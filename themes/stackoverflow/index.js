@@ -18,7 +18,6 @@ module.exports = {
 
 
 /* HANDLEBARS HELPERS */
-
 Handlebars.registerHelper('paragraphSplit', function(plaintext) {
     var lines = plaintext.split(/\r\n|\r|\n/g);
     var output = '';
