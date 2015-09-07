@@ -1,10 +1,10 @@
-# Spartan theme for jsonresume [![npm version](https://badge.fury.io/js/jsonresume-theme-spartan.svg)](http://badge.fury.io/js/jsonresume-theme-spartan)
+# Stack Overflow theme for jsonresume [![npm version](https://badge.fury.io/js/jsonresume-theme-stackoverflow.svg)](http://badge.fury.io/js/jsonresume-theme-stackoverflow)
 
 This is a theme for JSON Resume. It is available via npm:
 ```
-npm install jsonresume-theme-spartan
+npm install jsonresume-theme-stackoverflow
 ```
-[DEMO](https://themes.jsonresume.org/spartan)
+[DEMO](https://themes.jsonresume.org/stackoverflow)
 
 **Printable version with custom CSS**
 
