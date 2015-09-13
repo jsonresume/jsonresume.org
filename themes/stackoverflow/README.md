@@ -8,9 +8,37 @@ npm install jsonresume-theme-stackoverflow
 
 **Printable version with custom CSS**
 
+### Social Profiles Icons
+
+**Profiles supported with brand colors:**
+
+github, stack overflow, linkedin, dribbble, twitter, facebook, pinterest, instagram, soundcloud, wordpress, youtube, flickr, google plus, tumblr, foursquare.
+
+To have a social icon close the social link profile (or username) it is enough to set a `network` the name of the Social Network (es: 'Stack Overflow').
+
+#### Support to extra fields
+
+With stackowerflow theme it is possible to add:
+
+- `keywords` to each 'work', 'publication' and 'volunteer' item
+- `summary`to each 'interests' and 'education' item
+- `location` to each 'work', 'education' and 'volunteer' item
+
+example of the extra `location` object: 
+
+```
+"location": {
+	"city": "Zürich",
+	"countryCode": "CH",
+	"region": "Switzerland"
+} 
+```
+
 ## Getting started
 
 ### Install the command line
+
+Create your resume in json on [jsonresume](https://jsonresume.org)
 
 The official [resume-cli](https://github.com/jsonresume/resume-cli) to run the development server.
 
@@ -34,31 +62,10 @@ Preview: http://localhost:4000
 Press ctrl-c to stop
 ```
 
-### Social Profiles Icons
+## Contribution
 
-**Profiles supported with brand colors:**
-
-github, stack overflow, linkedin, dribbble, twitter, facebook, pinterest, instagram, soundcloud, wordpress, youtube, flickr, google plus, tumblr, foursquare.
-
-To have a social icon close the social link profile (or username) it is enough to set a `network` the name of the Social Network (es: 'Stack Overflow').
-
-## Contribute
-
-To test the theme, this is what you'll need:
-
-- [node.js](http://howtonode.org/how-to-install-nodejs)
-- [npm](http://howtonode.org/introduction-to-npm)
-
-If you're on Linux, you can simply run:
-
-```
-sudo apt-get install nodejs-legacy npm
-```
-
-Or if you're on OSX and got [Homebrew](http://brew.sh/) installed:
-```
-brew install node
-```
+[Open an issue](https://github.com/francescoes/jsonresume-theme-stackoverflow/issues/new) or fork the project, add your feature (or fix your bug) 
+and open a pull request 
 
 ## License
 

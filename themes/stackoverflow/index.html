@@ -1,0 +1,1223 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+		<title>Francesco Esposito</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+		<style>
+			/********************************************
+* 	reset from
+* 	http://meyerweb.com/eric/tools/css/reset/
+*******************************************/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+}
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+
+/****************
+*	COMMONS		
+****************/
+body, html {
+	font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+	font-size: 13px;
+	color: #40484f;
+	font-weight: 400;
+	letter-spacing: 0;
+	line-height: 1.46153846;
+	text-align: left;
+	webkit-text-size-adjust: 100%;
+}
+
+a {
+	color: #0095ff;
+}
+
+a:hover {
+	color: #0c65a5;
+}
+
+ul {
+	margin-top: 1rem; 
+}
+
+li {
+	list-style-type: square;
+	list-style-position: outside;
+	margin-left: 1.3em;
+}
+
+h1 {
+	font-size: 2rem;
+}
+
+h2 {
+	font-size: 1.67rem;
+}
+
+h3 {
+	font-size: 1.27rem;
+}
+
+em {
+	color: #757575;
+}
+
+blockquote {
+	margin: 0;
+	margin-bottom: 1em;
+}
+
+strong {
+	font-weight: 700;
+	font-size: 1.1em;
+}
+
+/* main container */
+#resume {
+	padding: 1rem;
+	margin-top: 2rem;
+}
+
+/* every section wrapper */
+.section {
+	margin-bottom: 2rem;
+}
+
+section .location {
+	display: block;
+	margin-top: .5em;
+	color: #606d76;
+	font-weight: 700;
+}
+
+#profiles .item {
+	padding: .5em 0; 
+}
+
+#header > #profiles,
+#header > #contact,
+#skills,
+#languages,
+#interests {
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-flow: row wrap;
+	flex-flow: row wrap;
+	-webkit-justify-content: flex-start;
+	justify-content: flex-start;
+}
+
+#header > div {
+	line-height: 1.5;
+}
+
+#header > div > div {
+	margin-right: 1.2em;
+}
+
+#header h1.name {
+	font-size: 2.8rem;
+	font-weight: 200;
+	line-height: 100%;
+}
+
+#header h2.label {
+	color: #202931;
+	font-size: 1.47rem;
+	text-indent: 2px;
+}
+
+#header .picture {
+	width: 11em;
+	float: right;
+	border-radius: 4px;
+}
+
+.main-summary {
+	background: #f1f8ff;
+	padding: 1.2em 1em;
+	margin-top: 1rem;
+}
+
+.main-summary p {
+	margin-top: .5em;
+}
+
+h2.section-title {
+	display: inline-block;
+	background: #fff;
+	padding: 0 1em 0.3em 0;
+	color: #ff6d1f;
+	text-transform: uppercase;
+	font-weight: 600;
+	border: none;
+	font-size: .9rem;
+}
+
+.section > header {
+	position: relative;
+}
+
+.fa {
+	margin-right: 0.25em;
+}
+
+.section > header::after {
+	position: absolute;
+	left: 0;
+	top: .7em;
+	height: 1px;
+	background: #ccc;
+	content: "";
+	width: 100%;
+	z-index: -100;
+	display: block;
+}
+
+.section.main-summary > section {
+	margin: 0;
+}
+
+.section > section > header {
+	font-size: 1.38rem;
+	position: relative;
+	margin-top: .7em;
+}
+
+.section > section > header:first-of-type {
+	margin: 0; 
+}
+
+.section > section > header .space-left {
+	position: absolute;
+	left: -1.56rem;
+	top: 5px;
+	color: #aaa;
+	line-height: 1;
+	opacity: 0;
+}
+
+.position,
+.company,
+.organization,
+.institution,
+.date,
+.area,
+.studyType,
+.title, 
+.awarder {
+	display: inline-block;
+}
+
+.position,
+.studyType,
+.area,
+.title,
+.language,
+.name {
+	font-weight: 600;
+}
+
+.company::before,
+.institution::before,
+.organization::before,
+.awarder::before {
+	content: "@"
+}
+
+.company,
+.institution,
+.organization,
+.awarder {
+	color: #606d76;
+	font-weight: 400;
+}
+
+.section header .date {
+	font-size: 1rem;
+	display: block;
+	padding: .5em 0;
+	font-weight: 600;
+}
+
+ul.keywords,
+ul.courses {
+	margin: 0; 
+}
+
+ul.keywords li,
+ul.courses li {
+	display: inline-block;
+	margin: 2px 2px 2px 0;
+	padding: 4px 5px 5px;
+	font-size: .9rem;
+	line-height: 1;
+	text-transform: lowercase;
+	color: #3e6d8e;
+	background-color: #dfeaf1;
+	border: 0 solid #dfeaf1;
+	white-space: nowrap;
+}
+
+ul.keywords li:hover,
+ul.courses li:hover {
+	background: #dfeaf0;
+}
+
+.item {
+	padding: .5em 0;
+}
+
+.gpa {
+	padding-bottom: .5em;
+}
+
+.fa.social {
+	font-size: 1.1em;
+}
+
+/* Social Media Brand Colors */
+.google-plus {
+	color: #dd4b39;	
+}
+
+.tumblr {
+	color:#32506d;
+}
+
+.foursquare {
+	color:  #0072b1;
+}
+
+.facebook {
+	color: #3b5998;
+}
+
+.linkedin {
+	color: #007bb6;
+}
+
+.pinterest {
+	color: #cb2027;
+}
+
+.dribbble {
+	color: #ea4c89;
+}
+
+.instagram {
+	color: #517fa4;
+}
+
+.twitter {
+	color: #00aced;
+}
+
+.soundcloud { 
+	color: #ff3a00;
+}
+
+.wordpress {
+	color: #21759b;
+}
+
+.youtube {
+	color: #bb0000;
+}
+
+.github {
+	color: #171515;
+}
+
+.stack-overflow {
+	color: #828386;
+	position: relative;
+}
+
+.flickr {
+	color: #ff0084;
+}      
+
+.stack-overflow::after {
+	position: absolute;
+	left: 0;
+	content: '\f16c';
+	color: #f68a1f;
+	overflow: hidden;
+	height: 40%;
+}
+
+#languages .item,
+#skills .item,
+#interests .item {
+	width: 15em;
+	padding: 0 .5em .5em 0;
+	border-bottom: none;
+}
+
+#skills .item {
+	width: 17.5em;
+}
+
+#skills .item .keywords {
+	width: 15em;
+}
+
+/* Skills chart */
+.level .bar {
+	border: 1px solid #ddd;
+	display: block;
+	width: 10em;
+	height: 5px;
+	margin: 0em 0 1em 0;
+	position: relative;
+}
+
+.level .bar::after {
+	position: absolute;
+	content: " ";
+	top: 0;
+	left: 0;
+	background: black;
+	height: 5px;
+}
+
+.level.beginner .bar::after {
+	background: #EB5F51;
+	width: 2.5em;
+} 
+
+.level.intermediate .bar::after {
+	background: #ffdf1f;
+	width: 5em;
+} 
+
+.level.advanced .bar::after,
+.level.fluent .bar::after {
+	background: #59C596;
+	width: 7.5em;
+} 
+
+.level.master .bar::after,
+.level.native.speaker .bar::after {
+	background: #5CB85C;
+	width: 10em;
+}
+
+#references .item {
+	padding-left: .5em;
+	border-left: 5px solid #ff6d1f;
+}
+
+
+/******************
+*	HELPER CLASSES	
+******************/
+
+.clear::after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+.display {
+	display: block;
+	opacity: 1;
+}
+
+.margin1 {
+	margin-bottom: .5rem;
+}
+
+/****************
+*		TABLET
+****************/
+@media screen and (min-width: 602px) { 
+	#resume {
+		width: 80%;
+		margin: 0 auto;
+	}
+}
+
+
+/****************
+*		LAPTOP	
+****************/
+@media screen and (min-width: 1025px) { 
+	li {
+		margin-left: 1.5em;
+	}
+
+	#resume {
+		width: 750px;
+		margin: 2rem auto;
+		opacity: 0;
+		-webkit-transition: opacity .5s ease-in-out;
+		transition: opacity .5s ease-in-out;
+	}
+
+	.section > section > header .space-left {
+		opacity: 1;
+		cursor: pointer;
+	}
+	
+	.section > section {
+		margin-left: 1.67rem;
+	}
+
+	.company::before,
+	.institution::before,
+	.organization::before,
+	.awarder::before {
+		content: "|";
+	}
+	
+	.header-left {
+		float: left;
+		width: 70%;
+		word-break: break-all;
+	}
+	
+	.section header .date {
+		float: right;
+		padding: .2em;
+	}
+
+	.display {
+		display: none;
+	}
+
+	.display:not(.none) {
+		display: block;
+	}
+
+}
+
+@media print {
+
+	.company::before,
+	.institution::before,
+	.organization::before,
+	.awarder::before {
+		content: "|";
+	}
+	
+	.main-summary {
+		padding: 0;
+		margin-top: 2rem;
+	}
+
+	.stack-overflow::after {
+		content: "";
+	}
+
+	ul.keywords li,
+	ul.courses li {
+		display: inline-block;
+		margin: 0;
+		padding: 0;
+		font-size: .9rem;
+		line-height: 1;
+		text-transform: lowercase;
+		color: #3e6d8e;
+		background-color: #dfeaf1;
+		border: 0 solid #dfeaf1;
+		white-space: nowrap;
+	}
+
+	ul.keywords li::after,
+	ul.courses li::after {
+		padding: 0 0 0 .3em;
+		content: "|";
+	}
+	
+	ul.keywords li:last-of-type::after,
+	ul.courses li:last-of-type::after {
+		content: "";
+	}
+
+	.level em {
+		font-style: normal;
+		padding: .1em 0; 
+	}
+
+	.level .bar {
+		display: none;	
+	}	
+
+	#profiles .item {
+		padding: 0; 
+	}
+
+	.item.display {
+		display: block;
+		opacity: 1 !important;
+	}
+
+	.section > section > header {
+		margin-top: .75em;
+	}
+
+}
+		</style>
+	</head>
+
+	<body>
+		<div id="resume">
+				<header id="header" class="clear">
+						<div>
+							<h1 class="name">Francesco Esposito</h1>
+							<h2 class="label">Front End Software Engineer</h2>
+						</div>
+
+						<div class="location">
+								<span class="city">
+									Zürich,
+								</span>
+								<span class="region">
+									Switzerland
+								</span>
+						</div>
+
+					<div id="contact">
+						<div class="website">
+							<a href="http://francescoes.com">http://francescoes.com</a>
+						</div>
+						<div class="email">
+							<a href="mailto:fraesps@gmail.com">fraesps@gmail.com</a>
+						</div>
+						<div class="phone">
+							(+41) 77 98 212 54
+						</div>
+					</div>
+
+					<div id="profiles">
+						<div class="item">
+								<div class="username">
+									<span class="fa fa-linkedin linkedin social"></span>
+									<span class="url">
+										<a href="https://ch.linkedin.com/in/francescoes">francescoes</a>
+									</span>
+								</div>
+						</div>
+						<div class="item">
+								<div class="username">
+									<span class="fa fa-github github social"></span>
+									<span class="url">
+										<a href="https://www.github.com/francescoes">francescoes</a>
+									</span>
+								</div>
+						</div>
+						<div class="item">
+								<div class="username">
+									<span class="fa fa-stack-overflow stack-overflow social"></span>
+									<span class="url">
+										<a href="https://stackoverflow.com/users/4457937/francesco-es?tab=profile">francesco-es</a>
+									</span>
+								</div>
+						</div>
+					</div>
+				</header>
+		
+					<section class="section main-summary">
+						<section>
+							<div><p>Francesco Esposito is a computer scientist, passionate about Web Development and currently focused on the Front-end, particularly JavaScript.</p><p>Semantic Web and Data Integration are two og the topics that triggers his interest. </p><p>When not working or coding, he enjoys to experiment in Mediterranean cuisine and reading books about Psychology.</p></div>
+						</section>
+					</section>
+
+				<section class="section margin1">
+					<header>
+						<h2 class='section-title'>Skills</h2>
+					</header>
+					<section id="skills">
+						<div class="item">
+							<h3 class="name">
+								Front-end Development
+							</h3>
+							<div class="level advanced">
+								<em>Advanced</em>
+								<div class="bar"></div>
+							</div>
+							<ul class="keywords">
+								<li>Javascript</li>
+								<li>jQuery</li>
+								<li>SockJs</li>
+								<li>HTML5</li>
+								<li>CSS3</li>
+								<li>Semantic UI</li>
+								<li>Handlebars</li>
+								<li>XSLT</li>
+								<li>Angularjs</li>
+								<li>Karma</li>
+							</ul>
+						</div>
+						<div class="item">
+							<h3 class="name">
+								Back-end Development
+							</h3>
+							<div class="level intermediate">
+								<em>Intermediate</em>
+								<div class="bar"></div>
+							</div>
+							<ul class="keywords">
+								<li>Python</li>
+								<li>C#</li>
+								<li>Java</li>
+								<li>Ruby</li>
+								<li>Web Scraping</li>
+								<li>Data Integration</li>
+								<li>REST</li>
+							</ul>
+						</div>
+						<div class="item">
+							<h3 class="name">
+								GIT
+							</h3>
+							<div class="level advanced">
+								<em>Advanced</em>
+								<div class="bar"></div>
+							</div>
+							<ul class="keywords">
+								<li>Github</li>
+								<li>BitBucket</li>
+								<li>Git flow</li>
+							</ul>
+						</div>
+						<div class="item">
+							<h3 class="name">
+								Semantic Web
+							</h3>
+							<div class="level advanced">
+								<em>Advanced</em>
+								<div class="bar"></div>
+							</div>
+							<ul class="keywords">
+								<li>Microdata</li>
+								<li>RDF</li>
+								<li>RDFa</li>
+								<li>OWL</li>
+							</ul>
+						</div>
+					</section>
+				</section>
+
+				<section class="section">
+					<header>
+						<h2 class='section-title'>Experience (4)</h2>
+					</header>
+					<section id="work">
+								<header>
+									<span class="space-left">
+											<span class="fa fa-caret-down"></span>
+									</span>
+									<div class="position">
+										Front End Software Engineer
+									</div>
+									<div class="company">
+										F&amp;P Personal Robotics
+									</div>
+									<div class="date">
+										<span class="startDate">
+											July 2015
+										</span>
+										<span class="endDate">
+											- Current
+										</span>
+									</div>
+								</header>
+
+								<ul class="keywords">
+									<li>JavaScript</li>
+									<li>jQuery</li>
+									<li>Sockjs</li>
+									<li>HTML5</li>
+									<li>CSS3</li>
+									<li>Python</li>
+								</ul>
+
+								<span class="location">
+									<span class="fa fa-map-marker"></span>
+										<span class="city">
+											Zürich
+										</span>
+										<span class="countryCode">
+											(CH),
+										</span>
+										<span class="region">
+											Switzerland
+										</span>
+								</span>
+
+								<div class="item display" style="opacity:1">
+									<div class="summary">
+										<p>Creation of a easy-to-use User Interface for Robots aimed to collaborate with humans in daily tasks</p>
+									</div>
+									<div class="website">
+										<a href="http://www.fp-robotics.com">http://www.fp-robotics.com</a>
+									</div>
+									<ul class="highlights">
+											<li>Collaboration with Graphics Designers to translate and integrate beautiful desing into code.</li>
+											<li>Working together with Back End developers in the development of new features.</li>
+									</ul>
+							</div>
+								<header>
+									<span class="space-left">
+											<span class="fa fa-caret-right"></span>
+									</span>
+									<div class="position">
+										Junior Full Stack Software Engineer
+									</div>
+									<div class="company">
+										YouRehab AG
+									</div>
+									<div class="date">
+										<span class="startDate">
+											September 2014
+										</span>
+										<span class="endDate">
+											- June 2015
+										</span>
+									</div>
+								</header>
+
+								<ul class="keywords">
+									<li>JavaScript</li>
+									<li>jQuery</li>
+									<li>Angularjs</li>
+									<li>C#</li>
+									<li>PHP</li>
+									<li>HTML5</li>
+									<li>CSS3</li>
+									<li>XSLT</li>
+								</ul>
+
+								<span class="location">
+									<span class="fa fa-map-marker"></span>
+										<span class="city">
+											Zürich
+										</span>
+										<span class="countryCode">
+											(CH),
+										</span>
+										<span class="region">
+											Switzerland
+										</span>
+								</span>
+
+								<div class="item display none" style="opacity:0">
+									<div class="summary">
+										<p>Development of a Software that helps the creation and the management of interactive rehabilitation plans for patients with sensory-motor and cognitive impairments.</p>
+									</div>
+									<div class="website">
+										<a href="http://www.yourehab.com">http://www.yourehab.com</a>
+									</div>
+									<ul class="highlights">
+											<li>Remote technical customer support for European clients.</li>
+											<li>Design, development and maintenance of the major product of the company. Bug fixing, reporting and tracking and development of new features.</li>
+									</ul>
+							</div>
+								<header>
+									<span class="space-left">
+											<span class="fa fa-caret-right"></span>
+									</span>
+									<div class="position">
+										Software Engineer Intern
+									</div>
+									<div class="company">
+										YouRehab AG
+									</div>
+									<div class="date">
+										<span class="startDate">
+											March 2014
+										</span>
+										<span class="endDate">
+											- July 2014
+										</span>
+									</div>
+								</header>
+
+								<ul class="keywords">
+									<li>JavaScript</li>
+									<li>d3js</li>
+									<li>C#</li>
+									<li>PHP</li>
+									<li>HTML5</li>
+									<li>CSS3</li>
+								</ul>
+
+								<span class="location">
+									<span class="fa fa-map-marker"></span>
+										<span class="city">
+											Zürich
+										</span>
+										<span class="countryCode">
+											(CH),
+										</span>
+										<span class="region">
+											Switzerland
+										</span>
+								</span>
+
+								<div class="item display none" style="opacity:0">
+									<div class="summary">
+										<p>Analysis and Visualisation of raw data concerning patient&#x27;s rehabilitation history</p>
+									</div>
+									<div class="website">
+										<a href="http://www.yourehab.com">http://www.yourehab.com</a>
+									</div>
+									<ul class="highlights">
+											<li>Research activity about Data Visualization techniques.</li>
+									</ul>
+							</div>
+								<header>
+									<span class="space-left">
+											<span class="fa fa-caret-right"></span>
+									</span>
+									<div class="position">
+										Junior Web Developer
+									</div>
+									<div class="company">
+										IT Engineering
+									</div>
+									<div class="date">
+										<span class="startDate">
+											January 2011
+										</span>
+										<span class="endDate">
+											- December 2011
+										</span>
+									</div>
+								</header>
+
+								<ul class="keywords">
+									<li>JavaScript</li>
+									<li>jQuery</li>
+									<li>PHP</li>
+									<li>HTML</li>
+									<li>CSS</li>
+								</ul>
+
+								<span class="location">
+									<span class="fa fa-map-marker"></span>
+										<span class="city">
+											Salerno
+										</span>
+										<span class="countryCode">
+											(IT),
+										</span>
+										<span class="region">
+											Italy
+										</span>
+								</span>
+
+								<div class="item display none" style="opacity:0">
+									<div class="summary">
+										<p>Development of e-commerce solutions for small companies</p>
+									</div>
+									<div class="website">
+										<a href="http://www.itengineering.it/.com">http://www.itengineering.it/.com</a>
+									</div>
+									<ul class="highlights">
+											<li>Design and Development of Wordpress and Magento themes.</li>
+									</ul>
+							</div>
+					</section>
+				</section>
+
+
+				<section class="section">
+					<header>
+						<h2 class='section-title'>Education</h2>
+					</header>
+					<section id="education">
+							<header class="clear">
+								<span class="space-left">
+										<span class="fa fa-caret-down"></span>
+								</span>
+								<div class="header-left">
+										<div class="studyType">
+											MSc
+										</div>
+										<div class="area">
+											Software Engineering
+										</div>
+										<div class="institution">
+											Università degli Studi di Salerno
+										</div>
+								</div>
+								<div class="date">
+									<span class="startDate">
+										2012
+									</span>
+									<span class="endDate">
+										- 2014
+									</span>
+								</div>
+							</header>
+
+								<ul class="courses">
+										<li>Project Managment</li>
+										<li>Web Engineering</li>
+										<li>Software Engineering</li>
+										<li>UML</li>
+										<li>Data Analysis</li>
+										<li>Computer Forensics</li>
+										<li>Data Integration</li>
+										<li>Adanced Algorithm</li>
+										<li>Compilers</li>
+								</ul>
+
+								<span class="location">
+									<span class="fa fa-map-marker"></span>
+									<span class="city">
+										Salerno
+									</span>
+									<span class="countryCode">
+										(IT),
+									</span>
+									<span class="region">
+										Italia
+									</span>
+								</span>
+
+								<div class="item display" style="opacity:1">
+									<div class='gpa'>
+										<strong> Grade:</strong> <span>Summa cum Laude</span>
+									</div>
+									<div class="summary">
+										<p>The Master Thesis was mainly engaged in web-based Data Visualisation techniques, usability test of state of art tools and development of a Data Visualisation module. The module has been developed for an ETH Spin off.</p>
+									</div>
+							</div>
+							<header class="clear">
+								<span class="space-left">
+										<span class="fa fa-caret-right"></span>
+								</span>
+								<div class="header-left">
+										<div class="studyType">
+											BSc
+										</div>
+										<div class="area">
+											Computer Science
+										</div>
+										<div class="institution">
+											Università degli Studi di Salerno
+										</div>
+								</div>
+								<div class="date">
+									<span class="startDate">
+										2005
+									</span>
+									<span class="endDate">
+										- 2010
+									</span>
+								</div>
+							</header>
+
+								<ul class="courses">
+										<li>Databases</li>
+										<li>Procedular Programming</li>
+										<li>Object Oriented Programming</li>
+										<li>Web Development</li>
+										<li>Marketing</li>
+								</ul>
+
+								<span class="location">
+									<span class="fa fa-map-marker"></span>
+									<span class="city">
+										Salerno
+									</span>
+									<span class="countryCode">
+										(IT),
+									</span>
+									<span class="region">
+										Italia
+									</span>
+								</span>
+
+								<div class="item display none" style="opacity:0">
+									<div class='gpa'>
+										<strong> Grade:</strong> <span>100/110</span>
+									</div>
+							</div>
+					</section>
+				</section>
+
+
+
+				<section class="section margin1">
+					<header>
+						<h2 class='section-title'>Languages</h2>
+					</header>
+					<section id="languages">
+							<div class="display">
+										<h3 class="language">
+											Italian
+										</h3>
+								<div class="item">
+										<div class="level fluency native speaker">
+											<em>Native speaker</em>
+											<div class="bar"></div>
+										</div>
+								</div>
+							</div>
+							<div class="display">
+										<h3 class="language">
+											English
+										</h3>
+								<div class="item">
+										<div class="level fluency fluent">
+											<em>Fluent</em>
+											<div class="bar"></div>
+										</div>
+								</div>
+							</div>
+							<div class="display">
+										<h3 class="language">
+											Spanish
+										</h3>
+								<div class="item">
+										<div class="level fluency beginner">
+											<em>Beginner</em>
+											<div class="bar"></div>
+										</div>
+								</div>
+							</div>
+					</section>
+				</section>
+
+				<section class="section margin1">
+					<header>
+						<h2 class='section-title' class='section-title'>Interests</h2>
+					</header>
+					<section id="interests">
+							<div class="item">
+									<h3 class="name">
+										Semantic Web
+									</h3>
+									<ul class="keywords">
+											<li>Microdata</li>
+											<li>Linked Data</li>
+									</ul>
+								<div class="summary">
+									<p></p>
+								</div>
+							</div>
+							<div class="item">
+									<h3 class="name">
+										Cooking
+									</h3>
+									<ul class="keywords">
+											<li>Mediterranean cuisine</li>
+									</ul>
+								<div class="summary">
+									<p></p>
+								</div>
+							</div>
+							<div class="item">
+									<h3 class="name">
+										Football
+									</h3>
+									<ul class="keywords">
+											<li>SSC Napoli</li>
+									</ul>
+								<div class="summary">
+									<p></p>
+								</div>
+							</div>
+					</section>
+				</section>
+
+		</div>		
+		<script>
+			(function(){
+				var elements = document.querySelector("#resume");
+
+				// adding the element to the all container
+				// and using event delegation
+				elements.addEventListener("click", function(e) {
+					var current = e.target;
+					// font awesone arrows
+					var arrowRight = current.classList.contains('fa-caret-right');
+					var arrowDown = current.classList.contains('fa-caret-down');
+
+					if(current && current.nodeName == "SPAN" && (arrowRight || arrowDown)) {
+						var header = e.target.parentNode.parentNode;
+						var item = header.nextSibling;
+
+						// select the .item element from the siblings
+						while (!item.classList || !item.classList.contains('item')) {
+							item = item.nextSibling;
+						}
+
+						// hide or show the .item element
+						item.classList.toggle('none');
+
+						// if the .item is going to be shown then imcrease is opacity 
+						// every 20 milliseconds to make a fadeIn effect
+						if (!item.classList.contains('none')) {
+							var id = setInterval(function() {
+								item.style.opacity = parseFloat(item.style.opacity) + 0.09;
+								if (parseFloat(item.style.opacity) >= 1) {
+									clearInterval(id);
+								} 
+							}, 20);
+						} else {
+							item.style.opacity = 0;
+						}
+
+						current.classList.toggle('fa-caret-right');
+						current.classList.toggle('fa-caret-down');
+					}
+
+				}, false);
+				
+				// Make the #resume visible only when the DOM is fully loaded
+				elements.style.opacity = '1';
+			})();
+		</script>
+	</body>
+
+</html>
