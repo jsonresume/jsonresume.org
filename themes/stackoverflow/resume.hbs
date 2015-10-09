@@ -29,7 +29,8 @@
 					{{/if}}
 
 					{{#location}}
-						<div class="location">
+						<span class="location">
+              based in
 							{{#if address}}
 								<span class="address">
 									{{address}},
@@ -55,8 +56,12 @@
 									{{countryCode}}
 								</span>
 							{{/if}}
-						</div>
+						</span>
 					{{/location}}
+
+          {{#if nationality}}
+            <span>and born in {{nationality}}</span>
+          {{/if}}
 
 					<div id="contact">
 						{{#if website}}
@@ -97,7 +102,7 @@
 					</div>
 					{{/if}}
 				</header>
-		
+
 				{{#if summary}}
 					<section class="section main-summary">
 						<section>
@@ -142,7 +147,7 @@
 			{{#if resume.work.length}}
 				<section class="section">
 					<header>
-						<h2 class='section-title'>Experience ({{resume.work.length}})</h2>
+						<h2 class='section-title'>Work Experience <span class="item-count">({{resume.work.length}})</span></h2>
 					</header>
 					<section id="work">
 						{{#each resume.work}}
@@ -182,6 +187,27 @@
 								</header>
 							{{/if}}
 
+              {{#location}}
+                <span class="location">
+									<span class="fa fa-map-marker"></span>
+                  {{#if city}}
+                    <span class="city">
+											{{city}},
+										</span>
+                  {{/if}}
+                  {{#if countryCode}}
+                    <span class="countryCode">
+											({{countryCode}})
+										</span>
+                  {{/if}}
+                  {{#if region}}
+                    <span class="region">
+                      {{region}}
+                    </span>
+                  {{/if}}
+								</span>
+              {{/location}}
+
 							{{#if keywords.length}}
 								<ul class="keywords">
 									{{#each keywords}}
@@ -189,29 +215,6 @@
 									{{/each}}
 								</ul>
 							{{/if}}
-
-							{{#location}}
-								<span class="location">
-									<span class="fa fa-map-marker"></span>
-									{{#if city}}
-										<span class="city">
-											{{city}}
-										</span>
-									{{/if}}
-									{{#if countryCode}}
-										<span class="countryCode">
-											({{countryCode}}),
-										</span>
-									{{else}}
-										<span>, </span>
-									{{/if}}
-									{{#if region}}
-										<span class="region">
-											{{region}}
-										</span>
-									{{/if}}
-								</span>
-							{{/location}}
 
 							{{#if @first}}
 								<div class="item display" style="opacity:1">
@@ -286,6 +289,27 @@
 								</header>
 							{{/if}}
 
+              {{#location}}
+                <span class="location">
+									<span class="fa fa-map-marker"></span>
+                  {{#if city}}
+                    <span class="city">
+											{{city}},
+										</span>
+                  {{/if}}
+                  {{#if countryCode}}
+                    <span class="countryCode">
+											({{countryCode}})
+										</span>
+                  {{/if}}
+                  {{#if region}}
+                    <span class="region">
+                      {{region}}
+                    </span>
+                  {{/if}}
+								</span>
+              {{/location}}
+
 							{{#if keywords.length}}
 								<ul class="keywords">
 									{{#each keywords}}
@@ -293,27 +317,6 @@
 									{{/each}}
 								</ul>
 							{{/if}}
-
-							{{#location}}
-								<span class="location">
-									<span class="fa fa-map-marker"></span>
-									{{#if city}}
-									<span class="city">
-										{{city}}
-									</span>
-									{{/if}}
-									{{#if countryCode}}
-									<span class="countryCode">
-										({{countryCode}}),
-									</span>
-									{{/if}}
-									{{#if region}}
-									<span class="region">
-										{{region}}
-									</span>
-									{{/if}}
-								</span>
-							{{/location}}
 
 							{{#if @first}}
 								<div class="item display" style="opacity:1">
@@ -346,7 +349,7 @@
 			{{#if resume.education.length}}
 				<section class="section">
 					<header>
-						<h2 class='section-title'>Education</h2>
+						<h2 class='section-title'>Education <span class="item-count">({{resume.education.length}})</span></h2>
 					</header>
 					<section id="education">
 						{{#each resume.education}}
@@ -393,34 +396,34 @@
 								</div>
 							</header>
 
-							{{#if courses.length}}
-								<ul class="courses">
-									{{#each courses}}
-										<li>{{.}}</li>
-									{{/each}}
-								</ul>
-							{{/if}}
-
 							{{#location}}
 								<span class="location">
 									<span class="fa fa-map-marker"></span>
 									{{#if city}}
-									<span class="city">
-										{{city}}
-									</span>
+										<span class="city">
+											{{city}},
+										</span>
 									{{/if}}
 									{{#if countryCode}}
-									<span class="countryCode">
-										({{countryCode}}),
-									</span>
+										<span class="countryCode">
+											({{countryCode}})
+										</span>
 									{{/if}}
 									{{#if region}}
-									<span class="region">
-										{{region}}
-									</span>
+										<span class="region">
+											{{region}}
+										</span>
 									{{/if}}
 								</span>
 							{{/location}}
+
+              {{#if courses.length}}
+                <ul class="courses">
+                  {{#each courses}}
+                    <li>{{.}}</li>
+                  {{/each}}
+                </ul>
+              {{/if}}
 
 							{{#if @first}}
 								<div class="item display" style="opacity:1">
@@ -472,7 +475,7 @@
 							</div>
 							{{#if date}}
 								<div class="date">
-									{{DMY date}}
+									{{Y date}}
 								</div>
 							{{/if}}
 						</header>
@@ -633,7 +636,7 @@
 					</section>
 				</section>
 			{{/if}}
-		</div>		
+		</div>
 		<script>
 			(function(){
 				var elements = document.querySelector("#resume");
@@ -658,14 +661,14 @@
 						// hide or show the .item element
 						item.classList.toggle('none');
 
-						// if the .item is going to be shown then imcrease is opacity 
+						// if the .item is going to be shown then imcrease is opacity
 						// every 20 milliseconds to make a fadeIn effect
 						if (!item.classList.contains('none')) {
 							var id = setInterval(function() {
 								item.style.opacity = parseFloat(item.style.opacity) + 0.09;
 								if (parseFloat(item.style.opacity) >= 1) {
 									clearInterval(id);
-								} 
+								}
 							}, 20);
 						} else {
 							item.style.opacity = 0;
@@ -676,7 +679,7 @@
 					}
 
 				}, false);
-				
+
 				// Make the #resume visible only when the DOM is fully loaded
 				elements.style.opacity = '1';
 			})();
