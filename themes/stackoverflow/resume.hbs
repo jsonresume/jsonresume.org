@@ -30,7 +30,6 @@
 
 					{{#location}}
 						<span class="location">
-              based in
 							{{#if address}}
 								<span class="address">
 									{{address}},
@@ -59,23 +58,25 @@
 						</span>
 					{{/location}}
 
-          {{#if nationality}}
-            <span>and born in {{nationality}}</span>
-          {{/if}}
+                    <div>born in {{placeOfBird}}, {{stateOfBird}} in {{dateOfBird}}</div>
+
 
 					<div id="contact">
 						{{#if website}}
 						<div class="website">
-							<a href="{{website}}">{{website}}</a>
+              <span class="fa fa-external-link"></span>
+							<a target="_blank" href="{{website}}">{{website}}</a>
 						</div>
 						{{/if}}
 						{{#if email}}
 						<div class="email">
+              <span class="fa fa-envelope-o"></span>
 							<a href="mailto:{{email}}">{{email}}</a>
 						</div>
 						{{/if}}
 						{{#if phone}}
 						<div class="phone">
+              <span class="fa fa-mobile"></span>
 							{{phone}}
 						</div>
 						{{/if}}
@@ -187,26 +188,31 @@
 								</header>
 							{{/if}}
 
-              {{#location}}
-                <span class="location">
-									<span class="fa fa-map-marker"></span>
-                  {{#if city}}
-                    <span class="city">
-											{{city}},
-										</span>
-                  {{/if}}
-                  {{#if countryCode}}
-                    <span class="countryCode">
-											({{countryCode}})
-										</span>
-                  {{/if}}
-                  {{#if region}}
-                    <span class="region">
-                      {{region}}
-                    </span>
-                  {{/if}}
-								</span>
-              {{/location}}
+                             {{#location}}
+                                <span class="location">
+                                    <span class="fa fa-map-marker"></span>
+                                    {{#if city}}
+                                    <span class="city">
+                                        {{city}},
+                                    </span>
+                                    {{/if}}
+                                    {{#if countryCode}}
+                                    <span class="countryCode">
+                                        ({{countryCode}})
+                                    </span>
+                                    {{/if}}
+                                    {{#if region}}
+                                    <span class="region">
+                                      {{region}}
+                                    </span>
+                                    {{/if}}
+                                </span>
+                            {{/location}}
+                            {{#if website}}
+                                <span class="website">
+                                    <a href="{{website}}">{{website}}</a>
+                                </span>
+                            {{/if}}
 
 							{{#if keywords.length}}
 								<ul class="keywords">
@@ -224,11 +230,6 @@
 								{{#if summary}}
 									<div class="summary">
 										<p>{{summary}}</p>
-									</div>
-								{{/if}}
-								{{#if website}}
-									<div class="website">
-										<a href="{{website}}">{{website}}</a>
 									</div>
 								{{/if}}
 								{{#if highlights.length}}

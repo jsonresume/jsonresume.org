@@ -120,8 +120,7 @@ strong {
 }
 
 section .location {
-    display: block;
-    margin-bottom: .5em;
+    margin-right: .5em;
     color: #606d76;
     font-weight: 700;
 }
@@ -285,7 +284,7 @@ h2.section-title {
 
 ul.keywords,
 ul.courses {
-    margin: 0;
+    margin-top: .5em;
 }
 
 ul.keywords li,
