@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-stackoverflow",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Stack Overflow theme for JSON Resume",
   "author": "Francesco Esposito <http://fran.cesco.io>",
   "repository": {
@@ -9,7 +9,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "handlebars": "^2.0.0-alpha.4",
-    "moment": "^2.10.6"
+    "handlebars": "latest",
+    "moment": "latest"
   }
 }

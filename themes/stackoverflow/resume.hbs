@@ -655,7 +655,7 @@
 						var item = header.nextSibling;
 
 						// select the .item element from the siblings
-						while (!item.classList || !item.classList.contains('item')) {
+						while (!item || !item.classList || !item.classList.contains('item')) {
 							item = item.nextSibling;
 						}
 
