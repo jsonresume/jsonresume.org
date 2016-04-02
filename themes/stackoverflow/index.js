@@ -20,15 +20,17 @@
 
     /* HANDLEBARS HELPERS */
     Handlebars.registerHelper('paragraphSplit', function(plaintext) {
-        var lines = plaintext.split(/\r\n|\r|\n/g);
         var output = '';
-        var i;
+        var lines = plaintext instanceof Array ? plaintext.join('').split(/\r\n|\r|\n/g) : plaintext.split(/\r\n|\r|\n/g);
+        var i = 0;
 
-        for (i = 0; i < lines.length; i+=1) {
+        while(i < lines.length) {
             if(lines[i]) {
                 output += '<p>' + lines[i] + '</p>';
             }
+            i += 1;
         }
+
         return new Handlebars.SafeString(output);
     });
 
@@ -41,17 +43,14 @@
     });
 
     Handlebars.registerHelper('MY', function(date) {
-    	var d = date.toString();
-    	return moment(d, 'YYYY-mm-dd').format('MMMM YYYY');
+    	return moment(date.toString(), ['YYYY-MM-DD']).format('MMMM YYYY');
     });
 
     Handlebars.registerHelper('Y', function(date) {
-    	var d = date.toString();
-        return moment(d, 'YYYY-mm-dd').format('YYYY');
+        return moment(date.toString(), ['YYYY-MM-DD']).format('YYYY');
     });
 
     Handlebars.registerHelper('DMY', function(date) {
-    	var d = date.toString();
-        return moment(d, 'YYYY-mm-dd').format('D MMMM YYYY');
+        return moment(date.toString(), ['YYYY-MM-DD']).format('D MMMM YYYY');
     });
 }());

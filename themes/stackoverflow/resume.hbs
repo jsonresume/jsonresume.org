@@ -58,7 +58,7 @@
 						</span>
 					{{/location}}
 
-                    <div>born in {{placeOfBird}}, {{stateOfBird}} in {{dateOfBird}}</div>
+                    <div>Born in {{placeOfBird}}, {{stateOfBird}} in {{dateOfBird}}</div>
 
 
 					<div id="contact">
@@ -229,7 +229,7 @@
 							{{/if}}
 								{{#if summary}}
 									<div class="summary">
-										<p>{{summary}}</p>
+										<p>{{paragraphSplit summary}}</p>
 									</div>
 								{{/if}}
 								{{#if highlights.length}}
@@ -326,7 +326,7 @@
 							{{/if}}
 								{{#if summary}}
 									<div class="summary">
-										<p>{{summary}}</p>
+										<p>{{paragraphSplit summary}}</p>
 									</div>
 								{{/if}}
 								{{#if website}}
@@ -438,7 +438,7 @@
 								{{/if}}
 								{{#if summary}}
 									<div class="summary">
-										<p>{{summary}}</p>
+										<p>{{paragraphSplit summary}}</p>
 									</div>
 								{{/if}}
 							</div>
@@ -487,7 +487,7 @@
 						{{/if}}
 							{{#if summary}}
 								<div class="summary">
-									<p>{{summary}}</p>
+									<p>{{paragraphSplit summary}}</p>
 								</div>
 							{{/if}}
 						</div>
@@ -549,7 +549,7 @@
 							{{/if}}
 								{{#if summary}}
 								<div class="summary">
-									<p>{{summary}}</p>
+									<p>{{paragraphSplit summary}}</p>
 								</div>
 								{{/if}}
 							</div>
@@ -605,9 +605,11 @@
 										{{/each}}
 									</ul>
 								{{/if}}
+								{{#if syummary}}
 								<div class="summary">
-									<p>{{summary}}</p>
+									<p>{{paragraphSplit summary}}</p>
 								</div>
+								{{/if}}
 							</div>
 						{{/each}}
 					</section>

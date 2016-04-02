@@ -63,6 +63,11 @@ body, html {
     webkit-text-size-adjust: 100%;
 }
 
+p {
+    display: block;
+    margin-bottom: 1.3em;
+}
+
 a {
     color: #0095ff;
     text-decoration: none;
@@ -105,7 +110,6 @@ blockquote {
 
 strong {
     font-weight: 700;
-    font-size: 1.1em;
 }
 
 /* main container */
@@ -182,7 +186,7 @@ section .location {
 }
 
 .main-summary p {
-    margin-top: .15em;
+    margin: .15em 0 0;
 }
 
 h2.section-title {
