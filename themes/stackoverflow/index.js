@@ -53,4 +53,29 @@
     Handlebars.registerHelper('DMY', function(date) {
         return moment(date.toString(), ['YYYY-MM-DD']).format('D MMMM YYYY');
     });
+
+    Handlebars.registerHelper('birthData', function(birth) {
+        var out = [];
+        if (birth) {
+            out.push('<div> Born in ');
+            out.push(birth.place);
+
+            if (birth.place) {
+                out.push(', ');
+            }
+
+            out.push(birth.state);
+
+            var year = birth.date &&
+                moment(birth.date.toString(), ['YYYY-MM-DD']).format('YYYY');
+
+            if (year && (birth.place || birth.state)) {
+                out.push(' in ');
+            }
+            out.push(year);
+            out.push('</div>');
+        }
+
+        return new Handlebars.SafeString(out.join(''));
+    });
 }());

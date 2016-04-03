@@ -52,11 +52,12 @@ To have a social icon close the social link profile (or username) it is enough t
 
 #### Support to extra fields
 
-With stackowerflow theme it is possible to add:
+With stackoverflow theme it is possible to add:
 
 - `keywords` to each 'work', 'publication' and 'volunteer' item
-- `summary`to each 'interests' and 'education' item
+- `summary` to each 'interests' and 'education' item
 - `location` to each 'work', 'education' and 'volunteer' item
+- `birth` to 'basics'
 
 example of the extra `location` object: 
 
@@ -66,6 +67,15 @@ example of the extra `location` object:
 	"countryCode": "CH",
 	"region": "Switzerland"
 } 
+```
+example of the extra `birth` object:
+
+```
+"birth": {
+  "place": "New York",
+  "state": "USA",
+  "date": "1988"
+}
 ```
 
 ## Contribution
