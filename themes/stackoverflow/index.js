@@ -56,11 +56,11 @@
 
     Handlebars.registerHelper('birthData', function(birth) {
         var out = [];
-        if (birth) {
+        if (birth && Object.keys(birth).length) {
             out.push('<div> Born in ');
             out.push(birth.place);
 
-            if (birth.place) {
+            if (birth.place && birth.state) {
                 out.push(', ');
             }
 
