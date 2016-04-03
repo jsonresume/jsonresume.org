@@ -60,7 +60,7 @@
             out.push('<div> Born in ');
             out.push(birth.place);
 
-            if (birth.place) {
+            if (birth.place && birth.state) {
                 out.push(', ');
             }
 
