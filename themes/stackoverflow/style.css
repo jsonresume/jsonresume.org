@@ -522,7 +522,7 @@ ul.courses li:hover {
     .header-left {
         float: left;
         width: 70%;
-        word-break: break-all;
+        word-break: normal;
     }
 
     .section header .date {
