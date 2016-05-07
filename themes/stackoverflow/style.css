@@ -268,7 +268,7 @@ h2.section-title {
 .institution::before,
 .organization::before,
 .awarder::before {
-    content: "at"
+    content: "at "
 }
 
 .company,
@@ -516,7 +516,7 @@ ul.courses li:hover {
     .institution::before,
     .organization::before,
     .awarder::before {
-        content: "|";
+        content: "| ";
     }
 
     .header-left {
@@ -563,7 +563,7 @@ ul.courses li:hover {
     .institution::before,
     .organization::before,
     .awarder::before {
-        content: "at";
+        content: "at ";
     }
 
     .main-summary {
