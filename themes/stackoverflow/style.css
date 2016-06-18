@@ -268,7 +268,7 @@ h2.section-title {
 .institution::before,
 .organization::before,
 .awarder::before {
-    content: "at"
+    content: "at "
 }
 
 .company,
@@ -516,13 +516,13 @@ ul.courses li:hover {
     .institution::before,
     .organization::before,
     .awarder::before {
-        content: "|";
+        content: "| ";
     }
 
     .header-left {
         float: left;
         width: 70%;
-        word-break: break-all;
+        word-break: normal;
     }
 
     .section header .date {
@@ -563,7 +563,7 @@ ul.courses li:hover {
     .institution::before,
     .organization::before,
     .awarder::before {
-        content: "at";
+        content: "at ";
     }
 
     .main-summary {
