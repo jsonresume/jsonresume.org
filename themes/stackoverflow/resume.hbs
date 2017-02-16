@@ -62,7 +62,7 @@
 						{{#if website}}
 						<div class="website">
               <span class="fa fa-external-link"></span>
-							<a target="_blank" href="{{website}}">{{website}}</a>
+							<a target="_blank" target="_blank" href="{{website}}">{{website}}</a>
 						</div>
 						{{/if}}
 						{{#if email}}
@@ -88,7 +88,7 @@
 									<span class="fa fa-{{spaceToDash network}} {{spaceToDash network}} social"></span>
 									{{#if url}}
 									<span class="url">
-										<a href="{{url}}">{{username}}</a>
+										<a target="_blank" href="{{url}}">{{username}}</a>
 									</span>
 									{{else}}
 										<span>{{username}}</span>
@@ -184,33 +184,31 @@
 									</div>
 								</header>
 							{{/if}}
-
-                             {{#location}}
-                                <span class="location">
-                                    <span class="fa fa-map-marker"></span>
-                                    {{#if city}}
-                                    <span class="city">
-                                        {{city}},
-                                    </span>
-                                    {{/if}}
-                                    {{#if countryCode}}
-                                    <span class="countryCode">
-                                        ({{countryCode}})
-                                    </span>
-                                    {{/if}}
-                                    {{#if region}}
-                                    <span class="region">
-                                      {{region}}
-                                    </span>
-                                    {{/if}}
-                                </span>
-                            {{/location}}
-                            {{#if website}}
-                                <span class="website">
-                                    <a href="{{website}}">{{website}}</a>
-                                </span>
-                            {{/if}}
-
+                {{#location}}
+                    <span class="location">
+                        <span class="fa fa-map-marker"></span>
+                        {{#if city}}
+                        <span class="city">
+                            {{city}},
+                        </span>
+                        {{/if}}
+                        {{#if countryCode}}
+                        <span class="countryCode">
+                            ({{countryCode}})
+                        </span>
+                        {{/if}}
+                        {{#if region}}
+                        <span class="region">
+                          {{region}}
+                        </span>
+                        {{/if}}
+                    </span>
+                {{/location}}
+                {{#if website}}
+                    <span class="website">
+                        <a target="_blank" href="{{website}}">{{website}}</a>
+                    </span>
+                {{/if}}
 							{{#if keywords.length}}
 								<ul class="keywords">
 									{{#each keywords}}
@@ -304,7 +302,7 @@
                             {{/location}}
                             {{#if url}}
                                 <span class="website">
-                                    <a href="{{url}}">{{url}}</a>
+                                    <a target="_blank" href="{{url}}">{{url}}</a>
                                 </span>
                             {{/if}}
 
@@ -425,7 +423,7 @@
 								{{/if}}
 								{{#if website}}
 									<div class="website">
-										<a href="{{website}}">{{website}}</a>
+										<a target="_blank" href="{{website}}">{{website}}</a>
 									</div>
 								{{/if}}
 								{{#if highlights.length}}
@@ -610,7 +608,7 @@
 										<span class="name">
 											{{#if website}}
 											<span class="website">
-												<a href="{{website}}">{{name}}</a>
+												<a target="_blank" href="{{website}}">{{name}}</a>
 											</span>
 											{{else}}
 												{{name}}
