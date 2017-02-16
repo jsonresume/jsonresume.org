@@ -184,31 +184,31 @@
 									</div>
 								</header>
 							{{/if}}
-                {{#location}}
-                    <span class="location">
-                        <span class="fa fa-map-marker"></span>
-                        {{#if city}}
-                        <span class="city">
-                            {{city}},
-                        </span>
-                        {{/if}}
-                        {{#if countryCode}}
-                        <span class="countryCode">
-                            ({{countryCode}})
-                        </span>
-                        {{/if}}
-                        {{#if region}}
-                        <span class="region">
-                          {{region}}
-                        </span>
-                        {{/if}}
-                    </span>
-                {{/location}}
-                {{#if website}}
-                    <span class="website">
-                        <a target="_blank" href="{{website}}">{{website}}</a>
-                    </span>
-                {{/if}}
+              {{#location}}
+                  <span class="location">
+                      <span class="fa fa-map-marker"></span>
+                      {{#if city}}
+                      <span class="city">
+                          {{city}},
+                      </span>
+                      {{/if}}
+                      {{#if countryCode}}
+                      <span class="countryCode">
+                          ({{countryCode}})
+                      </span>
+                      {{/if}}
+                      {{#if region}}
+                      <span class="region">
+                        {{region}}
+                      </span>
+                      {{/if}}
+                  </span>
+              {{/location}}
+              {{#if website}}
+                  <span class="website">
+                      <a target="_blank" href="{{website}}">{{website}}</a>
+                  </span>
+              {{/if}}
 							{{#if keywords.length}}
 								<ul class="keywords">
 									{{#each keywords}}
@@ -381,6 +381,11 @@
 									</div>
 								</header>
 							{{/if}}
+							{{#if website}}
+								<div class="website">
+									<a target="_blank" href="{{website}}">{{website}}</a>
+								</div>
+							{{/if}}
 
               {{#location}}
                 <span class="location">
@@ -419,11 +424,6 @@
 								{{#if summary}}
 									<div class="summary">
 										<p>{{paragraphSplit summary}}</p>
-									</div>
-								{{/if}}
-								{{#if website}}
-									<div class="website">
-										<a target="_blank" href="{{website}}">{{website}}</a>
 									</div>
 								{{/if}}
 								{{#if highlights.length}}

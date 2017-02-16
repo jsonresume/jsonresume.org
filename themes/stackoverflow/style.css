@@ -88,6 +88,10 @@ li {
     margin-left: 1.3em;
 }
 
+.highlights > li > p {
+  margin-bottom: 0.5em;
+}
+
 h1 {
     font-size: 2rem;
 }
