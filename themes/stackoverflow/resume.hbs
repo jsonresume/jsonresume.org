@@ -1,784 +1,784 @@
 <!doctype html>
 <html>
 
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-		<title>{{#resume.basics}}{{name}}{{/resume.basics}}</title>
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
-		<style>
-			{{{css}}}
-		</style>
-	</head>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>{{#resume.basics}}{{name}}{{/resume.basics}}</title>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+      <style>
+        {{{css}}}
+      </style>
+    </head>
 
-	<body>
-		<div id="resume">
-			{{#resume.basics}}
-				<header id="header" class="clear">
-					{{#if picture}}
-						<img class="picture" src="{{picture}}" alt="{{name}}"/>
-						<div class="middle">
-							<h1 class="name">{{name}}</h1>
-							<h2 class="label">{{label}}</h2>
-						</div>
-					{{else}}
-						<div>
-							<h1 class="name">{{name}}</h1>
-							<h2 class="label">{{label}}</h2>
-						</div>
-					{{/if}}
+    <body>
+      <div id="resume">
+        {{#resume.basics}}
+          <header id="header" class="clear">
+            {{#if picture}}
+              <img class="picture" src="{{picture}}" alt="{{name}}"/>
+              <div class="middle">
+                <h1 class="name">{{name}}</h1>
+                <h2 class="label">{{label}}</h2>
+              </div>
+            {{else}}
+              <div>
+                <h1 class="name">{{name}}</h1>
+                <h2 class="label">{{label}}</h2>
+              </div>
+            {{/if}}
 
-					{{#location}}
-						<span class="location">
-							{{#if address}}
-								<span class="address">
-									{{address}},
-								</span>
-							{{/if}}
-							{{#if postalCode}}
-								<span class="postalCode">
-									{{postalCode}},
-								</span>
-							{{/if}}
-							{{#if city}}
-								<span class="city">
-									{{city}},
-								</span>
-							{{/if}}
-							{{#if region}}
-								<span class="region">
-									{{region}}
-								</span>
-							{{/if}}
-							{{#if countryCode}}
-								<span class="countryCode">
-									{{countryCode}}
-								</span>
-							{{/if}}
-						</span>
-					{{/location}}
-                    {{#birthData birth}}{{/birthData}}
-					<div id="contact">
-						{{#if website}}
-						<div class="website">
-              <span class="fa fa-external-link"></span>
-							<a target="_blank" target="_blank" href="{{website}}">{{website}}</a>
-						</div>
-						{{/if}}
-						{{#if email}}
-						<div class="email">
-              <span class="fa fa-envelope-o"></span>
-							<a href="mailto:{{email}}">{{email}}</a>
-						</div>
-						{{/if}}
-						{{#if phone}}
-						<div class="phone">
-              <span class="fa fa-mobile"></span>
-							{{phone}}
-						</div>
-						{{/if}}
-					</div>
+            {{#location}}
+              <span class="location">
+                {{#if address}}
+                  <span class="address">
+                    {{address}},
+                  </span>
+                {{/if}}
+                {{#if postalCode}}
+                  <span class="postalCode">
+                    {{postalCode}},
+                  </span>
+                {{/if}}
+                {{#if city}}
+                  <span class="city">
+                    {{city}},
+                  </span>
+                {{/if}}
+                {{#if region}}
+                  <span class="region">
+                    {{region}}
+                  </span>
+                {{/if}}
+                {{#if countryCode}}
+                  <span class="countryCode">
+                    {{countryCode}}
+                  </span>
+                {{/if}}
+              </span>
+            {{/location}}
+            {{#birthData birth}}{{/birthData}}
+              <div id="contact">
+                {{#if website}}
+                  <div class="website">
+                    <span class="fa fa-external-link"></span>
+                    <a target="_blank" target="_blank" href="{{website}}">{{website}}</a>
+                  </div>
+                {{/if}}
+                {{#if email}}
+                  <div class="email">
+                    <span class="fa fa-envelope-o"></span>
+                    <a href="mailto:{{email}}">{{email}}</a>
+                  </div>
+                {{/if}}
+                {{#if phone}}
+                  <div class="phone">
+                    <span class="fa fa-mobile"></span>
+                    {{phone}}
+                  </div>
+                {{/if}}
+              </div>
 
-					{{#if profiles.length}}
-					<div id="profiles">
-						{{#each profiles}}
-						<div class="item">
-							{{#if network}}
-								<div class="username">
-									<span class="fa fa-{{spaceToDash network}} {{spaceToDash network}} social"></span>
-									{{#if url}}
-									<span class="url">
-										<a target="_blank" href="{{url}}">{{username}}</a>
-									</span>
-									{{else}}
-										<span>{{username}}</span>
-									{{/if}}
-								</div>
-							{{/if}}
-						</div>
-						{{/each}}
-					</div>
-					{{/if}}
-				</header>
+              {{#if profiles.length}}
+                <div id="profiles">
+                  {{#each profiles}}
+                    <div class="item">
+                      {{#if network}}
+                        <div class="username">
+                          <span class="fa fa-{{spaceToDash network}} {{spaceToDash network}} social"></span>
+                          {{#if url}}
+                            <span class="url">
+                              <a target="_blank" href="{{url}}">{{username}}</a>
+                            </span>
+                          {{else}}
+                            <span>{{username}}</span>
+                          {{/if}}
+                        </div>
+                      {{/if}}
+                    </div>
+                  {{/each}}
+                </div>
+              {{/if}}
+            </header>
 
-				{{#if summary}}
-					<section class="section main-summary">
-						<section>
-							<div>{{paragraphSplit summary}}</div>
-						</section>
-					</section>
-				{{/if}}
-			{{/resume.basics}}
+            {{#if summary}}
+              <section class="section main-summary">
+                <section>
+                  <div>{{paragraphSplit summary}}</div>
+                </section>
+              </section>
+            {{/if}}
+          {{/resume.basics}}
 
-			{{#if resume.skills.length}}
-				<section class="section margin1">
-					<header>
-						<h2 class='section-title'>Skills</h2>
-					</header>
-					<section id="skills">
-						{{#each resume.skills}}
-						<div class="item">
-							{{#if name}}
-							<h3 class="name">
-								{{name}}
-							</h3>
-							{{/if}}
-							{{#if level}}
-							<div class="level {{toLowerCase level}}">
-								<em>{{level}}</em>
-								<div class="bar"></div>
-							</div>
-							{{/if}}
-							{{#if keywords.length}}
-							<ul class="keywords">
-								{{#each keywords}}
-								<li>{{.}}</li>
-								{{/each}}
-							</ul>
-							{{/if}}
-						</div>
-						{{/each}}
-					</section>
-				</section>
-			{{/if}}
+          {{#if resume.skills.length}}
+            <section class="section margin1">
+              <header>
+                <h2 class='section-title'>Skills</h2>
+              </header>
+              <section id="skills">
+                {{#each resume.skills}}
+                  <div class="item">
+                    {{#if name}}
+                      <h3 class="name">
+                        {{name}}
+                      </h3>
+                    {{/if}}
+                    {{#if level}}
+                      <div class="level {{toLowerCase level}}">
+                        <em>{{level}}</em>
+                        <div class="bar"></div>
+                      </div>
+                    {{/if}}
+                    {{#if keywords.length}}
+                      <ul class="keywords">
+                        {{#each keywords}}
+                          <li>{{.}}</li>
+                        {{/each}}
+                      </ul>
+                    {{/if}}
+                  </div>
+                {{/each}}
+              </section>
+            </section>
+          {{/if}}
 
-			{{#if resume.work.length}}
-				<section class="section">
-					<header>
-						<h2 class='section-title'>Work Experience <span class="item-count">({{resume.work.length}})</span></h2>
-					</header>
-					<section id="work">
-						{{#each resume.work}}
-							{{#if company}}
-								<header>
-									<span class="space-left">
-										{{#if @first}}
-											<span class="fa fa-caret-down"></span>
-										{{else}}
-											<span class="fa fa-caret-right"></span>
-										{{/if}}
-									</span>
-									{{#if position}}
-									<div class="position">
-										{{position}}
-									</div>
-									{{/if}}
-									<div class="company">
-										{{company}}
-									</div>
-									<div class="date">
-										{{#if startDate}}
-										<span class="startDate">
-											{{MY startDate}}
-										</span>
-										{{/if}}
-										{{#if endDate}}
-										<span class="endDate">
-											- {{MY endDate}}
-										</span>
-										{{else}}
-										<span class="endDate">
-											- Current
-										</span>
-										{{/if}}
-									</div>
-								</header>
-							{{/if}}
-              {{#location}}
-                  <span class="location">
+          {{#if resume.work.length}}
+            <section class="section">
+              <header>
+                <h2 class='section-title'>Work Experience <span class="item-count">({{resume.work.length}})</span></h2>
+              </header>
+              <section id="work">
+                {{#each resume.work}}
+                  {{#if company}}
+                    <header>
+                      <span class="space-left">
+                        {{#if @first}}
+                          <span class="fa fa-caret-down"></span>
+                        {{else}}
+                          <span class="fa fa-caret-right"></span>
+                        {{/if}}
+                      </span>
+                      {{#if position}}
+                        <div class="position">
+                          {{position}}
+                        </div>
+                      {{/if}}
+                      <div class="company">
+                        {{company}}
+                      </div>
+                      <div class="date">
+                        {{#if startDate}}
+                          <span class="startDate">
+                            {{MY startDate}}
+                          </span>
+                        {{/if}}
+                        {{#if endDate}}
+                          <span class="endDate">
+                            - {{MY endDate}}
+                          </span>
+                        {{else}}
+                          <span class="endDate">
+                            - Current
+                          </span>
+                        {{/if}}
+                      </div>
+                    </header>
+                  {{/if}}
+                  {{#location}}
+                    <span class="location">
                       <span class="fa fa-map-marker"></span>
                       {{#if city}}
-                      <span class="city">
+                        <span class="city">
                           {{city}},
-                      </span>
+                        </span>
                       {{/if}}
                       {{#if countryCode}}
-                      <span class="countryCode">
+                        <span class="countryCode">
                           ({{countryCode}})
-                      </span>
+                        </span>
                       {{/if}}
                       {{#if region}}
-                      <span class="region">
-                        {{region}}
-                      </span>
+                        <span class="region">
+                          {{region}}
+                        </span>
                       {{/if}}
-                  </span>
-              {{/location}}
-              {{#if website}}
-                  <span class="website">
+                    </span>
+                  {{/location}}
+                  {{#if website}}
+                    <span class="website">
                       <a target="_blank" href="{{website}}">{{website}}</a>
-                  </span>
-              {{/if}}
-							{{#if keywords.length}}
-								<ul class="keywords">
-									{{#each keywords}}
-									<li>{{.}}</li>
-									{{/each}}
-								</ul>
-							{{/if}}
-
-							{{#if @first}}
-								<div class="item display" style="opacity:1">
-							{{else}}
-								<div class="item display none" style="opacity:0">
-							{{/if}}
-								{{#if summary}}
-									<div class="summary">
-										<p>{{paragraphSplit summary}}</p>
-									</div>
-								{{/if}}
-								{{#if highlights.length}}
-									<ul class="highlights">
-										{{#each highlights}}
-											<li>{{paragraphSplit .}}</li>
-										{{/each}}
-									</ul>
-								{{/if}}
-							</div>
-						{{/each}}
-					</section>
-				</section>
-			{{/if}}
-
-			{{#if resume.projects.length}}
-				<section class="section">
-					<header>
-						<h2 class='section-title'>Projects <span class="item-count">({{resume.work.length}})</span></h2>
-					</header>
-					<section id="work">
-						{{#each resume.projects}}
-							{{#if name}}
-								<header>
-									<span class="space-left">
-										{{#if @first}}
-											<span class="fa fa-caret-down"></span>
-										{{else}}
-											<span class="fa fa-caret-right"></span>
-										{{/if}}
-									</span>
-									{{#if name}}
-									<div class="position">
-										{{name}}
-									</div>
-									{{/if}}
-									<div class="date">
-										{{#if startDate}}
-										<span class="startDate">
-											{{MY startDate}}
-										</span>
-										{{/if}}
-										{{#if endDate}}
-										<span class="endDate">
-											- {{MY endDate}}
-										</span>
-										{{else}}
-										<span class="endDate">
-											- Current
-										</span>
-										{{/if}}
-									</div>
-								</header>
-							{{/if}}
-
-                             {{#location}}
-                                <span class="location">
-                                    <span class="fa fa-map-marker"></span>
-                                    {{#if city}}
-                                    <span class="city">
-                                        {{city}},
-                                    </span>
-                                    {{/if}}
-                                    {{#if countryCode}}
-                                    <span class="countryCode">
-                                        ({{countryCode}})
-                                    </span>
-                                    {{/if}}
-                                    {{#if region}}
-                                    <span class="region">
-                                      {{region}}
-                                    </span>
-                                    {{/if}}
-                                </span>
-                            {{/location}}
-                            {{#if url}}
-                                <span class="website">
-                                    <a target="_blank" href="{{url}}">{{url}}</a>
-                                </span>
-                            {{/if}}
-
-							{{#if keywords.length}}
-								<ul class="keywords">
-									{{#each keywords}}
-									<li>{{.}}</li>
-									{{/each}}
-								</ul>
-							{{/if}}
-
-							{{#if @first}}
-								<div class="item display" style="opacity:1">
-							{{else}}
-								<div class="item display none" style="opacity:0">
-							{{/if}}
-								{{#if summary}}
-									<div class="summary">
-										<p>{{paragraphSplit summary}}</p>
-									</div>
-								{{/if}}
-								{{#if highlights.length}}
-									<ul class="highlights">
-										{{#each highlights}}
-											<li>{{paragraphSplit .}}</li>
-										{{/each}}
-									</ul>
-								{{/if}}
-							</div>
-						{{/each}}
-					</section>
-				</section>
-			{{/if}}
-
-			{{#if resume.volunteer.length}}
-				<section class="section">
-					<header>
-						<h2 class='section-title'>Volunteer</h2>
-					</header>
-					<section id="volunteer">
-						{{#each resume.volunteer}}
-							{{#if organization}}
-								<header class="clear">
-									<span class="space-left">
-										{{#if @first}}
-											<span class="fa fa-caret-down"></span>
-										{{else}}
-											<span class="fa fa-caret-right"></span>
-										{{/if}}
-									</span>
-									<div class="header-left">
-										{{#if position}}
-											<div class="position">
-												{{position}}
-											</div>
-										{{/if}}
-										<div class="organization">
-											{{organization}}
-										</div>
-									</div>
-									<div class="date">
-										{{#if startDate}}
-										<span class="startDate">
-											{{MY startDate}}
-										</span>
-										{{/if}}
-										{{#if endDate}}
-										<span class="endDate">
-											- {{MY endDate}}
-										</span>
-										{{else}}
-										<span class="endDate">
-											- Current
-										</span>
-										{{/if}}
-									</div>
-								</header>
-							{{/if}}
-							{{#if website}}
-								<div class="website">
-									<a target="_blank" href="{{website}}">{{website}}</a>
-								</div>
-							{{/if}}
-
-              {{#location}}
-                <span class="location">
-									<span class="fa fa-map-marker"></span>
-                  {{#if city}}
-                    <span class="city">
-											{{city}},
-										</span>
-                  {{/if}}
-                  {{#if countryCode}}
-                    <span class="countryCode">
-											({{countryCode}})
-										</span>
-                  {{/if}}
-                  {{#if region}}
-                    <span class="region">
-                      {{region}}
                     </span>
                   {{/if}}
-								</span>
-              {{/location}}
+                  {{#if keywords.length}}
+                    <ul class="keywords">
+                      {{#each keywords}}
+                        <li>{{.}}</li>
+                      {{/each}}
+                    </ul>
+                  {{/if}}
 
-							{{#if keywords.length}}
-								<ul class="keywords">
-									{{#each keywords}}
-										<li>{{.}}</li>
-									{{/each}}
-								</ul>
-							{{/if}}
-
-							{{#if @first}}
-								<div class="item display" style="opacity:1">
-							{{else}}
-								<div class="item display none" style="opacity:0">
-							{{/if}}
-								{{#if summary}}
-									<div class="summary">
-										<p>{{paragraphSplit summary}}</p>
-									</div>
-								{{/if}}
-								{{#if highlights.length}}
-									<ul class="highlights">
-										{{#each highlights}}
-											<li>{{paragraphSplit .}}</li>
-										{{/each}}
-									</ul>
-								{{/if}}
-							</div>
-						{{/each}}
-					</section>
-				</section>
-			{{/if}}
-
-			{{#if resume.education.length}}
-				<section class="section">
-					<header>
-						<h2 class='section-title'>Education <span class="item-count">({{resume.education.length}})</span></h2>
-					</header>
-					<section id="education">
-						{{#each resume.education}}
-							<header class="clear">
-								<span class="space-left">
-									{{#if @first}}
-										<span class="fa fa-caret-down"></span>
-									{{else}}
-										<span class="fa fa-caret-right"></span>
-									{{/if}}
-								</span>
-								<div class="header-left">
-									{{#if studyType}}
-										<div class="studyType">
-											{{studyType}}
-										</div>
-									{{/if}}
-									{{#if area}}
-										<div class="area">
-											{{area}}
-										</div>
-									{{/if}}
-									{{#if institution}}
-										<div class="institution">
-											{{institution}}
-										</div>
-									{{/if}}
-								</div>
-								<div class="date">
-									{{#if startDate}}
-									<span class="startDate">
-										{{Y startDate}}
-									</span>
-									{{/if}}
-									{{#if endDate}}
-									<span class="endDate">
-										- {{Y endDate}}
-									</span>
-									{{else}}
-									<span class="endDate">
-										- Current
-									</span>
-									{{/if}}
-								</div>
-							</header>
-
-							{{#location}}
-								<span class="location">
-									<span class="fa fa-map-marker"></span>
-									{{#if city}}
-										<span class="city">
-											{{city}},
-										</span>
-									{{/if}}
-									{{#if countryCode}}
-										<span class="countryCode">
-											({{countryCode}})
-										</span>
-									{{/if}}
-									{{#if region}}
-										<span class="region">
-											{{region}}
-										</span>
-									{{/if}}
-								</span>
-							{{/location}}
-
-              {{#if courses.length}}
-                <ul class="courses">
-                  {{#each courses}}
-                    <li>{{.}}</li>
+                  {{#if @first}}
+                    <div class="item display" style="opacity:1">
+                    {{else}}
+                      <div class="item display none" style="opacity:0">
+                      {{/if}}
+                      {{#if summary}}
+                        <div class="summary">
+                          <p>{{paragraphSplit summary}}</p>
+                        </div>
+                      {{/if}}
+                      {{#if highlights.length}}
+                        <ul class="highlights">
+                          {{#each highlights}}
+                            <li>{{paragraphSplit .}}</li>
+                          {{/each}}
+                        </ul>
+                      {{/if}}
+                    </div>
                   {{/each}}
-                </ul>
+                </section>
+              </section>
+            {{/if}}
+
+            {{#if resume.projects.length}}
+              <section class="section">
+                <header>
+                  <h2 class='section-title'>Projects <span class="item-count">({{resume.works.length}})</span></h2>
+                </header>
+                <section id="work">
+                  {{#each resume.projects}}
+                    {{#if name}}
+                      <header>
+                        <span class="space-left">
+                          {{#if @first}}
+                            <span class="fa fa-caret-down"></span>
+                          {{else}}
+                            <span class="fa fa-caret-right"></span>
+                          {{/if}}
+                        </span>
+                        {{#if name}}
+                          <div class="position">
+                            {{name}}
+                          </div>
+                        {{/if}}
+                        <div class="date">
+                          {{#if startDate}}
+                            <span class="startDate">
+                              {{MY startDate}}
+                            </span>
+                          {{/if}}
+                          {{#if endDate}}
+                            <span class="endDate">
+                              - {{MY endDate}}
+                            </span>
+                          {{else}}
+                            <span class="endDate">
+                              - Current
+                            </span>
+                          {{/if}}
+                        </div>
+                      </header>
+                    {{/if}}
+
+                    {{#location}}
+                      <span class="location">
+                        <span class="fa fa-map-marker"></span>
+                        {{#if city}}
+                          <span class="city">
+                            {{city}},
+                          </span>
+                        {{/if}}
+                        {{#if countryCode}}
+                          <span class="countryCode">
+                            ({{countryCode}})
+                          </span>
+                        {{/if}}
+                        {{#if region}}
+                          <span class="region">
+                            {{region}}
+                          </span>
+                        {{/if}}
+                      </span>
+                    {{/location}}
+                    {{#if url}}
+                      <span class="website">
+                        <a target="_blank" href="{{url}}">{{url}}</a>
+                      </span>
+                    {{/if}}
+
+                    {{#if keywords.length}}
+                      <ul class="keywords">
+                        {{#each keywords}}
+                          <li>{{.}}</li>
+                        {{/each}}
+                      </ul>
+                    {{/if}}
+
+                    {{#if @first}}
+                      <div class="item display" style="opacity:1">
+                      {{else}}
+                        <div class="item display none" style="opacity:0">
+                        {{/if}}
+                        {{#if summary}}
+                          <div class="summary">
+                            <p>{{paragraphSplit summary}}</p>
+                          </div>
+                        {{/if}}
+                        {{#if highlights.length}}
+                          <ul class="highlights">
+                            {{#each highlights}}
+                              <li>{{paragraphSplit .}}</li>
+                            {{/each}}
+                          </ul>
+                        {{/if}}
+                      </div>
+                    {{/each}}
+                  </section>
+                </section>
               {{/if}}
 
-							{{#if @first}}
-								<div class="item display" style="opacity:1">
-							{{else}}
-								<div class="item display none" style="opacity:0">
-							{{/if}}
-								{{#if gpa}}
-									<div class='gpa'>
-										<strong> Grade:</strong> <span>{{gpa}}</span>
-									</div>
-								{{/if}}
-								{{#if summary}}
-									<div class="summary">
-										<p>{{paragraphSplit summary}}</p>
-									</div>
-								{{/if}}
-							</div>
-						{{/each}}
-					</section>
-				</section>
-			{{/if}}
+              {{#if resume.volunteer.length}}
+                <section class="section">
+                  <header>
+                    <h2 class='section-title'>Volunteer</h2>
+                  </header>
+                  <section id="volunteer">
+                    {{#each resume.volunteer}}
+                      {{#if organization}}
+                        <header class="clear">
+                          <span class="space-left">
+                            {{#if @first}}
+                              <span class="fa fa-caret-down"></span>
+                            {{else}}
+                              <span class="fa fa-caret-right"></span>
+                            {{/if}}
+                          </span>
+                          <div class="header-left">
+                            {{#if position}}
+                              <div class="position">
+                                {{position}}
+                              </div>
+                            {{/if}}
+                            <div class="organization">
+                              {{organization}}
+                            </div>
+                          </div>
+                          <div class="date">
+                            {{#if startDate}}
+                              <span class="startDate">
+                                {{MY startDate}}
+                              </span>
+                            {{/if}}
+                            {{#if endDate}}
+                              <span class="endDate">
+                                - {{MY endDate}}
+                              </span>
+                            {{else}}
+                              <span class="endDate">
+                                - Current
+                              </span>
+                            {{/if}}
+                          </div>
+                        </header>
+                      {{/if}}
+                      {{#if website}}
+                        <div class="website">
+                          <a target="_blank" href="{{website}}">{{website}}</a>
+                        </div>
+                      {{/if}}
 
-			{{#if resume.awards.length}}
-				<section class="section">
-					<header>
-						<h2 class='section-title'>Awards</h2>
-					</header>
-					<section id="awards">
-					{{#each resume.awards}}
-						<header class="clear">
-							<span class="space-left">
-								{{#if @first}}
-									<span class="fa fa-caret-down"></span>
-								{{else}}
-									<span class="fa fa-caret-right"></span>
-								{{/if}}
-							</span>
-							<div class="header-left">
-								{{#if title}}
-									<div class="title">
-										{{title}}
-									</div>
-								{{/if}}
-								{{#if awarder}}
-									<div class="awarder">
-										{{awarder}}
-									</div>
-								{{/if}}
-							</div>
-							{{#if date}}
-								<div class="date">
-									{{Y date}}
-								</div>
-							{{/if}}
-						</header>
-						{{#if @first}}
-							<div class="item display" style="opacity:1">
-						{{else}}
-							<div class="item display none" style="opacity:0">
-						{{/if}}
-							{{#if summary}}
-								<div class="summary">
-									<p>{{paragraphSplit summary}}</p>
-								</div>
-							{{/if}}
-						</div>
-					{{/each}}
-					</section>
-				</section>
-			{{/if}}
+                      {{#location}}
+                        <span class="location">
+                          <span class="fa fa-map-marker"></span>
+                          {{#if city}}
+                            <span class="city">
+                              {{city}},
+                            </span>
+                          {{/if}}
+                          {{#if countryCode}}
+                            <span class="countryCode">
+                              ({{countryCode}})
+                            </span>
+                          {{/if}}
+                          {{#if region}}
+                            <span class="region">
+                              {{region}}
+                            </span>
+                          {{/if}}
+                        </span>
+                      {{/location}}
 
-			{{#if resume.publications.length}}
-				<section class="section">
-					<header>
-						<h2 class='section-title'>Publications</h2>
-					</header>
-					<section id="publications">
-						{{#each resume.publications}}
-							<header class="clear">
-								<span class="space-left">
-								{{#if @first}}
-									<span class="fa fa-caret-down"></span>
-								{{else}}
-									<span class="fa fa-caret-right"></span>
-								{{/if}}
-								</span>
-								<div class="header-left">
-									{{#if name}}
-										<span class="name">
-											{{#if website}}
-											<span class="website">
-												<a target="_blank" href="{{website}}">{{name}}</a>
-											</span>
-											{{else}}
-												{{name}}
-										  {{/if}}
-										</span>
-									{{/if}}
-									{{#if publisher}}
-										<span class="publisher">
-											in {{publisher}}
-										</span>
-									{{/if}}
-								</div>
-								{{#if releaseDate}}
-									<span class="date">
-										{{DMY releaseDate}}
-									</span>
-								{{/if}}
-							</header>
-							{{#if keywords.length}}
-								<ul class="keywords">
-									{{#each keywords}}
-										<li>{{.}}</li>
-									{{/each}}
-								</ul>
-							{{/if}}
-							{{#if @first}}
-								<div class="item display" style="opacity:1">
-							{{else}}
-								<div class="item display none" style="opacity:0">
-							{{/if}}
-								{{#if summary}}
-								<div class="summary">
-									<p>{{paragraphSplit summary}}</p>
-								</div>
-								{{/if}}
-							</div>
-						{{/each}}
-					</section>
-				</section>
-			{{/if}}
+                      {{#if keywords.length}}
+                        <ul class="keywords">
+                          {{#each keywords}}
+                            <li>{{.}}</li>
+                          {{/each}}
+                        </ul>
+                      {{/if}}
 
-			{{#if resume.languages.length}}
-				<section class="section margin1">
-					<header>
-						<h2 class='section-title'>Languages</h2>
-					</header>
-					<section id="languages">
-						{{#each resume.languages}}
-							<div class="display">
-								{{#if language}}
-										<h3 class="language">
-											{{language}}
-										</h3>
-								{{/if}}
-								<div class="item">
-									{{#if fluency}}
-										<div class="level fluency {{toLowerCase fluency}}">
-											<em>{{fluency}}</em>
-											<div class="bar"></div>
-										</div>
-									{{/if}}
-								</div>
-							</div>
-						{{/each}}
-					</section>
-				</section>
-			{{/if}}
+                      {{#if @first}}
+                        <div class="item display" style="opacity:1">
+                        {{else}}
+                          <div class="item display none" style="opacity:0">
+                          {{/if}}
+                          {{#if summary}}
+                            <div class="summary">
+                              <p>{{paragraphSplit summary}}</p>
+                            </div>
+                          {{/if}}
+                          {{#if highlights.length}}
+                            <ul class="highlights">
+                              {{#each highlights}}
+                                <li>{{paragraphSplit .}}</li>
+                              {{/each}}
+                            </ul>
+                          {{/if}}
+                        </div>
+                      {{/each}}
+                    </section>
+                  </section>
+                {{/if}}
 
-			{{#if resume.interests.length}}
-				<section class="section margin1">
-					<header>
-						<h2 class='section-title' class='section-title'>Interests</h2>
-					</header>
-					<section id="interests">
-						{{#each resume.interests}}
-							<div class="item">
-								{{#if name}}
-									<h3 class="name">
-										{{name}}
-									</h3>
-								{{/if}}
-								{{#if keywords.length}}
-									<ul class="keywords">
-										{{#each keywords}}
-											<li>{{.}}</li>
-										{{/each}}
-									</ul>
-								{{/if}}
-								{{#if summary}}
-								<div class="summary">
-									<p>{{paragraphSplit summary}}</p>
-								</div>
-								{{/if}}
-							</div>
-						{{/each}}
-					</section>
-				</section>
-			{{/if}}
+                {{#if resume.education.length}}
+                  <section class="section">
+                    <header>
+                      <h2 class='section-title'>Education <span class="item-count">({{resume.education.length}})</span></h2>
+                    </header>
+                    <section id="education">
+                      {{#each resume.education}}
+                        <header class="clear">
+                          <span class="space-left">
+                            {{#if @first}}
+                              <span class="fa fa-caret-down"></span>
+                            {{else}}
+                              <span class="fa fa-caret-right"></span>
+                            {{/if}}
+                          </span>
+                          <div class="header-left">
+                            {{#if studyType}}
+                              <div class="studyType">
+                                {{studyType}}
+                              </div>
+                            {{/if}}
+                            {{#if area}}
+                              <div class="area">
+                                {{area}}
+                              </div>
+                            {{/if}}
+                            {{#if institution}}
+                              <div class="institution">
+                                {{institution}}
+                              </div>
+                            {{/if}}
+                          </div>
+                          <div class="date">
+                            {{#if startDate}}
+                              <span class="startDate">
+                                {{Y startDate}}
+                              </span>
+                            {{/if}}
+                            {{#if endDate}}
+                              <span class="endDate">
+                                - {{Y endDate}}
+                              </span>
+                            {{else}}
+                              <span class="endDate">
+                                - Current
+                              </span>
+                            {{/if}}
+                          </div>
+                        </header>
 
-			{{#if resume.references.length}}
-				<section class="section">
-					<header>
-						<h2 class='section-title'>References</h2>
-					</header>
-					<section id="references">
-						{{#each resume.references}}
-						<div class="item">
-							{{#if reference}}
-							<blockquote class="reference">
-								&#8220;&#32;{{reference}}&#32;&#8221;
-							</blockquote>
-							{{/if}}
-							{{#if name}}
-							<div class="name">
-								{{name}}
-							</div>
-							{{/if}}
-						</div>
-						{{/each}}
-					</section>
-				</section>
-			{{/if}}
-		</div>
-		<script>
-			(function(){
-				var elements = document.querySelector("#resume");
+                        {{#location}}
+                          <span class="location">
+                            <span class="fa fa-map-marker"></span>
+                            {{#if city}}
+                              <span class="city">
+                                {{city}},
+                              </span>
+                            {{/if}}
+                            {{#if countryCode}}
+                              <span class="countryCode">
+                                ({{countryCode}})
+                              </span>
+                            {{/if}}
+                            {{#if region}}
+                              <span class="region">
+                                {{region}}
+                              </span>
+                            {{/if}}
+                          </span>
+                        {{/location}}
 
-				// adding the element to the all container
-				// and using event delegation
-				elements.addEventListener("click", function(e) {
-					var current = e.target;
-					// font awesone arrows
-					var arrowRight = current.classList.contains('fa-caret-right');
-					var arrowDown = current.classList.contains('fa-caret-down');
+                        {{#if courses.length}}
+                          <ul class="courses">
+                            {{#each courses}}
+                              <li>{{.}}</li>
+                            {{/each}}
+                          </ul>
+                        {{/if}}
 
-					if(current && current.nodeName == "SPAN" && (arrowRight || arrowDown)) {
-						var header = e.target.parentNode.parentNode;
-						var item = header.nextSibling;
+                        {{#if @first}}
+                          <div class="item display" style="opacity:1">
+                          {{else}}
+                            <div class="item display none" style="opacity:0">
+                            {{/if}}
+                            {{#if gpa}}
+                              <div class='gpa'>
+                                <strong> Grade:</strong> <span>{{gpa}}</span>
+                              </div>
+                            {{/if}}
+                            {{#if summary}}
+                              <div class="summary">
+                                <p>{{paragraphSplit summary}}</p>
+                              </div>
+                            {{/if}}
+                          </div>
+                        {{/each}}
+                      </section>
+                    </section>
+                  {{/if}}
 
-						// select the .item element from the siblings
-						while (!item || !item.classList || !item.classList.contains('item')) {
-							item = item.nextSibling;
-						}
+                  {{#if resume.awards.length}}
+                    <section class="section">
+                      <header>
+                        <h2 class='section-title'>Awards</h2>
+                      </header>
+                      <section id="awards">
+                        {{#each resume.awards}}
+                          <header class="clear">
+                            <span class="space-left">
+                              {{#if @first}}
+                                <span class="fa fa-caret-down"></span>
+                              {{else}}
+                                <span class="fa fa-caret-right"></span>
+                              {{/if}}
+                            </span>
+                            <div class="header-left">
+                              {{#if title}}
+                                <div class="title">
+                                  {{title}}
+                                </div>
+                              {{/if}}
+                              {{#if awarder}}
+                                <div class="awarder">
+                                  {{awarder}}
+                                </div>
+                              {{/if}}
+                            </div>
+                            {{#if date}}
+                              <div class="date">
+                                {{Y date}}
+                              </div>
+                            {{/if}}
+                          </header>
+                          {{#if @first}}
+                            <div class="item display" style="opacity:1">
+                            {{else}}
+                              <div class="item display none" style="opacity:0">
+                              {{/if}}
+                              {{#if summary}}
+                                <div class="summary">
+                                  <p>{{paragraphSplit summary}}</p>
+                                </div>
+                              {{/if}}
+                            </div>
+                          {{/each}}
+                        </section>
+                      </section>
+                    {{/if}}
 
-						// hide or show the .item element
-						item.classList.toggle('none');
+                    {{#if resume.publications.length}}
+                      <section class="section">
+                        <header>
+                          <h2 class='section-title'>Publications</h2>
+                        </header>
+                        <section id="publications">
+                          {{#each resume.publications}}
+                            <header class="clear">
+                              <span class="space-left">
+                                {{#if @first}}
+                                  <span class="fa fa-caret-down"></span>
+                                {{else}}
+                                  <span class="fa fa-caret-right"></span>
+                                {{/if}}
+                              </span>
+                              <div class="header-left">
+                                {{#if name}}
+                                  <span class="name">
+                                    {{#if website}}
+                                      <span class="website">
+                                        <a target="_blank" href="{{website}}">{{name}}</a>
+                                      </span>
+                                    {{else}}
+                                      {{name}}
+                                    {{/if}}
+                                  </span>
+                                {{/if}}
+                                {{#if publisher}}
+                                  <span class="publisher">
+                                    in {{publisher}}
+                                  </span>
+                                {{/if}}
+                              </div>
+                              {{#if releaseDate}}
+                                <span class="date">
+                                  {{DMY releaseDate}}
+                                </span>
+                              {{/if}}
+                            </header>
+                            {{#if keywords.length}}
+                              <ul class="keywords">
+                                {{#each keywords}}
+                                  <li>{{.}}</li>
+                                {{/each}}
+                              </ul>
+                            {{/if}}
+                            {{#if @first}}
+                              <div class="item display" style="opacity:1">
+                              {{else}}
+                                <div class="item display none" style="opacity:0">
+                                {{/if}}
+                                {{#if summary}}
+                                  <div class="summary">
+                                    <p>{{paragraphSplit summary}}</p>
+                                  </div>
+                                {{/if}}
+                              </div>
+                            {{/each}}
+                          </section>
+                        </section>
+                      {{/if}}
 
-						// if the .item is going to be shown then imcrease is opacity
-						// every 20 milliseconds to make a fadeIn effect
-						if (!item.classList.contains('none')) {
-							var id = setInterval(function() {
-								item.style.opacity = parseFloat(item.style.opacity) + 0.09;
-								if (parseFloat(item.style.opacity) >= 1) {
-									clearInterval(id);
-								}
-							}, 20);
-						} else {
-							item.style.opacity = 0;
-						}
+                      {{#if resume.languages.length}}
+                        <section class="section margin1">
+                          <header>
+                            <h2 class='section-title'>Languages</h2>
+                          </header>
+                          <section id="languages">
+                            {{#each resume.languages}}
+                              <div class="display">
+                                {{#if language}}
+                                  <h3 class="language">
+                                    {{language}}
+                                  </h3>
+                                {{/if}}
+                                <div class="item">
+                                  {{#if fluency}}
+                                    <div class="level fluency {{toLowerCase fluency}}">
+                                      <em>{{fluency}}</em>
+                                      <div class="bar"></div>
+                                    </div>
+                                  {{/if}}
+                                </div>
+                              </div>
+                            {{/each}}
+                          </section>
+                        </section>
+                      {{/if}}
 
-						current.classList.toggle('fa-caret-right');
-						current.classList.toggle('fa-caret-down');
-					}
+                      {{#if resume.interests.length}}
+                        <section class="section margin1">
+                          <header>
+                            <h2 class='section-title' class='section-title'>Interests</h2>
+                          </header>
+                          <section id="interests">
+                            {{#each resume.interests}}
+                              <div class="item">
+                                {{#if name}}
+                                  <h3 class="name">
+                                    {{name}}
+                                  </h3>
+                                {{/if}}
+                                {{#if keywords.length}}
+                                  <ul class="keywords">
+                                    {{#each keywords}}
+                                      <li>{{.}}</li>
+                                    {{/each}}
+                                  </ul>
+                                {{/if}}
+                                {{#if summary}}
+                                  <div class="summary">
+                                    <p>{{paragraphSplit summary}}</p>
+                                  </div>
+                                {{/if}}
+                              </div>
+                            {{/each}}
+                          </section>
+                        </section>
+                      {{/if}}
 
-				}, false);
+                      {{#if resume.references.length}}
+                        <section class="section">
+                          <header>
+                            <h2 class='section-title'>References</h2>
+                          </header>
+                          <section id="references">
+                            {{#each resume.references}}
+                              <div class="item">
+                                {{#if reference}}
+                                  <blockquote class="reference">
+                                    &#8220;&#32;{{reference}}&#32;&#8221;
+                                  </blockquote>
+                                {{/if}}
+                                {{#if name}}
+                                  <div class="name">
+                                    {{name}}
+                                  </div>
+                                {{/if}}
+                              </div>
+                            {{/each}}
+                          </section>
+                        </section>
+                      {{/if}}
+                    </div>
+                    <script>
+                      (function(){
+                        var elements = document.querySelector("#resume");
 
-				// Make the #resume visible only when the DOM is fully loaded
-				elements.style.opacity = '1';
-			})();
-		</script>
-	</body>
+                        // adding the element to the all container
+                        // and using event delegation
+                        elements.addEventListener("click", function(e) {
+                          var current = e.target;
+                          // font awesone arrows
+                          var arrowRight = current.classList.contains('fa-caret-right');
+                          var arrowDown = current.classList.contains('fa-caret-down');
 
-</html>
+                          if(current && current.nodeName == "SPAN" && (arrowRight || arrowDown)) {
+                            var header = e.target.parentNode.parentNode;
+                            var item = header.nextSibling;
+
+                            // select the .item element from the siblings
+                            while (!item || !item.classList || !item.classList.contains('item')) {
+                              item = item.nextSibling;
+                            }
+
+                            // hide or show the .item element
+                            item.classList.toggle('none');
+
+                            // if the .item is going to be shown then imcrease is opacity
+                            // every 20 milliseconds to make a fadeIn effect
+                            if (!item.classList.contains('none')) {
+                              var id = setInterval(function() {
+                                item.style.opacity = parseFloat(item.style.opacity) + 0.09;
+                                if (parseFloat(item.style.opacity) >= 1) {
+                                  clearInterval(id);
+                                }
+                              }, 20);
+                            } else {
+                              item.style.opacity = 0;
+                            }
+
+                            current.classList.toggle('fa-caret-right');
+                            current.classList.toggle('fa-caret-down');
+                          }
+
+                        }, false);
+
+                        // Make the #resume visible only when the DOM is fully loaded
+                        elements.style.opacity = '1';
+                      })();
+                    </script>
+                  </body>
+
+                </html>
