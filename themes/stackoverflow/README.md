@@ -19,7 +19,7 @@ sudo npm install -g resume-cli
 ```
 ### Install and serve theme
 
-This is a theme for JSON Resume. It is available via npm:
+Clone the repository
 
 ```
 npm install jsonresume-theme-stackoverflow
@@ -83,6 +83,18 @@ example of the extra `birth` object:
 Fork the project, add your feature (or fix your bug) and open a pull request OR
 
 [Open an issue](https://github.com/francescoes/jsonresume-theme-stackoverflow/issues/new) if you find find or if you would like to have extra fields or changes 
+
+To watch for changes, in the main directory run:
+
+```
+npm install
+```
+
+and then:
+
+```
+resume serve
+```
 
 ## License
 
