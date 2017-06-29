@@ -11,5 +11,8 @@
   "dependencies": {
     "handlebars": "latest",
     "moment": "latest"
+  },
+  "devDependencies": {
+    "webpack": "^3.0.0"
   }
 }

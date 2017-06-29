@@ -1,0 +1,48 @@
+{{#if resume.awards.length}}
+<section class="section">
+  <header>
+    <h2 class='section-title'>Awards</h2>
+  </header>
+  <section id="awards">
+    {{#each resume.awards}}
+    <header class="clear">
+      <span class="space-left">
+      {{#if @first}}
+      <span class="fa fa-caret-down"></span>
+      {{else}}
+      <span class="fa fa-caret-right"></span>
+      {{/if}}
+      </span>
+      <div class="header-left">
+        {{#if title}}
+        <div class="title">
+          {{title}}
+        </div>
+        {{/if}}
+        {{#if awarder}}
+        <div class="awarder">
+          {{awarder}}
+        </div>
+        {{/if}}
+      </div>
+      {{#if date}}
+      <div class="date">
+        {{Y date}}
+      </div>
+      {{/if}}
+    </header>
+    {{#if @first}}
+    <div class="item display" style="opacity:1">
+    {{else}}
+    <div class="item display none" style="opacity:0">
+      {{/if}}
+      {{#if summary}}
+      <div class="summary">
+        <p>{{paragraphSplit summary}}</p>
+      </div>
+      {{/if}}
+    </div>
+    {{/each}}
+  </section>
+</section>
+{{/if}}
