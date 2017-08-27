@@ -394,7 +394,10 @@ ul.courses li:hover {
     content: '\f16c';
     color: #f68a1f;
     overflow: hidden;
-    height: 40%;
+    height: 100%;
+}
+.telegram {
+    color: #2291c3;
 }
 
 #languages .item,
