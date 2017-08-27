@@ -42,6 +42,8 @@ Preview: http://localhost:4000
 Press ctrl-c to stop
 ```
 
+To build your own resume, create a 'resume.json' file in the current folder and follow the [json resume schema](https://jsonresume.org/schema/)
+
 ### Social Profiles Icons
 
 **Profiles supported with brand colors:**
@@ -83,18 +85,6 @@ example of the extra `birth` object:
 Fork the project, add your feature (or fix your bug) and open a pull request OR
 
 [Open an issue](https://github.com/francescoes/jsonresume-theme-stackoverflow/issues/new) if you find find or if you would like to have extra fields or changes 
-
-To watch for changes, in the main directory run:
-
-```
-npm install
-```
-
-and then:
-
-```
-resume serve
-```
 
 ## License
 
