@@ -25,52 +25,5 @@
     {{> interests }}
     {{> references }}
 
-    <script>
-    (function() {
-      var elements = document.querySelector("#resume");
-
-      // adding the element to the all container
-      // and using event delegation
-      elements.addEventListener("click", function(e) {
-        var current = e.target;
-        // font awesone arrows
-        var arrowRight = current.classList.contains('fa-caret-right');
-        var arrowDown = current.classList.contains('fa-caret-down');
-
-        if (current && current.nodeName == "SPAN" && (arrowRight || arrowDown)) {
-          var header = e.target.parentNode.parentNode;
-          var item = header.nextSibling;
-
-          // select the .item element from the siblings
-          while (!item || !item.classList || !item.classList.contains('item')) {
-            item = item.nextSibling;
-          }
-
-          // hide or show the .item element
-          item.classList.toggle('none');
-
-          // if the .item is going to be shown then imcrease is opacity
-          // every 20 milliseconds to make a fadeIn effect
-          if (!item.classList.contains('none')) {
-            var id = setInterval(function() {
-              item.style.opacity = parseFloat(item.style.opacity) + 0.09;
-              if (parseFloat(item.style.opacity) >= 1) {
-                clearInterval(id);
-              }
-            }, 20);
-          } else {
-            item.style.opacity = 0;
-          }
-
-          current.classList.toggle('fa-caret-right');
-          current.classList.toggle('fa-caret-down');
-        }
-
-      }, false);
-
-      // Make the #resume visible only when the DOM is fully loaded
-      elements.style.opacity = '1';
-    })();
-    </script>
   </body>
 </html>

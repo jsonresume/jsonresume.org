@@ -2,19 +2,88 @@
 * 	reset from
 * 	http://meyerweb.com/eric/tools/css/reset/
 *******************************************/
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
     margin: 0;
     padding: 0;
     border: 0;
@@ -22,8 +91,17 @@ time, mark, audio, video {
     vertical-align: baseline;
 }
 
-article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section {
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
     display: block;
 }
 
@@ -31,16 +109,20 @@ body {
     line-height: 1;
 }
 
-ol, ul {
+ol,
+ul {
     list-style: none;
 }
 
-blockquote, q {
+blockquote,
+q {
     quotes: none;
 }
 
-blockquote:before, blockquote:after,
-q:before, q:after {
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
     content: none;
 }
 
@@ -49,10 +131,13 @@ table {
     border-spacing: 0;
 }
 
+
 /****************
 *	COMMONS
 ****************/
-body, html {
+
+body,
+html {
     font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     font-size: 13px;
     color: #40484f;
@@ -88,8 +173,8 @@ li {
     margin-left: 1.3em;
 }
 
-.highlights > li > p {
-  margin-bottom: 0.5em;
+.highlights>li>p {
+    margin-bottom: 0.5em;
 }
 
 h1 {
@@ -116,13 +201,17 @@ strong {
     font-weight: 700;
 }
 
+
 /* main container */
+
 #resume {
     padding: 1rem;
     margin-top: 2rem;
 }
 
+
 /* every section wrapper */
+
 .section {
     margin-bottom: 1rem;
 }
@@ -141,8 +230,8 @@ section .location {
     padding: 0;
 }
 
-#header > #profiles,
-#header > #contact,
+#header>#profiles,
+#header>#contact,
 #skills,
 #languages,
 #interests {
@@ -157,11 +246,11 @@ section .location {
     justify-content: flex-start;
 }
 
-#header > div {
+#header>div {
     line-height: 1.5;
 }
 
-#header > div > div {
+#header>div>div {
     margin-right: 1.2em;
 }
 
@@ -204,7 +293,7 @@ h2.section-title {
     font-size: .9rem;
 }
 
-.section > header {
+.section>header {
     position: relative;
 }
 
@@ -212,7 +301,7 @@ h2.section-title {
     margin-right: 0.25em;
 }
 
-.section > header::after {
+.section>header::after {
     position: absolute;
     left: 0;
     top: .7em;
@@ -224,21 +313,21 @@ h2.section-title {
     display: block;
 }
 
-.section.main-summary > section {
+.section.main-summary>section {
     margin: 0;
 }
 
-.section > section > header {
+.section>section>header {
     font-size: 1.38rem;
     position: relative;
     margin-top: .7em;
 }
 
-.section > section > header:first-of-type {
+.section>section>header:first-of-type {
     margin: 0;
 }
 
-.section > section > header .space-left {
+.section>section>header .space-left {
     position: absolute;
     left: -1.56rem;
     top: 5px;
@@ -326,7 +415,9 @@ ul.courses li:hover {
     font-size: 1.1em;
 }
 
+
 /* Social Media Brand Colors */
+
 .google-plus {
     color: #dd4b39;
 }
@@ -396,6 +487,7 @@ ul.courses li:hover {
     overflow: hidden;
     height: 100%;
 }
+
 .telegram {
     color: #2291c3;
 }
@@ -416,7 +508,9 @@ ul.courses li:hover {
     width: 15em;
 }
 
+
 /* Skill chart */
+
 .level {
     margin-bottom: .5em;
 }
@@ -465,6 +559,10 @@ ul.courses li:hover {
     border-left: 5px solid #ff6d1f;
 }
 
+.toggle-item {
+  visibility: hidden;
+}
+
 /******************
 *	HELPER CLASSES
 ******************/
@@ -484,9 +582,11 @@ ul.courses li:hover {
     margin-bottom: .5rem;
 }
 
+
 /****************
 *		TABLET
 ****************/
+
 @media screen and (min-width: 602px) {
     #resume {
         width: 80%;
@@ -494,61 +594,78 @@ ul.courses li:hover {
     }
 }
 
+
 /****************
 *		LAPTOP
 ****************/
+
 @media screen and (min-width: 1025px) {
     li {
         margin-left: 1.5em;
     }
-
     #resume {
         width: 820px;
-        margin: 2rem auto;
-        opacity: 0;
-        -webkit-transition: opacity .5s ease-in-out;
-        transition: opacity .5s ease-in-out;
+        margin: 2rem auto;      
     }
-
-    .section > section > header .space-left {
+    .section>section>header .space-left {
         opacity: 1;
         cursor: pointer;
     }
-
-    .section > section {
+    .section>section {
         margin-left: 1.67rem;
     }
-
+    .toggle-item {
+        transform: translate(-9999px);
+    }
+    .toggle-item+label {
+        display: block;
+        margin-top: -16px;
+    }
+    .toggle-item:checked+label:after {
+        content: '\f0d7';
+    }
+    .toggle-item+label:after {
+        float: left;
+        cursor: pointer;
+        margin-left: -20px;
+        color: #aaa;
+        font-size: 16px;
+        content: '\f0da';
+        font-family: Fontawesome;
+    }
+    .toggle-item~.item {
+        height: 0;
+        opacity: 0;
+    }
+    .toggle-item:checked~.item {
+        height: auto;
+        opacity: 1;
+        transition: all .5s linear;
+    }
     .company::before,
     .institution::before,
     .organization::before,
     .awarder::before {
         content: "| ";
     }
-
     .header-left {
         float: left;
         width: 70%;
         word-break: normal;
     }
-
     .section header .date {
         float: right;
         padding: .2em;
     }
-
     .display {
         display: none;
     }
-
     .display:not(.none) {
         display: block;
     }
-
 }
 
 @media print {
-
     #resume {
         margin: 0;
         padding: 0;
@@ -557,54 +674,44 @@ ul.courses li:hover {
         line-height: 1.3;
         /*font-family: Arial, Georgia, "Lucida Grande", sans-serif;*/
     }
-
     @page {
         margin: 1cm 1.4cm;
     }
-
     .item-count {
         display: none;
     }
-
     .company::before,
     .institution::before,
     .organization::before,
     .awarder::before {
         content: "at ";
     }
-
     .main-summary {
         padding: 2rem 0;
     }
-
     .section {
         margin: .8rem 0;
         padding: 0;
     }
-
     .section header {
         padding-bottom: .15rem;
     }
-
     .section .location {
         padding-bottom: .15rem;
     }
     .stack-overflow::after {
         content: "";
     }
-
     .fa.social {
         color: #828386;
     }
-
     ul {
         margin-top: .4em;
     }
-
-    ul, li {
+    ul,
+    li {
         padding: 0;
     }
-
     ul.keywords li,
     ul.courses li {
         margin: 0;
@@ -612,54 +719,43 @@ ul.courses li:hover {
         font-size: .8rem;
         text-transform: lowercase;
     }
-
     ul.keywords li::after,
     ul.courses li::after {
         padding: 0 0 0 .1rem;
         content: " |";
     }
-
     ul.keywords::before,
     ul.courses::before {
         font-size: .8rem;
         font-weight: 600;
     }
-
     ul.keywords::before {
         content: "Skills acquired: ";
     }
-
     #skills .keywords::before {
         content: '';
     }
-
     .section p {
         margin: 0;
         padding: 0;
     }
-
     ul.courses::before {
         content: "Major courses: ";
     }
-
     ul.keywords li:last-of-type::after,
     ul.courses li:last-of-type::after {
         content: "";
     }
-
     .level em {
         font-style: normal;
         padding: .1em 0;
     }
-
     .level .bar {
         display: none;
     }
-
     #profiles .item {
         padding: 0;
     }
-
     .item.display {
         display: block;
         opacity: 1 !important;
