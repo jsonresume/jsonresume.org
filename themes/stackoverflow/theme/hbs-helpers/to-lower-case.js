@@ -1,3 +1,4 @@
-const Handlebars = require('handlebars');
 
-Handlebars.registerHelper('toLowerCase', str => str.toLowerCase());
+module.exports = {
+  toLowerCase: str => str.toLowerCase()
+};
