@@ -8,11 +8,9 @@
     "url": "https://github.com/francescoes/jsonresume-theme-stackoverflow"
   },
   "license": "MIT",
+  "main": "index.js",
   "dependencies": {
     "handlebars": "^4.0.10",
     "moment": "^2.18.1"
-  },
-  "devDependencies": {
-    "require-dir": "^0.3.2"
   }
 }

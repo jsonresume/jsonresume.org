@@ -1,7 +1,7 @@
 const moment = require('moment');
-const Handlebars = require('handlebars');
+const { SafeString } = require('handlebars');
 
-Handlebars.registerHelper('birthDate', (birth) => {
+const birthDate = (birth) => {
   const out = [];
   if (birth && Object.keys(birth).length) {
     if (birth.place) {
@@ -18,5 +18,7 @@ Handlebars.registerHelper('birthDate', (birth) => {
     }
   }
 
-  return new Handlebars.SafeString(out.join(''));
-});
+  return new SafeString(out.join(''));
+};
+
+module.exports = { birthDate };
