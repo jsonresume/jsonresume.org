@@ -12,10 +12,14 @@
 			</h3>
 			{{/if}} {{#if level}}
 			<div class="level {{toLowerCase level}}">
+				{{#if levelDisplay}}
+				<em>{{levelDisplay}}</em>
+				{{else}}
 				<em>{{level}}</em>
+				{{/if}}
 				<div class="bar"></div>
 			</div>
-			{{/if}} 
+			{{/if}}
 			{{#if keywords.length}}
 			<ul class="keywords">
 				{{#each keywords}}
