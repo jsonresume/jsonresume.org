@@ -479,6 +479,14 @@ ul.courses li:hover {
     color: #ff0084;
 }
 
+.reddit {
+    color: #ff4500;
+}
+
+.hacker-news {
+    color: #ff6600;
+}
+
 .stack-overflow::after {
     position: absolute;
     left: 0;
