@@ -627,7 +627,6 @@ ul.courses li:hover {
     }
     .toggle-item+label {
         display: block;
-        margin-top: -16px;
     }
     .toggle-item:checked+label:after {
         content: '\f0d7';
