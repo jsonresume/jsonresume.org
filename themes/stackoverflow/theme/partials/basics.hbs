@@ -39,19 +39,19 @@
 		<div id="contact">
 			{{#if website}}
 			<div class="website">
-				<span class="fa fa-external-link"></span>
+				<span class="fas fa-external-link-alt"></span>
 				<a target="_blank" target="_blank" href="{{website}}">{{website}}</a>
 			</div>
 			{{/if}} 
 			{{#if email}}
 			<div class="email">
-				<span class="fa fa-envelope-o"></span>
+				<span class="far fa-envelope"></span>
 				<a href="mailto:{{email}}">{{email}}</a>
 			</div>
 			{{/if}} 
 			{{#if phone}}
 			<div class="phone">
-				<span class="fa fa-mobile"></span>
+				<span class="fas fa-mobile-alt"></span>
 				<a href="tel:{{phone}}">{{phone}}</a>
 			</div>
 			{{/if}}
@@ -63,7 +63,7 @@
 			<div class="item">
 				{{#if network}}
 				<div class="username">
-					<span class="fa fa-{{spaceToDash network}} {{spaceToDash network}} social"></span>
+					<span class="fab fa-{{spaceToDash network}} {{spaceToDash network}} social"></span>
 					{{#if url}}
 					<span class="url">
 						<a target="_blank" href="{{url}}">{{username}}</a>

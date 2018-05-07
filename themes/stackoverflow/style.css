@@ -629,7 +629,7 @@ ul.courses li:hover {
         display: block;
     }
     .toggle-item:checked+label:after {
-        content: '\f0d7';
+        content: "\f0d7";
     }
     .toggle-item+label:after {
         float: left;
@@ -637,8 +637,9 @@ ul.courses li:hover {
         margin-left: -20px;
         color: #aaa;
         font-size: 16px;
-        content: '\f0da';
-        font-family: Fontawesome;
+        font-weight: 900;
+        font-family: "Font Awesome 5 Free";
+        content: "\f0da";
     }
     .toggle-item~.item {
         height: 0;

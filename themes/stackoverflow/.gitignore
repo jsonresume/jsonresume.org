@@ -1,5 +1,6 @@
 bower_components/
 node_modules/
+public/
 npm-debug.log
 resume.html
 resume.pdf
