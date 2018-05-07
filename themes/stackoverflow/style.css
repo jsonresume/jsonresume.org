@@ -404,6 +404,7 @@ ul.courses li:hover {
 }
 
 .item {
+    overflow: hidden;
     padding: .5em 0;
 }
 
