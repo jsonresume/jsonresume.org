@@ -21,13 +21,7 @@ sudo npm install -g resume-cli
 
 Clone the repository
 
-```
-npm install jsonresume-theme-stackoverflow
-```
-
-then change directory: 
-
-`cd node_modules/jsonresume-theme-stackoverflow/`
+`git clone https://github.com/francescoes/jsonresume-theme-stackoverflow.git`
 
 And simply run:
 
