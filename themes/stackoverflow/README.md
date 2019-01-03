@@ -14,9 +14,8 @@ The official [resume-cli](https://github.com/jsonresume/resume-cli) to run the d
 
 Go ahead and install it:
 
-```
-sudo npm install -g resume-cli
-```
+`npm install -g resume-cli`
+
 ### Install and serve theme
 
 Clone the repository
