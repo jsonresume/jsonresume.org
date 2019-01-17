@@ -16,7 +16,7 @@
       {{/if}}
 
       {{#if name}}
-      <header>
+      <header class="clear">
         {{#if name}}
         <div class="position">{{name}}</div>
         {{/if}}
@@ -62,9 +62,7 @@
       {{/if}}
       <div class="item">
         {{#if summary}}
-        <div class="summary">
-          <p>{{paragraphSplit summary}}</p>
-        </div>
+          <div class="summary">{{paragraphSplit summary}}</div>
         {{/if}}
         {{#if highlights.length}}
         <ul class="highlights">

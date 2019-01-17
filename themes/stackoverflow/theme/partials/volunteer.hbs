@@ -17,7 +17,7 @@
         <label for="volunteer-item-{{@index}}"></label>
       {{/if}}    
 
-      <header>
+      <header class="clear">
         <div class="header-left">
           {{#if position}}
           <div class="position">
@@ -80,9 +80,7 @@
       {{/if}}
       <div class="item">
         {{#if summary}}
-        <div class="summary">
-          <p>{{paragraphSplit summary}}</p>
-        </div>
+          <div class="summary">{{paragraphSplit summary}}</div>
         {{/if}}
         {{#if highlights.length}}
         <ul class="highlights">

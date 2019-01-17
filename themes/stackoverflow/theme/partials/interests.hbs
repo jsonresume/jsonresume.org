@@ -1,5 +1,5 @@
 {{#if resume.interests.length}}
-<section class="section margin1">
+<section class="section">
   <header>
     <h2 class='section-title' class='section-title'>Interests</h2>
   </header>
@@ -19,9 +19,7 @@
       </ul>
       {{/if}}
       {{#if summary}}
-      <div class="summary">
-        <p>{{paragraphSplit summary}}</p>
-      </div>
+        <div class="summary">{{paragraphSplit summary}}</div>
       {{/if}}
     </div>
     {{/each}}

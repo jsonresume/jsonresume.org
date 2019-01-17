@@ -15,7 +15,7 @@
         <label for="publication-item-{{@index}}"></label>
       {{/if}}
 
-      <header>
+      <header class="clear">
         <div class="header-left">
           {{#if name}}
           <span class="name">
@@ -50,9 +50,7 @@
 
       <div class="item">  
         {{#if summary}}
-        <div class="summary">
-          <p>{{paragraphSplit summary}}</p>
-        </div>
+          <div class="summary">{{paragraphSplit summary}}</div>
         {{/if}}
       </div>
     </section>
