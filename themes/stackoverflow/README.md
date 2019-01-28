@@ -2,7 +2,7 @@
 
 **Printable version with custom CSS**
 
-[DEMO](https://themes.jsonresume.org/stackoverflow)
+[DEMO](https://phoinixi.github.io/website/resume/stackoverflow)
 
 ## Getting started
 
