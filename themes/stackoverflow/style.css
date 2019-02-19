@@ -3,7 +3,87 @@
 * 	http://meyerweb.com/eric/tools/css/reset/
 *******************************************/
 
-html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
   margin: 0;
   padding: 0;
   border: 0;
@@ -11,7 +91,17 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
   vertical-align: baseline;
 }
 
-article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
   display: block;
 }
 
@@ -19,15 +109,20 @@ body {
   line-height: 1;
 }
 
-ol, ul {
+ol,
+ul {
   list-style: none;
 }
 
-blockquote, q {
+blockquote,
+q {
   quotes: none;
 }
 
-blockquote:before, blockquote:after, q:before, q:after {
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
   content: none;
 }
 
@@ -40,7 +135,8 @@ table {
 *	COMMONS
 ****************/
 
-body, html {
+body,
+html {
   font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
   font-size: 13px;
   color: #40484f;
@@ -108,20 +204,24 @@ strong {
 }
 
 section .location {
-  margin-right: .5em;
+  margin-right: 0.5em;
   color: #606d76;
   font-weight: 700;
 }
 
 #contact {
-  margin-top: .5rem;
+  margin-top: 0.5rem;
 }
 
 #profiles .item {
   padding: 0;
 }
 
-#header>#profiles, #header>#contact, #skills, #languages, #interests {
+#header > #profiles,
+#header > #contact,
+#skills,
+#languages,
+#interests {
   display: -webkit-box;
   display: -moz-box;
   display: -ms-flexbox;
@@ -133,11 +233,11 @@ section .location {
   justify-content: flex-start;
 }
 
-#header>div {
+#header > div {
   line-height: 1.5;
 }
 
-#header>div>div {
+#header > div > div {
   margin-right: 1.2em;
 }
 
@@ -177,10 +277,10 @@ section .location {
   text-transform: uppercase;
   font-weight: 600;
   border: none;
-  font-size: .9rem;
+  font-size: 0.9rem;
 }
 
-.section>header {
+.section > header {
   position: relative;
 }
 
@@ -188,10 +288,10 @@ section .location {
   margin-right: 0.25em;
 }
 
-.section>header::after {
+.section > header::after {
   position: absolute;
   left: 0;
-  top: .7em;
+  top: 0.7em;
   height: 1px;
   background: #ccc;
   content: "";
@@ -200,21 +300,21 @@ section .location {
   display: block;
 }
 
-.section.main-summary>section {
+.section.main-summary > section {
   margin: 0;
 }
 
-.section>section>header {
+.section > section > header {
   font-size: 1.38rem;
   position: relative;
-  margin-top: .7em;
+  margin-top: 0.7em;
 }
 
-.section>section>header:first-of-type {
+.section > section > header:first-of-type {
   margin: 0;
 }
 
-.section>section>header .space-left {
+.section > section > header .space-left {
   position: absolute;
   left: -1.56rem;
   top: 5px;
@@ -223,19 +323,38 @@ section .location {
   opacity: 0;
 }
 
-.position, .company, .organization, .institution, .date, .area, .studyType, .title, .awarder {
+.position,
+.company,
+.organization,
+.institution,
+.date,
+.area,
+.studyType,
+.title,
+.awarder {
   display: inline;
 }
 
-.position, .studyType, .area, .title, .language, .name {
+.position,
+.studyType,
+.area,
+.title,
+.language,
+.name {
   font-weight: 600;
 }
 
-.company::before, .institution::before, .organization::before, .awarder::before {
-  content: "at "
+.company::before,
+.institution::before,
+.organization::before,
+.awarder::before {
+  content: "at ";
 }
 
-.company, .institution, .organization, .awarder {
+.company,
+.institution,
+.organization,
+.awarder {
   color: #606d76;
   font-weight: 400;
 }
@@ -243,20 +362,22 @@ section .location {
 .section header .date {
   display: block;
   font-size: 1rem;
-  padding: .1em 0;
+  padding: 0.1em 0;
   color: #606d76;
   font-weight: 400;
 }
 
-.keywords, .courses {
-  margin: .5em 0;
+.keywords,
+.courses {
+  margin: 0.5em 0;
 }
 
-.keywords li, .courses li {
+.keywords li,
+.courses li {
   display: inline-block;
   margin: 2px 2px 2px 0;
   padding: 4px 5px 5px;
-  font-size: .9rem;
+  font-size: 0.9rem;
   line-height: 1;
   color: #3e6d8e;
   background-color: #dfeaf1;
@@ -264,7 +385,8 @@ section .location {
   white-space: nowrap;
 }
 
-.keywords li:hover, .courses li:hover {
+.keywords li:hover,
+.courses li:hover {
   background: #dfeaf0;
 }
 
@@ -272,7 +394,7 @@ section .location {
   margin: 1em 0 0 0;
 }
 
-.highlights>li>p {
+.highlights > li > p {
   margin-bottom: 0.5em;
 }
 
@@ -281,7 +403,7 @@ section .location {
 }
 
 .gpa {
-  padding-bottom: .5em;
+  padding-bottom: 0.5em;
 }
 
 .fa.social {
@@ -362,7 +484,7 @@ section .location {
 .stack-overflow::after {
   position: absolute;
   left: 0;
-  content: '\f16c';
+  content: "\f16c";
   color: #f68a1f;
   overflow: hidden;
   height: 100%;
@@ -372,9 +494,11 @@ section .location {
   color: #2291c3;
 }
 
-#languages .item, #skills .item, #interests .item {
+#languages .item,
+#skills .item,
+#interests .item {
   width: 15em;
-  padding: 0 .5em .5em 0;
+  padding: 0 0.5em 0.5em 0;
   border-bottom: none;
 }
 
@@ -389,7 +513,11 @@ section .location {
 /* Skill chart */
 
 .level {
-  margin-bottom: .5em;
+  margin-bottom: 0.5em;
+}
+
+.level em {
+  padding-left: 0.2em;
 }
 
 .level .bar {
@@ -410,7 +538,7 @@ section .location {
 }
 
 .level.beginner .bar::after {
-  background: #EB5F51;
+  background: #eb5f51;
   width: 2.5em;
 }
 
@@ -419,18 +547,20 @@ section .location {
   width: 5em;
 }
 
-.level.advanced .bar::after, .level.fluent .bar::after {
-  background: #5CB85C;
+.level.advanced .bar::after,
+.level.fluent .bar::after {
+  background: #5cb85c;
   width: 7.5em;
 }
 
-.level.master .bar::after, .level.native.speaker .bar::after {
-  background: #59C596;
+.level.master .bar::after,
+.level.native.speaker .bar::after {
+  background: #59c596;
   width: 10em;
 }
 
 #references .item {
-  padding-left: .5em;
+  padding-left: 0.5em;
   border-left: 5px solid #ff6d1f;
 }
 
@@ -438,8 +568,8 @@ section .location {
   display: none;
 }
 
-.section>section>section {
-  margin-bottom: .5rem;
+.section > section > section {
+  margin-bottom: 0.5rem;
 }
 
 /******************
@@ -485,23 +615,23 @@ section .location {
     width: 820px;
     margin: 2rem auto;
   }
-  .section>section>header .space-left {
+  .section > section > header .space-left {
     opacity: 1;
     cursor: pointer;
   }
-  .section>section:not(.main-summary) {
+  .section > section:not(.main-summary) {
     margin-left: 1.67rem;
   }
   .toggle-item {
     transform: translate(-9999px);
   }
-  .toggle-item+label {
+  .toggle-item + label {
     display: block;
   }
-  .toggle-item:checked+label:after {
+  .toggle-item:checked + label:after {
     content: "\f0d7";
   }
-  .toggle-item+label:after {
+  .toggle-item + label:after {
     float: left;
     cursor: pointer;
     margin-left: -20px;
@@ -511,16 +641,19 @@ section .location {
     font-family: "Font Awesome 5 Free";
     content: "\f0da";
   }
-  .toggle-item~.item {
+  .toggle-item ~ .item {
     height: 0;
     opacity: 0;
   }
-  .toggle-item:checked~.item {
+  .toggle-item:checked ~ .item {
     height: auto;
     opacity: 1;
-    transition: all .5s linear;
+    transition: all 0.5s linear;
   }
-  .company::before, .institution::before, .organization::before, .awarder::before {
+  .company::before,
+  .institution::before,
+  .organization::before,
+  .awarder::before {
     content: "| ";
   }
   .header-left {
@@ -529,7 +662,7 @@ section .location {
     word-break: normal;
   }
   .section header .date {
-    padding: .2em;
+    padding: 0.2em;
   }
   .display {
     display: none;
@@ -541,8 +674,8 @@ section .location {
 
 @media print {
   #resume {
-    margin: .1em;
-    padding: .1em;
+    margin: 0.1em;
+    padding: 0.1em;
     -ms-word-wrap: break-word;
     word-wrap: break-word;
     line-height: 1.25;
@@ -553,7 +686,10 @@ section .location {
   .item-count {
     display: none;
   }
-  .company::before, .institution::before, .organization::before, .awarder::before {
+  .company::before,
+  .institution::before,
+  .organization::before,
+  .awarder::before {
     content: "at ";
   }
   .main-summary {
@@ -561,19 +697,19 @@ section .location {
     background: transparent;
   }
   .section {
-    margin: .8rem 0;
+    margin: 0.8rem 0;
     padding: 0;
   }
   .section header {
-    padding-bottom: .15rem;
+    padding-bottom: 0.15rem;
   }
   .section .location {
-    padding-bottom: .15rem;
+    padding-bottom: 0.15rem;
   }
-  .section>section>section {
+  .section > section > section {
     margin: 0 0 1em 0;
   }
-  .section>section>section:last-of-type {
+  .section > section > section:last-of-type {
     margin: 0;
   }
   .stack-overflow::after {
@@ -583,31 +719,35 @@ section .location {
     color: #828386;
   }
   ul {
-    margin-top: .4em;
+    margin-top: 0.4em;
   }
-  ul, li {
+  ul,
+  li {
     padding: 0;
   }
-  ul.keywords li, ul.courses li {
+  ul.keywords li,
+  ul.courses li {
     margin: 0;
     padding: 0;
-    font-size: .8rem;
+    font-size: 0.8rem;
     background: transparent;
   }
-  ul.keywords li::after, ul.courses li::after {
-    padding: 0 0 0 .1rem;
+  ul.keywords li::after,
+  ul.courses li::after {
+    padding: 0 0 0 0.1rem;
     content: " |";
   }
-  ul.keywords::before, ul.courses::before {
-    font-size: .8rem;
+  ul.keywords::before,
+  ul.courses::before {
+    font-size: 0.8rem;
     font-weight: 600;
   }
   #skills .item {
-    width: calc(100%/3);
+    width: calc(100% / 3);
     padding: 0;
   }
   .highlights {
-    margin: .5em 0 0 0;
+    margin: 0.5em 0 0 0;
   }
   ul.keywords::before {
     content: "Skills acquired: ";
@@ -622,12 +762,13 @@ section .location {
   ul.courses::before {
     content: "Major courses: ";
   }
-  ul.keywords li:last-of-type::after, ul.courses li:last-of-type::after {
+  ul.keywords li:last-of-type::after,
+  ul.courses li:last-of-type::after {
     content: "";
   }
   .level em {
     font-style: normal;
-    padding: .1em 0;
+    padding: 0.1em 0;
   }
   .level .bar {
     display: none;
@@ -640,6 +781,6 @@ section .location {
     opacity: 1 !important;
   }
   .fa-map-marker-alt:before {
-    padding-left: .1em;
+    padding-left: 0.1em;
   }
 }
