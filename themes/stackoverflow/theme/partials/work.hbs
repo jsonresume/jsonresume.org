@@ -7,7 +7,7 @@
   <section id="work">
     {{#each resume.work}}
     <section class="work-item">
-			{{#if company}}
+			{{#if name}}
 
       {{#if summary}}
         {{#if @first}}
@@ -22,34 +22,34 @@
 				{{#if position}}
 				<div class="position">{{position}}</div>
 				{{/if}}
-				<div class="company">{{company}}</div>
+				<div class="company">{{name}}</div>
 				<div class="date">
           {{#if startDate}}
-				  <span class="startDate">{{MY startDate}}</span> 
+				  <span class="startDate">{{MY startDate}}</span>
           {{/if}}
           {{#if endDate}}
-					<span class="endDate">- {{MY endDate}}</span> 
+					<span class="endDate">- {{MY endDate}}</span>
           {{else}}
 					<span class="endDate">- Current</span>
           {{/if}}
 				</div>
 			</header>
 			{{/if}}
-			
+
 			{{#location}}
 			<span class="location">
-				<span class="fas fa-map-marker-alt"></span> 
+				<span class="fas fa-map-marker-alt"></span>
 				{{#if city}}
 				<span class="city">{{city}},</span>
-				{{/if}} 
+				{{/if}}
 				{{#if countryCode}}
-				<span class="countryCode">({{countryCode}})</span> 
-				{{/if}} 
+				<span class="countryCode">({{countryCode}})</span>
+				{{/if}}
 				{{#if region}}
-				<span class="region">{{region}}</span> 
+				<span class="region">{{region}}</span>
 				{{/if}}
 			</span>
-	    {{/location}} 
+	    {{/location}}
 			{{#if website}}
     	<span class="website">
     		<a target="_blank" href="{{website}}">{{website}}</a>
@@ -63,7 +63,7 @@
     	<div class="item" id="work-item">
         {{#if summary}}
         <div class="summary">{{paragraphSplit summary}}</div>
-        {{/if}} 
+        {{/if}}
         {{#if highlights.length}}
         <ul class="highlights">
           {{#each highlights}}
