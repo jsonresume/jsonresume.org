@@ -403,6 +403,7 @@ section .location {
 }
 
 .gpa {
+  clear: both;
   padding-bottom: 0.5em;
 }
 
