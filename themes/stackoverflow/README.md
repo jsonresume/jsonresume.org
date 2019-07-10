@@ -2,7 +2,7 @@
 
 **Printable version with custom CSS**
 
-[DEMO](https://phoinixi.github.io/website/resume/stackoverflow)
+[DEMO](https://fran.cesco.io/resume/stackoverflow)
 
 ## Getting started
 
