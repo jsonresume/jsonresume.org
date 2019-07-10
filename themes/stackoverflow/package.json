@@ -10,7 +10,7 @@
   "license": "MIT",
   "main": "index.js",
   "dependencies": {
-    "handlebars": "^4.0.10",
+    "handlebars": "^4.1.2",
     "moment": "^2.18.1"
   }
 }
