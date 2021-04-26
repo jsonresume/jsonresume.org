@@ -36,7 +36,8 @@
 			</header>
 			{{/if}}
 
-			{{#location}}
+			{{#if location}}
+			{{#isObject location}}
 			<span class="location">
 				<span class="fas fa-map-marker-alt"></span>
 				{{#if city}}
@@ -49,7 +50,14 @@
 				<span class="region">{{region}}</span>
 				{{/if}}
 			</span>
-	    {{/location}}
+			{{else}}
+			<span class="location">
+				<span class="fas fa-map-marker-alt"></span>
+				<span>{{location}}</span>
+			</span>
+			{{/isObject}}
+	    {{/if}}
+
 			{{#if website}}
     	<span class="website">
     		<a target="_blank" href="{{website}}">{{website}}</a>

@@ -6,6 +6,7 @@ const HELPERS = join(__dirname, 'theme/hbs-helpers');
 
 const { birthDate } = require(join(HELPERS, 'birth-date.js'));
 const { dateHelpers } = require(join(HELPERS, 'date-helpers.js'));
+const { isObject } = require(join(HELPERS, 'is-object.js'));
 const { paragraphSplit } = require(join(HELPERS, 'paragraph-split.js'));
 const { toLowerCase } = require(join(HELPERS, 'to-lower-case.js'));
 const { spaceToDash } = require(join(HELPERS, 'space-to-dash.js'));
@@ -13,12 +14,13 @@ const { spaceToDash } = require(join(HELPERS, 'space-to-dash.js'));
 const { MY, Y, DMY } = dateHelpers;
 
 Handlebars.registerHelper('birthDate', birthDate);
-Handlebars.registerHelper('paragraphSplit', paragraphSplit);
-Handlebars.registerHelper('spaceToDash', spaceToDash);
-Handlebars.registerHelper('toLowerCase', toLowerCase);
 Handlebars.registerHelper('MY', MY);
 Handlebars.registerHelper('Y', Y);
 Handlebars.registerHelper('DMY', DMY);
+Handlebars.registerHelper('isObject', isObject);
+Handlebars.registerHelper('paragraphSplit', paragraphSplit);
+Handlebars.registerHelper('toLowerCase', toLowerCase);
+Handlebars.registerHelper('spaceToDash', spaceToDash);
 
 function render(resume) {
   const css = readFileSync(`${__dirname}/style.css`, 'utf-8');
