@@ -674,6 +674,9 @@ section .location {
 }
 
 @media print {
+  a:not(.hide-href-print)::after{
+    content: " (" attr(href) ") ";
+  }
   #resume {
     margin: 0.1em;
     padding: 0.1em;
