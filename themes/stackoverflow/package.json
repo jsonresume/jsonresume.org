@@ -11,6 +11,6 @@
   "main": "index.js",
   "dependencies": {
     "handlebars": "^4.7.7",
-    "moment": "^2.19.3"
+    "moment": "^2.29.2"
   }
 }
