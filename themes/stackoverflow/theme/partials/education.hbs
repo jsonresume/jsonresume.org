@@ -8,11 +8,6 @@
     {{#each resume.education}}
     <section class="education-item">
       {{#if summary}}
-        {{#if @first}}
-        <input id="education-item-{{@index}}" type="checkbox" class="toggle-item" checked="checked" />
-        {{else}}
-        <input id="education-item-{{@index}}" type="checkbox" class="toggle-item" />
-        {{/if}}
         <label for="education-item-{{@index}}"></label>
       {{/if}}
       <header class="clear">
@@ -55,7 +50,7 @@
       <span class="location">
         <span class="fas fa-map-marker-alt"></span>
         {{#if city}}
-        <span class="city">{{city}}, </span>
+        <span class="city">{{city}}</span>
         {{/if}}
         {{#if countryCode}}
         <span class="countryCode">({{countryCode}})</span>

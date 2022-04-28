@@ -7,11 +7,6 @@
     {{#each resume.projects}}
     <section class="project-item">
       {{#if summary}}
-        {{#if @first}}
-        <input id="project-item-{{@index}}" type="checkbox" class="toggle-item" checked="checked" />
-        {{else}}
-        <input id="project-item-{{@index}}" type="checkbox" class="toggle-item" />
-        {{/if}}
         <label for="project-item-{{@index}}"></label>
       {{/if}}
 
@@ -50,6 +45,7 @@
       {{/location}}
       {{#if url}}
       <span class="website">
+        <span class="fas fa-external-link-alt"></span>
         <a target="_blank" href="{{url}}">{{url}}</a>
       </span>
       {{/if}}

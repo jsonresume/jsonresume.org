@@ -9,13 +9,8 @@
       {{#if organization}}
 
       {{#if summary}}
-        {{#if @first}}
-        <input id="volunteer-item-{{@index}}" type="checkbox" class="toggle-item" checked="checked" />
-        {{else}}
-        <input id="volunteer-item-{{@index}}" type="checkbox" class="toggle-item" />
-        {{/if}}
-        <label for="volunteer-item-{{@index}}"></label>
-      {{/if}}    
+      <label for="volunteer-item-{{@index}}"></label>
+      {{/if}}
 
       <header class="clear">
         <div class="header-left">
@@ -31,16 +26,16 @@
         <div class="date">
           {{#if startDate}}
           <span class="startDate">
-          {{MY startDate}}
+            {{MY startDate}}
           </span>
           {{/if}}
           {{#if endDate}}
           <span class="endDate">
-          - {{MY endDate}}
+            - {{MY endDate}}
           </span>
           {{else}}
           <span class="endDate">
-          - Current
+            - Current
           </span>
           {{/if}}
         </div>
@@ -48,27 +43,28 @@
       {{/if}}
       {{#if website}}
       <div class="website">
+        <span class="fas fa-external-link-alt"></span>
         <a target="_blank" href="{{website}}">{{website}}</a>
       </div>
       {{/if}}
       {{#location}}
       <span class="location">
-      <span class="fas fa-map-marker-alt"></span>
-      {{#if city}}
-      <span class="city">
-      {{city}},
-      </span>
-      {{/if}}
-      {{#if countryCode}}
-      <span class="countryCode">
-      ({{countryCode}})
-      </span>
-      {{/if}}
-      {{#if region}}
-      <span class="region">
-      {{region}}
-      </span>
-      {{/if}}
+        <span class="fas fa-map-marker-alt"></span>
+        {{#if city}}
+        <span class="city">
+          {{city}},
+        </span>
+        {{/if}}
+        {{#if countryCode}}
+        <span class="countryCode">
+          ({{countryCode}})
+        </span>
+        {{/if}}
+        {{#if region}}
+        <span class="region">
+          {{region}}
+        </span>
+        {{/if}}
       </span>
       {{/location}}
       {{#if keywords.length}}
@@ -80,7 +76,7 @@
       {{/if}}
       <div class="item">
         {{#if summary}}
-          <div class="summary">{{paragraphSplit summary}}</div>
+        <div class="summary">{{paragraphSplit summary}}</div>
         {{/if}}
         {{#if highlights.length}}
         <ul class="highlights">
