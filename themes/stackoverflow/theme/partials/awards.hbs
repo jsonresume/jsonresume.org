@@ -1,42 +1,42 @@
 {{#if resume.awards.length}}
-<section class="section">
-  <header>
-    <h2 class='section-title'>Awards</h2>
-  </header>
-  <section id="awards">
-    {{#each resume.awards}}
-    <section class="award-item">
-      {{#if summary}}
-        <label for="award-item-{{@index}}"></label>
-      {{/if}}
+  <section class="section">
+    <header>
+      <h2 class="section-title">Awards</h2>
+    </header>
+    <section id="awards">
+      {{#each resume.awards}}
+        <section class="award-item">
+          {{#if summary}}
+            <label for="award-item-{{@index}}"></label>
+          {{/if}}
 
-      <header class="clear">
-        <div class="header-left">
-          {{#if title}}
-          <div class="title">
-            {{title}}
+          <header class="clear">
+            {{#if date}}
+              <div class="date">
+                {{Y date}}
+              </div>
+            {{/if}}
+            <div class="header-left">
+              {{#if title}}
+                <div class="title">
+                  {{title}}
+                </div>
+              {{/if}}
+              {{#if awarder}}
+                <div class="awarder">
+                  {{awarder}}
+                </div>
+              {{/if}}
+            </div>
+          </header>
+
+          <div class="item">
+            {{#if summary}}
+              <div class="summary">{{paragraphSplit summary}}</div>
+            {{/if}}
           </div>
-          {{/if}}
-          {{#if awarder}}
-          <div class="awarder">
-            {{awarder}}
-          </div>
-          {{/if}}
-        </div>
-        {{#if date}}
-        <div class="date">
-          {{Y date}}
-        </div>
-        {{/if}}
-      </header>
-      
-      <div class="item">
-        {{#if summary}}
-          <div class="summary">{{paragraphSplit summary}}</div>
-        {{/if}}
-      </div>
+        </section>
+      {{/each}}
     </section>
-    {{/each}}
   </section>
-</section>
 {{/if}}

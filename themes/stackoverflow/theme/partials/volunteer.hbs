@@ -13,17 +13,7 @@
       {{/if}}
 
       <header class="clear">
-        <div class="header-left">
-          {{#if position}}
-          <div class="position">
-            {{position}}
-          </div>
-          {{/if}}
-          <div class="organization">
-            {{organization}}
-          </div>
-        </div>
-        <div class="date">
+         <div class="date">
           {{#if startDate}}
           <span class="startDate">
             {{MY startDate}}
@@ -39,6 +29,17 @@
           </span>
           {{/if}}
         </div>
+        <div class="header-left">
+          {{#if position}}
+          <div class="position">
+            {{position}}
+          </div>
+          {{/if}}
+          <div class="organization">
+            {{organization}}
+          </div>
+        </div>
+       
       </header>
       {{/if}}
       {{#if website}}

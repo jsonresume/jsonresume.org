@@ -565,7 +565,7 @@ section .location {
 }
 
 .section > section > section {
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 /******************
@@ -641,7 +641,7 @@ section .location {
 }
 
 @media print {
-  a:not(.hide-href-print)::after{
+  #profiles a:not(.hide-href-print)::after{
     content: " (" attr(href) ") ";
   }
   #resume {
