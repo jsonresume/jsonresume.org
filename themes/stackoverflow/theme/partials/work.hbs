@@ -35,10 +35,10 @@
       <span class="fas fa-map-marker-alt"></span>
       <span class="location">{{location}}</span>
       {{/if}}
-      {{#if website}}
-      <span class="website">
+      {{#if url}}
+      <span class="url">
         <span class="fas fa-external-link-alt"></span>
-        <a target="_blank" href="{{website}}">{{website}}</a>
+        <a target="_blank" href="{{url}}">{{url}}</a>
       </span> {{/if}} {{#if keywords.length}}
       <ul class="keywords">
         {{#each keywords}}
