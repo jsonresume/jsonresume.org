@@ -11,6 +11,7 @@
   "main": "index.js",
   "dependencies": {
     "handlebars": "^4.7.7",
+    "markdown-it": "^13.0.1",
     "moment": "^2.29.2"
   }
 }
