@@ -2,7 +2,7 @@
 
 **Printable version with custom CSS**
 
-[DEMO](https://themes.jsonresume.org/theme/stackoverflow)
+[DEMO](https://francesco.netlify.app/)
 
 ## Getting started
 
