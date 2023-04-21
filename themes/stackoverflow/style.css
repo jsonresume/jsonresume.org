@@ -373,7 +373,7 @@ section .location {
 
 .keywords li,
 .courses li {
-  display: inline-block;
+  display: block;
   margin: 2px 2px 2px 0;
   padding: 4px 5px 5px;
   font-size: 0.9rem;
