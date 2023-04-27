@@ -1,101 +1,191 @@
 {
   "basics": {
-    "name": "Jane Doe",
-    "label": "Super Rocket Scientist",
-    "image": "profile.jpeg",
-    "email": "Your email address",
-    "phone": "A phone number, with any formatting you like. E.g. (555) 555-5555.",
-    "degree": "",
-    "website": "Your website URL",
-    "summary": "A one-sentence to one-paragraph overview text. Do not include any line-breaks.",
+    "name": "Samantha Jones",
+    "label": "Software Developer",
+    "picture": "",
+    "email": "samantha.jones@email.com",
+    "phone": "(555) 555-5555",
+    "website": "https://www.samanthajones.com",
+    "summary": "Experienced software developer with a passion for developing innovative solutions that improve user experiences.",
     "location": {
-      "address": "Your street address or mailing address",
-      "postalCode": "Your postal code (ZIP in the U.S.)",
-      "city": "Your city",
-      "countryCode": "Your country (e.g. USA)",
-      "region": "Your region (state in the U.S.)"
+      "address": "123 Main St.",
+      "postalCode": "12345",
+      "city": "Anytown",
+      "countryCode": "US",
+      "region": "Any State"
     },
     "profiles": [
       {
-        "network": "A social media or other profile that you would like to include (e.g. LinkedIn, Twitter)",
-        "username": "Your username on this network",
-        "url": "A URL to your user profile page"
+        "network": "GitHub",
+        "username": "sjones",
+        "url": "https://github.com/sjones"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "samanthajones",
+        "url": "https://www.linkedin.com/in/samanthajones"
       }
     ]
   },
   "work": [
     {
-      "company": "Your employer name",
-      "position": "Your job title",
-      "website": "The URL for the employer's website",
-      "startDate": "Your start date, in YYYY-MM-DD format",
-      "endDate": "Your end date, in YYY-MM-DD format (leave blank for a current position)",
-      "summary": "A one-sentence to one-paragraph summary of this employer or position",
+      "company": "Acme Inc.",
+      "position": "Software Developer",
+      "website": "https://www.acme.com",
+      "startDate": "2018-06-01",
+      "endDate": "2022-05-31",
+      "summary": "Developed and maintained a web application for tracking customer orders and inventory using React, Node.js, and PostgreSQL.",
       "highlights": [
-        "Bullet-point list items that you would like to include along with (or instead of) a summary paragraph."
+        "Implemented real-time order tracking feature using WebSockets.",
+        "Optimized database queries to improve application performance by 30%."
       ]
-    }
-  ],
-  "volunteer": [
+    },
     {
-      "organization": "Your volunteer organization name",
-      "position": "Your job title",
-      "website": "The URL for the employer's website",
-      "startDate": "Your start date, in YYYY-MM-DD format",
-      "endDate": "Your end date, in YYY-MM-DD format (leave blank for a current position)",
-      "summary": "A one-sentence to one-paragraph summary of this employer or position",
+      "company": "XYZ Corp.",
+      "position": "Software Engineer",
+      "website": "https://www.xyz.com",
+      "startDate": "2016-01-01",
+      "endDate": "2018-05-31",
+      "summary": "Developed and maintained a mobile application for managing personal finances using React Native and Firebase.",
       "highlights": [
-        "Bullet-point list items that you would like to include along with (or instead of) a summary paragraph."
+        "Implemented biometric authentication feature using Touch ID and Face ID.",
+        "Integrated third-party APIs to allow users to view their account balances from multiple financial institutions."
       ]
     }
   ],
   "education": [
     {
-      "institution": "Your school name",
-      "area": "Your area of study or degree earned",
-      "studyType": "",
-      "startDate": "Your start date, in YYYY-MM-DD format",
-      "endDate": "Your completion date, in YYYY-MM-DD format",
-      "gpa": "",
-      "courses": [""]
+      "institution": "University of California, Berkeley",
+      "area": "Computer Science",
+      "studyType": "Bachelor",
+      "startDate": "2013-08-01",
+      "endDate": "2017-05-01",
+      "score": "3.7",
+      "courses": [
+        "Data Structures and Algorithms",
+        "Computer Networks",
+        "Database Systems",
+        "Artificial Intelligence"
+      ]
+    },
+    {
+      "institution": "Stanford University",
+      "area": "Artificial Intelligence",
+      "studyType": "Master",
+      "startDate": "2017-08-01",
+      "endDate": "2019-05-01",
+      "score": "3.9",
+      "courses": [
+        "Machine Learning",
+        "Natural Language Processing",
+        "Computer Vision",
+        "Advanced Robotics"
+      ]
+    },
+    {
+      "institution": "Harvard University",
+      "area": "Economics",
+      "studyType": "Bachelor",
+      "startDate": "2010-08-01",
+      "endDate": "2014-05-01",
+      "score": "3.8",
+      "courses": [
+        "Microeconomics",
+        "Macroeconomics",
+        "International Trade",
+        "Econometrics"
+      ]
+    },
+    {
+      "institution": "Massachusetts Institute of Technology",
+      "area": "Electrical Engineering and Computer Science",
+      "studyType": "PhD",
+      "startDate": "2020-08-01",
+      "score": "4.0",
+      "courses": [
+        "Algorithms",
+        "Distributed Systems",
+        "Computer Architecture",
+        "Programming Languages"
+      ]
     }
   ],
-  "awards": [
+  "volunteer": [
     {
-      "title": "Your award title",
-      "date": "Your date, in YYYY-MM-DD format you received the award",
-      "awarder": "Your award given by",
-      "summary": "A one-sentence to one-paragraph overview of this award"
-    }
-  ],
-  "publications": [
+      "organization": "Local Animal Shelter",
+      "position": "Volunteer",
+      "website": "https://www.localanimalshelter.com",
+      "startDate": "2019-01-01",
+      "endDate": "2020-12-31",
+      "summary": "Assisted with daily operations of the shelter, including feeding and caring for animals, cleaning cages and kennels, and providing customer service to visitors.",
+      "highlights": [
+        "Trained and mentored new volunteers on proper animal care techniques.",
+        "Organized and led fundraising events to support the shelter's mission."
+      ]
+    },
     {
-      "name": "Your publication title",
-      "publisher": "Publisher name",
-      "releaseDate": "Publication date, in YYYY-MM-DD format",
-      "website": "The website URL for this publisher or book",
-      "summary": "A one-sentence to one-paragraph overview of this publication"
+      "organization": "City Soup Kitchen",
+      "position": "Soup Kitchen Volunteer",
+      "website": "https://www.citysoupkitchen.com",
+      "startDate": "2018-03-01",
+      "endDate": "2018-06-30",
+      "summary": "Assisted with preparing and serving meals to homeless and low-income individuals in the community.",
+      "highlights": [
+        "Developed strong relationships with regular guests and provided emotional support and resources to those in need.",
+        "Collaborated with other volunteers to improve efficiency and organization of kitchen operations."
+      ]
+    },
+    {
+      "organization": "Global Health Corps",
+      "position": "Fellow",
+      "website": "https://www.globalhealthcorps.org",
+      "startDate": "2016-07-01",
+      "endDate": "2017-06-30",
+      "summary": "Collaborated with local health organizations in Malawi to develop and implement community health programs focused on maternal and child health.",
+      "highlights": [
+        "Designed and conducted community needs assessments to identify gaps in health services and resources.",
+        "Developed and delivered trainings to local health workers and community members on topics such as family planning, nutrition, and hygiene."
+      ]
     }
   ],
   "skills": [
     {
-      "name": "A category of job skills (e.g. 'Programming Languages')",
-      "level": "",
-      "keywords": ["Keywords under this category (e.g. 'Java', 'C++', etc)"]
+      "name": "JavaScript",
+      "level": "Expert"
+    },
+    {
+      "name": "React",
+      "level": "Expert"
+    },
+    {
+      "name": "Node.js",
+      "level": "Expert"
+    },
+    {
+      "name": "HTML",
+      "level": "Expert"
+    },
+    {
+      "name": "CSS",
+      "level": "Expert"
+    },
+    {
+      "name": "SQL",
+      "level": "Intermediate"
+    },
+    {
+      "name": "Java",
+      "level": "Intermediate"
     }
   ],
   "languages": [
     {
-      "language": "Language name",
-      "fluency": "Your language fluency"
-    }
-  ],
-  "interests": [
+      "language": "English",
+      "fluency": "Native speaker"
+    },
     {
-      "name": "A category of interests (e.g. 'Sports')",
-      "keywords": [
-        "Keywords under this category (e.g. 'Cricket', 'Football', 'Golf')"
-      ]
+      "language": "Spanish",
+      "fluency": "Intermediate"
     }
   ]
 }
