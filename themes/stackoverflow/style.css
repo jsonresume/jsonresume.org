@@ -373,7 +373,7 @@ section .location {
 
 .keywords li,
 .courses li {
-  display: block;
+  display: inline-block;
   margin: 2px 2px 2px 0;
   padding: 4px 5px 5px;
   font-size: 0.9rem;
@@ -641,7 +641,7 @@ section .location {
 }
 
 @media print {
-  #profiles a:not(.hide-href-print)::after{
+  #profiles a:not(.hide-href-print)::after {
     content: " (" attr(href) ") ";
   }
   #resume {

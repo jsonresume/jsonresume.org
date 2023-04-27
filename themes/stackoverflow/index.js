@@ -20,7 +20,7 @@ Handlebars.registerHelper('paragraphSplit', paragraphSplit);
 Handlebars.registerHelper('toLowerCase', toLowerCase);
 Handlebars.registerHelper('spaceToDash', spaceToDash);
 
-function render(resume) {
+const createRender = (language) => (resume) =>  {
   const css = readFileSync(`${__dirname}/style.css`, 'utf-8');
   const tpl = readFileSync(`${__dirname}/resume.hbs`, 'utf-8');
   const partialsDir = join(__dirname, 'theme/partials');
@@ -51,4 +51,9 @@ const pdfRenderOptions = {
   }
 }
 
-module.exports = { render, pdfRenderOptions };
+const createTheme = (language = 'en') => ({
+  pdfRenderOptions,
+  render: createRender(language)
+})
+
+module.exports = createTheme
