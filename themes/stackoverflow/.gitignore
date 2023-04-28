@@ -8,5 +8,4 @@ resume.json
 dist/
 public/
 !public/profile.jpeg
-!public/style.css
 storybook-static/
