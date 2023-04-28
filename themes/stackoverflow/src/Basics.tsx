@@ -70,7 +70,7 @@ const Profile: React.FC<ProfileProps> = ({ network, username, url }) => (
 );
 
 export const Basics: React.FC<BasicsProps> = (props) => {
-  const { name, label, location, image, profiles } = props;
+  const { name, label, location, image, profiles, summary } = props;
   return (
     <>
       <header id="header" className="clear">
@@ -89,18 +89,13 @@ export const Basics: React.FC<BasicsProps> = (props) => {
           ))}
         </div>
       )}
+      {summary && (
+        <section className="section">
+          <section className="main-summary">
+            <div>{summary}</div>
+          </section>
+        </section>
+      )}
     </>
   );
 };
-
-/**
-{{#if summary}}
-<section className="section">
-    <section className="main-summary">
-        <div>{{paragraphSplit summary}}</div>
-    </section>
-</section>
-{{/if}}
-
-{{/resume.basics}}
-*/

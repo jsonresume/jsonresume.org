@@ -1,44 +1,771 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <link rel="stylesheet" href="style.css" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My App</title>
+    <style>/********************************************
+* 	reset from
+* 	http://meyerweb.com/eric/tools/css/reset/
+*******************************************/
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+
+body {
+  line-height: 1;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+blockquote,
+q {
+  quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/****************
+*	COMMONS
+****************/
+
+body,
+html {
+  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-size: 13px;
+  color: #40484f;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.46153846;
+  text-align: left;
+}
+
+p {
+  display: block;
+}
+
+a {
+  color: #0095ff;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #0c65a5;
+  text-decoration: underline;
+}
+
+li {
+  list-style-type: square;
+  list-style-position: outside;
+  margin-left: 1.3em;
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.67rem;
+}
+
+h3 {
+  font-size: 1.27rem;
+}
+
+em {
+  color: #757575;
+}
+
+blockquote {
+  margin-bottom: 1em;
+}
+
+strong {
+  font-weight: 700;
+}
+
+/* main container */
+
+#resume {
+  padding: 1.5rem;
+}
+
+/* every section wrapper */
+
+.section {
+  margin-bottom: 1rem;
+}
+
+section .location {
+  margin-right: 0.5em;
+  color: #606d76;
+  font-weight: 700;
+}
+
+#contact {
+  margin-top: 0.5rem;
+}
+
+#profiles .item {
+  padding: 0;
+}
+
+#header > #profiles,
+#header > #contact,
+#skills,
+#languages,
+#interests {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-flow: row wrap;
+  flex-flow: row wrap;
+  -webkit-justify-content: flex-start;
+  justify-content: flex-start;
+}
+
+#header > div {
+  line-height: 1.5;
+}
+
+#header > div > div {
+  margin-right: 1.2em;
+}
+
+#header h1.name {
+  font-size: 2.8rem;
+  font-weight: 100;
+  line-height: 100%;
+}
+
+#header h2.label {
+  color: #202931;
+  font-size: 1.47rem;
+  font-weight: 300;
+}
+
+#header .image {
+  width: 11em;
+  float: right;
+  border-radius: 4px;
+}
+
+.main-summary {
+  background: #f1f8ff;
+  padding: 1.2em 1em;
+  margin-top: 1rem;
+}
+
+.main-summary p {
+  margin: 0;
+}
+
+.section-title {
+  display: inline-block;
+  background: #fff;
+  padding: 0 1em 0.3em 0;
+  color: #ff6d1f;
+  text-transform: uppercase;
+  font-weight: 600;
+  border: none;
+  font-size: 0.9rem;
+}
+
+.section > header {
+  position: relative;
+}
+
+.fa {
+  margin-right: 0.25em;
+}
+
+.section > header::after {
+  position: absolute;
+  left: 0;
+  top: 0.7em;
+  height: 1px;
+  background: #ccc;
+  content: "";
+  width: 100%;
+  z-index: -100;
+  display: block;
+}
+
+.section.main-summary > section {
+  margin: 0;
+}
+
+.section > section > header {
+  font-size: 1.38rem;
+  position: relative;
+  margin-top: 0.7em;
+}
+
+.section > section > header:first-of-type {
+  margin: 0;
+}
+
+.section > section > header .space-left {
+  position: absolute;
+  left: -1.56rem;
+  top: 5px;
+  color: #aaa;
+  line-height: 1;
+  opacity: 0;
+}
+
+.position,
+.company,
+.organization,
+.institution,
+.date,
+.area,
+.studyType,
+.title,
+.awarder {
+  display: inline;
+}
+
+.position,
+.studyType,
+.area,
+.title,
+.language,
+.name {
+  font-weight: 600;
+}
+
+.company::before,
+.institution::before,
+.organization::before,
+.awarder::before {
+  content: "at ";
+}
+
+.company,
+.institution,
+.organization,
+.awarder {
+  color: #606d76;
+  font-weight: 400;
+}
+
+.section header .date {
+  display: block;
+  font-size: 1rem;
+  padding: 0.1em 0;
+  color: #606d76;
+  font-weight: 400;
+}
+
+.keywords,
+.courses {
+  margin: 0.5em 0;
+}
+
+.keywords li,
+.courses li {
+  display: inline-block;
+  margin: 2px 2px 2px 0;
+  padding: 4px 5px 5px;
+  font-size: 0.9rem;
+  line-height: 1;
+  color: #3e6d8e;
+  background-color: #dfeaf1;
+  border: 0 solid #dfeaf1;
+  white-space: nowrap;
+}
+
+.keywords li:hover,
+.courses li:hover {
+  background: #dfeaf0;
+}
+
+.highlights {
+  margin: 1em 0 0 0;
+}
+
+.highlights > li > p {
+  margin-bottom: 0.5em;
+}
+
+.item {
+  overflow: hidden;
+}
+
+.gpa {
+  clear: both;
+  padding-bottom: 0.5em;
+}
+
+.fa.social {
+  font-size: 1.1em;
+}
+
+/* Social Media Brand Colors */
+
+.google-plus {
+  color: #dd4b39;
+}
+
+.tumblr {
+  color: #32506d;
+}
+
+.foursquare {
+  color: #0072b1;
+}
+
+.facebook {
+  color: #3b5998;
+}
+
+.linkedin {
+  color: #007bb6;
+}
+
+.pinterest {
+  color: #cb2027;
+}
+
+.dribbble {
+  color: #ea4c89;
+}
+
+.instagram {
+  color: #517fa4;
+}
+
+.twitter {
+  color: #00aced;
+}
+
+.soundcloud {
+  color: #ff3a00;
+}
+
+.wordpress {
+  color: #21759b;
+}
+
+.youtube {
+  color: #bb0000;
+}
+
+.github {
+  color: #171515;
+}
+
+.stack-overflow {
+  color: #828386;
+  position: relative;
+}
+
+.flickr {
+  color: #ff0084;
+}
+
+.reddit {
+  color: #ff4500;
+}
+
+.hacker-news {
+  color: #ff6600;
+}
+
+.stack-overflow::after {
+  position: absolute;
+  left: 0;
+  content: "\f16c";
+  color: #f68a1f;
+  overflow: hidden;
+  height: 100%;
+}
+
+.telegram {
+  color: #2291c3;
+}
+
+#languages .item,
+#skills .item,
+#interests .item {
+  width: 15em;
+  padding: 0 0.5em 0.5em 0;
+  border-bottom: none;
+}
+
+#skills .item {
+  width: 16em;
+}
+
+#skills .item .keywords {
+  width: 15em;
+}
+
+/* Skill chart */
+
+.level {
+  margin-bottom: 0.5em;
+}
+
+.level em {
+  padding-left: 0.2em;
+}
+
+.level .bar {
+  border: 1px solid #ddd;
+  display: block;
+  width: 10em;
+  height: 5px;
+  position: relative;
+}
+
+.level .bar::after {
+  position: absolute;
+  content: " ";
+  top: 0;
+  left: 0;
+  background: black;
+  height: 5px;
+}
+
+.level.beginner .bar::after {
+  background: #eb5f51;
+  width: 2.5em;
+}
+
+.level.intermediate .bar::after {
+  background: #ffdf1f;
+  width: 5em;
+}
+
+.level.advanced .bar::after,
+.level.fluent .bar::after {
+  background: #5cb85c;
+  width: 7.5em;
+}
+
+.level.master .bar::after,
+.level.native.speaker .bar::after {
+  background: #59c596;
+  width: 10em;
+}
+
+#references .item {
+  padding-left: 0.5em;
+  border-left: 5px solid #ff6d1f;
+}
+
+.section > section > section {
+  margin-bottom: 1rem;
+}
+
+/******************
+*	HELPER CLASSES
+******************/
+
+.clear::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.display {
+  display: block;
+  opacity: 1 !important;
+}
+
+/****************
+*		TABLET
+****************/
+
+@media screen and (min-width: 602px) {
+  #resume {
+    width: 80%;
+    margin: 0 auto;
+  }
+  .section header .date {
+    float: right;
+    font-weight: 600;
+    color: #000;
+  }
+}
+
+/****************
+*		LAPTOP
+****************/
+
+@media screen and (min-width: 1025px) {
+  li {
+    margin-left: 1.5em;
+  }
+  #resume {
+    width: 820px;
+    margin: 2rem auto;
+  }
+  .section > section > header .space-left {
+    opacity: 1;
+    cursor: pointer;
+  }
+  .section > section:not(.main-summary) {
+    margin-left: 1.67rem;
+  }
+  .company::before,
+  .institution::before,
+  .organization::before,
+  .awarder::before {
+    content: "| ";
+  }
+  .header-left {
+    float: left;
+    width: 70%;
+    word-break: normal;
+  }
+  .section header .date {
+    padding: 0.2em;
+  }
+  .display {
+    display: none;
+  }
+  .display:not(.none) {
+    display: block;
+  }
+}
+
+@media print {
+  #profiles a:not(.hide-href-print)::after {
+    content: " (" attr(href) ") ";
+  }
+  #resume {
+    margin: 0.1em;
+    padding: 0.1em;
+    -ms-word-wrap: break-word;
+    word-wrap: break-word;
+    line-height: 1.25;
+  }
+  @page {
+    margin: 1cm 1.4cm;
+  }
+  .item-count {
+    display: none;
+  }
+  .company::before,
+  .institution::before,
+  .organization::before,
+  .awarder::before {
+    content: "at ";
+  }
+  .main-summary {
+    padding: 0;
+    background: transparent;
+  }
+  .section {
+    margin: 0.8rem 0;
+    padding: 0;
+  }
+  .section header {
+    padding-bottom: 0.15rem;
+  }
+  .section .location {
+    padding-bottom: 0.15rem;
+  }
+  .section > section > section {
+    margin: 0 0 1em 0;
+  }
+  .section > section > section:last-of-type {
+    margin: 0;
+  }
+  .stack-overflow::after {
+    content: "";
+  }
+  .fa.social {
+    color: #828386;
+  }
+  ul {
+    margin-top: 0.4em;
+  }
+  ul,
+  li {
+    padding: 0;
+  }
+  ul.keywords li,
+  ul.courses li {
+    margin: 0;
+    padding: 0;
+    font-size: 0.8rem;
+    background: transparent;
+  }
+  ul.keywords li::after,
+  ul.courses li::after {
+    padding: 0 0 0 0.1rem;
+    content: " |";
+  }
+  ul.keywords::before,
+  ul.courses::before {
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+  #skills .item {
+    width: calc(100% / 3);
+    padding: 0;
+  }
+  .highlights {
+    margin: 0.5em 0 0 0;
+  }
+  ul.keywords::before {
+    content: "Skills acquired: ";
+  }
+  #skills .keywords::before {
+    content: none;
+  }
+  .section p {
+    margin: 0;
+    padding: 0;
+  }
+  ul.courses::before {
+    content: "Major courses: ";
+  }
+  ul.keywords li:last-of-type::after,
+  ul.courses li:last-of-type::after {
+    content: "";
+  }
+  .level em {
+    font-style: normal;
+    padding: 0.1em 0;
+  }
+  .level .bar {
+    display: none;
+  }
+  #profiles .item {
+    padding: 0;
+  }
+  .item.display {
+    display: block;
+    opacity: 1 !important;
+  }
+  .fa-map-marker-alt:before {
+    padding-left: 0.1em;
+  }
+}
+</style>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+    <div id="root"><div id="resume"><header id="header" class="clear"><div class="middle"><h1 class="name">Levin Keller</h1><h2 class="label">Full Stack Developer</h2></div></header><span class="location"><span class="city">Hildesheim<!-- -->,</span><span class="region">Niedersachsen<!-- -->,</span><span class="countryCode">DE<!-- -->,</span></span><div id="contact"><div class="website"><span class="fas fa-external-link-alt"></span><a class="hide-href-print" target="_blank" href="https://levinkeller.de">https://levinkeller.de</a></div><div class="email"><span class="far fa-envelope"></span><a class="hide-href-print" href="mailto:work@levinkeller.de">work@levinkeller.de</a></div><div class="phone"><span class="fas fa-mobile-alt"></span><a class="hide-href-print" href="tel:{{phone}}">+4915156041082</a></div></div><div id="profiles"><div class="item"><div class="username"><span class="fab fa-{{spaceToDash network}} {{spaceToDash network}} social"></span><span class="url"><a target="_blank" href="{{url}}">levino</a></span></div></div></div><section class="section"><section class="main-summary"><div>I am a hands on software developer with a keen interest in building value through code. I have extensive experience in building complex applications, putting together dev teams and working with stakeholders to maximize the impact of the dev time on the business value. The software I produce is robust, maintainable and the code is clean. In my spare time I garden a lot.
+ 
+ Please note that I only list substantial and interesting projects below.</div></section></section><section class="section"><header><h2 class="section-title">Education <span class="item-count">(<!-- -->1<!-- -->)</span></h2></header><section id="education"><section class="education-item"><header class="clear"><div class="date"><span class="startDate">2005</span><span class="endDate"> - <!-- -->2012</span></div><div class="header-left"><div class="studyType">Diplom</div><div class="area">Mathematics</div><div class="institution">Rheinische Friedrich-Wilhelms-Universität Bonn</div></div></header><div class="item"></div></section></section></section><section class="section"><header><h2 class="section-title">Interests</h2></header><section id="interests"><div class="item"><h3 class="name">Code</h3><ul class="keywords"><li>open source</li><li>functional programming</li><li>test driven development</li><li>dev team scaling</li></ul></div><div class="item"><h3 class="name">Gardening</h3><ul class="keywords"><li>vegetables</li><li>fruits</li><li>flowers</li></ul></div><div class="item"><h3 class="name">Sustainability</h3><ul class="keywords"><li>veganism</li><li>public transport</li><li>circular economy</li></ul></div><div class="item"><h3 class="name">Finance</h3><ul class="keywords"><li>game theory</li><li>tax</li><li>tail events</li></ul></div></section></section><section class="section"><header><h2 class="section-title">Languages</h2></header><section id="languages"><div class="display"><h3 class="language">English</h3><div class="item"><div class="level fluency fluent"><em>Fluent</em><div class="bar"></div></div></div></div><div class="display"><h3 class="language">German</h3><div class="item"><div class="level fluency native speaker"><em>Native speaker</em><div class="bar"></div></div></div></div></section></section><section class="section"><header><h2 class="section-title">Projects <span class="item-count">(<!-- -->1<!-- -->)</span></h2></header><section id="projects"><section class="project-item"><header class="clear"><div class="position">mock-jwks</div></header><span class="website"><span class="fas fa-external-link-alt"></span><a target="_blank" href="https://www.npmjs.com/package/mock-jwks">https://www.npmjs.com/package/mock-jwks</a></span><div class="item"><ul class="highlights"><li>100k+ downloads per week</li></ul></div></section></section></section><section class="section"><header><h2 class="section-title">Skills</h2></header><section id="skills"><div class="item"><h3 class="name">Programming Languages</h3><ul class="keywords"><li>TypeScript</li><li>NodeJS</li><li>JavaScript</li><li>ECMAScript</li><li>elm</li></ul></div><div class="item"><h3 class="name">Front End</h3><ul class="keywords"><li>React</li><li>React Native</li><li>NextJS</li><li>GatsbyJS</li><li>HTML</li><li>css</li></ul></div><div class="item"><h3 class="name">Back End</h3><ul class="keywords"><li>firebase</li><li>GraphQL</li><li>NodeJS</li><li>TypeScript</li><li>Apollo</li></ul></div><div class="item"><h3 class="name">Block Chain</h3><ul class="keywords"><li>Solidity</li><li>Truffle</li></ul></div><div class="item"><h3 class="name">Test Frameworks</h3><ul class="keywords"><li>jest</li></ul></div><div class="item"><h3 class="name">Services</h3><ul class="keywords"><li>netlify</li><li>firebase</li><li>auth0</li></ul></div><div class="item"><h3 class="name">Platforms</h3><ul class="keywords"><li>GCP</li><li>AWS</li></ul></div><div class="item"><h3 class="name">Libraries</h3><ul class="keywords"><li>Ramda</li><li>fp-ts</li><li>superagent</li></ul></div></section></section><section class="section"><header><h2 class="section-title">Work Experience <span class="item-count">(<!-- -->6<!-- -->)</span></h2></header><section id="work"><section class="work-item"><label for="work-item-0"></label><header class="clear"><div class="date"><span class="startDate">Nov 2021</span><span class="endDate">- <!-- -->Oct 2022</span></div><div class="position">Lead Developer</div><div class="company">BrandTURBO</div></header><span class="fas fa-map-marker-alt"></span><span class="location">Berlin, Germany</span><span class="url"><span class="fas fa-external-link-alt"></span><a target="_blank" href="https://thefan.club">https://thefan.club</a></span><div class="item" id="work-item"><div class="summary">BrandTURBO builds MEMBER which is a mobile app that organizes content in groups where like-minded users are invited to enjoy, create and share content. I joined the team early and helped build the product and also grow the team with new hires.</div><ul class="highlights"><li>Migrated code base from JS to TS</li><li>Onboarded and supervised 4 developers</li><li>Set up CD and CI with github actions</li><li>Enabled test driven development against local firebase back end</li><li>Introduced unit and integration testing</li></ul></div></section><section class="work-item"><label for="work-item-1"></label><header class="clear"><div class="date"><span class="startDate">Nov 2017</span><span class="endDate">- <!-- -->Oct 2021</span></div><div class="position">Owner</div><div class="company">Hardfork GmbH</div></header><span class="fas fa-map-marker-alt"></span><span class="location">Berlin, Germany</span><div class="item" id="work-item"><div class="summary">Hardfork was my attempt at running my own agency. I employed up to three full time engineers for client projects but was unable to maintain the company for economic reasons. The projects below during this time where with Hardfork&#x27;s clients.</div></div></section><section class="work-item"><label for="work-item-2"></label><header class="clear"><div class="date"><span class="startDate">Oct 2020</span><span class="endDate">- <!-- -->Jul 2021</span></div><div class="position">Lead Developer</div><div class="company">Financial institution</div></header><span class="fas fa-map-marker-alt"></span><span class="location">Berlin, Germany</span><div class="item" id="work-item"><div class="summary">Via Hardfork: My team and me built a REST API to interact with smart contracts on a private EVM-based blockchain. It enabled our client to register auto loans for their customers and record interactions such as payments and due interest while using simple HTTP requests.</div><ul class="highlights"><li>Supervised 3 developers, including mentoring and organisation of tasks</li><li>Designed the architecture over the stack</li><li>Introduced test driven development for solidity smart contracts</li><li>Closely worked with the client to maximize output within the budget</li></ul></div></section><section class="work-item"><label for="work-item-3"></label><header class="clear"><div class="date"><span class="startDate">Dec 2019</span><span class="endDate">- <!-- -->Feb 2020</span></div><div class="position">Product Owner &amp; Lead Developer</div><div class="company">lexoffice Addon</div></header><div class="item" id="work-item"><div class="summary">Via Hardfork: An attempt to generate passive income with a SaaS. We developed a browser extension (Chrome and Firefox) that extended the UI of the popular bookkeeping SaaS lexoffice with a button. This button allowed the users to have invoices printed out and sent as letters via letterXpress. It worked brilliantly but was an economic failure.</div><ul class="highlights"><li>Supervised 2 developers, including mentoring and organisation of tasks</li><li>Successfully published a chrome and firefox extension to the stores</li><li>Successfully negotiated an affiliated payment with letterXpress for every letter sent</li></ul></div></section><section class="work-item"><label for="work-item-4"></label><header class="clear"><div class="date"><span class="startDate">Jan 2018</span><span class="endDate">- <!-- -->Oct 2019</span></div><div class="position">Interim CTO</div><div class="company">Fundament Securities GmbH</div></header><span class="fas fa-map-marker-alt"></span><span class="location">Berlin, Germany</span><div class="item" id="work-item"><div class="summary">Via Hardfork: Me and my team built a digital investment platform for investments in real estate funds. It enabled retail investors to subscribe in a fully digital way to new real estate funds. We provided a landing page, an id verification via ID-Now and a browser based blockchain wallet to purchase security tokens from the client.</div><ul class="highlights"><li>Supervised 2 developers, including mentoring and organisation of tasks</li><li>Enabled the first BaFin approved STO for real estate funds in Germany</li><li>Designed highly complex smart contracts with thorough automated testing</li><li>Integration of ID-Now</li></ul></div></section><section class="work-item"><label for="work-item-5"></label><header class="clear"><div class="date"><span class="startDate">Apr 2015</span><span class="endDate">- <!-- -->Oct 2017</span></div><div class="position">CTO</div><div class="company">Satoshipay</div></header><span class="fas fa-map-marker-alt"></span><span class="location">Berlin, Germany</span><div class="item" id="work-item"><div class="summary">Back in the day Satoshipay attempted to enable publishers to monetize their content in a frictionless way and without using ads or tracking. To this end I helped to build a Wordpress plugin which would enable a browser based bitcoin wallet on the website. Users of the website could then fund their wallet with bitcoins, create payment channel with the publisher and pay very small amounts on a per article or even per paragraph basis. I joined the team early on and build the whole tech stack, hired new team members and advised stakeholders on technology decisions.</div><ul class="highlights"><li>During this project I used React and Redux for the first time. Changed my life!</li><li>Succeeded in a fast paced and sometimes challenging start up environment (after the round is before the round)</li><li>Achieved one of the first payment channel implementations for bitcoin, especially for browser wallets</li></ul></div></section></section></section></div></div>
   </body>
 </html>
