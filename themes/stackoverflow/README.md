@@ -8,4 +8,4 @@ There is an automatic storybook [deployment](https://sb-stackoverflow-jsonresume
 
 ## Handlebars example
 
-There is an automatic [deployment]() of the local [example resuse](./src/storyResume.json) using the hold handlebars template for reference.
+There is an automatic [deployment](https://hbs-stackoverflow-theme-example.netlify.app/) of the local [example resuse](./src/storyResume.json) using the hold handlebars template for reference.
