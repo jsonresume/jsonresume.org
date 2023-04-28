@@ -8859,6 +8859,15 @@ jsonresume-theme-even@^0.6.0:
     micromark "^2.11.4"
     striptags "^3.1.1"
 
+jsonresume-theme-stackoverflow@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/jsonresume-theme-stackoverflow/-/jsonresume-theme-stackoverflow-2.0.1.tgz#c1eb0fd0addd8218d7ff77562ce1e99ce8b04693"
+  integrity sha512-0MnndIpdT7SVWrpYqEcRX8SAGF1g69KzumP5V4Kwx3MNkntK51dTXmJA2MHQnTK1rqJWwFN7TMSpSM8aWjKv9w==
+  dependencies:
+    handlebars "^4.7.7"
+    markdown-it "^13.0.1"
+    moment "^2.29.2"
+
 "jsx-ast-utils@^2.4.1 || ^3.0.0", jsx-ast-utils@^3.3.3:
   version "3.3.3"
   resolved "https://registry.yarnpkg.com/jsx-ast-utils/-/jsx-ast-utils-3.3.3.tgz#76b3e6e6cece5c69d49a5792c3d01bd1a0cdc7ea"
@@ -9383,7 +9392,7 @@ mkdirp@^1.0.3:
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-1.0.4.tgz#3eb5ed62622756d79a5f0e2a221dfebad75c2f7e"
   integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
 
-moment@^2.29.4:
+moment@^2.29.2, moment@^2.29.4:
   version "2.29.4"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.4.tgz#3dbe052889fe7c1b2ed966fcb3a77328964ef108"
   integrity sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==

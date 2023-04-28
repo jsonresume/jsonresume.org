@@ -5,7 +5,7 @@ resume.html
 resume.pdf
 resume.json
 .DS_Store
-/dist
-/public
-!/public/profile.jpeg
-!/public/style.css
+dist/
+public/
+!public/profile.jpeg
+storybook-static/
