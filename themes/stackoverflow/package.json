@@ -15,12 +15,16 @@
   },
   "dependencies": {
     "handlebars": "^4.7.7",
+    "i18next": "^22.4.15",
+    "i18next-browser-languagedetector": "^7.0.1",
+    "i18next-http-backend": "^2.2.0",
     "jsonresume-theme-stackoverflow": "^2.0.1",
     "markdown-it": "^13.0.1",
     "moment": "^2.29.4",
     "ramda": "^0.29.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-i18next": "^12.2.2",
     "react-scripts": "5.0.1",
     "styled-components": "^5.3.10",
     "web-vitals": "^2.1.0"
@@ -46,6 +50,7 @@
     "prop-types": "^15.8.1",
     "resume-cli": "^3.0.8",
     "storybook": "^7.0.7",
+    "storybook-react-i18next": "^2.0.1",
     "typescript": "^5.0.4",
     "webpack": "^5.81.0"
   },
