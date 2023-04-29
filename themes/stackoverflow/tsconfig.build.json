@@ -5,5 +5,5 @@
     "noEmit": false,
     "module": "CommonJS"
   },
-  "include": ["src/index.**.ts"]
+  "include": ["src/*/index.ts"]
 }

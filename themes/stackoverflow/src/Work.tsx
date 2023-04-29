@@ -47,7 +47,10 @@ export const Work = withTranslation()(
               {workItem.location && (
                 <>
                   <span className="fas fa-map-marker-alt" />
-                  <span className="location">{workItem.location}</span>
+                  <span className="location">
+                    {"\u00A0"}
+                    {workItem.location}
+                  </span>
                 </>
               )}
 
@@ -55,6 +58,7 @@ export const Work = withTranslation()(
                 <span className="url">
                   <span className="fas fa-external-link-alt" />
                   <a target="_blank" href={workItem.url}>
+                    {"\u00A0"}
                     {workItem.url}
                   </a>
                 </span>
