@@ -8,10 +8,10 @@
     "url": "https://github.com/francescoes/jsonresume-theme-stackoverflow"
   },
   "license": "MIT",
-  "main": "./dist/index.en.js",
+  "main": "./dist/en/index.js",
   "exports": {
-    ".": "./dist/index.en.js",
-    "./german": "./dist/index.de.js"
+    ".": "./dist/en/index.js",
+    "./german": "./dist/de/index.js"
   },
   "dependencies": {
     "handlebars": "^4.7.7",

@@ -65,7 +65,7 @@ const Profile: React.FC<ProfileProps> = ({ network, username, url }) => (
         ></span>
         {url ? (
           <span className="url">
-            <a target="_blank" href="{{url}}">
+            <a target="_blank" href={url}>
               {"\u00A0"}
               {username}
             </a>
