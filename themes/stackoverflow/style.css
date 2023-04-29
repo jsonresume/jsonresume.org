@@ -182,10 +182,6 @@ em {
   color: #757575;
 }
 
-blockquote {
-  margin-bottom: 1em;
-}
-
 strong {
   font-weight: 700;
 }
@@ -347,7 +343,7 @@ section .location {
 .institution::before,
 .organization::before,
 .awarder::before {
-  content: "at ";
+  content: " at ";
 }
 
 .company,
@@ -561,6 +557,12 @@ section .location {
 
 #references .item {
   padding-left: 0.5em;
+}
+
+#references {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1em;
   border-left: 5px solid #ff6d1f;
 }
 

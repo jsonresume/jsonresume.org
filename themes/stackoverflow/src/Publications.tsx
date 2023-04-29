@@ -27,6 +27,7 @@ export const Publications: React.FC<{ publications: Publication[] }> = ({
                       <span className="website">
                         <span className="fas fa-external-link-alt"></span>
                         <a target="_blank" href={publication.url}>
+                          {"\u00A0"}
                           {publication.name}
                         </a>
                       </span>
@@ -36,7 +37,7 @@ export const Publications: React.FC<{ publications: Publication[] }> = ({
                   </span>
                 )}
                 {publication.publisher && (
-                  <span className="publisher">in {publication.publisher}</span>
+                  <span className="publisher"> in {publication.publisher}</span>
                 )}
               </div>
             </header>

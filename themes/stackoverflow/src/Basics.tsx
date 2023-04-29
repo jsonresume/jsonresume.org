@@ -4,6 +4,7 @@ import type {
   Basics as BasicsProps,
   Profile as ProfileProps,
 } from "./types";
+import * as R from "ramda";
 
 const Location: React.FC<LocationProps> = ({
   address,
@@ -13,11 +14,11 @@ const Location: React.FC<LocationProps> = ({
   countryCode,
 }) => (
   <span className="location">
-    {address && <span className="address">{address},</span>}
-    {postalCode && <span className="postalCode">{postalCode},</span>}
-    {city && <span className="city">{city},</span>}
-    {region && <span className="region">{region},</span>}
-    {countryCode && <span className="countryCode">{countryCode},</span>}
+    {address && <span className="address">{address}, </span>}
+    {postalCode && <span className="postalCode">{postalCode}, </span>}
+    {city && <span className="city">{city}, </span>}
+    {region && <span className="region">{region} </span>}
+    {countryCode && <span className="countryCode">{countryCode}</span>}
   </span>
 );
 
@@ -27,6 +28,7 @@ export const Contact: React.FC<BasicsProps> = ({ email, url, phone }) => (
       <div className="website">
         <span className="fas fa-external-link-alt"></span>
         <a className="hide-href-print" target="_blank" href={url}>
+          {"\u00A0"}
           {url}
         </a>
       </div>
@@ -35,6 +37,7 @@ export const Contact: React.FC<BasicsProps> = ({ email, url, phone }) => (
       <div className="email">
         <span className="far fa-envelope"></span>
         <a className="hide-href-print" href={`mailto:${email}`}>
+          {"\u00A0"}
           {email}
         </a>
       </div>
@@ -43,6 +46,7 @@ export const Contact: React.FC<BasicsProps> = ({ email, url, phone }) => (
       <div className="phone">
         <span className="fas fa-mobile-alt"></span>
         <a className="hide-href-print" href="tel:{{phone}}">
+          {"\u00A0"}
           {phone}
         </a>
       </div>
@@ -54,15 +58,23 @@ const Profile: React.FC<ProfileProps> = ({ network, username, url }) => (
   <div className="item">
     {network && (
       <div className="username">
-        <span className="fab fa-{{spaceToDash network}} {{spaceToDash network}} social"></span>
+        <span
+          className={`fab fa-${R.toLower(network)} ${R.toLower(
+            network
+          )} social`}
+        ></span>
         {url ? (
           <span className="url">
             <a target="_blank" href="{{url}}">
+              {"\u00A0"}
               {username}
             </a>
           </span>
         ) : (
-          <span>{username}</span>
+          <span>
+            {"\u00A0"}
+            {username}
+          </span>
         )}
       </div>
     )}
@@ -79,16 +91,16 @@ export const Basics: React.FC<BasicsProps> = (props) => {
           <h1 className="name">{name}</h1>
           <h2 className="label">{label}</h2>
         </div>
+        {location && <Location {...location} />}
+        <Contact {...props} />
+        {profiles && (
+          <div id="profiles">
+            {profiles.map((profile, index) => (
+              <Profile {...profile} key={index} />
+            ))}
+          </div>
+        )}
       </header>
-      {location && <Location {...location} />}
-      <Contact {...props} />
-      {profiles && (
-        <div id="profiles">
-          {profiles.map((profile, index) => (
-            <Profile {...profile} key={index} />
-          ))}
-        </div>
-      )}
       {summary && (
         <section className="section">
           <section className="main-summary">

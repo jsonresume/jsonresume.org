@@ -35,6 +35,7 @@ export const Certificates: React.FC<{ certificates: Certificate[] }> = ({
                       rel="noopener noreferrer"
                       href={certificate.url}
                     >
+                      {"\u00A0"}
                       {certificate.url}
                     </a>
                   </span>

@@ -28,11 +28,11 @@ export const Volunteer: React.FC<VolunteerProps> = ({ volunteer }) => {
                     {item.startDate && (
                       <span className="startDate">
                         {new Date(item.startDate).toLocaleDateString()}
+                        {"\u00A0"}
                       </span>
                     )}
                     {item.endDate ? (
                       <span className="endDate">
-                        {" "}
                         - {new Date(item.endDate).toLocaleDateString()}
                       </span>
                     ) : (
@@ -52,6 +52,7 @@ export const Volunteer: React.FC<VolunteerProps> = ({ volunteer }) => {
               <div className="website">
                 <span className="fas fa-external-link-alt"></span>
                 <a target="_blank" href={item.url}>
+                  {"\u00A0"}
                   {item.url}
                 </a>
               </div>

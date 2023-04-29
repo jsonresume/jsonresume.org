@@ -22,6 +22,7 @@ export const Work: React.FC<{ work: WorkItem[] }> = ({ work }) =>
                     {workItem.startDate && (
                       <span className="startDate">
                         {MY(workItem.startDate)}
+                        {"\u00A0"}
                       </span>
                     )}
                     {workItem.endDate ? (
