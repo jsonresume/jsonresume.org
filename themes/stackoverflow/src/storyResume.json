@@ -5,7 +5,7 @@
     "image": "profile.jpeg",
     "email": "samantha.jones@email.com",
     "phone": "(555) 555-5555",
-    "website": "https://www.samanthajones.com",
+    "url": "https://www.samanthajones.com",
     "summary": "Experienced software developer with a passion for developing innovative solutions that improve user experiences.",
     "location": {
       "address": "123 Main St.",
@@ -60,7 +60,7 @@
       "endDate": "2019-07",
       "url": "https://example.com/cat-chat",
       "keywords": ["chat", "cats", "humor"],
-      "summary": "A chat application for cats, complete with emojis of mice, birds, and fish. Meow-sages never looked so cute!",
+      "description": "A chat application for cats, complete with emojis of mice, birds, and fish. Meow-sages never looked so cute!",
       "highlights": [
         "Implemented realtime chat using WebSocket technology",
         "Created custom cat-themed emojis using Adobe Illustrator"
@@ -72,7 +72,7 @@
       "endDate": "2020-07",
       "url": "https://example.com/nacho-tracker",
       "keywords": ["nachos", "tracking", "snacks"],
-      "summary": "An app for tracking the location of your nachos. Never lose sight of your favorite snack again!",
+      "description": "An app for tracking the location of your nachos. Never lose sight of your favorite snack again!",
       "highlights": [
         "Built a RESTful API using Node.js and Express",
         "Designed a responsive UI with Bootstrap"
@@ -84,7 +84,7 @@
       "endDate": "2021-02",
       "url": "https://example.com/reverse-alarm-clock",
       "keywords": ["clock", "time", "reverse"],
-      "summary": "An alarm clock that wakes you up by setting the time to the moment you fell asleep. Who needs a snooze button?",
+      "description": "An alarm clock that wakes you up by setting the time to the moment you fell asleep. Who needs a snooze button?",
       "highlights": [
         "Developed the algorithm for calculating sleep time using JavaScript",
         "Integrated with Google Calendar API for scheduling"
@@ -96,7 +96,7 @@
       "name": "The Ultimate Guide to Becoming a Cat Lady",
       "publisher": "Cat Fancy Magazine",
       "releaseDate": "2022-01-01",
-      "keywords": ["cats", "cat lady", "cat ownership"],
+      "url": "https://example.com/cat-lady-book",
       "summary": "This comprehensive guide provides everything you need to know about becoming a cat lady, from selecting the perfect feline companion to building a cat-friendly home."
     },
     {
@@ -189,7 +189,7 @@
     {
       "organization": "Local Animal Shelter",
       "position": "Volunteer",
-      "website": "https://www.localanimalshelter.com",
+      "url": "https://www.localanimalshelter.com",
       "startDate": "2019-01-01",
       "endDate": "2020-12-31",
       "summary": "Assisted with daily operations of the shelter, including feeding and caring for animals, cleaning cages and kennels, and providing customer service to visitors.",
@@ -201,7 +201,7 @@
     {
       "organization": "City Soup Kitchen",
       "position": "Soup Kitchen Volunteer",
-      "website": "https://www.citysoupkitchen.com",
+      "url": "https://www.citysoupkitchen.com",
       "startDate": "2018-03-01",
       "endDate": "2018-06-30",
       "summary": "Assisted with preparing and serving meals to homeless and low-income individuals in the community.",
@@ -213,7 +213,7 @@
     {
       "organization": "Global Health Corps",
       "position": "Fellow",
-      "website": "https://www.globalhealthcorps.org",
+      "url": "https://www.globalhealthcorps.org",
       "startDate": "2016-07-01",
       "endDate": "2017-06-30",
       "summary": "Collaborated with local health organizations in Malawi to develop and implement community health programs focused on maternal and child health.",

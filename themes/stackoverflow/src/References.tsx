@@ -14,10 +14,10 @@ export const References: React.FC<{ references: Reference[] }> = ({
           <div className="item" key={index}>
             {reference.reference && (
               <blockquote className="reference">
-                &#8220;&#32;{reference.reference}&#32;&#8221;
+                &#8220;{reference.reference}&#8221;
+                {reference.name && <div className="name">{reference.name}</div>}
               </blockquote>
             )}
-            {reference.name && <div className="name">{reference.name}</div>}
           </div>
         ))}
       </section>

@@ -24,7 +24,10 @@ export const Projects: React.FC<{ projects: Project[] }> = ({ projects }) => (
                   )}
                   {project.startDate && (
                     <div className="date">
-                      <span className="startDate">{MY(project.startDate)}</span>
+                      <span className="startDate">
+                        {MY(project.startDate)}
+                        {"\u00A0"}
+                      </span>
                       {project.endDate ? (
                         <span className="endDate">- {MY(project.endDate)}</span>
                       ) : (
@@ -39,6 +42,7 @@ export const Projects: React.FC<{ projects: Project[] }> = ({ projects }) => (
                 <span className="website">
                   <span className="fas fa-external-link-alt"></span>
                   <a target="_blank" href={project.url}>
+                    {"\u00A0"}
                     {project.url}
                   </a>
                 </span>

@@ -36,7 +36,12 @@ export const Education: React.FC<{ education: EducationProps[] }> = ({
                 {edu.studyType && (
                   <div className="studyType">{edu.studyType}</div>
                 )}
-                {edu.area && <div className="area">{edu.area}</div>}
+                {edu.area && (
+                  <div className="area">
+                    {"\u00A0"}
+                    {edu.area}
+                  </div>
+                )}
                 {edu.institution && (
                   <div className="institution">{edu.institution}</div>
                 )}
