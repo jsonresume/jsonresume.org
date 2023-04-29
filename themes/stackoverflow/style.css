@@ -339,13 +339,6 @@ section .location {
   font-weight: 600;
 }
 
-.company::before,
-.institution::before,
-.organization::before,
-.awarder::before {
-  content: " at ";
-}
-
 .company,
 .institution,
 .organization,
@@ -605,6 +598,13 @@ section .location {
 *		LAPTOP
 ****************/
 
+.company::before,
+.institution::before,
+.organization::before,
+.awarder::before {
+  content: " | ";
+}
+
 @media screen and (min-width: 1025px) {
   li {
     margin-left: 1.5em;
@@ -620,12 +620,7 @@ section .location {
   .section > section:not(.main-summary) {
     margin-left: 1.67rem;
   }
-  .company::before,
-  .institution::before,
-  .organization::before,
-  .awarder::before {
-    content: "| ";
-  }
+
   .header-left {
     float: left;
     width: 70%;

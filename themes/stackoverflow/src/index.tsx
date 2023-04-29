@@ -4,8 +4,8 @@ import type { Resume as ResumeType } from "./types";
 import { readFileSync } from "fs";
 import path from "path";
 const css = readFileSync(path.join(__dirname, "../style.css")).toString();
-
-type Language = "en" | "de";
+import { I18nextProvider } from "react-i18next";
+import { createI18N, Language } from "./i18n";
 
 const createRender = (language: Language) => (resume: ResumeType) =>
   `<!doctype html>
@@ -18,7 +18,11 @@ const createRender = (language: Language) => (resume: ResumeType) =>
     <style>${css}</style>
   </head>
   <body>
-    <div id="root">${renderToString(<Resume {...resume} />)}</div>
+    <div id="root">${renderToString(
+      <I18nextProvider i18n={createI18N(language)}>
+        <Resume {...resume} />
+      </I18nextProvider>
+    )}</div>
   </body>
 </html>`;
 
