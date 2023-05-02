@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.0.5](https://github.com/levino/jsonresume-theme-stackoverflow-react/compare/v1.0.0...v2.0.5) (2023-05-02)
+
+
+### Bug Fixes
+
+* release script ([a2d3f00](https://github.com/levino/jsonresume-theme-stackoverflow-react/commit/a2d3f00974a67be9b2927cf0978b2566198e2c6e))
+* use correct version number ([256a4e7](https://github.com/levino/jsonresume-theme-stackoverflow-react/commit/256a4e7db90d948cbfadf45f8f60ce8bb339f61d))
+
+
+### Miscellaneous Chores
+
+* release 2.0.5 ([0d87363](https://github.com/levino/jsonresume-theme-stackoverflow-react/commit/0d873636fe068d6927662961195f49e7749ca282))
+
 ## 1.0.0 (2023-05-02)
 
 
