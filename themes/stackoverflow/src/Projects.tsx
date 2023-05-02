@@ -45,7 +45,7 @@ export const Projects = withTranslation()(
                 {project.url && (
                   <span className="website">
                     <span className="fas fa-external-link-alt"></span>
-                    <a target="_blank" href={project.url}>
+                    <a target="_blank" href={project.url} rel="noreferrer">
                       {"\u00A0"}
                       {project.url}
                     </a>

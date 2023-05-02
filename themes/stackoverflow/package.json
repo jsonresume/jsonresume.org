@@ -1,11 +1,11 @@
 {
-  "name": "react-jsonresume-theme-stackoverflow",
-  "version": "2.0.1",
-  "description": "Stack Overflow theme for JSON Resume",
-  "author": "Francesco Esposito",
+  "name": "jsonresume-theme-stackoverflow-react",
+  "version": "1.0.0",
+  "description": "Stack Overflow theme for JSON Resume written with React",
+  "author": "Levin Keller",
   "repository": {
     "type": "git",
-    "url": "https://github.com/francescoes/jsonresume-theme-stackoverflow"
+    "url": "https://github.com/levino/jsonresume-theme-stackoverflow-react"
   },
   "license": "MIT",
   "main": "./dist/en/index.js",
@@ -47,6 +47,8 @@
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "babel-plugin-named-exports-order": "^0.0.2",
+    "eslint": "^8.39.0",
+    "eslint-config-react-app": "^7.0.1",
     "prop-types": "^15.8.1",
     "resume-cli": "^3.0.8",
     "storybook": "^7.0.7",

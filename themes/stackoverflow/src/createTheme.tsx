@@ -3,9 +3,9 @@ import { renderToString } from "react-dom/server";
 import type { Resume as ResumeType } from "./types";
 import { readFileSync } from "fs";
 import path from "path";
-const css = readFileSync(path.join(__dirname, "../style.css")).toString();
 import { I18nextProvider } from "react-i18next";
 import { createI18N, Language } from "./i18n";
+const css = readFileSync(path.join(__dirname, "../style.css")).toString();
 
 const createRender = (language: Language) => (resume: ResumeType) =>
   `<!doctype html>

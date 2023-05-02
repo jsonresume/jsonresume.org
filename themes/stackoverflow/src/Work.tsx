@@ -57,7 +57,7 @@ export const Work = withTranslation()(
               {workItem.url && (
                 <span className="url">
                   <span className="fas fa-external-link-alt" />
-                  <a target="_blank" href={workItem.url}>
+                  <a target="_blank" href={workItem.url} rel="noreferrer">
                     {"\u00A0"}
                     {workItem.url}
                   </a>

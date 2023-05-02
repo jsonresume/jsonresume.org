@@ -6275,7 +6275,7 @@ eslint-webpack-plugin@^3.1.1:
     normalize-path "^3.0.0"
     schema-utils "^4.0.0"
 
-eslint@^8.3.0:
+eslint@^8.3.0, eslint@^8.39.0:
   version "8.39.0"
   resolved "https://registry.yarnpkg.com/eslint/-/eslint-8.39.0.tgz#7fd20a295ef92d43809e914b70c39fd5a23cf3f1"
   integrity sha512-mwiok6cy7KTW7rBpo05k6+p4YVZByLNjAZ/ACB9DRCu4YDRwjXI01tWHp6KAUWelsBetTxKK/2sHB0vdS8Z2Og==
