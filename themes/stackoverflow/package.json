@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-stackoverflow-react",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Stack Overflow theme for JSON Resume written with React",
   "author": "Levin Keller",
   "repository": {
@@ -63,7 +63,7 @@
     "build": "tsc -p tsconfig.build.json",
     "lint": "eslint .",
     "prepack": "yarn clean && yarn build",
-    "clean": "rm -r dist storybook-static",
+    "clean": "rm -rf dist storybook-static",
     "postpack": "yarn clean"
   },
   "eslintConfig": {
