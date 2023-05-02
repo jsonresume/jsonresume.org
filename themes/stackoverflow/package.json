@@ -61,7 +61,10 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "build": "tsc -p tsconfig.build.json",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "prepack": "yarn clean && yarn build",
+    "clean": "rm -r dist storybook-static",
+    "postpack": "yarn clean"
   },
   "eslintConfig": {
     "extends": [
