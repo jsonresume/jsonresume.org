@@ -66,6 +66,11 @@
     "clean": "rm -rf dist storybook-static",
     "postpack": "yarn clean"
   },
+  "files": [
+    "dist",
+    "README.md",
+    "style.css"
+  ],
   "eslintConfig": {
     "extends": [
       "react-app",
