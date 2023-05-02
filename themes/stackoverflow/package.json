@@ -60,7 +60,8 @@
     "dev": "resume serve --theme .",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "build": "tsc -p tsconfig.build.json"
+    "build": "tsc -p tsconfig.build.json",
+    "lint": "eslint ."
   },
   "eslintConfig": {
     "extends": [
