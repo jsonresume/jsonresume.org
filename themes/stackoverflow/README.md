@@ -16,6 +16,10 @@ I made this as a basis for others to add more languages. The repo comes with a n
 
 ## Previews
 
+### Example CV
+
+There is an automatic [deployment](https://stackoverflow-jsonresume-example.netlify.app/) of a made up example CV with this theme.
+
 ### Storybook deployment
 
 There is an automatic storybook [deployment](https://sb-stackoverflow-jsonresume-theme.netlify.app/).
