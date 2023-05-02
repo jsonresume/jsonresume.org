@@ -26,7 +26,7 @@ export const Publications = withTranslation()(
                       {publication.url ? (
                         <span className="website">
                           <span className="fas fa-external-link-alt"></span>
-                          <a target="_blank" href={publication.url}>
+                          <a target="_blank" href={publication.url} rel="noreferrer">
                             {"\u00A0"}
                             {publication.name}
                           </a>

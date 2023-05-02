@@ -27,7 +27,7 @@ export const Contact: React.FC<BasicsProps> = ({ email, url, phone }) => (
     {url && (
       <div className="website">
         <span className="fas fa-external-link-alt"></span>
-        <a className="hide-href-print" target="_blank" href={url}>
+        <a className="hide-href-print" target="_blank" href={url} rel="noreferrer">
           {"\u00A0"}
           {url}
         </a>
@@ -65,7 +65,7 @@ const Profile: React.FC<ProfileProps> = ({ network, username, url }) => (
         ></span>
         {url ? (
           <span className="url">
-            <a target="_blank" href={url}>
+            <a target="_blank" href={url} rel="noreferrer">
               {"\u00A0"}
               {username}
             </a>

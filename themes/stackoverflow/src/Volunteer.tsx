@@ -52,7 +52,7 @@ export const Volunteer = withTranslation()(
               {item.url && (
                 <div className="website">
                   <span className="fas fa-external-link-alt"></span>
-                  <a target="_blank" href={item.url}>
+                  <a target="_blank" href={item.url} rel="noreferrer">
                     {"\u00A0"}
                     {item.url}
                   </a>

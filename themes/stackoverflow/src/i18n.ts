@@ -1,6 +1,6 @@
 import i18n from "i18next";
-export type Language = "en" | "de";
 import translations from "./translations.json";
+export type Language = "en" | "de";
 
 export const createI18N = (language: Language) => {
   i18n.init({
