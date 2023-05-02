@@ -22,4 +22,4 @@ There is an automatic storybook [deployment](https://sb-stackoverflow-jsonresume
 
 ## Remarks
 
-The CVs of Samantha Jones were made up / translated for me by ChatGPT.
+The CVs of Samantha Jones were made up / translated for me by ChatGPT. I also used ChatGPT to translate all handlebars templates to `jsx` code. Worked brilliantly and saved me so much time!
