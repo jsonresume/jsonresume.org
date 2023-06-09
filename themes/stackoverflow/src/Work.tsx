@@ -54,6 +54,14 @@ export const Work = withTranslation()(
                 </>
               )}
 
+              {workItem.keywords?.length && (
+                <ul className="keywords">
+                  {workItem.keywords.map((keyword, index) => (
+                    <li key={index}>{keyword}</li>
+                  ))}
+                </ul>
+              )}
+
               {workItem.url && (
                 <span className="url">
                   <span className="fas fa-external-link-alt" />

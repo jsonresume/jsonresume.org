@@ -38,7 +38,8 @@
       "highlights": [
         "Implemented real-time order tracking feature using WebSockets.",
         "Optimized database queries to improve application performance by 30%."
-      ]
+      ],
+      "keywords": ["nodejs", "TypeScript", "go", "aws"]
     },
     {
       "name": "XYZ Corp.",
