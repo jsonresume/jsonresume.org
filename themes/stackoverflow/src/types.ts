@@ -262,6 +262,11 @@ export interface Work {
    * Specify multiple accomplishments
    */
   highlights?: string[];
+
+  /**
+   * List some keywords pertaining to this work experience
+   */
+  keywords?: string[];
 }
 
 export interface Project {
