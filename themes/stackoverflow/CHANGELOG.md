@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.1.0](https://github.com/levino/jsonresume-theme-stackoverflow-react/compare/v2.0.5...v2.1.0) (2023-06-09)
+
+
+### Features
+
+* support keywords for work experience entries ([fa44d82](https://github.com/levino/jsonresume-theme-stackoverflow-react/commit/fa44d82fd9f53cd29b75229aa8a6725a275d3233)), closes [#19](https://github.com/levino/jsonresume-theme-stackoverflow-react/issues/19)
+
+
+### Bug Fixes
+
+* **docs:** link to example deployment ([4177a4e](https://github.com/levino/jsonresume-theme-stackoverflow-react/commit/4177a4e0c20c0b4e701cc8fdae1089fac3c33ec1))
+* remove trailing curly bracket in html title ([7cca95e](https://github.com/levino/jsonresume-theme-stackoverflow-react/commit/7cca95e8daf146bda2c3d0f948e7b50b45563a82))
+
 ## [2.0.5](https://github.com/levino/jsonresume-theme-stackoverflow-react/compare/v1.0.0...v2.0.5) (2023-05-02)
 
 
