@@ -1,13 +1,13 @@
-import { Button } from 'ui';
-import styled from 'styled-components';
-import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
-import { faker } from '@faker-js/faker';
-import { v4 as uuidv4 } from 'uuid';
-import axios from 'axios';
-import { NodeHtmlMarkdown, NodeHtmlMarkdownOptions } from 'node-html-markdown';
-import ReactMarkdown from 'react-markdown';
-import Link from 'next/link';
+import { Button } from "ui";
+import styled from "styled-components";
+import { useRouter } from "next/router";
+import { useEffect, useRef, useState } from "react";
+import { faker } from "@faker-js/faker";
+import { v4 as uuidv4 } from "uuid";
+import axios from "axios";
+import { NodeHtmlMarkdown, NodeHtmlMarkdownOptions } from "node-html-markdown";
+import ReactMarkdown from "react-markdown";
+import Link from "next/link";
 
 const Container = styled.div`
   height: 100vh;
@@ -68,7 +68,7 @@ const Links = styled.div`
 `;
 export default function Layout({ children }) {
   const router = useRouter();
-  const parts = router.asPath.split('/');
+  const parts = router.asPath.split("/");
   const username = parts[1];
   const onShowAbout = () => {};
 
@@ -78,7 +78,7 @@ export default function Layout({ children }) {
         <Header>
           <HeaderContainer>
             <Logo href="https://jsonresume.org" target="__blank">
-              JSON Resume
+              JSON Resume2
             </Logo>
             <Links>
               <Link href={`/${username}/jobs`}>Jobs</Link>
@@ -116,7 +116,7 @@ export default function Layout({ children }) {
           margin: 0px;
           padding: 0px;
           background-color: #f5f5f5;
-          font-family: 'Open Sans', sans-serif;
+          font-family: "Open Sans", sans-serif;
         }
       `}</style>
     </>
