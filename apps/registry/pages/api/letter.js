@@ -32,7 +32,7 @@ export default async function handler(req, res) {
   Please write me a cover letter
   `;
 
-  const res = await api.sendMessage(prompt);
+  const res2 = await api.sendMessage(prompt);
 
-  return res.status(200).send(res.text);
+  return res.status(200).send(res2.text);
 }
