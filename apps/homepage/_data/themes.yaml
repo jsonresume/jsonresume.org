@@ -1,0 +1,168 @@
+- name: Elegant
+  slug: elegant
+  github: mudassir0909
+  author: Mudassir
+  link: https://github.com/mudassir0909
+
+- name: Kendall
+  slug: kendall
+  github: LinuxBozo
+  author: M. Adam Kendall
+  link: https://registry.jsonresume.org/linuxbozo
+
+- name: Macchiato
+  slug: macchiato
+  github: biosan
+  author: Alessandro Biondi
+  link: https://registry.jsonresume.org/biosan
+
+- name: OnePage
+  slug: onepage
+  github: ainsleyc
+  author: Ainsley Chong
+  link: https://github.com/ainsleyc
+
+- name: Flat
+  slug: flat
+  github: erming
+  author: Mattias Erming
+  link: https://github.com/erming
+
+- name: Class
+  slug: class
+  github: varjmes
+  author: James Spencer
+  link: https://www.twitter.com/varjmes
+
+- name: Short
+  slug: short
+  github: isnotahippy
+  author: Graeme Maciver
+  link: https://github.com/isnotahippy
+
+- name: Papirus
+  slug: papirus
+  github: konalexiou
+  author: Konstantinos Alexiou
+  link: https://github.com/konalexiou
+
+- name: Verbum
+  slug: verbum
+  github: konalexiou
+  author: Konstantinos Alexiou
+  link: https://github.com/konalexiou
+
+- name: Compact
+  slug: compact
+  github: 
+  author: 
+  link: 
+
+- name: Contempo
+  slug: contempo
+  github: 
+  author: 
+  link: 
+
+
+- name: Direct
+  slug: direct
+  github: 
+  author: 
+  link: 
+
+- name: Dinesh
+  slug: dinesh
+  github: 
+  author: 
+  link: 
+
+- name: Fresh
+  slug: fresh
+  github: 
+  author: 
+  link: 
+
+- name: Full
+  slug: full
+  github: 
+  author: 
+  link: 
+
+- name: Joeytall
+  slug: joeytall
+  github: 
+  author: 
+  link: 
+
+- name: One Page Plus
+  slug: onepage-plus
+  github: 
+  author: 
+  link: 
+
+
+- name: Kwan
+  slug: kwan-linkedin
+  github: 
+  author: 
+  link: 
+
+- name: Resu
+  slug: resu
+  github: 
+  author: 
+  link: 
+
+- name: Rickosborne
+  slug: rickosborne
+  github: 
+  author: 
+  link: 
+
+
+- name: Riga
+  slug: riga
+  github: 
+  author: 
+  link: 
+
+
+- name: Spartacus
+  slug: spartacus
+  github: 
+  author: 
+  link: 
+
+
+- name: Timeline Fixed
+  slug: timeline-fixed
+  github: 
+  author: 
+  link: 
+
+
+- name: Tachyons Clean
+  slug: tachyons-clean
+  github: 
+  author: 
+  link: 
+
+
+- name: Simple
+  slug: simple
+  github: 
+  author: 
+  link: 
+
+- name: Sceptile
+  slug: sceptile
+  github: 
+  author: 
+  link: 
+
+- name: Classy
+  slug: classy
+  github: JaredCubilla
+  author: Jared Cubilla
+  link: https://github.com/JaredCubilla

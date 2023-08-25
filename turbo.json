@@ -1,0 +1,18 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["**/.env.*local"],
+  "pipeline": {
+    "db:generate": {
+      "cache": false
+    },
+    "build": {
+      "outputs": [".next/**", "!.next/cache/**"]
+    },
+    "lint": {},
+    "dev": {
+      "cache": false,
+      "persistent": true
+    }
+  },
+  "globalEnv": ["NODE_ENV", "TOT", "DATABASE_URL", "DATABASE_URL_RAW", "GITHUB_TOKEN", "OPENAI_API_KEY", "PINECONE_API_KEY", "PINECONE_ENVIRONMENT"]
+}

@@ -1,0 +1,1 @@
+This is where all the apps that live on the registry.jsonresume.org domain live

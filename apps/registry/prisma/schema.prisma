@@ -1,0 +1,17 @@
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-1.0.x"]
+}
+
+datasource db {
+  provider = "postgres"
+  url      = env("DATABASE_URL")
+}
+
+model resumes {
+  id        Int   @id @default(autoincrement())
+  username  String @unique
+  resume    Json
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
