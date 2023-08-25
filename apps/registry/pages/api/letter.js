@@ -1,5 +1,5 @@
-const { Client } = require('pg');
-import { ChatGPTAPI } from 'chatgpt';
+const { Client } = require("pg");
+import { ChatGPTAPI } from "chatgpt";
 
 export default async function handler(req, res) {
   const { username } = req.body;
@@ -19,7 +19,6 @@ export default async function handler(req, res) {
   const api = new ChatGPTAPI({
     apiKey: process.env.OPENAI_API_KEY,
     completionParams: {
-      // model: 'gpt-4',
       temperature: 0.9,
       top_p: 0.8,
     },
@@ -30,11 +29,10 @@ export default async function handler(req, res) {
 
   ${data}
 
- 
   Please write me a cover letter
   `;
 
-  const res2 = await api.sendMessage(prompt);
+  const res = await api.sendMessage(prompt);
 
-  return res.status(200).send(res2.text);
+  return res.status(200).send(res.text);
 }
