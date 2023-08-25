@@ -78,7 +78,7 @@ export default function Layout({ children }) {
         <Header>
           <HeaderContainer>
             <Logo href="https://jsonresume.org" target="__blank">
-              JSON Resume2
+              JSON Resume
             </Logo>
             <Links>
               <Link href={`/${username}/jobs`}>Jobs</Link>

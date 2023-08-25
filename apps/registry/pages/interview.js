@@ -262,7 +262,7 @@ export default function Talk() {
         <>
           <Switch>
             <Option active={position === INTERVIEWER} onClick={togglePosition}>
-              Interviewer2
+              Interviewer
             </Option>
             <Option active={position === CANDIDATE} onClick={togglePosition}>
               Candidate
