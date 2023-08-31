@@ -46,6 +46,7 @@ const Input = styled.input`
 const Switch = styled.div`
   position: fixed;
   top: 50px;
+  left: calc(100vw - 600px);
   width: 300px;
   height: 30px;
   display: flex;
