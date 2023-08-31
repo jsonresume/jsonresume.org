@@ -9,9 +9,9 @@ This is a monorepo, will be the home of the registry, the homepage, ui kit, base
 All projects hosted on this domain, will be found in the /apps folder.
 
 - [jsonresume.org](https://jsonresume.org) - the homepage, currently built in Jekyll, would like to move to a Javascript framework for easier contributions
- - found in /apps/homepage
+  - found in /apps/homepage
 - [registry.jsonresume.org](https://registry.jsonresume.org) - the opt-in hosted place blah blah
- - found in /apps/registry
+  - found in /apps/registry
 
 ## Requirements
 
