@@ -2,11 +2,30 @@
 
 This is a monorepo, will be the home of the registry, the homepage, ui kit, base templates, utils etc
 
+# @todo - explain apps vs packages
+
+## Apps
+
+All projects hosted on this domain, will be found in the /apps folder.
+
+- [jsonresume.org](https://jsonresume.org) - the homepage, currently built in Jekyll, would like to move to a Javascript framework for easier contributions
+ - found in /apps/homepage
+- [registry.jsonresume.org](https://registry.jsonresume.org) - the opt-in hosted place blah blah
+ - found in /apps/registry
+
 ## Requirements
 
-This project requires [pnpm](https://pnpm.io/installation) (yet another npm/yarn alternative)
+1. This project requires [pnpm](https://pnpm.io/installation) (yet another npm/yarn alternative)
 
-Until futher ado this repo will depend on a globally installed version of [turbo](https://turbo.build/repo/docs/installing).
+```
+curl -fsSL https://get.pnpm.io/install.sh | sh -
+```
+
+2. Until futher ado this repo will also depend on a globally installed version of [turbo](https://turbo.build/repo/docs/installing).
+
+```
+pnpm install turbo --global
+```
 
 (insert someone who can remove all of the global crap)
 
@@ -32,7 +51,7 @@ To start an individual app;
 turbo dev --filter=registry
 ```
 
-// @todo - don't really want to add containers (docker etc), thoughts needed
+# @todo - don't really want to add containers (docker etc), thoughts needed
 
 **Environment variables**:
 
@@ -40,9 +59,12 @@ These are required to run the registry. (only the github token, but it probably 
 
 ```
 GITHUB_TOKEN=
+
+# normal dbs vs edge location dbs
 DATABASE_URL_RAW=
 DATABASE_URL=
 
+# ai crap, llm and vectors
 PINECONE_API_KEY=
 PINECONE_ENVIRONMENT=
 OPENAI_API_KEY=
@@ -59,14 +81,15 @@ OPENAI_API_KEY=
 # Notes
 - Gonna drop Typescript, prefer less barriers to entry
 - Templates cannot read from the file system when using the registry
-
+- Base templates using react/svelte/etc
+- pdf? lol
 
 
 # WIP
 
 ## Prisma
 
-// @todo - edge location database proxy, might just get rid of it, kind of annoying
+# @todo - edge location database proxy, might just get rid of it, kind of annoying
 
 apps/registry postinstall$ prisma generate --data-proxy
 [2 lines collapsed]
@@ -86,18 +109,17 @@ Done in 8.2s
 
 ### Jobs
 
-creating embeddings out of hn who is hiring post
+## @todo - creating embeddings out of hn who is hiring post
 
 ### Letter
 
-@todo - set up an url reader or copy paste a jd
+## @todo - set up an url reader or copy paste a jd
 
 ### Suggestions
 
-use a fine trained model
+## @todo - use a fine trained model
 
 ### Interview
 
-example of how to use memories and vector similarity searches
+## @todo - example of how to use memories and vector similarity searches
 
-AI
