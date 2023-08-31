@@ -2,7 +2,7 @@
 
 This is a monorepo, will be the home of the registry, the homepage, ui kit, base templates, utils etc
 
-# @todo - explain apps vs packages
+// @todo - explain apps vs packages
 
 ## Apps
 
@@ -51,7 +51,7 @@ To start an individual app;
 turbo dev --filter=registry
 ```
 
-# @todo - don't really want to add containers (docker etc), thoughts needed
+// @todo - don't really want to add containers (docker etc), thoughts needed
 
 **Environment variables**:
 
@@ -89,7 +89,7 @@ OPENAI_API_KEY=
 
 ## Prisma
 
-# @todo - edge location database proxy, might just get rid of it, kind of annoying
+// @todo - edge location database proxy, might just get rid of it, kind of annoying
 
 apps/registry postinstall$ prisma generate --data-proxy
 [2 lines collapsed]
@@ -109,17 +109,17 @@ Done in 8.2s
 
 ### Jobs
 
-## @todo - creating embeddings out of hn who is hiring post
+// @todo - creating embeddings out of hn who is hiring post
 
 ### Letter
 
-## @todo - set up an url reader or copy paste a jd
+// @todo - set up an url reader or copy paste a jd
 
 ### Suggestions
 
-## @todo - use a fine trained model
+// @todo - use a fine trained model
 
 ### Interview
 
-## @todo - example of how to use memories and vector similarity searches
+// @todo - example of how to use memories and vector similarity searches
 
