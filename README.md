@@ -9,9 +9,9 @@ This is a monorepo, will be the home of the registry, the homepage, ui kit, base
 All projects hosted on this domain, will be found in the /apps folder.
 
 - [jsonresume.org](https://jsonresume.org) - the homepage, currently built in Jekyll, would like to move to a Javascript framework for easier contributions
-  - found in /apps/homepage
+  - found in [/apps/homepage](https://github.com/jsonresume/jsonresume.org/tree/master/apps/homepage)
 - [registry.jsonresume.org](https://registry.jsonresume.org) - the opt-in hosted place blah blah
-  - found in /apps/registry
+  - found in [/apps/registry](https://github.com/jsonresume/jsonresume.org/tree/master/apps/registry)
 
 ## Requirements
 
@@ -51,7 +51,7 @@ To start an individual app;
 turbo dev --filter=registry
 ```
 
-// @todo - don't really want to add containers (docker etc), thoughts needed
+// @todo - don't really want to add containers (docker etc), thoughts needed (because of the current jekyll requirement on the homepage)
 
 **Environment variables**:
 
@@ -70,7 +70,13 @@ PINECONE_ENVIRONMENT=
 OPENAI_API_KEY=
 ```
 
-## Formats
+
+## App - Registry
+
+registry shit goes here
+
+
+### Formats
 
 - markdown
 - yaml
@@ -78,14 +84,23 @@ OPENAI_API_KEY=
 - text
 - lex
 
-# Notes
+### Notes
 - Gonna drop Typescript, prefer less barriers to entry
 - Templates cannot read from the file system when using the registry
 - Base templates using react/svelte/etc
 - pdf? lol
 
+## App - Homepage
 
-# WIP
+homepage shit goes here
+
+### Notes
+
+- Get rid of Jekyll
+
+
+
+# OTHER - WIP - IGNORE
 
 ## Prisma
 
