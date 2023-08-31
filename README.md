@@ -1,19 +1,52 @@
-JSON RESUME mono repo
+# JSON Resume
 
-This repo uses Vercel's Turbo repo setup.
+This is a monorepo, will be the home of the registry, the homepage, ui kit, base templates, utils etc
+
+## Requirements
+
+This project requires [pnpm](https://pnpm.io/installation) (yet another npm/yarn alternative)
+
+Until futher ado this repo will depend on a globally installed version of [turbo](https://turbo.build/repo/docs/installing).
+
+(insert someone who can remove all of the global crap)
 
 ## Getting Started
 
+This repo uses Vercel's Turbo repo setup.
+
+Install the packages;
+
 ```
-// install turbo
+pnpm i
+```
+
+To start them all;
+
+```
 turbo dev
 ```
 
-Environment keys
+To start an individual app;
 
-- openai keys
-  // maybe any llm endpoint
-- github api token
+```
+turbo dev --filter=registry
+```
+
+// @todo - don't really want to add containers (docker etc), thoughts needed
+
+**Environment variables**:
+
+These are required to run the registry. (only the github token, but it probably crashs without the rest for now)
+
+```
+GITHUB_TOKEN=
+DATABASE_URL_RAW=
+DATABASE_URL=
+
+PINECONE_API_KEY=
+PINECONE_ENVIRONMENT=
+OPENAI_API_KEY=
+```
 
 ## Formats
 
@@ -22,6 +55,34 @@ Environment keys
 - html
 - text
 - lex
+
+# Notes
+- Gonna drop Typescript, prefer less barriers to entry
+- Templates cannot read from the file system when using the registry
+
+
+
+# WIP
+
+## Prisma
+
+// @todo - edge location database proxy, might just get rid of it, kind of annoying
+
+apps/registry postinstall$ prisma generate --data-proxy
+[2 lines collapsed]
+│ You can now start using Prisma Client in your code. Reference: https://pris.
+│ ```
+│ import { PrismaClient } from '@prisma/client'
+│ const prisma = new PrismaClient()
+│ ```
+│ To use Prisma Client in edge runtimes like Cloudflare Workers or Vercel Edge
+│ ``` 
+│ import { PrismaClient } from '@prisma/client/edge'
+│ ```
+│ You will need a Prisma Data Proxy connection string. See documentation: http
+└─ Done in 1.4s
+Done in 8.2s
+
 
 ### Jobs
 
