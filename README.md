@@ -2,8 +2,6 @@
 
 This is a monorepo, will be the home of the registry, the homepage, ui kit, base templates, utils etc
 
-// @todo - explain apps vs packages
-
 ## Apps
 
 All projects hosted on this domain, will be found in the /apps folder.
@@ -51,8 +49,6 @@ To start an individual app;
 turbo dev --filter=registry
 ```
 
-// @todo - don't really want to add containers (docker etc), thoughts needed (because of the current jekyll requirement on the homepage)
-
 **Environment variables**:
 
 These are required to run the registry. (only the github token, but it probably crashs without the rest for now)
@@ -97,12 +93,23 @@ This will start a local server at [http://localhost:3002/thomasdavis](http://loc
 
 ## App - Homepage
 
-homepage shit goes here
+```
+turbo dev --filter=homepage
+```
 
-### Notes
+Kind of a mess, but it works.
 
-- Get rid of Jekyll
+It uses Jekyll, to install it 
 
+```
+gem install bundler jekyll
+```
+
+Then to run it
+
+```
+jekyll serve
+```
 ## AI
 
 This repo contains some fun examples of AI/LLM usage. Each feature can be reached by simply appending your normal hosted url with the following;
