@@ -27,7 +27,7 @@ curl -fsSL https://get.pnpm.io/install.sh | sh -
 pnpm install turbo --global
 ```
 
-(insert someone who can remove all of the global crap)
+(insert someone who can remove all of the global install crap)
 
 ## Getting Started
 
@@ -58,6 +58,7 @@ turbo dev --filter=registry
 These are required to run the registry. (only the github token, but it probably crashs without the rest for now)
 
 ```
+# classic token
 GITHUB_TOKEN=
 
 # normal dbs vs edge location dbs
@@ -73,16 +74,20 @@ OPENAI_API_KEY=
 
 ## App - Registry
 
-registry shit goes here
+```
+turbo dev --filter=registry
+```
+
+This will start a local server at [http://localhost:3002/thomasdavis](http://localhost:3002/thomasdavis)
 
 
 ### Formats
 
-- markdown
-- yaml
-- html
-- text
-- lex
+- Markdown
+- YAML
+- HTML
+- Text
+- Lex
 
 ### Notes
 - Gonna drop Typescript, prefer less barriers to entry
@@ -98,43 +103,38 @@ homepage shit goes here
 
 - Get rid of Jekyll
 
+## AI
 
-
-# OTHER - WIP - IGNORE
-
-## Prisma
-
-// @todo - edge location database proxy, might just get rid of it, kind of annoying
-
-apps/registry postinstall$ prisma generate --data-proxy
-[2 lines collapsed]
-│ You can now start using Prisma Client in your code. Reference: https://pris.
-│ ```
-│ import { PrismaClient } from '@prisma/client'
-│ const prisma = new PrismaClient()
-│ ```
-│ To use Prisma Client in edge runtimes like Cloudflare Workers or Vercel Edge
-│ ``` 
-│ import { PrismaClient } from '@prisma/client/edge'
-│ ```
-│ You will need a Prisma Data Proxy connection string. See documentation: http
-└─ Done in 1.4s
-Done in 8.2s
-
+This repo contains some fun examples of AI/LLM usage. Each feature can be reached by simply appending your normal hosted url with the following;
 
 ### Jobs
 
-// @todo - creating embeddings out of hn who is hiring post
+This project creates embeddings out of Hacker News Who Is Hiring post, it then generates an embedding of your resume. Then uses vector similarity matching to recommend what jobs would be most applicable to you. 
+
+It is not setup to be automated at the moment, and the formatting is garbage. Each post should be sent to GPT to reformat it into a templated job description before generating embeddings.
+
+
+[http://localhost:3002/thomasdavis/jobs](http://localhost:3002/thomasdavis/jobs)
 
 ### Letter
 
-// @todo - set up an url reader or copy paste a jd
+This is a very simple service that prompts GPT with your resume and asks to generate a cover letter.
+
+It could be easily improved to also contain the context of the job you are applying for. 
+
+[http://localhost:3002/thomasdavis/letter](http://localhost:3002/thomasdavis/letter)
+
 
 ### Suggestions
 
-// @todo - use a fine trained model
+This is a very simple service that prompts GPT with your resume and asks to generate a list of suggestions for you to improve your resume.
+
+[http://localhost:3002/thomasdavis/suggestions](http://localhost:3002/thomasdavis/suggestions)
+
 
 ### Interview
 
-// @todo - example of how to use memories and vector similarity searches
+This is an implementation of a chat bot, your resume is injected, and the conversation is included in the prompt. So you can interview your self or talk as if you were being interviewed.
+
+[http://localhost:3002/thomasdavis/interview](http://localhost:3002/thomasdavis/interview)
 
