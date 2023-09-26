@@ -155,6 +155,10 @@ export default function Talk() {
     setPosition(position === INTERVIEWER ? CANDIDATE : INTERVIEWER);
   };
 
+	const uselessFunction = () => {
+setMessages([]);
+};
+
   const postMessage = async () => {
     setReplying(true);
     console.log("what is the value of text", text);
