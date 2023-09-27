@@ -33,6 +33,11 @@
   description: Intuitive job-candidate skill visualization, taking advantage of D3.js and JSONResume.
   category: visualization
 
+- name: refo
+  link: https://github.com/kireerik/refo
+  description: A static site and resume example with styled components.
+  category: generator
+
 - name: gulp-resume
   link: https://github.com/mattberther/gulp-resume
   description: gulp-resume is a gulp plugin to generate a resume using jsonresume.org.
