@@ -8,7 +8,7 @@ jQuery(() => {
  * Apply the class "active" to the current page in the navigation bar.
  */
 function highlight() {
-  $("#nav a").each(function() {
+  $("#nav a").each(function () {
     const self = $(this);
     const href = self.attr("href");
     const path = window.location.pathname;
@@ -23,18 +23,16 @@ function highlight() {
 function equalizeFeatureHeight() {
   const start = $("#start");
 
-  if (!start.length)
-    return;
+  if (!start.length) return;
 
   setInterval(() => {
     let max = 0;
     const items = start.find(".feature p");
 
-    items.css("height", "auto").each(function() {
+    items.css("height", "auto").each(function () {
       const h = $(this).height();
 
-      if (h > max)
-        max = h;
+      if (h > max) max = h;
     });
 
     items.height(max);

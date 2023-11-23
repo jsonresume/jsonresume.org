@@ -25,7 +25,7 @@ ${work.position}
 
 ${work.summary}
 
-${(work.highlights ?? []).map((highlight) => `+ ${highlight}`).join('\n')}
+${(work.highlights ?? []).map((highlight) => `+ ${highlight}`).join("\n")}
 
 `
 )}
@@ -44,7 +44,7 @@ ${volunteer.position}
 
 ${volunteer.summary}
 
-${(volunteer.highlights ?? []).map((highlight) => `+ ${highlight}`).join('\n')}
+${(volunteer.highlights ?? []).map((highlight) => `+ ${highlight}`).join("\n")}
 
 
 `
@@ -56,11 +56,11 @@ ${(volunteer.highlights ?? []).map((highlight) => `+ ${highlight}`).join('\n')}
 ============================
 ${(resume.education ?? []).map(
   (education) => `
-${education.startDate} – ${education.endDate || ''}
+${education.startDate} – ${education.endDate || ""}
 ${education.institution} 
 ${education.area} - ${education.studyType}
 
-${(education.courses ?? []).map((course) => `+ ${course}`).join('\n')}
+${(education.courses ?? []).map((course) => `+ ${course}`).join("\n")}
 
 
 `
@@ -72,7 +72,7 @@ ${(education.courses ?? []).map((course) => `+ ${course}`).join('\n')}
 ============================
 ${(resume.awards ?? []).map(
   (award) => `
-${award.title} – ${award.date || ''}
+${award.title} – ${award.date || ""}
 ${award.awarder} 
 
 `
@@ -85,7 +85,7 @@ ${award.awarder}
 ============================
 ${(resume.certificates ?? []).map(
   (certificate) => `
-${certificate.name} – ${certificate.date || ''}
+${certificate.name} – ${certificate.date || ""}
 ${certificate.issuer} 
 
 
@@ -100,7 +100,7 @@ PUBLICATIONS
 ============================
 ${(resume.publications ?? []).map(
   (publication) => `
-${publication.name} – ${publication.date || ''}
+${publication.name} – ${publication.date || ""}
 ${publication.issuer} 
 
 ${publication.summary}
@@ -120,10 +120,10 @@ ${(resume.skills ?? [])
     (skill) => `
 ${skill.name}
 -------------
-${(skill.keywords ?? []).map((keyword) => `+ ${keyword}`).join('\n')}
+${(skill.keywords ?? []).map((keyword) => `+ ${keyword}`).join("\n")}
 `
   )
-  .join('\n')}
+  .join("\n")}
 `;
   }
   return { content, headers: [] };

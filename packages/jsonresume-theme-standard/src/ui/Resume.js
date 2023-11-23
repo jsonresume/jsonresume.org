@@ -1,7 +1,7 @@
-import styled from 'styled-components';
-import Basics from './Basics';
-import Work from './Work';
-import Projects from './Projects';
+import styled from "styled-components";
+import Basics from "./Basics";
+import Work from "./Work";
+import Projects from "./Projects";
 
 const Layout = styled.div`
   max-width: 660px;

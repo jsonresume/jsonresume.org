@@ -1,7 +1,7 @@
-import styled from 'styled-components';
-import SubTitle from './SubTitle';
-import List from './List';
-import DateRange from './DateRange';
+import styled from "styled-components";
+import SubTitle from "./SubTitle";
+import List from "./List";
+import DateRange from "./DateRange";
 
 const Company = styled.div`
   font-size: 16px;

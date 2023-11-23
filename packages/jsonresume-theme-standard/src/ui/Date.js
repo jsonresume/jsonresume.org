@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const Text = styled.div`
   font-size: 16px;
@@ -7,7 +7,7 @@ const Text = styled.div`
 
 const Date = ({ date }) => {
   // @todo - format date here
-  return <Text>{date ?? 'Present'}</Text>;
+  return <Text>{date ?? "Present"}</Text>;
 };
 
 export default Date;

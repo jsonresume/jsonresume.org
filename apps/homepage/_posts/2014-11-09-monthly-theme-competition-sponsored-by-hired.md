@@ -10,7 +10,6 @@ JSON Resume helps people create a stylish resume without worrying about design a
 
 Changing the style of your resume can be done easily in a few seconds because all our themes obey the JSON Resume standard.
 
-
 <div class="row">
   <div class="col-sm-4 col-md-4">
     <div class="theme">

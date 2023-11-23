@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import Date from './Date';
+import styled from "styled-components";
+import Date from "./Date";
 
 const Text = styled.div`
   font-size: 16px;

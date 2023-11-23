@@ -22,15 +22,15 @@ When JSON resume first went public, it was actually unexpected and the project w
 
 Some accomplishments so far
 
-* Over 1400 stars on the [resume CLI](https://github.com/jsonresume/resume-cli)
-* 97 issues created for the specification, [52 closed](https://github.com/jsonresume/resume-schema/issues?q=is%3Aissue+is%3Aclosed)
-* Built a [modular theme system](https://github.com/jsonresume/theme-manager) leveraging NPM for version management
-* Active [theme development](http://node-modules.com/search?q=jsonresume-theme-*) underway
-* Progress made on [LinkedIn export](https://jmperezperez.com/linkedin-to-json-resume/)
-* Build your `resume.json` with a GUI, coming in the next few days([screenshot](https://i.imgur.com/RYqIdUp.png))
-* Organized a [standards committee](/team)
-* Multiple HR related services are looking at supporting and potentially sponsoring the JSON resume project
-* Officially listed JSON schema on [JSON Schema Store](https://schemastore.org/)
+- Over 1400 stars on the [resume CLI](https://github.com/jsonresume/resume-cli)
+- 97 issues created for the specification, [52 closed](https://github.com/jsonresume/resume-schema/issues?q=is%3Aissue+is%3Aclosed)
+- Built a [modular theme system](https://github.com/jsonresume/theme-manager) leveraging NPM for version management
+- Active [theme development](http://node-modules.com/search?q=jsonresume-theme-*) underway
+- Progress made on [LinkedIn export](https://jmperezperez.com/linkedin-to-json-resume/)
+- Build your `resume.json` with a GUI, coming in the next few days([screenshot](https://i.imgur.com/RYqIdUp.png))
+- Organized a [standards committee](/team)
+- Multiple HR related services are looking at supporting and potentially sponsoring the JSON resume project
+- Officially listed JSON schema on [JSON Schema Store](https://schemastore.org/)
 
 An obligatory thank you to everybody who has participated up to this point. And a very special thanks to [Mattias Erming](https://github.com/erming) who has put a lot of hard work into developing and brainstorming the future of JSON resume.
 
@@ -38,9 +38,9 @@ An obligatory thank you to everybody who has participated up to this point. And 
 
 After long discussions about the specification in the GitHub issues, we have come to settle on a few points.
 
-* JSON resume exist to empower individuals to manage their job seeking profiles and this is our highest priority.
-* Because there is no easily accessible alternative, we are going to maintain a casual approach to the project.
-* The specification is not to be the perfect description of a person but instead a description of a resume where only things relevant in the context of hiring will be allowed in.
+- JSON resume exist to empower individuals to manage their job seeking profiles and this is our highest priority.
+- Because there is no easily accessible alternative, we are going to maintain a casual approach to the project.
+- The specification is not to be the perfect description of a person but instead a description of a resume where only things relevant in the context of hiring will be allowed in.
 
 To guarantee the **success** of JSON resume, we will be aiming to integrate as an import/export option where ever possible. We want a thriving theme ecosystem and as many tools as possible.
 
