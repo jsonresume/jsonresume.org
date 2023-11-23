@@ -4,4 +4,6 @@ const format = async function format(resume) {
   return { content, headers: [] };
 };
 
-export default { format };
+const exports = { format };
+
+export default exports;

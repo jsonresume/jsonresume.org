@@ -29,7 +29,7 @@ export default function Talk() {
     };
 
     fetchData();
-  }, []);
+  }, [username]);
 
   return (
     <Layout>

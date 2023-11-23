@@ -43,7 +43,7 @@ const Resumes = () => {
           return (
             <div key={resume.updated_at}>
               <a href={`https://registry.jsonresume.org/${resume.username}`}>
-                <Image src={resume.image} />
+                <Image alt="The user"src={resume.image} />
               </a>
               <div>{resume.label?.substr(0, 30)}</div>
             </div>

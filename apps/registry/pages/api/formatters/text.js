@@ -129,4 +129,6 @@ ${(skill.keywords ?? []).map((keyword) => `+ ${keyword}`).join('\n')}
   return { content, headers: [] };
 };
 
-export default { format };
+const exports = { format };
+
+export default exports;

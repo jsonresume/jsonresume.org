@@ -2,4 +2,6 @@ const format = async function format(resume) {
   return { content: 'Unsupported Latex', headers: [] };
 };
 
-export default { format };
+const exports = { format };
+
+export default exports;

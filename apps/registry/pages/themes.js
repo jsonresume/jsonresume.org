@@ -44,6 +44,7 @@ const Resumes = () => {
             <div key={resume}>
               <a href={resume}>
                 <Image
+                  alt="Screenshot"
                   src={`https://screenshot-peach-beta.vercel.app/api?url=${resume}&height=720&width=1280`}
                 />
               </a>
