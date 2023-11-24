@@ -29,7 +29,7 @@ export default function Letter() {
     };
 
     fetchData();
-  }, []);
+  }, [username]);
 
   return (
     <Layout>

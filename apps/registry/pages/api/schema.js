@@ -1,4 +1,4 @@
-export default {
+const schema = {
   $schema: 'http://json-schema.org/draft-04/schema#',
   additionalProperties: false,
   definitions: {
@@ -519,3 +519,5 @@ export default {
   title: 'Resume Schema',
   type: 'object',
 };
+
+export default schema;

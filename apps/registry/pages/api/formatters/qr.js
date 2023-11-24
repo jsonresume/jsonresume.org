@@ -19,4 +19,6 @@ export const format = async function format(resume, { username }) {
   };
 };
 
-export default { format };
+const exports = { format };
+
+export default exports;

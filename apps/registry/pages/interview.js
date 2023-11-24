@@ -220,7 +220,7 @@ export default function Talk() {
       setReply("");
       textInput?.current?.focus();
     }
-  }, [replying]);
+  }, [messages, position, reply, replying]);
 
   console.log({ messages });
 

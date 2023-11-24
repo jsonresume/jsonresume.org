@@ -99,4 +99,6 @@ const format = async function (resume, options) {
   };
 };
 
-export default { format };
+const exports = { format };
+
+export default exports;
