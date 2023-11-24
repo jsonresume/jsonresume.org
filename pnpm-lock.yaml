@@ -25,6 +25,8 @@ importers:
         specifier: ^1.9.6
         version: 1.10.16
 
+  apps/homepage: {}
+
   apps/registry:
     dependencies:
       '@faker-js/faker':
