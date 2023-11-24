@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import SubTitle from "./SubTitle";
+import styled from 'styled-components';
+import SubTitle from './SubTitle';
 
 const Title = styled.div`
   font-size: 34px;

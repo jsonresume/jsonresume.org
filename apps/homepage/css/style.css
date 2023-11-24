@@ -7,7 +7,7 @@ body {
 body {
   color: #222;
   background: #fff;
-  font: 14px "Open Sans";
+  font: 14px 'Open Sans';
   margin: 0;
   overflow-x: hidden;
 }
@@ -17,7 +17,7 @@ a:hover {
   transition: all 0.25s;
 }
 h1 {
-  font: 300 40px "Open Sans";
+  font: 300 40px 'Open Sans';
   margin: 0;
 }
 h1,
@@ -147,7 +147,7 @@ pre {
 #sidebar a {
   display: block;
   color: #000;
-  font: 600 15px "Open Sans";
+  font: 600 15px 'Open Sans';
   padding: 15px 30px;
 }
 #sidebar a + a {
@@ -155,7 +155,7 @@ pre {
 }
 #nav {
   background: #fff18f;
-  font: 600 15px "Open Sans";
+  font: 600 15px 'Open Sans';
   overflow: hidden;
 }
 #nav button {
@@ -242,7 +242,7 @@ pre {
 }
 #search:before {
   color: #ccc;
-  content: "\f002";
+  content: '\f002';
   cursor: text;
   font: 24px FontAwesome;
   position: absolute;
@@ -356,7 +356,7 @@ pre {
   margin-top: 0;
   margin-bottom: 0.5em;
 }
-#schema .row div[class^="col-sm-"] {
+#schema .row div[class^='col-sm-'] {
   margin-bottom: 30px;
 }
 #themes {
@@ -460,13 +460,13 @@ pre {
 #team .person .github:before {
   color: #ccc;
   font: 14px FontAwesome;
-  content: "\f09b";
+  content: '\f09b';
   margin-right: 6px;
 }
 #team .person .twitter:before {
   color: #ddd;
   font: 14px FontAwesome;
-  content: "\f099";
+  content: '\f099';
   margin-right: 6px;
 }
 #footer {

@@ -1,5 +1,5 @@
-const { Client } = require("pg");
-import { ChatGPTAPI } from "chatgpt";
+const { Client } = require('pg');
+import { ChatGPTAPI } from 'chatgpt';
 
 export default async function handler(req, res) {
   const { username } = req.body;

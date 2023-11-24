@@ -1,12 +1,12 @@
-import { OpenAIStream } from "./openAIStream";
-import prisma from "../../lib/prisma";
+import { OpenAIStream } from './openAIStream';
+import prisma from '../../lib/prisma';
 
 if (!process.env.OPENAI_API_KEY) {
-  throw new Error("Missing env var from OpenAI");
+  throw new Error('Missing env var from OpenAI');
 }
 
 export const config = {
-  runtime: "edge",
+  runtime: 'edge',
 };
 
 const SYSTEM_PROMPT = {
@@ -34,28 +34,28 @@ export default async function handler(req, res) {
   });
 
   if (!prompt) {
-    return new Response("No prompt in the request", { status: 400 });
+    return new Response('No prompt in the request', { status: 400 });
   }
   // get resume from database
   const lastMessages = messages;
-  console.log("STUFF", { username, prompt, position, lastMessages });
+  console.log('STUFF', { username, prompt, position, lastMessages });
 
   let lastMessagesString = lastMessages
     .map((m) => {
       return `${m.position}: ${m.content}\n`;
     })
-    .join("\n");
+    .join('\n');
 
   lastMessagesString += `${
-    position === "candidate" ? "candidate" : "interviewer"
+    position === 'candidate' ? 'candidate' : 'interviewer'
   }:${prompt}\n`;
 
   lastMessagesString += `${
-    position === "candidate" ? "interviewer" : "candidate"
+    position === 'candidate' ? 'interviewer' : 'candidate'
   }:`;
 
   const payload = {
-    model: "text-davinci-003",
+    model: 'text-davinci-003',
     prompt: [
       SYSTEM_PROMPT[position],
       `For context, here is the resume in question: ${JSON.stringify(resume)}`,
@@ -67,7 +67,7 @@ export default async function handler(req, res) {
       `,
       //
       position,
-    ].join("\n\n"),
+    ].join('\n\n'),
     prompt: `
     ${SYSTEM_PROMPT[position]}
     For context, here is the resume in question: ${JSON.stringify(resume)}

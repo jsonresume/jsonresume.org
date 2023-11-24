@@ -1,7 +1,7 @@
-import { renderToString } from "react-dom/server";
-import { ServerStyleSheet } from "styled-components";
-import Document from "./ui/Document";
-import Resume from "./ui/Resume";
+import { renderToString } from 'react-dom/server';
+import { ServerStyleSheet } from 'styled-components';
+import Document from './ui/Document';
+import Resume from './ui/Resume';
 
 export const render = (resume) => {
   const sheet = new ServerStyleSheet();

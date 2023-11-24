@@ -1,6 +1,6 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
 
 const Image = styled.img`
   width: 200px;
@@ -20,10 +20,10 @@ const Resumes = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("/api/themes");
+        const response = await axios.get('/api/themes');
         setData(response.data);
       } catch (error) {
-        console.error("Error fetching data: ", error);
+        console.error('Error fetching data: ', error);
       }
     };
 

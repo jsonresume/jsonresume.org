@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "First Official Release"
+title: 'First Official Release'
 date: 2014-07-31 14:18:05
 permalink: /blog/first-official-release/
 author: Thomas Davis

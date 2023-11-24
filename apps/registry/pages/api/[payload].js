@@ -1,41 +1,41 @@
-const sampleResume = require("./samples/resume");
-const find = require("lodash/find");
-const axios = require("axios");
-const Validator = require("jsonschema").Validator;
-import schema from "./schema";
-import qr from "./formatters/qr";
-import template from "./formatters/template";
-import txt from "./formatters/text";
-import tex from "./formatters/tex";
-import json from "./formatters/json";
-import yaml from "./formatters/yaml";
+const sampleResume = require('./samples/resume');
+const find = require('lodash/find');
+const axios = require('axios');
+const Validator = require('jsonschema').Validator;
+import schema from './schema';
+import qr from './formatters/qr';
+import template from './formatters/template';
+import txt from './formatters/text';
+import tex from './formatters/tex';
+import json from './formatters/json';
+import yaml from './formatters/yaml';
 
-const { Client } = require("pg");
+const { Client } = require('pg');
 
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
-const FILE_TYPES = new Set(["qr", "json", "tex", "txt", "template", "yaml"]);
+const FILE_TYPES = new Set(['qr', 'json', 'tex', 'txt', 'template', 'yaml']);
 
 const failMessage = (message) => {
   return (
     message +
-    ", message @ajaxdavis on twitter if you need help (or tag me in your gist comments @thomasdavis"
+    ', message @ajaxdavis on twitter if you need help (or tag me in your gist comments @thomasdavis'
   );
 };
 
 export default async function handler(req, res) {
   const { theme, payload } = req.query;
   const v = new Validator();
-  const payloadSplit = payload.split(".");
+  const payloadSplit = payload.split('.');
 
   const username = payloadSplit[0];
-  let fileType = "template";
+  let fileType = 'template';
   if (payloadSplit.length === 2) {
     fileType = payloadSplit[1];
   }
 
   if (!FILE_TYPES.has(fileType)) {
-    return res.status(200).send(failMessage("not supported file type"));
+    return res.status(200).send(failMessage('not supported file type'));
   }
 
   const FORMATTERS = {
@@ -50,24 +50,24 @@ export default async function handler(req, res) {
   const formatter = FORMATTERS[fileType];
 
   if (!formatter) {
-    return res.status(200).send(failMessage("not supported formatted"));
+    return res.status(200).send(failMessage('not supported formatted'));
   }
 
   if (
     [
-      "favicon.ico",
-      "competition",
-      "stats",
-      "apple-touch-icon.png",
-      "apple-touch-icon-precomposed.png",
-      "robots.txt",
+      'favicon.ico',
+      'competition',
+      'stats',
+      'apple-touch-icon.png',
+      'apple-touch-icon-precomposed.png',
+      'robots.txt',
     ].indexOf(username) !== -1
   ) {
     return res.send(null);
   }
 
   let gistId;
-  console.log("Fetching gistId");
+  console.log('Fetching gistId');
   console.log(`https://api.github.com/users/${username}/gists`);
 
   let gistData = {};
@@ -77,26 +77,26 @@ export default async function handler(req, res) {
       `https://api.github.com/users/${username}/gists?per_page=100`,
       {
         headers: {
-          Authorization: "Bearer " + GITHUB_TOKEN,
+          Authorization: 'Bearer ' + GITHUB_TOKEN,
         },
       }
     );
   } catch (e) {
     console.log(e);
-    return res.send(failMessage("This is not a valid Github username"));
+    return res.send(failMessage('This is not a valid Github username'));
   }
 
   if (!gistData.data) {
-    return res.send(failMessage("This is not a valid Github username"));
+    return res.send(failMessage('This is not a valid Github username'));
   }
 
   const resumeUrl = find(gistData.data, (f) => {
-    return f.files["resume.json"];
+    return f.files['resume.json'];
   });
 
   if (!resumeUrl) {
     return res.send(
-      failMessage("You have no gists named resume.json or your gist is private")
+      failMessage('You have no gists named resume.json or your gist is private')
     );
   }
 
@@ -110,17 +110,17 @@ export default async function handler(req, res) {
       new Date().getTime();
 
     resumeRes = await axios({
-      method: "GET",
-      headers: { "content-type": "application/json" },
+      method: 'GET',
+      headers: { 'content-type': 'application/json' },
       url: fullResumeGistUrl,
     });
   } catch (e) {
     // If gist url is invalid, flush the gistid in cache
-    return res.status(200).send(failMessage("Cannot fetch gist, no idea why"));
+    return res.status(200).send(failMessage('Cannot fetch gist, no idea why'));
   }
 
   let realTheme =
-    theme || (resumeRes.data.meta && resumeRes.data.meta.theme) || "flat";
+    theme || (resumeRes.data.meta && resumeRes.data.meta.theme) || 'flat';
 
   realTheme = realTheme.toLowerCase();
 
@@ -129,7 +129,7 @@ export default async function handler(req, res) {
 
   if (!validation.valid) {
     return res.status(200).send(
-      failMessage("Validation failed") +
+      failMessage('Validation failed') +
         `
     
 Your resume does not conform to the schema, visit https://jsonresume.org/schema/ to double check why. But the error message below should contain all the information you need.
@@ -157,14 +157,14 @@ ${JSON.stringify(validation.errors, null, 2)}
         [username, JSON.stringify(selectedResume)]
       );
     } catch (err) {
-      console.error("error executing query:", err);
+      console.error('error executing query:', err);
     } finally {
       client.end();
     }
   })();
 
   const options = { ...req.query, theme: realTheme, username };
-  let formatted = "";
+  let formatted = '';
   try {
     formatted = await formatter.format(selectedResume, options);
   } catch (e) {
@@ -173,7 +173,7 @@ ${JSON.stringify(validation.errors, null, 2)}
       .status(200)
       .send(
         failMessage(
-          "Cannot format resume, no idea why #likely-a-validation-error"
+          'Cannot format resume, no idea why #likely-a-validation-error'
         )
       );
   }

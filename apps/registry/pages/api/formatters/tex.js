@@ -1,5 +1,5 @@
 const format = async function format(resume) {
-  return { content: "Unsupported Latex", headers: [] };
+  return { content: 'Unsupported Latex', headers: [] };
 };
 
 const exports = { format };

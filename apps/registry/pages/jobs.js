@@ -1,10 +1,10 @@
-import styled from "styled-components";
-import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
-import axios from "axios";
-import { NodeHtmlMarkdown, NodeHtmlMarkdownOptions } from "node-html-markdown";
-import ReactMarkdown from "react-markdown";
-import Layout from "../ui/Layout";
+import styled from 'styled-components';
+import { useRouter } from 'next/router';
+import { useEffect, useRef, useState } from 'react';
+import axios from 'axios';
+import { NodeHtmlMarkdown, NodeHtmlMarkdownOptions } from 'node-html-markdown';
+import ReactMarkdown from 'react-markdown';
+import Layout from '../ui/Layout';
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -56,7 +56,7 @@ const Helper = styled.div`
 
 export default function Talk() {
   const router = useRouter();
-  const parts = router.asPath.split("/");
+  const parts = router.asPath.split('/');
   const username = parts[1];
 
   const [jobs, setJobs] = useState(null);
@@ -64,12 +64,12 @@ export default function Talk() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.post("/api/jobs", {
+        const response = await axios.post('/api/jobs', {
           username,
         });
         setJobs(response.data);
       } catch (error) {
-        console.error("Error fetching data: ", error);
+        console.error('Error fetching data: ', error);
       }
     };
 
@@ -82,15 +82,15 @@ export default function Talk() {
         <Messages>
           {jobs &&
             jobs.map((job) => {
-              let content = job.content.replace("<code>", "");
-              content = job.content.replace("</code>", "");
-              content = job.content.replace("<pre>", "");
-              content = job.content.replace("</pre>", "");
+              let content = job.content.replace('<code>', '');
+              content = job.content.replace('</code>', '');
+              content = job.content.replace('<pre>', '');
+              content = job.content.replace('</pre>', '');
               return (
                 <Message key={job.uuid}>
                   <Name>{capitalizeFirstLetter(job.type)}</Name>
                   <ReactMarkdown>
-                    {NodeHtmlMarkdown.translate(content).replace("```", "")}
+                    {NodeHtmlMarkdown.translate(content).replace('```', '')}
                   </ReactMarkdown>
                 </Message>
               );

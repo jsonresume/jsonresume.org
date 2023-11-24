@@ -1,104 +1,104 @@
 const schema = {
-  $schema: "http://json-schema.org/draft-04/schema#",
+  $schema: 'http://json-schema.org/draft-04/schema#',
   additionalProperties: false,
   definitions: {
     iso8601: {
-      type: "string",
+      type: 'string',
       description:
-        "Similar to the standard date type, but each section after the year is optional. e.g. 2014-06-29 or 2023-04",
+        'Similar to the standard date type, but each section after the year is optional. e.g. 2014-06-29 or 2023-04',
       pattern:
-        "^([1-2][0-9]{3}-[0-1][0-9]-[0-3][0-9]|[1-2][0-9]{3}-[0-1][0-9]|[1-2][0-9]{3})$",
+        '^([1-2][0-9]{3}-[0-1][0-9]-[0-3][0-9]|[1-2][0-9]{3}-[0-1][0-9]|[1-2][0-9]{3})$',
     },
   },
   properties: {
     $schema: {
-      type: "string",
+      type: 'string',
       description:
-        "link to the version of the schema that can validate the resume",
-      format: "uri",
+        'link to the version of the schema that can validate the resume',
+      format: 'uri',
     },
     basics: {
-      type: "object",
+      type: 'object',
       additionalProperties: true,
       properties: {
         name: {
-          type: "string",
+          type: 'string',
         },
         label: {
-          type: "string",
-          description: "e.g. Web Developer",
+          type: 'string',
+          description: 'e.g. Web Developer',
         },
         image: {
-          type: "string",
-          description: "URL (as per RFC 3986) to a image in JPEG or PNG format",
+          type: 'string',
+          description: 'URL (as per RFC 3986) to a image in JPEG or PNG format',
         },
         email: {
-          type: "string",
-          description: "e.g. thomas@gmail.com",
-          format: "email",
+          type: 'string',
+          description: 'e.g. thomas@gmail.com',
+          format: 'email',
         },
         phone: {
-          type: "string",
+          type: 'string',
           description:
-            "Phone numbers are stored as strings so use any format you like, e.g. 712-117-2923",
+            'Phone numbers are stored as strings so use any format you like, e.g. 712-117-2923',
         },
         url: {
-          type: "string",
+          type: 'string',
           description:
-            "URL (as per RFC 3986) to your website, e.g. personal homepage",
-          format: "uri",
+            'URL (as per RFC 3986) to your website, e.g. personal homepage',
+          format: 'uri',
         },
         summary: {
-          type: "string",
-          description: "Write a short 2-3 sentence biography about yourself",
+          type: 'string',
+          description: 'Write a short 2-3 sentence biography about yourself',
         },
         location: {
-          type: "object",
+          type: 'object',
           additionalProperties: true,
           properties: {
             address: {
-              type: "string",
+              type: 'string',
               description:
-                "To add multiple address lines, use \n. For example, 1234 Glücklichkeit Straße\nHinterhaus 5. Etage li.",
+                'To add multiple address lines, use \n. For example, 1234 Glücklichkeit Straße\nHinterhaus 5. Etage li.',
             },
             postalCode: {
-              type: "string",
+              type: 'string',
             },
             city: {
-              type: "string",
+              type: 'string',
             },
             countryCode: {
-              type: "string",
-              description: "code as per ISO-3166-1 ALPHA-2, e.g. US, AU, IN",
+              type: 'string',
+              description: 'code as per ISO-3166-1 ALPHA-2, e.g. US, AU, IN',
             },
             region: {
-              type: "string",
+              type: 'string',
               description:
-                "The general region where you live. Can be a US state, or a province, for instance.",
+                'The general region where you live. Can be a US state, or a province, for instance.',
             },
           },
         },
         profiles: {
-          type: "array",
+          type: 'array',
           description:
-            "Specify any number of social networks that you participate in",
+            'Specify any number of social networks that you participate in',
           additionalItems: false,
           items: {
-            type: "object",
+            type: 'object',
             additionalProperties: true,
             properties: {
               network: {
-                type: "string",
-                description: "e.g. Facebook or Twitter",
+                type: 'string',
+                description: 'e.g. Facebook or Twitter',
               },
               username: {
-                type: "string",
-                description: "e.g. neutralthoughts",
+                type: 'string',
+                description: 'e.g. neutralthoughts',
               },
               url: {
-                type: "string",
-                description: "e.g. http://twitter.example.com/neutralthoughts",
-                format: "uri",
+                type: 'string',
+                description: 'e.g. http://twitter.example.com/neutralthoughts',
+                format: 'uri',
               },
             },
           },
@@ -106,387 +106,387 @@ const schema = {
       },
     },
     work: {
-      type: "array",
+      type: 'array',
       additionalItems: false,
       items: {
-        type: "object",
+        type: 'object',
         additionalProperties: true,
         properties: {
           name: {
-            type: "string",
-            description: "e.g. Facebook",
+            type: 'string',
+            description: 'e.g. Facebook',
           },
           location: {
-            type: "string",
-            description: "e.g. Menlo Park, CA",
+            type: 'string',
+            description: 'e.g. Menlo Park, CA',
           },
           description: {
-            type: "string",
-            description: "e.g. Social Media Company",
+            type: 'string',
+            description: 'e.g. Social Media Company',
           },
           position: {
-            type: "string",
-            description: "e.g. Software Engineer",
+            type: 'string',
+            description: 'e.g. Software Engineer',
           },
           url: {
-            type: "string",
-            description: "e.g. http://facebook.example.com",
-            format: "uri",
+            type: 'string',
+            description: 'e.g. http://facebook.example.com',
+            format: 'uri',
           },
           startDate: {
-            $ref: "#/definitions/iso8601",
+            $ref: '#/definitions/iso8601',
           },
           endDate: {
-            $ref: "#/definitions/iso8601",
+            $ref: '#/definitions/iso8601',
           },
           summary: {
-            type: "string",
+            type: 'string',
             description:
-              "Give an overview of your responsibilities at the company",
+              'Give an overview of your responsibilities at the company',
           },
           highlights: {
-            type: "array",
-            description: "Specify multiple accomplishments",
+            type: 'array',
+            description: 'Specify multiple accomplishments',
             additionalItems: false,
             items: {
-              type: "string",
+              type: 'string',
               description:
-                "e.g. Increased profits by 20% from 2011-2012 through viral advertising",
+                'e.g. Increased profits by 20% from 2011-2012 through viral advertising',
             },
           },
         },
       },
     },
     volunteer: {
-      type: "array",
+      type: 'array',
       additionalItems: false,
       items: {
-        type: "object",
+        type: 'object',
         additionalProperties: true,
         properties: {
           organization: {
-            type: "string",
-            description: "e.g. Facebook",
+            type: 'string',
+            description: 'e.g. Facebook',
           },
           position: {
-            type: "string",
-            description: "e.g. Software Engineer",
+            type: 'string',
+            description: 'e.g. Software Engineer',
           },
           url: {
-            type: "string",
-            description: "e.g. http://facebook.example.com",
-            format: "uri",
+            type: 'string',
+            description: 'e.g. http://facebook.example.com',
+            format: 'uri',
           },
           startDate: {
-            $ref: "#/definitions/iso8601",
+            $ref: '#/definitions/iso8601',
           },
           endDate: {
-            $ref: "#/definitions/iso8601",
+            $ref: '#/definitions/iso8601',
           },
           summary: {
-            type: "string",
+            type: 'string',
             description:
-              "Give an overview of your responsibilities at the company",
+              'Give an overview of your responsibilities at the company',
           },
           highlights: {
-            type: "array",
-            description: "Specify accomplishments and achievements",
+            type: 'array',
+            description: 'Specify accomplishments and achievements',
             additionalItems: false,
             items: {
-              type: "string",
+              type: 'string',
               description:
-                "e.g. Increased profits by 20% from 2011-2012 through viral advertising",
+                'e.g. Increased profits by 20% from 2011-2012 through viral advertising',
             },
           },
         },
       },
     },
     education: {
-      type: "array",
+      type: 'array',
       additionalItems: false,
       items: {
-        type: "object",
+        type: 'object',
         additionalProperties: true,
         properties: {
           institution: {
-            type: "string",
-            description: "e.g. Massachusetts Institute of Technology",
+            type: 'string',
+            description: 'e.g. Massachusetts Institute of Technology',
           },
           url: {
-            type: "string",
-            description: "e.g. http://facebook.example.com",
-            format: "uri",
+            type: 'string',
+            description: 'e.g. http://facebook.example.com',
+            format: 'uri',
           },
           area: {
-            type: "string",
-            description: "e.g. Arts",
+            type: 'string',
+            description: 'e.g. Arts',
           },
           studyType: {
-            type: "string",
-            description: "e.g. Bachelor",
+            type: 'string',
+            description: 'e.g. Bachelor',
           },
           startDate: {
-            $ref: "#/definitions/iso8601",
+            $ref: '#/definitions/iso8601',
           },
           endDate: {
-            $ref: "#/definitions/iso8601",
+            $ref: '#/definitions/iso8601',
           },
           score: {
-            type: "string",
-            description: "grade point average, e.g. 3.67/4.0",
+            type: 'string',
+            description: 'grade point average, e.g. 3.67/4.0',
           },
           courses: {
-            type: "array",
-            description: "List notable courses/subjects",
+            type: 'array',
+            description: 'List notable courses/subjects',
             additionalItems: false,
             items: {
-              type: "string",
-              description: "e.g. H1302 - Introduction to American history",
+              type: 'string',
+              description: 'e.g. H1302 - Introduction to American history',
             },
           },
         },
       },
     },
     awards: {
-      type: "array",
+      type: 'array',
       description:
-        "Specify any awards you have received throughout your professional career",
+        'Specify any awards you have received throughout your professional career',
       additionalItems: false,
       items: {
-        type: "object",
+        type: 'object',
         additionalProperties: true,
         properties: {
           title: {
-            type: "string",
-            description: "e.g. One of the 100 greatest minds of the century",
+            type: 'string',
+            description: 'e.g. One of the 100 greatest minds of the century',
           },
           date: {
-            $ref: "#/definitions/iso8601",
+            $ref: '#/definitions/iso8601',
           },
           awarder: {
-            type: "string",
-            description: "e.g. Time Magazine",
+            type: 'string',
+            description: 'e.g. Time Magazine',
           },
           summary: {
-            type: "string",
-            description: "e.g. Received for my work with Quantum Physics",
+            type: 'string',
+            description: 'e.g. Received for my work with Quantum Physics',
           },
         },
       },
     },
     certificates: {
-      type: "array",
+      type: 'array',
       description:
-        "Specify any certificates you have received throughout your professional career",
+        'Specify any certificates you have received throughout your professional career',
       additionalItems: false,
       items: {
-        type: "object",
+        type: 'object',
         additionalProperties: true,
         properties: {
           name: {
-            type: "string",
-            description: "e.g. Certified Kubernetes Administrator",
+            type: 'string',
+            description: 'e.g. Certified Kubernetes Administrator',
           },
           date: {
-            $ref: "#/definitions/iso8601",
+            $ref: '#/definitions/iso8601',
           },
           url: {
-            type: "string",
-            description: "e.g. http://example.com",
-            format: "uri",
+            type: 'string',
+            description: 'e.g. http://example.com',
+            format: 'uri',
           },
           issuer: {
-            type: "string",
-            description: "e.g. CNCF",
+            type: 'string',
+            description: 'e.g. CNCF',
           },
         },
       },
     },
     publications: {
-      type: "array",
-      description: "Specify your publications through your career",
+      type: 'array',
+      description: 'Specify your publications through your career',
       additionalItems: false,
       items: {
-        type: "object",
+        type: 'object',
         additionalProperties: true,
         properties: {
           name: {
-            type: "string",
-            description: "e.g. The World Wide Web",
+            type: 'string',
+            description: 'e.g. The World Wide Web',
           },
           publisher: {
-            type: "string",
-            description: "e.g. IEEE, Computer Magazine",
+            type: 'string',
+            description: 'e.g. IEEE, Computer Magazine',
           },
           releaseDate: {
-            $ref: "#/definitions/iso8601",
+            $ref: '#/definitions/iso8601',
           },
           url: {
-            type: "string",
+            type: 'string',
             description:
-              "e.g. http://www.computer.org.example.com/csdl/mags/co/1996/10/rx069-abs.html",
-            format: "uri",
+              'e.g. http://www.computer.org.example.com/csdl/mags/co/1996/10/rx069-abs.html',
+            format: 'uri',
           },
           summary: {
-            type: "string",
+            type: 'string',
             description:
-              "Short summary of publication. e.g. Discussion of the World Wide Web, HTTP, HTML.",
+              'Short summary of publication. e.g. Discussion of the World Wide Web, HTTP, HTML.',
           },
         },
       },
     },
     skills: {
-      type: "array",
-      description: "List out your professional skill-set",
+      type: 'array',
+      description: 'List out your professional skill-set',
       additionalItems: false,
       items: {
-        type: "object",
+        type: 'object',
         additionalProperties: true,
         properties: {
           name: {
-            type: "string",
-            description: "e.g. Web Development",
+            type: 'string',
+            description: 'e.g. Web Development',
           },
           level: {
-            type: "string",
-            description: "e.g. Master",
+            type: 'string',
+            description: 'e.g. Master',
           },
           keywords: {
-            type: "array",
-            description: "List some keywords pertaining to this skill",
+            type: 'array',
+            description: 'List some keywords pertaining to this skill',
             additionalItems: false,
             items: {
-              type: "string",
-              description: "e.g. HTML",
+              type: 'string',
+              description: 'e.g. HTML',
             },
           },
         },
       },
     },
     languages: {
-      type: "array",
-      description: "List any other languages you speak",
+      type: 'array',
+      description: 'List any other languages you speak',
       additionalItems: false,
       items: {
-        type: "object",
+        type: 'object',
         additionalProperties: true,
         properties: {
           language: {
-            type: "string",
-            description: "e.g. English, Spanish",
+            type: 'string',
+            description: 'e.g. English, Spanish',
           },
           fluency: {
-            type: "string",
-            description: "e.g. Fluent, Beginner",
+            type: 'string',
+            description: 'e.g. Fluent, Beginner',
           },
         },
       },
     },
     interests: {
-      type: "array",
+      type: 'array',
       additionalItems: false,
       items: {
-        type: "object",
+        type: 'object',
         additionalProperties: true,
         properties: {
           name: {
-            type: "string",
-            description: "e.g. Philosophy",
+            type: 'string',
+            description: 'e.g. Philosophy',
           },
           keywords: {
-            type: "array",
+            type: 'array',
             additionalItems: false,
             items: {
-              type: "string",
-              description: "e.g. Friedrich Nietzsche",
+              type: 'string',
+              description: 'e.g. Friedrich Nietzsche',
             },
           },
         },
       },
     },
     references: {
-      type: "array",
-      description: "List references you have received",
+      type: 'array',
+      description: 'List references you have received',
       additionalItems: false,
       items: {
-        type: "object",
+        type: 'object',
         additionalProperties: true,
         properties: {
           name: {
-            type: "string",
-            description: "e.g. Timothy Cook",
+            type: 'string',
+            description: 'e.g. Timothy Cook',
           },
           reference: {
-            type: "string",
+            type: 'string',
             description:
-              "e.g. Joe blogs was a great employee, who turned up to work at least once a week. He exceeded my expectations when it came to doing nothing.",
+              'e.g. Joe blogs was a great employee, who turned up to work at least once a week. He exceeded my expectations when it came to doing nothing.',
           },
         },
       },
     },
     projects: {
-      type: "array",
-      description: "Specify career projects",
+      type: 'array',
+      description: 'Specify career projects',
       additionalItems: false,
       items: {
-        type: "object",
+        type: 'object',
         additionalProperties: true,
         properties: {
           name: {
-            type: "string",
-            description: "e.g. The World Wide Web",
+            type: 'string',
+            description: 'e.g. The World Wide Web',
           },
           description: {
-            type: "string",
+            type: 'string',
             description:
-              "Short summary of project. e.g. Collated works of 2017.",
+              'Short summary of project. e.g. Collated works of 2017.',
           },
           highlights: {
-            type: "array",
-            description: "Specify multiple features",
+            type: 'array',
+            description: 'Specify multiple features',
             additionalItems: false,
             items: {
-              type: "string",
-              description: "e.g. Directs you close but not quite there",
+              type: 'string',
+              description: 'e.g. Directs you close but not quite there',
             },
           },
           keywords: {
-            type: "array",
-            description: "Specify special elements involved",
+            type: 'array',
+            description: 'Specify special elements involved',
             additionalItems: false,
             items: {
-              type: "string",
-              description: "e.g. AngularJS",
+              type: 'string',
+              description: 'e.g. AngularJS',
             },
           },
           startDate: {
-            $ref: "#/definitions/iso8601",
+            $ref: '#/definitions/iso8601',
           },
           endDate: {
-            $ref: "#/definitions/iso8601",
+            $ref: '#/definitions/iso8601',
           },
           url: {
-            type: "string",
-            format: "uri",
+            type: 'string',
+            format: 'uri',
             description:
-              "e.g. http://www.computer.org/csdl/mags/co/1996/10/rx069-abs.html",
+              'e.g. http://www.computer.org/csdl/mags/co/1996/10/rx069-abs.html',
           },
           roles: {
-            type: "array",
-            description: "Specify your role on this project or in company",
+            type: 'array',
+            description: 'Specify your role on this project or in company',
             additionalItems: false,
             items: {
-              type: "string",
-              description: "e.g. Team Lead, Speaker, Writer",
+              type: 'string',
+              description: 'e.g. Team Lead, Speaker, Writer',
             },
           },
           entity: {
-            type: "string",
+            type: 'string',
             description:
               "Specify the relevant company/entity affiliations e.g. 'greenpeace', 'corporationXYZ'",
           },
           type: {
-            type: "string",
+            type: 'string',
             description:
               " e.g. 'volunteering', 'presentation', 'talk', 'application', 'conference'",
           },
@@ -494,30 +494,30 @@ const schema = {
       },
     },
     meta: {
-      type: "object",
+      type: 'object',
       description:
-        "The schema version and any other tooling configuration lives here",
+        'The schema version and any other tooling configuration lives here',
       additionalProperties: true,
       properties: {
         canonical: {
-          type: "string",
+          type: 'string',
           description:
-            "URL (as per RFC 3986) to latest version of this document",
-          format: "uri",
+            'URL (as per RFC 3986) to latest version of this document',
+          format: 'uri',
         },
         version: {
-          type: "string",
-          description: "A version field which follows semver - e.g. v1.0.0",
+          type: 'string',
+          description: 'A version field which follows semver - e.g. v1.0.0',
         },
         lastModified: {
-          type: "string",
-          description: "Using ISO 8601 with YYYY-MM-DDThh:mm:ss",
+          type: 'string',
+          description: 'Using ISO 8601 with YYYY-MM-DDThh:mm:ss',
         },
       },
     },
   },
-  title: "Resume Schema",
-  type: "object",
+  title: 'Resume Schema',
+  type: 'object',
 };
 
 export default schema;

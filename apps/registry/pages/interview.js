@@ -1,10 +1,10 @@
-import { Button } from "ui";
-import styled from "styled-components";
-import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
-import { faker } from "@faker-js/faker";
-import { v4 as uuidv4 } from "uuid";
-import Layout from "../ui/Layout";
+import { Button } from 'ui';
+import styled from 'styled-components';
+import { useRouter } from 'next/router';
+import { useEffect, useRef, useState } from 'react';
+import { faker } from '@faker-js/faker';
+import { v4 as uuidv4 } from 'uuid';
+import Layout from '../ui/Layout';
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -55,7 +55,7 @@ const Switch = styled.div`
 `;
 
 const Option = styled.div`
-  background-color: ${(props) => (props.active ? "#df4848" : "#999")};
+  background-color: ${(props) => (props.active ? '#df4848' : '#999')};
   width: 140px;
   cursor: pointer;
   height: 30px;
@@ -63,7 +63,7 @@ const Option = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: ${(props) => (props.active ? "#fbfbfb" : "#222")};
+  color: ${(props) => (props.active ? '#fbfbfb' : '#222')};
   &:hover {
     background-color: #ea8989;
   }
@@ -121,18 +121,18 @@ const Helper = styled.div`
   }
 `;
 
-const INTERVIEWER = "interviewer";
-const CANDIDATE = "candidate";
+const INTERVIEWER = 'interviewer';
+const CANDIDATE = 'candidate';
 
-const interviewId = "axyz";
+const interviewId = 'axyz';
 
 export default function Talk() {
   const router = useRouter();
-  const parts = router.asPath.split("/");
+  const parts = router.asPath.split('/');
   const username = parts[1];
   console.log({ username });
-  const [text, setText] = useState("");
-  const [reply, setReply] = useState("");
+  const [text, setText] = useState('');
+  const [reply, setReply] = useState('');
   const [replying, setReplying] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showAbout, setShowAbout] = useState(false);
@@ -142,9 +142,9 @@ export default function Talk() {
     position === CANDIDATE
       ? {
           position: INTERVIEWER,
-          content: "Hello, I am here to interview you",
+          content: 'Hello, I am here to interview you',
         }
-      : { position: CANDIDATE, content: "Hi, I am ready to be interviewed" };
+      : { position: CANDIDATE, content: 'Hi, I am ready to be interviewed' };
   const [messages, setMessages] = useState([initialMessage]);
 
   const bottomRef = useRef(null);
@@ -157,7 +157,7 @@ export default function Talk() {
 
   const postMessage = async () => {
     setReplying(true);
-    console.log("what is the value of text", text);
+    console.log('what is the value of text', text);
     // const message = {
     //   id: uuidv4(),
     //   content: faker.lorem.lines({ min: 1, max: 10 }),
@@ -165,10 +165,10 @@ export default function Talk() {
     // setMessages([...messages, message]);
     const prompt = text;
 
-    const response = await fetch("/api/interview", {
-      method: "POST",
+    const response = await fetch('/api/interview', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         username,
@@ -192,7 +192,7 @@ export default function Talk() {
     const decoder = new TextDecoder();
     let done = false;
 
-    let reply = "";
+    let reply = '';
     while (!done) {
       const { value, done: doneReading } = await reader.read();
       done = doneReading;
@@ -200,15 +200,15 @@ export default function Talk() {
       reply = reply + chunkValue;
       setReply(reply);
     }
-    console.log("set reply");
+    console.log('set reply');
     console.log({ reply });
-    console.log("sdasdasda", { messages });
+    console.log('sdasdasda', { messages });
 
     setReplying(false);
   };
 
   useEffect(() => {
-    if (replying !== null && reply !== "") {
+    if (replying !== null && reply !== '') {
       setMessages([
         ...messages,
         {
@@ -217,7 +217,7 @@ export default function Talk() {
           position: position === INTERVIEWER ? CANDIDATE : INTERVIEWER,
         },
       ]);
-      setReply("");
+      setReply('');
       textInput?.current?.focus();
     }
   }, [messages, position, reply, replying]);
@@ -229,8 +229,8 @@ export default function Talk() {
   };
 
   const handleInputKeyPress = (ev) => {
-    if (ev.key === "Enter") {
-      console.log("do validate");
+    if (ev.key === 'Enter') {
+      console.log('do validate');
       setMessages([
         ...messages,
         {
@@ -240,12 +240,12 @@ export default function Talk() {
         },
       ]);
       postMessage();
-      setText("");
+      setText('');
     }
   };
 
   const onShowAbout = () => {
-    console.log("show about");
+    console.log('show about');
     // toggle showAbout
     setShowAbout(!showAbout);
   };
@@ -254,7 +254,7 @@ export default function Talk() {
 
   useEffect(() => {
     // 👇️ scroll to bottom every time messages change
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
   return (
@@ -274,7 +274,7 @@ export default function Talk() {
               {messages.map((message) => {
                 return (
                   <Message key={message.id}>
-                    <Name>{capitalizeFirstLetter(message.position)}:</Name>{" "}
+                    <Name>{capitalizeFirstLetter(message.position)}:</Name>{' '}
                     {message.content}
                   </Message>
                 );
@@ -286,7 +286,7 @@ export default function Talk() {
                       position === INTERVIEWER ? CANDIDATE : INTERVIEWER
                     )}
                     :
-                  </Name>{" "}
+                  </Name>{' '}
                   {reply}
                 </Message>
               )}
@@ -319,7 +319,7 @@ export default function Talk() {
               onChange={handleInputChange}
               onKeyPress={handleInputKeyPress}
               disabled={replying}
-              value={replying ? "Thinking..." : text}
+              value={replying ? 'Thinking...' : text}
               ref={textInput}
             />
           </InputContainer>
