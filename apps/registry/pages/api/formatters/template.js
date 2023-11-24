@@ -31,6 +31,7 @@ export const THEMES = {
   macchiato: require('jsonresume-theme-macchiato'),
   mantra: require('jsonresume-theme-mantra'),
   'mocha-responsive': require('jsonresume-theme-mocha-responsive'),
+  minyma: require('jsonresume-theme-minyma'),
   modern: require('jsonresume-theme-modern'),
   msresume: require('jsonresume-theme-msresume'),
   one: require('jsonresume-theme-one'),

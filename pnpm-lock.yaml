@@ -162,6 +162,9 @@ importers:
       jsonresume-theme-mantra:
         specifier: ^0.2.1
         version: 0.2.1
+      jsonresume-theme-minyma:
+        specifier: ^0.0.2
+        version: 0.0.2
       jsonresume-theme-mocha-responsive:
         specifier: ^1.1.1
         version: 1.1.1
@@ -6744,6 +6747,12 @@ packages:
       handlebars-helpers: 0.10.0
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  /jsonresume-theme-minyma@0.0.2:
+    resolution: {integrity: sha512-hQxBsxE2aLKmr5Kei8BI2QO2n7aKjchvA9x4d5RjbAnplnK2JNRbAgGJ+RFIX6o609xLdubX1HsrrncZoo1HCw==}
+    dependencies:
+      handlebars: 4.7.7
     dev: false
 
   /jsonresume-theme-mocha-responsive@1.1.1:
