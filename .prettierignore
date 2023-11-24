@@ -1,0 +1,3 @@
+**/.next/**/*
+pnpm-lock.yaml
+apps/homepage/_layouts/compress.html

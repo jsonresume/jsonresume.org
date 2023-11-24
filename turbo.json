@@ -9,10 +9,21 @@
       "outputs": [".next/**", "!.next/cache/**"]
     },
     "lint": {},
+    "//#format": {},
+    "//#prettier": {},
     "dev": {
       "cache": false,
       "persistent": true
     }
   },
-  "globalEnv": ["NODE_ENV", "TOT", "DATABASE_URL", "DATABASE_URL_RAW", "GITHUB_TOKEN", "OPENAI_API_KEY", "PINECONE_API_KEY", "PINECONE_ENVIRONMENT"]
+  "globalEnv": [
+    "NODE_ENV",
+    "TOT",
+    "DATABASE_URL",
+    "DATABASE_URL_RAW",
+    "GITHUB_TOKEN",
+    "OPENAI_API_KEY",
+    "PINECONE_API_KEY",
+    "PINECONE_ENVIRONMENT"
+  ]
 }

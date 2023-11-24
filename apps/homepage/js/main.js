@@ -8,33 +8,31 @@ jQuery(() => {
  * Apply the class "active" to the current page in the navigation bar.
  */
 function highlight() {
-  $("#nav a").each(function() {
+  $('#nav a').each(function () {
     const self = $(this);
-    const href = self.attr("href");
+    const href = self.attr('href');
     const path = window.location.pathname;
 
     if (path === href) {
-      self.addClass("active");
-      self.siblings().removeClass("active");
+      self.addClass('active');
+      self.siblings().removeClass('active');
     }
   });
 }
 
 function equalizeFeatureHeight() {
-  const start = $("#start");
+  const start = $('#start');
 
-  if (!start.length)
-    return;
+  if (!start.length) return;
 
   setInterval(() => {
     let max = 0;
-    const items = start.find(".feature p");
+    const items = start.find('.feature p');
 
-    items.css("height", "auto").each(function() {
+    items.css('height', 'auto').each(function () {
       const h = $(this).height();
 
-      if (h > max)
-        max = h;
+      if (h > max) max = h;
     });
 
     items.height(max);
@@ -42,18 +40,18 @@ function equalizeFeatureHeight() {
 }
 
 function enableSidebar() {
-  const viewport = $("#viewport");
+  const viewport = $('#viewport');
 
-  $(".lt").on("touchstart click", (e) => {
+  $('.lt').on('touchstart click', (e) => {
     e.stopPropagation();
     e.preventDefault();
-    viewport.toggleClass("open");
+    viewport.toggleClass('open');
   });
 
-  $(".inner").on("touchstart click", (e) => {
-    if (viewport.hasClass("open")) {
+  $('.inner').on('touchstart click', (e) => {
+    if (viewport.hasClass('open')) {
       e.stopPropagation();
-      viewport.removeClass("open");
+      viewport.removeClass('open');
     }
   });
 }

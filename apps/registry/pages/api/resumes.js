@@ -1,7 +1,7 @@
 // @todo - shows a list of all cached github gists
 
-const { Client } = require("pg");
-const gravatar = require("gravatar");
+const { Client } = require('pg');
+const gravatar = require('gravatar');
 
 export default async function handler(req, res) {
   const client = new Client(process.env.DATABASE_URL_RAW);
@@ -21,7 +21,7 @@ export default async function handler(req, res) {
         resume?.basics?.image ||
         gravatar.url(
           resume?.basics?.email,
-          { s: "200", r: "x", d: "retro" },
+          { s: '200', r: 'x', d: 'retro' },
           true
         ),
       updated_at: row.updated_at,

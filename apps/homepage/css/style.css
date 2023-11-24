@@ -7,17 +7,17 @@ body {
 body {
   color: #222;
   background: #fff;
-  font: 14px "Open Sans";
+  font: 14px 'Open Sans';
   margin: 0;
   overflow-x: hidden;
 }
 a:hover {
   text-decoration: none;
-  -webkit-transition: all .25s;
-  transition: all .25s;
+  -webkit-transition: all 0.25s;
+  transition: all 0.25s;
 }
 h1 {
-  font: 300 40px "Open Sans";
+  font: 300 40px 'Open Sans';
   margin: 0;
 }
 h1,
@@ -53,15 +53,15 @@ pre {
   letter-spacing: 1px;
   padding: 8px 16px;
   text-transform: uppercase;
-  -webkit-transition: background .1s, color .1s;
-  transition: background .1s, color .1s;
+  -webkit-transition: background 0.1s, color 0.1s;
+  transition: background 0.1s, color 0.1s;
   word-spacing: 3px;
 }
 .btn:hover {
   border-color: #aaa;
   color: #666;
-  -webkit-transition: all .25s;
-  transition: all .25s;
+  -webkit-transition: all 0.25s;
+  transition: all 0.25s;
 }
 .btn-red {
   background: #df4848;
@@ -72,8 +72,8 @@ pre {
   background: #ce2424;
   border: 2px solid #ce2424;
   color: #fff;
-  -webkit-transition: all .25s;
-  transition: all .25s;
+  -webkit-transition: all 0.25s;
+  transition: all 0.25s;
 }
 .btn-big {
   font-size: 12px;
@@ -100,8 +100,8 @@ pre {
   border-color: #ccc;
   color: inherit;
   text-decoration: none;
-  -webkit-transition: all .25s;
-  transition: all .25s;
+  -webkit-transition: all 0.25s;
+  transition: all 0.25s;
 }
 .post-list {
   margin: 0;
@@ -130,10 +130,10 @@ pre {
 #viewport {
   min-height: 100%;
   width: 100%;
-  -webkit-transition: all .4s;
-  transition: all .4s;
+  -webkit-transition: all 0.4s;
+  transition: all 0.4s;
   -webkit-transform: translateZ(0);
-          transform: translateZ(0);
+  transform: translateZ(0);
 }
 #sidebar {
   background: #f2f2f2;
@@ -147,7 +147,7 @@ pre {
 #sidebar a {
   display: block;
   color: #000;
-  font: 600 15px "Open Sans";
+  font: 600 15px 'Open Sans';
   padding: 15px 30px;
 }
 #sidebar a + a {
@@ -155,7 +155,7 @@ pre {
 }
 #nav {
   background: #fff18f;
-  font: 600 15px "Open Sans";
+  font: 600 15px 'Open Sans';
   overflow: hidden;
 }
 #nav button {
@@ -169,8 +169,8 @@ pre {
 #nav a:hover {
   color: #ce2424;
   text-decoration: none;
-    -webkit-transition: all .25s;
-    transition: all .25s;
+  -webkit-transition: all 0.25s;
+  transition: all 0.25s;
 }
 #nav .lt {
   display: none;
@@ -232,7 +232,7 @@ pre {
 }
 #start .feature img {
   margin-bottom: 20px;
-  opacity: .3;
+  opacity: 0.3;
 }
 #start .feature .btn {
   margin-top: 10px;
@@ -242,7 +242,7 @@ pre {
 }
 #search:before {
   color: #ccc;
-  content: "\f002";
+  content: '\f002';
   cursor: text;
   font: 24px FontAwesome;
   position: absolute;
@@ -284,8 +284,8 @@ pre {
 #docs .item:hover {
   color: #000;
   text-decoration: none;
-  -webkit-transition: all .25s;
-  transition: all .25s;
+  -webkit-transition: all 0.25s;
+  transition: all 0.25s;
 }
 #getting-started {
   margin-top: 20px;
@@ -354,9 +354,9 @@ pre {
 }
 #schema .integration p {
   margin-top: 0;
-  margin-bottom: .5em;
+  margin-bottom: 0.5em;
 }
-#schema .row div[class^="col-sm-"] {
+#schema .row div[class^='col-sm-'] {
   margin-bottom: 30px;
 }
 #themes {
@@ -377,8 +377,8 @@ pre {
 }
 #themes .theme img:hover {
   border-color: #ccc;
-  -webkit-transition: all .25s;
-  transition: all .25s;
+  -webkit-transition: all 0.25s;
+  transition: all 0.25s;
 }
 #themes .theme .name {
   margin-top: 10px;
@@ -388,8 +388,7 @@ pre {
   margin-top: 20px;
   text-align: center;
 }
-#themes
-#themes .meta {
+#themes #themes .meta {
   margin-top: 10px;
   line-height: 1.4;
 }
@@ -455,19 +454,19 @@ pre {
 #team .person a:hover,
 #team .person a:hover:before {
   color: #d14;
-  -webkit-transition: all .25s;
-  transition: all .25s;
+  -webkit-transition: all 0.25s;
+  transition: all 0.25s;
 }
 #team .person .github:before {
   color: #ccc;
   font: 14px FontAwesome;
-  content: "\f09b";
+  content: '\f09b';
   margin-right: 6px;
 }
 #team .person .twitter:before {
   color: #ddd;
   font: 14px FontAwesome;
-  content: "\f099";
+  content: '\f099';
   margin-right: 6px;
 }
 #footer {
@@ -485,8 +484,8 @@ pre {
 }
 #footer a:hover {
   color: #000;
-  -webkit-transition: all .25s;
-  transition: all .25s;
+  -webkit-transition: all 0.25s;
+  transition: all 0.25s;
 }
 
 @media (max-width: 991px) {
@@ -500,7 +499,7 @@ pre {
   }
   #viewport.open {
     -webkit-transform: translate3d(225px, 0, 0);
-            transform: translate3d(225px, 0, 0);
+    transform: translate3d(225px, 0, 0);
   }
   #nav {
     text-align: center;

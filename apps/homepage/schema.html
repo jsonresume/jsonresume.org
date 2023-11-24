@@ -23,9 +23,9 @@ title: Schema
       </p>
       <h4>Why JSON?</h4>
       <p>
-        We believe that the strengths of the JSON format makes it a good fit
-        for resumes. It's lightweight, easy to use and it's perfect to build
-        tools for!
+        We believe that the strengths of the JSON format makes it a good fit for
+        resumes. It's lightweight, easy to use and it's perfect to build tools
+        for!
       </p>
       <p>
         We also feel that the <a href="https://json-schema.org/">JSON Schema</a>
@@ -33,7 +33,8 @@ title: Schema
       </p>
       <h4>Open Source</h4>
       <p>
-        The schema is <a href="https://github.com/jsonresume/resume-schema">open source</a>
+        The schema is
+        <a href="https://github.com/jsonresume/resume-schema">open source</a>
         and community-driven. We release everything we do under the MIT license.
       </p>
     </div>
@@ -158,13 +159,17 @@ title: Schema
     <div class="col-sm-4 hidden-sm">
       <h4>Integrations</h4>
       <p>
-        Export your profile into the JSON Resume format from the services
-        below:
+        Export your profile into the JSON Resume format from the services below:
       </p>
       {% for integration in site.data.integrations %}
       <div class="row integration">
         <div class="col-xs-2">
-          <img src="{{integration.image}}" alt="{{integration.name}} Logo" width="35" height="35">
+          <img
+            src="{{integration.image}}"
+            alt="{{integration.name}} Logo"
+            width="35"
+            height="35"
+          />
         </div>
         <div class="col-xs-10">
           <p><strong>{{integration.name}}</strong></p>

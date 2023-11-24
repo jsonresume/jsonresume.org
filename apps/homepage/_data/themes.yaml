@@ -54,112 +54,105 @@
 
 - name: Compact
   slug: compact
-  github: 
-  author: 
-  link: 
+  github:
+  author:
+  link:
 
 - name: Contempo
   slug: contempo
-  github: 
-  author: 
-  link: 
-
+  github:
+  author:
+  link:
 
 - name: Direct
   slug: direct
-  github: 
-  author: 
-  link: 
+  github:
+  author:
+  link:
 
 - name: Dinesh
   slug: dinesh
-  github: 
-  author: 
-  link: 
+  github:
+  author:
+  link:
 
 - name: Fresh
   slug: fresh
-  github: 
-  author: 
-  link: 
+  github:
+  author:
+  link:
 
 - name: Full
   slug: full
-  github: 
-  author: 
-  link: 
+  github:
+  author:
+  link:
 
 - name: Joeytall
   slug: joeytall
-  github: 
-  author: 
-  link: 
+  github:
+  author:
+  link:
 
 - name: One Page Plus
   slug: onepage-plus
-  github: 
-  author: 
-  link: 
-
+  github:
+  author:
+  link:
 
 - name: Kwan
   slug: kwan-linkedin
-  github: 
-  author: 
-  link: 
+  github:
+  author:
+  link:
 
 - name: Resu
   slug: resu
-  github: 
-  author: 
-  link: 
+  github:
+  author:
+  link:
 
 - name: Rickosborne
   slug: rickosborne
-  github: 
-  author: 
-  link: 
-
+  github:
+  author:
+  link:
 
 - name: Riga
   slug: riga
-  github: 
-  author: 
-  link: 
-
+  github:
+  author:
+  link:
 
 - name: Spartacus
   slug: spartacus
-  github: 
-  author: 
-  link: 
-
+  github:
+  author:
+  link:
 
 - name: Timeline Fixed
   slug: timeline-fixed
-  github: 
-  author: 
-  link: 
-
+  github:
+  author:
+  link:
 
 - name: Tachyons Clean
   slug: tachyons-clean
-  github: 
-  author: 
-  link: 
-
+  github:
+  author:
+  link:
 
 - name: Simple
   slug: simple
-  github: 
-  author: 
-  link: 
+  github:
+  author:
+  link:
 
 - name: Sceptile
   slug: sceptile
-  github: 
-  author: 
-  link: 
+  github:
+  author:
+  link:
 
 - name: Classy
   slug: classy

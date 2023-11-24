@@ -59,7 +59,6 @@ PINECONE_ENVIRONMENT=
 OPENAI_API_KEY=
 ```
 
-
 ## App - Registry
 
 ```
@@ -67,7 +66,6 @@ pnpm dev --filter=registry
 ```
 
 This will start a local server at [http://localhost:3002/thomasdavis](http://localhost:3002/thomasdavis)
-
 
 ### Formats
 
@@ -78,6 +76,7 @@ This will start a local server at [http://localhost:3002/thomasdavis](http://loc
 - Lex
 
 ### Notes
+
 - Gonna drop Typescript, prefer less barriers to entry
 - Templates cannot read from the file system when using the registry
 - Base templates using react/svelte/etc
@@ -91,7 +90,7 @@ pnpm dev --filter=homepage
 
 Kind of a mess, but it works.
 
-It uses Jekyll, to install it 
+It uses Jekyll, to install it
 
 ```
 gem install bundler jekyll
@@ -102,16 +101,16 @@ Then to run it
 ```
 jekyll serve
 ```
+
 ## AI
 
 This repo contains some fun examples of AI/LLM usage. Each feature can be reached by simply appending your normal hosted url with the following;
 
 ### Jobs
 
-This project creates embeddings out of Hacker News Who Is Hiring post, it then generates an embedding of your resume. Then uses vector similarity matching to recommend what jobs would be most applicable to you. 
+This project creates embeddings out of Hacker News Who Is Hiring post, it then generates an embedding of your resume. Then uses vector similarity matching to recommend what jobs would be most applicable to you.
 
 It is not setup to be automated at the moment, and the formatting is garbage. Each post should be sent to GPT to reformat it into a templated job description before generating embeddings.
-
 
 [http://localhost:3002/thomasdavis/jobs](http://localhost:3002/thomasdavis/jobs)
 
@@ -119,17 +118,15 @@ It is not setup to be automated at the moment, and the formatting is garbage. Ea
 
 This is a very simple service that prompts GPT with your resume and asks to generate a cover letter.
 
-It could be easily improved to also contain the context of the job you are applying for. 
+It could be easily improved to also contain the context of the job you are applying for.
 
 [http://localhost:3002/thomasdavis/letter](http://localhost:3002/thomasdavis/letter)
-
 
 ### Suggestions
 
 This is a very simple service that prompts GPT with your resume and asks to generate a list of suggestions for you to improve your resume.
 
 [http://localhost:3002/thomasdavis/suggestions](http://localhost:3002/thomasdavis/suggestions)
-
 
 ### Interview
 

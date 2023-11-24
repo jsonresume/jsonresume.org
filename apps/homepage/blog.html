@@ -18,13 +18,9 @@ title: Blog
     <div class="col-sm-8 col-sm-offset-2">
       <header>
         <h2>
-          <a href="{{ post.url }}">
-            {{ post.title }}
-          </a>
+          <a href="{{ post.url }}"> {{ post.title }} </a>
         </h2>
-        <div class="date">
-          posted {{ post.date | date: "%B %d, %Y" }}
-        </div>
+        <div class="date">posted {{ post.date | date: "%B %d, %Y" }}</div>
       </header>
       <div class="content">
         <p>{{ post.excerpt }}</p>

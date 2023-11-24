@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Theme Competition - Sponsored by Hired.com"
+title: 'Theme Competition - Sponsored by Hired.com'
 date: 2014-11-09 14:18:05
 permalink: /blog/monthly-theme-competition-sponsored-by-hired/
 author: Thomas Davis
@@ -9,7 +9,6 @@ author: Thomas Davis
 JSON Resume helps people create a stylish resume without worrying about design and formatting.
 
 Changing the style of your resume can be done easily in a few seconds because all our themes obey the JSON Resume standard.
-
 
 <div class="row">
   <div class="col-sm-4 col-md-4">
