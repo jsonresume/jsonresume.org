@@ -13,19 +13,11 @@ All projects hosted on this domain, will be found in the /apps folder.
 
 ## Requirements
 
-1. This project requires [pnpm](https://pnpm.io/installation) (yet another npm/yarn alternative)
+This project requires [pnpm](https://pnpm.io/installation) (yet another npm/yarn alternative)
 
 ```
 curl -fsSL https://get.pnpm.io/install.sh | sh -
 ```
-
-2. Until futher ado this repo will also depend on a globally installed version of [turbo](https://turbo.build/repo/docs/installing).
-
-```
-pnpm install turbo --global
-```
-
-(insert someone who can remove all of the global install crap)
 
 ## Getting Started
 
@@ -40,13 +32,13 @@ pnpm i
 To start them all;
 
 ```
-turbo dev
+pnpm dev
 ```
 
 To start an individual app;
 
 ```
-turbo dev --filter=registry
+pnpm dev --filter=registry
 ```
 
 **Environment variables**:
@@ -71,7 +63,7 @@ OPENAI_API_KEY=
 ## App - Registry
 
 ```
-turbo dev --filter=registry
+pnpm dev --filter=registry
 ```
 
 This will start a local server at [http://localhost:3002/thomasdavis](http://localhost:3002/thomasdavis)
@@ -94,7 +86,7 @@ This will start a local server at [http://localhost:3002/thomasdavis](http://loc
 ## App - Homepage
 
 ```
-turbo dev --filter=homepage
+pnpm dev --filter=homepage
 ```
 
 Kind of a mess, but it works.
@@ -144,4 +136,3 @@ This is a very simple service that prompts GPT with your resume and asks to gene
 This is an implementation of a chat bot, your resume is injected, and the conversation is included in the prompt. So you can interview your self or talk as if you were being interviewed.
 
 [http://localhost:3002/thomasdavis/interview](http://localhost:3002/thomasdavis/interview)
-
