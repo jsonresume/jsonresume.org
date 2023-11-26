@@ -1,7 +1,6 @@
 export const THEMES = {
   ace: require('jsonresume-theme-ace'),
   actual: require('jsonresume-theme-actual'),
-  apage: require('jsonresume-theme-apage'),
   autumn: require('jsonresume-theme-autumn'),
   caffeine: require('jsonresume-theme-caffeine'),
   class: require('jsonresume-theme-class'),
