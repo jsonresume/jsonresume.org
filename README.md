@@ -38,7 +38,7 @@ pnpm dev
 To start an individual app;
 
 ```
-pnpm dev --filter=registry
+pnpm --filter=registry dev
 ```
 
 **Environment variables**:
