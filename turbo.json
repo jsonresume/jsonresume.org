@@ -14,6 +14,10 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "test:e2e": {
+      "cache": false,
+      "persistent": true
     }
   },
   "globalEnv": [
@@ -24,6 +28,7 @@
     "GITHUB_TOKEN",
     "OPENAI_API_KEY",
     "PINECONE_API_KEY",
-    "PINECONE_ENVIRONMENT"
+    "PINECONE_ENVIRONMENT",
+    "CI"
   ]
 }

@@ -14,6 +14,10 @@ const { Client } = require('pg');
 
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
+if (!GITHUB_TOKEN && process.env.NODE_ENV !== 'development') {
+  throw new Error('GITHUB_TOKEN is not set in environment variables');
+}
+
 const FILE_TYPES = new Set(['qr', 'json', 'tex', 'txt', 'template', 'yaml']);
 
 const failMessage = (message) => {
@@ -77,7 +81,7 @@ export default async function handler(req, res) {
       `https://api.github.com/users/${username}/gists?per_page=100`,
       {
         headers: {
-          Authorization: 'Bearer ' + GITHUB_TOKEN,
+          ...(GITHUB_TOKEN ? { Authorization: 'Bearer ' + GITHUB_TOKEN } : {}), // If we have no token and are in development, we can still make some requests.
         },
       }
     );
