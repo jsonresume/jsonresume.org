@@ -40,7 +40,7 @@ jobs:
           node-version: 18
           cache: 'pnpm'
       - run: pnpm install
-      - run: pnpm start-server-and-test 'pnpm --filter=registry dev' 3002 'exit 0;'
+      - run: pnpm start-server-and-test 'turbo dev --filter=registry' 3002 'exit 0;'
         working-directory: apps/registry
   build:
     runs-on: ubuntu-latest
