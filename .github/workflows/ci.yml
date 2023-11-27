@@ -26,6 +26,22 @@ jobs:
           cache: pnpm
       - run: pnpm install
       - run: pnpm turbo lint prettier
+  dev-script:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'pnpm'
+      - run: pnpm install
+      - run: pnpm start-server-and-test 'turbo dev --filter=registry' 3002 'exit 0;'
+        working-directory: apps/registry
   build:
     runs-on: ubuntu-latest
     steps:

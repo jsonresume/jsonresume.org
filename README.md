@@ -32,13 +32,13 @@ pnpm i
 To start them all;
 
 ```
-pnpm dev
+pnpm turbo dev
 ```
 
 To start an individual app;
 
 ```
-pnpm dev --filter=registry
+pnpm turbo dev --filter=registry
 ```
 
 **Environment variables**:
