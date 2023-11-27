@@ -77,9 +77,6 @@ importers:
       jsonresume-theme-actual:
         specifier: ^0.2.1
         version: 0.2.1
-      jsonresume-theme-apage:
-        specifier: ^1.0.2
-        version: 1.0.2
       jsonresume-theme-autumn:
         specifier: ^1.0.1
         version: 1.0.1
@@ -6628,12 +6625,6 @@ packages:
       markdown-it: 13.0.1
       moment: 2.29.4
       pug: 3.0.2
-    dev: false
-
-  /jsonresume-theme-apage@1.0.2:
-    resolution: {integrity: sha512-NOVX6ghNr1Gsb1A3KFUOjxYMj9Jz+PPUbayvqx8mN68QakvsJCE63sqRha0RhYE1ZC7ZTG0XRfZbb0rNGtYQ8w==}
-    dependencies:
-      handlebars: 4.7.7
     dev: false
 
   /jsonresume-theme-autumn@1.0.1:
