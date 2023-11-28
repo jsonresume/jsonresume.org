@@ -1,0 +1,103 @@
+{
+  "name": "jsonresume-theme-stackoverflow-react",
+  "version": "2.1.0",
+  "description": "Stack Overflow theme for JSON Resume written with React",
+  "author": "Levin Keller",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/levino/jsonresume-theme-stackoverflow-react"
+  },
+  "license": "MIT",
+  "main": "./dist/en/index.js",
+  "exports": {
+    ".": "./dist/en/index.js",
+    "./german": "./dist/de/index.js"
+  },
+  "dependencies": {
+    "handlebars": "^4.7.7",
+    "i18next": "^22.4.15",
+    "i18next-browser-languagedetector": "^7.0.1",
+    "i18next-http-backend": "^2.2.0",
+    "jsonresume-theme-stackoverflow": "^2.0.1",
+    "markdown-it": "^13.0.1",
+    "moment": "^2.29.4",
+    "ramda": "^0.29.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-i18next": "^12.2.2",
+    "react-scripts": "5.0.1",
+    "styled-components": "^5.3.10",
+    "web-vitals": "^2.1.0"
+  },
+  "devDependencies": {
+    "@storybook/addon-essentials": "^7.0.7",
+    "@storybook/addon-interactions": "^7.0.7",
+    "@storybook/addon-links": "^7.0.7",
+    "@storybook/blocks": "^7.0.7",
+    "@storybook/preset-create-react-app": "^7.0.7",
+    "@storybook/react": "^7.0.7",
+    "@storybook/react-webpack5": "^7.0.7",
+    "@storybook/testing-library": "^0.0.14-next.2",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^13.0.0",
+    "@testing-library/user-event": "^13.2.1",
+    "@types/jest": "^27.0.1",
+    "@types/node": "^16.7.13",
+    "@types/ramda": "^0.29.1",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "babel-plugin-named-exports-order": "^0.0.2",
+    "eslint": "^8.39.0",
+    "eslint-config-react-app": "^7.0.1",
+    "prop-types": "^15.8.1",
+    "resume-cli": "^3.0.8",
+    "storybook": "^7.0.7",
+    "storybook-react-i18next": "^2.0.1",
+    "typescript": "^5.0.4",
+    "webpack": "^5.81.0"
+  },
+  "scripts": {
+    "dev": "resume serve --theme .",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "build": "tsc -p tsconfig.build.json",
+    "lint": "eslint .",
+    "prepack": "yarn clean && yarn build",
+    "clean": "rm -rf dist storybook-static",
+    "postpack": "yarn clean"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "style.css"
+  ],
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ],
+    "overrides": [
+      {
+        "files": [
+          "**/*.stories.*"
+        ],
+        "rules": {
+          "import/no-anonymous-default-export": "off"
+        }
+      }
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "packageManager": "yarn@4.0.0-rc.43"
+}

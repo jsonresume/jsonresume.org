@@ -1,0 +1,20 @@
+{
+  "en": {
+    "translation": {}
+  },
+  "de": {
+    "translation": {
+      "Skills": "Fähigkeiten",
+      "Interests": "Interessen",
+      "Work Experience": "Arbeitserfahrung",
+      "Certificates": "Zertifikate",
+      "Projects": "Projekte",
+      "Volunteer": "Engagement",
+      "Education": "Ausbildung",
+      "Awards": "Auszeichnungen",
+      "Publications": "Veröffentlichungen",
+      "Languages": "Sprachen",
+      "References": "Referenzen"
+    }
+  }
+}
