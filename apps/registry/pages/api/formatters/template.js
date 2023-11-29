@@ -48,6 +48,11 @@ const getTheme = (theme) => {
 const format = async function (resume, options) {
   const theme = options.theme ?? 'elegant';
   const themeRenderer = getTheme(theme);
+
+  if (!themeRenderer) {
+    throw new Error('theme-missing');
+  }
+
   const resumeHTML = themeRenderer.render(resume);
 
   return {
