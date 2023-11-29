@@ -120,7 +120,7 @@ export default async function handler(req, res) {
     });
   } catch (e) {
     // If gist url is invalid, flush the gistid in cache
-    return res.status(200).send(failMessage('Cannot fetch gist, no idea why'));
+    return res.status(400).send(failMessage('Cannot fetch gist, no idea why'));
   }
 
   let realTheme =
@@ -132,7 +132,7 @@ export default async function handler(req, res) {
   const validation = v.validate(selectedResume, schema);
 
   if (!validation.valid) {
-    return res.status(200).send(
+    return res.status(400).send(
       failMessage('Validation failed') +
         `
     
@@ -175,7 +175,7 @@ ${JSON.stringify(validation.errors, null, 2)}
     // @todo - do this better
     if (e.message === 'theme-missing') {
       return res
-        .status(200)
+        .status(400)
         .send(
           failMessage(
             'This theme is currently unsupported. Please visit this Github issue to request it https://github.com/jsonresume/jsonresume.org/issues/36 (unfortunately we have recently (11/2023) disabled a bunch of legacy themes due to critical flaws in them, please request if you would like them back.)'
@@ -184,7 +184,7 @@ ${JSON.stringify(validation.errors, null, 2)}
     }
 
     return res
-      .status(200)
+      .status(400)
       .send(
         failMessage(
           'Cannot format resume, no idea why #likely-a-validation-error'
