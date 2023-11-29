@@ -31,48 +31,12 @@ title: Themes
   </p>
   <p>
     Preview them by just editing the query string
-    <a href="https://registry.jsonresume.org/thomasdavis?theme=flat"
+    <a href="https://registry.jsonresume.org/thomasdavis?theme=kendall"
       >https://registry.jsonresume.org/thomasdavis?theme=flat</a
     >
   </p>
   <div class="row">
     {% for theme in site.data.themes %}
-    <div class="col-sm-4 col-md-3">
-      <div class="theme">
-        <div class="row">
-          <div class="col-sm-12 col-xs-6">
-            <a
-              href="https://registry.jsonresume.org/thomasdavis?theme={{ theme.slug }}"
-            >
-              <img
-                style="height: 129px"
-                src="https://screenshot-peach-beta.vercel.app/api?v=1&url=https://registry.jsonresume.org/thomasdavis?theme={{ theme.slug }}&height=720&width=1280"
-              />
-            </a>
-          </div>
-          <div class="col-sm-12 col-xs-6 meta">
-            <div class="name">{{ theme.name }}</div>
-            <div class="author">
-              by <a href="{{theme.link}}" target="_blank">{{ theme.author }}</a>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12">
-            <a
-              href="https://registry.jsonresume.org/thomasdavis?theme={{ theme.slug }}"
-              class="btn"
-              >Preview theme</a
-            >
-          </div>
-        </div>
-      </div>
-    </div>
-    {% endfor %}
-  </div>
-  <h2>Broken - Being repaired</h2>
-  <div class="row">
-    {% for theme in site.data.broken %}
     <div class="col-sm-4 col-md-3">
       <div class="theme">
         <div class="row">
