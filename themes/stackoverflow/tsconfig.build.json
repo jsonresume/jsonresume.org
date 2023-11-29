@@ -3,7 +3,7 @@
   "compilerOptions": {
     "outDir": "./dist",
     "noEmit": false,
-    "module": "CommonJS"
+    "module": "commonjs"
   },
   "include": ["src/*/index.ts"]
 }

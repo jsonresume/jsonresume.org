@@ -1,17 +1,17 @@
-import React from "react";
-import { Resume as ResumeProps } from "./types";
-import { Basics } from "./Basics";
-import { Volunteer } from "./Volunteer";
-import { Education } from "./Education";
-import { Awards } from "./Awards";
-import { Certificates } from "./Certificates";
-import { Interests } from "./Interests";
-import { Languages } from "./Languages";
-import { Projects } from "./Projects";
-import { Publications } from "./Publications";
-import { References } from "./References";
-import { Skills } from "./Skills";
-import { Work } from "./Work";
+import React from 'react';
+import { Resume as ResumeProps } from './types';
+import { Basics } from './Basics';
+import { Volunteer } from './Volunteer';
+import { Education } from './Education';
+import { Awards } from './Awards';
+import { Certificates } from './Certificates';
+import { Interests } from './Interests';
+import { Languages } from './Languages';
+import { Projects } from './Projects';
+import { Publications } from './Publications';
+import { References } from './References';
+import { Skills } from './Skills';
+import { Work } from './Work';
 
 export const Resume: React.FC<ResumeProps> = (resume) => (
   <div id="resume">

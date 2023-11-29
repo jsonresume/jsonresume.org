@@ -1,17 +1,27 @@
 {
-  "name": "jsonresume-theme-stackoverflow-react",
+  "name": "theme-stackoverflow",
   "version": "2.1.0",
   "description": "Stack Overflow theme for JSON Resume written with React",
-  "author": "Levin Keller",
+  "contributors": [
+    {
+      "name": "Francesco Esposito"
+    },
+    {
+      "name": "Levin Keller",
+      "email": "post@levinkeller.de",
+      "url": "https://www.levinkeller.de"
+    }
+  ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/levino/jsonresume-theme-stackoverflow-react"
+    "url": "jsonresume/jsonresume",
+    "directory": "themes/stackoverflow"
   },
   "license": "MIT",
-  "main": "./dist/en/index.js",
+  "main": "./dist/en/index.ts",
   "exports": {
-    ".": "./dist/en/index.js",
-    "./german": "./dist/de/index.js"
+    ".": "./dist/en/index.ts",
+    "./german": "./dist/de/index.ts"
   },
   "dependencies": {
     "handlebars": "^4.7.7",
@@ -47,14 +57,13 @@
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "babel-plugin-named-exports-order": "^0.0.2",
-    "eslint": "^8.39.0",
-    "eslint-config-react-app": "^7.0.1",
+    "eslint-config-custom": "workspace:*",
     "prop-types": "^15.8.1",
-    "resume-cli": "^3.0.8",
     "storybook": "^7.0.7",
     "storybook-react-i18next": "^2.0.1",
     "typescript": "^5.0.4",
-    "webpack": "^5.81.0"
+    "webpack": "^5.81.0",
+    "tsconfig": "workspace:*"
   },
   "scripts": {
     "dev": "resume serve --theme .",

@@ -1,14 +1,13 @@
-import React from "react";
-import { Publication } from "./types";
-import { DMY } from "./dateHelpers";
-import { withTranslation, WithTranslation } from "react-i18next";
+import { Publication } from './types';
+import { DMY } from './dateHelpers';
+import { withTranslation, WithTranslation } from 'react-i18next';
 
 export const Publications = withTranslation()(
   ({ publications, t }: { publications: Publication[] } & WithTranslation) =>
     publications.length > 0 ? (
       <section className="section">
         <header>
-          <h2 className="section-title">{t("Publications")}</h2>
+          <h2 className="section-title">{t('Publications')}</h2>
         </header>
         <section id="publications">
           {publications.map((publication, index) => (
@@ -26,8 +25,12 @@ export const Publications = withTranslation()(
                       {publication.url ? (
                         <span className="website">
                           <span className="fas fa-external-link-alt"></span>
-                          <a target="_blank" href={publication.url} rel="noreferrer">
-                            {"\u00A0"}
+                          <a
+                            target="_blank"
+                            href={publication.url}
+                            rel="noreferrer"
+                          >
+                            {'\u00A0'}
                             {publication.name}
                           </a>
                         </span>
@@ -38,7 +41,7 @@ export const Publications = withTranslation()(
                   )}
                   {publication.publisher && (
                     <span className="publisher">
-                      {" "}
+                      {' '}
                       in {publication.publisher}
                     </span>
                   )}

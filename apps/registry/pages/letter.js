@@ -1,12 +1,6 @@
-import { Button } from 'ui';
-import styled from 'styled-components';
 import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
-import { faker } from '@faker-js/faker';
-import { v4 as uuidv4 } from 'uuid';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { NodeHtmlMarkdown, NodeHtmlMarkdownOptions } from 'node-html-markdown';
-import ReactMarkdown from 'react-markdown';
 import Layout from '../ui/Layout';
 
 export default function Letter() {

@@ -1,5 +1,5 @@
-import { OpenAIStream } from './openAIStream';
 import prisma from '../../lib/prisma';
+import { OpenAIStream } from './openAIStream';
 
 if (!process.env.OPENAI_API_KEY) {
   throw new Error('Missing env var from OpenAI');
@@ -24,7 +24,7 @@ Do not apologize when you don't understand them or when you ask them to repeat t
     `,
 };
 
-export default async function handler(req, res) {
+export default async function handler(req) {
   const { prompt, position, messages, username } = await req.json();
 
   const resume = await prisma.resumes.findUnique({
@@ -56,18 +56,6 @@ export default async function handler(req, res) {
 
   const payload = {
     model: 'text-davinci-003',
-    prompt: [
-      SYSTEM_PROMPT[position],
-      `For context, here is the resume in question: ${JSON.stringify(resume)}`,
-      `The last messages of your conversation were: ${JSON.stringify(
-        messages.map((m) => {
-          return `${m.position}: ${m.content}\n`;
-        })
-      )}
-      `,
-      //
-      position,
-    ].join('\n\n'),
     prompt: `
     ${SYSTEM_PROMPT[position]}
     For context, here is the resume in question: ${JSON.stringify(resume)}

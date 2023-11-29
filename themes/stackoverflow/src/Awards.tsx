@@ -1,4 +1,3 @@
-import React from "react";
 import { Award } from "./types";
 import { withTranslation, WithTranslation } from "react-i18next";
 

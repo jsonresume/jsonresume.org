@@ -153,7 +153,7 @@ ${JSON.stringify(validation.errors, null, 2)}
   (async () => {
     await client.connect();
     try {
-      const results = await client.query(
+      await client.query(
         `INSERT INTO resumes (username, resume) VALUES ($1, $2)
         ON CONFLICT (username) 
         DO 

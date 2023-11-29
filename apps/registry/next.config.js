@@ -1,6 +1,6 @@
 module.exports = {
   reactStrictMode: true,
-  transpilePackages: ['ui'],
+  transpilePackages: ['ui', 'theme-stackoverflow'],
   async rewrites() {
     return [
       {

@@ -1,7 +1,6 @@
-import React from "react";
-import { Project } from "./types";
-import { MY } from "./dateHelpers";
-import { withTranslation, WithTranslation } from "react-i18next";
+import { Project } from './types';
+import { MY } from './dateHelpers';
+import { withTranslation, WithTranslation } from 'react-i18next';
 export const Projects = withTranslation()(
   ({ projects, t }: { projects: Project[] } & WithTranslation) => (
     <>
@@ -9,7 +8,7 @@ export const Projects = withTranslation()(
         <section className="section">
           <header>
             <h2 className="section-title">
-              {t("Projects")}{" "}
+              {t('Projects')}{' '}
               <span className="item-count">({projects.length})</span>
             </h2>
           </header>
@@ -28,7 +27,7 @@ export const Projects = withTranslation()(
                       <div className="date">
                         <span className="startDate">
                           {MY(project.startDate)}
-                          {"\u00A0"}
+                          {'\u00A0'}
                         </span>
                         {project.endDate ? (
                           <span className="endDate">
@@ -46,7 +45,7 @@ export const Projects = withTranslation()(
                   <span className="website">
                     <span className="fas fa-external-link-alt"></span>
                     <a target="_blank" href={project.url} rel="noreferrer">
-                      {"\u00A0"}
+                      {'\u00A0'}
                       {project.url}
                     </a>
                   </span>

@@ -1,13 +1,12 @@
-import React from "react";
-import { Skill } from "./types";
-import { withTranslation, WithTranslation } from "react-i18next";
+import { Skill } from './types';
+import { withTranslation, WithTranslation } from 'react-i18next';
 
 export const Skills = withTranslation()(
   ({ skills, t }: { skills: Skill[] } & WithTranslation) =>
     skills.length > 0 ? (
       <section className="section">
         <header>
-          <h2 className="section-title">{t("Skills")}</h2>
+          <h2 className="section-title">{t('Skills')}</h2>
         </header>
         <section id="skills">
           {skills.map((skill, index) => (

@@ -1,6 +1,5 @@
-import React from "react";
-import { EducationProps } from "./types";
-import { withTranslation, WithTranslation } from "react-i18next";
+import { EducationProps } from './types';
+import { withTranslation, WithTranslation } from 'react-i18next';
 
 export const Education = withTranslation()(
   ({ education, t }: { education: EducationProps[] } & WithTranslation) => {
@@ -14,7 +13,7 @@ export const Education = withTranslation()(
       <section className="section">
         <header>
           <h2 className="section-title">
-            {t("Education")}{" "}
+            {t('Education')}{' '}
             <span className="item-count">({education.length})</span>
           </h2>
         </header>
@@ -31,7 +30,7 @@ export const Education = withTranslation()(
                   )}
                   {edu.endDate ? (
                     <span className="endDate">
-                      {" "}
+                      {' '}
                       - {formatDate(edu.endDate)}
                     </span>
                   ) : (
@@ -44,7 +43,7 @@ export const Education = withTranslation()(
                   )}
                   {edu.area && (
                     <div className="area">
-                      {"\u00A0"}
+                      {'\u00A0'}
                       {edu.area}
                     </div>
                   )}

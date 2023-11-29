@@ -1,3 +1,5 @@
+import stackoverflow from 'theme-stackoverflow';
+
 export const THEMES = {
   ace: require('jsonresume-theme-ace'),
   actual: require('jsonresume-theme-actual'),
@@ -58,7 +60,7 @@ export const THEMES = {
   spartan: require('jsonresume-theme-spartan'),
   srt: require('jsonresume-theme-srt'),
   stackoverflowed: require('jsonresume-theme-stackoverflowed'),
-  stackoverflow: require('jsonresume-theme-stackoverflow'),
+  stackoverflow,
   standard: require('jsonresume-theme-standard'),
   'standard-resume': require('jsonresume-theme-standard-resume'),
   'tachyons-clean': require('jsonresume-theme-tachyons-clean'),

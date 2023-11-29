@@ -1,6 +1,5 @@
-import React from "react";
-import { Language } from "./types";
-import { withTranslation, WithTranslation } from "react-i18next";
+import { Language } from './types';
+import { withTranslation, WithTranslation } from 'react-i18next';
 
 export const Languages = withTranslation()(
   ({ languages, t }: { languages: Language[] } & WithTranslation) => (
@@ -8,7 +7,7 @@ export const Languages = withTranslation()(
       {languages.length && (
         <section className="section">
           <header>
-            <h2 className="section-title">{t("Languages")}</h2>
+            <h2 className="section-title">{t('Languages')}</h2>
           </header>
           <section id="languages">
             {languages.map((language, index) => (

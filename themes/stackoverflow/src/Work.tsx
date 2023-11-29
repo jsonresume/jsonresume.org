@@ -1,7 +1,6 @@
-import React from "react";
-import { Work as WorkItem } from "./types";
-import { MY } from "./dateHelpers";
-import { withTranslation, WithTranslation } from "react-i18next";
+import { Work as WorkItem } from './types';
+import { MY } from './dateHelpers';
+import { withTranslation, WithTranslation } from 'react-i18next';
 
 export const Work = withTranslation()(
   ({ work, t }: { work: WorkItem[] } & WithTranslation) =>
@@ -9,7 +8,7 @@ export const Work = withTranslation()(
       <section className="section">
         <header>
           <h2 className="section-title">
-            {t("Work Experience")}{" "}
+            {t('Work Experience')}{' '}
             <span className="item-count">({work.length})</span>
           </h2>
         </header>
@@ -25,7 +24,7 @@ export const Work = withTranslation()(
                       {workItem.startDate && (
                         <span className="startDate">
                           {MY(workItem.startDate)}
-                          {"\u00A0"}
+                          {'\u00A0'}
                         </span>
                       )}
                       {workItem.endDate ? (
@@ -48,7 +47,7 @@ export const Work = withTranslation()(
                 <>
                   <span className="fas fa-map-marker-alt" />
                   <span className="location">
-                    {"\u00A0"}
+                    {'\u00A0'}
                     {workItem.location}
                   </span>
                 </>
@@ -66,7 +65,7 @@ export const Work = withTranslation()(
                 <span className="url">
                   <span className="fas fa-external-link-alt" />
                   <a target="_blank" href={workItem.url} rel="noreferrer">
-                    {"\u00A0"}
+                    {'\u00A0'}
                     {workItem.url}
                   </a>
                 </span>

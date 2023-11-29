@@ -1,6 +1,5 @@
-import React from "react";
-import { Volunteer as VolunteerInterface } from "./types";
-import { withTranslation, WithTranslation } from "react-i18next";
+import { Volunteer as VolunteerInterface } from './types';
+import { withTranslation, WithTranslation } from 'react-i18next';
 interface VolunteerProps {
   volunteer: VolunteerInterface[];
 }
@@ -14,7 +13,7 @@ export const Volunteer = withTranslation()(
     return (
       <section className="section">
         <header>
-          <h2 className="section-title">{t("Volunteer")}</h2>
+          <h2 className="section-title">{t('Volunteer')}</h2>
         </header>
         <section id="volunteer">
           {volunteer.map((item, index) => (
@@ -29,7 +28,7 @@ export const Volunteer = withTranslation()(
                       {item.startDate && (
                         <span className="startDate">
                           {new Date(item.startDate).toLocaleDateString()}
-                          {"\u00A0"}
+                          {'\u00A0'}
                         </span>
                       )}
                       {item.endDate ? (
@@ -53,7 +52,7 @@ export const Volunteer = withTranslation()(
                 <div className="website">
                   <span className="fas fa-external-link-alt"></span>
                   <a target="_blank" href={item.url} rel="noreferrer">
-                    {"\u00A0"}
+                    {'\u00A0'}
                     {item.url}
                   </a>
                 </div>

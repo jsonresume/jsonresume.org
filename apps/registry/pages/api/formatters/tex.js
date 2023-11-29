@@ -1,4 +1,4 @@
-const format = async function format(resume) {
+const format = async function format() {
   return { content: 'Unsupported Latex', headers: [] };
 };
 
