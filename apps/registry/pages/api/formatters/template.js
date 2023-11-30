@@ -1,3 +1,5 @@
+import { render as standard } from 'jsonresume-theme-standard';
+
 export const THEMES = {
   ace: require('jsonresume-theme-ace'),
   actual: require('jsonresume-theme-actual'),
@@ -28,7 +30,7 @@ export const THEMES = {
   spartan: require('jsonresume-theme-spartan'),
   stackoverflowed: require('jsonresume-theme-stackoverflowed'),
   stackoverflow: require('jsonresume-theme-stackoverflow'),
-  standard: require('jsonresume-theme-standard'),
+  standard: { render: standard },
   'standard-resume': require('jsonresume-theme-standard-resume'),
   'tan-responsive': require('jsonresume-theme-tan-responsive'),
   techlead: require('jsonresume-theme-techlead'),

@@ -1,10 +1,10 @@
-import styled from 'styled-components';
-import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
-import { NodeHtmlMarkdown, NodeHtmlMarkdownOptions } from 'node-html-markdown';
+import { useRouter } from 'next/router';
+import { NodeHtmlMarkdown } from 'node-html-markdown';
+import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import Layout from '../ui/Layout';
+import styled from 'styled-components';
+import Layout from '../src/ui/Layout';
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -36,22 +36,6 @@ const Name = styled.span`
   display: inline-block;
   text-align: right;
   margin-right: 5px;
-`;
-
-const Helper = styled.div`
-  font-size: 13px;
-  margin-bottom: 15px;
-  & a {
-    text-decoration: none;
-    font-weight: 600;
-  }
-  & a:hover {
-    text-decoration: underline;
-    color: #df4848;
-  }
-  & a:visited {
-    color: #000;
-  }
 `;
 
 export default function Talk() {

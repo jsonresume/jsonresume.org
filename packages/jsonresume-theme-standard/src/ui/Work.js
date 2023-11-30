@@ -25,9 +25,9 @@ const Work = ({ work }) => {
   return (
     <div>
       <SubTitle>Professional Experience</SubTitle>
-      {work.slice(0, 1).map((w) => {
+      {work.slice(0, 1).map((w, key) => {
         return (
-          <div>
+          <div key={key}>
             <Company>
               <CompanyPosition>{w.position}</CompanyPosition>
               &nbsp;-&nbsp;
