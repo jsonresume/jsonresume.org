@@ -1,4 +1,4 @@
-:root {
+export default `:root {
   --accent:#BC1B39;
   --anchor-color: #2C85B1;
   --blue:#2C85B1;
@@ -317,4 +317,4 @@ section.experience .item header .subhead, section.volunteering .item header .sub
     margin: 0;
     padding: 0;
   }
-}
+}`;

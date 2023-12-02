@@ -1,4 +1,4 @@
-{{#if resume.languages.length}}
+export default `{{#if resume.languages.length}}
 <section id="languages" class="languages">
   {{#each resume.languages}}
   <div class="item">
@@ -16,4 +16,4 @@
   </div>
   {{/each}}
 </section>
-{{/if}}
+{{/if}}`;

@@ -1,4 +1,4 @@
-{{#if resume.work.length}}
+export default `{{#if resume.work.length}}
 <section id="experience" class="experience">
   {{#each resume.work}}
   <section class="item">
@@ -42,4 +42,4 @@
   </section>
   {{/each}}
 </section>
-{{/if}}
+{{/if}}`;

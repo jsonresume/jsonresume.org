@@ -1,4 +1,4 @@
-{{#resume.basics}}
+export default `{{#resume.basics}}
 <section id="heading" class="heading">
   <header>
     <h1>
@@ -72,4 +72,4 @@
   </div>
   {{/if}}
 </section>
-{{/resume.basics}}
+{{/resume.basics}}`;

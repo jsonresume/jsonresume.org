@@ -1,36 +1,40 @@
 const fs = require('fs');
 const path = require('path');
 const Handlebars = require('handlebars');
+import css from './style';
+import template from './resume';
+import awards from './partials/awards';
+import basics from './partials/basics';
+import certificates from './partials/certificates';
+import education from './partials/education';
+import interests from './partials/interests';
+import languages from './partials/languages';
+import projects from './partials/projects';
+import publications from './partials/publications';
+import references from './partials/references';
+import skills from './partials/skills';
+import volunteer from './partials/volunteer';
+import work from './partials/work';
 
-//@todo - figure out how to get the relative directory
+const partials = {
+  awards,
+  basics,
+  certificates,
+  education,
+  interests,
+  languages,
+  projects,
+  publications,
+  references,
+  skills,
+  volunteer,
+  work,
+};
 
-const configDirectory = path.resolve(process.cwd(), 'config');
-console.log(configDirectory);
-const themePath = path.resolve(
-  process.cwd(),
-  '../../packages/jsonresume-theme-full'
-);
 function render(resume) {
-  const css = fs.readFileSync(path.resolve(themePath, 'style.css'), 'utf-8');
-  const template = fs.readFileSync(
-    path.resolve(themePath, 'resume.hbs'),
-    'utf-8'
-  );
-  const partialsDir = path.join(themePath, 'partials');
-
-  const filenames = fs.readdirSync(partialsDir);
-
-  filenames.forEach(function (filename) {
-    const matches = /^([^.]+).hbs$/.exec(filename);
-    if (!matches) {
-      return;
-    }
-    const name = matches[1];
-    const filepath = path.resolve(partialsDir, filename);
-
-    const template = fs.readFileSync(filepath, 'utf8');
-
-    Handlebars.registerPartial(name, template);
+  Object.entries(partials).forEach(function ([key, partial]) {
+    console.log({ key, partial });
+    Handlebars.registerPartial(key, partial);
   });
 
   // Nicer dates

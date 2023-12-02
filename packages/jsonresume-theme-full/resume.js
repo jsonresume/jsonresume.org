@@ -1,4 +1,4 @@
-<!doctype html>
+export default `<!doctype html>
 <html>
 	<head>
 	<meta charset="utf-8">
@@ -39,4 +39,4 @@
       {{> references }}
     </div>
 	</body>
-</html>
+</html>`;
