@@ -2,6 +2,7 @@ import { render as standard } from 'jsonresume-theme-standard';
 import { render as full } from 'jsonresume-theme-full';
 import { render as spartacus } from 'jsonresume-theme-spartacus';
 import { render as flat } from 'jsonresume-theme-flat';
+import { render as papirus } from 'jsonresume-theme-papirus';
 
 export const THEMES = {
   ace: require('jsonresume-theme-ace'),
@@ -27,6 +28,7 @@ export const THEMES = {
   onepageresume: require('jsonresume-theme-onepageresume'),
   orbit: require('jsonresume-theme-orbit'),
   paper: require('jsonresume-theme-paper'),
+  papirus: { render: papirus },
   'paper-plus-plus': require('jsonresume-theme-paper-plus-plus'),
   pumpkin: require('jsonresume-theme-pumpkin'),
   rocketspacer: require('jsonresume-theme-rocketspacer'),
