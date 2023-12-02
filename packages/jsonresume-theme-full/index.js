@@ -33,7 +33,6 @@ const partials = {
 
 function render(resume) {
   Object.entries(partials).forEach(function ([key, partial]) {
-    console.log({ key, partial });
     Handlebars.registerPartial(key, partial);
   });
 

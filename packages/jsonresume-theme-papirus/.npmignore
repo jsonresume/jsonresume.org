@@ -1,0 +1,14 @@
+.idea
+gulp
+src
+.travis.yml
+.eslintrc
+.stylelintrc
+gulpfile.js
+resume.json
+resume.pdf
+resume-sample.json
+gulp-cache
+Dockerfile
+docker-compose.yml
+docs
