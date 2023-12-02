@@ -1,0 +1,572 @@
+<!doctype html>
+<html>
+	<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimal-ui">
+	<title>John Doe  - Director of Engineering</title>
+	<style>
+  	:root {
+  --accent:#BC1B39;
+  --anchor-color: #2C85B1;
+  --blue:#2C85B1;
+  --copy-color-light: #666666;
+  --copy-color: #242424;
+  --grey:#999999;
+  --light-grey:#ededed;
+  --white:#FFFFFF;
+  --base-font-size: 12pt;
+  --spacing-double: 1rem;
+  --spacing-small: .1rem;
+  --spacing: .5rem;
+}
+@media (min-width: 567px) {
+  :root {
+    --spacing-double: 1.5rem;
+    --spacing-small: .25rem;
+    --spacing: .75rem;
+  }
+}
+@media print {
+  :root {
+    --anchor-color: #000000;
+    --base-font-size: 9pt;
+    --copy-color-light: #000000;
+    --copy-color: #000000;
+  }
+}
+
+body {
+  color: var(--copy-color);
+  display: flex;
+  font: var(--base-font-size) "Open Sans", Helvetica, Arial, sans-serif;
+  justify-content: center;
+  line-height: 1.25;
+  -webkit-print-color-adjust: exact;
+}
+
+em {
+  color: var(--grey);
+}
+
+p {
+  font-size: 90%;
+}
+
+a {
+  color: var(--anchor-color);
+  font-weight: 400;
+  text-decoration: none;
+}
+
+ul {
+  margin-bottom: 0;
+}
+
+section {
+  margin: var(--spacing) 0 var(--spacing-double);
+}
+
+blockquote {
+  margin-bottom: 0 0 var(--spacing);
+}
+
+#resume {
+  background: var(--white);
+  margin: var(--spacing) var(--spacing-double);
+  max-width: 760px;
+}
+
+section.heading header h1 {
+  font-size: 180%;
+  font-weight: 300;
+  margin: 0;
+}
+section.heading header h2 {
+  font-size: 140%;
+  font-weight: 400;
+  margin: 0;
+}
+section.heading header h2::after {
+  display: none;
+}
+section.heading header .contact {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: var(--spacing);
+}
+@media (min-width: 567px) {
+  section.heading header .contact {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+section.heading header address {
+  font-size: 90%;
+  font-style: normal;
+  padding-bottom: var(--spacing);
+}
+section.heading .profiles {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: var(--spacing);
+}
+@media (min-width: 567px) {
+  section.heading .profiles {
+    flex-direction: row;
+    justify-content: start;
+  }
+}
+section.heading .profiles .profile.print {
+  display: none;
+}
+@media print {
+  section.heading .profiles .profile.print {
+    display: block;
+  }
+}
+section.heading .profiles strong {
+  margin: 0 var(--spacing-small) 0 0;
+}
+section.heading .profiles span {
+  margin: 0 var(--spacing-double) 0 0;
+}
+
+section.experience .item {
+  border-bottom: 1px solid var(--light-grey);
+  margin: 0 0 0.5em;
+  padding: 0 0 0.5em;
+}
+section.experience .item:last-child {
+  border-bottom: none;
+}
+section.experience .item header a,
+section.experience .item header h3 {
+  color: var(--copy-color);
+  display: inline-block;
+  font-weight: 400;
+  text-decoration: none;
+}
+@media (max-width: 566px) {
+  section.experience .item header .subhead {
+    flex-direction: column;
+    margin-bottom: var(--spacing-double);
+  }
+}
+section.experience .item .summary p {
+  margin-top: var(--spacing);
+}
+section.experience .item .summary p:first-child {
+  margin-top: var(--spacing-small);
+}
+section.experience .item .summary p:last-child {
+  margin-bottom: var(--spacing-small);
+}
+section.experience .item .position {
+  color: var(--copy-color-light);
+  font-size: 100%;
+  font-weight: 500;
+  margin: var(--spacing-small) 0;
+}
+section.experience .item .startDate,
+section.experience .item .endDate {
+  color: var(--grey);
+}
+section.skills .item {
+  margin: 0;
+  padding: 0 0 var(--spacing);
+}
+section.skills .item:first-child {
+  margin-top: var(--spacing);
+}
+section.skills .item:last-child {
+  margin-bottom: var(--spacing);
+}
+section.skills .item .name {
+  display: inline-block;
+  font-size: 90%;
+  font-weight: 600;
+  margin: 0 var(--spacing) 0 0;
+  text-transform: uppercase;
+  vertical-align: top;
+  white-space: nowrap;
+}
+section.skills .item .keywords {
+  display: inline-block;
+  font-size: 90%;
+  vertical-align: top;
+}
+
+section.volunteering .item .position {
+  font-weight: 600;
+}
+section.volunteering .item header .subhead {
+  margin-top: var(--spacing);
+}
+section.projects .item strong {
+  color: var(--copy-color-light);
+  font-weight: 600;
+  display: inline-block;
+  padding-top: var(--spacing);
+}
+section.awards .item .title {
+  font-weight: 600;
+}
+section.publications .item .name {
+  font-weight: 600;
+}
+section.languages .language-item {
+  display: flex;
+  justify-content: start;
+}
+section.languages .language-item:first-child {
+  margin-top: var(--spacing);
+}
+section.languages .language-item:last-child {
+  margin-bottom: var(--spacing);
+}
+section.languages .language-item .language {
+  display: inline-block;
+  font-size: 90%;
+  font-weight: 600;
+  margin: 0 var(--spacing) 0 0;
+  text-transform: uppercase;
+  vertical-align: top;
+  white-space: nowrap;
+}
+section.languages .language-item .fluency {
+  color: var(--copy-color-light);
+  font-style: italic;
+}
+
+section.interests .item .name {
+  font-weight: 600;
+  padding-right: var(--spacing);
+}
+
+section.references .item blockquote {
+  font-style: italic;
+  margin-bottom: 0;
+  margin-left: var(--spacing);
+}
+section.references .item .name {
+  color: var(--copy-color-light);
+}
+
+section h2 {
+  color: var(--accent);
+  font-size: 135%;
+  font-weight: 400;
+  margin: 0 0 var(--spacing-double);
+  position: relative;
+  text-transform: uppercase;
+}
+section h2::after {
+  background: var(--accent);
+  bottom: -10px;
+  content: " ";
+  display: inline-block;
+  height: 3px;
+  left: 0;
+  position: absolute;
+  width: 2.5rem;
+}
+section header h3 {
+  margin: 0;
+  font-weight: 600;
+}
+
+section.experience .item .highlights, section.volunteering .highlights, section.projects .highlights,
+section.projects .keywords,
+section.projects .roles, section.education .item .courses {
+  font-size: 90%;
+  line-height: 1.3;
+  list-style: square;
+  margin: var(--spacing-small) 0 var(--spacing);
+  padding-left: var(--spacing-double);
+}
+
+section.experience .item, section.volunteering .item, section.projects .item, section.education .item, section.awards .item, section.publications .item, section.interests .item, section.references .item {
+  page-break-inside: avoid;
+}
+
+@media print {
+  section.heading .profiles .profile:not(.print), section.publications .item .website {
+    display: none;
+  }
+}
+
+section.experience .item header .subhead, section.volunteering .item header .subhead, section.projects .item header, section.education .item header, section.awards .item header, section.publications .item .subhead {
+  align-items: baseline;
+  display: flex;
+  justify-content: space-between;
+}
+@media (min-width: 567px) {
+  section.experience .item header .subhead, section.volunteering .item header .subhead, section.projects .item header, section.education .item header, section.awards .item header, section.publications .item .subhead {
+    flex-direction: row;
+  }
+}
+
+@media print {
+  body {
+    font-size: 11pt;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+	</style>
+	<style media="print">
+		body { font-size: 12px; }
+	</style>
+  <style>
+    :root {
+      --accent: #BC1B39;
+    }
+  </style>
+
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,300' rel='stylesheet' type='text/css'>
+	
+	</head>
+  <body>	
+    <div id="resume">
+      <section id="heading" class="heading">
+        <header>
+          <h1>
+            John Doe
+          </h1>
+          <h2>Director of Engineering</h2>
+          <div class="summary"><p>A summary of John Doe…</p></div>
+          <div class="contact">
+            <span class="contact-detail"><a href="mailto:john@gmail.com">john@gmail.com</a></span>
+            <span class="contact-detail">(912) 555-4321</span>
+            <span class="contact-detail"><a href="https://johndoe.com" target="external">https://johndoe.com</a></span>
+          </div>
+          <address>
+            <span class="address-detail">2712 Broadway St.</span>
+            <span class="address-detail">San Francisco,</span>
+            <span class="address-detail">CA</span>
+            <span class="address-detail">90210</span>
+            <span class="address-detail">US</span>
+          </address>
+        </header>
+      
+        <div class="profiles">
+          <div class="profile">
+            <strong class="network">Twitter</strong>
+            <span class="username">
+              <a href="https://twitter.com/john" target="external">@john</a>
+            </span>
+          </div>
+          <div class="profile print">
+            <span class="username">
+              https://twitter.com/john
+            </span>
+          </div>
+          <div class="profile">
+            <strong class="network">GitHub</strong>
+            <span class="username">
+              <a href="https://github.com/john" target="external">@john</a>
+            </span>
+          </div>
+          <div class="profile print">
+            <span class="username">
+              https://github.com/john
+            </span>
+          </div>
+        </div>
+      </section>
+      <section id="experience" class="experience">
+        <section class="item">
+          <h2>Experience</h2>
+          <header>
+            <h3 class="name"><a href="https://example.com" target="external">Robot Company</a></h3>
+            <div class="subhead">
+            <span class="position">Robotic Landlord</span>
+            <small class="dates">Jan 2012
+             - Mar 2021</small>
+            </div>
+          </header>
+          <div class="summary"><p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Itaque necessitatibus quo placeat architecto iste totam vitae amet aliquam vero aperiam, omnis tempora libero nobis in incidunt fugit deleniti saepe fugiat.</p><p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Itaque necessitatibus quo placeat architecto iste totam vitae amet aliquam vero aperiam, omnis tempora libero nobis in incidunt fugit deleniti saepe fugiat.</p></div>
+          <ul class="highlights">
+            <li>Started the company</li>
+            <li>Experimental Surgery</li>
+            <li>Beep Boop</li>
+          </ul>
+        </section>
+        <section class="item">
+          <header>
+            <h3 class="name"><a href="https://company.com" target="external">Company</a></h3>
+            <div class="subhead">
+            <span class="position">Software Engineer</span>
+            <small class="dates">Jan 2014
+             - Jan 2014</small>
+            </div>
+          </header>
+          <div class="summary"><p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Itaque necessitatibus quo placeat architecto iste totam vitae amet aliquam vero aperiam, omnis tempora libero nobis in incidunt fugit deleniti saepe fugiat.</p></div>
+        </section>
+        <section class="item">
+          <header>
+            <h3 class="name">Tiny Child</h3>
+            <div class="subhead">
+            <span class="position">Human</span>
+            <small class="dates">Feb 1977
+             - Present</small>
+            </div>
+          </header>
+          <div class="summary"><p>It was dark, but now it is light. I was born a small human and am growing into a slightly bigger human.</p><p>No, for real.</p></div>
+          <ul class="highlights">
+            <li>Born</li>
+            <li>Grew up</li>
+            <li>Grown up</li>
+          </ul>
+        </section>
+      </section>
+      <section id="skills" class="skills">
+        <div class="item">
+          <h2>Skills</h2>
+          <div class="name">Engineering</div>
+          <div class="keywords">
+            JavaScript,
+            HTML,
+            CSS/PostCSS/Sass
+          </div>
+        </div>
+        <div class="item">
+          <div class="name">Human</div>
+          <div class="keywords">
+            Breathing,
+            Eating,
+            Sleeping
+          </div>
+        </div>
+      </section>
+      <section id="volunteering" class="volunteering">
+        <div class="item">
+          <h2>Volunteering</h2>
+          <header>
+            <h3 class="name">Organization</h3>
+            <div class="subhead">
+              <span class="position">Volunteer</span>
+              <small class="startDate">Jan 2012
+              - Jan 2013</small>
+            </div>
+          </header>
+          <div class="summary">Description…</div>
+          <ul class="highlights">
+            <li>Awarded &#x27;Volunteer of the Month&#x27;</li>
+          </ul>
+        </div>
+      </section>
+      <section id="projects" class="projects">
+        <section class="item">
+          <h2>Projects</h2>
+          <header>
+            <h3 class="name">Project</h3>
+            <small class="subhead">Jan 2019
+             - Jan 2021</small>
+          </header>
+          <strong>Highlights</strong>
+          <ul class="highlights">
+            <li>Won award at AIHacks 2016</li>
+          </ul>
+          <strong>Keywords</strong>
+          <ul class="keywords">
+            <li>HTML</li>
+          </ul>
+            <strong>Roles</strong>
+          <ul class="roles">
+            <li>Team Lead</li>
+          </ul>
+            <div class="entity">Entity</div>
+            <div class="type">application</div>
+        </section>
+      </section>
+      <section id="education" class="education">
+        <div class="item">
+          <h2>Education</h2>
+          <header>
+              <h3 class="name">University</h3>
+            <small class="dates">
+              <span class="startDate">Jan 2011</span>
+              <span class="endDate"> - Jan 2013</span>
+            </small>
+          </header>
+          <div class="qualification">
+            <span class="studyType">Bachelor</span>
+            <span class="area">Software Development</span>
+            <span class="gpa">GPA: 4.0</span>
+            <br>
+            <strong>Courses</strong>
+            <ul class="courses">
+              <li>DB1101 - Basic SQL</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+      <section id="awards" class="awards">
+        <div class="item">
+          <h2>Awards</h2>
+          <header>
+            <div class="title">Award</div>
+            <small class="date">Nov 2014</small>
+          </header>
+          <div class="awarder">Company</div>
+          <div class="summary"><span>There is no spoon.</span></div>
+        </div>
+      </section>
+      <section id="publications" class="publications">
+        <div class="item">
+          <h2>Publications</h2>
+          <div class="name">Publication</div>
+          <div class="subhead">
+      
+          <div class="publisher">Company</div>
+          <small class="releaseDate">Oct 2014</small>
+          <div class="website"><a href="https://publication.com" target="external">Link</a></div>
+          </div>
+          <div class="summary">Description…</div>
+        </div>
+      </section>
+      <section id="languages" class="languages">
+        <div class="item">
+          <h2>Languages</h2>
+          <div class="language-item">
+            <span class="language">English:</span>
+            <span class="fluency">Native speaker</span>
+          </div>
+        </div>
+        <div class="item">
+          <div class="language-item">
+            <span class="language">Pig Latin:</span>
+            <span class="fluency">Professional working proficiency</span>
+          </div>
+        </div>
+      </section>
+      <section id="interests" class="interests">
+        <div class="item">
+          <h2>Interests</h2>
+          <span class="name">Wildlife:</span>
+          <span class="keywords">
+            <span>Ferrets</span>,
+            <span>Unicorns</span>
+          </span>
+        </div>
+        <div class="item">
+          <span class="name">Travel:</span>
+          <span class="keywords">
+            <span>Skiing</span>,
+            <span>Hiking</span>,
+            <span>Rest Stops</span>
+          </span>
+        </div>
+      </section>
+      <section id="references" class="references">
+        <div class="item">
+          <h2>References</h2>
+          <blockquote class="reference">Reference…</blockquote>
+          <div class="name">— Jane Doe</div>
+        </div>
+      </section>
+    </div>
+	</body>
+</html>

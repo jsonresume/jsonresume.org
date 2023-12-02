@@ -1,0 +1,388 @@
+// Mixins/Various
+$small: '(max-width: 566px)'
+$full: '(min-width: 567px)'
+
+=smallsize
+  @media  #{$small}
+    @content
+ 
+=fullsize
+  @media #{$full}
+    @content
+  
+// Begin Stylesheet
+\:root
+  // Colors
+  --accent:#BC1B39
+  --anchor-color: #2C85B1
+  --blue:#2C85B1
+  --copy-color-light: #666666
+  --copy-color: #242424
+  --grey:#999999
+  --light-grey:#ededed
+  --white:#FFFFFF
+
+  // Sizes
+  --base-font-size: 12pt
+  --spacing-double: 1rem
+  --spacing-small: .1rem
+  --spacing: .5rem
+
+  +fullsize
+    --spacing-double: 1.5rem 
+    --spacing-small: .25rem
+    --spacing: .75rem
+
+  @media print
+    --anchor-color: #000000
+    --base-font-size: 9pt
+    --copy-color-light: #000000
+    --copy-color: #000000
+
+body
+  color: var(--copy-color)
+  display: flex
+  font: var(--base-font-size) 'Open Sans', Helvetica, Arial, sans-serif
+  justify-content: center
+  line-height: 1.25
+  -webkit-print-color-adjust: exact
+
+em
+  color: var(--grey)
+
+p
+  font-size: 90%
+
+a
+  color: var(--anchor-color)
+  font-weight: 400
+  text-decoration: none
+
+ul
+  margin-bottom: 0
+
+section
+  margin: var(--spacing) 0 var(--spacing-double)
+
+blockquote
+  margin-bottom: 0 0 var(--spacing)
+
+#resume
+  background: var(--white)
+  margin: var(--spacing) var(--spacing-double)
+  max-width: 760px
+
+// Basics (name, picture, contact info)
+section.heading
+  header
+    h1
+      font-size: 180%
+      font-weight: 300
+      margin: 0
+
+    h2
+      font-size: 140%
+      font-weight: 400
+      margin: 0
+
+      &::after
+        display: none
+
+    .contact
+      display: flex
+      flex-direction: column
+      padding-bottom: var(--spacing)
+
+      +fullsize
+        flex-direction: row
+        justify-content: space-between
+
+    address
+      font-size: 90%
+      font-style: normal
+      padding-bottom: var(--spacing)
+
+  .profiles
+    display: flex
+    flex-direction: column
+    padding-bottom: var(--spacing)
+
+    +fullsize
+      flex-direction: row
+      justify-content: start
+
+    .profile
+      &:not(.print)
+        @extend %hide-on-print
+
+      &.print
+        display: none
+
+        @media print
+          display: block
+
+
+    strong
+      margin: 0 var(--spacing-small) 0 0
+
+    span
+      margin: 0 var(--spacing-double) 0 0
+
+// Experience items (Work)
+section.experience
+  .item
+    @extend %avoid-break
+    border-bottom: 1px solid var(--light-grey)
+    margin: 0 0 .5em
+    padding: 0 0 .5em
+
+    &:last-child
+      border-bottom: none
+
+    header
+      a,
+      h3
+        color: var(--copy-color)
+        display: inline-block
+        font-weight: 400
+        text-decoration: none
+
+      .subhead
+        @extend %flexible-heading
+
+        +smallsize
+          flex-direction: column
+          margin-bottom: var(--spacing-double)
+
+    .summary
+      p
+        margin-top: var(--spacing)
+
+        &:first-child
+          margin-top: var(--spacing-small)
+
+        &:last-child
+          margin-bottom: var(--spacing-small)
+
+    .position
+      color: var(--copy-color-light)
+      font-size: 100%
+      font-weight: 500
+      margin: var(--spacing-small) 0
+
+    .startDate,
+    .endDate
+      color: var(--grey)
+
+    .highlights
+      @extend %unordered-list
+
+// Skills
+section.skills
+  .item
+    margin: 0
+    padding: 0 0 var(--spacing)
+
+    &:first-child
+      margin-top: var(--spacing)
+
+    &:last-child
+      margin-bottom: var(--spacing)
+
+    .name
+      display: inline-block
+      font-size: 90%
+      font-weight: 600
+      margin: 0 var(--spacing) 0 0
+      text-transform: uppercase
+      vertical-align: top
+      white-space: nowrap
+
+    .keywords
+      display: inline-block
+      font-size: 90%
+      vertical-align: top
+
+// Volunteering
+section.volunteering
+  .item
+    @extend %avoid-break
+
+    .position
+      font-weight: 600
+
+    header
+      .subhead
+        @extend %flexible-heading
+        margin-top: var(--spacing)
+
+  .highlights
+    @extend %unordered-list
+
+// Projects
+section.projects
+  .item
+    @extend %avoid-break
+
+    strong
+      color: var(--copy-color-light)
+      font-weight: 600
+      display: inline-block
+      padding-top: var(--spacing)
+
+  .highlights,
+  .keywords,
+  .roles
+    @extend %unordered-list
+
+  .item header
+    @extend %flexible-heading
+
+// Education
+section.education
+  .item
+    @extend %avoid-break
+  
+    header
+      @extend %flexible-heading
+
+    .courses
+      @extend %unordered-list
+  
+// Awards
+section.awards
+  .item
+    @extend %avoid-break
+
+    .title
+      font-weight: 600
+
+    header
+      @extend %flexible-heading
+
+// Publications
+section.publications
+  .item
+    @extend %avoid-break
+
+    .name
+      font-weight: 600
+
+    .website
+      @extend %hide-on-print
+
+    .subhead
+      @extend %flexible-heading
+
+// Languages
+section.languages
+  .language-item
+    align-items: baseline
+    display: flex
+    justify-content: start
+
+    &:first-child
+      margin-top: var(--spacing)
+
+    &:last-child
+      margin-bottom: var(--spacing)
+
+    .language
+      display: inline-block
+      font-size: 90%
+      font-weight: 600
+      margin: 0 var(--spacing) 0 0
+      text-transform: uppercase
+      vertical-align: top
+      white-space: nowrap
+
+    .fluency
+      color: var(--copy-color-light)
+      font-style: italic
+
+// Interests
+section.interests
+  .item
+    @extend %avoid-break
+    margin-bottom: var(--spacing)
+
+    &:last-child
+      margin-bottom: var(--spacing)
+
+    .name
+      display: inline-block
+      font-size: 90%
+      font-weight: 600
+      margin: 0 var(--spacing) 0 0
+      text-transform: uppercase
+      vertical-align: top
+      white-space: nowrap
+
+// References
+section.references
+  .item
+    @extend %avoid-break
+
+    blockquote
+      font-style: italic
+      margin:
+        bottom: 0
+        left: var(--spacing)
+    
+    .name
+      color: var(--copy-color-light)
+
+// Miscellaneous Styles
+section
+  h2
+    color: var(--accent)
+    font-size: 135%
+    font-weight: 400
+    margin: 0 0 var(--spacing-double)
+    position: relative
+    text-transform: uppercase
+
+    &::after
+      background: var(--accent)
+      bottom: -10px
+      content: ' '
+      display: inline-block
+      height: 3px
+      left: 0
+      position: absolute
+      width: 2.5rem
+
+  header
+    h3
+      margin: 0
+      font-weight: 600
+
+// Extends
+%unordered-list
+  font-size: 90%
+  line-height: 1.3
+  list-style: square
+  margin: var(--spacing-small) 0 var(--spacing)
+  padding-left: var(--spacing-double)
+
+%avoid-break
+  page-break-inside: avoid
+
+%hide-on-print
+  @media print
+    display: none
+
+%flexible-heading
+  align-items: baseline
+  display: flex
+  justify-content: space-between
+
+  +fullsize
+    flex-direction: row
+
+// Print Styles
+@media print
+  body
+    font-size: 11pt
+    margin: 0
+    padding: 0

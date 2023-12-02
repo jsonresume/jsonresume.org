@@ -1,0 +1,32 @@
+{
+  "name": "jsonresume-theme-full",
+  "version": "1.0.0",
+  "description": "Simple to the point theme for JSON Resume, based on the short theme",
+  "author": "Jack Keller",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jackkeller/jsonresume-theme-full"
+  },
+  "bugs": {
+    "url": "https://github.com/jackkeller/jsonresume-theme-full/issues"
+  },
+  "homepage": "https://github.com/jackkeller/jsonresume-theme-full#readme",
+  "keywords": [
+    "jsonresume",
+    "resume",
+    "full theme support",
+    "accent color",
+    "developer friendly"
+  ],
+  "scripts": {
+    "style": "sass dev/style.sass dev/style.css --watch",
+    "dev": "npx livereloadx -s -p 35729 dev"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "handlebars": "latest"
+  },
+  "devDependencies": {
+    "sass": "^1.44.0"
+  }
+}
