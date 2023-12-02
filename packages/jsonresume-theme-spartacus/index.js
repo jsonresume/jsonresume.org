@@ -1,7 +1,8 @@
-var Handlebars = require('handlebars');
-var Moment = require('moment');
 import css from './style';
 import tpl from './resume';
+
+const Handlebars = require('handlebars');
+const Moment = require('moment');
 
 function render(resume) {
   return Handlebars.compile(tpl)({
@@ -18,6 +19,6 @@ Handlebars.registerHelper('prettifyDate', function (resumeDate) {
   if (!resumeDate) {
     return 'Present';
   }
-  var newDate = Moment(resumeDate).format('MMM YYYY');
+  const newDate = Moment(resumeDate).format('MMM YYYY');
   return newDate;
 });
