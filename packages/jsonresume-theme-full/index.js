@@ -52,6 +52,7 @@ function render(resume) {
     'Nov',
     'Dec',
   ];
+
   Handlebars.registerHelper('date', function (date) {
     const theDate = new Date(date);
     return `${months[theDate.getMonth()]} ${theDate.getFullYear()}`;
