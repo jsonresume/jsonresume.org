@@ -1,4 +1,5 @@
 import { render as standard } from 'jsonresume-theme-standard';
+import { render as full } from 'jsonresume-theme-full';
 
 export const THEMES = {
   ace: require('jsonresume-theme-ace'),
@@ -6,6 +7,7 @@ export const THEMES = {
   autumn: require('jsonresume-theme-autumn'),
   cora: require('jsonresume-theme-cora'),
   elegant: require('jsonresume-theme-elegant'),
+  full: { render: full },
   'el-santo': require('jsonresume-theme-el-santo'),
   even: require('jsonresume-theme-even'),
   github: require('jsonresume-theme-github'),
