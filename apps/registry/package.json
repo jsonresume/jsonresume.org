@@ -55,6 +55,7 @@
     "jsonresume-theme-rocketspacer": "^1.2.2",
     "jsonresume-theme-simple-red": "^1.0.4",
     "jsonresume-theme-spartan": "^0.3.0",
+    "jsonresume-theme-spartacus": "*",
     "jsonresume-theme-stackoverflow": "^2.0.0",
     "jsonresume-theme-stackoverflowed": "^1.1.5",
     "jsonresume-theme-standard": "*",

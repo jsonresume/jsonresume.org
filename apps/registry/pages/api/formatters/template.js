@@ -1,5 +1,6 @@
 import { render as standard } from 'jsonresume-theme-standard';
 import { render as full } from 'jsonresume-theme-full';
+import { render as spartacus } from 'jsonresume-theme-spartacus';
 
 export const THEMES = {
   ace: require('jsonresume-theme-ace'),
@@ -30,6 +31,7 @@ export const THEMES = {
   'simple-red': require('jsonresume-theme-simple-red'),
   rickosborne: require('jsonresume-theme-rickosborne'),
   spartan: require('jsonresume-theme-spartan'),
+  spartacus: { render: spartacus },
   stackoverflowed: require('jsonresume-theme-stackoverflowed'),
   stackoverflow: require('jsonresume-theme-stackoverflow'),
   standard: { render: standard },

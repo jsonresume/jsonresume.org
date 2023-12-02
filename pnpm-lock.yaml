@@ -157,6 +157,9 @@ importers:
       jsonresume-theme-simple-red:
         specifier: ^1.0.4
         version: 1.0.4
+      jsonresume-theme-spartacus:
+        specifier: '*'
+        version: link:../../packages/jsonresume-theme-spartacus
       jsonresume-theme-spartan:
         specifier: ^0.3.0
         version: 0.3.0
@@ -283,6 +286,15 @@ importers:
       sass:
         specifier: ^1.44.0
         version: 1.62.0
+
+  packages/jsonresume-theme-spartacus:
+    dependencies:
+      handlebars:
+        specifier: latest
+        version: 4.7.8
+      moment:
+        specifier: ^2.14.1
+        version: 2.29.4
 
   packages/jsonresume-theme-standard:
     devDependencies:
@@ -4118,19 +4130,6 @@ packages:
       moment: 2.29.4
     dev: false
 
-  /handlebars@4.7.7:
-    resolution: {integrity: sha512-aAcXm5OAfE/8IXkcZvCepKU3VzW1/39Fb5ZuqMtgI/hT8X2YgoMvBY5dLhq/cpOvw7Lk1nK/UF71aLG/ZnVYRA==}
-    engines: {node: '>=0.4.7'}
-    hasBin: true
-    dependencies:
-      minimist: 1.2.7
-      neo-async: 2.6.2
-      source-map: 0.6.1
-      wordwrap: 1.0.0
-    optionalDependencies:
-      uglify-js: 3.17.4
-    dev: false
-
   /handlebars@4.7.8:
     resolution: {integrity: sha512-vafaFqs8MZkRrSX7sFVUdo3ap/eNiLnb4IakshzvP56X5Nr1iGKAIqdX6tMlm6HcNRIkr6AxO5jFEoJzzpT8aQ==}
     engines: {node: '>=0.4.7'}
@@ -4937,7 +4936,7 @@ packages:
     resolution: {integrity: sha512-X96nByNU1S4ymzcmoFOoQB2aWNPkIYbtkyMngFDGl2fqp8lk/+0kRYqq/V1KtSB5cTrp1hJtrnGhO31spUIX2A==}
     dependencies:
       gravatar: 1.8.2
-      handlebars: 4.7.7
+      handlebars: 4.7.8
       handlebars-layouts: 3.1.4
       handlebars.moment: 1.0.4
       humanize-duration: 3.28.0
@@ -4958,7 +4957,7 @@ packages:
     dependencies:
       country-code-lookup: 0.0.20
       date-fns: 2.29.3
-      handlebars: 4.7.7
+      handlebars: 4.7.8
       handlebars-wax: 6.1.0
     dev: false
 
@@ -4966,7 +4965,7 @@ packages:
     resolution: {integrity: sha512-GC++9+ps/t49na1qErGnuEn2zWaYv9RidHYxfMTfoJixyBNn7kFbJBvtOtlM7jR6BbvGhDZfAeXXv0r1gy9acw==}
     dependencies:
       dateformat: 3.0.3
-      handlebars: 4.7.7
+      handlebars: 4.7.8
       lodash: 4.17.21
       npm: 6.14.18
       resume-schema: 0.0.18
@@ -4976,7 +4975,7 @@ packages:
   /jsonresume-theme-el-santo@0.0.3:
     resolution: {integrity: sha512-JNGbe0MrDvjSP57TvRmtkdFFz35dw1iVu6JHiejPQNd63KUNOUyxeEx905fBXKWFvavSc2uh9vYgU3XrQExvOQ==}
     dependencies:
-      handlebars: 4.7.7
+      handlebars: 4.7.8
       help: 3.0.2
     dev: false
 
@@ -4984,7 +4983,7 @@ packages:
     resolution: {integrity: sha512-UHKZx+AoE/zGnsZBgV60b+kP5s7euzLp1wDfOItWCt90iwzXuiY++BETTsaRlQHt4nrKbb5GvjXHkE02xovS1w==}
     dependencies:
       gravatar: 1.8.2
-      handlebars: 4.7.7
+      handlebars: 4.7.8
       jsonresume-themeutils: 1.4.3
       markdown-it: 6.1.1
       markdown-it-abbr: 1.0.4
@@ -5001,7 +5000,7 @@ packages:
     engines: {node: '>=4.0'}
     dependencies:
       email-scramble: 2.0.1
-      handlebars: 4.7.7
+      handlebars: 4.7.8
       moment: 2.29.4
     dev: false
 
@@ -5020,7 +5019,7 @@ packages:
     resolution: {integrity: sha512-QpcmNEknqoD8IatVLjPg/6TSrVFZDg0GNX66Ynv4eiFXS++VE+GH4ngLnj3VkvJNjRFJXvYnjic2Ua2OsakDlw==}
     dependencies:
       '@primer/css': 14.4.0
-      handlebars: 4.7.7
+      handlebars: 4.7.8
       html-minifier: 4.0.0
       sass: 1.62.0
     dev: false
@@ -5029,7 +5028,7 @@ packages:
     resolution: {integrity: sha512-d8eK2CD+fOSPAMdF/NTssdRys9sPSbrLXajyYTx1z4ef3aaUjo6NlnbNZ4nA5P5t/vaKsIAqifJ1PkgK4qUfFQ==}
     dependencies:
       '@primer/css': 14.4.0
-      handlebars: 4.7.7
+      handlebars: 4.7.8
       html-minifier: 4.0.0
       sass: 1.62.0
     dev: false
@@ -5046,7 +5045,7 @@ packages:
     resolution: {integrity: sha512-Du7c5SB2/P/d5K7jDfoB9Rf4tbr/JmKanb0QA22QYq0i3O3Ov+knolispM7FrRBGKJ3UFdUCI1MtqSI7leuFlA==}
     engines: {node: '>=6'}
     dependencies:
-      handlebars: 4.7.7
+      handlebars: 4.7.8
       handlebars-utils: 1.0.6
       marked: 0.7.0
       moment: 2.29.4
@@ -5070,7 +5069,7 @@ packages:
     resolution: {integrity: sha512-mQvITMqK+ub//j468EwiUeVvcagcfMrGsI4J6/7yogCOUIeYa9vsxgU/iPKnnSyA+X3iC+zPGPSMV5d6tH1kGA==}
     dependencies:
       address-format: 0.0.3
-      handlebars: 4.7.7
+      handlebars: 4.7.8
       handlebars-wax: 6.1.0
       moment: 2.29.4
     dev: false
@@ -5078,7 +5077,7 @@ packages:
   /jsonresume-theme-mantra@0.2.1:
     resolution: {integrity: sha512-jTFE8hYhvCKM7J1YypT8z7c7iKJmKOYKsKwlHLZFDrMIGmtsZ2Kyg0EmMviczE81ohbj2fOdKO8TmE+53AAN+g==}
     dependencies:
-      handlebars: 4.7.7
+      handlebars: 4.7.8
       handlebars-helpers: 0.10.0
     transitivePeerDependencies:
       - supports-color
@@ -5087,7 +5086,7 @@ packages:
   /jsonresume-theme-minyma@0.0.2:
     resolution: {integrity: sha512-hQxBsxE2aLKmr5Kei8BI2QO2n7aKjchvA9x4d5RjbAnplnK2JNRbAgGJ+RFIX6o609xLdubX1HsrrncZoo1HCw==}
     dependencies:
-      handlebars: 4.7.7
+      handlebars: 4.7.8
     dev: false
 
   /jsonresume-theme-mocha-responsive@1.1.1:
@@ -5095,11 +5094,11 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       address-format: 0.0.3
-      handlebars: 4.7.7
+      handlebars: 4.7.8
       handlebars-wax: 5.1.1
       image-to-base64: 2.2.0
       marked: 0.8.2
-      promised-handlebars: 2.0.1(handlebars@4.7.7)
+      promised-handlebars: 2.0.1(handlebars@4.7.8)
     transitivePeerDependencies:
       - encoding
     dev: false
@@ -5116,13 +5115,13 @@ packages:
     resolution: {integrity: sha512-uLePylvH6YZZi6Y/PnvaYyDt6I0LoCzF3uhQOAuw+RMeLAcrnK3LyhSq1N6/zNqHdHbR8Di6AVaQW+0gJVnnLg==}
     dependencies:
       css: 2.2.4
-      handlebars: 4.7.7
+      handlebars: 4.7.8
     dev: false
 
   /jsonresume-theme-onepageresume@0.0.6:
     resolution: {integrity: sha512-tVFsN/v1maalDv5SB0PXbuJnhMuVO7ieTdF+ZI//Vq2n5fYt1fLjvAMjkzvtV3kRz7cbXMLEpuxfx66n51KRSw==}
     dependencies:
-      handlebars: 4.7.7
+      handlebars: 4.7.8
       lodash: 4.17.21
     dev: false
 
@@ -5130,7 +5129,7 @@ packages:
     resolution: {integrity: sha512-oDONC6TnYKiGdc46XMCy1Kupcn+8ZmMWq7Nrt9pWTpjFXz4FrqTHO9CnrdqCEyKNhzuB8ZZ9Pl9M2eRYp4zaLQ==}
     engines: {node: '>=10'}
     dependencies:
-      handlebars: 4.7.7
+      handlebars: 4.7.8
       handlebars-utils: 1.0.6
       marked: 4.3.0
     dev: false
@@ -5138,20 +5137,20 @@ packages:
   /jsonresume-theme-paper-plus-plus@0.5.1:
     resolution: {integrity: sha512-7s2MlW+IZvJ59NrjezgtB2rSmF1PNtYWz+Pfi+NyWpjvGJGedMwAy4zcY49vr0xId6MVFQ9joJBRPHa9NRO8dA==}
     dependencies:
-      handlebars: 4.7.7
+      handlebars: 4.7.8
     dev: false
 
   /jsonresume-theme-paper@0.5.0:
     resolution: {integrity: sha512-RhXdFOZ3Bpic2d4gL9qV+9sLbvGuZRN1NPk/yai0GnVm0OZZw+0kYUSYiO3nCRrw3cYam5gyusL3NMEScCrrwA==}
     dependencies:
-      handlebars: 4.7.7
+      handlebars: 4.7.8
     dev: false
 
   /jsonresume-theme-pumpkin@1.1.4:
     resolution: {integrity: sha512-I7qMpMkTWdOphsSihpXz+50R9ZU1eSFfbV686VxBr47V2ndCc5v6IEBFvCCxwbCITryFBqLCbU6F8otkqVlxiA==}
     dependencies:
       dateformat: 3.0.3
-      handlebars: 4.7.7
+      handlebars: 4.7.8
       underscore: 1.13.6
     dev: false
 
@@ -5175,21 +5174,21 @@ packages:
   /jsonresume-theme-simple-red@1.0.4:
     resolution: {integrity: sha512-fd09BiRACMa+MKyBsxYy0vDdGQfF6wMHlk8m06LFSPAtDrPrXTHPXRyjSUwMcJHNT3Pa5OI7RfMKu3jXgfKX5g==}
     dependencies:
-      handlebars: 4.7.7
+      handlebars: 4.7.8
       moment: 2.29.4
     dev: false
 
   /jsonresume-theme-spartan@0.3.0:
     resolution: {integrity: sha512-CQDFnTOsmoaa0OTtDwLAYZnXmfqeDky/kn3oWwqmsMkSoO0O41scUlaX0Y0bxZg9VghSrojrdMN7k9MMeAkbfw==}
     dependencies:
-      handlebars: 4.7.7
+      handlebars: 4.7.8
       moment: 2.29.4
     dev: false
 
   /jsonresume-theme-stackoverflow@2.0.0:
     resolution: {integrity: sha512-SsKzZPodhgT9by3osxOUa6GfFBMxVzuMWhoOAbGWppEY1fPJ2PgwVbgdFX0flgUugQNz1+ypCdu/5zjs9Tz0bg==}
     dependencies:
-      handlebars: 4.7.7
+      handlebars: 4.7.8
       moment: 2.29.4
     dev: false
 
@@ -5215,7 +5214,7 @@ packages:
   /jsonresume-theme-standard-resume@2.1.0:
     resolution: {integrity: sha512-3UBBKi2Ixc7aPaf5B0IFAmo7FK9w/m1CeX17ij4AoS9qVFb0W6vUuOeAHDELnTSLnp8WK8hUTqJfb9uQyz3Ibg==}
     dependencies:
-      handlebars: 4.7.7
+      handlebars: 4.7.8
       helper-date: 1.0.1
     transitivePeerDependencies:
       - supports-color
@@ -5243,7 +5242,7 @@ packages:
   /jsonresume-theme-techlead@1.0.1:
     resolution: {integrity: sha512-2pY4kM3lRqlyx2tL1HkzvEm8M4bDbVS5rU6UpEmTIPaR6PcAN4B5yTcQUETqAX3EX2gUBi3VvLN94GzerJd+FQ==}
     dependencies:
-      handlebars: 4.7.7
+      handlebars: 4.7.8
     dev: false
 
   /jsonresume-themeutils@1.4.3:
@@ -6863,13 +6862,13 @@ packages:
       asap: 2.0.6
     dev: false
 
-  /promised-handlebars@2.0.1(handlebars@4.7.7):
+  /promised-handlebars@2.0.1(handlebars@4.7.8):
     resolution: {integrity: sha512-idhuCYZulsjgBssopKqsV6lpJXFEzK+vjoCa+bDmbUG7lUz9kO+25GgcZKw+xbXrPfJxV8PwKrS5CIPmhbLgBg==}
     peerDependencies:
       handlebars: 3||4
     dependencies:
       deep-aplus: 1.0.4
-      handlebars: 4.7.7
+      handlebars: 4.7.8
     dev: false
 
   /prop-types@15.8.1:
