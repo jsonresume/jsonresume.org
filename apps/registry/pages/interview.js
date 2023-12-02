@@ -1,10 +1,8 @@
-import { Button } from 'ui';
-import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
-import { faker } from '@faker-js/faker';
+import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
-import Layout from '../ui/Layout';
+import Layout from '../src/ui/Layout';
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -124,8 +122,6 @@ const Helper = styled.div`
 const INTERVIEWER = 'interviewer';
 const CANDIDATE = 'candidate';
 
-const interviewId = 'axyz';
-
 export default function Talk() {
   const router = useRouter();
   const parts = router.asPath.split('/');
@@ -134,9 +130,7 @@ export default function Talk() {
   const [text, setText] = useState('');
   const [reply, setReply] = useState('');
   const [replying, setReplying] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [showAbout, setShowAbout] = useState(false);
-  const [error, setError] = useState(null);
+  const [showAbout] = useState(false);
   const [position, setPosition] = useState(CANDIDATE);
   const initialMessage =
     position === CANDIDATE
@@ -242,12 +236,6 @@ export default function Talk() {
       postMessage();
       setText('');
     }
-  };
-
-  const onShowAbout = () => {
-    console.log('show about');
-    // toggle showAbout
-    setShowAbout(!showAbout);
   };
 
   console.log({ showAbout });
