@@ -124,7 +124,7 @@ export default async function handler(req, res) {
   }
 
   let realTheme =
-    theme || (resumeRes.data.meta && resumeRes.data.meta.theme) || 'flat';
+    theme || (resumeRes.data.meta && resumeRes.data.meta.theme) || 'elegant';
 
   realTheme = realTheme.toLowerCase();
 
