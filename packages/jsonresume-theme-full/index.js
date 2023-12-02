@@ -3,8 +3,13 @@ const path = require('path');
 const Handlebars = require('handlebars');
 
 //@todo - figure out how to get the relative directory
-const themePath =
-  __dirname + '../../../../../../../packages/jsonresume-theme-full';
+
+const configDirectory = path.resolve(process.cwd(), 'config');
+console.log(configDirectory);
+const themePath = path.resolve(
+  process.cwd(),
+  '../../packages/jsonresume-theme-full'
+);
 function render(resume) {
   const css = fs.readFileSync(path.join(themePath, 'style.css'), 'utf-8');
   const template = fs.readFileSync(path.join(themePath, 'resume.hbs'), 'utf-8');
@@ -54,7 +59,7 @@ function render(resume) {
 Handlebars.registerHelper('paragraphSplit', function (plaintext) {
   let output = '';
   const lines = plaintext.split(/\r\n|\r|\n/g);
-  for (i = 0; i < lines.length; i++) {
+  for (let i = 0; i < lines.length; i++) {
     if (lines[i]) {
       output += '<p>' + lines[i] + '</p>';
     }
