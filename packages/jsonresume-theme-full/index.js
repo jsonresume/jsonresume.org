@@ -11,8 +11,11 @@ const themePath = path.resolve(
   '../../packages/jsonresume-theme-full'
 );
 function render(resume) {
-  const css = fs.readFileSync(path.join(themePath, 'style.css'), 'utf-8');
-  const template = fs.readFileSync(path.join(themePath, 'resume.hbs'), 'utf-8');
+  const css = fs.readFileSync(path.resolve(themePath, 'style.css'), 'utf-8');
+  const template = fs.readFileSync(
+    path.resolve(themePath, 'resume.hbs'),
+    'utf-8'
+  );
   const partialsDir = path.join(themePath, 'partials');
 
   const filenames = fs.readdirSync(partialsDir);
@@ -23,7 +26,7 @@ function render(resume) {
       return;
     }
     const name = matches[1];
-    const filepath = path.join(partialsDir, filename);
+    const filepath = path.resolve(partialsDir, filename);
 
     const template = fs.readFileSync(filepath, 'utf8');
 
