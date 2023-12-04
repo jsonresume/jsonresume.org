@@ -18,9 +18,9 @@
 
 - name: Relaxed
   slug: relaxed
-  github:
-  author:
-  link:
+  github: ObserverOfTime
+  author: ObserverOfTime
+  link: https://github.com/ObserverOfTime
 
 - name: Rickosborne
   slug: rickosborne

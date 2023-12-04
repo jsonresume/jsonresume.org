@@ -31,6 +31,7 @@ export const THEMES = {
   papirus: { render: papirus },
   'paper-plus-plus': require('jsonresume-theme-paper-plus-plus'),
   pumpkin: require('jsonresume-theme-pumpkin'),
+  relaxed: require('jsonresume-theme-relaxed'),
   rocketspacer: require('jsonresume-theme-rocketspacer'),
   'simple-red': require('jsonresume-theme-simple-red'),
   rickosborne: require('jsonresume-theme-rickosborne'),
