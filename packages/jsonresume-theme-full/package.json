@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "jsonresume-theme-full",
   "version": "1.0.0",
   "description": "Simple to the point theme for JSON Resume, based on the short theme",
