@@ -3,6 +3,3 @@ pnpm-lock.yaml
 apps/homepage/_layouts/compress.html
 apps/homepage/vendor
 apps/homepage/_site
-packages/jsonresume-theme-full
-packages/jsonresume-theme-spartacus
-packages/jsonresume-theme-papirus

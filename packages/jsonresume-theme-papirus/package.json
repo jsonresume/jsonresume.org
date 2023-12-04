@@ -7,6 +7,15 @@
     "type": "git",
     "url": "https://github.com/konalexiou/jsonresume-theme-papirus"
   },
+  "main": "build/index.js",
+  "exports": {
+    "next": "./src/index.js",
+    "default": "./build/index.js"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "build": "webpack --mode production"
+  },
   "keywords": [
     "jsonresume",
     "jsonresume-theme",
@@ -16,9 +25,18 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "handlebars": "latest",
+    "handlebars": "^4",
     "html-pdf": "^2.2.0",
     "moment": "^2.19.1",
     "pluralize": "^7.0.0"
+  },
+  "devDependencies": {
+    "css-loader": "^6.8.1",
+    "handlebars-loader": "^1.7.3",
+    "raw-loader": "^4.0.2",
+    "style-loader": "^3.3.3",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-node-externals": "^3.0.0"
   }
 }

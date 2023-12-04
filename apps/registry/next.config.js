@@ -1,6 +1,6 @@
 module.exports = {
   reactStrictMode: true,
-  transpilePackages: ['ui'],
+  transpilePackages: ['ui', 'jsonresume-theme-papirus'],
   async rewrites() {
     return [
       {
@@ -27,5 +27,30 @@ module.exports = {
   },
   compiler: {
     styledComponents: true,
+  },
+  webpack: (config) => {
+    config.module.rules.push({
+      test: /\.hbs$/,
+      loader: 'handlebars-loader',
+      options: {
+        precompileOptions: {
+          knownHelpersOnly: false,
+        },
+      },
+    });
+    const name = 'next';
+
+    class NextEntryPlugin {
+      apply(compiler) {
+        compiler.hooks.afterEnvironment.tap('NextEntryPlugin', () => {
+          compiler.options.resolve.conditionNames = [
+            ...compiler.options.resolve.conditionNames,
+            name,
+          ];
+        });
+      }
+    }
+    config.plugins.push(new NextEntryPlugin());
+    return config;
   },
 };
