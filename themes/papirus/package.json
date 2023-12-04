@@ -1,6 +1,6 @@
 {
-  "name": "jsonresume-theme-papirus",
-  "version": "0.0.5",
+  "name": "@jsonresume/theme-papirus",
+  "version": "1.0.0",
   "description": "Papirus theme for JSON Resume",
   "author": "Konstantinos Alexiou",
   "repository": {
@@ -14,7 +14,8 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "prepack": "turbo build"
   },
   "keywords": [
     "jsonresume",
@@ -26,7 +27,6 @@
   "license": "MIT",
   "dependencies": {
     "handlebars": "^4",
-    "html-pdf": "^2.2.0",
     "moment": "^2.19.1",
     "pluralize": "^7.0.0"
   },
