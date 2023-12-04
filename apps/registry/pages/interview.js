@@ -126,7 +126,6 @@ export default function Talk() {
   const router = useRouter();
   const parts = router.asPath.split('/');
   const username = parts[1];
-  console.log({ username });
   const [text, setText] = useState('');
   const [reply, setReply] = useState('');
   const [replying, setReplying] = useState(null);
@@ -152,11 +151,7 @@ export default function Talk() {
   const postMessage = async () => {
     setReplying(true);
     console.log('what is the value of text', text);
-    // const message = {
-    //   id: uuidv4(),
-    //   content: faker.lorem.lines({ min: 1, max: 10 }),
-    // };
-    // setMessages([...messages, message]);
+
     const prompt = text;
 
     const response = await fetch('/api/interview', {
@@ -216,8 +211,6 @@ export default function Talk() {
     }
   }, [messages, position, reply, replying]);
 
-  console.log({ messages });
-
   const handleInputChange = (ev) => {
     setText(ev.target.value);
   };
@@ -237,8 +230,6 @@ export default function Talk() {
       setText('');
     }
   };
-
-  console.log({ showAbout });
 
   useEffect(() => {
     // 👇️ scroll to bottom every time messages change
