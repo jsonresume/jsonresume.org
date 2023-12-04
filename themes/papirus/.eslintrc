@@ -1,6 +1,4 @@
 {
   "extends": ["custom"],
-  "parserOptions": {
-    "sourceType": "module"
-  }
+  "sourceType": "module"
 }

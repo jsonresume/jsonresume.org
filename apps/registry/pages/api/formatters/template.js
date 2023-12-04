@@ -2,7 +2,7 @@ import { render as standard } from 'jsonresume-theme-standard';
 import { render as full } from 'jsonresume-theme-full';
 import { render as spartacus } from 'jsonresume-theme-spartacus';
 import { render as flat } from 'jsonresume-theme-flat';
-import { render as papirus } from 'jsonresume-theme-papirus';
+import { render as papirus } from '@jsonresume/theme-papirus';
 
 export const THEMES = {
   ace: require('jsonresume-theme-ace'),
@@ -63,7 +63,7 @@ const format = async function (resume, options) {
     throw new Error('theme-missing');
   }
 
-  const resumeHTML = themeRenderer.render(resume);
+  const resumeHTML = await themeRenderer.render(resume);
 
   return {
     content: resumeHTML,

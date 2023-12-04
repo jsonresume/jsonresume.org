@@ -51,7 +51,7 @@
     "jsonresume-theme-orbit": "^1.1.0",
     "jsonresume-theme-paper": "^0.5.0",
     "jsonresume-theme-paper-plus-plus": "^0.5.1",
-    "jsonresume-theme-papirus": "workspace:*",
+    "@jsonresume/theme-papirus": "workspace:*",
     "jsonresume-theme-pumpkin": "^1.1.4",
     "jsonresume-theme-relaxed": "^0.1.6",
     "jsonresume-theme-rickosborne": "2022.9.16-T1450",

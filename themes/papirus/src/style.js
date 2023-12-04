@@ -1,4 +1,4 @@
-body {
+export default `body {
   background: #e5ded4;
   font: 15px Arial, Helvetica, sans-serif;
   line-height: 1.4;
@@ -655,4 +655,4 @@ section {
     white-space: pre-wrap;
     color: #ffffff !important;
   }
-}
+}`;
