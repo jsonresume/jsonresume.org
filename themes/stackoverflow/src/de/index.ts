@@ -1,3 +1,3 @@
-import { createTheme } from "../createTheme";
+import { createTheme } from '../createTheme';
 
-module.exports = createTheme("de");
+module.exports = createTheme('de');

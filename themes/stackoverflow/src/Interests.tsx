@@ -1,5 +1,5 @@
-import { Interest } from "./types";
-import { withTranslation, WithTranslation } from "react-i18next";
+import { Interest } from './types';
+import { withTranslation, WithTranslation } from 'react-i18next';
 
 export const Interests = withTranslation()(
   ({ interests, t }: { interests: Interest[] } & WithTranslation) => {
@@ -10,7 +10,7 @@ export const Interests = withTranslation()(
     return (
       <section className="section">
         <header>
-          <h2 className="section-title">{t("Interests")}</h2>
+          <h2 className="section-title">{t('Interests')}</h2>
         </header>
         <section id="interests">
           {interests.map((interest, index) => (

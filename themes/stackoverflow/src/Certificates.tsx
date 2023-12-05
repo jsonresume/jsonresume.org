@@ -1,5 +1,5 @@
-import { Certificate } from "./types";
-import { withTranslation, WithTranslation } from "react-i18next";
+import { Certificate } from './types';
+import { withTranslation, WithTranslation } from 'react-i18next';
 
 export const Certificates = withTranslation()(
   ({ certificates, t }: { certificates: Certificate[] } & WithTranslation) => (
@@ -7,7 +7,7 @@ export const Certificates = withTranslation()(
       {certificates.length > 0 && (
         <section className="section">
           <header>
-            <h2 className="section-title">{t("Certificates")}</h2>
+            <h2 className="section-title">{t('Certificates')}</h2>
           </header>
           <section id="certificates">
             {certificates.map((certificate, index) => (
@@ -34,7 +34,7 @@ export const Certificates = withTranslation()(
                         rel="noopener noreferrer"
                         href={certificate.url}
                       >
-                        {"\u00A0"}
+                        {'\u00A0'}
                         {certificate.url}
                       </a>
                     </span>

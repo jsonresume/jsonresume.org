@@ -1,8 +1,8 @@
-import moment from "moment";
+import moment from 'moment';
 
 export const MY = (date: string) =>
-  moment(date, ["YYYY-MM-DD"]).format("MMM YYYY");
+  moment(date, ['YYYY-MM-DD']).format('MMM YYYY');
 
-export const Y = (date: string) => moment(date, ["YYYY-MM-DD"]).format("YYYY");
+export const Y = (date: string) => moment(date, ['YYYY-MM-DD']).format('YYYY');
 export const DMY = (date: string) =>
-  moment(date, ["YYYY-MM-DD"]).format("D MMM YYYY");
+  moment(date, ['YYYY-MM-DD']).format('D MMM YYYY');

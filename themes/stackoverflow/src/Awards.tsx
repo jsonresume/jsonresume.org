@@ -1,5 +1,5 @@
-import { Award } from "./types";
-import { withTranslation, WithTranslation } from "react-i18next";
+import { Award } from './types';
+import { withTranslation, WithTranslation } from 'react-i18next';
 
 export const Awards = withTranslation()(
   ({ awards, t }: { awards: Award[] } & WithTranslation) => (
@@ -7,7 +7,7 @@ export const Awards = withTranslation()(
       {awards.length > 0 && (
         <section className="section">
           <header>
-            <h2 className="section-title">{t("Awards")}</h2>
+            <h2 className="section-title">{t('Awards')}</h2>
           </header>
           <section id="awards">
             {awards.map((award, index) => (

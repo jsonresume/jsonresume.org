@@ -1,10 +1,10 @@
-import "../style.css";
-import type { Preview } from "@storybook/react";
-import i18n from "./i18next";
+import '../style.css';
+import type { Preview } from '@storybook/react';
+import i18n from './i18next';
 
 const preview: Preview = {
   parameters: {
-    actions: { argTypesRegex: "^on[A-Z].*" },
+    actions: { argTypesRegex: '^on[A-Z].*' },
     controls: {
       matchers: {
         color: /(background|color)$/i,
@@ -14,10 +14,10 @@ const preview: Preview = {
     i18n,
   },
   globals: {
-    locale: "en",
+    locale: 'en',
     locales: {
-      en: { title: "English" },
-      de: { title: "Deutsch" },
+      en: { title: 'English' },
+      de: { title: 'Deutsch' },
     },
   },
 };

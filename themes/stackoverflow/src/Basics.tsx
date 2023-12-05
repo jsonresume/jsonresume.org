@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 import type {
   Location as LocationProps,
   Basics as BasicsProps,
   Profile as ProfileProps,
-} from "./types";
-import * as R from "ramda";
+} from './types';
+import * as R from 'ramda';
 
 const Location: React.FC<LocationProps> = ({
   address,
@@ -27,8 +27,13 @@ export const Contact: React.FC<BasicsProps> = ({ email, url, phone }) => (
     {url && (
       <div className="website">
         <span className="fas fa-external-link-alt"></span>
-        <a className="hide-href-print" target="_blank" href={url} rel="noreferrer">
-          {"\u00A0"}
+        <a
+          className="hide-href-print"
+          target="_blank"
+          href={url}
+          rel="noreferrer"
+        >
+          {'\u00A0'}
           {url}
         </a>
       </div>
@@ -37,7 +42,7 @@ export const Contact: React.FC<BasicsProps> = ({ email, url, phone }) => (
       <div className="email">
         <span className="far fa-envelope"></span>
         <a className="hide-href-print" href={`mailto:${email}`}>
-          {"\u00A0"}
+          {'\u00A0'}
           {email}
         </a>
       </div>
@@ -46,7 +51,7 @@ export const Contact: React.FC<BasicsProps> = ({ email, url, phone }) => (
       <div className="phone">
         <span className="fas fa-mobile-alt"></span>
         <a className="hide-href-print" href="tel:{{phone}}">
-          {"\u00A0"}
+          {'\u00A0'}
           {phone}
         </a>
       </div>
@@ -66,13 +71,13 @@ const Profile: React.FC<ProfileProps> = ({ network, username, url }) => (
         {url ? (
           <span className="url">
             <a target="_blank" href={url} rel="noreferrer">
-              {"\u00A0"}
+              {'\u00A0'}
               {username}
             </a>
           </span>
         ) : (
           <span>
-            {"\u00A0"}
+            {'\u00A0'}
             {username}
           </span>
         )}

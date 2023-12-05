@@ -1,12 +1,12 @@
-import { Reference } from "./types";
-import { withTranslation, WithTranslation } from "react-i18next";
+import { Reference } from './types';
+import { withTranslation, WithTranslation } from 'react-i18next';
 
 export const References = withTranslation()(
   ({ references, t }: { references: Reference[] } & WithTranslation) =>
     references.length ? (
       <section className="section">
         <header>
-          <h2 className="section-title">{t("References")}</h2>
+          <h2 className="section-title">{t('References')}</h2>
         </header>
         <section id="references">
           {references.map((reference, index) => (

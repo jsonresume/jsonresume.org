@@ -137,7 +137,7 @@ table {
 
 body,
 html {
-  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
   font-size: 13px;
   color: #40484f;
   font-weight: 400;
@@ -289,7 +289,7 @@ section .location {
   top: 0.7em;
   height: 1px;
   background: #ccc;
-  content: "";
+  content: '';
   width: 100%;
   z-index: -100;
   display: block;
@@ -473,7 +473,7 @@ section .location {
 .stack-overflow::after {
   position: absolute;
   left: 0;
-  content: "\f16c";
+  content: '\f16c';
   color: #f68a1f;
   overflow: hidden;
   height: 100%;
@@ -519,7 +519,7 @@ section .location {
 
 .level .bar::after {
   position: absolute;
-  content: " ";
+  content: ' ';
   top: 0;
   left: 0;
   background: black;
@@ -568,7 +568,7 @@ section .location {
 ******************/
 
 .clear::after {
-  content: "";
+  content: '';
   display: table;
   clear: both;
 }
@@ -602,7 +602,7 @@ section .location {
 .institution::before,
 .organization::before,
 .awarder::before {
-  content: " | ";
+  content: ' | ';
 }
 
 @media screen and (min-width: 1025px) {
@@ -639,7 +639,7 @@ section .location {
 
 @media print {
   #profiles a:not(.hide-href-print)::after {
-    content: " (" attr(href) ") ";
+    content: ' (' attr(href) ') ';
   }
   #resume {
     margin: 0.1em;
@@ -658,7 +658,7 @@ section .location {
   .institution::before,
   .organization::before,
   .awarder::before {
-    content: "at ";
+    content: 'at ';
   }
   .main-summary {
     padding: 0;
@@ -681,7 +681,7 @@ section .location {
     margin: 0;
   }
   .stack-overflow::after {
-    content: "";
+    content: '';
   }
   .fa.social {
     color: #828386;
@@ -703,7 +703,7 @@ section .location {
   ul.keywords li::after,
   ul.courses li::after {
     padding: 0 0 0 0.1rem;
-    content: " |";
+    content: ' |';
   }
   ul.keywords::before,
   ul.courses::before {
@@ -718,7 +718,7 @@ section .location {
     margin: 0.5em 0 0 0;
   }
   ul.keywords::before {
-    content: "Skills acquired: ";
+    content: 'Skills acquired: ';
   }
   #skills .keywords::before {
     content: none;
@@ -728,11 +728,11 @@ section .location {
     padding: 0;
   }
   ul.courses::before {
-    content: "Major courses: ";
+    content: 'Major courses: ';
   }
   ul.keywords li:last-of-type::after,
   ul.courses li:last-of-type::after {
-    content: "";
+    content: '';
   }
   .level em {
     font-style: normal;
