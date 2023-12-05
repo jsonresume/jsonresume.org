@@ -170,6 +170,9 @@ importers:
       jsonresume-theme-simple-red:
         specifier: ^1.0.4
         version: 1.0.4
+      jsonresume-theme-spartacus:
+        specifier: workspace:*
+        version: link:../../packages/jsonresume-theme-spartacus
       jsonresume-theme-spartan:
         specifier: ^0.3.0
         version: 0.3.0

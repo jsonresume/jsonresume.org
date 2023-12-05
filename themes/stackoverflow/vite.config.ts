@@ -9,11 +9,8 @@ export default defineConfig({
     target: 'node20',
     outDir: './dist',
     rollupOptions: {
-      input: './src/en/index.ts',
+      input: './src/index.ts',
       external: ['react', 'react-dom/server'],
-      output: {
-        format: 'module',
-      },
     },
   },
   resolve: {

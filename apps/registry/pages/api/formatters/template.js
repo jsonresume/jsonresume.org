@@ -4,7 +4,7 @@ import { render as spartacus } from 'jsonresume-theme-spartacus';
 import { render as flat } from 'jsonresume-theme-flat';
 import { render as papirus } from 'jsonresume-theme-papirus';
 
-import stackoverflow from '@jsoneresume/theme-stackoverflow';
+import { render as stackoverflow } from '@jsonresume/theme-stackoverflow';
 
 export const THEMES = {
   ace: require('jsonresume-theme-ace'),
@@ -40,10 +40,8 @@ export const THEMES = {
   spartan: require('jsonresume-theme-spartan'),
   spartacus: { render: spartacus },
   stackoverflowed: require('jsonresume-theme-stackoverflowed'),
-  stackoverflow: require('jsonresume-theme-stackoverflow'),
   standard: { render: standard },
-  stackoverflow,
-  standard: require('jsonresume-theme-standard'),
+  stackoverflow: { render: stackoverflow },
   'standard-resume': require('jsonresume-theme-standard-resume'),
   'tan-responsive': require('jsonresume-theme-tan-responsive'),
   techlead: require('jsonresume-theme-techlead'),

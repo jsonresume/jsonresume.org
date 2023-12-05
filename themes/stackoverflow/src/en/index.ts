@@ -1,3 +1,3 @@
-import { createTheme } from "../createTheme";
+import { createTheme } from '../createTheme';
 
-module.exports = createTheme("en");
+export const { render } = createTheme('en');

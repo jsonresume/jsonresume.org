@@ -18,9 +18,9 @@
     "directory": "themes/stackoverflow"
   },
   "license": "MIT",
-  "main": "./dist/en/index.ts",
+  "main": "./dist/index.js",
   "exports": {
-    ".": "./dist/en/index.ts",
+    ".": "./dist/index.js",
     "./german": "./dist/de/index.ts"
   },
   "dependencies": {
@@ -39,6 +39,7 @@
     "styled-components": "^5.3.11",
     "web-vitals": "^2.1.0"
   },
+  "type": "module",
   "devDependencies": {
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@storybook/addon-essentials": "^7.0.7",
@@ -74,7 +75,7 @@
     "dev": "resume serve --theme .",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "build": "tsc -p tsconfig.build.json",
+    "build": "vite build",
     "lint": "eslint .",
     "prepack": "yarn clean && yarn build",
     "clean": "rm -rf dist storybook-static",
