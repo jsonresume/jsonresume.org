@@ -26,7 +26,7 @@ export const THEMES = {
   minyma: require('jsonresume-theme-minyma'),
   msresume: require('jsonresume-theme-msresume'),
   one: require('jsonresume-theme-one'),
-  onepage: require('jsonresume-theme-onepage'),
+  onepage: { render: onepage },
   onepageresume: require('jsonresume-theme-onepageresume'),
   orbit: require('jsonresume-theme-orbit'),
   paper: require('jsonresume-theme-paper'),
