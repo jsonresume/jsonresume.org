@@ -36,10 +36,11 @@
     "react-dom": "^18.2.0",
     "react-i18next": "^12.2.2",
     "react-scripts": "5.0.1",
-    "styled-components": "^5.3.10",
+    "styled-components": "^5.3.11",
     "web-vitals": "^2.1.0"
   },
   "devDependencies": {
+    "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@storybook/addon-essentials": "^7.0.7",
     "@storybook/addon-interactions": "^7.0.7",
     "@storybook/addon-links": "^7.0.7",
@@ -56,14 +57,18 @@
     "@types/ramda": "^0.29.1",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
+    "@types/styled-components": "^5.1.32",
+    "@vitejs/plugin-react": "^4.2.1",
     "babel-plugin-named-exports-order": "^0.0.2",
     "eslint-config-custom": "workspace:*",
     "prop-types": "^15.8.1",
+    "rollup-plugin-node-polyfills": "^0.2.1",
     "storybook": "^7.0.7",
     "storybook-react-i18next": "^2.0.1",
+    "tsconfig": "workspace:*",
     "typescript": "^5.0.4",
-    "webpack": "^5.81.0",
-    "tsconfig": "workspace:*"
+    "vite": "^5.0.5",
+    "webpack": "^5.81.0"
   },
   "scripts": {
     "dev": "resume serve --theme .",
