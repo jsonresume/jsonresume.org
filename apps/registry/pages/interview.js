@@ -1,6 +1,6 @@
-import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import Layout from '../src/ui/Layout';
 

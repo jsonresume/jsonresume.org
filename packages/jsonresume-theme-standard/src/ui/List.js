@@ -1,13 +1,4 @@
-import styled from 'styled-components';
-
-const Text = styled.div`
-  font-size: 20px;
-  color: #330000;
-`;
-
 const List = ({ items }) => {
-  console.log({ items });
-
   if (!items) {
     return null;
   }

@@ -81,7 +81,7 @@ jobs:
         run: pnpm exec playwright install --with-deps
         working-directory: apps/registry
       - name: Run Playwright tests
-        run: pnpm turbo test:e2e
+        run: pnpm turbo test:e2e --concurrency 1000 # The high concurrency is due to a bug: https://github.com/vercel/turbo/issues/4291
       - uses: actions/upload-artifact@v3
         if: always()
         with:

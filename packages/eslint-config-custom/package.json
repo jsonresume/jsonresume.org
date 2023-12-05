@@ -4,7 +4,6 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "eslint-config-next": "^13",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-turbo": "^1",
     "eslint-plugin-react": "^7.33.2"

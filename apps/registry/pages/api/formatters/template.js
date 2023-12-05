@@ -1,73 +1,52 @@
-import stackoverflow from 'theme-stackoverflow';
+import { render as standard } from 'jsonresume-theme-standard';
+import { render as full } from 'jsonresume-theme-full';
+import { render as spartacus } from 'jsonresume-theme-spartacus';
+import { render as flat } from 'jsonresume-theme-flat';
+import { render as papirus } from 'jsonresume-theme-papirus';
+
+import stackoverflow from '@jsoneresume/theme-stackoverflow';
 
 export const THEMES = {
   ace: require('jsonresume-theme-ace'),
   actual: require('jsonresume-theme-actual'),
   autumn: require('jsonresume-theme-autumn'),
-  caffeine: require('jsonresume-theme-caffeine'),
-  class: require('jsonresume-theme-class'),
-  classy: require('jsonresume-theme-classy'),
   cora: require('jsonresume-theme-cora'),
-  compact: require('jsonresume-theme-compact'),
-  contempo: require('jsonresume-theme-contempo'),
-  dave: require('jsonresume-theme-dave'),
-  direct: require('jsonresume-theme-direct'),
-  dinesh: require('jsonresume-theme-dinesh'),
   elegant: require('jsonresume-theme-elegant'),
-  elite: require('jsonresume-theme-elite'),
-  // eloquent: require('jsonresume-theme-eloquent'),
+  full: { render: full },
+  flat: { render: flat },
   'el-santo': require('jsonresume-theme-el-santo'),
   even: require('jsonresume-theme-even'),
-  flat: require('jsonresume-theme-flat'),
-  'flat-fr': require('jsonresume-theme-flat-fr'),
-  fresh: require('jsonresume-theme-fresh'),
-  full: require('jsonresume-theme-full'),
-  joeytall: require('jsonresume-theme-joeytall'),
   github: require('jsonresume-theme-github'),
   github2: require('jsonresume-theme-github2'),
   jacrys: require('jsonresume-theme-jacrys'),
   kards: require('jsonresume-theme-kards'),
-  keloran: require('jsonresume-theme-keloran'),
   kendall: require('jsonresume-theme-kendall'),
   macchiato: require('jsonresume-theme-macchiato'),
   mantra: require('jsonresume-theme-mantra'),
   'mocha-responsive': require('jsonresume-theme-mocha-responsive'),
   minyma: require('jsonresume-theme-minyma'),
-  modern: require('jsonresume-theme-modern'),
   msresume: require('jsonresume-theme-msresume'),
   one: require('jsonresume-theme-one'),
-  onepage: require('jsonresume-theme-onepage'),
-  'onepage-plus': require('jsonresume-theme-onepage-plus'),
-  'onepage-efficient': require('jsonresume-theme-onepage-efficient'),
   onepageresume: require('jsonresume-theme-onepageresume'),
   orbit: require('jsonresume-theme-orbit'),
   paper: require('jsonresume-theme-paper'),
+  papirus: { render: papirus },
   'paper-plus-plus': require('jsonresume-theme-paper-plus-plus'),
-  papirus: require('jsonresume-theme-papirus'),
   pumpkin: require('jsonresume-theme-pumpkin'),
-  rocketspacer: require('jsonresume-theme-rocketspacer'),
-  short: require('jsonresume-theme-short'),
-  'simple-red': require('jsonresume-theme-simple-red'),
   relaxed: require('jsonresume-theme-relaxed'),
-  resu: require('jsonresume-theme-resu'),
+  rocketspacer: require('jsonresume-theme-rocketspacer'),
+  'simple-red': require('jsonresume-theme-simple-red'),
   rickosborne: require('jsonresume-theme-rickosborne'),
-  riga: require('jsonresume-theme-riga'),
-  slick: require('jsonresume-theme-slick'),
-  sceptile: require('jsonresume-theme-sceptile'),
-  simple: require('jsonresume-theme-simple'),
-  spartacus: require('jsonresume-theme-spartacus'),
-  'timeline-fixed': require('jsonresume-theme-timeline-fixed'),
   spartan: require('jsonresume-theme-spartan'),
-  srt: require('jsonresume-theme-srt'),
+  spartacus: { render: spartacus },
   stackoverflowed: require('jsonresume-theme-stackoverflowed'),
+  stackoverflow: require('jsonresume-theme-stackoverflow'),
+  standard: { render: standard },
   stackoverflow,
   standard: require('jsonresume-theme-standard'),
   'standard-resume': require('jsonresume-theme-standard-resume'),
-  'tachyons-clean': require('jsonresume-theme-tachyons-clean'),
   'tan-responsive': require('jsonresume-theme-tan-responsive'),
   techlead: require('jsonresume-theme-techlead'),
-  verbum: require('jsonresume-theme-verbum'),
-  wraypro: require('jsonresume-theme-wraypro'),
 };
 
 const getTheme = (theme) => {
@@ -84,6 +63,11 @@ const getTheme = (theme) => {
 const format = async function (resume, options) {
   const theme = options.theme ?? 'elegant';
   const themeRenderer = getTheme(theme);
+
+  if (!themeRenderer) {
+    throw new Error('theme-missing');
+  }
+
   const resumeHTML = themeRenderer.render(resume);
 
   return {

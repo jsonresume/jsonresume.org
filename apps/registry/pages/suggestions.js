@@ -1,7 +1,7 @@
+import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
-import Layout from '../ui/Layout';
+import Layout from '../src/ui/Layout';
 
 export default function Talk() {
   const router = useRouter();

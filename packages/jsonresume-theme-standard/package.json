@@ -5,6 +5,13 @@
   "license": "MIT",
   "devDependencies": {
     "eslint-config-custom": "workspace:*",
-    "react": "^17.0.2"
+    "react": "^18",
+    "styled-components": "^6"
+  },
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "peerDependencies": {
+    "styled-components": "^6"
   }
 }

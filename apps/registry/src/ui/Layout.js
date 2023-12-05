@@ -1,7 +1,7 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import Image from 'next/image';
 
 const Container = styled.div`
   height: 100vh;
@@ -84,7 +84,8 @@ export default function Layout({ children }) {
         <div>{children}</div>
       </Container>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+      <link rel="preconnect" href="https://fonts.gstatic.com" />
+
       <script
         async
         data-id="101412887"
