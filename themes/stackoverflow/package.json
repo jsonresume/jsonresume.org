@@ -77,9 +77,10 @@
     "build-storybook": "storybook build",
     "build": "vite build",
     "lint": "eslint .",
-    "prepack": "yarn clean && yarn build",
+    "prepack": "pnpm run clean && pnpm run build",
     "clean": "rm -rf dist storybook-static",
-    "postpack": "yarn clean"
+    "postpack": "pnpm run clean",
+    "prepare": "pnpm run build"
   },
   "files": [
     "dist",
@@ -113,6 +114,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "packageManager": "yarn@4.0.0-rc.43"
+  }
 }
