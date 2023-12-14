@@ -1,5 +1,7 @@
 node_modules/*
 resume.json
-build/*
+build/
 *.DS_Store
 public/
+src/templates.cjs
+src/partials.cjs

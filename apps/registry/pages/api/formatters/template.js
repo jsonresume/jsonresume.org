@@ -4,7 +4,7 @@ import * as onepage from 'jsonresume-theme-onepage';
 import * as onepageplus from 'jsonresume-theme-onepage-plus';
 import * as spartacus from 'jsonresume-theme-spartacus';
 import * as flat from 'jsonresume-theme-flat';
-import * as papirus from 'jsonresume-theme-papirus';
+import * as papirus from '@jsonresume/theme-papirus';
 import * as stackoverflow from '@jsonresume/theme-stackoverflow';
 
 export const THEMES = {

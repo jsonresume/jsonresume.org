@@ -5,11 +5,14 @@
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier -w .",
-    "prettier": "prettier -c ."
+    "prettier": "prettier -c .",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "eslint": "^8",
     "eslint-config-custom": "workspace:*",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
     "prettier": "^2.5.1",
     "start-server-and-test": "^2.0.3",
     "turbo": "^1.9.6"

@@ -29,8 +29,14 @@
       "endDate": "2014",
       "summary": "Pied Piper is a multi-platform technology based on a proprietary universal compression algorithm that has consistently fielded high Weisman Scores™ that are not merely competitive, but approach the theoretical limit of lossless compression.",
       "details": [
-        { "text": "Build an algorithm for artist to detect if their music was violating copy right infringement laws", "comment": "Java" },
-        { "text": "Optimized an algorithm that holds the current world record for Weisman Scores", "comment": "c++" },
+        {
+          "text": "Build an algorithm for artist to detect if their music was violating copy right infringement laws",
+          "comment": "Java"
+        },
+        {
+          "text": "Optimized an algorithm that holds the current world record for Weisman Scores",
+          "comment": "c++"
+        },
         { "text": "Successfully won Techcrunch Disrupt" }
       ]
     }
@@ -43,9 +49,7 @@
       "startDate": "2012",
       "endDate": "2013",
       "summary": "Global movement of free coding clubs for young people.",
-      "highlights": [
-        "Awarded 'Teacher of the Month'"
-      ]
+      "highlights": ["Awarded 'Teacher of the Month'"]
     }
   ],
   "education": [
@@ -56,10 +60,7 @@
       "startDate": "2011",
       "endDate": "2014",
       "gpa": "4.0",
-      "courses": [
-        "DB1101 - Basic SQL",
-        "CS2011 - Java Introduction"
-      ]
+      "courses": ["DB1101 - Basic SQL", "CS2011 - Java Introduction"]
     }
   ],
   "awards": [
@@ -106,10 +107,7 @@
   "interests": [
     {
       "name": "Wildlife",
-      "keywords": [
-        "Ferrets",
-        "Unicorns"
-      ]
+      "keywords": ["Ferrets", "Unicorns"]
     }
   ]
 }

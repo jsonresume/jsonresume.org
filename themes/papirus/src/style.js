@@ -1,5 +1,5 @@
 export default `body {
-  background: #E5DED4;
+  background: #e5ded4;
   font: 15px Arial, Helvetica, sans-serif;
   line-height: 1.4;
   color: #929292;
@@ -12,7 +12,7 @@ export default `body {
 
 #resume {
   border-radius: 5px;
-  border: 1px solid #C7C7C7;
+  border: 1px solid #c7c7c7;
   overflow: hidden;
 }
 
@@ -20,23 +20,23 @@ section {
   margin-bottom: 5rem;
 }
 
-[class^="section-"] > .title {
+[class^='section-'] > .title {
   text-transform: uppercase;
   padding: 15px 0;
   margin: 0;
 }
 
-[class^="section-"] > .title .title-icon,
-[class^="section-"] > .title span {
+[class^='section-'] > .title .title-icon,
+[class^='section-'] > .title span {
   display: inline-block;
   vertical-align: middle;
 }
 
-[class^="section-"] > .title span {
+[class^='section-'] > .title span {
   margin-left: 2px;
 }
 
-[class^="section-"] > .title .title-icon {
+[class^='section-'] > .title .title-icon {
   background-color: whitesmoke;
   border-radius: 50%;
   width: 2rem;
@@ -52,7 +52,9 @@ section {
   padding-bottom: 99999px;
 }
 
-.sidebar, .sidebar h1, .sidebar h2 {
+.sidebar,
+.sidebar h1,
+.sidebar h2 {
   color: #ffffff !important;
 }
 
@@ -93,7 +95,7 @@ section {
 }
 
 .section-education .ul.courses li {
-  margin:0;
+  margin: 0;
 }
 
 .section-education .institution {
@@ -104,7 +106,9 @@ section {
   font-size: 1.2rem;
 }
 
-.sidebar a:link, .sidebar a:hover, .sidebar a:visited {
+.sidebar a:link,
+.sidebar a:hover,
+.sidebar a:visited {
   text-decoration: none;
   color: #ffffff !important;
 }
@@ -112,22 +116,22 @@ section {
 /* Content */
 .content {
   padding: 5rem;
-  background: #FFFFFF;
+  background: #ffffff;
   margin-bottom: -99999px;
   padding-bottom: 99999px;
 }
 
 .content h1 {
-  color: #3C3C3C;
+  color: #3c3c3c;
   text-transform: uppercase;
   text-align: center;
   font-size: 4rem;
-  letter-spacing: 1.0rem;
+  letter-spacing: 1rem;
   font-weight: bold;
 }
 
 .content h2 {
-  color: #6D6D6D;
+  color: #6d6d6d;
   text-transform: uppercase;
   text-align: left;
   font-size: 1.5rem;
@@ -136,9 +140,11 @@ section {
   margin-top: 5rem;
 }
 
-.content a:link, .content a:hover, .content a:visited {
+.content a:link,
+.content a:hover,
+.content a:visited {
   text-decoration: none;
-  color: #6D6D6D;
+  color: #6d6d6d;
 }
 
 /* Sections */
@@ -147,7 +153,7 @@ section {
 }
 
 .section-name h2 {
-  color: #6D6D6D;
+  color: #6d6d6d;
   text-transform: uppercase;
   text-align: center;
   font-size: 1.5rem;
@@ -171,14 +177,15 @@ section {
 }
 
 .section-work .item .company {
-    padding: 0.5rem 0 0.5rem 0;
-    color: #6D6D6D;
-    font-weight: bold;
+  padding: 0.5rem 0 0.5rem 0;
+  color: #6d6d6d;
+  font-weight: bold;
 }
 
-.section-work .item .summary, .section-work .item .highlights {
-    font-style: italic;
-    text-align: justify;
+.section-work .item .summary,
+.section-work .item .highlights {
+  font-style: italic;
+  text-align: justify;
 }
 
 .section-volunteer .item {
@@ -192,16 +199,16 @@ section {
 }
 
 .section-volunteer .item .company {
-    padding: 0.5rem 0 0.5rem 0;
-    color: #6D6D6D;
-    font-weight: bold;
+  padding: 0.5rem 0 0.5rem 0;
+  color: #6d6d6d;
+  font-weight: bold;
 }
 
-.section-volunteer .item .summary, .section-volunteer .item .highlights {
-    font-style: italic;
-    text-align: justify;
+.section-volunteer .item .summary,
+.section-volunteer .item .highlights {
+  font-style: italic;
+  text-align: justify;
 }
-
 
 .section-publications .item {
   margin-bottom: 2.5rem;
@@ -214,23 +221,24 @@ section {
 }
 
 .section-publications .item .publication {
-    padding: 0.5rem 0 0.5rem 0;
-    color: #6D6D6D;
-    font-weight: bold;
+  padding: 0.5rem 0 0.5rem 0;
+  color: #6d6d6d;
+  font-weight: bold;
 }
 
-.section-publications .item .summary, .section-publications .item .highlights {
-    font-style: italic;
-    text-align: justify;
+.section-publications .item .summary,
+.section-publications .item .highlights {
+  font-style: italic;
+  text-align: justify;
 }
-
 
 .section-awards .item .title {
   font-weight: bold;
   color: #333438;
 }
 
-.section-awards .item .date, .section-awards .item .awarder {
+.section-awards .item .date,
+.section-awards .item .awarder {
   font-weight: normal;
   color: #929292;
 }
@@ -263,7 +271,6 @@ section {
 .section-skills .item {
   margin-bottom: 1rem;
 }
-
 
 .section-contact .fa {
   padding: 0.8rem 0 0 0;
@@ -319,23 +326,23 @@ section {
     margin-bottom: 2.5rem;
   }
 
-  [class^="section-"] > .title {
+  [class^='section-'] > .title {
     text-transform: uppercase;
     padding: 0.7rem 0;
     margin: 0;
   }
 
-  [class^="section-"] > .title .title-icon,
-  [class^="section-"] > .title span {
+  [class^='section-'] > .title .title-icon,
+  [class^='section-'] > .title span {
     display: inline-block;
     vertical-align: middle;
   }
 
-  [class^="section-"] > .title span {
+  [class^='section-'] > .title span {
     margin-left: 2px;
   }
 
-  [class^="section-"] > .title .title-icon {
+  [class^='section-'] > .title .title-icon {
     background-color: whitesmoke;
     border-radius: 50%;
     width: 2rem;
@@ -349,10 +356,12 @@ section {
     background: #333438 !important;
     margin-bottom: -99999px;
     padding-bottom: 99999px;
-		color: #ffffff !important;
+    color: #ffffff !important;
   }
 
-  .sidebar, .sidebar h1, .sidebar h2 {
+  .sidebar,
+  .sidebar h1,
+  .sidebar h2 {
     color: #ffffff !important;
   }
 
@@ -363,12 +372,12 @@ section {
     letter-spacing: 0.5rem;
     font-weight: bold;
     margin-top: 5rem;
-		color: #ffffff !important;
+    color: #ffffff !important;
   }
 
   .sidebar h2.title span {
     color: #ffffff !important;
-}
+  }
 
   .avatar {
     margin: 2rem 0 2rem 1rem;
@@ -381,27 +390,27 @@ section {
 
   .section-education .item {
     margin-bottom: 3rem;
-		color: #ffffff !important;
+    color: #ffffff !important;
   }
 
-  .section-education .studyTitle span{
+  .section-education .studyTitle span {
     text-transform: uppercase;
     font-weight: bold;
     font-size: 1.1rem;
-		color: #ffffff !important;
+    color: #ffffff !important;
   }
 
-  .section-education .studyTitle span.badge{
+  .section-education .studyTitle span.badge {
     text-transform: uppercase;
     font-weight: bold;
-    font-size: 1.0rem;
-		color: #ffffff !important;
+    font-size: 1rem;
+    color: #ffffff !important;
     background: #939393 !important;
   }
 
   .section-education .courses {
     font-size: 1.1rem;
-		color: #ffffff !important;
+    color: #ffffff !important;
   }
 
   .section-education ul.courses {
@@ -411,44 +420,46 @@ section {
   }
 
   .section-education .ul.courses li {
-    margin:0;
-		color: #ffffff !important;
+    margin: 0;
+    color: #ffffff !important;
   }
 
   .section-education .institution {
-    font-size: 1.0rem;
-		color: #ffffff !important;
+    font-size: 1rem;
+    color: #ffffff !important;
   }
 
-  .section-education .date span{
-    font-size: 1.0rem;
-		color: #ffffff !important;
+  .section-education .date span {
+    font-size: 1rem;
+    color: #ffffff !important;
   }
 
-  .sidebar a:link, .sidebar a:hover, .sidebar a:visited {
+  .sidebar a:link,
+  .sidebar a:hover,
+  .sidebar a:visited {
     text-decoration: none;
-		color: #ffffff !important;
+    color: #ffffff !important;
   }
 
   /* Content */
   .content {
     padding: 3rem 5rem 3rem 2rem;
-    background: #FFFFFF !important;
+    background: #ffffff !important;
     margin-bottom: -99999px;
     padding-bottom: 99999px;
   }
 
   .content h1 {
-    color: #3C3C3C !important;
+    color: #3c3c3c !important;
     text-transform: uppercase;
     text-align: center;
     font-size: 2.5rem;
-    letter-spacing: 1.0rem;
+    letter-spacing: 1rem;
     font-weight: bold;
   }
 
   .content h2 {
-    color: #6D6D6D !important;
+    color: #6d6d6d !important;
     text-transform: uppercase;
     text-align: left;
     font-size: 1.2rem;
@@ -457,9 +468,11 @@ section {
     margin-top: 2rem;
   }
 
-  .content a:link, .content a:hover, .content a:visited {
+  .content a:link,
+  .content a:hover,
+  .content a:visited {
     text-decoration: none;
-    color: #6D6D6D !important;
+    color: #6d6d6d !important;
   }
 
   /* Sections */
@@ -468,7 +481,7 @@ section {
   }
 
   .section-name h2 {
-    color: #6D6D6D !important;
+    color: #6d6d6d !important;
     text-transform: uppercase;
     text-align: center;
     font-size: 1.2rem;
@@ -492,14 +505,15 @@ section {
   }
 
   .section-work .item .company {
-      padding: 0.5rem 0 0.5rem 0;
-      color: #6D6D6D !important;
-      font-weight: bold;
+    padding: 0.5rem 0 0.5rem 0;
+    color: #6d6d6d !important;
+    font-weight: bold;
   }
 
-  .section-work .item .summary, .section-work .item .highlights {
-      font-style: italic;
-      text-align: justify;
+  .section-work .item .summary,
+  .section-work .item .highlights {
+    font-style: italic;
+    text-align: justify;
   }
 
   .section-volunteer .item {
@@ -513,16 +527,16 @@ section {
   }
 
   .section-volunteer .item .company {
-      padding: 0.5rem 0 0.5rem 0;
-      color: #6D6D6D !important;
-      font-weight: bold;
+    padding: 0.5rem 0 0.5rem 0;
+    color: #6d6d6d !important;
+    font-weight: bold;
   }
 
-  .section-volunteer .item .summary, .section-volunteer .item .highlights {
-      font-style: italic;
-      text-align: justify;
+  .section-volunteer .item .summary,
+  .section-volunteer .item .highlights {
+    font-style: italic;
+    text-align: justify;
   }
-
 
   .section-publications .item {
     margin-bottom: 2.5rem;
@@ -535,23 +549,24 @@ section {
   }
 
   .section-publications .item .publication {
-      padding: 0.5rem 0 0.5rem 0;
-      color: #6D6D6D !important;
-      font-weight: bold;
+    padding: 0.5rem 0 0.5rem 0;
+    color: #6d6d6d !important;
+    font-weight: bold;
   }
 
-  .section-publications .item .summary, .section-publications .item .highlights {
-      font-style: italic;
-      text-align: justify;
+  .section-publications .item .summary,
+  .section-publications .item .highlights {
+    font-style: italic;
+    text-align: justify;
   }
-
 
   .section-awards .item .title {
     font-weight: bold;
     color: #333438 !important;
   }
 
-  .section-awards .item .date, .section-awards .item .awarder {
+  .section-awards .item .date,
+  .section-awards .item .awarder {
     font-weight: normal;
     color: #929292 !important;
   }
@@ -577,7 +592,7 @@ section {
   }
 
   .section-interests .item {
-    margin: 0.2rem 0 0.0rem 0;
+    margin: 0.2rem 0 0rem 0;
     line-height: 1.4rem;
   }
 
@@ -589,21 +604,20 @@ section {
     color: #ffffff !important;
   }
 
-	.section-skills .item .keywords .span {
-		color: #ffffff !important;
-		background: #929292 !important;
-	}
-
-  .section-skills .keywords span.label {
-      color: #000 !important;
-      background: #929292 !important;
-      line-height: 1.7rem;
+  .section-skills .item .keywords .span {
+    color: #ffffff !important;
+    background: #929292 !important;
   }
 
+  .section-skills .keywords span.label {
+    color: #000 !important;
+    background: #929292 !important;
+    line-height: 1.7rem;
+  }
 
   .section-contact .fa {
     padding: 0.5rem 0 0 0;
-    background: #ffffff  !important;
+    background: #ffffff !important;
     color: #333438 !important;
     border-radius: 100rem;
     width: 2.2rem;
@@ -621,7 +635,7 @@ section {
 
   .section-contact ul.contact li {
     margin: 0.5rem 0 0.5rem 0;
-		color: #ffffff !important;
+    color: #ffffff !important;
   }
 
   .section-contact ul.profiles {
@@ -632,13 +646,13 @@ section {
 
   .section-contact ul.profiles li {
     margin: 0.5rem 0 0.5rem 0;
-		color: #ffffff !important;
+    color: #ffffff !important;
   }
 
-  .section-contact ul.contact li span,.section-contact ul.profiles li span {
-      word-wrap: break-word;
-      white-space: pre-wrap;
-      color: #ffffff !important;
+  .section-contact ul.contact li span,
+  .section-contact ul.profiles li span {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    color: #ffffff !important;
   }
-
 }`;
