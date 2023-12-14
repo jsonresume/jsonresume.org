@@ -2,8 +2,6 @@ name: Release
 
 on:
   push:
-    branches:
-      - master
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
@@ -12,6 +10,12 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     steps:
+      - name: Generate a token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
       - uses: actions/checkout@v3
       - uses: pnpm/action-setup@v2
         with:
@@ -27,5 +31,5 @@ jobs:
         id: changesets
         uses: changesets/action@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
