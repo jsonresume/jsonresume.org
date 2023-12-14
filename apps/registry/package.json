@@ -1,6 +1,6 @@
 {
   "name": "registry",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "scripts": {
     "dev": "next dev --port 3002",
@@ -37,8 +37,6 @@
     "jsonresume-theme-full": "workspace:*",
     "jsonresume-theme-github": "^0.0.5",
     "jsonresume-theme-github2": "^0.0.8",
-    "jsonresume-theme-full": "workspace:*",
-    "jsonresume-theme-flat": "workspace:*",
     "jsonresume-theme-jacrys": "^1.0.4",
     "jsonresume-theme-kards": "^1.0.2",
     "jsonresume-theme-kendall": "^0.2.0",
@@ -67,7 +65,6 @@
     "jsonresume-theme-stackoverflowed": "^1.1.5",
     "jsonresume-theme-standard": "workspace:*",
     "jsonresume-theme-standard-resume": "^2.1.0",
-    "jsonresume-theme-spartacus": "workspace:*",
     "jsonresume-theme-tan-responsive": "^0.0.7",
     "jsonresume-theme-techlead": "^1.0.1",
     "jsonschema": "^1.4.1",
