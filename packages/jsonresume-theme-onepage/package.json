@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "jsonresume-theme-onepage",
   "version": "0.0.3",
   "description": "Compact, printable theme for JSON Resume",

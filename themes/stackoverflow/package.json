@@ -76,9 +76,8 @@
     "build-storybook": "storybook build",
     "build": "vite build",
     "lint": "eslint .",
-    "prepack": "pnpm run clean && pnpm run build",
+    "prepublishOnly": "pnpm run clean && pnpm run build",
     "clean": "rm -rf dist storybook-static",
-    "postpack": "pnpm run clean",
     "prepare": "pnpm run build"
   },
   "files": [
