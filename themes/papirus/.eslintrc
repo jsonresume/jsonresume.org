@@ -1,4 +1,7 @@
 {
   "extends": ["custom"],
-  "sourceType": "module"
+  "parserOptions": {
+    "ecmaVersion": 2023,
+    "sourceType": "module"
+  }
 }

@@ -5,3 +5,6 @@ apps/homepage/vendor
 apps/homepage/_site
 dist
 themes/stackoverflow/public
+apps/registry/playwright-report
+themes/papirus/src/partials.cjs
+themes/papirus/src/templates.cjs
