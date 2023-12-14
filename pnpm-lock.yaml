@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 importers:
 
   .:
@@ -136,6 +140,9 @@ importers:
       jsonresume-theme-onepage:
         specifier: '*'
         version: link:../../packages/jsonresume-theme-onepage
+      jsonresume-theme-onepage-plus:
+        specifier: '*'
+        version: link:../../packages/jsonresume-theme-onepage-plus
       jsonresume-theme-onepageresume:
         specifier: ^0.0.6
         version: 0.0.6
@@ -309,6 +316,12 @@ importers:
         version: 2.2.4
       handlebars:
         specifier: ^4
+        version: 4.7.8
+
+  packages/jsonresume-theme-onepage-plus:
+    dependencies:
+      handlebars:
+        specifier: latest
         version: 4.7.8
 
   packages/jsonresume-theme-papirus:
@@ -9395,7 +9408,3 @@ packages:
   /zod@3.21.4:
     resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
     dev: false
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
