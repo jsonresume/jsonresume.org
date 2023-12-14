@@ -9,7 +9,7 @@
     "prepare": "husky install"
   },
   "devDependencies": {
-    "eslint": "^7.32.0",
+    "eslint": "^8",
     "eslint-config-custom": "workspace:*",
     "husky": "^8.0.3",
     "lint-staged": "^15.2.0",

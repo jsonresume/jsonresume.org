@@ -1,0 +1,116 @@
+{
+  "name": "@jsonresume/theme-stackoverflow",
+  "version": "2.1.0",
+  "description": "Stack Overflow theme for JSON Resume written with React",
+  "contributors": [
+    {
+      "name": "Francesco Esposito"
+    },
+    {
+      "name": "Levin Keller",
+      "email": "post@levinkeller.de",
+      "url": "https://www.levinkeller.de"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "jsonresume/jsonresume",
+    "directory": "themes/stackoverflow"
+  },
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./german": "./dist/de/index.ts"
+  },
+  "dependencies": {
+    "handlebars": "^4.7.7",
+    "i18next": "^22.4.15",
+    "i18next-browser-languagedetector": "^7.0.1",
+    "i18next-http-backend": "^2.2.0",
+    "jsonresume-theme-stackoverflow": "^2.0.1",
+    "markdown-it": "^13.0.1",
+    "moment": "^2.29.4",
+    "ramda": "^0.29.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-i18next": "^12.2.2",
+    "react-scripts": "5.0.1",
+    "styled-components": "^5.3.11",
+    "web-vitals": "^2.1.0"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
+    "@storybook/addon-essentials": "^7.0.7",
+    "@storybook/addon-interactions": "^7.0.7",
+    "@storybook/addon-links": "^7.0.7",
+    "@storybook/blocks": "^7.0.7",
+    "@storybook/preset-create-react-app": "^7.0.7",
+    "@storybook/react": "^7.0.7",
+    "@storybook/react-webpack5": "^7.0.7",
+    "@storybook/testing-library": "^0.0.14-next.2",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^13.0.0",
+    "@testing-library/user-event": "^13.2.1",
+    "@types/jest": "^27.0.1",
+    "@types/node": "^18",
+    "@types/ramda": "^0.29.1",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@types/styled-components": "^5.1.32",
+    "@vitejs/plugin-react": "^4.2.1",
+    "babel-plugin-named-exports-order": "^0.0.2",
+    "eslint-config-custom": "workspace:*",
+    "prop-types": "^15.8.1",
+    "rollup-plugin-node-polyfills": "^0.2.1",
+    "storybook": "^7.0.7",
+    "storybook-react-i18next": "^2.0.1",
+    "tsconfig": "workspace:*",
+    "typescript": "^4",
+    "vite": "^5.0.5",
+    "webpack": "^5.81.0"
+  },
+  "scripts": {
+    "dev": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "build": "vite build",
+    "lint": "eslint .",
+    "prepublishOnly": "pnpm run clean && pnpm run build",
+    "clean": "rm -rf dist storybook-static",
+    "prepare": "pnpm run build"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "style.css"
+  ],
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ],
+    "overrides": [
+      {
+        "files": [
+          "**/*.stories.*"
+        ],
+        "rules": {
+          "import/no-anonymous-default-export": "off"
+        }
+      }
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
