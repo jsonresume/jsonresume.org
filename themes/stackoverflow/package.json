@@ -72,8 +72,7 @@
     "webpack": "^5.81.0"
   },
   "scripts": {
-    "dev": "resume serve --theme .",
-    "storybook": "storybook dev -p 6006",
+    "dev": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "build": "vite build",
     "lint": "eslint .",

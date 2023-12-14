@@ -14,16 +14,6 @@ yarn resume export -r resume.de.json -t ./node_modules/jsonresume-theme-stackove
 
 I made this as a basis for others to add more languages. The repo comes with a new stack (`react`) and new productivity tools (`storybook` and `i18next`) to ease the work. So I kindly invite you to open an issue for the new language you want to add and then make a PR providing support for that language.
 
-## Previews
-
-### Example CV
-
-There is an automatic [deployment](https://stackoverflow-jsonresume-example.netlify.app/) of a made up example CV with this theme.
-
-### Storybook deployment
-
-There is an automatic storybook [deployment](https://sb-stackoverflow-jsonresume-theme.netlify.app/).
-
 ## Remarks
 
 The CVs of Samantha Jones were made up / translated for me by ChatGPT. I also used ChatGPT to translate all handlebars templates to `jsx` code. Worked brilliantly and saved me so much time!

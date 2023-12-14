@@ -145,7 +145,7 @@ importers:
         version: link:../../packages/jsonresume-theme-onepage
       jsonresume-theme-onepage-plus:
         specifier: '*'
-        version: link:../../packages/jsonresume-theme-onepage-plus
+        version: 1.0.1
       jsonresume-theme-onepageresume:
         specifier: ^0.0.6
         version: 0.0.6
@@ -500,6 +500,9 @@ importers:
       prop-types:
         specifier: ^15.8.1
         version: 15.8.1
+      resumed:
+        specifier: ^3.0.1
+        version: 3.0.1
       rollup-plugin-node-polyfills:
         specifier: ^0.2.1
         version: 0.2.1
@@ -4379,7 +4382,7 @@ packages:
       debug: 4.3.4(supports-color@5.5.0)
       espree: 9.6.1
       globals: 13.23.0
-      ignore: 5.2.0
+      ignore: 5.3.0
       import-fresh: 3.3.0
       js-yaml: 4.1.0
       minimatch: 3.1.2
@@ -11677,7 +11680,7 @@ packages:
       glob-parent: 6.0.2
       globals: 13.23.0
       graphemer: 1.4.0
-      ignore: 5.2.0
+      ignore: 5.3.0
       imurmurhash: 0.1.4
       is-glob: 4.0.3
       is-path-inside: 3.0.3
@@ -14916,6 +14919,12 @@ packages:
       handlebars: 4.7.7
     dev: false
 
+  /jsonresume-theme-onepage-plus@1.0.1:
+    resolution: {integrity: sha512-wiDJ6CjsKSi7ZYHXH7Ume4EDcnmSyLhIVMQO3PYKbpQCaLZQkM2E2gj8ViHoFrWgbRfyBPvxIN+95Ow+bqnVrw==}
+    dependencies:
+      handlebars: 2.0.0
+    dev: false
+
   /jsonresume-theme-onepageresume@0.0.6:
     resolution: {integrity: sha512-tVFsN/v1maalDv5SB0PXbuJnhMuVO7ieTdF+ZI//Vq2n5fYt1fLjvAMjkzvtV3kRz7cbXMLEpuxfx66n51KRSw==}
     dependencies:
@@ -15315,11 +15324,9 @@ packages:
 
   /lodash.get@4.4.2:
     resolution: {integrity: sha512-z+Uw/vLuy6gQe8cfaFWD7p0wVv8fJl3mbzXh33RS+0oW2wvUqiRXiQ69gLWSLpgB5/6sU+r6BlQR0MBILadqTQ==}
-    dev: false
 
   /lodash.isequal@4.5.0:
     resolution: {integrity: sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==}
-    dev: false
 
   /lodash.isplainobject@4.0.6:
     resolution: {integrity: sha512-oSXzaWypCMHkPC3NvBEaPHf0KsA5mvPrOPgQWDsbg8n7orZ290M0BmC/jgRZ4vcJ6DTAhjrsSYgdsW/F+MFOBA==}
@@ -19056,7 +19063,16 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       z-schema: 4.2.4
-    dev: false
+
+  /resumed@3.0.1:
+    resolution: {integrity: sha512-bHv7qDQwmx5ei+u81JIxD1Cdcm/d6wcJXzmi7rMiGttC8kV7jnznBeN0QpYi6xy6vl51VuokTatAhXXfbo4G9w==}
+    engines: {node: '>=14.16'}
+    hasBin: true
+    dependencies:
+      resume-schema: 1.0.0
+      sade: 1.8.1
+      yoctocolors: 1.0.0
+    dev: true
 
   /ret@0.1.15:
     resolution: {integrity: sha512-TTlYpa+OL+vMMNG24xSlQGEJ3B/RzEfUlLct7b5G/ytav+wPrplCpVMFuwzXbkecJrb6IYo1iFb0S9v37754mg==}
@@ -19178,7 +19194,6 @@ packages:
     engines: {node: '>=6'}
     dependencies:
       mri: 1.2.0
-    dev: false
 
   /safe-array-concat@1.0.1:
     resolution: {integrity: sha512-6XbUAseYE2KtOuGueyeobCySj9L4+66Tn6KQMOPQJrAJEowYKW/YR/MGJZl7FdydUdaFu4LYyDZjxf4/Nmo23Q==}
@@ -21247,7 +21262,6 @@ packages:
   /validator@13.9.0:
     resolution: {integrity: sha512-B+dGG8U3fdtM0/aNK4/X8CXq/EcxU2WPrPEkJGslb47qyHsxmbggTWK0yEA4qnYVNF+nxNlN88o14hIcPmSIEA==}
     engines: {node: '>= 0.10'}
-    dev: false
 
   /validator@9.4.1:
     resolution: {integrity: sha512-YV5KjzvRmSyJ1ee/Dm5UED0G+1L4GZnLN3w6/T+zZm8scVua4sOhYKWTUrKa0H/tMiJyO9QLHMPN+9mB/aMunA==}
@@ -22096,6 +22110,11 @@ packages:
     resolution: {integrity: sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==}
     engines: {node: '>=12.20'}
 
+  /yoctocolors@1.0.0:
+    resolution: {integrity: sha512-qJNAmSF77lWjfRVwCZK3PcKYWrr+55RUQTiXDxXHGbxzf8WuuRgftIB3hqZ5fykjOF/MC62cazsG/2ZDBedOnQ==}
+    engines: {node: '>=14.16'}
+    dev: true
+
   /z-schema@3.19.1:
     resolution: {integrity: sha512-jPNzqmOu3+AGbb4krDODqo4QBzwUGDVzyfGyy1HtWaUnafltQotatSpxxWd6Mp0iSZOUwHU5sqKYi+U8HsHMkg==}
     hasBin: true
@@ -22117,7 +22136,6 @@ packages:
       validator: 13.9.0
     optionalDependencies:
       commander: 2.20.3
-    dev: false
 
   /zod@3.21.4:
     resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}

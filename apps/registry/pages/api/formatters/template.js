@@ -1,12 +1,11 @@
-import { render as standard } from 'jsonresume-theme-standard';
-import { render as full } from 'jsonresume-theme-full';
-import { render as onepage } from 'jsonresume-theme-onepage';
-import { render as onepageplus } from 'jsonresume-theme-onepage-plus';
-import { render as spartacus } from 'jsonresume-theme-spartacus';
-import { render as flat } from 'jsonresume-theme-flat';
-import { render as papirus } from 'jsonresume-theme-papirus';
-
-import { render as stackoverflow } from '@jsonresume/theme-stackoverflow';
+import * as standard from 'jsonresume-theme-standard';
+import * as full from 'jsonresume-theme-full';
+import * as onepage from 'jsonresume-theme-onepage';
+import * as onepageplus from 'jsonresume-theme-onepage-plus';
+import * as spartacus from 'jsonresume-theme-spartacus';
+import * as flat from 'jsonresume-theme-flat';
+import * as papirus from 'jsonresume-theme-papirus';
+import * as stackoverflow from '@jsonresume/theme-stackoverflow';
 
 export const THEMES = {
   ace: require('jsonresume-theme-ace'),
@@ -14,8 +13,8 @@ export const THEMES = {
   autumn: require('jsonresume-theme-autumn'),
   cora: require('jsonresume-theme-cora'),
   elegant: require('jsonresume-theme-elegant'),
-  full: { render: full },
-  flat: { render: flat },
+  full,
+  flat,
   'el-santo': require('jsonresume-theme-el-santo'),
   even: require('jsonresume-theme-even'),
   github: require('jsonresume-theme-github'),
@@ -29,12 +28,12 @@ export const THEMES = {
   minyma: require('jsonresume-theme-minyma'),
   msresume: require('jsonresume-theme-msresume'),
   one: require('jsonresume-theme-one'),
-  onepage: { render: onepage },
-  'onepage-plus': { render: onepageplus },
+  onepage,
+  'onepage-plus': onepageplus,
   onepageresume: require('jsonresume-theme-onepageresume'),
   orbit: require('jsonresume-theme-orbit'),
   paper: require('jsonresume-theme-paper'),
-  papirus: { render: papirus },
+  papirus,
   'paper-plus-plus': require('jsonresume-theme-paper-plus-plus'),
   pumpkin: require('jsonresume-theme-pumpkin'),
   relaxed: require('jsonresume-theme-relaxed'),
@@ -42,10 +41,10 @@ export const THEMES = {
   'simple-red': require('jsonresume-theme-simple-red'),
   rickosborne: require('jsonresume-theme-rickosborne'),
   spartan: require('jsonresume-theme-spartan'),
-  spartacus: { render: spartacus },
+  spartacus,
   stackoverflowed: require('jsonresume-theme-stackoverflowed'),
-  standard: { render: standard },
-  stackoverflow: { render: stackoverflow },
+  standard,
+  stackoverflow,
   'standard-resume': require('jsonresume-theme-standard-resume'),
   'tan-responsive': require('jsonresume-theme-tan-responsive'),
   techlead: require('jsonresume-theme-techlead'),
