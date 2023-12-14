@@ -129,8 +129,8 @@ importers:
         specifier: ^0.2.1
         version: 0.2.1
       jsonresume-theme-minyma:
-        specifier: ^0.0.2
-        version: 0.0.2
+        specifier: ^0.0.4
+        version: 0.0.4
       jsonresume-theme-mocha-responsive:
         specifier: ^1.1.1
         version: 1.1.1
@@ -140,6 +140,12 @@ importers:
       jsonresume-theme-one:
         specifier: ^0.0.1
         version: 0.0.1
+      jsonresume-theme-onepage:
+        specifier: '*'
+        version: link:../../packages/jsonresume-theme-onepage
+      jsonresume-theme-onepage-plus:
+        specifier: '*'
+        version: link:../../packages/jsonresume-theme-onepage-plus
       jsonresume-theme-onepageresume:
         specifier: ^0.0.6
         version: 0.0.6
@@ -305,6 +311,21 @@ importers:
       sass:
         specifier: ^1.44.0
         version: 1.62.0
+
+  packages/jsonresume-theme-onepage:
+    dependencies:
+      css:
+        specifier: 2.2.x
+        version: 2.2.4
+      handlebars:
+        specifier: ^4
+        version: 4.7.8
+
+  packages/jsonresume-theme-onepage-plus:
+    dependencies:
+      handlebars:
+        specifier: latest
+        version: 4.7.8
 
   packages/jsonresume-theme-papirus:
     dependencies:
@@ -14860,8 +14881,8 @@ packages:
       - supports-color
     dev: false
 
-  /jsonresume-theme-minyma@0.0.2:
-    resolution: {integrity: sha512-hQxBsxE2aLKmr5Kei8BI2QO2n7aKjchvA9x4d5RjbAnplnK2JNRbAgGJ+RFIX6o609xLdubX1HsrrncZoo1HCw==}
+  /jsonresume-theme-minyma@0.0.4:
+    resolution: {integrity: sha512-C+5q4PCKCH2UYs2Ha74QNO7CW4WWwb383CsNVBWML8a7SJoGd7udYOkA+5YSp8GgvmHes3lUtqjn6wXbyhc7Kw==}
     dependencies:
       handlebars: 4.7.7
     dev: false
