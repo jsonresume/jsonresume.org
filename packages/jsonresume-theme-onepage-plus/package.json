@@ -1,0 +1,14 @@
+{
+  "name": "jsonresume-theme-onepage-plus",
+  "version": "1.0.0",
+  "description": "An update of the onepage theme (a compact theme for JSON Resume, designed for printing).",
+  "author": "Daniel A. Rodríguez Caballero & Veli K. Celik",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vkcelik/jsonresume-theme-onepage-plus"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "handlebars": "latest"
+  }
+}

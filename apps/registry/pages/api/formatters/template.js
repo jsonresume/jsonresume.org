@@ -1,5 +1,7 @@
 import { render as standard } from 'jsonresume-theme-standard';
 import { render as full } from 'jsonresume-theme-full';
+import { render as onepage } from 'jsonresume-theme-onepage';
+import { render as onepageplus } from 'jsonresume-theme-onepage-plus';
 import { render as spartacus } from 'jsonresume-theme-spartacus';
 import { render as flat } from 'jsonresume-theme-flat';
 import { render as papirus } from '@jsonresume/theme-papirus';
@@ -25,12 +27,15 @@ export const THEMES = {
   minyma: require('jsonresume-theme-minyma'),
   msresume: require('jsonresume-theme-msresume'),
   one: require('jsonresume-theme-one'),
+  onepage: { render: onepage },
+  'onepage-plus': { render: onepageplus },
   onepageresume: require('jsonresume-theme-onepageresume'),
   orbit: require('jsonresume-theme-orbit'),
   paper: require('jsonresume-theme-paper'),
   papirus: { render: papirus },
   'paper-plus-plus': require('jsonresume-theme-paper-plus-plus'),
   pumpkin: require('jsonresume-theme-pumpkin'),
+  relaxed: require('jsonresume-theme-relaxed'),
   rocketspacer: require('jsonresume-theme-rocketspacer'),
   'simple-red': require('jsonresume-theme-simple-red'),
   rickosborne: require('jsonresume-theme-rickosborne'),
