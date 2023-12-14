@@ -68,7 +68,7 @@ const format = async function (resume, options) {
     throw new Error('theme-missing');
   }
 
-  const resumeHTML = await themeRenderer.render(resume);
+  const resumeHTML = themeRenderer.render(resume);
 
   return {
     content: resumeHTML,
