@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "jsonresume-theme-spartacus",
   "version": "1.0.0",
   "description": "Spartacus theme for JSON Resume",

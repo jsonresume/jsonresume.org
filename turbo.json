@@ -6,7 +6,8 @@
       "cache": false
     },
     "build": {
-      "outputs": [".next/**", "!.next/cache/**", "_site/**"]
+      "outputs": [".next/**", "!.next/cache/**", "_site/**"],
+      "dependsOn": ["^build"]
     },
     "lint": {},
     "//#format": {},

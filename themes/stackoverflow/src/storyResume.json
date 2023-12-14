@@ -1,0 +1,364 @@
+{
+  "basics": {
+    "name": "Samantha Jones",
+    "label": "Software Developer",
+    "image": "profile.jpeg",
+    "email": "samantha.jones@email.com",
+    "phone": "(555) 555-5555",
+    "url": "https://www.samanthajones.com",
+    "summary": "Experienced software developer with a passion for developing innovative solutions that improve user experiences.",
+    "location": {
+      "address": "123 Main St.",
+      "postalCode": "12345",
+      "city": "Anytown",
+      "countryCode": "US",
+      "region": "Any State"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "sjones",
+        "url": "https://github.com/sjones"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "samanthajones",
+        "url": "https://www.linkedin.com/in/samanthajones"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Acme Inc.",
+      "position": "Software Developer",
+      "website": "https://www.acme.com",
+      "startDate": "2018-06-01",
+      "endDate": "2022-05-31",
+      "summary": "Developed and maintained a web application for tracking customer orders and inventory using React, Node.js, and PostgreSQL.",
+      "highlights": [
+        "Implemented real-time order tracking feature using WebSockets.",
+        "Optimized database queries to improve application performance by 30%."
+      ],
+      "keywords": ["nodejs", "TypeScript", "go", "aws"]
+    },
+    {
+      "name": "XYZ Corp.",
+      "position": "Software Engineer",
+      "website": "https://www.xyz.com",
+      "startDate": "2016-01-01",
+      "endDate": "2018-05-31",
+      "summary": "Developed and maintained a mobile application for managing personal finances using React Native and Firebase.",
+      "highlights": [
+        "Implemented biometric authentication feature using Touch ID and Face ID.",
+        "Integrated third-party APIs to allow users to view their account balances from multiple financial institutions."
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Cat Chat",
+      "startDate": "2019-06",
+      "endDate": "2019-07",
+      "url": "https://example.com/cat-chat",
+      "keywords": ["chat", "cats", "humor"],
+      "description": "A chat application for cats, complete with emojis of mice, birds, and fish. Meow-sages never looked so cute!",
+      "highlights": [
+        "Implemented realtime chat using WebSocket technology",
+        "Created custom cat-themed emojis using Adobe Illustrator"
+      ]
+    },
+    {
+      "name": "Nacho Tracker",
+      "startDate": "2020-05",
+      "endDate": "2020-07",
+      "url": "https://example.com/nacho-tracker",
+      "keywords": ["nachos", "tracking", "snacks"],
+      "description": "An app for tracking the location of your nachos. Never lose sight of your favorite snack again!",
+      "highlights": [
+        "Built a RESTful API using Node.js and Express",
+        "Designed a responsive UI with Bootstrap"
+      ]
+    },
+    {
+      "name": "Reverse Alarm Clock",
+      "startDate": "2021-01",
+      "endDate": "2021-02",
+      "url": "https://example.com/reverse-alarm-clock",
+      "keywords": ["clock", "time", "reverse"],
+      "description": "An alarm clock that wakes you up by setting the time to the moment you fell asleep. Who needs a snooze button?",
+      "highlights": [
+        "Developed the algorithm for calculating sleep time using JavaScript",
+        "Integrated with Google Calendar API for scheduling"
+      ]
+    }
+  ],
+  "publications": [
+    {
+      "name": "The Ultimate Guide to Becoming a Cat Lady",
+      "publisher": "Cat Fancy Magazine",
+      "releaseDate": "2022-01-01",
+      "url": "https://example.com/cat-lady-book",
+      "summary": "This comprehensive guide provides everything you need to know about becoming a cat lady, from selecting the perfect feline companion to building a cat-friendly home."
+    },
+    {
+      "name": "Cooking with Cacti",
+      "publisher": "Desert Living Magazine",
+      "releaseDate": "2021-05-15",
+      "keywords": ["cacti", "cooking", "recipe"],
+      "summary": "Discover the unique and delicious flavors of cacti with this collection of mouth-watering recipes, ranging from cactus tacos to prickly pear margaritas."
+    },
+    {
+      "name": "The Art of Soap Carving",
+      "publisher": "Crafts Monthly",
+      "releaseDate": "2020-08-01",
+      "keywords": ["soap carving", "crafts", "art"],
+      "summary": "Learn the fascinating and intricate art of soap carving, from selecting the perfect bar of soap to creating stunning designs and patterns."
+    },
+    {
+      "name": "The History of Underwater Basket Weaving",
+      "publisher": "Anthropology Quarterly",
+      "releaseDate": "2019-12-01",
+      "keywords": ["basket weaving", "underwater", "history"],
+      "summary": "Explore the ancient practice of underwater basket weaving, tracing its origins from ancient civilizations to modern times, and the impact it has had on human culture and society."
+    },
+    {
+      "name": "The Science of Surfing",
+      "publisher": "Surfing Magazine",
+      "releaseDate": "2018-06-01",
+      "keywords": ["surfing", "science", "oceanography"],
+      "summary": "Dive deep into the science of surfing, examining the physics, oceanography, and meteorology behind this thrilling and exhilarating sport."
+    }
+  ],
+  "education": [
+    {
+      "institution": "University of California, Berkeley",
+      "area": "Computer Science",
+      "studyType": "Bachelor",
+      "startDate": "2013-08-01",
+      "endDate": "2017-05-01",
+      "score": "3.7",
+      "courses": [
+        "Data Structures and Algorithms",
+        "Computer Networks",
+        "Database Systems",
+        "Artificial Intelligence"
+      ]
+    },
+    {
+      "institution": "Stanford University",
+      "area": "Artificial Intelligence",
+      "studyType": "Master",
+      "startDate": "2017-08-01",
+      "endDate": "2019-05-01",
+      "score": "3.9",
+      "courses": [
+        "Machine Learning",
+        "Natural Language Processing",
+        "Computer Vision",
+        "Advanced Robotics"
+      ]
+    },
+    {
+      "institution": "Harvard University",
+      "area": "Economics",
+      "studyType": "Bachelor",
+      "startDate": "2010-08-01",
+      "endDate": "2014-05-01",
+      "score": "3.8",
+      "courses": [
+        "Microeconomics",
+        "Macroeconomics",
+        "International Trade",
+        "Econometrics"
+      ]
+    },
+    {
+      "institution": "Massachusetts Institute of Technology",
+      "area": "Electrical Engineering and Computer Science",
+      "studyType": "PhD",
+      "startDate": "2020-08-01",
+      "score": "4.0",
+      "courses": [
+        "Algorithms",
+        "Distributed Systems",
+        "Computer Architecture",
+        "Programming Languages"
+      ]
+    }
+  ],
+  "volunteer": [
+    {
+      "organization": "Local Animal Shelter",
+      "position": "Volunteer",
+      "url": "https://www.localanimalshelter.com",
+      "startDate": "2019-01-01",
+      "endDate": "2020-12-31",
+      "summary": "Assisted with daily operations of the shelter, including feeding and caring for animals, cleaning cages and kennels, and providing customer service to visitors.",
+      "highlights": [
+        "Trained and mentored new volunteers on proper animal care techniques.",
+        "Organized and led fundraising events to support the shelter's mission."
+      ]
+    },
+    {
+      "organization": "City Soup Kitchen",
+      "position": "Soup Kitchen Volunteer",
+      "url": "https://www.citysoupkitchen.com",
+      "startDate": "2018-03-01",
+      "endDate": "2018-06-30",
+      "summary": "Assisted with preparing and serving meals to homeless and low-income individuals in the community.",
+      "highlights": [
+        "Developed strong relationships with regular guests and provided emotional support and resources to those in need.",
+        "Collaborated with other volunteers to improve efficiency and organization of kitchen operations."
+      ]
+    },
+    {
+      "organization": "Global Health Corps",
+      "position": "Fellow",
+      "url": "https://www.globalhealthcorps.org",
+      "startDate": "2016-07-01",
+      "endDate": "2017-06-30",
+      "summary": "Collaborated with local health organizations in Malawi to develop and implement community health programs focused on maternal and child health.",
+      "highlights": [
+        "Designed and conducted community needs assessments to identify gaps in health services and resources.",
+        "Developed and delivered trainings to local health workers and community members on topics such as family planning, nutrition, and hygiene."
+      ]
+    }
+  ],
+
+  "awards": [
+    {
+      "title": "Best Employee of the Year",
+      "awarder": "ABC Company",
+      "date": "2022-01-01",
+      "summary": "Recognized for outstanding performance and contributions to the team."
+    },
+    {
+      "title": "Excellence in Customer Service",
+      "awarder": "XYZ Association",
+      "date": "2021-05-01",
+      "summary": "Received award for consistently delivering exceptional customer service and satisfaction."
+    }
+  ],
+  "skills": [
+    {
+      "name": "JavaScript",
+      "level": "Master"
+    },
+    {
+      "name": "React",
+      "level": "Master"
+    },
+    {
+      "name": "Node.js",
+      "level": "Master"
+    },
+    {
+      "name": "HTML",
+      "level": "Master"
+    },
+    {
+      "name": "CSS",
+      "level": "Master"
+    },
+    {
+      "name": "SQL",
+      "level": "Intermediate"
+    },
+    {
+      "name": "Java",
+      "level": "Intermediate"
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Native speaker"
+    },
+    {
+      "language": "Spanish",
+      "fluency": "Intermediate"
+    }
+  ],
+
+  "certificates": [
+    {
+      "name": "React Developer Certification",
+      "issuer": "React University",
+      "date": "2021-10-01",
+      "url": "https://www.reactuniversity.com/certificates/react-developer"
+    },
+    {
+      "name": "AWS Certified Solutions Architect",
+      "issuer": "Amazon Web Services",
+      "date": "2021-07-15",
+      "url": "https://www.aws.training/certification/digital-badges/verify?blablabla"
+    },
+    {
+      "name": "Certified Scrum Master",
+      "issuer": "Scrum Alliance",
+      "date": "2021-04-01",
+      "url": "https://www.scrumalliance.org/certifications/practitioners/certified-scrummaster-csm"
+    },
+    {
+      "name": "Google Analytics Individual Qualification",
+      "issuer": "Google",
+      "date": "2020-09-01",
+      "url": "https://analytics.google.com/analytics/academy/course/6"
+    },
+    {
+      "name": "Certified Information Systems Security Professional (CISSP)",
+      "issuer": "International Information System Security Certification Consortium",
+      "date": "2019-12-01",
+      "url": "https://www.isc2.org/Certifications/CISSP"
+    }
+  ],
+  "interests": [
+    {
+      "name": "Photography",
+      "keywords": ["landscape", "portrait", "street"],
+      "summary": "I love taking photos of landscapes, people and architecture in my spare time."
+    },
+    {
+      "name": "Hiking",
+      "keywords": ["mountains", "trails", "nature"],
+      "summary": "I enjoy exploring the outdoors and discovering new hiking trails with beautiful views."
+    },
+    {
+      "name": "Cooking",
+      "keywords": ["Italian cuisine", "baking", "grilling"],
+      "summary": "I am passionate about experimenting with new recipes and techniques in the kitchen."
+    },
+    {
+      "name": "Travel",
+      "keywords": ["culture", "food", "history"],
+      "summary": "I love learning about new cultures and trying local cuisine while traveling to new places."
+    },
+    {
+      "name": "Music",
+      "keywords": ["jazz", "blues", "rock"],
+      "summary": "I enjoy listening to a variety of genres and attending concerts and festivals when possible."
+    }
+  ],
+  "references": [
+    {
+      "name": "John Doe",
+      "reference": "I have had the pleasure of working with Samantha on multiple projects, and she consistently delivers high-quality work on time and on budget. His attention to detail and ability to communicate effectively make him an asset to any team."
+    },
+    {
+      "name": "Jane Smith",
+      "reference": "I highly recommend Samantha for any position she may apply for. She is a skilled communicator and problem solver, and she always goes above and beyond to ensure that her work is of the highest quality."
+    },
+    {
+      "name": "Bob Johnson",
+      "reference": "Samantha is an excellent team player who is always willing to lend a helping hand. His positive attitude and strong work ethic make him a pleasure to work with, and I highly recommend him for any position he may seek."
+    },
+    {
+      "name": "Samantha Lee",
+      "reference": "Samantha [Jones] is an outstanding employee who consistently exceeds expectations. She is detail-oriented, organized, and highly skilled in her field. I highly recommend her for any position she may apply for."
+    },
+    {
+      "name": "Tom Wilson",
+      "reference": "Samantha is an exceptional leader who inspires his team to work towards a common goal. She is a creative problem solver and an excellent communicator. I highly recommend him for any leadership position he may seek."
+    }
+  ]
+}

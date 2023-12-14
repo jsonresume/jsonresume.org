@@ -1,5 +1,5 @@
-import { OpenAIStream } from './openAIStream';
 import prisma from '../../lib/prisma';
+import { OpenAIStream } from './openAIStream';
 
 if (!process.env.OPENAI_API_KEY) {
   throw new Error('Missing env var from OpenAI');
