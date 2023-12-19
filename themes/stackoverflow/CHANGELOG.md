@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.1.1
+
+### Patch Changes
+
+- b20e0e3: A release to test the publication automation.
+
 ## [2.1.0](https://github.com/levino/jsonresume-theme-stackoverflow-react/compare/v2.0.5...v2.1.0) (2023-06-09)
 
 ### Features
