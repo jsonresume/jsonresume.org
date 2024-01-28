@@ -17,6 +17,7 @@ const Resume = ({ resume }) => {
       <Basics basics={resume.basics} />
       <Work work={resume.work} />
       <Projects projects={resume.projects} />
+      <Projects projects={resume.projects} />
       <style
         dangerouslySetInnerHTML={{
           __html: `

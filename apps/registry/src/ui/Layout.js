@@ -8,8 +8,6 @@ const Container = styled.div`
   width: 100vw;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
 `;
 
 const HeaderContainer = styled.div`
@@ -60,6 +58,13 @@ const Links = styled.div`
     }
   }
 `;
+
+const Content = styled.div`
+  max-width: 800px;
+  margin: auto;
+  margin-top: 80px;
+`;
+
 export default function Layout({ children }) {
   const router = useRouter();
   const parts = router.asPath.split('/');
@@ -71,7 +76,7 @@ export default function Layout({ children }) {
         <Header>
           <HeaderContainer>
             <Logo href="https://jsonresume.org" target="__blank">
-              JSON Resume
+              JSON Resume AI
             </Logo>
             <Links>
               <Link href={`/${username}/jobs`}>Jobs</Link>
@@ -81,7 +86,7 @@ export default function Layout({ children }) {
             </Links>
           </HeaderContainer>
         </Header>
-        <div>{children}</div>
+        <Content>{children}</Content>
       </Container>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" />
@@ -89,7 +94,7 @@ export default function Layout({ children }) {
       <script
         async
         data-id="101412887"
-        src="//static.getclicky.com/js"
+        src="https://static.getclicky.com/js"
       ></script>
       <noscript>
         <p>
@@ -97,7 +102,7 @@ export default function Layout({ children }) {
             alt="Clicky"
             width="1"
             height="1"
-            src="//in.getclicky.com/101412887ns.gif"
+            src="https://in.getclicky.com/101412887ns.gif"
           />
         </p>
       </noscript>
