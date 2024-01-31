@@ -14,7 +14,7 @@ const Button = styled.button`
 
   &:hover {
     background: #ce2424;
-    border: 2px px solid #ce2424;
+    border: 2px solid #ce2424;
     color: #fff;
     -webkit-transition: all 0.25s;
     transition: all 0.25s;
@@ -22,7 +22,7 @@ const Button = styled.button`
 
   &:disabled {
     background: #ccc;
-    border: 2px px solid #ccc;
+    border: 2px solid #ccc;
     color: #fff;
     -webkit-transition: all 0.25s;
     transition: all 0.25s;
