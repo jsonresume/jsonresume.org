@@ -14,7 +14,9 @@ export default function Component({ onChange, options }) {
     <>
       <Dropdown onChange={onChange}>
         {options.map((option) => (
-         <option key={option.value} value={option.value}>{option.label}</option>
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
         ))}
       </Dropdown>
     </>
