@@ -5,27 +5,33 @@ import Layout from '../src/ui/Layout';
 import Button from '../src/ui/Button';
 import Dropdown from '../src/ui/Dropdown';
 import styled from 'styled-components';
+import ReactMarkdown from 'react-markdown';
 
 /*
 #todo
   - do type as the stream
 
 */
-
 const Hero = styled.div`
-  margin-bottom: 20px;
+  margin-bottom: 40px;
+  color: #555;
+  text-align: center;
+  font-family: Lato;
+  font-size: 22px;
 `;
 
 const ButtonGroup = styled.div`
   display: flex;
   justify-content: space-between;
   margin: auto;
-  margin-top: 20px;
 `;
 
-const Label = styled.div`
+const Label = styled.label`
   font-size: 16px;
+  color: #555;
   font-weight: bold;
+  margin-bottom: 10px;
+  display: block;
 `;
 
 const JobDescription = styled.textarea`
@@ -35,17 +41,14 @@ const JobDescription = styled.textarea`
   border-radius: 5px;
   padding: 10px;
   font-size: 14px;
+  margin-bottom: 20px;
 `;
 
 const Paper = styled.div`
-  width: 100%;
-  height: 500px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  padding: 10px;
-  font-size: 14px;
-  overflow: scroll;
-  background: #efefef;
+  padding: 10px 40px;
+  background: #fff;
 `;
 
 export default function Letter() {
@@ -78,7 +81,7 @@ export default function Letter() {
           });
 
           let letter = response.data;
-          letter = letter.replace(/(?:\r\n|\r|\n)/g, '<br>');
+          // letter = letter.replace(/(?:\r\n|\r|\n)/g, '<br>');
 
           setLetter(letter);
           setSubmitting(false);
@@ -98,13 +101,11 @@ export default function Letter() {
 
   return (
     <Layout>
-      <Hero style={{ fontSize: 20 }}>
-        Explain the basic concept of this in a cool font. Yada bing bada boom.
-        Lorem isum the joker stood there and his jokes began. Or if you want to
-        use this and if it works.
+      <Hero>
+        Combines the users resume.json with the job description below to
+        generate a cover letter in the tonality specified
       </Hero>
       <Label>Job Description (optional)</Label>
-      <br />
       <JobDescription onChange={saveJobDescription} value={jobDescription} />
       <Label>Tonality</Label>
       <ButtonGroup>
@@ -140,8 +141,11 @@ export default function Letter() {
         </Button>
       </ButtonGroup>
       <br />
-      {!letter && <div>Loading...</div>}
-      {letter && <Paper>{letter}</Paper>}
+      {letter && (
+        <Paper>
+          <ReactMarkdown>{letter}</ReactMarkdown>
+        </Paper>
+      )}
     </Layout>
   );
 }

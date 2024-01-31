@@ -41,7 +41,9 @@ export default async function handler(req, res) {
 
   let prompt = [
     `
-  Hi there, this is my resume in the JSON format.
+You are a human candidate for a job. Read the supplied resume and pretend you are that person. Your resume has been supplied to them.
+
+This is your resume in the JSON format. Reference it for the cover letter.
 
   ${data}
 
@@ -57,8 +59,11 @@ export default async function handler(req, res) {
     `);
   }
 
-  prompt.push(`Using a ${tone} tonality. `);
-  prompt.push('Please write me a cover letter');
+  prompt.push(
+    `Using a ${tone} tonality. Format your response using Markdown. Don't be afraid to name your lack of experience the candidate might have but focus on your strengths. Keep it two a couple short paragraphs only 300 words.`
+  );
+
+  prompt.push('Please write a short cover letter');
 
   console.log({ tone });
 

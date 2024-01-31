@@ -90,7 +90,16 @@ export default function Layout({ children }) {
       </Container>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" />
-
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Ubuntu:400,500,700"
+        defer
+      />{' '}
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Lato:300,500,700"
+        defer
+      />
       <script
         async
         data-id="101412887"
