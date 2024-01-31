@@ -133,3 +133,10 @@ This is a very simple service that prompts GPT with your resume and asks to gene
 This is an implementation of a chat bot, your resume is injected, and the conversation is included in the prompt. So you can interview your self or talk as if you were being interviewed.
 
 [http://localhost:3002/thomasdavis/interview](http://localhost:3002/thomasdavis/interview)
+
+# todo
+
+- AI tools
+  - add an option to use your own key
+  - add a footer
+  - change the url pattern to be ai.jsonresume.org/thomasdavis etc
