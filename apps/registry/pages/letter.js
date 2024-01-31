@@ -92,7 +92,7 @@ export default function Letter() {
 
       fetchData();
     }
-  }, [username, submitting]);
+  }, [username, submitting, jobDescription, tone]);
 
   const handleGenerate = () => {
     console.log('clickeed');
