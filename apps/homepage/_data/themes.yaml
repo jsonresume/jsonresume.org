@@ -22,6 +22,12 @@
   author: ObserverOfTime
   link: https://github.com/ObserverOfTime
 
+- name: Stack Overflow
+  slug: stackoverflow
+  github:
+  author:
+  link:
+
 - name: Rickosborne
   slug: rickosborne
   github:
@@ -36,6 +42,12 @@
 
 - name: One Page Plus
   slug: onepage-plus
+  github:
+  author:
+  link:
+
+- name: Paper
+  slug: paper-plus-plus
   github:
   author:
   link:
