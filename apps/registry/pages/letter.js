@@ -43,8 +43,8 @@ export default function Letter() {
       ? window?.localStorage?.getItem('jobDescription')
       : ''
   );
-  const [tone, setTone] = useState('formal');
 
+  const [tone, setTone] = useState('formal');
   const [letter, setLetter] = useState(null);
 
   const saveJobDescription = (event) => {
@@ -76,7 +76,6 @@ export default function Letter() {
   }, [username, submitting, jobDescription, tone]);
 
   const handleGenerate = () => {
-    console.log('clickeed');
     setSubmitting(true);
   };
 

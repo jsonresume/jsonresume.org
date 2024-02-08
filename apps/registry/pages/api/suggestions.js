@@ -2,7 +2,7 @@ const { Client } = require('pg');
 import { ChatGPTAPI } from 'chatgpt';
 
 export default async function handler(req, res) {
-  const { username } = req.body;
+  const { username, focus } = req.body;
 
   const client = new Client(process.env.DATABASE_URL_RAW);
   await client.connect();
@@ -37,6 +37,7 @@ export default async function handler(req, res) {
 
   Do not give general tips. Be as specific about my actual resume as possible.
   
+  Focus on ${focus}
   `;
 
   const res2 = await api.sendMessage(prompt);

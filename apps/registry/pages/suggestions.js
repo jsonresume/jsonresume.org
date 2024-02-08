@@ -1,4 +1,5 @@
 import axios from 'axios';
+import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Layout from '../src/ui/Layout';
@@ -8,59 +9,67 @@ import ButtonGroup from '../src/ui/ButtonGroup';
 import Dropdown from '../src/ui/Dropdown';
 import Button from '../src/ui/Button';
 
-export default function Talk() {
+const Paper = styled.div`
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px 40px;
+  background: #fff;
+`;
+
+export default function Suggestions() {
   const router = useRouter();
   const parts = router.asPath.split('/');
   const username = parts[1];
 
+  const [submitting, setSubmitting] = useState(false);
+  const [focus, setFocus] = useState('general');
   const [suggestions, setSuggestions] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.post('/api/suggestions', {
-          username,
-        });
-        setSuggestions(response.data);
-      } catch (error) {
-        console.error('Error fetching data: ', error);
-      }
-    };
+    if (submitting) {
+      const fetchData = async () => {
+        try {
+          const response = await axios.post('/api/suggestions', {
+            username,
+            focus,
+          });
+          setSuggestions(response.data);
+          setSubmitting(false);
+        } catch (error) {
+          console.error('Error fetching data: ', error);
+        }
+      };
 
-    fetchData();
-  }, [username]);
+      fetchData();
+    }
+  }, [username, submitting]);
 
-  const submitting = false;
-  const handleGenerate = () => {};
+  const handleGenerate = () => {
+    setSubmitting(true);
+  };
 
   return (
     <Layout>
       <Hero>Generates suggestions to improve your resume</Hero>
-      <Label>Tonality</Label>
+      <Label>Focus</Label>
       <ButtonGroup>
         <div>
           <Dropdown
-            onChange={() => {}}
+            onChange={(e) => {
+              setFocus(e.target.value);
+            }}
             options={[
               {
-                label: 'Formal',
-                value: 'formal',
+                label: 'General',
+                value: 'general',
               },
               {
-                label: 'Casual',
-                value: 'casual',
+                label: 'Spelling',
+                value: 'spelling',
               },
               {
-                label: 'Sarcastic',
-                value: 'sarcastic',
-              },
-              {
-                label: 'Funny',
-                value: 'funny',
-              },
-              {
-                label: 'Professional',
-                value: 'professional',
+                label: 'Grammar',
+                value: 'grammar',
               },
             ]}
           />
@@ -69,18 +78,20 @@ export default function Talk() {
           {submitting ? 'GENERATING' : 'GENERATE'}
         </Button>
       </ButtonGroup>
-      {!suggestions && <div>Loading...</div>}
-      {suggestions && (
-        <pre
-          style={{
-            'white-space': 'pre-wrap',
-            width: '60%',
-            margin: 'auto',
-            'margin-top': '100px',
-          }}
-        >
-          {suggestions}
-        </pre>
+      <br />
+      {!submitting && suggestions && (
+        <Paper>
+          <pre
+            style={{
+              'white-space': 'pre-wrap',
+              width: '60%',
+              margin: 'auto',
+              'margin-top': '100px',
+            }}
+          >
+            {suggestions}
+          </pre>
+        </Paper>
       )}
     </Layout>
   );

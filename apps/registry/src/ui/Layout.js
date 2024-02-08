@@ -61,6 +61,7 @@ const Links = styled.div`
 
 const Content = styled.div`
   max-width: 800px;
+  min-width: 800px;
   margin: auto;
   margin-top: 80px;
 `;
