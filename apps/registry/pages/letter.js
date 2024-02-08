@@ -6,19 +6,13 @@ import Button from '../src/ui/Button';
 import Dropdown from '../src/ui/Dropdown';
 import styled from 'styled-components';
 import ReactMarkdown from 'react-markdown';
+import Hero from '../src/ui/Hero';
 
 /*
 #todo
   - do type as the stream
 
 */
-const Hero = styled.div`
-  margin-bottom: 40px;
-  color: #555;
-  text-align: center;
-  font-family: Lato;
-  font-size: 22px;
-`;
 
 const ButtonGroup = styled.div`
   display: flex;
@@ -81,7 +75,6 @@ export default function Letter() {
           });
 
           let letter = response.data;
-          // letter = letter.replace(/(?:\r\n|\r|\n)/g, '<br>');
 
           setLetter(letter);
           setSubmitting(false);

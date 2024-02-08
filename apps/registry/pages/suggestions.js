@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Layout from '../src/ui/Layout';
+import Hero from '../src/ui/Hero';
 
 export default function Talk() {
   const router = useRouter();
@@ -27,6 +28,7 @@ export default function Talk() {
 
   return (
     <Layout>
+      <Hero>Generates suggestions to improve your resume</Hero>
       {!suggestions && <div>Loading...</div>}
       {suggestions && (
         <pre
