@@ -7,26 +7,14 @@ import Dropdown from '../src/ui/Dropdown';
 import styled from 'styled-components';
 import ReactMarkdown from 'react-markdown';
 import Hero from '../src/ui/Hero';
+import Label from '../src/ui/Label';
+import ButtonGroup from '../src/ui/ButtonGroup';
 
 /*
 #todo
   - do type as the stream
 
 */
-
-const ButtonGroup = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin: auto;
-`;
-
-const Label = styled.label`
-  font-size: 16px;
-  color: #555;
-  font-weight: bold;
-  margin-bottom: 10px;
-  display: block;
-`;
 
 const JobDescription = styled.textarea`
   width: calc(100% - 30px);
