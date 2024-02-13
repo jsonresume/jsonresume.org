@@ -42,7 +42,7 @@ export default function Suggestions() {
 
       fetchData();
     }
-  }, [username, submitting]);
+  }, [username, submitting, focus]);
 
   const handleGenerate = () => {
     setSubmitting(true);
