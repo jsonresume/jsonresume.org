@@ -33,9 +33,9 @@ export default async function handler(req, res) {
 
   const api = new ChatGPTAPI({
     apiKey: process.env.OPENAI_API_KEY,
+    model: 'gpt-3.5-32k-turbo',
     completionParams: {
-      temperature: 0.9,
-      top_p: 0.8,
+      temperature: 0.85,
     },
   });
 
@@ -63,9 +63,11 @@ This is your resume in the JSON format. Reference it for the cover letter.
     `Using a ${tone} tonality. Format your response using Markdown. Don't be afraid to name your lack of experience the candidate might have but focus on your strengths. Keep it two a couple short paragraphs only 300 words.`
   );
 
-  prompt.push('Please write a short cover letter');
+  prompt.push(
+    'Please write a short cover letter. Make sure you write a cover letter.'
+  );
 
-  console.log({ tone });
+  console.log({ prompt });
 
   const res2 = await api.sendMessage(prompt.join(''));
 
