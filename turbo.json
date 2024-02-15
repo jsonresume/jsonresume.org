@@ -30,6 +30,7 @@
     "OPENAI_API_KEY",
     "PINECONE_API_KEY",
     "PINECONE_ENVIRONMENT",
-    "CI"
+    "CI",
+    "SUPABASE_KEY"
   ]
 }
