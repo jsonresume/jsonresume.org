@@ -1,6 +1,9 @@
-const { Client } = require('pg');
 import { ChatGPTAPI } from 'chatgpt';
+const { createClient } = require('@supabase/supabase-js');
 
+const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
+const supabaseKey = process.env.SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
 /*
 #todo
  - add an input box to post the job description
@@ -19,17 +22,14 @@ import { ChatGPTAPI } from 'chatgpt';
 export default async function handler(req, res) {
   const { username, jobDescription, tone } = req.body;
 
-  const client = new Client(process.env.DATABASE_URL_RAW);
-  await client.connect();
+  const { data } = await supabase
+    .from('resumes')
+    .select()
+    .eq('username', username);
 
-  const results = await client.query(
-    `SELECT username, resume, updated_at from resumes WHERE username = $1 ORDER BY updated_at DESC`,
-    [username]
-  );
+  const resume = JSON.parse(data[0].resume);
 
-  const resume = results.rows[0];
-
-  const data = JSON.stringify(resume);
+  const resumeString = JSON.stringify(resume);
 
   const api = new ChatGPTAPI({
     apiKey: process.env.OPENAI_API_KEY,
@@ -45,7 +45,7 @@ You are a human candidate for a job. Read the supplied resume and pretend you ar
 
 This is your resume in the JSON format. Reference it for the cover letter.
 
-  ${data}
+  ${resumeString}
 
   `,
   ];

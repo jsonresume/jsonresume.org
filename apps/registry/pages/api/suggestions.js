@@ -1,20 +1,21 @@
-const { Client } = require('pg');
+const { createClient } = require('@supabase/supabase-js');
 import { ChatGPTAPI } from 'chatgpt';
+
+const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
+const supabaseKey = process.env.SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 export default async function handler(req, res) {
   const { username, focus } = req.body;
 
-  const client = new Client(process.env.DATABASE_URL_RAW);
-  await client.connect();
+  const { data } = await supabase
+    .from('resumes')
+    .select()
+    .eq('username', username);
 
-  const results = await client.query(
-    `SELECT username, resume, updated_at from resumes WHERE username = $1 ORDER BY updated_at DESC`,
-    [username]
-  );
+  const resume = JSON.parse(data[0].resume);
 
-  const resume = results.rows[0];
-
-  const data = JSON.stringify(resume);
+  const resumeString = JSON.stringify(resume);
 
   const api = new ChatGPTAPI({
     apiKey: process.env.OPENAI_API_KEY,
@@ -27,7 +28,7 @@ export default async function handler(req, res) {
   const prompt = `
   Hi there, this is my resume in the JSON format.
 
-  ${data}
+  ${resumeString}
 
   Please give me detail suggestions on how to improve it e.g.
   - Bad spelling and grammar

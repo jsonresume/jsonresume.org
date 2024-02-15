@@ -1,4 +1,5 @@
 const sampleResume = require('./samples/resume');
+const { createClient } = require('@supabase/supabase-js');
 const find = require('lodash/find');
 const axios = require('axios');
 const Validator = require('jsonschema').Validator;
@@ -10,9 +11,11 @@ import tex from './formatters/tex';
 import json from './formatters/json';
 import yaml from './formatters/yaml';
 
-const { Client } = require('pg');
-
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+
+const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
+const supabaseKey = process.env.SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 if (!GITHUB_TOKEN && process.env.NODE_ENV !== 'development') {
   throw new Error('GITHUB_TOKEN is not set in environment variables');
@@ -147,24 +150,20 @@ ${JSON.stringify(validation.errors, null, 2)}
     );
   }
 
-  const client = new Client(process.env.DATABASE_URL_RAW);
-
   // @todo - using as a resume cache for extra features
   (async () => {
-    await client.connect();
-    try {
-      await client.query(
-        `INSERT INTO resumes (username, resume) VALUES ($1, $2)
-        ON CONFLICT (username) 
-        DO 
-          UPDATE SET resume = $2`,
-        [username, JSON.stringify(selectedResume)]
-      );
-    } catch (err) {
-      console.error('error executing query:', err);
-    } finally {
-      client.end();
-    }
+    const { data, error } = await supabase
+      .from('resumes')
+      .upsert(
+        {
+          username,
+          resume: JSON.stringify(selectedResume),
+          updated_at: new Date(),
+        },
+        { onConflict: 'username' }
+      )
+      .select();
+    console.log({ data, error });
   })();
 
   const options = { ...req.query, theme: realTheme, username };

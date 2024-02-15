@@ -1,18 +1,16 @@
 // @todo - shows a list of all cached github gists
 
-const { Client } = require('pg');
+const { createClient } = require('@supabase/supabase-js');
+
+const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
+const supabaseKey = process.env.SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
 const gravatar = require('gravatar');
 
 export default async function handler(req, res) {
-  const client = new Client(process.env.DATABASE_URL_RAW);
+  const { data } = await supabase.from('resumes').select();
 
-  await client.connect();
-
-  const results = await client.query(
-    `SELECT username, resume, updated_at from resumes ORDER BY updated_at DESC`
-  );
-
-  const resumes = results.rows.map((row) => {
+  const resumes = data.map((row) => {
     const resume = JSON.parse(row.resume);
     return {
       username: row.username,
