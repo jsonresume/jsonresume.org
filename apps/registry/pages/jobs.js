@@ -6,10 +6,6 @@ import ReactMarkdown from 'react-markdown';
 import styled from 'styled-components';
 import Layout from '../src/ui/Layout';
 
-function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
 const MessagesContainer = styled.div`
   background: #fbfbfb;
   max-width: 600px;
@@ -72,7 +68,7 @@ export default function Talk() {
               content = job.content.replace('</pre>', '');
               return (
                 <Message key={job.uuid}>
-                  <Name>{capitalizeFirstLetter(job.type)}</Name>
+                  <Name>=======================</Name>
                   <ReactMarkdown>
                     {NodeHtmlMarkdown.translate(content).replace('```', '')}
                   </ReactMarkdown>

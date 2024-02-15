@@ -13,8 +13,11 @@
   },
   "dependencies": {
     "@faker-js/faker": "^8.0.2",
+    "@jsonresume/theme-papirus": "workspace:*",
+    "@jsonresume/theme-stackoverflow": "workspace:*",
     "@pinecone-database/pinecone": "^0.1.6",
     "@prisma/client": "^4.15.0",
+    "@supabase/supabase-js": "^2.39.6",
     "async": "^3.2.4",
     "axios": "^1.3.6",
     "chatgpt": "^5.2.4",
@@ -53,7 +56,6 @@
     "jsonresume-theme-orbit": "^1.1.0",
     "jsonresume-theme-paper": "^0.5.0",
     "jsonresume-theme-paper-plus-plus": "^0.5.1",
-    "@jsonresume/theme-papirus": "workspace:*",
     "jsonresume-theme-pumpkin": "^1.1.4",
     "jsonresume-theme-relaxed": "^0.1.8",
     "jsonresume-theme-rickosborne": "2022.9.16-T1450",
@@ -82,7 +84,6 @@
     "react-markdown": "^8.0.7",
     "resume-schema": "^1.0.0",
     "styled-components": "^6",
-    "@jsonresume/theme-stackoverflow": "workspace:*",
     "ui": "workspace:*",
     "uuid": "^9.0.0"
   },

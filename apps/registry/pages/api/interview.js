@@ -1,5 +1,9 @@
-import prisma from '../../lib/prisma';
 import { OpenAIStream } from './openAIStream';
+const { createClient } = require('@supabase/supabase-js');
+
+const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
+const supabaseKey = process.env.SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 if (!process.env.OPENAI_API_KEY) {
   throw new Error('Missing env var from OpenAI');
@@ -10,7 +14,7 @@ export const config = {
 };
 
 const SYSTEM_PROMPT = {
-  interviewer: `You are a human candidate for a job. Read the supplied resume and pretend you are that person. Your resume has been supplied to them. You are being interviewed by the interviewer. Answer the questions seriously and professionally. Try to be light hearted though to show your human side
+  interviewer: `You are a human candidate for a web developer job. Read the supplied resume and pretend you are that person. Your resume has been supplied to them. You are being interviewed by the interviewer. Answer the questions seriously and professionally. Try to be light hearted though to show your human side
     
   You are trying to get the job.
 
@@ -27,11 +31,12 @@ Do not apologize when you don't understand them or when you ask them to repeat t
 export default async function handler(req) {
   const { prompt, position, messages, username } = await req.json();
 
-  const resume = await prisma.resumes.findUnique({
-    where: {
-      username,
-    },
-  });
+  const { data } = await supabase
+    .from('resumes')
+    .select()
+    .eq('username', username);
+
+  const resume = JSON.parse(data[0].resume);
 
   if (!prompt) {
     return new Response('No prompt in the request', { status: 400 });
@@ -55,7 +60,7 @@ export default async function handler(req) {
   }:`;
 
   const payload = {
-    model: 'text-davinci-003',
+    model: 'gpt-3.5-turbo-instruct',
     prompt: `
     ${SYSTEM_PROMPT[position]}
     For context, here is the resume in question: ${JSON.stringify(resume)}
