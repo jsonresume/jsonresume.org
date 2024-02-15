@@ -11,4 +11,3 @@ A bunch of scripts to facilitate scraping, storing and creating vectors for jobs
 5. Generate embeddings for job posts and store in pinecone
 6. Set up a cronjob on vercel to run this every 14 days
    - try to sync with the day of month hn creates the thread
-     a
