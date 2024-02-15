@@ -262,7 +262,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  github-pages (~> 219)
+  github-pages
   webrick (~> 1.8)
 
 RUBY VERSION
