@@ -1,4 +1,6 @@
 source 'https://rubygems.org'
+
+ruby "~> 3.2.1"
 gem "github-pages", "~> 219", group: :jekyll_plugins
 
 gem "webrick", "~> 1.8"
