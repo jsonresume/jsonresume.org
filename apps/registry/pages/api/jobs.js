@@ -31,6 +31,10 @@ export default async function handler(req, res) {
       skills: resume.skills,
       work: resume.work,
       summary: resume.summary,
+      education: resume.education,
+      awards: resume.awards,
+      basics: resume.basics,
+      interests: resume.interests,
     }),
   });
 
@@ -47,8 +51,12 @@ export default async function handler(req, res) {
   const { data: documents } = await supabase.rpc('match_jobs', {
     query_embedding: embedding,
     match_threshold: 0.78, // Choose an appropriate threshold for your data
-    match_count: 10, // Choose the number of matches
+    match_count: 20, // Choose the number of matches
   });
 
-  return res.status(200).send(documents);
+  const jobIds = documents.map((doc) => doc.id);
+
+  const { data: jobs } = await supabase.from('jobs').select().in('id', jobIds);
+
+  return res.status(200).send(jobs);
 }

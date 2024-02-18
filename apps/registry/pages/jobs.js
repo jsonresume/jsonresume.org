@@ -1,10 +1,9 @@
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { NodeHtmlMarkdown } from 'node-html-markdown';
 import { useEffect, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
 import styled from 'styled-components';
 import Layout from '../src/ui/Layout';
+import Link from 'next/link';
 
 const MessagesContainer = styled.div`
   background: #fbfbfb;
@@ -24,14 +23,6 @@ const Message = styled.div`
   background: #fbfbfb;
   padding: 0 20px;
   margin-bottom: 10px;
-`;
-
-const Name = styled.span`
-  font-weight: 600;
-  flex: 0 0 100px;
-  display: inline-block;
-  text-align: right;
-  margin-right: 5px;
 `;
 
 export default function Talk() {
@@ -62,16 +53,48 @@ export default function Talk() {
         <Messages>
           {jobs &&
             jobs.map((job) => {
-              let content = job.content.replace('<code>', '');
-              content = job.content.replace('</code>', '');
-              content = job.content.replace('<pre>', '');
-              content = job.content.replace('</pre>', '');
+              const fullJob = JSON.parse(job.gpt_content);
+              console.log({ fullJob });
               return (
                 <Message key={job.uuid}>
-                  <Name>=======================</Name>
-                  <ReactMarkdown>
-                    {NodeHtmlMarkdown.translate(content).replace('```', '')}
-                  </ReactMarkdown>
+                  <br />
+                  <h3>{fullJob.title}</h3>
+                  <h4>{fullJob.company}</h4>
+                  <strong>Remote: &nbsp;</strong>
+                  {fullJob.remote}
+                  <br />
+                  <strong>Type: &nbsp;</strong>
+                  {fullJob.type}
+                  <br />
+                  <strong>Salary: &nbsp;</strong>
+                  {fullJob.salary}
+                  <br />
+                  <br />
+                  {fullJob.description}
+                  <br />
+                  <br />
+                  <ul>
+                    {fullJob.skills?.map((skill) => {
+                      return (
+                        <li key={skill.name}>
+                          <strong>{skill.name}</strong>
+
+                          <ul>
+                            {skill.keywords?.map((keyword) => {
+                              return <li key={keyword}>{keyword}</li>;
+                            })}
+                          </ul>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                  {fullJob.application}
+                  <br />
+                  <br />
+                  <Link href={job.url}>Source</Link>
+                  <br />
+                  <br />
+                  <hr />
                 </Message>
               );
             })}
