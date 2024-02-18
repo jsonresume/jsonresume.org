@@ -24,9 +24,8 @@ export default async function handler(req, res) {
     .eq('username', username);
 
   const resume = JSON.parse(data[0].resume);
-  console.log({ resume });
   const completion = await openai.createEmbedding({
-    model: 'text-embedding-ada-002',
+    model: 'text-embedding-3-large',
     input: JSON.stringify({
       skills: resume.skills,
       work: resume.work,
@@ -38,7 +37,7 @@ export default async function handler(req, res) {
     }),
   });
 
-  const desiredLength = 2048;
+  const desiredLength = 3072;
 
   let embedding = completion.data.data[0].embedding;
 
@@ -48,13 +47,13 @@ export default async function handler(req, res) {
     );
   }
 
-  const { data: documents } = await supabase.rpc('match_jobs', {
+  const { data: documents, error } = await supabase.rpc('match_jobs_v5', {
     query_embedding: embedding,
-    match_threshold: 0.78, // Choose an appropriate threshold for your data
+    match_threshold: 0.18, // Choose an appropriate threshold for your data
     match_count: 20, // Choose the number of matches
   });
-
-  const jobIds = documents.map((doc) => doc.id);
+  console.log({ documents, error });
+  const jobIds = documents ? documents.map((doc) => doc.id) : [];
 
   const { data: jobs } = await supabase.from('jobs').select().in('id', jobIds);
 
