@@ -235,7 +235,9 @@ async function main() {
           },
           {
             role: 'assistant',
-            content: `Here is an example of a job description in JSON schema format: ${jobSchema}`,
+            content: `Here is an example of a job description in JSON schema format: ${JSON.stringify(
+              jobSchema
+            )}`,
           },
           {
             role: 'assistant',
@@ -303,7 +305,13 @@ async function main() {
         ],
         function_call: 'auto',
       });
-      console.log(chat.data);
+      // console.log(chat.data);
+      console.log('AFASDASDAS');
+      console.log('AFASDASDAS');
+      console.log('AFASDASDAS');
+      console.log('AFASDASDAS');
+      console.log('AFASDASDAS');
+      console.log('AFASDASDAS');
       const details = chat.data.choices[0].message.function_call?.arguments;
       console.log(JSON.parse(details));
       try {
