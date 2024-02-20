@@ -7,8 +7,6 @@ import Link from 'next/link';
 
 const MessagesContainer = styled.div`
   background: #fbfbfb;
-  max-width: 600px;
-  padding: 90px 30px;
   width: 100%;
   height: calc(100vh - 170px);
 `;
@@ -25,7 +23,12 @@ const Message = styled.div`
   margin-bottom: 10px;
 `;
 
-export default function Talk() {
+/*
+ - only show last 3 months of jobs
+ - show similarity score
+*/
+
+export default function Jobs() {
   const router = useRouter();
   const parts = router.asPath.split('/');
   const username = parts[1];

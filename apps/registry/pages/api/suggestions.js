@@ -19,9 +19,9 @@ export default async function handler(req, res) {
 
   const api = new ChatGPTAPI({
     apiKey: process.env.OPENAI_API_KEY,
+    model: 'gpt-3.5-32k-turbo',
     completionParams: {
       temperature: 0.9,
-      top_p: 0.8,
     },
   });
 
@@ -35,6 +35,8 @@ export default async function handler(req, res) {
   - Sentences that seem irrelvant
   - Better ways of saying things
   - Jobs and skills that I could have described better
+
+  Format your answer in markdown
 
   Do not give general tips. Be as specific about my actual resume as possible.
   

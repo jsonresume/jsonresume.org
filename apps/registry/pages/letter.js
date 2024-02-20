@@ -17,11 +17,11 @@ import ButtonGroup from '../src/ui/ButtonGroup';
 */
 
 const JobDescription = styled.textarea`
-  width: calc(100% - 30px);
+  width: calc(100% - 50px);
   height: 100px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  padding: 10px;
+  padding: 20px;
   font-size: 14px;
   margin-bottom: 20px;
 `;

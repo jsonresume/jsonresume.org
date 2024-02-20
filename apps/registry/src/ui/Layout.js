@@ -3,15 +3,11 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
-const Container = styled.div`
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  flex-direction: column;
-`;
+const Container = styled.div``;
 
 const HeaderContainer = styled.div`
   max-width: 800px;
+  width: 100%;
   margin: auto;
   display: flex;
   flex-direction: row;
@@ -26,7 +22,7 @@ const Header = styled.div`
   position: fixed;
   left: 0;
   top: 0;
-  width: 100vw;
+  width: 100%;
   height: 40px;
   font-weight: 500;
 `;
@@ -49,6 +45,7 @@ const Logo = styled.a`
 const Links = styled.div`
   width: 300px;
   display: flex;
+  margin-right: 20px;
   justify-content: space-between;
   a {
     text-decoration: none;
@@ -61,9 +58,9 @@ const Links = styled.div`
 
 const Content = styled.div`
   max-width: 800px;
-  min-width: 800px;
   margin: auto;
   margin-top: 80px;
+  padding: 20px;
 `;
 
 export default function Layout({ children }) {

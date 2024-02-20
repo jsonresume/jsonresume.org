@@ -8,6 +8,7 @@ import Label from '../src/ui/Label';
 import ButtonGroup from '../src/ui/ButtonGroup';
 import Dropdown from '../src/ui/Dropdown';
 import Button from '../src/ui/Button';
+import ReactMarkdown from 'react-markdown';
 
 const Paper = styled.div`
   border: 1px solid #ccc;
@@ -81,16 +82,7 @@ export default function Suggestions() {
       <br />
       {!submitting && suggestions && (
         <Paper>
-          <pre
-            style={{
-              'white-space': 'pre-wrap',
-              width: '60%',
-              margin: 'auto',
-              'margin-top': '100px',
-            }}
-          >
-            {suggestions}
-          </pre>
+          <ReactMarkdown>{suggestions}</ReactMarkdown>
         </Paper>
       )}
     </Layout>
