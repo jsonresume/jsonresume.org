@@ -44,7 +44,8 @@ const Input = styled.input`
 const Switch = styled.div`
   position: fixed;
   top: 50px;
-  left: calc(100vw - 600px);
+  left: 50%;
+  transform: translateX(-50%);
   width: 300px;
   height: 30px;
   display: flex;
@@ -80,6 +81,7 @@ const MessagesContainer = styled.div`
   padding: 90px 30px;
   width: 100%;
   height: calc(100vh - 170px);
+  margin: auto;
 `;
 
 const Messages = styled.div`
