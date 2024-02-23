@@ -1,0 +1,21 @@
+{
+  "private": true,
+  "name": "jsonresume-theme-cv",
+  "version": "0.0.0",
+  "main": "./src/index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint-config-custom": "workspace:*",
+    "react": "^18",
+    "styled-components": "^6"
+  },
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "peerDependencies": {
+    "styled-components": "^6"
+  },
+  "dependencies": {
+    "react-icons": "^5.0.1"
+  }
+}
