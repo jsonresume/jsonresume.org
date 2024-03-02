@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 const Container = styled.div``;
@@ -45,7 +46,7 @@ const Logo = styled.a`
 const Links = styled.div`
   width: 300px;
   display: flex;
-  margin-right: 20px;
+  margin-left: 20px;
   justify-content: space-between;
   a {
     text-decoration: none;
@@ -63,10 +64,51 @@ const Content = styled.div`
   padding: 20px;
 `;
 
+const UserSearch = styled.div`
+  display: flex;
+  justify-content: space-between;
+  max-width: 800px;
+  flex-direction: row;
+  margin: 20px auto;
+  a {
+    text-decoration: none;
+    color: #000;
+    margin-left: 10px;
+    :visited {
+      color: #000;
+    }
+  }
+`;
+
+const UserInput = styled.input`
+  margin-left: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #000;
+`;
+
 export default function Layout({ children }) {
   const router = useRouter();
   const parts = router.asPath.split('/');
   const username = parts[1];
+
+  const [users, setUsers] = useState([]);
+  // const [user, setUser] = useState('');
+  // write a function that fetches user from an api and puts in state
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const response = await fetch('/api/resumes');
+      const data = await response.json();
+      setUsers(data);
+    };
+    fetchUsers();
+  });
+
+  console.log({ users });
+
+  // const onChangeUser = (e) => {
+  //   setUser(e.target.value);
+  // };
 
   return (
     <>
@@ -83,6 +125,26 @@ export default function Layout({ children }) {
               <Link href={`/${username}/suggestions`}>Suggestions</Link>
             </Links>
           </HeaderContainer>
+          <UserSearch>
+            <div>
+              Using the resume of
+              {username && (
+                <UserInput
+                  type="text"
+                  placeholder="Github username"
+                  value={username}
+                />
+              )}
+            </div>
+            <div>
+              <a href={`https://registry.jsonresume.org/${username}`}>
+                View resume
+              </a>
+              <a href={`https://registry.jsonresume.org/${username}.json`}>
+                View raw
+              </a>
+            </div>
+          </UserSearch>
         </Header>
         <Content>{children}</Content>
       </Container>
