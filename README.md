@@ -140,3 +140,5 @@ This is an implementation of a chat bot, your resume is injected, and the conver
   - add an option to use your own key
   - add a footer
   - change the url pattern to be ai.jsonresume.org/thomasdavis etc
+
+ci
