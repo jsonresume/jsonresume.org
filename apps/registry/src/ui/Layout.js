@@ -125,7 +125,12 @@ export default function Layout({ children }) {
               <Link href={`/${username}/suggestions`}>Suggestions</Link>
             </Links>
           </HeaderContainer>
-          <UserSearch>
+          <UserSearch
+            onChange={(ev) => {
+              console.log('change', ev.target.value);
+              window.location.href = `/${ev.target.value}/jobs`;
+            }}
+          >
             <div>
               Using the resume of
               <UserSelect defaultValue={username} value={username}>
