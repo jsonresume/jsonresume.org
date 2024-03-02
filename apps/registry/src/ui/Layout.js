@@ -102,14 +102,13 @@ export default function Layout({ children }) {
       setUsers(data);
     };
     fetchUsers();
-  }, []);
+  });
 
   // const onChangeUser = (e) => {
   //   setUser(e.target.value);
   // };
 
   // rmember to cache the users api
-
   return (
     <>
       <Container>
@@ -133,14 +132,12 @@ export default function Layout({ children }) {
           >
             <div>
               Using the resume of
-              <UserSelect defaultValue={username} value={username}>
+              <UserSelect>
                 {users.map((user) => {
-                  console.log(username === user.username);
                   return (
                     <option
-                      selected={username === user.username}
                       key={user.username}
-                      value={user.username}
+                      selected={username === user.username}
                     >
                       {user.username}
                     </option>
