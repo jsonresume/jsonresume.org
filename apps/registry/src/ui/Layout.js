@@ -146,12 +146,12 @@ export default function Layout({ children }) {
               </UserSelect>
             </div>
             <div>
-              <a href={`https://registry.jsonresume.org/${username}`}>
+              <Link href={`https://registry.jsonresume.org/${username}`}>
                 View resume
-              </a>
-              <a href={`https://registry.jsonresume.org/${username}.json`}>
+              </Link>
+              <Link href={`https://registry.jsonresume.org/${username}.json`}>
                 View raw
-              </a>
+              </Link>
             </div>
           </UserSearch>
         </Header>
