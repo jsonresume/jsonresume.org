@@ -69,10 +69,9 @@ export default function Jobs() {
     <Layout>
       {' '}
       <Hero>
-        We create an embedding with 3702 dimensions of your resume.json. The
-        same is done for Hacker News posts which have also been processed by GPT
-        3.5. Once both embeddings are calculated, we do a vector similarity
-        search.
+        Creates an embedding with 3702 dimensions of your resume.json. The same
+        is done for Hacker News posts which have also been processed by GPT 3.5.
+        Once both embeddings are calculated, we do a vector similarity search.
       </Hero>
       <ButtonGroup>
         <div></div>

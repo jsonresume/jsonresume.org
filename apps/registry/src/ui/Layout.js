@@ -80,7 +80,7 @@ const UserSearch = styled.div`
   }
 `;
 
-const UserInput = styled.input`
+const UserSelect = styled.select`
   margin-left: 10px;
   padding: 5px;
   border-radius: 5px;
@@ -102,13 +102,13 @@ export default function Layout({ children }) {
       setUsers(data);
     };
     fetchUsers();
-  });
-
-  console.log({ users });
+  }, []);
 
   // const onChangeUser = (e) => {
   //   setUser(e.target.value);
   // };
+
+  // rmember to cache the users api
 
   return (
     <>
@@ -128,13 +128,20 @@ export default function Layout({ children }) {
           <UserSearch>
             <div>
               Using the resume of
-              {username && (
-                <UserInput
-                  type="text"
-                  placeholder="Github username"
-                  value={username}
-                />
-              )}
+              <UserSelect defaultValue={username} value={username}>
+                {users.map((user) => {
+                  console.log(username === user.username);
+                  return (
+                    <option
+                      selected={username === user.username}
+                      key={user.username}
+                      value={user.username}
+                    >
+                      {user.username}
+                    </option>
+                  );
+                })}
+              </UserSelect>
             </div>
             <div>
               <a href={`https://registry.jsonresume.org/${username}`}>
