@@ -24,7 +24,6 @@ const NavLink = ({ href, children }) => {
   const path = asPath.split('/')[2];
   const slugPath = href.split('/')[2];
   const ariaCurrent = slugPath === path ? 'page' : undefined;
-  console.log({ href, path, ariaCurrent });
   return (
     <Link href={href}>
       <LinkElement aria-current={ariaCurrent}>{children}</LinkElement>

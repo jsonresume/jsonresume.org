@@ -37,10 +37,15 @@ export default function Letter() {
   const router = useRouter();
   const parts = router.asPath.split('/');
   const username = parts[1];
+  // get query param
+  const { job } = router.query;
+  console.log({ job });
   const [submitting, setSubmitting] = useState(false);
   const [jobDescription, setJobDescription] = useState(
     typeof window !== 'undefined'
-      ? window?.localStorage?.getItem('jobDescription')
+      ? job
+        ? window.localStorage.getItem(`job-${job}`)
+        : window?.localStorage?.getItem('jobDescription')
       : ''
   );
 

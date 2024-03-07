@@ -14,7 +14,6 @@ const Button = styled.button`
 
   &:hover {
     background: #ce2424;
-    border: 2px solid #ce2424;
     color: #fff;
     -webkit-transition: all 0.25s;
     transition: all 0.25s;

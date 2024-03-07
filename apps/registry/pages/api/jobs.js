@@ -47,18 +47,16 @@ export default async function handler(req, res) {
     );
   }
 
-  const { data: documents, error } = await supabase.rpc('match_jobs_v5', {
+  const { data: documents } = await supabase.rpc('match_jobs_v5', {
     query_embedding: embedding,
     match_threshold: 0.18, // Choose an appropriate threshold for your data
     match_count: 20, // Choose the number of matches
   });
-  console.log({ documents, error });
+
   const jobIds = documents ? documents.map((doc) => doc.id) : [];
 
-  // return documents created before two months ago
-
   const { data: jobs } = await supabase.from('jobs').select().in('id', jobIds);
-  console.log({ jobs });
+
   const filteredJobs = jobs.filter(
     (job) =>
       new Date(job.created_at) > new Date(Date.now() - 60 * 24 * 60 * 60 * 1000)

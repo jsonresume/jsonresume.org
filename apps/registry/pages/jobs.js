@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Layout from '../src/ui/Layout';
@@ -60,6 +60,31 @@ export default function Jobs() {
       fetchData();
     }
   }, [username, submitting]);
+  const makeCoverletter = async (job) => {
+    const gptJob = JSON.parse(job.gpt_content);
+    localStorage.setItem(
+      `job-${job.id}`,
+      `
+    ${gptJob.title}
+    ${gptJob.company}
+
+    ${gptJob.description}
+
+    Skills:
+    ${gptJob.skills?.map((skill) => skill.name).join(', ')}
+
+    Skill Keywords:
+    ${gptJob.skills?.map((skill) => skill.keywords?.join(', ')).join(', ')}
+
+    Responsibilities:
+    ${gptJob.responsibilities?.join(', ')}
+
+
+  
+    `
+    );
+    Router.push(`/${username}/letter?job=${job.id}`);
+  };
 
   const handleGenerate = () => {
     setSubmitting(true);
@@ -86,7 +111,6 @@ export default function Jobs() {
             {jobs &&
               jobs.map((job) => {
                 const fullJob = JSON.parse(job.gpt_content);
-                console.log({ fullJob });
                 return (
                   <Message key={job.uuid}>
                     <br />
@@ -126,7 +150,17 @@ export default function Jobs() {
                     <Link href={job.url}>Source</Link>
                     <br />
                     <br />
+                    <Button
+                      onClick={() => {
+                        makeCoverletter(job);
+                      }}
+                    >
+                      Make Cover Letter
+                    </Button>
+                    <br />
+                    <br />
                     <hr />
+                    <br />
                   </Message>
                 );
               })}
