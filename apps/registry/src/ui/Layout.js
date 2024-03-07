@@ -1,8 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import Autocomplete from './Autocomplete';
 
 const Container = styled.div``;
 
@@ -17,15 +18,40 @@ const HeaderContainer = styled.div`
   padding: 0 15px;
   height: 100%;
 `;
-
+const UserSearchContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: #fff;
+`;
+const UserSearch = styled.div`
+  display: flex;
+  justify-content: space-between;
+  max-width: 800px;
+  width: 100%;
+  margin: auto;
+  flex-direction: row;
+  a {
+    text-decoration: none;
+    color: #000;
+    margin-left: 10px;
+    :visited {
+      color: #000;
+    }
+  }
+`;
 const Header = styled.div`
   background: #fff18f;
   position: fixed;
   left: 0;
   top: 0;
   width: 100%;
-  height: 40px;
+  height: 80px;
   font-weight: 500;
+  display: flex;
+  flex-direction: column;
 `;
 
 const Logo = styled.a`
@@ -64,37 +90,21 @@ const Content = styled.div`
   padding: 20px;
 `;
 
-const UserSearch = styled.div`
-  display: flex;
-  justify-content: space-between;
-  max-width: 800px;
-  flex-direction: row;
-  margin: 20px auto;
-  a {
-    text-decoration: none;
-    color: #000;
-    margin-left: 10px;
-    :visited {
-      color: #000;
-    }
-  }
-`;
-
-const UserSelect = styled.select`
+const UserSelect = styled.div`
+  display: inline-block;
   margin-left: 10px;
   padding: 5px;
   border-radius: 5px;
-  border: 1px solid #000;
+  width: 140px;
 `;
 
 export default function Layout({ children }) {
   const router = useRouter();
   const parts = router.asPath.split('/');
-  const username = parts[1];
-
+  const [username, setUsername] = useState(parts[1]);
+  console.log({ username });
   const [users, setUsers] = useState([]);
-  // const [user, setUser] = useState('');
-  // write a function that fetches user from an api and puts in state
+
   useEffect(() => {
     const fetchUsers = async () => {
       const response = await fetch('/api/resumes');
@@ -102,11 +112,18 @@ export default function Layout({ children }) {
       setUsers(data);
     };
     fetchUsers();
-  });
+  }, []);
 
-  // const onChangeUser = (e) => {
-  //   setUser(e.target.value);
-  // };
+  const onChangeUsername = (value) => {
+    Router.push(
+      {
+        pathname: `/${value}/jobs`,
+      },
+      undefined,
+      { shallow: true }
+    );
+    setUsername(value);
+  };
 
   // rmember to cache the users api
   return (
@@ -124,36 +141,28 @@ export default function Layout({ children }) {
               <Link href={`/${username}/suggestions`}>Suggestions</Link>
             </Links>
           </HeaderContainer>
-          <UserSearch
-            onChange={(ev) => {
-              console.log('change', ev.target.value);
-              window.location.href = `/${ev.target.value}/jobs`;
-            }}
-          >
-            <div>
-              Using the resume of
-              <UserSelect>
-                {users.map((user) => {
-                  return (
-                    <option
-                      key={user.username}
-                      selected={username === user.username}
-                    >
-                      {user.username}
-                    </option>
-                  );
-                })}
-              </UserSelect>
-            </div>
-            <div>
-              <Link href={`https://registry.jsonresume.org/${username}`}>
-                View resume
-              </Link>
-              <Link href={`https://registry.jsonresume.org/${username}.json`}>
-                View raw
-              </Link>
-            </div>
-          </UserSearch>
+          <UserSearchContainer>
+            <UserSearch>
+              <div>
+                Using the resume of
+                <UserSelect>
+                  <Autocomplete
+                    defaultValue={username}
+                    onChange={onChangeUsername}
+                    suggestions={users.map((user) => user.username)}
+                  />
+                </UserSelect>
+              </div>
+              <div>
+                <Link href={`https://registry.jsonresume.org/${username}`}>
+                  View resume
+                </Link>
+                <Link href={`https://registry.jsonresume.org/${username}.json`}>
+                  View raw
+                </Link>
+              </div>
+            </UserSearch>
+          </UserSearchContainer>
         </Header>
         <Content>{children}</Content>
       </Container>

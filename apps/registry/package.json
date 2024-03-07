@@ -81,6 +81,7 @@
     "prisma": "^4.15.0",
     "qr-image": "^3.2.0",
     "react": "^18.2.0",
+    "react-autocomplete": "^1.8.1",
     "react-dom": "^18.2.0",
     "react-markdown": "^8.0.7",
     "resume-schema": "^1.0.0",
