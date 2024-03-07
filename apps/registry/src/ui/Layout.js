@@ -1,9 +1,9 @@
 import Image from 'next/image';
-import Link from 'next/link';
 import Router, { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Autocomplete from './Autocomplete';
+import NavLink from './NavLink';
 
 const Container = styled.div``;
 
@@ -128,10 +128,10 @@ export default function Layout({ children }) {
               JSON Resume AI
             </Logo>
             <Links>
-              <Link href={`/${username}/jobs`}>Jobs</Link>
-              <Link href={`/${username}/interview`}>Interview</Link>
-              <Link href={`/${username}/letter`}>Letter</Link>
-              <Link href={`/${username}/suggestions`}>Suggestions</Link>
+              <NavLink href={`/${username}/jobs`}>Jobs</NavLink>
+              <NavLink href={`/${username}/interview`}>Interview</NavLink>
+              <NavLink href={`/${username}/letter`}>Letter</NavLink>
+              <NavLink href={`/${username}/suggestions`}>Suggestions</NavLink>
             </Links>
           </HeaderContainer>
           <UserSearchContainer>
@@ -147,8 +147,8 @@ export default function Layout({ children }) {
                 </UserSelect>
               </div>
               <Links style={{ width: 180 }}>
-                <Link href={`/${username}`}>View resume</Link>
-                <Link href={`/${username}.json`}>View raw</Link>
+                <NavLink href={`/${username}`}>View resume</NavLink>
+                <NavLink href={`/${username}.json`}>View raw</NavLink>
               </Links>
             </UserSearch>
           </UserSearchContainer>
