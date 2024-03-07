@@ -15,31 +15,25 @@ const HeaderContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 0 15px;
   height: 100%;
+  height: 50px;
 `;
+
 const UserSearchContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
   width: 100%;
   background: #fff;
 `;
 const UserSearch = styled.div`
   display: flex;
+  height: 50px;
   justify-content: space-between;
   max-width: 800px;
   width: 100%;
   margin: auto;
-  flex-direction: row;
-  a {
-    text-decoration: none;
-    color: #000;
-    margin-left: 10px;
-    :visited {
-      color: #000;
-    }
+  line-height: 40px;
+  a,
+  span {
+    line-height: 50px;
   }
 `;
 const Header = styled.div`
@@ -50,8 +44,6 @@ const Header = styled.div`
   width: 100%;
   height: 80px;
   font-weight: 500;
-  display: flex;
-  flex-direction: column;
 `;
 
 const Logo = styled.a`
@@ -86,7 +78,7 @@ const Links = styled.div`
 const Content = styled.div`
   max-width: 800px;
   margin: auto;
-  margin-top: 80px;
+  margin-top: 100px;
   padding: 20px;
 `;
 
@@ -101,6 +93,7 @@ const UserSelect = styled.div`
 export default function Layout({ children }) {
   const router = useRouter();
   const parts = router.asPath.split('/');
+  const path = parts[2];
   const [username, setUsername] = useState(parts[1]);
   console.log({ username });
   const [users, setUsers] = useState([]);
@@ -117,7 +110,7 @@ export default function Layout({ children }) {
   const onChangeUsername = (value) => {
     Router.push(
       {
-        pathname: `/${value}/jobs`,
+        pathname: `/${value}/${path}`,
       },
       undefined,
       { shallow: true }
@@ -153,14 +146,10 @@ export default function Layout({ children }) {
                   />
                 </UserSelect>
               </div>
-              <div>
-                <Link href={`https://registry.jsonresume.org/${username}`}>
-                  View resume
-                </Link>
-                <Link href={`https://registry.jsonresume.org/${username}.json`}>
-                  View raw
-                </Link>
-              </div>
+              <Links style={{ width: 180 }}>
+                <Link href={`/${username}`}>View resume</Link>
+                <Link href={`/${username}.json`}>View raw</Link>
+              </Links>
             </UserSearch>
           </UserSearchContainer>
         </Header>
