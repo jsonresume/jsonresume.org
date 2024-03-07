@@ -147,4 +147,9 @@
   link: https://github.com/nikaro/resume-pycli
   description: Python CLI tool to build a beautiful resume from a JSON Resume file.
   category: cli
+
+- name: ancv
+  link: https://github.com/alexpovel/ancv/
+  description:  Renders your JSON Resume for online & pretty terminal display
+  category: visualization
 # https://github.com/renoirb/jsonresume-from-yaml
