@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 importers:
 
   .:
@@ -143,8 +147,8 @@ importers:
         specifier: ^0.2.1
         version: 0.2.1
       jsonresume-theme-minyma:
-        specifier: ^0.0.4
-        version: 0.0.4
+        specifier: ^0.0.5
+        version: 0.0.5
       jsonresume-theme-mocha-responsive:
         specifier: ^1.1.1
         version: 1.1.1
@@ -4658,6 +4662,45 @@ packages:
       webpack: 5.89.0(@swc/core@1.3.99)(esbuild@0.19.8)
       webpack-dev-server: 4.15.1(webpack@5.89.0)
 
+  /@pmmmwh/react-refresh-webpack-plugin@0.5.11(react-refresh@0.14.0)(webpack@5.89.0):
+    resolution: {integrity: sha512-7j/6vdTym0+qZ6u4XbSAxrWBGYSdCfTzySkj7WAFgDLmSyWlOrWvpyzxlFh5jtw9dn0oL/jtW+06XfFiisN3JQ==}
+    engines: {node: '>= 10.13'}
+    peerDependencies:
+      '@types/webpack': 4.x || 5.x
+      react-refresh: '>=0.10.0 <1.0.0'
+      sockjs-client: ^1.4.0
+      type-fest: '>=0.17.0 <5.0.0'
+      webpack: '>=4.43.0 <6.0.0'
+      webpack-dev-server: 3.x || 4.x
+      webpack-hot-middleware: 2.x
+      webpack-plugin-serve: 0.x || 1.x
+    peerDependenciesMeta:
+      '@types/webpack':
+        optional: true
+      sockjs-client:
+        optional: true
+      type-fest:
+        optional: true
+      webpack-dev-server:
+        optional: true
+      webpack-hot-middleware:
+        optional: true
+      webpack-plugin-serve:
+        optional: true
+    dependencies:
+      ansi-html-community: 0.0.8
+      common-path-prefix: 3.0.0
+      core-js-pure: 3.26.1
+      error-stack-parser: 2.1.4
+      find-up: 5.0.0
+      html-entities: 2.4.0
+      loader-utils: 2.0.4
+      react-refresh: 0.14.0
+      schema-utils: 3.3.0
+      source-map: 0.7.4
+      webpack: 5.89.0(@swc/core@1.3.99)(esbuild@0.19.8)
+    dev: true
+
   /@primer/css@14.4.0:
     resolution: {integrity: sha512-o9DwcAH43jZNDC/rPLjsYTU/I1LsHIgIQlSO3X8vZV2u65LmWeA5jHI2cSadZYN3N0Gm0Soh0zVYuhh7kMskXA==}
     hasBin: true
@@ -6211,7 +6254,7 @@ packages:
       react-scripts: '>=5.0.0'
     dependencies:
       '@babel/core': 7.23.5
-      '@pmmmwh/react-refresh-webpack-plugin': 0.5.11(react-refresh@0.11.0)(webpack-dev-server@4.15.1)(webpack@5.89.0)
+      '@pmmmwh/react-refresh-webpack-plugin': 0.5.11(react-refresh@0.14.0)(webpack@5.89.0)
       '@storybook/react-docgen-typescript-plugin': 1.0.6--canary.9.0c3f3b7.0(typescript@4.9.5)(webpack@5.89.0)
       '@storybook/types': 7.5.3
       '@types/babel__core': 7.20.5
@@ -14671,8 +14714,8 @@ packages:
       - supports-color
     dev: false
 
-  /jsonresume-theme-minyma@0.0.4:
-    resolution: {integrity: sha512-C+5q4PCKCH2UYs2Ha74QNO7CW4WWwb383CsNVBWML8a7SJoGd7udYOkA+5YSp8GgvmHes3lUtqjn6wXbyhc7Kw==}
+  /jsonresume-theme-minyma@0.0.5:
+    resolution: {integrity: sha512-1x5HAjEXTCrYVYgmAIXunzE2KuWL2hzA1r+DAWjxMWBrXhtZQ1SXMSQK4oaTNvN6v7mX9OC23STMwTYPNcoUgA==}
     dependencies:
       handlebars: 4.7.8
     dev: false
@@ -20531,6 +20574,29 @@ packages:
       terser: 5.24.0
       webpack: 5.89.0(@swc/core@1.3.99)(esbuild@0.19.8)
 
+  /terser-webpack-plugin@5.3.9(webpack@5.89.0):
+    resolution: {integrity: sha512-ZuXsqE07EcggTWQjXUj+Aot/OMcD0bMKGgF63f7UxYcu5/AJF53aIpK1YoP5xR9l6s/Hy2b+t1AM0bLNPRuhwA==}
+    engines: {node: '>= 10.13.0'}
+    peerDependencies:
+      '@swc/core': '*'
+      esbuild: '*'
+      uglify-js: '*'
+      webpack: ^5.1.0
+    peerDependenciesMeta:
+      '@swc/core':
+        optional: true
+      esbuild:
+        optional: true
+      uglify-js:
+        optional: true
+    dependencies:
+      '@jridgewell/trace-mapping': 0.3.18
+      jest-worker: 27.5.1
+      schema-utils: 3.3.0
+      serialize-javascript: 6.0.1
+      terser: 5.24.0
+      webpack: 5.89.0(webpack-cli@5.1.4)
+
   /terser@5.24.0:
     resolution: {integrity: sha512-ZpGR4Hy3+wBEzVEnHvstMvqpD/nABNelQn/z2r0fjVWGQsN3bpOLzQlqDxmb4CDZnXq5lpjnQ+mHQLAOpfM5iw==}
     engines: {node: '>=10'}
@@ -21769,7 +21835,7 @@ packages:
       neo-async: 2.6.2
       schema-utils: 3.3.0
       tapable: 2.2.1
-      terser-webpack-plugin: 5.3.9(@swc/core@1.3.99)(esbuild@0.19.8)(webpack@5.89.0)
+      terser-webpack-plugin: 5.3.9(webpack@5.89.0)
       watchpack: 2.4.0
       webpack-cli: 5.1.4(webpack@5.89.0)
       webpack-sources: 3.2.3
@@ -22343,7 +22409,3 @@ packages:
   /zod@3.21.4:
     resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
     dev: false
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
