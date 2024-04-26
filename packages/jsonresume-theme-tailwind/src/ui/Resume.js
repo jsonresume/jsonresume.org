@@ -2,6 +2,9 @@ import { Inter } from 'next/font/google';
 import Hero from './Hero';
 import About from './About';
 import Work from './Work';
+import Projects from './Projects';
+import Education from './Education';
+import Skills from './Skills';
 
 // import Projects from './Projects';
 // import Summary from './Summary';
@@ -21,6 +24,9 @@ const Resume = ({ resume }) => {
             <Hero basics={resume.basics} />
             <About basics={resume.basics} />
             <Work work={resume.work} />
+            <Education education={resume.education} />
+            <Skills skills={resume.skills} />
+            <Projects projects={resume.projects} />
           </section>
         </main>
       </div>

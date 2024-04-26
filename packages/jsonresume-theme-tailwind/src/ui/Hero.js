@@ -1,3 +1,13 @@
+import { Avatar, AvatarImage, AvatarFallback } from './Avatar';
+import { Button } from './Button';
+import { CiMail, CiPhone, CiGlobe } from 'react-icons/ci';
+import { FaGithub, FaTwitter } from 'react-icons/fa';
+
+const socials = {
+  github: FaGithub,
+  twitter: FaTwitter,
+};
+
 const HeroComponent = ({ basics }) => {
   return (
     <div className="flex items-center justify-between">
@@ -7,15 +17,60 @@ const HeroComponent = ({ basics }) => {
           {basics.label}
         </p>
         <p className="max-w-md items-center text-pretty font-mono text-xs text-muted-foreground">
-          <a
-            className="inline-flex gap-x-1.5 align-baseline leading-none hover:underline"
-            href={basics.location.city}
-            target="_blank"
-          >
+          <span className="inline-flex gap-x-1.5 align-baseline leading-none">
+            <CiGlobe />
             {basics.location.city}
-          </a>
+          </span>
         </p>
+        <div className="flex gap-x-1 pt-1 font-mono text-sm text-muted-foreground print:hidden">
+          {basics.email ? (
+            <Button className="size-8" variant="outline" size="icon" asChild>
+              <a href={`mailto:${basics.email}`}>
+                <CiMail className="size-4" />
+              </a>
+            </Button>
+          ) : null}
+          {basics.phone ? (
+            <Button className="size-8" variant="outline" size="icon" asChild>
+              <a href={`tel:${basics.phone}`}>
+                <CiPhone className="size-4" />
+              </a>
+            </Button>
+          ) : null}
+          {basics.profiles.map((social) => {
+            const SocialIcon = socials[social.network];
+            return (
+              <Button
+                key={social.username}
+                className="size-8"
+                variant="outline"
+                size="icon"
+                asChild
+              >
+                <a href={social.url}>
+                  <SocialIcon className="size-4" />
+                </a>
+              </Button>
+            );
+          })}
+        </div>
+        <div className="hidden flex-col gap-x-1 font-mono text-sm text-muted-foreground print:flex">
+          {basics.email ? (
+            <a href={`mailto:${basics.email}`}>
+              <span className="underline">{basics.email}</span>
+            </a>
+          ) : null}
+          {basics.phone ? (
+            <a href={`tel:${basics.phone}`}>
+              <span className="underline">{basics.phone}</span>
+            </a>
+          ) : null}
+        </div>
       </div>
+      <Avatar className="size-28">
+        <AvatarImage alt={basics.name} src={basics.image} />
+        <AvatarFallback>{'TD'}</AvatarFallback>
+      </Avatar>
     </div>
   );
 };

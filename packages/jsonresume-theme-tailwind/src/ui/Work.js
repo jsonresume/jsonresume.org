@@ -34,7 +34,16 @@ const Work = ({ work }) => {
 
               <h4 className="font-mono text-sm leading-none">{w.title}</h4>
             </CardHeader>
-            <CardContent className="mt-2 text-xs">{w.summary}</CardContent>
+            <CardContent className="mt-2 text-xs">
+              {w.summary}
+              <br />
+              <br />
+              <ul>
+                {w.highlights?.map((h) => {
+                  return <li>- {h}</li>;
+                })}
+              </ul>
+            </CardContent>
           </Card>
         );
       })}
