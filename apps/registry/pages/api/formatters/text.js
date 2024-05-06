@@ -3,9 +3,18 @@
 const format = async function format(resume) {
   let content = `
 ${resume.basics.name}
-Pittsburgh, PA 15201
-(555) 555-5555
-example@example.com
+${resume.basics.label}
+
+// Pittsburgh, PA 15201
+${resume.basics.location.address}
+${resume.basics.location.city}
+${resume.basics.location.region}
+${resume.basics.location.postalCode}
+${resume.basics.location.countryCode}
+// (555) 555-5555
+${resume.basics.phone}
+// example@example.com
+${resume.basics.email}
 
 PROFESSIONAL SUMMARY
 ============================
