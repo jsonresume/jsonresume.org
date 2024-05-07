@@ -1,4 +1,4 @@
-This is the homepage rewritten from jekyll into nextjs 
+This is the homepage rewritten from jekyll into nextjs
 
 - finish it
 - make an integrations page

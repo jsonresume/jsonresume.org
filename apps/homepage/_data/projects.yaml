@@ -150,6 +150,6 @@
 
 - name: ancv
   link: https://github.com/alexpovel/ancv/
-  description:  Renders your JSON Resume for online & pretty terminal display
+  description: Renders your JSON Resume for online & pretty terminal display
   category: visualization
 # https://github.com/renoirb/jsonresume-from-yaml
