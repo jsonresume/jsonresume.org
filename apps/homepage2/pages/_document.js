@@ -1,11 +1,12 @@
 // pages/_document.tsx file
 import Document, { Html, Head, Main, NextScript } from 'next/document';
+import Image from 'next/image';
 import { ServerStyleSheet } from 'styled-components';
 export default class MyDocument extends Document {
   render() {
     return (
       <Html>
-        <Head>
+        <Head title="asdasd">
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" />
 
@@ -18,17 +19,15 @@ export default class MyDocument extends Document {
           <meta http-equiv="X-UA-Compatible" content="IE=edge" />
           <meta name="description" content="{{site.description}}" />
 
-          <title>asdasd</title>
-
           <link rel="shortcut icon" href="/favicon.png" />
           <link
             rel="stylesheet"
-            href="https://fonts.googleapis.com/css?family=Ubuntu:400,500,700"
+            href="https://fonts.googleapis.com/css?family=Ubuntu:400,500,700&display=optional"
             defer
           />
           <link
             rel="stylesheet"
-            href="https://fonts.googleapis.com/css?family=Lato:300,500,700"
+            href="https://fonts.googleapis.com/css?family=Lato:300,500,700&display=optional"
             defer
           />
           <link
@@ -74,7 +73,7 @@ export default class MyDocument extends Document {
               <div class="inner">
                 <nav id="nav">
                   <a href="#" class="lt">
-                    <img src="/img/hamburger.png" />
+                    <Image src="/img/hamburger.png" alt="A hamburger" />
                   </a>
                   <div class="container">
                     <div class="row">
