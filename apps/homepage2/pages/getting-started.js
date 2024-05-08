@@ -183,6 +183,7 @@ export default function GettingStarted() {
                 <a href="https://registry.jsonresume.org/thomasdavis.qr">
                   https://registry.jsonresume.org/thomasdavis.qr
                 </a>
+                <br />
                 e.g. <br />
                 <Image
                   src="https://registry.jsonresume.org/thomasdavis.qr"
