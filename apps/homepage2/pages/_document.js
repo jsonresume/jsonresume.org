@@ -18,7 +18,7 @@ export default class MyDocument extends Document {
           <meta http-equiv="X-UA-Compatible" content="IE=edge" />
           <meta name="description" content="{{site.description}}" />
 
-          <link rel="shortcut icon" href="/favicon.png" />
+          <link rel="shortcut icon" href="/img/favicon.png" />
           <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Ubuntu:400,500,700&display=optional"

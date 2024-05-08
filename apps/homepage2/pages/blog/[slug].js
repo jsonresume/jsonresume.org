@@ -1,8 +1,8 @@
+import Head from 'next/head';
 import { getPostData, getAllPostSlugs } from '../../lib/posts';
 import { DiscussionEmbed } from 'disqus-react';
 
 export async function getStaticProps({ params }) {
-  // Add the "await" keyword like this:
   const postData = await getPostData(params.slug);
 
   return {
@@ -30,6 +30,9 @@ export default function BlogPost({ postData }) {
 
   return (
     <>
+      <Head>
+        <title>{postData.title} — Blog — JSON Resume</title>
+      </Head>
       <header id="header">
         <div class="container">
           <div class="row">

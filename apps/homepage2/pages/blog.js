@@ -1,5 +1,5 @@
 import React from 'react';
-// import { formatDate } from './utils'; // Helper function to format the date
+import Head from 'next/head';
 import { getSortedPostsData } from '../lib/posts';
 
 const formatDate = (date) => {
@@ -20,6 +20,9 @@ function Blog({ allPostsData }) {
   const posts = allPostsData;
   return (
     <>
+      <Head>
+        <title>Blog — JSON Resume</title>
+      </Head>
       <header id="header">
         <div className="container">
           <div className="row">

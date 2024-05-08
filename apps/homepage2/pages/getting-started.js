@@ -1,8 +1,12 @@
 import Image from 'next/image';
+import Head from 'next/head';
 
 export default function GettingStarted() {
   return (
     <>
+      <Head>
+        <title>Getting Started — JSON Resume</title>
+      </Head>
       <header id="header">
         <div class="container">
           <div class="row">
