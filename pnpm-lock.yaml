@@ -611,6 +611,9 @@ importers:
       css-loader:
         specifier: ^6.8.1
         version: 6.8.1(webpack@5.89.0)
+      eslint-config-custom:
+        specifier: workspace:*
+        version: link:../../packages/eslint-config-custom
       handlebars-loader:
         specifier: ^1.7.3
         version: 1.7.3(handlebars@4.7.8)
