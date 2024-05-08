@@ -1,58 +1,4 @@
 export default function GettingStarted() {
-  //   - name: Elegant
-  //   slug: elegant
-  //   github: mudassir0909
-  //   author: Mudassir
-  //   link: https://github.com/mudassir0909
-
-  // - name: Kendall
-  //   slug: kendall
-  //   github: LinuxBozo
-  //   author: M. Adam Kendall
-  //   link: https://registry.jsonresume.org/linuxbozo
-
-  // - name: Macchiato
-  //   slug: macchiato
-  //   github: biosan
-  //   author: Alessandro Biondi
-  //   link: https://registry.jsonresume.org/biosan
-
-  // - name: Relaxed
-  //   slug: relaxed
-  //   github: ObserverOfTime
-  //   author: ObserverOfTime
-  //   link: https://github.com/ObserverOfTime
-
-  // - name: Stack Overflow
-  //   slug: stackoverflow
-  //   github:
-  //   author:
-  //   link:
-
-  // - name: Rickosborne
-  //   slug: rickosborne
-  //   github:
-  //   author:
-  //   link:
-
-  // - name: Flat
-  //   slug: flat
-  //   github: erming
-  //   author: Mattias Erming
-  //   link: https://github.com/erming
-
-  // - name: One Page Plus
-  //   slug: onepage-plus
-  //   github:
-  //   author:
-  //   link:
-
-  // - name: Paper
-  //   slug: paper-plus-plus
-  //   github:
-  //   author:
-  //   link:
-
   // convert themes above into js array
   const themes = [
     {
@@ -156,7 +102,7 @@ export default function GettingStarted() {
         <div class="row">
           {themes.map((theme) => {
             return (
-              <div class="col-sm-4 col-md-3">
+              <div class="col-sm-4 col-md-3" key={theme.slug}>
                 <div class="theme">
                   <div class="row">
                     <div class="col-sm-12 col-xs-6">
