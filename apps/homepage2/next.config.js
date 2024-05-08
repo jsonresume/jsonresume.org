@@ -15,6 +15,24 @@ module.exports = {
         port: '',
         pathname: '/*',
       },
+      {
+        protocol: 'https',
+        hostname: 'registry.jsonresume.org',
+        port: '',
+        pathname: '/*',
+      },
+      {
+        protocol: 'https',
+        hostname: 'avatars.githubusercontent.com',
+        port: '',
+        pathname: '/*',
+      },
+      {
+        protocol: 'https',
+        hostname: 'screenshot-peach-beta.vercel.app',
+        port: '',
+        pathname: '/*',
+      },
     ],
   },
 };

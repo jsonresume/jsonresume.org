@@ -29,7 +29,7 @@ export default function GettingStarted() {
               <p>
                 <strong>Note:</strong> The official CLI tool isn&apos;t that
                 actively maintained. There is an alternative that you might have
-                more success with
+                more success with{' '}
                 <a href="https://github.com/rbardini/resumed">
                   @rbardini/resumed
                 </a>
@@ -51,7 +51,7 @@ export default function GettingStarted() {
                 One of our community members wrote a great Chrome extension to
                 import your LinkedIn Profile.
                 <br />
-                <br />
+                <br />{' '}
                 <a
                   target="_blank"
                   href="https://chrome.google.com/webstore/detail/json-resume-exporter/caobgmmcpklomkcckaenhjlokpmfbdec"
@@ -68,7 +68,7 @@ export default function GettingStarted() {
                 JSON Resume offers a hosting service that renders your
                 <code>resume.json</code> to any theme you would like. <br />
                 <br />
-                e.g.
+                e.g.{' '}
                 <a href="https://registry.jsonresume.org/thomasdavis">
                   https://registry.jsonresume.org/thomasdavis
                 </a>
@@ -77,7 +77,7 @@ export default function GettingStarted() {
                 All you have to do is create a Gist on GitHub named
                 <code>resume.json</code>. <br />
                 <br />
-                e.g.
+                e.g.{' '}
                 <a href="https://gist.github.com/thomasdavis/c9dcfa1b37dec07fb2ee7f36d7278105">
                   https://gist.github.com/thomasdavis/c9dcfa1b37dec07fb2ee7f36d7278105
                 </a>
@@ -105,7 +105,7 @@ export default function GettingStarted() {
                 your gist when you push to your own repo. Example below;
                 <br />
                 <br />
-                <strong>EXAMPLE</strong> -
+                <strong>EXAMPLE</strong> -{' '}
                 <a href="https://github.com/thomasdavis/resume">
                   https://github.com/thomasdavis/resume
                 </a>
@@ -118,17 +118,17 @@ export default function GettingStarted() {
                 You can access more raw formats of your resume too!
                 <br />
                 <br />
-                <strong>JSON</strong> -
+                <strong>JSON</strong> -{' '}
                 <a href="https://registry.jsonresume.org/thomasdavis.json">
                   https://registry.jsonresume.org/thomasdavis.json
                 </a>
                 <br />
-                <strong>YAML</strong> -
+                <strong>YAML</strong> -{' '}
                 <a href="https://registry.jsonresume.org/thomasdavis.yaml">
                   https://registry.jsonresume.org/thomasdavis.yaml
                 </a>
                 <br />
-                <strong>TEXT</strong> -
+                <strong>TEXT</strong> -{' '}
                 <a href="https://registry.jsonresume.org/thomasdavis.txt">
                   https://registry.jsonresume.org/thomasdavis.txt
                 </a>
@@ -146,21 +146,21 @@ export default function GettingStarted() {
                 <br />
                 <strong>Interview Yourself or Be Interviewed </strong>(using
                 OpenAI GPT-3 your resume.json gets inserted in the prompt and
-                you can talk to or at yourself) -
+                you can talk to or at yourself) -{' '}
                 <a href="https://registry.jsonresume.org/thomasdavis/interview">
                   https://registry.jsonresume.org/thomasdavis/interview
                 </a>
                 <br />
                 <br />
                 <strong>Recommended Jobs </strong>(tries to match your resume to
-                recent Who is Hiring? hn posts) -
+                recent Who is Hiring? hn posts) -{' '}
                 <a href="https://registry.jsonresume.org/thomasdavis/jobs">
                   https://registry.jsonresume.org/thomasdavis/jobs
                 </a>
                 <br />
                 <br />
                 <strong>Cover Letter </strong>(attempts to write a cover letter
-                that matches your resume) -
+                that matches your resume) -{' '}
                 <a href="https://registry.jsonresume.org/thomasdavis/letter">
                   https://registry.jsonresume.org/thomasdavis/letter
                 </a>
@@ -168,7 +168,7 @@ export default function GettingStarted() {
                 <br />
                 <strong>Resume Suggestions</strong> (it asks ChatGPT to give
                 precise feedback for improvements you could make to your resume)
-                -
+                -{' '}
                 <a href="https://registry.jsonresume.org/thomasdavis/suggestions">
                   https://registry.jsonresume.org/thomasdavis/suggestions
                 </a>
@@ -179,14 +179,15 @@ export default function GettingStarted() {
                 <br />
                 <br />
                 If you want to generate a QR code that links to your hosted
-                resume, use
+                resume, use{' '}
                 <a href="https://registry.jsonresume.org/thomasdavis.qr">
                   https://registry.jsonresume.org/thomasdavis.qr
                 </a>
                 e.g. <br />
                 <Image
                   src="https://registry.jsonresume.org/thomasdavis.qr"
-                  style={{ width: '120px' }}
+                  width="120"
+                  height="120"
                   alt="Thomas Davis"
                 />
               </p>
