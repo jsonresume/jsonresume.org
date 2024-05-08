@@ -69,6 +69,7 @@
     "jsonresume-theme-standard": "workspace:*",
     "jsonresume-theme-standard-resume": "^2.1.0",
     "jsonresume-theme-tan-responsive": "^0.0.7",
+    "jsonresume-theme-tailwind": "*",
     "jsonresume-theme-techlead": "^1.0.1",
     "jsonschema": "^1.4.1",
     "lodash": "^4.17.21",

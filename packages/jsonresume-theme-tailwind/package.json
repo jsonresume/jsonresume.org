@@ -1,0 +1,30 @@
+{
+  "private": true,
+  "name": "jsonresume-theme-tailwind",
+  "version": "0.0.0",
+  "main": "./src/index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint-config-custom": "workspace:*",
+    "react": "^18",
+    "styled-components": "^6",
+    "tailwindcss": "^3.4.3"
+  },
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "peerDependencies": {
+    "styled-components": "^6"
+  },
+  "dependencies": {
+    "@radix-ui/react-avatar": "^1.0.4",
+    "@radix-ui/react-slot": "^1.0.2",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "google": "link:next/font/google",
+    "react-icons": "^5.0.1",
+    "server": "link:twind/shim/server",
+    "tailwind-merge": "^2.3.0",
+    "twind": "^0.16.19"
+  }
+}
