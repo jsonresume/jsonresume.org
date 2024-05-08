@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 export default function GettingStarted() {
   return (
     <>
@@ -16,25 +18,27 @@ export default function GettingStarted() {
             <section>
               <h2>Command Line Tool</h2>
               <p>
-                We've built a CLI (Command Line Interface) which is supported by
-                OSX, Linux and Windows. To create your own resume, install
+                We&apos;ve built a CLI (Command Line Interface) which is
+                supported by OSX, Linux and Windows. To create your own resume,
+                install
                 <code>resume-cli</code> from <b>npm</b>:
               </p>
               <p>
                 <code>npm install -g resume-cli</code>
               </p>
               <p>
-                <strong>Note:</strong> The official CLI tool isn't that actively
-                maintained. There is an alternative that you might have more
-                success with
+                <strong>Note:</strong> The official CLI tool isn&apos;t that
+                actively maintained. There is an alternative that you might have
+                more success with
                 <a href="https://github.com/rbardini/resumed">
                   @rbardini/resumed
                 </a>
               </p>
               <h3>Exporting</h3>
               <p>
-                The command line tool uses an ecosystem of modules that we've
-                open sourced to convert your resume to different formats:
+                The command line tool uses an ecosystem of modules that
+                we&apos;ve open sourced to convert your resume to different
+                formats:
               </p>
               <p>
                 <code>resume export resume.pdf</code>
@@ -180,9 +184,10 @@ export default function GettingStarted() {
                   https://registry.jsonresume.org/thomasdavis.qr
                 </a>
                 e.g. <br />
-                <img
+                <Image
                   src="https://registry.jsonresume.org/thomasdavis.qr"
                   style={{ width: '120px' }}
+                  alt="Thomas Davis"
                 />
               </p>
               <br />
