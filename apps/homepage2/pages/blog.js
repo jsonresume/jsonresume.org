@@ -18,7 +18,6 @@ export async function getStaticProps() {
 
 function Blog({ allPostsData }) {
   const posts = allPostsData;
-  console.log({ allPostsData });
   return (
     <>
       <header id="header">

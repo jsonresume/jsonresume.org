@@ -3,7 +3,6 @@ import { DiscussionEmbed } from 'disqus-react';
 
 export async function getStaticProps({ params }) {
   // Add the "await" keyword like this:
-  console.log({ params });
   const postData = await getPostData(params.slug);
 
   return {
@@ -22,7 +21,6 @@ export async function getStaticPaths() {
 }
 
 export default function BlogPost({ postData }) {
-  console.log({ postData });
   const disqusShortname = 'jsonresume';
   const disqusConfig = {
     url: `http://jsonresume.org${postData.url}`,
