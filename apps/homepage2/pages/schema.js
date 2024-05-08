@@ -22,8 +22,8 @@ export default function Schema() {
             <h4>Why JSON?</h4>
             <p>
               We believe that the strengths of the JSON format makes it a good
-              fit for resumes. It's lightweight, easy to use and it's perfect to
-              build tools for!
+              fit for resumes. It&apos;s lightweight, easy to use and it&apos;s
+              perfect to build tools for!
             </p>
             <p>
               We also feel that the{' '}

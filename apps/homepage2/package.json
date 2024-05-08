@@ -8,8 +8,7 @@
     "start": "next start",
     "lint": "next lint --max-warnings=0",
     "postinstall": "prisma generate --data-proxy",
-    "db:generate": "prisma generate",
-    "test:e2e": "playwright test"
+    "db:generate": "prisma generate"
   },
   "dependencies": {
     "@faker-js/faker": "^8.0.2",
@@ -48,13 +47,11 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.40.0",
     "@types/node": "^20.10.0",
     "caniuse-lite": "^1.0.30001566",
     "eslint": "^8.55.0",
     "eslint-config-custom": "workspace:*",
     "eslint-config-next": "^14.0.3",
-    "playwright": "^1.40.0",
     "typescript": "^5.3.2"
   }
 }
