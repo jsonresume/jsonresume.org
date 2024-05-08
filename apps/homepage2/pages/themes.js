@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 export default function GettingStarted() {
   // convert themes above into js array
   const themes = [
@@ -110,8 +112,11 @@ export default function GettingStarted() {
                       <a
                         href={`https://registry.jsonresume.org/thomasdavis?theme=${theme.slug}`}
                       >
-                        <img
+                        <Image
                           style={{ height: '129px' }}
+                          height="129"
+                          width="163"
+                          alt={theme.name}
                           src={`https://screenshot-peach-beta.vercel.app/api?v=1&url=https://registry.jsonresume.org/thomasdavis?theme=${theme.slug}&height=720&width=1280`}
                         />
                       </a>

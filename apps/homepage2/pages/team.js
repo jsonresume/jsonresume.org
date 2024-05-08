@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 export default function Team() {
   const team = {
     coreTeam: [
@@ -108,7 +110,7 @@ export default function Team() {
               <div className="row">
                 {team.coreTeam.map((member) => (
                   <div key={member.github} className="col-lg-6 person">
-                    <img
+                    <Image
                       className="avatar"
                       src={member.avatar}
                       alt={`Avatar of ${member.name}.`}
@@ -139,7 +141,7 @@ export default function Team() {
               <div className="row">
                 {team.standardsCommittee.map((member) => (
                   <div key={member.github} className="col-lg-6 person">
-                    <img
+                    <Image
                       className="avatar"
                       src={member.avatar}
                       alt={`Avatar of ${member.name}.`}
