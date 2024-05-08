@@ -15,6 +15,12 @@ module.exports = {
         port: '',
         pathname: '/*',
       },
+      {
+        protocol: 'https',
+        hostname: 'registry.jsonresume.org',
+        port: '',
+        pathname: '/*',
+      },
     ],
   },
 };

@@ -73,7 +73,12 @@ export default class MyDocument extends Document {
               <div class="inner">
                 <nav id="nav">
                   <a href="#" class="lt">
-                    <Image src="/img/hamburger.png" alt="A hamburger" />
+                    <Image
+                      width="32"
+                      height="32"
+                      src="/img/hamburger.png"
+                      alt="A hamburger"
+                    />
                   </a>
                   <div class="container">
                     <div class="row">
