@@ -13,7 +13,6 @@ ${resume.basics.location.postalCode}
 ${resume.basics.location.countryCode}
 // (555) 555-5555
 ${resume.basics.phone}
-// example@example.com
 ${resume.basics.email}
 
 PROFESSIONAL SUMMARY
