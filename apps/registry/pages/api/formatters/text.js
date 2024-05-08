@@ -4,8 +4,6 @@ const format = async function format(resume) {
   let content = `
 ${resume.basics.name}
 ${resume.basics.label}
-
-// Pittsburgh, PA 15201
 ${resume.basics.location.address}
 ${resume.basics.location.city}
 ${resume.basics.location.region}
