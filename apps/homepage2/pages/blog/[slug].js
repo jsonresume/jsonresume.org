@@ -21,7 +21,7 @@ export async function getStaticPaths() {
   };
 }
 
-export default function blog({ postData }) {
+export default function BlogPost({ postData }) {
   console.log({ postData });
   const disqusShortname = 'jsonresume';
   const disqusConfig = {
