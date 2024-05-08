@@ -9,7 +9,6 @@ ${resume.basics.location.city}
 ${resume.basics.location.region}
 ${resume.basics.location.postalCode}
 ${resume.basics.location.countryCode}
-// (555) 555-5555
 ${resume.basics.phone}
 ${resume.basics.email}
 
