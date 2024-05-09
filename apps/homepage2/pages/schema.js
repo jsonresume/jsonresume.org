@@ -1,6 +1,11 @@
+import Head from 'next/head';
+
 export default function Schema() {
   return (
     <>
+      <Head>
+        <title>Schema — JSON Resume</title>
+      </Head>
       <header id="header">
         <div class="container">
           <div class="row">

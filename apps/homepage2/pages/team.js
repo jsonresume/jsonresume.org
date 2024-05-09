@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Head from 'next/head';
 
 export default function Team() {
   const team = {
@@ -65,6 +66,9 @@ export default function Team() {
   };
   return (
     <>
+      <Head>
+        <title>Team — JSON Resume</title>
+      </Head>
       <header id="header">
         <div className="container">
           <div className="row">

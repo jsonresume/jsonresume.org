@@ -1,3 +1,5 @@
+import Head from 'next/head';
+
 export default function GettingStarted() {
   const projects = [
     {
@@ -238,6 +240,9 @@ export default function GettingStarted() {
 
   return (
     <div>
+      <Head>
+        <title>Projects — JSON Resume</title>
+      </Head>
       <header id="header">
         <div className="container">
           <div className="row">

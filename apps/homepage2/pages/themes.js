@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import Image from 'next/image';
 
 export default function GettingStarted() {
@@ -70,6 +71,9 @@ export default function GettingStarted() {
 
   return (
     <>
+      <Head>
+        <title>Themes — JSON Resume</title>
+      </Head>
       <header id="header">
         <div class="container">
           <div class="row">

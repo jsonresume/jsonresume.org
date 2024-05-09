@@ -1,6 +1,11 @@
+import Head from 'next/head';
+
 export default function Homepage() {
   return (
     <div>
+      <Head>
+        <title>JSON Resume</title>
+      </Head>
       <header id="header" class="yellow promo">
         <div class="container">
           <div class="row">
