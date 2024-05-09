@@ -18,14 +18,14 @@ export default class MyDocument extends Document {
                 alt="Clicky"
                 width="1"
                 height="1"
-                src="//in.getclicky.com/101412017ns.gif"
+                src="https://in.getclicky.com/101412017ns.gif"
               />
             </p>
           </noscript>
           <script
             async
             data-id="101412017"
-            src="//static.getclicky.com/js"
+            src="https://static.getclicky.com/js"
           ></script>
 
           <meta charset="utf-8" />
