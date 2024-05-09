@@ -12,7 +12,7 @@ function render(resume) {
 }
 
 module.exports = {
-  render: render,
+  render,
 };
 
 Handlebars.registerHelper('prettifyDate', function (resumeDate) {
