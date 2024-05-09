@@ -14,7 +14,7 @@ export default class MyDocument extends Document {
           <link rel="dns-prefetch" href="//static.getclicky.com" />
           <noscript>
             <p>
-              <img
+              <Image
                 alt="Clicky"
                 width="1"
                 height="1"
