@@ -33,8 +33,6 @@ importers:
         specifier: ^1.13.3
         version: 1.13.3
 
-  apps/homepage: {}
-
   apps/homepage2:
     dependencies:
       '@faker-js/faker':
