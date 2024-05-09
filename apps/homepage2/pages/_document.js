@@ -12,6 +12,21 @@ export default class MyDocument extends Document {
           <link rel="dns-prefetch" href="//fonts.googleapis.com" />
           <link rel="dns-prefetch" href="//cdnjs.cloudflare.com" />
           <link rel="dns-prefetch" href="//static.getclicky.com" />
+          <noscript>
+            <p>
+              <Image
+                alt="Clicky"
+                width="1"
+                height="1"
+                src="https://in.getclicky.com/101412017ns.gif"
+              />
+            </p>
+          </noscript>
+          <script
+            async
+            data-id="101412017"
+            src="https://static.getclicky.com/js"
+          ></script>
 
           <meta charset="utf-8" />
           <meta http-equiv="X-UA-Compatible" content="IE=edge" />
