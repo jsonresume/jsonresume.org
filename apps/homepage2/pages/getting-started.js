@@ -1,6 +1,25 @@
 import Image from 'next/image';
 import Head from 'next/head';
 
+// @todo - list out integrations again or make new page
+// - name: gitconnected
+//   image: https://gitconnected.com/public/meta/favicon/favicon-96x96.png
+//   description: Career tools for developers. Effortlessly manage your portfolio and resume - level up your career.
+//   url: https://gitconnected.com/tools
+//   display-url: https://gitconnected.com
+
+// - name: Represent
+//   image: https://represent.io/assets/logos/logo-yellow.png
+//   description: Represent is the best way to create a beautiful and professional resume in minutes.
+//   url: https://represent.io/
+//   display-url: https://represent.io
+
+// - name: DoYouBuzz
+//   image: https://i.imgur.com/bXti2H5.png
+//   description: Creating a resume has never been easier. In a few minutes, you will have a beautiful resume you can use anywhere.
+//   url: https://www.doyoubuzz.com/
+//   display-url: https://www.doyoubuzz.com
+
 export default function GettingStarted() {
   return (
     <>

@@ -1,9 +1,0 @@
-{
-  "private": true,
-  "name": "homepage",
-  "version": "1.0.0",
-  "scripts": {
-    "build": "bundle exec jekyll build",
-    "dev": "bundle exec jekyll serve --watch --drafts"
-  }
-}

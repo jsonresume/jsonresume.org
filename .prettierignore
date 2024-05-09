@@ -1,8 +1,5 @@
 **/.next/**/*
 pnpm-lock.yaml
-apps/homepage/_layouts/compress.html
-apps/homepage/vendor
-apps/homepage/_site
 dist
 themes/stackoverflow/public
 apps/registry/playwright-report
