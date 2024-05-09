@@ -195,6 +195,12 @@ ${JSON.stringify(validation.errors, null, 2)}
     res.setHeader(header.key, header.value);
   });
 
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
+  res.setHeader('Access-Control-Allow-Origin', '*');
+
   if (formatted.content instanceof Buffer) {
     // handles images/binary
     formatted.content.pipe(res);
