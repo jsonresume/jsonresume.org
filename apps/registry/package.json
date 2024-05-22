@@ -68,8 +68,8 @@
     "jsonresume-theme-stackoverflowed": "^1.1.5",
     "jsonresume-theme-standard": "workspace:*",
     "jsonresume-theme-standard-resume": "^2.1.0",
-    "jsonresume-theme-tan-responsive": "^0.0.7",
     "jsonresume-theme-tailwind": "*",
+    "jsonresume-theme-tan-responsive": "^0.0.7",
     "jsonresume-theme-techlead": "^1.0.1",
     "jsonschema": "^1.4.1",
     "lodash": "^4.17.21",
@@ -80,6 +80,7 @@
     "pg": "^8.11.0",
     "pinecone-client": "^1.1.0",
     "prisma": "^4.15.0",
+    "prismjs": "^1.29.0",
     "qr-image": "^3.2.0",
     "react": "^18.2.0",
     "react-autocomplete": "^1.8.1",
@@ -91,12 +92,14 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.24.5",
     "@playwright/test": "^1.40.0",
     "@types/node": "^20.10.0",
     "caniuse-lite": "^1.0.30001566",
     "eslint": "^8.55.0",
     "eslint-config-custom": "workspace:*",
     "eslint-config-next": "^14.0.3",
+    "eslint-plugin-react": "^7.33.2",
     "playwright": "^1.40.0",
     "typescript": "^5.3.2"
   }

@@ -9,13 +9,18 @@
     "lint": "eslint \"**/*.ts*\""
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.24.5",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^7.32.0",
     "eslint-config-custom": "workspace:*",
+    "eslint-plugin-react": "^7.33.2",
     "react": "^18",
     "tsconfig": "workspace:*",
     "typescript": "^5"
   },
-  "module": "true"
+  "module": "true",
+  "dependencies": {
+    "prismjs": "^1.29.0"
+  }
 }

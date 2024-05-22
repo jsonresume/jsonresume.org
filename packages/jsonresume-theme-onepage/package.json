@@ -10,13 +10,18 @@
   },
   "license": "MIT",
   "dependencies": {
+    "css": "2.2.x",
     "handlebars": "^4",
-    "css": "2.2.x"
+    "prismjs": "^1.29.0"
   },
   "bugs": {
     "url": "https://github.com/ainsleychong/jsonresume-theme-onepage/issues"
   },
   "homepage": "https://github.com/ainsleychong/jsonresume-theme-onepage",
   "main": "index.js",
-  "devDependencies": {}
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.24.5",
+    "eslint": "^9.3.0",
+    "eslint-plugin-react": "^7.33.2"
+  }
 }

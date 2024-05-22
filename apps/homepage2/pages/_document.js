@@ -80,6 +80,7 @@ export default class MyDocument extends Document {
                 <a href="/schema/">Schema</a>
                 <a href="/themes/">Themes</a>
                 <a href="/projects/">Projects</a>
+                <a href="/ai/">AI</a>
                 <a href="/team/">Team</a>
                 <a href="/blog/">Blog</a>
               </aside>
@@ -102,6 +103,7 @@ export default class MyDocument extends Document {
                           <a href="/schema/">Schema</a>
                           <a href="/themes/">Themes</a>
                           <a href="/projects/">Projects</a>
+                          <a href="/ai/">AI</a>
                           <a href="/team/">Team</a>
                           <a href="/blog/">Blog</a>
                         </div>
