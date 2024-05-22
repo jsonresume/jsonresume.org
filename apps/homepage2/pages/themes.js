@@ -84,27 +84,40 @@ export default function GettingStarted() {
         </div>
       </header>
       <div id="themes" class="container">
-        <p>
-          There are over{' '}
-          <a href="https://www.npmjs.com/search?ranking=maintenance&q=jsonresume-theme">
-            400+ npm packages
-          </a>{' '}
-          of themes that we pick official themes from. They are all open source
-          and built by the community.
-        </p>
-        <p>
-          Not all themes that are available in our hosted offering are listed
-          below, you can see a list at{' '}
-          <a href="https://registry.jsonresume.org/themes">
-            https://registry.jsonresume.org/themes
-          </a>
-        </p>
-        <p>
-          Preview them by just editing the query string{' '}
-          <a href="https://registry.jsonresume.org/thomasdavis?theme=kendall">
-            https://registry.jsonresume.org/thomasdavis?theme=flat
-          </a>
-        </p>
+        <div class="row">
+          <div class="col-md-6">
+            <h3>Browse</h3>
+
+            <p>
+              There are over{' '}
+              <a href="https://www.npmjs.com/search?ranking=maintenance&q=jsonresume-theme">
+                400+ npm packages
+              </a>{' '}
+              of themes that we pick official themes from. They are all open
+              source and built by the community.
+            </p>
+            <p>
+              Not all themes that are available in our hosted offering are
+              listed below, you can see a list at{' '}
+              <a href="https://registry.jsonresume.org/themes">
+                https://registry.jsonresume.org/themes
+              </a>
+            </p>
+            <p>
+              Preview them by just editing the query string{' '}
+              <a href="https://registry.jsonresume.org/thomasdavis?theme=kendall">
+                https://registry.jsonresume.org/thomasdavis?theme=flat
+              </a>
+            </p>
+          </div>
+          <div class="col-md-6">
+            <h3>Want to develop your own?</h3>
+            <p>
+              Read the <a href="/theme-development">theme development guide</a>{' '}
+            </p>
+          </div>
+        </div>
+        <br />
         <div class="row">
           {themes.map((theme) => {
             return (
@@ -150,52 +163,6 @@ export default function GettingStarted() {
               </div>
             );
           })}
-        </div>
-        <div class="row">
-          <div class="clear: both;"></div>
-
-          <h2>Want to develop your own?</h2>
-          <p>
-            Check out an example boilerplate theme{' '}
-            <a href="https://github.com/jsonresume/jsonresume-theme-boilerplate">
-              https://github.com/jsonresume/jsonresume-theme-boilerplate
-            </a>
-            .
-            <br />
-            <br />
-            Here is an example of a more well done and modern theme{' '}
-            <a href="https://github.com/davcd/jsonresume-theme-actual">
-              https://github.com/davcd/jsonresume-theme-actual
-            </a>
-            .
-            <br />
-            <br />
-            For an even better theme development environment, try this{' '}
-            <a href="https://github.com/kelyvin/jsonresume-theme-caffeine">
-              https://github.com/kelyvin/jsonresume-theme-caffeine
-            </a>
-            .
-            <br />
-            <br />
-            In short, if you want to add a theme to the official list, you need
-            to publish an NPM module named
-            <code>jsonresume-theme-&#123;name&#125;</code>. That module needs to
-            export a function called `render` that takes a `resume.json` and
-            returns a plain HTML string.
-          </p>
-          <h3>Getting started</h3>
-          <p>
-            If you are using the registry to host your resume, you can easily
-            test different themes by appending a query string e.g.
-          </p>
-          <a href="https://registry.jsonresume.org/thomasdavis?theme=flat">
-            https://registry.jsonresume.org/thomasdavis?theme=flat
-          </a>
-          <p>
-            Or you can set the default theme for your resume on the registry by
-            using the <code>--theme</code> option in the CLI tool e.g.
-          </p>
-          <code>resume publish --theme flat</code>
         </div>
       </div>
     </>

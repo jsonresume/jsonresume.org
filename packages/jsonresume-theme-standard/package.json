@@ -2,18 +2,16 @@
   "private": true,
   "name": "jsonresume-theme-standard",
   "version": "0.0.0",
-  "private": true,
   "main": "./src/index.js",
   "license": "MIT",
   "devDependencies": {
-    "eslint-config-custom": "workspace:*",
     "react": "^18",
     "styled-components": "^6"
   },
-  "scripts": {
-    "lint": "eslint ."
-  },
   "peerDependencies": {
     "styled-components": "^6"
+  },
+  "dependencies": {
+    "prismjs": "^1.29.0"
   }
 }

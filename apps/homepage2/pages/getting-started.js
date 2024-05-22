@@ -1,25 +1,6 @@
 import Image from 'next/image';
 import Head from 'next/head';
 
-// @todo - list out integrations again or make new page
-// - name: gitconnected
-//   image: https://gitconnected.com/public/meta/favicon/favicon-96x96.png
-//   description: Career tools for developers. Effortlessly manage your portfolio and resume - level up your career.
-//   url: https://gitconnected.com/tools
-//   display-url: https://gitconnected.com
-
-// - name: Represent
-//   image: https://represent.io/assets/logos/logo-yellow.png
-//   description: Represent is the best way to create a beautiful and professional resume in minutes.
-//   url: https://represent.io/
-//   display-url: https://represent.io
-
-// - name: DoYouBuzz
-//   image: https://i.imgur.com/bXti2H5.png
-//   description: Creating a resume has never been easier. In a few minutes, you will have a beautiful resume you can use anywhere.
-//   url: https://www.doyoubuzz.com/
-//   display-url: https://www.doyoubuzz.com
-
 export default function GettingStarted() {
   return (
     <>
@@ -154,46 +135,6 @@ export default function GettingStarted() {
                 <strong>TEXT</strong> -{' '}
                 <a href="https://registry.jsonresume.org/thomasdavis.txt">
                   https://registry.jsonresume.org/thomasdavis.txt
-                </a>
-              </p>
-              <hr />
-              <p>
-                <strong>AI (completely experimental)</strong>
-                <br />
-                <br />
-                These urls are integrated with OpenAI ChatGPT, and will pass
-                your resume to them with a predefined prompt to get a new
-                response generated each time. (they take over 10 seconds to run
-                so be paitience)
-                <br />
-                <br />
-                <strong>Interview Yourself or Be Interviewed </strong>(using
-                OpenAI GPT-3 your resume.json gets inserted in the prompt and
-                you can talk to or at yourself) -{' '}
-                <a href="https://registry.jsonresume.org/thomasdavis/interview">
-                  https://registry.jsonresume.org/thomasdavis/interview
-                </a>
-                <br />
-                <br />
-                <strong>Recommended Jobs </strong>(tries to match your resume to
-                recent Who is Hiring? hn posts) -{' '}
-                <a href="https://registry.jsonresume.org/thomasdavis/jobs">
-                  https://registry.jsonresume.org/thomasdavis/jobs
-                </a>
-                <br />
-                <br />
-                <strong>Cover Letter </strong>(attempts to write a cover letter
-                that matches your resume) -{' '}
-                <a href="https://registry.jsonresume.org/thomasdavis/letter">
-                  https://registry.jsonresume.org/thomasdavis/letter
-                </a>
-                <br />
-                <br />
-                <strong>Resume Suggestions</strong> (it asks ChatGPT to give
-                precise feedback for improvements you could make to your resume)
-                -{' '}
-                <a href="https://registry.jsonresume.org/thomasdavis/suggestions">
-                  https://registry.jsonresume.org/thomasdavis/suggestions
                 </a>
               </p>
               <hr />

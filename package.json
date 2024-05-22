@@ -21,6 +21,7 @@
   "name": "jsonresume.org",
   "dependencies": {
     "@changesets/cli": "^2.27.1",
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "react-syntax-highlighter": "^15.5.0"
   }
 }

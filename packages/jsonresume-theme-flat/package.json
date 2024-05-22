@@ -12,7 +12,13 @@
     "start": "resume serve"
   },
   "dependencies": {
-    "handlebars": "latest"
+    "handlebars": "latest",
+    "prismjs": "^1.29.0"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.24.5",
+    "eslint": "^9.3.0",
+    "eslint-plugin-react": "^7.33.2"
+  }
 }
