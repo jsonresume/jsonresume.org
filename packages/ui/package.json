@@ -5,9 +5,6 @@
   "main": "./index.tsx",
   "types": "./index.tsx",
   "license": "MIT",
-  "scripts": {
-    "lint": "eslint \"**/*.ts*\""
-  },
   "devDependencies": {
     "@babel/eslint-parser": "^7.24.5",
     "@types/react": "^18",
