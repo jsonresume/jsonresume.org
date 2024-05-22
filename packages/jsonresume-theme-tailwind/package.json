@@ -13,9 +13,6 @@
     "styled-components": "^6",
     "tailwindcss": "^3.4.3"
   },
-  "scripts": {
-    "lint": "eslint ."
-  },
   "peerDependencies": {
     "styled-components": "^6"
   },

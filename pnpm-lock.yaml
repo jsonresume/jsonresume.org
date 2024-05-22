@@ -545,9 +545,6 @@ importers:
       handlebars:
         specifier: ^4
         version: 4.7.8
-      prismjs:
-        specifier: ^1.29.0
-        version: 1.29.0
     devDependencies:
       '@babel/eslint-parser':
         specifier: ^7.24.5
@@ -606,18 +603,6 @@ importers:
         specifier: ^1.29.0
         version: 1.29.0
     devDependencies:
-      '@babel/eslint-parser':
-        specifier: ^7.24.5
-        version: 7.24.5(@babel/core@7.23.5)(eslint@9.3.0)
-      eslint:
-        specifier: ^9.3.0
-        version: 9.3.0
-      eslint-config-custom:
-        specifier: workspace:*
-        version: link:../eslint-config-custom
-      eslint-plugin-react:
-        specifier: ^7.33.2
-        version: 7.33.2(eslint@9.3.0)
       react:
         specifier: ^18
         version: 18.2.0
