@@ -5,13 +5,14 @@
   "main": "./src/index.js",
   "license": "MIT",
   "devDependencies": {
+    "eslint-config-custom": "workspace:^",
     "react": "^18",
     "styled-components": "^6"
   },
   "peerDependencies": {
     "styled-components": "^6"
   },
-  "dependencies": {
-    "prismjs": "^1.29.0"
+  "scripts": {
+    "lint": "eslint ."
   }
 }
