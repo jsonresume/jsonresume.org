@@ -95,7 +95,7 @@ This project creates embeddings out of Hacker News Who Is Hiring post, it then g
 
 It is not setup to be automated at the moment, and the formatting is garbage. Each post should be sent to GPT to reformat it into a templated job description before generating embeddings.
 
-[http://localhost:3002/thomasdavis/jobs](http://localhost:3002/thomasdavis/jobs)
+[http://localhost:3000/thomasdavis/jobs](http://localhost:3000/thomasdavis/jobs)
 
 ### Letter
 
@@ -103,19 +103,19 @@ This is a very simple service that prompts GPT with your resume and asks to gene
 
 It could be easily improved to also contain the context of the job you are applying for.
 
-[http://localhost:3002/thomasdavis/letter](http://localhost:3002/thomasdavis/letter)
+[http://localhost:3000/thomasdavis/letter](http://localhost:3000/thomasdavis/letter)
 
 ### Suggestions
 
 This is a very simple service that prompts GPT with your resume and asks to generate a list of suggestions for you to improve your resume.
 
-[http://localhost:3002/thomasdavis/suggestions](http://localhost:3002/thomasdavis/suggestions)
+[http://localhost:3000/thomasdavis/suggestions](http://localhost:3000/thomasdavis/suggestions)
 
 ### Interview
 
 This is an implementation of a chat bot, your resume is injected, and the conversation is included in the prompt. So you can interview your self or talk as if you were being interviewed.
 
-[http://localhost:3002/thomasdavis/interview](http://localhost:3002/thomasdavis/interview)
+[http://localhost:3000/thomasdavis/interview](http://localhost:3000/thomasdavis/interview)
 
 # todo
 
