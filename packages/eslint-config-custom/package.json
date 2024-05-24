@@ -7,17 +7,15 @@
   "dependencies": {
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-turbo": "^1",
-    "prismjs": "^1.29.0"
+    "eslint-plugin-react": "^7.33.2"
   },
   "publishConfig": {
     "access": "public"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.24.5",
     "@typescript-eslint/eslint-plugin": "^6.13.1",
     "@typescript-eslint/parser": "^6.13.1",
     "eslint": "^8.54.0",
-    "eslint-plugin-react": "^7.33.2",
     "typescript": "^5.3.2"
   },
   "scripts": {
