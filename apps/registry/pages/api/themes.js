@@ -1,4 +1,4 @@
-const { THEMES } = require('./formatters/template');
+const { THEMES } = require('../../lib/formatters/template');
 
 export default async function handler(req, res) {
   const themes = {};

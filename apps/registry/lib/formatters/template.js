@@ -46,7 +46,6 @@ export const THEMES = {
   rickosborne: require('jsonresume-theme-rickosborne'),
   spartan: require('jsonresume-theme-spartan'),
   spartacus,
-  stackoverflowed: require('jsonresume-theme-stackoverflowed'),
   standard,
   stackoverflow,
   'standard-resume': require('jsonresume-theme-standard-resume'),
