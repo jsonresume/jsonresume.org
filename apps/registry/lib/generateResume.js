@@ -41,7 +41,7 @@ const generateResume = async (username, extension = 'template', query = {}) => {
     });
   }
 
-  let selectedTheme = theme || (resume.meta && resume.meta.theme) || 'elegant';
+  let selectedTheme = theme || resume.meta?.theme || 'elegant';
 
   selectedTheme = selectedTheme.toLowerCase();
 
