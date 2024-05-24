@@ -38,8 +38,8 @@ export default async function handler(req, res) {
     // handles images/binary
     content.pipe(res);
   } else {
-    if (forceJSON !== undefined) {
-      return res.status(200).send({ content });
-    return res.status(200).send(forceJSON !== undefined ? { content } : content);
+    return res
+      .status(200)
+      .send(forceJSON !== undefined ? { content } : content);
   }
 }
