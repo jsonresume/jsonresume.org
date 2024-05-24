@@ -37,8 +37,7 @@ const getResumeGist = async (username) => {
   let resumeRes = {};
 
   try {
-    const fullResumeGistUrl =
-      `https://gist.githubusercontent.com/${username}/${gistId}/raw?cachebust=${new Date().getTime()}`;
+    const fullResumeGistUrl = `https://gist.githubusercontent.com/${username}/${gistId}/raw?cachebust=${new Date().getTime()}`;
 
     resumeRes = await axios({
       method: 'GET',
