@@ -55,9 +55,6 @@ jobs:
         with:
           node-version: 18
           cache: pnpm
-      - uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
       - run: pnpm install
       - run: pnpm turbo build
   test:
