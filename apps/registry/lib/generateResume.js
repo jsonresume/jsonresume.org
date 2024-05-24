@@ -47,17 +47,21 @@ const generateResume = async (username, extension = 'template', query = {}) => {
 
   // @todo - using as a resume cache for extra features
   (async () => {
-    await supabase
-      .from('resumes')
-      .upsert(
-        {
-          username,
-          resume: JSON.stringify(resume),
-          updated_at: new Date(),
-        },
-        { onConflict: 'username' }
-      )
-      .select();
+    try {
+      await supabase
+        .from('resumes')
+        .upsert(
+          {
+            username,
+            resume: JSON.stringify(resume),
+            updated_at: new Date(),
+          },
+          { onConflict: 'username' }
+        )
+        .select();
+    } catch (error) {
+      console.error('Failed to cache resume:', error);
+    }
   })();
 
   const options = { ...query, theme: selectedTheme, username };
