@@ -40,8 +40,6 @@ export default async function handler(req, res) {
   } else {
     if (forceJSON !== undefined) {
       return res.status(200).send({ content });
-    } else {
-      return res.status(200).send(content);
-    }
+    return res.status(200).send(forceJSON !== undefined ? { content } : content);
   }
 }
