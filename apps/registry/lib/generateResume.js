@@ -77,7 +77,7 @@ const generateResume = async (username, extension = 'template', query = {}) => {
       return buildError(ERROR_CODES.TEMPLATE_MISSING);
     }
 
-    return buildError(ERROR_CODES.UNKNOWN_TEMPLATE_ERROR);
+    return buildError(ERROR_CODES.UNKNOWN_TEMPLATE_ERROR, { stack: e.stack });
   }
 
   return { content: formatted.content, headers: formatted.headers || [] };
