@@ -1,5 +1,5 @@
 const sampleResume = require('../samples/resume');
-import template from '../formatters/template';
+import template from '../../../lib/formatters/template';
 
 export default async function handler(req, res) {
   const { theme } = req.query;

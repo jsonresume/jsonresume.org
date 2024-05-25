@@ -33,7 +33,7 @@ export default async function handler(req, res) {
 
   const api = new ChatGPTAPI({
     apiKey: process.env.OPENAI_API_KEY,
-    model: 'gpt-3.5-32k-turbo',
+    model: 'gpt-4o',
     completionParams: {
       temperature: 0.85,
     },

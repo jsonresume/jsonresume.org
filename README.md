@@ -6,9 +6,9 @@ This is a monorepo, will be the home of the registry, the homepage, ui kit, base
 
 All projects hosted on this domain, will be found in the /apps folder.
 
-- [jsonresume.org](https://jsonresume.org) - the homepage, currently built in Jekyll, would like to move to a Javascript framework for easier contributions
-  - found in [/apps/homepage](https://github.com/jsonresume/jsonresume.org/tree/master/apps/homepage)
-- [registry.jsonresume.org](https://registry.jsonresume.org) - the opt-in hosted place blah blah
+- [jsonresume.org](https://jsonresume.org) - the homepage
+  - found in [/apps/homepage2](https://github.com/jsonresume/jsonresume.org/tree/master/apps/homepage2)
+- [registry.jsonresume.org](https://registry.jsonresume.org) - the opensource free to use registry
   - found in [/apps/registry](https://github.com/jsonresume/jsonresume.org/tree/master/apps/registry)
 
 ## Requirements
@@ -41,9 +41,15 @@ To start an individual app;
 pnpm turbo dev --filter=registry
 ```
 
+## App - Registry
+
+```
+pnpm dev --filter=registry
+```
+
 **Environment variables**:
 
-These are required to run the registry. (only the github token, but it probably crashs without the rest for now)
+These are optionally to run the different parts of the registry. The main behavior of rendering resumes does not need any.
 
 ```
 # classic token
@@ -59,13 +65,7 @@ PINECONE_ENVIRONMENT=
 OPENAI_API_KEY=
 ```
 
-## App - Registry
-
-```
-pnpm dev --filter=registry
-```
-
-This will start a local server at [http://localhost:3002/thomasdavis](http://localhost:3002/thomasdavis)
+This will start a local server at [http://localhost:3000/thomasdavis](http://localhost:3000/thomasdavis)
 
 ### Formats
 
@@ -75,32 +75,15 @@ This will start a local server at [http://localhost:3002/thomasdavis](http://loc
 - Text
 - Lex
 
-### Notes
-
-- Gonna drop Typescript, prefer less barriers to entry
-- Templates cannot read from the file system when using the registry
-- Base templates using react/svelte/etc
-- pdf? lol
-
 ## App - Homepage
 
 ```
-pnpm dev --filter=homepage
+pnpm dev --filter=homepage2
 ```
 
-Kind of a mess, but it works.
+## Contributors
 
-It uses Jekyll, to install it
-
-```
-gem install bundler jekyll
-```
-
-Then to run it
-
-```
-jekyll serve
-```
+|Contribs|
 
 ## AI
 
@@ -112,7 +95,7 @@ This project creates embeddings out of Hacker News Who Is Hiring post, it then g
 
 It is not setup to be automated at the moment, and the formatting is garbage. Each post should be sent to GPT to reformat it into a templated job description before generating embeddings.
 
-[http://localhost:3002/thomasdavis/jobs](http://localhost:3002/thomasdavis/jobs)
+[http://localhost:3000/thomasdavis/jobs](http://localhost:3000/thomasdavis/jobs)
 
 ### Letter
 
@@ -120,19 +103,19 @@ This is a very simple service that prompts GPT with your resume and asks to gene
 
 It could be easily improved to also contain the context of the job you are applying for.
 
-[http://localhost:3002/thomasdavis/letter](http://localhost:3002/thomasdavis/letter)
+[http://localhost:3000/thomasdavis/letter](http://localhost:3000/thomasdavis/letter)
 
 ### Suggestions
 
 This is a very simple service that prompts GPT with your resume and asks to generate a list of suggestions for you to improve your resume.
 
-[http://localhost:3002/thomasdavis/suggestions](http://localhost:3002/thomasdavis/suggestions)
+[http://localhost:3000/thomasdavis/suggestions](http://localhost:3000/thomasdavis/suggestions)
 
 ### Interview
 
 This is an implementation of a chat bot, your resume is injected, and the conversation is included in the prompt. So you can interview your self or talk as if you were being interviewed.
 
-[http://localhost:3002/thomasdavis/interview](http://localhost:3002/thomasdavis/interview)
+[http://localhost:3000/thomasdavis/interview](http://localhost:3000/thomasdavis/interview)
 
 # todo
 
