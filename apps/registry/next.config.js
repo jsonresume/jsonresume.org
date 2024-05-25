@@ -38,4 +38,13 @@ module.exports = {
       },
     ],
   },
+  experimental: {
+    serverActions: {
+      allowedOrigins: [
+        'localhost:3000',
+        '*.registry.jsonresume.org',
+        'registry.jsonresume.org',
+      ],
+    },
+  },
 };
