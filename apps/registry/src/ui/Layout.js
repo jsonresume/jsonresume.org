@@ -158,7 +158,7 @@ export default function Layout({ children }) {
 
       <script
         async
-        data-id="101412887"
+        data-id="101412017"
         src="https://static.getclicky.com/js"
       ></script>
       <noscript>
