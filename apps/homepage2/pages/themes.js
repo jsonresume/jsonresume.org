@@ -11,41 +11,6 @@ export default function GettingStarted() {
       author: 'Mudassir',
       link: 'https://github.com/mudassir0909',
     },
-    {
-      name: 'Kendall',
-      slug: 'kendall',
-      github: 'LinuxBozo',
-      author: 'M. Adam Kendall',
-      link: 'https://registry.jsonresume.org/linuxbozo',
-    },
-    {
-      name: 'Macchiato',
-      slug: 'macchiato',
-      github: 'biosan',
-      author: 'Alessandro Biondi',
-      link: 'https://registry.jsonresume.org/biosan',
-    },
-    {
-      name: 'Relaxed',
-      slug: 'relaxed',
-      github: 'ObserverOfTime',
-      author: 'ObserverOfTime',
-      link: 'https://github.com/ObserverOfTime',
-    },
-    {
-      name: 'Stack Overflow',
-      slug: 'stackoverflow',
-      github: '',
-      author: '',
-      link: '',
-    },
-    {
-      name: 'Rickosborne',
-      slug: 'rickosborne',
-      github: '',
-      author: '',
-      link: '',
-    },
   ];
 
   return (
