@@ -1,9 +1,14 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useRecordVoice } from './useRecordVoice';
 
-const RecordButton = () => {
+const RecordButton = ({ onNewText }) => {
   const { text, recording, startRecording, stopRecording } = useRecordVoice();
+
+  useEffect(() => {
+    onNewText(text);
+  }, [text]);
 
   return (
     // Button for starting and stopping voice recording

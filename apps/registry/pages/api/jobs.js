@@ -1,4 +1,4 @@
-const { Configuration, OpenAIApi } = require('openai');
+const OpenAI = require('openai');
 const { createClient } = require('@supabase/supabase-js');
 
 const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
@@ -9,12 +9,11 @@ if (!process.env.OPENAI_API_KEY) {
   throw new Error('Missing env var from OpenAI');
 }
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
 
 export default async function handler(req, res) {
-  const openai = new OpenAIApi(configuration);
+  const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
   const { username } = req.body;
 
@@ -24,7 +23,7 @@ export default async function handler(req, res) {
     .eq('username', username);
 
   const resume = JSON.parse(data[0].resume);
-  const completion = await openai.createEmbedding({
+  const completion = await openai.embeddings.create({
     model: 'text-embedding-3-large',
     input: JSON.stringify({
       skills: resume.skills,

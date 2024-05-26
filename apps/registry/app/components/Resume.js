@@ -5,7 +5,6 @@ import { Octokit, App } from 'octokit';
 import { find } from 'lodash';
 import axios from 'axios';
 import ResumeEditor from './ResumeEditor';
-import RecordButton from './RecordButton';
 import fetch from 'node-fetch';
 
 export default async function Page(props) {
@@ -41,7 +40,7 @@ export default async function Page(props) {
     //     },
     //   },
     // });
-
+    return;
     const url = 'https://api.github.com/gists/' + gistId;
     const token = session.accessToken;
 
@@ -80,7 +79,6 @@ export default async function Page(props) {
       Hello, Dashboard Page! asds
       <SignIn />
       <div>
-        <RecordButton />
         <ResumeEditor
           resume={JSON.stringify(resume, undefined, 2)}
           updateGist={updateGist}

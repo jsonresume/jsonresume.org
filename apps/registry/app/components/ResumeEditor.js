@@ -1,8 +1,11 @@
 'use client';
-
+// https://dev.to/amnish04/openai-has-text-to-speech-support-now-4mlp
 import Editor from '@monaco-editor/react';
 import { useRef, useEffect, useState } from 'react';
-import { render } from '../../../../packages/jsonresume-theme-cv';
+import { render } from '../../../../packages/jsonresume-theme-flat';
+import RecordButton from './RecordButton';
+import { merge, mergeAndConcat } from 'merge-anything';
+
 const HtmlIframe = ({ htmlString }) => {
   const iframeRef = useRef(null);
 
@@ -31,6 +34,28 @@ export default function ResumeEditor({ resume: initialResume, updateGist }) {
     updateContent();
   }, [resume]);
 
+  const onNewText = async (text) => {
+    if (text?.length < 5) return;
+    console.log('new text:', text);
+    const response = await fetch('/api/resumeSuggestion', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        text,
+        resume,
+      }),
+    }).then((res) => res.json());
+    console.log({ response });
+    const data = JSON.parse(response);
+    const suggestion = JSON.parse(data.jsonresume);
+    const newResume = merge(JSON.parse(resume), suggestion);
+    console.log({ data, suggestion });
+    setResume(JSON.stringify(newResume, undefined, 2));
+    // keep a local transcript of text and followup
+  };
+
   return (
     <div>
       <button
@@ -40,6 +65,8 @@ export default function ResumeEditor({ resume: initialResume, updateGist }) {
       >
         update gist
       </button>
+      <RecordButton onNewText={onNewText} />
+
       <div
         style={{
           display: 'flex',
@@ -51,6 +78,7 @@ export default function ResumeEditor({ resume: initialResume, updateGist }) {
           width="50vw"
           defaultLanguage="json"
           defaultValue={initialResume}
+          value={resume}
           onChange={(code) => setResume(code)}
         />
 
