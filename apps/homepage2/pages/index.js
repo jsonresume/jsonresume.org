@@ -6,22 +6,7 @@ export default function Homepage() {
       <Head>
         <title>JSON Resume</title>
       </Head>
-      <header id="header" class="yellow promo">
-        <div class="container">
-          <div class="row">
-            <div class="col-sm-12">
-              <h1>JSON Resume</h1>
-              <p>
-                The open source initiative to create a JSON-based standard for
-                resumes. For developers, by developers.
-              </p>
-              <a href="/schema/" class="btn btn-red btn-big">
-                Read more
-              </a>
-            </div>
-          </div>
-        </div>
-      </header>
+
       <div id="start">
         <div class="container">
           <div class="row">
