@@ -46,27 +46,6 @@ export default function GettingStarted() {
       author: '',
       link: '',
     },
-    {
-      name: 'Flat',
-      slug: 'flat',
-      github: 'erming',
-      author: 'Mattias Erming',
-      link: 'https://github.com/erming',
-    },
-    {
-      name: 'One Page Plus',
-      slug: 'onepage-plus',
-      github: '',
-      author: '',
-      link: '',
-    },
-    {
-      name: 'Paper',
-      slug: 'paper-plus-plus',
-      github: '',
-      author: '',
-      link: '',
-    },
   ];
 
   return (
