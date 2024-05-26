@@ -31,6 +31,9 @@
     "PINECONE_API_KEY",
     "PINECONE_ENVIRONMENT",
     "CI",
-    "SUPABASE_KEY"
+    "SUPABASE_KEY",
+    "AUTH_GITHUB_ID",
+    "AUTH_GITHUB_SECRET",
+    "VERCEL_ENV"
   ]
 }
