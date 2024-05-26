@@ -9,11 +9,10 @@ if (!process.env.OPENAI_API_KEY) {
   throw new Error('Missing env var from OpenAI');
 }
 
-
 export default async function handler(req, res) {
   const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+    apiKey: process.env.OPENAI_API_KEY,
+  });
 
   const { username } = req.body;
 

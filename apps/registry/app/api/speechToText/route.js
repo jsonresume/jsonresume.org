@@ -2,12 +2,11 @@ import { NextResponse } from 'next/server';
 import fs from 'fs';
 import OpenAI from 'openai';
 
-
 export async function POST(req) {
   const body = await req.json();
   const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+    apiKey: process.env.OPENAI_API_KEY,
+  });
 
   const base64Audio = body.audio;
 
