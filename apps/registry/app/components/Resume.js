@@ -1,11 +1,12 @@
 'use server';
-
 import SignIn from './SignIn';
 import { auth } from '../../auth';
 import { Octokit, App } from 'octokit';
 import { find } from 'lodash';
 import axios from 'axios';
 import ResumeEditor from './ResumeEditor';
+import RecordButton from './RecordButton';
+import fetch from 'node-fetch';
 
 export default async function Page(props) {
   const session = await auth();
@@ -22,7 +23,6 @@ export default async function Page(props) {
   });
 
   const gistId = resumeUrl.id;
-  console.log({ resumeUrl, resumeGist });
   const fullResumeGistUrl = `https://gist.githubusercontent.com/${username}/${gistId}/raw?cachebust=${new Date().getTime()}`;
   const resumeRes = await axios({
     method: 'GET',
@@ -41,26 +41,46 @@ export default async function Page(props) {
     //     },
     //   },
     // });
-    console.log('what happens');
-    // console.log({ response });
+
+    const url = 'https://api.github.com/gists/' + gistId;
+    const token = session.accessToken;
+
+    const headers = {
+      Accept: 'application/vnd.github+json',
+      Authorization: `Bearer ${token}`,
+      'X-GitHub-Api-Version': '2022-11-28',
+      'Content-Type': 'application/json',
+    };
+
+    const data = {
+      files: {
+        'resume.json': {
+          content: resume,
+        },
+      },
+    };
+    fetch(url, {
+      method: 'PATCH',
+      headers: headers,
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(JSON.stringify(data)))
+      .catch((error) => console.error('Error:', error));
+
     return null;
   }
 
   const resume = resumeRes.data;
 
-  console.log({ resume });
   //   console.log('Hello, %s', data);
+
   return (
     <div>
       Hello, Dashboard Page! asds
       <SignIn />
       <div>
-        More to come (read the homepage for instructions on how to use the
-        registry)
-        <br />
-        https://github.com/jsonresume/jsonresume.org
-        <br />
-        <a href="https://registry.jsonresume.org/resumes">view all resumes</a>
+        <RecordButton />
         <ResumeEditor
           resume={JSON.stringify(resume, undefined, 2)}
           updateGist={updateGist}
