@@ -94,7 +94,7 @@
     "react-speech-recognition": "^3.10.0",
     "resume-schema": "^1.0.0",
     "styled-components": "^6",
-    "ui": "workspace:*",
+    "@jsonresume/ui": "workspace:*",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
