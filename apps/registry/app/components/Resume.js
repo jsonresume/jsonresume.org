@@ -7,10 +7,14 @@ import axios from 'axios';
 import ResumeEditor from './ResumeEditor';
 import fetch from 'node-fetch';
 
+// @todo - add json schema to editor
+//codesandbox.io/p/sandbox/monaco-editor-json-validation-example-gue0q?file=%2Fsrc%2FApp.js
+
 export default async function Page(props) {
   const session = await auth();
   console.log({ session });
   let resume = null;
+  let gistId = null;
   if (session) {
     const octokit = new Octokit({ auth: session.accessToken });
     const { data } = await octokit.rest.users.getAuthenticated();
@@ -24,7 +28,7 @@ export default async function Page(props) {
       return f.files['resume.json'];
     });
 
-    const gistId = resumeUrl.id;
+    gistId = resumeUrl.id;
     const fullResumeGistUrl = `https://gist.githubusercontent.com/${username}/${gistId}/raw?cachebust=${new Date().getTime()}`;
     const resumeRes = await axios({
       method: 'GET',
@@ -36,15 +40,18 @@ export default async function Page(props) {
 
   async function updateGist(resume) {
     'use server';
+    const octokit = new Octokit({ auth: session.accessToken });
 
-    // const response = await octokit.rest.gists.update({
-    //   gist_id: gistId,
-    //   files: {
-    //     'resume.json': {
-    //       content: resume,
-    //     },
-    //   },
-    // });
+    if (gistId) {
+      const response = await octokit.rest.gists.update({
+        gist_id: gistId,
+        files: {
+          'resume.json': {
+            content: resume,
+          },
+        },
+      });
+    }
     return;
     // const url = 'https://api.github.com/gists/' + gistId;
     // const token = session.accessToken;

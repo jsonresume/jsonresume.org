@@ -1,18 +1,15 @@
 {
-  "private": true,
   "name": "ui",
   "version": "0.0.0",
-  "main": "./index.tsx",
-  "types": "./index.tsx",
+  "main": "./index.js",
   "license": "MIT",
   "devDependencies": {
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "eslint": "^7.32.0",
     "eslint-config-custom": "workspace:*",
-    "react": "^18",
-    "tsconfig": "workspace:*",
-    "typescript": "^5"
+    "react": "^18"
+  },
+  "exports": {
+    "./Button": "./src/Button.js",
+    "./Header": "./src/Header.js"
   },
   "module": "true"
 }

@@ -611,12 +611,6 @@ importers:
 
   packages/ui:
     devDependencies:
-      '@types/react':
-        specifier: ^18
-        version: 18.2.39
-      '@types/react-dom':
-        specifier: ^18
-        version: 18.2.17
       eslint:
         specifier: ^7.32.0
         version: 7.32.0
@@ -626,12 +620,6 @@ importers:
       react:
         specifier: ^18
         version: 18.2.0
-      tsconfig:
-        specifier: workspace:*
-        version: link:../tsconfig
-      typescript:
-        specifier: ^5
-        version: 5.3.2
 
   themes/papirus:
     dependencies:
