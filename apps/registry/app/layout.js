@@ -1,12 +1,6 @@
-// import Header from '@jsonresume/ui/Header';
+import Header from '@jsonresume/ui/Header';
 import Head from 'next/head';
-import StyledComponentsRegistry from './lib/registry';
-
-/*
-@todo
- - make ui components to reuse with homepage
-
-*/
+import { signOut } from 'next-auth/react';
 
 export default function Layout({ children }) {
   return (
@@ -24,22 +18,20 @@ export default function Layout({ children }) {
         />
       </Head>
       <body>
-        <StyledComponentsRegistry>
-          {/* <Header
-            left={
-              <div>
-                <a href="/">JSON Resume Registry</a>
-              </div>
-            }
-            right={
-              <div>
-                <a href="/logout">About</a>
-                <a href="/logout">Logout</a>
-              </div>
-            }
-          /> */}
-          {children}
-        </StyledComponentsRegistry>
+        <Header
+          left={
+            <div>
+              <a href="/">JSON Resume Registry</a>
+            </div>
+          }
+          right={
+            <div>
+              <a href="/logout">About</a>
+              <span onClick={signOut}>Logout</span>
+            </div>
+          }
+        />
+        {children}
       </body>
     </html>
   );
