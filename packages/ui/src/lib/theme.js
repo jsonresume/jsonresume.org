@@ -3,9 +3,9 @@
 const colors = Object.freeze({
   primary: {
     light: '#7986cb',
-    main: '#3f51b5',
+    main: '#fff18f',
     dark: '#303f9f',
-    contrastText: '#ffffff',
+    contrastText: '#000',
   },
   secondary: {
     light: '#ff4081',
@@ -49,4 +49,7 @@ const colors = Object.freeze({
   },
 });
 
-export default colors;
+const theme = {
+  colors,
+};
+export default theme;
