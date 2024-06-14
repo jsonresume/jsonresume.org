@@ -11,7 +11,15 @@ const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
 const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-const EXTENSIONS = new Set(['qr', 'json', 'tex', 'txt', 'template', 'yaml']);
+const EXTENSIONS = new Set([
+  'qr',
+  'json',
+  'tex',
+  'txt',
+  'template',
+  'yaml',
+  'rendercv',
+]);
 
 const generateResume = async (username, extension = 'template', query = {}) => {
   const { theme } = query;

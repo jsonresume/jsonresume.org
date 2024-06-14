@@ -4,6 +4,7 @@ import txt from './text';
 import tex from './tex';
 import json from './json';
 import yaml from './yaml';
+import rendercv from './rendercv';
 
 const formatters = {
   qr,
@@ -12,6 +13,7 @@ const formatters = {
   txt,
   template,
   yaml,
+  rendercv,
 };
 
 export default formatters;
