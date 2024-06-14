@@ -1,4 +1,4 @@
-const YAML = require('json-to-pretty-yaml');
+import YAML from 'json-to-pretty-yaml';
 
 const networks = {
   facebook: 'Facebook',
@@ -12,7 +12,7 @@ const networks = {
   youtube: 'YouTube',
 };
 
-const format = async function format(jsonResume) {
+export const convert = async function format(jsonResume) {
   const renderCV = {
     cv: {
       name: jsonResume.basics.name,
@@ -84,7 +84,3 @@ const format = async function format(jsonResume) {
 
   return { content, headers: [] };
 };
-
-const exports = { format };
-
-export default exports;

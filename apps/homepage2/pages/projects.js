@@ -72,6 +72,13 @@ export default function GettingStarted() {
       category: 'parser',
     },
     {
+      name: 'rendercv',
+      description:
+        'RenderCV is a latext CV/resume framework. It allows you to create a high-quality CV as a PDF from a YAML file with full Markdown syntax support and complete control over the latex code',
+      link: 'https://github.com/schnerring/hugo-mod-json-resume',
+      category: 'framework',
+    },
+    {
       name: 'hugo-mod-json-resume',
       description:
         'A Hugo module containing templates to integrate multilingual JSON Resume data into your Hugo website.',
