@@ -82,5 +82,5 @@ export const convert = async function format(jsonResume) {
   };
   const content = YAML.stringify(renderCV);
 
-  return { content, headers: [] };
+  return content;
 };

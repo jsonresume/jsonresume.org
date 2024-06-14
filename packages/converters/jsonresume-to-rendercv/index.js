@@ -30,7 +30,7 @@ fs.readFile(inputPath, 'utf8', async (err, data) => {
 
   const rendercvData = await convert(resumeData);
 
-  fs.writeFile(outputPath, rendercvData.content, (writeErr) => {
+  fs.writeFile(outputPath, rendercvData, (writeErr) => {
     if (writeErr) {
       console.error('Error writing output file:', writeErr);
       process.exit(1);
