@@ -12,6 +12,15 @@ export default class MyDocument extends Document {
           <link rel="dns-prefetch" href="//fonts.googleapis.com" />
           <link rel="dns-prefetch" href="//cdnjs.cloudflare.com" />
           <link rel="dns-prefetch" href="//static.getclicky.com" />
+          {(process.env.NODE_ENV === 'development' ||
+            process.env.VERCEL_ENV === 'preview') && (
+            // eslint-disable-next-line @next/next/no-sync-scripts
+            <script
+              data-project-id="3T7wRdtjOmyutEJb4CkBwQmBQqnzIsTTBh1ypGGP"
+              data-is-production-environment="false"
+              src="https://snippet.meticulous.ai/v1/meticulous.js"
+            />
+          )}
           <noscript>
             <p>
               <Image
