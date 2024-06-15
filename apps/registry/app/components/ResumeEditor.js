@@ -30,11 +30,7 @@ export default function ResumeEditor({ resume: initialResume, updateGist }) {
 
   useEffect(() => {
     updateContent();
-  }, [resume]);
-
-  const onNewText = async (text) => {
-    // keep a local transcript of text and followup
-  };
+  }, [resume, updateContent]);
 
   return (
     <div>

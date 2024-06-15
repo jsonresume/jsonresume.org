@@ -26,7 +26,6 @@ export default function Layout({ children }) {
           }
           right={
             <div>
-              <a href="/logout">About</a>
               <span onClick={signOut}>Logout</span>
             </div>
           }

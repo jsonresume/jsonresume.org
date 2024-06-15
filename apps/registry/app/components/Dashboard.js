@@ -1,7 +1,7 @@
 'use server';
 import SignIn from './SignIn';
 import { auth } from '../../auth';
-import { Octokit, App } from 'octokit';
+import { Octokit } from 'octokit';
 import { find } from 'lodash';
 import axios from 'axios';
 import ResumeEditor from './ResumeEditor';
@@ -164,7 +164,7 @@ const sampleResume = {
   ],
 };
 
-export default async function Page(props) {
+export default async function Page() {
   const session = await auth();
   console.log({ session });
   let resume = null;
@@ -181,11 +181,10 @@ export default async function Page(props) {
 
     const username = data.login;
     const gists = await octokit.rest.gists.list({ per_page: 100 });
-    let resumeGist = null;
 
     const resumeUrl = find(gists.data, (f) => {
       // console.log({ f });
-      return f.files['blah.json'];
+      return f.files['resume.json'];
     });
 
     if (resumeUrl) {
@@ -205,10 +204,10 @@ export default async function Page(props) {
     const octokit = new Octokit({ auth: session.accessToken });
 
     if (gistId) {
-      const response = await octokit.rest.gists.update({
+      await octokit.rest.gists.update({
         gist_id: gistId,
         files: {
-          'blah.json': {
+          'resume.json': {
             content: resume,
           },
         },
@@ -226,7 +225,7 @@ export default async function Page(props) {
     console.log('====');
     const response = await octokit.rest.gists.create({
       files: {
-        'blah.json': {
+        'resume.json': {
           content: JSON.stringify(sampleResume, undefined, 2),
         },
       },
