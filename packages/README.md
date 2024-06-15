@@ -1,1 +1,0 @@
-All components across the project should live here

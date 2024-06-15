@@ -4,15 +4,14 @@
 require('dotenv').config({ path: __dirname + '/./../../.env' });
 
 const { createClient } = require('@supabase/supabase-js');
-const { Configuration, OpenAIApi } = require('openai');
+const OpenAI = require('openai');
 
 const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
 const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
-const configuration = new Configuration({
+const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
-const openai = new OpenAIApi(configuration);
 
 /*
 - multpple positions
@@ -221,7 +220,7 @@ async function main() {
   data.forEach(async (job) => {
     const jobDescription = job.content;
     if (!job.gpt_content) {
-      const chat = await openai.createChatCompletion({
+      const chat = await openai.chat.completions.create({
         model: 'gpt-3.5-turbo',
         temperature: 0.8,
         messages: [
@@ -312,7 +311,7 @@ async function main() {
       console.log('AFASDASDAS');
       console.log('AFASDASDAS');
       console.log('AFASDASDAS');
-      const details = chat.data.choices[0].message.function_call?.arguments;
+      const details = chat.choices[0].message.function_call?.arguments;
       console.log(JSON.parse(details));
       try {
         const { error } = await supabase

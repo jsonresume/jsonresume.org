@@ -1,19 +1,18 @@
 require('dotenv').config({ path: __dirname + '/./../../.env' });
 
 const { createClient } = require('@supabase/supabase-js');
-const { Configuration, OpenAIApi } = require('openai');
+const OpenAI = require('openai');
 
 const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
 const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
-const configuration = new Configuration({
+const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
-const openai = new OpenAIApi(configuration);
 
 async function main() {
   //   const { data, error } = await supabase.from('jobs').select();
-  const completion1 = await openai.createEmbedding({
+  const completion1 = await openai.embeddings.create({
     model: 'text-embedding-ada-002',
     input: JSON.stringify('haskell computer vision'),
   });

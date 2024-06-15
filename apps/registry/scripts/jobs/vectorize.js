@@ -1,22 +1,21 @@
 require('dotenv').config({ path: __dirname + '/./../../.env' });
 
 const { createClient } = require('@supabase/supabase-js');
-const { Configuration, OpenAIApi } = require('openai');
+const OpenAI = require('openai');
 
 const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
 const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
-const configuration = new Configuration({
+const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
-const openai = new OpenAIApi(configuration);
 
 async function main() {
   const { data, error } = await supabase.from('jobs').select();
   console.log({ data, error });
   data.forEach(async (job) => {
     if (!job.embedding_v5) {
-      const completion1 = await openai.createEmbedding({
+      const completion1 = await openai.embeddings.create({
         model: 'text-embedding-3-large',
         input: JSON.stringify(job.gpt_content),
       });
