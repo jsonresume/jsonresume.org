@@ -63,6 +63,38 @@ export default function GettingStarted() {
                   Download here
                 </a>
               </p>
+              <h3>Latex</h3>
+              <p>
+                If you want to render a Latex resume there is very well put
+                together project called{' '}
+                <a
+                  target="_blank"
+                  href="https://github.com/sinaatalay/rendercv"
+                >
+                  RenderCV
+                </a>
+                . It has it&apos;s own data format for resumes but we have tools
+                to convert your <code>resume.json</code> to their format.
+              </p>
+              <p>
+                To convert your resume.json
+                <br />
+                <br />
+                <code>npx @jsonresume/jsonresume-to-rendercv resume.json</code>
+                <br />
+                <br />
+                Then simply
+                <br />
+                <br />
+                <code>rendercv render resume.yaml</code>
+                <br />
+                <br />
+                If you use the registry hosting service, you can access your
+                resume in the RenderCV format e.g.
+                <a href="https://registry.jsonresume.org/thomasdavis.rendercv">
+                  https://registry.jsonresume.org/thomasdavis.rendercv
+                </a>
+              </p>
             </section>
           </div>
           <div class="col-sm-6">
@@ -94,7 +126,8 @@ export default function GettingStarted() {
                 </code>
               </p>
               <p>
-                To set a theme, just add to your <code>resume.json</code>;<br />
+                To set a theme, just add to your <code>resume.json</code>
+                <br />
                 <code>
                   &#123; &quot;meta&quot;: &#123; &quot;theme&quot;:
                   &quot;elegant&quot; &#125; &#125;
@@ -106,7 +139,7 @@ export default function GettingStarted() {
                 <br />
                 <br />
                 Basically, you can just make a Github Action, that publishes
-                your gist when you push to your own repo. Example below;
+                your gist when you push to your own repo. Example below
                 <br />
                 <br />
                 <strong>EXAMPLE</strong> -{' '}
