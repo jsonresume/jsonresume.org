@@ -23,14 +23,10 @@ export default function ResumeEditor({ resume: initialResume, updateGist }) {
     setResume(initialResume);
   }, [initialResume]);
 
-  const updateContent = async () => {
+  useEffect(() => {
     const rendered = render(JSON.parse(resume));
     setContent(rendered);
-  };
-
-  useEffect(() => {
-    updateContent();
-  }, [resume, updateContent]);
+  }, [resume]);
 
   return (
     <div>
