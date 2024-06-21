@@ -1,10 +1,12 @@
 'use client';
 // https://dev.to/amnish04/openai-has-text-to-speech-support-now-4mlp
-import Editor from '@monaco-editor/react';
+import Editor, { useMonaco } from '@monaco-editor/react';
 import { useRef, useEffect, useState } from 'react';
-import { render } from '../../../../packages/jsonresume-theme-flat';
+import { render } from '../../../../themes/stackoverflow/dist';
+// import { render } from '../../../../packages/jsonresume-theme-flat';
 import Button from '@jsonresume/ui/Button';
 import Link from '@jsonresume/ui/Link';
+import schema from './schema';
 
 const HtmlIframe = ({ htmlString }) => {
   const iframeRef = useRef(null);
@@ -23,6 +25,7 @@ const HtmlIframe = ({ htmlString }) => {
     />
   );
 };
+
 export default function ResumeEditor({
   login,
   resume: initialResume,
@@ -31,16 +34,37 @@ export default function ResumeEditor({
   const [resume, setResume] = useState(initialResume);
   const [changed, setChanged] = useState(false);
   const [content, setContent] = useState('');
+  const monaco = useMonaco();
 
   useEffect(() => {
     setResume(initialResume);
   }, [initialResume]);
 
   useEffect(() => {
-    const rendered = render(JSON.parse(resume));
-    setContent(rendered);
-    setChanged(true);
+    try {
+      const rendered = render(JSON.parse(resume));
+      setContent(rendered);
+      setChanged(true);
+    } catch (e) {
+      console.log(e);
+    }
   }, [resume]);
+
+  useEffect(() => {
+    if (monaco) {
+      // Register the JSON schema
+      monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+        validate: true,
+        schemas: [
+          {
+            uri: 'http://myserver/foo-schema.json', // id of the schema
+            fileMatch: ['*'], // associate with all JSON files
+            schema,
+          },
+        ],
+      });
+    }
+  }, [monaco, schema]);
 
   return (
     <div>
@@ -57,7 +81,8 @@ export default function ResumeEditor({
             lineHeight: '26px',
           }}
         >
-          The live preview does not support your theme but the registry does
+          The live preview does not support your theme but the registry does.
+          (coming soon)
         </div>
         <div>
           <Link
@@ -92,6 +117,7 @@ export default function ResumeEditor({
           width="50vw"
           defaultLanguage="json"
           defaultValue={initialResume}
+          options={{ wordWrap: 'on' }}
           value={resume}
           onChange={(code) => setResume(code)}
         />
