@@ -19,7 +19,9 @@ const HtmlIframe = ({ htmlString }) => {
 };
 export default function ResumeEditor({ resume: initialResume, updateGist }) {
   const [resume, setResume] = useState(initialResume);
+  const [changed, setChanged] = useState(false);
   const [content, setContent] = useState('');
+
   useEffect(() => {
     setResume(initialResume);
   }, [initialResume]);
@@ -27,13 +29,16 @@ export default function ResumeEditor({ resume: initialResume, updateGist }) {
   useEffect(() => {
     const rendered = render(JSON.parse(resume));
     setContent(rendered);
+    setChanged(true);
   }, [resume]);
 
   return (
     <div>
       <div style={{ padding: 10, textAlign: 'center' }}>
         <Button
+          disabled={!changed}
           onClick={async () => {
+            setChanged(false);
             await updateGist(resume);
           }}
         >
