@@ -9,7 +9,8 @@
   },
   "exports": {
     "./Button": "./src/Button.js",
-    "./Header": "./src/Header.js"
+    "./Header": "./src/Header.js",
+    "./Link": "./src/Link.js"
   },
   "module": "true",
   "dependencies": {

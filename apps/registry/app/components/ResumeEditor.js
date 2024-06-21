@@ -3,6 +3,7 @@
 import Editor from '@monaco-editor/react';
 import { useRef, useEffect, useState } from 'react';
 import { render } from '../../../../packages/jsonresume-theme-flat';
+import Button from '@jsonresume/ui/Button';
 
 const HtmlIframe = ({ htmlString }) => {
   const iframeRef = useRef(null);
@@ -30,14 +31,15 @@ export default function ResumeEditor({ resume: initialResume, updateGist }) {
 
   return (
     <div>
-      <button
-        onClick={async () => {
-          await updateGist(resume);
-        }}
-      >
-        update gist
-      </button>
-
+      <div style={{ padding: 10, textAlign: 'center' }}>
+        <Button
+          onClick={async () => {
+            await updateGist(resume);
+          }}
+        >
+          Update Gist
+        </Button>
+      </div>
       <div
         style={{
           display: 'flex',
