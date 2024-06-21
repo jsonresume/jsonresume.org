@@ -64,7 +64,7 @@ export default function ResumeEditor({
         ],
       });
     }
-  }, [monaco, schema]);
+  }, [monaco]);
 
   return (
     <div>

@@ -13,7 +13,7 @@ export default function CreateResume({ createGist }) {
         <br />
         <br />
         <br />
-        You currently don't have a gist named resume.json
+        You currently don&apos;t have a gist named resume.json
         <br />
         <br />
         {!creating && (
