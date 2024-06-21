@@ -1,0 +1,17 @@
+.link {
+  color: #000;
+  text-decoration: none;
+  color: #222;
+  font: 14px 'Open Sans';
+  margin: 0;
+  overflow-x: hidden;
+  cursor: pointer;
+  font-weight: 600;
+
+  &:hover {
+    text-decoration: none;
+    color: #ce2424;
+    -webkit-transition: all 0.25s;
+    transition: all 0.25s;
+  }
+}

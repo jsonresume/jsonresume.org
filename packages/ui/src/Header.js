@@ -1,21 +1,10 @@
-// import styled, { ThemeProvider } from 'styled-components';
-// import theme from './lib/theme';
+import styles from './Header.module.css';
 
-// const HeaderContainer = styled.header`
-//   background-color: ${({ theme }) => theme.colors.primary.main};
-//   color: white;
-//   padding: 1rem;
-//   a {
-//     color: ${({ theme }) => theme.colors.primary.contrastText};
-//     text-decoration: none;
-//   }
-// `;
-
-// @todo - ideally I want to publish this ui package where styled component is not required, but I don't know how to do that yet
+// #fff18f
 
 const Header = ({ left = null, right = null }) => {
   return (
-    <nav>
+    <nav className={styles.header}>
       <div
         style={{
           display: 'flex',
