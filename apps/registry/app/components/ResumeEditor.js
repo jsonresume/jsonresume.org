@@ -4,6 +4,7 @@ import Editor from '@monaco-editor/react';
 import { useRef, useEffect, useState } from 'react';
 import { render } from '../../../../packages/jsonresume-theme-flat';
 import Button from '@jsonresume/ui/Button';
+import Link from '@jsonresume/ui/Link';
 
 const HtmlIframe = ({ htmlString }) => {
   const iframeRef = useRef(null);
@@ -15,9 +16,18 @@ const HtmlIframe = ({ htmlString }) => {
     iframeDocument.close();
   }, [htmlString]);
 
-  return <iframe ref={iframeRef} style={{ width: '100%', height: '100%' }} />;
+  return (
+    <iframe
+      ref={iframeRef}
+      style={{ border: 0, outline: 0, width: '100%', height: '100%' }}
+    />
+  );
 };
-export default function ResumeEditor({ resume: initialResume, updateGist }) {
+export default function ResumeEditor({
+  login,
+  resume: initialResume,
+  updateGist,
+}) {
   const [resume, setResume] = useState(initialResume);
   const [changed, setChanged] = useState(false);
   const [content, setContent] = useState('');
@@ -34,16 +44,42 @@ export default function ResumeEditor({ resume: initialResume, updateGist }) {
 
   return (
     <div>
-      <div style={{ padding: 10, textAlign: 'center' }}>
-        <Button
-          disabled={!changed}
-          onClick={async () => {
-            setChanged(false);
-            await updateGist(resume);
+      <div
+        style={{
+          padding: 10,
+          display: 'flex',
+          justifyContent: 'space-between',
+        }}
+      >
+        <div
+          style={{
+            fontSize: 12,
+            lineHeight: '26px',
           }}
         >
-          Update Gist
-        </Button>
+          The live preview does not support your theme but the registry does
+        </div>
+        <div>
+          <Link
+            href={`/${login}`}
+            target="_blank"
+            style={{
+              marginRight: 20,
+              fontSize: 12,
+            }}
+          >
+            View Resume
+          </Link>
+          <Button
+            disabled={!changed}
+            onClick={async () => {
+              setChanged(false);
+              await updateGist(resume);
+            }}
+          >
+            Update Gist
+          </Button>
+        </div>
       </div>
       <div
         style={{
@@ -61,7 +97,7 @@ export default function ResumeEditor({ resume: initialResume, updateGist }) {
         />
 
         <div style={{ width: '50vw', height: '90vh' }}>
-          <HtmlIframe htmlString={content} />
+          <HtmlIframe style={{ border: 0 }} htmlString={content} />
         </div>
       </div>
     </div>

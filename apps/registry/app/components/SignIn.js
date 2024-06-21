@@ -16,10 +16,13 @@ export default function SignIn() {
       </form>
       <br />
       <div>
+        This will let you sync a resume.json on your Github gists.
+        <br />
+        <br />
+        If you already have one, it will load it into the editor.
+        <br />
+        <br />
         There is nothing stored on our servers.
-        <br />
-        <br />
-        This will let you sync a resume.gist on your Github account.
       </div>
     </div>
   );
