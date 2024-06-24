@@ -5,3 +5,5 @@ themes/stackoverflow/public
 apps/registry/playwright-report
 themes/papirus/src/partials.cjs
 themes/papirus/src/templates.cjs
+apps/**/*.css
+packages/**/*.css

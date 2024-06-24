@@ -164,11 +164,14 @@ const sampleResume = {
   ],
 };
 
+const RESUME_GIST_NAME = 'resume.json';
+
 export default async function Page() {
   const session = await auth();
   console.log({ session });
   let resume = null;
   let gistId = null;
+  let login = null;
 
   console.log('Hello, %s', { session });
   if (!session) {
@@ -178,13 +181,13 @@ export default async function Page() {
   if (session) {
     const octokit = new Octokit({ auth: session.accessToken });
     const { data } = await octokit.rest.users.getAuthenticated();
-
+    console.log({ data });
     const username = data.login;
+    login = username;
     const gists = await octokit.rest.gists.list({ per_page: 100 });
 
     const resumeUrl = find(gists.data, (f) => {
-      // console.log({ f });
-      return f.files['resume.json'];
+      return f.files[RESUME_GIST_NAME];
     });
 
     if (resumeUrl) {
@@ -207,7 +210,7 @@ export default async function Page() {
       await octokit.rest.gists.update({
         gist_id: gistId,
         files: {
-          'resume.json': {
+          [RESUME_GIST_NAME]: {
             content: resume,
           },
         },
@@ -219,22 +222,19 @@ export default async function Page() {
   async function createGist() {
     'use server';
     const octokit = new Octokit({ auth: session.accessToken });
-    console.log('====');
-    console.log('====');
-    console.log('====');
-    console.log('====');
+
     const response = await octokit.rest.gists.create({
       files: {
-        'resume.json': {
+        [RESUME_GIST_NAME]: {
           content: JSON.stringify(sampleResume, undefined, 2),
         },
       },
     });
-    console.log({ response });
+
     return response;
   }
 
-  //   console.log('Hello, %s', data);
+  console.log({ session });
 
   return (
     <div>
@@ -243,6 +243,7 @@ export default async function Page() {
       {session && resume && (
         <div>
           <ResumeEditor
+            login={login}
             resume={JSON.stringify(resume, undefined, 2)}
             updateGist={updateGist}
           />

@@ -1,5 +1,8 @@
 import Header from '@jsonresume/ui/Header';
 import { signOut } from 'next-auth/react';
+import Link from '@jsonresume/ui/Link';
+import { auth } from '../auth';
+import './global.css';
 
 export const metadata = {
   title: 'JSON Resume Registry',
@@ -9,21 +12,21 @@ export const viewport = {
   initialScale: 1,
   width: 'device-width',
 };
-export default function Layout({ children }) {
+
+export default async function Layout({ children }) {
+  const session = await auth();
+  console.log('Hello, %s', { session });
+
   return (
     <html lang="en">
       <body>
         <Header
           left={
             <div>
-              <a href="/">JSON Resume Registry</a>
+              <Link href="/">JSON Resume Registry</Link>
             </div>
           }
-          right={
-            <div>
-              <span onClick={signOut}>Logout</span>
-            </div>
-          }
+          right={<div>{session && <Link onClick={signOut}>Logout</Link>}</div>}
         />
         {children}
         <link
