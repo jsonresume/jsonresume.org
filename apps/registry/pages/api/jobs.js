@@ -37,7 +37,7 @@ export default async function handler(req, res) {
 
   const desiredLength = 3072;
 
-  let embedding = completion.data.data[0].embedding;
+  let embedding = completion.data[0].embedding;
 
   if (embedding.length < desiredLength) {
     embedding = embedding.concat(
@@ -57,7 +57,8 @@ export default async function handler(req, res) {
 
   const filteredJobs = jobs.filter(
     (job) =>
-      new Date(job.created_at) > new Date(Date.now() - 60 * 24 * 60 * 60 * 1000)
+      new Date(job.created_at) >
+      new Date(Date.now() - 60 * 24 * 60 * 120 * 1000)
   );
 
   return res.status(200).send(filteredJobs);
