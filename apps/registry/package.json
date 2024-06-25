@@ -37,6 +37,7 @@
     "jsonresume-theme-autumn": "^1.0.1",
     "jsonresume-theme-cora": "^0.1.1",
     "jsonresume-theme-cv": "workspace:*",
+    "jsonresume-theme-professional": "workspace:*",
     "jsonresume-theme-el-santo": "^0.0.3",
     "jsonresume-theme-elegant": "^1.16.1",
     "jsonresume-theme-eloquent": "^4.1.0",

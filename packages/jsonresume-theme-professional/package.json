@@ -1,0 +1,22 @@
+{
+  "private": true,
+  "name": "jsonresume-theme-professional",
+  "version": "0.0.0",
+  "main": "./src/index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint-config-custom": "workspace:^",
+    "react": "^18",
+    "styled-components": "^6"
+  },
+  "peerDependencies": {
+    "styled-components": "^6"
+  },
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "prismjs": "^1.29.0",
+    "react-icons": "^5.0.1"
+  }
+}

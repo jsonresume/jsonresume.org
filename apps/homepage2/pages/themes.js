@@ -12,6 +12,13 @@ export default function GettingStarted() {
       link: 'https://github.com/mudassir0909',
     },
     {
+      name: 'Professional',
+      slug: 'professional',
+      github: 'thomasdavis',
+      author: 'Thomas Davis',
+      link: 'https://registry.jsonresume.org/thomasdavis',
+    },
+    {
       name: 'Kendall',
       slug: 'kendall',
       github: 'LinuxBozo',

@@ -2,8 +2,8 @@
 // https://dev.to/amnish04/openai-has-text-to-speech-support-now-4mlp
 import Editor, { useMonaco } from '@monaco-editor/react';
 import { useRef, useEffect, useState } from 'react';
-import { render } from '../../../../themes/stackoverflow/dist';
-// import { render } from '../../../../packages/jsonresume-theme-flat';
+// import { render } from '../../../../themes/stackoverflow/dist';
+import { render } from '../../../../packages/jsonresume-theme-professional';
 import Button from '@jsonresume/ui/Button';
 import Link from '@jsonresume/ui/Link';
 import schema from './schema';
