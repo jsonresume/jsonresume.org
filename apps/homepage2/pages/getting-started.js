@@ -50,7 +50,7 @@ export default function GettingStarted() {
               <p>
                 <code>resume export resume.html</code>
               </p>
-              <h3>Import from LinkedIn</h3>
+              <h2>Import from LinkedIn</h2>
               <p>
                 One of our community members wrote a great Chrome extension to
                 import your LinkedIn Profile.
@@ -63,7 +63,7 @@ export default function GettingStarted() {
                   Download here
                 </a>
               </p>
-              <h3>Latex</h3>
+              <h2>Latex</h2>
               <p>
                 If you want to render a Latex resume there is very well put
                 together project called{' '}
@@ -106,24 +106,26 @@ export default function GettingStarted() {
                 <br />
                 e.g.{' '}
                 <a href="https://registry.jsonresume.org/thomasdavis">
-                  https://registry.jsonresume.org/thomasdavis
+                  registry.jsonresume.org/thomasdavis
                 </a>
               </p>
               <p>
                 All you have to do is create a Gist on GitHub named
-                <code>resume.json</code>. <br />
-                <br />
+                <code>resume.json</code>. <br /> <br />
+                <strong>Alternatively</strong>, you can use the Editor at{' '}
+                <a href="https://registry.jsonresume.org">
+                  registry.jsonresume.org
+                </a>{' '}
+                <br /> <br />
                 e.g.{' '}
                 <a href="https://gist.github.com/thomasdavis/c9dcfa1b37dec07fb2ee7f36d7278105">
-                  https://gist.github.com/thomasdavis/c9dcfa1b37dec07fb2ee7f36d7278105
+                  gist.github.com/thomasdavis/c9dcfa1b37dec07fb2ee7f36d7278105
                 </a>
               </p>
               <p>
                 Our hosting service will automatically detect this when you
                 access
-                <code>
-                  https://registry.jsonresume.org/your_github_username
-                </code>
+                <code>registry.jsonresume.org/your_github_username</code>
               </p>
               <p>
                 To set a theme, just add to your <code>resume.json</code>
@@ -144,7 +146,7 @@ export default function GettingStarted() {
                 <br />
                 <strong>EXAMPLE</strong> -{' '}
                 <a href="https://github.com/thomasdavis/resume">
-                  https://github.com/thomasdavis/resume
+                  github.com/thomasdavis/resume
                 </a>
               </p>
               <hr />
@@ -157,17 +159,17 @@ export default function GettingStarted() {
                 <br />
                 <strong>JSON</strong> -{' '}
                 <a href="https://registry.jsonresume.org/thomasdavis.json">
-                  https://registry.jsonresume.org/thomasdavis.json
+                  registry.jsonresume.org/thomasdavis.json
                 </a>
                 <br />
                 <strong>YAML</strong> -{' '}
                 <a href="https://registry.jsonresume.org/thomasdavis.yaml">
-                  https://registry.jsonresume.org/thomasdavis.yaml
+                  registry.jsonresume.org/thomasdavis.yaml
                 </a>
                 <br />
                 <strong>TEXT</strong> -{' '}
                 <a href="https://registry.jsonresume.org/thomasdavis.txt">
-                  https://registry.jsonresume.org/thomasdavis.txt
+                  registry.jsonresume.org/thomasdavis.txt
                 </a>
               </p>
               <hr />
@@ -178,7 +180,7 @@ export default function GettingStarted() {
                 If you want to generate a QR code that links to your hosted
                 resume, use{' '}
                 <a href="https://registry.jsonresume.org/thomasdavis.qr">
-                  https://registry.jsonresume.org/thomasdavis.qr
+                  registry.jsonresume.org/thomasdavis.qr
                 </a>
                 <br />
                 e.g. <br />
