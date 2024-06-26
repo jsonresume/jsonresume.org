@@ -114,7 +114,7 @@ export default function ResumeEditor({
       >
         <Editor
           height="90vh"
-          width="50vw"
+          width="25vw"
           defaultLanguage="json"
           defaultValue={initialResume}
           options={{ wordWrap: 'on' }}
@@ -122,7 +122,7 @@ export default function ResumeEditor({
           onChange={(code) => setResume(code)}
         />
 
-        <div style={{ width: '50vw', height: '90vh' }}>
+        <div style={{ width: '75vw', height: '90vh' }}>
           <HtmlIframe style={{ border: 0 }} htmlString={content} />
         </div>
       </div>
