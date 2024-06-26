@@ -7,7 +7,9 @@ const SummaryComponent = ({ basics }) => {
   const { summary } = basics;
   return (
     <Section>
-      <Summary>{summary}</Summary>
+      <div className="secondary">
+        <Summary>{summary}</Summary>
+      </div>
     </Section>
   );
 };

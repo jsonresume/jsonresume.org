@@ -56,7 +56,7 @@ export const render = (resume) => {
     }
 
     h2 {
-      font-size: 1.7rem;
+      font-size: 1.65rem;
     }
 
     p {
@@ -66,7 +66,11 @@ export const render = (resume) => {
 
     p, li {
       font-size: 1.4rem;
-    
+      line-height: 1.5rem;
+    }
+
+    .secondary {
+      color: #111;
     }
 
     a {

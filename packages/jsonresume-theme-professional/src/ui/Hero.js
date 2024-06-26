@@ -29,7 +29,9 @@ const Info = styled.div`
   align-items: center;
   font-size: 1.5rem;
   svg {
+    color: #000;
     margin-right: 5px;
+    width: 10px;
   }
 
   a {
@@ -51,56 +53,58 @@ const HeroComponent = ({ basics }) => {
   return (
     <Section>
       <Title>{name}</Title>
-      <BasicInfo>
-        {location && (
-          <Info>
-            <FaMapPin />
-            {location.city}, {location.countryCode}
-          </Info>
-        )}
-        {email && (
-          <Info>
-            <FaEnvelope />
-            {email}
-          </Info>
-        )}
-        {phone && (
-          <Info>
-            <FaPhoneAlt />
-            {phone}
-          </Info>
-        )}
-        {url && (
-          <Info>
-            <FaLink />
-            <a href="{url}">{url}</a>
-          </Info>
-        )}
-        {linkedin && (
-          <Info>
-            <FaLinkedin />
-            <a href={`https://linkedin.com/${linkedin.username}`}>
-              {linkedin.username}
-            </a>
-          </Info>
-        )}
-        {github && (
-          <Info>
-            <FaGithub />
-            <a href={`https://github.com/${github.username}`}>
-              {github.username}
-            </a>
-          </Info>
-        )}
-        {twitter && (
-          <Info>
-            <FaTwitter />
-            <a href={`https://twitter.com/${twitter.username}`}>
-              {twitter.username}
-            </a>
-          </Info>
-        )}
-      </BasicInfo>
+      <div className="secondary">
+        <BasicInfo>
+          {location && (
+            <Info>
+              <FaMapPin />
+              {location.city}, {location.countryCode}
+            </Info>
+          )}
+          {email && (
+            <Info>
+              <FaEnvelope />
+              {email}
+            </Info>
+          )}
+          {phone && (
+            <Info>
+              <FaPhoneAlt />
+              {phone}
+            </Info>
+          )}
+          {url && (
+            <Info>
+              <FaLink />
+              <a href="{url}">{url}</a>
+            </Info>
+          )}
+          {linkedin && (
+            <Info>
+              <FaLinkedin />
+              <a href={`https://linkedin.com/${linkedin.username}`}>
+                {linkedin.username}
+              </a>
+            </Info>
+          )}
+          {github && (
+            <Info>
+              <FaGithub />
+              <a href={`https://github.com/${github.username}`}>
+                {github.username}
+              </a>
+            </Info>
+          )}
+          {twitter && (
+            <Info>
+              <FaTwitter />
+              <a href={`https://twitter.com/${twitter.username}`}>
+                {twitter.username}
+              </a>
+            </Info>
+          )}
+        </BasicInfo>
+      </div>
     </Section>
   );
 };
