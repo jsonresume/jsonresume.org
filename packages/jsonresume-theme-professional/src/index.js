@@ -11,41 +11,79 @@ export const render = (resume) => {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <style>
-  html {
-    font-family:
-      Menlo,
-      Monaco,
-      Lucida Console,
-      "Courier New",
-      Courier,
-      monospace;
-    background: #fff;
-    letter-spacing: -0.025rem;
-  }
+    @font-face {
+      font-family: LatinModern;
+      font-style: normal;
+      font-weight: normal;
+      src: url("/fonts/lmroman10-regular.otf") format("opentype");
+    }
 
-  body,
-  figure {
-    margin: 0;
-    padding: 0;
-    font-size: 12px;
-    color: #333;
-  }
+    @font-face {
+      font-family: LatinModern;
+      font-weight: bold;
+      src: url("/fonts/lmroman10-bold.otf") format("opentype");
+    }
 
-  a {
-    text-decoration: none;
-  }
+    @font-face {
+      font-family: LatinModern;
+      font-style: italic;
+      src: url("/fonts/lmroman10-italic.otf") format("opentype");
+    }
 
-  ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
+     @font-face {
+      font-family: LatinModernSans;
+      font-style: normal;
+      font-weight: normal;
+      src: url("/fonts/lmsans10-regular.otf") format("opentype");
+    }
 
-  *,
-  *::before,
-  *::after {
-    box-sizing: border-box;
-  }
+    @font-face {
+      font-family: LatinModernSans;
+      font-weight: bold;
+      src: url("/fonts/lmsans10-bold.otf") format("opentype");
+    }
+
+    @font-face {
+      font-family: LatinModernSans;
+      font-style: italic;
+      src: url("/fonts/lmsans10-italic.otf") format("opentype");
+    }
+
+    html {
+      font-family:LatinModern, "Courier New", monospace;
+      background: #fff;
+      font-size: 10px;
+    }
+
+    h2 {
+      font-size: 1.7rem;
+    }
+
+    p {
+      padding: 0;
+      margin: 0;
+    }
+
+    p, li {
+      font-size: 1.4rem;
+    
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
 
 
 

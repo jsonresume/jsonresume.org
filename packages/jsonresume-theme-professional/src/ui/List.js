@@ -5,7 +5,6 @@ const ListContainer = styled.ul`
   line-height: 16px;
   li::before {
     content: '•';
-    color: #333;
     display: inline-block;
     width: 1em;
     margin-left: -1em;

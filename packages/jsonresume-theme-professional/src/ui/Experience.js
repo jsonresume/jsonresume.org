@@ -1,41 +1,52 @@
-import Section from './Section';
+import styled from 'styled-components';
+import List from './List';
+import DateRange from './DateRange';
 
-const ExperienceComponent = ({ work }) => {
+const Meta = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2px;
+`;
+
+const Title = styled.div`
+  font-weight: 600;
+  font-size: 1.45rem;
+  margin-bottom: 3px;
+`;
+
+const SubTitle = styled.div`
+  font-style: italic;
+  font-size: 1.4rem;
+  margin-bottom: 3px;
+`;
+
+const Container = styled.div`
+  margin-bottom: 10px;
+`;
+
+const Summary = styled.p`
+  margin-bottom: 5px;
+`;
+
+const Experience = ({
+  title,
+  startDate,
+  endDate,
+  subTitle,
+  summary,
+  highlights,
+}) => {
   return (
-    <Section title="Experience">
-      <ul class="experience">
-        {work.map(({ name, startDate, endDate, position, summary, url }) => {
-          const startYear = new Date(startDate).getFullYear();
-          const endYear =
-            endDate != null ? new Date(endDate).getFullYear() : 'Present';
-          const years = `${startYear} - ${endYear}`;
-
-          return (
-            <li>
-              <article>
-                <header>
-                  <div>
-                    <h3>
-                      <a href={url} title={`Ver ${name}`} target="_blank">
-                        {name}
-                      </a>
-                    </h3>
-                    <h4>{position}</h4>
-                  </div>
-
-                  <time>{years}</time>
-                </header>
-
-                <footer>
-                  <p>{summary}</p>
-                </footer>
-              </article>
-            </li>
-          );
-        })}
-      </ul>
-    </Section>
+    <Container>
+      <Meta>
+        <Title>{title}</Title>
+        <DateRange startDate={startDate} endDate={endDate} />
+      </Meta>
+      {subTitle && <SubTitle>{subTitle}</SubTitle>}
+      <Summary>{summary}</Summary>
+      <List items={highlights} />
+    </Container>
   );
 };
 
-export default ExperienceComponent;
+export default Experience;
