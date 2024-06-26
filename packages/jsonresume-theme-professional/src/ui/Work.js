@@ -9,7 +9,7 @@ const Work = ({ work }) => {
   return (
     <div>
       <Section title="Experience">
-        {work.slice(0, 2).map((w, key) => {
+        {work.map((w, key) => {
           return (
             <Experience
               title={w.position}

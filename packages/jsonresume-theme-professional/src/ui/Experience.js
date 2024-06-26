@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import List from './List';
 import DateRange from './DateRange';
+import Date from './Date';
 
 const Meta = styled.div`
   display: flex;
@@ -30,6 +31,7 @@ const Summary = styled.p`
 
 const Experience = ({
   title,
+  date,
   startDate,
   endDate,
   subTitle,
@@ -40,11 +42,19 @@ const Experience = ({
     <Container>
       <Meta>
         <Title>{title}</Title>
-        <DateRange startDate={startDate} endDate={endDate} />
+        <div className="secondary">
+          {date ? (
+            <Date date={date} />
+          ) : (
+            <DateRange startDate={startDate} endDate={endDate} />
+          )}
+        </div>
       </Meta>
       {subTitle && <SubTitle>{subTitle}</SubTitle>}
-      <Summary>{summary}</Summary>
-      <List items={highlights} />
+      <div className="secondary">
+        {summary && <Summary>{summary}</Summary>}
+        <List items={highlights} />
+      </div>
     </Container>
   );
 };
