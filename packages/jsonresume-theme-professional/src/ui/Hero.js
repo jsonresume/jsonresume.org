@@ -11,7 +11,7 @@ import {
 import Section from './Section';
 
 const Title = styled.div`
-  font-size: 2rem;
+  font-size: 3rem;
   text-align: center;
   margin-top: 20px;
   margin-bottom: 20px;
@@ -19,15 +19,15 @@ const Title = styled.div`
 
 const BasicInfo = styled.div`
   display: flex;
-  gap: 0 20px;
+  gap: 10px 20px;
   justify-content: center;
-
   flex-wrap: wrap;
 `;
 
 const Info = styled.div`
   display: flex;
   align-items: center;
+  font-size: 1.5rem;
   svg {
     margin-right: 5px;
   }
@@ -35,6 +35,9 @@ const Info = styled.div`
   a {
     color: inherit;
     text-decoration: none;
+    &:hover {
+      color: #000;
+    }
   }
 `;
 

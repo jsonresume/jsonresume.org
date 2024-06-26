@@ -5,33 +5,22 @@ const Section = styled.div`
   margin: 0 auto 8px;
 
   h2 {
-    font-size: 16px;
-
     margin: 0;
     padding: 0;
     margin-bottom: 3px;
     font-weight: 600;
   }
 
-  @media (width <= 700px) {
-    section {
-      margin-bottom: 4px;
-    }
-  }
-
   hr {
     margin: 0;
     padding: 0;
-  }
-
-  p {
-    margin: 0;
-    padding: 0;
+    margin-top: 7px;
+    margin-bottom: 3px;
   }
 `;
 
 const Container = styled.div`
-  margin-left: 8px;
+  margin: 0 8px;
 `;
 
 const SectionComponent = ({ children, title }) => {
