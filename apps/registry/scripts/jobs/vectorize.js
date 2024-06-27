@@ -15,6 +15,7 @@ async function main() {
   console.log({ data, error });
   data.forEach(async (job) => {
     if (!job.embedding_v5) {
+      console.log('create embedding');
       const completion1 = await openai.embeddings.create({
         model: 'text-embedding-3-large',
         input: JSON.stringify(job.gpt_content),
@@ -22,7 +23,7 @@ async function main() {
 
       const desiredLength = 3072;
 
-      let embedding = completion1.data.data[0].embedding;
+      let embedding = completion1.data[0].embedding;
 
       if (embedding.length < desiredLength) {
         embedding = embedding.concat(

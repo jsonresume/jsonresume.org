@@ -15,6 +15,7 @@ const openai = new OpenAI({
 
 /*
 - multpple positions
+- needs ENUM values for skill levels etc
 - location
 - remote
 - date
@@ -215,38 +216,57 @@ const jobSchema = {
 };
 
 async function main() {
-  const { data } = await supabase.from('jobs').select();
+  console.log('fetching');
 
-  data.forEach(async (job) => {
+  const { data } = await supabase.from('jobs').select();
+  console.log('fetched', data);
+  for (let index = 0; index < data.length; index++) {
+    const job = data[index];
+
     const jobDescription = job.content;
+    console.log('job', index);
+    const messages = [
+      {
+        role: 'system',
+        content: `You are a human assistant to a recruiter. You are helping them turn a job description into structured data. Try to understand if the position is remote or not. make sure to include the remote property. 
+        
+        Possible values for remote are: FULL, HYBRID, NONE.
+        
+        The job description should be in JSON format. 
+        
+        
+        Where no value can be ascertained simply return null. Here is an example of a job description as a schema in JSON format: ${jobSchema}`,
+      },
+      {
+        role: 'assistant',
+        content: `This is the json example for a job: ${exampleJob}`,
+      },
+      {
+        role: 'assistant',
+        content: `Here is an example of a job description in JSON schema format: ${JSON.stringify(
+          jobSchema
+        )}`,
+      },
+      {
+        role: 'assistant',
+        content: `This is the job description ${jobDescription}`,
+      },
+      {
+        role: 'user',
+        content: `Make sure to include every property. Try really hard to fill out every property. 
+        
+        For responsibilities and skills. Take a really hard attempt to come up with likely values. They should not be null.
+
+        Make sure position is filled out, come up with your best guess.
+        
+        Translate this job description into a JSON schema`,
+      },
+    ];
     if (!job.gpt_content) {
       const chat = await openai.chat.completions.create({
-        model: 'gpt-3.5-turbo',
+        model: 'gpt-4o',
         temperature: 0.8,
-        messages: [
-          {
-            role: 'system',
-            content: `You are a human assistant to a recruiter. You are helping them turn a job description into structured data. Try to understand if the position is remote or not. make sure to include the remote property. The job description should be in JSON format. Where no value can be ascertained simply return null. Here is an example of a job description as a schema in JSON format: ${jobSchema}`,
-          },
-          {
-            role: 'assistant',
-            content: `This is the json example for a job: ${exampleJob}`,
-          },
-          {
-            role: 'assistant',
-            content: `Here is an example of a job description in JSON schema format: ${JSON.stringify(
-              jobSchema
-            )}`,
-          },
-          {
-            role: 'assistant',
-            content: `This is the job description ${jobDescription}`,
-          },
-          {
-            role: 'user',
-            content: `Make sure to include every property. Try really hard to fill out every property. Translate this job description into a JSON schema`,
-          },
-        ],
+        messages,
         functions: [
           {
             name: 'jobDescriptionToSchema',
@@ -267,6 +287,7 @@ async function main() {
                     region: { type: 'string' },
                   },
                 },
+                position: { type: 'string' },
                 type: { type: 'string' },
                 salary: { type: 'string' },
                 date: { type: 'string' },
@@ -305,15 +326,18 @@ async function main() {
         function_call: 'auto',
       });
       // console.log(chat.data);
+      console.log({ jobDescription });
+
       console.log('AFASDASDAS');
       console.log('AFASDASDAS');
       console.log('AFASDASDAS');
       console.log('AFASDASDAS');
       console.log('AFASDASDAS');
       console.log('AFASDASDAS');
-      const details = chat.choices[0].message.function_call?.arguments;
-      console.log(JSON.parse(details));
+      console.log(chat);
       try {
+        const details = chat.choices[0].message.function_call?.arguments;
+        console.log(JSON.parse(details));
         const { error } = await supabase
           .from('jobs')
           .update({
@@ -323,9 +347,18 @@ async function main() {
         console.log({ error });
       } catch (e) {
         console.error(e);
+        await supabase
+          .from('jobs')
+          .update({
+            gpt_content: 'FAILED',
+          })
+          .eq('id', job.id);
       }
+      await new Promise((resolve) => setTimeout(resolve, 5000));
     }
-  });
+
+    // sleep for 5 seconds
+  }
 }
 
 main();
