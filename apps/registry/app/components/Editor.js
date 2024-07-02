@@ -181,6 +181,7 @@ export default async function Page() {
   if (session) {
     const octokit = new Octokit({ auth: session.accessToken });
     const { data } = await octokit.rest.users.getAuthenticated();
+    console.log({ data });
     const username = data.login;
     login = username;
     const gists = await octokit.rest.gists.list({ per_page: 100 });
