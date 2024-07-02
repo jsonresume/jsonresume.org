@@ -1,5 +1,6 @@
 import Header from '@jsonresume/ui/Header';
 import { signOut } from 'next-auth/react';
+import { Octokit } from 'octokit';
 import Link from '@jsonresume/ui/Link';
 import { auth } from '../auth';
 import './global.css';
@@ -15,8 +16,16 @@ export const viewport = {
 
 export default async function Layout({ children }) {
   const session = await auth();
-  console.log('Hello, %s', { session });
 
+  let username = null;
+
+  if (session) {
+    const octokit = new Octokit({ auth: session.accessToken });
+    const { data } = await octokit.rest.users.getAuthenticated();
+    username = data.login;
+  }
+  console.log('Hello, %s', { session });
+  console.log(JSON.stringify({ session }));
   return (
     <html lang="en">
       <body>
@@ -26,7 +35,20 @@ export default async function Layout({ children }) {
               <Link href="/">JSON Resume Registry</Link>
             </div>
           }
-          right={<div>{session && <Link onClick={signOut}>Logout</Link>}</div>}
+          right={
+            <div>
+              {session && <Link href={`/${username}/editor`}>Editor</Link>}
+              {session && <Link href={`/${username}/jobs`}>Jobs</Link>}
+              {session && (
+                <Link href={`/${username}/suggestions`}>Suggestions</Link>
+              )}
+              {session && (
+                <Link href={`/${username}/interview`}>Interview</Link>
+              )}
+              {session && <Link href={`/${username}/letter`}>Letter</Link>}
+              {session && <Link onClick={signOut}>Logout</Link>}
+            </div>
+          }
         />
         {children}
         <link

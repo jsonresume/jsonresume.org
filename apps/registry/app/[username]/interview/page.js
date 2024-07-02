@@ -1,8 +1,8 @@
-import { useRouter } from 'next/router';
+'use client';
+
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
-import Layout from '../src/ui/Layout';
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -124,10 +124,8 @@ const Helper = styled.div`
 const INTERVIEWER = 'interviewer';
 const CANDIDATE = 'candidate';
 
-export default function Talk() {
-  const router = useRouter();
-  const parts = router.asPath.split('/');
-  const username = parts[1];
+export default function Talk({ params }) {
+  const { username } = params;
   const [text, setText] = useState('');
   const [reply, setReply] = useState('');
   const [replying, setReplying] = useState(null);
@@ -239,7 +237,7 @@ export default function Talk() {
   }, [messages]);
 
   return (
-    <Layout>
+    <>
       {!showAbout && (
         <>
           <Switch>
@@ -306,6 +304,6 @@ export default function Talk() {
           </InputContainer>
         </>
       )}
-    </Layout>
+    </>
   );
 }

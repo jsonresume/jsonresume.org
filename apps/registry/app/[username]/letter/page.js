@@ -1,14 +1,15 @@
+'use client';
+
 import axios from 'axios';
-import { useRouter } from 'next/router';
+
 import { useEffect, useState } from 'react';
-import Layout from '../src/ui/Layout';
-import Button from '../src/ui/Button';
-import Dropdown from '../src/ui/Dropdown';
+import Button from '../../../src/ui/Button';
+import Dropdown from '../../../src/ui/Dropdown';
 import styled from 'styled-components';
 import ReactMarkdown from 'react-markdown';
-import Hero from '../src/ui/Hero';
-import Label from '../src/ui/Label';
-import ButtonGroup from '../src/ui/ButtonGroup';
+import Hero from '../../../src/ui/Hero';
+import Label from '../../../src/ui/Label';
+import ButtonGroup from '../../../src/ui/ButtonGroup';
 
 /*
 #todo
@@ -33,12 +34,14 @@ const Paper = styled.div`
   background: #fff;
 `;
 
-export default function Letter() {
-  const router = useRouter();
-  const parts = router.asPath.split('/');
-  const username = parts[1];
+export default function Letter({ params }) {
+  // return <div>letterasdas{children}</div>;
+  // const router = useRouter();
+  const { username } = params;
+
   // get query param
-  const { job } = router.query;
+  //   const { job } = router.query;
+  const job = '123';
   console.log({ job });
   const [submitting, setSubmitting] = useState(false);
   const [jobDescription, setJobDescription] = useState(
@@ -85,7 +88,7 @@ export default function Letter() {
   };
 
   return (
-    <Layout>
+    <>
       <Hero>
         Combines the users resume.json with the job description below to
         generate a cover letter in the tonality specified
@@ -131,6 +134,6 @@ export default function Letter() {
           <ReactMarkdown>{letter}</ReactMarkdown>
         </Paper>
       )}
-    </Layout>
+    </>
   );
 }

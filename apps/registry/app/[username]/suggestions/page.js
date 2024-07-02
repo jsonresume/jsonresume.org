@@ -1,13 +1,13 @@
+'use client';
 import axios from 'axios';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import Layout from '../src/ui/Layout';
-import Hero from '../src/ui/Hero';
-import Label from '../src/ui/Label';
-import ButtonGroup from '../src/ui/ButtonGroup';
-import Dropdown from '../src/ui/Dropdown';
-import Button from '../src/ui/Button';
+import Hero from '../../../src/ui/Hero';
+import Label from '../../../src/ui/Label';
+import ButtonGroup from '../../../src/ui/ButtonGroup';
+import Dropdown from '../../../src/ui/Dropdown';
+import Button from '../../../src/ui/Button';
 import ReactMarkdown from 'react-markdown';
 
 const Paper = styled.div`
@@ -17,10 +17,8 @@ const Paper = styled.div`
   background: #fff;
 `;
 
-export default function Suggestions() {
-  const router = useRouter();
-  const parts = router.asPath.split('/');
-  const username = parts[1];
+export default function Suggestions({ params }) {
+  const { username } = params;
 
   const [submitting, setSubmitting] = useState(false);
   const [focus, setFocus] = useState('general');
@@ -50,7 +48,7 @@ export default function Suggestions() {
   };
 
   return (
-    <Layout>
+    <>
       <Hero>Generates suggestions to improve your resume</Hero>
       <Label>Focus</Label>
       <ButtonGroup>
@@ -85,6 +83,6 @@ export default function Suggestions() {
           <ReactMarkdown>{suggestions}</ReactMarkdown>
         </Paper>
       )}
-    </Layout>
+    </>
   );
 }

@@ -1,12 +1,13 @@
+'use client';
+
 import axios from 'axios';
 import Router, { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Layout from '../src/ui/Layout';
 import Link from 'next/link';
-import Hero from '../src/ui/Hero';
-import ButtonGroup from '../src/ui/ButtonGroup';
-import Button from '../src/ui/Button';
+import Hero from '../../../src/ui/Hero';
+import ButtonGroup from '../../../src/ui/ButtonGroup';
+import Button from '../../../src/ui/Button';
 
 const MessagesContainer = styled.div`
   background: #fbfbfb;
@@ -31,10 +32,8 @@ const Message = styled.div`
  - show similarity score
 */
 
-export default function Jobs() {
-  const router = useRouter();
-  const parts = router.asPath.split('/');
-  const username = parts[1];
+export default function Jobs({ params }) {
+  const username = params.username;
 
   const [submitting, setSubmitting] = useState(false);
   const [jobs, setJobs] = useState(null);
@@ -91,7 +90,7 @@ export default function Jobs() {
   };
 
   return (
-    <Layout>
+    <>
       {' '}
       <Hero>
         Creates an embedding with 3702 dimensions of your resume.json. The same
@@ -167,6 +166,6 @@ export default function Jobs() {
           </Messages>
         </MessagesContainer>
       )}
-    </Layout>
+    </>
   );
 }
