@@ -1,4 +1,4 @@
-import { Octokit } from 'octokit';
+// import { Octokit } from 'octokit';
 import Menu from './components/Menu';
 import { auth } from '../auth';
 import './global.css';
@@ -15,13 +15,13 @@ export const viewport = {
 export default async function Layout({ children }) {
   const session = await auth();
   // const { username } = params;
-  let username = null;
+  // let username = null;
 
-  if (session) {
-    const octokit = new Octokit({ auth: session.accessToken });
-    const { data } = await octokit.rest.users.getAuthenticated();
-    username = data.login;
-  }
+  // if (session) {
+  //   const octokit = new Octokit({ auth: session.accessToken });
+  //   const { data } = await octokit.rest.users.getAuthenticated();
+  //   username = data.login;
+  // }
 
   return (
     <html lang="en">

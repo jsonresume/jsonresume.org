@@ -1,7 +1,6 @@
 'use client';
 import axios from 'axios';
 import styled from 'styled-components';
-import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Hero from '../../../src/ui/Hero';
 import Label from '../../../src/ui/Label';
