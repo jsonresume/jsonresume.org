@@ -234,8 +234,6 @@ export default async function Page() {
     return response;
   }
 
-  console.log({ session });
-
   return (
     <div>
       {!session && <SignIn />}

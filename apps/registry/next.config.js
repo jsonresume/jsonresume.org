@@ -7,24 +7,26 @@ module.exports = {
         source: '/:payload',
         destination: '/api/:payload',
       },
-      {
-        source: '/:payload/interview',
-        destination: '/interview',
-      },
-      {
-        source: '/:payload/jobs',
-        destination: '/jobs',
-      },
-      {
-        source: '/:payload/letter',
-        destination: '/letter',
-      },
-      {
-        source: '/:payload/suggestions',
-        destination: '/suggestions',
-      },
     ];
   },
+  //     {
+  //       source: '/:payload/interview',
+  //       destination: '/interview',
+  //     },
+  //     {
+  //       source: '/:payload/jobs',
+  //       destination: '/jobs',
+  //     },
+  //     {
+  //       source: '/:payload/letter',
+  //       destination: '/letter',
+  //     },
+  //     {
+  //       source: '/:payload/suggestions',
+  //       destination: '/suggestions',
+  //     },
+  //   ];
+  // },
   compiler: {
     styledComponents: true,
   },

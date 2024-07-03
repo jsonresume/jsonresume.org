@@ -1,8 +1,9 @@
 import styles from './Link.module.css';
+import Link from 'next/link';
 
-const Link = ({ children, href, onClick, style, target }) => {
+const LinkContainer = ({ children, href = '#', onClick, style, target }) => {
   return (
-    <a
+    <Link
       className={styles.link}
       href={href}
       onClick={onClick}
@@ -10,8 +11,8 @@ const Link = ({ children, href, onClick, style, target }) => {
       target={target}
     >
       {children}
-    </a>
+    </Link>
   );
 };
 
-export default Link;
+export default LinkContainer;

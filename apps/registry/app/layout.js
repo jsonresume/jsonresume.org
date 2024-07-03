@@ -1,6 +1,5 @@
-import Header from '@jsonresume/ui/Header';
-import { signOut } from 'next-auth/react';
-import Link from '@jsonresume/ui/Link';
+// import { Octokit } from 'octokit';
+import Menu from './components/Menu';
 import { auth } from '../auth';
 import './global.css';
 
@@ -15,19 +14,19 @@ export const viewport = {
 
 export default async function Layout({ children }) {
   const session = await auth();
-  console.log('Hello, %s', { session });
+  // const { username } = params;
+  // let username = null;
+
+  // if (session) {
+  //   const octokit = new Octokit({ auth: session.accessToken });
+  //   const { data } = await octokit.rest.users.getAuthenticated();
+  //   username = data.login;
+  // }
 
   return (
     <html lang="en">
       <body>
-        <Header
-          left={
-            <div>
-              <Link href="/">JSON Resume Registry</Link>
-            </div>
-          }
-          right={<div>{session && <Link onClick={signOut}>Logout</Link>}</div>}
-        />
+        <Menu session={session} />
         {children}
         <link
           href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap"

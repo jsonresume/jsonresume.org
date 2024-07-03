@@ -16,6 +16,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     async jwt({ token, account }) {
       // Persist the OAuth access token to the token right after signin
+      console.log({ account });
       if (account) {
         token.accessToken = account.access_token;
       }

@@ -1,8 +1,23 @@
-import Dashboard from './components/Dashboard';
-
-// @todo - come up with a strategy of what Pages should handle
-// I think they should just handle url params and pass them to components
+'use server';
+import SignIn from './components/SignIn';
+import { auth } from '../auth';
+import { Octokit } from 'octokit';
+import { redirect } from 'next/navigation';
 
 export default async function Page() {
-  return <Dashboard />;
+  const session = await auth();
+
+  console.log('Hello, %s', { session });
+  if (!session) {
+    return <SignIn />;
+  }
+
+  if (session) {
+    const octokit = new Octokit({ auth: session.accessToken });
+    const { data } = await octokit.rest.users.getAuthenticated();
+    const username = data.login;
+    redirect(`/${username}/editor`);
+  }
+
+  return null;
 }
