@@ -12,7 +12,7 @@ export default async function handler(req, res) {
   const { data } = await supabase
     .from('resumes')
     .select()
-    .sort('created_at', { ascending: false })
+    .order('created_at', { ascending: false })
     .limit(limit || 1000);
 
   const resumes = data.map((row) => {
