@@ -1,5 +1,6 @@
 import NextAuth from 'next-auth';
 import GitHub from 'next-auth/providers/github';
+import { Octokit } from 'octokit';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -16,7 +17,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     async jwt({ token, account }) {
       // Persist the OAuth access token to the token right after signin
-      console.log({ account });
       if (account) {
         token.accessToken = account.access_token;
       }
@@ -25,6 +25,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async session({ session, token }) {
       // Send properties to the client, like an access token and user id from a provider.
       session.accessToken = token.accessToken;
+
+      const octokit = new Octokit({ auth: session.accessToken });
+      const { data } = await octokit.rest.users.getAuthenticated();
+      const username = data.login;
+      session.username = username;
+      session.blah = 'blah';
       return session;
     },
   },
