@@ -12,6 +12,7 @@ export default async function handler(req, res) {
   const { data } = await supabase
     .from('resumes')
     .select()
+    .order('created_at', { ascending: false })
     .limit(limit || 1000);
 
   const resumes = data.map((row) => {
