@@ -218,8 +218,11 @@ const jobSchema = {
 async function main() {
   console.log('fetching');
 
-  const { data } = await supabase.from('jobs').select();
-  console.log('fetched', data);
+  const { data, error } = await supabase
+    .from('jobs')
+    .select()
+    .not('gpt_content', 'is', null);
+  console.log('fetched', data, error);
   for (let index = 0; index < data.length; index++) {
     const job = data[index];
 
@@ -256,6 +259,8 @@ async function main() {
         content: `Make sure to include every property. Try really hard to fill out every property. 
         
         For responsibilities and skills. Take a really hard attempt to come up with likely values. They should not be null.
+
+        Make sure things are too long. Be short and succint.
 
         Make sure position is filled out, come up with your best guess.
         
@@ -354,7 +359,7 @@ async function main() {
           })
           .eq('id', job.id);
       }
-      await new Promise((resolve) => setTimeout(resolve, 5000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     }
 
     // sleep for 5 seconds

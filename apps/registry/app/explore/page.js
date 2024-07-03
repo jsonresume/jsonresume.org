@@ -10,7 +10,7 @@ const Heading = styled.h1`
 `;
 
 const Image = styled.img`
-  width: 200px;
+  width: 90px;
 `;
 
 const Images = styled.div`

@@ -47,18 +47,23 @@ export default async function handler(req, res) {
 
   const { data: documents } = await supabase.rpc('match_jobs_v5', {
     query_embedding: embedding,
-    match_threshold: 0.18, // Choose an appropriate threshold for your data
-    match_count: 20, // Choose the number of matches
+    match_threshold: 0.14, // Choose an appropriate threshold for your data
+    match_count: 80, // Choose the number of matches
   });
 
-  const jobIds = documents ? documents.map((doc) => doc.id) : [];
+  console.log({ documents });
+  // similarity is on documents, it is a flow, i want to sort from highest to lowest
+  // then get the job ids
+  const sortedDocuments = documents.sort((a, b) => b.similarity - a.similarity);
+  const jobIds = documents ? sortedDocuments.map((doc) => doc.id) : [];
 
   const { data: jobs } = await supabase.from('jobs').select().in('id', jobIds);
+  // sort jobs in the same order as jobIds by id
+  const sortedJobs = jobIds.map((id) => jobs.find((job) => job.id === id));
 
-  const filteredJobs = jobs.filter(
+  const filteredJobs = sortedJobs.filter(
     (job) =>
-      new Date(job.created_at) >
-      new Date(Date.now() - 60 * 24 * 60 * 120 * 1000)
+      new Date(job.created_at) > new Date(Date.now() - 60 * 24 * 60 * 60 * 1000)
   );
 
   return res.status(200).send(filteredJobs);
