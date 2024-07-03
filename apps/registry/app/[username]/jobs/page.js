@@ -1,7 +1,7 @@
 'use client';
 
 import axios from 'axios';
-import Router, { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
@@ -34,7 +34,7 @@ const Message = styled.div`
 
 export default function Jobs({ params }) {
   const username = params.username;
-
+  const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [jobs, setJobs] = useState(null);
 
@@ -82,7 +82,7 @@ export default function Jobs({ params }) {
   
     `
     );
-    Router.push(`/${username}/letter?job=${job.id}`);
+    router.push(`/${username}/letter?job=${job.id}`);
   };
 
   const handleGenerate = () => {
@@ -100,7 +100,7 @@ export default function Jobs({ params }) {
       <ButtonGroup>
         <div></div>
         <Button disabled={submitting} onClick={handleGenerate}>
-          {submitting ? 'GENERATING' : 'GENERATE'}
+          {submitting ? 'FINDING' : 'FIND JOBS'}
         </Button>
       </ButtonGroup>
       <br />

@@ -124,4 +124,6 @@ This is an implementation of a chat bot, your resume is injected, and the conver
   - add a footer
   - change the url pattern to be ai.jsonresume.org/thomasdavis etc
 
-ci
+Design System
+
+https://www.colorhexa.com/fff18f

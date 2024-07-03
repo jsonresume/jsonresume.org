@@ -1,8 +1,8 @@
 'use client';
 
 import axios from 'axios';
-
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Button from '../../../src/ui/Button';
 import Dropdown from '../../../src/ui/Dropdown';
 import styled from 'styled-components';
@@ -35,14 +35,10 @@ const Paper = styled.div`
 `;
 
 export default function Letter({ params }) {
-  // return <div>letterasdas{children}</div>;
-  // const router = useRouter();
+  const searchParams = useSearchParams();
   const { username } = params;
-
-  // get query param
-  //   const { job } = router.query;
-  const job = '123';
-  console.log({ job });
+  const job = searchParams.get('job');
+  console.log({ job, searchParams });
   const [submitting, setSubmitting] = useState(false);
   const [jobDescription, setJobDescription] = useState(
     typeof window !== 'undefined'
