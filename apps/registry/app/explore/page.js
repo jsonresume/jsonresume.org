@@ -28,7 +28,6 @@ const Resumes = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get('/api/resumes?limit=300');
-        console.log({ response });
         // let resumes = response.data;
         // remove ones with no avatar
 
