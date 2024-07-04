@@ -1,3 +1,5 @@
+[![](https://dcbadge.limes.pink/api/server/GTZtn8pTXC)](https://discord.gg/GTZtn8pTXC)
+
 # JSON Resume
 
 This is a monorepo, will be the home of the registry, the homepage, ui kit, base templates, utils etc
