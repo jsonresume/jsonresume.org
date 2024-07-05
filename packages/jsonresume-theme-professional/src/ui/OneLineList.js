@@ -21,7 +21,7 @@ const OneLineList = ({ name, items }) => {
     <Container>
       <Name>{name}:</Name>
       <List>
-        <div class="secondary">{items.join(', ')}</div>
+        <div class="secondary">{items?.join(', ')}</div>
       </List>
     </Container>
   );
