@@ -8,7 +8,7 @@ const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const HN_API = 'https://hn.algolia.com/api/v1/items/';
-const WHO_IS_HIRING_ITEM_ID = 40224213;
+const WHO_IS_HIRING_ITEM_ID = 40846428;
 
 async function main() {
   const response = await axios.get(`${HN_API}${WHO_IS_HIRING_ITEM_ID}`);
