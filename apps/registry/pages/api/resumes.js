@@ -11,7 +11,8 @@ export default async function handler(req, res) {
   const { data } = await supabase
     .from('resumes')
     .select()
-    .order('created_at', { ascending: false });
+    .order('created_at', { ascending: false })
+    .limit(1000);
 
   const resumes = data.map((row) => {
     const resume = JSON.parse(row.resume);
