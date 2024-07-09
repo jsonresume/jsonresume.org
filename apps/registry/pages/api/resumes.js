@@ -30,6 +30,8 @@ export default async function handler(req, res) {
           { s: '200', r: 'x', d: 'retro' },
           true
         ),
+      name: resume?.basics?.name,
+      location: resume?.basics?.location,
       updated_at: row.updated_at,
       created_at: row.created_at,
     };

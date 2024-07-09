@@ -4,7 +4,7 @@ import Editor, { useMonaco } from '@monaco-editor/react';
 import { useRef, useEffect, useState } from 'react';
 // import { render } from '../../../../themes/stackoverflow/dist';
 import { render } from '../../../../packages/jsonresume-theme-professional';
-import Button from '@jsonresume/ui/Button';
+import Button from './Button/Button';
 import Link from '@jsonresume/ui/Link';
 import schema from './schema';
 
