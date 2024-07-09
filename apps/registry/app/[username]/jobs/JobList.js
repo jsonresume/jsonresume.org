@@ -89,10 +89,9 @@ const JobSkills = styled.ul`
 const JobList = ({ jobs, makeCoverletter }) => {
   const fullJobs = jobs?.map((job) => {
     const fullJob = JSON.parse(job.gpt_content);
+    fullJob.raw = job;
     return fullJob;
   });
-
-  console.log({ fullJobs });
 
   return (
     <JobListContainer>
@@ -144,7 +143,7 @@ const JobList = ({ jobs, makeCoverletter }) => {
           <br />
           <Button
             onClick={() => {
-              makeCoverletter(job);
+              makeCoverletter(job.raw);
             }}
           >
             Make Cover Letter

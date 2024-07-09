@@ -5,12 +5,15 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
 
-const Heading = styled.h1`
-  text-align: center;
+const ImageContainer = styled.div`
+  width: 150px;
+  height: 180px;
 `;
 
 const Image = styled.img`
-  width: 90px;
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
 `;
 
 const Images = styled.div`
@@ -18,6 +21,7 @@ const Images = styled.div`
   flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
+  margin-top: 20px;
 `;
 
 const Resumes = () => {
@@ -27,7 +31,7 @@ const Resumes = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('/api/resumes?limit=300');
+        const response = await axios.get('/api/resumes?limit=500');
         // let resumes = response.data;
         // remove ones with no avatar
 
@@ -42,18 +46,17 @@ const Resumes = () => {
 
   return (
     <div>
-      <Heading>Here are some recent JSON Resume&nbsp;s</Heading>
       {!data && <div style={{ textAlign: 'center' }}>Loading...</div>}
       {data && (
         <Images>
           {data.map((resume) => {
             return (
-              <div key={resume.updated_at}>
+              <ImageContainer key={resume.updated_at}>
                 <Link href={`/${resume.username}/dashboard`}>
                   <Image alt="The user" src={resume.image} />
                 </Link>
                 <div>{resume.label?.substr(0, 30)}</div>
-              </div>
+              </ImageContainer>
             );
           })}
         </Images>

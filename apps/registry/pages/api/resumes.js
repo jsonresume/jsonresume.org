@@ -8,11 +8,13 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 const gravatar = require('gravatar');
 
 export default async function handler(req, res) {
+  const { limit } = req.query;
+
   const { data } = await supabase
     .from('resumes')
     .select()
-    .order('created_at', { ascending: false })
-    .limit(1000);
+    .limit(limit || 500)
+    .order('created_at', { ascending: false });
 
   const resumes = data.map((row) => {
     const resume = JSON.parse(row.resume);
