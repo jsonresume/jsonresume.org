@@ -7,7 +7,9 @@ import Link from '@jsonresume/ui/Link';
 import { ProfileProvider } from './ProfileContext';
 import Button from '../../src/ui/Button';
 
-const ProfileContainer = styled.div``;
+const ProfileContainer = styled.div`
+  font-size: 1.2rem;
+`;
 
 const Container = styled.div`
   width: 960px;
@@ -104,6 +106,11 @@ export default function Layout({ children, resume, username, session }) {
   const image = resume?.basics?.image
     ? resume?.basics.image
     : '/default-avatar.png';
+
+  if (!resume) {
+    return <ProfileContainer>Resume not found</ProfileContainer>;
+  }
+
   return (
     <ProfileContainer>
       <MenuContainer>

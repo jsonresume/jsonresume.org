@@ -9,13 +9,15 @@ const gravatar = require('gravatar');
 
 export default async function handler(req, res) {
   const { limit } = req.query;
-
+  console.time('getResumes');
   const { data } = await supabase
     .from('resumes')
     .select()
     .limit(limit || 3000);
   // .order('created_at', { ascending: false });
+  console.timeEnd('getResumes');
 
+  console.time('mapResumes');
   const resumes = data.map((row) => {
     const resume = JSON.parse(row.resume);
     return {
@@ -32,10 +34,13 @@ export default async function handler(req, res) {
       created_at: row.created_at,
     };
   });
+  console.timeEnd('mapResumes');
 
+  console.time('sortResumes');
   resumes.sort((a, b) => {
     return new Date(b.created_at) - new Date(a.created_at);
   });
+  console.timeEnd('sortResumes');
 
   return res.status(200).send(resumes);
 }
