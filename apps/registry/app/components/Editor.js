@@ -8,6 +8,7 @@ import ResumeEditor from './ResumeEditor';
 import CreateResume from './CreateResume';
 // @todo - add json schema to editor
 //codesandbox.io/p/sandbox/monaco-editor-json-validation-example-gue0q?file=%2Fsrc%2FApp.js
+
 const sampleResume = {
   basics: {
     name: 'Elon Musk',

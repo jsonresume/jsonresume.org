@@ -5,28 +5,99 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
 
-const ImageContainer = styled.div`
-  width: 150px;
-  height: 180px;
+const Container = styled.div`
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
 `;
 
-const Image = styled.img`
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
+const FilterInput = styled.input`
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+
+  width: calc(100% - 20px);
 `;
 
-const Images = styled.div`
+const ResumeList = styled.div`
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-direction: column;
   gap: 10px;
-  margin-top: 20px;
 `;
+
+const ResumeItem = styled(Link)`
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 10px;
+  background: #fffdf1;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.2s ease-in-out;
+  &:hover {
+    background: #fff18f;
+  }
+`;
+
+const Avatar = styled.img`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 20px;
+`;
+
+const ResumeDetails = styled.div`
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+`;
+
+const ResumeName = styled.div`
+  font-size: 18px;
+  font-weight: bold;
+  text-decoration: none;
+`;
+
+const ResumeLocation = styled.div`
+  font-size: 14px;
+  color: #666;
+  text-decoration: none;
+`;
+
+const formatLocation = (location) => {
+  if (!location) return 'Location not provided';
+
+  const {
+    // address = '',
+    postalCode = '',
+    city = '',
+    region = '',
+    countryCode = '',
+  } = location;
+
+  // Construct the location string by including only the parts that are provided
+  const locationParts = [city, region, postalCode, countryCode].filter(
+    (part) => part.trim() !== ''
+  );
+
+  if (locationParts.length === 0) return 'Location not provided';
+
+  return locationParts.join(', ');
+};
 
 const Resumes = () => {
   // get all resumes
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
+  const [filter, setFilter] = useState('');
+  const [filteredResumes, setFilteredResumes] = useState([]);
+
+  useEffect(() => {
+    setFilteredResumes(
+      data.filter((resume) =>
+        resume?.name?.toLowerCase().includes(filter.toLowerCase())
+      )
+    );
+  }, [filter, data]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,18 +119,29 @@ const Resumes = () => {
     <div>
       {!data && <div style={{ textAlign: 'center' }}>Loading...</div>}
       {data && (
-        <Images>
-          {data.map((resume) => {
-            return (
-              <ImageContainer key={resume.updated_at}>
-                <Link href={`/${resume.username}/dashboard`}>
-                  <Image alt="The user" src={resume.image} />
-                </Link>
-                <div>{resume.label?.substr(0, 30)}</div>
-              </ImageContainer>
-            );
-          })}
-        </Images>
+        <>
+          <Container>
+            <FilterInput
+              type="text"
+              placeholder="Filter by name..."
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+            />
+            <ResumeList>
+              {filteredResumes.map((resume, index) => (
+                <ResumeItem key={index} href={`/${resume.username}/dashboard`}>
+                  <Avatar src={resume.image} alt={resume.name} />
+                  <ResumeDetails>
+                    <ResumeName>{resume.name}</ResumeName>
+                    <ResumeLocation>
+                      {formatLocation(resume.location)}
+                    </ResumeLocation>
+                  </ResumeDetails>
+                </ResumeItem>
+              ))}
+            </ResumeList>
+          </Container>
+        </>
       )}
     </div>
   );
