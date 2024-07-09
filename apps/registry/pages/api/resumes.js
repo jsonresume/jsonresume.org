@@ -8,11 +8,13 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 const gravatar = require('gravatar');
 
 export default async function handler(req, res) {
-  // const { limit } = req.query;
+  const { limit } = req.query;
   console.time('getResumes');
-  const { data } = await supabase.from('resumes').select().limit(300);
-  // .limit(limit || 3000);
-  // .order('created_at', { ascending: false });
+  const { data } = await supabase
+    .from('resumes')
+    .select()
+    .order('created_at', { ascending: false })
+    .limit(limit || 3000);
   console.timeEnd('getResumes');
 
   console.time('mapResumes');
