@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Counter from './Counter';
 
 export default function Homepage() {
   return (
@@ -6,6 +7,9 @@ export default function Homepage() {
       <Head>
         <title>JSON Resume</title>
       </Head>
+      <div>
+        <Counter />
+      </div>
       <header id="header" class="yellow promo">
         <div class="container">
           <div class="row">
