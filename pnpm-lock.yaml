@@ -183,6 +183,9 @@ importers:
       '@faker-js/faker':
         specifier: ^8.0.2
         version: 8.0.2
+      '@jsonresume/schema':
+        specifier: ^1.2.0
+        version: 1.2.0
       '@jsonresume/theme-papirus':
         specifier: workspace:*
         version: link:../../themes/papirus
@@ -5222,6 +5225,13 @@ packages:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
+
+  /@jsonresume/schema@1.2.0:
+    resolution: {integrity: sha512-1oUi7Gd6JMfx2239lZC0rcUYH7/Nb1DXZe6l39JJBPfxlfcELTthU4YrwfipzxFOKb+dY2VsA93YVv3m0S7EwA==}
+    engines: {node: '>=20'}
+    dependencies:
+      jsonschema: 1.4.1
+    dev: false
 
   /@juggle/resize-observer@3.4.0:
     resolution: {integrity: sha512-dfLbk+PwWvFzSxwk3n5ySL0hfBog779o8h68wK/7/APo/7cgyWp5jcXockbxdk5kFRkbeXWm4Fbi9FrdN381sA==}

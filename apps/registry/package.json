@@ -14,6 +14,7 @@
   "dependencies": {
     "@ai-sdk/openai": "^0.0.14",
     "@faker-js/faker": "^8.0.2",
+    "@jsonresume/schema": "^1.2.0",
     "@jsonresume/theme-papirus": "workspace:*",
     "@jsonresume/theme-stackoverflow": "workspace:*",
     "@jsonresume/ui": "workspace:*",
@@ -37,7 +38,6 @@
     "jsonresume-theme-autumn": "^1.0.1",
     "jsonresume-theme-cora": "^0.1.1",
     "jsonresume-theme-cv": "workspace:*",
-    "jsonresume-theme-professional": "workspace:*",
     "jsonresume-theme-el-santo": "^0.0.3",
     "jsonresume-theme-elegant": "^1.16.1",
     "jsonresume-theme-eloquent": "^4.1.0",
@@ -62,6 +62,7 @@
     "jsonresume-theme-orbit": "^1.1.0",
     "jsonresume-theme-paper": "^0.5.0",
     "jsonresume-theme-paper-plus-plus": "^0.5.1",
+    "jsonresume-theme-professional": "workspace:*",
     "jsonresume-theme-pumpkin": "^1.1.4",
     "jsonresume-theme-relaxed": "^0.1.8",
     "jsonresume-theme-rickosborne": "2022.9.16-T1450",

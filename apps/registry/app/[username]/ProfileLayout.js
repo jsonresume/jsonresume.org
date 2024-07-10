@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import Link from '@jsonresume/ui/Link';
 import { ProfileProvider } from './ProfileContext';
 import Button from '../../src/ui/Button';
+const gravatar = require('gravatar');
 
 const ProfileContainer = styled.div`
   font-size: 1.2rem;
@@ -103,9 +104,10 @@ const ViewMenu = styled.div``;
 
 export default function Layout({ children, resume, username, session }) {
   const router = useRouter();
-  const image = resume?.basics?.image
-    ? resume?.basics.image
-    : '/default-avatar.png';
+
+  const image =
+    resume?.basics?.image ||
+    gravatar.url(resume?.basics?.email, { s: '200', r: 'x', d: 'retro' }, true);
 
   if (!resume) {
     return <ProfileContainer>Resume not found</ProfileContainer>;

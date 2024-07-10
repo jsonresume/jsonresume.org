@@ -112,9 +112,14 @@ export default class MyDocument extends Document {
                           <a href="/schema/">Schema</a>
                           <a href="/themes/">Themes</a>
                           <a href="/projects/">Projects</a>
-                          <a href="/ai/">AI</a>
                           <a href="/team/">Team</a>
-                          <a href="/blog/">Blog</a>
+
+                          <a
+                            href="https://registry.jsonresume.org/explore"
+                            target="_blank"
+                          >
+                            Hosting
+                          </a>
                         </div>
                       </div>
                     </div>
@@ -128,6 +133,10 @@ export default class MyDocument extends Document {
                       <p>JSON Resume is open source</p>
                       <p>
                         <a href="//github.com/jsonresume">View on GitHub</a>
+                      </p>
+                      <p>
+                        <a href="/ai/">AI</a>&nbsp;|&nbsp;
+                        <a href="/blog/">Blog</a>&nbsp;|
                       </p>
                     </div>
                   </div>
