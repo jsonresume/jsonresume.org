@@ -55,11 +55,7 @@
     "remote": {
       "type": "string",
       "description": "the level of remote work available",
-      "enum": [
-        "Full",
-        "Hybrid",
-        "None"
-      ]
+      "enum": ["Full", "Hybrid", "None"]
     },
     "salary": {
       "type": "string",
