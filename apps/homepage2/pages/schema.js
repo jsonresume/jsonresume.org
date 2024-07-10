@@ -44,6 +44,11 @@ export default function Schema() {
               and community-driven. We release everything we do under the MIT
               license.
             </p>
+            <hr />
+            <p>
+              We are also working on a{' '}
+              <a href="/job-description-schema">Job Description schema</a>
+            </p>
           </div>
           <div class="col-sm-9 col-md-7">
             <div class="header">
