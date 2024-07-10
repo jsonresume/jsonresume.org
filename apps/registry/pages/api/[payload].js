@@ -1,4 +1,5 @@
 import generateResume from '../../lib/generateResume';
+import trackView from '../../lib/trackView';
 
 export default async function handler(req, res) {
   const { forceJSON, payload } = req.query;
@@ -33,6 +34,8 @@ export default async function handler(req, res) {
   headers.forEach((header) => {
     res.setHeader(header.key, header.value);
   });
+
+  trackView(username);
 
   if (content instanceof Buffer || content instanceof ReadableStream) {
     // handles images/binary
