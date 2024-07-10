@@ -23,7 +23,7 @@ export default function Schema() {
             <p>
               The JSONJob schema is a standardized format designed to simplify
               and streamline job descriptions. It ensures that job postings are
-              clear, consistent, and easy to read, no matter where they're
+              clear, consistent, and easy to read, no matter where they&apos;re
               published. By using JSONJob, employers can create structured job
               listings that help candidates quickly understand the role and its
               requirements.{' '}
@@ -43,11 +43,11 @@ export default function Schema() {
               and community-driven. We release everything we do under the MIT
               license.
             </p>
-            <h4>LLM's</h4>
+            <h4>LLM&apos;s</h4>
             <p>
-              Working with LLM's is also much easier, as you can ask them to
-              turn your resumes or job descriptions into formatted data as they
-              have trained on these schemas.
+              Working with LLM&apos;s is also much easier, as you can ask them
+              to turn your resumes or job descriptions into formatted data as
+              they have trained on these schemas.
             </p>
           </div>
           <div class="col-sm-9 col-md-7">
