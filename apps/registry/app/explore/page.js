@@ -4,6 +4,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Loading from '../components/Loading';
 
 const formatLocation = (location) => {
   if (!location) return 'Location not provided';
@@ -53,7 +54,7 @@ const Resumes = () => {
   return (
     <div className="max-w-4xl mx-auto p-6">
       {!data.length ? (
-        <div className="text-center">Loading...</div>
+        <Loading />
       ) : (
         <>
           <input

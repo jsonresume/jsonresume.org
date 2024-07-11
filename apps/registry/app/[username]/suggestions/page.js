@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Hero from '../../../src/ui/Hero';
 import ReactMarkdown from 'react-markdown';
+import Loading from '../../components/Loading';
 
 export default function Suggestions({ params }) {
   const { username } = params;
@@ -62,9 +63,12 @@ export default function Suggestions({ params }) {
         </button>
       </div>
       <br />
+      {submitting && <Loading />}
       {!submitting && suggestions && (
-        <div className="border border-gray-300 rounded-md p-6 bg-white shadow-md">
-          <ReactMarkdown>{suggestions}</ReactMarkdown>
+        <div className="min-w-full border border-gray-300 rounded-md p-6 bg-white shadow-md prose lg:prose-xl">
+          <ReactMarkdown className="m-auto prose lg:prose-xl">
+            {suggestions}
+          </ReactMarkdown>
         </div>
       )}
     </div>

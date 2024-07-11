@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import Hero from '../../../src/ui/Hero';
+import Loading from '../../components/Loading';
 
 export default function Letter({ params }) {
   const searchParams = useSearchParams();
@@ -53,7 +54,6 @@ export default function Letter({ params }) {
   const handleGenerate = () => {
     setSubmitting(true);
   };
-
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <Hero
@@ -89,9 +89,12 @@ export default function Letter({ params }) {
           {submitting ? 'GENERATING' : 'GENERATE'}
         </button>
       </div>
-      {letter && (
-        <div className="border border-gray-300 rounded-md p-6 bg-white shadow-md">
-          <ReactMarkdown>{letter}</ReactMarkdown>
+      {submitting && <Loading />}
+      {!submitting && letter && (
+        <div className="min-w-full border border-gray-300 rounded-md p-6 bg-white shadow-md">
+          <ReactMarkdown className="m-auto prose lg:prose-xl">
+            {letter}
+          </ReactMarkdown>
         </div>
       )}
     </div>

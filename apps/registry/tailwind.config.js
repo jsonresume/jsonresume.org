@@ -67,7 +67,8 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+
+  plugins: [require('@tailwindcss/typography')],
 };
 
 // my tailwind semantic colors are called accent, secondary, success, and danger. they have values 50,100,200,300,400,500,600,700,800,900,950.

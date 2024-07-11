@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Hero from '../../../src/ui/Hero';
 import JobList from './JobList';
+import Loading from '../../components/Loading';
 
 export default function Jobs({ params }) {
   const username = params.username;
@@ -47,7 +48,6 @@ export default function Jobs({ params }) {
     );
     router.push(`/${username}/letter?job=${job.id}`);
   };
-
   return (
     <div className="p-6">
       <Hero
@@ -58,7 +58,7 @@ export default function Jobs({ params }) {
           search."
       />
 
-      {!jobs && <div>Loading...</div>}
+      {!jobs && <Loading />}
       <JobList jobs={jobs} makeCoverletter={makeCoverletter} />
     </div>
   );
