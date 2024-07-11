@@ -1,7 +1,6 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { Analytics } from '@vercel/analytics/react';
 import Image from 'next/image';
-import { ServerStyleSheet } from 'styled-components';
 export default class MyDocument extends Document {
   render() {
     return (
@@ -133,7 +132,9 @@ export default class MyDocument extends Document {
                     <div class="col-sm-12">
                       <p>JSON Resume is open source</p>
                       <p>
-                        <a href="//github.com/jsonresume">View on GitHub</a>
+                        <a href="https://github.com/jsonresume">
+                          View on GitHub
+                        </a>
                       </p>
                       <p>
                         <a href="/ai/">AI</a>&nbsp;|&nbsp;
@@ -177,28 +178,5 @@ export default class MyDocument extends Document {
         </body>
       </Html>
     );
-  }
-  static async getInitialProps(ctx) {
-    const sheet = new ServerStyleSheet();
-    const originalRenderPage = ctx.renderPage;
-    try {
-      ctx.renderPage = () =>
-        originalRenderPage({
-          enhanceApp: (App) => (props) =>
-            sheet.collectStyles(<App {...props} />), //gets the styles from all the components inside <App>
-        });
-      const initialProps = await Document.getInitialProps(ctx);
-      return {
-        ...initialProps,
-        styles: (
-          <>
-            {initialProps.styles}
-            {sheet.getStyleElement()}
-          </>
-        ),
-      };
-    } finally {
-      sheet.seal();
-    }
   }
 }
