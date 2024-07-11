@@ -1,4 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
+import { Analytics } from '@vercel/analytics/react';
 import Image from 'next/image';
 import { ServerStyleSheet } from 'styled-components';
 export default class MyDocument extends Document {
@@ -172,6 +173,7 @@ export default class MyDocument extends Document {
           ></script>
 
           <script src="/js/main.js" defer></script>
+          <Analytics />
         </body>
       </Html>
     );
