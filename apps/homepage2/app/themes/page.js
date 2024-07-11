@@ -1,5 +1,11 @@
-import Head from 'next/head';
 import Image from 'next/image';
+
+export const metadata = {
+  title: 'Themes — JSON Resume',
+  description: 'Themes for JSON Resume',
+  image: 'https://jsonresume.org/images/logo.png',
+  url: 'https://jsonresume.org/themes/',
+};
 
 export default function GettingStarted() {
   // convert themes above into js array
@@ -78,9 +84,6 @@ export default function GettingStarted() {
 
   return (
     <>
-      <Head>
-        <title>Themes — JSON Resume</title>
-      </Head>
       <header id="header">
         <div class="container">
           <div class="row">

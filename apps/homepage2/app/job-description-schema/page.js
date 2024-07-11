@@ -1,11 +1,13 @@
-import Head from 'next/head';
+export const metadata = {
+  title: 'Job Description Schema — JSON Resume',
+  description: 'Job Description Schema',
+  image: 'https://jsonresume.org/images/logo.png',
+  url: 'https://jsonresume.org/job-description-schema/',
+};
 
 export default function Schema() {
   return (
     <>
-      <Head>
-        <title>Job Description Schema — JSON Resume</title>
-      </Head>
       <header id="header">
         <div class="container">
           <div class="row">

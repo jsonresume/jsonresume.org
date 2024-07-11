@@ -1,5 +1,13 @@
 import Head from 'next/head';
 
+export const metadata = {
+  title: 'AI — JSON Resume',
+  description:
+    'These are a bunch of AI related tools for building your resume. They are all fully open source but the hosted version uses a central API account which will be subject to usage limits.',
+  image: 'https://jsonresume.org/images/logo.png',
+  url: 'https://jsonresume.org/ai/',
+};
+
 export default function GettingStarted() {
   return (
     <>
