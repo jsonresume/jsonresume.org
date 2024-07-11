@@ -93,7 +93,7 @@ pnpm dev --filter=homepage2
 
 ## Contributors
 
-| Contributors |
+[![](https://4.vercel.app/github/contributors/jsonresume/jsonresume.org?strokeopacity=1)](https://discord.gg/GTZtn8pTXC)
 
 ## AI Features
 
