@@ -1,4 +1,6 @@
 // import { Octokit } from 'octokit';
+import { Analytics } from '@vercel/analytics/react';
+
 import Menu from './components/Menu';
 import { auth } from '../auth';
 import './global.css';
@@ -36,6 +38,8 @@ export default async function Layout({ children }) {
           rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,300,600,800&display=swap"
         />
+
+        <Analytics />
       </body>
     </html>
   );
