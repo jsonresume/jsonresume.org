@@ -1,6 +1,6 @@
 'use server';
 
-export default async function Page({ children }) {
+export default async function Page() {
   return (
     <div>
       <header id="header" className="yellow promo">
