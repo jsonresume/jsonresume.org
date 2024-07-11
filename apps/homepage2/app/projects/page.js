@@ -1,4 +1,9 @@
-import Head from 'next/head';
+export const metadata = {
+  title: 'Projects — JSON Resume',
+  description: 'Community projects built around JSON Resume',
+  image: 'https://jsonresume.org/images/logo.png',
+  url: 'https://jsonresume.org/projects/',
+};
 
 export default function GettingStarted() {
   const PROJECTS = [
@@ -426,9 +431,6 @@ export default function GettingStarted() {
 
   return (
     <div>
-      <Head>
-        <title>Projects — JSON Resume</title>
-      </Head>
       <header id="header">
         <div className="container">
           <div className="row">

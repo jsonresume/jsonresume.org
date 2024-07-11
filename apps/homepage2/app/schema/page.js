@@ -1,5 +1,12 @@
 import Head from 'next/head';
 
+export const metadata = {
+  title: 'Schema — JSON Resume',
+  description: 'JSON Resume schema',
+  image: 'https://jsonresume.org/images/logo.png',
+  url: 'https://jsonresume.org/schema/',
+};
+
 export default function Schema() {
   return (
     <>

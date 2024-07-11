@@ -1,6 +1,12 @@
-import Head from 'next/head';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { solarizedlight } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+
+export const metadata = {
+  title: 'Theme Development — JSON Resume',
+  description: 'Theme Development for JSON Resume',
+  image: 'https://jsonresume.org/images/logo.png',
+  url: 'https://jsonresume.org/theme-development/',
+};
 
 export default function ThemeDevelopment() {
   const codeString = `
@@ -13,28 +19,25 @@ export default function ThemeDevelopment() {
 
   return (
     <>
-      <Head>
-        <title>Theme Development — JSON Resume</title>
-      </Head>
       <header id="header">
-        <div class="container">
-          <div class="row">
-            <div class="col-sm-12">
+        <div className="container">
+          <div className="row">
+            <div className="col-sm-12">
               <h1>Theme Development</h1>
             </div>
           </div>
         </div>
       </header>
-      <div id="themes" class="container">
-        <div class="row">
-          <div class="col-md-3">
+      <div id="themes" className="container">
+        <div className="row">
+          <div className="col-md-3">
             <p>
               Remember JSON Resume is just a schema. Our method of theming is
               purely recommended if you wish to be compatibable with the
               official tooling and hosting.
             </p>
           </div>
-          <div class="col-md-9">
+          <div className="col-md-9">
             <h3>Getting started</h3>
             <p>
               The basic philosophy is that you create a new NPM module that
@@ -122,7 +125,7 @@ export default function ThemeDevelopment() {
             </p>
           </div>
         </div>
-        <div class="row"></div>
+        <div className="row"></div>
       </div>
     </>
   );

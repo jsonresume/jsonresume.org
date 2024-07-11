@@ -1,11 +1,12 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { Analytics } from '@vercel/analytics/react';
 import Image from 'next/image';
+import Link from 'next/link';
 export default class MyDocument extends Document {
   render() {
     return (
       <Html>
-        <Head title="asdasd">
+        <Head title="JSON Resume">
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" />
 
@@ -84,18 +85,18 @@ export default class MyDocument extends Document {
           <div id="main">
             <div id="viewport">
               <aside id="sidebar">
-                <a href="/">Home</a>
-                <a href="/getting-started/">Getting Started</a>
-                <a href="/schema/">Schema</a>
-                <a href="/themes/">Themes</a>
-                <a href="/projects/">Projects</a>
-                <a href="/ai/">AI</a>
-                <a href="/team/">Team</a>
-                <a href="/blog/">Blog</a>
+                <Link href="/">Home</Link>
+                <Link href="/getting-started/">Getting Started</Link>
+                <Link href="/schema/">Schema</Link>
+                <Link href="/themes/">Themes</Link>
+                <Link href="/projects/">Projects</Link>
+                <Link href="/ai/">AI</Link>
+                <Link href="/team/">Team</Link>
+                <Link href="/blog/">Blog</Link>
               </aside>
-              <div class="inner">
+              <div className="inner">
                 <nav id="nav">
-                  <a href="#" class="lt">
+                  <a href="#" className="lt">
                     <Image
                       width="18"
                       height="14"
@@ -103,23 +104,23 @@ export default class MyDocument extends Document {
                       alt="homepage navigation"
                     />
                   </a>
-                  <div class="container">
-                    <div class="row">
-                      <div class="col-sm-12">
-                        <a href="/">JSON Resume</a>
-                        <div class="float-right hidden-xs">
-                          <a href="/getting-started/">Getting Started</a>
-                          <a href="/schema/">Schema</a>
-                          <a href="/themes/">Themes</a>
-                          <a href="/projects/">Projects</a>
-                          <a href="/team/">Team</a>
+                  <div className="container">
+                    <div className="row">
+                      <div className="col-sm-12">
+                        <Link href="/">JSON Resume</Link>
+                        <div className="float-right hidden-xs">
+                          <Link href="/getting-started/">Getting Started</Link>
+                          <Link href="/schema/">Schema</Link>
+                          <Link href="/themes/">Themes</Link>
+                          <Link href="/projects/">Projects</Link>
+                          <Link href="/team/">Team</Link>
 
-                          <a
+                          <Link
                             href="https://registry.jsonresume.org/explore"
                             target="_blank"
                           >
                             Hosting
-                          </a>
+                          </Link>
                         </div>
                       </div>
                     </div>
@@ -127,18 +128,18 @@ export default class MyDocument extends Document {
                 </nav>
                 <Main />
 
-                <footer id="footer" class="container">
-                  <div class="row">
-                    <div class="col-sm-12">
+                <footer id="footer" className="container">
+                  <div className="row">
+                    <div className="col-sm-12">
                       <p>JSON Resume is open source</p>
                       <p>
-                        <a href="https://github.com/jsonresume">
+                        <Link href="https://github.com/jsonresume">
                           View on GitHub
-                        </a>
+                        </Link>
                       </p>
                       <p>
-                        <a href="/ai/">AI</a>&nbsp;|&nbsp;
-                        <a href="/blog/">Blog</a>&nbsp;|
+                        <Link href="/ai/">AI</Link>&nbsp;|&nbsp;
+                        <Link href="/blog/">Blog</Link>&nbsp;|
                       </p>
                     </div>
                   </div>

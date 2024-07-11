@@ -8,3 +8,4 @@ themes/papirus/src/templates.cjs
 apps/**/*.css
 packages/**/*.css
 README.md
+.turbo/*

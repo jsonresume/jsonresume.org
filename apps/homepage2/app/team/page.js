@@ -1,5 +1,11 @@
 import Image from 'next/image';
-import Head from 'next/head';
+
+export const metadata = {
+  title: 'Team — JSON Resume',
+  description: 'Meet the team behind JSON Resume',
+  image: 'https://jsonresume.org/images/logo.png',
+  url: 'https://jsonresume.org/team/',
+};
 
 export default function Team() {
   const team = {
@@ -66,9 +72,6 @@ export default function Team() {
   };
   return (
     <>
-      <Head>
-        <title>Team — JSON Resume</title>
-      </Head>
       <header id="header">
         <div className="container">
           <div className="row">

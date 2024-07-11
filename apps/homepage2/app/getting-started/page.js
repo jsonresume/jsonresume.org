@@ -1,12 +1,15 @@
 import Image from 'next/image';
-import Head from 'next/head';
+
+export const metadata = {
+  title: 'Getting Started - JSON Resume',
+  description: 'Getting started with JSON Resume',
+  image: 'https://jsonresume.org/images/logo.png',
+  url: 'https://jsonresume.org/getting-started/',
+};
 
 export default function GettingStarted() {
   return (
     <>
-      <Head>
-        <title>Getting Started — JSON Resume</title>
-      </Head>
       <header id="header">
         <div class="container">
           <div class="row">
