@@ -127,6 +127,8 @@ export default function GettingStarted() {
         <br />
         <div class="row">
           {themes.map((theme) => {
+            // src={`https://screenshot-peach-beta.vercel.app/api?v=1&url=https://registry.jsonresume.org/thomasdavis?theme=${theme.slug}&height=720&width=1280`}
+
             return (
               <div class="col-sm-4 col-md-3" key={theme.slug}>
                 <div class="theme">
@@ -137,11 +139,11 @@ export default function GettingStarted() {
                         href={`https://registry.jsonresume.org/thomasdavis?theme=${theme.slug}`}
                       >
                         <Image
-                          style={{ height: '129px' }}
+                          style={{ height: '100px' }}
                           height="129"
                           width="163"
                           alt={theme.name}
-                          src={`https://screenshot-peach-beta.vercel.app/api?v=1&url=https://registry.jsonresume.org/thomasdavis?theme=${theme.slug}&height=720&width=1280`}
+                          src={`/img/themes/${theme.slug}.png`}
                         />
                       </a>
                     </div>
