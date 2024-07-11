@@ -3,7 +3,7 @@ import { signIn } from '../../auth';
 
 export default function SignIn() {
   return (
-    <div className="text-lg w-[400px] mx-auto p-8 bg-white rounded-lg shadow-md">
+    <div className="text-lg m-8 w-[400px] mx-auto p-8 bg-white rounded-lg shadow-md">
       <div className="mb-6 text-gray-700">
         <p>
           Welcome to the JSON Resume Registry! Seamlessly sync your resume.json
@@ -26,7 +26,7 @@ export default function SignIn() {
       >
         <button
           type="submit"
-          className="w-full py-3 px-4 bg-blue-600 text-white rounded-md flex items-center justify-center hover:bg-blue-700 transition-colors duration-200"
+          className="w-full py-3 px-4 bg-secondary-600 text-white rounded-md flex items-center justify-center hover:bg-secondary-700 transition-colors duration-200"
         >
           <Github size={20} className="mr-2" /> Sign in with GitHub
         </button>

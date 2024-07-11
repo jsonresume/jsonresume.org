@@ -29,7 +29,7 @@ export default function Layout({ children, resume, username, session }) {
   ];
 
   return (
-    <div className="text-lg bg-gray-100 min-h-screen flex flex-col items-center px-4 md:px-10">
+    <div className="text-lg min-h-screen flex flex-col items-center px-4 md:px-10">
       <div className="w-full py-10 flex flex-col md:flex-row justify-center items-start">
         <div className="w-full min-w-[300px] md:max-w-[300px] mr-0 md:mr-10 mb-10 md:mb-0">
           <div className="bg-white p-6 rounded-lg shadow-md">
@@ -47,7 +47,7 @@ export default function Layout({ children, resume, username, session }) {
                 {resume.basics.label}
               </p>
               <div className="flex items-center mb-2 text-sm text-gray-500">
-                <MapPin className="w-4 h-4 mr-1" />
+                <MapPin className="w-4 h-4 mr-1 text-secondary-500" />
                 <span>
                   {resume.basics.location.countryCode ||
                     'Location not available'}
@@ -55,13 +55,13 @@ export default function Layout({ children, resume, username, session }) {
               </div>
               <a
                 href={`mailto:${resume.basics.email}`}
-                className="mb-4 text-sm text-blue-600 hover:underline"
+                className="mb-4 text-sm text-secondary-500 hover:underline"
               >
                 {resume.basics.email}
               </a>
               <div className="flex flex-col items-center mt-4 space-y-2">
                 <a href={`/${username}`} target="_blank">
-                  <button className="bg-gray-200 text-gray-700 py-2 px-4 rounded hover:bg-gray-300">
+                  <button className="bg-secondary-100 text-secondary-800 py-2 px-4 rounded hover:bg-secondary-200 transition-colors duration-200">
                     View Resume
                   </button>
                 </a>
@@ -69,7 +69,7 @@ export default function Layout({ children, resume, username, session }) {
               {session && (
                 <button
                   onClick={() => router.push('/editor')}
-                  className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
+                  className="mt-4 bg-secondary-500 text-white py-2 px-4 rounded hover:bg-secondary-700 transition-colors duration-200"
                 >
                   Edit Resume
                 </button>
@@ -78,15 +78,15 @@ export default function Layout({ children, resume, username, session }) {
           </div>
         </div>
         <div className="flex-1 bg-white p-6 rounded-lg shadow-md max-w-[800px] w-full">
-          <div className="flex justify-start gap-4 mb-4  pb-2">
+          <div className="flex justify-start gap-4 mb-4 pb-2">
             {navLinks.map((link) => (
               <Link key={link.href} href={link.href} passHref>
                 <span
                   className={`text-gray-700 hover:text-gray-900 py-2 px-4 rounded-full ${
                     pathname === link.href
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-gray-200 hover:bg-gray-300'
-                  }`}
+                      ? 'bg-secondary-500 text-white'
+                      : 'bg-secondary-100 hover:bg-secondary-200'
+                  } transition-colors duration-200`}
                 >
                   {link.label}
                 </span>

@@ -68,7 +68,7 @@ const Resumes = () => {
               <Link
                 key={index}
                 href={`/${resume.username}/dashboard`}
-                className="flex items-center p-4 border border-gray-300 rounded bg-yellow-50 hover:bg-yellow-200 transition-colors duration-200"
+                className="flex items-center p-4 border border-gray-300 rounded bg-white hover:bg-gray-100 transition-colors duration-200"
               >
                 <img
                   src={resume.image}

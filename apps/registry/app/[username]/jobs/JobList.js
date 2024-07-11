@@ -5,6 +5,7 @@ import {
   Calendar,
   DollarSign,
   BriefcaseIcon,
+  Globe,
   CheckCircle,
   Star,
 } from 'lucide-react';
@@ -27,7 +28,7 @@ const JobDescription = ({ job, makeCoverletter }) => {
             <span>{job.company || 'Not available'}</span>
           </div>
           <div className="flex items-center">
-            <DollarSign className="w-5 h-5 mr-2 text-yellow-500" />
+            <DollarSign className="w-5 h-5 mr-2 text-warning-500" />
             <span>
               {job.salary
                 ? `$${Number(job.salary).toLocaleString()}/year`
@@ -35,7 +36,7 @@ const JobDescription = ({ job, makeCoverletter }) => {
             </span>
           </div>
           <div className="flex items-center">
-            <MapPin className="w-5 h-5 mr-2 text-blue-500" />
+            <MapPin className="w-5 h-5 mr-2 text-secondary-500" />
             <span>
               {job.location
                 ? `${job.location.city}, ${job.location.countryCode}`
@@ -43,11 +44,15 @@ const JobDescription = ({ job, makeCoverletter }) => {
             </span>
           </div>
           <div className="flex items-center">
-            <BriefcaseIcon className="w-5 h-5 mr-2 text-purple-500" />
+            <BriefcaseIcon className="w-5 h-5 mr-2 text-accent-500" />
             <span>{job.experience || 'Not available'}</span>
           </div>
           <div className="flex items-center">
-            <Calendar className="w-5 h-5 mr-2 text-green-500" />
+            <Globe className="w-5 h-5 mr-2 text-accent-500" />
+            <span>Remote - {job.remote || 'Not available'}</span>
+          </div>
+          <div className="flex items-center">
+            <Calendar className="w-5 h-5 mr-2 text-success-500" />
             <span>{job.date || 'Not available'}</span>
           </div>
           <div className="text-gray-600 col-span-full">
@@ -73,7 +78,7 @@ const JobDescription = ({ job, makeCoverletter }) => {
               {job.responsibilities?.length ? (
                 job.responsibilities.map((resp, index) => (
                   <li key={index} className="flex items-start mb-2">
-                    <CheckCircle className="w-5 h-5 mr-2 text-green-500 flex-shrink-0 mt-1" />
+                    <CheckCircle className="w-5 h-5 mr-2 text-success-500 flex-shrink-0 mt-1" />
                     <span>{resp}</span>
                   </li>
                 ))
@@ -91,7 +96,7 @@ const JobDescription = ({ job, makeCoverletter }) => {
               {job.qualifications?.length ? (
                 job.qualifications.map((qual, index) => (
                   <li key={index} className="flex items-start mb-2">
-                    <CheckCircle className="w-5 h-5 mr-2 text-blue-500 flex-shrink-0 mt-1" />
+                    <CheckCircle className="w-5 h-5 mr-2 text-secondary-500 flex-shrink-0 mt-1" />
                     <span>{qual}</span>
                   </li>
                 ))
@@ -112,7 +117,7 @@ const JobDescription = ({ job, makeCoverletter }) => {
                     {skill.name}
                   </h3>
                   <div className="flex items-center mb-2">
-                    <Star className="w-5 h-5 mr-2 text-yellow-500" />
+                    <Star className="w-5 h-5 mr-2 text-warning-500" />
                     <span>{skill.level}</span>
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -137,7 +142,7 @@ const JobDescription = ({ job, makeCoverletter }) => {
           </div>
           <div className="mt-4 flex gap-4">
             <button
-              className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
+              className="bg-secondary-500 text-white py-2 px-4 rounded hover:bg-secondary-700 transition-colors duration-200"
               onClick={() => makeCoverletter(job.raw)}
             >
               Make Cover Letter
@@ -146,7 +151,7 @@ const JobDescription = ({ job, makeCoverletter }) => {
               href={job.url || '#'}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-gray-200 text-gray-700 py-2 px-4 rounded hover:bg-gray-300"
+              className="bg-gray-200 text-gray-700 py-2 px-4 rounded hover:bg-gray-300 transition-colors duration-200"
             >
               View Original Job
             </a>

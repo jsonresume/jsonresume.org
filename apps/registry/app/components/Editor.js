@@ -165,7 +165,7 @@ const sampleResume = {
   ],
 };
 
-const RESUME_GIST_NAME = 'resume.json';
+const RESUME_GIST_NAME = 'resumeaa.json';
 
 export default async function Page() {
   const session = await auth();

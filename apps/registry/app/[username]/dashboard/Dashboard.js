@@ -40,14 +40,14 @@ const ResumeData = {
 };
 
 const SectionTitle = ({ children }) => (
-  <h2 className="text-2xl font-bold mb-4 text-gray-800 border-b-2 border-blue-500 pb-2">
+  <h2 className="text-2xl font-bold mb-4 text-gray-800 border-b-2 border-secondary-500 pb-2">
     {children}
   </h2>
 );
 
 const InfoItem = ({ icon: Icon, label, value }) => (
   <div className="flex items-center space-x-2 mb-2">
-    <Icon className="w-5 h-5 text-blue-500" />
+    <Icon className="w-5 h-5 text-secondary-500" />
     <span className="font-medium text-gray-700">{label}:</span>
     <span className="text-gray-900">{value}</span>
   </div>
@@ -63,7 +63,7 @@ const ProgressBar = ({ value, max, label }) => (
     </div>
     <div className="w-full bg-gray-200 rounded-full h-2.5">
       <div
-        className="bg-blue-600 h-2.5 rounded-full"
+        className="bg-secondary-600 h-2.5 rounded-full"
         style={{ width: `${(value / max) * 100}%` }}
       ></div>
     </div>
@@ -73,7 +73,7 @@ const ProgressBar = ({ value, max, label }) => (
 const TimelineItem = ({ title, duration }) => (
   <div className="mb-4">
     <div className="flex items-center mb-1">
-      <div className="bg-blue-500 rounded-full w-3 h-3 mr-2"></div>
+      <div className="bg-secondary-500 rounded-full w-3 h-3 mr-2"></div>
       <h4 className="text-lg font-semibold">{title}</h4>
     </div>
     <p className="text-sm text-gray-600 ml-5">{duration}</p>
@@ -81,7 +81,7 @@ const TimelineItem = ({ title, duration }) => (
 );
 
 const SkillBadge = ({ skill }) => (
-  <span className="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded">
+  <span className="bg-secondary-100 text-secondary-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded">
     {skill}
   </span>
 );
