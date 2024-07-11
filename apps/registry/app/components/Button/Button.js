@@ -80,7 +80,14 @@ const StyledLink = styled.a`
   ${buttonStyles}
 `;
 
-const Button = ({ size, color, href, children, disabled, ...props }) => {
+const Button = ({
+  size = 'medium',
+  color = 'default',
+  href = null,
+  children,
+  disabled,
+  ...props
+}) => {
   if (href) {
     return (
       <StyledLink
@@ -108,12 +115,6 @@ Button.propTypes = {
   color: PropTypes.oneOf(['default', 'success', 'danger']),
   href: PropTypes.string,
   children: PropTypes.node.isRequired,
-};
-
-Button.defaultProps = {
-  size: 'medium',
-  color: 'default',
-  href: null,
 };
 
 export default Button;
