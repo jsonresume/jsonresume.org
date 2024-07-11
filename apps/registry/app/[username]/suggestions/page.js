@@ -1,20 +1,9 @@
 'use client';
+
 import axios from 'axios';
-import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import Hero from '../../../src/ui/Hero';
-import Label from '../../../src/ui/Label';
-import ButtonGroup from '../../../src/ui/ButtonGroup';
-import Dropdown from '../../../src/ui/Dropdown';
-import Button from '../../../src/ui/Button';
 import ReactMarkdown from 'react-markdown';
-
-const Paper = styled.div`
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 10px 40px;
-  background: #fff;
-`;
 
 export default function Suggestions({ params }) {
   const { username } = params;
@@ -35,6 +24,7 @@ export default function Suggestions({ params }) {
           setSubmitting(false);
         } catch (error) {
           console.error('Error fetching data: ', error);
+          setSubmitting(false);
         }
       };
 
@@ -47,41 +37,36 @@ export default function Suggestions({ params }) {
   };
 
   return (
-    <>
-      <Hero>Generates suggestions to improve your resume</Hero>
-      <Label>Focus</Label>
-      <ButtonGroup>
-        <div>
-          <Dropdown
-            onChange={(e) => {
-              setFocus(e.target.value);
-            }}
-            options={[
-              {
-                label: 'General',
-                value: 'general',
-              },
-              {
-                label: 'Spelling',
-                value: 'spelling',
-              },
-              {
-                label: 'Grammar',
-                value: 'grammar',
-              },
-            ]}
-          />
-        </div>
-        <Button disabled={submitting} onClick={handleGenerate}>
+    <div className="p-6 bg-gray-50 min-h-screen">
+      <Hero
+        title="Improve Your Resume"
+        description="Generates suggestions to improve your resume based on the selected focus."
+      />
+      <label className="block text-xl font-semibold mb-2">Focus</label>
+      <div className="flex items-center mb-4">
+        <select
+          className="mr-4 border border-gray-300 rounded-md p-2"
+          onChange={(e) => setFocus(e.target.value)}
+          value={focus}
+        >
+          <option value="general">General</option>
+          <option value="spelling">Spelling</option>
+          <option value="grammar">Grammar</option>
+        </select>
+        <button
+          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
+          disabled={submitting}
+          onClick={handleGenerate}
+        >
           {submitting ? 'GENERATING' : 'GENERATE'}
-        </Button>
-      </ButtonGroup>
+        </button>
+      </div>
       <br />
       {!submitting && suggestions && (
-        <Paper>
+        <div className="border border-gray-300 rounded-md p-6 bg-white shadow-md">
           <ReactMarkdown>{suggestions}</ReactMarkdown>
-        </Paper>
+        </div>
       )}
-    </>
+    </div>
   );
 }
