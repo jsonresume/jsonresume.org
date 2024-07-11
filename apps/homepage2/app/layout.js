@@ -2,8 +2,7 @@ import { Analytics } from '@vercel/analytics/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Ubuntu, Lato, Open_Sans } from 'next/font/google';
-import './styles.css';
-
+import './global.css';
 const ubuntu = Ubuntu({
   subsets: ['latin'],
   display: 'swap',

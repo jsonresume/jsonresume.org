@@ -1,4 +1,5 @@
 
+
 html,
 body {
   height: 100%;
@@ -17,17 +18,18 @@ a:hover {
   transition: all 0.25s;
 }
 h1 {
-  font: 300 40px 'Open Sans';
+  font-size: 40px !important;
   font-family: var(--font-open-sans) !important;
-  margin: 0;
+  font-weight: 300 !important;
+  margin: 0 !important;
 }
 h1,
 h2,
 h3 {
-  margin-top: 0;
+  margin-top: 0 ;
 }
 p {
-  margin: 1em 0;
+  margin: 1em 0 ;
 }
 p,
 li {
@@ -46,40 +48,40 @@ pre {
 }
 .btn {
   background: #fff;
-  border: 2px solid #ddd;
-  border-radius: 3px;
+  border: 2px solid #ddd !important; 
+  border-radius: 3px !important; 
   color: #aaa;
   display: inline-block;
-  font-size: 11px;
-  letter-spacing: 1px;
-  padding: 8px 16px;
-  text-transform: uppercase;
+  font-size: 11px !important;
+  letter-spacing: 1px !important;
+  padding: 8px 16px !important;
+  text-transform: uppercase !important;
   -webkit-transition: background 0.1s, color 0.1s;
   transition: background 0.1s, color 0.1s;
-  word-spacing: 3px;
+  word-spacing: 3px !important;
 }
 .btn:hover {
-  border-color: #aaa;
-  color: #666;
-  -webkit-transition: all 0.25s;
-  transition: all 0.25s;
+  border-color: #aaa !important;
+  color: #666 !important;
+  -webkit-transition: all 0.25s !important;
+  transition: all 0.25s !important;
 }
 .btn-red {
-  background: #df4848;
-  border: 2px solid #df4848;
-  color: #fff;
+  background: #df4848 !important;
+  border: 2px solid #df4848 !important;
+  color: #fff !important; 
 }
 .btn-red:hover {
-  background: #ce2424;
-  border: 2px solid #ce2424;
-  color: #fff;
-  -webkit-transition: all 0.25s;
-  transition: all 0.25s;
+  background: #ce2424 !important;
+  border: 2px solid #ce2424 !important;
+  color: #fff !important;
+  -webkit-transition: all 0.25s !important;
+  transition: all 0.25s !important; 
 }
 .btn-big {
-  font-size: 12px;
-  font-weight: 600;
-  padding: 12px 24px;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  padding: 12px 24px !important;
 }
 .button {
   background-color: #ececec;
@@ -148,7 +150,8 @@ pre {
 #sidebar a {
   display: block;
   color: #000;
-  font: 600 15px 'Open Sans';
+  font-weight: 600 !important;
+  font-size: 15px !important;
   font-family: var(--font-open-sans) !important;
 
   padding: 15px 30px;
@@ -158,7 +161,9 @@ pre {
 }
 #nav {
   background: #fff18f;
-  font: 600 15px 'Open Sans';
+ 
+  font-weight: 600 !important;
+  font-size: 15px !important;
   font-family: var(--font-open-sans) !important;
 
   overflow: hidden;
@@ -202,7 +207,9 @@ pre {
 }
 #nav #logo {
   color: #000;
-  font: 700 16px Ubuntu;
+  font-family: var(--font-ubuntu) !important;
+  font-weight: 700 !important;
+  font-size: 16px !important;
   margin-right: 20px;
   padding: 10px 0;
 }
@@ -328,13 +335,14 @@ pre {
   border-right: 1px solid #ddd;
   padding: 0 10px;
   overflow: hidden;
+  background: #fff !important;
 }
 #schema pre span {
-  color: #bbb;
+  color: #bbb !important;
 }
 #schema .header {
-  background: #f9f9f9;
-  border: 1px solid #ddd;
+  background: #f9f9f9 !important;
+  border: 1px solid #ddd !important;
   border-bottom: 0;
   border-radius: 2px;
   color: #666;
@@ -342,15 +350,17 @@ pre {
   line-height: 19px;
   text-transform: uppercase;
   font-size: 12px;
+  border-bottom: none !important;
 }
 #schema .version {
-  color: #ccc;
+  color: #ccc !important;
 }
 #schema .schema {
   padding-top: 10px;
   border-bottom: 1px solid #ddd;
   border-radius: 0 0 2px 2px;
   padding-bottom: 10px;
+  border-top: none;
 }
 #schema .integration p {
   margin-top: 0;
