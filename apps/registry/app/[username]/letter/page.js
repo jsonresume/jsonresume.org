@@ -3,42 +3,13 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import Button from '../../../src/ui/Button';
-import Dropdown from '../../../src/ui/Dropdown';
-import styled from 'styled-components';
 import ReactMarkdown from 'react-markdown';
 import Hero from '../../../src/ui/Hero';
-import Label from '../../../src/ui/Label';
-import ButtonGroup from '../../../src/ui/ButtonGroup';
-
-/*
-#todo
-  - do type as the stream
-
-*/
-
-const JobDescription = styled.textarea`
-  width: calc(100% - 50px);
-  height: 100px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 20px;
-  font-size: 14px;
-  margin-bottom: 20px;
-`;
-
-const Paper = styled.div`
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 10px 40px;
-  background: #fff;
-`;
 
 export default function Letter({ params }) {
   const searchParams = useSearchParams();
   const { username } = params;
   const job = searchParams.get('job');
-  console.log({ job, searchParams });
   const [submitting, setSubmitting] = useState(false);
   const [jobDescription, setJobDescription] = useState(
     typeof window !== 'undefined'
@@ -47,7 +18,6 @@ export default function Letter({ params }) {
         : window?.localStorage?.getItem('jobDescription')
       : ''
   );
-
   const [tone, setTone] = useState('formal');
   const [letter, setLetter] = useState(null);
 
@@ -72,6 +42,7 @@ export default function Letter({ params }) {
           setSubmitting(false);
         } catch (error) {
           console.error('Error fetching data: ', error);
+          setSubmitting(false);
         }
       };
 
@@ -84,52 +55,45 @@ export default function Letter({ params }) {
   };
 
   return (
-    <>
-      <Hero>
-        Combines the users resume.json with the job description below to
-        generate a cover letter in the tonality specified
-      </Hero>
-      <Label>Job Description (optional)</Label>
-      <JobDescription onChange={saveJobDescription} value={jobDescription} />
-      <Label>Tonality</Label>
-      <ButtonGroup>
-        <div>
-          <Dropdown
-            onChange={(event) => setTone(event.target.value)}
-            options={[
-              {
-                label: 'Formal',
-                value: 'formal',
-              },
-              {
-                label: 'Casual',
-                value: 'casual',
-              },
-              {
-                label: 'Sarcastic',
-                value: 'sarcastic',
-              },
-              {
-                label: 'Funny',
-                value: 'funny',
-              },
-              {
-                label: 'Professional',
-                value: 'professional',
-              },
-            ]}
-          />
-        </div>
-        <Button disabled={submitting} onClick={handleGenerate}>
+    <div className="p-6 bg-gray-50 min-h-screen">
+      <Hero
+        title="Generate Your Cover Letter"
+        description="Combines your resume.json with the job description below to generate a cover letter in the specified tonality."
+      />
+      <label className="block text-xl font-semibold mb-2">
+        Job Description (optional)
+      </label>
+      <textarea
+        className="w-full h-32 border border-gray-300 rounded-md p-4 mb-4 text-sm"
+        onChange={saveJobDescription}
+        value={jobDescription}
+      />
+      <label className="block text-xl font-semibold mb-2">Tonality</label>
+      <div className="flex items-center mb-4">
+        <select
+          className="mr-4 border border-gray-300 rounded-md p-2"
+          onChange={(event) => setTone(event.target.value)}
+          value={tone}
+        >
+          <option value="formal">Formal</option>
+          <option value="casual">Casual</option>
+          <option value="sarcastic">Sarcastic</option>
+          <option value="funny">Funny</option>
+          <option value="professional">Professional</option>
+        </select>
+        <button
+          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
+          disabled={submitting}
+          onClick={handleGenerate}
+        >
           {submitting ? 'GENERATING' : 'GENERATE'}
-        </Button>
-      </ButtonGroup>
-      <br />
+        </button>
+      </div>
       {letter && (
-        <Paper>
+        <div className="border border-gray-300 rounded-md p-6 bg-white shadow-md">
           <ReactMarkdown>{letter}</ReactMarkdown>
-        </Paper>
+        </div>
       )}
-    </>
+    </div>
   );
 }

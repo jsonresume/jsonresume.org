@@ -80,6 +80,7 @@
     "jsonresume-theme-techlead": "^1.0.1",
     "jsonschema": "^1.4.1",
     "lodash": "^4.17.21",
+    "lucide-react": "^0.407.0",
     "merge-anything": "^5.1.7",
     "next": "^14.2.5",
     "next-auth": "5.0.0-beta.18",

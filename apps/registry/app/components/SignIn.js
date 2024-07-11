@@ -1,51 +1,43 @@
-import { FaGithub } from 'react-icons/fa';
+import { Github } from 'lucide-react';
 import { signIn } from '../../auth';
-import Button from './Button/Button';
 
 export default function SignIn() {
   return (
-    <div
-      style={{
-        fontSize: '1.4rem',
-        width: 400,
-        margin: 'auto',
-        padding: '30px 30px',
-      }}
-    >
-      <div>
-        Edit your resume.json synced from Github Gist.
-        <br />
-        <br />
-        If you already have one, it will load it into the editor.
-        <br />
-        <br />
-        There is nothing stored on our servers.
+    <div className="text-lg w-[400px] mx-auto p-8 bg-white rounded-lg shadow-md">
+      <div className="mb-6 text-gray-700">
+        <p>
+          Welcome to the JSON Resume Registry! Seamlessly sync your resume.json
+          from GitHub Gist.
+        </p>
+        <p className="mt-4">
+          If you already have a resume.json, it will be loaded directly into the
+          editor for you.
+        </p>
+        <p className="mt-4">
+          Rest assured, your data is secure. We do not store anything on our
+          servers.
+        </p>
       </div>
-      <br />
       <form
         action={async () => {
           'use server';
           await signIn('github');
         }}
       >
-        <Button
+        <button
           type="submit"
-          size="large"
-          style={{ display: 'flex', alignItems: 'center' }}
+          className="w-full py-3 px-4 bg-blue-600 text-white rounded-md flex items-center justify-center hover:bg-blue-700 transition-colors duration-200"
         >
-          <FaGithub size="20px" style={{ marginRight: '10px' }} /> Signin with
-          GitHub
-        </Button>
+          <Github size={20} className="mr-2" /> Sign in with GitHub
+        </button>
       </form>
-      <br />
-      <br />
-      <div style={{ color: '#777' }}>
-        <h3 style={{ color: '#222' }}>#todo</h3>
-        <ul>
-          <li>full featured resume editor</li>
-          <li style={{ textDecoration: 'line-through' }}>basic AI tools</li>
-          <li>build social networking</li>
-          <li>opt in notifications and analytics</li>
+      <div className="mt-8 text-gray-500">
+        <h3 className="text-gray-800 mb-3 text-xl">Upcoming Features</h3>
+        <ul className="list-disc pl-5 space-y-2">
+          <li>Full-featured resume editor</li>
+          <li className="line-through">Basic AI tools</li>
+          <li>Social networking capabilities</li>
+          <li>Opt-in notifications and analytics</li>
         </ul>
       </div>
     </div>

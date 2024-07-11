@@ -38,6 +38,18 @@ module.exports = {
         port: '',
         pathname: '/*',
       },
+      {
+        protocol: 'https',
+        hostname: 's.gravatar.com',
+        port: '',
+        pathname: '/avatar/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'avatars0.githubusercontent.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
   experimental: {

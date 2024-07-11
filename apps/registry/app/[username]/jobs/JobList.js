@@ -1,90 +1,161 @@
-// Install styled-components if you haven't already
-// npm install styled-components
+import React, { useState } from 'react';
+import {
+  MapPin,
+  Building,
+  Calendar,
+  DollarSign,
+  BriefcaseIcon,
+  CheckCircle,
+  Star,
+} from 'lucide-react';
 
-import React from 'react';
-import styled from 'styled-components';
-import Link from 'next/link';
-import Button from '../../../src/ui/Button';
+const JobDescription = ({ job, makeCoverletter }) => {
+  const [expanded, setExpanded] = useState(false);
 
-const JobListContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-`;
+  return (
+    <div
+      className="p-6 bg-white shadow-lg rounded-lg transition-transform transform hover:scale-105 cursor-pointer"
+      onClick={() => setExpanded(!expanded)}
+    >
+      <header className="mb-4">
+        <h1 className="text-2xl font-bold text-gray-800">
+          {job.title || 'Not available'}
+        </h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-600 mt-2">
+          <div className="flex items-center">
+            <Building className="w-5 h-5 mr-2" />
+            <span>{job.company || 'Not available'}</span>
+          </div>
+          <div className="flex items-center">
+            <DollarSign className="w-5 h-5 mr-2 text-yellow-500" />
+            <span>
+              {job.salary
+                ? `$${Number(job.salary).toLocaleString()}/year`
+                : 'Not available'}
+            </span>
+          </div>
+          <div className="flex items-center">
+            <MapPin className="w-5 h-5 mr-2 text-blue-500" />
+            <span>
+              {job.location
+                ? `${job.location.city}, ${job.location.countryCode}`
+                : 'Not available'}
+            </span>
+          </div>
+          <div className="flex items-center">
+            <BriefcaseIcon className="w-5 h-5 mr-2 text-purple-500" />
+            <span>{job.experience || 'Not available'}</span>
+          </div>
+          <div className="flex items-center">
+            <Calendar className="w-5 h-5 mr-2 text-green-500" />
+            <span>{job.date || 'Not available'}</span>
+          </div>
+          <div className="text-gray-600 col-span-full">
+            {expanded ? (
+              <p>{job.description || 'Not available'}</p>
+            ) : (
+              <p>
+                {job.description
+                  ? job.description.slice(0, 100) + '...'
+                  : 'Not available'}
+              </p>
+            )}
+          </div>
+        </div>
+      </header>
+      {expanded && (
+        <div className="mt-4">
+          <div className="mb-6">
+            <h2 className="text-2xl font-semibold mb-3 text-gray-800">
+              Responsibilities
+            </h2>
+            <ul className="list-none">
+              {job.responsibilities?.length ? (
+                job.responsibilities.map((resp, index) => (
+                  <li key={index} className="flex items-start mb-2">
+                    <CheckCircle className="w-5 h-5 mr-2 text-green-500 flex-shrink-0 mt-1" />
+                    <span>{resp}</span>
+                  </li>
+                ))
+              ) : (
+                <p>Not available</p>
+              )}
+            </ul>
+          </div>
 
-const JobCard = styled.div`
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-`;
+          <div className="mb-6">
+            <h2 className="text-2xl font-semibold mb-3 text-gray-800">
+              Qualifications
+            </h2>
+            <ul className="list-none">
+              {job.qualifications?.length ? (
+                job.qualifications.map((qual, index) => (
+                  <li key={index} className="flex items-start mb-2">
+                    <CheckCircle className="w-5 h-5 mr-2 text-blue-500 flex-shrink-0 mt-1" />
+                    <span>{qual}</span>
+                  </li>
+                ))
+              ) : (
+                <p>Not available</p>
+              )}
+            </ul>
+          </div>
 
-const JobTitle = styled.h2`
-  margin: 0;
-  font-size: 1.5em;
-  color: #333;
-`;
-
-const JobCompany = styled.h3`
-  margin: 0;
-  font-size: 1.2em;
-  color: #555;
-`;
-
-const JobType = styled.span`
-  display: inline-block;
-  background-color: #f0f0f0;
-  border-radius: 4px;
-  padding: 5px 10px;
-  margin-right: 10px;
-  font-size: 0.9em;
-`;
-
-const JobDate = styled.span`
-  display: inline-block;
-  font-size: 0.9em;
-  color: #999;
-`;
-
-const JobDescription = styled.p`
-  font-size: 1em;
-  color: #666;
-`;
-
-const JobLocation = styled.div`
-  font-size: 0.9em;
-  color: #999;
-`;
-
-const JobRemote = styled.div`
-  font-size: 0.9em;
-  color: #999;
-`;
-
-const JobSalary = styled.div`
-  font-size: 0.9em;
-  color: #999;
-`;
-
-const JobExperience = styled.div`
-  font-size: 0.9em;
-  color: #999;
-`;
-
-const JobResponsibilities = styled.ul`
-  font-size: 0.9em;
-  color: #666;
-`;
-
-const JobQualifications = styled.ul`
-  font-size: 0.9em;
-  color: #666;
-`;
-
-const JobSkills = styled.ul`
-  font-size: 0.9em;
-  color: #666;
-`;
+          <div className="mb-6">
+            <h2 className="text-2xl font-semibold mb-3 text-gray-800">
+              Skills
+            </h2>
+            {job.skills?.length ? (
+              job.skills.map((skill, index) => (
+                <div key={index} className="mb-4">
+                  <h3 className="text-xl font-semibold text-gray-700">
+                    {skill.name}
+                  </h3>
+                  <div className="flex items-center mb-2">
+                    <Star className="w-5 h-5 mr-2 text-yellow-500" />
+                    <span>{skill.level}</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {skill.keywords?.length ? (
+                      skill.keywords.map((keyword, kidx) => (
+                        <span
+                          key={kidx}
+                          className="px-3 py-1 bg-gray-200 text-gray-700 rounded-full text-sm"
+                        >
+                          {keyword}
+                        </span>
+                      ))
+                    ) : (
+                      <p>Not available</p>
+                    )}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>Not available</p>
+            )}
+          </div>
+          <div className="mt-4 flex gap-4">
+            <button
+              className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
+              onClick={() => makeCoverletter(job.raw)}
+            >
+              Make Cover Letter
+            </button>
+            <a
+              href={job.url || '#'}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-gray-200 text-gray-700 py-2 px-4 rounded hover:bg-gray-300"
+            >
+              View Original Job
+            </a>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const JobList = ({ jobs, makeCoverletter }) => {
   const fullJobs = jobs?.map((job) => {
@@ -94,63 +165,15 @@ const JobList = ({ jobs, makeCoverletter }) => {
   });
 
   return (
-    <JobListContainer>
+    <div className="flex flex-col gap-5">
       {fullJobs?.map((job, index) => (
-        <JobCard key={index}>
-          <JobTitle>{job.title}</JobTitle>
-          <JobCompany>{job.company}</JobCompany>
-          <JobType>{job.type}</JobType>
-          <JobDate>{job.date}</JobDate>
-          <JobDescription>{job.description}</JobDescription>
-          <JobLocation>
-            {job.location?.address}, {job.location?.city},{' '}
-            {job.location?.region}, {job.location?.countryCode},{' '}
-            {job.location?.postalCode}
-          </JobLocation>
-          <JobRemote>Remote: {job.remote}</JobRemote>
-          <JobSalary>Salary: {job.salary}</JobSalary>
-          <JobExperience>Experience: {job.experience}</JobExperience>
-          <JobResponsibilities>
-            Responsibilities:
-            {job.responsibilities?.map((responsibility, idx) => (
-              <li key={idx}>{responsibility}</li>
-            ))}
-          </JobResponsibilities>
-          <JobQualifications>
-            Qualifications:
-            {job.qualifications?.map((qualification, idx) => (
-              <li key={idx}>{qualification}</li>
-            ))}
-          </JobQualifications>
-          <JobSkills>
-            Skills:
-            {job.skills?.map((skill, idx) => (
-              <li key={idx}>
-                {skill.name} - {skill.level}
-                <ul>
-                  {skill.keywords?.map((keyword, kidx) => (
-                    <li key={kidx}>{keyword}</li>
-                  ))}
-                </ul>
-              </li>
-            ))}
-          </JobSkills>
-          {job.application}
-          <br />
-          <br />
-          <Link href={job.url || '#'}>Source</Link>
-          <br />
-          <br />
-          <Button
-            onClick={() => {
-              makeCoverletter(job.raw);
-            }}
-          >
-            Make Cover Letter
-          </Button>
-        </JobCard>
+        <JobDescription
+          key={index}
+          job={job}
+          makeCoverletter={makeCoverletter}
+        />
       ))}
-    </JobListContainer>
+    </div>
   );
 };
 
