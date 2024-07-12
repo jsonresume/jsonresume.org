@@ -6,6 +6,7 @@ import { find } from 'lodash';
 import axios from 'axios';
 import ResumeEditor from './ResumeEditor';
 import CreateResume from './CreateResume';
+import { track } from '@vercel/analytics/server';
 // @todo - add json schema to editor
 //codesandbox.io/p/sandbox/monaco-editor-json-validation-example-gue0q?file=%2Fsrc%2FApp.js
 
@@ -203,7 +204,7 @@ export default async function Page() {
   async function updateGist(resume) {
     'use server';
     const octokit = new Octokit({ auth: session.accessToken });
-
+    track('ResumeUpdate', { username: login });
     if (gistId) {
       await octokit.rest.gists.update({
         gist_id: gistId,
@@ -219,6 +220,7 @@ export default async function Page() {
 
   async function createGist() {
     'use server';
+    track('ResumeCreate', { username: login });
     const octokit = new Octokit({ auth: session.accessToken });
 
     const response = await octokit.rest.gists.create({

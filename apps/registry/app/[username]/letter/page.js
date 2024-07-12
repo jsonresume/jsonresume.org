@@ -6,6 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import Hero from '../../../src/ui/Hero';
 import Loading from '../../components/Loading';
+import { track } from '@vercel/analytics/server';
 
 export default function Letter({ params }) {
   const searchParams = useSearchParams();
@@ -29,6 +30,7 @@ export default function Letter({ params }) {
 
   useEffect(() => {
     if (submitting) {
+      track('ResumeLetter', { username });
       const fetchData = async () => {
         try {
           const response = await axios.post('/api/letter', {

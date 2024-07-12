@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import Hero from '../../../src/ui/Hero';
 import ReactMarkdown from 'react-markdown';
 import Loading from '../../components/Loading';
+import { track } from '@vercel/analytics/server';
 
 export default function Suggestions({ params }) {
   const { username } = params;
@@ -15,6 +16,7 @@ export default function Suggestions({ params }) {
 
   useEffect(() => {
     if (submitting) {
+      track('ResumeSuggestions', { username });
       const fetchData = async () => {
         try {
           const response = await axios.post('/api/suggestions', {
