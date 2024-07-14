@@ -229,6 +229,7 @@ export default async function Page() {
           content: JSON.stringify(sampleResume, undefined, 2),
         },
       },
+      public: true,
     });
 
     return response;
