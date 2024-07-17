@@ -1,4 +1,5 @@
 import generateResume from '../../lib/generateResume';
+import errorTemplate from '../../lib/errorTemplate';
 import trackView from '../../lib/trackView';
 
 export default async function handler(req, res) {
@@ -20,7 +21,11 @@ export default async function handler(req, res) {
   );
 
   if (error) {
-    return res.status(400).send(error);
+    if (error?.extra?.validation) {
+      return res.status(400).send(errorTemplate(error));
+    } else {
+      return res.status(400).send(error);
+    }
   }
 
   res.setHeader(
