@@ -16,10 +16,10 @@ export default function GettingStarted() {
       language: 'N/A',
     },
     {
-      name: 'Social Network',
+      name: 'Resumeio',
       description:
-        'A social network for developers to showcase their JSON Resume.',
-      link: 'https://www.social.network/',
+        'Have you ever find yourself wanting to create a professional looking CV, but instead you handled all your personal data in exchange of a single unchangeable PDF file?',
+      link: 'https://resumio.xyz/',
       category: 'integration',
       language: 'N/A',
     },
