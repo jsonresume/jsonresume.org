@@ -1,42 +1,43 @@
 import React from 'react';
+import { Briefcase, Book, Award, FileText, TrendingUp } from 'lucide-react';
+import { useProfileData } from '../ProfileContext';
 import {
-  Briefcase,
-  Book,
-  Award,
-  FileText,
-  MapPin,
-  TrendingUp,
-} from 'lucide-react';
+  totalExperience,
+  averageJobDuration,
+  careerProgression,
+  skillEvolution,
+  getEducationLevel,
+} from '../../../lib/calculations';
 
-const ResumeData = {
-  // Assume this object contains all the parsed JSON resume data
-  // We'll use placeholder data for this example
-  totalExperience: { years: 8, months: 3 },
-  totalJobs: 5,
-  totalProjects: 12,
-  totalSkills: 25,
-  totalCertifications: 3,
-  totalAwards: 2,
-  totalPublications: 1,
-  totalVolunteer: 3,
-  averageJobDuration: { years: 1, months: 8 },
-  mostFrequentJobTitle: 'Software Engineer',
-  topSkillCategories: ['Programming', 'Web Development', 'Data Analysis'],
-  mostRecentSkill: 'React Native',
-  topIndustries: ['Technology', 'Finance', 'Healthcare'],
-  educationLevel: "Master's Degree",
-  geographicMobility: 3,
-  careerProgression: [
-    { title: 'Junior Developer', duration: '1 year' },
-    { title: 'Software Engineer', duration: '3 years' },
-    { title: 'Senior Software Engineer', duration: '2 years' },
-    { title: 'Lead Developer', duration: '2 years' },
-  ],
-  skillEvolution: [
-    { year: 2018, skills: ['JavaScript', 'HTML', 'CSS'] },
-    { year: 2020, skills: ['React', 'Node.js', 'SQL'] },
-    { year: 2022, skills: ['Python', 'Machine Learning', 'React Native'] },
-  ],
+const getMetrics = ({ resume }) => {
+  console.log({ resume });
+  console.log(skillEvolution(resume));
+  const ResumeData = {
+    // Assume this object contains all the parsed JSON resume data
+    // We'll use placeholder data for this example
+    totalExperience: totalExperience(resume),
+    totalJobs: resume.work?.length,
+    totalProjects: resume.projects?.length,
+    totalSkills: resume.skills?.length,
+    totalCertifications: resume.certifications?.length,
+    totalAwards: resume.awards?.length,
+    totalPublications: resume.publications?.length,
+    totalVolunteer: resume.volunteer?.length,
+    averageJobDuration: averageJobDuration(resume),
+    mostFrequentJobTitle: 'Software Engineer',
+    topSkillCategories: ['Programming', 'Web Development', 'Data Analysis'],
+    mostRecentSkill: 'React Native',
+    topIndustries: ['Technology', 'Finance', 'Healthcare'],
+    educationLevel: getEducationLevel(resume),
+    geographicMobility: 3,
+    careerProgression: careerProgression(resume),
+    skillEvolution: [
+      { year: 2018, skills: ['JavaScript', 'HTML', 'CSS'] },
+      { year: 2020, skills: ['React', 'Node.js', 'SQL'] },
+      { year: 2022, skills: ['Python', 'Machine Learning', 'React Native'] },
+    ],
+  };
+  return ResumeData;
 };
 
 const SectionTitle = ({ children }) => (
@@ -53,22 +54,22 @@ const InfoItem = ({ icon: Icon, label, value }) => (
   </div>
 );
 
-const ProgressBar = ({ value, max, label }) => (
-  <div className="mb-4">
-    <div className="flex justify-between mb-1">
-      <span className="text-sm font-medium text-gray-700">{label}</span>
-      <span className="text-sm font-medium text-gray-700">
-        {value}/{max}
-      </span>
-    </div>
-    <div className="w-full bg-gray-200 rounded-full h-2.5">
-      <div
-        className="bg-secondary-600 h-2.5 rounded-full"
-        style={{ width: `${(value / max) * 100}%` }}
-      ></div>
-    </div>
-  </div>
-);
+// const ProgressBar = ({ value, max, label }) => (
+//   <div className="mb-4">
+//     <div className="flex justify-between mb-1">
+//       <span className="text-sm font-medium text-gray-700">{label}</span>
+//       <span className="text-sm font-medium text-gray-700">
+//         {value}/{max}
+//       </span>
+//     </div>
+//     <div className="w-full bg-gray-200 rounded-full h-2.5">
+//       <div
+//         className="bg-secondary-600 h-2.5 rounded-full"
+//         style={{ width: `${(value / max) * 100}%` }}
+//       ></div>
+//     </div>
+//   </div>
+// );
 
 const TimelineItem = ({ title, duration }) => (
   <div className="mb-4">
@@ -76,7 +77,7 @@ const TimelineItem = ({ title, duration }) => (
       <div className="bg-secondary-500 rounded-full w-3 h-3 mr-2"></div>
       <h4 className="text-lg font-semibold">{title}</h4>
     </div>
-    <p className="text-sm text-gray-600 ml-5">{duration}</p>
+    <p className="text-sm text-gray-600 ml-5">{duration.years} years</p>
   </div>
 );
 
@@ -87,10 +88,12 @@ const SkillBadge = ({ skill }) => (
 );
 
 const ResumeDashboard = () => {
+  const { resume } = useProfileData();
+  const ResumeData = getMetrics({ resume });
   return (
     <div className="w-full p-6 bg-white shadow-lg rounded-lg">
       <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">
-        THIS DATA ISNT REAL - COMING SOON
+        THIS IS SUPA BETA - WIP
       </h1>
 
       <section className="mb-8">
@@ -114,17 +117,12 @@ const ResumeDashboard = () => {
           <InfoItem
             icon={Award}
             label="Certifications"
-            value={ResumeData.totalCertifications}
+            value={ResumeData.totalCertifications || 0}
           />
           <InfoItem
             icon={Book}
             label="Education"
             value={ResumeData.educationLevel}
-          />
-          <InfoItem
-            icon={MapPin}
-            label="Relocations"
-            value={ResumeData.geographicMobility}
           />
         </div>
       </section>
@@ -132,18 +130,18 @@ const ResumeDashboard = () => {
       <section className="mb-8">
         <SectionTitle>Top Skill Categories</SectionTitle>
         <div className="flex flex-wrap gap-2 mb-4">
-          {ResumeData.topSkillCategories.map((category, index) => (
-            <SkillBadge key={index} skill={category} />
+          {resume.skills?.map((s, index) => (
+            <SkillBadge key={index} skill={s.name} />
           ))}
         </div>
       </section>
 
-      <section className="mb-8">
+      {/* <section className="mb-8">
         <SectionTitle>Top Industries</SectionTitle>
         {ResumeData.topIndustries.map((industry, index) => (
           <ProgressBar key={index} value={5 - index} max={5} label={industry} />
         ))}
-      </section>
+      </section> */}
 
       <section className="mb-8">
         <SectionTitle>Career Progression</SectionTitle>
@@ -170,7 +168,7 @@ const ResumeDashboard = () => {
         </div>
       </section>
 
-      <section className="mb-8">
+      {/* <section className="mb-8">
         <SectionTitle>Skills Evolution</SectionTitle>
         {ResumeData.skillEvolution.map((yearSkills, index) => (
           <div key={index} className="mb-6">
@@ -194,7 +192,7 @@ const ResumeDashboard = () => {
             value={ResumeData.mostRecentSkill}
           />
         </div>
-      </section>
+      </section> */}
     </div>
   );
 };
