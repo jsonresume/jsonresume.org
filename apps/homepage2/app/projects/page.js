@@ -8,6 +8,38 @@ export const metadata = {
 export default function GettingStarted() {
   const PROJECTS = [
     {
+      name: 'Reactive Resume',
+      description:
+        'An open-source resume builder supporting JSON Resume schema with multiple templates.',
+      link: 'https://rxresu.me',
+      category: 'integration',
+      language: 'N/A',
+    },
+    {
+      name: 'Social Network',
+      description:
+        'A social network for developers to showcase their JSON Resume.',
+      link: 'https://www.social.network/',
+      category: 'integration',
+      language: 'N/A',
+    },
+    {
+      name: 'Resumake',
+      description:
+        'A web app that generates resumes based on JSON Resume schema.',
+      link: 'https://resumake.io',
+      category: 'integration',
+      language: 'N/A',
+    },
+    {
+      name: 'Standard Resume',
+      description:
+        'A web-based resume builder with support for importing JSON resumes.',
+      link: 'https://standardresume.co',
+      category: 'integration',
+      language: 'N/A',
+    },
+    {
       name: 'JSON Resume Validator (PHP)',
       description:
         'Tool in PHP that validates if a Resume is according to the defined schema. It also validates if any desired properties are not empty.',
@@ -372,6 +404,7 @@ export default function GettingStarted() {
   ];
 
   const categories = [
+    'integration',
     'framework',
     'validator',
     'hosting',
