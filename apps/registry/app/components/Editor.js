@@ -12,156 +12,144 @@ import { track } from '@vercel/analytics/server';
 
 const sampleResume = {
   basics: {
-    name: 'Elon Musk',
-    label: 'CEO & Entrepreneur',
-    image: '',
-    email: 'elon@musk.com',
+    name: 'Thomas Edison',
+    label: 'Inventor and Businessman',
+    picture: 'https://example.com/photo.jpg',
+    email: 'thomas.edison@example.com',
     phone: '(123) 456-7890',
-    url: 'https://elonmusk.com',
+    website: 'https://thomasedison.com',
     summary:
-      'Innovative entrepreneur and engineer with a passion for technology, space exploration, and sustainable energy. Founder and CEO of SpaceX, Tesla, Neuralink, and The Boring Company.',
+      'Prolific inventor and businessman known for developing many devices that greatly influenced life around the world, including the phonograph, the motion picture camera, and the electric light bulb.',
     location: {
-      address: '',
-      postalCode: '94025',
-      city: 'Menlo Park',
+      address: 'Menlo Park',
+      postalCode: '12345',
+      city: 'Edison',
       countryCode: 'US',
-      region: 'California',
+      region: 'New Jersey',
     },
     profiles: [
       {
         network: 'LinkedIn',
-        username: 'elonmusk',
-        url: 'https://linkedin.com/in/elonmusk',
+        username: 'thomasedison',
+        url: 'https://www.linkedin.com/in/thomasedison',
       },
       {
         network: 'Twitter',
-        username: 'elonmusk',
-        url: 'https://twitter.com/elonmusk',
+        username: 'realThomasEdison',
+        url: 'https://twitter.com/realThomasEdison',
       },
     ],
   },
   work: [
     {
-      name: 'SpaceX',
-      position: 'Founder, CEO, and Lead Designer',
-      url: 'https://spacex.com',
-      startDate: '2002-03-01',
-      summary:
-        'Leading private aerospace manufacturer and space transportation company.',
-      highlights: [
-        'Developed the Falcon and Starship rockets.',
-        'Pioneered reusable rocket technology.',
-        'Achieved the first privately-funded spacecraft to reach orbit and return.',
-      ],
-    },
-    {
-      name: 'Tesla, Inc.',
-      position: 'Co-Founder, CEO, and Product Architect',
-      url: 'https://tesla.com',
-      startDate: '2004-02-01',
-      summary: 'Electric vehicle and clean energy company.',
-      highlights: [
-        'Designed and launched multiple electric vehicle models.',
-        'Developed solar energy products and energy storage solutions.',
-        'Achieved widespread adoption of electric vehicles and sustainable energy.',
-      ],
-    },
-    {
-      name: 'Neuralink',
-      position: 'Co-Founder and CEO',
-      url: 'https://neuralink.com',
-      startDate: '2016-07-01',
-      summary: 'Neurotechnology company developing brain-machine interfaces.',
-      highlights: [
-        'Developed advanced neural implant technology.',
-        'Pioneered research in brain-machine interface applications.',
-        'Advancing the future of human cognitive enhancement.',
-      ],
-    },
-    {
-      name: 'The Boring Company',
+      company: 'Edison Electric Light Company',
       position: 'Founder',
-      url: 'https://boringcompany.com',
-      startDate: '2016-12-01',
-      summary: 'Infrastructure and tunnel construction services company.',
+      website: 'https://edison.com',
+      startDate: '1878-01-01',
+      endDate: '1931-10-18',
+      summary:
+        'Founded the company that brought electric light to households and businesses.',
       highlights: [
-        'Developed innovative tunneling technologies.',
-        'Constructed test tunnels and proposed urban transportation solutions.',
-        'Aimed to reduce urban traffic congestion.',
+        'Invented the first commercially practical incandescent light bulb.',
+        'Developed the electric power distribution system.',
+      ],
+    },
+    {
+      company: 'General Electric',
+      position: 'Co-Founder',
+      website: 'https://ge.com',
+      startDate: '1892-01-01',
+      endDate: '1931-10-18',
+      summary:
+        'Co-founded General Electric, one of the largest and most diversified industrial corporations in the world.',
+      highlights: [
+        'Played a key role in the development of electrical power and lighting systems.',
+        'Contributed to the advancement of numerous technological innovations.',
+      ],
+    },
+  ],
+  volunteer: [
+    {
+      organization: 'Menlo Park Laboratory',
+      position: 'Lead Researcher',
+      website: 'https://menloparklab.com',
+      startDate: '1876-01-01',
+      endDate: '1931-10-18',
+      summary:
+        'Conducted research and experiments leading to numerous patents and innovations.',
+      highlights: [
+        'Developed the phonograph, a device for recording and reproducing sound.',
+        'Invented the motion picture camera, contributing to the birth of the film industry.',
       ],
     },
   ],
   education: [
     {
-      institution: 'University of Pennsylvania',
-      url: 'https://upenn.edu',
-      area: 'Physics',
-      studyType: 'Bachelor of Arts',
-      startDate: '1992-09-01',
-      endDate: '1995-05-01',
-      score: '',
-      courses: [],
+      institution: 'Self-Taught',
+      area: 'Various fields of science and technology',
+      studyType: 'Self-Education',
+      startDate: '1859-01-01',
+      endDate: '1931-10-18',
+      gpa: '',
+      courses: [
+        'Electrical Engineering',
+        'Mechanical Engineering',
+        'Chemistry',
+      ],
     },
+  ],
+  awards: [
     {
-      institution: 'University of Pennsylvania',
-      url: 'https://upenn.edu',
-      area: 'Economics',
-      studyType: 'Bachelor of Science in Economics from the Wharton School',
-      startDate: '1992-09-01',
-      endDate: '1995-05-01',
-      score: '',
-      courses: [],
+      title: 'Congressional Gold Medal',
+      date: '1928-01-01',
+      awarder: 'United States Congress',
+      summary:
+        'Awarded for distinguished achievements and contributions to society.',
+    },
+  ],
+  publications: [
+    {
+      name: 'Electric Light and Power',
+      publisher: 'Scientific American',
+      releaseDate: '1880-01-01',
+      website: 'https://scientificamerican.com',
+      summary:
+        'A paper detailing the development and impact of electric light and power systems.',
     },
   ],
   skills: [
     {
-      name: 'Leadership',
-      level: 'Expert',
-      keywords: ['Visionary Leadership', 'Team Building', 'Strategic Planning'],
-    },
-    {
-      name: 'Engineering',
-      level: 'Expert',
-      keywords: [
-        'Aerospace Engineering',
-        'Electrical Engineering',
-        'Mechanical Engineering',
-      ],
+      name: 'Inventing',
+      level: 'Master',
+      keywords: ['Electricity', 'Sound Recording', 'Motion Pictures'],
     },
     {
       name: 'Entrepreneurship',
       level: 'Expert',
-      keywords: ['Startups', 'Innovation', 'Business Development'],
+      keywords: [
+        'Business Development',
+        'Product Innovation',
+        'Industrial Research',
+      ],
     },
   ],
   languages: [
     {
       language: 'English',
-      fluency: 'Native',
-    },
-    {
-      language: 'Afrikaans',
-      fluency: 'Conversational',
+      fluency: 'Native speaker',
     },
   ],
   interests: [
     {
-      name: 'Space Exploration',
-      keywords: ['Mars Colonization', 'Rocket Science', 'Astronomy'],
-    },
-    {
-      name: 'Sustainable Energy',
-      keywords: ['Electric Vehicles', 'Solar Energy', 'Battery Technology'],
+      name: 'Research and Development',
+      keywords: ['Innovations', 'Experimentation'],
     },
   ],
   references: [
     {
-      name: 'Larry Page',
-      reference: 'Co-Founder of Google',
-    },
-    {
-      name: 'Richard Branson',
-      reference: 'Founder of Virgin Group',
+      name: 'Henry Ford',
+      reference:
+        'Thomas Edison was a brilliant inventor and a visionary businessman. His work has had a profound impact on the modern world.',
     },
   ],
 };
