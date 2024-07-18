@@ -9,6 +9,7 @@ import {
   CheckCircle,
   Star,
 } from 'lucide-react';
+import Link from 'next/link';
 
 const JobDescription = ({ job, makeCoverletter }) => {
   const [expanded, setExpanded] = useState(false);
@@ -155,6 +156,15 @@ const JobDescription = ({ job, makeCoverletter }) => {
             >
               View Original Job
             </a>
+
+            <Link
+              href={`/jobs/${job.raw.uuid}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-gray-200 text-gray-700 py-2 px-4 rounded hover:bg-gray-300 transition-colors duration-200"
+            >
+              View Job Candiates
+            </Link>
           </div>
         </div>
       )}
