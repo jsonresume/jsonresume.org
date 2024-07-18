@@ -3,6 +3,7 @@
 
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Loading from '../components/Loading';
 
@@ -66,23 +67,33 @@ const Resumes = () => {
           />
           <div className="flex flex-col gap-4">
             {filteredResumes.map((resume, index) => (
-              <Link
+              <motion.div
                 key={index}
-                href={`/${resume.username}/dashboard`}
-                className="flex items-center p-4 border border-gray-300 rounded bg-white hover:bg-gray-100 transition-colors duration-200"
+                whileHover={{ scale: 1.1 }}
+                initial={{
+                  scale: [1, 1.1],
+                }}
+                whileInView={{
+                  scale: [1.1, 1],
+                }}
               >
-                <img
-                  src={resume.image}
-                  alt={resume.name}
-                  className="w-12 h-12 rounded-full mr-4"
-                />
-                <div>
-                  <div className="text-lg font-bold">{resume.name}</div>
-                  <div className="text-sm text-gray-600">
-                    {formatLocation(resume.location)}
+                <Link
+                  href={`/${resume.username}/dashboard`}
+                  className="flex items-center p-4 border border-gray-300 rounded bg-white hover:bg-gray-100 transition-colors duration-200"
+                >
+                  <img
+                    src={resume.image}
+                    alt={resume.name}
+                    className="w-12 h-12 rounded-full mr-4"
+                  />
+                  <div>
+                    <div className="text-lg font-bold">{resume.name}</div>
+                    <div className="text-sm text-gray-600">
+                      {formatLocation(resume.location)}
+                    </div>
                   </div>
-                </div>
-              </Link>
+                </Link>
+              </motion.div>
             ))}
           </div>
         </>

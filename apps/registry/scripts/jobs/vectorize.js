@@ -11,39 +11,60 @@ const openai = new OpenAI({
 });
 
 async function main() {
-  const { data, error } = await supabase.from('jobs').select();
-  console.log({ data, error });
-  data.forEach(async (job) => {
+  console.log('Starting main function...');
+
+  const { data, error } = await supabase
+    .from('jobs')
+    .select('id::text, gpt_content, embedding_v5')
+    .is('embedding_v5', null);
+
+  if (error) {
+    console.error('Error fetching jobs:', error);
+    return;
+  }
+
+  console.log('Fetched jobs:', data);
+
+  for (const job of data) {
     if (!job.embedding_v5) {
-      console.log('create embedding');
-      const completion1 = await openai.embeddings.create({
-        model: 'text-embedding-3-large',
-        input: JSON.stringify(job.gpt_content),
-      });
-
-      const desiredLength = 3072;
-
-      let embedding = completion1.data[0].embedding;
-
-      if (embedding.length < desiredLength) {
-        embedding = embedding.concat(
-          Array(desiredLength - embedding.length).fill(0)
-        );
-      }
-
+      console.log(`Creating embedding for job ID: ${job.id}`);
       try {
-        const { error } = await supabase
+        const completion1 = await openai.embeddings.create({
+          model: 'text-embedding-3-large',
+          input: job.gpt_content,
+        });
+
+        const desiredLength = 3072;
+        let embedding = completion1.data[0].embedding;
+
+        if (embedding.length < desiredLength) {
+          console.log(`Padding embedding for job ID: ${job.id}`);
+          embedding = embedding.concat(
+            Array(desiredLength - embedding.length).fill(0)
+          );
+        }
+
+        const { error: updateError } = await supabase
           .from('jobs')
           .update({
             embedding_v5: embedding,
           })
           .eq('id', job.id);
-        console.log({ error });
+
+        if (updateError) {
+          console.error(`Error updating job ID: ${job.id}`, updateError);
+        } else {
+          console.log(`Successfully updated job ID: ${job.id}`);
+        }
       } catch (e) {
-        console.error(e);
+        console.error(`Error creating embedding for job ID: ${job.id}`, e);
       }
+    } else {
+      console.log(`Embedding already exists for job ID: ${job.id}`);
     }
-  });
+  }
+
+  console.log('Main function finished.');
 }
 
-main();
+main().catch((e) => console.error('Error in main function:', e));

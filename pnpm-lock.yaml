@@ -246,6 +246,9 @@ importers:
       faker:
         specifier: ^6.6.6
         version: 6.6.6
+      framer-motion:
+        specifier: ^11.3.6
+        version: 11.3.6(react-dom@18.3.1)(react@18.3.1)
       gravatar:
         specifier: ^1.8.2
         version: 1.8.2
@@ -15681,6 +15684,25 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       map-cache: 0.2.2
+    dev: false
+
+  /framer-motion@11.3.6(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-olpX48qfoSIDjhw0RbolhOGBQmdMAXHHpSI0PFdTj5LeXChcf5F4ApShs0mQ6FPEPOj7dnEvSyB07UgRK5G9Jw==}
+    peerDependencies:
+      '@emotion/is-prop-valid': '*'
+      react: ^18.0.0
+      react-dom: ^18.0.0
+    peerDependenciesMeta:
+      '@emotion/is-prop-valid':
+        optional: true
+      react:
+        optional: true
+      react-dom:
+        optional: true
+    dependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      tslib: 2.6.3
     dev: false
 
   /fresh@0.5.2:
