@@ -43,7 +43,8 @@ export default function Suggestions({ params }) {
     <div className="p-6 bg-gray-50 min-h-screen">
       <Hero
         title="Improve Your Resume"
-        description="Generates suggestions to improve your resume based on the selected focus."
+        description="Generates suggestions to improve your resume based on the selected focus. It currently takes a while to generate (streaming coming soon
+  )"
       />
       <label className="block text-xl font-semibold mb-2">Focus</label>
       <div className="flex items-center mb-4">
