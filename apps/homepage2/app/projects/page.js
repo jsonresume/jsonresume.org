@@ -8,6 +8,14 @@ export const metadata = {
 export default function GettingStarted() {
   const PROJECTS = [
     {
+      name: 'Friggeri Resume',
+      description:
+        'An open-source static webapp supporting JSON Resume, Markdown or gist URL and export to PDF using Browser Print dialog',
+      link: 'https://yne.fr/resume/',
+      category: 'integration',
+      language: 'Javascript',
+    },
+    {
       name: 'Reactive Resume',
       description:
         'An open-source resume builder supporting JSON Resume schema with multiple templates.',
