@@ -11,7 +11,7 @@ const ExperienceComponent = ({ work }) => {
           const years = `${startYear} - ${endYear}`;
 
           return (
-            <li>
+            <li key={name + startDate}>
               <article>
                 <header>
                   <div>

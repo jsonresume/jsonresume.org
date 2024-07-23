@@ -10,9 +10,9 @@ const Projects = ({ projects }) => {
     <Section title="Projects">
       <ul class="projects">
         {projects.map(
-          ({ url, description, highlights, name, isActive, github }) => {
+          ({ url, description, highlights, name, isActive, github }, index) => {
             return (
-              <li>
+              <li key={index}>
                 <article>
                   <header>
                     <h3>
@@ -38,8 +38,8 @@ const Projects = ({ projects }) => {
                     <p>{description}</p>
                   </header>
                   <footer>
-                    {highlights.map((highlight) => {
-                      return <span>{highlight}</span>;
+                    {highlights.map((highlight, i) => {
+                      return <span key={i}>{highlight}</span>;
                     })}
                   </footer>
                 </article>
