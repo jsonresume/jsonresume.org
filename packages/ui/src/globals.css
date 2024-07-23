@@ -74,3 +74,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+html, body {
+  font-family: 'Open Sans', sans-serif;
+}

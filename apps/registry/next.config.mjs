@@ -1,4 +1,4 @@
-module.exports = {
+const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ['@repo/ui'],
   async rewrites() {
@@ -41,3 +41,5 @@ module.exports = {
     },
   },
 };
+
+export default nextConfig;

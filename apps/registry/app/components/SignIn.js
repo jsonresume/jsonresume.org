@@ -6,10 +6,10 @@ export default function SignIn() {
   return (
     <div className="text-lg m-8 w-[400px] mx-auto p-8 bg-white rounded-lg shadow-md">
       <Button>Click me</Button>
-      <Button variant="destructive">Desasdastructive</Button>
-      <Button variant="destructive">Desasdastructive</Button>
-      <Button variant="destructive">Desasdastructive</Button>
-      <Button variant="destructive">Desasdastructive</Button>
+
+      <Button variant="destructive" disabled>
+        Destructive
+      </Button>
       <div className="mb-6 text-gray-700">
         <p>
           Welcome to the JSON Resume Registry! Seamlessly sync your resume.json
