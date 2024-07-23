@@ -5,11 +5,6 @@ import { Button } from '@repo/ui/components/ui/button';
 export default function SignIn() {
   return (
     <div className="text-lg m-8 w-[400px] mx-auto p-8 bg-white rounded-lg shadow-md">
-      <Button>Click me</Button>
-
-      <Button variant="destructive" disabled>
-        Destructive
-      </Button>
       <div className="mb-6 text-gray-700">
         <p>
           Welcome to the JSON Resume Registry! Seamlessly sync your resume.json
@@ -31,12 +26,9 @@ export default function SignIn() {
           await signIn('github');
         }}
       >
-        <button
-          type="submit"
-          className="w-full py-3 px-4 bg-secondary-600 text-white rounded-md flex items-center justify-center hover:bg-secondary-700 transition-colors duration-200"
-        >
+        <Button type="submit">
           <Github size={20} className="mr-2" /> Sign in with GitHub
-        </button>
+        </Button>
       </form>
       <div className="mt-8 text-gray-500">
         <h3 className="text-gray-800 mb-3 text-xl">Upcoming Features</h3>
