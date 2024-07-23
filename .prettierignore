@@ -9,3 +9,7 @@ apps/**/*.css
 packages/**/*.css
 README.md
 .turbo/*
+**/tsconfig.json
+packages/jsonresume-theme-standard/package.json
+packages/ui/src/components/ui/button.tsx
+packages/ui/src/components/ui/card.tsx
