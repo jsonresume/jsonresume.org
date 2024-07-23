@@ -1,19 +1,42 @@
 {
-  "name": "@jsonresume/ui",
+  "name": "@repo/ui",
   "version": "0.0.0",
-  "main": "./index.js",
-  "license": "MIT",
-  "devDependencies": {
-    "eslint-config-custom": "workspace:*",
+  "private": true,
+  "scripts": {
+    "ui:add": "pnpm dlx shadcn-ui@latest add",
+    "lint": "eslint ."
+  },
+  "peerDependencies": {
     "react": "^18"
   },
-  "exports": {
-    "./Button": "./src/Button.js",
-    "./Header": "./src/Header.js",
-    "./Link": "./src/Link.js"
+  "devDependencies": {
+    "@repo/eslint-config-custom": "workspace:*",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "postcss-load-config": "^6.0.1",
+    "tailwindcss": "^3.4.4",
+    "typescript": "^5.4.5"
   },
-  "module": "true",
   "dependencies": {
-    "styled-components": "^6.1.11"
+    "@radix-ui/react-slot": "^1.0.2",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.395.0",
+    "tailwind-merge": "^2.3.0",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "exports": {
+    "./globals.css": "./src/globals.css",
+    "./postcss.config": "./postcss.config.mjs",
+    "./tailwind.config": "./tailwind.config.js",
+    "./lib/*": ["./src/lib/*.js", "./src/lib/*.ts"],
+    "./components/*": [
+      "./src/components/*.jsx",
+      "./src/components/*.js",
+      "./src/components/*.ts",
+      "./src/components/*.tsx"
+    ]
   }
 }

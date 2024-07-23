@@ -1,9 +1,15 @@
 import { Github } from 'lucide-react';
 import { signIn } from '../../auth';
 import { track } from '@vercel/analytics/server';
+import { Button } from '@repo/ui/components/ui/button';
 export default function SignIn() {
   return (
     <div className="text-lg m-8 w-[400px] mx-auto p-8 bg-white rounded-lg shadow-md">
+      <Button>Click me</Button>
+      <Button variant="destructive">Desasdastructive</Button>
+      <Button variant="destructive">Desasdastructive</Button>
+      <Button variant="destructive">Desasdastructive</Button>
+      <Button variant="destructive">Desasdastructive</Button>
       <div className="mb-6 text-gray-700">
         <p>
           Welcome to the JSON Resume Registry! Seamlessly sync your resume.json

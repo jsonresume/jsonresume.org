@@ -3,7 +3,7 @@ import { Analytics } from '@vercel/analytics/react';
 
 import Menu from './components/Menu';
 import { auth } from '../auth';
-import './global.css';
+import '@repo/ui/globals.css';
 export const metadata = {
   title: 'JSON Resume Registry',
 };

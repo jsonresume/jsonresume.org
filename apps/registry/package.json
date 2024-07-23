@@ -17,7 +17,7 @@
     "@jsonresume/schema": "^1.2.0",
     "@jsonresume/theme-papirus": "workspace:*",
     "@jsonresume/theme-stackoverflow": "workspace:*",
-    "@jsonresume/ui": "workspace:*",
+    "@repo/ui": "workspace:*",
     "@monaco-editor/react": "^4.6.0",
     "@pinecone-database/pinecone": "^0.1.6",
     "@prisma/client": "^4.15.0",
@@ -112,7 +112,8 @@
     "@types/node": "^20.10.0",
     "caniuse-lite": "^1.0.30001566",
     "eslint": "^8.55.0",
-    "eslint-config-custom": "workspace:*",
+    "@repo/eslint-config-custom": "workspace:*",
+    "tsconfig": "workspace:*",
     "eslint-config-next": "^14.2.5",
     "playwright": "^1.40.0",
     "typescript": "^5.3.2"

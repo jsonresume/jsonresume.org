@@ -11,12 +11,12 @@ importers:
         specifier: ^16.0.3
         version: 16.0.3
     devDependencies:
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:packages/eslint-config-custom
       eslint:
         specifier: ^8
         version: 8.55.0
-      eslint-config-custom:
-        specifier: workspace:*
-        version: link:packages/eslint-config-custom
       husky:
         specifier: ^8.0.3
         version: 8.0.3
@@ -44,15 +44,15 @@ importers:
       '@jsonresume/theme-stackoverflow':
         specifier: workspace:*
         version: link:../../themes/stackoverflow
-      '@jsonresume/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
       '@pinecone-database/pinecone':
         specifier: ^0.1.6
         version: 0.1.6
       '@prisma/client':
         specifier: ^4.15.0
         version: 4.15.0(prisma@4.15.0)
+      '@repo/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       '@supabase/supabase-js':
         specifier: ^2.39.6
         version: 2.39.6
@@ -159,6 +159,9 @@ importers:
         specifier: ^9.0.0
         version: 9.0.0
     devDependencies:
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../../packages/eslint-config-custom
       '@types/node':
         specifier: ^20.10.0
         version: 20.10.0
@@ -168,9 +171,6 @@ importers:
       eslint:
         specifier: ^8.55.0
         version: 8.55.0
-      eslint-config-custom:
-        specifier: workspace:*
-        version: link:../../packages/eslint-config-custom
       eslint-config-next:
         specifier: ^14.2.5
         version: 14.2.5(eslint@8.55.0)(typescript@5.3.2)
@@ -195,9 +195,6 @@ importers:
       '@jsonresume/theme-stackoverflow':
         specifier: workspace:*
         version: link:../../themes/stackoverflow
-      '@jsonresume/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
       '@monaco-editor/react':
         specifier: ^4.6.0
         version: 4.6.0(monaco-editor@0.50.0)(react-dom@18.3.1)(react@18.3.1)
@@ -207,6 +204,9 @@ importers:
       '@prisma/client':
         specifier: ^4.15.0
         version: 4.15.0(prisma@4.15.0)
+      '@repo/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       '@supabase/supabase-js':
         specifier: ^2.39.6
         version: 2.39.6
@@ -466,6 +466,9 @@ importers:
       '@playwright/test':
         specifier: ^1.40.0
         version: 1.40.0
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../../packages/eslint-config-custom
       '@types/node':
         specifier: ^20.10.0
         version: 20.10.0
@@ -475,15 +478,15 @@ importers:
       eslint:
         specifier: ^8.55.0
         version: 8.55.0
-      eslint-config-custom:
-        specifier: workspace:*
-        version: link:../../packages/eslint-config-custom
       eslint-config-next:
         specifier: ^14.2.5
         version: 14.2.5(eslint@8.55.0)(typescript@5.3.2)
       playwright:
         specifier: ^1.40.0
         version: 1.40.0
+      tsconfig:
+        specifier: workspace:*
+        version: link:../../packages/tsconfig
       typescript:
         specifier: ^5.3.2
         version: 5.3.2
@@ -522,7 +525,7 @@ importers:
         specifier: ^5.0.1
         version: 5.0.1(react@18.3.1)
     devDependencies:
-      eslint-config-custom:
+      '@repo/eslint-config-custom':
         specifier: workspace:^
         version: link:../eslint-config-custom
       react:
@@ -585,7 +588,7 @@ importers:
         specifier: ^5.0.1
         version: 5.0.1(react@18.3.1)
     devDependencies:
-      eslint-config-custom:
+      '@repo/eslint-config-custom':
         specifier: workspace:^
         version: link:../eslint-config-custom
       react:
@@ -606,7 +609,7 @@ importers:
 
   packages/jsonresume-theme-standard:
     devDependencies:
-      eslint-config-custom:
+      '@repo/eslint-config-custom':
         specifier: workspace:^
         version: link:../eslint-config-custom
       react:
@@ -646,7 +649,7 @@ importers:
         specifier: ^0.16.19
         version: 0.16.19
     devDependencies:
-      eslint-config-custom:
+      '@repo/eslint-config-custom':
         specifier: workspace:*
         version: link:../eslint-config-custom
       react:
@@ -663,16 +666,52 @@ importers:
 
   packages/ui:
     dependencies:
-      styled-components:
-        specifier: ^6.1.11
-        version: 6.1.11(react-dom@18.3.1)(react@18.3.1)
-    devDependencies:
-      eslint-config-custom:
-        specifier: workspace:*
-        version: link:../eslint-config-custom
+      '@radix-ui/react-slot':
+        specifier: ^1.0.2
+        version: 1.0.2(@types/react@18.2.39)(react@18.3.1)
+      class-variance-authority:
+        specifier: ^0.7.0
+        version: 0.7.0
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
+      lucide-react:
+        specifier: ^0.395.0
+        version: 0.395.0(react@18.3.1)
       react:
         specifier: ^18
         version: 18.3.1
+      tailwind-merge:
+        specifier: ^2.3.0
+        version: 2.3.0
+      tailwindcss-animate:
+        specifier: ^1.0.7
+        version: 1.0.7(tailwindcss@3.4.4)
+    devDependencies:
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      '@types/node':
+        specifier: ^20
+        version: 20.10.0
+      '@types/react':
+        specifier: ^18
+        version: 18.2.39
+      autoprefixer:
+        specifier: ^10.4.19
+        version: 10.4.19(postcss@8.4.39)
+      postcss:
+        specifier: ^8.4.38
+        version: 8.4.39
+      postcss-load-config:
+        specifier: ^6.0.1
+        version: 6.0.1(postcss@8.4.39)
+      tailwindcss:
+        specifier: ^3.4.4
+        version: 3.4.4
+      typescript:
+        specifier: ^5.4.5
+        version: 5.4.5
 
   themes/papirus:
     dependencies:
@@ -771,6 +810,9 @@ importers:
       '@esbuild-plugins/node-globals-polyfill':
         specifier: ^0.2.3
         version: 0.2.3(esbuild@0.23.0)
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../../packages/eslint-config-custom
       '@storybook/addon-essentials':
         specifier: ^7.0.7
         version: 7.0.7(react-dom@18.3.1)(react@18.3.1)
@@ -828,9 +870,6 @@ importers:
       babel-plugin-named-exports-order:
         specifier: ^0.0.2
         version: 0.0.2
-      eslint-config-custom:
-        specifier: workspace:*
-        version: link:../../packages/eslint-config-custom
       prop-types:
         specifier: ^15.8.1
         version: 15.8.1
@@ -18884,6 +18923,11 @@ packages:
     resolution: {integrity: sha512-K2U4W2Ff5ibV7j7ydLr+zLAkIg5JJ4lPn1Ltsdt+Tz/IjQ8buJ55pZAxoP34lqIiwtF9iAvtLv3JGv7CAyAg+g==}
     engines: {node: '>=14'}
 
+  /lilconfig@3.1.2:
+    resolution: {integrity: sha512-eop+wDAvpItUys0FWkHIKeC9ybYrTGbU41U5K7+bttZZeohvnY7M9dZ5kB21GNWiFT2q1OoPTvncPCgSOVO5ow==}
+    engines: {node: '>=14'}
+    dev: true
+
   /lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
 
@@ -19159,6 +19203,14 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       yallist: 4.0.0
+    dev: false
+
+  /lucide-react@0.395.0(react@18.3.1):
+    resolution: {integrity: sha512-6hzdNH5723A4FLaYZWpK50iyZH8iS2Jq5zuPRRotOFkhu6kxxJiebVdJ72tCR5XkiIeYFOU5NUawFZOac+VeYw==}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.3.1
     dev: false
 
   /lucide-react@0.407.0(react@18.3.1):
@@ -21472,6 +21524,28 @@ packages:
       postcss: 8.4.39
       yaml: 2.3.4
 
+  /postcss-load-config@6.0.1(postcss@8.4.39):
+    resolution: {integrity: sha512-oPtTM4oerL+UXmx+93ytZVN82RrlY/wPUV8IeDxFrzIjXOLF1pN+EmKPLbubvKHT2HC20xXsCAH2Z+CKV6Oz/g==}
+    engines: {node: '>= 18'}
+    peerDependencies:
+      jiti: '>=1.21.0'
+      postcss: '>=8.0.9'
+      tsx: ^4.8.1
+      yaml: ^2.4.2
+    peerDependenciesMeta:
+      jiti:
+        optional: true
+      postcss:
+        optional: true
+      tsx:
+        optional: true
+      yaml:
+        optional: true
+    dependencies:
+      lilconfig: 3.1.2
+      postcss: 8.4.39
+    dev: true
+
   /postcss-loader@6.2.1(postcss@8.4.39)(webpack@5.89.0):
     resolution: {integrity: sha512-WbbYpmAaKcux/P66bZ40bpWsBucjx/TTgVVzRZ9yUO8yQfVBlameJ0ZGVaPfH64hNSBh63a+ICP5nqOpBA0w+Q==}
     engines: {node: '>= 12.13.0'}
@@ -22779,7 +22853,7 @@ packages:
       semver: 7.6.2
       source-map-loader: 3.0.2(webpack@5.89.0)
       style-loader: 3.3.3(webpack@5.89.0)
-      tailwindcss: 3.4.3
+      tailwindcss: 3.4.4
       terser-webpack-plugin: 5.3.9(@swc/core@1.3.99)(esbuild@0.23.0)(webpack@5.89.0)
       typescript: 4.9.5
       webpack: 5.89.0(@swc/core@1.3.99)(esbuild@0.23.0)
@@ -24653,8 +24727,46 @@ packages:
       '@babel/runtime': 7.24.7
     dev: false
 
+  /tailwindcss-animate@1.0.7(tailwindcss@3.4.4):
+    resolution: {integrity: sha512-bl6mpH3T7I3UFxuvDEXLxy/VuFxBk5bbzplh7tXI68mwMokNYd1t9qPBHlnyTwfa4JGC4zP516I1hYYtQ/vspA==}
+    peerDependencies:
+      tailwindcss: '>=3.0.0 || insiders'
+    dependencies:
+      tailwindcss: 3.4.4
+    dev: false
+
   /tailwindcss@3.4.3:
     resolution: {integrity: sha512-U7sxQk/n397Bmx4JHbJx/iSOOv5G+II3f1kpLpY2QeUv5DcPdcTsYLlusZfq1NthHS1c1cZoyFmmkex1rzke0A==}
+    engines: {node: '>=14.0.0'}
+    hasBin: true
+    dependencies:
+      '@alloc/quick-lru': 5.2.0
+      arg: 5.0.2
+      chokidar: 3.6.0
+      didyoumean: 1.2.2
+      dlv: 1.1.3
+      fast-glob: 3.3.2
+      glob-parent: 6.0.2
+      is-glob: 4.0.3
+      jiti: 1.21.0
+      lilconfig: 2.1.0
+      micromatch: 4.0.7
+      normalize-path: 3.0.0
+      object-hash: 3.0.0
+      picocolors: 1.0.1
+      postcss: 8.4.39
+      postcss-import: 15.1.0(postcss@8.4.39)
+      postcss-js: 4.0.1(postcss@8.4.39)
+      postcss-load-config: 4.0.2(postcss@8.4.39)
+      postcss-nested: 6.0.1(postcss@8.4.39)
+      postcss-selector-parser: 6.0.13
+      resolve: 1.22.8
+      sucrase: 3.34.0
+    transitivePeerDependencies:
+      - ts-node
+
+  /tailwindcss@3.4.4:
+    resolution: {integrity: sha512-ZoyXOdJjISB7/BcLTR6SEsLgKtDStYyYZVLsUtWChO4Ps20CBad7lfJKVDiejocV4ME1hLmyY0WJE3hSDcmQ2A==}
     engines: {node: '>=14.0.0'}
     hasBin: true
     dependencies:
@@ -25272,6 +25384,12 @@ packages:
     resolution: {integrity: sha512-6l+RyNy7oAHDfxC4FzSJcz9vnjTKxrLpDG5M2Vu4SHRVNg6xzqZp6LYSR9zjqQTu8DU/f5xwxUdADOkbrIX2gQ==}
     engines: {node: '>=14.17'}
     hasBin: true
+
+  /typescript@5.4.5:
+    resolution: {integrity: sha512-vcI4UpRgg81oIRUFwR0WSIHKt11nJ7SAVlYNIu+QpqeyXP+gpQJy/Z4+F0aGxSE4MqwjyXvW/TzgkLAx2AGHwQ==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+    dev: true
 
   /uc.micro@1.0.6:
     resolution: {integrity: sha512-8Y75pvTYkLJW2hWQHXxoqRgV7qb9B+9vFEtidML+7koHUFapnVJAZ6cKs+Qjz5Aw3aZWHMC6u0wJE3At+nSGwA==}

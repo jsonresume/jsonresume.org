@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "eslint-config-custom",
+  "name": "@repo/eslint-config-custom",
   "version": "0.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -9,6 +9,11 @@
     "eslint-config-turbo": "^1",
     "eslint-plugin-react": "^7.33.2"
   },
+  "files": [
+    "library.js",
+    "next.js",
+    "react-internal.js"
+  ],
   "publishConfig": {
     "access": "public"
   },

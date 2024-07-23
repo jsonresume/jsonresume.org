@@ -14,7 +14,7 @@
     "@faker-js/faker": "^8.0.2",
     "@jsonresume/theme-papirus": "workspace:*",
     "@jsonresume/theme-stackoverflow": "workspace:*",
-    "@jsonresume/ui": "workspace:*",
+    "@repo/ui": "workspace:*",
     "@pinecone-database/pinecone": "^0.1.6",
     "@prisma/client": "^4.15.0",
     "@supabase/supabase-js": "^2.39.6",
@@ -57,7 +57,7 @@
     "@types/node": "^20.10.0",
     "caniuse-lite": "^1.0.30001566",
     "eslint": "^8.55.0",
-    "eslint-config-custom": "workspace:*",
+    "@repo/eslint-config-custom": "workspace:*",
     "eslint-config-next": "^14.2.5",
     "typescript": "^5.3.2"
   }
