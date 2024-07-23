@@ -1,7 +1,7 @@
 import * as standard from 'jsonresume-theme-standard';
 import * as cv from 'jsonresume-theme-cv';
 import * as professional from 'jsonresume-theme-professional';
-import * as tailwind from 'jsonresume-theme-tailwind';
+// import * as tailwind from 'jsonresume-theme-tailwind';
 import * as full from 'jsonresume-theme-full';
 import * as onepage from 'jsonresume-theme-onepage';
 import * as onepageplus from 'jsonresume-theme-onepage-plus';
@@ -17,7 +17,7 @@ export const THEMES = {
   cora: require('jsonresume-theme-cora'),
   cv,
   professional,
-  tailwind,
+  // tailwind,
   elegant: require('jsonresume-theme-elegant'),
   full,
   flat,

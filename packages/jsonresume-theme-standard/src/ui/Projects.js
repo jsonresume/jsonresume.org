@@ -25,9 +25,9 @@ const Projects = ({ projects }) => {
   return (
     <div>
       <SubTitle>Projects</SubTitle>
-      {projects.slice(0, 1).map((w) => {
+      {projects.map((w) => {
         return (
-          <div>
+          <div key={w.name}>
             <Project>
               <ProjectPosition>{w.position}</ProjectPosition>
               &nbsp;-&nbsp;

@@ -5,7 +5,7 @@ import { useRef, useEffect, useState } from 'react';
 // import { render } from '../../../../themes/stackoverflow/dist';
 import { render } from '../../../../packages/jsonresume-theme-professional';
 import Button from './Button/Button';
-import Link from '@jsonresume/ui/Link';
+import Link from 'next/link';
 import schema from './schema';
 
 const HtmlIframe = ({ htmlString }) => {

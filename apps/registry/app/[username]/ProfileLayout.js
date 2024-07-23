@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { ProfileProvider } from './ProfileContext';
 import gravatar from 'gravatar';
 import { MapPin } from 'lucide-react';
+import { Button } from '@repo/ui/components/ui/button';
 
 export default function Layout({ children, resume, username, session }) {
   const router = useRouter();
@@ -47,7 +48,7 @@ export default function Layout({ children, resume, username, session }) {
                 {resume.basics.label}
               </p>
               <div className="flex items-center mb-2 text-sm text-gray-500">
-                <MapPin className="w-4 h-4 mr-1 text-secondary-500" />
+                <MapPin className="w-4 h-4 mr-1 text-primary" />
                 <span>
                   {resume.basics.location.countryCode ||
                     'Location not available'}
@@ -55,24 +56,20 @@ export default function Layout({ children, resume, username, session }) {
               </div>
               <a
                 href={`mailto:${resume.basics.email}`}
-                className="mb-4 text-sm text-secondary-500 hover:underline"
+                className="mb-4 text-sm text-primary hover:underline"
               >
                 {resume.basics.email}
               </a>
               <div className="flex flex-col items-center mt-4 space-y-2">
                 <a href={`/${username}`} target="_blank">
-                  <button className="bg-secondary-100 text-secondary-800 py-2 px-4 rounded hover:bg-secondary-200 transition-colors duration-200">
-                    View Resume
-                  </button>
+                  <Button>View Resume</Button>
                 </a>
               </div>
+              <br />
               {session && (
-                <button
-                  onClick={() => router.push('/editor')}
-                  className="mt-4 bg-secondary-500 text-white py-2 px-4 rounded hover:bg-secondary-700 transition-colors duration-200"
-                >
+                <Button onClick={() => router.push('/editor')}>
                   Edit Resume
-                </button>
+                </Button>
               )}
             </div>
           </div>
@@ -84,8 +81,8 @@ export default function Layout({ children, resume, username, session }) {
                 <span
                   className={`text-gray-700 hover:text-gray-900 py-2 px-4 rounded-full ${
                     pathname === link.href
-                      ? 'bg-secondary-500 text-white'
-                      : 'bg-secondary-100 hover:bg-secondary-200'
+                      ? 'bg-primary text-white'
+                      : 'bg-secondary-light hover:bg-secondary'
                   } transition-colors duration-200`}
                 >
                   {link.label}

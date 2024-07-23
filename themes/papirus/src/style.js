@@ -1,4 +1,4 @@
-export default `body {
+const styles = `body {
   background: #e5ded4;
   font: 15px Arial, Helvetica, sans-serif;
   line-height: 1.4;
@@ -656,3 +656,4 @@ section {
     color: #ffffff !important;
   }
 }`;
+export default styles;

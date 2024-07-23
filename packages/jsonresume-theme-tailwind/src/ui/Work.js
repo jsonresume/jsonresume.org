@@ -5,9 +5,9 @@ const Work = ({ work }) => {
   return (
     <Section>
       <h2 className="text-xl font-bold">Work Experience</h2>
-      {work.map((w) => {
+      {work.map((w, index) => {
         return (
-          <Card key={w.company}>
+          <Card key={index}>
             <CardHeader>
               <div className="flex items-center justify-between gap-x-2 text-base">
                 <h3 className="inline-flex items-center justify-center gap-x-1 font-semibold leading-none">
@@ -39,8 +39,8 @@ const Work = ({ work }) => {
               <br />
               <br />
               <ul>
-                {w.highlights?.map((h) => {
-                  return <li>- {h}</li>;
+                {w.highlights?.map((h, index) => {
+                  return <li key={index}>- {h}</li>;
                 })}
               </ul>
             </CardContent>
