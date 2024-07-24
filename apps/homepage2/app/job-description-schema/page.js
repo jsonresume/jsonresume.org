@@ -39,7 +39,7 @@ export default function Schema() {
             <h4>Open Source</h4>
             <p>
               The schema is{' '}
-              <a href="https://github.com/jsonresume/resume-schema/job-schema.json">
+              <a href="https://github.com/jsonresume/resume-schema/blob/master/job-schema.json">
                 open source
               </a>{' '}
               and community-driven. We release everything we do under the MIT
