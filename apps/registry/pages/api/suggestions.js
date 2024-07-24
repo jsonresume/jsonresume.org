@@ -31,16 +31,15 @@ export default async function handler(req, res) {
   - Better ways of saying things
   - Jobs and skills that I could have described better
   - You can't rewrite references, but you inform if they don't make the candidate look good.
-  - Your suggestions should be very brief and terse. No one likes reading long resumes.
+  - Your suggestions should be very brief.
   - Don't comment on url or email addresses. Assume they are correct.
   - Don't bother commenting if a field is already concise, good or clear.
 
   Do not give general tips. Be as specific about my actual resume as possible.
   
+  Logically structure your response into digestable sections. Use headings, subheadings, and bullet points where appropriate. You are talking to a person.
 
-  Make sure you reference which aspect of the json resume that you are talking about for each critcisim.
-
-  e.g. basics.name, work[0].position, projects[1].highlights[1] etc.
+  Make sure there is plenty of spacing.
 
   Format your answer in markdown
 
@@ -55,18 +54,10 @@ export default async function handler(req, res) {
 
   const chat = await openai.chat.completions.create({
     model: 'gpt-4o',
-    temperature: 0.8,
+    temperature: 0.85,
     messages,
   });
-  // console.log(chat.data);
 
-  console.log('AFASDASDAS');
-  console.log('AFASDASDAS');
-  console.log('AFASDASDAS');
-  console.log('AFASDASDAS');
-  console.log('AFASDASDAS');
-  console.log('AFASDASDAS');
-  console.log(chat);
   try {
     const content = chat.choices[0].message.content;
     return res.status(200).send(content);

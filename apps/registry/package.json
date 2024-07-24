@@ -102,6 +102,7 @@
     "react-dom": "^18.3.1",
     "react-markdown": "^8.0.7",
     "react-speech-recognition": "^3.10.0",
+    "recharts": "^2.12.7",
     "resume-schema": "^1.0.0",
     "sonner": "^1.5.0",
     "styled-components": "6.1.11",

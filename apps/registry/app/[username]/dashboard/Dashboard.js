@@ -5,16 +5,11 @@ import {
   totalExperience,
   averageJobDuration,
   careerProgression,
-  skillEvolution,
   getEducationLevel,
 } from '../../../lib/calculations';
 
 const getMetrics = ({ resume }) => {
-  console.log({ resume });
-  console.log(skillEvolution(resume));
   const ResumeData = {
-    // Assume this object contains all the parsed JSON resume data
-    // We'll use placeholder data for this example
     totalExperience: totalExperience(resume),
     totalJobs: resume.work?.length,
     totalProjects: resume.projects?.length,
@@ -31,11 +26,6 @@ const getMetrics = ({ resume }) => {
     educationLevel: getEducationLevel(resume),
     geographicMobility: 3,
     careerProgression: careerProgression(resume),
-    skillEvolution: [
-      { year: 2018, skills: ['JavaScript', 'HTML', 'CSS'] },
-      { year: 2020, skills: ['React', 'Node.js', 'SQL'] },
-      { year: 2022, skills: ['Python', 'Machine Learning', 'React Native'] },
-    ],
   };
   return ResumeData;
 };
@@ -53,23 +43,6 @@ const InfoItem = ({ icon: Icon, label, value }) => (
     <span className="text-gray-900">{value}</span>
   </div>
 );
-
-// const ProgressBar = ({ value, max, label }) => (
-//   <div className="mb-4">
-//     <div className="flex justify-between mb-1">
-//       <span className="text-sm font-medium text-gray-700">{label}</span>
-//       <span className="text-sm font-medium text-gray-700">
-//         {value}/{max}
-//       </span>
-//     </div>
-//     <div className="w-full bg-gray-200 rounded-full h-2.5">
-//       <div
-//         className="bg-secondary-600 h-2.5 rounded-full"
-//         style={{ width: `${(value / max) * 100}%` }}
-//       ></div>
-//     </div>
-//   </div>
-// );
 
 const TimelineItem = ({ title, duration }) => (
   <div className="mb-4">
@@ -93,7 +66,7 @@ const ResumeDashboard = () => {
   return (
     <div className="w-full p-6 bg-white shadow-lg rounded-lg">
       <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">
-        THIS IS SUPA BETA - WIP
+        Resume Dashboard
       </h1>
 
       <section className="mb-8">
@@ -136,13 +109,6 @@ const ResumeDashboard = () => {
         </div>
       </section>
 
-      {/* <section className="mb-8">
-        <SectionTitle>Top Industries</SectionTitle>
-        {ResumeData.topIndustries.map((industry, index) => (
-          <ProgressBar key={index} value={5 - index} max={5} label={industry} />
-        ))}
-      </section> */}
-
       <section className="mb-8">
         <SectionTitle>Career Progression</SectionTitle>
         <div className="space-y-4">
@@ -167,32 +133,6 @@ const ResumeDashboard = () => {
           />
         </div>
       </section>
-
-      {/* <section className="mb-8">
-        <SectionTitle>Skills Evolution</SectionTitle>
-        {ResumeData.skillEvolution.map((yearSkills, index) => (
-          <div key={index} className="mb-6">
-            <h3 className="text-lg font-semibold mb-2">{yearSkills.year}</h3>
-            <div className="flex flex-wrap gap-2">
-              {yearSkills.skills.map((skill, skillIndex) => (
-                <SkillBadge key={skillIndex} skill={skill} />
-              ))}
-            </div>
-          </div>
-        ))}
-        <div className="mt-4">
-          <InfoItem
-            icon={TrendingUp}
-            label="Total Skills"
-            value={ResumeData.totalSkills}
-          />
-          <InfoItem
-            icon={TrendingUp}
-            label="Most Recent Skill"
-            value={ResumeData.mostRecentSkill}
-          />
-        </div>
-      </section> */}
     </div>
   );
 };
