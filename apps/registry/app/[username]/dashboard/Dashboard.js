@@ -14,7 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@repo/ui/components/ui/card';
-
+import { Badge } from '@repo/ui/components/ui/badge';
 import { Progress } from '@repo/ui/components/ui/progress';
 import {
   totalExperience,
@@ -35,7 +35,7 @@ const getMetrics = ({ resume }) => {
     totalVolunteer: resume.volunteer?.length,
     averageJobDuration: averageJobDuration(resume),
     mostFrequentJobTitle: 'Software Engineer',
-    topSkillCategories: ['Programming', 'Web Development', 'Data Analysis'],
+    topSkillCategories: resume.skills?.map((skill) => skill.name),
     mostRecentSkill: 'React Native',
     topIndustries: ['Technology', 'Finance', 'Healthcare'],
     educationLevel: getEducationLevel(resume),
@@ -45,6 +45,34 @@ const getMetrics = ({ resume }) => {
   return ResumeData;
 };
 
+const SkillsList = ({ skills }) => {
+  if (!skills || skills.length === 0) {
+    return <p>No skills listed.</p>;
+  }
+
+  return (
+    <div className="space-y-4">
+      {skills.map((skill, index) => (
+        <div key={index} className="border rounded-lg p-4 shadow-sm">
+          <h3 className="text-lg font-semibold mb-2">{skill.name}</h3>
+          {skill.level && (
+            <p className="text-sm text-gray-600 mb-2">Level: {skill.level}</p>
+          )}
+          {skill.keywords && skill.keywords.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {skill.keywords.map((keyword, keywordIndex) => (
+                <Badge key={keywordIndex} variant="secondary">
+                  {keyword}
+                </Badge>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
+
 const ResumeDashboard = () => {
   const { resume } = useProfileData();
   const ResumeData = getMetrics({ resume });
@@ -52,6 +80,18 @@ const ResumeDashboard = () => {
     <>
       <div className="min-h-screen p-8">
         <div className="">
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle className="text-xl font-semibold flex items-center">
+                <FileText className="w-5 h-5 mr-2" />
+                Summary
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-lg">{resume.basics?.summary}</p>
+            </CardContent>
+          </Card>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <Card>
               <CardHeader>
@@ -127,20 +167,11 @@ const ResumeDashboard = () => {
             <CardHeader>
               <CardTitle className="text-xl font-semibold flex items-center">
                 <Code className="w-5 h-5 mr-2" />
-                Top Skill Categories
+                Skills
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex flex-wrap gap-2">
-                {ResumeData.topSkillCategories.map((skill, index) => (
-                  <span
-                    key={index}
-                    className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
+              <SkillsList skills={resume.skills} />
             </CardContent>
           </Card>
 

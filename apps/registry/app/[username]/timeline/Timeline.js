@@ -37,7 +37,7 @@ const SimpleVerticalTimeline = ({ resume }) => {
                 const opposite = side === 'left' ? 'right' : 'left';
                 return (
                   <TimelineItem key={index} status="done">
-                    <TimelineHeading className="text-xl" side={side}>
+                    <TimelineHeading className="text-2xl" side={side}>
                       {work.name}
                     </TimelineHeading>
                     <TimelineHeading side={opposite} variant="secondary">
@@ -45,7 +45,7 @@ const SimpleVerticalTimeline = ({ resume }) => {
                     </TimelineHeading>
                     <TimelineDot status="done" />
                     <TimelineLine done />
-                    <TimelineContent className="text-sm" side={side}>
+                    <TimelineContent className="text-base" side={side}>
                       <span className="font-bold">{work.position}</span> <br />
                       {work.summary}
                     </TimelineContent>
