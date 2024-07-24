@@ -23,6 +23,7 @@ export default function Layout({ children, resume, username, session }) {
 
   const navLinks = [
     { href: `/${username}/dashboard`, label: 'Dashboard' },
+    { href: `/${username}/timeline`, label: 'Timeline' },
     { href: `/${username}/jobs`, label: 'Jobs' },
     { href: `/${username}/suggestions`, label: 'Suggestions' },
     { href: `/${username}/letter`, label: 'Letter' },
