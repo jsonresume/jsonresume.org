@@ -29,6 +29,7 @@ async function main() {
     if (!job.embedding_v5) {
       console.log(`Creating embedding for job ID: ${job.id}`);
       try {
+        console.log({ job });
         const completion1 = await openai.embeddings.create({
           model: 'text-embedding-3-large',
           input: job.gpt_content,

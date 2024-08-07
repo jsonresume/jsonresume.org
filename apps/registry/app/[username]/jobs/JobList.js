@@ -13,7 +13,7 @@ import Link from 'next/link';
 
 const JobDescription = ({ job, makeCoverletter }) => {
   const [expanded, setExpanded] = useState(false);
-
+  console.log({ job });
   return (
     <div
       className="p-6 bg-white shadow-lg rounded-lg transition-transform transform hover:scale-105 cursor-pointer"
@@ -149,7 +149,7 @@ const JobDescription = ({ job, makeCoverletter }) => {
               Make Cover Letter
             </button>
             <a
-              href={job.url || '#'}
+              href={job.raw?.url || '#'}
               target="_blank"
               rel="noopener noreferrer"
               className="bg-gray-200 text-gray-700 py-2 px-4 rounded hover:bg-gray-300 transition-colors duration-200"

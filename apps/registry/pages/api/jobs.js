@@ -48,7 +48,7 @@ export default async function handler(req, res) {
   const { data: documents } = await supabase.rpc('match_jobs_v5', {
     query_embedding: embedding,
     match_threshold: 0.14, // Choose an appropriate threshold for your data
-    match_count: 40, // Choose the number of matches
+    match_count: 60, // Choose the number of matches
   });
 
   console.log({ documents });
@@ -63,7 +63,7 @@ export default async function handler(req, res) {
 
   const filteredJobs = sortedJobs.filter(
     (job) =>
-      new Date(job.created_at) > new Date(Date.now() - 60 * 24 * 60 * 60 * 1000)
+      new Date(job.created_at) > new Date(Date.now() - 60 * 24 * 60 * 90 * 1000)
   );
 
   return res.status(200).send(filteredJobs);

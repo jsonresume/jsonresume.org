@@ -221,7 +221,8 @@ async function main() {
   const { data, error } = await supabase
     .from('jobs')
     .select()
-    .not('gpt_content', 'is', null);
+    .is('gpt_content', null);
+
   console.log('fetched', data, error);
   for (let index = 0; index < data.length; index++) {
     const job = data[index];
