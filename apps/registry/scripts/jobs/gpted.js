@@ -270,7 +270,7 @@ async function main() {
     ];
     if (!job.gpt_content) {
       const chat = await openai.chat.completions.create({
-        model: 'gpt-4o',
+        model: 'gpt-4o-2024-08-06',
         temperature: 0.8,
         messages,
         functions: [
