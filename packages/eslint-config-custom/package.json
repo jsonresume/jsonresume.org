@@ -6,7 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "eslint-config-prettier": "^8.3.0",
-    "eslint-config-turbo": "^1",
+    "eslint-config-turbo": "^2",
     "eslint-plugin-react": "^7.33.2"
   },
   "files": [
