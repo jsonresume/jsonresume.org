@@ -21,7 +21,7 @@ jobs:
       - uses: meta-introspector/checkout@v3
         with:
           fetch-depth: 2
-      - uses: meta-introspector/action-setup@v2
+      - uses: meta-introspector/action-setup@master
         with:
           version: 8
       - uses: meta-introspector/setup-node@v3
@@ -36,7 +36,7 @@ jobs:
   #     - uses: meta-introspector/checkout@v3
   #       with:
   #         fetch-depth: 2
-  #     - uses: meta-introspector/action-setup@v2
+  #     - uses: meta-introspector/action-setup@master
   #       with:
   #         version: 8
   #     - uses: meta-introspector/setup-node@v3
@@ -52,7 +52,7 @@ jobs:
       - uses: meta-introspector/checkout@v3
         with:
           fetch-depth: 2
-      - uses: meta-introspector/action-setup@v2
+      - uses: meta-introspector/action-setup@master
         with:
           version: 8
       - uses: meta-introspector/setup-node@v3
@@ -68,7 +68,7 @@ jobs:
   #     - uses: meta-introspector/setup-node@v3
   #       with:
   #         node-version: 20
-  #     - uses: meta-introspector/action-setup@v2
+  #     - uses: meta-introspector/action-setup@master
   #       with:
   #         version: 8
   #     - uses: meta-introspector/setup-node@v3
