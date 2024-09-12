@@ -10,7 +10,6 @@
     "react": "^18"
   },
   "devDependencies": {
-    "@repo/eslint-config-custom": "workspace:*",
     "@types/node": "^20",
     "@types/react": "^18",
     "autoprefixer": "^10.4.19",

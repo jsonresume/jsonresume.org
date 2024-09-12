@@ -61,7 +61,6 @@
     "@types/styled-components": "^5.1.32",
     "@vitejs/plugin-react": "^4.2.1",
     "babel-plugin-named-exports-order": "^0.0.2",
-    "@repo/eslint-config-custom": "workspace:*",
     "prop-types": "^15.8.1",
     "rollup-plugin-node-polyfills": "^0.2.1",
     "storybook": "^7.0.7",

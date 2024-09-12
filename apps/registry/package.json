@@ -110,7 +110,6 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.40.0",
-    "@repo/eslint-config-custom": "workspace:*",
     "@types/node": "^20.10.0",
     "caniuse-lite": "^1.0.30001566",
     "eslint": "^8.55.0",

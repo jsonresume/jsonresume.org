@@ -57,7 +57,6 @@
     "@types/node": "^20.10.0",
     "caniuse-lite": "^1.0.30001566",
     "eslint": "^8.55.0",
-    "@repo/eslint-config-custom": "workspace:*",
     "eslint-config-next": "^14.2.5",
     "typescript": "^5.3.2"
   }

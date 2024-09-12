@@ -5,7 +5,6 @@
   "main": "./src/index.js",
   "license": "MIT",
   "devDependencies": {
-    "@repo/eslint-config-custom": "workspace:*",
     "react": "^18",
 
     "styled-components": "^6"
