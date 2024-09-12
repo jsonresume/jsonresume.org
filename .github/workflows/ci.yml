@@ -18,13 +18,13 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: meta-introspector/checkout@v3
         with:
           fetch-depth: 2
-      - uses: pnpm/action-setup@v2
+      - uses: meta-introspector/action-setup@v2
         with:
           version: 8
-      - uses: actions/setup-node@v3
+      - uses: meta-introspector/setup-node@v3
         with:
           node-version: 20
           cache: pnpm
@@ -33,13 +33,13 @@ jobs:
   # dev-script:
   #   runs-on: ubuntu-latest
   #   steps:
-  #     - uses: actions/checkout@v3
+  #     - uses: meta-introspector/checkout@v3
   #       with:
   #         fetch-depth: 2
-  #     - uses: pnpm/action-setup@v2
+  #     - uses: meta-introspector/action-setup@v2
   #       with:
   #         version: 8
-  #     - uses: actions/setup-node@v3
+  #     - uses: meta-introspector/setup-node@v3
   #       with:
   #         node-version: 20
   #         cache: 'pnpm'
@@ -49,13 +49,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: meta-introspector/checkout@v3
         with:
           fetch-depth: 2
-      - uses: pnpm/action-setup@v2
+      - uses: meta-introspector/action-setup@v2
         with:
           version: 8
-      - uses: actions/setup-node@v3
+      - uses: meta-introspector/setup-node@v3
         with:
           node-version: 20
           cache: pnpm
@@ -64,14 +64,14 @@ jobs:
   # test:
   #   runs-on: ubuntu-latest
   #   steps:
-  #     - uses: actions/checkout@v3
-  #     - uses: actions/setup-node@v3
+  #     - uses: meta-introspector/checkout@v3
+  #     - uses: meta-introspector/setup-node@v3
   #       with:
   #         node-version: 20
-  #     - uses: pnpm/action-setup@v2
+  #     - uses: meta-introspector/action-setup@v2
   #       with:
   #         version: 8
-  #     - uses: actions/setup-node@v3
+  #     - uses: meta-introspector/setup-node@v3
   #       with:
   #         node-version: 20
   #         cache: pnpm
@@ -81,7 +81,7 @@ jobs:
   #       working-directory: apps/registry
   #     - name: Run Playwright tests
   #       run: pnpm turbo test:e2e --concurrency 1000 # The high concurrency is due to a bug: https://github.com/vercel/turbo/issues/4291
-  #     - uses: actions/upload-artifact@v3
+  #     - uses: meta-introspector/upload-artifact@v3
   #       if: always()
   #       with:
   #         name: playwright-report
