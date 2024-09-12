@@ -23,7 +23,7 @@ jobs:
           fetch-depth: 2
       - uses: meta-introspector/action-setup@master
         with:
-          version: 8
+          version: 7.15.0
       - uses: meta-introspector/setup-node@v3
         with:
           node-version: 20
@@ -38,7 +38,7 @@ jobs:
   #         fetch-depth: 2
   #     - uses: meta-introspector/action-setup@master
   #       with:
-  #         version: 8
+  #         version: 7.15.0
   #     - uses: meta-introspector/setup-node@v3
   #       with:
   #         node-version: 20
@@ -54,7 +54,7 @@ jobs:
           fetch-depth: 2
       - uses: meta-introspector/action-setup@master
         with:
-          version: 8
+          version: 7.15.0
       - uses: meta-introspector/setup-node@v3
         with:
           node-version: 20
@@ -70,7 +70,7 @@ jobs:
   #         node-version: 20
   #     - uses: meta-introspector/action-setup@master
   #       with:
-  #         version: 8
+  #         version: 7.15.0
   #     - uses: meta-introspector/setup-node@v3
   #       with:
   #         node-version: 20
