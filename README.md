@@ -36,6 +36,7 @@ pnpm i
 To start all applications:
 
 ```sh
+pnpm i -D @storybook/cli
 pnpm turbo dev
 ```
 

@@ -7,14 +7,18 @@
     "format": "prettier -w .",
     "prettier": "prettier -c .",
     "prepare": "husky install",
-    "ui:add": "pnpm --filter @repo/ui ui:add"
+    "ui:add": "pnpm --filter @repo/ui ui:add",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "devDependencies": {
-    "eslint": "^8",
+    "@chromatic-com/storybook": "^1.9.0",
     "@repo/eslint-config-custom": "workspace:*",
+    "eslint": "^8",
     "husky": "^8.0.3",
     "lint-staged": "^15.2.0",
     "prettier": "^2.8.0",
+    "prop-types": "^15.8.1",
     "start-server-and-test": "^2.0.3",
     "turbo": "^2.0.6"
   },
@@ -22,6 +26,7 @@
   "name": "jsonresume.org",
   "dependencies": {
     "@changesets/cli": "^2.27.1",
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "jsonresume.org": "link:"
   }
 }
