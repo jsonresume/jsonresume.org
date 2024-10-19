@@ -48,6 +48,14 @@ export default function GettingStarted() {
       language: 'N/A',
     },
     {
+      name: 'ResumeSet',
+      description:
+        'AI tailored resume builder with support for importing JSON resumes.',
+      link: 'https://resumeset.com',
+      category: 'integration',
+      language: 'N/A',
+    },
+    {
       name: 'JSON Resume Validator (PHP)',
       description:
         'Tool in PHP that validates if a Resume is according to the defined schema. It also validates if any desired properties are not empty.',
