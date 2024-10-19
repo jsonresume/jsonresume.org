@@ -658,7 +658,7 @@ section .location {
   .institution::before,
   .organization::before,
   .awarder::before {
-    content: 'at ';
+    content: ' at ';
   }
   .main-summary {
     padding: 0;
