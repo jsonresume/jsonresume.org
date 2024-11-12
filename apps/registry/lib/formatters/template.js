@@ -1,6 +1,6 @@
 import * as standard from 'jsonresume-theme-standard';
 import * as cv from 'jsonresume-theme-cv';
-import * as professional from 'jsonresume-theme-professional';
+import * as professional from '@jsonresume/jsonresume-theme-professional';
 // import * as tailwind from 'jsonresume-theme-tailwind';
 import * as full from 'jsonresume-theme-full';
 import * as onepage from 'jsonresume-theme-onepage';
