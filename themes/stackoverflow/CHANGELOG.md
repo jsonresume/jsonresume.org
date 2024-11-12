@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.1.2
+
+### Patch Changes
+
+- f18f64c: Add missing emptyspace in positions for print outs.
+
 ## 2.1.1
 
 ### Patch Changes
