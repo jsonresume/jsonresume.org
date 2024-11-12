@@ -1,6 +1,6 @@
 {
   "name": "@jsonresume/theme-stackoverflow",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Stack Overflow theme for JSON Resume written with React",
   "contributors": [
     {
