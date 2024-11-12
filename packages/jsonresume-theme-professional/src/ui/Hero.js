@@ -46,9 +46,15 @@ const Info = styled.div`
 const HeroComponent = ({ basics }) => {
   const { name, url, location, profiles, phone, email } = basics;
 
-  const linkedin = profiles.find(({ network }) => network === 'linkedin');
-  const github = profiles.find(({ network }) => network === 'github');
-  const twitter = profiles.find(({ network }) => network === 'twitter');
+  const linkedin = profiles.find(
+    ({ network }) => network.toLowerCase() === 'linkedin'
+  );
+  const github = profiles.find(
+    ({ network }) => network.toLowerCase() === 'github'
+  );
+  const twitter = profiles.find(
+    ({ network }) => network.toLowerCase() === 'twitter'
+  );
 
   return (
     <Section>
