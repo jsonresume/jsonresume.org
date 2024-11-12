@@ -21,6 +21,7 @@ import {
 } from '@repo/ui/components/ui/select';
 import { ScrollArea } from '@repo/ui/components/ui/scroll-area';
 import { Loader2 } from 'lucide-react';
+import Image from 'next/image';
 
 const formatLocation = (location) => {
   if (!location) return 'Location not provided';
@@ -202,7 +203,7 @@ const Resumes = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="flex items-center">
-                        <img
+                        <Image
                           src={resume.image}
                           alt={resume.name}
                           className="w-12 h-12 rounded-full mr-4"

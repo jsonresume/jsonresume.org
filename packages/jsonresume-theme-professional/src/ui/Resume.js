@@ -11,6 +11,7 @@ import Skills from './Skills';
 import Interests from './Interests';
 import Languages from './Languages';
 import References from './References';
+import Volunteer from './Volunteer';
 
 const Layout = styled.div`
   max-width: 660px;
@@ -27,6 +28,7 @@ const Resume = ({ resume }) => {
       <Education education={resume.education} />
       <Work work={resume.work} />
       <Projects projects={resume.projects} />
+      <Volunteer volunteer={resume.volunteer} />
       <Certificates certificates={resume.certificates} />
       <Publications publications={resume.publications} />
       <Awards awards={resume.awards} />
