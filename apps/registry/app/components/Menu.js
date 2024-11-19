@@ -34,16 +34,16 @@ export default function Menu({ session }) {
             >
               Explore
             </Link>
-            {/* <Link
+            <Link
               href="/jobs"
               className={`text-xl font-bold ${
-                isActive('/jobs')
+                isActive('/jobs') || pathname.startsWith('/jobs/')
                   ? 'text-secondary-900 underline'
                   : 'text-black'
               } hover:text-secondary-900 transition-colors duration-200`}
             >
               Jobs
-            </Link> */}
+            </Link>
             <a
               href="https://github.com/jsonresume/jsonresume.org"
               className="text-xl font-bold text-black hover:text-secondary-900 transition-colors duration-200"

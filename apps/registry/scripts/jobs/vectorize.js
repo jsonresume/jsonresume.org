@@ -16,7 +16,11 @@ async function main() {
   const { data, error } = await supabase
     .from('jobs')
     .select('id::text, gpt_content, embedding_v5')
-    .is('embedding_v5', null);
+    // .is('embedding_v5', null)
+    .gte(
+      'created_at',
+      new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+    );
 
   if (error) {
     console.error('Error fetching jobs:', error);
@@ -26,7 +30,7 @@ async function main() {
   console.log('Fetched jobs:', data);
 
   for (const job of data) {
-    if (!job.embedding_v5) {
+    if (true || !job.embedding_v5) {
       console.log(`Creating embedding for job ID: ${job.id}`);
       try {
         console.log({ job });

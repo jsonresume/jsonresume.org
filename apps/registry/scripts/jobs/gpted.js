@@ -221,7 +221,11 @@ async function main() {
   const { data, error } = await supabase
     .from('jobs')
     .select()
-    .is('gpt_content', null);
+    // .is('gpt_content', null)
+    .gte(
+      'created_at',
+      new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+    );
 
   console.log('fetched', data, error);
   for (let index = 0; index < data.length; index++) {
@@ -232,45 +236,103 @@ async function main() {
     const messages = [
       {
         role: 'system',
-        content: `You are a human assistant to a recruiter. You are helping them turn a job description into structured data. Try to understand if the position is remote or not. make sure to include the remote property. 
-        
-        Possible values for remote are: FULL, HYBRID, NONE.
-        
-        The job description should be in JSON format. 
-        
-        
-        Where no value can be ascertained simply return null. Here is an example of a job description as a schema in JSON format: ${jobSchema}`,
-      },
-      {
-        role: 'assistant',
-        content: `This is the json example for a job: ${exampleJob}`,
-      },
-      {
-        role: 'assistant',
-        content: `Here is an example of a job description in JSON schema format: ${JSON.stringify(
-          jobSchema
-        )}`,
-      },
-      {
-        role: 'assistant',
-        content: `This is the job description ${jobDescription}`,
-      },
-      {
-        role: 'user',
-        content: `Make sure to include every property. Try really hard to fill out every property. 
-        
-        For responsibilities and skills. Take a really hard attempt to come up with likely values. They should not be null.
+        content: `Here’s an improved and more detailed version of the original prompt, now incorporating the provided jobSchema for clarity and structure:
 
-        Make sure things are too long. Be short and succint.
+---
 
-        Make sure position is filled out, come up with your best guess.
-        
-        Translate this job description into a JSON schema`,
+### Prompt: Turn a Job Description into Structured JSON Data
+
+You are a human assistant working for a recruiter. Your role is to transform job descriptions into structured JSON data. Follow the guidelines below to ensure high-quality and consistent results.
+
+### Task:
+Carefully analyze the given job description and convert it into a structured JSON format based on the schema provided.
+
+### Key Details:
+1. **JSON Schema**:
+   Use the following JSON schema to guide your output:
+
+   ${JSON.stringify(jobSchema, null, 2)}
+
+2. **Remote Property**:
+   - Identify whether the position is remote.
+   - Possible values:
+     - "Full": Fully remote.
+     - "Hybrid": Combination of on-site and remote work.
+     - "None": Fully on-site.
+   - If unclear, set the value to null.
+
+3. **Filling Properties**:
+   - Make every effort to populate **all** fields. If information is missing, make educated guesses based on the context.
+   - **Responsibilities**, **Qualifications**, and **Skills** must not be null. Infer likely values based on the job's context.
+   - For the **Position** (title), if unspecified, provide your best guess based on the description.
+
+4. **Concise Descriptions**:
+   - Keep all values short and to the point, especially for arrays such as **responsibilities** and **skills**.
+
+5. **Formatting and Validation**:
+   - The output must strictly adhere to the schema format. Ensure data types, enumerations, and patterns are correctly followed.
+   - For example:
+     - Dates should follow ISO 8601 format.
+     - Location fields such as 'countryCode' must comply with ISO-3166-1 ALPHA-2 codes (e.g., US, IN).
+
+6. **Example Job Description**:
+   Here is the job description for you to process:  
+   ${jobDescription}
+
+### Example Output:
+To help guide you, here is an example of a properly formatted job description in JSON:
+
+{
+  "title": "Web Developer",
+  "company": "Microsoft",
+  "type": "Full-time",
+  "date": "2023-04",
+  "description": "Develop and maintain web applications.",
+  "location": {
+    "address": "123 Main Street\nSuite 500",
+    "postalCode": "12345",
+    "city": "Seattle",
+    "countryCode": "US",
+    "region": "WA"
+  },
+  "remote": "Hybrid",
+  "salary": "100000",
+  "experience": "Mid-level",
+  "responsibilities": [
+    "Build and maintain web APIs.",
+    "Collaborate with cross-functional teams."
+  ],
+  "qualifications": [
+    "Bachelor's degree in Computer Science.",
+    "3+ years of experience in web development."
+  ],
+  "skills": [
+    {
+      "name": "Web Development",
+      "level": "Expert",
+      "keywords": ["HTML", "CSS", "JavaScript"]
+    }
+  ],
+  "meta": {
+    "canonical": "http://example.com/job-schema/v1",
+    "version": "v1.0.0",
+    "lastModified": "2024-11-19T12:00:00"
+  }
+}
+
+### Final Output:
+Using the instructions and example above, transform the provided job description into a structured JSON document.`,
       },
     ];
-    if (!job.gpt_content) {
+
+    // if job created_at is less than a week ago
+    if (
+      true ||
+      new Date(job.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+    ) {
+      // if (!job.gpt_content) {
       const chat = await openai.chat.completions.create({
-        model: 'gpt-4o-mini',
+        model: 'gpt-4o-2024-08-06',
         temperature: 0.8,
         messages,
         functions: [
