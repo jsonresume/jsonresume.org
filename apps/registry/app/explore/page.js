@@ -6,7 +6,7 @@ const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
 const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-const ITEMS_PER_PAGE = 20;
+const ITEMS_PER_PAGE = 100;
 
 export const metadata = {
   title: 'Explore JSON Resumes | JSON Resume Registry',
@@ -23,24 +23,26 @@ export const metadata = {
 async function getResumes(page = 1, search = '') {
   try {
     // First get the total count
-    let countQuery = supabase.from('resumes').select('*', { count: 'exact', head: true });
-    
+    let countQuery = supabase
+      .from('resumes')
+      .select('*', { count: 'exact', head: true });
+
     if (search && search.trim() !== '') {
       countQuery = countQuery.textSearch('resume', search.trim(), {
         config: 'english',
-        type: 'websearch'
+        type: 'websearch',
       });
     }
-    
+
     const { count: totalCount } = await countQuery;
 
     // Then get the actual data
     let dataQuery = supabase.from('resumes').select('*');
-    
+
     if (search && search.trim() !== '') {
       dataQuery = dataQuery.textSearch('resume', search.trim(), {
         config: 'english',
-        type: 'websearch'
+        type: 'websearch',
       });
     }
 
