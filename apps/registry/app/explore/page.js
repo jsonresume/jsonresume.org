@@ -3,8 +3,6 @@ import ClientResumes from './ClientResumes';
 import gravatar from 'gravatar';
 
 const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
-const supabaseKey = process.env.SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 const ITEMS_PER_PAGE = 100;
 
@@ -20,8 +18,18 @@ export const metadata = {
   },
 };
 
+// This makes the page static at build time
+export const dynamic = 'force-dynamic';
+
 async function getResumes(page = 1, search = '') {
   try {
+    // During build time, return empty data
+    if (!process.env.SUPABASE_KEY) {
+      return { resumes: [], totalCount: 0, totalPages: 0 };
+    }
+
+    const supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
+
     // First get the total count
     let countQuery = supabase
       .from('resumes')
