@@ -14,6 +14,82 @@ import {
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
+// Utility functions for categorization
+const normalizeString = (str) => {
+  if (!str) return '';
+  return str.toLowerCase().replace(/[^a-z0-9]/g, '');
+};
+
+const categorizeJobType = (type) => {
+  const normalized = normalizeString(type);
+  
+  if (normalized.includes('contract')) return 'Contract';
+  if (normalized.includes('fulltime') || normalized.includes('full')) return 'Full-time';
+  if (normalized.includes('parttime') || normalized.includes('part')) return 'Part-time';
+  if (normalized.includes('intern')) return 'Internship';
+  if (normalized.includes('temp')) return 'Temporary';
+  if (normalized.includes('hybrid')) return 'Hybrid';
+  if (normalized.includes('remote')) return 'Remote';
+  
+  return 'Other';
+};
+
+const categorizeExperience = (exp) => {
+  const normalized = normalizeString(exp);
+  
+  if (normalized.includes('entry') || normalized.includes('junior')) return 'Entry Level';
+  if (normalized.includes('mid') || normalized.includes('intermediate')) return 'Mid Level';
+  if (normalized.includes('senior') || normalized.includes('sr')) return 'Senior Level';
+  if (normalized.includes('lead') || normalized.includes('principal')) return 'Lead';
+  if (normalized.includes('manager') || normalized.includes('head')) return 'Manager';
+  if (normalized.includes('exec') || normalized.includes('director')) return 'Executive';
+  
+  return 'Not Specified';
+};
+
+const categorizeSalary = (salary) => {
+  if (!salary) return 'Not Specified';
+  
+  const normalized = normalizeString(salary);
+  
+  if (normalized.includes('competitive')) return 'Competitive';
+  
+  // Extract the first number found in the string
+  const numbers = salary.match(/\d+/g);
+  if (!numbers) return 'Not Specified';
+  
+  const firstNumber = parseInt(numbers[0], 10);
+  
+  if (normalized.includes('k')) {
+    if (firstNumber < 50) return 'Under $50k';
+    if (firstNumber < 100) return '$50k - $100k';
+    if (firstNumber < 150) return '$100k - $150k';
+    if (firstNumber < 200) return '$150k - $200k';
+    return '$200k+';
+  }
+  
+  if (firstNumber < 50000) return 'Under $50k';
+  if (firstNumber < 100000) return '$50k - $100k';
+  if (firstNumber < 150000) return '$100k - $150k';
+  if (firstNumber < 200000) return '$150k - $200k';
+  return '$200k+';
+};
+
+const categorizeLocation = (location) => {
+  if (!location) return 'Not Specified';
+  
+  // If it's already in the City, Region, Country format, return as is
+  if (location.includes(',')) return location;
+  
+  const normalized = normalizeString(location);
+  
+  if (normalized.includes('remote')) return 'Remote';
+  if (normalized.includes('hybrid')) return 'Hybrid';
+  if (normalized.includes('onsite') || normalized.includes('office')) return 'On-site';
+  
+  return location;
+};
+
 const ClientJobBoard = ({ initialJobs }) => {
   const [jobs] = useState(initialJobs);
   const [filteredJobs, setFilteredJobs] = useState(initialJobs);
@@ -26,7 +102,7 @@ const ClientJobBoard = ({ initialJobs }) => {
     company: '',
   });
 
-  // Extract unique values for each filter
+  // Extract and categorize unique values for each filter
   const filterOptions = useMemo(() => {
     const options = {
       jobType: new Set(),
@@ -41,8 +117,12 @@ const ClientJobBoard = ({ initialJobs }) => {
         ? JSON.parse(job.gpt_content)
         : {};
 
-      if (gptContent.type) options.jobType.add(gptContent.type);
-      if (gptContent.experience) options.experience.add(gptContent.experience);
+      if (gptContent.type) {
+        options.jobType.add(categorizeJobType(gptContent.type));
+      }
+      if (gptContent.experience) {
+        options.experience.add(categorizeExperience(gptContent.experience));
+      }
       if (gptContent.location) {
         const location = [
           gptContent.location.city,
@@ -51,10 +131,16 @@ const ClientJobBoard = ({ initialJobs }) => {
         ]
           .filter(Boolean)
           .join(', ');
-        if (location) options.location.add(location);
+        if (location) {
+          options.location.add(categorizeLocation(location));
+        }
       }
-      if (gptContent.salary) options.salary.add(gptContent.salary);
-      if (gptContent.company) options.company.add(gptContent.company);
+      if (gptContent.salary) {
+        options.salary.add(categorizeSalary(gptContent.salary));
+      }
+      if (gptContent.company) {
+        options.company.add(gptContent.company);
+      }
     });
 
     return {
@@ -69,7 +155,6 @@ const ClientJobBoard = ({ initialJobs }) => {
   useEffect(() => {
     let result = jobs;
 
-    // Apply search term filter
     if (searchTerm) {
       const searchLower = searchTerm.toLowerCase();
       result = result.filter((job) => {
@@ -91,7 +176,6 @@ const ClientJobBoard = ({ initialJobs }) => {
       });
     }
 
-    // Apply all other filters
     Object.entries(filters).forEach(([key, value]) => {
       if (value) {
         result = result.filter((job) => {
@@ -101,9 +185,9 @@ const ClientJobBoard = ({ initialJobs }) => {
 
           switch (key) {
             case 'jobType':
-              return gptContent.type === value;
+              return categorizeJobType(gptContent.type) === value;
             case 'experience':
-              return gptContent.experience === value;
+              return categorizeExperience(gptContent.experience) === value;
             case 'location':
               const jobLocation = [
                 gptContent.location?.city,
@@ -112,9 +196,9 @@ const ClientJobBoard = ({ initialJobs }) => {
               ]
                 .filter(Boolean)
                 .join(', ');
-              return jobLocation === value;
+              return categorizeLocation(jobLocation) === value;
             case 'salary':
-              return gptContent.salary === value;
+              return categorizeSalary(gptContent.salary) === value;
             case 'company':
               return gptContent.company === value;
             default:
