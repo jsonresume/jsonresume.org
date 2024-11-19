@@ -173,7 +173,10 @@ const JobDescription = ({ job, makeCoverletter }) => {
 };
 
 const JobList = ({ jobs, makeCoverletter }) => {
-  const fullJobs = jobs?.map((job) => {
+  const validJobs = jobs?.filter(
+    (job) => job.gpt_content && job.gpt_content !== 'FAILED'
+  );
+  const fullJobs = validJobs?.map((job) => {
     const fullJob = JSON.parse(job.gpt_content);
     fullJob.raw = job;
     return fullJob;

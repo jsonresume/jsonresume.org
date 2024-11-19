@@ -10,136 +10,75 @@ import {
   Clock,
   Filter,
 } from 'lucide-react';
-
-// Assuming you have these colors defined in your Tailwind config
-// accent: '#FF6B6B'
-// secondary: '#4ECDC4'
-
-const jobData = {
-  $schema: 'http://json-schema.org/draft-04/schema#',
-  title: 'Web Developer',
-  company: 'Microsoft',
-  type: 'Full-time',
-  date: '2024-07',
-  description:
-    'We are looking for a skilled Web Developer to join our team. The role involves building and maintaining web applications.',
-  location: {
-    address: '1234 Glücklichkeit Straße\nHinterhaus 5. Etage li.',
-    postalCode: '10115',
-    city: 'Berlin',
-    countryCode: 'DE',
-    region: 'Berlin',
-  },
-  remote: 'Hybrid',
-  salary: '100000',
-  experience: 'Mid-level',
-  responsibilities: [
-    'Develop and maintain web applications',
-    'Collaborate with cross-functional teams',
-    'Ensure the technical feasibility of UI/UX designs',
-    'Optimize applications for maximum speed and scalability',
-  ],
-  qualifications: [
-    "Bachelor's degree in Computer Science or related field",
-    '3+ years of experience in web development',
-    'Strong understanding of JavaScript, HTML, and CSS',
-  ],
-  skills: [
-    {
-      name: 'Web Development',
-      level: 'Master',
-      keywords: ['HTML', 'CSS', 'JavaScript', 'React', 'Node.js'],
-    },
-    {
-      name: 'Database Management',
-      level: 'Intermediate',
-      keywords: ['SQL', 'NoSQL', 'MongoDB'],
-    },
-  ],
-  meta: {
-    canonical: 'http://example.com/jobs/web-developer',
-    version: 'v1.0.0',
-    lastModified: '2024-07-10T15:00:00',
-  },
-};
-
-const jobs = [
-  { ...jobData, id: 1 },
-  {
-    ...jobData,
-    id: 2,
-    title: 'Frontend Developer',
-    company: 'Google',
-    salary: '120000',
-  },
-  {
-    ...jobData,
-    id: 3,
-    title: 'Backend Developer',
-    company: 'Amazon',
-    salary: '130000',
-  },
-  {
-    ...jobData,
-    id: 4,
-    title: 'Full Stack Developer',
-    company: 'Facebook',
-    salary: '140000',
-  },
-  {
-    ...jobData,
-    id: 5,
-    title: 'DevOps Engineer',
-    company: 'Netflix',
-    salary: '125000',
-  },
-];
+import axios from 'axios';
 
 const JobBoard = () => {
-  const [filteredJobs, setFilteredJobs] = useState(jobs);
+  const [jobs, setJobs] = useState([]);
+  const [filteredJobs, setFilteredJobs] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedJobType, setSelectedJobType] = useState('');
   const [selectedExperience, setSelectedExperience] = useState('');
-  const [showFilters, setShowFilters] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const results = jobs.filter(
-      (job) =>
-        job.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
-        (selectedJobType === '' || job.type === selectedJobType) &&
-        (selectedExperience === '' || job.experience === selectedExperience)
-    );
-    setFilteredJobs(results);
-  }, [searchTerm, selectedJobType, selectedExperience]);
+    const fetchJobs = async () => {
+      try {
+        const response = await axios.get('/api/jobs/all');
+        setJobs(response.data);
+        setFilteredJobs(response.data);
+      } catch (error) {
+        console.error('Error fetching jobs:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchJobs();
+  }, []);
+
+  useEffect(() => {
+    let result = jobs;
+
+    if (searchTerm) {
+      result = result.filter(
+        (job) =>
+          job.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          job.company?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          job.description?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    if (selectedJobType) {
+      result = result.filter((job) => job.type === selectedJobType);
+    }
+
+    if (selectedExperience) {
+      result = result.filter((job) => job.experience === selectedExperience);
+    }
+
+    setFilteredJobs(result);
+  }, [searchTerm, selectedJobType, selectedExperience, jobs]);
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
-      <h1 className="text-4xl font-bold text-secondary mb-8 text-center">
-        Job Board
-      </h1>
-      <div className="max-w-6xl mx-auto">
-        <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-4xl font-bold text-gray-900 mb-8">Job Board</h1>
+        <div className="grid gap-6">
           <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-          <button
-            onClick={() => setShowFilters(!showFilters)}
-            className="flex items-center bg-secondary text-white px-4 py-2 rounded-md hover:bg-opacity-90 transition-colors duration-200"
-          >
-            <Filter className="mr-2" size={20} />
-            {showFilters ? 'Hide Filters' : 'Show Filters'}
-          </button>
-        </div>
-        <div className="flex flex-col md:flex-row gap-8">
-          <AnimatePresence>
-            {showFilters && (
-              <Filters
-                selectedJobType={selectedJobType}
-                setSelectedJobType={setSelectedJobType}
-                selectedExperience={selectedExperience}
-                setSelectedExperience={setSelectedExperience}
-              />
-            )}
-          </AnimatePresence>
-          <JobList jobs={filteredJobs} />
+          <Filters
+            selectedJobType={selectedJobType}
+            setSelectedJobType={setSelectedJobType}
+            selectedExperience={selectedExperience}
+            setSelectedExperience={setSelectedExperience}
+          />
+          {loading ? (
+            <div className="text-center py-10">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
+              <p className="mt-4 text-gray-600">Loading jobs...</p>
+            </div>
+          ) : (
+            <JobList jobs={filteredJobs} />
+          )}
         </div>
       </div>
     </div>
@@ -226,6 +165,21 @@ const JobList = ({ jobs }) => {
 
 const JobItem = ({ job }) => {
   const [expanded, setExpanded] = useState(false);
+  const gptContent =
+    job.gpt_content && job.gpt_content !== 'FAILED'
+      ? JSON.parse(job.gpt_content)
+      : {};
+
+  // Extract and format location
+  const location = gptContent.location || {};
+  const locationString = [location.city, location.region, location.countryCode]
+    .filter(Boolean)
+    .join(', ');
+
+  // Format salary if available
+  const salary = gptContent.salary
+    ? `$${Number(gptContent.salary).toLocaleString()}/year`
+    : 'Not specified';
 
   return (
     <motion.div
@@ -242,24 +196,26 @@ const JobItem = ({ job }) => {
       <div className="flex justify-between items-start mb-4">
         <div>
           <h3 className="text-2xl font-bold text-secondary mb-2">
-            {job.title}
+            {gptContent.title || 'Untitled Position'}
           </h3>
           <div className="flex items-center text-gray-600 mb-2">
             <Briefcase className="mr-2" size={16} />
-            <span>{job.company}</span>
+            <span>{gptContent.company || 'Company not specified'}</span>
           </div>
-          <div className="flex items-center text-gray-600">
-            <MapPin className="mr-2" size={16} />
-            <span>
-              {job.location.city}, {job.location.region}
-            </span>
-          </div>
+          {locationString && (
+            <div className="flex items-center text-gray-600">
+              <MapPin className="mr-2" size={16} />
+              <span>{locationString}</span>
+            </div>
+          )}
         </div>
         <div className="text-right">
-          <p className="text-accent font-bold text-xl mb-2">${job.salary}</p>
-          <span className="inline-block bg-secondary text-white text-sm px-2 py-1 rounded">
-            {job.type}
-          </span>
+          <p className="text-accent font-bold text-xl mb-2">{salary}</p>
+          {gptContent.type && (
+            <span className="inline-block bg-secondary text-white text-sm px-2 py-1 rounded">
+              {gptContent.type}
+            </span>
+          )}
         </div>
       </div>
       <AnimatePresence>
@@ -270,46 +226,68 @@ const JobItem = ({ job }) => {
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <p className="text-gray-700 mb-4">{job.description}</p>
+            {gptContent.description && (
+              <p className="text-gray-700 mb-4">{gptContent.description}</p>
+            )}
             <div className="grid grid-cols-2 gap-4 mb-4">
-              <div className="flex items-center">
-                <Clock className="mr-2 text-accent" size={16} />
-                <span>{job.remote}</span>
-              </div>
-              <div className="flex items-center">
-                <DollarSign className="mr-2 text-accent" size={16} />
-                <span>{job.experience}</span>
-              </div>
-            </div>
-            <h4 className="font-bold text-secondary mb-2">Responsibilities</h4>
-            <ul className="list-disc list-inside mb-4">
-              {job.responsibilities.map((res, index) => (
-                <li key={index} className="text-gray-700">
-                  {res}
-                </li>
-              ))}
-            </ul>
-            <h4 className="font-bold text-secondary mb-2">Qualifications</h4>
-            <ul className="list-disc list-inside mb-4">
-              {job.qualifications.map((qual, index) => (
-                <li key={index} className="text-gray-700">
-                  {qual}
-                </li>
-              ))}
-            </ul>
-            <h4 className="font-bold text-secondary mb-2">Skills</h4>
-            <div className="flex flex-wrap gap-2">
-              {job.skills.flatMap((skill) =>
-                skill.keywords.map((keyword, idx) => (
-                  <span
-                    key={idx}
-                    className="bg-gray-200 text-gray-800 px-2 py-1 rounded text-sm"
-                  >
-                    {keyword}
-                  </span>
-                ))
+              {gptContent.remote && (
+                <div className="flex items-center">
+                  <Clock className="mr-2 text-accent" size={16} />
+                  <span>{gptContent.remote}</span>
+                </div>
+              )}
+              {gptContent.experience && (
+                <div className="flex items-center">
+                  <DollarSign className="mr-2 text-accent" size={16} />
+                  <span>{gptContent.experience}</span>
+                </div>
               )}
             </div>
+            {gptContent.responsibilities?.length > 0 && (
+              <>
+                <h4 className="font-bold text-secondary mb-2">
+                  Responsibilities
+                </h4>
+                <ul className="list-disc list-inside mb-4">
+                  {gptContent.responsibilities.map((res, index) => (
+                    <li key={index} className="text-gray-700">
+                      {res}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+            {gptContent.qualifications?.length > 0 && (
+              <>
+                <h4 className="font-bold text-secondary mb-2">
+                  Qualifications
+                </h4>
+                <ul className="list-disc list-inside mb-4">
+                  {gptContent.qualifications.map((qual, index) => (
+                    <li key={index} className="text-gray-700">
+                      {qual}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+            {gptContent.skills?.length > 0 && (
+              <>
+                <h4 className="font-bold text-secondary mb-2">Skills</h4>
+                <div className="flex flex-wrap gap-2">
+                  {gptContent.skills.flatMap((skill) =>
+                    (skill.keywords || []).map((keyword, idx) => (
+                      <span
+                        key={idx}
+                        className="bg-gray-200 text-gray-800 px-2 py-1 rounded text-sm"
+                      >
+                        {keyword}
+                      </span>
+                    ))
+                  )}
+                </div>
+              </>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
