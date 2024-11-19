@@ -200,27 +200,26 @@ const FilterSection = ({ title, options, value, onChange, icon: Icon }) => {
         <Icon className="h-5 w-5 text-gray-500 mr-2" />
         <h3 className="text-sm font-medium text-gray-900">{title}</h3>
       </div>
-      <div className="space-y-2">
-        {options.map((option) => (
-          <label key={option} className="flex items-center">
-            <input
-              type="radio"
-              name={title.toLowerCase()}
-              value={option}
-              checked={value === option}
-              onChange={(e) => onChange(e.target.value)}
-              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
-            />
-            <span className="ml-2 text-sm text-gray-700">{option}</span>
-          </label>
-        ))}
+      <div className="relative">
+        <select
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="block w-full pl-3 pr-10 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-white"
+        >
+          <option value="">All {title}s</option>
+          {options.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
         {value && (
           <button
             onClick={() => onChange('')}
-            className="text-sm text-blue-600 hover:text-blue-800 flex items-center mt-2"
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            title="Clear filter"
           >
-            Clear
-            <X className="w-4 h-4 ml-1" />
+            <X className="w-4 h-4" />
           </button>
         )}
       </div>
