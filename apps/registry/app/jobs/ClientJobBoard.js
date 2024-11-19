@@ -1,61 +1,174 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, MapPin, Briefcase, DollarSign, Filter } from 'lucide-react';
+import {
+  Search,
+  MapPin,
+  Briefcase,
+  DollarSign,
+  Filter,
+  X,
+  Clock,
+  Building,
+} from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 const ClientJobBoard = ({ initialJobs }) => {
   const [jobs] = useState(initialJobs);
   const [filteredJobs, setFilteredJobs] = useState(initialJobs);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedJobType, setSelectedJobType] = useState('');
-  const [selectedExperience, setSelectedExperience] = useState('');
-  const [loading] = useState(false);
+  const [filters, setFilters] = useState({
+    jobType: '',
+    experience: '',
+    location: '',
+    salary: '',
+    company: '',
+  });
+
+  // Extract unique values for each filter
+  const filterOptions = useMemo(() => {
+    const options = {
+      jobType: new Set(),
+      experience: new Set(),
+      location: new Set(),
+      salary: new Set(),
+      company: new Set(),
+    };
+
+    jobs.forEach((job) => {
+      const gptContent = job.gpt_content && job.gpt_content !== 'FAILED'
+        ? JSON.parse(job.gpt_content)
+        : {};
+
+      if (gptContent.type) options.jobType.add(gptContent.type);
+      if (gptContent.experience) options.experience.add(gptContent.experience);
+      if (gptContent.location) {
+        const location = [
+          gptContent.location.city,
+          gptContent.location.region,
+          gptContent.location.countryCode,
+        ]
+          .filter(Boolean)
+          .join(', ');
+        if (location) options.location.add(location);
+      }
+      if (gptContent.salary) options.salary.add(gptContent.salary);
+      if (gptContent.company) options.company.add(gptContent.company);
+    });
+
+    return {
+      jobType: Array.from(options.jobType).sort(),
+      experience: Array.from(options.experience).sort(),
+      location: Array.from(options.location).sort(),
+      salary: Array.from(options.salary).sort(),
+      company: Array.from(options.company).sort(),
+    };
+  }, [jobs]);
 
   useEffect(() => {
     let result = jobs;
 
+    // Apply search term filter
     if (searchTerm) {
-      result = result.filter(
-        (job) =>
-          job.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          job.company?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          job.description?.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+      const searchLower = searchTerm.toLowerCase();
+      result = result.filter((job) => {
+        const gptContent = job.gpt_content && job.gpt_content !== 'FAILED'
+          ? JSON.parse(job.gpt_content)
+          : {};
+        
+        return (
+          gptContent.title?.toLowerCase().includes(searchLower) ||
+          gptContent.company?.toLowerCase().includes(searchLower) ||
+          gptContent.description?.toLowerCase().includes(searchLower) ||
+          gptContent.requirements?.some(req => 
+            req.toLowerCase().includes(searchLower)
+          ) ||
+          gptContent.responsibilities?.some(resp => 
+            resp.toLowerCase().includes(searchLower)
+          )
+        );
+      });
     }
 
-    if (selectedJobType) {
-      result = result.filter((job) => job.type === selectedJobType);
-    }
+    // Apply all other filters
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value) {
+        result = result.filter((job) => {
+          const gptContent = job.gpt_content && job.gpt_content !== 'FAILED'
+            ? JSON.parse(job.gpt_content)
+            : {};
 
-    if (selectedExperience) {
-      result = result.filter((job) => job.experience === selectedExperience);
-    }
+          switch (key) {
+            case 'jobType':
+              return gptContent.type === value;
+            case 'experience':
+              return gptContent.experience === value;
+            case 'location':
+              const jobLocation = [
+                gptContent.location?.city,
+                gptContent.location?.region,
+                gptContent.location?.countryCode,
+              ]
+                .filter(Boolean)
+                .join(', ');
+              return jobLocation === value;
+            case 'salary':
+              return gptContent.salary === value;
+            case 'company':
+              return gptContent.company === value;
+            default:
+              return true;
+          }
+        });
+      }
+    });
 
     setFilteredJobs(result);
-  }, [searchTerm, selectedJobType, selectedExperience, jobs]);
+  }, [searchTerm, filters, jobs]);
+
+  const clearFilters = () => {
+    setFilters({
+      jobType: '',
+      experience: '',
+      location: '',
+      salary: '',
+      company: '',
+    });
+  };
+
+  const activeFilterCount = Object.values(filters).filter(Boolean).length;
 
   return (
     <div className="flex flex-col md:flex-row gap-6">
-      <div className="w-full md:w-64">
+      <div className="w-full md:w-80">
         <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-        <Filters
-          selectedJobType={selectedJobType}
-          setSelectedJobType={setSelectedJobType}
-          selectedExperience={selectedExperience}
-          setSelectedExperience={setSelectedExperience}
-        />
+        <div className="sticky top-4">
+          <Filters
+            filters={filters}
+            setFilters={setFilters}
+            filterOptions={filterOptions}
+            clearFilters={clearFilters}
+            activeFilterCount={activeFilterCount}
+          />
+        </div>
       </div>
       <div className="flex-1">
-        {loading ? (
-          <div className="text-center py-10">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading jobs...</p>
-          </div>
-        ) : (
-          <JobList jobs={filteredJobs} />
-        )}
+        <div className="flex justify-between items-center mb-4">
+          <p className="text-sm text-gray-600">
+            {filteredJobs.length} {filteredJobs.length === 1 ? 'job' : 'jobs'} found
+          </p>
+          {activeFilterCount > 0 && (
+            <button
+              onClick={clearFilters}
+              className="text-sm text-blue-600 hover:text-blue-800 flex items-center"
+            >
+              Clear all filters
+              <X className="w-4 h-4 ml-1" />
+            </button>
+          )}
+        </div>
+        <JobList jobs={filteredJobs} />
       </div>
     </div>
   );
@@ -78,83 +191,101 @@ const SearchBar = ({ searchTerm, setSearchTerm }) => {
   );
 };
 
-const Filters = ({
-  selectedJobType,
-  setSelectedJobType,
-  selectedExperience,
-  setSelectedExperience,
-}) => {
-  const jobTypes = ['Full-time', 'Part-time', 'Contract', 'Internship'];
-  const experienceLevels = [
-    'Entry Level',
-    'Mid Level',
-    'Senior Level',
-    'Lead',
-    'Manager',
-  ];
+const FilterSection = ({ title, options, value, onChange, icon: Icon }) => {
+  if (!options || options.length === 0) return null;
 
   return (
-    <div className="space-y-6">
-      <div>
-        <div className="flex items-center mb-4">
-          <Filter className="h-5 w-5 text-gray-500 mr-2" />
-          <h2 className="text-lg font-medium text-black">Filters</h2>
-        </div>
-        <div className="space-y-6">
-          <div>
-            <h3 className="text-sm font-medium text-black mb-2">Job Type</h3>
-            <div className="space-y-2">
-              {jobTypes.map((type) => (
-                <label key={type} className="flex items-center">
-                  <input
-                    type="radio"
-                    name="jobType"
-                    value={type}
-                    checked={selectedJobType === type}
-                    onChange={(e) => setSelectedJobType(e.target.value)}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
-                  />
-                  <span className="ml-2 text-sm text-black">{type}</span>
-                </label>
-              ))}
-              {selectedJobType && (
-                <button
-                  onClick={() => setSelectedJobType('')}
-                  className="text-sm text-blue-600 hover:text-blue-500 mt-1"
-                >
-                  Clear
-                </button>
-              )}
-            </div>
-          </div>
-          <div>
-            <h3 className="text-sm font-medium text-black mb-2">Experience</h3>
-            <div className="space-y-2">
-              {experienceLevels.map((level) => (
-                <label key={level} className="flex items-center">
-                  <input
-                    type="radio"
-                    name="experience"
-                    value={level}
-                    checked={selectedExperience === level}
-                    onChange={(e) => setSelectedExperience(e.target.value)}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
-                  />
-                  <span className="ml-2 text-sm text-black">{level}</span>
-                </label>
-              ))}
-              {selectedExperience && (
-                <button
-                  onClick={() => setSelectedExperience('')}
-                  className="text-sm text-blue-600 hover:text-blue-500 mt-1"
-                >
-                  Clear
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
+    <div className="mb-6">
+      <div className="flex items-center mb-3">
+        <Icon className="h-5 w-5 text-gray-500 mr-2" />
+        <h3 className="text-sm font-medium text-gray-900">{title}</h3>
       </div>
+      <div className="space-y-2">
+        {options.map((option) => (
+          <label key={option} className="flex items-center">
+            <input
+              type="radio"
+              name={title.toLowerCase()}
+              value={option}
+              checked={value === option}
+              onChange={(e) => onChange(e.target.value)}
+              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+            />
+            <span className="ml-2 text-sm text-gray-700">{option}</span>
+          </label>
+        ))}
+        {value && (
+          <button
+            onClick={() => onChange('')}
+            className="text-sm text-blue-600 hover:text-blue-800 flex items-center mt-2"
+          >
+            Clear
+            <X className="w-4 h-4 ml-1" />
+          </button>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const Filters = ({ filters, setFilters, filterOptions, activeFilterCount }) => {
+  const updateFilter = (key, value) => {
+    setFilters((prev) => ({ ...prev, [key]: value }));
+  };
+
+  return (
+    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center">
+          <Filter className="h-5 w-5 text-gray-500 mr-2" />
+          <h2 className="text-lg font-medium text-gray-900">Filters</h2>
+        </div>
+        {activeFilterCount > 0 && (
+          <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+            {activeFilterCount}
+          </span>
+        )}
+      </div>
+
+      <FilterSection
+        title="Job Type"
+        options={filterOptions.jobType}
+        value={filters.jobType}
+        onChange={(value) => updateFilter('jobType', value)}
+        icon={Briefcase}
+      />
+
+      <FilterSection
+        title="Experience"
+        options={filterOptions.experience}
+        value={filters.experience}
+        onChange={(value) => updateFilter('experience', value)}
+        icon={Clock}
+      />
+
+      <FilterSection
+        title="Location"
+        options={filterOptions.location}
+        value={filters.location}
+        onChange={(value) => updateFilter('location', value)}
+        icon={MapPin}
+      />
+
+      <FilterSection
+        title="Salary"
+        options={filterOptions.salary}
+        value={filters.salary}
+        onChange={(value) => updateFilter('salary', value)}
+        icon={DollarSign}
+      />
+
+      <FilterSection
+        title="Company"
+        options={filterOptions.company}
+        value={filters.company}
+        onChange={(value) => updateFilter('company', value)}
+        icon={Building}
+      />
     </div>
   );
 };
@@ -197,41 +328,47 @@ const JobItem = ({ job }) => {
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -50 }}
-      transition={{ duration: 0.3 }}
-      className="bg-white p-6 rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-shadow"
+      className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow duration-200"
       onClick={handleClick}
     >
-      <div className="flex justify-between items-start mb-4">
-        <div>
-          <h3 className="text-2xl font-bold text-black mb-2">
+      <div className="flex flex-col md:flex-row justify-between">
+        <div className="flex-1">
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">
             {gptContent.title || 'Untitled Position'}
           </h3>
-          <div className="flex items-center text-black mb-2">
-            <Briefcase className="mr-2" size={16} />
-            <span>{gptContent.company || 'Company not specified'}</span>
+          <div className="flex flex-wrap gap-4 text-sm text-gray-600 mb-4">
+            {gptContent.company && (
+              <div className="flex items-center">
+                <Building className="h-4 w-4 mr-1" />
+                {gptContent.company}
+              </div>
+            )}
+            {locationString && (
+              <div className="flex items-center">
+                <MapPin className="h-4 w-4 mr-1" />
+                {locationString}
+              </div>
+            )}
+            {salary && (
+              <div className="flex items-center">
+                <DollarSign className="h-4 w-4 mr-1" />
+                {salary}
+              </div>
+            )}
+            {gptContent.type && (
+              <div className="flex items-center">
+                <Briefcase className="h-4 w-4 mr-1" />
+                {gptContent.type}
+              </div>
+            )}
           </div>
-          {locationString && (
-            <div className="flex items-center text-black">
-              <MapPin className="mr-2" size={16} />
-              <span>{locationString}</span>
-            </div>
-          )}
-        </div>
-        <div className="flex flex-col items-end">
-          <div className="text-black mb-2">
-            <DollarSign className="inline mr-1" size={16} />
-            {salary}
-          </div>
-          {gptContent.type && (
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-              {gptContent.type}
-            </span>
+          {gptContent.description && (
+            <p className="text-gray-600 line-clamp-2">
+              {gptContent.description}
+            </p>
           )}
         </div>
       </div>
-      {gptContent.description && (
-        <p className="text-black line-clamp-3">{gptContent.description}</p>
-      )}
     </motion.div>
   );
 };
