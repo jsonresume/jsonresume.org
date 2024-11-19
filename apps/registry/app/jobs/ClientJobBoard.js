@@ -2,25 +2,16 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  Search,
-  MapPin,
-  Briefcase,
-  Building,
-  Calendar,
-  DollarSign,
-  Clock,
-  Filter,
-} from 'lucide-react';
+import { Search, MapPin, Briefcase, DollarSign, Filter } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 const ClientJobBoard = ({ initialJobs }) => {
-  const [jobs, setJobs] = useState(initialJobs);
+  const [jobs] = useState(initialJobs);
   const [filteredJobs, setFilteredJobs] = useState(initialJobs);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedJobType, setSelectedJobType] = useState('');
   const [selectedExperience, setSelectedExperience] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
 
   useEffect(() => {
     let result = jobs;
@@ -181,7 +172,6 @@ const JobList = ({ jobs }) => {
 };
 
 const JobItem = ({ job }) => {
-  const [expanded, setExpanded] = useState(false);
   const router = useRouter();
   const gptContent =
     job.gpt_content && job.gpt_content !== 'FAILED'

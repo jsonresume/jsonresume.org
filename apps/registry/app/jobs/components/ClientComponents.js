@@ -1,18 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import {
-  Search,
-  MapPin,
-  Briefcase,
-  Building,
-  Calendar,
-  DollarSign,
-  Clock,
-  Filter,
-} from 'lucide-react';
+import { Search, MapPin, Building, DollarSign, Filter } from 'lucide-react';
 
 export const JobList = ({ jobs }) => {
   return (
