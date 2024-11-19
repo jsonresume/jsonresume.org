@@ -2,11 +2,22 @@ import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 
 const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
-const supabaseKey = process.env.SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
+
+// This ensures the route is always dynamic
+export const dynamic = 'force-dynamic';
 
 export async function GET(request, { params }) {
+  // During build time or when SUPABASE_KEY is not available
+  if (!process.env.SUPABASE_KEY) {
+    return NextResponse.json(
+      { message: 'API not available during build' },
+      { status: 503 }
+    );
+  }
+
   try {
+    const supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
+
     const { data: job, error } = await supabase
       .from('jobs')
       .select('*')
@@ -26,7 +37,7 @@ export async function GET(request, { params }) {
 
     return NextResponse.json(job);
   } catch (error) {
-    console.error('Error fetching job:', error);
+    console.error('Error:', error);
     return NextResponse.json(
       { message: 'Internal server error' },
       { status: 500 }

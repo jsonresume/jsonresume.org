@@ -7,29 +7,40 @@ const ClientJobBoard = dynamic(() => import('./ClientJobBoard'), {
 });
 
 const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
-const supabaseKey = process.env.SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
+
+// This ensures the page is dynamic at runtime
 
 async function getJobs() {
-  const ninetyDaysAgo = new Date();
-  ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
-
-  const { data: jobs, error } = await supabase
-    .from('jobs')
-    .select('*')
-    .gte('created_at', ninetyDaysAgo.toISOString())
-    .order('created_at', { ascending: false });
-
-  if (error) {
-    console.error('Error fetching jobs:', error);
-    return [];
+  // During build time or when SUPABASE_KEY is not available
+  if (!process.env.SUPABASE_KEY) {
+    return { jobs: [], error: null };
   }
 
-  return jobs || [];
+  try {
+    const supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
+    const ninetyDaysAgo = new Date();
+    ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
+
+    const { data: jobs, error } = await supabase
+      .from('jobs')
+      .select('*')
+      .gte('created_at', ninetyDaysAgo.toISOString())
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching jobs:', error);
+      return { jobs: [], error };
+    }
+
+    return { jobs: jobs || [], error: null };
+  } catch (error) {
+    console.error('Error:', error);
+    return { jobs: [], error };
+  }
 }
 
 export default async function JobsPage() {
-  const initialJobs = await getJobs();
+  const { jobs } = await getJobs();
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
@@ -42,7 +53,7 @@ export default async function JobsPage() {
             </div>
           }
         >
-          <ClientJobBoard initialJobs={initialJobs} />
+          <ClientJobBoard initialJobs={jobs} />
         </Suspense>
       </div>
     </div>
