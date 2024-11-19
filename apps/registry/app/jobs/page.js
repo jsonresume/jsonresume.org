@@ -4,13 +4,16 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search,
-  Briefcase,
   MapPin,
+  Briefcase,
+  Building,
+  Calendar,
   DollarSign,
   Clock,
   Filter,
 } from 'lucide-react';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 const JobBoard = () => {
   const [jobs, setJobs] = useState([]);
@@ -62,44 +65,49 @@ const JobBoard = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold text-gray-900 mb-8">Job Board</h1>
-        <div className="grid gap-6">
-          <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-          <Filters
-            selectedJobType={selectedJobType}
-            setSelectedJobType={setSelectedJobType}
-            selectedExperience={selectedExperience}
-            setSelectedExperience={setSelectedExperience}
-          />
-          {loading ? (
-            <div className="text-center py-10">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
-              <p className="mt-4 text-gray-600">Loading jobs...</p>
-            </div>
-          ) : (
-            <JobList jobs={filteredJobs} />
-          )}
+        <h1 className="text-4xl font-bold text-black mb-8">Job Board</h1>
+        <div className="flex flex-col md:flex-row gap-6">
+          <div className="w-full md:w-64">
+            <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+            <Filters
+              selectedJobType={selectedJobType}
+              setSelectedJobType={setSelectedJobType}
+              selectedExperience={selectedExperience}
+              setSelectedExperience={setSelectedExperience}
+            />
+          </div>
+          <div className="flex-1">
+            {loading ? (
+              <div className="text-center py-10">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
+                <p className="mt-4 text-gray-600">Loading jobs...</p>
+              </div>
+            ) : (
+              <JobList jobs={filteredJobs} />
+            )}
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-const SearchBar = ({ searchTerm, setSearchTerm }) => (
-  <div className="relative flex-grow max-w-2xl">
-    <input
-      type="text"
-      placeholder="Search for jobs..."
-      value={searchTerm}
-      onChange={(e) => setSearchTerm(e.target.value)}
-      className="w-full pl-10 pr-4 py-2 rounded-md border-2 border-gray-300 focus:border-accent focus:ring focus:ring-accent focus:ring-opacity-50"
-    />
-    <Search
-      className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-      size={20}
-    />
-  </div>
-);
+const SearchBar = ({ searchTerm, setSearchTerm }) => {
+  return (
+    <div className="relative mb-6">
+      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+        <Search className="h-5 w-5 text-gray-400" />
+      </div>
+      <input
+        type="text"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+        placeholder="Search jobs..."
+      />
+    </div>
+  );
+};
 
 const Filters = ({
   selectedJobType,
@@ -107,64 +115,96 @@ const Filters = ({
   selectedExperience,
   setSelectedExperience,
 }) => {
+  const jobTypes = ['Full-time', 'Part-time', 'Contract', 'Internship'];
+  const experienceLevels = [
+    'Entry Level',
+    'Mid Level',
+    'Senior Level',
+    'Lead',
+    'Manager',
+  ];
+
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -100 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -100 }}
-      transition={{ duration: 0.3 }}
-      className="w-full md:w-1/4 bg-white p-6 rounded-lg shadow-md"
-    >
-      <h2 className="text-xl font-bold mb-4 text-secondary">Filters</h2>
-      <div className="mb-4">
-        <label className="block text-gray-700 mb-2">Job Type</label>
-        <select
-          value={selectedJobType}
-          onChange={(e) => setSelectedJobType(e.target.value)}
-          className="w-full bg-white border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-accent focus:ring-opacity-50 px-4 py-2"
-        >
-          <option value="">All Types</option>
-          <option value="Full-time">Full-time</option>
-          <option value="Part-time">Part-time</option>
-          <option value="Contract">Contract</option>
-        </select>
+    <div className="space-y-6">
+      <div>
+        <div className="flex items-center mb-4">
+          <Filter className="h-5 w-5 text-gray-500 mr-2" />
+          <h2 className="text-lg font-medium text-black">Filters</h2>
+        </div>
+        <div className="space-y-6">
+          <div>
+            <h3 className="text-sm font-medium text-black mb-2">Job Type</h3>
+            <div className="space-y-2">
+              {jobTypes.map((type) => (
+                <label key={type} className="flex items-center">
+                  <input
+                    type="radio"
+                    name="jobType"
+                    value={type}
+                    checked={selectedJobType === type}
+                    onChange={(e) => setSelectedJobType(e.target.value)}
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                  />
+                  <span className="ml-2 text-sm text-black">{type}</span>
+                </label>
+              ))}
+              {selectedJobType && (
+                <button
+                  onClick={() => setSelectedJobType('')}
+                  className="text-sm text-blue-600 hover:text-blue-500 mt-1"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+          </div>
+          <div>
+            <h3 className="text-sm font-medium text-black mb-2">Experience</h3>
+            <div className="space-y-2">
+              {experienceLevels.map((level) => (
+                <label key={level} className="flex items-center">
+                  <input
+                    type="radio"
+                    name="experience"
+                    value={level}
+                    checked={selectedExperience === level}
+                    onChange={(e) => setSelectedExperience(e.target.value)}
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                  />
+                  <span className="ml-2 text-sm text-black">{level}</span>
+                </label>
+              ))}
+              {selectedExperience && (
+                <button
+                  onClick={() => setSelectedExperience('')}
+                  className="text-sm text-blue-600 hover:text-blue-500 mt-1"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
-      <div className="mb-4">
-        <label className="block text-gray-700 mb-2">Experience Level</label>
-        <select
-          value={selectedExperience}
-          onChange={(e) => setSelectedExperience(e.target.value)}
-          className="w-full bg-white border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-accent focus:ring-opacity-50 px-4 py-2"
-        >
-          <option value="">All Levels</option>
-          <option value="Entry-level">Entry-level</option>
-          <option value="Mid-level">Mid-level</option>
-          <option value="Senior-level">Senior-level</option>
-        </select>
-      </div>
-    </motion.div>
+    </div>
   );
 };
 
 const JobList = ({ jobs }) => {
   return (
-    <div className="w-full md:w-3/4 space-y-6">
+    <div className="space-y-6">
       <AnimatePresence>
         {jobs.map((job) => (
-          <JobItem key={job.id} job={job} />
+          <JobItem key={job.uuid} job={job} />
         ))}
       </AnimatePresence>
-      {jobs.length === 0 && (
-        <p className="text-center text-gray-500 mt-8">
-          No jobs found. Try adjusting your filters.
-        </p>
-      )}
     </div>
   );
 };
 
 const JobItem = ({ job }) => {
   const [expanded, setExpanded] = useState(false);
+  const router = useRouter();
   const gptContent =
     job.gpt_content && job.gpt_content !== 'FAILED'
       ? JSON.parse(job.gpt_content)
@@ -181,116 +221,51 @@ const JobItem = ({ job }) => {
     ? `$${Number(gptContent.salary).toLocaleString()}/year`
     : 'Not specified';
 
+  const handleClick = () => {
+    router.push(`/jobs/${job.uuid}`);
+  };
+
   return (
     <motion.div
       layout
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 50 }}
+      exit={{ opacity: 0, y: -50 }}
       transition={{ duration: 0.3 }}
-      className={`bg-white p-6 rounded-lg shadow-md cursor-pointer ${
-        expanded ? 'border-l-4 border-accent' : ''
-      }`}
-      onClick={() => setExpanded(!expanded)}
+      className="bg-white p-6 rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-shadow"
+      onClick={handleClick}
     >
       <div className="flex justify-between items-start mb-4">
         <div>
-          <h3 className="text-2xl font-bold text-secondary mb-2">
+          <h3 className="text-2xl font-bold text-black mb-2">
             {gptContent.title || 'Untitled Position'}
           </h3>
-          <div className="flex items-center text-gray-600 mb-2">
+          <div className="flex items-center text-black mb-2">
             <Briefcase className="mr-2" size={16} />
             <span>{gptContent.company || 'Company not specified'}</span>
           </div>
           {locationString && (
-            <div className="flex items-center text-gray-600">
+            <div className="flex items-center text-black">
               <MapPin className="mr-2" size={16} />
               <span>{locationString}</span>
             </div>
           )}
         </div>
-        <div className="text-right">
-          <p className="text-accent font-bold text-xl mb-2">{salary}</p>
+        <div className="flex flex-col items-end">
+          <div className="text-black mb-2">
+            <DollarSign className="inline mr-1" size={16} />
+            {salary}
+          </div>
           {gptContent.type && (
-            <span className="inline-block bg-secondary text-white text-sm px-2 py-1 rounded">
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
               {gptContent.type}
             </span>
           )}
         </div>
       </div>
-      <AnimatePresence>
-        {expanded && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            {gptContent.description && (
-              <p className="text-gray-700 mb-4">{gptContent.description}</p>
-            )}
-            <div className="grid grid-cols-2 gap-4 mb-4">
-              {gptContent.remote && (
-                <div className="flex items-center">
-                  <Clock className="mr-2 text-accent" size={16} />
-                  <span>{gptContent.remote}</span>
-                </div>
-              )}
-              {gptContent.experience && (
-                <div className="flex items-center">
-                  <DollarSign className="mr-2 text-accent" size={16} />
-                  <span>{gptContent.experience}</span>
-                </div>
-              )}
-            </div>
-            {gptContent.responsibilities?.length > 0 && (
-              <>
-                <h4 className="font-bold text-secondary mb-2">
-                  Responsibilities
-                </h4>
-                <ul className="list-disc list-inside mb-4">
-                  {gptContent.responsibilities.map((res, index) => (
-                    <li key={index} className="text-gray-700">
-                      {res}
-                    </li>
-                  ))}
-                </ul>
-              </>
-            )}
-            {gptContent.qualifications?.length > 0 && (
-              <>
-                <h4 className="font-bold text-secondary mb-2">
-                  Qualifications
-                </h4>
-                <ul className="list-disc list-inside mb-4">
-                  {gptContent.qualifications.map((qual, index) => (
-                    <li key={index} className="text-gray-700">
-                      {qual}
-                    </li>
-                  ))}
-                </ul>
-              </>
-            )}
-            {gptContent.skills?.length > 0 && (
-              <>
-                <h4 className="font-bold text-secondary mb-2">Skills</h4>
-                <div className="flex flex-wrap gap-2">
-                  {gptContent.skills.flatMap((skill) =>
-                    (skill.keywords || []).map((keyword, idx) => (
-                      <span
-                        key={idx}
-                        className="bg-gray-200 text-gray-800 px-2 py-1 rounded text-sm"
-                      >
-                        {keyword}
-                      </span>
-                    ))
-                  )}
-                </div>
-              </>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {gptContent.description && (
+        <p className="text-black line-clamp-3">{gptContent.description}</p>
+      )}
     </motion.div>
   );
 };
