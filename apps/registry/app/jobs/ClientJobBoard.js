@@ -184,10 +184,8 @@ const JobItem = ({ job }) => {
     .filter(Boolean)
     .join(', ');
 
-  // Format salary if available
-  const salary = gptContent.salary
-    ? `$${Number(gptContent.salary).toLocaleString()}/year`
-    : 'Not specified';
+  // Use salary string directly to support various formats
+  const salary = gptContent.salary || 'Not specified';
 
   const handleClick = () => {
     router.push(`/jobs/${job.uuid}`);
