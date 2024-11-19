@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 
 export default function ClientResumes({
   initialResumes,
@@ -165,7 +166,7 @@ export default function ClientResumes({
                 className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow"
               >
                 <div className="flex items-center space-x-4">
-                  <img
+                  <Image
                     src={resume.image}
                     alt={resume.name || 'Profile'}
                     className="w-16 h-16 rounded-full object-cover"
