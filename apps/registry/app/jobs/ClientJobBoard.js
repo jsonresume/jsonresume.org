@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search,
   MapPin,
@@ -376,11 +375,9 @@ const Filters = ({ filters, setFilters, filterOptions, activeFilterCount }) => {
 const JobList = ({ jobs }) => {
   return (
     <div className="space-y-6">
-      <AnimatePresence>
-        {jobs.map((job) => (
-          <JobItem key={job.uuid} job={job} />
-        ))}
-      </AnimatePresence>
+      {jobs.map((job) => (
+        <JobItem key={job.uuid} job={job} />
+      ))}
     </div>
   );
 };
@@ -392,13 +389,10 @@ const JobItem = ({ job }) => {
       ? JSON.parse(job.gpt_content)
       : {};
 
-  // Extract and format location
-  const location = gptContent.location || {};
-  const locationString = [location.city, location.region, location.countryCode]
+  const locationString = [gptContent.location?.city, gptContent.location?.region, gptContent.location?.countryCode]
     .filter(Boolean)
     .join(', ');
 
-  // Use salary string directly to support various formats
   const salary = gptContent.salary || 'Not specified';
 
   const handleClick = () => {
@@ -406,53 +400,43 @@ const JobItem = ({ job }) => {
   };
 
   return (
-    <motion.div
-      layout
-      initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -50 }}
+    <div
       className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow duration-200"
       onClick={handleClick}
     >
       <div className="flex flex-col md:flex-row justify-between">
         <div className="flex-1">
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">
-            {gptContent.title || 'Untitled Position'}
-          </h3>
-          <div className="flex flex-wrap gap-4 text-sm text-gray-600 mb-4">
-            {gptContent.company && (
-              <div className="flex items-center">
-                <Building className="h-4 w-4 mr-1" />
-                {gptContent.company}
-              </div>
-            )}
-            {locationString && (
-              <div className="flex items-center">
-                <MapPin className="h-4 w-4 mr-1" />
-                {locationString}
-              </div>
-            )}
-            {salary && (
-              <div className="flex items-center">
-                <DollarSign className="h-4 w-4 mr-1" />
-                {salary}
-              </div>
-            )}
-            {gptContent.type && (
-              <div className="flex items-center">
-                <Briefcase className="h-4 w-4 mr-1" />
-                {gptContent.type}
-              </div>
-            )}
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">
+            {gptContent.title || 'Position Not Specified'}
+          </h2>
+          <div className="text-sm text-gray-500 space-y-2">
+            <div className="flex items-center">
+              <Building className="w-4 h-4 mr-2" />
+              <span>{gptContent.company || 'Company Not Specified'}</span>
+            </div>
+            <div className="flex items-center">
+              <MapPin className="w-4 h-4 mr-2" />
+              <span>{locationString || 'Location Not Specified'}</span>
+            </div>
+            <div className="flex items-center">
+              <Briefcase className="w-4 h-4 mr-2" />
+              <span>
+                {categorizeJobType(gptContent.type) || 'Type Not Specified'}
+              </span>
+            </div>
+            <div className="flex items-center">
+              <DollarSign className="w-4 h-4 mr-2" />
+              <span>{salary}</span>
+            </div>
           </div>
           {gptContent.description && (
-            <p className="text-gray-600 line-clamp-2">
+            <p className="mt-4 text-gray-600 line-clamp-3">
               {gptContent.description}
             </p>
           )}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
