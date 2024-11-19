@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
 
 export default function ClientResumes({
   initialResumes,
@@ -121,94 +120,77 @@ export default function ClientResumes({
         )}
       </div>
 
-      <AnimatePresence mode="wait">
-        {isLoading ? (
-          <motion.div
-            key="loading"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-6"
-          >
-            {[...Array(6)].map((_, index) => (
-              <div
-                key={index}
-                className="bg-white p-6 rounded-lg shadow-md animate-pulse"
-              >
-                <div className="flex items-center space-x-4">
-                  <div className="rounded-full bg-gray-200 h-16 w-16"></div>
-                  <div className="flex-1">
-                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                    <div className="space-y-3 mt-4">
-                      <div className="h-3 bg-gray-200 rounded"></div>
-                      <div className="h-3 bg-gray-200 rounded w-5/6"></div>
-                    </div>
+      {isLoading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {[...Array(6)].map((_, index) => (
+            <div
+              key={index}
+              className="bg-white p-6 rounded-lg shadow-md animate-pulse"
+            >
+              <div className="flex items-center space-x-4">
+                <div className="rounded-full bg-gray-200 h-16 w-16"></div>
+                <div className="flex-1">
+                  <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                  <div className="space-y-3 mt-4">
+                    <div className="h-3 bg-gray-200 rounded"></div>
+                    <div className="h-3 bg-gray-200 rounded w-5/6"></div>
                   </div>
                 </div>
               </div>
-            ))}
-          </motion.div>
-        ) : (
-          <motion.div
-            key="content"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-6"
-          >
-            {initialResumes.map((resume, index) => (
-              <motion.div
-                key={resume.username}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-                className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow"
-              >
-                <div className="flex items-center space-x-4">
-                  <img
-                    src={resume.image}
-                    alt={resume.name || 'Profile'}
-                    className="w-16 h-16 rounded-full object-cover"
-                  />
-                  <div className="flex-1">
-                    <h3 className="text-lg font-semibold">
-                      <a
-                        href={`/${resume.username}`}
-                        className="hover:text-blue-600 transition-colors"
-                      >
-                        {resume.name || 'Anonymous'}
-                      </a>
-                    </h3>
-                    <p className="text-gray-600">
-                      {resume.label || 'No title'}
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      {resume.location?.city
-                        ? `${resume.location.city}, ${resume.location.countryCode}`
-                        : 'Location not specified'}
-                    </p>
-                    <div className="mt-2 space-x-3 text-sm">
-                      <a
-                        href={`/${resume.username}`}
-                        className="text-blue-600 hover:text-blue-800 transition-colors"
-                      >
-                        View Resume
-                      </a>
-                      <span className="text-gray-300">•</span>
-                      <a
-                        href={`/${resume.username}/dashboard`}
-                        className="text-blue-600 hover:text-blue-800 transition-colors"
-                      >
-                        Dashboard
-                      </a>
-                    </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {initialResumes.map((resume) => (
+            <div
+              key={resume.username}
+              className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow"
+            >
+              <div className="flex items-center space-x-4">
+                <img
+                  src={resume.image}
+                  alt={resume.name || 'Profile'}
+                  className="w-16 h-16 rounded-full object-cover"
+                />
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold">
+                    <a
+                      href={`/${resume.username}`}
+                      className="hover:text-blue-600 transition-colors"
+                    >
+                      {resume.name || 'Anonymous'}
+                    </a>
+                  </h3>
+                  <p className="text-gray-600">
+                    {resume.label || 'No title'}
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    {resume.location?.city
+                      ? `${resume.location.city}, ${resume.location.countryCode}`
+                      : 'Location not specified'}
+                  </p>
+                  <div className="mt-2 space-x-3 text-sm">
+                    <a
+                      href={`/${resume.username}`}
+                      className="text-blue-600 hover:text-blue-800 transition-colors"
+                    >
+                      View Resume
+                    </a>
+                    <span className="text-gray-300">•</span>
+                    <a
+                      href={`/${resume.username}/dashboard`}
+                      className="text-blue-600 hover:text-blue-800 transition-colors"
+                    >
+                      Dashboard
+                    </a>
                   </div>
                 </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {totalPages > 1 && (
         <div className="mt-8 flex justify-center">
