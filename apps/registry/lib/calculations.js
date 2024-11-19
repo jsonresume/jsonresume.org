@@ -7,7 +7,7 @@ import nlp from 'compromise';
  * @returns {Object} - An object containing the total work experience in years, months, and days.
  */
 export function totalExperience(resume) {
-  const workHistory = resume.work;
+  const workHistory = resume.work || [];
   const dateRanges = workHistory.map((job) => ({
     startDate: new Date(job.startDate),
     endDate: job.endDate ? new Date(job.endDate) : new Date(),
@@ -17,7 +17,7 @@ export function totalExperience(resume) {
   dateRanges.sort((a, b) => a.startDate - b.startDate);
 
   // Merge overlapping date ranges
-  const mergedRanges = [];
+  let mergedRanges = [];
   let currentRange = dateRanges[0];
 
   for (let i = 1; i < dateRanges.length; i++) {
@@ -39,7 +39,11 @@ export function totalExperience(resume) {
   // Calculate total experience from merged ranges
   let totalExperienceInDays = 0;
 
+  // Remove undefined or invalid date ranges
+  mergedRanges = mergedRanges.filter(Boolean);
+
   mergedRanges.forEach((range) => {
+    console.log({ range, mergedRanges });
     const experience =
       (range.endDate - range.startDate) / (1000 * 60 * 60 * 24); // Convert milliseconds to days
     totalExperienceInDays += experience;
@@ -127,7 +131,7 @@ export function averageJobDuration(resume) {
  * @returns {Array} - An array of objects representing the career progression with title and duration in years and months.
  */
 export function careerProgression(resume) {
-  const workHistory = resume.work;
+  const workHistory = resume.work || [];
   const progressionMap = new Map();
 
   workHistory.forEach((job) => {
