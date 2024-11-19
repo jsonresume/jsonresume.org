@@ -1,105 +1,75 @@
-/* eslint-disable @next/next/no-img-element */
-'use client';
+import { createClient } from '@supabase/supabase-js';
+import ClientResumes from './ClientResumes';
+import gravatar from 'gravatar';
 
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import Link from 'next/link';
-import Loading from '../components/Loading';
+const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
+const supabaseKey = process.env.SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
 
-const formatLocation = (location) => {
-  if (!location) return 'Location not provided';
-
-  const {
-    postalCode = '',
-    city = '',
-    region = '',
-    countryCode = '',
-  } = location;
-
-  const locationParts = [city, region, postalCode, countryCode].filter(
-    (part) => part.trim() !== ''
-  );
-
-  if (locationParts.length === 0) return 'Location not provided';
-
-  return locationParts.join(', ');
+export const metadata = {
+  title: 'Explore JSON Resumes | JSON Resume Registry',
+  description: 'Browse and discover professional resumes created using the JSON Resume standard. Find inspiration for your own resume or connect with other professionals.',
+  openGraph: {
+    title: 'Explore JSON Resumes',
+    description: 'Browse and discover professional resumes created using the JSON Resume standard.',
+    type: 'website',
+  },
 };
 
-const Resumes = () => {
-  const [data, setData] = useState([]);
-  const [filter, setFilter] = useState('');
-  const [filteredResumes, setFilteredResumes] = useState([]);
+async function getResumes() {
+  try {
+    console.time('getResumes');
+    const { data, error } = await supabase
+      .from('resumes')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(3000);
 
-  useEffect(() => {
-    setFilteredResumes(
-      data.filter((resume) =>
-        resume?.name?.toLowerCase().includes(filter.toLowerCase())
-      )
-    );
-  }, [filter, data]);
+    if (error) throw error;
+    console.timeEnd('getResumes');
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('/api/resumes?limit=500');
-        setData(response.data);
-      } catch (error) {
-        console.error('Error fetching data: ', error);
-      }
-    };
+    console.time('mapResumes');
+    const resumes = data.map((row) => {
+      const resume = JSON.parse(row.resume);
+      return {
+        username: row.username,
+        label: resume?.basics?.label,
+        image:
+          resume?.basics?.image ||
+          gravatar.url(
+            resume?.basics?.email,
+            { s: '200', r: 'x', d: 'retro' },
+            true
+          ),
+        name: resume?.basics?.name,
+        location: resume?.basics?.location,
+        updated_at: row.updated_at,
+        created_at: row.created_at,
+      };
+    });
+    console.timeEnd('mapResumes');
 
-    fetchData();
-  }, []);
+    console.time('sortResumes');
+    resumes.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    console.timeEnd('sortResumes');
+
+    return resumes;
+  } catch (error) {
+    console.error('Error fetching resumes:', error);
+    return [];
+  }
+}
+
+export default async function ExplorePage() {
+  const resumes = await getResumes();
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      {!data.length ? (
-        <Loading />
-      ) : (
-        <>
-          <input
-            type="text"
-            placeholder="Filter by name..."
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            className="w-full p-3 mb-6 border border-gray-300 rounded"
-          />
-          <div className="flex flex-col gap-4">
-            {filteredResumes.map((resume, index) => (
-              <motion.div
-                key={index}
-                whileHover={{ scale: 1.1 }}
-                initial={{
-                  scale: [1, 1.1],
-                }}
-                whileInView={{
-                  scale: [1.1, 1],
-                }}
-              >
-                <Link
-                  href={`/${resume.username}/dashboard`}
-                  className="flex items-center p-4 border border-gray-300 rounded bg-white hover:bg-gray-100 transition-colors duration-200"
-                >
-                  <img
-                    src={resume.image}
-                    alt={resume.name}
-                    className="w-12 h-12 rounded-full mr-4"
-                  />
-                  <div>
-                    <div className="text-lg font-bold">{resume.name}</div>
-                    <div className="text-sm text-gray-600">
-                      {formatLocation(resume.location)}
-                    </div>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-        </>
-      )}
+      <h1 className="text-3xl font-bold mb-6">Explore JSON Resumes</h1>
+      <p className="text-gray-600 mb-8">
+        Browse through professional resumes created using the JSON Resume standard. Get inspired or connect with other professionals.
+      </p>
+      <ClientResumes initialResumes={resumes} />
     </div>
   );
-};
-
-export default Resumes;
+}
