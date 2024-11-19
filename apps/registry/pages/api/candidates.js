@@ -38,7 +38,7 @@ export default async function handler(req, res) {
       {
         query_embedding: jobData.embedding_v5,
         match_threshold: 0.14,
-        match_count: 20, // Limit to top 20 matches
+        match_count: 100,
       }
     );
 
@@ -55,15 +55,20 @@ export default async function handler(req, res) {
           username: match.username,
           similarity: match.similarity,
           label: resume?.basics?.label,
-          image: resume?.basics?.image ||
-            gravatar.url(resume?.basics?.email || '', {
-              s: '200',
-              r: 'x',
-              d: 'retro',
-            }, true),
+          image:
+            resume?.basics?.image ||
+            gravatar.url(
+              resume?.basics?.email || '',
+              {
+                s: '200',
+                r: 'x',
+                d: 'retro',
+              },
+              true
+            ),
           name: resume?.basics?.name,
           location: resume?.basics?.location,
-          skills: resume?.skills?.map(s => s.name) || [],
+          skills: resume?.skills?.map((s) => s.name) || [],
           headline: resume?.basics?.summary,
           updated_at: match.updated_at,
           created_at: match.created_at,
@@ -92,7 +97,7 @@ export default async function handler(req, res) {
         company: jobData.company,
         location: jobData.location,
         description: jobData.description,
-      }
+      },
     });
   } catch (error) {
     console.error('Error:', error);
