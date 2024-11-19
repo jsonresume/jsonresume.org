@@ -162,9 +162,7 @@ export default function ClientResumes({
                       {resume.name || 'Anonymous'}
                     </a>
                   </h3>
-                  <p className="text-gray-600">
-                    {resume.label || 'No title'}
-                  </p>
+                  <p className="text-gray-600">{resume.label || 'No title'}</p>
                   <p className="text-sm text-gray-500">
                     {resume.location?.city
                       ? `${resume.location.city}, ${resume.location.countryCode}`

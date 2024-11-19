@@ -21,44 +21,52 @@ const normalizeString = (str) => {
 
 const categorizeJobType = (type) => {
   const normalized = normalizeString(type);
-  
+
   if (normalized.includes('contract')) return 'Contract';
-  if (normalized.includes('fulltime') || normalized.includes('full')) return 'Full-time';
-  if (normalized.includes('parttime') || normalized.includes('part')) return 'Part-time';
+  if (normalized.includes('fulltime') || normalized.includes('full'))
+    return 'Full-time';
+  if (normalized.includes('parttime') || normalized.includes('part'))
+    return 'Part-time';
   if (normalized.includes('intern')) return 'Internship';
   if (normalized.includes('temp')) return 'Temporary';
   if (normalized.includes('hybrid')) return 'Hybrid';
   if (normalized.includes('remote')) return 'Remote';
-  
+
   return 'Other';
 };
 
 const categorizeExperience = (exp) => {
   const normalized = normalizeString(exp);
-  
-  if (normalized.includes('entry') || normalized.includes('junior')) return 'Entry Level';
-  if (normalized.includes('mid') || normalized.includes('intermediate')) return 'Mid Level';
-  if (normalized.includes('senior') || normalized.includes('sr')) return 'Senior Level';
-  if (normalized.includes('lead') || normalized.includes('principal')) return 'Lead';
-  if (normalized.includes('manager') || normalized.includes('head')) return 'Manager';
-  if (normalized.includes('exec') || normalized.includes('director')) return 'Executive';
-  
+
+  if (normalized.includes('entry') || normalized.includes('junior'))
+    return 'Entry Level';
+  if (normalized.includes('mid') || normalized.includes('intermediate'))
+    return 'Mid Level';
+  if (normalized.includes('senior') || normalized.includes('sr'))
+    return 'Senior Level';
+  if (normalized.includes('lead') || normalized.includes('principal'))
+    return 'Lead';
+  if (normalized.includes('manager') || normalized.includes('head'))
+    return 'Manager';
+  if (normalized.includes('exec') || normalized.includes('director'))
+    return 'Executive';
+
   return 'Not Specified';
 };
 
 const categorizeSalary = (salary) => {
   if (!salary) return 'Not Specified';
-  
+
   const normalized = normalizeString(salary);
-  
+
   if (normalized.includes('competitive')) return 'Competitive';
-  
+
   // Extract the first number found in the string
   const numbers = salary.match(/\d+/g);
   if (!numbers) return 'Not Specified';
-  
+
   const firstNumber = parseInt(numbers[0], 10);
-  
+
   if (normalized.includes('k')) {
     if (firstNumber < 50) return 'Under $50k';
     if (firstNumber < 100) return '$50k - $100k';
@@ -66,7 +74,7 @@ const categorizeSalary = (salary) => {
     if (firstNumber < 200) return '$150k - $200k';
     return '$200k+';
   }
-  
+
   if (firstNumber < 50000) return 'Under $50k';
   if (firstNumber < 100000) return '$50k - $100k';
   if (firstNumber < 150000) return '$100k - $150k';
@@ -76,16 +84,17 @@ const categorizeSalary = (salary) => {
 
 const categorizeLocation = (location) => {
   if (!location) return 'Not Specified';
-  
+
   // If it's already in the City, Region, Country format, return as is
   if (location.includes(',')) return location;
-  
+
   const normalized = normalizeString(location);
-  
+
   if (normalized.includes('remote')) return 'Remote';
   if (normalized.includes('hybrid')) return 'Hybrid';
-  if (normalized.includes('onsite') || normalized.includes('office')) return 'On-site';
-  
+  if (normalized.includes('onsite') || normalized.includes('office'))
+    return 'On-site';
+
   return location;
 };
 
@@ -112,9 +121,10 @@ const ClientJobBoard = ({ initialJobs }) => {
     };
 
     jobs.forEach((job) => {
-      const gptContent = job.gpt_content && job.gpt_content !== 'FAILED'
-        ? JSON.parse(job.gpt_content)
-        : {};
+      const gptContent =
+        job.gpt_content && job.gpt_content !== 'FAILED'
+          ? JSON.parse(job.gpt_content)
+          : {};
 
       if (gptContent.type) {
         options.jobType.add(categorizeJobType(gptContent.type));
@@ -157,18 +167,19 @@ const ClientJobBoard = ({ initialJobs }) => {
     if (searchTerm) {
       const searchLower = searchTerm.toLowerCase();
       result = result.filter((job) => {
-        const gptContent = job.gpt_content && job.gpt_content !== 'FAILED'
-          ? JSON.parse(job.gpt_content)
-          : {};
-        
+        const gptContent =
+          job.gpt_content && job.gpt_content !== 'FAILED'
+            ? JSON.parse(job.gpt_content)
+            : {};
+
         return (
           gptContent.title?.toLowerCase().includes(searchLower) ||
           gptContent.company?.toLowerCase().includes(searchLower) ||
           gptContent.description?.toLowerCase().includes(searchLower) ||
-          gptContent.requirements?.some(req => 
+          gptContent.requirements?.some((req) =>
             req.toLowerCase().includes(searchLower)
           ) ||
-          gptContent.responsibilities?.some(resp => 
+          gptContent.responsibilities?.some((resp) =>
             resp.toLowerCase().includes(searchLower)
           )
         );
@@ -178,9 +189,10 @@ const ClientJobBoard = ({ initialJobs }) => {
     Object.entries(filters).forEach(([key, value]) => {
       if (value) {
         result = result.filter((job) => {
-          const gptContent = job.gpt_content && job.gpt_content !== 'FAILED'
-            ? JSON.parse(job.gpt_content)
-            : {};
+          const gptContent =
+            job.gpt_content && job.gpt_content !== 'FAILED'
+              ? JSON.parse(job.gpt_content)
+              : {};
 
           switch (key) {
             case 'jobType':
@@ -239,7 +251,8 @@ const ClientJobBoard = ({ initialJobs }) => {
       <div className="flex-1">
         <div className="flex justify-between items-center mb-4">
           <p className="text-sm text-gray-600">
-            {filteredJobs.length} {filteredJobs.length === 1 ? 'job' : 'jobs'} found
+            {filteredJobs.length} {filteredJobs.length === 1 ? 'job' : 'jobs'}{' '}
+            found
           </p>
           {activeFilterCount > 0 && (
             <button
@@ -389,7 +402,11 @@ const JobItem = ({ job }) => {
       ? JSON.parse(job.gpt_content)
       : {};
 
-  const locationString = [gptContent.location?.city, gptContent.location?.region, gptContent.location?.countryCode]
+  const locationString = [
+    gptContent.location?.city,
+    gptContent.location?.region,
+    gptContent.location?.countryCode,
+  ]
     .filter(Boolean)
     .join(', ');
 

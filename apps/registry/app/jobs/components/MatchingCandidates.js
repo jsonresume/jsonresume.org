@@ -53,11 +53,7 @@ export default function MatchingCandidates({ jobId }) {
   }
 
   if (error) {
-    return (
-      <div className="mt-8 text-center text-gray-500">
-        {error}
-      </div>
-    );
+    return <div className="mt-8 text-center text-gray-500">{error}</div>;
   }
 
   if (!candidates?.length) {
@@ -106,7 +102,8 @@ export default function MatchingCandidates({ jobId }) {
                   <div className="flex items-center text-gray-500 text-sm mt-1">
                     <MapPin className="w-4 h-4 mr-1" />
                     <span>
-                      {candidate.location.city}, {candidate.location.countryCode}
+                      {candidate.location.city},{' '}
+                      {candidate.location.countryCode}
                     </span>
                   </div>
                 )}
