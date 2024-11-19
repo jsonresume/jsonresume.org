@@ -170,7 +170,7 @@ export default function ClientResumes({
                     alt={resume.name || 'Profile'}
                     className="w-16 h-16 rounded-full object-cover"
                   />
-                  <div>
+                  <div className="flex-1">
                     <h3 className="text-lg font-semibold">
                       <a
                         href={`/${resume.username}`}
@@ -187,6 +187,21 @@ export default function ClientResumes({
                         ? `${resume.location.city}, ${resume.location.countryCode}`
                         : 'Location not specified'}
                     </p>
+                    <div className="mt-2 space-x-3 text-sm">
+                      <a
+                        href={`/${resume.username}`}
+                        className="text-blue-600 hover:text-blue-800 transition-colors"
+                      >
+                        View Resume
+                      </a>
+                      <span className="text-gray-300">•</span>
+                      <a
+                        href={`/${resume.username}/dashboard`}
+                        className="text-blue-600 hover:text-blue-800 transition-colors"
+                      >
+                        Dashboard
+                      </a>
+                    </div>
                   </div>
                 </div>
               </motion.div>
