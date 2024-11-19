@@ -1,5 +1,7 @@
-import { createClient } from '@supabase/supabase-js';
-import Link from 'next/link';
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   MapPin,
   Building,
@@ -11,59 +13,52 @@ import {
   ArrowLeft,
   Clock,
 } from 'lucide-react';
+import axios from 'axios';
+import { motion } from 'framer-motion';
 
-const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
-const supabaseKey = process.env.SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
+export default function JobPage({ params }) {
+  const router = useRouter();
+  const [job, setJob] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-// Enable static page generation with dynamic routes
-export async function generateStaticParams() {
-  const { data: jobs } = await supabase
-    .from('jobs')
-    .select('uuid')
-    .order('created_at', { ascending: false })
-    .limit(1000);
-
-  return jobs?.map((job) => ({
-    uuid: job.uuid,
-  })) || [];
-}
-
-// Add metadata for SEO
-export async function generateMetadata({ params }) {
-  const { data: job } = await supabase
-    .from('jobs')
-    .select('*')
-    .eq('uuid', params.uuid)
-    .single();
-
-  if (!job) {
-    return {
-      title: 'Job Not Found - JSON Resume',
-      description: 'The job listing you are looking for could not be found.',
+  useEffect(() => {
+    const fetchJob = async () => {
+      try {
+        const response = await axios.get(`/api/jobs/${params.uuid}`);
+        if (response.data) {
+          console.log('Job data:', response.data); // Add logging
+          setJob(response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching job:', error);
+      } finally {
+        setLoading(false);
+      }
     };
+
+    if (params.uuid) {
+      fetchJob();
+    }
+  }, [params.uuid]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="animate-pulse space-y-4">
+            <div className="h-8 bg-gray-200 rounded w-3/4"></div>
+            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+            <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+            <div className="space-y-3">
+              <div className="h-4 bg-gray-200 rounded"></div>
+              <div className="h-4 bg-gray-200 rounded"></div>
+              <div className="h-4 bg-gray-200 rounded"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
-
-  const gptContent = job.gpt_content && job.gpt_content !== 'FAILED'
-    ? JSON.parse(job.gpt_content)
-    : {};
-
-  return {
-    title: `${gptContent.title || job.title} at ${gptContent.company || 'Company'} - JSON Resume Jobs`,
-    description: gptContent.description?.substring(0, 160) || job.description?.substring(0, 160) || 'View this job opportunity on JSON Resume.',
-    openGraph: {
-      title: `${gptContent.title || job.title} at ${gptContent.company || 'Company'}`,
-      description: gptContent.description?.substring(0, 160) || job.description?.substring(0, 160) || 'View this job opportunity on JSON Resume.',
-    },
-  };
-}
-
-export default async function JobPage({ params }) {
-  const { data: job } = await supabase
-    .from('jobs')
-    .select('*')
-    .eq('uuid', params.uuid)
-    .single();
 
   if (!job) {
     return (
@@ -75,13 +70,13 @@ export default async function JobPage({ params }) {
           <p className="text-gray-600 mb-4">
             The job you're looking for doesn't exist or has been removed.
           </p>
-          <Link
-            href="/jobs"
+          <button
+            onClick={() => router.push('/jobs')}
             className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
           >
             <ArrowLeft className="mr-2 h-5 w-5" />
             Back to Jobs
-          </Link>
+          </button>
         </div>
       </div>
     );
@@ -104,148 +99,197 @@ export default async function JobPage({ params }) {
     : 'Not specified';
 
   // Format posted date
-  const postedDate = new Date(job.created_at);
-  const timeAgo = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
-  const daysAgo = Math.ceil(
-    (postedDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)
-  );
-  const postedAgo = timeAgo.format(daysAgo, 'day');
+  const postedDate = job.created_at
+    ? new Date(job.created_at).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+    : 'Recently';
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="min-h-screen bg-gray-50 py-8"
+    >
       <div className="max-w-4xl mx-auto px-4">
-        <div className="bg-white shadow-lg rounded-lg overflow-hidden">
-          <div className="p-6">
-            {/* Header */}
-            <div className="flex justify-between items-start mb-6">
+        <button
+          onClick={() => router.push('/jobs')}
+          className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-6 transition-colors"
+        >
+          <ArrowLeft className="mr-2 h-5 w-5" />
+          Back to Jobs
+        </button>
+
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          {/* Header Section */}
+          <div className="p-6 border-b border-gray-100">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                  {gptContent.title || job.title}
+                  {gptContent.title || 'Untitled Position'}
                 </h1>
-                <div className="flex items-center text-gray-600 mb-2">
+                <div className="flex items-center text-gray-600">
                   <Building className="mr-2 h-5 w-5" />
-                  <span className="font-medium">{gptContent.company}</span>
+                  <span className="font-medium">
+                    {gptContent.company || 'Company not specified'}
+                  </span>
                 </div>
-                {locationString && (
-                  <div className="flex items-center text-gray-600">
-                    <MapPin className="mr-2 h-5 w-5" />
-                    <span>{locationString}</span>
-                  </div>
-                )}
               </div>
-              <div className="text-right">
-                <div className="text-2xl font-bold text-blue-600 mb-2">{salary}</div>
-                {gptContent.type && (
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                    {gptContent.type}
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                  {gptContent.type || 'Full-time'}
+                </span>
+                {gptContent.remote && (
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                    Remote
                   </span>
                 )}
               </div>
             </div>
+          </div>
 
-            {/* Meta Information */}
-            <div className="grid grid-cols-2 gap-4 mb-6">
+          {/* Details Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 border-b border-gray-100">
+            {locationString && (
               <div className="flex items-center text-gray-600">
-                <Calendar className="mr-2 h-5 w-5" />
-                <span>Posted {postedAgo}</span>
-              </div>
-              {gptContent.experience && (
-                <div className="flex items-center text-gray-600">
-                  <Clock className="mr-2 h-5 w-5" />
-                  <span>{gptContent.experience}</span>
+                <MapPin className="mr-3 h-5 w-5 text-gray-400" />
+                <div>
+                  <div className="text-sm font-medium text-gray-500">
+                    Location
+                  </div>
+                  <div className="text-gray-900">{locationString}</div>
                 </div>
-              )}
+              </div>
+            )}
+            <div className="flex items-center text-gray-600">
+              <DollarSign className="mr-3 h-5 w-5 text-gray-400" />
+              <div>
+                <div className="text-sm font-medium text-gray-500">Salary</div>
+                <div className="text-gray-900">{salary}</div>
+              </div>
             </div>
+            {gptContent.experience && (
+              <div className="flex items-center text-gray-600">
+                <BriefcaseIcon className="mr-3 h-5 w-5 text-gray-400" />
+                <div>
+                  <div className="text-sm font-medium text-gray-500">
+                    Experience
+                  </div>
+                  <div className="text-gray-900">{gptContent.experience}</div>
+                </div>
+              </div>
+            )}
+            <div className="flex items-center text-gray-600">
+              <Clock className="mr-3 h-5 w-5 text-gray-400" />
+              <div>
+                <div className="text-sm font-medium text-gray-500">
+                  Posted Date
+                </div>
+                <div className="text-gray-900">{postedDate}</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Content Sections */}
+          <div className="p-6 space-y-8">
+            {/* Apply Button */}
+            {job.url && (
+              <div className="flex justify-center mb-8">
+                <a
+                  href={job.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+                >
+                  <BriefcaseIcon className="mr-2 h-5 w-5" />
+                  Apply Now
+                </a>
+              </div>
+            )}
 
             {/* Description */}
             {gptContent.description && (
-              <div className="mb-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-3">
+              <section>
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">
                   Description
                 </h2>
-                <p className="text-gray-700 whitespace-pre-line">
-                  {gptContent.description}
-                </p>
-              </div>
+                <div className="prose max-w-none text-gray-600">
+                  <p className="whitespace-pre-wrap">
+                    {gptContent.description}
+                  </p>
+                </div>
+              </section>
             )}
 
             {/* Responsibilities */}
             {gptContent.responsibilities?.length > 0 && (
-              <div className="mb-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-3">
+              <section>
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">
                   Responsibilities
                 </h2>
-                <ul className="list-disc list-inside space-y-2">
-                  {gptContent.responsibilities.map((responsibility, index) => (
-                    <li key={index} className="text-gray-700">
-                      {responsibility}
+                <ul className="space-y-3">
+                  {gptContent.responsibilities.map((item, index) => (
+                    <li key={index} className="flex items-start">
+                      <CheckCircle className="w-5 h-5 mr-3 text-green-500 flex-shrink-0 mt-1" />
+                      <span className="text-gray-600">{item}</span>
                     </li>
                   ))}
                 </ul>
-              </div>
+              </section>
             )}
 
             {/* Qualifications */}
             {gptContent.qualifications?.length > 0 && (
-              <div className="mb-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-3">
+              <section>
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">
                   Qualifications
                 </h2>
-                <ul className="list-disc list-inside space-y-2">
-                  {gptContent.qualifications.map((qualification, index) => (
-                    <li key={index} className="text-gray-700">
-                      {qualification}
+                <ul className="space-y-3">
+                  {gptContent.qualifications.map((item, index) => (
+                    <li key={index} className="flex items-start">
+                      <CheckCircle className="w-5 h-5 mr-3 text-blue-500 flex-shrink-0 mt-1" />
+                      <span className="text-gray-600">{item}</span>
                     </li>
                   ))}
                 </ul>
-              </div>
+              </section>
             )}
 
             {/* Skills */}
             {gptContent.skills?.length > 0 && (
-              <div className="mb-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-3">
+              <section>
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">
                   Required Skills
                 </h2>
-                <div className="flex flex-wrap gap-2">
-                  {gptContent.skills.flatMap((skill) =>
-                    (skill.keywords || []).map((keyword, idx) => (
-                      <span
-                        key={idx}
-                        className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800"
-                      >
-                        {keyword}
-                      </span>
-                    ))
-                  )}
+                <div className="space-y-4">
+                  {gptContent.skills.map((skillGroup, index) => (
+                    <div key={index}>
+                      {skillGroup.name && (
+                        <h3 className="font-medium text-gray-700 mb-2">
+                          {skillGroup.name}
+                        </h3>
+                      )}
+                      <div className="flex flex-wrap gap-2">
+                        {(skillGroup.keywords || []).map((skill, idx) => (
+                          <span
+                            key={idx}
+                            className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800"
+                          >
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              </div>
+              </section>
             )}
-
-            {/* Navigation and Apply */}
-            <div className="mt-8 flex justify-between items-center">
-              <Link
-                href="/jobs"
-                className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                <ArrowLeft className="mr-2 h-5 w-5" />
-                Back to Jobs
-              </Link>
-              {job.apply_url && (
-                <a
-                  href={job.apply_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                >
-                  Apply Now
-                  <CheckCircle className="ml-2 h-5 w-5" />
-                </a>
-              )}
-            </div>
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
