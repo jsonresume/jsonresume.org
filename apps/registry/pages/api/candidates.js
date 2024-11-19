@@ -1,27 +1,101 @@
 const { createClient } = require('@supabase/supabase-js');
+const gravatar = require('gravatar');
 
 const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
-const supabaseKey = process.env.SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
-
-if (!process.env.OPENAI_API_KEY) {
-  throw new Error('Missing env var from OpenAI');
-}
-
-// This API route is used to match candidates to a job
 
 export default async function handler(req, res) {
-  const jobId = 40224903;
+  if (!process.env.SUPABASE_KEY) {
+    return res.status(503).json({ message: 'API not available during build' });
+  }
 
-  const { data } = await supabase.from('jobs').select().eq('uuid', jobId);
+  try {
+    const supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
+    const { jobId } = req.query;
 
-  const jdEmbedding = data[0].embedding_v5;
+    if (!jobId) {
+      return res.status(400).json({ message: 'Job ID is required' });
+    }
 
-  const { data: documents } = await supabase.rpc('match_resumes_v5', {
-    query_embedding: jdEmbedding,
-    match_threshold: 0.14, // Choose an appropriate threshold for your data
-    match_count: 40, // Choose the number of matches
-  });
+    // Get the job's embedding
+    const { data: jobData, error: jobError } = await supabase
+      .from('jobs')
+      .select('*')
+      .eq('uuid', jobId)
+      .single();
 
-  return res.status(200).send(documents);
+    if (jobError || !jobData) {
+      console.error('Error fetching job:', jobError);
+      return res.status(404).json({ message: 'Job not found' });
+    }
+
+    if (!jobData.embedding_v5) {
+      return res.status(400).json({ message: 'Job has no embedding' });
+    }
+
+    // Match resumes using vector similarity
+    const { data: matches, error: matchError } = await supabase.rpc(
+      'match_resumes_v5',
+      {
+        query_embedding: jobData.embedding_v5,
+        match_threshold: 0.14,
+        match_count: 20, // Limit to top 20 matches
+      }
+    );
+
+    if (matchError) {
+      console.error('Error matching resumes:', matchError);
+      return res.status(500).json({ message: 'Error matching resumes' });
+    }
+
+    // Format the results
+    const candidates = matches.map((match) => {
+      try {
+        const resume = JSON.parse(match.resume);
+        return {
+          username: match.username,
+          similarity: match.similarity,
+          label: resume?.basics?.label,
+          image: resume?.basics?.image ||
+            gravatar.url(resume?.basics?.email || '', {
+              s: '200',
+              r: 'x',
+              d: 'retro',
+            }, true),
+          name: resume?.basics?.name,
+          location: resume?.basics?.location,
+          skills: resume?.skills?.map(s => s.name) || [],
+          headline: resume?.basics?.summary,
+          updated_at: match.updated_at,
+          created_at: match.created_at,
+        };
+      } catch (e) {
+        console.error('Error parsing resume:', e);
+        return {
+          username: match.username,
+          similarity: match.similarity,
+          label: 'Error parsing resume',
+          image: gravatar.url('', { s: '200', r: 'x', d: 'retro' }, true),
+          name: match.username,
+          location: null,
+          skills: [],
+          headline: null,
+          updated_at: match.updated_at,
+          created_at: match.created_at,
+        };
+      }
+    });
+
+    return res.status(200).json({
+      candidates,
+      job: {
+        title: jobData.title,
+        company: jobData.company,
+        location: jobData.location,
+        description: jobData.description,
+      }
+    });
+  } catch (error) {
+    console.error('Error:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
 }
