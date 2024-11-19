@@ -9,6 +9,8 @@ module.exports = {
     '@next/next/no-sync-scripts': 'off',
     '@next/next/no-page-custom-font': 'off',
     '@next/next/no-img-element': 'off',
+    'react/no-unescaped-entities': 'off',
+    'no-case-declarations': 'off',
   },
   env: {
     browser: true,
