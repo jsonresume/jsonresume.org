@@ -22,17 +22,31 @@ export default async function handler(req, res) {
     .eq('username', username);
 
   const resume = JSON.parse(data[0].resume);
+
+  // Generate a natural language description of the resume
+  const resumeCompletion = await openai.chat.completions.create({
+    model: 'gpt-3.5-turbo-16k',
+    messages: [
+      {
+        role: 'system',
+        content:
+          "You are a professional resume analyzer. Create a detailed professional summary that describes this candidate's background, skills, and experience in natural language. Focus on their expertise, achievements, and what makes them unique. Write it in a style similar to job descriptions to optimize for semantic matching. Do not include the candidates name. Be terse as most job descriptions are.",
+      },
+      {
+        role: 'user',
+        content: JSON.stringify(resume),
+      },
+    ],
+    temperature: 0.85,
+  });
+
+  const resumeDescription = resumeCompletion.choices[0].message.content;
+
+  console.log({ resumeDescription });
+
   const completion = await openai.embeddings.create({
     model: 'text-embedding-3-large',
-    input: JSON.stringify({
-      skills: resume.skills,
-      work: resume.work,
-      summary: resume.summary,
-      education: resume.education,
-      awards: resume.awards,
-      basics: resume.basics,
-      interests: resume.interests,
-    }),
+    input: resumeDescription,
   });
 
   const desiredLength = 3072;
@@ -47,8 +61,8 @@ export default async function handler(req, res) {
 
   const { data: documents } = await supabase.rpc('match_jobs_v5', {
     query_embedding: embedding,
-    match_threshold: 0.14, // Choose an appropriate threshold for your data
-    match_count: 60, // Choose the number of matches
+    match_threshold: 0.02, // Choose an appropriate threshold for your data
+    match_count: 200, // Choose the number of matches
   });
 
   console.log({ documents });
@@ -58,8 +72,14 @@ export default async function handler(req, res) {
   const jobIds = documents ? sortedDocuments.map((doc) => doc.id) : [];
 
   const { data: jobs } = await supabase.from('jobs').select().in('id', jobIds);
-  // sort jobs in the same order as jobIds by id
-  const sortedJobs = jobIds.map((id) => jobs.find((job) => job.id === id));
+  // sort jobs in the same order as jobIds by id and add similarity scores
+  const sortedJobs = jobIds.map((id, index) => {
+    const job = jobs.find((job) => job.id === id);
+    return {
+      ...job,
+      similarity: documents[index].similarity,
+    };
+  });
 
   const filteredJobs = sortedJobs.filter(
     (job) =>
