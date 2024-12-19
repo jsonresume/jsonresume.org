@@ -441,6 +441,29 @@ const algorithms = {
   }
 };
 
+const colors = [
+  '#FF6B6B', // coral red
+  '#4ECDC4', // turquoise
+  '#45B7D1', // sky blue
+  '#96CEB4', // sage green
+  '#F7D794', // mellow yellow
+  '#9B59B6', // amethyst purple
+  '#FF8C94', // rose pink
+  '#4A90E2', // ocean blue
+  '#50E3C2', // mint
+  '#F39C12', // amber
+  '#D35400', // pumpkin
+  '#FF5E3A', // sunset orange
+  '#2ECC71', // emerald
+  '#F64747', // pomegranate
+  '#786FA6', // lavender
+  '#00B894', // mountain meadow
+  '#FD79A8', // pink glamour
+  '#6C5CE7', // blue violet
+  '#FDA7DF', // light pink
+  '#A8E6CF', // light green
+];
+
 const Header = memo(() => (
   <div className="prose max-w-3xl mx-auto mb-8">
     <h1 className="text-3xl font-bold mb-4">Job Market Simlarity</h1>
@@ -578,7 +601,7 @@ const GraphContainer = ({ dataSource, algorithm }) => {
           uuids: items.map(item => dataSource === 'jobs' ? item.uuid : item.username),
           usernames: dataSource === 'jobs' ? null : [...new Set(items.map(item => item.username))],
           avgEmbedding,
-          color: `hsl(${Math.random() * 360}, 70%, 50%)`,
+          color: colors[index % colors.length],
           companies: dataSource === 'jobs' ? [...new Set(items.map(item => item.company || 'Unknown Company'))] : null,
           countryCodes: dataSource === 'jobs' ? [...new Set(items.map(item => item.countryCode || 'Unknown Location'))] : null
         };
@@ -656,15 +679,24 @@ const GraphContainer = ({ dataSource, algorithm }) => {
       {graphData && (
         <ForceGraph2D
           graphData={graphData}
-          nodeColor={node => highlightNodes.has(node) ? '#ff0000' : node.color}
+          nodeColor={node => highlightNodes.has(node) ? '#FF4757' : node.color}
           nodeCanvasObject={(node, ctx, globalScale) => {
             // Draw node
             const size = node.size * (4 / Math.max(1, globalScale));
             ctx.beginPath();
             ctx.arc(node.x, node.y, size, 0, 2 * Math.PI);
-            ctx.fillStyle = highlightNodes.has(node) ? '#ff0000' : node.color;
+            ctx.fillStyle = highlightNodes.has(node) ? '#FF4757' : node.color;
             ctx.fill();
 
+            // Add a subtle glow effect
+            if (highlightNodes.has(node)) {
+              ctx.shadowColor = '#FF4757';
+              ctx.shadowBlur = 15;
+              ctx.strokeStyle = '#FF4757';
+              ctx.lineWidth = 2;
+              ctx.stroke();
+              ctx.shadowBlur = 0;
+            }
             // Only draw label if node is highlighted
             if (highlightNodes.has(node)) {
               const label = node.id;
@@ -697,8 +729,8 @@ const GraphContainer = ({ dataSource, algorithm }) => {
           }}
           nodeRelSize={4}
           linkWidth={link => highlightLinks.has(link) ? 2 : 1}
-          linkColor={link => highlightLinks.has(link) ? '#ff0000' : '#cccccc'}
-          linkOpacity={0.3}
+          linkColor={link => highlightLinks.has(link) ? '#FF4757' : '#E5E9F2'}
+          linkOpacity={0.5}
           linkDirectionalParticles={0}
           linkDirectionalParticleWidth={2}
           onNodeHover={handleNodeHover}
