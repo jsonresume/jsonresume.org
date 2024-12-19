@@ -38,6 +38,100 @@ function getAverageEmbedding(embeddings) {
   return normalizeVector(avg);
 }
 
+// Similarity algorithms
+const algorithms = {
+  knn: {
+    name: 'K-Nearest Neighbors',
+    compute: (nodes, K = 3, minSimilarity = 0.5) => {
+      const links = new Set();
+      nodes.forEach((node, i) => {
+        const similarities = nodes.map((otherNode, j) => ({
+          index: j,
+          similarity: i === j ? -1 : cosineSimilarity(node.avgEmbedding, otherNode.avgEmbedding)
+        }));
+
+        similarities
+          .sort((a, b) => b.similarity - a.similarity)
+          .slice(0, K)
+          .forEach(({ index, similarity }) => {
+            if (similarity > minSimilarity) {
+              links.add({
+                source: nodes[i].id,
+                target: nodes[index].id,
+                value: similarity
+              });
+            }
+          });
+      });
+      return Array.from(links);
+    }
+  },
+  threshold: {
+    name: 'Similarity Threshold',
+    compute: (nodes, threshold = 0.7) => {
+      const links = new Set();
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const similarity = cosineSimilarity(nodes[i].avgEmbedding, nodes[j].avgEmbedding);
+          if (similarity > threshold) {
+            links.add({
+              source: nodes[i].id,
+              target: nodes[j].id,
+              value: similarity
+            });
+          }
+        }
+      }
+      return Array.from(links);
+    }
+  },
+  mst: {
+    name: 'Minimum Spanning Tree',
+    compute: (nodes, minSimilarity = 0.3) => {
+      // Kruskal's algorithm for MST
+      const links = [];
+      const parent = new Array(nodes.length).fill(0).map((_, i) => i);
+      
+      function find(x) {
+        if (parent[x] !== x) parent[x] = find(parent[x]);
+        return parent[x];
+      }
+      
+      function union(x, y) {
+        parent[find(x)] = find(y);
+      }
+
+      // Create all possible edges with weights
+      const edges = [];
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const similarity = cosineSimilarity(nodes[i].avgEmbedding, nodes[j].avgEmbedding);
+          if (similarity > minSimilarity) {
+            edges.push({ i, j, similarity });
+          }
+        }
+      }
+
+      // Sort edges by similarity (descending)
+      edges.sort((a, b) => b.similarity - a.similarity);
+
+      // Build MST
+      edges.forEach(({ i, j, similarity }) => {
+        if (find(i) !== find(j)) {
+          union(i, j);
+          links.push({
+            source: nodes[i].id,
+            target: nodes[j].id,
+            value: similarity
+          });
+        }
+      });
+
+      return links;
+    }
+  }
+};
+
 export default function JobSimilarityPage() {
   const [graphData, setGraphData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -45,6 +139,8 @@ export default function JobSimilarityPage() {
   const [highlightNodes, setHighlightNodes] = useState(new Set());
   const [highlightLinks, setHighlightLinks] = useState(new Set());
   const [hoverNode, setHoverNode] = useState(null);
+  const [algorithm, setAlgorithm] = useState('knn');
+  const [rawNodes, setRawNodes] = useState(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -65,18 +161,12 @@ export default function JobSimilarityPage() {
           jobGroups[title].push(item);
         });
 
-        // Create nodes and links
-        const nodes = [];
-        const links = new Set(); // Use Set to avoid duplicate links
-        const K_NEIGHBORS = 3; // Number of connections per node
-        const similarityThreshold = 0.7;
-
-        // Create nodes for each unique job title with normalized average embeddings
-        Object.entries(jobGroups).forEach(([title, items], index) => {
+        // Create nodes with normalized embeddings
+        const nodes = Object.entries(jobGroups).map(([title, items], index) => {
           const normalizedEmbeddings = items.map(item => normalizeVector(item.embedding));
           const avgEmbedding = getAverageEmbedding(normalizedEmbeddings);
           
-          nodes.push({
+          return {
             id: title,
             group: index,
             size: Math.log(items.length + 1) * 3,
@@ -84,37 +174,12 @@ export default function JobSimilarityPage() {
             uuids: items.map(item => item.uuid),
             avgEmbedding,
             color: `hsl(${Math.random() * 360}, 70%, 50%)`
-          });
+          };
         });
 
-        // For each node, find its K most similar neighbors
-        nodes.forEach((node, i) => {
-          // Calculate similarities with all other nodes
-          const similarities = nodes.map((otherNode, j) => ({
-            index: j,
-            similarity: i === j ? -1 : cosineSimilarity(node.avgEmbedding, otherNode.avgEmbedding)
-          }));
-
-          // Sort by similarity and get top K
-          similarities
-            .sort((a, b) => b.similarity - a.similarity)
-            .slice(0, K_NEIGHBORS)
-            .forEach(({ index, similarity }) => {
-              if (similarity > similarityThreshold) { 
-                const linkId = [i, index].sort().join('-');
-                links.add({
-                  source: nodes[i].id,
-                  target: nodes[index].id,
-                  value: similarity
-                });
-              }
-            });
-        });
-
-        setGraphData({ 
-          nodes, 
-          links: Array.from(links)
-        });
+        setRawNodes(nodes);
+        const links = algorithms[algorithm].compute(nodes);
+        setGraphData({ nodes, links });
       } catch (err) {
         setError(err.message);
       } finally {
@@ -124,6 +189,14 @@ export default function JobSimilarityPage() {
 
     fetchData();
   }, []);
+
+  // Update graph when algorithm changes
+  useEffect(() => {
+    if (rawNodes) {
+      const links = algorithms[algorithm].compute(rawNodes);
+      setGraphData({ nodes: rawNodes, links });
+    }
+  }, [algorithm, rawNodes]);
 
   const handleNodeHover = useCallback(node => {
     setHighlightNodes(new Set(node ? [node] : []));
@@ -153,7 +226,21 @@ export default function JobSimilarityPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-4">Job Similarity Network</h1>
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-3xl font-bold">Job Similarity Network</h1>
+        <div className="flex items-center gap-4">
+          <label className="font-medium">Algorithm:</label>
+          <select 
+            className="p-2 border rounded-lg bg-white"
+            value={algorithm}
+            onChange={(e) => setAlgorithm(e.target.value)}
+          >
+            {Object.entries(algorithms).map(([key, { name }]) => (
+              <option key={key} value={key}>{name}</option>
+            ))}
+          </select>
+        </div>
+      </div>
       <p className="mb-4">
         Explore similar job positions in an interactive network. Each node represents a job title, with size indicating the number of listings.
         Connected positions are similar based on job content. Hover to highlight connections, click to view job details.
