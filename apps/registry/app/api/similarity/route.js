@@ -18,9 +18,9 @@ export async function GET(request) {
   try {
     const supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
     const { searchParams } = new URL(request.url);
-    const limit = parseInt(searchParams.get('limit')) || 1500;
+    const limit = parseInt(searchParams.get('limit')) || 2000;
 
-    console.time('getSimilarityData');
+    console.time('getResumeSimilarityData');
     const { data, error } = await supabase
       .from('resumes')
       .select('username, embedding, resume')
@@ -29,14 +29,14 @@ export async function GET(request) {
       .order('created_at', { ascending: false });
 
     if (error) {
-      console.error('Error fetching similarity data:', error);
+      console.error('Error fetching resume similarity data:', error);
       return NextResponse.json(
-        { message: 'Error fetching similarity data' },
+        { message: 'Error fetching resume similarity data' },
         { status: 500 }
       );
     }
 
-    console.timeEnd('getSimilarityData');
+    console.timeEnd('getResumeSimilarityData');
 
     // Parse embeddings from strings to numerical arrays and extract position
     const parsedData = data.map(item => {
