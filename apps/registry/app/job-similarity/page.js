@@ -800,7 +800,7 @@ export default function Page() {
 
   return (
     <div className="min-h-screen bg-accent-100">
-      <div className="prose max-w-3xl mx-auto">
+      <div className="prose max-w-3xl mx-auto pt-8">
         <Header />
         <Controls
           dataSource={dataSource}
