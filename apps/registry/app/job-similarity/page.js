@@ -800,7 +800,7 @@ const GraphContainer = ({ dataSource, algorithm }) => {
           nodeColor={(node) =>
             highlightNodes.has(node) ? '#ff0000' : node.color
           }
-          nodeCanvasObject={(node, ctx, globalScale) => {
+          nodeCanvasObject={(node, ctx) => {
             // Draw node
             ctx.beginPath();
             ctx.arc(node.x, node.y, node.size * 2, 0, 2 * Math.PI);
