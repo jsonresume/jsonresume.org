@@ -40,6 +40,51 @@ function getAverageEmbedding(embeddings) {
 
 // Similarity algorithms
 const algorithms = {
+  mst: {
+    name: 'Minimum Spanning Tree',
+    compute: (nodes, minSimilarity = 0.3) => {
+      // Kruskal's algorithm for MST
+      const links = [];
+      const parent = new Array(nodes.length).fill(0).map((_, i) => i);
+      
+      function find(x) {
+        if (parent[x] !== x) parent[x] = find(parent[x]);
+        return parent[x];
+      }
+      
+      function union(x, y) {
+        parent[find(x)] = find(y);
+      }
+
+      // Create all possible edges with weights
+      const edges = [];
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const similarity = cosineSimilarity(nodes[i].avgEmbedding, nodes[j].avgEmbedding);
+          if (similarity > minSimilarity) {
+            edges.push({ i, j, similarity });
+          }
+        }
+      }
+
+      // Sort edges by similarity (descending)
+      edges.sort((a, b) => b.similarity - a.similarity);
+
+      // Build MST
+      edges.forEach(({ i, j, similarity }) => {
+        if (find(i) !== find(j)) {
+          union(i, j);
+          links.push({
+            source: nodes[i].id,
+            target: nodes[j].id,
+            value: similarity
+          });
+        }
+      });
+
+      return links;
+    }
+  },
   knn: {
     name: 'K-Nearest Neighbors',
     compute: (nodes, K = 3, minSimilarity = 0.5) => {
@@ -85,49 +130,132 @@ const algorithms = {
       return Array.from(links);
     }
   },
-  mst: {
-    name: 'Minimum Spanning Tree',
-    compute: (nodes, minSimilarity = 0.3) => {
-      // Kruskal's algorithm for MST
-      const links = [];
-      const parent = new Array(nodes.length).fill(0).map((_, i) => i);
-      
-      function find(x) {
-        if (parent[x] !== x) parent[x] = find(parent[x]);
-        return parent[x];
-      }
-      
-      function union(x, y) {
-        parent[find(x)] = find(y);
-      }
+  hierarchical: {
+    name: 'Hierarchical Clustering',
+    compute: (nodes, threshold = 0.5) => {
+      const links = new Set();
+      let clusters = new Array(nodes.length).fill(0).map((_, i) => [i]);
+      const similarities = [];
 
-      // Create all possible edges with weights
-      const edges = [];
+      // Calculate all pairwise similarities
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
           const similarity = cosineSimilarity(nodes[i].avgEmbedding, nodes[j].avgEmbedding);
-          if (similarity > minSimilarity) {
-            edges.push({ i, j, similarity });
+          similarities.push({ i, j, similarity });
+        }
+      }
+
+      // Sort by similarity descending
+      similarities.sort((a, b) => b.similarity - a.similarity);
+
+      // Merge clusters and add links
+      similarities.forEach(({ i, j, similarity }) => {
+        if (similarity > threshold) {
+          const cluster1 = clusters.find(c => c.includes(i));
+          const cluster2 = clusters.find(c => c.includes(j));
+          
+          if (cluster1 !== cluster2) {
+            // Add links between closest points in clusters
+            links.add({
+              source: nodes[i].id,
+              target: nodes[j].id,
+              value: similarity
+            });
+            
+            // Merge clusters
+            const merged = [...cluster1, ...cluster2];
+            clusters = clusters.filter(c => c !== cluster1 && c !== cluster2);
+            clusters.push(merged);
+          }
+        }
+      });
+
+      return Array.from(links);
+    }
+  },
+  community: {
+    name: 'Community Detection',
+    compute: (nodes, threshold = 0.5, communityThreshold = 0.6) => {
+      const links = new Set();
+      const communities = new Map();
+      let communityId = 0;
+
+      // First pass: create initial communities based on strong similarities
+      for (let i = 0; i < nodes.length; i++) {
+        if (!communities.has(i)) {
+          const community = new Set([i]);
+          communities.set(i, communityId);
+
+          // Find strongly connected nodes
+          for (let j = 0; j < nodes.length; j++) {
+            if (i !== j && !communities.has(j)) {
+              const similarity = cosineSimilarity(nodes[i].avgEmbedding, nodes[j].avgEmbedding);
+              if (similarity > communityThreshold) {
+                community.add(j);
+                communities.set(j, communityId);
+              }
+            }
+          }
+          communityId++;
+        }
+      }
+
+      // Second pass: connect communities
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const similarity = cosineSimilarity(nodes[i].avgEmbedding, nodes[j].avgEmbedding);
+          const sameCommunity = communities.get(i) === communities.get(j);
+
+          // Add links within communities and strong links between communities
+          if (similarity > (sameCommunity ? threshold : communityThreshold)) {
+            links.add({
+              source: nodes[i].id,
+              target: nodes[j].id,
+              value: similarity
+            });
           }
         }
       }
 
-      // Sort edges by similarity (descending)
-      edges.sort((a, b) => b.similarity - a.similarity);
-
-      // Build MST
-      edges.forEach(({ i, j, similarity }) => {
-        if (find(i) !== find(j)) {
-          union(i, j);
-          links.push({
-            source: nodes[i].id,
-            target: nodes[j].id,
-            value: similarity
-          });
+      return Array.from(links);
+    }
+  },
+  adaptive: {
+    name: 'Adaptive Threshold',
+    compute: (nodes) => {
+      const links = new Set();
+      const similarities = [];
+      
+      // Calculate all pairwise similarities
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const similarity = cosineSimilarity(nodes[i].avgEmbedding, nodes[j].avgEmbedding);
+          similarities.push(similarity);
         }
-      });
+      }
 
-      return links;
+      // Calculate adaptive threshold using mean and standard deviation
+      const mean = similarities.reduce((a, b) => a + b, 0) / similarities.length;
+      const std = Math.sqrt(
+        similarities.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / similarities.length
+      );
+      const adaptiveThreshold = mean + 0.5 * std;
+
+      // Create links based on adaptive threshold
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const similarity = cosineSimilarity(nodes[i].avgEmbedding, nodes[j].avgEmbedding);
+          if (similarity > adaptiveThreshold) {
+            links.add({
+              source: nodes[i].id,
+              target: nodes[j].id,
+              value: similarity
+            });
+          }
+        }
+      }
+
+      return Array.from(links);
     }
   }
 };
@@ -139,7 +267,7 @@ export default function JobSimilarityPage() {
   const [highlightNodes, setHighlightNodes] = useState(new Set());
   const [highlightLinks, setHighlightLinks] = useState(new Set());
   const [hoverNode, setHoverNode] = useState(null);
-  const [algorithm, setAlgorithm] = useState('knn');
+  const [algorithm, setAlgorithm] = useState('mst');
   const [rawNodes, setRawNodes] = useState(null);
 
   useEffect(() => {
