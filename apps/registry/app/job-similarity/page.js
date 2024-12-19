@@ -594,7 +594,7 @@ const GraphContainer = ({ dataSource, algorithm }) => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    
+
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
@@ -620,7 +620,7 @@ const GraphContainer = ({ dataSource, algorithm }) => {
   const handleNodeClick = useCallback(
     (node) => {
       if (!node) return;
-      
+
       if (isMobile) {
         // On mobile, just show the tooltip
         setHoverNode(node);

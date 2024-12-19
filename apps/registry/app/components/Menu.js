@@ -23,16 +23,24 @@ export default function Menu({ session }) {
     { href: '/explore', label: 'Explore' },
     { href: '/jobs', label: 'Jobs' },
     { href: '/job-similarity', label: 'Similarity' },
-    { href: 'https://github.com/jsonresume/jsonresume.org', label: 'Github', external: true },
+    {
+      href: 'https://github.com/jsonresume/jsonresume.org',
+      label: 'Github',
+      external: true,
+    },
     { href: 'https://discord.gg/GTZtn8pTXC', label: 'Discord', external: true },
   ];
 
   const authItems = [
-    ...(username ? [
-      { href: `/${username}/dashboard`, label: 'Profile' },
-      { href: '/editor', label: 'Editor' },
-    ] : []),
-    session ? { onClick: signOut, label: 'Logout' } : { href: '/', label: 'Sign in' },
+    ...(username
+      ? [
+          { href: `/${username}/dashboard`, label: 'Profile' },
+          { href: '/editor', label: 'Editor' },
+        ]
+      : []),
+    session
+      ? { onClick: signOut, label: 'Logout' }
+      : { href: '/', label: 'Sign in' },
   ];
 
   return (
@@ -56,9 +64,13 @@ export default function Menu({ session }) {
           </div>
         }
         right={
-          <div className={`${isOpen ? 'block' : 'hidden'} lg:flex lg:items-center lg:flex-1`}>
+          <div
+            className={`${
+              isOpen ? 'block' : 'hidden'
+            } lg:flex lg:items-center lg:flex-1`}
+          >
             <nav className="flex flex-col lg:flex-row lg:items-center lg:justify-end gap-4 p-4 lg:p-5">
-              {menuItems.map((item) => (
+              {menuItems.map((item) =>
                 item.external ? (
                   <a
                     key={item.href}
@@ -72,7 +84,8 @@ export default function Menu({ session }) {
                     key={item.href}
                     href={item.href}
                     className={`text-lg lg:text-xl font-bold ${
-                      isActive(item.href) || (item.href === '/jobs' && pathname.startsWith('/jobs/'))
+                      isActive(item.href) ||
+                      (item.href === '/jobs' && pathname.startsWith('/jobs/'))
                         ? 'text-secondary-900 underline'
                         : 'text-black'
                     } hover:text-secondary-900 transition-colors duration-200 py-2 lg:py-0`}
@@ -80,8 +93,8 @@ export default function Menu({ session }) {
                     {item.label}
                   </Link>
                 )
-              ))}
-              {authItems.map((item) => (
+              )}
+              {authItems.map((item) =>
                 item.onClick ? (
                   <button
                     key={item.label}
@@ -95,7 +108,8 @@ export default function Menu({ session }) {
                     key={item.href}
                     href={item.href}
                     className={`text-lg lg:text-xl font-bold hover:text-secondary-900 transition-colors duration-200 py-2 lg:py-0 ${
-                      (item.href === `/${username}/dashboard` && isProfileActive) ||
+                      (item.href === `/${username}/dashboard` &&
+                        isProfileActive) ||
                       isActive(item.href)
                         ? 'text-secondary-900 underline'
                         : 'text-black'
@@ -104,7 +118,7 @@ export default function Menu({ session }) {
                     {item.label}
                   </Link>
                 )
-              ))}
+              )}
             </nav>
           </div>
         }
