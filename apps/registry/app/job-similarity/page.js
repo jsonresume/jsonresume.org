@@ -858,13 +858,15 @@ const GraphContainer = ({ dataSource, algorithm }) => {
           onNodeHover={handleNodeHover}
           onNodeClick={handleNodeClick}
           enableNodeDrag={false}
+          warmupTicks={100}
           cooldownTicks={50}
           d3AlphaDecay={0.05}
           d3VelocityDecay={0.4}
-          warmupTicks={50}
           d3Force={{
-            collision: 1,
-            charge: -30,
+            collision: d3.forceCollide().radius((node) => Math.max(20, node.size * 2)),
+            charge: d3.forceManyBody().strength(-150),
+            x: d3.forceX().strength(0.05),
+            y: d3.forceY().strength(0.05)
           }}
           width={window.innerWidth}
           height={window.innerHeight - 32 * 16}
