@@ -508,7 +508,7 @@ const colors = [
 ];
 
 const Header = memo(() => (
-  <div className="prose max-w-3xl mx-auto mb-8">
+  <div className="mb-8">
     <h1 className="text-3xl font-bold mb-4">Job Market Simlarity</h1>
     <div className="space-y-4 text-gray-700">
       <p>
@@ -542,8 +542,8 @@ Header.displayName = 'Header';
 
 const Controls = memo(
   ({ dataSource, setDataSource, algorithm, setAlgorithm }) => (
-    <div className="prose max-w-3xl mx-auto mb-8">
-      <div className="flex gap-4 items-center">
+    <div className="mb-8">
+      <div className="flex flex-col sm:flex-row gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Data Source
@@ -916,7 +916,7 @@ export default function Page() {
 
   return (
     <div className="min-h-screen bg-accent-100">
-      <div className="prose max-w-3xl mx-auto pt-8">
+      <div className="prose max-w-3xl mx-auto pt-8 px-4 sm:px-6 lg:px-8">
         <Header />
         <Controls
           dataSource={dataSource}
