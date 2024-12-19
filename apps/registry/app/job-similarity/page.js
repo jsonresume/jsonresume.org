@@ -19,6 +19,25 @@ function cosineSimilarity(a, b) {
   return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
 }
 
+// Helper function to normalize vector
+function normalizeVector(vector) {
+  const magnitude = Math.sqrt(vector.reduce((sum, val) => sum + val * val, 0));
+  return vector.map(val => val / magnitude);
+}
+
+// Helper function to get average embedding
+function getAverageEmbedding(embeddings) {
+  const dim = embeddings[0].length;
+  const sum = new Array(dim).fill(0);
+  embeddings.forEach(emb => {
+    emb.forEach((val, i) => {
+      sum[i] += val;
+    });
+  });
+  const avg = sum.map(val => val / embeddings.length);
+  return normalizeVector(avg);
+}
+
 export default function JobSimilarityPage() {
   const [graphData, setGraphData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -48,49 +67,54 @@ export default function JobSimilarityPage() {
 
         // Create nodes and links
         const nodes = [];
-        const links = [];
+        const links = new Set(); // Use Set to avoid duplicate links
+        const K_NEIGHBORS = 3; // Number of connections per node
         const similarityThreshold = 0.7;
 
-        // Create nodes for each unique job title
+        // Create nodes for each unique job title with normalized average embeddings
         Object.entries(jobGroups).forEach(([title, items], index) => {
+          const normalizedEmbeddings = items.map(item => normalizeVector(item.embedding));
+          const avgEmbedding = getAverageEmbedding(normalizedEmbeddings);
+          
           nodes.push({
             id: title,
             group: index,
             size: Math.log(items.length + 1) * 3,
             count: items.length,
             uuids: items.map(item => item.uuid),
-            embeddings: items.map(item => item.embedding),
+            avgEmbedding,
             color: `hsl(${Math.random() * 360}, 70%, 50%)`
           });
         });
 
-        // Create links between similar jobs
-        for (let i = 0; i < nodes.length; i++) {
-          for (let j = i + 1; j < nodes.length; j++) {
-            // Calculate average similarity between groups
-            let totalSimilarity = 0;
-            let comparisons = 0;
-            
-            nodes[i].embeddings.forEach(emb1 => {
-              nodes[j].embeddings.forEach(emb2 => {
-                totalSimilarity += cosineSimilarity(emb1, emb2);
-                comparisons++;
-              });
+        // For each node, find its K most similar neighbors
+        nodes.forEach((node, i) => {
+          // Calculate similarities with all other nodes
+          const similarities = nodes.map((otherNode, j) => ({
+            index: j,
+            similarity: i === j ? -1 : cosineSimilarity(node.avgEmbedding, otherNode.avgEmbedding)
+          }));
+
+          // Sort by similarity and get top K
+          similarities
+            .sort((a, b) => b.similarity - a.similarity)
+            .slice(0, K_NEIGHBORS)
+            .forEach(({ index, similarity }) => {
+              if (similarity > similarityThreshold) { 
+                const linkId = [i, index].sort().join('-');
+                links.add({
+                  source: nodes[i].id,
+                  target: nodes[index].id,
+                  value: similarity
+                });
+              }
             });
+        });
 
-            const avgSimilarity = totalSimilarity / comparisons;
-            
-            if (avgSimilarity > similarityThreshold) {
-              links.push({
-                source: nodes[i].id,
-                target: nodes[j].id,
-                value: avgSimilarity
-              });
-            }
-          }
-        }
-
-        setGraphData({ nodes, links });
+        setGraphData({ 
+          nodes, 
+          links: Array.from(links)
+        });
       } catch (err) {
         setError(err.message);
       } finally {
