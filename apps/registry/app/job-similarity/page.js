@@ -799,80 +799,62 @@ const GraphContainer = ({ dataSource, algorithm }) => {
         <ForceGraph2D
           graphData={graphData}
           nodeColor={(node) =>
-            highlightNodes.has(node) ? '#FF4757' : node.color
+            highlightNodes.has(node) ? '#ff0000' : node.color
           }
           nodeCanvasObject={(node, ctx, globalScale) => {
             // Draw node
-            const size = node.size * (4 / Math.max(1, globalScale));
             ctx.beginPath();
-            ctx.arc(node.x, node.y, size, 0, 2 * Math.PI);
-            ctx.fillStyle = highlightNodes.has(node) ? '#FF4757' : node.color;
+            ctx.arc(node.x, node.y, node.size * 2, 0, 2 * Math.PI);
+            ctx.fillStyle = highlightNodes.has(node) ? '#ff0000' : node.color;
             ctx.fill();
 
-            // Add a subtle glow effect
-            if (highlightNodes.has(node)) {
-              ctx.shadowColor = '#FF4757';
-              ctx.shadowBlur = 15;
-              ctx.strokeStyle = '#FF4757';
-              ctx.lineWidth = 2;
-              ctx.stroke();
-              ctx.shadowBlur = 0;
-            }
             // Only draw label if node is highlighted
             if (highlightNodes.has(node)) {
               const label = node.id;
               const fontSize = Math.max(14, node.size * 1.5);
               ctx.font = `${fontSize}px Sans-Serif`;
-              ctx.textAlign = 'center';
-              ctx.textBaseline = 'middle';
-              ctx.fillStyle = '#000';
-
-              // Add background to text
               const textWidth = ctx.measureText(label).width;
-              const bckgDimensions = [textWidth, fontSize].map(
-                (n) => n + fontSize * 0.4
+              const bckgDimensions = [textWidth, fontSize].map((n) =>
+                n + fontSize * 0.2
               );
-              ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+
+              // Draw background for label
+              ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
               ctx.fillRect(
                 node.x - bckgDimensions[0] / 2,
-                node.y - bckgDimensions[1] / 2,
+                node.y - bckgDimensions[1] * 2,
                 bckgDimensions[0],
                 bckgDimensions[1]
               );
 
+              // Draw label
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
               ctx.fillStyle = '#000';
-              ctx.fillText(label, node.x, node.y);
+              ctx.fillText(label, node.x, node.y - bckgDimensions[1] * 1.5);
 
-              // Add count below label
-              const countLabel = `${node.count} ${
-                dataSource === 'jobs' ? 'jobs' : 'resumes'
-              }`;
+              // Draw count
+              const countLabel = `(${node.count})`;
               const smallerFont = fontSize * 0.7;
               ctx.font = `${smallerFont}px Sans-Serif`;
               ctx.fillText(countLabel, node.x, node.y - bckgDimensions[1]);
             }
           }}
-          nodeRelSize={4}
+          nodeRelSize={6}
           linkWidth={(link) => (highlightLinks.has(link) ? 2 : 1)}
           linkColor={(link) =>
-            highlightLinks.has(link) ? '#FF4757' : '#E5E9F2'
+            highlightLinks.has(link) ? '#ff0000' : '#cccccc'
           }
-          linkOpacity={0.5}
-          linkDirectionalParticles={0}
+          linkOpacity={0.3}
+          linkDirectionalParticles={4}
           linkDirectionalParticleWidth={2}
           onNodeHover={handleNodeHover}
           onNodeClick={handleNodeClick}
           enableNodeDrag={false}
+          cooldownTicks={100}
+          d3AlphaDecay={0.02}
+          d3VelocityDecay={0.3}
           warmupTicks={100}
-          cooldownTicks={50}
-          d3AlphaDecay={0.05}
-          d3VelocityDecay={0.4}
-          d3Force={{
-            collision: forceCollide().radius((node) => Math.max(20, node.size * 2)),
-            charge: forceManyBody().strength(-150),
-            x: forceX().strength(0.05),
-            y: forceY().strength(0.05)
-          }}
           width={window.innerWidth}
           height={window.innerHeight - 32 * 16}
         />
