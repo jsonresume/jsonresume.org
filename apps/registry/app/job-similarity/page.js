@@ -791,7 +791,7 @@ const GraphContainer = ({ dataSource, algorithm }) => {
     );
 
   return (
-    <div className="w-full h-full relative">
+    <div className="w-full h-[600px] relative">
       {graphData && (
         <ForceGraph2D
           graphData={graphData}
@@ -853,7 +853,7 @@ const GraphContainer = ({ dataSource, algorithm }) => {
           d3VelocityDecay={0.3}
           warmupTicks={100}
           width={window.innerWidth}
-          height={window.innerHeight - 32 * 16}
+          height={600}
         />
       )}
       {hoverNode && (
@@ -925,7 +925,7 @@ export default function Page() {
           setAlgorithm={setAlgorithm}
         />
       </div>
-      <div className="w-full h-[calc(100vh-32rem)] bg-white">
+      <div className="w-full h-[600px] bg-white">
         <GraphContainer dataSource={dataSource} algorithm={algorithm} />
       </div>
     </div>
