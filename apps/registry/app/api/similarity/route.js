@@ -18,14 +18,15 @@ export async function GET(request) {
   try {
     const supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
     const { searchParams } = new URL(request.url);
-    const limit = parseInt(searchParams.get('limit')) || 100;
+    const limit = parseInt(searchParams.get('limit')) || 500;
 
     console.time('getSimilarityData');
     const { data, error } = await supabase
       .from('resumes')
       .select('username, embedding')
       .not('embedding', 'is', null)
-      .limit(limit);
+      .limit(limit)
+      .order('created_at', { ascending: false });
 
     if (error) {
       console.error('Error fetching similarity data:', error);

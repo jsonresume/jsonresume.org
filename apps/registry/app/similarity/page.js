@@ -77,14 +77,16 @@ export default function SimilarityPage() {
           y: reducedEmbeddings.map(coords => coords[1]),
           text: jsonData.map(item => item.username),
           mode: 'markers+text',
-          type: 'scatter',
+          type: 'scattergl',  // Use WebGL renderer for better performance
           textposition: 'top',
           marker: {
-            size: 10,
+            size: 8,  // Slightly smaller markers for less overlap
             color: reducedEmbeddings.map((_, i) => i),
             colorscale: 'Viridis',
+            opacity: 0.7,  // Add some transparency
           },
           hoverinfo: 'text',
+          hovertemplate: '%{text}<extra></extra>',  // Clean hover label
           username: jsonData.map(item => item.username), // Store usernames for click handling
         };
 
@@ -129,12 +131,33 @@ export default function SimilarityPage() {
           data={[data]}
           layout={{
             title: 'Resume Similarity Map',
-            xaxis: { title: 'Component 1' },
-            yaxis: { title: 'Component 2' },
+            xaxis: { 
+              title: 'Component 1',
+              showgrid: true,
+              zeroline: false,
+            },
+            yaxis: { 
+              title: 'Component 2',
+              showgrid: true,
+              zeroline: false,
+            },
             hovermode: 'closest',
             width: null,
             height: null,
             autosize: true,
+            showlegend: false,
+            dragmode: 'zoom',  // Enable box zoom by default
+            modebar: {
+              remove: ['lasso', 'select'],
+              add: ['drawopenpath', 'eraseshape'],
+            },
+          }}
+          config={{
+            responsive: true,
+            scrollZoom: true,  // Enable scroll to zoom
+            displayModeBar: true,  // Always show the mode bar
+            modeBarButtonsToAdd: ['select2d', 'lasso2d'],  // Add selection tools
+            displaylogo: false,
           }}
           useResizeHandler
           className="w-full h-full"
