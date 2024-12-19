@@ -598,9 +598,40 @@ export default function JobSimilarityPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="prose max-w-4xl mx-auto mb-8">
+        <h1 className="text-3xl font-bold mb-4">Job Market Neural Network</h1>
+        <div className="space-y-4 text-gray-700">
+          <p>
+            This visualization represents a neural network of the current job market, created by analyzing thousands of job postings from "Who's Hiring" threads 
+            and comparing them against JSON Resume profiles. The data is processed using OpenAI's GPT-4 and embedding models to create a semantic understanding 
+            of job roles and skills.
+          </p>
+          <p>
+            <strong>Data Processing Pipeline:</strong>
+          </p>
+          <ul className="list-disc pl-5 space-y-2">
+            <li>
+              <strong>Job Data:</strong> Scraped from HN "Who's Hiring" threads → Processed through GPT-4 to generate standardized job descriptions → 
+              Converted to vectors using OpenAI's text-embedding-ada-002 model
+            </li>
+            <li>
+              <strong>Resume Data:</strong> Sourced from the JSON Resume Registry → Position and skills extracted → 
+              Vectorized using the same embedding model for direct comparison
+            </li>
+          </ul>
+          <p>
+            <strong>Visualization Algorithms:</strong> Choose from multiple graph algorithms to explore different aspects of the job market. The MST (Minimum Spanning Tree) 
+            shows core relationships, while algorithms like Community Detection and Maximum Cliques reveal clusters of similar roles.
+          </p>
+          <p>
+            Toggle between Jobs and Resumes to compare market demand against available talent. Performance Mode optimizes rendering for large datasets 
+            by reducing animations and physics calculations.
+          </p>
+        </div>
+      </div>
+
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-3xl font-bold">Similarity Network</h1>
         <div className="flex items-center gap-4">
           <label className="font-medium">Data Source:</label>
           <select 
@@ -625,18 +656,14 @@ export default function JobSimilarityPage() {
             <input
               type="checkbox"
               checked={performanceMode}
-              onChange={(e) => setPerformanceMode(e.target.checked)}
+              onChange={(e) => setPerformanceMode(e.checked)}
               className="mr-2"
             />
             Performance Mode
           </label>
         </div>
       </div>
-      <p className="mb-4">
-        Explore similar {dataSource === 'jobs' ? 'job positions' : 'resumes'} in an interactive network. 
-        Each node represents a {dataSource === 'jobs' ? 'job title' : 'position'}, with size indicating the number of {dataSource === 'jobs' ? 'listings' : 'resumes'}.
-        Connected positions are similar based on content. Hover to highlight connections, click to view details.
-      </p>
+
       <div className="relative w-full h-[800px] bg-white rounded-lg shadow-lg">
         {graphData && (
           <ForceGraph2D
@@ -699,7 +726,7 @@ export default function JobSimilarityPage() {
           />
         )}
         {hoverNode && (
-          <div className="absolute top-4 right-4 bg-white p-4 rounded-lg shadow-lg max-w-md">
+          <div className="absolute top-4 right-4 bg-white p-4 rounded-lg shadow-lg w-80">
             <h3 className="font-bold">{hoverNode.id}</h3>
             <p>{hoverNode.count} {dataSource === 'jobs' ? 'job listings' : 'resumes'}</p>
             {dataSource === 'jobs' && hoverNode.companies && (
