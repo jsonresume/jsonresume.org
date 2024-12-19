@@ -2,6 +2,7 @@
 
 import React, { useState, useCallback, memo, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import { forceCollide, forceManyBody, forceX, forceY } from 'd3-force';
 
 const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), {
   ssr: false,
@@ -713,10 +714,14 @@ const GraphContainer = ({ dataSource, algorithm }) => {
     setLoading(true);
     setError(null);
     try {
+      // Check if we're in development environment
+      const isLocal = process.env.NODE_ENV === 'development';
+      const limit = isLocal ? 300 : 1500;
+
       const response = await fetch(
         `/api/${
           dataSource === 'jobs' ? 'job-' : ''
-        }similarity?limit=1500&algorithm=${algorithm}`
+        }similarity?limit=${limit}`
       );
       if (!response.ok) {
         throw new Error('Failed to fetch data');
@@ -730,7 +735,7 @@ const GraphContainer = ({ dataSource, algorithm }) => {
     } finally {
       setLoading(false);
     }
-  }, [dataSource, algorithm, processData]);
+  }, [dataSource, processData]);
 
   const processLinks = useCallback(() => {
     if (!rawNodes) return;
@@ -863,10 +868,10 @@ const GraphContainer = ({ dataSource, algorithm }) => {
           d3AlphaDecay={0.05}
           d3VelocityDecay={0.4}
           d3Force={{
-            collision: d3.forceCollide().radius((node) => Math.max(20, node.size * 2)),
-            charge: d3.forceManyBody().strength(-150),
-            x: d3.forceX().strength(0.05),
-            y: d3.forceY().strength(0.05)
+            collision: forceCollide().radius((node) => Math.max(20, node.size * 2)),
+            charge: forceManyBody().strength(-150),
+            x: forceX().strength(0.05),
+            y: forceY().strength(0.05)
           }}
           width={window.innerWidth}
           height={window.innerHeight - 32 * 16}

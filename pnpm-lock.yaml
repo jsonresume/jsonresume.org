@@ -237,6 +237,9 @@ importers:
       compromise:
         specifier: ^14.13.0
         version: 14.13.0
+      d3-force:
+        specifier: ^3.0.0
+        version: 3.0.0
       dotenv-cli:
         specifier: ^7.2.1
         version: 7.2.1
@@ -13067,6 +13070,15 @@ packages:
       d3-dispatch: 1.0.6
       d3-quadtree: 1.0.7
       d3-timer: 1.0.10
+    dev: false
+
+  /d3-force@3.0.0:
+    resolution: {integrity: sha512-zxV/SsA+U4yte8051P4ECydjD/S+qeYtnaIyAs9tgHCqfguma/aAQDjo85A9Z6EKhBirHRJHXIgJUlffT4wdLg==}
+    engines: {node: '>=12'}
+    dependencies:
+      d3-dispatch: 1.0.6
+      d3-quadtree: 1.0.7
+      d3-timer: 3.0.1
     dev: false
 
   /d3-format@1.4.5:
