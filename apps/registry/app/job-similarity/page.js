@@ -598,40 +598,29 @@ export default function JobSimilarityPage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      <div className="prose max-w-4xl mx-auto mb-8">
+    <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="prose max-w-3xl mx-auto mb-8">
         <h1 className="text-3xl font-bold mb-4">Job Market Neural Network</h1>
         <div className="space-y-4 text-gray-700">
           <p>
-            This visualization represents a neural network of the current job market, created by analyzing thousands of job postings from "Who's Hiring" threads 
-            and comparing them against JSON Resume profiles. The data is processed using OpenAI's GPT-4 and embedding models to create a semantic understanding 
-            of job roles and skills.
-          </p>
-          <p>
-            <strong>Data Processing Pipeline:</strong>
+            An interactive visualization of the tech job market, powered by data from HN "Who's Hiring" threads and the JSON Resume Registry. 
+            The network reveals patterns and clusters in job roles and resume profiles through semantic analysis.
           </p>
           <ul className="list-disc pl-5 space-y-2">
             <li>
-              <strong>Job Data:</strong> Scraped from HN "Who's Hiring" threads → Processed through GPT-4 to generate standardized job descriptions → 
-              Converted to vectors using OpenAI's text-embedding-ada-002 model
+              <strong>Jobs View:</strong> Job posts from "Who's Hiring" → GPT-4 standardization → OpenAI embeddings
             </li>
             <li>
-              <strong>Resume Data:</strong> Sourced from the JSON Resume Registry → Position and skills extracted → 
-              Vectorized using the same embedding model for direct comparison
+              <strong>Resumes View:</strong> JSON Resume profiles → OpenAI embeddings
             </li>
           </ul>
           <p>
-            <strong>Visualization Algorithms:</strong> Choose from multiple graph algorithms to explore different aspects of the job market. The MST (Minimum Spanning Tree) 
-            shows core relationships, while algorithms like Community Detection and Maximum Cliques reveal clusters of similar roles.
-          </p>
-          <p>
-            Toggle between Jobs and Resumes to compare market demand against available talent. Performance Mode optimizes rendering for large datasets 
-            by reducing animations and physics calculations.
+            Multiple graph algorithms available to explore different relationships. Performance Mode recommended for larger datasets.
           </p>
         </div>
       </div>
 
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex justify-end mb-4">
         <div className="flex items-center gap-4">
           <label className="font-medium">Data Source:</label>
           <select 
