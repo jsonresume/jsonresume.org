@@ -62,7 +62,12 @@ export async function GET(request) {
       };
     }).filter(item => item.embedding !== null);
 
-    return NextResponse.json(parsedData);
+    return NextResponse.json(parsedData, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'public, max-age=86400, s-maxage=86400, stale-while-revalidate=86400',
+      },
+    });
   } catch (error) {
     console.error('Error in job similarity endpoint:', error);
     return NextResponse.json(
