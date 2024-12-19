@@ -464,42 +464,43 @@ const Header = memo(() => (
   </div>
 ));
 
-const Controls = memo(({ dataSource, algorithm, performanceMode, onDataSourceChange, onAlgorithmChange, onPerformanceModeChange, algorithms }) => (
-  <div className="flex justify-end mb-4">
-    <div className="flex items-center gap-4">
-      <label className="font-medium">Data Source:</label>
-      <select 
-        className="p-2 border rounded-lg bg-white"
-        value={dataSource}
-        onChange={onDataSourceChange}
-      >
-        <option value="jobs">Jobs</option>
-        <option value="resumes">Resumes</option>
-      </select>
-      <label className="font-medium">Algorithm:</label>
-      <select 
-        className="p-2 border rounded-lg bg-white"
-        value={algorithm}
-        onChange={onAlgorithmChange}
-      >
-        {Object.entries(algorithms).map(([key, { name }]) => (
-          <option key={key} value={key}>{name}</option>
-        ))}
-      </select>
-      <label className="font-medium ml-4">
-        <input
-          type="checkbox"
-          checked={performanceMode}
-          onChange={onPerformanceModeChange}
-          className="mr-2"
-        />
-        Performance Mode
-      </label>
+const Controls = memo(({ dataSource, setDataSource, algorithm, setAlgorithm }) => (
+  <div className="prose max-w-3xl mx-auto mb-8">
+    <div className="flex gap-4 items-center">
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Data Source
+        </label>
+        <select
+          value={dataSource}
+          onChange={(e) => setDataSource(e.target.value)}
+          className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-secondary-500 focus:border-secondary-500 sm:text-sm rounded-md"
+        >
+          <option value="jobs">Job Listings</option>
+          <option value="resumes">Resumes</option>
+        </select>
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Algorithm
+        </label>
+        <select
+          value={algorithm}
+          onChange={(e) => setAlgorithm(e.target.value)}
+          className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-secondary-500 focus:border-secondary-500 sm:text-sm rounded-md"
+        >
+          {Object.entries(algorithms).map(([key, { name }]) => (
+            <option key={key} value={key}>
+              {name}
+            </option>
+          ))}
+        </select>
+      </div>
     </div>
   </div>
 ));
 
-const GraphContainer = ({ dataSource, algorithm, performanceMode }) => {
+const GraphContainer = ({ dataSource, algorithm }) => {
   const [graphData, setGraphData] = useState(null);
   const [hoverNode, setHoverNode] = useState(null);
   const [rawNodes, setRawNodes] = useState(null);
@@ -712,48 +713,48 @@ const GraphContainer = ({ dataSource, algorithm, performanceMode }) => {
               const label = node.id;
               const fontSize = Math.max(14, node.size * 1.5);
               ctx.font = `${fontSize}px Sans-Serif`;
-              const textWidth = ctx.measureText(label).width;
-              const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2);
-
-              // Draw background for label
-              ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-              ctx.fillRect(
-                node.x - bckgDimensions[0] / 2,
-                node.y - bckgDimensions[1] * 2,
-                bckgDimensions[0],
-                bckgDimensions[1]
-              );
-
-              // Draw label
               ctx.textAlign = 'center';
               ctx.textBaseline = 'middle';
               ctx.fillStyle = '#000';
-              ctx.fillText(label, node.x, node.y - bckgDimensions[1] * 1.5);
+              
+              // Add background to text
+              const textWidth = ctx.measureText(label).width;
+              const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.4);
+              ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+              ctx.fillRect(
+                node.x - bckgDimensions[0] / 2,
+                node.y - bckgDimensions[1] / 2,
+                bckgDimensions[0],
+                bckgDimensions[1]
+              );
+              
+              ctx.fillStyle = '#000';
+              ctx.fillText(label, node.x, node.y);
 
-              // Draw count
-              const countLabel = `(${node.count})`;
+              // Add count below label
+              const countLabel = `${node.count} ${dataSource === 'jobs' ? 'jobs' : 'resumes'}`;
               const smallerFont = fontSize * 0.7;
               ctx.font = `${smallerFont}px Sans-Serif`;
               ctx.fillText(countLabel, node.x, node.y - bckgDimensions[1]);
             }
           }}
-          nodeRelSize={performanceMode ? 4 : 6}
+          nodeRelSize={4}
           linkWidth={link => highlightLinks.has(link) ? 2 : 1}
           linkColor={link => highlightLinks.has(link) ? '#ff0000' : '#cccccc'}
           linkOpacity={0.3}
-          linkDirectionalParticles={performanceMode ? 0 : 4}
+          linkDirectionalParticles={0}
           linkDirectionalParticleWidth={2}
           onNodeHover={handleNodeHover}
           onNodeClick={handleNodeClick}
-          enableNodeDrag={!performanceMode}
-          cooldownTicks={performanceMode ? 50 : 100}
-          d3AlphaDecay={performanceMode ? 0.05 : 0.02}
-          d3VelocityDecay={performanceMode ? 0.4 : 0.3}
-          warmupTicks={performanceMode ? 50 : 100}
-          d3Force={performanceMode ? {
+          enableNodeDrag={false}
+          cooldownTicks={50}
+          d3AlphaDecay={0.05}
+          d3VelocityDecay={0.4}
+          warmupTicks={50}
+          d3Force={{
             collision: 1,
             charge: -30
-          } : undefined}
+          }}
         />
       )}
       {hoverNode && (
@@ -794,33 +795,20 @@ const GraphContainer = ({ dataSource, algorithm, performanceMode }) => {
 export default function Page() {
   const [dataSource, setDataSource] = useState('jobs');
   const [algorithm, setAlgorithm] = useState('mst');
-  const [performanceMode, setPerformanceMode] = useState(false);
-
-  const handleDataSourceChange = useCallback((e) => setDataSource(e.target.value), []);
-  const handleAlgorithmChange = useCallback((e) => setAlgorithm(e.target.value), []);
-  const handlePerformanceModeChange = useCallback((e) => setPerformanceMode(e.checked), []);
 
   return (
-    <div className="min-h-screen">
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        <Header />
-        <Controls 
-          dataSource={dataSource}
-          algorithm={algorithm}
-          performanceMode={performanceMode}
-          onDataSourceChange={handleDataSourceChange}
-          onAlgorithmChange={handleAlgorithmChange}
-          onPerformanceModeChange={handlePerformanceModeChange}
-          algorithms={algorithms}
-        />
-      </div>
-      <div className="w-full">
-        <GraphContainer 
-          dataSource={dataSource}
-          algorithm={algorithm}
-          performanceMode={performanceMode}
-        />
-      </div>
+    <div className="min-h-screen bg-accent-100">
+      <Header />
+      <Controls
+        dataSource={dataSource}
+        setDataSource={setDataSource}
+        algorithm={algorithm}
+        setAlgorithm={setAlgorithm}
+      />
+      <GraphContainer
+        dataSource={dataSource}
+        algorithm={algorithm}
+      />
     </div>
   );
 }
