@@ -45,9 +45,9 @@ export default function Menu({ session }) {
               Jobs
             </Link>
             <Link
-              href="/similarity"
+              href="/job-similarity"
               className={`text-xl font-bold ${
-                isActive('/similarity')
+                isActive('/job-similarity')
                   ? 'text-secondary-900 underline'
                   : 'text-black'
               } hover:text-secondary-900 transition-colors duration-200`}
