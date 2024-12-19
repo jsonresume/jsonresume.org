@@ -1,48 +1,41 @@
 'use client';
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useState, useCallback, memo, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 
-// Import ForceGraph dynamically to avoid SSR issues
 const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), { ssr: false });
 
 // Helper function to compute cosine similarity
-function cosineSimilarity(a, b) {
-  let dotProduct = 0;
-  let normA = 0;
-  let normB = 0;
-  for (let i = 0; i < a.length; i++) {
-    dotProduct += a[i] * b[i];
-    normA += a[i] * a[i];
-    normB += b[i] * b[i];
-  }
-  return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
-}
+const cosineSimilarity = (a, b) => {
+  if (!Array.isArray(a) || !Array.isArray(b) || a.length !== b.length) return 0;
+  
+  const dotProduct = a.reduce((sum, _, i) => sum + a[i] * b[i], 0);
+  const magnitudeA = Math.sqrt(a.reduce((sum, val) => sum + val * val, 0));
+  const magnitudeB = Math.sqrt(b.reduce((sum, val) => sum + val * val, 0));
+  
+  return dotProduct / (magnitudeA * magnitudeB);
+};
 
-// Helper function to normalize vector
-function normalizeVector(vector) {
+// Helper function to normalize a vector
+const normalizeVector = (vector) => {
   if (!Array.isArray(vector) || vector.length === 0) return null;
+  
   const magnitude = Math.sqrt(vector.reduce((sum, val) => sum + val * val, 0));
   if (magnitude === 0) return null;
+  
   return vector.map(val => val / magnitude);
-}
+};
 
 // Helper function to get average embedding
-function getAverageEmbedding(embeddings) {
-  // Filter out null or invalid embeddings
-  const validEmbeddings = embeddings.filter(emb => Array.isArray(emb) && emb.length > 0);
-  if (validEmbeddings.length === 0) return null;
-
-  const dim = validEmbeddings[0].length;
-  const sum = new Array(dim).fill(0);
-  validEmbeddings.forEach(emb => {
-    emb.forEach((val, i) => {
-      sum[i] += val;
-    });
-  });
-  const avg = sum.map(val => val / validEmbeddings.length);
-  return normalizeVector(avg);
-}
+const getAverageEmbedding = (embeddings) => {
+  if (!Array.isArray(embeddings) || embeddings.length === 0) return null;
+  
+  const sum = embeddings.reduce((acc, curr) => {
+    return acc.map((val, i) => val + curr[i]);
+  }, new Array(embeddings[0].length).fill(0));
+  
+  return sum.map(val => val / embeddings.length);
+};
 
 // Similarity algorithms
 const algorithms = {
@@ -448,21 +441,76 @@ const algorithms = {
   }
 };
 
-export default function JobSimilarityPage() {
+const Header = memo(() => (
+  <div className="prose max-w-3xl mx-auto mb-8">
+    <h1 className="text-3xl font-bold mb-4">Job Market Neural Network</h1>
+    <div className="space-y-4 text-gray-700">
+      <p>
+        An interactive visualization of the tech job market, powered by data from HN "Who's Hiring" threads and the JSON Resume Registry. 
+        The network reveals patterns and clusters in job roles and resume profiles through semantic analysis.
+      </p>
+      <ul className="list-disc pl-5 space-y-2">
+        <li>
+          <strong>Jobs View:</strong> Job posts from "Who's Hiring" → GPT-4 standardization → OpenAI embeddings
+        </li>
+        <li>
+          <strong>Resumes View:</strong> JSON Resume profiles → OpenAI embeddings
+        </li>
+      </ul>
+      <p>
+        Multiple graph algorithms available to explore different relationships. Performance Mode recommended for larger datasets.
+      </p>
+    </div>
+  </div>
+));
+
+const Controls = memo(({ dataSource, algorithm, performanceMode, onDataSourceChange, onAlgorithmChange, onPerformanceModeChange, algorithms }) => (
+  <div className="flex justify-end mb-4">
+    <div className="flex items-center gap-4">
+      <label className="font-medium">Data Source:</label>
+      <select 
+        className="p-2 border rounded-lg bg-white"
+        value={dataSource}
+        onChange={onDataSourceChange}
+      >
+        <option value="jobs">Jobs</option>
+        <option value="resumes">Resumes</option>
+      </select>
+      <label className="font-medium">Algorithm:</label>
+      <select 
+        className="p-2 border rounded-lg bg-white"
+        value={algorithm}
+        onChange={onAlgorithmChange}
+      >
+        {Object.entries(algorithms).map(([key, { name }]) => (
+          <option key={key} value={key}>{name}</option>
+        ))}
+      </select>
+      <label className="font-medium ml-4">
+        <input
+          type="checkbox"
+          checked={performanceMode}
+          onChange={onPerformanceModeChange}
+          className="mr-2"
+        />
+        Performance Mode
+      </label>
+    </div>
+  </div>
+));
+
+const GraphContainer = ({ dataSource, algorithm, performanceMode }) => {
   const [graphData, setGraphData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [hoverNode, setHoverNode] = useState(null);
+  const [rawNodes, setRawNodes] = useState(null);
   const [highlightNodes, setHighlightNodes] = useState(new Set());
   const [highlightLinks, setHighlightLinks] = useState(new Set());
-  const [hoverNode, setHoverNode] = useState(null);
-  const [algorithm, setAlgorithm] = useState('mst');
-  const [dataSource, setDataSource] = useState('jobs');
-  const [rawNodes, setRawNodes] = useState(null);
-  const [performanceMode, setPerformanceMode] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Fetch data only when dataSource changes
+  // Fetch data when dataSource changes
   useEffect(() => {
-    async function fetchData() {
+    const fetchData = async () => {
       setLoading(true);
       setError(null);
       try {
@@ -539,30 +587,75 @@ export default function JobSimilarityPage() {
       } finally {
         setLoading(false);
       }
-    }
+    };
 
     fetchData();
-  }, [dataSource]); // Only depend on dataSource
+  }, [dataSource]);
 
   // Compute links when algorithm changes or when we have new nodes
   useEffect(() => {
     if (!rawNodes) return;
-    
-    try {
-      const links = algorithms[algorithm].compute(rawNodes);
-      setGraphData({ nodes: rawNodes, links });
-    } catch (err) {
-      console.error('Error computing links:', err);
-      setError(err.message);
-    }
-  }, [algorithm, rawNodes]);
 
-  useEffect(() => {
-    // Enable performance mode automatically for large datasets
-    if (graphData?.nodes?.length > 1000) {
-      setPerformanceMode(true);
+    const links = [];
+    const threshold = 0.7; // Similarity threshold
+
+    // Different algorithms for computing links
+    if (algorithm === 'mst') {
+      // Kruskal's algorithm for MST
+      const parent = new Array(rawNodes.length).fill(0).map((_, i) => i);
+      
+      function find(x) {
+        if (parent[x] !== x) parent[x] = find(parent[x]);
+        return parent[x];
+      }
+      
+      function union(x, y) {
+        parent[find(x)] = find(y);
+      }
+
+      // Create all possible edges with weights
+      const edges = [];
+      for (let i = 0; i < rawNodes.length; i++) {
+        for (let j = i + 1; j < rawNodes.length; j++) {
+          const similarity = cosineSimilarity(rawNodes[i].avgEmbedding, rawNodes[j].avgEmbedding);
+          if (similarity > threshold) {
+            edges.push({ i, j, similarity });
+          }
+        }
+      }
+
+      // Sort edges by similarity (descending)
+      edges.sort((a, b) => b.similarity - a.similarity);
+
+      // Build MST
+      edges.forEach(({ i, j, similarity }) => {
+        if (find(i) !== find(j)) {
+          union(i, j);
+          links.push({
+            source: rawNodes[i].id,
+            target: rawNodes[j].id,
+            value: similarity
+          });
+        }
+      });
+    } else if (algorithm === 'threshold') {
+      // Simple threshold algorithm
+      for (let i = 0; i < rawNodes.length; i++) {
+        for (let j = i + 1; j < rawNodes.length; j++) {
+          const similarity = cosineSimilarity(rawNodes[i].avgEmbedding, rawNodes[j].avgEmbedding);
+          if (similarity > threshold) {
+            links.push({
+              source: rawNodes[i].id,
+              target: rawNodes[j].id,
+              value: similarity
+            });
+          }
+        }
+      }
     }
-  }, [graphData]);
+
+    setGraphData({ nodes: rawNodes, links });
+  }, [rawNodes, algorithm]);
 
   const handleNodeHover = useCallback(node => {
     setHighlightNodes(new Set(node ? [node] : []));
@@ -579,173 +672,132 @@ export default function JobSimilarityPage() {
     }
   }, [dataSource]);
 
-  if (loading) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-4">Similarity Network</h1>
-        <p>Loading...</p>
-      </div>
-    );
-  }
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
-  if (error) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-4">Similarity Network</h1>
-        <p className="text-red-500">Error: {error}</p>
-      </div>
-    );
-  }
+  return (
+    <div className="relative w-full h-[800px] bg-white rounded-lg shadow-lg">
+      {graphData && (
+        <ForceGraph2D
+          graphData={graphData}
+          nodeColor={node => highlightNodes.has(node) ? '#ff0000' : node.color}
+          nodeCanvasObject={(node, ctx, globalScale) => {
+            // Draw node
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, node.size * 2, 0, 2 * Math.PI);
+            ctx.fillStyle = highlightNodes.has(node) ? '#ff0000' : node.color;
+            ctx.fill();
+
+            // Only draw label if node is highlighted
+            if (highlightNodes.has(node)) {
+              const label = node.id;
+              const fontSize = Math.max(14, node.size * 1.5);
+              ctx.font = `${fontSize}px Sans-Serif`;
+              const textWidth = ctx.measureText(label).width;
+              const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2);
+
+              // Draw background for label
+              ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+              ctx.fillRect(
+                node.x - bckgDimensions[0] / 2,
+                node.y - bckgDimensions[1] * 2,
+                bckgDimensions[0],
+                bckgDimensions[1]
+              );
+
+              // Draw label
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              ctx.fillStyle = '#000';
+              ctx.fillText(label, node.x, node.y - bckgDimensions[1] * 1.5);
+
+              // Draw count
+              const countLabel = `(${node.count})`;
+              const smallerFont = fontSize * 0.7;
+              ctx.font = `${smallerFont}px Sans-Serif`;
+              ctx.fillText(countLabel, node.x, node.y - bckgDimensions[1]);
+            }
+          }}
+          nodeRelSize={performanceMode ? 4 : 6}
+          linkWidth={link => highlightLinks.has(link) ? 2 : 1}
+          linkColor={link => highlightLinks.has(link) ? '#ff0000' : '#cccccc'}
+          linkOpacity={0.3}
+          linkDirectionalParticles={performanceMode ? 0 : 4}
+          linkDirectionalParticleWidth={2}
+          onNodeHover={handleNodeHover}
+          onNodeClick={handleNodeClick}
+          enableNodeDrag={!performanceMode}
+          cooldownTicks={performanceMode ? 50 : 100}
+          d3AlphaDecay={performanceMode ? 0.05 : 0.02}
+          d3VelocityDecay={performanceMode ? 0.4 : 0.3}
+          warmupTicks={performanceMode ? 50 : 100}
+          d3Force={performanceMode ? {
+            collision: 1,
+            charge: -30
+          } : undefined}
+        />
+      )}
+      {hoverNode && (
+        <div className="absolute top-4 right-4 bg-white p-4 rounded-lg shadow-lg w-80">
+          <h3 className="font-bold">{hoverNode.id}</h3>
+          <p>{hoverNode.count} {dataSource === 'jobs' ? 'job listings' : 'resumes'}</p>
+          {dataSource === 'jobs' && hoverNode.companies && (
+            <div className="mt-2">
+              <p className="text-sm text-gray-600">Companies:</p>
+              <p className="text-sm">{hoverNode.companies.slice(0, 5).join(', ')}{hoverNode.companies.length > 5 ? `, +${hoverNode.companies.length - 5} more` : ''}</p>
+            </div>
+          )}
+          {dataSource === 'jobs' && hoverNode.countryCodes && (
+            <div className="mt-2">
+              <p className="text-sm text-gray-600">Locations:</p>
+              <p className="text-sm">{hoverNode.countryCodes.slice(0, 5).join(', ')}{hoverNode.countryCodes.length > 5 ? `, +${hoverNode.countryCodes.length - 5} more` : ''}</p>
+            </div>
+          )}
+          {dataSource !== 'jobs' && hoverNode.usernames && (
+            <div className="mt-2">
+              <p className="text-sm text-gray-600">Usernames:</p>
+              <div className="text-sm max-h-32 overflow-y-auto">
+                {hoverNode.usernames.map((username, i) => (
+                  <div key={i} className="hover:bg-gray-100 p-1 rounded cursor-pointer" onClick={() => window.open(`/${username}`, '_blank')}>
+                    {username}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          <p className="text-sm text-gray-600 mt-2">Click to view {dataSource === 'jobs' ? 'job' : 'resume'}</p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default function Page() {
+  const [dataSource, setDataSource] = useState('jobs');
+  const [algorithm, setAlgorithm] = useState('mst');
+  const [performanceMode, setPerformanceMode] = useState(false);
+
+  const handleDataSourceChange = useCallback((e) => setDataSource(e.target.value), []);
+  const handleAlgorithmChange = useCallback((e) => setAlgorithm(e.target.value), []);
+  const handlePerformanceModeChange = useCallback((e) => setPerformanceMode(e.checked), []);
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
-      <div className="prose max-w-3xl mx-auto mb-8">
-        <h1 className="text-3xl font-bold mb-4">Job Market Neural Network</h1>
-        <div className="space-y-4 text-gray-700">
-          <p>
-            An interactive visualization of the tech job market, powered by data from HN "Who's Hiring" threads and the JSON Resume Registry. 
-            The network reveals patterns and clusters in job roles and resume profiles through semantic analysis.
-          </p>
-          <ul className="list-disc pl-5 space-y-2">
-            <li>
-              <strong>Jobs View:</strong> Job posts from "Who's Hiring" → GPT-4 standardization → OpenAI embeddings
-            </li>
-            <li>
-              <strong>Resumes View:</strong> JSON Resume profiles → OpenAI embeddings
-            </li>
-          </ul>
-          <p>
-            Multiple graph algorithms available to explore different relationships. Performance Mode recommended for larger datasets.
-          </p>
-        </div>
-      </div>
-
-      <div className="flex justify-end mb-4">
-        <div className="flex items-center gap-4">
-          <label className="font-medium">Data Source:</label>
-          <select 
-            className="p-2 border rounded-lg bg-white"
-            value={dataSource}
-            onChange={(e) => setDataSource(e.target.value)}
-          >
-            <option value="jobs">Jobs</option>
-            <option value="resumes">Resumes</option>
-          </select>
-          <label className="font-medium">Algorithm:</label>
-          <select 
-            className="p-2 border rounded-lg bg-white"
-            value={algorithm}
-            onChange={(e) => setAlgorithm(e.target.value)}
-          >
-            {Object.entries(algorithms).map(([key, { name }]) => (
-              <option key={key} value={key}>{name}</option>
-            ))}
-          </select>
-          <label className="font-medium ml-4">
-            <input
-              type="checkbox"
-              checked={performanceMode}
-              onChange={(e) => setPerformanceMode(e.checked)}
-              className="mr-2"
-            />
-            Performance Mode
-          </label>
-        </div>
-      </div>
-
-      <div className="relative w-full h-[800px] bg-white rounded-lg shadow-lg">
-        {graphData && (
-          <ForceGraph2D
-            graphData={graphData}
-            nodeColor={node => highlightNodes.has(node) ? '#ff0000' : node.color}
-            nodeCanvasObject={(node, ctx, globalScale) => {
-              // Draw node
-              ctx.beginPath();
-              ctx.arc(node.x, node.y, node.size * 2, 0, 2 * Math.PI);
-              ctx.fillStyle = highlightNodes.has(node) ? '#ff0000' : node.color;
-              ctx.fill();
-
-              // Only draw label if node is highlighted
-              if (highlightNodes.has(node)) {
-                const label = node.id;
-                const fontSize = Math.max(14, node.size * 1.5);
-                ctx.font = `${fontSize}px Sans-Serif`;
-                const textWidth = ctx.measureText(label).width;
-                const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2);
-
-                // Draw background for label
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-                ctx.fillRect(
-                  node.x - bckgDimensions[0] / 2,
-                  node.y - bckgDimensions[1] * 2,
-                  bckgDimensions[0],
-                  bckgDimensions[1]
-                );
-
-                // Draw label
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillStyle = '#000';
-                ctx.fillText(label, node.x, node.y - bckgDimensions[1] * 1.5);
-
-                // Draw count
-                const countLabel = `(${node.count})`;
-                const smallerFont = fontSize * 0.7;
-                ctx.font = `${smallerFont}px Sans-Serif`;
-                ctx.fillText(countLabel, node.x, node.y - bckgDimensions[1]);
-              }
-            }}
-            nodeRelSize={performanceMode ? 4 : 6}
-            linkWidth={link => highlightLinks.has(link) ? 2 : 1}
-            linkColor={link => highlightLinks.has(link) ? '#ff0000' : '#cccccc'}
-            linkOpacity={0.3}
-            linkDirectionalParticles={performanceMode ? 0 : 4}
-            linkDirectionalParticleWidth={2}
-            onNodeHover={handleNodeHover}
-            onNodeClick={handleNodeClick}
-            enableNodeDrag={!performanceMode}
-            cooldownTicks={performanceMode ? 50 : 100}
-            d3AlphaDecay={performanceMode ? 0.05 : 0.02}
-            d3VelocityDecay={performanceMode ? 0.4 : 0.3}
-            warmupTicks={performanceMode ? 50 : 100}
-            d3Force={performanceMode ? {
-              collision: 1,
-              charge: -30
-            } : undefined}
-          />
-        )}
-        {hoverNode && (
-          <div className="absolute top-4 right-4 bg-white p-4 rounded-lg shadow-lg w-80">
-            <h3 className="font-bold">{hoverNode.id}</h3>
-            <p>{hoverNode.count} {dataSource === 'jobs' ? 'job listings' : 'resumes'}</p>
-            {dataSource === 'jobs' && hoverNode.companies && (
-              <div className="mt-2">
-                <p className="text-sm text-gray-600">Companies:</p>
-                <p className="text-sm">{hoverNode.companies.slice(0, 5).join(', ')}{hoverNode.companies.length > 5 ? `, +${hoverNode.companies.length - 5} more` : ''}</p>
-              </div>
-            )}
-            {dataSource === 'jobs' && hoverNode.countryCodes && (
-              <div className="mt-2">
-                <p className="text-sm text-gray-600">Locations:</p>
-                <p className="text-sm">{hoverNode.countryCodes.slice(0, 5).join(', ')}{hoverNode.countryCodes.length > 5 ? `, +${hoverNode.countryCodes.length - 5} more` : ''}</p>
-              </div>
-            )}
-            {dataSource !== 'jobs' && hoverNode.usernames && (
-              <div className="mt-2">
-                <p className="text-sm text-gray-600">Usernames:</p>
-                <div className="text-sm max-h-32 overflow-y-auto">
-                  {hoverNode.usernames.map((username, i) => (
-                    <div key={i} className="hover:bg-gray-100 p-1 rounded cursor-pointer" onClick={() => window.open(`/${username}`, '_blank')}>
-                      {username}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-            <p className="text-sm text-gray-600 mt-2">Click to view {dataSource === 'jobs' ? 'job' : 'resume'}</p>
-          </div>
-        )}
-      </div>
+      <Header />
+      <Controls 
+        dataSource={dataSource}
+        algorithm={algorithm}
+        performanceMode={performanceMode}
+        onDataSourceChange={handleDataSourceChange}
+        onAlgorithmChange={handleAlgorithmChange}
+        onPerformanceModeChange={handlePerformanceModeChange}
+        algorithms={algorithms}
+      />
+      <GraphContainer 
+        dataSource={dataSource}
+        algorithm={algorithm}
+        performanceMode={performanceMode}
+      />
     </div>
   );
 }
