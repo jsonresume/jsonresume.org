@@ -44,6 +44,16 @@ export default function Menu({ session }) {
             >
               Jobs
             </Link>
+            <Link
+              href="/similarity"
+              className={`text-xl font-bold ${
+                isActive('/similarity')
+                  ? 'text-secondary-900 underline'
+                  : 'text-black'
+              } hover:text-secondary-900 transition-colors duration-200`}
+            >
+              Similarity
+            </Link>
             <a
               href="https://github.com/jsonresume/jsonresume.org"
               className="text-xl font-bold text-black hover:text-secondary-900 transition-colors duration-200"
