@@ -588,6 +588,17 @@ const GraphContainer = ({ dataSource, algorithm }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [edges, setEdges] = useState([]);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const handleNodeHover = useCallback(
     (node) => {
@@ -609,12 +620,19 @@ const GraphContainer = ({ dataSource, algorithm }) => {
   const handleNodeClick = useCallback(
     (node) => {
       if (!node) return;
+      
+      if (isMobile) {
+        // On mobile, just show the tooltip
+        setHoverNode(node);
+        return;
+      }
+
       if (node.uuids && node.uuids.length > 0) {
         const baseUrl = dataSource === 'jobs' ? '/jobs/' : '/';
         window.open(`${baseUrl}${node.uuids[0]}`, '_blank');
       }
     },
-    [dataSource]
+    [dataSource, isMobile]
   );
 
   const processData = useCallback(
