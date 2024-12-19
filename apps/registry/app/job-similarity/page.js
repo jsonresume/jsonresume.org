@@ -846,7 +846,7 @@ const GraphContainer = ({ dataSource, algorithm }) => {
             highlightLinks.has(link) ? '#ff0000' : '#cccccc'
           }
           linkOpacity={0.3}
-          linkDirectionalParticles={4}
+          linkDirectionalParticles={0}
           linkDirectionalParticleWidth={2}
           onNodeHover={handleNodeHover}
           onNodeClick={handleNodeClick}
