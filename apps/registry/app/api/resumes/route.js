@@ -19,7 +19,7 @@ export async function GET(request) {
   try {
     const supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
     const { searchParams } = new URL(request.url);
-    const limit = parseInt(searchParams.get('limit')) || 3000;
+    const limit = parseInt(searchParams.get('limit')) || 2000;
     const page = parseInt(searchParams.get('page')) || 1;
     const search = searchParams.get('search') || '';
 
