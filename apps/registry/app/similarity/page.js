@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import dynamic from 'next/dynamic';
-import { PrismaClient } from '@prisma/client';
 
-// Import Plotly dynamically to avoid SSR issues
-const Plot = dynamic(() => import('react-plotly.js'), { ssr: false });
+// Import ForceGraph dynamically to avoid SSR issues
+const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), { ssr: false });
 
 // Helper function to compute cosine similarity
 function cosineSimilarity(a, b) {
@@ -20,44 +19,13 @@ function cosineSimilarity(a, b) {
   return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
 }
 
-// Helper function for dimensionality reduction using PCA
-function pca(vectors, dimensions = 2) {
-  // Center the data
-  const mean = vectors[0].map((_, colIndex) => 
-    vectors.reduce((sum, row) => sum + row[colIndex], 0) / vectors.length
-  );
-  
-  const centered = vectors.map(vector => 
-    vector.map((value, index) => value - mean[index])
-  );
-
-  // Compute covariance matrix
-  const covMatrix = [];
-  for (let i = 0; i < centered[0].length; i++) {
-    covMatrix[i] = [];
-    for (let j = 0; j < centered[0].length; j++) {
-      let sum = 0;
-      for (let k = 0; k < centered.length; k++) {
-        sum += centered[k][i] * centered[k][j];
-      }
-      covMatrix[i][j] = sum / (centered.length - 1);
-    }
-  }
-
-  // For simplicity, we'll just take the first two dimensions
-  // In a production environment, you'd want to compute eigenvectors properly
-  const reduced = centered.map(vector => [
-    vector.slice(0, dimensions).reduce((sum, val) => sum + val, 0),
-    vector.slice(dimensions, dimensions * 2).reduce((sum, val) => sum + val, 0)
-  ]);
-
-  return reduced;
-}
-
 export default function SimilarityPage() {
-  const [data, setData] = useState(null);
+  const [graphData, setGraphData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [highlightNodes, setHighlightNodes] = useState(new Set());
+  const [highlightLinks, setHighlightLinks] = useState(new Set());
+  const [hoverNode, setHoverNode] = useState(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -68,31 +36,61 @@ export default function SimilarityPage() {
         }
         const jsonData = await response.json();
         
-        // Reduce dimensions of embeddings using PCA
-        const reducedEmbeddings = pca(jsonData.map(item => item.embedding));
-        
-        // Prepare data for plotting
-        const plotData = {
-          x: reducedEmbeddings.map(coords => coords[0]),
-          y: reducedEmbeddings.map(coords => coords[1]),
-          text: jsonData.map(item => item.position),
-          mode: 'markers+text',
-          type: 'scattergl',  // Use WebGL renderer for better performance
-          textposition: 'top center',
-          marker: {
-            size: 8,  // Slightly smaller markers for less overlap
-            color: reducedEmbeddings.map((_, i) => i),
-            colorscale: 'Viridis',
-            opacity: 0.7,  // Add some transparency
-          },
-          hoverinfo: 'text',
-          hovertemplate: 
-            '<b>%{text}</b><br>' +
-            'Click to view resume<extra></extra>',
-          username: jsonData.map(item => item.username), // Store usernames for click handling
-        };
+        // Group similar positions
+        const positionGroups = {};
+        jsonData.forEach(item => {
+          const position = item.position;
+          if (!positionGroups[position]) {
+            positionGroups[position] = [];
+          }
+          positionGroups[position].push(item);
+        });
 
-        setData(plotData);
+        // Create nodes and links
+        const nodes = [];
+        const links = [];
+        const similarityThreshold = 0.7;
+
+        // Create nodes for each unique position
+        Object.entries(positionGroups).forEach(([position, items], index) => {
+          nodes.push({
+            id: position,
+            group: index,
+            size: Math.log(items.length + 1) * 3,
+            count: items.length,
+            usernames: items.map(item => item.username),
+            embeddings: items.map(item => item.embedding),
+            color: `hsl(${Math.random() * 360}, 70%, 50%)`
+          });
+        });
+
+        // Create links between similar positions
+        for (let i = 0; i < nodes.length; i++) {
+          for (let j = i + 1; j < nodes.length; j++) {
+            // Calculate average similarity between groups
+            let totalSimilarity = 0;
+            let comparisons = 0;
+            
+            nodes[i].embeddings.forEach(emb1 => {
+              nodes[j].embeddings.forEach(emb2 => {
+                totalSimilarity += cosineSimilarity(emb1, emb2);
+                comparisons++;
+              });
+            });
+
+            const avgSimilarity = totalSimilarity / comparisons;
+            
+            if (avgSimilarity > similarityThreshold) {
+              links.push({
+                source: nodes[i].id,
+                target: nodes[j].id,
+                value: avgSimilarity
+              });
+            }
+          }
+        }
+
+        setGraphData({ nodes, links });
       } catch (err) {
         setError(err.message);
       } finally {
@@ -103,10 +101,18 @@ export default function SimilarityPage() {
     fetchData();
   }, []);
 
+  const handleNodeHover = useCallback(node => {
+    setHighlightNodes(new Set(node ? [node] : []));
+    setHighlightLinks(new Set(graphData?.links.filter(link => 
+      link.source.id === node?.id || link.target.id === node?.id
+    ) || []));
+    setHoverNode(node || null);
+  }, [graphData]);
+
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-4">Resume Similarity Map</h1>
+        <h1 className="text-3xl font-bold mb-4">Resume Position Network</h1>
         <p>Loading...</p>
       </div>
     );
@@ -115,7 +121,7 @@ export default function SimilarityPage() {
   if (error) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-4">Resume Similarity Map</h1>
+        <h1 className="text-3xl font-bold mb-4">Resume Position Network</h1>
         <p className="text-red-500">Error: {error}</p>
       </div>
     );
@@ -123,54 +129,79 @@ export default function SimilarityPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-4">Resume Similarity Map by Position</h1>
+      <h1 className="text-3xl font-bold mb-4">Resume Position Network</h1>
       <p className="mb-4">
-        This visualization shows how similar resumes are to each other based on their content. 
-        Resumes that are closer together are more similar.
+        Explore similar positions in an interactive network. Each node represents a position, with size indicating the number of resumes.
+        Connected positions are similar based on resume content. Hover to highlight connections, click to view resumes.
       </p>
-      <div className="w-full h-[600px] bg-white rounded-lg shadow-lg p-4">
-        <Plot
-          data={[data]}
-          layout={{
-            title: 'Resume Similarity Map by Position',
-            xaxis: { 
-              title: 'Component 1',
-              showgrid: true,
-              zeroline: false,
-            },
-            yaxis: { 
-              title: 'Component 2',
-              showgrid: true,
-              zeroline: false,
-            },
-            hovermode: 'closest',
-            width: null,
-            height: null,
-            autosize: true,
-            showlegend: false,
-            dragmode: 'zoom',  // Enable box zoom by default
-            modebar: {
-              remove: ['lasso', 'select'],
-              add: ['drawopenpath', 'eraseshape'],
-            },
-          }}
-          config={{
-            responsive: true,
-            scrollZoom: true,  // Enable scroll to zoom
-            displayModeBar: true,  // Always show the mode bar
-            modeBarButtonsToAdd: ['select2d', 'lasso2d'],  // Add selection tools
-            displaylogo: false,
-          }}
-          useResizeHandler
-          className="w-full h-full"
-          onClick={(event) => {
-            if (event?.points?.[0]) {
-              const pointIndex = event.points[0].pointIndex;
-              const username = data.username[pointIndex];
-              window.open(`/${username}`, '_blank');
-            }
-          }}
-        />
+      <div className="relative w-full h-[800px] bg-white rounded-lg shadow-lg">
+        {graphData && (
+          <ForceGraph2D
+            graphData={graphData}
+            nodeColor={node => highlightNodes.has(node) ? '#ff0000' : node.color}
+            nodeCanvasObject={(node, ctx, globalScale) => {
+              // Draw node
+              ctx.beginPath();
+              ctx.arc(node.x, node.y, node.size * 2, 0, 2 * Math.PI);
+              ctx.fillStyle = highlightNodes.has(node) ? '#ff0000' : node.color;
+              ctx.fill();
+
+              // Only draw label if node is highlighted
+              if (highlightNodes.has(node)) {
+                const label = node.id;
+                const fontSize = Math.max(14, node.size * 1.5);
+                ctx.font = `${fontSize}px Sans-Serif`;
+                const textWidth = ctx.measureText(label).width;
+                const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2);
+
+                // Draw background for label
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+                ctx.fillRect(
+                  node.x - bckgDimensions[0] / 2,
+                  node.y - bckgDimensions[1] * 2,
+                  bckgDimensions[0],
+                  bckgDimensions[1]
+                );
+
+                // Draw label
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = '#000';
+                ctx.fillText(label, node.x, node.y - bckgDimensions[1] * 1.5);
+
+                // Draw count
+                const countLabel = `(${node.count})`;
+                const smallerFont = fontSize * 0.7;
+                ctx.font = `${smallerFont}px Sans-Serif`;
+                ctx.fillText(countLabel, node.x, node.y - bckgDimensions[1]);
+              }
+            }}
+            nodeRelSize={6}
+            linkWidth={link => highlightLinks.has(link) ? 2 : 1}
+            linkColor={link => highlightLinks.has(link) ? '#ff0000' : '#cccccc'}
+            linkOpacity={0.3}
+            linkDirectionalParticles={4}
+            linkDirectionalParticleWidth={2}
+            onNodeHover={handleNodeHover}
+            onNodeClick={(node) => {
+              if (node.usernames && node.usernames.length > 0) {
+                window.open(`/${node.usernames[0]}`, '_blank');
+              }
+            }}
+            enableNodeDrag={true}
+            cooldownTicks={100}
+            d3AlphaDecay={0.02}
+            d3VelocityDecay={0.3}
+            warmupTicks={100}
+          />
+        )}
+        {hoverNode && (
+          <div className="absolute top-4 right-4 bg-white p-4 rounded-lg shadow-lg">
+            <h3 className="font-bold">{hoverNode.id}</h3>
+            <p>{hoverNode.count} resumes</p>
+            <p className="text-sm text-gray-600">Click to view a sample resume</p>
+          </div>
+        )}
       </div>
     </div>
   );
