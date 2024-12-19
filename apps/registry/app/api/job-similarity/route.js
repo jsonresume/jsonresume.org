@@ -41,9 +41,10 @@ export async function GET(request) {
     // Parse embeddings and job titles
     const parsedData = data.map(item => {
       let jobTitle = 'Unknown Position';
+      let gptContent = null;
       try {
-        const gptContent = JSON.parse(item.gpt_content);
-        jobTitle = gptContent.title || 'Unknown Position';
+        gptContent = JSON.parse(item.gpt_content);
+        jobTitle = gptContent?.title || 'Unknown Position';
       } catch (e) {
         console.warn('Failed to parse gpt_content for job:', item.uuid);
       }
@@ -51,6 +52,8 @@ export async function GET(request) {
       return {
         uuid: item.uuid,
         title: jobTitle,
+        company: gptContent?.company,
+        countryCode: gptContent?.countryCode,
         embedding: typeof item.embedding_v5 === 'string' 
           ? JSON.parse(item.embedding_v5)
           : Array.isArray(item.embedding_v5)

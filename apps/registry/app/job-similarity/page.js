@@ -338,7 +338,9 @@ export default function JobSimilarityPage() {
               count: items.length,
               uuids: items.map(item => dataSource === 'jobs' ? item.uuid : item.username),
               avgEmbedding,
-              color: `hsl(${Math.random() * 360}, 70%, 50%)`
+              color: `hsl(${Math.random() * 360}, 70%, 50%)`,
+              companies: dataSource === 'jobs' ? [...new Set(items.map(item => item.company || 'Unknown Company'))] : null,
+              countryCodes: dataSource === 'jobs' ? [...new Set(items.map(item => item.countryCode || 'Unknown Location'))] : null
             };
           })
           .filter(node => node !== null);
@@ -514,10 +516,22 @@ export default function JobSimilarityPage() {
           />
         )}
         {hoverNode && (
-          <div className="absolute top-4 right-4 bg-white p-4 rounded-lg shadow-lg">
+          <div className="absolute top-4 right-4 bg-white p-4 rounded-lg shadow-lg max-w-md">
             <h3 className="font-bold">{hoverNode.id}</h3>
             <p>{hoverNode.count} {dataSource === 'jobs' ? 'job listings' : 'resumes'}</p>
-            <p className="text-sm text-gray-600">Click to view {dataSource === 'jobs' ? 'job' : 'resume'}</p>
+            {dataSource === 'jobs' && hoverNode.companies && (
+              <div className="mt-2">
+                <p className="text-sm text-gray-600">Companies:</p>
+                <p className="text-sm">{hoverNode.companies.slice(0, 5).join(', ')}{hoverNode.companies.length > 5 ? `, +${hoverNode.companies.length - 5} more` : ''}</p>
+              </div>
+            )}
+            {dataSource === 'jobs' && hoverNode.countryCodes && (
+              <div className="mt-2">
+                <p className="text-sm text-gray-600">Locations:</p>
+                <p className="text-sm">{hoverNode.countryCodes.slice(0, 5).join(', ')}{hoverNode.countryCodes.length > 5 ? `, +${hoverNode.countryCodes.length - 5} more` : ''}</p>
+              </div>
+            )}
+            <p className="text-sm text-gray-600 mt-2">Click to view {dataSource === 'jobs' ? 'job' : 'resume'}</p>
           </div>
         )}
       </div>
