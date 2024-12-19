@@ -62,7 +62,16 @@ export async function GET(request) {
       };
     }).filter(item => item.embedding !== null);
 
-    return NextResponse.json(parsedData);
+    // Add strong cache headers
+    const headers = new Headers();
+    headers.set('Cache-Control', 'public, max-age=86400, s-maxage=86400, stale-while-revalidate=86400');
+    headers.set('CDN-Cache-Control', 'public, max-age=86400, s-maxage=86400');
+    headers.set('Vercel-CDN-Cache-Control', 'public, max-age=86400, s-maxage=86400');
+
+    return NextResponse.json(parsedData, {
+      headers,
+      status: 200
+    });
   } catch (error) {
     console.error('Error in job similarity endpoint:', error);
     return NextResponse.json(
