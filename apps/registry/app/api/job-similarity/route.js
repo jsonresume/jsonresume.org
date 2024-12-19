@@ -39,33 +39,37 @@ export async function GET(request) {
     console.timeEnd('getJobSimilarityData');
 
     // Parse embeddings and job titles
-    const parsedData = data.map(item => {
-      let jobTitle = 'Unknown Position';
-      let gptContent = null;
-      try {
-        gptContent = JSON.parse(item.gpt_content);
-        jobTitle = gptContent?.title || 'Unknown Position';
-      } catch (e) {
-        console.warn('Failed to parse gpt_content for job:', item.uuid);
-      }
+    const parsedData = data
+      .map((item) => {
+        let jobTitle = 'Unknown Position';
+        let gptContent = null;
+        try {
+          gptContent = JSON.parse(item.gpt_content);
+          jobTitle = gptContent?.title || 'Unknown Position';
+        } catch (e) {
+          console.warn('Failed to parse gpt_content for job:', item.uuid);
+        }
 
-      return {
-        uuid: item.uuid,
-        title: jobTitle,
-        company: gptContent?.company,
-        countryCode: gptContent?.countryCode,
-        embedding: typeof item.embedding_v5 === 'string' 
-          ? JSON.parse(item.embedding_v5)
-          : Array.isArray(item.embedding_v5)
-            ? item.embedding_v5
-            : null
-      };
-    }).filter(item => item.embedding !== null);
+        return {
+          uuid: item.uuid,
+          title: jobTitle,
+          company: gptContent?.company,
+          countryCode: gptContent?.countryCode,
+          embedding:
+            typeof item.embedding_v5 === 'string'
+              ? JSON.parse(item.embedding_v5)
+              : Array.isArray(item.embedding_v5)
+              ? item.embedding_v5
+              : null,
+        };
+      })
+      .filter((item) => item.embedding !== null);
 
     return NextResponse.json(parsedData, {
       headers: {
         'Content-Type': 'application/json',
-        'Cache-Control': 'public, max-age=86400, s-maxage=86400, stale-while-revalidate=86400',
+        'Cache-Control':
+          'public, max-age=86400, s-maxage=86400, stale-while-revalidate=86400',
       },
     });
   } catch (error) {

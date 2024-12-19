@@ -3,38 +3,40 @@
 import React, { useState, useCallback, memo, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 
-const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), { ssr: false });
+const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), {
+  ssr: false,
+});
 
 // Helper function to compute cosine similarity
 const cosineSimilarity = (a, b) => {
   if (!Array.isArray(a) || !Array.isArray(b) || a.length !== b.length) return 0;
-  
+
   const dotProduct = a.reduce((sum, _, i) => sum + a[i] * b[i], 0);
   const magnitudeA = Math.sqrt(a.reduce((sum, val) => sum + val * val, 0));
   const magnitudeB = Math.sqrt(b.reduce((sum, val) => sum + val * val, 0));
-  
+
   return dotProduct / (magnitudeA * magnitudeB);
 };
 
 // Helper function to normalize a vector
 const normalizeVector = (vector) => {
   if (!Array.isArray(vector) || vector.length === 0) return null;
-  
+
   const magnitude = Math.sqrt(vector.reduce((sum, val) => sum + val * val, 0));
   if (magnitude === 0) return null;
-  
-  return vector.map(val => val / magnitude);
+
+  return vector.map((val) => val / magnitude);
 };
 
 // Helper function to get average embedding
 const getAverageEmbedding = (embeddings) => {
   if (!Array.isArray(embeddings) || embeddings.length === 0) return null;
-  
+
   const sum = embeddings.reduce((acc, curr) => {
     return acc.map((val, i) => val + curr[i]);
   }, new Array(embeddings[0].length).fill(0));
-  
-  return sum.map(val => val / embeddings.length);
+
+  return sum.map((val) => val / embeddings.length);
 };
 
 // Similarity algorithms
@@ -45,12 +47,12 @@ const algorithms = {
       // Kruskal's algorithm for MST
       const links = [];
       const parent = new Array(nodes.length).fill(0).map((_, i) => i);
-      
+
       function find(x) {
         if (parent[x] !== x) parent[x] = find(parent[x]);
         return parent[x];
       }
-      
+
       function union(x, y) {
         parent[find(x)] = find(y);
       }
@@ -59,7 +61,10 @@ const algorithms = {
       const edges = [];
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
-          const similarity = cosineSimilarity(nodes[i].avgEmbedding, nodes[j].avgEmbedding);
+          const similarity = cosineSimilarity(
+            nodes[i].avgEmbedding,
+            nodes[j].avgEmbedding
+          );
           if (similarity > minSimilarity) {
             edges.push({ i, j, similarity });
           }
@@ -76,13 +81,13 @@ const algorithms = {
           links.push({
             source: nodes[i].id,
             target: nodes[j].id,
-            value: similarity
+            value: similarity,
           });
         }
       });
 
       return links;
-    }
+    },
   },
   knn: {
     name: 'K-Nearest Neighbors',
@@ -91,7 +96,10 @@ const algorithms = {
       nodes.forEach((node, i) => {
         const similarities = nodes.map((otherNode, j) => ({
           index: j,
-          similarity: i === j ? -1 : cosineSimilarity(node.avgEmbedding, otherNode.avgEmbedding)
+          similarity:
+            i === j
+              ? -1
+              : cosineSimilarity(node.avgEmbedding, otherNode.avgEmbedding),
         }));
 
         similarities
@@ -102,13 +110,13 @@ const algorithms = {
               links.add({
                 source: nodes[i].id,
                 target: nodes[index].id,
-                value: similarity
+                value: similarity,
               });
             }
           });
       });
       return Array.from(links);
-    }
+    },
   },
   threshold: {
     name: 'Similarity Threshold',
@@ -116,18 +124,21 @@ const algorithms = {
       const links = new Set();
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
-          const similarity = cosineSimilarity(nodes[i].avgEmbedding, nodes[j].avgEmbedding);
+          const similarity = cosineSimilarity(
+            nodes[i].avgEmbedding,
+            nodes[j].avgEmbedding
+          );
           if (similarity > threshold) {
             links.add({
               source: nodes[i].id,
               target: nodes[j].id,
-              value: similarity
+              value: similarity,
             });
           }
         }
       }
       return Array.from(links);
-    }
+    },
   },
   hierarchical: {
     name: 'Hierarchical Clustering',
@@ -139,7 +150,10 @@ const algorithms = {
       // Calculate all pairwise similarities
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
-          const similarity = cosineSimilarity(nodes[i].avgEmbedding, nodes[j].avgEmbedding);
+          const similarity = cosineSimilarity(
+            nodes[i].avgEmbedding,
+            nodes[j].avgEmbedding
+          );
           similarities.push({ i, j, similarity });
         }
       }
@@ -150,27 +164,27 @@ const algorithms = {
       // Merge clusters and add links
       similarities.forEach(({ i, j, similarity }) => {
         if (similarity > threshold) {
-          const cluster1 = clusters.find(c => c.includes(i));
-          const cluster2 = clusters.find(c => c.includes(j));
-          
+          const cluster1 = clusters.find((c) => c.includes(i));
+          const cluster2 = clusters.find((c) => c.includes(j));
+
           if (cluster1 !== cluster2) {
             // Add links between closest points in clusters
             links.add({
               source: nodes[i].id,
               target: nodes[j].id,
-              value: similarity
+              value: similarity,
             });
-            
+
             // Merge clusters
             const merged = [...cluster1, ...cluster2];
-            clusters = clusters.filter(c => c !== cluster1 && c !== cluster2);
+            clusters = clusters.filter((c) => c !== cluster1 && c !== cluster2);
             clusters.push(merged);
           }
         }
       });
 
       return Array.from(links);
-    }
+    },
   },
   community: {
     name: 'Community Detection',
@@ -188,7 +202,10 @@ const algorithms = {
           // Find strongly connected nodes
           for (let j = 0; j < nodes.length; j++) {
             if (i !== j && !communities.has(j)) {
-              const similarity = cosineSimilarity(nodes[i].avgEmbedding, nodes[j].avgEmbedding);
+              const similarity = cosineSimilarity(
+                nodes[i].avgEmbedding,
+                nodes[j].avgEmbedding
+              );
               if (similarity > communityThreshold) {
                 community.add(j);
                 communities.set(j, communityId);
@@ -202,7 +219,10 @@ const algorithms = {
       // Second pass: connect communities
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
-          const similarity = cosineSimilarity(nodes[i].avgEmbedding, nodes[j].avgEmbedding);
+          const similarity = cosineSimilarity(
+            nodes[i].avgEmbedding,
+            nodes[j].avgEmbedding
+          );
           const sameCommunity = communities.get(i) === communities.get(j);
 
           // Add links within communities and strong links between communities
@@ -210,52 +230,60 @@ const algorithms = {
             links.add({
               source: nodes[i].id,
               target: nodes[j].id,
-              value: similarity
+              value: similarity,
             });
           }
         }
       }
 
       return Array.from(links);
-    }
+    },
   },
   adaptive: {
     name: 'Adaptive Threshold',
     compute: (nodes) => {
       const links = new Set();
       const similarities = [];
-      
+
       // Calculate all pairwise similarities
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
-          const similarity = cosineSimilarity(nodes[i].avgEmbedding, nodes[j].avgEmbedding);
+          const similarity = cosineSimilarity(
+            nodes[i].avgEmbedding,
+            nodes[j].avgEmbedding
+          );
           similarities.push(similarity);
         }
       }
 
       // Calculate adaptive threshold using mean and standard deviation
-      const mean = similarities.reduce((a, b) => a + b, 0) / similarities.length;
+      const mean =
+        similarities.reduce((a, b) => a + b, 0) / similarities.length;
       const std = Math.sqrt(
-        similarities.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / similarities.length
+        similarities.reduce((a, b) => a + Math.pow(b - mean, 2), 0) /
+          similarities.length
       );
       const adaptiveThreshold = mean + 0.5 * std;
 
       // Create links based on adaptive threshold
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
-          const similarity = cosineSimilarity(nodes[i].avgEmbedding, nodes[j].avgEmbedding);
+          const similarity = cosineSimilarity(
+            nodes[i].avgEmbedding,
+            nodes[j].avgEmbedding
+          );
           if (similarity > adaptiveThreshold) {
             links.add({
               source: nodes[i].id,
               target: nodes[j].id,
-              value: similarity
+              value: similarity,
             });
           }
         }
       }
 
       return Array.from(links);
-    }
+    },
   },
   maxSpanningTree: {
     name: 'Maximum Spanning Tree',
@@ -264,12 +292,15 @@ const algorithms = {
       // Calculate all pairwise similarities
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
-          const similarity = cosineSimilarity(nodes[i].avgEmbedding, nodes[j].avgEmbedding);
+          const similarity = cosineSimilarity(
+            nodes[i].avgEmbedding,
+            nodes[j].avgEmbedding
+          );
           if (similarity >= minSimilarity) {
             edges.push({
               source: nodes[i],
               target: nodes[j],
-              similarity: similarity
+              similarity: similarity,
             });
           }
         }
@@ -289,7 +320,7 @@ const algorithms = {
         }
         return disjointSet.get(node.id);
       };
-      
+
       const union = (node1, node2) => {
         const root1 = find(node1);
         const root2 = find(node2);
@@ -298,7 +329,7 @@ const algorithms = {
         }
       };
 
-      const mstEdges = edges.filter(edge => {
+      const mstEdges = edges.filter((edge) => {
         const sourceRoot = find(edge.source);
         const targetRoot = find(edge.target);
         if (sourceRoot !== targetRoot) {
@@ -309,18 +340,23 @@ const algorithms = {
       });
 
       return mstEdges;
-    }
+    },
   },
   clique: {
     name: 'Maximum Cliques',
     compute: (nodes, minSimilarity = 0.6) => {
       // Build adjacency matrix
       const n = nodes.length;
-      const adj = Array(n).fill().map(() => Array(n).fill(false));
-      
+      const adj = Array(n)
+        .fill()
+        .map(() => Array(n).fill(false));
+
       for (let i = 0; i < n; i++) {
         for (let j = i + 1; j < n; j++) {
-          const similarity = cosineSimilarity(nodes[i].avgEmbedding, nodes[j].avgEmbedding);
+          const similarity = cosineSimilarity(
+            nodes[i].avgEmbedding,
+            nodes[j].avgEmbedding
+          );
           if (similarity >= minSimilarity) {
             adj[i][j] = adj[j][i] = true;
           }
@@ -331,26 +367,27 @@ const algorithms = {
       const cliques = [];
       const bronKerbosch = (r, p, x) => {
         if (p.length === 0 && x.length === 0) {
-          if (r.length >= 3) { // Only consider cliques of size 3 or larger
+          if (r.length >= 3) {
+            // Only consider cliques of size 3 or larger
             cliques.push([...r]);
           }
           return;
         }
 
         const pivot = [...p, ...x][0];
-        const candidates = p.filter(v => !adj[pivot][v]);
+        const candidates = p.filter((v) => !adj[pivot][v]);
 
         for (const v of candidates) {
           const newR = [...r, v];
-          const newP = p.filter(u => adj[v][u]);
-          const newX = x.filter(u => adj[v][u]);
+          const newP = p.filter((u) => adj[v][u]);
+          const newX = x.filter((u) => adj[v][u]);
           bronKerbosch(newR, newP, newX);
-          p = p.filter(u => u !== v);
+          p = p.filter((u) => u !== v);
           x.push(v);
         }
       };
 
-      const vertices = Array.from({length: n}, (_, i) => i);
+      const vertices = Array.from({ length: n }, (_, i) => i);
       bronKerbosch([], vertices, []);
 
       // Convert cliques to edges
@@ -365,26 +402,31 @@ const algorithms = {
             edges.push({
               source: nodes[clique[i]],
               target: nodes[clique[j]],
-              similarity
+              similarity,
             });
           }
         }
       }
 
       return edges;
-    }
+    },
   },
   pathfinder: {
     name: 'Pathfinder Network',
     compute: (nodes, r = 2) => {
       const n = nodes.length;
-      const distances = Array(n).fill().map(() => Array(n).fill(Infinity));
-      
+      const distances = Array(n)
+        .fill()
+        .map(() => Array(n).fill(Infinity));
+
       // Calculate initial distances
       for (let i = 0; i < n; i++) {
         distances[i][i] = 0;
         for (let j = i + 1; j < n; j++) {
-          const similarity = cosineSimilarity(nodes[i].avgEmbedding, nodes[j].avgEmbedding);
+          const similarity = cosineSimilarity(
+            nodes[i].avgEmbedding,
+            nodes[j].avgEmbedding
+          );
           // Convert similarity to distance (1 - similarity)
           const distance = 1 - similarity;
           distances[i][j] = distances[j][i] = distance;
@@ -397,7 +439,7 @@ const algorithms = {
           for (let j = 0; j < n; j++) {
             const sum = Math.pow(
               Math.pow(distances[i][k], r) + Math.pow(distances[k][j], r),
-              1/r
+              1 / r
             );
             if (sum < distances[i][j]) {
               distances[i][j] = sum;
@@ -415,7 +457,7 @@ const algorithms = {
             if (k !== i && k !== j) {
               const sum = Math.pow(
                 Math.pow(distances[i][k], r) + Math.pow(distances[k][j], r),
-                1/r
+                1 / r
               );
               if (Math.abs(sum - distances[i][j]) < 1e-10) {
                 isMinimal = false;
@@ -425,11 +467,12 @@ const algorithms = {
           }
           if (isMinimal) {
             const similarity = 1 - distances[i][j];
-            if (similarity > 0.3) { // Only include edges with reasonable similarity
+            if (similarity > 0.3) {
+              // Only include edges with reasonable similarity
               edges.push({
                 source: nodes[i],
                 target: nodes[j],
-                similarity
+                similarity,
               });
             }
           }
@@ -437,8 +480,8 @@ const algorithms = {
       }
 
       return edges;
-    }
-  }
+    },
+  },
 };
 
 const colors = [
@@ -469,18 +512,24 @@ const Header = memo(() => (
     <h1 className="text-3xl font-bold mb-4">Job Market Simlarity</h1>
     <div className="space-y-4 text-gray-700">
       <p>
-        An interactive visualization of the tech job market, powered by data from HN "Who's Hiring" threads and the JSON Resume Registry. 
-        Each node represents a job category, with edges connecting similar roles. The size of each node indicates the number of job listings in that category.
+        An interactive visualization of the tech job market, powered by data
+        from HN "Who's Hiring" threads and the JSON Resume Registry. Each node
+        represents a job category, with edges connecting similar roles. The size
+        of each node indicates the number of job listings in that category.
       </p>
       <p>
-        Hover over a node to see details about the companies and locations hiring for that role. Click a node to view the original job listing or resume profile.
+        Hover over a node to see details about the companies and locations
+        hiring for that role. Click a node to view the original job listing or
+        resume profile.
       </p>
       <ul className="list-disc pl-5 space-y-2">
         <li>
-          <strong>Jobs View:</strong> Job posts from "Who's Hiring" → GPT-4 standardization → OpenAI embeddings
+          <strong>Jobs View:</strong> Job posts from "Who's Hiring" → GPT-4
+          standardization → OpenAI embeddings
         </li>
         <li>
-          <strong>Resumes View:</strong> JSON Resume profiles → OpenAI embeddings
+          <strong>Resumes View:</strong> JSON Resume profiles → OpenAI
+          embeddings
         </li>
       </ul>
       <p>
@@ -491,41 +540,43 @@ const Header = memo(() => (
 ));
 Header.displayName = 'Header';
 
-const Controls = memo(({ dataSource, setDataSource, algorithm, setAlgorithm }) => (
-  <div className="prose max-w-3xl mx-auto mb-8">
-    <div className="flex gap-4 items-center">
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Data Source
-        </label>
-        <select
-          value={dataSource}
-          onChange={(e) => setDataSource(e.target.value)}
-          className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-secondary-500 focus:border-secondary-500 sm:text-sm rounded-md"
-        >
-          <option value="jobs">Job Listings</option>
-          <option value="resumes">Resumes</option>
-        </select>
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Algorithm
-        </label>
-        <select
-          value={algorithm}
-          onChange={(e) => setAlgorithm(e.target.value)}
-          className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-secondary-500 focus:border-secondary-500 sm:text-sm rounded-md"
-        >
-          {Object.entries(algorithms).map(([key, { name }]) => (
-            <option key={key} value={key}>
-              {name}
-            </option>
-          ))}
-        </select>
+const Controls = memo(
+  ({ dataSource, setDataSource, algorithm, setAlgorithm }) => (
+    <div className="prose max-w-3xl mx-auto mb-8">
+      <div className="flex gap-4 items-center">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Data Source
+          </label>
+          <select
+            value={dataSource}
+            onChange={(e) => setDataSource(e.target.value)}
+            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-secondary-500 focus:border-secondary-500 sm:text-sm rounded-md"
+          >
+            <option value="jobs">Job Listings</option>
+            <option value="resumes">Resumes</option>
+          </select>
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Algorithm
+          </label>
+          <select
+            value={algorithm}
+            onChange={(e) => setAlgorithm(e.target.value)}
+            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-secondary-500 focus:border-secondary-500 sm:text-sm rounded-md"
+          >
+            {Object.entries(algorithms).map(([key, { name }]) => (
+              <option key={key} value={key}>
+                {name}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
     </div>
-  </div>
-));
+  )
+);
 Controls.displayName = 'Controls';
 
 const GraphContainer = ({ dataSource, algorithm }) => {
@@ -538,88 +589,135 @@ const GraphContainer = ({ dataSource, algorithm }) => {
   const [error, setError] = useState(null);
   const [edges, setEdges] = useState([]);
 
-  const handleNodeHover = useCallback((node) => {
-    setHighlightNodes(new Set(node ? [node] : []));
-    setHighlightLinks(new Set(node ? edges.filter(link => link.source === node || link.target === node) : []));
-    setHoverNode(node || null);
-  }, [edges]);
+  const handleNodeHover = useCallback(
+    (node) => {
+      setHighlightNodes(new Set(node ? [node] : []));
+      setHighlightLinks(
+        new Set(
+          node
+            ? edges.filter(
+                (link) => link.source === node || link.target === node
+              )
+            : []
+        )
+      );
+      setHoverNode(node || null);
+    },
+    [edges]
+  );
 
-  const handleNodeClick = useCallback((node) => {
-    if (!node) return;
-    if (node.uuids && node.uuids.length > 0) {
-      const baseUrl = dataSource === 'jobs' ? '/jobs/' : '/';
-      window.open(`${baseUrl}${node.uuids[0]}`, '_blank');
-    }
-  }, [dataSource]);
-
-  const processData = useCallback((data) => {
-    // Filter out items without valid embeddings
-    const validData = data.filter(item => {
-      const embedding = dataSource === 'jobs' ? 
-        item.embedding : 
-        (typeof item.embedding === 'string' ? JSON.parse(item.embedding) : item.embedding);
-      return Array.isArray(embedding) && embedding.length > 0;
-    });
-
-    // Group similar items
-    const groups = {};
-
-    validData.forEach(item => {
-      const label = dataSource === 'jobs' 
-        ? item.title 
-        : (item.position || 'Unknown Position');
-        
-      if (!groups[label]) {
-        groups[label] = [];
+  const handleNodeClick = useCallback(
+    (node) => {
+      if (!node) return;
+      if (node.uuids && node.uuids.length > 0) {
+        const baseUrl = dataSource === 'jobs' ? '/jobs/' : '/';
+        window.open(`${baseUrl}${node.uuids[0]}`, '_blank');
       }
-      groups[label].push(item);
-    });
+    },
+    [dataSource]
+  );
 
-    // Create nodes with normalized embeddings
-    const nodes = Object.entries(groups)
-      .map(([label, items], index) => {
-        const embeddings = items.map(item => {
-          if (dataSource === 'jobs') return item.embedding;
-          return typeof item.embedding === 'string' ? 
-            JSON.parse(item.embedding) : item.embedding;
-        });
+  const processData = useCallback(
+    (data) => {
+      // Filter out items without valid embeddings
+      const validData = data.filter((item) => {
+        const embedding =
+          dataSource === 'jobs'
+            ? item.embedding
+            : typeof item.embedding === 'string'
+            ? JSON.parse(item.embedding)
+            : item.embedding;
+        return Array.isArray(embedding) && embedding.length > 0;
+      });
 
-        const normalizedEmbeddings = embeddings
-          .map(emb => normalizeVector(emb))
-          .filter(emb => emb !== null);
+      // Group similar items
+      const groups = {};
 
-        if (normalizedEmbeddings.length === 0) return null;
+      validData.forEach((item) => {
+        const label =
+          dataSource === 'jobs'
+            ? item.title
+            : item.position || 'Unknown Position';
 
-        const avgEmbedding = getAverageEmbedding(normalizedEmbeddings);
-        if (!avgEmbedding) return null;
+        if (!groups[label]) {
+          groups[label] = [];
+        }
+        groups[label].push(item);
+      });
 
-        return {
-          id: label,
-          group: index,
-          size: Math.log(items.length + 1) * 3,
-          count: items.length,
-          uuids: items.map(item => dataSource === 'jobs' ? item.uuid : item.username),
-          usernames: dataSource === 'jobs' ? null : [...new Set(items.map(item => item.username))],
-          avgEmbedding,
-          color: colors[index % colors.length],
-          companies: dataSource === 'jobs' ? [...new Set(items.map(item => item.company || 'Unknown Company'))] : null,
-          countryCodes: dataSource === 'jobs' ? [...new Set(items.map(item => item.countryCode || 'Unknown Location'))] : null
-        };
-      })
-      .filter(node => node !== null);
+      // Create nodes with normalized embeddings
+      const nodes = Object.entries(groups)
+        .map(([label, items], index) => {
+          const embeddings = items.map((item) => {
+            if (dataSource === 'jobs') return item.embedding;
+            return typeof item.embedding === 'string'
+              ? JSON.parse(item.embedding)
+              : item.embedding;
+          });
 
-    if (nodes.length === 0) {
-      throw new Error('No valid data found with embeddings');
-    }
+          const normalizedEmbeddings = embeddings
+            .map((emb) => normalizeVector(emb))
+            .filter((emb) => emb !== null);
 
-    return nodes;
-  }, [dataSource]);
+          if (normalizedEmbeddings.length === 0) return null;
+
+          const avgEmbedding = getAverageEmbedding(normalizedEmbeddings);
+          if (!avgEmbedding) return null;
+
+          return {
+            id: label,
+            group: index,
+            size: Math.log(items.length + 1) * 3,
+            count: items.length,
+            uuids: items.map((item) =>
+              dataSource === 'jobs' ? item.uuid : item.username
+            ),
+            usernames:
+              dataSource === 'jobs'
+                ? null
+                : [...new Set(items.map((item) => item.username))],
+            avgEmbedding,
+            color: colors[index % colors.length],
+            companies:
+              dataSource === 'jobs'
+                ? [
+                    ...new Set(
+                      items.map((item) => item.company || 'Unknown Company')
+                    ),
+                  ]
+                : null,
+            countryCodes:
+              dataSource === 'jobs'
+                ? [
+                    ...new Set(
+                      items.map(
+                        (item) => item.countryCode || 'Unknown Location'
+                      )
+                    ),
+                  ]
+                : null,
+          };
+        })
+        .filter((node) => node !== null);
+
+      if (nodes.length === 0) {
+        throw new Error('No valid data found with embeddings');
+      }
+
+      return nodes;
+    },
+    [dataSource]
+  );
 
   const fetchData = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`/api/${dataSource === 'jobs' ? 'job-' : ''}similarity?limit=250&algorithm=${algorithm}`);
+      const response = await fetch(
+        `/api/${
+          dataSource === 'jobs' ? 'job-' : ''
+        }similarity?limit=250&algorithm=${algorithm}`
+      );
       if (!response.ok) {
         throw new Error('Failed to fetch data');
       }
@@ -652,34 +750,52 @@ const GraphContainer = ({ dataSource, algorithm }) => {
     processLinks();
   }, [processLinks]);
 
-  if (loading) return (
-    <div className="prose max-w-3xl mx-auto h-[calc(100vh-32rem)] flex items-start justify-center bg-white pt-16">
-      <div className="flex flex-col items-center gap-4">
-        <div className="w-16 h-16 border-4 border-secondary-600 border-t-transparent rounded-full animate-spin"></div>
-        <div className="text-lg text-secondary-600 font-medium">Loading graph data...</div>
-      </div>
-    </div>
-  );
-  if (error) return (
-    <div className="prose max-w-3xl mx-auto h-[calc(100vh-32rem)] flex items-start justify-center bg-white pt-16">
-      <div className="flex flex-col items-center gap-4 max-w-lg text-center">
-        <div className="w-16 h-16 flex items-center justify-center rounded-full bg-red-100">
-          <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-          </svg>
+  if (loading)
+    return (
+      <div className="prose max-w-3xl mx-auto h-[calc(100vh-32rem)] flex items-start justify-center bg-white pt-16">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-16 h-16 border-4 border-secondary-600 border-t-transparent rounded-full animate-spin"></div>
+          <div className="text-lg text-secondary-600 font-medium">
+            Loading graph data...
+          </div>
         </div>
-        <div className="text-lg text-red-600 font-medium">Error loading graph data</div>
-        <div className="text-sm text-gray-600">{error}</div>
       </div>
-    </div>
-  );
+    );
+  if (error)
+    return (
+      <div className="prose max-w-3xl mx-auto h-[calc(100vh-32rem)] flex items-start justify-center bg-white pt-16">
+        <div className="flex flex-col items-center gap-4 max-w-lg text-center">
+          <div className="w-16 h-16 flex items-center justify-center rounded-full bg-red-100">
+            <svg
+              className="w-8 h-8 text-red-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+              />
+            </svg>
+          </div>
+          <div className="text-lg text-red-600 font-medium">
+            Error loading graph data
+          </div>
+          <div className="text-sm text-gray-600">{error}</div>
+        </div>
+      </div>
+    );
 
   return (
     <div className="w-full h-full relative">
       {graphData && (
         <ForceGraph2D
           graphData={graphData}
-          nodeColor={node => highlightNodes.has(node) ? '#FF4757' : node.color}
+          nodeColor={(node) =>
+            highlightNodes.has(node) ? '#FF4757' : node.color
+          }
           nodeCanvasObject={(node, ctx, globalScale) => {
             // Draw node
             const size = node.size * (4 / Math.max(1, globalScale));
@@ -705,10 +821,12 @@ const GraphContainer = ({ dataSource, algorithm }) => {
               ctx.textAlign = 'center';
               ctx.textBaseline = 'middle';
               ctx.fillStyle = '#000';
-              
+
               // Add background to text
               const textWidth = ctx.measureText(label).width;
-              const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.4);
+              const bckgDimensions = [textWidth, fontSize].map(
+                (n) => n + fontSize * 0.4
+              );
               ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
               ctx.fillRect(
                 node.x - bckgDimensions[0] / 2,
@@ -716,20 +834,24 @@ const GraphContainer = ({ dataSource, algorithm }) => {
                 bckgDimensions[0],
                 bckgDimensions[1]
               );
-              
+
               ctx.fillStyle = '#000';
               ctx.fillText(label, node.x, node.y);
 
               // Add count below label
-              const countLabel = `${node.count} ${dataSource === 'jobs' ? 'jobs' : 'resumes'}`;
+              const countLabel = `${node.count} ${
+                dataSource === 'jobs' ? 'jobs' : 'resumes'
+              }`;
               const smallerFont = fontSize * 0.7;
               ctx.font = `${smallerFont}px Sans-Serif`;
               ctx.fillText(countLabel, node.x, node.y - bckgDimensions[1]);
             }
           }}
           nodeRelSize={4}
-          linkWidth={link => highlightLinks.has(link) ? 2 : 1}
-          linkColor={link => highlightLinks.has(link) ? '#FF4757' : '#E5E9F2'}
+          linkWidth={(link) => (highlightLinks.has(link) ? 2 : 1)}
+          linkColor={(link) =>
+            highlightLinks.has(link) ? '#FF4757' : '#E5E9F2'
+          }
           linkOpacity={0.5}
           linkDirectionalParticles={0}
           linkDirectionalParticleWidth={2}
@@ -742,7 +864,7 @@ const GraphContainer = ({ dataSource, algorithm }) => {
           warmupTicks={50}
           d3Force={{
             collision: 1,
-            charge: -30
+            charge: -30,
           }}
           width={window.innerWidth}
           height={window.innerHeight - 32 * 16}
@@ -751,17 +873,30 @@ const GraphContainer = ({ dataSource, algorithm }) => {
       {hoverNode && (
         <div className="absolute top-4 right-4 bg-white p-4 rounded-lg shadow-lg w-80">
           <h3 className="font-bold">{hoverNode.id}</h3>
-          <p>{hoverNode.count} {dataSource === 'jobs' ? 'job listings' : 'resumes'}</p>
+          <p>
+            {hoverNode.count}{' '}
+            {dataSource === 'jobs' ? 'job listings' : 'resumes'}
+          </p>
           {dataSource === 'jobs' && hoverNode.companies && (
             <div className="mt-2">
               <p className="text-sm text-gray-600">Companies:</p>
-              <p className="text-sm">{hoverNode.companies.slice(0, 5).join(', ')}{hoverNode.companies.length > 5 ? `, +${hoverNode.companies.length - 5} more` : ''}</p>
+              <p className="text-sm">
+                {hoverNode.companies.slice(0, 5).join(', ')}
+                {hoverNode.companies.length > 5
+                  ? `, +${hoverNode.companies.length - 5} more`
+                  : ''}
+              </p>
             </div>
           )}
           {dataSource === 'jobs' && hoverNode.countryCodes && (
             <div className="mt-2">
               <p className="text-sm text-gray-600">Locations:</p>
-              <p className="text-sm">{hoverNode.countryCodes.slice(0, 5).join(', ')}{hoverNode.countryCodes.length > 5 ? `, +${hoverNode.countryCodes.length - 5} more` : ''}</p>
+              <p className="text-sm">
+                {hoverNode.countryCodes.slice(0, 5).join(', ')}
+                {hoverNode.countryCodes.length > 5
+                  ? `, +${hoverNode.countryCodes.length - 5} more`
+                  : ''}
+              </p>
             </div>
           )}
           {dataSource !== 'jobs' && hoverNode.usernames && (
@@ -769,14 +904,20 @@ const GraphContainer = ({ dataSource, algorithm }) => {
               <p className="text-sm text-gray-600">Usernames:</p>
               <div className="text-sm max-h-32 overflow-y-auto">
                 {hoverNode.usernames.map((username, i) => (
-                  <div key={i} className="hover:bg-gray-100 p-1 rounded cursor-pointer" onClick={() => window.open(`/${username}`, '_blank')}>
+                  <div
+                    key={i}
+                    className="hover:bg-gray-100 p-1 rounded cursor-pointer"
+                    onClick={() => window.open(`/${username}`, '_blank')}
+                  >
                     {username}
                   </div>
                 ))}
               </div>
             </div>
           )}
-          <p className="text-sm text-gray-600 mt-2">Click to view {dataSource === 'jobs' ? 'job' : 'resume'}</p>
+          <p className="text-sm text-gray-600 mt-2">
+            Click to view {dataSource === 'jobs' ? 'job' : 'resume'}
+          </p>
         </div>
       )}
     </div>
@@ -799,10 +940,7 @@ export default function Page() {
         />
       </div>
       <div className="w-full h-[calc(100vh-32rem)] bg-white">
-        <GraphContainer
-          dataSource={dataSource}
-          algorithm={algorithm}
-        />
+        <GraphContainer dataSource={dataSource} algorithm={algorithm} />
       </div>
     </div>
   );

@@ -4,7 +4,9 @@ import React, { useEffect, useState, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 
 // Import ForceGraph dynamically to avoid SSR issues
-const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), { ssr: false });
+const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), {
+  ssr: false,
+});
 
 // Helper function to compute cosine similarity
 function cosineSimilarity(a, b) {
@@ -35,10 +37,10 @@ export default function SimilarityPage() {
           throw new Error('Failed to fetch data');
         }
         const jsonData = await response.json();
-        
+
         // Group similar positions
         const positionGroups = {};
-        jsonData.forEach(item => {
+        jsonData.forEach((item) => {
           const position = item.position;
           if (!positionGroups[position]) {
             positionGroups[position] = [];
@@ -58,9 +60,9 @@ export default function SimilarityPage() {
             group: index,
             size: Math.log(items.length + 1) * 3,
             count: items.length,
-            usernames: items.map(item => item.username),
-            embeddings: items.map(item => item.embedding),
-            color: `hsl(${Math.random() * 360}, 70%, 50%)`
+            usernames: items.map((item) => item.username),
+            embeddings: items.map((item) => item.embedding),
+            color: `hsl(${Math.random() * 360}, 70%, 50%)`,
           });
         });
 
@@ -70,21 +72,21 @@ export default function SimilarityPage() {
             // Calculate average similarity between groups
             let totalSimilarity = 0;
             let comparisons = 0;
-            
-            nodes[i].embeddings.forEach(emb1 => {
-              nodes[j].embeddings.forEach(emb2 => {
+
+            nodes[i].embeddings.forEach((emb1) => {
+              nodes[j].embeddings.forEach((emb2) => {
                 totalSimilarity += cosineSimilarity(emb1, emb2);
                 comparisons++;
               });
             });
 
             const avgSimilarity = totalSimilarity / comparisons;
-            
+
             if (avgSimilarity > similarityThreshold) {
               links.push({
                 source: nodes[i].id,
                 target: nodes[j].id,
-                value: avgSimilarity
+                value: avgSimilarity,
               });
             }
           }
@@ -101,13 +103,20 @@ export default function SimilarityPage() {
     fetchData();
   }, []);
 
-  const handleNodeHover = useCallback(node => {
-    setHighlightNodes(new Set(node ? [node] : []));
-    setHighlightLinks(new Set(graphData?.links.filter(link => 
-      link.source.id === node?.id || link.target.id === node?.id
-    ) || []));
-    setHoverNode(node || null);
-  }, [graphData]);
+  const handleNodeHover = useCallback(
+    (node) => {
+      setHighlightNodes(new Set(node ? [node] : []));
+      setHighlightLinks(
+        new Set(
+          graphData?.links.filter(
+            (link) => link.source.id === node?.id || link.target.id === node?.id
+          ) || []
+        )
+      );
+      setHoverNode(node || null);
+    },
+    [graphData]
+  );
 
   if (loading) {
     return (
@@ -131,14 +140,18 @@ export default function SimilarityPage() {
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-4">Resume Position Network</h1>
       <p className="mb-4">
-        Explore similar positions in an interactive network. Each node represents a position, with size indicating the number of resumes.
-        Connected positions are similar based on resume content. Hover to highlight connections, click to view resumes.
+        Explore similar positions in an interactive network. Each node
+        represents a position, with size indicating the number of resumes.
+        Connected positions are similar based on resume content. Hover to
+        highlight connections, click to view resumes.
       </p>
       <div className="relative w-full h-[800px] bg-white rounded-lg shadow-lg">
         {graphData && (
           <ForceGraph2D
             graphData={graphData}
-            nodeColor={node => highlightNodes.has(node) ? '#ff0000' : node.color}
+            nodeColor={(node) =>
+              highlightNodes.has(node) ? '#ff0000' : node.color
+            }
             nodeCanvasObject={(node, ctx, globalScale) => {
               // Draw node
               const size = node.size * (4 / Math.max(1, globalScale));
@@ -153,7 +166,9 @@ export default function SimilarityPage() {
                 const fontSize = Math.max(14, size * 1.5);
                 ctx.font = `${fontSize}px Sans-Serif`;
                 const textWidth = ctx.measureText(label).width;
-                const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2);
+                const bckgDimensions = [textWidth, fontSize].map(
+                  (n) => n + fontSize * 0.2
+                );
 
                 // Draw background for label
                 ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
@@ -178,8 +193,10 @@ export default function SimilarityPage() {
               }
             }}
             nodeRelSize={6}
-            linkWidth={link => highlightLinks.has(link) ? 2 : 1}
-            linkColor={link => highlightLinks.has(link) ? '#ff0000' : '#cccccc'}
+            linkWidth={(link) => (highlightLinks.has(link) ? 2 : 1)}
+            linkColor={(link) =>
+              highlightLinks.has(link) ? '#ff0000' : '#cccccc'
+            }
             linkOpacity={0.3}
             linkDirectionalParticles={4}
             linkDirectionalParticleWidth={2}
@@ -200,7 +217,9 @@ export default function SimilarityPage() {
           <div className="absolute top-4 right-4 bg-white p-4 rounded-lg shadow-lg">
             <h3 className="font-bold">{hoverNode.id}</h3>
             <p>{hoverNode.count} resumes</p>
-            <p className="text-sm text-gray-600">Click to view a sample resume</p>
+            <p className="text-sm text-gray-600">
+              Click to view a sample resume
+            </p>
           </div>
         )}
       </div>

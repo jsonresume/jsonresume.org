@@ -39,30 +39,34 @@ export async function GET(request) {
     console.timeEnd('getResumeSimilarityData');
 
     // Parse embeddings from strings to numerical arrays and extract position
-    const parsedData = data.map(item => {
-      let resumeData;
-      try {
-        resumeData = JSON.parse(item.resume);
-      } catch (e) {
-        console.warn('Failed to parse resume for user:', item.username);
-        resumeData = {};
-      }
+    const parsedData = data
+      .map((item) => {
+        let resumeData;
+        try {
+          resumeData = JSON.parse(item.resume);
+        } catch (e) {
+          console.warn('Failed to parse resume for user:', item.username);
+          resumeData = {};
+        }
 
-      return {
-        username: item.username,
-        embedding: typeof item.embedding === 'string' 
-          ? JSON.parse(item.embedding)
-          : Array.isArray(item.embedding)
-            ? item.embedding
-            : null,
-        position: resumeData?.basics?.label || 'Unknown Position'
-      };
-    }).filter(item => item.embedding !== null);
+        return {
+          username: item.username,
+          embedding:
+            typeof item.embedding === 'string'
+              ? JSON.parse(item.embedding)
+              : Array.isArray(item.embedding)
+              ? item.embedding
+              : null,
+          position: resumeData?.basics?.label || 'Unknown Position',
+        };
+      })
+      .filter((item) => item.embedding !== null);
 
     return NextResponse.json(parsedData, {
       headers: {
         'Content-Type': 'application/json',
-        'Cache-Control': 'public, max-age=86400, s-maxage=86400, stale-while-revalidate=86400',
+        'Cache-Control':
+          'public, max-age=86400, s-maxage=86400, stale-while-revalidate=86400',
       },
     });
   } catch (error) {
