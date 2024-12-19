@@ -84,6 +84,8 @@ export default function SimilarityPage() {
             color: reducedEmbeddings.map((_, i) => i),
             colorscale: 'Viridis',
           },
+          hoverinfo: 'text',
+          username: jsonData.map(item => item.username), // Store usernames for click handling
         };
 
         setData(plotData);
@@ -136,6 +138,13 @@ export default function SimilarityPage() {
           }}
           useResizeHandler
           className="w-full h-full"
+          onClick={(event) => {
+            if (event?.points?.[0]) {
+              const pointIndex = event.points[0].pointIndex;
+              const username = data.username[pointIndex];
+              window.open(`/${username}`, '_blank');
+            }
+          }}
         />
       </div>
     </div>
