@@ -75,10 +75,10 @@ export default function SimilarityPage() {
         const plotData = {
           x: reducedEmbeddings.map(coords => coords[0]),
           y: reducedEmbeddings.map(coords => coords[1]),
-          text: jsonData.map(item => item.username),
+          text: jsonData.map(item => item.position),
           mode: 'markers+text',
           type: 'scattergl',  // Use WebGL renderer for better performance
-          textposition: 'top',
+          textposition: 'top center',
           marker: {
             size: 8,  // Slightly smaller markers for less overlap
             color: reducedEmbeddings.map((_, i) => i),
@@ -86,7 +86,9 @@ export default function SimilarityPage() {
             opacity: 0.7,  // Add some transparency
           },
           hoverinfo: 'text',
-          hovertemplate: '%{text}<extra></extra>',  // Clean hover label
+          hovertemplate: 
+            '<b>%{text}</b><br>' +
+            'Click to view resume<extra></extra>',
           username: jsonData.map(item => item.username), // Store usernames for click handling
         };
 
@@ -121,7 +123,7 @@ export default function SimilarityPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-4">Resume Similarity Map</h1>
+      <h1 className="text-3xl font-bold mb-4">Resume Similarity Map by Position</h1>
       <p className="mb-4">
         This visualization shows how similar resumes are to each other based on their content. 
         Resumes that are closer together are more similar.
@@ -130,7 +132,7 @@ export default function SimilarityPage() {
         <Plot
           data={[data]}
           layout={{
-            title: 'Resume Similarity Map',
+            title: 'Resume Similarity Map by Position',
             xaxis: { 
               title: 'Component 1',
               showgrid: true,

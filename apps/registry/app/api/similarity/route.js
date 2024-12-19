@@ -23,7 +23,7 @@ export async function GET(request) {
     console.time('getSimilarityData');
     const { data, error } = await supabase
       .from('resumes')
-      .select('username, embedding')
+      .select('username, embedding, resume')
       .not('embedding', 'is', null)
       .limit(limit)
       .order('created_at', { ascending: false });
@@ -38,15 +38,26 @@ export async function GET(request) {
 
     console.timeEnd('getSimilarityData');
 
-    // Parse embeddings from strings to numerical arrays
-    const parsedData = data.map(item => ({
-      ...item,
-      embedding: typeof item.embedding === 'string' 
-        ? JSON.parse(item.embedding)
-        : Array.isArray(item.embedding)
-          ? item.embedding
-          : null
-    })).filter(item => item.embedding !== null);
+    // Parse embeddings from strings to numerical arrays and extract position
+    const parsedData = data.map(item => {
+      let resumeData;
+      try {
+        resumeData = JSON.parse(item.resume);
+      } catch (e) {
+        console.warn('Failed to parse resume for user:', item.username);
+        resumeData = {};
+      }
+
+      return {
+        username: item.username,
+        embedding: typeof item.embedding === 'string' 
+          ? JSON.parse(item.embedding)
+          : Array.isArray(item.embedding)
+            ? item.embedding
+            : null,
+        position: resumeData?.basics?.label || 'Unknown Position'
+      };
+    }).filter(item => item.embedding !== null);
 
     return NextResponse.json(parsedData);
   } catch (error) {
