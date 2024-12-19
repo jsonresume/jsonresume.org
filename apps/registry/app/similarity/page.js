@@ -141,15 +141,16 @@ export default function SimilarityPage() {
             nodeColor={node => highlightNodes.has(node) ? '#ff0000' : node.color}
             nodeCanvasObject={(node, ctx, globalScale) => {
               // Draw node
+              const size = node.size * (4 / Math.max(1, globalScale));
               ctx.beginPath();
-              ctx.arc(node.x, node.y, node.size * 2, 0, 2 * Math.PI);
+              ctx.arc(node.x, node.y, size, 0, 2 * Math.PI);
               ctx.fillStyle = highlightNodes.has(node) ? '#ff0000' : node.color;
               ctx.fill();
 
               // Only draw label if node is highlighted
               if (highlightNodes.has(node)) {
                 const label = node.id;
-                const fontSize = Math.max(14, node.size * 1.5);
+                const fontSize = Math.max(14, size * 1.5);
                 ctx.font = `${fontSize}px Sans-Serif`;
                 const textWidth = ctx.measureText(label).width;
                 const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2);
