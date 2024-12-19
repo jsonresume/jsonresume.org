@@ -276,10 +276,13 @@ export default function JobSimilarityPage() {
   const [algorithm, setAlgorithm] = useState('mst');
   const [dataSource, setDataSource] = useState('jobs');
   const [rawNodes, setRawNodes] = useState(null);
+  const [performanceMode, setPerformanceMode] = useState(true);
 
+  // Fetch data only when dataSource changes
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
+      setError(null);
       try {
         const endpoint = dataSource === 'jobs' ? '/api/job-similarity' : '/api/similarity';
         const response = await fetch(endpoint);
@@ -298,6 +301,7 @@ export default function JobSimilarityPage() {
 
         // Group similar items
         const groups = {};
+
         validData.forEach(item => {
           const label = dataSource === 'jobs' 
             ? item.title 
@@ -344,8 +348,6 @@ export default function JobSimilarityPage() {
         }
 
         setRawNodes(nodes);
-        const links = algorithms[algorithm].compute(nodes);
-        setGraphData({ nodes, links });
       } catch (err) {
         console.error('Error in fetchData:', err);
         setError(err.message);
@@ -355,7 +357,27 @@ export default function JobSimilarityPage() {
     }
 
     fetchData();
-  }, [algorithm, dataSource]);
+  }, [dataSource]); // Only depend on dataSource
+
+  // Compute links when algorithm changes or when we have new nodes
+  useEffect(() => {
+    if (!rawNodes) return;
+    
+    try {
+      const links = algorithms[algorithm].compute(rawNodes);
+      setGraphData({ nodes: rawNodes, links });
+    } catch (err) {
+      console.error('Error computing links:', err);
+      setError(err.message);
+    }
+  }, [algorithm, rawNodes]);
+
+  useEffect(() => {
+    // Enable performance mode automatically for large datasets
+    if (graphData?.nodes?.length > 1000) {
+      setPerformanceMode(true);
+    }
+  }, [graphData]);
 
   const handleNodeHover = useCallback(node => {
     setHighlightNodes(new Set(node ? [node] : []));
@@ -414,6 +436,15 @@ export default function JobSimilarityPage() {
               <option key={key} value={key}>{name}</option>
             ))}
           </select>
+          <label className="font-medium ml-4">
+            <input
+              type="checkbox"
+              checked={performanceMode}
+              onChange={(e) => setPerformanceMode(e.target.checked)}
+              className="mr-2"
+            />
+            Performance Mode
+          </label>
         </div>
       </div>
       <p className="mb-4">
@@ -463,19 +494,23 @@ export default function JobSimilarityPage() {
                 ctx.fillText(countLabel, node.x, node.y - bckgDimensions[1]);
               }
             }}
-            nodeRelSize={6}
+            nodeRelSize={performanceMode ? 4 : 6}
             linkWidth={link => highlightLinks.has(link) ? 2 : 1}
             linkColor={link => highlightLinks.has(link) ? '#ff0000' : '#cccccc'}
             linkOpacity={0.3}
-            linkDirectionalParticles={4}
+            linkDirectionalParticles={performanceMode ? 0 : 4}
             linkDirectionalParticleWidth={2}
             onNodeHover={handleNodeHover}
             onNodeClick={handleNodeClick}
-            enableNodeDrag={true}
-            cooldownTicks={100}
-            d3AlphaDecay={0.02}
-            d3VelocityDecay={0.3}
-            warmupTicks={100}
+            enableNodeDrag={!performanceMode}
+            cooldownTicks={performanceMode ? 50 : 100}
+            d3AlphaDecay={performanceMode ? 0.05 : 0.02}
+            d3VelocityDecay={performanceMode ? 0.4 : 0.3}
+            warmupTicks={performanceMode ? 50 : 100}
+            d3Force={performanceMode ? {
+              collision: 1,
+              charge: -30
+            } : undefined}
           />
         )}
         {hoverNode && (
