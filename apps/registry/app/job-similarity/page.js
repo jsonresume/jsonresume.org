@@ -21,20 +21,26 @@ function cosineSimilarity(a, b) {
 
 // Helper function to normalize vector
 function normalizeVector(vector) {
+  if (!Array.isArray(vector) || vector.length === 0) return null;
   const magnitude = Math.sqrt(vector.reduce((sum, val) => sum + val * val, 0));
+  if (magnitude === 0) return null;
   return vector.map(val => val / magnitude);
 }
 
 // Helper function to get average embedding
 function getAverageEmbedding(embeddings) {
-  const dim = embeddings[0].length;
+  // Filter out null or invalid embeddings
+  const validEmbeddings = embeddings.filter(emb => Array.isArray(emb) && emb.length > 0);
+  if (validEmbeddings.length === 0) return null;
+
+  const dim = validEmbeddings[0].length;
   const sum = new Array(dim).fill(0);
-  embeddings.forEach(emb => {
+  validEmbeddings.forEach(emb => {
     emb.forEach((val, i) => {
       sum[i] += val;
     });
   });
-  const avg = sum.map(val => val / embeddings.length);
+  const avg = sum.map(val => val / validEmbeddings.length);
   return normalizeVector(avg);
 }
 
@@ -268,47 +274,80 @@ export default function JobSimilarityPage() {
   const [highlightLinks, setHighlightLinks] = useState(new Set());
   const [hoverNode, setHoverNode] = useState(null);
   const [algorithm, setAlgorithm] = useState('mst');
+  const [dataSource, setDataSource] = useState('jobs');
   const [rawNodes, setRawNodes] = useState(null);
 
   useEffect(() => {
     async function fetchData() {
+      setLoading(true);
       try {
-        const response = await fetch('/api/job-similarity');
+        const endpoint = dataSource === 'jobs' ? '/api/job-similarity' : '/api/similarity';
+        const response = await fetch(endpoint);
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
         const jsonData = await response.json();
         
-        // Group similar job titles
-        const jobGroups = {};
-        jsonData.forEach(item => {
-          const title = item.title;
-          if (!jobGroups[title]) {
-            jobGroups[title] = [];
+        // Filter out items without valid embeddings
+        const validData = jsonData.filter(item => {
+          const embedding = dataSource === 'jobs' ? 
+            item.embedding : 
+            (typeof item.embedding === 'string' ? JSON.parse(item.embedding) : item.embedding);
+          return Array.isArray(embedding) && embedding.length > 0;
+        });
+
+        // Group similar items
+        const groups = {};
+        validData.forEach(item => {
+          const label = dataSource === 'jobs' 
+            ? item.title 
+            : (item.position || 'Unknown Position');
+            
+          if (!groups[label]) {
+            groups[label] = [];
           }
-          jobGroups[title].push(item);
+          groups[label].push(item);
         });
 
         // Create nodes with normalized embeddings
-        const nodes = Object.entries(jobGroups).map(([title, items], index) => {
-          const normalizedEmbeddings = items.map(item => normalizeVector(item.embedding));
-          const avgEmbedding = getAverageEmbedding(normalizedEmbeddings);
-          
-          return {
-            id: title,
-            group: index,
-            size: Math.log(items.length + 1) * 3,
-            count: items.length,
-            uuids: items.map(item => item.uuid),
-            avgEmbedding,
-            color: `hsl(${Math.random() * 360}, 70%, 50%)`
-          };
-        });
+        const nodes = Object.entries(groups)
+          .map(([label, items], index) => {
+            const embeddings = items.map(item => {
+              if (dataSource === 'jobs') return item.embedding;
+              return typeof item.embedding === 'string' ? 
+                JSON.parse(item.embedding) : item.embedding;
+            });
+
+            const normalizedEmbeddings = embeddings
+              .map(emb => normalizeVector(emb))
+              .filter(emb => emb !== null);
+
+            if (normalizedEmbeddings.length === 0) return null;
+
+            const avgEmbedding = getAverageEmbedding(normalizedEmbeddings);
+            if (!avgEmbedding) return null;
+
+            return {
+              id: label,
+              group: index,
+              size: Math.log(items.length + 1) * 3,
+              count: items.length,
+              uuids: items.map(item => dataSource === 'jobs' ? item.uuid : item.username),
+              avgEmbedding,
+              color: `hsl(${Math.random() * 360}, 70%, 50%)`
+            };
+          })
+          .filter(node => node !== null);
+
+        if (nodes.length === 0) {
+          throw new Error('No valid data found with embeddings');
+        }
 
         setRawNodes(nodes);
         const links = algorithms[algorithm].compute(nodes);
         setGraphData({ nodes, links });
       } catch (err) {
+        console.error('Error in fetchData:', err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -316,15 +355,7 @@ export default function JobSimilarityPage() {
     }
 
     fetchData();
-  }, []);
-
-  // Update graph when algorithm changes
-  useEffect(() => {
-    if (rawNodes) {
-      const links = algorithms[algorithm].compute(rawNodes);
-      setGraphData({ nodes: rawNodes, links });
-    }
-  }, [algorithm, rawNodes]);
+  }, [algorithm, dataSource]);
 
   const handleNodeHover = useCallback(node => {
     setHighlightNodes(new Set(node ? [node] : []));
@@ -334,10 +365,17 @@ export default function JobSimilarityPage() {
     setHoverNode(node || null);
   }, [graphData]);
 
+  const handleNodeClick = useCallback(node => {
+    if (node.uuids && node.uuids.length > 0) {
+      const baseUrl = dataSource === 'jobs' ? '/jobs/' : '/';
+      window.open(`${baseUrl}${node.uuids[0]}`, '_blank');
+    }
+  }, [dataSource]);
+
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-4">Job Similarity Network</h1>
+        <h1 className="text-3xl font-bold mb-4">Similarity Network</h1>
         <p>Loading...</p>
       </div>
     );
@@ -346,7 +384,7 @@ export default function JobSimilarityPage() {
   if (error) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-4">Job Similarity Network</h1>
+        <h1 className="text-3xl font-bold mb-4">Similarity Network</h1>
         <p className="text-red-500">Error: {error}</p>
       </div>
     );
@@ -355,8 +393,17 @@ export default function JobSimilarityPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-3xl font-bold">Job Similarity Network</h1>
+        <h1 className="text-3xl font-bold">Similarity Network</h1>
         <div className="flex items-center gap-4">
+          <label className="font-medium">Data Source:</label>
+          <select 
+            className="p-2 border rounded-lg bg-white"
+            value={dataSource}
+            onChange={(e) => setDataSource(e.target.value)}
+          >
+            <option value="jobs">Jobs</option>
+            <option value="resumes">Resumes</option>
+          </select>
           <label className="font-medium">Algorithm:</label>
           <select 
             className="p-2 border rounded-lg bg-white"
@@ -370,8 +417,9 @@ export default function JobSimilarityPage() {
         </div>
       </div>
       <p className="mb-4">
-        Explore similar job positions in an interactive network. Each node represents a job title, with size indicating the number of listings.
-        Connected positions are similar based on job content. Hover to highlight connections, click to view job details.
+        Explore similar {dataSource === 'jobs' ? 'job positions' : 'resumes'} in an interactive network. 
+        Each node represents a {dataSource === 'jobs' ? 'job title' : 'position'}, with size indicating the number of {dataSource === 'jobs' ? 'listings' : 'resumes'}.
+        Connected positions are similar based on content. Hover to highlight connections, click to view details.
       </p>
       <div className="relative w-full h-[800px] bg-white rounded-lg shadow-lg">
         {graphData && (
@@ -422,11 +470,7 @@ export default function JobSimilarityPage() {
             linkDirectionalParticles={4}
             linkDirectionalParticleWidth={2}
             onNodeHover={handleNodeHover}
-            onNodeClick={(node) => {
-              if (node.uuids && node.uuids.length > 0) {
-                window.open(`/jobs/${node.uuids[0]}`, '_blank');
-              }
-            }}
+            onNodeClick={handleNodeClick}
             enableNodeDrag={true}
             cooldownTicks={100}
             d3AlphaDecay={0.02}
@@ -437,8 +481,8 @@ export default function JobSimilarityPage() {
         {hoverNode && (
           <div className="absolute top-4 right-4 bg-white p-4 rounded-lg shadow-lg">
             <h3 className="font-bold">{hoverNode.id}</h3>
-            <p>{hoverNode.count} job listings</p>
-            <p className="text-sm text-gray-600">Click to view a sample job</p>
+            <p>{hoverNode.count} {dataSource === 'jobs' ? 'job listings' : 'resumes'}</p>
+            <p className="text-sm text-gray-600">Click to view {dataSource === 'jobs' ? 'job' : 'resume'}</p>
           </div>
         )}
       </div>
