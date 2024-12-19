@@ -519,6 +519,7 @@ export default function JobSimilarityPage() {
               size: Math.log(items.length + 1) * 3,
               count: items.length,
               uuids: items.map(item => dataSource === 'jobs' ? item.uuid : item.username),
+              usernames: dataSource === 'jobs' ? null : items.map(item => item.username),
               avgEmbedding,
               color: `hsl(${Math.random() * 360}, 70%, 50%)`,
               companies: dataSource === 'jobs' ? [...new Set(items.map(item => item.company || 'Unknown Company'))] : null,
@@ -711,6 +712,12 @@ export default function JobSimilarityPage() {
               <div className="mt-2">
                 <p className="text-sm text-gray-600">Locations:</p>
                 <p className="text-sm">{hoverNode.countryCodes.slice(0, 5).join(', ')}{hoverNode.countryCodes.length > 5 ? `, +${hoverNode.countryCodes.length - 5} more` : ''}</p>
+              </div>
+            )}
+            {dataSource !== 'jobs' && hoverNode.usernames && (
+              <div className="mt-2">
+                <p className="text-sm text-gray-600">Usernames:</p>
+                <p className="text-sm">{hoverNode.usernames.slice(0, 5).join(', ')}{hoverNode.usernames.length > 5 ? `, +${hoverNode.usernames.length - 5} more` : ''}</p>
               </div>
             )}
             <p className="text-sm text-gray-600 mt-2">Click to view {dataSource === 'jobs' ? 'job' : 'resume'}</p>
