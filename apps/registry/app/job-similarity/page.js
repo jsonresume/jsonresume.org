@@ -447,7 +447,10 @@ const Header = memo(() => (
     <div className="space-y-4 text-gray-700">
       <p>
         An interactive visualization of the tech job market, powered by data from HN "Who's Hiring" threads and the JSON Resume Registry. 
-        The network reveals patterns and clusters in job roles and resume profiles through semantic analysis.
+        Each node represents a job category, with edges connecting similar roles. The size of each node indicates the number of job listings in that category.
+      </p>
+      <p>
+        Hover over a node to see details about the companies and locations hiring for that role. Click a node to view the original job listing or resume profile.
       </p>
       <ul className="list-disc pl-5 space-y-2">
         <li>
@@ -458,7 +461,7 @@ const Header = memo(() => (
         </li>
       </ul>
       <p>
-        Multiple graph algorithms available to explore different relationships. Performance Mode recommended for larger datasets.
+        Multiple graph algorithms available to explore different relationships.
       </p>
     </div>
   </div>
@@ -520,11 +523,11 @@ const GraphContainer = ({ dataSource, algorithm }) => {
 
   const handleNodeClick = useCallback((node) => {
     if (!node) return;
-    const nodeData = rawNodes.find(n => n.title === node.id);
-    if (nodeData) {
-      window.open(nodeData.url, '_blank');
+    if (node.uuids && node.uuids.length > 0) {
+      const baseUrl = dataSource === 'jobs' ? '/jobs/' : '/';
+      window.open(`${baseUrl}${node.uuids[0]}`, '_blank');
     }
-  }, [rawNodes]);
+  }, [dataSource]);
 
   const processData = useCallback((data) => {
     // Filter out items without valid embeddings
