@@ -696,7 +696,7 @@ const GraphContainer = ({ dataSource, algorithm }) => {
   );
 
   return (
-    <div className="prose max-w-3xl mx-auto relative h-[calc(100vh-32rem)] bg-white">
+    <div className="w-full h-full relative">
       {graphData && (
         <ForceGraph2D
           graphData={graphData}
@@ -755,6 +755,8 @@ const GraphContainer = ({ dataSource, algorithm }) => {
             collision: 1,
             charge: -30
           }}
+          width={window.innerWidth}
+          height={window.innerHeight - 32 * 16}
         />
       )}
       {hoverNode && (
@@ -798,17 +800,21 @@ export default function Page() {
 
   return (
     <div className="min-h-screen bg-accent-100">
-      <Header />
-      <Controls
-        dataSource={dataSource}
-        setDataSource={setDataSource}
-        algorithm={algorithm}
-        setAlgorithm={setAlgorithm}
-      />
-      <GraphContainer
-        dataSource={dataSource}
-        algorithm={algorithm}
-      />
+      <div className="prose max-w-3xl mx-auto">
+        <Header />
+        <Controls
+          dataSource={dataSource}
+          setDataSource={setDataSource}
+          algorithm={algorithm}
+          setAlgorithm={setAlgorithm}
+        />
+      </div>
+      <div className="w-full h-[calc(100vh-32rem)] bg-white">
+        <GraphContainer
+          dataSource={dataSource}
+          algorithm={algorithm}
+        />
+      </div>
     </div>
   );
 }
