@@ -30,9 +30,9 @@ export default function SimilarityPage() {
   const [hoverNode, setHoverNode] = useState(null);
 
   useEffect(() => {
-    async function fetchData() {
+    const fetchData = async () => {
       try {
-        const response = await fetch('/api/similarity');
+        const response = await fetch('/api/similarity?limit=1500');
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
@@ -98,7 +98,7 @@ export default function SimilarityPage() {
       } finally {
         setLoading(false);
       }
-    }
+    };
 
     fetchData();
   }, []);

@@ -716,7 +716,7 @@ const GraphContainer = ({ dataSource, algorithm }) => {
       const response = await fetch(
         `/api/${
           dataSource === 'jobs' ? 'job-' : ''
-        }similarity?limit=250&algorithm=${algorithm}`
+        }similarity?limit=1500&algorithm=${algorithm}`
       );
       if (!response.ok) {
         throw new Error('Failed to fetch data');
