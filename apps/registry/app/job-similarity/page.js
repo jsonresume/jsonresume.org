@@ -911,7 +911,10 @@ const GraphContainer = ({ dataSource, algorithm }) => {
                   <div
                     key={i}
                     className="hover:bg-gray-100 p-1 rounded cursor-pointer"
-                    onClick={() => window.open(`/${username}`, '_blank')}
+                    onClick={() => {
+                      const baseUrl = dataSource === 'jobs' ? '/jobs/' : '/';
+                      window.open(`${baseUrl}${hoverNode.uuids[0]}`, '_blank');
+                    }}
                   >
                     {username}
                   </div>
@@ -919,9 +922,30 @@ const GraphContainer = ({ dataSource, algorithm }) => {
               </div>
             </div>
           )}
-          <p className="text-sm text-gray-600 mt-2">
-            Click to view {dataSource === 'jobs' ? 'job' : 'resume'}
-          </p>
+          {dataSource === 'jobs' && (
+            <div className="mt-4">
+              <a
+                href={`/jobs/${hoverNode.uuids[0]}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:text-blue-800 underline"
+              >
+                View job listing →
+              </a>
+            </div>
+          )}
+          {dataSource !== 'jobs' && (
+            <div className="mt-4">
+              <a
+                href={`/${hoverNode.uuids[0]}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:text-blue-800 underline"
+              >
+                View resume →
+              </a>
+            </div>
+          )}
         </div>
       )}
     </div>
