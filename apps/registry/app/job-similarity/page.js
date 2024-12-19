@@ -508,7 +508,7 @@ const colors = [
 ];
 
 const Header = memo(() => (
-  <div className="prose max-w-3xl mx-auto mb-8">
+  <div className="mb-8">
     <h1 className="text-3xl font-bold mb-4">Job Market Simlarity</h1>
     <div className="space-y-4 text-gray-700">
       <p>
@@ -542,8 +542,8 @@ Header.displayName = 'Header';
 
 const Controls = memo(
   ({ dataSource, setDataSource, algorithm, setAlgorithm }) => (
-    <div className="prose max-w-3xl mx-auto mb-8">
-      <div className="flex gap-4 items-center">
+    <div className="mb-8">
+      <div className="flex flex-col sm:flex-row gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Data Source
@@ -588,6 +588,17 @@ const GraphContainer = ({ dataSource, algorithm }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [edges, setEdges] = useState([]);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const handleNodeHover = useCallback(
     (node) => {
@@ -609,12 +620,19 @@ const GraphContainer = ({ dataSource, algorithm }) => {
   const handleNodeClick = useCallback(
     (node) => {
       if (!node) return;
+
+      if (isMobile) {
+        // On mobile, just show the tooltip
+        setHoverNode(node);
+        return;
+      }
+
       if (node.uuids && node.uuids.length > 0) {
         const baseUrl = dataSource === 'jobs' ? '/jobs/' : '/';
         window.open(`${baseUrl}${node.uuids[0]}`, '_blank');
       }
     },
-    [dataSource]
+    [dataSource, isMobile]
   );
 
   const processData = useCallback(
@@ -791,7 +809,7 @@ const GraphContainer = ({ dataSource, algorithm }) => {
     );
 
   return (
-    <div className="w-full h-full relative">
+    <div className="w-full h-[600px] relative">
       {graphData && (
         <ForceGraph2D
           graphData={graphData}
@@ -853,7 +871,7 @@ const GraphContainer = ({ dataSource, algorithm }) => {
           d3VelocityDecay={0.3}
           warmupTicks={100}
           width={window.innerWidth}
-          height={window.innerHeight - 32 * 16}
+          height={600}
         />
       )}
       {hoverNode && (
@@ -893,7 +911,10 @@ const GraphContainer = ({ dataSource, algorithm }) => {
                   <div
                     key={i}
                     className="hover:bg-gray-100 p-1 rounded cursor-pointer"
-                    onClick={() => window.open(`/${username}`, '_blank')}
+                    onClick={() => {
+                      const baseUrl = dataSource === 'jobs' ? '/jobs/' : '/';
+                      window.open(`${baseUrl}${hoverNode.uuids[0]}`, '_blank');
+                    }}
                   >
                     {username}
                   </div>
@@ -901,9 +922,30 @@ const GraphContainer = ({ dataSource, algorithm }) => {
               </div>
             </div>
           )}
-          <p className="text-sm text-gray-600 mt-2">
-            Click to view {dataSource === 'jobs' ? 'job' : 'resume'}
-          </p>
+          {dataSource === 'jobs' && (
+            <div className="mt-4">
+              <a
+                href={`/jobs/${hoverNode.uuids[0]}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:text-blue-800 underline"
+              >
+                View job listing →
+              </a>
+            </div>
+          )}
+          {dataSource !== 'jobs' && (
+            <div className="mt-4">
+              <a
+                href={`/${hoverNode.uuids[0]}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:text-blue-800 underline"
+              >
+                View resume →
+              </a>
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -916,7 +958,7 @@ export default function Page() {
 
   return (
     <div className="min-h-screen bg-accent-100">
-      <div className="prose max-w-3xl mx-auto pt-8">
+      <div className="prose max-w-3xl mx-auto pt-8 px-4 sm:px-6 lg:px-8">
         <Header />
         <Controls
           dataSource={dataSource}
@@ -925,7 +967,7 @@ export default function Page() {
           setAlgorithm={setAlgorithm}
         />
       </div>
-      <div className="w-full h-[calc(100vh-32rem)] bg-white">
+      <div className="w-full h-[600px] bg-white">
         <GraphContainer dataSource={dataSource} algorithm={algorithm} />
       </div>
     </div>
