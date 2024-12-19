@@ -2,7 +2,6 @@
 
 import React, { useState, useCallback, memo, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import { forceCollide, forceManyBody, forceX, forceY } from 'd3-force';
 
 const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), {
   ssr: false,
