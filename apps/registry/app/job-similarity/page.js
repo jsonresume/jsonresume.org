@@ -676,7 +676,7 @@ const GraphContainer = ({ dataSource, algorithm, performanceMode }) => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="relative w-full h-[800px] bg-white rounded-lg shadow-lg">
+    <div className="relative w-full h-screen">
       {graphData && (
         <ForceGraph2D
           graphData={graphData}
@@ -782,22 +782,26 @@ export default function Page() {
   const handlePerformanceModeChange = useCallback((e) => setPerformanceMode(e.checked), []);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      <Header />
-      <Controls 
-        dataSource={dataSource}
-        algorithm={algorithm}
-        performanceMode={performanceMode}
-        onDataSourceChange={handleDataSourceChange}
-        onAlgorithmChange={handleAlgorithmChange}
-        onPerformanceModeChange={handlePerformanceModeChange}
-        algorithms={algorithms}
-      />
-      <GraphContainer 
-        dataSource={dataSource}
-        algorithm={algorithm}
-        performanceMode={performanceMode}
-      />
+    <div className="min-h-screen">
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <Header />
+        <Controls 
+          dataSource={dataSource}
+          algorithm={algorithm}
+          performanceMode={performanceMode}
+          onDataSourceChange={handleDataSourceChange}
+          onAlgorithmChange={handleAlgorithmChange}
+          onPerformanceModeChange={handlePerformanceModeChange}
+          algorithms={algorithms}
+        />
+      </div>
+      <div className="w-full">
+        <GraphContainer 
+          dataSource={dataSource}
+          algorithm={algorithm}
+          performanceMode={performanceMode}
+        />
+      </div>
     </div>
   );
 }

@@ -18,7 +18,7 @@ export async function GET(request) {
   try {
     const supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
     const { searchParams } = new URL(request.url);
-    const limit = parseInt(searchParams.get('limit')) || 2000;
+    const limit = parseInt(searchParams.get('limit')) || 100;
 
     console.time('getResumeSimilarityData');
     const { data, error } = await supabase
