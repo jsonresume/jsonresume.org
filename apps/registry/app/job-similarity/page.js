@@ -718,9 +718,7 @@ const GraphContainer = ({ dataSource, algorithm }) => {
       const limit = isLocal ? 300 : 1500;
 
       const response = await fetch(
-        `/api/${
-          dataSource === 'jobs' ? 'job-' : ''
-        }similarity?limit=${limit}`
+        `/api/${dataSource === 'jobs' ? 'job-' : ''}similarity?limit=${limit}`
       );
       if (!response.ok) {
         throw new Error('Failed to fetch data');
@@ -813,8 +811,8 @@ const GraphContainer = ({ dataSource, algorithm }) => {
               const fontSize = Math.max(14, node.size * 1.5);
               ctx.font = `${fontSize}px Sans-Serif`;
               const textWidth = ctx.measureText(label).width;
-              const bckgDimensions = [textWidth, fontSize].map((n) =>
-                n + fontSize * 0.2
+              const bckgDimensions = [textWidth, fontSize].map(
+                (n) => n + fontSize * 0.2
               );
 
               // Draw background for label
