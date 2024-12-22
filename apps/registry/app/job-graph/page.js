@@ -291,108 +291,49 @@ const GraphContainer = ({ username }) => {
           }))
         });
 
-        // Then create job-to-job connections
+        // Create job-to-job connections - each job connects to its most similar neighbor
         const jobLinks = [];
-        const edges = [];
         
-        // Create edges only between highly similar jobs
+        // For each job, find and connect to its most similar neighbor
         for (let i = 0; i < jobNodes.length; i++) {
-          // Track top 5 most similar jobs for each job
-          const similarities = [];
+          const job = jobNodes[i];
+          let bestMatch = null;
+          let bestSimilarity = 0;
           
+          // Find the most similar job
           for (let j = 0; j < jobNodes.length; j++) {
             if (i === j) continue;
+            const otherJob = jobNodes[j];
             
-            const similarity = cosineSimilarity(
-              jobNodes[i].embedding,
-              jobNodes[j].embedding
-            );
-            
-            similarities.push({
-              index: j,
-              similarity,
-              source: jobNodes[i],
-              target: jobNodes[j]
-            });
+            const similarity = cosineSimilarity(job.embedding, otherJob.embedding);
+            if (similarity > bestSimilarity && similarity > 0.3) { // Lower threshold to ensure connections
+              bestSimilarity = similarity;
+              bestMatch = otherJob;
+            }
           }
           
-          // Sort by similarity and take top 5
-          similarities.sort((a, b) => b.similarity - a.similarity);
-          similarities.slice(0, 5).forEach(edge => {
-            if (edge.similarity > 0.6) { // Only keep very strong connections
-              edges.push({
-                i,
-                j: edge.index,
-                similarity: edge.similarity,
-                source: edge.source,
-                target: edge.target
-              });
-            }
-          });
-        }
-
-        console.log('Job-to-Job Edges:', {
-          totalJobs: jobNodes.length,
-          edgesCreated: edges.length,
-          sampleEdges: edges.slice(0, 5).map(e => ({
-            source: e.source.title,
-            target: e.target.title,
-            similarity: e.similarity
-          }))
-        });
-
-        // Sort edges by similarity
-        edges.sort((a, b) => b.similarity - a.similarity);
-
-        // Create initial job clusters with strongest connections
-        edges.forEach(({ source, target, similarity }) => {
-          jobLinks.push({
-            source,
-            target,
-            value: similarity,
-            type: 'job-job'
-          });
-        });
-
-        // Track connected nodes
-        const connectedNodes = new Set();
-        jobLinks.forEach(link => {
-          connectedNodes.add(link.source.id);
-          connectedNodes.add(link.target.id);
-        });
-        resumeLinks.forEach(link => {
-          connectedNodes.add(link.source.id);
-          connectedNodes.add(link.target.id);
-        });
-
-        // Connect isolated nodes to their nearest neighbor
-        const isolatedNodes = jobNodes.filter(node => !connectedNodes.has(node.id));
-        console.log('Isolated nodes:', isolatedNodes.length);
-
-        isolatedNodes.forEach(node => {
-          // Find the most similar connected node
-          let bestMatch = null;
-          let bestSimilarity = -1;
-
-          jobNodes.forEach(otherNode => {
-            if (connectedNodes.has(otherNode.id) && node.id !== otherNode.id) {
-              const similarity = cosineSimilarity(node.embedding, otherNode.embedding);
-              if (similarity > bestSimilarity) {
-                bestSimilarity = similarity;
-                bestMatch = otherNode;
-              }
-            }
-          });
-
+          // Create link to the most similar job
           if (bestMatch) {
             jobLinks.push({
-              source: node,
+              source: job,
               target: bestMatch,
               value: bestSimilarity,
               type: 'job-job'
             });
-            connectedNodes.add(node.id);
+            console.log(`Connected: ${job.title} -> ${bestMatch.title} (${(bestSimilarity * 100).toFixed(1)}%)`);
+          } else {
+            console.log(`Warning: No similar job found for ${job.title}`);
           }
+        }
+
+        console.log('Job links created:', {
+          totalJobs: jobNodes.length,
+          links: jobLinks.length,
+          sampleLinks: jobLinks.slice(0, 5).map(link => ({
+            source: link.source.title,
+            target: link.target.title,
+            similarity: (link.value * 100).toFixed(1) + '%'
+          }))
         });
 
         // Create final graph data with proper node references
