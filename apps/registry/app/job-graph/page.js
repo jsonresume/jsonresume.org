@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, memo, useEffect } from 'react';
+import React, { useState, useCallback, memo, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 
 const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), {
@@ -27,6 +27,8 @@ const colors = {
   resume: '#FF6B6B', // coral red for the central resume node
   jobs: '#4ECDC4', // turquoise for job nodes
   selected: '#ff0000', // red for highlighted nodes
+  resumeLink: '#FF8C94', // rose pink for resume-to-job connections
+  jobLink: '#96CEB4', // sage green for job-to-job connections
 };
 
 const Header = memo(() => (
@@ -74,6 +76,7 @@ const GraphContainer = ({ username }) => {
   const [error, setError] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
   const [resumes, setResumes] = useState(null);
+  const graphRef = useRef(null);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -156,6 +159,18 @@ const GraphContainer = ({ username }) => {
           throw new Error('Resume not found');
         }
 
+        // Debug selected resume data
+        console.log('Selected Resume:', {
+          username,
+          position: selectedResume.position,
+          hasEmbedding: !!selectedResume.embedding,
+          embeddingType: typeof selectedResume.embedding,
+          embeddingLength: selectedResume.embedding ? 
+            (typeof selectedResume.embedding === 'string' ? 
+              JSON.parse(selectedResume.embedding).length : 
+              selectedResume.embedding.length) : 0
+        });
+
         // Fetch similar jobs
         const jobsResponse = await fetch('/api/job-similarity?limit=500', {
           cache: 'no-store',
@@ -172,81 +187,259 @@ const GraphContainer = ({ username }) => {
           throw new Error('Invalid jobs response format');
         }
 
-        // Create the central resume node
+        // Create resume node with proper embedding
+        const resumeEmbedding = normalizeVector(
+          typeof selectedResume.embedding === 'string'
+            ? JSON.parse(selectedResume.embedding)
+            : selectedResume.embedding
+        );
+
         const resumeNode = {
           id: username,
           username,
           type: 'resume',
-          size: 10,
+          size: 8,
           color: colors.resume,
-          embedding: normalizeVector(
-            typeof selectedResume.embedding === 'string'
-              ? JSON.parse(selectedResume.embedding)
-              : selectedResume.embedding
-          ),
+          embedding: resumeEmbedding,
           title: selectedResume.position || 'Resume',
         };
 
-        // Create job nodes and calculate similarities
+        console.log('Resume Node:', {
+          id: resumeNode.id,
+          title: resumeNode.title,
+          hasEmbedding: !!resumeNode.embedding,
+          embeddingLength: resumeNode.embedding?.length
+        });
+
+        // Debug job data before processing
+        console.log('Jobs Data:', {
+          total: jobsData.length,
+          withEmbeddings: jobsData.filter(j => j.embedding).length,
+          sampleEmbedding: jobsData[0]?.embedding ? 
+            (typeof jobsData[0].embedding === 'string' ? 
+              JSON.parse(jobsData[0].embedding).length : 
+              jobsData[0].embedding.length) : 0
+        });
+
+        // Calculate resume similarities for all jobs first
         const jobNodes = jobsData
           .filter((job) => job.embedding)
-          .map((job) => ({
-            id: job.uuid,
-            uuid: job.uuid,
-            type: 'job',
-            title: job.title,
-            company: job.company,
-            size: 5,
-            color: colors.jobs,
-            embedding: normalizeVector(
+          .map((job) => {
+            const jobEmbedding = normalizeVector(
               typeof job.embedding === 'string'
                 ? JSON.parse(job.embedding)
                 : job.embedding
-            ),
-          }))
-          .filter((job) => job.embedding);
+            );
+            
+            const similarity = resumeNode.embedding && jobEmbedding ? 
+              cosineSimilarity(resumeNode.embedding, jobEmbedding) : 0;
+            
+            console.log(`Job "${job.title}":`, {
+              similarity,
+              hasEmbedding: !!jobEmbedding,
+              embeddingLength: jobEmbedding?.length
+            });
+            
+            return {
+              id: job.id,
+              title: job.title,
+              company: job.company,
+              embedding: jobEmbedding,
+              type: 'job',
+              size: 5,
+              color: colors.jobs,
+              resumeSimilarity: Math.round(similarity * 100) / 100
+            };
+          })
+          .filter((job) => job.embedding && job.title !== "Unknown Position");
 
-        // Calculate similarities and create links
-        const links = [];
-        const similarities = [];
+        // Sort jobs by similarity to resume
+        const sortedJobs = [...jobNodes].sort((a, b) => b.resumeSimilarity - a.resumeSimilarity);
         
-        console.log('Resume embedding length:', resumeNode.embedding?.length);
-        console.log('Number of job nodes:', jobNodes.length);
+        // Create resume connections to top similar jobs
+        const resumeLinks = [];
+        const numResumeConnections = Math.max(5, Math.ceil(jobNodes.length * 0.1)); // Connect to top 10% or at least 5
         
-        jobNodes.forEach((job) => {
-          if (!job.embedding || !resumeNode.embedding) {
-            console.log('Missing embedding for job:', job.title);
-            return;
+        console.log('Creating resume connections:', {
+          totalJobs: jobNodes.length,
+          numConnections: numResumeConnections,
+          topJobs: sortedJobs.slice(0, 5).map(job => ({
+            title: job.title,
+            similarity: job.resumeSimilarity
+          }))
+        });
+
+        // Create links to top similar jobs
+        for (let i = 0; i < numResumeConnections; i++) {
+          const job = sortedJobs[i];
+          if (job && job.resumeSimilarity > 0.2) { // Only connect if similarity is above 20%
+            resumeLinks.push({
+              source: resumeNode,
+              target: job,
+              value: job.resumeSimilarity,
+              type: 'resume-job'
+            });
+            console.log(`Created resume link to: ${job.title} (${(job.resumeSimilarity * 100).toFixed(1)}%)`);
+          }
+        }
+
+        console.log('Resume links created:', {
+          count: resumeLinks.length,
+          links: resumeLinks.map(link => ({
+            target: link.target.title,
+            similarity: (link.value * 100).toFixed(1) + '%'
+          }))
+        });
+
+        // Then create job-to-job connections
+        const jobLinks = [];
+        const edges = [];
+        
+        // Create edges only between highly similar jobs
+        for (let i = 0; i < jobNodes.length; i++) {
+          // Track top 5 most similar jobs for each job
+          const similarities = [];
+          
+          for (let j = 0; j < jobNodes.length; j++) {
+            if (i === j) continue;
+            
+            const similarity = cosineSimilarity(
+              jobNodes[i].embedding,
+              jobNodes[j].embedding
+            );
+            
+            similarities.push({
+              index: j,
+              similarity,
+              source: jobNodes[i],
+              target: jobNodes[j]
+            });
           }
           
-          const similarity = cosineSimilarity(resumeNode.embedding, job.embedding);
-          similarities.push(similarity);
-          
-          if (similarity > 0.2) {
+          // Sort by similarity and take top 5
+          similarities.sort((a, b) => b.similarity - a.similarity);
+          similarities.slice(0, 5).forEach(edge => {
+            if (edge.similarity > 0.6) { // Only keep very strong connections
+              edges.push({
+                i,
+                j: edge.index,
+                similarity: edge.similarity,
+                source: edge.source,
+                target: edge.target
+              });
+            }
+          });
+        }
+
+        console.log('Job-to-Job Edges:', {
+          totalJobs: jobNodes.length,
+          edgesCreated: edges.length,
+          sampleEdges: edges.slice(0, 5).map(e => ({
+            source: e.source.title,
+            target: e.target.title,
+            similarity: e.similarity
+          }))
+        });
+
+        // Sort edges by similarity
+        edges.sort((a, b) => b.similarity - a.similarity);
+
+        // Create initial job clusters with strongest connections
+        edges.forEach(({ source, target, similarity }) => {
+          jobLinks.push({
+            source,
+            target,
+            value: similarity,
+            type: 'job-job'
+          });
+        });
+
+        // Track connected nodes
+        const connectedNodes = new Set();
+        jobLinks.forEach(link => {
+          connectedNodes.add(link.source.id);
+          connectedNodes.add(link.target.id);
+        });
+        resumeLinks.forEach(link => {
+          connectedNodes.add(link.source.id);
+          connectedNodes.add(link.target.id);
+        });
+
+        // Connect isolated nodes to their nearest neighbor
+        const isolatedNodes = jobNodes.filter(node => !connectedNodes.has(node.id));
+        console.log('Isolated nodes:', isolatedNodes.length);
+
+        isolatedNodes.forEach(node => {
+          // Find the most similar connected node
+          let bestMatch = null;
+          let bestSimilarity = -1;
+
+          jobNodes.forEach(otherNode => {
+            if (connectedNodes.has(otherNode.id) && node.id !== otherNode.id) {
+              const similarity = cosineSimilarity(node.embedding, otherNode.embedding);
+              if (similarity > bestSimilarity) {
+                bestSimilarity = similarity;
+                bestMatch = otherNode;
+              }
+            }
+          });
+
+          if (bestMatch) {
+            jobLinks.push({
+              source: node,
+              target: bestMatch,
+              value: bestSimilarity,
+              type: 'job-job'
+            });
+            connectedNodes.add(node.id);
+          }
+        });
+
+        // Create final graph data with proper node references
+        const nodes = [resumeNode, ...jobNodes];
+        const nodeById = new Map(nodes.map(node => [node.id, node]));
+
+        // Create the links array with direct node references
+        const links = [];
+        
+        // Add resume links
+        resumeLinks.forEach(link => {
+          if (link.source && link.target) {
             links.push({
-              source: resumeNode.id,
-              target: job.id,
-              value: similarity,
+              source: link.source,
+              target: link.target,
+              value: link.value,
+              type: 'resume-job'
             });
           }
         });
-        
-        console.log('Similarity stats:', {
-          max: Math.max(...similarities),
-          min: Math.min(...similarities),
-          avg: similarities.reduce((a, b) => a + b, 0) / similarities.length,
-          numLinks: links.length
+
+        // Add job links
+        jobLinks.forEach(link => {
+          if (link.source && link.target) {
+            links.push({
+              source: link.source,
+              target: link.target,
+              value: link.value,
+              type: 'job-job'
+            });
+          }
         });
 
-        // Sort links by similarity and take top N
-        links.sort((a, b) => b.value - a.value);
-        const topLinks = links.slice(0, 10); 
+        const graphData = { nodes, links };
 
-        // Set graph data
-        setGraphData({
-          nodes: [resumeNode, ...jobNodes],
-          links: topLinks,
+        console.log('Final Graph Data:', {
+          nodes: nodes.length,
+          links: links.length,
+          resumeLinks: links.filter(l => l.type === 'resume-job').map(l => ({
+            source: l.source.title || 'Resume',
+            target: l.target.title,
+            value: (l.value * 100).toFixed(1) + '%'
+          })),
+          jobLinks: links.filter(l => l.type === 'job-job').length
         });
+
+        setGraphData(graphData);
       } catch (err) {
         console.error('Error updating graph:', err);
         setError(`Failed to load graph: ${err.message}`);
@@ -276,10 +469,9 @@ const GraphContainer = ({ username }) => {
         <div className="flex flex-col items-center gap-4 max-w-lg text-center">
           <div className="w-16 h-16 flex items-center justify-center rounded-full bg-red-100">
             <svg
-              className="w-8 h-8 text-red-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+              className="h-5 w-5 text-red-400"
+              viewBox="0 0 20 20"
+              fill="currentColor"
             >
               <path
                 strokeLinecap="round"
@@ -309,58 +501,52 @@ const GraphContainer = ({ username }) => {
   return (
     <div className="w-full h-[600px] relative">
       <ForceGraph2D
+        ref={graphRef}
         graphData={graphData}
-        nodeColor={(node) =>
-          highlightNodes.has(node) ? colors.selected : node.color
-        }
-        nodeCanvasObject={(node, ctx) => {
-          // Draw node
+        nodeId="id"
+        nodeLabel={(node) => `${node.title}${node.company ? ` at ${node.company}` : ''}`}
+        linkSource="source"
+        linkTarget="target"
+        linkColor={(link) => link.type === 'resume-job' ? colors.resumeLink : colors.jobLink}
+        linkWidth={(link) => link.type === 'resume-job' ? Math.sqrt(link.value) * 4 : Math.sqrt(link.value) * 2}
+        nodeCanvasObject={(node, ctx, globalScale) => {
+          // Draw circle
+          const size = node.type === 'resume' ? 8 : 5;
           ctx.beginPath();
-          ctx.arc(node.x, node.y, node.size * 2, 0, 2 * Math.PI);
-          ctx.fillStyle = highlightNodes.has(node) ? colors.selected : node.color;
+          ctx.arc(node.x, node.y, size, 0, 2 * Math.PI);
+          ctx.fillStyle = node.type === 'resume' ? colors.resume : colors.jobs;
           ctx.fill();
 
-          // Draw label if node is highlighted or is the resume node
-          if (highlightNodes.has(node) || node.type === 'resume') {
-            const label = node.type === 'resume' ? `Resume: ${node.username}` : node.title;
-            const fontSize = Math.max(14, node.size * 1.5);
+          // Draw label
+          const label = node.type === 'resume' ? 'Resume' : node.title;
+          const fontSize = node.type === 'resume' ? 5 : 3;
+          ctx.font = `${fontSize}px Sans-Serif`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillStyle = 'black';
+          ctx.fillText(label, node.x, node.y - size - 1);
+
+          // Draw similarity score for job nodes
+          if (node.type === 'job') {
+            const score = (node.resumeSimilarity * 100).toFixed(0) + '%';
             ctx.font = `${fontSize}px Sans-Serif`;
-            const textWidth = ctx.measureText(label).width;
-            const bckgDimensions = [textWidth, fontSize].map(
-              (n) => n + fontSize * 0.2
-            );
-
-            // Draw background for label
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-            ctx.fillRect(
-              node.x - bckgDimensions[0] / 2,
-              node.y - bckgDimensions[1] * 2,
-              bckgDimensions[0],
-              bckgDimensions[1]
-            );
-
-            // Draw label
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillStyle = '#000';
-            ctx.fillText(label, node.x, node.y - bckgDimensions[1] * 1.5);
+            ctx.fillStyle = '#666';
+            ctx.fillText(score, node.x, node.y + size + fontSize);
           }
         }}
-        nodeRelSize={6}
-        linkWidth={(link) => (highlightLinks.has(link) ? 2 : 1)}
-        linkColor={(link) =>
-          highlightLinks.has(link) ? colors.selected : '#cccccc'
-        }
-        linkOpacity={0.3}
+        linkDirectionalParticles={(link) => link.type === 'resume-job' ? 4 : 2}
+        linkDirectionalParticleWidth={(link) => link.type === 'resume-job' ? 4 : 2}
         onNodeHover={handleNodeHover}
         onNodeClick={handleNodeClick}
         enableNodeDrag={false}
-        cooldownTicks={100}
-        d3AlphaDecay={0.02}
-        d3VelocityDecay={0.3}
-        warmupTicks={100}
-        width={window.innerWidth}
-        height={600}
+        d3Force={(d3Force) => {
+          // Increase repulsion between nodes
+          d3Force('charge').strength(-100);
+          // Add collision force to prevent overlap
+          d3Force('collision', d3.forceCollide(20));
+          // Adjust link distance based on type
+          d3Force('link').distance(link => link.type === 'resume-job' ? 100 : 50);
+        }}
       />
       {hoverNode && (
         <div className="absolute top-4 right-4 bg-white p-4 rounded-lg shadow-lg w-80">
@@ -452,7 +638,12 @@ export default function Page() {
             <div className="flex">
               <div className="flex-shrink-0">
                 <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                  />
                 </svg>
               </div>
               <div className="ml-3">
