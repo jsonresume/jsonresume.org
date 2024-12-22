@@ -256,131 +256,60 @@ const GraphContainer = ({ username }) => {
         // Sort jobs by similarity to resume
         const sortedJobs = [...jobNodes].sort((a, b) => b.resumeSimilarity - a.resumeSimilarity);
         
-        // Create resume connections to top similar jobs
-        const resumeLinks = [];
-        const numResumeConnections = Math.max(5, Math.ceil(jobNodes.length * 0.1)); // Connect to top 10% or at least 5
-        
-        console.log('Creating resume connections:', {
-          totalJobs: jobNodes.length,
-          numConnections: numResumeConnections,
-          topJobs: sortedJobs.slice(0, 5).map(job => ({
-            title: job.title,
-            similarity: job.resumeSimilarity
-          }))
-        });
-
-        // Create links to top similar jobs
-        for (let i = 0; i < numResumeConnections; i++) {
-          const job = sortedJobs[i];
-          if (job && job.resumeSimilarity > 0.2) { // Only connect if similarity is above 20%
-            resumeLinks.push({
-              source: resumeNode,
-              target: job,
-              value: job.resumeSimilarity,
-              type: 'resume-job'
-            });
-            console.log(`Created resume link to: ${job.title} (${(job.resumeSimilarity * 100).toFixed(1)}%)`);
-          }
-        }
-
-        console.log('Resume links created:', {
-          count: resumeLinks.length,
-          links: resumeLinks.map(link => ({
-            target: link.target.title,
-            similarity: (link.value * 100).toFixed(1) + '%'
-          }))
-        });
-
-        // Create job-to-job connections - each job connects to its most similar neighbor
-        const jobLinks = [];
-        
-        // For each job, find and connect to its most similar neighbor
-        for (let i = 0; i < jobNodes.length; i++) {
-          const job = jobNodes[i];
-          let bestMatch = null;
-          let bestSimilarity = 0;
-          
-          // Find the most similar job
-          for (let j = 0; j < jobNodes.length; j++) {
-            if (i === j) continue;
-            const otherJob = jobNodes[j];
-            
-            const similarity = cosineSimilarity(job.embedding, otherJob.embedding);
-            if (similarity > bestSimilarity && similarity > 0.3) { // Lower threshold to ensure connections
-              bestSimilarity = similarity;
-              bestMatch = otherJob;
-            }
-          }
-          
-          // Create link to the most similar job
-          if (bestMatch) {
-            jobLinks.push({
-              source: job,
-              target: bestMatch,
-              value: bestSimilarity,
-              type: 'job-job'
-            });
-            console.log(`Connected: ${job.title} -> ${bestMatch.title} (${(bestSimilarity * 100).toFixed(1)}%)`);
-          } else {
-            console.log(`Warning: No similar job found for ${job.title}`);
-          }
-        }
-
-        console.log('Job links created:', {
-          totalJobs: jobNodes.length,
-          links: jobLinks.length,
-          sampleLinks: jobLinks.slice(0, 5).map(link => ({
-            source: link.source.title,
-            target: link.target.title,
-            similarity: (link.value * 100).toFixed(1) + '%'
-          }))
-        });
-
-        // Create final graph data with proper node references
-        const nodes = [resumeNode, ...jobNodes];
-        const nodeById = new Map(nodes.map(node => [node.id, node]));
-
-        // Create the links array with direct node references
+        // Take top 20 most similar jobs to connect to resume
+        const resumeConnectedJobs = sortedJobs.slice(0, 20);
+        const remainingJobs = sortedJobs.slice(20);
         const links = [];
-        
-        // Add resume links
-        resumeLinks.forEach(link => {
-          if (link.source && link.target) {
-            links.push({
-              source: link.source,
-              target: link.target,
-              value: link.value,
-              type: 'resume-job'
-            });
-          }
+
+        // Connect top 20 to resume
+        resumeConnectedJobs.forEach(job => {
+          links.push({
+            source: resumeNode,
+            target: job,
+            value: job.resumeSimilarity,
+            type: 'resume-job'
+          });
         });
 
-        // Add job links
-        jobLinks.forEach(link => {
-          if (link.source && link.target) {
+        // For each remaining job, find its most similar resume-connected job
+        remainingJobs.forEach(job => {
+          // Find most similar resume-connected job
+          let bestMatch = null;
+          let bestSimilarity = -1;
+
+          resumeConnectedJobs.forEach(resumeJob => {
+            const similarity = cosineSimilarity(job.embedding, resumeJob.embedding);
+            if (similarity > bestSimilarity) {
+              bestSimilarity = similarity;
+              bestMatch = resumeJob;
+            }
+          });
+
+          // Always create a connection to the most similar resume-connected job
+          if (bestMatch) {
             links.push({
-              source: link.source,
-              target: link.target,
-              value: link.value,
+              source: bestMatch,
+              target: job,
+              value: Math.max(0.1, bestSimilarity), // Minimum strength of 0.1
               type: 'job-job'
             });
           }
         });
 
-        const graphData = { nodes, links };
-
-        console.log('Final Graph Data:', {
-          nodes: nodes.length,
-          links: links.length,
-          resumeLinks: links.filter(l => l.type === 'resume-job').map(l => ({
-            source: l.source.title || 'Resume',
-            target: l.target.title,
-            value: (l.value * 100).toFixed(1) + '%'
-          })),
+        // Log connection stats
+        console.log('Graph Data:', {
+          totalNodes: jobNodes.length,
+          resumeConnections: resumeConnectedJobs.length,
+          totalLinks: links.length,
+          resumeLinks: links.filter(l => l.type === 'resume-job').length,
           jobLinks: links.filter(l => l.type === 'job-job').length
         });
 
-        setGraphData(graphData);
+        // Set graph data with all nodes
+        setGraphData({
+          nodes: [resumeNode, ...jobNodes],
+          links
+        });
       } catch (err) {
         console.error('Error updating graph:', err);
         setError(`Failed to load graph: ${err.message}`);
