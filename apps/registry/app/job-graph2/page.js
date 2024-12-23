@@ -132,10 +132,6 @@ const Header = memo(() => (
           <strong>Jobs View:</strong> Job posts from "Who's Hiring" → GPT-4
           standardization → OpenAI embeddings
         </li>
-        <li>
-          <strong>Resumes View:</strong> JSON Resume profiles → OpenAI
-          embeddings
-        </li>
       </ul>
       <p>
         Multiple graph algorithms available to explore different relationships.
@@ -145,30 +141,7 @@ const Header = memo(() => (
 ));
 Header.displayName = 'Header';
 
-const Controls = memo(
-  ({ dataSource, setDataSource }) => (
-    <div className="mb-8">
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Data Source
-          </label>
-          <select
-            value={dataSource}
-            onChange={(e) => setDataSource(e.target.value)}
-            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-secondary-500 focus:border-secondary-500 sm:text-sm rounded-md"
-          >
-            <option value="jobs">Job Listings</option>
-            <option value="resumes">Resumes</option>
-          </select>
-        </div>
-      </div>
-    </div>
-  )
-);
-Controls.displayName = 'Controls';
-
-const GraphContainer = ({ dataSource }) => {
+const GraphContainer = () => {
   const [graphData, setGraphData] = useState(null);
   const [hoverNode, setHoverNode] = useState(null);
   const [rawNodes, setRawNodes] = useState(null);
@@ -217,104 +190,72 @@ const GraphContainer = ({ dataSource }) => {
       }
 
       if (node.uuids && node.uuids.length > 0) {
-        const baseUrl = dataSource === 'jobs' ? '/jobs/' : '/';
+        const baseUrl = '/jobs/';
         window.open(`${baseUrl}${node.uuids[0]}`, '_blank');
       }
     },
-    [dataSource, isMobile]
+    [isMobile]
   );
 
-  const processData = useCallback(
-    (data) => {
-      // Filter out items without valid embeddings
-      const validData = data.filter((item) => {
-        const embedding =
-          dataSource === 'jobs'
-            ? item.embedding
-            : typeof item.embedding === 'string'
-            ? JSON.parse(item.embedding)
-            : item.embedding;
-        return Array.isArray(embedding) && embedding.length > 0;
-      });
+  const processData = useCallback((data) => {
+    // Filter out items without valid embeddings
+    const validData = data.filter((item) => {
+      const embedding = item.embedding;
+      return Array.isArray(embedding) && embedding.length > 0;
+    });
 
-      // Group similar items
-      const groups = {};
+    // Group similar items
+    const groups = {};
 
-      validData.forEach((item) => {
-        const label =
-          dataSource === 'jobs'
-            ? item.title
-            : item.position || 'Unknown Position';
+    validData.forEach((item) => {
+      const label = item.title;
 
-        if (!groups[label]) {
-          groups[label] = [];
-        }
-        groups[label].push(item);
-      });
-
-      // Create nodes with normalized embeddings
-      const nodes = Object.entries(groups)
-        .map(([label, items], index) => {
-          const embeddings = items.map((item) => {
-            if (dataSource === 'jobs') return item.embedding;
-            return typeof item.embedding === 'string'
-              ? JSON.parse(item.embedding)
-              : item.embedding;
-          });
-
-          const normalizedEmbeddings = embeddings
-            .map((emb) => normalizeVector(emb))
-            .filter((emb) => emb !== null);
-
-          if (normalizedEmbeddings.length === 0) return null;
-
-          const avgEmbedding = getAverageEmbedding(normalizedEmbeddings);
-          if (!avgEmbedding) return null;
-
-          return {
-            id: label,
-            group: index,
-            size: Math.log(items.length + 1) * 3,
-            count: items.length,
-            uuids: items.map((item) =>
-              dataSource === 'jobs' ? item.uuid : item.username
-            ),
-            usernames:
-              dataSource === 'jobs'
-                ? null
-                : [...new Set(items.map((item) => item.username))],
-            avgEmbedding,
-            color: colors[index % colors.length],
-            companies:
-              dataSource === 'jobs'
-                ? [
-                    ...new Set(
-                      items.map((item) => item.company || 'Unknown Company')
-                    ),
-                  ]
-                : null,
-            countryCodes:
-              dataSource === 'jobs'
-                ? [
-                    ...new Set(
-                      items.map(
-                        (item) => item.countryCode || 'Unknown Location'
-                      )
-                    ),
-                  ]
-                : null,
-          };
-        })
-        .filter((node) => node !== null);
-
-      if (nodes.length === 0) {
-        throw new Error('No valid data found with embeddings');
+      if (!groups[label]) {
+        groups[label] = [];
       }
+      groups[label].push(item);
+    });
 
-      return nodes;
-    },
-    [dataSource]
-  );
+    // Create nodes with normalized embeddings
+    const nodes = Object.entries(groups)
+      .map(([label, items], index) => {
+        const embeddings = items.map((item) => item.embedding);
+
+        const normalizedEmbeddings = embeddings
+          .map((emb) => normalizeVector(emb))
+          .filter((emb) => emb !== null);
+
+        if (normalizedEmbeddings.length === 0) return null;
+
+        const avgEmbedding = getAverageEmbedding(normalizedEmbeddings);
+        if (!avgEmbedding) return null;
+
+        return {
+          id: label,
+          group: index,
+          size: Math.log(items.length + 1) * 3,
+          count: items.length,
+          uuids: items.map((item) => item.uuid),
+          companies: [
+            ...new Set(items.map((item) => item.company || 'Unknown Company')),
+          ],
+          countryCodes: [
+            ...new Set(
+              items.map((item) => item.countryCode || 'Unknown Location')
+            ),
+          ],
+          avgEmbedding,
+          color: colors[index % colors.length],
+        };
+      })
+      .filter((node) => node !== null);
+
+    if (nodes.length === 0) {
+      throw new Error('No valid data found with embeddings');
+    }
+
+    return nodes;
+  }, []);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -324,9 +265,7 @@ const GraphContainer = ({ dataSource }) => {
       const isLocal = process.env.NODE_ENV === 'development';
       const limit = isLocal ? 300 : 1500;
 
-      const response = await fetch(
-        `/api/${dataSource === 'jobs' ? 'job-' : ''}similarity?limit=${limit}`
-      );
+      const response = await fetch(`/api/job-similarity?limit=${limit}`);
       if (!response.ok) {
         throw new Error('Failed to fetch data');
       }
@@ -339,13 +278,26 @@ const GraphContainer = ({ dataSource }) => {
     } finally {
       setLoading(false);
     }
-  }, [dataSource, processData]);
+  }, [processData]);
 
   const processLinks = useCallback(() => {
     if (!rawNodes) return;
 
     const links = algorithms.hierarchical.compute(rawNodes);
-    setGraphData({ nodes: rawNodes, links });
+
+    // Add special resume node
+    const specialNode = {
+      id: 'Current Resume',
+      group: -1,
+      size: 8, // Make it larger than other nodes
+      color: '#ff0000', // Bright red
+      x: window.innerWidth / 2, // Place it in the center initially
+      y: 300,
+      fx: window.innerWidth / 2, // Fix its position
+      fy: 300,
+    };
+
+    setGraphData({ nodes: [...rawNodes, specialNode], links });
     setEdges(links);
   }, [rawNodes]);
 
@@ -465,10 +417,9 @@ const GraphContainer = ({ dataSource }) => {
         <div className="absolute top-4 right-4 bg-white p-4 rounded-lg shadow-lg w-80">
           <h3 className="font-bold">{hoverNode.id}</h3>
           <p>
-            {hoverNode.count}{' '}
-            {dataSource === 'jobs' ? 'job listings' : 'resumes'}
+            {hoverNode.count} job listings
           </p>
-          {dataSource === 'jobs' && hoverNode.companies && (
+          {hoverNode.companies && (
             <div className="mt-2">
               <p className="text-sm text-gray-600">Companies:</p>
               <p className="text-sm">
@@ -479,7 +430,7 @@ const GraphContainer = ({ dataSource }) => {
               </p>
             </div>
           )}
-          {dataSource === 'jobs' && hoverNode.countryCodes && (
+          {hoverNode.countryCodes && (
             <div className="mt-2">
               <p className="text-sm text-gray-600">Locations:</p>
               <p className="text-sm">
@@ -490,49 +441,16 @@ const GraphContainer = ({ dataSource }) => {
               </p>
             </div>
           )}
-          {dataSource !== 'jobs' && hoverNode.usernames && (
-            <div className="mt-2">
-              <p className="text-sm text-gray-600">Usernames:</p>
-              <div className="text-sm max-h-32 overflow-y-auto">
-                {hoverNode.usernames.map((username, i) => (
-                  <div
-                    key={i}
-                    className="hover:bg-gray-100 p-1 rounded cursor-pointer"
-                    onClick={() => {
-                      const baseUrl = dataSource === 'jobs' ? '/jobs/' : '/';
-                      window.open(`${baseUrl}${hoverNode.uuids[0]}`, '_blank');
-                    }}
-                  >
-                    {username}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-          {dataSource === 'jobs' && (
-            <div className="mt-4">
-              <a
-                href={`/jobs/${hoverNode.uuids[0]}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 hover:text-blue-800 underline"
-              >
-                View job listing →
-              </a>
-            </div>
-          )}
-          {dataSource !== 'jobs' && (
-            <div className="mt-4">
-              <a
-                href={`/${hoverNode.uuids[0]}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 hover:text-blue-800 underline"
-              >
-                View resume →
-              </a>
-            </div>
-          )}
+          <div className="mt-4">
+            <a
+              href={`/jobs/${hoverNode.uuids[0]}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:text-blue-800 underline"
+            >
+              View job listing →
+            </a>
+          </div>
         </div>
       )}
     </div>
@@ -540,19 +458,13 @@ const GraphContainer = ({ dataSource }) => {
 };
 
 export default function Page() {
-  const [dataSource, setDataSource] = useState('jobs');
-
   return (
     <div className="min-h-screen bg-accent-100">
       <div className="prose max-w-3xl mx-auto pt-8 px-4 sm:px-6 lg:px-8">
         <Header />
-        <Controls
-          dataSource={dataSource}
-          setDataSource={setDataSource}
-        />
       </div>
       <div className="w-full h-[600px] bg-white">
-        <GraphContainer dataSource={dataSource} />
+        <GraphContainer />
       </div>
     </div>
   );
