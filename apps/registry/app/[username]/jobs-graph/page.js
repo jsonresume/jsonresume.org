@@ -10,35 +10,50 @@ const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), {
   ssr: false,
 });
 
+const DEFAULT_WIDTH = 800;
+const DEFAULT_HEIGHT = 600;
+
 export default function Jobs({ params }) {
   const { username } = params;
   const [jobs, setJobs] = useState(null);
-  const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
+  const [dimensions, setDimensions] = useState({ width: DEFAULT_WIDTH, height: DEFAULT_HEIGHT });
   const [graphData, setGraphData] = useState({
     nodes: [
       {
         id: 'Current Resume',
         group: -1,
-        size: 8,
+        size: 15,
         color: '#ff0000',
-        x: 400,
-        y: 300,
-        fx: 400,
-        fy: 300,
+        x: DEFAULT_WIDTH / 2,
+        y: DEFAULT_HEIGHT / 2,
+        fx: DEFAULT_WIDTH / 2,
+        fy: DEFAULT_HEIGHT / 2,
       },
     ],
     links: [],
   });
 
-  // Initialize dimensions on mount
+  // Update dimensions and node position when component mounts
   useEffect(() => {
-    // Set initial dimensions
     const container = document.getElementById('graph-container');
     if (container) {
-      setDimensions({
-        width: container.offsetWidth,
-        height: 600,
-      });
+      const width = container.offsetWidth;
+      const height = 600;
+      setDimensions({ width, height });
+      
+      // Update node position based on new dimensions
+      setGraphData(prev => ({
+        ...prev,
+        nodes: [
+          {
+            ...prev.nodes[0],
+            x: width / 2,
+            y: height / 2,
+            fx: width / 2,
+            fy: height / 2,
+          },
+        ],
+      }));
     }
   }, []);
 
