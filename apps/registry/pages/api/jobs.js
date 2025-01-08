@@ -65,23 +65,60 @@ export default async function handler(req, res) {
     match_count: 500, // Choose the number of matches
   });
 
-  // console.log({ documents });
+  // Log initial match count
+  console.log('Total matched jobs:', documents.length);
+
   // similarity is on documents, it is a flow, i want to sort from highest to lowest
-  // then get the job ids
   const sortedDocuments = documents.sort((a, b) => b.similarity - a.similarity);
   const jobIds = documents ? sortedDocuments.map((doc) => doc.id) : [];
 
-  const { data: jobs } = await supabase.from('jobs').select().in('id', jobIds);
-  // sort jobs in the same order as jobIds by id and add similarity scores
-  const sortedJobs = jobIds.map((id, index) => {
-    const job = jobs.find((job) => job.id === id);
+  const { data: sortedJobs } = await supabase
+    .from('jobs')
+    .select('*')
+    .in('id', jobIds)
+    .order('created_at', { ascending: false });
+
+  // Add similarity scores to jobs
+  const jobsWithSimilarity = sortedJobs.map((job) => {
+    const doc = sortedDocuments.find((d) => d.id === job.id);
     return {
       ...job,
-      similarity: documents[index].similarity,
+      similarity: doc ? doc.similarity : 0,
     };
   });
 
-  const filteredJobs = sortedJobs.filter(
+  // Get date distribution
+  const validDates = jobsWithSimilarity
+    .map((job) => {
+      const date = new Date(job.created_at);
+      // Check if date is valid
+      if (isNaN(date.getTime())) {
+        console.log('Invalid date found:', {
+          id: job.id,
+          created_at: job.created_at,
+        });
+        return null;
+      }
+      return date;
+    })
+    .filter(Boolean); // Remove null values
+
+  if (validDates.length > 0) {
+    const oldestDate = new Date(Math.min(...validDates));
+    const newestDate = new Date(Math.max(...validDates));
+
+    console.log('Date range of jobs:', {
+      oldest: oldestDate.toISOString(),
+      newest: newestDate.toISOString(),
+      daysBetween: Math.floor((newestDate - oldestDate) / (1000 * 60 * 60 * 24)),
+      validDatesCount: validDates.length,
+      invalidDatesCount: jobsWithSimilarity.length - validDates.length,
+    });
+  } else {
+    console.log('No valid dates found in the jobs');
+  }
+
+  const filteredJobs = jobsWithSimilarity.filter(
     (job) =>
       new Date(job.created_at) >
       new Date(Date.now() - 60 * 24 * 60 * 60 * 1000),
