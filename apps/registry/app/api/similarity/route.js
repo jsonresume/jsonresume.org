@@ -21,10 +21,23 @@ export async function GET(request) {
     const limit = parseInt(searchParams.get('limit')) || 1000;
 
     console.time('getResumeSimilarityData');
-    const { data, error } = await supabase
+    // First fetch thomasdavis's resume
+    const { data: thomasData, error: thomasError } = await supabase
+      .from('resumes')
+      .select('username, embedding, resume')
+      .eq('username', 'thomasdavis')
+      .single();
+
+    if (thomasError) {
+      console.error('Error fetching thomasdavis resume:', thomasError);
+    }
+
+    // Then fetch other resumes
+    const { data: otherData, error } = await supabase
       .from('resumes')
       .select('username, embedding, resume')
       .not('embedding', 'is', null)
+      .neq('username', 'thomasdavis')  // Exclude thomasdavis from this query
       .limit(limit)
       .order('created_at', { ascending: false });
 
@@ -37,6 +50,9 @@ export async function GET(request) {
     }
 
     console.timeEnd('getResumeSimilarityData');
+
+    // Combine the results, putting thomasdavis first if available
+    const data = thomasData ? [thomasData, ...(otherData || [])] : otherData;
 
     // Parse embeddings from strings to numerical arrays and extract position
     const parsedData = data
