@@ -235,6 +235,10 @@ export default function Jobs({ params }) {
           backgroundColor="#EFF6FF"
           nodeColor={(node) => node.color}
           onNodeHover={setHoveredNode}
+          nodeRelSize={1}
+          nodeVal={8}  // Base node size
+          nodeVisibility={true}
+          nodeCanvasObjectMode={() => "after"}
           nodeCanvasObject={(node, ctx) => {
             // Draw node with border
             ctx.beginPath();
@@ -271,7 +275,13 @@ export default function Jobs({ params }) {
               ctx.fillText(label, node.x, node.y - bckgDimensions[1] * 1.5);
             }
           }}
-          nodeRelSize={1}
+          nodePointerAreaPaint={(node, color, ctx) => {
+            // Draw a larger hit area for hover detection
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, node.size * 2, 0, 2 * Math.PI);
+            ctx.fillStyle = color;
+            ctx.fill();
+          }}
           linkWidth={(link) => Math.sqrt(link.value) * 2}
           linkColor="#cccccc"
           linkOpacity={0.3}
