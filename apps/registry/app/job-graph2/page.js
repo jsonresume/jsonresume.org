@@ -263,7 +263,7 @@ const GraphContainer = () => {
     try {
       // Check if we're in development environment
       const isLocal = process.env.NODE_ENV === 'development';
-      const limit = isLocal ? 300 : 1500;
+      const limit = isLocal ? 1300 : 1500;
 
       const response = await fetch(`/api/job-similarity?limit=${limit}`);
       if (!response.ok) {
