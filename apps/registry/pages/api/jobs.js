@@ -30,7 +30,7 @@ export default async function handler(req, res) {
       {
         role: 'system',
         content:
-          "You are a professional resume analyzer. Create a detailed professional summary that describes this candidate's background, skills, and experience in natural language. Focus on their expertise, achievements, and what makes them unique. Write it in a style similar to job descriptions to optimize for semantic matching. Do not include the candidates name. Be terse as most job descriptions are.",
+          "You are a professional resume analyzer. Create a detailed professional summary that describes this candidate's background, skills, and experience in natural language. Focus on their expertise, achievements, and what makes them unique. Write it in a style similar to job descriptions to optimize for semantic matching. Do not include the candidates name. Make sure to include everything significant to the users career. Describe the type of industries they have experience in.",
       },
       {
         role: 'user',
@@ -61,11 +61,11 @@ export default async function handler(req, res) {
 
   const { data: documents } = await supabase.rpc('match_jobs_v5', {
     query_embedding: embedding,
-    match_threshold: 0, // Choose an appropriate threshold for your data
-    match_count: 250, // Choose the number of matches
+    match_threshold: -1, // Choose an appropriate threshold for your data
+    match_count: 500, // Choose the number of matches
   });
 
-  console.log({ documents });
+  // console.log({ documents });
   // similarity is on documents, it is a flow, i want to sort from highest to lowest
   // then get the job ids
   const sortedDocuments = documents.sort((a, b) => b.similarity - a.similarity);
@@ -81,10 +81,11 @@ export default async function handler(req, res) {
     };
   });
 
-  // const filteredJobs = sortedJobs.filter(
-  //   (job) =>
-  //     new Date(job.created_at) > new Date(Date.now() - 60 * 24 * 60 * 90 * 1000)
-  // );
+  const filteredJobs = sortedJobs.filter(
+    (job) =>
+      new Date(job.created_at) >
+      new Date(Date.now() - 60 * 24 * 60 * 60 * 1000),
+  );
 
-  return res.status(200).send(sortedJobs);
+  return res.status(200).send(filteredJobs);
 }
