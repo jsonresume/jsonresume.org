@@ -21,6 +21,7 @@ export default function Jobs({ params }) {
     height: DEFAULT_HEIGHT,
   });
   const graphRef = useRef();
+  const [hoveredNode, setHoveredNode] = useState(null);
   const [graphData, setGraphData] = useState({
     nodes: [
       {
@@ -79,8 +80,8 @@ export default function Jobs({ params }) {
             id: job.uuid,
             label: parsedJob.title,
             group: 1,
-            size: 3,
-            color: '#4287f5', // Blue color for job nodes
+            size: 5,
+            color: '#4287f5',
           };
         });
 
@@ -96,7 +97,7 @@ export default function Jobs({ params }) {
             {
               id: username,
               group: -1,
-              size: 4,
+              size: 8,
               color: '#ff0000',
               x: 0,
               y: 0,
@@ -106,7 +107,6 @@ export default function Jobs({ params }) {
           links: jobLinks,
         });
 
-        // Log the most relevant jobs
         console.log(
           'Most relevant jobs:',
           topJobs.map((job) => {
@@ -155,6 +155,7 @@ export default function Jobs({ params }) {
           graphData={graphData}
           backgroundColor="#EFF6FF"
           nodeColor={(node) => node.color}
+          onNodeHover={setHoveredNode}
           nodeCanvasObject={(node, ctx) => {
             // Draw node with border
             ctx.beginPath();
@@ -162,33 +163,34 @@ export default function Jobs({ params }) {
             ctx.fillStyle = node.color;
             ctx.fill();
             ctx.strokeStyle = '#000';
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 1;
             ctx.stroke();
 
-            // Draw label
-            const label = node.label || node.id;
-            // Larger font for resume node, smaller for job nodes
-            const fontSize = node.group === -1 ? Math.max(14, node.size) : 6;
-            ctx.font = `${node.group === -1 ? 'bold' : 'normal'} ${fontSize}px Sans-Serif`;
-            const textWidth = ctx.measureText(label).width;
-            const bckgDimensions = [textWidth, fontSize].map(
-              (n) => n + fontSize * 0.2,
-            );
+            // Only draw label for resume node or hovered node
+            if (node.group === -1 || node === hoveredNode) {
+              const label = node.label || node.id;
+              const fontSize = node.group === -1 ? Math.max(14, node.size) : 12;
+              ctx.font = `${node.group === -1 ? 'bold' : 'normal'} ${fontSize}px Sans-Serif`;
+              const textWidth = ctx.measureText(label).width;
+              const bckgDimensions = [textWidth, fontSize].map(
+                (n) => n + fontSize * 0.2,
+              );
 
-            // Draw background for label
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-            ctx.fillRect(
-              node.x - bckgDimensions[0] / 2,
-              node.y - bckgDimensions[1] * 2,
-              bckgDimensions[0],
-              bckgDimensions[1],
-            );
+              // Draw background for label
+              ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+              ctx.fillRect(
+                node.x - bckgDimensions[0] / 2,
+                node.y - bckgDimensions[1] * 2,
+                bckgDimensions[0],
+                bckgDimensions[1],
+              );
 
-            // Draw label
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillStyle = '#000';
-            ctx.fillText(label, node.x, node.y - bckgDimensions[1] * 1.5);
+              // Draw label
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              ctx.fillStyle = '#000';
+              ctx.fillText(label, node.x, node.y - bckgDimensions[1] * 1.5);
+            }
           }}
           nodeRelSize={1}
           linkWidth={(link) => Math.sqrt(link.value) * 2}
