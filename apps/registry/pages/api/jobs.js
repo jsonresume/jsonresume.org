@@ -62,7 +62,7 @@ export default async function handler(req, res) {
   const { data: documents } = await supabase.rpc('match_jobs_v5', {
     query_embedding: embedding,
     match_threshold: 0, // Choose an appropriate threshold for your data
-    match_count: 35, // Choose the number of matches
+    match_count: 45, // Choose the number of matches
   });
 
   console.log({ documents });

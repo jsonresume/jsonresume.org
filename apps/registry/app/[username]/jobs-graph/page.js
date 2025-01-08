@@ -13,6 +13,25 @@ const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), {
 const DEFAULT_WIDTH = 800;
 const DEFAULT_HEIGHT = 600;
 
+// Utility functions for vector similarity
+const cosineSimilarity = (a, b) => {
+  if (!Array.isArray(a) || !Array.isArray(b)) {
+    console.log('Invalid vectors:', { a, b });
+    return 0;
+  }
+  if (a.length !== b.length) {
+    console.log('Vector length mismatch:', {
+      aLength: a.length,
+      bLength: b.length,
+    });
+    return 0;
+  }
+  const dotProduct = a.reduce((sum, _, i) => sum + a[i] * b[i], 0);
+  const magnitudeA = Math.sqrt(a.reduce((sum, val) => sum + val * val, 0));
+  const magnitudeB = Math.sqrt(b.reduce((sum, val) => sum + val * val, 0));
+  return dotProduct / (magnitudeA * magnitudeB);
+};
+
 export default function Jobs({ params }) {
   const { username } = params;
   const [jobs, setJobs] = useState(null);
@@ -27,7 +46,7 @@ export default function Jobs({ params }) {
       {
         id: username,
         group: -1,
-        size: 4,
+        size: 8,
         color: '#ff0000',
         x: 0,
         y: 0,
@@ -65,6 +84,9 @@ export default function Jobs({ params }) {
           (a, b) => b.similarity - a.similarity,
         );
 
+        // Debug job structure
+        console.log('Sample job:', sortedJobs[0]);
+
         // Split into most relevant (top 20) and less relevant
         const topJobs = sortedJobs.slice(0, 20);
         const otherJobs = sortedJobs.slice(20);
@@ -73,7 +95,7 @@ export default function Jobs({ params }) {
         setLessRelevant(otherJobs);
         setJobs(sortedJobs);
 
-        // Create nodes and links for the graph
+        // Create nodes for most relevant jobs
         const jobNodes = topJobs.map((job) => {
           const parsedJob = JSON.parse(job.gpt_content);
           return {
@@ -82,16 +104,78 @@ export default function Jobs({ params }) {
             group: 1,
             size: 5,
             color: '#4287f5',
+            vector: JSON.parse(job.embedding_v5),
           };
         });
 
-        const jobLinks = topJobs.map((job) => ({
+        // Create nodes for less relevant jobs
+        const lessRelevantNodes = otherJobs.map((job) => {
+          const parsedJob = JSON.parse(job.gpt_content);
+          return {
+            id: job.uuid,
+            label: parsedJob.title,
+            group: 2,
+            size: 3,
+            color: '#87ceeb',
+            vector: JSON.parse(job.embedding_v5),
+          };
+        });
+
+        // Create links from resume to most relevant jobs
+        const resumeLinks = topJobs.map((job) => ({
           source: username,
           target: job.uuid,
           value: job.similarity,
         }));
 
-        // Update graph with new nodes and links
+        // Create links from less relevant jobs to their most similar relevant job
+        const jobToJobLinks = otherJobs.map((lessRelevantJob) => {
+          // Find the most similar relevant job
+          let maxSimilarity = -1;
+          let mostSimilarJobId = null;
+
+          // Debug the vectors
+          const lessRelevantVector = JSON.parse(lessRelevantJob.embedding_v5);
+          console.log('Less relevant job vector:', {
+            id: lessRelevantJob.uuid,
+            vectorSample: lessRelevantVector.slice(0, 5),
+          });
+
+          topJobs.forEach((relevantJob) => {
+            const relevantVector = JSON.parse(relevantJob.embedding_v5);
+            const similarity = cosineSimilarity(
+              lessRelevantVector,
+              relevantVector,
+            );
+
+            // Log each similarity calculation
+            console.log('Similarity check:', {
+              lessRelevantId: lessRelevantJob.uuid,
+              relevantId: relevantJob.uuid,
+              similarity,
+              currentMax: maxSimilarity,
+            });
+
+            if (similarity > maxSimilarity) {
+              maxSimilarity = similarity;
+              mostSimilarJobId = relevantJob.uuid;
+            }
+          });
+
+          console.log('Final connection:', {
+            lessRelevantId: lessRelevantJob.uuid,
+            mostSimilarJobId,
+            similarity: maxSimilarity,
+          });
+
+          return {
+            source: mostSimilarJobId,
+            target: lessRelevantJob.uuid,
+            value: maxSimilarity,
+          };
+        });
+
+        // Update graph with all nodes and links
         setGraphData({
           nodes: [
             {
@@ -103,8 +187,9 @@ export default function Jobs({ params }) {
               y: 0,
             },
             ...jobNodes,
+            ...lessRelevantNodes,
           ],
-          links: jobLinks,
+          links: [...resumeLinks, ...jobToJobLinks],
         });
 
         console.log(
