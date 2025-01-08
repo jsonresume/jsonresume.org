@@ -35,11 +35,14 @@ export default function Jobs({ params }) {
     links: [],
   });
 
+  const [mostRelevant, setMostRelevant] = useState([]);
+  const [lessRelevant, setLessRelevant] = useState([]);
+
   // Center and zoom the graph when it's ready
   const handleEngineStop = useCallback(() => {
     if (graphRef.current) {
       graphRef.current.centerAt(0, 0);
-      graphRef.current.zoom(10); // Zoom out more (smaller number = more zoomed out)
+      graphRef.current.zoom(10);
     }
   }, []);
 
@@ -57,7 +60,31 @@ export default function Jobs({ params }) {
     const fetchData = async () => {
       try {
         const response = await axios.post('/api/jobs', { username });
-        setJobs(response.data);
+        const sortedJobs = response.data.sort(
+          (a, b) => b.similarity - a.similarity,
+        );
+
+        // Split into most relevant (top 20) and less relevant
+        const topJobs = sortedJobs.slice(0, 20);
+        const otherJobs = sortedJobs.slice(20);
+
+        setMostRelevant(topJobs);
+        setLessRelevant(otherJobs);
+        setJobs(sortedJobs);
+
+        // Log the most relevant jobs
+        console.log(
+          'Most relevant jobs:',
+          topJobs.map((job) => {
+            const parsedJob = JSON.parse(job.gpt_content);
+
+            return {
+              uuid: job.uuid,
+              title: parsedJob.title,
+              similarity: job.similarity,
+            };
+          }),
+        );
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -76,7 +103,10 @@ export default function Jobs({ params }) {
       {!jobs && <Loading />}
       <div className="mt-4 text-lg">
         {jobs ? (
-          <p>Found {jobs.length} related jobs</p>
+          <p>
+            Found {jobs.length} related jobs ({mostRelevant.length} highly
+            relevant)
+          </p>
         ) : (
           <p>Loading jobs...</p>
         )}
