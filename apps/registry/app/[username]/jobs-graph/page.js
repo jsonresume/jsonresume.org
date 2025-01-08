@@ -72,6 +72,40 @@ export default function Jobs({ params }) {
         setLessRelevant(otherJobs);
         setJobs(sortedJobs);
 
+        // Create nodes and links for the graph
+        const jobNodes = topJobs.map((job) => {
+          const parsedJob = JSON.parse(job.gpt_content);
+          return {
+            id: job.uuid,
+            label: parsedJob.title,
+            group: 1,
+            size: 3,
+            color: '#4287f5', // Blue color for job nodes
+          };
+        });
+
+        const jobLinks = topJobs.map((job) => ({
+          source: username,
+          target: job.uuid,
+          value: job.similarity,
+        }));
+
+        // Update graph with new nodes and links
+        setGraphData({
+          nodes: [
+            {
+              id: username,
+              group: -1,
+              size: 4,
+              color: '#ff0000',
+              x: 0,
+              y: 0,
+            },
+            ...jobNodes,
+          ],
+          links: jobLinks,
+        });
+
         // Log the most relevant jobs
         console.log(
           'Most relevant jobs:',
@@ -91,7 +125,7 @@ export default function Jobs({ params }) {
     };
 
     fetchData();
-  }, []);
+  }, [username]);
 
   return (
     <div className="p-6">
@@ -132,9 +166,10 @@ export default function Jobs({ params }) {
             ctx.stroke();
 
             // Draw label
-            const label = node.id;
-            const fontSize = Math.max(14, node.size);
-            ctx.font = `bold ${fontSize}px Sans-Serif`;
+            const label = node.label || node.id;
+            // Larger font for resume node, smaller for job nodes
+            const fontSize = node.group === -1 ? Math.max(14, node.size) : 6;
+            ctx.font = `${node.group === -1 ? 'bold' : 'normal'} ${fontSize}px Sans-Serif`;
             const textWidth = ctx.measureText(label).width;
             const bckgDimensions = [textWidth, fontSize].map(
               (n) => n + fontSize * 0.2,
@@ -156,7 +191,7 @@ export default function Jobs({ params }) {
             ctx.fillText(label, node.x, node.y - bckgDimensions[1] * 1.5);
           }}
           nodeRelSize={1}
-          linkWidth={1}
+          linkWidth={(link) => Math.sqrt(link.value) * 2}
           linkColor="#cccccc"
           linkOpacity={0.3}
           enableNodeDrag={false}
@@ -169,6 +204,9 @@ export default function Jobs({ params }) {
           onEngineStop={handleEngineStop}
           minZoom={0.1}
           maxZoom={5}
+          d3Force="charge"
+          d3ForceStrength={-200}
+          linkDistance={100}
         />
       </div>
     </div>
