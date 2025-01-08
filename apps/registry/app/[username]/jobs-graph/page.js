@@ -16,7 +16,7 @@ const DEFAULT_HEIGHT = 600;
 // Format skills array into a readable string
 const formatSkills = (skills) => {
   if (!skills) return '';
-  return skills.map(skill => `${skill.name} (${skill.level})`).join(', ');
+  return skills.map((skill) => `${skill.name} (${skill.level})`).join(', ');
 };
 
 // Format qualifications array into a bullet list
@@ -28,7 +28,7 @@ const formatQualifications = (qualifications) => {
 // Helper to format job info into tooltip text
 const formatTooltip = (jobInfo) => {
   if (!jobInfo) return '';
-  
+
   // Truncate description if needed
   const truncateText = (text, maxLength) => {
     if (!text) return '';
@@ -37,10 +37,12 @@ const formatTooltip = (jobInfo) => {
   };
 
   const parts = [
-    `${jobInfo.title} at ${jobInfo.company}`,
+    `${jobInfo.title || 'Untitled'} at ${jobInfo.company || 'Unknown Company'}`,
     jobInfo.remote ? `${jobInfo.remote} Remote` : '',
-    jobInfo.location.city ? `Location: ${jobInfo.location.city}, ${jobInfo.location.region || ''}` : '',
-    `Type: ${jobInfo.type}`,
+    jobInfo.location && jobInfo.location.city
+      ? `Location: ${jobInfo.location.city}${jobInfo.location.region ? `, ${jobInfo.location.region}` : ''}`
+      : '',
+    `Type: ${jobInfo.type || 'Not specified'}`,
     '',
     'Description:',
     truncateText(jobInfo.description, 150),
@@ -140,7 +142,7 @@ export default function Jobs({ params }) {
 
         // Store parsed job info
         const jobInfoMap = {};
-        sortedJobs.forEach(job => {
+        sortedJobs.forEach((job) => {
           jobInfoMap[job.uuid] = JSON.parse(job.gpt_content);
         });
         setJobInfo(jobInfoMap);
@@ -179,11 +181,14 @@ export default function Jobs({ params }) {
         }));
 
         // Keep track of nodes that are already in the graph
-        const graphNodeIds = new Set([username, ...topJobs.map(job => job.uuid)]);
-        
+        const graphNodeIds = new Set([
+          username,
+          ...topJobs.map((job) => job.uuid),
+        ]);
+
         // Create links from less relevant jobs to their most similar plotted job
         const jobToJobLinks = [];
-        
+
         // Process less relevant jobs one at a time
         otherJobs.forEach((lessRelevantJob) => {
           // Find the most similar job from already plotted nodes
@@ -195,7 +200,7 @@ export default function Jobs({ params }) {
           sortedJobs.forEach((otherJob) => {
             if (!graphNodeIds.has(otherJob.uuid)) return; // Skip jobs not yet in graph
             if (otherJob.uuid === lessRelevantJob.uuid) return; // Skip self-comparison
-            
+
             const otherVector = JSON.parse(otherJob.embedding_v5);
             const similarity = cosineSimilarity(
               lessRelevantVector,
@@ -273,10 +278,11 @@ export default function Jobs({ params }) {
           nodeColor={(node) => node.color}
           onNodeHover={setHoveredNode}
           nodeRelSize={1}
-          nodeVal={8}  // Base node size
+          nodeVal={8} // Base node size
           nodeVisibility={true}
-          nodeCanvasObjectMode={() => "after"}
+          nodeCanvasObjectMode={() => 'after'}
           nodeCanvasObject={(node, ctx) => {
+            // Skip tooltip rendering here - we'll do it in a separate pass
             // Draw node with border
             ctx.beginPath();
             ctx.arc(node.x, node.y, node.size, 0, 2 * Math.PI);
@@ -285,74 +291,6 @@ export default function Jobs({ params }) {
             ctx.strokeStyle = '#000';
             ctx.lineWidth = 1;
             ctx.stroke();
-
-            // Only draw tooltip for hovered node
-            if (node === hoveredNode && node.group !== -1) {
-              const info = jobInfo[node.id];
-              if (!info) return;
-
-              const tooltip = formatTooltip(info);
-              const maxWidth = 300; // Maximum width for tooltip
-              const fontSize = 12;
-              const lineHeight = fontSize + 4;
-              ctx.font = `${fontSize}px Sans-Serif`;
-
-              // Word wrap function
-              const wrapText = (text, maxWidth) => {
-                const words = text.split(' ');
-                const lines = [];
-                let currentLine = words[0];
-
-                for (let i = 1; i < words.length; i++) {
-                  const word = words[i];
-                  const width = ctx.measureText(currentLine + " " + word).width;
-                  if (width < maxWidth) {
-                    currentLine += " " + word;
-                  } else {
-                    lines.push(currentLine);
-                    currentLine = word;
-                  }
-                }
-                lines.push(currentLine);
-                return lines;
-              };
-
-              // Process each line of the tooltip
-              const rawLines = tooltip.split('\n');
-              const wrappedLines = [];
-              rawLines.forEach(line => {
-                if (line.trim() === '') {
-                  wrappedLines.push('');
-                } else {
-                  wrappedLines.push(...wrapText(line, maxWidth - 20));
-                }
-              });
-              
-              // Calculate tooltip dimensions
-              const tooltipWidth = Math.min(maxWidth, Math.max(...wrappedLines.map(line => ctx.measureText(line).width)) + 20);
-              const tooltipHeight = wrappedLines.length * lineHeight + 10;
-              
-              // Position tooltip above node
-              const tooltipX = node.x - tooltipWidth / 2;
-              const tooltipY = node.y - node.size - tooltipHeight - 10;
-              
-              // Draw tooltip background
-              ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
-              ctx.strokeStyle = '#000';
-              ctx.lineWidth = 1;
-              ctx.beginPath();
-              ctx.roundRect(tooltipX, tooltipY, tooltipWidth, tooltipHeight, 5);
-              ctx.fill();
-              ctx.stroke();
-              
-              // Draw tooltip text
-              ctx.fillStyle = '#000';
-              ctx.textAlign = 'left';
-              ctx.textBaseline = 'top';
-              wrappedLines.forEach((line, i) => {
-                ctx.fillText(line, tooltipX + 10, tooltipY + 5 + i * lineHeight);
-              });
-            }
 
             // Draw regular label for resume node
             if (node.group === -1) {
@@ -386,6 +324,98 @@ export default function Jobs({ params }) {
             ctx.arc(node.x, node.y, node.size * 2, 0, 2 * Math.PI);
             ctx.fillStyle = color;
             ctx.fill();
+          }}
+          onRenderFramePost={(ctx, rootGroup) => {
+            // Render tooltip after everything else
+            if (hoveredNode && hoveredNode.group !== -1) {
+              const info = jobInfo[hoveredNode.id];
+              if (!info) return;
+
+              const tooltip = formatTooltip(info);
+              const maxWidth = 300;
+              const fontSize = 12;
+              const lineHeight = fontSize + 4;
+              ctx.font = `${fontSize}px Sans-Serif`;
+
+              // Word wrap function
+              const wrapText = (text, maxWidth) => {
+                const words = text.split(' ');
+                const lines = [];
+                let currentLine = words[0];
+
+                for (let i = 1; i < words.length; i++) {
+                  const word = words[i];
+                  const width = ctx.measureText(currentLine + ' ' + word).width;
+                  if (width < maxWidth) {
+                    currentLine += ' ' + word;
+                  } else {
+                    lines.push(currentLine);
+                    currentLine = word;
+                  }
+                }
+                lines.push(currentLine);
+                return lines;
+              };
+
+              // Process each line of the tooltip
+              const rawLines = tooltip.split('\n');
+              const wrappedLines = [];
+              rawLines.forEach((line) => {
+                if (line.trim() === '') {
+                  wrappedLines.push('');
+                } else {
+                  wrappedLines.push(...wrapText(line, maxWidth - 20));
+                }
+              });
+
+              // Calculate tooltip dimensions
+              const tooltipWidth = Math.min(
+                maxWidth,
+                Math.max(
+                  ...wrappedLines.map((line) => ctx.measureText(line).width),
+                ) + 20,
+              );
+              const tooltipHeight = wrappedLines.length * lineHeight + 10;
+
+              // Position tooltip, checking for screen boundaries
+              let tooltipX = hoveredNode.x - tooltipWidth / 2;
+              let tooltipY =
+                hoveredNode.y - hoveredNode.size - tooltipHeight - 10;
+
+              // Check if tooltip would go off the top of the screen
+              if (tooltipY < 0) {
+                // Position below the node instead
+                tooltipY = hoveredNode.y + hoveredNode.size + 10;
+              }
+
+              // Check horizontal boundaries
+              if (tooltipX < 0) {
+                tooltipX = 0;
+              } else if (tooltipX + tooltipWidth > ctx.canvas.width) {
+                tooltipX = ctx.canvas.width - tooltipWidth;
+              }
+
+              // Draw tooltip background
+              ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+              ctx.strokeStyle = '#000';
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.roundRect(tooltipX, tooltipY, tooltipWidth, tooltipHeight, 5);
+              ctx.fill();
+              ctx.stroke();
+
+              // Draw tooltip text
+              ctx.fillStyle = '#000';
+              ctx.textAlign = 'left';
+              ctx.textBaseline = 'top';
+              wrappedLines.forEach((line, i) => {
+                ctx.fillText(
+                  line,
+                  tooltipX + 10,
+                  tooltipY + 5 + i * lineHeight,
+                );
+              });
+            }
           }}
           linkWidth={(link) => Math.sqrt(link.value) * 2}
           linkColor="#cccccc"
