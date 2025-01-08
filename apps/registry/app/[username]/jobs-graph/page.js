@@ -128,51 +128,45 @@ export default function Jobs({ params }) {
           value: job.similarity,
         }));
 
-        // Create links from less relevant jobs to their most similar relevant job
-        const jobToJobLinks = otherJobs.map((lessRelevantJob) => {
-          // Find the most similar relevant job
+        // Keep track of nodes that are already in the graph
+        const graphNodeIds = new Set([username, ...topJobs.map(job => job.uuid)]);
+        
+        // Create links from less relevant jobs to their most similar plotted job
+        const jobToJobLinks = [];
+        
+        // Process less relevant jobs one at a time
+        otherJobs.forEach((lessRelevantJob) => {
+          // Find the most similar job from already plotted nodes
           let maxSimilarity = -1;
           let mostSimilarJobId = null;
-
-          // Debug the vectors
           const lessRelevantVector = JSON.parse(lessRelevantJob.embedding_v5);
-          console.log('Less relevant job vector:', {
-            id: lessRelevantJob.uuid,
-            vectorSample: lessRelevantVector.slice(0, 5),
-          });
 
-          topJobs.forEach((relevantJob) => {
-            const relevantVector = JSON.parse(relevantJob.embedding_v5);
+          // Only compare against jobs already in the graph
+          sortedJobs.forEach((otherJob) => {
+            if (!graphNodeIds.has(otherJob.uuid)) return; // Skip jobs not yet in graph
+            if (otherJob.uuid === lessRelevantJob.uuid) return; // Skip self-comparison
+            
+            const otherVector = JSON.parse(otherJob.embedding_v5);
             const similarity = cosineSimilarity(
               lessRelevantVector,
-              relevantVector,
+              otherVector,
             );
-
-            // Log each similarity calculation
-            console.log('Similarity check:', {
-              lessRelevantId: lessRelevantJob.uuid,
-              relevantId: relevantJob.uuid,
-              similarity,
-              currentMax: maxSimilarity,
-            });
 
             if (similarity > maxSimilarity) {
               maxSimilarity = similarity;
-              mostSimilarJobId = relevantJob.uuid;
+              mostSimilarJobId = otherJob.uuid;
             }
           });
 
-          console.log('Final connection:', {
-            lessRelevantId: lessRelevantJob.uuid,
-            mostSimilarJobId,
-            similarity: maxSimilarity,
-          });
-
-          return {
-            source: mostSimilarJobId,
-            target: lessRelevantJob.uuid,
-            value: maxSimilarity,
-          };
+          // Add the link and mark this node as now in the graph
+          if (mostSimilarJobId) {
+            jobToJobLinks.push({
+              source: mostSimilarJobId,
+              target: lessRelevantJob.uuid,
+              value: maxSimilarity,
+            });
+            graphNodeIds.add(lessRelevantJob.uuid);
+          }
         });
 
         // Update graph with all nodes and links
