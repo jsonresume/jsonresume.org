@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import axios from 'axios';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import Hero from '../../../src/ui/Hero';
 import Loading from '../../components/Loading';
 
@@ -16,44 +16,40 @@ const DEFAULT_HEIGHT = 600;
 export default function Jobs({ params }) {
   const { username } = params;
   const [jobs, setJobs] = useState(null);
-  const [dimensions, setDimensions] = useState({ width: DEFAULT_WIDTH, height: DEFAULT_HEIGHT });
+  const [dimensions, setDimensions] = useState({
+    width: DEFAULT_WIDTH,
+    height: DEFAULT_HEIGHT,
+  });
+  const graphRef = useRef();
   const [graphData, setGraphData] = useState({
     nodes: [
       {
-        id: 'Current Resume',
+        id: username,
         group: -1,
-        size: 15,
+        size: 4,
         color: '#ff0000',
-        x: DEFAULT_WIDTH / 2,
-        y: DEFAULT_HEIGHT / 2,
-        fx: DEFAULT_WIDTH / 2,
-        fy: DEFAULT_HEIGHT / 2,
+        x: 0,
+        y: 0,
       },
     ],
     links: [],
   });
 
-  // Update dimensions and node position when component mounts
+  // Center and zoom the graph when it's ready
+  const handleEngineStop = useCallback(() => {
+    if (graphRef.current) {
+      graphRef.current.centerAt(0, 0);
+      graphRef.current.zoom(10); // Zoom out more (smaller number = more zoomed out)
+    }
+  }, []);
+
+  // Update dimensions when component mounts
   useEffect(() => {
     const container = document.getElementById('graph-container');
     if (container) {
       const width = container.offsetWidth;
       const height = 600;
       setDimensions({ width, height });
-      
-      // Update node position based on new dimensions
-      setGraphData(prev => ({
-        ...prev,
-        nodes: [
-          {
-            ...prev.nodes[0],
-            x: width / 2,
-            y: height / 2,
-            fx: width / 2,
-            fy: height / 2,
-          },
-        ],
-      }));
     }
   }, []);
 
@@ -91,20 +87,24 @@ export default function Jobs({ params }) {
         className="w-full h-[600px] bg-blue-50 relative mt-4"
       >
         <ForceGraph2D
+          ref={graphRef}
           graphData={graphData}
           backgroundColor="#EFF6FF"
           nodeColor={(node) => node.color}
           nodeCanvasObject={(node, ctx) => {
-            // Draw node
+            // Draw node with border
             ctx.beginPath();
-            ctx.arc(node.x, node.y, node.size * 2, 0, 2 * Math.PI);
+            ctx.arc(node.x, node.y, node.size, 0, 2 * Math.PI);
             ctx.fillStyle = node.color;
             ctx.fill();
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 2;
+            ctx.stroke();
 
             // Draw label
             const label = node.id;
-            const fontSize = Math.max(14, node.size * 1.5);
-            ctx.font = `${fontSize}px Sans-Serif`;
+            const fontSize = Math.max(14, node.size);
+            ctx.font = `bold ${fontSize}px Sans-Serif`;
             const textWidth = ctx.measureText(label).width;
             const bckgDimensions = [textWidth, fontSize].map(
               (n) => n + fontSize * 0.2,
@@ -125,7 +125,7 @@ export default function Jobs({ params }) {
             ctx.fillStyle = '#000';
             ctx.fillText(label, node.x, node.y - bckgDimensions[1] * 1.5);
           }}
-          nodeRelSize={6}
+          nodeRelSize={1}
           linkWidth={1}
           linkColor="#cccccc"
           linkOpacity={0.3}
@@ -136,6 +136,9 @@ export default function Jobs({ params }) {
           warmupTicks={100}
           width={dimensions.width}
           height={dimensions.height}
+          onEngineStop={handleEngineStop}
+          minZoom={0.1}
+          maxZoom={5}
         />
       </div>
     </div>
