@@ -13,6 +13,48 @@ const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), {
 const DEFAULT_WIDTH = 800;
 const DEFAULT_HEIGHT = 600;
 
+// Format skills array into a readable string
+const formatSkills = (skills) => {
+  if (!skills) return '';
+  return skills.map(skill => `${skill.name} (${skill.level})`).join(', ');
+};
+
+// Format qualifications array into a bullet list
+const formatQualifications = (qualifications) => {
+  if (!qualifications) return '';
+  return qualifications.join('\n• ');
+};
+
+// Helper to format job info into tooltip text
+const formatTooltip = (jobInfo) => {
+  if (!jobInfo) return '';
+  
+  // Truncate description if needed
+  const truncateText = (text, maxLength) => {
+    if (!text) return '';
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength - 3) + '...';
+  };
+
+  const parts = [
+    `${jobInfo.title} at ${jobInfo.company}`,
+    jobInfo.remote ? `${jobInfo.remote} Remote` : '',
+    jobInfo.location.city ? `Location: ${jobInfo.location.city}, ${jobInfo.location.region || ''}` : '',
+    `Type: ${jobInfo.type}`,
+    '',
+    'Description:',
+    truncateText(jobInfo.description, 150),
+    '',
+    'Skills:',
+    formatSkills(jobInfo.skills),
+    '',
+    'Qualifications:',
+    `• ${formatQualifications(jobInfo.qualifications)}`,
+  ];
+
+  return parts.filter(Boolean).join('\n');
+};
+
 // Utility functions for vector similarity
 const cosineSimilarity = (a, b) => {
   if (!Array.isArray(a) || !Array.isArray(b)) {
@@ -41,6 +83,7 @@ export default function Jobs({ params }) {
   });
   const graphRef = useRef();
   const [hoveredNode, setHoveredNode] = useState(null);
+  const [jobInfo, setJobInfo] = useState({}); // Store parsed job info
   const [graphData, setGraphData] = useState({
     nodes: [
       {
@@ -94,6 +137,13 @@ export default function Jobs({ params }) {
         setMostRelevant(topJobs);
         setLessRelevant(otherJobs);
         setJobs(sortedJobs);
+
+        // Store parsed job info
+        const jobInfoMap = {};
+        sortedJobs.forEach(job => {
+          jobInfoMap[job.uuid] = JSON.parse(job.gpt_content);
+        });
+        setJobInfo(jobInfoMap);
 
         // Create nodes for most relevant jobs
         const jobNodes = topJobs.map((job) => {
@@ -185,19 +235,6 @@ export default function Jobs({ params }) {
           ],
           links: [...resumeLinks, ...jobToJobLinks],
         });
-
-        console.log(
-          'Most relevant jobs:',
-          topJobs.map((job) => {
-            const parsedJob = JSON.parse(job.gpt_content);
-
-            return {
-              uuid: job.uuid,
-              title: parsedJob.title,
-              similarity: job.similarity,
-            };
-          }),
-        );
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -249,11 +286,79 @@ export default function Jobs({ params }) {
             ctx.lineWidth = 1;
             ctx.stroke();
 
-            // Only draw label for resume node or hovered node
-            if (node.group === -1 || node === hoveredNode) {
+            // Only draw tooltip for hovered node
+            if (node === hoveredNode && node.group !== -1) {
+              const info = jobInfo[node.id];
+              if (!info) return;
+
+              const tooltip = formatTooltip(info);
+              const maxWidth = 300; // Maximum width for tooltip
+              const fontSize = 12;
+              const lineHeight = fontSize + 4;
+              ctx.font = `${fontSize}px Sans-Serif`;
+
+              // Word wrap function
+              const wrapText = (text, maxWidth) => {
+                const words = text.split(' ');
+                const lines = [];
+                let currentLine = words[0];
+
+                for (let i = 1; i < words.length; i++) {
+                  const word = words[i];
+                  const width = ctx.measureText(currentLine + " " + word).width;
+                  if (width < maxWidth) {
+                    currentLine += " " + word;
+                  } else {
+                    lines.push(currentLine);
+                    currentLine = word;
+                  }
+                }
+                lines.push(currentLine);
+                return lines;
+              };
+
+              // Process each line of the tooltip
+              const rawLines = tooltip.split('\n');
+              const wrappedLines = [];
+              rawLines.forEach(line => {
+                if (line.trim() === '') {
+                  wrappedLines.push('');
+                } else {
+                  wrappedLines.push(...wrapText(line, maxWidth - 20));
+                }
+              });
+              
+              // Calculate tooltip dimensions
+              const tooltipWidth = Math.min(maxWidth, Math.max(...wrappedLines.map(line => ctx.measureText(line).width)) + 20);
+              const tooltipHeight = wrappedLines.length * lineHeight + 10;
+              
+              // Position tooltip above node
+              const tooltipX = node.x - tooltipWidth / 2;
+              const tooltipY = node.y - node.size - tooltipHeight - 10;
+              
+              // Draw tooltip background
+              ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+              ctx.strokeStyle = '#000';
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.roundRect(tooltipX, tooltipY, tooltipWidth, tooltipHeight, 5);
+              ctx.fill();
+              ctx.stroke();
+              
+              // Draw tooltip text
+              ctx.fillStyle = '#000';
+              ctx.textAlign = 'left';
+              ctx.textBaseline = 'top';
+              wrappedLines.forEach((line, i) => {
+                ctx.fillText(line, tooltipX + 10, tooltipY + 5 + i * lineHeight);
+              });
+            }
+
+            // Draw regular label for resume node
+            if (node.group === -1) {
               const label = node.label || node.id;
-              const fontSize = node.group === -1 ? Math.max(14, node.size) : 12;
-              ctx.font = `${node.group === -1 ? 'bold' : 'normal'} ${fontSize}px Sans-Serif`;
+              const fontSize = Math.max(14, node.size);
+              ctx.font = `bold ${fontSize}px Sans-Serif`;
               const textWidth = ctx.measureText(label).width;
               const bckgDimensions = [textWidth, fontSize].map(
                 (n) => n + fontSize * 0.2,
