@@ -157,7 +157,7 @@ export default function Jobs({ params }) {
             label: parsedJob.title,
             group: 1,
             size: 5,
-            color: '#4287f5',
+            color: '#fff18f',
             vector: JSON.parse(job.embedding_v5),
           };
         });
@@ -170,7 +170,7 @@ export default function Jobs({ params }) {
             label: parsedJob.title,
             group: 2,
             size: 3,
-            color: '#87ceeb',
+            color: '#fff18f',
             vector: JSON.parse(job.embedding_v5),
           };
         });
@@ -285,6 +285,19 @@ export default function Jobs({ params }) {
           nodeCanvasObjectMode={() => 'after'}
           nodeCanvasObject={(node, ctx) => {
             // Skip tooltip rendering here - we'll do it in a separate pass
+            // Calculate dynamic size based on rank for job nodes
+            if (node.group !== -1) {
+              const jobIndex = [...mostRelevant, ...lessRelevant].findIndex(j => j.uuid === node.id);
+              if (jobIndex !== -1) {
+                // Start with size 12 for rank 1, decrease gradually to minimum size 3
+                const maxSize = 12;
+                const minSize = 3;
+                const sizeRange = maxSize - minSize;
+                const totalJobs = mostRelevant.length + lessRelevant.length;
+                node.size = Math.max(minSize, maxSize - (sizeRange * jobIndex / totalJobs));
+              }
+            }
+
             // Draw node with border
             ctx.beginPath();
             ctx.arc(node.x, node.y, node.size, 0, 2 * Math.PI);
@@ -323,7 +336,7 @@ export default function Jobs({ params }) {
                 node.x - bckgDimensions[0] / 2,
                 node.y - bckgDimensions[1] * 2,
                 bckgDimensions[0],
-                bckgDimensions[1],
+                bckgDimensions[1]
               );
 
               // Draw label
