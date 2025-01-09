@@ -136,6 +136,8 @@ export default function Jobs({ params }) {
         const topJobs = sortedJobs.slice(0, 20);
         const otherJobs = sortedJobs.slice(20);
 
+        console.log({ topJobs });
+
         setMostRelevant(topJobs);
         setLessRelevant(otherJobs);
         setJobs(sortedJobs);
@@ -250,12 +252,12 @@ export default function Jobs({ params }) {
 
   return (
     <div className="p-6">
-      <Hero
+      {/* <Hero
         title="Jobs graph"
         description="This page shows the most related jobs to you in a directed force graph. Jobs with the most relevance appear linked to your resume. Less relevant jobs are connected to other jobs instead of directly to your resume."
-      />
+      /> */}
 
-      {!jobs && <Loading />}
+      {/* {!jobs && <Loading />} */}
       <div className="mt-4 text-lg">
         {jobs ? (
           <p>
