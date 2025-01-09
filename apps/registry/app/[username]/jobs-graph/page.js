@@ -87,7 +87,7 @@ const cosineSimilarity = (a, b) => {
 const calculateCollisionRadius = (node) => {
   // Replace this with your logic to determine node size
   const nodeSize = node.size || 1; // Default size if not specified
-  return nodeSize + 10; // Add padding if desired
+  return nodeSize + 3; // Add padding if desired
 };
 
 export default function Jobs({ params }) {
@@ -110,15 +110,15 @@ export default function Jobs({ params }) {
 
   // Center and zoom the graph when it's ready
   const handleEngineStop = useCallback(() => {
-    console.log('Graph instance:', graphRef.current);
+    console.log('ENGINE STOPPED Graph instance:', graphRef.current);
     if (graphRef.current) {
       if (!isInitialized) {
         const fg = graphRef.current;
         console.log('FG IS STARTING', fg);
         if (fg) {
           // Deactivate existing forces if necessary
-          fg.d3Force('center', null);
-          fg.d3Force('charge', null);
+          // fg.d3Force('center', null);
+          // fg.d3Force('charge', null);
 
           // Add custom collision force
           fg.d3Force(
@@ -132,7 +132,7 @@ export default function Jobs({ params }) {
             forceLink().distance((link) => {
               const sourceSize = link.source.size || 1;
               const targetSize = link.target.size || 1;
-              const baseDistance = 50; // Base distance between nodes
+              const baseDistance = 150; // Base distance between nodes
               return baseDistance + sourceSize + targetSize;
             }),
           );
@@ -140,7 +140,7 @@ export default function Jobs({ params }) {
         }
       }
     }
-  }, [isInitialized]);
+  }, []);
 
   // Update dimensions when component mounts
   useEffect(() => {
@@ -298,7 +298,7 @@ export default function Jobs({ params }) {
           nodeColor={(node) => node.color}
           onNodeHover={setHoveredNode}
           nodeVal={(node) => node.size}
-          nodeCanvasObjectMode={() => 'before'}
+          nodeCanvasObjectMode={() => 'after'}
           nodeCanvasObject={(node, ctx) => {
             ctx.beginPath();
             ctx.arc(
@@ -310,83 +310,81 @@ export default function Jobs({ params }) {
             );
             ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
             ctx.stroke();
+
+            if (node.group !== -1) {
+              const jobIndex = [...mostRelevant, ...lessRelevant].findIndex(
+                (j) => j.uuid === node.id,
+              );
+              if (jobIndex !== -1) {
+                // Start with size 12 for rank 1, decrease gradually to minimum size 3
+                const maxSize = 22;
+                const minSize = 4;
+                const sizeRange = maxSize - minSize;
+                const totalJobs = mostRelevant.length + lessRelevant.length;
+                // node.size = Math.max(minSize, maxSize);
+                node.size = Math.max(
+                  minSize,
+                  maxSize - (sizeRange * jobIndex) / totalJobs,
+                );
+              }
+            }
+
+            //   // Draw node with border
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, node.size, 0, 2 * Math.PI);
+            ctx.fillStyle = node.color;
+            ctx.fill();
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+
+            //   // Draw rank number for job nodes
+            if (node.group !== -1) {
+              const jobIndex = [...mostRelevant, ...lessRelevant].findIndex(
+                (j) => j.uuid === node.id,
+              );
+              if (jobIndex !== -1) {
+                const fontSize = Math.max(10, node.size * 0.8);
+                ctx.font = `${fontSize}px Sans-Serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = '#000';
+                ctx.fillText(jobIndex + 1, node.x, node.y);
+              }
+            }
+
+            //   // Draw regular label for resume node
+            if (node.group === -1) {
+              const label = node.label || node.id;
+              const fontSize = Math.max(14, node.size);
+              ctx.font = `bold ${fontSize}px Sans-Serif`;
+              const textWidth = ctx.measureText(label).width;
+              const bckgDimensions = [textWidth, fontSize].map(
+                (n) => n + fontSize * 0.2,
+              );
+
+              // Draw background for label
+              ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+              ctx.strokeStyle = '#000';
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.roundRect(
+                node.x - bckgDimensions[0] / 2,
+                node.y - bckgDimensions[1] * 2,
+                bckgDimensions[0],
+                bckgDimensions[1],
+                5,
+              );
+              ctx.fill();
+              ctx.stroke();
+
+              // Draw label
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              ctx.fillStyle = '#000';
+              ctx.fillText(label, node.x, node.y - bckgDimensions[1] * 1.5);
+            }
           }}
-          // random number between 1-20 for size
-          // nodeCanvasObjectMode={() => 'after'}
-          // nodeCanvasObject={(node, ctx) => {
-          //   // Skip tooltip rendering here - we'll do it in a separate pass
-          //   // Calculate dynamic size based on rank for job nodes
-          //   if (node.group !== -1) {
-          //     const jobIndex = [...mostRelevant, ...lessRelevant].findIndex(
-          //       (j) => j.uuid === node.id,
-          //     );
-          //     if (jobIndex !== -1) {
-          //       // Start with size 12 for rank 1, decrease gradually to minimum size 3
-          //       const maxSize = 12;
-          //       const minSize = 3;
-          //       const sizeRange = maxSize - minSize;
-          //       const totalJobs = mostRelevant.length + lessRelevant.length;
-          //       node.size = Math.max(minSize, maxSize);
-          //       // node.size = Math.max(minSize, maxSize - (sizeRange * jobIndex / totalJobs));
-          //     }
-          //   }
-
-          //   // Draw node with border
-          //   ctx.beginPath();
-          //   ctx.arc(node.x, node.y, node.size, 0, 2 * Math.PI);
-          //   ctx.fillStyle = node.color;
-          //   ctx.fill();
-          //   ctx.strokeStyle = '#000';
-          //   ctx.lineWidth = 1;
-          //   ctx.stroke();
-
-          //   // Draw rank number for job nodes
-          //   if (node.group !== -1) {
-          //     const jobIndex = [...mostRelevant, ...lessRelevant].findIndex(
-          //       (j) => j.uuid === node.id,
-          //     );
-          //     if (jobIndex !== -1) {
-          //       const fontSize = Math.max(10, node.size * 0.8);
-          //       ctx.font = `${fontSize}px Sans-Serif`;
-          //       ctx.textAlign = 'center';
-          //       ctx.textBaseline = 'middle';
-          //       ctx.fillStyle = '#000';
-          //       ctx.fillText(jobIndex + 1, node.x, node.y);
-          //     }
-          //   }
-
-          //   // Draw regular label for resume node
-          //   if (node.group === -1) {
-          //     const label = node.label || node.id;
-          //     const fontSize = Math.max(14, node.size);
-          //     ctx.font = `bold ${fontSize}px Sans-Serif`;
-          //     const textWidth = ctx.measureText(label).width;
-          //     const bckgDimensions = [textWidth, fontSize].map(
-          //       (n) => n + fontSize * 0.2,
-          //     );
-
-          //     // Draw background for label
-          //     ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-          //     ctx.strokeStyle = '#000';
-          //     ctx.lineWidth = 1;
-          //     ctx.beginPath();
-          //     ctx.roundRect(
-          //       node.x - bckgDimensions[0] / 2,
-          //       node.y - bckgDimensions[1] * 2,
-          //       bckgDimensions[0],
-          //       bckgDimensions[1],
-          //       5,
-          //     );
-          //     ctx.fill();
-          //     ctx.stroke();
-
-          //     // Draw label
-          //     ctx.textAlign = 'center';
-          //     ctx.textBaseline = 'middle';
-          //     ctx.fillStyle = '#000';
-          //     ctx.fillText(label, node.x, node.y - bckgDimensions[1] * 1.5);
-          //   }
-          // }}
           // nodePointerAreaPaint={(node, color, ctx) => {
           //   // Draw a larger hit area for hover detection
           //   ctx.beginPath();
@@ -497,7 +495,6 @@ export default function Jobs({ params }) {
           onEngineStop={handleEngineStop}
           minZoom={0.1}
           maxZoom={5}
-          linkDistance={100}
           forceEngine="d3"
           d3AlphaDecay={0.02}
           d3VelocityDecay={0.3}
