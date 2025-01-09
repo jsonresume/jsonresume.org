@@ -79,6 +79,7 @@ const cosineSimilarity = (a, b) => {
 export default function Jobs({ params }) {
   const { username } = params;
   const [jobs, setJobs] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [dimensions, setDimensions] = useState({
     width: DEFAULT_WIDTH,
     height: DEFAULT_HEIGHT,
@@ -86,19 +87,7 @@ export default function Jobs({ params }) {
   const graphRef = useRef();
   const [hoveredNode, setHoveredNode] = useState(null);
   const [jobInfo, setJobInfo] = useState({}); // Store parsed job info
-  const [graphData, setGraphData] = useState({
-    nodes: [
-      {
-        id: username,
-        group: -1,
-        size: 8,
-        color: '#ff0000',
-        x: 0,
-        y: 0,
-      },
-    ],
-    links: [],
-  });
+  const [graphData, setGraphData] = useState(null);
 
   const [mostRelevant, setMostRelevant] = useState([]);
   const [lessRelevant, setLessRelevant] = useState([]);
@@ -123,20 +112,16 @@ export default function Jobs({ params }) {
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       try {
         const response = await axios.post('/api/jobs', { username });
         const sortedJobs = response.data.sort(
           (a, b) => b.similarity - a.similarity,
         );
 
-        // Debug job structure
-        console.log('Sample job:', sortedJobs[0]);
-
         // Split into most relevant (top 20) and less relevant
         const topJobs = sortedJobs.slice(0, 20);
         const otherJobs = sortedJobs.slice(20);
-
-        console.log({ topJobs });
 
         setMostRelevant(topJobs);
         setLessRelevant(otherJobs);
@@ -149,85 +134,8 @@ export default function Jobs({ params }) {
         });
         setJobInfo(jobInfoMap);
 
-        // Create nodes for most relevant jobs
-        const jobNodes = topJobs.map((job) => {
-          const parsedJob = JSON.parse(job.gpt_content);
-          return {
-            id: job.uuid,
-            label: parsedJob.title,
-            group: 1,
-            size: 5,
-            color: '#fff18f',
-            vector: JSON.parse(job.embedding_v5),
-          };
-        });
-
-        // Create nodes for less relevant jobs
-        const lessRelevantNodes = otherJobs.map((job) => {
-          const parsedJob = JSON.parse(job.gpt_content);
-          return {
-            id: job.uuid,
-            label: parsedJob.title,
-            group: 2,
-            size: 3,
-            color: '#fff18f',
-            vector: JSON.parse(job.embedding_v5),
-          };
-        });
-
-        // Create links from resume to most relevant jobs
-        const resumeLinks = topJobs.map((job) => ({
-          source: username,
-          target: job.uuid,
-          value: job.similarity,
-        }));
-
-        // Keep track of nodes that are already in the graph
-        const graphNodeIds = new Set([
-          username,
-          ...topJobs.map((job) => job.uuid),
-        ]);
-
-        // Create links from less relevant jobs to their most similar plotted job
-        const jobToJobLinks = [];
-
-        // Process less relevant jobs one at a time
-        otherJobs.forEach((lessRelevantJob) => {
-          // Find the most similar job from already plotted nodes
-          let maxSimilarity = -1;
-          let mostSimilarJobId = null;
-          const lessRelevantVector = JSON.parse(lessRelevantJob.embedding_v5);
-
-          // Only compare against jobs already in the graph
-          sortedJobs.forEach((otherJob) => {
-            if (!graphNodeIds.has(otherJob.uuid)) return; // Skip jobs not yet in graph
-            if (otherJob.uuid === lessRelevantJob.uuid) return; // Skip self-comparison
-
-            const otherVector = JSON.parse(otherJob.embedding_v5);
-            const similarity = cosineSimilarity(
-              lessRelevantVector,
-              otherVector,
-            );
-
-            if (similarity > maxSimilarity) {
-              maxSimilarity = similarity;
-              mostSimilarJobId = otherJob.uuid;
-            }
-          });
-
-          // Add the link and mark this node as now in the graph
-          if (mostSimilarJobId) {
-            jobToJobLinks.push({
-              source: mostSimilarJobId,
-              target: lessRelevantJob.uuid,
-              value: maxSimilarity,
-            });
-            graphNodeIds.add(lessRelevantJob.uuid);
-          }
-        });
-
-        // Update graph with all nodes and links
-        setGraphData({
+        // Create all graph data at once
+        const initialGraphData = {
           nodes: [
             {
               id: username,
@@ -237,18 +145,72 @@ export default function Jobs({ params }) {
               x: 0,
               y: 0,
             },
-            ...jobNodes,
-            ...lessRelevantNodes,
+            ...topJobs.map((job) => ({
+              id: job.uuid,
+              label: JSON.parse(job.gpt_content).title,
+              group: 1,
+              size: 5,
+              color: '#fff18f',
+              vector: JSON.parse(job.embedding_v5),
+            })),
+            ...otherJobs.map((job) => ({
+              id: job.uuid,
+              label: JSON.parse(job.gpt_content).title,
+              group: 2,
+              size: 3,
+              color: '#fff18f',
+              vector: JSON.parse(job.embedding_v5),
+            })),
           ],
-          links: [...resumeLinks, ...jobToJobLinks],
-        });
+          links: [
+            ...topJobs.map((job) => ({
+              source: username,
+              target: job.uuid,
+              value: job.similarity,
+            })),
+            // Add job-to-job links
+            ...otherJobs.map((lessRelevantJob) => {
+              const lessRelevantVector = JSON.parse(lessRelevantJob.embedding_v5);
+              const mostSimilarJob = [...topJobs].reduce((best, current) => {
+                const similarity = cosineSimilarity(
+                  lessRelevantVector,
+                  JSON.parse(current.embedding_v5)
+                );
+                return similarity > best.similarity ? { job: current, similarity } : best;
+              }, { job: null, similarity: -1 });
+
+              return mostSimilarJob.job ? {
+                source: mostSimilarJob.job.uuid,
+                target: lessRelevantJob.uuid,
+                value: mostSimilarJob.similarity,
+              } : null;
+            }).filter(Boolean),
+          ],
+        };
+        
+        setGraphData(initialGraphData);
       } catch (error) {
         console.error('Error fetching data:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    fetchData();
+    if (username) {
+      fetchData();
+    }
   }, [username]);
+
+  if (isLoading || !graphData) {
+    return (
+      <div className="p-6">
+        <div className="mt-4 text-lg">
+          <p>Loading jobs graph...</p>
+        </div>
+        <div id="graph-container" className="w-full h-[600px] bg-blue-50 relative mt-4" />
+      </div>
+    );
+  }
 
   return (
     <div className="p-6">
@@ -332,18 +294,28 @@ export default function Jobs({ params }) {
 
               // Draw background for label
               ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-              ctx.fillRect(
+              ctx.strokeStyle = '#000';
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.roundRect(
                 node.x - bckgDimensions[0] / 2,
                 node.y - bckgDimensions[1] * 2,
                 bckgDimensions[0],
-                bckgDimensions[1]
+                bckgDimensions[1],
+                5
               );
+              ctx.fill();
+              ctx.stroke();
 
               // Draw label
               ctx.textAlign = 'center';
               ctx.textBaseline = 'middle';
               ctx.fillStyle = '#000';
-              ctx.fillText(label, node.x, node.y - bckgDimensions[1] * 1.5);
+              ctx.fillText(
+                label,
+                node.x,
+                node.y - bckgDimensions[1] * 1.5
+              );
             }
           }}
           nodePointerAreaPaint={(node, color, ctx) => {
@@ -401,7 +373,7 @@ export default function Jobs({ params }) {
                 maxWidth,
                 Math.max(
                   ...wrappedLines.map((line) => ctx.measureText(line).width),
-                ) + 20,
+                ) + 20
               );
               const tooltipHeight = wrappedLines.length * lineHeight + 10;
 
@@ -440,7 +412,7 @@ export default function Jobs({ params }) {
                 ctx.fillText(
                   line,
                   tooltipX + 10,
-                  tooltipY + 5 + i * lineHeight,
+                  tooltipY + 5 + i * lineHeight
                 );
               });
             }
