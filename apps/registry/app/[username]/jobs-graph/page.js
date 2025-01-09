@@ -104,9 +104,20 @@ export default function Jobs({ params }) {
   const [hoveredNode, setHoveredNode] = useState(null);
   const [jobInfo, setJobInfo] = useState({}); // Store parsed job info
   const [graphData, setGraphData] = useState(null);
+  const imageCache = useRef(new Map());
 
   const [mostRelevant, setMostRelevant] = useState([]);
   const [lessRelevant, setLessRelevant] = useState([]);
+
+  // Function to preload and cache image
+  const getCachedImage = (src) => {
+    if (!imageCache.current.has(src)) {
+      const img = new Image();
+      img.src = src;
+      imageCache.current.set(src, img);
+    }
+    return imageCache.current.get(src);
+  };
 
   // Center and zoom the graph when it's ready
   const handleEngineStop = useCallback(() => {
@@ -265,10 +276,9 @@ export default function Jobs({ params }) {
             // Draw node with border
             if (node.group === -1 && node.image) {
               // Resume node with image
-              const img = new Image();
-              img.src = node.image;
+              const img = getCachedImage(node.image);
               
-              img.onload = () => {
+              if (img.complete) {
                 ctx.save();
                 ctx.beginPath();
                 ctx.arc(node.x, node.y, node.size, 0, 2 * Math.PI);
@@ -284,7 +294,16 @@ export default function Jobs({ params }) {
                 ctx.lineWidth = 2;
                 ctx.stroke();
                 ctx.restore();
-              };
+              } else {
+                // Draw default circle while image is loading
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, node.size, 0, 2 * Math.PI);
+                ctx.fillStyle = node.color;
+                ctx.fill();
+                ctx.strokeStyle = '#000';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+              }
             } else {
               // Default node rendering for all other cases
               ctx.beginPath();
