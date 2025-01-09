@@ -118,7 +118,13 @@ export default function Jobs({ params }) {
         if (fg) {
           // Deactivate existing forces if necessary
           // fg.d3Force('center', null);
-          // fg.d3Force('charge', null);
+          fg.d3Force(
+            'charge',
+            forceManyBody()
+              .strength(-300) // Negative values repel nodes; adjust this value for more/less repulsion
+              .distanceMax(600) // Maximum distance where the charge force is applied
+              .distanceMin(20), // Minimum distance where the charge force is applied
+          );
 
           // Add custom collision force
           fg.d3Force(
@@ -127,15 +133,15 @@ export default function Jobs({ params }) {
           );
 
           // Update link distance
-          fg.d3Force(
-            'link',
-            forceLink().distance((link) => {
-              const sourceSize = link.source.size || 1;
-              const targetSize = link.target.size || 1;
-              const baseDistance = 150; // Base distance between nodes
-              return baseDistance + sourceSize + targetSize;
-            }),
-          );
+          // fg.d3Force(
+          //   'link',
+          //   forceLink().distance((link) => {
+          //     const sourceSize = link.source.size || 1;
+          //     const targetSize = link.target.size || 1;
+          //     const baseDistance = 150; // Base distance between nodes
+          //     return baseDistance + sourceSize + targetSize;
+          //   }),
+          // );
           setIsInitialized(true);
         }
       }
@@ -385,105 +391,105 @@ export default function Jobs({ params }) {
               ctx.fillText(label, node.x, node.y - bckgDimensions[1] * 1.5);
             }
           }}
-          // nodePointerAreaPaint={(node, color, ctx) => {
-          //   // Draw a larger hit area for hover detection
-          //   ctx.beginPath();
-          //   ctx.arc(node.x, node.y, node.size * 2, 0, 2 * Math.PI);
-          //   ctx.fillStyle = color;
-          //   ctx.fill();
-          // }}
-          // onRenderFramePost={(ctx, rootGroup) => {
-          //   // Render tooltip after everything else
-          //   if (hoveredNode && hoveredNode.group !== -1) {
-          //     const info = jobInfo[hoveredNode.id];
-          //     if (!info) return;
+          nodePointerAreaPaint={(node, color, ctx) => {
+            // Draw a larger hit area for hover detection
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, node.size * 2, 0, 2 * Math.PI);
+            ctx.fillStyle = color;
+            ctx.fill();
+          }}
+          onRenderFramePost={(ctx, rootGroup) => {
+            // Render tooltip after everything else
+            if (hoveredNode && hoveredNode.group !== -1) {
+              const info = jobInfo[hoveredNode.id];
+              if (!info) return;
 
-          //     const tooltip = formatTooltip(info);
-          //     const maxWidth = 300;
-          //     const fontSize = 12;
-          //     const lineHeight = fontSize + 4;
-          //     ctx.font = `${fontSize}px Sans-Serif`;
+              const tooltip = formatTooltip(info);
+              const maxWidth = 300;
+              const fontSize = 12;
+              const lineHeight = fontSize + 4;
+              ctx.font = `${fontSize}px Sans-Serif`;
 
-          //     // Word wrap function
-          //     const wrapText = (text, maxWidth) => {
-          //       const words = text.split(' ');
-          //       const lines = [];
-          //       let currentLine = words[0];
+              // Word wrap function
+              const wrapText = (text, maxWidth) => {
+                const words = text.split(' ');
+                const lines = [];
+                let currentLine = words[0];
 
-          //       for (let i = 1; i < words.length; i++) {
-          //         const word = words[i];
-          //         const width = ctx.measureText(currentLine + ' ' + word).width;
-          //         if (width < maxWidth) {
-          //           currentLine += ' ' + word;
-          //         } else {
-          //           lines.push(currentLine);
-          //           currentLine = word;
-          //         }
-          //       }
-          //       lines.push(currentLine);
-          //       return lines;
-          //     };
+                for (let i = 1; i < words.length; i++) {
+                  const word = words[i];
+                  const width = ctx.measureText(currentLine + ' ' + word).width;
+                  if (width < maxWidth) {
+                    currentLine += ' ' + word;
+                  } else {
+                    lines.push(currentLine);
+                    currentLine = word;
+                  }
+                }
+                lines.push(currentLine);
+                return lines;
+              };
 
-          //     // Process each line of the tooltip
-          //     const rawLines = tooltip.split('\n');
-          //     const wrappedLines = [];
-          //     rawLines.forEach((line) => {
-          //       if (line.trim() === '') {
-          //         wrappedLines.push('');
-          //       } else {
-          //         wrappedLines.push(...wrapText(line, maxWidth - 20));
-          //       }
-          //     });
+              // Process each line of the tooltip
+              const rawLines = tooltip.split('\n');
+              const wrappedLines = [];
+              rawLines.forEach((line) => {
+                if (line.trim() === '') {
+                  wrappedLines.push('');
+                } else {
+                  wrappedLines.push(...wrapText(line, maxWidth - 20));
+                }
+              });
 
-          //     // Calculate tooltip dimensions
-          //     const tooltipWidth = Math.min(
-          //       maxWidth,
-          //       Math.max(
-          //         ...wrappedLines.map((line) => ctx.measureText(line).width),
-          //       ) + 20,
-          //     );
-          //     const tooltipHeight = wrappedLines.length * lineHeight + 10;
+              // Calculate tooltip dimensions
+              const tooltipWidth = Math.min(
+                maxWidth,
+                Math.max(
+                  ...wrappedLines.map((line) => ctx.measureText(line).width),
+                ) + 20,
+              );
+              const tooltipHeight = wrappedLines.length * lineHeight + 10;
 
-          //     // Position tooltip, checking for screen boundaries
-          //     let tooltipX = hoveredNode.x - tooltipWidth / 2;
-          //     let tooltipY =
-          //       hoveredNode.y - hoveredNode.size - tooltipHeight - 10;
+              // Position tooltip, checking for screen boundaries
+              let tooltipX = hoveredNode.x - tooltipWidth / 2;
+              let tooltipY =
+                hoveredNode.y - hoveredNode.size - tooltipHeight - 10;
 
-          //     // Check if tooltip would go off the top of the screen
-          //     if (tooltipY < 0) {
-          //       // Position below the node instead
-          //       tooltipY = hoveredNode.y + hoveredNode.size + 10;
-          //     }
+              // Check if tooltip would go off the top of the screen
+              if (tooltipY < 0) {
+                // Position below the node instead
+                tooltipY = hoveredNode.y + hoveredNode.size + 10;
+              }
 
-          //     // Check horizontal boundaries
-          //     if (tooltipX < 0) {
-          //       tooltipX = 0;
-          //     } else if (tooltipX + tooltipWidth > ctx.canvas.width) {
-          //       tooltipX = ctx.canvas.width - tooltipWidth;
-          //     }
+              // Check horizontal boundaries
+              if (tooltipX < 0) {
+                tooltipX = 0;
+              } else if (tooltipX + tooltipWidth > ctx.canvas.width) {
+                tooltipX = ctx.canvas.width - tooltipWidth;
+              }
 
-          //     // Draw tooltip background
-          //     ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
-          //     ctx.strokeStyle = '#000';
-          //     ctx.lineWidth = 1;
-          //     ctx.beginPath();
-          //     ctx.roundRect(tooltipX, tooltipY, tooltipWidth, tooltipHeight, 5);
-          //     ctx.fill();
-          //     ctx.stroke();
+              // Draw tooltip background
+              ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+              ctx.strokeStyle = '#000';
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.roundRect(tooltipX, tooltipY, tooltipWidth, tooltipHeight, 5);
+              ctx.fill();
+              ctx.stroke();
 
-          //     // Draw tooltip text
-          //     ctx.fillStyle = '#000';
-          //     ctx.textAlign = 'left';
-          //     ctx.textBaseline = 'top';
-          //     wrappedLines.forEach((line, i) => {
-          //       ctx.fillText(
-          //         line,
-          //         tooltipX + 10,
-          //         tooltipY + 5 + i * lineHeight,
-          //       );
-          //     });
-          //   }
-          // }}
+              // Draw tooltip text
+              ctx.fillStyle = '#000';
+              ctx.textAlign = 'left';
+              ctx.textBaseline = 'top';
+              wrappedLines.forEach((line, i) => {
+                ctx.fillText(
+                  line,
+                  tooltipX + 10,
+                  tooltipY + 5 + i * lineHeight,
+                );
+              });
+            }
+          }}
           linkWidth={(link) => Math.sqrt(link.value) * 2}
           linkColor="#cccccc"
           linkOpacity={0.3}
