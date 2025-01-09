@@ -105,10 +105,11 @@ export default async function handler(req, res) {
       {
         id: username,
         group: -1,
-        size: 8,
-        color: '#ff0000',
+        size: 24,
+        color: resume.basics?.image ? 'url(#resumeImage)' : '#ff0000',
         x: 0,
         y: 0,
+        image: resume.basics?.image || null,
       },
       ...topJobs.map((job) => ({
         id: job.uuid,
@@ -173,5 +174,6 @@ export default async function handler(req, res) {
     mostRelevant: topJobs,
     lessRelevant: otherJobs,
     allJobs: sortedJobs,
+    resume: resume,
   });
 }

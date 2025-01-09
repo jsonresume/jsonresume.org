@@ -163,8 +163,14 @@ export default function Jobs({ params }) {
       setIsLoading(true);
       try {
         const response = await axios.post('/api/jobs-graph', { username });
-        const { graphData, jobInfoMap, mostRelevant, lessRelevant, allJobs } =
-          response.data;
+        const {
+          graphData,
+          jobInfoMap,
+          mostRelevant,
+          lessRelevant,
+          allJobs,
+          resume,
+        } = response.data;
 
         setMostRelevant(mostRelevant);
         setLessRelevant(lessRelevant);
@@ -240,7 +246,40 @@ export default function Jobs({ params }) {
             ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
             ctx.stroke();
 
-            if (node.group !== -1) {
+            if (node.group === -1) {
+              // Resume node
+              if (node.image) {
+                // Create a circular clipping path
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, node.size, 0, 2 * Math.PI);
+                ctx.clip();
+
+                // Create and draw the image
+                const img = new Image();
+                img.src = node.image;
+                img.onload = () => {
+                  const size = node.size * 2;
+                  ctx.drawImage(
+                    img,
+                    node.x - node.size,
+                    node.y - node.size,
+                    size,
+                    size
+                  );
+                  ctx.restore();
+                };
+              } else {
+                // Fallback to color fill
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, node.size, 0, 2 * Math.PI);
+                ctx.fillStyle = node.color;
+                ctx.fill();
+              }
+              ctx.strokeStyle = '#000';
+              ctx.lineWidth = 2;
+              ctx.stroke();
+            } else if (node.group !== -1) {
               const jobIndex = [...mostRelevant, ...lessRelevant].findIndex(
                 (j) => j.uuid === node.id,
               );
@@ -258,7 +297,7 @@ export default function Jobs({ params }) {
               }
             }
 
-            //   // Draw node with border
+            // Draw node with border
             ctx.beginPath();
             ctx.arc(node.x, node.y, node.size, 0, 2 * Math.PI);
             ctx.fillStyle = node.color;
@@ -267,7 +306,7 @@ export default function Jobs({ params }) {
             ctx.lineWidth = 1;
             ctx.stroke();
 
-            //   // Draw rank number for job nodes
+            // Draw rank number for job nodes
             if (node.group !== -1) {
               const jobIndex = [...mostRelevant, ...lessRelevant].findIndex(
                 (j) => j.uuid === node.id,
@@ -282,7 +321,7 @@ export default function Jobs({ params }) {
               }
             }
 
-            //   // Draw regular label for resume node
+            // Draw regular label for resume node
             if (node.group === -1) {
               const label = node.label || node.id;
               const fontSize = Math.max(14, node.size);
