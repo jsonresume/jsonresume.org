@@ -134,31 +134,39 @@ export default async function handler(req, res) {
         target: job.uuid,
         value: job.similarity,
       })),
-      ...otherJobs
-        .map((lessRelevantJob) => {
-          const lessRelevantVector = JSON.parse(lessRelevantJob.embedding_v5);
-          const mostSimilarJob = [...topJobs].reduce(
-            (best, current) => {
-              const similarity = cosineSimilarity(
-                lessRelevantVector,
-                JSON.parse(current.embedding_v5),
-              );
-              return similarity > best.similarity
-                ? { job: current, similarity }
-                : best;
-            },
-            { job: null, similarity: -1 },
-          );
+      // Process other jobs sequentially, each one only looking at previously processed jobs
+      ...otherJobs.reduce((links, lessRelevantJob, index) => {
+        const lessRelevantVector = JSON.parse(lessRelevantJob.embedding_v5);
+        
+        // Jobs to compare against: top jobs + already processed less relevant jobs
+        const availableJobs = [
+          ...topJobs,
+          ...otherJobs.slice(0, index)
+        ];
+        
+        const mostSimilarJob = availableJobs.reduce(
+          (best, current) => {
+            const similarity = cosineSimilarity(
+              lessRelevantVector,
+              JSON.parse(current.embedding_v5),
+            );
+            return similarity > best.similarity
+              ? { job: current, similarity }
+              : best;
+          },
+          { job: null, similarity: -1 },
+        );
 
-          return mostSimilarJob.job
-            ? {
-                source: mostSimilarJob.job.uuid,
-                target: lessRelevantJob.uuid,
-                value: mostSimilarJob.similarity,
-              }
-            : null;
-        })
-        .filter(Boolean),
+        if (mostSimilarJob.job) {
+          links.push({
+            source: mostSimilarJob.job.uuid,
+            target: lessRelevantJob.uuid,
+            value: mostSimilarJob.similarity,
+          });
+        }
+        
+        return links;
+      }, []),
     ],
   };
 
