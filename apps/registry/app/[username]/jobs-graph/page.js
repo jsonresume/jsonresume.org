@@ -294,6 +294,19 @@ export default function Jobs({ params }) {
             ctx.lineWidth = 1;
             ctx.stroke();
 
+            // Draw rank number for job nodes
+            if (node.group !== -1) {
+              const jobIndex = [...mostRelevant, ...lessRelevant].findIndex(j => j.uuid === node.id);
+              if (jobIndex !== -1) {
+                const fontSize = Math.max(10, node.size * 0.8);
+                ctx.font = `${fontSize}px Sans-Serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = '#000';
+                ctx.fillText(jobIndex + 1, node.x, node.y);
+              }
+            }
+
             // Draw regular label for resume node
             if (node.group === -1) {
               const label = node.label || node.id;
