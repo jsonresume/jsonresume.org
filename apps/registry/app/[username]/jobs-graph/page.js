@@ -162,92 +162,15 @@ export default function Jobs({ params }) {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.post('/api/jobs', { username });
-        const sortedJobs = response.data.sort(
-          (a, b) => b.similarity - a.similarity,
-        );
+        const response = await axios.post('/api/jobs-graph', { username });
+        const { graphData, jobInfoMap, mostRelevant, lessRelevant, allJobs } =
+          response.data;
 
-        // Split into most relevant (top 20) and less relevant
-        const topJobs = sortedJobs.slice(0, 20);
-        const otherJobs = sortedJobs.slice(20);
-
-        setMostRelevant(topJobs);
-        setLessRelevant(otherJobs);
-        setJobs(sortedJobs);
-
-        // Store parsed job info
-        const jobInfoMap = {};
-        sortedJobs.forEach((job) => {
-          jobInfoMap[job.uuid] = JSON.parse(job.gpt_content);
-        });
+        setMostRelevant(mostRelevant);
+        setLessRelevant(lessRelevant);
+        setJobs(allJobs);
         setJobInfo(jobInfoMap);
-
-        // Create all graph data at once
-        const initialGraphData = {
-          nodes: [
-            {
-              id: username,
-              group: -1,
-              size: 8,
-              color: '#ff0000',
-              x: 0,
-              y: 0,
-            },
-            ...topJobs.map((job) => ({
-              id: job.uuid,
-              label: JSON.parse(job.gpt_content).title,
-              group: 1,
-              size: 4,
-              color: '#fff18f',
-              vector: JSON.parse(job.embedding_v5),
-            })),
-            ...otherJobs.map((job) => ({
-              id: job.uuid,
-              label: JSON.parse(job.gpt_content).title,
-              group: 2,
-              size: 4,
-              color: '#fff18f',
-              vector: JSON.parse(job.embedding_v5),
-            })),
-          ],
-          links: [
-            ...topJobs.map((job) => ({
-              source: username,
-              target: job.uuid,
-              value: job.similarity,
-            })),
-            // Add job-to-job links
-            ...otherJobs
-              .map((lessRelevantJob) => {
-                const lessRelevantVector = JSON.parse(
-                  lessRelevantJob.embedding_v5,
-                );
-                const mostSimilarJob = [...topJobs].reduce(
-                  (best, current) => {
-                    const similarity = cosineSimilarity(
-                      lessRelevantVector,
-                      JSON.parse(current.embedding_v5),
-                    );
-                    return similarity > best.similarity
-                      ? { job: current, similarity }
-                      : best;
-                  },
-                  { job: null, similarity: -1 },
-                );
-
-                return mostSimilarJob.job
-                  ? {
-                      source: mostSimilarJob.job.uuid,
-                      target: lessRelevantJob.uuid,
-                      value: mostSimilarJob.similarity,
-                    }
-                  : null;
-              })
-              .filter(Boolean),
-          ],
-        };
-
-        setGraphData(initialGraphData);
+        setGraphData(graphData);
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
