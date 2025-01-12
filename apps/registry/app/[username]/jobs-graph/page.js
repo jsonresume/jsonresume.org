@@ -83,8 +83,6 @@ export default function Jobs({ params }) {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const graphRef = useRef();
   const [activeNode, setActiveNode] = useState(null);
-  const [hoveredNode, setHoveredNode] = useState(null);
-  const [pinnedNode, setPinnedNode] = useState(null);
   const [jobInfo, setJobInfo] = useState({}); // Store parsed job info
   const [graphData, setGraphData] = useState(null);
   const imageCache = useRef(new Map());
@@ -356,8 +354,6 @@ export default function Jobs({ params }) {
       });
 
       if (clickedNode) {
-        setPinnedNode(clickedNode);
-        setHoveredNode(null);
         setActiveNode(clickedNode);
       }
     },
@@ -389,14 +385,8 @@ export default function Jobs({ params }) {
       setIsLoading(true);
       try {
         const response = await axios.post('/api/jobs-graph', { username });
-        const {
-          graphData,
-          jobInfoMap,
-          mostRelevant,
-          lessRelevant,
-          allJobs,
-          resume,
-        } = response.data;
+        const { graphData, jobInfoMap, mostRelevant, lessRelevant, allJobs } =
+          response.data;
 
         setMostRelevant(mostRelevant);
         setLessRelevant(lessRelevant);
@@ -521,8 +511,6 @@ export default function Jobs({ params }) {
                 </button>
                 <button
                   onClick={() => {
-                    setPinnedNode(null);
-                    setHoveredNode(null);
                     setActiveNode(null);
                   }}
                   style={{
@@ -702,7 +690,7 @@ export default function Jobs({ params }) {
             ctx.fillStyle = color;
             ctx.fill();
           }}
-          onRenderFramePost={(ctx, rootGroup) => {
+          onRenderFramePost={() => {
             // No need to render tooltip in canvas anymore since we're using DOM
           }}
           linkWidth={(link) => Math.sqrt(link.value) * 2}
@@ -721,8 +709,6 @@ export default function Jobs({ params }) {
           d3VelocityDecay={0.3}
           onNodeHover={(node) => {
             if (node) {
-              setPinnedNode(null);
-              setHoveredNode(node);
               setActiveNode(node);
             }
           }}

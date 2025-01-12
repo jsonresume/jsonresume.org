@@ -23,24 +23,24 @@ export default async function handler(req, res) {
 
   const resume = JSON.parse(data[0].resume);
 
-  // // Generate a natural language description of the resume
-  // // // const resumeCompletion = await openai.chat.completions.create({
-  // // //   model: 'gpt-3.5-turbo-16k',
-  // // //   messages: [
-  // // //     {
-  // // //       role: 'system',
-  // // //       content:
-  // // //         "You are a professional resume analyzer. Create a detailed professional summary that describes this candidate's background, skills, and experience in natural language. Focus on their expertise, achievements, and what makes them unique. Write it in a style similar to job descriptions to optimize for semantic matching. Do not include the candidates name. Make sure to include everything significant to the users career. Describe the type of industries they have experience in.",
-  // // //     },
-  // // //     {
-  // // //       role: 'user',
-  // // //       content: JSON.stringify(resume),
-  // // //     },
-  // // //   ],
-  // // //   temperature: 0.85,
-  // // // });
+  // Generate a natural language description of the resume
+  const resumeCompletion = await openai.chat.completions.create({
+    model: 'gpt-3.5-turbo-16k',
+    messages: [
+      {
+        role: 'system',
+        content:
+          "You are a professional resume analyzer. Create a detailed professional summary that describes this candidate's background, skills, and experience in natural language. Focus on their expertise, achievements, and what makes them unique. Write it in a style similar to job descriptions to optimize for semantic matching. Do not include the candidates name. Make sure to include everything significant to the users career. Describe the type of industries they have experience in.",
+      },
+      {
+        role: 'user',
+        content: JSON.stringify(resume),
+      },
+    ],
+    temperature: 0.85,
+  });
 
-  // // // const resumeDescription = resumeCompletion.choices[0].message.content;
+  const resumeDescription = resumeCompletion.choices[0].message.content;
   console.log({ resumeDescription });
 
   const completion = await openai.embeddings.create({
