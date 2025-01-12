@@ -67,7 +67,7 @@ export default async function handler(req, res) {
   let embedding = completion.data[0].embedding;
   if (embedding.length < desiredLength) {
     embedding = embedding.concat(
-      Array(desiredLength - embedding.length).fill(0),
+      Array(desiredLength - embedding.length).fill(0)
     );
   }
 
@@ -137,24 +137,21 @@ export default async function handler(req, res) {
       // Process other jobs sequentially, each one only looking at previously processed jobs
       ...otherJobs.reduce((links, lessRelevantJob, index) => {
         const lessRelevantVector = JSON.parse(lessRelevantJob.embedding_v5);
-        
+
         // Jobs to compare against: top jobs + already processed less relevant jobs
-        const availableJobs = [
-          ...topJobs,
-          ...otherJobs.slice(0, index)
-        ];
-        
+        const availableJobs = [...topJobs, ...otherJobs.slice(0, index)];
+
         const mostSimilarJob = availableJobs.reduce(
           (best, current) => {
             const similarity = cosineSimilarity(
               lessRelevantVector,
-              JSON.parse(current.embedding_v5),
+              JSON.parse(current.embedding_v5)
             );
             return similarity > best.similarity
               ? { job: current, similarity }
               : best;
           },
-          { job: null, similarity: -1 },
+          { job: null, similarity: -1 }
         );
 
         if (mostSimilarJob.job) {
@@ -164,7 +161,7 @@ export default async function handler(req, res) {
             value: mostSimilarJob.similarity,
           });
         }
-        
+
         return links;
       }, []),
     ],

@@ -32,7 +32,9 @@ const formatTooltip = (jobInfo) => {
     `${jobInfo.title || 'Untitled'} at ${jobInfo.company || 'Unknown Company'}`,
     jobInfo.remote ? `${jobInfo.remote} Remote` : '',
     jobInfo.location && jobInfo.location.city
-      ? `Location: ${jobInfo.location.city}${jobInfo.location.region ? `, ${jobInfo.location.region}` : ''}`
+      ? `Location: ${jobInfo.location.city}${
+          jobInfo.location.region ? `, ${jobInfo.location.region}` : ''
+        }`
       : '',
     `Type: ${jobInfo.type || 'Not specified'}`,
     '',
@@ -174,12 +176,12 @@ export default function Jobs({ params }) {
         newReadJobs.add(jobId);
         localStorage.setItem(
           `readJobs_${username}`,
-          JSON.stringify([...newReadJobs]),
+          JSON.stringify([...newReadJobs])
         );
         return newReadJobs;
       });
     },
-    [username],
+    [username]
   );
 
   // Memoize node colors for salary view
@@ -196,13 +198,13 @@ export default function Jobs({ params }) {
         const darkBlue = [30, 64, 175]; // bg-blue-800
 
         const r = Math.round(
-          lightBlue[0] + (darkBlue[0] - lightBlue[0]) * percentage,
+          lightBlue[0] + (darkBlue[0] - lightBlue[0]) * percentage
         );
         const g = Math.round(
-          lightBlue[1] + (darkBlue[1] - lightBlue[1]) * percentage,
+          lightBlue[1] + (darkBlue[1] - lightBlue[1]) * percentage
         );
         const b = Math.round(
-          lightBlue[2] + (darkBlue[2] - lightBlue[2]) * percentage,
+          lightBlue[2] + (darkBlue[2] - lightBlue[2]) * percentage
         );
 
         colors.set(id, `rgb(${r}, ${g}, ${b})`);
@@ -224,7 +226,7 @@ export default function Jobs({ params }) {
 
       return readJobs.has(node.id) ? '#f1f5f9' : '#fef9c3';
     },
-    [readJobs, filterText, filteredNodes, showSalaryGradient, nodeSalaryColors],
+    [readJobs, filterText, filteredNodes, showSalaryGradient, nodeSalaryColors]
   );
 
   const getNodeBackground = useCallback(
@@ -241,13 +243,13 @@ export default function Jobs({ params }) {
           const darkBlue = [30, 64, 175]; // bg-blue-800
 
           const r = Math.round(
-            lightBlue[0] + (darkBlue[0] - lightBlue[0]) * percentage,
+            lightBlue[0] + (darkBlue[0] - lightBlue[0]) * percentage
           );
           const g = Math.round(
-            lightBlue[1] + (darkBlue[1] - lightBlue[1]) * percentage,
+            lightBlue[1] + (darkBlue[1] - lightBlue[1]) * percentage
           );
           const b = Math.round(
-            lightBlue[2] + (darkBlue[2] - lightBlue[2]) * percentage,
+            lightBlue[2] + (darkBlue[2] - lightBlue[2]) * percentage
           );
 
           return `rgb(${r}, ${g}, ${b})`;
@@ -265,7 +267,7 @@ export default function Jobs({ params }) {
       jobInfo,
       parseSalary,
       salaryRange,
-    ],
+    ]
   );
 
   // Function to preload and cache image
@@ -293,13 +295,13 @@ export default function Jobs({ params }) {
             forceManyBody()
               .strength(-300) // Negative values repel nodes; adjust this value for more/less repulsion
               .distanceMax(600) // Maximum distance where the charge force is applied
-              .distanceMin(20), // Minimum distance where the charge force is applied
+              .distanceMin(20) // Minimum distance where the charge force is applied
           );
 
           // Add custom collision force
           fg.d3Force(
             'collide',
-            forceCollide().radius((node) => calculateCollisionRadius(node)),
+            forceCollide().radius((node) => calculateCollisionRadius(node))
           );
 
           setIsInitialized(true);
@@ -328,7 +330,7 @@ export default function Jobs({ params }) {
         setActiveNode(clickedNode);
       }
     },
-    [graphData],
+    [graphData]
   );
 
   useEffect(() => {
@@ -543,7 +545,7 @@ export default function Jobs({ params }) {
             // Calculate other node sizes based on relevance
             else {
               const jobIndex = [...mostRelevant, ...lessRelevant].findIndex(
-                (j) => j.uuid === node.id,
+                (j) => j.uuid === node.id
               );
               if (jobIndex !== -1) {
                 const maxSize = 36;
@@ -552,7 +554,7 @@ export default function Jobs({ params }) {
                 const totalJobs = mostRelevant.length + lessRelevant.length;
                 node.size = Math.max(
                   minSize,
-                  maxSize - (sizeRange * jobIndex) / totalJobs,
+                  maxSize - (sizeRange * jobIndex) / totalJobs
                 );
               }
             }
@@ -580,7 +582,7 @@ export default function Jobs({ params }) {
                   node.x - node.size,
                   node.y - node.size,
                   node.size * 2,
-                  node.size * 2,
+                  node.size * 2
                 );
                 ctx.strokeStyle = '#000';
                 ctx.lineWidth = 2;
@@ -610,7 +612,7 @@ export default function Jobs({ params }) {
             // Draw rank number for job nodes
             if (node.group !== -1) {
               const jobIndex = [...mostRelevant, ...lessRelevant].findIndex(
-                (j) => j.uuid === node.id,
+                (j) => j.uuid === node.id
               );
               if (jobIndex !== -1) {
                 const fontSize = Math.max(10, node.size * 0.8);
@@ -629,7 +631,7 @@ export default function Jobs({ params }) {
               ctx.font = `bold ${fontSize}px Sans-Serif`;
               const textWidth = ctx.measureText(label).width;
               const bckgDimensions = [textWidth, fontSize].map(
-                (n) => n + fontSize * 0.2,
+                (n) => n + fontSize * 0.2
               );
 
               // Draw background for label
@@ -642,7 +644,7 @@ export default function Jobs({ params }) {
                 node.y - bckgDimensions[1] * 2,
                 bckgDimensions[0],
                 bckgDimensions[1],
-                5,
+                5
               );
               ctx.fill();
               ctx.stroke();

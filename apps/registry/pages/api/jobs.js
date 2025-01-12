@@ -54,7 +54,7 @@ export default async function handler(req, res) {
 
   if (embedding.length < desiredLength) {
     embedding = embedding.concat(
-      Array(desiredLength - embedding.length).fill(0),
+      Array(desiredLength - embedding.length).fill(0)
     );
   }
 
@@ -110,7 +110,7 @@ export default async function handler(req, res) {
       oldest: oldestDate.toISOString(),
       newest: newestDate.toISOString(),
       daysBetween: Math.floor(
-        (newestDate - oldestDate) / (1000 * 60 * 60 * 24),
+        (newestDate - oldestDate) / (1000 * 60 * 60 * 24)
       ),
       validDatesCount: validDates.length,
       invalidDatesCount: jobsWithSimilarity.length - validDates.length,
@@ -121,8 +121,7 @@ export default async function handler(req, res) {
 
   const filteredJobs = jobsWithSimilarity.filter(
     (job) =>
-      new Date(job.created_at) >
-      new Date(Date.now() - 60 * 24 * 60 * 60 * 1000),
+      new Date(job.created_at) > new Date(Date.now() - 60 * 24 * 60 * 60 * 1000)
   );
 
   return res.status(200).send(filteredJobs);

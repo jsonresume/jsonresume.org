@@ -37,7 +37,7 @@ export async function GET(request) {
       .from('resumes')
       .select('username, embedding, resume')
       .not('embedding', 'is', null)
-      .neq('username', 'thomasdavis')  // Exclude thomasdavis from this query
+      .neq('username', 'thomasdavis') // Exclude thomasdavis from this query
       .limit(limit)
       .order('created_at', { ascending: false });
 
