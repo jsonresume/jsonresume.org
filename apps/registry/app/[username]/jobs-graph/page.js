@@ -111,6 +111,9 @@ export default function Jobs({ params }) {
 
   const [readJobs, setReadJobs] = useState(new Set());
 
+  const [filterText, setFilterText] = useState('');
+  const [filteredNodes, setFilteredNodes] = useState(new Set());
+
   // Load read jobs from localStorage on mount
   useEffect(() => {
     const storedReadJobs = localStorage.getItem(`readJobs_${username}`);
@@ -119,24 +122,67 @@ export default function Jobs({ params }) {
     }
   }, [username]);
 
-  const markJobAsRead = useCallback((jobId) => {
-    setReadJobs(prev => {
-      const newReadJobs = new Set(prev);
-      newReadJobs.add(jobId);
-      localStorage.setItem(`readJobs_${username}`, JSON.stringify([...newReadJobs]));
-      return newReadJobs;
+  useEffect(() => {
+    if (!filterText.trim() || !jobInfo) {
+      setFilteredNodes(new Set());
+      return;
+    }
+
+    const searchText = filterText.toLowerCase();
+    const matches = new Set();
+    
+    Object.entries(jobInfo).forEach(([id, job]) => {
+      const searchableText = [
+        job.title,
+        job.company,
+        job.description,
+        job.type,
+        job.location?.city,
+        job.location?.region,
+        job.skills?.map(s => s.name).join(' '),
+        job.qualifications?.join(' ')
+      ].filter(Boolean).join(' ').toLowerCase();
+
+      if (searchableText.includes(searchText)) {
+        matches.add(id);
+      }
     });
-  }, [username]);
 
-  const getNodeColor = useCallback((node) => {
-    if (node.group === -1) return '#666';
-    return readJobs.has(node.id) ? '#94a3b8' : '#3b82f6';
-  }, [readJobs]);
+    setFilteredNodes(matches);
+  }, [filterText, jobInfo]);
 
-  const getNodeBackground = useCallback((node) => {
-    if (node.group === -1) return '#fff';
-    return readJobs.has(node.id) ? '#f1f5f9' : '#eff6ff';
-  }, [readJobs]);
+  const markJobAsRead = useCallback(
+    (jobId) => {
+      setReadJobs((prev) => {
+        const newReadJobs = new Set(prev);
+        newReadJobs.add(jobId);
+        localStorage.setItem(
+          `readJobs_${username}`,
+          JSON.stringify([...newReadJobs]),
+        );
+        return newReadJobs;
+      });
+    },
+    [username],
+  );
+
+  const getNodeColor = useCallback(
+    (node) => {
+      if (node.group === -1) return '#666';
+      if (filterText && !filteredNodes.has(node.id)) return '#e2e8f0';
+      return readJobs.has(node.id) ? '#94a3b8' : '#f5d90a';
+    },
+    [readJobs, filterText, filteredNodes],
+  );
+
+  const getNodeBackground = useCallback(
+    (node) => {
+      if (node.group === -1) return '#fff';
+      if (filterText && !filteredNodes.has(node.id)) return '#f8fafc';
+      return readJobs.has(node.id) ? '#f1f5f9' : '#fef9c3';
+    },
+    [readJobs, filterText, filteredNodes],
+  );
 
   // Function to preload and cache image
   const getCachedImage = (src) => {
@@ -188,33 +234,36 @@ export default function Jobs({ params }) {
     }
   }, []);
 
-  const handleCanvasClick = useCallback((event) => {
-    if (!graphRef.current) return;
-    
-    const canvas = graphRef.current.canvas;
-    const rect = canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
+  const handleCanvasClick = useCallback(
+    (event) => {
+      if (!graphRef.current) return;
 
-    // Check if click is on a node
-    const clickedNode = graphData?.nodes.find((node) => {
-      const dx = x - node.x;
-      const dy = y - node.y;
-      return Math.sqrt(dx * dx + dy * dy) <= node.size;
-    });
+      const canvas = graphRef.current.canvas;
+      const rect = canvas.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
 
-    if (clickedNode) {
-      setPinnedNode(clickedNode);
-      setHoveredNode(null);
-      setActiveNode(clickedNode);
-    }
-  }, [graphData]);
+      // Check if click is on a node
+      const clickedNode = graphData?.nodes.find((node) => {
+        const dx = x - node.x;
+        const dy = y - node.y;
+        return Math.sqrt(dx * dx + dy * dy) <= node.size;
+      });
+
+      if (clickedNode) {
+        setPinnedNode(clickedNode);
+        setHoveredNode(null);
+        setActiveNode(clickedNode);
+      }
+    },
+    [graphData],
+  );
 
   useEffect(() => {
     if (graphRef.current?.canvas && dimensions.width && dimensions.height) {
       const canvas = graphRef.current.canvas;
       canvas.addEventListener('click', handleCanvasClick);
-      
+
       return () => {
         canvas.removeEventListener('click', handleCanvasClick);
       };
@@ -285,10 +334,19 @@ export default function Jobs({ params }) {
       {/* {!jobs && <Loading />} */}
       <div className="mt-4 text-lg">
         {jobs ? (
-          <p>
-            Found {jobs.length} related jobs ({mostRelevant.length} highly
-            relevant)
-          </p>
+          <div className="flex flex-col gap-4">
+            <p>
+              Found {jobs.length} related jobs ({mostRelevant.length} highly
+              relevant)
+            </p>
+            <input
+              type="text"
+              placeholder="Filter jobs by title, company, skills..."
+              value={filterText}
+              onChange={(e) => setFilterText(e.target.value)}
+              className="w-full max-w-xl px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
         ) : (
           <p>Loading jobs...</p>
         )}
@@ -318,14 +376,22 @@ export default function Jobs({ params }) {
             }}
           >
             <div style={{ position: 'relative' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  marginBottom: '10px',
+                }}
+              >
                 <button
                   onClick={() => markJobAsRead(activeNode.id)}
                   style={{
                     padding: '4px 8px',
                     borderRadius: '4px',
                     border: '1px solid #ccc',
-                    backgroundColor: readJobs.has(activeNode.id) ? '#e2e8f0' : '#fff',
+                    backgroundColor: readJobs.has(activeNode.id)
+                      ? '#e2e8f0'
+                      : '#fff',
                     cursor: 'pointer',
                     fontSize: '12px',
                   }}
@@ -368,8 +434,12 @@ export default function Jobs({ params }) {
           nodeVal={(node) => node.size}
           nodeCanvasObjectMode={() => 'after'}
           nodeCanvasObject={(node, ctx) => {
-            // Calculate node size based on relevance
-            if (node.group !== -1) {
+            // Set resume node size
+            if (node.group === -1) {
+              node.size = 80;
+            }
+            // Calculate other node sizes based on relevance
+            else {
               const jobIndex = [...mostRelevant, ...lessRelevant].findIndex(
                 (j) => j.uuid === node.id,
               );
