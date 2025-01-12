@@ -99,6 +99,7 @@ export default function Jobs({ params }) {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const graphRef = useRef();
   const canvasRef = useRef(null);
+  const [activeNode, setActiveNode] = useState(null);
   const [hoveredNode, setHoveredNode] = useState(null);
   const [pinnedNode, setPinnedNode] = useState(null);
   const [jobInfo, setJobInfo] = useState({}); // Store parsed job info
@@ -176,6 +177,7 @@ export default function Jobs({ params }) {
     if (clickedNode) {
       setPinnedNode(clickedNode);
       setHoveredNode(null);
+      setActiveNode(clickedNode);
     }
   }, [graphData]);
 
@@ -271,7 +273,7 @@ export default function Jobs({ params }) {
           position: 'relative',
         }}
       >
-        {(hoveredNode || pinnedNode) && (
+        {activeNode && (
           <div
             style={{
               position: 'absolute',
@@ -291,6 +293,7 @@ export default function Jobs({ params }) {
                 onClick={() => {
                   setPinnedNode(null);
                   setHoveredNode(null);
+                  setActiveNode(null);
                 }}
                 style={{
                   position: 'absolute',
@@ -312,7 +315,7 @@ export default function Jobs({ params }) {
               >
                 ×
               </button>
-              {formatTooltip(jobInfo[pinnedNode?.id || hoveredNode?.id])}
+              {formatTooltip(jobInfo[activeNode.id])}
             </div>
           </div>
         )}
@@ -324,8 +327,7 @@ export default function Jobs({ params }) {
             if (node) {
               setPinnedNode(null);
               setHoveredNode(node);
-            } else if (!pinnedNode) {
-              setHoveredNode(null);
+              setActiveNode(node);
             }
           }}
           nodeColor={(node) => node.color}
