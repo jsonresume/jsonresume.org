@@ -400,6 +400,14 @@ export default function Jobs({ params }) {
             <p className="text-lg text-gray-600">
               This graph shows jobs that match your resume. The closer a job matches your skills and experience, the larger and more connected its circle will be.
             </p>
+            <div className="mt-4 text-sm text-gray-500 space-y-2">
+              <p>
+                Jobs are sourced from Hacker News "Who is Hiring?" posts. The matching process takes a moment to analyze each position against your resume.
+              </p>
+              <p>
+                Note: This is an experimental feature and may not catch every job or skill match perfectly.
+              </p>
+            </div>
           </div>
 
           <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
@@ -451,6 +459,9 @@ export default function Jobs({ params }) {
 
         <div className="mt-4 text-lg">
           <p>Loading jobs graph...</p>
+          <p className="mt-2 text-sm text-gray-500">
+            This might take a minute as we analyze job matches. Thanks for your patience!
+          </p>
         </div>
         <div
           id="graph-container"
@@ -480,6 +491,14 @@ export default function Jobs({ params }) {
           <p className="text-lg text-gray-600">
             This graph shows jobs that match your resume. The closer a job matches your skills and experience, the larger and more connected its circle will be.
           </p>
+          <div className="mt-4 text-sm text-gray-500 space-y-2">
+            <p>
+              Jobs are sourced from Hacker News "Who is Hiring?" posts. The matching process takes a moment to analyze each position against your resume.
+            </p>
+            <p>
+              Note: This is an experimental feature and may not catch every job or skill match perfectly.
+            </p>
+          </div>
         </div>
 
         <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
