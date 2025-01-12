@@ -1,6 +1,7 @@
 'use client';
 
 import axios from 'axios';
+import Link from 'next/link';
 import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import { forceCollide, forceManyBody } from 'd3-force';
 import ForceGraph2D from 'react-force-graph-2d';
@@ -381,6 +382,18 @@ export default function Jobs({ params }) {
   if (isLoading || !graphData) {
     return (
       <div className="p-6">
+        <nav className="mb-6">
+          <Link
+            href={`/${username}`}
+            className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
+          >
+            <svg className="w-4 h-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
+            </svg>
+            Back to {username}'s Profile
+          </Link>
+        </nav>
+
         <div className="space-y-6 mb-8 max-w-4xl">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Job Matches Graph</h1>
@@ -449,6 +462,18 @@ export default function Jobs({ params }) {
 
   return (
     <div className="p-6">
+      <nav className="mb-6">
+        <Link
+          href={`/${username}`}
+          className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
+        >
+          <svg className="w-4 h-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
+          </svg>
+          Back to {username}'s Profile
+        </Link>
+      </nav>
+
       <div className="space-y-6 mb-8 max-w-4xl">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Job Matches Graph</h1>
