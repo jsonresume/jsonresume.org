@@ -46,7 +46,7 @@ export default async function handler(req, res) {
   });
 
   const resumeDescription = resumeCompletion.choices[0].message.content;
-
+  console.log({ resumeDescription });
   //   const resumeDescription = `
   // Professional Summary
   // Dynamic and accomplished Full-Stack Web Developer with extensive experience in building scalable, user-focused applications from the ground up, particularly in startup environments. Adept at wearing multiple hats to deliver robust, product-driven solutions that prioritize user feedback and high-impact results. A recognized leader in the open-source community and a trusted contributor to several high-profile initiatives, with a proven track record of driving innovation and collaboration.
@@ -67,7 +67,7 @@ export default async function handler(req, res) {
   let embedding = completion.data[0].embedding;
   if (embedding.length < desiredLength) {
     embedding = embedding.concat(
-      Array(desiredLength - embedding.length).fill(0)
+      Array(desiredLength - embedding.length).fill(0),
     );
   }
 
@@ -145,13 +145,13 @@ export default async function handler(req, res) {
           (best, current) => {
             const similarity = cosineSimilarity(
               lessRelevantVector,
-              JSON.parse(current.embedding_v5)
+              JSON.parse(current.embedding_v5),
             );
             return similarity > best.similarity
               ? { job: current, similarity }
               : best;
           },
-          { job: null, similarity: -1 }
+          { job: null, similarity: -1 },
         );
 
         if (mostSimilarJob.job) {
