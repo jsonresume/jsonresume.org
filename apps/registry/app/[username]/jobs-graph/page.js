@@ -109,6 +109,35 @@ export default function Jobs({ params }) {
   const [mostRelevant, setMostRelevant] = useState([]);
   const [lessRelevant, setLessRelevant] = useState([]);
 
+  const [readJobs, setReadJobs] = useState(new Set());
+
+  // Load read jobs from localStorage on mount
+  useEffect(() => {
+    const storedReadJobs = localStorage.getItem(`readJobs_${username}`);
+    if (storedReadJobs) {
+      setReadJobs(new Set(JSON.parse(storedReadJobs)));
+    }
+  }, [username]);
+
+  const markJobAsRead = useCallback((jobId) => {
+    setReadJobs(prev => {
+      const newReadJobs = new Set(prev);
+      newReadJobs.add(jobId);
+      localStorage.setItem(`readJobs_${username}`, JSON.stringify([...newReadJobs]));
+      return newReadJobs;
+    });
+  }, [username]);
+
+  const getNodeColor = useCallback((node) => {
+    if (node.group === -1) return '#666';
+    return readJobs.has(node.id) ? '#94a3b8' : '#3b82f6';
+  }, [readJobs]);
+
+  const getNodeBackground = useCallback((node) => {
+    if (node.group === -1) return '#fff';
+    return readJobs.has(node.id) ? '#f1f5f9' : '#eff6ff';
+  }, [readJobs]);
+
   // Function to preload and cache image
   const getCachedImage = (src) => {
     if (!imageCache.current.has(src)) {
@@ -289,32 +318,44 @@ export default function Jobs({ params }) {
             }}
           >
             <div style={{ position: 'relative' }}>
-              <button
-                onClick={() => {
-                  setPinnedNode(null);
-                  setHoveredNode(null);
-                  setActiveNode(null);
-                }}
-                style={{
-                  position: 'absolute',
-                  top: '-5px',
-                  right: '-5px',
-                  width: '20px',
-                  height: '20px',
-                  borderRadius: '50%',
-                  border: '1px solid #000',
-                  backgroundColor: 'white',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '12px',
-                  padding: 0,
-                  lineHeight: 1,
-                }}
-              >
-                ×
-              </button>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+                <button
+                  onClick={() => markJobAsRead(activeNode.id)}
+                  style={{
+                    padding: '4px 8px',
+                    borderRadius: '4px',
+                    border: '1px solid #ccc',
+                    backgroundColor: readJobs.has(activeNode.id) ? '#e2e8f0' : '#fff',
+                    cursor: 'pointer',
+                    fontSize: '12px',
+                  }}
+                >
+                  {readJobs.has(activeNode.id) ? 'Read ✓' : 'Mark as Read'}
+                </button>
+                <button
+                  onClick={() => {
+                    setPinnedNode(null);
+                    setHoveredNode(null);
+                    setActiveNode(null);
+                  }}
+                  style={{
+                    width: '20px',
+                    height: '20px',
+                    borderRadius: '50%',
+                    border: '1px solid #000',
+                    backgroundColor: 'white',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '12px',
+                    padding: 0,
+                    lineHeight: 1,
+                  }}
+                >
+                  ×
+                </button>
+              </div>
               {formatTooltip(jobInfo[activeNode.id])}
             </div>
           </div>
@@ -323,28 +364,11 @@ export default function Jobs({ params }) {
           ref={graphRef}
           graphData={graphData}
           nodeLabel={null}
-          onNodeHover={(node) => {
-            if (node) {
-              setPinnedNode(null);
-              setHoveredNode(node);
-              setActiveNode(node);
-            }
-          }}
-          nodeColor={(node) => node.color}
+          nodeColor={(node) => getNodeColor(node)}
           nodeVal={(node) => node.size}
           nodeCanvasObjectMode={() => 'after'}
           nodeCanvasObject={(node, ctx) => {
-            ctx.beginPath();
-            ctx.arc(
-              node.x,
-              node.y,
-              calculateCollisionRadius(node),
-              0,
-              2 * Math.PI,
-            );
-            ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
-            ctx.stroke();
-
+            // Calculate node size based on relevance
             if (node.group !== -1) {
               const jobIndex = [...mostRelevant, ...lessRelevant].findIndex(
                 (j) => j.uuid === node.id,
@@ -361,7 +385,15 @@ export default function Jobs({ params }) {
               }
             }
 
-            // Draw node with border
+            // Draw node
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, node.size, 0, 2 * Math.PI);
+            ctx.fillStyle = getNodeBackground(node);
+            ctx.fill();
+            ctx.strokeStyle = getNodeColor(node);
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
             if (node.group === -1 && node.image) {
               // Resume node with image
               const img = getCachedImage(node.image);
@@ -386,7 +418,7 @@ export default function Jobs({ params }) {
                 // Draw default circle while image is loading
                 ctx.beginPath();
                 ctx.arc(node.x, node.y, node.size, 0, 2 * Math.PI);
-                ctx.fillStyle = node.color;
+                ctx.fillStyle = getNodeColor(node);
                 ctx.fill();
                 ctx.strokeStyle = '#000';
                 ctx.lineWidth = 2;
@@ -396,7 +428,7 @@ export default function Jobs({ params }) {
               // Default node rendering for all other cases
               ctx.beginPath();
               ctx.arc(node.x, node.y, node.size, 0, 2 * Math.PI);
-              ctx.fillStyle = node.color;
+              ctx.fillStyle = getNodeColor(node);
               ctx.fill();
               ctx.strokeStyle = '#000';
               ctx.lineWidth = 1;
@@ -474,6 +506,13 @@ export default function Jobs({ params }) {
           forceEngine="d3"
           d3AlphaDecay={0.02}
           d3VelocityDecay={0.3}
+          onNodeHover={(node) => {
+            if (node) {
+              setPinnedNode(null);
+              setHoveredNode(node);
+              setActiveNode(node);
+            }
+          }}
         />
       </div>
     </div>
