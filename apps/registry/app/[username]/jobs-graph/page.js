@@ -381,6 +381,61 @@ export default function Jobs({ params }) {
   if (isLoading || !graphData) {
     return (
       <div className="p-6">
+        <div className="space-y-6 mb-8 max-w-4xl">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Job Matches Graph</h1>
+            <p className="text-lg text-gray-600">
+              This graph shows jobs that match your resume. The closer a job matches your skills and experience, the larger and more connected its circle will be.
+            </p>
+          </div>
+
+          <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">How to Use the Graph</h2>
+            
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <h3 className="font-medium text-gray-900 mb-2">Reading the Graph</h3>
+                <ul className="space-y-2 text-gray-600">
+                  <li className="flex items-start">
+                    <span className="text-blue-500 mr-2">•</span>
+                    Your resume sits in the center
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-blue-500 mr-2">•</span>
+                    Bigger circles mean closer skill matches
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-blue-500 mr-2">•</span>
+                    Numbers show match rank (1 is the best match)
+                  </li>
+                </ul>
+              </div>
+              
+              <div>
+                <h3 className="font-medium text-gray-900 mb-2">Tools to Help You</h3>
+                <ul className="space-y-2 text-gray-600">
+                  <li className="flex items-start">
+                    <span className="text-blue-500 mr-2">•</span>
+                    Click any job to see its details
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-blue-500 mr-2">•</span>
+                    Search helps find specific jobs
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-blue-500 mr-2">•</span>
+                    Salary view shows pay ranges in blue
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-blue-500 mr-2">•</span>
+                    Mark jobs as read to keep track
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="mt-4 text-lg">
           <p>Loading jobs graph...</p>
         </div>
@@ -404,7 +459,7 @@ export default function Jobs({ params }) {
 
         <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">How to Use the Graph</h2>
-          
+            
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <h3 className="font-medium text-gray-900 mb-2">Reading the Graph</h3>
@@ -423,7 +478,7 @@ export default function Jobs({ params }) {
                 </li>
               </ul>
             </div>
-            
+              
             <div>
               <h3 className="font-medium text-gray-900 mb-2">Tools to Help You</h3>
               <ul className="space-y-2 text-gray-600">
