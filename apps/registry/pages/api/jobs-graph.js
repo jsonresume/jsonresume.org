@@ -46,7 +46,7 @@ export default async function handler(req, res) {
   });
 
   const resumeDescription = resumeCompletion.choices[0].message.content;
-
+  console.log({ resumeDescription });
   //   const resumeDescription = `
   // Professional Summary
   // Dynamic and accomplished Full-Stack Web Developer with extensive experience in building scalable, user-focused applications from the ground up, particularly in startup environments. Adept at wearing multiple hats to deliver robust, product-driven solutions that prioritize user feedback and high-impact results. A recognized leader in the open-source community and a trusted contributor to several high-profile initiatives, with a proven track record of driving innovation and collaboration.

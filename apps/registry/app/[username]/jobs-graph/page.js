@@ -1,6 +1,7 @@
 'use client';
 
 import axios from 'axios';
+import Link from 'next/link';
 import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import { forceCollide, forceManyBody } from 'd3-force';
 import ForceGraph2D from 'react-force-graph-2d';
@@ -381,8 +382,108 @@ export default function Jobs({ params }) {
   if (isLoading || !graphData) {
     return (
       <div className="p-6">
+        <nav className="mb-6">
+          <Link
+            href={`/${username}`}
+            className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
+          >
+            <svg
+              className="w-4 h-4 mr-1"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                clipRule="evenodd"
+              />
+            </svg>
+            Back to {username}'s Profile
+          </Link>
+        </nav>
+
+        <div className="space-y-6 mb-8 max-w-4xl">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              Job Matches Graph
+            </h1>
+            <p className="text-lg text-gray-600">
+              This graph shows jobs that match your resume. The closer a job
+              matches your skills and experience, the larger and more connected
+              its circle will be.
+            </p>
+            <div className="mt-4 text-sm text-gray-500 space-y-2">
+              <p>
+                Jobs are sourced from Hacker News "Who is Hiring?" posts. The
+                matching process takes a moment to analyze each position against
+                your resume.
+              </p>
+              <p>
+                Note: This is an experimental feature and may not catch every
+                job or skill match perfectly.
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+              How to Use the Graph
+            </h2>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <h3 className="font-medium text-gray-900 mb-2">
+                  Reading the Graph
+                </h3>
+                <ul className="space-y-2 text-gray-600">
+                  <li className="flex items-start">
+                    <span className="text-blue-500 mr-2">•</span>
+                    Your resume sits in the center
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-blue-500 mr-2">•</span>
+                    Bigger circles mean closer skill matches
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-blue-500 mr-2">•</span>
+                    Numbers show match rank (1 is the best match)
+                  </li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="font-medium text-gray-900 mb-2">
+                  Tools to Help You
+                </h3>
+                <ul className="space-y-2 text-gray-600">
+                  <li className="flex items-start">
+                    <span className="text-blue-500 mr-2">•</span>
+                    Click any job to see its details
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-blue-500 mr-2">•</span>
+                    Search helps find specific jobs
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-blue-500 mr-2">•</span>
+                    Salary view shows pay ranges in blue
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-blue-500 mr-2">•</span>
+                    Mark jobs as read to keep track
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="mt-4 text-lg">
           <p>Loading jobs graph...</p>
+          <p className="mt-2 text-sm text-gray-500">
+            This might take a minute as we analyze job matches. Thanks for your
+            patience!
+          </p>
         </div>
         <div
           id="graph-container"
@@ -394,10 +495,97 @@ export default function Jobs({ params }) {
 
   return (
     <div className="p-6">
-      {/* <Hero
-        title="Jobs graph"
-        description="This page shows the most related jobs to you in a directed force graph. Jobs with the most relevance appear linked to your resume. Less relevant jobs are connected to other jobs instead of directly to your resume."
-      /> */}
+      <nav className="mb-6">
+        <Link
+          href={`/${username}`}
+          className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
+        >
+          <svg className="w-4 h-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+            <path
+              fillRule="evenodd"
+              d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+              clipRule="evenodd"
+            />
+          </svg>
+          Back to {username}'s Profile
+        </Link>
+      </nav>
+
+      <div className="space-y-6 mb-8 max-w-4xl">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Job Matches Graph
+          </h1>
+          <p className="text-lg text-gray-600">
+            This graph shows jobs that match your resume. The closer a job
+            matches your skills and experience, the larger and more connected
+            its circle will be.
+          </p>
+          <div className="mt-4 text-sm text-gray-500 space-y-2">
+            <p>
+              Jobs are sourced from Hacker News "Who is Hiring?" posts. The
+              matching process takes a moment to analyze each position against
+              your resume.
+            </p>
+            <p>
+              Note: This is an experimental feature and may not catch every job
+              or skill match perfectly.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">
+            How to Use the Graph
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <h3 className="font-medium text-gray-900 mb-2">
+                Reading the Graph
+              </h3>
+              <ul className="space-y-2 text-gray-600">
+                <li className="flex items-start">
+                  <span className="text-blue-500 mr-2">•</span>
+                  Your resume sits in the center
+                </li>
+                <li className="flex items-start">
+                  <span className="text-blue-500 mr-2">•</span>
+                  Bigger circles mean closer skill matches
+                </li>
+                <li className="flex items-start">
+                  <span className="text-blue-500 mr-2">•</span>
+                  Numbers show match rank (1 is the best match)
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="font-medium text-gray-900 mb-2">
+                Tools to Help You
+              </h3>
+              <ul className="space-y-2 text-gray-600">
+                <li className="flex items-start">
+                  <span className="text-blue-500 mr-2">•</span>
+                  Click any job to see its details
+                </li>
+                <li className="flex items-start">
+                  <span className="text-blue-500 mr-2">•</span>
+                  Search helps find specific jobs
+                </li>
+                <li className="flex items-start">
+                  <span className="text-blue-500 mr-2">•</span>
+                  Salary view shows pay ranges in blue
+                </li>
+                <li className="flex items-start">
+                  <span className="text-blue-500 mr-2">•</span>
+                  Mark jobs as read to keep track
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* {!jobs && <Loading />} */}
       <div className="mt-4 text-lg">
