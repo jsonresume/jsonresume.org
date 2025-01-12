@@ -76,7 +76,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libasound2 libicu-dev libffi-dev libx264-dev
+          sudo apt-get install -y libasound2 libicu-dev libffi-dev libx264-dev liboss4-salsa-asound2
       - run: pnpm install
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
