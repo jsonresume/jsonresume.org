@@ -534,6 +534,28 @@ export default function Jobs({ params }) {
                 </button>
               </div>
               {formatTooltip(jobInfo[activeNode.id])}
+              <div className="mt-2 flex items-center justify-between gap-2">
+                <div className="flex-1">
+                  <p className="text-sm text-gray-500">
+                    {jobInfo[activeNode.id]?.location?.city || 'Remote'}{' '}
+                    {jobInfo[activeNode.id]?.type || ''}
+                  </p>
+                </div>
+                <a
+                  href={`/jobs/${activeNode.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3 py-1 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  View Details
+                </a>
+              </div>
+              {jobInfo[activeNode.id]?.salary && (
+                <p className="text-sm text-gray-500 mt-1">
+                  Salary: {jobInfo[activeNode.id].salary}
+                </p>
+              )}
             </div>
           </div>
         )}
