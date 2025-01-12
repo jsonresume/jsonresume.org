@@ -49,25 +49,6 @@ const formatTooltip = (jobInfo) => {
   return parts.filter(Boolean).join('\n');
 };
 
-// Utility functions for vector similarity
-const cosineSimilarity = (a, b) => {
-  if (!Array.isArray(a) || !Array.isArray(b)) {
-    console.log('Invalid vectors:', { a, b });
-    return 0;
-  }
-  if (a.length !== b.length) {
-    console.log('Vector length mismatch:', {
-      aLength: a.length,
-      bLength: b.length,
-    });
-    return 0;
-  }
-  const dotProduct = a.reduce((sum, _, i) => sum + a[i] * b[i], 0);
-  const magnitudeA = Math.sqrt(a.reduce((sum, val) => sum + val * val, 0));
-  const magnitudeB = Math.sqrt(b.reduce((sum, val) => sum + val * val, 0));
-  return dotProduct / (magnitudeA * magnitudeB);
-};
-
 const calculateCollisionRadius = (node) => {
   // Replace this with your logic to determine node size
   const nodeSize = node.size || 1; // Default size if not specified
@@ -321,21 +302,11 @@ export default function Jobs({ params }) {
             forceCollide().radius((node) => calculateCollisionRadius(node)),
           );
 
-          // Update link distance
-          // fg.d3Force(
-          //   'link',
-          //   forceLink().distance((link) => {
-          //     const sourceSize = link.source.size || 1;
-          //     const targetSize = link.target.size || 1;
-          //     const baseDistance = 150; // Base distance between nodes
-          //     return baseDistance + sourceSize + targetSize;
-          //   }),
-          // );
           setIsInitialized(true);
         }
       }
     }
-  }, []);
+  }, [isInitialized]);
 
   const handleCanvasClick = useCallback(
     (event) => {
