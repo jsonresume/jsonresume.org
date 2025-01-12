@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import axios from 'axios';
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import Hero from '../../../src/ui/Hero';
 import Loading from '../../components/Loading';
 import {
@@ -217,45 +217,42 @@ export default function Jobs({ params }) {
     [username],
   );
 
+  // Memoize node colors for salary view
+  const nodeSalaryColors = useMemo(() => {
+    if (!showSalaryGradient || !jobInfo) return new Map();
+    
+    const colors = new Map();
+    Object.entries(jobInfo).forEach(([id, job]) => {
+      const salary = parseSalary(job.salary);
+      if (salary) {
+        const percentage = (salary - salaryRange.min) / (salaryRange.max - salaryRange.min);
+        const lightBlue = [219, 234, 254]; // bg-blue-100
+        const darkBlue = [30, 64, 175];    // bg-blue-800
+        
+        const r = Math.round(lightBlue[0] + (darkBlue[0] - lightBlue[0]) * percentage);
+        const g = Math.round(lightBlue[1] + (darkBlue[1] - lightBlue[1]) * percentage);
+        const b = Math.round(lightBlue[2] + (darkBlue[2] - lightBlue[2]) * percentage);
+        
+        colors.set(id, `rgb(${r}, ${g}, ${b})`);
+      } else {
+        colors.set(id, '#e2e8f0'); // Light gray for no salary
+      }
+    });
+    return colors;
+  }, [showSalaryGradient, jobInfo, parseSalary, salaryRange]);
+
   const getNodeColor = useCallback(
     (node) => {
-      console.log('Getting color for node:', {
-        id: node.id,
-        showSalary: showSalaryGradient,
-        job: jobInfo[node.id],
-      });
-
       if (node.group === -1) return '#fff';
       if (filterText && !filteredNodes.has(node.id)) return '#f8fafc';
       
-      if (showSalaryGradient && jobInfo[node.id]) {
-        const salary = parseSalary(jobInfo[node.id].salary);
-        console.log('Parsed salary:', {
-          nodeId: node.id,
-          rawSalary: jobInfo[node.id].salary,
-          parsed: salary,
-          range: salaryRange
-        });
-
-        if (salary) {
-          const percentage = (salary - salaryRange.min) / (salaryRange.max - salaryRange.min);
-          const lightBlue = [219, 234, 254]; // bg-blue-100
-          const darkBlue = [30, 64, 175];    // bg-blue-800
-          
-          const r = Math.round(lightBlue[0] + (darkBlue[0] - lightBlue[0]) * percentage);
-          const g = Math.round(lightBlue[1] + (darkBlue[1] - lightBlue[1]) * percentage);
-          const b = Math.round(lightBlue[2] + (darkBlue[2] - lightBlue[2]) * percentage);
-          
-          const color = `rgb(${r}, ${g}, ${b})`;
-          console.log('Generated color:', { salary, percentage, color });
-          return color;
-        }
-        return '#e2e8f0'; // Light gray for no salary
+      if (showSalaryGradient) {
+        return nodeSalaryColors.get(node.id) || '#e2e8f0';
       }
       
       return readJobs.has(node.id) ? '#f1f5f9' : '#fef9c3';
     },
-    [readJobs, filterText, filteredNodes, showSalaryGradient, jobInfo, parseSalary, salaryRange],
+    [readJobs, filterText, filteredNodes, showSalaryGradient, nodeSalaryColors],
   );
 
   const getNodeBackground = useCallback(
