@@ -96,12 +96,11 @@ export default function Jobs({ params }) {
   const [isLoading, setIsLoading] = useState(true);
   const [isInitialized, setIsInitialized] = useState(false); // Track if initialized
 
-  const [dimensions, setDimensions] = useState({
-    width: DEFAULT_WIDTH,
-    height: DEFAULT_HEIGHT,
-  });
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const graphRef = useRef();
+  const canvasRef = useRef(null);
   const [hoveredNode, setHoveredNode] = useState(null);
+  const [pinnedNode, setPinnedNode] = useState(null);
   const [jobInfo, setJobInfo] = useState({}); // Store parsed job info
   const [graphData, setGraphData] = useState(null);
   const imageCache = useRef(new Map());
@@ -159,7 +158,38 @@ export default function Jobs({ params }) {
     }
   }, []);
 
-  // Update dimensions when component mounts
+  const handleCanvasClick = useCallback((event) => {
+    if (!graphRef.current) return;
+    
+    const canvas = graphRef.current.canvas;
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    // Check if click is on a node
+    const clickedNode = graphData?.nodes.find((node) => {
+      const dx = x - node.x;
+      const dy = y - node.y;
+      return Math.sqrt(dx * dx + dy * dy) <= node.size;
+    });
+
+    if (clickedNode) {
+      setPinnedNode(clickedNode);
+      setHoveredNode(null);
+    }
+  }, [graphData]);
+
+  useEffect(() => {
+    if (graphRef.current?.canvas && dimensions.width && dimensions.height) {
+      const canvas = graphRef.current.canvas;
+      canvas.addEventListener('click', handleCanvasClick);
+      
+      return () => {
+        canvas.removeEventListener('click', handleCanvasClick);
+      };
+    }
+  }, [handleCanvasClick, dimensions]);
+
   useEffect(() => {
     const container = document.getElementById('graph-container');
     if (container) {
@@ -235,14 +265,70 @@ export default function Jobs({ params }) {
 
       <div
         id="graph-container"
-        className="w-full h-[600px] bg-blue-50 relative mt-4"
+        style={{
+          width: '100%',
+          height: '600px',
+          position: 'relative',
+        }}
       >
+        {(hoveredNode || pinnedNode) && (
+          <div
+            style={{
+              position: 'absolute',
+              top: '20px',
+              right: '20px',
+              maxWidth: '300px',
+              backgroundColor: 'rgba(255, 255, 255, 0.95)',
+              padding: '10px',
+              borderRadius: '5px',
+              border: '1px solid #000',
+              zIndex: 1000,
+              whiteSpace: 'pre-wrap',
+            }}
+          >
+            <div style={{ position: 'relative' }}>
+              <button
+                onClick={() => {
+                  setPinnedNode(null);
+                  setHoveredNode(null);
+                }}
+                style={{
+                  position: 'absolute',
+                  top: '-5px',
+                  right: '-5px',
+                  width: '20px',
+                  height: '20px',
+                  borderRadius: '50%',
+                  border: '1px solid #000',
+                  backgroundColor: 'white',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '12px',
+                  padding: 0,
+                  lineHeight: 1,
+                }}
+              >
+                ×
+              </button>
+              {formatTooltip(jobInfo[pinnedNode?.id || hoveredNode?.id])}
+            </div>
+          </div>
+        )}
         <ForceGraph2D
           ref={graphRef}
           graphData={graphData}
-          backgroundColor="#EFF6FF"
+          nodeLabel={null}
+          onNodeHover={(node) => {
+            if (node) {
+              setPinnedNode(null);
+              setHoveredNode(node);
+            } else if (!pinnedNode) {
+              setHoveredNode(null);
+            }
+          }}
           nodeColor={(node) => node.color}
-          onNodeHover={setHoveredNode}
           nodeVal={(node) => node.size}
           nodeCanvasObjectMode={() => 'after'}
           nodeCanvasObject={(node, ctx) => {
@@ -262,7 +348,7 @@ export default function Jobs({ params }) {
                 (j) => j.uuid === node.id,
               );
               if (jobIndex !== -1) {
-                const maxSize = 22;
+                const maxSize = 36;
                 const minSize = 4;
                 const sizeRange = maxSize - minSize;
                 const totalJobs = mostRelevant.length + lessRelevant.length;
@@ -277,7 +363,7 @@ export default function Jobs({ params }) {
             if (node.group === -1 && node.image) {
               // Resume node with image
               const img = getCachedImage(node.image);
-              
+
               if (img.complete) {
                 ctx.save();
                 ctx.beginPath();
@@ -288,7 +374,7 @@ export default function Jobs({ params }) {
                   node.x - node.size,
                   node.y - node.size,
                   node.size * 2,
-                  node.size * 2
+                  node.size * 2,
                 );
                 ctx.strokeStyle = '#000';
                 ctx.lineWidth = 2;
@@ -370,96 +456,7 @@ export default function Jobs({ params }) {
             ctx.fill();
           }}
           onRenderFramePost={(ctx, rootGroup) => {
-            // Render tooltip after everything else
-            if (hoveredNode && hoveredNode.group !== -1) {
-              const info = jobInfo[hoveredNode.id];
-              if (!info) return;
-
-              const tooltip = formatTooltip(info);
-              const maxWidth = 300;
-              const fontSize = 12;
-              const lineHeight = fontSize + 4;
-              ctx.font = `${fontSize}px Sans-Serif`;
-
-              // Word wrap function
-              const wrapText = (text, maxWidth) => {
-                const words = text.split(' ');
-                const lines = [];
-                let currentLine = words[0];
-
-                for (let i = 1; i < words.length; i++) {
-                  const word = words[i];
-                  const width = ctx.measureText(currentLine + ' ' + word).width;
-                  if (width < maxWidth) {
-                    currentLine += ' ' + word;
-                  } else {
-                    lines.push(currentLine);
-                    currentLine = word;
-                  }
-                }
-                lines.push(currentLine);
-                return lines;
-              };
-
-              // Process each line of the tooltip
-              const rawLines = tooltip.split('\n');
-              const wrappedLines = [];
-              rawLines.forEach((line) => {
-                if (line.trim() === '') {
-                  wrappedLines.push('');
-                } else {
-                  wrappedLines.push(...wrapText(line, maxWidth - 20));
-                }
-              });
-
-              // Calculate tooltip dimensions
-              const tooltipWidth = Math.min(
-                maxWidth,
-                Math.max(
-                  ...wrappedLines.map((line) => ctx.measureText(line).width),
-                ) + 20,
-              );
-              const tooltipHeight = wrappedLines.length * lineHeight + 10;
-
-              // Position tooltip, checking for screen boundaries
-              let tooltipX = hoveredNode.x - tooltipWidth / 2;
-              let tooltipY =
-                hoveredNode.y - hoveredNode.size - tooltipHeight - 10;
-
-              // Check if tooltip would go off the top of the screen
-              if (tooltipY < 0) {
-                // Position below the node instead
-                tooltipY = hoveredNode.y + hoveredNode.size + 10;
-              }
-
-              // Check horizontal boundaries
-              if (tooltipX < 0) {
-                tooltipX = 0;
-              } else if (tooltipX + tooltipWidth > ctx.canvas.width) {
-                tooltipX = ctx.canvas.width - tooltipWidth;
-              }
-
-              // Draw tooltip background
-              ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
-              ctx.strokeStyle = '#000';
-              ctx.lineWidth = 1;
-              ctx.beginPath();
-              ctx.roundRect(tooltipX, tooltipY, tooltipWidth, tooltipHeight, 5);
-              ctx.fill();
-              ctx.stroke();
-
-              // Draw tooltip text
-              ctx.fillStyle = '#000';
-              ctx.textAlign = 'left';
-              ctx.textBaseline = 'top';
-              wrappedLines.forEach((line, i) => {
-                ctx.fillText(
-                  line,
-                  tooltipX + 10,
-                  tooltipY + 5 + i * lineHeight,
-                );
-              });
-            }
+            // No need to render tooltip in canvas anymore since we're using DOM
           }}
           linkWidth={(link) => Math.sqrt(link.value) * 2}
           linkColor="#cccccc"
