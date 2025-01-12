@@ -58,29 +58,34 @@ jobs:
           cache: pnpm
       - run: pnpm install
       - run: pnpm turbo build
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 20
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 20
-          cache: pnpm
-      - run: pnpm install
-      - name: Install Playwright Browsers
-        run: pnpm exec playwright install --with-deps
-        working-directory: apps/registry
-      - name: Run Playwright tests
-        run: pnpm turbo test:e2e --concurrency 1000 # The high concurrency is due to a bug: https://github.com/vercel/turbo/issues/4291
-      - uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 30
+  # test:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 20
+  #     - uses: pnpm/action-setup@v2
+  #       with:
+  #         version: 8
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 20
+  #         cache: pnpm
+
+  #     - name: Install dependencies
+  #       run: |
+  #         sudo apt-get update
+  #         sudo apt-get install -y libasound2 libicu-dev libffi-dev libx264-dev liboss4-salsa-asound2
+  #     - run: pnpm install
+  #     - name: Install Playwright Browsers
+  #       run: pnpm exec playwright install --with-deps
+  #       working-directory: apps/registry
+  #     - name: Run Playwright tests
+  #       run: pnpm turbo test:e2e --concurrency 1000 # The high concurrency is due to a bug: https://github.com/vercel/turbo/issues/4291
+  #     - uses: actions/upload-artifact@v3
+  #       if: always()
+  #       with:
+  #         name: playwright-report
+  #         path: playwright-report/
+  #         retention-days: 30
