@@ -1,25 +1,9 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import axios from 'axios';
 import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
-import Hero from '../../../src/ui/Hero';
-import Loading from '../../components/Loading';
-import {
-  forceSimulation,
-  forceCollide,
-  forceManyBody,
-  forceCenter,
-  forceLink,
-} from 'd3-force';
+import { forceCollide, forceManyBody } from 'd3-force';
 import ForceGraph2D from 'react-force-graph-2d';
-
-// const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), {
-//   ssr: false,
-// });
-
-const DEFAULT_WIDTH = 800;
-const DEFAULT_HEIGHT = 600;
 
 // Format skills array into a readable string
 const formatSkills = (skills) => {
@@ -98,7 +82,6 @@ export default function Jobs({ params }) {
 
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const graphRef = useRef();
-  const canvasRef = useRef(null);
   const [activeNode, setActiveNode] = useState(null);
   const [hoveredNode, setHoveredNode] = useState(null);
   const [pinnedNode, setPinnedNode] = useState(null);
@@ -115,48 +98,51 @@ export default function Jobs({ params }) {
   const [filteredNodes, setFilteredNodes] = useState(new Set());
 
   const [showSalaryGradient, setShowSalaryGradient] = useState(false);
-  const [salaryRange, setSalaryRange] = useState({ min: Infinity, max: -Infinity });
+  const [salaryRange, setSalaryRange] = useState({
+    min: Infinity,
+    max: -Infinity,
+  });
 
   // Parse salary from various string formats
   const parseSalary = useCallback((salary) => {
     if (!salary) return null;
     if (typeof salary === 'number') return salary;
-    
+
     const str = salary.toString().toLowerCase();
     // Extract all numbers from the string
     const numbers = str.match(/\d+(?:\.\d+)?/g);
     if (!numbers) return null;
-    
+
     // Convert numbers considering k/K multiplier
-    const values = numbers.map(num => {
+    const values = numbers.map((num) => {
       const multiplier = str.includes('k') ? 1000 : 1;
       return parseFloat(num) * multiplier;
     });
-    
+
     // If range, return average
     if (values.length > 1) {
       values.sort((a, b) => a - b);
       return (values[0] + values[values.length - 1]) / 2;
     }
-    
+
     return values[0];
   }, []);
 
   // Calculate salary range when jobs data changes
   useEffect(() => {
     if (!jobInfo) return;
-    
+
     let min = Infinity;
     let max = -Infinity;
-    
-    Object.values(jobInfo).forEach(job => {
+
+    Object.values(jobInfo).forEach((job) => {
       const salary = parseSalary(job.salary);
       if (salary) {
         min = Math.min(min, salary);
         max = Math.max(max, salary);
       }
     });
-    
+
     if (min !== Infinity && max !== -Infinity) {
       setSalaryRange({ min, max });
     }
@@ -220,19 +206,26 @@ export default function Jobs({ params }) {
   // Memoize node colors for salary view
   const nodeSalaryColors = useMemo(() => {
     if (!showSalaryGradient || !jobInfo) return new Map();
-    
+
     const colors = new Map();
     Object.entries(jobInfo).forEach(([id, job]) => {
       const salary = parseSalary(job.salary);
       if (salary) {
-        const percentage = (salary - salaryRange.min) / (salaryRange.max - salaryRange.min);
+        const percentage =
+          (salary - salaryRange.min) / (salaryRange.max - salaryRange.min);
         const lightBlue = [219, 234, 254]; // bg-blue-100
-        const darkBlue = [30, 64, 175];    // bg-blue-800
-        
-        const r = Math.round(lightBlue[0] + (darkBlue[0] - lightBlue[0]) * percentage);
-        const g = Math.round(lightBlue[1] + (darkBlue[1] - lightBlue[1]) * percentage);
-        const b = Math.round(lightBlue[2] + (darkBlue[2] - lightBlue[2]) * percentage);
-        
+        const darkBlue = [30, 64, 175]; // bg-blue-800
+
+        const r = Math.round(
+          lightBlue[0] + (darkBlue[0] - lightBlue[0]) * percentage,
+        );
+        const g = Math.round(
+          lightBlue[1] + (darkBlue[1] - lightBlue[1]) * percentage,
+        );
+        const b = Math.round(
+          lightBlue[2] + (darkBlue[2] - lightBlue[2]) * percentage,
+        );
+
         colors.set(id, `rgb(${r}, ${g}, ${b})`);
       } else {
         colors.set(id, '#e2e8f0'); // Light gray for no salary
@@ -245,11 +238,11 @@ export default function Jobs({ params }) {
     (node) => {
       if (node.group === -1) return '#fff';
       if (filterText && !filteredNodes.has(node.id)) return '#f8fafc';
-      
+
       if (showSalaryGradient) {
         return nodeSalaryColors.get(node.id) || '#e2e8f0';
       }
-      
+
       return readJobs.has(node.id) ? '#f1f5f9' : '#fef9c3';
     },
     [readJobs, filterText, filteredNodes, showSalaryGradient, nodeSalaryColors],
@@ -259,26 +252,41 @@ export default function Jobs({ params }) {
     (node) => {
       if (node.group === -1) return '#fff';
       if (filterText && !filteredNodes.has(node.id)) return '#f8fafc';
-      
+
       if (showSalaryGradient && jobInfo[node.id]) {
         const salary = parseSalary(jobInfo[node.id].salary);
         if (salary) {
-          const percentage = (salary - salaryRange.min) / (salaryRange.max - salaryRange.min);
+          const percentage =
+            (salary - salaryRange.min) / (salaryRange.max - salaryRange.min);
           const lightBlue = [219, 234, 254]; // bg-blue-100
-          const darkBlue = [30, 64, 175];    // bg-blue-800
-          
-          const r = Math.round(lightBlue[0] + (darkBlue[0] - lightBlue[0]) * percentage);
-          const g = Math.round(lightBlue[1] + (darkBlue[1] - lightBlue[1]) * percentage);
-          const b = Math.round(lightBlue[2] + (darkBlue[2] - lightBlue[2]) * percentage);
-          
+          const darkBlue = [30, 64, 175]; // bg-blue-800
+
+          const r = Math.round(
+            lightBlue[0] + (darkBlue[0] - lightBlue[0]) * percentage,
+          );
+          const g = Math.round(
+            lightBlue[1] + (darkBlue[1] - lightBlue[1]) * percentage,
+          );
+          const b = Math.round(
+            lightBlue[2] + (darkBlue[2] - lightBlue[2]) * percentage,
+          );
+
           return `rgb(${r}, ${g}, ${b})`;
         }
         return '#e2e8f0'; // Light gray for no salary
       }
-      
+
       return readJobs.has(node.id) ? '#f1f5f9' : '#fef9c3';
     },
-    [readJobs, filterText, filteredNodes, showSalaryGradient, jobInfo, parseSalary, salaryRange],
+    [
+      readJobs,
+      filterText,
+      filteredNodes,
+      showSalaryGradient,
+      jobInfo,
+      parseSalary,
+      salaryRange,
+    ],
   );
 
   // Function to preload and cache image
@@ -453,7 +461,9 @@ export default function Jobs({ params }) {
                     onChange={(e) => setShowSalaryGradient(e.target.checked)}
                   />
                   <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                  <span className="ml-2 text-sm font-medium text-gray-900">Salary View</span>
+                  <span className="ml-2 text-sm font-medium text-gray-900">
+                    Salary View
+                  </span>
                 </label>
               </div>
             </div>
