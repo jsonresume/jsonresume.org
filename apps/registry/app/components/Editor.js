@@ -262,6 +262,67 @@ export default function Editor() {
     fetchData();
   }, []);
 
+  async function updateGist(resumeContent) {
+    try {
+      if (!session?.provider_token) {
+        throw new Error('No GitHub access token available');
+      }
+      
+      const octokit = new Octokit({ auth: session.provider_token });
+      track('ResumeUpdate', { username: login });
+
+      if (gistId) {
+        await octokit.rest.gists.update({
+          gist_id: gistId,
+          files: {
+            [RESUME_GIST_NAME]: {
+              content: resumeContent,
+            },
+          },
+        });
+      } else {
+        const { data } = await octokit.rest.gists.create({
+          public: true,
+          files: {
+            [RESUME_GIST_NAME]: {
+              content: resumeContent,
+            },
+          },
+        });
+        setGistId(data.id);
+      }
+    } catch (error) {
+      console.error('Error updating gist:', error);
+      throw error;
+    }
+  }
+
+  async function createGist() {
+    try {
+      if (!session?.provider_token) {
+        throw new Error('No GitHub access token available');
+      }
+
+      track('ResumeCreate', { username: login });
+      const octokit = new Octokit({ auth: session.provider_token });
+
+      const { data } = await octokit.rest.gists.create({
+        files: {
+          [RESUME_GIST_NAME]: {
+            content: JSON.stringify(sampleResume, undefined, 2),
+          },
+        },
+        public: true,
+      });
+
+      setGistId(data.id);
+      return data;
+    } catch (error) {
+      console.error('Error creating gist:', error);
+      throw error;
+    }
+  }
+
   if (loading) {
     return (
       <div className="p-4">
@@ -293,19 +354,13 @@ export default function Editor() {
       {resume ? (
         <ResumeEditor
           resume={JSON.stringify(resume, undefined, 2)}
-          onChange={async (value) => {
-            // Temporarily disabled
-            console.log('Update disabled for debugging');
-          }}
+          updateGist={updateGist}
         />
       ) : (
         <div>
           <CreateResume
             sampleResume={sampleResume}
-            onSubmit={async (value) => {
-              // Temporarily disabled
-              console.log('Create disabled for debugging');
-            }}
+            createGist={createGist}
           />
           <pre className="mt-4 p-4 bg-gray-100 rounded overflow-auto max-h-[500px]">
             Debug Info:
