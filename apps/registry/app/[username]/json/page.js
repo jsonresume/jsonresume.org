@@ -1,31 +1,43 @@
 'use client';
 
 import React from 'react';
-import Editor from '@monaco-editor/react';
 import styled from 'styled-components';
-import { useProfileData } from '../ProfileContext';
+import { useResume } from '../../providers/ResumeProvider';
+import { Editor } from '@monaco-editor/react';
 
 const Container = styled.div`
   font-size: 1.4rem;
 `;
 
-const Resumes = () => {
-  const { resume } = useProfileData();
+const JsonView = () => {
+  const { resume, loading, error } = useResume();
+
+  if (loading) {
+    return <Container>Loading JSON view...</Container>;
+  }
+
+  if (error) {
+    return <Container>Error loading resume: {error}</Container>;
+  }
+
+  if (!resume) {
+    return <Container>No resume found</Container>;
+  }
 
   return (
     <Container>
       <Editor
-        height="90vh"
-        width="100%"
+        height="70vh"
         defaultLanguage="json"
-        readOnly
-        defaultValue={JSON.stringify(resume, undefined, 2)}
-        options={{ wordWrap: 'on' }}
-        value={JSON.stringify(resume, undefined, 2)}
-        onChange={() => {}}
+        defaultValue={JSON.stringify(resume, null, 2)}
+        options={{
+          readOnly: true,
+          minimap: { enabled: false },
+          scrollBeyondLastLine: false,
+        }}
       />
     </Container>
   );
 };
 
-export default Resumes;
+export default JsonView;
