@@ -1,17 +1,44 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "rhel-openssl-1.0.x"]
 }
 
 datasource db {
-  provider = "postgres"
-  url      = env("DATABASE_URL")
+  provider  = "postgres"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_DATABASE_URL")
 }
 
 model resumes {
-  id        Int   @id @default(autoincrement())
-  username  String @unique
-  resume    Json
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id         BigInt                 @id @default(autoincrement())
+  created_at DateTime               @default(now()) @db.Timestamptz(6)
+  username   String                 @unique
+  resume     String?
+  updated_at DateTime?              @default(now()) @updatedAt @db.Timestamptz(6)
+  embedding  Unsupported("vector")?
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model jobs {
+  id           BigInt                   @id @default(autoincrement())
+  created_at   DateTime                 @default(now()) @db.Timestamptz(6)
+  uuid         String?
+  content      String?
+  type         String?
+  raw          String?
+  url          String?                  @unique
+  gpt_content  String?
+  posted_at    DateTime?                @db.Timestamptz(6)
+  embedding    Unsupported("vector")?
+  embedding_v2 Unsupported("vector")?
+  embedding_v3 Float[]
+  embedding_v4 Unsupported("_vector")[]
+  embedding_v5 Unsupported("vector")?
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model views {
+  id         BigInt   @id @default(autoincrement())
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  username   String?
 }

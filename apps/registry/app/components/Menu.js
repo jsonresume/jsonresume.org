@@ -1,23 +1,20 @@
-'use client';
+'use client'
 
-import React, { useState } from 'react';
-import { usePathname } from 'next/navigation';
-import { signOut } from 'next-auth/react';
-import Link from 'next/link';
-import { Menu as MenuIcon, X } from 'lucide-react';
-import Header from './Header';
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { useAuth } from '../context/auth'
+import { Button } from "@repo/ui/components/ui/button"
+import { supabase } from '../lib/supabase'
 
-export default function Menu({ session }) {
-  const pathname = usePathname();
-  const username = session?.username;
-  const [isOpen, setIsOpen] = useState(false);
+export default function Menu() {
+  const { user, loading } = useAuth()
+  const pathname = usePathname()
 
-  const isActive = (path) => pathname === path;
-  const isProfileActive = pathname.startsWith(`/${username}`);
+  const handleSignOut = async () => {
+    await supabase.auth.signOut()
+  }
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
+  const isActive = (path) => pathname === path
 
   const menuItems = [
     { href: '/explore', label: 'Explore' },
@@ -29,53 +26,27 @@ export default function Menu({ session }) {
       external: true,
     },
     { href: 'https://discord.gg/GTZtn8pTXC', label: 'Discord', external: true },
-  ];
-
-  const authItems = [
-    ...(username
-      ? [
-          { href: `/${username}/dashboard`, label: 'Profile' },
-          { href: '/editor', label: 'Editor' },
-        ]
-      : []),
-    session
-      ? { onClick: signOut, label: 'Logout' }
-      : { href: '/', label: 'Sign in' },
-  ];
+  ]
 
   return (
-    <div className="bg-accent-200 shadow-md">
-      <Header
-        left={
-          <div className="flex items-center justify-between w-full lg:w-auto p-4 lg:p-5">
-            <Link
-              href="/"
-              className="text-2xl font-bold text-black hover:text-secondary-900 transition-colors duration-200"
-            >
-              JSON Resume Registry
-            </Link>
-            <button
-              onClick={toggleMenu}
-              className="lg:hidden p-2 text-black hover:text-secondary-900"
-              aria-label="Toggle menu"
-            >
-              {isOpen ? <X size={24} /> : <MenuIcon size={24} />}
-            </button>
-          </div>
-        }
-        right={
-          <div
-            className={`${
-              isOpen ? 'block' : 'hidden'
-            } lg:flex lg:items-center lg:flex-1`}
-          >
-            <nav className="flex flex-col lg:flex-row lg:items-center lg:justify-end gap-4 p-4 lg:p-5">
+    <nav className="bg-white shadow">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16">
+          <div className="flex">
+            <div className="flex-shrink-0 flex items-center">
+              <Link href="/" className="text-xl font-bold">
+                JSON Resume Registry
+              </Link>
+            </div>
+            <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               {menuItems.map((item) =>
                 item.external ? (
                   <a
                     key={item.href}
                     href={item.href}
-                    className="text-lg lg:text-xl font-bold text-black hover:text-secondary-900 transition-colors duration-200 py-2 lg:py-0"
+                    className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
                     {item.label}
                   </a>
@@ -83,46 +54,65 @@ export default function Menu({ session }) {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`text-lg lg:text-xl font-bold ${
-                      isActive(item.href) ||
-                      (item.href === '/jobs' && pathname.startsWith('/jobs/'))
-                        ? 'text-secondary-900 underline'
-                        : 'text-black'
-                    } hover:text-secondary-900 transition-colors duration-200 py-2 lg:py-0`}
-                  >
-                    {item.label}
-                  </Link>
-                )
-              )}
-              {authItems.map((item) =>
-                item.onClick ? (
-                  <button
-                    key={item.label}
-                    onClick={item.onClick}
-                    className="text-lg lg:text-xl font-bold text-black hover:text-secondary-900 transition-colors duration-200 py-2 lg:py-0 text-left"
-                  >
-                    {item.label}
-                  </button>
-                ) : (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={`text-lg lg:text-xl font-bold hover:text-secondary-900 transition-colors duration-200 py-2 lg:py-0 ${
-                      (item.href === `/${username}/dashboard` &&
-                        isProfileActive) ||
+                    className={`inline-flex items-center px-1 pt-1 text-sm font-medium ${
                       isActive(item.href)
-                        ? 'text-secondary-900 underline'
-                        : 'text-black'
+                        ? 'text-secondary-900 border-b-2 border-secondary-900'
+                        : 'text-gray-900'
                     }`}
                   >
                     {item.label}
                   </Link>
                 )
               )}
-            </nav>
+            </div>
           </div>
-        }
-      />
-    </div>
-  );
+          
+          <div className="flex items-center space-x-4">
+            {user && (
+              <Link
+                href="/editor"
+                className={`text-sm font-medium ${
+                  isActive('/editor')
+                    ? 'text-secondary-900 border-b-2 border-secondary-900'
+                    : 'text-gray-900'
+                }`}
+              >
+                Editor
+              </Link>
+            )}
+            
+            {loading ? (
+              <div className="h-8 w-8 animate-spin rounded-full border-2 border-gray-900 border-t-transparent" />
+            ) : user ? (
+              <div className="flex items-center space-x-4">
+                <Link
+                  href={`/${user.email?.split('@')[0]}/dashboard`}
+                  className={`text-sm font-medium ${
+                    pathname.includes('/dashboard')
+                      ? 'text-secondary-900 border-b-2 border-secondary-900'
+                      : 'text-gray-900'
+                  }`}
+                >
+                  Profile
+                </Link>
+                <span className="text-sm text-gray-700">{user.email}</span>
+                <Button
+                  variant="outline"
+                  onClick={handleSignOut}
+                >
+                  Sign out
+                </Button>
+              </div>
+            ) : (
+              <Link href="/login">
+                <Button variant="default">
+                  Sign in
+                </Button>
+              </Link>
+            )}
+          </div>
+        </div>
+      </div>
+    </nav>
+  )
 }
