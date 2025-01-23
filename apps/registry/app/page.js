@@ -2,6 +2,7 @@
 
 import { auth } from '../auth';
 import { redirect } from 'next/navigation';
+import Link from 'next/link';
 import { Button } from '@repo/ui/components/ui/button';
 import {
   Card,
@@ -43,13 +44,17 @@ export default async function Page() {
           your career.
         </p>
         <div className="flex gap-4 justify-center">
-          <Button size="lg" className="gap-2">
-            <Github className="w-4 h-4" />
-            Continue with GitHub
+          <Button size="lg" className="gap-2" asChild>
+            <Link href="/login">
+              <Github className="w-4 h-4" />
+              Continue with GitHub
+            </Link>
           </Button>
-          <Button size="lg" variant="outline" className="gap-2">
-            <FileJson className="w-4 h-4" />
-            View Schema
+          <Button size="lg" variant="outline" className="gap-2" asChild>
+            <a href="https://jsonresume.org/schema" target="_blank" rel="noopener noreferrer">
+              <FileJson className="w-4 h-4" />
+              View Schema
+            </a>
           </Button>
         </div>
       </div>
@@ -148,10 +153,19 @@ export default async function Page() {
               Join thousands of developers who are using JSON Resume to create
               and share their professional profiles.
             </p>
-            <Button size="lg" variant="secondary" className="gap-2">
-              <Github className="w-4 h-4" />
-              Sign in with GitHub
-            </Button>
+            <div className="flex gap-4 justify-center">
+              <Button size="lg" variant="secondary" className="gap-2" asChild>
+                <Link href="/login">
+                  <Github className="w-4 h-4" />
+                  Sign in
+                </Link>
+              </Button>
+              <Button size="lg" variant="outline" className="gap-2" asChild>
+                <Link href="/signup">
+                  Create account
+                </Link>
+              </Button>
+            </div>
           </CardContent>
         </Card>
       </div>
