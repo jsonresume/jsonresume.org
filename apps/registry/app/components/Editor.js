@@ -168,14 +168,17 @@ export default function Editor() {
       let debug = {};
       try {
         // Get session from Supabase
-        const { data: { session: currentSession }, error: sessionError } = await supabase.auth.getSession();
+        const {
+          data: { session: currentSession },
+          error: sessionError,
+        } = await supabase.auth.getSession();
         debug.sessionError = sessionError;
         debug.hasSession = !!currentSession;
         debug.provider = currentSession?.provider_id;
         debug.providerToken = !!currentSession?.provider_token;
         debug.userMetadata = currentSession?.user?.user_metadata;
         debug.accessToken = currentSession?.access_token;
-        
+
         setSession(currentSession);
         setDebugInfo(debug);
 
@@ -184,7 +187,9 @@ export default function Editor() {
         }
 
         if (!currentSession.provider_token) {
-          throw new Error('No provider token found. This is needed for GitHub API access.');
+          throw new Error(
+            'No provider token found. This is needed for GitHub API access.',
+          );
         }
 
         // Get GitHub username from user metadata
@@ -198,13 +203,14 @@ export default function Editor() {
         setLogin(username);
 
         // Initialize Octokit with the provider token
-        const octokit = new Octokit({ 
-          auth: currentSession.provider_token 
+        const octokit = new Octokit({
+          auth: currentSession.provider_token,
         });
 
         // Test the GitHub API access
         try {
-          const { data: userData } = await octokit.rest.users.getAuthenticated();
+          const { data: userData } =
+            await octokit.rest.users.getAuthenticated();
           debug.githubApiTest = 'Success';
           debug.githubUsername = userData.login;
         } catch (githubError) {
@@ -235,9 +241,10 @@ export default function Editor() {
             headers: { 'content-type': 'application/json' },
             url: fullResumeGistUrl,
           });
-          
+
           setResume(resumeRes.data);
           debug.resumeDataLoaded = true;
+          debug.resumeRes = resumeRes.data;
         }
       } catch (error) {
         debug.error = {
@@ -270,7 +277,9 @@ export default function Editor() {
   if (!session || !login) {
     return (
       <div className="p-4">
-        <div className="text-red-500">Not authenticated or missing GitHub username</div>
+        <div className="text-red-500">
+          Not authenticated or missing GitHub username
+        </div>
         <pre className="mt-4 p-4 bg-gray-100 rounded overflow-auto max-h-[500px]">
           Debug Info:
           {JSON.stringify(debugInfo, null, 2)}
@@ -283,7 +292,7 @@ export default function Editor() {
     <div>
       {resume ? (
         <ResumeEditor
-          initialValue={resume}
+          resume={JSON.stringify(resume, undefined, 2)}
           onChange={async (value) => {
             // Temporarily disabled
             console.log('Update disabled for debugging');
