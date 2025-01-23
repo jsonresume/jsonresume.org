@@ -21,7 +21,7 @@ const HtmlIframe = ({ htmlString }) => {
   return (
     <iframe
       ref={iframeRef}
-      style={{ border: 0, outline: 0, width: '100%', height: '100%' }}
+      className="w-full h-full"
     />
   );
 };
@@ -66,8 +66,8 @@ export default function ResumeEditor({
   }, [monaco]);
 
   return (
-    <div>
-      <div className="p-4 flex justify-between items-center border-b">
+    <div className="h-full flex flex-col">
+      <div className="shrink-0 p-4 flex justify-between items-center border-b bg-white">
         <div className="text-sm text-gray-600">
           The live preview uses the professional theme. You can choose different themes on your public resume page.
         </div>
@@ -93,17 +93,21 @@ export default function ResumeEditor({
           </Button>
         </div>
       </div>
-      <div className="flex h-screen">
-        <Editor
-          height="90vh"
-          width="50vw"
-          defaultLanguage="json"
-          defaultValue={initialResume}
-          options={{ wordWrap: 'on' }}
-          value={resume}
-          onChange={(code) => setResume(code)}
-        />
-        <div className="w-1/2 h-screen p-4 border-l">
+      <div className="flex-1 flex overflow-hidden">
+        <div className="w-1/2">
+          <Editor
+            height="100%"
+            defaultLanguage="json"
+            value={resume}
+            onChange={(code) => setResume(code)}
+            options={{
+              minimap: { enabled: false },
+              scrollBeyondLastLine: false,
+              wordWrap: 'on'
+            }}
+          />
+        </div>
+        <div className="w-1/2 border-l">
           <HtmlIframe htmlString={content} />
         </div>
       </div>

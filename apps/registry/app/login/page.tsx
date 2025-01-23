@@ -23,7 +23,7 @@ export default function LoginPage() {
             access_type: 'offline',
             prompt: 'consent',
           },
-          redirectTo: `${window.location.origin}/auth/callback`
+          redirectTo: `${window.location.origin}/editor`
         },
       })
 

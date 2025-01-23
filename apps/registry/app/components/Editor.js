@@ -216,19 +216,17 @@ export default function Editor() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 relative overflow-hidden">
+    <div className="h-[calc(100vh-64px)] bg-gray-50 relative overflow-hidden">
       {/* Decorative elements */}
       <div className="absolute inset-0 bg-grid-black/[0.02] bg-[size:20px_20px]" />
       <div className="absolute -top-4 -left-4 w-72 h-72 bg-primary/30 rounded-full blur-3xl" />
       <div className="absolute -bottom-4 -right-4 w-72 h-72 bg-primary/20 rounded-full blur-3xl" />
 
       {resume ? (
-        <div className="relative">
-          <ResumeEditor
-            resume={JSON.stringify(resume, undefined, 2)}
-            updateGist={updateGist}
-          />
-        </div>
+        <ResumeEditor
+          resume={JSON.stringify(resume, undefined, 2)}
+          updateGist={updateGist}
+        />
       ) : (
         <CreateResume sampleResume={sampleResume} createGist={createGist} />
       )}
