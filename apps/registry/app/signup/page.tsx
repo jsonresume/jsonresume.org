@@ -1,80 +1,80 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import { supabase } from '../lib/supabase'
-import { Button } from "@repo/ui/components/ui/button"
-import { Input } from "@repo/ui/components/ui/input"
-import { Card } from "@repo/ui/components/ui/card"
-import { Separator } from "@repo/ui/components/ui/separator"
-import { Github } from 'lucide-react'
-import { faker } from '@faker-js/faker'
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { supabase } from '../lib/supabase';
+import { Button } from '@repo/ui/components/ui/button';
+import { Input } from '@repo/ui/components/ui/input';
+import { Card } from '@repo/ui/components/ui/card';
+import { Separator } from '@repo/ui/components/ui/separator';
+import { Github } from 'lucide-react';
+import { faker } from '@faker-js/faker';
 
 export default function SignUpPage() {
-  const router = useRouter()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const generateDisplayName = () => {
-    const character = faker.person.firstName()
-    const animal = faker.animal.type()
-    const color = faker.color.human()
-    return `${color}${character}${animal}`
-  }
+    const character = faker.person.firstName();
+    const animal = faker.animal.type();
+    const color = faker.color.human();
+    return `${color}${character}${animal}`;
+  };
 
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError(null)
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
 
     try {
       // First create the user
-      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+      const { error: signUpError } = await supabase.auth.signUp({
         email,
         password,
         options: {
           data: {
             display_name: generateDisplayName(),
-          }
-        }
-      })
+          },
+        },
+      });
 
-      if (signUpError) throw signUpError
+      if (signUpError) throw signUpError;
 
       // Then sign them in
-      const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+      const { error: signInError } = await supabase.auth.signInWithPassword({
         email,
         password,
-      })
+      });
 
-      if (signInError) throw signInError
+      if (signInError) throw signInError;
 
-      router.push('/')
-      router.refresh()
+      router.push('/');
+      router.refresh();
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'An error occurred')
+      setError(error instanceof Error ? error.message : 'An error occurred');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleGithubLogin = async () => {
     try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
+      const { error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
         options: {
           scopes: 'read:user gist',
         },
-      })
+      });
 
-      if (error) throw error
+      if (error) throw error;
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'An error occurred')
+      setError(error instanceof Error ? error.message : 'An error occurred');
     }
-  }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -85,7 +85,10 @@ export default function SignUpPage() {
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
             Or{' '}
-            <Link href="/login" className="font-medium text-blue-600 hover:text-blue-500">
+            <Link
+              href="/login"
+              className="font-medium text-blue-600 hover:text-blue-500"
+            >
               sign in to your existing account
             </Link>
           </p>
@@ -151,16 +154,12 @@ export default function SignUpPage() {
           )}
 
           <div>
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={loading}
-            >
+            <Button type="submit" className="w-full" disabled={loading}>
               {loading ? 'Creating account...' : 'Create account'}
             </Button>
           </div>
         </form>
       </Card>
     </div>
-  )
+  );
 }

@@ -1,34 +1,38 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import { supabase } from '../lib/supabase'
-import { Card } from "@repo/ui/components/ui/card"
+import { useEffect, useState } from 'react';
+import { supabase } from '../lib/supabase';
+import { Card } from '@repo/ui/components/ui/card';
 
 export default function SettingsPage() {
-  const [session, setSession] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
+  const [session, setSession] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchSession = async () => {
-      const { data: { session }, error } = await supabase.auth.getSession()
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (session) {
-        setSession(session)
+        setSession(session);
       }
-      setLoading(false)
-    }
+      setLoading(false);
+    };
 
-    fetchSession()
-  }, [])
+    fetchSession();
+  }, []);
 
   if (loading) {
-    return <div>Loading...</div>
+    return <div>Loading...</div>;
   }
 
   if (!session) {
-    return <div>Please sign in to view settings</div>
+    return <div>Please sign in to view settings</div>;
   }
 
-  const username = session.user.user_metadata?.user_name || session.user.user_metadata?.preferred_username
+  const username =
+    session.user.user_metadata?.user_name ||
+    session.user.user_metadata?.preferred_username;
 
   return (
     <div className="container mx-auto py-8 px-4">
@@ -69,5 +73,5 @@ export default function SettingsPage() {
         </div>
       </Card>
     </div>
-  )
+  );
 }

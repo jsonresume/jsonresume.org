@@ -3,11 +3,16 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Search, MapPin, Briefcase, ExternalLink, LayoutDashboard } from 'lucide-react';
-import { Card, CardContent, CardFooter } from "@repo/ui/components/ui/card";
-import { Button } from "@repo/ui/components/ui/button";
-import { Badge } from "@repo/ui/components/ui/badge";
-import { Input } from "@repo/ui/components/ui/input";
+import {
+  Search,
+  MapPin,
+  Briefcase,
+  ExternalLink,
+  LayoutDashboard,
+} from 'lucide-react';
+import { Card, CardContent, CardFooter } from '@repo/ui/components/ui/card';
+import { Button } from '@repo/ui/components/ui/button';
+import { Input } from '@repo/ui/components/ui/input';
 
 export default function ClientResumes({
   initialResumes,
@@ -113,76 +118,87 @@ export default function ClientResumes({
 
       {/* Resume Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        {isLoading ? (
-          // Loading skeletons
-          Array.from({ length: 6 }).map((_, i) => (
-            <Card key={i} className="animate-pulse">
-              <CardContent className="p-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-16 h-16 bg-gray-200 rounded-full" />
-                  <div className="flex-1">
-                    <div className="h-4 bg-gray-200 rounded w-3/4 mb-2" />
-                    <div className="h-3 bg-gray-200 rounded w-1/2" />
+        {isLoading
+          ? // Loading skeletons
+            Array.from({ length: 6 }).map((_, i) => (
+              <Card key={i} className="animate-pulse">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-16 h-16 bg-gray-200 rounded-full" />
+                    <div className="flex-1">
+                      <div className="h-4 bg-gray-200 rounded w-3/4 mb-2" />
+                      <div className="h-3 bg-gray-200 rounded w-1/2" />
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))
-        ) : (
-          initialResumes.map((resume) => (
-            <Card key={resume.username} className="h-full hover:shadow-lg transition-shadow">
-              <CardContent className="p-6">
-                <div className="flex items-start gap-4">
-                  {/* Avatar */}
-                  <img
-                    src={resume.image}
-                    alt={resume.name || resume.username}
-                    className="w-16 h-16 rounded-full object-cover border-2 border-gray-100"
-                  />
-                  
-                  {/* Info */}
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-lg text-gray-900 truncate">
-                      {resume.name || resume.username}
-                    </h3>
-                    
-                    {resume.label && (
-                      <p className="text-gray-600 text-sm mb-2 truncate">
-                        <Briefcase className="inline-block w-4 h-4 mr-1 -mt-0.5" />
-                        {resume.label}
-                      </p>
-                    )}
-                    
-                    {resume.location?.city && (
-                      <p className="text-gray-500 text-sm flex items-center gap-1">
-                        <MapPin className="w-4 h-4" />
-                        <span className="truncate">
-                          {[resume.location.city, resume.location.region, resume.location.countryCode]
-                            .filter(Boolean)
-                            .join(', ')}
-                        </span>
-                      </p>
-                    )}
+                </CardContent>
+              </Card>
+            ))
+          : initialResumes.map((resume) => (
+              <Card
+                key={resume.username}
+                className="h-full hover:shadow-lg transition-shadow"
+              >
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    {/* Avatar */}
+                    <img
+                      src={resume.image}
+                      alt={resume.name || resume.username}
+                      className="w-16 h-16 rounded-full object-cover border-2 border-gray-100"
+                    />
+
+                    {/* Info */}
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-lg text-gray-900 truncate">
+                        {resume.name || resume.username}
+                      </h3>
+
+                      {resume.label && (
+                        <p className="text-gray-600 text-sm mb-2 truncate">
+                          <Briefcase className="inline-block w-4 h-4 mr-1 -mt-0.5" />
+                          {resume.label}
+                        </p>
+                      )}
+
+                      {resume.location?.city && (
+                        <p className="text-gray-500 text-sm flex items-center gap-1">
+                          <MapPin className="w-4 h-4" />
+                          <span className="truncate">
+                            {[
+                              resume.location.city,
+                              resume.location.region,
+                              resume.location.countryCode,
+                            ]
+                              .filter(Boolean)
+                              .join(', ')}
+                          </span>
+                        </p>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-              <CardFooter className="px-6 py-4 border-t flex gap-2 justify-end bg-gray-50">
-                <Button variant="outline" size="sm" asChild>
-                  <Link href={`/${resume.username}`} className="flex items-center gap-1">
-                    <ExternalLink className="w-4 h-4" />
-                    View Resume
-                  </Link>
-                </Button>
-                <Button variant="outline" size="sm" asChild>
-                  <Link href={`/${resume.username}/dashboard`} className="flex items-center gap-1">
-                    <LayoutDashboard className="w-4 h-4" />
-                    Dashboard
-                  </Link>
-                </Button>
-              </CardFooter>
-            </Card>
-          ))
-        )}
+                </CardContent>
+                <CardFooter className="px-6 py-4 border-t flex gap-2 justify-end bg-gray-50">
+                  <Button variant="outline" size="sm" asChild>
+                    <Link
+                      href={`/${resume.username}`}
+                      className="flex items-center gap-1"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      View Resume
+                    </Link>
+                  </Button>
+                  <Button variant="outline" size="sm" asChild>
+                    <Link
+                      href={`/${resume.username}/dashboard`}
+                      className="flex items-center gap-1"
+                    >
+                      <LayoutDashboard className="w-4 h-4" />
+                      Dashboard
+                    </Link>
+                  </Button>
+                </CardFooter>
+              </Card>
+            ))}
       </div>
 
       {/* Pagination */}
@@ -195,7 +211,7 @@ export default function ClientResumes({
           >
             Previous
           </Button>
-          
+
           {getPageNumbers().map((pageNum, index) => (
             <Button
               key={index}
@@ -211,7 +227,7 @@ export default function ClientResumes({
               {pageNum}
             </Button>
           ))}
-          
+
           <Button
             variant="outline"
             onClick={() => handlePageChange(currentPage + 1)}

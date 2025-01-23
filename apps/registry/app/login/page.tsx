@@ -1,21 +1,19 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { supabase } from '../lib/supabase'
-import { Button } from "@repo/ui/components/ui/button"
-import { Card, CardContent } from "@repo/ui/components/ui/card"
-import { Github, FileJson, ArrowRight } from 'lucide-react'
-import { Badge } from "@repo/ui/components/ui/badge"
-import Link from 'next/link'
+import { useState } from 'react';
+import { supabase } from '../lib/supabase';
+import { Button } from '@repo/ui/components/ui/button';
+import { Card, CardContent } from '@repo/ui/components/ui/card';
+import { Github, FileJson, ArrowRight } from 'lucide-react';
+import { Badge } from '@repo/ui/components/ui/badge';
+import Link from 'next/link';
 
 export default function LoginPage() {
-  const router = useRouter()
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null);
 
   const handleGithubLogin = async () => {
     try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
+      const { error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
         options: {
           scopes: 'read:user gist',
@@ -23,15 +21,15 @@ export default function LoginPage() {
             access_type: 'offline',
             prompt: 'consent',
           },
-          redirectTo: `${window.location.origin}/editor`
+          redirectTo: `${window.location.origin}/editor`,
         },
-      })
+      });
 
-      if (error) throw error
+      if (error) throw error;
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'An error occurred')
+      setError(error instanceof Error ? error.message : 'An error occurred');
     }
-  }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
@@ -39,7 +37,7 @@ export default function LoginPage() {
       <div className="absolute inset-0 bg-grid-black/[0.02] bg-[size:20px_20px]" />
       <div className="absolute -top-4 -left-4 w-72 h-72 bg-primary/30 rounded-full blur-3xl" />
       <div className="absolute -bottom-4 -right-4 w-72 h-72 bg-primary/20 rounded-full blur-3xl" />
-      
+
       <Card className="max-w-md w-full relative backdrop-blur-xl bg-white/80 border-none shadow-xl">
         <CardContent className="p-8 space-y-6">
           <div className="text-center space-y-2">
@@ -55,11 +53,10 @@ export default function LoginPage() {
                 JSON Resume
               </h2>
             </div>
-            <h3 className="text-xl text-gray-600">
-              Welcome Back
-            </h3>
+            <h3 className="text-xl text-gray-600">Welcome Back</h3>
             <p className="text-gray-600 max-w-sm mx-auto">
-              Sign in to manage your resume, explore themes, and share your professional profile.
+              Sign in to manage your resume, explore themes, and share your
+              professional profile.
             </p>
           </div>
 
@@ -86,10 +83,12 @@ export default function LoginPage() {
                   <div className="w-full border-t border-gray-200"></div>
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white/80 text-gray-500">New to JSON Resume?</span>
+                  <span className="px-2 bg-white/80 text-gray-500">
+                    New to JSON Resume?
+                  </span>
                 </div>
               </div>
-              
+
               <Button
                 variant="outline"
                 size="lg"
@@ -107,13 +106,23 @@ export default function LoginPage() {
           <div className="text-center">
             <p className="text-sm text-gray-600">
               By signing in, you agree to our{' '}
-              <Link href="/terms" className="font-medium text-gray-900 hover:text-primary transition-colors">Terms of Service</Link>
-              {' '}and{' '}
-              <Link href="/privacy" className="font-medium text-gray-900 hover:text-primary transition-colors">Privacy Policy</Link>
+              <Link
+                href="/terms"
+                className="font-medium text-gray-900 hover:text-primary transition-colors"
+              >
+                Terms of Service
+              </Link>{' '}
+              and{' '}
+              <Link
+                href="/privacy"
+                className="font-medium text-gray-900 hover:text-primary transition-colors"
+              >
+                Privacy Policy
+              </Link>
             </p>
           </div>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

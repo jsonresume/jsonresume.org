@@ -9,7 +9,7 @@ import { MapPin } from 'lucide-react';
 import { Button } from '@repo/ui/components/ui/button';
 import { useResume } from '../providers/ResumeProvider';
 
-export default function Layout({ children, username, session }) {
+export default function Layout({ children, username }) {
   const router = useRouter();
   const pathname = usePathname();
   const { resume, loading, error } = useResume();
@@ -65,7 +65,8 @@ export default function Layout({ children, username, session }) {
                 <div className="flex items-center mb-2 text-sm text-gray-500">
                   <MapPin className="w-4 h-4 mr-1" />
                   <span>
-                    {resume.basics.location.city}, {resume.basics.location.region}
+                    {resume.basics.location.city},{' '}
+                    {resume.basics.location.region}
                   </span>
                 </div>
               )}
