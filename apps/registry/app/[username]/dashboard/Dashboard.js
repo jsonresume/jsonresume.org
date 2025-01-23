@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import {
   Briefcase,
@@ -6,7 +8,7 @@ import {
   BarChart,
   GraduationCap,
 } from 'lucide-react';
-import { useProfileData } from '../ProfileContext';
+import { useResume } from '../../providers/ResumeProvider';
 
 import {
   Card,
@@ -74,8 +76,22 @@ const SkillsList = ({ skills }) => {
 };
 
 const ResumeDashboard = () => {
-  const { resume } = useProfileData();
-  const ResumeData = getMetrics({ resume });
+  const { resume, loading, error } = useResume();
+
+  if (loading) {
+    return <div>Loading dashboard...</div>;
+  }
+
+  if (error) {
+    return <div>Error loading dashboard: {error}</div>;
+  }
+
+  if (!resume) {
+    return <div>No resume found. Create one to see your dashboard.</div>;
+  }
+
+  const metrics = getMetrics({ resume });
+
   return (
     <>
       <div className="min-h-screen p-8">
@@ -104,24 +120,22 @@ const ResumeDashboard = () => {
                 <div>
                   <p className="text-sm text-gray-500">Total Experience</p>
                   <p className="text-2xl font-bold">
-                    {ResumeData.totalExperience.years} y{' '}
-                    {ResumeData.totalExperience.months} m
+                    {metrics.totalExperience.years} y{' '}
+                    {metrics.totalExperience.months} m
                   </p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-500">Total Projects</p>
-                  <p className="text-2xl font-bold">
-                    {ResumeData.totalProjects}
-                  </p>
+                  <p className="text-2xl font-bold">{metrics.totalProjects}</p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-500">Total Skills</p>
-                  <p className="text-2xl font-bold">{ResumeData.totalSkills}</p>
+                  <p className="text-2xl font-bold">{metrics.totalSkills}</p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-500">Certifications</p>
                   <p className="text-2xl font-bold">
-                    {ResumeData.totalCertifications ?? 0}
+                    {metrics.totalCertifications ?? 0}
                   </p>
                 </div>
               </CardContent>
@@ -135,9 +149,7 @@ const ResumeDashboard = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-2xl font-bold">
-                  {ResumeData.educationLevel}
-                </p>
+                <p className="text-2xl font-bold">{metrics.educationLevel}</p>
                 <p className="text-sm text-gray-500">Highest Degree Achieved</p>
               </CardContent>
             </Card>
@@ -151,12 +163,12 @@ const ResumeDashboard = () => {
               <CardContent className="grid grid-cols-2 gap-4">
                 <div>
                   <p className="text-sm text-gray-500">Total Jobs</p>
-                  <p className="text-2xl font-bold">{ResumeData.totalJobs}</p>
+                  <p className="text-2xl font-bold">{metrics.totalJobs}</p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-500">Avg Job Duration</p>
                   <p className="text-2xl font-bold">
-                    {`${ResumeData.averageJobDuration.years}y ${ResumeData.averageJobDuration.months}m`}
+                    {`${metrics.averageJobDuration.years}y ${metrics.averageJobDuration.months}m`}
                   </p>
                 </div>
               </CardContent>
@@ -184,7 +196,7 @@ const ResumeDashboard = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {ResumeData.careerProgression.map((job, index) => (
+                {metrics.careerProgression.map((job, index) => (
                   <div key={index} className="flex items-center">
                     <div className="w-1/3">
                       <p className="font-semibold">{job.title}</p>

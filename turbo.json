@@ -15,7 +15,9 @@
     "AUTH_SECRET",
     "AUTH_GITHUB_ID",
     "AUTH_GITHUB_SECRET",
-    "VERCEL_ENV"
+    "VERCEL_ENV",
+    "NEXT_PUBLIC_SUPABASE_URL",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY"
   ],
   "tasks": {
     "db:generate": {

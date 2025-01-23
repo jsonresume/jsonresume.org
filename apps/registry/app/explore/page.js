@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import ClientResumes from './ClientResumes';
 import gravatar from 'gravatar';
+import { Users, Globe2, Code2 } from 'lucide-react';
 
 const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
 
@@ -117,22 +118,63 @@ export default async function ExplorePage({ searchParams }) {
   const { resumes, totalCount, totalPages } = await getResumes(page, search);
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">Explore JSON Resumes</h1>
-      <p className="text-gray-600 mb-8">
-        Browse through professional resumes created using the JSON Resume
-        standard. Get inspired or connect with other professionals.
-      </p>
-      <div className="text-sm text-gray-600 mb-6">
-        Showing {resumes.length} of {totalCount} resumes
-        {search && ` matching "${search}"`}
+    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
+      {/* Hero Section */}
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-grid-gray-100/50 bg-[size:20px_20px] [mask-image:linear-gradient(to_bottom,white,transparent)]" />
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pt-24 pb-16 relative">
+          <div className="absolute -top-4 -left-4 w-72 h-72 bg-primary/30 rounded-full blur-3xl" />
+          <div className="absolute -bottom-4 -right-4 w-72 h-72 bg-primary/20 rounded-full blur-3xl" />
+
+          <div className="relative">
+            <h1 className="text-5xl font-bold tracking-tight text-gray-900 mb-6 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900">
+              Explore JSON Resumes
+            </h1>
+            <p className="text-xl text-gray-600 max-w-2xl mb-8 leading-relaxed">
+              Discover how professionals present their careers using the JSON
+              Resume standard. Get inspired and see how others structure their
+              experiences.
+            </p>
+
+            <div className="flex items-center gap-4 text-sm text-gray-500 mb-8">
+              <div className="flex items-center gap-2">
+                <Users className="w-4 h-4" />
+                <span>{totalCount.toLocaleString()} Resumes</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Globe2 className="w-4 h-4" />
+                <span>Global Community</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Code2 className="w-4 h-4" />
+                <span>Open Source</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <ClientResumes
-        initialResumes={resumes}
-        currentPage={page}
-        totalPages={totalPages}
-        currentSearch={search}
-      />
+
+      {/* Content Section */}
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12">
+        <div className="text-sm text-gray-600 mb-6">
+          {search ? (
+            <span>
+              Found {totalCount.toLocaleString()} resumes matching "{search}"
+            </span>
+          ) : (
+            <span>
+              Browsing {totalCount.toLocaleString()} professional resumes
+            </span>
+          )}
+        </div>
+
+        <ClientResumes
+          initialResumes={resumes}
+          currentPage={page}
+          totalPages={totalPages}
+          currentSearch={search}
+        />
+      </div>
     </div>
   );
 }

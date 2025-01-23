@@ -1,14 +1,10 @@
-'use server';
-import SignIn from './SignIn';
-import { auth } from '../../auth';
-import { Octokit } from 'octokit';
-import { find } from 'lodash';
-import axios from 'axios';
+'use client';
+
+import { useResume } from '../providers/ResumeProvider';
 import ResumeEditor from './ResumeEditor';
 import CreateResume from './CreateResume';
-import { track } from '@vercel/analytics/server';
-// @todo - add json schema to editor
-//codesandbox.io/p/sandbox/monaco-editor-json-validation-example-gue0q?file=%2Fsrc%2FApp.js
+import { FileJson } from 'lucide-react';
+import { Badge, Card, CardContent } from '@repo/ui';
 
 const sampleResume = {
   basics: {
@@ -154,87 +150,80 @@ const sampleResume = {
   ],
 };
 
-const RESUME_GIST_NAME = 'resume.json';
+export default function Editor() {
+  const { resume, loading, error, updateGist, createGist } = useResume();
 
-export default async function Page() {
-  const session = await auth();
-  let resume = null;
-  let gistId = null;
-  let login = null;
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute -top-4 -left-4 w-72 h-72 bg-primary/30 rounded-full blur-3xl" />
+        <div className="absolute -bottom-4 -right-4 w-72 h-72 bg-primary/20 rounded-full blur-3xl" />
 
-  if (!session) {
-    return <SignIn />;
+        <Card className="max-w-md w-full relative backdrop-blur-xl bg-white/80 border-none shadow-xl">
+          <CardContent className="p-8 space-y-6">
+            <div className="text-center space-y-2">
+              <div className="flex justify-center mb-6">
+                <Badge className="animate-pulse" variant="secondary">
+                  <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse mr-2" />
+                  Loading Resume
+                </Badge>
+              </div>
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <FileJson className="w-8 h-8 text-primary" />
+                <h2 className="text-3xl font-bold tracking-tight text-gray-900">
+                  JSON Resume
+                </h2>
+              </div>
+              <p className="text-gray-600 max-w-sm mx-auto">
+                Fetching your resume data...
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
 
-  if (session) {
-    const octokit = new Octokit({ auth: session.accessToken });
-    const { data } = await octokit.rest.users.getAuthenticated();
-    const username = data.login;
-    login = username;
-    const gists = await octokit.rest.gists.list({ per_page: 100 });
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute inset-0 bg-grid-black/[0.02] bg-[size:20px_20px]" />
+        <div className="absolute -top-4 -left-4 w-72 h-72 bg-primary/30 rounded-full blur-3xl" />
+        <div className="absolute -bottom-4 -right-4 w-72 h-72 bg-primary/20 rounded-full blur-3xl" />
 
-    const resumeUrl = find(gists.data, (f) => {
-      return f.files[RESUME_GIST_NAME];
-    });
-
-    if (resumeUrl) {
-      gistId = resumeUrl.id;
-      const fullResumeGistUrl = `https://gist.githubusercontent.com/${username}/${gistId}/raw?cachebust=${new Date().getTime()}`;
-      const resumeRes = await axios({
-        method: 'GET',
-        headers: { 'content-type': 'application/json' },
-        url: fullResumeGistUrl,
-      });
-      resume = resumeRes.data;
-    }
-  }
-
-  async function updateGist(resume) {
-    'use server';
-    const octokit = new Octokit({ auth: session.accessToken });
-    track('ResumeUpdate', { username: login });
-    if (gistId) {
-      await octokit.rest.gists.update({
-        gist_id: gistId,
-        files: {
-          [RESUME_GIST_NAME]: {
-            content: resume,
-          },
-        },
-      });
-    }
-    return;
-  }
-
-  async function createGist() {
-    'use server';
-    track('ResumeCreate', { username: login });
-    const octokit = new Octokit({ auth: session.accessToken });
-
-    const response = await octokit.rest.gists.create({
-      files: {
-        [RESUME_GIST_NAME]: {
-          content: JSON.stringify(sampleResume, undefined, 2),
-        },
-      },
-      public: true,
-    });
-
-    return response;
+        <Card className="max-w-md w-full relative backdrop-blur-xl bg-white/80 border-none shadow-xl">
+          <CardContent className="p-8 space-y-6">
+            <div className="text-center space-y-2">
+              <div className="flex justify-center mb-6">
+                <Badge variant="destructive">Error</Badge>
+              </div>
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <FileJson className="w-8 h-8 text-primary" />
+                <h2 className="text-3xl font-bold tracking-tight text-gray-900">
+                  JSON Resume
+                </h2>
+              </div>
+              <p className="text-red-600 max-w-sm mx-auto">{error}</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
 
   return (
-    <div>
-      {!session && <SignIn />}
-      {session && !resume && <CreateResume createGist={createGist} />}
-      {session && resume && (
-        <div>
-          <ResumeEditor
-            login={login}
-            resume={JSON.stringify(resume, undefined, 2)}
-            updateGist={updateGist}
-          />
-        </div>
+    <div className="h-[calc(100vh-64px)] bg-gray-50 relative overflow-hidden">
+      {/* Decorative elements */}
+
+      {resume ? (
+        <ResumeEditor
+          resume={JSON.stringify(resume, undefined, 2)}
+          updateGist={updateGist}
+        />
+      ) : (
+        <CreateResume sampleResume={sampleResume} createGist={createGist} />
       )}
     </div>
   );

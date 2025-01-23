@@ -1,12 +1,12 @@
 'use client';
-// https://dev.to/amnish04/openai-has-text-to-speech-support-now-4mlp
+
 import Editor, { useMonaco } from '@monaco-editor/react';
 import { useRef, useEffect, useState } from 'react';
-// import { render } from '../../../../themes/stackoverflow/dist';
 import { render } from '../../../../packages/jsonresume-theme-professional';
-import Button from './Button/Button';
+import { Button } from '@repo/ui';
 import Link from 'next/link';
 import schema from './schema';
+import { ExternalLink, Save } from 'lucide-react';
 
 const HtmlIframe = ({ htmlString }) => {
   const iframeRef = useRef(null);
@@ -18,12 +18,7 @@ const HtmlIframe = ({ htmlString }) => {
     iframeDocument.close();
   }, [htmlString]);
 
-  return (
-    <iframe
-      ref={iframeRef}
-      style={{ border: 0, outline: 0, width: '100%', height: '100%' }}
-    />
-  );
+  return <iframe ref={iframeRef} className="w-full h-full overflow-auto" />;
 };
 
 export default function ResumeEditor({
@@ -52,13 +47,12 @@ export default function ResumeEditor({
 
   useEffect(() => {
     if (monaco) {
-      // Register the JSON schema
       monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
         validate: true,
         schemas: [
           {
-            uri: 'http://myserver/foo-schema.json', // id of the schema
-            fileMatch: ['*'], // associate with all JSON files
+            uri: 'http://myserver/foo-schema.json',
+            fileMatch: ['*'],
             schema,
           },
         ],
@@ -67,63 +61,54 @@ export default function ResumeEditor({
   }, [monaco]);
 
   return (
-    <div>
-      <div
-        style={{
-          padding: 10,
-          display: 'flex',
-          justifyContent: 'space-between',
-        }}
-      >
-        <div
-          style={{
-            fontSize: 12,
-            lineHeight: '26px',
-          }}
-        >
-          The live preview does not support your theme but the registry does.
-          (coming soon)
+    <div className="h-full flex flex-col">
+      <div className="shrink-0 p-4 flex justify-between items-center border-b bg-white">
+        <div className="text-sm text-gray-600">
+          The live preview uses the professional theme. You can choose different
+          themes on your public resume page.
         </div>
-        <div>
-          <Link
-            href={`/${login}`}
-            target="_blank"
-            style={{
-              marginRight: 20,
-              fontSize: 12,
-            }}
-          >
-            View Resume
-          </Link>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" asChild>
+            <Link
+              href={`/${login}`}
+              target="_blank"
+              className="flex items-center gap-1"
+            >
+              <ExternalLink className="w-4 h-4" />
+              View Resume
+            </Link>
+          </Button>
           <Button
+            variant="default"
+            size="sm"
             disabled={!changed}
             onClick={async () => {
               setChanged(false);
               await updateGist(resume);
             }}
+            className="flex items-center gap-1"
           >
-            Update Gist
+            <Save className="w-4 h-4" />
+            Save Changes
           </Button>
         </div>
       </div>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-        }}
-      >
-        <Editor
-          height="90vh"
-          width="50vw"
-          defaultLanguage="json"
-          defaultValue={initialResume}
-          options={{ wordWrap: 'on' }}
-          value={resume}
-          onChange={(code) => setResume(code)}
-        />
-
-        <div style={{ width: '50vw', height: '90vh' }}>
-          <HtmlIframe style={{ border: 0 }} htmlString={content} />
+      <div className="flex-1 flex overflow-hidden">
+        <div className="w-1/2">
+          <Editor
+            height="100%"
+            defaultLanguage="json"
+            value={resume}
+            onChange={(code) => setResume(code)}
+            options={{
+              minimap: { enabled: false },
+              scrollBeyondLastLine: false,
+              wordWrap: 'on',
+            }}
+          />
+        </div>
+        <div className="w-1/2 border-l h-full overflow-auto">
+          <HtmlIframe htmlString={content} />
         </div>
       </div>
     </div>

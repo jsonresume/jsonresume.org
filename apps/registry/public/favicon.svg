@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="32" height="32" rx="6" fill="#FFEDD5"/>
+  
+  <!-- File shape -->
+  <path d="M8 6C8 4.89543 8.89543 4 10 4H18L24 10V26C24 27.1046 23.1046 28 22 28H10C8.89543 28 8 27.1046 8 26V6Z" fill="#FB923C"/>
+  
+  <!-- Folded corner -->
+  <path d="M18 4L24 10H19C18.4477 10 18 9.55228 18 9V4Z" fill="#EA580C"/>
+  
+  <!-- { } brackets -->
+  <path d="M13 12L11 14L13 16M19 12L21 14L19 16" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
