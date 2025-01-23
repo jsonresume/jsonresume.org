@@ -28,6 +28,8 @@ export default function SettingsPage() {
     return <div>Please sign in to view settings</div>
   }
 
+  const username = session.user.user_metadata?.user_name || session.user.user_metadata?.preferred_username
+
   return (
     <div className="container mx-auto py-8 px-4">
       <h1 className="text-2xl font-bold mb-6">Settings</h1>
@@ -37,33 +39,32 @@ export default function SettingsPage() {
             <h2 className="font-semibold">Email</h2>
             <p>{session.user.email}</p>
           </div>
+          {username && (
+            <div>
+              <h2 className="font-semibold">GitHub Username</h2>
+              <p>{username}</p>
+            </div>
+          )}
           <div>
             <h2 className="font-semibold">User ID</h2>
             <p>{session.user.id}</p>
           </div>
-          {session.user.user_metadata && (
-            <div>
-              <h2 className="font-semibold">GitHub Username</h2>
-              <p>
-                        <div className="mt-8">
-                          <h2 className="font-semibold mb-2">Debug Information</h2>
-                          <div className="bg-gray-50 p-4 rounded-md">
-                            <h3 className="font-medium">Provider</h3>
-                            <pre className="text-sm overflow-auto">
-                              {JSON.stringify(session.user.app_metadata?.provider, null, 2)}
-                            </pre>
-                            <h3 className="font-medium mt-2">User Metadata</h3>
-                            <pre className="text-sm overflow-auto">
-                              {JSON.stringify(session.user.user_metadata, null, 2)}
-                            </pre>
-                          </div>
-                        </div>
-              </p>
-            </div>
-          )}
           <div>
             <h2 className="font-semibold">Last Sign In</h2>
             <p>{new Date(session.user.last_sign_in_at).toLocaleString()}</p>
+          </div>
+          <div className="mt-8">
+            <h2 className="font-semibold mb-2">Debug Information</h2>
+            <div className="bg-gray-50 p-4 rounded-md">
+              <h3 className="font-medium">User Metadata</h3>
+              <pre className="text-sm overflow-auto">
+                {JSON.stringify(session.user.user_metadata, null, 2)}
+              </pre>
+              <h3 className="font-medium mt-2">App Metadata</h3>
+              <pre className="text-sm overflow-auto">
+                {JSON.stringify(session.user.app_metadata, null, 2)}
+              </pre>
+            </div>
           </div>
         </div>
       </Card>

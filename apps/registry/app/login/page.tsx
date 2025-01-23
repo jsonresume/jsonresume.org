@@ -45,6 +45,11 @@ export default function LoginPage() {
         provider: 'github',
         options: {
           scopes: 'read:user gist',
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
+          redirectTo: `${window.location.origin}/auth/callback`
         },
       })
 

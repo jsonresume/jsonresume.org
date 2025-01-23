@@ -1,119 +1,115 @@
 'use client';
 
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useAuth } from '../context/auth';
-import { Button } from '@repo/ui/components/ui/button';
 import { supabase } from '../lib/supabase';
+import { Github } from 'lucide-react';
+import { Button } from '@repo/ui/components/ui/button';
+import { useRouter } from 'next/navigation';
 
 export default function Menu() {
-  const { user, loading } = useAuth();
-  const pathname = usePathname();
+  const [user, setUser] = useState(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        setUser(session.user);
+      }
+    };
+
+    fetchUser();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (session) {
+          setUser(session.user);
+        } else {
+          setUser(null);
+        }
+      }
+    );
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut();
+    if (!error) {
+      router.push('/');
+      router.refresh();
+    }
   };
 
-  const isActive = (path) => pathname === path;
-
-  const menuItems = [
-    { href: '/explore', label: 'Explore' },
-    { href: '/jobs', label: 'Jobs' },
-    { href: '/job-similarity', label: 'Similarity' },
-    {
-      href: 'https://github.com/jsonresume/jsonresume.org',
-      label: 'Github',
-      external: true,
-    },
-    { href: 'https://discord.gg/GTZtn8pTXC', label: 'Discord', external: true },
-  ];
-
   return (
-    <nav className="bg-white shadow">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex">
-            <div className="flex-shrink-0 flex items-center">
-              <Link href="/" className="text-xl font-bold">
-                JSON Resume Registry
-              </Link>
-            </div>
-            <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-              {menuItems.map((item) =>
-                item.external ? (
-                  <a
-                    key={item.href}
-                    href={item.href}
-                    className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {item.label}
-                  </a>
-                ) : (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={`inline-flex items-center px-1 pt-1 text-sm font-medium ${
-                      isActive(item.href)
-                        ? 'text-secondary-900 border-b-2 border-secondary-900'
-                        : 'text-gray-900'
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                ),
-              )}
-            </div>
+    <nav className="border-b">
+      <div className="container mx-auto px-6 py-3">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center space-x-8">
+            <Link href="/" className="text-xl font-bold">
+              JSON Resume Registry
+            </Link>
+            <Link href="/explore" className="text-gray-600 hover:text-gray-900">
+              Explore
+            </Link>
+            <Link href="/jobs" className="text-gray-600 hover:text-gray-900">
+              Jobs
+            </Link>
+            <Link href="/job-similarity" className="text-gray-600 hover:text-gray-900">
+              Similarity
+            </Link>
+            <a
+              href="https://github.com/jsonresume/jsonresume.org"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-600 hover:text-gray-900"
+            >
+              Github
+            </a>
+            <a
+              href="https://discord.gg/GTZtn8pTXC"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-600 hover:text-gray-900"
+            >
+              Discord
+            </a>
           </div>
 
           <div className="flex items-center space-x-4">
-            {user && (
-              <Link
-                href="/editor"
-                className={`text-sm font-medium ${
-                  isActive('/editor')
-                    ? 'text-secondary-900 border-b-2 border-secondary-900'
-                    : 'text-gray-900'
-                }`}
-              >
-                Editor
-              </Link>
-            )}
-
-            {loading ? (
-              <div className="h-8 w-8 animate-spin rounded-full border-2 border-gray-900 border-t-transparent" />
-            ) : user ? (
-              <div className="flex items-center space-x-4">
+            {user ? (
+              <>
                 <Link
-                  href={`/${user.email?.split('@')[0]}/dashboard`}
-                  className={`text-sm font-medium ${
-                    pathname.includes('/dashboard')
-                      ? 'text-secondary-900 border-b-2 border-secondary-900'
-                      : 'text-gray-900'
-                  }`}
+                  href={`/${user.user_metadata?.user_name || user.user_metadata?.preferred_username}/dashboard`}
+                  className="text-gray-600 hover:text-gray-900"
                 >
-                  Profile
+                  Dashboard
                 </Link>
                 <Link
-                  className={`text-sm font-medium ${
-                    pathname.includes('/dashboard')
-                      ? 'text-secondary-900 border-b-2 border-secondary-900'
-                      : 'text-gray-900'
-                  }`}
-                  href={`/settings`}
+                  href="/settings"
+                  className="text-gray-600 hover:text-gray-900"
                 >
                   Settings
                 </Link>
-                <span className="text-sm text-gray-700">{user.email}</span>
-                <Button variant="outline" onClick={handleSignOut}>
+                <Button variant="ghost" onClick={handleSignOut}>
                   Sign out
                 </Button>
-              </div>
+              </>
             ) : (
-              <Link href="/login">
-                <Button variant="default">Sign in</Button>
-              </Link>
+              <>
+                <Link href="/login">
+                  <Button variant="ghost">Sign in</Button>
+                </Link>
+                <Link href="/signup">
+                  <Button>
+                    <Github className="w-4 h-4 mr-2" />
+                    Sign up with GitHub
+                  </Button>
+                </Link>
+              </>
             )}
           </div>
         </div>
