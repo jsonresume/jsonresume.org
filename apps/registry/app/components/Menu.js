@@ -3,10 +3,10 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { supabase } from '../lib/supabase';
-import { 
-  Github, 
-  Menu as MenuIcon, 
-  X, 
+import {
+  Github,
+  Menu as MenuIcon,
+  X,
   FileJson,
   Compass,
   Briefcase,
@@ -14,14 +14,12 @@ import {
   MessagesSquare,
   Settings as SettingsIcon,
   LogOut,
-  LayoutDashboard
+  LayoutDashboard,
+  Edit,
 } from 'lucide-react';
 import { Button } from '@repo/ui/components/ui/button';
 import { useRouter, usePathname } from 'next/navigation';
-import {
-  Card,
-  CardContent,
-} from "@repo/ui/components/ui/card";
+import { Card, CardContent } from '@repo/ui/components/ui/card';
 
 export default function Menu() {
   const [user, setUser] = useState(null);
@@ -36,7 +34,9 @@ export default function Menu() {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (session) {
         setUser(session.user);
       }
@@ -44,15 +44,15 @@ export default function Menu() {
 
     fetchUser();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (session) {
-          setUser(session.user);
-        } else {
-          setUser(null);
-        }
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (session) {
+        setUser(session.user);
+      } else {
+        setUser(null);
       }
-    );
+    });
 
     return () => {
       subscription.unsubscribe();
@@ -69,15 +69,24 @@ export default function Menu() {
 
   const NavLinks = () => (
     <>
-      <Link href="/explore" className="text-sm font-medium text-gray-900 hover:text-gray-800 flex items-center gap-2">
+      <Link
+        href="/explore"
+        className="text-sm font-medium text-gray-900 hover:text-gray-800 flex items-center gap-2"
+      >
         <Compass className="w-4 h-4" />
         Explore
       </Link>
-      <Link href="/jobs" className="text-sm font-medium text-gray-900 hover:text-gray-800 flex items-center gap-2">
+      <Link
+        href="/jobs"
+        className="text-sm font-medium text-gray-900 hover:text-gray-800 flex items-center gap-2"
+      >
         <Briefcase className="w-4 h-4" />
         Jobs
       </Link>
-      <Link href="/job-similarity" className="text-sm font-medium text-gray-900 hover:text-gray-800 flex items-center gap-2">
+      <Link
+        href="/job-similarity"
+        className="text-sm font-medium text-gray-900 hover:text-gray-800 flex items-center gap-2"
+      >
         <Sparkles className="w-4 h-4" />
         Similarity
       </Link>
@@ -114,14 +123,21 @@ export default function Menu() {
             Dashboard
           </Link>
           <Link
+            href="/editor"
+            className="text-sm font-medium text-gray-900 hover:text-gray-800 flex items-center gap-2"
+          >
+            <Edit className="w-4 h-4" />
+            Editor
+          </Link>
+          <Link
             href="/settings"
             className="text-sm font-medium text-gray-900 hover:text-gray-800 flex items-center gap-2"
           >
             <SettingsIcon className="w-4 h-4" />
             Settings
           </Link>
-          <Button 
-            variant="ghost" 
+          <Button
+            variant="ghost"
             onClick={handleSignOut}
             className="text-sm font-medium text-gray-900 hover:bg-gray-900/5 flex items-center gap-2"
           >
@@ -148,7 +164,9 @@ export default function Menu() {
           <div className="flex items-center gap-2">
             <Link href="/" className="flex items-center gap-2">
               <FileJson className="w-6 h-6 text-gray-900" />
-              <span className="text-lg font-bold text-gray-900">JSON Resume</span>
+              <span className="text-lg font-bold text-gray-900">
+                JSON Resume
+              </span>
             </Link>
           </div>
 
