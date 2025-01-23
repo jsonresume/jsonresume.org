@@ -40,7 +40,7 @@ export default async function Page() {
           <div className="absolute -top-4 -left-4 w-72 h-72 bg-primary/30 rounded-full blur-3xl" />
           <div className="absolute -bottom-4 -right-4 w-72 h-72 bg-primary/20 rounded-full blur-3xl" />
           <Badge className="mb-4 animate-pulse" variant="secondary">
-            v2.0 Beta
+            v1.0 Beta
           </Badge>
           <h1 className="text-6xl font-bold tracking-tight text-gray-900 sm:text-7xl mb-6 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900">
             Your Resume as Code
