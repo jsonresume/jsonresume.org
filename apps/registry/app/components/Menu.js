@@ -3,7 +3,19 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { supabase } from '../lib/supabase';
-import { Github, Menu as MenuIcon, X, FileJson } from 'lucide-react';
+import { 
+  Github, 
+  Menu as MenuIcon, 
+  X, 
+  FileJson,
+  Compass,
+  Briefcase,
+  Sparkles,
+  MessagesSquare,
+  Settings as SettingsIcon,
+  LogOut,
+  LayoutDashboard
+} from 'lucide-react';
 import { Button } from '@repo/ui/components/ui/button';
 import { useRouter } from 'next/navigation';
 import {
@@ -51,29 +63,34 @@ export default function Menu() {
 
   const NavLinks = () => (
     <>
-      <Link href="/explore" className="text-sm font-medium text-gray-900 hover:text-gray-800">
+      <Link href="/explore" className="text-sm font-medium text-gray-900 hover:text-gray-800 flex items-center gap-2">
+        <Compass className="w-4 h-4" />
         Explore
       </Link>
-      <Link href="/jobs" className="text-sm font-medium text-gray-900 hover:text-gray-800">
+      <Link href="/jobs" className="text-sm font-medium text-gray-900 hover:text-gray-800 flex items-center gap-2">
+        <Briefcase className="w-4 h-4" />
         Jobs
       </Link>
-      <Link href="/job-similarity" className="text-sm font-medium text-gray-900 hover:text-gray-800">
+      <Link href="/job-similarity" className="text-sm font-medium text-gray-900 hover:text-gray-800 flex items-center gap-2">
+        <Sparkles className="w-4 h-4" />
         Similarity
       </Link>
       <a
         href="https://github.com/jsonresume/jsonresume.org"
         target="_blank"
         rel="noopener noreferrer"
-        className="text-sm font-medium text-gray-900 hover:text-gray-800"
+        className="text-sm font-medium text-gray-900 hover:text-gray-800 flex items-center gap-2"
       >
+        <Github className="w-4 h-4" />
         Github
       </a>
       <a
         href="https://discord.gg/GTZtn8pTXC"
         target="_blank"
         rel="noopener noreferrer"
-        className="text-sm font-medium text-gray-900 hover:text-gray-800"
+        className="text-sm font-medium text-gray-900 hover:text-gray-800 flex items-center gap-2"
       >
+        <MessagesSquare className="w-4 h-4" />
         Discord
       </a>
     </>
@@ -85,21 +102,24 @@ export default function Menu() {
         <>
           <Link
             href={`/${user.user_metadata?.user_name || user.user_metadata?.preferred_username}/dashboard`}
-            className="text-sm font-medium text-gray-900 hover:text-gray-800"
+            className="text-sm font-medium text-gray-900 hover:text-gray-800 flex items-center gap-2"
           >
+            <LayoutDashboard className="w-4 h-4" />
             Dashboard
           </Link>
           <Link
             href="/settings"
-            className="text-sm font-medium text-gray-900 hover:text-gray-800"
+            className="text-sm font-medium text-gray-900 hover:text-gray-800 flex items-center gap-2"
           >
+            <SettingsIcon className="w-4 h-4" />
             Settings
           </Link>
           <Button 
             variant="ghost" 
             onClick={handleSignOut}
-            className="text-sm font-medium text-gray-900 hover:bg-gray-900/5"
+            className="text-sm font-medium text-gray-900 hover:bg-gray-900/5 flex items-center gap-2"
           >
+            <LogOut className="w-4 h-4" />
             Sign out
           </Button>
         </>
@@ -118,15 +138,27 @@ export default function Menu() {
     <div className="bg-primary border-b border-gray-900/10">
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo and Mobile Menu Button */}
+          {/* Logo */}
           <div className="flex items-center gap-2">
             <Link href="/" className="flex items-center gap-2">
               <FileJson className="w-6 h-6 text-gray-900" />
               <span className="text-lg font-bold text-gray-900">JSON Resume</span>
             </Link>
+          </div>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex md:items-center md:gap-8">
+            <NavLinks />
+          </div>
+
+          {/* Desktop Auth Links and Mobile Menu Button */}
+          <div className="flex items-center gap-6 justify-end">
+            <div className="hidden md:flex md:items-center md:gap-6">
+              <AuthLinks />
+            </div>
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="ml-4 inline-flex items-center justify-center p-2 rounded-md text-gray-900 hover:bg-gray-900/5 md:hidden"
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-900 hover:bg-gray-900/5 md:hidden"
             >
               <span className="sr-only">Open main menu</span>
               {isOpen ? (
@@ -135,16 +167,6 @@ export default function Menu() {
                 <MenuIcon className="block h-5 w-5" />
               )}
             </button>
-          </div>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex md:items-center md:gap-8">
-            <NavLinks />
-          </div>
-
-          {/* Desktop Auth Links */}
-          <div className="hidden md:flex md:items-center md:gap-6">
-            <AuthLinks />
           </div>
         </div>
 
