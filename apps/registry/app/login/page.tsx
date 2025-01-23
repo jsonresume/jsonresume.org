@@ -105,11 +105,11 @@ export default function LoginPage() {
           </div>
 
           <div className="text-center">
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-600">
               By signing in, you agree to our{' '}
-              <Link href="/terms" className="text-primary hover:underline">Terms of Service</Link>
+              <Link href="/terms" className="font-medium text-gray-900 hover:text-primary transition-colors">Terms of Service</Link>
               {' '}and{' '}
-              <Link href="/privacy" className="text-primary hover:underline">Privacy Policy</Link>
+              <Link href="/privacy" className="font-medium text-gray-900 hover:text-primary transition-colors">Privacy Policy</Link>
             </p>
           </div>
         </CardContent>
