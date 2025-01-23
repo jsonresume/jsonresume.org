@@ -6,7 +6,8 @@ import '@repo/ui/globals.css';
 
 export const metadata = {
   title: 'JSON Resume Registry',
-  description: 'A platform for creating, sharing, and managing JSON-based resumes',
+  description:
+    'A platform for creating, sharing, and managing JSON-based resumes',
   icons: {
     icon: '/favicon.svg',
     shortcut: '/favicon.svg',

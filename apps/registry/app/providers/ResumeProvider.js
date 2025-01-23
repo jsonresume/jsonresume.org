@@ -38,7 +38,11 @@ export function ResumeProvider({ children }) {
   useEffect(() => {
     const storedData = localStorage.getItem(STORAGE_KEY);
     if (storedData) {
-      const { resume: storedResume, gistId: storedGistId, username: storedUsername } = JSON.parse(storedData);
+      const {
+        resume: storedResume,
+        gistId: storedGistId,
+        username: storedUsername,
+      } = JSON.parse(storedData);
       setResume(storedResume);
       setGistId(storedGistId);
       setUsername(storedUsername);
@@ -48,7 +52,10 @@ export function ResumeProvider({ children }) {
   // Save to localStorage whenever resume, gistId, or username changes
   useEffect(() => {
     if (resume || gistId || username) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ resume, gistId, username }));
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ resume, gistId, username })
+      );
     }
   }, [resume, gistId, username]);
 
@@ -84,7 +91,9 @@ export function ResumeProvider({ children }) {
 
         if (resumeUrl) {
           setGistId(resumeUrl.id);
-          const fullResumeGistUrl = `https://gist.githubusercontent.com/${username}/${resumeUrl.id}/raw?cachebust=${new Date().getTime()}`;
+          const fullResumeGistUrl = `https://gist.githubusercontent.com/${username}/${
+            resumeUrl.id
+          }/raw?cachebust=${new Date().getTime()}`;
 
           const response = await fetch(fullResumeGistUrl);
           if (!response.ok) {
@@ -200,5 +209,7 @@ export function ResumeProvider({ children }) {
     createGist,
   };
 
-  return <ResumeContext.Provider value={value}>{children}</ResumeContext.Provider>;
+  return (
+    <ResumeContext.Provider value={value}>{children}</ResumeContext.Provider>
+  );
 }

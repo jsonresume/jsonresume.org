@@ -116,7 +116,10 @@ export default function Menu() {
       {user ? (
         <>
           <Link
-            href={`/${user.user_metadata?.user_name || user.user_metadata?.preferred_username}/dashboard`}
+            href={`/${
+              user.user_metadata?.user_name ||
+              user.user_metadata?.preferred_username
+            }/dashboard`}
             className="text-sm font-medium text-gray-900 hover:text-gray-800 flex items-center gap-2"
           >
             <LayoutDashboard className="w-4 h-4" />
