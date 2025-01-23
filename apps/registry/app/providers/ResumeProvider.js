@@ -60,6 +60,23 @@ export function ResumeProvider({ children }) {
   }, [resume, gistId, username]);
 
   useEffect(() => {
+    const fetchFromRegistry = async (username) => {
+      try {
+        const response = await fetch(
+          `https://registry.jsonresume.org/${username}.json`
+        );
+        if (!response.ok) {
+          throw new Error('Failed to fetch resume from registry');
+        }
+        const resumeData = await response.json();
+        setResume(resumeData);
+        setUsername(username);
+      } catch (error) {
+        console.error('Error fetching from registry:', error);
+        setError(error.message);
+      }
+    };
+
     const fetchData = async () => {
       try {
         const {
@@ -67,7 +84,14 @@ export function ResumeProvider({ children }) {
         } = await supabase.auth.getSession();
         setSession(currentSession);
 
+        // Get username from URL path
+        const pathParts = window.location.pathname.split('/');
+        const urlUsername = pathParts[1]; // Assumes URL format /:username/*
+
         if (!currentSession) {
+          if (urlUsername) {
+            await fetchFromRegistry(urlUsername);
+          }
           setLoading(false);
           return;
         }
