@@ -1,33 +1,32 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useAuth } from '../context/auth'
-import { Button } from "@repo/ui/components/ui/button"
-import { supabase } from '../lib/supabase'
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useAuth } from '../context/auth';
+import { Button } from '@repo/ui/components/ui/button';
+import { supabase } from '../lib/supabase';
 
 export default function Menu() {
-  const { user, loading } = useAuth()
-  const pathname = usePathname()
+  const { user, loading } = useAuth();
+  const pathname = usePathname();
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut()
-  }
+    await supabase.auth.signOut();
+  };
 
-  const isActive = (path) => pathname === path
+  const isActive = (path) => pathname === path;
 
   const menuItems = [
     { href: '/explore', label: 'Explore' },
     { href: '/jobs', label: 'Jobs' },
     { href: '/job-similarity', label: 'Similarity' },
-    ...(user ? [{ href: '/settings', label: 'Settings' }] : []),
     {
       href: 'https://github.com/jsonresume/jsonresume.org',
       label: 'Github',
       external: true,
     },
     { href: 'https://discord.gg/GTZtn8pTXC', label: 'Discord', external: true },
-  ]
+  ];
 
   return (
     <nav className="bg-white shadow">
@@ -63,11 +62,11 @@ export default function Menu() {
                   >
                     {item.label}
                   </Link>
-                )
+                ),
               )}
             </div>
           </div>
-          
+
           <div className="flex items-center space-x-4">
             {user && (
               <Link
@@ -81,7 +80,7 @@ export default function Menu() {
                 Editor
               </Link>
             )}
-            
+
             {loading ? (
               <div className="h-8 w-8 animate-spin rounded-full border-2 border-gray-900 border-t-transparent" />
             ) : user ? (
@@ -96,24 +95,29 @@ export default function Menu() {
                 >
                   Profile
                 </Link>
-                <span className="text-sm text-gray-700">{user.email}</span>
-                <Button
-                  variant="outline"
-                  onClick={handleSignOut}
+                <Link
+                  className={`text-sm font-medium ${
+                    pathname.includes('/dashboard')
+                      ? 'text-secondary-900 border-b-2 border-secondary-900'
+                      : 'text-gray-900'
+                  }`}
+                  href={`/settings`}
                 >
+                  Settings
+                </Link>
+                <span className="text-sm text-gray-700">{user.email}</span>
+                <Button variant="outline" onClick={handleSignOut}>
                   Sign out
                 </Button>
               </div>
             ) : (
               <Link href="/login">
-                <Button variant="default">
-                  Sign in
-                </Button>
+                <Button variant="default">Sign in</Button>
               </Link>
             )}
           </div>
         </div>
       </div>
     </nav>
-  )
+  );
 }
