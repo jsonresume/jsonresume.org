@@ -2,7 +2,7 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import { useProfileData } from '../ProfileContext';
+import { useResume } from '../../providers/ResumeProvider';
 import ResumeDashboard from './Dashboard';
 
 const Container = styled.div`
@@ -10,7 +10,15 @@ const Container = styled.div`
 `;
 
 const Resumes = () => {
-  const { resume } = useProfileData();
+  const { resume, loading, error } = useResume();
+
+  if (loading) {
+    return <Container>Loading...</Container>;
+  }
+
+  if (error) {
+    return <Container>Error: {error}</Container>;
+  }
 
   return (
     <Container>

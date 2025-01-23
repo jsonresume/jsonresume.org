@@ -4,21 +4,34 @@
 import React from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { ProfileProvider } from './ProfileContext';
 import gravatar from 'gravatar';
 import { MapPin } from 'lucide-react';
 import { Button } from '@repo/ui/components/ui/button';
+import { useResume } from '../providers/ResumeProvider';
 
-export default function Layout({ children, resume, username, session }) {
+export default function Layout({ children, username, session }) {
   const router = useRouter();
   const pathname = usePathname();
+  const { resume, loading, error } = useResume();
 
   const image =
     resume?.basics?.image ||
     gravatar.url(resume?.basics?.email, { s: '200', r: 'x', d: 'retro' }, true);
 
+  if (loading) {
+    return <div className="text-lg text-center py-10">Loading resume...</div>;
+  }
+
+  if (error) {
+    return <div className="text-lg text-center py-10">Error: {error}</div>;
+  }
+
   if (!resume) {
-    return <div className="text-lg text-center py-10">Resume not found</div>;
+    return (
+      <div className="text-lg text-center py-10">
+        No resume found. Please create one in the editor.
+      </div>
+    );
   }
 
   const navLinks = [
@@ -48,57 +61,47 @@ export default function Layout({ children, resume, username, session }) {
               <p className="mb-4 text-lg text-gray-700 text-center">
                 {resume.basics.label}
               </p>
-              <div className="flex items-center mb-2 text-sm text-gray-500">
-                <MapPin className="w-4 h-4 mr-1 text-primary" />
-                <span>
-                  {resume.basics.location.countryCode ||
-                    'Location not available'}
-                </span>
-              </div>
-              <a
-                href={`mailto:${resume.basics.email}`}
-                className="mb-4 text-sm text-primary hover:underline"
-              >
-                {resume.basics.email}
-              </a>
-              <div className="flex flex-col items-center mt-4 space-y-2">
-                <a href={`/${username}`} target="_blank">
-                  <Button>View Resume</Button>
-                </a>
-              </div>
-              <br />
-              {session && (
-                <Button onClick={() => router.push('/editor')}>
+              {resume.basics.location && (
+                <div className="flex items-center mb-2 text-sm text-gray-500">
+                  <MapPin className="w-4 h-4 mr-1" />
+                  <span>
+                    {resume.basics.location.city}, {resume.basics.location.region}
+                  </span>
+                </div>
+              )}
+              <div className="w-full mt-4">
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => router.push('/editor')}
+                >
                   Edit Resume
                 </Button>
-              )}
+              </div>
             </div>
           </div>
-        </div>
-        <div className="flex-1 bg-white p-6 rounded-lg shadow-md max-w-[800px] w-full">
-          <div className="flex justify-start gap-4 mb-4 pb-2">
-            {navLinks.map((link) => (
-              <Link key={link.href} href={link.href} passHref>
-                <span
-                  className={`text-gray-700 hover:text-gray-900 py-2 px-4 rounded-full ${
-                    pathname === link.href
-                      ? 'bg-primary text-white'
-                      : 'bg-secondary-light hover:bg-secondary'
-                  } transition-colors duration-200`}
-                >
-                  {link.label}
-                </span>
-              </Link>
-            ))}
+          <div className="bg-white p-6 rounded-lg shadow-md mt-6">
+            <nav>
+              <ul className="space-y-2">
+                {navLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className={`block p-2 rounded transition-colors ${
+                        pathname === link.href
+                          ? 'bg-gray-100 text-gray-900'
+                          : 'text-gray-600 hover:bg-gray-50'
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
           </div>
-          <ProfileProvider
-            resume={resume}
-            username={username}
-            session={session}
-          >
-            {children}
-          </ProfileProvider>
         </div>
+        <div className="flex-1 w-full">{children}</div>
       </div>
     </div>
   );
