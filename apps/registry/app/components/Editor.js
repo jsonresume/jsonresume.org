@@ -1,14 +1,13 @@
-'use server';
-import SignIn from './SignIn';
-import { auth } from '../../auth';
+'use client';
+
+import { useState, useEffect } from 'react';
+import { supabase } from '../lib/supabase';
 import { Octokit } from 'octokit';
 import { find } from 'lodash';
 import axios from 'axios';
 import ResumeEditor from './ResumeEditor';
 import CreateResume from './CreateResume';
 import { track } from '@vercel/analytics/server';
-// @todo - add json schema to editor
-//codesandbox.io/p/sandbox/monaco-editor-json-validation-example-gue0q?file=%2Fsrc%2FApp.js
 
 const sampleResume = {
   basics: {
@@ -156,84 +155,153 @@ const sampleResume = {
 
 const RESUME_GIST_NAME = 'resume.json';
 
-export default async function Page() {
-  const session = await auth();
-  let resume = null;
-  let gistId = null;
-  let login = null;
+export default function Editor() {
+  const [session, setSession] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [resume, setResume] = useState(null);
+  const [gistId, setGistId] = useState(null);
+  const [login, setLogin] = useState(null);
+  const [debugInfo, setDebugInfo] = useState(null);
 
-  if (!session) {
-    return <SignIn />;
+  useEffect(() => {
+    const fetchData = async () => {
+      let debug = {};
+      try {
+        // Get session from Supabase
+        const { data: { session: currentSession }, error: sessionError } = await supabase.auth.getSession();
+        debug.sessionError = sessionError;
+        debug.hasSession = !!currentSession;
+        debug.provider = currentSession?.provider_id;
+        debug.providerToken = !!currentSession?.provider_token;
+        debug.userMetadata = currentSession?.user?.user_metadata;
+        debug.accessToken = currentSession?.access_token;
+        
+        setSession(currentSession);
+        setDebugInfo(debug);
+
+        if (!currentSession) {
+          throw new Error('No session found');
+        }
+
+        if (!currentSession.provider_token) {
+          throw new Error('No provider token found. This is needed for GitHub API access.');
+        }
+
+        // Get GitHub username from user metadata
+        const username = currentSession.user?.user_metadata?.user_name;
+        debug.username = username;
+
+        if (!username) {
+          throw new Error('No GitHub username found in user metadata');
+        }
+
+        setLogin(username);
+
+        // Initialize Octokit with the provider token
+        const octokit = new Octokit({ 
+          auth: currentSession.provider_token 
+        });
+
+        // Test the GitHub API access
+        try {
+          const { data: userData } = await octokit.rest.users.getAuthenticated();
+          debug.githubApiTest = 'Success';
+          debug.githubUsername = userData.login;
+        } catch (githubError) {
+          debug.githubApiTest = 'Failed';
+          debug.githubError = githubError.message;
+          throw githubError;
+        }
+
+        // Get user's gists
+        const gists = await octokit.rest.gists.list({ per_page: 100 });
+        debug.gistsCount = gists.data.length;
+
+        const resumeUrl = find(gists.data, (f) => {
+          return f.files[RESUME_GIST_NAME];
+        });
+
+        debug.foundResumeGist = !!resumeUrl;
+
+        if (resumeUrl) {
+          setGistId(resumeUrl.id);
+          debug.gistId = resumeUrl.id;
+
+          const fullResumeGistUrl = `https://gist.githubusercontent.com/${username}/${resumeUrl.id}/raw?cachebust=${new Date().getTime()}`;
+          debug.gistUrl = fullResumeGistUrl;
+
+          const resumeRes = await axios({
+            method: 'GET',
+            headers: { 'content-type': 'application/json' },
+            url: fullResumeGistUrl,
+          });
+          
+          setResume(resumeRes.data);
+          debug.resumeDataLoaded = true;
+        }
+      } catch (error) {
+        debug.error = {
+          message: error.message,
+          stack: error.stack,
+        };
+        console.error('Error fetching data:', error);
+        setDebugInfo({ ...debug, finalError: error.message });
+      } finally {
+        setLoading(false);
+        setDebugInfo(debug);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="p-4">
+        <div>Loading...</div>
+        <pre className="mt-4 p-4 bg-gray-100 rounded overflow-auto max-h-[500px]">
+          Debug Info:
+          {JSON.stringify(debugInfo, null, 2)}
+        </pre>
+      </div>
+    );
   }
 
-  if (session) {
-    const octokit = new Octokit({ auth: session.accessToken });
-    const { data } = await octokit.rest.users.getAuthenticated();
-    const username = data.login;
-    login = username;
-    const gists = await octokit.rest.gists.list({ per_page: 100 });
-
-    const resumeUrl = find(gists.data, (f) => {
-      return f.files[RESUME_GIST_NAME];
-    });
-
-    if (resumeUrl) {
-      gistId = resumeUrl.id;
-      const fullResumeGistUrl = `https://gist.githubusercontent.com/${username}/${gistId}/raw?cachebust=${new Date().getTime()}`;
-      const resumeRes = await axios({
-        method: 'GET',
-        headers: { 'content-type': 'application/json' },
-        url: fullResumeGistUrl,
-      });
-      resume = resumeRes.data;
-    }
-  }
-
-  async function updateGist(resume) {
-    'use server';
-    const octokit = new Octokit({ auth: session.accessToken });
-    track('ResumeUpdate', { username: login });
-    if (gistId) {
-      await octokit.rest.gists.update({
-        gist_id: gistId,
-        files: {
-          [RESUME_GIST_NAME]: {
-            content: resume,
-          },
-        },
-      });
-    }
-    return;
-  }
-
-  async function createGist() {
-    'use server';
-    track('ResumeCreate', { username: login });
-    const octokit = new Octokit({ auth: session.accessToken });
-
-    const response = await octokit.rest.gists.create({
-      files: {
-        [RESUME_GIST_NAME]: {
-          content: JSON.stringify(sampleResume, undefined, 2),
-        },
-      },
-      public: true,
-    });
-
-    return response;
+  if (!session || !login) {
+    return (
+      <div className="p-4">
+        <div className="text-red-500">Not authenticated or missing GitHub username</div>
+        <pre className="mt-4 p-4 bg-gray-100 rounded overflow-auto max-h-[500px]">
+          Debug Info:
+          {JSON.stringify(debugInfo, null, 2)}
+        </pre>
+      </div>
+    );
   }
 
   return (
     <div>
-      {!session && <SignIn />}
-      {session && !resume && <CreateResume createGist={createGist} />}
-      {session && resume && (
+      {resume ? (
+        <ResumeEditor
+          initialValue={resume}
+          onChange={async (value) => {
+            // Temporarily disabled
+            console.log('Update disabled for debugging');
+          }}
+        />
+      ) : (
         <div>
-          <ResumeEditor
-            login={login}
-            resume={JSON.stringify(resume, undefined, 2)}
-            updateGist={updateGist}
+          <CreateResume
+            sampleResume={sampleResume}
+            onSubmit={async (value) => {
+              // Temporarily disabled
+              console.log('Create disabled for debugging');
+            }}
           />
+          <pre className="mt-4 p-4 bg-gray-100 rounded overflow-auto max-h-[500px]">
+            Debug Info:
+            {JSON.stringify(debugInfo, null, 2)}
+          </pre>
         </div>
       )}
     </div>
