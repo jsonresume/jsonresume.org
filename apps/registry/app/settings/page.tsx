@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
-import { Card } from '@repo/ui/components/ui/card';
+import { Card } from '@repo/ui';
 
 export default function SettingsPage() {
   const [session, setSession] = useState<any>(null);

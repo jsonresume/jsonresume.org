@@ -2,7 +2,7 @@ import React from 'react';
 import { VariantProps, cva } from 'class-variance-authority';
 import { Check, Circle, X } from 'lucide-react';
 
-import { cn } from '@repo/ui/lib/utils';
+import { cn } from '../../lib/utils';
 
 const timelineVariants = cva('grid', {
   variants: {
