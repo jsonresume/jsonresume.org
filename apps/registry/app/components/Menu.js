@@ -99,17 +99,12 @@ export default function Menu() {
                 </Button>
               </>
             ) : (
-              <>
-                <Link href="/login">
-                  <Button variant="ghost">Sign in</Button>
-                </Link>
-                <Link href="/signup">
-                  <Button>
-                    <Github className="w-4 h-4 mr-2" />
-                    Sign up with GitHub
-                  </Button>
-                </Link>
-              </>
+              <Link href="/login">
+                <Button>
+                  <Github className="w-4 h-4 mr-2" />
+                  Sign in with GitHub
+                </Button>
+              </Link>
             )}
           </div>
         </div>
