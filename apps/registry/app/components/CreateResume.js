@@ -2,6 +2,11 @@
 
 import { useState } from 'react';
 import { useResume } from '../providers/ResumeProvider';
+import { Button } from '@repo/ui/components/ui/button';
+import { Card, CardContent } from '@repo/ui/components/ui/card';
+import { Badge } from '@repo/ui/components/ui/badge';
+import { FileJson, ArrowRight, Github } from 'lucide-react';
+import Link from 'next/link';
 
 const sampleResume = {
   basics: {
@@ -163,33 +168,79 @@ export default function CreateResume() {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen p-6 pt-20">
-      <div className="bg-white p-12 rounded-lg shadow-lg text-center max-w-md">
-        <p className="text-xl mb-8">
-          It looks like you don&apos;t have a gist named{' '}
-          <strong>resume.json</strong> yet. No worries! You can easily create
-          one right here. Once created, you&apos;ll find it at{' '}
-          <a
-            href="https://gist.github.com"
-            className="text-secondary-500 hover:text-secondary-700"
-          >
-            gist.github.com
-          </a>
-          .
-        </p>
-        {!creating ? (
-          <button
-            onClick={handleCreateResume}
-            className="bg-accent-500 text-white text-lg py-3 px-6 rounded-lg shadow-md hover:bg-accent-700 transition duration-300"
-          >
-            Create resume.json gist
-          </button>
-        ) : (
-          <div className="text-xl text-secondary-700 mt-4">
-            Creating your resume.json gist...
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      {/* Decorative elements */}
+      <div className="absolute inset-0 bg-grid-black/[0.02] bg-[size:20px_20px]" />
+      <div className="absolute -top-4 -left-4 w-72 h-72 bg-primary/30 rounded-full blur-3xl" />
+      <div className="absolute -bottom-4 -right-4 w-72 h-72 bg-primary/20 rounded-full blur-3xl" />
+
+      <Card className="max-w-md w-full relative backdrop-blur-xl bg-white/80 border-none shadow-xl">
+        <CardContent className="p-8 space-y-6">
+          <div className="text-center space-y-2">
+            <div className="flex justify-center mb-6">
+              <Badge className="animate-pulse" variant="secondary">
+                <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse mr-2" />
+                Create Your Resume
+              </Badge>
+            </div>
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <FileJson className="w-8 h-8 text-primary" />
+              <h2 className="text-3xl font-bold tracking-tight text-gray-900">
+                JSON Resume
+              </h2>
+            </div>
+            <p className="text-gray-600 max-w-sm mx-auto">
+              Get started with a pre-filled resume template. You can edit it
+              anytime through{' '}
+              <Link
+                href="https://gist.github.com"
+                className=" hover:text-primary/90 underline"
+              >
+                gist.github.com
+              </Link>
+              .
+            </p>
           </div>
-        )}
-      </div>
+
+          <div className="space-y-4">
+            <Button
+              onClick={handleCreateResume}
+              size="lg"
+              className="w-full gap-2 text-lg h-14 hover:scale-105 transition-transform group"
+              disabled={creating}
+            >
+              <Github className="w-5 h-5" />
+              {creating ? 'Creating Resume...' : 'Create Resume Gist'}
+              <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+            </Button>
+
+            <div className="text-center space-y-4">
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-200"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-white/80 text-gray-500">
+                    Need help getting started?
+                  </span>
+                </div>
+              </div>
+
+              <Button
+                variant="outline"
+                size="lg"
+                className="w-full gap-2 text-lg h-14 hover:scale-105 transition-transform group"
+                asChild
+              >
+                <Link href="/explore">
+                  Explore Other Resumes
+                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
