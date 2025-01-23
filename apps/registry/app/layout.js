@@ -6,7 +6,16 @@ import '@repo/ui/globals.css';
 
 export const metadata = {
   title: 'JSON Resume Registry',
-  description: 'JSON Resume Registry',
+  description: 'A platform for creating, sharing, and managing JSON-based resumes',
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg',
+    other: {
+      rel: 'apple-touch-icon-precomposed',
+      url: '/favicon.svg',
+    },
+  },
 };
 
 export const viewport = {
