@@ -7,6 +7,12 @@ import { Github, FileJson, ArrowRight } from 'lucide-react';
 
 import Link from 'next/link';
 
+// Get the app URL from environment, fallback to window.location.origin
+const getAppUrl = () => {
+  if (typeof window === 'undefined') return '';
+  return process.env.NEXT_PUBLIC_APP_URL || window.location.origin;
+};
+
 export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
 
@@ -20,7 +26,7 @@ export default function LoginPage() {
             access_type: 'offline',
             prompt: 'consent',
           },
-          redirectTo: `/editor`,
+          redirectTo: `${getAppUrl()}/editor`,
         },
       });
 
