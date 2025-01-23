@@ -1,13 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
-import { Octokit } from 'octokit';
-import { find } from 'lodash';
-import axios from 'axios';
+import { useResume } from '../providers/ResumeProvider';
 import ResumeEditor from './ResumeEditor';
 import CreateResume from './CreateResume';
-import { track } from '@vercel/analytics/server';
 
 const sampleResume = {
   basics: {
@@ -153,198 +148,17 @@ const sampleResume = {
   ],
 };
 
-const RESUME_GIST_NAME = 'resume.json';
-
 export default function Editor() {
-  const [session, setSession] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [resume, setResume] = useState(null);
-  const [gistId, setGistId] = useState(null);
-  const [login, setLogin] = useState(null);
-  const [debugInfo, setDebugInfo] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      let debug = {};
-      try {
-        // Get session from Supabase
-        const {
-          data: { session: currentSession },
-          error: sessionError,
-        } = await supabase.auth.getSession();
-        debug.sessionError = sessionError;
-        debug.hasSession = !!currentSession;
-        debug.provider = currentSession?.provider_id;
-        debug.providerToken = !!currentSession?.provider_token;
-        debug.userMetadata = currentSession?.user?.user_metadata;
-        debug.accessToken = currentSession?.access_token;
-
-        setSession(currentSession);
-        setDebugInfo(debug);
-
-        if (!currentSession) {
-          throw new Error('No session found');
-        }
-
-        if (!currentSession.provider_token) {
-          throw new Error(
-            'No provider token found. This is needed for GitHub API access.',
-          );
-        }
-
-        // Get GitHub username from user metadata
-        const username = currentSession.user?.user_metadata?.user_name;
-        debug.username = username;
-
-        if (!username) {
-          throw new Error('No GitHub username found in user metadata');
-        }
-
-        setLogin(username);
-
-        // Initialize Octokit with the provider token
-        const octokit = new Octokit({
-          auth: currentSession.provider_token,
-        });
-
-        // Test the GitHub API access
-        try {
-          const { data: userData } =
-            await octokit.rest.users.getAuthenticated();
-          debug.githubApiTest = 'Success';
-          debug.githubUsername = userData.login;
-        } catch (githubError) {
-          debug.githubApiTest = 'Failed';
-          debug.githubError = githubError.message;
-          throw githubError;
-        }
-
-        // Get user's gists
-        const gists = await octokit.rest.gists.list({ per_page: 100 });
-        debug.gistsCount = gists.data.length;
-
-        const resumeUrl = find(gists.data, (f) => {
-          return f.files[RESUME_GIST_NAME];
-        });
-
-        debug.foundResumeGist = !!resumeUrl;
-
-        if (resumeUrl) {
-          setGistId(resumeUrl.id);
-          debug.gistId = resumeUrl.id;
-
-          const fullResumeGistUrl = `https://gist.githubusercontent.com/${username}/${resumeUrl.id}/raw?cachebust=${new Date().getTime()}`;
-          debug.gistUrl = fullResumeGistUrl;
-
-          const resumeRes = await axios({
-            method: 'GET',
-            headers: { 'content-type': 'application/json' },
-            url: fullResumeGistUrl,
-          });
-
-          setResume(resumeRes.data);
-          debug.resumeDataLoaded = true;
-          debug.resumeRes = resumeRes.data;
-        }
-      } catch (error) {
-        debug.error = {
-          message: error.message,
-          stack: error.stack,
-        };
-        console.error('Error fetching data:', error);
-        setDebugInfo({ ...debug, finalError: error.message });
-      } finally {
-        setLoading(false);
-        setDebugInfo(debug);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  async function updateGist(resumeContent) {
-    try {
-      if (!session?.provider_token) {
-        throw new Error('No GitHub access token available');
-      }
-      
-      const octokit = new Octokit({ auth: session.provider_token });
-      track('ResumeUpdate', { username: login });
-
-      if (gistId) {
-        await octokit.rest.gists.update({
-          gist_id: gistId,
-          files: {
-            [RESUME_GIST_NAME]: {
-              content: resumeContent,
-            },
-          },
-        });
-      } else {
-        const { data } = await octokit.rest.gists.create({
-          public: true,
-          files: {
-            [RESUME_GIST_NAME]: {
-              content: resumeContent,
-            },
-          },
-        });
-        setGistId(data.id);
-      }
-    } catch (error) {
-      console.error('Error updating gist:', error);
-      throw error;
-    }
-  }
-
-  async function createGist() {
-    try {
-      if (!session?.provider_token) {
-        throw new Error('No GitHub access token available');
-      }
-
-      track('ResumeCreate', { username: login });
-      const octokit = new Octokit({ auth: session.provider_token });
-
-      const { data } = await octokit.rest.gists.create({
-        files: {
-          [RESUME_GIST_NAME]: {
-            content: JSON.stringify(sampleResume, undefined, 2),
-          },
-        },
-        public: true,
-      });
-
-      setGistId(data.id);
-      return data;
-    } catch (error) {
-      console.error('Error creating gist:', error);
-      throw error;
-    }
-  }
+  const { resume, loading, error, updateGist, createGist } = useResume();
 
   if (loading) {
-    return (
-      <div className="p-4">
-        <div>Loading...</div>
-        <pre className="mt-4 p-4 bg-gray-100 rounded overflow-auto max-h-[500px]">
-          Debug Info:
-          {JSON.stringify(debugInfo, null, 2)}
-        </pre>
-      </div>
-    );
+    return <div className="p-4">Loading...</div>;
   }
 
-  if (!session || !login) {
+  if (error) {
     return (
-      <div className="p-4">
-        <div className="text-red-500">
-          Not authenticated or missing GitHub username
-        </div>
-        <pre className="mt-4 p-4 bg-gray-100 rounded overflow-auto max-h-[500px]">
-          Debug Info:
-          {JSON.stringify(debugInfo, null, 2)}
-        </pre>
+      <div className="p-4 text-red-500">
+        Error: {error}
       </div>
     );
   }
@@ -357,16 +171,10 @@ export default function Editor() {
           updateGist={updateGist}
         />
       ) : (
-        <div>
-          <CreateResume
-            sampleResume={sampleResume}
-            createGist={createGist}
-          />
-          <pre className="mt-4 p-4 bg-gray-100 rounded overflow-auto max-h-[500px]">
-            Debug Info:
-            {JSON.stringify(debugInfo, null, 2)}
-          </pre>
-        </div>
+        <CreateResume 
+          sampleResume={sampleResume} 
+          createGist={createGist} 
+        />
       )}
     </div>
   );
