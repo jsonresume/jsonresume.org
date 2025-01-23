@@ -1,9 +1,5 @@
-import Editor from '../components/Editor';
-import { auth } from '../../auth';
+import ClientEditor from './ClientEditor';
 
-export default async function Page() {
-  const session = await auth();
-  console.log({ session });
-
-  return <Editor />;
+export default function Page() {
+  return <ClientEditor />;
 }

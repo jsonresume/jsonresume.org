@@ -5,6 +5,8 @@ import ResumeEditor from './ResumeEditor';
 import CreateResume from './CreateResume';
 import { FileJson } from 'lucide-react';
 import { Badge, Card, CardContent } from '@repo/ui';
+import { useAuth } from '../context/auth';
+import { ResumeProvider } from '../providers/ResumeProvider';
 
 const sampleResume = {
   basics: {
@@ -151,6 +153,29 @@ const sampleResume = {
 };
 
 export default function Editor() {
+  const { user, loading: authLoading } = useAuth();
+  const username = user?.user_metadata?.user_name;
+
+  if (authLoading) {
+    return <div className="text-lg text-center py-10">Loading...</div>;
+  }
+
+  if (!username) {
+    return (
+      <div className="text-lg text-center py-10">
+        Unable to determine username. Please try logging in again.
+      </div>
+    );
+  }
+
+  return (
+    <ResumeProvider targetUsername={username}>
+      <EditorContent />
+    </ResumeProvider>
+  );
+}
+
+function EditorContent() {
   const { resume, loading, error, updateGist, createGist } = useResume();
 
   if (loading) {

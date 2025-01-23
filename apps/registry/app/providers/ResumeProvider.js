@@ -6,7 +6,6 @@ import { Octokit } from 'octokit';
 import { find } from 'lodash';
 
 const RESUME_GIST_NAME = 'resume.json';
-const STORAGE_KEY = 'jsonresume_data';
 
 const ResumeContext = createContext({
   resume: null,
@@ -26,7 +25,7 @@ export function useResume() {
   return context;
 }
 
-export function ResumeProvider({ children }) {
+export function ResumeProvider({ children, targetUsername }) {
   const [session, setSession] = useState(null);
   const [resume, setResume] = useState(null);
   const [gistId, setGistId] = useState(null);
@@ -36,31 +35,31 @@ export function ResumeProvider({ children }) {
 
   // Load from localStorage on mount
   useEffect(() => {
-    const storedData = localStorage.getItem(STORAGE_KEY);
-    if (storedData) {
-      const {
-        resume: storedResume,
-        gistId: storedGistId,
-        username: storedUsername,
-      } = JSON.parse(storedData);
-      setResume(storedResume);
-      setGistId(storedGistId);
-      setUsername(storedUsername);
+    if (!targetUsername) {
+      return;
     }
-  }, []);
 
-  // Save to localStorage whenever resume, gistId, or username changes
+    const storedData = localStorage.getItem(`resume_${targetUsername}`);
+    if (storedData) {
+      const parsedData = JSON.parse(storedData);
+      setResume(parsedData.resume);
+      setGistId(parsedData.gistId);
+      setUsername(targetUsername);
+    }
+  }, [targetUsername]);
+
+  // Save to localStorage whenever resume changes
   useEffect(() => {
-    if (resume || gistId || username) {
+    if (resume && username) {
       localStorage.setItem(
-        STORAGE_KEY,
+        `resume_${username}`,
         JSON.stringify({ resume, gistId, username })
       );
     }
   }, [resume, gistId, username]);
 
   useEffect(() => {
-    const fetchFromRegistry = async (username) => {
+    async (username) => {
       try {
         const response = await fetch(
           `https://registry.jsonresume.org/${username}.json`
@@ -79,52 +78,63 @@ export function ResumeProvider({ children }) {
 
     const fetchData = async () => {
       try {
+        if (!targetUsername) {
+          setLoading(false);
+          return;
+        }
+
+        // Always try to fetch from registry first for the target username
+        try {
+          const response = await fetch(
+            `https://registry.jsonresume.org/${targetUsername}.json`
+          );
+          if (response.ok) {
+            const resumeData = await response.json();
+            setResume(resumeData);
+            setUsername(targetUsername);
+            setLoading(false);
+            return;
+          }
+        } catch (error) {
+          console.error('Error fetching from registry:', error);
+        }
+
+        // If registry fetch fails and user is logged in, try GitHub only if it's their own profile
         const {
           data: { session: currentSession },
         } = await supabase.auth.getSession();
         setSession(currentSession);
 
-        // Get username from URL path
-        const pathParts = window.location.pathname.split('/');
-        const urlUsername = pathParts[1]; // Assumes URL format /:username/*
-
-        if (!currentSession) {
-          if (urlUsername) {
-            await fetchFromRegistry(urlUsername);
-          }
+        if (!currentSession || !currentSession.provider_token) {
           setLoading(false);
           return;
         }
 
-        if (!currentSession.provider_token) {
-          throw new Error('No GitHub access token available');
-        }
+        const githubUsername = currentSession.user?.user_metadata?.user_name;
 
-        const username = currentSession.user?.user_metadata?.user_name;
-        if (!username) {
-          throw new Error('No GitHub username found in user metadata');
-        }
-        setUsername(username);
+        // Only proceed with GitHub if we're viewing the logged-in user's profile
+        if (githubUsername && githubUsername === targetUsername) {
+          const octokit = new Octokit({ auth: currentSession.provider_token });
+          const gists = await octokit.rest.gists.list({ per_page: 100 });
 
-        const octokit = new Octokit({ auth: currentSession.provider_token });
-        const gists = await octokit.rest.gists.list({ per_page: 100 });
+          const resumeUrl = find(gists.data, (f) => {
+            return f.files[RESUME_GIST_NAME];
+          });
 
-        const resumeUrl = find(gists.data, (f) => {
-          return f.files[RESUME_GIST_NAME];
-        });
+          if (resumeUrl) {
+            setGistId(resumeUrl.id);
+            const fullResumeGistUrl = `https://gist.githubusercontent.com/${githubUsername}/${
+              resumeUrl.id
+            }/raw?cachebust=${new Date().getTime()}`;
 
-        if (resumeUrl) {
-          setGistId(resumeUrl.id);
-          const fullResumeGistUrl = `https://gist.githubusercontent.com/${username}/${
-            resumeUrl.id
-          }/raw?cachebust=${new Date().getTime()}`;
-
-          const response = await fetch(fullResumeGistUrl);
-          if (!response.ok) {
-            throw new Error('Failed to fetch resume data');
+            const response = await fetch(fullResumeGistUrl);
+            if (!response.ok) {
+              throw new Error('Failed to fetch resume data');
+            }
+            const resumeData = await response.json();
+            setResume(resumeData);
+            setUsername(githubUsername);
           }
-          const resumeData = await response.json();
-          setResume(resumeData);
         }
       } catch (error) {
         console.error('Error fetching resume data:', error);
@@ -134,8 +144,8 @@ export function ResumeProvider({ children }) {
       }
     };
 
-    // Only fetch from GitHub on initial page load
-    if (!resume && !error) {
+    // Fetch when targetUsername changes or we don't have data
+    if (!resume || username !== targetUsername) {
       fetchData();
     }
 
@@ -149,14 +159,14 @@ export function ResumeProvider({ children }) {
         setGistId(null);
         setUsername(null);
         setError(null);
-        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(`resume_${username}`);
       }
     });
 
     return () => {
       subscription.unsubscribe();
     };
-  }, [resume, error]);
+  }, [resume, error, username, targetUsername]);
 
   const updateGist = async (resumeContent) => {
     try {

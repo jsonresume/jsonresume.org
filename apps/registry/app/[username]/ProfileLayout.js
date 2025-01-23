@@ -7,9 +7,17 @@ import Link from 'next/link';
 import gravatar from 'gravatar';
 import { MapPin } from 'lucide-react';
 import { Button } from '@repo/ui/components/ui/button';
-import { useResume } from '../providers/ResumeProvider';
+import { ResumeProvider, useResume } from '../providers/ResumeProvider';
 
 export default function Layout({ children, username }) {
+  return (
+    <ResumeProvider targetUsername={username}>
+      <InnerLayout username={username}>{children}</InnerLayout>
+    </ResumeProvider>
+  );
+}
+
+function InnerLayout({ children, username }) {
   const router = useRouter();
   const pathname = usePathname();
   const { resume, loading, error } = useResume();
