@@ -44,7 +44,21 @@ export default function SettingsPage() {
           {session.user.user_metadata && (
             <div>
               <h2 className="font-semibold">GitHub Username</h2>
-              <p>{session.user.user_metadata.user_name}</p>
+              <p>
+                        <div className="mt-8">
+                          <h2 className="font-semibold mb-2">Debug Information</h2>
+                          <div className="bg-gray-50 p-4 rounded-md">
+                            <h3 className="font-medium">Provider</h3>
+                            <pre className="text-sm overflow-auto">
+                              {JSON.stringify(session.user.app_metadata?.provider, null, 2)}
+                            </pre>
+                            <h3 className="font-medium mt-2">User Metadata</h3>
+                            <pre className="text-sm overflow-auto">
+                              {JSON.stringify(session.user.user_metadata, null, 2)}
+                            </pre>
+                          </div>
+                        </div>
+              </p>
             </div>
           )}
           <div>

@@ -41,7 +41,10 @@ export default function LoginPage() {
   const handleGithubLogin = async () => {
     try {
       const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'github'
+        provider: 'github',
+        options: {
+          scopes: 'read:user gist',
+        },
       })
 
       if (error) throw error
