@@ -20,6 +20,7 @@ export default function Menu() {
     { href: '/explore', label: 'Explore' },
     { href: '/jobs', label: 'Jobs' },
     { href: '/job-similarity', label: 'Similarity' },
+    ...(user ? [{ href: '/settings', label: 'Settings' }] : []),
     {
       href: 'https://github.com/jsonresume/jsonresume.org',
       label: 'Github',
