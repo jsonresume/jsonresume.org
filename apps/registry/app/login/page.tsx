@@ -20,7 +20,7 @@ export default function LoginPage() {
             access_type: 'offline',
             prompt: 'consent',
           },
-          redirectTo: `${window.location.origin}/editor`,
+          redirectTo: `/editor`,
         },
       });
 
