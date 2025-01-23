@@ -4,8 +4,7 @@ import { useResume } from '../providers/ResumeProvider';
 import ResumeEditor from './ResumeEditor';
 import CreateResume from './CreateResume';
 import { FileJson } from 'lucide-react';
-import { Badge } from '@repo/ui/components/ui/badge';
-import { Card, CardContent } from '@repo/ui/components/ui/card';
+import { Badge, Card, CardContent } from '@repo/ui';
 
 const sampleResume = {
   basics: {

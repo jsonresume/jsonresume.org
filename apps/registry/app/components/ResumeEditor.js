@@ -3,7 +3,7 @@
 import Editor, { useMonaco } from '@monaco-editor/react';
 import { useRef, useEffect, useState } from 'react';
 import { render } from '../../../../packages/jsonresume-theme-professional';
-import { Button } from '@repo/ui/components/ui/button';
+import { Button } from '@repo/ui';
 import Link from 'next/link';
 import schema from './schema';
 import { ExternalLink, Save } from 'lucide-react';

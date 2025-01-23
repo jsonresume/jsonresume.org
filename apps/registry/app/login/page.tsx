@@ -2,10 +2,9 @@
 
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
-import { Button } from '@repo/ui/components/ui/button';
-import { Card, CardContent } from '@repo/ui/components/ui/card';
+import { Badge, Button, Card, CardContent } from '@repo/ui';
 import { Github, FileJson, ArrowRight } from 'lucide-react';
-import { Badge } from '@repo/ui/components/ui/badge';
+
 import Link from 'next/link';
 
 export default function LoginPage() {

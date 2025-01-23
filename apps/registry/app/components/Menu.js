@@ -17,9 +17,8 @@ import {
   LayoutDashboard,
   Edit,
 } from 'lucide-react';
-import { Button } from '@repo/ui/components/ui/button';
 import { useRouter, usePathname } from 'next/navigation';
-import { Card, CardContent } from '@repo/ui/components/ui/card';
+import { Button, Card, CardContent } from '@repo/ui';
 
 export default function Menu() {
   const [user, setUser] = useState(null);

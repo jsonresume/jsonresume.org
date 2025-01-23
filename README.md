@@ -136,3 +136,6 @@ Access: [http://localhost:3000/thomasdavis/interview](http://localhost:3000/thom
 Brand colors: [Color Hexa](https://www.colorhexa.com/fff18f)
 
 Feel free to join our community on [Discord](https://discord.gg/GTZtn8pTXC) for discussions, support, and collaboration.
+
+### Turbo Gotchas
+- If you don't import components from `@repo/ui`, it will not work in the build step

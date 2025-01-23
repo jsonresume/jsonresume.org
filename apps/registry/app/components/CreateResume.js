@@ -2,9 +2,7 @@
 
 import { useState } from 'react';
 import { useResume } from '../providers/ResumeProvider';
-import { Button } from '@repo/ui/components/ui/button';
-import { Card, CardContent } from '@repo/ui/components/ui/card';
-import { Badge } from '@repo/ui/components/ui/badge';
+import { Button, Card, CardContent, Badge } from '@repo/ui';
 import { FileJson, ArrowRight, Github } from 'lucide-react';
 import Link from 'next/link';
 

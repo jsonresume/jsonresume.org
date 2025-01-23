@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, CardContent } from '@repo/ui/components/ui/card';
+import { Card, CardContent } from '@repo/ui';
 import Link from 'next/link';
 
 export default function PrivacyPage() {

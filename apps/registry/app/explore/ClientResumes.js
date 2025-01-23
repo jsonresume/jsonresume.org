@@ -10,9 +10,7 @@ import {
   ExternalLink,
   LayoutDashboard,
 } from 'lucide-react';
-import { Card, CardContent, CardFooter } from '@repo/ui/components/ui/card';
-import { Button } from '@repo/ui/components/ui/button';
-import { Input } from '@repo/ui/components/ui/input';
+import { Card, CardContent, CardFooter, Button, Input } from '@repo/ui';
 
 export default function ClientResumes({
   initialResumes,
