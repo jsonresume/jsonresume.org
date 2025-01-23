@@ -6,6 +6,7 @@ import { Octokit } from 'octokit';
 import { find } from 'lodash';
 
 const RESUME_GIST_NAME = 'resume.json';
+const STORAGE_KEY = 'jsonresume_data';
 
 const ResumeContext = createContext({
   resume: null,
@@ -32,6 +33,24 @@ export function ResumeProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [username, setUsername] = useState(null);
+
+  // Load from localStorage on mount
+  useEffect(() => {
+    const storedData = localStorage.getItem(STORAGE_KEY);
+    if (storedData) {
+      const { resume: storedResume, gistId: storedGistId, username: storedUsername } = JSON.parse(storedData);
+      setResume(storedResume);
+      setGistId(storedGistId);
+      setUsername(storedUsername);
+    }
+  }, []);
+
+  // Save to localStorage whenever resume, gistId, or username changes
+  useEffect(() => {
+    if (resume || gistId || username) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ resume, gistId, username }));
+    }
+  }, [resume, gistId, username]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -82,7 +101,10 @@ export function ResumeProvider({ children }) {
       }
     };
 
-    fetchData();
+    // Only fetch from GitHub on initial page load
+    if (!resume && !error) {
+      fetchData();
+    }
 
     // Subscribe to auth changes
     const {
@@ -94,13 +116,14 @@ export function ResumeProvider({ children }) {
         setGistId(null);
         setUsername(null);
         setError(null);
+        localStorage.removeItem(STORAGE_KEY);
       }
     });
 
     return () => {
       subscription.unsubscribe();
     };
-  }, []);
+  }, [resume, error]);
 
   const updateGist = async (resumeContent) => {
     try {
@@ -119,6 +142,9 @@ export function ResumeProvider({ children }) {
             },
           },
         });
+        // Update local storage and state after successful update
+        const updatedResume = JSON.parse(resumeContent);
+        setResume(updatedResume);
       } else {
         const { data } = await octokit.rest.gists.create({
           public: true,
@@ -129,6 +155,9 @@ export function ResumeProvider({ children }) {
           },
         });
         setGistId(data.id);
+        // Update local storage and state after successful create
+        const updatedResume = JSON.parse(resumeContent);
+        setResume(updatedResume);
       }
     } catch (error) {
       console.error('Error updating gist:', error);
@@ -153,6 +182,7 @@ export function ResumeProvider({ children }) {
       });
 
       setGistId(data.id);
+      setResume(sampleResume);
       return data;
     } catch (error) {
       console.error('Error creating gist:', error);
