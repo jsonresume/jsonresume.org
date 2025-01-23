@@ -7,6 +7,7 @@ import { Button } from '@repo/ui';
 import Link from 'next/link';
 import schema from './schema';
 import { ExternalLink, Save } from 'lucide-react';
+import { useResume } from '../providers/ResumeProvider';
 
 const HtmlIframe = ({ htmlString }) => {
   const iframeRef = useRef(null);
@@ -21,11 +22,8 @@ const HtmlIframe = ({ htmlString }) => {
   return <iframe ref={iframeRef} className="w-full h-full overflow-auto" />;
 };
 
-export default function ResumeEditor({
-  login,
-  resume: initialResume,
-  updateGist,
-}) {
+export default function ResumeEditor({ resume: initialResume, updateGist }) {
+  const { username } = useResume();
   const [resume, setResume] = useState(initialResume);
   const [changed, setChanged] = useState(false);
   const [content, setContent] = useState('');
@@ -70,7 +68,7 @@ export default function ResumeEditor({
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" asChild>
             <Link
-              href={`/${login}`}
+              href={`/${username}`}
               target="_blank"
               className="flex items-center gap-1"
             >
