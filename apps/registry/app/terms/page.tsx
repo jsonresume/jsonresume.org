@@ -71,7 +71,7 @@ export default function TermsPage() {
                 For questions about these Terms of Service, please contact us through{' '}
                 <a 
                   href="https://github.com/jsonresume/jsonresume.org/issues" 
-                  className="text-primary hover:underline"
+                  className="font-medium text-gray-900 hover:text-primary transition-colors"
                   target="_blank" 
                   rel="noopener noreferrer"
                 >
@@ -85,7 +85,7 @@ export default function TermsPage() {
         <div className="text-center">
           <Link 
             href="/" 
-            className="text-primary hover:text-primary/80 transition-colors"
+            className="font-medium text-gray-900 hover:text-primary transition-colors"
           >
             Return to Home
           </Link>
