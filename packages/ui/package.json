@@ -2,6 +2,28 @@
   "name": "@repo/ui",
   "version": "0.0.0",
   "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "require": "./src/index.ts"
+    },
+    "./styles.css": "./src/globals.css",
+    "./globals.css": "./src/globals.css",
+    "./postcss.config": "./postcss.config.mjs",
+    "./tailwind.config": "./tailwind.config.js",
+    "./lib/*": [
+      "./src/lib/*.js",
+      "./src/lib/*.ts"
+    ],
+    "./components/*": [
+      "./src/components/*.jsx",
+      "./src/components/*.js",
+      "./src/components/*.ts",
+      "./src/components/*.tsx"
+    ]
+  },
   "scripts": {
     "ui:add": "pnpm dlx shadcn-ui@latest add",
     "lint": "eslint ."
@@ -36,20 +58,5 @@
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7"
-  },
-  "exports": {
-    "./globals.css": "./src/globals.css",
-    "./postcss.config": "./postcss.config.mjs",
-    "./tailwind.config": "./tailwind.config.js",
-    "./lib/*": [
-      "./src/lib/*.js",
-      "./src/lib/*.ts"
-    ],
-    "./components/*": [
-      "./src/components/*.jsx",
-      "./src/components/*.js",
-      "./src/components/*.ts",
-      "./src/components/*.tsx"
-    ]
   }
 }
