@@ -18,12 +18,7 @@ const HtmlIframe = ({ htmlString }) => {
     iframeDocument.close();
   }, [htmlString]);
 
-  return (
-    <iframe
-      ref={iframeRef}
-      className="w-full h-full"
-    />
-  );
+  return <iframe ref={iframeRef} className="w-full h-full overflow-auto" />;
 };
 
 export default function ResumeEditor({
@@ -69,17 +64,22 @@ export default function ResumeEditor({
     <div className="h-full flex flex-col">
       <div className="shrink-0 p-4 flex justify-between items-center border-b bg-white">
         <div className="text-sm text-gray-600">
-          The live preview uses the professional theme. You can choose different themes on your public resume page.
+          The live preview uses the professional theme. You can choose different
+          themes on your public resume page.
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" asChild>
-            <Link href={`/${login}`} target="_blank" className="flex items-center gap-1">
+            <Link
+              href={`/${login}`}
+              target="_blank"
+              className="flex items-center gap-1"
+            >
               <ExternalLink className="w-4 h-4" />
               View Resume
             </Link>
           </Button>
-          <Button 
-            variant="default" 
+          <Button
+            variant="default"
             size="sm"
             disabled={!changed}
             onClick={async () => {
@@ -103,11 +103,11 @@ export default function ResumeEditor({
             options={{
               minimap: { enabled: false },
               scrollBeyondLastLine: false,
-              wordWrap: 'on'
+              wordWrap: 'on',
             }}
           />
         </div>
-        <div className="w-1/2 border-l">
+        <div className="w-1/2 border-l h-full overflow-auto">
           <HtmlIframe htmlString={content} />
         </div>
       </div>
