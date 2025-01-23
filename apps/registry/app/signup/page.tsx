@@ -9,6 +9,7 @@ import { Input } from "@repo/ui/components/ui/input"
 import { Card } from "@repo/ui/components/ui/card"
 import { Separator } from "@repo/ui/components/ui/separator"
 import { Github } from 'lucide-react'
+import { faker } from '@faker-js/faker'
 
 export default function SignUpPage() {
   const router = useRouter()
@@ -17,18 +18,39 @@ export default function SignUpPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  const generateDisplayName = () => {
+    const character = faker.person.firstName()
+    const animal = faker.animal.type()
+    const color = faker.color.human()
+    return `${color}${character}${animal}`
+  }
+
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError(null)
 
     try {
-      const { data, error } = await supabase.auth.signUp({
+      // First create the user
+      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            display_name: generateDisplayName(),
+          }
+        }
+      })
+
+      if (signUpError) throw signUpError
+
+      // Then sign them in
+      const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
 
-      if (error) throw error
+      if (signInError) throw signInError
 
       router.push('/')
       router.refresh()
