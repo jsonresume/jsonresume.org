@@ -128,6 +128,17 @@ export default function LoginPage() {
             <div className="text-red-500 text-sm text-center">{error}</div>
           )}
 
+          <div className="flex items-center justify-between">
+            <div className="text-sm">
+              <Link
+                href="/reset-password"
+                className="font-medium text-blue-600 hover:text-blue-500"
+              >
+                Forgot your password?
+              </Link>
+            </div>
+          </div>
+
           <div>
             <Button
               type="submit"
