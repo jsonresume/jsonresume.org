@@ -17,7 +17,7 @@ import {
   LayoutDashboard
 } from 'lucide-react';
 import { Button } from '@repo/ui/components/ui/button';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import {
   Card,
   CardContent,
@@ -27,6 +27,12 @@ export default function Menu() {
   const [user, setUser] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
+
+  // Close menu when pathname changes
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     const fetchUser = async () => {
