@@ -6,6 +6,8 @@ import { supabase } from '../lib/supabase'
 import { Button } from "@repo/ui/components/ui/button"
 import { Input } from "@repo/ui/components/ui/input"
 import { Card } from "@repo/ui/components/ui/card"
+import { Separator } from "@repo/ui/components/ui/separator"
+import { Github } from 'lucide-react'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -36,6 +38,18 @@ export default function LoginPage() {
     }
   }
 
+  const handleGithubLogin = async () => {
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'github'
+      })
+
+      if (error) throw error
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'An error occurred')
+    }
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <Card className="max-w-md w-full space-y-8 p-8">
@@ -44,7 +58,29 @@ export default function LoginPage() {
             Sign in to your account
           </h2>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleLogin}>
+
+        <Button
+          type="button"
+          variant="outline"
+          className="w-full"
+          onClick={handleGithubLogin}
+        >
+          <Github className="mr-2 h-4 w-4" />
+          Continue with GitHub
+        </Button>
+
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <Separator className="w-full" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-gray-50 px-2 text-muted-foreground">
+              Or continue with email
+            </span>
+          </div>
+        </div>
+
+        <form className="space-y-6" onSubmit={handleLogin}>
           <div className="rounded-md shadow-sm space-y-4">
             <div>
               <label htmlFor="email" className="sr-only">
