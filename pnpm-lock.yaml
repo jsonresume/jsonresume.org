@@ -321,6 +321,9 @@ importers:
       jsonresume-theme-latex:
         specifier: ^0.1.2
         version: 0.1.2
+      jsonresume-theme-lucide:
+        specifier: ^1.0.1
+        version: 1.0.1
       jsonresume-theme-macchiato:
         specifier: ^1.1.0
         version: 1.1.0
@@ -18629,6 +18632,14 @@ packages:
   /jsonresume-theme-latex@0.1.2:
     resolution: {integrity: sha512-aTWSVgQWH01sQhQ5AOGp0fd+NXuTfa4V5OVppy23Tb5lUagwbrY0Z2BB3fGjiODDclHLtZOXJMHKXJ8khg7qZA==}
     dependencies:
+      moment: 2.29.4
+    dev: false
+
+  /jsonresume-theme-lucide@1.0.1:
+    resolution: {integrity: sha512-eXgdhzqwNbXTkDQCZ7vYVb8mDdu1rHrNMcOoix/rApMho0Cq3/nEtpAvFZkT+7W86CnQ9WLm2CpXV3gJg/G3ww==}
+    dependencies:
+      handlebars: 4.7.8
+      markdown-it: 13.0.1
       moment: 2.29.4
     dev: false
 

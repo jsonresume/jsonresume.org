@@ -46,6 +46,7 @@ function InnerLayout({ children, username }) {
     { href: `/${username}/dashboard`, label: 'Dashboard' },
     { href: `/${username}/timeline`, label: 'Timeline' },
     { href: `/${username}/jobs`, label: 'Jobs' },
+    { href: `/${username}/jobs-graph`, label: 'Jobs Graph' },
     { href: `/${username}/suggestions`, label: 'Suggestions' },
     { href: `/${username}/letter`, label: 'Letter' },
     { href: `/${username}/json`, label: 'View JSON' },

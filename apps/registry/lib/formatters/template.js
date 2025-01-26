@@ -28,6 +28,7 @@ export const THEMES = {
   jacrys: require('jsonresume-theme-jacrys'),
   kards: require('jsonresume-theme-kards'),
   kendall: require('jsonresume-theme-kendall'),
+  lucide: require('jsonresume-theme-lucide'),
   macchiato: require('jsonresume-theme-macchiato'),
   mantra: require('jsonresume-theme-mantra'),
   'mocha-responsive': require('jsonresume-theme-mocha-responsive'),
