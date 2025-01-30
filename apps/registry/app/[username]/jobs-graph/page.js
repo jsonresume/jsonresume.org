@@ -114,6 +114,76 @@ export default function Jobs({ params }) {
   const [selectedNode, setSelectedNode] = useState(null);
   const [filterText, setFilterText] = useState('');
   const [filteredNodes, setFilteredNodes] = useState(new Set());
+  const [showSalaryGradient, setShowSalaryGradient] = useState(false);
+  const [salaryRange, setSalaryRange] = useState({ min: Infinity, max: -Infinity });
+
+  // Parse salary from various string formats
+  const parseSalary = useCallback((salary) => {
+    if (!salary) return null;
+    if (typeof salary === 'number') return salary;
+
+    const str = salary.toString().toLowerCase();
+    // Extract all numbers from the string
+    const numbers = str.match(/\d+(?:\.\d+)?/g);
+    if (!numbers) return null;
+
+    // Convert numbers considering k/K multiplier
+    const values = numbers.map((num) => {
+      const multiplier = str.includes('k') ? 1000 : 1;
+      return parseFloat(num) * multiplier;
+    });
+
+    // If range, return average
+    if (values.length > 1) {
+      values.sort((a, b) => a - b);
+      return (values[0] + values[values.length - 1]) / 2;
+    }
+
+    return values[0];
+  }, []);
+
+  // Calculate salary range when jobs data changes
+  useEffect(() => {
+    if (!jobInfo) return;
+
+    let min = Infinity;
+    let max = -Infinity;
+
+    Object.values(jobInfo).forEach((job) => {
+      const salary = parseSalary(job.salary);
+      if (salary) {
+        min = Math.min(min, salary);
+        max = Math.max(max, salary);
+      }
+    });
+
+    if (min !== Infinity && max !== -Infinity) {
+      setSalaryRange({ min, max });
+    }
+  }, [jobInfo, parseSalary]);
+
+  // Get background color based on salary
+  const getNodeBackground = useCallback((node, jobData) => {
+    if (node.data.isResume) return 'white';
+    
+    if (showSalaryGradient && jobData) {
+      const salary = parseSalary(jobData.salary);
+      if (salary) {
+        const percentage = (salary - salaryRange.min) / (salaryRange.max - salaryRange.min);
+        const lightBlue = [219, 234, 254]; // bg-blue-100
+        const darkBlue = [30, 64, 175];   // bg-blue-800
+
+        const r = Math.round(lightBlue[0] + (darkBlue[0] - lightBlue[0]) * percentage);
+        const g = Math.round(lightBlue[1] + (darkBlue[1] - lightBlue[1]) * percentage);
+        const b = Math.round(lightBlue[2] + (darkBlue[2] - lightBlue[2]) * percentage);
+
+        return `rgb(${r}, ${g}, ${b})`;
+      }
+      return '#e2e8f0'; // Light gray for no salary
+    }
+
+    return filterText && !filteredNodes.has(node.id) ? '#f1f5f9' : 'rgb(255 241 143)';
+  }, [showSalaryGradient, salaryRange, filterText, filteredNodes, parseSalary]);
 
   // Find path to resume node
   const findPathToResume = useCallback((edges, startNodeId) => {
@@ -325,14 +395,28 @@ export default function Jobs({ params }) {
         </Link>
       </nav>
 
-      <div className="px-4 py-2 bg-white border-b">
+      <div className="px-4 py-2 bg-white border-b flex items-center gap-4">
         <input
           type="text"
           placeholder="Filter jobs by title, company, skills..."
           value={filterText}
           onChange={(e) => setFilterText(e.target.value)}
-          className="w-full max-w-xl px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="flex-1 max-w-xl px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
+        <div className="flex items-center gap-2">
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              className="sr-only peer"
+              checked={showSalaryGradient}
+              onChange={(e) => setShowSalaryGradient(e.target.checked)}
+            />
+            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+            <span className="ml-2 text-sm font-medium text-gray-900">
+              Salary View
+            </span>
+          </label>
+        </div>
       </div>
 
       <div className="flex-1 relative">
@@ -342,8 +426,7 @@ export default function Jobs({ params }) {
             style: {
               ...node.style,
               opacity: filterText && !node.data.isResume && !filteredNodes.has(node.id) ? 0.2 : 1,
-              background: node.data.isResume ? 'white' : 
-                (filterText && !filteredNodes.has(node.id) ? '#f1f5f9' : 'rgb(255 241 143)'),
+              background: getNodeBackground(node, jobInfo[node.id]),
             }
           }))}
           edges={edges.map(edge => {
