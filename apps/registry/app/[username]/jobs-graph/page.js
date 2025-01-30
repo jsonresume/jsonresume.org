@@ -65,7 +65,7 @@ const getLayoutedElements = (nodes, edges, direction = 'TB') => {
   dagreGraph.setDefaultEdgeLabel(() => ({}));
 
   const isHorizontal = direction === 'LR';
-  dagreGraph.setGraph({ 
+  dagreGraph.setGraph({
     rankdir: direction,
     align: 'UL',
     nodesep: 80,
@@ -74,13 +74,13 @@ const getLayoutedElements = (nodes, edges, direction = 'TB') => {
     marginx: 20,
     marginy: 20,
     acyclicer: 'greedy',
-    ranker: 'network-simplex'
+    ranker: 'network-simplex',
   });
 
   nodes.forEach((node) => {
-    dagreGraph.setNode(node.id, { 
+    dagreGraph.setNode(node.id, {
       width: node.data.isResume ? 200 : 250,
-      height: node.data.isResume ? 100 : 100
+      height: node.data.isResume ? 100 : 100,
     });
   });
 
@@ -115,7 +115,28 @@ export default function Jobs({ params }) {
   const [filterText, setFilterText] = useState('');
   const [filteredNodes, setFilteredNodes] = useState(new Set());
   const [showSalaryGradient, setShowSalaryGradient] = useState(false);
-  const [salaryRange, setSalaryRange] = useState({ min: Infinity, max: -Infinity });
+  const [salaryRange, setSalaryRange] = useState({
+    min: Infinity,
+    max: -Infinity,
+  });
+  const [readJobs, setReadJobs] = useState(new Set());
+
+  // Load read jobs from local storage
+  useEffect(() => {
+    const storedReadJobs = localStorage.getItem(`readJobs_${username}`);
+    if (storedReadJobs) {
+      setReadJobs(new Set(JSON.parse(storedReadJobs)));
+    }
+  }, [username]);
+
+  // Save read jobs to local storage
+  const markJobAsRead = useCallback((jobId) => {
+    const newReadJobs = new Set(readJobs);
+    const key = `${username}_${jobId}`;
+    newReadJobs.add(key);
+    setReadJobs(newReadJobs);
+    localStorage.setItem(`readJobs_${username}`, JSON.stringify([...newReadJobs]));
+  }, [readJobs, username]);
 
   // Parse salary from various string formats
   const parseSalary = useCallback((salary) => {
@@ -162,61 +183,79 @@ export default function Jobs({ params }) {
     }
   }, [jobInfo, parseSalary]);
 
-  // Get background color based on salary
-  const getNodeBackground = useCallback((node, jobData) => {
-    if (node.data.isResume) return 'white';
-    
-    if (showSalaryGradient && jobData) {
-      const salary = parseSalary(jobData.salary);
-      if (salary) {
-        const percentage = (salary - salaryRange.min) / (salaryRange.max - salaryRange.min);
-        const lightBlue = [219, 234, 254]; // bg-blue-100
-        const darkBlue = [30, 64, 175];   // bg-blue-800
+  // Get background color based on salary and read status
+  const getNodeBackground = useCallback(
+    (node, jobData) => {
+      if (node.data.isResume) return 'white';
 
-        const r = Math.round(lightBlue[0] + (darkBlue[0] - lightBlue[0]) * percentage);
-        const g = Math.round(lightBlue[1] + (darkBlue[1] - lightBlue[1]) * percentage);
-        const b = Math.round(lightBlue[2] + (darkBlue[2] - lightBlue[2]) * percentage);
+      const key = `${username}_${node.id}`;
+      if (readJobs.has(key)) return '#f1f5f9';
 
-        return `rgb(${r}, ${g}, ${b})`;
+      if (showSalaryGradient && jobData) {
+        const salary = parseSalary(jobData.salary);
+        if (salary) {
+          const percentage =
+            (salary - salaryRange.min) / (salaryRange.max - salaryRange.min);
+          const lightBlue = [219, 234, 254]; // bg-blue-100
+          const darkBlue = [30, 64, 175]; // bg-blue-800
+
+          const r = Math.round(
+            lightBlue[0] + (darkBlue[0] - lightBlue[0]) * percentage,
+          );
+          const g = Math.round(
+            lightBlue[1] + (darkBlue[1] - lightBlue[1]) * percentage,
+          );
+          const b = Math.round(
+            lightBlue[2] + (darkBlue[2] - lightBlue[2]) * percentage,
+          );
+
+          return `rgb(${r}, ${g}, ${b})`;
+        }
+        return '#e2e8f0'; // Light gray for no salary
       }
-      return '#e2e8f0'; // Light gray for no salary
-    }
 
-    return filterText && !filteredNodes.has(node.id) ? '#f1f5f9' : 'rgb(255 241 143)';
-  }, [showSalaryGradient, salaryRange, filterText, filteredNodes, parseSalary]);
+      return filterText && !node.data.isResume && !filteredNodes.has(node.id)
+        ? '#f1f5f9'
+        : 'rgb(255 241 143)';
+    },
+    [showSalaryGradient, salaryRange, filterText, filteredNodes, parseSalary, readJobs, username],
+  );
 
   // Find path to resume node
-  const findPathToResume = useCallback((edges, startNodeId) => {
-    const pathEdges = new Set();
-    const visited = new Set();
-    
-    const findPath = (currentId) => {
-      if (visited.has(currentId)) return false;
-      visited.add(currentId);
-      
-      // Find edge going to parent
-      const parentEdge = edges.find(edge => 
-        edge.target === currentId && !visited.has(edge.source)
-      );
-      
-      if (!parentEdge) return false;
-      
-      pathEdges.add(parentEdge.id);
-      
-      // If we've reached the resume node (which should be a source node)
-      const isParentResume = nodes.find(n => 
-        n.id === parentEdge.source && n.data.isResume
-      );
-      
-      if (isParentResume) return true;
-      
-      // Continue up the tree
-      return findPath(parentEdge.source);
-    };
-    
-    findPath(startNodeId);
-    return pathEdges;
-  }, [nodes]);
+  const findPathToResume = useCallback(
+    (edges, startNodeId) => {
+      const pathEdges = new Set();
+      const visited = new Set();
+
+      const findPath = (currentId) => {
+        if (visited.has(currentId)) return false;
+        visited.add(currentId);
+
+        // Find edge going to parent
+        const parentEdge = edges.find(
+          (edge) => edge.target === currentId && !visited.has(edge.source),
+        );
+
+        if (!parentEdge) return false;
+
+        pathEdges.add(parentEdge.id);
+
+        // If we've reached the resume node (which should be a source node)
+        const isParentResume = nodes.find(
+          (n) => n.id === parentEdge.source && n.data.isResume,
+        );
+
+        if (isParentResume) return true;
+
+        // Continue up the tree
+        return findPath(parentEdge.source);
+      };
+
+      findPath(startNodeId);
+      return pathEdges;
+    },
+    [nodes],
+  );
 
   // Convert graph data to React Flow format
   const convertToReactFlowFormat = useCallback((graphData, jobInfoMap) => {
@@ -265,20 +304,23 @@ export default function Jobs({ params }) {
     return getLayoutedElements(rfNodes, rfEdges, 'TB');
   }, []);
 
-  const getEdgeStyle = useCallback((edge) => {
-    if (!selectedNode) return { stroke: '#94a3b8', strokeWidth: 2 };
-    
-    const pathToResume = findPathToResume(edges, selectedNode.id);
-    
-    if (pathToResume.has(edge.id)) {
-      return {
-        stroke: '#3b82f6',
-        strokeWidth: 2,
-      };
-    }
-    
-    return { stroke: '#94a3b8', strokeWidth: 2 };
-  }, [selectedNode, edges, findPathToResume]);
+  const getEdgeStyle = useCallback(
+    (edge) => {
+      if (!selectedNode) return { stroke: '#94a3b8', strokeWidth: 2 };
+
+      const pathToResume = findPathToResume(edges, selectedNode.id);
+
+      if (pathToResume.has(edge.id)) {
+        return {
+          stroke: '#3b82f6',
+          strokeWidth: 2,
+        };
+      }
+
+      return { stroke: '#94a3b8', strokeWidth: 2 };
+    },
+    [selectedNode, edges, findPathToResume],
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -353,7 +395,11 @@ export default function Jobs({ params }) {
             href={`/${username}`}
             className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
           >
-            <svg className="w-4 h-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+            <svg
+              className="w-4 h-4 mr-1"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
               <path
                 fillRule="evenodd"
                 d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
@@ -368,8 +414,8 @@ export default function Jobs({ params }) {
           <div className="text-lg">
             <p>Loading jobs graph...</p>
             <p className="mt-2 text-sm text-gray-500">
-              This might take a minute as we analyze job matches. Thanks for your
-              patience!
+              This might take a minute as we analyze job matches. Thanks for
+              your patience!
             </p>
           </div>
         </div>
@@ -421,17 +467,20 @@ export default function Jobs({ params }) {
 
       <div className="flex-1 relative">
         <ReactFlow
-          nodes={nodes.map(node => ({
+          nodes={nodes.map((node) => ({
             ...node,
             style: {
               ...node.style,
-              opacity: filterText && !node.data.isResume && !filteredNodes.has(node.id) ? 0.2 : 1,
+              opacity:
+                filterText && !node.data.isResume && !filteredNodes.has(node.id)
+                  ? 0.2
+                  : 1,
               background: getNodeBackground(node, jobInfo[node.id]),
-            }
+            },
           }))}
-          edges={edges.map(edge => {
+          edges={edges.map((edge) => {
             if (!selectedNode) return edge;
-            
+
             const pathToResume = findPathToResume(edges, selectedNode.id);
             return {
               ...edge,
@@ -464,10 +513,10 @@ export default function Jobs({ params }) {
             <div className="flex justify-between items-start mb-2">
               <h3 className="font-bold">{selectedNode.data.jobInfo.title}</h3>
               <button
-                onClick={() => setSelectedNode(null)}
-                className="text-gray-500 hover:text-gray-700"
+                onClick={() => markJobAsRead(selectedNode.id)}
+                className="text-sm px-2 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors"
               >
-                ×
+                Mark as Read
               </button>
             </div>
             <div className="text-sm whitespace-pre-wrap">
