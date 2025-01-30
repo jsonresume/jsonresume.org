@@ -184,17 +184,13 @@ export default function Jobs({ params }) {
 
   if (isLoading || !nodes.length) {
     return (
-      <div className="p-6">
-        <nav className="mb-6">
+      <div className="h-screen flex flex-col">
+        <nav className="px-4 py-2 bg-white border-b">
           <Link
             href={`/${username}`}
             className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
           >
-            <svg
-              className="w-4 h-4 mr-1"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
+            <svg className="w-4 h-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
               <path
                 fillRule="evenodd"
                 d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
@@ -205,24 +201,22 @@ export default function Jobs({ params }) {
           </Link>
         </nav>
 
-        <div className="mt-4 text-lg">
-          <p>Loading jobs graph...</p>
-          <p className="mt-2 text-sm text-gray-500">
-            This might take a minute as we analyze job matches. Thanks for your
-            patience!
-          </p>
+        <div className="flex-1 flex justify-center items-center">
+          <div className="text-lg">
+            <p>Loading jobs graph...</p>
+            <p className="mt-2 text-sm text-gray-500">
+              This might take a minute as we analyze job matches. Thanks for your
+              patience!
+            </p>
+          </div>
         </div>
-        <div
-          id="graph-container"
-          className="w-full h-[600px] bg-blue-50 relative mt-4"
-        />
       </div>
     );
   }
 
   return (
-    <div className="p-6">
-      <nav className="mb-6">
+    <div className="h-screen flex flex-col">
+      <nav className="px-4 py-2 bg-white border-b">
         <Link
           href={`/${username}`}
           className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
@@ -238,11 +232,7 @@ export default function Jobs({ params }) {
         </Link>
       </nav>
 
-      <div className="mt-4 text-lg">
-        {jobs && <p>Found {jobs.length} related jobs</p>}
-      </div>
-
-      <div style={{ width: '100%', height: '800px' }} className="bg-blue-50">
+      <div className="flex-1 relative">
         <ReactFlow
           nodes={nodes}
           edges={edges}
