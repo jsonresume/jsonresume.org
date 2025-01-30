@@ -69,8 +69,8 @@ const getLayoutedElements = (nodes, edges, direction = 'TB') => {
 
   nodes.forEach((node) => {
     dagreGraph.setNode(node.id, { 
-      width: node.data.isResume ? 150 : 80, 
-      height: node.data.isResume ? 150 : 80 
+      width: node.data.isResume ? 200 : 250, 
+      height: node.data.isResume ? 100 : 100 
     });
   });
 
@@ -85,8 +85,8 @@ const getLayoutedElements = (nodes, edges, direction = 'TB') => {
     return {
       ...node,
       position: {
-        x: nodeWithPosition.x - (node.data.isResume ? 75 : 40),
-        y: nodeWithPosition.y - (node.data.isResume ? 75 : 40),
+        x: nodeWithPosition.x - (node.data.isResume ? 100 : 125),
+        y: nodeWithPosition.y - (node.data.isResume ? 50 : 50),
       },
     };
   });
@@ -109,12 +109,20 @@ export default function Jobs({ params }) {
 
     const rfNodes = graphData.nodes.map((node) => {
       const isResume = node.group === -1;
+      const jobData = jobInfoMap[node.id];
+  
       return {
         id: node.id,
         type: 'default',
         position: { x: 0, y: 0 }, // Position will be set by dagre
         data: { 
-          label: isResume ? 'Your Resume' : `Job ${node.id}`,
+          label: isResume ? 'Your Resume' : (
+            <div className="job-card-content">
+              <div className="job-title">{jobData?.title || 'Unknown Position'}</div>
+              <div className="company-name">{jobData?.company || 'Unknown Company'}</div>
+              {jobData?.salary && <div className="salary">{jobData.salary}</div>}
+            </div>
+          ),
           jobInfo: jobInfoMap[node.id],
           isResume,
         },
@@ -421,31 +429,69 @@ export default function Jobs({ params }) {
       <style jsx global>{`
         .resume-node {
           background: white;
-          border: 2px solid black;
-          border-radius: 50%;
-          width: 150px !important;
-          height: 150px !important;
+          border: 2px solid #2563eb;
+          border-radius: 8px;
+          width: 200px !important;
+          height: 100px !important;
+          padding: 16px;
           display: flex;
           justify-content: center;
           align-items: center;
-          font-size: 16px;
+          font-size: 18px;
           font-weight: bold;
+          color: #1e40af;
+          box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
         }
         
         .job-node {
-          background: #fef9c3;
-          border: 1px solid black;
-          border-radius: 50%;
-          width: 80px !important;
-          height: 80px !important;
+          background: white;
+          border: 1px solid #e5e7eb;
+          border-radius: 8px;
+          width: 250px !important;
+          height: 100px !important;
+          padding: 12px;
+          font-size: 14px;
+          box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+          transition: all 0.2s ease;
+        }
+
+        .job-node:hover {
+          border-color: #2563eb;
+          box-shadow: 0 8px 12px -1px rgb(0 0 0 / 0.1);
+        }
+
+        .job-card-content {
           display: flex;
-          justify-content: center;
-          align-items: center;
+          flex-direction: column;
+          gap: 4px;
+          width: 100%;
+        }
+
+        .job-title {
+          font-weight: 600;
+          color: #111827;
+          font-size: 14px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .company-name {
+          color: #4b5563;
+          font-size: 13px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .salary {
+          color: #059669;
           font-size: 12px;
+          font-weight: 500;
         }
 
         .react-flow__edge-path {
-          stroke: #cccccc;
+          stroke: #94a3b8;
           stroke-width: 2;
         }
 
