@@ -240,6 +240,9 @@ export default function Jobs({ params }) {
           onEdgesChange={onEdgesChange}
           onNodeClick={handleNodeClick}
           fitView
+          minZoom={0.05}
+          maxZoom={4}
+          defaultZoom={0.5}
           proOptions={{ hideAttribution: true }}
           defaultEdgeOptions={{
             type: 'smoothstep',
