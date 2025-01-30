@@ -60,17 +60,27 @@ const formatTooltip = (jobInfo) => {
   return parts.filter(Boolean).join('\n');
 };
 
-const dagreGraph = new dagre.graphlib.Graph();
-dagreGraph.setDefaultEdgeLabel(() => ({}));
-
 const getLayoutedElements = (nodes, edges, direction = 'TB') => {
+  const dagreGraph = new dagre.graphlib.Graph();
+  dagreGraph.setDefaultEdgeLabel(() => ({}));
+
   const isHorizontal = direction === 'LR';
-  dagreGraph.setGraph({ rankdir: direction });
+  dagreGraph.setGraph({ 
+    rankdir: direction,
+    align: 'UL',
+    nodesep: 80,
+    ranksep: 100,
+    edgesep: 40,
+    marginx: 20,
+    marginy: 20,
+    acyclicer: 'greedy',
+    ranker: 'network-simplex'
+  });
 
   nodes.forEach((node) => {
-    dagreGraph.setNode(node.id, {
+    dagreGraph.setNode(node.id, { 
       width: node.data.isResume ? 200 : 250,
-      height: node.data.isResume ? 100 : 100,
+      height: node.data.isResume ? 100 : 100
     });
   });
 
@@ -102,6 +112,41 @@ export default function Jobs({ params }) {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [selectedNode, setSelectedNode] = useState(null);
+  const [filterText, setFilterText] = useState('');
+  const [filteredNodes, setFilteredNodes] = useState(new Set());
+
+  // Find path to resume node
+  const findPathToResume = useCallback((edges, startNodeId) => {
+    const pathEdges = new Set();
+    const visited = new Set();
+    
+    const findPath = (currentId) => {
+      if (visited.has(currentId)) return false;
+      visited.add(currentId);
+      
+      // Find edge going to parent
+      const parentEdge = edges.find(edge => 
+        edge.target === currentId && !visited.has(edge.source)
+      );
+      
+      if (!parentEdge) return false;
+      
+      pathEdges.add(parentEdge.id);
+      
+      // If we've reached the resume node (which should be a source node)
+      const isParentResume = nodes.find(n => 
+        n.id === parentEdge.source && n.data.isResume
+      );
+      
+      if (isParentResume) return true;
+      
+      // Continue up the tree
+      return findPath(parentEdge.source);
+    };
+    
+    findPath(startNodeId);
+    return pathEdges;
+  }, [nodes]);
 
   // Convert graph data to React Flow format
   const convertToReactFlowFormat = useCallback((graphData, jobInfoMap) => {
@@ -142,13 +187,28 @@ export default function Jobs({ params }) {
       id: `e${index}`,
       source: link.source,
       target: link.target,
-      type: 'default',
-      animated: true,
+      type: 'smoothstep',
+      animated: false,
+      style: { stroke: '#94a3b8', strokeWidth: 2 },
     }));
 
-    // Apply dagre layout
     return getLayoutedElements(rfNodes, rfEdges, 'TB');
   }, []);
+
+  const getEdgeStyle = useCallback((edge) => {
+    if (!selectedNode) return { stroke: '#94a3b8', strokeWidth: 2 };
+    
+    const pathToResume = findPathToResume(edges, selectedNode.id);
+    
+    if (pathToResume.has(edge.id)) {
+      return {
+        stroke: '#3b82f6',
+        strokeWidth: 2,
+      };
+    }
+    
+    return { stroke: '#94a3b8', strokeWidth: 2 };
+  }, [selectedNode, edges, findPathToResume]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -177,6 +237,39 @@ export default function Jobs({ params }) {
       fetchData();
     }
   }, [username, convertToReactFlowFormat]);
+
+  // Filter nodes based on search text
+  useEffect(() => {
+    if (!filterText.trim() || !jobInfo) {
+      setFilteredNodes(new Set());
+      return;
+    }
+
+    const searchText = filterText.toLowerCase();
+    const matches = new Set();
+
+    Object.entries(jobInfo).forEach(([id, job]) => {
+      const searchableText = [
+        job.title,
+        job.company,
+        job.description,
+        job.type,
+        job.location?.city,
+        job.location?.region,
+        job.skills?.map((s) => s.name).join(' '),
+        job.qualifications?.join(' '),
+      ]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase();
+
+      if (searchableText.includes(searchText)) {
+        matches.add(id);
+      }
+    });
+
+    setFilteredNodes(matches);
+  }, [filterText, jobInfo]);
 
   const handleNodeClick = useCallback((_, node) => {
     setSelectedNode(node);
@@ -232,10 +325,37 @@ export default function Jobs({ params }) {
         </Link>
       </nav>
 
+      <div className="px-4 py-2 bg-white border-b">
+        <input
+          type="text"
+          placeholder="Filter jobs by title, company, skills..."
+          value={filterText}
+          onChange={(e) => setFilterText(e.target.value)}
+          className="w-full max-w-xl px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
       <div className="flex-1 relative">
         <ReactFlow
-          nodes={nodes}
-          edges={edges}
+          nodes={nodes.map(node => ({
+            ...node,
+            style: {
+              ...node.style,
+              opacity: filterText && !node.data.isResume && !filteredNodes.has(node.id) ? 0.2 : 1,
+              background: node.data.isResume ? 'white' : 
+                (filterText && !filteredNodes.has(node.id) ? '#f1f5f9' : 'rgb(255 241 143)'),
+            }
+          }))}
+          edges={edges.map(edge => {
+            if (!selectedNode) return edge;
+            
+            const pathToResume = findPathToResume(edges, selectedNode.id);
+            return {
+              ...edge,
+              animated: pathToResume.has(edge.id),
+              style: getEdgeStyle(edge),
+            };
+          })}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onNodeClick={handleNodeClick}
@@ -244,9 +364,11 @@ export default function Jobs({ params }) {
           maxZoom={4}
           defaultZoom={0.5}
           proOptions={{ hideAttribution: true }}
+          edgeOptions={{
+            type: 'smoothstep',
+          }}
           defaultEdgeOptions={{
             type: 'smoothstep',
-            animated: true,
           }}
         >
           <Background />
@@ -274,7 +396,6 @@ export default function Jobs({ params }) {
 
       <style jsx global>{`
         .resume-node {
-          background: white;
           border: 2px solid #2563eb;
           border-radius: 8px;
           width: 200px !important;
@@ -290,7 +411,6 @@ export default function Jobs({ params }) {
         }
 
         .job-node {
-          background: white;
           border: 1px solid #e5e7eb;
           border-radius: 8px;
           width: 250px !important;
@@ -315,7 +435,7 @@ export default function Jobs({ params }) {
 
         .job-title {
           font-weight: 600;
-          color: #111827;
+          color: #1e293b;
           font-size: 14px;
           white-space: nowrap;
           overflow: hidden;
@@ -323,7 +443,7 @@ export default function Jobs({ params }) {
         }
 
         .company-name {
-          color: #4b5563;
+          color: #334155;
           font-size: 13px;
           white-space: nowrap;
           overflow: hidden;
@@ -331,7 +451,7 @@ export default function Jobs({ params }) {
         }
 
         .salary {
-          color: #059669;
+          color: #0f766e;
           font-size: 12px;
           font-weight: 500;
         }
