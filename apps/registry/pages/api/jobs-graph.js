@@ -13,6 +13,10 @@ const cosineSimilarity = (a, b) => {
 };
 
 export default async function handler(req, res) {
+  if (req.method !== 'GET') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
   if (!process.env.OPENAI_API_KEY) {
     throw new Error('Missing env var from OpenAI');
   }
@@ -21,7 +25,10 @@ export default async function handler(req, res) {
     apiKey: process.env.OPENAI_API_KEY,
   });
 
-  const { username } = req.body;
+  const username = req.query.username;
+  if (!username) {
+    return res.status(400).json({ error: 'Username is required' });
+  }
 
   const { data } = await supabase
     .from('resumes')
@@ -67,7 +74,7 @@ export default async function handler(req, res) {
   let embedding = completion.data[0].embedding;
   if (embedding.length < desiredLength) {
     embedding = embedding.concat(
-      Array(desiredLength - embedding.length).fill(0),
+      Array(desiredLength - embedding.length).fill(0)
     );
   }
 
@@ -145,13 +152,13 @@ export default async function handler(req, res) {
           (best, current) => {
             const similarity = cosineSimilarity(
               lessRelevantVector,
-              JSON.parse(current.embedding_v5),
+              JSON.parse(current.embedding_v5)
             );
             return similarity > best.similarity
               ? { job: current, similarity }
               : best;
           },
-          { job: null, similarity: -1 },
+          { job: null, similarity: -1 }
         );
 
         if (mostSimilarJob.job) {
@@ -174,17 +181,28 @@ export default async function handler(req, res) {
   });
 
   // Set cache control headers for CDN caching
-  res.setHeader(
-    'Cache-Control',
-    'public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800',
-  );
+  const etag = `"${username}-v1"`; // Make ETag deterministic
+  res.setHeader('ETag', etag);
+  res.setHeader('Cache-Control', 'public, max-age=86400');
+  res.setHeader('Vary', 'Accept-Encoding');
+  res.setHeader('CDN-Cache-Control', 'public, max-age=86400');
+  res.setHeader('Cloudflare-CDN-Cache-Control', 'public, max-age=86400');
 
-  res.status(200).json({
-    graphData,
+  // Ensure consistent ordering of properties for better caching
+  const response = {
+    graphData: {
+      nodes: graphData.nodes.sort((a, b) => a.id.localeCompare(b.id)),
+      links: graphData.links.sort(
+        (a, b) =>
+          a.source.localeCompare(b.source) || a.target.localeCompare(b.target)
+      ),
+    },
     jobInfoMap,
     mostRelevant: topJobs,
     lessRelevant: otherJobs,
     allJobs: sortedJobs,
-    resume: resume,
-  });
+    resume,
+  };
+
+  res.status(200).json(response);
 }

@@ -339,7 +339,9 @@ export default function Jobs({ params }) {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.post('/api/jobs-graph', { username });
+        const response = await axios.get(
+          `/api/jobs-graph?username=${encodeURIComponent(username)}`
+        );
         const { graphData, jobInfoMap, allJobs } = response.data;
 
         setJobs(allJobs);
