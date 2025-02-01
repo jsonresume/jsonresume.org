@@ -33,7 +33,7 @@ const getLayoutedElements = (nodes, edges, direction = 'TB') => {
   nodes.forEach((node) => {
     dagreGraph.setNode(node.id, {
       width: node.data.isResume ? 200 : 250,
-      height: node.data.isResume ? 100 : 100,
+      height: node.data.isResume ? 100 : 150,
     });
   });
 
@@ -49,7 +49,7 @@ const getLayoutedElements = (nodes, edges, direction = 'TB') => {
       ...node,
       position: {
         x: nodeWithPosition.x - (node.data.isResume ? 100 : 125),
-        y: nodeWithPosition.y - (node.data.isResume ? 50 : 50),
+        y: nodeWithPosition.y - (node.data.isResume ? 50 : 75),
       },
     };
   });
@@ -162,7 +162,7 @@ export default function Jobs({ params }) {
             lightBlue[0] + (darkBlue[0] - lightBlue[0]) * percentage
           );
           const g = Math.round(
-            lightBlue[1] + (darkBlue[1] - lightBlue[1]) * percentage
+            lightBlue[1] + (darkBlue[1] - lightBlue[0]) * percentage
           );
           const b = Math.round(
             lightBlue[2] + (darkBlue[2] - lightBlue[2]) * percentage
@@ -238,18 +238,45 @@ export default function Jobs({ params }) {
         position: { x: 0, y: 0 }, // Position will be set by dagre
         data: {
           label: isResume ? (
-            'Your Resume'
+            <div className="resume-node-content">
+              <svg className="resume-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <span>Your Resume</span>
+            </div>
           ) : (
             <div className="job-card-content">
               <div className="job-title">
                 {jobData?.title || 'Unknown Position'}
               </div>
               <div className="company-name">
+                <svg className="company-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} 
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
                 {jobData?.company || 'Unknown Company'}
               </div>
-              {jobData?.salary && (
-                <div className="salary">{jobData.salary}</div>
-              )}
+              
+              <div className="job-meta">
+                <div className="meta-pills">
+                  {jobData?.type && (
+                    <div className="meta-pill type">
+                      {jobData.type}
+                    </div>
+                  )}
+                  {jobData?.remote && (
+                    <div className="meta-pill remote">
+                      {jobData.remote}
+                    </div>
+                  )}
+                  {jobData?.salary && (
+                    <div className="meta-pill salary">
+                      {jobData.salary}
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           ),
           jobInfo: jobInfoMap[node.id],
@@ -589,17 +616,14 @@ export default function Jobs({ params }) {
                         <div className="flex flex-wrap gap-1.5">
                           {selectedNode.data.jobInfo.skills.map(
                             (skill, index) => (
-                              <span
-                                key={index}
-                                className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10"
-                              >
+                              <div key={index} className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
                                 {skill.name}
                                 {skill.level && (
                                   <span className="ml-1 text-gray-400">
                                     • {skill.level}
                                   </span>
                                 )}
-                              </span>
+                              </div>
                             )
                           )}
                         </div>
@@ -622,6 +646,21 @@ export default function Jobs({ params }) {
                       </div>
                     )}
                 </div>
+
+                <div className="p-4 bg-gray-50 rounded-b-xl flex justify-end">
+                  <a
+                    href={`/jobs/${selectedNode.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-md px-4 py-2 text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 shadow-sm transition-colors"
+                  >
+                    View Job Details
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  </a>
+                </div>
               </div>
             )}
           </div>
@@ -630,8 +669,8 @@ export default function Jobs({ params }) {
 
       <style jsx global>{`
         .resume-node {
-          border: 2px solid #2563eb;
-          border-radius: 8px;
+          border: 2px double #2563eb;
+          border-radius: 12px;
           width: 200px !important;
           height: 100px !important;
           padding: 16px;
@@ -641,82 +680,118 @@ export default function Jobs({ params }) {
           font-size: 18px;
           font-weight: bold;
           color: #1e40af;
-          box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+          background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+          box-shadow: 0 8px 16px -4px rgb(37 99 235 / 0.15);
+          position: relative;
+          overflow: hidden;
+        }
+
+        .resume-node::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: radial-gradient(circle at center, rgba(37, 99, 235, 0.1) 0%, transparent 70%);
+          animation: pulse 3s ease-in-out infinite;
+        }
+
+        .resume-node-content {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 8px;
+          z-index: 1;
+        }
+
+        .resume-icon {
+          width: 24px;
+          height: 24px;
+          color: #2563eb;
         }
 
         .job-node {
           border: 1px solid #e5e7eb;
           border-radius: 8px;
           width: 250px !important;
-          height: 100px !important;
+          min-height: 100px !important;
+          height: auto !important;
           padding: 12px;
           font-size: 14px;
+          background: linear-gradient(to bottom, #ffffff, #f8fafc);
           box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
           transition: all 0.2s ease;
         }
 
         .job-node:hover {
           border-color: #2563eb;
+          transform: translateY(-2px);
           box-shadow: 0 8px 12px -1px rgb(0 0 0 / 0.1);
         }
 
         .job-card-content {
           display: flex;
           flex-direction: column;
-          gap: 4px;
-          width: 100%;
+          gap: 8px;
+          height: 100%;
+          min-height: 76px;
         }
 
         .job-title {
           font-weight: 600;
           color: #1e293b;
           font-size: 14px;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
+          line-height: 1.3;
+          overflow: visible;
+          word-wrap: break-word;
         }
 
         .company-name {
-          color: #334155;
+          color: #475569;
           font-size: 13px;
+          display: flex;
+          align-items: center;
+          gap: 4px;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
         }
 
-        .salary {
-          color: #0f766e;
-          font-size: 12px;
+        .company-icon {
+          width: 14px;
+          height: 14px;
+          flex-shrink: 0;
+        }
+
+        .job-meta {
+          margin-top: auto;
+        }
+
+        .meta-pills {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 4px;
+        }
+
+        .meta-pill {
+          font-size: 11px;
+          padding: 2px 6px;
+          border-radius: 4px;
           font-weight: 500;
+          white-space: nowrap;
         }
 
-        .react-flow__edge-path {
-          stroke: #94a3b8;
-          stroke-width: 2;
+        .meta-pill.type {
+          background-color: #f0f9ff;
+          color: #0369a1;
         }
 
-        .react-flow__edge.animated path {
-          stroke-dasharray: 5;
-          animation: dashdraw 0.5s linear infinite;
+        .meta-pill.remote {
+          background-color: #f0fdf4;
+          color: #166534;
         }
 
-        @keyframes dashdraw {
-          from {
-            stroke-dashoffset: 10;
-          }
-        }
-
-        @keyframes bounce-once {
-          0%,
-          100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-25%);
-          }
-        }
-        .animate-bounce-once {
-          animation: bounce-once 0.5s ease-in-out;
+        .meta-pill.salary {
+          background-color: #ecfdf5;
+          color: #059669;
         }
       `}</style>
     </div>
