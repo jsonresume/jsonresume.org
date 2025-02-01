@@ -173,6 +173,12 @@ export default async function handler(req, res) {
     jobInfoMap[job.uuid] = JSON.parse(job.gpt_content);
   });
 
+  // Set cache control headers for CDN caching
+  res.setHeader(
+    'Cache-Control',
+    'public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800'
+  );
+
   res.status(200).json({
     graphData,
     jobInfoMap,

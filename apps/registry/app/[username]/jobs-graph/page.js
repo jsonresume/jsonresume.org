@@ -2,9 +2,17 @@
 
 import axios from 'axios';
 import Link from 'next/link';
-import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
-import { forceCollide, forceManyBody } from 'd3-force';
-import ForceGraph2D from 'react-force-graph-2d';
+import { useEffect, useState, useCallback } from 'react';
+import {
+  ReactFlow,
+  Background,
+  Controls,
+  MiniMap,
+  useNodesState,
+  useEdgesState,
+} from '@xyflow/react';
+import '@xyflow/react/dist/style.css';
+import dagre from '@dagrejs/dagre';
 
 // Format skills array into a readable string
 const formatSkills = (skills) => {
@@ -52,38 +60,88 @@ const formatTooltip = (jobInfo) => {
   return parts.filter(Boolean).join('\n');
 };
 
-const calculateCollisionRadius = (node) => {
-  // Replace this with your logic to determine node size
-  const nodeSize = node.size || 1; // Default size if not specified
-  return nodeSize + 3; // Add padding if desired
+const getLayoutedElements = (nodes, edges, direction = 'TB') => {
+  const dagreGraph = new dagre.graphlib.Graph();
+  dagreGraph.setDefaultEdgeLabel(() => ({}));
+
+  dagreGraph.setGraph({
+    rankdir: direction,
+    align: 'UL',
+    nodesep: 80,
+    ranksep: 100,
+    edgesep: 40,
+    marginx: 20,
+    marginy: 20,
+    acyclicer: 'greedy',
+    ranker: 'network-simplex',
+  });
+
+  nodes.forEach((node) => {
+    dagreGraph.setNode(node.id, {
+      width: node.data.isResume ? 200 : 250,
+      height: node.data.isResume ? 100 : 100,
+    });
+  });
+
+  edges.forEach((edge) => {
+    dagreGraph.setEdge(edge.source, edge.target);
+  });
+
+  dagre.layout(dagreGraph);
+
+  const layoutedNodes = nodes.map((node) => {
+    const nodeWithPosition = dagreGraph.node(node.id);
+    return {
+      ...node,
+      position: {
+        x: nodeWithPosition.x - (node.data.isResume ? 100 : 125),
+        y: nodeWithPosition.y - (node.data.isResume ? 50 : 50),
+      },
+    };
+  });
+
+  return { nodes: layoutedNodes, edges };
 };
 
 export default function Jobs({ params }) {
   const { username } = params;
-  const [jobs, setJobs] = useState(null);
+  const [, setJobs] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isInitialized, setIsInitialized] = useState(false); // Track if initialized
-
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-  const graphRef = useRef();
-  const [activeNode, setActiveNode] = useState(null);
-  const [jobInfo, setJobInfo] = useState({}); // Store parsed job info
-  const [graphData, setGraphData] = useState(null);
-  const imageCache = useRef(new Map());
-
-  const [mostRelevant, setMostRelevant] = useState([]);
-  const [lessRelevant, setLessRelevant] = useState([]);
-
-  const [readJobs, setReadJobs] = useState(new Set());
-
+  const [jobInfo, setJobInfo] = useState({});
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [selectedNode, setSelectedNode] = useState(null);
   const [filterText, setFilterText] = useState('');
   const [filteredNodes, setFilteredNodes] = useState(new Set());
-
   const [showSalaryGradient, setShowSalaryGradient] = useState(false);
   const [salaryRange, setSalaryRange] = useState({
     min: Infinity,
     max: -Infinity,
   });
+  const [readJobs, setReadJobs] = useState(new Set());
+
+  // Load read jobs from local storage
+  useEffect(() => {
+    const storedReadJobs = localStorage.getItem(`readJobs_${username}`);
+    if (storedReadJobs) {
+      setReadJobs(new Set(JSON.parse(storedReadJobs)));
+    }
+  }, [username]);
+
+  // Save read jobs to local storage
+  const markJobAsRead = useCallback(
+    (jobId) => {
+      const newReadJobs = new Set(readJobs);
+      const key = `${username}_${jobId}`;
+      newReadJobs.add(key);
+      setReadJobs(newReadJobs);
+      localStorage.setItem(
+        `readJobs_${username}`,
+        JSON.stringify([...newReadJobs])
+      );
+    },
+    [readJobs, username]
+  );
 
   // Parse salary from various string formats
   const parseSalary = useCallback((salary) => {
@@ -130,14 +188,182 @@ export default function Jobs({ params }) {
     }
   }, [jobInfo, parseSalary]);
 
-  // Load read jobs from localStorage on mount
-  useEffect(() => {
-    const storedReadJobs = localStorage.getItem(`readJobs_${username}`);
-    if (storedReadJobs) {
-      setReadJobs(new Set(JSON.parse(storedReadJobs)));
-    }
-  }, [username]);
+  // Get background color based on salary and read status
+  const getNodeBackground = useCallback(
+    (node, jobData) => {
+      if (node.data.isResume) return 'white';
 
+      const key = `${username}_${node.id}`;
+      if (readJobs.has(key)) return '#f1f5f9';
+
+      if (showSalaryGradient && jobData) {
+        const salary = parseSalary(jobData.salary);
+        if (salary) {
+          const percentage =
+            (salary - salaryRange.min) / (salaryRange.max - salaryRange.min);
+          const lightBlue = [219, 234, 254]; // bg-blue-100
+          const darkBlue = [30, 64, 175]; // bg-blue-800
+
+          const r = Math.round(
+            lightBlue[0] + (darkBlue[0] - lightBlue[0]) * percentage
+          );
+          const g = Math.round(
+            lightBlue[1] + (darkBlue[1] - lightBlue[1]) * percentage
+          );
+          const b = Math.round(
+            lightBlue[2] + (darkBlue[2] - lightBlue[2]) * percentage
+          );
+
+          return `rgb(${r}, ${g}, ${b})`;
+        }
+        return '#e2e8f0'; // Light gray for no salary
+      }
+
+      return filterText && !node.data.isResume && !filteredNodes.has(node.id)
+        ? '#f1f5f9'
+        : 'rgb(255 241 143)';
+    },
+    [
+      showSalaryGradient,
+      salaryRange,
+      filterText,
+      filteredNodes,
+      parseSalary,
+      readJobs,
+      username,
+    ]
+  );
+
+  // Find path to resume node
+  const findPathToResume = useCallback(
+    (edges, startNodeId) => {
+      const pathEdges = new Set();
+      const visited = new Set();
+
+      const findPath = (currentId) => {
+        if (visited.has(currentId)) return false;
+        visited.add(currentId);
+
+        // Find edge going to parent
+        const parentEdge = edges.find(
+          (edge) => edge.target === currentId && !visited.has(edge.source)
+        );
+
+        if (!parentEdge) return false;
+
+        pathEdges.add(parentEdge.id);
+
+        // If we've reached the resume node (which should be a source node)
+        const isParentResume = nodes.find(
+          (n) => n.id === parentEdge.source && n.data.isResume
+        );
+
+        if (isParentResume) return true;
+
+        // Continue up the tree
+        return findPath(parentEdge.source);
+      };
+
+      findPath(startNodeId);
+      return pathEdges;
+    },
+    [nodes]
+  );
+
+  // Convert graph data to React Flow format
+  const convertToReactFlowFormat = useCallback((graphData, jobInfoMap) => {
+    if (!graphData) return { nodes: [], edges: [] };
+
+    const rfNodes = graphData.nodes.map((node) => {
+      const isResume = node.group === -1;
+      const jobData = jobInfoMap[node.id];
+
+      return {
+        id: node.id,
+        type: 'default',
+        position: { x: 0, y: 0 }, // Position will be set by dagre
+        data: {
+          label: isResume ? (
+            'Your Resume'
+          ) : (
+            <div className="job-card-content">
+              <div className="job-title">
+                {jobData?.title || 'Unknown Position'}
+              </div>
+              <div className="company-name">
+                {jobData?.company || 'Unknown Company'}
+              </div>
+              {jobData?.salary && (
+                <div className="salary">{jobData.salary}</div>
+              )}
+            </div>
+          ),
+          jobInfo: jobInfoMap[node.id],
+          isResume,
+        },
+        className: isResume ? 'resume-node' : 'job-node',
+      };
+    });
+
+    const rfEdges = graphData.links.map((link, index) => ({
+      id: `e${index}`,
+      source: link.source,
+      target: link.target,
+      type: 'smoothstep',
+      animated: false,
+      style: { stroke: '#94a3b8', strokeWidth: 2 },
+    }));
+
+    return getLayoutedElements(rfNodes, rfEdges, 'TB');
+  }, []);
+
+  const getEdgeStyle = useCallback(
+    (edge) => {
+      if (!selectedNode) return { stroke: '#94a3b8', strokeWidth: 2 };
+
+      const pathToResume = findPathToResume(edges, selectedNode.id);
+
+      if (pathToResume.has(edge.id)) {
+        return {
+          stroke: '#3b82f6',
+          strokeWidth: 2,
+        };
+      }
+
+      return { stroke: '#94a3b8', strokeWidth: 2 };
+    },
+    [selectedNode, edges, findPathToResume]
+  );
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const response = await axios.post('/api/jobs-graph', { username });
+        const { graphData, jobInfoMap, allJobs } = response.data;
+
+        setJobs(allJobs);
+        setJobInfo(jobInfoMap);
+
+        const { nodes: rfNodes, edges: rfEdges } = convertToReactFlowFormat(
+          graphData,
+          jobInfoMap
+        );
+        setNodes(rfNodes);
+        setEdges(rfEdges);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (username) {
+      fetchData();
+    }
+  }, [username, convertToReactFlowFormat, setNodes, setEdges]);
+
+  // Filter nodes based on search text
   useEffect(() => {
     if (!filterText.trim() || !jobInfo) {
       setFilteredNodes(new Set());
@@ -170,332 +396,13 @@ export default function Jobs({ params }) {
     setFilteredNodes(matches);
   }, [filterText, jobInfo]);
 
-  const markJobAsRead = useCallback(
-    (jobId) => {
-      setReadJobs((prev) => {
-        const newReadJobs = new Set(prev);
-        newReadJobs.add(jobId);
-        localStorage.setItem(
-          `readJobs_${username}`,
-          JSON.stringify([...newReadJobs])
-        );
-        return newReadJobs;
-      });
-    },
-    [username]
-  );
-
-  // Memoize node colors for salary view
-  const nodeSalaryColors = useMemo(() => {
-    if (!showSalaryGradient || !jobInfo) return new Map();
-
-    const colors = new Map();
-    Object.entries(jobInfo).forEach(([id, job]) => {
-      const salary = parseSalary(job.salary);
-      if (salary) {
-        const percentage =
-          (salary - salaryRange.min) / (salaryRange.max - salaryRange.min);
-        const lightBlue = [219, 234, 254]; // bg-blue-100
-        const darkBlue = [30, 64, 175]; // bg-blue-800
-
-        const r = Math.round(
-          lightBlue[0] + (darkBlue[0] - lightBlue[0]) * percentage
-        );
-        const g = Math.round(
-          lightBlue[1] + (darkBlue[1] - lightBlue[1]) * percentage
-        );
-        const b = Math.round(
-          lightBlue[2] + (darkBlue[2] - lightBlue[2]) * percentage
-        );
-
-        colors.set(id, `rgb(${r}, ${g}, ${b})`);
-      } else {
-        colors.set(id, '#e2e8f0'); // Light gray for no salary
-      }
-    });
-    return colors;
-  }, [showSalaryGradient, jobInfo, parseSalary, salaryRange]);
-
-  const getNodeColor = useCallback(
-    (node) => {
-      if (node.group === -1) return '#fff';
-      if (filterText && !filteredNodes.has(node.id)) return '#f8fafc';
-
-      if (showSalaryGradient) {
-        return nodeSalaryColors.get(node.id) || '#e2e8f0';
-      }
-
-      return readJobs.has(node.id) ? '#f1f5f9' : '#fef9c3';
-    },
-    [readJobs, filterText, filteredNodes, showSalaryGradient, nodeSalaryColors]
-  );
-
-  const getNodeBackground = useCallback(
-    (node) => {
-      if (node.group === -1) return '#fff';
-      if (filterText && !filteredNodes.has(node.id)) return '#f8fafc';
-
-      if (showSalaryGradient && jobInfo[node.id]) {
-        const salary = parseSalary(jobInfo[node.id].salary);
-        if (salary) {
-          const percentage =
-            (salary - salaryRange.min) / (salaryRange.max - salaryRange.min);
-          const lightBlue = [219, 234, 254]; // bg-blue-100
-          const darkBlue = [30, 64, 175]; // bg-blue-800
-
-          const r = Math.round(
-            lightBlue[0] + (darkBlue[0] - lightBlue[0]) * percentage
-          );
-          const g = Math.round(
-            lightBlue[1] + (darkBlue[1] - lightBlue[1]) * percentage
-          );
-          const b = Math.round(
-            lightBlue[2] + (darkBlue[2] - lightBlue[2]) * percentage
-          );
-
-          return `rgb(${r}, ${g}, ${b})`;
-        }
-        return '#e2e8f0'; // Light gray for no salary
-      }
-
-      return readJobs.has(node.id) ? '#f1f5f9' : '#fef9c3';
-    },
-    [
-      readJobs,
-      filterText,
-      filteredNodes,
-      showSalaryGradient,
-      jobInfo,
-      parseSalary,
-      salaryRange,
-    ]
-  );
-
-  // Function to preload and cache image
-  const getCachedImage = (src) => {
-    if (!imageCache.current.has(src)) {
-      const img = new Image();
-      img.src = src;
-      imageCache.current.set(src, img);
-    }
-    return imageCache.current.get(src);
-  };
-
-  // Center and zoom the graph when it's ready
-  const handleEngineStop = useCallback(() => {
-    console.log('ENGINE STOPPED Graph instance:', graphRef.current);
-    if (graphRef.current) {
-      if (!isInitialized) {
-        const fg = graphRef.current;
-        console.log('FG IS STARTING', fg);
-        if (fg) {
-          // Deactivate existing forces if necessary
-          // fg.d3Force('center', null);
-          fg.d3Force(
-            'charge',
-            forceManyBody()
-              .strength(-300) // Negative values repel nodes; adjust this value for more/less repulsion
-              .distanceMax(600) // Maximum distance where the charge force is applied
-              .distanceMin(20) // Minimum distance where the charge force is applied
-          );
-
-          // Add custom collision force
-          fg.d3Force(
-            'collide',
-            forceCollide().radius((node) => calculateCollisionRadius(node))
-          );
-
-          setIsInitialized(true);
-        }
-      }
-    }
-  }, [isInitialized]);
-
-  const handleCanvasClick = useCallback(
-    (event) => {
-      if (!graphRef.current) return;
-
-      const canvas = graphRef.current.canvas;
-      const rect = canvas.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
-
-      // Check if click is on a node
-      const clickedNode = graphData?.nodes.find((node) => {
-        const dx = x - node.x;
-        const dy = y - node.y;
-        return Math.sqrt(dx * dx + dy * dy) <= node.size;
-      });
-
-      if (clickedNode) {
-        setActiveNode(clickedNode);
-      }
-    },
-    [graphData]
-  );
-
-  useEffect(() => {
-    if (graphRef.current?.canvas && dimensions.width && dimensions.height) {
-      const canvas = graphRef.current.canvas;
-      canvas.addEventListener('click', handleCanvasClick);
-
-      return () => {
-        canvas.removeEventListener('click', handleCanvasClick);
-      };
-    }
-  }, [handleCanvasClick, dimensions]);
-
-  useEffect(() => {
-    const container = document.getElementById('graph-container');
-    if (container) {
-      const width = container.offsetWidth;
-      const height = 600;
-      setDimensions({ width, height });
-    }
+  const handleNodeClick = useCallback((_, node) => {
+    setSelectedNode(node);
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const response = await axios.post('/api/jobs-graph', { username });
-        const { graphData, jobInfoMap, mostRelevant, lessRelevant, allJobs } =
-          response.data;
-
-        setMostRelevant(mostRelevant);
-        setLessRelevant(lessRelevant);
-        setJobs(allJobs);
-        setJobInfo(jobInfoMap);
-        setGraphData(graphData);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (username) {
-      fetchData();
-    }
-  }, [username]);
-
-  if (isLoading || !graphData) {
-    return (
-      <div className="p-6">
-        <nav className="mb-6">
-          <Link
-            href={`/${username}`}
-            className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
-          >
-            <svg
-              className="w-4 h-4 mr-1"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                clipRule="evenodd"
-              />
-            </svg>
-            Back to {username}'s Profile
-          </Link>
-        </nav>
-
-        <div className="space-y-6 mb-8 max-w-4xl">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Job Matches Graph
-            </h1>
-            <p className="text-lg text-gray-600">
-              This graph shows jobs that match your resume. The closer a job
-              matches your skills and experience, the larger and more connected
-              its circle will be.
-            </p>
-            <div className="mt-4 text-sm text-gray-500 space-y-2">
-              <p>
-                Jobs are sourced from Hacker News "Who is Hiring?" posts. The
-                matching process takes a moment to analyze each position against
-                your resume.
-              </p>
-              <p>
-                Note: This is an experimental feature and may not catch every
-                job or skill match perfectly.
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
-              How to Use the Graph
-            </h2>
-
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <h3 className="font-medium text-gray-900 mb-2">
-                  Reading the Graph
-                </h3>
-                <ul className="space-y-2 text-gray-600">
-                  <li className="flex items-start">
-                    <span className="text-blue-500 mr-2">•</span>
-                    Your resume sits in the center
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-blue-500 mr-2">•</span>
-                    Bigger circles mean closer skill matches
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-blue-500 mr-2">•</span>
-                    Numbers show match rank (1 is the best match)
-                  </li>
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="font-medium text-gray-900 mb-2">
-                  Tools to Help You
-                </h3>
-                <ul className="space-y-2 text-gray-600">
-                  <li className="flex items-start">
-                    <span className="text-blue-500 mr-2">•</span>
-                    Click any job to see its details
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-blue-500 mr-2">•</span>
-                    Search helps find specific jobs
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-blue-500 mr-2">•</span>
-                    Salary view shows pay ranges in blue
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-blue-500 mr-2">•</span>
-                    Mark jobs as read to keep track
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-4 text-lg">
-          <p>Loading jobs graph...</p>
-          <p className="mt-2 text-sm text-gray-500">
-            This might take a minute as we analyze job matches. Thanks for your
-            patience!
-          </p>
-        </div>
-        <div
-          id="graph-container"
-          className="w-full h-[600px] bg-blue-50 relative mt-4"
-        />
-      </div>
-    );
-  }
-
   return (
-    <div className="p-6">
-      <nav className="mb-6">
+    <div className="h-screen flex flex-col">
+      <nav className="px-4 py-2 bg-white border-b">
         <Link
           href={`/${username}`}
           className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
@@ -511,370 +418,215 @@ export default function Jobs({ params }) {
         </Link>
       </nav>
 
-      <div className="space-y-6 mb-8 max-w-4xl">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Job Matches Graph
-          </h1>
-          <p className="text-lg text-gray-600">
-            This graph shows jobs that match your resume. The closer a job
-            matches your skills and experience, the larger and more connected
-            its circle will be.
+      <div className="px-4 py-3 bg-white border-b">
+        <div className="max-w-6xl">
+          <p className="mb-2">
+            This graph uses vector similarity to match your resume with relevant
+            job postings from Hacker News "Who is Hiring?" threads. Jobs are
+            analyzed and matched against your resume using natural language
+            processing. The matching process takes a moment to analyze each
+            position.
           </p>
-          <div className="mt-4 text-sm text-gray-500 space-y-2">
-            <p>
-              Jobs are sourced from Hacker News "Who is Hiring?" posts. The
-              matching process takes a moment to analyze each position against
-              your resume.
-            </p>
-            <p>
-              Note: This is an experimental feature and may not catch every job
-              or skill match perfectly.
-            </p>
-          </div>
-        </div>
-
-        <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">
-            How to Use the Graph
-          </h2>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            <div>
-              <h3 className="font-medium text-gray-900 mb-2">
-                Reading the Graph
-              </h3>
-              <ul className="space-y-2 text-gray-600">
-                <li className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  Your resume sits in the center
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  Bigger circles mean closer skill matches
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  Numbers show match rank (1 is the best match)
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-medium text-gray-900 mb-2">
-                Tools to Help You
-              </h3>
-              <ul className="space-y-2 text-gray-600">
-                <li className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  Click any job to see its details
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  Search helps find specific jobs
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  Salary view shows pay ranges in blue
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
-                  Mark jobs as read to keep track
-                </li>
-              </ul>
-            </div>
-          </div>
+          <p className="text-sm text-gray-600">
+            Note: This is an experimental feature and may not catch every job or
+            skill match perfectly.
+          </p>
         </div>
       </div>
 
-      {/* {!jobs && <Loading />} */}
-      <div className="mt-4 text-lg">
-        {jobs ? (
-          <div className="flex flex-col gap-4">
-            <p>
-              Found {jobs.length} related jobs ({mostRelevant.length} highly
-              relevant)
+      {isLoading || !nodes.length ? (
+        <div className="flex-1 flex justify-center items-center">
+          <div className="text-lg">
+            <p>Loading jobs graph...</p>
+            <p className="mt-2 text-sm text-gray-500">
+              This might take a minute as we analyze job matches. Thanks for
+              your patience!
             </p>
-            <div className="flex items-center gap-4 w-full max-w-xl">
-              <input
-                type="text"
-                placeholder="Filter jobs by title, company, skills..."
-                value={filterText}
-                onChange={(e) => setFilterText(e.target.value)}
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <div className="flex items-center gap-2">
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    className="sr-only peer"
-                    checked={showSalaryGradient}
-                    onChange={(e) => setShowSalaryGradient(e.target.checked)}
-                  />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                  <span className="ml-2 text-sm font-medium text-gray-900">
-                    Salary View
-                  </span>
-                </label>
-              </div>
+          </div>
+        </div>
+      ) : (
+        <>
+          <div className="px-4 py-2 bg-white border-b flex items-center gap-4">
+            <input
+              type="text"
+              placeholder="Filter jobs by title, company, skills..."
+              value={filterText}
+              onChange={(e) => setFilterText(e.target.value)}
+              className="flex-1 max-w-xl px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <div className="flex items-center gap-2">
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="sr-only peer"
+                  checked={showSalaryGradient}
+                  onChange={(e) => setShowSalaryGradient(e.target.checked)}
+                />
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                <span className="ml-2 text-sm font-medium text-gray-900">
+                  Salary View
+                </span>
+              </label>
             </div>
           </div>
-        ) : (
-          <p>Loading jobs...</p>
-        )}
-      </div>
 
-      <div
-        id="graph-container"
-        style={{
-          width: '100%',
-          height: '600px',
-          position: 'relative',
-        }}
-      >
-        {activeNode && (
-          <div
-            style={{
-              position: 'absolute',
-              top: '20px',
-              right: '20px',
-              maxWidth: '300px',
-              backgroundColor: 'rgba(255, 255, 255, 0.95)',
-              padding: '10px',
-              borderRadius: '5px',
-              border: '1px solid #000',
-              zIndex: 1000,
-              whiteSpace: 'pre-wrap',
-            }}
-          >
-            <div style={{ position: 'relative' }}>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  marginBottom: '10px',
-                }}
-              >
-                <button
-                  onClick={() => markJobAsRead(activeNode.id)}
-                  style={{
-                    padding: '4px 8px',
-                    borderRadius: '4px',
-                    border: '1px solid #ccc',
-                    backgroundColor: readJobs.has(activeNode.id)
-                      ? '#e2e8f0'
-                      : '#fff',
-                    cursor: 'pointer',
-                    fontSize: '12px',
-                  }}
-                >
-                  {readJobs.has(activeNode.id) ? 'Read ✓' : 'Mark as Read'}
-                </button>
-                <button
-                  onClick={() => {
-                    setActiveNode(null);
-                  }}
-                  style={{
-                    width: '20px',
-                    height: '20px',
-                    borderRadius: '50%',
-                    border: '1px solid #000',
-                    backgroundColor: 'white',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '12px',
-                    padding: 0,
-                    lineHeight: 1,
-                  }}
-                >
-                  ×
-                </button>
-              </div>
-              {formatTooltip(jobInfo[activeNode.id])}
-              <div className="mt-2 flex items-center justify-between gap-2">
-                <div className="flex-1">
-                  <p className="text-sm text-gray-500">
-                    {jobInfo[activeNode.id]?.location?.city || 'Remote'}{' '}
-                    {jobInfo[activeNode.id]?.type || ''}
-                  </p>
+          <div className="flex-1 relative">
+            <ReactFlow
+              nodes={nodes.map((node) => ({
+                ...node,
+                style: {
+                  ...node.style,
+                  opacity:
+                    filterText &&
+                    !node.data.isResume &&
+                    !filteredNodes.has(node.id)
+                      ? 0.2
+                      : 1,
+                  background: getNodeBackground(node, jobInfo[node.id]),
+                },
+              }))}
+              edges={edges.map((edge) => {
+                if (!selectedNode) return edge;
+
+                const pathToResume = findPathToResume(edges, selectedNode.id);
+                return {
+                  ...edge,
+                  animated: pathToResume.has(edge.id),
+                  style: getEdgeStyle(edge),
+                };
+              })}
+              onNodesChange={onNodesChange}
+              onEdgesChange={onEdgesChange}
+              onNodeClick={handleNodeClick}
+              fitView={false}
+              minZoom={0.05}
+              maxZoom={4}
+              defaultZoom={1.2}
+              onInit={(reactFlowInstance) => {
+                setTimeout(() => {
+                  const resumeNode = nodes.find((node) => node.data.isResume);
+                  if (resumeNode) {
+                    reactFlowInstance.setCenter(
+                      resumeNode.position.x,
+                      resumeNode.position.y,
+                      { zoom: 1.2, duration: 800 }
+                    );
+                  }
+                }, 100);
+              }}
+              proOptions={{ hideAttribution: true }}
+              edgeOptions={{
+                type: 'smoothstep',
+              }}
+              defaultEdgeOptions={{
+                type: 'smoothstep',
+              }}
+            >
+              <Background />
+              <Controls />
+              <MiniMap />
+            </ReactFlow>
+
+            {selectedNode && selectedNode.data.jobInfo && (
+              <div className="absolute top-4 right-4 max-w-sm bg-white p-4 rounded-lg shadow-lg border border-gray-200">
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="font-bold">
+                    {selectedNode.data.jobInfo.title}
+                  </h3>
+                  <button
+                    onClick={() => markJobAsRead(selectedNode.id)}
+                    className="text-sm px-2 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors"
+                  >
+                    Mark as Read
+                  </button>
                 </div>
-                <a
-                  href={`/jobs/${activeNode.id}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-3 py-1 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  View Details
-                </a>
+                <div className="text-sm whitespace-pre-wrap">
+                  {formatTooltip(selectedNode.data.jobInfo)}
+                </div>
               </div>
-              {jobInfo[activeNode.id]?.salary && (
-                <p className="text-sm text-gray-500 mt-1">
-                  Salary: {jobInfo[activeNode.id].salary}
-                </p>
-              )}
-            </div>
+            )}
           </div>
-        )}
-        <ForceGraph2D
-          ref={graphRef}
-          graphData={graphData}
-          nodeLabel={null}
-          nodeColor={(node) => getNodeColor(node)}
-          nodeVal={(node) => node.size}
-          nodeCanvasObjectMode={() => 'after'}
-          nodeCanvasObject={(node, ctx) => {
-            // Set resume node size
-            if (node.group === -1) {
-              node.size = 80;
-            }
-            // Calculate other node sizes based on relevance
-            else {
-              const jobIndex = [...mostRelevant, ...lessRelevant].findIndex(
-                (j) => j.uuid === node.id
-              );
-              if (jobIndex !== -1) {
-                const maxSize = 36;
-                const minSize = 4;
-                const sizeRange = maxSize - minSize;
-                const totalJobs = mostRelevant.length + lessRelevant.length;
-                node.size = Math.max(
-                  minSize,
-                  maxSize - (sizeRange * jobIndex) / totalJobs
-                );
-              }
-            }
+        </>
+      )}
 
-            // Draw node
-            ctx.beginPath();
-            ctx.arc(node.x, node.y, node.size, 0, 2 * Math.PI);
-            ctx.fillStyle = getNodeBackground(node);
-            ctx.fill();
-            ctx.strokeStyle = getNodeColor(node);
-            ctx.lineWidth = 2;
-            ctx.stroke();
+      <style jsx global>{`
+        .resume-node {
+          border: 2px solid #2563eb;
+          border-radius: 8px;
+          width: 200px !important;
+          height: 100px !important;
+          padding: 16px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 18px;
+          font-weight: bold;
+          color: #1e40af;
+          box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
 
-            if (node.group === -1 && node.image) {
-              // Resume node with image
-              const img = getCachedImage(node.image);
+        .job-node {
+          border: 1px solid #e5e7eb;
+          border-radius: 8px;
+          width: 250px !important;
+          height: 100px !important;
+          padding: 12px;
+          font-size: 14px;
+          box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+          transition: all 0.2s ease;
+        }
 
-              if (img.complete) {
-                ctx.save();
-                ctx.beginPath();
-                ctx.arc(node.x, node.y, node.size, 0, 2 * Math.PI);
-                ctx.clip();
-                ctx.drawImage(
-                  img,
-                  node.x - node.size,
-                  node.y - node.size,
-                  node.size * 2,
-                  node.size * 2
-                );
-                ctx.strokeStyle = '#000';
-                ctx.lineWidth = 2;
-                ctx.stroke();
-                ctx.restore();
-              } else {
-                // Draw default circle while image is loading
-                ctx.beginPath();
-                ctx.arc(node.x, node.y, node.size, 0, 2 * Math.PI);
-                ctx.fillStyle = getNodeColor(node);
-                ctx.fill();
-                ctx.strokeStyle = '#000';
-                ctx.lineWidth = 2;
-                ctx.stroke();
-              }
-            } else {
-              // Default node rendering for all other cases
-              ctx.beginPath();
-              ctx.arc(node.x, node.y, node.size, 0, 2 * Math.PI);
-              ctx.fillStyle = getNodeColor(node);
-              ctx.fill();
-              ctx.strokeStyle = '#000';
-              ctx.lineWidth = 1;
-              ctx.stroke();
-            }
+        .job-node:hover {
+          border-color: #2563eb;
+          box-shadow: 0 8px 12px -1px rgb(0 0 0 / 0.1);
+        }
 
-            // Draw rank number for job nodes
-            if (node.group !== -1) {
-              const jobIndex = [...mostRelevant, ...lessRelevant].findIndex(
-                (j) => j.uuid === node.id
-              );
-              if (jobIndex !== -1) {
-                const fontSize = Math.max(10, node.size * 0.8);
-                ctx.font = `${fontSize}px Sans-Serif`;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillStyle = '#000';
-                ctx.fillText(jobIndex + 1, node.x, node.y);
-              }
-            }
+        .job-card-content {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+          width: 100%;
+        }
 
-            // Draw regular label for resume node
-            if (node.group === -1) {
-              const label = node.label || node.id;
-              const fontSize = Math.max(14, node.size);
-              ctx.font = `bold ${fontSize}px Sans-Serif`;
-              const textWidth = ctx.measureText(label).width;
-              const bckgDimensions = [textWidth, fontSize].map(
-                (n) => n + fontSize * 0.2
-              );
+        .job-title {
+          font-weight: 600;
+          color: #1e293b;
+          font-size: 14px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
 
-              // Draw background for label
-              ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-              ctx.strokeStyle = '#000';
-              ctx.lineWidth = 1;
-              ctx.beginPath();
-              ctx.roundRect(
-                node.x - bckgDimensions[0] / 2,
-                node.y - bckgDimensions[1] * 2,
-                bckgDimensions[0],
-                bckgDimensions[1],
-                5
-              );
-              ctx.fill();
-              ctx.stroke();
+        .company-name {
+          color: #334155;
+          font-size: 13px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
 
-              // Draw label
-              ctx.textAlign = 'center';
-              ctx.textBaseline = 'middle';
-              ctx.fillStyle = '#000';
-              ctx.fillText(label, node.x, node.y - bckgDimensions[1] * 1.5);
-            }
-          }}
-          nodePointerAreaPaint={(node, color, ctx) => {
-            // Draw a larger hit area for hover detection
-            ctx.beginPath();
-            ctx.arc(node.x, node.y, node.size * 2, 0, 2 * Math.PI);
-            ctx.fillStyle = color;
-            ctx.fill();
-          }}
-          onRenderFramePost={() => {
-            // No need to render tooltip in canvas anymore since we're using DOM
-          }}
-          linkWidth={(link) => Math.sqrt(link.value) * 2}
-          linkColor="#cccccc"
-          linkOpacity={0.3}
-          enableNodeDrag={true}
-          cooldownTicks={100}
-          warmupTicks={100}
-          width={dimensions.width}
-          height={dimensions.height}
-          onEngineStop={handleEngineStop}
-          minZoom={0.1}
-          maxZoom={5}
-          forceEngine="d3"
-          d3AlphaDecay={0.02}
-          d3VelocityDecay={0.3}
-          onNodeHover={(node) => {
-            if (node) {
-              setActiveNode(node);
-            }
-          }}
-        />
-      </div>
+        .salary {
+          color: #0f766e;
+          font-size: 12px;
+          font-weight: 500;
+        }
+
+        .react-flow__edge-path {
+          stroke: #94a3b8;
+          stroke-width: 2;
+        }
+
+        .react-flow__edge.animated path {
+          stroke-dasharray: 5;
+          animation: dashdraw 0.5s linear infinite;
+        }
+
+        @keyframes dashdraw {
+          from {
+            stroke-dashoffset: 10;
+          }
+        }
+      `}</style>
     </div>
   );
 }
