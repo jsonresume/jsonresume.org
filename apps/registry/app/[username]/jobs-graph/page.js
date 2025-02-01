@@ -137,10 +137,10 @@ export default function Jobs({ params }) {
       setReadJobs(newReadJobs);
       localStorage.setItem(
         `readJobs_${username}`,
-        JSON.stringify([...newReadJobs]),
+        JSON.stringify([...newReadJobs])
       );
     },
-    [readJobs, username],
+    [readJobs, username]
   );
 
   // Parse salary from various string formats
@@ -205,13 +205,13 @@ export default function Jobs({ params }) {
           const darkBlue = [30, 64, 175]; // bg-blue-800
 
           const r = Math.round(
-            lightBlue[0] + (darkBlue[0] - lightBlue[0]) * percentage,
+            lightBlue[0] + (darkBlue[0] - lightBlue[0]) * percentage
           );
           const g = Math.round(
-            lightBlue[1] + (darkBlue[1] - lightBlue[1]) * percentage,
+            lightBlue[1] + (darkBlue[1] - lightBlue[1]) * percentage
           );
           const b = Math.round(
-            lightBlue[2] + (darkBlue[2] - lightBlue[2]) * percentage,
+            lightBlue[2] + (darkBlue[2] - lightBlue[2]) * percentage
           );
 
           return `rgb(${r}, ${g}, ${b})`;
@@ -231,7 +231,7 @@ export default function Jobs({ params }) {
       parseSalary,
       readJobs,
       username,
-    ],
+    ]
   );
 
   // Find path to resume node
@@ -246,7 +246,7 @@ export default function Jobs({ params }) {
 
         // Find edge going to parent
         const parentEdge = edges.find(
-          (edge) => edge.target === currentId && !visited.has(edge.source),
+          (edge) => edge.target === currentId && !visited.has(edge.source)
         );
 
         if (!parentEdge) return false;
@@ -255,7 +255,7 @@ export default function Jobs({ params }) {
 
         // If we've reached the resume node (which should be a source node)
         const isParentResume = nodes.find(
-          (n) => n.id === parentEdge.source && n.data.isResume,
+          (n) => n.id === parentEdge.source && n.data.isResume
         );
 
         if (isParentResume) return true;
@@ -267,7 +267,7 @@ export default function Jobs({ params }) {
       findPath(startNodeId);
       return pathEdges;
     },
-    [nodes],
+    [nodes]
   );
 
   // Convert graph data to React Flow format
@@ -332,7 +332,7 @@ export default function Jobs({ params }) {
 
       return { stroke: '#94a3b8', strokeWidth: 2 };
     },
-    [selectedNode, edges, findPathToResume],
+    [selectedNode, edges, findPathToResume]
   );
 
   useEffect(() => {
@@ -347,7 +347,7 @@ export default function Jobs({ params }) {
 
         const { nodes: rfNodes, edges: rfEdges } = convertToReactFlowFormat(
           graphData,
-          jobInfoMap,
+          jobInfoMap
         );
         setNodes(rfNodes);
         setEdges(rfEdges);
@@ -509,7 +509,7 @@ export default function Jobs({ params }) {
                     reactFlowInstance.setCenter(
                       resumeNode.position.x,
                       resumeNode.position.y,
-                      { zoom: 1.2, duration: 800 },
+                      { zoom: 1.2, duration: 800 }
                     );
                   }
                 }, 100);
