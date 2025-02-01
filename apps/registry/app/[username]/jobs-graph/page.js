@@ -130,13 +130,19 @@ export default function Jobs({ params }) {
   }, [username]);
 
   // Save read jobs to local storage
-  const markJobAsRead = useCallback((jobId) => {
-    const newReadJobs = new Set(readJobs);
-    const key = `${username}_${jobId}`;
-    newReadJobs.add(key);
-    setReadJobs(newReadJobs);
-    localStorage.setItem(`readJobs_${username}`, JSON.stringify([...newReadJobs]));
-  }, [readJobs, username]);
+  const markJobAsRead = useCallback(
+    (jobId) => {
+      const newReadJobs = new Set(readJobs);
+      const key = `${username}_${jobId}`;
+      newReadJobs.add(key);
+      setReadJobs(newReadJobs);
+      localStorage.setItem(
+        `readJobs_${username}`,
+        JSON.stringify([...newReadJobs]),
+      );
+    },
+    [readJobs, username],
+  );
 
   // Parse salary from various string formats
   const parseSalary = useCallback((salary) => {
@@ -218,7 +224,15 @@ export default function Jobs({ params }) {
         ? '#f1f5f9'
         : 'rgb(255 241 143)';
     },
-    [showSalaryGradient, salaryRange, filterText, filteredNodes, parseSalary, readJobs, username],
+    [
+      showSalaryGradient,
+      salaryRange,
+      filterText,
+      filteredNodes,
+      parseSalary,
+      readJobs,
+      username,
+    ],
   );
 
   // Find path to resume node
@@ -394,11 +408,7 @@ export default function Jobs({ params }) {
           href={`/${username}`}
           className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900"
         >
-          <svg
-            className="w-4 h-4 mr-1"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
+          <svg className="w-4 h-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
             <path
               fillRule="evenodd"
               d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
@@ -410,15 +420,17 @@ export default function Jobs({ params }) {
       </nav>
 
       <div className="px-4 py-3 bg-white border-b">
-        <div className="max-w-4xl">
+        <div className="max-w-6xl">
           <p className="mb-2">
-            This graph uses vector similarity to match your resume with relevant job postings from Hacker News "Who is Hiring?" threads.
-          </p>
-          <p className="mb-2">
-            Jobs are analyzed and matched against your resume using natural language processing. The matching process takes a moment to analyze each position.
+            This graph uses vector similarity to match your resume with relevant
+            job postings from Hacker News "Who is Hiring?" threads. Jobs are
+            analyzed and matched against your resume using natural language
+            processing. The matching process takes a moment to analyze each
+            position.
           </p>
           <p className="text-sm text-gray-600">
-            Note: This is an experimental feature and may not catch every job or skill match perfectly.
+            Note: This is an experimental feature and may not catch every job or
+            skill match perfectly.
           </p>
         </div>
       </div>
@@ -466,7 +478,9 @@ export default function Jobs({ params }) {
                 style: {
                   ...node.style,
                   opacity:
-                    filterText && !node.data.isResume && !filteredNodes.has(node.id)
+                    filterText &&
+                    !node.data.isResume &&
+                    !filteredNodes.has(node.id)
                       ? 0.2
                       : 1,
                   background: getNodeBackground(node, jobInfo[node.id]),
@@ -491,9 +505,13 @@ export default function Jobs({ params }) {
               defaultZoom={1.2}
               onInit={(reactFlowInstance) => {
                 setTimeout(() => {
-                  const resumeNode = nodes.find(node => node.data.isResume);
+                  const resumeNode = nodes.find((node) => node.data.isResume);
                   if (resumeNode) {
-                    reactFlowInstance.setCenter(resumeNode.position.x, resumeNode.position.y, { zoom: 1.2, duration: 800 });
+                    reactFlowInstance.setCenter(
+                      resumeNode.position.x,
+                      resumeNode.position.y,
+                      { zoom: 1.2, duration: 800 },
+                    );
                   }
                 }, 100);
               }}
@@ -513,7 +531,9 @@ export default function Jobs({ params }) {
             {selectedNode && selectedNode.data.jobInfo && (
               <div className="absolute top-4 right-4 max-w-sm bg-white p-4 rounded-lg shadow-lg border border-gray-200">
                 <div className="flex justify-between items-start mb-2">
-                  <h3 className="font-bold">{selectedNode.data.jobInfo.title}</h3>
+                  <h3 className="font-bold">
+                    {selectedNode.data.jobInfo.title}
+                  </h3>
                   <button
                     onClick={() => markJobAsRead(selectedNode.id)}
                     className="text-sm px-2 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors"
