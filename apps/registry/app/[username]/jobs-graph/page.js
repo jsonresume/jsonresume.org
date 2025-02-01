@@ -14,52 +14,6 @@ import {
 import '@xyflow/react/dist/style.css';
 import dagre from '@dagrejs/dagre';
 
-// Format skills array into a readable string
-const formatSkills = (skills) => {
-  if (!skills) return '';
-  return skills.map((skill) => `${skill.name} (${skill.level})`).join(', ');
-};
-
-// Format qualifications array into a bullet list
-const formatQualifications = (qualifications) => {
-  if (!qualifications) return '';
-  return qualifications.join('\n• ');
-};
-
-// Helper to format job info into tooltip text
-const formatTooltip = (jobInfo) => {
-  if (!jobInfo) return '';
-
-  // Truncate description if needed
-  const truncateText = (text, maxLength) => {
-    if (!text) return '';
-    if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength - 3) + '...';
-  };
-
-  const parts = [
-    `${jobInfo.title || 'Untitled'} at ${jobInfo.company || 'Unknown Company'}`,
-    jobInfo.remote ? `${jobInfo.remote} Remote` : '',
-    jobInfo.location && jobInfo.location.city
-      ? `Location: ${jobInfo.location.city}${
-          jobInfo.location.region ? `, ${jobInfo.location.region}` : ''
-        }`
-      : '',
-    `Type: ${jobInfo.type || 'Not specified'}`,
-    '',
-    'Description:',
-    truncateText(jobInfo.description, 150),
-    '',
-    'Skills:',
-    formatSkills(jobInfo.skills),
-    '',
-    'Qualifications:',
-    `• ${formatQualifications(jobInfo.qualifications)}`,
-  ];
-
-  return parts.filter(Boolean).join('\n');
-};
-
 const getLayoutedElements = (nodes, edges, direction = 'TB') => {
   const dagreGraph = new dagre.graphlib.Graph();
   dagreGraph.setDefaultEdgeLabel(() => ({}));
@@ -530,20 +484,143 @@ export default function Jobs({ params }) {
             </ReactFlow>
 
             {selectedNode && selectedNode.data.jobInfo && (
-              <div className="absolute top-4 right-4 max-w-sm bg-white p-4 rounded-lg shadow-lg border border-gray-200">
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="font-bold">
-                    {selectedNode.data.jobInfo.title}
-                  </h3>
-                  <button
-                    onClick={() => markJobAsRead(selectedNode.id)}
-                    className="text-sm px-2 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors"
-                  >
-                    Mark as Read
-                  </button>
+              <div className="absolute top-4 right-4 max-w-lg bg-white rounded-xl shadow-xl border border-gray-200 divide-y divide-gray-100">
+                <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-t-xl">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-900">
+                        {selectedNode.data.jobInfo.title}
+                      </h3>
+                      <p className="text-indigo-600 font-medium mt-1">
+                        {selectedNode.data.jobInfo.company}
+                      </p>
+                      <div className="flex gap-3 mt-2">
+                        {selectedNode.data.jobInfo.type && (
+                          <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+                            {selectedNode.data.jobInfo.type}
+                          </span>
+                        )}
+                        {selectedNode.data.jobInfo.remote && (
+                          <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/10">
+                            {selectedNode.data.jobInfo.remote} Remote
+                          </span>
+                        )}
+                        {selectedNode.data.jobInfo.salary && (
+                          <span className="inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-inset ring-yellow-600/10">
+                            {selectedNode.data.jobInfo.salary}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => markJobAsRead(selectedNode.id)}
+                      className={`ml-4 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-all ${
+                        readJobs.has(`${username}_${selectedNode.id}`)
+                          ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-md'
+                          : 'bg-blue-50 text-blue-600 hover:bg-blue-100 hover:shadow-md'
+                      }`}
+                    >
+                      <svg
+                        className={`w-4 h-4 ${
+                          readJobs.has(`${username}_${selectedNode.id}`)
+                            ? 'animate-bounce-once'
+                            : ''
+                        }`}
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                      {readJobs.has(`${username}_${selectedNode.id}`)
+                        ? 'Read'
+                        : 'Mark as Read'}
+                    </button>
+                  </div>
                 </div>
-                <div className="text-sm whitespace-pre-wrap">
-                  {formatTooltip(selectedNode.data.jobInfo)}
+
+                <div className="p-4 space-y-4">
+                  {selectedNode.data.jobInfo.location && (
+                    <div className="flex items-start gap-2 text-gray-600">
+                      <svg
+                        className="w-5 h-5 mt-0.5 text-gray-400"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                        />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
+                      </svg>
+                      <span>
+                        {selectedNode.data.jobInfo.location.city}
+                        {selectedNode.data.jobInfo.location.region &&
+                          `, ${selectedNode.data.jobInfo.location.region}`}
+                      </span>
+                    </div>
+                  )}
+
+                  {selectedNode.data.jobInfo.description && (
+                    <div className="text-gray-600 text-sm leading-relaxed">
+                      {selectedNode.data.jobInfo.description}
+                    </div>
+                  )}
+
+                  {selectedNode.data.jobInfo.skills &&
+                    selectedNode.data.jobInfo.skills.length > 0 && (
+                      <div>
+                        <h4 className="text-sm font-semibold text-gray-900 mb-2">
+                          Skills
+                        </h4>
+                        <div className="flex flex-wrap gap-1.5">
+                          {selectedNode.data.jobInfo.skills.map(
+                            (skill, index) => (
+                              <span
+                                key={index}
+                                className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10"
+                              >
+                                {skill.name}
+                                {skill.level && (
+                                  <span className="ml-1 text-gray-400">
+                                    • {skill.level}
+                                  </span>
+                                )}
+                              </span>
+                            )
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                  {selectedNode.data.jobInfo.qualifications &&
+                    selectedNode.data.jobInfo.qualifications.length > 0 && (
+                      <div>
+                        <h4 className="text-sm font-semibold text-gray-900 mb-2">
+                          Qualifications
+                        </h4>
+                        <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
+                          {selectedNode.data.jobInfo.qualifications.map(
+                            (qual, index) => (
+                              <li key={index}>{qual}</li>
+                            )
+                          )}
+                        </ul>
+                      </div>
+                    )}
                 </div>
               </div>
             )}
@@ -627,6 +704,19 @@ export default function Jobs({ params }) {
           from {
             stroke-dashoffset: 10;
           }
+        }
+
+        @keyframes bounce-once {
+          0%,
+          100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-25%);
+          }
+        }
+        .animate-bounce-once {
+          animation: bounce-once 0.5s ease-in-out;
         }
       `}</style>
     </div>
