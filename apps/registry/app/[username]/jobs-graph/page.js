@@ -491,10 +491,18 @@ export default function Jobs({ params }) {
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onNodeClick={handleNodeClick}
-          fitView
+          fitView={false}
           minZoom={0.05}
           maxZoom={4}
-          defaultZoom={0.5}
+          defaultZoom={1.2}
+          onInit={(reactFlowInstance) => {
+            setTimeout(() => {
+              const resumeNode = nodes.find(node => node.data.isResume);
+              if (resumeNode) {
+                reactFlowInstance.setCenter(resumeNode.position.x, resumeNode.position.y, { zoom: 1.2, duration: 800 });
+              }
+            }, 100);
+          }}
           proOptions={{ hideAttribution: true }}
           edgeOptions={{
             type: 'smoothstep',
