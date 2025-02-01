@@ -74,6 +74,15 @@ export default function Jobs({ params }) {
   });
   const [readJobs, setReadJobs] = useState(new Set());
 
+  const highlightText = useCallback((text, searchText) => {
+    if (!searchText || !text) return text;
+    const parts = text.toString().split(new RegExp(`(${searchText})`, 'gi'));
+    return parts.map((part, index) => 
+      part.toLowerCase() === searchText.toLowerCase() ? 
+        <span key={index} className="bg-yellow-200">{part}</span> : part
+    );
+  }, []);
+
   // Load read jobs from local storage
   useEffect(() => {
     const storedReadJobs = localStorage.getItem(`readJobs_${username}`);
@@ -516,10 +525,10 @@ export default function Jobs({ params }) {
                   <div className="flex justify-between items-start">
                     <div>
                       <h3 className="text-xl font-bold text-gray-900">
-                        {selectedNode.data.jobInfo.title}
+                        {filterText ? highlightText(selectedNode.data.jobInfo.title, filterText) : selectedNode.data.jobInfo.title}
                       </h3>
                       <p className="text-indigo-600 font-medium mt-1">
-                        {selectedNode.data.jobInfo.company}
+                        {filterText ? highlightText(selectedNode.data.jobInfo.company, filterText) : selectedNode.data.jobInfo.company}
                       </p>
                       <div className="flex gap-3 mt-2">
                         {selectedNode.data.jobInfo.type && (
@@ -603,7 +612,7 @@ export default function Jobs({ params }) {
 
                   {selectedNode.data.jobInfo.description && (
                     <div className="text-gray-600 text-sm leading-relaxed">
-                      {selectedNode.data.jobInfo.description}
+                      {filterText ? highlightText(selectedNode.data.jobInfo.description, filterText) : selectedNode.data.jobInfo.description}
                     </div>
                   )}
 
@@ -617,10 +626,10 @@ export default function Jobs({ params }) {
                           {selectedNode.data.jobInfo.skills.map(
                             (skill, index) => (
                               <div key={index} className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
-                                {skill.name}
+                                {filterText ? highlightText(skill.name, filterText) : skill.name}
                                 {skill.level && (
                                   <span className="ml-1 text-gray-400">
-                                    • {skill.level}
+                                    • {filterText ? highlightText(skill.level, filterText) : skill.level}
                                   </span>
                                 )}
                               </div>
@@ -639,7 +648,9 @@ export default function Jobs({ params }) {
                         <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
                           {selectedNode.data.jobInfo.qualifications.map(
                             (qual, index) => (
-                              <li key={index}>{qual}</li>
+                              <li key={index}>
+                                {filterText ? highlightText(qual, filterText) : qual}
+                              </li>
                             )
                           )}
                         </ul>
