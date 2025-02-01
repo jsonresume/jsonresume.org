@@ -67,7 +67,7 @@ export default async function handler(req, res) {
   let embedding = completion.data[0].embedding;
   if (embedding.length < desiredLength) {
     embedding = embedding.concat(
-      Array(desiredLength - embedding.length).fill(0)
+      Array(desiredLength - embedding.length).fill(0),
     );
   }
 
@@ -145,13 +145,13 @@ export default async function handler(req, res) {
           (best, current) => {
             const similarity = cosineSimilarity(
               lessRelevantVector,
-              JSON.parse(current.embedding_v5)
+              JSON.parse(current.embedding_v5),
             );
             return similarity > best.similarity
               ? { job: current, similarity }
               : best;
           },
-          { job: null, similarity: -1 }
+          { job: null, similarity: -1 },
         );
 
         if (mostSimilarJob.job) {
@@ -172,6 +172,12 @@ export default async function handler(req, res) {
   sortedJobs.forEach((job) => {
     jobInfoMap[job.uuid] = JSON.parse(job.gpt_content);
   });
+
+  // Set cache control headers for CDN caching
+  res.setHeader(
+    'Cache-Control',
+    'public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800',
+  );
 
   res.status(200).json({
     graphData,
