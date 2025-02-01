@@ -64,7 +64,6 @@ const getLayoutedElements = (nodes, edges, direction = 'TB') => {
   const dagreGraph = new dagre.graphlib.Graph();
   dagreGraph.setDefaultEdgeLabel(() => ({}));
 
-  const isHorizontal = direction === 'LR';
   dagreGraph.setGraph({
     rankdir: direction,
     align: 'UL',
@@ -106,7 +105,7 @@ const getLayoutedElements = (nodes, edges, direction = 'TB') => {
 
 export default function Jobs({ params }) {
   const { username } = params;
-  const [jobs, setJobs] = useState(null);
+  const [, setJobs] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [jobInfo, setJobInfo] = useState({});
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
@@ -362,7 +361,7 @@ export default function Jobs({ params }) {
     if (username) {
       fetchData();
     }
-  }, [username, convertToReactFlowFormat]);
+  }, [username, convertToReactFlowFormat, setNodes, setEdges]);
 
   // Filter nodes based on search text
   useEffect(() => {
