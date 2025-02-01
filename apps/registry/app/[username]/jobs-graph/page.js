@@ -441,6 +441,20 @@ export default function Jobs({ params }) {
         </Link>
       </nav>
 
+      <div className="px-4 py-3 bg-white border-b">
+        <div className="max-w-3xl">
+          <p className="mb-2">
+            This graph shows jobs that match your resume. The closer a job matches your skills and experience, the larger and more connected its circle will be.
+          </p>
+          <p className="mb-2">
+            Jobs are sourced from Hacker News "Who is Hiring?" posts. The matching process takes a moment to analyze each position against your resume.
+          </p>
+          <p className="text-sm text-gray-600">
+            Note: This is an experimental feature and may not catch every job or skill match perfectly.
+          </p>
+        </div>
+      </div>
+
       <div className="px-4 py-2 bg-white border-b flex items-center gap-4">
         <input
           type="text"
