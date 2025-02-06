@@ -81,7 +81,7 @@ export default async function handler(req, res) {
   const { data: documents } = await supabase.rpc('match_jobs_v5', {
     query_embedding: embedding,
     match_threshold: -1,
-    match_count: 100,
+    match_count: 200,
     created_after: new Date(
       Date.now() - 65 * 24 * 60 * 60 * 1000
     ).toISOString(),
