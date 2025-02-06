@@ -102,9 +102,9 @@ export default async function handler(req, res) {
     };
   });
 
-  // Split into most relevant (top 20) and less relevant
-  const topJobs = sortedJobs.slice(0, 20);
-  const otherJobs = sortedJobs.slice(20);
+  // Split into most relevant (top 10) and less relevant
+  const topJobs = sortedJobs.slice(0, 10);
+  const otherJobs = sortedJobs.slice(10);
 
   // Create graph data
   const graphData = {
