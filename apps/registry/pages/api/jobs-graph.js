@@ -37,7 +37,7 @@ export default async function handler(req, res) {
 
   const resume = JSON.parse(data[0].resume);
   const resumeCompletion = await openai.chat.completions.create({
-    model: 'gpt-3.5-turbo-16k',
+    model: 'gpt-4o-mini',
     messages: [
       {
         role: 'system',
