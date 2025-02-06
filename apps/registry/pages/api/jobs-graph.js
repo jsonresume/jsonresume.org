@@ -81,7 +81,10 @@ export default async function handler(req, res) {
   const { data: documents } = await supabase.rpc('match_jobs_v5', {
     query_embedding: embedding,
     match_threshold: -1,
-    match_count: 150,
+    match_count: 100,
+    created_after: new Date(
+      Date.now() - 65 * 24 * 60 * 60 * 1000
+    ).toISOString(),
   });
 
   const sortedDocuments = documents.sort((a, b) => b.similarity - a.similarity);
@@ -91,6 +94,10 @@ export default async function handler(req, res) {
     .from('jobs')
     .select('*')
     .in('id', jobIds)
+    .gte(
+      'created_at',
+      new Date(Date.now() - 65 * 24 * 60 * 60 * 1000).toISOString()
+    )
     .order('created_at', { ascending: false });
 
   // Add similarity scores to jobs
