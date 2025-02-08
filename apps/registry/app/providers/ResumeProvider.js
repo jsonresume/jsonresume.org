@@ -26,7 +26,7 @@ export function useResume() {
 }
 
 export function ResumeProvider({ children, targetUsername }) {
-  const [session, setSession] = useState(null);
+  const [, setSession] = useState(null);
   const [resume, setResume] = useState(null);
   const [gistId, setGistId] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -170,11 +170,38 @@ export function ResumeProvider({ children, targetUsername }) {
 
   const updateGist = async (resumeContent) => {
     try {
-      if (!session?.provider_token) {
-        throw new Error('No GitHub access token available');
+      const {
+        data: { session: currentSession },
+      } = await supabase.auth.getSession();
+
+      if (!currentSession?.provider_token) {
+        // Try to get a fresh token
+        try {
+          const { error } = await supabase.auth.signInWithOAuth({
+            provider: 'github',
+            options: {
+              scopes: 'gist',
+              redirectTo: window.location.origin,
+              queryParams: {
+                access_type: 'offline',
+                prompt: 'consent',
+              },
+            },
+          });
+
+          if (error) throw error;
+
+          // Wait for redirect
+          return;
+        } catch (error) {
+          console.error('GitHub authentication error:', error);
+          throw new Error(
+            'Failed to authenticate with GitHub. Please try again.'
+          );
+        }
       }
 
-      const octokit = new Octokit({ auth: session.provider_token });
+      const octokit = new Octokit({ auth: currentSession.provider_token });
 
       if (gistId) {
         await octokit.rest.gists.update({
@@ -210,11 +237,38 @@ export function ResumeProvider({ children, targetUsername }) {
 
   const createGist = async (sampleResume) => {
     try {
-      if (!session?.provider_token) {
-        throw new Error('No GitHub access token available');
+      const {
+        data: { session: currentSession },
+      } = await supabase.auth.getSession();
+
+      if (!currentSession?.provider_token) {
+        // Try to get a fresh token
+        try {
+          const { error } = await supabase.auth.signInWithOAuth({
+            provider: 'github',
+            options: {
+              scopes: 'gist',
+              redirectTo: window.location.origin,
+              queryParams: {
+                access_type: 'offline',
+                prompt: 'consent',
+              },
+            },
+          });
+
+          if (error) throw error;
+
+          // Wait for redirect
+          return;
+        } catch (error) {
+          console.error('GitHub authentication error:', error);
+          throw new Error(
+            'Failed to authenticate with GitHub. Please try again.'
+          );
+        }
       }
 
-      const octokit = new Octokit({ auth: session.provider_token });
+      const octokit = new Octokit({ auth: currentSession.provider_token });
       const { data } = await octokit.rest.gists.create({
         files: {
           [RESUME_GIST_NAME]: {
