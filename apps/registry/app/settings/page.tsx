@@ -50,6 +50,74 @@ export default function SettingsPage() {
             </div>
           )}
           <div>
+            <h2 className="font-semibold">GitHub Connection Status</h2>
+            {session.user.identities?.some(
+              (identity: any) => identity.provider === 'github'
+            ) ? (
+              <div className="space-y-2">
+                <p className="text-green-600">✓ Connected to GitHub</p>
+                <p className="text-sm text-gray-600">
+                  Access Token Available:{' '}
+                  {session.user.identities?.find(
+                    (identity: any) => identity.provider === 'github'
+                  )?.access_token
+                    ? 'Yes'
+                    : 'No'}
+                </p>
+                <div className="text-sm text-gray-600">
+                  <p>Provider Token: {session.provider_token ? 'Yes' : 'No'}</p>
+                  {session.provider_token && (
+                    <p className="text-xs">
+                      Token: {session.provider_token.substring(0, 8)}...
+                      {session.provider_token.substring(
+                        session.provider_token.length - 8
+                      )}
+                    </p>
+                  )}
+                  <p>
+                    App Metadata Token:{' '}
+                    {session.user.app_metadata?.provider_token ? 'Yes' : 'No'}
+                  </p>
+                  <p>
+                    Identity Token:{' '}
+                    {session.user.identities?.find(
+                      (identity: any) => identity.provider === 'github'
+                    )?.provider_token
+                      ? 'Yes'
+                      : 'No'}
+                  </p>
+                </div>
+                {!session.user.identities?.find(
+                  (identity: any) => identity.provider === 'github'
+                )?.access_token && (
+                  <button
+                    onClick={async () => {
+                      const { error } = await supabase.auth.signInWithOAuth({
+                        provider: 'github',
+                        options: {
+                          scopes: 'gist',
+                          redirectTo: window.location.origin + '/settings',
+                          queryParams: {
+                            access_type: 'offline',
+                            prompt: 'consent',
+                          },
+                        },
+                      });
+                      if (error) {
+                        console.error('OAuth error:', error);
+                      }
+                    }}
+                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                  >
+                    Reconnect GitHub with Gist Access
+                  </button>
+                )}
+              </div>
+            ) : (
+              <p className="text-red-600">Not connected to GitHub</p>
+            )}
+          </div>
+          <div>
             <h2 className="font-semibold">User ID</h2>
             <p>{session.user.id}</p>
           </div>
@@ -60,7 +128,17 @@ export default function SettingsPage() {
           <div className="mt-8">
             <h2 className="font-semibold mb-2">Debug Information</h2>
             <div className="bg-gray-50 p-4 rounded-md">
-              <h3 className="font-medium">User Metadata</h3>
+              <h3 className="font-medium">GitHub Identity</h3>
+              <pre className="text-sm overflow-auto">
+                {JSON.stringify(
+                  session.user.identities?.find(
+                    (identity: any) => identity.provider === 'github'
+                  ),
+                  null,
+                  2
+                )}
+              </pre>
+              <h3 className="font-medium mt-2">User Metadata</h3>
               <pre className="text-sm overflow-auto">
                 {JSON.stringify(session.user.user_metadata, null, 2)}
               </pre>
