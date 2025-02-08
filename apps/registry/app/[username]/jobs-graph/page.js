@@ -77,9 +77,14 @@ export default function Jobs({ params }) {
   const highlightText = useCallback((text, searchText) => {
     if (!searchText || !text) return text;
     const parts = text.toString().split(new RegExp(`(${searchText})`, 'gi'));
-    return parts.map((part, index) => 
-      part.toLowerCase() === searchText.toLowerCase() ? 
-        <span key={index} className="bg-yellow-200">{part}</span> : part
+    return parts.map((part, index) =>
+      part.toLowerCase() === searchText.toLowerCase() ? (
+        <span key={index} className="bg-yellow-200">
+          {part}
+        </span>
+      ) : (
+        part
+      )
     );
   }, []);
 
@@ -248,9 +253,18 @@ export default function Jobs({ params }) {
         data: {
           label: isResume ? (
             <div className="resume-node-content">
-              <svg className="resume-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              <svg
+                className="resume-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
               </svg>
               <span>Your Resume</span>
             </div>
@@ -260,29 +274,32 @@ export default function Jobs({ params }) {
                 {jobData?.title || 'Unknown Position'}
               </div>
               <div className="company-name">
-                <svg className="company-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} 
-                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                <svg
+                  className="company-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                  />
                 </svg>
                 {jobData?.company || 'Unknown Company'}
               </div>
-              
+
               <div className="job-meta">
                 <div className="meta-pills">
                   {jobData?.type && (
-                    <div className="meta-pill type">
-                      {jobData.type}
-                    </div>
+                    <div className="meta-pill type">{jobData.type}</div>
                   )}
                   {jobData?.remote && (
-                    <div className="meta-pill remote">
-                      {jobData.remote}
-                    </div>
+                    <div className="meta-pill remote">{jobData.remote}</div>
                   )}
                   {jobData?.salary && (
-                    <div className="meta-pill salary">
-                      {jobData.salary}
-                    </div>
+                    <div className="meta-pill salary">{jobData.salary}</div>
                   )}
                 </div>
               </div>
@@ -525,10 +542,20 @@ export default function Jobs({ params }) {
                   <div className="flex justify-between items-start">
                     <div>
                       <h3 className="text-xl font-bold text-gray-900">
-                        {filterText ? highlightText(selectedNode.data.jobInfo.title, filterText) : selectedNode.data.jobInfo.title}
+                        {filterText
+                          ? highlightText(
+                              selectedNode.data.jobInfo.title,
+                              filterText
+                            )
+                          : selectedNode.data.jobInfo.title}
                       </h3>
                       <p className="text-indigo-600 font-medium mt-1">
-                        {filterText ? highlightText(selectedNode.data.jobInfo.company, filterText) : selectedNode.data.jobInfo.company}
+                        {filterText
+                          ? highlightText(
+                              selectedNode.data.jobInfo.company,
+                              filterText
+                            )
+                          : selectedNode.data.jobInfo.company}
                       </p>
                       <div className="flex gap-3 mt-2">
                         {selectedNode.data.jobInfo.type && (
@@ -612,7 +639,12 @@ export default function Jobs({ params }) {
 
                   {selectedNode.data.jobInfo.description && (
                     <div className="text-gray-600 text-sm leading-relaxed">
-                      {filterText ? highlightText(selectedNode.data.jobInfo.description, filterText) : selectedNode.data.jobInfo.description}
+                      {filterText
+                        ? highlightText(
+                            selectedNode.data.jobInfo.description,
+                            filterText
+                          )
+                        : selectedNode.data.jobInfo.description}
                     </div>
                   )}
 
@@ -625,11 +657,19 @@ export default function Jobs({ params }) {
                         <div className="flex flex-wrap gap-1.5">
                           {selectedNode.data.jobInfo.skills.map(
                             (skill, index) => (
-                              <div key={index} className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
-                                {filterText ? highlightText(skill.name, filterText) : skill.name}
+                              <div
+                                key={index}
+                                className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10"
+                              >
+                                {filterText
+                                  ? highlightText(skill.name, filterText)
+                                  : skill.name}
                                 {skill.level && (
                                   <span className="ml-1 text-gray-400">
-                                    • {filterText ? highlightText(skill.level, filterText) : skill.level}
+                                    •{' '}
+                                    {filterText
+                                      ? highlightText(skill.level, filterText)
+                                      : skill.level}
                                   </span>
                                 )}
                               </div>
@@ -649,7 +689,9 @@ export default function Jobs({ params }) {
                           {selectedNode.data.jobInfo.qualifications.map(
                             (qual, index) => (
                               <li key={index}>
-                                {filterText ? highlightText(qual, filterText) : qual}
+                                {filterText
+                                  ? highlightText(qual, filterText)
+                                  : qual}
                               </li>
                             )
                           )}
@@ -666,9 +708,18 @@ export default function Jobs({ params }) {
                     className="inline-flex items-center gap-1.5 rounded-md px-4 py-2 text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 shadow-sm transition-colors"
                   >
                     View Job Details
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                      />
                     </svg>
                   </a>
                 </div>
@@ -701,7 +752,11 @@ export default function Jobs({ params }) {
           content: '';
           position: absolute;
           inset: 0;
-          background: radial-gradient(circle at center, rgba(37, 99, 235, 0.1) 0%, transparent 70%);
+          background: radial-gradient(
+            circle at center,
+            rgba(37, 99, 235, 0.1) 0%,
+            transparent 70%
+          );
           animation: pulse 3s ease-in-out infinite;
         }
 
