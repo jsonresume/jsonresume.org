@@ -57,6 +57,45 @@ const getLayoutedElements = (nodes, edges, direction = 'TB') => {
   return { nodes: layoutedNodes, edges };
 };
 
+const LoadingAnimation = () => (
+  <div className="loading-container">
+    <div className="graph-loader">
+      <div className="resume-node-loader" />
+      <div className="job-nodes">
+        <div className="job-node-loader n1" />
+        <div className="job-node-loader n2" />
+        <div className="job-node-loader n3" />
+        <div className="job-node-loader n4" />
+        <div className="job-node-loader n5" />
+      </div>
+      <svg
+        className="connections"
+        width="100%"
+        height="100%"
+        viewBox="0 0 400 300"
+      >
+        <path className="connection c1" d="M200,100 L120,180" />
+        <path className="connection c2" d="M200,100 L200,180" />
+        <path className="connection c3" d="M200,100 L280,180" />
+        <path className="connection c4" d="M120,180 L80,260" />
+        <path className="connection c5" d="M280,180 L320,260" />
+      </svg>
+      <div className="floating-icons">
+        <div className="floating-icon i1">💼</div>
+        <div className="floating-icon i2">📝</div>
+        <div className="floating-icon i3">💻</div>
+        <div className="floating-icon i4">📊</div>
+      </div>
+    </div>
+    <div className="loading-text">
+      <p className="text-lg">Analyzing job matches...</p>
+      <p className="mt-2 text-sm text-gray-500">
+        Building your personalized job graph. This might take a minute.
+      </p>
+    </div>
+  </div>
+);
+
 export default function Jobs({ params }) {
   const { username } = params;
   const [, setJobs] = useState(null);
@@ -445,13 +484,7 @@ export default function Jobs({ params }) {
 
       {isLoading || !nodes.length ? (
         <div className="flex-1 flex justify-center items-center">
-          <div className="text-lg">
-            <p>Loading jobs graph...</p>
-            <p className="mt-2 text-sm text-gray-500">
-              This might take a minute as we analyze job matches. Thanks for
-              your patience!
-            </p>
-          </div>
+          <LoadingAnimation />
         </div>
       ) : (
         <>
@@ -858,6 +891,189 @@ export default function Jobs({ params }) {
         .meta-pill.salary {
           background-color: #ecfdf5;
           color: #059669;
+        }
+
+        /* Loading Animation Styles */
+        .loading-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 2rem;
+        }
+
+        .graph-loader {
+          width: 400px;
+          height: 300px;
+          position: relative;
+        }
+
+        .resume-node-loader {
+          width: 60px;
+          height: 60px;
+          background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+          border: 2px solid #2563eb;
+          border-radius: 12px;
+          position: absolute;
+          top: 40px;
+          left: 170px;
+          animation: pulse 2s ease-in-out infinite;
+        }
+
+        .job-node-loader {
+          width: 50px;
+          height: 40px;
+          background: #fff;
+          border: 1px solid #e5e7eb;
+          border-radius: 8px;
+          position: absolute;
+          opacity: 0;
+          animation: fadeInScale 0.5s ease-out forwards;
+        }
+
+        .n1 {
+          top: 150px;
+          left: 100px;
+          animation-delay: 0.2s;
+        }
+        .n2 {
+          top: 150px;
+          left: 175px;
+          animation-delay: 0.4s;
+        }
+        .n3 {
+          top: 150px;
+          left: 250px;
+          animation-delay: 0.6s;
+        }
+        .n4 {
+          top: 230px;
+          left: 60px;
+          animation-delay: 0.8s;
+        }
+        .n5 {
+          top: 230px;
+          left: 290px;
+          animation-delay: 1s;
+        }
+
+        .connections {
+          position: absolute;
+          top: 0;
+          left: 0;
+          pointer-events: none;
+        }
+
+        .connection {
+          fill: none;
+          stroke: #94a3b8;
+          stroke-width: 2;
+          stroke-dasharray: 10;
+          opacity: 0;
+          animation: drawLine 1s ease-out forwards;
+        }
+
+        .c1 {
+          animation-delay: 0.3s;
+        }
+        .c2 {
+          animation-delay: 0.5s;
+        }
+        .c3 {
+          animation-delay: 0.7s;
+        }
+        .c4 {
+          animation-delay: 0.9s;
+        }
+        .c5 {
+          animation-delay: 1.1s;
+        }
+
+        .floating-icons {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+        }
+
+        .floating-icon {
+          position: absolute;
+          font-size: 20px;
+          opacity: 0;
+          animation: float 3s ease-in-out infinite;
+        }
+
+        .i1 {
+          top: 30%;
+          left: 20%;
+          animation-delay: 0.2s;
+        }
+        .i2 {
+          top: 40%;
+          left: 70%;
+          animation-delay: 0.7s;
+        }
+        .i3 {
+          top: 60%;
+          left: 30%;
+          animation-delay: 1.2s;
+        }
+        .i4 {
+          top: 50%;
+          left: 80%;
+          animation-delay: 1.7s;
+        }
+
+        @keyframes pulse {
+          0% {
+            transform: scale(1);
+            box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4);
+          }
+          50% {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px 10px rgba(37, 99, 235, 0);
+          }
+          100% {
+            transform: scale(1);
+            box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+          }
+        }
+
+        @keyframes fadeInScale {
+          from {
+            transform: scale(0.8);
+            opacity: 0;
+          }
+          to {
+            transform: scale(1);
+            opacity: 1;
+          }
+        }
+
+        @keyframes drawLine {
+          from {
+            stroke-dashoffset: 100;
+            opacity: 0;
+          }
+          to {
+            stroke-dashoffset: 0;
+            opacity: 0.6;
+          }
+        }
+
+        @keyframes float {
+          0% {
+            transform: translateY(0px) rotate(0deg);
+            opacity: 0;
+          }
+          30% {
+            opacity: 1;
+          }
+          70% {
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(-100px) rotate(360deg);
+            opacity: 0;
+          }
         }
       `}</style>
     </div>
