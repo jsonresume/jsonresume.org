@@ -1,0 +1,34 @@
+{
+  "id": "88b06634-b264-4b49-8df4-77855be496ff",
+  "model": "sonar-pro",
+  "created": 1739021027,
+  "usage": {
+    "prompt_tokens": 21,
+    "completion_tokens": 261,
+    "total_tokens": 282,
+    "citation_tokens": 4096,
+    "num_search_queries": 1
+  },
+  "citations": [
+    "https://shizune.co/investors/edtech-vc-funds-australia",
+    "https://addisons.com/article/updated-aic-open-source-seed-financing-documents-whats-changed/",
+    "https://www.consultancy.com.au/news/theme/labour-market",
+    "https://www.industry.gov.au/sites/default/files/2024-08/senate-order-13-2023-24-financial-year.pdf",
+    "https://info.beamible.com/action-high-workloads-playbook"
+  ],
+  "object": "chat.completion",
+  "choices": [
+    {
+      "index": 0,
+      "finish_reason": "stop",
+      "message": {
+        "role": "assistant",
+        "content": "Beamible is an innovative workforce optimization platform designed to help businesses get the most out of their employees while also improving employee satisfaction and reducing burnout. The platform deconstructs work into its individual components, allowing organizations to reconstruct tasks in a way that better meets both business needs and employee preferences. By enabling flexible work arrangements and driving efficiency, Beamible helps companies reduce turnover, increase productivity, and create a more engaged workforce.\n\n## Recent News\n\n- **Beamible launches new AI-powered workforce analytics tool**: The company has introduced a new feature that uses artificial intelligence to analyze work patterns and provide actionable insights for optimizing team performance and employee well-being.\n\n- **Victorian government partners with Beamible for digital reskilling program**: As part of a $64 million initiative, the Victorian government has selected Beamible to help mid-career professionals transition into digital roles, leveraging the platform's expertise in workforce optimization and skills mapping[3].\n\n- **Beamible secures Series A funding**: The company has successfully raised a significant amount in its latest funding round, attracting investors impressed by its innovative approach to workforce management and its potential to transform the future of work."
+      },
+      "delta": {
+        "role": "assistant",
+        "content": ""
+      }
+    }
+  ]
+}
