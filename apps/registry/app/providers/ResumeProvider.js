@@ -3,7 +3,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { Octokit } from 'octokit';
-import { find } from 'lodash';
 
 const RESUME_GIST_NAME = 'resume.json';
 
@@ -33,22 +32,6 @@ export function ResumeProvider({ children, targetUsername }) {
   const [error, setError] = useState(null);
   const [username, setUsername] = useState(null);
 
-  // Load from localStorage on mount
-  useEffect(() => {
-    if (!targetUsername) {
-      return;
-    }
-
-    const storedData = localStorage.getItem(`resume_${targetUsername}`);
-    if (storedData) {
-      const parsedData = JSON.parse(storedData);
-      setResume(parsedData.resume);
-      setGistId(parsedData.gistId);
-      setUsername(targetUsername);
-    }
-  }, [targetUsername]);
-
-  // Save to localStorage whenever resume changes
   useEffect(() => {
     if (resume && username) {
       localStorage.setItem(
@@ -58,24 +41,23 @@ export function ResumeProvider({ children, targetUsername }) {
     }
   }, [resume, gistId, username]);
 
-  useEffect(() => {
-    async (username) => {
-      try {
-        const response = await fetch(
-          `https://registry.jsonresume.org/${username}.json`
-        );
-        if (!response.ok) {
-          throw new Error('Failed to fetch resume from registry');
-        }
-        const resumeData = await response.json();
-        setResume(resumeData);
-        setUsername(username);
-      } catch (error) {
-        console.error('Error fetching from registry:', error);
-        setError(error.message);
+  const fetchFromRegistry = async (username) => {
+    try {
+      const response = await fetch(
+        `https://registry.jsonresume.org/${username}.json`
+      );
+      if (!response.ok) {
+        throw new Error('Failed to fetch resume from registry');
       }
-    };
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error fetching from registry:', error);
+      return null;
+    }
+  };
 
+  useEffect(() => {
     const fetchData = async () => {
       try {
         if (!targetUsername) {
@@ -83,29 +65,32 @@ export function ResumeProvider({ children, targetUsername }) {
           return;
         }
 
-        // Always try to fetch from registry first for the target username
-        try {
-          const response = await fetch(
-            `https://registry.jsonresume.org/${targetUsername}.json`
-          );
-          if (response.ok) {
-            const resumeData = await response.json();
-            setResume(resumeData);
-            setUsername(targetUsername);
-            setLoading(false);
-            return;
-          }
-        } catch (error) {
-          console.error('Error fetching from registry:', error);
+        // Check localStorage first
+        const cached = localStorage.getItem(`resume_${targetUsername}`);
+        if (cached) {
+          const { resume: cachedResume, gistId: cachedGistId } =
+            JSON.parse(cached);
+          setResume(cachedResume);
+          setGistId(cachedGistId);
+          setUsername(targetUsername);
         }
 
-        // If registry fetch fails and user is logged in, try GitHub only if it's their own profile
+        // Always try to fetch from registry first for the target username
+        const registryData = await fetchFromRegistry(targetUsername);
+        if (registryData) {
+          setResume(registryData);
+          setUsername(targetUsername);
+          setLoading(false);
+          return;
+        }
+
+        // If registry fetch fails and user is logged in, try GitHub
         const {
           data: { session: currentSession },
         } = await supabase.auth.getSession();
         setSession(currentSession);
 
-        if (!currentSession || !currentSession.provider_token) {
+        if (!currentSession?.provider_token) {
           setLoading(false);
           return;
         }
@@ -115,25 +100,85 @@ export function ResumeProvider({ children, targetUsername }) {
         // Only proceed with GitHub if we're viewing the logged-in user's profile
         if (githubUsername && githubUsername === targetUsername) {
           const octokit = new Octokit({ auth: currentSession.provider_token });
-          const gists = await octokit.rest.gists.list({ per_page: 100 });
 
-          const resumeUrl = find(gists.data, (f) => {
-            return f.files[RESUME_GIST_NAME];
-          });
+          try {
+            console.log('Fetching gists for user:', githubUsername);
+            const { data: gists } = await octokit.rest.gists.list({
+              per_page: 100,
+              sort: 'updated',
+              direction: 'desc',
+            });
 
-          if (resumeUrl) {
-            setGistId(resumeUrl.id);
-            const fullResumeGistUrl = `https://gist.githubusercontent.com/${githubUsername}/${
-              resumeUrl.id
-            }/raw?cachebust=${new Date().getTime()}`;
+            console.log('Found gists:', gists.length);
 
-            const response = await fetch(fullResumeGistUrl);
-            if (!response.ok) {
-              throw new Error('Failed to fetch resume data');
+            // Find the most recently updated resume.json gist
+            const findLatestResumeGist = async (octokit) => {
+              console.log('Looking for most recent resume.json gist...');
+              const { data: gists } = await octokit.rest.gists.list({
+                per_page: 100,
+                sort: 'updated',
+                direction: 'desc',
+              });
+
+              console.log(
+                `Found ${gists.length} gists, searching for resume.json...`
+              );
+              const resumeGist = gists.find((gist) =>
+                Object.keys(gist.files).some(
+                  (filename) => filename.toLowerCase() === 'resume.json'
+                )
+              );
+
+              if (resumeGist) {
+                console.log(
+                  'Found most recent resume.json gist:',
+                  resumeGist.id
+                );
+                return resumeGist.id;
+              }
+
+              console.log('No existing resume.json gist found');
+              return null;
+            };
+
+            const latestGistId = await findLatestResumeGist(octokit);
+            if (latestGistId) {
+              console.log('Found most recent resume.json gist:', latestGistId);
+              setGistId(latestGistId);
+
+              // Get the raw content
+              const { data: gists } = await octokit.rest.gists.get({
+                gist_id: latestGistId,
+              });
+              const resumeFile = Object.values(gists.files).find(
+                (file) => file.filename.toLowerCase() === 'resume.json'
+              );
+
+              if (resumeFile?.raw_url) {
+                const response = await fetch(resumeFile.raw_url);
+                if (!response.ok) {
+                  throw new Error('Failed to fetch resume data');
+                }
+                const resumeData = await response.json();
+                setResume(resumeData);
+                setUsername(githubUsername);
+
+                // Update localStorage with the latest gist ID
+                localStorage.setItem(
+                  `resume_${githubUsername}`,
+                  JSON.stringify({
+                    resume: resumeData,
+                    gistId: latestGistId,
+                    username: githubUsername,
+                  })
+                );
+              }
+            } else {
+              console.log('No resume.json gist found');
             }
-            const resumeData = await response.json();
-            setResume(resumeData);
-            setUsername(githubUsername);
+          } catch (error) {
+            console.error('Error fetching gists:', error);
+            setError('Failed to fetch resume from GitHub');
           }
         }
       } catch (error) {
@@ -144,29 +189,8 @@ export function ResumeProvider({ children, targetUsername }) {
       }
     };
 
-    // Fetch when targetUsername changes or we don't have data
-    if (!resume || username !== targetUsername) {
-      fetchData();
-    }
-
-    // Subscribe to auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
-      setSession(session);
-      if (event === 'SIGNED_OUT') {
-        setResume(null);
-        setGistId(null);
-        setUsername(null);
-        setError(null);
-        localStorage.removeItem(`resume_${username}`);
-      }
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [resume, error, username, targetUsername]);
+    fetchData();
+  }, [targetUsername]);
 
   const updateGist = async (resumeContent) => {
     try {
@@ -175,7 +199,6 @@ export function ResumeProvider({ children, targetUsername }) {
       } = await supabase.auth.getSession();
 
       if (!currentSession?.provider_token) {
-        // Try to get a fresh token
         try {
           const { error } = await supabase.auth.signInWithOAuth({
             provider: 'github',
@@ -190,8 +213,6 @@ export function ResumeProvider({ children, targetUsername }) {
           });
 
           if (error) throw error;
-
-          // Wait for redirect
           return;
         } catch (error) {
           console.error('GitHub authentication error:', error);
@@ -203,32 +224,74 @@ export function ResumeProvider({ children, targetUsername }) {
 
       const octokit = new Octokit({ auth: currentSession.provider_token });
 
-      if (gistId) {
+      // Always look for the most recently updated resume.json gist first
+      const findLatestResumeGist = async (octokit) => {
+        console.log('Looking for most recent resume.json gist...');
+        const { data: gists } = await octokit.rest.gists.list({
+          per_page: 100,
+          sort: 'updated',
+          direction: 'desc',
+        });
+
+        console.log(
+          `Found ${gists.length} gists, searching for resume.json...`
+        );
+        const resumeGist = gists.find((gist) =>
+          Object.keys(gist.files).some(
+            (filename) => filename.toLowerCase() === 'resume.json'
+          )
+        );
+
+        if (resumeGist) {
+          console.log('Found most recent resume.json gist:', resumeGist.id);
+          return resumeGist.id;
+        }
+
+        console.log('No existing resume.json gist found');
+        return null;
+      };
+
+      const latestGistId = await findLatestResumeGist(octokit);
+
+      if (latestGistId) {
+        console.log('Updating existing gist:', latestGistId);
         await octokit.rest.gists.update({
-          gist_id: gistId,
+          gist_id: latestGistId,
           files: {
-            [RESUME_GIST_NAME]: {
+            'resume.json': {
               content: resumeContent,
             },
           },
         });
-        // Update local storage and state after successful update
-        const updatedResume = JSON.parse(resumeContent);
-        setResume(updatedResume);
+        setGistId(latestGistId);
       } else {
-        const { data } = await octokit.rest.gists.create({
-          public: true,
+        console.log('No existing resume.json gist found, creating new one');
+        const { data: newGist } = await octokit.rest.gists.create({
           files: {
-            [RESUME_GIST_NAME]: {
+            'resume.json': {
               content: resumeContent,
             },
           },
+          public: true,
+          description: 'JSON Resume',
         });
-        setGistId(data.id);
-        // Update local storage and state after successful create
-        const updatedResume = JSON.parse(resumeContent);
-        setResume(updatedResume);
+        console.log('Created new gist:', newGist.id);
+        setGistId(newGist.id);
       }
+
+      // Update local storage and state after successful update
+      const updatedResume = JSON.parse(resumeContent);
+      setResume(updatedResume);
+
+      // Store the latest state
+      localStorage.setItem(
+        `resume_${username}`,
+        JSON.stringify({
+          resume: updatedResume,
+          gistId: latestGistId,
+          username,
+        })
+      );
     } catch (error) {
       console.error('Error updating gist:', error);
       throw error;
