@@ -20,14 +20,14 @@ const getLayoutedElements = (nodes, edges, direction = 'TB') => {
 
   dagreGraph.setGraph({
     rankdir: direction,
-    align: 'UL',
-    nodesep: 80,
-    ranksep: 100,
-    edgesep: 40,
+    align: 'DL',
+    nodesep: 40,
+    ranksep: 120,
+    edgesep: 20,
     marginx: 20,
     marginy: 20,
     acyclicer: 'greedy',
-    ranker: 'network-simplex',
+    ranker: 'tight-tree',
   });
 
   nodes.forEach((node) => {
