@@ -1,0 +1,124 @@
+{
+  "basics": {
+    "name": "John Doe",
+    "label": "Software Engineer",
+    "image": "https://example.com/profile.jpg",
+    "email": "johndoe@example.com",
+    "phone": "+1234567890",
+    "url": "https://johndoe.dev",
+    "summary": "Passionate software engineer with 10+ years of experience in full-stack development, specializing in JavaScript, Python, and cloud-based architectures.",
+    "location": {
+      "address": "123 Main St",
+      "postalCode": "10001",
+      "city": "New York",
+      "countryCode": "US",
+      "region": "NY"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "johndoe",
+        "url": "https://github.com/johndoe"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "johndoe",
+        "url": "https://linkedin.com/in/johndoe"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "TechCorp",
+      "position": "Senior Software Engineer",
+      "url": "https://techcorp.com",
+      "startDate": "2020-06-01",
+      "summary": "Developing scalable web applications and leading the front-end team.",
+      "highlights": [
+        "Optimized application performance, improving load times by 30%",
+        "Led a team of 5 engineers in developing a new SaaS product",
+        "Implemented CI/CD pipelines reducing deployment times"
+      ]
+    },
+    {
+      "name": "DevSolutions",
+      "position": "Software Engineer",
+      "url": "https://devsolutions.com",
+      "startDate": "2016-09-01",
+      "endDate": "2020-05-30",
+      "summary": "Built and maintained cloud-based applications.",
+      "highlights": [
+        "Developed a real-time chat system used by 50,000+ users",
+        "Migrated legacy applications to a modern tech stack"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University of Technology",
+      "url": "https://universitytech.edu",
+      "area": "Computer Science",
+      "studyType": "Bachelor's",
+      "startDate": "2012-08-01",
+      "endDate": "2016-06-01",
+      "courses": [
+        "Algorithms and Data Structures",
+        "Distributed Systems",
+        "Machine Learning"
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "name": "Programming Languages",
+      "level": "Expert",
+      "keywords": ["JavaScript", "Python", "TypeScript", "Go"]
+    },
+    {
+      "name": "Web Development",
+      "level": "Advanced",
+      "keywords": ["React", "Node.js", "GraphQL", "Next.js"]
+    },
+    {
+      "name": "Cloud & DevOps",
+      "level": "Intermediate",
+      "keywords": ["AWS", "Docker", "Kubernetes", "CI/CD"]
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Native"
+    },
+    {
+      "language": "Spanish",
+      "fluency": "Professional"
+    }
+  ],
+  "projects": [
+    {
+      "name": "AI Chatbot",
+      "description": "Developed an AI-powered chatbot for customer support.",
+      "url": "https://chatbot.example.com",
+      "highlights": [
+        "Used GPT-based AI for natural language processing",
+        "Integrated with Slack, Telegram, and WhatsApp"
+      ]
+    }
+  ],
+  "awards": [
+    {
+      "title": "Best Developer Award",
+      "date": "2021-10-10",
+      "awarder": "Tech Excellence Awards",
+      "summary": "Recognized for outstanding contributions to open-source projects."
+    }
+  ],
+  "certificates": [
+    {
+      "name": "AWS Certified Solutions Architect",
+      "date": "2022-05-01",
+      "issuer": "Amazon Web Services"
+    }
+  ]
+}
