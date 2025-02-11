@@ -25,7 +25,7 @@ export default async function handler(req, res) {
 
   // Generate a natural language description of the resume
   const resumeCompletion = await openai.chat.completions.create({
-    model: 'gpt-4-mini',
+    model: 'gpt-4o-mini',
     messages: [
       {
         role: 'system',
