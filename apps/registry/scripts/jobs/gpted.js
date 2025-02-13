@@ -404,6 +404,12 @@ Using the instructions and example above, transform the provided job description
 
         const parsedCompanyData = JSON.parse(companyData[0].data);
 
+        // exit if no company data
+        if (companyError || !parsedCompanyData) {
+          // exit node
+          process.exit(1);
+        }
+
         const companyDetails = parsedCompanyData.choices[0].message.content;
 
         console.log({ companyDetails, companyError });
@@ -438,8 +444,7 @@ Using the instructions and example above, transform the provided job description
 
           messages.push({
             role: 'system',
-            content: `Don't actually return your response in JSON format, just return a text response of all the job description in natural language. Don't miss any fields when talking about the job description.
-            `,
+            content: `Transform the structured job information into a comprehensive, natural-language job description. Write it as if it were a professional job posting that would appear on a career site. Include all details about the role, company, requirements, and benefits in a flowing narrative format. Focus on using industry-standard terminology and keywords that would naturally appear in relevant resumes. Make sure to incorporate all the technical skills, qualifications, and responsibilities in a way that would maximize semantic matching with candidate resumes.`,
           });
 
           const chat3 = await openai.chat.completions.create({
@@ -452,19 +457,21 @@ Using the instructions and example above, transform the provided job description
 
           try {
             console.log({ chat3, content });
+            const { error } = await supabase
+              .from('jobs')
+              .update({
+                gpt_content: details,
+                gpt_content_json_extended: jobJson2,
+                gpt_content_full: content,
+              })
+              .eq('id', job.id);
+            console.log({ error });
           } catch (e) {
             console.log({ e });
           }
         } catch (e) {
           console.log({ e });
         }
-        // const { error } = await supabase
-        //   .from('jobs')
-        //   .update({
-        //     gpt_content: details,
-        //   })
-        //   .eq('id', job.id);
-        // console.log({ error });
       } catch (e) {
         console.error(e);
         await supabase
