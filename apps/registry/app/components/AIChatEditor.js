@@ -20,31 +20,48 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
     }
   }, [messages]);
 
-  const startRecording = async () => {
+  const handleStartRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       mediaRecorderRef.current = new MediaRecorder(stream);
       chunksRef.current = [];
 
-      mediaRecorderRef.current.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          chunksRef.current.push(event.data);
+      mediaRecorderRef.current.ondataavailable = (e) => {
+        if (e.data.size > 0) {
+          chunksRef.current.push(e.data);
         }
       };
 
       mediaRecorderRef.current.onstop = async () => {
         const audioBlob = new Blob(chunksRef.current, { type: 'audio/webm' });
-        const userMessage = {
-          role: 'user',
-          content: 'Audio message',
-          id: Date.now().toString()
-        };
-
-        setMessages(prev => [...prev, userMessage]);
         setIsProcessing(true);
 
         try {
-          const response = await fetch('/api/chat', {
+          // First, transcribe the audio
+          const formData = new FormData();
+          formData.append('audio', audioBlob);
+
+          const transcribeResponse = await fetch('/api/transcribe', {
+            method: 'POST',
+            body: formData,
+          });
+
+          const transcribeData = await transcribeResponse.json();
+
+          if (!transcribeResponse.ok) {
+            throw new Error(transcribeData.error || 'Failed to transcribe audio');
+          }
+
+          // Then send the transcribed text to the chat API
+          const userMessage = {
+            role: 'user',
+            content: transcribeData.text,
+            id: Date.now().toString()
+          };
+
+          setMessages(prev => [...prev, userMessage]);
+
+          const chatResponse = await fetch('/api/chat', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -52,43 +69,44 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
             body: JSON.stringify({
               messages: [...messages, userMessage],
               currentResume: resume,
-              audioBlob,
             }),
           });
 
-          const data = await response.json();
+          const chatData = await chatResponse.json();
 
-          if (response.ok) {
-            setMessages(prev => [...prev, {
-              role: 'assistant',
-              content: data.message,
-              suggestedChanges: data.suggestedChanges,
-              id: (Date.now() + 1).toString()
-            }]);
-          } else {
-            throw new Error(data.error || 'Failed to get response');
+          if (!chatResponse.ok) {
+            throw new Error(chatData.error || 'Failed to process message');
           }
-        } catch (error) {
-          console.error('Error:', error);
+
           setMessages(prev => [...prev, {
             role: 'assistant',
-            content: 'Sorry, there was an error processing your request.',
+            content: chatData.message,
+            suggestedChanges: chatData.suggestedChanges,
+            id: (Date.now() + 1).toString()
+          }]);
+        } catch (error) {
+          console.error('Error processing audio:', error);
+          setMessages(prev => [...prev, {
+            role: 'assistant',
+            content: 'Sorry, there was an error processing your audio message.',
             id: (Date.now() + 1).toString()
           }]);
         }
 
         setIsProcessing(false);
+        stream.getTracks().forEach(track => track.stop());
       };
 
       mediaRecorderRef.current.start();
       setIsRecording(true);
     } catch (error) {
-      console.error('Error accessing microphone:', error);
+      console.error('Error starting recording:', error);
+      alert('Error accessing microphone. Please make sure you have granted microphone permissions.');
     }
   };
 
-  const stopRecording = () => {
-    if (mediaRecorderRef.current && isRecording) {
+  const handleStopRecording = () => {
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
       mediaRecorderRef.current.stop();
       setIsRecording(false);
     }
@@ -226,9 +244,9 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
               variant={isRecording ? 'destructive' : 'outline'}
               onClick={() => {
                 if (isRecording) {
-                  stopRecording();
+                  handleStopRecording();
                 } else {
-                  startRecording();
+                  handleStartRecording();
                 }
               }}
             >

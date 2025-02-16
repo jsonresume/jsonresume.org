@@ -10,42 +10,59 @@ const RESUME_FIELDS_GUIDE = {
     required: ['name', 'label', 'email'],
     recommended: ['phone', 'url', 'summary', 'location', 'profiles'],
     locationDetails: ['address', 'postalCode', 'city', 'countryCode', 'region'],
-    profileDetails: ['network', 'username', 'url']
+    profileDetails: ['network', 'username', 'url'],
   },
   work: {
     required: ['company', 'position', 'startDate'],
-    recommended: ['endDate', 'summary', 'highlights', 'location', 'url', 'technologies']
+    recommended: [
+      'endDate',
+      'summary',
+      'highlights',
+      'location',
+      'url',
+      'technologies',
+    ],
   },
   education: {
     required: ['institution', 'area', 'studyType', 'startDate'],
-    recommended: ['endDate', 'score', 'courses', 'location', 'activities']
+    recommended: ['endDate', 'score', 'courses', 'location', 'activities'],
   },
   skills: {
     required: ['name', 'level'],
-    recommended: ['keywords', 'yearsOfExperience']
+    recommended: ['keywords', 'yearsOfExperience'],
   },
   projects: {
     required: ['name', 'description'],
-    recommended: ['highlights', 'keywords', 'startDate', 'endDate', 'url', 'technologies']
-  }
+    recommended: [
+      'highlights',
+      'keywords',
+      'startDate',
+      'endDate',
+      'url',
+      'technologies',
+    ],
+  },
 };
 
 const checkMissingDetails = (resume) => {
   const missing = {};
-  
+
   Object.entries(RESUME_FIELDS_GUIDE).forEach(([section, fields]) => {
     const sectionData = resume[section];
-    
+
     if (!sectionData) {
-      missing[section] = { required: fields.required, recommended: fields.recommended };
+      missing[section] = {
+        required: fields.required,
+        recommended: fields.recommended,
+      };
       return;
     }
 
     if (Array.isArray(sectionData)) {
       sectionData.forEach((item, index) => {
         const itemMissing = {
-          required: fields.required.filter(field => !item[field]),
-          recommended: fields.recommended.filter(field => !item[field])
+          required: fields.required.filter((field) => !item[field]),
+          recommended: fields.recommended.filter((field) => !item[field]),
         };
         if (itemMissing.required.length || itemMissing.recommended.length) {
           missing[`${section}[${index}]`] = itemMissing;
@@ -53,8 +70,8 @@ const checkMissingDetails = (resume) => {
       });
     } else {
       const sectionMissing = {
-        required: fields.required.filter(field => !sectionData[field]),
-        recommended: fields.recommended.filter(field => !sectionData[field])
+        required: fields.required.filter((field) => !sectionData[field]),
+        recommended: fields.recommended.filter((field) => !sectionData[field]),
       };
       if (sectionMissing.required.length || sectionMissing.recommended.length) {
         missing[section] = sectionMissing;
@@ -67,7 +84,7 @@ const checkMissingDetails = (resume) => {
 
 const generateFollowUpQuestions = (missingDetails) => {
   const questions = [];
-  
+
   Object.entries(missingDetails).forEach(([section, fields]) => {
     if (fields.required.length > 0) {
       questions.push(`Could you please provide the following required details for ${section}:
@@ -148,9 +165,9 @@ export async function POST(req) {
 
     const missingDetails = checkMissingDetails(currentResume);
     const followUpQuestions = generateFollowUpQuestions(missingDetails);
-    
+
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4o',
       messages: [
         {
           role: 'system',
@@ -185,17 +202,20 @@ export async function POST(req) {
 
     const assistantMessage = completion.choices[0].message.content;
     const parsedResponse = extractJsonFromMessage(assistantMessage);
-    
+
     // If there are missing details but no follow-up questions in the response,
     // append them to the message
     let finalMessage = parsedResponse?.message || assistantMessage;
     if (followUpQuestions.length > 0 && !finalMessage.includes('?')) {
-      finalMessage += '\n\nTo make your resume more comprehensive, please provide:\n' + 
+      finalMessage +=
+        '\n\nTo make your resume more comprehensive, please provide:\n' +
         followUpQuestions.join('\n\n');
     }
 
     return Response.json({
-      suggestedChanges: parsedResponse?.changes || formatSuggestedChanges(assistantMessage, currentResume),
+      suggestedChanges:
+        parsedResponse?.changes ||
+        formatSuggestedChanges(assistantMessage, currentResume),
       message: finalMessage,
     });
   } catch (error) {
