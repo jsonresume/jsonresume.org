@@ -216,9 +216,17 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
 
       setMessages(prev => [...prev, assistantMessage]);
       
-      // Speak the assistant's message
+      console.log('Attempting to speak message:', data.message);
       if (speechSupported) {
-        speak(data.message);
+        console.log('Speech is supported, calling speak function');
+        try {
+          await speak(data.message);
+          console.log('Speak function completed');
+        } catch (err) {
+          console.error('Error during speech:', err);
+        }
+      } else {
+        console.log('Speech is not supported');
       }
 
       if (data.suggestedChanges) {
