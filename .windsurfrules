@@ -1,0 +1,89 @@
+Next.js Best Practices:
+
+Use the App Router for improved performance and easier data fetching
+Implement server-side rendering for better SEO and initial load performance
+Utilize Next.js built-in image optimization for faster image loading
+Leverage Next.js API routes for secure server-side operations
+Implement proper error boundaries to handle and display errors gracefully
+Use Next.js built-in internationalization features for multi-language support
+
+React Best Practices:
+
+Prefer functional components with hooks over class components for better readability and reusability
+Use React.memo and useMemo for performance optimization in large applications
+Strictly follow React hooks rules to prevent bugs and improve code clarity
+Implement proper state management using Context API or external libraries like Redux
+Use PropTypes or TypeScript for type checking to catch errors early
+Leverage React.lazy and Suspense for code-splitting and improved load times
+
+Tailwind CSS Best Practices:
+
+Use utility-first approach for consistent and maintainable styles
+Implement responsive design using Tailwind's built-in responsive utilities
+Utilize Tailwind's JIT (Just-In-Time) mode for faster build times and smaller CSS files
+Create custom components with @apply directive for reusability
+Use Tailwind's dark mode support for easy theming
+Implement proper accessibility practices with Tailwind's accessibility utilities
+
+Prisma Best Practices:
+
+Use Prisma Client for type-safe database queries
+Implement proper error handling for database operations
+Utilize Prisma Migrate for version-controlled database schema changes
+Leverage Prisma's relation fields for efficient data modeling
+Use Prisma's query raw and execute raw for complex queries when needed
+Implement proper connection pooling for improved performance
+
+Supabase Best Practices:
+
+Use Supabase Auth for secure user authentication
+Implement proper row-level security for data protection
+Utilize Supabase Realtime for instant data updates
+Leverage Supabase Functions for serverless backend logic
+Use Supabase Storage for secure file management
+Implement proper error handling for Supabase operations
+
+Axios Best Practices:
+
+Use Axios interceptors for global request/response handling
+Implement proper error handling for Axios requests
+Utilize Axios cancel tokens for managing long-running requests
+Leverage Axios responseType for efficient data handling
+Use Axios timeout configuration for better performance and reliability
+Implement proper CORS handling when using Axios for cross-origin requests
+
+Lodash Best Practices:
+
+Use Lodash functions judiciously to avoid unnecessary dependencies
+Implement proper tree-shaking to reduce bundle size
+Utilize Lodash's functional programming utilities for cleaner code
+Leverage Lodash's collection methods for efficient data manipulation
+Use Lodash's memoize function for performance optimization in expensive computations
+Implement proper error handling when using Lodash functions
+
+Express.js Best Practices:
+
+Use middleware for reusable functionality and better code organization
+Implement proper error handling with error-handling middleware
+Utilize Express Router for modular route management
+Leverage Express's built-in security features like helmet
+Use environment variables for configuration to improve security
+Implement proper logging for better debugging and monitoring
+
+OpenAI API Best Practices:
+
+Use proper error handling for API requests
+Implement rate limiting to prevent abuse and ensure fair usage
+Utilize streaming responses for large language model outputs
+Leverage fine-tuning for domain-specific applications
+Implement proper authentication and authorization for API access
+Use caching strategies to reduce API calls and improve performance
+
+UUID Best Practices:
+
+Use UUID v4 for generating random, unique identifiers
+Implement proper validation for UUIDs in your application
+Utilize UUID parsing and stringification for efficient data handling
+Leverage UUID comparison for efficient sorting and searching
+Use UUID namespaces for generating related identifiers
+Implement proper error handling when working with UUIDs

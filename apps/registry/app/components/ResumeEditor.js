@@ -28,7 +28,7 @@ export default function ResumeEditor({ resume: initialResume, updateGist }) {
   const [resume, setResume] = useState(initialResume);
   const [changed, setChanged] = useState(false);
   const [content, setContent] = useState('');
-  const [editorMode, setEditorMode] = useState('json'); // 'json' or 'gui'
+  const [editorMode, setEditorMode] = useState('gui'); // 'json' or 'gui'
   const monaco = useMonaco();
 
   useEffect(() => {

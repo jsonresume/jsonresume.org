@@ -120,7 +120,17 @@ export default function GuiEditor({ resume, onChange }) {
       ...resume,
       work: [
         ...(resume.work || []),
-        { name: '', position: '', startDate: '', endDate: '', highlights: [] },
+        {
+          name: '',
+          position: '',
+          startDate: '',
+          endDate: '',
+          location: '',
+          url: '',
+          summary: '',
+          description: '',
+          highlights: [],
+        },
       ],
     });
   };
@@ -150,6 +160,116 @@ export default function GuiEditor({ resume, onChange }) {
     const newWork = [...(resume.work || [])];
     newWork[workIndex].highlights.splice(highlightIndex, 1);
     onChange({ ...resume, work: newWork });
+  };
+
+  const updateProfiles = (index, field, value) => {
+    const newProfiles = [...(resume.basics?.profiles || [])];
+    newProfiles[index] = { ...newProfiles[index], [field]: value };
+    onChange({
+      ...resume,
+      basics: {
+        ...resume.basics,
+        profiles: newProfiles,
+      },
+    });
+  };
+
+  const addProfile = () => {
+    onChange({
+      ...resume,
+      basics: {
+        ...resume.basics,
+        profiles: [
+          ...(resume.basics?.profiles || []),
+          { network: '', username: '', url: '' },
+        ],
+      },
+    });
+  };
+
+  const removeProfile = (index) => {
+    const newProfiles = [...(resume.basics?.profiles || [])];
+    newProfiles.splice(index, 1);
+    onChange({
+      ...resume,
+      basics: {
+        ...resume.basics,
+        profiles: newProfiles,
+      },
+    });
+  };
+
+  const updateVolunteer = (index, field, value) => {
+    const newVolunteer = [...(resume.volunteer || [])];
+    newVolunteer[index] = { ...newVolunteer[index], [field]: value };
+    onChange({ ...resume, volunteer: newVolunteer });
+  };
+
+  const updateEducation = (index, field, value) => {
+    const newEducation = [...(resume.education || [])];
+    newEducation[index] = { ...newEducation[index], [field]: value };
+    onChange({ ...resume, education: newEducation });
+  };
+
+  const updateAwards = (index, field, value) => {
+    const newAwards = [...(resume.awards || [])];
+    newAwards[index] = { ...newAwards[index], [field]: value };
+    onChange({ ...resume, awards: newAwards });
+  };
+
+  const updateCertificates = (index, field, value) => {
+    const newCertificates = [...(resume.certificates || [])];
+    newCertificates[index] = { ...newCertificates[index], [field]: value };
+    onChange({ ...resume, certificates: newCertificates });
+  };
+
+  const updatePublications = (index, field, value) => {
+    const newPublications = [...(resume.publications || [])];
+    newPublications[index] = { ...newPublications[index], [field]: value };
+    onChange({ ...resume, publications: newPublications });
+  };
+
+  const updateSkills = (index, field, value) => {
+    const newSkills = [...(resume.skills || [])];
+    newSkills[index] = { ...newSkills[index], [field]: value };
+    onChange({ ...resume, skills: newSkills });
+  };
+
+  const updateLanguages = (index, field, value) => {
+    const newLanguages = [...(resume.languages || [])];
+    newLanguages[index] = { ...newLanguages[index], [field]: value };
+    onChange({ ...resume, languages: newLanguages });
+  };
+
+  const updateInterests = (index, field, value) => {
+    const newInterests = [...(resume.interests || [])];
+    newInterests[index] = { ...newInterests[index], [field]: value };
+    onChange({ ...resume, interests: newInterests });
+  };
+
+  const updateReferences = (index, field, value) => {
+    const newReferences = [...(resume.references || [])];
+    newReferences[index] = { ...newReferences[index], [field]: value };
+    onChange({ ...resume, references: newReferences });
+  };
+
+  const updateProjects = (index, field, value) => {
+    const newProjects = [...(resume.projects || [])];
+    newProjects[index] = { ...newProjects[index], [field]: value };
+    onChange({ ...resume, projects: newProjects });
+  };
+
+  const addArrayItem = (section, template) => {
+    onChange({
+      ...resume,
+      [section]: [...(resume[section] || []), template],
+    });
+  };
+
+  const removeArrayItem = (section, index) => {
+    const newArray = [...(resume[section] || [])];
+    newArray.splice(index, 1);
+    onChange({ ...resume, [section]: newArray });
   };
 
   return (
@@ -301,13 +421,22 @@ export default function GuiEditor({ resume, onChange }) {
                 />
               </div>
               <FormField
+                label="Summary"
+                type="textarea"
+                value={item.summary}
+                onChange={(value) =>
+                  updateWorkExperience(index, 'summary', value)
+                }
+                placeholder="Brief summary of your role and responsibilities..."
+              />
+              <FormField
                 label="Description"
                 type="textarea"
                 value={item.description}
                 onChange={(value) =>
                   updateWorkExperience(index, 'description', value)
                 }
-                placeholder="Company description..."
+                placeholder="Detailed description of your work experience..."
               />
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-700">
@@ -343,6 +472,645 @@ export default function GuiEditor({ resume, onChange }) {
                   Add Highlight
                 </Button>
               </div>
+            </div>
+          )}
+        />
+      </FormSection>
+
+      <FormSection title="Profiles">
+        <ArrayField
+          items={resume.basics?.profiles || []}
+          onAdd={addProfile}
+          onRemove={removeProfile}
+          addLabel="Add Profile"
+          renderItem={(item, index) => (
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                label="Network"
+                value={item.network}
+                onChange={(value) => updateProfiles(index, 'network', value)}
+                placeholder="Twitter, LinkedIn, etc."
+              />
+              <FormField
+                label="Username"
+                value={item.username}
+                onChange={(value) => updateProfiles(index, 'username', value)}
+                placeholder="johndoe"
+              />
+              <FormField
+                label="URL"
+                type="url"
+                value={item.url}
+                onChange={(value) => updateProfiles(index, 'url', value)}
+                placeholder="https://twitter.com/johndoe"
+              />
+            </div>
+          )}
+        />
+      </FormSection>
+
+      <FormSection title="Volunteer Experience">
+        <ArrayField
+          items={resume.volunteer || []}
+          onAdd={() =>
+            addArrayItem('volunteer', {
+              organization: '',
+              position: '',
+              url: '',
+              startDate: '',
+              endDate: '',
+              summary: '',
+              highlights: [],
+            })
+          }
+          onRemove={(index) => removeArrayItem('volunteer', index)}
+          addLabel="Add Volunteer Experience"
+          renderItem={(item, index) => (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  label="Organization"
+                  value={item.organization}
+                  onChange={(value) =>
+                    updateVolunteer(index, 'organization', value)
+                  }
+                  placeholder="Organization Name"
+                />
+                <FormField
+                  label="Position"
+                  value={item.position}
+                  onChange={(value) =>
+                    updateVolunteer(index, 'position', value)
+                  }
+                  placeholder="Volunteer Position"
+                />
+                <FormField
+                  label="Start Date"
+                  value={item.startDate}
+                  onChange={(value) =>
+                    updateVolunteer(index, 'startDate', value)
+                  }
+                  placeholder="YYYY-MM"
+                />
+                <FormField
+                  label="End Date"
+                  value={item.endDate}
+                  onChange={(value) => updateVolunteer(index, 'endDate', value)}
+                  placeholder="YYYY-MM or Present"
+                />
+                <FormField
+                  label="URL"
+                  type="url"
+                  value={item.url}
+                  onChange={(value) => updateVolunteer(index, 'url', value)}
+                  placeholder="https://organization.com"
+                />
+              </div>
+              <FormField
+                label="Summary"
+                type="textarea"
+                value={item.summary}
+                onChange={(value) => updateVolunteer(index, 'summary', value)}
+                placeholder="Description of your volunteer work..."
+              />
+              <ArrayField
+                items={item.highlights || []}
+                onAdd={() => {
+                  const newVolunteer = [...(resume.volunteer || [])];
+                  newVolunteer[index] = {
+                    ...newVolunteer[index],
+                    highlights: [...(newVolunteer[index].highlights || []), ''],
+                  };
+                  onChange({ ...resume, volunteer: newVolunteer });
+                }}
+                onRemove={(highlightIndex) => {
+                  const newVolunteer = [...(resume.volunteer || [])];
+                  newVolunteer[index].highlights.splice(highlightIndex, 1);
+                  onChange({ ...resume, volunteer: newVolunteer });
+                }}
+                addLabel="Add Highlight"
+                renderItem={(highlight, highlightIndex) => (
+                  <FormField
+                    value={highlight}
+                    onChange={(value) => {
+                      const newVolunteer = [...(resume.volunteer || [])];
+                      newVolunteer[index].highlights[highlightIndex] = value;
+                      onChange({ ...resume, volunteer: newVolunteer });
+                    }}
+                    placeholder="Achievement or responsibility..."
+                  />
+                )}
+              />
+            </div>
+          )}
+        />
+      </FormSection>
+
+      <FormSection title="Education">
+        <ArrayField
+          items={resume.education || []}
+          onAdd={() =>
+            addArrayItem('education', {
+              institution: '',
+              area: '',
+              studyType: '',
+              startDate: '',
+              endDate: '',
+              score: '',
+              courses: [],
+            })
+          }
+          onRemove={(index) => removeArrayItem('education', index)}
+          addLabel="Add Education"
+          renderItem={(item, index) => (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  label="Institution"
+                  value={item.institution}
+                  onChange={(value) =>
+                    updateEducation(index, 'institution', value)
+                  }
+                  placeholder="University Name"
+                />
+                <FormField
+                  label="Area"
+                  value={item.area}
+                  onChange={(value) => updateEducation(index, 'area', value)}
+                  placeholder="Field of Study"
+                />
+                <FormField
+                  label="Study Type"
+                  value={item.studyType}
+                  onChange={(value) =>
+                    updateEducation(index, 'studyType', value)
+                  }
+                  placeholder="Bachelor, Master, etc."
+                />
+                <FormField
+                  label="Start Date"
+                  value={item.startDate}
+                  onChange={(value) =>
+                    updateEducation(index, 'startDate', value)
+                  }
+                  placeholder="YYYY-MM"
+                />
+                <FormField
+                  label="End Date"
+                  value={item.endDate}
+                  onChange={(value) => updateEducation(index, 'endDate', value)}
+                  placeholder="YYYY-MM or Present"
+                />
+                <FormField
+                  label="Score"
+                  value={item.score}
+                  onChange={(value) => updateEducation(index, 'score', value)}
+                  placeholder="Grade or GPA"
+                />
+              </div>
+              <ArrayField
+                items={item.courses || []}
+                onAdd={() => {
+                  const newEducation = [...(resume.education || [])];
+                  newEducation[index] = {
+                    ...newEducation[index],
+                    courses: [...(newEducation[index].courses || []), ''],
+                  };
+                  onChange({ ...resume, education: newEducation });
+                }}
+                onRemove={(courseIndex) => {
+                  const newEducation = [...(resume.education || [])];
+                  newEducation[index].courses.splice(courseIndex, 1);
+                  onChange({ ...resume, education: newEducation });
+                }}
+                addLabel="Add Course"
+                renderItem={(course, courseIndex) => (
+                  <FormField
+                    value={course}
+                    onChange={(value) => {
+                      const newEducation = [...(resume.education || [])];
+                      newEducation[index].courses[courseIndex] = value;
+                      onChange({ ...resume, education: newEducation });
+                    }}
+                    placeholder="Course name or code"
+                  />
+                )}
+              />
+            </div>
+          )}
+        />
+      </FormSection>
+
+      <FormSection title="Awards">
+        <ArrayField
+          items={resume.awards || []}
+          onAdd={() =>
+            addArrayItem('awards', {
+              title: '',
+              date: '',
+              awarder: '',
+              summary: '',
+            })
+          }
+          onRemove={(index) => removeArrayItem('awards', index)}
+          addLabel="Add Award"
+          renderItem={(item, index) => (
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                label="Title"
+                value={item.title}
+                onChange={(value) => updateAwards(index, 'title', value)}
+                placeholder="Award Title"
+              />
+              <FormField
+                label="Date"
+                value={item.date}
+                onChange={(value) => updateAwards(index, 'date', value)}
+                placeholder="YYYY-MM-DD"
+              />
+              <FormField
+                label="Awarder"
+                value={item.awarder}
+                onChange={(value) => updateAwards(index, 'awarder', value)}
+                placeholder="Organization"
+              />
+              <FormField
+                label="Summary"
+                type="textarea"
+                value={item.summary}
+                onChange={(value) => updateAwards(index, 'summary', value)}
+                placeholder="Description of the award..."
+              />
+            </div>
+          )}
+        />
+      </FormSection>
+
+      <FormSection title="Certificates">
+        <ArrayField
+          items={resume.certificates || []}
+          onAdd={() =>
+            addArrayItem('certificates', {
+              name: '',
+              date: '',
+              issuer: '',
+              url: '',
+            })
+          }
+          onRemove={(index) => removeArrayItem('certificates', index)}
+          addLabel="Add Certificate"
+          renderItem={(item, index) => (
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                label="Name"
+                value={item.name}
+                onChange={(value) => updateCertificates(index, 'name', value)}
+                placeholder="Certificate Name"
+              />
+              <FormField
+                label="Date"
+                value={item.date}
+                onChange={(value) => updateCertificates(index, 'date', value)}
+                placeholder="YYYY-MM-DD"
+              />
+              <FormField
+                label="Issuer"
+                value={item.issuer}
+                onChange={(value) => updateCertificates(index, 'issuer', value)}
+                placeholder="Issuing Organization"
+              />
+              <FormField
+                label="URL"
+                type="url"
+                value={item.url}
+                onChange={(value) => updateCertificates(index, 'url', value)}
+                placeholder="https://certificate.com"
+              />
+            </div>
+          )}
+        />
+      </FormSection>
+
+      <FormSection title="Publications">
+        <ArrayField
+          items={resume.publications || []}
+          onAdd={() =>
+            addArrayItem('publications', {
+              name: '',
+              publisher: '',
+              releaseDate: '',
+              url: '',
+              summary: '',
+            })
+          }
+          onRemove={(index) => removeArrayItem('publications', index)}
+          addLabel="Add Publication"
+          renderItem={(item, index) => (
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                label="Name"
+                value={item.name}
+                onChange={(value) => updatePublications(index, 'name', value)}
+                placeholder="Publication Title"
+              />
+              <FormField
+                label="Publisher"
+                value={item.publisher}
+                onChange={(value) =>
+                  updatePublications(index, 'publisher', value)
+                }
+                placeholder="Publisher Name"
+              />
+              <FormField
+                label="Release Date"
+                value={item.releaseDate}
+                onChange={(value) =>
+                  updatePublications(index, 'releaseDate', value)
+                }
+                placeholder="YYYY-MM-DD"
+              />
+              <FormField
+                label="URL"
+                type="url"
+                value={item.url}
+                onChange={(value) => updatePublications(index, 'url', value)}
+                placeholder="https://publication.com"
+              />
+              <FormField
+                label="Summary"
+                type="textarea"
+                value={item.summary}
+                onChange={(value) =>
+                  updatePublications(index, 'summary', value)
+                }
+                placeholder="Description of the publication..."
+              />
+            </div>
+          )}
+        />
+      </FormSection>
+
+      <FormSection title="Skills">
+        <ArrayField
+          items={resume.skills || []}
+          onAdd={() =>
+            addArrayItem('skills', {
+              name: '',
+              level: '',
+              keywords: [],
+            })
+          }
+          onRemove={(index) => removeArrayItem('skills', index)}
+          addLabel="Add Skill"
+          renderItem={(item, index) => (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  label="Name"
+                  value={item.name}
+                  onChange={(value) => updateSkills(index, 'name', value)}
+                  placeholder="Skill Name"
+                />
+                <FormField
+                  label="Level"
+                  value={item.level}
+                  onChange={(value) => updateSkills(index, 'level', value)}
+                  placeholder="Beginner, Intermediate, Expert"
+                />
+              </div>
+              <ArrayField
+                items={item.keywords || []}
+                onAdd={() => {
+                  const newSkills = [...(resume.skills || [])];
+                  newSkills[index] = {
+                    ...newSkills[index],
+                    keywords: [...(newSkills[index].keywords || []), ''],
+                  };
+                  onChange({ ...resume, skills: newSkills });
+                }}
+                onRemove={(keywordIndex) => {
+                  const newSkills = [...(resume.skills || [])];
+                  newSkills[index].keywords.splice(keywordIndex, 1);
+                  onChange({ ...resume, skills: newSkills });
+                }}
+                addLabel="Add Keyword"
+                renderItem={(keyword, keywordIndex) => (
+                  <FormField
+                    value={keyword}
+                    onChange={(value) => {
+                      const newSkills = [...(resume.skills || [])];
+                      newSkills[index].keywords[keywordIndex] = value;
+                      onChange({ ...resume, skills: newSkills });
+                    }}
+                    placeholder="Related technology or tool"
+                  />
+                )}
+              />
+            </div>
+          )}
+        />
+      </FormSection>
+
+      <FormSection title="Languages">
+        <ArrayField
+          items={resume.languages || []}
+          onAdd={() =>
+            addArrayItem('languages', {
+              language: '',
+              fluency: '',
+            })
+          }
+          onRemove={(index) => removeArrayItem('languages', index)}
+          addLabel="Add Language"
+          renderItem={(item, index) => (
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                label="Language"
+                value={item.language}
+                onChange={(value) => updateLanguages(index, 'language', value)}
+                placeholder="Language Name"
+              />
+              <FormField
+                label="Fluency"
+                value={item.fluency}
+                onChange={(value) => updateLanguages(index, 'fluency', value)}
+                placeholder="Native Speaker, Fluent, Intermediate, etc."
+              />
+            </div>
+          )}
+        />
+      </FormSection>
+
+      <FormSection title="Interests">
+        <ArrayField
+          items={resume.interests || []}
+          onAdd={() =>
+            addArrayItem('interests', {
+              name: '',
+              keywords: [],
+            })
+          }
+          onRemove={(index) => removeArrayItem('interests', index)}
+          addLabel="Add Interest"
+          renderItem={(item, index) => (
+            <div className="space-y-4">
+              <FormField
+                label="Name"
+                value={item.name}
+                onChange={(value) => updateInterests(index, 'name', value)}
+                placeholder="Interest Name"
+              />
+              <ArrayField
+                items={item.keywords || []}
+                onAdd={() => {
+                  const newInterests = [...(resume.interests || [])];
+                  newInterests[index] = {
+                    ...newInterests[index],
+                    keywords: [...(newInterests[index].keywords || []), ''],
+                  };
+                  onChange({ ...resume, interests: newInterests });
+                }}
+                onRemove={(keywordIndex) => {
+                  const newInterests = [...(resume.interests || [])];
+                  newInterests[index].keywords.splice(keywordIndex, 1);
+                  onChange({ ...resume, interests: newInterests });
+                }}
+                addLabel="Add Keyword"
+                renderItem={(keyword, keywordIndex) => (
+                  <FormField
+                    value={keyword}
+                    onChange={(value) => {
+                      const newInterests = [...(resume.interests || [])];
+                      newInterests[index].keywords[keywordIndex] = value;
+                      onChange({ ...resume, interests: newInterests });
+                    }}
+                    placeholder="Related activity or topic"
+                  />
+                )}
+              />
+            </div>
+          )}
+        />
+      </FormSection>
+
+      <FormSection title="References">
+        <ArrayField
+          items={resume.references || []}
+          onAdd={() =>
+            addArrayItem('references', {
+              name: '',
+              reference: '',
+            })
+          }
+          onRemove={(index) => removeArrayItem('references', index)}
+          addLabel="Add Reference"
+          renderItem={(item, index) => (
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                label="Name"
+                value={item.name}
+                onChange={(value) => updateReferences(index, 'name', value)}
+                placeholder="Reference Name"
+              />
+              <FormField
+                label="Reference"
+                type="textarea"
+                value={item.reference}
+                onChange={(value) =>
+                  updateReferences(index, 'reference', value)
+                }
+                placeholder="Reference text..."
+              />
+            </div>
+          )}
+        />
+      </FormSection>
+
+      <FormSection title="Projects">
+        <ArrayField
+          items={resume.projects || []}
+          onAdd={() =>
+            addArrayItem('projects', {
+              name: '',
+              description: '',
+              highlights: [],
+              keywords: [],
+              startDate: '',
+              endDate: '',
+              url: '',
+              roles: [],
+            })
+          }
+          onRemove={(index) => removeArrayItem('projects', index)}
+          addLabel="Add Project"
+          renderItem={(item, index) => (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  label="Name"
+                  value={item.name}
+                  onChange={(value) => updateProjects(index, 'name', value)}
+                  placeholder="Project Name"
+                />
+                <FormField
+                  label="URL"
+                  type="url"
+                  value={item.url}
+                  onChange={(value) => updateProjects(index, 'url', value)}
+                  placeholder="https://project.com"
+                />
+                <FormField
+                  label="Start Date"
+                  value={item.startDate}
+                  onChange={(value) =>
+                    updateProjects(index, 'startDate', value)
+                  }
+                  placeholder="YYYY-MM"
+                />
+                <FormField
+                  label="End Date"
+                  value={item.endDate}
+                  onChange={(value) => updateProjects(index, 'endDate', value)}
+                  placeholder="YYYY-MM or Present"
+                />
+              </div>
+              <FormField
+                label="Description"
+                type="textarea"
+                value={item.description}
+                onChange={(value) =>
+                  updateProjects(index, 'description', value)
+                }
+                placeholder="Project description..."
+              />
+              <ArrayField
+                items={item.highlights || []}
+                onAdd={() => {
+                  const newProjects = [...(resume.projects || [])];
+                  newProjects[index] = {
+                    ...newProjects[index],
+                    highlights: [...(newProjects[index].highlights || []), ''],
+                  };
+                  onChange({ ...resume, projects: newProjects });
+                }}
+                onRemove={(highlightIndex) => {
+                  const newProjects = [...(resume.projects || [])];
+                  newProjects[index].highlights.splice(highlightIndex, 1);
+                  onChange({ ...resume, projects: newProjects });
+                }}
+                addLabel="Add Highlight"
+                renderItem={(highlight, highlightIndex) => (
+                  <FormField
+                    value={highlight}
+                    onChange={(value) => {
+                      const newProjects = [...(resume.projects || [])];
+                      newProjects[index].highlights[highlightIndex] = value;
+                      onChange({ ...resume, projects: newProjects });
+                    }}
+                    placeholder="Project achievement or feature..."
+                  />
+                )}
+              />
             </div>
           )}
         />
