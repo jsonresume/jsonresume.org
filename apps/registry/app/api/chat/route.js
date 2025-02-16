@@ -111,13 +111,25 @@ const extractJsonFromMessage = (message) => {
     // Try to find a JSON object in code blocks
     const codeBlockMatch = message.match(/```(?:json)?\s*(\{[\s\S]*?\})\s*```/);
     if (codeBlockMatch) {
-      return JSON.parse(codeBlockMatch[1]);
+      // Remove comments before parsing
+      const jsonString = codeBlockMatch[1]
+        .replace(/\/\/.*$/gm, '') // Remove single-line comments
+        .replace(/\/\*[\s\S]*?\*\//g, '') // Remove multi-line comments
+        .replace(/,(\s*[}\]])/g, '$1'); // Remove trailing commas
+
+      return JSON.parse(jsonString);
     }
 
     // Try to find any JSON object in the message
     const jsonMatch = message.match(/\{[\s\S]*?\}/);
     if (jsonMatch) {
-      return JSON.parse(jsonMatch[0]);
+      // Remove comments before parsing
+      const jsonString = jsonMatch[0]
+        .replace(/\/\/.*$/gm, '')
+        .replace(/\/\*[\s\S]*?\*\//g, '')
+        .replace(/,(\s*[}\]])/g, '$1');
+
+      return JSON.parse(jsonString);
     }
 
     return null;
@@ -131,19 +143,36 @@ const formatSuggestedChanges = (assistantMessage, currentResume) => {
   const extractedJson = extractJsonFromMessage(assistantMessage);
   if (!extractedJson) return {};
 
+  // Clean up the extracted JSON by removing any undefined or null values
+  const cleanJson = (obj) => {
+    if (Array.isArray(obj)) {
+      return obj.map(cleanJson).filter(item => item != null);
+    }
+    if (typeof obj === 'object' && obj !== null) {
+      const cleaned = {};
+      for (const [key, value] of Object.entries(obj)) {
+        if (value != null) {
+          cleaned[key] = cleanJson(value);
+        }
+      }
+      return cleaned;
+    }
+    return obj;
+  };
+
   // If the extracted JSON contains changes field, use that directly
   if (extractedJson.changes) {
-    return extractedJson.changes;
+    return cleanJson(extractedJson.changes);
   }
 
   // If the extracted JSON is a complete resume or section, merge it with current resume
   if (extractedJson.basics || extractedJson.work || extractedJson.education) {
-    return extractedJson;
+    return cleanJson(extractedJson);
   }
 
   // If it's a specific field update (e.g., basics.name), create the proper structure
   const changes = {};
-  Object.entries(extractedJson).forEach(([key, value]) => {
+  Object.entries(cleanJson(extractedJson)).forEach(([key, value]) => {
     const parts = key.split('.');
     let current = changes;
     parts.forEach((part, index) => {
@@ -165,9 +194,9 @@ export async function POST(req) {
 
     const missingDetails = checkMissingDetails(currentResume);
     const followUpQuestions = generateFollowUpQuestions(missingDetails);
-
+    
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4o',
+      model: 'gpt-4',
       messages: [
         {
           role: 'system',
@@ -182,12 +211,28 @@ export async function POST(req) {
           - Encourage users to quantify their impact (e.g., "increased sales by 25%")
           - Request dates, locations, and other contextual details
           - Suggest relevant skills and technologies based on their experience
+          - When suggesting changes, only include fields that have actual values
+          - Do not include fields with placeholder text or comments
+          - Remove any fields that would be null, undefined, or contain placeholders
           
-          Response format:
+          Response format example:
           {
-            "message": "A helpful message explaining changes and asking follow-up questions",
+            "message": "I've updated your location and added your education details. To make your education section more comprehensive, could you please provide your graduation date and any notable courses or projects?",
             "changes": {
-              // Suggested resume changes in JSON Resume format
+              "basics": {
+                "location": {
+                  "city": "Guatemala City",
+                  "countryCode": "GT"
+                }
+              },
+              "education": [
+                {
+                  "institution": "University of Guatemala",
+                  "area": "Software Engineering",
+                  "studyType": "Bachelors",
+                  "startDate": "2025"
+                }
+              ]
             }
           }
 
@@ -202,24 +247,60 @@ export async function POST(req) {
 
     const assistantMessage = completion.choices[0].message.content;
     const parsedResponse = extractJsonFromMessage(assistantMessage);
+    
+    // Split the message into changes explanation and follow-up questions
+    let finalMessage = '';
+    if (parsedResponse?.message) {
+      finalMessage = parsedResponse.message;
+    } else {
+      // Extract text outside of code blocks as the message
+      const textParts = assistantMessage.split('```');
+      finalMessage = textParts.filter((_, i) => i % 2 === 0).join(' ').trim();
+    }
 
-    // If there are missing details but no follow-up questions in the response,
-    // append them to the message
-    let finalMessage = parsedResponse?.message || assistantMessage;
+    // Always append follow-up questions if there are missing details
     if (followUpQuestions.length > 0 && !finalMessage.includes('?')) {
-      finalMessage +=
-        '\n\nTo make your resume more comprehensive, please provide:\n' +
+      finalMessage += '\n\nTo make your resume more comprehensive, please provide:\n' + 
         followUpQuestions.join('\n\n');
     }
 
+    // Clean up any suggested changes to remove placeholders and comments
+    const cleanChanges = (changes) => {
+      if (!changes) return {};
+      
+      const clean = {};
+      for (const [key, value] of Object.entries(changes)) {
+        if (value === null || value === undefined) continue;
+        if (typeof value === 'string' && (value.includes('XX') || value.includes('Please specify'))) continue;
+        if (Array.isArray(value)) {
+          const cleanArray = value.map(item => {
+            if (typeof item === 'object') return cleanChanges(item);
+            return item;
+          }).filter(item => item !== null && item !== undefined);
+          if (cleanArray.length > 0) clean[key] = cleanArray;
+        } else if (typeof value === 'object') {
+          const cleanObj = cleanChanges(value);
+          if (Object.keys(cleanObj).length > 0) clean[key] = cleanObj;
+        } else {
+          clean[key] = value;
+        }
+      }
+      return clean;
+    };
+
+    const suggestedChanges = cleanChanges(
+      parsedResponse?.changes || formatSuggestedChanges(assistantMessage, currentResume)
+    );
+
     return Response.json({
-      suggestedChanges:
-        parsedResponse?.changes ||
-        formatSuggestedChanges(assistantMessage, currentResume),
+      suggestedChanges,
       message: finalMessage,
     });
   } catch (error) {
     console.error('Error in chat route:', error);
-    return Response.json({ error: 'Internal server error' }, { status: 500 });
+    return Response.json({ 
+      error: 'Internal server error',
+      details: error.message 
+    }, { status: 500 });
   }
 }

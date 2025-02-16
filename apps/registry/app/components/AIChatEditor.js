@@ -33,13 +33,15 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
       };
 
       mediaRecorderRef.current.onstop = async () => {
-        const audioBlob = new Blob(chunksRef.current, { type: 'audio/webm' });
+        const audioBlob = new Blob(chunksRef.current, { type: 'audio/webm; codecs=opus' });
         setIsProcessing(true);
 
         try {
           // First, transcribe the audio
           const formData = new FormData();
-          formData.append('audio', audioBlob);
+          // Create a File object from the Blob with a specific name
+          const audioFile = new File([audioBlob], 'audio.webm', { type: 'audio/webm; codecs=opus' });
+          formData.append('audio', audioFile);
 
           const transcribeResponse = await fetch('/api/transcribe', {
             method: 'POST',
@@ -49,17 +51,21 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
           const transcribeData = await transcribeResponse.json();
 
           if (!transcribeResponse.ok) {
-            throw new Error(transcribeData.error || 'Failed to transcribe audio');
+            throw new Error(transcribeData.details || transcribeData.error || 'Failed to transcribe audio');
           }
 
-          // Then send the transcribed text to the chat API
+          // Show transcribed text as user message
           const userMessage = {
             role: 'user',
             content: transcribeData.text,
             id: Date.now().toString()
           };
 
-          setMessages(prev => [...prev, userMessage]);
+          setMessages(prev => [...prev, {
+            role: 'user',
+            content: `🎤 "${transcribeData.text}"`,
+            id: Date.now().toString()
+          }]);
 
           const chatResponse = await fetch('/api/chat', {
             method: 'POST',
@@ -88,13 +94,13 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
           console.error('Error processing audio:', error);
           setMessages(prev => [...prev, {
             role: 'assistant',
-            content: 'Sorry, there was an error processing your audio message.',
+            content: `Sorry, there was an error processing your audio message: ${error.message}`,
             id: (Date.now() + 1).toString()
           }]);
+        } finally {
+          setIsProcessing(false);
+          stream.getTracks().forEach(track => track.stop());
         }
-
-        setIsProcessing(false);
-        stream.getTracks().forEach(track => track.stop());
       };
 
       mediaRecorderRef.current.start();
