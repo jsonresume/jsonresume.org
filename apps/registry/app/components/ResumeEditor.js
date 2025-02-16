@@ -6,8 +6,9 @@ import { render } from '../../../../packages/jsonresume-theme-professional';
 import { Button } from '@repo/ui';
 import Link from 'next/link';
 import schema from './schema';
-import { ExternalLink, Save } from 'lucide-react';
+import { ExternalLink, Save, Code, Layout } from 'lucide-react';
 import { useResume } from '../providers/ResumeProvider';
+import GuiEditor from './GuiEditor';
 
 const HtmlIframe = ({ htmlString }) => {
   const iframeRef = useRef(null);
@@ -27,6 +28,7 @@ export default function ResumeEditor({ resume: initialResume, updateGist }) {
   const [resume, setResume] = useState(initialResume);
   const [changed, setChanged] = useState(false);
   const [content, setContent] = useState('');
+  const [editorMode, setEditorMode] = useState('json'); // 'json' or 'gui'
   const monaco = useMonaco();
 
   useEffect(() => {
@@ -61,9 +63,31 @@ export default function ResumeEditor({ resume: initialResume, updateGist }) {
   return (
     <div className="h-full flex flex-col">
       <div className="shrink-0 p-4 flex justify-between items-center border-b bg-white">
-        <div className="text-sm text-gray-600">
-          The live preview uses the professional theme. You can choose different
-          themes on your public resume page.
+        <div className="flex items-center gap-4">
+          <div className="flex rounded-lg border p-1">
+            <Button
+              variant={editorMode === 'json' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setEditorMode('json')}
+              className="flex items-center gap-1"
+            >
+              <Code className="w-4 h-4" />
+              JSON
+            </Button>
+            <Button
+              variant={editorMode === 'gui' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setEditorMode('gui')}
+              className="flex items-center gap-1"
+            >
+              <Layout className="w-4 h-4" />
+              Form
+            </Button>
+          </div>
+          <div className="text-sm text-gray-600">
+            The live preview uses the professional theme. You can choose
+            different themes on your public resume page.
+          </div>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" asChild>
@@ -93,17 +117,26 @@ export default function ResumeEditor({ resume: initialResume, updateGist }) {
       </div>
       <div className="flex-1 flex overflow-hidden">
         <div className="w-1/2">
-          <Editor
-            height="100%"
-            defaultLanguage="json"
-            value={resume}
-            onChange={(code) => setResume(code)}
-            options={{
-              minimap: { enabled: false },
-              scrollBeyondLastLine: false,
-              wordWrap: 'on',
-            }}
-          />
+          {editorMode === 'json' ? (
+            <Editor
+              height="100%"
+              defaultLanguage="json"
+              value={resume}
+              onChange={(code) => setResume(code)}
+              options={{
+                minimap: { enabled: false },
+                scrollBeyondLastLine: false,
+                wordWrap: 'on',
+              }}
+            />
+          ) : (
+            <GuiEditor
+              resume={JSON.parse(resume)}
+              onChange={(newResume) =>
+                setResume(JSON.stringify(newResume, null, 2))
+              }
+            />
+          )}
         </div>
         <div className="w-1/2 border-l h-full overflow-auto">
           <HtmlIframe htmlString={content} />
