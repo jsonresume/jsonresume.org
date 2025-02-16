@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Button } from '@repo/ui';
 import { Mic, MicOff, Send } from 'lucide-react';
+import { useSpeech } from '../hooks/useSpeech';
 
 const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
   const [messages, setMessages] = useState([]);
@@ -13,6 +14,7 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
   const chunksRef = useRef([]);
   const [appliedChanges, setAppliedChanges] = useState(new Set());
   const chatContainerRef = useRef(null);
+  const { speak, stop, speaking, supported: speechSupported, error: speechError } = useSpeech();
 
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -180,12 +182,66 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
     setIsProcessing(false);
   };
 
+  const handleSubmitMessage = async (message, isAudio = false) => {
+    try {
+      setIsProcessing(true);
+      const newUserMessage = {
+        role: 'user',
+        content: message
+      };
+      
+      setMessages(prev => [...prev, newUserMessage]);
+      
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: [...messages, newUserMessage],
+          currentResume: resume
+        })
+      });
+
+      if (!response.ok) throw new Error('Failed to get AI response');
+      
+      const data = await response.json();
+      
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      const assistantMessage = {
+        role: 'assistant',
+        content: data.message
+      };
+
+      setMessages(prev => [...prev, assistantMessage]);
+      
+      // Speak the assistant's message
+      if (speechSupported) {
+        speak(data.message);
+      }
+
+      if (data.suggestedChanges) {
+        onResumeChange(data.suggestedChanges);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      // toast.error(error.message || 'Failed to process message');
+    } finally {
+      setIsProcessing(false);
+      setInputText('');
+    }
+  };
+
   return (
-    <div className="flex flex-col h-[600px] border rounded-lg">
-      <div
-        ref={chatContainerRef}
-        className="flex-1 overflow-y-auto p-4 space-y-4"
-      >
+    <div className="flex flex-col h-full">
+      {speechError && (
+        <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4">
+          <p className="font-bold">Speech Synthesis Issue:</p>
+          <p>{speechError}</p>
+        </div>
+      )}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((message, index) => (
           <div
             key={message.id}
@@ -224,6 +280,14 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
                     </Button>
                   </div>
                 </div>
+              )}
+              {message.role === 'assistant' && speaking && (
+                <button
+                  onClick={stop}
+                  className="mt-2 text-sm text-gray-600 hover:text-gray-800"
+                >
+                  Stop Speaking
+                </button>
               )}
             </div>
           </div>
