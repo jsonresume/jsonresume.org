@@ -75,7 +75,7 @@ const ResumeEditor = ({ resume: initialResume, updateGist }) => {
   });
   const [content, setContent] = useState('');
   const [editorMode, setEditorMode] = useState('gui');
-  const [pendingChanges, setPendingChanges] = useState(null);
+  const [, setPendingChanges] = useState(null);
   const monaco = useMonaco();
 
   useEffect(() => {

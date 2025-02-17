@@ -2,7 +2,7 @@ import { OpenAI } from 'openai';
 import { NextResponse } from 'next/server';
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
 const systemPrompt = `You are an AI assistant helping to edit a JSON Resume (https://jsonresume.org/schema/).
@@ -21,199 +21,144 @@ Adding: {"work": [{"name": "New Co", "position": "Engineer", "startDate": "2020-
 Updating: {"work": [{"name": "Existing Co", "position": "Senior Engineer"}]}
 Deleting: {"work": [{"name": "Old Co", "_delete": true}]}`;
 
-const resumeSchema = {
-  type: "object",
-  properties: {
-    basics: {
-      type: "object",
-      properties: {
-        name: { type: "string" },
-        label: { type: "string" },
-        email: { type: "string" },
-        phone: { type: "string" },
-        url: { type: "string" },
-        summary: { type: "string" },
-        location: {
-          type: "object",
-          properties: {
-            address: { type: "string" },
-            postalCode: { type: "string" },
-            city: { type: "string" },
-            countryCode: { type: "string" },
-            region: { type: "string" }
-          }
-        },
-        profiles: {
-          type: "array",
-          items: {
-            type: "object",
-            properties: {
-              network: { type: "string" },
-              username: { type: "string" },
-              url: { type: "string" }
-            }
-          }
-        }
-      }
-    },
-    work: {
-      type: "array",
-      items: {
-        type: "object",
-        properties: {
-          name: { type: "string" },
-          position: { type: "string" },
-          url: { type: "string" },
-          startDate: { type: "string" },
-          endDate: { type: "string" },
-          summary: { type: "string" },
-          highlights: {
-            type: "array",
-            items: { type: "string" }
-          },
-          technologies: {
-            type: "array",
-            items: { type: "string" }
-          }
-        }
-      }
-    }
-  }
-};
-
 export async function POST(req) {
   try {
     const { messages, currentResume } = await req.json();
-    
+
     const completion = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: 'gpt-4',
       messages: [
-        { role: "system", content: systemPrompt },
-        { role: "system", content: `Current resume state: ${JSON.stringify(currentResume, null, 2)}` },
-        ...messages.map(msg => ({
+        { role: 'system', content: systemPrompt },
+        {
+          role: 'system',
+          content: `Current resume state: ${JSON.stringify(currentResume, null, 2)}`,
+        },
+        ...messages.map((msg) => ({
           role: msg.role,
-          content: msg.content
-        }))
+          content: msg.content,
+        })),
       ],
       tools: [
         {
-          type: "function",
+          type: 'function',
           function: {
-            name: "update_resume",
-            description: "Update specific sections of the resume with new information",
+            name: 'update_resume',
+            description:
+              'Update specific sections of the resume with new information',
             parameters: {
-              type: "object",
+              type: 'object',
               properties: {
                 changes: {
-                  type: "object",
-                  description: "Changes to apply to the resume",
+                  type: 'object',
+                  description: 'Changes to apply to the resume',
                   properties: {
                     basics: {
-                      type: "object",
+                      type: 'object',
                       properties: {
-                        name: { type: "string" },
-                        label: { type: "string" },
-                        email: { type: "string" },
-                        phone: { type: "string" },
-                        url: { type: "string" },
-                        summary: { type: "string" },
+                        name: { type: 'string' },
+                        label: { type: 'string' },
+                        email: { type: 'string' },
+                        phone: { type: 'string' },
+                        url: { type: 'string' },
+                        summary: { type: 'string' },
                         location: {
-                          type: "object",
+                          type: 'object',
                           properties: {
-                            address: { type: "string" },
-                            postalCode: { type: "string" },
-                            city: { type: "string" },
-                            countryCode: { type: "string" },
-                            region: { type: "string" }
-                          }
+                            address: { type: 'string' },
+                            postalCode: { type: 'string' },
+                            city: { type: 'string' },
+                            countryCode: { type: 'string' },
+                            region: { type: 'string' },
+                          },
                         },
                         profiles: {
-                          type: "array",
+                          type: 'array',
                           items: {
-                            type: "object",
+                            type: 'object',
                             properties: {
-                              network: { type: "string" },
-                              username: { type: "string" },
-                              url: { type: "string" }
-                            }
-                          }
-                        }
-                      }
+                              network: { type: 'string' },
+                              username: { type: 'string' },
+                              url: { type: 'string' },
+                            },
+                          },
+                        },
+                      },
                     },
                     work: {
-                      type: "array",
+                      type: 'array',
                       items: {
-                        type: "object",
+                        type: 'object',
                         properties: {
-                          name: { type: "string" },
-                          position: { type: "string" },
-                          url: { type: "string" },
-                          startDate: { type: "string" },
-                          endDate: { type: "string" },
-                          summary: { type: "string" },
+                          name: { type: 'string' },
+                          position: { type: 'string' },
+                          url: { type: 'string' },
+                          startDate: { type: 'string' },
+                          endDate: { type: 'string' },
+                          summary: { type: 'string' },
                           highlights: {
-                            type: "array",
-                            items: { type: "string" }
+                            type: 'array',
+                            items: { type: 'string' },
                           },
                           technologies: {
-                            type: "array",
-                            items: { type: "string" }
+                            type: 'array',
+                            items: { type: 'string' },
                           },
-                          _delete: { type: "boolean" }
-                        }
-                      }
+                          _delete: { type: 'boolean' },
+                        },
+                      },
                     },
                     education: {
-                      type: "array",
+                      type: 'array',
                       items: {
-                        type: "object",
+                        type: 'object',
                         properties: {
-                          institution: { type: "string" },
-                          area: { type: "string" },
-                          studyType: { type: "string" },
-                          startDate: { type: "string" },
-                          endDate: { type: "string" },
-                          score: { type: "string" },
-                          _delete: { type: "boolean" }
-                        }
-                      }
+                          institution: { type: 'string' },
+                          area: { type: 'string' },
+                          studyType: { type: 'string' },
+                          startDate: { type: 'string' },
+                          endDate: { type: 'string' },
+                          score: { type: 'string' },
+                          _delete: { type: 'boolean' },
+                        },
+                      },
                     },
                     skills: {
-                      type: "array",
+                      type: 'array',
                       items: {
-                        type: "object",
+                        type: 'object',
                         properties: {
-                          name: { type: "string" },
-                          level: { type: "string" },
+                          name: { type: 'string' },
+                          level: { type: 'string' },
                           keywords: {
-                            type: "array",
-                            items: { type: "string" }
+                            type: 'array',
+                            items: { type: 'string' },
                           },
-                          _delete: { type: "boolean" }
-                        }
-                      }
-                    }
-                  }
+                          _delete: { type: 'boolean' },
+                        },
+                      },
+                    },
+                  },
                 },
                 explanation: {
-                  type: "string",
-                  description: "A brief, friendly explanation of the changes being made"
-                }
+                  type: 'string',
+                  description:
+                    'A brief, friendly explanation of the changes being made',
+                },
               },
-              required: ["changes", "explanation"]
-            }
-          }
-        }
-      ]
+              required: ['changes', 'explanation'],
+            },
+          },
+        },
+      ],
     });
 
     const response = completion.choices[0].message;
-    
+
     // If no tool calls, just return the message
     if (!response.tool_calls) {
       return NextResponse.json({
         message: response.content,
-        suggestedChanges: null
+        suggestedChanges: null,
       });
     }
 
@@ -221,10 +166,12 @@ export async function POST(req) {
     for (const toolCall of response.tool_calls) {
       if (toolCall.function.name === 'update_resume') {
         try {
-          const { changes, explanation } = JSON.parse(toolCall.function.arguments);
+          const { changes, explanation } = JSON.parse(
+            toolCall.function.arguments,
+          );
           return NextResponse.json({
             message: explanation,
-            suggestedChanges: changes
+            suggestedChanges: changes,
           });
         } catch (error) {
           console.error('Error parsing tool call arguments:', error);
@@ -236,9 +183,8 @@ export async function POST(req) {
     // Fallback response if no relevant tool calls
     return NextResponse.json({
       message: response.content,
-      suggestedChanges: null
+      suggestedChanges: null,
     });
-
   } catch (error) {
     console.error('Error:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
