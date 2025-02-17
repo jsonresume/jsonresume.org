@@ -5,13 +5,21 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
-const systemPrompt = `You are an AI assistant helping users edit their JSON Resume. 
-Follow these rules strictly:
-1. Focus on one section at a time - don't jump between different sections
-2. Ask for information one or two fields at a time, not everything at once
-3. Keep responses conversational and brief
-4. After user provides information, use the appropriate tool
-5. Only suggest additional fields after the current changes are applied`;
+const systemPrompt = `You are an AI assistant helping to edit a JSON Resume (https://jsonresume.org/schema/).
+When suggesting changes:
+1. Return a JSON object containing ONLY the sections that need to be modified
+2. For array sections (work, education, etc.):
+   - To ADD a new item: include it in the array
+   - To UPDATE an existing item: include the full item with all changes
+   - To DELETE an item: include it with a "_delete": true flag and enough identifying information (name, dates)
+3. Keep responses concise but friendly
+4. Always validate dates are in YYYY-MM-DD format
+5. Ensure all required fields are present
+
+Example responses:
+Adding: {"work": [{"name": "New Co", "position": "Engineer", "startDate": "2020-01-01"}]}
+Updating: {"work": [{"name": "Existing Co", "position": "Senior Engineer"}]}
+Deleting: {"work": [{"name": "Old Co", "_delete": true}]}`;
 
 const resumeSchema = {
   type: "object",
@@ -150,7 +158,8 @@ export async function POST(req) {
                           technologies: {
                             type: "array",
                             items: { type: "string" }
-                          }
+                          },
+                          _delete: { type: "boolean" }
                         }
                       }
                     },
@@ -164,7 +173,8 @@ export async function POST(req) {
                           studyType: { type: "string" },
                           startDate: { type: "string" },
                           endDate: { type: "string" },
-                          score: { type: "string" }
+                          score: { type: "string" },
+                          _delete: { type: "boolean" }
                         }
                       }
                     },
@@ -178,7 +188,8 @@ export async function POST(req) {
                           keywords: {
                             type: "array",
                             items: { type: "string" }
-                          }
+                          },
+                          _delete: { type: "boolean" }
                         }
                       }
                     }

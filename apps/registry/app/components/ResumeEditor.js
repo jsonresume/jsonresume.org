@@ -115,53 +115,64 @@ const ResumeEditor = ({ resume: initialResume, updateGist }) => {
     setPendingChanges(changes);
   }, []);
 
-  const applyChanges = useCallback(() => {
-    console.log('Applying pending changes:', pendingChanges);
-    if (!pendingChanges) {
-      console.warn('No pending changes to apply');
-      return false;
-    }
+  const handleApplyChanges = useCallback((changes) => {
+    const newResume = { ...resume };
 
-    try {
-      const mergeChanges = (current, changes) => {
-        console.log('Merging changes into current state:', { current, changes });
-        const merged = { ...current };
-
-        // Helper to merge arrays
-        const mergeArrays = (currentArr = [], changesArr = []) => {
-          console.log('Merging arrays:', { currentArr, changesArr });
-          if (!Array.isArray(changesArr)) {
-            console.warn('Changes array is not an array:', changesArr);
-            return currentArr;
+    // Helper function to intelligently merge arrays
+    const mergeArrays = (existingArray = [], newArray = [], key = 'name') => {
+      const result = [...existingArray];
+      
+      newArray.forEach(newItem => {
+        // For deletion (marked with _delete flag)
+        if (newItem._delete) {
+          const index = result.findIndex(item => 
+            item[key] === newItem[key] || 
+            (item.startDate === newItem.startDate && item.endDate === newItem.endDate)
+          );
+          if (index !== -1) {
+            result.splice(index, 1);
           }
-          return changesArr; // Replace the entire array
-        };
+          return;
+        }
 
-        // Recursively merge objects
-        Object.entries(changes).forEach(([key, value]) => {
-          if (Array.isArray(value)) {
-            merged[key] = mergeArrays(current[key], value);
-          } else if (value && typeof value === 'object') {
-            merged[key] = mergeChanges(current[key] || {}, value);
-          } else {
-            merged[key] = value;
-          }
-          console.log(`Updated ${key}:`, merged[key]);
-        });
+        // For updates or additions
+        const existingIndex = result.findIndex(item => 
+          item[key] === newItem[key] || 
+          (item.startDate === newItem.startDate && item.endDate === newItem.endDate)
+        );
 
-        return merged;
-      };
+        if (existingIndex !== -1) {
+          // Update existing item
+          result[existingIndex] = { ...result[existingIndex], ...newItem };
+        } else {
+          // Add new item
+          result.push(newItem);
+        }
+      });
 
-      const updatedResume = mergeChanges(resume, pendingChanges);
-      console.log('Final merged resume:', updatedResume);
-      setResume(updatedResume);
-      setPendingChanges(null);
-      return true;
-    } catch (error) {
-      console.error('Error applying changes:', error);
-      throw error;
-    }
-  }, [resume, pendingChanges]);
+      return result;
+    };
+
+    // Process each section of changes
+    Object.entries(changes).forEach(([section, value]) => {
+      if (Array.isArray(value)) {
+        // Handle array sections (work, education, etc.)
+        newResume[section] = mergeArrays(
+          resume[section], 
+          value,
+          section === 'skills' ? 'name' : 'name'  // Use appropriate key for matching
+        );
+      } else if (typeof value === 'object' && value !== null) {
+        // Handle nested objects
+        newResume[section] = { ...resume[section], ...value };
+      } else {
+        // Handle primitive values
+        newResume[section] = value;
+      }
+    });
+
+    setResume(newResume);
+  }, [resume]);
 
   const handleGuiChange = useCallback((changes) => {
     console.log('GUI editor changes:', changes);
@@ -260,7 +271,7 @@ const ResumeEditor = ({ resume: initialResume, updateGist }) => {
             <AIChatEditor
               resume={resume}
               onResumeChange={handleResumeChange}
-              onApplyChanges={applyChanges}
+              onApplyChanges={handleApplyChanges}
             />
           )}
         </div>
