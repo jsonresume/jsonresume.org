@@ -65,7 +65,7 @@ const ResumeEditor = ({ resume: initialResume, updateGist }) => {
   const [resume, setResume] = useState(() => {
     if (!initialResume) return defaultResume;
     try {
-      return typeof initialResume === 'string' 
+      return typeof initialResume === 'string'
         ? JSON.parse(initialResume)
         : initialResume;
     } catch (error) {
@@ -115,74 +115,83 @@ const ResumeEditor = ({ resume: initialResume, updateGist }) => {
     setPendingChanges(changes);
   }, []);
 
-  const handleApplyChanges = useCallback((changes) => {
-    const newResume = { ...resume };
+  const handleApplyChanges = useCallback(
+    (changes) => {
+      const newResume = { ...resume };
 
-    // Helper function to intelligently merge arrays
-    const mergeArrays = (existingArray = [], newArray = [], key = 'name') => {
-      const result = [...existingArray];
-      
-      newArray.forEach(newItem => {
-        // For deletion (marked with _delete flag)
-        if (newItem._delete) {
-          const index = result.findIndex(item => 
-            item[key] === newItem[key] || 
-            (item.startDate === newItem.startDate && item.endDate === newItem.endDate)
-          );
-          if (index !== -1) {
-            result.splice(index, 1);
+      // Helper function to intelligently merge arrays
+      const mergeArrays = (existingArray = [], newArray = [], key = 'name') => {
+        const result = [...existingArray];
+
+        newArray.forEach((newItem) => {
+          // For deletion (marked with _delete flag)
+          if (newItem._delete) {
+            const index = result.findIndex(
+              (item) =>
+                item[key] === newItem[key] ||
+                (item.startDate === newItem.startDate &&
+                  item.endDate === newItem.endDate),
+            );
+            if (index !== -1) {
+              result.splice(index, 1);
+            }
+            return;
           }
-          return;
-        }
 
-        // For updates or additions
-        const existingIndex = result.findIndex(item => 
-          item[key] === newItem[key] || 
-          (item.startDate === newItem.startDate && item.endDate === newItem.endDate)
-        );
+          // For updates or additions
+          const existingIndex = result.findIndex(
+            (item) =>
+              item[key] === newItem[key] ||
+              (item.startDate === newItem.startDate &&
+                item.endDate === newItem.endDate),
+          );
 
-        if (existingIndex !== -1) {
-          // Update existing item
-          result[existingIndex] = { ...result[existingIndex], ...newItem };
+          if (existingIndex !== -1) {
+            // Update existing item
+            result[existingIndex] = { ...result[existingIndex], ...newItem };
+          } else {
+            // Add new item
+            result.push(newItem);
+          }
+        });
+
+        return result;
+      };
+
+      // Process each section of changes
+      Object.entries(changes).forEach(([section, value]) => {
+        if (Array.isArray(value)) {
+          // Handle array sections (work, education, etc.)
+          newResume[section] = mergeArrays(
+            resume[section],
+            value,
+            section === 'skills' ? 'name' : 'name', // Use appropriate key for matching
+          );
+        } else if (typeof value === 'object' && value !== null) {
+          // Handle nested objects
+          newResume[section] = { ...resume[section], ...value };
         } else {
-          // Add new item
-          result.push(newItem);
+          // Handle primitive values
+          newResume[section] = value;
         }
       });
 
-      return result;
-    };
-
-    // Process each section of changes
-    Object.entries(changes).forEach(([section, value]) => {
-      if (Array.isArray(value)) {
-        // Handle array sections (work, education, etc.)
-        newResume[section] = mergeArrays(
-          resume[section], 
-          value,
-          section === 'skills' ? 'name' : 'name'  // Use appropriate key for matching
-        );
-      } else if (typeof value === 'object' && value !== null) {
-        // Handle nested objects
-        newResume[section] = { ...resume[section], ...value };
-      } else {
-        // Handle primitive values
-        newResume[section] = value;
-      }
-    });
-
-    setResume(newResume);
-  }, [resume]);
+      setResume(newResume);
+    },
+    [resume],
+  );
 
   const handleGuiChange = useCallback((changes) => {
     console.log('GUI editor changes:', changes);
-    setResume(prev => ({ ...prev, ...changes }));
+    setResume((prev) => ({ ...prev, ...changes }));
   }, []);
 
   const handleJsonChange = useCallback((newResume) => {
     console.log('Received JSON changes:', newResume);
     try {
-      setResume(typeof newResume === 'string' ? JSON.parse(newResume) : newResume);
+      setResume(
+        typeof newResume === 'string' ? JSON.parse(newResume) : newResume,
+      );
     } catch (error) {
       console.error('Error parsing JSON:', error);
     }
@@ -190,60 +199,84 @@ const ResumeEditor = ({ resume: initialResume, updateGist }) => {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="shrink-0 p-4 flex justify-between items-center border-b bg-white">
-        <div className="flex-1">
-          <div className="flex rounded-lg border p-1">
-            <Button
-              variant={editorMode === 'json' ? 'default' : 'ghost'}
-              size="sm"
-              onClick={() => setEditorMode('json')}
-              className="flex items-center gap-1"
+      <div className="shrink-0 border-b bg-white shadow-sm">
+        <div className="max-w-screen-2xl mx-auto">
+          <div className="p-4 flex flex-col sm:flex-row sm:items-center gap-4">
+            <nav
+              className="flex-1"
+              role="navigation"
+              aria-label="Editor mode selection"
             >
-              <Code className="w-4 h-4" />
-              JSON
-            </Button>
-            <Button
-              variant={editorMode === 'gui' ? 'default' : 'ghost'}
-              size="sm"
-              onClick={() => setEditorMode('gui')}
-              className="flex items-center gap-1"
-            >
-              <Layout className="w-4 h-4" />
-              Form
-            </Button>
-            <Button
-              variant={editorMode === 'ai' ? 'default' : 'ghost'}
-              size="sm"
-              onClick={() => setEditorMode('ai')}
-              className="flex items-center gap-1"
-            >
-              AI Chat
-            </Button>
+              <div className="inline-flex rounded-lg border bg-gray-50/50 p-1 shadow-sm">
+                <Button
+                  variant={editorMode === 'json' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setEditorMode('json')}
+                  className="flex items-center gap-2 min-w-[90px] justify-center transition-colors"
+                  aria-pressed={editorMode === 'json'}
+                >
+                  <Code className="w-4 h-4" aria-hidden="true" />
+                  <span>JSON</span>
+                </Button>
+                <Button
+                  variant={editorMode === 'gui' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setEditorMode('gui')}
+                  className="flex items-center gap-2 min-w-[90px] justify-center transition-colors"
+                  aria-pressed={editorMode === 'gui'}
+                >
+                  <Layout className="w-4 h-4" aria-hidden="true" />
+                  <span>Form</span>
+                </Button>
+                <Button
+                  variant={editorMode === 'ai' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setEditorMode('ai')}
+                  className="flex items-center gap-2 min-w-[90px] justify-center transition-colors relative"
+                  aria-pressed={editorMode === 'ai'}
+                >
+                  <span
+                    className="relative flex items-center"
+                    aria-hidden="true"
+                  >
+                    <span className="absolute -top-1 -right-1 flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                    </span>
+                    ✨
+                  </span>
+                  <span>AI Chat</span>
+                </Button>
+              </div>
+            </nav>
+
+            <div className="flex items-center gap-3 shrink-0">
+              <Button
+                variant="outline"
+                size="sm"
+                asChild
+                className="transition-colors hover:bg-gray-50"
+              >
+                <Link
+                  href={`/${username}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2"
+                >
+                  <ExternalLink className="w-4 h-4" aria-hidden="true" />
+                  <span>View Public</span>
+                </Link>
+              </Button>
+              <Button
+                size="sm"
+                className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                onClick={() => updateGist(JSON.stringify(resume, null, 2))}
+              >
+                <Save className="w-4 h-4" aria-hidden="true" />
+                <span>Save</span>
+              </Button>
+            </div>
           </div>
-          <div className="text-sm text-gray-600">
-            The live preview uses the professional theme. You can choose
-            different themes on your public resume page.
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" asChild>
-            <Link
-              href={`/${username}`}
-              target="_blank"
-              className="flex items-center gap-1"
-            >
-              <ExternalLink className="w-4 h-4" />
-              View Public
-            </Link>
-          </Button>
-          <Button
-            size="sm"
-            className="flex items-center gap-1"
-            onClick={() => updateGist(JSON.stringify(resume, null, 2))}
-          >
-            <Save className="w-4 h-4" />
-            Save
-          </Button>
         </div>
       </div>
       <div className="flex-1 flex overflow-hidden">
@@ -262,10 +295,7 @@ const ResumeEditor = ({ resume: initialResume, updateGist }) => {
             />
           )}
           {editorMode === 'gui' && (
-            <GuiEditor
-              resume={resume}
-              onChange={handleGuiChange}
-            />
+            <GuiEditor resume={resume} onChange={handleGuiChange} />
           )}
           {editorMode === 'ai' && (
             <AIChatEditor
