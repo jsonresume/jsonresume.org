@@ -1,20 +1,16 @@
-'use client';
-
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { Button } from '@repo/ui';
-import { Mic, MicOff, Send } from 'lucide-react';
+import { Send, Mic, MicOff } from 'lucide-react';
 import { useSpeech } from '../hooks/useSpeech';
 
 const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
   const [messages, setMessages] = useState([]);
-  const [inputText, setInputText] = useState('');
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [inputMessage, setInputMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
-  const mediaRecorderRef = useRef(null);
-  const chunksRef = useRef([]);
-  const [appliedChanges, setAppliedChanges] = useState(new Set());
+  const [mediaRecorder, setMediaRecorder] = useState(null);
+  const { speak, stop, speaking } = useSpeech();
   const chatContainerRef = useRef(null);
-  const { speak, stop, speaking, supported: speechSupported, error: speechError } = useSpeech();
 
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -22,172 +18,23 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
     }
   }, [messages]);
 
-  const handleStartRecording = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      mediaRecorderRef.current = new MediaRecorder(stream);
-      chunksRef.current = [];
-
-      mediaRecorderRef.current.ondataavailable = (e) => {
-        if (e.data.size > 0) {
-          chunksRef.current.push(e.data);
-        }
-      };
-
-      mediaRecorderRef.current.onstop = async () => {
-        const audioBlob = new Blob(chunksRef.current, { type: 'audio/webm; codecs=opus' });
-        setIsProcessing(true);
-
-        try {
-          // First, transcribe the audio
-          const formData = new FormData();
-          // Create a File object from the Blob with a specific name
-          const audioFile = new File([audioBlob], 'audio.webm', { type: 'audio/webm; codecs=opus' });
-          formData.append('audio', audioFile);
-
-          const transcribeResponse = await fetch('/api/transcribe', {
-            method: 'POST',
-            body: formData,
-          });
-
-          const transcribeData = await transcribeResponse.json();
-
-          if (!transcribeResponse.ok) {
-            throw new Error(transcribeData.details || transcribeData.error || 'Failed to transcribe audio');
-          }
-
-          // Show transcribed text as user message
-          const userMessage = {
-            role: 'user',
-            content: transcribeData.text,
-            id: Date.now().toString()
-          };
-
-          setMessages(prev => [...prev, {
-            role: 'user',
-            content: `🎤 "${transcribeData.text}"`,
-            id: Date.now().toString()
-          }]);
-
-          const chatResponse = await fetch('/api/chat', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              messages: [...messages, userMessage],
-              currentResume: resume,
-            }),
-          });
-
-          const chatData = await chatResponse.json();
-
-          if (!chatResponse.ok) {
-            throw new Error(chatData.error || 'Failed to process message');
-          }
-
-          setMessages(prev => [...prev, {
-            role: 'assistant',
-            content: chatData.message,
-            suggestedChanges: chatData.suggestedChanges,
-            id: (Date.now() + 1).toString()
-          }]);
-        } catch (error) {
-          console.error('Error processing audio:', error);
-          setMessages(prev => [...prev, {
-            role: 'assistant',
-            content: `Sorry, there was an error processing your audio message: ${error.message}`,
-            id: (Date.now() + 1).toString()
-          }]);
-        } finally {
-          setIsProcessing(false);
-          stream.getTracks().forEach(track => track.stop());
-        }
-      };
-
-      mediaRecorderRef.current.start();
-      setIsRecording(true);
-    } catch (error) {
-      console.error('Error starting recording:', error);
-      alert('Error accessing microphone. Please make sure you have granted microphone permissions.');
-    }
-  };
-
-  const handleStopRecording = () => {
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
-      mediaRecorderRef.current.stop();
-      setIsRecording(false);
-    }
-  };
-
-  const handleApplyChanges = useCallback((changes, messageId) => {
-    onApplyChanges(changes);
-    setAppliedChanges(prev => new Set([...prev, messageId]));
-  }, [onApplyChanges]);
-
-  const handleRejectChanges = useCallback((changes, messageId) => {
-    setAppliedChanges(prev => new Set([...prev, messageId]));
+  const addSystemMessage = useCallback((content, type = 'info') => {
+    const systemMessage = {
+      role: 'system',
+      content,
+      type,
+      id: Date.now()
+    };
+    setMessages(prev => [...prev, systemMessage]);
   }, []);
 
-  const isChangeApplied = useCallback((messageId) => {
-    return appliedChanges.has(messageId);
-  }, [appliedChanges]);
-
-  const handleSubmit = async () => {
-    if (!inputText.trim() && !isRecording) return;
-
-    const userMessage = {
-      role: 'user',
-      content: inputText,
-      id: Date.now().toString()
-    };
-
-    setMessages(prev => [...prev, userMessage]);
-    setInputText('');
-    setIsProcessing(true);
-
+  const handleSubmitMessage = async (message) => {
     try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          messages: [...messages, userMessage],
-          currentResume: resume,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setMessages(prev => [...prev, {
-          role: 'assistant',
-          content: data.message,
-          suggestedChanges: data.suggestedChanges,
-          id: (Date.now() + 1).toString()
-        }]);
-      } else {
-        throw new Error(data.error || 'Failed to get response');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      setMessages(prev => [...prev, {
-        role: 'assistant',
-        content: 'Sorry, there was an error processing your request.',
-        id: (Date.now() + 1).toString()
-      }]);
-    }
-
-    setIsProcessing(false);
-  };
-
-  const handleSubmitMessage = async (message, isAudio = false) => {
-    try {
-      setIsProcessing(true);
+      setIsLoading(true);
       const newUserMessage = {
         role: 'user',
-        content: message
+        content: message,
+        id: Date.now()
       };
       
       setMessages(prev => [...prev, newUserMessage]);
@@ -211,82 +58,161 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
 
       const assistantMessage = {
         role: 'assistant',
-        content: data.message
+        content: data.message,
+        id: Date.now(),
+        suggestedChanges: data.suggestedChanges
       };
 
       setMessages(prev => [...prev, assistantMessage]);
       
-      console.log('Attempting to speak message:', data.message);
-      if (speechSupported) {
-        console.log('Speech is supported, calling speak function');
+      // Log suggested changes
+      if (data.suggestedChanges) {
+        console.log('Received suggested changes:', data.suggestedChanges);
+        onResumeChange(data.suggestedChanges);
+      }
+
+      // Speak the assistant's message if it's not just suggesting changes
+      if (!data.suggestedChanges) {
         try {
           await speak(data.message);
-          console.log('Speak function completed');
         } catch (err) {
           console.error('Error during speech:', err);
         }
-      } else {
-        console.log('Speech is not supported');
-      }
-
-      if (data.suggestedChanges) {
-        onResumeChange(data.suggestedChanges);
       }
     } catch (error) {
       console.error('Error:', error);
-      // toast.error(error.message || 'Failed to process message');
+      addSystemMessage(error.message || 'Failed to process message', 'error');
     } finally {
-      setIsProcessing(false);
-      setInputText('');
+      setIsLoading(false);
+      setInputMessage('');
+    }
+  };
+
+  const handleApplyChanges = useCallback((changes, messageId) => {
+    console.log('Applying changes...', changes);
+    if (!changes) {
+      console.log('No changes to apply');
+      return;
+    }
+    
+    if (onApplyChanges) {
+      try {
+        onApplyChanges(changes);
+        console.log('Changes applied successfully');
+        addSystemMessage('✅ Changes have been successfully applied to your resume', 'success');
+        setMessages(prev => prev.map(msg => 
+          msg.id === messageId ? { ...msg, changesApplied: true } : msg
+        ));
+      } catch (error) {
+        console.error('Error applying changes:', error);
+        addSystemMessage('❌ Failed to apply changes: ' + error.message, 'error');
+      }
+    } else {
+      console.warn('onApplyChanges callback is not defined');
+      addSystemMessage('❌ Unable to apply changes: System not configured properly', 'error');
+    }
+  }, [onApplyChanges, addSystemMessage]);
+
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream);
+      const chunks = [];
+
+      recorder.ondataavailable = (e) => chunks.push(e.data);
+      recorder.onstop = async () => {
+        const blob = new Blob(chunks, { type: 'audio/webm' });
+        const formData = new FormData();
+        formData.append('audio', blob);
+
+        try {
+          setIsLoading(true);
+          const response = await fetch('/api/transcribe', {
+            method: 'POST',
+            body: formData,
+          });
+
+          if (!response.ok) throw new Error('Failed to transcribe audio');
+          
+          const data = await response.json();
+          if (data.error) throw new Error(data.error);
+          
+          setInputMessage(data.text);
+        } catch (error) {
+          console.error('Transcription error:', error);
+          addSystemMessage('Failed to transcribe audio: ' + error.message, 'error');
+        } finally {
+          setIsLoading(false);
+        }
+
+        // Clean up the stream
+        stream.getTracks().forEach(track => track.stop());
+      };
+
+      recorder.start();
+      setMediaRecorder(recorder);
+      setIsRecording(true);
+    } catch (error) {
+      console.error('Error accessing microphone:', error);
+      addSystemMessage('Failed to access microphone: ' + error.message, 'error');
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+      mediaRecorder.stop();
+      setIsRecording(false);
     }
   };
 
   return (
     <div className="flex flex-col h-full">
-      {speechError && (
-        <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4">
-          <p className="font-bold">Speech Synthesis Issue:</p>
-          <p>{speechError}</p>
-        </div>
-      )}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {messages.map((message, index) => (
+      <div 
+        ref={chatContainerRef}
+        className="flex-1 overflow-y-auto p-4 space-y-4"
+      >
+        {messages.map((message) => (
           <div
             key={message.id}
             className={`flex ${
-              message.role === 'user' ? 'justify-end' : 'justify-start'
+              message.role === 'user' 
+                ? 'justify-end' 
+                : message.role === 'system'
+                  ? 'justify-center'
+                  : 'justify-start'
             }`}
           >
             <div
-              className={`max-w-[70%] p-3 rounded-lg ${
+              className={`max-w-[80%] p-3 rounded-lg ${
                 message.role === 'user'
                   ? 'bg-blue-500 text-white'
-                  : 'bg-gray-100'
+                  : message.role === 'system'
+                    ? message.type === 'error'
+                      ? 'bg-red-100 text-red-700'
+                      : message.type === 'success'
+                        ? 'bg-green-100 text-green-700'
+                        : 'bg-gray-100 text-gray-700'
+                    : 'bg-gray-100 text-gray-900'
               }`}
             >
               <p className="whitespace-pre-wrap">{message.content}</p>
-              {message.suggestedChanges && Object.keys(message.suggestedChanges).length > 0 && (
+              {message.role === 'assistant' && message.suggestedChanges && (
                 <div className="mt-2">
-                  <pre className="bg-gray-800 text-white p-2 rounded overflow-x-auto">
+                  <pre className="bg-gray-800 text-white p-3 rounded-lg overflow-x-auto my-2 text-sm">
                     {JSON.stringify(message.suggestedChanges, null, 2)}
                   </pre>
-                  <div className="mt-2 flex space-x-2">
-                    <Button
-                      onClick={() => handleApplyChanges(message.suggestedChanges, message.id)}
-                      disabled={isChangeApplied(message.id)}
-                      className={isChangeApplied(message.id) ? 'opacity-50 cursor-not-allowed' : ''}
-                    >
-                      {isChangeApplied(message.id) ? 'Applied' : 'Apply Changes'}
-                    </Button>
-                    <Button 
-                      variant="outline"
-                      onClick={() => handleRejectChanges(message.suggestedChanges, message.id)}
-                      disabled={isChangeApplied(message.id)}
-                      className={isChangeApplied(message.id) ? 'opacity-50 cursor-not-allowed' : ''}
-                    >
-                      {isChangeApplied(message.id) ? 'Rejected' : 'Reject'}
-                    </Button>
-                  </div>
+                  <Button
+                    onClick={() => handleApplyChanges(message.suggestedChanges, message.id)}
+                    disabled={message.changesApplied}
+                    className={`
+                      w-full text-center py-2 px-4 rounded
+                      ${message.changesApplied 
+                        ? 'bg-green-100 text-green-700 cursor-not-allowed'
+                        : 'bg-blue-500 text-white hover:bg-blue-600'}
+                    `}
+                  >
+                    {message.changesApplied ? '✓ Changes Applied' : 'Apply Changes'}
+                  </Button>
                 </div>
               )}
               {message.role === 'assistant' && speaking && (
@@ -300,43 +226,38 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
             </div>
           </div>
         ))}
-        {isProcessing && (
+        {isLoading && (
           <div className="flex justify-start">
             <div className="bg-gray-100 p-3 rounded-lg">
-              Processing...
+              <span className="animate-pulse">Thinking...</span>
             </div>
           </div>
         )}
       </div>
-      <div className="border-t p-4">
+      
+      <div className="p-4 border-t">
         <div className="flex space-x-2">
-          <textarea
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-            placeholder="Type your message or use the microphone..."
-            className="flex-1 p-2 border rounded-lg resize-none"
-            rows={2}
+          <input
+            type="text"
+            value={inputMessage}
+            onChange={(e) => setInputMessage(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' && handleSubmitMessage(inputMessage)}
+            placeholder="Type your message..."
+            className="flex-1 p-2 border rounded"
           />
-          <div className="flex flex-col space-y-2">
-            <Button
-              variant={isRecording ? 'destructive' : 'outline'}
-              onClick={() => {
-                if (isRecording) {
-                  handleStopRecording();
-                } else {
-                  handleStartRecording();
-                }
-              }}
-            >
-              {isRecording ? <MicOff /> : <Mic />}
-            </Button>
-            <Button
-              onClick={handleSubmit}
-              disabled={!inputText.trim() && !isRecording || isProcessing}
-            >
-              <Send />
-            </Button>
-          </div>
+          <Button
+            onClick={() => handleSubmitMessage(inputMessage)}
+            disabled={isLoading || !inputMessage.trim()}
+          >
+            <Send className="w-4 h-4" />
+          </Button>
+          <Button
+            onClick={isRecording ? stopRecording : startRecording}
+            disabled={isLoading}
+            className={isRecording ? 'bg-red-500 hover:bg-red-600' : ''}
+          >
+            {isRecording ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+          </Button>
         </div>
       </div>
     </div>

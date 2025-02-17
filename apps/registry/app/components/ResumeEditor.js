@@ -60,36 +60,6 @@ const HtmlIframe = ({ htmlString }) => {
   );
 };
 
-// Helper function to smartly merge resume changes
-const mergeResumeChanges = (currentResume, changes) => {
-  const newResume = { ...currentResume };
-
-  Object.entries(changes).forEach(([key, value]) => {
-    // Handle array fields (work, education, awards, etc.)
-    if (Array.isArray(value)) {
-      // If the field doesn't exist in current resume, create it
-      if (!newResume[key]) {
-        newResume[key] = [];
-      }
-      // Append new items to the array
-      newResume[key] = [...newResume[key], ...value];
-    }
-    // Handle object fields (basics, location, etc.)
-    else if (typeof value === 'object' && value !== null) {
-      newResume[key] = {
-        ...newResume[key],
-        ...value
-      };
-    }
-    // Handle primitive fields
-    else {
-      newResume[key] = value;
-    }
-  });
-
-  return newResume;
-};
-
 const ResumeEditor = ({ resume: initialResume, updateGist }) => {
   const { username } = useResume();
   const [resume, setResume] = useState(() => {
@@ -105,7 +75,12 @@ const ResumeEditor = ({ resume: initialResume, updateGist }) => {
   });
   const [content, setContent] = useState('');
   const [editorMode, setEditorMode] = useState('gui');
+  const [pendingChanges, setPendingChanges] = useState(null);
   const monaco = useMonaco();
+
+  useEffect(() => {
+    console.log('Current resume state:', resume);
+  }, [resume]);
 
   useEffect(() => {
     try {
@@ -131,12 +106,75 @@ const ResumeEditor = ({ resume: initialResume, updateGist }) => {
     }
   }, [monaco]);
 
-  const handleResumeChange = useCallback((newResume) => {
-    setResume(typeof newResume === 'string' ? JSON.parse(newResume) : newResume);
+  const handleResumeChange = useCallback((changes) => {
+    console.log('Received changes in ResumeEditor:', changes);
+    if (!changes) {
+      console.warn('No changes received');
+      return;
+    }
+    setPendingChanges(changes);
   }, []);
 
-  const handleApplyChanges = useCallback((changes) => {
-    setResume(currentResume => mergeResumeChanges(currentResume, changes));
+  const applyChanges = useCallback(() => {
+    console.log('Applying pending changes:', pendingChanges);
+    if (!pendingChanges) {
+      console.warn('No pending changes to apply');
+      return false;
+    }
+
+    try {
+      const mergeChanges = (current, changes) => {
+        console.log('Merging changes into current state:', { current, changes });
+        const merged = { ...current };
+
+        // Helper to merge arrays
+        const mergeArrays = (currentArr = [], changesArr = []) => {
+          console.log('Merging arrays:', { currentArr, changesArr });
+          if (!Array.isArray(changesArr)) {
+            console.warn('Changes array is not an array:', changesArr);
+            return currentArr;
+          }
+          return changesArr; // Replace the entire array
+        };
+
+        // Recursively merge objects
+        Object.entries(changes).forEach(([key, value]) => {
+          if (Array.isArray(value)) {
+            merged[key] = mergeArrays(current[key], value);
+          } else if (value && typeof value === 'object') {
+            merged[key] = mergeChanges(current[key] || {}, value);
+          } else {
+            merged[key] = value;
+          }
+          console.log(`Updated ${key}:`, merged[key]);
+        });
+
+        return merged;
+      };
+
+      const updatedResume = mergeChanges(resume, pendingChanges);
+      console.log('Final merged resume:', updatedResume);
+      setResume(updatedResume);
+      setPendingChanges(null);
+      return true;
+    } catch (error) {
+      console.error('Error applying changes:', error);
+      throw error;
+    }
+  }, [resume, pendingChanges]);
+
+  const handleGuiChange = useCallback((changes) => {
+    console.log('GUI editor changes:', changes);
+    setResume(prev => ({ ...prev, ...changes }));
+  }, []);
+
+  const handleJsonChange = useCallback((newResume) => {
+    console.log('Received JSON changes:', newResume);
+    try {
+      setResume(typeof newResume === 'string' ? JSON.parse(newResume) : newResume);
+    } catch (error) {
+      console.error('Error parsing JSON:', error);
+    }
   }, []);
 
   return (
@@ -204,13 +242,7 @@ const ResumeEditor = ({ resume: initialResume, updateGist }) => {
               height="100%"
               defaultLanguage="json"
               value={JSON.stringify(resume, null, 2)}
-              onChange={(code) => {
-                try {
-                  handleResumeChange(code);
-                } catch (error) {
-                  console.error('Error parsing JSON:', error);
-                }
-              }}
+              onChange={(code) => handleJsonChange(code)}
               options={{
                 minimap: { enabled: false },
                 scrollBeyondLastLine: false,
@@ -221,14 +253,14 @@ const ResumeEditor = ({ resume: initialResume, updateGist }) => {
           {editorMode === 'gui' && (
             <GuiEditor
               resume={resume}
-              onChange={handleResumeChange}
+              onChange={handleGuiChange}
             />
           )}
           {editorMode === 'ai' && (
             <AIChatEditor
               resume={resume}
               onResumeChange={handleResumeChange}
-              onApplyChanges={handleApplyChanges}
+              onApplyChanges={applyChanges}
             />
           )}
         </div>
