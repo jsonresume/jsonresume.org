@@ -3,11 +3,18 @@ import { writeFile } from 'fs/promises';
 import { join } from 'path';
 import fs from 'fs';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
 export async function POST(req) {
+  if (!process.env.OPENAI_API_KEY) {
+    return NextResponse.json(
+      { message: 'API not available during build' },
+      { status: 503 }
+    );
+  }
+
+  const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+
   try {
     const formData = await req.formData();
     const audioFile = formData.get('audio');

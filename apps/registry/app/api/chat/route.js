@@ -21,7 +21,7 @@ export async function POST(req) {
   if (!process.env.OPENAI_API_KEY) {
     return NextResponse.json(
       { message: 'API not available during build' },
-      { status: 503 },
+      { status: 503 }
     );
   }
 
@@ -41,7 +41,7 @@ export async function POST(req) {
           content: `Current resume state: ${JSON.stringify(
             currentResume,
             null,
-            2,
+            2
           )}`,
         },
         ...messages.map((msg) => ({
@@ -178,7 +178,7 @@ export async function POST(req) {
       if (toolCall.function.name === 'update_resume') {
         try {
           const { changes, explanation } = JSON.parse(
-            toolCall.function.arguments,
+            toolCall.function.arguments
           );
           return NextResponse.json({
             message: explanation,
