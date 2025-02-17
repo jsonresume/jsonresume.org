@@ -215,32 +215,81 @@ const jobSchema = {
   type: 'object',
 };
 
+const jobDescriptionToSchemaFunction = {
+  name: 'jobDescriptionToSchema',
+  description: 'Takes a fluid job description and turns it into a JSON schema',
+  parameters: {
+    type: 'object',
+    properties: {
+      title: { type: 'string' },
+      company: { type: 'string' },
+      location: {
+        type: 'object',
+        properties: {
+          address: { type: 'string' },
+          postalCode: { type: 'string' },
+          city: { type: 'string' },
+          countryCode: { type: 'string' },
+          region: { type: 'string' },
+        },
+      },
+      position: { type: 'string' },
+      type: { type: 'string' },
+      salary: { type: 'string' },
+      date: { type: 'string' },
+      remote: { type: 'string' },
+      description: { type: 'string' },
+      responsibilities: {
+        type: 'array',
+        items: { type: 'string' },
+      },
+      qualifications: {
+        type: 'array',
+        items: { type: 'string' },
+      },
+      skills: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            name: { type: 'string' },
+            level: { type: 'string' },
+            keywords: {
+              type: 'array',
+              items: { type: 'string' },
+            },
+          },
+        },
+      },
+      experience: { type: 'string' },
+      education: { type: 'string' },
+      application: { type: 'string' },
+    },
+    required: [],
+  },
+};
+
 async function main() {
   console.log('fetching');
 
   const { data, error } = await supabase
     .from('jobs')
     .select()
-    // .is('gpt_content', null)
     .gte(
       'created_at',
-      new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+      new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString()
     );
 
-  console.log('fetched', data, error);
   for (let index = 0; index < data.length; index++) {
     const job = data[index];
 
     const jobDescription = job.content;
-    console.log('job', index);
+
     const messages = [
       {
         role: 'system',
-        content: `Here’s an improved and more detailed version of the original prompt, now incorporating the provided jobSchema for clarity and structure:
-
----
-
-### Prompt: Turn a Job Description into Structured JSON Data
+        content: `
+Turn a Job Description into Structured JSON Data
 
 You are a human assistant working for a recruiter. Your role is to transform job descriptions into structured JSON data. Follow the guidelines below to ensure high-quality and consistent results.
 
@@ -275,9 +324,7 @@ Carefully analyze the given job description and convert it into a structured JSO
      - Dates should follow ISO 8601 format.
      - Location fields such as 'countryCode' must comply with ISO-3166-1 ALPHA-2 codes (e.g., US, IN).
 
-6. **Example Job Description**:
-   Here is the job description for you to process:  
-   ${jobDescription}
+6. Make sure the company description is a minimum of three sentences.
 
 ### Example Output:
 To help guide you, here is an example of a properly formatted job description in JSON:
@@ -320,99 +367,111 @@ To help guide you, here is an example of a properly formatted job description in
   }
 }
 
+**Example Job Description**:
+   Here is the job description for you to process:  
+   ${jobDescription}
+
 ### Final Output:
 Using the instructions and example above, transform the provided job description into a structured JSON document.`,
       },
     ];
 
-    // if job created_at is less than a week ago
-    if (
-      true ||
-      new Date(job.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
-    ) {
-      // if (!job.gpt_content) {
+    if (!job.gpt_content) {
+      console.log('Found job without gpt_content', job);
       const chat = await openai.chat.completions.create({
-        model: 'gpt-4o-2024-08-06',
-        temperature: 0.8,
+        model: 'gpt-4o-mini',
+        temperature: 0.75,
         messages,
-        functions: [
-          {
-            name: 'jobDescriptionToSchema',
-            description:
-              'Takes a fluid job description and turns it into a JSON schema',
-            parameters: {
-              type: 'object',
-              properties: {
-                title: { type: 'string' },
-                company: { type: 'string' },
-                location: {
-                  type: 'object',
-                  properties: {
-                    address: { type: 'string' },
-                    postalCode: { type: 'string' },
-                    city: { type: 'string' },
-                    countryCode: { type: 'string' },
-                    region: { type: 'string' },
-                  },
-                },
-                position: { type: 'string' },
-                type: { type: 'string' },
-                salary: { type: 'string' },
-                date: { type: 'string' },
-                remote: { type: 'string' },
-                description: { type: 'string' },
-                responsibilities: {
-                  type: 'array',
-                  items: { type: 'string' },
-                },
-                qualifications: {
-                  type: 'array',
-                  items: { type: 'string' },
-                },
-                skills: {
-                  type: 'array',
-                  items: {
-                    type: 'object',
-                    properties: {
-                      name: { type: 'string' },
-                      level: { type: 'string' },
-                      keywords: {
-                        type: 'array',
-                        items: { type: 'string' },
-                      },
-                    },
-                  },
-                },
-                experience: { type: 'string' },
-                education: { type: 'string' },
-                application: { type: 'string' },
-              },
-              required: [],
-            },
-          },
-        ],
+        functions: [jobDescriptionToSchemaFunction],
         function_call: 'auto',
       });
-      // console.log(chat.data);
-      console.log({ jobDescription });
 
-      console.log('AFASDASDAS');
-      console.log('AFASDASDAS');
-      console.log('AFASDASDAS');
-      console.log('AFASDASDAS');
-      console.log('AFASDASDAS');
-      console.log('AFASDASDAS');
-      console.log(chat);
       try {
         const details = chat.choices[0].message.function_call?.arguments;
-        console.log(JSON.parse(details));
-        const { error } = await supabase
-          .from('jobs')
-          .update({
-            gpt_content: details,
-          })
-          .eq('id', job.id);
-        console.log({ error });
+
+        const jobJson = JSON.parse(details);
+
+        console.log({ jobJson });
+
+        const { company } = jobJson;
+
+        console.log({ company });
+
+        const { data: companyData, error: companyError } = await supabase
+          .from('companies')
+          .select()
+          .eq('name', company);
+
+        const parsedCompanyData = JSON.parse(companyData[0].data);
+
+        // exit if no company data
+        if (companyError || !parsedCompanyData) {
+          // exit node
+          process.exit(1);
+        }
+
+        const companyDetails = parsedCompanyData.choices[0].message.content;
+
+        console.log({ companyDetails, companyError });
+
+        messages.push({
+          role: 'system',
+          content: `Here is more information about the company;
+          
+          ${companyDetails}
+          `,
+        });
+
+        // regenerate gpt content now that we have more context
+
+        console.log({ messages });
+
+        const chat2 = await openai.chat.completions.create({
+          model: 'gpt-4o-mini',
+          temperature: 0.75,
+          messages,
+          functions: [jobDescriptionToSchemaFunction],
+          function_call: 'auto',
+        });
+
+        try {
+          const details2 = chat2.choices[0].message.function_call?.arguments;
+          const jobJson2 = JSON.parse(details2);
+
+          console.log({ jobJson2 });
+
+          // now i want to run one more pass through the ai but this time, don't call a function, just return a text response of all the job description in natural language
+
+          messages.push({
+            role: 'system',
+            content: `Transform the structured job information into a comprehensive, natural-language job description. Write it as if it were a professional job posting that would appear on a career site. Include all details about the role, company, requirements, and benefits in a flowing narrative format. Focus on using industry-standard terminology and keywords that would naturally appear in relevant resumes. Make sure to incorporate all the technical skills, qualifications, and responsibilities in a way that would maximize semantic matching with candidate resumes.`,
+          });
+
+          const chat3 = await openai.chat.completions.create({
+            model: 'gpt-4o-mini',
+            temperature: 0.75,
+            messages,
+          });
+
+          const content = chat3.choices[0].message.content;
+
+          try {
+            console.log({ chat3, content });
+            const { error } = await supabase
+              .from('jobs')
+              .update({
+                gpt_content: details,
+                gpt_content_json_extended: jobJson2,
+                gpt_content_full: content,
+              })
+              .eq('id', job.id);
+            console.log({ error });
+          } catch (e) {
+            console.log({ e });
+          }
+        } catch (e) {
+          console.log({ e });
+        }
       } catch (e) {
         console.error(e);
         await supabase
@@ -424,8 +483,6 @@ Using the instructions and example above, transform the provided job description
       }
       await new Promise((resolve) => setTimeout(resolve, 1000));
     }
-
-    // sleep for 5 seconds
   }
 }
 
