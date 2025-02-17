@@ -190,22 +190,22 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
                 : message.role === 'system'
                   ? 'justify-center'
                   : 'justify-start'
-            }`}
+            } w-full`}
           >
             <div
-              className={`max-w-[80%] p-3 rounded-lg ${
+              className={`${
                 message.role === 'user'
-                  ? 'bg-blue-500 text-white'
+                  ? 'bg-blue-500 text-white max-w-[80%]'
                   : message.role === 'system'
                     ? message.type === 'error'
-                      ? 'bg-red-100 text-red-700'
+                      ? 'bg-red-100 text-red-700 w-full'
                       : message.type === 'success'
-                        ? 'bg-green-100 text-green-700'
-                        : 'bg-gray-100 text-gray-700'
-                    : 'bg-gray-100 text-gray-900'
-              }`}
+                        ? 'bg-green-100 text-green-700 w-full'
+                        : 'bg-gray-100 text-gray-700 w-full'
+                    : 'bg-gray-100 text-gray-900 w-full'
+              } p-3 rounded-lg`}
             >
-              <p className="whitespace-pre-wrap">{message.content}</p>
+              <p className="whitespace-pre-wrap break-words">{message.content}</p>
               {message.role === 'assistant' && speaking && (
                 <Button
                   onClick={stop}
@@ -217,7 +217,7 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
               )}
               {message.role === 'assistant' && message.suggestedChanges && (
                 <div className="mt-2 -mx-3">
-                  <pre className="bg-gray-800 text-white p-4 rounded-lg overflow-x-auto my-2 text-sm w-full">
+                  <pre className="bg-gray-800 text-white p-4 rounded-lg overflow-x-auto my-2 text-sm w-full whitespace-pre-wrap break-words">
                     {JSON.stringify(message.suggestedChanges, null, 2)}
                   </pre>
                   <Button
