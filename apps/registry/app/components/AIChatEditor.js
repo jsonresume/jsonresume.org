@@ -1,7 +1,8 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { Button } from '@repo/ui';
-import { Send, Mic, MicOff } from 'lucide-react';
+import { Send, Mic, MicOff, Settings } from 'lucide-react';
 import { useSpeech } from '../hooks/useSpeech';
+import { useSettings } from '../hooks/useSettings';
 
 const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
   const [messages, setMessages] = useState([]);
@@ -9,7 +10,9 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
+  const [showSettings, setShowSettings] = useState(false);
   const { speak, stop, speaking } = useSpeech();
+  const [settings, updateSettings] = useSettings();
   const chatContainerRef = useRef(null);
 
   useEffect(() => {
@@ -71,11 +74,13 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
         onResumeChange(data.suggestedChanges);
       }
 
-      // Always speak the assistant's message
-      try {
-        await speak(data.message);
-      } catch (err) {
-        console.error('Error during speech:', err);
+      // Only speak if TTS is enabled in settings
+      if (settings.ttsEnabled) {
+        try {
+          await speak(data.message);
+        } catch (err) {
+          console.error('Error during speech:', err);
+        }
       }
     } catch (error) {
       console.error('Error:', error);
@@ -235,30 +240,65 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
         )}
       </div>
       
-      <div className="p-4 border-t">
-        <div className="flex space-x-2">
-          <input
-            type="text"
-            value={inputMessage}
-            onChange={(e) => setInputMessage(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSubmitMessage(inputMessage)}
-            placeholder="Type your message..."
-            className="flex-1 p-2 border rounded"
-          />
-          <Button
-            onClick={() => handleSubmitMessage(inputMessage)}
-            disabled={isLoading || !inputMessage.trim()}
-          >
-            <Send className="w-4 h-4" />
-          </Button>
-          <Button
-            onClick={isRecording ? stopRecording : startRecording}
-            disabled={isLoading}
-            className={isRecording ? 'bg-red-500 hover:bg-red-600' : ''}
-          >
-            {isRecording ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-          </Button>
+      <div className="border-t">
+        <div className="p-4">
+          <div className="flex space-x-2">
+            <input
+              type="text"
+              value={inputMessage}
+              onChange={(e) => setInputMessage(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleSubmitMessage(inputMessage)}
+              placeholder="Type your message..."
+              className="flex-1 p-2 border rounded"
+            />
+            <Button
+              onClick={() => handleSubmitMessage(inputMessage)}
+              disabled={isLoading || !inputMessage.trim()}
+            >
+              <Send className="w-4 h-4" />
+            </Button>
+            <Button
+              onClick={isRecording ? stopRecording : startRecording}
+              disabled={isLoading}
+              className={isRecording ? 'bg-red-500 hover:bg-red-600' : ''}
+            >
+              {isRecording ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+            </Button>
+            <Button
+              onClick={() => setShowSettings(!showSettings)}
+              className={showSettings ? 'bg-blue-100' : ''}
+            >
+              <Settings className="w-4 h-4" />
+            </Button>
+          </div>
         </div>
+
+        {/* Settings Panel */}
+        {showSettings && (
+          <div className="px-4 pb-4">
+            <div className="bg-gray-50 p-4 rounded-lg space-y-4">
+              <h3 className="font-medium text-gray-900">Settings</h3>
+              <div className="flex items-center justify-between">
+                <label className="text-sm text-gray-700">Text-to-Speech</label>
+                <button
+                  onClick={() => updateSettings({ ttsEnabled: !settings.ttsEnabled })}
+                  className={`
+                    relative inline-flex h-6 w-11 items-center rounded-full
+                    ${settings.ttsEnabled ? 'bg-blue-500' : 'bg-gray-200'}
+                    transition-colors duration-200
+                  `}
+                >
+                  <span
+                    className={`
+                      inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200
+                      ${settings.ttsEnabled ? 'translate-x-6' : 'translate-x-1'}
+                    `}
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
