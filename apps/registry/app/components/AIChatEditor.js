@@ -71,13 +71,11 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
         onResumeChange(data.suggestedChanges);
       }
 
-      // Speak the assistant's message if it's not just suggesting changes
-      if (!data.suggestedChanges) {
-        try {
-          await speak(data.message);
-        } catch (err) {
-          console.error('Error during speech:', err);
-        }
+      // Always speak the assistant's message
+      try {
+        await speak(data.message);
+      } catch (err) {
+        console.error('Error during speech:', err);
       }
     } catch (error) {
       console.error('Error:', error);
