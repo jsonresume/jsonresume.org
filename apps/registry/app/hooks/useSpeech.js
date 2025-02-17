@@ -5,7 +5,6 @@ export function useSpeech() {
   const [supported, setSupported] = useState(false);
   const [selectedVoice, setSelectedVoice] = useState(null);
   const [error, setError] = useState(null);
-  const voiceTested = useRef(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
@@ -27,19 +26,11 @@ export function useSpeech() {
         );
         console.log('English voices:', englishVoices.map(v => `${v.name} (${v.lang})`));
         
-        if (englishVoices.length > 0 && !voiceTested.current) {
+        if (englishVoices.length > 0) {
           const preferredVoice = englishVoices.find(v => v.lang === 'en-US') || englishVoices[0];
           console.log('Selected voice:', preferredVoice.name);
           setSelectedVoice(preferredVoice);
           setError(null);
-          
-          // Test the voice only once
-          voiceTested.current = true;
-          const test = new SpeechSynthesisUtterance('Test');
-          test.voice = preferredVoice;
-          test.onend = () => console.log('Test speech completed');
-          test.onerror = (e) => console.error('Test speech failed:', e);
-          window.speechSynthesis.speak(test);
         }
       };
 

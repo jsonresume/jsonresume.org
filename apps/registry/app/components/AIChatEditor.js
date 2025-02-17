@@ -195,9 +195,18 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
               }`}
             >
               <p className="whitespace-pre-wrap">{message.content}</p>
+              {message.role === 'assistant' && speaking && (
+                <Button
+                  onClick={stop}
+                  className="mt-3 w-full bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 px-4 rounded flex items-center justify-center gap-2"
+                >
+                  <span className="animate-pulse">●</span>
+                  Stop Speaking
+                </Button>
+              )}
               {message.role === 'assistant' && message.suggestedChanges && (
-                <div className="mt-2">
-                  <pre className="bg-gray-800 text-white p-3 rounded-lg overflow-x-auto my-2 text-sm">
+                <div className="mt-2 -mx-3">
+                  <pre className="bg-gray-800 text-white p-4 rounded-lg overflow-x-auto my-2 text-sm w-full">
                     {JSON.stringify(message.suggestedChanges, null, 2)}
                   </pre>
                   <Button
@@ -213,14 +222,6 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
                     {message.changesApplied ? '✓ Changes Applied' : 'Apply Changes'}
                   </Button>
                 </div>
-              )}
-              {message.role === 'assistant' && speaking && (
-                <button
-                  onClick={stop}
-                  className="mt-2 text-sm text-gray-600 hover:text-gray-800"
-                >
-                  Stop Speaking
-                </button>
               )}
             </div>
           </div>
