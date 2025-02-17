@@ -137,7 +137,8 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
           const data = await response.json();
           if (data.error) throw new Error(data.error);
           
-          setInputMessage(data.text);
+          // Instead of setting input, directly send the transcribed message
+          handleSubmitMessage(data.text);
         } catch (error) {
           console.error('Transcription error:', error);
           addSystemMessage('Failed to transcribe audio: ' + error.message, 'error');
