@@ -1,5 +1,6 @@
 import OpenAI from 'openai';
 import { writeFile } from 'fs/promises';
+import { NextResponse } from 'next/server';
 import { join } from 'path';
 import fs from 'fs';
 
