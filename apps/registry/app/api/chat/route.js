@@ -1,10 +1,6 @@
 import { OpenAI } from 'openai';
 import { NextResponse } from 'next/server';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
 const systemPrompt = `You are an AI assistant helping to edit a JSON Resume (https://jsonresume.org/schema/).
 When suggesting changes:
 1. Return a JSON object containing ONLY the sections that need to be modified
@@ -22,6 +18,17 @@ Updating: {"work": [{"name": "Existing Co", "position": "Senior Engineer"}]}
 Deleting: {"work": [{"name": "Old Co", "_delete": true}]}`;
 
 export async function POST(req) {
+  if (!process.env.OPENAI_API_KEY) {
+    return NextResponse.json(
+      { message: 'API not available during build' },
+      { status: 503 },
+    );
+  }
+
+  const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+
   try {
     const { messages, currentResume } = await req.json();
 
@@ -34,7 +41,7 @@ export async function POST(req) {
           content: `Current resume state: ${JSON.stringify(
             currentResume,
             null,
-            2
+            2,
           )}`,
         },
         ...messages.map((msg) => ({
@@ -171,7 +178,7 @@ export async function POST(req) {
       if (toolCall.function.name === 'update_resume') {
         try {
           const { changes, explanation } = JSON.parse(
-            toolCall.function.arguments
+            toolCall.function.arguments,
           );
           return NextResponse.json({
             message: explanation,
