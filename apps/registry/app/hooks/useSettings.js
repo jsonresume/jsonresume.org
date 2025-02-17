@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 export function useSettings() {
   const [settings, setSettings] = useState({
     ttsEnabled: true, // Text-to-speech enabled by default
+    autoApplyChanges: false, // Auto-apply changes disabled by default
   });
 
   // Load settings from localStorage on mount
