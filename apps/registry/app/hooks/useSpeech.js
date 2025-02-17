@@ -15,7 +15,7 @@ export function useSpeech() {
         const availableVoices = window.speechSynthesis.getVoices();
         console.log(
           'Available voices:',
-          availableVoices.map((v) => `${v.name} (${v.lang})`),
+          availableVoices.map((v) => `${v.name} (${v.lang})`)
         );
 
         if (availableVoices.length === 0) {
@@ -26,11 +26,11 @@ export function useSpeech() {
         // Try to find an English voice
         const englishVoices = availableVoices.filter(
           (voice) =>
-            voice.lang.startsWith('en-US') || voice.lang.startsWith('en-GB'),
+            voice.lang.startsWith('en-US') || voice.lang.startsWith('en-GB')
         );
         console.log(
           'English voices:',
-          englishVoices.map((v) => `${v.name} (${v.lang})`),
+          englishVoices.map((v) => `${v.name} (${v.lang})`)
         );
 
         if (englishVoices.length > 0) {
@@ -67,10 +67,10 @@ export function useSpeech() {
         if (!supported || !text) {
           console.warn(
             'Cannot speak:',
-            !supported ? 'Speech not supported' : 'No text provided',
+            !supported ? 'Speech not supported' : 'No text provided'
           );
           reject(
-            new Error(!supported ? 'Speech not supported' : 'No text provided'),
+            new Error(!supported ? 'Speech not supported' : 'No text provided')
           );
           return;
         }
@@ -127,7 +127,7 @@ export function useSpeech() {
         }
       });
     },
-    [supported, selectedVoice],
+    [supported, selectedVoice]
   );
 
   const stop = useCallback(() => {

@@ -277,7 +277,7 @@ async function main() {
     .select()
     .gte(
       'created_at',
-      new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString(),
+      new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString()
     );
 
   for (let index = 0; index < data.length; index++) {

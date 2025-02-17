@@ -13,7 +13,10 @@ export async function POST(req) {
     const audioFile = formData.get('audio');
 
     if (!audioFile) {
-      return Response.json({ error: 'No audio file provided' }, { status: 400 });
+      return Response.json(
+        { error: 'No audio file provided' },
+        { status: 400 }
+      );
     }
 
     // Create a temporary file
@@ -27,7 +30,7 @@ export async function POST(req) {
         file: fs.createReadStream(tmpFilePath),
         model: 'whisper-1',
         language: 'en',
-        response_format: 'text'
+        response_format: 'text',
       });
 
       // Clean up the temporary file
@@ -46,9 +49,12 @@ export async function POST(req) {
     }
   } catch (error) {
     console.error('Error transcribing audio:', error);
-    return Response.json({ 
-      error: 'Failed to transcribe audio',
-      details: error.message 
-    }, { status: 500 });
+    return Response.json(
+      {
+        error: 'Failed to transcribe audio',
+        details: error.message,
+      },
+      { status: 500 }
+    );
   }
 }

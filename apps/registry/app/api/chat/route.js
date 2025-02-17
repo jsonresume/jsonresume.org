@@ -31,7 +31,11 @@ export async function POST(req) {
         { role: 'system', content: systemPrompt },
         {
           role: 'system',
-          content: `Current resume state: ${JSON.stringify(currentResume, null, 2)}`,
+          content: `Current resume state: ${JSON.stringify(
+            currentResume,
+            null,
+            2
+          )}`,
         },
         ...messages.map((msg) => ({
           role: msg.role,
@@ -167,7 +171,7 @@ export async function POST(req) {
       if (toolCall.function.name === 'update_resume') {
         try {
           const { changes, explanation } = JSON.parse(
-            toolCall.function.arguments,
+            toolCall.function.arguments
           );
           return NextResponse.json({
             message: explanation,

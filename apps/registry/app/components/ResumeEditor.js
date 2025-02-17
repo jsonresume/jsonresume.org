@@ -130,7 +130,7 @@ const ResumeEditor = ({ resume: initialResume, updateGist }) => {
               (item) =>
                 item[key] === newItem[key] ||
                 (item.startDate === newItem.startDate &&
-                  item.endDate === newItem.endDate),
+                  item.endDate === newItem.endDate)
             );
             if (index !== -1) {
               result.splice(index, 1);
@@ -143,7 +143,7 @@ const ResumeEditor = ({ resume: initialResume, updateGist }) => {
             (item) =>
               item[key] === newItem[key] ||
               (item.startDate === newItem.startDate &&
-                item.endDate === newItem.endDate),
+                item.endDate === newItem.endDate)
           );
 
           if (existingIndex !== -1) {
@@ -165,7 +165,7 @@ const ResumeEditor = ({ resume: initialResume, updateGist }) => {
           newResume[section] = mergeArrays(
             resume[section],
             value,
-            section === 'skills' ? 'name' : 'name', // Use appropriate key for matching
+            section === 'skills' ? 'name' : 'name' // Use appropriate key for matching
           );
         } else if (typeof value === 'object' && value !== null) {
           // Handle nested objects
@@ -178,7 +178,7 @@ const ResumeEditor = ({ resume: initialResume, updateGist }) => {
 
       setResume(newResume);
     },
-    [resume],
+    [resume]
   );
 
   const handleGuiChange = useCallback((changes) => {
@@ -190,7 +190,7 @@ const ResumeEditor = ({ resume: initialResume, updateGist }) => {
     console.log('Received JSON changes:', newResume);
     try {
       setResume(
-        typeof newResume === 'string' ? JSON.parse(newResume) : newResume,
+        typeof newResume === 'string' ? JSON.parse(newResume) : newResume
       );
     } catch (error) {
       console.error('Error parsing JSON:', error);

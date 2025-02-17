@@ -29,7 +29,8 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
 
   useEffect(() => {
     if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
     }
   }, [messages]);
 
@@ -38,9 +39,9 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
       role: 'system',
       content,
       type,
-      id: Date.now()
+      id: Date.now(),
     };
-    setMessages(prev => [...prev, systemMessage]);
+    setMessages((prev) => [...prev, systemMessage]);
   }, []);
 
   const handleSubmitMessage = async (message) => {
@@ -49,30 +50,32 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
       const newUserMessage = {
         role: 'user',
         content: message,
-        id: Date.now()
+        id: Date.now(),
       };
-      
-      setMessages(prev => [...prev, newUserMessage]);
-      
+
+      setMessages((prev) => [...prev, newUserMessage]);
+
       // Only send last 10 messages as context
-      const recentMessages = [...messages.slice(-9), newUserMessage].map(msg => ({
-        role: msg.role,
-        content: msg.content
-      }));
+      const recentMessages = [...messages.slice(-9), newUserMessage].map(
+        (msg) => ({
+          role: msg.role,
+          content: msg.content,
+        })
+      );
 
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           messages: recentMessages,
-          currentResume: resume
-        })
+          currentResume: resume,
+        }),
       });
 
       if (!response.ok) throw new Error('Failed to get AI response');
-      
+
       const data = await response.json();
-      
+
       if (data.error) {
         throw new Error(data.error);
       }
@@ -81,16 +84,16 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
         role: 'assistant',
         content: data.message,
         id: Date.now(),
-        suggestedChanges: data.suggestedChanges
+        suggestedChanges: data.suggestedChanges,
       };
 
-      setMessages(prev => [...prev, assistantMessage]);
-      
+      setMessages((prev) => [...prev, assistantMessage]);
+
       // Log suggested changes
       if (data.suggestedChanges) {
         console.log('Received suggested changes:', data.suggestedChanges);
         onResumeChange(data.suggestedChanges);
-        
+
         // Auto-apply changes if enabled
         if (settings.autoApplyChanges) {
           handleApplyChanges(data.suggestedChanges, assistantMessage.id);
@@ -115,30 +118,44 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
     }
   };
 
-  const handleApplyChanges = useCallback((changes, messageId) => {
-    console.log('Applying changes...', changes);
-    if (!changes) {
-      console.log('No changes to apply');
-      return;
-    }
-    
-    if (onApplyChanges) {
-      try {
-        onApplyChanges(changes);
-        console.log('Changes applied successfully');
-        addSystemMessage('✅ Changes have been successfully applied to your resume', 'success');
-        setMessages(prev => prev.map(msg => 
-          msg.id === messageId ? { ...msg, changesApplied: true } : msg
-        ));
-      } catch (error) {
-        console.error('Error applying changes:', error);
-        addSystemMessage('❌ Failed to apply changes: ' + error.message, 'error');
+  const handleApplyChanges = useCallback(
+    (changes, messageId) => {
+      console.log('Applying changes...', changes);
+      if (!changes) {
+        console.log('No changes to apply');
+        return;
       }
-    } else {
-      console.warn('onApplyChanges callback is not defined');
-      addSystemMessage('❌ Unable to apply changes: System not configured properly', 'error');
-    }
-  }, [onApplyChanges, addSystemMessage]);
+
+      if (onApplyChanges) {
+        try {
+          onApplyChanges(changes);
+          console.log('Changes applied successfully');
+          addSystemMessage(
+            '✅ Changes have been successfully applied to your resume',
+            'success'
+          );
+          setMessages((prev) =>
+            prev.map((msg) =>
+              msg.id === messageId ? { ...msg, changesApplied: true } : msg
+            )
+          );
+        } catch (error) {
+          console.error('Error applying changes:', error);
+          addSystemMessage(
+            '❌ Failed to apply changes: ' + error.message,
+            'error'
+          );
+        }
+      } else {
+        console.warn('onApplyChanges callback is not defined');
+        addSystemMessage(
+          '❌ Unable to apply changes: System not configured properly',
+          'error'
+        );
+      }
+    },
+    [onApplyChanges, addSystemMessage]
+  );
 
   const startRecording = async () => {
     try {
@@ -160,21 +177,24 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
           });
 
           if (!response.ok) throw new Error('Failed to transcribe audio');
-          
+
           const data = await response.json();
           if (data.error) throw new Error(data.error);
-          
+
           // Instead of setting input, directly send the transcribed message
           handleSubmitMessage(data.text);
         } catch (error) {
           console.error('Transcription error:', error);
-          addSystemMessage('Failed to transcribe audio: ' + error.message, 'error');
+          addSystemMessage(
+            'Failed to transcribe audio: ' + error.message,
+            'error'
+          );
         } finally {
           setIsLoading(false);
         }
 
         // Clean up the stream
-        stream.getTracks().forEach(track => track.stop());
+        stream.getTracks().forEach((track) => track.stop());
       };
 
       recorder.start();
@@ -182,7 +202,10 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
       setIsRecording(true);
     } catch (error) {
       console.error('Error accessing microphone:', error);
-      addSystemMessage('Failed to access microphone: ' + error.message, 'error');
+      addSystemMessage(
+        'Failed to access microphone: ' + error.message,
+        'error'
+      );
     }
   };
 
@@ -195,7 +218,7 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
 
   return (
     <div className="flex flex-col h-full">
-      <div 
+      <div
         ref={chatContainerRef}
         className="flex-1 overflow-y-auto p-4 space-y-4"
       >
@@ -203,11 +226,11 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
           <div
             key={message.id}
             className={`flex ${
-              message.role === 'user' 
-                ? 'justify-end' 
+              message.role === 'user'
+                ? 'justify-end'
                 : message.role === 'system'
-                  ? 'justify-center'
-                  : 'justify-start'
+                ? 'justify-center'
+                : 'justify-start'
             } w-full`}
           >
             <div
@@ -215,15 +238,17 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
                 message.role === 'user'
                   ? 'bg-blue-500 text-white max-w-[80%]'
                   : message.role === 'system'
-                    ? message.type === 'error'
-                      ? 'bg-red-100 text-red-700 w-full'
-                      : message.type === 'success'
-                        ? 'bg-green-100 text-green-700 w-full'
-                        : 'bg-gray-100 text-gray-700 w-full'
-                    : 'bg-gray-100 text-gray-900 w-full'
+                  ? message.type === 'error'
+                    ? 'bg-red-100 text-red-700 w-full'
+                    : message.type === 'success'
+                    ? 'bg-green-100 text-green-700 w-full'
+                    : 'bg-gray-100 text-gray-700 w-full'
+                  : 'bg-gray-100 text-gray-900 w-full'
               } p-3 rounded-lg`}
             >
-              <p className="whitespace-pre-wrap break-words">{message.content}</p>
+              <p className="whitespace-pre-wrap break-words">
+                {message.content}
+              </p>
               {message.role === 'assistant' && speaking && (
                 <Button
                   onClick={stop}
@@ -239,16 +264,22 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
                     {JSON.stringify(message.suggestedChanges, null, 2)}
                   </pre>
                   <Button
-                    onClick={() => handleApplyChanges(message.suggestedChanges, message.id)}
+                    onClick={() =>
+                      handleApplyChanges(message.suggestedChanges, message.id)
+                    }
                     disabled={message.changesApplied}
                     className={`
                       w-full text-center py-2 px-4 rounded
-                      ${message.changesApplied 
-                        ? 'bg-green-100 text-green-700 cursor-not-allowed'
-                        : 'bg-blue-500 text-white hover:bg-blue-600'}
+                      ${
+                        message.changesApplied
+                          ? 'bg-green-100 text-green-700 cursor-not-allowed'
+                          : 'bg-blue-500 text-white hover:bg-blue-600'
+                      }
                     `}
                   >
-                    {message.changesApplied ? '✓ Changes Applied' : 'Apply Changes'}
+                    {message.changesApplied
+                      ? '✓ Changes Applied'
+                      : 'Apply Changes'}
                   </Button>
                 </div>
               )}
@@ -264,7 +295,7 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
         )}
         <div ref={messagesEndRef} />
       </div>
-      
+
       <div className="border-t">
         <div className="p-4">
           <div className="flex space-x-2">
@@ -272,7 +303,9 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
               type="text"
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleSubmitMessage(inputMessage)}
+              onKeyPress={(e) =>
+                e.key === 'Enter' && handleSubmitMessage(inputMessage)
+              }
               placeholder="Type your message..."
               className="flex-1 p-2 border rounded"
             />
@@ -287,7 +320,11 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
               disabled={isLoading}
               className={isRecording ? 'bg-red-500 hover:bg-red-600' : ''}
             >
-              {isRecording ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+              {isRecording ? (
+                <MicOff className="w-4 h-4" />
+              ) : (
+                <Mic className="w-4 h-4" />
+              )}
             </Button>
             <Button
               onClick={() => setShowSettings(!showSettings)}
@@ -303,15 +340,21 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
           <div className="px-4 pb-4">
             <div className="bg-gray-50 p-4 rounded-lg space-y-4">
               <h3 className="font-medium text-gray-900">Settings</h3>
-              
+
               {/* Text-to-Speech Toggle */}
               <div className="flex items-center justify-between">
                 <div>
-                  <label className="text-sm text-gray-700">Text-to-Speech</label>
-                  <p className="text-xs text-gray-500">AI assistant speaks responses</p>
+                  <label className="text-sm text-gray-700">
+                    Text-to-Speech
+                  </label>
+                  <p className="text-xs text-gray-500">
+                    AI assistant speaks responses
+                  </p>
                 </div>
                 <button
-                  onClick={() => updateSettings({ ttsEnabled: !settings.ttsEnabled })}
+                  onClick={() =>
+                    updateSettings({ ttsEnabled: !settings.ttsEnabled })
+                  }
                   className={`
                     relative inline-flex h-6 w-11 items-center rounded-full
                     ${settings.ttsEnabled ? 'bg-blue-500' : 'bg-gray-200'}
@@ -330,11 +373,19 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
               {/* Auto-Apply Changes Toggle */}
               <div className="flex items-center justify-between">
                 <div>
-                  <label className="text-sm text-gray-700">Auto-Apply Changes</label>
-                  <p className="text-xs text-gray-500">Automatically apply suggested changes</p>
+                  <label className="text-sm text-gray-700">
+                    Auto-Apply Changes
+                  </label>
+                  <p className="text-xs text-gray-500">
+                    Automatically apply suggested changes
+                  </p>
                 </div>
                 <button
-                  onClick={() => updateSettings({ autoApplyChanges: !settings.autoApplyChanges })}
+                  onClick={() =>
+                    updateSettings({
+                      autoApplyChanges: !settings.autoApplyChanges,
+                    })
+                  }
                   className={`
                     relative inline-flex h-6 w-11 items-center rounded-full
                     ${settings.autoApplyChanges ? 'bg-blue-500' : 'bg-gray-200'}
@@ -344,7 +395,11 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
                   <span
                     className={`
                       inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200
-                      ${settings.autoApplyChanges ? 'translate-x-6' : 'translate-x-1'}
+                      ${
+                        settings.autoApplyChanges
+                          ? 'translate-x-6'
+                          : 'translate-x-1'
+                      }
                     `}
                   />
                 </button>
