@@ -5,7 +5,14 @@ import { useSpeech } from '../hooks/useSpeech';
 import { useSettings } from '../hooks/useSettings';
 
 const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState(() => {
+    const savedMessages = localStorage.getItem('resumeAiChatMessages');
+    if (savedMessages) {
+      const parsed = JSON.parse(savedMessages);
+      return parsed.slice(-30); // Keep only last 30 messages
+    }
+    return [];
+  });
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
@@ -14,6 +21,11 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
   const { speak, stop, speaking } = useSpeech();
   const [settings, updateSettings] = useSettings();
   const chatContainerRef = useRef(null);
+  const messagesEndRef = useRef(null);
+
+  useEffect(() => {
+    localStorage.setItem('resumeAiChatMessages', JSON.stringify(messages));
+  }, [messages]);
 
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -42,11 +54,17 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
       
       setMessages(prev => [...prev, newUserMessage]);
       
+      // Only send last 10 messages as context
+      const recentMessages = [...messages.slice(-9), newUserMessage].map(msg => ({
+        role: msg.role,
+        content: msg.content
+      }));
+
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          messages: [...messages, newUserMessage],
+          messages: recentMessages,
           currentResume: resume
         })
       });
@@ -244,6 +262,7 @@ const AIChatEditor = ({ resume, onResumeChange, onApplyChanges }) => {
             </div>
           </div>
         )}
+        <div ref={messagesEndRef} />
       </div>
       
       <div className="border-t">
