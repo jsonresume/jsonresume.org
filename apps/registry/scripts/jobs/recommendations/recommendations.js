@@ -23,44 +23,76 @@ notes:
  - vector simalarity works better on unstructured text 
 */
 
+// Helper function to extract domain from URL
+function extractDomain(url) {
+  if (!url) return null;
+  try {
+    const urlObj = new URL(url);
+    return urlObj.hostname.replace(/^www\./, '');
+  } catch (error) {
+    console.error(`Invalid URL: ${url}`);
+    return null;
+  }
+}
+
 const resume = JSON.parse(fs.readFileSync('resume.json', 'utf8'));
 const job = JSON.parse(fs.readFileSync('job.json', 'utf8'));
 
 // Extract unique companies from work experience
 const companies = resume.work?.reduce((acc, work) => {
-  if (work.name && !acc[work.name]) {
-    acc[work.name] = { 
-      name: work.name, 
-      url: work.url || null,
-      position: work.position,
-      startDate: work.startDate,
-      endDate: work.endDate
-    };
+  if (work.name) {
+    const url = work.website || work.url;
+    const domain = extractDomain(url);
+    const key = domain || work.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+    if (!acc[key]) {
+      acc[key] = {
+        name: work.name,
+        url: url,
+        domain: domain,
+        position: work.position,
+        startDate: work.startDate,
+        endDate: work.endDate,
+      };
+    }
   }
   return acc;
 }, {});
 
 // Add the company from the job posting
 if (job.company) {
-  companies[job.company] = { 
-    name: job.company, 
-    url: job.url || null,
+  const domain = extractDomain(job.url);
+  const key = domain || job.company.toLowerCase().replace(/[^a-z0-9]/g, '');
+  companies[key] = {
+    name: job.company,
+    url: job.url,
+    domain: domain,
     position: job.title,
     type: job.type,
-    remote: job.remote
+    remote: job.remote,
   };
 }
 
-console.log('🏢 Companies found:', Object.keys(companies));
+console.log(' Companies found:', Object.keys(companies));
 
 // Function to fetch company data from Perplexity
-async function getCompanyData(companyName) {
+async function getCompanyData(companyName, existingUrl = null) {
   const requestBody = {
     model: 'sonar-pro',
     messages: [
       {
         role: 'user',
-        content: `Generate a paragraph and recent news for the company: ${companyName}. Use markdown. Only add a heading for Recent news`,
+        content: `For the company "${companyName}", provide:
+1. A brief description of what they do
+2. Recent news
+3. Work life conditions
+4. Their official website URL
+
+Format the response in markdown with these exact headings:
+## Description
+## Recent News
+## Work life conditions
+## Website
+[only include the direct URL, nothing else]`,
       },
     ],
     max_tokens: 2000,
@@ -88,7 +120,7 @@ async function getCompanyData(companyName) {
   };
 
   try {
-    console.log(`📤 Sending request for ${companyName}...`);
+    console.log(` Sending request for ${companyName}...`);
     const response = await fetch(
       'https://api.perplexity.ai/chat/completions',
       options,
@@ -109,8 +141,23 @@ async function getCompanyData(companyName) {
     }
 
     const data = await response.json();
-    console.log(`✅ Got data for ${companyName}`);
-    return data;
+
+    // Extract URL from the response
+    const content = data.choices[0]?.message?.content || '';
+    const websiteMatch = content.match(/## Website\s*\n(https?:\/\/[^\s\n]+)/);
+    const websiteUrl = websiteMatch?.[1] || existingUrl;
+
+    // Get domain from the URL
+    const domain = extractDomain(websiteUrl);
+
+    console.log(
+      ` Got data for ${companyName}${domain ? ` (${domain})` : ''}`,
+    );
+    return {
+      ...data,
+      extractedUrl: websiteUrl,
+      domain: domain,
+    };
   } catch (error) {
     console.error(`Error fetching data for ${companyName}:`, error);
     return null;
@@ -121,71 +168,110 @@ async function getCompanyData(companyName) {
 let companyData = {};
 try {
   companyData = JSON.parse(fs.readFileSync('companyData.json', 'utf8'));
-  console.log('📚 Loaded existing company data');
-  
+  console.log(' Loaded existing company data');
+
   // Log which companies we already have data for
   const existingCompanies = Object.keys(companyData);
   if (existingCompanies.length > 0) {
-    console.log('📋 Already have data for:', existingCompanies.join(', '));
+    console.log(' Already have data for:', existingCompanies.join(', '));
   }
 } catch (error) {
-  console.log('📝 Creating new company data file');
+  console.log(' Creating new company data file');
 }
 
 // Fetch data for each company
 async function fetchAllCompanyData() {
-  for (const [companyName, companyInfo] of Object.entries(companies)) {
-    if (!companyData[companyName]) {
-      console.log(`🔍 Fetching data for ${companyName}...`);
-      const data = await getCompanyData(companyName);
+  for (const [key, companyInfo] of Object.entries(companies)) {
+    const existingData = companyData[key];
+    if (!existingData) {
+      console.log(` Fetching data for ${companyInfo.name}...`);
+      const data = await getCompanyData(companyInfo.name, companyInfo.url);
       if (data) {
-        companyData[companyName] = {
+        // Use the domain from the API response if we don't have one
+        const finalKey = companyInfo.domain || data.domain || key;
+        companyData[finalKey] = {
           ...data,
-          ...companyInfo, // Include all company info from resume/job
-          lastUpdated: new Date().toISOString()
+          ...companyInfo,
+          url: companyInfo.url || data.extractedUrl,
+          lastUpdated: new Date().toISOString(),
         };
         // Save after each successful fetch to prevent data loss
-        fs.writeFileSync('companyData.json', JSON.stringify(companyData, null, 2));
+        fs.writeFileSync(
+          'companyData.json',
+          JSON.stringify(companyData, null, 2),
+        );
       }
       // Add a small delay between requests
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     } else {
-      console.log(`✓ Already have data for ${companyName}`);
+      console.log(` Already have data for ${companyInfo.name}`);
       // Update the existing data with any new company info
-      companyData[companyName] = {
-        ...companyData[companyName],
+      companyData[key] = {
+        ...existingData,
         ...companyInfo,
-        lastUpdated: companyData[companyName].lastUpdated // Preserve the original fetch date
+        lastUpdated: existingData.lastUpdated, // Preserve the original fetch date
       };
-      fs.writeFileSync('companyData.json', JSON.stringify(companyData, null, 2));
+      fs.writeFileSync(
+        'companyData.json',
+        JSON.stringify(companyData, null, 2),
+      );
     }
   }
 }
 
 // Fetch company data before proceeding with the resume analysis
 await fetchAllCompanyData();
-console.log('✅ Company data collection complete');
+console.log(' Company data collection complete');
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+// Helper function to extract relevant text from company data
+function extractCompanyInsights(companyData) {
+  const insights = {};
+  for (const [domain, data] of Object.entries(companyData)) {
+    if (data.choices?.[0]?.message?.content) {
+      const content = data.choices[0].message.content;
+      insights[domain] = {
+        name: data.name,
+        description: content.match(/## Description\n\n([^#]+)/)?.[1]?.trim(),
+        workLife: content
+          .match(/## Work life conditions\n\n([^#]+)/)?.[1]
+          ?.trim(),
+        recentNews: content.match(/## Recent News\n\n([^#]+)/)?.[1]?.trim(),
+        url: data.url,
+        position: data.position,
+        startDate: data.startDate,
+        endDate: data.endDate,
+        type: data.type,
+        remote: data.remote,
+      };
+    }
+  }
+  return insights;
+}
+
+const companyInsights = extractCompanyInsights(companyData);
+
 const messages = [
   {
     role: 'system',
     content: `You are an expert recruiter AI that evaluates resumes against job descriptions. 
-    You will analyze the provided resume and job description to determine how well the candidate matches the position.
-    Consider factors like:
-    - Skills and technical expertise match
-    - Experience level alignment
-    - Industry knowledge
-    - Leadership capabilities (if required)
-    - Education and certifications
-    Return a score and detailed explanation of your evaluation.`,
+    You will analyze the provided resume, job description, and detailed company information to determine how well the candidate matches the position.
+    Consider:
+    1. Technical Skills Match
+    2. Experience Level & Seniority
+    3. Industry Knowledge & Company Culture Fit
+    4. Remote Work Experience (if applicable)
+    5. Career Progression & Growth
+    6. Company-Specific Requirements
+    
+    Provide a detailed analysis with a confidence score.`,
   },
   {
     role: 'user',
-    content: `Please evaluate this candidate's resume for the following job position:
+    content: `Please evaluate this candidate for the following position:
 
     RESUME:
     ${JSON.stringify(resume, null, 2)}
@@ -193,7 +279,19 @@ const messages = [
     JOB DESCRIPTION:
     ${JSON.stringify(job, null, 2)}
     
-    Analyze the match and provide a score.`,
+    COMPANY INSIGHTS:
+    ${JSON.stringify(companyInsights, null, 2)}
+
+    Consider the following in your analysis:
+    1. The candidate's experience at ${Object.values(companyInsights)
+      .map((c) => c.name)
+      .join(', ')}
+    2. Work culture fit based on the company insights
+    3. Technical requirements and experience
+    4. Career progression and growth potential
+    5. Remote work experience (${job.remote === 'Full' ? 'this is a fully remote position' : 'this is an office-based position'})
+    
+    Analyze the match and provide a detailed score.`,
   },
 ];
 
@@ -225,18 +323,58 @@ const scoreFunction = {
         },
         description: 'Areas where the candidate may need improvement',
       },
+      cultureFit: {
+        type: 'object',
+        properties: {
+          score: {
+            type: 'number',
+            description: 'Culture fit score between 0 and 1',
+          },
+          reasons: {
+            type: 'array',
+            items: {
+              type: 'string',
+            },
+            description: 'Reasons for the culture fit score',
+          },
+        },
+        required: ['score', 'reasons'],
+      },
+      remoteWorkReadiness: {
+        type: 'object',
+        properties: {
+          score: {
+            type: 'number',
+            description: 'Remote work readiness score between 0 and 1',
+          },
+          analysis: {
+            type: 'string',
+            description: 'Analysis of remote work capabilities',
+          },
+        },
+        required: ['score', 'analysis'],
+      },
     },
-    required: ['score', 'explanation', 'keyMatches', 'gapsIdentified'],
+    required: [
+      'score',
+      'explanation',
+      'keyMatches',
+      'gapsIdentified',
+      'cultureFit',
+      'remoteWorkReadiness',
+    ],
   },
 };
 
 const chat = await openai.chat.completions.create({
-  model: 'gpt-4',
+  model: 'gpt-4o-mini',
   temperature: 0.75,
   messages,
   functions: [scoreFunction],
   function_call: { name: 'calculateMatchScore' },
 });
+
+console.log(JSON.stringify(messages, null, 2));
 
 const result = JSON.parse(chat.choices[0].message.function_call.arguments);
 console.log(result);

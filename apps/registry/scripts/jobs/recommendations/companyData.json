@@ -223,5 +223,1258 @@
     "startDate": "2018-11",
     "endDate": "2019-01",
     "lastUpdated": "2025-02-20T06:45:33.554Z"
+  },
+  "domain7.com": {
+    "id": "069ea48e-9224-4a10-9933-450f2d082770",
+    "model": "sonar-pro",
+    "created": 1740034175,
+    "usage": {
+      "prompt_tokens": 72,
+      "completion_tokens": 238,
+      "total_tokens": 310,
+      "citation_tokens": 4389,
+      "num_search_queries": 4
+    },
+    "citations": [
+      "https://ossisto.com/blog/web-development-companies-in-vancouver/",
+      "https://cissprep.net/domain-7-fully-updated/",
+      "https://www.aacnnursing.org/Portals/0/PDFs/CCNE/DCCs-Resource-Handout.pdf",
+      "https://www.101domain.com",
+      "https://www.kevangilbert.com/cold-feet/",
+      "https://aiptcomics.com/2024/08/06/public-domain-7-review/",
+      "https://certificationacademy.com/cissp-certification/requirements/",
+      "https://www.kevangilbert.com",
+      "https://www.infosecinstitute.com/resources/cissp/the-cissp-domains-an-overview/",
+      "https://www.prlog.org/13061299-infosectrain-hosts-free-masterclass-on-cissp-deep-dive-domain-7-security-operations.html"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "## Description\n\nDomain7 is a web development and digital strategy company based in Vancouver, Canada. They specialize in user experience design, digital strategy, and creating intuitive and effective websites for their clients[1][5]. The company offers comprehensive web and marketing solutions, focusing on tailored strategies to meet specific client needs[1].\n\n## Recent News\n\nDomain7 recently commissioned a creative project involving a song called \"Cold Feet\" by Kevan Gilbert. The project aimed to retain mind-and-heart-share of close collaborators, foster employee well-being and retention, lead to client contract renewal, and increase brand relevance in the market[5].\n\n## Work life conditions\n\nWhile specific details about work life conditions at Domain7 are not provided in the search results, the company appears to value creativity and employee engagement, as evidenced by their support for creative projects like the \"Cold Feet\" song[5]. They also emphasize a client-centric approach and focus on understanding and meeting unique client needs, which may suggest a collaborative work environment[1].\n\n## Website\n\nhttps://www.domain7.com"
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "extractedUrl": "https://www.domain7.com",
+    "domain": "domain7.com",
+    "name": "Domain7",
+    "url": "https://www.domain7.com",
+    "position": "Lead Full-Stack Developer",
+    "startDate": "2019-11",
+    "endDate": "2020-02",
+    "lastUpdated": "2025-02-20T06:49:35.222Z"
+  },
+  "catchdigital.com": {
+    "id": "4b6c1b7e-c6ad-4bcb-a8ae-d4065df74a53",
+    "model": "sonar-pro",
+    "created": 1740034185,
+    "usage": {
+      "prompt_tokens": 72,
+      "completion_tokens": 344,
+      "total_tokens": 416,
+      "citation_tokens": 3379,
+      "num_search_queries": 4
+    },
+    "citations": [
+      "https://www.catchdigitalsolutions.au/faqs-page",
+      "https://www.itnews.com.au/news/wesfarmers-to-restructure-digital-capabilities-as-catch-closes-614471",
+      "https://plusapn.com/resources/impact-of-remote-work-on-mental-health/",
+      "https://www.catchdigitalsolutions.au/web-design-agency",
+      "https://www.catch-retail-media.com",
+      "https://www.wesfarmers.com.au/investor-centre/company-performance-news/catch-update",
+      "https://www.yarooms.com/blog/workplace-of-the-future-technology",
+      "https://www.getcatch.com/terms",
+      "https://www.catchdigitalsolutions.au",
+      "https://www.startupdaily.net/topic/business/230-million-catch-wesfarmers-is-shutting-it-down/"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "## Description\n\nCatch Digital Solutions is a digital marketing agency specializing in services for construction companies in Australia. They offer comprehensive digital marketing solutions including website design, mobile app development, search engine optimization (SEO), social media marketing, pay-per-click advertising (PPC), content marketing, and branding[1][9]. The company focuses on creating personalized, AI-driven websites and marketing strategies tailored to the construction industry[4].\n\n## Recent News\n\nThere is no recent news specifically about Catch Digital Solutions. However, there is news about a different company called Catch, an online retailer owned by Wesfarmers:\n\nWesfarmers announced in January 2025 that it will shut down the online retailer Catch at the end of April 2025. Catch is expected to post a loss before tax of between $38 million and $40 million in the half-year to December 31, 2024. Some parts of Catch's business, such as e-commerce fulfillment centers, will be transferred to Kmart Group, while certain digital capabilities will be absorbed into other Wesfarmers retail divisions[2][6][10].\n\n## Work life conditions\n\nThere is no specific information available about work life conditions at Catch Digital Solutions. However, as a digital marketing agency, they likely operate in a fast-paced, technology-driven environment. The company's focus on the construction industry suggests that employees may need to have or develop specialized knowledge in this sector[1][4][9].\n\n## Website\n\nhttps://www.catchdigitalsolutions.au"
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "extractedUrl": "https://www.catchdigitalsolutions.au",
+    "domain": "catchdigital.com",
+    "name": "Catch Digital",
+    "url": "https://www.catchdigital.com",
+    "position": "Senior Developer",
+    "startDate": "2019-09",
+    "endDate": "2019-10",
+    "lastUpdated": "2025-02-20T06:49:45.239Z"
+  },
+  "capgemini.com": {
+    "id": "a96e518b-1513-45b8-b894-572892485e56",
+    "model": "sonar-pro",
+    "created": 1740034195,
+    "usage": {
+      "prompt_tokens": 73,
+      "completion_tokens": 344,
+      "total_tokens": 417,
+      "citation_tokens": 5166,
+      "num_search_queries": 3
+    },
+    "citations": [
+      "https://vizologi.com/business-strategy-canvas/capgemini-group-business-model-canvas/",
+      "https://grapevine.in/post/cognizant-vs-capgemini-f927bf5c-b8d8-4458-a996-ff5731a9b9c9",
+      "https://devsdata.com/top-capgemini-competitors-alternatives/",
+      "https://www.scmr.com/company/capgemini",
+      "https://www.indeed.com/cmp/Capgemini/reviews/capgemini-is-without-a-doubt-the-worst-place-i-ve-ever-worked?id=db9e318e2d0d0b51",
+      "https://sightsinplus.com/news/hiring/capgemini-walk-in-drive-oct-21-explore-400-job-opportunities/",
+      "https://www.weforum.org/organizations/capgemini/",
+      "https://www.capgemini.com/wp-content/uploads/2024/12/20241202-Group-HS-Policy.pdf",
+      "https://www.capgemini.com",
+      "https://www.capgemini.com/careers/career-paths/careers-at-capgemini-engineering/rewrite-your-future/rewrite-your-future-at-capgemini-engineering-faqs/"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "## Description\n\nCapgemini is a global leader in consulting, technology services, and digital transformation. The company partners with organizations to transform and manage their business by leveraging technology[1][3]. With over 270,000 employees in more than 50 countries, Capgemini offers a wide range of services including cloud solutions, data & AI, industry digitization, ERP systems, and cybersecurity[3]. Their mission is to harness human potential through technology for an inclusive and sustainable future[1].\n\n## Recent News\n\n- Capgemini is organizing a special walk-in drive exclusively for women candidates with 1-6 years of experience in Accounts Payable, General Ledger, or Accounts Receivable on October 21, 2024, in Kolkata[6].\n- The company has recently posted over 400 job opportunities on its LinkedIn page[6].\n- Capgemini has released a new Health & Safety Policy document in December 2024, emphasizing employee well-being and flexible working arrangements[8].\n\n## Work life conditions\n\nWork life conditions at Capgemini can vary significantly depending on the project and manager assigned. Some employees report a friendly and accepting culture, while others describe challenging experiences[5]. The company offers flexible working options to help employees balance their work and personal life[8]. Additional benefits may include private medical care, group life insurance, sport cards, and social funds[10]. However, some employees have reported concerns about compensation and benefits, particularly in certain locations[5].\n\n## Website\n\nhttps://www.capgemini.com"
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "extractedUrl": "https://www.capgemini.com",
+    "domain": "capgemini.com",
+    "name": "Capgemini",
+    "url": "https://capgemini.com",
+    "position": "Solutions Architect (SC Cleared)",
+    "startDate": "2019-01",
+    "endDate": "2019-04",
+    "lastUpdated": "2025-02-20T06:49:55.564Z"
+  },
+  "sogeti.com": {
+    "id": "96c7355d-a0e8-45a2-94b0-98e74a89fcc2",
+    "model": "sonar-pro",
+    "created": 1740034204,
+    "usage": {
+      "prompt_tokens": 74,
+      "completion_tokens": 269,
+      "total_tokens": 343,
+      "citation_tokens": 3780,
+      "num_search_queries": 4
+    },
+    "citations": [
+      "https://irishtrade.ie/c-3823-Sogeti-Ireland-Limited",
+      "https://www.youtube.com/watch?v=hug4ix9mJxI",
+      "https://ie.indeed.com/cmp/Version-1/reviews",
+      "https://www.sogeti.ie/about-us/our-story/",
+      "https://www.sogeti.com/about-us/passion-for-sport/",
+      "https://itnation.lu/news/sogeti-at-the-luxembourg-software-testing-event-2024-exploring-genai-in-testing/",
+      "https://www.capgemini.com/solutions/the-employee-experience/",
+      "https://www.sogeti.ie/about-us/locations/",
+      "https://www.sogeti.ie/about-us/responsible-business/",
+      "https://www.capgemini.com/us-en/news/press-releases/full-year-2024-results/"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "## Description\n\nSogeti Ireland Limited is a software solutions company based in Dublin, Ireland. They provide computer solutions consultancy, bespoke software design, programming services, and sales and supply of computer equipment[1]. As part of the larger Capgemini Group, Sogeti focuses on implementing innovative technology solutions for organizations, specializing in quality engineering, cloud and application development, all driven by AI, data and automation[6].\n\n## Recent News\n\nSogeti participated as a gold sponsor at the Luxembourg Software Testing Event 2024 on November 14, 2024. They presented a keynote session titled \"Achieving Quality at Speed with GenAI in Testing,\" exploring how Generative AI is being integrated into quality engineering and testing practices[6].\n\n## Work life conditions\n\nBased on employee reviews of Capgemini (Sogeti's parent company), work conditions are generally positive with good work-life balance and flexibility. However, some employees report concerns about salary increments and career progression. The company is described as having a professional work environment with good staff morale and a profit-sharing scheme. Hybrid working arrangements are common, with employees often working remotely for part of the week[3].\n\n## Website\nhttps://www.sogeti.ie"
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "extractedUrl": "https://www.sogeti.ie",
+    "domain": "sogeti.com",
+    "name": "Sogeti Ireland",
+    "url": "https://sogeti.com",
+    "position": "Technical Architect",
+    "startDate": "2018-11",
+    "endDate": "2019-01",
+    "lastUpdated": "2025-02-20T06:50:04.859Z"
+  },
+  "neonrated.com": {
+    "id": "4d1d13ab-f584-4ae4-8b50-1b5e3b00c75f",
+    "model": "sonar-pro",
+    "created": 1740034749,
+    "usage": {
+      "prompt_tokens": 72,
+      "completion_tokens": 299,
+      "total_tokens": 371,
+      "citation_tokens": 5225,
+      "num_search_queries": 3
+    },
+    "citations": [
+      "https://en.wikipedia.org/wiki/Neon_(company)",
+      "https://www.itochu.co.jp/en/news/press/2025/250110.html",
+      "https://www.neonscreens.com",
+      "https://fastercapital.com/topics/structuring-clear-and-concise-messages.html",
+      "https://leadiq.com/c/neon/6258ea471c78b336660c1169",
+      "https://www.neonglobal.com/en/newsroom/",
+      "https://neonmfg.com/pages/our-story",
+      "https://huggingface.co/datasets/EricLu/System-Prompt-Instruction-Real-world-Implementation-Training-set/viewer/default/train",
+      "https://www.tipranks.com/news/company-announcements/neo-neon-holdings-announces-change-in-controlling-shareholder-structure",
+      "https://cinema.neonrated.com/longlegs/"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "## Description\n\nNeon is an American independent film production and distribution company founded in 2017 by CEO Tom Quinn and Tim League. The company specializes in acquiring and distributing notable independent and international films, with a focus on titles that appeal to audiences under 45 years old, including those with violence, foreign language content, and non-fiction works[1].\n\n## Recent News\n\nIn July 2024, Neon achieved its biggest opening weekend at the box office with the horror thriller film \"Longlegs,\" which grossed $22.6 million from 2,510 theaters. The film became Neon's highest-grossing domestic release, surpassing \"Parasite\" with $58.6 million in its third weekend[1].\n\nIn January 2025, Neon announced a capital and business tie-up with ITOCHU Corporation, a major Japanese trading company. This partnership aims to expand Neon's exhibition business globally, develop exhibition facilities, and disseminate Japanese content worldwide[2][6].\n\n## Work life conditions\n\nInformation about specific work life conditions at Neon is not provided in the given search results. However, as a growing independent film company with recent successes and partnerships, it's likely that the work environment is dynamic and focused on creative and business development in the film industry.\n\n## Website\n\nhttps://neonrated.com"
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "extractedUrl": "https://neonrated.com",
+    "domain": null,
+    "name": "Neon",
+    "url": "https://neonrated.com",
+    "position": "Team Lead, Backend as a Service",
+    "type": "Full Time",
+    "remote": "Full",
+    "lastUpdated": "2025-02-20T06:59:09.614Z"
+  },
+  "miscgroup.com": {
+    "id": "f5873c38-e049-4332-8523-9f99c7e16ff9",
+    "model": "sonar-pro",
+    "created": 1740034682,
+    "usage": {
+      "prompt_tokens": 72,
+      "completion_tokens": 354,
+      "total_tokens": 426,
+      "citation_tokens": 3798,
+      "num_search_queries": 4
+    },
+    "citations": [
+      "https://www.miscgroup.com",
+      "https://www.miscgroup.com/media/media-releases/misc-group-financial-results-for-the-third-quarter-of-2024-0ef37268a12e824f00d2e75d1aad13b3",
+      "https://www.kenokel.com/top-work-life-balance-challenges-in-2024/",
+      "https://starcitizen.tools/Musashi_Industrial_and_Starflight_Concern",
+      "https://www.sustainalytics.com/esg-rating/misc-bhd/1008753232",
+      "https://maritime-executive.com/article/malaysia-s-misc-and-armada-explore-merger-to-form-floating-production-giant",
+      "https://www.gloroots.com/blog/1099-employee-benefits",
+      "https://miscproducts.com/privacy-policy/",
+      "https://leadiq.com/c/misc-berhad/5a1d8b13240000240065fa3e",
+      "https://www.marinelink.com/companies/misc-group-83948"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "## Description\n\nMISC Berhad is a global leader in energy-related maritime solutions and services, with over 56 years of experience[1]. Their principal businesses include energy shipping, offshore solutions, marine repair and conversions, integrated marine services, port management, and maritime training[1]. MISC operates a fleet of more than 100 owned and in-chartered vessels with a combined deadweight tonnage capacity of over 13 million tonnes[1].\n\n## Recent News\n\n1. MISC Group signed an agreement to develop ammonia engines for ships, marking a step towards zero-emission shipping operations[10].\n\n2. MISC Berhad entered into an agreement with Japanese ship owner Nissen Kaiun Co., Ltd. for the sale and charter of two of its existing LNG carriers[10].\n\n3. MISC Berhad and Bumi Armada Berhad signed a non-binding memorandum of understanding on November 14, 2024, to explore a prospective merger, potentially forming a floating production giant[6].\n\n## Work life conditions\n\nWhile specific information about work-life conditions at MISC is not provided in the search results, the company is recognized for its commitment to sustainability and ESG practices, being part of the DJSI Emerging Markets Index and FTSE4Good Bursa Malaysia Index[1]. This suggests a focus on employee well-being and sustainable work practices. However, like many companies in the maritime and energy sectors, employees may face challenges such as long working hours, which can impact work-life balance[3].\n\n## Website\n\nhttps://www.miscgroup.com"
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "extractedUrl": "https://www.miscgroup.com",
+    "domain": null,
+    "name": "Misc Companies",
+    "url": "https://www.miscgroup.com",
+    "position": "Product Engineer",
+    "startDate": "2020-05-05",
+    "lastUpdated": "2025-02-20T06:58:03.070Z"
+  },
+  "token.com": {
+    "id": "ff5faf15-cde4-4a0b-ab3d-c04cfc6e44fc",
+    "model": "sonar-pro",
+    "created": 1740034573,
+    "usage": {
+      "prompt_tokens": 72,
+      "completion_tokens": 246,
+      "total_tokens": 318,
+      "citation_tokens": 4366,
+      "num_search_queries": 4
+    },
+    "citations": [
+      "https://www.investopedia.com/terms/t/tokenized-equity.asp",
+      "https://www.businesswire.com/news/home/20240926935746/en/Tokenized-Asset-Coalition-Announces-New-Member-Cohort-and-Releases-2024-State-of-Tokenization-Report",
+      "https://en.wikipedia.org/wiki/Tokenism",
+      "https://www.token.com/token-launch/",
+      "http://rlaexp.com/intro-brainroad.html",
+      "https://cointelegraph.com/learn/articles/how-to-tokenize-your-business-equity",
+      "https://www.bankingdive.com/news/tokenized-securities-firm-prometheum-raises-20m/735973/",
+      "https://howtoaba.com/what-is-a-token-economy-system/",
+      "https://tokenterminal.com",
+      "https://huggingface.co/datasets/m-ric/huggingface_doc_qa_eval/viewer"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "## Description\n\nTokenized is a company that focuses on converting traditional equity, such as company shares, into digital tokens on blockchain networks. This process, known as tokenization, allows for decentralized, peer-to-peer exchanges of equity ownership without relying on centralized stock exchanges or private placement markets[1].\n\n## Recent News\n\nTokenized Asset Coalition (TAC) released its second State of Tokenization Report in September 2024, providing comprehensive industry insights. The report highlights:\n\n- Major institutions forecast the tokenized assets market to reach $2-30 trillion in the next decade.\n- Tokenized assets (RWAs) currently represent $176 billion, with nearly $15 billion excluding stablecoins.\n- A Coinbase survey revealed 56% of Fortune 500 companies are working on onchain projects.\n- Private credit comprises the bulk of tokenized assets TVL, with nearly $9 billion of active loans[2].\n\n## Work life conditions\n\nInformation about specific work life conditions at Tokenized is not available in the provided search results.\n\n## Website\nhttps://www.token.com"
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "extractedUrl": "https://www.token.com",
+    "domain": null,
+    "name": "Tokenized",
+    "url": "https://www.token.com",
+    "position": "Senior Javascript Developer",
+    "startDate": "2020-05-05",
+    "endDate": "2021-05-05",
+    "lastUpdated": "2025-02-20T06:56:13.316Z"
+  },
+  "play.google.com": {
+    "id": "1346a830-35e6-4558-acce-3668695721a0",
+    "model": "sonar-pro",
+    "created": 1740034696,
+    "usage": {
+      "prompt_tokens": 72,
+      "completion_tokens": 175,
+      "total_tokens": 247,
+      "citation_tokens": 4774,
+      "num_search_queries": 4
+    },
+    "citations": [
+      "https://play.google.com/store/apps/details?id=com.onekosmos.kernel.blockid&hl=en_US",
+      "https://www.rediff.com/business/report/india-opens-biggest-oil-gas-block-bid-round-25-blocks-on-offer/20250211.htm",
+      "https://www.indeed.com/cmp/Block-d2625fe0/reviews",
+      "https://bycrawford.com/blog/how-to-find-a-block-id-on-squarespace",
+      "https://bidstrading.com",
+      "https://www.ahmedabadmirror.com/govt-opens-biggest-oil--gas-block-bid-round/81885187.html",
+      "https://www.lbmc.com/blog/peo-culture/",
+      "https://kaspa.org",
+      "https://www.investopedia.com/terms/b/blocktrade.asp",
+      "https://www.tribune242.com/news/2024/oct/03/us-airlines-block-bid-falls-short/"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "## Description\n\nBlockID is a cybersecurity solution developed by 1Kosmos that combines digital identity proofing with advanced biometrics and passwordless authentication for workforce and customer applications. It aims to improve security for corporate networks and enterprise applications by eliminating usernames and passwords, as well as the need for separate multi-factor authentication solutions[1].\n\n## Recent News\n\nThere is no recent news specifically about BlockID or 1Kosmos in the provided search results.\n\n## Work life conditions\n\nNo specific information about work life conditions at 1Kosmos (the company behind BlockID) is available in the given search results.\n\n## Website\n\nhttps://play.google.com/store/apps/details?id=com.onekosmos.kernel.blockid&hl=en_US"
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "extractedUrl": "https://play.google.com/store/apps/details?id=com.onekosmos.kernel.blockid&hl=en_US",
+    "domain": null,
+    "name": "Blockbid",
+    "url": "https://play.google.com/store/apps/details?id=com.onekosmos.kernel.blockid&hl=en_US",
+    "position": "Senior Javascript Developer",
+    "startDate": "2018-03-01",
+    "endDate": "2020-01-01",
+    "lastUpdated": "2025-02-20T06:58:16.266Z"
+  },
+  "listium.com": {
+    "id": "88c6058f-4c9f-4140-a7fc-bf6ce8f7f680",
+    "model": "sonar-pro",
+    "created": 1740034701,
+    "usage": {
+      "prompt_tokens": 72,
+      "completion_tokens": 152,
+      "total_tokens": 224,
+      "citation_tokens": 3316,
+      "num_search_queries": 4
+    },
+    "citations": [
+      "https://www.fastcompany.com/91088011/free-list-maker-app-listium",
+      "https://www.prnewswire.com/news-releases/arcadium-lithium-receives-all-required-regulatory-approvals-globally-to-close-acquisition-by-rio-tinto-and-announces-court-hearing-date-302376594.html",
+      "https://www.noemamag.com/the-secret-magical-life-of-lithium",
+      "https://lithiumchile.ca",
+      "https://www.standardlithium.com/investors/company-information",
+      "https://lithiumamericas.com/news/news-details/2024/Lithium-Americas-Announces-Closing-of-Thacker-Pass-Joint-Venture-with-General-Motors/default.aspx",
+      "https://www.medicalnewstoday.com/articles/326516",
+      "https://www.lithiumuniverse.com",
+      "https://liviumcorp.com/our-company/",
+      "https://investingnews.com/category/daily/resource-investing/battery-metals-investing/lithium-investing/"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "## Description\n\nListium is a web-based application that allows users to create, customize, and share visually appealing lists on various topics. The platform offers a user-friendly interface for crafting lists that can be shared publicly or with selected individuals[1].\n\n## Recent News\n\nIn April 2024, Listium launched as a completely free service, offering users the ability to create and share interactive lists. The platform gained attention for its simplicity and versatility in list-making, catering to both personal and professional use cases[1].\n\n## Work life conditions\n\nInformation about work life conditions at Listium is not available in the provided search results.\n\n## Website\n\nhttps://listium.com"
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "extractedUrl": "https://listium.com",
+    "domain": "listium.com",
+    "name": "Listium",
+    "url": "https://listium.com",
+    "position": "Developer",
+    "startDate": "2016-01-01",
+    "endDate": "2018-01-01",
+    "lastUpdated": "2025-02-20T06:58:21.531Z"
+  },
+  "eff.org": {
+    "id": "0a7f6b0b-2186-4f23-a91e-7a01e3ef3dae",
+    "model": "sonar-pro",
+    "created": 1740034710,
+    "usage": {
+      "prompt_tokens": 73,
+      "completion_tokens": 327,
+      "total_tokens": 400,
+      "citation_tokens": 3894,
+      "num_search_queries": 4
+    },
+    "citations": [
+      "https://en.wikipedia.org/wiki/Electronic_Frontier_Foundation",
+      "https://www.eff.org/Press",
+      "https://www.eff.org/deeplinks/2024/05/one-busy-day-life-effs-activism-team",
+      "https://www.eff.org/issues/digital-identity",
+      "https://www.w3.org/groups/cg/?closed=1",
+      "https://bluegoatcyber.com/blog/what-is-electronic-frontier-foundation-eff/",
+      "https://www.eff.org/deeplinks/2025/01/digital-rights-and-new-administration-effector-371",
+      "https://ifpte20.org/wp-content/uploads/2024/10/Electronic-Frontier-Foundation-2024-2027.pdf",
+      "https://www.eff.org/deeplinks/2024/11/todays-double-feature-privacy-and-free-speech",
+      "https://github.com/ilsilfverskiold/gpt-create-dataset/blob/main/processedData_1700838002264.csv"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "## Description\n\nThe Electronic Frontier Foundation (EFF) is an international non-profit digital rights group based in San Francisco, California. Founded in 1990, EFF works to protect civil liberties in the digital world[1]. They focus on defending free speech, privacy, innovation, and consumer rights online through legal action, policy advocacy, and technological development[6].\n\n## Recent News\n\n1. **EFF Sues OPM, DOGE and Musk**: EFF and a coalition of privacy defenders filed a lawsuit against the U.S. Office of Personnel Management (OPM) to prevent the disclosure of millions of Americans' private information to Elon Musk's \"Department of Government Efficiency\"[2].\n\n2. **Podcast Award**: EFF's \"How to Fix the Internet\" podcast won a 2024 Anthem Award[1].\n\n3. **New Administration Focus**: EFF is providing guidance on digital rights issues to the new administration and Congress, as outlined in their recent EFFector newsletter[7].\n\n## Work life conditions\n\nEFF offers flexible working hours to its employees. For example, staff in different time zones can adjust their schedules to accommodate team meetings[3]. The organization has a collective bargaining agreement with the Engineers and Scientists of California Local 20, IFPTE union, which outlines various workplace policies including health and safety considerations, performance evaluations, and introductory periods for new employees[8].\n\n## Website\n\nhttps://www.eff.org"
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "extractedUrl": "https://www.eff.org",
+    "domain": "eff.org",
+    "name": "Electronic Frontier Foundation",
+    "url": "http://www.eff.org",
+    "position": "Developer",
+    "startDate": "2014-04-01",
+    "endDate": "2016-01-01",
+    "lastUpdated": "2025-02-20T06:58:30.360Z"
+  },
+  "earbits.com": {
+    "id": "7d61ab9e-7f69-4104-b9f3-0fc7a818be6e",
+    "model": "sonar-pro",
+    "created": 1740034717,
+    "usage": {
+      "prompt_tokens": 72,
+      "completion_tokens": 224,
+      "total_tokens": 296,
+      "citation_tokens": 4009,
+      "num_search_queries": 4
+    },
+    "citations": [
+      "https://www.ycombinator.com/companies/earbits",
+      "https://www.biospace.com/granza-bio-raises-7m-seed-funding-to-advance-the-delivery-of-cancer-treatment-and-genetic-medicines",
+      "https://www.webmd.com/drugs/2/drug-5488/ofloxacin-otic-ear/details",
+      "https://www.etymotic.com/product/er20xs/",
+      "https://www.youtube.com/watch?v=ozhu0fWsSbw",
+      "https://www.futurespaceflight.com/commercial-rockets/zhuque-2.html?view=article&id=471%3Aspaceium-closes-%246-3m-seed-round-to-build-refueling-stations-in-space&catid=16",
+      "https://angelspartners.com/top-venture-capital-firms/Mobile",
+      "https://www.earbit.fi/category/shop-all",
+      "https://www.youtube.com/watch?v=q_sgQ6_0owU",
+      "https://www.futurespaceflight.com/launch-overview/spaceshiptwo.html?id=16&view=category"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "## Description\n\nEarbits was a music streaming platform that allowed bands and record labels to bid for airtime and have their music streamed to qualified audiences[1]. It functioned as a \"Google AdWords for music,\" providing a unique marketing tool for independent artists and labels to reach new listeners[1][5].\n\n## Recent News\n\nEarbits was acquired in 2015[5]. Since then, one of its co-founders, Yotam Rosenbaum, has transitioned into venture capital. He now runs an investment fund exclusively focused on Y Combinator-backed companies[5]. Another co-founder, Joey Flores, is currently the Founder and Managing Director of Inversion Art, a Y Combinator-inspired accelerator for high-profile fine artists[1].\n\n## Work life conditions\n\nThere is no current information available about work life conditions at Earbits, as the company was acquired in 2015 and is no longer operating independently.\n\n## Website\n\nhttp://earbits.com"
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "extractedUrl": "http://earbits.com",
+    "domain": "earbits.com",
+    "name": "Earbits",
+    "url": "http://www.earbits.com",
+    "position": "CTO",
+    "startDate": "2013-03-08",
+    "endDate": "2015-01-09",
+    "lastUpdated": "2025-02-20T06:58:37.734Z"
+  },
+  "jsonresume.org": {
+    "id": "6e815224-cba3-478c-af78-7e30d266ab41",
+    "model": "sonar-pro",
+    "created": 1740034724,
+    "usage": {
+      "prompt_tokens": 72,
+      "completion_tokens": 234,
+      "total_tokens": 306,
+      "citation_tokens": 4508,
+      "num_search_queries": 4
+    },
+    "citations": [
+      "https://jsonresume.org/job-description-schema",
+      "https://www.youtube.com/watch?v=8jykY8ZMWgQ",
+      "https://enhancv.com/resume-examples/qa-tester/",
+      "https://jsonresume.org/team",
+      "https://jsonresume.org/projects",
+      "https://github.com/jsonresume/jsonresume.org",
+      "https://cvcompiler.com/software-engineer-resume-examples",
+      "https://registry.jsonresume.org",
+      "https://www.indeed.com/career-advice/resumes-cover-letters/rest-api-resume",
+      "https://registry.jsonresume.org/yazeedxo/jobs"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "## Description\n\nJSON Resume is an open-source initiative that provides a standardized format for creating and sharing resumes using JSON (JavaScript Object Notation). The platform offers tools and services to help developers and job seekers create, manage, and share their professional profiles in a structured, machine-readable format[1][8].\n\n## Recent News\n\nJSON Resume has recently updated its platform with new features:\n\n- The introduction of a new CLI (Command Line Interface) tool for easier resume creation and management[4].\n- Launch of an improved registry system that allows users to publish and share their resumes through unique URLs[8].\n- Integration of AI-powered tools to provide smart suggestions and improvements for resume content[8].\n\n## Work life conditions\n\nWhile specific details about work life conditions at JSON Resume are not provided in the search results, the project appears to be community-driven and open-source. Contributors likely work remotely and collaborate through platforms like GitHub. The project emphasizes creativity, standardization, and technological innovation in resume creation[1][5][8].\n\n## Website\n\nhttps://jsonresume.org"
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "extractedUrl": "https://jsonresume.org",
+    "domain": "jsonresume.org",
+    "name": "JSON Resume",
+    "url": "http://jsonresume.org",
+    "position": "Founder",
+    "startDate": "2014-04-01",
+    "lastUpdated": "2025-02-20T06:58:45.112Z"
+  },
+  "taskforceis": {
+    "id": "5f981eeb-470b-4bb1-b609-96fb81957d40",
+    "model": "sonar-pro",
+    "created": 1740034617,
+    "usage": {
+      "prompt_tokens": 73,
+      "completion_tokens": 83,
+      "total_tokens": 156,
+      "citation_tokens": 4526,
+      "num_search_queries": 4
+    },
+    "citations": [
+      "https://www.unpri.org/policy/taskforce-on-net-zero-policy",
+      "https://www.nist.gov/news-events/news/2024/11/us-ai-safety-institute-establishes-new-us-government-taskforce-collaborate",
+      "https://provost.uchicago.edu/sites/default/files/documents/reports/Final_Report_Work-Life_Balance_Task_Force_Aug_08.pdf",
+      "https://www.tisfd.org",
+      "https://www.hssstaffing.com/taskforce/",
+      "https://www.sec.gov/newsroom/press-releases/2025-30",
+      "https://www.dowjones.com/scoops/goldman-sachs-seeks-improve-working-conditions-junior-staffers/",
+      "https://www.irf.global/task-forces/",
+      "https://www.indeed.com/cmp/Taskforce-Fore-Ending-Homelessness,-Inc.",
+      "https://www.vermontpublic.org/local-news/2025-02-03/a-new-state-task-force-is-trying-to-get-ahead-of-fast-moving-trump-actions"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "I apologize, but I do not have any specific information about a company called \"Taskforce.is\" in the provided search results. The search results contain information about various task forces and organizations, but none specifically match the company name \"Taskforce.is\". Without reliable information, I cannot provide accurate details about their description, recent news, work life conditions, or official website URL."
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "extractedUrl": null,
+    "domain": null,
+    "name": "Taskforce.is",
+    "position": "Developer",
+    "startDate": "2013-06-01",
+    "endDate": "2016-01-01",
+    "lastUpdated": "2025-02-20T06:56:57.726Z"
+  },
+  "heliguy.com": {
+    "id": "d42f6f92-1294-4198-bfdf-89e94a74c307",
+    "model": "sonar-pro",
+    "created": 1740034733,
+    "usage": {
+      "prompt_tokens": 73,
+      "completion_tokens": 321,
+      "total_tokens": 394,
+      "citation_tokens": 4305,
+      "num_search_queries": 4
+    },
+    "citations": [
+      "https://www.dronedeploy.com/about",
+      "https://www.lorienglobal.com/us/jobs/635125-Drone-Pilot",
+      "https://gigexchange.com/career-advice/job-description/drone-operator",
+      "https://www.dronestagr.am",
+      "https://flypix.ai/blog/drone-photography-companies/",
+      "https://www.keranews.org/government/2025-02-11/dallas-deployed-its-police-drone-fleet-thousands-of-time-times-in-2024",
+      "https://xrtechgroup.com/drone-pilot-career/",
+      "https://www.heliguy.com/drone-hire/",
+      "https://uavcoach.com/drone-business/",
+      "https://www.cbsnews.com/newyork/news/new-jersey-drones-new-technology-to-be-deployed/"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "## Description\n\nDrone Hire is a company that offers drone rental and survey equipment hire services. They provide flexible access to the latest DJI drone technology for both commercial and recreational operators. Their service allows customers to rent drones for short-term jobs, try before buying, or maintain operational continuity when their own equipment is out of action[8].\n\n## Recent News\n\nThere is no recent news specifically about Drone Hire in the provided search results. However, the drone industry in general has seen some developments:\n\n- The Dallas Police Department deployed its fleet of drones about 8,000 times in fiscal year 2024, indicating an increased use of drones in law enforcement[6].\n- New drone detection technology is being deployed in New Jersey following a spike in drone sightings, as announced by Governor Phil Murphy in December 2024[10].\n\n## Work life conditions\n\nWhile there's no specific information about work life conditions at Drone Hire, general conditions for drone operators often include:\n\n- Variable work hours, potentially including early mornings, late nights, and weekends[2].\n- Outdoor work in various weather conditions[2][7].\n- Potential for frequent travel, up to 75% of the year for some positions[2].\n- Need for flexibility and adaptability to different project requirements[2][7].\n- Requirement to stay updated with regulations and safety procedures[7].\n\n## Website\n\nhttps://www.heliguy.com/drone-hire/"
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "extractedUrl": "https://www.heliguy.com/drone-hire/",
+    "domain": null,
+    "name": "Drone Hire",
+    "url": "https://www.heliguy.com/drone-hire/",
+    "position": "Co-Founder",
+    "startDate": "2013-01-01",
+    "lastUpdated": "2025-02-20T06:58:53.392Z"
+  },
+  "backbonetutorialscom": {
+    "id": "cb2ef46c-331f-48fe-9f9c-7c179ea85e6a",
+    "model": "sonar-pro",
+    "created": 1740034632,
+    "usage": {
+      "prompt_tokens": 75,
+      "completion_tokens": 107,
+      "total_tokens": 182,
+      "citation_tokens": 4096,
+      "num_search_queries": 4
+    },
+    "citations": [
+      "https://www.sandipuniversity.edu.in/show_file.php?doc_name=library%2FeBooks%2FProgramming-eBooks.pdf",
+      "https://www.tiktok.com/@andrelynjapay/video/7458978279769312520",
+      "https://www.tiktok.com/@andrelynjapay/video/7466256835910159623",
+      "https://www.tiktok.com/@andrelynjapay/photo/7461610511893810440",
+      "https://www.tiktok.com/@andrelynjapay/video/7466040551092030727"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "I apologize, but I don't have enough accurate information from the search results to provide a comprehensive answer to your query about BackboneTutorials.com. The search results only mention BackboneTutorials.com briefly as a publisher of a book by Thomas Davis in 2012[1]. There's no additional information about the company's description, recent news, work life conditions, or official website URL. Without more reliable data, I cannot construct a detailed response that meets your formatting requirements."
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "extractedUrl": null,
+    "domain": null,
+    "name": "BackboneTutorials.com",
+    "position": "Founder",
+    "startDate": "2011-01-01",
+    "endDate": "2014-01-01",
+    "lastUpdated": "2025-02-20T06:57:12.465Z"
+  },
+  "tiny.cloud": {
+    "id": "4103c12c-eb70-47db-838a-2da1faeaa422",
+    "model": "sonar-pro",
+    "created": 1740034740,
+    "usage": {
+      "prompt_tokens": 73,
+      "completion_tokens": 230,
+      "total_tokens": 303,
+      "citation_tokens": 4587,
+      "num_search_queries": 4
+    },
+    "citations": [
+      "https://en.wikipedia.org/wiki/OpenText",
+      "https://www.sasktel.com/wps/wcm/connect/content/home/pdp-cas",
+      "https://www.wiwi-treff.de/Consulting-and-Advisory/MSG-Systems/Capgemini-vs-Msg-Systems/Diskussion-15431",
+      "https://docs.oracle.com/en/middleware/webcenter/content/14.1.2/webcenter-content-relnotes/index.html",
+      "https://www.tiny.cloud/legal/cloud-use-subscription-agreement/",
+      "https://help.hcl-software.com/connections/v6/admin/admin/t_admin_forums_notification_replies_domino.html",
+      "https://www.researchgate.net/publication/276349137_A_new_model_for_airport_passenger_segmentation",
+      "https://help.hcl-software.com/connections/v6/admin/admin/t_admin_common_config_mail_was.html",
+      "https://www.tiny.cloud/legal/tiny-self-hosted-oem-saas-agreement/",
+      "https://help.hcl-software.com/connections/v6/admin/admin/t_admin_forums_notification_replies_was_session.html"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "## Description\n\nEphox was a software company that developed and sold content authoring and editing solutions[1]. They were known for their rich-text editors and content management system (CMS) integration tools[1][5]. Ephox's products included online rich-text editors that were licensed by other web content management vendors[1].\n\n## Recent News\n\nThere is no recent news about Ephox as an independent company. The company appears to have been acquired or merged with another entity called Tiny Technologies Inc. Recent references to Ephox show it as \"Ephox Corporation DBA Tiny Technologies Inc.\"[5][9]. Tiny Technologies now offers cloud-based and self-hosted rich text editing solutions that likely evolved from Ephox's original products.\n\n## Work life conditions\n\nSpecific information about work life conditions at Ephox is not available in the given search results. However, companies in the software industry often emphasize work-life balance, flexible working arrangements, and opportunities for professional growth to attract and retain talent.\n\n## Website\n\nhttps://www.tiny.cloud"
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "extractedUrl": "https://www.tiny.cloud",
+    "domain": null,
+    "name": "Ephox",
+    "url": "https://www.tiny.cloud",
+    "position": "Front-end Developer",
+    "startDate": "2011-01-01",
+    "endDate": "2012-06-01",
+    "lastUpdated": "2025-02-20T06:59:00.537Z"
+  },
+  "tokenized": {
+    "id": "17377591-f726-45b6-a839-bfed2025cfe4",
+    "model": "sonar-pro",
+    "created": 1740034689,
+    "usage": {
+      "prompt_tokens": 72,
+      "completion_tokens": 238,
+      "total_tokens": 310,
+      "citation_tokens": 4241,
+      "num_search_queries": 4
+    },
+    "citations": [
+      "https://www.investopedia.com/terms/t/tokenized-equity.asp",
+      "https://www.businesswire.com/news/home/20240926935746/en/Tokenized-Asset-Coalition-Announces-New-Member-Cohort-and-Releases-2024-State-of-Tokenization-Report",
+      "https://en.wikipedia.org/wiki/Tokenism",
+      "https://tokenterminal.com",
+      "http://rlaexp.com/intro-brainroad.html",
+      "https://cointelegraph.com/learn/articles/how-to-tokenize-your-business-equity",
+      "https://www.bankingdive.com/news/tokenized-securities-firm-prometheum-raises-20m/735973/",
+      "https://howtoaba.com/what-is-a-token-economy-system/",
+      "https://centrifuge.io",
+      "https://huggingface.co/datasets/m-ric/huggingface_doc_qa_eval/viewer"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "I apologize, but I don't have enough accurate information to provide a comprehensive response about a company called \"Tokenized\" as requested. The search results don't contain specific details about a company by that exact name. \n\nInstead, I can provide some general information about tokenization in finance based on the available search results:\n\n## Description\nTokenization refers to the process of representing ownership in assets or equity through digital tokens on a blockchain network. This allows for decentralized, peer-to-peer exchanges of ownership rights rather than relying on centralized stock exchanges or private placement markets[1].\n\n## Recent News\nThe Tokenized Asset Coalition (TAC) released its second State of Tokenization Report in September 2024, providing insights into the tokenized assets industry. The report highlighted that major institutions forecast the tokenized assets market to reach $2-30 trillion in the next decade[2].\n\n## Work life conditions\nThere is no specific information available about work life conditions for a company called \"Tokenized\".\n\n## Website\n[No official website URL available for a company called \"Tokenized\"]"
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "extractedUrl": null,
+    "domain": null,
+    "name": "Tokenized",
+    "url": null,
+    "position": "Senior Javascript Developer",
+    "startDate": "2020-05-05",
+    "endDate": "2021-05-05",
+    "lastUpdated": "2025-02-20T06:58:10.064Z"
+  },
+  "lordajax.com": {
+    "id": "842de28b-d5be-4b70-8b50-c0c7d1a51584",
+    "model": "sonar-pro",
+    "created": 1740035043,
+    "usage": {
+      "prompt_tokens": 72,
+      "completion_tokens": 343,
+      "total_tokens": 415,
+      "citation_tokens": 2990,
+      "num_search_queries": 4
+    },
+    "citations": [
+      "https://www.miscgroup.com",
+      "https://www.marinelink.com/companies/misc-group-83948",
+      "https://www.kenokel.com/top-work-life-balance-challenges-in-2024/",
+      "https://starcitizen.tools/Musashi_Industrial_and_Starflight_Concern",
+      "https://www.sustainalytics.com/esg-rating/misc-bhd/1008753232",
+      "https://www.marinelink.com/news/maritime/misc-berhad",
+      "https://www.gloroots.com/blog/1099-employee-benefits",
+      "https://miscproducts.com/privacy-policy/",
+      "https://leadiq.com/c/misc-berhad/5a1d8b13240000240065fa3e",
+      "https://www.tradewindsnews.com/offshore/misc-in-talks-for-3-3bn-offshore-shipping-tie-up-with-bumi-armada/2-1-1740245"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "## Description\n\nMISC Berhad is a global leader in energy-related maritime solutions and services with over 56 years of experience. Their principal businesses include energy shipping, offshore solutions, marine repair and conversions, integrated marine services, port management, and maritime training[1]. MISC operates a fleet of more than 100 owned and in-chartered vessels with a combined deadweight tonnage capacity of over 13 million tonnes[1]. The company is recognized for its commitment to sustainability and ESG practices[1].\n\n## Recent News\n\n1. MISC signed an agreement to develop ammonia engines for ships, marking a step towards zero-emission shipping operations[2].\n\n2. The company entered into an agreement with Japanese ship owner Nissen Kaiun Co., Ltd. for the sale and charter of two of its existing LNG carriers[2][6].\n\n3. MISC is in talks with floating production vessel specialist Bumi Armada for a potential $3.3 billion offshore shipping merger[10].\n\n## Work life conditions\n\nWhile specific information about MISC's work life conditions is not provided in the search results, the company operates in an industry that often faces challenges related to work-life balance. In the maritime and offshore sectors, long working hours are common, with 29% of workers citing this as a major challenge[3]. To address this, both employees and supervisors need to communicate about time management, prioritize key tasks, and evaluate the sustainability of workloads to maintain a healthier work-life balance[3].\n\n## Website\n\nhttps://www.miscgroup.com"
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "extractedUrl": "https://www.miscgroup.com",
+    "domain": "lordajax.com",
+    "name": "Misc Companies",
+    "url": "https://lordajax.com/",
+    "position": "Product Engineer",
+    "startDate": "2020-05-05",
+    "lastUpdated": "2025-02-20T07:04:03.650Z"
+  },
+  "tokenized.com": {
+    "id": "fa290894-4615-4112-92c6-885312636526",
+    "model": "sonar-pro",
+    "created": 1740035050,
+    "usage": {
+      "prompt_tokens": 72,
+      "completion_tokens": 213,
+      "total_tokens": 285,
+      "citation_tokens": 4366,
+      "num_search_queries": 4
+    },
+    "citations": [
+      "https://www.investopedia.com/terms/t/tokenized-equity.asp",
+      "https://www.businesswire.com/news/home/20240926935746/en/Tokenized-Asset-Coalition-Announces-New-Member-Cohort-and-Releases-2024-State-of-Tokenization-Report",
+      "https://en.wikipedia.org/wiki/Tokenism",
+      "https://www.token.com/token-launch/",
+      "http://rlaexp.com/intro-brainroad.html",
+      "https://cointelegraph.com/learn/articles/how-to-tokenize-your-business-equity",
+      "https://www.bankingdive.com/news/tokenized-securities-firm-prometheum-raises-20m/735973/",
+      "https://howtoaba.com/what-is-a-token-economy-system/",
+      "https://tokenterminal.com",
+      "https://huggingface.co/datasets/m-ric/huggingface_doc_qa_eval/viewer"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "## Description\n\nTokenized is a company that specializes in tokenizing equity and assets using blockchain technology. They convert traditional equity, such as company shares, into digital tokens that can be traded on blockchain platforms. This allows for decentralized, peer-to-peer exchanges of ownership rights, potentially increasing liquidity and enabling fractional ownership of assets[1].\n\n## Recent News\n\nTokenized Asset Coalition (TAC) released its second State of Tokenization Report in September 2024, providing comprehensive insights into the tokenization industry. The report highlights that tokenized assets (excluding stablecoins) represent nearly $15 billion across 150+ issuers on 20+ public blockchains. Additionally, TAC welcomed 21 new members, expanding its coalition to over 40 leaders in tokenization[2].\n\n## Work life conditions\n\nInformation about specific work life conditions at Tokenized is not available in the provided search results.\n\n## Website\n\nhttps://www.token.com"
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "extractedUrl": "https://www.token.com",
+    "domain": "tokenized.com",
+    "name": "Tokenized",
+    "url": "https://tokenized.com/",
+    "position": "Senior Javascript Developer",
+    "startDate": "2020-05-05",
+    "endDate": "2021-05-05",
+    "lastUpdated": "2025-02-20T07:04:10.561Z"
+  },
+  "platform.blockbid.io": {
+    "id": "eb5733bc-9a17-48a1-84c6-68db7fdd3e4e",
+    "model": "sonar-pro",
+    "created": 1740035056,
+    "usage": {
+      "prompt_tokens": 72,
+      "completion_tokens": 169,
+      "total_tokens": 241,
+      "citation_tokens": 4774,
+      "num_search_queries": 4
+    },
+    "citations": [
+      "https://play.google.com/store/apps/details?id=com.onekosmos.kernel.blockid&hl=en_US",
+      "https://www.rediff.com/business/report/india-opens-biggest-oil-gas-block-bid-round-25-blocks-on-offer/20250211.htm",
+      "https://www.indeed.com/cmp/Block-d2625fe0/reviews",
+      "https://bycrawford.com/blog/how-to-find-a-block-id-on-squarespace",
+      "https://bidstrading.com",
+      "https://www.ahmedabadmirror.com/govt-opens-biggest-oil--gas-block-bid-round/81885187.html",
+      "https://www.lbmc.com/blog/peo-culture/",
+      "https://kaspa.org",
+      "https://www.investopedia.com/terms/b/blocktrade.asp",
+      "https://www.tribune242.com/news/2024/oct/03/us-airlines-block-bid-falls-short/"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "## Description\n\nBlockID is a cybersecurity solution developed by 1Kosmos that combines digital identity proofing with advanced biometrics and passwordless authentication for workforce and customer applications. It aims to improve security for corporate networks and enterprise applications by eliminating usernames and passwords, as well as the need for separate multi-factor authentication solutions[1].\n\n## Recent News\n\nThere is no recent news specifically about BlockID or 1Kosmos in the provided search results.\n\n## Work life conditions\n\nThe search results do not contain any information about work life conditions at BlockID or 1Kosmos.\n\n## Website\n\nhttps://play.google.com/store/apps/details?id=com.onekosmos.kernel.blockid&hl=en_US"
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "extractedUrl": "https://play.google.com/store/apps/details?id=com.onekosmos.kernel.blockid&hl=en_US",
+    "domain": "platform.blockbid.io",
+    "name": "Blockbid",
+    "url": "https://platform.blockbid.io",
+    "position": "Senior Javascript Developer",
+    "startDate": "2018-03-01",
+    "endDate": "2020-01-01",
+    "lastUpdated": "2025-02-20T07:04:16.615Z"
+  },
+  "taskforce.is": {
+    "id": "4db0e670-2465-43b1-b084-9b838b9f8dd0",
+    "model": "sonar-pro",
+    "created": 1740035062,
+    "usage": {
+      "prompt_tokens": 73,
+      "completion_tokens": 157,
+      "total_tokens": 230,
+      "citation_tokens": 4340,
+      "num_search_queries": 4
+    },
+    "citations": [
+      "https://www.unpri.org/policy/taskforce-on-net-zero-policy",
+      "https://www.nist.gov/news-events/news/2024/11/us-ai-safety-institute-establishes-new-us-government-taskforce-collaborate",
+      "https://provost.uchicago.edu/sites/default/files/documents/reports/Final_Report_Work-Life_Balance_Task_Force_Aug_08.pdf",
+      "https://www.tisfd.org",
+      "https://www.hssstaffing.com/taskforce/",
+      "https://www.hklaw.com/en/insights/publications/2025/01/sec-launches-new-crypto-task-force",
+      "https://www.dowjones.com/scoops/goldman-sachs-seeks-improve-working-conditions-junior-staffers/",
+      "https://www.fcc.gov/privacy-and-data-protection-task-force",
+      "https://www.indeed.com/cmp/Taskforce-Fore-Ending-Homelessness,-Inc.",
+      "https://hcttf.org/newsroom/"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "## Description\n\nTaskforce.is appears to be a company focused on addressing inequality and social issues through financial disclosures. They develop recommendations and guidance for businesses and financial institutions to report on impacts, risks, and opportunities related to people and society[4].\n\n## Recent News\n\nThe Taskforce on Inequality and Social-related Financial Disclosures (TISFD) was announced as a global initiative in September 2024. Its aim is to incentivize business and financial practices that create fairer, stronger societies and economies[4].\n\n## Work life conditions\n\nThere is no specific information available about work life conditions at Taskforce.is in the provided search results.\n\n## Website\n\nhttps://www.tisfd.org"
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "extractedUrl": "https://www.tisfd.org",
+    "domain": "taskforce.is",
+    "name": "Taskforce.is",
+    "url": "http://www.taskforce.is",
+    "position": "Developer",
+    "startDate": "2013-06-01",
+    "endDate": "2016-01-01",
+    "lastUpdated": "2025-02-20T07:04:23.504Z"
+  },
+  "dronehire.org": {
+    "id": "adf25c3a-5b4a-4a44-a5f0-228ef4259d40",
+    "model": "sonar-pro",
+    "created": 1740035072,
+    "usage": {
+      "prompt_tokens": 73,
+      "completion_tokens": 320,
+      "total_tokens": 393,
+      "citation_tokens": 3990,
+      "num_search_queries": 4
+    },
+    "citations": [
+      "https://www.dronedeploy.com/about",
+      "https://www.avweb.com/aviation-news/chinese-drone-ban-talk-boosts-archer-joby-stocks/",
+      "https://gigexchange.com/career-advice/job-description/drone-operator",
+      "https://www.dronestagr.am",
+      "https://flypix.ai/blog/drone-photography-companies/",
+      "https://www.flyingmag.com/modern/trends-impacting-future-drone-pilot-employment/",
+      "https://xrtechgroup.com/drone-pilot-career/",
+      "https://www.heliguy.com/drone-hire/",
+      "https://uavcoach.com/drone-business/",
+      "https://dronexl.co/2025/02/17/national-park-drone-violations-surge/"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "## Description\n\nDrone Hire, also known as heliguy™, is a company that offers flexible drone rental services. They provide a cost-effective solution for accessing the latest DJI technology without the need to purchase equipment outright. Their services cater to both commercial and recreational operators, offering the UK's largest drone rental fleet[8].\n\n## Recent News\n\nThere is no recent news specifically about Drone Hire (heliguy™) in the provided search results. However, the drone industry as a whole has seen some recent developments:\n\n1. The U.S. government is considering banning Chinese-made drones, which has led to a surge in stock prices for U.S.-based eVTOL developers like Archer and Joby Aviation[2].\n\n2. The National Park Service is facing staffing cuts, which may lead to an increase in drone violations in national parks[10].\n\n## Work life conditions\n\nThe search results do not provide specific information about work life conditions at Drone Hire (heliguy™). However, general working conditions for drone operators can vary depending on the type of job:\n\n- Drone operators may work in both office and outdoor settings.\n- The job may require frequent travel.\n- Good communication skills and technical knowledge about drones are essential.\n- Physical safety considerations include wearing protective gear and potential risks associated with climbing structures or operating electronic equipment[3].\n\n## Website\n\nhttps://www.heliguy.com/drone-hire/"
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "extractedUrl": "https://www.heliguy.com/drone-hire/",
+    "domain": "dronehire.org",
+    "name": "Drone Hire",
+    "url": "http://www.dronehire.org",
+    "position": "Co-Founder",
+    "startDate": "2013-01-01",
+    "lastUpdated": "2025-02-20T07:04:32.189Z"
+  },
+  "backbonetutorials.com": {
+    "id": "41500dfb-885d-49b7-8c48-13320cc0e38b",
+    "model": "sonar-pro",
+    "created": 1740035078,
+    "usage": {
+      "prompt_tokens": 75,
+      "completion_tokens": 160,
+      "total_tokens": 235,
+      "citation_tokens": 4915,
+      "num_search_queries": 4
+    },
+    "citations": [
+      "https://musial-bright.com/blog.html",
+      "https://www.tiktok.com/@andrelynjapay/video/7458978279769312520",
+      "https://www.tiktok.com/@andrelynjapay/video/7466256835910159623",
+      "https://www.sandipuniversity.edu.in/show_file.php?doc_name=library%2FeBooks%2FProgramming-eBooks.pdf",
+      "https://www.tiktok.com/@andrelynjapay/photo/7461610511893810440",
+      "https://www.tiktok.com/@andrelynjapay/video/7466040551092030727"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "## Description\n\nBackboneTutorials.com is a website that provides tutorials and resources for learning Backbone.js, a JavaScript framework for building web applications[4]. The site was created by Thomas Davis and offers a comprehensive guide to help developers understand and use Backbone.js effectively.\n\n## Recent News\n\nThere is no recent news available about BackboneTutorials.com from the provided search results. The most recent information dates back to 2012 when the site published a 55-page tutorial on Backbone.js[4].\n\n## Work life conditions\n\nInformation about work life conditions at BackboneTutorials.com is not available in the given search results.\n\n## Website\n\nhttp://backbonetutorials.com"
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "extractedUrl": "http://backbonetutorials.com",
+    "domain": "backbonetutorials.com",
+    "name": "BackboneTutorials.com",
+    "url": "http://backbonetutorials.com",
+    "position": "Founder",
+    "startDate": "2011-01-01",
+    "endDate": "2014-01-01",
+    "lastUpdated": "2025-02-20T07:04:38.341Z"
+  },
+  "ephox.com": {
+    "id": "e120fdd2-c302-443f-9bbd-6dfe722d3077",
+    "model": "sonar-pro",
+    "created": 1740035084,
+    "usage": {
+      "prompt_tokens": 73,
+      "completion_tokens": 208,
+      "total_tokens": 281,
+      "citation_tokens": 4587,
+      "num_search_queries": 4
+    },
+    "citations": [
+      "https://en.wikipedia.org/wiki/OpenText",
+      "https://www.sasktel.com/wps/wcm/connect/content/home/pdp-cas",
+      "https://www.wiwi-treff.de/Consulting-and-Advisory/MSG-Systems/Capgemini-vs-Msg-Systems/Diskussion-15431",
+      "https://docs.oracle.com/en/middleware/webcenter/content/14.1.2/webcenter-content-relnotes/index.html",
+      "https://www.tiny.cloud/legal/cloud-use-subscription-agreement/",
+      "https://help.hcl-software.com/connections/v6/admin/admin/t_admin_forums_notification_replies_domino.html",
+      "https://www.researchgate.net/publication/276349137_A_new_model_for_airport_passenger_segmentation",
+      "https://help.hcl-software.com/connections/v6/admin/admin/t_admin_common_config_mail_was.html",
+      "https://www.tiny.cloud/legal/tiny-self-hosted-oem-saas-agreement/",
+      "https://help.hcl-software.com/connections/v6/admin/admin/t_admin_forums_notification_replies_was_session.html"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "## Description\n\nEphox Corporation, now known as Tiny Technologies Inc., is a software company that develops and provides rich-text editing solutions[1][9]. Their main product is TinyMCE, a popular open-source web-based text editor that can be integrated into various applications and platforms[5][9].\n\n## Recent News\n\nIn November 2024, Tiny Technologies Inc. updated their Cloud Services Subscription Agreement and Self-Hosted Software License Agreement[5][9]. These updates likely reflect changes in their service offerings or legal requirements, indicating ongoing development and maintenance of their products and services.\n\n## Work life conditions\n\nWhile specific information about Ephox's work life conditions is not provided in the search results, software companies in general often offer flexible work environments and competitive benefits. However, without direct information from Ephox or current employees, it's not possible to make definitive statements about their work life conditions.\n\n## Website\n\nhttps://www.tiny.cloud"
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "extractedUrl": "https://www.tiny.cloud",
+    "domain": "ephox.com",
+    "name": "Ephox",
+    "url": "http://ephox.com",
+    "position": "Front-end Developer",
+    "startDate": "2011-01-01",
+    "endDate": "2012-06-01",
+    "lastUpdated": "2025-02-20T07:04:44.331Z"
+  },
+  "lorikeetcx.ai": {
+    "id": "49b97529-8ad3-4e77-8edf-f42c147f0dfc",
+    "model": "sonar-pro",
+    "created": 1740035092,
+    "usage": {
+      "prompt_tokens": 74,
+      "completion_tokens": 277,
+      "total_tokens": 351,
+      "citation_tokens": 4616,
+      "num_search_queries": 4
+    },
+    "citations": [
+      "https://www.prnewswire.com/news-releases/lorikeet-secures-5-million-in-funding-to-empower-cx-teams-with-first-ai-agent-that-offers-human-quality-support-at-scale-302266748.html",
+      "https://www.prnewswire.com/news-releases/lorikeet-secures-9-million-in-additional-funding-as-market-demand-surges-for-its-ai-customer-support-agents-302368146.html",
+      "https://www.rspcaqld.org.au/blog/wildlife-conservation/lorikeet-paralysis-syndrome",
+      "https://www.lorikeetcx.ai/news",
+      "https://blackbird.vc/blog/investment-notes-lorikeet",
+      "https://www.thesaasnews.com/news/lorikeet-raises-9-million-in-funding",
+      "https://vetslovepets.com.au/blogs/bird/lorikeets-breed-guide",
+      "https://nre.tas.gov.au/invasive-species/invasive-animals/invasive-birds/rainbow-lorikeet",
+      "https://www.startupdaily.net/topic/funding/bird-seed-ai-customer-support-platform-lorikeet-flies-high-with-7-3-million-raise/",
+      "https://www.finsmes.com/2025/02/lorikeet-raises-9m-in-funding.html"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "## Description\n\nLorikeet is an AI customer experience company that provides advanced AI-powered customer support agents. Their platform is designed to handle complex support tickets and workflows typically reserved for skilled human agents, offering human-quality support at scale[1][2]. Lorikeet's unique AI architecture allows it to follow exact business logic, integrate with existing company workflows, and maintain a natural conversational experience while adhering to strict business rules[1].\n\n## Recent News\n\nLorikeet recently secured AUD $9 million in additional funding from Blackbird and existing investors Square Peg and Skip Capital[2]. This funding round comes just four months after their initial USD $5 million seed round in October 2024[1][2]. The company has experienced significant growth, increasing bookings by 3.5 times and adding several unicorns and public companies as customers and pilot partners[2]. Lorikeet plans to use the new funding to enhance their intelligent graph technology, expand enterprise capabilities, and accelerate go-to-market initiatives across key industries including healthcare, financial services, and technology[2].\n\n## Work life conditions\n\nInformation about work life conditions at Lorikeet is not provided in the given search results.\n\n## Website\n\nhttps://www.lorikeetcx.ai"
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "extractedUrl": "https://www.lorikeetcx.ai",
+    "domain": null,
+    "name": "Lorikeet",
+    "url": "https://www.lorikeetcx.ai",
+    "position": "Forward Deployed AI Engineer / AI Implementation Strategist / Software Engineer / Design Lead",
+    "type": "Full-time",
+    "remote": "Hybrid",
+    "lastUpdated": "2025-02-20T07:04:52.672Z"
+  },
+  "nango.dev": {
+    "id": "67c14291-6c63-403d-81b0-f8f1d9e14522",
+    "model": "sonar-pro",
+    "created": 1740035275,
+    "usage": {
+      "prompt_tokens": 72,
+      "completion_tokens": 304,
+      "total_tokens": 376,
+      "citation_tokens": 5774,
+      "num_search_queries": 4
+    },
+    "citations": [
+      "https://www.useparagon.com/blog/merge-vs-nango",
+      "https://www.mangofashiongroup.com/en/press-releases",
+      "https://www.stirworld.com/inspire-people-sami-architect-joar-nango-on-autonomy-nomadism-and-escaping-cliches",
+      "https://www.nango.dev/auth",
+      "https://www.ycombinator.com/companies/nango/jobs/FQgt4Yl-senior-full-stack-engineer-remote-us-canada-east",
+      "https://www.youtube.com/watch?v=cToRF-5FT48",
+      "https://www.newsday.co.zw/local-news/article/200038417/trump-aid-freeze-triggers-carnage-nango",
+      "https://docs.nango.dev/changelog/overview",
+      "https://www.nango.dev",
+      "https://www.the-independent.com/news/world/europe/mango-founder-isak-andic-death-net-worth-cause-b2664466.html"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "## Description\n\nNango is a comprehensive product integrations platform that allows companies to quickly integrate with over 300 external APIs. They provide pre-built integrations, developer tools, and UI components to simplify the process of building and maintaining product integrations. Nango's platform handles authorization, offers a unified API interface, and provides API-specific tooling to abstract away complexities of individual APIs[1][4][9].\n\n## Recent News\n\n- Nango achieved SOC 2 Type 2 certification, in addition to their existing GDPR compliance[8].\n- They introduced new features including authorization input validation, an OpenTelemetry exporter for improved observability, and end-user authorization guides[8].\n- Nango now offers support for more frequent data syncs, down to 30-second intervals, as a paid add-on for Scale plan customers[8].\n- The company expanded its API catalog in September, adding support for several new services including Replicate, Anthropic, OpenAI, and others[8].\n\n## Work life conditions\n\nNango is hiring for remote positions, including a Senior Full Stack Engineer role for candidates in the US/Canada East time zones. They describe themselves as a company that makes it easy for engineers to integrate software with external APIs, suggesting a tech-focused work environment[5].\n\n## Website\n\nhttps://www.nango.dev"
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "extractedUrl": "https://www.nango.dev",
+    "domain": null,
+    "name": "Nango",
+    "url": "https://www.nango.dev",
+    "position": "Full-stack engineer",
+    "type": "Full-time",
+    "remote": "Full",
+    "lastUpdated": "2025-02-20T07:07:55.390Z"
+  },
+  "mixrank.com": {
+    "id": "2e3ee8e2-58a3-4f27-b9fe-eb54e6a76c02",
+    "model": "sonar-pro",
+    "created": 1740035508,
+    "usage": {
+      "prompt_tokens": 72,
+      "completion_tokens": 290,
+      "total_tokens": 362,
+      "citation_tokens": 3978,
+      "num_search_queries": 4
+    },
+    "citations": [
+      "https://mixrank.com/vs/xverum/",
+      "https://www.theregister.com/2024/11/15/bitfinix_intruder_sentenced/",
+      "https://www.jointaro.com/jobs/mixrank/junior-software-engineer-globalremote-e3c7bdf6/",
+      "https://www.jointaro.com/jobs/mixrank/software-engineer-remote-hungary/",
+      "https://mixrank.com/api/documentation",
+      "https://www.ycombinator.com/companies/mixrank/jobs/3J8aZqd-self-taught-hobbyists-junior-software-engineers-brazil-remote",
+      "https://www.jointaro.com/jobs/mixrank/data-engineer-remote/",
+      "https://mixrank.com/pricing",
+      "https://time.com/7200219/bitcoin-netflix-biggest-heist-ever/",
+      "https://nubela.co/blog/best-data-enrichment-apis/"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "## Description\n\nMixRank is a B2B SaaS company that processes and analyzes vast amounts of data to provide actionable insights for businesses[1][7]. They specialize in creating comprehensive databases of mobile apps, websites, technographics, companies, and decision makers[7]. MixRank's platform processes petabytes of data monthly from various sources including web crawls, app stores, and social media[4][7].\n\n## Recent News\n\nMixRank continues to grow rapidly, with a reported 50% annual growth rate[7]. The company has expanded its data delivery capabilities, now offering fresh data to customers every 60 minutes[8]. This is powered by over 1 billion queries and 150 million full-page crawls monthly, allowing MixRank to detect changes quickly and update their databases accordingly[8].\n\n## Work life conditions\n\nMixRank offers a fully remote work environment with no headquarters office, providing flexibility and work-life balance for its employees[7]. The company has a team of 44 people spread across more than 15 countries[7]. MixRank's culture emphasizes independence, innovation, and impact[7]. They offer opportunities for both new graduates and experienced professionals to work with petabyte-scale data systems[7].\n\n## Website\n\nhttps://mixrank.com"
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "extractedUrl": "https://mixrank.com",
+    "domain": null,
+    "name": "MixRank",
+    "url": "https://mixrank.com",
+    "position": "Software Engineer",
+    "type": "Full-time",
+    "remote": "Full",
+    "lastUpdated": "2025-02-20T07:11:48.630Z"
   }
 }

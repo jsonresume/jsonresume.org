@@ -1,43 +1,32 @@
 {
-  "title": "Team Lead, Backend as a Service",
-  "company": "Neon",
-  "location": {
-    "address": "Remote",
-    "postalCode": "",
-    "city": "",
-    "countryCode": "",
-    "region": ""
-  },
-  "type": "Full Time",
-  "salary": "",
+  "title": "Senior Full-stack Django Developer",
+  "company": "Safety Cybersecurity",
+  "type": "Full-time",
   "date": "2023-04",
+  "description": "Seeking senior engineers for our products. Work on web platform or CLI/Firewall product with a strong team from Google, AWS, and Microsoft.",
+  "location": { "countryCode": "CA" },
   "remote": "Full",
-  "description": "Neon is a well-funded startup building open-source, cloud-native Postgres. We enable developers to ship faster with Postgres.",
+  "salary": "145000-171000",
+  "experience": "Senior",
   "responsibilities": [
-    "Lead backend development for cloud-native PostgreSQL platform.",
-    "Guide the team in building scalable database solutions.",
-    "Facilitate collaboration across distributed teams."
+    "Develop and maintain web platform using Django and React.",
+    "Collaborate with engineers across teams.",
+    "Contribute to CLI/Firewall product development."
   ],
   "qualifications": [
-    "7+ years of experience in backend development.",
-    "Experience with dev tooling and cloud infrastructure."
+    "Experience in full-stack development.",
+    "Proficiency in Django and React."
   ],
   "skills": [
     {
-      "name": "Backend Development",
+      "name": "Full-stack Development",
       "level": "Expert",
-      "keywords": ["Postgres", "Rust", "Go", "Cloud Infrastructure"]
-    },
-    {
-      "name": "Team Leadership",
-      "level": "Expert",
-      "keywords": ["Agile", "Project Management"]
+      "keywords": ["Django", "React", "Python", "AWS"]
     }
   ],
-  "experience": "Senior",
   "meta": {
-    "canonical": "https://neon.tech",
+    "canonical": "https://jobs.ashbyhq.com/safety/3ce3b764-6818-44fb-9339-333909578df9",
     "version": "v1.0.0",
-    "lastModified": "2024-04-01T12:00:00"
+    "lastModified": "2023-11-19T12:00:00"
   }
 }
