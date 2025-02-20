@@ -87,3 +87,9 @@ Utilize UUID parsing and stringification for efficient data handling
 Leverage UUID comparison for efficient sorting and searching
 Use UUID namespaces for generating related identifiers
 Implement proper error handling when working with UUIDs
+
+Instructions
+
+- I am currently working on the recommendation engine, everytime you write code update the markdown file to reflect what this feature does and what it needs, just any useful information for building this feature
+
+apps/registry/scripts/jobs/recommendations/product-requirements.md

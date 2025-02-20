@@ -1,0 +1,43 @@
+{
+  "title": "Team Lead, Backend as a Service",
+  "company": "Neon",
+  "location": {
+    "address": "Remote",
+    "postalCode": "",
+    "city": "",
+    "countryCode": "",
+    "region": ""
+  },
+  "type": "Full Time",
+  "salary": "",
+  "date": "2023-04",
+  "remote": "Full",
+  "description": "Neon is a well-funded startup building open-source, cloud-native Postgres. We enable developers to ship faster with Postgres.",
+  "responsibilities": [
+    "Lead backend development for cloud-native PostgreSQL platform.",
+    "Guide the team in building scalable database solutions.",
+    "Facilitate collaboration across distributed teams."
+  ],
+  "qualifications": [
+    "7+ years of experience in backend development.",
+    "Experience with dev tooling and cloud infrastructure."
+  ],
+  "skills": [
+    {
+      "name": "Backend Development",
+      "level": "Expert",
+      "keywords": ["Postgres", "Rust", "Go", "Cloud Infrastructure"]
+    },
+    {
+      "name": "Team Leadership",
+      "level": "Expert",
+      "keywords": ["Agile", "Project Management"]
+    }
+  ],
+  "experience": "Senior",
+  "meta": {
+    "canonical": "https://neon.tech",
+    "version": "v1.0.0",
+    "lastModified": "2024-04-01T12:00:00"
+  }
+}

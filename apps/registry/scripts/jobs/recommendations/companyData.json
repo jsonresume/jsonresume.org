@@ -1,0 +1,227 @@
+{
+  "Neon": {
+    "id": "c44dc73a-2e1a-4356-a731-f1585b2252d3",
+    "model": "sonar-pro",
+    "created": 1740033720,
+    "usage": {
+      "prompt_tokens": 22,
+      "completion_tokens": 442,
+      "total_tokens": 464,
+      "citation_tokens": 4977,
+      "num_search_queries": 2
+    },
+    "citations": [
+      "https://www.itochu.co.jp/en/news/press/2025/250110.html",
+      "https://www.screendaily.com/news/neon-closes-200m-plus-credit-facility-led-by-comerica-bank-to-bolster-core-functions/5199464.article",
+      "https://changelog.com/jsparty/317",
+      "https://www.latimes.com/entertainment-arts/business/story/2025-01-29/neon-inks-first-deal-of-sundance-with-together-acquisition",
+      "https://cohu.gcs-web.com/news-releases/news-release-details/cohu-enters-hbm-memory-market-neon-inspection-metrology-platform",
+      "https://fastercapital.com/topics/using-annotations-and-callouts-to-highlight-key-points.html",
+      "https://www.neonglobal.com/en/newsroom/",
+      "https://neon.tech/blog/how-dispatch-speeds-up-development-with-neon-while-keeping-workloads-on-aurora",
+      "https://dev.to/zenstack/code-as-doc-automate-by-vercel-ai-sdk-and-zenstack-for-free-1ch4",
+      "https://blooloop.com/immersive/news/neon-battersea-launch/"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "Neon is an innovative global entertainment company known for its cutting-edge immersive exhibitions and experiences. Founded with a vision to revolutionize the entertainment industry, Neon has quickly established itself as a leader in creating captivating, technology-driven experiences that blend art, culture, and history. The company's portfolio includes a wide range of exhibitions, from ancient historical artifacts to contemporary pop culture phenomena, all presented in uniquely immersive formats that engage audiences in new and exciting ways[7][10].\n\n## Recent News\n\n- **New Venue at Battersea Power Station**: Neon has announced the spring 2025 launch of its new event space adjacent to London's iconic Battersea Power Station. This purpose-built entertainment and cultural exhibition space is the first of its kind in Central London[10][7].\n\n- **Partnership with ITOCHU Corporation**: On January 10, 2025, Neon welcomed ITOCHU Corporation as a shareholder, marking a significant step in its strategic growth in Japan and beyond. This partnership follows a joint venture established in 2023 with ITOCHU Property Development, Ltd[7].\n\n- **Ramses the Great Exhibition in Tokyo**: Neon is set to debut its \"Ramses & the Gold of the Pharaohs\" exhibition in Tokyo on March 8, 2025. This marks the exhibition's first appearance in Asia, featuring 181 exhibits including many artifacts on loan from the Grand Egyptian Museum[7].\n\n- **Financial Boost**: In late 2024, Neon closed a $200m-plus credit facility led by Comerica Bank, aimed at bolstering core functions such as film acquisitions, development, production, and distribution[2].\n\n- **Sundance Acquisition**: In January 2025, Neon made the first big deal at the Sundance Film Festival, acquiring worldwide rights to the horror film 'Together' starring Alison Brie and Dave Franco for an estimated $15-17 million[4]."
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "url": null,
+    "lastUpdated": "2025-02-20T06:42:00.871Z",
+    "name": "Neon",
+    "position": "Team Lead, Backend as a Service",
+    "type": "Full Time",
+    "remote": "Full"
+  },
+  "Domain7": {
+    "id": "7d50593e-aecf-446c-a0b0-2b9a924e36c9",
+    "model": "sonar-pro",
+    "created": 1740033905,
+    "usage": {
+      "prompt_tokens": 23,
+      "completion_tokens": 232,
+      "total_tokens": 255,
+      "citation_tokens": 5157,
+      "num_search_queries": 2
+    },
+    "citations": [
+      "https://www.kevangilbert.com",
+      "https://cissprep.net/domain-7-fully-updated/",
+      "https://en.wikipedia.org/wiki/GNU_General_Public_License",
+      "https://ossisto.com/blog/web-development-companies-in-vancouver/",
+      "https://www.isc2.org/certifications/cissp/cissp-exam-refresh-faq",
+      "https://ccdcoe.org/uploads/2024/05/CyCon_2024_book.pdf",
+      "https://www.infosecinstitute.com/resources/cissp/the-cissp-domains-an-overview/",
+      "https://www.youtube.com/watch?v=jzNSkJ2ZZ-c",
+      "https://comicbookdispatch.com/public-domain-7-review/",
+      "https://kactusbio.com/collections/new-products"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "Domain7 is a digital transformation consultancy that specializes in user experience design, digital strategy, and web development. Founded in 1996, the company has grown to become a leader in helping organizations navigate the complexities of the digital landscape. Domain7's approach combines human-centered design principles with cutting-edge technology to create innovative solutions that drive meaningful change for their clients. With a team of experienced strategists, designers, and developers, Domain7 offers a wide range of services including digital strategy consulting, user experience design, web and mobile application development, and organizational change management[1][4].\n\n## Recent News\n\n- Domain7 expands its digital strategy services to include AI-driven solutions for enterprise clients[1].\n- The company launches a new sustainability initiative, committing to carbon-neutral operations by 2026[4].\n- Domain7 partners with a leading tech education provider to offer digital skills training programs for underserved communities[1].\n- The firm's CEO, Kevan Gilbert, is recognized as a thought leader in digital transformation at a recent industry conference[1]."
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "name": "Domain7",
+    "url": "https://www.domain7.com",
+    "position": "Lead Full-Stack Developer",
+    "startDate": "2019-11",
+    "endDate": "2020-02",
+    "lastUpdated": "2025-02-20T06:45:05.280Z"
+  },
+  "Catch Digital": {
+    "id": "56f995ef-6469-44bc-be9f-3b7d2a7d469c",
+    "model": "sonar-pro",
+    "created": 1740033914,
+    "usage": {
+      "prompt_tokens": 23,
+      "completion_tokens": 342,
+      "total_tokens": 365,
+      "citation_tokens": 4350,
+      "num_search_queries": 2
+    },
+    "citations": [
+      "https://www.catchdigitalsolutions.au/faqs-page",
+      "https://www.itnews.com.au/news/wesfarmers-to-restructure-digital-capabilities-as-catch-closes-614471",
+      "https://www.nichepublisher.biz/which-ai-was-best-for-creating-a-newsletter-from-our-own-content/",
+      "https://www.catchdigitalsolutions.au",
+      "https://www.wesfarmers.com.au/investor-centre/company-performance-news/catch-update",
+      "https://blog.bit.ai/writing-release-notes/",
+      "https://www.catch-retail-media.com",
+      "https://www.startupdaily.net/topic/business/230-million-catch-wesfarmers-is-shutting-it-down/",
+      "https://userlist.com/blog/new-feature-announcement-emails/",
+      "https://www.getcatch.com/terms"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "Catch Digital Solutions is a specialized digital marketing agency focused on serving the construction industry. With over 20 years of experience in construction prior to founding the agency, Catch Digital combines deep industry knowledge with cutting-edge digital marketing strategies to help construction companies stand out in a competitive market[1][4]. Their comprehensive services include website design, mobile app development, search engine optimization (SEO), social media marketing, pay-per-click advertising (PPC), content marketing, and branding[1]. By leveraging data-driven approaches and tailoring campaigns to specific goals, Catch Digital aims to transform construction businesses into industry leaders, driving growth and generating valuable leads[4].\n\n## Recent News\n\n- **Wesfarmers to shut down Catch e-commerce platform**: Wesfarmers announced the closure of its online retailer Catch, which it acquired in 2019 for $230 million. The shutdown is scheduled for April 30, 2025, due to increased competition in Australian e-commerce[8][2].\n\n- **Catch's e-commerce fulfillment centers to be transferred**: As part of the restructuring, Catch's e-commerce fulfillment warehouses will be transferred to Kmart Group in the fourth quarter of the 2025 financial year, aiming to improve customer experience and efficiency[2][5].\n\n- **Digital capabilities to be reorganized**: Wesfarmers plans to transfer select digital capabilities developed by Catch to its retail divisions, including Bunnings and Kmart, to strengthen their omnichannel offerings[2][5]."
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "name": "Catch Digital",
+    "url": "https://www.catchdigital.com",
+    "position": "Senior Developer",
+    "startDate": "2019-09",
+    "endDate": "2019-10",
+    "lastUpdated": "2025-02-20T06:45:14.926Z"
+  },
+  "Capgemini": {
+    "id": "c22a9611-0db5-4508-b87d-4924251e0d65",
+    "model": "sonar-pro",
+    "created": 1740033924,
+    "usage": {
+      "prompt_tokens": 24,
+      "completion_tokens": 414,
+      "total_tokens": 438,
+      "citation_tokens": 5543,
+      "num_search_queries": 1
+    },
+    "citations": [
+      "https://www.marketscreener.com/quote/stock/CAPGEMINI-SE-4624/news/Capgemini-cautious-for-2025-2024-sales-fall-less-than-expected-49081925/",
+      "https://www.apidays.global/paris2024/",
+      "https://www.business-standard.com/companies/news/it-firm-capgemini-expects-flat-growth-in-2025-as-demand-remains-weak-125021801030_1.html",
+      "https://bestofai.com/allArticles",
+      "https://news.sap.com/2025/02/driving-efficiency-compliance-capgemini-sap-fieldglass/",
+      "https://studenttheses.uu.nl/bitstream/handle/20.500.12932/38537/Nieuwenhuizen,%202020,%20Working%20digitally%20during%20the%20Covid-19%20pandemic%20.pdf?sequence=1",
+      "https://www.reinsurancene.ws/2025-the-year-genai-delivers-real-value-to-the-re-insurance-industry-capgeminis-denninger/",
+      "https://www.javatpoint.com/expand-in-html",
+      "https://www.capgemini.com/news/",
+      "https://www.capgemini.com/news/press-releases/technovision-top-5-tech-trends-to-watch-in-2025/"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "Capgemini is a global leader in consulting, technology services, and digital transformation. Founded in 1967, the company has grown to become one of the world's largest IT services providers, with a presence in over 50 countries. Capgemini offers a wide range of services, including cloud computing, artificial intelligence, cybersecurity, and digital strategy, helping businesses across various industries to innovate and adapt to the rapidly changing technological landscape. The company is known for its strong focus on innovation, sustainability, and employee development, consistently ranking among the top employers in the tech industry[5][7].\n\n## Recent News\n\n- **Cautious Outlook for 2025**: Capgemini reported a 2% drop in annual sales at constant exchange rates for 2024, slightly above expectations. The company has announced a cautious outlook for 2025, targeting sales growth between -2.0% and +2.0% at constant exchange rates[1][3].\n\n- **Generative AI Focus**: Capgemini is seeing increased traction in cloud and data & AI services, with Generative AI accounting for around 5% of bookings in Q4 2024. The company expects 2025 to be the year when GenAI starts delivering real value in the re/insurance industry[7].\n\n- **SAP Fieldglass Implementation**: Capgemini has successfully leveraged SAP Fieldglass solutions to manage its contingent workforce across more than 30 countries, resulting in a 26% increase in unitary cost savings and a 50% increase in productivity from the internal procurement services team[5].\n\n- **Top Tech Trends for 2025**: Capgemini's TechnoVision report highlights the top 5 tech trends to watch in 2025, including advancements in Generative AI, cybersecurity, AI-driven sustainability, and more[10]."
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "name": "Capgemini",
+    "url": "https://capgemini.com",
+    "position": "Solutions Architect (SC Cleared)",
+    "startDate": "2019-01",
+    "endDate": "2019-04",
+    "lastUpdated": "2025-02-20T06:45:25.109Z"
+  },
+  "Sogeti Ireland": {
+    "id": "bd3e3c67-4f9b-45b6-a6f8-543f0ec12506",
+    "model": "sonar-pro",
+    "created": 1740033933,
+    "usage": {
+      "prompt_tokens": 25,
+      "completion_tokens": 301,
+      "total_tokens": 326,
+      "citation_tokens": 5126,
+      "num_search_queries": 2
+    },
+    "citations": [
+      "https://www.sogeti.ie/about-us/responsible-business/",
+      "https://www.capgemini.com/us-en/news/press-releases/full-year-2024-results/",
+      "https://www.apidays.global/paris2024/",
+      "https://www.sogeti.com/about-us/responsible-business/",
+      "https://www.capgemini.com/us-en/news/press-releases/",
+      "https://www.sogeti.ie/about-us/passion-for-sport/",
+      "https://www.sogeti.com/about-us/passion-for-sport/",
+      "https://www.sogeti.com/services/modern-apps/",
+      "https://www.sogeti.ie/insights/newsroom/",
+      "https://www.sogeti.com/end-to-end-solutions/"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "Sogeti Ireland is a leading technology consulting company that specializes in digital services and software engineering. As part of the global Capgemini Group, Sogeti Ireland combines local expertise with international resources to deliver innovative solutions to clients across various industries. The company focuses on merging technology with sustainability and inclusion, aiming to create a positive impact on communities and foster a brighter, more sustainable future[1][4]. Sogeti Ireland's services encompass modern application development, digital transformation, and responsible business practices, helping organizations accelerate innovation and stay competitive in rapidly evolving markets[8].\n\n## Recent News\n\n- **Sogeti merges technology with sustainability and inclusion** (November 7, 2024): The company announced its commitment to fostering a positive community impact and a brighter sustainable future through innovative technology solutions[1].\n\n- **Capgemini Group reports strong performance in UK and Ireland** (February 18, 2025): The United Kingdom and Ireland region, which includes Sogeti, saw a 1.5% growth in revenues, supported by strong performance in the Energy & Utilities and Manufacturing sectors[2].\n\n- **Sogeti showcases passion for sport through global sponsorships** (November 8, 2024): The company highlighted its support for global sports events, emphasizing how it drives teamwork, innovation, and excellence through transformative technology and expertise[6][7]."
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "name": "Sogeti Ireland",
+    "url": "https://sogeti.com",
+    "position": "Technical Architect",
+    "startDate": "2018-11",
+    "endDate": "2019-01",
+    "lastUpdated": "2025-02-20T06:45:33.554Z"
+  }
+}

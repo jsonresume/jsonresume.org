@@ -1,0 +1,141 @@
+{
+  "basics": {
+    "name": "Craig Gardener",
+    "label": "Chief Technology Officer | Head of Engineering | DevSecOps Expert",
+    "email": "craig@craiggardener.uk",
+    "phone": "+44 (0) 7506 443818",
+    "url": "https://www.linkedin.com/in/craiggardener/",
+    "summary": "Visionary technology leader with a strong background in DevSecOps, cloud infrastructure, and software development automation. Recognized as a GitLab Champion and skilled in implementing CI/CD and secure development practices across large-scale systems. Proven ability to align technical strategies with business objectives, improve development practices, and optimize technology operations to drive growth and innovation.",
+    "location": {
+      "address": "",
+      "postalCode": "",
+      "city": "",
+      "countryCode": "UK",
+      "region": ""
+    },
+    "profiles": [
+      {
+        "network": "LinkedIn",
+        "username": "craiggardener",
+        "url": "https://www.linkedin.com/in/craiggardener/"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Domain7",
+      "position": "Lead Full-Stack Developer",
+      "url": "https://www.domain7.com",
+      "startDate": "2019-11",
+      "endDate": "2020-02",
+      "summary": "Directed the engineering team for the Carbon Trust website redevelopment, establishing a globally distributed environment on Google Kubernetes Engine (GKE).",
+      "highlights": [
+        "Built testing and deployment pipelines with Google Cloud Build, integrating DevSecOps practices to ensure secure and reliable code deployment.",
+        "Oversaw stakeholder management, setting realistic timelines and budget expectations while ensuring project deliverables met high standards."
+      ]
+    },
+    {
+      "name": "Catch Digital",
+      "position": "Senior Developer",
+      "url": "https://www.catchdigital.com",
+      "startDate": "2019-09",
+      "endDate": "2019-10",
+      "summary": "Contributed to the Salford University website project, developing custom modules and enhancing CI/CD workflows.",
+      "highlights": [
+        "Employed GitLab CI to streamline deployments and introduced DevSecOps principles to enhance security in the development process."
+      ]
+    },
+    {
+      "name": "Capgemini",
+      "position": "Solutions Architect (SC Cleared)",
+      "url": "https://capgemini.com",
+      "startDate": "2019-01",
+      "endDate": "2019-04",
+      "summary": "Led the automation of infrastructure management for a high-profile government project, deploying CI pipelines across multiple Kubernetes clusters.",
+      "highlights": [
+        "Implemented data replication and disaster recovery protocols for secure database management, ensuring compliance with security policies."
+      ]
+    },
+    {
+      "name": "Sogeti Ireland",
+      "position": "Technical Architect",
+      "url": "https://sogeti.com",
+      "startDate": "2018-11",
+      "endDate": "2019-01",
+      "summary": "Architected a unified codebase for Liberty Insurance’s international web properties, enabling efficient content management across multiple regions.",
+      "highlights": [
+        "Modernized development practices, establishing continuous deployment workflows and onboarding teams to GitLab’s collaborative development environment."
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Carbon Trust Website",
+      "description": "Architected a high-availability website environment and automated deployment processes.",
+      "highlights": [
+        "Developed for Domain7 using Google Kubernetes Engine and CI/CD"
+      ],
+      "keywords": ["CI/CD", "GKE", "DevSecOps"],
+      "startDate": "2019-11",
+      "endDate": "2020-02"
+    },
+    {
+      "name": "Rogue Landlord and Agent Checker",
+      "description": "Developed the UK’s first public database of landlord offenses, utilizing custom migration handlers and secure workflows.",
+      "highlights": ["Lead Developer for Greater London Authority project"],
+      "keywords": ["Drupal 7", "Security", "Public Database"],
+      "startDate": "2017-05",
+      "endDate": "2017-11"
+    },
+    {
+      "name": "Bracknell Forest Council Public Website",
+      "description": "Led the creation of Bracknell Forest Council’s main website, transitioning from legacy systems to an optimized Drupal 7 solution with modern DevOps tools.",
+      "highlights": [
+        "Implemented Drupal 7, optimized workflows and DevOps integrations"
+      ],
+      "keywords": ["Drupal 7", "DevOps", "Government"],
+      "startDate": "2015-02",
+      "endDate": "2017-05"
+    }
+  ],
+  "education": [
+    {
+      "institution": "Open University",
+      "area": "Computing",
+      "url": "https://www.open.ac.uk",
+      "startDate": "2009",
+      "endDate": "2013",
+      "studyType": ""
+    }
+  ],
+  "certificates": [
+    {
+      "name": "Drupal 7 Grand Master",
+      "date": "2018-01",
+      "issuer": "Acquia"
+    },
+    {
+      "name": "Acquia Cloud Pro",
+      "date": "2018-01",
+      "issuer": "Acquia"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Languages",
+      "keywords": ["PHP", "JavaScript", "Bash", "SQL"]
+    },
+    {
+      "name": "Tools",
+      "keywords": ["GitLab", "Docker", "Kubernetes", "Terraform", "Jenkins"]
+    },
+    {
+      "name": "Cloud Platforms",
+      "keywords": ["Google Cloud", "AWS", "Acquia"]
+    },
+    {
+      "name": "Methodologies",
+      "keywords": ["Agile", "Scrum", "DevSecOps"]
+    }
+  ]
+}
