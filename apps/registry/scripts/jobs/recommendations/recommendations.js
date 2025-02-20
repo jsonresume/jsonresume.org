@@ -150,9 +150,7 @@ Format the response in markdown with these exact headings:
     // Get domain from the URL
     const domain = extractDomain(websiteUrl);
 
-    console.log(
-      ` Got data for ${companyName}${domain ? ` (${domain})` : ''}`,
-    );
+    console.log(` Got data for ${companyName}${domain ? ` (${domain})` : ''}`);
     return {
       ...data,
       extractedUrl: websiteUrl,
@@ -367,14 +365,20 @@ const scoreFunction = {
 };
 
 const chat = await openai.chat.completions.create({
-  model: 'gpt-4o-mini',
+  model: 'gpt-4o',
   temperature: 0.75,
   messages,
   functions: [scoreFunction],
-  function_call: { name: 'calculateMatchScore' },
 });
 
+// Log token usage
+console.log('\nToken Usage:');
+console.log('Prompt tokens:', chat.usage.prompt_tokens);
+console.log('Completion tokens:', chat.usage.completion_tokens);
+console.log('Total tokens:', chat.usage.total_tokens);
+console.log('\nMessages:');
 console.log(JSON.stringify(messages, null, 2));
 
 const result = JSON.parse(chat.choices[0].message.function_call.arguments);
+console.log('\nResult:');
 console.log(result);

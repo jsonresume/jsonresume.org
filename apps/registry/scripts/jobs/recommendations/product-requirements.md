@@ -76,10 +76,19 @@ The recommendation engine analyzes resumes against job postings to provide intel
 - `node-fetch`: For making HTTP requests
 - `dotenv`: For environment variable management
 
-### API Rate Limiting
+### API Rate Limiting & Optimization
 - Implements delays between Perplexity API calls
 - Caches company data to minimize API usage
 - Uses OpenAI function calling for structured responses
+- Tracks token usage for cost optimization
+- Handles API failures gracefully with fallback data
+
+### Error Handling
+- Graceful handling of failed API calls
+- Fallback to minimal data when API calls fail
+- Consistent error logging and reporting
+- Domain validation and URL cleaning
+- Token usage monitoring and logging
 
 ## Best Practices
 - Use domain-based keys for consistent company identification
@@ -88,6 +97,10 @@ The recommendation engine analyzes resumes against job postings to provide intel
 - Validate and clean URLs and domains
 - Store comprehensive company context for better matching
 - Use structured function calls for reliable scoring
+- Monitor and optimize token usage
+- Implement rate limiting for API calls
+- Use proper error handling for failed requests
+- Cache responses to reduce API costs
 
 ## Future Enhancements
 - Implement vector similarity search for better matching
@@ -100,3 +113,7 @@ The recommendation engine analyzes resumes against job postings to provide intel
 - Enhance culture fit analysis with more data points
 - Add skill-based vector embeddings
 - Implement automated skill gap analysis
+- Add token usage analytics and cost tracking
+- Implement adaptive rate limiting based on usage patterns
+- Add caching layer for frequently accessed data
+- Implement batch processing for large-scale analysis

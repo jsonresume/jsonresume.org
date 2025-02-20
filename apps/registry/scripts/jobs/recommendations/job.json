@@ -1,32 +1,36 @@
 {
-  "title": "Senior Full-stack Django Developer",
-  "company": "Safety Cybersecurity",
+  "title": "Founding Frontend Engineer",
+  "company": "Pincites",
   "type": "Full-time",
   "date": "2023-04",
-  "description": "Seeking senior engineers for our products. Work on web platform or CLI/Firewall product with a strong team from Google, AWS, and Microsoft.",
-  "location": { "countryCode": "CA" },
+  "description": "Pincites uses AI to help legal teams identify negotiation patterns, align with GTM teams, and streamline contract reviews. Our mission is to close deals faster by transforming legal into a strategic partner through transparent, automated workflows that improve consistency and collaboration.",
+  "location": { "countryCode": "US" },
   "remote": "Full",
-  "salary": "145000-171000",
   "experience": "Senior",
   "responsibilities": [
-    "Develop and maintain web platform using Django and React.",
-    "Collaborate with engineers across teams.",
-    "Contribute to CLI/Firewall product development."
+    "Develop frontend solutions using React, Typescript, CSS, and Next.js",
+    "Collaborate with large enterprises to implement solutions",
+    "Take ownership of large technical areas"
   ],
   "qualifications": [
-    "Experience in full-stack development.",
-    "Proficiency in Django and React."
+    "Proficiency with React, Typescript, CSS, Next.js",
+    "Experience with LLMs"
   ],
   "skills": [
     {
-      "name": "Full-stack Development",
+      "name": "Frontend Development",
       "level": "Expert",
-      "keywords": ["Django", "React", "Python", "AWS"]
+      "keywords": ["React", "Typescript", "CSS", "Next.js"]
+    },
+    {
+      "name": "AI and LLM Integration",
+      "level": "Intermediate",
+      "keywords": ["LLMs"]
     }
   ],
   "meta": {
-    "canonical": "https://jobs.ashbyhq.com/safety/3ce3b764-6818-44fb-9339-333909578df9",
+    "canonical": "https://www.ycombinator.com/companies/pincites/jobs",
     "version": "v1.0.0",
-    "lastModified": "2023-11-19T12:00:00"
+    "lastModified": "2023-11-26T12:00:00"
   }
 }

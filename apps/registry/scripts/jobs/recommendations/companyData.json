@@ -1476,5 +1476,98 @@
     "type": "Full-time",
     "remote": "Full",
     "lastUpdated": "2025-02-20T07:11:48.630Z"
+  },
+  "safetycybersecurity": {
+    "id": "b825dc03-687c-4179-92ab-3fe70f33d868",
+    "model": "sonar-pro",
+    "created": 1740035766,
+    "usage": {
+      "prompt_tokens": 73,
+      "completion_tokens": 113,
+      "total_tokens": 186,
+      "citation_tokens": 4637,
+      "num_search_queries": 4
+    },
+    "citations": [
+      "https://www.stationx.net/top-cyber-security-companies/",
+      "https://upstream.auto/blog/us-banning-chinese-and-russian-technology/",
+      "https://digitaldefynd.com/IQ/pros-and-cons-of-working-in-cyber-security/",
+      "https://www.nist.gov/cyberframework",
+      "https://cybermagazine.com/articles/top-10-most-profitable-cybersecurity-companies",
+      "https://www.netsec.news/workplace-safety-cybersecurity/",
+      "https://www.stjohns.edu/news-media/johnnies-blog/day-life-cybersecurity-professional",
+      "https://www.nsa.gov",
+      "https://safe.security",
+      "https://www.zscaler.com/blogs/product-insights/new-healthcare-triad-safety-cybersecurity-and-profitability-diagnostics"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "I apologize, but I do not have any specific information about a company called \"Safety Cybersecurity\" in the search results provided. The query appears to be asking about a particular company, but there is no data about a company by that exact name in the given sources. Without accurate information, I cannot provide details about their description, recent news, work life conditions, or official website. If you have additional details or would like information about cybersecurity companies in general, I'd be happy to assist based on the available search results."
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "extractedUrl": null,
+    "domain": null,
+    "name": "Safety Cybersecurity",
+    "position": "Senior Full-stack Django Developer",
+    "type": "Full-time",
+    "remote": "Full",
+    "lastUpdated": "2025-02-20T07:16:06.758Z"
+  },
+  "pincites": {
+    "id": "fe763f0e-2e99-48db-a17e-de2fda66ef35",
+    "model": "sonar-pro",
+    "created": 1740035967,
+    "usage": {
+      "prompt_tokens": 73,
+      "completion_tokens": 267,
+      "total_tokens": 340,
+      "citation_tokens": 4777,
+      "num_search_queries": 4
+    },
+    "citations": [
+      "https://www.tryfondo.com/blog/pincites-launches",
+      "https://www.ycombinator.com/companies/pincites/jobs/aukLzWU-founding-backend-applied-ai-engineer",
+      "https://courts.delaware.gov/Opinions/Download.aspx?id=369700",
+      "https://guides.law.sc.edu/LRAWFall/CitingStateCases",
+      "https://beamstart.com/@pincites-17233291026399",
+      "https://gritdaily.com/law-firm-creator-economy-chelsey-mori-unbound-legal/",
+      "https://hnhiring.com/locations/remote",
+      "https://tarlton.law.utexas.edu/bluebook-legal-citation/pages-paragraphs-pincites",
+      "https://maven.com/pincites/ai-for-legal",
+      "https://www.youtube.com/watch?v=FAEBsgvJfb4"
+    ],
+    "object": "chat.completion",
+    "choices": [
+      {
+        "index": 0,
+        "finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "## Description\n\nPincites is an AI-powered contract negotiation assistant that helps legal teams review and redline contracts faster. The company uses large language models to build contract playbooks that can be applied consistently within Microsoft Word, reducing the time spent on contract negotiation while achieving better and more consistent results[1][5].\n\n## Recent News\n\nPincites launched on Y Combinator's \"Launch YC\" platform in 2024[1]. The company has recently doubled its revenue in the first three months of 2024 and is at an inflection point in its growth[2]. In February 2025, Pincites collaborated with lawyer Chelsey Mori to develop AI-powered playbooks for the creator economy, streamlining contract review processes for influencers and digital entrepreneurs[6].\n\n## Work life conditions\n\nPincites offers a remote work environment with competitive compensation. They provide cash compensation similar to YC founding engineer roles but offer significantly higher equity compensation, around 10 times more than comparable companies[7]. The company is in its seed stage and is assembling a world-class team, offering founding members a meaningful stake in the company's growth[2].\n\n## Website\n\nwww.pincites.com"
+        },
+        "delta": {
+          "role": "assistant",
+          "content": ""
+        }
+      }
+    ],
+    "extractedUrl": null,
+    "domain": null,
+    "name": "Pincites",
+    "url": null,
+    "position": "Founding Frontend Engineer",
+    "type": "Full-time",
+    "remote": "Full",
+    "lastUpdated": "2025-02-20T07:19:27.766Z"
   }
 }
