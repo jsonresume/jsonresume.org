@@ -44,7 +44,7 @@ export default function Jobs({ params }) {
 
       Responsibilities:
       ${gptJob.responsibilities?.join(', ')}
-      `
+      `,
     );
     router.push(`/${username}/letter?job=${job.id}`);
   };

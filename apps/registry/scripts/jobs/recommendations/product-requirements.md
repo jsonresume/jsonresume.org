@@ -1,119 +1,125 @@
-# JSON Resume Recommendation Engine
+# Job Recommendations Engine
 
 ## Overview
-The recommendation engine analyzes resumes against job postings to provide intelligent job matching and scoring. It enhances the matching process by incorporating rich company data and context through the Perplexity API, providing a comprehensive evaluation of both technical fit and cultural alignment.
+The Job Recommendations Engine is an AI-powered system that matches JSON Resume profiles with job postings, providing detailed compatibility analysis and actionable insights.
 
-## Features
+## Core Features
 
-### Company Data Enrichment
-- Extracts companies from both resume work history and job postings
-- Uses company website domains as unique identifiers for consistent tracking
-- Fetches detailed company information using Perplexity API:
-  - Company description and background
-  - Recent news and developments
-  - Work culture and conditions
-  - Official website URL
-- Caches company data to optimize API usage
-- Stores comprehensive context including:
-  - Company URLs and domains
-  - Position details
-  - Employment dates
-  - Job types and remote work status
+### Resume Analysis
+- Extracts key information from JSON Resume format
+- Analyzes skills, experience, and qualifications
+- Considers work history and career progression
+- Evaluates remote work experience
 
-### Data Storage
-- Company data is stored in `companyData.json`
-- Uses website domains as primary keys (e.g., "neon.tech", "google.com")
-- Falls back to normalized company name if no domain is available
-- Format:
+### Job Matching
+- Comprehensive job compatibility scoring
+- Technical skills alignment
+- Experience level matching
+- Culture fit assessment
+- Remote work readiness evaluation
+
+### Scoring System
+- Overall Match Score (0-1)
+- Technical Skills Score (0-1)
+- Experience Level Score (0-1)
+- Culture Fit Score (0-1)
+- Detailed analysis for each score component
+- Lists of matched and missing skills
+- Personalized recommendations
+
+## API Integration
+
+### Recommendations API (`/api/recommendations`)
+- **Method**: POST
+- **Authentication**: Required
+- **Request Body**:
   ```json
   {
-    "company-domain.com": {
-      "name": "Company Name",
-      "url": "https://company-domain.com",
-      "domain": "company-domain.com",
-      "position": "string",
-      "startDate": "string",
-      "endDate": "string",
-      "perplexityData": {
-        "description": "string",
-        "recentNews": "string",
-        "workLife": "string"
-      },
-      "lastUpdated": "string"
+    "username": "string",
+    "jobPosting": {
+      "id": "string",
+      "title": "string",
+      "company": "string",
+      "type": "string",
+      "remote": "string",
+      "description": "string",
+      "skills": [
+        {
+          "name": "string",
+          "level": "string",
+          "keywords": ["string"]
+        }
+      ],
+      "qualifications": ["string"],
+      "location": {
+        "countryCode": "string"
+      }
     }
   }
   ```
+- **Response**:
+  ```json
+  {
+    "overallScore": "number",
+    "skillsScore": "number",
+    "experienceScore": "number",
+    "cultureScore": "number",
+    "overallAnalysis": "string",
+    "skillsAnalysis": "string",
+    "experienceAnalysis": "string",
+    "cultureAnalysis": "string",
+    "matchedSkills": ["string"],
+    "missingSkills": ["string"],
+    "recommendations": ["string"]
+  }
+  ```
 
-### Resume-Job Matching
-- Uses OpenAI GPT-4 for intelligent matching with enhanced context
-- Scoring Factors:
-  1. Technical Skills Match
-  2. Experience Level & Seniority
-  3. Industry Knowledge & Company Culture Fit
-  4. Remote Work Experience
-  5. Career Progression & Growth
-  6. Company-Specific Requirements
-
-### Scoring System
-- Provides detailed scoring metrics:
-  - Overall Match Score (0-1)
-  - Culture Fit Score (0-1)
-  - Remote Work Readiness Score (0-1)
-- Includes detailed analysis:
-  - Key matching points
-  - Identified gaps
-  - Culture fit reasoning
-  - Remote work capabilities assessment
+### Error Handling
+- 400: Missing required parameters
+- 404: Resume not found
+- 500: Internal server error
 
 ## Technical Requirements
 
 ### Environment Variables
-- `OPENAI_API_KEY`: For GPT-4 analysis
-- `PERPLEXITY_API_KEY`: For company research
+- `NEXT_PUBLIC_SUPABASE_URL`: Supabase project URL
+- `SUPABASE_KEY`: Supabase service role key
+- `OPENAI_API_KEY`: OpenAI API key
 
 ### Dependencies
-- `openai`: OpenAI API client
-- `node-fetch`: For making HTTP requests
-- `dotenv`: For environment variable management
-
-### API Rate Limiting & Optimization
-- Implements delays between Perplexity API calls
-- Caches company data to minimize API usage
-- Uses OpenAI function calling for structured responses
-- Tracks token usage for cost optimization
-- Handles API failures gracefully with fallback data
-
-### Error Handling
-- Graceful handling of failed API calls
-- Fallback to minimal data when API calls fail
-- Consistent error logging and reporting
-- Domain validation and URL cleaning
-- Token usage monitoring and logging
-
-## Best Practices
-- Use domain-based keys for consistent company identification
-- Cache and reuse company data when possible
-- Implement proper error handling for API calls
-- Validate and clean URLs and domains
-- Store comprehensive company context for better matching
-- Use structured function calls for reliable scoring
-- Monitor and optimize token usage
-- Implement rate limiting for API calls
-- Use proper error handling for failed requests
-- Cache responses to reduce API costs
+- OpenAI API for analysis
+- Supabase for resume storage
+- Next.js 14 App Router
+- GPT-4 for scoring
 
 ## Future Enhancements
-- Implement vector similarity search for better matching
-- Add company size and industry classification
-- Include salary data and market trends
-- Integrate with job boards for real-time opportunities
-- Add periodic refresh of company data
-- Implement domain verification and URL validation
-- Add support for company aliases and acquisitions
-- Enhance culture fit analysis with more data points
-- Add skill-based vector embeddings
-- Implement automated skill gap analysis
-- Add token usage analytics and cost tracking
-- Implement adaptive rate limiting based on usage patterns
-- Add caching layer for frequently accessed data
-- Implement batch processing for large-scale analysis
+1. Job recommendation caching
+2. Batch job analysis
+3. Historical match tracking
+4. Skill development suggestions
+5. Industry-specific insights
+6. Career path recommendations
+
+## Security Considerations
+1. API rate limiting
+2. Request validation
+3. Resume data protection
+4. Secure API key handling
+5. User authentication
+6. Error logging
+
+## Performance Optimization
+1. Response caching
+2. Parallel processing
+3. Request batching
+4. API timeout handling
+5. Error recovery
+6. Load balancing
+
+## User Experience
+1. Real-time scoring
+2. Detailed feedback
+3. Visual score representation
+4. Actionable insights
+5. Mobile responsiveness
+6. Accessibility compliance
