@@ -68,7 +68,7 @@ async function getResumes(page = 1, search = '') {
     }
 
     console.time('mapResumes');
-    const resumes = data.map((row) => {
+    let resumes = data.map((row) => {
       try {
         const resume = JSON.parse(row.resume);
         return {
@@ -99,6 +99,8 @@ async function getResumes(page = 1, search = '') {
         };
       }
     });
+
+    resumes = resumes.filter((resume) => resume.meta?.public !== false);
     console.timeEnd('mapResumes');
 
     return {
