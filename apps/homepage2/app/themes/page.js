@@ -48,9 +48,9 @@ export default function GettingStarted() {
     {
       name: 'Stack Overflow',
       slug: 'stackoverflow',
-      github: '',
-      author: '',
-      link: '',
+      github: 'phoinixi',
+      author: 'Francesco Esposito',
+      link: 'https://github.com/phoinixi',
     },
     {
       name: 'Rickosborne',
