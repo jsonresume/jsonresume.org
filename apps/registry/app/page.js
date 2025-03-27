@@ -224,7 +224,7 @@ export default async function Page() {
                 <span className="font-bold text-xl">JSON Resume</span>
               </div>
               <p className="text-gray-600 mb-4 max-w-md">
-                An open source initiative to create a JSON-based standard for
+                An open-source initiative to create a JSON-based standard for
                 resumes. Helping developers showcase their work and experience.
               </p>
               <div className="flex gap-4">

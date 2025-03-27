@@ -9,7 +9,7 @@ export default async function Page() {
             <div className="col-sm-12">
               <h1>JSON Resume</h1>
               <p>
-                The open source initiative to create a JSON-based standard for
+                The open-source initiative to create a JSON-based standard for
                 resumes. For developers, by developers.
               </p>
               <a href="/schema/" className="btn btn-red btn-big">

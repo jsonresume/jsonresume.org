@@ -184,7 +184,7 @@ const resume = {
         'Tens of thousands of users',
       ],
       summary:
-        "JSON Resume is a community driven open source initiative to create a JSON based standard for resumes. There is no reason why there can't be a common standard for writing a resume that can be extended with an ecosystem of open source tools.",
+        "JSON Resume is a community driven open-source initiative to create a JSON based standard for resumes. There is no reason why there can't be a common standard for writing a resume that can be extended with an ecosystem of open source tools.",
       website: 'http://jsonresume.org',
       pinned: true,
       name: 'JSON Resume',
