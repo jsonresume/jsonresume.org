@@ -28,10 +28,10 @@ const Resume = ({ resume }) => {
       <Work work={resume.work} />
       <Projects projects={resume.projects} />
       <Education education={resume.education} />
-      <Volunteer volunteer={resume.volunteer} />
       <Certificates certificates={resume.certificates} />
       <Publications publications={resume.publications} />
       <Awards awards={resume.awards} />
+      <Volunteer volunteer={resume.volunteer} />
       <Languages languages={resume.languages} />
       <Skills skills={resume.skills} />
       <Interests interests={resume.interests} />
