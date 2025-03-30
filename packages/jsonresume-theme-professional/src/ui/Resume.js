@@ -25,9 +25,9 @@ const Resume = ({ resume }) => {
     <Layout>
       <Hero basics={resume.basics} />
       <Summary basics={resume.basics} />
-      <Education education={resume.education} />
       <Work work={resume.work} />
       <Projects projects={resume.projects} />
+      <Education education={resume.education} />
       <Volunteer volunteer={resume.volunteer} />
       <Certificates certificates={resume.certificates} />
       <Publications publications={resume.publications} />
