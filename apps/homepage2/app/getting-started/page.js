@@ -98,25 +98,6 @@ export default function GettingStarted() {
                   https://registry.jsonresume.org/thomasdavis.rendercv
                 </a>
               </p>
-              <h2>Maintaining and deploying multiple versions of resume</h2>
-                <p>
-                    This paragraph will briefly describe how I have created a somewhat manual process on my particular usecase. My usecase is that I need the possibility to maintain and deploy multiple version, based on language and for a particular position I am applying for, to the registry. Then I am able to export and create pdfs of my "current" resume, now in the registry, using any suitable existing theme.
-                    <br />
-                    <br />
-                    In this <a target="_blank" href="https://github.com/HarrySolsem/JsonResume.git"> repo</a> you will find that this is my attack vector:
-                </p>
-                <p>
-                    <ol>
-                        <li>I keep multiple versions of my resumes in a resume folder.</li>
-                        <li>In the root of my folder I have a file named resume-config. When I would like to deploy a particular version of my resume, for instance my English version of project manager resume, I replace the content of resume-config and adds the name of the file to deploy.</li>
-                        <li>Now I do a commit and push. What then happens is that the Git concept of hooks steps into action. I am using a pre-push hook that will replace the content of my resume.json with the content of my project manager json, and then push it. NB! Pay attention to the part of the readme.md mentioning the need to configure the location of the hooks folder.</li>
-                        <li>After this my actions in the repo will do it's thing and deploy (via my gist) to the registry.</li>
-                    </ol>    
-                    <br />
-                    <br />
-                    This is currently working for me, but this can for sure be extended and improved. Whatever your need would be, as long as you are able to put it into the pre-push hook, maybe it can be done. 
-                    Already people are looking for ways to remove certain sections of their resume, and I am quite sure that this can be done with some json modification tricks. Please have a look at my repo, clone and send pr on any changes you would like to suggest.
-                </p>
             </section>
           </div>
           <div class="col-sm-6">

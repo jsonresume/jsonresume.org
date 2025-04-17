@@ -36,4 +36,3 @@ yarn-error.log*
 # vercel
 .vercel
 .parcel-cache
-/.vs
