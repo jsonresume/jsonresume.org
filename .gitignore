@@ -37,3 +37,4 @@ yarn-error.log*
 .vercel
 .parcel-cache
 /.vs/jsonresume.org/FileContentIndex
+/.vs/slnx.sqlite
