@@ -25,13 +25,13 @@ const Resume = ({ resume }) => {
     <Layout>
       <Hero basics={resume.basics} />
       <Summary basics={resume.basics} />
-      <Education education={resume.education} />
       <Work work={resume.work} />
       <Projects projects={resume.projects} />
-      <Volunteer volunteer={resume.volunteer} />
+      <Education education={resume.education} />
       <Certificates certificates={resume.certificates} />
       <Publications publications={resume.publications} />
       <Awards awards={resume.awards} />
+      <Volunteer volunteer={resume.volunteer} />
       <Languages languages={resume.languages} />
       <Skills skills={resume.skills} />
       <Interests interests={resume.interests} />
