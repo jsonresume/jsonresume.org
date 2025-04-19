@@ -103,7 +103,7 @@ export default function GettingStarted() {
                 This section describes a manual workflow for maintaining and deploying multiple resume versions by language and position. You can export and publish a "current" resume JSON to the registry using any compatible theme.
               </p>
               <p>
-                In this <a target="_blank" rel="noopener noreferrer" href="https://github.com/HarrySolsem/JsonResume.git">repo</a>, you will find my approach:
+                In this <a target="_blank" rel="noopener noreferrer" href="https://github.com/HarrySolsem/JsonResume">repo</a>, you will find my approach:
               </p>
               <ol>
                 <li>Store multiple resume JSON files in a dedicated folder.</li>
