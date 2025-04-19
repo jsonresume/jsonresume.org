@@ -98,7 +98,7 @@ export default function GettingStarted() {
                   https://registry.jsonresume.org/thomasdavis.rendercv
                 </a>
               </p>
-              <h2>Maintaining and Deploying Multiple Versions of Resumes</h2>
+              <h2>Maintaining and Deploying Multiple Versions of Resumes</h2> 
 +              <p>
 +                This section describes a manual workflow for maintaining and deploying multiple resume versions by language and position. You can export and publish a "current" resume JSON to the registry using any compatible theme.
 +              </p>
