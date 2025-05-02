@@ -47,3 +47,4 @@
  - this step is currently disabled and could exist in better places
  - uses perplexity to do a search for company and its recent news, stores in db
  - can be parallelized (also can ignore this step for now)
+ - need a runner to emulate what github workflows does or something
