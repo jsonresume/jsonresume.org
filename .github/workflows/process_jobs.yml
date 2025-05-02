@@ -31,3 +31,9 @@ jobs:
         run: node apps/registry/scripts/jobs/getLatestWhoIsHiring.js
       - name: Output first 10 lines of generated JSON
         run: head -n 10 apps/registry/scripts/jobs/output/whoIsHiring.json
+      - name: Upload Who Is Hiring data as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: who-is-hiring-data
+          path: apps/registry/scripts/jobs/output/whoIsHiring.json
+          retention-days: 7
