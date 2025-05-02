@@ -3,9 +3,6 @@ require('dotenv').config({ path: __dirname + '/./../../.env' });
 const { createClient } = require('@supabase/supabase-js');
 const OpenAI = require('openai');
 
-const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
-const supabaseKey = process.env.SUPABASE_KEY;
-
 // Log environment variables for debugging
 console.log('Environment variables:', {
   NODE_ENV: process.env.NODE_ENV,
@@ -15,7 +12,29 @@ console.log('Environment variables:', {
   CURRENT_DIR: __dirname,
 });
 
-const supabase = createClient(supabaseUrl, supabaseKey);
+const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
+const supabaseKey =
+  process.env.SUPABASE_KEY || 'MISSING_KEY_USING_FILE_ONLY_MODE';
+
+let supabase;
+try {
+  console.log('Attempting to create Supabase client with:', {
+    supabaseUrl,
+    keyLength: supabaseKey ? supabaseKey.length : 0,
+  });
+  supabase = createClient(supabaseUrl, supabaseKey);
+  console.log('Supabase client created successfully');
+} catch (error) {
+  console.error('Failed to create Supabase client:', error.message);
+  console.log('Will continue in file-only mode without database access');
+  supabase = {
+    from: () => ({
+      select: () => ({ data: [] }),
+      update: () => ({ error: null }),
+    }),
+  };
+}
+
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
