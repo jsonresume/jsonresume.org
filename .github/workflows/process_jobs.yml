@@ -12,7 +12,7 @@ env:
   SUPABASE_KEY: ${{ vars.SUPABASE_KEY }}
 
 jobs:
-  setup:
+  process_hn_jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -30,4 +30,7 @@ jobs:
       - name: Run Who Is Hiring script
         run: node apps/registry/scripts/jobs/getLatestWhoIsHiring.js
       - name: Run gpted.js on whoIsHiring.json
-        run: node apps/registry/scripts/jobs/gpted.js
+        run: |
+          echo "SUPABASE_KEY: ${{ env.SUPABASE_KEY != '' }}"
+          echo "OPENAI_API_KEY: ${{ env.OPENAI_API_KEY != '' }}"
+          SUPABASE_KEY="${{ env.SUPABASE_KEY }}" OPENAI_API_KEY="${{ env.OPENAI_API_KEY }}" node apps/registry/scripts/jobs/gpted.js
