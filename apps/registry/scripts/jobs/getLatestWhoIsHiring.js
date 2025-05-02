@@ -4,6 +4,8 @@
  */
 
 const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
 
 // API endpoints
 const HN_SEARCH_API = 'https://hn.algolia.com/api/v1/search';
@@ -67,8 +69,19 @@ async function findLatestWhoIsHiringThread() {
         })),
       };
 
+      // Create outputs directory if it doesn't exist
+      const outputDir = path.join(__dirname, 'output');
+      if (!fs.existsSync(outputDir)) {
+        fs.mkdirSync(outputDir, { recursive: true });
+      }
+
+      // Write results to outputs/whoIsHiring.json
+      const outputPath = path.join(outputDir, 'whoIsHiring.json');
+      fs.writeFileSync(outputPath, JSON.stringify(result, null, 2));
+
       // Output the result to stdout
       console.log(JSON.stringify(result));
+      console.log(`\nResults written to ${outputPath}`);
 
       return result;
     } else {
