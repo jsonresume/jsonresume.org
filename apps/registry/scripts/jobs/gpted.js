@@ -1,13 +1,11 @@
-// Process job descriptions from the whoIsHiring.json file
-// and pass it to a template function for openai to turn a job description into a structured JSON representation
+// load all the resumes from the database
+// and pass it to a template function for openai to turn a job description schema in a json representation
 
 require('dotenv').config({ path: __dirname + '/./../../.env' });
 
 const { createClient } = require('@supabase/supabase-js');
 const OpenAI = require('openai');
 const async = require('async');
-const fs = require('fs');
-const path = require('path');
 
 const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
 const supabaseKey = process.env.SUPABASE_KEY;
@@ -15,9 +13,6 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
-
-// Path to the whoIsHiring.json file
-const whoIsHiringPath = path.join(__dirname, 'output', 'whoIsHiring.json');
 
 /*
 - multpple positions
@@ -276,9 +271,12 @@ const jobDescriptionToSchemaFunction = {
 };
 
 async function processJob(job) {
-  const jobId = job.id;
-  console.log('Processing job:', jobId);
-  const jobDescription = job.text; // Using 'text' field from the whoIsHiring.json structure
+  if (job.gpt_content) {
+    return; // Skip jobs that already have gpt_content
+  }
+
+  console.log('Processing job:', job.id);
+  const jobDescription = job.content;
 
   const messages = [
     {
@@ -437,93 +435,48 @@ Using the instructions and example above, transform the provided job description
     const content = chat3.choices[0].message.content;
     console.log({ jobId: job.id, content });
 
-    // Prepare the processed job data
-    const processedJob = {
-      id: job.id,
-      author: job.author,
-      created_at: job.created_at,
-      content: job.text,
-      url: job.url,
-      gpt_content: details,
-      gpt_content_json_extended: jobJson2,
-      gpt_content_full: content,
-    };
+    // Update the job in the database
+    const { error } = await supabase
+      .from('jobs')
+      .update({
+        gpt_content: details,
+        gpt_content_json_extended: jobJson2,
+        gpt_content_full: content,
+      })
+      .eq('id', job.id);
 
-    // Save to a processed jobs file
-    const processedJobsPath = path.join(
-      __dirname,
-      'output',
-      'processedJobs.json'
-    );
-
-    // Check if the file exists, create it if not
-    let processedJobs = [];
-    if (fs.existsSync(processedJobsPath)) {
-      const fileContent = fs.readFileSync(processedJobsPath, 'utf8');
-      if (fileContent) {
-        processedJobs = JSON.parse(fileContent);
-      }
+    if (error) {
+      console.log({ jobId: job.id, error });
+    } else {
+      console.log(`Successfully processed job: ${job.id}`);
     }
-
-    // Add the newly processed job
-    processedJobs.push(processedJob);
-
-    // Write back to the file
-    fs.writeFileSync(processedJobsPath, JSON.stringify(processedJobs, null, 2));
-
-    console.log(`Successfully processed job: ${job.id}`);
   } catch (e) {
     console.error(`Error processing job ${job.id}:`, e);
-
-    // Save error information to a file
-    const errorLogPath = path.join(__dirname, 'output', 'errorLog.json');
-
-    let errorLog = [];
-    if (fs.existsSync(errorLogPath)) {
-      const fileContent = fs.readFileSync(errorLogPath, 'utf8');
-      if (fileContent) {
-        errorLog = JSON.parse(fileContent);
-      }
-    }
-
-    errorLog.push({
-      id: job.id,
-      timestamp: new Date().toISOString(),
-      error: e.message,
-    });
-
-    fs.writeFileSync(errorLogPath, JSON.stringify(errorLog, null, 2));
+    await supabase
+      .from('jobs')
+      .update({
+        gpt_content: 'FAILED',
+      })
+      .eq('id', job.id);
   }
 }
 
 async function main() {
-  console.log('Reading jobs from whoIsHiring.json...');
+  console.log('Fetching jobs...');
 
-  // Check if the file exists
-  if (!fs.existsSync(whoIsHiringPath)) {
-    console.error(`Error: File not found at ${whoIsHiringPath}`);
-    process.exit(1);
-  }
+  const { data } = await supabase
+    .from('jobs')
+    .select()
+    .gte(
+      'created_at',
+      new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString()
+    );
 
-  // Read and parse the JSON file
-  const fileContent = fs.readFileSync(whoIsHiringPath, 'utf8');
-  const whoIsHiringData = JSON.parse(fileContent);
+  console.log(`Found ${data.length} jobs, processing up to 3 at a time`);
 
-  // Extract comments from the data structure
-  const comments = whoIsHiringData.comments || [];
-
-  console.log(
-    `Found ${comments.length} comments, processing up to 3 at a time`
-  );
-
-  // Create output directory if it doesn't exist
-  const outputDir = path.join(__dirname, 'output');
-  if (!fs.existsSync(outputDir)) {
-    fs.mkdirSync(outputDir, { recursive: true });
-  }
-
-  // Each comment is a job posting
-  const jobsToProcess = comments;
+  // Filter jobs that don't have gpt_content
+  const jobsToProcess = data.filter((job) => !job.gpt_content);
+  console.log(`${jobsToProcess.length} jobs need processing`);
 
   // Process jobs in parallel with a concurrency limit of 3
   await async.eachLimit(jobsToProcess, 3, async (job) => {
