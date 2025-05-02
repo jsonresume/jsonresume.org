@@ -1,3 +1,6 @@
+// load all the resumes from the database
+// and pass it to a template function for openai to turn a job description schema in a json representation
+
 require('dotenv').config({ path: __dirname + '/./../../.env' });
 
 const { createClient } = require('@supabase/supabase-js');
@@ -35,9 +38,18 @@ try {
   };
 }
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+let openai;
+
+try {
+  console.log('Attempting to create OpenAI client');
+  openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+  console.log('OpenAI client created successfully');
+} catch (error) {
+  console.error('Failed to create OpenAI client:', error.message);
+  process.exit(1); // Exit if OpenAI fails as it's essential
+}
 
 async function main() {
   console.log('Starting main function...');

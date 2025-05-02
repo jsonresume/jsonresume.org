@@ -40,6 +40,7 @@ try {
 }
 
 let openai;
+
 try {
   console.log('Attempting to create OpenAI client');
   openai = new OpenAI({
