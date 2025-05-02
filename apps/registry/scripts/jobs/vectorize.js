@@ -5,6 +5,16 @@ const OpenAI = require('openai');
 
 const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
 const supabaseKey = process.env.SUPABASE_KEY;
+
+// Log environment variables for debugging
+console.log('Environment variables:', {
+  NODE_ENV: process.env.NODE_ENV,
+  SUPABASE_KEY_EXISTS: !!process.env.SUPABASE_KEY,
+  OPENAI_API_KEY_EXISTS: !!process.env.OPENAI_API_KEY,
+  ENV_PATH: __dirname + '/./../../.env',
+  CURRENT_DIR: __dirname,
+});
+
 const supabase = createClient(supabaseUrl, supabaseKey);
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -30,7 +40,7 @@ async function main() {
   console.log('Fetched jobs:', data);
 
   for (const job of data) {
-    if (true || !job.embedding_v5) {
+    if (!job.embedding_v5) {
       console.log(`Creating embedding for job ID: ${job.id}`);
       try {
         console.log({ job });
