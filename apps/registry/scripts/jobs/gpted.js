@@ -24,50 +24,50 @@ const openai = new OpenAI({
 - a vote system for how shit the job translation was (3+)
 */
 
-const exampleJob = `
-{
-  "title": "Software Developer",
-  "company": "TechCorp",
-  "location": {
-    "address": "123 Main Street",
-    "postalCode": "12345",
-    "city": "Anytown",
-    "countryCode": "US",
-    "region": "State"
-  },
-  "type": "Full-time",
-  "remote": "FULL",
-  "salary": "100000",
-  "date": "2022-03-01",
-  "description": "We are seeking a skilled Software Developer to join our dynamic team...",
-  "responsibilities": [
-    "Design and implement software solutions",
-    "Collaborate with cross-functional teams to deliver high-quality code",
-    "Conduct code reviews and provide constructive feedback"
-  ],
-  "qualifications": [
-    "Bachelor's degree in Computer Science or related field",
-    "Proven experience in software development",
-    "Proficiency in JavaScript, Python, and React"
-  ],
-  "skills": [
-    "JavaScript",
-    "Python",
-    "React"
-  ],
-  "experience": "Mid-level",
-  "education": "Bachelor's Degree",
-  "application": "To apply, please send your resume and cover letter to careers@techcorp.com",
-  "perks": [
-    "Competitive salary",
-    "Flexible work hours",
-    "Healthcare benefits",
-    "Professional development opportunities",
-    "Casual dress code",
-    "Company-sponsored events and outings"
-  ]
-}
-`;
+// const exampleJob = `
+// {
+//   "title": "Software Developer",
+//   "company": "TechCorp",
+//   "location": {
+//     "address": "123 Main Street",
+//     "postalCode": "12345",
+//     "city": "Anytown",
+//     "countryCode": "US",
+//     "region": "State"
+//   },
+//   "type": "Full-time",
+//   "remote": "FULL",
+//   "salary": "100000",
+//   "date": "2022-03-01",
+//   "description": "We are seeking a skilled Software Developer to join our dynamic team...",
+//   "responsibilities": [
+//     "Design and implement software solutions",
+//     "Collaborate with cross-functional teams to deliver high-quality code",
+//     "Conduct code reviews and provide constructive feedback"
+//   ],
+//   "qualifications": [
+//     "Bachelor's degree in Computer Science or related field",
+//     "Proven experience in software development",
+//     "Proficiency in JavaScript, Python, and React"
+//   ],
+//   "skills": [
+//     "JavaScript",
+//     "Python",
+//     "React"
+//   ],
+//   "experience": "Mid-level",
+//   "education": "Bachelor's Degree",
+//   "application": "To apply, please send your resume and cover letter to careers@techcorp.com",
+//   "perks": [
+//     "Competitive salary",
+//     "Flexible work hours",
+//     "Healthcare benefits",
+//     "Professional development opportunities",
+//     "Casual dress code",
+//     "Company-sponsored events and outings"
+//   ]
+// }
+// `;
 
 const jobSchema = {
   $schema: 'http://json-schema.org/draft-04/schema#',
@@ -272,7 +272,7 @@ const jobDescriptionToSchemaFunction = {
 async function main() {
   console.log('fetching');
 
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from('jobs')
     .select()
     .gte(
@@ -402,25 +402,21 @@ Using the instructions and example above, transform the provided job description
           .select()
           .eq('name', company);
 
-        const parsedCompanyData = JSON.parse(companyData[0].data);
+        if (companyData && companyData[0]) {
+          const parsedCompanyData = JSON.parse(companyData[0].data);
 
-        // exit if no company data
-        if (companyError || !parsedCompanyData) {
-          // exit node
-          process.exit(1);
+          const companyDetails = parsedCompanyData.choices[0].message.content;
+
+          console.log({ companyDetails, companyError });
+
+          messages.push({
+            role: 'system',
+            content: `Here is more information about the company;
+            
+            ${companyDetails}
+            `,
+          });
         }
-
-        const companyDetails = parsedCompanyData.choices[0].message.content;
-
-        console.log({ companyDetails, companyError });
-
-        messages.push({
-          role: 'system',
-          content: `Here is more information about the company;
-          
-          ${companyDetails}
-          `,
-        });
 
         // regenerate gpt content now that we have more context
 
