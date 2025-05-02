@@ -421,7 +421,7 @@ Using the instructions and example above, transform the provided job description
   try {
     console.log('Starting OpenAI processing for job:', job.id);
     const chat = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
+      model: 'gpt-4.1-mini',
       temperature: 0.75,
       messages,
       functions: [jobDescriptionToSchemaFunction],
@@ -458,7 +458,7 @@ Using the instructions and example above, transform the provided job description
     // Regenerate gpt content with more context
     console.log({ jobId: job.id, messages });
     const chat2 = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
+      model: 'gpt-4.1-mini',
       temperature: 0.75,
       messages,
       functions: [jobDescriptionToSchemaFunction],
@@ -476,7 +476,7 @@ Using the instructions and example above, transform the provided job description
     });
 
     const chat3 = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
+      model: 'gpt-4.1-mini',
       temperature: 0.75,
       messages,
     });
@@ -531,10 +531,8 @@ async function main() {
     const { data, error } = await supabase
       .from('jobs')
       .select()
-      .gte(
-        'created_at',
-        new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString()
-      );
+      .order('id', { ascending: false })
+      .limit(1000);
 
     if (error) {
       console.error('Error fetching jobs from database:', error);
@@ -554,7 +552,7 @@ async function main() {
   }
 
   // Process jobs in parallel with a concurrency limit of 3
-  await async.eachLimit(jobsToProcess, 3, async (job) => {
+  await async.eachLimit(jobsToProcess, 5, async (job) => {
     await processJob(job);
     // Small delay between starting jobs to avoid rate limiting
     await new Promise((resolve) => setTimeout(resolve, 500));
