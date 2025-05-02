@@ -6,6 +6,8 @@ require('dotenv').config({ path: __dirname + '/./../../.env' });
 const { createClient } = require('@supabase/supabase-js');
 const OpenAI = require('openai');
 const async = require('async');
+const fs = require('fs');
+const path = require('path');
 
 const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
 const supabaseKey = process.env.SUPABASE_KEY;
@@ -462,21 +464,37 @@ Using the instructions and example above, transform the provided job description
 }
 
 async function main() {
-  console.log('Fetching jobs...');
+  console.log('Reading jobs from whoIsHiring.json...');
 
-  const { data } = await supabase
-    .from('jobs')
-    .select()
-    .gte(
-      'created_at',
-      new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString()
-    );
+  // Path to the whoIsHiring.json file
+  const whoIsHiringPath = path.join(__dirname, 'output', 'whoIsHiring.json');
 
-  console.log(`Found ${data.length} jobs, processing up to 3 at a time`);
+  // Check if the file exists
+  if (!fs.existsSync(whoIsHiringPath)) {
+    console.error(`Error: File not found at ${whoIsHiringPath}`);
+    process.exit(1);
+  }
 
-  // Filter jobs that don't have gpt_content
-  const jobsToProcess = data.filter((job) => !job.gpt_content);
-  console.log(`${jobsToProcess.length} jobs need processing`);
+  // Read and parse the JSON file
+  const fileContent = fs.readFileSync(whoIsHiringPath, 'utf8');
+  const whoIsHiringData = JSON.parse(fileContent);
+
+  // Extract comments from the data structure
+  const comments = whoIsHiringData.comments || [];
+
+  console.log(
+    `Found ${comments.length} jobs from Hacker News, processing up to 3 at a time`
+  );
+
+  // Each comment is a job posting
+  const jobsToProcess = comments.map((comment) => ({
+    id: comment.id,
+    content: comment.text, // Map the text field to content for compatibility
+    author: comment.author,
+    created_at: comment.created_at,
+    url: comment.url,
+  }));
+  console.log(`Prepared ${jobsToProcess.length} jobs for processing`);
 
   // Process jobs in parallel with a concurrency limit of 3
   await async.eachLimit(jobsToProcess, 3, async (job) => {

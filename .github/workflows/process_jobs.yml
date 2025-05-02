@@ -29,6 +29,5 @@ jobs:
       - run: pnpm turbo lint prettier
       - name: Run Who Is Hiring script
         run: node apps/registry/scripts/jobs/getLatestWhoIsHiring.js
-      - name: Output first 10 lines of generated JSON
-        run: head -n 10 apps/registry/scripts/jobs/output/whoIsHiring.json
-      - name: Upload Who Is Hiring data as artifact
+      - name: Run gpted.js on whoIsHiring.json
+        run: node apps/registry/scripts/jobs/gpted.js
