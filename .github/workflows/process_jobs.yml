@@ -31,9 +31,19 @@ jobs:
         run: node apps/registry/scripts/jobs/getLatestWhoIsHiring.js
       - name: Output first 10 lines of generated JSON
         run: head -n 10 apps/registry/scripts/jobs/output/whoIsHiring.json
+      - name: Process job descriptions with OpenAI
+        run: node apps/registry/scripts/jobs/gpted.js
+      - name: Output first 10 lines of processed jobs
+        run: head -n 10 apps/registry/scripts/jobs/output/processedJobs.json || echo "No processed jobs file found"
       - name: Upload Who Is Hiring data as artifact
         uses: actions/upload-artifact@v2
         with:
           name: who-is-hiring-data
           path: apps/registry/scripts/jobs/output/whoIsHiring.json
+          retention-days: 7
+      - name: Upload Processed Jobs data as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: processed-jobs-data
+          path: apps/registry/scripts/jobs/output/processedJobs.json
           retention-days: 7
