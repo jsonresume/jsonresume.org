@@ -36,3 +36,5 @@ jobs:
           echo "OPENAI_API_KEY exists: ${{ env.OPENAI_API_KEY != '' }}"
           echo "Running gpted.js with environment variables..."
           SUPABASE_KEY="${{ secrets.SUPABASE_KEY }}" OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}" node apps/registry/scripts/jobs/gpted.js
+      - name: Vectortize jobs for the vector search index
+        run: node apps/registry/scripts/jobs/vectorize.js
