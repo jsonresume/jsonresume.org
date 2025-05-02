@@ -29,8 +29,10 @@ jobs:
       - run: pnpm turbo lint prettier
       - name: Run Who Is Hiring script
         run: node apps/registry/scripts/jobs/getLatestWhoIsHiring.js
-      - name: Run gpted.js on whoIsHiring.json
+      - name: Run gpted.js to process jobs
         run: |
-          echo "SUPABASE_KEY: ${{ env.SUPABASE_KEY != '' }}"
-          echo "OPENAI_API_KEY: ${{ env.OPENAI_API_KEY != '' }}"
-          SUPABASE_KEY="${{ env.SUPABASE_KEY }}" OPENAI_API_KEY="${{ env.OPENAI_API_KEY }}" node apps/registry/scripts/jobs/gpted.js
+          echo "Environment variables check:"
+          echo "SUPABASE_KEY exists: ${{ env.SUPABASE_KEY != '' }}"
+          echo "OPENAI_API_KEY exists: ${{ env.OPENAI_API_KEY != '' }}"
+          echo "Running gpted.js with environment variables..."
+          SUPABASE_KEY="${{ secrets.SUPABASE_KEY }}" OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}" node apps/registry/scripts/jobs/gpted.js

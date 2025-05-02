@@ -6,8 +6,6 @@ require('dotenv').config({ path: __dirname + '/./../../.env' });
 const { createClient } = require('@supabase/supabase-js');
 const OpenAI = require('openai');
 const async = require('async');
-const fs = require('fs');
-const path = require('path');
 
 // Log environment variables for debugging
 console.log('Environment variables:', {
@@ -485,81 +483,22 @@ Using the instructions and example above, transform the provided job description
     const content = chat3.choices[0].message.content;
     console.log({ jobId: job.id, content });
 
-    // Prepare the processed job data
-    const processedJob = {
-      id: job.id,
-      author: job.author,
-      created_at: job.created_at,
-      content: job.content,
-      url: job.url,
-      gpt_content: details,
-      gpt_content_json_extended: jobJson2,
-      gpt_content_full: content,
-    };
+    console.log(`Updating job ${job.id} in database`);
 
-    console.log(`Saving processed job ${job.id} data`);
+    // Update the job in the database
+    const { error } = await supabase
+      .from('jobs')
+      .update({
+        gpt_content: details,
+        gpt_content_json_extended: jobJson2,
+        gpt_content_full: content,
+      })
+      .eq('id', job.id);
 
-    // Save to a processed jobs file first (as backup)
-    try {
-      const outputDir = path.join(__dirname, 'output');
-      if (!fs.existsSync(outputDir)) {
-        console.log(`Creating output directory: ${outputDir}`);
-        fs.mkdirSync(outputDir, { recursive: true });
-      }
-
-      const processedJobsPath = path.join(outputDir, 'processedJobs.json');
-      console.log(`Saving to file: ${processedJobsPath}`);
-
-      // Check if the file exists, create it if not
-      let processedJobs = [];
-      if (fs.existsSync(processedJobsPath)) {
-        const fileContent = fs.readFileSync(processedJobsPath, 'utf8');
-        if (fileContent) {
-          processedJobs = JSON.parse(fileContent);
-          console.log(
-            `Found existing processed jobs file with ${processedJobs.length} jobs`
-          );
-        }
-      } else {
-        console.log('Creating new processed jobs file');
-      }
-
-      // Add the newly processed job
-      processedJobs.push(processedJob);
-
-      // Write back to the file
-      fs.writeFileSync(
-        processedJobsPath,
-        JSON.stringify(processedJobs, null, 2)
-      );
-      console.log(`Successfully saved job ${job.id} to file`);
-    } catch (fileError) {
-      console.error(`Error saving to file: ${fileError.message}`);
-    }
-
-    // Try to update the database if Supabase is available
-    try {
-      if (supabaseKey !== 'MISSING_KEY_USING_FILE_ONLY_MODE') {
-        console.log(`Attempting to update job ${job.id} in Supabase database`);
-        const { error } = await supabase
-          .from('jobs')
-          .update({
-            gpt_content: details,
-            gpt_content_json_extended: jobJson2,
-            gpt_content_full: content,
-          })
-          .eq('id', job.id);
-
-        if (error) {
-          console.error(`Database update error for job ${job.id}:`, error);
-        } else {
-          console.log(`Successfully updated job ${job.id} in database`);
-        }
-      } else {
-        console.log('Skipping database update - running in file-only mode');
-      }
-    } catch (dbError) {
-      console.error(`Database operation failed: ${dbError.message}`);
+    if (error) {
+      console.log({ jobId: job.id, error });
+    } else {
+      console.log(`Successfully processed job: ${job.id}`);
     }
 
     console.log(`Successfully processed job: ${job.id}`);
@@ -568,57 +507,14 @@ Using the instructions and example above, transform the provided job description
     console.error(`Error processing job ${job.id}:`, e);
     console.error('Stack trace:', e.stack);
 
-    // Save error information to a file
-    try {
-      const outputDir = path.join(__dirname, 'output');
-      if (!fs.existsSync(outputDir)) {
-        fs.mkdirSync(outputDir, { recursive: true });
-      }
-
-      const errorLogPath = path.join(outputDir, 'errorLog.json');
-      console.log(`Saving error to log file: ${errorLogPath}`);
-
-      let errorLog = [];
-      if (fs.existsSync(errorLogPath)) {
-        const fileContent = fs.readFileSync(errorLogPath, 'utf8');
-        if (fileContent) {
-          errorLog = JSON.parse(fileContent);
-        }
-      }
-
-      errorLog.push({
-        id: job.id,
-        timestamp: new Date().toISOString(),
-        error: e.message,
-        stack: e.stack,
-      });
-
-      fs.writeFileSync(errorLogPath, JSON.stringify(errorLog, null, 2));
-      console.log('Error logged to file');
-    } catch (logError) {
-      console.error('Failed to write error log:', logError);
-    }
-
-    // Try to update the database if Supabase is available
-    try {
-      if (supabaseKey !== 'MISSING_KEY_USING_FILE_ONLY_MODE') {
-        console.log(`Attempting to mark job ${job.id} as FAILED in database`);
-        await supabase
-          .from('jobs')
-          .update({
-            gpt_content: 'FAILED',
-          })
-          .eq('id', job.id);
-      } else {
-        console.log(
-          'Skipping database update for failed job - running in file-only mode'
-        );
-      }
-    } catch (dbError) {
-      console.error(
-        `Database operation failed for error logging: ${dbError.message}`
-      );
-    }
+    // Mark job as failed in database
+    console.log(`Marking job ${job.id} as FAILED in database`);
+    await supabase
+      .from('jobs')
+      .update({
+        gpt_content: 'FAILED',
+      })
+      .eq('id', job.id);
   }
 }
 
@@ -628,55 +524,33 @@ async function main() {
   console.log('======================================');
   console.log('Script version: 1.0.0');
   console.log('Current directory:', __dirname);
-  console.log('Reading jobs from whoIsHiring.json...');
+  console.log('Fetching jobs from database...');
+  let jobsToProcess = [];
+  try {
+    const { data, error } = await supabase
+      .from('jobs')
+      .select()
+      .gte(
+        'created_at',
+        new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString()
+      );
 
-  // Path to the whoIsHiring.json file
-  const whoIsHiringPath = path.join(__dirname, 'output', 'whoIsHiring.json');
-  console.log(`Looking for whoIsHiring.json at: ${whoIsHiringPath}`);
-
-  // Check if the file exists
-  if (!fs.existsSync(whoIsHiringPath)) {
-    console.error(`Error: File not found at ${whoIsHiringPath}`);
-    console.log('Listing files in directory:');
-    try {
-      const dir = path.dirname(whoIsHiringPath);
-      if (fs.existsSync(dir)) {
-        const files = fs.readdirSync(dir);
-        console.log(`Files in ${dir}:`, files);
-      } else {
-        console.log(`Directory ${dir} does not exist`);
-        console.log(
-          'Creating directory and exiting. Please run again after file is created.'
-        );
-        fs.mkdirSync(dir, { recursive: true });
-      }
-    } catch (e) {
-      console.error('Error listing directory:', e);
+    if (error) {
+      console.error('Error fetching jobs from database:', error);
+      process.exit(1);
     }
+
+    console.log(
+      `Found ${data.length} jobs in database, processing up to 3 at a time`
+    );
+
+    // Filter jobs that don't have gpt_content
+    jobsToProcess = data.filter((job) => !job.gpt_content);
+    console.log(`${jobsToProcess.length} jobs need processing`);
+  } catch (error) {
+    console.error('Error in database query:', error);
     process.exit(1);
   }
-  console.log('Found whoIsHiring.json file');
-
-  // Read and parse the JSON file
-  const fileContent = fs.readFileSync(whoIsHiringPath, 'utf8');
-  const whoIsHiringData = JSON.parse(fileContent);
-
-  // Extract comments from the data structure
-  const comments = whoIsHiringData.comments || [];
-
-  console.log(
-    `Found ${comments.length} jobs from Hacker News, processing up to 3 at a time`
-  );
-
-  // Each comment is a job posting
-  const jobsToProcess = comments.map((comment) => ({
-    id: comment.id,
-    content: comment.text, // Map the text field to content for compatibility
-    author: comment.author,
-    created_at: comment.created_at,
-    url: comment.url,
-  }));
-  console.log(`Prepared ${jobsToProcess.length} jobs for processing`);
 
   // Process jobs in parallel with a concurrency limit of 3
   await async.eachLimit(jobsToProcess, 3, async (job) => {
