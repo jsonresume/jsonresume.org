@@ -23,7 +23,8 @@ async function findLatestWhoIsHiringThread() {
       params: {
         tags: 'story,author_whoishiring',
         hitsPerPage: 1000, // Get all results to ensure we get the latest
-        numericFilters: 'created_at_i>0',
+        // Filter for 2020 (Unix timestamps for Jan 1, 2020 to Dec 31, 2020)
+        numericFilters: 'created_at_i>=1577836800,created_at_i<=1609459199',
       },
     });
 
@@ -38,7 +39,6 @@ async function findLatestWhoIsHiringThread() {
 
       // Get the thread ID
       const threadId = latestThread.objectID;
-
       // Get all comments for this thread (only top-level comments)
       const commentsResponse = await axios.get(HN_SEARCH_BY_DATE, {
         params: {
