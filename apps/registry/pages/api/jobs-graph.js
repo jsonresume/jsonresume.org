@@ -125,22 +125,44 @@ export default async function handler(req, res) {
         y: 0,
         image: resume.basics?.image || null,
       },
-      ...topJobs.map((job) => ({
-        id: job.uuid,
-        label: JSON.parse(job.gpt_content).title,
-        group: 1,
-        size: 4,
-        color: '#fff18f',
-        vector: JSON.parse(job.embedding_v5),
-      })),
-      ...otherJobs.map((job) => ({
-        id: job.uuid,
-        label: JSON.parse(job.gpt_content).title,
-        group: 2,
-        size: 4,
-        color: '#fff18f',
-        vector: JSON.parse(job.embedding_v5),
-      })),
+      ...topJobs
+        .map((job) => {
+          try {
+            const jobContent = JSON.parse(job.gpt_content);
+            const vector = JSON.parse(job.embedding_v5);
+            return {
+              id: job.uuid,
+              label: jobContent.title,
+              group: 1,
+              size: 4,
+              color: '#fff18f',
+              vector,
+            };
+          } catch (e) {
+            // Skip jobs with invalid JSON
+            return null;
+          }
+        })
+        .filter(Boolean),
+      ...otherJobs
+        .map((job) => {
+          try {
+            const jobContent = JSON.parse(job.gpt_content);
+            const vector = JSON.parse(job.embedding_v5);
+            return {
+              id: job.uuid,
+              label: jobContent.title,
+              group: 2,
+              size: 4,
+              color: '#fff18f',
+              vector,
+            };
+          } catch (e) {
+            // Skip jobs with invalid JSON
+            return null;
+          }
+        })
+        .filter(Boolean),
     ],
     links: [
       ...topJobs.map((job) => ({
@@ -188,12 +210,12 @@ export default async function handler(req, res) {
   });
 
   // Set cache control headers for CDN caching
-  const etag = `"${username}-v1"`; // Make ETag deterministic
-  res.setHeader('ETag', etag);
-  res.setHeader('Cache-Control', 'public, max-age=86400');
-  res.setHeader('Vary', 'Accept-Encoding');
-  res.setHeader('CDN-Cache-Control', 'public, max-age=86400');
-  res.setHeader('Cloudflare-CDN-Cache-Control', 'public, max-age=86400');
+  // const etag = `"${username}-v1"`; // Make ETag deterministic
+  // res.setHeader('ETag', etag);
+  // res.setHeader('Cache-Control', 'public, max-age=86400');
+  // res.setHeader('Vary', 'Accept-Encoding');
+  // res.setHeader('CDN-Cache-Control', 'public, max-age=86400');
+  // res.setHeader('Cloudflare-CDN-Cache-Control', 'public, max-age=86400');
 
   // Ensure consistent ordering of properties for better caching
   const response = {

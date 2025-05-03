@@ -5,13 +5,52 @@ require('dotenv').config({ path: __dirname + '/./../../.env' });
 
 const { createClient } = require('@supabase/supabase-js');
 const OpenAI = require('openai');
+const async = require('async');
+
+// Log environment variables for debugging
+console.log('Environment variables:', {
+  NODE_ENV: process.env.NODE_ENV,
+  SUPABASE_KEY_EXISTS: !!process.env.SUPABASE_KEY,
+  OPENAI_API_KEY_EXISTS: !!process.env.OPENAI_API_KEY,
+  ENV_PATH: __dirname + '/./../../.env',
+  CURRENT_DIR: __dirname,
+});
 
 const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
-const supabaseKey = process.env.SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+const supabaseKey =
+  process.env.SUPABASE_KEY || 'MISSING_KEY_USING_FILE_ONLY_MODE';
+
+let supabase;
+try {
+  console.log('Attempting to create Supabase client with:', {
+    supabaseUrl,
+    keyLength: supabaseKey ? supabaseKey.length : 0,
+  });
+  supabase = createClient(supabaseUrl, supabaseKey);
+  console.log('Supabase client created successfully');
+} catch (error) {
+  console.error('Failed to create Supabase client:', error.message);
+  console.log('Will continue in file-only mode without database access');
+  supabase = {
+    from: () => ({
+      select: () => ({ data: [] }),
+      update: () => ({ error: null }),
+    }),
+  };
+}
+
+let openai;
+
+try {
+  console.log('Attempting to create OpenAI client');
+  openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+  console.log('OpenAI client created successfully');
+} catch (error) {
+  console.error('Failed to create OpenAI client:', error.message);
+  process.exit(1); // Exit if OpenAI fails as it's essential
+}
 
 /*
 - multpple positions
@@ -24,50 +63,50 @@ const openai = new OpenAI({
 - a vote system for how shit the job translation was (3+)
 */
 
-const exampleJob = `
-{
-  "title": "Software Developer",
-  "company": "TechCorp",
-  "location": {
-    "address": "123 Main Street",
-    "postalCode": "12345",
-    "city": "Anytown",
-    "countryCode": "US",
-    "region": "State"
-  },
-  "type": "Full-time",
-  "remote": "FULL",
-  "salary": "100000",
-  "date": "2022-03-01",
-  "description": "We are seeking a skilled Software Developer to join our dynamic team...",
-  "responsibilities": [
-    "Design and implement software solutions",
-    "Collaborate with cross-functional teams to deliver high-quality code",
-    "Conduct code reviews and provide constructive feedback"
-  ],
-  "qualifications": [
-    "Bachelor's degree in Computer Science or related field",
-    "Proven experience in software development",
-    "Proficiency in JavaScript, Python, and React"
-  ],
-  "skills": [
-    "JavaScript",
-    "Python",
-    "React"
-  ],
-  "experience": "Mid-level",
-  "education": "Bachelor's Degree",
-  "application": "To apply, please send your resume and cover letter to careers@techcorp.com",
-  "perks": [
-    "Competitive salary",
-    "Flexible work hours",
-    "Healthcare benefits",
-    "Professional development opportunities",
-    "Casual dress code",
-    "Company-sponsored events and outings"
-  ]
-}
-`;
+// const exampleJob = `
+// {
+//   "title": "Software Developer",
+//   "company": "TechCorp",
+//   "location": {
+//     "address": "123 Main Street",
+//     "postalCode": "12345",
+//     "city": "Anytown",
+//     "countryCode": "US",
+//     "region": "State"
+//   },
+//   "type": "Full-time",
+//   "remote": "FULL",
+//   "salary": "100000",
+//   "date": "2022-03-01",
+//   "description": "We are seeking a skilled Software Developer to join our dynamic team...",
+//   "responsibilities": [
+//     "Design and implement software solutions",
+//     "Collaborate with cross-functional teams to deliver high-quality code",
+//     "Conduct code reviews and provide constructive feedback"
+//   ],
+//   "qualifications": [
+//     "Bachelor's degree in Computer Science or related field",
+//     "Proven experience in software development",
+//     "Proficiency in JavaScript, Python, and React"
+//   ],
+//   "skills": [
+//     "JavaScript",
+//     "Python",
+//     "React"
+//   ],
+//   "experience": "Mid-level",
+//   "education": "Bachelor's Degree",
+//   "application": "To apply, please send your resume and cover letter to careers@techcorp.com",
+//   "perks": [
+//     "Competitive salary",
+//     "Flexible work hours",
+//     "Healthcare benefits",
+//     "Professional development opportunities",
+//     "Casual dress code",
+//     "Company-sponsored events and outings"
+//   ]
+// }
+// `;
 
 const jobSchema = {
   $schema: 'http://json-schema.org/draft-04/schema#',
@@ -269,26 +308,29 @@ const jobDescriptionToSchemaFunction = {
   },
 };
 
-async function main() {
-  console.log('fetching');
+async function processJob(job) {
+  console.log('======================================');
+  console.log(`Starting to process job: ${job.id}`);
+  console.log('Job details:', {
+    id: job.id,
+    author: job.author,
+    contentLength: job.content ? job.content.length : 0,
+    created_at: job.created_at,
+    url: job.url,
+  });
 
-  const { data, error } = await supabase
-    .from('jobs')
-    .select()
-    .gte(
-      'created_at',
-      new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString()
-    );
+  if (job.gpt_content) {
+    console.log(`Job ${job.id} already has gpt_content, skipping`);
+    return; // Skip jobs that already have gpt_content
+  }
 
-  for (let index = 0; index < data.length; index++) {
-    const job = data[index];
+  console.log(`Processing job content for job ID: ${job.id}`);
+  const jobDescription = job.content;
 
-    const jobDescription = job.content;
-
-    const messages = [
-      {
-        role: 'system',
-        content: `
+  const messages = [
+    {
+      role: 'system',
+      content: `
 Turn a Job Description into Structured JSON Data
 
 You are a human assistant working for a recruiter. Your role is to transform job descriptions into structured JSON data. Follow the guidelines below to ensure high-quality and consistent results.
@@ -373,117 +415,150 @@ To help guide you, here is an example of a properly formatted job description in
 
 ### Final Output:
 Using the instructions and example above, transform the provided job description into a structured JSON document.`,
-      },
-    ];
+    },
+  ];
 
-    if (!job.gpt_content) {
-      console.log('Found job without gpt_content', job);
-      const chat = await openai.chat.completions.create({
-        model: 'gpt-4o-mini',
-        temperature: 0.75,
-        messages,
-        functions: [jobDescriptionToSchemaFunction],
-        function_call: 'auto',
+  try {
+    console.log('Starting OpenAI processing for job:', job.id);
+    const chat = await openai.chat.completions.create({
+      model: 'gpt-4.1-mini',
+      temperature: 0.75,
+      messages,
+      functions: [jobDescriptionToSchemaFunction],
+      function_call: 'auto',
+    });
+
+    const details = chat.choices[0].message.function_call?.arguments;
+    const jobJson = JSON.parse(details);
+    console.log({ jobId: job.id, jobJson });
+
+    const { company } = jobJson;
+    console.log({ jobId: job.id, company });
+
+    // Get company data if available
+    const { data: companyData, error: companyError } = await supabase
+      .from('companies')
+      .select()
+      .eq('name', company);
+
+    if (companyData && companyData[0]) {
+      const parsedCompanyData = JSON.parse(companyData[0].data);
+      const companyDetails = parsedCompanyData.choices[0].message.content;
+      console.log({ jobId: job.id, companyDetails, companyError });
+
+      messages.push({
+        role: 'system',
+        content: `Here is more information about the company;
+        
+        ${companyDetails}
+        `,
       });
-
-      try {
-        const details = chat.choices[0].message.function_call?.arguments;
-
-        const jobJson = JSON.parse(details);
-
-        console.log({ jobJson });
-
-        const { company } = jobJson;
-
-        console.log({ company });
-
-        const { data: companyData, error: companyError } = await supabase
-          .from('companies')
-          .select()
-          .eq('name', company);
-
-        const parsedCompanyData = JSON.parse(companyData[0].data);
-
-        // exit if no company data
-        if (companyError || !parsedCompanyData) {
-          // exit node
-          process.exit(1);
-        }
-
-        const companyDetails = parsedCompanyData.choices[0].message.content;
-
-        console.log({ companyDetails, companyError });
-
-        messages.push({
-          role: 'system',
-          content: `Here is more information about the company;
-          
-          ${companyDetails}
-          `,
-        });
-
-        // regenerate gpt content now that we have more context
-
-        console.log({ messages });
-
-        const chat2 = await openai.chat.completions.create({
-          model: 'gpt-4o-mini',
-          temperature: 0.75,
-          messages,
-          functions: [jobDescriptionToSchemaFunction],
-          function_call: 'auto',
-        });
-
-        try {
-          const details2 = chat2.choices[0].message.function_call?.arguments;
-          const jobJson2 = JSON.parse(details2);
-
-          console.log({ jobJson2 });
-
-          // now i want to run one more pass through the ai but this time, don't call a function, just return a text response of all the job description in natural language
-
-          messages.push({
-            role: 'system',
-            content: `Transform the structured job information into a comprehensive, natural-language job description. Write it as if it were a professional job posting that would appear on a career site. Include all details about the role, company, requirements, and benefits in a flowing narrative format. Focus on using industry-standard terminology and keywords that would naturally appear in relevant resumes. Make sure to incorporate all the technical skills, qualifications, and responsibilities in a way that would maximize semantic matching with candidate resumes.`,
-          });
-
-          const chat3 = await openai.chat.completions.create({
-            model: 'gpt-4o-mini',
-            temperature: 0.75,
-            messages,
-          });
-
-          const content = chat3.choices[0].message.content;
-
-          try {
-            console.log({ chat3, content });
-            const { error } = await supabase
-              .from('jobs')
-              .update({
-                gpt_content: details,
-                gpt_content_json_extended: jobJson2,
-                gpt_content_full: content,
-              })
-              .eq('id', job.id);
-            console.log({ error });
-          } catch (e) {
-            console.log({ e });
-          }
-        } catch (e) {
-          console.log({ e });
-        }
-      } catch (e) {
-        console.error(e);
-        await supabase
-          .from('jobs')
-          .update({
-            gpt_content: 'FAILED',
-          })
-          .eq('id', job.id);
-      }
-      await new Promise((resolve) => setTimeout(resolve, 1000));
     }
+
+    // Regenerate gpt content with more context
+    console.log({ jobId: job.id, messages });
+    const chat2 = await openai.chat.completions.create({
+      model: 'gpt-4.1-mini',
+      temperature: 0.75,
+      messages,
+      functions: [jobDescriptionToSchemaFunction],
+      function_call: 'auto',
+    });
+
+    const details2 = chat2.choices[0].message.function_call?.arguments;
+    const jobJson2 = JSON.parse(details2);
+    console.log({ jobId: job.id, jobJson2 });
+
+    // Generate natural language description
+    messages.push({
+      role: 'system',
+      content: `Transform the structured job information into a comprehensive, natural-language job description. Write it as if it were a professional job posting that would appear on a career site. Include all details about the role, company, requirements, and benefits in a flowing narrative format. Focus on using industry-standard terminology and keywords that would naturally appear in relevant resumes. Make sure to incorporate all the technical skills, qualifications, and responsibilities in a way that would maximize semantic matching with candidate resumes.`,
+    });
+
+    const chat3 = await openai.chat.completions.create({
+      model: 'gpt-4.1-mini',
+      temperature: 0.75,
+      messages,
+    });
+
+    const content = chat3.choices[0].message.content;
+    console.log({ jobId: job.id, content });
+
+    console.log(`Updating job ${job.id} in database`);
+
+    // Update the job in the database
+    const { error } = await supabase
+      .from('jobs')
+      .update({
+        gpt_content: details,
+        gpt_content_json_extended: jobJson2,
+        gpt_content_full: content,
+      })
+      .eq('id', job.id);
+
+    if (error) {
+      console.log({ jobId: job.id, error });
+    } else {
+      console.log(`Successfully processed job: ${job.id}`);
+    }
+
+    console.log(`Successfully processed job: ${job.id}`);
+    console.log('======================================');
+  } catch (e) {
+    console.error(`Error processing job ${job.id}:`, e);
+    console.error('Stack trace:', e.stack);
+
+    // Mark job as failed in database
+    console.log(`Marking job ${job.id} as FAILED in database`);
+    await supabase
+      .from('jobs')
+      .update({
+        gpt_content: 'FAILED',
+      })
+      .eq('id', job.id);
   }
+}
+
+async function main() {
+  console.log('======================================');
+  console.log('STARTING JOB PROCESSING');
+  console.log('======================================');
+  console.log('Script version: 1.0.0');
+  console.log('Current directory:', __dirname);
+  console.log('Fetching jobs from database...');
+  let jobsToProcess = [];
+  try {
+    const { data, error } = await supabase
+      .from('jobs')
+      .select()
+      .order('id', { ascending: false })
+      .limit(1000);
+
+    if (error) {
+      console.error('Error fetching jobs from database:', error);
+      process.exit(1);
+    }
+
+    console.log(
+      `Found ${data.length} jobs in database, processing up to 3 at a time`
+    );
+
+    // Filter jobs that don't have gpt_content
+    jobsToProcess = data.filter((job) => !job.gpt_content);
+    console.log(`${jobsToProcess.length} jobs need processing`);
+  } catch (error) {
+    console.error('Error in database query:', error);
+    process.exit(1);
+  }
+
+  // Process jobs in parallel with a concurrency limit of 3
+  await async.eachLimit(jobsToProcess, 5, async (job) => {
+    await processJob(job);
+    // Small delay between starting jobs to avoid rate limiting
+    await new Promise((resolve) => setTimeout(resolve, 500));
+  });
+
+  console.log('All jobs processed successfully!');
 }
 
 main();
