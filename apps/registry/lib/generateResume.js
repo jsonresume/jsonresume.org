@@ -19,6 +19,7 @@ const EXTENSIONS = new Set([
   'template',
   'yaml',
   'rendercv',
+  'agent',
 ]);
 
 const generateResume = async (username, extension = 'template', query = {}) => {

@@ -128,44 +128,8 @@ export default async function handler(req, res) {
       ...topJobs
         .map((job) => {
           try {
-            // Skip jobs with gpt_content set to "FAILED" or null/undefined
-            if (
-              !job.gpt_content ||
-              job.gpt_content === 'FAILED' ||
-              !job.embedding_v5
-            ) {
-              console.log(
-                `Skipping job ${job.uuid} due to missing or failed content`
-              );
-              return null;
-            }
-
-            // Parse JSON safely
-            let jobContent, vector;
-            try {
-              jobContent = JSON.parse(job.gpt_content);
-            } catch (parseError) {
-              console.log(
-                `Error parsing gpt_content for job ${job.uuid}: ${parseError.message}`
-              );
-              return null;
-            }
-
-            try {
-              vector = JSON.parse(job.embedding_v5);
-            } catch (parseError) {
-              console.log(
-                `Error parsing embedding_v5 for job ${job.uuid}: ${parseError.message}`
-              );
-              return null;
-            }
-
-            // Ensure jobContent has a title
-            if (!jobContent || !jobContent.title) {
-              console.log(`Job ${job.uuid} has invalid content structure`);
-              return null;
-            }
-
+            const jobContent = JSON.parse(job.gpt_content);
+            const vector = JSON.parse(job.embedding_v5);
             return {
               id: job.uuid,
               label: jobContent.title,
@@ -175,10 +139,7 @@ export default async function handler(req, res) {
               vector,
             };
           } catch (e) {
-            // Skip jobs with any other errors
-            console.log(
-              `Unexpected error processing job ${job.uuid}: ${e.message}`
-            );
+            // Skip jobs with invalid JSON
             return null;
           }
         })
@@ -186,34 +147,8 @@ export default async function handler(req, res) {
       ...otherJobs
         .map((job) => {
           try {
-            // Skip jobs with gpt_content set to "FAILED" or null/undefined
-            if (
-              !job.gpt_content ||
-              job.gpt_content === 'FAILED' ||
-              !job.embedding_v5
-            ) {
-              return null;
-            }
-
-            // Parse JSON safely
-            let jobContent, vector;
-            try {
-              jobContent = JSON.parse(job.gpt_content);
-            } catch (parseError) {
-              return null;
-            }
-
-            try {
-              vector = JSON.parse(job.embedding_v5);
-            } catch (parseError) {
-              return null;
-            }
-
-            // Ensure jobContent has a title
-            if (!jobContent || !jobContent.title) {
-              return null;
-            }
-
+            const jobContent = JSON.parse(job.gpt_content);
+            const vector = JSON.parse(job.embedding_v5);
             return {
               id: job.uuid,
               label: jobContent.title,
@@ -223,7 +158,7 @@ export default async function handler(req, res) {
               vector,
             };
           } catch (e) {
-            // Skip jobs with any other errors
+            // Skip jobs with invalid JSON
             return null;
           }
         })
@@ -237,58 +172,33 @@ export default async function handler(req, res) {
       })),
       // Process other jobs sequentially, each one only looking at previously processed jobs
       ...otherJobs.reduce((links, lessRelevantJob, index) => {
-        try {
-          // Skip jobs with missing or invalid embedding
-          if (!lessRelevantJob.embedding_v5) return links;
+        const lessRelevantVector = JSON.parse(lessRelevantJob.embedding_v5);
 
-          let lessRelevantVector;
-          try {
-            lessRelevantVector = JSON.parse(lessRelevantJob.embedding_v5);
-          } catch (e) {
-            return links; // Skip if can't parse embedding
-          }
+        // Jobs to compare against: top jobs + already processed less relevant jobs
+        const availableJobs = [...topJobs, ...otherJobs.slice(0, index)];
 
-          // Jobs to compare against: top jobs + already processed less relevant jobs
-          const availableJobs = [...topJobs, ...otherJobs.slice(0, index)];
+        const mostSimilarJob = availableJobs.reduce(
+          (best, current) => {
+            const similarity = cosineSimilarity(
+              lessRelevantVector,
+              JSON.parse(current.embedding_v5)
+            );
+            return similarity > best.similarity
+              ? { job: current, similarity }
+              : best;
+          },
+          { job: null, similarity: -1 }
+        );
 
-          const mostSimilarJob = availableJobs.reduce(
-            (best, current) => {
-              try {
-                if (!current.embedding_v5) return best;
-
-                let currentVector;
-                try {
-                  currentVector = JSON.parse(current.embedding_v5);
-                } catch (e) {
-                  return best; // Skip if can't parse embedding
-                }
-
-                const similarity = cosineSimilarity(
-                  lessRelevantVector,
-                  currentVector
-                );
-                return similarity > best.similarity
-                  ? { job: current, similarity }
-                  : best;
-              } catch (e) {
-                return best; // Skip on any error
-              }
-            },
-            { job: null, similarity: -1 }
-          );
-
-          if (mostSimilarJob.job) {
-            links.push({
-              source: mostSimilarJob.job.uuid,
-              target: lessRelevantJob.uuid,
-              value: mostSimilarJob.similarity,
-            });
-          }
-
-          return links;
-        } catch (e) {
-          return links; // Return unchanged links on error
+        if (mostSimilarJob.job) {
+          links.push({
+            source: mostSimilarJob.job.uuid,
+            target: lessRelevantJob.uuid,
+            value: mostSimilarJob.similarity,
+          });
         }
+
+        return links;
       }, []),
     ],
   };
@@ -296,21 +206,11 @@ export default async function handler(req, res) {
   // Create job info map
   const jobInfoMap = {};
   sortedJobs.forEach((job) => {
-    try {
-      // Skip jobs with invalid gpt_content
-      if (!job.gpt_content || job.gpt_content === 'FAILED') {
-        return; // Skip this job
-      }
-
-      // Try to parse the content
-      jobInfoMap[job.uuid] = JSON.parse(job.gpt_content);
-    } catch (error) {
-      // Just skip this job on parsing error
-      console.log(`Error parsing job ${job.uuid} content: ${error.message}`);
-    }
+    jobInfoMap[job.uuid] = JSON.parse(job.gpt_content);
   });
 
   // Set cache control headers for CDN caching
+  // const etag = `"${username}-v1"`; // Make ETag deterministic
   // res.setHeader('ETag', etag);
   // res.setHeader('Cache-Control', 'public, max-age=86400');
   // res.setHeader('Vary', 'Accept-Encoding');
