@@ -98,22 +98,52 @@ export default function GettingStarted() {
                   https://registry.jsonresume.org/thomasdavis.rendercv
                 </a>
               </p>
-              <h2>Maintaining and Deploying Multiple Versions of Resumes</h2> 
+              <h2>Maintaining and Deploying Multiple Versions</h2>
               <p>
-                This section describes a manual workflow for maintaining and deploying multiple resume versions by language and position. You can export and publish a "current" resume JSON to the registry using any compatible theme.
+                While unofficial, this approach offers a practical guide for
+                maintaining and deploying multiple resume versions by language
+                and role. You can manually export and publish a
+                &quot;current&quot; version to the registry using any compatible
+                theme.
               </p>
               <p>
-                In this <a target="_blank" rel="noopener noreferrer" href="https://github.com/HarrySolsem/JsonResume">repo</a>, you will find my approach:
+                In this{' '}
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://github.com/HarrySolsem/JsonResume"
+                >
+                  repo
+                </a>
+                , by{' '}
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://github.com/HarrySolsem"
+                >
+                  @HarrySolsem
+                </a>{' '}
+                you will find the approach:
               </p>
               <ol>
-                <li>Store multiple resume JSON files in a dedicated folder.</li>
-                <li>Use a root-level <code>resume-config.json</code> file to select which resume to deploy.</li>
-                <li>Commit and push; a pre-push Git hook replaces the content in <code>resume.json</code> with the content of the file named in <code>resume-config.json</code>.</li>
-                <li>GitHub Actions then deploy the selected resume to the registry.</li>
+                <li>
+                  Store multiple <code>resume.json</code> files in a dedicated
+                  folder.
+                </li>
+                <li>
+                  Use a root-level <code>resume-config.json</code> file to
+                  select which resume to deploy.
+                </li>
+                <li>
+                  Commit and push; a pre-push Git hook replaces the content in{' '}
+                  <code>resume.json</code> with the content of the file named in{' '}
+                  <code>resume-config.json</code>.
+                </li>
+                <li>
+                  GitHub Actions then deploy the selected resume to the
+                  registry.
+                </li>
               </ol>
-              <p>
-                This workflow is working well for me and can be easily extended. Feel free to clone the repo and submit pull requests with improvements.
-              </p>            
             </section>
           </div>
           <div class="col-sm-6">
