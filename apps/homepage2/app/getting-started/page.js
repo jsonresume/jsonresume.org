@@ -98,6 +98,52 @@ export default function GettingStarted() {
                   https://registry.jsonresume.org/thomasdavis.rendercv
                 </a>
               </p>
+              <h2>Maintaining and Deploying Multiple Versions</h2>
+              <p>
+                While unofficial, this approach offers a practical guide for
+                maintaining and deploying multiple resume versions by language
+                and role. You can manually export and publish a
+                &quot;current&quot; version to the registry using any compatible
+                theme.
+              </p>
+              <p>
+                In this{' '}
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://github.com/HarrySolsem/JsonResume"
+                >
+                  repo
+                </a>
+                , by{' '}
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://github.com/HarrySolsem"
+                >
+                  @HarrySolsem
+                </a>{' '}
+                you will find the approach:
+              </p>
+              <ol>
+                <li>
+                  Store multiple <code>resume.json</code> files in a dedicated
+                  folder.
+                </li>
+                <li>
+                  Use a root-level <code>resume-config.json</code> file to
+                  select which resume to deploy.
+                </li>
+                <li>
+                  Commit and push; a pre-push Git hook replaces the content in{' '}
+                  <code>resume.json</code> with the content of the file named in{' '}
+                  <code>resume-config.json</code>.
+                </li>
+                <li>
+                  GitHub Actions then deploy the selected resume to the
+                  registry.
+                </li>
+              </ol>
             </section>
           </div>
           <div class="col-sm-6">
