@@ -126,22 +126,20 @@ export default function GettingStarted() {
                 you will find the approach:
               </p>
               <ol>
+                <li>Store multiple resumes files in a dedicated folder.</li>
                 <li>
-                  Store multiple <code>resume.json</code> files in a dedicated
-                  folder.
+                  Use a root-level <code>config.json</code> file to select which
+                  resume to deploy.
                 </li>
                 <li>
-                  Use a root-level <code>resume-config.json</code> file to
-                  select which resume to deploy.
-                </li>
-                <li>
-                  Commit and push; a pre-push Git hook replaces the content in{' '}
-                  <code>resume.json</code> with the content of the file named in{' '}
-                  <code>resume-config.json</code>.
+                  Commit and push; a Git action workflow replaces the content in{' '}
+                  <code>resume.json</code> with the content from the file
+                  selected from the resumes folder based on the resumetype and
+                  language settings in <code>config.json</code>.
                 </li>
                 <li>
                   GitHub Actions then deploy the selected resume to the
-                  registry.
+                  registry. More information in my readme
                 </li>
               </ol>
             </section>
