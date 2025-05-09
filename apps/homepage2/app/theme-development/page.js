@@ -61,8 +61,8 @@ export default function ThemeDevelopment() {
             <h3>Considerations</h3>
             <p>
               <ul>
-                <li>All assets and css has to be inline the output</li>
-                <li>Gotta base64 encoding your images and other assets</li>
+                <li>All assets and css must be inlined in the output</li>
+                <li>Images and other assets must be base64-encoded</li>
                 <li>
                   The <code>render</code> function should be pure, as in, it
                   should have no side effects. Which means to say it
@@ -77,7 +77,7 @@ export default function ThemeDevelopment() {
                 </li>
                 <li>
                   Feel free to share any opinions on this process in the
-                  repoistory
+                  repository
                 </li>
               </ul>
             </p>
