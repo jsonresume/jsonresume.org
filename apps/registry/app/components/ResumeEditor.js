@@ -46,18 +46,13 @@ const HtmlIframe = ({ htmlString }) => {
   const iframeRef = useRef(null);
 
   useEffect(() => {
-    if (iframeRef.current) {
-      iframeRef.current.srcdoc = htmlString;
-    }
+    const iframeDocument = iframeRef.current.contentDocument;
+    iframeDocument.open();
+    iframeDocument.write(htmlString);
+    iframeDocument.close();
   }, [htmlString]);
 
-  return (
-    <iframe
-      ref={iframeRef}
-      className="w-full h-full"
-      title="Resume Preview"
-    ></iframe>
-  );
+  return <iframe ref={iframeRef} className="w-full h-full overflow-auto" />;
 };
 
 const ResumeEditor = ({ resume: initialResume, updateGist }) => {
