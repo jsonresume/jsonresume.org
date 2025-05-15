@@ -76,6 +76,7 @@ const ResumeEditor = ({ resume: initialResume, updateGist }) => {
   const [content, setContent] = useState('');
   const [editorMode, setEditorMode] = useState('gui');
   const [, setPendingChanges] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
   const monaco = useMonaco();
 
   useEffect(() => {
@@ -270,10 +271,20 @@ const ResumeEditor = ({ resume: initialResume, updateGist }) => {
               <Button
                 size="sm"
                 className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                onClick={() => updateGist(JSON.stringify(resume, null, 2))}
+                onClick={async () => {
+                  setIsSaving(true);
+                  try {
+                    await updateGist(JSON.stringify(resume, null, 2));
+                  } catch (error) {
+                    console.error('Error saving resume:', error);
+                  } finally {
+                    setIsSaving(false);
+                  }
+                }}
+                disabled={isSaving}
               >
                 <Save className="w-4 h-4" aria-hidden="true" />
-                <span>Save</span>
+                <span>{isSaving ? 'Saving...' : 'Save'}</span>
               </Button>
             </div>
           </div>
