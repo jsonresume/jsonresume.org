@@ -52,7 +52,7 @@ export const render = (resume) => {
     html {
       font-family:LatinModern, "Courier New", monospace;
       background: #fff;
-      font-size: 10px;
+      font-size: 11px;
     }
 
     h2 {

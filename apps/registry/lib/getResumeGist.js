@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { find } from 'lodash';
 import buildError, { ERROR_CODES } from './error/buildError';
+import { RESUME_GIST_NAME } from '../app/providers/ResumeProvider';
 
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
@@ -25,7 +26,7 @@ const getResumeGist = async (username) => {
   }
 
   const resumeUrl = find(gistData.data, (f) => {
-    return f.files['resume.json'];
+    return f.files[RESUME_GIST_NAME];
   });
 
   if (!resumeUrl) {

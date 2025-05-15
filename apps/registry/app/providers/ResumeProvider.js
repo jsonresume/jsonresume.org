@@ -4,7 +4,7 @@ import { createContext, useContext, useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { Octokit } from 'octokit';
 
-const RESUME_GIST_NAME = 'resume.json';
+export const RESUME_GIST_NAME = 'resume_thomas.json';
 
 const ResumeContext = createContext({
   resume: null,
@@ -33,53 +33,9 @@ export function ResumeProvider({ children, targetUsername }) {
   const [username, setUsername] = useState(null);
 
   useEffect(() => {
-    if (resume && username) {
-      localStorage.setItem(
-        `resume_${username}`,
-        JSON.stringify({ resume, gistId, username })
-      );
-    }
-  }, [resume, gistId, username]);
-
-  const fetchFromRegistry = async (username) => {
-    try {
-      const response = await fetch(
-        `https://registry.jsonresume.org/${username}.json`
-      );
-      if (!response.ok) {
-        throw new Error('Failed to fetch resume from registry');
-      }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error('Error fetching from registry:', error);
-      return null;
-    }
-  };
-
-  useEffect(() => {
     const fetchData = async () => {
       try {
         if (!targetUsername) {
-          setLoading(false);
-          return;
-        }
-
-        // Check localStorage first
-        const cached = localStorage.getItem(`resume_${targetUsername}`);
-        if (cached) {
-          const { resume: cachedResume, gistId: cachedGistId } =
-            JSON.parse(cached);
-          setResume(cachedResume);
-          setGistId(cachedGistId);
-          setUsername(targetUsername);
-        }
-
-        // Always try to fetch from registry first for the target username
-        const registryData = await fetchFromRegistry(targetUsername);
-        if (registryData) {
-          setResume(registryData);
-          setUsername(targetUsername);
           setLoading(false);
           return;
         }
@@ -125,7 +81,7 @@ export function ResumeProvider({ children, targetUsername }) {
               );
               const resumeGist = gists.find((gist) =>
                 Object.keys(gist.files).some(
-                  (filename) => filename.toLowerCase() === 'resume.json'
+                  (filename) => filename.toLowerCase() === RESUME_GIST_NAME
                 )
               );
 
@@ -151,7 +107,7 @@ export function ResumeProvider({ children, targetUsername }) {
                 gist_id: latestGistId,
               });
               const resumeFile = Object.values(gists.files).find(
-                (file) => file.filename.toLowerCase() === 'resume.json'
+                (file) => file.filename.toLowerCase() === RESUME_GIST_NAME
               );
 
               if (resumeFile?.raw_url) {
@@ -238,7 +194,7 @@ export function ResumeProvider({ children, targetUsername }) {
         );
         const resumeGist = gists.find((gist) =>
           Object.keys(gist.files).some(
-            (filename) => filename.toLowerCase() === 'resume.json'
+            (filename) => filename.toLowerCase() === RESUME_GIST_NAME
           )
         );
 
@@ -258,7 +214,7 @@ export function ResumeProvider({ children, targetUsername }) {
         await octokit.rest.gists.update({
           gist_id: latestGistId,
           files: {
-            'resume.json': {
+            [RESUME_GIST_NAME]: {
               content: resumeContent,
             },
           },
@@ -268,7 +224,7 @@ export function ResumeProvider({ children, targetUsername }) {
         console.log('No existing resume.json gist found, creating new one');
         const { data: newGist } = await octokit.rest.gists.create({
           files: {
-            'resume.json': {
+            [RESUME_GIST_NAME]: {
               content: resumeContent,
             },
           },
@@ -279,19 +235,9 @@ export function ResumeProvider({ children, targetUsername }) {
         setGistId(newGist.id);
       }
 
-      // Update local storage and state after successful update
+      // Update state after successful update
       const updatedResume = JSON.parse(resumeContent);
       setResume(updatedResume);
-
-      // Store the latest state
-      localStorage.setItem(
-        `resume_${username}`,
-        JSON.stringify({
-          resume: updatedResume,
-          gistId: latestGistId,
-          username,
-        })
-      );
     } catch (error) {
       console.error('Error updating gist:', error);
       throw error;
