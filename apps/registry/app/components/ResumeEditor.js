@@ -68,15 +68,32 @@ const ResumeEditor = ({ resume: initialResume, updateGist }) => {
       return defaultResume;
     }
   });
+
+  // Store the original resume for comparison to detect changes
+  const [originalResume, setOriginalResume] = useState(() => {
+    if (!initialResume) return JSON.stringify(defaultResume);
+    try {
+      return typeof initialResume === 'string'
+        ? initialResume
+        : JSON.stringify(initialResume, null, 2);
+    } catch (error) {
+      console.error('Error storing original resume:', error);
+      return JSON.stringify(defaultResume);
+    }
+  });
   const [content, setContent] = useState('');
   const [editorMode, setEditorMode] = useState('gui');
   const [, setPendingChanges] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
   const monaco = useMonaco();
 
   useEffect(() => {
     console.log('Current resume state:', resume);
-  }, [resume]);
+    // Check if there are changes by comparing current resume with original
+    const currentResumeStr = JSON.stringify(resume, null, 2);
+    setHasChanges(currentResumeStr !== originalResume);
+  }, [resume, originalResume]);
 
   useEffect(() => {
     try {
@@ -269,14 +286,18 @@ const ResumeEditor = ({ resume: initialResume, updateGist }) => {
                 onClick={async () => {
                   setIsSaving(true);
                   try {
-                    await updateGist(JSON.stringify(resume, null, 2));
+                    const resumeStr = JSON.stringify(resume, null, 2);
+                    await updateGist(resumeStr);
+                    // Update the original resume after successful save
+                    setOriginalResume(resumeStr);
+                    setHasChanges(false);
                   } catch (error) {
                     console.error('Error saving resume:', error);
                   } finally {
                     setIsSaving(false);
                   }
                 }}
-                disabled={isSaving}
+                disabled={isSaving || !hasChanges}
               >
                 <Save className="w-4 h-4" aria-hidden="true" />
                 <span>{isSaving ? 'Saving...' : 'Save'}</span>

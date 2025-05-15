@@ -4,7 +4,7 @@ import { createContext, useContext, useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { Octokit } from 'octokit';
 
-export const RESUME_GIST_NAME = 'resume_thomas.json';
+export const RESUME_GIST_NAME = 'resume.json';
 
 const ResumeContext = createContext({
   resume: null,
