@@ -28,7 +28,7 @@ export default function Schema() {
           <div class="col-md-5">
             <h4>What is it?</h4>
             <p>
-              JSON Resume is a community driven open source initiative to create
+              JSON Resume is a community driven open-source initiative to create
               JSON-based standard for resumes.
             </p>
             <h4>Why JSON?</h4>
