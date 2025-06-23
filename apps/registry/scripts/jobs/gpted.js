@@ -421,7 +421,7 @@ Using the instructions and example above, transform the provided job description
   try {
     console.log('Starting OpenAI processing for job:', job.id);
     const chat = await openai.chat.completions.create({
-      model: 'gpt-4.1-mini',
+      model: 'gpt-4.1',
       temperature: 0.75,
       messages,
       functions: [jobDescriptionToSchemaFunction],
@@ -429,6 +429,7 @@ Using the instructions and example above, transform the provided job description
     });
 
     const details = chat.choices[0].message.function_call?.arguments;
+    console.log(JSON.stringify(details, null, 2));
     const jobJson = JSON.parse(details);
     console.log({ jobId: job.id, jobJson });
 
@@ -458,7 +459,7 @@ Using the instructions and example above, transform the provided job description
     // Regenerate gpt content with more context
     console.log({ jobId: job.id, messages });
     const chat2 = await openai.chat.completions.create({
-      model: 'gpt-4.1-mini',
+      model: 'gpt-4.1',
       temperature: 0.75,
       messages,
       functions: [jobDescriptionToSchemaFunction],
@@ -476,7 +477,7 @@ Using the instructions and example above, transform the provided job description
     });
 
     const chat3 = await openai.chat.completions.create({
-      model: 'gpt-4.1-mini',
+      model: 'gpt-4.1',
       temperature: 0.75,
       messages,
     });
