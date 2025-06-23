@@ -35,7 +35,13 @@ export default async function handler(req, res) {
     .select()
     .eq('username', username);
 
-  const resume = JSON.parse(data[0].resume);
+  let resume = {};
+  try {
+    resume = JSON.parse(data[0].resume);
+  } catch (error) {
+    console.error('Error parsing resume JSON:', error);
+    return res.status(400).json({ error: 'Invalid resume format' });
+  }
   const resumeCompletion = await openai.chat.completions.create({
     model: 'gpt-4o-mini',
     messages: [
@@ -172,7 +178,13 @@ export default async function handler(req, res) {
       })),
       // Process other jobs sequentially, each one only looking at previously processed jobs
       ...otherJobs.reduce((links, lessRelevantJob, index) => {
-        const lessRelevantVector = JSON.parse(lessRelevantJob.embedding_v5);
+        let lessRelevantVector;
+        try {
+          lessRelevantVector = JSON.parse(lessRelevantJob.embedding_v5);
+        } catch (error) {
+          console.error('Error parsing less relevant job embedding:', error);
+          return links; // Skip this job if we can't parse its embedding
+        }
 
         // Jobs to compare against: top jobs + already processed less relevant jobs
         const availableJobs = [...topJobs, ...otherJobs.slice(0, index)];
@@ -181,7 +193,14 @@ export default async function handler(req, res) {
           (best, current) => {
             const similarity = cosineSimilarity(
               lessRelevantVector,
-              JSON.parse(current.embedding_v5)
+              (() => {
+                try {
+                  return JSON.parse(current.embedding_v5);
+                } catch (error) {
+                  console.error('Error parsing current job embedding:', error);
+                  return []; // Return empty array to avoid breaking similarity calculation
+                }
+              })()
             );
             return similarity > best.similarity
               ? { job: current, similarity }
@@ -206,7 +225,15 @@ export default async function handler(req, res) {
   // Create job info map
   const jobInfoMap = {};
   sortedJobs.forEach((job) => {
-    jobInfoMap[job.uuid] = JSON.parse(job.gpt_content);
+    try {
+      jobInfoMap[job.uuid] = JSON.parse(job.gpt_content);
+    } catch (error) {
+      console.error(`Error parsing job content for ${job.uuid}:`, error);
+      jobInfoMap[job.uuid] = {
+        title: 'Unknown Job',
+        error: 'Failed to parse job data',
+      };
+    }
   });
 
   // Set cache control headers for CDN caching
