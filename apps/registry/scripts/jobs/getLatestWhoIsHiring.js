@@ -22,9 +22,9 @@ async function findLatestWhoIsHiringThread() {
     const response = await axios.get(HN_SEARCH_API, {
       params: {
         tags: 'story,author_whoishiring',
-        hitsPerPage: 1000, // Get all results to ensure we get the latest
-        // Filter for 2020 (Unix timestamps for Jan 1, 2020 to Dec 31, 2020)
-        numericFilters: 'created_at_i>=1577836800,created_at_i<=1609459199',
+        hitsPerPage: 100, // Get enough results to ensure we get the latest
+        query: 'Who is Hiring', // Search for posts with this title
+        // No date filter to get the latest posts
       },
     });
 
