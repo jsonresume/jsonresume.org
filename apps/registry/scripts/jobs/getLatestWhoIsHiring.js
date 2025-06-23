@@ -1,12 +1,16 @@
+require('dotenv').config({ path: __dirname + '/./../../.env' });
 /**
  * Script to query Hacker News API and find the latest "Who is hiring" thread
  * posted by the user "whoishiring" and output all comments to stdout
  */
+const { createClient } = require('@supabase/supabase-js');
 
 const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
-
+const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
+const supabaseKey = process.env.SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
 // API endpoints
 const HN_SEARCH_API = 'https://hn.algolia.com/api/v1/search';
 const HN_SEARCH_BY_DATE = 'https://hn.algolia.com/api/v1/search_by_date';
@@ -48,7 +52,16 @@ async function findLatestWhoIsHiringThread() {
         },
       });
 
-      const comments = commentsResponse.data.hits || [];
+      let comments = commentsResponse.data.hits || [];
+
+      comments = comments.map((comment) => ({
+        id: comment.objectID,
+        author: comment.author,
+        created_at: comment.created_at,
+        text: comment.comment_text,
+        points: comment.points,
+        url: `https://news.ycombinator.com/item?id=${comment.objectID}`,
+      }));
 
       // Format the output with thread info and all comments
       const result = {
@@ -59,14 +72,7 @@ async function findLatestWhoIsHiringThread() {
           created_at: latestThread.created_at,
           author: latestThread.author,
         },
-        comments: comments.map((comment) => ({
-          id: comment.objectID,
-          author: comment.author,
-          created_at: comment.created_at,
-          text: comment.comment_text,
-          points: comment.points,
-          url: `https://news.ycombinator.com/item?id=${comment.objectID}`,
-        })),
+        comments,
       };
 
       // Create outputs directory if it doesn't exist
@@ -83,6 +89,18 @@ async function findLatestWhoIsHiringThread() {
       console.log(JSON.stringify(result));
       console.log(`\nResults written to ${outputPath}`);
 
+      // Now insert into Supabase
+      comments.forEach(async (post) => {
+        const { error } = await supabase.from('jobs').insert({
+          uuid: post.id,
+          content: post.text,
+          posted_at: new Date(post.created_at_i * 1000),
+          type: 'hackernews',
+          raw: JSON.stringify(post),
+          url: `https://news.ycombinator.com/item?id=${post.id}`,
+        });
+        console.log({ error });
+      });
       return result;
     } else {
       return null;
