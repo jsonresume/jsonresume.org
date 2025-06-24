@@ -1,8 +1,8 @@
 name: Process HN Jobs
 
 on:
-  # Schedule updates (00:30 && 12:30 UTC daily)
-  schedule: [{ cron: '0 * * * *' }]
+  # Schedule updates (00:30 UTC daily)
+  schedule: [{ cron: '30 0 * * *' }]
   # Lines below let you run workflow manually and on each commit
   workflow_dispatch:
   push: { branches: ['master'] }
