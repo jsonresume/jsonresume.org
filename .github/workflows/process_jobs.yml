@@ -28,7 +28,7 @@ jobs:
       - run: pnpm install
       - run: pnpm turbo lint prettier
       - name: Run Who Is Hiring script
-        run: node apps/registry/scripts/jobs/getLatestWhoIsHiring.js
+        run: SUPABASE_KEY="${{ secrets.SUPABASE_KEY }}"  node apps/registry/scripts/jobs/getLatestWhoIsHiring.js
       - name: Run gpted.js to process jobs
         run: |
           echo "Environment variables check:"
