@@ -5,6 +5,8 @@ export const metadata = {
   url: 'https://jsonresume.org/projects/',
 };
 
+import './projects.css';
+
 export default function GettingStarted() {
   const PROJECTS = [
     {
@@ -34,7 +36,7 @@ export default function GettingStarted() {
     {
       name: 'Resumake',
       description:
-        'A web app that generates resumes based on JSON Resume schema.',
+        'A web app that generates résumés based on JSON Resume schema.',
       link: 'https://resumake.io',
       category: 'integration',
       language: 'N/A',
@@ -42,7 +44,7 @@ export default function GettingStarted() {
     {
       name: 'Standard Resume',
       description:
-        'A web-based resume builder with support for importing JSON resumes.',
+        'A web-based resume builder with support for importing JSON résumés.',
       link: 'https://standardresume.co',
       category: 'integration',
       language: 'N/A',
@@ -50,7 +52,7 @@ export default function GettingStarted() {
     {
       name: 'ResumeSet',
       description:
-        'AI tailored resume builder with support for importing JSON resumes.',
+        'AI tailored resume builder with support for importing JSON résumés.',
       link: 'https://resumeset.com',
       category: 'integration',
       language: 'N/A',
@@ -66,7 +68,7 @@ export default function GettingStarted() {
     {
       name: 'JSON Resume Validator (Python)',
       description:
-        'Python tool to validate JSON resumes to ensure that they are according to the defined schema',
+        'Python tool to validate JSON résumés to ensure that they are according to the defined schema',
       link: 'https://github.com/kelvintaywl/jsonresume-validator',
       category: 'validator',
       language: 'Python',
@@ -74,14 +76,14 @@ export default function GettingStarted() {
     {
       name: 'JSON Resume Validator and Parser (Java)',
       description:
-        'Java library to validate and parse JSON resumes to Java objects',
+        'Java library to validate and parse JSON résumés to Java objects',
       link: 'https://github.com/eaxdev/Java-JsonResume-Validator',
       category: 'validator',
       language: 'Java',
     },
     {
       name: 'JSON Resume Validator (Go)',
-      description: 'Go library to validate JSON resumes',
+      description: 'Go library to validate JSON résumés',
       link: 'https://github.com/cinarmert/json-resume-validator',
       category: 'validator',
       language: 'Go',
@@ -248,7 +250,7 @@ export default function GettingStarted() {
     },
     {
       name: 'jsonresume-gpt3',
-      description: 'This uses GPT-3 API access to generate fake resumes.',
+      description: 'This uses GPT-3 API access to generate fake résumés.',
       link: 'https://github.com/jsonresume/jsonresume-gpt3',
       category: 'ai',
       language: 'Python',
@@ -256,7 +258,7 @@ export default function GettingStarted() {
     {
       name: 'Registry AI',
       description:
-        'The official registry offers a bunch of useful AI tools for hosted resumes',
+        'The official registry offers a bunch of useful AI tools for hosted résumés',
       link: 'https://registry.jsonresume.org/thomasdavis/jobs',
       category: 'ai',
       language: 'Javascript',
@@ -288,7 +290,7 @@ export default function GettingStarted() {
     {
       name: 'jsonresume-docx',
       description:
-        'Render your JSON resume as a .docx file, hide your personality. ;)',
+        'Render your JSON résumé as a .docx file, hide your personality. ;)',
       link: 'https://github.com/panasenco/jsonresume-docx',
       category: 'framework',
       language: 'Python',
@@ -318,7 +320,7 @@ export default function GettingStarted() {
     {
       name: 'JSONResume Generator - Github Action',
       description:
-        'Generating resumes with JSONResume! Makes use of the resumed CLI to generate resumes!',
+        'Generating résumés with JSONResume! Makes use of the resumed CLI to generate résumés!',
       link: 'https://github.com/Devleaps/jsonresume-generator',
       category: 'github',
       language: 'YAML',
@@ -341,7 +343,7 @@ export default function GettingStarted() {
     {
       name: 'JSON Resume as a Service',
       description:
-        'Serverless service that uses the jsonresume.org schema to generate dynamic resumes from a github gist that you can download or recieve back as a http response.',
+        'Serverless service that uses the jsonresume.org schema to generate dynamic résumés from a github gist that you can download or recieve back as a http response.',
       link: 'https://github.com/DrakeAxelrod/json-resume-service',
       category: 'hosting',
       language: 'Javascript',
@@ -356,7 +358,7 @@ export default function GettingStarted() {
     },
     {
       name: 'goresume',
-      description: 'Build HTML/PDF resume from JSON/YAML/TOML',
+      description: 'Build HTML/PDF résumé from JSON/YAML/TOML',
       link: 'https://github.com/nikaro/goresume',
       category: 'cli',
       language: 'Go',
@@ -371,7 +373,7 @@ export default function GettingStarted() {
     {
       name: 'resume-pycli',
       description:
-        'Python CLI tool to build a beautiful resume from a JSON Resume file.',
+        'Python CLI tool to build a beautiful résumé from a JSON Resume file.',
       link: 'https://github.com/nikaro/resume-pycli',
       category: 'cli',
       language: 'Python',
@@ -396,9 +398,9 @@ export default function GettingStarted() {
     {
       name: 'jsonresume-nix',
       description:
-        'Provides a Nix-based environment for working with JSON Resume, enabling users to build and develop JSON Resume projects with Nix package manager.',
+        'Provides a Nix-based environment for working with JSON Resume.',
       link: 'https://github.com/TaserudConsulting/jsonresume-nix',
-      category: 'images',
+      category: 'tooling',
       language: 'Nix',
     },
     {
@@ -412,27 +414,58 @@ export default function GettingStarted() {
 
     {
       name: 'resume-optimizer',
-      description: 'Use AI to ensure your resume passes ATS keyword screening.',
+      description: 'Use AI to ensure your résumé passes ATS keyword screening.',
       link: 'https://github.com/panasenco/resume-optimizer',
       category: 'images',
       language: 'Nix',
     },
+    {
+      name: 'ResumeHub Theme',
+      description: 'A JSON Resume theme from ResumeHub.no.',
+      link: 'https://github.com/Solsem-Consulting/jsonresume-theme-ResumeHub',
+      category: 'theme',
+      language: 'Handlebars',
+    },
+    {
+      name: 'Astro JSON Resume',
+      description: 'Static Astro website generated from a JSON Resume file.',
+      link: 'https://github.com/ambaena/json-resume',
+      category: 'framework',
+      language: 'Astro',
+    },
+    {
+      name: 'Lissy93 CV',
+      description: 'Auto-generates LaTeX PDF and website from JSONResume data.',
+      link: 'https://github.com/Lissy93/cv',
+      category: 'generator',
+      language: 'TeX/JavaScript',
+    },
+    {
+      name: 'Straightforward Theme',
+      description: 'A straightforward JSON Resume theme.',
+      link: 'https://github.com/slugstack/jsonresume-theme-straightforward',
+      category: 'theme',
+      language: 'Handlebars',
+    },
   ];
 
   const categories = [
-    'integration',
-    'framework',
-    'validator',
-    'hosting',
     'ai',
-    'transfer',
-    'github',
-    'editor',
-    'cli',
-    'visualization',
-    'generator',
-    'parser',
     'ats',
+    'cli',
+    'editor',
+    'framework',
+    'generator',
+    'github',
+    'hosting',
+    'images',
+    'integration',
+    'parser',
+    'theme',
+    'tooling',
+    'transfer',
+    'validator',
+    'visualization',
   ];
 
   const renderProjects = (category) => {
@@ -441,39 +474,12 @@ export default function GettingStarted() {
     );
 
     return projects.map((project) => (
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          width: '100%',
-          marginBottom: '15px',
-        }}
-        key={project.link}
-      >
-        <div
-          style={{
-            flexWrap: 'wrap',
-            minWidth: '200px',
-            maxWidth: '200px',
-            wordWrap: 'break-word',
-          }}
-        >
+      <div className="project-item" key={project.link}>
+        <div className="project-name">
           <a href={project.link}>{project.name}</a>
         </div>
-        <div
-          style={{
-            minWidth: '100px',
-          }}
-        >
-          {project.language}
-        </div>
-        <div
-          style={{
-            flexGrow: 1,
-          }}
-        >
-          {project.description}
-        </div>
+        <div className="project-language">{project.language}</div>
+        <div className="project-description">{project.description}</div>
       </div>
     ));
   };
@@ -494,8 +500,10 @@ export default function GettingStarted() {
           <div className="col-sm-12 contributing">
             <p>
               JSON Resume was built to inspire a new creative movement around
-              resumes. Please submit new projects to the{' '}
-              <a href="https://github.com/jsonresume/jsonresume.org">repo</a>
+              résumés. Please submit new projects to the{' '}
+              <a href="https://github.com/jsonresume/jsonresume.org">
+                repository
+              </a>
             </p>
 
             {categories.map((category) => (
