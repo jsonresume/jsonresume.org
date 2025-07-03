@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import merge from 'lodash/merge';
 import { Settings, Send } from 'lucide-react';
 import { useChat } from '@ai-sdk/react';
 import Editor from '@monaco-editor/react';
@@ -35,6 +36,7 @@ export default function PathwaysPage() {
   };
 
   const [resumeData, setResumeData] = useState(sampleResume);
+  const handledToolCalls = useRef(new Set());
   const [resumeJson, setResumeJson] = useState(() =>
     JSON.stringify(sampleResume, null, 2)
   );
@@ -57,6 +59,37 @@ export default function PathwaysPage() {
     ],
     body: { currentResume: resumeData },
   });
+
+  // Auto-apply updateResume tool calls
+  useEffect(() => {
+    for (const msg of messages) {
+      for (const part of msg.parts ?? []) {
+        if (
+          part.type === 'tool-invocation' &&
+          ['updateResume', 'update_resume'].includes(
+            part.toolInvocation.toolName
+          ) &&
+          part.toolInvocation.state === 'call' &&
+          !handledToolCalls.current.has(part.toolInvocation.toolCallId)
+        ) {
+          const { changes, explanation } = part.toolInvocation.args ?? {};
+          if (changes && typeof changes === 'object') {
+            setResumeData((prev) => merge({}, prev, changes));
+            setResumeJson((prev) => {
+              const merged = merge({}, JSON.parse(prev), changes);
+              return JSON.stringify(merged, null, 2);
+            });
+          }
+          // Send back result so SDK is satisfied
+          addToolResult({
+            toolCallId: part.toolInvocation.toolCallId,
+            result: 'Changes applied',
+          });
+          handledToolCalls.current.add(part.toolInvocation.toolCallId);
+        }
+      }
+    }
+  }, [messages, addToolResult]);
 
   console.log({ messages });
 
@@ -158,22 +191,22 @@ export default function PathwaysPage() {
                               );
                             case 'result':
                               return (
-                                <div
-                                  key={callId}
-                                  className="p-2 rounded-lg bg-green-50 text-green-900 text-xs"
-                                >
-                                  {typeof part.toolInvocation.result ===
-                                  'string' ? (
-                                    <span>{part.toolInvocation.result}</span>
-                                  ) : (
+                                <div key={callId} className="p-2 rounded-lg">
+                                  <div>
+                                    <span>
+                                      {part.toolInvocation.args.explanation}
+                                    </span>
+                                  </div>
+                                  <br />
+                                  <div className="text-xs bg-green-50 text-green-900">
                                     <pre className="whitespace-pre-wrap break-words">
                                       {JSON.stringify(
-                                        part.toolInvocation.result,
+                                        part.toolInvocation.args.changes,
                                         null,
                                         2
                                       )}
                                     </pre>
-                                  )}
+                                  </div>
                                 </div>
                               );
                           }

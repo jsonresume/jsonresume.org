@@ -3,7 +3,8 @@ import { openai } from '@ai-sdk/openai';
 import { z } from 'zod';
 // Define the update_resume tool with Zod schema
 export const updateResume = tool({
-  name: 'update_resume',
+  // name inferred as key when passed in array; ensure matches 'updateResume'
+  name: 'updateResume',
   description: 'Update specific sections of the resume with new information',
   parameters: z.object({
     changes: z.object({
