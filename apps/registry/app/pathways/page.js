@@ -1,10 +1,68 @@
 'use client';
 
+// Deep-merge resume changes, supporting `_delete:true` to remove items from arrays
+function applyResumeChanges(prev, changes) {
+  const next = cloneDeep(prev);
+
+  function recurse(target, patch) {
+    for (const key of Object.keys(patch)) {
+      const patchVal = patch[key];
+      if (Array.isArray(patchVal)) {
+        // Handle arrays (e.g., work, education). Use index if provided, else append.
+        if (!Array.isArray(target[key])) target[key] = [];
+        patchVal.forEach((item, idx) => {
+          if (item && typeof item === 'object' && item._delete) {
+            target[key] = target[key].filter((_, i) => i !== idx);
+            return;
+          }
+
+          // Try match by name & position for object arrays
+          if (typeof item === 'object' && !Array.isArray(item)) {
+            const matchIdx = target[key].findIndex(
+              (t) => t && typeof t === 'object' && t.name === item.name && t.position === item.position
+            );
+            if (matchIdx !== -1) {
+              recurse(target[key][matchIdx], item);
+              return;
+            }
+          }
+
+          // If position already exists by index
+          if (target[key][idx] !== undefined) {
+            if (typeof item === 'object' && typeof target[key][idx] === 'object') {
+              recurse(target[key][idx], item);
+            } else {
+              // primitive or mismatched types – replace
+              target[key][idx] = item;
+            }
+          } else {
+            // append
+            target[key].push(item);
+          }
+        });
+      } else if (patchVal && typeof patchVal === 'object') {
+        if (!target[key] || typeof target[key] !== 'object') {
+          target[key] = cloneDeep(patchVal);
+        } else {
+          recurse(target[key], patchVal);
+        }
+      } else {
+        target[key] = patchVal;
+      }
+    }
+  }
+
+  recurse(next, changes);
+  return next;
+}
+
+
 import { useState, useEffect, useRef } from 'react';
-import merge from 'lodash/merge';
+import cloneDeep from 'lodash/cloneDeep';
 import { Settings, Send } from 'lucide-react';
 import { useChat } from '@ai-sdk/react';
 import Editor from '@monaco-editor/react';
+import Messages from './components/Messages';
 
 export default function PathwaysPage() {
   const [activeTab, setActiveTab] = useState('graph');
@@ -74,9 +132,9 @@ export default function PathwaysPage() {
         ) {
           const { changes, explanation } = part.toolInvocation.args ?? {};
           if (changes && typeof changes === 'object') {
-            setResumeData((prev) => merge({}, prev, changes));
+            setResumeData((prev) => applyResumeChanges(prev, changes));
             setResumeJson((prev) => {
-              const merged = merge({}, JSON.parse(prev), changes);
+              const merged = applyResumeChanges(JSON.parse(prev), changes);
               return JSON.stringify(merged, null, 2);
             });
           }
@@ -91,7 +149,7 @@ export default function PathwaysPage() {
     }
   }, [messages, addToolResult]);
 
-  console.log({ messages });
+  
 
   return (
     <div className="flex flex-col h-screen">
@@ -161,68 +219,9 @@ export default function PathwaysPage() {
           <div className="px-4 py-3 border-b">
             <h2 className="text-base font-medium">Copilot Chat</h2>
           </div>
-          <div className="flex-1 overflow-auto p-4 space-y-2 text-sm text-gray-500">
-            <div className="space-y-3">
-              {messages?.map((message) => (
-                <div key={message.id} className="space-y-1">
-                  <strong className="capitalize text-xs">{`${message.role}: `}</strong>
-                  {message.parts.map((part, idx) => {
-                    switch (part.type) {
-                      case 'text':
-                        return <span key={idx}>{part.text}</span>;
-                      case 'tool-invocation': {
-                        const callId = part.toolInvocation.toolCallId;
-                        if (part.toolInvocation.toolName === 'updateResume') {
-                          switch (part.toolInvocation.state) {
-                            case 'call':
-                              return (
-                                <div
-                                  key={callId}
-                                  className="p-2 rounded-lg bg-green-50 text-green-900 text-xs"
-                                >
-                                  <pre className="whitespace-pre-wrap break-words">
-                                    {JSON.stringify(
-                                      part.toolInvocation.args,
-                                      null,
-                                      2
-                                    )}
-                                  </pre>
-                                </div>
-                              );
-                            case 'result':
-                              return (
-                                <div key={callId} className="p-2 rounded-lg">
-                                  <div>
-                                    <span>
-                                      {part.toolInvocation.args.explanation}
-                                    </span>
-                                  </div>
-                                  <br />
-                                  <div className="text-xs bg-green-50 text-green-900">
-                                    <pre className="whitespace-pre-wrap break-words">
-                                      {JSON.stringify(
-                                        part.toolInvocation.args.changes,
-                                        null,
-                                        2
-                                      )}
-                                    </pre>
-                                  </div>
-                                </div>
-                              );
-                          }
-                        }
-                        return null;
-                      }
-                      default:
-                        return null;
-                    }
-                  })}
-                </div>
-              ))}
-              {isLoading && (
-                <p className="text-sm text-gray-500">Copilot is thinking…</p>
-              )}
-            </div>
+          <div className="flex-1 overflow-auto p-4 text-sm text-gray-500">
+            <Messages messages={messages} isLoading={isLoading} />
+
           </div>
           <form onSubmit={handleSubmit} className="border-t p-3 flex gap-2">
             <input
