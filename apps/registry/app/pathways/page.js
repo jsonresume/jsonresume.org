@@ -1,9 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Settings } from 'lucide-react';
-import ResumeEditor from '../components/ResumeEditor';
-import { ResumeProvider } from '../providers/ResumeProvider';
+import { Settings, Send } from 'lucide-react';
+import Editor from '@monaco-editor/react';
 
 export default function PathwaysPage() {
   const [activeTab, setActiveTab] = useState('graph');
@@ -34,6 +33,12 @@ export default function PathwaysPage() {
   };
 
   const [resumeData, setResumeData] = useState(sampleResume);
+  const [resumeJson, setResumeJson] = useState(() => JSON.stringify(sampleResume, null, 2));
+  // Chat state
+  const [messages, setMessages] = useState([
+    { role: 'copilot', content: 'Hi! I\'m your Copilot. Ask me anything about your career pathway.' },
+  ]);
+  const [chatInput, setChatInput] = useState('');
 
   return (
     <div className="flex flex-col h-screen">
@@ -75,19 +80,25 @@ export default function PathwaysPage() {
             {activeTab === 'graph' ? (
               <MockGraph />
             ) : (
-              <ResumeProvider>
-                <ResumeEditor
-                  resume={resumeData}
-                  updateGist={async (updated) => {
-                    // keep local state in sync
-                    try {
-                      setResumeData(JSON.parse(updated));
-                    } catch {
-                      /* ignore */
-                    }
-                  }}
-                />
-              </ResumeProvider>
+              <Editor
+                height="100%"
+                defaultLanguage="json"
+                value={resumeJson}
+                onChange={(code) => {
+                  setResumeJson(code || '');
+                  try {
+                    const parsed = JSON.parse(code);
+                    setResumeData(parsed);
+                  } catch {
+                    // Ignore parse errors until valid JSON
+                  }
+                }}
+                options={{
+                  minimap: { enabled: false },
+                  wordWrap: 'on',
+                  scrollBeyondLastLine: false,
+                }}
+              />
             )}
           </div>
         </section>
@@ -98,9 +109,38 @@ export default function PathwaysPage() {
             <h2 className="text-base font-medium">Copilot Chat</h2>
           </div>
           <div className="flex-1 overflow-auto p-4 space-y-2 text-sm text-gray-500">
-            {/* Placeholder chat content */}
-            <p>Chat widget coming soon…</p>
+            <div className="space-y-3">
+              {messages.map((m, idx) => (
+                <div key={idx} className={`p-2 rounded-lg ${m.role === 'copilot' ? 'bg-indigo-50 text-indigo-900' : 'bg-gray-100'}`}>
+                  <p className="text-xs font-semibold mb-1 capitalize">{m.role}</p>
+                  <p>{m.content}</p>
+                </div>
+              ))}
+            </div>
           </div>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (!chatInput.trim()) return;
+              setMessages((prev) => [...prev, { role: 'user', content: chatInput.trim() }]);
+              setChatInput('');
+            }}
+            className="border-t p-3 flex gap-2"
+          >
+            <input
+              type="text"
+              value={chatInput}
+              onChange={(e) => setChatInput(e.target.value)}
+              placeholder="Type a message..."
+              className="flex-1 rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+            <button
+              type="submit"
+              className="p-2 rounded-md bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center"
+            >
+              <Send className="w-4 h-4" />
+            </button>
+          </form>
         </aside>
       </div>
     </div>
