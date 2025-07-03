@@ -26,6 +26,11 @@ export default function Menu() {
   const router = useRouter();
   const pathname = usePathname();
 
+  // Hide menu on Pathways page
+  if (pathname?.startsWith('/pathways')) {
+    return null;
+  }
+
   // Close menu when pathname changes
   useEffect(() => {
     setIsOpen(false);
