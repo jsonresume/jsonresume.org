@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@ai-sdk/openai": "^1.0.10",
+    "@ai-sdk/react": "^1.2.12",
     "@dagrejs/dagre": "^1.1.4",
     "@faker-js/faker": "^8.0.2",
     "@jsonresume/jsonresume-theme-professional": "workspace:*",

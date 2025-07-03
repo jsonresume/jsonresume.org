@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Settings, Send } from 'lucide-react';
+import { useChat } from '@ai-sdk/react';
 import Editor from '@monaco-editor/react';
 
 export default function PathwaysPage() {
@@ -14,31 +15,47 @@ export default function PathwaysPage() {
       label: 'Full-Stack Developer',
       email: 'jane.doe@example.com',
       location: { city: 'San Francisco', region: 'CA', countryCode: 'US' },
-      summary: 'Experienced developer with a passion for building scalable web applications.'
+      summary:
+        'Experienced developer with a passion for building scalable web applications.',
     },
     work: [
       {
         name: 'Acme Corp',
         position: 'Software Engineer',
         startDate: '2022-01-01',
-        summary: 'Worked on front-end features using React and Tailwind CSS.'
-      }
+        summary: 'Worked on front-end features using React and Tailwind CSS.',
+      },
     ],
     education: [],
     skills: [
       { name: 'JavaScript', level: 'Advanced' },
       { name: 'React', level: 'Advanced' },
-      { name: 'Node.js', level: 'Intermediate' }
+      { name: 'Node.js', level: 'Intermediate' },
     ],
   };
 
   const [resumeData, setResumeData] = useState(sampleResume);
-  const [resumeJson, setResumeJson] = useState(() => JSON.stringify(sampleResume, null, 2));
-  // Chat state
-  const [messages, setMessages] = useState([
-    { role: 'copilot', content: 'Hi! I\'m your Copilot. Ask me anything about your career pathway.' },
-  ]);
-  const [chatInput, setChatInput] = useState('');
+  const [resumeJson, setResumeJson] = useState(() =>
+    JSON.stringify(sampleResume, null, 2)
+  );
+  // Chat via useChat
+  const {
+    messages,
+    input: chatInput,
+    handleInputChange,
+    handleSubmit,
+    isLoading,
+  } = useChat({
+    api: '/api/pathways',
+    initialMessages: [
+      {
+        role: 'assistant',
+        content:
+          "Hi! I'm your Copilot. Ask me anything about your career pathway.",
+      },
+    ],
+    body: { currentResume: resumeData },
+  });
 
   return (
     <div className="flex flex-col h-screen">
@@ -111,26 +128,27 @@ export default function PathwaysPage() {
           <div className="flex-1 overflow-auto p-4 space-y-2 text-sm text-gray-500">
             <div className="space-y-3">
               {messages.map((m, idx) => (
-                <div key={idx} className={`p-2 rounded-lg ${m.role === 'copilot' ? 'bg-indigo-50 text-indigo-900' : 'bg-gray-100'}`}>
-                  <p className="text-xs font-semibold mb-1 capitalize">{m.role}</p>
+                <div
+                  key={idx}
+                  className={`p-2 rounded-lg ${
+                    m.role === 'copilot'
+                      ? 'bg-indigo-50 text-indigo-900'
+                      : 'bg-gray-100'
+                  }`}
+                >
+                  <p className="text-xs font-semibold mb-1 capitalize">
+                    {m.role}
+                  </p>
                   <p>{m.content}</p>
                 </div>
               ))}
             </div>
           </div>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              if (!chatInput.trim()) return;
-              setMessages((prev) => [...prev, { role: 'user', content: chatInput.trim() }]);
-              setChatInput('');
-            }}
-            className="border-t p-3 flex gap-2"
-          >
+          <form onSubmit={handleSubmit} className="border-t p-3 flex gap-2">
             <input
               type="text"
               value={chatInput}
-              onChange={(e) => setChatInput(e.target.value)}
+              onChange={handleInputChange}
               placeholder="Type a message..."
               className="flex-1 rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
@@ -158,7 +176,14 @@ function MockGraph() {
         className="opacity-50"
         aria-hidden="true"
       >
-        <circle cx="100" cy="100" r="80" stroke="currentColor" strokeWidth="4" fill="none" />
+        <circle
+          cx="100"
+          cy="100"
+          r="80"
+          stroke="currentColor"
+          strokeWidth="4"
+          fill="none"
+        />
         <circle cx="100" cy="40" r="8" fill="currentColor" />
         <circle cx="160" cy="100" r="8" fill="currentColor" />
         <circle cx="100" cy="160" r="8" fill="currentColor" />
