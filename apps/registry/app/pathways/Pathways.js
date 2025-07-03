@@ -1,11 +1,9 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { Settings, Send } from 'lucide-react';
-import { useChat } from '@ai-sdk/react';
+import { useState } from 'react';
+import { Settings } from 'lucide-react';
 import Editor from '@monaco-editor/react';
-import Messages from './components/Messages';
-import applyResumeChanges from '../utils/applyResumeChanges';
+import CopilotChat from './components/CopilotChat';
 
 export default function Pathways() {
   const [activeTab, setActiveTab] = useState('graph');
@@ -35,61 +33,10 @@ export default function Pathways() {
   };
 
   const [resumeData, setResumeData] = useState(sampleResume);
-  const handledToolCalls = useRef(new Set());
+
   const [resumeJson, setResumeJson] = useState(() =>
     JSON.stringify(sampleResume, null, 2)
   );
-
-  const {
-    messages,
-    input: chatInput,
-    handleInputChange,
-    handleSubmit,
-    isLoading,
-    addToolResult,
-  } = useChat({
-    api: '/api/pathways',
-    initialMessages: [
-      {
-        role: 'assistant',
-        content:
-          "Hi! I'm your Copilot. Ask me anything about your career pathway.",
-      },
-    ],
-    body: { currentResume: resumeData },
-  });
-
-  useEffect(() => {
-    for (const msg of messages) {
-      for (const part of msg.parts ?? []) {
-        if (
-          part.type === 'tool-invocation' &&
-          ['updateResume', 'update_resume'].includes(
-            part.toolInvocation.toolName
-          ) &&
-          part.toolInvocation.state === 'call' &&
-          !handledToolCalls.current.has(part.toolInvocation.toolCallId)
-        ) {
-          const { changes } = part.toolInvocation.args ?? {};
-          if (changes && typeof changes === 'object') {
-            setResumeData((prev) => applyResumeChanges(prev, changes));
-            setResumeJson((prev) =>
-              JSON.stringify(
-                applyResumeChanges(JSON.parse(prev), changes),
-                null,
-                2
-              )
-            );
-          }
-          addToolResult({
-            toolCallId: part.toolInvocation.toolCallId,
-            result: 'Changes applied',
-          });
-          handledToolCalls.current.add(part.toolInvocation.toolCallId);
-        }
-      }
-    }
-  }, [messages, addToolResult]);
 
   return (
     <div className="flex flex-col h-screen">
@@ -146,29 +93,11 @@ export default function Pathways() {
           </div>
         </section>
 
-        <aside className="w-[360px] border-l bg-white flex flex-col">
-          <div className="px-4 py-3 border-b">
-            <h2 className="text-base font-medium">Copilot Chat</h2>
-          </div>
-          <div className="flex-1 overflow-auto p-4 text-sm text-gray-500">
-            <Messages messages={messages} isLoading={isLoading} />
-          </div>
-          <form onSubmit={handleSubmit} className="border-t p-3 flex gap-2">
-            <input
-              type="text"
-              value={chatInput}
-              onChange={handleInputChange}
-              placeholder="Type a message..."
-              className="flex-1 rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
-            <button
-              type="submit"
-              className="p-2 rounded-md bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center"
-            >
-              <Send className="w-4 h-4" />
-            </button>
-          </form>
-        </aside>
+        <CopilotChat
+          resumeData={resumeData}
+          setResumeData={setResumeData}
+          setResumeJson={setResumeJson}
+        />
       </div>
     </div>
   );
