@@ -45,6 +45,7 @@ export default function PathwaysPage() {
     handleInputChange,
     handleSubmit,
     isLoading,
+    addToolResult,
   } = useChat({
     api: '/api/pathways',
     initialMessages: [
@@ -56,6 +57,8 @@ export default function PathwaysPage() {
     ],
     body: { currentResume: resumeData },
   });
+
+  console.log({ messages });
 
   return (
     <div className="flex flex-col h-screen">
@@ -127,21 +130,65 @@ export default function PathwaysPage() {
           </div>
           <div className="flex-1 overflow-auto p-4 space-y-2 text-sm text-gray-500">
             <div className="space-y-3">
-              {messages.map((m, idx) => (
-                <div
-                  key={idx}
-                  className={`p-2 rounded-lg ${
-                    m.role === 'copilot'
-                      ? 'bg-indigo-50 text-indigo-900'
-                      : 'bg-gray-100'
-                  }`}
-                >
-                  <p className="text-xs font-semibold mb-1 capitalize">
-                    {m.role}
-                  </p>
-                  <p>{m.content}</p>
+              {messages?.map((message) => (
+                <div key={message.id} className="space-y-1">
+                  <strong className="capitalize text-xs">{`${message.role}: `}</strong>
+                  {message.parts.map((part, idx) => {
+                    switch (part.type) {
+                      case 'text':
+                        return <span key={idx}>{part.text}</span>;
+                      case 'tool-invocation': {
+                        const callId = part.toolInvocation.toolCallId;
+                        if (part.toolInvocation.toolName === 'updateResume') {
+                          switch (part.toolInvocation.state) {
+                            case 'call':
+                              return (
+                                <div
+                                  key={callId}
+                                  className="p-2 rounded-lg bg-green-50 text-green-900 text-xs"
+                                >
+                                  <pre className="whitespace-pre-wrap break-words">
+                                    {JSON.stringify(
+                                      part.toolInvocation.args,
+                                      null,
+                                      2
+                                    )}
+                                  </pre>
+                                </div>
+                              );
+                            case 'result':
+                              return (
+                                <div
+                                  key={callId}
+                                  className="p-2 rounded-lg bg-green-50 text-green-900 text-xs"
+                                >
+                                  {typeof part.toolInvocation.result ===
+                                  'string' ? (
+                                    <span>{part.toolInvocation.result}</span>
+                                  ) : (
+                                    <pre className="whitespace-pre-wrap break-words">
+                                      {JSON.stringify(
+                                        part.toolInvocation.result,
+                                        null,
+                                        2
+                                      )}
+                                    </pre>
+                                  )}
+                                </div>
+                              );
+                          }
+                        }
+                        return null;
+                      }
+                      default:
+                        return null;
+                    }
+                  })}
                 </div>
               ))}
+              {isLoading && (
+                <p className="text-sm text-gray-500">Copilot is thinking…</p>
+              )}
             </div>
           </div>
           <form onSubmit={handleSubmit} className="border-t p-3 flex gap-2">
