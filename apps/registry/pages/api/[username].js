@@ -3,19 +3,19 @@ import errorTemplate from '../../lib/errorTemplate';
 import trackView from '../../lib/trackView';
 
 export default async function handler(req, res) {
-  const { forceJSON, payload } = req.query;
-  const payloadSplit = payload.split('.');
+  const { forceJSON, username } = req.query;
+  const usernameSplit = username.split('.');
 
-  const username = payloadSplit[0];
+  const usernameBase = usernameSplit[0];
 
   let extension = null; // default formatter type
 
-  if (payloadSplit.length === 2) {
-    extension = payloadSplit[1];
+  if (usernameSplit.length === 2) {
+    extension = usernameSplit[1];
   }
 
   const { error, content, headers } = await generateResume(
-    username,
+    usernameBase,
     extension || 'template',
     req.query
   );
@@ -40,7 +40,7 @@ export default async function handler(req, res) {
     res.setHeader(header.key, header.value);
   });
 
-  trackView(username);
+  trackView(usernameBase);
 
   if (content instanceof Buffer || content instanceof ReadableStream) {
     // handles images/binary
