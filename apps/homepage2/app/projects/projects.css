@@ -1,0 +1,21 @@
+.project-item {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.project-name {
+  flex-wrap: wrap;
+  min-width: 200px;
+  max-width: 200px;
+  word-wrap: break-word;
+}
+
+.project-language {
+  min-width: 100px;
+}
+
+.project-description {
+  flex-grow: 1;
+}
