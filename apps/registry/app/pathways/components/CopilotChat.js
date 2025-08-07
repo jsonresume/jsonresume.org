@@ -306,6 +306,9 @@ export default function CopilotChat({
       if (text) {
         // Set the transcribed text as input
         setInput(text);
+        // Auto-submit the transcribed message
+        sendMessage({ text: text });
+        setInput('');
       }
     } catch (error) {
       console.error('Transcription error:', error);

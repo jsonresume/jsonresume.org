@@ -22,20 +22,18 @@ export async function POST(request) {
       fileSize: audioFile.size,
     });
 
-    // Convert the audio file to a Blob which the AI SDK expects
-    const audioBlob = new Blob([await audioFile.arrayBuffer()], {
-      type: audioFile.type || 'audio/wav',
+    // Get the audio data as an ArrayBuffer
+    const audioArrayBuffer = await audioFile.arrayBuffer();
+
+    console.log('Audio data prepared:', {
+      type: audioFile.type,
+      size: audioArrayBuffer.byteLength,
     });
 
-    console.log('Audio blob prepared:', {
-      type: audioBlob.type,
-      size: audioBlob.size,
-    });
-
-    // Use the AI SDK transcribe function with the blob
+    // Use the AI SDK transcribe function with the ArrayBuffer directly
     const result = await transcribe({
       model: openai.transcription('whisper-1'),
-      audio: audioBlob,
+      audio: audioArrayBuffer,
     });
 
     console.log('Transcription result:', {
