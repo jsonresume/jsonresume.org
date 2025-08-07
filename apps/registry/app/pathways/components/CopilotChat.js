@@ -90,6 +90,27 @@ export default function CopilotChat({
     toggleRecording(stopSpeech);
   }, [toggleRecording, stopSpeech]);
 
+  // Handle file upload and resume extraction
+  const handleFileUpload = useCallback(
+    (extractedData) => {
+      // Create a message about the uploaded files
+      const fileCount = extractedData.length;
+      const filenames = extractedData.map((item) => item.filename).join(', ');
+
+      // Send a message to trigger resume update via AI (data is already in JSON Resume format)
+      const uploadMessage = `I've uploaded ${fileCount} resume file${
+        fileCount > 1 ? 's' : ''
+      } (${filenames}). Please analyze and update my resume with this information: ${JSON.stringify(
+        extractedData.map((item) => item.data),
+        null,
+        2
+      )}`;
+
+      sendMessage({ text: uploadMessage });
+    },
+    [sendMessage]
+  );
+
   // Track what we've already spoken using a ref so it persists across renders
   const lastSpokenTextRef = useRef('');
 
@@ -180,6 +201,7 @@ export default function CopilotChat({
         onInputChange={setInput}
         onSubmit={handleSubmit}
         onToggleRecording={handleToggleRecording}
+        onFileUpload={handleFileUpload}
       />
     </aside>
   );

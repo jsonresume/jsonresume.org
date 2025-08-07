@@ -256,6 +256,187 @@ Current `CopilotChat.js` could be split into:
 3. **Speech Queueing**: Cancels previous utterances before new ones
 4. **Lazy Voice Loading**: Voices loaded on first use
 
+## File Upload Feature Implementation Plan
+
+### Architecture Overview
+
+**Multi-Modal Approach**: Use AI SDK v5's multi-modal capabilities combined with `generateObject` for structured data extraction from uploaded resume files.
+
+**File Processing Flow**:
+
+1. Client-side file upload with drag-and-drop
+2. Convert files to data URLs or base64
+3. Send to AI model with structured extraction prompt
+4. Extract resume data using Zod schema validation
+5. Apply changes via existing `updateResume` tool
+
+### 1. File Upload UI Component
+
+**Location**: `/app/pathways/components/FileUpload.js`
+
+**Features**:
+
+- Drag-and-drop zone with visual feedback
+- Click-to-upload fallback
+- Multiple file format support (PDF, DOC, DOCX, TXT)
+- File size validation (max 10MB)
+- Preview selected files before processing
+- Progress indicators during upload/processing
+
+**Integration Point**: Add to `ChatInput.js` as an attachment button or separate upload area.
+
+### 2. File Processing Strategy
+
+**Client-Side Processing**:
+
+- Use `FileReader` API to convert files to data URLs
+- Support for text files (.txt) - direct text extraction
+- Binary files (.pdf, .doc) - send as base64 to AI model
+
+**AI Model Processing**:
+
+- Use GPT-4o (multi-modal) for image/PDF processing
+- Use `generateObject` with resume schema for structured extraction
+- Fallback to text processing for unsupported formats
+
+### 3. API Endpoint Design
+
+**New Route**: `/app/api/pathways/upload/route.js`
+
+**Capabilities**:
+
+- Accept FormData with files
+- Convert files to appropriate format for AI model
+- Use `generateObject` with JSON Resume schema
+- Return structured resume data
+- Error handling for unsupported formats
+
+**Schema Definition**:
+
+```javascript
+const resumeExtractionSchema = z.object({
+  basics: z.object({
+    name: z.string().optional(),
+    email: z.string().email().optional(),
+    phone: z.string().optional(),
+    location: z
+      .object({
+        city: z.string().optional(),
+        region: z.string().optional(),
+      })
+      .optional(),
+  }),
+  work: z
+    .array(
+      z.object({
+        company: z.string(),
+        position: z.string(),
+        startDate: z.string().optional(),
+        endDate: z.string().optional(),
+        summary: z.string().optional(),
+      })
+    )
+    .optional(),
+  education: z
+    .array(
+      z.object({
+        institution: z.string(),
+        area: z.string().optional(),
+        studyType: z.string().optional(),
+        startDate: z.string().optional(),
+        endDate: z.string().optional(),
+      })
+    )
+    .optional(),
+  skills: z
+    .array(
+      z.object({
+        name: z.string(),
+        keywords: z.array(z.string()).optional(),
+      })
+    )
+    .optional(),
+});
+```
+
+### 4. Integration with Existing System
+
+**UpdateResume Tool Enhancement**:
+
+- Extend to handle bulk updates from parsed files
+- Add merge strategy (replace vs append)
+- Provide user confirmation before applying changes
+
+**Chat Integration**:
+
+- Show file upload as special message type
+- Display extracted data before applying
+- Allow users to review and modify before confirmation
+
+### 5. File Format Support Matrix
+
+| Format | Processing Method | AI Model | Reliability |
+| ------ | ----------------- | -------- | ----------- |
+| .txt   | Direct text       | GPT-4.1  | High        |
+| .pdf   | Multi-modal       | GPT-4o   | High        |
+| .doc   | Text extraction\* | GPT-4.1  | Medium      |
+| .docx  | Text extraction\* | GPT-4.1  | Medium      |
+| .rtf   | Text extraction\* | GPT-4.1  | Medium      |
+| Images | Multi-modal       | GPT-4o   | Medium      |
+
+\*Requires server-side text extraction library
+
+### 6. Implementation Phases
+
+**Phase 1**: Basic text file upload and parsing
+**Phase 2**: PDF support via multi-modal AI
+**Phase 3**: Microsoft Office document support
+**Phase 4**: Image/screenshot resume parsing
+**Phase 5**: Advanced merge strategies and user controls
+
+### 7. Technical Considerations
+
+**Security**:
+
+- File type validation
+- Size limits (10MB max)
+- Virus scanning consideration
+- No file storage - process and discard
+
+**Performance**:
+
+- Client-side file validation
+- Streaming for large files
+- Caching extracted data temporarily
+- Rate limiting for API endpoints
+
+**User Experience**:
+
+- Clear upload progress indicators
+- Preview extracted data before applying
+- Undo functionality for applied changes
+- Error messages for failed extractions
+
+### 8. Testing Strategy
+
+**Unit Tests**:
+
+- File validation logic
+- Schema validation
+- Data extraction accuracy
+
+**Integration Tests**:
+
+- End-to-end file upload flow
+- Resume update integration
+- Error handling scenarios
+
+**Manual Tests**:
+
+- Various resume formats
+- Edge cases (corrupted files, unusual layouts)
+- Performance with large files
+
 ## Future Enhancements
 
 - [ ] Add voice input for two-way conversation
@@ -266,6 +447,12 @@ Current `CopilotChat.js` could be split into:
 - [ ] Implement voice customization settings
 - [ ] Add career goal tracking
 - [ ] Integration with job boards
+- [ ] **File Upload Resume Parsing** (In Progress)
+  - [ ] Phase 1: Text file upload and parsing
+  - [ ] Phase 2: PDF support via multi-modal AI
+  - [ ] Phase 3: Microsoft Office document support
+  - [ ] Phase 4: Image/screenshot resume parsing
+  - [ ] Phase 5: Advanced merge strategies and user controls
 
 ## Security Considerations
 
