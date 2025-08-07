@@ -2,7 +2,8 @@
 
 import { Send } from 'lucide-react';
 import { useChat } from '@ai-sdk/react';
-import { useEffect, useRef } from 'react';
+import { DefaultChatTransport } from 'ai';
+import { useEffect, useRef, useState } from 'react';
 import Messages from './Messages';
 import applyResumeChanges from '../utils/applyResumeChanges';
 
@@ -12,25 +13,37 @@ export default function CopilotChat({
   setResumeJson,
 }) {
   const handledToolCalls = useRef(new Set());
+  const [input, setInput] = useState('');
 
-  const {
-    messages,
-    input: chatInput,
-    handleInputChange,
-    handleSubmit,
-    isLoading,
-    addToolResult,
-  } = useChat({
-    api: '/api/pathways',
+  const { messages, sendMessage, status, addToolResult } = useChat({
+    transport: new DefaultChatTransport({
+      api: '/api/pathways',
+      body: { currentResume: resumeData },
+    }),
     initialMessages: [
       {
         role: 'assistant',
         content:
           "Hi! I'm your Copilot. Ask me anything about your career pathway.",
+        parts: [
+          {
+            type: 'text',
+            text: "Hi! I'm your Copilot. Ask me anything about your career pathway.",
+          },
+        ],
       },
     ],
-    body: { currentResume: resumeData },
   });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (input.trim()) {
+      sendMessage({ text: input });
+      setInput('');
+    }
+  };
+
+  const isLoading = status === 'streaming';
 
   // Apply resume updates returned by the AI tool
   useEffect(() => {
@@ -75,8 +88,8 @@ export default function CopilotChat({
       <form onSubmit={handleSubmit} className="border-t p-3 flex gap-2">
         <input
           type="text"
-          value={chatInput}
-          onChange={handleInputChange}
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
           placeholder="Type a message..."
           className="flex-1 rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />

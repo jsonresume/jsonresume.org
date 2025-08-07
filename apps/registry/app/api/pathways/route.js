@@ -1,4 +1,4 @@
-import { streamText, smoothStream, tool } from 'ai';
+import { streamText, smoothStream, tool, convertToModelMessages } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { z } from 'zod';
 // Define the update_resume tool with Zod schema
@@ -89,21 +89,14 @@ export async function POST(request) {
   try {
     const { messages, currentResume } = await request.json();
 
-    // Prepend system context including resume (optional)
-    const systemMessages = [
-      {
-        role: 'system',
-        content: `You are a helpful career copilot. When the user requests changes, generally ADD SAMPLE DATA directly instead of asking follow-up questions, unless absolutely necessary. The current resume JSON: ${JSON.stringify(
-          currentResume || {},
-          null,
-          2
-        )}`,
-      },
-    ];
-
     const result = await streamText({
       model: openai('gpt-4.1'),
-      messages: [...systemMessages, ...messages],
+      system: `You are a helpful career copilot. When the user requests changes, generally ADD SAMPLE DATA directly instead of asking follow-up questions, unless absolutely necessary. The current resume JSON: ${JSON.stringify(
+        currentResume || {},
+        null,
+        2
+      )}`,
+      messages: convertToModelMessages(messages),
       tools: { updateResume },
       experimental_transform: smoothStream({
         delayInMs: 20,
@@ -111,9 +104,7 @@ export async function POST(request) {
       }),
     });
 
-    return result.toDataStreamResponse({
-      getErrorMessage: errorHandler,
-    });
+    return result.toUIMessageStreamResponse();
   } catch (error) {
     return new Response(JSON.stringify({ error: errorHandler(error) }), {
       status: 500,
