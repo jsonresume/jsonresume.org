@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Settings } from 'lucide-react';
 import Editor from '@monaco-editor/react';
-import CopilotChat from './components/CopilotChat';
+import CopilotChat from './components/CopilotChatRefactored';
 import ResumePreview from './components/ResumePreview';
 
 export default function Pathways() {
