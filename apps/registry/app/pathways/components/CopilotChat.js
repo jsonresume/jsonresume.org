@@ -2,7 +2,7 @@
 
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport } from 'ai';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Messages from './Messages';
 import ChatHeader from './ChatHeader';
 import ChatInput from './ChatInput';
@@ -90,46 +90,24 @@ export default function CopilotChat({
     toggleRecording(stopSpeech);
   }, [toggleRecording, stopSpeech]);
 
-  // Track the index of the last spoken message
-  const [lastSpokenMessageIndex, setLastSpokenMessageIndex] = useState(-1);
-
-  // Reset when speech is toggled
-  useEffect(() => {
-    if (!isSpeechEnabled) {
-      setLastSpokenMessageIndex(-1);
-    }
-  }, [isSpeechEnabled]);
+  // Track what we've already spoken using a ref so it persists across renders
+  const lastSpokenTextRef = useRef('');
 
   // Speak new assistant messages
   useEffect(() => {
-    if (!isSpeechEnabled || status === 'streaming') return;
+    if (!isSpeechEnabled) return;
 
-    // Find the last assistant message
-    let lastAssistantIndex = -1;
-    for (let i = messages.length - 1; i >= 0; i--) {
-      if (messages[i].role === 'assistant') {
-        lastAssistantIndex = i;
-        break;
-      }
-    }
-
-    // Check if we have a new message to speak
-    if (
-      lastAssistantIndex === -1 ||
-      lastAssistantIndex <= lastSpokenMessageIndex
-    ) {
-      return;
-    }
-
-    const messageToSpeak = messages[lastAssistantIndex];
+    // Get the last message
+    const lastMessage = messages[messages.length - 1];
+    if (!lastMessage || lastMessage.role !== 'assistant') return;
 
     // Extract text content to speak
     let textToSpeak = '';
 
-    if (messageToSpeak.content) {
-      textToSpeak = messageToSpeak.content;
-    } else if (messageToSpeak.parts) {
-      for (const part of messageToSpeak.parts) {
+    if (lastMessage.content) {
+      textToSpeak = lastMessage.content;
+    } else if (lastMessage.parts) {
+      for (const part of lastMessage.parts) {
         if (part.type === 'text') {
           textToSpeak += part.text + ' ';
         } else if (
@@ -144,19 +122,32 @@ export default function CopilotChat({
       }
     }
 
-    // Speak the message if we have text
-    if (textToSpeak.trim()) {
-      // Update the last spoken index
-      setLastSpokenMessageIndex(lastAssistantIndex);
+    const trimmedText = textToSpeak.trim();
+
+    // Only speak if we're not still streaming and haven't spoken this exact text already
+    if (
+      trimmedText &&
+      status !== 'streaming' &&
+      trimmedText !== lastSpokenTextRef.current
+    ) {
+      // Update the ref to remember what we're speaking
+      lastSpokenTextRef.current = trimmedText;
 
       // Add a small delay to make it feel more natural
       const timeoutId = setTimeout(() => {
-        speakText(textToSpeak.trim());
+        speakText(trimmedText);
       }, 300);
 
       return () => clearTimeout(timeoutId);
     }
-  }, [messages, isSpeechEnabled, status, speakText, lastSpokenMessageIndex]);
+  }, [messages, isSpeechEnabled, status, speakText]);
+
+  // Reset spoken text when speech is toggled off
+  useEffect(() => {
+    if (!isSpeechEnabled) {
+      lastSpokenTextRef.current = '';
+    }
+  }, [isSpeechEnabled]);
 
   // Cleanup on unmount
   useEffect(() => {
