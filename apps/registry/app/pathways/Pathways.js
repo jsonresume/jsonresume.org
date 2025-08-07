@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Settings } from 'lucide-react';
 import Editor from '@monaco-editor/react';
 import CopilotChat from './components/CopilotChat';
+import ResumePreview from './components/ResumePreview';
 
 export default function Pathways() {
   const [activeTab, setActiveTab] = useState('graph');
@@ -12,23 +13,90 @@ export default function Pathways() {
       name: 'Jane Doe',
       label: 'Full-Stack Developer',
       email: 'jane.doe@example.com',
+      phone: '+1-555-0123',
+      url: 'https://janedoe.dev',
       location: { city: 'San Francisco', region: 'CA', countryCode: 'US' },
       summary:
-        'Experienced developer with a passion for building scalable web applications.',
+        'Experienced full-stack developer with 5+ years building scalable web applications. Passionate about clean code, user experience, and mentoring junior developers.',
+      profiles: [
+        {
+          network: 'GitHub',
+          username: 'janedoe',
+          url: 'https://github.com/janedoe',
+        },
+        {
+          network: 'LinkedIn',
+          username: 'janedoe',
+          url: 'https://linkedin.com/in/janedoe',
+        },
+      ],
     },
     work: [
       {
-        name: 'Acme Corp',
-        position: 'Software Engineer',
-        startDate: '2022-01-01',
-        summary: 'Worked on front-end features using React and Tailwind CSS.',
+        name: 'Tech Solutions Inc.',
+        position: 'Senior Software Engineer',
+        startDate: '2022-03-01',
+        summary:
+          'Lead development of microservices architecture and mentored team of 5 developers.',
+        highlights: [
+          'Architected and implemented microservices reducing response time by 40%',
+          'Led migration from monolithic to containerized architecture',
+          'Mentored 5 junior developers and conducted code reviews',
+        ],
+      },
+      {
+        name: 'StartupCo',
+        position: 'Full-Stack Developer',
+        startDate: '2020-01-01',
+        endDate: '2022-02-01',
+        summary: 'Built features for B2B SaaS platform serving 10,000+ users.',
+        highlights: [
+          'Developed real-time collaboration features using WebSockets',
+          'Improved application performance by 60% through optimization',
+          'Implemented CI/CD pipeline reducing deployment time by 70%',
+        ],
       },
     ],
-    education: [],
+    education: [
+      {
+        institution: 'University of California, Berkeley',
+        area: 'Computer Science',
+        studyType: 'Bachelor',
+        startDate: '2016-09-01',
+        endDate: '2020-05-01',
+        score: '3.8',
+        courses: [
+          'Data Structures',
+          'Algorithms',
+          'Web Development',
+          'Database Systems',
+        ],
+      },
+    ],
     skills: [
-      { name: 'JavaScript', level: 'Advanced' },
-      { name: 'React', level: 'Advanced' },
-      { name: 'Node.js', level: 'Intermediate' },
+      {
+        name: 'JavaScript',
+        level: 'Expert',
+        keywords: ['ES6+', 'TypeScript', 'Node.js', 'React', 'Vue.js'],
+      },
+      {
+        name: 'Backend Development',
+        level: 'Advanced',
+        keywords: ['Python', 'Django', 'PostgreSQL', 'Redis', 'Docker'],
+      },
+      {
+        name: 'Cloud & DevOps',
+        level: 'Intermediate',
+        keywords: ['AWS', 'CI/CD', 'Kubernetes', 'Terraform'],
+      },
+    ],
+    awards: [
+      {
+        title: 'Best Innovation Award',
+        date: '2023-06-01',
+        awarder: 'Tech Solutions Inc.',
+        summary: 'For developing an AI-powered code review system',
+      },
     ],
   };
 
@@ -54,7 +122,7 @@ export default function Pathways() {
       <div className="flex flex-1 overflow-hidden">
         <section className="flex flex-col flex-1 overflow-hidden">
           <nav className="flex border-b bg-gray-50 text-sm font-medium">
-            {['graph', 'resume'].map((tab) => (
+            {['graph', 'preview', 'resume'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
@@ -64,7 +132,11 @@ export default function Pathways() {
                     : 'border-transparent hover:text-indigo-600'
                 }`}
               >
-                {tab === 'graph' ? 'Graph' : 'Resume'}
+                {tab === 'graph'
+                  ? 'Graph'
+                  : tab === 'preview'
+                  ? 'Preview'
+                  : 'Resume'}
               </button>
             ))}
           </nav>
@@ -72,6 +144,8 @@ export default function Pathways() {
           <div className="flex-1 overflow-auto">
             {activeTab === 'graph' ? (
               <MockGraph />
+            ) : activeTab === 'preview' ? (
+              <ResumePreview resumeData={resumeData} />
             ) : (
               <Editor
                 height="100%"
