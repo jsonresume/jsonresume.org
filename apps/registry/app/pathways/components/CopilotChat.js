@@ -90,37 +90,46 @@ export default function CopilotChat({
     toggleRecording(stopSpeech);
   }, [toggleRecording, stopSpeech]);
 
-  // Track which messages have been spoken
-  const [spokenMessageIds, setSpokenMessageIds] = useState(new Set());
+  // Track the index of the last spoken message
+  const [lastSpokenMessageIndex, setLastSpokenMessageIndex] = useState(-1);
 
-  // Clear spoken messages when speech is toggled off
+  // Reset when speech is toggled
   useEffect(() => {
     if (!isSpeechEnabled) {
-      setSpokenMessageIds(new Set());
+      setLastSpokenMessageIndex(-1);
     }
   }, [isSpeechEnabled]);
 
   // Speak new assistant messages
   useEffect(() => {
-    if (!isSpeechEnabled) return;
+    if (!isSpeechEnabled || status === 'streaming') return;
 
-    // Get the last message
-    const lastMessage = messages[messages.length - 1];
-    if (!lastMessage || lastMessage.role !== 'assistant') return;
+    // Find the last assistant message
+    let lastAssistantIndex = -1;
+    for (let i = messages.length - 1; i >= 0; i--) {
+      if (messages[i].role === 'assistant') {
+        lastAssistantIndex = i;
+        break;
+      }
+    }
 
-    // Create a unique ID for this message
-    const messageId = `${messages.length}-${lastMessage.content || ''}`;
+    // Check if we have a new message to speak
+    if (
+      lastAssistantIndex === -1 ||
+      lastAssistantIndex <= lastSpokenMessageIndex
+    ) {
+      return;
+    }
 
-    // Skip if we've already spoken this message
-    if (spokenMessageIds.has(messageId)) return;
+    const messageToSpeak = messages[lastAssistantIndex];
 
     // Extract text content to speak
     let textToSpeak = '';
 
-    if (lastMessage.content) {
-      textToSpeak = lastMessage.content;
-    } else if (lastMessage.parts) {
-      for (const part of lastMessage.parts) {
+    if (messageToSpeak.content) {
+      textToSpeak = messageToSpeak.content;
+    } else if (messageToSpeak.parts) {
+      for (const part of messageToSpeak.parts) {
         if (part.type === 'text') {
           textToSpeak += part.text + ' ';
         } else if (
@@ -135,10 +144,10 @@ export default function CopilotChat({
       }
     }
 
-    // Only speak if we're not still streaming
-    if (textToSpeak && status !== 'streaming') {
-      // Mark this message as spoken
-      setSpokenMessageIds((prev) => new Set([...prev, messageId]));
+    // Speak the message if we have text
+    if (textToSpeak.trim()) {
+      // Update the last spoken index
+      setLastSpokenMessageIndex(lastAssistantIndex);
 
       // Add a small delay to make it feel more natural
       const timeoutId = setTimeout(() => {
@@ -147,7 +156,7 @@ export default function CopilotChat({
 
       return () => clearTimeout(timeoutId);
     }
-  }, [messages, isSpeechEnabled, status, speakText, spokenMessageIds]);
+  }, [messages, isSpeechEnabled, status, speakText, lastSpokenMessageIndex]);
 
   // Cleanup on unmount
   useEffect(() => {
