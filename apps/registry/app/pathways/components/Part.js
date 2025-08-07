@@ -7,41 +7,47 @@ export default function Part({ part }) {
     case 'text':
       return <span>{part.text}</span>;
 
-    case 'tool-invocation': {
-      const { toolCallId, toolName, state, input, output } =
-        part.toolInvocation;
-      if (toolName !== 'updateResume' && toolName !== 'update_resume')
+    // AI SDK v5 tool format - tool-updateResume
+    case 'tool-updateResume': {
+      // Only show when input is available (not while streaming)
+      if (
+        part.state !== 'input-available' &&
+        part.state !== 'output-available'
+      ) {
         return null;
-
-      if (state === 'call') {
-        return (
-          <div
-            key={toolCallId}
-            className="p-2 rounded-lg bg-green-50 text-green-900 text-xs"
-          >
-            <pre className="whitespace-pre-wrap break-words">
-              {JSON.stringify(input, null, 2)}
-            </pre>
-          </div>
-        );
       }
 
-      if (state === 'result') {
-        return (
-          <div key={toolCallId} className="p-2 rounded-lg space-y-1">
-            {input?.explanation && <span>{input.explanation}</span>}
-            {input?.changes && (
-              <div className="text-xs bg-green-50 text-green-900">
-                <pre className="whitespace-pre-wrap break-words">
-                  {JSON.stringify(input.changes, null, 2)}
-                </pre>
-              </div>
-            )}
-          </div>
-        );
-      }
-      return null;
+      const { input } = part;
+      return (
+        <div className="p-2 rounded-lg bg-blue-50 text-blue-900 text-xs space-y-2">
+          <div className="font-semibold">📝 Updating resume...</div>
+          {input?.explanation && (
+            <div className="text-sm">{input.explanation}</div>
+          )}
+          {input?.changes && (
+            <details className="mt-2">
+              <summary className="cursor-pointer text-xs font-medium">
+                View changes
+              </summary>
+              <pre className="whitespace-pre-wrap break-words bg-white/50 p-2 rounded mt-1 text-xs">
+                {JSON.stringify(input.changes, null, 2)}
+              </pre>
+            </details>
+          )}
+          {part.state === 'output-available' && part.output && (
+            <div className="text-green-700 font-medium mt-2">
+              ✓ {part.output}
+            </div>
+          )}
+        </div>
+      );
     }
+
+    // Handle step indicators
+    case 'step-start':
+    case 'step-finish':
+      return null; // Don't render step indicators
+
     default:
       return null;
   }

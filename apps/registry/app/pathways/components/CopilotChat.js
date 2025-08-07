@@ -49,15 +49,13 @@ export default function CopilotChat({
   useEffect(() => {
     for (const msg of messages) {
       for (const part of msg.parts ?? []) {
+        // Check for tool-updateResume parts (v5 format)
         if (
-          part.type === 'tool-invocation' &&
-          ['updateResume', 'update_resume'].includes(
-            part.toolInvocation.toolName
-          ) &&
-          part.toolInvocation.state === 'call' &&
-          !handledToolCalls.current.has(part.toolInvocation.toolCallId)
+          part.type === 'tool-updateResume' &&
+          part.state === 'input-available' &&
+          !handledToolCalls.current.has(part.toolCallId)
         ) {
-          const { changes } = part.toolInvocation.input ?? {};
+          const { changes } = part.input ?? {};
           if (changes && typeof changes === 'object') {
             setResumeData((prev) => applyResumeChanges(prev, changes));
             setResumeJson((prev) =>
@@ -69,10 +67,10 @@ export default function CopilotChat({
             );
           }
           addToolResult({
-            toolCallId: part.toolInvocation.toolCallId,
-            output: 'Changes applied',
+            toolCallId: part.toolCallId,
+            result: 'Changes applied',
           });
-          handledToolCalls.current.add(part.toolInvocation.toolCallId);
+          handledToolCalls.current.add(part.toolCallId);
         }
       }
     }
