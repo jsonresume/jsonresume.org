@@ -6,6 +6,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import Messages from './Messages';
 import ChatHeader from './ChatHeader';
 import ChatInput from './ChatInput';
+import ResumeParseResult from './ResumeParseResult';
 import useSpeech from '../hooks/useSpeech';
 import useVoiceRecording from '../hooks/useVoiceRecording';
 import useResumeUpdater from '../hooks/useResumeUpdater';
@@ -27,6 +28,8 @@ export default function CopilotChat({
   setResumeJson,
 }) {
   const [input, setInput] = useState('');
+  const [pendingResumeData, setPendingResumeData] = useState(null);
+  const [isApplyingResume, setIsApplyingResume] = useState(false);
 
   // Initialize chat with AI SDK
   const { messages, sendMessage, status, addToolResult } = useChat({
@@ -91,25 +94,50 @@ export default function CopilotChat({
   }, [toggleRecording, stopSpeech]);
 
   // Handle file upload and resume extraction
-  const handleFileUpload = useCallback(
-    (extractedData) => {
-      // Create a message about the uploaded files
-      const fileCount = extractedData.length;
-      const filenames = extractedData.map((item) => item.filename).join(', ');
+  const handleFileUpload = useCallback((extractedData) => {
+    // For now, we'll take the first file's data (can extend for multiple files later)
+    const firstFile = extractedData[0];
+    if (firstFile) {
+      // Show the parsed resume data in the review UI
+      setPendingResumeData({
+        filename: firstFile.filename,
+        data: firstFile.data,
+      });
+    }
+  }, []);
 
-      // Send a message to trigger resume update via AI (data is already in JSON Resume format)
-      const uploadMessage = `I've uploaded ${fileCount} resume file${
-        fileCount > 1 ? 's' : ''
-      } (${filenames}). Please analyze and update my resume with this information: ${JSON.stringify(
-        extractedData.map((item) => item.data),
-        null,
-        2
-      )}`;
+  // Handle applying parsed resume data
+  const handleApplyResumeData = useCallback(
+    async (selectedData) => {
+      setIsApplyingResume(true);
+      try {
+        // Create a message to the AI with the selected data for processing
+        const uploadMessage = `I've uploaded a resume file (${
+          pendingResumeData.filename
+        }). Please analyze and update my resume with this information: ${JSON.stringify(
+          selectedData,
+          null,
+          2
+        )}`;
 
-      sendMessage({ text: uploadMessage });
+        // Send to AI for processing
+        sendMessage({ text: uploadMessage });
+
+        // Clear pending data
+        setPendingResumeData(null);
+      } catch (error) {
+        console.error('Error applying resume data:', error);
+      } finally {
+        setIsApplyingResume(false);
+      }
     },
-    [sendMessage]
+    [pendingResumeData, sendMessage]
   );
+
+  // Handle dismissing the parse result
+  const handleDismissParseResult = useCallback(() => {
+    setPendingResumeData(null);
+  }, []);
 
   // Track what we've already spoken using a ref so it persists across renders
   const lastSpokenTextRef = useRef('');
@@ -192,6 +220,16 @@ export default function CopilotChat({
 
       <div className="flex-1 overflow-auto p-4 text-sm text-gray-500">
         <Messages messages={messages} isLoading={isLoading} />
+
+        {/* Show resume parse result if available */}
+        {pendingResumeData && (
+          <ResumeParseResult
+            parsedData={pendingResumeData.data}
+            onApplyChanges={handleApplyResumeData}
+            onDismiss={handleDismissParseResult}
+            isApplying={isApplyingResume}
+          />
+        )}
       </div>
 
       <ChatInput
