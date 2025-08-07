@@ -6,7 +6,7 @@ export const updateResume = tool({
   // name inferred as key when passed in array; ensure matches 'updateResume'
   name: 'updateResume',
   description: 'Update specific sections of the resume with new information',
-  parameters: z.object({
+  inputSchema: z.object({
     changes: z.object({
       basics: z
         .object({

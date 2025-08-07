@@ -6,7 +6,11 @@ import { useEffect, useRef } from 'react';
 import Messages from './Messages';
 import applyResumeChanges from '../utils/applyResumeChanges';
 
-export default function CopilotChat({ resumeData, setResumeData, setResumeJson }) {
+export default function CopilotChat({
+  resumeData,
+  setResumeData,
+  setResumeJson,
+}) {
   const handledToolCalls = useRef(new Set());
 
   const {
@@ -21,7 +25,8 @@ export default function CopilotChat({ resumeData, setResumeData, setResumeJson }
     initialMessages: [
       {
         role: 'assistant',
-        content: "Hi! I'm your Copilot. Ask me anything about your career pathway.",
+        content:
+          "Hi! I'm your Copilot. Ask me anything about your career pathway.",
       },
     ],
     body: { currentResume: resumeData },
@@ -33,20 +38,26 @@ export default function CopilotChat({ resumeData, setResumeData, setResumeJson }
       for (const part of msg.parts ?? []) {
         if (
           part.type === 'tool-invocation' &&
-          ['updateResume', 'update_resume'].includes(part.toolInvocation.toolName) &&
+          ['updateResume', 'update_resume'].includes(
+            part.toolInvocation.toolName
+          ) &&
           part.toolInvocation.state === 'call' &&
           !handledToolCalls.current.has(part.toolInvocation.toolCallId)
         ) {
-          const { changes } = part.toolInvocation.args ?? {};
+          const { changes } = part.toolInvocation.input ?? {};
           if (changes && typeof changes === 'object') {
             setResumeData((prev) => applyResumeChanges(prev, changes));
             setResumeJson((prev) =>
-              JSON.stringify(applyResumeChanges(JSON.parse(prev), changes), null, 2)
+              JSON.stringify(
+                applyResumeChanges(JSON.parse(prev), changes),
+                null,
+                2
+              )
             );
           }
           addToolResult({
             toolCallId: part.toolInvocation.toolCallId,
-            result: 'Changes applied',
+            output: 'Changes applied',
           });
           handledToolCalls.current.add(part.toolInvocation.toolCallId);
         }

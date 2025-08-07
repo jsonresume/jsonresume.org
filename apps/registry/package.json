@@ -3,7 +3,7 @@
   "version": "1.0.1",
   "private": true,
   "scripts": {
-    "dev": "next dev --port 3000",
+    "dev": "next dev --port 3200",
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint --max-warnings=0",
@@ -12,8 +12,8 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
-    "@ai-sdk/openai": "^1.0.10",
-    "@ai-sdk/react": "^1.2.12",
+    "@ai-sdk/openai": "^2.0.0",
+    "@ai-sdk/react": "^2.0.0",
     "@dagrejs/dagre": "^1.1.4",
     "@faker-js/faker": "^8.0.2",
     "@jsonresume/jsonresume-theme-professional": "workspace:*",
@@ -29,7 +29,7 @@
     "@tailwindcss/typography": "^0.5.13",
     "@vercel/analytics": "^1.3.1",
     "@xyflow/react": "^12.4.2",
-    "ai": "^4.3.13",
+    "ai": "^5.0.0",
     "async": "^3.2.4",
     "autoprefixer": "^10.4.19",
     "axios": "^1.3.6",

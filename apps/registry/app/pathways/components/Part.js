@@ -8,14 +8,19 @@ export default function Part({ part }) {
       return <span>{part.text}</span>;
 
     case 'tool-invocation': {
-      const { toolCallId, toolName, state, args } = part.toolInvocation;
-      if (toolName !== 'updateResume' && toolName !== 'update_resume') return null;
+      const { toolCallId, toolName, state, input, output } =
+        part.toolInvocation;
+      if (toolName !== 'updateResume' && toolName !== 'update_resume')
+        return null;
 
       if (state === 'call') {
         return (
-          <div key={toolCallId} className="p-2 rounded-lg bg-green-50 text-green-900 text-xs">
+          <div
+            key={toolCallId}
+            className="p-2 rounded-lg bg-green-50 text-green-900 text-xs"
+          >
             <pre className="whitespace-pre-wrap break-words">
-              {JSON.stringify(args, null, 2)}
+              {JSON.stringify(input, null, 2)}
             </pre>
           </div>
         );
@@ -24,11 +29,11 @@ export default function Part({ part }) {
       if (state === 'result') {
         return (
           <div key={toolCallId} className="p-2 rounded-lg space-y-1">
-            {args?.explanation && <span>{args.explanation}</span>}
-            {args?.changes && (
+            {input?.explanation && <span>{input.explanation}</span>}
+            {input?.changes && (
               <div className="text-xs bg-green-50 text-green-900">
                 <pre className="whitespace-pre-wrap break-words">
-                  {JSON.stringify(args.changes, null, 2)}
+                  {JSON.stringify(input.changes, null, 2)}
                 </pre>
               </div>
             )}
