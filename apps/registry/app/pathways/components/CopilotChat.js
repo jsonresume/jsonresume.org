@@ -1,6 +1,6 @@
 'use client';
 
-import { Send, Volume2, VolumeX } from 'lucide-react';
+import { Send, Volume2, VolumeX, Mic, MicOff } from 'lucide-react';
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport } from 'ai';
 import { useEffect, useRef, useState } from 'react';
@@ -17,7 +17,11 @@ export default function CopilotChat({
   const [isSpeechEnabled, setIsSpeechEnabled] = useState(false);
   const [isGeneratingSpeech, setIsGeneratingSpeech] = useState(false);
   const [selectedVoice, setSelectedVoice] = useState('nova'); // nova is warm and friendly
+  const [isRecording, setIsRecording] = useState(false);
+  const [isTranscribing, setIsTranscribing] = useState(false);
   const audioRef = useRef(null);
+  const mediaRecorderRef = useRef(null);
+  const audioChunksRef = useRef([]);
 
   const { messages, sendMessage, status, addToolResult } = useChat({
     transport: new DefaultChatTransport({
@@ -143,6 +147,183 @@ export default function CopilotChat({
     setIsSpeechEnabled(!isSpeechEnabled);
   };
 
+  // Convert audio blob to WAV format
+  const convertToWav = async (audioBlob) => {
+    const audioContext = new (window.AudioContext ||
+      window.webkitAudioContext)();
+    const arrayBuffer = await audioBlob.arrayBuffer();
+    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+
+    // Create WAV file
+    const length = audioBuffer.length * audioBuffer.numberOfChannels * 2;
+    const buffer = new ArrayBuffer(44 + length);
+    const view = new DataView(buffer);
+
+    // WAV header
+    const writeString = (offset, string) => {
+      for (let i = 0; i < string.length; i++) {
+        view.setUint8(offset + i, string.charCodeAt(i));
+      }
+    };
+
+    writeString(0, 'RIFF');
+    view.setUint32(4, 36 + length, true);
+    writeString(8, 'WAVE');
+    writeString(12, 'fmt ');
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true);
+    view.setUint16(22, audioBuffer.numberOfChannels, true);
+    view.setUint32(24, audioBuffer.sampleRate, true);
+    view.setUint32(
+      28,
+      audioBuffer.sampleRate * 2 * audioBuffer.numberOfChannels,
+      true
+    );
+    view.setUint16(32, audioBuffer.numberOfChannels * 2, true);
+    view.setUint16(34, 16, true);
+    writeString(36, 'data');
+    view.setUint32(40, length, true);
+
+    // Convert audio data
+    const channelData = audioBuffer.getChannelData(0);
+    let offset = 44;
+    for (let i = 0; i < channelData.length; i++) {
+      const sample = Math.max(-1, Math.min(1, channelData[i]));
+      view.setInt16(offset, sample * 0x7fff, true);
+      offset += 2;
+    }
+
+    return new Blob([buffer], { type: 'audio/wav' });
+  };
+
+  // Start recording audio
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+      // Use standard WebM format
+      const mimeType = 'audio/webm';
+
+      // Create MediaRecorder with the stream
+      const mediaRecorder = new MediaRecorder(stream, {
+        mimeType: mimeType,
+      });
+
+      mediaRecorderRef.current = mediaRecorder;
+      audioChunksRef.current = [];
+
+      // Collect audio chunks
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data);
+        }
+      };
+
+      // Handle recording stop
+      mediaRecorder.onstop = async () => {
+        // Create blob from recorded chunks
+        const webmBlob = new Blob(audioChunksRef.current, {
+          type: 'audio/webm',
+        });
+
+        try {
+          // Convert to WAV for better compatibility
+          console.log('Converting audio to WAV format...');
+          const wavBlob = await convertToWav(webmBlob);
+          await transcribeAudio(wavBlob);
+        } catch (conversionError) {
+          console.error(
+            'Failed to convert to WAV, trying WebM directly:',
+            conversionError
+          );
+          // Fallback to WebM if conversion fails
+          await transcribeAudio(webmBlob);
+        }
+
+        // Stop all tracks to release the microphone
+        stream.getTracks().forEach((track) => track.stop());
+      };
+
+      // Start recording
+      mediaRecorder.start();
+      setIsRecording(true);
+    } catch (error) {
+      console.error('Error starting recording:', error);
+      alert('Could not access microphone. Please check permissions.');
+    }
+  };
+
+  // Stop recording
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && isRecording) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+    }
+  };
+
+  // Transcribe audio to text
+  const transcribeAudio = async (audioBlob) => {
+    try {
+      setIsTranscribing(true);
+
+      console.log('Sending audio for transcription:', {
+        type: audioBlob.type,
+        size: audioBlob.size,
+      });
+
+      // Determine file extension based on MIME type
+      const extension = audioBlob.type.includes('wav')
+        ? 'wav'
+        : audioBlob.type.includes('webm')
+        ? 'webm'
+        : audioBlob.type.includes('ogg')
+        ? 'ogg'
+        : audioBlob.type.includes('mp4')
+        ? 'mp4'
+        : 'wav';
+
+      // Create FormData with the audio blob
+      const formData = new FormData();
+      formData.append('audio', audioBlob, `recording.${extension}`);
+
+      // Send to transcription API
+      const response = await fetch('/api/transcribe', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const error = await response
+          .json()
+          .catch(() => ({ error: 'Unknown error' }));
+        console.error('Transcription API error:', error);
+        throw new Error(error.details || error.error || 'Transcription failed');
+      }
+
+      const { text } = await response.json();
+      console.log('Transcription result:', text);
+
+      if (text) {
+        // Set the transcribed text as input
+        setInput(text);
+      }
+    } catch (error) {
+      console.error('Transcription error:', error);
+      alert(`Failed to transcribe audio: ${error.message}`);
+    } finally {
+      setIsTranscribing(false);
+    }
+  };
+
+  // Toggle recording
+  const toggleRecording = () => {
+    if (isRecording) {
+      stopRecording();
+    } else {
+      startRecording();
+    }
+  };
+
   // Apply resume updates returned by the AI tool
   useEffect(() => {
     for (const msg of messages) {
@@ -214,12 +395,22 @@ export default function CopilotChat({
     }
   }, [messages, isSpeechEnabled, status]);
 
-  // Clean up audio on unmount
+  // Clean up audio and recording on unmount
   useEffect(() => {
     return () => {
+      // Clean up audio playback
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current = null;
+      }
+
+      // Clean up recording
+      if (mediaRecorderRef.current && isRecording) {
+        mediaRecorderRef.current.stop();
+        // Stop all tracks
+        mediaRecorderRef.current.stream
+          ?.getTracks()
+          .forEach((track) => track.stop());
       }
     };
   }, []);
@@ -267,16 +458,42 @@ export default function CopilotChat({
         <Messages messages={messages} isLoading={isLoading} />
       </div>
       <form onSubmit={handleSubmit} className="border-t p-3 flex gap-2">
+        <button
+          type="button"
+          onClick={toggleRecording}
+          disabled={isTranscribing}
+          className={`p-2 rounded-md transition-colors flex items-center justify-center relative ${
+            isRecording
+              ? 'bg-red-500 hover:bg-red-600 text-white animate-pulse'
+              : isTranscribing
+              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              : 'bg-gray-100 hover:bg-gray-200 text-gray-600'
+          }`}
+          title={isRecording ? 'Stop recording' : 'Start recording'}
+        >
+          {isRecording ? (
+            <MicOff className="w-4 h-4" />
+          ) : (
+            <Mic className="w-4 h-4" />
+          )}
+          {isTranscribing && (
+            <span className="absolute -top-1 -right-1 w-2 h-2 bg-blue-600 rounded-full animate-pulse" />
+          )}
+        </button>
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Type a message..."
-          className="flex-1 rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          placeholder={
+            isTranscribing ? 'Transcribing...' : 'Type or speak a message...'
+          }
+          disabled={isTranscribing}
+          className="flex-1 rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:bg-gray-50 disabled:text-gray-500"
         />
         <button
           type="submit"
-          className="p-2 rounded-md bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center"
+          disabled={isTranscribing || !input.trim()}
+          className="p-2 rounded-md bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center disabled:bg-gray-300 disabled:cursor-not-allowed"
         >
           <Send className="w-4 h-4" />
         </button>
