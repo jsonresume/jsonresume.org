@@ -9,7 +9,15 @@
     "lint": "next lint --max-warnings=0",
     "postinstall": "prisma generate --data-proxy",
     "db:generate": "prisma generate",
-    "test:e2e": "playwright test"
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:pathways": "jest --testPathPatterns=pathways",
+    "test:api": "jest --testPathPatterns=api",
+    "test:components": "jest --testPathPatterns=components",
+    "test:utils": "jest --testPathPatterns=utils",
+    "test:e2e": "playwright test",
+    "test:all": "npm run test && npm run test:e2e"
   },
   "dependencies": {
     "@ai-sdk/openai": "^2.0.0",
@@ -122,15 +130,27 @@
     "zod": "^3.25.71"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.23.5",
+    "@babel/preset-react": "^7.27.1",
+    "@babel/preset-typescript": "^7.27.1",
     "@playwright/test": "^1.40.0",
     "@repo/eslint-config-custom": "workspace:*",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^13.0.0",
+    "@testing-library/user-event": "^13.2.1",
     "@types/bcrypt": "^5.0.2",
+    "@types/jest": "^27.0.1",
     "@types/next-auth": "^3.15.0",
     "@types/node": "^20.10.0",
+    "babel-jest": "^30.0.5",
     "caniuse-lite": "^1.0.30001566",
     "eslint": "^8.55.0",
     "eslint-config-next": "^14.2.5",
+    "jest": "^30.0.5",
+    "jest-environment-jsdom": "^30.0.5",
+    "next-router-mock": "^1.0.2",
     "playwright": "^1.40.0",
+    "ts-jest": "^29.4.1",
     "tsconfig": "workspace:*",
     "typescript": "^5.3.2"
   }

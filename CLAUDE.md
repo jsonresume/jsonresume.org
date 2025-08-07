@@ -104,10 +104,48 @@ See `apps/registry/app/pathways/CLAUDE.md` for detailed AI SDK v5 implementation
 
 ### Testing Approach
 
-- Unit tests for utilities
-- Component tests for UI
-- Integration tests for API routes
-- E2E tests for critical user flows
+#### Jest Testing Framework
+
+**Test Structure**:
+
+```
+apps/registry/__tests__/
+├── pathways/
+│   ├── components/     # Component tests
+│   └── utils/          # Utility tests
+└── api/
+    ├── pathways/       # API route tests
+    ├── speech/         # Speech API tests
+    └── transcribe/     # Transcription tests
+```
+
+**Running Tests**:
+
+```bash
+npm run test              # Run all tests
+npm run test:watch        # Watch mode
+npm run test:coverage     # Coverage report
+npm run test:pathways     # Pathways tests only
+npm run test:components   # Component tests
+npm run test:utils        # Utility tests
+npm run test:api          # API tests
+```
+
+**Test Coverage Areas**:
+
+- Unit tests for utilities (applyResumeChanges)
+- Component tests for UI (CopilotChat, Message, Part)
+- Integration tests for API routes (pathways, speech, transcribe)
+- Mock browser APIs (MediaRecorder, AudioContext, getUserMedia)
+- E2E tests with Playwright for critical user flows
+
+**Testing Best Practices**:
+
+- Use @testing-library/react for component testing
+- Mock external dependencies (AI SDK, OpenAI)
+- Test user interactions, not implementation details
+- Maintain test files under 150 lines
+- Group related tests in describe blocks
 
 ## Commit Guidelines
 

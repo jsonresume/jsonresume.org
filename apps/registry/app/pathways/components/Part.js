@@ -3,6 +3,10 @@
 import React from 'react';
 
 export default function Part({ part }) {
+  if (!part || !part.type) {
+    return null;
+  }
+
   switch (part.type) {
     case 'text':
       return <span>{part.text}</span>;
