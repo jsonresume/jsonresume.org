@@ -199,6 +199,12 @@ export default function CopilotChat({
   // Start recording audio
   const startRecording = async () => {
     try {
+      // Stop any currently playing audio when starting to record
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
       // Use standard WebM format
