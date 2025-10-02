@@ -1,9 +1,6 @@
+const { generateText } = require('ai');
+const { openai } = require('@ai-sdk/openai');
 const OpenAI = require('openai');
-const { createClient } = require('@supabase/supabase-js');
-
-const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
-const supabaseKey = process.env.SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 const cosineSimilarity = (a, b) => {
   const dotProduct = a.reduce((sum, val, i) => sum + val * b[i], 0);
@@ -21,14 +18,15 @@ export default async function handler(req, res) {
     throw new Error('Missing env var from OpenAI');
   }
 
-  const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-  });
-
   const username = req.query.username;
   if (!username) {
     return res.status(400).json({ error: 'Username is required' });
   }
+
+  // Lazy load Supabase
+  const { createClient } = require('@supabase/supabase-js');
+  const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
+  const supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
 
   const { data } = await supabase
     .from('resumes')
@@ -42,23 +40,16 @@ export default async function handler(req, res) {
     console.error('Error parsing resume JSON:', error);
     return res.status(400).json({ error: 'Invalid resume format' });
   }
-  const resumeCompletion = await openai.chat.completions.create({
-    model: 'gpt-4o-mini',
-    messages: [
-      {
-        role: 'system',
-        content:
-          "You are a professional resume analyzer. Create a detailed professional summary that describes this candidate's background, skills, and experience in natural language. Focus on their expertise, achievements, and what makes them unique. Write it in a style similar to job descriptions to optimize for semantic matching. Do not include the candidates name. Make sure to include everything significant to the users career. Describe the type of industries they have experience in.",
-      },
-      {
-        role: 'user',
-        content: JSON.stringify(resume),
-      },
-    ],
+
+  const { text: resumeDescription } = await generateText({
+    model: openai('gpt-4o-mini', {
+      apiKey: process.env.OPENAI_API_KEY,
+    }),
+    system:
+      "You are a professional resume analyzer. Create a detailed professional summary that describes this candidate's background, skills, and experience in natural language. Focus on their expertise, achievements, and what makes them unique. Write it in a style similar to job descriptions to optimize for semantic matching. Do not include the candidates name. Make sure to include everything significant to the users career. Describe the type of industries they have experience in.",
+    prompt: JSON.stringify(resume),
     temperature: 0.85,
   });
-
-  const resumeDescription = resumeCompletion.choices[0].message.content;
   console.log({ resumeDescription });
   //   const resumeDescription = `
   // Professional Summary
@@ -71,7 +62,12 @@ export default async function handler(req, res) {
   // Leadership: Demonstrated success in team management, including CTO-level responsibilities, with a history of scaling startups and rescuing critical projects under tight deadlines.
   // Open-Source Advocacy: Founder of initiatives like JSON Resume and Cdnjs, serving millions of developers and websites globally, with a strong commitment to fostering community-driven solutions.`;
 
-  const completion = await openai.embeddings.create({
+  // Use OpenAI SDK for embeddings (not yet supported in Vercel AI SDK)
+  const openaiClient = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+
+  const completion = await openaiClient.embeddings.create({
     model: 'text-embedding-3-large',
     input: resumeDescription,
   });
