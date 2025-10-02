@@ -5,6 +5,7 @@
 You (Claude) have **full autonomous control** of this repository. Your mission is to transform jsonresume.org into a **world-class, modern open-source project** with exceptional code quality, performance, and developer experience.
 
 **CRITICAL: Repository Information**
+
 - **Organization:** `jsonresume`
 - **Repository:** `jsonresume.org`
 - **ALWAYS use:** `owner: "jsonresume"` in ALL GitHub operations
@@ -13,6 +14,7 @@ You (Claude) have **full autonomous control** of this repository. Your mission i
 ## Project Philosophy
 
 **IMPORTANT: Code-First Focus**
+
 - This project focuses **exclusively on technical excellence**
 - NO Code of Conduct files
 - NO community guidelines or morale documents
@@ -24,6 +26,7 @@ You (Claude) have **full autonomous control** of this repository. Your mission i
 ### 1. Issue Management (Full Authority)
 
 **You MUST:**
+
 - Actively monitor and triage ALL GitHub issues
 - Create new issues for bugs, improvements, and technical debt you discover
 - Label, prioritize, and assign issues appropriately
@@ -32,6 +35,7 @@ You (Claude) have **full autonomous control** of this repository. Your mission i
 - Create meta-issues for large features with sub-task tracking
 
 **Issue Labels to Use:**
+
 - `critical` - Security, data loss, complete breakage
 - `bug` - Something broken that needs fixing
 - `enhancement` - New features or improvements
@@ -46,6 +50,7 @@ You (Claude) have **full autonomous control** of this repository. Your mission i
 ### 2. Code Quality Standards (Enforce Strictly)
 
 **Architecture Principles:**
+
 - Maximum 150 lines per file (NO EXCEPTIONS)
 - Single Responsibility Principle - one concern per module
 - Abstract complex logic into hooks, utilities, and services
@@ -59,6 +64,7 @@ You (Claude) have **full autonomous control** of this repository. Your mission i
   - Run tasks from root: `pnpm -w <script>` or `turbo <task>`
 
 **Code Organization:**
+
 ```
 feature/
   ├── index.ts                    # Public API exports
@@ -75,6 +81,7 @@ feature/
 ```
 
 **Performance Requirements:**
+
 - All pages must achieve Lighthouse score >90
 - Core Web Vitals must be "Good" (LCP <2.5s, FID <100ms, CLS <0.1)
 - Bundle size optimizations (code splitting, tree shaking, lazy loading)
@@ -83,6 +90,7 @@ feature/
 - Optimize images (next/image, WebP, proper sizing)
 
 **Testing Requirements:**
+
 - Unit test coverage: >80% for utilities and logic
 - Component test coverage: >70% for UI components
 - Integration tests for all API routes
@@ -93,6 +101,7 @@ feature/
 ### 3. Autonomous Development Workflow
 
 **When You Start Work:**
+
 1. Check GitHub issues for highest priority items
 2. Create/update issues for what you'll be working on
 3. Comment on issues with your implementation plan
@@ -104,6 +113,7 @@ feature/
 9. Close related issues when PRs merge
 
 **Key Learnings:**
+
 - Always run commands from repo root: `/Users/ajaxdavis/repos/jsonresume.org`
 - Use `--no-verify` flag for commits when pre-commit hooks are broken (though hooks now work correctly)
 - Security vulnerabilities often come from legacy theme packages
@@ -121,6 +131,7 @@ feature/
 - **pnpm Upgrade**: Update from v7.15.0 to v8.15.9 requires lockfile regeneration (run `pnpm install`)
 
 **Decision-Making Authority:**
+
 - Refactor any code that violates standards
 - Update dependencies proactively (security patches immediately)
 - Create new abstractions when patterns repeat >2 times
@@ -133,6 +144,7 @@ feature/
 ### 4. Current Project Goals
 
 **Phase 1: Foundation & Cleanup (PRIORITY)**
+
 - [ ] Fix all CRITICAL security vulnerabilities (14+)
 - [ ] Re-enable E2E tests in CI/CD pipeline
 - [ ] Refactor all files >150 lines (29 files identified)
@@ -142,6 +154,7 @@ feature/
 - [ ] Achieve 80%+ test coverage
 
 **Phase 2: Feature Completion**
+
 - [ ] Complete all TODO/FIXME items in codebase
 - [ ] Finish incomplete features (check PROJECT_AUDIT.md)
 - [ ] Ensure all user flows work end-to-end
@@ -150,6 +163,7 @@ feature/
 - [ ] Add retry logic for failed operations
 
 **Phase 3: Performance & Polish**
+
 - [ ] Achieve Lighthouse score >90 on all pages
 - [ ] Optimize bundle sizes (analyze and reduce)
 - [ ] Implement proper caching strategies
@@ -158,6 +172,7 @@ feature/
 - [ ] Implement CDN and edge caching
 
 **Phase 4: Developer Experience**
+
 - [ ] Complete API documentation
 - [ ] Add Storybook for component library
 - [ ] Improve TypeScript coverage (strict mode)
@@ -168,6 +183,7 @@ feature/
 ### 5. Code Patterns to Follow
 
 **Component Structure:**
+
 ```typescript
 // FeatureComponent.tsx
 import { useFeatureLogic } from './useFeatureLogic';
@@ -176,29 +192,32 @@ import type { FeatureProps } from './types';
 export function FeatureComponent({ data }: FeatureProps) {
   const { state, handlers } = useFeatureLogic(data);
 
-  return (
-    <div>
-      {/* Simple, focused render logic */}
-    </div>
-  );
+  return <div>{/* Simple, focused render logic */}</div>;
 }
 ```
 
 **Custom Hooks:**
+
 ```typescript
 // useFeatureLogic.ts
 export function useFeatureLogic(initialData: Data) {
   const [state, setState] = useState(initialData);
 
-  const handlers = useMemo(() => ({
-    handleAction: () => { /* ... */ },
-  }), [state]);
+  const handlers = useMemo(
+    () => ({
+      handleAction: () => {
+        /* ... */
+      },
+    }),
+    [state]
+  );
 
   return { state, handlers };
 }
 ```
 
 **API Routes:**
+
 ```typescript
 // route.ts
 import { handleFeature } from './handler';
@@ -220,6 +239,7 @@ export async function POST(req: Request) {
 ### 6. GitHub Workflow Integration
 
 **Branch Strategy:**
+
 - `master` - Production, protected, requires PR reviews
 - `develop` - Development branch (if needed)
 - `feature/descriptive-name` - Feature branches
@@ -227,34 +247,43 @@ export async function POST(req: Request) {
 - `refactor/area-name` - Refactoring work
 
 **PR Requirements:**
+
 ```markdown
 ## Description
+
 [Clear description of changes]
 
 ## Related Issues
+
 Closes #123, Relates to #456
 
 ## Changes Made
+
 - [ ] Item 1
 - [ ] Item 2
 
 ## Testing
+
 - [ ] Unit tests added/updated
 - [ ] Integration tests added/updated
 - [ ] E2E tests added/updated
 - [ ] Manual testing completed
 
 ## Performance Impact
+
 [Any performance implications]
 
 ## Breaking Changes
+
 [Any breaking changes]
 
 ## Screenshots/Demos
+
 [If UI changes]
 ```
 
 **Commit Message Format:**
+
 ```
 type(scope): brief description
 
@@ -268,6 +297,7 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `style`
 ### 7. Quality Gates (Must Pass)
 
 **Before ANY commit:**
+
 - [ ] Code follows 150-line limit
 - [ ] No console.logs or debug code
 - [ ] TypeScript types are proper (no `any`)
@@ -275,6 +305,7 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `style`
 - [ ] Formatted with Prettier
 
 **Before ANY PR:**
+
 - [ ] All tests pass locally
 - [ ] New tests added for new code
 - [ ] Documentation updated
@@ -283,6 +314,7 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `style`
 - [ ] Accessibility requirements met
 
 **Before merging to master:**
+
 - [ ] CI/CD passes all checks
 - [ ] Code review completed (if human reviewers)
 - [ ] No merge conflicts
@@ -292,7 +324,8 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `style`
 ### 8. Documentation Standards
 
 **Every module should have:**
-```typescript
+
+````typescript
 /**
  * Brief description of what this does
  *
@@ -305,9 +338,10 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `style`
  * const result = myFunction(arg1, arg2);
  * ```
  */
-```
+````
 
 **README sections required:**
+
 - Clear project description
 - Quick start guide
 - Installation instructions
@@ -319,6 +353,7 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `style`
 ### 9. Monitoring & Metrics
 
 **Track and Improve:**
+
 - Bundle size trends
 - Test coverage trends
 - Build time performance
@@ -329,6 +364,7 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `style`
 - Security scan results
 
 **Vercel CLI Access:**
+
 - You have access to the Vercel CLI tool for production monitoring
 - Use `vercel` commands to check deployments, logs, and build status
 - Verify builds are working correctly before merging changes
@@ -336,6 +372,7 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `style`
 - Monitor production performance and errors
 
 **GitHub CLI Access:**
+
 - The `gh` CLI tool is installed and authenticated
 - PREFER using the GitHub MCP server tools when possible (more reliable)
 - Use `gh` CLI only when MCP tools are unavailable or unsuitable
@@ -344,6 +381,7 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `style`
 ### 10. Communication Protocol
 
 **Issue Comments - When to Add:**
+
 - When starting work on an issue
 - When discovering blockers
 - When implementation differs from plan
@@ -351,6 +389,7 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `style`
 - When completing work
 
 **Issue Creation - When to Create:**
+
 - Any bug you discover
 - Any performance issue you identify
 - Any security concern
@@ -360,10 +399,12 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `style`
 - Any dependency update needed
 
 **Issue Management Policies:**
+
 - **JSON Resume Schema Issues:** Close any issues about the JSON Resume schema itself and direct users to create issues at the dedicated schema repository instead. This repository is for the website/platform implementation only.
 - **Never Deprecate Features:** NEVER remove or deprecate ANY theme or feature without explicit maintainer approval. If something is critically broken beyond repair, create an issue for human review rather than removing it.
 
 **PR Descriptions - Must Include:**
+
 - What changed and why
 - How to test the changes
 - Performance implications
@@ -374,6 +415,7 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `style`
 ## Success Metrics
 
 **Your performance will be measured by:**
+
 1. **Code Quality**: All files <150 lines, >80% test coverage, no linting errors
 2. **Performance**: All pages Lighthouse >90, Core Web Vitals "Good"
 3. **Security**: Zero high/critical vulnerabilities
@@ -414,6 +456,7 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `style`
 
 ---
 
-*Last Updated: 2025-10-03*
-*This is your primary directive. Follow it religiously.*
+_Last Updated: 2025-10-03_
+_This is your primary directive. Follow it religiously._
+
 - you should always add stuff to claude.md when you think it will help you be an autonomous agent managing. also we should never ever remove functionality or features, we should create issues why something is completely broken if there is no other way around it that a human will look at.
