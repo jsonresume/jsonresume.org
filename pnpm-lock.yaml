@@ -47,7 +47,6 @@ importers:
       eslint-config-next: ^14.2.5
       eventsource-parser: ^1.0.0
       express: ^4.18.2
-      faker: ^6.6.6
       gravatar: ^1.8.2
       gray-matter: ^4.0.3
       handlebars: ^4.7.8
@@ -90,7 +89,6 @@ importers:
       dotenv-cli: 7.4.4
       eventsource-parser: 1.1.2
       express: 4.21.2
-      faker: 6.6.6
       gravatar: 1.8.2
       gray-matter: 4.0.3
       handlebars: 4.7.8
@@ -443,7 +441,7 @@ importers:
   packages/jsonresume-theme-onepage:
     specifiers:
       css: 2.2.x
-      handlebars: ^4
+      handlebars: ^4.7.8
     dependencies:
       css: 2.2.4
       handlebars: 4.7.8
@@ -9990,7 +9988,7 @@ packages:
   /axios/1.11.0:
     resolution: {integrity: sha512-1Lx3WLFQWm3ooKDYZD1eXmoGO9fxYQjrycfHFC8P0sCfQVXyROp0p9PFWBehewBOdCwHc+f/b8I0fMto5eSfwA==}
     dependencies:
-      follow-redirects: 1.15.11_debug@4.4.1
+      follow-redirects: 1.15.11
       form-data: 4.0.4
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
@@ -10676,7 +10674,7 @@ packages:
   /centra/2.7.0_debug@4.4.1:
     resolution: {integrity: sha512-PbFMgMSrmgx6uxCdm57RUos9Tc3fclMvhLSATYN39XsDV29B89zZ3KA89jmY0vwSGazyU+uerqwa6t+KaodPcg==}
     dependencies:
-      follow-redirects: 1.15.11_debug@4.4.1
+      follow-redirects: 1.15.11
     transitivePeerDependencies:
       - debug
     dev: false
@@ -14072,6 +14070,7 @@ packages:
         optional: true
     dependencies:
       debug: 4.4.1
+    dev: true
 
   /font-atlas/2.1.0:
     resolution: {integrity: sha512-kP3AmvX+HJpW4w3d+PiPR2X6E1yvsBXt2yhuCw+yReO9F1WYhvZwx3c95DGZGwg9xYzDGrgJYa885xmVA+28Cg==}
