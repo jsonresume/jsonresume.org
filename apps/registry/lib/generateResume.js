@@ -5,12 +5,6 @@ import formatters from './formatters/formatters';
 
 const Validator = require('jsonschema').Validator;
 
-const { createClient } = require('@supabase/supabase-js');
-
-const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
-const supabaseKey = process.env.SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
-
 const EXTENSIONS = new Set([
   'qr',
   'json',
@@ -56,7 +50,19 @@ const generateResume = async (username, extension = 'template', query = {}) => {
 
   // @todo - using as a resume cache for extra features
   (async () => {
+    // Skip caching if Supabase key is not configured (e.g., in CI/test environments)
+    const supabaseKey = process.env.SUPABASE_KEY;
+    if (!supabaseKey) {
+      console.log('Skipping resume caching: SUPABASE_KEY not configured');
+      return;
+    }
+
     try {
+      // Lazy load Supabase client only when needed
+      const { createClient } = require('@supabase/supabase-js');
+      const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
+      const supabase = createClient(supabaseUrl, supabaseKey);
+
       await supabase
         .from('resumes')
         .upsert(
