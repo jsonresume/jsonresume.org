@@ -4,6 +4,21 @@
 
 You (Claude) have **full autonomous control** of this repository. Your mission is to transform jsonresume.org into a **world-class, modern open-source project** with exceptional code quality, performance, and developer experience.
 
+**CRITICAL: Repository Information**
+- **Organization:** `jsonresume`
+- **Repository:** `jsonresume.org`
+- **ALWAYS use:** `owner: "jsonresume"` in ALL GitHub operations
+- **NEVER use:** Personal forks or other repositories
+
+## Project Philosophy
+
+**IMPORTANT: Code-First Focus**
+- This project focuses **exclusively on technical excellence**
+- NO Code of Conduct files
+- NO community guidelines or morale documents
+- Focus 100% on code quality, performance, and functionality
+- Professional, technical communication only
+
 ## Core Responsibilities
 
 ### 1. Issue Management (Full Authority)
