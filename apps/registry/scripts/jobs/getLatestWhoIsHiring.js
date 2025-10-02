@@ -58,6 +58,7 @@ async function findLatestWhoIsHiringThread() {
         id: comment.objectID,
         author: comment.author,
         created_at: comment.created_at,
+        created_at_i: comment.created_at_i,
         text: comment.comment_text,
         points: comment.points,
         url: `https://news.ycombinator.com/item?id=${comment.objectID}`,
@@ -90,17 +91,42 @@ async function findLatestWhoIsHiringThread() {
       console.log(`\nResults written to ${outputPath}`);
 
       // Now insert into Supabase
-      comments.forEach(async (post) => {
-        const { error } = await supabase.from('jobs').insert({
-          uuid: post.id,
-          content: post.text,
-          posted_at: new Date(post.created_at_i * 1000),
-          type: 'hackernews',
-          raw: JSON.stringify(post),
-          url: `https://news.ycombinator.com/item?id=${post.id}`,
-        });
-        console.log({ error });
-      });
+      let insertedCount = 0;
+      let duplicateCount = 0;
+      let errorCount = 0;
+
+      for (const post of comments) {
+        try {
+          const { data, error } = await supabase.from('jobs').insert({
+            uuid: post.id,
+            content: post.text,
+            posted_at: new Date(post.created_at_i * 1000),
+            type: 'hackernews',
+            raw: JSON.stringify(post),
+            url: `https://news.ycombinator.com/item?id=${post.id}`,
+          });
+
+          if (error) {
+            // Ignore duplicate key errors (23505)
+            if (error.code === '23505') {
+              duplicateCount++;
+            } else {
+              console.error(`Error inserting job ${post.id}:`, error);
+              errorCount++;
+            }
+          } else {
+            console.log(`✅ Inserted job ${post.id}`);
+            insertedCount++;
+          }
+        } catch (err) {
+          console.error(`Failed to insert job ${post.id}:`, err);
+          errorCount++;
+        }
+      }
+
+      console.log(
+        `\n📊 Summary: ${insertedCount} inserted, ${duplicateCount} duplicates, ${errorCount} errors`
+      );
       return result;
     } else {
       return null;
