@@ -28,6 +28,13 @@ You (Claude) have **full autonomous control** of this repository. Your mission i
   - Standardize on streaming responses, tool calling, and unified API
   - Prefer `ai` package providers over vendor-specific SDKs
 
+**Development Tools:**
+
+- **Supabase CLI**: Installed and authenticated
+  - Database name: `registry` (associated with registry app)
+  - Use for local development and migrations
+  - Run `supabase` commands for database operations
+
 ## Core Responsibilities
 
 ### 1. Issue Management (Full Authority)
