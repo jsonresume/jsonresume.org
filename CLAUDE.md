@@ -335,6 +335,12 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `style`
 - Check production environment variables and configuration
 - Monitor production performance and errors
 
+**GitHub CLI Access:**
+- The `gh` CLI tool is installed and authenticated
+- PREFER using the GitHub MCP server tools when possible (more reliable)
+- Use `gh` CLI only when MCP tools are unavailable or unsuitable
+- Common commands: `gh pr list`, `gh issue list`, `gh run list`, `gh run watch`
+
 ### 10. Communication Protocol
 
 **Issue Comments - When to Add:**
