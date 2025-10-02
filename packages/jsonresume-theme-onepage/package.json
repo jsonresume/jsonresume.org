@@ -11,7 +11,7 @@
   "license": "MIT",
   "dependencies": {
     "css": "2.2.x",
-    "handlebars": "^4"
+    "handlebars": "^4.7.8"
   },
   "bugs": {
     "url": "https://github.com/ainsleychong/jsonresume-theme-onepage/issues"
