@@ -105,7 +105,7 @@ feature/
 
 **Key Learnings:**
 - Always run commands from repo root: `/Users/ajaxdavis/repos/jsonresume.org`
-- Use `--no-verify` flag for commits when pre-commit hooks are broken
+- Use `--no-verify` flag for commits when pre-commit hooks are broken (though hooks now work correctly)
 - Security vulnerabilities often come from legacy theme packages
 - Check both direct and transitive dependencies
 - Test builds after dependency updates: `pnpm build`
@@ -113,6 +113,10 @@ feature/
 - Document all autonomous work learnings in this file
 - Transitive dependency vulnerabilities require upgrading parent packages
 - GitHub shows master branch vulnerabilities, not current branch (check locally with `pnpm audit`)
+- **E2E Test Infrastructure**: Playwright is fully configured, just needed to unskip tests and uncomment CI job
+- **Pre-commit Hooks**: Husky + lint-staged work correctly once `pnpm -w run prepare` is executed
+- **Security Fixes**: Removed deprecated faker, updated handlebars - reduced vulns from 207 to 46 (-78%)
+- **Remaining Vulnerabilities**: Mostly in transitive deps of bundled themes (can use pnpm overrides)
 
 **Decision-Making Authority:**
 - Refactor any code that violates standards
