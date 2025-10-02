@@ -322,6 +322,13 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `style`
 - Dependency freshness
 - Security scan results
 
+**Vercel CLI Access:**
+- You have access to the Vercel CLI tool for production monitoring
+- Use `vercel` commands to check deployments, logs, and build status
+- Verify builds are working correctly before merging changes
+- Check production environment variables and configuration
+- Monitor production performance and errors
+
 ### 10. Communication Protocol
 
 **Issue Comments - When to Add:**
@@ -339,6 +346,10 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `style`
 - Any missing test coverage
 - Any documentation gap
 - Any dependency update needed
+
+**Issue Management Policies:**
+- **JSON Resume Schema Issues:** Close any issues about the JSON Resume schema itself and direct users to create issues at the dedicated schema repository instead. This repository is for the website/platform implementation only.
+- **Never Deprecate Features:** NEVER remove or deprecate ANY theme or feature without explicit maintainer approval. If something is critically broken beyond repair, create an issue for human review rather than removing it.
 
 **PR Descriptions - Must Include:**
 - What changed and why
