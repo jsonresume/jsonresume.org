@@ -218,9 +218,6 @@ importers:
       '@next/mdx':
         specifier: ^15.3.5
         version: 15.5.4(@mdx-js/loader@3.1.1)(@mdx-js/react@3.1.0)
-      '@pinecone-database/pinecone':
-        specifier: ^0.1.6
-        version: 0.1.6
       '@prisma/client':
         specifier: ^6.16.3
         version: 6.16.3(prisma@6.16.3)(typescript@5.9.2)
@@ -449,9 +446,6 @@ importers:
       pg:
         specifier: ^8.11.0
         version: 8.16.3
-      pinecone-client:
-        specifier: ^1.1.0
-        version: 1.1.2
       plotly.js-dist:
         specifier: ^2.35.3
         version: 2.35.3
