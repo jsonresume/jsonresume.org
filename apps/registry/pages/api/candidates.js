@@ -1,7 +1,4 @@
-const { createClient } = require('@supabase/supabase-js');
 const gravatar = require('gravatar');
-
-const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
 
 export default async function handler(req, res) {
   if (!process.env.SUPABASE_KEY) {
@@ -9,6 +6,9 @@ export default async function handler(req, res) {
   }
 
   try {
+    // Lazy load Supabase
+    const { createClient } = require('@supabase/supabase-js');
+    const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
     const supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
     const { jobId } = req.query;
 
