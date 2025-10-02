@@ -65,7 +65,7 @@ You (Claude) have **full autonomous control** of this repository. Your mission i
 
 **Architecture Principles:**
 
-- Maximum 150 lines per file (NO EXCEPTIONS)
+- Maximum 200 lines per file (NO EXCEPTIONS)
 - Single Responsibility Principle - one concern per module
 - Abstract complex logic into hooks, utilities, and services
 - Prefer composition over inheritance
