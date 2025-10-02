@@ -23,5 +23,11 @@
   "dependencies": {
     "@changesets/cli": "^2.27.1",
     "dotenv": "^16.0.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "handlebars@<4.7.8": "^4.7.8",
+      "uglify-js@<3.0.0": "^3.19.3"
+    }
   }
 }
