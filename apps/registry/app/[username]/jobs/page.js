@@ -3,6 +3,7 @@
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { PublicViewBanner } from '../../components/PublicViewBanner';
 import Hero from '../../../src/ui/Hero';
 import JobList from './JobList';
 import Loading from '../../components/Loading';
@@ -51,17 +52,20 @@ export default function Jobs({ params }) {
     router.push(`/${username}/letter?job=${job.id}`);
   };
   return (
-    <div className="p-6">
-      <Hero
-        title="Find Jobs Based on Your Resume"
-        description="Creates an embedding with 3702 dimensions of your resume.json. The
+    <>
+      <PublicViewBanner username={username} />
+      <div className="p-6">
+        <Hero
+          title="Find Jobs Based on Your Resume"
+          description="Creates an embedding with 3702 dimensions of your resume.json. The
           same is done for Hacker News posts which have also been processed by
           GPT-4. Once both embeddings are calculated, we do a vector similarity
           search."
-      />
+        />
 
-      {!jobs && <Loading />}
-      <JobList jobs={jobs} makeCoverletter={makeCoverletter} />
-    </div>
+        {!jobs && <Loading />}
+        <JobList jobs={jobs} makeCoverletter={makeCoverletter} />
+      </div>
+    </>
   );
 }

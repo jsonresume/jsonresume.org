@@ -2,15 +2,17 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import { useResume } from '../../providers/ResumeProvider';
+import { usePublicResume } from '../../providers/PublicResumeProvider';
+import { PublicViewBanner } from '../../components/PublicViewBanner';
 import TimelineComponent from './Timeline';
 
 const Container = styled.div`
   font-size: 1.4rem;
 `;
 
-const Timeline = () => {
-  const { resume, loading, error } = useResume();
+const Timeline = ({ params }) => {
+  const { username } = params;
+  const { resume, loading, error } = usePublicResume();
 
   if (loading) {
     return <Container>Loading timeline...</Container>;
@@ -25,9 +27,12 @@ const Timeline = () => {
   }
 
   return (
-    <Container>
-      <TimelineComponent resume={resume} />
-    </Container>
+    <>
+      <PublicViewBanner username={username} />
+      <Container>
+        <TimelineComponent resume={resume} />
+      </Container>
+    </>
   );
 };
 

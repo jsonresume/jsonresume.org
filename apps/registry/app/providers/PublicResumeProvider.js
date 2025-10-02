@@ -1,0 +1,71 @@
+'use client';
+
+import { createContext, useContext, useState, useEffect } from 'react';
+
+const PublicResumeContext = createContext({
+  resume: null,
+  loading: true,
+  error: null,
+});
+
+export function usePublicResume() {
+  const context = useContext(PublicResumeContext);
+  if (!context) {
+    throw new Error(
+      'usePublicResume must be used within a PublicResumeProvider'
+    );
+  }
+  return context;
+}
+
+/**
+ * PublicResumeProvider fetches resume data from the public API endpoint
+ * No authentication required - suitable for public dashboard pages
+ */
+export function PublicResumeProvider({ username, children }) {
+  const [resume, setResume] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchPublicResume = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const response = await fetch(`/api/${username}`);
+
+        if (!response.ok) {
+          if (response.status === 404) {
+            throw new Error('Resume not found');
+          }
+          throw new Error(`Failed to fetch resume: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        setResume(data);
+      } catch (err) {
+        console.error('Error fetching public resume:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (username) {
+      fetchPublicResume();
+    }
+  }, [username]);
+
+  const value = {
+    resume,
+    loading,
+    error,
+  };
+
+  return (
+    <PublicResumeContext.Provider value={value}>
+      {children}
+    </PublicResumeContext.Provider>
+  );
+}

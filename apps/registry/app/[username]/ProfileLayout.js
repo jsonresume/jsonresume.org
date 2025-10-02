@@ -24,6 +24,17 @@ function InnerLayout({ children, username, session }) {
   const pathname = usePathname();
   const { resume, loading, error } = useResume();
 
+  // Public pages bypass the ProfileLayout wrapper
+  const PUBLIC_PAGES = ['timeline', 'jobs', 'json'];
+  const isPublicPage = PUBLIC_PAGES.some((page) =>
+    pathname.includes(`/${page}`)
+  );
+
+  if (isPublicPage) {
+    // Public pages handle their own layout and providers
+    return <>{children}</>;
+  }
+
   const currentUsername = session?.username;
 
   const image =

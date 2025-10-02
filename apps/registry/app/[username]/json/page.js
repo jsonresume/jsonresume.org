@@ -2,15 +2,17 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import { useResume } from '../../providers/ResumeProvider';
+import { usePublicResume } from '../../providers/PublicResumeProvider';
+import { PublicViewBanner } from '../../components/PublicViewBanner';
 import { Editor } from '@monaco-editor/react';
 
 const Container = styled.div`
   font-size: 1.4rem;
 `;
 
-const JsonView = () => {
-  const { resume, loading, error } = useResume();
+const JsonView = ({ params }) => {
+  const { username } = params;
+  const { resume, loading, error } = usePublicResume();
 
   if (loading) {
     return <Container>Loading JSON view...</Container>;
@@ -25,18 +27,21 @@ const JsonView = () => {
   }
 
   return (
-    <Container>
-      <Editor
-        height="70vh"
-        defaultLanguage="json"
-        defaultValue={JSON.stringify(resume, null, 2)}
-        options={{
-          readOnly: true,
-          minimap: { enabled: false },
-          scrollBeyondLastLine: false,
-        }}
-      />
-    </Container>
+    <>
+      <PublicViewBanner username={username} />
+      <Container>
+        <Editor
+          height="70vh"
+          defaultLanguage="json"
+          defaultValue={JSON.stringify(resume, null, 2)}
+          options={{
+            readOnly: true,
+            minimap: { enabled: false },
+            scrollBeyondLastLine: false,
+          }}
+        />
+      </Container>
+    </>
   );
 };
 
