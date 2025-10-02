@@ -1,9 +1,5 @@
-import { OpenAIStream } from './openAIStream';
-const { createClient } = require('@supabase/supabase-js');
-
-const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
-const supabaseKey = process.env.SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
+import { streamText } from 'ai';
+import { openai } from '@ai-sdk/openai';
 
 if (!process.env.OPENAI_API_KEY) {
   throw new Error('Missing env var from OpenAI');
@@ -30,6 +26,11 @@ Do not apologize when you don't understand them or when you ask them to repeat t
 
 export default async function handler(req) {
   const { prompt, position, messages, username } = await req.json();
+
+  // Lazy load Supabase
+  const { createClient } = require('@supabase/supabase-js');
+  const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
+  const supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
 
   const { data } = await supabase
     .from('resumes')
@@ -59,8 +60,10 @@ export default async function handler(req) {
     position === 'candidate' ? 'interviewer' : 'candidate'
   }:`;
 
-  const payload = {
-    model: 'gpt-3.5-turbo-instruct',
+  const result = streamText({
+    model: openai('gpt-4o-mini', {
+      apiKey: process.env.OPENAI_API_KEY,
+    }),
     prompt: `
     ${SYSTEM_PROMPT[position]}
     For context, here is the resume in question: ${JSON.stringify(resume)}
@@ -68,13 +71,8 @@ export default async function handler(req) {
     ${lastMessagesString}
     `,
     temperature: 0.7,
-    top_p: 1,
-    frequency_penalty: 0,
-    presence_penalty: 0,
-    max_tokens: 200,
-    stream: true,
-    n: 1,
-  };
-  const stream = await OpenAIStream(payload);
-  return new Response(stream);
+    maxTokens: 200,
+  });
+
+  return result.toDataStreamResponse();
 }
