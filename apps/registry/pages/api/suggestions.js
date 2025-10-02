@@ -1,14 +1,14 @@
-const { createClient } = require('@supabase/supabase-js');
 const YAML = require('json-to-pretty-yaml');
-const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
-const supabaseKey = process.env.SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
-const OpenAI = require('openai');
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+const { generateText } = require('ai');
+const { openai } = require('@ai-sdk/openai');
+
 export default async function handler(req, res) {
   const { username } = req.body;
+
+  // Lazy load Supabase
+  const { createClient } = require('@supabase/supabase-js');
+  const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
+  const supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
 
   const { data } = await supabase
     .from('resumes')
@@ -45,24 +45,19 @@ export default async function handler(req, res) {
 
   `;
 
-  const messages = [
-    {
-      role: 'system',
-      content: prompt,
-    },
-  ];
-
-  const chat = await openai.chat.completions.create({
-    model: 'gpt-4o-2024-08-06',
-    temperature: 0.85,
-    messages,
-  });
-
   try {
-    const content = chat.choices[0].message.content;
-    return res.status(200).send(content);
+    const { text } = await generateText({
+      model: openai('gpt-4o-2024-08-06', {
+        apiKey: process.env.OPENAI_API_KEY,
+      }),
+      temperature: 0.85,
+      system: prompt,
+      prompt: '', // Empty prompt since everything is in system
+    });
+
+    return res.status(200).send(text);
   } catch (e) {
     console.error(e);
-    return e;
+    return res.status(500).json({ error: e.message });
   }
 }

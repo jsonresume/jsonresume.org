@@ -1,12 +1,6 @@
-const { createClient } = require('@supabase/supabase-js');
 const YAML = require('json-to-pretty-yaml');
-const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
-const supabaseKey = process.env.SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
-const OpenAI = require('openai');
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+const { generateText } = require('ai');
+const { openai } = require('@ai-sdk/openai');
 
 /*
  @todo
@@ -25,38 +19,15 @@ const BREVITY = {
   verbose: 'verbose',
 };
 
-const functions = [
-  {
-    name: 'jsonresumeSuggestion',
-    description:
-      'Given a jsonresume schema property, this format recommends improvements to the resume.',
-    parameters: {
-      type: 'object',
-      properties: {
-        suggestions: {
-          type: 'array',
-          items: {
-            type: 'object',
-            properties: {
-              schemaKey: {
-                type: 'string',
-                description:
-                  'The key of the schema property to suggest improvements for e.g. basics.summary, work[1].name, work[1].highlights[0], skills[2].keywords[2] etc',
-              },
-              suggestion: { type: 'string' },
-            },
-          },
-        },
-      },
-      required: [],
-    },
-  },
-];
-
 export default async function handler(req, res) {
   const username = req.body.username || 'thomasdavis';
   const brevity = req.body.brevity || BREVITY.verbose;
   const sentiment = req.body.sentiment || 'modest';
+
+  // Lazy load Supabase
+  const { createClient } = require('@supabase/supabase-js');
+  const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
+  const supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
 
   const { data } = await supabase
     .from('resumes')
@@ -128,7 +99,7 @@ export default async function handler(req, res) {
   - If you say something is wrong, suggest a better way to say it.
 
   Do not give general tips. Be as specific about my actual resume as possible.
-  
+
 
   Make sure you reference which aspect of the json resume that you are talking about for each critcisim.
 
@@ -137,30 +108,53 @@ export default async function handler(req, res) {
   Suggest!
   `);
 
-  const messages = [
-    {
-      role: 'system',
-      content: prompt.join(''),
-    },
-  ];
-
-  const chat = await openai.chat.completions.create({
-    model: 'gpt-4o-2024-08-06',
-    temperature: 0.7,
-    messages,
-    functions,
-  });
-
-  console.log(JSON.stringify(chat, undefined, 4));
-
   try {
-    // get open ai function response
-    const functionCall = chat.choices[0].message.function_call;
-    const results = JSON.parse(functionCall.arguments);
-    console.log(results);
-    return res.status(200).send(results);
+    const result = await generateText({
+      model: openai('gpt-4o-2024-08-06', {
+        apiKey: process.env.OPENAI_API_KEY,
+      }),
+      temperature: 0.7,
+      system: prompt.join(''),
+      prompt: '', // Empty since everything is in system
+      tools: {
+        jsonresumeSuggestion: {
+          description:
+            'Given a jsonresume schema property, this format recommends improvements to the resume.',
+          parameters: {
+            type: 'object',
+            properties: {
+              suggestions: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    schemaKey: {
+                      type: 'string',
+                      description:
+                        'The key of the schema property to suggest improvements for e.g. basics.summary, work[1].name, work[1].highlights[0], skills[2].keywords[2] etc',
+                    },
+                    suggestion: { type: 'string' },
+                  },
+                },
+              },
+            },
+            required: [],
+          },
+        },
+      },
+    });
+
+    // Check if tool was called
+    if (result.toolCalls && result.toolCalls.length > 0) {
+      const toolCall = result.toolCalls[0];
+      console.log(JSON.stringify(toolCall, undefined, 4));
+      return res.status(200).send(toolCall.args);
+    }
+
+    // Fallback to text response
+    return res.status(200).send({ text: result.text });
   } catch (e) {
     console.error(e);
-    return res.status(200).send('it failed');
+    return res.status(500).json({ error: e.message });
   }
 }
