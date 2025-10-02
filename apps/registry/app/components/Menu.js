@@ -158,6 +158,11 @@ export default function Menu() {
     </>
   );
 
+  // Hide menu on Pathways page
+  if (pathname?.startsWith('/pathways')) {
+    return null;
+  }
+
   return (
     <div className="bg-primary border-b border-gray-900/10">
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
