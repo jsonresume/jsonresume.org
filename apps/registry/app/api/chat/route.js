@@ -1,4 +1,5 @@
-import { OpenAI } from 'openai';
+import { generateText } from 'ai';
+import { openai } from '@ai-sdk/openai';
 import { NextResponse } from 'next/server';
 
 const systemPrompt = `You are an AI assistant helping to edit a JSON Resume (https://jsonresume.org/schema/).
@@ -25,175 +26,147 @@ export async function POST(req) {
     );
   }
 
-  const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-  });
-
   try {
     const { messages, currentResume } = await req.json();
 
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4',
-      messages: [
-        { role: 'system', content: systemPrompt },
-        {
-          role: 'system',
-          content: `Current resume state: ${JSON.stringify(
-            currentResume,
-            null,
-            2
-          )}`,
-        },
-        ...messages.map((msg) => ({
-          role: msg.role,
-          content: msg.content,
-        })),
-      ],
-      tools: [
-        {
-          type: 'function',
-          function: {
-            name: 'update_resume',
-            description:
-              'Update specific sections of the resume with new information',
-            parameters: {
-              type: 'object',
-              properties: {
-                changes: {
-                  type: 'object',
-                  description: 'Changes to apply to the resume',
-                  properties: {
-                    basics: {
-                      type: 'object',
-                      properties: {
-                        name: { type: 'string' },
-                        label: { type: 'string' },
-                        email: { type: 'string' },
-                        phone: { type: 'string' },
-                        url: { type: 'string' },
-                        summary: { type: 'string' },
-                        location: {
+    const result = await generateText({
+      model: openai('gpt-4', {
+        apiKey: process.env.OPENAI_API_KEY,
+      }),
+      system: `${systemPrompt}\n\nCurrent resume state: ${JSON.stringify(
+        currentResume,
+        null,
+        2
+      )}`,
+      messages: messages.map((msg) => ({
+        role: msg.role,
+        content: msg.content,
+      })),
+      tools: {
+        update_resume: {
+          description:
+            'Update specific sections of the resume with new information',
+          parameters: {
+            type: 'object',
+            properties: {
+              changes: {
+                type: 'object',
+                description: 'Changes to apply to the resume',
+                properties: {
+                  basics: {
+                    type: 'object',
+                    properties: {
+                      name: { type: 'string' },
+                      label: { type: 'string' },
+                      email: { type: 'string' },
+                      phone: { type: 'string' },
+                      url: { type: 'string' },
+                      summary: { type: 'string' },
+                      location: {
+                        type: 'object',
+                        properties: {
+                          address: { type: 'string' },
+                          postalCode: { type: 'string' },
+                          city: { type: 'string' },
+                          countryCode: { type: 'string' },
+                          region: { type: 'string' },
+                        },
+                      },
+                      profiles: {
+                        type: 'array',
+                        items: {
                           type: 'object',
                           properties: {
-                            address: { type: 'string' },
-                            postalCode: { type: 'string' },
-                            city: { type: 'string' },
-                            countryCode: { type: 'string' },
-                            region: { type: 'string' },
+                            network: { type: 'string' },
+                            username: { type: 'string' },
+                            url: { type: 'string' },
                           },
-                        },
-                        profiles: {
-                          type: 'array',
-                          items: {
-                            type: 'object',
-                            properties: {
-                              network: { type: 'string' },
-                              username: { type: 'string' },
-                              url: { type: 'string' },
-                            },
-                          },
-                        },
-                      },
-                    },
-                    work: {
-                      type: 'array',
-                      items: {
-                        type: 'object',
-                        properties: {
-                          name: { type: 'string' },
-                          position: { type: 'string' },
-                          url: { type: 'string' },
-                          startDate: { type: 'string' },
-                          endDate: { type: 'string' },
-                          summary: { type: 'string' },
-                          highlights: {
-                            type: 'array',
-                            items: { type: 'string' },
-                          },
-                          technologies: {
-                            type: 'array',
-                            items: { type: 'string' },
-                          },
-                          _delete: { type: 'boolean' },
-                        },
-                      },
-                    },
-                    education: {
-                      type: 'array',
-                      items: {
-                        type: 'object',
-                        properties: {
-                          institution: { type: 'string' },
-                          area: { type: 'string' },
-                          studyType: { type: 'string' },
-                          startDate: { type: 'string' },
-                          endDate: { type: 'string' },
-                          score: { type: 'string' },
-                          _delete: { type: 'boolean' },
-                        },
-                      },
-                    },
-                    skills: {
-                      type: 'array',
-                      items: {
-                        type: 'object',
-                        properties: {
-                          name: { type: 'string' },
-                          level: { type: 'string' },
-                          keywords: {
-                            type: 'array',
-                            items: { type: 'string' },
-                          },
-                          _delete: { type: 'boolean' },
                         },
                       },
                     },
                   },
-                },
-                explanation: {
-                  type: 'string',
-                  description:
-                    'A brief, friendly explanation of the changes being made',
+                  work: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        name: { type: 'string' },
+                        position: { type: 'string' },
+                        url: { type: 'string' },
+                        startDate: { type: 'string' },
+                        endDate: { type: 'string' },
+                        summary: { type: 'string' },
+                        highlights: {
+                          type: 'array',
+                          items: { type: 'string' },
+                        },
+                        technologies: {
+                          type: 'array',
+                          items: { type: 'string' },
+                        },
+                        _delete: { type: 'boolean' },
+                      },
+                    },
+                  },
+                  education: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        institution: { type: 'string' },
+                        area: { type: 'string' },
+                        studyType: { type: 'string' },
+                        startDate: { type: 'string' },
+                        endDate: { type: 'string' },
+                        score: { type: 'string' },
+                        _delete: { type: 'boolean' },
+                      },
+                    },
+                  },
+                  skills: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        name: { type: 'string' },
+                        level: { type: 'string' },
+                        keywords: {
+                          type: 'array',
+                          items: { type: 'string' },
+                        },
+                        _delete: { type: 'boolean' },
+                      },
+                    },
+                  },
                 },
               },
-              required: ['changes', 'explanation'],
+              explanation: {
+                type: 'string',
+                description:
+                  'A brief, friendly explanation of the changes being made',
+              },
             },
+            required: ['changes', 'explanation'],
           },
         },
-      ],
+      },
     });
 
-    const response = completion.choices[0].message;
-
-    // If no tool calls, just return the message
-    if (!response.tool_calls) {
-      return NextResponse.json({
-        message: response.content,
-        suggestedChanges: null,
-      });
-    }
-
-    // Process tool calls
-    for (const toolCall of response.tool_calls) {
-      if (toolCall.function.name === 'update_resume') {
-        try {
-          const { changes, explanation } = JSON.parse(
-            toolCall.function.arguments
-          );
-          return NextResponse.json({
-            message: explanation,
-            suggestedChanges: changes,
-          });
-        } catch (error) {
-          console.error('Error parsing tool call arguments:', error);
-          throw error;
-        }
+    // Check if tool was called
+    if (result.toolCalls && result.toolCalls.length > 0) {
+      const toolCall = result.toolCalls[0];
+      if (toolCall.toolName === 'update_resume') {
+        const { changes, explanation } = toolCall.args;
+        return NextResponse.json({
+          message: explanation,
+          suggestedChanges: changes,
+        });
       }
     }
 
-    // Fallback response if no relevant tool calls
+    // No tool call - return text response
     return NextResponse.json({
-      message: response.content,
+      message: result.text,
       suggestedChanges: null,
     });
   } catch (error) {
