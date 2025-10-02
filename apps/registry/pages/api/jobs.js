@@ -14,10 +14,20 @@ export default async function handler(req, res) {
   const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
   const supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
 
-  const { data } = await supabase
+  const { data, error: dbError } = await supabase
     .from('resumes')
     .select()
     .eq('username', username);
+
+  if (dbError) {
+    return res
+      .status(500)
+      .json({ error: 'Database error', details: dbError.message });
+  }
+
+  if (!data || data.length === 0) {
+    return res.status(404).json({ error: 'No resume found for this user' });
+  }
 
   const resume = JSON.parse(data[0].resume);
 

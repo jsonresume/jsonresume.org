@@ -19,6 +19,8 @@ export default function Jobs({ params }) {
         setJobs(response.data);
       } catch (error) {
         console.error('Error fetching data: ', error);
+        // Set empty array on error so JobList shows empty state
+        setJobs([]);
       }
     };
 
