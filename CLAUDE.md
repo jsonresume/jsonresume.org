@@ -51,6 +51,12 @@ You (Claude) have **full autonomous control** of this repository. Your mission i
 - Abstract complex logic into hooks, utilities, and services
 - Prefer composition over inheritance
 - Colocate related files in feature folders
+- **Turborepo Best Practices:**
+  - Use workspace protocols (`workspace:*`) for internal packages
+  - Leverage Turbo's caching for builds and tests
+  - Configure task dependencies correctly in `turbo.json`
+  - Share configs via workspace packages (`@repo/eslint-config-custom`, etc.)
+  - Run tasks from root: `pnpm -w <script>` or `turbo <task>`
 
 **Code Organization:**
 ```
