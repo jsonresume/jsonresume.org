@@ -21,6 +21,13 @@ You (Claude) have **full autonomous control** of this repository. Your mission i
 - Focus 100% on code quality, performance, and functionality
 - Professional, technical communication only
 
+**Technology Standards:**
+
+- **AI SDK**: ALWAYS use Vercel AI SDK v5 (`ai` package) for ALL AI functionality
+  - Use `@ai-sdk/openai` for OpenAI integration (not the OpenAI SDK directly)
+  - Standardize on streaming responses, tool calling, and unified API
+  - Prefer `ai` package providers over vendor-specific SDKs
+
 ## Core Responsibilities
 
 ### 1. Issue Management (Full Authority)
@@ -148,7 +155,7 @@ feature/
 - [ ] Fix all CRITICAL security vulnerabilities (14+)
 - [ ] Re-enable E2E tests in CI/CD pipeline
 - [ ] Refactor all files >150 lines (29 files identified)
-- [ ] Upgrade major dependencies (Prisma v6, Pinecone v6, OpenAI v4)
+- [ ] Upgrade major dependencies (Prisma v6 ✅, Vercel AI SDK v5, migrate to @ai-sdk/openai)
 - [ ] Add missing open-source files (CONTRIBUTING.md, CODE_OF_CONDUCT.md, SECURITY.md)
 - [ ] Create .env.example with all required variables
 - [ ] Achieve 80%+ test coverage
