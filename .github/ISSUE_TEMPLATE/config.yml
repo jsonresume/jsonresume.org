@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 GitHub Discussions
+    url: https://github.com/jsonresume/jsonresume.org/discussions
+    about: Ask questions and discuss ideas with the community
+  - name: 🔒 Security Vulnerability
+    url: https://github.com/jsonresume/jsonresume.org/security/advisories/new
+    about: Report security vulnerabilities privately (DO NOT create a public issue)

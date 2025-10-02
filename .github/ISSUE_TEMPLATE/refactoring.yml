@@ -1,0 +1,91 @@
+name: 🔧 Refactoring
+description: Propose code refactoring or technical improvements
+title: '[Refactor]: '
+labels: ['refactor']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for proposing a refactoring! Please provide technical details about the improvement.
+
+  - type: textarea
+    id: current-state
+    attributes:
+      label: Current State
+      description: Describe the current code/architecture that needs refactoring
+      placeholder: Describe what exists now...
+    validations:
+      required: true
+
+  - type: textarea
+    id: issues
+    attributes:
+      label: Issues with Current Implementation
+      description: What problems does the current implementation have?
+      placeholder: |
+        - Performance issues
+        - Difficult to maintain
+        - Violates design patterns
+        - Code duplication
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-changes
+    attributes:
+      label: Proposed Changes
+      description: Describe the refactoring you'd like to implement
+      placeholder: Describe the new structure/approach...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: reason
+    attributes:
+      label: Primary Reason
+      description: What is the main reason for this refactoring?
+      options:
+        - Code quality (maintainability, readability)
+        - Performance optimization
+        - File size reduction (≤150 lines)
+        - Design pattern improvement
+        - Technical debt reduction
+        - Test coverage improvement
+        - Type safety improvement
+    validations:
+      required: true
+
+  - type: textarea
+    id: affected-files
+    attributes:
+      label: Affected Files/Modules
+      description: List the files or modules that would be affected
+      placeholder: |
+        - src/components/Feature.tsx
+        - src/hooks/useFeature.ts
+      render: markdown
+
+  - type: checkboxes
+    id: breaking-changes
+    attributes:
+      label: Breaking Changes
+      options:
+        - label: This refactoring includes breaking changes
+        - label: Migration guide will be provided
+
+  - type: textarea
+    id: benefits
+    attributes:
+      label: Expected Benefits
+      description: What benefits will this refactoring provide?
+      placeholder: |
+        - Improved performance by X%
+        - Reduced bundle size by Y KB
+        - Better code organization
+        - Easier to test
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Add any other technical details or context

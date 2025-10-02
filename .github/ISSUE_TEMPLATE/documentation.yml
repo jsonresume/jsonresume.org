@@ -1,0 +1,94 @@
+name: 📚 Documentation
+description: Suggest documentation improvements or additions
+title: '[Docs]: '
+labels: ['documentation']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve our documentation! Please provide details about what needs to be documented.
+
+  - type: dropdown
+    id: doc-type
+    attributes:
+      label: Documentation Type
+      description: What type of documentation needs work?
+      options:
+        - API Documentation
+        - Developer Guide
+        - User Guide
+        - Architecture Documentation
+        - Code Comments
+        - README
+        - Contributing Guidelines
+        - Setup/Installation
+        - Configuration
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: missing-unclear
+    attributes:
+      label: What's Missing or Unclear?
+      description: Describe what documentation is missing or unclear
+      placeholder: Describe the gap in documentation...
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-content
+    attributes:
+      label: Proposed Content
+      description: Describe or draft the documentation you'd like to add
+      placeholder: Outline the content to be added...
+    validations:
+      required: true
+
+  - type: textarea
+    id: affected-files
+    attributes:
+      label: Affected Files
+      description: Which files or sections would be affected?
+      placeholder: |
+        - README.md
+        - docs/api/endpoints.md
+        - src/components/Feature.tsx (code comments)
+      render: markdown
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this documentation?
+      options:
+        - Critical (blocks development/usage)
+        - High (significant gap)
+        - Medium (improvement)
+        - Low (nice to have)
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: audience
+    attributes:
+      label: Target Audience
+      description: Who is this documentation for?
+      options:
+        - label: End Users
+        - label: Contributors/Developers
+        - label: Maintainers
+        - label: API Consumers
+
+  - type: textarea
+    id: examples
+    attributes:
+      label: Examples
+      description: Provide examples of what the documentation should include
+      placeholder: Add code examples, screenshots, or references...
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Add any other context about the documentation request
