@@ -117,6 +117,8 @@ feature/
 - **Pre-commit Hooks**: Husky + lint-staged work correctly once `pnpm -w run prepare` is executed
 - **Security Fixes**: Removed deprecated faker, updated handlebars - reduced vulns from 207 to 46 (-78%)
 - **Remaining Vulnerabilities**: Mostly in transitive deps of bundled themes (can use pnpm overrides)
+- **CI Failures**: pnpm lockfile version mismatch causes frozen lockfile errors - update packageManager version to match CI
+- **pnpm Upgrade**: Update from v7.15.0 to v8.15.9 requires lockfile regeneration (run `pnpm install`)
 
 **Decision-Making Authority:**
 - Refactor any code that violates standards
