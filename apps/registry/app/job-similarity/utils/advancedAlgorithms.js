@@ -1,4 +1,4 @@
-import { cosineSimilarity } from './vectorUtils';
+import { cosineSimilarity } from '../../utils/vectorUtils';
 
 /**
  * Maximum Spanning Tree algorithm

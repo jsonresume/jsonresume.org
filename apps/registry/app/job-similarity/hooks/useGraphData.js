@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { normalizeVector, getAverageEmbedding } from '../utils/vectorUtils';
+import { normalizeVector, getAverageEmbedding } from '../../utils/vectorUtils';
 import { colors } from '../utils/constants';
 
 /**

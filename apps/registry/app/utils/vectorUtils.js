@@ -1,5 +1,6 @@
 /**
  * Vector utility functions for similarity calculations
+ * Shared across similarity and job-similarity features
  */
 
 /**
