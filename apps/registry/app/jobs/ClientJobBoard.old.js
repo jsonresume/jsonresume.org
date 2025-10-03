@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import { X } from 'lucide-react';
-import { useJobFiltering } from './ClientJobBoardModule/hooks/useJobFiltering';
-import { SearchBar } from './ClientJobBoardModule/components/SearchBar';
-import { Filters } from './ClientJobBoardModule/components/Filters';
-import { JobList } from './ClientJobBoardModule/components/JobList';
+import { useJobFiltering } from './hooks/useJobFiltering';
+import { SearchBar } from './components/SearchBar';
+import { Filters } from './components/Filters';
+import { JobList } from './components/JobList';
 
 const ClientJobBoard = ({ initialJobs }) => {
   const [jobs] = useState(initialJobs);
