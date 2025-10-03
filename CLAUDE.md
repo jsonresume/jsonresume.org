@@ -144,6 +144,36 @@ feature/
 - **CI Failures**: pnpm lockfile version mismatch causes frozen lockfile errors - update packageManager version to match CI
 - **pnpm Upgrade**: Update from v7.15.0 to v8.15.9 requires lockfile regeneration (run `pnpm install`)
 
+**Refactoring Large Files (200+ lines):**
+
+- **Pattern**: Extract into feature folders with components/, hooks/, utils/, styles/
+- **Components**: Focus on rendering, receive props, minimal logic
+- **Hooks**: Encapsulate state management and side effects (useJobGraphData, useReadJobs, etc.)
+- **Utils**: Pure functions for calculations, formatting, conversions (testable!)
+- **Styles**: Extract inline styles to separate CSS files
+- **Main Page**: Thin orchestration layer that composes hooks and components
+- **Example**: jobs-graph (1081→184 lines main + 693 across 12 modules)
+- **Benefits**: Better testability, reusability, maintainability, git history
+
+**Public vs Private Pages:**
+
+- **Pattern**: Create separate data providers for public/private access
+- **PublicResumeProvider**: Fetches from public API, no auth required
+- **ResumeProvider**: Uses GitHub OAuth for authenticated access
+- **Smart Routing**: Detect public pages in layout and bypass auth wrapper
+- **Banner**: Add informational banner to show public view mode with login CTA
+- **Example**: timeline, jobs, json pages now publicly accessible
+- **Benefits**: Portfolio sharing, better SEO, conversion funnel, user value
+
+**Authentication Error UX:**
+
+- **Pattern**: Show context-aware messages based on auth state
+- **Not logged in**: Clear prompt with login CTA
+- **Wrong user**: Explain mismatch with account switch option
+- **Both states**: Include link to public resume for accessibility
+- **API errors**: Return proper HTTP status codes (404, 500) with meaningful messages
+- **Client handling**: Gracefully handle errors with empty states, not infinite loading
+
 **Decision-Making Authority:**
 
 - Refactor any code that violates standards
