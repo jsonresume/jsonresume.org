@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useResume } from '../../providers/ResumeProvider';
+import { useResume } from '../../../providers/ResumeProvider';
 
 export function useCreateResume(sampleResume) {
   const [creating, setCreating] = useState(false);

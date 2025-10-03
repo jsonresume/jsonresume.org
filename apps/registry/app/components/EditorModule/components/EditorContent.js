@@ -1,4 +1,4 @@
-import { useResume } from '../../providers/ResumeProvider';
+import { useResume } from '../../../providers/ResumeProvider';
 import ResumeEditor from '../../ResumeEditor';
 import CreateResume from '../../CreateResume';
 import { LoadingState } from './LoadingState';

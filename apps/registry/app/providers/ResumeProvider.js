@@ -7,6 +7,9 @@ import {
   createNewGist,
 } from './ResumeProviderModule/utils/gistOperations';
 
+// Re-export constant for backward compatibility
+export { RESUME_GIST_NAME } from './ResumeProviderModule/constants';
+
 const ResumeContext = createContext({
   resume: null,
   gistId: null,
