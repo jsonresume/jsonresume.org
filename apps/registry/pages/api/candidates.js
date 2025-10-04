@@ -1,4 +1,7 @@
-const gravatar = require('gravatar');
+import { createSupabaseClient } from './candidates/supabaseClient';
+import { fetchJob } from './candidates/fetchJob';
+import { matchResumes } from './candidates/matchResumes';
+import { formatCandidates } from './candidates/formatCandidates';
 
 export default async function handler(req, res) {
   if (!process.env.SUPABASE_KEY) {
@@ -6,97 +9,37 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Lazy load Supabase
-    const { createClient } = require('@supabase/supabase-js');
-    const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
-    const supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
+    const supabase = createSupabaseClient();
     const { jobId } = req.query;
 
     if (!jobId) {
       return res.status(400).json({ message: 'Job ID is required' });
     }
 
-    // Get the job's embedding
-    const { data: jobData, error: jobError } = await supabase
-      .from('jobs')
-      .select('*')
-      .eq('uuid', jobId)
-      .single();
-
-    if (jobError || !jobData) {
-      console.error('Error fetching job:', jobError);
-      return res.status(404).json({ message: 'Job not found' });
+    const jobResult = await fetchJob(supabase, jobId);
+    if (jobResult.error) {
+      return res.status(jobResult.status).json({ message: jobResult.error });
     }
 
-    if (!jobData.embedding_v5) {
-      return res.status(400).json({ message: 'Job has no embedding' });
-    }
-
-    // Match resumes using vector similarity
-    const { data: matches, error: matchError } = await supabase.rpc(
-      'match_resumes_v5',
-      {
-        query_embedding: jobData.embedding_v5,
-        match_threshold: 0.14,
-        match_count: 100,
-      }
+    const matchResult = await matchResumes(
+      supabase,
+      jobResult.jobData.embedding_v5
     );
-
-    if (matchError) {
-      console.error('Error matching resumes:', matchError);
-      return res.status(500).json({ message: 'Error matching resumes' });
+    if (matchResult.error) {
+      return res
+        .status(matchResult.status)
+        .json({ message: matchResult.error });
     }
 
-    // Format the results
-    const candidates = matches.map((match) => {
-      try {
-        const resume = JSON.parse(match.resume);
-        return {
-          username: match.username,
-          similarity: match.similarity,
-          label: resume?.basics?.label,
-          image:
-            resume?.basics?.image ||
-            gravatar.url(
-              resume?.basics?.email || '',
-              {
-                s: '200',
-                r: 'x',
-                d: 'retro',
-              },
-              true
-            ),
-          name: resume?.basics?.name,
-          location: resume?.basics?.location,
-          skills: resume?.skills?.map((s) => s.name) || [],
-          headline: resume?.basics?.summary,
-          updated_at: match.updated_at,
-          created_at: match.created_at,
-        };
-      } catch (e) {
-        console.error('Error parsing resume:', e);
-        return {
-          username: match.username,
-          similarity: match.similarity,
-          label: 'Error parsing resume',
-          image: gravatar.url('', { s: '200', r: 'x', d: 'retro' }, true),
-          name: match.username,
-          location: null,
-          skills: [],
-          headline: null,
-          updated_at: match.updated_at,
-          created_at: match.created_at,
-        };
-      }
-    });
+    const candidates = formatCandidates(matchResult.matches);
 
     return res.status(200).json({
       candidates,
       job: {
-        title: jobData.title,
-        company: jobData.company,
-        location: jobData.location,
-        description: jobData.description,
+        title: jobResult.jobData.title,
+        company: jobResult.jobData.company,
+        location: jobResult.jobData.location,
+        description: jobResult.jobData.description,
       },
     });
   } catch (error) {
