@@ -11,6 +11,7 @@ module.exports = {
     '@next/next/no-img-element': 'off',
     'react/no-unescaped-entities': 'off',
     'no-case-declarations': 'off',
+    'no-unused-vars': ['error', { vars: 'all', args: 'none' }],
   },
   env: {
     browser: true,
