@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Octokit } from 'octokit';
-import { RESUME_GIST_NAME } from '../constants';
 import { findLatestResumeGist } from '../utils/gistFinder';
 import { getSession } from '../utils/githubAuth';
+import { fetchGistData } from './useResumeData/fetchGistData';
+import { cacheResume } from './useResumeData/cacheResume';
 
 export const useResumeData = (targetUsername) => {
   const [resume, setResume] = useState(null);
@@ -37,30 +38,12 @@ export const useResumeData = (targetUsername) => {
               console.log('Found most recent resume.json gist:', latestGistId);
               setGistId(latestGistId);
 
-              const { data: gists } = await octokit.rest.gists.get({
-                gist_id: latestGistId,
-              });
-              const resumeFile = Object.values(gists.files).find(
-                (file) => file.filename.toLowerCase() === RESUME_GIST_NAME
-              );
+              const resumeData = await fetchGistData(octokit, latestGistId);
 
-              if (resumeFile?.raw_url) {
-                const response = await fetch(resumeFile.raw_url);
-                if (!response.ok) {
-                  throw new Error('Failed to fetch resume data');
-                }
-                const resumeData = await response.json();
+              if (resumeData) {
                 setResume(resumeData);
                 setUsername(githubUsername);
-
-                localStorage.setItem(
-                  `resume_${githubUsername}`,
-                  JSON.stringify({
-                    resume: resumeData,
-                    gistId: latestGistId,
-                    username: githubUsername,
-                  })
-                );
+                cacheResume(githubUsername, resumeData, latestGistId);
               }
             } else {
               console.log('No resume.json gist found');
