@@ -1,0 +1,27 @@
+name: Vercel Error Monitor
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # every 6 hours
+  workflow_dispatch:       # manual trigger
+
+jobs:
+  monitor-errors:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Vercel CLI
+        run: npm i -g vercel
+
+      - name: Run Monitor Script
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERCEL_DEPLOYMENT_URL: https://jsonresume-org.vercel.app
+        run: node scripts/monitor-vercel-errors.js
