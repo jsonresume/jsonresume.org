@@ -22,7 +22,7 @@ const logs = fetchLogs();
 const errorBlocks = [];
 let block = [];
 logs.forEach(line => {
-  if (line.toLowerCase().includes("error") || block.length) {
+  if (line.toLowerCase().includes("warn") || block.length) { //error or warn
     block.push(line);
     if (line.trim() === "") {
       errorBlocks.push(block);
@@ -85,3 +85,4 @@ fs.writeFileSync(hashFile, JSON.stringify(existingHashes, null, 2));
 if (newErrors.length === 0) {
   console.log('No new unique errors to report.');
 }
+
