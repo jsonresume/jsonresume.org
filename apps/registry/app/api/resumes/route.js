@@ -1,8 +1,7 @@
-import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
-import gravatar from 'gravatar';
-
-const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
+import { createSupabaseClient } from './utils/supabaseClient';
+import { buildResumesQuery } from './utils/queryBuilder';
+import { formatResumes } from './utils/formatResumes';
 
 // This ensures the route is always dynamic
 export const dynamic = 'force-dynamic';
@@ -17,27 +16,11 @@ export async function GET(request) {
   }
 
   try {
-    const supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
+    const supabase = createSupabaseClient();
     const { searchParams } = new URL(request.url);
-    const limit = parseInt(searchParams.get('limit')) || 2000;
-    const page = parseInt(searchParams.get('page')) || 1;
-    const search = searchParams.get('search') || '';
 
     console.time('getResumes');
-    const query = supabase
-      .from('resumes')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(limit)
-      .range((page - 1) * limit, page * limit - 1);
-
-    if (search && search.trim() !== '') {
-      query.textSearch('resume', search.trim(), {
-        config: 'english',
-        type: 'websearch',
-      });
-    }
-
+    const query = buildResumesQuery(supabase, searchParams);
     const { data, error } = await query;
 
     if (error) {
@@ -58,41 +41,7 @@ export async function GET(request) {
     }
 
     console.time('mapResumes');
-    const resumes = data.map((row) => {
-      try {
-        const resume = JSON.parse(row.resume);
-        return {
-          username: row.username,
-          label: resume?.basics?.label,
-          image:
-            resume?.basics?.image ||
-            gravatar.url(
-              resume?.basics?.email || '',
-              {
-                s: '200',
-                r: 'x',
-                d: 'retro',
-              },
-              true
-            ),
-          name: resume?.basics?.name,
-          location: resume?.basics?.location,
-          updated_at: row.updated_at,
-          created_at: row.created_at,
-        };
-      } catch (e) {
-        console.error('Error parsing resume:', e);
-        return {
-          username: row.username,
-          label: 'Error parsing resume',
-          image: gravatar.url('', { s: '200', r: 'x', d: 'retro' }, true),
-          name: row.username,
-          location: null,
-          updated_at: row.updated_at,
-          created_at: row.created_at,
-        };
-      }
-    });
+    const resumes = formatResumes(data);
     console.timeEnd('mapResumes');
 
     return NextResponse.json(resumes);
