@@ -2,13 +2,13 @@ const fs = require('fs');
 const crypto = require('crypto');
 const { execSync } = require('child_process');
 
-const DEPLOYMENT_URL = process.env.VERCEL_DEPLOYMENT_URL || "https://jsonresume-org.vercel.app";
+const DEPLOYMENT_NAME = process.env.VERCEL_DEPLOYMENT_NAME || "jsonresume-org-homepage2";
 const hashFile = 'error-hashes.json';
 
 // Fetch logs
 function fetchLogs() {
   try {
-    const output = execSync(`vercel logs ${DEPLOYMENT_URL} --token ${process.env.VERCEL_TOKEN} --limit 200`, { encoding: "utf8" });
+    const output = execSync(`vercel logs ${DEPLOYMENT_NAME} --token ${process.env.VERCEL_TOKEN}`, { encoding: "utf8" });
     return output.split("\n");
   } catch (err) {
     console.error("Failed to fetch logs:", err.message);
@@ -85,4 +85,5 @@ fs.writeFileSync(hashFile, JSON.stringify(existingHashes, null, 2));
 if (newErrors.length === 0) {
   console.log('No new unique errors to report.');
 }
+
 
