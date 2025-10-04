@@ -69,7 +69,7 @@ Generated automatically from Vercel logs.`;
 
     try {
       execSync(
-        `gh issue create --repo jsonresume/jsonresume.org --title "${title}" --body "${body}" --label "vercel-error"`,
+        `gh issue create --repo a-y-a-n-das/jsonresume.org --title "${title}" --body "${body}" --label "vercel-error"`,
         { stdio: 'inherit' }
       );
       console.log(`Created GitHub issue for: ${block[0]}`);
