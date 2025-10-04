@@ -9,6 +9,7 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/jsonresume/jsonresume.org/actions/workflows/ci.yml"><img src="https://github.com/jsonresume/jsonresume.org/actions/workflows/ci.yml/badge.svg" alt="CI Status"></a>
   <a href="https://discord.gg/GTZtn8pTXC"><img src="https://dcbadge.limes.pink/api/server/GTZtn8pTXC" alt="Discord"></a>
   <img src="https://img.shields.io/github/license/jsonresume/jsonresume.org" alt="License">
   <img src="https://img.shields.io/github/stars/jsonresume/jsonresume.org?style=social" alt="Stars">
