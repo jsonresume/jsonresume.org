@@ -1,11 +1,9 @@
-const OpenAI = require('openai');
-const jobDescriptionToSchemaFunction = require('./openaiFunction');
+const { updateJob, markJobAsFailed } = require('./database');
+const { initialProcessing } = require('./processJob/initialProcessing');
+const { companyEnrichment } = require('./processJob/companyEnrichment');
 const {
-  getJobProcessingPrompt,
-  getCompanyContextPrompt,
-  getNaturalLanguagePrompt,
-} = require('./prompts');
-const { getCompanyData, updateJob, markJobAsFailed } = require('./database');
+  naturalLanguageGeneration,
+} = require('./processJob/naturalLanguageGeneration');
 
 /**
  * Process a single job with OpenAI
@@ -28,68 +26,28 @@ async function processJob(job, openaiClient, supabase) {
 
   try {
     // Step 1: Initial processing
-    const messages = [
-      {
-        role: 'system',
-        content: getJobProcessingPrompt(job.content),
-      },
-    ];
-
-    console.log('Starting OpenAI processing for job:', job.id);
-    const chat1 = await openaiClient.chat.completions.create({
-      model: 'gpt-4.1',
-      temperature: 0.75,
-      messages,
-      functions: [jobDescriptionToSchemaFunction],
-      function_call: 'auto',
-    });
-
-    const details1 = chat1.choices[0].message.function_call?.arguments;
-    console.log(JSON.stringify(details1, null, 2));
-    const jobJson = JSON.parse(details1);
-    console.log({ jobId: job.id, jobJson });
-
+    const { messages, details1, jobJson } = await initialProcessing(
+      openaiClient,
+      job
+    );
     const { company } = jobJson;
     console.log({ jobId: job.id, company });
 
-    // Step 2: Enrich with company data if available
-    const companyDetails = await getCompanyData(supabase, company);
-    if (companyDetails) {
-      console.log({ jobId: job.id, companyDetails });
-      messages.push({
-        role: 'system',
-        content: getCompanyContextPrompt(companyDetails),
-      });
-    }
-
-    // Step 3: Regenerate with company context
-    console.log({ jobId: job.id, messages });
-    const chat2 = await openaiClient.chat.completions.create({
-      model: 'gpt-4.1',
-      temperature: 0.75,
+    // Step 2 & 3: Enrich with company data and regenerate
+    const jobJson2 = await companyEnrichment(
+      openaiClient,
+      supabase,
+      job,
       messages,
-      functions: [jobDescriptionToSchemaFunction],
-      function_call: 'auto',
-    });
-
-    const details2 = chat2.choices[0].message.function_call?.arguments;
-    const jobJson2 = JSON.parse(details2);
-    console.log({ jobId: job.id, jobJson2 });
+      company
+    );
 
     // Step 4: Generate natural language description
-    messages.push({
-      role: 'system',
-      content: getNaturalLanguagePrompt(),
-    });
-
-    const chat3 = await openaiClient.chat.completions.create({
-      model: 'gpt-4.1',
-      temperature: 0.75,
-      messages,
-    });
-
-    const content = chat3.choices[0].message.content;
-    console.log({ jobId: job.id, content });
+    const content = await naturalLanguageGeneration(
+      openaiClient,
+      job,
+      messages
+    );
 
     // Step 5: Update database
     console.log(`Updating job ${job.id} in database`);
