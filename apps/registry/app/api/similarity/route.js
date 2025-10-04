@@ -1,7 +1,7 @@
-import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
-
-const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
+import { createSupabase } from './utils/createSupabase';
+import { fetchThomasResume, fetchOtherResumes } from './utils/fetchResumeData';
+import { parseResumeData } from './utils/parseResumeData';
 
 // This ensures the route is always dynamic
 export const dynamic = 'force-dynamic';
@@ -16,67 +16,23 @@ export async function GET(request) {
   }
 
   try {
-    const supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
+    const supabase = createSupabase();
     const { searchParams } = new URL(request.url);
     const limit = parseInt(searchParams.get('limit')) || 1000;
 
     console.time('getResumeSimilarityData');
-    // First fetch thomasdavis's resume
-    const { data: thomasData, error: thomasError } = await supabase
-      .from('resumes')
-      .select('username, embedding, resume')
-      .eq('username', 'thomasdavis')
-      .single();
 
-    if (thomasError) {
-      console.error('Error fetching thomasdavis resume:', thomasError);
-    }
-
-    // Then fetch other resumes
-    const { data: otherData, error } = await supabase
-      .from('resumes')
-      .select('username, embedding, resume')
-      .not('embedding', 'is', null)
-      .neq('username', 'thomasdavis') // Exclude thomasdavis from this query
-      .limit(limit)
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      console.error('Error fetching resume similarity data:', error);
-      return NextResponse.json(
-        { message: 'Error fetching resume similarity data' },
-        { status: 500 }
-      );
-    }
+    // Fetch resume data
+    const thomasData = await fetchThomasResume(supabase);
+    const otherData = await fetchOtherResumes(supabase, limit);
 
     console.timeEnd('getResumeSimilarityData');
 
-    // Combine the results, putting thomasdavis first if available
+    // Combine results, putting thomasdavis first if available
     const data = thomasData ? [thomasData, ...(otherData || [])] : otherData;
 
-    // Parse embeddings from strings to numerical arrays and extract position
-    const parsedData = data
-      .map((item) => {
-        let resumeData;
-        try {
-          resumeData = JSON.parse(item.resume);
-        } catch (e) {
-          console.warn('Failed to parse resume for user:', item.username);
-          resumeData = {};
-        }
-
-        return {
-          username: item.username,
-          embedding:
-            typeof item.embedding === 'string'
-              ? JSON.parse(item.embedding)
-              : Array.isArray(item.embedding)
-              ? item.embedding
-              : null,
-          position: resumeData?.basics?.label || 'Unknown Position',
-        };
-      })
-      .filter((item) => item.embedding !== null);
+    // Parse embeddings and extract positions
+    const parsedData = parseResumeData(data);
 
     return NextResponse.json(parsedData, {
       headers: {
