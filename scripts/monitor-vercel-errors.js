@@ -6,7 +6,6 @@ const path = require('path');
 const HASH_FILE = path.join(__dirname, '.vercel-error-hashes.json');
 const VERCEL_PROJECTS = [
   { name: 'jsonresume-org-registry', url: 'https://registry.jsonresume.org' },
-  { name: 'jsonresume-org-homepage2', url: 'https://jsonresume.org' },
 ];
 
 function loadHashes() {
