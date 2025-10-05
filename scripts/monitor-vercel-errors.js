@@ -35,10 +35,12 @@ function createErrorFingerprint(message, stack = '') {
 
 async function fetchVercelLogs(project) {
   try {
-    // Use timeout with SIGKILL to force termination after 5 seconds
-    // Get as many logs as possible in 5 seconds
+    // Use gtimeout (macOS) or timeout (Linux) with SIGKILL to force termination after 5 seconds
+    const timeoutCmd = execSync('which gtimeout 2>/dev/null || which timeout', {
+      encoding: 'utf8',
+    }).trim();
     const result = execSync(
-      `timeout -s SIGKILL 5 bash -c "VERCEL_TOKEN=${process.env.VERCEL_TOKEN} vercel logs ${project.url} --json 2>&1" || true`,
+      `${timeoutCmd} -s SIGKILL 5 bash -c "VERCEL_TOKEN=${process.env.VERCEL_TOKEN} vercel logs ${project.url} --json 2>&1" || true`,
       { encoding: 'utf8', maxBuffer: 10 * 1024 * 1024 }
     );
 
@@ -95,11 +97,12 @@ function searchExistingIssue(fingerprint) {
   try {
     const result = execSync(
       `gh issue list --repo ${process.env.GITHUB_REPOSITORY} --label auto-error --search "Error Fingerprint: ${fingerprint}" --json number,state --limit 1`,
-      { encoding: 'utf8' }
+      { encoding: 'utf8', timeout: 10000 }
     );
     const issues = JSON.parse(result);
     return issues.length > 0 ? issues[0] : null;
   } catch (error) {
+    console.error('Failed to search issues:', error.message);
     return null;
   }
 }
@@ -139,12 +142,13 @@ ${stackTrace}
         /"/g,
         '\\"'
       )}" --body-file ${bodyFile} --label auto-error --label bug --label vercel-logs`,
-      { encoding: 'utf8' }
+      { encoding: 'utf8', timeout: 30000 }
     );
     fs.unlinkSync(bodyFile);
     return result.trim();
   } catch (error) {
     fs.unlinkSync(bodyFile);
+    console.error('Failed to create issue:', error.message);
     throw error;
   }
 }
@@ -154,7 +158,7 @@ function updateIssueOccurrence(issueNumber, fingerprint) {
     const comment = `This error occurred again at ${new Date().toISOString()}`;
     execSync(
       `gh issue comment ${issueNumber} --repo ${process.env.GITHUB_REPOSITORY} --body "${comment}"`,
-      { encoding: 'utf8' }
+      { encoding: 'utf8', timeout: 10000 }
     );
   } catch (error) {
     console.error(`Failed to update issue #${issueNumber}:`, error.message);
