@@ -38,3 +38,6 @@ yarn-error.log*
 .vercel
 .parcel-cache
 /.vs
+
+# Vercel error monitoring
+scripts/.vercel-error-hashes.json
