@@ -4,7 +4,10 @@ const fs = require('fs');
 const path = require('path');
 
 const HASH_FILE = path.join(__dirname, '.vercel-error-hashes.json');
-const VERCEL_PROJECTS = ['jsonresume-org-registry', 'jsonresume-org-homepage2'];
+const VERCEL_PROJECTS = [
+  { name: 'jsonresume-org-registry', url: 'https://registry.jsonresume.org' },
+  { name: 'jsonresume-org-homepage2', url: 'https://jsonresume.org' },
+];
 
 function loadHashes() {
   if (fs.existsSync(HASH_FILE)) {
@@ -31,13 +34,13 @@ function createErrorFingerprint(message, stack = '') {
     .slice(0, 16);
 }
 
-function fetchVercelLogs(projectName) {
+function fetchVercelLogs(project) {
   try {
-    // Use project name directly, Vercel CLI will find the latest deployment
-    const cmd = `vercel logs ${projectName} --token ${process.env.VERCEL_TOKEN} --scope jsonresume 2>&1 || true`;
+    // Use deployment URL to fetch logs
+    const cmd = `vercel logs ${project.url} --token ${process.env.VERCEL_TOKEN} 2>&1 || true`;
     return execSync(cmd, { encoding: 'utf8', maxBuffer: 10 * 1024 * 1024 });
   } catch (error) {
-    console.error(`Failed to fetch logs for ${projectName}:`, error.message);
+    console.error(`Failed to fetch logs for ${project.name}:`, error.message);
     return '';
   }
 }
@@ -163,16 +166,16 @@ async function main() {
   let duplicatesSkipped = 0;
 
   for (const project of VERCEL_PROJECTS) {
-    console.log(`\nFetching logs for ${project}...`);
+    console.log(`\nFetching logs for ${project.name}...`);
     const logs = fetchVercelLogs(project);
 
     if (!logs) {
-      console.log(`No logs available for ${project}`);
+      console.log(`No logs available for ${project.name}`);
       continue;
     }
 
     const errors = parseErrors(logs);
-    console.log(`Found ${errors.length} potential errors in ${project}`);
+    console.log(`Found ${errors.length} potential errors in ${project.name}`);
 
     for (const error of errors) {
       const fingerprint = createErrorFingerprint(
@@ -190,7 +193,7 @@ async function main() {
       }
 
       try {
-        const issueUrl = createIssue(error, fingerprint, project);
+        const issueUrl = createIssue(error, fingerprint, project.name);
         errorHashes[fingerprint] = {
           created: new Date().toISOString(),
           issueUrl,
