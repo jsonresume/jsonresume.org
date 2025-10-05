@@ -1,7 +1,7 @@
 import { Github } from 'lucide-react';
 import { signIn } from '../../auth';
 import { track } from '@vercel/analytics/server';
-import { Button } from '@repo/ui/components/ui/button';
+import { Button } from '@repo/ui';
 export default function SignIn() {
   return (
     <div className="text-lg m-8 w-[400px] mx-auto p-8 bg-white rounded-lg shadow-md">

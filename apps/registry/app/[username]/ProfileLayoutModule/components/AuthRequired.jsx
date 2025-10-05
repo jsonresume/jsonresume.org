@@ -1,6 +1,6 @@
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Button } from '@repo/ui/components/ui/button';
+import { Button } from '@repo/ui';
 
 export function AuthRequired({ username, session }) {
   const router = useRouter();

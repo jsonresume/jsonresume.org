@@ -1,8 +1,4 @@
-import { Button } from '@repo/ui/components/ui/button';
-import { Card } from '@repo/ui/components/ui/card';
-import { Input } from '@repo/ui/components/ui/input';
-import { Badge } from '@repo/ui/components/ui/badge';
-import { Separator } from '@repo/ui/components/ui/separator';
+import { Button, Card, Input, Badge, Separator } from '@repo/ui';
 
 export default function UIStyleGuide() {
   return (

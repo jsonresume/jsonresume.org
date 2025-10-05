@@ -1,17 +1,15 @@
-import { Input } from '@repo/ui/components/ui/input';
 import {
+  Input,
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from '@repo/ui/components/ui/card';
-import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@repo/ui/components/ui/select';
+} from '@repo/ui';
 
 export function FilterSidebar({
   nameFilter,

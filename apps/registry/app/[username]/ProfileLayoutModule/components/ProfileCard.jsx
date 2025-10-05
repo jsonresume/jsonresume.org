@@ -1,6 +1,6 @@
 import { useRouter } from 'next/navigation';
 import { MapPin } from 'lucide-react';
-import { Button } from '@repo/ui/components/ui/button';
+import { Button } from '@repo/ui';
 
 export function ProfileCard({ resume, username, image }) {
   const router = useRouter();

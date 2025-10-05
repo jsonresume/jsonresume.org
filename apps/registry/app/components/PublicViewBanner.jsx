@@ -3,7 +3,7 @@
 import { X, Lock } from 'lucide-react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button } from '@repo/ui/components/ui/button';
+import { Button } from '@repo/ui';
 
 /**
  * Banner shown on public dashboard pages to indicate public access mode

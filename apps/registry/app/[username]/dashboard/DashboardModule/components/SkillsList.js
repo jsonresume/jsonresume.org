@@ -1,4 +1,4 @@
-import { Badge } from '@repo/ui/components/ui/badge';
+import { Badge } from '@repo/ui';
 
 /**
  * Skills list component with categories and keywords
