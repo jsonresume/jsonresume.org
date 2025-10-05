@@ -16,6 +16,14 @@ export default function GettingStarted() {
       language: 'Javascript',
     },
     {
+      name: 'Multilingual Resume',
+      description:
+        'GitHub repository with i18n support (EN/FR), automated translations via GitHub Actions, and PDF generation.',
+      link: 'https://github.com/ludoo0d0a/resume',
+      category: 'integration',
+      language: 'Javascript',
+    },
+    {
       name: 'Reactive Resume',
       description:
         'An open-source resume builder supporting JSON Resume schema with multiple templates.',
@@ -305,6 +313,22 @@ export default function GettingStarted() {
       description:
         'CMD Resume is a web based command line for your resume using data from JSON Resume format.',
       link: 'https://github.com/bbody/CMD-Resume',
+      category: 'visualization',
+      language: 'Javascript',
+    },
+    {
+      name: 'AWASM Portfolio',
+      description:
+        'WebAssembly-powered interactive resume with K8s-like commands. Provides CLI and UI modes for exploring your JSON Resume.',
+      link: 'https://github.com/TrianaLab/awasm-portfolio',
+      category: 'visualization',
+      language: 'Go/WebAssembly',
+    },
+    {
+      name: 'JSON Resume Terminal',
+      description:
+        'Web component for displaying JSON Resume in a terminal-style interface. Fetches resume from GitHub gist.',
+      link: 'https://github.com/kyzrfranz/jsonresume-terminal',
       category: 'visualization',
       language: 'Javascript',
     },
