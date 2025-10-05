@@ -33,7 +33,8 @@ function createErrorFingerprint(message, stack = '') {
 
 function fetchVercelLogs(projectName) {
   try {
-    const cmd = `vercel logs https://${projectName}.vercel.app --token ${process.env.VERCEL_TOKEN} 2>&1 || true`;
+    // Use project name directly, Vercel CLI will find the latest deployment
+    const cmd = `vercel logs ${projectName} --token ${process.env.VERCEL_TOKEN} --scope jsonresume 2>&1 || true`;
     return execSync(cmd, { encoding: 'utf8', maxBuffer: 10 * 1024 * 1024 });
   } catch (error) {
     console.error(`Failed to fetch logs for ${projectName}:`, error.message);
