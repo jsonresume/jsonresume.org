@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Octokit } from 'octokit';
 import { logger } from '@/lib/logger';
+import { retryWithBackoff } from '@/lib/retry';
 import { findLatestResumeGist } from '../utils/gistFinder';
 import { getSession } from '../utils/githubAuth';
 import { fetchGistData } from './useResumeData/fetchGistData';
@@ -34,7 +35,12 @@ export const useResumeData = (targetUsername) => {
           const octokit = new Octokit({ auth: currentSession.provider_token });
 
           try {
-            const latestGistId = await findLatestResumeGist(octokit);
+            // Retry finding gist with exponential backoff
+            const latestGistId = await retryWithBackoff(
+              () => findLatestResumeGist(octokit),
+              { maxAttempts: 3 }
+            );
+
             if (latestGistId) {
               logger.info(
                 { gistId: latestGistId, username: githubUsername },
@@ -42,7 +48,11 @@ export const useResumeData = (targetUsername) => {
               );
               setGistId(latestGistId);
 
-              const resumeData = await fetchGistData(octokit, latestGistId);
+              // Retry fetching gist data with exponential backoff
+              const resumeData = await retryWithBackoff(
+                () => fetchGistData(octokit, latestGistId),
+                { maxAttempts: 3 }
+              );
 
               if (resumeData) {
                 setResume(resumeData);
