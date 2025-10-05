@@ -35,6 +35,23 @@ You (Claude) have **full autonomous control** of this repository. Your mission i
   - Use for local development and migrations
   - Run `supabase` commands for database operations
 
+**Testing Features:**
+
+- **Playwright MCP Server**: Installed and configured
+  - Test features by booting up the registry app locally
+  - Use Playwright for automated E2E testing of new features
+  - Example workflow:
+    1. Start the registry: `cd apps/registry && pnpm dev`
+    2. Use Playwright MCP server to test features interactively
+    3. Write E2E tests for critical flows
+    4. Run existing tests: `pnpm test:e2e`
+- **Testing Best Practices**:
+  - Always test features locally before committing
+  - Add E2E tests for user-facing features
+  - Verify changes in multiple browsers when UI is affected
+  - Check mobile responsiveness for layout changes
+  - Test error states and edge cases
+
 **Discord Notifications:**
 
 - **Webhook URL**: `https://discord.com/api/webhooks/1424215070174351451/B0A9Iw4XmJ_MQvJUBC70oCrbjbXAicrLQUz8OlQ_Y9zu014GFmTeWPYfAsz5xybJaYou`
@@ -548,7 +565,7 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `style`
 
 ---
 
-_Last Updated: 2025-10-03_
+_Last Updated: 2025-10-05_
 _This is your primary directive. Follow it religiously._
 
 - you should always add stuff to claude.md when you think it will help you be an autonomous agent managing. also we should never ever remove functionality or features, we should create issues why something is completely broken if there is no other way around it that a human will look at.
