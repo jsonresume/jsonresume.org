@@ -26,7 +26,7 @@
   },
   "scripts": {
     "ui:add": "pnpm dlx shadcn-ui@latest add",
-    "lint": "echo 'Linting disabled for @repo/ui - see issue for ESLint TypeScript parsing' && exit 0",
+    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint \"src/**/*.{js,jsx,ts,tsx}\"",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
