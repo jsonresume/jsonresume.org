@@ -1,35 +1,15 @@
 import { Analytics } from '@vercel/analytics/react';
 import Image from 'next/image';
-import Link from 'next/link';
-import { Ubuntu, Lato, Open_Sans } from 'next/font/google';
+import { fontVariables } from './components/layout/fonts';
+import { Sidebar } from './components/layout/Sidebar';
+import { TopNav } from './components/layout/TopNav';
+import { Footer } from './components/layout/Footer';
+import { ExternalScripts } from './components/layout/ExternalScripts';
 import './global.css';
-const ubuntu = Ubuntu({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-ubuntu',
-  weight: ['300', '400', '500', '700'],
-});
-
-const open_sans = Open_Sans({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-open-sans',
-  weight: ['300', '400', '600', '700', '800'],
-});
-
-const lato = Lato({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-lato',
-  weight: ['100', '300', '400', '700', '900'],
-});
 
 export default async function Layout({ children }) {
   return (
-    <html
-      lang="en"
-      className={`${lato.variable} ${open_sans.variable} ${ubuntu.variable}`}
-    >
+    <html lang="en" className={fontVariables}>
       <head title="JSON Resume">
         <link rel="dns-prefetch" href="//cdnjs.cloudflare.com" />
         <link rel="dns-prefetch" href="//static.getclicky.com" />
@@ -94,96 +74,16 @@ export default async function Layout({ children }) {
       <body>
         <div id="main">
           <div id="viewport">
-            <aside id="sidebar">
-              <Link href="/">Home</Link>
-              <Link href="/getting-started/">Getting Started</Link>
-              <Link href="/schema/">Schema</Link>
-              <Link href="/themes/">Themes</Link>
-              <Link href="/projects/">Projects</Link>
-              <Link href="/ai/">AI</Link>
-              <Link href="/team/">Team</Link>
-              <Link href="/blog/">Blog</Link>
-            </aside>
+            <Sidebar />
             <div className="inner">
-              <nav id="nav">
-                <a href="#" className="lt">
-                  <Image
-                    width="18"
-                    height="14"
-                    src="/img/hamburger.png"
-                    alt="homepage navigation"
-                  />
-                </a>
-                <div className="container">
-                  <div className="row">
-                    <div className="col-sm-12">
-                      <Link href="/">JSON Resume</Link>
-                      <div className="float-right hidden-xs">
-                        <Link href="/getting-started/">Getting Started</Link>
-                        <Link href="/schema/">Schema</Link>
-                        <Link href="/themes/">Themes</Link>
-                        <Link href="/projects/">Projects</Link>
-                        <Link href="/team/">Team</Link>
-
-                        <Link
-                          href="https://registry.jsonresume.org/explore"
-                          target="_blank"
-                        >
-                          Hosting
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </nav>
+              <TopNav />
               {children}
-
-              <footer id="footer" className="container">
-                <div className="row">
-                  <div className="col-sm-12">
-                    <p>JSON Resume is open source</p>
-                    <p>
-                      <Link href="https://github.com/jsonresume">
-                        View on GitHub
-                      </Link>
-                    </p>
-                    <p>
-                      <Link href="/ai/">AI</Link>&nbsp;|&nbsp;
-                      <Link href="/blog/">Blog</Link>&nbsp;|
-                    </p>
-                  </div>
-                </div>
-              </footer>
+              <Footer />
             </div>
           </div>
         </div>
 
-        <script
-          src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"
-          integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
-          crossorigin="anonymous"
-          defer
-        ></script>
-        <script
-          src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"
-          integrity="sha256-dsOXGNHAo/syFnazt+KTBsCQeRmlcW1XKL0bCK4Baec="
-          crossorigin="anonymous"
-          defer
-        ></script>
-        <script
-          src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.2/lodash.min.js"
-          integrity="sha256-rKk2QnJsnOCsuS8oSzkedgInNJbYmA09J0w26nVBpss="
-          crossorigin="anonymous"
-          defer
-        ></script>
-        <script
-          src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"
-          integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8="
-          crossorigin="anonymous"
-          defer
-        ></script>
-
-        <script src="/js/main.js" defer></script>
+        <ExternalScripts />
         <Analytics />
       </body>
     </html>
