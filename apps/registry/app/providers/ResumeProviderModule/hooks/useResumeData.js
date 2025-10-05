@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Octokit } from 'octokit';
+import { logger } from '@/lib/logger';
 import { findLatestResumeGist } from '../utils/gistFinder';
 import { getSession } from '../utils/githubAuth';
 import { fetchGistData } from './useResumeData/fetchGistData';
@@ -35,7 +36,10 @@ export const useResumeData = (targetUsername) => {
           try {
             const latestGistId = await findLatestResumeGist(octokit);
             if (latestGistId) {
-              console.log('Found most recent resume.json gist:', latestGistId);
+              logger.info(
+                { gistId: latestGistId, username: githubUsername },
+                'Found most recent resume.json gist'
+              );
               setGistId(latestGistId);
 
               const resumeData = await fetchGistData(octokit, latestGistId);
@@ -46,15 +50,24 @@ export const useResumeData = (targetUsername) => {
                 cacheResume(githubUsername, resumeData, latestGistId);
               }
             } else {
-              console.log('No resume.json gist found');
+              logger.info(
+                { username: githubUsername },
+                'No resume.json gist found'
+              );
             }
           } catch (error) {
-            console.error('Error fetching gists:', error);
+            logger.error(
+              { error: error.message, username: githubUsername },
+              'Error fetching gists'
+            );
             setError('Failed to fetch resume from GitHub');
           }
         }
       } catch (error) {
-        console.error('Error fetching resume data:', error);
+        logger.error(
+          { error: error.message, targetUsername },
+          'Error fetching resume data'
+        );
         setError(error.message);
       } finally {
         setLoading(false);

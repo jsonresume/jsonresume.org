@@ -1,3 +1,4 @@
+import { logger } from '@/lib/logger';
 import { supabase } from '../../../lib/supabase';
 
 export const authenticateGitHub = async () => {
@@ -16,7 +17,10 @@ export const authenticateGitHub = async () => {
 
     if (error) throw error;
   } catch (error) {
-    console.error('GitHub authentication error:', error);
+    logger.error(
+      { error: error.message, action: 'github_auth_failed' },
+      'GitHub authentication error'
+    );
     throw new Error('Failed to authenticate with GitHub. Please try again.');
   }
 };

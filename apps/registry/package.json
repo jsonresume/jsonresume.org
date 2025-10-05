@@ -98,6 +98,8 @@
     "octokit": "^4.0.2",
     "openai": "^4.28.0",
     "pg": "^8.11.0",
+    "pino": "^10.0.0",
+    "pino-pretty": "^13.1.1",
     "plotly.js-dist": "^2.35.3",
     "postcss": "^8.4.39",
     "prisma": "^6.16.3",
