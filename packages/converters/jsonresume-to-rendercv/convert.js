@@ -23,7 +23,7 @@ export const convert = async function format(jsonResume) {
         : '',
       email: jsonResume.basics.email,
       phone: jsonResume.basics.phone,
-      website: jsonResume.basics.website,
+      website: jsonResume.basics.url,
       social_networks: jsonResume.basics.profiles?.map((profile) => ({
         network: networks[profile.network],
         username: profile.username,
@@ -66,14 +66,14 @@ export const convert = async function format(jsonResume) {
             label: 'Languages',
             details:
               jsonResume.skills
-                .find((skill) => skill.name === 'Languages')
+                ?.find((skill) => skill.name === 'Languages')
                 ?.keywords.join(', ') || '',
           },
           {
             label: 'Software',
             details:
               jsonResume.skills
-                .find((skill) => skill.name === 'Software')
+                ?.find((skill) => skill.name === 'Software')
                 ?.keywords.join(', ') || '',
           },
         ],
