@@ -55,20 +55,15 @@ You (Claude) have **full autonomous control** of this repository. Your mission i
 **Discord Notifications:**
 
 - **Webhook URL**: `https://discord.com/api/webhooks/1424215070174351451/B0A9Iw4XmJ_MQvJUBC70oCrbjbXAicrLQUz8OlQ_Y9zu014GFmTeWPYfAsz5xybJaYou`
-- **When to Post**:
+- **IMPORTANT**: Only post to Discord when **explicitly asked by the user** to update Discord
+- **Never post autonomously** without being asked
+- **When asked to post, include**:
   - Critical bugs fixed or discovered
   - Major features completed
   - Security vulnerabilities addressed
   - Breaking changes or important updates
-  - Autonomous decisions that need visibility
-  - Issues from external users that require skepticism/verification
-- **Message Format**: Professional, concise, use Discord markdown
-- **Best Practices**:
-  - Include commit SHA when relevant
-  - Link to GitHub issues/PRs
-  - Use emojis sparingly (✅ for success, ⚠️ for warnings, 🔒 for security)
-  - Keep messages under 2000 characters
-  - Use code blocks for technical details
+  - Relevant commit SHAs and GitHub issue links
+- **Message Format**: Professional, concise, use Discord markdown, keep under 2000 characters
 
 ## Core Responsibilities
 
@@ -275,44 +270,32 @@ feature/
 - Optimize performance bottlenecks
 - Improve error handling and user feedback
 
-### 4. Current Project Goals
+### 4. Work Planning & Execution
 
-**Phase 1: Foundation & Cleanup (PRIORITY)**
+**CRITICAL: Use GitHub Issues for ALL Work Tracking**
 
-- [x] Fix all CRITICAL security vulnerabilities (14+) - ✅ Reduced to 1 low severity
-- [x] Re-enable E2E tests in CI/CD pipeline - ✅ Already enabled and passing
-- [ ] Refactor all files >200 lines (enforce strict 200-line limit)
-- [ ] Upgrade major dependencies (Prisma v6 ✅, Vercel AI SDK v5, migrate to @ai-sdk/openai)
-- [x] Add missing open-source files (CONTRIBUTING.md, SECURITY.md) - ✅ Already exist
-- [x] Create .env.example with all required variables - ✅ Completed
-- [ ] Achieve 80%+ test coverage
+- **NEVER invent "phases" or arbitrary project structure** - work is tracked in GitHub issues only
+- **Start work by checking GitHub issues** - prioritize by labels (critical, bug, enhancement, etc.)
+- **Create issues for new work** before starting implementation
+- **Update issues with progress** - comment with implementation details, blockers, decisions
+- **Close issues when complete** - with detailed summary of what was done
+- **Link commits to issues** - use "Closes #123" or "Fixes #456" in commit messages
 
-**Phase 2: Feature Completion**
+**Autonomous Work Priority:**
 
-- [ ] Complete all TODO/FIXME items in codebase
-- [ ] Finish incomplete features (check PROJECT_AUDIT.md)
-- [ ] Ensure all user flows work end-to-end
-- [ ] Add proper error boundaries and fallbacks
-- [ ] Implement comprehensive loading states
-- [ ] Add retry logic for failed operations
+1. **Critical/Security Issues** - Address immediately, create issue if none exists
+2. **Open Issues with Labels** - Work through by priority (critical > bug > enhancement > refactor)
+3. **Code Quality Improvements** - Only if no higher priority issues exist
+4. **Documentation Updates** - Keep CLAUDE.md updated with learnings
 
-**Phase 3: Performance & Polish**
+**When Starting Autonomous Work:**
 
-- [ ] Achieve Lighthouse score >90 on all pages
-- [ ] Optimize bundle sizes (analyze and reduce)
-- [ ] Implement proper caching strategies
-- [ ] Add skeleton loaders and progressive enhancement
-- [ ] Optimize database queries (add indexes, reduce N+1)
-- [ ] Implement CDN and edge caching
-
-**Phase 4: Developer Experience**
-
-- [ ] Complete API documentation
-- [ ] Add Storybook for component library
-- [ ] Improve TypeScript coverage (strict mode)
-- [ ] Add pre-commit hooks (linting, formatting, tests)
-- [ ] Create development guides for common tasks
-- [ ] Add code generation scripts/templates
+1. Run `gh issue list --state open --label critical,bug` (or use GitHub MCP tools)
+2. Pick highest priority issue that you can work on
+3. Comment on issue: "Starting work on this - [brief implementation plan]"
+4. Do the work, make commits
+5. Update issue with results and close if complete
+6. If work uncovers new issues, create them immediately
 
 ### 5. Code Patterns to Follow
 
