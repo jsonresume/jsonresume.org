@@ -1,3 +1,5 @@
+import { logger } from '@/lib/logger';
+
 const parseEmbedding = (embedding) => {
   if (typeof embedding === 'string') {
     return JSON.parse(embedding);
@@ -9,7 +11,7 @@ const parseResumeJSON = (resumeString, username) => {
   try {
     return JSON.parse(resumeString);
   } catch (e) {
-    console.warn('Failed to parse resume for user:', username);
+    logger.warn({ error: e.message, username }, 'Failed to parse resume');
     return {};
   }
 };

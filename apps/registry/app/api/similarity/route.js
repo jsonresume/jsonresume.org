@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { logger } from '@/lib/logger';
 import { createSupabase } from './utils/createSupabase';
 import { fetchThomasResume, fetchOtherResumes } from './utils/fetchResumeData';
 import { parseResumeData } from './utils/parseResumeData';
@@ -20,13 +21,17 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const limit = parseInt(searchParams.get('limit')) || 1000;
 
-    console.time('getResumeSimilarityData');
+    const fetchStart = Date.now();
 
     // Fetch resume data
     const thomasData = await fetchThomasResume(supabase);
     const otherData = await fetchOtherResumes(supabase, limit);
 
-    console.timeEnd('getResumeSimilarityData');
+    const fetchDuration = Date.now() - fetchStart;
+    logger.debug(
+      { duration: fetchDuration, limit },
+      'Fetched resume similarity data'
+    );
 
     // Combine results, putting thomasdavis first if available
     const data = thomasData ? [thomasData, ...(otherData || [])] : otherData;
@@ -42,7 +47,7 @@ export async function GET(request) {
       },
     });
   } catch (error) {
-    console.error('Error in similarity endpoint:', error);
+    logger.error({ error: error.message }, 'Error in similarity endpoint');
     return NextResponse.json(
       { message: 'Internal server error' },
       { status: 500 }

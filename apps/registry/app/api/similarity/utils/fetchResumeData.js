@@ -1,3 +1,5 @@
+import { logger } from '@/lib/logger';
+
 export const fetchThomasResume = async (supabase) => {
   const { data, error } = await supabase
     .from('resumes')
@@ -6,7 +8,7 @@ export const fetchThomasResume = async (supabase) => {
     .single();
 
   if (error) {
-    console.error('Error fetching thomasdavis resume:', error);
+    logger.error({ error: error.message }, 'Error fetching thomasdavis resume');
   }
 
   return data;
@@ -22,7 +24,10 @@ export const fetchOtherResumes = async (supabase, limit) => {
     .order('created_at', { ascending: false });
 
   if (error) {
-    console.error('Error fetching resume similarity data:', error);
+    logger.error(
+      { error: error.message, limit },
+      'Error fetching resume similarity data'
+    );
     throw error;
   }
 
