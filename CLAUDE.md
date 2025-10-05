@@ -236,7 +236,7 @@ feature/
 - [x] Re-enable E2E tests in CI/CD pipeline - ✅ Already enabled and passing
 - [ ] Refactor all files >150 lines (29 files identified)
 - [ ] Upgrade major dependencies (Prisma v6 ✅, Vercel AI SDK v5, migrate to @ai-sdk/openai)
-- [ ] Add missing open-source files (CONTRIBUTING.md, SECURITY.md) - Note: No CODE_OF_CONDUCT per project philosophy
+- [x] Add missing open-source files (CONTRIBUTING.md, SECURITY.md) - ✅ Already exist
 - [x] Create .env.example with all required variables - ✅ Completed
 - [ ] Achieve 80%+ test coverage
 
