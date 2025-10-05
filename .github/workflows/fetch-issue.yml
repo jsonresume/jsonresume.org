@@ -48,7 +48,7 @@ jobs:
         run: |
           echo "SENTRY_ORG=$SENTRY_ORG"
           echo "SENTRY_PROJECT=$SENTRY_PROJECT"
-          echo "GITHUB_REPO=$GITHUB_REPO"
+          echo "MY_GITHUB_REPO=$MY_GITHUB_REPO"
           echo "GITHUB_TOKEN length=${#GITHUB_TOKEN}"
         env:
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
@@ -58,6 +58,7 @@ jobs:
       
       
       
+
 
 
 
