@@ -1,0 +1,42 @@
+cv:
+  name: 'Thomas Edison'
+  location: 'Edison, US'
+  email: 'thomas@example.com'
+  phone: '123-456-7890'
+  website: 'https://thomasedison.com'
+  social_networks:
+    - network: 'LinkedIn'
+      username: 'thomasedison'
+  sections:
+    summary:
+      - 'Prolific inventor'
+    education:
+      - institution: 'Self-Taught'
+        area: 'Science'
+        degree: 'Self-Education'
+        start_date: '1859-01-01'
+        highlights:
+          - 'Electrical Engineering'
+    experience:
+      - company: 'Edison Electric'
+        position: 'Founder'
+        start_date: '1878-01-01'
+        end_date: '1931-10-18'
+        highlights:
+          - 'Invented the lightbulb'
+    publications:
+      - title: 'Electric Light'
+        date: '1880-01-01'
+    projects:
+      - name: 'Phonograph'
+        date: '1877-01-01'
+        highlights:
+          - 'Sound recording device'
+    additional_experience_and_awards:
+      - label: 'Congressional Gold Medal'
+        details: 'US Congress'
+    technologies:
+      - label: 'Languages'
+        details: 'English, French'
+      - label: 'Software'
+        details: 'CAD, Simulation'

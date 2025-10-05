@@ -5,7 +5,7 @@
 <h1 align="center">JSON Resume</h1>
 
 <p align="center">
-  <b>A community-driven open source initiative to create a JSON-based standard for resumes</b>
+  <b>A community-driven open-source initiative to create a JSON-based standard for resumes</b>
 </p>
 
 <p align="center">
