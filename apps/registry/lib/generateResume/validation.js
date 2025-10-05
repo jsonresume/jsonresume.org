@@ -23,6 +23,14 @@ export const validateExtension = (extension) => {
 };
 
 export const validateResume = (resume) => {
+  // Allow bypassing validation via meta.skipValidation flag
+  if (resume?.meta?.skipValidation === true) {
+    console.log(
+      'Schema validation bypassed via meta.skipValidation flag for experimental resume'
+    );
+    return { error: null };
+  }
+
   const v = new Validator();
   const validation = v.validate(resume, schema);
 
