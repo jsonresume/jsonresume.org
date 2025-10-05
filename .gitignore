@@ -41,3 +41,6 @@ yarn-error.log*
 
 # Vercel error monitoring
 scripts/.vercel-error-hashes.json
+
+*storybook.log
+storybook-static

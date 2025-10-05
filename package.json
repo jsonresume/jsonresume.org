@@ -7,7 +7,9 @@
     "format": "prettier -w .",
     "prettier": "prettier -c .",
     "prepare": "husky install",
-    "ui:add": "pnpm --filter @repo/ui ui:add"
+    "ui:add": "pnpm --filter @repo/ui ui:add",
+    "storybook": "pnpm --filter @repo/ui storybook",
+    "build-storybook": "pnpm --filter @repo/ui build-storybook"
   },
   "devDependencies": {
     "eslint": "^8",
