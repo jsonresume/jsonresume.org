@@ -53,11 +53,12 @@ jobs:
         env:
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-          GITHUB_REPO: ${{ secrets.GITHUB_REPO }}
+          MY_GITHUB_REPO: ${{ secrets.MY_GITHUB_REPO }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       
       
+
 
 
 
