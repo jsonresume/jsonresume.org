@@ -35,6 +35,7 @@
   },
   "devDependencies": {
     "@repo/eslint-config-custom": "workspace:*",
+    "@storybook/addon-a11y": "^9.1.10",
     "@storybook/addon-docs": "^9.1.10",
     "@storybook/addon-onboarding": "^9.1.10",
     "@storybook/react-vite": "^9.1.10",

@@ -789,6 +789,9 @@ importers:
       '@repo/eslint-config-custom':
         specifier: workspace:*
         version: link:../eslint-config-custom
+      '@storybook/addon-a11y':
+        specifier: ^9.1.10
+        version: 9.1.10(storybook@9.1.10)
       '@storybook/addon-docs':
         specifier: ^9.1.10
         version: 9.1.10(@types/react@18.3.23)(storybook@9.1.10)
@@ -6515,6 +6518,16 @@ packages:
   /@standard-schema/spec@1.0.0:
     resolution: {integrity: sha512-m2bOd0f2RT9k8QJx1JN85cZYyH1RqFBdlwtkSlf4tBDYLCiiZnv1fIIwacK6cqwXavOydf0NPToMQgpKq+dVlA==}
     dev: false
+
+  /@storybook/addon-a11y@9.1.10(storybook@9.1.10):
+    resolution: {integrity: sha512-RhYYtk8nePxVNfP/voW8vS7AiQxWWBgOLNMTeDr9Anjh06mpSWZ/U/zEUNC9TrId5BxnyZJW5Lkg0JUMwvyfjw==}
+    peerDependencies:
+      storybook: ^9.1.10
+    dependencies:
+      '@storybook/global': 5.0.0
+      axe-core: 4.10.3
+      storybook: 9.1.10(@testing-library/dom@10.4.1)(prettier@2.8.8)(vite@5.4.19)
+    dev: true
 
   /@storybook/addon-actions@8.6.14(storybook@8.6.14):
     resolution: {integrity: sha512-mDQxylxGGCQSK7tJPkD144J8jWh9IU9ziJMHfB84PKpI/V5ZgqMDnpr2bssTrUaGDqU5e1/z8KcRF+Melhs9pQ==}
