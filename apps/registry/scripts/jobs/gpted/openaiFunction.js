@@ -1,58 +1,48 @@
+const { z } = require('zod');
+
 /**
- * OpenAI function schema for converting job descriptions to structured JSON
+ * Zod schema for job description to JSON conversion (AI SDK)
  */
-const jobDescriptionToSchemaFunction = {
-  name: 'jobDescriptionToSchema',
+const jobDescriptionSchema = z.object({
+  title: z.string().optional(),
+  company: z.string().optional(),
+  location: z
+    .object({
+      address: z.string().optional(),
+      postalCode: z.string().optional(),
+      city: z.string().optional(),
+      countryCode: z.string().optional(),
+      region: z.string().optional(),
+    })
+    .optional(),
+  position: z.string().optional(),
+  type: z.string().optional(),
+  salary: z.string().optional(),
+  date: z.string().optional(),
+  remote: z.string().optional(),
+  description: z.string().optional(),
+  responsibilities: z.array(z.string()).optional(),
+  qualifications: z.array(z.string()).optional(),
+  skills: z
+    .array(
+      z.object({
+        name: z.string().optional(),
+        level: z.string().optional(),
+        keywords: z.array(z.string()).optional(),
+      })
+    )
+    .optional(),
+  experience: z.string().optional(),
+  education: z.string().optional(),
+  application: z.string().optional(),
+});
+
+/**
+ * AI SDK tool definition for job description parsing
+ */
+const jobDescriptionTool = {
   description: 'Takes a fluid job description and turns it into a JSON schema',
-  parameters: {
-    type: 'object',
-    properties: {
-      title: { type: 'string' },
-      company: { type: 'string' },
-      location: {
-        type: 'object',
-        properties: {
-          address: { type: 'string' },
-          postalCode: { type: 'string' },
-          city: { type: 'string' },
-          countryCode: { type: 'string' },
-          region: { type: 'string' },
-        },
-      },
-      position: { type: 'string' },
-      type: { type: 'string' },
-      salary: { type: 'string' },
-      date: { type: 'string' },
-      remote: { type: 'string' },
-      description: { type: 'string' },
-      responsibilities: {
-        type: 'array',
-        items: { type: 'string' },
-      },
-      qualifications: {
-        type: 'array',
-        items: { type: 'string' },
-      },
-      skills: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            name: { type: 'string' },
-            level: { type: 'string' },
-            keywords: {
-              type: 'array',
-              items: { type: 'string' },
-            },
-          },
-        },
-      },
-      experience: { type: 'string' },
-      education: { type: 'string' },
-      application: { type: 'string' },
-    },
-    required: [],
-  },
+  parameters: jobDescriptionSchema,
 };
 
-module.exports = jobDescriptionToSchemaFunction;
+module.exports = { jobDescriptionSchema, jobDescriptionTool };

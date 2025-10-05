@@ -1,30 +1,42 @@
-const jobDescriptionToSchemaFunction = require('../openaiFunction');
+const { generateText } = require('ai');
+const { openai } = require('@ai-sdk/openai');
+const { jobDescriptionTool } = require('../openaiFunction');
 const { getJobProcessingPrompt } = require('../prompts');
 
 /**
- * Perform initial job processing with OpenAI
+ * Perform initial job processing using Vercel AI SDK
  */
-async function initialProcessing(openaiClient, job) {
-  const messages = [
-    {
-      role: 'system',
-      content: getJobProcessingPrompt(job.content),
-    },
-  ];
+async function initialProcessing(job) {
+  const systemPrompt = getJobProcessingPrompt(job.content);
 
-  console.log('Starting OpenAI processing for job:', job.id);
-  const chat1 = await openaiClient.chat.completions.create({
-    model: 'gpt-4.1',
+  console.log('Starting AI processing for job:', job.id);
+  const result = await generateText({
+    model: openai('gpt-4'),
+    system: systemPrompt,
+    prompt: 'Parse this job description into structured data',
+    tools: {
+      jobDescriptionToSchema: jobDescriptionTool,
+    },
+    toolChoice: 'required',
     temperature: 0.75,
-    messages,
-    functions: [jobDescriptionToSchemaFunction],
-    function_call: 'auto',
   });
 
-  const details1 = chat1.choices[0].message.function_call?.arguments;
+  // Extract tool call result
+  const toolCall = result.toolCalls[0];
+  const jobJson = toolCall.args;
+  const details1 = JSON.stringify(jobJson);
+
   console.log(JSON.stringify(details1, null, 2));
-  const jobJson = JSON.parse(details1);
   console.log({ jobId: job.id, jobJson });
+
+  // Build messages array for next steps
+  const messages = [
+    { role: 'system', content: systemPrompt },
+    {
+      role: 'user',
+      content: 'Parse this job description into structured data',
+    },
+  ];
 
   return { messages, details1, jobJson };
 }

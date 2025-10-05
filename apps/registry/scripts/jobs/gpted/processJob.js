@@ -6,9 +6,9 @@ const {
 } = require('./processJob/naturalLanguageGeneration');
 
 /**
- * Process a single job with OpenAI
+ * Process a single job using Vercel AI SDK
  */
-async function processJob(job, openaiClient, supabase) {
+async function processJob(job, supabase) {
   console.log('======================================');
   console.log(`Starting to process job: ${job.id}`);
   console.log('Job details:', {
@@ -26,28 +26,15 @@ async function processJob(job, openaiClient, supabase) {
 
   try {
     // Step 1: Initial processing
-    const { messages, details1, jobJson } = await initialProcessing(
-      openaiClient,
-      job
-    );
+    const { messages, details1, jobJson } = await initialProcessing(job);
     const { company } = jobJson;
     console.log({ jobId: job.id, company });
 
     // Step 2 & 3: Enrich with company data and regenerate
-    const jobJson2 = await companyEnrichment(
-      openaiClient,
-      supabase,
-      job,
-      messages,
-      company
-    );
+    const jobJson2 = await companyEnrichment(supabase, job, messages, company);
 
     // Step 4: Generate natural language description
-    const content = await naturalLanguageGeneration(
-      openaiClient,
-      job,
-      messages
-    );
+    const content = await naturalLanguageGeneration(job, messages);
 
     // Step 5: Update database
     console.log(`Updating job ${job.id} in database`);
