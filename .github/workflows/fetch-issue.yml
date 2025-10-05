@@ -33,12 +33,13 @@ jobs:
 
       - name: Run Sentry to GitHub script
         run: |
-          node --env-file=.env.local scripts/sentry-to-github.js
+          node scripts/sentry-to-github.js
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
 
 
