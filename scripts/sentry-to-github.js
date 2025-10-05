@@ -27,6 +27,7 @@ async function githubIssueExists(title) {
     headers: { Authorization: `token ${GITHUB_TOKEN}` },
   });
   const issues = await res.json();
+  console.log("GitHub API response for issues:", issues);
   return issues.some((issue) => issue.title === title);
 }
 
@@ -66,5 +67,6 @@ async function createGithubIssue(title, body) {
     console.error("Error in Sentry -> GitHub workflow:", err);
   }
 })();
+
 
 
