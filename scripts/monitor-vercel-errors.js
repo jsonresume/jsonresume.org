@@ -35,8 +35,9 @@ function createErrorFingerprint(message, stack = '') {
 
 function fetchVercelLogs(project) {
   try {
-    // Use deployment URL to fetch logs
-    const cmd = `vercel logs ${project.url} --token ${process.env.VERCEL_TOKEN} 2>&1 || true`;
+    // Set VERCEL_TOKEN as environment variable - CLI reads it automatically
+    // Use --json for structured output, timeout after 5 seconds to get recent logs
+    const cmd = `VERCEL_TOKEN=${process.env.VERCEL_TOKEN} timeout 5 vercel logs ${project.url} --json 2>&1 || true`;
     return execSync(cmd, { encoding: 'utf8', maxBuffer: 10 * 1024 * 1024 });
   } catch (error) {
     console.error(`Failed to fetch logs for ${project.name}:`, error.message);
@@ -47,31 +48,40 @@ function fetchVercelLogs(project) {
 function parseErrors(logs) {
   const errors = [];
   const lines = logs.split('\n');
-  let currentError = null;
 
   for (const line of lines) {
-    if (
-      line.match(/error|exception|failed|fatal/i) &&
-      !line.match(/successfully|resolved/i)
-    ) {
-      if (currentError) {
-        errors.push(currentError);
-      }
-      currentError = {
-        message: line.trim(),
-        stack: [],
-        timestamp: new Date().toISOString(),
-      };
-    } else if (currentError && line.trim().startsWith('at ')) {
-      currentError.stack.push(line.trim());
-    } else if (currentError && !line.trim()) {
-      errors.push(currentError);
-      currentError = null;
-    }
-  }
+    if (!line.trim()) continue;
 
-  if (currentError) {
-    errors.push(currentError);
+    try {
+      const log = JSON.parse(line);
+
+      // Filter for error-level logs or logs containing error keywords
+      const isError =
+        log.level === 'error' ||
+        (log.message &&
+          log.message.match(/error|exception|failed|fatal/i) &&
+          !log.message.match(/successfully|resolved/i));
+
+      if (isError) {
+        errors.push({
+          message: log.message || line,
+          stack: log.stack ? [log.stack] : [],
+          timestamp: log.timestamp || new Date().toISOString(),
+        });
+      }
+    } catch (e) {
+      // If not JSON, fall back to text parsing for error keywords
+      if (
+        line.match(/error|exception|failed|fatal/i) &&
+        !line.match(/successfully|resolved/i)
+      ) {
+        errors.push({
+          message: line.trim(),
+          stack: [],
+          timestamp: new Date().toISOString(),
+        });
+      }
+    }
   }
 
   return errors;
