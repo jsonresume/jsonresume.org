@@ -1,4 +1,11 @@
 import { Palette } from 'lucide-react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@repo/ui';
 
 const AVAILABLE_THEMES = [
   'ace',
@@ -53,25 +60,21 @@ export const ThemeSelector = ({ selectedTheme, setSelectedTheme }) => {
       aria-label="Theme selection"
     >
       <Palette className="w-4 h-4 text-gray-500" aria-hidden="true" />
-      <label
-        htmlFor="theme-select"
-        className="text-sm font-medium text-gray-700 whitespace-nowrap"
-      >
+      <label className="text-sm font-medium text-gray-700 whitespace-nowrap">
         Theme:
       </label>
-      <select
-        id="theme-select"
-        value={selectedTheme}
-        onChange={(e) => setSelectedTheme(e.target.value)}
-        className="px-3 py-1.5 text-sm border border-gray-300 rounded-md bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors cursor-pointer"
-        aria-label="Select resume theme"
-      >
-        {AVAILABLE_THEMES.map((theme) => (
-          <option key={theme} value={theme}>
-            {theme}
-          </option>
-        ))}
-      </select>
+      <Select value={selectedTheme} onValueChange={setSelectedTheme}>
+        <SelectTrigger className="w-[180px]" aria-label="Select resume theme">
+          <SelectValue placeholder="Select theme" />
+        </SelectTrigger>
+        <SelectContent>
+          {AVAILABLE_THEMES.map((theme) => (
+            <SelectItem key={theme} value={theme}>
+              {theme}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
   );
 };
