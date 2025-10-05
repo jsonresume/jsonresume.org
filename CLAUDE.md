@@ -111,7 +111,12 @@ You (Claude) have **full autonomous control** of this repository. Your mission i
 
 **Architecture Principles:**
 
-- Maximum 200 lines per file (NO EXCEPTIONS)
+- **File Size Limits** (enforce based on file type):
+  - **Production code**: Maximum 200 lines per file
+  - **Tests**: Maximum 500 lines per file (.test.ts, .test.tsx, .spec.ts, etc.)
+  - **Stories**: Maximum 500 lines per file (.stories.tsx, .stories.ts)
+  - **Config files**: Maximum 500 lines per file (config.ts, setup.ts, etc.)
+  - **Generated files**: No limit (migrations, generated types, etc.)
 - Single Responsibility Principle - one concern per module
 - Abstract complex logic into hooks, utilities, and services
 - Prefer composition over inheritance
