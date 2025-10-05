@@ -20,6 +20,7 @@ jobs:
         run: npm i -g vercel
 
       - name: Fetch and Monitor Errors
+        timeout-minutes: 2
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -36,9 +36,13 @@ function createErrorFingerprint(message, stack = '') {
 function fetchVercelLogs(project) {
   try {
     // Set VERCEL_TOKEN as environment variable - CLI reads it automatically
-    // Use --json for structured output, timeout after 5 seconds to get recent logs
-    const cmd = `VERCEL_TOKEN=${process.env.VERCEL_TOKEN} timeout 5 vercel logs ${project.url} --json 2>&1 || true`;
-    return execSync(cmd, { encoding: 'utf8', maxBuffer: 10 * 1024 * 1024 });
+    // Note: GitHub Actions workflow has timeout-minutes: 2 to prevent hanging
+    const cmd = `VERCEL_TOKEN=${process.env.VERCEL_TOKEN} vercel logs ${project.url} --json 2>&1 || true`;
+    return execSync(cmd, {
+      encoding: 'utf8',
+      maxBuffer: 10 * 1024 * 1024,
+      timeout: 10000, // 10 second timeout for execSync
+    });
   } catch (error) {
     console.error(`Failed to fetch logs for ${project.name}:`, error.message);
     return '';
