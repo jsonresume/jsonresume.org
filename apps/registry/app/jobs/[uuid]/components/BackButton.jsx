@@ -1,15 +1,13 @@
 'use client';
 
 import { ArrowLeft } from 'lucide-react';
+import { Button } from '@repo/ui';
 
 export const BackButton = ({ onClick }) => {
   return (
-    <button
-      onClick={onClick}
-      className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-8"
-    >
+    <Button variant="ghost" onClick={onClick} className="mb-8">
       <ArrowLeft className="w-4 h-4 mr-2" />
       Back to Jobs
-    </button>
+    </Button>
   );
 };

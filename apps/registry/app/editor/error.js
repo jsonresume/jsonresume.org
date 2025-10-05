@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { logger } from '@/lib/logger';
+import { Button } from '@repo/ui';
 
 export default function EditorError({ error, reset }) {
   useEffect(() => {
@@ -35,18 +36,10 @@ export default function EditorError({ error, reset }) {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <button
-            onClick={() => reset()}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Retry Editor
-          </button>
-          <a
-            href="/dashboard"
-            className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
-          >
-            Go to Dashboard
-          </a>
+          <Button onClick={() => reset()}>Retry Editor</Button>
+          <Button variant="secondary" asChild>
+            <a href="/dashboard">Go to Dashboard</a>
+          </Button>
         </div>
 
         {process.env.NODE_ENV === 'development' && error && (
