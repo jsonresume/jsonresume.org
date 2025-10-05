@@ -3,6 +3,7 @@ import { writeFile } from 'fs/promises';
 import { NextResponse } from 'next/server';
 import { join } from 'path';
 import fs from 'fs';
+import { logger } from '@/lib/logger';
 
 export async function POST(req) {
   if (!process.env.OPENAI_API_KEY) {
@@ -43,7 +44,11 @@ export async function POST(req) {
 
       // Clean up the temporary file
       fs.unlink(tmpFilePath, (err) => {
-        if (err) console.error('Error deleting temporary file:', err);
+        if (err)
+          logger.error(
+            { error: err.message, filePath: tmpFilePath },
+            'Error deleting temporary file'
+          );
       });
 
       return Response.json({ text: transcription });
@@ -56,7 +61,7 @@ export async function POST(req) {
       }
     }
   } catch (error) {
-    console.error('Error transcribing audio:', error);
+    logger.error({ error: error.message }, 'Error transcribing audio');
     return Response.json(
       {
         error: 'Failed to transcribe audio',

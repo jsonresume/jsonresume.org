@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
+import { logger } from '@/lib/logger';
 
 const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
 
@@ -20,7 +21,7 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const limit = parseInt(searchParams.get('limit')) || 750;
 
-    console.time('getJobSimilarityData');
+    const queryStart = Date.now();
     const { data, error } = await supabase
       .from('jobs')
       .select('uuid, embedding_v5, gpt_content')
@@ -29,14 +30,21 @@ export async function GET(request) {
       .order('created_at', { ascending: false });
 
     if (error) {
-      console.error('Error fetching job similarity data:', error);
+      logger.error(
+        { error: error.message, limit },
+        'Error fetching job similarity data'
+      );
       return NextResponse.json(
         { message: 'Error fetching job similarity data' },
         { status: 500 }
       );
     }
 
-    console.timeEnd('getJobSimilarityData');
+    const queryDuration = Date.now() - queryStart;
+    logger.debug(
+      { duration: queryDuration, limit },
+      'Fetched job similarity data'
+    );
 
     // Parse embeddings and job titles
     const parsedData = data
@@ -47,7 +55,10 @@ export async function GET(request) {
           gptContent = JSON.parse(item.gpt_content);
           jobTitle = gptContent?.title || 'Unknown Position';
         } catch (e) {
-          console.warn('Failed to parse gpt_content for job:', item.uuid);
+          logger.warn(
+            { error: e.message, uuid: item.uuid },
+            'Failed to parse gpt_content for job'
+          );
         }
 
         return {
@@ -73,7 +84,7 @@ export async function GET(request) {
       },
     });
   } catch (error) {
-    console.error('Error in job similarity endpoint:', error);
+    logger.error({ error: error.message }, 'Error in job similarity endpoint');
     return NextResponse.json(
       { message: 'Internal server error' },
       { status: 500 }

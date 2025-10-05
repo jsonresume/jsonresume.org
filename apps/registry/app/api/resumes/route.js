@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { logger } from '@/lib/logger';
 import { createSupabaseClient } from './utils/supabaseClient';
 import { buildResumesQuery } from './utils/queryBuilder';
 import { formatResumes } from './utils/formatResumes';
@@ -19,19 +20,20 @@ export async function GET(request) {
     const supabase = createSupabaseClient();
     const { searchParams } = new URL(request.url);
 
-    console.time('getResumes');
+    const queryStart = Date.now();
     const query = buildResumesQuery(supabase, searchParams);
     const { data, error } = await query;
 
     if (error) {
-      console.error('Error fetching resumes:', error);
+      logger.error({ error: error.message }, 'Error fetching resumes');
       return NextResponse.json(
         { message: 'Error fetching resumes' },
         { status: 500 }
       );
     }
 
-    console.timeEnd('getResumes');
+    const queryDuration = Date.now() - queryStart;
+    logger.debug({ duration: queryDuration }, 'Fetched resumes from database');
 
     if (!data) {
       return NextResponse.json(
@@ -40,13 +42,17 @@ export async function GET(request) {
       );
     }
 
-    console.time('mapResumes');
+    const formatStart = Date.now();
     const resumes = formatResumes(data);
-    console.timeEnd('mapResumes');
+    const formatDuration = Date.now() - formatStart;
+    logger.debug(
+      { duration: formatDuration, count: resumes.length },
+      'Formatted resumes'
+    );
 
     return NextResponse.json(resumes);
   } catch (error) {
-    console.error('Error:', error);
+    logger.error({ error: error.message }, 'Resumes API error');
     return NextResponse.json(
       { message: 'Internal server error' },
       { status: 500 }
