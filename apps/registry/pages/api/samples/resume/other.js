@@ -88,7 +88,7 @@ module.exports = {
       ],
       summary:
         'Following Googles CDN for jQuery, we decided to start a CDN for the less popular Javascript frameworks. The CDN is community moderated and open source on GitHub. We secured a partnership with Cloudflare who now supports the infrastructure.',
-      website: 'http://www.cdnjs.com',
+      url: 'http://www.cdnjs.com',
       name: 'Cdnjs',
       position: 'Co-Founder',
       startDate: '2011-01-08',

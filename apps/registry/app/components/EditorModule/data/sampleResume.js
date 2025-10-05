@@ -5,7 +5,7 @@ export const sampleResume = {
     picture: 'https://example.com/photo.jpg',
     email: 'thomas.edison@example.com',
     phone: '(123) 456-7890',
-    website: 'https://thomasedison.com',
+    url: 'https://thomasedison.com',
     summary:
       'Prolific inventor and businessman known for developing many devices that greatly influenced life around the world, including the phonograph, the motion picture camera, and the electric light bulb.',
     location: {
@@ -32,7 +32,7 @@ export const sampleResume = {
     {
       company: 'Edison Electric Light Company',
       position: 'Founder',
-      website: 'https://edison.com',
+      url: 'https://edison.com',
       startDate: '1878-01-01',
       endDate: '1931-10-18',
       summary:
@@ -45,7 +45,7 @@ export const sampleResume = {
     {
       company: 'General Electric',
       position: 'Co-Founder',
-      website: 'https://ge.com',
+      url: 'https://ge.com',
       startDate: '1892-01-01',
       endDate: '1931-10-18',
       summary:
@@ -60,7 +60,7 @@ export const sampleResume = {
     {
       organization: 'Menlo Park Laboratory',
       position: 'Lead Researcher',
-      website: 'https://menloparklab.com',
+      url: 'https://menloparklab.com',
       startDate: '1876-01-01',
       endDate: '1931-10-18',
       summary:
@@ -100,7 +100,7 @@ export const sampleResume = {
       name: 'Electric Light and Power',
       publisher: 'Scientific American',
       releaseDate: '1880-01-01',
-      website: 'https://scientificamerican.com',
+      url: 'https://scientificamerican.com',
       summary:
         'A paper detailing the development and impact of electric light and power systems.',
     },

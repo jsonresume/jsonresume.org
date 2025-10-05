@@ -2,7 +2,7 @@ module.exports = [
   {
     summary:
       'Tokenized is a Bitcoin wallet for issuing, managing and trading digital tokens. I built out the front end which was packaged as an electron app. It was a difficult frontend to build because we store the users keys locally and used them to sign transactions and contracts.',
-    website: 'https://tokenized.com/',
+    url: 'https://tokenized.com/',
     name: 'Tokenized',
     location: 'Melbourne',
     position: 'Senior Javascript Developer',
@@ -12,7 +12,7 @@ module.exports = [
   {
     summary:
       'Blockbid is an Australian crypto currency exchange. I started off on the frontend but eventually became lead tech and worked on every moving piece of the exchange. I really enjoyed working with liquidity providers and connecting their platforms to help us achieve liquid markets.',
-    website: 'https://platform.blockbid.io',
+    url: 'https://platform.blockbid.io',
     name: 'Blockbid',
     location: 'Melbourne',
     position: 'Senior Javascript Developer',
@@ -35,7 +35,7 @@ module.exports = [
     ],
     summary:
       'Built a very large and complex React / Redux application. It works on all platforms and has IOS/Android builds due to it being a PWA. (wrapped it in React Native though only implementing a WebView)',
-    website: 'https://listium.com',
+    url: 'https://listium.com',
     pinned: true,
     name: 'Listium',
     position: 'Developer',
@@ -53,7 +53,7 @@ module.exports = [
     pinned: true,
     summary:
       'Following Googleâ€™s CDN for jQuery, we decided to start a CDN for the less popular Javascript frameworks. The CDN is community moderated and open source on GitHub. We secured a partnership with Cloudflare who now supports the infrastructure.',
-    website: 'http://www.cdnjs.com',
+    url: 'http://www.cdnjs.com',
     name: 'Cdnjs',
     position: 'Co-Founder',
     startDate: '2011-01-08',
@@ -66,7 +66,7 @@ module.exports = [
     ],
     summary:
       "Hired to take EFF's campaigning to the next level by building an action centre in Ruby on Rails. The action centre is built around some large open source tools that lower the barrier to entry when contacting congress.",
-    website: 'http://www.eff.org',
+    url: 'http://www.eff.org',
     name: 'Electronic Frontier Foundation',
     position: 'Developer',
     startDate: '2014-04-01',
@@ -80,7 +80,7 @@ module.exports = [
     ],
     summary:
       'Started off as a front end developer but took on the role of CTO in early 2013. The application frontend is built with Javascript and organized as a single page application that talks to a collection of Rails web servers which are connected to MongoDB.',
-    website: 'http://www.earbits.com',
+    url: 'http://www.earbits.com',
     name: 'Earbits',
     position: 'CTO',
     endDate: '2015-01-09',
@@ -95,7 +95,7 @@ module.exports = [
     ],
     summary:
       "JSON Resume is a community driven open source initiative to create a JSON based standard for resumes. There is no reason why there can't be a common standard for writing a resume that can be extended with an ecosystem of open source tools.",
-    website: 'http://jsonresume.org',
+    url: 'http://jsonresume.org',
     pinned: true,
     name: 'JSON Resume',
     position: 'Founder',
@@ -110,7 +110,7 @@ module.exports = [
     ],
     summary:
       'Worked on many politically charged campaigns against mass surveillance. Not only technically challenging work but also a lot of networking and getting my hands dirty with politics.    Our biggest project was "TheDayWeFightBack"..',
-    website: 'http://www.taskforce.is',
+    url: 'http://www.taskforce.is',
     name: 'Taskforce.is',
     position: 'Developer',
     startDate: '2013-06-01',
@@ -122,7 +122,7 @@ module.exports = [
     ],
     summary:
       'An international directory of civilian drone / UAV operators for hire. Services include aerial photography, aerial video, mapping, surveying, precision agriculture, real estate photography, remote inspections and infrared imaging. Our plan is to be the place to go when looking for UAV/Drone services. The website is built in Backbone.js and API is built with Node.js and Postgres. ',
-    website: 'http://www.dronehire.org',
+    url: 'http://www.dronehire.org',
     name: 'Drone Hire',
     position: 'Co-Founder',
     startDate: '2013-01-01',
@@ -135,7 +135,7 @@ module.exports = [
     ],
     summary:
       'I write tutorials and blog post regarding the popular Javascript framework Backbone.js. The tutorials cover a range of topics regarding front end development aimed at beginners, experts and anyone in between.',
-    website: 'http://backbonetutorials.com',
+    url: 'http://backbonetutorials.com',
     name: 'BackboneTutorials.com',
     position: 'Founder',
     startDate: '2011-01-01',
@@ -144,7 +144,7 @@ module.exports = [
   {
     summary:
       'Ephox is a worldwide company who is heavily involved with the development of TinyMce and enterprise editors. My primary role included building front-end widgets and applications. Worked on a major product using Backbone.js as a base. Heavily involved in UI/UX design and wire-framing. Also spend a lot of time designing API specifications and documentation.',
-    website: 'http://ephox.com',
+    url: 'http://ephox.com',
     name: 'Ephox',
     position: 'Front-end Developer',
     endDate: '2012-06-01',
