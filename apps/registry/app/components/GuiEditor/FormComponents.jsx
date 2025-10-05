@@ -1,27 +1,32 @@
 'use client';
 
-import { useState } from 'react';
-import { Plus, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
-import { Button } from '@repo/ui';
+import { Plus, Trash2 } from 'lucide-react';
+import {
+  Button,
+  Input,
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from '@repo/ui';
 
 export const FormSection = ({ title, children, defaultOpen = false }) => {
-  const [isOpen, setIsOpen] = useState(defaultOpen);
-
   return (
-    <div className="border rounded-lg mb-4">
-      <button
-        className="w-full px-4 py-3 flex items-center justify-between bg-gray-50 rounded-t-lg hover:bg-gray-100"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        <h3 className="font-medium text-gray-900">{title}</h3>
-        {isOpen ? (
-          <ChevronUp className="w-4 h-4" />
-        ) : (
-          <ChevronDown className="w-4 h-4" />
-        )}
-      </button>
-      {isOpen && <div className="p-4 space-y-4">{children}</div>}
-    </div>
+    <Accordion
+      type="single"
+      collapsible
+      defaultValue={defaultOpen ? 'item-1' : undefined}
+      className="mb-4"
+    >
+      <AccordionItem value="item-1" className="border rounded-lg">
+        <AccordionTrigger className="px-4 py-3 bg-gray-50 rounded-t-lg hover:bg-gray-100">
+          <h3 className="font-medium text-gray-900">{title}</h3>
+        </AccordionTrigger>
+        <AccordionContent className="p-4 space-y-4">
+          {children}
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
   );
 };
 
@@ -46,12 +51,11 @@ export const FormField = ({
         rows={3}
       />
     ) : (
-      <input
+      <Input
         type={type}
         value={value || ''}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
     )}
     {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
