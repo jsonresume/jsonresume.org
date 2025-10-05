@@ -3,10 +3,7 @@
 
 require('dotenv').config({ path: __dirname + '/./../../.env' });
 
-const {
-  createSupabaseClient,
-  createOpenAIClient,
-} = require('./vectorize/initClients');
+const { createSupabaseClient } = require('./vectorize/initClients');
 const { createEmbedding } = require('./vectorize/createEmbedding');
 
 // Log environment variables for debugging
@@ -19,7 +16,6 @@ console.log('Environment variables:', {
 });
 
 const supabase = createSupabaseClient();
-const openai = createOpenAIClient();
 
 async function main() {
   console.log('Starting main function...');
@@ -42,7 +38,7 @@ async function main() {
 
   for (const job of data) {
     if (!job.embedding_v5) {
-      await createEmbedding(openai, job, supabase);
+      await createEmbedding(job, supabase);
     } else {
       console.log(`Embedding already exists for job ID: ${job.id}`);
     }

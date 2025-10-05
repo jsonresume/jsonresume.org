@@ -1,5 +1,4 @@
 const { createClient } = require('@supabase/supabase-js');
-const OpenAI = require('openai');
 
 const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
 
@@ -27,18 +26,4 @@ function createSupabaseClient() {
   }
 }
 
-function createOpenAIClient() {
-  try {
-    console.log('Attempting to create OpenAI client');
-    const openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-    });
-    console.log('OpenAI client created successfully');
-    return openai;
-  } catch (error) {
-    console.error('Failed to create OpenAI client:', error.message);
-    process.exit(1); // Exit if OpenAI fails as it's essential
-  }
-}
-
-module.exports = { createSupabaseClient, createOpenAIClient };
+module.exports = { createSupabaseClient };

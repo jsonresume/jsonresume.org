@@ -1,14 +1,17 @@
-async function createEmbedding(openai, job, supabase) {
+const { embed } = require('ai');
+const { openai } = require('@ai-sdk/openai');
+
+async function createEmbedding(job, supabase) {
   console.log(`Creating embedding for job ID: ${job.id}`);
   try {
     console.log({ job });
-    const completion1 = await openai.embeddings.create({
-      model: 'text-embedding-3-large',
-      input: job.gpt_content,
+    const { embedding: rawEmbedding } = await embed({
+      model: openai.embedding('text-embedding-3-large'),
+      value: job.gpt_content,
     });
 
     const desiredLength = 3072;
-    let embedding = completion1.data[0].embedding;
+    let embedding = rawEmbedding;
 
     if (embedding.length < desiredLength) {
       console.log(`Padding embedding for job ID: ${job.id}`);

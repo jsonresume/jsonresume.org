@@ -1,7 +1,8 @@
-const OpenAI = require('openai');
+const { embed } = require('ai');
+const { openai } = require('@ai-sdk/openai');
 
 /**
- * Creates an embedding vector from text using OpenAI
+ * Creates an embedding vector from text using Vercel AI SDK
  * @param {string} text - Text to embed
  * @returns {Promise<number[]>} Embedding vector (padded to 3072 dimensions)
  */
@@ -10,17 +11,13 @@ export async function createEmbedding(text) {
     throw new Error('Missing env var from OpenAI');
   }
 
-  const openaiClient = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-  });
-
-  const completion = await openaiClient.embeddings.create({
-    model: 'text-embedding-3-large',
-    input: text,
+  const { embedding: rawEmbedding } = await embed({
+    model: openai.embedding('text-embedding-3-large'),
+    value: text,
   });
 
   const desiredLength = 3072;
-  let embedding = completion.data[0].embedding;
+  let embedding = rawEmbedding;
 
   // Pad embedding if needed
   if (embedding.length < desiredLength) {
