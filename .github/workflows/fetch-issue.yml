@@ -41,7 +41,7 @@ jobs:
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPO: ${{ secrets.GITHUB_REPO }}
+          MY_GITHUB_REPO: ${{ secrets.MY_GITHUB_REPO }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
 
       - name: Debug secrets
@@ -58,6 +58,7 @@ jobs:
       
       
       
+
 
 
 
