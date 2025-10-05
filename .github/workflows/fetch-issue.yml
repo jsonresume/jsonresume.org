@@ -1,0 +1,33 @@
+name: fetch-issue-sentry
+
+on:
+  schedule:
+    - cron: "0 * * * *" # runs every hour
+  workflow_dispatch:    # allows manual trigger
+
+jobs:
+  fetch-issues:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: pnpm install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run Sentry to GitHub script
+        run: |
+          node --env-file=.env.local scripts/sentry-to-github.js
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
