@@ -22,6 +22,10 @@ jobs:
         with:
           node-version: 20
 
+      - name: Setup pnpm
+        run: npm install -g pnpm
+
+
       - name: Install dependencies
         run: pnpm install
         env:
@@ -35,6 +39,7 @@ jobs:
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
 
 
