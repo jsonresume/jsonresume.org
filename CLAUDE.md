@@ -179,6 +179,15 @@ feature/
 - **API errors**: Return proper HTTP status codes (404, 500) with meaningful messages
 - **Client handling**: Gracefully handle errors with empty states, not infinite loading
 
+**Circular Import Prevention:**
+
+- **File vs Directory**: When a file and directory have the same name, imports resolve to the FILE first
+- **Pattern**: Always use explicit paths for directory imports: `'./MyComponent/index.js'` not `'./MyComponent'`
+- **Example Issue**: `ResumeEndpoint.jsx` importing from `'./ResumeEndpoint'` creates circular import
+- **Fix**: Use `'./ResumeEndpoint/index.js'` to explicitly target the directory
+- **Detection**: Build errors like "Unsupported Server Component type: undefined" or "Maximum call stack size exceeded"
+- **Prevention**: Never name a file the same as a directory it imports from
+
 **Decision-Making Authority:**
 
 - Refactor any code that violates standards
