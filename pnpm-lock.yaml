@@ -353,8 +353,8 @@ importers:
         specifier: ^0.2.1
         version: 0.2.1
       jsonresume-theme-minyma:
-        specifier: ^0.0.4
-        version: 0.0.4
+        specifier: ^0.0.5
+        version: 0.0.5
       jsonresume-theme-mocha-responsive:
         specifier: ^1.1.1
         version: 1.1.1
@@ -16842,8 +16842,8 @@ packages:
       - supports-color
     dev: false
 
-  /jsonresume-theme-minyma@0.0.4:
-    resolution: {integrity: sha512-C+5q4PCKCH2UYs2Ha74QNO7CW4WWwb383CsNVBWML8a7SJoGd7udYOkA+5YSp8GgvmHes3lUtqjn6wXbyhc7Kw==}
+  /jsonresume-theme-minyma@0.0.5:
+    resolution: {integrity: sha512-1x5HAjEXTCrYVYgmAIXunzE2KuWL2hzA1r+DAWjxMWBrXhtZQ1SXMSQK4oaTNvN6v7mX9OC23STMwTYPNcoUgA==}
     dependencies:
       handlebars: 4.7.8
     dev: false
