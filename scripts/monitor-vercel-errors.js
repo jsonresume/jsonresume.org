@@ -1,4 +1,4 @@
-const { execSync } = require('child_process');
+const { execSync, spawn } = require('child_process');
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
@@ -34,19 +34,39 @@ function createErrorFingerprint(message, stack = '') {
 }
 
 function fetchVercelLogs(project) {
-  try {
-    // Set VERCEL_TOKEN as environment variable - CLI reads it automatically
-    // Note: GitHub Actions workflow has timeout-minutes: 2 to prevent hanging
-    const cmd = `VERCEL_TOKEN=${process.env.VERCEL_TOKEN} vercel logs ${project.url} --json 2>&1 || true`;
-    return execSync(cmd, {
-      encoding: 'utf8',
-      maxBuffer: 10 * 1024 * 1024,
-      timeout: 10000, // 10 second timeout for execSync
+  return new Promise((resolve) => {
+    let output = '';
+    const timeout = 10000; // 10 seconds
+
+    const proc = spawn('vercel', ['logs', project.url, '--json'], {
+      env: { ...process.env, VERCEL_TOKEN: process.env.VERCEL_TOKEN },
     });
-  } catch (error) {
-    console.error(`Failed to fetch logs for ${project.name}:`, error.message);
-    return '';
-  }
+
+    proc.stdout.on('data', (data) => {
+      output += data.toString();
+    });
+
+    proc.stderr.on('data', (data) => {
+      output += data.toString();
+    });
+
+    proc.on('error', (error) => {
+      console.error(`Failed to fetch logs for ${project.name}:`, error.message);
+      resolve('');
+    });
+
+    // Force kill after timeout
+    const timer = setTimeout(() => {
+      proc.kill('SIGTERM');
+      setTimeout(() => proc.kill('SIGKILL'), 1000); // Force kill if SIGTERM doesn't work
+      resolve(output);
+    }, timeout);
+
+    proc.on('exit', () => {
+      clearTimeout(timer);
+      resolve(output);
+    });
+  });
 }
 
 function parseErrors(logs) {
@@ -180,7 +200,7 @@ async function main() {
 
   for (const project of VERCEL_PROJECTS) {
     console.log(`\nFetching logs for ${project.name}...`);
-    const logs = fetchVercelLogs(project);
+    const logs = await fetchVercelLogs(project);
 
     if (!logs) {
       console.log(`No logs available for ${project.name}`);
