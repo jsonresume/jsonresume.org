@@ -55,8 +55,15 @@ function parseErrors(logs) {
   const errors = [];
   const lines = logs.split('\n');
 
+  // Skip CLI header lines - only parse actual log output
+  const cliHeaders =
+    /^(Vercel CLI|Fetching|Displaying|waiting for|Error: No existing credentials)/i;
+
   for (const line of lines) {
     if (!line.trim()) continue;
+
+    // Skip Vercel CLI informational/error messages
+    if (cliHeaders.test(line)) continue;
 
     try {
       const log = JSON.parse(line);
@@ -76,17 +83,9 @@ function parseErrors(logs) {
         });
       }
     } catch (e) {
-      // If not JSON, fall back to text parsing for error keywords
-      if (
-        line.match(/error|exception|failed|fatal/i) &&
-        !line.match(/successfully|resolved/i)
-      ) {
-        errors.push({
-          message: line.trim(),
-          stack: [],
-          timestamp: new Date().toISOString(),
-        });
-      }
+      // If not JSON, skip it - we only want actual JSON log entries
+      // This prevents CLI messages from being treated as errors
+      continue;
     }
   }
 
