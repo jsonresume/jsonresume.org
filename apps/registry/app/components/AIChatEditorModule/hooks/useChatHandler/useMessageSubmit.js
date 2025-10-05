@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { logger } from '@/lib/logger';
 import { sendChatMessage } from '../../utils/chatApi';
 
 export const useMessageSubmit = ({
@@ -38,7 +39,10 @@ export const useMessageSubmit = ({
         addMessage(assistantMessage);
 
         if (data.suggestedChanges) {
-          console.log('Received suggested changes:', data.suggestedChanges);
+          logger.info(
+            { changesCount: Object.keys(data.suggestedChanges).length },
+            'Received suggested changes'
+          );
           onResumeChange(data.suggestedChanges);
 
           if (settings.autoApplyChanges) {
@@ -51,11 +55,11 @@ export const useMessageSubmit = ({
           try {
             await speak(data.message);
           } catch (err) {
-            console.error('Error during speech:', err);
+            logger.error({ error: err.message }, 'Error during speech');
           }
         }
       } catch (error) {
-        console.error('Error:', error);
+        logger.error({ error: error.message }, 'Chat message error');
         addSystemMessage(error.message || 'Failed to process message', 'error');
       } finally {
         setIsLoading(false);

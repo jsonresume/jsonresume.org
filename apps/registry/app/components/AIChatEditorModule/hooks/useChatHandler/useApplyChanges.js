@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { logger } from '@/lib/logger';
 
 export const useApplyChanges = ({
   onApplyChanges,
@@ -7,30 +8,36 @@ export const useApplyChanges = ({
 }) => {
   const handleApplyChanges = useCallback(
     (changes, messageId) => {
-      console.log('Applying changes...', changes);
+      logger.debug(
+        { changesCount: changes ? Object.keys(changes).length : 0, messageId },
+        'Applying changes'
+      );
       if (!changes) {
-        console.log('No changes to apply');
+        logger.debug('No changes to apply');
         return;
       }
 
       if (onApplyChanges) {
         try {
           onApplyChanges(changes);
-          console.log('Changes applied successfully');
+          logger.info({ messageId }, 'Changes applied successfully');
           addSystemMessage(
             '✅ Changes have been successfully applied to your resume',
             'success'
           );
           markChangesApplied(messageId);
         } catch (error) {
-          console.error('Error applying changes:', error);
+          logger.error(
+            { error: error.message, messageId },
+            'Error applying changes'
+          );
           addSystemMessage(
             '❌ Failed to apply changes: ' + error.message,
             'error'
           );
         }
       } else {
-        console.warn('onApplyChanges callback is not defined');
+        logger.warn({ messageId }, 'onApplyChanges callback is not defined');
         addSystemMessage(
           '❌ Unable to apply changes: System not configured properly',
           'error'

@@ -2,6 +2,8 @@
  * Voice loading and selection utilities
  */
 
+import { logger } from '@/lib/logger';
+
 export const findEnglishVoice = (voices) => {
   const englishVoices = voices.filter(
     (voice) => voice.lang.startsWith('en-US') || voice.lang.startsWith('en-GB')
@@ -18,19 +20,25 @@ export const loadVoices = (onVoiceLoaded) => {
   const availableVoices = window.speechSynthesis.getVoices();
 
   if (availableVoices.length === 0) {
-    console.warn('No voices available yet, will retry');
+    logger.warn('No voices available yet, will retry');
     return;
   }
 
-  console.log(
-    'Available voices:',
-    availableVoices.map((v) => `${v.name} (${v.lang})`)
+  logger.debug(
+    {
+      voiceCount: availableVoices.length,
+      voices: availableVoices.map((v) => `${v.name} (${v.lang})`),
+    },
+    'Available voices loaded'
   );
 
   const selectedVoice = findEnglishVoice(availableVoices);
 
   if (selectedVoice) {
-    console.log('Selected voice:', selectedVoice.name);
+    logger.info(
+      { voiceName: selectedVoice.name, lang: selectedVoice.lang },
+      'Selected voice'
+    );
     onVoiceLoaded(selectedVoice);
   }
 };
