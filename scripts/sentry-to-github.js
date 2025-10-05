@@ -7,7 +7,7 @@ const SENTRY_AUTH_TOKEN = process.env.SENTRY_AUTH_TOKEN;
 const SENTRY_ORG = process.env.SENTRY_ORG;
 const SENTRY_PROJECT = process.env.SENTRY_PROJECT;
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-const GITHUB_REPO = process.env.GITHUB_REPO; // "owner/repo" format
+const GITHUB_REPO = process.env.MY_GITHUB_REPO; // "owner/repo" format
 
 console.log(`${SENTRY_AUTH_TOKEN}`);
 // Sentry issues
@@ -66,4 +66,5 @@ async function createGithubIssue(title, body) {
     console.error("Error in Sentry -> GitHub workflow:", err);
   }
 })();
+
 
