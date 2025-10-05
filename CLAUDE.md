@@ -221,6 +221,17 @@ feature/
   - Performance tracking: Replace console.time/timeEnd with Date.now() duration calculations
   - Environment variable: `LOG_LEVEL` (trace|debug|info|warn|error|fatal) defaults to info in prod, debug in dev
   - Benefits: JSON structured logs, contextual metadata, better production debugging, performance metrics
+- **Retry Logic with Exponential Backoff** (Oct 2025):
+  - Created apps/registry/app/lib/retry.js - centralized retry utility for all API calls
+  - `retryWithBackoff(fn, options)` - wraps any async function with retry logic
+  - `createRetryFetch(options)` - fetch API wrapper with automatic retry
+  - `createRetryAxios(axiosInstance, options)` - axios wrapper with automatic retry
+  - Default config: 3 attempts, 1s-10s delays, exponential backoff with ±25% jitter
+  - Retryable: network errors, timeouts, HTTP 408/429/500/502/503/504
+  - Integrated with Pino structured logging for retry visibility
+  - Pattern: `await retryWithBackoff(() => apiCall(), { maxAttempts: 3 })`
+  - Applied to useResumeData hook (GitHub API calls)
+  - Benefits: Prevents thundering herd, graceful recovery from transient failures, configurable per use case
 
 **Refactoring Large Files (200+ lines):**
 
