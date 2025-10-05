@@ -14,6 +14,7 @@ const ResumeEditor = ({ resume: initialResume, updateGist }) => {
   const { username } = useResume();
   const [editorMode, setEditorMode] = useState('gui');
   const [isSaving, setIsSaving] = useState(false);
+  const [selectedTheme, setSelectedTheme] = useState('professional');
   const monaco = useMonaco();
 
   const { resume, setResume, setOriginalResume, hasChanges, setHasChanges } =
@@ -27,7 +28,7 @@ const ResumeEditor = ({ resume: initialResume, updateGist }) => {
     handleApplyChanges,
     handleGuiChange,
     handleJsonChange,
-  } = useResumeHandlers(resume, setResume);
+  } = useResumeHandlers(resume, setResume, selectedTheme);
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -52,6 +53,8 @@ const ResumeEditor = ({ resume: initialResume, updateGist }) => {
         onSave={handleSave}
         isSaving={isSaving}
         hasChanges={hasChanges}
+        selectedTheme={selectedTheme}
+        setSelectedTheme={setSelectedTheme}
       />
       <div className="flex-1 flex overflow-hidden">
         <div className="w-1/2">
