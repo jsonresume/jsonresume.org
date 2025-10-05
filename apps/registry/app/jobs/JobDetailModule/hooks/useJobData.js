@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { logger } from '@/lib/logger';
 import axios from 'axios';
 
 export const useJobData = (uuid) => {
@@ -11,7 +12,7 @@ export const useJobData = (uuid) => {
         const { data } = await axios.get(`/api/jobs/${uuid}`);
         setJob(data);
       } catch (error) {
-        console.error('Error fetching job:', error);
+        logger.error({ error: error.message }, 'Error fetching job:');
       } finally {
         setLoading(false);
       }

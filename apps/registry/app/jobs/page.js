@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import { logger } from '@/lib/logger';
 import { createClient } from '@supabase/supabase-js';
 import dynamic from 'next/dynamic';
 
@@ -30,13 +31,13 @@ async function getJobs() {
       .order('created_at', { ascending: false });
 
     if (error) {
-      console.error('Error fetching jobs:', error);
+      logger.error({ error: error.message }, 'Error fetching jobs:');
       return { jobs: [], error };
     }
 
     return { jobs: jobs || [], error: null };
   } catch (error) {
-    console.error('Error:', error);
+    logger.error({ error: error.message }, 'Error:');
     return { jobs: [], error };
   }
 }

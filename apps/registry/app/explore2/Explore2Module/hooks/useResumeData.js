@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { logger } from '@/lib/logger';
 import axios from 'axios';
 
 export function useResumeData() {
@@ -12,7 +13,7 @@ export function useResumeData() {
         setData(response.data);
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching data: ', error);
+        logger.error({ error: error.message }, 'Error fetching data: ');
         setLoading(false);
       }
     };

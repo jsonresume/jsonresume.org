@@ -1,6 +1,7 @@
 'use client';
 
 import axios from 'axios';
+import { logger } from '@/lib/logger';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { PublicViewBanner } from '../../components/PublicViewBanner';
@@ -19,7 +20,7 @@ export default function Jobs({ params }) {
         const response = await axios.post('/api/jobs', { username });
         setJobs(response.data);
       } catch (error) {
-        console.error('Error fetching data: ', error);
+        logger.error({ error: error.message }, 'Error fetching data: ');
         // Set empty array on error so JobList shows empty state
         setJobs([]);
       }

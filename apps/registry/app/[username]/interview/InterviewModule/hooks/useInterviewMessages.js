@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { logger } from '@/lib/logger';
 import { v4 as uuidv4 } from 'uuid';
 import { INTERVIEWER, CANDIDATE } from '../constants/roles';
 import { streamInterviewResponse } from '../utils/interviewApi';
@@ -33,7 +34,7 @@ export function useInterviewMessages(username, position) {
       );
       setReplying(false);
     } catch (error) {
-      console.error('Interview API error:', error);
+      logger.error({ error: error.message }, 'Interview API error:');
       setReplying(false);
     }
   };

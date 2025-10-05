@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { logger } from '@/lib/logger';
 import { useGraphData } from './useGraphData';
 import { allAlgorithms } from '../utils/allAlgorithms';
 
@@ -35,7 +36,7 @@ export const useSimilarityGraph = (dataSource, algorithm) => {
       const processedData = processData(data);
       setRawNodes(processedData);
     } catch (err) {
-      console.error('Error fetching data:', err);
+      logger.error({ error: err.message }, 'Error fetching data:');
       setError(err.message);
     } finally {
       setLoading(false);

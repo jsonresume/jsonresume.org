@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { logger } from '@/lib/logger';
 import axios from 'axios';
 
 export const useCandidates = (jobId) => {
@@ -15,7 +16,7 @@ export const useCandidates = (jobId) => {
         setcandidates(data.candidates);
         setError(null);
       } catch (err) {
-        console.error('Error fetching candidates:', err);
+        logger.error({ error: err.message }, 'Error fetching candidates:');
         setError('Failed to load matching candidates');
       } finally {
         setLoading(false);

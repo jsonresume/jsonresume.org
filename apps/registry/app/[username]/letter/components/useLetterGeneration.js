@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { logger } from '@/lib/logger';
 import axios from 'axios';
 
 export const useLetterGeneration = (username, jobDescription, tone) => {
@@ -20,7 +21,7 @@ export const useLetterGeneration = (username, jobDescription, tone) => {
           setLetter(letter);
           setSubmitting(false);
         } catch (error) {
-          console.error('Error fetching data: ', error);
+          logger.error({ error: error.message }, 'Error fetching data: ');
           setSubmitting(false);
         }
       };
