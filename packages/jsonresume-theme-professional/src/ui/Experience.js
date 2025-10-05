@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { marked } from 'marked';
 import List from './List';
 import DateRange from './DateRange';
 import Date from './Date';
@@ -25,7 +26,7 @@ const Container = styled.div`
   margin-bottom: 10px;
 `;
 
-const Summary = styled.p`
+const Summary = styled.div`
   margin-bottom: 5px;
 `;
 
@@ -38,6 +39,8 @@ const Experience = ({
   summary,
   highlights,
 }) => {
+  const htmlSummary = summary ? marked.parse(summary, { breaks: true }) : '';
+
   return (
     <Container>
       <Meta>
@@ -52,7 +55,9 @@ const Experience = ({
       </Meta>
       {subTitle && <SubTitle>{subTitle}</SubTitle>}
       <div className="secondary">
-        {summary && <Summary>{summary}</Summary>}
+        {summary && (
+          <Summary dangerouslySetInnerHTML={{ __html: htmlSummary }} />
+        )}
         <List items={highlights} />
       </div>
     </Container>

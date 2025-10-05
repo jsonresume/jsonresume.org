@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { marked } from 'marked';
 
 const ListContainer = styled.ul`
   padding-left: 20px;
@@ -19,9 +20,12 @@ const List = ({ items }) => {
 
   return (
     <ListContainer>
-      {items.map((item) => (
-        <li key={item}>{item}</li>
-      ))}
+      {items.map((item, index) => {
+        const htmlContent = marked.parseInline(item, { breaks: true });
+        return (
+          <li key={index} dangerouslySetInnerHTML={{ __html: htmlContent }} />
+        );
+      })}
     </ListContainer>
   );
 };

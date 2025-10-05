@@ -646,6 +646,9 @@ importers:
 
   packages/jsonresume-theme-professional:
     dependencies:
+      marked:
+        specifier: ^16.3.0
+        version: 16.3.0
       prismjs:
         specifier: ^1.30.0
         version: 1.30.0
@@ -17326,6 +17329,12 @@ packages:
       linkify-it: 4.0.1
       mdurl: 1.0.1
       uc.micro: 1.0.6
+    dev: false
+
+  /marked@16.3.0:
+    resolution: {integrity: sha512-K3UxuKu6l6bmA5FUwYho8CfJBlsUWAooKtdGgMcERSpF7gcBUrCGsLH7wDaaNOzwq18JzSUDyoEb/YsrqMac3w==}
+    engines: {node: '>= 20'}
+    hasBin: true
     dev: false
 
   /marked@4.3.0:
