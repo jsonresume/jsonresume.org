@@ -10,26 +10,19 @@
     "ui:add": "pnpm --filter @repo/ui ui:add"
   },
   "devDependencies": {
-    "eslint": "^8",
     "@repo/eslint-config-custom": "workspace:*",
+    "eslint": "^8",
     "husky": "^8.0.3",
     "lint-staged": "^15.2.0",
     "prettier": "^2.8.0",
     "start-server-and-test": "^2.0.3",
     "turbo": "^2.0.6"
   },
-   "packageManager": "pnpm@8.15.9",
-  "name": "jsonresume.org",
-  "dependencies": {
-    "@changesets/cli": "^2.27.1",
-    "@sentry/node": "^10.17.0",
-    "dotenv": "^16.6.1",
-    "node-fetch": "2"
-  },
   "packageManager": "pnpm@8.15.9",
   "name": "jsonresume.org",
   "dependencies": {
     "@changesets/cli": "^2.27.1",
+    "@sentry/node": "^10.17.0",
     "dotenv": "^16.0.3"
   },
   "pnpm": {
