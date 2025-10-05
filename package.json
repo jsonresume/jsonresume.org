@@ -18,6 +18,14 @@
     "start-server-and-test": "^2.0.3",
     "turbo": "^2.0.6"
   },
+   "packageManager": "pnpm@8.15.9",
+  "name": "jsonresume.org",
+  "dependencies": {
+    "@changesets/cli": "^2.27.1",
+    "@sentry/node": "^10.17.0",
+    "dotenv": "^16.6.1",
+    "node-fetch": "2"
+  },
   "packageManager": "pnpm@8.15.9",
   "name": "jsonresume.org",
   "dependencies": {
