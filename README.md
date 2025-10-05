@@ -139,6 +139,50 @@ The homepage serves as the main entry point for the JSON Resume project.
 pnpm dev --filter=homepage2
 ```
 
+## Building Themes
+
+### Creating a React Theme for the Registry
+
+The registry can render React-based themes. Here's how to create one:
+
+1. **Create a new theme package** in `/themes/your-theme-name`
+2. **Export a React component** that accepts `resume` prop
+3. **Important**: Avoid using Node.js-specific modules like `fs` - they won't work on Vercel's edge runtime
+4. **Use the `@repo/ui` package** for shared components
+
+Example structure:
+```jsx
+// themes/your-theme/index.js
+export default function YourTheme({ resume }) {
+  return (
+    <div>
+      <h1>{resume.basics.name}</h1>
+      {/* Your theme JSX */}
+    </div>
+  );
+}
+```
+
+5. **Test locally**:
+```sh
+pnpm dev --filter=registry
+# Visit http://localhost:3000/thomasdavis?theme=your-theme-name
+```
+
+### AI Features Development
+
+The AI-powered features require additional environment variables:
+
+```sh
+# Required for AI features
+OPENAI_API_KEY=your_openai_key
+PERPLEXITY_API_KEY=your_perplexity_key
+PINECONE_API_KEY=your_pinecone_key
+PINECONE_ENVIRONMENT=your_pinecone_env
+```
+
+AI features use the Vercel AI SDK v5 (`ai` package). See the registry app for implementation examples.
+
 ## Testing
 
 ```sh
