@@ -95,12 +95,18 @@ function parseErrors(logs) {
 
 function searchExistingIssue(fingerprint) {
   try {
-    const result = execSync(
-      `gh issue list --repo ${process.env.GITHUB_REPOSITORY} --label auto-error --search "Error Fingerprint: ${fingerprint}" --json number,state --limit 1`,
-      { encoding: 'utf8', timeout: 10000 }
+    const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
+    const query = encodeURIComponent(
+      `repo:${owner}/${repo} is:issue label:auto-error "${fingerprint}" in:body`
     );
-    const issues = JSON.parse(result);
-    return issues.length > 0 ? issues[0] : null;
+    const result = execSync(
+      `curl -sS --max-time 10 -H "Authorization: Bearer ${process.env.GH_TOKEN}" "https://api.github.com/search/issues?q=${query}&per_page=1"`,
+      { encoding: 'utf8' }
+    );
+    const data = JSON.parse(result);
+    return data.items?.length > 0
+      ? { number: data.items[0].number, state: data.items[0].state }
+      : null;
   } catch (error) {
     console.error('Failed to search issues:', error.message);
     return null;
@@ -131,23 +137,27 @@ ${stackTrace}
 ---
 *This issue was automatically created by the Vercel Error Monitor*`;
 
-  const bodyFile = `/tmp/issue-body-${Date.now()}.md`;
-  fs.writeFileSync(bodyFile, body);
-
   try {
+    const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
+    const payload = JSON.stringify({
+      title,
+      body,
+      labels: ['auto-error', 'bug', 'vercel-logs'],
+    });
+
     const result = execSync(
-      `gh issue create --repo ${
-        process.env.GITHUB_REPOSITORY
-      } --title "${title.replace(
-        /"/g,
-        '\\"'
-      )}" --body-file ${bodyFile} --label auto-error --label bug --label vercel-logs`,
-      { encoding: 'utf8', timeout: 30000 }
+      `curl -sS --max-time 30 -X POST -H "Authorization: Bearer ${
+        process.env.GH_TOKEN
+      }" -H "Content-Type: application/json" -d '${payload.replace(
+        /'/g,
+        "'\\''"
+      )}' "https://api.github.com/repos/${owner}/${repo}/issues"`,
+      { encoding: 'utf8' }
     );
-    fs.unlinkSync(bodyFile);
-    return result.trim();
+
+    const issue = JSON.parse(result);
+    return issue.html_url || 'Issue created';
   } catch (error) {
-    fs.unlinkSync(bodyFile);
     console.error('Failed to create issue:', error.message);
     throw error;
   }
@@ -155,10 +165,18 @@ ${stackTrace}
 
 function updateIssueOccurrence(issueNumber, fingerprint) {
   try {
+    const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
     const comment = `This error occurred again at ${new Date().toISOString()}`;
+    const payload = JSON.stringify({ body: comment });
+
     execSync(
-      `gh issue comment ${issueNumber} --repo ${process.env.GITHUB_REPOSITORY} --body "${comment}"`,
-      { encoding: 'utf8', timeout: 10000 }
+      `curl -sS --max-time 10 -X POST -H "Authorization: Bearer ${
+        process.env.GH_TOKEN
+      }" -H "Content-Type: application/json" -d '${payload.replace(
+        /'/g,
+        "'\\''"
+      )}' "https://api.github.com/repos/${owner}/${repo}/issues/${issueNumber}/comments"`,
+      { encoding: 'utf8' }
     );
   } catch (error) {
     console.error(`Failed to update issue #${issueNumber}:`, error.message);
