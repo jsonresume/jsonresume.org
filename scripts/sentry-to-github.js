@@ -1,7 +1,5 @@
 // scripts/sentry-to-github.js
 import fetch from 'node-fetch';
-import dotenv from 'dotenv';
-dotenv.config();
 
 
 
@@ -68,3 +66,4 @@ async function createGithubIssue(title, body) {
     console.error("Error in Sentry -> GitHub workflow:", err);
   }
 })();
+
