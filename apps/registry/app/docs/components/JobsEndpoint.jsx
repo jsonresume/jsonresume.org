@@ -1,4 +1,9 @@
-import { Header, InfoCards, EndpointInfo, ResponseInfo } from './JobsEndpoint';
+import {
+  Header,
+  InfoCards,
+  EndpointInfo,
+  ResponseInfo,
+} from './JobsEndpoint/index.js';
 
 export const JobsEndpoint = () => {
   return (
