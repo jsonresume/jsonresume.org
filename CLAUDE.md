@@ -208,6 +208,19 @@ feature/
   - TypeScript ESLint parsing in monorepo packages can fail even with correct dependencies
   - When ESLint can't parse TypeScript: check parser config, verify dependencies, consider workspace structure
   - Temporarily disabling problematic lint scripts with exit 0 can unblock CI while investigating fixes
+- **Storybook Vite TSConfig Resolution** (Oct 2025):
+  - Vite's tsconfck cannot resolve relative paths in `extends`: `"../tsconfig/react-library.json"` fails
+  - Solution: Use package name format: `"tsconfig/react-library.json"` (matches pnpm workspace package name)
+  - Error: `TSConfckParseError: failed to resolve "extends":"tsconfig/react-library.json"`
+  - This affects Storybook v9+ using Vite as the bundler
+  - Storybook now runs successfully on http://localhost:6006 with all 17+ component stories
+- **Structured Logging Migration** (Oct 2025):
+  - Migrated 81 console.log/error/warn statements to Pino structured logging across 6 commits
+  - Pattern: `logger.error({ error: error.message, ...context }, 'Message')` for errors
+  - Pattern: `logger.debug({ ...metadata }, 'Message')` for debug logs
+  - Performance tracking: Replace console.time/timeEnd with Date.now() duration calculations
+  - Environment variable: `LOG_LEVEL` (trace|debug|info|warn|error|fatal) defaults to info in prod, debug in dev
+  - Benefits: JSON structured logs, contextual metadata, better production debugging, performance metrics
 
 **Refactoring Large Files (200+ lines):**
 
