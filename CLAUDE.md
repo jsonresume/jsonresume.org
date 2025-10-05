@@ -211,6 +211,18 @@ feature/
 - **Benefits**: Better testability, reusability, maintainability, git history
 - **Don't Over-Refactor**: Files under 200 lines that are well-structured don't need splitting
 
+**Refactoring Templates and Large Files:**
+
+- **Handlebars Templates**: Split into logical sections (head, header, sections by content)
+- **React/Styled Components**: Extract CSS to separate styles.js files
+- **Template Concatenation**: Use ES6 imports and string concatenation for modular templates
+- **Escape Template Literals**: When extracting backtick strings, escape existing backticks with \`
+- **Recent Successes** (2025-10-05):
+  - timeline.tsx: 207→18 lines (split into 6 component files)
+  - spartacus resume.js: 203→6 lines (split into 4 template files)
+  - theme-flat resume.js: 436→27 lines (split into 12 template files)
+  - theme-cv index.js: 337→17 lines (extracted CSS to styles.js)
+
 **Public vs Private Pages:**
 
 - **Pattern**: Create separate data providers for public/private access
