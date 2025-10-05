@@ -40,7 +40,7 @@ export const Page: React.FC = () => {
         <ul>
           <li>
             Use a higher-level connected component. Storybook helps you compose
-            such data from the "args" of child component stories
+            such data from the &ldquo;args&rdquo; of child component stories
           </li>
           <li>
             Assemble data in the page component from your services. You can mock

@@ -3,6 +3,12 @@
 module.exports = {
   root: true,
   extends: ['@repo/eslint-config-custom', 'plugin:storybook/recommended'],
-  parser: '@typescript-eslint/parser',
-  rules: {},
+  settings: {
+    react: {
+      version: 'detect',
+    },
+  },
+  rules: {
+    'react/react-in-jsx-scope': 'off',
+  },
 };
