@@ -44,7 +44,20 @@ jobs:
           GITHUB_REPO: ${{ secrets.GITHUB_REPO }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
 
-
+      - name: Debug secrets
+        run: |
+          echo "SENTRY_ORG=$SENTRY_ORG"
+          echo "SENTRY_PROJECT=$SENTRY_PROJECT"
+          echo "GITHUB_REPO=$GITHUB_REPO"
+          echo "GITHUB_TOKEN length=${#GITHUB_TOKEN}"
+        env:
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+          GITHUB_REPO: ${{ secrets.GITHUB_REPO }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      
+      
 
 
 
