@@ -1,4 +1,4 @@
-const { exec, execSync } = require('child_process');
+const { execSync } = require('child_process');
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
@@ -34,32 +34,19 @@ function createErrorFingerprint(message, stack = '') {
 }
 
 async function fetchVercelLogs(project) {
-  return new Promise((resolve) => {
-    const cmd = `vercel logs ${project.url} --json`;
-    const proc = exec(cmd, {
-      env: { ...process.env, VERCEL_TOKEN: process.env.VERCEL_TOKEN },
-      maxBuffer: 10 * 1024 * 1024,
-    });
+  try {
+    // Use timeout with SIGKILL to force termination after 5 seconds
+    // Get as many logs as possible in 5 seconds
+    const result = execSync(
+      `timeout -s SIGKILL 5 bash -c "VERCEL_TOKEN=${process.env.VERCEL_TOKEN} vercel logs ${project.url} --json 2>&1" || true`,
+      { encoding: 'utf8', maxBuffer: 10 * 1024 * 1024 }
+    );
 
-    let output = '';
-    proc.stdout.on('data', (data) => {
-      output += data;
-    });
-    proc.stderr.on('data', (data) => {
-      output += data;
-    });
-
-    // Kill after 8 seconds
-    const timeout = setTimeout(() => {
-      proc.kill('SIGKILL');
-      resolve(output);
-    }, 8000);
-
-    proc.on('exit', () => {
-      clearTimeout(timeout);
-      resolve(output);
-    });
-  });
+    return result;
+  } catch (error) {
+    console.error(`Failed to fetch logs for ${project.name}:`, error.message);
+    return '';
+  }
 }
 
 function parseErrors(logs) {
