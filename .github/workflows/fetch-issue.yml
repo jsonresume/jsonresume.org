@@ -1,7 +1,7 @@
 name: fetch-issue-sentry
 
 on:
-push:
+  push:
     branches:
       - "sentry-to-github-issue"
 
@@ -35,5 +35,6 @@ jobs:
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
 
