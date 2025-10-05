@@ -146,6 +146,10 @@ feature/
 
 **Refactoring Large Files (200+ lines):**
 
+- **Hard Limit**: 200 lines per file (NO EXCEPTIONS)
+- **Target Range**: Files over 200 lines MUST be refactored
+- **Acceptable Range**: Files 100-200 lines are fine if well-structured with single responsibility
+- **Optimal Range**: <150 lines recommended for main components, but not required
 - **Pattern**: Extract into feature folders with components/, hooks/, utils/, styles/
 - **Components**: Focus on rendering, receive props, minimal logic
 - **Hooks**: Encapsulate state management and side effects (useJobGraphData, useReadJobs, etc.)
@@ -154,6 +158,7 @@ feature/
 - **Main Page**: Thin orchestration layer that composes hooks and components
 - **Example**: jobs-graph (1081→184 lines main + 693 across 12 modules)
 - **Benefits**: Better testability, reusability, maintainability, git history
+- **Don't Over-Refactor**: Files under 200 lines that are well-structured don't need splitting
 
 **Public vs Private Pages:**
 
