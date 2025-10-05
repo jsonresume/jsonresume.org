@@ -46,7 +46,16 @@ const getResumeGist = async (username, gistname = RESUME_GIST_NAME) => {
       url: fullResumeGistUrl,
     });
   } catch (e) {
+    // Check if the error is a JSON parsing error
+    if (e.message?.includes('JSON') || e.name === 'SyntaxError') {
+      return buildError(ERROR_CODES.RESUME_NOT_VALID_JSON);
+    }
     return buildError(ERROR_CODES.GIST_UNKNOWN_ERROR);
+  }
+
+  // Validate that we actually received valid JSON data
+  if (typeof resumeRes.data !== 'object' || resumeRes.data === null) {
+    return buildError(ERROR_CODES.RESUME_NOT_VALID_JSON);
   }
 
   return { resume: resumeRes.data };
