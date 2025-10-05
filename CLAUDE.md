@@ -172,6 +172,11 @@ feature/
 - **Remaining Vulnerabilities**: Mostly in transitive deps of bundled themes (can use pnpm overrides)
 - **CI Failures**: pnpm lockfile version mismatch causes frozen lockfile errors - update packageManager version to match CI
 - **pnpm Upgrade**: Update from v7.15.0 to v8.15.9 requires lockfile regeneration (run `pnpm install`)
+- **Multi-Gist Support**: Implemented ?gistname= parameter for accessing alternate resume files (e.g., resume-en.json, resume-fr.json)
+  - Modified getResumeGist() to accept optional gistname parameter with default fallback
+  - Updated generateResume() to pass gistname from query params
+  - Enhanced PublicResumeProvider to read searchParams using useSearchParams() hook
+  - Documented new query parameter in API docs at /docs
 
 **Refactoring Large Files (200+ lines):**
 
@@ -234,7 +239,7 @@ feature/
 
 - [x] Fix all CRITICAL security vulnerabilities (14+) - ✅ Reduced to 1 low severity
 - [x] Re-enable E2E tests in CI/CD pipeline - ✅ Already enabled and passing
-- [ ] Refactor all files >150 lines (29 files identified)
+- [ ] Refactor all files >200 lines (enforce strict 200-line limit)
 - [ ] Upgrade major dependencies (Prisma v6 ✅, Vercel AI SDK v5, migrate to @ai-sdk/openai)
 - [x] Add missing open-source files (CONTRIBUTING.md, SECURITY.md) - ✅ Already exist
 - [x] Create .env.example with all required variables - ✅ Completed

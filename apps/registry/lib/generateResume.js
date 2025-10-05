@@ -6,7 +6,7 @@ import { cacheResume } from './generateResume/cacheResume';
 import { formatResume } from './generateResume/formatResume';
 
 const generateResume = async (username, extension = 'template', query = {}) => {
-  const { theme } = query;
+  const { theme, gistname } = query;
   const formatter = formatters[extension];
 
   const { error: extensionError } = validateExtension(extension);
@@ -17,7 +17,7 @@ const generateResume = async (username, extension = 'template', query = {}) => {
   }
 
   // retrieve the users github gist
-  const { error: gistError, resume } = await getResumeGist(username);
+  const { error: gistError, resume } = await getResumeGist(username, gistname);
 
   if (gistError) {
     return buildError(gistError);

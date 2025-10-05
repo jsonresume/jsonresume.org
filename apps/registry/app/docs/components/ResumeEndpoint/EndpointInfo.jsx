@@ -28,6 +28,25 @@ export const EndpointInfo = () => {
           </li>
         </ul>
       </div>
+
+      <h3 className="text-xl font-medium text-gray-700 mt-6 mb-3">
+        Query Parameters
+      </h3>
+      <div className="bg-gray-50 p-4 rounded-lg">
+        <ul className="space-y-2">
+          <li>
+            <strong className="text-gray-900">theme</strong>{' '}
+            <span className="text-blue-600">(optional)</span>: Override the
+            resume&apos;s theme (e.g., ?theme=elegant)
+          </li>
+          <li>
+            <strong className="text-gray-900">gistname</strong>{' '}
+            <span className="text-blue-600">(optional)</span>: Specify an
+            alternative gist filename (e.g., ?gistname=resume-en.json). Defaults
+            to resume.json
+          </li>
+        </ul>
+      </div>
     </>
   );
 };
