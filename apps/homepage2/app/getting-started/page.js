@@ -53,19 +53,6 @@ export default function GettingStarted() {
               <p>
                 <code>resume export resume.html</code>
               </p>
-              <h2>Import from LinkedIn</h2>
-              <p>
-                One of our community members wrote a great Chrome extension to
-                import your LinkedIn Profile.
-                <br />
-                <br />{' '}
-                <a
-                  target="_blank"
-                  href="https://chrome.google.com/webstore/detail/json-resume-exporter/caobgmmcpklomkcckaenhjlokpmfbdec"
-                >
-                  Download here
-                </a>
-              </p>
               <h2>Latex</h2>
               <p>
                 If you want to render a Latex resume there is very well put
