@@ -199,6 +199,14 @@ feature/
   - Updated generateResume() to pass gistname from query params
   - Enhanced PublicResumeProvider to read searchParams using useSearchParams() hook
   - Documented new query parameter in API docs at /docs
+- **Security Vulnerability Patching**: Use pnpm overrides to force patched versions of vulnerable dependencies
+  - Add overrides to root package.json under `pnpm.overrides`
+  - Format: `"package@vulnerable-range": "^patched-version"`
+  - Example: `"vite@<=5.4.19": "^5.4.20"` fixes CVE in Storybook dependencies
+  - Always run `pnpm install` after adding overrides to regenerate lockfile
+  - Verify fix with `pnpm audit` before committing
+  - GitHub Dependabot scans differently than `pnpm audit` - trust local audit results
+  - Abandoned packages with no patch (`<0.0.0`) require alternative solutions (exclude features, find replacements)
 
 **Refactoring Large Files (200+ lines):**
 
