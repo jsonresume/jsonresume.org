@@ -1,9 +1,9 @@
 name: fetch-issue-sentry
 
 on:
-  schedule:
-    - cron: "0 * * * *" # runs every hour
-  workflow_dispatch:    # allows manual trigger
+  #schedule:
+  #  - cron: "0 * * * *" 
+  workflow_dispatch:    
 
 jobs:
   fetch-issues:
@@ -31,3 +31,4 @@ jobs:
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
