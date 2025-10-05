@@ -1,0 +1,67 @@
+name: fetch-issue-sentry
+
+on:
+  push:
+    branches:
+      - "sentry-to-github-issue"
+
+  #schedule:
+  #  - cron: "0 * * * *" 
+  workflow_dispatch:    
+
+jobs:
+  fetch-issues:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup pnpm
+        run: npm install -g pnpm
+
+      - name: modules
+        run: pnpm add node-fetch -w
+
+      - name: Install dependencies
+        run: pnpm install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run Sentry to GitHub script
+        run: |
+          node scripts/sentry-to-github.js
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MY_GITHUB_REPO: ${{ secrets.MY_GITHUB_REPO }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+
+      - name: Debug secrets
+        run: |
+          echo "SENTRY_ORG=$SENTRY_ORG"
+          echo "SENTRY_PROJECT=$SENTRY_PROJECT"
+          echo "GITHUB_REPO=$GITHUB_REPO"
+          echo "GITHUB_TOKEN length=${#GITHUB_TOKEN}"
+        env:
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+          MY_GITHUB_REPO: ${{ secrets.MY_GITHUB_REPO }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      
+      
+
+
+
+
+
+
+
