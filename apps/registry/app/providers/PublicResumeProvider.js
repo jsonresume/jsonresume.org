@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { logger } from '@/lib/logger';
 
 const PublicResumeContext = createContext({
   resume: null,
@@ -52,7 +53,14 @@ export function PublicResumeProvider({ username, children }) {
         const data = await response.json();
         setResume(data);
       } catch (err) {
-        console.error('Error fetching public resume:', err);
+        logger.error(
+          {
+            error: err.message,
+            username,
+            gistname: searchParams.get('gistname'),
+          },
+          'Error fetching public resume'
+        );
         setError(err.message);
       } finally {
         setLoading(false);

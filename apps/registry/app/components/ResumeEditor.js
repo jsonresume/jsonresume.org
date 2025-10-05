@@ -2,6 +2,7 @@
 
 import { useMonaco } from '@monaco-editor/react';
 import { useState } from 'react';
+import { logger } from '@/lib/logger';
 import { useResume } from '../providers/ResumeProvider';
 import { useResumeState } from './ResumeEditorModule/hooks/useResumeState';
 import { useMonacoSetup } from './ResumeEditorModule/hooks/useMonacoSetup';
@@ -38,7 +39,7 @@ const ResumeEditor = ({ resume: initialResume, updateGist }) => {
       setOriginalResume(resumeStr);
       setHasChanges(false);
     } catch (error) {
-      console.error('Error saving resume:', error);
+      logger.error({ error: error.message, username }, 'Error saving resume');
     } finally {
       setIsSaving(false);
     }

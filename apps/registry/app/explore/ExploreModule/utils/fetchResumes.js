@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { logger } from '@/lib/logger';
 import { SUPABASE_URL, ITEMS_PER_PAGE } from '../constants';
 import { parseResumeRow } from './parseResume';
 
@@ -35,23 +36,33 @@ export async function fetchResumes(page = 1, search = '') {
       });
     }
 
-    console.time('getResumes');
+    const queryStart = Date.now();
     const { data, error } = await dataQuery
       .order('created_at', { ascending: false })
       .range((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE - 1);
 
     if (error) throw error;
-    console.timeEnd('getResumes');
+
+    const queryDuration = Date.now() - queryStart;
+    logger.debug(
+      { duration: queryDuration, page, search },
+      'Fetched resumes from database'
+    );
 
     if (!data) {
       throw new Error('No data returned from query');
     }
 
-    console.time('mapResumes');
+    const parseStart = Date.now();
     const resumes = data
       .map(parseResumeRow)
       .filter((resume) => resume.meta?.public !== false);
-    console.timeEnd('mapResumes');
+
+    const parseDuration = Date.now() - parseStart;
+    logger.debug(
+      { duration: parseDuration, count: resumes.length },
+      'Parsed and filtered resumes'
+    );
 
     return {
       resumes,
@@ -59,7 +70,10 @@ export async function fetchResumes(page = 1, search = '') {
       totalPages: Math.ceil((totalCount || 0) / ITEMS_PER_PAGE),
     };
   } catch (error) {
-    console.error('Error fetching resumes:', error);
+    logger.error(
+      { error: error.message, page, search },
+      'Error fetching resumes'
+    );
     return { resumes: [], totalCount: 0, totalPages: 0 };
   }
 }

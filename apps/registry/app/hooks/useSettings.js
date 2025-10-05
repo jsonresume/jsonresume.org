@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { logger } from '@/lib/logger';
 
 export function useSettings() {
   const [settings, setSettings] = useState({
@@ -13,7 +14,7 @@ export function useSettings() {
       try {
         setSettings(JSON.parse(savedSettings));
       } catch (error) {
-        console.error('Error loading settings:', error);
+        logger.error({ error: error.message }, 'Error loading settings');
       }
     }
   }, []);

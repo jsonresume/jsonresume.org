@@ -1,4 +1,5 @@
 import gravatar from 'gravatar';
+import { logger } from '@/lib/logger';
 
 export function parseResumeRow(row) {
   try {
@@ -19,7 +20,10 @@ export function parseResumeRow(row) {
       created_at: row.created_at,
     };
   } catch (e) {
-    console.error('Error parsing resume:', e);
+    logger.error(
+      { error: e.message, username: row.username },
+      'Error parsing resume'
+    );
     return {
       username: row.username,
       label: 'Error parsing resume',
