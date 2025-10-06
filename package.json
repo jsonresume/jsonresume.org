@@ -28,7 +28,7 @@
   "pnpm": {
     "overrides": {
       "handlebars@<4.7.8": "^4.7.8",
-      "node-fetch": "^3.3.2"
+      "node-fetch": "^3.3.2",
       "uglify-js@<3.0.0": "^3.19.3",
       "tar@<6.2.1": "^6.2.1",
       "marked@<4.0.10": "^4.0.10",
