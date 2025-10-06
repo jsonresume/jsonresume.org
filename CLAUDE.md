@@ -158,6 +158,13 @@ feature/
 - All tests must pass before merging
 - No skipped or disabled tests in main branch
 
+**Testing Strategy:**
+
+- **Priority:** Focus on testing lib/ functions and pure utility functions
+- **Test:** Calculations, formatters, parsers, validators, data transformations
+- **Avoid testing:** UI components with heavy dependencies, complex hooks, API routes with external services
+- **Goal:** High coverage on business logic and utilities, not exhaustive component testing
+
 ### 3. Autonomous Development Workflow
 
 **When You Start Work:**
@@ -232,6 +239,28 @@ feature/
   - Pattern: `await retryWithBackoff(() => apiCall(), { maxAttempts: 3 })`
   - Applied to useResumeData hook (GitHub API calls)
   - Benefits: Prevents thundering herd, graceful recovery from transient failures, configurable per use case
+- **@repo/ui Component Library Integration** (Oct 2025):
+  - Migrated 20+ files across 5 commits to use centralized UI components from `@repo/ui` package
+  - Added Textarea component to @repo/ui (shadcn pattern with focus ring, disabled states)
+  - Removed ~178 lines of duplicate button/input/textarea styling code
+  - **Button variants used**: default (primary), secondary, ghost (minimal), link (text links), size="icon" (square icon buttons)
+  - **Input component**: Text fields with built-in focus states and error handling
+  - **Textarea component**: Multi-line text input with consistent styling (rows prop supported)
+  - **asChild pattern** for semantic buttons: `<Button asChild><Link>Text</Link></Button>` or `<Button asChild><a>Text</a></Button>`
+  - **Input with icons**: Maintain wrapper div, use Input component for base input element
+  - **Migration targets**: Error boundaries, navigation (back buttons, mobile menu), search bars, filters, job actions, settings, forms, textareas
+  - Benefits: Consistent design system, better accessibility (focus states, ARIA), centralized maintenance, TypeScript type safety
+  - Pattern for raw button → Button: Replace `<button className="..." onClick={fn}>` with `<Button variant="ghost" onClick={fn}>`
+  - Pattern for link button: Use `asChild` + appropriate HTML element (Link or a tag)
+  - Pattern for textarea → Textarea: Replace `<textarea className="...">` with `<Textarea rows={3}>`
+  - Icon buttons: Use `size="icon"` variant for square buttons with icons only
+- **Unit Tests in CI** (Oct 2025):
+  - Discovered unit tests were NOT running in CI - only E2E tests (Playwright) were configured
+  - CI workflow (`.github/workflows/ci.yml`) had `test` job but it only ran `pnpm turbo test:e2e`
+  - Added dedicated `unit-test` job that runs `pnpm turbo test` to execute all vitest unit tests
+  - All 831 unit tests now run on every push and merge group event
+  - Benefits: Prevents regressions, enforces test coverage, catches failures before merge
+  - Lesson: Always verify CI runs all test types (unit, integration, E2E), not just one
 
 **Refactoring Large Files (200+ lines):**
 
@@ -603,7 +632,7 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `style`
 
 ---
 
-_Last Updated: 2025-10-05_
+_Last Updated: 2025-10-06_
 _This is your primary directive. Follow it religiously._
 
 - you should always add stuff to claude.md when you think it will help you be an autonomous agent managing. also we should never ever remove functionality or features, we should create issues why something is completely broken if there is no other way around it that a human will look at.
