@@ -1,31 +1,27 @@
 import Link from 'next/link';
+import { Button } from '@repo/ui';
 
 export function JobActions({ job, makeCoverletter }) {
   return (
     <div className="mt-4 flex gap-4">
-      <button
-        className="bg-secondary-500 text-white py-2 px-4 rounded hover:bg-secondary-700 transition-colors duration-200"
-        onClick={() => makeCoverletter(job.raw)}
-      >
+      <Button onClick={() => makeCoverletter(job.raw)}>
         Make Cover Letter
-      </button>
-      <a
-        href={job.raw?.url || '#'}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="bg-gray-200 text-gray-700 py-2 px-4 rounded hover:bg-gray-300 transition-colors duration-200"
-      >
-        View Original Job
-      </a>
+      </Button>
+      <Button variant="secondary" asChild>
+        <a href={job.raw?.url || '#'} target="_blank" rel="noopener noreferrer">
+          View Original Job
+        </a>
+      </Button>
 
-      <Link
-        href={`/jobs/${job.raw.uuid}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="bg-gray-200 text-gray-700 py-2 px-4 rounded hover:bg-gray-300 transition-colors duration-200"
-      >
-        View Job Candiates
-      </Link>
+      <Button variant="secondary" asChild>
+        <Link
+          href={`/jobs/${job.raw.uuid}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          View Job Candidates
+        </Link>
+      </Button>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { supabase } from '../../lib/supabase';
+import { Button } from '@repo/ui';
 
 interface GitHubStatusSectionProps {
   isConnected: boolean;
@@ -62,12 +63,9 @@ export const GitHubStatusSection = ({
           <p>Identity Token: {githubIdentity?.provider_token ? 'Yes' : 'No'}</p>
         </div>
         {!githubIdentity?.access_token && (
-          <button
-            onClick={handleReconnect}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-          >
+          <Button onClick={handleReconnect}>
             Reconnect GitHub with Gist Access
-          </button>
+          </Button>
         )}
       </div>
     </div>

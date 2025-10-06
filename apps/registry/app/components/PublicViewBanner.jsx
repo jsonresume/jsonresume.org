@@ -43,13 +43,15 @@ export function PublicViewBanner({ username }) {
             >
               Login as @{username}
             </Button>
-            <button
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={() => setDismissed(true)}
-              className="text-blue-600 hover:text-blue-800 p-1"
+              className="h-8 w-8 text-blue-600 hover:text-blue-800"
               aria-label="Dismiss banner"
             >
               <X className="w-4 h-4" />
-            </button>
+            </Button>
           </div>
         </div>
       </div>
