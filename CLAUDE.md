@@ -196,6 +196,12 @@ feature/
 - **Remaining Vulnerabilities**: Mostly in transitive deps of bundled themes (can use pnpm overrides)
 - **CI Failures**: pnpm lockfile version mismatch causes frozen lockfile errors - update packageManager version to match CI
 - **pnpm Upgrade**: Update from v7.15.0 to v8.15.9 requires lockfile regeneration (run `pnpm install`)
+- **Turbo Test Execution Issue**: Turbo reports "No tasks were executed" even with correct turbo.json configuration
+  - Added `test` task to turbo.json with `cache: false`
+  - Tried `--filter=registry` and `--force` flags - both failed
+  - Solution: Bypass turbo entirely with `pnpm --filter registry test -- --run` in CI
+  - Pattern: For selective package tests, use pnpm --filter directly instead of turbo task runner
+  - Commits: 7db8e6a (turbo.json), 551f51f (CI fix)
 - **Multi-Gist Support**: Implemented ?gistname= parameter for accessing alternate resume files (e.g., resume-en.json, resume-fr.json)
   - Modified getResumeGist() to accept optional gistname parameter with default fallback
   - Updated generateResume() to pass gistname from query params
