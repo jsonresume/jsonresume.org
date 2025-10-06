@@ -261,6 +261,14 @@ feature/
   - All 831 unit tests now run on every push and merge group event
   - Benefits: Prevents regressions, enforces test coverage, catches failures before merge
   - Lesson: Always verify CI runs all test types (unit, integration, E2E), not just one
+- **Turbo.json Task Configuration** (Oct 2025):
+  - **Critical CI Issue**: CI failed with "Could not find task `test` in project" even after adding unit-test job
+  - **Root Cause**: turbo.json didn't have a `test` task defined - only had `test:e2e`
+  - **Fix**: Added `"test": { "cache": false }` to turbo.json tasks
+  - **Lesson**: When adding new CI jobs that run `pnpm turbo <task>`, ALWAYS verify turbo.json has that task defined
+  - **Pattern**: Each turbo command must have a corresponding task in turbo.json, even if it just passes through to workspace scripts
+  - **Testing**: Run `pnpm turbo test` locally to verify task exists before pushing CI changes
+  - Commit: 7db8e6a (fixed the missing task after initial unit-test job addition in ad31231)
 
 **Refactoring Large Files (200+ lines):**
 
