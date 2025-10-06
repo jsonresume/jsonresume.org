@@ -2,126 +2,125 @@ import { describe, it, expect } from 'vitest';
 import { getEducationLevel } from './educationCalculations';
 
 describe('getEducationLevel', () => {
-  it('returns highest education level based on latest end date', () => {
+  it('returns highest education level', () => {
     const resume = {
       education: [
-        {
-          studyType: "Bachelor's Degree",
-          endDate: '2018-05-15',
-        },
-        {
-          studyType: "Master's Degree",
-          endDate: '2020-12-20',
-        },
-        {
-          studyType: 'High School Diploma',
-          endDate: '2014-06-01',
-        },
+        { studyType: 'Bachelor', endDate: '2020-05-01' },
+        { studyType: 'Master', endDate: '2022-05-01' },
       ],
     };
+
     const result = getEducationLevel(resume);
-    expect(result).toBe("Master's Degree");
+
+    expect(result).toBe('Master');
   });
 
-  it('returns first education if only one exists', () => {
-    const resume = {
-      education: [
-        {
-          studyType: "Bachelor's Degree",
-          endDate: '2020-05-15',
-        },
-      ],
-    };
-    const result = getEducationLevel(resume);
-    expect(result).toBe("Bachelor's Degree");
-  });
-
-  it('handles missing education array', () => {
+  it('returns message when no education array', () => {
     const resume = {};
+
     const result = getEducationLevel(resume);
+
     expect(result).toBe('No education information available');
   });
 
-  it('handles empty education array', () => {
+  it('returns message when education array is empty', () => {
     const resume = { education: [] };
+
     const result = getEducationLevel(resume);
+
     expect(result).toBe('No education information available');
   });
 
-  it('compares dates correctly when year is same', () => {
+  it('returns first education when only one entry', () => {
     const resume = {
-      education: [
-        {
-          studyType: "Bachelor's Degree",
-          endDate: '2020-05-15',
-        },
-        {
-          studyType: "Master's Degree",
-          endDate: '2020-12-20',
-        },
-      ],
+      education: [{ studyType: 'PhD', endDate: '2025-06-01' }],
     };
+
     const result = getEducationLevel(resume);
-    expect(result).toBe("Master's Degree");
+
+    expect(result).toBe('PhD');
   });
 
-  it('handles education with same end dates', () => {
+  it('selects education with latest endDate', () => {
     const resume = {
       education: [
-        {
-          studyType: 'Computer Science',
-          endDate: '2020-05-15',
-        },
-        {
-          studyType: 'Mathematics',
-          endDate: '2020-05-15',
-        },
+        { studyType: 'Bachelor', endDate: '2018-05-01' },
+        { studyType: 'High School', endDate: '2014-06-01' },
+        { studyType: 'Master', endDate: '2020-05-01' },
       ],
     };
+
     const result = getEducationLevel(resume);
-    // Should return first one when dates are equal
-    expect(result).toBe('Computer Science');
+
+    expect(result).toBe('Master');
   });
 
-  it('handles education entries in chronological order', () => {
+  it('compares dates correctly', () => {
     const resume = {
       education: [
-        {
-          studyType: 'High School',
-          endDate: '2014-06-01',
-        },
-        {
-          studyType: "Bachelor's",
-          endDate: '2018-05-15',
-        },
-        {
-          studyType: "Master's",
-          endDate: '2020-12-20',
-        },
+        { studyType: 'Older', endDate: '2020-01-01' },
+        { studyType: 'Newer', endDate: '2020-12-31' },
       ],
     };
+
     const result = getEducationLevel(resume);
-    expect(result).toBe("Master's");
+
+    expect(result).toBe('Newer');
   });
 
-  it('handles education entries in reverse chronological order', () => {
+  it('handles education with same endDate', () => {
+    const resume = {
+      education: [
+        { studyType: 'First', endDate: '2020-05-01' },
+        { studyType: 'Second', endDate: '2020-05-01' },
+      ],
+    };
+
+    const result = getEducationLevel(resume);
+
+    // Should return first one since dates are equal
+    expect(result).toBe('First');
+  });
+
+  it('handles various date formats', () => {
+    const resume = {
+      education: [
+        { studyType: 'Bachelor', endDate: '2020-05-15' },
+        { studyType: 'Master', endDate: '2022-06-20' },
+      ],
+    };
+
+    const result = getEducationLevel(resume);
+
+    expect(result).toBe('Master');
+  });
+
+  it('handles education without all fields', () => {
+    const resume = {
+      education: [
+        { studyType: 'Bachelor', endDate: '2020-01-01' },
+        { studyType: 'Certificate' },
+      ],
+    };
+
+    const result = getEducationLevel(resume);
+
+    expect(result).toBeDefined();
+  });
+
+  it('returns studyType from latest education', () => {
     const resume = {
       education: [
         {
-          studyType: "Master's",
-          endDate: '2020-12-20',
-        },
-        {
-          studyType: "Bachelor's",
-          endDate: '2018-05-15',
-        },
-        {
-          studyType: 'High School',
-          endDate: '2014-06-01',
+          studyType: 'Bachelor of Science',
+          area: 'Computer Science',
+          endDate: '2020-05-01',
         },
       ],
     };
+
     const result = getEducationLevel(resume);
-    expect(result).toBe("Master's");
+
+    expect(result).toBe('Bachelor of Science');
   });
 });
