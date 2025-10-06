@@ -2,131 +2,131 @@ import { describe, it, expect } from 'vitest';
 import { groupItems } from './groupItems';
 
 describe('groupItems', () => {
-  describe('jobs data source', () => {
-    it('groups jobs by title', () => {
+  describe('with jobs data source', () => {
+    it('groups items by title', () => {
       const data = [
-        { id: 1, title: 'Software Developer', embedding: [0.1] },
-        { id: 2, title: 'Software Developer', embedding: [0.2] },
-        { id: 3, title: 'Product Manager', embedding: [0.3] },
+        { id: 1, title: 'Developer' },
+        { id: 2, title: 'Developer' },
+        { id: 3, title: 'Designer' },
       ];
 
       const result = groupItems(data, 'jobs');
 
-      expect(Object.keys(result)).toHaveLength(2);
-      expect(result['Software Developer']).toHaveLength(2);
-      expect(result['Product Manager']).toHaveLength(1);
+      expect(result.Developer).toHaveLength(2);
+      expect(result.Designer).toHaveLength(1);
     });
 
-    it('creates separate groups for different titles', () => {
+    it('creates array for each unique title', () => {
       const data = [
-        { id: 1, title: 'Developer', embedding: [0.1] },
-        { id: 2, title: 'Designer', embedding: [0.2] },
-        { id: 3, title: 'Manager', embedding: [0.3] },
+        { id: 1, title: 'Engineer' },
+        { id: 2, title: 'Manager' },
       ];
 
       const result = groupItems(data, 'jobs');
 
-      expect(Object.keys(result)).toHaveLength(3);
-      expect(result['Developer']).toEqual([data[0]]);
-      expect(result['Designer']).toEqual([data[1]]);
-      expect(result['Manager']).toEqual([data[2]]);
+      expect(result.Engineer).toEqual([{ id: 1, title: 'Engineer' }]);
+      expect(result.Manager).toEqual([{ id: 2, title: 'Manager' }]);
+    });
+
+    it('preserves item data in groups', () => {
+      const data = [
+        { id: 1, title: 'Dev', company: 'Acme' },
+        { id: 2, title: 'Dev', company: 'Corp' },
+      ];
+
+      const result = groupItems(data, 'jobs');
+
+      expect(result.Dev[0].company).toBe('Acme');
+      expect(result.Dev[1].company).toBe('Corp');
     });
   });
 
-  describe('resumes data source', () => {
-    it('groups resumes by position', () => {
+  describe('with non-jobs data source', () => {
+    it('groups items by position', () => {
       const data = [
-        { id: 1, position: 'Frontend Developer', embedding: [0.1] },
-        { id: 2, position: 'Frontend Developer', embedding: [0.2] },
-        { id: 3, position: 'Backend Developer', embedding: [0.3] },
+        { id: 1, position: 'Developer' },
+        { id: 2, position: 'Developer' },
+        { id: 3, position: 'Designer' },
       ];
 
       const result = groupItems(data, 'resumes');
 
-      expect(Object.keys(result)).toHaveLength(2);
-      expect(result['Frontend Developer']).toHaveLength(2);
-      expect(result['Backend Developer']).toHaveLength(1);
+      expect(result.Developer).toHaveLength(2);
+      expect(result.Designer).toHaveLength(1);
     });
 
-    it('uses "Unknown Position" for missing positions', () => {
+    it('uses "Unknown Position" for missing position', () => {
+      const data = [{ id: 1 }, { id: 2, position: 'Dev' }];
+
+      const result = groupItems(data, 'resumes');
+
+      expect(result['Unknown Position']).toHaveLength(1);
+      expect(result['Dev']).toHaveLength(1);
+    });
+
+    it('groups items with null position as Unknown', () => {
       const data = [
-        { id: 1, position: 'Developer', embedding: [0.1] },
-        { id: 2, embedding: [0.2] }, // No position
-        { id: 3, position: null, embedding: [0.3] }, // Null position
+        { id: 1, position: null },
+        { id: 2, position: null },
       ];
 
       const result = groupItems(data, 'resumes');
 
-      expect(result['Developer']).toHaveLength(1);
       expect(result['Unknown Position']).toHaveLength(2);
-      expect(result['Unknown Position']).toContainEqual(data[1]);
-      expect(result['Unknown Position']).toContainEqual(data[2]);
+    });
+  });
+
+  describe('edge cases', () => {
+    it('returns empty object for empty data', () => {
+      const result = groupItems([], 'jobs');
+
+      expect(result).toEqual({});
     });
 
-    it('groups multiple resumes with same position', () => {
-      const data = [
-        { id: 1, position: 'Software Engineer', embedding: [0.1] },
-        { id: 2, position: 'Software Engineer', embedding: [0.2] },
-        { id: 3, position: 'Software Engineer', embedding: [0.3] },
-      ];
+    it('handles single item', () => {
+      const data = [{ id: 1, title: 'Dev' }];
 
-      const result = groupItems(data, 'resumes');
+      const result = groupItems(data, 'jobs');
 
       expect(Object.keys(result)).toHaveLength(1);
-      expect(result['Software Engineer']).toHaveLength(3);
+      expect(result.Dev).toHaveLength(1);
     });
-  });
 
-  it('handles empty data array', () => {
-    expect(groupItems([], 'jobs')).toEqual({});
-    expect(groupItems([], 'resumes')).toEqual({});
-  });
+    it('handles all items with same label', () => {
+      const data = [
+        { id: 1, title: 'Dev' },
+        { id: 2, title: 'Dev' },
+        { id: 3, title: 'Dev' },
+      ];
 
-  it('handles single item', () => {
-    const data = [{ id: 1, title: 'Developer', embedding: [0.1] }];
+      const result = groupItems(data, 'jobs');
 
-    const result = groupItems(data, 'jobs');
+      expect(Object.keys(result)).toHaveLength(1);
+      expect(result.Dev).toHaveLength(3);
+    });
 
-    expect(Object.keys(result)).toHaveLength(1);
-    expect(result['Developer']).toEqual([data[0]]);
-  });
+    it('maintains insertion order within groups', () => {
+      const data = [
+        { id: 1, title: 'Dev' },
+        { id: 2, title: 'Dev' },
+      ];
 
-  it('preserves all item properties in groups', () => {
-    const data = [
-      {
-        id: 1,
-        title: 'Developer',
-        embedding: [0.1],
-        company: 'Acme Inc',
-        salary: 100000,
-      },
-      {
-        id: 2,
-        title: 'Developer',
-        embedding: [0.2],
-        company: 'Tech Corp',
-        salary: 120000,
-      },
-    ];
+      const result = groupItems(data, 'jobs');
 
-    const result = groupItems(data, 'jobs');
+      expect(result.Dev[0].id).toBe(1);
+      expect(result.Dev[1].id).toBe(2);
+    });
 
-    expect(result['Developer'][0]).toEqual(data[0]);
-    expect(result['Developer'][1]).toEqual(data[1]);
-    expect(result['Developer'][0].company).toBe('Acme Inc');
-    expect(result['Developer'][1].salary).toBe(120000);
-  });
+    it('creates separate groups for different cases', () => {
+      const data = [
+        { id: 1, title: 'developer' },
+        { id: 2, title: 'Developer' },
+      ];
 
-  it('handles items with various label formats', () => {
-    const data = [
-      { id: 1, title: 'senior developer', embedding: [0.1] },
-      { id: 2, title: 'Senior Developer', embedding: [0.2] },
-      { id: 3, title: 'SENIOR DEVELOPER', embedding: [0.3] },
-    ];
+      const result = groupItems(data, 'jobs');
 
-    const result = groupItems(data, 'jobs');
-
-    // Labels are case-sensitive, so creates 3 groups
-    expect(Object.keys(result)).toHaveLength(3);
+      expect(result.developer).toHaveLength(1);
+      expect(result.Developer).toHaveLength(1);
+    });
   });
 });
