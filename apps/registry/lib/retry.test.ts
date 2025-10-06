@@ -68,7 +68,6 @@ describe('retryWithBackoff', () => {
   });
 
   it('applies exponential backoff delays', async () => {
-    const delays: number[] = [];
     const fn = vi
       .fn()
       .mockRejectedValueOnce(new Error('fail 1'))
