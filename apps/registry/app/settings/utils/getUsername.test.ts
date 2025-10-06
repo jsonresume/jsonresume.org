@@ -7,82 +7,71 @@ describe('getUsername', () => {
       user: {
         user_metadata: {
           user_name: 'johndoe',
-          preferred_username: 'john_doe',
         },
       },
     };
 
-    const result = getUsername(session);
-
-    expect(result).toBe('johndoe');
+    expect(getUsername(session)).toBe('johndoe');
   });
 
-  it('falls back to preferred_username when user_name is not available', () => {
+  it('falls back to preferred_username when user_name missing', () => {
     const session = {
       user: {
         user_metadata: {
-          preferred_username: 'john_doe',
+          preferred_username: 'janedoe',
         },
       },
     };
 
-    const result = getUsername(session);
-
-    expect(result).toBe('john_doe');
-  });
-
-  it('returns undefined when both are missing', () => {
-    const session = {
-      user: {
-        user_metadata: {},
-      },
-    };
-
-    const result = getUsername(session);
-
-    expect(result).toBeUndefined();
-  });
-
-  it('returns undefined when session is null', () => {
-    const result = getUsername(null);
-    expect(result).toBeUndefined();
-  });
-
-  it('returns undefined when session is undefined', () => {
-    const result = getUsername(undefined);
-    expect(result).toBeUndefined();
-  });
-
-  it('returns undefined when user is missing', () => {
-    const session = {};
-    const result = getUsername(session);
-    expect(result).toBeUndefined();
-  });
-
-  it('returns undefined when user_metadata is missing', () => {
-    const session = {
-      user: {},
-    };
-    const result = getUsername(session);
-    expect(result).toBeUndefined();
+    expect(getUsername(session)).toBe('janedoe');
   });
 
   it('prefers user_name over preferred_username', () => {
     const session = {
       user: {
         user_metadata: {
-          user_name: 'first_choice',
-          preferred_username: 'second_choice',
+          user_name: 'user1',
+          preferred_username: 'user2',
         },
       },
     };
 
-    const result = getUsername(session);
-
-    expect(result).toBe('first_choice');
+    expect(getUsername(session)).toBe('user1');
   });
 
-  it('returns user_name even when it is empty string', () => {
+  it('returns undefined when session is null', () => {
+    expect(getUsername(null)).toBeUndefined();
+  });
+
+  it('returns undefined when session is undefined', () => {
+    expect(getUsername(undefined)).toBeUndefined();
+  });
+
+  it('returns undefined when user is missing', () => {
+    const session = {};
+
+    expect(getUsername(session)).toBeUndefined();
+  });
+
+  it('returns undefined when user_metadata is missing', () => {
+    const session = {
+      user: {},
+    };
+
+    expect(getUsername(session)).toBeUndefined();
+  });
+
+  it('returns undefined when both usernames are missing', () => {
+    const session = {
+      user: {
+        user_metadata: {},
+      },
+    };
+
+    expect(getUsername(session)).toBeUndefined();
+  });
+
+  it('handles empty string user_name by falling back', () => {
     const session = {
       user: {
         user_metadata: {
@@ -92,24 +81,18 @@ describe('getUsername', () => {
       },
     };
 
-    const result = getUsername(session);
-
-    // Empty string is falsy, so falls back
-    expect(result).toBe('fallback');
+    expect(getUsername(session)).toBe('fallback');
   });
 
-  it('handles null user_name gracefully', () => {
+  it('handles special characters in username', () => {
     const session = {
       user: {
         user_metadata: {
-          user_name: null,
-          preferred_username: 'fallback',
+          user_name: 'user-name_123',
         },
       },
     };
 
-    const result = getUsername(session);
-
-    expect(result).toBe('fallback');
+    expect(getUsername(session)).toBe('user-name_123');
   });
 });
