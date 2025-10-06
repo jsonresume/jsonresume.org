@@ -33,6 +33,9 @@ importers:
       dotenv:
         specifier: ^16.0.3
         version: 16.6.1
+      node-fetch:
+        specifier: ^3.3.2
+        version: 3.3.2
     devDependencies:
       '@repo/eslint-config-custom':
         specifier: workspace:*
