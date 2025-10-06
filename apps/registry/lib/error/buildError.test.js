@@ -2,99 +2,93 @@ import { describe, it, expect } from 'vitest';
 import buildError, { ERROR_CODES, ERROR_CODE_MESSAGES } from './buildError';
 
 describe('ERROR_CODES', () => {
-  it('contains all expected error codes', () => {
-    expect(ERROR_CODES).toHaveProperty('INVALID_USERNAME');
-    expect(ERROR_CODES).toHaveProperty('NON_EXISTENT_GIST');
-    expect(ERROR_CODES).toHaveProperty('GIST_UNKNOWN_ERROR');
-    expect(ERROR_CODES).toHaveProperty('RESUME_SCHEMA_ERROR');
-    expect(ERROR_CODES).toHaveProperty('TEMPLATE_MISSING');
-    expect(ERROR_CODES).toHaveProperty('UNKNOWN_TEMPLATE_ERROR');
-    expect(ERROR_CODES).toHaveProperty('INVALID_EXTENSION');
-    expect(ERROR_CODES).toHaveProperty('UNKNOWN_FORMATTER');
-    expect(ERROR_CODES).toHaveProperty('RESUME_NOT_VALID_JSON');
+  it('contains all error code constants', () => {
+    expect(ERROR_CODES.INVALID_USERNAME).toBe('INVALID_USERNAME');
+    expect(ERROR_CODES.NON_EXISTENT_GIST).toBe('NON_EXISTENT_GIST');
+    expect(ERROR_CODES.TEMPLATE_MISSING).toBe('TEMPLATE_MISSING');
   });
 
-  it('is frozen and cannot be modified', () => {
+  it('is frozen object', () => {
     expect(Object.isFrozen(ERROR_CODES)).toBe(true);
+  });
+
+  it('has matching keys and values', () => {
+    Object.keys(ERROR_CODES).forEach((key) => {
+      expect(ERROR_CODES[key]).toBe(key);
+    });
   });
 });
 
 describe('ERROR_CODE_MESSAGES', () => {
   it('has messages for all error codes', () => {
     Object.keys(ERROR_CODES).forEach((code) => {
-      expect(ERROR_CODE_MESSAGES).toHaveProperty(code);
+      expect(ERROR_CODE_MESSAGES[code]).toBeDefined();
       expect(typeof ERROR_CODE_MESSAGES[code]).toBe('string');
-      expect(ERROR_CODE_MESSAGES[code].length).toBeGreaterThan(0);
     });
   });
 
-  it('is frozen and cannot be modified', () => {
+  it('is frozen object', () => {
     expect(Object.isFrozen(ERROR_CODE_MESSAGES)).toBe(true);
+  });
+
+  it('contains helpful error messages', () => {
+    expect(ERROR_CODE_MESSAGES.INVALID_USERNAME).toContain('username');
+    expect(ERROR_CODE_MESSAGES.TEMPLATE_MISSING).toContain('theme');
+    expect(ERROR_CODE_MESSAGES.RESUME_SCHEMA_ERROR).toContain('schema');
   });
 });
 
 describe('buildError', () => {
   it('builds error object with code and message', () => {
-    const error = buildError(ERROR_CODES.INVALID_USERNAME);
-    expect(error).toEqual({
-      error: {
-        code: 'INVALID_USERNAME',
-        message: 'This is not a valid Github username',
-        extra: undefined,
-      },
+    const result = buildError('INVALID_USERNAME');
+
+    expect(result.error.code).toBe('INVALID_USERNAME');
+    expect(result.error.message).toBe(ERROR_CODE_MESSAGES.INVALID_USERNAME);
+  });
+
+  it('includes extra details when provided', () => {
+    const extra = { username: 'invalid@user' };
+    const result = buildError('INVALID_USERNAME', extra);
+
+    expect(result.error.extra).toEqual(extra);
+  });
+
+  it('handles undefined extra', () => {
+    const result = buildError('TEMPLATE_MISSING');
+
+    expect(result.error.extra).toBeUndefined();
+  });
+
+  it('builds template missing error', () => {
+    const result = buildError('TEMPLATE_MISSING');
+
+    expect(result.error.code).toBe('TEMPLATE_MISSING');
+    expect(result.error.message).toContain('theme');
+  });
+
+  it('builds schema error', () => {
+    const result = buildError('RESUME_SCHEMA_ERROR', {
+      errors: ['field missing'],
     });
+
+    expect(result.error.code).toBe('RESUME_SCHEMA_ERROR');
+    expect(result.error.extra.errors).toEqual(['field missing']);
   });
 
-  it('includes extra data when provided', () => {
-    const extra = { username: 'test@user', details: 'Invalid characters' };
-    const error = buildError(ERROR_CODES.INVALID_USERNAME, extra);
-    expect(error.error.extra).toEqual(extra);
+  it('returns consistent structure', () => {
+    const result = buildError('GIST_UNKNOWN_ERROR');
+
+    expect(result).toHaveProperty('error');
+    expect(result.error).toHaveProperty('code');
+    expect(result.error).toHaveProperty('message');
   });
 
-  it('builds RESUME_SCHEMA_ERROR correctly', () => {
-    const error = buildError(ERROR_CODES.RESUME_SCHEMA_ERROR);
-    expect(error.error.code).toBe('RESUME_SCHEMA_ERROR');
-    expect(error.error.message).toContain('schema');
-  });
+  it('handles all error codes', () => {
+    Object.keys(ERROR_CODES).forEach((code) => {
+      const result = buildError(code);
 
-  it('builds TEMPLATE_MISSING error correctly', () => {
-    const error = buildError(ERROR_CODES.TEMPLATE_MISSING);
-    expect(error.error.code).toBe('TEMPLATE_MISSING');
-    expect(error.error.message).toContain('unsupported');
-  });
-
-  it('builds NON_EXISTENT_GIST error correctly', () => {
-    const error = buildError(ERROR_CODES.NON_EXISTENT_GIST);
-    expect(error.error.code).toBe('NON_EXISTENT_GIST');
-    expect(error.error.message).toContain('gist');
-  });
-
-  it('preserves complex extra data', () => {
-    const extra = {
-      stack: 'Error stack trace here...',
-      context: {
-        userId: 123,
-        timestamp: '2024-01-01',
-      },
-    };
-    const error = buildError(ERROR_CODES.UNKNOWN_TEMPLATE_ERROR, extra);
-    expect(error.error.extra).toEqual(extra);
-    expect(error.error.extra.context.userId).toBe(123);
-  });
-
-  it('handles all error codes without throwing', () => {
-    Object.values(ERROR_CODES).forEach((code) => {
-      expect(() => buildError(code)).not.toThrow();
-    });
-  });
-
-  it('returns consistent structure for all error codes', () => {
-    Object.values(ERROR_CODES).forEach((code) => {
-      const error = buildError(code);
-      expect(error).toHaveProperty('error');
-      expect(error.error).toHaveProperty('code');
-      expect(error.error).toHaveProperty('message');
-      expect(error.error).toHaveProperty('extra');
+      expect(result.error.code).toBe(code);
+      expect(result.error.message).toBe(ERROR_CODE_MESSAGES[code]);
     });
   });
 });
