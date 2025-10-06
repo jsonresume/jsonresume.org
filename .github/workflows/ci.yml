@@ -71,7 +71,7 @@ jobs:
           cache: pnpm
       - run: pnpm install
       - name: Run unit tests
-        run: pnpm turbo test --filter=registry -- --run
+        run: pnpm turbo test --filter=registry --force -- --run
   test:
     runs-on: ubuntu-latest
     steps:
