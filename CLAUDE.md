@@ -269,6 +269,12 @@ feature/
   - **Pattern**: Each turbo command must have a corresponding task in turbo.json, even if it just passes through to workspace scripts
   - **Testing**: Run `pnpm turbo test` locally to verify task exists before pushing CI changes
   - Commit: 7db8e6a (fixed the missing task after initial unit-test job addition in ad31231)
+- **Turbo Test Execution Issue**: Turbo reports "No tasks were executed" even with correct turbo.json configuration
+  - Added `test` task to turbo.json with `cache: false`
+  - Tried `--filter=registry` and `--force` flags - both failed
+  - Solution: Bypass turbo entirely with `pnpm --filter registry test -- --run` in CI
+  - Pattern: For selective package tests, use pnpm --filter directly instead of turbo task runner
+  - Commits: 7db8e6a (turbo.json), 551f51f (CI fix)
 
 **Refactoring Large Files (200+ lines):**
 
