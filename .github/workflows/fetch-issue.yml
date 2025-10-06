@@ -25,9 +25,6 @@ jobs:
       - name: Setup pnpm
         run: npm install -g pnpm
 
-      - name: modules
-        run: pnpm add node-fetch -w
-
       - name: Install dependencies
         run: pnpm install
         env:
@@ -46,6 +43,7 @@ jobs:
       
       
       
+
 
 
 
