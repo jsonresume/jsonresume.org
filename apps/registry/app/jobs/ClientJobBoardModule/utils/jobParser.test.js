@@ -4,70 +4,67 @@ import { parseJobContent, getLocationString } from './jobParser';
 describe('parseJobContent', () => {
   it('parses valid JSON gpt_content', () => {
     const job = {
-      gpt_content: '{"title": "Developer", "company": "Tech Co"}',
+      gpt_content: '{"title": "Developer", "company": "Acme"}',
     };
+
     const result = parseJobContent(job);
-    expect(result).toEqual({
-      title: 'Developer',
-      company: 'Tech Co',
-    });
+
+    expect(result.title).toBe('Developer');
+    expect(result.company).toBe('Acme');
   });
 
   it('returns empty object when gpt_content is FAILED', () => {
-    const job = {
-      gpt_content: 'FAILED',
-    };
+    const job = { gpt_content: 'FAILED' };
+
     const result = parseJobContent(job);
+
     expect(result).toEqual({});
   });
 
   it('returns empty object when gpt_content is missing', () => {
     const job = {};
-    const result = parseJobContent(job);
-    expect(result).toEqual({});
-  });
 
-  it('parses complex nested gpt_content', () => {
-    const job = {
-      gpt_content: JSON.stringify({
-        title: 'Senior Engineer',
-        location: {
-          city: 'San Francisco',
-          region: 'CA',
-        },
-        requirements: ['5+ years', 'JavaScript', 'React'],
-      }),
-    };
     const result = parseJobContent(job);
-    expect(result).toEqual({
-      title: 'Senior Engineer',
-      location: {
-        city: 'San Francisco',
-        region: 'CA',
-      },
-      requirements: ['5+ years', 'JavaScript', 'React'],
-    });
+
+    expect(result).toEqual({});
   });
 
   it('returns empty object when gpt_content is null', () => {
-    const job = {
-      gpt_content: null,
-    };
+    const job = { gpt_content: null };
+
     const result = parseJobContent(job);
+
     expect(result).toEqual({});
   });
 
-  it('returns empty object when gpt_content is undefined', () => {
+  it('parses complex job content', () => {
     const job = {
-      gpt_content: undefined,
+      gpt_content: JSON.stringify({
+        title: 'Senior Engineer',
+        company: 'Tech Corp',
+        location: { city: 'SF', region: 'CA' },
+        salary: { min: 100000, max: 150000 },
+      }),
     };
+
     const result = parseJobContent(job);
+
+    expect(result.title).toBe('Senior Engineer');
+    expect(result.location.city).toBe('SF');
+    expect(result.salary.min).toBe(100000);
+  });
+
+  it('handles empty JSON object', () => {
+    const job = { gpt_content: '{}' };
+
+    const result = parseJobContent(job);
+
     expect(result).toEqual({});
   });
 });
 
 describe('getLocationString', () => {
-  it('formats complete location with city, region, and country', () => {
+  it('formats complete location', () => {
     const gptContent = {
       location: {
         city: 'San Francisco',
@@ -75,49 +72,85 @@ describe('getLocationString', () => {
         countryCode: 'US',
       },
     };
+
     const result = getLocationString(gptContent);
+
     expect(result).toBe('San Francisco, CA, US');
   });
 
   it('handles missing city', () => {
     const gptContent = {
       location: {
-        region: 'CA',
+        region: 'NY',
         countryCode: 'US',
       },
     };
+
     const result = getLocationString(gptContent);
-    expect(result).toBe('CA, US');
+
+    expect(result).toBe('NY, US');
   });
 
   it('handles missing region', () => {
     const gptContent = {
       location: {
-        city: 'San Francisco',
-        countryCode: 'US',
+        city: 'London',
+        countryCode: 'UK',
       },
     };
+
     const result = getLocationString(gptContent);
-    expect(result).toBe('San Francisco, US');
+
+    expect(result).toBe('London, UK');
   });
 
   it('handles only city', () => {
     const gptContent = {
-      location: {
-        city: 'San Francisco',
-      },
+      location: { city: 'Seattle' },
     };
+
     const result = getLocationString(gptContent);
-    expect(result).toBe('San Francisco');
+
+    expect(result).toBe('Seattle');
   });
 
-  it('returns empty string when location is missing', () => {
+  it('handles missing location object', () => {
     const gptContent = {};
+
     const result = getLocationString(gptContent);
+
     expect(result).toBe('');
   });
 
-  it('returns empty string when all location fields are null', () => {
+  it('handles null values in location', () => {
+    const gptContent = {
+      location: {
+        city: null,
+        region: 'TX',
+        countryCode: null,
+      },
+    };
+
+    const result = getLocationString(gptContent);
+
+    expect(result).toBe('TX');
+  });
+
+  it('handles empty strings in location', () => {
+    const gptContent = {
+      location: {
+        city: '',
+        region: 'CA',
+        countryCode: '',
+      },
+    };
+
+    const result = getLocationString(gptContent);
+
+    expect(result).toBe('CA');
+  });
+
+  it('handles all null location', () => {
     const gptContent = {
       location: {
         city: null,
@@ -125,19 +158,23 @@ describe('getLocationString', () => {
         countryCode: null,
       },
     };
+
     const result = getLocationString(gptContent);
+
     expect(result).toBe('');
   });
 
-  it('handles partial location data', () => {
+  it('filters falsy values correctly', () => {
     const gptContent = {
       location: {
-        city: 'Remote',
-        region: null,
-        countryCode: 'Global',
+        city: 'Boston',
+        region: undefined,
+        countryCode: 'US',
       },
     };
+
     const result = getLocationString(gptContent);
-    expect(result).toBe('Remote, Global');
+
+    expect(result).toBe('Boston, US');
   });
 });
