@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@repo/ui';
+import { Button, Textarea } from '@repo/ui';
 
 export const LetterForm = ({
   jobDescription,
@@ -15,8 +15,8 @@ export const LetterForm = ({
       <label className="block text-xl font-semibold mb-2">
         Job Description (optional)
       </label>
-      <textarea
-        className="w-full h-32 border border-gray-300 rounded-md p-4 mb-4 text-sm"
+      <Textarea
+        className="h-32 mb-4"
         onChange={saveJobDescription}
         value={jobDescription}
       />
