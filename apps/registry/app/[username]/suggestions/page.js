@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import Hero from '../../../src/ui/Hero';
 import ReactMarkdown from 'react-markdown';
 import Loading from '../../components/Loading';
+import { Button } from '@repo/ui';
 
 export default function Suggestions({ params }) {
   const { username } = params;
@@ -56,13 +57,9 @@ export default function Suggestions({ params }) {
           <option value="spelling">Spelling</option>
           <option value="grammar">Grammar</option>
         </select>
-        <button
-          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
-          disabled={submitting}
-          onClick={handleGenerate}
-        >
+        <Button disabled={submitting} onClick={handleGenerate}>
           {submitting ? 'GENERATING' : 'GENERATE'}
-        </button>
+        </Button>
       </div>
       <br />
       {submitting && <Loading />}

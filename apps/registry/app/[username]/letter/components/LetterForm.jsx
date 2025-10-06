@@ -1,5 +1,7 @@
 'use client';
 
+import { Button } from '@repo/ui';
+
 export const LetterForm = ({
   jobDescription,
   saveJobDescription,
@@ -31,13 +33,9 @@ export const LetterForm = ({
           <option value="funny">Funny</option>
           <option value="professional">Professional</option>
         </select>
-        <button
-          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
-          disabled={submitting}
-          onClick={handleGenerate}
-        >
+        <Button disabled={submitting} onClick={handleGenerate}>
           {submitting ? 'GENERATING' : 'GENERATE'}
-        </button>
+        </Button>
       </div>
     </>
   );

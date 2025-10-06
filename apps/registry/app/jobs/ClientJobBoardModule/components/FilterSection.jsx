@@ -1,4 +1,5 @@
 import { X } from 'lucide-react';
+import { Button } from '@repo/ui';
 
 export const FilterSection = ({
   title,
@@ -29,13 +30,15 @@ export const FilterSection = ({
           ))}
         </select>
         {value && (
-          <button
+          <Button
             onClick={() => onChange('')}
-            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            variant="ghost"
+            size="icon"
+            className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 text-gray-400 hover:text-gray-600"
             title="Clear filter"
           >
             <X className="w-4 h-4" />
-          </button>
+          </Button>
         )}
       </div>
     </div>
