@@ -3,6 +3,7 @@ import { OverviewSection } from './components/OverviewSection.jsx';
 import { ResumeEndpoint } from './components/ResumeEndpoint.jsx';
 import { JobsEndpoint } from './components/JobsEndpoint.jsx';
 import { LegacyJobsEndpoint } from './components/LegacyJobsEndpoint.jsx';
+import { ATSEndpoint } from './components/ATSEndpoint.jsx';
 
 export default function Docs() {
   return (
@@ -15,6 +16,7 @@ export default function Docs() {
               <OverviewSection />
               <ResumeEndpoint />
               <JobsEndpoint />
+              <ATSEndpoint />
               <LegacyJobsEndpoint />
             </div>
           </div>
