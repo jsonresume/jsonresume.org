@@ -348,6 +348,37 @@ feature/
 - **Detection**: Build errors like "Unsupported Server Component type: undefined" or "Maximum call stack size exceeded"
 - **Prevention**: Never name a file the same as a directory it imports from
 
+**Avoiding Code Duplication - Search Before Creating:**
+
+- **CRITICAL**: Before creating ANY new function, hook, or utility, ALWAYS search the codebase first
+- **Pattern**: Use Glob/Grep tools to find existing similar functionality
+- **Search locations** (in priority order):
+  1. `apps/registry/app/utils/` - shared utilities
+  2. `apps/registry/lib/` - library functions
+  3. `packages/` - monorepo shared packages
+  4. Module-specific utils folders (e.g., `app/[username]/jobs/utils/`)
+- **Before creating a new function**:
+  1. Search for similar function names: `grep -r "functionName" apps/registry/app`
+  2. Check utils folders: `find apps/registry -name "*utils*" -type d`
+  3. Review existing code in the same domain (jobs, resume, similarity, etc.)
+- **When you find existing code**:
+  - **Reuse it directly** if it does exactly what you need
+  - **Extend/modify it** if it's close but needs tweaks (better than duplicating)
+  - **Abstract it** if you find repeated patterns across multiple places
+- **Red flags for duplication**:
+  - Creating formatters when `apps/registry/app/utils/formatters.js` exists
+  - Writing vector math when `apps/registry/app/utils/vectorUtils.js` exists
+  - Building date utilities when `apps/registry/lib/calculations/dateUtils.js` exists
+  - Creating parsing logic when similar parsers exist in other modules
+- **Benefits**: Less code to maintain, consistent behavior, fewer bugs, easier refactoring
+- **Example workflow**:
+  ```
+  Need a salary formatter?
+  → Search: grep -r "salary" apps/registry --include="*.js"
+  → Find: apps/registry/app/jobs/utils/salaryParser.js
+  → Result: Import and use existing salaryParser instead of creating new one
+  ```
+
 **Decision-Making Authority:**
 
 - Refactor any code that violates standards
