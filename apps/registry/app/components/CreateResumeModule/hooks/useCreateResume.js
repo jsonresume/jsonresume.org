@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { logger } from '@/lib/logger';
 import { useResume } from '../../../providers/ResumeProvider';
 
 export function useCreateResume(sampleResume) {
@@ -11,7 +12,7 @@ export function useCreateResume(sampleResume) {
       await createGist(sampleResume);
       window.location.reload();
     } catch (error) {
-      console.error('Error creating resume:', error);
+      logger.error({ error: error.message }, 'Error creating resume');
       setCreating(false);
     }
   };

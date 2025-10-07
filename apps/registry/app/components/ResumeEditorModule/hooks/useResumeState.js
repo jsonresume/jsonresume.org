@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { logger } from '@/lib/logger';
 import { defaultResume } from '../data/defaultResume';
 
 export const useResumeState = (initialResume) => {
@@ -9,7 +10,7 @@ export const useResumeState = (initialResume) => {
         ? JSON.parse(initialResume)
         : initialResume;
     } catch (error) {
-      console.error('Error parsing initial resume:', error);
+      logger.error({ error: error.message }, 'Error parsing initial resume');
       return defaultResume;
     }
   });
@@ -21,7 +22,7 @@ export const useResumeState = (initialResume) => {
         ? initialResume
         : JSON.stringify(initialResume, null, 2);
     } catch (error) {
-      console.error('Error storing original resume:', error);
+      logger.error({ error: error.message }, 'Error storing original resume');
       return JSON.stringify(defaultResume);
     }
   });

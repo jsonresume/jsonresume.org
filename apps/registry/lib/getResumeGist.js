@@ -5,7 +5,7 @@ import { RESUME_GIST_NAME } from '../app/providers/ResumeProvider';
 
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
-const getResumeGist = async (username) => {
+const getResumeGist = async (username, gistname = RESUME_GIST_NAME) => {
   let gistData = null;
   try {
     gistData = await axios.get(
@@ -26,7 +26,7 @@ const getResumeGist = async (username) => {
   }
 
   const resumeUrl = find(gistData.data, (f) => {
-    return f.files[RESUME_GIST_NAME];
+    return f.files[gistname];
   });
 
   if (!resumeUrl) {
@@ -46,7 +46,16 @@ const getResumeGist = async (username) => {
       url: fullResumeGistUrl,
     });
   } catch (e) {
+    // Check if the error is a JSON parsing error
+    if (e.message?.includes('JSON') || e.name === 'SyntaxError') {
+      return buildError(ERROR_CODES.RESUME_NOT_VALID_JSON);
+    }
     return buildError(ERROR_CODES.GIST_UNKNOWN_ERROR);
+  }
+
+  // Validate that we actually received valid JSON data
+  if (typeof resumeRes.data !== 'object' || resumeRes.data === null) {
+    return buildError(ERROR_CODES.RESUME_NOT_VALID_JSON);
   }
 
   return { resume: resumeRes.data };

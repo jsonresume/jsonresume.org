@@ -1,8 +1,8 @@
-import { DocHeader } from './components/DocHeader';
-import { OverviewSection } from './components/OverviewSection';
-import { ResumeEndpoint } from './components/ResumeEndpoint';
-import { JobsEndpoint } from './components/JobsEndpoint';
-import { LegacyJobsEndpoint } from './components/LegacyJobsEndpoint';
+import { DocHeader } from './components/DocHeader.jsx';
+import { OverviewSection } from './components/OverviewSection.jsx';
+import { ResumeEndpoint } from './components/ResumeEndpoint.jsx';
+import { JobsEndpoint } from './components/JobsEndpoint.jsx';
+import { LegacyJobsEndpoint } from './components/LegacyJobsEndpoint.jsx';
 
 export default function Docs() {
   return (

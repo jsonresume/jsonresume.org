@@ -2,6 +2,7 @@
 
 import { useMonaco } from '@monaco-editor/react';
 import { useState } from 'react';
+import { logger } from '@/lib/logger';
 import { useResume } from '../providers/ResumeProvider';
 import { useResumeState } from './ResumeEditorModule/hooks/useResumeState';
 import { useMonacoSetup } from './ResumeEditorModule/hooks/useMonacoSetup';
@@ -14,6 +15,7 @@ const ResumeEditor = ({ resume: initialResume, updateGist }) => {
   const { username } = useResume();
   const [editorMode, setEditorMode] = useState('gui');
   const [isSaving, setIsSaving] = useState(false);
+  const [selectedTheme, setSelectedTheme] = useState('professional');
   const monaco = useMonaco();
 
   const { resume, setResume, setOriginalResume, hasChanges, setHasChanges } =
@@ -27,7 +29,7 @@ const ResumeEditor = ({ resume: initialResume, updateGist }) => {
     handleApplyChanges,
     handleGuiChange,
     handleJsonChange,
-  } = useResumeHandlers(resume, setResume);
+  } = useResumeHandlers(resume, setResume, selectedTheme);
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -37,7 +39,7 @@ const ResumeEditor = ({ resume: initialResume, updateGist }) => {
       setOriginalResume(resumeStr);
       setHasChanges(false);
     } catch (error) {
-      console.error('Error saving resume:', error);
+      logger.error({ error: error.message, username }, 'Error saving resume');
     } finally {
       setIsSaving(false);
     }
@@ -52,6 +54,8 @@ const ResumeEditor = ({ resume: initialResume, updateGist }) => {
         onSave={handleSave}
         isSaving={isSaving}
         hasChanges={hasChanges}
+        selectedTheme={selectedTheme}
+        setSelectedTheme={setSelectedTheme}
       />
       <div className="flex-1 flex overflow-hidden">
         <div className="w-1/2">

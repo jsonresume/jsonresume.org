@@ -1,6 +1,7 @@
 'use client';
 
 import axios from 'axios';
+import { logger } from '@/lib/logger';
 import { useEffect, useState } from 'react';
 import Hero from '../../../src/ui/Hero';
 import ReactMarkdown from 'react-markdown';
@@ -24,7 +25,7 @@ export default function Suggestions({ params }) {
           setSuggestions(response.data);
           setSubmitting(false);
         } catch (error) {
-          console.error('Error fetching data: ', error);
+          logger.error({ error: error.message }, 'Error fetching data: ');
           setSubmitting(false);
         }
       };

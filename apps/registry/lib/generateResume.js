@@ -1,101 +1,42 @@
-import schema from './schema';
 import buildError, { ERROR_CODES } from './error/buildError';
 import getResumeGist from './getResumeGist';
 import formatters from './formatters/formatters';
-
-const Validator = require('jsonschema').Validator;
-
-const EXTENSIONS = new Set([
-  'qr',
-  'json',
-  'tex',
-  'txt',
-  'template',
-  'yaml',
-  'rendercv',
-  'agent',
-]);
+import { validateExtension, validateResume } from './generateResume/validation';
+import { cacheResume } from './generateResume/cacheResume';
+import { formatResume } from './generateResume/formatResume';
 
 const generateResume = async (username, extension = 'template', query = {}) => {
-  const { theme } = query;
+  const { theme, gistname } = query;
   const formatter = formatters[extension];
 
-  if (!EXTENSIONS.has(extension)) {
-    return buildError(ERROR_CODES.INVALID_EXTENSION);
-  }
+  const { error: extensionError } = validateExtension(extension);
+  if (extensionError) return extensionError;
 
   if (!formatter) {
     return buildError(ERROR_CODES.UNKNOWN_FORMATTER);
   }
 
   // retrieve the users github gist
-  const { error: gistError, resume } = await getResumeGist(username);
+  const { error: gistError, resume } = await getResumeGist(username, gistname);
 
   if (gistError) {
     return buildError(gistError);
   }
 
-  const v = new Validator();
-  const validation = v.validate(resume, schema);
-
-  if (!validation.valid) {
-    return buildError(ERROR_CODES.RESUME_SCHEMA_ERROR, {
-      validation: validation.errors,
-    });
-  }
+  const { error: validationError } = validateResume(resume);
+  if (validationError) return validationError;
 
   let selectedTheme = theme || resume.meta?.theme || 'elegant';
-
   selectedTheme = selectedTheme.toLowerCase();
 
   // @todo - using as a resume cache for extra features
   (async () => {
-    // Skip caching if Supabase key is not configured (e.g., in CI/test environments)
-    const supabaseKey = process.env.SUPABASE_KEY;
-    if (!supabaseKey) {
-      console.log('Skipping resume caching: SUPABASE_KEY not configured');
-      return;
-    }
-
-    try {
-      // Lazy load Supabase client only when needed
-      const { createClient } = require('@supabase/supabase-js');
-      const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
-      const supabase = createClient(supabaseUrl, supabaseKey);
-
-      await supabase
-        .from('resumes')
-        .upsert(
-          {
-            username,
-            resume: JSON.stringify(resume),
-            updated_at: new Date(),
-          },
-          { onConflict: 'username' }
-        )
-        .select();
-    } catch (error) {
-      console.error('Failed to cache resume:', error);
-    }
+    await cacheResume(username, resume);
   })();
 
   const options = { ...query, theme: selectedTheme, username };
 
-  let formatted = {};
-
-  try {
-    formatted = await formatter.format(resume, options);
-  } catch (e) {
-    console.error(e);
-    // @todo - do this better
-    if (e.message === 'theme-missing') {
-      return buildError(ERROR_CODES.TEMPLATE_MISSING);
-    }
-
-    return buildError(ERROR_CODES.UNKNOWN_TEMPLATE_ERROR, { stack: e.stack });
-  }
-
-  return { content: formatted.content, headers: formatted.headers || [] };
+  return formatResume(resume, formatter, options);
 };
 
 export default generateResume;

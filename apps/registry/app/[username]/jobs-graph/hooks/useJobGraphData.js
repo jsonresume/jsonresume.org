@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { logger } from '@/lib/logger';
 import axios from 'axios';
 import { convertToReactFlowFormat } from '../utils/graphConverter';
 
@@ -31,7 +32,7 @@ export const useJobGraphData = (username, setNodes, setEdges) => {
         setNodes(rfNodes);
         setEdges(rfEdges);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        logger.error({ error: error.message }, 'Error fetching data:');
       } finally {
         setIsLoading(false);
       }

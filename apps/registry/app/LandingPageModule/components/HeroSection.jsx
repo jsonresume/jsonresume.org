@@ -1,6 +1,5 @@
 import Link from 'next/link';
-import { Button } from '@repo/ui/components/ui/button';
-import { Badge } from '@repo/ui/components/ui/badge';
+import { Button, Badge } from '@repo/ui';
 import { Github, FileJson, ArrowRight, Code2, Users } from 'lucide-react';
 
 export const HeroSection = () => {

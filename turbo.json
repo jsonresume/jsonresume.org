@@ -20,7 +20,8 @@
     "NEXT_PUBLIC_SUPABASE_URL",
     "NEXT_PUBLIC_SUPABASE_ANON_KEY",
     "NEXT_PUBLIC_APP_URL",
-    "PERPLEXITY_API_KEY"
+    "PERPLEXITY_API_KEY",
+    "LOG_LEVEL"
   ],
   "tasks": {
     "db:generate": {
@@ -36,6 +37,9 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "test": {
+      "cache": false
     },
     "test:e2e": {
       "cache": false,

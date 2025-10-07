@@ -1,6 +1,8 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { logger } from '@/lib/logger';
 
 const PublicResumeContext = createContext({
   resume: null,
@@ -26,6 +28,7 @@ export function PublicResumeProvider({ username, children }) {
   const [resume, setResume] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     const fetchPublicResume = async () => {
@@ -33,7 +36,12 @@ export function PublicResumeProvider({ username, children }) {
         setLoading(true);
         setError(null);
 
-        const response = await fetch(`/api/${username}`);
+        const gistname = searchParams.get('gistname');
+        const url = gistname
+          ? `/api/${username}?gistname=${encodeURIComponent(gistname)}`
+          : `/api/${username}`;
+
+        const response = await fetch(url);
 
         if (!response.ok) {
           if (response.status === 404) {
@@ -45,7 +53,14 @@ export function PublicResumeProvider({ username, children }) {
         const data = await response.json();
         setResume(data);
       } catch (err) {
-        console.error('Error fetching public resume:', err);
+        logger.error(
+          {
+            error: err.message,
+            username,
+            gistname: searchParams.get('gistname'),
+          },
+          'Error fetching public resume'
+        );
         setError(err.message);
       } finally {
         setLoading(false);
@@ -55,7 +70,7 @@ export function PublicResumeProvider({ username, children }) {
     if (username) {
       fetchPublicResume();
     }
-  }, [username]);
+  }, [username, searchParams]);
 
   const value = {
     resume,

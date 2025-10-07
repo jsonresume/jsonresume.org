@@ -4,16 +4,13 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-} from '@repo/ui/components/ui/card';
-
-import {
   Timeline,
   TimelineContent,
   TimelineDot,
   TimelineHeading,
   TimelineItem,
   TimelineLine,
-} from '@repo/ui/components/ui/timeline';
+} from '@repo/ui';
 import { Briefcase } from 'lucide-react';
 
 const SimpleVerticalTimeline = ({ resume }) => {

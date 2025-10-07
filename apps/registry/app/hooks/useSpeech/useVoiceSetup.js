@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { logger } from '@/lib/logger';
 import { loadVoices, retryLoadVoices } from './voiceLoader';
 
 export const useVoiceSetup = () => {
@@ -8,7 +9,7 @@ export const useVoiceSetup = () => {
 
   useEffect(() => {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      console.log('Speech synthesis is supported');
+      logger.info('Speech synthesis is supported');
       setSupported(true);
 
       const handleVoiceLoaded = (voice) => {
@@ -26,7 +27,7 @@ export const useVoiceSetup = () => {
         window.speechSynthesis?.cancel();
       };
     } else {
-      console.warn('Speech synthesis is not supported');
+      logger.warn('Speech synthesis is not supported');
       setError('Speech synthesis is not supported in this browser');
     }
   }, []);

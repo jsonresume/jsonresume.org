@@ -1,10 +1,11 @@
 'use client';
 
 import { ResumeProvider } from '../providers/ResumeProvider';
+import { logger } from '@/lib/logger';
 import Editor from '../components/Editor';
 
 export default function EditorWrapper({ username, session }) {
-  console.log('EditorWrapper:', { username, session });
+  logger.debug({ username, session }, 'EditorWrapper:');
 
   if (!session) {
     return (

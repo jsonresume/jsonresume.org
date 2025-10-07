@@ -1,10 +1,5 @@
 import { Briefcase } from 'lucide-react';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@repo/ui/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui';
 
 /**
  * Overview metrics card component

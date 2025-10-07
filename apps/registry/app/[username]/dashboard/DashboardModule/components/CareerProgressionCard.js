@@ -1,11 +1,5 @@
 import { FileText } from 'lucide-react';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@repo/ui/components/ui/card';
-import { Progress } from '@repo/ui/components/ui/progress';
+import { Card, CardContent, CardHeader, CardTitle, Progress } from '@repo/ui';
 
 /**
  * Career progression card component

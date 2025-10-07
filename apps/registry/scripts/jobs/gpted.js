@@ -1,8 +1,7 @@
-// Process job descriptions using OpenAI to create structured JSON data
+// Process job descriptions using Vercel AI SDK to create structured JSON data
 
 require('dotenv').config({ path: __dirname + '/./../../.env' });
 
-const OpenAI = require('openai');
 const async = require('async');
 const { initializeSupabase, fetchJobs } = require('./gpted/database');
 const processJob = require('./gpted/processJob');
@@ -18,19 +17,6 @@ console.log('Environment variables:', {
 
 // Initialize Supabase
 const supabase = initializeSupabase();
-
-// Initialize OpenAI
-let openaiClient;
-try {
-  console.log('Attempting to create OpenAI client');
-  openaiClient = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-  });
-  console.log('OpenAI client created successfully');
-} catch (error) {
-  console.error('Failed to create OpenAI client:', error.message);
-  process.exit(1); // Exit if OpenAI fails as it's essential
-}
 
 async function main() {
   console.log('======================================');
@@ -56,7 +42,7 @@ async function main() {
 
   // Process jobs in parallel with a concurrency limit of 5
   await async.eachLimit(jobsToProcess, 5, async (job) => {
-    await processJob(job, openaiClient, supabase);
+    await processJob(job, supabase);
     // Small delay between starting jobs to avoid rate limiting
     await new Promise((resolve) => setTimeout(resolve, 500));
   });

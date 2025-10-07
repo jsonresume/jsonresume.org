@@ -1,6 +1,5 @@
-const { generateText } = require('ai');
+const { generateText, embed } = require('ai');
 const { openai } = require('@ai-sdk/openai');
-const OpenAI = require('openai');
 
 export default async function handler(req, res) {
   // Set CORS headers to allow any origin
@@ -56,18 +55,14 @@ export default async function handler(req, res) {
   });
   console.log({ resumeDescription });
 
-  // Use OpenAI SDK for embeddings (not yet supported in Vercel AI SDK)
-  const openaiClient = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-  });
-
-  const completion = await openaiClient.embeddings.create({
-    model: 'text-embedding-3-large',
-    input: resumeDescription,
+  // Generate embedding using Vercel AI SDK
+  const { embedding: rawEmbedding } = await embed({
+    model: openai.embedding('text-embedding-3-large'),
+    value: resumeDescription,
   });
 
   const desiredLength = 3072;
-  let embedding = completion.data[0].embedding;
+  let embedding = rawEmbedding;
   if (embedding.length < desiredLength) {
     embedding = embedding.concat(
       Array(desiredLength - embedding.length).fill(0)

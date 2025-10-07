@@ -1,4 +1,5 @@
 import { Octokit } from 'octokit';
+import { logger } from '@/lib/logger';
 import { RESUME_GIST_NAME } from '../constants';
 import { findLatestResumeGist } from './gistFinder';
 import { getSession, authenticateGitHub } from './githubAuth';
@@ -19,7 +20,10 @@ export const updateGistContent = async (
   const latestGistId = await findLatestResumeGist(octokit);
 
   if (latestGistId) {
-    console.log('Updating existing gist:', latestGistId);
+    logger.info(
+      { gistId: latestGistId, action: 'gist_update' },
+      'Updating existing gist'
+    );
     await octokit.rest.gists.update({
       gist_id: latestGistId,
       files: {
@@ -30,7 +34,10 @@ export const updateGistContent = async (
     });
     setGistId(latestGistId);
   } else {
-    console.log('No existing resume.json gist found, creating new one');
+    logger.info(
+      { action: 'gist_create_start' },
+      'No existing resume.json gist found, creating new one'
+    );
     const { data: newGist } = await octokit.rest.gists.create({
       files: {
         [RESUME_GIST_NAME]: {
@@ -40,7 +47,10 @@ export const updateGistContent = async (
       public: true,
       description: 'JSON Resume',
     });
-    console.log('Created new gist:', newGist.id);
+    logger.info(
+      { gistId: newGist.id, action: 'gist_created' },
+      'Created new gist'
+    );
     setGistId(newGist.id);
   }
 

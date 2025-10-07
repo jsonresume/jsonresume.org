@@ -2,6 +2,8 @@
  * Core speech synthesis engine
  */
 
+import { logger } from '@/lib/logger';
+
 const UTTERANCE_CONFIG = {
   rate: 0.9,
   pitch: 1.0,
@@ -24,15 +26,15 @@ export const speakWithWarmup = (utterance) => {
     warmup.volume = 0;
 
     warmup.onend = () => {
-      console.log('Warmup ended, starting main speech');
+      logger.debug('Warmup ended, starting main speech');
 
       utterance.onend = () => {
-        console.log('Speech ended normally');
+        logger.debug('Speech ended normally');
         resolve();
       };
 
       utterance.onerror = (event) => {
-        console.error('Speech error occurred:', event);
+        logger.error({ error: event.error }, 'Speech error occurred');
         reject(new Error(`Speech error: ${event.error}`));
       };
 

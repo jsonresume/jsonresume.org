@@ -1,6 +1,5 @@
 import Link from 'next/link';
-import { Button } from '@repo/ui/components/ui/button';
-import { Card, CardContent } from '@repo/ui/components/ui/card';
+import { Button, Card, CardContent } from '@repo/ui';
 import { Github, FileJson, ArrowRight } from 'lucide-react';
 
 export const CTASection = () => {

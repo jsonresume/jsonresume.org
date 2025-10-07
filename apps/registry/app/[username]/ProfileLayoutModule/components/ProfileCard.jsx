@@ -1,6 +1,6 @@
 import { useRouter } from 'next/navigation';
 import { MapPin } from 'lucide-react';
-import { Button } from '@repo/ui/components/ui/button';
+import { Button, Avatar, AvatarImage, AvatarFallback } from '@repo/ui';
 
 export function ProfileCard({ resume, username, image }) {
   const router = useRouter();
@@ -8,11 +8,12 @@ export function ProfileCard({ resume, username, image }) {
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
       <div className="flex flex-col items-center">
-        <img
-          src={image}
-          alt={`${resume.basics.name}`}
-          className="w-[150px] h-[150px] rounded-full border-4 border-white shadow-md"
-        />
+        <Avatar className="w-[150px] h-[150px] border-4 border-white shadow-md">
+          <AvatarImage src={image} alt={`${resume.basics.name}`} />
+          <AvatarFallback>
+            {resume.basics.name?.charAt(0) || 'U'}
+          </AvatarFallback>
+        </Avatar>
         <h2 className="mt-4 mb-2 text-3xl font-semibold text-gray-800">
           {resume.basics.name}
         </h2>

@@ -7,7 +7,9 @@
     "format": "prettier -w .",
     "prettier": "prettier -c .",
     "prepare": "husky install",
-    "ui:add": "pnpm --filter @repo/ui ui:add"
+    "ui:add": "pnpm --filter @repo/ui ui:add",
+    "storybook": "pnpm --filter @repo/ui storybook",
+    "build-storybook": "pnpm --filter @repo/ui build-storybook"
   },
   "devDependencies": {
     "@repo/eslint-config-custom": "workspace:*",
@@ -41,7 +43,18 @@
       "braces@<3.0.3": "^3.0.3",
       "axios@<1.12.0": "^1.12.0",
       "highlight.js@<10.4.1": "^10.7.3",
-      "got@<11.8.5": "^11.8.6"
+      "got@<11.8.5": "^11.8.6",
+      "markdown-it@<12.3.2": "^12.3.2",
+      "postcss@<8.4.31": "^8.4.31",
+      "validator@<13.7.0": "^13.7.0",
+      "micromatch@<4.0.8": "^4.0.8",
+      "pug@<3.0.3": "^3.0.3",
+      "pug-code-gen@<3.0.3": "^3.0.3",
+      "esbuild@<0.25.0": "^0.25.0",
+      "vite@<=5.4.19": "^5.4.20",
+      "html-minifier@<=4.0.0": "npm:html-minifier-terser@^7.2.0",
+      "lodash.template@<=4.5.0": "npm:lodash@^4.17.21",
+      "webpack-dev-server@<=5.2.0": "^5.2.1"
     }
   }
 }

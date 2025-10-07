@@ -1,5 +1,6 @@
 import { useRef, useEffect } from 'react';
 import { MessageBubble } from './MessageBubble';
+import { ScrollArea } from '@repo/ui';
 
 export const MessageList = ({
   messages,
@@ -13,33 +14,36 @@ export const MessageList = ({
 
   useEffect(() => {
     if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop =
-        chatContainerRef.current.scrollHeight;
+      const viewport = chatContainerRef.current.querySelector(
+        '[data-radix-scroll-area-viewport]'
+      );
+      if (viewport) {
+        viewport.scrollTop = viewport.scrollHeight;
+      }
     }
   }, [messages]);
 
   return (
-    <div
-      ref={chatContainerRef}
-      className="flex-1 overflow-y-auto p-4 space-y-4"
-    >
-      {messages.map((message) => (
-        <MessageBubble
-          key={message.id}
-          message={message}
-          speaking={speaking}
-          onStopSpeaking={onStopSpeaking}
-          onApplyChanges={onApplyChanges}
-        />
-      ))}
-      {isLoading && (
-        <div className="flex justify-start">
-          <div className="bg-gray-100 p-3 rounded-lg">
-            <span className="animate-pulse">Thinking...</span>
+    <ScrollArea ref={chatContainerRef} className="flex-1 p-4">
+      <div className="space-y-4">
+        {messages.map((message) => (
+          <MessageBubble
+            key={message.id}
+            message={message}
+            speaking={speaking}
+            onStopSpeaking={onStopSpeaking}
+            onApplyChanges={onApplyChanges}
+          />
+        ))}
+        {isLoading && (
+          <div className="flex justify-start">
+            <div className="bg-gray-100 p-3 rounded-lg">
+              <span className="animate-pulse">Thinking...</span>
+            </div>
           </div>
-        </div>
-      )}
-      <div ref={messagesEndRef} />
-    </div>
+        )}
+        <div ref={messagesEndRef} />
+      </div>
+    </ScrollArea>
   );
 };

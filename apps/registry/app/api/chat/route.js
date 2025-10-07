@@ -1,6 +1,7 @@
 import { generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { NextResponse } from 'next/server';
+import { logger } from '@/lib/logger';
 import { SYSTEM_PROMPT } from './config/systemPrompt';
 import { RESUME_TOOL_SCHEMA } from './config/resumeToolSchema';
 import { processToolResponse } from './utils/processToolResponse';
@@ -34,7 +35,7 @@ export async function POST(req) {
 
     return processToolResponse(result);
   } catch (error) {
-    console.error('Error:', error);
+    logger.error({ error: error.message }, 'Chat API error');
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

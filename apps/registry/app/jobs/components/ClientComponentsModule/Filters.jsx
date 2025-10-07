@@ -1,6 +1,7 @@
 'use client';
 
 import { Filter } from 'lucide-react';
+import { Button } from '@repo/ui';
 import { JOB_TYPES, EXPERIENCE_LEVELS } from './filterOptions';
 
 export function Filters({
@@ -34,12 +35,14 @@ export function Filters({
                 </label>
               ))}
               {selectedJobType && (
-                <button
+                <Button
+                  variant="link"
+                  size="sm"
                   onClick={() => setSelectedJobType('')}
-                  className="text-sm text-blue-600 hover:text-blue-500 mt-1"
+                  className="mt-1 h-auto p-0"
                 >
                   Clear
-                </button>
+                </Button>
               )}
             </div>
           </div>
@@ -62,12 +65,14 @@ export function Filters({
                 </label>
               ))}
               {selectedExperience && (
-                <button
+                <Button
+                  variant="link"
+                  size="sm"
                   onClick={() => setSelectedExperience('')}
-                  className="text-sm text-blue-600 hover:text-blue-500 mt-1"
+                  className="mt-1 h-auto p-0"
                 >
                   Clear
-                </button>
+                </Button>
               )}
             </div>
           </div>

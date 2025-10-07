@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import { logger } from '@/lib/logger';
 import { createClient } from '@supabase/supabase-js';
 import dynamic from 'next/dynamic';
 
@@ -8,7 +9,9 @@ const ClientJobBoard = dynamic(() => import('./ClientJobBoard'), {
 
 const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
 
-// This ensures the page is dynamic at runtime
+// Force dynamic rendering - Next.js route config
+export const dynamicParams = true;
+export const revalidate = 0;
 
 async function getJobs() {
   // During build time or when SUPABASE_KEY is not available
@@ -28,19 +31,39 @@ async function getJobs() {
       .order('created_at', { ascending: false });
 
     if (error) {
-      console.error('Error fetching jobs:', error);
+      logger.error({ error: error.message }, 'Error fetching jobs:');
       return { jobs: [], error };
     }
 
     return { jobs: jobs || [], error: null };
   } catch (error) {
-    console.error('Error:', error);
+    logger.error({ error: error.message }, 'Error:');
     return { jobs: [], error };
   }
 }
 
 export default async function JobsPage() {
   const { jobs } = await getJobs();
+
+  // Show error message if SUPABASE_KEY is missing
+  if (!process.env.SUPABASE_KEY) {
+    return (
+      <div className="min-h-screen bg-gray-100 p-8">
+        <div className="max-w-7xl mx-auto">
+          <h1 className="text-4xl font-bold text-black mb-8">Job Board</h1>
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+            <h2 className="text-xl font-semibold text-yellow-800 mb-2">
+              Configuration Required
+            </h2>
+            <p className="text-yellow-700">
+              The job board is currently unavailable due to missing
+              configuration. Please contact the administrator.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">

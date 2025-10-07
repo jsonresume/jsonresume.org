@@ -1,6 +1,14 @@
 import Link from 'next/link';
 import { MapPin, Briefcase, ExternalLink, LayoutDashboard } from 'lucide-react';
-import { Card, CardContent, CardFooter, Button } from '@repo/ui';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  Button,
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
+} from '@repo/ui';
 
 export function ResumeCard({ resume }) {
   const locationString = [
@@ -16,11 +24,16 @@ export function ResumeCard({ resume }) {
       <CardContent className="p-6">
         <div className="flex items-start gap-4">
           {/* Avatar */}
-          <img
-            src={resume.image}
-            alt={resume.name || resume.username}
-            className="w-16 h-16 rounded-full object-cover border-2 border-gray-100"
-          />
+          <Avatar className="w-16 h-16 border-2 border-gray-100">
+            <AvatarImage
+              src={resume.image}
+              alt={resume.name || resume.username}
+            />
+            <AvatarFallback>
+              {(resume.name || resume.username)?.charAt(0)?.toUpperCase() ||
+                'U'}
+            </AvatarFallback>
+          </Avatar>
 
           {/* Info */}
           <div className="flex-1 min-w-0">

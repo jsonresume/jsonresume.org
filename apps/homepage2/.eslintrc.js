@@ -2,17 +2,9 @@
 
 module.exports = {
   root: true,
-  extends: ['@repo/eslint-config-custom'],
-  parser: '@typescript-eslint/parser',
-  rules: {
-    '@next/next/no-html-link-for-pages': 'off',
-    '@next/next/no-sync-scripts': 'off',
-  },
+  extends: ['@repo/eslint-config-custom/next'],
   env: {
-    browser: true,
-    es2021: true,
     jquery: true,
     commonjs: true,
-    node: true,
   },
 };

@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { logger } from '@/lib/logger';
 import { useRouter } from 'next/navigation';
 import { MapPin, Building, DollarSign } from 'lucide-react';
 
@@ -23,7 +24,7 @@ export function JobItem({ job }) {
     : 'Not specified';
 
   const handleClick = () => {
-    console.log('Navigating to job:', job.uuid);
+    logger.debug(job.uuid, 'Navigating to job:');
     router.push(`/jobs/${job.uuid}`);
   };
 

@@ -1,4 +1,5 @@
 import { ArrowLeft } from 'lucide-react';
+import { Button } from '@repo/ui';
 
 export const NotFoundState = ({ onBack }) => {
   return (
@@ -8,13 +9,10 @@ export const NotFoundState = ({ onBack }) => {
         <p className="text-gray-600 mb-8">
           The job you're looking for doesn't exist or has been removed.
         </p>
-        <button
-          onClick={onBack}
-          className="inline-flex items-center text-blue-600 hover:text-blue-800"
-        >
+        <Button variant="ghost" onClick={onBack}>
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Jobs
-        </button>
+        </Button>
       </div>
     </div>
   );

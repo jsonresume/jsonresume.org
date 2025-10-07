@@ -3,7 +3,7 @@
 import { X, Lock } from 'lucide-react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button } from '@repo/ui/components/ui/button';
+import { Button } from '@repo/ui';
 
 /**
  * Banner shown on public dashboard pages to indicate public access mode
@@ -43,13 +43,15 @@ export function PublicViewBanner({ username }) {
             >
               Login as @{username}
             </Button>
-            <button
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={() => setDismissed(true)}
-              className="text-blue-600 hover:text-blue-800 p-1"
+              className="h-8 w-8 text-blue-600 hover:text-blue-800"
               aria-label="Dismiss banner"
             >
               <X className="w-4 h-4" />
-            </button>
+            </Button>
           </div>
         </div>
       </div>

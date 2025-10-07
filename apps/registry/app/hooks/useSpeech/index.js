@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { logger } from '@/lib/logger';
 import { useVoiceSetup } from './useVoiceSetup';
 import { createUtterance, speakWithWarmup } from './speechEngine';
 
@@ -14,13 +15,13 @@ export function useSpeech() {
           const errorMsg = !supported
             ? 'Speech not supported'
             : 'No text provided';
-          console.warn('Cannot speak:', errorMsg);
+          logger.warn({ errorMsg, supported, hasText: !!text }, 'Cannot speak');
           reject(new Error(errorMsg));
           return;
         }
 
         if (!selectedVoice) {
-          console.warn('No voice selected yet');
+          logger.warn({ supported }, 'No voice selected yet');
           reject(new Error('No voice selected yet'));
           return;
         }
@@ -28,12 +29,18 @@ export function useSpeech() {
         try {
           // Cancel any ongoing speech
           window.speechSynthesis.cancel();
-          console.log('Starting speech with text:', text.substring(0, 100));
+          logger.info(
+            {
+              textPreview: text.substring(0, 100),
+              voiceName: selectedVoice.name,
+            },
+            'Starting speech'
+          );
 
           const utterance = createUtterance(text, selectedVoice);
 
           utterance.onstart = () => {
-            console.log('Speech started');
+            logger.debug('Speech started');
             setSpeaking(true);
           };
 
@@ -48,7 +55,7 @@ export function useSpeech() {
               reject(err);
             });
         } catch (err) {
-          console.error('Speech synthesis error:', err);
+          logger.error({ error: err.message }, 'Speech synthesis error');
           setError(`Speech synthesis error: ${err.message}`);
           setSpeaking(false);
           reject(err);
@@ -60,7 +67,7 @@ export function useSpeech() {
 
   const stop = useCallback(() => {
     if (!supported) return;
-    console.log('Stopping speech');
+    logger.info('Stopping speech');
     window.speechSynthesis.cancel();
     setSpeaking(false);
   }, [supported]);

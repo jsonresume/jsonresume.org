@@ -1,11 +1,11 @@
 {
-    "extends": "@repo/typescript-config-custom",
-    "compilerOptions": {
-      "baseUrl": ".",
-      "paths": {
-        "@repo/ui/*": ["./src/*"]
-      }
-    },
-    "include": ["src"],
-    "exclude": ["node_modules"]
-  }
+  "extends": "tsconfig/react-library.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@repo/ui/*": ["./src/*"]
+    }
+  },
+  "include": ["src", ".storybook"],
+  "exclude": ["node_modules", "dist", "storybook-static"]
+}

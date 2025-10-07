@@ -1,0 +1,237 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Introduction/Design Tokens" />
+
+# Design Tokens
+
+The UI library uses a token-based design system with CSS variables for theming and Tailwind utilities for spacing and layout.
+
+## Color System
+
+### Semantic Colors
+
+Colors are defined using HSL (Hue, Saturation, Lightness) values that automatically adapt to light/dark mode.
+
+#### Light Mode
+
+| Token                      | HSL Value           | Usage                                  |
+| -------------------------- | ------------------- | -------------------------------------- |
+| `--background`             | `0 0% 100%`         | Page background (white)                |
+| `--foreground`             | `222.2 84% 4.9%`    | Primary text color (dark)              |
+| `--primary`                | `57 100% 78%`       | Brand color (yellow #fff18f)           |
+| `--primary-foreground`     | `0 0% 0%`           | Text on primary background (black)     |
+| `--secondary`              | `210 40% 96.1%`     | Secondary background (light blue-gray) |
+| `--secondary-foreground`   | `222.2 47.4% 11.2%` | Text on secondary                      |
+| `--muted`                  | `210 40% 96.1%`     | Muted background                       |
+| `--muted-foreground`       | `215.4 16.3% 46.9%` | Muted text (gray)                      |
+| `--accent`                 | `210 40% 96.1%`     | Accent background                      |
+| `--accent-foreground`      | `222.2 47.4% 11.2%` | Text on accent                         |
+| `--destructive`            | `0 84.2% 60.2%`     | Error/danger color (red)               |
+| `--destructive-foreground` | `210 40% 98%`       | Text on destructive                    |
+| `--border`                 | `214.3 31.8% 91.4%` | Border color (light gray)              |
+| `--input`                  | `214.3 31.8% 91.4%` | Input border color                     |
+| `--ring`                   | `222.2 84% 4.9%`    | Focus ring color                       |
+
+#### Dark Mode
+
+| Token                      | HSL Value           | Usage                            |
+| -------------------------- | ------------------- | -------------------------------- |
+| `--background`             | `222.2 84% 4.9%`    | Page background (dark)           |
+| `--foreground`             | `210 40% 98%`       | Primary text color (light)       |
+| `--primary`                | `57 100% 78%`       | Brand color (yellow #fff18f)     |
+| `--primary-foreground`     | `0 0% 0%`           | Text on primary (black)          |
+| `--secondary`              | `217.2 32.6% 17.5%` | Secondary background (dark gray) |
+| `--secondary-foreground`   | `210 40% 98%`       | Text on secondary                |
+| `--muted`                  | `217.2 32.6% 17.5%` | Muted background                 |
+| `--muted-foreground`       | `215 20.2% 65.1%`   | Muted text                       |
+| `--accent`                 | `217.2 32.6% 17.5%` | Accent background                |
+| `--accent-foreground`      | `210 40% 98%`       | Text on accent                   |
+| `--destructive`            | `0 62.8% 30.6%`     | Error/danger color (dark red)    |
+| `--destructive-foreground` | `210 40% 98%`       | Text on destructive              |
+| `--border`                 | `217.2 32.6% 17.5%` | Border color                     |
+| `--input`                  | `217.2 32.6% 17.5%` | Input border color               |
+| `--ring`                   | `212.7 26.8% 83.9%` | Focus ring color                 |
+
+### Usage in Code
+
+```tsx
+// Using Tailwind utilities
+<div className="bg-background text-foreground">
+  <Button className="bg-primary text-primary-foreground">Primary Action</Button>
+</div>;
+
+// Using CSS variables directly
+const styles = {
+  backgroundColor: 'hsl(var(--primary))',
+  color: 'hsl(var(--primary-foreground))',
+};
+```
+
+## Typography
+
+### Font Sizes
+
+Custom font scale optimized for readability:
+
+| Token  | Size              | Line Height | Usage               |
+| ------ | ----------------- | ----------- | ------------------- |
+| `xs`   | `0.875rem` (14px) | -           | Fine print, labels  |
+| `sm`   | `1rem` (16px)     | -           | Small text          |
+| `base` | `1.125rem` (18px) | -           | Body text           |
+| `lg`   | `1.25rem` (20px)  | -           | Large text          |
+| `xl`   | `1.5rem` (24px)   | -           | Headings            |
+| `2xl`  | `1.875rem` (30px) | -           | Section titles      |
+| `3xl`  | `2.25rem` (36px)  | -           | Page titles         |
+| `4xl`  | `3rem` (48px)     | -           | Hero headings       |
+| `5xl`  | `3.75rem` (60px)  | -           | Display text        |
+| `6xl`  | `4.5rem` (72px)   | -           | Extra large display |
+
+### Usage
+
+```tsx
+<h1 className="text-4xl font-bold">Page Title</h1>
+<p className="text-base text-muted-foreground">Body text</p>
+<span className="text-xs text-muted-foreground">Fine print</span>
+```
+
+## Spacing
+
+### Container
+
+```tsx
+// Centered container with max-width
+<div className="container">
+  {/* max-width: 1400px, centered, padding: 2rem */}
+</div>
+```
+
+### Tailwind Spacing Scale
+
+Use Tailwind's default spacing scale (0.25rem increments):
+
+| Class  | Value     | Pixels |
+| ------ | --------- | ------ |
+| `p-0`  | `0`       | 0px    |
+| `p-1`  | `0.25rem` | 4px    |
+| `p-2`  | `0.5rem`  | 8px    |
+| `p-4`  | `1rem`    | 16px   |
+| `p-8`  | `2rem`    | 32px   |
+| `p-16` | `4rem`    | 64px   |
+
+## Border Radius
+
+Border radius values based on `--radius` CSS variable (default: `0.5rem`):
+
+| Token        | Value                       | Usage               |
+| ------------ | --------------------------- | ------------------- |
+| `rounded-sm` | `calc(var(--radius) - 4px)` | Small radius (2px)  |
+| `rounded-md` | `calc(var(--radius) - 2px)` | Medium radius (6px) |
+| `rounded-lg` | `var(--radius)`             | Large radius (8px)  |
+
+### Usage
+
+```tsx
+<Card className="rounded-lg">
+  <CardContent className="rounded-md">Content with medium radius</CardContent>
+</Card>
+```
+
+## Animations
+
+### Accordion Animations
+
+```css
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+```
+
+### Usage
+
+```tsx
+// Automatically applied to Accordion components
+<Accordion>
+  <AccordionItem value="item-1">
+    <AccordionTrigger>Click to expand</AccordionTrigger>
+    <AccordionContent className="animate-accordion-down">
+      Content slides down smoothly
+    </AccordionContent>
+  </AccordionItem>
+</Accordion>
+```
+
+## Customization
+
+### Changing Theme Colors
+
+Edit `packages/ui/src/globals.css` to customize colors:
+
+```css
+:root {
+  /* Change primary brand color */
+  --primary: 57 100% 78%; /* Yellow */
+  --primary-foreground: 0 0% 0%; /* Black text */
+
+  /* Change background */
+  --background: 0 0% 100%; /* White */
+}
+
+.dark {
+  --background: 222.2 84% 4.9%; /* Dark background */
+}
+```
+
+### Adding Custom Tokens
+
+Extend the Tailwind config in `packages/ui/tailwind.config.js`:
+
+```js
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        'custom-blue': '#3b82f6',
+      },
+      spacing: {
+        128: '32rem',
+      },
+    },
+  },
+};
+```
+
+## Grid Backgrounds
+
+Custom utility classes for grid backgrounds:
+
+```tsx
+// Light mode grid
+<div className="bg-grid-gray-100 bg-[size:20px_20px]" />
+
+// Dark mode grid
+<div className="bg-grid-white bg-[size:20px_20px]" />
+```
+
+These automatically invert in dark mode for proper contrast.
+
+---
+
+**See Also:**
+
+- [Tailwind CSS Customization](https://tailwindcss.com/docs/theme)
+- [CSS Variables for theming](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties)
+- [shadcn/ui Theming Guide](https://ui.shadcn.com/docs/theming)

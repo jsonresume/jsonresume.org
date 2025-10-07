@@ -3,7 +3,7 @@ import {
   EndpointInfo,
   Examples,
   ErrorResponses,
-} from './ResumeEndpoint';
+} from './ResumeEndpoint/index.js';
 
 export const ResumeEndpoint = () => {
   return (

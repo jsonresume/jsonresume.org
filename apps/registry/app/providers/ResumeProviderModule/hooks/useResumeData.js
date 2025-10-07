@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Octokit } from 'octokit';
-import { RESUME_GIST_NAME } from '../constants';
+import { logger } from '@/lib/logger';
+import { retryWithBackoff } from '@/lib/retry';
 import { findLatestResumeGist } from '../utils/gistFinder';
 import { getSession } from '../utils/githubAuth';
+import { fetchGistData } from './useResumeData/fetchGistData';
+import { cacheResume } from './useResumeData/cacheResume';
 
 export const useResumeData = (targetUsername) => {
   const [resume, setResume] = useState(null);
@@ -32,46 +35,49 @@ export const useResumeData = (targetUsername) => {
           const octokit = new Octokit({ auth: currentSession.provider_token });
 
           try {
-            const latestGistId = await findLatestResumeGist(octokit);
+            // Retry finding gist with exponential backoff
+            const latestGistId = await retryWithBackoff(
+              () => findLatestResumeGist(octokit),
+              { maxAttempts: 3 }
+            );
+
             if (latestGistId) {
-              console.log('Found most recent resume.json gist:', latestGistId);
+              logger.info(
+                { gistId: latestGistId, username: githubUsername },
+                'Found most recent resume.json gist'
+              );
               setGistId(latestGistId);
 
-              const { data: gists } = await octokit.rest.gists.get({
-                gist_id: latestGistId,
-              });
-              const resumeFile = Object.values(gists.files).find(
-                (file) => file.filename.toLowerCase() === RESUME_GIST_NAME
+              // Retry fetching gist data with exponential backoff
+              const resumeData = await retryWithBackoff(
+                () => fetchGistData(octokit, latestGistId),
+                { maxAttempts: 3 }
               );
 
-              if (resumeFile?.raw_url) {
-                const response = await fetch(resumeFile.raw_url);
-                if (!response.ok) {
-                  throw new Error('Failed to fetch resume data');
-                }
-                const resumeData = await response.json();
+              if (resumeData) {
                 setResume(resumeData);
                 setUsername(githubUsername);
-
-                localStorage.setItem(
-                  `resume_${githubUsername}`,
-                  JSON.stringify({
-                    resume: resumeData,
-                    gistId: latestGistId,
-                    username: githubUsername,
-                  })
-                );
+                cacheResume(githubUsername, resumeData, latestGistId);
               }
             } else {
-              console.log('No resume.json gist found');
+              logger.info(
+                { username: githubUsername },
+                'No resume.json gist found'
+              );
             }
           } catch (error) {
-            console.error('Error fetching gists:', error);
+            logger.error(
+              { error: error.message, username: githubUsername },
+              'Error fetching gists'
+            );
             setError('Failed to fetch resume from GitHub');
           }
         }
       } catch (error) {
-        console.error('Error fetching resume data:', error);
+        logger.error(
+          { error: error.message, targetUsername },
+          'Error fetching resume data'
+        );
         setError(error.message);
       } finally {
         setLoading(false);

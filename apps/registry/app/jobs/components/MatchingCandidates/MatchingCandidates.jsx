@@ -1,8 +1,8 @@
 'use client';
 
-import { useCandidates } from './MatchingCandidates/useCandidates';
-import { LoadingSkeleton } from './MatchingCandidates/LoadingSkeleton';
-import { CandidateCard } from './MatchingCandidates/CandidateCard';
+import { useCandidates } from './useCandidates';
+import { LoadingSkeleton } from './LoadingSkeleton';
+import { CandidateCard } from './CandidateCard';
 
 export default function MatchingCandidates({ jobId }) {
   const { candidates, loading, error } = useCandidates(jobId);

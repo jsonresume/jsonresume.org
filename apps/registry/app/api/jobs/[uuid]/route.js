@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
+import { logger } from '@/lib/logger';
 
 const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
 
@@ -37,7 +38,7 @@ export async function GET(request, { params }) {
 
     return NextResponse.json(job);
   } catch (error) {
-    console.error('Error:', error);
+    logger.error({ error: error.message, uuid: params.uuid }, 'Jobs API error');
     return NextResponse.json(
       { message: 'Internal server error' },
       { status: 500 }

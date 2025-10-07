@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { logger } from '@/lib/logger';
 import { JobHeader } from './JobHeader';
 import { JobDescriptionText } from './JobDescriptionText';
 import { ResponsibilitiesList } from './ResponsibilitiesList';
@@ -8,7 +9,10 @@ import { JobActions } from './JobActions';
 
 export function JobDescription({ job, makeCoverletter }) {
   const [expanded, setExpanded] = useState(false);
-  console.log({ job });
+  logger.debug(
+    { jobId: job.id, jobTitle: job.title },
+    'Rendering job description'
+  );
 
   return (
     <div

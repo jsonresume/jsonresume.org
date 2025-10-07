@@ -1,10 +1,13 @@
 {
   "name": "@jsonresume/jsonresume-to-rendercv",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "Convert JSON Resume to rendercv format",
   "main": "index.js",
   "type": "module",
   "bin": "./index.js",
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "dependencies": {
     "json-to-pretty-yaml": "^1.2.2"
   },

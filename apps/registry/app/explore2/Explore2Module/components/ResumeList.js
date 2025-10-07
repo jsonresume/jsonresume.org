@@ -7,8 +7,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@repo/ui/components/ui/card';
-import { ScrollArea } from '@repo/ui/components/ui/scroll-area';
+  ScrollArea,
+} from '@repo/ui';
 import { formatLocation } from '../../../utils/formatters';
 
 export function ResumeList({ resumes }) {

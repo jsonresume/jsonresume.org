@@ -1,9 +1,4 @@
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from '@repo/ui/components/ui/card';
+import { Card, CardHeader, CardTitle, CardDescription } from '@repo/ui';
 import { features } from '../data/features';
 
 export const FeaturesGrid = () => {

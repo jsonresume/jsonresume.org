@@ -1,0 +1,141 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Introduction/Getting Started" />
+
+# UI Component Library
+
+Welcome to the JSON Resume UI component library documentation. This is a centralized collection of reusable React components built with **shadcn/ui**, **Radix UI**, and **Tailwind CSS**.
+
+## Overview
+
+This component library provides:
+
+- 🎨 **Consistent Design System** - Unified theme, colors, and spacing tokens
+- ♿ **Accessible Components** - Built on Radix UI primitives with ARIA compliance
+- 🌓 **Dark Mode Support** - Full light/dark theme switching via next-themes
+- 📱 **Responsive Design** - Mobile-first approach with Tailwind utilities
+- 🧩 **Composable Patterns** - Flexible components that work together seamlessly
+
+## Installation
+
+Import components from the `@repo/ui` package:
+
+```tsx
+import { Button, Card, Tabs } from '@repo/ui';
+```
+
+## Quick Start
+
+All components support Tailwind CSS utility classes for customization:
+
+```tsx
+import { Button } from '@repo/ui';
+
+export default function Example() {
+  return (
+    <Button variant="default" size="lg" className="w-full">
+      Click me
+    </Button>
+  );
+}
+```
+
+## Key Features
+
+### Component Variants
+
+Most components support multiple variants via the `variant` prop:
+
+- **Button**: `default`, `destructive`, `outline`, `secondary`, `ghost`, `link`
+- **Card**: Standard card with `CardHeader`, `CardContent`, `CardFooter`
+- **Tabs**: Horizontal navigation with accessible keyboard controls
+
+### Dark Mode
+
+The library includes built-in dark mode support using CSS variables:
+
+```tsx
+import { ThemeProvider } from 'next-themes';
+
+export default function App({ children }) {
+  return (
+    <ThemeProvider attribute="class" defaultTheme="system">
+      {children}
+    </ThemeProvider>
+  );
+}
+```
+
+### Accessibility
+
+All components are built on **Radix UI primitives**, ensuring:
+
+- ✅ Keyboard navigation
+- ✅ Screen reader support
+- ✅ Focus management
+- ✅ ARIA attributes
+
+Test accessibility in Storybook using the **Accessibility** addon panel.
+
+## Design Tokens
+
+The library uses a token-based design system. See the **Design Tokens** section for:
+
+- Color palette (light/dark modes)
+- Typography scale
+- Spacing system
+- Border radius values
+- Animation keyframes
+
+## Component Categories
+
+### Form Components
+
+- **Button** - Primary action button with variants
+- **Checkbox** - Accessible checkbox with label
+- **Select** - Dropdown select with search
+
+### Layout Components
+
+- **Card** - Container with header, content, footer
+- **Separator** - Visual divider
+- **Tabs** - Tabbed navigation
+- **ScrollArea** - Custom scrollbar styling
+
+### Display Components
+
+- **Avatar** - User profile image with fallback
+- **Progress** - Progress indicator
+- **Timeline** - Vertical timeline visualization
+
+### Feedback Components
+
+- **Sonner** - Toast notifications
+- **Accordion** - Collapsible content sections
+
+## Development
+
+### Adding New Components
+
+1. Create component in `packages/ui/src/components/ui/`
+2. Export from `packages/ui/src/index.ts`
+3. Create story in `*.stories.tsx`
+4. Document props and usage
+
+### Theming
+
+Customize the design system by editing:
+
+- `packages/ui/tailwind.config.js` - Tailwind theme tokens
+- `packages/ui/src/globals.css` - CSS variables for colors
+
+## Resources
+
+- [shadcn/ui Documentation](https://ui.shadcn.com/)
+- [Radix UI Primitives](https://www.radix-ui.com/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Storybook](https://storybook.js.org/)
+
+---
+
+**Next Steps:** Explore individual components in the sidebar or view the **Design Tokens** for customization options.
