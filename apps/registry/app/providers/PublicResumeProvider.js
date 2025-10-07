@@ -38,8 +38,8 @@ export function PublicResumeProvider({ username, children }) {
 
         const gistname = searchParams.get('gistname');
         const url = gistname
-          ? `/api/${username}?gistname=${encodeURIComponent(gistname)}`
-          : `/api/${username}`;
+          ? `/api/${username}.json?gistname=${encodeURIComponent(gistname)}`
+          : `/api/${username}.json`;
 
         const response = await fetch(url);
 
