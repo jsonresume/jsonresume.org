@@ -95,10 +95,8 @@ describe('fetchResumes', () => {
     });
 
     // textSearch is called twice (count query and data query)
-    let countQueryCalled = false;
     mockQuery.select.mockImplementation((fields, options) => {
       if (options?.head) {
-        countQueryCalled = true;
         return {
           ...mockQuery,
           then: (resolve) => resolve({ count: 5 }),
