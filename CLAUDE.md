@@ -202,6 +202,16 @@ feature/
   - Solution: Bypass turbo entirely with `pnpm --filter registry test -- --run` in CI
   - Pattern: For selective package tests, use pnpm --filter directly instead of turbo task runner
   - Commits: 7db8e6a (turbo.json), 551f51f (CI fix)
+- **Git Workflow: NEVER Mix Local Git with GitHub API** (Oct 2025):
+  - **CRITICAL**: Never use both local git commits AND GitHub API file updates (create_or_update_file) in the same session
+  - This creates duplicate commits with different SHAs, leading to divergent branches
+  - **Pattern**: Choose ONE method per session:
+    - **Local git workflow** (preferred for multiple commits): git add → git commit → git push
+    - **GitHub API** (only for single file updates when git push fails): use create_or_update_file
+  - **If branches diverge**: Create backup branch, reset to origin/master, cherry-pick commits
+  - **Recovery command**: `git reset --hard origin/master` then cherry-pick or re-apply changes
+  - **Prevention**: Always check `git status` before switching between local git and GitHub API
+  - Incident: Oct 7, 2025 - 43 local commits diverged from 8 remote commits, required cherry-picking 40 commits
 - **Multi-Gist Support**: Implemented ?gistname= parameter for accessing alternate resume files (e.g., resume-en.json, resume-fr.json)
   - Modified getResumeGist() to accept optional gistname parameter with default fallback
   - Updated generateResume() to pass gistname from query params
