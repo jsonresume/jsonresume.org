@@ -9,7 +9,6 @@ const SENTRY_PROJECT = process.env.SENTRY_PROJECT;
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const GITHUB_REPO = process.env.MY_GITHUB_REPO; // "owner/repo" format
 
-console.log(`${SENTRY_AUTH_TOKEN}`);
 // Sentry issues
 async function fetchSentryIssues() {
   const url = `https://sentry.io/api/0/projects/${SENTRY_ORG}/${SENTRY_PROJECT}/issues/?query=is:unresolved&statsPeriod=24h`;
@@ -67,6 +66,7 @@ async function createGithubIssue(title, body) {
     console.error("Error in Sentry -> GitHub workflow:", err);
   }
 })();
+
 
 
 
