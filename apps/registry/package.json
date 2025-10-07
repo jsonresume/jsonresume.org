@@ -100,6 +100,7 @@
     "object-hash": "^3.0.0",
     "octokit": "^4.0.2",
     "openai": "^4.28.0",
+    "pdf-parse": "^2.2.1",
     "pg": "^8.11.0",
     "pino": "^10.0.0",
     "pino-pretty": "^13.1.1",
