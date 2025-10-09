@@ -1,5 +1,7 @@
 'use client';
 
+import { Button, Textarea } from '@repo/ui';
+
 export const LetterForm = ({
   jobDescription,
   saveJobDescription,
@@ -13,8 +15,8 @@ export const LetterForm = ({
       <label className="block text-xl font-semibold mb-2">
         Job Description (optional)
       </label>
-      <textarea
-        className="w-full h-32 border border-gray-300 rounded-md p-4 mb-4 text-sm"
+      <Textarea
+        className="h-32 mb-4"
         onChange={saveJobDescription}
         value={jobDescription}
       />
@@ -31,13 +33,9 @@ export const LetterForm = ({
           <option value="funny">Funny</option>
           <option value="professional">Professional</option>
         </select>
-        <button
-          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
-          disabled={submitting}
-          onClick={handleGenerate}
-        >
+        <Button disabled={submitting} onClick={handleGenerate}>
           {submitting ? 'GENERATING' : 'GENERATE'}
-        </button>
+        </Button>
       </div>
     </>
   );

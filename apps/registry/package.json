@@ -9,6 +9,9 @@
     "lint": "next lint --max-warnings=0",
     "postinstall": "prisma generate --data-proxy",
     "db:generate": "prisma generate",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
     "test:e2e": "playwright test"
   },
   "dependencies": {
@@ -97,6 +100,7 @@
     "object-hash": "^3.0.0",
     "octokit": "^4.0.2",
     "openai": "^4.28.0",
+    "pdf-parse": "^2.2.1",
     "pg": "^8.11.0",
     "pino": "^10.0.0",
     "pino-pretty": "^13.1.1",
@@ -123,14 +127,21 @@
   "devDependencies": {
     "@playwright/test": "^1.40.0",
     "@repo/eslint-config-custom": "workspace:*",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^13.0.0",
+    "@testing-library/user-event": "^13.2.1",
     "@types/bcrypt": "^5.0.2",
     "@types/next-auth": "^3.15.0",
     "@types/node": "^20.10.0",
+    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/ui": "^3.2.4",
     "caniuse-lite": "^1.0.30001566",
     "eslint": "^8.55.0",
     "eslint-config-next": "^14.2.5",
+    "jsdom": "^27.0.0",
     "playwright": "^1.40.0",
     "tsconfig": "workspace:*",
-    "typescript": "^5.3.2"
+    "typescript": "^5.3.2",
+    "vitest": "^3.2.4"
   }
 }

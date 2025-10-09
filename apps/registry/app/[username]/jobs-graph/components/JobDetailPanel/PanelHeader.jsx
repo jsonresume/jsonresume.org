@@ -1,4 +1,6 @@
 import { highlightText } from '../../utils/textUtils';
+import { Button } from '@repo/ui';
+import { Check } from 'lucide-react';
 
 export function PanelHeader({ jobInfo, filterText, isRead, onMarkAsRead }) {
   return (
@@ -33,29 +35,17 @@ export function PanelHeader({ jobInfo, filterText, isRead, onMarkAsRead }) {
             )}
           </div>
         </div>
-        <button
+        <Button
           onClick={onMarkAsRead}
-          className={`ml-4 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-all ${
-            isRead
-              ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-md'
-              : 'bg-blue-50 text-blue-600 hover:bg-blue-100 hover:shadow-md'
-          }`}
+          variant={isRead ? 'default' : 'secondary'}
+          size="sm"
+          className={`ml-4 rounded-full ${isRead ? 'shadow-md' : ''}`}
         >
-          <svg
-            className={`w-4 h-4 ${isRead ? 'animate-bounce-once' : ''}`}
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M5 13l4 4L19 7"
-            />
-          </svg>
+          <Check
+            className={`w-4 h-4 mr-1.5 ${isRead ? 'animate-bounce-once' : ''}`}
+          />
           {isRead ? 'Read' : 'Mark as Read'}
-        </button>
+        </Button>
       </div>
     </div>
   );

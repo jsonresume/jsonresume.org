@@ -1,6 +1,14 @@
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ['@repo/ui'],
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      // Externalize pdf-parse and its dependencies for server-side only
+      config.externals = config.externals || [];
+      config.externals.push('pdf-parse', 'canvas');
+    }
+    return config;
+  },
   async rewrites() {
     return [
       {

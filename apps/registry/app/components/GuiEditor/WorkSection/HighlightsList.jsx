@@ -1,7 +1,7 @@
 'use client';
 
 import { Plus, Trash2 } from 'lucide-react';
-import { Button } from '@repo/ui';
+import { Button, Input } from '@repo/ui';
 
 export const HighlightsList = ({
   highlights,
@@ -17,11 +17,11 @@ export const HighlightsList = ({
       </label>
       {(highlights || []).map((highlight, hIndex) => (
         <div key={hIndex} className="flex gap-2">
-          <input
+          <Input
             type="text"
             value={highlight}
             onChange={(e) => updateHighlight(workIndex, hIndex, e.target.value)}
-            className="flex-1 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-1"
             placeholder="Achievement or responsibility..."
           />
           <Button

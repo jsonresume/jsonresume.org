@@ -24,7 +24,7 @@ function InnerLayout({ children, username, session }) {
   const { resume, loading, error } = useResume();
 
   // Public pages bypass the ProfileLayout wrapper
-  const PUBLIC_PAGES = ['timeline', 'jobs', 'json'];
+  const PUBLIC_PAGES = ['timeline', 'jobs', 'json', 'ats'];
   const isPublicPage = PUBLIC_PAGES.some((page) =>
     pathname.includes(`/${page}`)
   );

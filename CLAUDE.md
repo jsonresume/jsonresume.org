@@ -196,6 +196,28 @@ feature/
 - **Remaining Vulnerabilities**: Mostly in transitive deps of bundled themes (can use pnpm overrides)
 - **CI Failures**: pnpm lockfile version mismatch causes frozen lockfile errors - update packageManager version to match CI
 - **pnpm Upgrade**: Update from v7.15.0 to v8.15.9 requires lockfile regeneration (run `pnpm install`)
+- **Turbo Test Execution Issue**: Turbo reports "No tasks were executed" even with correct turbo.json configuration
+  - Added `test` task to turbo.json with `cache: false`
+  - Tried `--filter=registry` and `--force` flags - both failed
+  - Solution: Bypass turbo entirely with `pnpm --filter registry test -- --run` in CI
+  - Pattern: For selective package tests, use pnpm --filter directly instead of turbo task runner
+  - Commits: 7db8e6a (turbo.json), 551f51f (CI fix)
+- **Git Workflow: ALWAYS Use Git Commits, NEVER GitHub API** (Oct 2025):
+  - **CRITICAL**: NEVER use GitHub API file updates (create_or_update_file, push_files, etc.) for code changes
+  - **ALWAYS use local git workflow**: `git add → git commit → git push`
+  - GitHub API file operations create duplicate commits with different SHAs, causing divergent branches
+  - **The ONLY correct workflow**:
+    1. Edit files locally with Write/Edit tools
+    2. `git add <files>`
+    3. `git commit -m "message"`
+    4. `git push origin master`
+  - **If git push fails**:
+    1. `git pull --rebase origin master` (resolve conflicts if needed)
+    2. `git push origin master` (retry push)
+    3. If still failing, investigate and fix the root cause - DO NOT use GitHub API as a workaround
+  - **Recovery from divergent branches**: Create backup branch, reset to origin/master, cherry-pick commits
+  - **Why this matters**: Using GitHub API creates parallel commit history that diverges from local git
+  - Incident: Oct 7, 2025 - 43 local commits diverged from 8 remote commits, required cherry-picking 40 commits
 - **Multi-Gist Support**: Implemented ?gistname= parameter for accessing alternate resume files (e.g., resume-en.json, resume-fr.json)
   - Modified getResumeGist() to accept optional gistname parameter with default fallback
   - Updated generateResume() to pass gistname from query params
@@ -331,6 +353,37 @@ feature/
 - **Fix**: Use `'./ResumeEndpoint/index.js'` to explicitly target the directory
 - **Detection**: Build errors like "Unsupported Server Component type: undefined" or "Maximum call stack size exceeded"
 - **Prevention**: Never name a file the same as a directory it imports from
+
+**Avoiding Code Duplication - Search Before Creating:**
+
+- **CRITICAL**: Before creating ANY new function, hook, or utility, ALWAYS search the codebase first
+- **Pattern**: Use Glob/Grep tools to find existing similar functionality
+- **Search locations** (in priority order):
+  1. `apps/registry/app/utils/` - shared utilities
+  2. `apps/registry/lib/` - library functions
+  3. `packages/` - monorepo shared packages
+  4. Module-specific utils folders (e.g., `app/[username]/jobs/utils/`)
+- **Before creating a new function**:
+  1. Search for similar function names: `grep -r "functionName" apps/registry/app`
+  2. Check utils folders: `find apps/registry -name "*utils*" -type d`
+  3. Review existing code in the same domain (jobs, resume, similarity, etc.)
+- **When you find existing code**:
+  - **Reuse it directly** if it does exactly what you need
+  - **Extend/modify it** if it's close but needs tweaks (better than duplicating)
+  - **Abstract it** if you find repeated patterns across multiple places
+- **Red flags for duplication**:
+  - Creating formatters when `apps/registry/app/utils/formatters.js` exists
+  - Writing vector math when `apps/registry/app/utils/vectorUtils.js` exists
+  - Building date utilities when `apps/registry/lib/calculations/dateUtils.js` exists
+  - Creating parsing logic when similar parsers exist in other modules
+- **Benefits**: Less code to maintain, consistent behavior, fewer bugs, easier refactoring
+- **Example workflow**:
+  ```
+  Need a salary formatter?
+  → Search: grep -r "salary" apps/registry --include="*.js"
+  → Find: apps/registry/app/jobs/utils/salaryParser.js
+  → Result: Import and use existing salaryParser instead of creating new one
+  ```
 
 **Decision-Making Authority:**
 

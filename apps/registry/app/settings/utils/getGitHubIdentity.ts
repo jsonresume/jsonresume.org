@@ -11,7 +11,9 @@ export const getGitHubIdentity = (session: any) => {
  * Checks if user is connected to GitHub
  */
 export const isGitHubConnected = (session: any): boolean => {
-  return session?.user?.identities?.some(
-    (identity: any) => identity.provider === 'github'
+  return Boolean(
+    session?.user?.identities?.some(
+      (identity: any) => identity.provider === 'github'
+    )
   );
 };
