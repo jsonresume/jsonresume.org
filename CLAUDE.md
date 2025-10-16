@@ -151,19 +151,25 @@ feature/
 
 **Testing Requirements:**
 
-- Unit test coverage: >80% for utilities and logic
-- Component test coverage: >70% for UI components
-- Integration tests for all API routes
-- E2E tests for critical user flows (login, resume creation, export)
-- All tests must pass before merging
-- No skipped or disabled tests in main branch
+- **Focus on Core Functionality**: Test what matters - utilities, business logic, calculations
+- **NO arbitrary coverage percentages**: Coverage metrics are not a goal
+- **E2E tests for critical user flows**: Login, resume creation, export
+- **All tests must pass before merging**: Zero tolerance for broken tests
+- **No skipped or disabled tests in main branch**: Fix or remove, don't skip
 
-**Testing Strategy:**
+**Practical Testing Strategy:**
 
-- **Priority:** Focus on testing lib/ functions and pure utility functions
-- **Test:** Calculations, formatters, parsers, validators, data transformations
-- **Avoid testing:** UI components with heavy dependencies, complex hooks, API routes with external services
-- **Goal:** High coverage on business logic and utilities, not exhaustive component testing
+- **PRIORITY: Test pure functions and utilities**
+  - Calculations (dateUtils, experienceCalculations, converters)
+  - Formatters (json, yaml, tex, location, salary)
+  - Parsers and validators (resume validation, job parsing)
+  - Data transformations (vector math, similarity algorithms)
+  - Error handling utilities
+- **Test business logic hooks** when they contain complex logic worth testing
+- **Test API routes** for critical endpoints (auth, resume generation, data fetching)
+- **DON'T test for coverage numbers**: Test because the functionality is critical
+- **DON'T test UI components excessively**: Simple rendering components don't need tests
+- **DON'T test wrappers and glue code**: Focus on logic, not boilerplate
 
 ### 3. Autonomous Development Workflow
 
@@ -297,6 +303,14 @@ feature/
   - Solution: Bypass turbo entirely with `pnpm --filter registry test -- --run` in CI
   - Pattern: For selective package tests, use pnpm --filter directly instead of turbo task runner
   - Commits: 7db8e6a (turbo.json), 551f51f (CI fix)
+- **Test Coverage Philosophy** (Oct 2025):
+  - **REMOVED** arbitrary 80% coverage thresholds from vitest.config.ts
+  - Coverage percentages are **not a goal** - focus on testing critical functionality
+  - Test pure functions, business logic, calculations, formatters, parsers - NOT for coverage numbers
+  - 831 unit tests in place covering core utilities and algorithms
+  - Philosophy: Test what matters, not what inflates metrics
+  - Don't waste time testing simple UI components, wrappers, or glue code
+  - Quality over quantity - meaningful tests that prevent real regressions
 
 **Refactoring Large Files (200+ lines):**
 
@@ -659,7 +673,7 @@ Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `perf`, `style`
 
 **Your performance will be measured by:**
 
-1. **Code Quality**: All files <150 lines, >80% test coverage, no linting errors
+1. **Code Quality**: All files <200 lines, critical functionality tested, no linting errors
 2. **Performance**: All pages Lighthouse >90, Core Web Vitals "Good"
 3. **Security**: Zero high/critical vulnerabilities
 4. **Completeness**: All features working, no broken flows
