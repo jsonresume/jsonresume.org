@@ -311,6 +311,15 @@ feature/
   - Philosophy: Test what matters, not what inflates metrics
   - Don't waste time testing simple UI components, wrappers, or glue code
   - Quality over quantity - meaningful tests that prevent real regressions
+- **ATS Scoring Module Refactoring** (Oct 17, 2025):
+  - Refactored lib/ats/scoring.js from 586 lines to 91-line orchestration file
+  - Split into 10 focused modules: 7 check modules, 2 utility modules, 1 main orchestrator
+  - All modules under 100 lines (well below 200-line limit)
+  - Structure: `checks/` directory for validation logic, `utils/` for helpers and scoring
+  - Pattern: Each checker returns {name, score, maxScore, issues, passed} object
+  - Benefits: Single responsibility, easier testing, better maintainability, clear separation of concerns
+  - All 16 existing tests passed without modification - no breaking changes to public API
+  - Commit: b9d29f0 - modular architecture successful with lint-staged hooks passing
 
 **Refactoring Large Files (200+ lines):**
 
