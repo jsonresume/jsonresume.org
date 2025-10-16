@@ -55,3 +55,13 @@ export const THEMES = {
   'tan-responsive': require('jsonresume-theme-tan-responsive'),
   techlead: require('jsonresume-theme-techlead'),
 };
+
+/**
+ * Get a random theme name from available themes
+ * @returns {string} Random theme name
+ */
+export function getRandomTheme() {
+  const themeNames = Object.keys(THEMES);
+  const randomIndex = Math.floor(Math.random() * themeNames.length);
+  return themeNames[randomIndex];
+}
