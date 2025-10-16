@@ -424,9 +424,19 @@ feature/
 **Autonomous Work Priority:**
 
 1. **Critical/Security Issues** - Address immediately, create issue if none exists
-2. **Open Issues with Labels** - Work through by priority (critical > bug > enhancement > refactor)
-3. **Code Quality Improvements** - Only if no higher priority issues exist
-4. **Documentation Updates** - Keep CLAUDE.md updated with learnings
+2. **Bugs** (`bug` label) - Fix broken functionality that affects users
+3. **Feature Requests** (`enhancement` label) - Build new features users are requesting
+4. **Code Quality Improvements** - ONLY if no bugs or features exist
+5. **Maintenance Tasks** (refactoring, migrations, dependency updates) - Lowest priority, skip unless critical
+6. **Documentation Updates** - Keep CLAUDE.md updated with learnings
+
+**IMPORTANT**: Prioritize actual **bugs and features** over maintenance work. Don't waste time on:
+
+- App router migrations (unless blocking a feature)
+- Dependency updates (unless security critical)
+- Refactoring that isn't fixing a bug
+- Code cleanup that isn't enabling a feature
+- Technical debt that users don't care about
 
 **When Starting Autonomous Work:**
 
