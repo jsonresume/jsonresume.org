@@ -12,6 +12,7 @@ Thank you for your interest in contributing to JSON Resume! This document provid
 - [Testing](#testing)
 - [Pull Request Process](#pull-request-process)
 - [Commit Message Guidelines](#commit-message-guidelines)
+- [Contributing Themes](#contributing-themes)
 
 ## Code of Conduct
 
@@ -343,6 +344,226 @@ Updated to use dynamic URL based on deployment context.
 
 Fixes #456
 ```
+
+## Contributing Themes
+
+Want to add your resume theme to the registry? Here's everything you need to know.
+
+### Theme Requirements
+
+**CRITICAL:** Themes must be **serverless-compatible**. The registry runs on Vercel's serverless functions, which means:
+
+❌ **Cannot use:**
+
+- `fs.readFileSync()` or any filesystem operations
+- `fs.readFile()`, `fs.readdirSync()`, etc.
+- `__dirname` or `__filename` for file paths
+- Dynamic file loading at runtime
+
+✅ **Must use:**
+
+- ES6 imports for templates and styles
+- Build-time bundling (Vite, webpack, rollup)
+- All assets inlined at compile time
+
+### Quick Start: Converting Your Theme
+
+#### Before (❌ Breaks on Vercel)
+
+```javascript
+// index.js
+const fs = require('fs');
+const Handlebars = require('handlebars');
+
+function render(resume) {
+  const template = fs.readFileSync(__dirname + '/template.hbs', 'utf-8');
+  const css = fs.readFileSync(__dirname + '/style.css', 'utf-8');
+
+  return Handlebars.compile(template)({
+    css: `<style>${css}</style>`,
+    resume,
+  });
+}
+
+module.exports = { render };
+```
+
+#### After (✅ Works on Vercel)
+
+```javascript
+// index.js
+import Handlebars from 'handlebars';
+import template from './template.hbs?raw'; // Vite raw import
+import css from './style.css?inline'; // Vite inline import
+
+export function render(resume) {
+  return Handlebars.compile(template)({
+    css: `<style>${css}</style>`,
+    resume,
+  });
+}
+```
+
+### Step-by-Step Migration Guide
+
+#### Option 1: Use Vite (Recommended)
+
+1. **Install Vite and plugins:**
+
+   ```bash
+   npm install --save-dev vite vite-plugin-handlebars
+   ```
+
+2. **Create `vite.config.js`:**
+
+   ```javascript
+   import { defineConfig } from 'vite';
+
+   export default defineConfig({
+     build: {
+       lib: {
+         entry: './index.js',
+         formats: ['cjs'],
+         fileName: 'index',
+       },
+       rollupOptions: {
+         external: ['handlebars'],
+       },
+     },
+   });
+   ```
+
+3. **Update imports to use Vite's special imports:**
+
+   ```javascript
+   import template from './template.hbs?raw';
+   import css from './style.css?inline';
+   ```
+
+4. **Add build script to `package.json`:**
+
+   ```json
+   {
+     "scripts": {
+       "build": "vite build",
+       "prepublishOnly": "npm run build"
+     },
+     "main": "./dist/index.cjs"
+   }
+   ```
+
+5. **Build and test:**
+
+   ```bash
+   npm run build
+   npm publish
+   ```
+
+#### Option 2: Inline Everything Manually
+
+For simple themes, you can inline content directly:
+
+```javascript
+// index.js
+import Handlebars from 'handlebars';
+
+const template = `
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body { font-family: Arial, sans-serif; }
+      /* your styles here */
+    </style>
+  </head>
+  <body>
+    <h1>{{resume.basics.name}}</h1>
+    <!-- your template here -->
+  </body>
+</html>
+`;
+
+export function render(resume) {
+  return Handlebars.compile(template)({ resume });
+}
+```
+
+### Testing Your Theme Locally
+
+1. **Install your theme in the registry:**
+
+   ```bash
+   cd jsonresume.org
+   pnpm --filter registry add your-theme-name
+   ```
+
+2. **Add it to `themeConfig.js`:**
+
+   ```javascript
+   // apps/registry/lib/formatters/template/themeConfig.js
+   export const THEMES = {
+     // ... existing themes
+     'your-theme': require('your-theme-name'),
+   };
+   ```
+
+3. **Start the dev server:**
+
+   ```bash
+   pnpm dev
+   ```
+
+4. **Test your theme:**
+   ```
+   http://localhost:3000/thomasdavis?theme=your-theme
+   ```
+
+### Working Examples
+
+Check these themes in the repo for reference:
+
+- **Simple approach:** `packages/jsonresume-theme-standard`
+- **Vite bundling:** `packages/jsonresume-theme-professional`
+- **Handlebars templates:** `packages/jsonresume-theme-spartacus`
+
+### Common Issues
+
+#### Issue: "Cannot find module"
+
+**Cause:** Vite isn't bundling your files
+**Fix:** Ensure you're using `?raw` or `?inline` suffixes for non-JS imports
+
+#### Issue: "Template is undefined"
+
+**Cause:** Import path is incorrect
+**Fix:** Use relative paths (`./template.hbs`) not absolute paths
+
+#### Issue: Theme works locally but fails on Vercel
+
+**Cause:** Still using `fs` somewhere
+**Fix:** Search your code for `require('fs')` or `fs.readFile`
+
+### Submitting Your Theme
+
+Once your theme is serverless-compatible:
+
+1. **Publish to npm** (if not already published)
+2. **Open an issue** at [#36](https://github.com/jsonresume/jsonresume.org/issues/36)
+3. **Provide:**
+   - Theme name
+   - npm package name
+   - Link to repository
+   - Confirmation that it doesn't use `fs` operations
+
+We'll review and add it to the registry!
+
+### Need Help?
+
+- **Examples:** See `packages/` directory in this repo
+- **Questions:** Comment on [issue #36](https://github.com/jsonresume/jsonresume.org/issues/36)
+- **Stuck:** We're happy to help! Just ask.
+
+---
 
 ## Getting Help
 
