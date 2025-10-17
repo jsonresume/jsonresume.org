@@ -330,6 +330,20 @@ feature/
   - **Zero files over 200 lines**: All production code now complies with 200-line hard limit
   - **Key Insight**: Different file types need different refactoring strategies (API routes → utils, docs → data+components, libs → config+implementations, React → hooks+components)
   - Benefits: Better testability, maintainability, reusability, clear module boundaries, easier code review
+- **Theme Request Investigation** (Oct 18, 2025):
+  - Investigated user-requested themes (americano, engineering, verbum) from issue #36
+  - **All requested themes use fs.readFileSync** - incompatible with Vercel serverless environment
+  - americano (v1.0.8): Uses fs.readFileSync on lines 62-63 for template/CSS loading
+  - engineering (v0.4.0): Heavy fs usage on lines 48-49, 58, 68 (readFileSync + readdirSync)
+  - verbum (v0.0.5): Not investigated (outdated, last update 2017)
+  - **Pattern**: Be skeptical of external user requests - verify compatibility before adding
+  - **Solution documented**: Added comprehensive "Contributing Themes" section to CONTRIBUTING.md
+  - **Theme requirements**: Must use ES6 imports or build-time bundling (Vite/webpack/rollup), NO runtime fs operations
+  - **Migration guide**: Step-by-step instructions for converting fs.readFileSync themes to Vite imports
+  - **Working examples**: Referenced packages/jsonresume-theme-{standard,professional,spartacus}
+  - **Communication**: Posted findings to issue #36 to educate theme developers
+  - Commit: 5f8b57a - comprehensive serverless theme migration documentation
+  - Benefits: Clear expectations for theme contributors, prevents future incompatible theme requests
 
 **Refactoring Large Files (200+ lines):**
 
