@@ -12,8 +12,8 @@
     "build-storybook": "pnpm --filter @repo/ui build-storybook"
   },
   "devDependencies": {
-    "eslint": "^8",
     "@repo/eslint-config-custom": "workspace:*",
+    "eslint": "^8",
     "husky": "^8.0.3",
     "lint-staged": "^15.2.0",
     "prettier": "^2.8.0",
@@ -24,11 +24,14 @@
   "name": "jsonresume.org",
   "dependencies": {
     "@changesets/cli": "^2.27.1",
-    "dotenv": "^16.0.3"
+    "@sentry/node": "^10.17.0",
+    "dotenv": "^16.0.3",
+    "node-fetch": "3"
   },
   "pnpm": {
     "overrides": {
       "handlebars@<4.7.8": "^4.7.8",
+      "node-fetch": "^3.3.2",
       "uglify-js@<3.0.0": "^3.19.3",
       "tar@<6.2.1": "^6.2.1",
       "marked@<4.0.10": "^4.0.10",
