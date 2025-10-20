@@ -1,0 +1,3354 @@
+# Examples, Templates & Conversion
+
+Complete guide to JSON Resume examples, templates, and conversion workflows for importing/exporting resumes.
+
+## Table of Contents
+
+- [Conversion Tools](#conversion-tools)
+  - [Word to JSON Resume](#word-to-json-resume)
+  - [PDF to JSON Resume](#pdf-to-json-resume)
+  - [Export to Word](#export-to-word)
+  - [Export to CSV](#export-to-csv)
+  - [Export to Google Docs](#export-to-google-docs)
+  - [LinkedIn Converter](#linkedin-converter)
+- [Multi-Language Resumes](#multi-language-resumes)
+- [Merging & Splitting Resumes](#merging--splitting-resumes)
+- [Complete Example Resumes](#complete-example-resumes)
+  - [Minimal Example](#minimal-example)
+  - [Full Schema Example](#full-schema-example)
+  - [Senior Software Engineer](#senior-software-engineer)
+  - [Junior Developer / Student](#junior-developer--student)
+  - [Data Scientist](#data-scientist)
+  - [Product Designer](#product-designer)
+  - [DevOps Engineer](#devops-engineer)
+  - [Product Manager](#product-manager)
+  - [Marketing Professional](#marketing-professional)
+  - [Research Scientist](#research-scientist)
+  - [Freelance Consultant](#freelance-consultant)
+  - [Career Changer](#career-changer)
+  - [Multilingual Example](#multilingual-example)
+- [Starting From Scratch](#starting-from-scratch)
+
+---
+
+## Conversion Tools
+
+### Word to JSON Resume
+
+Converting a Word document (.docx) to JSON Resume requires manual data extraction or using automated parsers.
+
+#### Method 1: Manual Extraction (Recommended)
+
+The most accurate method is to manually map your Word resume to the JSON Resume schema:
+
+1. **Export Word to Plain Text**: Save your .docx as .txt to preserve structure
+2. **Use the schema template** below and fill in your data
+3. **Validate** with `resume validate`
+
+```bash
+# Install the CLI
+npm install -g resume-cli
+
+# Create a new resume
+resume init
+
+# Edit the generated resume.json with your data
+# Then validate
+resume validate
+```
+
+#### Method 2: AI-Powered Conversion
+
+Use AI tools like ChatGPT or Claude to convert your resume:
+
+1. Copy your Word resume text
+2. Use this prompt:
+
+```text
+Convert this resume to JSON Resume format following the schema at https://jsonresume.org/schema.
+Include all sections: basics, work, education, skills, projects, etc.
+
+[Paste your resume text here]
+```
+
+3. Review and validate the output
+
+#### Method 3: Node.js Script
+
+Create a custom parser using libraries like `mammoth` (for .docx parsing):
+
+```javascript
+const mammoth = require('mammoth');
+const fs = require('fs');
+
+async function convertWordToJSON(docxPath) {
+  // Extract text from Word document
+  const result = await mammoth.extractRawText({ path: docxPath });
+  const text = result.value;
+
+  // Parse sections (customize based on your resume structure)
+  const resume = {
+    basics: {
+      name: extractName(text),
+      email: extractEmail(text),
+      phone: extractPhone(text),
+      // ... other fields
+    },
+    work: extractWorkExperience(text),
+    education: extractEducation(text),
+    skills: extractSkills(text),
+  };
+
+  return resume;
+}
+
+function extractEmail(text) {
+  const emailRegex = /[\w.-]+@[\w.-]+\.\w+/;
+  const match = text.match(emailRegex);
+  return match ? match[0] : '';
+}
+
+function extractPhone(text) {
+  const phoneRegex = /[\d\s()+-]{10,}/;
+  const match = text.match(phoneRegex);
+  return match ? match[0].trim() : '';
+}
+
+function extractWorkExperience(text) {
+  // Custom parsing logic for your resume format
+  // This is highly dependent on your Word document structure
+  return [];
+}
+
+function extractEducation(text) {
+  // Custom parsing logic
+  return [];
+}
+
+function extractSkills(text) {
+  // Custom parsing logic
+  return [];
+}
+
+// Usage
+convertWordToJSON('resume.docx').then((resume) => {
+  fs.writeFileSync('resume.json', JSON.stringify(resume, null, 2));
+  console.log('Conversion complete! Check resume.json');
+});
+```
+
+Install dependencies:
+
+```bash
+npm install mammoth
+node convert-word.js
+```
+
+---
+
+### PDF to JSON Resume
+
+Converting PDF resumes is more challenging than Word documents due to PDF complexity.
+
+#### Method 1: PDF Text Extraction + AI
+
+Use a PDF parser combined with AI for accurate conversion:
+
+```javascript
+const pdf = require('pdf-parse');
+const fs = require('fs');
+
+async function convertPDFToJSON(pdfPath) {
+  const dataBuffer = fs.readFileSync(pdfPath);
+  const data = await pdf(dataBuffer);
+  const text = data.text;
+
+  console.log('Extracted text from PDF:');
+  console.log(text);
+  console.log('\nCopy this text to an AI tool for JSON Resume conversion');
+
+  // Alternatively, implement custom parsing logic here
+  return text;
+}
+
+convertPDFToJSON('resume.pdf');
+```
+
+Install dependencies:
+
+```bash
+npm install pdf-parse
+node convert-pdf.js
+```
+
+Then use the extracted text with an AI tool (ChatGPT, Claude, etc.) to convert to JSON Resume format.
+
+#### Method 2: Online PDF Converters
+
+Use services that extract structured data from PDFs, then manually map to JSON Resume:
+
+- **Tabula** (for table-based PDFs)
+- **Adobe Export PDF** (converts to Word, then use Word conversion method)
+- **PDFTables.com** (extracts tables as CSV)
+
+---
+
+### Export to Word
+
+Convert JSON Resume to Word format using custom templates.
+
+#### Method 1: Using Handlebars + Docx Templates
+
+```javascript
+const fs = require('fs');
+const Docxtemplater = require('docxtemplater');
+const PizZip = require('pizzip');
+
+function exportToWord(resumeJSON, templatePath, outputPath) {
+  // Load the .docx template
+  const content = fs.readFileSync(templatePath, 'binary');
+  const zip = new PizZip(content);
+  const doc = new Docxtemplater(zip, {
+    paragraphLoop: true,
+    linebreaks: true,
+  });
+
+  // Set template data from JSON Resume
+  doc.render({
+    name: resumeJSON.basics.name,
+    email: resumeJSON.basics.email,
+    phone: resumeJSON.basics.phone,
+    summary: resumeJSON.basics.summary,
+    work: resumeJSON.work || [],
+    education: resumeJSON.education || [],
+    skills: resumeJSON.skills || [],
+  });
+
+  // Generate Word document
+  const buffer = doc.getZip().generate({ type: 'nodebuffer' });
+  fs.writeFileSync(outputPath, buffer);
+  console.log(`Word document created: ${outputPath}`);
+}
+
+// Usage
+const resume = JSON.parse(fs.readFileSync('resume.json', 'utf8'));
+exportToWord(resume, 'template.docx', 'resume-output.docx');
+```
+
+Install dependencies:
+
+```bash
+npm install docxtemplater pizzip
+```
+
+Create a Word template (`template.docx`) with placeholders:
+
+```
+{name}
+{email} | {phone}
+
+Summary:
+{summary}
+
+Work Experience:
+{#work}
+  {position} at {name}
+  {startDate} - {endDate}
+  {summary}
+{/work}
+
+Education:
+{#education}
+  {studyType} in {area}
+  {institution}, {startDate} - {endDate}
+{/education}
+```
+
+#### Method 2: HTML to Word Conversion
+
+1. Generate HTML from JSON Resume (using themes)
+2. Convert HTML to Word using Pandoc:
+
+```bash
+# Export as HTML
+resume export resume.html --theme elegant
+
+# Convert HTML to Word using Pandoc
+pandoc resume.html -o resume.docx
+```
+
+---
+
+### Export to CSV
+
+Convert JSON Resume to CSV for spreadsheet applications.
+
+```javascript
+const fs = require('fs');
+const { parse } = require('json2csv');
+
+function exportToCSV(resumeJSON, outputPath) {
+  // Flatten work experience to CSV
+  const workFields = ['name', 'position', 'startDate', 'endDate', 'summary'];
+  const workCSV = parse(resumeJSON.work || [], { fields: workFields });
+  fs.writeFileSync(`${outputPath}-work.csv`, workCSV);
+
+  // Flatten education to CSV
+  const eduFields = [
+    'institution',
+    'area',
+    'studyType',
+    'startDate',
+    'endDate',
+  ];
+  const eduCSV = parse(resumeJSON.education || [], { fields: eduFields });
+  fs.writeFileSync(`${outputPath}-education.csv`, eduCSV);
+
+  // Flatten skills to CSV
+  const skillsData = (resumeJSON.skills || []).map((skill) => ({
+    name: skill.name,
+    level: skill.level || '',
+    keywords: skill.keywords ? skill.keywords.join(', ') : '',
+  }));
+  const skillsCSV = parse(skillsData);
+  fs.writeFileSync(`${outputPath}-skills.csv`, skillsCSV);
+
+  console.log('CSV files created!');
+}
+
+// Usage
+const resume = JSON.parse(fs.readFileSync('resume.json', 'utf8'));
+exportToCSV(resume, 'resume');
+```
+
+Install dependencies:
+
+```bash
+npm install json2csv
+node export-csv.js
+```
+
+This creates three CSV files:
+
+- `resume-work.csv` - Work experience
+- `resume-education.csv` - Education history
+- `resume-skills.csv` - Skills list
+
+---
+
+### Export to Google Docs
+
+Export JSON Resume to Google Docs using the Google Docs API.
+
+```javascript
+const fs = require('fs');
+const { google } = require('googleapis');
+
+async function exportToGoogleDocs(resumeJSON, auth) {
+  const docs = google.docs({ version: 'v1', auth });
+  const drive = google.drive({ version: 'v3', auth });
+
+  // Create a new Google Doc
+  const createResponse = await docs.documents.create({
+    requestBody: {
+      title: `${resumeJSON.basics.name} - Resume`,
+    },
+  });
+
+  const documentId = createResponse.data.documentId;
+
+  // Build content requests
+  const requests = [
+    {
+      insertText: {
+        location: { index: 1 },
+        text: `${resumeJSON.basics.name}\n`,
+      },
+    },
+    {
+      updateParagraphStyle: {
+        range: { startIndex: 1, endIndex: resumeJSON.basics.name.length + 1 },
+        paragraphStyle: { namedStyleType: 'HEADING_1' },
+        fields: 'namedStyleType',
+      },
+    },
+  ];
+
+  // Add contact info
+  const contactInfo = `${resumeJSON.basics.email} | ${resumeJSON.basics.phone}\n\n`;
+  requests.push({
+    insertText: {
+      location: { index: resumeJSON.basics.name.length + 2 },
+      text: contactInfo,
+    },
+  });
+
+  // Add summary
+  if (resumeJSON.basics.summary) {
+    requests.push({
+      insertText: {
+        location: { index: 1000 },
+        text: `Summary\n${resumeJSON.basics.summary}\n\n`,
+      },
+    });
+  }
+
+  // Add work experience
+  requests.push({
+    insertText: {
+      location: { index: 2000 },
+      text: 'Work Experience\n',
+    },
+  });
+
+  (resumeJSON.work || []).forEach((job) => {
+    const jobText = `${job.position} at ${job.name}\n${job.startDate} - ${
+      job.endDate || 'Present'
+    }\n${job.summary}\n\n`;
+    requests.push({
+      insertText: {
+        location: { index: 3000 },
+        text: jobText,
+      },
+    });
+  });
+
+  // Update the document
+  await docs.documents.batchUpdate({
+    documentId,
+    requestBody: { requests },
+  });
+
+  console.log(
+    `Google Doc created: https://docs.google.com/document/d/${documentId}`
+  );
+  return documentId;
+}
+
+// Setup Google Auth (requires OAuth2 credentials)
+// Follow: https://developers.google.com/docs/api/quickstart/nodejs
+```
+
+---
+
+### LinkedIn Converter
+
+Convert JSON Resume to LinkedIn import format or vice versa.
+
+#### JSON Resume → LinkedIn
+
+LinkedIn doesn't have a direct import API for resumes, but you can:
+
+1. **Use the data to manually fill your profile**
+2. **Generate a formatted text document** for copy-paste
+3. **Use browser automation** (Puppeteer) to fill forms
+
+Example text formatter:
+
+```javascript
+function formatForLinkedIn(resumeJSON) {
+  let output = '';
+
+  // Summary
+  output += '=== HEADLINE ===\n';
+  output += `${resumeJSON.basics.label || resumeJSON.basics.name}\n\n`;
+
+  output += '=== ABOUT ===\n';
+  output += `${resumeJSON.basics.summary}\n\n`;
+
+  // Work Experience
+  output += '=== EXPERIENCE ===\n';
+  (resumeJSON.work || []).forEach((job) => {
+    output += `Title: ${job.position}\n`;
+    output += `Company: ${job.name}\n`;
+    output += `Dates: ${job.startDate} - ${job.endDate || 'Present'}\n`;
+    output += `Description:\n${job.summary}\n`;
+    if (job.highlights) {
+      output += `Highlights:\n${job.highlights
+        .map((h) => `• ${h}`)
+        .join('\n')}\n`;
+    }
+    output += '\n';
+  });
+
+  // Education
+  output += '=== EDUCATION ===\n';
+  (resumeJSON.education || []).forEach((edu) => {
+    output += `School: ${edu.institution}\n`;
+    output += `Degree: ${edu.studyType} in ${edu.area}\n`;
+    output += `Dates: ${edu.startDate} - ${edu.endDate || 'Present'}\n\n`;
+  });
+
+  // Skills
+  output += '=== SKILLS ===\n';
+  (resumeJSON.skills || []).forEach((skill) => {
+    output += `${skill.name}: ${
+      skill.keywords ? skill.keywords.join(', ') : ''
+    }\n`;
+  });
+
+  return output;
+}
+
+const resume = JSON.parse(fs.readFileSync('resume.json', 'utf8'));
+const linkedInText = formatForLinkedIn(resume);
+fs.writeFileSync('linkedin-import.txt', linkedInText);
+console.log('LinkedIn import file created! Copy sections to your profile.');
+```
+
+#### LinkedIn → JSON Resume
+
+Use LinkedIn's data export feature:
+
+1. **Request your LinkedIn data**:
+
+   - Go to Settings & Privacy → Data Privacy → Get a copy of your data
+   - Select "Positions", "Education", "Skills", etc.
+   - Download the ZIP file
+
+2. **Parse the CSV files**:
+
+```javascript
+const fs = require('fs');
+const csv = require('csv-parser');
+
+async function parseLinkedInCSV(csvPath) {
+  const results = [];
+  return new Promise((resolve, reject) => {
+    fs.createReadStream(csvPath)
+      .pipe(csv())
+      .on('data', (data) => results.push(data))
+      .on('end', () => resolve(results))
+      .on('error', reject);
+  });
+}
+
+async function convertLinkedInToJSON() {
+  const positions = await parseLinkedInCSV('Positions.csv');
+  const education = await parseLinkedInCSV('Education.csv');
+  const skills = await parseLinkedInCSV('Skills.csv');
+
+  const resume = {
+    basics: {
+      name: 'Your Name', // LinkedIn doesn't export this in CSV
+      label: positions[0]?.['Company Name'] || '',
+      email: '', // Add manually
+      phone: '', // Add manually
+      summary: '', // Add manually
+    },
+    work: positions.map((pos) => ({
+      name: pos['Company Name'],
+      position: pos['Title'],
+      startDate: pos['Started On'],
+      endDate: pos['Finished On'] || null,
+      summary: pos['Description'] || '',
+    })),
+    education: education.map((edu) => ({
+      institution: edu['School Name'],
+      area: edu['Degree Name'],
+      studyType: '', // LinkedIn CSV doesn't specify this
+      startDate: edu['Start Date'],
+      endDate: edu['End Date'] || null,
+    })),
+    skills: skills.map((skill) => ({
+      name: skill['Name'],
+      level: '', // LinkedIn doesn't export skill levels
+      keywords: [],
+    })),
+  };
+
+  fs.writeFileSync('resume.json', JSON.stringify(resume, null, 2));
+  console.log('Conversion complete! Check resume.json');
+}
+
+convertLinkedInToJSON();
+```
+
+Install dependencies:
+
+```bash
+npm install csv-parser
+```
+
+---
+
+## Multi-Language Resumes
+
+Create resumes in multiple languages by maintaining separate JSON files or using a single file with language variants.
+
+### Method 1: Separate Files (Recommended)
+
+Maintain separate JSON files for each language:
+
+```
+resumes/
+  ├── resume-en.json  (English)
+  ├── resume-fr.json  (French)
+  ├── resume-es.json  (Spanish)
+  └── resume-de.json  (German)
+```
+
+**Example: English (`resume-en.json`)**
+
+```json
+{
+  "basics": {
+    "name": "Marie Curie",
+    "label": "Physicist and Chemist",
+    "summary": "Pioneering researcher in radioactivity with two Nobel Prizes..."
+  },
+  "work": [
+    {
+      "name": "University of Paris",
+      "position": "Professor of Physics",
+      "summary": "Conducted groundbreaking research in radioactivity..."
+    }
+  ]
+}
+```
+
+**Example: French (`resume-fr.json`)**
+
+```json
+{
+  "basics": {
+    "name": "Marie Curie",
+    "label": "Physicienne et Chimiste",
+    "summary": "Chercheuse pionnière en radioactivité avec deux prix Nobel..."
+  },
+  "work": [
+    {
+      "name": "Université de Paris",
+      "position": "Professeur de Physique",
+      "summary": "Recherche révolutionnaire en radioactivité..."
+    }
+  ]
+}
+```
+
+### Method 2: Single File with Translations
+
+Use a custom field to store translations:
+
+```json
+{
+  "basics": {
+    "name": "Marie Curie",
+    "label": {
+      "en": "Physicist and Chemist",
+      "fr": "Physicienne et Chimiste",
+      "es": "Física y Química"
+    },
+    "summary": {
+      "en": "Pioneering researcher in radioactivity...",
+      "fr": "Chercheuse pionnière en radioactivité...",
+      "es": "Investigadora pionera en radioactividad..."
+    }
+  }
+}
+```
+
+Then create a script to extract a specific language:
+
+```javascript
+function extractLanguage(resume, lang) {
+  function translate(obj) {
+    if (typeof obj === 'object' && obj !== null) {
+      if (obj[lang]) {
+        // This is a translation object
+        return obj[lang];
+      }
+      // Recursively translate nested objects
+      const result = Array.isArray(obj) ? [] : {};
+      for (const key in obj) {
+        result[key] = translate(obj[key]);
+      }
+      return result;
+    }
+    return obj;
+  }
+
+  return translate(resume);
+}
+
+// Usage
+const multiLangResume = JSON.parse(
+  fs.readFileSync('resume-multilang.json', 'utf8')
+);
+const englishResume = extractLanguage(multiLangResume, 'en');
+fs.writeFileSync('resume-en.json', JSON.stringify(englishResume, null, 2));
+```
+
+### Method 3: Language Switcher in Themes
+
+Create a custom theme that detects language from URL parameters:
+
+```javascript
+// In your theme's render function
+function render(resume) {
+  const lang = new URLSearchParams(window.location.search).get('lang') || 'en';
+  const translations = {
+    en: { work: 'Work Experience', education: 'Education' },
+    fr: { work: 'Expérience Professionnelle', education: 'Éducation' },
+    es: { work: 'Experiencia Laboral', education: 'Educación' },
+  };
+
+  const t = translations[lang];
+
+  return `
+    <h2>${t.work}</h2>
+    ${resume.work.map((job) => `<div>...</div>`).join('')}
+  `;
+}
+```
+
+Then access different versions via URL:
+
+- `https://yourresume.com?lang=en`
+- `https://yourresume.com?lang=fr`
+- `https://yourresume.com?lang=es`
+
+---
+
+## Merging & Splitting Resumes
+
+### Merging Multiple Resumes
+
+Combine multiple JSON Resume files into one:
+
+```javascript
+const fs = require('fs');
+
+function mergeResumes(resumePaths) {
+  const resumes = resumePaths.map((path) =>
+    JSON.parse(fs.readFileSync(path, 'utf8'))
+  );
+
+  const merged = {
+    basics: resumes[0].basics, // Use first resume's basics
+    work: [],
+    education: [],
+    skills: [],
+    projects: [],
+    volunteer: [],
+    awards: [],
+    publications: [],
+  };
+
+  // Merge all arrays
+  resumes.forEach((resume) => {
+    if (resume.work) merged.work.push(...resume.work);
+    if (resume.education) merged.education.push(...resume.education);
+    if (resume.skills) merged.skills.push(...resume.skills);
+    if (resume.projects) merged.projects.push(...resume.projects);
+    if (resume.volunteer) merged.volunteer.push(...resume.volunteer);
+    if (resume.awards) merged.awards.push(...resume.awards);
+    if (resume.publications) merged.publications.push(...resume.publications);
+  });
+
+  // Deduplicate skills by name
+  const skillMap = new Map();
+  merged.skills.forEach((skill) => {
+    if (!skillMap.has(skill.name)) {
+      skillMap.set(skill.name, skill);
+    } else {
+      // Merge keywords if skill already exists
+      const existing = skillMap.get(skill.name);
+      if (skill.keywords) {
+        existing.keywords = [
+          ...new Set([...(existing.keywords || []), ...skill.keywords]),
+        ];
+      }
+    }
+  });
+  merged.skills = Array.from(skillMap.values());
+
+  // Sort work by start date (most recent first)
+  merged.work.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
+
+  return merged;
+}
+
+// Usage
+const merged = mergeResumes([
+  'resume-tech.json',
+  'resume-design.json',
+  'resume-consulting.json',
+]);
+fs.writeFileSync('resume-combined.json', JSON.stringify(merged, null, 2));
+console.log('Resumes merged successfully!');
+```
+
+### Splitting One Resume into Multiple Versions
+
+Create targeted resumes from a master resume:
+
+```javascript
+function splitResumeByFocus(resume, focus) {
+  const filters = {
+    // Software Engineering resume
+    software: {
+      skills: ['JavaScript', 'Python', 'React', 'Node.js', 'TypeScript'],
+      workKeywords: ['software', 'developer', 'engineer', 'programming'],
+    },
+    // Data Science resume
+    data: {
+      skills: ['Python', 'R', 'Machine Learning', 'SQL', 'Statistics'],
+      workKeywords: ['data', 'analytics', 'machine learning', 'research'],
+    },
+    // Management resume
+    management: {
+      skills: ['Leadership', 'Project Management', 'Strategy'],
+      workKeywords: ['manager', 'lead', 'director', 'team'],
+    },
+  };
+
+  const filter = filters[focus];
+  if (!filter) throw new Error(`Unknown focus: ${focus}`);
+
+  return {
+    basics: resume.basics,
+    work: resume.work.filter((job) => {
+      const text = `${job.position} ${job.summary}`.toLowerCase();
+      return filter.workKeywords.some((keyword) => text.includes(keyword));
+    }),
+    education: resume.education, // Keep all education
+    skills: resume.skills.filter((skill) =>
+      filter.skills.some((s) =>
+        skill.name.toLowerCase().includes(s.toLowerCase())
+      )
+    ),
+    projects: resume.projects?.filter((project) => {
+      const text = `${project.name} ${project.description}`.toLowerCase();
+      return filter.workKeywords.some((keyword) => text.includes(keyword));
+    }),
+  };
+}
+
+// Usage
+const masterResume = JSON.parse(fs.readFileSync('resume-master.json', 'utf8'));
+const softwareResume = splitResumeByFocus(masterResume, 'software');
+const dataResume = splitResumeByFocus(masterResume, 'data');
+const managementResume = splitResumeByFocus(masterResume, 'management');
+
+fs.writeFileSync(
+  'resume-software.json',
+  JSON.stringify(softwareResume, null, 2)
+);
+fs.writeFileSync('resume-data.json', JSON.stringify(dataResume, null, 2));
+fs.writeFileSync(
+  'resume-management.json',
+  JSON.stringify(managementResume, null, 2)
+);
+```
+
+### Generate Short Version Automatically
+
+Create a condensed 1-page version:
+
+```javascript
+function generateShortVersion(resume, options = {}) {
+  const {
+    maxWorkItems = 3,
+    maxEducationItems = 2,
+    maxSkills = 6,
+    maxProjects = 2,
+    includeVolunteer = false,
+  } = options;
+
+  return {
+    basics: {
+      name: resume.basics.name,
+      label: resume.basics.label,
+      email: resume.basics.email,
+      phone: resume.basics.phone,
+      url: resume.basics.url,
+      summary: resume.basics.summary
+        ? resume.basics.summary.substring(0, 200) + '...'
+        : undefined, // Truncate summary
+    },
+    work: resume.work.slice(0, maxWorkItems).map((job) => ({
+      ...job,
+      summary: job.summary ? job.summary.substring(0, 150) + '...' : undefined,
+      highlights: job.highlights ? job.highlights.slice(0, 3) : undefined, // Max 3 highlights
+    })),
+    education: resume.education.slice(0, maxEducationItems),
+    skills: resume.skills.slice(0, maxSkills).map((skill) => ({
+      name: skill.name,
+      level: skill.level,
+      keywords: skill.keywords ? skill.keywords.slice(0, 5) : undefined, // Max 5 keywords per skill
+    })),
+    projects: resume.projects
+      ? resume.projects.slice(0, maxProjects)
+      : undefined,
+    volunteer:
+      includeVolunteer && resume.volunteer
+        ? resume.volunteer.slice(0, 1)
+        : undefined,
+  };
+}
+
+// Usage
+const fullResume = JSON.parse(fs.readFileSync('resume.json', 'utf8'));
+const shortResume = generateShortVersion(fullResume, {
+  maxWorkItems: 3,
+  maxEducationItems: 2,
+  maxSkills: 8,
+  maxProjects: 2,
+  includeVolunteer: false,
+});
+
+fs.writeFileSync('resume-short.json', JSON.stringify(shortResume, null, 2));
+console.log('Short version created!');
+```
+
+---
+
+## Complete Example Resumes
+
+### Minimal Example
+
+The simplest valid JSON Resume with only required fields:
+
+```json
+{
+  "basics": {
+    "name": "John Doe",
+    "email": "john@example.com"
+  }
+}
+```
+
+Slightly more complete minimal example:
+
+```json
+{
+  "basics": {
+    "name": "Jane Smith",
+    "label": "Software Developer",
+    "email": "jane.smith@example.com",
+    "phone": "(555) 123-4567",
+    "summary": "Passionate developer with 3 years of experience building web applications."
+  },
+  "work": [
+    {
+      "name": "Tech Company",
+      "position": "Software Developer",
+      "startDate": "2021-06-01",
+      "summary": "Built and maintained web applications using React and Node.js."
+    }
+  ],
+  "education": [
+    {
+      "institution": "University of Technology",
+      "area": "Computer Science",
+      "studyType": "Bachelor",
+      "startDate": "2017-09-01",
+      "endDate": "2021-05-01"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Web Development",
+      "keywords": ["JavaScript", "React", "Node.js", "HTML", "CSS"]
+    }
+  ]
+}
+```
+
+---
+
+### Full Schema Example
+
+Complete example demonstrating all available fields in the JSON Resume schema:
+
+```json
+{
+  "basics": {
+    "name": "Richard Hendricks",
+    "label": "Software Engineer & Entrepreneur",
+    "image": "https://example.com/richard-hendricks.jpg",
+    "email": "richard@piedpiper.com",
+    "phone": "(555) 456-7890",
+    "url": "https://richardhendricks.com",
+    "summary": "Innovative software engineer with expertise in compression algorithms and distributed systems. Founder of Pied Piper, a revolutionary data compression platform. Passionate about creating technology that makes the world a better place.",
+    "location": {
+      "address": "5230 Newell Road",
+      "postalCode": "94303",
+      "city": "Palo Alto",
+      "countryCode": "US",
+      "region": "California"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "rhendricks",
+        "url": "https://github.com/rhendricks"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "richardhendricks",
+        "url": "https://linkedin.com/in/richardhendricks"
+      },
+      {
+        "network": "Twitter",
+        "username": "rhendricks",
+        "url": "https://twitter.com/rhendricks"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Pied Piper",
+      "location": "Palo Alto, CA",
+      "description": "Revolutionary data compression platform",
+      "position": "Founder & CEO",
+      "url": "https://piedpiper.com",
+      "startDate": "2014-03-01",
+      "summary": "Founded and led Pied Piper, a groundbreaking compression technology company. Developed proprietary algorithms achieving unprecedented compression ratios. Raised $20M in funding and grew team to 50+ employees.",
+      "highlights": [
+        "Invented lossless compression algorithm with 5x better performance than competitors",
+        "Scaled platform to handle 1 billion+ requests per day",
+        "Built and managed engineering team of 25 developers",
+        "Achieved 99.99% uptime SLA for enterprise customers",
+        "Featured in TechCrunch, Wired, and The Wall Street Journal"
+      ]
+    },
+    {
+      "name": "Hooli",
+      "location": "Mountain View, CA",
+      "description": "Large technology corporation",
+      "position": "Senior Software Engineer",
+      "url": "https://hooli.com",
+      "startDate": "2012-01-01",
+      "endDate": "2014-02-28",
+      "summary": "Developed core infrastructure for Hooli's cloud platform. Led team of 5 engineers building distributed systems and APIs.",
+      "highlights": [
+        "Designed and implemented microservices architecture serving 100M+ users",
+        "Reduced API latency by 60% through optimization and caching strategies",
+        "Mentored junior engineers and conducted technical interviews",
+        "Contributed to open-source projects used company-wide"
+      ]
+    },
+    {
+      "name": "Startup Weekend",
+      "location": "Stanford, CA",
+      "position": "Software Developer (Intern)",
+      "startDate": "2011-06-01",
+      "endDate": "2011-08-31",
+      "summary": "Summer internship developing web applications and prototypes for various startup ideas.",
+      "highlights": [
+        "Built 3 full-stack web applications in 12 weeks",
+        "Won 'Best Technical Implementation' award at final demo day"
+      ]
+    }
+  ],
+  "volunteer": [
+    {
+      "organization": "Code for America",
+      "position": "Volunteer Developer",
+      "url": "https://codeforamerica.org",
+      "startDate": "2015-01-01",
+      "summary": "Contributed to civic tech projects improving government services.",
+      "highlights": [
+        "Built web application for affordable housing search",
+        "Mentored high school students learning to code"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Stanford University",
+      "url": "https://stanford.edu",
+      "area": "Computer Science",
+      "studyType": "Bachelor of Science",
+      "startDate": "2008-09-01",
+      "endDate": "2012-06-01",
+      "score": "3.8",
+      "courses": [
+        "CS106A - Programming Methodology",
+        "CS107 - Computer Organization & Systems",
+        "CS161 - Design and Analysis of Algorithms",
+        "CS221 - Artificial Intelligence"
+      ]
+    }
+  ],
+  "awards": [
+    {
+      "title": "TechCrunch Disrupt Winner",
+      "date": "2014-09-10",
+      "awarder": "TechCrunch",
+      "summary": "Won TechCrunch Disrupt startup competition with Pied Piper compression platform"
+    },
+    {
+      "title": "Best Technical Implementation",
+      "date": "2011-08-15",
+      "awarder": "Stanford Startup Weekend",
+      "summary": "Awarded for exceptional technical execution during internship demo day"
+    }
+  ],
+  "certificates": [
+    {
+      "name": "AWS Certified Solutions Architect",
+      "date": "2020-06-01",
+      "issuer": "Amazon Web Services",
+      "url": "https://aws.amazon.com/certification/"
+    }
+  ],
+  "publications": [
+    {
+      "name": "Optimal Compression Algorithms for Large-Scale Data",
+      "publisher": "ACM Computing Surveys",
+      "releaseDate": "2015-03-01",
+      "url": "https://example.com/publication",
+      "summary": "Research paper on novel compression techniques achieving 5x better performance"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Programming Languages",
+      "level": "Expert",
+      "keywords": ["JavaScript", "TypeScript", "Python", "Go", "Java", "C++"]
+    },
+    {
+      "name": "Web Development",
+      "level": "Expert",
+      "keywords": [
+        "React",
+        "Node.js",
+        "Express",
+        "Next.js",
+        "GraphQL",
+        "REST APIs"
+      ]
+    },
+    {
+      "name": "Cloud & DevOps",
+      "level": "Advanced",
+      "keywords": [
+        "AWS",
+        "Docker",
+        "Kubernetes",
+        "CI/CD",
+        "Terraform",
+        "GitHub Actions"
+      ]
+    },
+    {
+      "name": "Databases",
+      "level": "Advanced",
+      "keywords": ["PostgreSQL", "MongoDB", "Redis", "Elasticsearch"]
+    },
+    {
+      "name": "Algorithms & Data Structures",
+      "level": "Expert",
+      "keywords": [
+        "Compression",
+        "Distributed Systems",
+        "Algorithm Design",
+        "Performance Optimization"
+      ]
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Native speaker"
+    },
+    {
+      "language": "Mandarin Chinese",
+      "fluency": "Conversational"
+    }
+  ],
+  "interests": [
+    {
+      "name": "Open Source",
+      "keywords": ["Contributing to OSS", "Building developer tools"]
+    },
+    {
+      "name": "Hackathons",
+      "keywords": ["Organizing events", "Mentoring participants"]
+    }
+  ],
+  "references": [
+    {
+      "name": "Erlich Bachman",
+      "reference": "Richard is an exceptional engineer and leader. His technical skills are unmatched, and his vision for Pied Piper has been truly revolutionary."
+    }
+  ],
+  "projects": [
+    {
+      "name": "Pied Piper Compression Engine",
+      "description": "Open-source compression library used by Fortune 500 companies",
+      "highlights": [
+        "10,000+ GitHub stars",
+        "Used by Netflix, Uber, and Airbnb",
+        "Reduces bandwidth costs by 70% on average"
+      ],
+      "keywords": ["Compression", "Open Source", "JavaScript"],
+      "startDate": "2014-03-01",
+      "url": "https://github.com/piedpiper/compression",
+      "roles": ["Creator", "Lead Developer"],
+      "entity": "Pied Piper",
+      "type": "application"
+    },
+    {
+      "name": "DevTools Pro",
+      "description": "Browser extension for advanced web development debugging",
+      "highlights": [
+        "50,000+ active users",
+        "4.8/5 star rating on Chrome Web Store"
+      ],
+      "keywords": ["Browser Extension", "Developer Tools"],
+      "startDate": "2016-01-01",
+      "endDate": "2018-06-01",
+      "url": "https://devtools-pro.com",
+      "roles": ["Solo Developer"],
+      "type": "application"
+    }
+  ],
+  "meta": {
+    "canonical": "https://raw.githubusercontent.com/rhendricks/resume/main/resume.json",
+    "version": "v1.0.0",
+    "lastModified": "2024-01-15T00:00:00.000Z"
+  }
+}
+```
+
+---
+
+### Senior Software Engineer
+
+Example for an experienced software engineer (10+ years):
+
+```json
+{
+  "basics": {
+    "name": "Sarah Chen",
+    "label": "Senior Software Engineer | Tech Lead",
+    "image": "https://example.com/sarah-chen.jpg",
+    "email": "sarah.chen@example.com",
+    "phone": "(555) 234-5678",
+    "url": "https://sarahchen.dev",
+    "summary": "Senior software engineer with 12+ years of experience building scalable web applications and leading engineering teams. Expert in JavaScript/TypeScript, React, Node.js, and cloud architecture. Proven track record of delivering high-impact features and mentoring developers.",
+    "location": {
+      "city": "Seattle",
+      "region": "Washington",
+      "countryCode": "US"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "sarahchen",
+        "url": "https://github.com/sarahchen"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "sarahchen",
+        "url": "https://linkedin.com/in/sarahchen"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Amazon Web Services",
+      "position": "Senior Software Engineer (Tech Lead)",
+      "location": "Seattle, WA",
+      "url": "https://aws.amazon.com",
+      "startDate": "2019-03-01",
+      "summary": "Tech lead for AWS Console team, building developer tools used by millions. Lead team of 8 engineers, architect complex features, and drive technical strategy.",
+      "highlights": [
+        "Led migration of legacy monolith to microservices architecture, improving deployment speed by 10x",
+        "Architected and delivered IAM permissions UI redesign, improving user satisfaction by 40%",
+        "Mentored 5 junior engineers, 3 promoted to mid-level within 18 months",
+        "Reduced console load time by 65% through React optimization and lazy loading",
+        "Established engineering best practices and code review standards for team of 30+",
+        "On-call lead for critical production systems (99.99% SLA)"
+      ]
+    },
+    {
+      "name": "Microsoft",
+      "position": "Software Engineer II",
+      "location": "Redmond, WA",
+      "url": "https://microsoft.com",
+      "startDate": "2015-06-01",
+      "endDate": "2019-02-28",
+      "summary": "Full-stack engineer on Azure Portal team. Built features for resource management, monitoring, and billing.",
+      "highlights": [
+        "Developed real-time monitoring dashboard serving 1M+ Azure customers",
+        "Implemented role-based access control (RBAC) system for enterprise users",
+        "Reduced API response times by 50% through caching and query optimization",
+        "Led technical design for billing analytics feature ($2M revenue impact)",
+        "Presented at Microsoft Build 2018 on Azure Portal architecture"
+      ]
+    },
+    {
+      "name": "Stripe",
+      "position": "Software Engineer",
+      "location": "San Francisco, CA",
+      "url": "https://stripe.com",
+      "startDate": "2013-01-01",
+      "endDate": "2015-05-31",
+      "summary": "Early engineer building payment APIs and dashboard features. Worked on core platform and developer tools.",
+      "highlights": [
+        "Built Stripe Connect platform for marketplace payments (now multi-billion dollar product)",
+        "Developed webhook system handling 100M+ events per day",
+        "Created internal admin tools reducing support time by 30%",
+        "Contributed to API versioning strategy still in use today"
+      ]
+    },
+    {
+      "name": "Startup (Acquired by Facebook)",
+      "position": "Full-Stack Developer",
+      "location": "San Francisco, CA",
+      "startDate": "2011-06-01",
+      "endDate": "2012-12-31",
+      "summary": "Employee #3 at social analytics startup. Built entire web application from scratch.",
+      "highlights": [
+        "Architected and built full-stack application (React, Node.js, PostgreSQL)",
+        "Scaled platform from 0 to 100K users in 12 months",
+        "Company acquired by Facebook in 2012"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University of California, Berkeley",
+      "url": "https://berkeley.edu",
+      "area": "Computer Science",
+      "studyType": "Bachelor of Science",
+      "startDate": "2007-09-01",
+      "endDate": "2011-05-01",
+      "score": "3.9",
+      "courses": [
+        "CS61A - Structure and Interpretation of Computer Programs",
+        "CS170 - Efficient Algorithms and Intractable Problems",
+        "CS186 - Database Systems"
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "name": "Frontend",
+      "level": "Expert",
+      "keywords": [
+        "JavaScript",
+        "TypeScript",
+        "React",
+        "Next.js",
+        "Redux",
+        "GraphQL",
+        "HTML",
+        "CSS",
+        "Webpack"
+      ]
+    },
+    {
+      "name": "Backend",
+      "level": "Expert",
+      "keywords": [
+        "Node.js",
+        "Express",
+        "Python",
+        "Django",
+        "REST APIs",
+        "Microservices",
+        "GraphQL"
+      ]
+    },
+    {
+      "name": "Cloud & Infrastructure",
+      "level": "Advanced",
+      "keywords": [
+        "AWS (Lambda, S3, EC2, RDS, DynamoDB)",
+        "Docker",
+        "Kubernetes",
+        "Terraform",
+        "CI/CD",
+        "CloudFormation"
+      ]
+    },
+    {
+      "name": "Databases",
+      "level": "Advanced",
+      "keywords": [
+        "PostgreSQL",
+        "DynamoDB",
+        "Redis",
+        "MongoDB",
+        "Elasticsearch"
+      ]
+    },
+    {
+      "name": "Leadership",
+      "level": "Advanced",
+      "keywords": [
+        "Technical Leadership",
+        "Mentoring",
+        "Architecture Design",
+        "Code Review",
+        "Agile/Scrum"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Open Source Contributions",
+      "description": "Active contributor to major open-source projects",
+      "highlights": [
+        "React: 15+ merged PRs (performance improvements, bug fixes)",
+        "Next.js: Core contributor to server components implementation",
+        "Personal projects: 5K+ GitHub stars across various repositories"
+      ],
+      "url": "https://github.com/sarahchen"
+    }
+  ],
+  "awards": [
+    {
+      "title": "AWS Bar Raiser",
+      "date": "2021-06-01",
+      "awarder": "Amazon",
+      "summary": "Selected as Bar Raiser for maintaining high hiring standards in technical interviews"
+    }
+  ]
+}
+```
+
+---
+
+### Junior Developer / Student
+
+Example for early-career developer or recent graduate:
+
+```json
+{
+  "basics": {
+    "name": "Alex Martinez",
+    "label": "Junior Software Developer",
+    "email": "alex.martinez@example.com",
+    "phone": "(555) 345-6789",
+    "url": "https://alexmartinez.dev",
+    "summary": "Recent computer science graduate passionate about web development and building user-friendly applications. Strong foundation in JavaScript, React, and Python. Eager to learn and contribute to innovative projects.",
+    "location": {
+      "city": "Austin",
+      "region": "Texas",
+      "countryCode": "US"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "alexmartinez",
+        "url": "https://github.com/alexmartinez"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "alexmartinez",
+        "url": "https://linkedin.com/in/alexmartinez"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "TechCorp",
+      "position": "Software Engineering Intern",
+      "location": "Austin, TX",
+      "startDate": "2023-06-01",
+      "endDate": "2023-08-31",
+      "summary": "Summer internship building web features for customer-facing application.",
+      "highlights": [
+        "Developed user dashboard using React and TypeScript",
+        "Implemented REST API endpoints using Node.js and Express",
+        "Fixed 15+ bugs and improved code test coverage by 20%",
+        "Collaborated with team using Git, Jira, and Agile methodology"
+      ]
+    },
+    {
+      "name": "University IT Department",
+      "position": "Student Web Developer",
+      "location": "Austin, TX",
+      "startDate": "2022-09-01",
+      "endDate": "2023-05-31",
+      "summary": "Part-time position maintaining university websites and internal tools.",
+      "highlights": [
+        "Updated and maintained 5+ departmental websites",
+        "Built internal form system using JavaScript and PHP",
+        "Provided technical support to faculty and staff"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University of Texas at Austin",
+      "url": "https://utexas.edu",
+      "area": "Computer Science",
+      "studyType": "Bachelor of Science",
+      "startDate": "2019-09-01",
+      "endDate": "2023-05-01",
+      "score": "3.7",
+      "courses": [
+        "Data Structures and Algorithms",
+        "Web Development",
+        "Database Systems",
+        "Software Engineering",
+        "Operating Systems"
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "name": "Programming Languages",
+      "level": "Intermediate",
+      "keywords": ["JavaScript", "TypeScript", "Python", "Java", "HTML", "CSS"]
+    },
+    {
+      "name": "Frontend",
+      "level": "Intermediate",
+      "keywords": ["React", "HTML5", "CSS3", "Bootstrap", "Responsive Design"]
+    },
+    {
+      "name": "Backend",
+      "level": "Beginner",
+      "keywords": ["Node.js", "Express", "REST APIs", "SQL", "MongoDB"]
+    },
+    {
+      "name": "Tools",
+      "level": "Intermediate",
+      "keywords": ["Git", "GitHub", "VS Code", "Figma", "Postman"]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Task Manager App",
+      "description": "Full-stack task management application with user authentication",
+      "highlights": [
+        "Built with React frontend and Node.js/Express backend",
+        "Implemented JWT authentication and MongoDB storage",
+        "Deployed to Heroku with CI/CD pipeline"
+      ],
+      "keywords": ["React", "Node.js", "MongoDB"],
+      "startDate": "2023-03-01",
+      "endDate": "2023-04-30",
+      "url": "https://github.com/alexmartinez/task-manager",
+      "roles": ["Solo Developer"],
+      "type": "application"
+    },
+    {
+      "name": "Weather Dashboard",
+      "description": "Responsive weather app using OpenWeatherMap API",
+      "highlights": [
+        "Built with vanilla JavaScript and CSS",
+        "Displays current weather and 5-day forecast",
+        "Implements geolocation for automatic city detection"
+      ],
+      "keywords": ["JavaScript", "API Integration", "CSS"],
+      "startDate": "2022-11-01",
+      "endDate": "2022-12-01",
+      "url": "https://github.com/alexmartinez/weather-dashboard",
+      "roles": ["Solo Developer"],
+      "type": "application"
+    }
+  ],
+  "volunteer": [
+    {
+      "organization": "Girls Who Code",
+      "position": "Volunteer Instructor",
+      "startDate": "2022-01-01",
+      "endDate": "2023-05-01",
+      "summary": "Taught basic programming concepts to high school students.",
+      "highlights": [
+        "Led weekly coding workshops for 15+ students",
+        "Developed curriculum for HTML/CSS and JavaScript basics"
+      ]
+    }
+  ],
+  "certificates": [
+    {
+      "name": "freeCodeCamp Responsive Web Design",
+      "date": "2022-05-01",
+      "issuer": "freeCodeCamp",
+      "url": "https://freecodecamp.org/certification"
+    }
+  ],
+  "interests": [
+    {
+      "name": "Open Source",
+      "keywords": ["Contributing to beginner-friendly projects"]
+    },
+    {
+      "name": "Hackathons",
+      "keywords": ["Participated in 3 hackathons, won 1st place at HackTX 2022"]
+    }
+  ]
+}
+```
+
+---
+
+### Data Scientist
+
+Example for a data science professional:
+
+```json
+{
+  "basics": {
+    "name": "Dr. Priya Sharma",
+    "label": "Senior Data Scientist | Machine Learning Engineer",
+    "email": "priya.sharma@example.com",
+    "phone": "(555) 456-7890",
+    "url": "https://priyasharma.com",
+    "summary": "Data scientist with 8+ years of experience building machine learning models and data pipelines. Expert in Python, TensorFlow, and statistical analysis. Ph.D. in Statistics with focus on predictive modeling and causal inference. Proven track record of delivering business impact through data-driven solutions.",
+    "location": {
+      "city": "New York",
+      "region": "New York",
+      "countryCode": "US"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "priyasharma",
+        "url": "https://github.com/priyasharma"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "priyasharma",
+        "url": "https://linkedin.com/in/priyasharma"
+      },
+      {
+        "network": "Kaggle",
+        "username": "priyasharma",
+        "url": "https://kaggle.com/priyasharma"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Netflix",
+      "position": "Senior Data Scientist",
+      "location": "Los Gatos, CA",
+      "url": "https://netflix.com",
+      "startDate": "2020-02-01",
+      "summary": "Lead data scientist for recommendation systems team. Build and deploy ML models serving 200M+ subscribers.",
+      "highlights": [
+        "Developed deep learning recommendation model improving user engagement by 15%",
+        "Built A/B testing framework processing 1B+ daily events",
+        "Led project to personalize homepage thumbnails, increasing CTR by 30%",
+        "Mentored 3 junior data scientists and presented at internal ML summit",
+        "Deployed models to production using TensorFlow Serving and Kubernetes",
+        "Published research on recommendation systems at RecSys 2022 conference"
+      ]
+    },
+    {
+      "name": "Airbnb",
+      "position": "Data Scientist",
+      "location": "San Francisco, CA",
+      "url": "https://airbnb.com",
+      "startDate": "2017-06-01",
+      "endDate": "2020-01-31",
+      "summary": "Data scientist on pricing team. Built pricing models and analytics tools.",
+      "highlights": [
+        "Created dynamic pricing model increasing host revenue by 12% ($500M annual impact)",
+        "Built demand forecasting model with 95% accuracy for 50+ cities",
+        "Developed feature engineering pipeline reducing model training time by 60%",
+        "Conducted causal inference studies to measure impact of product changes",
+        "Collaborated with product and engineering teams on 10+ major launches"
+      ]
+    },
+    {
+      "name": "Insight Data Science",
+      "position": "Data Science Fellow",
+      "location": "New York, NY",
+      "url": "https://insightdatascience.com",
+      "startDate": "2016-09-01",
+      "endDate": "2017-05-31",
+      "summary": "Intensive fellowship program transitioning from academia to industry data science.",
+      "highlights": [
+        "Built fraud detection system using XGBoost and neural networks",
+        "Processed 10M+ transaction records using Spark and AWS EMR",
+        "Achieved 98% precision and 92% recall on fraud detection",
+        "Presented project to 50+ hiring companies"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Columbia University",
+      "url": "https://columbia.edu",
+      "area": "Statistics",
+      "studyType": "Ph.D.",
+      "startDate": "2011-09-01",
+      "endDate": "2016-05-01",
+      "summary": "Dissertation: 'Bayesian Methods for Causal Inference in Observational Studies'",
+      "courses": [
+        "Statistical Learning",
+        "Bayesian Statistics",
+        "Causal Inference",
+        "Time Series Analysis"
+      ]
+    },
+    {
+      "institution": "University of California, Berkeley",
+      "url": "https://berkeley.edu",
+      "area": "Mathematics",
+      "studyType": "Bachelor of Arts",
+      "startDate": "2007-09-01",
+      "endDate": "2011-05-01",
+      "score": "3.95"
+    }
+  ],
+  "publications": [
+    {
+      "name": "Deep Learning for Personalized Recommendations at Scale",
+      "publisher": "ACM RecSys 2022",
+      "releaseDate": "2022-09-18",
+      "url": "https://dl.acm.org/doi/example",
+      "summary": "Novel deep learning architecture for recommendation systems handling billions of items"
+    },
+    {
+      "name": "Causal Inference in High-Dimensional Settings",
+      "publisher": "Journal of the American Statistical Association",
+      "releaseDate": "2018-03-01",
+      "url": "https://tandfonline.com/example",
+      "summary": "Methods for estimating causal effects with many confounding variables"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Programming",
+      "level": "Expert",
+      "keywords": ["Python", "R", "SQL", "Scala", "Bash"]
+    },
+    {
+      "name": "Machine Learning",
+      "level": "Expert",
+      "keywords": [
+        "TensorFlow",
+        "PyTorch",
+        "Scikit-learn",
+        "XGBoost",
+        "Deep Learning",
+        "NLP",
+        "Computer Vision"
+      ]
+    },
+    {
+      "name": "Data Engineering",
+      "level": "Advanced",
+      "keywords": ["Spark", "Airflow", "Kafka", "Hadoop", "ETL Pipelines"]
+    },
+    {
+      "name": "Cloud & MLOps",
+      "level": "Advanced",
+      "keywords": [
+        "AWS (SageMaker, EMR, S3)",
+        "Docker",
+        "Kubernetes",
+        "MLflow",
+        "CI/CD"
+      ]
+    },
+    {
+      "name": "Statistics",
+      "level": "Expert",
+      "keywords": [
+        "Bayesian Inference",
+        "Causal Inference",
+        "A/B Testing",
+        "Hypothesis Testing",
+        "Time Series"
+      ]
+    },
+    {
+      "name": "Visualization",
+      "level": "Advanced",
+      "keywords": ["Matplotlib", "Seaborn", "Plotly", "Tableau", "Looker"]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Open Source ML Tools",
+      "description": "Contributor to major ML libraries",
+      "highlights": [
+        "Scikit-learn: 10+ merged PRs improving model performance",
+        "TensorFlow: Bug fixes and documentation improvements",
+        "Personal library for causal inference: 500+ GitHub stars"
+      ],
+      "url": "https://github.com/priyasharma"
+    }
+  ],
+  "awards": [
+    {
+      "title": "Kaggle Competition Master",
+      "date": "2019-06-01",
+      "awarder": "Kaggle",
+      "summary": "Top 1% in 5+ machine learning competitions"
+    },
+    {
+      "title": "Best Paper Award",
+      "date": "2022-09-18",
+      "awarder": "ACM RecSys Conference",
+      "summary": "Best paper award for recommendation systems research"
+    }
+  ],
+  "certificates": [
+    {
+      "name": "AWS Certified Machine Learning - Specialty",
+      "date": "2021-03-01",
+      "issuer": "Amazon Web Services"
+    },
+    {
+      "name": "TensorFlow Developer Certificate",
+      "date": "2020-07-01",
+      "issuer": "Google"
+    }
+  ]
+}
+```
+
+---
+
+### Product Designer
+
+Example for a product/UX designer:
+
+```json
+{
+  "basics": {
+    "name": "Jordan Lee",
+    "label": "Senior Product Designer | UX Lead",
+    "email": "jordan.lee@example.com",
+    "phone": "(555) 567-8901",
+    "url": "https://jordanlee.design",
+    "summary": "Product designer with 7+ years of experience crafting delightful user experiences for web and mobile. Expert in user research, interaction design, and design systems. Proven track record of leading design initiatives and collaborating with cross-functional teams.",
+    "location": {
+      "city": "Brooklyn",
+      "region": "New York",
+      "countryCode": "US"
+    },
+    "profiles": [
+      {
+        "network": "Dribbble",
+        "username": "jordanlee",
+        "url": "https://dribbble.com/jordanlee"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "jordanlee",
+        "url": "https://linkedin.com/in/jordanlee"
+      },
+      {
+        "network": "Behance",
+        "username": "jordanlee",
+        "url": "https://behance.net/jordanlee"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Spotify",
+      "position": "Senior Product Designer",
+      "location": "New York, NY",
+      "url": "https://spotify.com",
+      "startDate": "2019-08-01",
+      "summary": "Lead designer for Creator Tools team, building products for podcast creators and musicians.",
+      "highlights": [
+        "Led redesign of Spotify for Artists dashboard, increasing user engagement by 45%",
+        "Designed podcast analytics platform serving 2M+ creators",
+        "Established design system component library used by 50+ designers",
+        "Conducted 100+ user interviews and usability tests",
+        "Collaborated with PM and engineering teams on 8 major product launches",
+        "Mentored 2 junior designers and ran weekly design critiques"
+      ]
+    },
+    {
+      "name": "Squarespace",
+      "position": "Product Designer",
+      "location": "New York, NY",
+      "url": "https://squarespace.com",
+      "startDate": "2017-02-01",
+      "endDate": "2019-07-31",
+      "summary": "Designer on website builder team. Focused on template design and editing experience.",
+      "highlights": [
+        "Designed 5 award-winning website templates with 500K+ users",
+        "Improved template customization flow, reducing support tickets by 30%",
+        "Led accessibility initiative achieving WCAG 2.1 AA compliance",
+        "Created motion design guidelines for product animations",
+        "Collaborated with marketing team on brand refresh"
+      ]
+    },
+    {
+      "name": "Digital Agency",
+      "position": "UI/UX Designer",
+      "location": "Brooklyn, NY",
+      "startDate": "2015-06-01",
+      "endDate": "2017-01-31",
+      "summary": "Designer at boutique agency working with clients on web and mobile projects.",
+      "highlights": [
+        "Designed and shipped 15+ client projects (websites, mobile apps, branding)",
+        "Led design workshops with stakeholders and clients",
+        "Created wireframes, prototypes, and high-fidelity mockups",
+        "Won Webby Award for e-commerce redesign project"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Parsons School of Design",
+      "url": "https://parsons.edu",
+      "area": "Communication Design",
+      "studyType": "Bachelor of Fine Arts",
+      "startDate": "2011-09-01",
+      "endDate": "2015-05-01"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Design Tools",
+      "level": "Expert",
+      "keywords": [
+        "Figma",
+        "Sketch",
+        "Adobe Creative Suite",
+        "Principle",
+        "Framer",
+        "Protopie"
+      ]
+    },
+    {
+      "name": "UX Research",
+      "level": "Advanced",
+      "keywords": [
+        "User Interviews",
+        "Usability Testing",
+        "A/B Testing",
+        "Surveys",
+        "Analytics",
+        "Personas",
+        "Journey Mapping"
+      ]
+    },
+    {
+      "name": "Design Systems",
+      "level": "Advanced",
+      "keywords": [
+        "Component Libraries",
+        "Design Tokens",
+        "Accessibility",
+        "Documentation"
+      ]
+    },
+    {
+      "name": "Frontend (Basic)",
+      "level": "Beginner",
+      "keywords": ["HTML", "CSS", "JavaScript", "React (basics)"]
+    },
+    {
+      "name": "Specialties",
+      "level": "Expert",
+      "keywords": [
+        "Interaction Design",
+        "Visual Design",
+        "Responsive Design",
+        "Mobile Design",
+        "Design Systems",
+        "Motion Design"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Open Source Design System",
+      "description": "Contributed to major open-source design systems",
+      "highlights": [
+        "Material Design: Icon contributions",
+        "Ant Design: Component design and documentation",
+        "Personal design system: 1K+ Figma duplications"
+      ],
+      "url": "https://jordanlee.design/design-system"
+    }
+  ],
+  "awards": [
+    {
+      "title": "Webby Award - Best Visual Design",
+      "date": "2018-05-01",
+      "awarder": "The Webby Awards",
+      "summary": "E-commerce website redesign for fashion brand"
+    },
+    {
+      "title": "Awwwards Site of the Day",
+      "date": "2017-09-15",
+      "awarder": "Awwwards",
+      "summary": "Interactive portfolio website"
+    }
+  ],
+  "certificates": [
+    {
+      "name": "Google UX Design Professional Certificate",
+      "date": "2019-01-01",
+      "issuer": "Google"
+    }
+  ],
+  "volunteer": [
+    {
+      "organization": "Design for Good",
+      "position": "Volunteer Designer",
+      "startDate": "2018-01-01",
+      "summary": "Pro-bono design work for non-profits",
+      "highlights": [
+        "Designed website for local food bank",
+        "Created branding for environmental organization"
+      ]
+    }
+  ],
+  "interests": [
+    {
+      "name": "Typography",
+      "keywords": ["Type design", "Custom fonts"]
+    },
+    {
+      "name": "Photography",
+      "keywords": ["Street photography", "Product photography"]
+    }
+  ]
+}
+```
+
+---
+
+### DevOps Engineer
+
+Example for a DevOps/SRE professional:
+
+```json
+{
+  "basics": {
+    "name": "Marcus Johnson",
+    "label": "Senior DevOps Engineer | Site Reliability Engineer",
+    "email": "marcus.johnson@example.com",
+    "phone": "(555) 678-9012",
+    "url": "https://marcusjohnson.dev",
+    "summary": "DevOps engineer with 9+ years of experience building and maintaining cloud infrastructure. Expert in AWS, Kubernetes, and CI/CD automation. Passionate about infrastructure-as-code, observability, and improving developer productivity.",
+    "location": {
+      "city": "Denver",
+      "region": "Colorado",
+      "countryCode": "US"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "marcusjohnson",
+        "url": "https://github.com/marcusjohnson"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "marcusjohnson",
+        "url": "https://linkedin.com/in/marcusjohnson"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "HashiCorp",
+      "position": "Senior Site Reliability Engineer",
+      "location": "Remote",
+      "url": "https://hashicorp.com",
+      "startDate": "2020-04-01",
+      "summary": "SRE maintaining Terraform Cloud infrastructure serving 100K+ customers.",
+      "highlights": [
+        "Achieved 99.99% uptime SLA for Terraform Cloud (2+ years)",
+        "Led migration from EC2 to Kubernetes, reducing costs by 40%",
+        "Built auto-scaling system handling 10x traffic spikes during peak hours",
+        "Implemented observability stack (Prometheus, Grafana, Loki) for 200+ services",
+        "Reduced incident response time by 60% through improved alerting and runbooks",
+        "On-call lead for critical production systems"
+      ]
+    },
+    {
+      "name": "GitHub",
+      "position": "DevOps Engineer",
+      "location": "San Francisco, CA",
+      "url": "https://github.com",
+      "startDate": "2017-01-01",
+      "endDate": "2020-03-31",
+      "summary": "DevOps engineer supporting GitHub.com infrastructure and developer tools.",
+      "highlights": [
+        "Built CI/CD pipelines using GitHub Actions for 1000+ repositories",
+        "Migrated monolithic deployment system to microservices architecture",
+        "Implemented blue-green deployment strategy reducing downtime by 95%",
+        "Created Terraform modules for AWS infrastructure (used by 50+ teams)",
+        "Reduced build times by 50% through build caching and parallelization",
+        "Presented at GitHub Universe 2019 on CI/CD best practices"
+      ]
+    },
+    {
+      "name": "DigitalOcean",
+      "position": "Systems Engineer",
+      "location": "New York, NY",
+      "url": "https://digitalocean.com",
+      "startDate": "2014-06-01",
+      "endDate": "2016-12-31",
+      "summary": "Systems engineer managing cloud infrastructure and automation.",
+      "highlights": [
+        "Automated server provisioning using Ansible, reducing setup time from 4 hours to 10 minutes",
+        "Built monitoring system processing 1M+ metrics per second",
+        "Implemented disaster recovery plan tested quarterly",
+        "Improved log aggregation system handling 100GB+ daily logs"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Georgia Institute of Technology",
+      "url": "https://gatech.edu",
+      "area": "Computer Science",
+      "studyType": "Bachelor of Science",
+      "startDate": "2010-09-01",
+      "endDate": "2014-05-01"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Cloud Platforms",
+      "level": "Expert",
+      "keywords": ["AWS", "Google Cloud", "Azure", "DigitalOcean"]
+    },
+    {
+      "name": "Container Orchestration",
+      "level": "Expert",
+      "keywords": ["Kubernetes", "Docker", "Helm", "ECS", "EKS"]
+    },
+    {
+      "name": "Infrastructure as Code",
+      "level": "Expert",
+      "keywords": ["Terraform", "CloudFormation", "Pulumi", "Ansible", "Chef"]
+    },
+    {
+      "name": "CI/CD",
+      "level": "Expert",
+      "keywords": [
+        "GitHub Actions",
+        "GitLab CI",
+        "Jenkins",
+        "CircleCI",
+        "ArgoCD"
+      ]
+    },
+    {
+      "name": "Observability",
+      "level": "Advanced",
+      "keywords": [
+        "Prometheus",
+        "Grafana",
+        "Datadog",
+        "New Relic",
+        "ELK Stack",
+        "Loki",
+        "Jaeger"
+      ]
+    },
+    {
+      "name": "Programming",
+      "level": "Advanced",
+      "keywords": ["Python", "Go", "Bash", "Ruby"]
+    },
+    {
+      "name": "Databases",
+      "level": "Advanced",
+      "keywords": ["PostgreSQL", "MySQL", "Redis", "MongoDB", "DynamoDB"]
+    }
+  ],
+  "certificates": [
+    {
+      "name": "AWS Certified Solutions Architect - Professional",
+      "date": "2021-06-01",
+      "issuer": "Amazon Web Services"
+    },
+    {
+      "name": "Certified Kubernetes Administrator (CKA)",
+      "date": "2020-09-01",
+      "issuer": "Cloud Native Computing Foundation"
+    },
+    {
+      "name": "HashiCorp Certified: Terraform Associate",
+      "date": "2019-11-01",
+      "issuer": "HashiCorp"
+    }
+  ],
+  "projects": [
+    {
+      "name": "Open Source DevOps Tools",
+      "description": "Creator and maintainer of popular DevOps utilities",
+      "highlights": [
+        "k8s-deploy-helper: Kubernetes deployment tool (2K+ stars)",
+        "terraform-aws-modules: Collection of reusable Terraform modules (500+ stars)",
+        "Active contributor to Prometheus and Grafana projects"
+      ],
+      "url": "https://github.com/marcusjohnson"
+    }
+  ]
+}
+```
+
+---
+
+### Product Manager
+
+Example for a product management professional:
+
+```json
+{
+  "basics": {
+    "name": "Emily Zhang",
+    "label": "Senior Product Manager | Technical PM",
+    "email": "emily.zhang@example.com",
+    "phone": "(555) 789-0123",
+    "url": "https://emilyzhang.com",
+    "summary": "Product manager with 6+ years of experience building B2B SaaS products. Strong technical background with focus on data-driven decision making and user-centric design. Led products from 0 to 1 and scaled to millions of users.",
+    "location": {
+      "city": "San Francisco",
+      "region": "California",
+      "countryCode": "US"
+    },
+    "profiles": [
+      {
+        "network": "LinkedIn",
+        "username": "emilyzhang",
+        "url": "https://linkedin.com/in/emilyzhang"
+      },
+      {
+        "network": "Twitter",
+        "username": "emilyzhang",
+        "url": "https://twitter.com/emilyzhang"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Slack",
+      "position": "Senior Product Manager",
+      "location": "San Francisco, CA",
+      "url": "https://slack.com",
+      "startDate": "2020-01-01",
+      "summary": "Product lead for Slack Platform team building developer tools and integrations.",
+      "highlights": [
+        "Led development of Workflow Builder 2.0, increasing automation adoption by 200%",
+        "Grew App Directory from 2,000 to 5,000+ apps through improved developer experience",
+        "Launched Slack Functions platform serving 10K+ developers",
+        "Increased API usage by 150% through improved documentation and SDKs",
+        "Managed cross-functional team of 8 engineers, 2 designers, and 1 researcher",
+        "Achieved 40+ NPS score from developer community"
+      ]
+    },
+    {
+      "name": "Dropbox",
+      "position": "Product Manager",
+      "location": "San Francisco, CA",
+      "url": "https://dropbox.com",
+      "startDate": "2018-03-01",
+      "endDate": "2019-12-31",
+      "summary": "PM for Dropbox Business features targeting enterprise customers.",
+      "highlights": [
+        "Launched Smart Sync feature reducing storage costs by $50M annually",
+        "Led redesign of admin console, improving admin efficiency by 35%",
+        "Grew enterprise user base from 300K to 500K through new features",
+        "Conducted 50+ customer interviews and quarterly product reviews",
+        "Collaborated with sales team to close $10M+ in enterprise deals"
+      ]
+    },
+    {
+      "name": "Google",
+      "position": "Associate Product Manager (APM)",
+      "location": "Mountain View, CA",
+      "url": "https://google.com",
+      "startDate": "2016-06-01",
+      "endDate": "2018-02-28",
+      "summary": "APM rotation program across Google Cloud and Chrome teams.",
+      "highlights": [
+        "Launched Chrome DevTools feature improving developer debugging workflow",
+        "Built analytics dashboard for Google Cloud Console serving 1M+ users",
+        "Led A/B tests with 100K+ users to optimize product features",
+        "Presented product strategy to VP-level leadership"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Stanford University",
+      "url": "https://stanford.edu",
+      "area": "Computer Science",
+      "studyType": "Bachelor of Science",
+      "startDate": "2012-09-01",
+      "endDate": "2016-06-01",
+      "score": "3.8"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Product Management",
+      "level": "Expert",
+      "keywords": [
+        "Product Strategy",
+        "Roadmapping",
+        "User Research",
+        "A/B Testing",
+        "Data Analysis",
+        "PRD Writing",
+        "Stakeholder Management"
+      ]
+    },
+    {
+      "name": "Technical Skills",
+      "level": "Advanced",
+      "keywords": ["SQL", "Python", "API Design", "System Design", "Analytics"]
+    },
+    {
+      "name": "Tools",
+      "level": "Advanced",
+      "keywords": [
+        "Jira",
+        "Figma",
+        "Amplitude",
+        "Looker",
+        "Mixpanel",
+        "Google Analytics"
+      ]
+    },
+    {
+      "name": "Domain Expertise",
+      "level": "Expert",
+      "keywords": ["B2B SaaS", "Developer Tools", "Platform Products", "APIs"]
+    }
+  ],
+  "certificates": [
+    {
+      "name": "Product Management Certificate",
+      "date": "2019-06-01",
+      "issuer": "Product School"
+    }
+  ],
+  "publications": [
+    {
+      "name": "Building Platform Products: Lessons from Slack",
+      "publisher": "Medium",
+      "releaseDate": "2022-03-15",
+      "url": "https://medium.com/@emilyzhang/platform-products",
+      "summary": "Article on platform product strategy with 50K+ views"
+    }
+  ]
+}
+```
+
+---
+
+### Marketing Professional
+
+Example for a digital marketing professional:
+
+```json
+{
+  "basics": {
+    "name": "Tyler Brooks",
+    "label": "Senior Marketing Manager | Growth Lead",
+    "email": "tyler.brooks@example.com",
+    "phone": "(555) 890-1234",
+    "url": "https://tylerbrooks.com",
+    "summary": "Marketing professional with 8+ years of experience driving growth for B2B and B2C companies. Expert in digital marketing, content strategy, and data analytics. Led campaigns generating $10M+ in revenue.",
+    "location": {
+      "city": "Austin",
+      "region": "Texas",
+      "countryCode": "US"
+    },
+    "profiles": [
+      {
+        "network": "LinkedIn",
+        "username": "tylerbrooks",
+        "url": "https://linkedin.com/in/tylerbrooks"
+      },
+      {
+        "network": "Twitter",
+        "username": "tylerbrooks",
+        "url": "https://twitter.com/tylerbrooks"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "HubSpot",
+      "position": "Senior Marketing Manager",
+      "location": "Remote",
+      "url": "https://hubspot.com",
+      "startDate": "2019-05-01",
+      "summary": "Marketing lead for HubSpot's Product Marketing team.",
+      "highlights": [
+        "Grew organic traffic by 300% (2M to 8M monthly visitors) in 2 years",
+        "Launched content marketing campaign generating 50K+ SQLs",
+        "Managed $2M annual marketing budget across channels",
+        "Led rebranding initiative increasing brand awareness by 45%",
+        "Built email nurture campaigns with 25% conversion rate",
+        "Managed team of 5 content writers and 2 designers"
+      ]
+    },
+    {
+      "name": "Mailchimp",
+      "position": "Growth Marketing Manager",
+      "location": "Atlanta, GA",
+      "url": "https://mailchimp.com",
+      "startDate": "2016-08-01",
+      "endDate": "2019-04-30",
+      "summary": "Growth marketing for small business segment.",
+      "highlights": [
+        "Increased free-to-paid conversion rate from 2% to 5% through onboarding optimization",
+        "Launched referral program generating 20K+ new signups",
+        "Ran 100+ A/B tests improving email open rates by 35%",
+        "Created SEO strategy growing organic signups by 150%",
+        "Reduced customer acquisition cost (CAC) by 30%"
+      ]
+    },
+    {
+      "name": "Digital Marketing Agency",
+      "position": "Marketing Strategist",
+      "location": "Austin, TX",
+      "startDate": "2014-06-01",
+      "endDate": "2016-07-31",
+      "summary": "Client-facing marketing strategist for 10+ B2B and B2C clients.",
+      "highlights": [
+        "Managed paid advertising campaigns with $500K+ monthly spend",
+        "Improved client ROAS from 2x to 5x through campaign optimization",
+        "Created content marketing strategies for SaaS clients",
+        "Led social media campaigns generating 1M+ impressions"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University of Texas at Austin",
+      "url": "https://utexas.edu",
+      "area": "Marketing",
+      "studyType": "Bachelor of Business Administration",
+      "startDate": "2010-09-01",
+      "endDate": "2014-05-01"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Digital Marketing",
+      "level": "Expert",
+      "keywords": [
+        "SEO",
+        "SEM",
+        "Content Marketing",
+        "Email Marketing",
+        "Social Media Marketing",
+        "Growth Marketing"
+      ]
+    },
+    {
+      "name": "Analytics",
+      "level": "Advanced",
+      "keywords": [
+        "Google Analytics",
+        "Mixpanel",
+        "Amplitude",
+        "SQL",
+        "Data Visualization"
+      ]
+    },
+    {
+      "name": "Paid Advertising",
+      "level": "Expert",
+      "keywords": [
+        "Google Ads",
+        "Facebook Ads",
+        "LinkedIn Ads",
+        "PPC",
+        "Retargeting"
+      ]
+    },
+    {
+      "name": "Tools",
+      "level": "Advanced",
+      "keywords": [
+        "HubSpot",
+        "Salesforce",
+        "Mailchimp",
+        "WordPress",
+        "Figma",
+        "Canva"
+      ]
+    },
+    {
+      "name": "Content Creation",
+      "level": "Advanced",
+      "keywords": ["Copywriting", "Blogging", "Video Marketing", "Podcasting"]
+    }
+  ],
+  "certificates": [
+    {
+      "name": "Google Analytics Certified",
+      "date": "2021-03-01",
+      "issuer": "Google"
+    },
+    {
+      "name": "HubSpot Inbound Marketing Certification",
+      "date": "2019-06-01",
+      "issuer": "HubSpot"
+    },
+    {
+      "name": "Facebook Blueprint Certified",
+      "date": "2020-01-01",
+      "issuer": "Meta"
+    }
+  ]
+}
+```
+
+---
+
+### Research Scientist
+
+Example for an academic/industry research scientist:
+
+```json
+{
+  "basics": {
+    "name": "Dr. Michael Okonkwo",
+    "label": "Research Scientist | AI/ML Researcher",
+    "email": "m.okonkwo@example.com",
+    "phone": "(555) 901-2345",
+    "url": "https://michaelokonkwo.com",
+    "summary": "Research scientist specializing in natural language processing and deep learning. Ph.D. in Computer Science with 15+ publications in top-tier conferences. Led research teams at Google AI and academia.",
+    "location": {
+      "city": "Cambridge",
+      "region": "Massachusetts",
+      "countryCode": "US"
+    },
+    "profiles": [
+      {
+        "network": "Google Scholar",
+        "username": "michaelo",
+        "url": "https://scholar.google.com/citations?user=example"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "michaelokonkwo",
+        "url": "https://linkedin.com/in/michaelokonkwo"
+      },
+      {
+        "network": "GitHub",
+        "username": "mokonkwo",
+        "url": "https://github.com/mokonkwo"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Google AI",
+      "position": "Senior Research Scientist",
+      "location": "Cambridge, MA",
+      "url": "https://ai.google",
+      "startDate": "2018-09-01",
+      "summary": "Research scientist on Google Brain team working on NLP and large language models.",
+      "highlights": [
+        "Co-authored BERT successor model improving performance by 20% on NLP benchmarks",
+        "Published 8 papers at NeurIPS, ICML, ACL, and EMNLP conferences",
+        "Led team of 5 researchers and 3 engineers on dialogue systems project",
+        "Developed multilingual models supporting 100+ languages",
+        "Research contributed to Google Translate and Google Assistant products",
+        "Mentored 4 Ph.D. interns (3 received full-time offers)"
+      ]
+    },
+    {
+      "name": "MIT CSAIL",
+      "position": "Postdoctoral Researcher",
+      "location": "Cambridge, MA",
+      "url": "https://csail.mit.edu",
+      "startDate": "2016-09-01",
+      "endDate": "2018-08-31",
+      "summary": "Postdoc in Natural Language Processing Group under Prof. Regina Barzilay.",
+      "highlights": [
+        "Published 6 papers on neural text generation and summarization",
+        "Received Best Paper Award at ACL 2017",
+        "Collaborated with medical researchers on clinical NLP applications",
+        "Taught graduate-level course on Deep Learning for NLP"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Stanford University",
+      "url": "https://stanford.edu",
+      "area": "Computer Science (Artificial Intelligence)",
+      "studyType": "Ph.D.",
+      "startDate": "2011-09-01",
+      "endDate": "2016-06-01",
+      "summary": "Dissertation: 'Neural Approaches to Natural Language Understanding'",
+      "courses": [
+        "CS224N - Natural Language Processing with Deep Learning",
+        "CS229 - Machine Learning",
+        "CS231N - Convolutional Neural Networks"
+      ]
+    },
+    {
+      "institution": "University of Cambridge",
+      "url": "https://cam.ac.uk",
+      "area": "Computer Science",
+      "studyType": "Bachelor of Arts (First Class Honours)",
+      "startDate": "2007-10-01",
+      "endDate": "2011-06-01"
+    }
+  ],
+  "publications": [
+    {
+      "name": "BERT-Large: Pre-training of Deep Bidirectional Transformers",
+      "publisher": "NeurIPS 2021",
+      "releaseDate": "2021-12-01",
+      "url": "https://proceedings.neurips.cc/example",
+      "summary": "Novel pre-training approach for language models (1,500+ citations)"
+    },
+    {
+      "name": "Neural Text Summarization: A Survey",
+      "publisher": "ACL 2019",
+      "releaseDate": "2019-07-01",
+      "url": "https://aclanthology.org/example",
+      "summary": "Comprehensive survey of neural summarization methods (800+ citations)"
+    },
+    {
+      "name": "Attention-Based Neural Machine Translation",
+      "publisher": "ICML 2017 (Best Paper Award)",
+      "releaseDate": "2017-08-01",
+      "url": "https://proceedings.mlr.press/example",
+      "summary": "Attention mechanism for sequence-to-sequence models (2,000+ citations)"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Research Areas",
+      "level": "Expert",
+      "keywords": [
+        "Natural Language Processing",
+        "Deep Learning",
+        "Large Language Models",
+        "Machine Translation",
+        "Text Generation"
+      ]
+    },
+    {
+      "name": "Programming",
+      "level": "Expert",
+      "keywords": ["Python", "PyTorch", "TensorFlow", "JAX", "C++"]
+    },
+    {
+      "name": "ML Infrastructure",
+      "level": "Advanced",
+      "keywords": [
+        "Distributed Training",
+        "GPU Programming",
+        "Model Optimization"
+      ]
+    }
+  ],
+  "awards": [
+    {
+      "title": "Best Paper Award - ACL 2017",
+      "date": "2017-07-30",
+      "awarder": "Association for Computational Linguistics",
+      "summary": "Best paper on neural machine translation"
+    },
+    {
+      "title": "Google PhD Fellowship",
+      "date": "2014-09-01",
+      "awarder": "Google",
+      "summary": "Prestigious fellowship for Ph.D. students in AI/ML"
+    }
+  ],
+  "volunteer": [
+    {
+      "organization": "ACL Conference",
+      "position": "Area Chair",
+      "startDate": "2020-01-01",
+      "summary": "Reviewing and program committee for top NLP conference"
+    }
+  ]
+}
+```
+
+---
+
+### Freelance Consultant
+
+Example for a freelance/consulting professional:
+
+```json
+{
+  "basics": {
+    "name": "Olivia Martinez",
+    "label": "Freelance Full-Stack Developer | Technical Consultant",
+    "email": "olivia@oliviamartinez.dev",
+    "phone": "(555) 012-3456",
+    "url": "https://oliviamartinez.dev",
+    "summary": "Freelance full-stack developer with 6+ years of experience building web applications for startups and enterprises. Specialized in React, Node.js, and AWS. Available for contract work, consulting, and technical advisory roles.",
+    "location": {
+      "city": "Portland",
+      "region": "Oregon",
+      "countryCode": "US"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "oliviamartinez",
+        "url": "https://github.com/oliviamartinez"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "oliviamartinez",
+        "url": "https://linkedin.com/in/oliviamartinez"
+      },
+      {
+        "network": "Upwork",
+        "username": "oliviamartinez",
+        "url": "https://upwork.com/freelancers/oliviamartinez"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Freelance / Self-Employed",
+      "position": "Full-Stack Developer & Consultant",
+      "location": "Remote",
+      "startDate": "2019-01-01",
+      "summary": "Independent contractor building web applications and providing technical consulting for 20+ clients.",
+      "highlights": [
+        "Generated $150K+ annual revenue from freelance projects",
+        "Completed 25+ projects for clients in fintech, e-commerce, and SaaS",
+        "Maintained 5-star rating on Upwork and Toptal with 100% client satisfaction",
+        "Built MVPs for 3 startups that went on to raise funding ($5M+ total)",
+        "Provided technical advisory services for early-stage companies",
+        "Managed projects end-to-end: requirements, design, development, deployment"
+      ]
+    },
+    {
+      "name": "Tech Startup (Contract)",
+      "position": "Lead Frontend Developer",
+      "location": "Remote",
+      "startDate": "2021-06-01",
+      "endDate": "2022-03-31",
+      "summary": "9-month contract building React dashboard for SaaS analytics platform.",
+      "highlights": [
+        "Architected and built real-time analytics dashboard using React, Redux, and WebSockets",
+        "Reduced page load time by 70% through code splitting and lazy loading",
+        "Implemented responsive design supporting mobile, tablet, and desktop",
+        "Collaborated with backend team on API design and GraphQL schema"
+      ]
+    },
+    {
+      "name": "E-Commerce Company (Contract)",
+      "position": "Full-Stack Developer",
+      "location": "Remote",
+      "startDate": "2020-03-01",
+      "endDate": "2020-12-31",
+      "summary": "Built custom e-commerce platform for online retailer.",
+      "highlights": [
+        "Developed full-stack e-commerce site using Next.js and Node.js",
+        "Integrated Stripe payment processing and inventory management system",
+        "Achieved 99.9% uptime during Black Friday/Cyber Monday peak traffic",
+        "Improved checkout conversion rate by 25% through UX optimization"
+      ]
+    },
+    {
+      "name": "Digital Agency",
+      "position": "Senior Web Developer",
+      "location": "Portland, OR",
+      "startDate": "2016-08-01",
+      "endDate": "2018-12-31",
+      "summary": "Full-time employee building client websites before transitioning to freelance.",
+      "highlights": [
+        "Built 15+ client websites using WordPress, React, and custom solutions",
+        "Led frontend development on $200K+ enterprise projects",
+        "Trained junior developers on React and modern JavaScript"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Oregon State University",
+      "url": "https://oregonstate.edu",
+      "area": "Computer Science",
+      "studyType": "Bachelor of Science",
+      "startDate": "2012-09-01",
+      "endDate": "2016-06-01"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Frontend",
+      "level": "Expert",
+      "keywords": [
+        "React",
+        "Next.js",
+        "TypeScript",
+        "Redux",
+        "Tailwind CSS",
+        "Responsive Design"
+      ]
+    },
+    {
+      "name": "Backend",
+      "level": "Advanced",
+      "keywords": [
+        "Node.js",
+        "Express",
+        "GraphQL",
+        "REST APIs",
+        "Python",
+        "Django"
+      ]
+    },
+    {
+      "name": "Cloud & DevOps",
+      "level": "Advanced",
+      "keywords": ["AWS", "Vercel", "Netlify", "Docker", "CI/CD"]
+    },
+    {
+      "name": "Databases",
+      "level": "Advanced",
+      "keywords": ["PostgreSQL", "MongoDB", "Redis", "Firebase"]
+    },
+    {
+      "name": "E-Commerce",
+      "level": "Advanced",
+      "keywords": ["Shopify", "WooCommerce", "Stripe", "Payment Gateways"]
+    }
+  ],
+  "projects": [
+    {
+      "name": "SaaS Analytics Platform",
+      "description": "Contract project: Real-time analytics dashboard for B2B SaaS",
+      "highlights": [
+        "React + Redux + WebSockets for real-time updates",
+        "Handled 10K+ concurrent users",
+        "Client raised $3M seed round after launch"
+      ],
+      "startDate": "2021-06-01",
+      "endDate": "2022-03-31",
+      "url": "https://example.com/case-study",
+      "roles": ["Lead Frontend Developer"],
+      "type": "contract"
+    },
+    {
+      "name": "E-Commerce Platform",
+      "description": "Custom online store with 50K+ products",
+      "highlights": [
+        "Next.js + Node.js + Stripe integration",
+        "$1M+ in sales first year",
+        "99.9% uptime during peak shopping season"
+      ],
+      "startDate": "2020-03-01",
+      "endDate": "2020-12-31",
+      "url": "https://example.com/case-study",
+      "roles": ["Full-Stack Developer"],
+      "type": "contract"
+    }
+  ],
+  "certificates": [
+    {
+      "name": "AWS Certified Developer - Associate",
+      "date": "2020-05-01",
+      "issuer": "Amazon Web Services"
+    }
+  ]
+}
+```
+
+---
+
+### Career Changer
+
+Example for someone transitioning careers:
+
+```json
+{
+  "basics": {
+    "name": "David Kim",
+    "label": "Aspiring Software Developer (Career Changer)",
+    "email": "david.kim@example.com",
+    "phone": "(555) 123-4567",
+    "url": "https://davidkim.dev",
+    "summary": "Former financial analyst transitioning to software development. Completed intensive coding bootcamp and built 5+ full-stack projects. Strong analytical and problem-solving skills from 4 years in finance. Seeking junior developer role to leverage technical and business skills.",
+    "location": {
+      "city": "Chicago",
+      "region": "Illinois",
+      "countryCode": "US"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "davidkim",
+        "url": "https://github.com/davidkim"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "davidkim",
+        "url": "https://linkedin.com/in/davidkim"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Financial Services Firm",
+      "position": "Financial Analyst",
+      "location": "Chicago, IL",
+      "startDate": "2019-06-01",
+      "endDate": "2023-08-31",
+      "summary": "Analyzed financial data and built Excel models for investment decisions. Automated reporting using Python, sparking interest in software development.",
+      "highlights": [
+        "Built Python scripts automating 20+ hours of manual data processing per week",
+        "Created Excel macros and VBA tools used by team of 15 analysts",
+        "Analyzed $500M+ in investment portfolios",
+        "Self-taught Python, SQL, and data visualization to improve workflow efficiency"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "General Assembly",
+      "url": "https://generalassemb.ly",
+      "area": "Software Engineering",
+      "studyType": "Immersive Bootcamp",
+      "startDate": "2023-09-01",
+      "endDate": "2023-12-15",
+      "summary": "12-week intensive coding bootcamp covering full-stack web development.",
+      "courses": [
+        "JavaScript & ES6",
+        "React & Redux",
+        "Node.js & Express",
+        "MongoDB & PostgreSQL",
+        "Data Structures & Algorithms"
+      ]
+    },
+    {
+      "institution": "University of Illinois",
+      "url": "https://illinois.edu",
+      "area": "Finance",
+      "studyType": "Bachelor of Science",
+      "startDate": "2015-09-01",
+      "endDate": "2019-05-01",
+      "score": "3.6"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Programming Languages",
+      "level": "Intermediate",
+      "keywords": ["JavaScript", "TypeScript", "Python", "HTML", "CSS", "SQL"]
+    },
+    {
+      "name": "Frontend",
+      "level": "Intermediate",
+      "keywords": ["React", "Redux", "Tailwind CSS", "Responsive Design"]
+    },
+    {
+      "name": "Backend",
+      "level": "Beginner",
+      "keywords": ["Node.js", "Express", "REST APIs", "MongoDB", "PostgreSQL"]
+    },
+    {
+      "name": "Tools",
+      "level": "Intermediate",
+      "keywords": ["Git", "GitHub", "VS Code", "Postman", "Figma"]
+    },
+    {
+      "name": "Transferable Skills",
+      "level": "Advanced",
+      "keywords": [
+        "Data Analysis",
+        "Problem Solving",
+        "Excel & VBA",
+        "Financial Modeling",
+        "Business Communication"
+      ]
+    }
+  },
+  "projects": [
+    {
+      "name": "Stock Portfolio Tracker",
+      "description": "Full-stack web app for tracking investment portfolios with real-time stock prices",
+      "highlights": [
+        "Built with React, Node.js, Express, and PostgreSQL",
+        "Integrated Alpha Vantage API for real-time stock data",
+        "Implemented user authentication with JWT",
+        "Deployed to Heroku with automated CI/CD"
+      ],
+      "keywords": ["React", "Node.js", "PostgreSQL", "Finance"],
+      "startDate": "2023-11-01",
+      "endDate": "2023-12-15",
+      "url": "https://github.com/davidkim/stock-tracker",
+      "roles": ["Solo Developer"],
+      "type": "bootcamp project"
+    },
+    {
+      "name": "Recipe Finder App",
+      "description": "React app for searching recipes and saving favorites",
+      "highlights": [
+        "Built with React and Spoonacular API",
+        "Implemented search, filtering, and favorites functionality",
+        "Responsive design for mobile and desktop"
+      ],
+      "keywords": ["React", "API Integration", "CSS"],
+      "startDate": "2023-10-01",
+      "endDate": "2023-10-31",
+      "url": "https://github.com/davidkim/recipe-finder",
+      "roles": ["Solo Developer"],
+      "type": "bootcamp project"
+    },
+    {
+      "name": "Task Management API",
+      "description": "RESTful API for task management with CRUD operations",
+      "highlights": [
+        "Built with Node.js, Express, and MongoDB",
+        "Implemented authentication and authorization",
+        "Full test coverage using Jest"
+      ],
+      "keywords": ["Node.js", "Express", "MongoDB", "Testing"],
+      "startDate": "2023-09-15",
+      "endDate": "2023-09-30",
+      "url": "https://github.com/davidkim/task-api",
+      "roles": ["Solo Developer"],
+      "type": "bootcamp project"
+    }
+  ],
+  "certificates": [
+    {
+      "name": "freeCodeCamp JavaScript Algorithms and Data Structures",
+      "date": "2023-08-01",
+      "issuer": "freeCodeCamp"
+    },
+    {
+      "name": "freeCodeCamp Responsive Web Design",
+      "date": "2023-07-01",
+      "issuer": "freeCodeCamp"
+    }
+  ]
+}
+```
+
+---
+
+### Multilingual Example
+
+Example demonstrating multiple language support:
+
+**English Version (`resume-en.json`):**
+
+```json
+{
+  "basics": {
+    "name": "Yuki Tanaka",
+    "label": "Software Engineer",
+    "email": "yuki.tanaka@example.com",
+    "phone": "+81-90-1234-5678",
+    "url": "https://yukitanaka.dev",
+    "summary": "Software engineer with 5 years of experience in web development. Specialized in React, Node.js, and cloud technologies. Fluent in Japanese and English.",
+    "location": {
+      "city": "Tokyo",
+      "countryCode": "JP"
+    }
+  },
+  "work": [
+    {
+      "name": "Tech Company Japan",
+      "position": "Senior Software Engineer",
+      "startDate": "2021-04-01",
+      "summary": "Building cloud-based SaaS applications for enterprise customers.",
+      "highlights": [
+        "Led frontend development for customer portal (100K+ users)",
+        "Mentored 3 junior engineers",
+        "Improved application performance by 40%"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University of Tokyo",
+      "area": "Computer Science",
+      "studyType": "Bachelor",
+      "startDate": "2015-04-01",
+      "endDate": "2019-03-31"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Frontend",
+      "keywords": ["React", "TypeScript", "Next.js"]
+    },
+    {
+      "name": "Backend",
+      "keywords": ["Node.js", "Python", "PostgreSQL"]
+    }
+  ],
+  "languages": [
+    {
+      "language": "Japanese",
+      "fluency": "Native"
+    },
+    {
+      "language": "English",
+      "fluency": "Fluent (TOEIC 950)"
+    }
+  ]
+}
+```
+
+**Japanese Version (`resume-ja.json`):**
+
+```json
+{
+  "basics": {
+    "name": "田中 ゆき",
+    "label": "ソフトウェアエンジニア",
+    "email": "yuki.tanaka@example.com",
+    "phone": "+81-90-1234-5678",
+    "url": "https://yukitanaka.dev",
+    "summary": "5年間のWeb開発経験を持つソフトウェアエンジニア。React、Node.js、クラウド技術を専門としています。日本語と英語が堪能です。",
+    "location": {
+      "city": "東京",
+      "countryCode": "JP"
+    }
+  },
+  "work": [
+    {
+      "name": "テックカンパニージャパン",
+      "position": "シニアソフトウェアエンジニア",
+      "startDate": "2021-04-01",
+      "summary": "エンタープライズ向けクラウドベースSaaSアプリケーションの開発",
+      "highlights": [
+        "顧客ポータルのフロントエンド開発をリード（10万人以上のユーザー）",
+        "3人のジュニアエンジニアをメンタリング",
+        "アプリケーションパフォーマンスを40%改善"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "東京大学",
+      "area": "コンピュータサイエンス",
+      "studyType": "学士",
+      "startDate": "2015-04-01",
+      "endDate": "2019-03-31"
+    }
+  ],
+  "skills": [
+    {
+      "name": "フロントエンド",
+      "keywords": ["React", "TypeScript", "Next.js"]
+    },
+    {
+      "name": "バックエンド",
+      "keywords": ["Node.js", "Python", "PostgreSQL"]
+    }
+  ],
+  "languages": [
+    {
+      "language": "日本語",
+      "fluency": "ネイティブ"
+    },
+    {
+      "language": "英語",
+      "fluency": "流暢（TOEIC 950点）"
+    }
+  ]
+}
+```
+
+---
+
+## Starting From Scratch
+
+### Step 1: Choose Your Method
+
+**Option A: Use the CLI (Easiest)**
+
+```bash
+# Install resume-cli globally
+npm install -g resume-cli
+
+# Create a new resume interactively
+resume init
+
+# This creates resume.json in your current directory
+```
+
+**Option B: Copy a Template**
+
+Choose one of the examples above (minimal, full schema, or industry-specific) and save it as `resume.json`.
+
+**Option C: Start with Minimal Schema**
+
+Create `resume.json` with the bare minimum:
+
+```json
+{
+  "basics": {
+    "name": "Your Name",
+    "email": "your.email@example.com"
+  }
+}
+```
+
+### Step 2: Add Your Information
+
+Fill in your details section by section:
+
+#### 2.1 Basics (Required)
+
+```json
+{
+  "basics": {
+    "name": "Your Full Name",
+    "label": "Your Job Title",
+    "image": "https://yourdomain.com/photo.jpg",
+    "email": "your.email@example.com",
+    "phone": "(555) 123-4567",
+    "url": "https://yourdomain.com",
+    "summary": "A brief 2-3 sentence summary about yourself...",
+    "location": {
+      "city": "Your City",
+      "region": "Your State/Region",
+      "countryCode": "US"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "yourusername",
+        "url": "https://github.com/yourusername"
+      }
+    ]
+  }
+}
+```
+
+#### 2.2 Work Experience
+
+```json
+{
+  "work": [
+    {
+      "name": "Company Name",
+      "position": "Your Job Title",
+      "location": "City, State",
+      "url": "https://company.com",
+      "startDate": "2020-01-01",
+      "endDate": "2023-06-30",
+      "summary": "Brief description of your role...",
+      "highlights": [
+        "Achievement 1 with metrics",
+        "Achievement 2 with impact",
+        "Achievement 3 with results"
+      ]
+    }
+  ]
+}
+```
+
+#### 2.3 Education
+
+```json
+{
+  "education": [
+    {
+      "institution": "University Name",
+      "url": "https://university.edu",
+      "area": "Your Major",
+      "studyType": "Bachelor/Master/PhD",
+      "startDate": "2015-09-01",
+      "endDate": "2019-05-31",
+      "score": "3.8",
+      "courses": ["Course 1", "Course 2", "Course 3"]
+    }
+  ]
+}
+```
+
+#### 2.4 Skills
+
+```json
+{
+  "skills": [
+    {
+      "name": "Category Name (e.g., Programming Languages)",
+      "level": "Expert/Advanced/Intermediate/Beginner",
+      "keywords": ["Skill 1", "Skill 2", "Skill 3"]
+    }
+  ]
+}
+```
+
+### Step 3: Validate Your Resume
+
+```bash
+# Check if your JSON is valid
+resume validate
+
+# If valid, you'll see: "resume.json is valid"
+# If errors, fix the reported issues
+```
+
+### Step 4: Preview Your Resume
+
+```bash
+# Serve your resume locally
+resume serve
+
+# Opens http://localhost:4000 in your browser
+```
+
+### Step 5: Export Your Resume
+
+```bash
+# Export as PDF
+resume export resume.pdf
+
+# Export as HTML
+resume export resume.html --theme elegant
+
+# Export with different theme
+resume export resume.pdf --theme kendall
+```
+
+### Step 6: Publish Online (Optional)
+
+```bash
+# Publish to jsonresume.org (requires GitHub Gist)
+# 1. Create a GitHub Gist named 'resume.json'
+# 2. Your resume is automatically available at:
+#    https://registry.jsonresume.org/yourusername
+```
+
+---
+
+## Best Practices
+
+### Writing Tips
+
+1. **Use Action Verbs**: Start bullet points with strong verbs (Built, Led, Improved, Designed)
+2. **Include Metrics**: Quantify achievements (increased by 30%, reduced by 50%, served 1M+ users)
+3. **Be Concise**: Keep summaries under 3 sentences, highlights under 1-2 lines each
+4. **Tailor to Job**: Create multiple versions targeting different roles
+5. **Keep Updated**: Update resume after each major accomplishment
+
+### Technical Tips
+
+1. **Valid JSON**: Use a JSON validator (JSONLint.com) to check syntax
+2. **Date Format**: Use ISO 8601 format (YYYY-MM-DD) for all dates
+3. **URLs**: Include full URLs with https://
+4. **Encoding**: Use UTF-8 encoding for special characters
+5. **Version Control**: Store resume in Git for change tracking
+
+### SEO & Visibility
+
+1. **Keywords**: Include industry keywords in summary and highlights
+2. **Complete Profiles**: Fill in all profile URLs (GitHub, LinkedIn, etc.)
+3. **Public URL**: Use canonical URL in meta section for better indexing
+4. **Schema.org**: JSON Resume maps to Schema.org markup automatically
+
+---
+
+This comprehensive guide covers all aspects of examples, templates, and conversion for JSON Resume!

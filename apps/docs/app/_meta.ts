@@ -1,11 +1,16 @@
 export default {
   index: 'Introduction',
   'getting-started': 'Getting Started',
+  schema: 'Schema & Structure',
+  examples: 'Examples & Templates',
   cli: 'CLI Tools',
   themes: 'Themes',
   hosting: 'Hosting & Publishing',
   jobs: 'Job Board',
+  developers: 'Developer Guide',
+  integration: 'Integration',
   api: 'API Reference',
   architecture: 'Architecture',
+  faq: 'FAQ',
   contributing: 'Contributing',
 };
