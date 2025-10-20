@@ -1,0 +1,242 @@
+# Getting Started
+
+This guide will help you create, validate, and publish your first JSON Resume.
+
+## Two Ways to Use JSON Resume
+
+JSON Resume is **fundamentally just a schema** - a standardized JSON format for resume data. You have two options:
+
+### Option 1: Just Use the Schema
+
+You can use the JSON Resume schema without any of our tools:
+
+- Create a `resume.json` file following the schema
+- Build your own resume renderer (website, PDF generator, etc.)
+- Validate against the schema manually or with your own tooling
+- Host it anywhere (your own server, GitHub, cloud storage)
+
+**This approach gives you complete control.** You own the data and choose how to use it.
+
+### Option 2: Use the Official Tools
+
+We provide optional reference implementations to make it easier:
+
+- **CLI**: For validation, generation, and export
+- **Registry**: Host your resume at jsonresume.org
+- **Themes**: Pre-built renderers for common formats
+
+**This guide covers Option 2** (using the official tools), but remember - you can always use just the schema if you prefer.
+
+---
+
+## Installation (Optional Tools)
+
+If you want to use the official tools, here's how to get started.
+
+### Using the Web Registry
+
+The easiest way to get started is to use the web registry at [jsonresume.org](https://jsonresume.org).
+
+1. Visit [jsonresume.org](https://jsonresume.org)
+2. Sign in with your GitHub account
+3. Create a new resume using the web interface
+4. Publish your resume to a GitHub Gist
+
+### Using the CLI
+
+For local development, you can install the JSON Resume CLI:
+
+```bash
+npm install -g resume-cli
+```
+
+## Creating Your First Resume
+
+### 1. Create the JSON File
+
+Create a new file called `resume.json` with your information:
+
+```json
+{
+  "basics": {
+    "name": "Your Name",
+    "label": "Software Engineer",
+    "image": "https://example.com/your-photo.jpg",
+    "email": "you@example.com",
+    "phone": "(555) 123-4567",
+    "url": "https://yourwebsite.com",
+    "summary": "A passionate software engineer with expertise in...",
+    "location": {
+      "city": "San Francisco",
+      "countryCode": "US",
+      "region": "California"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "yourusername",
+        "url": "https://github.com/yourusername"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Company Name",
+      "position": "Software Engineer",
+      "url": "https://company.com",
+      "startDate": "2020-01-01",
+      "endDate": "2023-12-31",
+      "summary": "Worked on building scalable web applications...",
+      "highlights": [
+        "Built feature X that improved performance by 50%",
+        "Led team of 5 engineers"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University Name",
+      "url": "https://university.edu",
+      "area": "Computer Science",
+      "studyType": "Bachelor",
+      "startDate": "2016-09-01",
+      "endDate": "2020-05-01",
+      "score": "3.8"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Web Development",
+      "level": "Advanced",
+      "keywords": ["JavaScript", "React", "Node.js", "TypeScript"]
+    }
+  ]
+}
+```
+
+### 2. Validate Your Resume
+
+Use the CLI to validate your resume:
+
+```bash
+resume validate resume.json
+```
+
+This will check your resume against the JSON Resume schema and report any errors.
+
+## Publishing Your Resume
+
+### Option 1: GitHub Gist (Recommended)
+
+The easiest way to publish your resume is to create a GitHub Gist:
+
+1. Go to [gist.github.com](https://gist.github.com)
+2. Create a new gist named `resume.json`
+3. Paste your resume JSON
+4. Make it public
+5. Access your resume at: `https://jsonresume.org/[your-github-username]`
+
+### Option 2: Use the Registry
+
+You can also use the registry to publish your resume:
+
+1. Visit [jsonresume.org](https://jsonresume.org)
+2. Sign in with GitHub
+3. Upload or paste your resume JSON
+4. Publish to make it publicly accessible
+
+## Choosing a Theme
+
+JSON Resume supports multiple themes for rendering your resume. You can preview themes at [jsonresume.org/themes](https://jsonresume.org/themes).
+
+To use a theme with the CLI:
+
+```bash
+resume serve --theme [theme-name]
+```
+
+Popular themes include:
+
+- `standard` - Clean and professional
+- `professional` - Modern and elegant
+- `spartacus` - Bold and impactful
+
+## Exporting to PDF or HTML
+
+### Using the CLI
+
+```bash
+# Export to HTML
+resume export resume.html --theme standard
+
+# Export to PDF
+resume export resume.pdf --theme professional
+```
+
+### Using the Registry
+
+Visit your resume URL and append the format:
+
+```
+https://jsonresume.org/[username].pdf
+https://jsonresume.org/[username].html
+```
+
+## Next Steps
+
+Now that you have your resume set up, you can:
+
+- Explore the [Job Board](/jobs) to find opportunities matched to your skills
+- Learn about the [API](/api) for integrating with other tools
+- Check out the [Architecture](/architecture) to understand how JSON Resume works
+- [Contribute](/contributing) to the JSON Resume project
+
+## Tips and Best Practices
+
+### Keep It Current
+
+Regularly update your resume JSON as your experience grows. The JSON format makes it easy to version control your resume using Git.
+
+### Use Semantic Versioning
+
+Consider using Git tags to version your resume:
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+### Validate Often
+
+Always validate your resume after making changes:
+
+```bash
+resume validate resume.json
+```
+
+### Leverage the Schema
+
+The JSON Resume schema is well-defined. Use an editor with JSON Schema support (like VSCode) for autocomplete and validation as you type.
+
+## Troubleshooting
+
+### Invalid JSON
+
+If you get JSON parsing errors, use a JSON validator like [jsonlint.com](https://jsonlint.com) to find syntax errors.
+
+### Schema Validation Errors
+
+The validator will tell you exactly which fields are missing or invalid. Refer to the [schema documentation](https://jsonresume.org/schema) for field requirements.
+
+### Theme Not Rendering
+
+Make sure the theme is installed:
+
+```bash
+npm install jsonresume-theme-[theme-name]
+```
+
+## Getting Help
+
+- **GitHub Issues**: [jsonresume/jsonresume.org/issues](https://github.com/jsonresume/jsonresume.org/issues)
+- **Community**: Join discussions on GitHub Discussions

@@ -1,0 +1,8 @@
+export default {
+  index: 'Introduction',
+  'getting-started': 'Getting Started',
+  jobs: 'Job Board System',
+  api: 'API Reference',
+  architecture: 'Architecture',
+  contributing: 'Contributing',
+};

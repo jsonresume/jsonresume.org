@@ -1,0 +1,243 @@
+# Job Board System
+
+The JSON Resume job board is an AI-powered system that matches your resume with relevant job opportunities from Hacker News "Who is Hiring?" threads.
+
+## Overview
+
+The job board system consists of three main stages:
+
+1. **Fetch**: Scrape job postings from HN "Who is Hiring?" threads
+2. **Process**: Use AI to extract structured data from job posts
+3. **Vectorize**: Create semantic embeddings for intelligent matching
+
+## How It Works
+
+### Data Pipeline
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│                      Data Flow Diagram                        │
+└──────────────────────────────────────────────────────────────┘
+
+1. Fetch Jobs
+   │
+   ├─> Hacker News API
+   ├─> Find "Ask HN: Who is hiring?" threads
+   └─> Extract job comments → Supabase jobs table
+       │
+       ├─ uuid (unique identifier)
+       ├─ hn_id (Hacker News comment ID)
+       ├─ content (raw job description text)
+       └─ posted_at (timestamp)
+
+2. AI Processing (GPT-5-mini)
+   │
+   ├─> For each job without gpt_content
+   ├─> OpenAI API extracts:
+   │   ├─ Company name
+   │   ├─ Job title
+   │   ├─ Location (city, state, country, remote status)
+   │   ├─ Job type (full-time, part-time, contract, etc.)
+   │   ├─ Salary range
+   │   ├─ Required skills
+   │   ├─ Description
+   │   └─ Application URL
+   └─> Store as JSON in gpt_content column
+
+3. Vectorization
+   │
+   ├─> For each processed job
+   ├─> Generate embedding using OpenAI ada-002
+   ├─> Store vector in Pinecone for semantic search
+   └─> Enable resume-job matching based on skills/experience
+```
+
+### Semantic Matching
+
+When you upload your resume, the system:
+
+1. Extracts your skills, experience, and preferences
+2. Generates a semantic vector from your resume
+3. Queries Pinecone for jobs with similar vectors
+4. Ranks jobs by relevance to your background
+5. Displays matched jobs with compatibility scores
+
+## Automated Processing
+
+The job board runs automatically via GitHub Actions:
+
+- **Schedule**: Daily at 9 AM UTC (1 AM PST / 4 AM EST)
+- **Manual Trigger**: Available from GitHub Actions UI
+- **Monitoring**: Discord notifications on failures
+- **Auto-Recovery**: Creates GitHub issues for repeated failures
+
+### Workflow Stages
+
+Each run processes jobs through three stages:
+
+| Stage             | Description                             | Duration       |
+| ----------------- | --------------------------------------- | -------------- |
+| 🔍 **Fetch**      | Scrape latest HN job posts              | ~30 seconds    |
+| 🤖 **AI Process** | Extract structured data with GPT-5-mini | ~45-60 minutes |
+| 🔢 **Vectorize**  | Generate embeddings for search          | ~15-30 minutes |
+
+## Local Development
+
+### Prerequisites
+
+```bash
+# Required environment variables
+OPENAI_API_KEY=sk-...        # OpenAI API key
+SUPABASE_KEY=eyJh...          # Supabase service role key
+PINECONE_API_KEY=xxx-...      # Pinecone API key
+PINECONE_ENVIRONMENT=us-...   # Pinecone environment
+```
+
+### Running Scripts
+
+```bash
+# Navigate to registry app
+cd apps/registry
+
+# 1. Fetch latest jobs from HN
+node scripts/jobs/getLatestWhoIsHiring.js
+
+# 2. Process jobs with AI
+node scripts/jobs/gpted.js
+
+# 3. Vectorize processed jobs
+node scripts/jobs/vectorize.js
+```
+
+### Monitoring Progress
+
+```sql
+-- Check processing status
+SELECT
+  COUNT(*) FILTER (WHERE gpt_content IS NULL) as unprocessed,
+  COUNT(*) FILTER (WHERE gpt_content IS NOT NULL AND gpt_content != 'FAILED') as processed,
+  COUNT(*) FILTER (WHERE gpt_content = 'FAILED') as failed,
+  COUNT(*) as total
+FROM jobs
+WHERE posted_at >= NOW() - INTERVAL '4 months';
+
+-- Find recent failures
+SELECT uuid, content, gpt_content, posted_at
+FROM jobs
+WHERE gpt_content = 'FAILED'
+ORDER BY posted_at DESC
+LIMIT 10;
+
+-- Check vectorization status
+SELECT COUNT(*)
+FROM jobs
+WHERE gpt_content IS NOT NULL
+  AND gpt_content != 'FAILED'
+  AND uuid IN (SELECT metadata->>'uuid' FROM pinecone_vectors);
+```
+
+## Performance & Costs
+
+### OpenAI API Usage
+
+- **Model**: GPT-5-mini (cost-effective for extraction tasks)
+- **Input**: ~500-1000 tokens per job post
+- **Output**: ~200-300 tokens structured JSON
+- **Cost**: ~$0.0002 per job processed
+
+### Expected Monthly Costs
+
+| Component                        | Cost                     |
+| -------------------------------- | ------------------------ |
+| OpenAI API (500-1000 jobs/month) | $0.10 - $0.20            |
+| Pinecone Free Tier               | $0.00                    |
+| Supabase Free Tier               | $0.00                    |
+| **Total**                        | **~$0.50 - $2.00/month** |
+
+## Troubleshooting
+
+### Jobs Not Processing
+
+1. Check OpenAI API key is valid and has credits
+2. Verify Supabase connection
+3. Check GitHub Actions logs for errors
+4. Look for rate limiting (429 errors)
+
+### Vectorization Failures
+
+1. Ensure Pinecone API key is correct
+2. Verify Pinecone index exists
+3. Check network connectivity
+4. Look for quota limits
+
+### No New Jobs
+
+- HN "Who is Hiring?" posts monthly (usually first of month)
+- Script only fetches from recent threads (last 30 days)
+- Check HN API is accessible
+
+## Advanced Configuration
+
+### Customize AI Extraction
+
+Edit `apps/registry/scripts/jobs/gpted.js` to modify the extraction prompt:
+
+```javascript
+const prompt = `
+Extract job details from this posting.
+Return JSON with: company, title, location, type, salary, skills, description, url
+`;
+```
+
+### Adjust Processing Rate
+
+Modify the batch size and delay in `gpted.js`:
+
+```javascript
+const BATCH_SIZE = 10; // Process 10 jobs at a time
+const DELAY_MS = 2000; // 2 second delay between batches
+```
+
+## Schema
+
+### Jobs Table
+
+```sql
+CREATE TABLE jobs (
+  uuid UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  hn_id TEXT UNIQUE NOT NULL,
+  content TEXT NOT NULL,
+  gpt_content JSONB,
+  posted_at TIMESTAMP WITH TIME ZONE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+```
+
+### GPT Content Format
+
+```json
+{
+  "company": "Acme Corp",
+  "title": "Senior Software Engineer",
+  "location": {
+    "city": "San Francisco",
+    "state": "CA",
+    "country": "USA",
+    "remote": "hybrid"
+  },
+  "type": "full-time",
+  "salary": "$150k-$200k",
+  "skills": ["JavaScript", "React", "Node.js"],
+  "description": "We're looking for...",
+  "url": "https://acme.com/jobs/123"
+}
+```
+
+## Related Documentation
+
+- [Architecture](/architecture) - System design and technical details
+- [API Reference](/api) - Endpoints for job search and matching
+- [Contributing](/contributing) - Help improve the job board
+
+For detailed implementation information, see the comprehensive README in `apps/registry/scripts/jobs/README.md`.

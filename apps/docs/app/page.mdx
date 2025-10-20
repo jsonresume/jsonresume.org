@@ -1,0 +1,137 @@
+# JSON Resume Documentation
+
+Welcome to the official documentation for JSON Resume - the open source initiative to create a JSON-based standard for resumes.
+
+## What is JSON Resume?
+
+**JSON Resume is an open-source schema standard for resumes.** At its core, it's just a standardized JSON format for representing your professional history. You can use the schema however you want - with the official tools or with your own custom implementations.
+
+### The Schema (Core)
+
+The JSON Resume schema is an open standard that anyone can use:
+
+- **Standardized Format**: A well-defined JSON schema for resume data
+- **Open Specification**: Use it with any tools, frameworks, or platforms
+- **No Vendor Lock-in**: Your data is portable and tool-agnostic
+- **Community-Driven**: Continuously improved by the open-source community
+
+### Official Tools (Optional)
+
+We provide optional reference implementations:
+
+- **CLI Tool**: Command-line interface for generating and validating resumes
+- **Theme System**: Beautiful, customizable themes for rendering resumes
+- **Registry**: Hosted platform for publishing and sharing resumes at jsonresume.org
+- **Job Board**: AI-powered job board with semantic matching to your resume
+
+**You don't have to use our tools!** The schema is the standard - build your own resume renderer, integrate it into your portfolio site, or use any other tool that supports the JSON Resume format.
+
+## Quick Links
+
+- [Getting Started](/getting-started) - Create your first JSON Resume
+- [Job Board System](/jobs) - Learn about our AI-powered job matching
+- [API Reference](/api) - Integrate JSON Resume into your applications
+- [Architecture](/architecture) - Technical details and system design
+- [Contributing](/contributing) - Help improve JSON Resume
+
+## The Standard
+
+JSON Resume follows a standardized schema that makes it easy to represent your professional history in a structured format:
+
+```json
+{
+  "basics": {
+    "name": "John Doe",
+    "label": "Software Engineer",
+    "image": "https://example.com/photo.jpg",
+    "email": "john@example.com",
+    "phone": "(912) 555-4321",
+    "url": "https://johndoe.com",
+    "summary": "A summary of John Doe…",
+    "location": {
+      "address": "2712 Broadway St",
+      "postalCode": "CA 94115",
+      "city": "San Francisco",
+      "countryCode": "US",
+      "region": "California"
+    },
+    "profiles": [
+      {
+        "network": "Twitter",
+        "username": "john",
+        "url": "https://twitter.com/john"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Company",
+      "position": "President",
+      "url": "https://company.com",
+      "startDate": "2013-01-01",
+      "endDate": "2014-01-01",
+      "summary": "Description…",
+      "highlights": ["Started the company"]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University",
+      "url": "https://institution.com/",
+      "area": "Software Development",
+      "studyType": "Bachelor",
+      "startDate": "2011-01-01",
+      "endDate": "2013-01-01",
+      "score": "4.0",
+      "courses": ["DB1101 - Basic SQL"]
+    }
+  ]
+}
+```
+
+## Why Use JSON Resume?
+
+### 📝 Schema Benefits
+
+- **Standardized Structure**: A well-defined JSON schema that covers all aspects of your professional history
+- **Machine-Readable**: Perfect for ATS systems, job boards, and automated processing
+- **Version Control**: Track changes to your resume over time with Git
+- **Portable**: Your data works across any tool or platform that supports JSON Resume
+- **No Lock-in**: You own your data - use it however you want
+
+### 🔧 Use It Your Way
+
+**The schema is just JSON.** You can:
+
+- Build your own resume renderer (React, Vue, plain HTML, LaTeX, etc.)
+- Integrate it into your personal website or portfolio
+- Create custom themes and renderers for specific industries
+- Use it with the official CLI and registry, or not - your choice
+- Store it anywhere (GitHub Gist, your own server, cloud storage)
+
+### 🌐 Community Ecosystem
+
+Because it's an open standard:
+
+- **Themes**: 50+ community-created themes available
+- **Tools**: Multiple CLI tools, web apps, and integrations
+- **Integrations**: Works with job boards, ATS systems, and portfolio sites
+- **Open Source**: Contributions welcome, no vendor control
+
+### 🚀 Official Tools (Optional)
+
+If you want to use our reference implementations:
+
+- **CLI**: Validate, generate, and export resumes
+- **Registry**: Host your resume at jsonresume.org/[your-username]
+- **Themes**: Use pre-built themes or create your own
+- **Job Board**: AI-powered matching (exclusive to jsonresume.org)
+
+## Get Started
+
+Ready to create your JSON Resume? Head over to the [Getting Started](/getting-started) guide to begin.
+
+## Community
+
+- **GitHub**: [jsonresume/jsonresume.org](https://github.com/jsonresume/jsonresume.org)
+- **Issues**: Report bugs and request features on [GitHub Issues](https://github.com/jsonresume/jsonresume.org/issues)

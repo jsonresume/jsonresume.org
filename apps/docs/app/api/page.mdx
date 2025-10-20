@@ -1,0 +1,349 @@
+# API Reference
+
+The JSON Resume API provides programmatic access to resume data, themes, and job matching.
+
+## Base URL
+
+```
+https://jsonresume.org/api
+```
+
+## Authentication
+
+Most endpoints are public and don't require authentication. For private resume access, you'll need to authenticate with GitHub OAuth.
+
+```bash
+# Public resume access (no auth required)
+GET https://jsonresume.org/[username]
+
+# Private resume access (requires auth)
+GET https://jsonresume.org/api/resume?token=YOUR_TOKEN
+```
+
+## Endpoints
+
+### Get Resume
+
+Fetch a resume by GitHub username.
+
+```http
+GET /[username]
+```
+
+**Parameters:**
+
+- `username` (required) - GitHub username
+
+**Response:**
+
+```json
+{
+  "basics": {
+    "name": "John Doe",
+    "label": "Software Engineer",
+    ...
+  },
+  ...
+}
+```
+
+### Get Resume with Theme
+
+Render a resume using a specific theme.
+
+```http
+GET /[username]?theme=[theme-name]
+```
+
+**Parameters:**
+
+- `username` (required) - GitHub username
+- `theme` (optional) - Theme name (default: `standard`)
+
+**Supported formats:**
+
+- `.html` - HTML rendering
+- `.pdf` - PDF export
+- `.json` - Raw JSON data
+
+**Examples:**
+
+```bash
+# Get resume as HTML with professional theme
+curl https://jsonresume.org/johndoe?theme=professional
+
+# Get resume as PDF
+curl https://jsonresume.org/johndoe.pdf
+
+# Get raw JSON
+curl https://jsonresume.org/johndoe.json
+```
+
+### Validate Resume
+
+Validate a resume against the JSON Resume schema.
+
+```http
+POST /api/validate
+Content-Type: application/json
+
+{
+  "basics": { ... },
+  ...
+}
+```
+
+**Response:**
+
+```json
+{
+  "valid": true,
+  "errors": []
+}
+```
+
+Or if invalid:
+
+```json
+{
+  "valid": false,
+  "errors": [
+    {
+      "path": "basics.email",
+      "message": "Invalid email format"
+    }
+  ]
+}
+```
+
+### Search Jobs
+
+Search for jobs matched to your resume.
+
+```http
+POST /api/jobs/search
+Content-Type: application/json
+
+{
+  "resume": { ... },
+  "filters": {
+    "location": "San Francisco",
+    "remote": true,
+    "types": ["full-time"]
+  }
+}
+```
+
+**Response:**
+
+```json
+{
+  "jobs": [
+    {
+      "uuid": "abc-123",
+      "company": "Acme Corp",
+      "title": "Senior Software Engineer",
+      "score": 0.95,
+      ...
+    }
+  ],
+  "total": 42
+}
+```
+
+## Rate Limiting
+
+API requests are rate-limited to prevent abuse:
+
+- **Anonymous**: 60 requests per hour
+- **Authenticated**: 5000 requests per hour
+
+Rate limit headers:
+
+```http
+X-RateLimit-Limit: 60
+X-RateLimit-Remaining: 59
+X-RateLimit-Reset: 1640995200
+```
+
+## Error Responses
+
+The API uses standard HTTP status codes:
+
+| Status | Description                             |
+| ------ | --------------------------------------- |
+| 200    | Success                                 |
+| 400    | Bad Request - Invalid parameters        |
+| 401    | Unauthorized - Authentication required  |
+| 404    | Not Found - Resume not found            |
+| 429    | Too Many Requests - Rate limit exceeded |
+| 500    | Internal Server Error                   |
+
+**Error format:**
+
+```json
+{
+  "error": {
+    "code": "RESUME_NOT_FOUND",
+    "message": "Resume not found for user: johndoe"
+  }
+}
+```
+
+## SDK / Client Libraries
+
+### JavaScript / TypeScript
+
+```bash
+npm install @jsonresume/client
+```
+
+```typescript
+import { JSONResumeClient } from '@jsonresume/client';
+
+const client = new JSONResumeClient();
+
+// Get resume
+const resume = await client.getResume('johndoe');
+
+// Validate resume
+const validation = await client.validate(resume);
+
+// Search jobs
+const jobs = await client.searchJobs(resume, {
+  remote: true,
+  location: 'San Francisco',
+});
+```
+
+### Python
+
+```bash
+pip install jsonresume
+```
+
+```python
+from jsonresume import Client
+
+client = Client()
+
+# Get resume
+resume = client.get_resume('johndoe')
+
+# Validate
+validation = client.validate(resume)
+
+# Search jobs
+jobs = client.search_jobs(resume, remote=True)
+```
+
+## Webhooks
+
+Subscribe to resume updates and job matches.
+
+```http
+POST /api/webhooks
+Content-Type: application/json
+Authorization: Bearer YOUR_TOKEN
+
+{
+  "url": "https://yourapp.com/webhook",
+  "events": ["resume.updated", "job.matched"]
+}
+```
+
+**Webhook payload:**
+
+```json
+{
+  "event": "job.matched",
+  "timestamp": "2024-01-15T10:30:00Z",
+  "data": {
+    "job": { ... },
+    "score": 0.92
+  }
+}
+```
+
+## GraphQL API
+
+For advanced queries, use the GraphQL API:
+
+```graphql
+{
+  resume(username: "johndoe") {
+    basics {
+      name
+      email
+      profiles {
+        network
+        url
+      }
+    }
+    work {
+      name
+      position
+      highlights
+    }
+  }
+
+  jobs(first: 10, filters: { remote: true }) {
+    edges {
+      node {
+        company
+        title
+        location {
+          city
+          remote
+        }
+      }
+    }
+  }
+}
+```
+
+## Examples
+
+### Full Resume Workflow
+
+```javascript
+// 1. Fetch resume from GitHub Gist
+const gistUrl =
+  'https://gist.githubusercontent.com/johndoe/abc123/raw/resume.json';
+const resume = await fetch(gistUrl).then((r) => r.json());
+
+// 2. Validate
+const validation = await fetch('https://jsonresume.org/api/validate', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(resume),
+}).then((r) => r.json());
+
+if (!validation.valid) {
+  console.error('Resume is invalid:', validation.errors);
+  return;
+}
+
+// 3. Search for matching jobs
+const jobs = await fetch('https://jsonresume.org/api/jobs/search', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ resume }),
+}).then((r) => r.json());
+
+console.log(`Found ${jobs.total} matching jobs`);
+```
+
+## Next Steps
+
+- [Getting Started](/getting-started) - Create your first resume
+- [Job Board](/jobs) - Learn about job matching
+- [Architecture](/architecture) - Technical details
+- [Contributing](/contributing) - Help improve the API
+
+## Support
+
+For API issues or questions:
+
+- **GitHub Issues**: [jsonresume/jsonresume.org/issues](https://github.com/jsonresume/jsonresume.org/issues)
+- **Documentation**: [https://docs.jsonresume.org](https://docs.jsonresume.org)

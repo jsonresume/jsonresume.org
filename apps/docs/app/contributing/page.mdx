@@ -1,0 +1,332 @@
+# Contributing
+
+Thank you for your interest in contributing to JSON Resume! This guide will help you get started.
+
+## Code of Conduct
+
+JSON Resume is a professional, technical project focused on code quality and functionality. We expect:
+
+- Professional, technical communication
+- Constructive feedback on code and features
+- Focus on technical excellence
+- Respectful collaboration
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 20+
+- pnpm 8.15.9+
+- Git
+- GitHub account
+
+### Fork and Clone
+
+```bash
+# Fork the repo on GitHub, then clone your fork
+git clone https://github.com/YOUR_USERNAME/jsonresume.org.git
+cd jsonresume.org
+
+# Add upstream remote
+git remote add upstream https://github.com/jsonresume/jsonresume.org.git
+```
+
+### Install Dependencies
+
+```bash
+# Install all dependencies
+pnpm install
+
+# Build packages
+pnpm build
+```
+
+### Run Development Server
+
+```bash
+# Start registry app
+pnpm --filter registry dev
+
+# Start docs site
+pnpm --filter docs dev
+
+# Start all apps
+pnpm dev
+```
+
+## Development Workflow
+
+### 1. Create a Feature Branch
+
+```bash
+git checkout -b feature/your-feature-name
+```
+
+### 2. Make Your Changes
+
+Follow our code quality standards:
+
+- **File Size Limit**: Maximum 200 lines per production file
+- **Testing**: Add tests for new functionality
+- **TypeScript**: Use proper types (no `any`)
+- **Linting**: Run `pnpm lint` before committing
+- **Formatting**: Code is auto-formatted with Prettier
+
+### 3. Test Your Changes
+
+```bash
+# Run unit tests
+pnpm test
+
+# Run E2E tests
+pnpm test:e2e
+
+# Run linting
+pnpm lint
+
+# Type check
+pnpm typecheck
+```
+
+### 4. Commit Your Changes
+
+```bash
+# Stage changes
+git add .
+
+# Commit with descriptive message
+git commit -m "feat(scope): brief description
+
+Longer description if needed
+
+Closes #123"
+```
+
+**Commit message format:**
+
+```
+type(scope): brief description
+
+[optional body]
+
+[optional footer]
+```
+
+**Types:**
+
+- `feat` - New feature
+- `fix` - Bug fix
+- `refactor` - Code refactoring
+- `test` - Adding tests
+- `docs` - Documentation
+- `chore` - Maintenance
+- `perf` - Performance improvement
+- `style` - Code style/formatting
+
+### 5. Push and Create PR
+
+```bash
+# Push to your fork
+git push origin feature/your-feature-name
+```
+
+Then create a Pull Request on GitHub with:
+
+- Clear description of changes
+- Related issue numbers
+- Testing instructions
+- Screenshots (for UI changes)
+
+## Code Quality Standards
+
+### File Organization
+
+Keep files focused and small:
+
+```typescript
+// ✅ Good - Single responsibility, <200 lines
+// UserProfile.tsx
+export function UserProfile({ user }: Props) {
+  const { loading, data } = useUserData(user.id);
+  return <ProfileView data={data} loading={loading} />;
+}
+
+// ❌ Bad - Multiple responsibilities, >200 lines
+// UserProfileWithDataAndLogicAndStyles.tsx
+// ... 500 lines of mixed concerns
+```
+
+### Component Structure
+
+```
+feature/
+  ├── index.ts                    # Public exports
+  ├── FeatureComponent.tsx        # Main component
+  ├── useFeatureData.ts          # Custom hooks
+  ├── FeatureTypes.ts            # Type definitions
+  ├── FeatureHelpers.ts          # Pure utilities
+  ├── FeatureComponent.test.tsx  # Tests
+  └── components/                # Sub-components
+      ├── SubComponentA.tsx
+      └── SubComponentB.tsx
+```
+
+### Testing Requirements
+
+- **Test pure functions and business logic** - Not arbitrary coverage percentages
+- **Test what matters** - Utilities, calculations, transformations
+- **E2E tests for critical flows** - Login, resume creation, job search
+- **All tests must pass** - No skipped or disabled tests in main branch
+
+### TypeScript Best Practices
+
+```typescript
+// ✅ Good - Explicit types
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
+function getUser(id: string): Promise<User> {
+  // ...
+}
+
+// ❌ Bad - Using any
+function getUser(id: any): Promise<any> {
+  // ...
+}
+```
+
+## Project-Specific Guidelines
+
+### Adding a New Theme
+
+Themes must work in serverless environments (no `fs` operations):
+
+```javascript
+// ❌ Bad - Uses fs.readFileSync
+const template = fs.readFileSync('./template.hbs', 'utf-8');
+
+// ✅ Good - Uses ES6 imports
+import template from './template.hbs';
+// or build-time bundling with Vite/webpack
+```
+
+See `CONTRIBUTING.md` in the root for detailed theme migration guide.
+
+### Modifying the Job Processing Pipeline
+
+When changing job processing scripts:
+
+1. Test locally first
+2. Verify OpenAI API usage doesn't spike
+3. Update monitoring queries in docs
+4. Update GitHub Actions workflow if needed
+
+### Working with the Database
+
+Use the Supabase CLI for migrations:
+
+```bash
+# Create a new migration
+supabase migration new your_migration_name
+
+# Apply migrations
+supabase db push
+
+# Reset database (destructive!)
+supabase db reset
+```
+
+## Areas Looking for Contributors
+
+### High Priority
+
+- 🐛 **Bug Fixes** - Check issues labeled `bug`
+- 📝 **Documentation** - Improve guides and examples
+- 🎨 **New Themes** - Create serverless-compatible themes
+- 🧪 **Test Coverage** - Add tests for critical utilities
+
+### Medium Priority
+
+- ⚡ **Performance** - Optimize rendering and API endpoints
+- ♿ **Accessibility** - Improve a11y compliance
+- 🌍 **i18n** - Add internationalization support
+- 📱 **Mobile** - Improve mobile experience
+
+### Good First Issues
+
+Look for issues labeled `good-first-issue`:
+
+```bash
+# List good first issues
+gh issue list --label "good-first-issue" --state open
+```
+
+## Community
+
+### Communication Channels
+
+- **GitHub Issues** - Bug reports, feature requests
+- **Pull Requests** - Code contributions
+- **Discussions** - General questions and ideas
+
+### Getting Help
+
+Stuck on something? Here's how to get help:
+
+1. **Search existing issues** - Your question might be answered
+2. **Check documentation** - Read the relevant docs first
+3. **Create an issue** - Describe your problem with details:
+   - What you're trying to do
+   - What you've tried
+   - Error messages or unexpected behavior
+   - Your environment (OS, Node version, etc.)
+
+## Recognition
+
+Contributors are recognized in:
+
+- GitHub contributors graph
+- Release notes
+- Special thanks in documentation
+
+Significant contributions may earn you:
+
+- Triage permissions (help manage issues)
+- Write access (trusted contributors)
+- Maintainer status (long-term contributors)
+
+## Release Process
+
+We use semantic versioning (semver):
+
+- `MAJOR` - Breaking changes
+- `MINOR` - New features (backwards compatible)
+- `PATCH` - Bug fixes
+
+Releases are automated via GitHub Actions when version tags are pushed.
+
+## Legal
+
+By contributing, you agree that your contributions will be licensed under the MIT License.
+
+## Next Steps
+
+Ready to contribute?
+
+1. Browse [open issues](https://github.com/jsonresume/jsonresume.org/issues)
+2. Find something that interests you
+3. Comment on the issue to claim it
+4. Fork, code, test, and submit a PR!
+
+Thank you for making JSON Resume better!
+
+## Resources
+
+- [GitHub Repository](https://github.com/jsonresume/jsonresume.org)
+- [Issue Tracker](https://github.com/jsonresume/jsonresume.org/issues)
+- [Pull Requests](https://github.com/jsonresume/jsonresume.org/pulls)
+- [Architecture Guide](/architecture)
+- [API Documentation](/api)

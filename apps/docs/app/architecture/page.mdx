@@ -1,0 +1,327 @@
+# Architecture
+
+Learn about the technical architecture of JSON Resume, including system design, technology stack, and deployment infrastructure.
+
+## System Overview
+
+JSON Resume is built as a modern monorepo with multiple applications and shared packages.
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     JSON Resume Platform                     │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────┐     ┌──────────────┐     ┌─────────────┐
+│   Registry  │     │   Homepage   │     │    Docs     │
+│   (Main App)│     │  (Marketing) │     │  (Nextra)   │
+└─────────────┘     └──────────────┘     └─────────────┘
+       │                    │                    │
+       └────────────────────┴────────────────────┘
+                            │
+       ┌────────────────────┴────────────────────┐
+       │          Shared Packages                │
+       ├─────────────────────────────────────────┤
+       │  @repo/ui - UI components               │
+       │  @repo/eslint-config - Linting          │
+       │  @repo/typescript-config - TS config    │
+       │  jsonresume-theme-* - Resume themes     │
+       └─────────────────────────────────────────┘
+```
+
+## Technology Stack
+
+### Frontend
+
+- **Framework**: Next.js 14 (App Router)
+- **UI Library**: React 18
+- **Styling**: Tailwind CSS
+- **Components**: shadcn/ui (@repo/ui)
+- **State Management**: React Context + Hooks
+- **Forms**: React Hook Form + Zod
+- **Icons**: Lucide React
+
+### Backend
+
+- **Runtime**: Node.js 20
+- **API**: Next.js API Routes
+- **Authentication**: NextAuth.js (GitHub OAuth)
+- **Database**: Supabase (PostgreSQL)
+- **Vector Store**: Pinecone
+- **AI/ML**: OpenAI API (GPT-5-mini, ada-002)
+
+### Infrastructure
+
+- **Hosting**: Vercel
+- **Database**: Supabase (PostgreSQL)
+- **Vector Search**: Pinecone
+- **CI/CD**: GitHub Actions
+- **Monitoring**: Vercel Analytics
+- **Logging**: Pino (structured JSON logs)
+
+### Build Tools
+
+- **Monorepo**: Turborepo
+- **Package Manager**: pnpm
+- **Linting**: ESLint
+- **Formatting**: Prettier
+- **Type Checking**: TypeScript 5
+- **Testing**: Vitest + Playwright
+
+## Application Structure
+
+### Registry App (`apps/registry`)
+
+The main application handling resumes, themes, and job matching.
+
+```
+apps/registry/
+├── app/                    # Next.js App Router
+│   ├── [username]/        # Public resume pages
+│   │   ├── page.js        # Resume viewer
+│   │   ├── timeline/      # Timeline visualization
+│   │   └── jobs/          # Job matches
+│   ├── api/               # API routes
+│   │   ├── auth/          # Authentication
+│   │   ├── resume/        # Resume operations
+│   │   └── jobs/          # Job search
+│   ├── jobs/              # Job board
+│   └── settings/          # User settings
+├── lib/                   # Shared utilities
+│   ├── auth.js           # Auth config
+│   ├── supabase.js       # DB client
+│   ├── logger.js         # Pino logger
+│   └── retry.js          # Retry logic
+├── scripts/              # Background jobs
+│   └── jobs/             # Job processing
+│       ├── getLatestWhoIsHiring.js
+│       ├── gpted.js
+│       └── vectorize.js
+└── public/               # Static assets
+```
+
+### Documentation (`apps/docs`)
+
+Nextra-based documentation site (this site!).
+
+```
+apps/docs/
+├── pages/                # MDX documentation
+│   ├── index.mdx        # Homepage
+│   ├── getting-started.mdx
+│   ├── jobs.mdx
+│   ├── api.mdx
+│   └── architecture.mdx
+├── theme.config.tsx     # Nextra theme config
+└── next.config.js       # Next.js config
+```
+
+## Data Flow
+
+### Resume Rendering Pipeline
+
+```
+1. User Request
+   https://jsonresume.org/johndoe
+   │
+2. GitHub Gist Fetch
+   ├─> Fetch gist.github.com/johndoe/resume.json
+   └─> Cache in server memory
+   │
+3. Theme Selection
+   ├─> User preference or query param
+   └─> Load theme package (jsonresume-theme-*)
+   │
+4. Server-Side Rendering
+   ├─> Pass resume JSON to theme
+   ├─> Generate HTML
+   └─> Return to browser
+   │
+5. Client Hydration
+   └─> React hydrates interactive features
+```
+
+### Job Matching Pipeline
+
+```
+1. Resume Upload
+   User uploads resume.json
+   │
+2. Skill Extraction
+   ├─> Parse resume structure
+   ├─> Extract skills, experience, preferences
+   └─> Generate embedding vector (OpenAI ada-002)
+   │
+3. Vector Search
+   ├─> Query Pinecone with resume vector
+   ├─> Get top K similar job vectors
+   └─> Return job UUIDs with scores
+   │
+4. Job Enrichment
+   ├─> Fetch full job details from Supabase
+   ├─> Apply additional filters (location, remote, etc.)
+   └─> Sort by relevance score
+   │
+5. Results Display
+   └─> Render matched jobs with compatibility %
+```
+
+## Database Schema
+
+### Jobs Table (Supabase PostgreSQL)
+
+```sql
+CREATE TABLE jobs (
+  uuid UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  hn_id TEXT UNIQUE NOT NULL,
+  content TEXT NOT NULL,
+  gpt_content JSONB,
+  posted_at TIMESTAMP WITH TIME ZONE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE INDEX idx_jobs_posted_at ON jobs(posted_at DESC);
+CREATE INDEX idx_jobs_gpt_content ON jobs USING GIN(gpt_content);
+```
+
+### Vector Index (Pinecone)
+
+```
+Dimension: 1536 (OpenAI ada-002)
+Metric: Cosine similarity
+Metadata: { uuid, company, title, skills[] }
+```
+
+## Deployment
+
+### Vercel Configuration
+
+```json
+{
+  "buildCommand": "pnpm turbo build --filter=registry",
+  "devCommand": "pnpm dev",
+  "framework": "nextjs",
+  "installCommand": "pnpm install"
+}
+```
+
+### Environment Variables
+
+Required secrets in production:
+
+```bash
+# Authentication
+AUTH_SECRET=xxx
+AUTH_GITHUB_ID=xxx
+AUTH_GITHUB_SECRET=xxx
+
+# Database
+SUPABASE_KEY=xxx
+DATABASE_URL=xxx
+
+# AI/ML
+OPENAI_API_KEY=xxx
+PINECONE_API_KEY=xxx
+PINECONE_ENVIRONMENT=xxx
+
+# Monitoring
+DISCORD_WEBHOOK_URL=xxx  # For failure notifications
+```
+
+## Performance Optimizations
+
+### Caching Strategy
+
+1. **Resume Gist**: Server-side memory cache (5 min TTL)
+2. **Theme Rendering**: CDN edge caching (Vercel)
+3. **Job Search**: Pinecone vector cache
+4. **Static Pages**: ISR (Incremental Static Regeneration)
+
+### Code Splitting
+
+- Lazy load job board components
+- Dynamic imports for themes
+- Route-based code splitting (Next.js automatic)
+
+### Image Optimization
+
+- next/image for automatic WebP conversion
+- Responsive image sizing
+- Lazy loading below the fold
+
+## Security
+
+### Authentication Flow
+
+```
+1. User clicks "Sign in with GitHub"
+   │
+2. NextAuth.js redirects to GitHub OAuth
+   │
+3. GitHub authorization
+   │
+4. Callback to /api/auth/callback/github
+   │
+5. Create/update session
+   │
+6. Store JWT in HTTP-only cookie
+   │
+7. Redirect to dashboard
+```
+
+### API Security
+
+- Rate limiting (60/hour anonymous, 5000/hour authenticated)
+- CORS configuration
+- Input validation (Zod schemas)
+- SQL injection prevention (parameterized queries)
+- XSS protection (React escaping + CSP headers)
+
+## Monitoring & Observability
+
+### Structured Logging
+
+```javascript
+import { logger } from '@/lib/logger';
+
+logger.info({ userId, action: 'resume_generated' }, 'Resume generated');
+logger.error({ error: err.message, stack: err.stack }, 'Job processing failed');
+```
+
+### Metrics
+
+- Vercel Analytics (page views, performance)
+- GitHub Actions (workflow success/failure rates)
+- OpenAI usage tracking (token consumption)
+- Pinecone query metrics (latency, throughput)
+
+### Alerting
+
+- Discord webhook for critical failures
+- GitHub Issues auto-created for repeated failures
+- Email notifications for security events
+
+## Scalability Considerations
+
+### Current Scale
+
+- ~500-1000 jobs processed/month
+- ~10-50 resumes generated/day
+- ~100-500 API requests/day
+
+### Future Scaling
+
+1. **Database**: Supabase can scale to millions of rows
+2. **Vector Search**: Pinecone supports billions of vectors
+3. **API**: Horizontal scaling via Vercel serverless functions
+4. **Background Jobs**: Move to queue-based system (Bull, BullMQ)
+
+## Contributing
+
+Want to contribute to the architecture? See the [Contributing Guide](/contributing).
+
+## Next Steps
+
+- [Getting Started](/getting-started) - Use the platform
+- [Job Board](/jobs) - Understand job matching
+- [API Reference](/api) - Build on top of JSON Resume
