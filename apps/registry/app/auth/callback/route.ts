@@ -1,6 +1,7 @@
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
+import logger from '@/lib/logger';
 
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
@@ -17,7 +18,7 @@ export async function GET(request: Request) {
     } = await supabase.auth.exchangeCodeForSession(code);
 
     if (error) {
-      console.error('Auth callback error:', error);
+      logger.error({ error: error.message, code }, 'Auth callback error');
       return NextResponse.redirect(
         `${requestUrl.origin}/login?error=${error.message}`
       );
@@ -29,7 +30,7 @@ export async function GET(request: Request) {
         await supabase.auth.getUser();
 
       if (userError) {
-        console.error('Error getting user data:', userError);
+        logger.error({ error: userError.message }, 'Error getting user data');
         return NextResponse.redirect(
           `${requestUrl.origin}/login?error=Failed to get user data`
         );
@@ -46,7 +47,13 @@ export async function GET(request: Request) {
       });
 
       if (updateError) {
-        console.error('Error updating user metadata:', updateError);
+        logger.error(
+          {
+            error: updateError.message,
+            username: userData.user.user_metadata.user_name,
+          },
+          'Error updating user metadata'
+        );
       }
     }
   }

@@ -1,5 +1,6 @@
 import { supabase } from '../../lib/supabase';
 import { Button } from '@repo/ui';
+import logger from '@/lib/logger';
 
 interface GitHubStatusSectionProps {
   isConnected: boolean;
@@ -25,7 +26,7 @@ export const GitHubStatusSection = ({
       },
     });
     if (error) {
-      console.error('OAuth error:', error);
+      logger.error({ error: error.message }, 'OAuth reconnection error');
     }
   };
 
