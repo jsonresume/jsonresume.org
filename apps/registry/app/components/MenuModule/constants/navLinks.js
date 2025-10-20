@@ -27,7 +27,7 @@ export const NAV_LINKS = [
     icon: Sparkles,
   },
   {
-    href: 'https://docs-jsonresume.vercel.app',
+    href: 'https://docs.jsonresume.org',
     label: 'Docs',
     icon: BookOpen,
     external: true,

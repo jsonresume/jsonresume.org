@@ -10,7 +10,7 @@ export function Sidebar() {
       <Link href="/projects/">Projects</Link>
       <Link href="/ai/">AI</Link>
       <Link href="/team/">Team</Link>
-      <Link href="https://docs-jsonresume.vercel.app" target="_blank">
+      <Link href="https://docs.jsonresume.org" target="_blank">
         Docs
       </Link>
       <Link href="/blog/">Blog</Link>
