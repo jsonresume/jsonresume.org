@@ -1,6 +1,20 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { retryWithBackoff, createRetryFetch, createRetryAxios } from './retry';
 
+// Mock logger
+vi.mock('./logger', () => {
+  const mockLogger = {
+    error: vi.fn(),
+    info: vi.fn(),
+    debug: vi.fn(),
+    warn: vi.fn(),
+  };
+  return {
+    default: mockLogger,
+    logger: mockLogger,
+  };
+});
+
 describe('retryWithBackoff', () => {
   beforeEach(() => {
     vi.clearAllMocks();

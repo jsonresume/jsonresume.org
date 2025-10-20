@@ -18,7 +18,7 @@ describe('logger', () => {
     process.env.NODE_ENV = 'development';
     delete process.env.LOG_LEVEL;
 
-    const { logger } = await import('./logger');
+    const logger = (await import('./logger')).default;
     expect(logger.level).toBe('debug');
   });
 
@@ -26,7 +26,7 @@ describe('logger', () => {
     process.env.NODE_ENV = 'production';
     delete process.env.LOG_LEVEL;
 
-    const { logger } = await import('./logger');
+    const logger = (await import('./logger')).default;
     expect(logger.level).toBe('info');
   });
 
@@ -34,12 +34,12 @@ describe('logger', () => {
     process.env.LOG_LEVEL = 'warn';
     process.env.NODE_ENV = 'production';
 
-    const { logger } = await import('./logger');
+    const logger = (await import('./logger')).default;
     expect(logger.level).toBe('warn');
   });
 
   it('supports all log levels', async () => {
-    const { logger } = await import('./logger');
+    const logger = (await import('./logger')).default;
 
     // Should have standard pino log methods
     expect(typeof logger.trace).toBe('function');
@@ -51,7 +51,7 @@ describe('logger', () => {
   });
 
   it('logs with metadata', async () => {
-    const { logger } = await import('./logger');
+    const logger = (await import('./logger')).default;
     const infoSpy = vi.spyOn(logger, 'info');
 
     logger.info({ userId: '123', action: 'login' }, 'User logged in');
@@ -63,7 +63,7 @@ describe('logger', () => {
   });
 
   it('logs errors with error object', async () => {
-    const { logger } = await import('./logger');
+    const logger = (await import('./logger')).default;
     const errorSpy = vi.spyOn(logger, 'error');
     const testError = new Error('Test error');
 
@@ -76,7 +76,7 @@ describe('logger', () => {
   });
 
   it('creates child loggers with context', async () => {
-    const { logger } = await import('./logger');
+    const logger = (await import('./logger')).default;
     const childLogger = logger.child({ module: 'auth' });
 
     expect(childLogger).toBeDefined();
@@ -85,7 +85,7 @@ describe('logger', () => {
 
   it('supports different log levels for filtering', async () => {
     process.env.LOG_LEVEL = 'warn';
-    const { logger } = await import('./logger');
+    const logger = (await import('./logger')).default;
 
     const debugSpy = vi.spyOn(logger, 'debug');
     const warnSpy = vi.spyOn(logger, 'warn');

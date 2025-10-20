@@ -1,29 +1,35 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { cacheResume } from './cacheResume';
 
+// Mock logger
+vi.mock('../logger', () => ({
+  default: {
+    error: vi.fn(),
+    info: vi.fn(),
+    debug: vi.fn(),
+    warn: vi.fn(),
+  },
+}));
+
 describe('cacheResume', () => {
   let originalEnv;
-  let consoleSpy;
-  let consoleErrorSpy;
 
   beforeEach(() => {
+    vi.clearAllMocks();
     originalEnv = process.env.SUPABASE_KEY;
-    consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-    consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterEach(() => {
     process.env.SUPABASE_KEY = originalEnv;
-    consoleSpy.mockRestore();
-    consoleErrorSpy.mockRestore();
   });
 
   it('skips caching when SUPABASE_KEY is not configured', async () => {
     delete process.env.SUPABASE_KEY;
+    const logger = (await import('../logger')).default;
 
     await cacheResume('test', { basics: {} });
 
-    expect(consoleSpy).toHaveBeenCalledWith(
+    expect(logger.debug).toHaveBeenCalledWith(
       'Skipping resume caching: SUPABASE_KEY not configured'
     );
   });
@@ -36,10 +42,11 @@ describe('cacheResume', () => {
 
   it('logs skip message with no key', async () => {
     delete process.env.SUPABASE_KEY;
+    const logger = (await import('../logger')).default;
 
     await cacheResume('test', {});
 
-    expect(consoleSpy).toHaveBeenCalledWith(
+    expect(logger.debug).toHaveBeenCalledWith(
       expect.stringContaining('Skipping resume caching')
     );
   });
@@ -54,18 +61,20 @@ describe('cacheResume', () => {
 
   it('handles resume parameter', async () => {
     delete process.env.SUPABASE_KEY;
+    const logger = (await import('../logger')).default;
 
     await cacheResume('test', { basics: { name: 'Test' } });
 
     // Just verify it doesn't crash
-    expect(consoleSpy).toHaveBeenCalled();
+    expect(logger.debug).toHaveBeenCalled();
   });
 
   it('handles username parameter', async () => {
     delete process.env.SUPABASE_KEY;
+    const logger = (await import('../logger')).default;
 
     await cacheResume('johndoe', {});
 
-    expect(consoleSpy).toHaveBeenCalled();
+    expect(logger.debug).toHaveBeenCalled();
   });
 });

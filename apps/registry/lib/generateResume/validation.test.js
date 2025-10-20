@@ -95,8 +95,8 @@ describe('validateResume', () => {
     expect(result.error).toBeNull();
   });
 
-  it('logs message when bypassing validation', () => {
-    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+  it('logs message when bypassing validation', async () => {
+    const logger = (await import('../logger')).default;
 
     const resume = {
       meta: {
@@ -106,11 +106,10 @@ describe('validateResume', () => {
 
     validateResume(resume);
 
-    expect(consoleSpy).toHaveBeenCalledWith(
+    expect(logger.info).toHaveBeenCalledWith(
+      { skipValidation: true },
       expect.stringContaining('Schema validation bypassed')
     );
-
-    consoleSpy.mockRestore();
   });
 
   it('validates schema compliance', () => {

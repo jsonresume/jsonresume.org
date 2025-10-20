@@ -43,5 +43,7 @@ const logger = pino({
   }),
 });
 
+// Support both CommonJS default import and ES6 named import
 module.exports = logger;
 module.exports.default = logger;
+module.exports.logger = logger;
