@@ -344,6 +344,50 @@ feature/
   - **Communication**: Posted findings to issue #36 to educate theme developers
   - Commit: 5f8b57a - comprehensive serverless theme migration documentation
   - Benefits: Clear expectations for theme contributors, prevents future incompatible theme requests
+- **Production Deployment Failures - Circular Imports & Module Exports** (Oct 20, 2025):
+  - **CRITICAL**: Discovered production builds had been failing for 4 days - last successful deployment was Oct 16
+  - Created Issue #230, identified root causes, fixed all build errors, closed issue same day
+  - **Root Cause 1 - Circular Import in WorkSection.jsx**:
+    - File `WorkSection.jsx` AND directory `WorkSection/` existed at same level
+    - Import path `'./WorkSection'` resolved to FILE not DIRECTORY (classic circular import)
+    - **Fix**: Use explicit path `'./WorkSection/index'` or `'./WorkSection/index.js'`
+    - **Pattern documented in CLAUDE.md**: Always use explicit directory paths when file+dir share same name
+    - Error: "Unsupported Server Component type: undefined"
+  - **Root Cause 2 - Incorrect Relative Import Paths in ATSScore.js**:
+    - File location: `app/[username]/ats/ATSScore.js`
+    - Used: `'../providers/PublicResumeProvider'` (goes up 1 level to `app/[username]/`)
+    - Should be: `'../../providers/PublicResumeProvider'` (goes up 2 levels to `app/`)
+    - **Lesson**: Always trace relative paths carefully in deeply nested directories
+    - Error: "Module not found: Can't resolve '../providers/PublicResumeProvider'"
+  - **Root Cause 3 - Logger Module Export Mismatch**:
+    - Originally: `module.exports = { logger }` (named export only)
+    - TypeScript files importing: `import logger from './logger'` (default import)
+    - ES6 files importing: `import { logger } from './logger'` (named import)
+    - **Fix**: Support both styles with triple export:
+      ```js
+      module.exports = logger; // CommonJS default
+      module.exports.default = logger; // ES6 default
+      module.exports.logger = logger; // ES6 named
+      ```
+    - **Test mocking**: vi.mock must export both `default` and `logger` for compatibility
+    - Error: "Property 'error' does not exist on type 'typeof import(...logger)'"
+  - **Root Cause 4 - Missing DISCORD_WEBHOOK_URL in turbo.json**:
+    - Turbo's eslint rule `turbo/no-undeclared-env-vars` requires all env vars declared in globalEnv
+    - **Fix**: Added `"DISCORD_WEBHOOK_URL"` to turbo.json globalEnv array
+  - **Test Mocking Challenges**:
+    - Migrating console.\* to logger required updating ALL test mocks
+    - Pattern: Replace `vi.spyOn(console, 'log')` with `vi.mock('./logger', () => ({ default: mockLogger }))`
+    - **Vitest hoisting gotcha**: Cannot reference variable before vi.mock - must inline or use factory function
+    - Fixed 6 test files: logger.test.ts, retry.test.ts, validation.test.js, trackView.test.js, cacheResume.test.js, formatResume.test.js
+  - **Verification Strategy**:
+    - Test local build FIRST: `pnpm build` (caught all 4 issues immediately)
+    - Run all tests: `pnpm --filter registry test -- --run` (caught mock issues)
+    - Monitor CI/CD: `gh run watch` (verify deployment succeeds)
+    - Check Vercel: `vercel ls --scope jsonresume` (confirm production deployment)
+  - **Commits**: 49f3d74 (fixed build errors), c69241f (fixed test mocks)
+  - **Issue**: #230 (created and closed same day)
+  - **Impact**: Production restored after 4 days of failed deployments
+  - **Key Takeaway**: ALWAYS run `pnpm build` locally before pushing - catches 90% of deployment issues
 
 **Refactoring Large Files (200+ lines):**
 
