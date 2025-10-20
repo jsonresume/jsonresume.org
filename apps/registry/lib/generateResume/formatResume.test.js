@@ -10,6 +10,16 @@ vi.mock('../error/buildError', () => ({
   },
 }));
 
+// Mock logger
+vi.mock('../logger', () => ({
+  default: {
+    error: vi.fn(),
+    info: vi.fn(),
+    debug: vi.fn(),
+    warn: vi.fn(),
+  },
+}));
+
 describe('formatResume', () => {
   it('formats resume successfully', async () => {
     const mockFormatter = {
@@ -78,9 +88,10 @@ describe('formatResume', () => {
     expect(result.error.details.error).toHaveProperty('stack');
   });
 
-  it('logs errors to console', async () => {
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+  it('logs errors with structured logging', async () => {
+    const logger = await import('../logger');
     const error = new Error('Test error');
+    error.stack = 'Test stack';
 
     const mockFormatter = {
       format: vi.fn().mockRejectedValue(error),
@@ -88,8 +99,10 @@ describe('formatResume', () => {
 
     await formatResume({}, mockFormatter, {});
 
-    expect(consoleSpy).toHaveBeenCalledWith('[Theme Error]', 'unknown', error);
-    consoleSpy.mockRestore();
+    expect(logger.default.error).toHaveBeenCalledWith(
+      { themeName: 'unknown', error: 'Test error', stack: 'Test stack' },
+      'Theme rendering error'
+    );
   });
 
   it('passes resume and options to formatter', async () => {

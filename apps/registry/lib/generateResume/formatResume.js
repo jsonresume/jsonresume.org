@@ -1,4 +1,5 @@
 import buildError, { ERROR_CODES } from '../error/buildError';
+import logger from '../logger';
 
 export const formatResume = async (resume, formatter, options) => {
   let formatted = {};
@@ -7,7 +8,10 @@ export const formatResume = async (resume, formatter, options) => {
   try {
     formatted = await formatter.format(resume, options);
   } catch (e) {
-    console.error('[Theme Error]', themeName, e);
+    logger.error(
+      { themeName, error: e.message, stack: e.stack },
+      'Theme rendering error'
+    );
 
     // Theme not found error
     if (e.message === 'theme-missing') {
