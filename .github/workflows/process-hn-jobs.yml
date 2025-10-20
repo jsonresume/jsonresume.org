@@ -1,0 +1,243 @@
+name: Process Hacker News Jobs
+
+on:
+  # Run daily at 9 AM UTC (1 AM PST / 4 AM EST)
+  schedule:
+    - cron: '0 9 * * *'
+
+  # Allow manual trigger from GitHub UI
+  workflow_dispatch:
+    inputs:
+      skip_fetch:
+        description: 'Skip fetching new jobs (only process existing)'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+
+env:
+  NODE_VERSION: '20'
+  PNPM_VERSION: '8.15.9'
+
+jobs:
+  process-jobs:
+    name: Process HN Jobs Pipeline
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Fetch latest HN jobs
+        if: github.event.inputs.skip_fetch != 'true'
+        id: fetch
+        working-directory: apps/registry
+        env:
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          echo "::group::Fetching HN jobs"
+          node scripts/jobs/getLatestWhoIsHiring.js 2>&1 | tee fetch.log
+
+          # Extract summary stats
+          JOBS_FETCHED=$(grep -oP 'Fetched \K\d+' fetch.log || echo "0")
+          JOBS_INSERTED=$(grep -oP 'Inserted \K\d+' fetch.log || echo "0")
+
+          echo "jobs_fetched=$JOBS_FETCHED" >> $GITHUB_OUTPUT
+          echo "jobs_inserted=$JOBS_INSERTED" >> $GITHUB_OUTPUT
+          echo "::endgroup::"
+        continue-on-error: false
+
+      - name: AI processing with GPT-5-mini
+        id: process
+        working-directory: apps/registry
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          echo "::group::AI Processing"
+
+          # Run with timeout and capture output
+          timeout 3600 node scripts/jobs/gpted.js 2>&1 | tee process.log
+
+          # Extract processing stats
+          JOBS_PROCESSED=$(grep -oP 'Successfully processed \K\d+' process.log | tail -1 || echo "0")
+          JOBS_FAILED=$(grep -c 'Error processing' process.log || echo "0")
+          JOBS_TOTAL=$(grep -oP '\K\d+(?= jobs need processing)' process.log | head -1 || echo "0")
+
+          echo "jobs_processed=$JOBS_PROCESSED" >> $GITHUB_OUTPUT
+          echo "jobs_failed=$JOBS_FAILED" >> $GITHUB_OUTPUT
+          echo "jobs_total=$JOBS_TOTAL" >> $GITHUB_OUTPUT
+          echo "::endgroup::"
+        continue-on-error: true
+
+      - name: Vectorize processed jobs
+        id: vectorize
+        working-directory: apps/registry
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          PINECONE_API_KEY: ${{ secrets.PINECONE_API_KEY }}
+          PINECONE_ENVIRONMENT: ${{ secrets.PINECONE_ENVIRONMENT }}
+        run: |
+          echo "::group::Vectorization"
+
+          timeout 1800 node scripts/jobs/vectorize.js 2>&1 | tee vectorize.log
+
+          # Extract vectorization stats
+          JOBS_VECTORIZED=$(grep -oP 'Vectorized \K\d+' vectorize.log || echo "0")
+
+          echo "jobs_vectorized=$JOBS_VECTORIZED" >> $GITHUB_OUTPUT
+          echo "::endgroup::"
+        continue-on-error: true
+
+      - name: Generate workflow summary
+        if: always()
+        run: |
+          echo "# HN Jobs Processing Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Date:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          echo "## Pipeline Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Stage | Status | Metrics |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|---------|" >> $GITHUB_STEP_SUMMARY
+
+          # Fetch stage
+          if [ "${{ steps.fetch.outcome }}" == "success" ]; then
+            echo "| 🔍 Fetch | ✅ Success | Fetched: ${{ steps.fetch.outputs.jobs_fetched }}, Inserted: ${{ steps.fetch.outputs.jobs_inserted }} |" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ steps.fetch.outcome }}" == "skipped" ]; then
+            echo "| 🔍 Fetch | ⏭️ Skipped | Manual skip requested |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| 🔍 Fetch | ❌ Failed | See logs for details |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          # Process stage
+          if [ "${{ steps.process.outcome }}" == "success" ]; then
+            echo "| 🤖 AI Process | ✅ Success | Processed: ${{ steps.process.outputs.jobs_processed }}/${{ steps.process.outputs.jobs_total }}, Failed: ${{ steps.process.outputs.jobs_failed }} |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| 🤖 AI Process | ❌ Failed | Processed: ${{ steps.process.outputs.jobs_processed }}/${{ steps.process.outputs.jobs_total }}, Failed: ${{ steps.process.outputs.jobs_failed }} |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          # Vectorize stage
+          if [ "${{ steps.vectorize.outcome }}" == "success" ]; then
+            echo "| 🔢 Vectorize | ✅ Success | Vectorized: ${{ steps.vectorize.outputs.jobs_vectorized }} |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| 🔢 Vectorize | ❌ Failed | Vectorized: ${{ steps.vectorize.outputs.jobs_vectorized }} |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Add failure notice if any step failed
+          if [ "${{ steps.fetch.outcome }}" == "failure" ] || [ "${{ steps.process.outcome }}" == "failure" ] || [ "${{ steps.vectorize.outcome }}" == "failure" ]; then
+            echo "## ⚠️ Pipeline Issues Detected" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "One or more stages failed. Check the logs above for details." >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "## 📊 Success Rate" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          TOTAL=${{ steps.process.outputs.jobs_total }}
+          PROCESSED=${{ steps.process.outputs.jobs_processed }}
+
+          if [ "$TOTAL" -gt 0 ]; then
+            SUCCESS_RATE=$(awk "BEGIN {printf \"%.1f\", ($PROCESSED / $TOTAL) * 100}")
+            echo "**AI Processing:** ${SUCCESS_RATE}% (${PROCESSED}/${TOTAL} jobs)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "**AI Processing:** No jobs to process" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Upload logs as artifacts
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: job-processing-logs-${{ github.run_number }}
+          path: |
+            apps/registry/fetch.log
+            apps/registry/process.log
+            apps/registry/vectorize.log
+          retention-days: 30
+
+      - name: Notify on failure (Discord)
+        if: failure() && github.event_name == 'schedule'
+        run: |
+          curl -H "Content-Type: application/json" \
+            -d "{
+              \"content\": \"⚠️ **HN Jobs Pipeline Failed**\n\nWorkflow run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\n\nCheck the logs for details.\"
+            }" \
+            ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+      - name: Create issue on repeated failure
+        if: failure() && github.event_name == 'schedule'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Check if there's already an open issue for pipeline failures
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'automated-jobs,bug',
+              per_page: 1
+            });
+
+            // Only create issue if none exists
+            if (issues.data.length === 0) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: '🚨 HN Jobs Processing Pipeline Failure',
+                body: `## Pipeline Failure Alert
+
+The automated HN jobs processing pipeline has failed.
+
+**Workflow Run:** https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}
+
+**Date:** ${new Date().toISOString()}
+
+### Debugging Steps
+
+1. Check the workflow logs for error messages
+2. Verify all required secrets are set:
+   - \`OPENAI_API_KEY\`
+   - \`SUPABASE_KEY\`
+   - \`PINECONE_API_KEY\`
+   - \`PINECONE_ENVIRONMENT\`
+3. Check API rate limits and quotas
+4. Review recent code changes that may have broken the pipeline
+
+This issue was automatically created by the GitHub Actions workflow.`,
+                labels: ['automated-jobs', 'bug', 'critical']
+              });
+            }
