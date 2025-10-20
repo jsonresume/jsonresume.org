@@ -1,8 +1,10 @@
+import logger from './logger';
+
 const trackView = async (username) => {
   // Skip tracking if Supabase key is not configured (e.g., in CI/test environments)
   const supabaseKey = process.env.SUPABASE_KEY;
   if (!supabaseKey) {
-    console.log('Skipping view tracking: SUPABASE_KEY not configured');
+    logger.debug('Skipping view tracking: SUPABASE_KEY not configured');
     return;
   }
 
@@ -21,7 +23,7 @@ const trackView = async (username) => {
       })
       .select();
   } catch (error) {
-    console.error('Failed to insert profile view:', error);
+    logger.error({ error: error.message, username }, 'Failed to track view');
   }
 };
 

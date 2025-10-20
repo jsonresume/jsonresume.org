@@ -10,6 +10,16 @@ vi.mock('../error/buildError', () => ({
   },
 }));
 
+// Mock logger
+vi.mock('../logger', () => ({
+  default: {
+    error: vi.fn(),
+    info: vi.fn(),
+    debug: vi.fn(),
+    warn: vi.fn(),
+  },
+}));
+
 // Mock schema
 vi.mock('../schema', () => ({
   default: {

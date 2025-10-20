@@ -1,7 +1,7 @@
 'use client';
 
 import { FormSection, ArrayField } from './FormComponents';
-import { WorkFields, HighlightsList } from './WorkSection';
+import { WorkFields, HighlightsList } from './WorkSection/index';
 
 export const WorkSection = ({ resume, handlers }) => {
   const {

@@ -20,7 +20,8 @@
     "NEXT_PUBLIC_SUPABASE_ANON_KEY",
     "NEXT_PUBLIC_APP_URL",
     "PERPLEXITY_API_KEY",
-    "LOG_LEVEL"
+    "LOG_LEVEL",
+    "DISCORD_WEBHOOK_URL"
   ],
   "tasks": {
     "db:generate": {

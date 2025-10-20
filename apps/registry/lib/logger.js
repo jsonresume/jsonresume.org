@@ -43,4 +43,5 @@ const logger = pino({
   }),
 });
 
-module.exports = { logger };
+module.exports = logger;
+module.exports.default = logger;

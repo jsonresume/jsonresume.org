@@ -1,5 +1,6 @@
 import schema from '../schema';
 import buildError, { ERROR_CODES } from '../error/buildError';
+import logger from '../logger';
 
 const Validator = require('jsonschema').Validator;
 
@@ -25,8 +26,9 @@ export const validateExtension = (extension) => {
 export const validateResume = (resume) => {
   // Allow bypassing validation via meta.skipValidation flag
   if (resume?.meta?.skipValidation === true) {
-    console.log(
-      'Schema validation bypassed via meta.skipValidation flag for experimental resume'
+    logger.info(
+      { skipValidation: true },
+      'Schema validation bypassed via meta.skipValidation flag'
     );
     return { error: null };
   }

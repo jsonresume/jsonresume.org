@@ -2,6 +2,7 @@ import axios from 'axios';
 import { find } from 'lodash';
 import buildError, { ERROR_CODES } from './error/buildError';
 import { RESUME_GIST_NAME } from '../app/providers/ResumeProvider';
+import logger from './logger';
 
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
@@ -17,7 +18,7 @@ const getResumeGist = async (username, gistname = RESUME_GIST_NAME) => {
       }
     );
   } catch (e) {
-    console.log(e);
+    logger.error({ error: e.message, username }, 'Failed to fetch gists');
     return buildError(ERROR_CODES.INVALID_USERNAME);
   }
 

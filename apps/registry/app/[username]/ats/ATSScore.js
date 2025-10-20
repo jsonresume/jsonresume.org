@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { usePublicResume } from '../providers/PublicResumeProvider';
-import { PublicViewBanner } from '../components/PublicViewBanner';
+import { usePublicResume } from '../../providers/PublicResumeProvider';
+import { PublicViewBanner } from '../../components/PublicViewBanner';
 import { ChecksList } from './ATSScoreModule/components/ChecksList';
 import { RecommendationsList } from './ATSScoreModule/components/RecommendationsList';
 import { useATSAnalysis } from './hooks/useATSAnalysis';
