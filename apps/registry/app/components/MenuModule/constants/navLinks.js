@@ -2,6 +2,7 @@ import {
   Compass,
   Briefcase,
   Sparkles,
+  BookOpen,
   Github,
   MessagesSquare,
 } from 'lucide-react';
@@ -24,6 +25,12 @@ export const NAV_LINKS = [
     href: '/job-similarity',
     label: 'Similarity',
     icon: Sparkles,
+  },
+  {
+    href: 'https://docs-jsonresume.vercel.app',
+    label: 'Docs',
+    icon: BookOpen,
+    external: true,
   },
   {
     href: 'https://github.com/jsonresume/jsonresume.org',

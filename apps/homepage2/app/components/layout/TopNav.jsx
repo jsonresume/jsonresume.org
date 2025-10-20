@@ -23,6 +23,10 @@ export function TopNav() {
               <Link href="/projects/">Projects</Link>
               <Link href="/team/">Team</Link>
 
+              <Link href="https://docs-jsonresume.vercel.app" target="_blank">
+                Docs
+              </Link>
+
               <Link
                 href="https://registry.jsonresume.org/explore"
                 target="_blank"
