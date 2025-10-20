@@ -1,0 +1,3236 @@
+# Developer Guide
+
+A comprehensive guide for developers building with JSON Resume. Learn how to contribute, integrate, build themes, and consume JSON Resume data in your applications.
+
+## Quick Navigation
+
+- [Contributing to JSON Resume](#contributing-to-json-resume)
+- [Local Development Setup](#local-development-setup)
+- [Technology Stack](#technology-stack-behind-jsonresumeorg)
+- [Theme Development](#writing-theme-packages)
+- [Programmatic Validation](#validate-json-programmatically)
+- [TypeScript Integration](#using-typescript-with-json-resume)
+- [Building Applications](#building-applications-with-json-resume)
+- [Language-Specific Integration](#language-specific-integration)
+- [React Components](#rendering-json-resume-in-react)
+- [Schema Migration](#handling-schema-migrations)
+- [Embedding Resumes](#embedding-resume-viewers)
+
+---
+
+## Contributing to JSON Resume
+
+JSON Resume is an **open-source project** welcoming contributions from developers worldwide.
+
+### Repository Location
+
+The main codebase is hosted on GitHub:
+
+```bash
+# Clone the repository
+git clone https://github.com/jsonresume/jsonresume.org.git
+cd jsonresume.org
+```
+
+**Repository structure:**
+
+- **Organization**: `jsonresume`
+- **Repository**: `jsonresume.org`
+- **Primary Branch**: `master`
+- **License**: MIT
+
+### Quick Start for Contributors
+
+1. **Fork the repository** on GitHub
+2. **Clone your fork** locally:
+
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/jsonresume.org.git
+   cd jsonresume.org
+   ```
+
+3. **Add upstream remote**:
+
+   ```bash
+   git remote add upstream https://github.com/jsonresume/jsonresume.org.git
+   ```
+
+4. **Create a feature branch**:
+
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+
+5. **Make changes, commit, and push**:
+
+   ```bash
+   git add .
+   git commit -m "feat: add amazing feature"
+   git push origin feature/your-feature-name
+   ```
+
+6. **Open a Pull Request** on GitHub
+
+### Contribution Guidelines
+
+- **File Size Limit**: Maximum 200 lines per production file (tests/stories can be larger)
+- **Testing Required**: Add tests for new functionality
+- **TypeScript Preferred**: Use TypeScript for type safety
+- **No `any` Types**: Use proper types or `unknown`
+- **Code Style**: Prettier auto-formats on commit
+- **Commit Messages**: Follow [Conventional Commits](https://www.conventionalcommits.org/)
+
+**Example commit message:**
+
+```
+feat(api): add resume validation endpoint
+
+Implements JSON schema validation for resume uploads.
+Uses AJV validator with JSON Resume schema v1.0.0.
+
+Closes #123
+```
+
+See [Contributing Guide](/contributing) for comprehensive details.
+
+---
+
+## Local Development Setup
+
+### Prerequisites
+
+- **Node.js** 20+ (LTS recommended)
+- **pnpm** 8.15.9+ (`npm install -g pnpm`)
+- **Git**
+- **Supabase CLI** (optional, for database work)
+
+### Installation Steps
+
+1. **Install dependencies**:
+
+   ```bash
+   pnpm install
+   ```
+
+2. **Set up environment variables**:
+
+   ```bash
+   # Copy example environment file
+   cp apps/registry/.env.example apps/registry/.env
+
+   # Edit .env and add your credentials:
+   # - GITHUB_ID and GITHUB_SECRET (OAuth)
+   # - OPENAI_API_KEY (for job matching)
+   # - SUPABASE_URL and SUPABASE_ANON_KEY
+   ```
+
+3. **Build packages**:
+
+   ```bash
+   pnpm build
+   ```
+
+4. **Start development servers**:
+
+   ```bash
+   # Start all apps
+   pnpm dev
+
+   # Or start specific apps:
+   pnpm --filter registry dev    # Registry app (port 3000)
+   pnpm --filter docs dev         # Documentation (port 3001)
+   ```
+
+### Development Workflow
+
+**Running tests:**
+
+```bash
+# Run all tests
+pnpm test
+
+# Run tests for specific package
+pnpm --filter registry test
+
+# Run E2E tests
+pnpm test:e2e
+
+# Run tests in watch mode
+pnpm --filter registry test -- --watch
+```
+
+**Linting and formatting:**
+
+```bash
+# Run ESLint
+pnpm lint
+
+# Auto-fix linting issues
+pnpm lint:fix
+
+# Check TypeScript types
+pnpm typecheck
+
+# Format code (runs automatically on commit)
+pnpm format
+```
+
+**Building for production:**
+
+```bash
+# Build all apps
+pnpm build
+
+# Build specific app
+pnpm --filter registry build
+```
+
+### Turborepo Monorepo Structure
+
+JSON Resume uses Turborepo for monorepo management:
+
+```
+jsonresume.org/
+├── apps/
+│   ├── registry/          # Main resume registry app
+│   ├── homepage/          # Marketing website
+│   └── docs/              # Documentation (Nextra)
+├── packages/
+│   ├── ui/                # Shared UI components (@repo/ui)
+│   ├── eslint-config-custom/  # ESLint config
+│   ├── tsconfig/          # TypeScript configs
+│   ├── jsonresume-theme-*/    # Resume themes
+│   └── converters/        # Format converters
+└── scripts/               # Build and automation scripts
+```
+
+**Running commands in workspaces:**
+
+```bash
+# Run command in specific workspace
+pnpm --filter registry dev
+
+# Run command in all workspaces
+pnpm -r build
+
+# Run turbo task
+turbo run build
+turbo run test --filter=registry
+```
+
+### Database Setup (Supabase)
+
+If you're working on features that require database access:
+
+```bash
+# Install Supabase CLI
+brew install supabase/tap/supabase
+
+# Link to project
+supabase link --project-ref your-project-ref
+
+# Pull schema
+supabase db pull
+
+# Create a migration
+supabase migration new add_new_feature
+
+# Apply migrations
+supabase db push
+
+# Reset database (destructive!)
+supabase db reset
+```
+
+The database name is **`registry`** and is associated with the registry app.
+
+---
+
+## Technology Stack Behind JSONResume.org
+
+Understanding the technology stack helps you contribute effectively.
+
+### Frontend Stack
+
+**Framework & Rendering:**
+
+- **Next.js 14** - React framework with App Router
+- **React 18** - UI library with Server Components
+- **TypeScript 5** - Type-safe JavaScript
+
+**Styling & Design:**
+
+- **Tailwind CSS** - Utility-first CSS framework
+- **shadcn/ui** - Accessible component library (`@repo/ui`)
+- **Lucide React** - Icon library
+- **Radix UI** - Headless UI primitives
+
+**State Management:**
+
+- **React Context** - Global state
+- **React Hooks** - Local state and side effects
+- **TanStack Query** (formerly React Query) - Server state management
+
+**Forms & Validation:**
+
+- **React Hook Form** - Form handling
+- **Zod** - Schema validation
+
+### Backend Stack
+
+**Runtime & APIs:**
+
+- **Node.js 20** - JavaScript runtime
+- **Next.js API Routes** - Serverless functions
+- **Vercel Edge Functions** - Edge runtime for performance
+
+**Authentication:**
+
+- **NextAuth.js** - Authentication framework
+- **GitHub OAuth** - Primary authentication provider
+
+**Database & Storage:**
+
+- **Supabase** - PostgreSQL database
+- **Prisma** - Database ORM (type-safe queries)
+- **GitHub Gists** - Resume storage backend
+
+**AI & Machine Learning:**
+
+- **Vercel AI SDK v5** - Unified AI framework (`ai` package)
+- **OpenAI API** - GPT-4o-mini for job descriptions, text-embedding-ada-002 for embeddings
+- **Pinecone** - Vector database for semantic search
+
+**Logging & Monitoring:**
+
+- **Pino** - Structured JSON logging
+- **Vercel Analytics** - Performance monitoring
+
+### Build & Development Tools
+
+**Monorepo Management:**
+
+- **Turborepo** - High-performance build system
+- **pnpm** - Fast, disk space efficient package manager
+
+**Code Quality:**
+
+- **ESLint** - JavaScript/TypeScript linting
+- **Prettier** - Code formatting
+- **Husky** - Git hooks
+- **lint-staged** - Run linters on staged files
+
+**Testing:**
+
+- **Vitest** - Unit and integration testing
+- **Playwright** - End-to-end testing
+- **Testing Library** - React component testing
+
+**Theme Development:**
+
+- **Handlebars** - Template engine for themes
+- **Vite** - Build tool for bundling themes
+- **Rollup** - Module bundler
+
+### Infrastructure & Deployment
+
+**Hosting:**
+
+- **Vercel** - Hosting and serverless functions
+- **Edge Network** - Global CDN for fast delivery
+
+**Continuous Integration:**
+
+- **GitHub Actions** - CI/CD pipeline
+- **Automated Testing** - Unit, integration, and E2E tests on every PR
+- **Automated Deployments** - Preview deployments for PRs, production deployments on merge
+
+**Key Design Decisions:**
+
+1. **Serverless Architecture** - Scales automatically, no server management
+2. **Edge-First** - Deploy close to users for low latency
+3. **Type Safety** - TypeScript everywhere for reliability
+4. **Component-Driven** - Modular, reusable components
+5. **Test-First** - Critical functionality must be tested
+
+---
+
+## Writing Theme Packages
+
+Themes are the heart of JSON Resume's visual flexibility. Learn how to create beautiful, serverless-compatible themes.
+
+### Theme Architecture
+
+A theme is a JavaScript/TypeScript package that exports a `render()` function:
+
+```typescript
+// Minimal theme structure
+export function render(resume: ResumeSchema): string {
+  // Takes JSON Resume data
+  // Returns HTML string
+  return '<html>...</html>';
+}
+```
+
+**Key concepts:**
+
+- **Input**: JSON Resume schema object
+- **Output**: HTML string (or PDF-ready HTML)
+- **Stateless**: Pure function, no side effects
+- **Serverless**: Must work in Vercel's serverless environment
+
+### Serverless Requirements
+
+**CRITICAL**: Themes must be serverless-compatible for use on the registry.
+
+❌ **Cannot use:**
+
+```javascript
+// ❌ Filesystem operations
+const template = fs.readFileSync('./template.hbs', 'utf-8');
+const css = fs.readFileSync('./style.css', 'utf-8');
+
+// ❌ __dirname or __filename
+const path = __dirname + '/assets/style.css';
+
+// ❌ Runtime file loading
+const files = fs.readdirSync('./templates');
+```
+
+✅ **Must use:**
+
+```javascript
+// ✅ ES6 imports
+import template from './template.hbs?raw';
+import css from './style.css?inline';
+
+// ✅ Build-time bundling
+import Handlebars from 'handlebars';
+
+// ✅ Inline templates
+const template = `<html>...</html>`;
+```
+
+### Quick Start: Simple Theme
+
+Create a minimal theme in 5 minutes:
+
+**1. Create project structure:**
+
+```bash
+mkdir jsonresume-theme-myname
+cd jsonresume-theme-myname
+npm init -y
+```
+
+**2. Install dependencies:**
+
+```bash
+npm install handlebars
+```
+
+**3. Create `index.js`:**
+
+```javascript
+import Handlebars from 'handlebars';
+
+const template = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{resume.basics.name}}</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f9f9f9;
+    }
+    header {
+      border-bottom: 3px solid #2c3e50;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    h1 {
+      font-size: 2.5rem;
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+    .label {
+      font-size: 1.2rem;
+      color: #7f8c8d;
+      margin-bottom: 10px;
+    }
+    .contact {
+      color: #95a5a6;
+      margin-bottom: 20px;
+    }
+    .contact a {
+      color: #3498db;
+      text-decoration: none;
+    }
+    section {
+      background: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #2c3e50;
+      border-bottom: 2px solid #ecf0f1;
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+    }
+    .job {
+      margin-bottom: 20px;
+    }
+    .job-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 10px;
+    }
+    .position {
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+    .company {
+      color: #7f8c8d;
+    }
+    .date {
+      color: #95a5a6;
+      font-size: 0.9rem;
+    }
+    @media print {
+      body { background: white; margin: 0; padding: 20px; }
+      section { box-shadow: none; page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>{{resume.basics.name}}</h1>
+    {{#if resume.basics.label}}
+      <div class="label">{{resume.basics.label}}</div>
+    {{/if}}
+    <div class="contact">
+      {{#if resume.basics.email}}
+        <a href="mailto:{{resume.basics.email}}">{{resume.basics.email}}</a>
+      {{/if}}
+      {{#if resume.basics.phone}}
+        • {{resume.basics.phone}}
+      {{/if}}
+      {{#if resume.basics.url}}
+        • <a href="{{resume.basics.url}}" target="_blank">{{resume.basics.url}}</a>
+      {{/if}}
+    </div>
+  </header>
+
+  {{#if resume.basics.summary}}
+    <section>
+      <h2>Summary</h2>
+      <p>{{resume.basics.summary}}</p>
+    </section>
+  {{/if}}
+
+  {{#if resume.work}}
+    <section>
+      <h2>Experience</h2>
+      {{#each resume.work}}
+        <div class="job">
+          <div class="job-header">
+            <div>
+              <div class="position">{{position}}</div>
+              {{#if name}}
+                <div class="company">{{name}}</div>
+              {{/if}}
+            </div>
+            <div class="date">
+              {{startDate}}{{#if endDate}} - {{endDate}}{{else}} - Present{{/if}}
+            </div>
+          </div>
+          {{#if summary}}
+            <p>{{summary}}</p>
+          {{/if}}
+          {{#if highlights}}
+            <ul>
+              {{#each highlights}}
+                <li>{{this}}</li>
+              {{/each}}
+            </ul>
+          {{/if}}
+        </div>
+      {{/each}}
+    </section>
+  {{/if}}
+
+  {{#if resume.education}}
+    <section>
+      <h2>Education</h2>
+      {{#each resume.education}}
+        <div class="job">
+          <div class="job-header">
+            <div>
+              <div class="position">{{studyType}}{{#if area}} in {{area}}{{/if}}</div>
+              {{#if institution}}
+                <div class="company">{{institution}}</div>
+              {{/if}}
+            </div>
+            <div class="date">
+              {{startDate}}{{#if endDate}} - {{endDate}}{{/if}}
+            </div>
+          </div>
+        </div>
+      {{/each}}
+    </section>
+  {{/if}}
+
+  {{#if resume.skills}}
+    <section>
+      <h2>Skills</h2>
+      {{#each resume.skills}}
+        <p><strong>{{name}}:</strong> {{#each keywords}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</p>
+      {{/each}}
+    </section>
+  {{/if}}
+</body>
+</html>
+`;
+
+export function render(resume) {
+  return Handlebars.compile(template)({ resume });
+}
+```
+
+**4. Update `package.json`:**
+
+```json
+{
+  "name": "jsonresume-theme-myname",
+  "version": "1.0.0",
+  "description": "A clean and simple JSON Resume theme",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js"
+  },
+  "keywords": ["jsonresume", "jsonresume-theme", "resume", "cv"],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "handlebars": "^4.7.8"
+  }
+}
+```
+
+**5. Test locally:**
+
+```bash
+# Link your theme
+npm link
+
+# Test with resume-cli (if installed)
+resume serve --theme myname
+
+# Or test programmatically
+node -e "
+import('./index.js').then(theme => {
+  const resume = { basics: { name: 'John Doe' } };
+  console.log(theme.render(resume));
+});
+"
+```
+
+**6. Publish to npm:**
+
+```bash
+npm publish
+```
+
+### Advanced: Theme with Vite Bundling
+
+For more complex themes with external templates and styles:
+
+**1. Install Vite:**
+
+```bash
+npm install --save-dev vite
+```
+
+**2. Create `vite.config.js`:**
+
+```javascript
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+  build: {
+    lib: {
+      entry: './index.js',
+      formats: ['es', 'cjs'],
+      fileName: (format) => `index.${format === 'es' ? 'mjs' : 'cjs'}`,
+    },
+    rollupOptions: {
+      external: ['handlebars'],
+    },
+  },
+});
+```
+
+**3. Create separate template file `template.hbs`:**
+
+```handlebars
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8' />
+    <title>{{resume.basics.name}}</title>
+    <style>{{{css}}}</style>
+  </head>
+  <body>
+    <h1>{{resume.basics.name}}</h1>
+    {{#if resume.basics.summary}}
+      <p>{{resume.basics.summary}}</p>
+    {{/if}}
+  </body>
+</html>
+```
+
+**4. Create `style.css`:**
+
+```css
+body {
+  font-family: 'Georgia', serif;
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+h1 {
+  color: #2c3e50;
+  border-bottom: 3px solid #e74c3c;
+}
+```
+
+**5. Update `index.js` to use Vite imports:**
+
+```javascript
+import Handlebars from 'handlebars';
+import template from './template.hbs?raw';
+import css from './style.css?inline';
+
+export function render(resume) {
+  return Handlebars.compile(template)({
+    resume,
+    css,
+  });
+}
+```
+
+**6. Add build script to `package.json`:**
+
+```json
+{
+  "scripts": {
+    "build": "vite build",
+    "prepublishOnly": "npm run build"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs"
+}
+```
+
+**7. Build and publish:**
+
+```bash
+npm run build
+npm publish
+```
+
+### Theme Best Practices
+
+**Responsive Design:**
+
+```css
+/* Mobile-first approach */
+body {
+  font-size: 14px;
+  padding: 10px;
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+  body {
+    font-size: 16px;
+    padding: 20px;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  body {
+    max-width: 800px;
+    margin: 40px auto;
+  }
+}
+```
+
+**Print Optimization:**
+
+```css
+@media print {
+  body {
+    color: #000;
+    background: #fff;
+  }
+
+  /* Avoid page breaks inside elements */
+  .job,
+  .education-item {
+    page-break-inside: avoid;
+  }
+
+  /* Hide non-essential elements */
+  .no-print {
+    display: none;
+  }
+
+  /* Set page margins */
+  @page {
+    margin: 1cm;
+    size: A4 portrait;
+  }
+}
+```
+
+**Accessibility:**
+
+```html
+<header role="banner">
+  <h1>{{resume.basics.name}}</h1>
+</header>
+
+<main role="main">
+  <section aria-labelledby="experience-heading">
+    <h2 id="experience-heading">Experience</h2>
+    <!-- content -->
+  </section>
+</main>
+
+<footer role="contentinfo">
+  <p>Last updated: {{lastModified}}</p>
+</footer>
+```
+
+**Handle Missing Data:**
+
+```handlebars
+{{! Always check for optional fields }}
+{{#if resume.work}}
+  {{#each resume.work}}
+    <h3>{{position}}{{#if name}} at {{name}}{{/if}}</h3>
+
+    {{#if summary}}
+      <p>{{summary}}</p>
+    {{/if}}
+
+    {{#if highlights}}
+      <ul>
+        {{#each highlights}}
+          <li>{{this}}</li>
+        {{/each}}
+      </ul>
+    {{/if}}
+  {{/each}}
+{{else}}
+  <p>No work experience listed.</p>
+{{/if}}
+```
+
+### Working Examples
+
+Check these themes in the repository for reference:
+
+- **Simple**: `packages/jsonresume-theme-standard` - Minimal, clean design
+- **Professional**: `packages/jsonresume-theme-professional` - Vite bundling with modular structure
+- **Spartacus**: `packages/jsonresume-theme-spartacus` - Handlebars templates with partials
+- **Flat**: `packages/jsonresume-theme-flat` - Modern flat design
+
+### Submitting Your Theme
+
+1. **Ensure serverless compatibility** - No `fs` operations
+2. **Test thoroughly** with various resume structures
+3. **Add documentation** - README with screenshots
+4. **Publish to npm**
+5. **Open an issue** at [jsonresume/jsonresume.org](https://github.com/jsonresume/jsonresume.org/issues)
+
+See [Contributing Themes](/contributing#contributing-themes) for detailed migration guides.
+
+---
+
+## Validate JSON Programmatically
+
+Validate resume data against the JSON Resume schema in your applications.
+
+### Using AJV (Recommended)
+
+AJV is a fast JSON schema validator:
+
+```bash
+npm install ajv ajv-formats
+```
+
+**Basic validation:**
+
+```typescript
+import Ajv from 'ajv';
+import addFormats from 'ajv-formats';
+
+// Initialize AJV with JSON Resume schema
+const ajv = new Ajv({ allErrors: true });
+addFormats(ajv);
+
+// Fetch the official JSON Resume schema
+const schemaUrl =
+  'https://raw.githubusercontent.com/jsonresume/resume-schema/master/schema.json';
+const response = await fetch(schemaUrl);
+const schema = await response.json();
+
+// Compile the schema
+const validate = ajv.compile(schema);
+
+// Validate a resume
+const resume = {
+  basics: {
+    name: 'John Doe',
+    email: 'john@example.com',
+  },
+  work: [],
+  education: [],
+};
+
+const valid = validate(resume);
+
+if (valid) {
+  console.log('✅ Resume is valid');
+} else {
+  console.log('❌ Validation errors:');
+  console.log(validate.errors);
+}
+```
+
+**Advanced validation with custom error messages:**
+
+```typescript
+import Ajv from 'ajv';
+import addFormats from 'ajv-formats';
+
+class ResumeValidator {
+  private validate: any;
+
+  constructor(schema: object) {
+    const ajv = new Ajv({
+      allErrors: true,
+      verbose: true,
+      $data: true,
+    });
+    addFormats(ajv);
+    this.validate = ajv.compile(schema);
+  }
+
+  validateResume(resume: object): ValidationResult {
+    const valid = this.validate(resume);
+
+    if (valid) {
+      return { valid: true, errors: [] };
+    }
+
+    const errors = this.validate.errors.map((error: any) => ({
+      path: error.instancePath,
+      field:
+        error.params?.missingProperty || error.instancePath.split('/').pop(),
+      message: this.formatErrorMessage(error),
+      keyword: error.keyword,
+    }));
+
+    return { valid: false, errors };
+  }
+
+  private formatErrorMessage(error: any): string {
+    const { keyword, params, message } = error;
+
+    switch (keyword) {
+      case 'required':
+        return `Missing required field: ${params.missingProperty}`;
+      case 'type':
+        return `Invalid type: expected ${params.type}`;
+      case 'format':
+        return `Invalid format: ${message}`;
+      case 'minLength':
+        return `Value too short (minimum ${params.limit} characters)`;
+      default:
+        return message || 'Validation error';
+    }
+  }
+}
+
+interface ValidationResult {
+  valid: boolean;
+  errors: Array<{
+    path: string;
+    field: string;
+    message: string;
+    keyword: string;
+  }>;
+}
+
+// Usage
+const schema = await fetch(
+  'https://raw.githubusercontent.com/jsonresume/resume-schema/master/schema.json'
+).then((r) => r.json());
+const validator = new ResumeValidator(schema);
+
+const result = validator.validateResume(myResume);
+if (!result.valid) {
+  result.errors.forEach((error) => {
+    console.error(`${error.path}: ${error.message}`);
+  });
+}
+```
+
+### Using Zod (Type-Safe Alternative)
+
+Zod provides TypeScript-first schema validation:
+
+```bash
+npm install zod
+```
+
+**Define a Zod schema for JSON Resume:**
+
+```typescript
+import { z } from 'zod';
+
+// Basics schema
+const BasicsSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  label: z.string().optional(),
+  image: z.string().url('Invalid image URL').optional(),
+  email: z.string().email('Invalid email address').optional(),
+  phone: z.string().optional(),
+  url: z.string().url('Invalid URL').optional(),
+  summary: z.string().optional(),
+  location: z
+    .object({
+      address: z.string().optional(),
+      postalCode: z.string().optional(),
+      city: z.string().optional(),
+      countryCode: z.string().optional(),
+      region: z.string().optional(),
+    })
+    .optional(),
+  profiles: z
+    .array(
+      z.object({
+        network: z.string(),
+        username: z.string(),
+        url: z.string().url(),
+      })
+    )
+    .optional(),
+});
+
+// Work schema
+const WorkSchema = z.object({
+  name: z.string().optional(),
+  position: z.string().optional(),
+  url: z.string().url().optional(),
+  startDate: z.string().optional(),
+  endDate: z.string().optional(),
+  summary: z.string().optional(),
+  highlights: z.array(z.string()).optional(),
+});
+
+// Education schema
+const EducationSchema = z.object({
+  institution: z.string().optional(),
+  url: z.string().url().optional(),
+  area: z.string().optional(),
+  studyType: z.string().optional(),
+  startDate: z.string().optional(),
+  endDate: z.string().optional(),
+  score: z.string().optional(),
+  courses: z.array(z.string()).optional(),
+});
+
+// Skills schema
+const SkillsSchema = z.object({
+  name: z.string().optional(),
+  level: z.string().optional(),
+  keywords: z.array(z.string()).optional(),
+});
+
+// Complete resume schema
+const ResumeSchema = z.object({
+  basics: BasicsSchema,
+  work: z.array(WorkSchema).optional(),
+  education: z.array(EducationSchema).optional(),
+  skills: z.array(SkillsSchema).optional(),
+  volunteer: z.array(z.any()).optional(),
+  awards: z.array(z.any()).optional(),
+  publications: z.array(z.any()).optional(),
+  languages: z.array(z.any()).optional(),
+  interests: z.array(z.any()).optional(),
+  references: z.array(z.any()).optional(),
+  projects: z.array(z.any()).optional(),
+});
+
+// Export type
+export type Resume = z.infer<typeof ResumeSchema>;
+
+// Usage
+function validateResume(data: unknown): Resume {
+  try {
+    return ResumeSchema.parse(data);
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      console.error('Validation errors:');
+      error.errors.forEach((err) => {
+        console.error(`  ${err.path.join('.')}: ${err.message}`);
+      });
+    }
+    throw new Error('Invalid resume data');
+  }
+}
+
+// Example
+const resume = validateResume({
+  basics: {
+    name: 'John Doe',
+    email: 'invalid-email', // This will fail
+  },
+});
+```
+
+### Server-Side Validation Endpoint
+
+Create an API endpoint for validation:
+
+```typescript
+// app/api/validate/route.ts
+import { NextRequest, NextResponse } from 'next/server';
+import Ajv from 'ajv';
+import addFormats from 'ajv-formats';
+
+// Cache schema
+let cachedSchema: any = null;
+
+async function getSchema() {
+  if (!cachedSchema) {
+    const response = await fetch(
+      'https://raw.githubusercontent.com/jsonresume/resume-schema/master/schema.json'
+    );
+    cachedSchema = await response.json();
+  }
+  return cachedSchema;
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const resume = await request.json();
+    const schema = await getSchema();
+
+    const ajv = new Ajv({ allErrors: true });
+    addFormats(ajv);
+    const validate = ajv.compile(schema);
+
+    const valid = validate(resume);
+
+    if (valid) {
+      return NextResponse.json({ valid: true, errors: [] });
+    }
+
+    const errors =
+      validate.errors?.map((error) => ({
+        path: error.instancePath,
+        message: error.message,
+        keyword: error.keyword,
+        params: error.params,
+      })) || [];
+
+    return NextResponse.json({ valid: false, errors }, { status: 400 });
+  } catch (error) {
+    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+  }
+}
+```
+
+**Client usage:**
+
+```typescript
+async function validateMyResume(resume: object) {
+  const response = await fetch('/api/validate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(resume),
+  });
+
+  const result = await response.json();
+
+  if (result.valid) {
+    console.log('✅ Resume is valid!');
+  } else {
+    console.error('❌ Validation errors:', result.errors);
+  }
+
+  return result;
+}
+```
+
+---
+
+## Using TypeScript with JSON Resume
+
+TypeScript provides excellent developer experience with type safety and autocomplete.
+
+### Official TypeScript Types
+
+Install the official types package:
+
+```bash
+npm install --save-dev @types/resume-schema
+```
+
+**Usage:**
+
+```typescript
+import type { ResumeSchema } from '@types/resume-schema';
+
+const resume: ResumeSchema = {
+  basics: {
+    name: 'John Doe',
+    label: 'Software Engineer',
+    email: 'john@example.com',
+    phone: '(123) 456-7890',
+    url: 'https://johndoe.com',
+    summary: 'Experienced software engineer...',
+    location: {
+      city: 'San Francisco',
+      countryCode: 'US',
+      region: 'California',
+    },
+    profiles: [
+      {
+        network: 'GitHub',
+        username: 'johndoe',
+        url: 'https://github.com/johndoe',
+      },
+    ],
+  },
+  work: [
+    {
+      name: 'Acme Corp',
+      position: 'Senior Software Engineer',
+      url: 'https://acme.com',
+      startDate: '2020-01-01',
+      summary: 'Led development of...',
+      highlights: ['Improved performance by 50%', 'Mentored junior developers'],
+    },
+  ],
+  education: [
+    {
+      institution: 'Stanford University',
+      area: 'Computer Science',
+      studyType: 'Bachelor',
+      startDate: '2014-09-01',
+      endDate: '2018-06-01',
+    },
+  ],
+  skills: [
+    {
+      name: 'Web Development',
+      keywords: ['JavaScript', 'TypeScript', 'React', 'Node.js'],
+    },
+  ],
+};
+
+// TypeScript will enforce the schema
+// This would cause a type error:
+// resume.basics.email = 123; // Type 'number' is not assignable to type 'string'
+```
+
+### Custom Type Definitions
+
+Create your own enhanced types:
+
+```typescript
+// types/resume.ts
+export interface Resume {
+  basics: Basics;
+  work?: Work[];
+  education?: Education[];
+  skills?: Skill[];
+  volunteer?: Volunteer[];
+  awards?: Award[];
+  publications?: Publication[];
+  languages?: Language[];
+  interests?: Interest[];
+  references?: Reference[];
+  projects?: Project[];
+}
+
+export interface Basics {
+  name: string;
+  label?: string;
+  image?: string;
+  email?: string;
+  phone?: string;
+  url?: string;
+  summary?: string;
+  location?: Location;
+  profiles?: Profile[];
+}
+
+export interface Location {
+  address?: string;
+  postalCode?: string;
+  city?: string;
+  countryCode?: string;
+  region?: string;
+}
+
+export interface Profile {
+  network: string;
+  username: string;
+  url: string;
+}
+
+export interface Work {
+  name?: string;
+  position?: string;
+  url?: string;
+  startDate?: string;
+  endDate?: string;
+  summary?: string;
+  highlights?: string[];
+}
+
+export interface Education {
+  institution?: string;
+  url?: string;
+  area?: string;
+  studyType?: string;
+  startDate?: string;
+  endDate?: string;
+  score?: string;
+  courses?: string[];
+}
+
+export interface Skill {
+  name?: string;
+  level?: string;
+  keywords?: string[];
+}
+
+export interface Volunteer {
+  organization?: string;
+  position?: string;
+  url?: string;
+  startDate?: string;
+  endDate?: string;
+  summary?: string;
+  highlights?: string[];
+}
+
+export interface Award {
+  title?: string;
+  date?: string;
+  awarder?: string;
+  summary?: string;
+}
+
+export interface Publication {
+  name?: string;
+  publisher?: string;
+  releaseDate?: string;
+  url?: string;
+  summary?: string;
+}
+
+export interface Language {
+  language?: string;
+  fluency?: string;
+}
+
+export interface Interest {
+  name?: string;
+  keywords?: string[];
+}
+
+export interface Reference {
+  name?: string;
+  reference?: string;
+}
+
+export interface Project {
+  name?: string;
+  description?: string;
+  highlights?: string[];
+  keywords?: string[];
+  startDate?: string;
+  endDate?: string;
+  url?: string;
+  roles?: string[];
+  entity?: string;
+  type?: string;
+}
+```
+
+### Type-Safe Resume Builder
+
+Build a type-safe resume builder:
+
+```typescript
+import type { Resume, Basics, Work, Education, Skill } from './types/resume';
+
+class ResumeBuilder {
+  private resume: Partial<Resume> = {};
+
+  setBasics(basics: Basics): this {
+    this.resume.basics = basics;
+    return this;
+  }
+
+  addWork(work: Work): this {
+    if (!this.resume.work) {
+      this.resume.work = [];
+    }
+    this.resume.work.push(work);
+    return this;
+  }
+
+  addEducation(education: Education): this {
+    if (!this.resume.education) {
+      this.resume.education = [];
+    }
+    this.resume.education.push(education);
+    return this;
+  }
+
+  addSkill(skill: Skill): this {
+    if (!this.resume.skills) {
+      this.resume.skills = [];
+    }
+    this.resume.skills.push(skill);
+    return this;
+  }
+
+  build(): Resume {
+    if (!this.resume.basics) {
+      throw new Error('Basics section is required');
+    }
+    return this.resume as Resume;
+  }
+}
+
+// Usage
+const resume = new ResumeBuilder()
+  .setBasics({
+    name: 'Jane Smith',
+    label: 'Full Stack Developer',
+    email: 'jane@example.com',
+  })
+  .addWork({
+    name: 'Tech Corp',
+    position: 'Lead Developer',
+    startDate: '2021-01-01',
+    highlights: ['Built scalable microservices', 'Led team of 5 engineers'],
+  })
+  .addSkill({
+    name: 'Frontend',
+    keywords: ['React', 'Vue', 'TypeScript'],
+  })
+  .build();
+```
+
+### Type Guards for Runtime Validation
+
+Combine TypeScript types with runtime checks:
+
+```typescript
+import type { Resume, Work } from './types/resume';
+
+// Type guard functions
+export function isValidBasics(obj: any): obj is Resume['basics'] {
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    typeof obj.name === 'string' &&
+    obj.name.length > 0
+  );
+}
+
+export function isValidWork(obj: any): obj is Work {
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    (obj.name === undefined || typeof obj.name === 'string') &&
+    (obj.position === undefined || typeof obj.position === 'string')
+  );
+}
+
+export function isValidResume(obj: any): obj is Resume {
+  if (typeof obj !== 'object' || obj === null) {
+    return false;
+  }
+
+  if (!isValidBasics(obj.basics)) {
+    return false;
+  }
+
+  if (obj.work && !Array.isArray(obj.work)) {
+    return false;
+  }
+
+  if (obj.work && !obj.work.every(isValidWork)) {
+    return false;
+  }
+
+  return true;
+}
+
+// Usage
+function processResume(data: unknown) {
+  if (!isValidResume(data)) {
+    throw new Error('Invalid resume data');
+  }
+
+  // TypeScript now knows `data` is Resume
+  console.log(`Processing resume for ${data.basics.name}`);
+
+  data.work?.forEach((job) => {
+    console.log(`  - ${job.position} at ${job.name}`);
+  });
+}
+```
+
+---
+
+## Building Applications with JSON Resume
+
+Learn how to build applications that consume and display JSON Resume data.
+
+### Fetching Resume Data
+
+**From GitHub Gist:**
+
+```typescript
+async function fetchResumeFromGist(username: string): Promise<Resume> {
+  const gistUrl = `https://gist.github.com/${username}/resume.json/raw`;
+
+  const response = await fetch(gistUrl);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch resume: ${response.statusText}`);
+  }
+
+  const resume = await response.json();
+  return resume;
+}
+
+// Usage
+const resume = await fetchResumeFromGist('thomasdavis');
+```
+
+**From JSON Resume Registry:**
+
+```typescript
+async function fetchResumeFromRegistry(username: string): Promise<Resume> {
+  const url = `https://jsonresume.org/${username}.json`;
+
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Resume not found for ${username}`);
+  }
+
+  const resume = await response.json();
+  return resume;
+}
+
+// Usage
+const resume = await fetchResumeFromRegistry('johndoe');
+```
+
+**With error handling and retries:**
+
+```typescript
+async function fetchResumeWithRetry(
+  username: string,
+  maxAttempts = 3
+): Promise<Resume> {
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      const url = `https://jsonresume.org/${username}.json`;
+      const response = await fetch(url, {
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        if (response.status === 404) {
+          throw new Error(`Resume not found for user: ${username}`);
+        }
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const resume = await response.json();
+      return resume;
+    } catch (error) {
+      if (attempt === maxAttempts) {
+        throw error;
+      }
+
+      // Exponential backoff
+      const delay = Math.pow(2, attempt) * 1000;
+      await new Promise((resolve) => setTimeout(resolve, delay));
+    }
+  }
+
+  throw new Error('Failed to fetch resume after retries');
+}
+```
+
+### Querying Resume Data
+
+**Extract specific information:**
+
+```typescript
+import type { Resume } from './types/resume';
+
+class ResumeQuery {
+  constructor(private resume: Resume) {}
+
+  // Get all companies worked at
+  getCompanies(): string[] {
+    return (
+      this.resume.work
+        ?.map((job) => job.name)
+        .filter((name): name is string => !!name) || []
+    );
+  }
+
+  // Get current job
+  getCurrentJob() {
+    return this.resume.work?.find((job) => !job.endDate);
+  }
+
+  // Calculate years of experience
+  getYearsOfExperience(): number {
+    if (!this.resume.work) return 0;
+
+    const experiences = this.resume.work.map((job) => {
+      const start = new Date(job.startDate || '');
+      const end = job.endDate ? new Date(job.endDate) : new Date();
+      return end.getTime() - start.getTime();
+    });
+
+    const totalMs = experiences.reduce((sum, exp) => sum + exp, 0);
+    return Math.floor(totalMs / (1000 * 60 * 60 * 24 * 365));
+  }
+
+  // Get all skills
+  getAllSkills(): string[] {
+    const skills = new Set<string>();
+
+    this.resume.skills?.forEach((skill) => {
+      skill.keywords?.forEach((keyword) => skills.add(keyword));
+    });
+
+    return Array.from(skills);
+  }
+
+  // Filter jobs by keyword
+  filterJobsByKeyword(keyword: string) {
+    return (
+      this.resume.work?.filter((job) => {
+        const text = [
+          job.name,
+          job.position,
+          job.summary,
+          ...(job.highlights || []),
+        ]
+          .join(' ')
+          .toLowerCase();
+
+        return text.includes(keyword.toLowerCase());
+      }) || []
+    );
+  }
+
+  // Get education summary
+  getEducationSummary() {
+    return (
+      this.resume.education?.map((edu) => ({
+        degree: `${edu.studyType} in ${edu.area}`,
+        institution: edu.institution,
+        year: edu.endDate?.split('-')[0],
+      })) || []
+    );
+  }
+}
+
+// Usage
+const query = new ResumeQuery(resume);
+console.log('Companies:', query.getCompanies());
+console.log('Years of experience:', query.getYearsOfExperience());
+console.log('Skills:', query.getAllSkills());
+console.log('Current job:', query.getCurrentJob());
+```
+
+### Building a Resume API Client
+
+Create a comprehensive API client:
+
+```typescript
+import type { Resume } from './types/resume';
+
+interface FetchOptions {
+  timeout?: number;
+  retries?: number;
+  cache?: boolean;
+}
+
+export class JSONResumeClient {
+  private baseUrl: string;
+  private cache: Map<string, { data: Resume; timestamp: number }>;
+  private cacheDuration: number;
+
+  constructor(baseUrl = 'https://jsonresume.org', cacheDuration = 300000) {
+    this.baseUrl = baseUrl;
+    this.cache = new Map();
+    this.cacheDuration = cacheDuration;
+  }
+
+  async getResume(
+    username: string,
+    options: FetchOptions = {}
+  ): Promise<Resume> {
+    const { timeout = 5000, retries = 3, cache = true } = options;
+
+    // Check cache
+    if (cache) {
+      const cached = this.cache.get(username);
+      if (cached && Date.now() - cached.timestamp < this.cacheDuration) {
+        return cached.data;
+      }
+    }
+
+    // Fetch with retries
+    for (let attempt = 1; attempt <= retries; attempt++) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+        const response = await fetch(`${this.baseUrl}/${username}.json`, {
+          signal: controller.signal,
+          headers: {
+            Accept: 'application/json',
+          },
+        });
+
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const resume: Resume = await response.json();
+
+        // Update cache
+        if (cache) {
+          this.cache.set(username, {
+            data: resume,
+            timestamp: Date.now(),
+          });
+        }
+
+        return resume;
+      } catch (error) {
+        if (attempt === retries) {
+          throw new Error(`Failed to fetch resume for ${username}: ${error}`);
+        }
+        await new Promise((resolve) => setTimeout(resolve, 1000 * attempt));
+      }
+    }
+
+    throw new Error('Unreachable');
+  }
+
+  async getResumeHTML(username: string, theme = 'standard'): Promise<string> {
+    const url = `${this.baseUrl}/${username}?theme=${theme}`;
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch HTML: ${response.statusText}`);
+    }
+
+    return response.text();
+  }
+
+  async getResumePDF(username: string, theme = 'standard'): Promise<Blob> {
+    const url = `${this.baseUrl}/${username}.pdf?theme=${theme}`;
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch PDF: ${response.statusText}`);
+    }
+
+    return response.blob();
+  }
+
+  clearCache(username?: string) {
+    if (username) {
+      this.cache.delete(username);
+    } else {
+      this.cache.clear();
+    }
+  }
+}
+
+// Usage
+const client = new JSONResumeClient();
+
+// Get JSON resume
+const resume = await client.getResume('johndoe');
+
+// Get HTML with custom theme
+const html = await client.getResumeHTML('johndoe', 'professional');
+
+// Download PDF
+const pdfBlob = await client.getResumePDF('johndoe', 'elegant');
+const pdfUrl = URL.createObjectURL(pdfBlob);
+window.open(pdfUrl);
+
+// Clear cache
+client.clearCache('johndoe');
+```
+
+---
+
+## Language-Specific Integration
+
+### Parsing JSON Resume in Python
+
+**Using the `json` module:**
+
+```python
+import json
+import requests
+from typing import Dict, List, Optional
+from dataclasses import dataclass, field
+
+@dataclass
+class Basics:
+    name: str
+    label: Optional[str] = None
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    url: Optional[str] = None
+    summary: Optional[str] = None
+
+@dataclass
+class Work:
+    name: Optional[str] = None
+    position: Optional[str] = None
+    url: Optional[str] = None
+    start_date: Optional[str] = None
+    end_date: Optional[str] = None
+    summary: Optional[str] = None
+    highlights: List[str] = field(default_factory=list)
+
+@dataclass
+class Education:
+    institution: Optional[str] = None
+    area: Optional[str] = None
+    study_type: Optional[str] = None
+    start_date: Optional[str] = None
+    end_date: Optional[str] = None
+
+@dataclass
+class Skill:
+    name: Optional[str] = None
+    level: Optional[str] = None
+    keywords: List[str] = field(default_factory=list)
+
+@dataclass
+class Resume:
+    basics: Basics
+    work: List[Work] = field(default_factory=list)
+    education: List[Education] = field(default_factory=list)
+    skills: List[Skill] = field(default_factory=list)
+
+class JSONResumeParser:
+    """Parse and validate JSON Resume data"""
+
+    @staticmethod
+    def from_file(filepath: str) -> Resume:
+        """Load resume from JSON file"""
+        with open(filepath, 'r') as f:
+            data = json.load(f)
+        return JSONResumeParser.from_dict(data)
+
+    @staticmethod
+    def from_url(username: str) -> Resume:
+        """Fetch resume from JSONResume.org"""
+        url = f"https://jsonresume.org/{username}.json"
+        response = requests.get(url)
+        response.raise_for_status()
+        data = response.json()
+        return JSONResumeParser.from_dict(data)
+
+    @staticmethod
+    def from_dict(data: Dict) -> Resume:
+        """Parse resume from dictionary"""
+        basics_data = data.get('basics', {})
+        basics = Basics(
+            name=basics_data.get('name', ''),
+            label=basics_data.get('label'),
+            email=basics_data.get('email'),
+            phone=basics_data.get('phone'),
+            url=basics_data.get('url'),
+            summary=basics_data.get('summary'),
+        )
+
+        work = [
+            Work(
+                name=w.get('name'),
+                position=w.get('position'),
+                url=w.get('url'),
+                start_date=w.get('startDate'),
+                end_date=w.get('endDate'),
+                summary=w.get('summary'),
+                highlights=w.get('highlights', []),
+            )
+            for w in data.get('work', [])
+        ]
+
+        education = [
+            Education(
+                institution=e.get('institution'),
+                area=e.get('area'),
+                study_type=e.get('studyType'),
+                start_date=e.get('startDate'),
+                end_date=e.get('endDate'),
+            )
+            for e in data.get('education', [])
+        ]
+
+        skills = [
+            Skill(
+                name=s.get('name'),
+                level=s.get('level'),
+                keywords=s.get('keywords', []),
+            )
+            for s in data.get('skills', [])
+        ]
+
+        return Resume(
+            basics=basics,
+            work=work,
+            education=education,
+            skills=skills,
+        )
+
+# Usage
+parser = JSONResumeParser()
+
+# From URL
+resume = parser.from_url('thomasdavis')
+print(f"Name: {resume.basics.name}")
+print(f"Label: {resume.basics.label}")
+print(f"Experience: {len(resume.work)} jobs")
+
+# From file
+resume = parser.from_file('resume.json')
+
+# Query data
+for job in resume.work:
+    print(f"{job.position} at {job.name}")
+
+# Extract skills
+all_skills = []
+for skill in resume.skills:
+    all_skills.extend(skill.keywords)
+print(f"Skills: {', '.join(all_skills)}")
+```
+
+**Using Pydantic for validation:**
+
+```python
+from pydantic import BaseModel, EmailStr, HttpUrl
+from typing import List, Optional
+import requests
+
+class Location(BaseModel):
+    address: Optional[str] = None
+    postal_code: Optional[str] = None
+    city: Optional[str] = None
+    country_code: Optional[str] = None
+    region: Optional[str] = None
+
+class Profile(BaseModel):
+    network: str
+    username: str
+    url: HttpUrl
+
+class Basics(BaseModel):
+    name: str
+    label: Optional[str] = None
+    image: Optional[HttpUrl] = None
+    email: Optional[EmailStr] = None
+    phone: Optional[str] = None
+    url: Optional[HttpUrl] = None
+    summary: Optional[str] = None
+    location: Optional[Location] = None
+    profiles: Optional[List[Profile]] = []
+
+class Work(BaseModel):
+    name: Optional[str] = None
+    position: Optional[str] = None
+    url: Optional[HttpUrl] = None
+    start_date: Optional[str] = None
+    end_date: Optional[str] = None
+    summary: Optional[str] = None
+    highlights: Optional[List[str]] = []
+
+class Resume(BaseModel):
+    basics: Basics
+    work: Optional[List[Work]] = []
+    # ... other fields
+
+    class Config:
+        # Handle camelCase to snake_case conversion
+        alias_generator = lambda x: ''.join(['_' + c.lower() if c.isupper() else c for c in x]).lstrip('_')
+        populate_by_name = True
+
+# Usage with automatic validation
+def fetch_and_validate_resume(username: str) -> Resume:
+    response = requests.get(f"https://jsonresume.org/{username}.json")
+    response.raise_for_status()
+
+    # Pydantic will validate the data
+    resume = Resume(**response.json())
+    return resume
+
+# This will raise validation errors if data is invalid
+resume = fetch_and_validate_resume('johndoe')
+```
+
+### Parsing in PHP/Laravel
+
+**Basic PHP parser:**
+
+```php
+<?php
+
+namespace App\Services;
+
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Collection;
+
+class JSONResumeParser
+{
+    public static function fromUrl(string $username): array
+    {
+        $url = "https://jsonresume.org/{$username}.json";
+        $response = Http::get($url);
+
+        if ($response->failed()) {
+            throw new \Exception("Failed to fetch resume for {$username}");
+        }
+
+        return $response->json();
+    }
+
+    public static function fromFile(string $filepath): array
+    {
+        $content = file_get_contents($filepath);
+        return json_decode($content, true);
+    }
+
+    public static function getBasics(array $resume): array
+    {
+        return $resume['basics'] ?? [];
+    }
+
+    public static function getWork(array $resume): array
+    {
+        return $resume['work'] ?? [];
+    }
+
+    public static function getEducation(array $resume): array
+    {
+        return $resume['education'] ?? [];
+    }
+
+    public static function getSkills(array $resume): array
+    {
+        return $resume['skills'] ?? [];
+    }
+
+    public static function getAllSkillKeywords(array $resume): array
+    {
+        $skills = self::getSkills($resume);
+        $keywords = [];
+
+        foreach ($skills as $skill) {
+            if (isset($skill['keywords'])) {
+                $keywords = array_merge($keywords, $skill['keywords']);
+            }
+        }
+
+        return array_unique($keywords);
+    }
+}
+
+// Usage
+$resume = JSONResumeParser::fromUrl('thomasdavis');
+$basics = JSONResumeParser::getBasics($resume);
+$skills = JSONResumeParser::getAllSkillKeywords($resume);
+
+echo "Name: " . $basics['name'] . "\n";
+echo "Skills: " . implode(', ', $skills) . "\n";
+```
+
+**Laravel model with casting:**
+
+```php
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\AsCollection;
+
+class Resume extends Model
+{
+    protected $fillable = [
+        'user_id',
+        'data',
+    ];
+
+    protected $casts = [
+        'data' => 'array',
+    ];
+
+    // Accessors
+    public function getBasicsAttribute(): array
+    {
+        return $this->data['basics'] ?? [];
+    }
+
+    public function getNameAttribute(): ?string
+    {
+        return $this->basics['name'] ?? null;
+    }
+
+    public function getWorkAttribute(): array
+    {
+        return $this->data['work'] ?? [];
+    }
+
+    public function getSkillsAttribute(): array
+    {
+        return $this->data['skills'] ?? [];
+    }
+
+    // Computed properties
+    public function getCurrentJob(): ?array
+    {
+        foreach ($this->work as $job) {
+            if (!isset($job['endDate'])) {
+                return $job;
+            }
+        }
+        return null;
+    }
+
+    public function getYearsOfExperience(): int
+    {
+        $totalDays = 0;
+
+        foreach ($this->work as $job) {
+            $start = new \DateTime($job['startDate'] ?? 'now');
+            $end = isset($job['endDate'])
+                ? new \DateTime($job['endDate'])
+                : new \DateTime();
+
+            $diff = $start->diff($end);
+            $totalDays += $diff->days;
+        }
+
+        return floor($totalDays / 365);
+    }
+}
+
+// Usage in controller
+public function show($username)
+{
+    $resumeData = JSONResumeParser::fromUrl($username);
+
+    $resume = Resume::create([
+        'user_id' => auth()->id(),
+        'data' => $resumeData,
+    ]);
+
+    return view('resume.show', [
+        'name' => $resume->name,
+        'currentJob' => $resume->getCurrentJob(),
+        'experience' => $resume->getYearsOfExperience(),
+    ]);
+}
+```
+
+**Laravel API resource:**
+
+```php
+<?php
+
+namespace App\Http\Resources;
+
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class ResumeResource extends JsonResource
+{
+    public function toArray($request): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->data['basics']['name'] ?? null,
+            'label' => $this->data['basics']['label'] ?? null,
+            'email' => $this->data['basics']['email'] ?? null,
+            'summary' => $this->data['basics']['summary'] ?? null,
+            'work' => collect($this->data['work'] ?? [])->map(function ($job) {
+                return [
+                    'company' => $job['name'] ?? null,
+                    'position' => $job['position'] ?? null,
+                    'start' => $job['startDate'] ?? null,
+                    'end' => $job['endDate'] ?? null,
+                    'current' => !isset($job['endDate']),
+                ];
+            }),
+            'skills' => collect($this->data['skills'] ?? [])
+                ->pluck('keywords')
+                ->flatten()
+                ->unique()
+                ->values(),
+            'years_experience' => $this->getYearsOfExperience(),
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+        ];
+    }
+}
+```
+
+---
+
+## Rendering JSON Resume in React
+
+Build React components to display resume data beautifully.
+
+### Basic Resume Component
+
+```tsx
+import React from 'react';
+import type { Resume } from './types/resume';
+
+interface ResumeViewerProps {
+  resume: Resume;
+}
+
+export function ResumeViewer({ resume }: ResumeViewerProps) {
+  const { basics, work, education, skills } = resume;
+
+  return (
+    <div className="max-w-4xl mx-auto p-8 bg-white shadow-lg">
+      {/* Header */}
+      <header className="border-b-4 border-blue-600 pb-6 mb-8">
+        <h1 className="text-4xl font-bold text-gray-900">{basics.name}</h1>
+        {basics.label && (
+          <p className="text-xl text-gray-600 mt-2">{basics.label}</p>
+        )}
+
+        <div className="flex gap-4 mt-4 text-gray-600">
+          {basics.email && (
+            <a href={`mailto:${basics.email}`} className="hover:text-blue-600">
+              {basics.email}
+            </a>
+          )}
+          {basics.phone && <span>{basics.phone}</span>}
+          {basics.url && (
+            <a
+              href={basics.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-blue-600"
+            >
+              {basics.url}
+            </a>
+          )}
+        </div>
+      </header>
+
+      {/* Summary */}
+      {basics.summary && (
+        <section className="mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Summary</h2>
+          <p className="text-gray-700 leading-relaxed">{basics.summary}</p>
+        </section>
+      )}
+
+      {/* Experience */}
+      {work && work.length > 0 && (
+        <section className="mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Experience</h2>
+          <div className="space-y-6">
+            {work.map((job, index) => (
+              <div key={index} className="border-l-4 border-gray-200 pl-4">
+                <div className="flex justify-between items-baseline">
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-900">
+                      {job.position}
+                    </h3>
+                    {job.name && <p className="text-gray-600">{job.name}</p>}
+                  </div>
+                  <span className="text-gray-500 text-sm">
+                    {job.startDate}
+                    {job.endDate ? ` - ${job.endDate}` : ' - Present'}
+                  </span>
+                </div>
+
+                {job.summary && (
+                  <p className="mt-2 text-gray-700">{job.summary}</p>
+                )}
+
+                {job.highlights && job.highlights.length > 0 && (
+                  <ul className="mt-2 list-disc list-inside space-y-1">
+                    {job.highlights.map((highlight, idx) => (
+                      <li key={idx} className="text-gray-700">
+                        {highlight}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Education */}
+      {education && education.length > 0 && (
+        <section className="mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Education</h2>
+          <div className="space-y-4">
+            {education.map((edu, index) => (
+              <div key={index}>
+                <div className="flex justify-between items-baseline">
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-900">
+                      {edu.studyType}
+                      {edu.area && ` in ${edu.area}`}
+                    </h3>
+                    {edu.institution && (
+                      <p className="text-gray-600">{edu.institution}</p>
+                    )}
+                  </div>
+                  <span className="text-gray-500 text-sm">
+                    {edu.startDate}
+                    {edu.endDate && ` - ${edu.endDate}`}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Skills */}
+      {skills && skills.length > 0 && (
+        <section className="mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Skills</h2>
+          <div className="space-y-3">
+            {skills.map((skill, index) => (
+              <div key={index}>
+                <h3 className="font-semibold text-gray-900">{skill.name}</h3>
+                {skill.keywords && (
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {skill.keywords.map((keyword, idx) => (
+                      <span
+                        key={idx}
+                        className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
+                      >
+                        {keyword}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+    </div>
+  );
+}
+```
+
+### Advanced: Resume Component with Hooks
+
+```tsx
+import React, { useState, useEffect } from 'react';
+import type { Resume } from './types/resume';
+
+interface UseResumeResult {
+  resume: Resume | null;
+  loading: boolean;
+  error: Error | null;
+}
+
+// Custom hook for fetching resume
+function useResume(username: string): UseResumeResult {
+  const [resume, setResume] = useState<Resume | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function fetchResume() {
+      try {
+        setLoading(true);
+        const response = await fetch(`https://jsonresume.org/${username}.json`);
+
+        if (!response.ok) {
+          throw new Error(`Resume not found for ${username}`);
+        }
+
+        const data = await response.json();
+
+        if (!cancelled) {
+          setResume(data);
+          setError(null);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError(err instanceof Error ? err : new Error('Unknown error'));
+          setResume(null);
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    }
+
+    fetchResume();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [username]);
+
+  return { resume, loading, error };
+}
+
+// Main component
+interface ResumePageProps {
+  username: string;
+}
+
+export function ResumePage({ username }: ResumePageProps) {
+  const { resume, loading, error } = useResume(username);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-red-600 mb-2">
+            Error Loading Resume
+          </h2>
+          <p className="text-gray-600">{error.message}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!resume) {
+    return null;
+  }
+
+  return <ResumeViewer resume={resume} />;
+}
+```
+
+### Component Library with Storybook
+
+Create reusable resume components:
+
+```tsx
+// components/ResumeHeader.tsx
+import React from 'react';
+import type { Basics } from './types/resume';
+
+interface ResumeHeaderProps {
+  basics: Basics;
+}
+
+export function ResumeHeader({ basics }: ResumeHeaderProps) {
+  return (
+    <header className="border-b-4 border-blue-600 pb-6 mb-8">
+      <h1 className="text-4xl font-bold text-gray-900">{basics.name}</h1>
+      {basics.label && (
+        <p className="text-xl text-gray-600 mt-2">{basics.label}</p>
+      )}
+      <ContactInfo basics={basics} />
+    </header>
+  );
+}
+
+// components/ContactInfo.tsx
+function ContactInfo({ basics }: { basics: Basics }) {
+  const items = [
+    basics.email && {
+      type: 'email',
+      value: basics.email,
+      href: `mailto:${basics.email}`,
+    },
+    basics.phone && {
+      type: 'phone',
+      value: basics.phone,
+    },
+    basics.url && {
+      type: 'url',
+      value: basics.url,
+      href: basics.url,
+    },
+  ].filter(Boolean);
+
+  return (
+    <div className="flex gap-4 mt-4 text-gray-600">
+      {items.map((item, index) =>
+        item.href ? (
+          <a
+            key={index}
+            href={item.href}
+            className="hover:text-blue-600"
+            target={item.type === 'url' ? '_blank' : undefined}
+            rel={item.type === 'url' ? 'noopener noreferrer' : undefined}
+          >
+            {item.value}
+          </a>
+        ) : (
+          <span key={index}>{item.value}</span>
+        )
+      )}
+    </div>
+  );
+}
+
+// components/WorkExperience.tsx
+import type { Work } from './types/resume';
+
+interface WorkExperienceProps {
+  work: Work[];
+}
+
+export function WorkExperience({ work }: WorkExperienceProps) {
+  if (!work || work.length === 0) return null;
+
+  return (
+    <section className="mb-8">
+      <h2 className="text-2xl font-bold text-gray-900 mb-4">Experience</h2>
+      <div className="space-y-6">
+        {work.map((job, index) => (
+          <JobItem key={index} job={job} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function JobItem({ job }: { job: Work }) {
+  return (
+    <div className="border-l-4 border-gray-200 pl-4 hover:border-blue-600 transition-colors">
+      <div className="flex justify-between items-baseline flex-wrap gap-2">
+        <div>
+          <h3 className="text-xl font-semibold text-gray-900">
+            {job.position}
+          </h3>
+          {job.name && <p className="text-gray-600">{job.name}</p>}
+        </div>
+        <span className="text-gray-500 text-sm whitespace-nowrap">
+          {formatDateRange(job.startDate, job.endDate)}
+        </span>
+      </div>
+
+      {job.summary && <p className="mt-2 text-gray-700">{job.summary}</p>}
+
+      {job.highlights && job.highlights.length > 0 && (
+        <ul className="mt-2 list-disc list-inside space-y-1">
+          {job.highlights.map((highlight, idx) => (
+            <li key={idx} className="text-gray-700">
+              {highlight}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+function formatDateRange(
+  start: string | undefined,
+  end: string | undefined
+): string {
+  if (!start) return '';
+  return end ? `${start} - ${end}` : `${start} - Present`;
+}
+
+// components/Skills.tsx
+import type { Skill } from './types/resume';
+
+interface SkillsProps {
+  skills: Skill[];
+}
+
+export function Skills({ skills }: SkillsProps) {
+  if (!skills || skills.length === 0) return null;
+
+  return (
+    <section className="mb-8">
+      <h2 className="text-2xl font-bold text-gray-900 mb-4">Skills</h2>
+      <div className="space-y-3">
+        {skills.map((skill, index) => (
+          <SkillItem key={index} skill={skill} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function SkillItem({ skill }: { skill: Skill }) {
+  return (
+    <div>
+      <h3 className="font-semibold text-gray-900">{skill.name}</h3>
+      {skill.keywords && (
+        <div className="flex flex-wrap gap-2 mt-2">
+          {skill.keywords.map((keyword, idx) => (
+            <span
+              key={idx}
+              className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
+            >
+              {keyword}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+**Storybook stories:**
+
+```tsx
+// components/ResumeHeader.stories.tsx
+import type { Meta, StoryObj } from '@storybook/react';
+import { ResumeHeader } from './ResumeHeader';
+
+const meta: Meta<typeof ResumeHeader> = {
+  title: 'Resume/ResumeHeader',
+  component: ResumeHeader,
+  parameters: {
+    layout: 'padded',
+  },
+};
+
+export default meta;
+type Story = StoryObj<typeof ResumeHeader>;
+
+export const Default: Story = {
+  args: {
+    basics: {
+      name: 'John Doe',
+      label: 'Software Engineer',
+      email: 'john@example.com',
+      phone: '(123) 456-7890',
+      url: 'https://johndoe.com',
+    },
+  },
+};
+
+export const Minimal: Story = {
+  args: {
+    basics: {
+      name: 'Jane Smith',
+    },
+  },
+};
+```
+
+---
+
+## Handling Schema Migrations
+
+As the JSON Resume schema evolves, handle version changes gracefully.
+
+### Schema Version Detection
+
+```typescript
+interface SchemaVersion {
+  major: number;
+  minor: number;
+  patch: number;
+}
+
+function detectSchemaVersion(resume: any): SchemaVersion | null {
+  // Check for $schema field
+  if (resume.$schema) {
+    const match = resume.$schema.match(/v?(\d+)\.(\d+)\.(\d+)/);
+    if (match) {
+      return {
+        major: parseInt(match[1]),
+        minor: parseInt(match[2]),
+        patch: parseInt(match[3]),
+      };
+    }
+  }
+
+  // Infer version from structure
+  if (resume.meta?.version) {
+    const [major, minor, patch] = resume.meta.version.split('.').map(Number);
+    return { major, minor, patch };
+  }
+
+  // Default to v1.0.0
+  return { major: 1, minor: 0, patch: 0 };
+}
+
+function isVersionCompatible(version: SchemaVersion): boolean {
+  // Only accept v1.x.x
+  return version.major === 1;
+}
+```
+
+### Migration Functions
+
+```typescript
+type Resume = any; // Your resume type
+
+interface Migration {
+  from: string;
+  to: string;
+  migrate: (resume: Resume) => Resume;
+}
+
+const migrations: Migration[] = [
+  {
+    from: '1.0.0',
+    to: '1.1.0',
+    migrate: (resume) => {
+      // Example: Add new optional field
+      return {
+        ...resume,
+        meta: {
+          ...resume.meta,
+          version: '1.1.0',
+          lastModified: new Date().toISOString(),
+        },
+      };
+    },
+  },
+  {
+    from: '1.1.0',
+    to: '1.2.0',
+    migrate: (resume) => {
+      // Example: Rename field
+      const work = resume.work?.map((job: any) => ({
+        ...job,
+        company: job.name, // Rename 'name' to 'company'
+        name: undefined,
+      }));
+
+      return {
+        ...resume,
+        work,
+        meta: {
+          ...resume.meta,
+          version: '1.2.0',
+        },
+      };
+    },
+  },
+];
+
+function migrateResume(resume: Resume, targetVersion: string): Resume {
+  const currentVersion = detectSchemaVersion(resume);
+  if (!currentVersion) {
+    throw new Error('Cannot detect schema version');
+  }
+
+  const currentVersionStr = `${currentVersion.major}.${currentVersion.minor}.${currentVersion.patch}`;
+
+  if (currentVersionStr === targetVersion) {
+    return resume; // Already at target version
+  }
+
+  let migratedResume = { ...resume };
+
+  // Apply migrations in sequence
+  for (const migration of migrations) {
+    if (
+      migration.to === targetVersion ||
+      needsMigration(currentVersionStr, migration.from, targetVersion)
+    ) {
+      migratedResume = migration.migrate(migratedResume);
+    }
+  }
+
+  return migratedResume;
+}
+
+function needsMigration(
+  current: string,
+  migrationFrom: string,
+  target: string
+): boolean {
+  const parse = (v: string) => v.split('.').map(Number);
+  const [cMaj, cMin] = parse(current);
+  const [mMaj, mMin] = parse(migrationFrom);
+  const [tMaj, tMin] = parse(target);
+
+  if (cMaj < mMaj || (cMaj === mMaj && cMin < mMin)) {
+    return false; // Current version is before this migration
+  }
+
+  if (tMaj < mMaj || (tMaj === mMaj && tMin < mMin)) {
+    return false; // Target version is before this migration
+  }
+
+  return true;
+}
+```
+
+### Backward Compatibility
+
+```typescript
+class ResumeAdapter {
+  /**
+   * Normalize resume data to current schema version
+   */
+  static normalize(resume: any): Resume {
+    const version = detectSchemaVersion(resume);
+
+    if (!version) {
+      return this.normalizeLegacy(resume);
+    }
+
+    if (version.major === 1) {
+      return this.normalizeV1(resume);
+    }
+
+    throw new Error(`Unsupported schema version: ${version.major}`);
+  }
+
+  private static normalizeLegacy(resume: any): Resume {
+    // Handle resumes without version info
+    return {
+      $schema:
+        'https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json',
+      basics: resume.basics || {},
+      work: resume.work || [],
+      education: resume.education || [],
+      skills: resume.skills || [],
+      // ... other fields
+    };
+  }
+
+  private static normalizeV1(resume: any): Resume {
+    // Ensure all required fields exist
+    return {
+      ...resume,
+      basics: resume.basics || { name: '' },
+      work: resume.work || [],
+      education: resume.education || [],
+      skills: resume.skills || [],
+    };
+  }
+
+  /**
+   * Transform resume for older systems
+   */
+  static downgrade(resume: Resume, targetVersion: string): any {
+    if (targetVersion === '1.0.0') {
+      // Remove fields that didn't exist in v1.0.0
+      const { meta, ...rest } = resume;
+      return rest;
+    }
+
+    return resume;
+  }
+}
+
+// Usage
+const rawResume = await fetch('https://jsonresume.org/johndoe.json').then((r) =>
+  r.json()
+);
+const normalized = ResumeAdapter.normalize(rawResume);
+const downgraded = ResumeAdapter.downgrade(normalized, '1.0.0');
+```
+
+---
+
+## Embedding Resume Viewers
+
+Embed interactive resume viewers in your website or application.
+
+### Simple iframe Embed
+
+```html
+<!-- Embed a resume from JSONResume.org -->
+<iframe
+  src="https://jsonresume.org/thomasdavis?theme=professional"
+  width="100%"
+  height="800"
+  frameborder="0"
+  style="border: 1px solid #ddd; border-radius: 8px;"
+  title="Resume for Thomas Davis"
+></iframe>
+```
+
+**With theme selector:**
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Resume Viewer</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .controls {
+        margin-bottom: 20px;
+      }
+      select {
+        padding: 8px;
+        font-size: 14px;
+      }
+      iframe {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="controls">
+      <label for="theme">Select Theme:</label>
+      <select id="theme" onchange="changeTheme()">
+        <option value="standard">Standard</option>
+        <option value="professional">Professional</option>
+        <option value="spartacus">Spartacus</option>
+        <option value="elegant">Elegant</option>
+        <option value="flat">Flat</option>
+      </select>
+    </div>
+
+    <iframe
+      id="resume-frame"
+      src="https://jsonresume.org/thomasdavis?theme=standard"
+      width="100%"
+      height="800"
+      frameborder="0"
+    ></iframe>
+
+    <script>
+      function changeTheme() {
+        const theme = document.getElementById('theme').value;
+        const iframe = document.getElementById('resume-frame');
+        iframe.src = `https://jsonresume.org/thomasdavis?theme=${theme}`;
+      }
+    </script>
+  </body>
+</html>
+```
+
+### React Resume Embed Component
+
+```tsx
+import React, { useState } from 'react';
+
+interface ResumeEmbedProps {
+  username: string;
+  defaultTheme?: string;
+  height?: string;
+  showThemeSelector?: boolean;
+}
+
+const THEMES = [
+  'standard',
+  'professional',
+  'spartacus',
+  'elegant',
+  'flat',
+  'cv',
+  'onepage',
+];
+
+export function ResumeEmbed({
+  username,
+  defaultTheme = 'standard',
+  height = '800px',
+  showThemeSelector = true,
+}: ResumeEmbedProps) {
+  const [theme, setTheme] = useState(defaultTheme);
+  const [loading, setLoading] = useState(true);
+
+  const resumeUrl = `https://jsonresume.org/${username}?theme=${theme}`;
+
+  return (
+    <div className="resume-embed">
+      {showThemeSelector && (
+        <div className="mb-4">
+          <label htmlFor="theme-select" className="mr-2 font-medium">
+            Theme:
+          </label>
+          <select
+            id="theme-select"
+            value={theme}
+            onChange={(e) => {
+              setTheme(e.target.value);
+              setLoading(true);
+            }}
+            className="border rounded px-3 py-2"
+          >
+            {THEMES.map((t) => (
+              <option key={t} value={t}>
+                {t.charAt(0).toUpperCase() + t.slice(1)}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+
+      <div className="relative" style={{ height }}>
+        {loading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" />
+          </div>
+        )}
+
+        <iframe
+          src={resumeUrl}
+          className="w-full h-full border border-gray-300 rounded-lg"
+          onLoad={() => setLoading(false)}
+          title={`Resume for ${username}`}
+        />
+      </div>
+    </div>
+  );
+}
+
+// Usage
+export function App() {
+  return (
+    <div className="container mx-auto p-8">
+      <h1 className="text-3xl font-bold mb-6">My Resume</h1>
+      <ResumeEmbed username="thomasdavis" showThemeSelector />
+    </div>
+  );
+}
+```
+
+### Custom Renderer with Web Component
+
+Create a reusable web component:
+
+```typescript
+// resume-viewer.ts
+class ResumeViewer extends HTMLElement {
+  private shadow: ShadowRoot;
+  private username: string = '';
+  private theme: string = 'standard';
+
+  constructor() {
+    super();
+    this.shadow = this.attachShadow({ mode: 'open' });
+  }
+
+  static get observedAttributes() {
+    return ['username', 'theme'];
+  }
+
+  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+    if (oldValue !== newValue) {
+      this[name as 'username' | 'theme'] = newValue;
+      this.render();
+    }
+  }
+
+  connectedCallback() {
+    this.username = this.getAttribute('username') || '';
+    this.theme = this.getAttribute('theme') || 'standard';
+    this.render();
+  }
+
+  private async render() {
+    if (!this.username) {
+      this.shadow.innerHTML = '<p>Please provide a username</p>';
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `https://jsonresume.org/${this.username}.json`
+      );
+      const resume = await response.json();
+
+      this.shadow.innerHTML = `
+        <style>
+          :host {
+            display: block;
+            font-family: system-ui, -apple-system, sans-serif;
+          }
+          .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+          }
+          h1 { color: #2c3e50; border-bottom: 3px solid #3498db; }
+          .job { margin-bottom: 20px; }
+          .skills { display: flex; flex-wrap: wrap; gap: 8px; }
+          .skill { background: #ecf0f1; padding: 4px 12px; border-radius: 12px; }
+        </style>
+
+        <div class="container">
+          <h1>${resume.basics.name}</h1>
+          <p>${resume.basics.label || ''}</p>
+
+          ${this.renderWork(resume.work || [])}
+          ${this.renderSkills(resume.skills || [])}
+        </div>
+      `;
+    } catch (error) {
+      this.shadow.innerHTML = `<p>Error loading resume: ${error}</p>`;
+    }
+  }
+
+  private renderWork(work: any[]): string {
+    if (!work.length) return '';
+
+    return `
+      <h2>Experience</h2>
+      ${work
+        .map(
+          (job) => `
+        <div class="job">
+          <h3>${job.position} at ${job.name}</h3>
+          <p>${job.startDate} - ${job.endDate || 'Present'}</p>
+          ${job.summary ? `<p>${job.summary}</p>` : ''}
+        </div>
+      `
+        )
+        .join('')}
+    `;
+  }
+
+  private renderSkills(skills: any[]): string {
+    if (!skills.length) return '';
+
+    return `
+      <h2>Skills</h2>
+      <div class="skills">
+        ${skills
+          .flatMap((s) => s.keywords || [])
+          .map((k) => `<span class="skill">${k}</span>`)
+          .join('')}
+      </div>
+    `;
+  }
+}
+
+// Register the custom element
+customElements.define('resume-viewer', ResumeViewer);
+
+// Usage in HTML:
+// <resume-viewer username="thomasdavis" theme="professional"></resume-viewer>
+```
+
+**Use the web component:**
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Resume Viewer</title>
+    <script type="module" src="resume-viewer.js"></script>
+  </head>
+  <body>
+    <!-- Simple usage -->
+    <resume-viewer username="thomasdavis"></resume-viewer>
+
+    <!-- With custom theme -->
+    <resume-viewer username="johndoe" theme="professional"></resume-viewer>
+
+    <!-- Dynamic update -->
+    <button onclick="updateResume()">Load Different Resume</button>
+
+    <script>
+      function updateResume() {
+        const viewer = document.querySelector('resume-viewer');
+        viewer.setAttribute('username', 'janedoe');
+        viewer.setAttribute('theme', 'elegant');
+      }
+    </script>
+  </body>
+</html>
+```
+
+---
+
+## Next Steps
+
+Now that you have comprehensive developer knowledge:
+
+1. **Contribute** - Check [open issues](https://github.com/jsonresume/jsonresume.org/issues) and contribute code
+2. **Build** - Create amazing applications with JSON Resume
+3. **Share** - Publish your themes and integrations
+4. **Explore** - Check out the [API Reference](/api) and [Architecture Guide](/architecture)
+
+## Resources
+
+- **GitHub**: [jsonresume/jsonresume.org](https://github.com/jsonresume/jsonresume.org)
+- **Schema**: [JSON Resume Schema](https://github.com/jsonresume/resume-schema)
+- **npm Themes**: [Search jsonresume-theme](https://www.npmjs.com/search?q=jsonresume-theme)
+- **Community**: [GitHub Discussions](https://github.com/jsonresume/jsonresume.org/discussions)
+
+---
+
+**Happy coding!** Build something awesome with JSON Resume.

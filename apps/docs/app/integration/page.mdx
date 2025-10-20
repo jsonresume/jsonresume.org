@@ -1,0 +1,2666 @@
+# Integration & Automation
+
+Integrate JSON Resume into your workflows, websites, and automation pipelines. This guide covers LinkedIn integration, portfolio embedding, CI/CD automation, and deployment to modern hosting platforms.
+
+## Quick Start
+
+### GitHub Actions Auto-Publish
+
+The fastest way to auto-publish your resume:
+
+```yaml
+# .github/workflows/resume.yml
+name: Update Resume
+on:
+  push:
+    paths:
+      - 'resume.json'
+      - '.github/workflows/resume.yml'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install resume-cli
+        run: npm install -g resume-cli
+
+      - name: Publish to jsonresume.org
+        run: resume publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+### Vercel One-Click Deploy
+
+Deploy your resume as a Next.js app:
+
+```bash
+# Clone starter template
+npx create-next-app@latest my-resume --example https://github.com/jsonresume/nextjs-starter
+
+# Add your resume
+cp resume.json my-resume/public/
+
+# Deploy to Vercel
+cd my-resume
+vercel
+```
+
+### Netlify Deploy
+
+Deploy static HTML resume:
+
+```toml
+# netlify.toml
+[build]
+  command = "npm install -g resume-cli && resume export index.html --theme professional"
+  publish = "."
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+```
+
+## LinkedIn Integration
+
+### Export LinkedIn to JSON Resume
+
+#### Using linkedin-to-jsonresume NPM Package
+
+```bash
+# Install the converter
+npm install -g linkedin-to-jsonresume
+
+# Export your LinkedIn profile
+# 1. Go to linkedin.com/settings/data-export
+# 2. Request archive (includes profile data)
+# 3. Download and extract the ZIP file
+
+# Convert to JSON Resume format
+linkedin-to-jsonresume path/to/linkedin-export.zip > resume.json
+
+# Validate the output
+resume validate resume.json
+```
+
+#### Manual LinkedIn Data Export
+
+```javascript
+// scripts/linkedin-to-resume.js
+import fs from 'fs';
+import path from 'path';
+
+/**
+ * Convert LinkedIn export to JSON Resume format
+ * LinkedIn provides: Profile.csv, Positions.csv, Education.csv, Skills.csv
+ */
+async function convertLinkedIn(exportPath) {
+  const resume = {
+    $schema:
+      'https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json',
+    basics: {},
+    work: [],
+    education: [],
+    skills: [],
+  };
+
+  // Parse Profile.csv
+  const profile = parseCSV(path.join(exportPath, 'Profile.csv'))[0];
+  resume.basics = {
+    name: `${profile['First Name']} ${profile['Last Name']}`,
+    label: profile['Headline'],
+    email: profile['Email Address'],
+    url: profile['Public Profile URL'],
+    summary: profile['Summary'],
+    location: {
+      city: profile['Geo Location'],
+      countryCode: profile['Country'],
+    },
+  };
+
+  // Parse Positions.csv
+  const positions = parseCSV(path.join(exportPath, 'Positions.csv'));
+  resume.work = positions.map((pos) => ({
+    name: pos['Company Name'],
+    position: pos['Title'],
+    startDate: formatDate(pos['Started On']),
+    endDate: pos['Finished On'] ? formatDate(pos['Finished On']) : null,
+    summary: pos['Description'],
+    url: pos['Company LinkedIn URL'],
+  }));
+
+  // Parse Education.csv
+  const education = parseCSV(path.join(exportPath, 'Education.csv'));
+  resume.education = education.map((edu) => ({
+    institution: edu['School Name'],
+    area: edu['Degree Name'],
+    studyType: edu['Degree'],
+    startDate: formatDate(edu['Start Date']),
+    endDate: formatDate(edu['End Date']),
+    courses: edu['Activities and Societies']
+      ? edu['Activities and Societies'].split(',')
+      : [],
+  }));
+
+  // Parse Skills.csv
+  const skills = parseCSV(path.join(exportPath, 'Skills.csv'));
+  resume.skills = skills.map((skill) => ({
+    name: skill['Name'],
+    level: '', // LinkedIn doesn't export skill level
+    keywords: [],
+  }));
+
+  return resume;
+}
+
+function parseCSV(filePath) {
+  const csv = fs.readFileSync(filePath, 'utf8');
+  const lines = csv.split('\n');
+  const headers = lines[0].split(',');
+
+  return lines.slice(1).map((line) => {
+    const values = line.split(',');
+    return headers.reduce((obj, header, i) => {
+      obj[header.trim()] = values[i]?.trim() || '';
+      return obj;
+    }, {});
+  });
+}
+
+function formatDate(dateStr) {
+  // LinkedIn format: "MM/YYYY" or "YYYY"
+  if (!dateStr) return null;
+  const parts = dateStr.split('/');
+  if (parts.length === 2) {
+    return `${parts[1]}-${parts[0].padStart(2, '0')}-01`;
+  }
+  return `${dateStr}-01-01`;
+}
+
+// Usage
+const resume = await convertLinkedIn('./linkedin-export');
+fs.writeFileSync('resume.json', JSON.stringify(resume, null, 2));
+console.log('✓ Converted LinkedIn export to resume.json');
+```
+
+#### Using Chrome Extension (Manual Export)
+
+```javascript
+// LinkedIn profile scraper bookmarklet
+// Run in browser console on your LinkedIn profile page
+(function () {
+  const resume = {
+    basics: {
+      name: document
+        .querySelector('.pv-text-details__left-panel h1')
+        ?.textContent.trim(),
+      label: document
+        .querySelector('.pv-text-details__left-panel .text-body-medium')
+        ?.textContent.trim(),
+      summary: document
+        .querySelector('.pv-about__summary-text')
+        ?.textContent.trim(),
+      url: window.location.href,
+      profiles: [
+        {
+          network: 'LinkedIn',
+          url: window.location.href,
+        },
+      ],
+    },
+    work: Array.from(document.querySelectorAll('#experience ~ div li')).map(
+      (exp) => ({
+        name: exp
+          .querySelector('.pv-entity__secondary-title')
+          ?.textContent.trim(),
+        position: exp
+          .querySelector('.pv-entity__summary-info h3')
+          ?.textContent.trim(),
+        startDate: exp
+          .querySelector('.pv-entity__date-range span:nth-child(2)')
+          ?.textContent.split('–')[0]
+          .trim(),
+        endDate: exp
+          .querySelector('.pv-entity__date-range span:nth-child(2)')
+          ?.textContent.split('–')[1]
+          ?.trim(),
+        summary: exp
+          .querySelector('.pv-entity__description')
+          ?.textContent.trim(),
+      })
+    ),
+  };
+
+  console.log(JSON.stringify(resume, null, 2));
+  copy(JSON.stringify(resume, null, 2)); // Auto-copy to clipboard
+  alert('Resume data copied to clipboard!');
+})();
+```
+
+### Sync LinkedIn Profile Updates
+
+```javascript
+// scripts/sync-linkedin.js
+import { chromium } from 'playwright';
+
+/**
+ * Automated LinkedIn profile sync
+ * Requires LinkedIn session cookies
+ */
+async function syncLinkedInProfile() {
+  const browser = await chromium.launch({ headless: true });
+  const context = await browser.newContext();
+
+  // Load saved LinkedIn session
+  const cookies = JSON.parse(fs.readFileSync('./linkedin-cookies.json'));
+  await context.addCookies(cookies);
+
+  const page = await context.newPage();
+  await page.goto('https://www.linkedin.com/in/me/');
+
+  // Extract profile data
+  const profileData = await page.evaluate(() => {
+    return {
+      name: document.querySelector('h1')?.textContent.trim(),
+      headline: document.querySelector('.text-body-medium')?.textContent.trim(),
+      // ... more fields
+    };
+  });
+
+  await browser.close();
+
+  // Merge with existing resume
+  const resume = JSON.parse(fs.readFileSync('./resume.json'));
+  resume.basics = { ...resume.basics, ...profileData };
+  fs.writeFileSync('./resume.json', JSON.stringify(resume, null, 2));
+}
+```
+
+## Web Portfolio Integration
+
+### Embed in React Portfolio
+
+```tsx
+// components/Resume.tsx
+import { useEffect, useState } from 'react';
+import type { ResumeSchema } from '@jsonresume/types';
+
+export function Resume({ username }: { username: string }) {
+  const [resume, setResume] = useState<ResumeSchema | null>(null);
+
+  useEffect(() => {
+    fetch(`https://jsonresume.org/${username}.json`)
+      .then((res) => res.json())
+      .then(setResume)
+      .catch(console.error);
+  }, [username]);
+
+  if (!resume) return <div>Loading...</div>;
+
+  return (
+    <div className="resume">
+      <header>
+        <h1>{resume.basics?.name}</h1>
+        <p>{resume.basics?.label}</p>
+        <p>{resume.basics?.summary}</p>
+      </header>
+
+      <section>
+        <h2>Experience</h2>
+        {resume.work?.map((job, i) => (
+          <div key={i}>
+            <h3>
+              {job.position} at {job.name}
+            </h3>
+            <p>
+              {job.startDate} - {job.endDate || 'Present'}
+            </p>
+            <p>{job.summary}</p>
+            <ul>
+              {job.highlights?.map((h, j) => (
+                <li key={j}>{h}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </section>
+    </div>
+  );
+}
+```
+
+### Embed in Vue.js Portfolio
+
+```vue
+<!-- components/JsonResume.vue -->
+<template>
+  <div class="resume" v-if="resume">
+    <header>
+      <h1>{{ resume.basics?.name }}</h1>
+      <p class="label">{{ resume.basics?.label }}</p>
+    </header>
+
+    <section v-for="job in resume.work" :key="job.name">
+      <h3>{{ job.position }}</h3>
+      <p class="company">{{ job.name }}</p>
+      <p class="dates">
+        {{ formatDate(job.startDate) }} - {{ formatDate(job.endDate) }}
+      </p>
+      <ul>
+        <li v-for="(highlight, i) in job.highlights" :key="i">
+          {{ highlight }}
+        </li>
+      </ul>
+    </section>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import type { ResumeSchema } from '@jsonresume/types';
+
+const props = defineProps<{ username: string }>();
+const resume = ref<ResumeSchema | null>(null);
+
+onMounted(async () => {
+  const res = await fetch(`https://jsonresume.org/${props.username}.json`);
+  resume.value = await res.json();
+});
+
+function formatDate(date: string | undefined) {
+  if (!date) return 'Present';
+  return new Date(date).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+  });
+}
+</script>
+```
+
+### Static Site Integration (Hugo)
+
+```html
+<!-- layouts/partials/resume.html -->
+{{ $resume := getJSON "https://jsonresume.org/" .Site.Params.github_username
+".json" }}
+
+<div class="resume">
+  <header>
+    <h1>{{ $resume.basics.name }}</h1>
+    <p>{{ $resume.basics.label }}</p>
+    <p>{{ $resume.basics.email }} | {{ $resume.basics.phone }}</p>
+  </header>
+
+  <section class="experience">
+    <h2>Experience</h2>
+    {{ range $resume.work }}
+    <div class="job">
+      <h3>{{ .position }} - {{ .name }}</h3>
+      <p class="dates">{{ .startDate }} to {{ .endDate }}</p>
+      <p>{{ .summary }}</p>
+      <ul>
+        {{ range .highlights }}
+        <li>{{ . }}</li>
+        {{ end }}
+      </ul>
+    </div>
+    {{ end }}
+  </section>
+</div>
+```
+
+### Gatsby Portfolio Integration
+
+```javascript
+// gatsby-config.js
+module.exports = {
+  plugins: [
+    {
+      resolve: 'gatsby-source-filesystem',
+      options: {
+        name: 'resume',
+        path: `${__dirname}/resume.json`,
+      },
+    },
+    {
+      resolve: 'gatsby-transformer-json',
+      options: {
+        typeName: 'Resume',
+      },
+    },
+  ],
+};
+
+// src/pages/resume.js
+import React from 'react';
+import { graphql } from 'gatsby';
+
+export default function ResumePage({ data }) {
+  const resume = data.resumeJson;
+
+  return (
+    <div>
+      <h1>{resume.basics.name}</h1>
+      <p>{resume.basics.label}</p>
+
+      {resume.work.map((job, i) => (
+        <div key={i}>
+          <h2>
+            {job.position} at {job.name}
+          </h2>
+          <p>
+            {job.startDate} - {job.endDate}
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export const query = graphql`
+  query {
+    resumeJson {
+      basics {
+        name
+        label
+        email
+        summary
+      }
+      work {
+        name
+        position
+        startDate
+        endDate
+        summary
+        highlights
+      }
+    }
+  }
+`;
+```
+
+## ATS System Support
+
+### Export for ATS Compatibility
+
+```javascript
+// scripts/generate-ats-friendly.js
+import fs from 'fs';
+import { marked } from 'marked';
+
+/**
+ * Generate ATS-friendly formats from JSON Resume
+ * Outputs: Plain text, Simple HTML, XML
+ */
+function generateATSFormats(resume) {
+  // Plain text version (best for ATS parsing)
+  const plainText = `
+${resume.basics.name}
+${resume.basics.label}
+${resume.basics.email} | ${resume.basics.phone}
+${resume.basics.location?.city}, ${resume.basics.location?.region}
+
+SUMMARY
+${resume.basics.summary}
+
+EXPERIENCE
+${resume.work
+  .map(
+    (job) => `
+${job.position} - ${job.name}
+${job.startDate} to ${job.endDate || 'Present'}
+${job.summary}
+${job.highlights?.map((h) => `• ${h}`).join('\n')}
+`
+  )
+  .join('\n')}
+
+EDUCATION
+${resume.education
+  .map(
+    (edu) => `
+${edu.studyType} in ${edu.area}
+${edu.institution}, ${edu.startDate} - ${edu.endDate}
+`
+  )
+  .join('\n')}
+
+SKILLS
+${resume.skills.map((s) => s.name).join(', ')}
+  `.trim();
+
+  // Simple HTML (ATS-safe, no CSS)
+  const simpleHTML = `
+<!DOCTYPE html>
+<html>
+<head><title>${resume.basics.name} - Resume</title></head>
+<body>
+  <h1>${resume.basics.name}</h1>
+  <p>${resume.basics.label}</p>
+  <p>${resume.basics.email} | ${resume.basics.phone}</p>
+
+  <h2>Summary</h2>
+  <p>${resume.basics.summary}</p>
+
+  <h2>Experience</h2>
+  ${resume.work
+    .map(
+      (job) => `
+    <div>
+      <h3>${job.position} - ${job.name}</h3>
+      <p>${job.startDate} to ${job.endDate || 'Present'}</p>
+      <p>${job.summary}</p>
+      <ul>
+        ${job.highlights?.map((h) => `<li>${h}</li>`).join('')}
+      </ul>
+    </div>
+  `
+    )
+    .join('')}
+</body>
+</html>
+  `;
+
+  // HR-XML format (some ATS systems support this)
+  const hrXML = `
+<?xml version="1.0" encoding="UTF-8"?>
+<Resume>
+  <StructuredXMLResume>
+    <ContactInfo>
+      <PersonName>
+        <FormattedName>${resume.basics.name}</FormattedName>
+      </PersonName>
+      <ContactMethod>
+        <InternetEmailAddress>${resume.basics.email}</InternetEmailAddress>
+        <Telephone>${resume.basics.phone}</Telephone>
+      </ContactMethod>
+    </ContactInfo>
+    <EmploymentHistory>
+      ${resume.work
+        .map(
+          (job) => `
+        <EmployerOrg>
+          <EmployerOrgName>${job.name}</EmployerOrgName>
+          <PositionHistory>
+            <Title>${job.position}</Title>
+            <StartDate>${job.startDate}</StartDate>
+            ${job.endDate ? `<EndDate>${job.endDate}</EndDate>` : ''}
+            <Description>${job.summary}</Description>
+          </PositionHistory>
+        </EmployerOrg>
+      `
+        )
+        .join('')}
+    </EmploymentHistory>
+  </StructuredXMLResume>
+</Resume>
+  `;
+
+  return { plainText, simpleHTML, hrXML };
+}
+
+const resume = JSON.parse(fs.readFileSync('./resume.json', 'utf8'));
+const formats = generateATSFormats(resume);
+
+fs.writeFileSync('resume-ats.txt', formats.plainText);
+fs.writeFileSync('resume-ats.html', formats.simpleHTML);
+fs.writeFileSync('resume-ats.xml', formats.hrXML);
+
+console.log('✓ Generated ATS-friendly formats');
+```
+
+### ATS Optimization Checker
+
+```javascript
+// scripts/check-ats-compatibility.js
+
+/**
+ * Check resume for ATS compatibility issues
+ */
+function checkATSCompatibility(resume) {
+  const issues = [];
+  const warnings = [];
+
+  // Check for required fields
+  if (!resume.basics?.name) issues.push('Missing name in basics');
+  if (!resume.basics?.email) issues.push('Missing email in basics');
+  if (!resume.basics?.phone)
+    warnings.push('Missing phone number (recommended)');
+
+  // Check date formats
+  resume.work?.forEach((job, i) => {
+    if (!job.startDate?.match(/^\d{4}-\d{2}-\d{2}$/)) {
+      warnings.push(
+        `Job ${i + 1}: Use YYYY-MM-DD date format for better ATS parsing`
+      );
+    }
+  });
+
+  // Check for keywords density
+  const text = JSON.stringify(resume).toLowerCase();
+  const keywordCount =
+    (resume.skills?.length || 0) +
+    (resume.work?.flatMap((j) => j.highlights || []).length || 0);
+
+  if (keywordCount < 20) {
+    warnings.push('Add more keywords/highlights for better ATS matching');
+  }
+
+  // Check for special characters that confuse ATS
+  const specialChars = ['•', '→', '★', '✓'];
+  const hasSpecialChars = specialChars.some((char) => text.includes(char));
+  if (hasSpecialChars) {
+    warnings.push('Avoid special characters/bullets - use plain text for ATS');
+  }
+
+  // Check file size (some ATS limit to 1MB)
+  const size = Buffer.byteLength(JSON.stringify(resume));
+  if (size > 1024 * 1024) {
+    warnings.push('Resume file size exceeds 1MB - some ATS may reject it');
+  }
+
+  return { issues, warnings, score: calculateATSScore(issues, warnings) };
+}
+
+function calculateATSScore(issues, warnings) {
+  let score = 100;
+  score -= issues.length * 20;
+  score -= warnings.length * 5;
+  return Math.max(0, score);
+}
+
+const resume = JSON.parse(fs.readFileSync('./resume.json', 'utf8'));
+const result = checkATSCompatibility(resume);
+
+console.log(`ATS Compatibility Score: ${result.score}/100`);
+if (result.issues.length) {
+  console.log('\nIssues:');
+  result.issues.forEach((i) => console.log(`  ✗ ${i}`));
+}
+if (result.warnings.length) {
+  console.log('\nWarnings:');
+  result.warnings.forEach((w) => console.log(`  ⚠ ${w}`));
+}
+```
+
+## Auto PDF Conversion
+
+### GitHub Actions PDF Generation
+
+```yaml
+# .github/workflows/generate-pdf.yml
+name: Generate Resume PDF
+
+on:
+  push:
+    paths:
+      - 'resume.json'
+  workflow_dispatch:
+
+jobs:
+  generate-pdf:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          npm install -g resume-cli
+          npm install -g puppeteer
+
+      - name: Generate PDF
+        run: |
+          resume export resume.pdf --theme professional
+
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: resume-pdf
+          path: resume.pdf
+
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: resume.pdf
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit PDF to repository
+        run: |
+          git config --global user.name 'Resume Bot'
+          git config --global user.email 'bot@jsonresume.org'
+          git add resume.pdf
+          git diff --staged --quiet || git commit -m "chore: update resume PDF [skip ci]"
+          git push
+```
+
+### Automated Multi-Format Export
+
+```yaml
+# .github/workflows/export-all-formats.yml
+name: Export All Resume Formats
+
+on:
+  push:
+    branches: [main]
+    paths: ['resume.json']
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        format: [html, pdf, markdown, docx]
+        theme: [professional, standard, spartacus]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install tools
+        run: |
+          npm install -g resume-cli
+          npm install -g puppeteer
+
+      - name: Export resume
+        run: |
+          mkdir -p exports
+          resume export exports/resume-${{ matrix.theme }}.${{ matrix.format }} \
+            --theme ${{ matrix.theme }}
+
+      - name: Upload exports
+        uses: actions/upload-artifact@v4
+        with:
+          name: resume-${{ matrix.theme }}-${{ matrix.format }}
+          path: exports/
+```
+
+### Self-Hosted PDF Service
+
+```javascript
+// server/pdf-service.js
+import express from 'express';
+import puppeteer from 'puppeteer';
+import { resumeToHTML } from 'resume-cli';
+
+const app = express();
+app.use(express.json());
+
+/**
+ * PDF generation microservice
+ * POST /generate-pdf
+ * Body: { resume: {...}, theme: 'professional' }
+ */
+app.post('/generate-pdf', async (req, res) => {
+  const { resume, theme = 'professional' } = req.body;
+
+  try {
+    // Convert resume to HTML
+    const html = await resumeToHTML(resume, theme);
+
+    // Generate PDF with Puppeteer
+    const browser = await puppeteer.launch({
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
+
+    const page = await browser.newPage();
+    await page.setContent(html, { waitUntil: 'networkidle0' });
+
+    const pdf = await page.pdf({
+      format: 'A4',
+      printBackground: true,
+      margin: {
+        top: '20mm',
+        right: '20mm',
+        bottom: '20mm',
+        left: '20mm',
+      },
+    });
+
+    await browser.close();
+
+    res.contentType('application/pdf');
+    res.send(pdf);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.listen(3000, () => {
+  console.log('PDF service running on port 3000');
+});
+```
+
+```dockerfile
+# Dockerfile for PDF service
+FROM node:20-slim
+
+# Install Chrome dependencies
+RUN apt-get update && apt-get install -y \
+    chromium \
+    fonts-liberation \
+    libnss3 \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci --production
+
+COPY server/ ./server/
+
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+
+EXPOSE 3000
+
+CMD ["node", "server/pdf-service.js"]
+```
+
+## GitHub Pages Integration
+
+### Automatic GitHub Pages Deploy
+
+```yaml
+# .github/workflows/gh-pages.yml
+name: Deploy Resume to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'resume.json'
+      - '.github/workflows/gh-pages.yml'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install resume-cli
+        run: npm install -g resume-cli
+
+      - name: Generate HTML
+        run: |
+          mkdir -p public
+          resume export public/index.html --theme professional
+          cp resume.json public/resume.json
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'public'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+```
+
+### Multi-Theme GitHub Pages Site
+
+```yaml
+# .github/workflows/multi-theme-pages.yml
+name: Deploy Multi-Theme Resume Site
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install -g resume-cli
+
+      - name: Generate all themes
+        run: |
+          mkdir -p public
+
+          # Generate index page with theme selector
+          cat > public/index.html <<EOF
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>My Resume - Multiple Themes</title>
+            <style>
+              body { font-family: system-ui; max-width: 800px; margin: 50px auto; }
+              .theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+              .theme-card { border: 1px solid #ddd; padding: 20px; border-radius: 8px; text-align: center; }
+              .theme-card a { text-decoration: none; color: #0066cc; font-weight: bold; }
+            </style>
+          </head>
+          <body>
+            <h1>My Resume</h1>
+            <p>Choose a theme:</p>
+            <div class="theme-grid">
+              <div class="theme-card"><a href="/professional.html">Professional</a></div>
+              <div class="theme-card"><a href="/standard.html">Standard</a></div>
+              <div class="theme-card"><a href="/spartacus.html">Spartacus</a></div>
+              <div class="theme-card"><a href="/flat.html">Flat</a></div>
+              <div class="theme-card"><a href="/cv.html">CV</a></div>
+            </div>
+            <p><a href="/resume.json">Download JSON</a> | <a href="/resume.pdf">Download PDF</a></p>
+          </body>
+          </html>
+          EOF
+
+          # Generate each theme
+          resume export public/professional.html --theme professional
+          resume export public/standard.html --theme standard
+          resume export public/spartacus.html --theme spartacus
+          resume export public/flat.html --theme flat
+          resume export public/cv.html --theme cv
+
+          # Copy JSON
+          cp resume.json public/resume.json
+
+          # Generate PDF
+          resume export public/resume.pdf --theme professional
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+```
+
+### Custom Domain Setup
+
+```yaml
+# public/CNAME
+resume.yourdomain.com
+```
+
+```yaml
+# .github/workflows/gh-pages-custom-domain.yml
+# ... previous steps ...
+
+- name: Add CNAME
+  run: echo "resume.yourdomain.com" > public/CNAME
+# ... deploy steps ...
+```
+
+Then configure DNS:
+
+```
+# DNS Records
+Type    Name      Value
+CNAME   resume    yourusername.github.io
+```
+
+## CI/CD Pipelines
+
+### GitLab CI Pipeline
+
+```yaml
+# .gitlab-ci.yml
+stages:
+  - validate
+  - build
+  - deploy
+
+variables:
+  NODE_VERSION: '20'
+
+validate:
+  stage: validate
+  image: node:${NODE_VERSION}
+  script:
+    - npm install -g resume-cli
+    - resume validate resume.json
+  only:
+    changes:
+      - resume.json
+
+build:
+  stage: build
+  image: node:${NODE_VERSION}
+  script:
+    - npm install -g resume-cli
+    - npm install -g puppeteer
+    - mkdir -p artifacts
+    - resume export artifacts/resume.html --theme professional
+    - resume export artifacts/resume.pdf --theme professional
+    - cp resume.json artifacts/
+  artifacts:
+    paths:
+      - artifacts/
+    expire_in: 30 days
+  only:
+    changes:
+      - resume.json
+
+deploy:production:
+  stage: deploy
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache curl
+  script:
+    - |
+      curl -X POST https://api.jsonresume.org/publish \
+        -H "Authorization: Bearer $JSONRESUME_TOKEN" \
+        -H "Content-Type: application/json" \
+        -d @resume.json
+  only:
+    - main
+  environment:
+    name: production
+    url: https://jsonresume.org/$CI_PROJECT_NAME
+```
+
+### Jenkins Pipeline
+
+```groovy
+// Jenkinsfile
+pipeline {
+    agent {
+        docker {
+            image 'node:20'
+        }
+    }
+
+    environment {
+        RESUME_FILE = 'resume.json'
+    }
+
+    stages {
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install -g resume-cli'
+            }
+        }
+
+        stage('Validate Resume') {
+            steps {
+                sh 'resume validate ${RESUME_FILE}'
+            }
+        }
+
+        stage('Generate Exports') {
+            parallel {
+                stage('HTML') {
+                    steps {
+                        sh 'resume export resume.html --theme professional'
+                    }
+                }
+                stage('PDF') {
+                    steps {
+                        sh 'npm install -g puppeteer'
+                        sh 'resume export resume.pdf --theme professional'
+                    }
+                }
+            }
+        }
+
+        stage('Archive Artifacts') {
+            steps {
+                archiveArtifacts artifacts: 'resume.*', fingerprint: true
+            }
+        }
+
+        stage('Deploy') {
+            when {
+                branch 'main'
+            }
+            steps {
+                withCredentials([string(credentialsId: 'jsonresume-token', variable: 'TOKEN')]) {
+                    sh '''
+                        curl -X POST https://api.jsonresume.org/publish \
+                             -H "Authorization: Bearer ${TOKEN}" \
+                             -H "Content-Type: application/json" \
+                             -d @${RESUME_FILE}
+                    '''
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            slackSend(
+                color: 'good',
+                message: "Resume updated successfully: ${env.BUILD_URL}"
+            )
+        }
+        failure {
+            slackSend(
+                color: 'danger',
+                message: "Resume build failed: ${env.BUILD_URL}"
+            )
+        }
+    }
+}
+```
+
+### CircleCI Configuration
+
+```yaml
+# .circleci/config.yml
+version: 2.1
+
+executors:
+  node:
+    docker:
+      - image: cimg/node:20.0
+
+jobs:
+  validate:
+    executor: node
+    steps:
+      - checkout
+      - run:
+          name: Install resume-cli
+          command: npm install -g resume-cli
+      - run:
+          name: Validate resume
+          command: resume validate resume.json
+
+  build:
+    executor: node
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            npm install -g resume-cli
+            npm install -g puppeteer
+      - run:
+          name: Generate exports
+          command: |
+            mkdir -p ~/artifacts
+            resume export ~/artifacts/resume.html --theme professional
+            resume export ~/artifacts/resume.pdf --theme professional
+            cp resume.json ~/artifacts/
+      - persist_to_workspace:
+          root: ~/artifacts
+          paths:
+            - resume.*
+      - store_artifacts:
+          path: ~/artifacts
+
+  deploy:
+    executor: node
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/artifacts
+      - run:
+          name: Deploy to jsonresume.org
+          command: |
+            curl -X POST https://api.jsonresume.org/publish \
+                 -H "Authorization: Bearer ${JSONRESUME_TOKEN}" \
+                 -H "Content-Type: application/json" \
+                 -d @resume.json
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - validate
+      - build:
+          requires:
+            - validate
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: main
+```
+
+## Notion & Airtable Integration
+
+### Notion Resume Sync
+
+```javascript
+// scripts/notion-to-resume.js
+import { Client } from '@notionhq/client';
+import fs from 'fs';
+
+const notion = new Client({ auth: process.env.NOTION_API_KEY });
+
+/**
+ * Sync resume data from Notion database
+ * Database structure:
+ * - Work Experience: Table with Company, Role, Start Date, End Date, Description
+ * - Education: Table with School, Degree, Field, Start Date, End Date
+ * - Skills: Table with Name, Level, Keywords
+ */
+async function syncFromNotion() {
+  const resume = {
+    $schema:
+      'https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json',
+    basics: await getBasics(),
+    work: await getWorkExperience(),
+    education: await getEducation(),
+    skills: await getSkills(),
+  };
+
+  fs.writeFileSync('resume.json', JSON.stringify(resume, null, 2));
+  console.log('✓ Synced resume from Notion');
+
+  return resume;
+}
+
+async function getBasics() {
+  // Get basics from a Notion page
+  const page = await notion.pages.retrieve({
+    page_id: process.env.NOTION_BASICS_PAGE_ID,
+  });
+
+  return {
+    name: page.properties.Name?.title[0]?.plain_text,
+    label: page.properties.Label?.rich_text[0]?.plain_text,
+    email: page.properties.Email?.email,
+    phone: page.properties.Phone?.phone_number,
+    summary: page.properties.Summary?.rich_text[0]?.plain_text,
+    url: page.properties.Website?.url,
+  };
+}
+
+async function getWorkExperience() {
+  const database = await notion.databases.query({
+    database_id: process.env.NOTION_WORK_DB_ID,
+    sorts: [{ property: 'Start Date', direction: 'descending' }],
+  });
+
+  return database.results.map((page) => ({
+    name: page.properties.Company?.title[0]?.plain_text,
+    position: page.properties.Role?.rich_text[0]?.plain_text,
+    startDate: page.properties['Start Date']?.date?.start,
+    endDate: page.properties['End Date']?.date?.start,
+    summary: page.properties.Description?.rich_text[0]?.plain_text,
+    highlights:
+      page.properties.Highlights?.multi_select.map((h) => h.name) || [],
+  }));
+}
+
+async function getEducation() {
+  const database = await notion.databases.query({
+    database_id: process.env.NOTION_EDUCATION_DB_ID,
+  });
+
+  return database.results.map((page) => ({
+    institution: page.properties.School?.title[0]?.plain_text,
+    area: page.properties.Field?.rich_text[0]?.plain_text,
+    studyType: page.properties.Degree?.select?.name,
+    startDate: page.properties['Start Date']?.date?.start,
+    endDate: page.properties['End Date']?.date?.start,
+  }));
+}
+
+async function getSkills() {
+  const database = await notion.databases.query({
+    database_id: process.env.NOTION_SKILLS_DB_ID,
+  });
+
+  return database.results.map((page) => ({
+    name: page.properties.Name?.title[0]?.plain_text,
+    level: page.properties.Level?.select?.name,
+    keywords: page.properties.Keywords?.multi_select.map((k) => k.name) || [],
+  }));
+}
+
+// Run sync
+syncFromNotion().catch(console.error);
+```
+
+### Airtable Resume Sync
+
+```javascript
+// scripts/airtable-to-resume.js
+import Airtable from 'airtable';
+import fs from 'fs';
+
+const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
+  process.env.AIRTABLE_BASE_ID
+);
+
+/**
+ * Sync resume from Airtable
+ * Base structure:
+ * - Basics (single record)
+ * - Work (multiple records)
+ * - Education (multiple records)
+ * - Skills (multiple records)
+ */
+async function syncFromAirtable() {
+  const resume = {
+    basics: await getBasics(),
+    work: await getWork(),
+    education: await getEducation(),
+    skills: await getSkills(),
+  };
+
+  fs.writeFileSync('resume.json', JSON.stringify(resume, null, 2));
+  console.log('✓ Synced resume from Airtable');
+}
+
+async function getBasics() {
+  const records = await base('Basics').select().firstPage();
+  const record = records[0].fields;
+
+  return {
+    name: record.Name,
+    label: record.Label,
+    email: record.Email,
+    phone: record.Phone,
+    summary: record.Summary,
+    url: record.Website,
+    location: {
+      city: record.City,
+      region: record.Region,
+      countryCode: record.Country,
+    },
+  };
+}
+
+async function getWork() {
+  const records = await base('Work')
+    .select({
+      sort: [{ field: 'Start Date', direction: 'desc' }],
+    })
+    .all();
+
+  return records.map((record) => ({
+    name: record.fields.Company,
+    position: record.fields.Position,
+    startDate: record.fields['Start Date'],
+    endDate: record.fields['End Date'],
+    summary: record.fields.Description,
+    highlights: record.fields.Highlights || [],
+  }));
+}
+
+async function getEducation() {
+  const records = await base('Education').select().all();
+
+  return records.map((record) => ({
+    institution: record.fields.School,
+    area: record.fields.Field,
+    studyType: record.fields.Degree,
+    startDate: record.fields['Start Date'],
+    endDate: record.fields['End Date'],
+  }));
+}
+
+async function getSkills() {
+  const records = await base('Skills').select().all();
+
+  return records.map((record) => ({
+    name: record.fields.Name,
+    level: record.fields.Level,
+    keywords: record.fields.Keywords || [],
+  }));
+}
+
+syncFromAirtable().catch(console.error);
+```
+
+### Bidirectional Sync with Webhooks
+
+```javascript
+// server/airtable-webhook.js
+import express from 'express';
+import fs from 'fs';
+import { syncFromAirtable } from './airtable-to-resume.js';
+
+const app = express();
+app.use(express.json());
+
+/**
+ * Webhook endpoint for Airtable changes
+ * Configure webhook in Airtable: https://airtable.com/account/integrations
+ */
+app.post('/webhook/airtable', async (req, res) => {
+  const { baseId, changedRecords } = req.body;
+
+  console.log(`Airtable change detected in base ${baseId}`);
+  console.log(`Changed records:`, changedRecords);
+
+  try {
+    // Re-sync resume from Airtable
+    await syncFromAirtable();
+
+    // Trigger GitHub Actions to rebuild
+    await fetch('https://api.github.com/repos/username/resume/dispatches', {
+      method: 'POST',
+      headers: {
+        Authorization: `token ${process.env.GITHUB_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        event_type: 'airtable-update',
+      }),
+    });
+
+    res.json({
+      status: 'success',
+      message: 'Resume synced and rebuild triggered',
+    });
+  } catch (error) {
+    console.error('Sync failed:', error);
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
+
+app.listen(3000, () => {
+  console.log('Airtable webhook server running on port 3000');
+});
+```
+
+## Auto-Update from GitHub Activity
+
+### GitHub Contributions Sync
+
+```javascript
+// scripts/sync-github-contributions.js
+import { graphql } from '@octokit/graphql';
+import fs from 'fs';
+
+/**
+ * Auto-update resume with GitHub contributions
+ * Adds recent projects and contributions to portfolio section
+ */
+async function syncGitHubContributions() {
+  const graphqlWithAuth = graphql.defaults({
+    headers: {
+      authorization: `token ${process.env.GITHUB_TOKEN}`,
+    },
+  });
+
+  // Fetch recent repositories and contributions
+  const { user } = await graphqlWithAuth(`
+    {
+      user(login: "${process.env.GITHUB_USERNAME}") {
+        repositories(
+          first: 10
+          orderBy: { field: UPDATED_AT, direction: DESC }
+          privacy: PUBLIC
+        ) {
+          nodes {
+            name
+            description
+            url
+            stargazerCount
+            primaryLanguage {
+              name
+            }
+            languages(first: 5) {
+              nodes {
+                name
+              }
+            }
+          }
+        }
+        contributionsCollection {
+          totalCommitContributions
+          totalPullRequestContributions
+          totalIssueContributions
+        }
+      }
+    }
+  `);
+
+  // Load existing resume
+  const resume = JSON.parse(fs.readFileSync('resume.json', 'utf8'));
+
+  // Update projects section
+  resume.projects = user.repositories.nodes.map((repo) => ({
+    name: repo.name,
+    description: repo.description,
+    url: repo.url,
+    keywords: repo.languages.nodes.map((l) => l.name),
+    highlights: [
+      `${repo.stargazerCount} stars`,
+      `Primary language: ${repo.primaryLanguage?.name || 'N/A'}`,
+    ],
+  }));
+
+  // Add GitHub stats to summary
+  const stats = user.contributionsCollection;
+  const githubStats = `GitHub: ${stats.totalCommitContributions} commits, ${stats.totalPullRequestContributions} PRs, ${stats.totalIssueContributions} issues in the last year.`;
+
+  if (!resume.basics.summary.includes('GitHub:')) {
+    resume.basics.summary += `\n\n${githubStats}`;
+  }
+
+  fs.writeFileSync('resume.json', JSON.stringify(resume, null, 2));
+  console.log('✓ Synced GitHub contributions');
+}
+
+syncGitHubContributions().catch(console.error);
+```
+
+### Automated GitHub Workflow
+
+```yaml
+# .github/workflows/auto-update-resume.yml
+name: Auto-Update Resume from GitHub
+
+on:
+  schedule:
+    # Run weekly on Sundays at midnight
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install @octokit/graphql
+
+      - name: Sync GitHub contributions
+        run: node scripts/sync-github-contributions.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_USERNAME: ${{ github.repository_owner }}
+
+      - name: Commit changes
+        run: |
+          git config --global user.name 'Resume Bot'
+          git config --global user.email 'bot@jsonresume.org'
+          git add resume.json
+          git diff --staged --quiet || git commit -m "chore: auto-update GitHub contributions"
+          git push
+```
+
+## Zapier & Make.com Integration
+
+### Zapier Custom Integration
+
+```javascript
+// zapier/triggers/resume-updated.js
+/**
+ * Zapier Trigger: Resume Updated
+ * Triggers when resume.json changes in GitHub
+ */
+module.exports = {
+  key: 'resume_updated',
+  noun: 'Resume',
+
+  display: {
+    label: 'Resume Updated',
+    description: 'Triggers when your JSON Resume is updated',
+  },
+
+  operation: {
+    inputFields: [
+      {
+        key: 'github_repo',
+        label: 'GitHub Repository',
+        type: 'string',
+        required: true,
+        helpText: 'Format: username/repo-name',
+      },
+    ],
+
+    perform: async (z, bundle) => {
+      const [owner, repo] = bundle.inputData.github_repo.split('/');
+
+      // Get latest commits for resume.json
+      const response = await z.request({
+        url: `https://api.github.com/repos/${owner}/${repo}/commits`,
+        params: {
+          path: 'resume.json',
+          per_page: 1,
+        },
+      });
+
+      const commit = response.data[0];
+
+      // Fetch resume content
+      const resumeResponse = await z.request({
+        url: `https://raw.githubusercontent.com/${owner}/${repo}/${commit.sha}/resume.json`,
+      });
+
+      return [
+        {
+          id: commit.sha,
+          resume: JSON.parse(resumeResponse.data),
+          updated_at: commit.commit.author.date,
+          message: commit.commit.message,
+        },
+      ];
+    },
+
+    sample: {
+      id: 'abc123',
+      resume: {
+        basics: {
+          name: 'John Doe',
+          email: 'john@example.com',
+        },
+      },
+      updated_at: '2024-01-15T10:30:00Z',
+      message: 'Update work experience',
+    },
+  },
+};
+```
+
+```javascript
+// zapier/creates/publish-resume.js
+/**
+ * Zapier Action: Publish Resume
+ * Publishes resume to jsonresume.org
+ */
+module.exports = {
+  key: 'publish_resume',
+  noun: 'Resume',
+
+  display: {
+    label: 'Publish Resume',
+    description: 'Publishes your resume to jsonresume.org',
+  },
+
+  operation: {
+    inputFields: [
+      {
+        key: 'resume',
+        label: 'Resume JSON',
+        type: 'text',
+        required: true,
+        helpText: 'Your complete JSON Resume data',
+      },
+      {
+        key: 'theme',
+        label: 'Theme',
+        type: 'string',
+        choices: ['professional', 'standard', 'spartacus', 'flat'],
+        default: 'professional',
+      },
+    ],
+
+    perform: async (z, bundle) => {
+      const response = await z.request({
+        url: 'https://api.jsonresume.org/publish',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: {
+          resume: JSON.parse(bundle.inputData.resume),
+          theme: bundle.inputData.theme,
+        },
+      });
+
+      return response.data;
+    },
+  },
+};
+```
+
+### Make.com HTTP Module
+
+```json
+{
+  "name": "JSON Resume Publisher",
+  "modules": [
+    {
+      "id": 1,
+      "module": "gateway:CustomWebHook",
+      "version": 1,
+      "parameters": {
+        "hook": "resume-webhook",
+        "maxResults": 1
+      }
+    },
+    {
+      "id": 2,
+      "module": "http:ActionSendData",
+      "version": 3,
+      "parameters": {},
+      "mapper": {
+        "url": "https://api.jsonresume.org/publish",
+        "method": "post",
+        "headers": [
+          {
+            "name": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "qs": [],
+        "bodyType": "raw",
+        "parseResponse": true,
+        "body": "{{1.resume}}"
+      }
+    },
+    {
+      "id": 3,
+      "module": "github:ActionCreateCommit",
+      "version": 1,
+      "mapper": {
+        "repo": "resume",
+        "owner": "{{1.username}}",
+        "branch": "main",
+        "message": "Update resume via Make.com",
+        "files": [
+          {
+            "path": "resume.json",
+            "content": "{{1.resume}}"
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+
+### n8n Workflow
+
+```json
+{
+  "name": "JSON Resume Auto-Publisher",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "resume-webhook",
+        "responseMode": "lastNode"
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://api.github.com/repos/{{$json.owner}}/{{$json.repo}}/contents/resume.json",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "requestMethod": "GET"
+      },
+      "name": "Get Resume from GitHub",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "const content = Buffer.from($input.item.json.content, 'base64').toString();\nreturn { json: JSON.parse(content) };"
+      },
+      "name": "Parse Resume",
+      "type": "n8n-nodes-base.function",
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://api.jsonresume.org/publish",
+        "requestMethod": "POST",
+        "jsonParameters": true,
+        "bodyParametersJson": "={{ $json }}"
+      },
+      "name": "Publish to jsonresume.org",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [850, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [{ "node": "Get Resume from GitHub", "type": "main", "index": 0 }]
+      ]
+    },
+    "Get Resume from GitHub": {
+      "main": [[{ "node": "Parse Resume", "type": "main", "index": 0 }]]
+    },
+    "Parse Resume": {
+      "main": [
+        [{ "node": "Publish to jsonresume.org", "type": "main", "index": 0 }]
+      ]
+    }
+  }
+}
+```
+
+## Mobile Apps & Bots
+
+### Telegram Bot Integration
+
+```javascript
+// bot/telegram-resume-bot.js
+import TelegramBot from 'node-telegram-bot-api';
+import fs from 'fs';
+import { resumeToHTML, resumeToPDF } from 'resume-cli';
+
+const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
+
+/**
+ * Telegram bot for resume management
+ * Commands:
+ * /start - Welcome message
+ * /resume - Get your resume as PDF
+ * /update - Update resume from file
+ * /preview - Preview resume in browser
+ */
+
+bot.onText(/\/start/, (msg) => {
+  const chatId = msg.chat.id;
+  bot.sendMessage(
+    chatId,
+    `
+Welcome to JSON Resume Bot!
+
+Commands:
+/resume - Get your resume as PDF
+/update - Send me your resume.json to update
+/preview - Get preview link
+/help - Show this message
+  `
+  );
+});
+
+bot.onText(/\/resume/, async (msg) => {
+  const chatId = msg.chat.id;
+  const username = msg.from.username;
+
+  try {
+    // Fetch user's resume
+    const response = await fetch(`https://jsonresume.org/${username}.json`);
+    const resume = await response.json();
+
+    // Generate PDF
+    const pdf = await resumeToPDF(resume, 'professional');
+
+    // Send PDF
+    bot.sendDocument(chatId, pdf, {
+      caption: 'Here is your resume!',
+    });
+  } catch (error) {
+    bot.sendMessage(chatId, `Error: ${error.message}`);
+  }
+});
+
+bot.on('document', async (msg) => {
+  const chatId = msg.chat.id;
+  const file = msg.document;
+
+  if (file.file_name !== 'resume.json') {
+    return bot.sendMessage(chatId, 'Please send a file named resume.json');
+  }
+
+  try {
+    // Download file
+    const fileData = await bot.downloadFile(file.file_id, './');
+    const resume = JSON.parse(fs.readFileSync(fileData, 'utf8'));
+
+    // Validate
+    const validation = await validateResume(resume);
+    if (!validation.valid) {
+      return bot.sendMessage(
+        chatId,
+        `Invalid resume:\n${validation.errors.join('\n')}`
+      );
+    }
+
+    // Publish
+    await publishResume(resume, msg.from.username);
+
+    bot.sendMessage(
+      chatId,
+      `✓ Resume updated!\nView at: https://jsonresume.org/${msg.from.username}`
+    );
+  } catch (error) {
+    bot.sendMessage(chatId, `Error: ${error.message}`);
+  }
+});
+
+bot.onText(/\/preview/, (msg) => {
+  const chatId = msg.chat.id;
+  const username = msg.from.username;
+
+  bot.sendMessage(
+    chatId,
+    `Preview your resume:\nhttps://jsonresume.org/${username}`
+  );
+});
+
+console.log('Telegram bot is running...');
+```
+
+### Discord Bot Integration
+
+```javascript
+// bot/discord-resume-bot.js
+import { Client, GatewayIntentBits, SlashCommandBuilder } from 'discord.js';
+import fs from 'fs';
+
+const client = new Client({
+  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
+});
+
+/**
+ * Discord bot for resume sharing
+ * Slash commands:
+ * /resume [username] - Show resume
+ * /resume-pdf [username] - Get PDF
+ * /my-resume - Show your own resume
+ */
+
+client.once('ready', () => {
+  console.log(`Discord bot logged in as ${client.user.tag}`);
+
+  // Register slash commands
+  const commands = [
+    new SlashCommandBuilder()
+      .setName('resume')
+      .setDescription('View a JSON Resume')
+      .addStringOption((option) =>
+        option
+          .setName('username')
+          .setDescription('GitHub username')
+          .setRequired(true)
+      ),
+    new SlashCommandBuilder()
+      .setName('resume-pdf')
+      .setDescription('Get resume as PDF')
+      .addStringOption((option) =>
+        option
+          .setName('username')
+          .setDescription('GitHub username')
+          .setRequired(true)
+      ),
+    new SlashCommandBuilder()
+      .setName('my-resume')
+      .setDescription('Show your own resume'),
+  ];
+
+  client.application.commands.set(commands);
+});
+
+client.on('interactionCreate', async (interaction) => {
+  if (!interaction.isChatInputCommand()) return;
+
+  const { commandName } = interaction;
+
+  if (commandName === 'resume') {
+    const username = interaction.options.getString('username');
+
+    try {
+      const response = await fetch(`https://jsonresume.org/${username}.json`);
+      const resume = await response.json();
+
+      const embed = {
+        color: 0x0099ff,
+        title: resume.basics.name,
+        description: resume.basics.summary,
+        url: `https://jsonresume.org/${username}`,
+        fields: [
+          {
+            name: 'Position',
+            value: resume.basics.label || 'N/A',
+          },
+          {
+            name: 'Experience',
+            value:
+              resume.work.length > 0
+                ? resume.work[0].name + ' - ' + resume.work[0].position
+                : 'N/A',
+          },
+        ],
+        footer: {
+          text: `View full resume at jsonresume.org/${username}`,
+        },
+      };
+
+      await interaction.reply({ embeds: [embed] });
+    } catch (error) {
+      await interaction.reply(`Error: ${error.message}`);
+    }
+  }
+
+  if (commandName === 'resume-pdf') {
+    await interaction.deferReply();
+
+    const username = interaction.options.getString('username');
+
+    try {
+      const response = await fetch(`https://jsonresume.org/${username}.pdf`);
+      const buffer = await response.arrayBuffer();
+
+      await interaction.editReply({
+        content: `Here's the resume for ${username}:`,
+        files: [
+          {
+            attachment: Buffer.from(buffer),
+            name: `${username}-resume.pdf`,
+          },
+        ],
+      });
+    } catch (error) {
+      await interaction.editReply(`Error: ${error.message}`);
+    }
+  }
+});
+
+client.login(process.env.DISCORD_BOT_TOKEN);
+```
+
+### iOS Shortcut Integration
+
+```javascript
+// Example API endpoint for iOS Shortcuts
+// GET /api/shortcuts/resume?username=johndoe&format=pdf
+
+import express from 'express';
+const app = express();
+
+app.get('/api/shortcuts/resume', async (req, res) => {
+  const { username, format = 'json' } = req.query;
+
+  try {
+    const response = await fetch(
+      `https://jsonresume.org/${username}.${format}`
+    );
+
+    if (format === 'pdf') {
+      const buffer = await response.arrayBuffer();
+      res.contentType('application/pdf');
+      res.send(Buffer.from(buffer));
+    } else {
+      const data = await response.json();
+      res.json(data);
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+```
+
+## AI & LLM Tools Integration
+
+### OpenAI GPT Integration
+
+```javascript
+// scripts/ai-resume-assistant.js
+import OpenAI from 'openai';
+import fs from 'fs';
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+/**
+ * AI Resume Assistant
+ * - Improve resume content with AI
+ * - Generate professional summaries
+ * - Optimize for ATS
+ */
+
+async function improveResumeWithAI(resume) {
+  const prompt = `
+You are a professional resume writer. Improve the following JSON Resume by:
+1. Enhancing the summary to be more impactful
+2. Improving work experience descriptions
+3. Making highlights more achievement-focused
+4. Optimizing for ATS systems
+
+Original resume:
+${JSON.stringify(resume, null, 2)}
+
+Return ONLY valid JSON in the same format.
+  `;
+
+  const completion = await openai.chat.completions.create({
+    model: 'gpt-4',
+    messages: [{ role: 'user', content: prompt }],
+    temperature: 0.7,
+  });
+
+  const improved = JSON.parse(completion.choices[0].message.content);
+  fs.writeFileSync('resume-improved.json', JSON.stringify(improved, null, 2));
+
+  console.log('✓ Resume improved with AI');
+  return improved;
+}
+
+async function generateSummary(resume) {
+  const experience = resume.work
+    .map((j) => `${j.position} at ${j.name}`)
+    .join(', ');
+
+  const completion = await openai.chat.completions.create({
+    model: 'gpt-4',
+    messages: [
+      {
+        role: 'user',
+        content: `Write a professional 3-sentence summary for someone with this experience: ${experience}. Focus on skills, achievements, and career goals.`,
+      },
+    ],
+    max_tokens: 150,
+  });
+
+  return completion.choices[0].message.content.trim();
+}
+
+// Usage
+const resume = JSON.parse(fs.readFileSync('resume.json', 'utf8'));
+const improved = await improveResumeWithAI(resume);
+```
+
+### Claude AI Integration
+
+```javascript
+// scripts/claude-resume-optimizer.js
+import Anthropic from '@anthropic-ai/sdk';
+import fs from 'fs';
+
+const anthropic = new Anthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY,
+});
+
+/**
+ * Use Claude to optimize resume for specific job descriptions
+ */
+async function optimizeForJobDescription(resume, jobDescription) {
+  const message = await anthropic.messages.create({
+    model: 'claude-3-opus-20240229',
+    max_tokens: 4096,
+    messages: [
+      {
+        role: 'user',
+        content: `
+I have this resume (JSON Resume format):
+${JSON.stringify(resume, null, 2)}
+
+I'm applying for this job:
+${jobDescription}
+
+Please optimize my resume for this specific job by:
+1. Tailoring the summary to match the job requirements
+2. Reordering and highlighting relevant work experience
+3. Emphasizing relevant skills
+4. Adding keywords from the job description
+
+Return ONLY the optimized JSON Resume, no explanations.
+      `,
+      },
+    ],
+  });
+
+  const optimized = JSON.parse(message.content[0].text);
+  fs.writeFileSync('resume-optimized.json', JSON.stringify(optimized, null, 2));
+
+  console.log('✓ Resume optimized for job description');
+  return optimized;
+}
+
+// Usage
+const resume = JSON.parse(fs.readFileSync('resume.json', 'utf8'));
+const jobDesc = fs.readFileSync('job-description.txt', 'utf8');
+await optimizeForJobDescription(resume, jobDesc);
+```
+
+### LangChain Integration
+
+```javascript
+// scripts/langchain-resume-qa.js
+import { ChatOpenAI } from '@langchain/openai';
+import { PromptTemplate } from '@langchain/core/prompts';
+import { LLMChain } from 'langchain/chains';
+import fs from 'fs';
+
+/**
+ * Answer questions about your resume using LangChain
+ */
+const resumeData = fs.readFileSync('resume.json', 'utf8');
+
+const model = new ChatOpenAI({
+  modelName: 'gpt-4',
+  temperature: 0,
+});
+
+const template = `
+You are a helpful assistant answering questions about this resume:
+
+{resume}
+
+Question: {question}
+
+Answer concisely and professionally:
+`;
+
+const prompt = PromptTemplate.fromTemplate(template);
+
+const chain = new LLMChain({
+  llm: model,
+  prompt: prompt,
+});
+
+async function askAboutResume(question) {
+  const result = await chain.call({
+    resume: resumeData,
+    question: question,
+  });
+
+  return result.text;
+}
+
+// Examples
+console.log(await askAboutResume('What are my top 3 skills?'));
+console.log(
+  await askAboutResume('How many years of experience do I have in Python?')
+);
+console.log(await askAboutResume('What was my most recent position?'));
+```
+
+## Vercel Deployment
+
+### Next.js App Router
+
+```typescript
+// app/page.tsx
+import { getResume } from '@/lib/resume';
+
+export default async function Home() {
+  const resume = await getResume();
+
+  return (
+    <div className="max-w-4xl mx-auto py-12 px-4">
+      <header className="mb-8">
+        <h1 className="text-4xl font-bold">{resume.basics.name}</h1>
+        <p className="text-xl text-gray-600">{resume.basics.label}</p>
+        <p className="mt-4">{resume.basics.summary}</p>
+      </header>
+
+      <section>
+        <h2 className="text-2xl font-bold mb-4">Experience</h2>
+        {resume.work.map((job, i) => (
+          <div key={i} className="mb-6">
+            <h3 className="text-xl font-semibold">{job.position}</h3>
+            <p className="text-gray-600">
+              {job.name} • {job.startDate} - {job.endDate || 'Present'}
+            </p>
+            <p className="mt-2">{job.summary}</p>
+          </div>
+        ))}
+      </section>
+    </div>
+  );
+}
+```
+
+```typescript
+// lib/resume.ts
+import fs from 'fs/promises';
+import path from 'path';
+import type { ResumeSchema } from '@jsonresume/types';
+
+export async function getResume(): Promise<ResumeSchema> {
+  // Option 1: Load from local file
+  const filePath = path.join(process.cwd(), 'resume.json');
+  const data = await fs.readFile(filePath, 'utf8');
+  return JSON.parse(data);
+
+  // Option 2: Fetch from GitHub Gist
+  // const response = await fetch('https://gist.githubusercontent.com/username/gist-id/raw/resume.json');
+  // return response.json();
+
+  // Option 3: Fetch from jsonresume.org
+  // const response = await fetch('https://jsonresume.org/username.json');
+  // return response.json();
+}
+```
+
+```bash
+# Deploy to Vercel
+vercel
+
+# Or connect GitHub repo for auto-deploy
+# Every push to main triggers a new deployment
+```
+
+### Vercel Serverless Functions
+
+```typescript
+// api/resume.ts
+import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { resumeToHTML, resumeToPDF } from 'resume-cli';
+
+/**
+ * Serverless function to generate resume in different formats
+ * GET /api/resume?format=html|pdf|json&theme=professional
+ */
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  const { format = 'json', theme = 'professional' } = req.query;
+
+  try {
+    // Fetch resume data
+    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/resume.json`);
+    const resume = await response.json();
+
+    if (format === 'json') {
+      return res.json(resume);
+    }
+
+    if (format === 'html') {
+      const html = await resumeToHTML(resume, theme as string);
+      res.setHeader('Content-Type', 'text/html');
+      return res.send(html);
+    }
+
+    if (format === 'pdf') {
+      const pdf = await resumeToPDF(resume, theme as string);
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'attachment; filename=resume.pdf');
+      return res.send(pdf);
+    }
+
+    return res.status(400).json({ error: 'Invalid format' });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}
+```
+
+### vercel.json Configuration
+
+```json
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "framework": "nextjs",
+  "rewrites": [
+    {
+      "source": "/resume.pdf",
+      "destination": "/api/resume?format=pdf"
+    },
+    {
+      "source": "/resume.html",
+      "destination": "/api/resume?format=html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "s-maxage=3600, stale-while-revalidate"
+        }
+      ]
+    }
+  ],
+  "env": {
+    "NEXT_PUBLIC_URL": "@next-public-url"
+  }
+}
+```
+
+## Netlify Deployment
+
+### Static Site Generation
+
+```toml
+# netlify.toml
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+[[redirects]]
+  from = "/resume.pdf"
+  to = "/.netlify/functions/generate-pdf"
+  status = 200
+
+[[redirects]]
+  from = "/resume/:theme"
+  to = "/.netlify/functions/render-theme"
+  status = 200
+  query = {theme = ":theme"}
+
+[[headers]]
+  for = "/resume.json"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+    Content-Type = "application/json"
+```
+
+### Netlify Functions
+
+```javascript
+// netlify/functions/generate-pdf.js
+const { resumeToPDF } = require('resume-cli');
+const fs = require('fs');
+
+exports.handler = async (event, context) => {
+  try {
+    const resume = JSON.parse(fs.readFileSync('./resume.json', 'utf8'));
+    const theme = event.queryStringParameters?.theme || 'professional';
+
+    const pdf = await resumeToPDF(resume, theme);
+
+    return {
+      statusCode: 200,
+      headers: {
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': 'attachment; filename=resume.pdf',
+      },
+      body: pdf.toString('base64'),
+      isBase64Encoded: true,
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: error.message }),
+    };
+  }
+};
+```
+
+```javascript
+// netlify/functions/render-theme.js
+const { resumeToHTML } = require('resume-cli');
+const fs = require('fs');
+
+exports.handler = async (event, context) => {
+  try {
+    const resume = JSON.parse(fs.readFileSync('./resume.json', 'utf8'));
+    const theme = event.queryStringParameters?.theme || 'professional';
+
+    const html = await resumeToHTML(resume, theme);
+
+    return {
+      statusCode: 200,
+      headers: {
+        'Content-Type': 'text/html',
+      },
+      body: html,
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: error.message }),
+    };
+  }
+};
+```
+
+### Netlify CLI Deploy
+
+```bash
+# Install Netlify CLI
+npm install -g netlify-cli
+
+# Login
+netlify login
+
+# Initialize site
+netlify init
+
+# Build and deploy
+netlify build
+netlify deploy --prod
+
+# Continuous deployment (link to GitHub)
+netlify link
+# Netlify will auto-deploy on every push to main
+```
+
+## Best Practices
+
+### Security Considerations
+
+1. **Never commit API keys** - Use environment variables
+2. **Validate all resume data** before processing
+3. **Sanitize HTML output** to prevent XSS
+4. **Use HTTPS** for all API calls
+5. **Rate limit** public endpoints
+6. **Authenticate** webhook endpoints
+
+```javascript
+// Example: Secure webhook endpoint
+import crypto from 'crypto';
+
+function verifyWebhookSignature(payload, signature, secret) {
+  const hmac = crypto.createHmac('sha256', secret);
+  const digest = hmac.update(payload).digest('hex');
+  return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(digest));
+}
+
+app.post('/webhook', (req, res) => {
+  const signature = req.headers['x-webhook-signature'];
+
+  if (
+    !verifyWebhookSignature(req.body, signature, process.env.WEBHOOK_SECRET)
+  ) {
+    return res.status(401).json({ error: 'Invalid signature' });
+  }
+
+  // Process webhook
+});
+```
+
+### Performance Optimization
+
+1. **Cache resume data** (CDN, Redis, local storage)
+2. **Lazy load** large sections
+3. **Optimize images** (compress, WebP, responsive)
+4. **Minify** JSON and HTML outputs
+5. **Use serverless** for PDF generation (scales automatically)
+
+```javascript
+// Example: Redis caching
+import Redis from 'ioredis';
+const redis = new Redis(process.env.REDIS_URL);
+
+async function getCachedResume(username) {
+  const cached = await redis.get(`resume:${username}`);
+  if (cached) return JSON.parse(cached);
+
+  const response = await fetch(`https://jsonresume.org/${username}.json`);
+  const resume = await response.json();
+
+  await redis.setex(`resume:${username}`, 3600, JSON.stringify(resume));
+  return resume;
+}
+```
+
+### Error Handling
+
+```javascript
+// Example: Robust error handling
+async function fetchResume(username) {
+  try {
+    const response = await fetch(`https://jsonresume.org/${username}.json`, {
+      timeout: 5000,
+    });
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        throw new Error(`Resume not found for user: ${username}`);
+      }
+      throw new Error(`Failed to fetch resume: ${response.statusText}`);
+    }
+
+    const resume = await response.json();
+
+    // Validate schema
+    const validation = validateResume(resume);
+    if (!validation.valid) {
+      throw new Error(`Invalid resume schema: ${validation.errors.join(', ')}`);
+    }
+
+    return resume;
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      throw new Error('Request timeout - please try again');
+    }
+
+    console.error('Failed to fetch resume:', error);
+    throw error;
+  }
+}
+```
+
+## Resources
+
+- [JSON Resume Schema](https://jsonresume.org/schema/)
+- [Official CLI Documentation](/cli)
+- [Theme Gallery](/themes)
+- [API Reference](/api)
+- [GitHub Actions Documentation](https://docs.github.com/en/actions)
+- [Vercel Documentation](https://vercel.com/docs)
+- [Netlify Documentation](https://docs.netlify.com)
+
+## Next Steps
+
+- [Create your resume](/getting-started)
+- [Explore themes](/themes)
+- [Read API docs](/api)
+- [Contribute to JSON Resume](/contributing)

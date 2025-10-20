@@ -1,0 +1,2079 @@
+# Schema & Structure
+
+The JSON Resume schema is the heart of the ecosystem. It's a standardized, open-source JSON format for representing professional history. This guide covers everything you need to know about creating valid JSON resumes.
+
+## What is the JSON Resume Schema?
+
+The JSON Resume schema is a **community-driven open standard** that defines how to structure resume data in JSON format. It's:
+
+- **Machine-readable**: Perfect for ATS systems, parsers, and automated tools
+- **Human-friendly**: Easy to read, write, and maintain
+- **Portable**: Your data works across any tool that supports JSON Resume
+- **Version-controlled**: Track changes over time with Git
+- **Tool-agnostic**: Use with the official CLI, custom renderers, or any application
+
+### Why JSON?
+
+JSON (JavaScript Object Notation) is a lightweight, widely-supported data format that's:
+
+- Easy to parse programmatically
+- Human-readable and editable
+- Supported by virtually every programming language
+- Perfect for web applications and APIs
+- Ideal for version control systems
+
+## Schema Versions
+
+### Current Version: 1.0.0
+
+The stable schema version is **1.0.0**, released in 2014 and continuously maintained by the community.
+
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/master/schema.json"
+}
+```
+
+### Where's the Official Schema?
+
+- **Schema Repository**: [github.com/jsonresume/resume-schema](https://github.com/jsonresume/resume-schema)
+- **Schema File**: [schema.json](https://raw.githubusercontent.com/jsonresume/resume-schema/master/schema.json)
+- **NPM Package**: `resume-schema` ([npmjs.com/package/resume-schema](https://www.npmjs.com/package/resume-schema))
+
+### Version History
+
+The schema follows semantic versioning:
+
+- **1.0.x**: Current stable version with ongoing maintenance
+- **0.x.x**: Pre-1.0 versions (deprecated)
+
+Issues and feature requests are tracked in the [schema repository](https://github.com/jsonresume/resume-schema/issues).
+
+## Validation
+
+### How to Validate Your Resume
+
+#### Using the CLI
+
+The official `resume-cli` includes built-in validation:
+
+```bash
+npm install -g resume-cli
+resume validate
+```
+
+#### Programmatic Validation
+
+```javascript
+const { validateResume } = require('./lib/generateResume/validation');
+
+const resume = {
+  basics: {
+    name: 'John Doe',
+    email: 'john@example.com',
+  },
+};
+
+const { error } = validateResume(resume);
+
+if (error) {
+  console.error('Validation failed:', error);
+} else {
+  console.log('Resume is valid!');
+}
+```
+
+#### Online Validation
+
+You can also validate using JSON Schema validators:
+
+1. Copy your resume JSON
+2. Visit [jsonschemavalidator.net](https://www.jsonschemavalidator.net/)
+3. Paste the schema from [here](https://raw.githubusercontent.com/jsonresume/resume-schema/master/schema.json)
+4. Paste your resume JSON
+5. Check for validation errors
+
+### Validation Bypass
+
+In some cases, you may want to bypass validation (e.g., when using experimental fields):
+
+```json
+{
+  "meta": {
+    "skipValidation": true
+  }
+}
+```
+
+**Warning**: Bypassing validation may cause compatibility issues with themes and tools.
+
+## Required vs Optional Fields
+
+### Nothing is Strictly Required
+
+The JSON Resume schema is **extremely flexible** - technically, no fields are strictly required. However, most themes expect at least the `basics` section to render properly.
+
+### Recommended Minimum
+
+For a functional resume, we recommend including:
+
+```json
+{
+  "basics": {
+    "name": "Your Name",
+    "label": "Your Job Title",
+    "email": "your@email.com"
+  }
+}
+```
+
+### Fully Featured Resume
+
+A comprehensive resume typically includes:
+
+- ✅ `basics` - Personal information (name, email, summary)
+- ✅ `work` - Work experience
+- ✅ `education` - Educational background
+- ⚪ `skills` - Technical and professional skills
+- ⚪ `projects` - Portfolio projects
+- ⚪ `volunteer` - Volunteer work
+- ⚪ `awards` - Awards and recognition
+- ⚪ `certificates` - Professional certifications
+- ⚪ `publications` - Published works
+- ⚪ `languages` - Spoken languages
+- ⚪ `interests` - Personal interests
+- ⚪ `references` - Professional references
+
+## Custom Fields
+
+### Adding Custom Data
+
+The schema allows `additionalProperties: true` on most sections, meaning you can add custom fields:
+
+```json
+{
+  "basics": {
+    "name": "John Doe",
+    "customField": "Custom value",
+    "pronouns": "he/him",
+    "availability": "Available for hire"
+  }
+}
+```
+
+### Custom Field Best Practices
+
+1. **Use descriptive names**: Make your custom fields self-explanatory
+2. **Document your usage**: If building a custom theme, document what custom fields it expects
+3. **Don't override standard fields**: Avoid naming conflicts with official schema fields
+4. **Consider compatibility**: Custom fields may not be supported by all themes
+
+### Extending for Specific Use Cases
+
+Some common custom extensions:
+
+```json
+{
+  "basics": {
+    "name": "John Doe",
+    "pronouns": "he/him",
+    "headline": "Building the future of web",
+    "timezone": "America/Los_Angeles"
+  },
+  "work": [
+    {
+      "name": "Company",
+      "position": "Senior Engineer",
+      "teamSize": 8,
+      "remoteWork": true,
+      "technologies": ["React", "Node.js"]
+    }
+  ]
+}
+```
+
+## Complete Field Reference
+
+### Basics
+
+Personal information and contact details.
+
+```json
+{
+  "basics": {
+    "name": "John Doe",
+    "label": "Software Engineer",
+    "image": "https://example.com/photo.jpg",
+    "email": "john@example.com",
+    "phone": "(912) 555-4321",
+    "url": "https://johndoe.com",
+    "summary": "Experienced software engineer with 10 years of building scalable web applications...",
+    "location": {
+      "address": "2712 Broadway St",
+      "postalCode": "CA 94115",
+      "city": "San Francisco",
+      "countryCode": "US",
+      "region": "California"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "johndoe",
+        "url": "https://github.com/johndoe"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "johndoe",
+        "url": "https://linkedin.com/in/johndoe"
+      }
+    ]
+  }
+}
+```
+
+**Field Descriptions:**
+
+| Field                  | Type           | Description                                        |
+| ---------------------- | -------------- | -------------------------------------------------- |
+| `name`                 | String         | Your full name                                     |
+| `label`                | String         | Your professional title (e.g., "Web Developer")    |
+| `image`                | String (URL)   | URL to a professional photo (JPEG or PNG)          |
+| `email`                | String (Email) | Your email address                                 |
+| `phone`                | String         | Phone number in any format                         |
+| `url`                  | String (URL)   | Personal website or portfolio URL                  |
+| `summary`              | String         | 2-3 sentence professional biography                |
+| `location`             | Object         | Your location details                              |
+| `location.address`     | String         | Street address (use `\n` for multiple lines)       |
+| `location.postalCode`  | String         | ZIP/postal code                                    |
+| `location.city`        | String         | City name                                          |
+| `location.countryCode` | String         | ISO-3166-1 ALPHA-2 country code (e.g., US, UK, CA) |
+| `location.region`      | String         | State, province, or region                         |
+| `profiles`             | Array          | Social media and professional profiles             |
+| `profiles[].network`   | String         | Platform name (e.g., GitHub, LinkedIn, Twitter)    |
+| `profiles[].username`  | String         | Your username on that platform                     |
+| `profiles[].url`       | String (URL)   | Full URL to your profile                           |
+
+**Example with Social Profiles:**
+
+```json
+{
+  "profiles": [
+    {
+      "network": "GitHub",
+      "username": "johndoe",
+      "url": "https://github.com/johndoe"
+    },
+    {
+      "network": "LinkedIn",
+      "username": "johndoe",
+      "url": "https://linkedin.com/in/johndoe"
+    },
+    {
+      "network": "Twitter",
+      "username": "johndoe",
+      "url": "https://twitter.com/johndoe"
+    },
+    {
+      "network": "Portfolio",
+      "url": "https://johndoe.com"
+    }
+  ]
+}
+```
+
+### Work
+
+Professional work experience.
+
+```json
+{
+  "work": [
+    {
+      "name": "Facebook",
+      "location": "Menlo Park, CA",
+      "description": "Social Media Company",
+      "position": "Senior Software Engineer",
+      "url": "https://facebook.com",
+      "startDate": "2018-03-15",
+      "endDate": "2023-06-30",
+      "summary": "Led development of user authentication and security systems serving 2B+ users.",
+      "highlights": [
+        "Reduced authentication latency by 40% through Redis caching optimization",
+        "Designed and implemented OAuth2 flow supporting 500K+ third-party apps",
+        "Mentored team of 5 junior engineers, 3 promoted to mid-level roles"
+      ]
+    },
+    {
+      "name": "Google",
+      "position": "Software Engineer",
+      "url": "https://google.com",
+      "startDate": "2015-01-10",
+      "endDate": "2018-03-01",
+      "summary": "Worked on Google Search infrastructure and ranking algorithms.",
+      "highlights": [
+        "Improved search result relevance by 15% through ML model optimization",
+        "Contributed to TensorFlow open source project"
+      ]
+    }
+  ]
+}
+```
+
+**Field Descriptions:**
+
+| Field         | Type              | Description                                |
+| ------------- | ----------------- | ------------------------------------------ |
+| `name`        | String            | Company name                               |
+| `location`    | String            | Office location (city, state/country)      |
+| `description` | String            | Brief company description                  |
+| `position`    | String            | Your job title                             |
+| `url`         | String (URL)      | Company website                            |
+| `startDate`   | String (ISO 8601) | Start date (YYYY-MM-DD, YYYY-MM, or YYYY)  |
+| `endDate`     | String (ISO 8601) | End date (empty string for current job)    |
+| `summary`     | String            | Overview of your role and responsibilities |
+| `highlights`  | Array[String]     | Key accomplishments and achievements       |
+
+**Current Job (No End Date):**
+
+```json
+{
+  "work": [
+    {
+      "name": "Current Company",
+      "position": "Senior Engineer",
+      "startDate": "2023-01",
+      "endDate": "",
+      "summary": "Leading backend architecture for main product."
+    }
+  ]
+}
+```
+
+**Multiple Roles at Same Company:**
+
+```json
+{
+  "work": [
+    {
+      "name": "TechCorp",
+      "position": "Senior Engineer",
+      "startDate": "2020-01",
+      "endDate": "",
+      "summary": "Promoted to senior role after 2 years."
+    },
+    {
+      "name": "TechCorp",
+      "position": "Software Engineer",
+      "startDate": "2018-01",
+      "endDate": "2019-12",
+      "summary": "Started as mid-level engineer."
+    }
+  ]
+}
+```
+
+**Freelance/Contract Work:**
+
+```json
+{
+  "work": [
+    {
+      "name": "Independent Consultant",
+      "position": "Freelance Web Developer",
+      "startDate": "2020-01",
+      "endDate": "2022-12",
+      "summary": "Provided web development services to 15+ clients.",
+      "highlights": [
+        "Built e-commerce platforms for 5 small businesses",
+        "Maintained 100% client satisfaction rating",
+        "Specialized in React and Node.js development"
+      ]
+    }
+  ]
+}
+```
+
+### Education
+
+Educational background and academic achievements.
+
+```json
+{
+  "education": [
+    {
+      "institution": "Massachusetts Institute of Technology",
+      "url": "https://mit.edu",
+      "area": "Computer Science",
+      "studyType": "Master of Science",
+      "startDate": "2013-09",
+      "endDate": "2015-06",
+      "score": "3.9",
+      "courses": [
+        "CS 6.824 - Distributed Systems",
+        "CS 6.830 - Database Systems",
+        "CS 6.858 - Computer Systems Security"
+      ]
+    },
+    {
+      "institution": "University of California, Berkeley",
+      "url": "https://berkeley.edu",
+      "area": "Computer Science",
+      "studyType": "Bachelor of Science",
+      "startDate": "2009-09",
+      "endDate": "2013-05",
+      "score": "3.7/4.0"
+    }
+  ]
+}
+```
+
+**Field Descriptions:**
+
+| Field         | Type              | Description                                       |
+| ------------- | ----------------- | ------------------------------------------------- |
+| `institution` | String            | University or institution name                    |
+| `url`         | String (URL)      | Institution website                               |
+| `area`        | String            | Field of study (e.g., Computer Science, Business) |
+| `studyType`   | String            | Degree type (e.g., Bachelor, Master, PhD)         |
+| `startDate`   | String (ISO 8601) | Start date                                        |
+| `endDate`     | String (ISO 8601) | End date (or expected graduation)                 |
+| `score`       | String            | GPA or grade (specify scale, e.g., "3.8/4.0")     |
+| `courses`     | Array[String]     | Notable courses or subjects                       |
+
+**Currently Enrolled:**
+
+```json
+{
+  "education": [
+    {
+      "institution": "Stanford University",
+      "area": "Machine Learning",
+      "studyType": "PhD",
+      "startDate": "2022-09",
+      "endDate": "2026-06",
+      "score": "4.0/4.0"
+    }
+  ]
+}
+```
+
+**Bootcamp or Alternative Education:**
+
+```json
+{
+  "education": [
+    {
+      "institution": "App Academy",
+      "area": "Full-Stack Web Development",
+      "studyType": "Certificate",
+      "startDate": "2021-01",
+      "endDate": "2021-06"
+    }
+  ]
+}
+```
+
+### Volunteer
+
+Volunteer work and community service.
+
+```json
+{
+  "volunteer": [
+    {
+      "organization": "Code for Good",
+      "position": "Web Developer",
+      "url": "https://codeforgood.org",
+      "startDate": "2020-01",
+      "endDate": "2022-12",
+      "summary": "Built websites for non-profit organizations.",
+      "highlights": [
+        "Developed donation platform processing $500K+ annually",
+        "Trained 10+ volunteers in web development basics",
+        "Led team of 5 developers on homeless shelter management system"
+      ]
+    }
+  ]
+}
+```
+
+**Field Descriptions:**
+
+| Field          | Type              | Description                     |
+| -------------- | ----------------- | ------------------------------- |
+| `organization` | String            | Organization name               |
+| `position`     | String            | Your volunteer role             |
+| `url`          | String (URL)      | Organization website            |
+| `startDate`    | String (ISO 8601) | Start date                      |
+| `endDate`      | String (ISO 8601) | End date (empty for ongoing)    |
+| `summary`      | String            | Overview of your volunteer work |
+| `highlights`   | Array[String]     | Key accomplishments             |
+
+### Skills
+
+Technical and professional skills.
+
+```json
+{
+  "skills": [
+    {
+      "name": "Frontend Development",
+      "level": "Expert",
+      "keywords": [
+        "React",
+        "TypeScript",
+        "Next.js",
+        "Tailwind CSS",
+        "JavaScript",
+        "HTML",
+        "CSS"
+      ]
+    },
+    {
+      "name": "Backend Development",
+      "level": "Advanced",
+      "keywords": ["Node.js", "Python", "PostgreSQL", "GraphQL", "REST APIs"]
+    },
+    {
+      "name": "DevOps",
+      "level": "Intermediate",
+      "keywords": ["Docker", "Kubernetes", "AWS", "CI/CD", "GitHub Actions"]
+    }
+  ]
+}
+```
+
+**Field Descriptions:**
+
+| Field      | Type          | Description                                                                |
+| ---------- | ------------- | -------------------------------------------------------------------------- |
+| `name`     | String        | Skill category (e.g., "Web Development", "Languages")                      |
+| `level`    | String        | Proficiency level (e.g., Beginner, Intermediate, Advanced, Expert, Master) |
+| `keywords` | Array[String] | Specific skills or technologies                                            |
+
+**Skills vs Keywords:**
+
+- **`name`**: Broad category or skill area
+- **`keywords`**: Specific technologies, tools, or techniques within that category
+
+**Alternative Organization:**
+
+```json
+{
+  "skills": [
+    {
+      "name": "Languages",
+      "keywords": ["JavaScript", "TypeScript", "Python", "Go"]
+    },
+    {
+      "name": "Frameworks",
+      "keywords": ["React", "Next.js", "Express", "Django"]
+    },
+    {
+      "name": "Tools",
+      "keywords": ["Git", "Docker", "VS Code", "Figma"]
+    },
+    {
+      "name": "Databases",
+      "keywords": ["PostgreSQL", "MongoDB", "Redis"]
+    }
+  ]
+}
+```
+
+### Projects
+
+Portfolio projects, open source contributions, and side projects.
+
+```json
+{
+  "projects": [
+    {
+      "name": "JSON Resume",
+      "description": "Open source standard for resumes in JSON format",
+      "highlights": [
+        "10K+ GitHub stars",
+        "Used by developers worldwide",
+        "50+ community themes available"
+      ],
+      "keywords": ["JSON", "Resume", "Open Source"],
+      "startDate": "2014-01",
+      "endDate": "2023-12",
+      "url": "https://jsonresume.org",
+      "roles": ["Maintainer", "Contributor"],
+      "entity": "Open Source",
+      "type": "application"
+    },
+    {
+      "name": "Personal Portfolio",
+      "description": "My personal website showcasing projects and blog posts",
+      "startDate": "2022-06",
+      "endDate": "",
+      "url": "https://johndoe.com",
+      "keywords": ["Next.js", "React", "Tailwind"],
+      "roles": ["Creator"],
+      "type": "website"
+    }
+  ]
+}
+```
+
+**Field Descriptions:**
+
+| Field         | Type              | Description                                                           |
+| ------------- | ----------------- | --------------------------------------------------------------------- |
+| `name`        | String            | Project name                                                          |
+| `description` | String            | Brief project description                                             |
+| `highlights`  | Array[String]     | Key features or achievements                                          |
+| `keywords`    | Array[String]     | Technologies used                                                     |
+| `startDate`   | String (ISO 8601) | Project start date                                                    |
+| `endDate`     | String (ISO 8601) | End date (empty for ongoing)                                          |
+| `url`         | String (URL)      | Project URL (live site, GitHub repo, etc.)                            |
+| `roles`       | Array[String]     | Your role(s) in the project                                           |
+| `entity`      | String            | Associated company/organization (if applicable)                       |
+| `type`        | String            | Project type (e.g., application, website, volunteering, presentation) |
+
+**Open Source Contributions:**
+
+```json
+{
+  "projects": [
+    {
+      "name": "React",
+      "description": "Contributed features and bug fixes to React core",
+      "url": "https://github.com/facebook/react",
+      "roles": ["Contributor"],
+      "entity": "Facebook Open Source",
+      "type": "application",
+      "highlights": [
+        "Implemented concurrent mode improvements",
+        "Fixed 10+ bugs in Suspense API"
+      ]
+    }
+  ]
+}
+```
+
+### Awards
+
+Awards, honors, and recognition.
+
+```json
+{
+  "awards": [
+    {
+      "title": "Employee of the Year",
+      "date": "2022-12-15",
+      "awarder": "TechCorp Inc.",
+      "summary": "Recognized for exceptional contributions to product development and team leadership"
+    },
+    {
+      "title": "Hackathon Winner",
+      "date": "2021-06",
+      "awarder": "Bay Area Hackathon",
+      "summary": "First place for AI-powered code review tool"
+    },
+    {
+      "title": "Dean's List",
+      "date": "2012",
+      "awarder": "UC Berkeley",
+      "summary": "Academic excellence recognition for 4 consecutive semesters"
+    }
+  ]
+}
+```
+
+**Field Descriptions:**
+
+| Field     | Type              | Description                            |
+| --------- | ----------------- | -------------------------------------- |
+| `title`   | String            | Award name                             |
+| `date`    | String (ISO 8601) | Date received                          |
+| `awarder` | String            | Organization/person granting the award |
+| `summary` | String            | Details about the award                |
+
+### Certificates
+
+Professional certifications and credentials.
+
+```json
+{
+  "certificates": [
+    {
+      "name": "AWS Certified Solutions Architect - Professional",
+      "date": "2023-01-15",
+      "url": "https://aws.amazon.com/certification/",
+      "issuer": "Amazon Web Services"
+    },
+    {
+      "name": "Certified Kubernetes Administrator (CKA)",
+      "date": "2022-06-30",
+      "url": "https://www.cncf.io/certification/cka/",
+      "issuer": "Cloud Native Computing Foundation"
+    },
+    {
+      "name": "Google Professional Cloud Architect",
+      "date": "2021-09-20",
+      "issuer": "Google Cloud"
+    }
+  ]
+}
+```
+
+**Field Descriptions:**
+
+| Field    | Type              | Description                          |
+| -------- | ----------------- | ------------------------------------ |
+| `name`   | String            | Certificate name                     |
+| `date`   | String (ISO 8601) | Date issued or earned                |
+| `url`    | String (URL)      | Verification URL or certificate link |
+| `issuer` | String            | Issuing organization                 |
+
+### Publications
+
+Published works, papers, articles, and talks.
+
+```json
+{
+  "publications": [
+    {
+      "name": "Optimizing Database Query Performance at Scale",
+      "publisher": "IEEE Computer Society",
+      "releaseDate": "2023-03-15",
+      "url": "https://ieeexplore.ieee.org/document/12345678",
+      "summary": "Research paper on novel indexing strategies for distributed databases"
+    },
+    {
+      "name": "Introduction to React Hooks",
+      "publisher": "Medium",
+      "releaseDate": "2022-06-01",
+      "url": "https://medium.com/@johndoe/react-hooks",
+      "summary": "Technical article explaining React Hooks with practical examples"
+    }
+  ]
+}
+```
+
+**Field Descriptions:**
+
+| Field         | Type              | Description                          |
+| ------------- | ----------------- | ------------------------------------ |
+| `name`        | String            | Publication title                    |
+| `publisher`   | String            | Publisher name                       |
+| `releaseDate` | String (ISO 8601) | Publication date                     |
+| `url`         | String (URL)      | Link to publication                  |
+| `summary`     | String            | Brief description of the publication |
+
+**Conference Talks:**
+
+```json
+{
+  "publications": [
+    {
+      "name": "Building Scalable Microservices",
+      "publisher": "React Conf 2023",
+      "releaseDate": "2023-10-15",
+      "url": "https://www.youtube.com/watch?v=example",
+      "summary": "45-minute talk on microservices architecture patterns"
+    }
+  ]
+}
+```
+
+### Languages
+
+Spoken languages and proficiency levels.
+
+```json
+{
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Native"
+    },
+    {
+      "language": "Spanish",
+      "fluency": "Professional Working Proficiency"
+    },
+    {
+      "language": "Mandarin",
+      "fluency": "Elementary"
+    }
+  ]
+}
+```
+
+**Field Descriptions:**
+
+| Field      | Type   | Description       |
+| ---------- | ------ | ----------------- |
+| `language` | String | Language name     |
+| `fluency`  | String | Proficiency level |
+
+**Common Fluency Levels:**
+
+- **Native**: Native language
+- **Fluent**: Full professional fluency
+- **Professional Working Proficiency**: Can use language effectively in professional settings
+- **Limited Working Proficiency**: Basic conversation and reading
+- **Elementary**: Basic knowledge
+- **Beginner**: Just starting to learn
+
+**Using CEFR Levels:**
+
+```json
+{
+  "languages": [
+    {
+      "language": "French",
+      "fluency": "B2 (Upper Intermediate)"
+    },
+    {
+      "language": "German",
+      "fluency": "A1 (Beginner)"
+    }
+  ]
+}
+```
+
+### Interests
+
+Personal interests and hobbies.
+
+```json
+{
+  "interests": [
+    {
+      "name": "Open Source",
+      "keywords": [
+        "Contributing to open source projects",
+        "Maintainer of several npm packages"
+      ]
+    },
+    {
+      "name": "Photography",
+      "keywords": [
+        "Landscape photography",
+        "Street photography",
+        "Film photography"
+      ]
+    },
+    {
+      "name": "Writing",
+      "keywords": ["Technical blogging", "Science fiction"]
+    }
+  ]
+}
+```
+
+**Field Descriptions:**
+
+| Field      | Type          | Description                       |
+| ---------- | ------------- | --------------------------------- |
+| `name`     | String        | Interest or hobby name            |
+| `keywords` | Array[String] | Specific details or sub-interests |
+
+**Minimal Format:**
+
+```json
+{
+  "interests": [{ "name": "Chess" }, { "name": "Hiking" }, { "name": "Piano" }]
+}
+```
+
+### References
+
+Professional references.
+
+```json
+{
+  "references": [
+    {
+      "name": "Jane Smith",
+      "reference": "I had the pleasure of working with John for 3 years at TechCorp. He consistently demonstrated exceptional technical skills and leadership abilities. John is a valuable asset to any team."
+    },
+    {
+      "name": "Bob Johnson",
+      "reference": "John was one of the most talented engineers I've managed. His ability to solve complex problems and mentor junior developers made a significant impact on our team's success."
+    }
+  ]
+}
+```
+
+**Field Descriptions:**
+
+| Field       | Type   | Description                        |
+| ----------- | ------ | ---------------------------------- |
+| `name`      | String | Reference's name                   |
+| `reference` | String | Reference statement or testimonial |
+
+**References Available Upon Request:**
+
+Many professionals prefer not to include references directly in their resume:
+
+```json
+{
+  "references": [
+    {
+      "name": "Available upon request",
+      "reference": ""
+    }
+  ]
+}
+```
+
+Or simply omit the `references` section entirely.
+
+### Meta
+
+Metadata about the resume itself.
+
+```json
+{
+  "meta": {
+    "canonical": "https://raw.githubusercontent.com/johndoe/resume/master/resume.json",
+    "version": "v1.0.0",
+    "lastModified": "2023-12-15T10:30:00",
+    "skipValidation": false
+  }
+}
+```
+
+**Field Descriptions:**
+
+| Field            | Type              | Description                               |
+| ---------------- | ----------------- | ----------------------------------------- |
+| `canonical`      | String (URL)      | Canonical URL for this resume             |
+| `version`        | String            | Version of your resume                    |
+| `lastModified`   | String (ISO 8601) | Last modification timestamp               |
+| `skipValidation` | Boolean           | Bypass schema validation (default: false) |
+
+## Date Formatting
+
+### ISO 8601 Format
+
+All dates in JSON Resume use **ISO 8601** format, with flexible precision:
+
+```json
+{
+  "startDate": "2023-06-15", // Full date: YYYY-MM-DD
+  "endDate": "2023-06" // Month precision: YYYY-MM
+}
+```
+
+**Supported Formats:**
+
+- `YYYY-MM-DD` - Full date (e.g., "2023-06-15")
+- `YYYY-MM` - Month precision (e.g., "2023-06")
+- `YYYY` - Year only (e.g., "2023")
+- `""` - Empty string for current/ongoing positions
+
+### Date Examples
+
+**Full precision:**
+
+```json
+{
+  "startDate": "2020-03-15",
+  "endDate": "2023-06-30"
+}
+```
+
+**Month precision:**
+
+```json
+{
+  "startDate": "2020-03",
+  "endDate": "2023-06"
+}
+```
+
+**Year only:**
+
+```json
+{
+  "startDate": "2020",
+  "endDate": "2023"
+}
+```
+
+**Current position (no end date):**
+
+```json
+{
+  "startDate": "2020-03",
+  "endDate": ""
+}
+```
+
+### Why ISO 8601?
+
+- **Unambiguous**: No confusion between MM/DD and DD/MM formats
+- **Sortable**: Dates sort correctly as strings
+- **International**: Works across all locales
+- **Flexible**: Support for different precision levels
+
+## Common Patterns
+
+### Pattern: Current Job
+
+For positions you're currently in, use an empty string for `endDate`:
+
+```json
+{
+  "work": [
+    {
+      "name": "Current Company",
+      "position": "Senior Software Engineer",
+      "startDate": "2021-06",
+      "endDate": "",
+      "summary": "Currently leading backend development team..."
+    }
+  ]
+}
+```
+
+### Pattern: Multiple Roles at One Company
+
+List each role as a separate entry, most recent first:
+
+```json
+{
+  "work": [
+    {
+      "name": "TechCorp",
+      "position": "Principal Engineer",
+      "startDate": "2022-01",
+      "endDate": "",
+      "summary": "Promoted to principal after leading 3 major product launches."
+    },
+    {
+      "name": "TechCorp",
+      "position": "Senior Engineer",
+      "startDate": "2020-01",
+      "endDate": "2021-12",
+      "summary": "Led team of 5 engineers on core product features."
+    },
+    {
+      "name": "TechCorp",
+      "position": "Software Engineer",
+      "startDate": "2018-06",
+      "endDate": "2019-12",
+      "summary": "Started as individual contributor on payments team."
+    }
+  ]
+}
+```
+
+### Pattern: Freelance/Contract Work
+
+#### Individual Freelance Business
+
+```json
+{
+  "work": [
+    {
+      "name": "Freelance Web Development",
+      "position": "Independent Consultant",
+      "startDate": "2020-01",
+      "endDate": "2022-12",
+      "summary": "Provided full-stack web development services to clients across various industries.",
+      "highlights": [
+        "Completed 20+ projects for small businesses and startups",
+        "Specialized in React, Node.js, and AWS deployments",
+        "Maintained 5-star rating across all client reviews"
+      ]
+    }
+  ]
+}
+```
+
+#### Multiple Contract Positions
+
+```json
+{
+  "work": [
+    {
+      "name": "Client A via Toptal",
+      "position": "Contract Frontend Developer",
+      "startDate": "2022-06",
+      "endDate": "2023-03",
+      "summary": "6-month contract building admin dashboard for SaaS platform."
+    },
+    {
+      "name": "Client B via Upwork",
+      "position": "Contract Full-Stack Developer",
+      "startDate": "2021-09",
+      "endDate": "2022-05",
+      "summary": "Built e-commerce platform from scratch using React and Node.js."
+    }
+  ]
+}
+```
+
+### Pattern: Gap in Employment
+
+You don't need to explicitly mark employment gaps - they're implied by date ranges. However, if you want to explain a gap:
+
+```json
+{
+  "work": [
+    {
+      "name": "Personal Development",
+      "position": "Career Break",
+      "startDate": "2021-06",
+      "endDate": "2022-01",
+      "summary": "Took time off to care for family and pursue online courses in machine learning.",
+      "highlights": [
+        "Completed Stanford ML specialization on Coursera",
+        "Built 3 personal projects using TensorFlow"
+      ]
+    }
+  ]
+}
+```
+
+### Pattern: Career Change
+
+Show progression across different industries:
+
+```json
+{
+  "work": [
+    {
+      "name": "TechStartup",
+      "position": "Software Engineer",
+      "startDate": "2020-01",
+      "endDate": "",
+      "summary": "Transitioned to software engineering after 5 years in finance."
+    }
+  ],
+  "education": [
+    {
+      "institution": "Coding Bootcamp",
+      "area": "Full-Stack Web Development",
+      "studyType": "Certificate",
+      "startDate": "2019-06",
+      "endDate": "2019-12"
+    },
+    {
+      "institution": "University of Economics",
+      "area": "Finance",
+      "studyType": "Bachelor",
+      "startDate": "2010-09",
+      "endDate": "2014-06"
+    }
+  ]
+}
+```
+
+### Pattern: Side Projects While Employed
+
+Use the `projects` section for side work:
+
+```json
+{
+  "work": [
+    {
+      "name": "Full-Time Company",
+      "position": "Software Engineer",
+      "startDate": "2020-01",
+      "endDate": ""
+    }
+  ],
+  "projects": [
+    {
+      "name": "Open Source Library",
+      "description": "Popular npm package with 10K+ weekly downloads",
+      "startDate": "2021-06",
+      "endDate": "",
+      "roles": ["Creator", "Maintainer"],
+      "type": "application"
+    }
+  ]
+}
+```
+
+### Pattern: Academic and Professional Projects
+
+Separate academic projects from professional ones:
+
+```json
+{
+  "projects": [
+    {
+      "name": "Distributed Database System",
+      "description": "Master's thesis project implementing Raft consensus algorithm",
+      "entity": "MIT",
+      "type": "academic",
+      "startDate": "2014-09",
+      "endDate": "2015-06"
+    },
+    {
+      "name": "Production SaaS Platform",
+      "description": "Enterprise project management tool serving 50K+ users",
+      "entity": "TechCorp",
+      "type": "application",
+      "startDate": "2020-01",
+      "endDate": "2023-06"
+    }
+  ]
+}
+```
+
+### Pattern: Skills by Proficiency Level
+
+Organize skills with clear proficiency indicators:
+
+```json
+{
+  "skills": [
+    {
+      "name": "Expert",
+      "keywords": ["JavaScript", "React", "Node.js"]
+    },
+    {
+      "name": "Advanced",
+      "keywords": ["TypeScript", "PostgreSQL", "AWS"]
+    },
+    {
+      "name": "Intermediate",
+      "keywords": ["Python", "Docker", "Kubernetes"]
+    },
+    {
+      "name": "Learning",
+      "keywords": ["Rust", "WebAssembly"]
+    }
+  ]
+}
+```
+
+### Pattern: Remote Work
+
+Indicate remote positions clearly:
+
+```json
+{
+  "work": [
+    {
+      "name": "Remote Company",
+      "location": "Remote (US)",
+      "position": "Senior Engineer",
+      "startDate": "2020-03",
+      "endDate": "",
+      "summary": "Fully remote position working across US timezones."
+    }
+  ]
+}
+```
+
+### Pattern: International Experience
+
+```json
+{
+  "work": [
+    {
+      "name": "Global Tech Inc.",
+      "location": "London, UK",
+      "position": "Software Engineer",
+      "startDate": "2018-06",
+      "endDate": "2020-12",
+      "summary": "Relocated to London office to lead EMEA expansion."
+    },
+    {
+      "name": "Global Tech Inc.",
+      "location": "San Francisco, CA",
+      "position": "Junior Engineer",
+      "startDate": "2016-01",
+      "endDate": "2018-05",
+      "summary": "Started at HQ before international transfer."
+    }
+  ]
+}
+```
+
+## Complete Examples
+
+### Minimal Resume
+
+A bare-bones valid resume:
+
+```json
+{
+  "basics": {
+    "name": "Jane Doe",
+    "email": "jane@example.com"
+  }
+}
+```
+
+### Junior Developer Resume
+
+Fresh graduate or bootcamp student:
+
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/master/schema.json",
+  "basics": {
+    "name": "Alex Johnson",
+    "label": "Junior Full-Stack Developer",
+    "email": "alex@example.com",
+    "phone": "(555) 123-4567",
+    "url": "https://alexjohnson.dev",
+    "summary": "Recent computer science graduate passionate about web development and open source. Strong foundation in JavaScript, React, and Node.js with several personal projects deployed to production.",
+    "location": {
+      "city": "Austin",
+      "region": "Texas",
+      "countryCode": "US"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "alexjohnson",
+        "url": "https://github.com/alexjohnson"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "alexjohnson",
+        "url": "https://linkedin.com/in/alexjohnson"
+      }
+    ]
+  },
+  "education": [
+    {
+      "institution": "University of Texas at Austin",
+      "area": "Computer Science",
+      "studyType": "Bachelor of Science",
+      "startDate": "2019-09",
+      "endDate": "2023-05",
+      "score": "3.8/4.0",
+      "courses": [
+        "Data Structures and Algorithms",
+        "Web Development",
+        "Database Systems"
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "name": "Frontend",
+      "keywords": ["React", "JavaScript", "HTML", "CSS", "Tailwind CSS"]
+    },
+    {
+      "name": "Backend",
+      "keywords": ["Node.js", "Express", "PostgreSQL"]
+    },
+    {
+      "name": "Tools",
+      "keywords": ["Git", "VS Code", "Postman"]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Task Management App",
+      "description": "Full-stack task manager with real-time collaboration",
+      "url": "https://github.com/alexjohnson/task-app",
+      "startDate": "2023-01",
+      "endDate": "2023-05",
+      "keywords": ["React", "Node.js", "WebSocket", "PostgreSQL"],
+      "highlights": [
+        "Real-time updates using WebSocket",
+        "User authentication with JWT",
+        "Deployed on Heroku with 50+ active users"
+      ]
+    }
+  ]
+}
+```
+
+### Senior Engineer Resume
+
+Experienced professional:
+
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/master/schema.json",
+  "basics": {
+    "name": "Sarah Chen",
+    "label": "Senior Software Engineer",
+    "email": "sarah.chen@example.com",
+    "phone": "(555) 987-6543",
+    "url": "https://sarahchen.dev",
+    "summary": "Senior software engineer with 10+ years building scalable web applications. Specialized in distributed systems, microservices architecture, and team leadership. Passionate about code quality, mentorship, and open source.",
+    "location": {
+      "city": "Seattle",
+      "region": "Washington",
+      "countryCode": "US"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "sarahchen",
+        "url": "https://github.com/sarahchen"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "sarahchen",
+        "url": "https://linkedin.com/in/sarahchen"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Amazon Web Services",
+      "location": "Seattle, WA",
+      "position": "Senior Software Engineer",
+      "url": "https://aws.amazon.com",
+      "startDate": "2019-03",
+      "endDate": "",
+      "summary": "Lead engineer for AWS Lambda team building serverless compute platform.",
+      "highlights": [
+        "Designed and implemented cold start optimization reducing latency by 60%",
+        "Led team of 8 engineers across 3 major feature releases",
+        "Mentored 5 junior engineers, 3 promoted to mid-level roles",
+        "Reduced production incidents by 40% through improved monitoring"
+      ]
+    },
+    {
+      "name": "Microsoft",
+      "location": "Redmond, WA",
+      "position": "Software Engineer II",
+      "url": "https://microsoft.com",
+      "startDate": "2015-06",
+      "endDate": "2019-02",
+      "summary": "Worked on Azure Storage team building distributed storage systems.",
+      "highlights": [
+        "Implemented geo-replication feature handling 10M+ requests/second",
+        "Contributed to open source Azure SDK libraries",
+        "On-call rotation leader for production storage clusters"
+      ]
+    },
+    {
+      "name": "Tech Startup",
+      "location": "San Francisco, CA",
+      "position": "Software Engineer",
+      "url": "https://example.com",
+      "startDate": "2013-01",
+      "endDate": "2015-05",
+      "summary": "Full-stack engineer at early-stage startup (acquired by Microsoft).",
+      "highlights": [
+        "First engineering hire, built product from scratch",
+        "Scaled platform from 0 to 100K users",
+        "Full ownership of backend architecture and infrastructure"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Stanford University",
+      "area": "Computer Science",
+      "studyType": "Master of Science",
+      "startDate": "2011-09",
+      "endDate": "2013-06",
+      "score": "3.9/4.0"
+    },
+    {
+      "institution": "UC Berkeley",
+      "area": "Computer Science",
+      "studyType": "Bachelor of Science",
+      "startDate": "2007-09",
+      "endDate": "2011-05",
+      "score": "3.7/4.0"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Languages",
+      "level": "Expert",
+      "keywords": ["Python", "Go", "TypeScript", "Java"]
+    },
+    {
+      "name": "Cloud & Infrastructure",
+      "level": "Expert",
+      "keywords": ["AWS", "Kubernetes", "Docker", "Terraform"]
+    },
+    {
+      "name": "Databases",
+      "level": "Advanced",
+      "keywords": ["PostgreSQL", "DynamoDB", "Redis", "Elasticsearch"]
+    },
+    {
+      "name": "Architecture",
+      "level": "Expert",
+      "keywords": ["Microservices", "Event-Driven", "Distributed Systems"]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Open Source Distributed Cache",
+      "description": "High-performance distributed caching library in Go",
+      "url": "https://github.com/sarahchen/cache",
+      "startDate": "2020-06",
+      "endDate": "",
+      "roles": ["Creator", "Maintainer"],
+      "type": "application",
+      "keywords": ["Go", "Distributed Systems", "Performance"],
+      "highlights": [
+        "5K+ GitHub stars",
+        "Used in production by 50+ companies",
+        "10x faster than Redis for certain workloads"
+      ]
+    }
+  ],
+  "certificates": [
+    {
+      "name": "AWS Certified Solutions Architect - Professional",
+      "date": "2021-06",
+      "issuer": "Amazon Web Services"
+    }
+  ],
+  "publications": [
+    {
+      "name": "Building Resilient Microservices",
+      "publisher": "InfoQ",
+      "releaseDate": "2022-09",
+      "url": "https://infoq.com/articles/microservices-resilience",
+      "summary": "Technical article on fault tolerance patterns in distributed systems"
+    }
+  ]
+}
+```
+
+### Freelancer Resume
+
+Independent consultant:
+
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/master/schema.json",
+  "basics": {
+    "name": "Mike Rodriguez",
+    "label": "Freelance Full-Stack Developer",
+    "email": "mike@example.com",
+    "phone": "(555) 246-8135",
+    "url": "https://mikerodriguez.dev",
+    "summary": "Experienced freelance developer specializing in React, Node.js, and cloud infrastructure. Delivered 50+ successful projects for clients ranging from startups to Fortune 500 companies. Expert in rapid prototyping and production deployments.",
+    "location": {
+      "city": "Remote",
+      "countryCode": "US"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "url": "https://github.com/mikerodriguez"
+      },
+      {
+        "network": "LinkedIn",
+        "url": "https://linkedin.com/in/mikerodriguez"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Independent Consulting",
+      "position": "Freelance Full-Stack Developer",
+      "startDate": "2018-01",
+      "endDate": "",
+      "summary": "Provide web development services to clients across various industries via Toptal and direct contracts.",
+      "highlights": [
+        "Completed 50+ projects with 100% client satisfaction",
+        "Specialized in React, Node.js, and AWS deployments",
+        "Average project value: $15K - $50K",
+        "Top-rated developer on Toptal (top 3%)"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "E-commerce Platform - Fortune 500 Retail",
+      "description": "Built headless e-commerce platform processing $2M+ monthly",
+      "startDate": "2023-01",
+      "endDate": "2023-06",
+      "entity": "Enterprise Client (NDA)",
+      "type": "application",
+      "keywords": ["Next.js", "Shopify", "AWS", "Stripe"],
+      "highlights": [
+        "6-month contract building custom storefront",
+        "99.9% uptime SLA achieved",
+        "Integrated with legacy ERP system"
+      ]
+    },
+    {
+      "name": "SaaS Analytics Dashboard - Tech Startup",
+      "description": "Real-time analytics platform for B2B SaaS company",
+      "startDate": "2022-06",
+      "endDate": "2022-12",
+      "entity": "Series A Startup",
+      "type": "application",
+      "keywords": ["React", "Node.js", "PostgreSQL", "WebSocket"],
+      "highlights": [
+        "Built from scratch in 6 months",
+        "Handles 1M+ events per day",
+        "Real-time dashboard updates"
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "name": "Frontend",
+      "level": "Expert",
+      "keywords": ["React", "Next.js", "TypeScript", "Tailwind CSS"]
+    },
+    {
+      "name": "Backend",
+      "level": "Expert",
+      "keywords": ["Node.js", "Python", "PostgreSQL", "GraphQL"]
+    },
+    {
+      "name": "DevOps",
+      "level": "Advanced",
+      "keywords": ["AWS", "Docker", "CI/CD", "Vercel"]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University of Miami",
+      "area": "Computer Science",
+      "studyType": "Bachelor",
+      "startDate": "2010-09",
+      "endDate": "2014-05"
+    }
+  ]
+}
+```
+
+### Career Changer Resume
+
+Transitioning between industries:
+
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/master/schema.json",
+  "basics": {
+    "name": "Emily Watson",
+    "label": "Software Engineer (Career Transitioner)",
+    "email": "emily@example.com",
+    "summary": "Former financial analyst transitioning to software engineering. Completed intensive coding bootcamp and built multiple full-stack applications. Strong analytical skills, attention to detail, and proven track record of learning complex systems quickly.",
+    "location": {
+      "city": "New York",
+      "region": "NY",
+      "countryCode": "US"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "url": "https://github.com/emilywatson"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Tech Startup",
+      "position": "Junior Software Engineer",
+      "startDate": "2023-06",
+      "endDate": "",
+      "summary": "Joined engineering team after completing bootcamp. Focus on frontend development with React.",
+      "highlights": [
+        "Built 3 major features for main product",
+        "Contributed to open source UI component library",
+        "Participated in code reviews and pair programming"
+      ]
+    },
+    {
+      "name": "Investment Bank",
+      "position": "Financial Analyst",
+      "startDate": "2018-06",
+      "endDate": "2023-01",
+      "summary": "Analyzed market trends and built financial models for investment decisions.",
+      "highlights": [
+        "Automated reporting processes using Python and Excel VBA",
+        "Managed portfolio of $50M+ in assets",
+        "Created data visualization dashboards"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "App Academy",
+      "area": "Full-Stack Web Development",
+      "studyType": "Certificate",
+      "startDate": "2023-01",
+      "endDate": "2023-05",
+      "courses": [
+        "JavaScript and React",
+        "Ruby on Rails",
+        "Algorithms and Data Structures"
+      ]
+    },
+    {
+      "institution": "NYU Stern School of Business",
+      "area": "Finance",
+      "studyType": "Bachelor of Science",
+      "startDate": "2014-09",
+      "endDate": "2018-05",
+      "score": "3.6/4.0"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Programming",
+      "keywords": ["JavaScript", "Python", "React", "Node.js", "SQL"]
+    },
+    {
+      "name": "Finance",
+      "keywords": ["Financial Modeling", "Excel", "Data Analysis"]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Stock Portfolio Tracker",
+      "description": "Full-stack app for tracking stock investments with real-time prices",
+      "url": "https://github.com/emilywatson/portfolio-tracker",
+      "startDate": "2023-03",
+      "endDate": "2023-05",
+      "keywords": ["React", "Node.js", "PostgreSQL", "Alpha Vantage API"],
+      "highlights": [
+        "Real-time stock price updates",
+        "Portfolio performance analytics",
+        "100+ registered users"
+      ]
+    }
+  ]
+}
+```
+
+### Academic/Research Resume
+
+PhD student or researcher:
+
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/master/schema.json",
+  "basics": {
+    "name": "Dr. James Lee",
+    "label": "Computer Science Researcher",
+    "email": "jlee@university.edu",
+    "url": "https://jameslee.research",
+    "summary": "PhD candidate specializing in machine learning and natural language processing. Published 15+ peer-reviewed papers in top-tier conferences. Experience teaching undergraduate courses and mentoring graduate students.",
+    "location": {
+      "city": "Cambridge",
+      "region": "MA",
+      "countryCode": "US"
+    }
+  },
+  "education": [
+    {
+      "institution": "MIT",
+      "area": "Computer Science (Machine Learning)",
+      "studyType": "PhD",
+      "startDate": "2019-09",
+      "endDate": "2024-05",
+      "score": "4.0/4.0",
+      "courses": [
+        "Advanced Machine Learning",
+        "Deep Learning",
+        "Natural Language Processing"
+      ]
+    },
+    {
+      "institution": "Stanford University",
+      "area": "Computer Science",
+      "studyType": "Bachelor of Science",
+      "startDate": "2015-09",
+      "endDate": "2019-06",
+      "score": "3.95/4.0"
+    }
+  ],
+  "work": [
+    {
+      "name": "MIT Computer Science Department",
+      "position": "Graduate Research Assistant",
+      "startDate": "2019-09",
+      "endDate": "",
+      "summary": "Conduct research in natural language processing under Dr. Smith.",
+      "highlights": [
+        "Published 15 papers in ACL, EMNLP, NeurIPS",
+        "Developed novel transformer architecture for multilingual NLP",
+        "Presented research at 5 international conferences"
+      ]
+    },
+    {
+      "name": "MIT Computer Science Department",
+      "position": "Teaching Assistant",
+      "startDate": "2020-01",
+      "endDate": "2023-12",
+      "summary": "TA for Introduction to Machine Learning (6.036)",
+      "highlights": [
+        "Taught recitation sections for 100+ students",
+        "Developed course materials and assignments",
+        "Held weekly office hours"
+      ]
+    }
+  ],
+  "publications": [
+    {
+      "name": "Attention Mechanisms for Low-Resource Languages",
+      "publisher": "ACL 2023",
+      "releaseDate": "2023-07",
+      "url": "https://aclanthology.org/2023.acl-long.123",
+      "summary": "Novel approach to transfer learning for low-resource NLP"
+    },
+    {
+      "name": "Multilingual Transformer Models",
+      "publisher": "EMNLP 2022",
+      "releaseDate": "2022-12",
+      "url": "https://aclanthology.org/2022.emnlp-main.456",
+      "summary": "Analysis of cross-lingual transfer in pretrained models"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Machine Learning",
+      "keywords": ["PyTorch", "TensorFlow", "Transformers", "NLP"]
+    },
+    {
+      "name": "Programming",
+      "keywords": ["Python", "C++", "CUDA"]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Open Source NLP Library",
+      "description": "Python library for multilingual NLP tasks",
+      "url": "https://github.com/jlee/nlp-lib",
+      "startDate": "2021-01",
+      "endDate": "",
+      "type": "application",
+      "highlights": [
+        "3K+ GitHub stars",
+        "Used in 50+ research papers",
+        "10+ contributors"
+      ]
+    }
+  ],
+  "awards": [
+    {
+      "title": "Best Paper Award",
+      "date": "2023-07",
+      "awarder": "ACL 2023",
+      "summary": "Awarded for outstanding contribution to NLP research"
+    }
+  ]
+}
+```
+
+## Best Practices
+
+### 1. Be Specific and Quantifiable
+
+**Bad:**
+
+```json
+{
+  "highlights": ["Improved performance", "Worked on important projects"]
+}
+```
+
+**Good:**
+
+```json
+{
+  "highlights": [
+    "Reduced page load time by 60% through image optimization and lazy loading",
+    "Led team of 5 engineers building authentication system serving 2M+ users"
+  ]
+}
+```
+
+### 2. Use Action Verbs
+
+Start highlights with strong action verbs:
+
+- Built, Designed, Implemented, Led, Managed
+- Reduced, Increased, Improved, Optimized
+- Created, Developed, Launched, Shipped
+- Mentored, Trained, Coached, Taught
+
+### 3. Keep It Current
+
+- Update your resume regularly (at least quarterly)
+- Remove outdated technologies or irrelevant experience
+- Focus on recent accomplishments (last 5-10 years)
+
+### 4. Tailor for Your Audience
+
+Different versions for different purposes:
+
+```json
+{
+  "meta": {
+    "version": "senior-engineer-2023",
+    "canonical": "https://github.com/username/resume/senior.json"
+  }
+}
+```
+
+### 5. Proofread Carefully
+
+- Use a JSON validator to check syntax
+- Run spell check on all text content
+- Have someone else review for clarity
+- Test your resume with multiple themes
+
+### 6. Optimize for ATS Systems
+
+- Include relevant keywords from job descriptions
+- Use standard section names (work, education, skills)
+- Avoid special characters in dates and text
+- Keep formatting simple and consistent
+
+### 7. Be Honest
+
+- Don't exaggerate skills or accomplishments
+- Accurately represent your role in projects
+- Use realistic proficiency levels
+- Include actual dates, not approximations
+
+### 8. Structure Logically
+
+- Most recent experience first (reverse chronological)
+- Group related skills together
+- Consistent date formats throughout
+- Clear hierarchy of information
+
+### 9. Highlight Achievements, Not Just Duties
+
+**Duties:**
+
+```json
+{
+  "summary": "Responsible for building web applications"
+}
+```
+
+**Achievements:**
+
+```json
+{
+  "highlights": [
+    "Built 5 production web apps serving 100K+ combined users",
+    "Reduced deployment time from 2 hours to 15 minutes with CI/CD pipeline"
+  ]
+}
+```
+
+### 10. Use the Schema Properly
+
+- Follow ISO 8601 for dates
+- Use proper URLs (https://)
+- Match field types (strings vs arrays)
+- Don't nest custom fields deeply
+
+## Tools and Resources
+
+### Official Resources
+
+- **Schema Repository**: [github.com/jsonresume/resume-schema](https://github.com/jsonresume/resume-schema)
+- **Registry**: [jsonresume.org](https://jsonresume.org)
+- **CLI Tool**: [github.com/jsonresume/resume-cli](https://github.com/jsonresume/resume-cli)
+
+### Validation Tools
+
+- **Resume CLI**: Built-in validation via `resume validate`
+- **JSON Schema Validator**: [jsonschemavalidator.net](https://www.jsonschemavalidator.net/)
+- **VS Code Extension**: JSON Schema validation in editor
+
+### Helpful Libraries
+
+- **NPM Package**: `resume-schema` - Official schema package
+- **TypeScript Types**: Generate types from schema for type-safe resumes
+- **Validation Library**: `jsonschema` - Used internally by JSON Resume
+
+### Community
+
+- **GitHub Discussions**: [github.com/jsonresume/resume-schema/discussions](https://github.com/jsonresume/resume-schema/discussions)
+- **Issues**: Report bugs or request features on GitHub
+- **Discord**: Join the JSON Resume community (link in repository)
+
+## Frequently Asked Questions
+
+### Can I use markdown in text fields?
+
+The schema accepts plain text. Some themes support markdown in `summary` and `highlights` fields, but this is not guaranteed. For maximum compatibility, use plain text.
+
+### How do I represent multiple locations for one job?
+
+Add separate work entries or mention in the summary:
+
+```json
+{
+  "work": [
+    {
+      "name": "Company",
+      "location": "San Francisco, CA & New York, NY",
+      "summary": "Split time between SF and NYC offices."
+    }
+  ]
+}
+```
+
+### Can I include images or files?
+
+The `basics.image` field accepts a URL to an image. For other files (like portfolios), use URLs in relevant sections:
+
+```json
+{
+  "projects": [
+    {
+      "name": "Portfolio",
+      "url": "https://myportfolio.com"
+    }
+  ]
+}
+```
+
+### What if my field is longer than themes support?
+
+Most themes truncate or paginate long content. Best practices:
+
+- Keep `summary` to 2-3 sentences (200-300 characters)
+- Limit `highlights` to 3-5 items per position
+- Use concise, impactful language
+
+### How do I handle confidential information?
+
+Omit or generalize confidential details:
+
+```json
+{
+  "work": [
+    {
+      "name": "Fortune 500 Financial Institution",
+      "summary": "Built high-frequency trading platform (details under NDA)."
+    }
+  ]
+}
+```
+
+### Can I have multiple resumes?
+
+Absolutely! Create different JSON files for different purposes:
+
+- `resume-senior.json` - Senior positions
+- `resume-frontend.json` - Frontend-focused
+- `resume-full.json` - Complete work history
+
+### Do all themes support all fields?
+
+No. Themes vary in which fields they render. Test your resume with multiple themes to ensure compatibility.
+
+## What's Next?
+
+- **[CLI Guide](/cli)** - Learn to use the resume-cli tool
+- **[Themes](/themes)** - Browse and install themes
+- **[Hosting](/hosting)** - Publish your resume to jsonresume.org
+- **[API Reference](/api)** - Integrate JSON Resume into applications
+
+---
+
+_This documentation is for JSON Resume schema version 1.0.0. For schema issues or feature requests, visit the [official schema repository](https://github.com/jsonresume/resume-schema)._

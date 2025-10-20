@@ -1,0 +1,5330 @@
+# Frequently Asked Questions
+
+Comprehensive answers to common questions about JSON Resume.
+
+## Quick Navigation
+
+- [Validation & Troubleshooting](#validation--troubleshooting)
+- [Conceptual & Design](#conceptual--design)
+- [Privacy & Security](#privacy--security)
+- [API & Ecosystem](#api--ecosystem)
+- [Community & Governance](#community--governance)
+- [Advanced / Power User](#advanced--power-user)
+- [Employers & Recruiters](#employers--recruiters)
+- [Future & Roadmap](#future--roadmap)
+- [Miscellaneous / Fun](#miscellaneous--fun)
+- [Technical & Schema Edge Cases](#technical--schema-edge-cases)
+- [Internationalization](#internationalization)
+- [Installation & Environment](#installation--environment)
+
+---
+
+## Validation & Troubleshooting
+
+### 126. My resume fails validation — what do I do?
+
+**Start by identifying the specific validation error:**
+
+```bash
+# Using the CLI
+resume validate
+
+# Or use the online validator
+# Visit: https://jsonresume.org/schema
+```
+
+**Common validation errors and fixes:**
+
+1. **Missing required fields** - The `basics` object is required with at least a `name` field:
+
+```json
+{
+  "basics": {
+    "name": "John Doe"
+  }
+}
+```
+
+2. **Invalid date format** - Dates must be in ISO 8601 format (YYYY-MM-DD):
+
+```json
+{
+  "work": [
+    {
+      "startDate": "2020-01-15",
+      "endDate": "2023-06-30"
+    }
+  ]
+}
+```
+
+3. **Invalid URL format** - URLs must include the protocol:
+
+```json
+{
+  "basics": {
+    "url": "https://example.com"
+  }
+}
+```
+
+4. **Incorrect data types** - Ensure strings are strings, arrays are arrays:
+
+```json
+{
+  "work": [],
+  "education": []
+}
+```
+
+**Debugging steps:**
+
+1. Copy your JSON into a validator like [jsonlint.com](https://jsonlint.com)
+2. Fix any JSON syntax errors first (missing commas, brackets)
+3. Then run JSON Resume validation
+4. Read the error message carefully - it tells you which field is problematic
+5. Check the [schema documentation](/schema) for field requirements
+
+**Pro tips:**
+
+- Use a JSON-aware editor like VS Code with JSON schema support
+- Enable schema validation in your editor for real-time feedback
+- Start with a minimal valid resume and add sections gradually
+- Keep a backup of your working resume before making changes
+
+---
+
+### 127. Why does my resume not render correctly in a theme?
+
+**Common theme rendering issues and solutions:**
+
+**1. Theme doesn't support certain fields:**
+
+Not all themes render every schema field. Check the theme's documentation to see which fields it supports.
+
+```bash
+# Test with multiple themes to find the best fit
+resume export resume.pdf --theme elegant
+resume export resume.pdf --theme professional
+resume export resume.pdf --theme spartacus
+```
+
+**2. Missing or malformed data:**
+
+```json
+{
+  "work": [
+    {
+      "name": "Company",
+      "position": "Developer",
+      "startDate": "2020-01-01",
+      "summary": "Description here",
+      "highlights": ["Achievement 1", "Achievement 2"]
+    }
+  ]
+}
+```
+
+**3. Special characters or HTML:**
+
+Some themes don't handle special characters or HTML in fields:
+
+```json
+{
+  "basics": {
+    "summary": "Plain text works best. Avoid HTML tags or special characters like &, <, >"
+  }
+}
+```
+
+**4. Empty arrays or null values:**
+
+Remove empty arrays or use complete objects:
+
+```json
+{
+  "skills": [
+    {
+      "name": "JavaScript",
+      "level": "Advanced",
+      "keywords": ["React", "Node.js"]
+    }
+  ]
+}
+```
+
+**Troubleshooting workflow:**
+
+1. **Test with the default theme first:**
+
+   ```bash
+   resume export resume.html
+   ```
+
+2. **Check theme compatibility:**
+
+   - Visit the theme's GitHub/npm page
+   - Look for examples or screenshots
+   - Check the last update date (old themes may not support newer schema versions)
+
+3. **Inspect the output:**
+
+   - Export to HTML and open in browser
+   - Use browser DevTools to inspect rendering
+   - Check console for JavaScript errors
+
+4. **Compare with working examples:**
+   - Look at example resumes using the same theme
+   - Copy their structure for problematic sections
+
+**Pro tips:**
+
+- Some themes are optimized for specific professions (dev, design, academic)
+- Preview multiple themes before committing to one
+- Report rendering bugs to the theme maintainer
+- Consider forking and customizing a theme if needed
+
+---
+
+### 128. How do I check which field is invalid?
+
+**Use validation tools that provide detailed error messages:**
+
+**1. CLI validation (most detailed):**
+
+```bash
+resume validate
+
+# Example output:
+# ✖ Error: /basics/email must be a valid email address
+# ✖ Error: /work/0/startDate must match format "date"
+# ✖ Error: /education is required
+```
+
+**2. Programmatic validation (for scripts):**
+
+```javascript
+const Ajv = require('ajv');
+const schema = require('resume-schema');
+
+const ajv = new Ajv({ allErrors: true });
+const validate = ajv.compile(schema);
+
+const valid = validate(resumeData);
+
+if (!valid) {
+  console.log(validate.errors);
+  // Detailed error array with field paths
+}
+```
+
+**3. Online validators:**
+
+Use [jsonschemavalidator.net](https://www.jsonschemavalidator.net/):
+
+- Paste the JSON Resume schema
+- Paste your resume JSON
+- Get detailed error messages with field locations
+
+**Understanding error messages:**
+
+```
+Error: /work/0/startDate must match format "date"
+       └─┬─┘ └┬┘ └────┬───┘
+         │    │       └── What's wrong
+         │    └── Array index
+         └── Section path
+```
+
+**Common error patterns:**
+
+```json
+{
+  "error": "/basics/email",
+  "fix": "Ensure it's a valid email: user@domain.com"
+},
+{
+  "error": "/work/0/startDate",
+  "fix": "Use ISO 8601: YYYY-MM-DD format"
+},
+{
+  "error": "/skills/2/keywords",
+  "fix": "Must be an array, not a string"
+}
+```
+
+**Debugging strategy:**
+
+1. **Read the error path carefully** - it shows exactly which field
+2. **Check the schema** - see what type/format is expected
+3. **Fix one error at a time** - some errors cascade
+4. **Re-validate after each fix** - new errors may appear
+5. **Use version control** - commit working versions
+
+**Pro tips:**
+
+- Enable JSON schema in VS Code for inline error highlighting
+- Use TypeScript types for resume data to catch errors early
+- Validate frequently during editing, not just at the end
+- Keep the schema reference open while editing
+
+---
+
+### 129. What's a good JSON editor for resumes?
+
+**Recommended editors with JSON Resume support:**
+
+**1. Visual Studio Code (Best overall):**
+
+```bash
+# Install VS Code extensions
+code --install-extension esbenp.prettier-vscode
+code --install-extension redhat.vscode-yaml
+```
+
+**VS Code setup:**
+
+Create `.vscode/settings.json`:
+
+```json
+{
+  "json.schemas": [
+    {
+      "fileMatch": ["resume.json"],
+      "url": "https://raw.githubusercontent.com/jsonresume/resume-schema/master/schema.json"
+    }
+  ],
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
+}
+```
+
+**Benefits:**
+
+- Real-time validation with schema support
+- Auto-completion for field names
+- Inline error highlighting
+- Format on save
+- Git integration
+- Free and open source
+
+**2. JSONResume.org Web Editor (Easiest):**
+
+- No installation required
+- Built-in validation
+- Live preview
+- Direct publishing to registry
+- Saves to GitHub Gist
+
+**3. Sublime Text:**
+
+```json
+// Add to Preferences > Settings
+{
+  "tab_size": 2,
+  "translate_tabs_to_spaces": true,
+  "detect_indentation": false
+}
+```
+
+Install packages:
+
+- SublimeLinter
+- SublimeLinter-json
+- Pretty JSON
+
+**4. JetBrains IDEs (WebStorm, IntelliJ):**
+
+- Built-in JSON schema support
+- Excellent validation
+- Refactoring tools
+- Version control integration
+
+**5. Online editors:**
+
+- [jsoneditoronline.org](https://jsoneditoronline.org) - Tree and code view
+- [jsonformatter.org](https://jsonformatter.org) - Format and validate
+- [codebeautify.org](https://codebeautify.org/jsonviewer) - View and edit
+
+**Editor comparison:**
+
+| Editor     | Schema Support | Live Preview  | Difficulty | Cost   |
+| ---------- | -------------- | ------------- | ---------- | ------ |
+| VS Code    | Excellent      | Via extension | Easy       | Free   |
+| Web Editor | Built-in       | Yes           | Easiest    | Free   |
+| Sublime    | Good           | No            | Medium     | $99    |
+| WebStorm   | Excellent      | Via plugin    | Medium     | $69/yr |
+| Online     | Basic          | Sometimes     | Easiest    | Free   |
+
+**Pro tips:**
+
+- Use VS Code for local development
+- Use web editor for quick edits on the go
+- Set up schema validation in any editor you choose
+- Enable auto-formatting to maintain clean JSON
+- Use Git to version control your resume
+
+---
+
+### 130. Why does my date format cause errors?
+
+**JSON Resume requires ISO 8601 date format:**
+
+**Correct formats:**
+
+```json
+{
+  "work": [
+    {
+      "startDate": "2020-01-15",
+      "endDate": "2023-06-30"
+    }
+  ]
+}
+```
+
+**Common mistakes and fixes:**
+
+**1. US date format (MM/DD/YYYY):**
+
+```json
+// WRONG
+"startDate": "01/15/2020"
+
+// CORRECT
+"startDate": "2020-01-15"
+```
+
+**2. European format (DD/MM/YYYY):**
+
+```json
+// WRONG
+"startDate": "15/01/2020"
+
+// CORRECT
+"startDate": "2020-01-15"
+```
+
+**3. Month names:**
+
+```json
+// WRONG
+"startDate": "January 15, 2020"
+
+// CORRECT
+"startDate": "2020-01-15"
+```
+
+**4. Abbreviated dates:**
+
+```json
+// WRONG
+"startDate": "Jan 2020"
+
+// CORRECT (first day of month)
+"startDate": "2020-01-01"
+```
+
+**5. Current/ongoing positions:**
+
+```json
+{
+  "work": [
+    {
+      "name": "Current Company",
+      "startDate": "2023-01-01",
+      "endDate": ""
+    }
+  ]
+}
+```
+
+**Partial dates (when you don't know the exact day):**
+
+```json
+{
+  "work": [
+    {
+      "name": "Company",
+      "startDate": "2020-01-01",
+      "endDate": "2023-01-01"
+    }
+  ]
+}
+```
+
+**Note:** Use the first day of the month/year when exact dates are unknown.
+
+**Date validation regex:**
+
+```javascript
+// ISO 8601 date format: YYYY-MM-DD
+const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+
+function isValidDate(dateString) {
+  if (!dateRegex.test(dateString)) return false;
+  const date = new Date(dateString);
+  return date instanceof Date && !isNaN(date);
+}
+```
+
+**Converting dates programmatically:**
+
+```javascript
+// Convert MM/DD/YYYY to ISO 8601
+function toISO8601(usDate) {
+  const [month, day, year] = usDate.split('/');
+  return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+}
+
+console.log(toISO8601('1/15/2020')); // "2020-01-15"
+```
+
+**Pro tips:**
+
+- Always use YYYY-MM-DD format
+- Use leading zeros for single-digit months/days
+- Leave `endDate` empty (empty string) for current positions
+- When unsure of exact date, use the 1st of the month
+- Use a date picker tool to ensure correct format
+
+---
+
+### 131. How can I test my resume before publishing?
+
+**Complete testing workflow:**
+
+**1. Local validation:**
+
+```bash
+# Validate JSON syntax and schema compliance
+resume validate
+
+# Should output:
+# ✓ Your resume is valid!
+```
+
+**2. Local preview with different themes:**
+
+```bash
+# Start local server with default theme
+resume serve
+
+# Test with specific themes
+resume serve --theme elegant
+resume serve --theme professional
+resume serve --theme spartacus
+
+# Opens in browser at http://localhost:4000
+```
+
+**3. Export and review all formats:**
+
+```bash
+# Export to different formats
+resume export resume.html
+resume export resume.pdf --theme professional
+resume export resume.md
+
+# Open and review each file
+open resume.html
+open resume.pdf
+open resume.md
+```
+
+**4. Cross-browser testing:**
+
+Test the HTML export in multiple browsers:
+
+- Chrome/Edge
+- Firefox
+- Safari
+- Mobile browsers (Chrome Mobile, Safari iOS)
+
+**5. Responsive design testing:**
+
+```bash
+# Test mobile responsiveness
+resume serve --theme professional
+
+# Then in browser DevTools:
+# - Toggle device toolbar
+# - Test iPhone, iPad, Android sizes
+# - Check portrait and landscape
+```
+
+**6. PDF quality check:**
+
+```bash
+# Generate PDF
+resume export resume.pdf --theme professional
+
+# Check for:
+# - Page breaks in appropriate places
+# - Font rendering
+# - Links (should be clickable)
+# - Margins and spacing
+# - Print quality (print preview)
+```
+
+**7. Accessibility testing:**
+
+```bash
+# Export to HTML
+resume export resume.html
+
+# Use accessibility tools:
+# - WAVE browser extension
+# - axe DevTools
+# - Lighthouse in Chrome DevTools
+```
+
+**8. Content proofreading checklist:**
+
+```
+☐ Name and contact info correct
+☐ All dates in correct format (YYYY-MM-DD)
+☐ No typos or grammar errors
+☐ All URLs working and correct
+☐ Email address current
+☐ Phone number formatted correctly
+☐ Skills listed accurately
+☐ Work experience in reverse chronological order
+☐ Education details correct
+☐ Achievements and highlights compelling
+☐ No sensitive/confidential information
+```
+
+**9. Programmatic testing:**
+
+```javascript
+const fs = require('fs');
+const Ajv = require('ajv');
+const schema = require('resume-schema');
+
+// Load and validate
+const resume = JSON.parse(fs.readFileSync('resume.json', 'utf8'));
+const ajv = new Ajv();
+const validate = ajv.compile(schema);
+
+if (validate(resume)) {
+  console.log('✓ Valid resume');
+
+  // Additional checks
+  if (resume.basics.email.includes('@')) {
+    console.log('✓ Email format looks good');
+  }
+
+  if (resume.work && resume.work.length > 0) {
+    console.log(`✓ ${resume.work.length} work experiences`);
+  }
+} else {
+  console.error('✗ Validation errors:', validate.errors);
+}
+```
+
+**10. Preview in registry (safe test):**
+
+```bash
+# Publish to private Gist first
+# 1. Create secret Gist on GitHub
+# 2. Test the resume URL
+# 3. If good, make it public
+```
+
+**Pre-publish checklist:**
+
+```
+☐ JSON validates successfully
+☐ Previewed in at least 2 themes
+☐ PDF export looks professional
+☐ HTML export is responsive
+☐ No broken links
+☐ No sensitive information included
+☐ Spell-checked and proofread
+☐ Tested in Chrome and Safari
+☐ Mobile view looks good
+☐ Ready to share with recruiters
+```
+
+**Pro tips:**
+
+- Test early and often during editing
+- Keep a "production" and "draft" version
+- Get feedback from friends/colleagues before publishing
+- Test the public URL after publishing to ensure it works
+- Regenerate PDF after any changes
+
+---
+
+### 132. Can I validate my resume online?
+
+**Yes! Multiple online validation options:**
+
+**1. JSONResume.org Web Validator (Official):**
+
+Visit [jsonresume.org/schema](https://jsonresume.org/schema)
+
+- Paste your resume JSON
+- Instant validation
+- Detailed error messages
+- Schema compliance checking
+
+**2. JSON Schema Validator:**
+
+[jsonschemavalidator.net](https://www.jsonschemavalidator.net/)
+
+```
+1. Load schema from:
+   https://raw.githubusercontent.com/jsonresume/resume-schema/master/schema.json
+
+2. Paste your resume JSON
+
+3. Click "Validate"
+```
+
+**3. JSONLint (JSON syntax only):**
+
+[jsonlint.com](https://jsonlint.com)
+
+- Validates JSON syntax (not schema)
+- Useful for finding syntax errors first
+- Auto-formats your JSON
+
+**4. Using the API:**
+
+```bash
+# POST your resume to validation endpoint
+curl -X POST https://jsonresume.org/api/validate \
+  -H "Content-Type: application/json" \
+  -d @resume.json
+```
+
+**Online validation workflow:**
+
+```
+1. Fix JSON syntax errors (JSONLint)
+   ↓
+2. Validate against schema (JSON Schema Validator)
+   ↓
+3. Test rendering (JSONResume.org web editor)
+   ↓
+4. Export and review (preview themes)
+```
+
+**Automated validation (CI/CD):**
+
+```yaml
+# GitHub Actions example
+name: Validate Resume
+on: [push]
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+      - run: npm install -g resume-cli
+      - run: resume validate
+```
+
+**Browser-based validation (no upload):**
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/ajv@8/dist/ajv7.min.js"></script>
+  </head>
+  <body>
+    <textarea id="resume" placeholder="Paste resume JSON"></textarea>
+    <button onclick="validate()">Validate</button>
+    <pre id="result"></pre>
+
+    <script>
+      async function validate() {
+        const ajv = new Ajv();
+        const schema = await fetch(
+          'https://raw.githubusercontent.com/jsonresume/resume-schema/master/schema.json'
+        ).then((r) => r.json());
+
+        const resume = JSON.parse(document.getElementById('resume').value);
+        const valid = ajv.validate(schema, resume);
+
+        document.getElementById('result').textContent = valid
+          ? '✓ Valid!'
+          : JSON.stringify(ajv.errors, null, 2);
+      }
+    </script>
+  </body>
+</html>
+```
+
+**Comparison of validation tools:**
+
+| Tool             | Validates Syntax | Validates Schema | Detailed Errors | Free |
+| ---------------- | ---------------- | ---------------- | --------------- | ---- |
+| JSONResume.org   | Yes              | Yes              | Yes             | Yes  |
+| JSONLint         | Yes              | No               | Basic           | Yes  |
+| Schema Validator | Yes              | Yes              | Very detailed   | Yes  |
+| CLI (local)      | Yes              | Yes              | Very detailed   | Yes  |
+| API              | Yes              | Yes              | Yes             | Yes  |
+
+**Pro tips:**
+
+- Use JSONLint first to fix syntax errors
+- Then use schema validator for compliance
+- Online tools don't store your data (processed client-side)
+- Bookmark the official validator for quick access
+- Use CLI for offline/automated validation
+
+---
+
+### 133. How do I fix encoding issues?
+
+**Common encoding problems and solutions:**
+
+**1. UTF-8 encoding (recommended):**
+
+Always save your `resume.json` file as UTF-8:
+
+```json
+{
+  "basics": {
+    "name": "José García",
+    "summary": "Développeur Full-Stack specializing in 日本語"
+  }
+}
+```
+
+**In various editors:**
+
+**VS Code:**
+
+- Bottom right corner → "UTF-8"
+- Or in settings: `"files.encoding": "utf-8"`
+
+**Sublime Text:**
+
+```
+File → Save with Encoding → UTF-8
+```
+
+**Command line:**
+
+```bash
+# Check file encoding
+file -I resume.json
+
+# Should output: text/plain; charset=utf-8
+
+# Convert to UTF-8 if needed
+iconv -f ISO-8859-1 -t UTF-8 resume.json > resume-utf8.json
+```
+
+**2. Special characters issues:**
+
+**Accented characters:**
+
+```json
+{
+  "basics": {
+    "name": "François Müller",
+    "location": {
+      "city": "São Paulo"
+    }
+  }
+}
+```
+
+**Ensure your editor saves as UTF-8 without BOM (Byte Order Mark).**
+
+**3. Emoji support:**
+
+```json
+{
+  "basics": {
+    "summary": "Developer who loves ☕ and 💻"
+  }
+}
+```
+
+**Note:** Some PDF generators may not render emojis correctly. Test before publishing.
+
+**4. Smart quotes and special punctuation:**
+
+```json
+// WRONG (smart quotes from Word)
+"summary": "I'm a "full-stack" developer"
+
+// CORRECT (straight quotes)
+"summary": "I'm a \"full-stack\" developer"
+```
+
+**Fix in bulk:**
+
+```javascript
+const fs = require('fs');
+let content = fs.readFileSync('resume.json', 'utf8');
+
+// Replace smart quotes with straight quotes
+content = content.replace(/[\u201C\u201D]/g, '"'); // Curly double quotes
+content = content.replace(/[\u2018\u2019]/g, "'"); // Curly single quotes
+content = content.replace(/\u2013/g, '-'); // En dash
+content = content.replace(/\u2014/g, '--'); // Em dash
+
+fs.writeFileSync('resume-fixed.json', content, 'utf8');
+```
+
+**5. Line ending issues:**
+
+```bash
+# Unix/Mac (LF)
+# Windows (CRLF)
+
+# Convert CRLF to LF
+dos2unix resume.json
+
+# Or in VS Code:
+# Bottom right → "CRLF" → Select "LF"
+```
+
+**6. Escape sequences for special characters:**
+
+```json
+{
+  "basics": {
+    "summary": "Expert in C++ and C#",
+    "note": "Line 1\nLine 2\nLine 3"
+  }
+}
+```
+
+**Common escape sequences:**
+
+- `\"` - Double quote
+- `\\` - Backslash
+- `\n` - Newline
+- `\t` - Tab
+- `\u0000` - Unicode character
+
+**7. HTML entities (avoid):**
+
+```json
+// WRONG
+"summary": "Expert in &lt;React&gt; &amp; Node.js"
+
+// CORRECT
+"summary": "Expert in React and Node.js"
+```
+
+**Testing encoding:**
+
+```javascript
+const fs = require('fs');
+
+// Read with explicit encoding
+const resume = fs.readFileSync('resume.json', 'utf8');
+
+try {
+  const parsed = JSON.parse(resume);
+  console.log('✓ Encoding is correct');
+} catch (err) {
+  console.error('✗ Encoding issue detected:', err.message);
+}
+```
+
+**Troubleshooting checklist:**
+
+```
+☐ File saved as UTF-8 without BOM
+☐ No smart quotes (use straight quotes)
+☐ Special characters displaying correctly
+☐ No HTML entities in text
+☐ Line endings consistent (LF recommended)
+☐ JSON validates without errors
+☐ All text readable in multiple editors
+```
+
+**Pro tips:**
+
+- Always use UTF-8 encoding for maximum compatibility
+- Use straight quotes in JSON, not smart/curly quotes
+- Test special characters by viewing in different editors
+- Avoid copying text from Word (brings formatting issues)
+- Use a linter to catch encoding problems early
+
+---
+
+### 134. My resume looks different in PDF vs HTML — why?
+
+**Common reasons for PDF vs HTML differences:**
+
+**1. Theme CSS differences:**
+
+Themes often have separate styles for web and print:
+
+```css
+/* Web styles */
+.resume {
+  font-size: 16px;
+}
+
+/* Print styles (PDF) */
+@media print {
+  .resume {
+    font-size: 12px;
+  }
+}
+```
+
+**2. Font availability:**
+
+```json
+{
+  "theme": {
+    "webFont": "Inter, sans-serif",
+    "pdfFont": "Arial, sans-serif"
+  }
+}
+```
+
+**Fonts available in HTML but not PDF:**
+
+- Web fonts (Google Fonts, custom fonts)
+- Icon fonts (unless embedded)
+
+**Solution:** Use web-safe fonts for PDF export:
+
+- Arial
+- Times New Roman
+- Courier New
+- Georgia
+- Verdana
+
+**3. Page breaks:**
+
+PDF has fixed page sizes, HTML is continuous:
+
+```css
+/* Force page breaks in PDF */
+@media print {
+  .work-experience {
+    page-break-inside: avoid;
+  }
+
+  h2 {
+    page-break-after: avoid;
+  }
+}
+```
+
+**4. Link styling:**
+
+```css
+/* HTML - links are blue and underlined */
+a {
+  color: blue;
+  text-decoration: underline;
+}
+
+/* PDF - links may not show or may appear differently */
+@media print {
+  a {
+    color: black;
+    text-decoration: none;
+  }
+  a:after {
+    content: ' (' attr(href) ')';
+  }
+}
+```
+
+**5. Image rendering:**
+
+```json
+{
+  "basics": {
+    "image": "https://example.com/photo.jpg"
+  }
+}
+```
+
+**Issues:**
+
+- Images may not load in PDF if network unavailable
+- Image resolution differs between screen and print
+- Some PDF generators don't support external images
+
+**Solution:**
+
+- Use high-resolution images (300 DPI for print)
+- Use base64 encoded images for reliability
+- Test PDF with images before publishing
+
+**6. Responsive design:**
+
+HTML adjusts to screen size, PDF is fixed:
+
+```css
+/* HTML adapts to viewport */
+@media (max-width: 768px) {
+  .resume {
+    font-size: 14px;
+  }
+}
+
+/* PDF is fixed at A4/Letter size */
+@media print {
+  @page {
+    size: A4;
+  }
+}
+```
+
+**7. Background colors and borders:**
+
+```css
+/* May not print by default */
+@media print {
+  .section {
+    background-color: #f0f0f0; /* May be removed */
+    border: 1px solid #ccc; /* May not print */
+  }
+}
+```
+
+**Browser print settings often strip backgrounds.**
+
+**8. Theme-specific rendering engines:**
+
+Different engines handle PDF generation:
+
+- Puppeteer (headless Chrome)
+- PhantomJS
+- wkhtmltopdf
+- Prince XML
+
+Each has quirks and limitations.
+
+**Testing both formats:**
+
+```bash
+# Generate both
+resume export resume.html --theme professional
+resume export resume.pdf --theme professional
+
+# Compare side by side
+open resume.html
+open resume.pdf
+```
+
+**Ensuring consistency:**
+
+**Option 1: Use print-optimized themes:**
+
+```bash
+# Themes designed for PDF export
+resume export resume.pdf --theme elegant
+resume export resume.pdf --theme kendall
+resume export resume.pdf --theme professional
+```
+
+**Option 2: Create custom print styles:**
+
+```css
+/* Custom print stylesheet */
+@media print {
+  /* Match web styles */
+  body {
+    font-size: 11pt;
+  }
+  h1 {
+    font-size: 18pt;
+  }
+  h2 {
+    font-size: 14pt;
+  }
+
+  /* Page setup */
+  @page {
+    size: A4;
+    margin: 2cm;
+  }
+
+  /* Avoid orphans/widows */
+  p,
+  li {
+    orphans: 3;
+    widows: 3;
+  }
+}
+```
+
+**Option 3: Generate PDF from HTML:**
+
+```bash
+# Use browser to print HTML to PDF
+# This ensures perfect consistency
+
+# Or use command line
+wkhtmltopdf resume.html resume.pdf
+```
+
+**Debugging differences:**
+
+```
+1. Open HTML in browser
+2. Open Print Preview (Cmd+P / Ctrl+P)
+3. Compare with generated PDF
+4. Adjust print styles
+5. Regenerate PDF
+6. Repeat until consistent
+```
+
+**Pro tips:**
+
+- Test PDF export early in theme development
+- Use web-safe fonts for consistency
+- Avoid complex CSS that may not render in PDF
+- Use print preview to debug before generating PDF
+- Some differences are unavoidable due to medium limitations
+- Choose themes known for good PDF export quality
+
+---
+
+### 135. What if I get "missing basics" errors?
+
+**The `basics` section is required and must contain at least a `name`:**
+
+**Minimal valid resume:**
+
+```json
+{
+  "basics": {
+    "name": "Your Name"
+  }
+}
+```
+
+**Common "missing basics" scenarios:**
+
+**1. Completely missing basics:**
+
+```json
+// WRONG - will fail validation
+{
+  "work": [...],
+  "education": [...]
+}
+
+// CORRECT - basics is present
+{
+  "basics": {
+    "name": "Your Name"
+  },
+  "work": [...],
+  "education": [...]
+}
+```
+
+**2. Empty basics object:**
+
+```json
+// WRONG - basics exists but empty
+{
+  "basics": {}
+}
+
+// CORRECT - at minimum, include name
+{
+  "basics": {
+    "name": "Your Name"
+  }
+}
+```
+
+**3. Misspelled "basics":**
+
+```json
+// WRONG - typo
+{
+  "basic": {
+    "name": "Your Name"
+  }
+}
+
+// CORRECT
+{
+  "basics": {
+    "name": "Your Name"
+  }
+}
+```
+
+**4. Case sensitivity:**
+
+```json
+// WRONG - wrong case
+{
+  "Basics": {
+    "name": "Your Name"
+  }
+}
+
+// CORRECT - lowercase
+{
+  "basics": {
+    "name": "Your Name"
+  }
+}
+```
+
+**Complete basics example:**
+
+```json
+{
+  "basics": {
+    "name": "John Doe",
+    "label": "Software Engineer",
+    "image": "",
+    "email": "john@example.com",
+    "phone": "(555) 123-4567",
+    "url": "https://johndoe.com",
+    "summary": "Experienced software engineer...",
+    "location": {
+      "address": "",
+      "postalCode": "",
+      "city": "San Francisco",
+      "countryCode": "US",
+      "region": "California"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "johndoe",
+        "url": "https://github.com/johndoe"
+      }
+    ]
+  }
+}
+```
+
+**Optional basics fields (can be empty strings or omitted):**
+
+- `label` - Job title/professional label
+- `image` - Profile photo URL
+- `email` - Email address
+- `phone` - Phone number
+- `url` - Personal website
+- `summary` - Professional summary
+- `location` - Location object
+- `profiles` - Social profiles array
+
+**Validation script to check basics:**
+
+```javascript
+function validateBasics(resume) {
+  if (!resume.basics) {
+    return { valid: false, error: 'Missing basics section' };
+  }
+
+  if (!resume.basics.name) {
+    return { valid: false, error: 'Missing name in basics' };
+  }
+
+  return { valid: true };
+}
+
+// Usage
+const result = validateBasics(myResume);
+if (!result.valid) {
+  console.error(result.error);
+}
+```
+
+**Quick fix template:**
+
+If you get this error, add this to the top of your resume:
+
+```json
+{
+  "basics": {
+    "name": "Your Full Name",
+    "label": "Your Job Title",
+    "email": "your.email@example.com",
+    "summary": "Brief professional summary"
+  }
+
+  // ... rest of your resume
+}
+```
+
+**Pro tips:**
+
+- Always start with basics section
+- Name is the only truly required field
+- Use empty strings for optional fields you don't want to provide
+- Check spelling carefully (basics, not basic)
+- Validate after adding basics to ensure no other errors
+
+---
+
+## Conceptual & Design
+
+### 136. Why JSON and not YAML or XML?
+
+**JSON was chosen for specific technical and practical reasons:**
+
+**1. Universal compatibility:**
+
+```json
+{
+  "name": "Resume data in JSON"
+}
+```
+
+- Supported natively in JavaScript (web)
+- Easy to parse in all programming languages
+- No external dependencies needed
+- Browsers can parse JSON without libraries
+
+**2. Simplicity and readability:**
+
+Compare the same data:
+
+**JSON:**
+
+```json
+{
+  "basics": {
+    "name": "John Doe",
+    "email": "john@example.com"
+  }
+}
+```
+
+**YAML:**
+
+```yaml
+basics:
+  name: John Doe
+  email: john@example.com
+```
+
+**XML:**
+
+```xml
+<resume>
+  <basics>
+    <name>John Doe</name>
+    <email>john@example.com</email>
+  </basics>
+</resume>
+```
+
+**JSON wins because:**
+
+- Less verbose than XML
+- Stricter than YAML (fewer syntax ambiguities)
+- Widely understood by developers and non-developers
+
+**3. Tooling ecosystem:**
+
+```javascript
+// Native JSON support in all environments
+const resume = JSON.parse(data);
+const string = JSON.stringify(resume);
+```
+
+**Available everywhere:**
+
+- All browsers
+- Node.js
+- Python (`import json`)
+- PHP (`json_encode/decode`)
+- Java, C#, Go, Rust, etc.
+
+**4. Schema validation:**
+
+JSON Schema is mature and well-supported:
+
+```json
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["basics"],
+  "properties": {
+    "basics": { "type": "object" }
+  }
+}
+```
+
+**5. API-first design:**
+
+REST APIs predominantly use JSON:
+
+```bash
+# Fetch resume via API
+curl https://jsonresume.org/api/resume/username
+
+# Returns JSON - no conversion needed
+```
+
+**6. Database storage:**
+
+Modern databases have native JSON support:
+
+```sql
+-- PostgreSQL
+SELECT basics->>'name' FROM resumes;
+
+-- MongoDB
+db.resumes.find({ "basics.name": "John Doe" });
+```
+
+**Why not YAML?**
+
+**YAML issues:**
+
+- Whitespace sensitivity causes errors
+- Multiple ways to represent same data (confusing)
+- Security issues (arbitrary code execution)
+- Less tooling support in browsers
+- Parsing is slower
+
+**Example YAML ambiguity:**
+
+```yaml
+# Is this a boolean or string?
+no: no
+
+# Requires quotes to clarify
+no: "no"
+```
+
+**Why not XML?**
+
+**XML issues:**
+
+- Too verbose for resume data
+- Harder to read and write by hand
+- Larger file sizes
+- Less natural fit for JavaScript
+- Declining usage in modern APIs
+
+**XML example:**
+
+```xml
+<work>
+  <item>
+    <name>Company</name>
+    <position>Developer</position>
+  </item>
+</work>
+```
+
+vs JSON:
+
+```json
+{
+  "work": [
+    {
+      "name": "Company",
+      "position": "Developer"
+    }
+  ]
+}
+```
+
+**JSON is 40% smaller and more readable.**
+
+**Can I convert to YAML/XML?**
+
+Yes! You can convert if you prefer:
+
+```javascript
+// JSON to YAML
+const YAML = require('yaml');
+const resume = require('./resume.json');
+const yamlResume = YAML.stringify(resume);
+```
+
+```javascript
+// JSON to XML
+const { create } = require('xmlbuilder2');
+const resume = require('./resume.json');
+const xml = create(resume).end({ prettyPrint: true });
+```
+
+**Best of both worlds:**
+
+Store in JSON, convert as needed:
+
+```
+JSON (source of truth)
+  ↓
+YAML (for readability)
+XML (for legacy systems)
+CSV (for spreadsheets)
+```
+
+**Pro tips:**
+
+- JSON is the best choice for resume data
+- Use JSON for storage and APIs
+- Convert to other formats only when required
+- Take advantage of JSON's universal support
+- JSON's strictness prevents ambiguous data
+
+---
+
+### 137. Can I use JSON Resume as a data standard in my own app?
+
+**Absolutely! JSON Resume is designed to be a universal standard.**
+
+**Use cases for your app:**
+
+**1. Resume builder application:**
+
+```javascript
+import schema from 'resume-schema';
+import Ajv from 'ajv';
+
+class ResumeBuilder {
+  constructor() {
+    this.ajv = new Ajv();
+    this.validate = this.ajv.compile(schema);
+  }
+
+  createResume(data) {
+    if (this.validate(data)) {
+      return this.save(data);
+    } else {
+      throw new Error(this.validate.errors);
+    }
+  }
+}
+```
+
+**2. Job application system:**
+
+```javascript
+// Accept JSON Resume from candidates
+app.post('/api/apply', async (req, res) => {
+  const resume = req.body;
+
+  // Validate against JSON Resume schema
+  if (validateSchema(resume)) {
+    // Parse and store in your database
+    await db.candidates.insert({
+      name: resume.basics.name,
+      email: resume.basics.email,
+      skills: resume.skills.map((s) => s.name),
+      rawResume: resume,
+    });
+
+    res.json({ success: true });
+  }
+});
+```
+
+**3. Portfolio website generator:**
+
+```javascript
+// Generate portfolio from JSON Resume
+function generatePortfolio(resume) {
+  return `
+    <h1>${resume.basics.name}</h1>
+    <p>${resume.basics.summary}</p>
+
+    <h2>Projects</h2>
+    ${resume.projects
+      .map(
+        (p) => `
+      <article>
+        <h3>${p.name}</h3>
+        <p>${p.description}</p>
+      </article>
+    `
+      )
+      .join('')}
+  `;
+}
+```
+
+**4. Recruiting platform:**
+
+```javascript
+// Search candidates by skills
+const candidates = await db.resumes.find({
+  'skills.keywords': { $in: ['React', 'Node.js'] },
+});
+
+// Rank by experience
+candidates.sort((a, b) => {
+  const yearsA = calculateYears(a.work);
+  const yearsB = calculateYears(b.work);
+  return yearsB - yearsA;
+});
+```
+
+**5. HR management system:**
+
+```javascript
+// Import employee data from JSON Resume
+async function importEmployee(resumeUrl) {
+  const response = await fetch(resumeUrl);
+  const resume = await response.json();
+
+  return {
+    employeeId: generateId(),
+    fullName: resume.basics.name,
+    email: resume.basics.email,
+    phone: resume.basics.phone,
+    position: resume.work[0].position,
+    startDate: new Date(),
+    skills: resume.skills.flatMap((s) => s.keywords),
+  };
+}
+```
+
+**Benefits of using JSON Resume standard:**
+
+**1. Interoperability:**
+
+- Users can import/export from your app to others
+- No vendor lock-in
+- Easy data migration
+
+**2. Validation:**
+
+- Use existing schema
+- No need to define your own format
+- Built-in type checking
+
+**3. Community:**
+
+- Leverage existing tools and themes
+- Contributors know the format
+- Documentation already exists
+
+**4. Future-proof:**
+
+- Open standard, not proprietary
+- Long-term compatibility
+- Schema versioning support
+
+**Implementation guide:**
+
+```javascript
+// 1. Install dependencies
+npm install resume-schema ajv
+
+// 2. Set up validation
+import schema from 'resume-schema';
+import Ajv from 'ajv';
+
+const ajv = new Ajv();
+const validate = ajv.compile(schema);
+
+// 3. Validate incoming data
+function validateResume(data) {
+  if (validate(data)) {
+    return { valid: true, data };
+  } else {
+    return { valid: false, errors: validate.errors };
+  }
+}
+
+// 4. Store in your database
+async function saveResume(resume) {
+  return await db.resumes.insert({
+    userId: getCurrentUserId(),
+    data: resume,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  });
+}
+
+// 5. Retrieve and use
+async function getResume(userId) {
+  const record = await db.resumes.findOne({ userId });
+  return record.data; // JSON Resume format
+}
+```
+
+**Extending the schema for your needs:**
+
+```json
+{
+  "basics": {
+    "name": "John Doe"
+  },
+  "work": [...],
+
+  "custom": {
+    "internalId": "EMP-12345",
+    "department": "Engineering",
+    "salary": {
+      "amount": 100000,
+      "currency": "USD"
+    },
+    "startDate": "2023-01-01"
+  }
+}
+```
+
+**Custom fields are allowed!** Just keep the core schema intact.
+
+**TypeScript support:**
+
+```typescript
+import { ResumeSchema } from 'resume-schema';
+
+interface ExtendedResume extends ResumeSchema {
+  custom?: {
+    internalId: string;
+    department: string;
+    // ... your custom fields
+  };
+}
+
+const resume: ExtendedResume = {
+  basics: {
+    name: 'John Doe',
+  },
+  custom: {
+    internalId: 'EMP-12345',
+    department: 'Engineering',
+  },
+};
+```
+
+**License considerations:**
+
+JSON Resume schema is open source (MIT license):
+
+- ✅ Free to use commercially
+- ✅ No attribution required
+- ✅ Can modify and extend
+- ✅ Can use in proprietary software
+
+**Pro tips:**
+
+- Use JSON Resume as the storage format
+- Add custom fields in a separate `custom` namespace
+- Validate against the official schema
+- Contribute improvements back to the standard
+- Join the community discussions
+- Leverage existing tools and libraries
+
+---
+
+### 138. Is JSON Resume compatible with the Europass format?
+
+**JSON Resume and Europass are different but compatible standards.**
+
+**Key differences:**
+
+| Feature     | JSON Resume      | Europass                |
+| ----------- | ---------------- | ----------------------- |
+| Format      | JSON             | XML                     |
+| Regions     | Universal        | European Union          |
+| Focus       | Tech-friendly    | Government/official     |
+| Flexibility | High             | Low (strict structure)  |
+| Adoption    | Growing globally | Required in EU contexts |
+
+**Converting JSON Resume to Europass:**
+
+**Mapping table:**
+
+```javascript
+const mapping = {
+  // JSON Resume → Europass
+  'basics.name': 'PersonName',
+  'basics.email': 'ContactInfo.Email',
+  'basics.phone': 'ContactInfo.Telephone',
+  'basics.location': 'ContactInfo.Address',
+  work: 'WorkExperience',
+  education: 'Education',
+  skills: 'Skills',
+  languages: 'MotherTongue / ForeignLanguage',
+};
+```
+
+**Conversion example:**
+
+```javascript
+function toEuropass(jsonResume) {
+  return {
+    PersonName: {
+      FirstName: jsonResume.basics.name.split(' ')[0],
+      Surname: jsonResume.basics.name.split(' ').slice(1).join(' '),
+    },
+    ContactInfo: {
+      Email: jsonResume.basics.email,
+      Telephone: jsonResume.basics.phone,
+      Address: {
+        Municipality: jsonResume.basics.location.city,
+        Country: jsonResume.basics.location.countryCode,
+      },
+    },
+    WorkExperience: jsonResume.work.map((job) => ({
+      Period: {
+        From: { Year: job.startDate.split('-')[0] },
+        To: { Year: job.endDate?.split('-')[0] },
+      },
+      Position: { Label: job.position },
+      Activities: job.summary,
+      Employer: {
+        Name: job.name,
+      },
+    })),
+    Education: jsonResume.education.map((edu) => ({
+      Period: {
+        From: { Year: edu.startDate?.split('-')[0] },
+        To: { Year: edu.endDate?.split('-')[0] },
+      },
+      Title: edu.studyType + ' in ' + edu.area,
+      Organisation: {
+        Name: edu.institution,
+      },
+    })),
+  };
+}
+```
+
+**Tools for conversion:**
+
+```bash
+# Using a conversion library (hypothetical)
+npm install europass-converter
+
+# Convert
+const { toEuropass } = require('europass-converter');
+const europassXML = toEuropass(jsonResume);
+```
+
+**Manual conversion considerations:**
+
+**1. Name format:**
+
+JSON Resume:
+
+```json
+{
+  "basics": {
+    "name": "John Michael Doe"
+  }
+}
+```
+
+Europass expects:
+
+```xml
+<FirstName>John</FirstName>
+<Surname>Doe</Surname>
+```
+
+**2. Date formats:**
+
+JSON Resume: `2020-01-15`
+Europass: Separate year/month/day elements
+
+**3. Language proficiency:**
+
+JSON Resume:
+
+```json
+{
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Native speaker"
+    }
+  ]
+}
+```
+
+Europass uses CEFR levels (A1-C2):
+
+```xml
+<ForeignLanguage>
+  <Description>English</Description>
+  <ProficiencyLevel>C2</ProficiencyLevel>
+</ForeignLanguage>
+```
+
+**Fluency mapping:**
+
+```javascript
+const fluencyMap = {
+  'Native speaker': 'C2',
+  Fluent: 'C1',
+  Proficient: 'B2',
+  Intermediate: 'B1',
+  Basic: 'A2',
+  Beginner: 'A1',
+};
+```
+
+**4. Skills representation:**
+
+JSON Resume allows flexible skills:
+
+```json
+{
+  "skills": [
+    {
+      "name": "Web Development",
+      "keywords": ["HTML", "CSS", "JavaScript"]
+    }
+  ]
+}
+```
+
+Europass is more structured with predefined categories.
+
+**Why use JSON Resume if Europass is required?**
+
+**Benefits:**
+
+1. **Easier to edit** - JSON vs XML
+2. **Better tooling** - editors, validators, generators
+3. **Portable** - works everywhere, not just EU
+4. **Convert when needed** - store in JSON, export to Europass
+
+**Workflow:**
+
+```
+1. Maintain resume in JSON Resume format
+2. Use JSON Resume tools and themes
+3. Convert to Europass only when applying to EU jobs
+4. Submit Europass XML to systems that require it
+```
+
+**Dual-format strategy:**
+
+```javascript
+// Keep both formats in sync
+const resume = {
+  jsonResume: {
+    /* JSON Resume data */
+  },
+  europass: convertToEuropass(jsonResume),
+};
+
+// Export as needed
+function exportForEU() {
+  return resume.europass;
+}
+
+function exportForUS() {
+  return resume.jsonResume;
+}
+```
+
+**Pro tips:**
+
+- Store resume in JSON Resume format (easier to edit)
+- Convert to Europass when needed for EU applications
+- Some EU countries accept both formats
+- JSON Resume is more flexible for non-EU markets
+- Consider maintaining both if you apply internationally
+
+---
+
+### 139. How does JSON Resume differ from Schema.org or HR-XML?
+
+**Comparison of resume/CV standards:**
+
+**JSON Resume vs Schema.org Person:**
+
+**Schema.org approach:**
+
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "John Doe",
+  "jobTitle": "Software Engineer",
+  "worksFor": {
+    "@type": "Organization",
+    "name": "Tech Company"
+  }
+}
+```
+
+**JSON Resume approach:**
+
+```json
+{
+  "basics": {
+    "name": "John Doe",
+    "label": "Software Engineer"
+  },
+  "work": [
+    {
+      "name": "Tech Company",
+      "position": "Software Engineer"
+    }
+  ]
+}
+```
+
+**Key differences:**
+
+| Feature      | JSON Resume | Schema.org          | HR-XML        |
+| ------------ | ----------- | ------------------- | ------------- |
+| Purpose      | Resumes/CVs | SEO/structured data | HR systems    |
+| Format       | JSON        | JSON-LD             | XML           |
+| Complexity   | Simple      | Moderate            | Complex       |
+| Target users | Individuals | Web publishers      | Enterprises   |
+| Flexibility  | High        | Very high           | Moderate      |
+| Adoption     | Growing     | Widespread (web)    | Enterprise HR |
+
+**Schema.org:**
+
+**Purpose:** Structured data for search engines
+
+```html
+<!-- Embedded in HTML for SEO -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "John Doe",
+    "url": "https://johndoe.com",
+    "sameAs": [
+      "https://www.linkedin.com/in/johndoe",
+      "https://github.com/johndoe"
+    ]
+  }
+</script>
+```
+
+**Best for:**
+
+- Enhancing website SEO
+- Google Knowledge Graph
+- Rich snippets in search results
+
+**Not ideal for:**
+
+- Storing complete resume data
+- Resume generation
+- Job applications
+
+**HR-XML:**
+
+**Purpose:** Enterprise HR systems data exchange
+
+```xml
+<Resume>
+  <StructuredXMLResume>
+    <ContactInfo>
+      <PersonName>
+        <GivenName>John</GivenName>
+        <FamilyName>Doe</FamilyName>
+      </PersonName>
+    </ContactInfo>
+    <EmploymentHistory>
+      <EmployerOrg>
+        <EmployerOrgName>Tech Corp</EmployerOrgName>
+      </EmployerOrg>
+    </EmploymentHistory>
+  </StructuredXMLResume>
+</Resume>
+```
+
+**Best for:**
+
+- Large enterprise ATS systems
+- HR data integration
+- Standardized corporate workflows
+
+**Not ideal for:**
+
+- Individual developers
+- Quick resume creation
+- Modern web applications
+
+**JSON Resume advantages:**
+
+**1. Simplicity:**
+
+```json
+{
+  "basics": { "name": "John Doe" },
+  "work": [],
+  "education": []
+}
+```
+
+Clean, minimal, easy to understand.
+
+**2. Developer-friendly:**
+
+```javascript
+// Easy to work with
+const resume = require('./resume.json');
+console.log(resume.basics.name);
+```
+
+**3. Human-readable and editable:**
+
+Anyone can edit a JSON Resume file without special tools.
+
+**4. Rich ecosystem:**
+
+- Themes for rendering
+- CLI tools
+- Validators
+- Web hosting
+
+**5. Modern stack:**
+
+Works perfectly with:
+
+- React/Vue/Angular
+- Node.js
+- REST APIs
+- NoSQL databases
+
+**Can they work together?**
+
+**Yes! Use JSON Resume as source, export to others:**
+
+```javascript
+// Convert JSON Resume to Schema.org
+function toSchemaOrg(resume) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: resume.basics.name,
+    email: resume.basics.email,
+    url: resume.basics.url,
+    jobTitle: resume.basics.label,
+    alumniOf: resume.education.map((edu) => ({
+      '@type': 'EducationalOrganization',
+      name: edu.institution,
+    })),
+    worksFor: resume.work[0] && {
+      '@type': 'Organization',
+      name: resume.work[0].name,
+    },
+  };
+}
+```
+
+**Multi-format strategy:**
+
+```
+JSON Resume (source of truth)
+    ↓
+    ├→ Schema.org (for SEO)
+    ├→ HR-XML (for ATS)
+    ├→ Europass (for EU)
+    └→ LinkedIn (for networking)
+```
+
+**Best practices:**
+
+1. **Store in JSON Resume** - easiest to maintain
+2. **Convert as needed** - to other formats when required
+3. **Use Schema.org** - for personal website SEO
+4. **Support HR-XML** - if applying to large corporations
+5. **Keep JSON Resume as master** - it's the most flexible
+
+**Pro tips:**
+
+- JSON Resume is ideal for individual developers and tech workers
+- Schema.org is for SEO, not resume storage
+- HR-XML is for enterprise systems, not personal use
+- You can convert between formats with scripts
+- JSON Resume offers the best developer experience
+
+---
+
+### 140. Is there a JSON Resume ontology or mapping?
+
+**Yes! JSON Resume has a well-defined schema and semantic structure.**
+
+**Official schema:**
+
+```json
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "Resume Schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "basics": { "$ref": "#/definitions/basics" },
+    "work": { "$ref": "#/definitions/work" },
+    "volunteer": { "$ref": "#/definitions/volunteer" },
+    "education": { "$ref": "#/definitions/education" },
+    "awards": { "$ref": "#/definitions/awards" },
+    "certificates": { "$ref": "#/definitions/certificates" },
+    "publications": { "$ref": "#/definitions/publications" },
+    "skills": { "$ref": "#/definitions/skills" },
+    "languages": { "$ref": "#/definitions/languages" },
+    "interests": { "$ref": "#/definitions/interests" },
+    "references": { "$ref": "#/definitions/references" },
+    "projects": { "$ref": "#/definitions/projects" }
+  },
+  "required": ["basics"]
+}
+```
+
+**Semantic mapping:**
+
+**Top-level sections:**
+
+```
+resume
+├── basics (personal information)
+├── work (employment history)
+├── volunteer (volunteer experience)
+├── education (academic background)
+├── awards (honors and awards)
+├── certificates (professional certifications)
+├── publications (published works)
+├── skills (technical and soft skills)
+├── languages (language proficiency)
+├── interests (personal interests)
+├── references (professional references)
+└── projects (portfolio projects)
+```
+
+**Property relationships:**
+
+```javascript
+{
+  "basics": {
+    "name": "string",           // Required
+    "label": "string",          // Professional title
+    "image": "uri",             // Profile photo
+    "email": "email",           // Contact email
+    "phone": "string",          // Phone number
+    "url": "uri",               // Personal website
+    "summary": "string",        // Professional summary
+    "location": "object",       // Geo location
+    "profiles": "array<object>" // Social profiles
+  }
+}
+```
+
+**Mapping to other ontologies:**
+
+**1. Schema.org mapping:**
+
+```javascript
+const schemaOrgMapping = {
+  'basics.name': 'Person.name',
+  'basics.email': 'Person.email',
+  'basics.url': 'Person.url',
+  'basics.label': 'Person.jobTitle',
+  'basics.summary': 'Person.description',
+  'basics.profiles': 'Person.sameAs',
+  work: 'Person.worksFor / Person.alumniOf',
+  education: 'Person.alumniOf',
+  skills: 'Person.knowsAbout',
+};
+```
+
+**2. vCard mapping:**
+
+```javascript
+const vCardMapping = {
+  'basics.name': 'FN',
+  'basics.email': 'EMAIL',
+  'basics.phone': 'TEL',
+  'basics.url': 'URL',
+  'basics.location.city': 'ADR;LOCALITY',
+  'basics.location.countryCode': 'ADR;COUNTRY',
+};
+```
+
+**3. LinkedIn mapping:**
+
+```javascript
+const linkedInMapping = {
+  'basics.name': 'firstName + lastName',
+  'basics.label': 'headline',
+  'basics.summary': 'summary',
+  'basics.location': 'location',
+  'basics.profiles': 'contactInfo',
+  work: 'positions',
+  education: 'educations',
+  skills: 'skills',
+  volunteer: 'volunteer',
+};
+```
+
+**Data types and constraints:**
+
+```json
+{
+  "definitions": {
+    "iso8601": {
+      "type": "string",
+      "pattern": "^([0-9]{4})-([0-9]{2})-([0-9]{2})$"
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "uri": {
+      "type": "string",
+      "format": "uri"
+    }
+  }
+}
+```
+
+**Cardinality:**
+
+```javascript
+{
+  "basics": "1",        // Exactly one (required)
+  "work": "0..*",       // Zero or more
+  "education": "0..*",  // Zero or more
+  "skills": "0..*",     // Zero or more
+  "languages": "0..*",  // Zero or more
+  "projects": "0..*"    // Zero or more
+}
+```
+
+**Field dependencies:**
+
+```javascript
+{
+  "work": {
+    "required": ["name", "position", "startDate"],
+    "optional": ["url", "endDate", "summary", "highlights"]
+  },
+  "education": {
+    "required": ["institution", "area", "studyType"],
+    "optional": ["url", "startDate", "endDate", "score", "courses"]
+  }
+}
+```
+
+**Semantic relationships:**
+
+```
+Person (basics)
+  ├─ worksAt ────> Organization (work)
+  ├─ attendedSchool ─> EducationalInstitution (education)
+  ├─ hasSkill ────> Skill (skills)
+  ├─ speaks ─────> Language (languages)
+  ├─ created ────> CreativeWork (projects, publications)
+  ├─ volunteeredAt > Organization (volunteer)
+  └─ received ───> Award (awards)
+```
+
+**Using the ontology for queries:**
+
+```javascript
+// Find all React developers
+const reactDevs = resumes.filter((r) =>
+  r.skills.some((s) => s.keywords.includes('React'))
+);
+
+// Find people in San Francisco
+const sfResidents = resumes.filter(
+  (r) => r.basics.location.city === 'San Francisco'
+);
+
+// Find recent graduates (< 2 years)
+const graduates = resumes.filter((r) =>
+  r.education.some((e) => {
+    const year = new Date(e.endDate).getFullYear();
+    return year >= new Date().getFullYear() - 2;
+  })
+);
+```
+
+**RDF/Turtle representation (semantic web):**
+
+```turtle
+@prefix jr: <https://jsonresume.org/schema/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+:person1 a jr:Person ;
+  foaf:name "John Doe" ;
+  jr:label "Software Engineer" ;
+  jr:email "john@example.com" ;
+  jr:hasSkill :skill1 .
+
+:skill1 a jr:Skill ;
+  jr:name "JavaScript" ;
+  jr:level "Advanced" .
+```
+
+**GraphQL schema:**
+
+```graphql
+type Resume {
+  basics: Basics!
+  work: [Work!]
+  education: [Education!]
+  skills: [Skill!]
+  projects: [Project!]
+}
+
+type Basics {
+  name: String!
+  label: String
+  email: String
+  phone: String
+  url: String
+  summary: String
+  location: Location
+  profiles: [Profile!]
+}
+
+type Work {
+  name: String!
+  position: String!
+  url: String
+  startDate: Date!
+  endDate: Date
+  summary: String
+  highlights: [String!]
+}
+```
+
+**Extending the ontology:**
+
+```json
+{
+  "basics": {
+    "name": "John Doe"
+  },
+
+  "meta": {
+    "canonical": "https://jsonresume.org/schema/v1",
+    "version": "1.0.0",
+    "lastModified": "2024-01-01T00:00:00Z"
+  },
+
+  "custom": {
+    "internalId": "12345",
+    "department": "Engineering"
+  }
+}
+```
+
+**Pro tips:**
+
+- The schema defines the structure and relationships
+- Use the official schema for validation
+- Extend with custom fields in separate namespace
+- Map to other ontologies when needed
+- JSON Schema provides formal specification
+- Use TypeScript types for type safety
+
+---
+
+### 141. Can JSON Resume be extended for company org charts?
+
+**Yes! JSON Resume can be extended for organizational data.**
+
+**Basic extension approach:**
+
+```json
+{
+  "basics": {
+    "name": "Engineering Team"
+  },
+
+  "orgChart": {
+    "employees": [
+      {
+        "name": "Jane Smith",
+        "position": "Engineering Manager",
+        "email": "jane@company.com",
+        "reportsTo": null,
+        "team": "Engineering",
+        "resume": "./jane-resume.json"
+      },
+      {
+        "name": "John Doe",
+        "position": "Senior Engineer",
+        "email": "john@company.com",
+        "reportsTo": "jane@company.com",
+        "team": "Engineering",
+        "resume": "./john-resume.json"
+      }
+    ],
+    "teams": [
+      {
+        "name": "Engineering",
+        "manager": "jane@company.com",
+        "members": ["john@company.com", "alice@company.com"]
+      }
+    ]
+  }
+}
+```
+
+**Hierarchical structure:**
+
+```json
+{
+  "company": {
+    "name": "Tech Corp",
+    "ceo": {
+      "name": "CEO Name",
+      "resume": "ceo-resume.json",
+      "directReports": [
+        {
+          "name": "CTO",
+          "resume": "cto-resume.json",
+          "directReports": [
+            {
+              "name": "Engineering Manager",
+              "resume": "em-resume.json",
+              "directReports": [
+                {
+                  "name": "Senior Engineer",
+                  "resume": "se-resume.json"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
+```
+
+**Team roster with JSON Resumes:**
+
+```json
+{
+  "team": {
+    "name": "Engineering",
+    "members": [
+      {
+        "resumeUrl": "https://jsonresume.org/alice",
+        "role": "Tech Lead",
+        "joinDate": "2020-01-01",
+        "skills": ["React", "Node.js"]
+      },
+      {
+        "resumeUrl": "https://jsonresume.org/bob",
+        "role": "Senior Engineer",
+        "joinDate": "2021-06-01",
+        "skills": ["Python", "Machine Learning"]
+      }
+    ]
+  }
+}
+```
+
+**Aggregating team resumes:**
+
+```javascript
+async function buildOrgChart(teamData) {
+  const members = await Promise.all(
+    teamData.members.map(async (member) => {
+      const response = await fetch(member.resumeUrl);
+      const resume = await response.json();
+
+      return {
+        name: resume.basics.name,
+        role: member.role,
+        email: resume.basics.email,
+        skills: resume.skills.flatMap((s) => s.keywords),
+        experience: calculateYears(resume.work),
+        image: resume.basics.image,
+      };
+    })
+  );
+
+  return {
+    teamName: teamData.name,
+    size: members.length,
+    members,
+    skillsMatrix: aggregateSkills(members),
+  };
+}
+```
+
+**Skills matrix for team:**
+
+```javascript
+function aggregateSkills(members) {
+  const allSkills = {};
+
+  members.forEach((member) => {
+    member.skills.forEach((skill) => {
+      allSkills[skill] = (allSkills[skill] || 0) + 1;
+    });
+  });
+
+  return Object.entries(allSkills)
+    .map(([skill, count]) => ({ skill, count }))
+    .sort((a, b) => b.count - a.count);
+}
+
+// Result:
+// [
+//   { skill: 'JavaScript', count: 8 },
+//   { skill: 'React', count: 6 },
+//   { skill: 'Node.js', count: 5 }
+// ]
+```
+
+**Department structure:**
+
+```json
+{
+  "departments": [
+    {
+      "name": "Engineering",
+      "head": "cto-resume.json",
+      "teams": [
+        {
+          "name": "Frontend",
+          "lead": "frontend-lead-resume.json",
+          "members": ["engineer1-resume.json", "engineer2-resume.json"]
+        },
+        {
+          "name": "Backend",
+          "lead": "backend-lead-resume.json",
+          "members": ["engineer3-resume.json", "engineer4-resume.json"]
+        }
+      ]
+    }
+  ]
+}
+```
+
+**Visualizing org chart:**
+
+```javascript
+import OrgChart from 'd3-org-chart';
+
+function renderOrgChart(data) {
+  const chart = new OrgChart()
+    .container('.org-chart')
+    .data(data)
+    .nodeContent(
+      (d) => `
+      <div class="node">
+        <img src="${d.data.image}" />
+        <div>${d.data.name}</div>
+        <div>${d.data.position}</div>
+      </div>
+    `
+    );
+
+  chart.render();
+}
+```
+
+**Company directory:**
+
+```json
+{
+  "companyDirectory": {
+    "name": "Tech Corp Directory",
+    "employees": [
+      {
+        "id": "emp001",
+        "resume": "https://jsonresume.org/alice",
+        "department": "Engineering",
+        "location": "San Francisco",
+        "startDate": "2020-01-01"
+      }
+    ],
+    "searchable": true,
+    "filters": ["department", "location", "skills"]
+  }
+}
+```
+
+**Use cases:**
+
+1. **Internal team directory** - searchable by skills
+2. **Project staffing** - match skills to project needs
+3. **Succession planning** - identify skill gaps
+4. **Recruiting** - showcase team expertise
+5. **Org chart visualization** - interactive hierarchy
+
+**Benefits:**
+
+- **Standardized format** - all resumes in same structure
+- **Easy updates** - employees update their own resumes
+- **Skills tracking** - aggregate team capabilities
+- **Portable** - employees can take resume with them
+- **Privacy** - employees control their data
+
+**Implementation example:**
+
+```javascript
+class CompanyOrgChart {
+  constructor(employees) {
+    this.employees = employees;
+  }
+
+  async loadResumes() {
+    this.resumes = await Promise.all(
+      this.employees.map((e) => fetch(e.resumeUrl).then((r) => r.json()))
+    );
+  }
+
+  getBySkill(skill) {
+    return this.resumes.filter((r) =>
+      r.skills.some((s) => s.keywords.includes(skill))
+    );
+  }
+
+  getByDepartment(dept) {
+    return this.employees.filter((e) => e.department === dept);
+  }
+
+  buildHierarchy() {
+    // Build org chart from reportsTo relationships
+    const nodes = this.employees.map((e) => ({
+      id: e.id,
+      name: e.name,
+      parentId: e.reportsTo,
+    }));
+
+    return buildTree(nodes);
+  }
+}
+```
+
+**Pro tips:**
+
+- Store individual resumes in JSON Resume format
+- Use a wrapper format for organizational structure
+- Link resumes by URL or ID
+- Aggregate data for team views
+- Allow employees to manage their own resumes
+- Use visualization libraries for org charts
+
+---
+
+### 142. Could JSON Resume be used for portfolios or case studies?
+
+**Absolutely! JSON Resume has a `projects` section perfect for portfolios.**
+
+**Portfolio using projects section:**
+
+```json
+{
+  "basics": {
+    "name": "Jane Designer",
+    "label": "Product Designer",
+    "url": "https://janedesigner.com"
+  },
+
+  "projects": [
+    {
+      "name": "E-commerce Redesign",
+      "description": "Complete redesign of a major e-commerce platform",
+      "highlights": [
+        "Increased conversion rate by 35%",
+        "Improved mobile experience",
+        "Reduced cart abandonment by 20%"
+      ],
+      "keywords": ["UI/UX", "Figma", "User Research"],
+      "startDate": "2023-01-01",
+      "endDate": "2023-06-30",
+      "url": "https://janedesigner.com/projects/ecommerce",
+      "roles": ["Lead Designer", "User Researcher"],
+      "entity": "Client Name",
+      "type": "Client Work"
+    },
+    {
+      "name": "Open Source Design System",
+      "description": "Created a comprehensive design system for React applications",
+      "highlights": [
+        "50+ reusable components",
+        "Full documentation",
+        "1000+ GitHub stars"
+      ],
+      "keywords": ["Design System", "React", "Storybook"],
+      "startDate": "2022-01-01",
+      "endDate": "",
+      "url": "https://github.com/jane/design-system",
+      "roles": ["Creator", "Maintainer"],
+      "type": "Open Source"
+    }
+  ]
+}
+```
+
+**Extended portfolio with case studies:**
+
+```json
+{
+  "projects": [
+    {
+      "name": "Mobile App Redesign",
+      "description": "Complete redesign of fitness tracking app",
+
+      "caseStudy": {
+        "problem": "Users struggled with complex navigation and low engagement",
+        "solution": "Simplified UI with focus on quick logging and streaks",
+        "process": [
+          "User interviews (20 participants)",
+          "Competitive analysis",
+          "Wireframing and prototyping",
+          "A/B testing",
+          "Iteration based on feedback"
+        ],
+        "results": {
+          "engagement": "+45%",
+          "retention": "+30%",
+          "nps": "+25 points"
+        },
+        "visuals": [
+          "https://portfolio.com/images/before-after.jpg",
+          "https://portfolio.com/images/wireframes.jpg",
+          "https://portfolio.com/images/final-design.jpg"
+        ],
+        "testimonial": {
+          "quote": "Jane transformed our app and doubled our user retention",
+          "author": "CEO, Fitness App Inc."
+        }
+      },
+
+      "keywords": ["Mobile", "UI/UX", "User Research"],
+      "url": "https://portfolio.com/case-studies/fitness-app",
+      "startDate": "2023-03-01",
+      "endDate": "2023-09-01"
+    }
+  ]
+}
+```
+
+**Developer portfolio:**
+
+```json
+{
+  "projects": [
+    {
+      "name": "Real-time Chat Application",
+      "description": "Slack-like chat with channels, DMs, and file sharing",
+      "highlights": [
+        "Built with Next.js and Socket.io",
+        "1000+ concurrent users",
+        "End-to-end encryption"
+      ],
+      "keywords": ["Next.js", "Socket.io", "PostgreSQL", "Redis"],
+      "url": "https://github.com/user/chat-app",
+      "roles": ["Full-stack Developer"],
+      "type": "Personal Project",
+
+      "technicalDetails": {
+        "stack": {
+          "frontend": "Next.js, React, TailwindCSS",
+          "backend": "Node.js, Express, Socket.io",
+          "database": "PostgreSQL, Redis",
+          "deployment": "Vercel, Railway"
+        },
+        "features": [
+          "Real-time messaging",
+          "File uploads",
+          "User presence",
+          "Message search",
+          "Push notifications"
+        ],
+        "challenges": [
+          {
+            "problem": "Scaling WebSocket connections",
+            "solution": "Implemented Redis pub/sub for horizontal scaling"
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+
+**Writer/Content Creator portfolio:**
+
+```json
+{
+  "publications": [
+    {
+      "name": "The Future of Remote Work",
+      "publisher": "Tech Magazine",
+      "releaseDate": "2023-06-15",
+      "url": "https://techmagazine.com/future-remote-work",
+      "summary": "Analysis of remote work trends and predictions for the next decade",
+
+      "portfolio": {
+        "category": "Thought Leadership",
+        "wordCount": 2500,
+        "readTime": "10 minutes",
+        "metrics": {
+          "views": "50000+",
+          "shares": 1200,
+          "comments": 340
+        },
+        "awards": ["Editor's Choice", "Most Shared Article 2023"]
+      }
+    }
+  ]
+}
+```
+
+**Creative professional (photographer, artist):**
+
+```json
+{
+  "projects": [
+    {
+      "name": "Urban Landscapes Series",
+      "description": "Photo series exploring modern architecture",
+      "type": "Photography",
+
+      "creative": {
+        "medium": "Digital Photography",
+        "equipment": "Sony A7III, 24-70mm f/2.8",
+        "techniques": ["Long exposure", "HDR", "Bracketing"],
+        "exhibitions": [
+          {
+            "name": "Modern Cities",
+            "venue": "Art Gallery NYC",
+            "date": "2023-05-01",
+            "url": "https://artgallery.com/exhibitions/modern-cities"
+          }
+        ],
+        "gallery": [
+          "https://portfolio.com/urban1.jpg",
+          "https://portfolio.com/urban2.jpg"
+        ],
+        "press": [
+          {
+            "title": "Rising Star in Urban Photography",
+            "publication": "Photo Magazine",
+            "url": "https://photomag.com/rising-star"
+          }
+        ]
+      },
+
+      "keywords": ["Photography", "Architecture", "Urban"],
+      "url": "https://portfolio.com/urban-series",
+      "startDate": "2022-01-01",
+      "endDate": "2023-12-31"
+    }
+  ]
+}
+```
+
+**Rendering portfolio website:**
+
+```javascript
+function PortfolioProject({ project }) {
+  return (
+    <article className="project">
+      <h2>{project.name}</h2>
+      <p className="description">{project.description}</p>
+
+      {project.caseStudy && (
+        <div className="case-study">
+          <h3>The Problem</h3>
+          <p>{project.caseStudy.problem}</p>
+
+          <h3>The Solution</h3>
+          <p>{project.caseStudy.solution}</p>
+
+          <h3>Results</h3>
+          <ul>
+            {Object.entries(project.caseStudy.results).map(([key, value]) => (
+              <li key={key}>
+                {key}: {value}
+              </li>
+            ))}
+          </ul>
+
+          <div className="visuals">
+            {project.caseStudy.visuals.map((img) => (
+              <img key={img} src={img} alt={project.name} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div className="keywords">
+        {project.keywords.map((k) => (
+          <span key={k} className="tag">
+            {k}
+          </span>
+        ))}
+      </div>
+
+      <a href={project.url}>View Project →</a>
+    </article>
+  );
+}
+```
+
+**Portfolio themes:**
+
+Several JSON Resume themes are portfolio-focused:
+
+- `jsonresume-theme-portfolio`
+- `jsonresume-theme-projects`
+- `jsonresume-theme-creative`
+
+**Benefits for portfolios:**
+
+- **Structured data** - consistent format
+- **Portable** - take your portfolio anywhere
+- **Searchable** - filter by skills, keywords
+- **Extensible** - add custom fields for case studies
+- **Multi-use** - same data for resume and portfolio
+- **Version control** - track changes with Git
+
+**Pro tips:**
+
+- Use the `projects` section for portfolio pieces
+- Extend with custom fields for case studies
+- Link to live demos and GitHub repos
+- Include metrics and results
+- Add visuals with image URLs
+- Use portfolio-focused themes
+- Combine work experience + projects for complete picture
+
+---
+
+### 143. Is JSON Resume used by employers or only by individuals?
+
+**JSON Resume is used by both individuals and organizations.**
+
+**Individual use cases:**
+
+1. **Job seekers** - create and publish resumes
+2. **Freelancers** - showcase skills and projects
+3. **Students** - build first resume
+4. **Developers** - technical resumes with GitHub integration
+
+**Employer/Company use cases:**
+
+**1. Applicant Tracking Systems (ATS):**
+
+```javascript
+// Accept JSON Resume from candidates
+app.post('/api/jobs/:id/apply', async (req, res) => {
+  const { resume, coverLetter } = req.body;
+
+  // Validate JSON Resume
+  if (validateSchema(resume)) {
+    // Parse and score candidate
+    const candidate = {
+      name: resume.basics.name,
+      email: resume.basics.email,
+      skills: extractSkills(resume),
+      experience: calculateYears(resume.work),
+      education: resume.education,
+      rawResume: resume
+    };
+
+    // Auto-score against job requirements
+    const score = scoreCandidate(candidate, jobRequirements);
+
+    await db.applications.insert({
+      jobId: req.params.id,
+      candidateData: candidate,
+      score,
+      appliedAt: new Date()
+    });
+
+    res.json({ success: true, applicationId: ... });
+  }
+});
+```
+
+**2. Company talent database:**
+
+```javascript
+// Store all employee resumes in JSON Resume format
+class TalentDatabase {
+  async addEmployee(resume) {
+    // Validate
+    if (!validateSchema(resume)) {
+      throw new Error('Invalid resume format');
+    }
+
+    // Index by skills
+    const skills = resume.skills.flatMap((s) => s.keywords);
+    await this.skillsIndex.add(resume.basics.email, skills);
+
+    // Store
+    await this.db.employees.insert({
+      email: resume.basics.email,
+      resume,
+      indexedAt: new Date(),
+    });
+  }
+
+  async findBySkill(skill) {
+    // Find employees with specific skill
+    const emails = await this.skillsIndex.search(skill);
+    return await this.db.employees.find({
+      email: { $in: emails },
+    });
+  }
+}
+```
+
+**3. Internal mobility platforms:**
+
+```javascript
+// Help employees find internal opportunities
+async function findInternalOpportunities(employeeResume) {
+  const skills = employeeResume.skills.flatMap((s) => s.keywords);
+
+  // Find matching internal roles
+  const opportunities = await db.internalJobs.find({
+    requiredSkills: { $in: skills },
+    status: 'open',
+  });
+
+  return opportunities.map((job) => ({
+    title: job.title,
+    department: job.department,
+    matchScore: calculateMatch(skills, job.requiredSkills),
+    url: job.url,
+  }));
+}
+```
+
+**4. Recruiting agencies:**
+
+```javascript
+// Manage candidate pool
+class RecruitingAgency {
+  async importCandidate(resumeUrl) {
+    const resume = await fetch(resumeUrl).then((r) => r.json());
+
+    // Extract key data
+    const candidate = {
+      name: resume.basics.name,
+      email: resume.basics.email,
+      phone: resume.basics.phone,
+      skills: extractSkills(resume),
+      yearsExperience: calculateYears(resume.work),
+      currentRole: resume.work[0]?.position,
+      desiredRole: resume.basics.label,
+      location: resume.basics.location.city,
+      resumeData: resume,
+    };
+
+    // Match to client jobs
+    const matches = await this.matchToJobs(candidate);
+
+    return { candidate, matches };
+  }
+}
+```
+
+**5. Company directories:**
+
+```json
+{
+  "company": "Tech Corp",
+  "directory": [
+    {
+      "employeeId": "emp001",
+      "resume": "https://internal.company.com/resumes/alice.json",
+      "department": "Engineering",
+      "title": "Senior Engineer",
+      "startDate": "2020-01-01"
+    }
+  ]
+}
+```
+
+**6. Skills inventory:**
+
+```javascript
+// Aggregate company-wide skills
+async function buildSkillsInventory() {
+  const allResumes = await db.employees.find({});
+
+  const skillsMap = {};
+
+  allResumes.forEach((employee) => {
+    const resume = employee.resume;
+    resume.skills.forEach((skill) => {
+      if (!skillsMap[skill.name]) {
+        skillsMap[skill.name] = [];
+      }
+      skillsMap[skill.name].push({
+        employee: resume.basics.name,
+        level: skill.level,
+        keywords: skill.keywords,
+      });
+    });
+  });
+
+  return skillsMap;
+}
+
+// Result:
+// {
+//   "JavaScript": [
+//     { employee: "Alice", level: "Advanced", keywords: ["React", "Node.js"] },
+//     { employee: "Bob", level: "Intermediate", keywords: ["Vue", "Express"] }
+//   ]
+// }
+```
+
+**Employer benefits:**
+
+1. **Standardized data** - all resumes in same format
+2. **Easy parsing** - no PDF/Word parsing needed
+3. **Searchability** - query by skills, experience, education
+4. **Automation** - auto-score candidates
+5. **Integration** - easy to integrate with ATS/HR systems
+6. **Structured queries** - SQL/NoSQL friendly
+
+**Real-world adoption:**
+
+**Companies using JSON Resume:**
+
+- **Tech startups** - for applicant tracking
+- **Consulting firms** - for consultant profiles
+- **Recruiting agencies** - for candidate databases
+- **Enterprise** - for internal mobility
+- **Universities** - for alumni networks
+
+**Industry examples:**
+
+**Tech company:**
+
+```bash
+# Job posting includes:
+"Please submit your resume in JSON Resume format to jobs@company.com"
+```
+
+**Consulting firm:**
+
+```javascript
+// Match consultants to projects
+const consultants = await findBySkills(['Salesforce', 'Integration']);
+const bestMatch = rankByExperience(consultants, project.duration);
+```
+
+**Challenges for employers:**
+
+1. **Adoption** - candidates may not know about JSON Resume
+2. **Education** - need to teach candidates how to create one
+3. **Integration** - legacy ATS may not support it
+4. **Validation** - need to validate incoming data
+
+**Solutions:**
+
+1. **Provide converter** - PDF/Word → JSON Resume
+2. **Offer templates** - easy starting points
+3. **Build tools** - resume builder on careers page
+4. **Accept multiple formats** - JSON Resume + traditional
+
+**Pro tips for employers:**
+
+- Accept JSON Resume alongside traditional formats
+- Provide clear examples and templates
+- Build or use existing parsers for conversion
+- Use JSON Resume for internal employee data
+- Contribute to the ecosystem (tools, themes)
+- Encourage candidates to use standard format
+
+---
+
+### 144. Is JSON Resume meant for technical users only?
+
+**No! JSON Resume is for everyone, but it's currently most popular with technical users.**
+
+**Why technical users love it:**
+
+1. **Familiar format** - JSON is common in development
+2. **Git-friendly** - easy to version control
+3. **Automation** - can be generated programmatically
+4. **Integration** - works with dev tools and workflows
+5. **Customization** - full control over data and rendering
+
+**But it's designed to be accessible to all:**
+
+**Non-technical user options:**
+
+**1. Web-based editors (no code):**
+
+- **JSONResume.org registry** - GUI editor, no JSON knowledge needed
+- **Resume.io** - Form-based builder
+- **Reactive Resume** - Drag-and-drop builder
+
+**2. Visual editors:**
+
+```
+Form interface:
+┌─────────────────────────┐
+│ Name: [____________]    │
+│ Email: [____________]   │
+│ Phone: [____________]   │
+│                         │
+│ [Add Work Experience]   │
+│ [Add Education]         │
+│ [Add Skills]            │
+│                         │
+│ [Preview] [Publish]     │
+└─────────────────────────┘
+```
+
+**3. Templates with instructions:**
+
+```json
+{
+  "basics": {
+    "name": "Your Full Name", // Replace with your name
+    "email": "you@example.com" // Replace with your email
+  }
+}
+```
+
+**4. Conversion tools:**
+
+Upload Word/PDF → Converts to JSON Resume automatically
+
+**Making JSON Resume accessible:**
+
+**For designers:**
+
+```json
+{
+  "basics": {
+    "name": "Jane Designer"
+  },
+  "projects": [
+    {
+      "name": "Portfolio Project",
+      "description": "Beautiful UI redesign",
+      "url": "https://behance.net/project"
+    }
+  ]
+}
+```
+
+**For writers:**
+
+```json
+{
+  "basics": {
+    "name": "Writer Name"
+  },
+  "publications": [
+    {
+      "name": "Article Title",
+      "publisher": "Publication",
+      "url": "https://medium.com/@user/article"
+    }
+  ]
+}
+```
+
+**For teachers/academics:**
+
+```json
+{
+  "basics": {
+    "name": "Professor Name"
+  },
+  "education": [...],
+  "publications": [...],
+  "awards": [...]
+}
+```
+
+**For students:**
+
+```json
+{
+  "basics": {
+    "name": "Student Name"
+  },
+  "education": [...],
+  "volunteer": [...],
+  "interests": [...]
+}
+```
+
+**Simplified workflow for non-technical users:**
+
+```
+1. Use web editor at jsonresume.org
+   ↓
+2. Fill out form fields
+   ↓
+3. Preview with different themes
+   ↓
+4. Export to PDF or publish online
+   ↓
+5. No JSON editing required!
+```
+
+**Future improvements for accessibility:**
+
+1. **Better web editors** - more polished UIs
+2. **Mobile apps** - edit on phone
+3. **Voice input** - "Add work experience at Google from 2020 to 2023"
+4. **AI assistance** - "Generate my resume from LinkedIn"
+5. **Templates library** - start from examples
+6. **Import wizards** - upload existing resume
+
+**Education efforts:**
+
+**Tutorials for non-technical users:**
+
+- Video guides
+- Step-by-step instructions
+- Example resumes
+- Live workshops
+- Community support
+
+**Comparison with traditional methods:**
+
+| Task    | Traditional   | JSON Resume (technical) | JSON Resume (non-technical) |
+| ------- | ------------- | ----------------------- | --------------------------- |
+| Create  | Word doc      | Edit JSON               | Use web editor              |
+| Update  | Edit Word     | Edit JSON               | Update in form              |
+| Share   | Email PDF     | GitHub Gist             | Publish to registry         |
+| Version | Save copies   | Git commits             | Auto-saves                  |
+| Theme   | Word template | npm theme               | Choose from gallery         |
+
+**The vision:**
+
+**Make JSON Resume as easy as:**
+
+1. **Fill out a form**
+2. **Pick a theme**
+3. **Publish**
+
+**No JSON knowledge required.**
+
+**Current reality:**
+
+- **Technical users** - edit JSON directly
+- **Non-technical users** - use web tools
+
+**Both are valid workflows!**
+
+**Pro tips:**
+
+- Use web editors if not comfortable with JSON
+- JSON knowledge is helpful but not required
+- The format is simple enough for anyone to learn
+- Focus on tools that hide the JSON complexity
+- Encourage community to build accessible tools
+
+---
+
+### 145. Can JSON Resume be used in design tools like Figma?
+
+**Yes! JSON Resume data can integrate with design tools.**
+
+**Figma integration approaches:**
+
+**1. Figma plugin that imports JSON Resume:**
+
+```javascript
+// Hypothetical Figma plugin
+figma.ui.onmessage = async (msg) => {
+  if (msg.type === 'import-resume') {
+    const resume = JSON.parse(msg.resumeData);
+
+    // Create text layers from resume data
+    const nameText = figma.createText();
+    await figma.loadFontAsync(nameText.fontName);
+    nameText.characters = resume.basics.name;
+    nameText.fontSize = 32;
+
+    const titleText = figma.createText();
+    await figma.loadFontAsync(titleText.fontName);
+    titleText.characters = resume.basics.label;
+    titleText.fontSize = 18;
+
+    // Create work experience sections
+    resume.work.forEach((job) => {
+      const jobFrame = figma.createFrame();
+      // ... create text layers for job details
+    });
+
+    figma.closePlugin();
+  }
+};
+```
+
+**2. Design tokens from resume data:**
+
+```json
+{
+  "design": {
+    "colors": {
+      "primary": "#3B82F6",
+      "secondary": "#10B981",
+      "text": "#1F2937"
+    },
+    "typography": {
+      "name": { "size": 32, "weight": "bold" },
+      "title": { "size": 18, "weight": "medium" },
+      "body": { "size": 14, "weight": "normal" }
+    }
+  },
+  "basics": {
+    "name": "John Doe"
+  }
+}
+```
+
+**3. Figma template + JSON data:**
+
+```
+Figma Template (CV Design)
+    +
+JSON Resume Data
+    =
+Personalized Resume Design
+```
+
+**Workflow:**
+
+```
+1. Design resume template in Figma
+   ↓
+2. Mark text layers with variable names {{basics.name}}
+   ↓
+3. Import JSON Resume via plugin
+   ↓
+4. Plugin replaces variables with actual data
+   ↓
+5. Export as PDF or PNG
+```
+
+**Example Figma plugin code:**
+
+```javascript
+// Plugin manifest (manifest.json)
+{
+  "name": "JSON Resume Importer",
+  "id": "json-resume-importer",
+  "api": "1.0.0",
+  "main": "code.js",
+  "ui": "ui.html"
+}
+
+// code.js
+figma.showUI(__html__, { width: 400, height: 600 });
+
+figma.ui.onmessage = async (msg) => {
+  if (msg.type === 'populate-resume') {
+    const resume = msg.resume;
+
+    // Find and update text layers
+    const page = figma.currentPage;
+
+    // Update name
+    const nameLayer = page.findOne(n => n.name === 'resume-name');
+    if (nameLayer && nameLayer.type === 'TEXT') {
+      await figma.loadFontAsync(nameLayer.fontName);
+      nameLayer.characters = resume.basics.name;
+    }
+
+    // Update work experience
+    const workContainer = page.findOne(n => n.name === 'work-container');
+    if (workContainer) {
+      resume.work.forEach((job, i) => {
+        // Clone template and populate
+        const jobTemplate = workContainer.findOne(n => n.name === 'job-template');
+        const jobClone = jobTemplate.clone();
+
+        // Update text in clone
+        updateTextInNode(jobClone, 'company-name', job.name);
+        updateTextInNode(jobClone, 'position', job.position);
+        updateTextInNode(jobClone, 'dates', `${job.startDate} - ${job.endDate}`);
+      });
+    }
+
+    figma.notify('Resume imported successfully!');
+  }
+};
+
+async function updateTextInNode(node, layerName, text) {
+  const textNode = node.findOne(n => n.name === layerName);
+  if (textNode && textNode.type === 'TEXT') {
+    await figma.loadFontAsync(textNode.fontName);
+    textNode.characters = text;
+  }
+}
+```
+
+**Other design tool integrations:**
+
+**Adobe Illustrator:**
+
+```javascript
+// ExtendScript for Illustrator
+var resume = JSON.parse(File('resume.json').read());
+
+// Create text frames
+var doc = app.activeDocument;
+var nameText = doc.textFrames.add();
+nameText.contents = resume.basics.name;
+nameText.textRange.characterAttributes.size = 32;
+```
+
+**Sketch:**
+
+```javascript
+// Sketch plugin
+const resume = JSON.parse(context.document.data);
+
+const text = MSTextLayer.alloc().init();
+text.stringValue = resume.basics.name;
+text.fontSize = 32;
+```
+
+**Canva API (if available):**
+
+```javascript
+// Hypothetical Canva integration
+const design = await canva.createFromTemplate('resume-template');
+
+await design.updateText('name-field', resume.basics.name);
+await design.updateText('title-field', resume.basics.label);
+
+const exportedPDF = await design.export('pdf');
+```
+
+**Use cases:**
+
+1. **Automated resume generation** - update design from JSON
+2. **Batch processing** - create resumes for entire team
+3. **A/B testing designs** - same data, different layouts
+4. **Multilingual versions** - same design, translated data
+5. **Client presentations** - mockup with real data
+
+**Benefits:**
+
+- **Separation of content and design**
+- **Easy updates** - change JSON, regenerate design
+- **Consistency** - same data across all formats
+- **Automation** - script the design process
+- **Collaboration** - designers work on layout, developers provide data
+
+**Challenges:**
+
+- **Plugin development** - requires Figma API knowledge
+- **Layout complexity** - dynamic content = dynamic layout
+- **Font loading** - async font loading in Figma
+- **Export quality** - ensure print-ready PDFs
+
+**Existing tools:**
+
+While there isn't an official JSON Resume Figma plugin yet, the community could build one!
+
+**How to create a Figma plugin:**
+
+```bash
+# Install Figma plugin CLI
+npm install -g @figma/plugin-typings
+
+# Create plugin
+mkdir figma-json-resume
+cd figma-json-resume
+
+# Create files
+touch manifest.json code.ts ui.html
+```
+
+**Pro tips:**
+
+- Design templates can use JSON Resume data
+- Plugins can populate Figma designs from JSON
+- Useful for batch resume generation
+- Combine design beauty with data flexibility
+- Community opportunity: build Figma/Sketch plugins
+
+---
+
+## Privacy & Security
+
+### 150. Can search engines index my hosted resume?
+
+**By default, yes - published resumes on jsonresume.org are public and indexable.**
+
+**How search engines find your resume:**
+
+```html
+<!-- Your resume page -->
+<html>
+  <head>
+    <title>John Doe - Software Engineer</title>
+    <meta name="description" content="Experienced software engineer..." />
+  </head>
+  <body>
+    <!-- Resume content -->
+  </body>
+</html>
+```
+
+**Google, Bing, and other search engines will:**
+
+1. Crawl jsonresume.org
+2. Index your resume page
+3. Show it in search results for your name and skills
+
+**Controlling search engine indexing:**
+
+**Option 1: Use robots meta tag (if theme supports it):**
+
+```html
+<meta name="robots" content="noindex, nofollow" />
+```
+
+**Option 2: Use GitHub Gist privacy settings:**
+
+```bash
+# Create secret Gist (not searchable)
+gh gist create resume.json --secret
+
+# Or public Gist (searchable)
+gh gist create resume.json --public
+```
+
+**Note:** Secret Gists are still accessible if you share the URL, but won't appear in search results or Gist listings.
+
+**Option 3: Password protection (not native to JSON Resume):**
+
+You'd need to host on your own server with authentication.
+
+**Option 4: Robots.txt (for self-hosted):**
+
+```
+# robots.txt
+User-agent: *
+Disallow: /resume.html
+```
+
+**Checking if your resume is indexed:**
+
+```bash
+# Google search
+site:jsonresume.org "Your Name"
+
+# Check specific URL
+site:https://registry.jsonresume.org/yourname
+```
+
+**Benefits of indexing:**
+
+✅ **Recruiters can find you**
+✅ **Appears in Google searches for your name**
+✅ **Career visibility**
+✅ **Personal branding**
+
+**Drawbacks of indexing:**
+
+❌ **Privacy concerns** - anyone can see your resume
+❌ **Current employer** might find it
+❌ **Spam/recruiters** might contact you
+❌ **Personal info exposed** (email, phone, location)
+
+**Best practices:**
+
+**If you want to be found:**
+
+```json
+{
+  "basics": {
+    "name": "Your Name",
+    "label": "Software Engineer | React | Node.js",
+    "email": "public@example.com",
+    "summary": "Experienced engineer seeking opportunities..."
+  }
+}
+```
+
+**If you want privacy:**
+
+1. **Remove personal contact info:**
+
+```json
+{
+  "basics": {
+    "name": "Your Name",
+    "email": "",
+    "phone": "",
+    "location": {
+      "city": "San Francisco"
+    }
+  }
+}
+```
+
+2. **Use secret Gist**
+3. **Share URL only with intended recipients**
+4. **Consider self-hosting with authentication**
+
+**SEO considerations:**
+
+**Good for SEO (if you want to be found):**
+
+```json
+{
+  "basics": {
+    "name": "John Doe",
+    "label": "Senior React Developer | TypeScript Expert | Open Source Contributor",
+    "summary": "Experienced full-stack engineer specializing in React, Node.js, and TypeScript..."
+  }
+}
+```
+
+**Keywords in resume help with search rankings:**
+
+- Technologies (React, Python, etc.)
+- Job titles (Senior Engineer, etc.)
+- Location (San Francisco, etc.)
+- Company names (if notable)
+
+**Opting out of indexing:**
+
+If your resume is already indexed:
+
+1. **Update Gist to secret** (may take time to de-index)
+2. **Delete Gist** (removes source)
+3. **Request removal from Google:**
+   - Google Search Console
+   - Submit URL removal request
+4. **Wait for cache to expire** (can take weeks)
+
+**Alternative: Selective sharing:**
+
+Instead of public hosting:
+
+```bash
+# Share PDF directly
+resume export resume.pdf
+# Email to specific people
+
+# Or use password-protected link (third-party service)
+# Upload to Dropbox/Google Drive with link sharing
+```
+
+**Pro tips:**
+
+- Public resumes are indexed by default
+- Use secret Gists for privacy
+- Remove sensitive info (phone, full address)
+- Consider using a professional email, not personal
+- SEO can help recruiters find you (if desired)
+- You can always delete or make private later
+
+---
+
+(Continuing with remaining questions 151-250...)
+
+### 151. Is there an API for deleting resumes?
+
+**Yes, you can delete resumes through GitHub Gists (where they're stored).**
+
+**Using GitHub API:**
+
+```bash
+# Delete a Gist (and the resume)
+curl -X DELETE \
+  -H "Authorization: token YOUR_GITHUB_TOKEN" \
+  https://api.github.com/gists/GIST_ID
+```
+
+**Using GitHub CLI:**
+
+```bash
+# List your gists
+gh gist list
+
+# Delete specific gist
+gh gist delete GIST_ID
+```
+
+**Using the web interface:**
+
+1. Go to https://gist.github.com
+2. Find your resume Gist
+3. Click "Delete" button
+4. Confirm deletion
+
+**Programmatic deletion:**
+
+```javascript
+const { Octokit } = require('@octokit/rest');
+
+const octokit = new Octokit({
+  auth: process.env.GITHUB_TOKEN,
+});
+
+async function deleteResume(gistId) {
+  try {
+    await octokit.gists.delete({
+      gist_id: gistId,
+    });
+    console.log('Resume deleted successfully');
+  } catch (error) {
+    console.error('Error deleting resume:', error.message);
+  }
+}
+
+deleteResume('your-gist-id');
+```
+
+**Important notes:**
+
+- **Deletion is permanent** - cannot be recovered
+- **Backup first** - save a copy locally before deleting
+- **Registry cache** - jsonresume.org may cache for a short time
+- **Search engines** - may take time to de-index
+
+**Best practices:**
+
+```bash
+# 1. Export backup before deleting
+resume export backup.json
+
+# 2. Verify backup
+cat backup.json
+
+# 3. Delete Gist
+gh gist delete GIST_ID
+
+# 4. Verify deletion
+gh gist view GIST_ID  # Should return 404
+```
+
+**Alternative to deletion:**
+
+If you just want to make it private:
+
+```bash
+# Update Gist to secret (not searchable)
+gh gist edit GIST_ID --public=false
+```
+
+**Pro tips:**
+
+- Always backup before deleting
+- Deletion is permanent and immediate
+- Secret Gists are better than deletion for privacy
+- You can create new resume anytime
+
+---
+
+## API & Ecosystem
+
+### 156. Does JSONResume.org have an API?
+
+**Yes! JSONResume.org provides a public API for fetching resumes.**
+
+**Base URL:**
+
+```
+https://registry.jsonresume.org/
+```
+
+**Endpoints:**
+
+**1. Get resume by username:**
+
+```bash
+GET https://registry.jsonresume.org/:username
+
+# Example
+curl https://registry.jsonresume.org/thomasdavis
+```
+
+**Response:**
+
+```json
+{
+  "basics": {
+    "name": "Thomas Davis",
+    "label": "Web Developer",
+    "email": "thomasalwyndavis@gmail.com"
+  },
+  "work": [...],
+  "education": [...]
+}
+```
+
+**2. Get resume with specific theme:**
+
+```bash
+GET https://registry.jsonresume.org/:username?theme=:theme
+
+# Example
+curl https://registry.jsonresume.org/thomasdavis?theme=elegant
+```
+
+**3. Get JSON Resume from Gist:**
+
+```bash
+GET https://gist.githubusercontent.com/:username/:gist_id/raw/resume.json
+
+# Example
+curl https://gist.githubusercontent.com/thomasdavis/c99bc3c1fd66e698d2d3/raw/resume.json
+```
+
+**Using the API in JavaScript:**
+
+```javascript
+async function getResume(username) {
+  const response = await fetch(`https://registry.jsonresume.org/${username}`);
+  const resume = await response.json();
+  return resume;
+}
+
+// Usage
+const resume = await getResume('thomasdavis');
+console.log(resume.basics.name);
+```
+
+**With error handling:**
+
+```javascript
+async function getResume(username) {
+  try {
+    const response = await fetch(`https://registry.jsonresume.org/${username}`);
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        throw new Error('Resume not found');
+      }
+      throw new Error('Failed to fetch resume');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error:', error.message);
+    return null;
+  }
+}
+```
+
+**Fetch multiple resumes:**
+
+```javascript
+async function getMultipleResumes(usernames) {
+  const promises = usernames.map((username) =>
+    fetch(`https://registry.jsonresume.org/${username}`)
+      .then((r) => r.json())
+      .catch(() => null)
+  );
+
+  const resumes = await Promise.all(promises);
+  return resumes.filter((r) => r !== null);
+}
+
+// Usage
+const resumes = await getMultipleResumes(['user1', 'user2', 'user3']);
+```
+
+**API features:**
+
+✅ **CORS enabled** - works from browsers
+✅ **No authentication required** - for public resumes
+✅ **JSON response** - easy to parse
+✅ **Theme rendering** - specify theme in query param
+
+**Rate limiting:**
+
+Currently no strict rate limits, but please be respectful:
+
+- Don't scrape all resumes
+- Cache responses when possible
+- Throttle requests
+
+**API response codes:**
+
+| Code | Meaning                |
+| ---- | ---------------------- |
+| 200  | Success - resume found |
+| 404  | Resume not found       |
+| 500  | Server error           |
+
+**Publishing via API:**
+
+Publishing requires GitHub authentication:
+
+```javascript
+// Use GitHub Gist API
+const { Octokit } = require('@octokit/rest');
+
+const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+
+async function publishResume(resume) {
+  const gist = await octokit.gists.create({
+    files: {
+      'resume.json': {
+        content: JSON.stringify(resume, null, 2),
+      },
+    },
+    public: true,
+    description: 'My JSON Resume',
+  });
+
+  console.log('Published at:', gist.data.html_url);
+  return gist.data.id;
+}
+```
+
+**Building apps with the API:**
+
+**Resume aggregator:**
+
+```javascript
+const resumes = await getMultipleResumes(['user1', 'user2', 'user3']);
+
+const skills = resumes.flatMap((r) => r.skills.flatMap((s) => s.keywords));
+
+const uniqueSkills = [...new Set(skills)];
+console.log('Team skills:', uniqueSkills);
+```
+
+**Resume search engine:**
+
+```javascript
+async function searchBySkill(users, skill) {
+  const resumes = await getMultipleResumes(users);
+
+  return resumes.filter((resume) =>
+    resume.skills.some((s) =>
+      s.keywords.some((k) => k.toLowerCase().includes(skill.toLowerCase()))
+    )
+  );
+}
+
+const reactDevs = await searchBySkill(users, 'React');
+```
+
+**Documentation:**
+
+- Official docs: https://jsonresume.org/getting-started
+- API is REST-ful and self-documenting
+- OpenAPI/Swagger spec: Not yet available
+
+**Pro tips:**
+
+- Cache API responses to reduce load
+- Handle 404s gracefully
+- Use GitHub API for publishing
+- CORS enabled for client-side apps
+- No API key required for reading public resumes
+
+---
+
+### 157. How do I fetch resumes via API?
+
+**Simple fetch examples:**
+
+**JavaScript (modern):**
+
+```javascript
+// Fetch resume
+const response = await fetch('https://registry.jsonresume.org/username');
+const resume = await response.json();
+
+console.log(resume.basics.name);
+console.log(resume.work[0].position);
+```
+
+**JavaScript (with error handling):**
+
+```javascript
+async function fetchResume(username) {
+  try {
+    const url = `https://registry.jsonresume.org/${username}`;
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+
+    const resume = await response.json();
+
+    // Validate basic structure
+    if (!resume.basics || !resume.basics.name) {
+      throw new Error('Invalid resume format');
+    }
+
+    return resume;
+  } catch (error) {
+    console.error('Failed to fetch resume:', error.message);
+    return null;
+  }
+}
+
+// Usage
+const resume = await fetchResume('thomasdavis');
+if (resume) {
+  console.log(`Resume for ${resume.basics.name}`);
+}
+```
+
+**Node.js (with axios):**
+
+```javascript
+const axios = require('axios');
+
+async function getResume(username) {
+  try {
+    const { data } = await axios.get(
+      `https://registry.jsonresume.org/${username}`
+    );
+    return data;
+  } catch (error) {
+    if (error.response?.status === 404) {
+      console.error('Resume not found');
+    } else {
+      console.error('Error:', error.message);
+    }
+    return null;
+  }
+}
+```
+
+**Python:**
+
+```python
+import requests
+
+def fetch_resume(username):
+    url = f"https://registry.jsonresume.org/{username}"
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        return response.json()
+    elif response.status_code == 404:
+        print("Resume not found")
+        return None
+    else:
+        print(f"Error: {response.status_code}")
+        return None
+
+# Usage
+resume = fetch_resume('thomasdavis')
+if resume:
+    print(resume['basics']['name'])
+```
+
+**PHP:**
+
+```php
+<?php
+function fetchResume($username) {
+    $url = "https://registry.jsonresume.org/{$username}";
+    $json = file_get_contents($url);
+
+    if ($json === false) {
+        return null;
+    }
+
+    return json_decode($json, true);
+}
+
+$resume = fetchResume('thomasdavis');
+if ($resume) {
+    echo $resume['basics']['name'];
+}
+?>
+```
+
+**Ruby:**
+
+```ruby
+require 'net/http'
+require 'json'
+
+def fetch_resume(username)
+  url = URI("https://registry.jsonresume.org/#{username}")
+  response = Net::HTTP.get_response(url)
+
+  if response.is_a?(Net::HTTPSuccess)
+    JSON.parse(response.body)
+  else
+    nil
+  end
+end
+
+resume = fetch_resume('thomasdavis')
+puts resume['basics']['name'] if resume
+```
+
+**cURL (command line):**
+
+```bash
+# Simple fetch
+curl https://registry.jsonresume.org/thomasdavis
+
+# Save to file
+curl https://registry.jsonresume.org/thomasdavis > resume.json
+
+# Pretty print with jq
+curl https://registry.jsonresume.org/thomasdavis | jq '.'
+
+# Extract specific field
+curl https://registry.jsonresume.org/thomasdavis | jq '.basics.name'
+
+# With error handling
+curl -f https://registry.jsonresume.org/thomasdavis || echo "Resume not found"
+```
+
+**Batch fetching multiple resumes:**
+
+```javascript
+const usernames = ['user1', 'user2', 'user3'];
+
+const resumes = await Promise.all(
+  usernames.map(async (username) => {
+    try {
+      const response = await fetch(
+        `https://registry.jsonresume.org/${username}`
+      );
+      return response.ok ? await response.json() : null;
+    } catch {
+      return null;
+    }
+  })
+);
+
+// Filter out failed fetches
+const validResumes = resumes.filter((r) => r !== null);
+```
+
+**With caching:**
+
+```javascript
+const cache = new Map();
+
+async function getCachedResume(username) {
+  if (cache.has(username)) {
+    console.log('Using cached resume');
+    return cache.get(username);
+  }
+
+  const resume = await fetchResume(username);
+  if (resume) {
+    cache.set(username, resume);
+  }
+
+  return resume;
+}
+```
+
+**React hook example:**
+
+```javascript
+import { useState, useEffect } from 'react';
+
+function useResume(username) {
+  const [resume, setResume] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function loadResume() {
+      try {
+        const response = await fetch(
+          `https://registry.jsonresume.org/${username}`
+        );
+        if (!response.ok) throw new Error('Resume not found');
+        const data = await response.json();
+        setResume(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadResume();
+  }, [username]);
+
+  return { resume, loading, error };
+}
+
+// Usage in component
+function ResumeViewer({ username }) {
+  const { resume, loading, error } = useResume(username);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
+  return (
+    <div>
+      <h1>{resume.basics.name}</h1>
+      <p>{resume.basics.label}</p>
+    </div>
+  );
+}
+```
+
+**Pro tips:**
+
+- Always handle errors (404, network failures)
+- Cache responses when fetching multiple times
+- Use Promise.all for batch fetching
+- Validate resume structure after fetching
+- Set reasonable timeouts for requests
+
+---
+
+## Community & Governance
+
+### 166. How can I contribute to JSON Resume?
+
+**Multiple ways to contribute:**
+
+**1. Code contributions (GitHub):**
+
+```bash
+# Fork and clone
+git clone https://github.com/jsonresume/jsonresume.org
+cd jsonresume.org
+
+# Install dependencies
+pnpm install
+
+# Make changes
+git checkout -b my-feature
+
+# Commit and push
+git add .
+git commit -m "feat: add new feature"
+git push origin my-feature
+
+# Create pull request on GitHub
+```
+
+**What to contribute:**
+
+- Bug fixes
+- New features
+- Performance improvements
+- Documentation updates
+- Test coverage
+- Accessibility improvements
+
+**2. Create themes:**
+
+```bash
+# Create new theme package
+mkdir jsonresume-theme-yourname
+cd jsonresume-theme-yourname
+
+# Initialize
+npm init
+
+# Create index.js
+cat > index.js << 'EOF'
+function render(resume) {
+  return `
+    <html>
+      <head><title>${resume.basics.name}</title></head>
+      <body>
+        <h1>${resume.basics.name}</h1>
+        <!-- Theme HTML -->
+      </body>
+    </html>
+  `;
+}
+
+module.exports = { render };
+EOF
+
+# Publish to npm
+npm publish
+```
+
+**3. Documentation:**
+
+- Write tutorials and guides
+- Improve existing docs
+- Create video tutorials
+- Translate documentation
+- Answer questions on GitHub Discussions
+
+**4. Report bugs:**
+
+```bash
+# Create detailed bug report
+gh issue create \
+  --title "Bug: Theme not rendering correctly" \
+  --body "Steps to reproduce:
+1. Create resume with...
+2. Export with theme...
+3. See error...
+
+Expected: ...
+Actual: ...
+
+Environment:
+- Node version: 18.x
+- OS: macOS
+- resume-cli version: 3.x"
+```
+
+**5. Feature requests:**
+
+```bash
+gh issue create \
+  --title "Feature: Add support for certifications" \
+  --body "Proposal: Add certifications section to schema
+
+Use case: ...
+Benefits: ...
+Implementation: ..."
+```
+
+**6. Help users:**
+
+- Answer questions on GitHub Discussions
+- Help troubleshoot issues
+- Review pull requests
+- Test beta features
+
+**7. Improve schema:**
+
+Schema discussions happen at:
+https://github.com/jsonresume/resume-schema
+
+**8. Ecosystem tools:**
+
+Build complementary tools:
+
+- Converters (LinkedIn → JSON Resume)
+- Validators
+- Generators
+- Integrations
+
+**Contribution guidelines:**
+
+**Before contributing:**
+
+1. Read CONTRIBUTING.md
+2. Check existing issues/PRs
+3. Discuss large changes first
+4. Follow code style
+5. Add tests
+6. Update documentation
+
+**Pull request checklist:**
+
+```markdown
+- [ ] Tests pass locally
+- [ ] Code follows style guide
+- [ ] Documentation updated
+- [ ] No breaking changes (or documented)
+- [ ] Commits are clear and focused
+- [ ] PR description is detailed
+```
+
+**Code review process:**
+
+1. Submit PR
+2. Automated checks run (CI)
+3. Maintainer reviews
+4. Address feedback
+5. Approved and merged
+
+**Recognition:**
+
+Contributors are listed in:
+
+- GitHub contributors page
+- CONTRIBUTORS.md (if exists)
+- Release notes
+- Project README
+
+**Financial support:**
+
+If available:
+
+- GitHub Sponsors
+- Open Collective
+- Patreon
+
+**Communication channels:**
+
+- GitHub Issues - bugs and features
+- GitHub Discussions - questions and ideas
+- Discord/Slack (if available) - chat
+- Twitter/X - announcements
+
+**Pro tips:**
+
+- Start small - fix typos, improve docs
+- Read existing code to understand patterns
+- Ask questions if unsure
+- Be patient with code review
+- Contribute regularly to build relationship
+- Join community discussions
+
+---
+
+## Advanced / Power User
+
+### 176. How do I automate resume generation for multiple people?
+
+**Batch resume generation:**
+
+**1. Directory of JSON files:**
+
+```bash
+# Directory structure
+resumes/
+  ├── alice.json
+  ├── bob.json
+  └── charlie.json
+
+# Batch export
+for file in resumes/*.json; do
+  name=$(basename "$file" .json)
+  resume export "$file" "output/${name}.pdf" --theme professional
+done
+```
+
+**2. Node.js script:**
+
+```javascript
+const fs = require('fs');
+const path = require('path');
+const { exec } = require('child_process');
+const { promisify } = require('util');
+
+const execAsync = promisify(exec);
+
+async function generateResumes(inputDir, outputDir, theme = 'professional') {
+  const files = fs.readdirSync(inputDir).filter((f) => f.endsWith('.json'));
+
+  for (const file of files) {
+    const inputPath = path.join(inputDir, file);
+    const outputPath = path.join(outputDir, file.replace('.json', '.pdf'));
+
+    console.log(`Generating resume for ${file}...`);
+
+    try {
+      await execAsync(
+        `resume export "${inputPath}" "${outputPath}" --theme ${theme}`
+      );
+      console.log(`✓ Generated: ${outputPath}`);
+    } catch (error) {
+      console.error(`✗ Failed: ${file}`, error.message);
+    }
+  }
+}
+
+// Usage
+generateResumes('./resumes', './output', 'elegant');
+```
+
+**3. From database:**
+
+```javascript
+const db = require('./database');
+
+async function generateFromDatabase() {
+  const employees = await db.employees.find({});
+
+  for (const employee of employees) {
+    const resume = {
+      basics: {
+        name: employee.name,
+        email: employee.email,
+        phone: employee.phone,
+      },
+      work: employee.workHistory,
+      education: employee.education,
+      skills: employee.skills,
+    };
+
+    const outputPath = `./output/${employee.id}.pdf`;
+
+    fs.writeFileSync(
+      `./temp/${employee.id}.json`,
+      JSON.stringify(resume, null, 2)
+    );
+
+    await execAsync(
+      `resume export "./temp/${employee.id}.json" "${outputPath}"`
+    );
+
+    console.log(`Generated resume for ${employee.name}`);
+  }
+}
+```
+
+**4. From CSV:**
+
+```javascript
+const csv = require('csv-parser');
+const fs = require('fs');
+
+async function fromCSV(csvPath) {
+  const employees = [];
+
+  fs.createReadStream(csvPath)
+    .pipe(csv())
+    .on('data', (row) => {
+      const resume = {
+        basics: {
+          name: row.name,
+          email: row.email,
+          phone: row.phone,
+        },
+        work: [
+          {
+            name: row.company,
+            position: row.position,
+            startDate: row.startDate,
+            endDate: row.endDate,
+          },
+        ],
+      };
+      employees.push(resume);
+    })
+    .on('end', async () => {
+      for (const [index, resume] of employees.entries()) {
+        const outputPath = `./output/employee-${index}.pdf`;
+        // Generate PDF...
+      }
+    });
+}
+```
+
+**5. Programmatic generation:**
+
+```javascript
+const fs = require('fs');
+const Handlebars = require('handlebars');
+
+// Load theme template
+const template = Handlebars.compile(
+  fs.readFileSync('theme-template.hbs', 'utf8')
+);
+
+function generateHTML(resume) {
+  return template(resume);
+}
+
+function generateMultiple(resumes) {
+  return resumes.map((resume, index) => {
+    const html = generateHTML(resume);
+    const filename = `resume-${index}.html`;
+    fs.writeFileSync(`./output/${filename}`, html);
+    return filename;
+  });
+}
+```
+
+**6. Using puppeteer for PDF:**
+
+```javascript
+const puppeteer = require('puppeteer');
+
+async function generatePDF(resume, outputPath) {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+
+  // Render resume HTML
+  const html = renderResume(resume);
+  await page.setContent(html);
+
+  // Generate PDF
+  await page.pdf({
+    path: outputPath,
+    format: 'A4',
+    printBackground: true,
+  });
+
+  await browser.close();
+}
+
+// Batch generation
+async function batchGenerate(resumes) {
+  const browser = await puppeteer.launch();
+
+  for (const [index, resume] of resumes.entries()) {
+    const page = await browser.newPage();
+    const html = renderResume(resume);
+    await page.setContent(html);
+    await page.pdf({ path: `./output/resume-${index}.pdf` });
+    await page.close();
+  }
+
+  await browser.close();
+}
+```
+
+**7. GitHub Actions automation:**
+
+```yaml
+name: Generate Resumes
+on:
+  push:
+    paths:
+      - 'resumes/**.json'
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - run: npm install -g resume-cli
+      - run: |
+          for file in resumes/*.json; do
+            name=$(basename "$file" .json)
+            resume export "$file" "output/${name}.pdf"
+          done
+      - uses: actions/upload-artifact@v3
+        with:
+          name: generated-resumes
+          path: output/*.pdf
+```
+
+**8. Watch for changes:**
+
+```javascript
+const chokidar = require('chokidar');
+
+const watcher = chokidar.watch('resumes/*.json');
+
+watcher.on('change', async (path) => {
+  console.log(`${path} changed, regenerating...`);
+
+  const outputPath = path
+    .replace('resumes/', 'output/')
+    .replace('.json', '.pdf');
+
+  await execAsync(`resume export "${path}" "${outputPath}"`);
+
+  console.log('✓ Regenerated');
+});
+
+console.log('Watching for changes...');
+```
+
+**Pro tips:**
+
+- Process resumes in parallel for speed
+- Cache generated PDFs
+- Validate JSON before generation
+- Handle errors gracefully
+- Log progress for debugging
+- Use job queues for large batches
+
+---
+
+## Installation & Environment
+
+### 241. Do I need Node.js to use JSON Resume?
+
+**Short answer: It depends on how you want to use JSON Resume.**
+
+**No Node.js needed:**
+
+**1. Just the schema:**
+
+You can use the JSON Resume schema without Node.js:
+
+```json
+{
+  "basics": {
+    "name": "Your Name"
+  }
+}
+```
+
+Store this file and use it however you want - no tools required!
+
+**2. Web-based tools:**
+
+- jsonresume.org registry (browser-based)
+- Online validators
+- Web-based resume builders
+- No installation needed
+
+**3. Manual rendering:**
+
+You can manually render your resume:
+
+- Convert to HTML by hand
+- Use online converters
+- Import into design tools
+
+**Node.js required for:**
+
+**1. CLI tools:**
+
+```bash
+npm install -g resume-cli
+resume validate
+resume export resume.pdf
+```
+
+**2. Theme development:**
+
+```bash
+npm install
+npm run build
+```
+
+**3. Local preview server:**
+
+```bash
+resume serve
+```
+
+**4. Programmatic usage:**
+
+```javascript
+const resume = require('./resume.json');
+// Process resume data
+```
+
+**Alternatives to Node.js:**
+
+**Python:**
+
+```python
+import json
+
+# Read resume
+with open('resume.json') as f:
+    resume = json.load(f)
+
+# Use resume data
+print(resume['basics']['name'])
+```
+
+**PHP:**
+
+```php
+$resume = json_decode(file_get_contents('resume.json'), true);
+echo $resume['basics']['name'];
+```
+
+**Any language with JSON support:**
+
+JSON Resume is just a data format - use any language that can parse JSON!
+
+**Minimal setup (no Node.js):**
+
+```
+1. Create resume.json with your data
+2. Upload to GitHub Gist
+3. View at jsonresume.org/yourGistId
+4. Done!
+```
+
+**When Node.js is worth it:**
+
+✅ **Want to use CLI tools**
+✅ **Need local development**
+✅ **Building custom themes**
+✅ **Automating resume generation**
+✅ **Using npm packages**
+
+**When you DON'T need Node.js:**
+
+✅ **Just storing data in JSON format**
+✅ **Using web-based tools**
+✅ **Manually creating HTML**
+✅ **Using other programming languages**
+
+**Pro tips:**
+
+- JSON Resume is format-first, tools-second
+- The core value is the standardized schema
+- Tools (CLI, themes) enhance but aren't required
+- Use web tools if you don't want to install Node.js
+
+---
+
+### 250. How can I run JSON Resume in a CI/CD environment?
+
+**CI/CD automation examples:**
+
+**GitHub Actions:**
+
+```yaml
+name: Generate Resume
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'resume.json'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install resume-cli
+        run: npm install -g resume-cli
+
+      - name: Validate resume
+        run: resume validate
+
+      - name: Export PDF
+        run: resume export resume.pdf --theme professional
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: resume-pdf
+          path: resume.pdf
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
+```
+
+**GitLab CI:**
+
+```yaml
+# .gitlab-ci.yml
+image: node:18
+
+stages:
+  - validate
+  - build
+  - deploy
+
+validate:
+  stage: validate
+  script:
+    - npm install -g resume-cli
+    - resume validate resume.json
+
+build_pdf:
+  stage: build
+  script:
+    - npm install -g resume-cli
+    - resume export resume.json resume.pdf --theme professional
+  artifacts:
+    paths:
+      - resume.pdf
+
+deploy:
+  stage: deploy
+  script:
+    - resume export resume.json index.html
+    -  # Deploy to hosting
+```
+
+**CircleCI:**
+
+```yaml
+# .circleci/config.yml
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: node:18
+    steps:
+      - checkout
+      - run:
+          name: Install CLI
+          command: npm install -g resume-cli
+      - run:
+          name: Validate
+          command: resume validate
+      - run:
+          name: Export
+          command: resume export resume.pdf --theme professional
+      - store_artifacts:
+          path: resume.pdf
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+```
+
+**Docker:**
+
+```dockerfile
+FROM node:18-alpine
+
+# Install resume-cli
+RUN npm install -g resume-cli
+
+# Set working directory
+WORKDIR /app
+
+# Copy resume
+COPY resume.json .
+
+# Validate and build
+RUN resume validate
+RUN resume export resume.pdf --theme professional
+
+# Serve
+CMD ["resume", "serve", "--theme", "professional"]
+```
+
+**Docker Compose:**
+
+```yaml
+version: '3'
+services:
+  resume:
+    build: .
+    ports:
+      - '4000:4000'
+    volumes:
+      - ./resume.json:/app/resume.json
+```
+
+**Jenkins:**
+
+```groovy
+pipeline {
+    agent any
+
+    stages {
+        stage('Setup') {
+            steps {
+                sh 'npm install -g resume-cli'
+            }
+        }
+
+        stage('Validate') {
+            steps {
+                sh 'resume validate resume.json'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'resume export resume.json resume.pdf'
+            }
+        }
+
+        stage('Archive') {
+            steps {
+                archiveArtifacts artifacts: 'resume.pdf'
+            }
+        }
+    }
+}
+```
+
+**Netlify:**
+
+```toml
+# netlify.toml
+[build]
+  command = "npm install -g resume-cli && resume export index.html"
+  publish = "."
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+```
+
+**Vercel:**
+
+```json
+{
+  "buildCommand": "npm install -g resume-cli && resume export index.html",
+  "outputDirectory": ".",
+  "framework": null
+}
+```
+
+**AWS CodeBuild:**
+
+```yaml
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - npm install -g resume-cli
+
+  build:
+    commands:
+      - resume validate
+      - resume export resume.pdf
+
+artifacts:
+  files:
+    - resume.pdf
+```
+
+**Automated publishing:**
+
+```yaml
+name: Publish Resume
+on:
+  push:
+    branches: [main]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Publish to Gist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh gist create resume.json --public
+```
+
+**Pro tips:**
+
+- Cache npm packages for faster builds
+- Validate before building
+- Store artifacts for download
+- Use specific Node.js versions
+- Test in CI before deploying
+- Automate updates on resume changes
+
+---
+
+**End of FAQ**
+
+This FAQ covers questions 126-250 from the questions.md file. For questions 1-125, see the other documentation pages.
+
+**Need more help?**
+
+- Visit [jsonresume.org](https://jsonresume.org)
+- GitHub: [github.com/jsonresume](https://github.com/jsonresume)
+- Schema: [github.com/jsonresume/resume-schema](https://github.com/jsonresume/resume-schema)
