@@ -1,0 +1,304 @@
+# Hosting & Publishing
+
+This guide covers everything you need to know about hosting and publishing your JSON Resume online.
+
+## Quick Start: Hosting on JSONResume.org
+
+The easiest way to host your resume is through JSONResume.org using GitHub Gist integration.
+
+### Step-by-Step Guide
+
+**1. Create Your Resume JSON**
+
+Create a file named \`resume.json\` with your professional information following the [JSON Resume schema](/schema).
+
+**2. Create a GitHub Gist**
+
+1. Go to [gist.github.com](https://gist.github.com)
+2. Sign in with your GitHub account
+3. Create a new gist with the filename \`resume.json\`
+4. Paste your resume JSON content
+5. Set the gist to **Public** (required for hosting)
+6. Click "Create public gist"
+
+**3. Access Your Hosted Resume**
+
+Your resume is now automatically hosted at:
+
+\`\`\`
+https://jsonresume.org/[your-github-username]
+\`\`\`
+
+For example, if your GitHub username is \`johndoe\`, your resume is at:
+\`\`\`
+https://jsonresume.org/johndoe
+\`\`\`
+
+**That's it!** No signup, no configuration, no deployment steps needed.
+
+---
+
+## Frequently Asked Questions
+
+### How can I host my resume on JSONResume.org?
+
+**Answer:** Simply create a public GitHub Gist named \`resume.json\` containing your JSON Resume data. The registry automatically detects and renders it at \`https://jsonresume.org/[your-username]\`.
+
+**Requirements:**
+
+- GitHub account
+- Public gist named \`resume.json\`
+- Valid JSON Resume format
+
+### How long does my resume stay online?
+
+**Answer:** Your resume stays online indefinitely as long as your GitHub Gist remains public. JSONResume.org fetches data directly from your gist in real-time, so there's no separate hosting expiration.
+
+**Persistence:**
+
+- Hosted forever (tied to GitHub Gist lifecycle)
+- No renewal or maintenance required
+- Automatically updated when you edit your gist
+
+### Can I make my resume private?
+
+**Answer:** Not on the public registry. JSONResume.org requires public gists to render resumes. However, you have alternatives:
+
+**Options for privacy:**
+
+- **Self-host**: Deploy your own instance (see Alternative Hosting Options below)
+- **Local rendering**: Use the CLI to generate HTML/PDF locally without publishing
+- **Authentication wall**: Build a custom solution with password protection
+- **Unlisted gist**: Use an obscure gist filename
+
+### Can I unpublish a resume?
+
+**Answer:** Yes, simply delete or make your GitHub Gist private:
+
+**Method 1: Delete the gist**
+
+1. Go to [gist.github.com](https://gist.github.com)
+2. Find your \`resume.json\` gist
+3. Click "Delete" button
+4. Your resume will return 404 within minutes
+
+**Method 2: Make gist private**
+
+1. Edit your gist settings
+2. Change visibility to "Secret"
+3. Resume becomes inaccessible at jsonresume.org/username
+
+**Note:** Changes may take a few minutes to propagate due to caching.
+
+### Can I host multiple resumes?
+
+**Answer:** Yes! Use the \`?gistname=\` query parameter to host multiple resume versions.
+
+**Example:**
+\`\`\`
+// Default resume (resume.json)
+https://jsonresume.org/johndoe
+
+// English version (resume-en.json)
+https://jsonresume.org/johndoe?gistname=resume-en.json
+
+// French version (resume-fr.json)
+https://jsonresume.org/johndoe?gistname=resume-fr.json
+\`\`\`
+
+### Can I use a custom domain?
+
+**Answer:** Not directly on jsonresume.org, but you can set up a custom domain using redirects or self-hosting.
+
+**Option 1: Domain redirect (easiest)**
+
+Use your domain registrar to set up a 301 redirect to your resume URL.
+
+**Option 2: Self-host with custom domain**
+
+Deploy your own resume renderer to Vercel/Netlify with your custom domain.
+
+### Is hosting on JSONResume.org free?
+
+**Answer:** Yes, completely free!
+
+**What's included:**
+
+- Unlimited resume hosting
+- Unlimited traffic
+- Multiple themes
+- PDF/HTML export
+- No ads, no paywalls, no premium tiers
+
+### Does JSONResume.org offer analytics or view counts?
+
+**Answer:** Not currently. JSONResume.org doesn't track views or analytics for privacy reasons.
+
+**Alternatives for tracking:**
+
+- **Self-host with analytics**: Deploy your own version with Google Analytics or Plausible
+- **URL shortener**: Use bit.ly or similar to track clicks to your resume URL
+- **Custom redirect**: Set up a redirect through your own server to log requests
+
+### How secure is my data on JSONResume.org?
+
+**Answer:** Your data security depends on GitHub's security, not JSONResume.org.
+
+**Security model:**
+
+- **Data storage**: Your resume lives on GitHub Gists (not our servers)
+- **Transmission**: HTTPS for all connections
+- **Access control**: Managed by GitHub (edit access requires GitHub auth)
+- **Caching**: Temporary caching for performance (cleared regularly)
+
+**Best practices:**
+
+- Don't include sensitive data (SSN, full address)
+- Use professional email (not personal)
+- Remember: public gists are publicly searchable on GitHub
+
+### Can I edit my hosted resume online?
+
+**Answer:** Yes, through GitHub Gist interface.
+
+**How to edit:**
+
+1. Go to [gist.github.com](https://gist.github.com)
+2. Find your \`resume.json\` gist
+3. Click "Edit" button
+4. Make changes to JSON
+5. Click "Update public gist"
+6. Changes appear on jsonresume.org within minutes
+
+### Can I password-protect my hosted resume?
+
+**Answer:** Not on the public JSONResume.org registry.
+
+**Alternatives:**
+
+- **Self-host with authentication**: Deploy your own version with password protection
+- **Use unlisted gist filename**: Create a unique filename that's hard to guess
+- **Third-party auth services**: Use Netlify Identity or Cloudflare Access
+
+### Can I delete my hosted resume permanently?
+
+**Answer:** Yes, delete your GitHub Gist.
+
+**Permanent deletion steps:**
+
+1. Go to [gist.github.com](https://gist.github.com)
+2. Open your \`resume.json\` gist
+3. Click "Delete" button
+4. Confirm deletion
+
+Your resume will return 404 within minutes.
+
+### Can I export a hosted resume back to JSON?
+
+**Answer:** Yes, easily!
+
+**Method 1: Direct JSON endpoint**
+\`\`\`
+https://jsonresume.org/[username].json
+\`\`\`
+
+**Method 2: GitHub Gist raw URL**
+Access your gist directly on GitHub and use the raw URL.
+
+### Can I link my hosted resume to LinkedIn or GitHub?
+
+**Answer:** Absolutely! Add your resume URL to your professional profiles.
+
+**LinkedIn:**
+Add link in Featured section: \`https://jsonresume.org/yourusername\`
+
+**GitHub:**
+Add to profile README:
+\`\`\`markdown
+[View my resume](https://jsonresume.org/yourusername)
+\`\`\`
+
+**Email signature:**
+Include your resume URL for easy sharing.
+
+## Advanced Features
+
+### Theme Selection
+
+Choose how your resume looks by appending \`?theme=\` parameter:
+
+\`\`\`
+// Professional theme
+https://jsonresume.org/johndoe?theme=professional
+
+// Standard theme
+https://jsonresume.org/johndoe?theme=standard
+\`\`\`
+
+### Export Formats
+
+Access your resume in different formats:
+
+\`\`\`
+// Interactive HTML (default)
+https://jsonresume.org/johndoe
+
+// PDF download
+https://jsonresume.org/johndoe.pdf
+
+// Raw JSON data
+https://jsonresume.org/johndoe.json
+\`\`\`
+
+## Alternative Hosting Options
+
+### Vercel (Recommended for Developers)
+
+Deploy a custom resume renderer with full control.
+
+\`\`\`bash
+npm i -g vercel
+vercel --prod
+\`\`\`
+
+Benefits: Custom domain, serverless scaling, free SSL
+
+### Netlify
+
+Similar to Vercel, great for static sites.
+
+\`\`\`bash
+npm i -g netlify-cli
+netlify deploy --prod --dir .
+\`\`\`
+
+### GitHub Pages
+
+Free hosting directly from your GitHub repository.
+
+1. Create repo named \`[username].github.io\`
+2. Generate resume HTML
+3. Push to GitHub
+4. Enable GitHub Pages in repo settings
+
+Your resume is now at \`https://[username].github.io\`
+
+### Self-Hosted Server
+
+Host on your own VPS for maximum control. Requires server maintenance and security updates.
+
+## Comparison Table
+
+| Feature       | JSONResume.org | Vercel/Netlify | GitHub Pages | Self-Hosted     |
+| ------------- | -------------- | -------------- | ------------ | --------------- |
+| Cost          | Free           | Free tier      | Free         | $$$             |
+| Setup Time    | 5 minutes      | 15 minutes     | 20 minutes   | 1+ hours        |
+| Custom Domain | Redirect only  | ✅ Included    | ✅ Included  | ✅ Full control |
+| Analytics     | ❌             | ✅ Built-in    | Via Google   | ✅ Full control |
+| Maintenance   | Zero           | Zero           | Zero         | High            |
+
+## Next Steps
+
+- [Getting Started](/getting-started) - Create your first resume
+- [Jobs](/jobs) - Find matching job opportunities
+- [API Reference](/api) - Integrate with other tools
