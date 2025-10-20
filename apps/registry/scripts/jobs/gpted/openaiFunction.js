@@ -39,6 +39,7 @@ const jobDescriptionSchema = z.object({
 
 /**
  * AI SDK tool definition for job description parsing
+ * Using Zod schema for type safety and automatic JSON Schema conversion
  */
 const jobDescriptionTool = {
   description: 'Takes a fluid job description and turns it into a JSON schema',

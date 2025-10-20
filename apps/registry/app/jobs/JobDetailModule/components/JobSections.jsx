@@ -8,4 +8,4 @@ export {
   BenefitsSection,
   CultureSection,
   AdditionalSection,
-} from './JobSections';
+} from './JobSections/index';

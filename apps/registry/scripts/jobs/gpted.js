@@ -32,8 +32,10 @@ async function main() {
       `Found ${data.length} jobs in database, processing up to 5 at a time`
     );
 
-    // Filter jobs that don't have gpt_content
-    jobsToProcess = data.filter((job) => !job.gpt_content);
+    // Filter jobs that don't have gpt_content or failed previously
+    jobsToProcess = data.filter(
+      (job) => !job.gpt_content || job.gpt_content === 'FAILED'
+    );
     console.log(`${jobsToProcess.length} jobs need processing`);
   } catch (error) {
     console.error('Error in database query:', error);

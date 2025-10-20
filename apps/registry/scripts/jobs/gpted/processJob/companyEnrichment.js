@@ -1,11 +1,11 @@
-const { generateText } = require('ai');
+const { generateObject } = require('ai');
 const { openai } = require('@ai-sdk/openai');
-const { jobDescriptionTool } = require('../openaiFunction');
+const { jobDescriptionSchema } = require('../openaiFunction');
 const { getCompanyContextPrompt } = require('../prompts');
 const { getCompanyData } = require('../database');
 
 /**
- * Enrich job with company data using Vercel AI SDK
+ * Enrich job with company data using Vercel AI SDK with structured outputs
  */
 async function companyEnrichment(supabase, job, messages, company) {
   const companyDetails = await getCompanyData(supabase, company);
@@ -28,20 +28,14 @@ async function companyEnrichment(supabase, job, messages, company) {
     .map((m) => m.content)
     .join('\n\n');
 
-  const result = await generateText({
-    model: openai('gpt-4'),
+  const { object: jobJson2 } = await generateObject({
+    model: openai('gpt-5-mini'),
     system: systemPrompts,
     prompt: 'Re-parse the job description with the additional company context',
-    tools: {
-      jobDescriptionToSchema: jobDescriptionTool,
-    },
-    toolChoice: 'required',
+    schema: jobDescriptionSchema,
     temperature: 0.75,
   });
 
-  // Extract tool call result
-  const toolCall = result.toolCalls[0];
-  const jobJson2 = toolCall.args;
   console.log({ jobId: job.id, jobJson2 });
 
   return jobJson2;

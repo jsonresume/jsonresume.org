@@ -19,9 +19,13 @@ async function processJob(job, supabase) {
     url: job.url,
   });
 
-  if (job.gpt_content) {
+  if (job.gpt_content && job.gpt_content !== 'FAILED') {
     console.log(`Job ${job.id} already has gpt_content, skipping`);
     return;
+  }
+
+  if (job.gpt_content === 'FAILED') {
+    console.log(`Job ${job.id} previously failed, retrying...`);
   }
 
   try {

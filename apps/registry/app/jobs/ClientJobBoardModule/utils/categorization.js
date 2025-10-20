@@ -5,4 +5,4 @@ export {
   categorizeExperience,
   categorizeSalary,
   categorizeLocation,
-} from './categorization';
+} from './categorization/index';

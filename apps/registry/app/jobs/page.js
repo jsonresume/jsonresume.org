@@ -21,14 +21,16 @@ async function getJobs() {
 
   try {
     const supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
-    const ninetyDaysAgo = new Date();
-    ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
+    const fourMonthsAgo = new Date();
+    fourMonthsAgo.setMonth(fourMonthsAgo.getMonth() - 4);
 
     const { data: jobs, error } = await supabase
       .from('jobs')
       .select('*')
-      .gte('created_at', ninetyDaysAgo.toISOString())
-      .order('created_at', { ascending: false });
+      .gte('posted_at', fourMonthsAgo.toISOString())
+      .not('gpt_content', 'is', null)
+      .not('gpt_content', 'eq', 'FAILED')
+      .order('posted_at', { ascending: false });
 
     if (error) {
       logger.error({ error: error.message }, 'Error fetching jobs:');

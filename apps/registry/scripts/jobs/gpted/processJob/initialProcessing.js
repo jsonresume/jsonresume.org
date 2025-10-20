@@ -1,29 +1,23 @@
-const { generateText } = require('ai');
+const { generateObject } = require('ai');
 const { openai } = require('@ai-sdk/openai');
-const { jobDescriptionTool } = require('../openaiFunction');
+const { jobDescriptionSchema } = require('../openaiFunction');
 const { getJobProcessingPrompt } = require('../prompts');
 
 /**
- * Perform initial job processing using Vercel AI SDK
+ * Perform initial job processing using Vercel AI SDK with structured outputs
  */
 async function initialProcessing(job) {
   const systemPrompt = getJobProcessingPrompt(job.content);
 
   console.log('Starting AI processing for job:', job.id);
-  const result = await generateText({
-    model: openai('gpt-4'),
+  const { object: jobJson } = await generateObject({
+    model: openai('gpt-5-mini'),
     system: systemPrompt,
     prompt: 'Parse this job description into structured data',
-    tools: {
-      jobDescriptionToSchema: jobDescriptionTool,
-    },
-    toolChoice: 'required',
+    schema: jobDescriptionSchema,
     temperature: 0.75,
   });
 
-  // Extract tool call result
-  const toolCall = result.toolCalls[0];
-  const jobJson = toolCall.args;
   const details1 = JSON.stringify(jobJson);
 
   console.log(JSON.stringify(details1, null, 2));
