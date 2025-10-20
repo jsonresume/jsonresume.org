@@ -22,22 +22,19 @@ async function findLatestWhoIsHiringThread() {
   try {
     // Query for stories with "Who is hiring" in the title by user "whoishiring"
     // Only need 1 result - the most recent one
-    // Use a broader query to ensure we get all "Who is hiring" threads
-    const response = await axios.get(HN_SEARCH_API, {
+    // Use search_by_date to get results chronologically (newest first)
+    const response = await axios.get(HN_SEARCH_BY_DATE, {
       params: {
         tags: 'story,author_whoishiring',
-        hitsPerPage: 100, // Get enough results to ensure we get the latest
+        hitsPerPage: 10, // Get recent results
         query: 'Who is Hiring', // Search for posts with this title
-        // No date filter to get the latest posts
       },
     });
 
     const hits = response.data.hits || [];
 
     if (hits.length > 0) {
-      // Sort by date (newest first)
-      hits.sort((a, b) => b.created_at_i - a.created_at_i);
-
+      // search_by_date already returns results chronologically (newest first)
       // Get the latest thread
       const latestThread = hits[0];
 
