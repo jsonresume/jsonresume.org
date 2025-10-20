@@ -75,7 +75,7 @@ describe('formatResume', () => {
 
     expect(result.error).toBeDefined();
     expect(result.error.code).toBe('UNKNOWN_TEMPLATE_ERROR');
-    expect(result.error.details).toHaveProperty('stack');
+    expect(result.error.details.error).toHaveProperty('stack');
   });
 
   it('logs errors to console', async () => {
@@ -88,7 +88,7 @@ describe('formatResume', () => {
 
     await formatResume({}, mockFormatter, {});
 
-    expect(consoleSpy).toHaveBeenCalledWith(error);
+    expect(consoleSpy).toHaveBeenCalledWith('[Theme Error]', 'unknown', error);
     consoleSpy.mockRestore();
   });
 
@@ -126,7 +126,7 @@ describe('formatResume', () => {
 
     const result = await formatResume({}, mockFormatter, {});
 
-    expect(result.error.details.stack).toBe('Stack trace here');
+    expect(result.error.details.error.stack).toBe('Stack trace here');
   });
 
   it('handles empty resume', async () => {
