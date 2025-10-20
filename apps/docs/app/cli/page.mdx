@@ -1,0 +1,1122 @@
+# CLI Tools
+
+The JSON Resume CLI (`resume-cli`) is the official command-line interface for creating, validating, and exporting JSON-based resumes. This comprehensive guide covers installation, commands, workflows, and troubleshooting.
+
+## What is the `resume-cli`?
+
+The `resume-cli` is a Node.js-based command-line tool that provides a complete workflow for managing JSON Resume files. It enables you to:
+
+- **Initialize** new resume projects with schema-compliant templates
+- **Validate** resume JSON against the official schema
+- **Preview** resumes locally with live reload
+- **Export** to multiple formats (HTML, PDF, Markdown)
+- **Publish** to JSONResume.org or GitHub Gist
+- **Customize** with community themes
+
+The CLI is designed for developers, designers, and anyone who wants full control over their resume as structured data.
+
+## Installation
+
+### Prerequisites
+
+- **Node.js 14 or higher** (18+ recommended)
+- **npm** or **pnpm** package manager
+
+Check your Node.js version:
+
+```bash
+node --version
+# v18.0.0 or higher recommended
+```
+
+### Global Installation (Recommended)
+
+Install globally to use the `resume` command anywhere:
+
+```bash
+npm install -g resume-cli
+```
+
+Verify installation:
+
+```bash
+resume --version
+# 3.1.2
+```
+
+### Platform-Specific Notes
+
+**macOS/Linux:**
+
+```bash
+# Using npm
+npm install -g resume-cli
+
+# Using pnpm (faster)
+pnpm add -g resume-cli
+```
+
+**Windows:**
+
+```powershell
+# Run as Administrator
+npm install -g resume-cli
+```
+
+**Permission Issues:**
+
+If you encounter `EACCES` errors on macOS/Linux:
+
+```bash
+# Option 1: Use npx (no installation)
+npx resume-cli init
+
+# Option 2: Fix npm permissions
+mkdir ~/.npm-global
+npm config set prefix '~/.npm-global'
+echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.bashrc
+source ~/.bashrc
+npm install -g resume-cli
+```
+
+### Alternative: Modern Fork
+
+The official CLI is not actively maintained. For a more modern alternative, consider:
+
+```bash
+npm install -g @rbardini/resumed
+```
+
+The `resumed` package offers:
+
+- Active maintenance
+- Better error messages
+- Modern Node.js features
+- Extended export formats
+
+## Complete Command Reference
+
+### `resume init`
+
+Creates a new `resume.json` file in your current directory with schema-compliant structure.
+
+**Usage:**
+
+```bash
+resume init
+```
+
+**What it does:**
+
+- Generates `resume.json` with example data
+- Follows the official JSON Resume schema
+- Includes all standard sections (basics, work, education, skills, etc.)
+
+**Example output:**
+
+```json
+{
+  "basics": {
+    "name": "John Doe",
+    "label": "Programmer",
+    "image": "",
+    "email": "john@example.com",
+    "phone": "(912) 555-4321",
+    "url": "https://johndoe.com",
+    "summary": "A summary of John Doe...",
+    "location": {
+      "address": "2712 Broadway St",
+      "postalCode": "CA 94115",
+      "city": "San Francisco",
+      "countryCode": "US",
+      "region": "California"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "johndoe",
+        "url": "https://github.com/johndoe"
+      }
+    ]
+  },
+  "work": [],
+  "education": [],
+  "skills": [],
+  "languages": [],
+  "interests": [],
+  "references": []
+}
+```
+
+**Customizing the template:**
+
+After running `init`, replace the example data with your own:
+
+```bash
+resume init
+# Edit resume.json in your favorite editor
+code resume.json  # VSCode
+vim resume.json   # Vim
+nano resume.json  # Nano
+```
+
+### `resume validate`
+
+Validates your `resume.json` against the official schema to ensure compliance.
+
+**Usage:**
+
+```bash
+resume validate
+# Validates ./resume.json by default
+
+resume validate path/to/custom-resume.json
+# Validates a specific file
+```
+
+**Success output:**
+
+```
+✓ resume.json is valid
+```
+
+**Error output:**
+
+```
+✗ resume.json has errors:
+  - Missing required field: basics.name
+  - Invalid date format in work[0].startDate (expected YYYY-MM-DD)
+  - Field work[0].website is deprecated, use work[0].url instead
+```
+
+**Exit codes:**
+
+- `0` - Valid resume
+- `1` - Validation errors found
+
+**Use in CI/CD:**
+
+```bash
+# GitHub Actions
+- name: Validate Resume
+  run: |
+    npm install -g resume-cli
+    resume validate resume.json
+
+# Pre-commit hook (package.json)
+{
+  "scripts": {
+    "validate": "resume validate"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run validate"
+    }
+  }
+}
+```
+
+### `resume export`
+
+Exports your resume to HTML, PDF, or other formats using themes.
+
+**Usage:**
+
+```bash
+# Export to HTML (default theme)
+resume export resume.html
+
+# Export to PDF
+resume export resume.pdf
+
+# Specify a custom theme
+resume export resume.html --theme professional
+
+# Use a local theme for development
+resume export resume.html --theme ./my-custom-theme
+```
+
+**Supported formats:**
+
+- `.html` - HTML file (can be hosted anywhere)
+- `.pdf` - PDF document (uses Puppeteer for rendering)
+
+**Theme options:**
+
+```bash
+# Install a theme first
+npm install jsonresume-theme-professional
+
+# Then export with that theme
+resume export resume.html --theme professional
+```
+
+**Popular themes:**
+
+- `standard` - Clean, traditional format
+- `professional` - Modern, minimalist design
+- `spartacus` - Bold, attention-grabbing
+- `elegant` - Typography-focused
+- `stackoverflow` - Developer-friendly
+
+**Export workflows:**
+
+```bash
+# Quick HTML preview
+resume export output.html && open output.html
+
+# Generate PDF for applications
+resume export john-doe-resume.pdf --theme professional
+
+# Batch export multiple formats
+resume export resume.html --theme standard
+resume export resume.pdf --theme standard
+```
+
+**PDF Export Requirements:**
+
+PDF generation requires Puppeteer (headless Chrome):
+
+```bash
+# Install dependencies (done automatically by resume-cli)
+npm install puppeteer
+
+# On Linux, you may need additional dependencies
+sudo apt-get install -y \
+  gconf-service libasound2 libatk1.0-0 libc6 libcairo2 \
+  libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 \
+  libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 \
+  libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 \
+  libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 \
+  libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 \
+  libxrender1 libxss1 libxtst6 ca-certificates \
+  fonts-liberation libappindicator1 libnss3 lsb-release \
+  xdg-utils wget
+```
+
+### `resume serve`
+
+Starts a local development server that renders your resume with live reload.
+
+**Usage:**
+
+```bash
+# Start server (default: http://localhost:4000)
+resume serve
+
+# Specify a custom port
+resume serve --port 8080
+
+# Use a specific theme
+resume serve --theme professional
+
+# Use a local theme directory for theme development
+resume serve --theme ./my-theme
+```
+
+**Output:**
+
+```
+Serving resume at http://localhost:4000
+Watching for changes...
+```
+
+**Live reload behavior:**
+
+- Watches `resume.json` for changes
+- Automatically refreshes browser when file is saved
+- Hot module replacement for fast feedback
+
+**Theme development workflow:**
+
+```bash
+# 1. Create a theme directory
+mkdir my-custom-theme
+cd my-custom-theme
+
+# 2. Create theme package.json
+npm init -y
+
+# 3. Create index.js with render function
+# (see Theme Development section)
+
+# 4. Serve your resume with the local theme
+cd ..
+resume serve --theme ./my-custom-theme
+
+# 5. Edit theme files - server auto-reloads
+```
+
+**Accessing from other devices:**
+
+```bash
+# Find your local IP
+ifconfig | grep inet  # macOS/Linux
+ipconfig              # Windows
+
+# Start server
+resume serve --port 4000
+
+# Access from phone/tablet on same network
+# http://192.168.1.100:4000
+```
+
+### `resume publish`
+
+Publishes your resume to JSONResume.org's registry (legacy feature).
+
+**Note:** This command is **deprecated**. The modern approach is to use GitHub Gist.
+
+**Legacy usage:**
+
+```bash
+resume publish
+# Uploads to registry.jsonresume.org
+```
+
+**Recommended alternative (GitHub Gist):**
+
+```bash
+# 1. Create a GitHub Gist at gist.github.com
+#    - Name the file: resume.json
+#    - Paste your JSON
+#    - Make it public
+
+# 2. Your resume is automatically available at:
+#    https://jsonresume.org/[your-github-username]
+
+# 3. Update by editing the gist
+#    Changes appear instantly
+```
+
+**Benefits of GitHub Gist approach:**
+
+- Version control (gist history)
+- Easy updates (edit in GitHub UI)
+- No separate authentication
+- Works with JSONResume.org automatically
+
+## Advanced Usage
+
+### Installing Custom Themes
+
+Themes are npm packages that render your resume JSON.
+
+**Find themes:**
+
+- Official gallery: https://jsonresume.org/themes
+- npm search: `npm search jsonresume-theme`
+- GitHub: Search "jsonresume-theme"
+
+**Install a theme:**
+
+```bash
+# Install locally in your project
+npm install jsonresume-theme-stackoverflow
+
+# Or globally
+npm install -g jsonresume-theme-stackoverflow
+```
+
+**Use the theme:**
+
+```bash
+# With serve
+resume serve --theme stackoverflow
+
+# With export
+resume export resume.html --theme stackoverflow
+```
+
+**Create your own theme:**
+
+```bash
+# 1. Initialize theme package
+mkdir jsonresume-theme-mytheme
+cd jsonresume-theme-mytheme
+npm init -y
+
+# 2. Create index.js
+cat > index.js << 'EOF'
+function render(resume) {
+  return `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <title>${resume.basics.name}</title>
+        <style>
+          body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+          h1 { color: #333; }
+        </style>
+      </head>
+      <body>
+        <h1>${resume.basics.name}</h1>
+        <p>${resume.basics.label}</p>
+        <p>${resume.basics.summary}</p>
+        <!-- Add more sections -->
+      </body>
+    </html>
+  `;
+}
+
+module.exports = { render };
+EOF
+
+# 3. Test locally
+cd ..
+resume serve --theme ./jsonresume-theme-mytheme
+
+# 4. Publish to npm (optional)
+cd jsonresume-theme-mytheme
+npm publish
+```
+
+### Listing Available Themes
+
+The CLI doesn't have a built-in theme list command, but you can find themes:
+
+**Online:**
+
+- https://jsonresume.org/themes (visual gallery)
+
+**Via npm:**
+
+```bash
+npm search jsonresume-theme
+```
+
+**Check installed themes:**
+
+```bash
+# Global themes
+npm list -g --depth=0 | grep jsonresume-theme
+
+# Local project themes
+npm list --depth=0 | grep jsonresume-theme
+```
+
+### Validation Deep Dive
+
+**Schema validation checks:**
+
+1. **Required fields** - Ensures `basics.name` and other mandatory fields exist
+2. **Field types** - Validates strings, arrays, objects, dates
+3. **Date formats** - Checks dates follow `YYYY-MM-DD` format
+4. **URL formats** - Validates URLs are well-formed
+5. **Email formats** - Ensures valid email addresses
+6. **Deprecated fields** - Warns about old schema versions
+
+**Common validation errors:**
+
+```bash
+# Missing required field
+Error: resume.basics.name is required
+
+# Invalid date format
+Error: resume.work[0].startDate must be YYYY-MM-DD (got "January 2020")
+
+# Wrong type
+Error: resume.skills should be an array (got object)
+
+# Invalid URL
+Error: resume.basics.url must be a valid URL (got "mywebsite")
+```
+
+**Debugging validation errors:**
+
+```bash
+# 1. Run validation
+resume validate resume.json > errors.txt 2>&1
+
+# 2. Check JSON syntax first
+cat resume.json | python -m json.tool
+# or
+cat resume.json | jq .
+
+# 3. Use a JSON schema validator with detailed output
+npm install -g ajv-cli
+ajv validate -s https://jsonresume.org/schema.json -d resume.json --verbose
+
+# 4. Use an IDE with JSON Schema support
+# VSCode with JSON extension shows inline errors
+```
+
+## Using Without Node.js
+
+While the official CLI requires Node.js, there are alternatives:
+
+### Web-based Tools
+
+**JSONResume.org Registry:**
+
+```
+1. Visit https://jsonresume.org
+2. Sign in with GitHub
+3. Create resume in browser
+4. Export to PDF/HTML
+```
+
+**Online Validators:**
+
+- https://jsonresume.org/schema (paste JSON)
+- JSON schema validators (paste schema + resume)
+
+### Docker Container
+
+Run the CLI in Docker without local Node.js:
+
+```dockerfile
+# Dockerfile
+FROM node:18-alpine
+RUN npm install -g resume-cli
+WORKDIR /resume
+ENTRYPOINT ["resume"]
+```
+
+**Usage:**
+
+```bash
+# Build image
+docker build -t resume-cli .
+
+# Validate
+docker run -v $(pwd):/resume resume-cli validate resume.json
+
+# Serve (map port 4000)
+docker run -v $(pwd):/resume -p 4000:4000 resume-cli serve
+
+# Export
+docker run -v $(pwd):/resume resume-cli export resume.pdf
+```
+
+### GitHub Actions (CI/CD)
+
+Validate resumes in GitHub Actions without local installation:
+
+```yaml
+# .github/workflows/validate-resume.yml
+name: Validate Resume
+on: [push, pull_request]
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - run: npm install -g resume-cli
+      - run: resume validate resume.json
+```
+
+## Updating the CLI
+
+### Check Current Version
+
+```bash
+resume --version
+# 3.1.2
+
+npm list -g resume-cli
+# resume-cli@3.1.2
+```
+
+### Update to Latest
+
+```bash
+# Global update
+npm update -g resume-cli
+
+# Or reinstall
+npm uninstall -g resume-cli
+npm install -g resume-cli
+
+# Verify new version
+resume --version
+```
+
+### Version History
+
+Check npm for version history:
+
+```bash
+npm view resume-cli versions
+# [ '0.0.0', '0.0.1', ..., '3.1.2' ]
+
+npm view resume-cli version
+# 3.1.2 (current latest)
+```
+
+## Troubleshooting
+
+### Invalid JSON Errors
+
+**Symptom:**
+
+```
+Error: Unexpected token } in JSON at position 543
+```
+
+**Solutions:**
+
+```bash
+# 1. Validate JSON syntax (not just schema)
+cat resume.json | python -m json.tool
+
+# 2. Use a JSON linter
+npm install -g jsonlint
+jsonlint resume.json
+
+# 3. Check for common issues:
+#    - Trailing commas in arrays/objects
+#    - Missing quotes around keys
+#    - Unescaped quotes in strings
+#    - Missing closing braces
+
+# 4. Use an editor with JSON validation
+# VSCode, Sublime Text, or online: jsonlint.com
+```
+
+### Schema Validation Debugging
+
+**Symptom:**
+
+```
+Resume is invalid but error message is unclear
+```
+
+**Solutions:**
+
+```bash
+# 1. Validate against schema manually
+npm install -g ajv-cli
+ajv validate \
+  -s https://raw.githubusercontent.com/jsonresume/resume-schema/master/schema.json \
+  -d resume.json \
+  --verbose
+
+# 2. Check individual sections
+# Extract each section and validate separately
+cat resume.json | jq '.basics' > basics.json
+cat resume.json | jq '.work' > work.json
+
+# 3. Compare with example resume
+curl https://jsonresume.org/schema.json | jq '.examples[0]' > example.json
+diff resume.json example.json
+
+# 4. Use IDE autocomplete
+# Add schema to VSCode/editor for inline validation
+```
+
+**VSCode Setup:**
+
+```json
+// .vscode/settings.json
+{
+  "json.schemas": [
+    {
+      "fileMatch": ["resume.json"],
+      "url": "https://raw.githubusercontent.com/jsonresume/resume-schema/master/schema.json"
+    }
+  ]
+}
+```
+
+### PDF Export Issues
+
+**Symptom:**
+
+```
+Error: Failed to launch chrome! spawn ENOENT
+```
+
+**Solutions:**
+
+```bash
+# 1. Install Puppeteer dependencies (Linux)
+sudo apt-get install -y \
+  libnss3 libatk-bridge2.0-0 libx11-xcb1 \
+  libxcomposite1 libxcursor1 libxdamage1 \
+  libxrandr2 libasound2 libpangocairo-1.0-0 \
+  libgtk-3-0
+
+# 2. Reinstall Puppeteer
+npm install puppeteer --force
+
+# 3. Use system Chrome
+export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+export PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome
+
+# 4. Alternative: Export HTML then print to PDF
+resume export resume.html
+# Open in browser and print to PDF manually
+```
+
+**macOS Puppeteer issues:**
+
+```bash
+# Grant permissions
+xattr -d com.apple.quarantine /path/to/chrome
+
+# Or use system Chrome
+export PUPPETEER_EXECUTABLE_PATH="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+```
+
+### Theme Not Found
+
+**Symptom:**
+
+```
+Error: Cannot find module 'jsonresume-theme-xyz'
+```
+
+**Solutions:**
+
+```bash
+# 1. Install the theme
+npm install jsonresume-theme-xyz
+
+# 2. Check theme name (must start with jsonresume-theme-)
+resume serve --theme xyz
+# NOT: resume serve --theme jsonresume-theme-xyz
+
+# 3. For local themes, use relative path
+resume serve --theme ./my-theme
+
+# 4. Verify theme installation
+npm list | grep jsonresume-theme
+```
+
+### Port Already in Use
+
+**Symptom:**
+
+```
+Error: listen EADDRINUSE: address already in use :::4000
+```
+
+**Solutions:**
+
+```bash
+# 1. Use a different port
+resume serve --port 4001
+
+# 2. Find and kill process using port 4000
+# macOS/Linux:
+lsof -i :4000
+kill -9 <PID>
+
+# Windows:
+netstat -ano | findstr :4000
+taskkill /PID <PID> /F
+
+# 3. Use a random available port
+resume serve --port 0
+# Server will choose an available port
+```
+
+### Node.js Version Issues
+
+**Symptom:**
+
+```
+SyntaxError: Unexpected token '?'
+```
+
+**Solutions:**
+
+```bash
+# 1. Check Node.js version
+node --version
+
+# 2. Upgrade Node.js (nvm recommended)
+nvm install 18
+nvm use 18
+npm install -g resume-cli
+
+# 3. Or use npx with specific version
+npx -p node@18 -p resume-cli resume validate
+
+# 4. Use Docker (no local Node.js)
+# See "Using Without Node.js" section
+```
+
+## Example Workflows
+
+### Local Development Workflow
+
+```bash
+# 1. Initialize new resume
+mkdir my-resume && cd my-resume
+resume init
+
+# 2. Edit resume.json
+code resume.json
+
+# 3. Start development server
+resume serve --port 4000
+
+# 4. Validate on save
+resume validate
+
+# 5. Export when ready
+resume export john-doe-resume.pdf --theme professional
+```
+
+### GitHub Integration Workflow
+
+```bash
+# 1. Create Git repo
+git init
+git add resume.json
+git commit -m "Initial resume"
+
+# 2. Add pre-commit validation
+npm init -y
+npm install husky --save-dev
+npx husky init
+echo "npx resume validate" > .husky/pre-commit
+
+# 3. Create GitHub Gist
+# Visit gist.github.com, create resume.json gist
+
+# 4. Your resume is live at:
+# https://jsonresume.org/[your-username]
+
+# 5. Update via Git
+git remote add gist https://gist.github.com/[gist-id].git
+git push gist master
+```
+
+### Multi-Format Export Workflow
+
+```bash
+# Export to all formats
+#!/bin/bash
+THEMES=("standard" "professional" "spartacus")
+
+for theme in "${THEMES[@]}"; do
+  resume export "resume-${theme}.html" --theme "$theme"
+  resume export "resume-${theme}.pdf" --theme "$theme"
+done
+
+# Creates:
+# resume-standard.html, resume-standard.pdf
+# resume-professional.html, resume-professional.pdf
+# resume-spartacus.html, resume-spartacus.pdf
+```
+
+### CI/CD Deployment Workflow
+
+```yaml
+# .github/workflows/deploy-resume.yml
+name: Deploy Resume
+on:
+  push:
+    branches: [main]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install CLI
+        run: npm install -g resume-cli
+
+      - name: Validate Resume
+        run: resume validate resume.json
+
+      - name: Export to HTML
+        run: resume export index.html --theme professional
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
+          publish_branch: gh-pages
+```
+
+## Integration with Build Tools
+
+### npm Scripts
+
+```json
+{
+  "name": "my-resume",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "resume serve --port 4000",
+    "validate": "resume validate resume.json",
+    "build:html": "resume export dist/resume.html --theme professional",
+    "build:pdf": "resume export dist/resume.pdf --theme professional",
+    "build": "npm run validate && npm run build:html && npm run build:pdf",
+    "deploy": "npm run build && gh-pages -d dist"
+  },
+  "devDependencies": {
+    "gh-pages": "^5.0.0",
+    "resume-cli": "^3.1.2"
+  }
+}
+```
+
+**Usage:**
+
+```bash
+npm run dev       # Start dev server
+npm run validate  # Validate resume
+npm run build     # Build all formats
+npm run deploy    # Deploy to GitHub Pages
+```
+
+### Makefile
+
+```makefile
+# Makefile
+.PHONY: validate serve build clean deploy
+
+validate:
+	resume validate resume.json
+
+serve:
+	resume serve --port 4000
+
+build: validate
+	mkdir -p dist
+	resume export dist/resume.html --theme professional
+	resume export dist/resume.pdf --theme professional
+
+clean:
+	rm -rf dist
+
+deploy: build
+	gh-pages -d dist
+
+install:
+	npm install -g resume-cli
+```
+
+**Usage:**
+
+```bash
+make validate  # Validate resume
+make serve     # Start dev server
+make build     # Build all formats
+make deploy    # Deploy to GitHub Pages
+```
+
+### Docker Compose
+
+```yaml
+# docker-compose.yml
+version: '3.8'
+services:
+  resume:
+    image: node:18-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - '4000:4000'
+    command: |
+      sh -c "npm install -g resume-cli && resume serve --port 4000"
+```
+
+**Usage:**
+
+```bash
+docker-compose up  # Start server at http://localhost:4000
+```
+
+## Tips & Best Practices
+
+### Version Control Your Resume
+
+```bash
+# Use semantic versioning for your resume
+git tag v1.0.0
+git tag v1.1.0  # After adding new job
+git tag v2.0.0  # After major career change
+
+# View resume at specific version
+git checkout v1.0.0
+resume export resume-v1.html
+```
+
+### Maintain Multiple Versions
+
+```bash
+# Create different resumes for different roles
+resume-fullstack.json
+resume-backend.json
+resume-frontend.json
+
+# Export each with appropriate theme
+resume export fullstack.pdf --theme professional < resume-fullstack.json
+resume export backend.pdf --theme stackoverflow < resume-backend.json
+```
+
+### Automate Updates
+
+```bash
+# Add resume update to daily standup
+cat >> ~/.bashrc << 'EOF'
+alias resume-edit="code ~/resume/resume.json && resume validate ~/resume/resume.json"
+EOF
+
+# Quick update and deploy
+function resume-deploy() {
+  cd ~/resume
+  resume validate resume.json && \
+  git add resume.json && \
+  git commit -m "Update resume: $1" && \
+  git push
+}
+
+# Usage: resume-deploy "Added new project"
+```
+
+### JSON Schema IDE Support
+
+Most modern IDEs support JSON Schema for autocomplete and validation:
+
+**VSCode:**
+
+```json
+// .vscode/settings.json
+{
+  "json.schemas": [
+    {
+      "fileMatch": ["resume.json"],
+      "url": "https://raw.githubusercontent.com/jsonresume/resume-schema/master/schema.json"
+    }
+  ]
+}
+```
+
+**IntelliJ/WebStorm:**
+
+```
+Settings → Languages & Frameworks → Schemas and DTDs → JSON Schema Mappings
+Add: https://raw.githubusercontent.com/jsonresume/resume-schema/master/schema.json
+File pattern: resume.json
+```
+
+## Next Steps
+
+Now that you understand the CLI tools, explore these topics:
+
+- **[Getting Started](/getting-started)** - Create your first resume
+- **[Schema Reference](/schema)** - Understand all available fields
+- **[Themes](/themes)** - Browse and create custom themes
+- **[API Integration](/api)** - Build tools that consume JSON Resume
+
+## Getting Help
+
+- **GitHub Issues**: [jsonresume/resume-cli/issues](https://github.com/jsonresume/resume-cli/issues)
+- **Community**: [jsonresume/jsonresume.org/discussions](https://github.com/jsonresume/jsonresume.org/discussions)
+- **Documentation**: This guide and [jsonresume.org/docs](https://jsonresume.org/docs)

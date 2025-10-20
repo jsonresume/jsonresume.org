@@ -1,0 +1,652 @@
+# Themes
+
+Transform your JSON Resume into beautiful HTML, PDF, or web pages using themes. JSON Resume themes are modular renderers that take your resume data and output styled documents.
+
+## Quick Navigation
+
+- [What are themes?](#what-are-json-resume-themes)
+- [Browse available themes](#available-themes)
+- [Install and use themes](#installing-themes)
+- [Create your own theme](#creating-custom-themes)
+- [Customize existing themes](#customizing-existing-themes)
+- [Best practices](#theme-development-best-practices)
+- [Troubleshooting](#fixing-theme-rendering-issues)
+
+## What are JSON Resume themes?
+
+**Themes are renderers** that transform your structured JSON Resume data into visually appealing documents. Each theme is a JavaScript package that implements a `render()` function:
+
+```javascript
+// Basic theme structure
+function render(resume) {
+  // Takes your JSON Resume data
+  // Returns formatted HTML
+  return '<html>...</html>';
+}
+```
+
+**Key characteristics:**
+
+- **Modular**: Each theme is an independent npm package
+- **Interchangeable**: Switch themes without changing your resume data
+- **Customizable**: Fork and modify themes to match your style
+- **Portable**: Use the same data across multiple themes
+
+Think of themes as the "view layer" - your JSON Resume data is the model, and themes are templates that display it in different ways.
+
+## Available Themes
+
+JSON Resume currently supports **50+ themes** in the registry. Here are some popular options:
+
+### Featured Themes
+
+**Standard** - The official reference theme, clean and professional
+
+```
+https://jsonresume.org/yourusername?theme=standard
+```
+
+**Professional** - Modern and elegant design with great typography
+
+```
+https://jsonresume.org/yourusername?theme=professional
+```
+
+**Spartacus** - Bold and impactful layout with strong visual hierarchy
+
+```
+https://jsonresume.org/yourusername?theme=spartacus
+```
+
+**Elegant** - Minimalist design focused on content and readability
+
+```
+https://jsonresume.org/yourusername?theme=elegant
+```
+
+**Flat** - Contemporary flat design with clean lines
+
+```
+https://jsonresume.org/yourusername?theme=flat
+```
+
+### Complete Theme List
+
+The registry includes 50+ themes (browse alphabetically):
+
+`ace` • `actual` • `autumn` • `cora` • `cv` • `el-santo` • `elegant` • `even` • `flat` • `full` • `github` • `github2` • `jacrys` • `kards` • `kendall` • `lucide` • `macchiato` • `mantra` • `minyma` • `mocha-responsive` • `msresume` • `one` • `onepage` • `onepage-plus` • `onepageresume` • `orbit` • `paper` • `paper-plus-plus` • `papirus` • `professional` • `pumpkin` • `relaxed` • `rickosborne` • `rocketspacer` • `simple-red` • `spartan` • `spartacus` • `stackoverflow` • `standard` • `standard-resume` • `tan-responsive` • `techlead`
+
+### Preview Themes
+
+Visit your resume with the `?theme=` parameter to try different themes:
+
+```
+https://jsonresume.org/yourusername?theme=THEME_NAME
+```
+
+## Installing Themes
+
+### Using the Registry (Easiest)
+
+All themes are pre-installed on the registry. Just use the theme parameter:
+
+```
+https://jsonresume.org/yourusername?theme=professional
+```
+
+Export to different formats:
+
+```
+https://jsonresume.org/yourusername.pdf?theme=professional
+https://jsonresume.org/yourusername.html?theme=professional
+```
+
+### Using the CLI
+
+For local development with `resume-cli`:
+
+```bash
+# Install the CLI
+npm install -g resume-cli
+
+# Install a theme
+npm install jsonresume-theme-professional
+
+# Serve with theme
+resume serve --theme professional
+
+# Export with theme
+resume export resume.pdf --theme professional
+```
+
+### Installing from npm
+
+Themes follow the naming convention `jsonresume-theme-NAME`:
+
+```bash
+npm install jsonresume-theme-standard
+npm install jsonresume-theme-elegant
+npm install jsonresume-theme-spartacus
+```
+
+Scoped themes use `@jsonresume/`:
+
+```bash
+npm install @jsonresume/jsonresume-theme-professional
+```
+
+## Switching Themes
+
+### On the Web Registry
+
+Add the `?theme=` query parameter:
+
+```
+# Default theme
+https://jsonresume.org/thomasdavis
+
+# With specific theme
+https://jsonresume.org/thomasdavis?theme=spartacus
+
+# PDF export with theme
+https://jsonresume.org/thomasdavis.pdf?theme=elegant
+```
+
+### With the CLI
+
+Use the `--theme` flag:
+
+```bash
+resume serve --theme professional
+resume export output.pdf --theme professional
+```
+
+### Programmatically
+
+Import and use themes directly:
+
+```javascript
+import * as theme from 'jsonresume-theme-professional';
+import resume from './resume.json';
+
+const html = theme.render(resume);
+```
+
+## Creating Custom Themes
+
+### Requirements
+
+**CRITICAL:** Themes must be **serverless-compatible** for use with the registry.
+
+❌ **Cannot use:**
+
+- `fs.readFileSync()` or any filesystem operations
+- `__dirname` or `__filename`
+- Runtime file loading
+
+✅ **Must use:**
+
+- ES6 imports for templates and assets
+- Build-time bundling (Vite, webpack, rollup)
+- All content inlined at compile time
+
+See [Contributing Themes](/contributing#contributing-themes) for detailed migration guides.
+
+### Quick Start
+
+Create a minimal theme:
+
+```javascript
+// index.js
+import Handlebars from 'handlebars';
+
+const template = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{resume.basics.name}}</title>
+  <style>
+    body {
+      font-family: 'Helvetica', 'Arial', sans-serif;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    h1 { color: #2c3e50; }
+  </style>
+</head>
+<body>
+  <h1>{{resume.basics.name}}</h1>
+  <p>{{resume.basics.email}}</p>
+  {{#if resume.basics.summary}}
+  <p>{{resume.basics.summary}}</p>
+  {{/if}}
+</body>
+</html>
+`;
+
+export function render(resume) {
+  return Handlebars.compile(template)({ resume });
+}
+```
+
+### Package Setup
+
+Create `package.json`:
+
+```json
+{
+  "name": "jsonresume-theme-myname",
+  "version": "1.0.0",
+  "description": "A custom JSON Resume theme",
+  "main": "index.js",
+  "type": "module",
+  "exports": {
+    ".": "./index.js"
+  },
+  "keywords": ["jsonresume", "jsonresume-theme"],
+  "license": "MIT"
+}
+```
+
+### Test Locally
+
+```bash
+npm link
+resume serve --theme myname
+```
+
+### Working Examples
+
+Reference implementations in the repository:
+
+- **Simple**: `packages/jsonresume-theme-standard`
+- **Vite bundling**: `packages/jsonresume-theme-professional`
+- **Handlebars**: `packages/jsonresume-theme-spartacus`
+
+## Customizing Existing Themes
+
+### Fork and Modify
+
+```bash
+# Clone a theme
+git clone https://github.com/jsonresume/jsonresume-theme-professional.git
+cd jsonresume-theme-professional
+
+# Install and test
+npm install
+npm link
+resume serve --theme professional
+
+# Make your changes, then publish
+npm publish
+```
+
+### Wrapper Theme
+
+Extend an existing theme:
+
+```javascript
+import * as baseTheme from 'jsonresume-theme-professional';
+
+export function render(resume) {
+  let html = baseTheme.render(resume);
+
+  // Inject custom CSS
+  const customCSS = `
+    <style>
+      h1 { color: #e74c3c !important; }
+    </style>
+  </head>
+  `;
+
+  return html.replace('</head>', customCSS);
+}
+```
+
+## Theme Development Best Practices
+
+### Responsive Design
+
+Design mobile-first:
+
+```css
+body {
+  padding: 10px;
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  body {
+    padding: 20px;
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 1024px) {
+  body {
+    max-width: 800px;
+    margin: 40px auto;
+  }
+}
+```
+
+### Print Optimization
+
+```css
+@media print {
+  body {
+    color: #000;
+    background: #fff;
+  }
+
+  .section {
+    page-break-inside: avoid;
+  }
+
+  @page {
+    margin: 1cm;
+    size: A4;
+  }
+}
+```
+
+### Accessibility
+
+```html
+<header role="banner">
+  <h1>{{resume.basics.name}}</h1>
+</header>
+
+<main role="main">
+  <section aria-labelledby="experience">
+    <h2 id="experience">Experience</h2>
+  </section>
+</main>
+```
+
+### Handle Missing Data
+
+Always check for optional fields:
+
+```handlebars
+{{#if resume.work}}
+  {{#each resume.work}}
+    <h3>{{position}}{{#if name}} at {{name}}{{/if}}</h3>
+  {{/each}}
+{{/if}}
+```
+
+## Can themes include custom CSS or JS?
+
+**Yes**, but with important constraints:
+
+### CSS
+
+✅ **Allowed:**
+
+- Inline CSS in `<style>` tags
+- CSS bundled at build time
+- Tailwind/Bootstrap (must be pre-compiled)
+
+❌ **Not Recommended:**
+
+- External CDN stylesheets (may fail offline)
+- Dynamic CSS loading
+
+```javascript
+// Good: bundled CSS
+import css from './style.css?inline';
+
+export function render(resume) {
+  return `<style>${css}</style>`;
+}
+```
+
+### JavaScript
+
+✅ **Allowed:**
+
+- Inline scripts for interactivity
+- Vanilla JavaScript
+
+❌ **Limitations:**
+
+- Only works in HTML output (not PDF)
+- Keep it simple and lightweight
+
+```html
+<script>
+  document.getElementById('theme-toggle').addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+  });
+</script>
+```
+
+## Are themes responsive and mobile-friendly?
+
+**It depends on the theme.** Most modern themes are responsive, but older themes may not be.
+
+### Check Responsiveness
+
+Test with different screen sizes:
+
+```
+https://jsonresume.org/yourusername?theme=professional
+```
+
+Resize your browser window or use responsive design mode.
+
+### Recommended Mobile-Friendly Themes
+
+- `professional` - Excellent mobile support
+- `spartacus` - Responsive grid layout
+- `mocha-responsive` - Built mobile-first
+- `tan-responsive` - Adaptive design
+- `flat` - Clean responsive design
+
+## How to preview multiple themes side by side?
+
+### Browser Tabs
+
+Open multiple tabs with different themes:
+
+```
+Tab 1: https://jsonresume.org/yourusername?theme=professional
+Tab 2: https://jsonresume.org/yourusername?theme=spartacus
+Tab 3: https://jsonresume.org/yourusername?theme=elegant
+```
+
+### CLI Side-by-Side
+
+```bash
+# Terminal 1
+resume serve --theme professional --port 4000
+
+# Terminal 2
+resume serve --theme spartacus --port 4001
+```
+
+### Screenshot Script
+
+```javascript
+import fs from 'fs';
+import * as professional from 'jsonresume-theme-professional';
+import * as elegant from 'jsonresume-theme-elegant';
+
+const resume = JSON.parse(fs.readFileSync('./resume.json', 'utf-8'));
+const themes = { professional, elegant };
+
+for (const [name, theme] of Object.entries(themes)) {
+  fs.writeFileSync(`preview-${name}.html`, theme.render(resume));
+}
+```
+
+## Are there any premium or paid themes?
+
+**No.** All JSON Resume themes are **free and open source**:
+
+- ✅ All themes are free to use, modify, and distribute
+- ✅ MIT/ISC licensed (most themes)
+- ✅ No restrictions on commercial use
+- ✅ Community maintained
+
+The ecosystem is community-driven and fully open source.
+
+## Contributing themes to the official gallery
+
+### Prerequisites
+
+- Serverless compatible (no `fs` operations)
+- Well tested with various resume structures
+- Documented README with screenshots
+- Responsive and accessible
+- Print-friendly CSS
+
+### Submission Process
+
+1. Publish to npm: `npm publish`
+2. Open an issue at [jsonresume/jsonresume.org](https://github.com/jsonresume/jsonresume.org/issues/new)
+3. Provide: theme name, npm package, GitHub URL, screenshot, description
+4. Confirm serverless compatibility
+
+See [Contributing Guide](/contributing#contributing-themes) for details.
+
+## Fixing theme rendering issues
+
+### Common Problems
+
+**Theme Not Found**
+
+```bash
+npm install jsonresume-theme-mytheme
+resume serve --theme mytheme
+```
+
+**Blank Page**
+
+- Check browser console for errors
+- Validate resume JSON: `resume validate`
+- Test with minimal resume data
+
+**Styling Issues**
+
+- Verify CSS is properly inlined
+- Check for CSP issues
+- Use web-safe fonts as fallback
+
+**PDF Export Issues**
+
+- Add print CSS with `@media print`
+- Avoid complex CSS (transforms, filters)
+- Inline all images as base64
+
+**Registry vs Local Differences**
+
+- Remove filesystem operations
+- Use relative imports
+- Don't rely on environment variables
+
+### Debug Checklist
+
+- [ ] Verify theme is installed
+- [ ] Check theme name spelling
+- [ ] Validate resume JSON
+- [ ] Test with minimal data
+- [ ] Check browser console
+- [ ] Verify serverless-compatible
+- [ ] Test with default theme first
+- [ ] Review theme documentation
+
+## Can I use Tailwind or Bootstrap in my theme?
+
+**Yes**, but you must bundle them at build time.
+
+### Tailwind Example
+
+```bash
+npm install tailwindcss
+npx tailwindcss -i ./input.css -o ./output.css
+```
+
+```javascript
+import css from './output.css?inline';
+
+export function render(resume) {
+  return `
+    <html>
+      <head><style>${css}</style></head>
+      <body class="bg-gray-50 p-8">
+        <h1 class="text-4xl">${resume.basics.name}</h1>
+      </body>
+    </html>
+  `;
+}
+```
+
+### Bootstrap Example
+
+```javascript
+import 'bootstrap/dist/css/bootstrap.min.css?inline';
+
+export function render(resume) {
+  return `
+    <div class="container">
+      <h1 class="display-4">${resume.basics.name}</h1>
+    </div>
+  `;
+}
+```
+
+## What is the default theme?
+
+The **standard** theme is the default theme used when no theme is specified:
+
+```
+https://jsonresume.org/yourusername
+# Uses standard theme by default
+```
+
+**Standard theme** is:
+
+- The official reference implementation
+- Clean and professional
+- Well-tested and maintained
+- Print-optimized
+- Accessible
+
+To explicitly use it:
+
+```
+https://jsonresume.org/yourusername?theme=standard
+```
+
+## Resources
+
+### Documentation
+
+- [Schema Reference](https://jsonresume.org/schema) - Complete schema
+- [Contributing Guide](/contributing#contributing-themes) - Detailed theme development
+- [Getting Started](/getting-started) - Create your first resume
+
+### Tools
+
+- [resume-cli](https://github.com/jsonresume/resume-cli) - Official CLI
+- [Handlebars](https://handlebarsjs.com/) - Templating engine
+- [Vite](https://vitejs.dev/) - Build tool
+
+### Community
+
+- [GitHub](https://github.com/jsonresume/jsonresume.org) - Main repository
+- [Issues](https://github.com/jsonresume/jsonresume.org/issues) - Report bugs
+- [npm](https://www.npmjs.com/search?q=jsonresume-theme) - Browse themes
+
+---
+
+## Next Steps
+
+- **Try themes**: Add `?theme=` to your resume URL
+- **Create your own**: Follow the quick start guide
+- **Contribute**: Share your theme with the community
+- **Explore**: Check out [Getting Started](/getting-started) for more
