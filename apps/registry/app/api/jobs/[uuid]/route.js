@@ -7,6 +7,23 @@ const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
 // This ensures the route is always dynamic
 export const dynamic = 'force-dynamic';
 
+/**
+ * Remove embedding fields from job object before sending to client
+ * Embeddings are large arrays that aren't needed on the client side
+ */
+function stripEmbeddings(job) {
+  if (!job) return job;
+  const {
+    embedding,
+    embedding_v2,
+    embedding_v3,
+    embedding_v4,
+    embedding_v5,
+    ...jobWithoutEmbeddings
+  } = job;
+  return jobWithoutEmbeddings;
+}
+
 export async function GET(request, { params }) {
   // During build time or when SUPABASE_KEY is not available
   if (!process.env.SUPABASE_KEY) {
@@ -36,7 +53,7 @@ export async function GET(request, { params }) {
       return NextResponse.json({ message: 'Job not found' }, { status: 404 });
     }
 
-    return NextResponse.json(job);
+    return NextResponse.json(stripEmbeddings(job));
   } catch (error) {
     logger.error({ error: error.message, uuid: params.uuid }, 'Jobs API error');
     return NextResponse.json(

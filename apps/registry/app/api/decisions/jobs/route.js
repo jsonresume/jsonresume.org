@@ -3,6 +3,24 @@ import { NextResponse } from 'next/server';
 
 const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
 
+/**
+ * Remove embedding fields from job objects before sending to client
+ * Embeddings are large arrays that aren't needed on the client side
+ */
+function stripEmbeddings(jobs) {
+  return jobs.map((job) => {
+    const {
+      embedding,
+      embedding_v2,
+      embedding_v3,
+      embedding_v4,
+      embedding_v5,
+      ...jobWithoutEmbeddings
+    } = job;
+    return jobWithoutEmbeddings;
+  });
+}
+
 export async function POST(request) {
   // During build time or when SUPABASE_KEY is not available
   if (!process.env.SUPABASE_KEY) {
@@ -56,10 +74,10 @@ export async function POST(request) {
       // Filter out jobs that have been decided on
       const undecidedJobs = jobs.filter((job) => !decidedJobIds.has(job.id));
 
-      return NextResponse.json(undecidedJobs);
+      return NextResponse.json(stripEmbeddings(undecidedJobs));
     }
 
-    return NextResponse.json(jobs || []);
+    return NextResponse.json(stripEmbeddings(jobs || []));
   } catch (error) {
     console.error('Error fetching jobs:', error);
     return NextResponse.json(
