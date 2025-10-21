@@ -5,15 +5,20 @@
 
 import { useState, useCallback } from 'react';
 import { useNodesState, useEdgesState } from '@xyflow/react';
-import { initialNodes, initialEdges } from '../config/decisionTree';
+import {
+  initialNodes,
+  initialEdges,
+  nodeStyle,
+  NODE_IDS,
+} from '../config/decisionTree';
 import { colors } from '../config/designSystem';
 
 export function useDecisionTree(resume) {
-  const [nodes, , onNodesChange] = useNodesState(initialNodes);
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [matchResult, setMatchResult] = useState(null);
 
-  // Reset all edges to default gray
+  // Reset all edges and nodes to default state
   const resetHighlights = useCallback(() => {
     setEdges((eds) =>
       eds.map((e) => ({
@@ -26,8 +31,34 @@ export function useDecisionTree(resume) {
         },
       }))
     );
+    setNodes((nds) =>
+      nds.map((n) => ({
+        ...n,
+        style:
+          n.type === 'output' || n.id === NODE_IDS.ROOT
+            ? n.style // Keep outcome nodes and root styled
+            : nodeStyle(), // Reset decision nodes to default
+      }))
+    );
     setMatchResult(null);
-  }, [setEdges]);
+  }, [setEdges, setNodes]);
+
+  // Update node color based on pass/fail
+  const updateNodeColor = useCallback(
+    (nodeId, passed) => {
+      setNodes((nds) =>
+        nds.map((n) =>
+          n.id === nodeId
+            ? {
+                ...n,
+                style: nodeStyle(passed ? 'success' : 'danger'),
+              }
+            : n
+        )
+      );
+    },
+    [setNodes]
+  );
 
   // Highlight a specific edge with color and animation
   const highlightEdge = useCallback(
@@ -124,6 +155,7 @@ export function useDecisionTree(resume) {
       if (skillsCheck) {
         reasons.push(['Required Skills', skillsCheck.reasoning]);
         if (!skillsCheck.hasAllSkills) {
+          updateNodeColor(NODE_IDS.CORE, false);
           highlightEdge('e_core_reject_no', colors.outcomes.noMatch.border);
           setMatchResult({
             outcome: 'noMatch',
@@ -133,6 +165,7 @@ export function useDecisionTree(resume) {
           });
           return;
         }
+        updateNodeColor(NODE_IDS.CORE, true);
         score += 40;
         highlightEdge('e_core_exp_yes', colors.paths.blue);
       }
@@ -142,6 +175,7 @@ export function useDecisionTree(resume) {
       if (expCheck) {
         reasons.push(['Experience', expCheck.reasoning]);
         if (!expCheck.hasEnoughExperience) {
+          updateNodeColor(NODE_IDS.EXP, false);
           highlightEdge('e_exp_reject_no', colors.outcomes.noMatch.border);
           setMatchResult({
             outcome: 'noMatch',
@@ -151,6 +185,7 @@ export function useDecisionTree(resume) {
           });
           return;
         }
+        updateNodeColor(NODE_IDS.EXP, true);
         score += 20;
         highlightEdge('e_exp_wr_yes', colors.paths.blue);
       }
@@ -160,6 +195,7 @@ export function useDecisionTree(resume) {
       if (workRightsCheck) {
         reasons.push(['Work Rights', workRightsCheck.reasoning]);
         if (!workRightsCheck.hasWorkRights) {
+          updateNodeColor(NODE_IDS.WR, false);
           highlightEdge('e_wr_reject_no', colors.outcomes.noMatch.border);
           setMatchResult({
             outcome: 'noMatch',
@@ -169,6 +205,7 @@ export function useDecisionTree(resume) {
           });
           return;
         }
+        updateNodeColor(NODE_IDS.WR, true);
         score += 8;
         highlightEdge('e_wr_loc_yes', colors.paths.blue);
       }
@@ -179,12 +216,14 @@ export function useDecisionTree(resume) {
         reasons.push(['Location', locationCheck.reasoning]);
 
         if (!locationCheck.locationCompatible) {
+          updateNodeColor(NODE_IDS.LOC, false);
           // Location failed → check timezone
           highlightEdge('e_loc_tz_no', colors.paths.orange);
           const timezoneCheck = decisions.checkTimezone;
           if (timezoneCheck) {
             reasons.push(['Timezone', timezoneCheck.reasoning]);
             if (!timezoneCheck.timezoneCompatible) {
+              updateNodeColor(NODE_IDS.TZ, false);
               highlightEdge('e_tz_reject_no', colors.outcomes.noMatch.border);
               setMatchResult({
                 outcome: 'noMatch',
@@ -194,10 +233,12 @@ export function useDecisionTree(resume) {
               });
               return;
             }
+            updateNodeColor(NODE_IDS.TZ, true);
             score += 6;
             highlightEdge('e_tz_avail_yes', colors.paths.blue);
           }
         } else {
+          updateNodeColor(NODE_IDS.LOC, true);
           score += 8;
           highlightEdge('e_loc_avail_yes', colors.paths.blue);
         }
@@ -208,6 +249,7 @@ export function useDecisionTree(resume) {
       if (availCheck) {
         reasons.push(['Availability', availCheck.reasoning]);
         if (!availCheck.availableInTime) {
+          updateNodeColor(NODE_IDS.AVAIL, false);
           highlightEdge(
             'e_avail_possible_no',
             colors.outcomes.possibleMatch.border
@@ -220,6 +262,7 @@ export function useDecisionTree(resume) {
           });
           return;
         }
+        updateNodeColor(NODE_IDS.AVAIL, true);
         score += 8;
         highlightEdge('e_avail_sal_yes', colors.paths.blue);
       }
@@ -229,6 +272,7 @@ export function useDecisionTree(resume) {
       if (salaryCheck) {
         reasons.push(['Salary', salaryCheck.reasoning]);
         if (!salaryCheck.salaryAligned) {
+          updateNodeColor(NODE_IDS.SAL, false);
           highlightEdge(
             'e_sal_possible_no',
             colors.outcomes.possibleMatch.border
@@ -241,6 +285,7 @@ export function useDecisionTree(resume) {
           });
           return;
         }
+        updateNodeColor(NODE_IDS.SAL, true);
         score += 5;
         highlightEdge('e_sal_bonus_yes', colors.paths.blue);
       }
@@ -250,6 +295,7 @@ export function useDecisionTree(resume) {
       if (bonusCheck) {
         reasons.push(['Bonus Skills', bonusCheck.reasoning]);
         if (!bonusCheck.hasBonusSkills) {
+          updateNodeColor(NODE_IDS.BONUS, false);
           highlightEdge(
             'e_bonus_possible_no',
             colors.outcomes.possibleMatch.border
@@ -262,6 +308,7 @@ export function useDecisionTree(resume) {
           });
           return;
         }
+        updateNodeColor(NODE_IDS.BONUS, true);
         score += 5;
         highlightEdge('e_bonus_strong_yes', colors.outcomes.strongMatch.border);
       }
@@ -274,7 +321,7 @@ export function useDecisionTree(resume) {
         score: Math.min(100, score),
       });
     },
-    [highlightEdge, setMatchResult]
+    [highlightEdge, setMatchResult, updateNodeColor]
   );
 
   return {
