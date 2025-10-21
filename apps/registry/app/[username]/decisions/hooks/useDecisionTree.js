@@ -1,12 +1,11 @@
 /**
  * useDecisionTree Hook
- * Manages decision tree state, animation, and evaluation logic
+ * Manages decision tree state, animation, and AI-powered evaluation logic
  */
 
 import { useState, useCallback } from 'react';
 import { useNodesState, useEdgesState } from '@xyflow/react';
 import { initialNodes, initialEdges } from '../config/decisionTree';
-import { checks } from '../config/matchingCriteria';
 import { colors } from '../config/designSystem';
 
 export function useDecisionTree(resume) {
@@ -52,178 +51,215 @@ export function useDecisionTree(resume) {
     [setEdges]
   );
 
-  // Evaluate a candidate-job match and animate the path
+  // Evaluate a candidate-job match using AI and animate the path
   const evaluateJob = useCallback(
-    (candidate, job) => {
+    async (candidate, job) => {
       if (!candidate || !job) return;
 
       resetHighlights();
+
+      // Show loading state
+      setMatchResult({
+        outcome: 'loading',
+        bucket: '🤖 AI Analyzing...',
+        reasons: [['Status', 'Sending resume and job to AI for evaluation']],
+        score: null,
+      });
+
+      try {
+        // Call AI evaluation endpoint
+        const response = await fetch('/api/decisions/evaluate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ resume: candidate, job }),
+        });
+
+        if (!response.ok) {
+          throw new Error('AI evaluation failed');
+        }
+
+        const { decisions } = await response.json();
+
+        // Animate path based on AI decisions
+        animateAIPath(decisions);
+      } catch (error) {
+        console.error('AI evaluation error:', error);
+        setMatchResult({
+          outcome: 'error',
+          bucket: '⚠️ Evaluation Error',
+          reasons: [['Error', error.message]],
+          score: 0,
+        });
+      }
+    },
+    [resetHighlights]
+  );
+
+  // Animate decision tree path based on AI results
+  const animateAIPath = useCallback(
+    (decisions) => {
       const reasons = [];
+      let score = 0;
 
       // Start: Root → Core Skills
       highlightEdge('e_root_core');
 
-      // Check 1: Core Skills
-      const r1 = checks.coreSkills(candidate, job);
-      reasons.push(['Required Skills', r1.reason]);
-
-      if (!r1.pass) {
-        highlightEdge('e_core_reject_no', colors.outcomes.noMatch.border);
-        setMatchResult({
-          outcome: 'noMatch',
-          bucket: '❌ Not a Match',
-          reasons,
-          score: 0,
-        });
-        return;
-      }
-      highlightEdge('e_core_exp_yes', colors.paths.blue);
-
-      // Check 2: Experience
-      const r2 = checks.experience(candidate, job);
-      reasons.push(['Experience', r2.reason]);
-
-      if (!r2.pass) {
-        highlightEdge('e_exp_reject_no', colors.outcomes.noMatch.border);
-        setMatchResult({
-          outcome: 'noMatch',
-          bucket: '❌ Not a Match',
-          reasons,
-          score: r1.score || 0,
-        });
-        return;
-      }
-      highlightEdge('e_exp_wr_yes', colors.paths.blue);
-
-      // Check 3: Work Rights
-      const r5 = checks.workRights(candidate, job);
-      reasons.push(['Work Rights', r5.reason]);
-
-      if (!r5.pass) {
-        highlightEdge('e_wr_reject_no', colors.outcomes.noMatch.border);
-        setMatchResult({
-          outcome: 'noMatch',
-          bucket: '❌ Not a Match',
-          reasons,
-          score: (r1.score || 0) + (r2.score || 0),
-        });
-        return;
-      }
-      highlightEdge('e_wr_loc_yes', colors.paths.blue);
-
-      // Check 4: Location
-      const r3 = checks.location(candidate, job);
-      reasons.push(['Location', r3.reason]);
-
-      if (!r3.pass) {
-        // Location failed → check timezone
-        highlightEdge('e_loc_tz_no', colors.paths.orange);
-        const r4 = checks.timezone(candidate, job);
-        reasons.push(['Timezone', r4.reason]);
-
-        if (!r4.pass) {
-          highlightEdge('e_tz_reject_no', colors.outcomes.noMatch.border);
+      // Check 1: Required Skills (AI)
+      const skillsCheck = decisions.checkRequiredSkills;
+      if (skillsCheck) {
+        reasons.push(['Required Skills', skillsCheck.reasoning]);
+        if (!skillsCheck.hasAllSkills) {
+          highlightEdge('e_core_reject_no', colors.outcomes.noMatch.border);
           setMatchResult({
             outcome: 'noMatch',
             bucket: '❌ Not a Match',
             reasons,
-            score: (r1.score || 0) + (r2.score || 0) + (r5.score || 0),
+            score: 0,
           });
           return;
         }
-        highlightEdge('e_tz_avail_yes', colors.paths.blue);
-      } else {
-        highlightEdge('e_loc_avail_yes', colors.paths.blue);
+        score += 40;
+        highlightEdge('e_core_exp_yes', colors.paths.blue);
       }
 
-      // Check 5: Availability
-      const r6 = checks.availability(candidate, job);
-      reasons.push(['Availability', r6.reason]);
-
-      if (!r6.pass) {
-        highlightEdge(
-          'e_avail_possible_no',
-          colors.outcomes.possibleMatch.border
-        );
-        setMatchResult({
-          outcome: 'possibleMatch',
-          bucket: '🟡 Possible Match',
-          reasons,
-          score:
-            (r1.score || 0) +
-            (r2.score || 0) +
-            (r3.score || 0) +
-            (r5.score || 0),
-        });
-        return;
+      // Check 2: Experience (AI)
+      const expCheck = decisions.checkExperience;
+      if (expCheck) {
+        reasons.push(['Experience', expCheck.reasoning]);
+        if (!expCheck.hasEnoughExperience) {
+          highlightEdge('e_exp_reject_no', colors.outcomes.noMatch.border);
+          setMatchResult({
+            outcome: 'noMatch',
+            bucket: '❌ Not a Match',
+            reasons,
+            score,
+          });
+          return;
+        }
+        score += 20;
+        highlightEdge('e_exp_wr_yes', colors.paths.blue);
       }
-      highlightEdge('e_avail_sal_yes', colors.paths.blue);
 
-      // Check 6: Salary
-      const r7 = checks.salary(candidate, job);
-      reasons.push(['Salary', r7.reason]);
-
-      if (!r7.pass) {
-        highlightEdge(
-          'e_sal_possible_no',
-          colors.outcomes.possibleMatch.border
-        );
-        setMatchResult({
-          outcome: 'possibleMatch',
-          bucket: '🟡 Possible Match',
-          reasons,
-          score:
-            (r1.score || 0) +
-            (r2.score || 0) +
-            (r3.score || 0) +
-            (r5.score || 0) +
-            (r6.score || 0),
-        });
-        return;
+      // Check 3: Work Rights (AI)
+      const workRightsCheck = decisions.checkWorkRights;
+      if (workRightsCheck) {
+        reasons.push(['Work Rights', workRightsCheck.reasoning]);
+        if (!workRightsCheck.hasWorkRights) {
+          highlightEdge('e_wr_reject_no', colors.outcomes.noMatch.border);
+          setMatchResult({
+            outcome: 'noMatch',
+            bucket: '❌ Not a Match',
+            reasons,
+            score,
+          });
+          return;
+        }
+        score += 8;
+        highlightEdge('e_wr_loc_yes', colors.paths.blue);
       }
-      highlightEdge('e_sal_bonus_yes', colors.paths.blue);
 
-      // Check 7: Bonus Skills
-      const r8 = checks.bonusSkills(candidate, job);
-      reasons.push(['Bonus Skills', r8.reason]);
+      // Check 4: Location (AI)
+      const locationCheck = decisions.checkLocation;
+      if (locationCheck) {
+        reasons.push(['Location', locationCheck.reasoning]);
 
-      if (!r8.pass) {
-        highlightEdge(
-          'e_bonus_possible_no',
-          colors.outcomes.possibleMatch.border
-        );
-        setMatchResult({
-          outcome: 'possibleMatch',
-          bucket: '🟡 Possible Match',
-          reasons,
-          score:
-            (r1.score || 0) +
-            (r2.score || 0) +
-            (r3.score || 0) +
-            (r5.score || 0) +
-            (r6.score || 0) +
-            (r7.score || 0),
-        });
-        return;
+        if (!locationCheck.locationCompatible) {
+          // Location failed → check timezone
+          highlightEdge('e_loc_tz_no', colors.paths.orange);
+          const timezoneCheck = decisions.checkTimezone;
+          if (timezoneCheck) {
+            reasons.push(['Timezone', timezoneCheck.reasoning]);
+            if (!timezoneCheck.timezoneCompatible) {
+              highlightEdge('e_tz_reject_no', colors.outcomes.noMatch.border);
+              setMatchResult({
+                outcome: 'noMatch',
+                bucket: '❌ Not a Match',
+                reasons,
+                score,
+              });
+              return;
+            }
+            score += 6;
+            highlightEdge('e_tz_avail_yes', colors.paths.blue);
+          }
+        } else {
+          score += 8;
+          highlightEdge('e_loc_avail_yes', colors.paths.blue);
+        }
       }
-      highlightEdge('e_bonus_strong_yes', colors.outcomes.strongMatch.border);
+
+      // Check 5: Availability (AI)
+      const availCheck = decisions.checkAvailability;
+      if (availCheck) {
+        reasons.push(['Availability', availCheck.reasoning]);
+        if (!availCheck.availableInTime) {
+          highlightEdge(
+            'e_avail_possible_no',
+            colors.outcomes.possibleMatch.border
+          );
+          setMatchResult({
+            outcome: 'possibleMatch',
+            bucket: '🟡 Possible Match',
+            reasons,
+            score,
+          });
+          return;
+        }
+        score += 8;
+        highlightEdge('e_avail_sal_yes', colors.paths.blue);
+      }
+
+      // Check 6: Salary (AI)
+      const salaryCheck = decisions.checkSalary;
+      if (salaryCheck) {
+        reasons.push(['Salary', salaryCheck.reasoning]);
+        if (!salaryCheck.salaryAligned) {
+          highlightEdge(
+            'e_sal_possible_no',
+            colors.outcomes.possibleMatch.border
+          );
+          setMatchResult({
+            outcome: 'possibleMatch',
+            bucket: '🟡 Possible Match',
+            reasons,
+            score,
+          });
+          return;
+        }
+        score += 5;
+        highlightEdge('e_sal_bonus_yes', colors.paths.blue);
+      }
+
+      // Check 7: Bonus Skills (AI)
+      const bonusCheck = decisions.checkBonusSkills;
+      if (bonusCheck) {
+        reasons.push(['Bonus Skills', bonusCheck.reasoning]);
+        if (!bonusCheck.hasBonusSkills) {
+          highlightEdge(
+            'e_bonus_possible_no',
+            colors.outcomes.possibleMatch.border
+          );
+          setMatchResult({
+            outcome: 'possibleMatch',
+            bucket: '🟡 Possible Match',
+            reasons,
+            score,
+          });
+          return;
+        }
+        score += 5;
+        highlightEdge('e_bonus_strong_yes', colors.outcomes.strongMatch.border);
+      }
 
       // Strong Match!
       setMatchResult({
         outcome: 'strongMatch',
         bucket: '✅ Strong Match',
         reasons,
-        score:
-          (r1.score || 0) +
-          (r2.score || 0) +
-          (r3.score || 0) +
-          (r5.score || 0) +
-          (r6.score || 0) +
-          (r7.score || 0) +
-          (r8.score || 0),
+        score: Math.min(100, score),
       });
     },
-    [resetHighlights, highlightEdge]
+    [highlightEdge, setMatchResult]
   );
 
   return {
