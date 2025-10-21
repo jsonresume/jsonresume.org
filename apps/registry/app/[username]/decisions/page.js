@@ -11,7 +11,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { useResume } from '../../providers/ResumeProvider';
+import { usePublicResume } from '../../providers/PublicResumeProvider';
 import { ResumePane } from './components/ResumePane';
 import { DecisionTreePane } from './components/DecisionTreePane';
 import { JobsPane } from './components/JobsPane';
@@ -21,7 +21,11 @@ import { logger } from '@/lib/logger';
 
 export default function DecisionsPage({ params }) {
   const { username } = params;
-  const { resume, loading: resumeLoading, error: resumeError } = useResume();
+  const {
+    resume,
+    loading: resumeLoading,
+    error: resumeError,
+  } = usePublicResume();
   const [jobs, setJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
   const [jobsLoading, setJobsLoading] = useState(true);
