@@ -76,8 +76,18 @@ export const checks = {
    */
   location(candidate, job) {
     const gptJob = job.gpt_content ? JSON.parse(job.gpt_content) : {};
+
+    // Extract job location string
+    let jobLocationStr = gptJob.location || '';
+    if (!jobLocationStr && job.location) {
+      jobLocationStr =
+        typeof job.location === 'string'
+          ? job.location
+          : job.location.city || job.location.region || '';
+    }
+
     const remoteOk =
-      gptJob.remote || job.location?.toLowerCase().includes('remote');
+      gptJob.remote || jobLocationStr.toLowerCase().includes('remote');
 
     if (remoteOk) {
       return {
@@ -92,7 +102,7 @@ export const checks = {
       candidate.basics?.location?.region ||
       ''
     ).toLowerCase();
-    const jobLocation = (gptJob.location || job.location || '').toLowerCase();
+    const jobLocation = jobLocationStr.toLowerCase();
 
     const pass =
       candidateLocation.includes(jobLocation) ||
