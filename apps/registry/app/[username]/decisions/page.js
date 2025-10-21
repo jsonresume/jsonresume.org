@@ -34,11 +34,11 @@ export default function DecisionsPage({ params }) {
         setJobsLoading(true);
         setJobsError(null);
 
-        // Call the existing jobs API (used by /jobs page)
+        // Call the jobs API with limit parameter
         const response = await fetch('/api/jobs', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username }),
+          body: JSON.stringify({ username, limit: 10 }), // Limit to 10 for testing
         });
 
         if (!response.ok) {
@@ -46,7 +46,7 @@ export default function DecisionsPage({ params }) {
         }
 
         const data = await response.json();
-        setJobs(Array.isArray(data) ? data.slice(0, 100) : []); // Limit to 100
+        setJobs(Array.isArray(data) ? data : []);
       } catch (error) {
         logger.error(
           { error: error.message, username },
