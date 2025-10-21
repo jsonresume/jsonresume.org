@@ -3,7 +3,7 @@
  * Manages decision tree state, animation, and AI-powered evaluation logic
  */
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useNodesState, useEdgesState } from '@xyflow/react';
 import {
   initialNodes,
@@ -13,10 +13,60 @@ import {
 } from '../config/decisionTree';
 import { colors } from '../config/designSystem';
 
+// Map node IDs to preference keys (constant outside component)
+const nodeToPreferenceMap = {
+  [NODE_IDS.CORE]: 'skills',
+  [NODE_IDS.EXP]: 'experience',
+  [NODE_IDS.LOC]: 'location',
+  [NODE_IDS.TZ]: 'timezone',
+  [NODE_IDS.SAL]: 'salary',
+  [NODE_IDS.BONUS]: 'skills', // Bonus skills uses same preference as core skills
+  // WR (work rights) and AVAIL (availability) always enabled
+};
+
 export function useDecisionTree(resume, preferences = {}) {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [matchResult, setMatchResult] = useState(null);
+
+  // Update node visibility based on preferences
+  useEffect(() => {
+    setNodes((nds) =>
+      nds.map((node) => {
+        const prefKey = nodeToPreferenceMap[node.id];
+
+        // If this node has a preference mapping, check if it's enabled
+        if (prefKey) {
+          const isEnabled = preferences[prefKey]?.enabled !== false;
+          return {
+            ...node,
+            hidden: !isEnabled,
+          };
+        }
+
+        // Always show root, outcome nodes, and nodes without preference mapping
+        return node;
+      })
+    );
+
+    // Also hide edges connected to hidden nodes
+    setEdges((eds) =>
+      eds.map((edge) => {
+        const sourcePrefKey = nodeToPreferenceMap[edge.source];
+        const targetPrefKey = nodeToPreferenceMap[edge.target];
+
+        const sourceHidden =
+          sourcePrefKey && preferences[sourcePrefKey]?.enabled === false;
+        const targetHidden =
+          targetPrefKey && preferences[targetPrefKey]?.enabled === false;
+
+        return {
+          ...edge,
+          hidden: sourceHidden || targetHidden,
+        };
+      })
+    );
+  }, [preferences, setNodes, setEdges]);
 
   // Reset all edges and nodes to default state
   const resetHighlights = useCallback(() => {
