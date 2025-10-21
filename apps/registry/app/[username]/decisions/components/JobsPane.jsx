@@ -5,7 +5,16 @@
 
 'use client';
 
-// Component for displaying ranked job matches
+// Helper function to safely extract location string
+function getLocationString(location) {
+  if (!location) return 'Location TBD';
+  if (typeof location === 'string') return location;
+  // Handle location object
+  const parts = [location.city, location.region, location.country]
+    .filter(Boolean)
+    .join(', ');
+  return parts || 'Location TBD';
+}
 
 export function JobsPane({ jobs, selectedJob, onSelectJob, loading }) {
   if (loading) {
@@ -50,11 +59,6 @@ export function JobsPane({ jobs, selectedJob, onSelectJob, loading }) {
           const score = job._score || 0;
           const outcome = job._outcome || 'noMatch';
 
-          // Debug: log job location
-          if (typeof job.location !== 'string' && job.location) {
-            console.log('Non-string job.location found:', job.id, job.location);
-          }
-
           return (
             <button
               key={job.id}
@@ -92,7 +96,9 @@ export function JobsPane({ jobs, selectedJob, onSelectJob, loading }) {
 
               {/* Location and Salary */}
               <div className="text-xs text-slate-600 mb-2">
-                <span>Remote</span>
+                <span>
+                  {getLocationString(gptJob.location || job.location)}
+                </span>
                 {gptJob.salary?.min && gptJob.salary?.max && (
                   <span className="ml-2">
                     • ${Math.round(gptJob.salary.min / 1000)}k-$
