@@ -144,23 +144,8 @@ export async function POST(request) {
       title: gptJob.title,
     });
 
-    // Prepare context for AI
-    const resumeContext = JSON.stringify(
-      {
-        name: resume.basics?.name,
-        label: resume.basics?.label,
-        location: resume.basics?.location,
-        email: resume.basics?.email,
-        skills: resume.skills,
-        work: resume.work,
-        education: resume.education,
-        availability: resume.availability || resume.availabilityWeeks,
-        salary: resume.salary || resume.basics?.expectedSalary,
-        workRights: resume.workRights || resume.basics?.workRights,
-      },
-      null,
-      2
-    );
+    // Prepare FULL resume context for AI - send everything!
+    const resumeContext = JSON.stringify(resume, null, 2);
 
     const jobContext = JSON.stringify(
       {
