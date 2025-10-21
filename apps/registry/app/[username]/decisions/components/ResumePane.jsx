@@ -65,13 +65,13 @@ export function ResumePane({ resume, matchResult, selectedJob }) {
         )}
 
         {/* Location */}
-        {(basics.location?.city || basics.location?.region) && (
+        {basics.location && (
           <div>
             <span className="font-medium text-slate-900">Location:</span>{' '}
             <span className="text-slate-700">
-              {basics.location.city}
+              {basics.location.city || ''}
               {basics.location.city && basics.location.region && ' • '}
-              {basics.location.region}
+              {basics.location.region || ''}
             </span>
           </div>
         )}

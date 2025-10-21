@@ -89,7 +89,7 @@ export const checks = {
 
     const candidateLocation = (
       candidate.basics?.location?.city ||
-      candidate.location ||
+      candidate.basics?.location?.region ||
       ''
     ).toLowerCase();
     const jobLocation = (gptJob.location || job.location || '').toLowerCase();
