@@ -4,6 +4,7 @@
  */
 
 import { MarkerType } from '@xyflow/react';
+import dagre from '@dagrejs/dagre';
 import { colors } from './designSystem';
 
 // Node IDs (constants for type safety)
@@ -22,9 +23,17 @@ export const NODE_IDS = {
   REJECT: 'reject',
 };
 
-// Layout helpers
-const x = (i) => 320 * i;
-const y = (i) => 100 * i;
+// Dagre layout configuration
+const dagreGraph = new dagre.graphlib.Graph();
+dagreGraph.setDefaultEdgeLabel(() => ({}));
+dagreGraph.setGraph({
+  rankdir: 'TB', // Top to bottom
+  nodesep: 80, // Horizontal spacing between nodes
+  ranksep: 120, // Vertical spacing between ranks
+  edgesep: 30, // Spacing between edges
+  marginx: 50,
+  marginy: 50,
+});
 
 // Node style generators
 export function nodeStyle(kind = 'default') {
@@ -83,88 +92,76 @@ export function nodeStyle(kind = 'default') {
   return base;
 }
 
-// Initial nodes configuration
-export const initialNodes = [
+// Base nodes without positions (dagre will calculate)
+const baseNodes = [
   {
     id: NODE_IDS.ROOT,
-    position: { x: x(2), y: y(0) },
     data: { label: 'Candidate → Job Match' },
     style: nodeStyle('title'),
     type: 'default',
   },
   {
     id: NODE_IDS.CORE,
-    position: { x: x(2), y: y(1) },
     data: { label: 'Has ALL required skills?' },
     style: nodeStyle(),
     type: 'default',
   },
   {
     id: NODE_IDS.EXP,
-    position: { x: x(2), y: y(2) },
     data: { label: 'Enough experience?' },
     style: nodeStyle(),
     type: 'default',
   },
   {
     id: NODE_IDS.WR,
-    position: { x: x(2), y: y(3) },
     data: { label: 'Work rights ok?' },
     style: nodeStyle(),
     type: 'default',
   },
   {
     id: NODE_IDS.LOC,
-    position: { x: x(1), y: y(4) },
     data: { label: 'Location fits?' },
     style: nodeStyle(),
     type: 'default',
   },
   {
     id: NODE_IDS.TZ,
-    position: { x: x(3), y: y(4.5) },
     data: { label: 'Timezone fits?' },
     style: nodeStyle(),
     type: 'default',
   },
   {
     id: NODE_IDS.AVAIL,
-    position: { x: x(2), y: y(5.5) },
     data: { label: 'Available soon?' },
     style: nodeStyle(),
     type: 'default',
   },
   {
     id: NODE_IDS.SAL,
-    position: { x: x(2), y: y(6.5) },
     data: { label: 'Salary within range?' },
     style: nodeStyle(),
     type: 'default',
   },
   {
     id: NODE_IDS.BONUS,
-    position: { x: x(2), y: y(7.5) },
     data: { label: 'Bonus skill overlap?' },
     style: nodeStyle(),
     type: 'default',
   },
   {
     id: NODE_IDS.STRONG,
-    position: { x: x(1), y: y(9) },
     data: { label: '✅ Strong Match' },
     style: nodeStyle('success'),
     type: 'output',
   },
   {
     id: NODE_IDS.POSSIBLE,
-    position: { x: x(2.5), y: y(9) },
     data: { label: '🟡 Possible Match' },
     style: nodeStyle('warn'),
     type: 'output',
   },
   {
     id: NODE_IDS.REJECT,
-    position: { x: x(4), y: y(9) },
     data: { label: '❌ Not a Match' },
     style: nodeStyle('danger'),
     type: 'output',
@@ -178,6 +175,7 @@ function createEdge(id, source, target, label = '') {
     source,
     target,
     label,
+    type: 'smoothstep',
     labelBgPadding: [8, 4],
     labelBgBorderRadius: 8,
     labelStyle: {
@@ -204,8 +202,8 @@ function createEdge(id, source, target, label = '') {
   };
 }
 
-// Initial edges configuration
-export const initialEdges = [
+// Base edges configuration
+const baseEdges = [
   // Root → Core skills
   createEdge('e_root_core', NODE_IDS.ROOT, NODE_IDS.CORE, ''),
 
@@ -257,13 +255,50 @@ export const initialEdges = [
   createEdge('e_bonus_possible_no', NODE_IDS.BONUS, NODE_IDS.POSSIBLE, 'No'),
 ];
 
+// Apply dagre layout to position nodes
+function getLayoutedNodes() {
+  // Add nodes to dagre graph
+  baseNodes.forEach((node) => {
+    dagreGraph.setNode(node.id, {
+      width: 220,
+      height: 80,
+    });
+  });
+
+  // Add edges to dagre graph
+  baseEdges.forEach((edge) => {
+    dagreGraph.setEdge(edge.source, edge.target);
+  });
+
+  // Calculate layout
+  dagre.layout(dagreGraph);
+
+  // Apply calculated positions to nodes
+  const layoutedNodes = baseNodes.map((node) => {
+    const nodeWithPosition = dagreGraph.node(node.id);
+    return {
+      ...node,
+      position: {
+        x: nodeWithPosition.x - 110, // Center node (width/2)
+        y: nodeWithPosition.y - 40, // Center node (height/2)
+      },
+    };
+  });
+
+  return layoutedNodes;
+}
+
+// Export positioned nodes and edges
+export const initialNodes = getLayoutedNodes();
+export const initialEdges = baseEdges;
+
 // React Flow configuration options
 export const reactFlowOptions = {
   fitView: true,
   fitViewOptions: {
-    padding: 0.2,
+    padding: 0.1,
   },
-  minZoom: 0.5,
+  minZoom: 0.3,
   maxZoom: 1.5,
   defaultEdgeOptions: {
     type: 'smoothstep',
