@@ -123,7 +123,7 @@ const tools = {
 
 export async function POST(request) {
   try {
-    const { resume, job } = await request.json();
+    const { resume, job, preferences = {} } = await request.json();
 
     console.log('=== AI EVALUATION DEBUG ===');
     console.log('Resume basics:', resume.basics?.name, resume.basics?.label);
@@ -168,6 +168,22 @@ export async function POST(request) {
 
     console.log('Resume context length:', resumeContext.length);
     console.log('Job context length:', jobContext.length);
+    console.log('User preferences:', preferences);
+
+    // Build user preferences context
+    const preferencesInfo = Object.entries(preferences)
+      .map(([key, pref]) => {
+        if (pref.enabled === false) {
+          return `- ${key}: DISABLED (user doesn't care about this criterion)`;
+        }
+        if (pref.value && Object.keys(pref.value).length > 0) {
+          return `- ${key}: ENABLED with custom values: ${JSON.stringify(
+            pref.value
+          )}`;
+        }
+        return `- ${key}: ENABLED (use standard evaluation)`;
+      })
+      .join('\n');
 
     const prompt = `You are an expert technical recruiter evaluating a candidate-job match.
 
@@ -177,19 +193,56 @@ ${resumeContext}
 JOB POSTING:
 ${jobContext}
 
-IMPORTANT: You MUST evaluate ALL of the following criteria by calling every tool, regardless of whether earlier checks passed or failed. This gives the candidate a complete picture of the match.
+USER EVALUATION PREFERENCES:
+The user has specified the following preferences for evaluation criteria:
+${
+  preferencesInfo ||
+  'No custom preferences set - use standard evaluation for all criteria'
+}
+
+IMPORTANT INSTRUCTIONS:
+- You MUST evaluate ALL criteria by calling every tool, regardless of whether earlier checks passed or failed
+- For criteria marked as DISABLED, still call the tool but be lenient in your evaluation
+- For criteria with custom values (e.g., salary ranges), use those values instead of the job's requirements
+- Provide comprehensive feedback on all dimensions to give the candidate a complete picture
 
 Call ALL of these tools in order:
-1. checkRequiredSkills - Does candidate have ALL required technical skills?
-2. checkExperience - Does candidate have enough years of experience?
+1. checkRequiredSkills - Does candidate have ALL required technical skills? ${
+      preferences.skills?.enabled === false
+        ? '(User disabled - be lenient)'
+        : ''
+    }
+2. checkExperience - Does candidate have enough years of experience? ${
+      preferences.experience?.enabled === false
+        ? '(User disabled - be lenient)'
+        : ''
+    }
 3. checkWorkRights - Does candidate have work authorization if required?
-4. checkLocation - Is location compatible (considering remote options)?
-5. checkTimezone - Is timezone compatible for remote work? (evaluate this regardless of location result)
+4. checkLocation - Is location compatible (considering remote options)? ${
+      preferences.location?.enabled === false
+        ? '(User disabled - be lenient)'
+        : ''
+    }
+5. checkTimezone - Is timezone compatible for remote work? ${
+      preferences.timezone?.enabled === false
+        ? '(User disabled - be lenient)'
+        : ''
+    }
 6. checkAvailability - Can candidate start within required timeframe?
-7. checkSalary - Are salary expectations aligned?
-8. checkBonusSkills - Does candidate have valuable bonus skills?
+7. checkSalary - Are salary expectations aligned? ${
+      preferences.salary?.enabled === false
+        ? '(User disabled - be lenient)'
+        : preferences.salary?.value?.min
+        ? `(User expects ${preferences.salary.value.min}-${preferences.salary.value.max})`
+        : ''
+    }
+8. checkBonusSkills - Does candidate have valuable bonus skills? ${
+      preferences.skills?.enabled === false
+        ? '(User disabled - be lenient)'
+        : ''
+    }
 
-Be thorough, honest, and realistic in your evaluation. Even if the candidate fails one check, continue evaluating all remaining criteria to provide comprehensive feedback.`;
+Be thorough, honest, and realistic in your evaluation. Even if the candidate fails one check, continue evaluating all remaining criteria.`;
 
     console.log('Prompt length:', prompt.length);
     console.log('Number of tools:', Object.keys(tools).length);
