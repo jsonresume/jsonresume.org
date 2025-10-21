@@ -309,15 +309,28 @@ export function recalculateLayout(nodes, edges) {
     edgesep: 20,
     marginx: 30,
     marginy: 30,
+    ranker: 'longest-path', // Use longest-path ranker for better hierarchy
   });
+
+  // Outcome node IDs that should always be at the bottom
+  const outcomeNodeIds = [NODE_IDS.STRONG, NODE_IDS.POSSIBLE, NODE_IDS.REJECT];
 
   // Only add visible nodes to the graph
   const visibleNodes = nodes.filter((n) => !n.hidden);
   visibleNodes.forEach((node) => {
-    graph.setNode(node.id, {
+    const nodeConfig = {
       width: 220,
       height: 80,
-    });
+    };
+
+    // Pin outcome nodes to the last rank
+    if (outcomeNodeIds.includes(node.id)) {
+      nodeConfig.rank = 'sink'; // Force to bottom
+    } else if (node.id === NODE_IDS.ROOT) {
+      nodeConfig.rank = 'source'; // Force to top
+    }
+
+    graph.setNode(node.id, nodeConfig);
   });
 
   // Only add edges between visible nodes
@@ -331,6 +344,14 @@ export function recalculateLayout(nodes, edges) {
   // Calculate layout
   dagre.layout(graph);
 
+  // Get the max Y position of outcome nodes to ensure they're all at the same level
+  const outcomePositions = outcomeNodeIds
+    .filter((id) => visibleNodeIds.has(id))
+    .map((id) => graph.node(id)?.y)
+    .filter(Boolean);
+  const outcomeY =
+    outcomePositions.length > 0 ? Math.max(...outcomePositions) : null;
+
   // Apply calculated positions to visible nodes
   return nodes.map((node) => {
     if (node.hidden) return node; // Keep hidden nodes as is
@@ -338,11 +359,17 @@ export function recalculateLayout(nodes, edges) {
     const nodeWithPosition = graph.node(node.id);
     if (!nodeWithPosition) return node; // Shouldn't happen, but safety check
 
+    // Force outcome nodes to the same Y level
+    const yPosition =
+      outcomeNodeIds.includes(node.id) && outcomeY !== null
+        ? outcomeY
+        : nodeWithPosition.y;
+
     return {
       ...node,
       position: {
         x: nodeWithPosition.x - 110,
-        y: nodeWithPosition.y - 40,
+        y: yPosition - 40,
       },
     };
   });
