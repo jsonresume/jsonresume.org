@@ -50,6 +50,11 @@ export function JobsPane({ jobs, selectedJob, onSelectJob, loading }) {
           const score = job._score || 0;
           const outcome = job._outcome || 'noMatch';
 
+          // Debug: log job location
+          if (typeof job.location !== 'string' && job.location) {
+            console.log('Non-string job.location found:', job.id, job.location);
+          }
+
           return (
             <button
               key={job.id}
@@ -87,14 +92,7 @@ export function JobsPane({ jobs, selectedJob, onSelectJob, loading }) {
 
               {/* Location and Salary */}
               <div className="text-xs text-slate-600 mb-2">
-                <span>
-                  {gptJob.location ||
-                    (typeof job.location === 'string'
-                      ? job.location
-                      : job.location?.city ||
-                        job.location?.region ||
-                        'Location TBD')}
-                </span>
+                <span>Remote</span>
                 {gptJob.salary?.min && gptJob.salary?.max && (
                   <span className="ml-2">
                     • ${Math.round(gptJob.salary.min / 1000)}k-$
