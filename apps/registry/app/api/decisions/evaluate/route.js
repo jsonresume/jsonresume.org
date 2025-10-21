@@ -8,15 +8,26 @@ import { NextResponse } from 'next/server';
 const tools = {
   checkRequiredSkills: tool({
     description:
-      'Check if the candidate has ALL required skills for the job. Be strict - missing even one required skill means failure.',
+      "Evaluate the candidate's skill match percentage with required job skills. Calculate what percentage of required skills they have. Be realistic - candidates can learn missing skills.",
     inputSchema: z.object({
-      hasAllSkills: z
-        .boolean()
-        .describe('True only if ALL required skills are present'),
+      matchPercentage: z
+        .number()
+        .min(0)
+        .max(1)
+        .describe(
+          'Percentage of required skills the candidate has (0.0 to 1.0). E.g., 0.75 means 75% match. >=0.8 is excellent, >=0.5 is acceptable, <0.5 is insufficient.'
+        ),
+      matchedSkills: z
+        .array(z.string())
+        .describe('List of required skills the candidate HAS'),
       missingSkills: z
         .array(z.string())
         .describe('List of required skills the candidate is missing'),
-      reasoning: z.string().describe('Brief explanation of the decision'),
+      reasoning: z
+        .string()
+        .describe(
+          'Brief explanation of the skill match percentage and what it means'
+        ),
     }),
   }),
 
@@ -207,9 +218,9 @@ IMPORTANT INSTRUCTIONS:
 - Provide comprehensive feedback on all dimensions to give the candidate a complete picture
 
 Call ALL of these tools in order:
-1. checkRequiredSkills - Does candidate have ALL required technical skills? ${
+1. checkRequiredSkills - Calculate skill match percentage (0.0-1.0). >=0.8 excellent, >=0.5 acceptable, <0.5 insufficient. ${
       preferences.skills?.enabled === false
-        ? '(User disabled - be lenient)'
+        ? '(User disabled - be very lenient)'
         : ''
     }
 2. checkExperience - Does candidate have enough years of experience? ${

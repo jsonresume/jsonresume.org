@@ -245,8 +245,12 @@ export function useDecisionTree(resume, preferences = {}) {
 
       // COLOR ALL NODES based on their results
       if (skillsCheck) {
-        updateNodeColor(NODE_IDS.CORE, skillsCheck.hasAllSkills);
-        if (skillsCheck.hasAllSkills) score += 40;
+        // Percentage-based: >=0.8 pass, 0.5-0.8 partial, <0.5 fail
+        const matchPct = skillsCheck.matchPercentage || 0;
+        const skillsPassed = matchPct >= 0.8;
+        updateNodeColor(NODE_IDS.CORE, skillsPassed);
+        // Score scales with match percentage (max 40 points)
+        score += Math.round(matchPct * 40);
       }
       if (expCheck) {
         updateNodeColor(NODE_IDS.EXP, expCheck.hasEnoughExperience);
@@ -278,9 +282,14 @@ export function useDecisionTree(resume, preferences = {}) {
       }
 
       // Determine outcome and where we fail on the path
-      if (skillsCheck && !skillsCheck.hasAllSkills) {
+      const matchPct = skillsCheck?.matchPercentage || 0;
+      if (skillsCheck && matchPct < 0.5) {
+        // Less than 50% skill match = instant reject
         finalOutcome = 'noMatch';
         failedAtNode = NODE_IDS.CORE;
+      } else if (skillsCheck && matchPct >= 0.5 && matchPct < 0.8) {
+        // 50-80% skill match = downgrade to possible match later
+        finalOutcome = 'possibleMatch';
       } else if (expCheck && !expCheck.hasEnoughExperience) {
         finalOutcome = 'noMatch';
         failedAtNode = NODE_IDS.EXP;
@@ -310,17 +319,88 @@ export function useDecisionTree(resume, preferences = {}) {
       // Start: Root → Core Skills
       highlightEdge('e_root_core');
 
-      // Check 1: Required Skills
+      // Check 1: Required Skills (percentage-based)
       if (skillsCheck) {
-        if (!skillsCheck.hasAllSkills) {
-          // FAILED - end path here
+        const skillMatchPct = skillsCheck.matchPercentage || 0;
+
+        if (skillMatchPct < 0.5) {
+          // FAILED (<50% match) - end path here with rejection
           updateNodeColor(NODE_IDS.CORE, false);
           highlightEdge('e_core_reject_no', colors.outcomes.noMatch.border);
           score = 0;
+        } else if (skillMatchPct >= 0.5 && skillMatchPct < 0.8) {
+          // PARTIAL (50-80% match) - continue with orange warning
+          updateNodeColor(NODE_IDS.CORE, false); // Show orange (warn state)
+          score += Math.round(skillMatchPct * 40);
+          highlightEdge('e_core_exp_yes', colors.paths.orange); // Orange path
+
+          // Continue evaluation for partial match (same logic as full pass)
+          // Check 2: Experience
+          if (expCheck) {
+            if (!expCheck.hasEnoughExperience) {
+              // FAILED - end path here
+              updateNodeColor(NODE_IDS.EXP, false);
+              highlightEdge('e_exp_reject_no', colors.outcomes.noMatch.border);
+            } else {
+              // PASSED - continue
+              updateNodeColor(NODE_IDS.EXP, true);
+              score += 20;
+              highlightEdge('e_exp_wr_yes', colors.paths.blue);
+
+              // Check 3: Work Rights
+              if (workRightsCheck) {
+                if (!workRightsCheck.hasWorkRights) {
+                  // FAILED - end path here
+                  updateNodeColor(NODE_IDS.WR, false);
+                  highlightEdge(
+                    'e_wr_reject_no',
+                    colors.outcomes.noMatch.border
+                  );
+                } else {
+                  // PASSED - continue
+                  updateNodeColor(NODE_IDS.WR, true);
+                  score += 8;
+                  highlightEdge('e_wr_loc_yes', colors.paths.blue);
+
+                  // Check 4: Location
+                  if (locationCheck) {
+                    if (!locationCheck.locationCompatible) {
+                      // Location FAILED - check timezone
+                      updateNodeColor(NODE_IDS.LOC, false);
+                      highlightEdge('e_loc_tz_no', colors.paths.orange);
+
+                      if (timezoneCheck) {
+                        if (!timezoneCheck.timezoneCompatible) {
+                          // Timezone FAILED - end path here
+                          updateNodeColor(NODE_IDS.TZ, false);
+                          highlightEdge(
+                            'e_tz_reject_no',
+                            colors.outcomes.noMatch.border
+                          );
+                        } else {
+                          // Timezone PASSED - continue to availability
+                          updateNodeColor(NODE_IDS.TZ, true);
+                          score += 6;
+                          highlightEdge('e_tz_avail_yes', colors.paths.blue);
+                          animateRestOfPath();
+                        }
+                      }
+                    } else {
+                      // Location PASSED - skip timezone, go to availability
+                      updateNodeColor(NODE_IDS.LOC, true);
+                      score += 8;
+                      highlightEdge('e_loc_avail_yes', colors.paths.blue);
+                      animateRestOfPath();
+                    }
+                  }
+                }
+              }
+            }
+          }
         } else {
-          // PASSED - continue
+          // PASSED (>=80% match) - continue with green
           updateNodeColor(NODE_IDS.CORE, true);
-          score += 40;
+          score += Math.round(skillMatchPct * 40);
           highlightEdge('e_core_exp_yes', colors.paths.blue);
 
           // Check 2: Experience
