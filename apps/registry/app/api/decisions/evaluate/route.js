@@ -1,14 +1,15 @@
 import { openai } from '@ai-sdk/openai';
-import { generateText } from 'ai';
+import { generateText, tool } from 'ai';
 import { z } from 'zod';
 import { NextResponse } from 'next/server';
 
 // Zod schemas for each decision criterion
+// AI SDK v5 uses tool() helper with inputSchema
 const tools = {
-  checkRequiredSkills: {
+  checkRequiredSkills: tool({
     description:
       'Check if the candidate has ALL required skills for the job. Be strict - missing even one required skill means failure.',
-    parameters: z.object({
+    inputSchema: z.object({
       hasAllSkills: z
         .boolean()
         .describe('True only if ALL required skills are present'),
@@ -17,12 +18,12 @@ const tools = {
         .describe('List of required skills the candidate is missing'),
       reasoning: z.string().describe('Brief explanation of the decision'),
     }),
-  },
+  }),
 
-  checkExperience: {
+  checkExperience: tool({
     description:
       'Evaluate if the candidate has enough years of experience for the role.',
-    parameters: z.object({
+    inputSchema: z.object({
       hasEnoughExperience: z
         .boolean()
         .describe('True if experience meets or exceeds requirement'),
@@ -30,23 +31,23 @@ const tools = {
       requiredYears: z.number().describe('Years of experience required by job'),
       reasoning: z.string().describe('Brief explanation of the decision'),
     }),
-  },
+  }),
 
-  checkWorkRights: {
+  checkWorkRights: tool({
     description:
       'Check if the candidate has legal work authorization if required by the job.',
-    parameters: z.object({
+    inputSchema: z.object({
       hasWorkRights: z
         .boolean()
         .describe('True if work rights verified or not required'),
       reasoning: z.string().describe('Brief explanation of the decision'),
     }),
-  },
+  }),
 
-  checkLocation: {
+  checkLocation: tool({
     description:
       'Evaluate location compatibility considering remote work options.',
-    parameters: z.object({
+    inputSchema: z.object({
       locationCompatible: z
         .boolean()
         .describe('True if location is compatible'),
@@ -55,12 +56,12 @@ const tools = {
       jobLocation: z.string().describe('Job location'),
       reasoning: z.string().describe('Brief explanation of the decision'),
     }),
-  },
+  }),
 
-  checkTimezone: {
+  checkTimezone: tool({
     description:
       'Check timezone compatibility if location failed. Only relevant for remote positions with timezone requirements.',
-    parameters: z.object({
+    inputSchema: z.object({
       timezoneCompatible: z
         .boolean()
         .describe('True if timezones are compatible'),
@@ -68,11 +69,11 @@ const tools = {
       requiredTimezone: z.string().describe('Required timezone'),
       reasoning: z.string().describe('Brief explanation of the decision'),
     }),
-  },
+  }),
 
-  checkAvailability: {
+  checkAvailability: tool({
     description: 'Check if candidate can start within the required timeframe.',
-    parameters: z.object({
+    inputSchema: z.object({
       availableInTime: z
         .boolean()
         .describe('True if available within required timeframe'),
@@ -82,11 +83,11 @@ const tools = {
         .describe('Maximum weeks job is willing to wait'),
       reasoning: z.string().describe('Brief explanation of the decision'),
     }),
-  },
+  }),
 
-  checkSalary: {
+  checkSalary: tool({
     description: 'Evaluate if salary expectations align with the job offer.',
-    parameters: z.object({
+    inputSchema: z.object({
       salaryAligned: z
         .boolean()
         .describe('True if salary expectations are compatible'),
@@ -103,12 +104,12 @@ const tools = {
         .describe('Job salary range'),
       reasoning: z.string().describe('Brief explanation of the decision'),
     }),
-  },
+  }),
 
-  checkBonusSkills: {
+  checkBonusSkills: tool({
     description:
       'Check for nice-to-have skills that make the candidate stand out.',
-    parameters: z.object({
+    inputSchema: z.object({
       hasBonusSkills: z
         .boolean()
         .describe('True if candidate has significant bonus skills'),
@@ -117,7 +118,7 @@ const tools = {
         .describe('List of matched bonus skills'),
       reasoning: z.string().describe('Brief explanation of the decision'),
     }),
-  },
+  }),
 };
 
 export async function POST(request) {
