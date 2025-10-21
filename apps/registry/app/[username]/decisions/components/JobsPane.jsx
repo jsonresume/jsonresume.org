@@ -87,7 +87,14 @@ export function JobsPane({ jobs, selectedJob, onSelectJob, loading }) {
 
               {/* Location and Salary */}
               <div className="text-xs text-slate-600 mb-2">
-                <span>{gptJob.location || job.location || 'Location TBD'}</span>
+                <span>
+                  {gptJob.location ||
+                    (typeof job.location === 'string'
+                      ? job.location
+                      : job.location?.city ||
+                        job.location?.region ||
+                        'Location TBD')}
+                </span>
                 {gptJob.salary?.min && gptJob.salary?.max && (
                   <span className="ml-2">
                     • ${Math.round(gptJob.salary.min / 1000)}k-$
