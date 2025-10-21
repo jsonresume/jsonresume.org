@@ -192,17 +192,19 @@ ${resumeContext}
 JOB POSTING:
 ${jobContext}
 
-Evaluate this match by calling the provided tools in order:
+IMPORTANT: You MUST evaluate ALL of the following criteria by calling every tool, regardless of whether earlier checks passed or failed. This gives the candidate a complete picture of the match.
+
+Call ALL of these tools in order:
 1. checkRequiredSkills - Does candidate have ALL required technical skills?
 2. checkExperience - Does candidate have enough years of experience?
 3. checkWorkRights - Does candidate have work authorization if required?
 4. checkLocation - Is location compatible (considering remote options)?
-5. If location failed, checkTimezone - Is timezone compatible for remote work?
+5. checkTimezone - Is timezone compatible for remote work? (evaluate this regardless of location result)
 6. checkAvailability - Can candidate start within required timeframe?
 7. checkSalary - Are salary expectations aligned?
 8. checkBonusSkills - Does candidate have valuable bonus skills?
 
-Be thorough and realistic in your evaluation. Consider the full context of both the resume and job posting.`;
+Be thorough, honest, and realistic in your evaluation. Even if the candidate fails one check, continue evaluating all remaining criteria to provide comprehensive feedback.`;
 
     console.log('Prompt length:', prompt.length);
     console.log('Number of tools:', Object.keys(tools).length);

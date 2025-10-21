@@ -12,9 +12,7 @@ export default function DecisionsLayout({ children, params }) {
 
   return (
     <PublicResumeProvider username={username}>
-      <div className="w-full h-screen overflow-hidden bg-slate-50">
-        {children}
-      </div>
+      <div className="w-full overflow-hidden bg-slate-50">{children}</div>
     </PublicResumeProvider>
   );
 }

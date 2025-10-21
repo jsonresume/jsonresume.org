@@ -1,0 +1,82 @@
+# JSON Resume Documentation
+
+Welcome to the official documentation for JSON Resume - the open source initiative to create a JSON-based standard for resumes.
+
+## What is JSON Resume?
+
+JSON Resume is a community-driven open source initiative to create a standardized format for resumes. The standard allows for easier parsing, processing, and sharing of resume data across different platforms and applications.
+
+## Features
+
+- **Standardized Format**: A well-defined JSON schema for resume data
+- **Theme System**: Beautiful, customizable themes for rendering resumes
+- **CLI Tool**: Command-line interface for generating and validating resumes
+- **Registry**: Hosted platform for publishing and sharing resumes
+- **Job Board**: AI-powered job board with semantic matching
+- **Open Source**: Community-driven with contributions welcome
+
+## Quick Links
+
+- [Getting Started](/getting-started) - Create your first JSON Resume
+- [Job Board System](/jobs) - Learn about the AI-powered job board
+- [API Reference](/api) - Explore the API endpoints
+- [Architecture](/architecture) - Understand the system design
+- [Contributing](/contributing) - Help improve JSON Resume
+
+## The Standard
+
+JSON Resume follows a standardized schema defined at [jsonresume.org/schema](https://jsonresume.org/schema). Here's a minimal example:
+
+```json
+{
+  "basics": {
+    "name": "John Doe",
+    "label": "Software Engineer",
+    "email": "john@example.com",
+    "summary": "A passionate software engineer...",
+    "location": {
+      "city": "San Francisco",
+      "countryCode": "US"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "johndoe",
+        "url": "https://github.com/johndoe"
+      }
+    ]
+  },
+  "work": [
+    {
+      "company": "Example Corp",
+      "position": "Software Engineer",
+      "startDate": "2020-01-01",
+      "highlights": ["Built scalable microservices", "Led team of 5 engineers"]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University of Example",
+      "area": "Computer Science",
+      "studyType": "Bachelor",
+      "endDate": "2019-05-01"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Web Development",
+      "keywords": ["JavaScript", "React", "Node.js"]
+    }
+  ]
+}
+```
+
+## Community
+
+- **GitHub**: [github.com/jsonresume/jsonresume.org](https://github.com/jsonresume/jsonresume.org)
+- **Issues**: Report bugs or request features
+- **Discussions**: Ask questions and share ideas
+
+## License
+
+JSON Resume is open source software licensed under the MIT License.

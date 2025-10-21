@@ -28,11 +28,11 @@ const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
 dagreGraph.setGraph({
   rankdir: 'TB', // Top to bottom
-  nodesep: 80, // Horizontal spacing between nodes
-  ranksep: 120, // Vertical spacing between ranks
-  edgesep: 30, // Spacing between edges
-  marginx: 50,
-  marginy: 50,
+  nodesep: 60, // Horizontal spacing between nodes (reduced)
+  ranksep: 80, // Vertical spacing between ranks (reduced for less height)
+  edgesep: 20, // Spacing between edges (reduced)
+  marginx: 30,
+  marginy: 30,
 });
 
 // Node style generators

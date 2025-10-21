@@ -294,27 +294,36 @@ function calculateYearsOfExperience(resume) {
  * Calculate overall match score for a candidate-job pair
  * Returns { score: 0-100, breakdown: object }
  */
-export function scoreCandidateForJob(candidate, job) {
+export function scoreCandidateForJob(candidate, job, preferences = {}) {
   const breakdown = {};
   let totalScore = 0;
 
-  // Core skills check (hard gate)
-  const r1 = checks.coreSkills(candidate, job);
-  breakdown.coreSkills = r1;
-  if (!r1.pass) {
-    return { score: 0, breakdown }; // Immediate rejection
+  // Helper to check if a criterion is enabled
+  const isEnabled = (criterion) => {
+    return preferences[criterion]?.enabled !== false; // Default to enabled if not set
+  };
+
+  // Core skills check (hard gate) - respects 'skills' preference
+  if (isEnabled('skills')) {
+    const r1 = checks.coreSkills(candidate, job);
+    breakdown.coreSkills = r1;
+    if (!r1.pass) {
+      return { score: 0, breakdown }; // Immediate rejection
+    }
+    totalScore += r1.score;
   }
-  totalScore += r1.score;
 
   // Experience check (heavy penalty if fail)
-  const r2 = checks.experience(candidate, job);
-  breakdown.experience = r2;
-  if (!r2.pass) {
-    return { score: totalScore, breakdown }; // Likely rejection
+  if (isEnabled('experience')) {
+    const r2 = checks.experience(candidate, job);
+    breakdown.experience = r2;
+    if (!r2.pass) {
+      return { score: totalScore, breakdown }; // Likely rejection
+    }
+    totalScore += r2.score;
   }
-  totalScore += r2.score;
 
-  // Work rights check (hard gate)
+  // Work rights check (hard gate) - always enabled (no preference for this)
   const r5 = checks.workRights(candidate, job);
   breakdown.workRights = r5;
   if (!r5.pass) {
@@ -323,31 +332,37 @@ export function scoreCandidateForJob(candidate, job) {
   totalScore += r5.score;
 
   // Location check (can fail if remote OK)
-  const r3 = checks.location(candidate, job);
-  breakdown.location = r3;
-  totalScore += r3.score;
+  if (isEnabled('location')) {
+    const r3 = checks.location(candidate, job);
+    breakdown.location = r3;
+    totalScore += r3.score;
 
-  // Timezone check (only matters if location failed and remote not OK)
-  if (!r3.pass) {
-    const r4 = checks.timezone(candidate, job);
-    breakdown.timezone = r4;
-    totalScore += r4.score;
+    // Timezone check (only matters if location failed and timezone enabled)
+    if (!r3.pass && isEnabled('timezone')) {
+      const r4 = checks.timezone(candidate, job);
+      breakdown.timezone = r4;
+      totalScore += r4.score;
+    }
   }
 
-  // Availability check (fail = possible match later)
+  // Availability check (fail = possible match later) - always enabled (no preference for this)
   const r6 = checks.availability(candidate, job);
   breakdown.availability = r6;
   totalScore += r6.score;
 
   // Salary check (fail = negotiable)
-  const r7 = checks.salary(candidate, job);
-  breakdown.salary = r7;
-  totalScore += r7.score;
+  if (isEnabled('salary')) {
+    const r7 = checks.salary(candidate, job);
+    breakdown.salary = r7;
+    totalScore += r7.score;
+  }
 
   // Bonus skills check (fail = still possible match)
-  const r8 = checks.bonusSkills(candidate, job);
-  breakdown.bonusSkills = r8;
-  totalScore += r8.score;
+  if (isEnabled('skills')) {
+    const r8 = checks.bonusSkills(candidate, job);
+    breakdown.bonusSkills = r8;
+    totalScore += r8.score;
+  }
 
   return {
     score: Math.max(0, Math.min(100, totalScore)),

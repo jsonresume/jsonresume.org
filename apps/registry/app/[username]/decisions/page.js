@@ -32,6 +32,7 @@ export default function DecisionsPage({ params }) {
   const [selectedJob, setSelectedJob] = useState(null);
   const [jobsLoading, setJobsLoading] = useState(true);
   const [jobsError, setJobsError] = useState(null);
+  const [preferences, setPreferences] = useState({});
 
   // Fetch jobs from database
   useEffect(() => {
@@ -75,7 +76,7 @@ export default function DecisionsPage({ params }) {
   }, [username, user]);
 
   // Rank jobs using scoring algorithm
-  const { rankedJobs } = useJobMatching(resume, jobs);
+  const { rankedJobs } = useJobMatching(resume, jobs, preferences);
 
   // Decision tree state and animation
   const {
@@ -85,7 +86,7 @@ export default function DecisionsPage({ params }) {
     onEdgesChange,
     evaluateJob,
     matchResult,
-  } = useDecisionTree(resume);
+  } = useDecisionTree(resume, preferences);
 
   // Handle job selection
   const handleSelectJob = useCallback(
@@ -125,6 +126,22 @@ export default function DecisionsPage({ params }) {
       setJobsLoading(false);
     }
   }, [username, user]);
+
+  // Handle preferences change
+  const handlePreferencesChange = useCallback(
+    (criterion, enabled, value) => {
+      setPreferences((prev) => ({
+        ...prev,
+        [criterion]: { enabled, value },
+      }));
+
+      // Re-evaluate current job with new preferences if one is selected
+      if (selectedJob && resume) {
+        evaluateJob(resume, selectedJob);
+      }
+    },
+    [selectedJob, resume, evaluateJob]
+  );
 
   // Loading state
   if (resumeLoading || jobsLoading) {
@@ -188,7 +205,11 @@ export default function DecisionsPage({ params }) {
     >
       {/* Left Pane: Resume Display (25%) */}
       <div className="col-span-3 h-full overflow-hidden">
-        <ResumePane resume={resume} />
+        <ResumePane
+          resume={resume}
+          user={user}
+          onPreferencesChange={handlePreferencesChange}
+        />
       </div>
 
       {/* Center Pane: Decision Tree (50%) */}

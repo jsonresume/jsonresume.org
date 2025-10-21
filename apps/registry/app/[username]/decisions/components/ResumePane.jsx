@@ -1,13 +1,15 @@
 /**
  * ResumePane Component
- * Left pane - displays candidate resume and match result
+ * Left pane - displays candidate resume
  */
 
 'use client';
 
+import { PreferencesPanel } from './PreferencesPanel';
+
 // Component for displaying candidate resume
 
-export function ResumePane({ resume, matchResult, selectedJob }) {
+export function ResumePane({ resume, user, onPreferencesChange }) {
   if (!resume) {
     return (
       <div className="h-full bg-white rounded-2xl shadow-md p-6">
@@ -45,7 +47,7 @@ export function ResumePane({ resume, matchResult, selectedJob }) {
       </header>
 
       {/* Resume Content */}
-      <div className="flex-1 overflow-y-auto space-y-4 text-sm">
+      <div className="flex-1 overflow-y-auto space-y-4 text-sm mb-4">
         {/* Name & Headline */}
         <div>
           <div className="text-base font-semibold text-slate-900">
@@ -155,43 +157,10 @@ export function ResumePane({ resume, matchResult, selectedJob }) {
         )}
       </div>
 
-      {/* Match Result Footer */}
-      {matchResult && (
-        <footer className="mt-4 pt-4 border-t border-slate-200">
-          <div className="mb-2">
-            <span className="text-sm font-medium text-slate-900">Result: </span>
-            <span
-              className={`text-sm font-semibold ${
-                matchResult.outcome === 'strongMatch'
-                  ? 'text-green-600'
-                  : matchResult.outcome === 'possibleMatch'
-                  ? 'text-orange-600'
-                  : 'text-red-600'
-              }`}
-            >
-              {matchResult.bucket}
-            </span>
-            {matchResult.score !== undefined && (
-              <span className="ml-2 text-xs font-mono text-slate-600">
-                ({matchResult.score}%)
-              </span>
-            )}
-          </div>
-
-          {matchResult.reasons && matchResult.reasons.length > 0 && (
-            <ul className="space-y-1 text-xs text-slate-700">
-              {matchResult.reasons.map(([criterion, reason], idx) => (
-                <li key={idx} className="flex gap-2">
-                  <span className="font-medium text-slate-900 min-w-[100px]">
-                    {criterion}:
-                  </span>
-                  <span className="text-slate-600">{reason}</span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </footer>
-      )}
+      {/* Preferences Panel */}
+      <div className="flex-shrink-0">
+        <PreferencesPanel user={user} onChange={onPreferencesChange} />
+      </div>
     </div>
   );
 }
