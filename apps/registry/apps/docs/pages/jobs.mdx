@@ -1,0 +1,111 @@
+# Job Board System
+
+The JSON Resume platform includes an AI-powered job board that scrapes, processes, and indexes job postings from Hacker News.
+
+## Overview
+
+The job board system consists of three main components:
+
+1. **Job Scraping** - Automatically fetch jobs from HN "Who is Hiring?" threads
+2. **AI Processing** - Parse and enrich jobs using OpenAI GPT-5-mini
+3. **Vector Search** - Enable semantic job matching with Pinecone
+
+## Architecture
+
+For detailed architecture documentation, see the [Job Processing Pipeline README](https://github.com/jsonresume/jsonresume.org/blob/master/scripts/jobs/README.md).
+
+## Features
+
+- Daily automated job scraping via GitHub Actions
+- AI-powered job parsing with structured data extraction
+- Company enrichment with external data sources
+- Natural language job descriptions
+- Vector embeddings for semantic search
+- Resume-to-job matching
+
+## Quick Start
+
+### Running Locally
+
+```bash
+cd apps/registry
+
+# Step 1: Fetch HN jobs
+node scripts/jobs/getLatestWhoIsHiring.js
+
+# Step 2: Process with AI (uses GPT-5-mini)
+node scripts/jobs/gpted.js
+
+# Step 3: Vectorize for search
+node scripts/jobs/vectorize.js
+```
+
+### Environment Variables
+
+```bash
+OPENAI_API_KEY=sk-...           # OpenAI API key
+SUPABASE_KEY=eyJ...             # Supabase service role key
+PINECONE_API_KEY=...            # Pinecone API key
+PINECONE_ENVIRONMENT=...        # Pinecone environment
+```
+
+## Automation
+
+The job processing pipeline runs automatically via GitHub Actions:
+
+- **Schedule**: Daily at 9 AM UTC
+- **Manual Trigger**: Available via GitHub UI
+- **Features**:
+  - Comprehensive error handling
+  - Discord notifications on failure
+  - Auto-creates GitHub issues for repeated failures
+  - Workflow summary with processing stats
+  - Log artifacts for debugging
+
+See the [GitHub Actions workflow](https://github.com/jsonresume/jsonresume.org/blob/master/.github/workflows/process-hn-jobs.yml) for implementation details.
+
+## Data Flow
+
+```
+HN API → Raw Jobs (Supabase)
+          ↓
+    AI Processing (GPT-5-mini)
+          ↓
+  Structured JSON (gpt_content column)
+          ↓
+   Vector Embeddings (Pinecone)
+          ↓
+    Semantic Search
+```
+
+## Monitoring
+
+View recent jobs and processing status:
+
+```sql
+SELECT
+  uuid,
+  hn_item_id,
+  posted_at,
+  CASE
+    WHEN gpt_content IS NULL THEN 'Pending'
+    WHEN gpt_content = 'FAILED' THEN 'Failed'
+    ELSE 'Processed'
+  END as status
+FROM jobs
+ORDER BY posted_at DESC
+LIMIT 100;
+```
+
+## Contributing
+
+For detailed information on contributing to the job board system, see:
+
+- [Job Processing Pipeline README](https://github.com/jsonresume/jsonresume.org/blob/master/scripts/jobs/README.md)
+- [Contributing Guidelines](/contributing)
+
+## Related Documentation
+
+- [Architecture](/architecture) - System design overview
+- [API Reference](/api) - API endpoints for job data
+- [GitHub Actions Workflow](https://github.com/jsonresume/jsonresume.org/blob/master/.github/workflows/process-hn-jobs.yml)
