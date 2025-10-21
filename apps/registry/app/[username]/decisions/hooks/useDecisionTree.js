@@ -157,6 +157,7 @@ export function useDecisionTree(resume, preferences = {}) {
       console.log('=== CLIENT: Starting AI Evaluation ===');
       console.log('Candidate:', candidate.basics?.name);
       console.log('Job:', job.title, job.company);
+      console.log('Preferences:', preferences);
 
       resetHighlights();
 
@@ -174,7 +175,7 @@ export function useDecisionTree(resume, preferences = {}) {
       });
 
       try {
-        const payload = { resume: candidate, job };
+        const payload = { resume: candidate, job, preferences };
         console.log('Sending payload with keys:', Object.keys(payload));
 
         // Call AI evaluation endpoint
@@ -210,7 +211,7 @@ export function useDecisionTree(resume, preferences = {}) {
         });
       }
     },
-    [resetHighlights]
+    [resetHighlights, preferences]
   );
 
   // Animate decision tree path based on AI results
