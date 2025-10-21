@@ -34,8 +34,8 @@ export default function DecisionsPage({ params }) {
         setJobsLoading(true);
         setJobsError(null);
 
-        // Call the jobs API with limit parameter
-        const response = await fetch('/api/jobs', {
+        // Call the decisions jobs API with limit parameter
+        const response = await fetch('/api/decisions/jobs', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username, limit: 10 }), // Limit to 10 for testing
