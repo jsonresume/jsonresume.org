@@ -125,6 +125,10 @@ export async function POST(request) {
   try {
     const { resume, job } = await request.json();
 
+    console.log('=== AI EVALUATION DEBUG ===');
+    console.log('Resume basics:', resume.basics?.name, resume.basics?.label);
+    console.log('Job title:', job.title, 'Company:', job.company);
+
     if (!resume || !job) {
       return NextResponse.json(
         { error: 'Resume and job are required' },
@@ -134,35 +138,51 @@ export async function POST(request) {
 
     // Parse job GPT content if available
     const gptJob = job.gpt_content ? JSON.parse(job.gpt_content) : {};
+    console.log('GPT Job parsed:', {
+      hasContent: !!job.gpt_content,
+      skills: gptJob.skills?.length || 0,
+      title: gptJob.title,
+    });
 
     // Prepare context for AI
-    const resumeContext = JSON.stringify({
-      name: resume.basics?.name,
-      label: resume.basics?.label,
-      location: resume.basics?.location,
-      email: resume.basics?.email,
-      skills: resume.skills,
-      work: resume.work,
-      education: resume.education,
-      availability: resume.availability || resume.availabilityWeeks,
-      salary: resume.salary || resume.basics?.expectedSalary,
-      workRights: resume.workRights || resume.basics?.workRights,
-    });
+    const resumeContext = JSON.stringify(
+      {
+        name: resume.basics?.name,
+        label: resume.basics?.label,
+        location: resume.basics?.location,
+        email: resume.basics?.email,
+        skills: resume.skills,
+        work: resume.work,
+        education: resume.education,
+        availability: resume.availability || resume.availabilityWeeks,
+        salary: resume.salary || resume.basics?.expectedSalary,
+        workRights: resume.workRights || resume.basics?.workRights,
+      },
+      null,
+      2
+    );
 
-    const jobContext = JSON.stringify({
-      title: gptJob.title || job.title,
-      company: gptJob.company || job.company,
-      location: gptJob.location || job.location,
-      remote: gptJob.remote,
-      description: job.description,
-      skills: gptJob.skills || [],
-      bonusSkills: gptJob.bonusSkills || [],
-      minYearsExperience: gptJob.minYearsExperience || 0,
-      salary: gptJob.salary || { min: 0, max: 999999 },
-      startWithinWeeks: gptJob.startWithinWeeks || 12,
-      workRightsRequired: gptJob.workRightsRequired !== false,
-      timezone: gptJob.timezone,
-    });
+    const jobContext = JSON.stringify(
+      {
+        title: gptJob.title || job.title,
+        company: gptJob.company || job.company,
+        location: gptJob.location || job.location,
+        remote: gptJob.remote,
+        description: job.description,
+        skills: gptJob.skills || [],
+        bonusSkills: gptJob.bonusSkills || [],
+        minYearsExperience: gptJob.minYearsExperience || 0,
+        salary: gptJob.salary || { min: 0, max: 999999 },
+        startWithinWeeks: gptJob.startWithinWeeks || 12,
+        workRightsRequired: gptJob.workRightsRequired !== false,
+        timezone: gptJob.timezone,
+      },
+      null,
+      2
+    );
+
+    console.log('Resume context length:', resumeContext.length);
+    console.log('Job context length:', jobContext.length);
 
     const prompt = `You are an expert technical recruiter evaluating a candidate-job match.
 
@@ -184,25 +204,42 @@ Evaluate this match by calling the provided tools in order:
 
 Be thorough and realistic in your evaluation. Consider the full context of both the resume and job posting.`;
 
+    console.log('Prompt length:', prompt.length);
+    console.log('Number of tools:', Object.keys(tools).length);
+
     // Call AI with tool definitions
-    const { toolCalls } = await generateText({
+    console.log('Calling generateText...');
+    const result = await generateText({
       model: openai('gpt-4o-mini'),
       prompt,
       tools,
       maxSteps: 10, // Allow multiple tool calls
     });
 
+    console.log('generateText result keys:', Object.keys(result));
+    console.log('toolCalls:', result.toolCalls);
+    console.log('toolCalls length:', result.toolCalls?.length || 0);
+    console.log('text response:', result.text?.substring(0, 200));
+
     // Process tool call results
     const decisions = {};
-    if (toolCalls) {
-      for (const toolCall of toolCalls) {
-        decisions[toolCall.toolName] = toolCall.args;
+    if (result.toolCalls) {
+      console.log('Processing', result.toolCalls.length, 'tool calls');
+      for (const toolCall of result.toolCalls) {
+        console.log('Tool call:', toolCall.toolName, 'Input:', toolCall.input);
+        decisions[toolCall.toolName] = toolCall.input; // Use .input instead of .args
       }
+    } else {
+      console.log('NO TOOL CALLS RETURNED!');
     }
+
+    console.log('Final decisions:', JSON.stringify(decisions, null, 2));
+    console.log('=== END DEBUG ===');
 
     return NextResponse.json({ decisions });
   } catch (error) {
     console.error('Error evaluating match:', error);
+    console.error('Error stack:', error.stack);
     return NextResponse.json(
       { error: 'Failed to evaluate match', details: error.message },
       { status: 500 }
