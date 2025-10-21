@@ -12,6 +12,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { usePublicResume } from '../../providers/PublicResumeProvider';
+import { useAuth } from '../../components/MenuModule/hooks/useAuth';
 import { ResumePane } from './components/ResumePane';
 import { DecisionTreePane } from './components/DecisionTreePane';
 import { JobsPane } from './components/JobsPane';
@@ -21,6 +22,7 @@ import { logger } from '@/lib/logger';
 
 export default function DecisionsPage({ params }) {
   const { username } = params;
+  const { user } = useAuth();
   const {
     resume,
     loading: resumeLoading,
@@ -38,11 +40,15 @@ export default function DecisionsPage({ params }) {
         setJobsLoading(true);
         setJobsError(null);
 
-        // Call the decisions jobs API with limit parameter
+        // Call the decisions jobs API with limit parameter and userId to filter out decided jobs
         const response = await fetch('/api/decisions/jobs', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, limit: 10 }), // Limit to 10 for testing
+          body: JSON.stringify({
+            username,
+            userId: user?.id,
+            limit: 10,
+          }), // Limit to 10 for testing
         });
 
         if (!response.ok) {
@@ -66,7 +72,7 @@ export default function DecisionsPage({ params }) {
     if (username) {
       fetchJobs();
     }
-  }, [username]);
+  }, [username, user]);
 
   // Rank jobs using scoring algorithm
   const { rankedJobs } = useJobMatching(resume, jobs);
@@ -92,12 +98,33 @@ export default function DecisionsPage({ params }) {
     [resume, evaluateJob]
   );
 
-  // Auto-select top job on load
-  useEffect(() => {
-    if (rankedJobs.length > 0 && !selectedJob) {
-      handleSelectJob(rankedJobs[0]);
+  // Refetch jobs after decision is made
+  const refetchJobs = useCallback(async () => {
+    try {
+      setJobsLoading(true);
+      const response = await fetch('/api/decisions/jobs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username,
+          userId: user?.id,
+          limit: 10,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch jobs: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      setJobs(Array.isArray(data) ? data : []);
+      setSelectedJob(null); // Clear selection after refetch
+    } catch (error) {
+      logger.error({ error: error.message }, 'Error refetching jobs');
+    } finally {
+      setJobsLoading(false);
     }
-  }, [rankedJobs, selectedJob, handleSelectJob]);
+  }, [username, user]);
 
   // Loading state
   if (resumeLoading || jobsLoading) {
@@ -155,18 +182,17 @@ export default function DecisionsPage({ params }) {
   }
 
   return (
-    <div className="w-full h-screen grid grid-cols-12 gap-4 p-4 bg-slate-50">
+    <div
+      className="w-full grid grid-cols-12 gap-4 p-4 bg-slate-50"
+      style={{ height: 'calc(100vh - 4rem)' }}
+    >
       {/* Left Pane: Resume Display (25%) */}
-      <div className="col-span-3">
-        <ResumePane
-          resume={resume}
-          matchResult={matchResult}
-          selectedJob={selectedJob}
-        />
+      <div className="col-span-3 h-full overflow-hidden">
+        <ResumePane resume={resume} />
       </div>
 
       {/* Center Pane: Decision Tree (50%) */}
-      <div className="col-span-6">
+      <div className="col-span-6 h-full overflow-hidden">
         <DecisionTreePane
           nodes={nodes}
           edges={edges}
@@ -176,12 +202,15 @@ export default function DecisionsPage({ params }) {
       </div>
 
       {/* Right Pane: Ranked Jobs (25%) */}
-      <div className="col-span-3">
+      <div className="col-span-3 h-full overflow-hidden">
         <JobsPane
           jobs={rankedJobs}
           selectedJob={selectedJob}
           onSelectJob={handleSelectJob}
           loading={jobsLoading}
+          matchResult={matchResult}
+          user={user}
+          onDecision={refetchJobs}
         />
       </div>
     </div>
