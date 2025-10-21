@@ -292,6 +292,137 @@ function getLayoutedNodes() {
 export const initialNodes = getLayoutedNodes();
 export const initialEdges = baseEdges;
 
+/**
+ * Recalculate layout for a subset of visible nodes
+ * @param {Array} nodes - All nodes (visible and hidden)
+ * @param {Array} edges - All edges
+ * @returns {Array} - Nodes with recalculated positions
+ */
+export function recalculateLayout(nodes, edges) {
+  // Create a new dagre graph
+  const graph = new dagre.graphlib.Graph();
+  graph.setDefaultEdgeLabel(() => ({}));
+  graph.setGraph({
+    rankdir: 'TB',
+    nodesep: 60,
+    ranksep: 80,
+    edgesep: 20,
+    marginx: 30,
+    marginy: 30,
+  });
+
+  // Only add visible nodes to the graph
+  const visibleNodes = nodes.filter((n) => !n.hidden);
+  visibleNodes.forEach((node) => {
+    graph.setNode(node.id, {
+      width: 220,
+      height: 80,
+    });
+  });
+
+  // Only add edges between visible nodes
+  const visibleNodeIds = new Set(visibleNodes.map((n) => n.id));
+  edges
+    .filter((e) => visibleNodeIds.has(e.source) && visibleNodeIds.has(e.target))
+    .forEach((edge) => {
+      graph.setEdge(edge.source, edge.target);
+    });
+
+  // Calculate layout
+  dagre.layout(graph);
+
+  // Apply calculated positions to visible nodes
+  return nodes.map((node) => {
+    if (node.hidden) return node; // Keep hidden nodes as is
+
+    const nodeWithPosition = graph.node(node.id);
+    if (!nodeWithPosition) return node; // Shouldn't happen, but safety check
+
+    return {
+      ...node,
+      position: {
+        x: nodeWithPosition.x - 110,
+        y: nodeWithPosition.y - 40,
+      },
+    };
+  });
+}
+
+/**
+ * Create bridge edges that skip over hidden nodes
+ * @param {Array} nodes - All nodes
+ * @param {Array} edges - Original edges
+ * @param {Object} nodeToPreferenceMap - Mapping of node IDs to preferences
+ * @returns {Array} - Modified edges with bridges
+ */
+export function createBridgeEdges(nodes, edges, nodeToPreferenceMap) {
+  const hiddenNodeIds = new Set(nodes.filter((n) => n.hidden).map((n) => n.id));
+
+  // Helper to find the next visible node downstream
+  function findNextVisibleNode(startNodeId, visitedEdges = new Set()) {
+    // Find all outgoing edges from this node
+    const outgoingEdges = edges.filter(
+      (e) => e.source === startNodeId && !visitedEdges.has(e.id)
+    );
+
+    for (const edge of outgoingEdges) {
+      visitedEdges.add(edge.id);
+
+      // If target is visible, return it
+      if (!hiddenNodeIds.has(edge.target)) {
+        return { nodeId: edge.target, label: edge.label };
+      }
+
+      // If target is hidden, recurse
+      const downstream = findNextVisibleNode(edge.target, visitedEdges);
+      if (downstream) return downstream;
+    }
+
+    return null;
+  }
+
+  const newEdges = [];
+  const processedConnections = new Set();
+
+  for (const edge of edges) {
+    const sourceHidden = hiddenNodeIds.has(edge.source);
+    const targetHidden = hiddenNodeIds.has(edge.target);
+
+    // If both visible, keep the edge
+    if (!sourceHidden && !targetHidden) {
+      newEdges.push({ ...edge, hidden: false });
+      continue;
+    }
+
+    // If source is visible but target is hidden, create a bridge
+    if (!sourceHidden && targetHidden) {
+      const downstream = findNextVisibleNode(edge.target);
+      if (downstream) {
+        const connectionKey = `${edge.source}->${downstream.nodeId}`;
+        if (!processedConnections.has(connectionKey)) {
+          processedConnections.add(connectionKey);
+          newEdges.push({
+            ...edge,
+            id: `bridge_${edge.source}_${downstream.nodeId}`,
+            target: downstream.nodeId,
+            label: edge.label || '',
+            hidden: false,
+            animated: false,
+          });
+        }
+      }
+      continue;
+    }
+
+    // Hide edges where source is hidden
+    if (sourceHidden) {
+      newEdges.push({ ...edge, hidden: true });
+    }
+  }
+
+  return newEdges;
+}
+
 // React Flow configuration options
 export const reactFlowOptions = {
   fitView: true,

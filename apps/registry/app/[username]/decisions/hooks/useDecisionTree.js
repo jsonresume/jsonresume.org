@@ -10,6 +10,8 @@ import {
   initialEdges,
   nodeStyle,
   NODE_IDS,
+  recalculateLayout,
+  createBridgeEdges,
 } from '../config/decisionTree';
 import { colors } from '../config/designSystem';
 
@@ -29,43 +31,58 @@ export function useDecisionTree(resume, preferences = {}) {
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [matchResult, setMatchResult] = useState(null);
 
-  // Update node visibility based on preferences
+  // Update node visibility and layout based on preferences
   useEffect(() => {
-    setNodes((nds) =>
-      nds.map((node) => {
-        const prefKey = nodeToPreferenceMap[node.id];
+    // Step 1: Mark nodes as hidden based on preferences
+    const nodesWithVisibility = initialNodes.map((node) => {
+      const prefKey = nodeToPreferenceMap[node.id];
 
-        // If this node has a preference mapping, check if it's enabled
-        if (prefKey) {
-          const isEnabled = preferences[prefKey]?.enabled !== false;
-          return {
-            ...node,
-            hidden: !isEnabled,
-          };
-        }
-
-        // Always show root, outcome nodes, and nodes without preference mapping
-        return node;
-      })
-    );
-
-    // Also hide edges connected to hidden nodes
-    setEdges((eds) =>
-      eds.map((edge) => {
-        const sourcePrefKey = nodeToPreferenceMap[edge.source];
-        const targetPrefKey = nodeToPreferenceMap[edge.target];
-
-        const sourceHidden =
-          sourcePrefKey && preferences[sourcePrefKey]?.enabled === false;
-        const targetHidden =
-          targetPrefKey && preferences[targetPrefKey]?.enabled === false;
-
+      // If this node has a preference mapping, check if it's enabled
+      if (prefKey) {
+        const isEnabled = preferences[prefKey]?.enabled !== false;
         return {
-          ...edge,
-          hidden: sourceHidden || targetHidden,
+          ...node,
+          hidden: !isEnabled,
         };
-      })
+      }
+
+      // Always show root, outcome nodes, and nodes without preference mapping
+      return { ...node, hidden: false };
+    });
+
+    // Step 2: Recalculate layout for visible nodes
+    const layoutedNodes = recalculateLayout(nodesWithVisibility, initialEdges);
+
+    // Step 3: Add smooth transition styles
+    const nodesWithTransitions = layoutedNodes.map((node) => ({
+      ...node,
+      style: {
+        ...node.style,
+        transition: 'all 0.3s ease-in-out',
+      },
+    }));
+
+    // Update nodes
+    setNodes(nodesWithTransitions);
+
+    // Step 4: Create bridge edges that skip hidden nodes
+    const bridgedEdges = createBridgeEdges(
+      nodesWithVisibility,
+      initialEdges,
+      nodeToPreferenceMap
     );
+
+    // Add smooth transitions to edges
+    const edgesWithTransitions = bridgedEdges.map((edge) => ({
+      ...edge,
+      style: {
+        ...edge.style,
+        transition: 'all 0.3s ease-in-out',
+      },
+    }));
+
+    // Update edges
+    setEdges(edgesWithTransitions);
   }, [preferences, setNodes, setEdges]);
 
   // Reset all edges and nodes to default state
