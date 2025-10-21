@@ -13,7 +13,7 @@ import {
 } from '../config/decisionTree';
 import { colors } from '../config/designSystem';
 
-export function useDecisionTree(resume) {
+export function useDecisionTree(resume, preferences = {}) {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [matchResult, setMatchResult] = useState(null);
@@ -93,11 +93,16 @@ export function useDecisionTree(resume) {
 
       resetHighlights();
 
-      // Show loading state
+      // Show loading state with animated messages
       setMatchResult({
         outcome: 'loading',
-        bucket: '🤖 AI Analyzing...',
-        reasons: [['Status', 'Sending resume and job to AI for evaluation']],
+        bucket: '🤖 AI is analyzing your match...',
+        reasons: [
+          ['Analyzing Skills', 'Comparing your skills with job requirements'],
+          ['Checking Experience', 'Evaluating years of experience'],
+          ['Reviewing Location', 'Assessing location compatibility'],
+          ['Computing Match Score', 'Calculating overall fit percentage'],
+        ],
         score: null,
       });
 
@@ -146,177 +151,243 @@ export function useDecisionTree(resume) {
     (decisions) => {
       const reasons = [];
       let score = 0;
+      let finalOutcome = 'strongMatch'; // Assume best case, downgrade as needed
+      let failedAtNode = null; // Track where the critical failure happened
 
+      // Collect all evaluation results first
+      const skillsCheck = decisions.checkRequiredSkills;
+      const expCheck = decisions.checkExperience;
+      const workRightsCheck = decisions.checkWorkRights;
+      const locationCheck = decisions.checkLocation;
+      const timezoneCheck = decisions.checkTimezone;
+      const availCheck = decisions.checkAvailability;
+      const salaryCheck = decisions.checkSalary;
+      const bonusCheck = decisions.checkBonusSkills;
+
+      // Build reasons array
+      if (skillsCheck) reasons.push(['Required Skills', skillsCheck.reasoning]);
+      if (expCheck) reasons.push(['Experience', expCheck.reasoning]);
+      if (workRightsCheck)
+        reasons.push(['Work Rights', workRightsCheck.reasoning]);
+      if (locationCheck) reasons.push(['Location', locationCheck.reasoning]);
+      if (timezoneCheck) reasons.push(['Timezone', timezoneCheck.reasoning]);
+      if (availCheck) reasons.push(['Availability', availCheck.reasoning]);
+      if (salaryCheck) reasons.push(['Salary', salaryCheck.reasoning]);
+      if (bonusCheck) reasons.push(['Bonus Skills', bonusCheck.reasoning]);
+
+      // COLOR ALL NODES based on their results
+      if (skillsCheck) {
+        updateNodeColor(NODE_IDS.CORE, skillsCheck.hasAllSkills);
+        if (skillsCheck.hasAllSkills) score += 40;
+      }
+      if (expCheck) {
+        updateNodeColor(NODE_IDS.EXP, expCheck.hasEnoughExperience);
+        if (expCheck.hasEnoughExperience) score += 20;
+      }
+      if (workRightsCheck) {
+        updateNodeColor(NODE_IDS.WR, workRightsCheck.hasWorkRights);
+        if (workRightsCheck.hasWorkRights) score += 8;
+      }
+      if (locationCheck) {
+        updateNodeColor(NODE_IDS.LOC, locationCheck.locationCompatible);
+        if (locationCheck.locationCompatible) score += 8;
+      }
+      if (timezoneCheck) {
+        updateNodeColor(NODE_IDS.TZ, timezoneCheck.timezoneCompatible);
+        if (timezoneCheck.timezoneCompatible) score += 6;
+      }
+      if (availCheck) {
+        updateNodeColor(NODE_IDS.AVAIL, availCheck.availableInTime);
+        if (availCheck.availableInTime) score += 8;
+      }
+      if (salaryCheck) {
+        updateNodeColor(NODE_IDS.SAL, salaryCheck.salaryAligned);
+        if (salaryCheck.salaryAligned) score += 5;
+      }
+      if (bonusCheck) {
+        updateNodeColor(NODE_IDS.BONUS, bonusCheck.hasBonusSkills);
+        if (bonusCheck.hasBonusSkills) score += 5;
+      }
+
+      // Determine outcome and where we fail on the path
+      if (skillsCheck && !skillsCheck.hasAllSkills) {
+        finalOutcome = 'noMatch';
+        failedAtNode = NODE_IDS.CORE;
+      } else if (expCheck && !expCheck.hasEnoughExperience) {
+        finalOutcome = 'noMatch';
+        failedAtNode = NODE_IDS.EXP;
+      } else if (workRightsCheck && !workRightsCheck.hasWorkRights) {
+        finalOutcome = 'noMatch';
+        failedAtNode = NODE_IDS.WR;
+      } else if (
+        locationCheck &&
+        !locationCheck.locationCompatible &&
+        timezoneCheck &&
+        !timezoneCheck.timezoneCompatible
+      ) {
+        finalOutcome = 'noMatch';
+        failedAtNode = NODE_IDS.TZ;
+      } else if (availCheck && !availCheck.availableInTime) {
+        finalOutcome = 'possibleMatch';
+        failedAtNode = NODE_IDS.AVAIL;
+      } else if (salaryCheck && !salaryCheck.salaryAligned) {
+        finalOutcome = 'possibleMatch';
+        failedAtNode = NODE_IDS.SAL;
+      } else if (bonusCheck && !bonusCheck.hasBonusSkills) {
+        finalOutcome = 'possibleMatch';
+        failedAtNode = NODE_IDS.BONUS;
+      }
+
+      // Now animate ONLY the actual path taken
       // Start: Root → Core Skills
       highlightEdge('e_root_core');
 
-      // Check 1: Required Skills (AI)
-      const skillsCheck = decisions.checkRequiredSkills;
+      // Check 1: Required Skills
       if (skillsCheck) {
-        reasons.push(['Required Skills', skillsCheck.reasoning]);
         if (!skillsCheck.hasAllSkills) {
+          // FAILED - end path here
           updateNodeColor(NODE_IDS.CORE, false);
           highlightEdge('e_core_reject_no', colors.outcomes.noMatch.border);
-          setMatchResult({
-            outcome: 'noMatch',
-            bucket: '❌ Not a Match',
-            reasons,
-            score: 0,
-          });
-          return;
-        }
-        updateNodeColor(NODE_IDS.CORE, true);
-        score += 40;
-        highlightEdge('e_core_exp_yes', colors.paths.blue);
-      }
-
-      // Check 2: Experience (AI)
-      const expCheck = decisions.checkExperience;
-      if (expCheck) {
-        reasons.push(['Experience', expCheck.reasoning]);
-        if (!expCheck.hasEnoughExperience) {
-          updateNodeColor(NODE_IDS.EXP, false);
-          highlightEdge('e_exp_reject_no', colors.outcomes.noMatch.border);
-          setMatchResult({
-            outcome: 'noMatch',
-            bucket: '❌ Not a Match',
-            reasons,
-            score,
-          });
-          return;
-        }
-        updateNodeColor(NODE_IDS.EXP, true);
-        score += 20;
-        highlightEdge('e_exp_wr_yes', colors.paths.blue);
-      }
-
-      // Check 3: Work Rights (AI)
-      const workRightsCheck = decisions.checkWorkRights;
-      if (workRightsCheck) {
-        reasons.push(['Work Rights', workRightsCheck.reasoning]);
-        if (!workRightsCheck.hasWorkRights) {
-          updateNodeColor(NODE_IDS.WR, false);
-          highlightEdge('e_wr_reject_no', colors.outcomes.noMatch.border);
-          setMatchResult({
-            outcome: 'noMatch',
-            bucket: '❌ Not a Match',
-            reasons,
-            score,
-          });
-          return;
-        }
-        updateNodeColor(NODE_IDS.WR, true);
-        score += 8;
-        highlightEdge('e_wr_loc_yes', colors.paths.blue);
-      }
-
-      // Check 4: Location (AI)
-      const locationCheck = decisions.checkLocation;
-      if (locationCheck) {
-        reasons.push(['Location', locationCheck.reasoning]);
-
-        if (!locationCheck.locationCompatible) {
-          updateNodeColor(NODE_IDS.LOC, false);
-          // Location failed → check timezone
-          highlightEdge('e_loc_tz_no', colors.paths.orange);
-          const timezoneCheck = decisions.checkTimezone;
-          if (timezoneCheck) {
-            reasons.push(['Timezone', timezoneCheck.reasoning]);
-            if (!timezoneCheck.timezoneCompatible) {
-              updateNodeColor(NODE_IDS.TZ, false);
-              highlightEdge('e_tz_reject_no', colors.outcomes.noMatch.border);
-              setMatchResult({
-                outcome: 'noMatch',
-                bucket: '❌ Not a Match',
-                reasons,
-                score,
-              });
-              return;
-            }
-            updateNodeColor(NODE_IDS.TZ, true);
-            score += 6;
-            highlightEdge('e_tz_avail_yes', colors.paths.blue);
-          }
+          score = 0;
         } else {
-          updateNodeColor(NODE_IDS.LOC, true);
-          score += 8;
-          highlightEdge('e_loc_avail_yes', colors.paths.blue);
+          // PASSED - continue
+          updateNodeColor(NODE_IDS.CORE, true);
+          score += 40;
+          highlightEdge('e_core_exp_yes', colors.paths.blue);
+
+          // Check 2: Experience
+          if (expCheck) {
+            if (!expCheck.hasEnoughExperience) {
+              // FAILED - end path here
+              updateNodeColor(NODE_IDS.EXP, false);
+              highlightEdge('e_exp_reject_no', colors.outcomes.noMatch.border);
+            } else {
+              // PASSED - continue
+              updateNodeColor(NODE_IDS.EXP, true);
+              score += 20;
+              highlightEdge('e_exp_wr_yes', colors.paths.blue);
+
+              // Check 3: Work Rights
+              if (workRightsCheck) {
+                if (!workRightsCheck.hasWorkRights) {
+                  // FAILED - end path here
+                  updateNodeColor(NODE_IDS.WR, false);
+                  highlightEdge(
+                    'e_wr_reject_no',
+                    colors.outcomes.noMatch.border
+                  );
+                } else {
+                  // PASSED - continue
+                  updateNodeColor(NODE_IDS.WR, true);
+                  score += 8;
+                  highlightEdge('e_wr_loc_yes', colors.paths.blue);
+
+                  // Check 4: Location
+                  if (locationCheck) {
+                    if (!locationCheck.locationCompatible) {
+                      // Location FAILED - check timezone
+                      updateNodeColor(NODE_IDS.LOC, false);
+                      highlightEdge('e_loc_tz_no', colors.paths.orange);
+
+                      if (timezoneCheck) {
+                        if (!timezoneCheck.timezoneCompatible) {
+                          // Timezone FAILED - end path here
+                          updateNodeColor(NODE_IDS.TZ, false);
+                          highlightEdge(
+                            'e_tz_reject_no',
+                            colors.outcomes.noMatch.border
+                          );
+                        } else {
+                          // Timezone PASSED - continue to availability
+                          updateNodeColor(NODE_IDS.TZ, true);
+                          score += 6;
+                          highlightEdge('e_tz_avail_yes', colors.paths.blue);
+                          animateRestOfPath();
+                        }
+                      }
+                    } else {
+                      // Location PASSED - skip timezone, go to availability
+                      updateNodeColor(NODE_IDS.LOC, true);
+                      score += 8;
+                      highlightEdge('e_loc_avail_yes', colors.paths.blue);
+                      animateRestOfPath();
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
 
-      // Check 5: Availability (AI)
-      const availCheck = decisions.checkAvailability;
-      if (availCheck) {
-        reasons.push(['Availability', availCheck.reasoning]);
-        if (!availCheck.availableInTime) {
-          updateNodeColor(NODE_IDS.AVAIL, false);
-          highlightEdge(
-            'e_avail_possible_no',
-            colors.outcomes.possibleMatch.border
-          );
-          setMatchResult({
-            outcome: 'possibleMatch',
-            bucket: '🟡 Possible Match',
-            reasons,
-            score,
-          });
-          return;
+      // Helper function for the rest of the path after location/timezone
+      function animateRestOfPath() {
+        // Check 5: Availability
+        if (availCheck) {
+          if (!availCheck.availableInTime) {
+            // FAILED - end as possible match
+            updateNodeColor(NODE_IDS.AVAIL, false);
+            highlightEdge(
+              'e_avail_possible_no',
+              colors.outcomes.possibleMatch.border
+            );
+          } else {
+            // PASSED - continue
+            updateNodeColor(NODE_IDS.AVAIL, true);
+            score += 8;
+            highlightEdge('e_avail_sal_yes', colors.paths.blue);
+
+            // Check 6: Salary
+            if (salaryCheck) {
+              if (!salaryCheck.salaryAligned) {
+                // FAILED - end as possible match
+                updateNodeColor(NODE_IDS.SAL, false);
+                highlightEdge(
+                  'e_sal_possible_no',
+                  colors.outcomes.possibleMatch.border
+                );
+              } else {
+                // PASSED - continue
+                updateNodeColor(NODE_IDS.SAL, true);
+                score += 5;
+                highlightEdge('e_sal_bonus_yes', colors.paths.blue);
+
+                // Check 7: Bonus Skills
+                if (bonusCheck) {
+                  if (!bonusCheck.hasBonusSkills) {
+                    // FAILED - end as possible match
+                    updateNodeColor(NODE_IDS.BONUS, false);
+                    highlightEdge(
+                      'e_bonus_possible_no',
+                      colors.outcomes.possibleMatch.border
+                    );
+                  } else {
+                    // PASSED - strong match!
+                    updateNodeColor(NODE_IDS.BONUS, true);
+                    score += 5;
+                    highlightEdge(
+                      'e_bonus_strong_yes',
+                      colors.outcomes.strongMatch.border
+                    );
+                  }
+                }
+              }
+            }
+          }
         }
-        updateNodeColor(NODE_IDS.AVAIL, true);
-        score += 8;
-        highlightEdge('e_avail_sal_yes', colors.paths.blue);
       }
 
-      // Check 6: Salary (AI)
-      const salaryCheck = decisions.checkSalary;
-      if (salaryCheck) {
-        reasons.push(['Salary', salaryCheck.reasoning]);
-        if (!salaryCheck.salaryAligned) {
-          updateNodeColor(NODE_IDS.SAL, false);
-          highlightEdge(
-            'e_sal_possible_no',
-            colors.outcomes.possibleMatch.border
-          );
-          setMatchResult({
-            outcome: 'possibleMatch',
-            bucket: '🟡 Possible Match',
-            reasons,
-            score,
-          });
-          return;
-        }
-        updateNodeColor(NODE_IDS.SAL, true);
-        score += 5;
-        highlightEdge('e_sal_bonus_yes', colors.paths.blue);
-      }
+      // Determine final result
+      const bucketText =
+        finalOutcome === 'strongMatch'
+          ? '✅ Strong Match'
+          : finalOutcome === 'possibleMatch'
+          ? '🟡 Possible Match'
+          : '❌ Not a Match';
 
-      // Check 7: Bonus Skills (AI)
-      const bonusCheck = decisions.checkBonusSkills;
-      if (bonusCheck) {
-        reasons.push(['Bonus Skills', bonusCheck.reasoning]);
-        if (!bonusCheck.hasBonusSkills) {
-          updateNodeColor(NODE_IDS.BONUS, false);
-          highlightEdge(
-            'e_bonus_possible_no',
-            colors.outcomes.possibleMatch.border
-          );
-          setMatchResult({
-            outcome: 'possibleMatch',
-            bucket: '🟡 Possible Match',
-            reasons,
-            score,
-          });
-          return;
-        }
-        updateNodeColor(NODE_IDS.BONUS, true);
-        score += 5;
-        highlightEdge('e_bonus_strong_yes', colors.outcomes.strongMatch.border);
-      }
-
-      // Strong Match!
       setMatchResult({
-        outcome: 'strongMatch',
-        bucket: '✅ Strong Match',
+        outcome: finalOutcome,
+        bucket: bucketText,
         reasons,
         score: Math.min(100, score),
       });

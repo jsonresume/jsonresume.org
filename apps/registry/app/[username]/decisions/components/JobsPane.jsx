@@ -1,9 +1,12 @@
 /**
  * JobsPane Component
- * Right pane - displays ranked job matches
+ * Right pane - displays ranked job matches or detailed job view
  */
 
 'use client';
+
+import { useState } from 'react';
+import { JobDetail } from './JobDetail';
 
 // Helper function to safely extract location string
 function getLocationString(location) {
@@ -16,7 +19,45 @@ function getLocationString(location) {
   return parts || 'Location TBD';
 }
 
-export function JobsPane({ jobs, selectedJob, onSelectJob, loading }) {
+export function JobsPane({
+  jobs,
+  selectedJob,
+  onSelectJob,
+  loading,
+  matchResult,
+  user,
+  onDecision,
+}) {
+  const [viewMode, setViewMode] = useState('list'); // 'list' or 'detail'
+
+  // Handle job selection
+  const handleSelectJob = (job) => {
+    onSelectJob(job);
+    setViewMode('detail');
+  };
+
+  // Handle back to list
+  const handleBackToList = () => {
+    setViewMode('list');
+  };
+
+  // Show detail view if a job is selected and in detail mode
+  if (viewMode === 'detail' && selectedJob) {
+    return (
+      <div className="h-full overflow-hidden">
+        <JobDetail
+          job={selectedJob}
+          matchResult={matchResult}
+          onBack={handleBackToList}
+          user={user}
+          onDecision={onDecision}
+        />
+      </div>
+    );
+  }
+
+  // Check if we're loading
+  const isEvaluating = matchResult?.outcome === 'loading';
   if (loading) {
     return (
       <div className="h-full bg-white rounded-2xl shadow-md p-6">
@@ -43,6 +84,15 @@ export function JobsPane({ jobs, selectedJob, onSelectJob, loading }) {
 
   return (
     <div className="h-full bg-white rounded-2xl shadow-md p-6 flex flex-col overflow-hidden">
+      {/* CSS for animations */}
+      <style jsx>{`
+        @keyframes spin {
+          to {
+            transform: rotate(360deg);
+          }
+        }
+      `}</style>
+
       {/* Header */}
       <header className="mb-4 pb-4 border-b border-slate-200">
         <h2 className="text-lg font-semibold text-slate-900">
@@ -62,13 +112,23 @@ export function JobsPane({ jobs, selectedJob, onSelectJob, loading }) {
           return (
             <button
               key={job.id}
-              onClick={() => onSelectJob(job)}
-              className={`w-full text-left p-3 rounded-xl border transition-all ${
-                isSelected
+              onClick={() => handleSelectJob(job)}
+              className={`relative w-full text-left p-3 rounded-xl border transition-all ${
+                isSelected && isEvaluating
+                  ? 'bg-gradient-to-br from-blue-50 to-purple-50 border-blue-300 shadow-md animate-pulse'
+                  : isSelected
                   ? 'bg-slate-100 border-slate-300 shadow-sm'
                   : 'bg-white border-slate-200 hover:bg-slate-50 hover:border-slate-300'
               }`}
             >
+              {isSelected && isEvaluating && (
+                <div className="absolute top-2 right-2">
+                  <div
+                    className="w-4 h-4 border-2 border-blue-300 border-t-blue-600 rounded-full"
+                    style={{ animation: 'spin 1s linear infinite' }}
+                  />
+                </div>
+              )}
               {/* Title and Score */}
               <div className="flex items-start justify-between gap-2 mb-2">
                 <div className="flex-1 min-w-0">

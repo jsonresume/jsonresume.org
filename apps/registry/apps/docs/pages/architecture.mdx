@@ -1,0 +1,47 @@
+# Architecture
+
+JSON Resume platform architecture overview.
+
+## System Components
+
+### Registry App
+
+The main Next.js application (`apps/registry`) handles:
+
+- Resume rendering and theming
+- GitHub Gist integration
+- Job board UI
+- API endpoints
+
+### Job Processing Pipeline
+
+Automated system for scraping and processing HN jobs:
+
+- **Scraping**: Fetch jobs from HN API
+- **AI Processing**: Parse with OpenAI GPT-5-mini
+- **Vectorization**: Create embeddings with Pinecone
+- **Automation**: GitHub Actions daily workflow
+
+See the [Job Board System](/jobs) documentation for details.
+
+### Theme System
+
+Modular theme system for customizable resume rendering:
+
+- `packages/jsonresume-theme-*` - Individual themes
+- Server-side rendering with Next.js
+- Support for custom themes
+
+## Technology Stack
+
+- **Framework**: Next.js 14 (App Router)
+- **Database**: Supabase PostgreSQL
+- **AI**: OpenAI GPT-5-mini (Vercel AI SDK)
+- **Vector Search**: Pinecone
+- **Deployment**: Vercel
+- **Monorepo**: Turborepo with pnpm
+
+## More Documentation Coming Soon
+
+This page is under construction. For now, explore the codebase at:
+[github.com/jsonresume/jsonresume.org](https://github.com/jsonresume/jsonresume.org)

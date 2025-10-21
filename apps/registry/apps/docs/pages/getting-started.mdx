@@ -1,0 +1,135 @@
+# Getting Started
+
+Get up and running with JSON Resume in minutes.
+
+## Installation
+
+```bash
+# Install the JSON Resume CLI globally
+npm install -g resume-cli
+
+# Or use npx (no installation required)
+npx resume-cli
+```
+
+## Creating Your First Resume
+
+### 1. Initialize
+
+Create a new resume.json file:
+
+```bash
+resume init
+```
+
+This will create a resume.json file with sample data.
+
+### 2. Edit Your Resume
+
+Open `resume.json` and update it with your information. Here's the structure:
+
+```json
+{
+  "basics": {
+    "name": "Your Name",
+    "label": "Your Title",
+    "email": "your.email@example.com",
+    "phone": "(555) 123-4567",
+    "url": "https://yourwebsite.com",
+    "summary": "A brief summary about you...",
+    "location": {
+      "city": "Your City",
+      "countryCode": "US",
+      "region": "California"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "yourusername",
+        "url": "https://github.com/yourusername"
+      }
+    ]
+  },
+  "work": [],
+  "education": [],
+  "skills": [],
+  "projects": [],
+  "awards": [],
+  "publications": [],
+  "volunteer": [],
+  "languages": [],
+  "interests": [],
+  "references": []
+}
+```
+
+### 3. Preview
+
+Preview your resume:
+
+```bash
+resume serve
+```
+
+This will start a local server and open your resume in your browser.
+
+### 4. Export
+
+Export to PDF or HTML:
+
+```bash
+# Export to PDF
+resume export resume.pdf
+
+# Export to HTML
+resume export resume.html
+```
+
+## Publishing Your Resume
+
+### Using GitHub Gist
+
+1. Create a new **public** gist at [gist.github.com](https://gist.github.com)
+2. Name the file `resume.json`
+3. Paste your resume data
+4. Save the gist
+5. Your resume will be available at `https://registry.jsonresume.org/{your-github-username}`
+
+### Example
+
+If your GitHub username is `johndoe`, your resume will be at:
+
+```
+https://registry.jsonresume.org/johndoe
+```
+
+## Themes
+
+JSON Resume supports multiple themes. To use a different theme:
+
+```bash
+# List available themes
+resume serve --theme [theme-name]
+
+# Example with different themes
+resume serve --theme elegant
+resume serve --theme professional
+resume serve --theme modern
+```
+
+## Validation
+
+Validate your resume against the JSON Resume schema:
+
+```bash
+resume validate
+```
+
+This will check for required fields and proper formatting.
+
+## Next Steps
+
+- Explore the [API Reference](/api) to learn about programmatic access
+- Learn about the [Job Board System](/jobs) and AI-powered matching
+- Read the [Architecture](/architecture) to understand how everything works
+- See [Contributing](/contributing) to help improve JSON Resume

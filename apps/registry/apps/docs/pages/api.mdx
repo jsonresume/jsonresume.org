@@ -1,0 +1,53 @@
+# API Reference
+
+Documentation for JSON Resume API endpoints.
+
+## Base URL
+
+```
+https://registry.jsonresume.org
+```
+
+## Endpoints
+
+### Get Resume
+
+```http
+GET /{username}
+```
+
+Fetch a user's resume from their GitHub Gist.
+
+**Parameters:**
+
+- `username` (path) - GitHub username
+
+**Example:**
+
+```bash
+curl https://registry.jsonresume.org/thomasdavis
+```
+
+### Theme Preview
+
+```http
+GET /{username}?theme={theme-name}
+```
+
+Render resume with a specific theme.
+
+**Parameters:**
+
+- `username` (path) - GitHub username
+- `theme` (query) - Theme name (e.g., "professional", "elegant")
+
+**Example:**
+
+```bash
+curl https://registry.jsonresume.org/thomasdavis?theme=professional
+```
+
+## More Documentation Coming Soon
+
+This page is under construction. For now, explore the codebase at:
+[github.com/jsonresume/jsonresume.org](https://github.com/jsonresume/jsonresume.org)

@@ -14,7 +14,7 @@ export async function POST(request) {
 
   try {
     const body = await request.json();
-    const { username, limit = 100 } = body;
+    const { username, userId, limit = 100 } = body;
 
     const supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
 
@@ -36,6 +36,28 @@ export async function POST(request) {
     const { data: jobs, error } = await query;
 
     if (error) throw error;
+
+    // If userId provided, filter out jobs the user has already decided on
+    if (userId && jobs && jobs.length > 0) {
+      const jobIds = jobs.map((job) => job.id);
+
+      // Get all decisions for this user on these jobs
+      const { data: decisions, error: decisionsError } = await supabase
+        .from('job_decisions')
+        .select('job_id')
+        .eq('user_id', userId)
+        .in('job_id', jobIds);
+
+      if (decisionsError) throw decisionsError;
+
+      // Create a Set of decided job IDs for fast lookup
+      const decidedJobIds = new Set(decisions?.map((d) => d.job_id) || []);
+
+      // Filter out jobs that have been decided on
+      const undecidedJobs = jobs.filter((job) => !decidedJobIds.has(job.id));
+
+      return NextResponse.json(undecidedJobs);
+    }
 
     return NextResponse.json(jobs || []);
   } catch (error) {
