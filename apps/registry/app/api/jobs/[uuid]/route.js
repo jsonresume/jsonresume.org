@@ -14,11 +14,11 @@ export const dynamic = 'force-dynamic';
 function stripEmbeddings(job) {
   if (!job) return job;
   const {
-    embedding,
-    embedding_v2,
-    embedding_v3,
-    embedding_v4,
-    embedding_v5,
+    embedding: _embedding,
+    embedding_v2: _embedding_v2,
+    embedding_v3: _embedding_v3,
+    embedding_v4: _embedding_v4,
+    embedding_v5: _embedding_v5,
     ...jobWithoutEmbeddings
   } = job;
   return jobWithoutEmbeddings;

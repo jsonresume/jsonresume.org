@@ -10,11 +10,11 @@ const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
 function stripEmbeddings(jobs) {
   return jobs.map((job) => {
     const {
-      embedding,
-      embedding_v2,
-      embedding_v3,
-      embedding_v4,
-      embedding_v5,
+      embedding: _embedding,
+      embedding_v2: _embedding_v2,
+      embedding_v3: _embedding_v3,
+      embedding_v4: _embedding_v4,
+      embedding_v5: _embedding_v5,
       ...jobWithoutEmbeddings
     } = job;
     return jobWithoutEmbeddings;
@@ -32,7 +32,7 @@ export async function POST(request) {
 
   try {
     const body = await request.json();
-    const { username, userId, limit = 100 } = body;
+    const { username: _username, userId, limit = 100 } = body;
 
     const supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
 

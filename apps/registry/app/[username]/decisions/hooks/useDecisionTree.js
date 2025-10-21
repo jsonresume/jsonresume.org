@@ -210,7 +210,7 @@ export function useDecisionTree(resume, preferences = {}) {
         });
       }
     },
-    [resetHighlights, preferences]
+    [resetHighlights, preferences, animateAIPath]
   );
 
   // Animate decision tree path based on AI results
@@ -219,7 +219,7 @@ export function useDecisionTree(resume, preferences = {}) {
       const reasons = [];
       let score = 0;
       let finalOutcome = 'strongMatch'; // Assume best case, downgrade as needed
-      let failedAtNode = null; // Track where the critical failure happened
+      let __failedAtNode = null; // Track where the critical failure happened (unused for now)
 
       // Collect all evaluation results first
       const skillsCheck = decisions.checkRequiredSkills;
@@ -279,16 +279,16 @@ export function useDecisionTree(resume, preferences = {}) {
       if (skillsCheck && matchPct < 0.5) {
         // Less than 50% skill match = instant reject
         finalOutcome = 'noMatch';
-        failedAtNode = NODE_IDS.CORE;
+        _failedAtNode = NODE_IDS.CORE;
       } else if (skillsCheck && matchPct >= 0.5 && matchPct < 0.8) {
         // 50-80% skill match = downgrade to possible match later
         finalOutcome = 'possibleMatch';
       } else if (expCheck && !expCheck.hasEnoughExperience) {
         finalOutcome = 'noMatch';
-        failedAtNode = NODE_IDS.EXP;
+        _failedAtNode = NODE_IDS.EXP;
       } else if (workRightsCheck && !workRightsCheck.hasWorkRights) {
         finalOutcome = 'noMatch';
-        failedAtNode = NODE_IDS.WR;
+        _failedAtNode = NODE_IDS.WR;
       } else if (
         locationCheck &&
         !locationCheck.locationCompatible &&
@@ -296,13 +296,13 @@ export function useDecisionTree(resume, preferences = {}) {
         !timezoneCheck.timezoneCompatible
       ) {
         finalOutcome = 'noMatch';
-        failedAtNode = NODE_IDS.TZ;
+        _failedAtNode = NODE_IDS.TZ;
       } else if (availCheck && !availCheck.availableInTime) {
         finalOutcome = 'possibleMatch';
-        failedAtNode = NODE_IDS.AVAIL;
+        _failedAtNode = NODE_IDS.AVAIL;
       } else if (salaryCheck && !salaryCheck.salaryAligned) {
         finalOutcome = 'possibleMatch';
-        failedAtNode = NODE_IDS.SAL;
+        _failedAtNode = NODE_IDS.SAL;
       }
 
       // Now animate ONLY the actual path taken
