@@ -8,7 +8,7 @@ import { NextResponse } from 'next/server';
 const tools = {
   checkRequiredSkills: tool({
     description:
-      "Evaluate the candidate's skill match percentage with required job skills. Calculate what percentage of required skills they have. Be realistic - candidates can learn missing skills.",
+      "Evaluate the candidate's skill match percentage with required job skills. Calculate what percentage of required skills they have. IMPORTANT: Search the ENTIRE resume including work.highlights, work.summary, projects.highlights, and education - not just the skills array. Skills and technologies can be mentioned anywhere. Be realistic - candidates can learn missing skills.",
     inputSchema: z.object({
       matchPercentage: z
         .number()
@@ -216,9 +216,10 @@ IMPORTANT INSTRUCTIONS:
 - For criteria marked as DISABLED, still call the tool but be lenient in your evaluation
 - For criteria with custom values (e.g., salary ranges), use those values instead of the job's requirements
 - Provide comprehensive feedback on all dimensions to give the candidate a complete picture
+- CRITICAL: When checking for skills, search the ENTIRE resume including work.highlights, work.summary, projects, education, not just the skills array. Skills can be mentioned anywhere in the resume.
 
 Call ALL of these tools in order:
-1. checkRequiredSkills - Calculate skill match percentage (0.0-1.0). >=0.8 excellent, >=0.5 acceptable, <0.5 insufficient. ${
+1. checkRequiredSkills - Calculate skill match percentage (0.0-1.0). Search the ENTIRE resume (skills, work experience, projects, highlights) for evidence of each required skill. >=0.8 excellent, >=0.5 acceptable, <0.5 insufficient. ${
       preferences.skills?.enabled === false
         ? '(User disabled - be very lenient)'
         : ''
