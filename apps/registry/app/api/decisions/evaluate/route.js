@@ -116,20 +116,6 @@ const tools = {
       reasoning: z.string().describe('Brief explanation of the decision'),
     }),
   }),
-
-  checkBonusSkills: tool({
-    description:
-      'Check for nice-to-have skills that make the candidate stand out.',
-    inputSchema: z.object({
-      hasBonusSkills: z
-        .boolean()
-        .describe('True if candidate has significant bonus skills'),
-      matchedSkills: z
-        .array(z.string())
-        .describe('List of matched bonus skills'),
-      reasoning: z.string().describe('Brief explanation of the decision'),
-    }),
-  }),
 };
 
 export async function POST(request) {
@@ -246,11 +232,6 @@ Call ALL of these tools in order:
         ? '(User disabled - be lenient)'
         : preferences.salary?.value?.min
         ? `(User expects ${preferences.salary.value.min}-${preferences.salary.value.max})`
-        : ''
-    }
-8. checkBonusSkills - Does candidate have valuable bonus skills? ${
-      preferences.skills?.enabled === false
-        ? '(User disabled - be lenient)'
         : ''
     }
 

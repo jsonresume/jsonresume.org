@@ -143,12 +143,6 @@ const baseNodes = [
     type: 'default',
   },
   {
-    id: NODE_IDS.BONUS,
-    data: { label: 'Bonus skill overlap?' },
-    style: nodeStyle(),
-    type: 'default',
-  },
-  {
     id: NODE_IDS.STRONG,
     data: { label: '✅ Strong Match' },
     style: nodeStyle('success'),
@@ -241,18 +235,14 @@ const baseEdges = [
     'No (maybe later)'
   ),
 
-  // Salary → Bonus or Possible
-  createEdge('e_sal_bonus_yes', NODE_IDS.SAL, NODE_IDS.BONUS, 'Yes'),
+  // Salary → Strong or Possible
+  createEdge('e_sal_strong_yes', NODE_IDS.SAL, NODE_IDS.STRONG, 'Yes'),
   createEdge(
     'e_sal_possible_no',
     NODE_IDS.SAL,
     NODE_IDS.POSSIBLE,
     'No (negotiate?)'
   ),
-
-  // Bonus → Strong or Possible
-  createEdge('e_bonus_strong_yes', NODE_IDS.BONUS, NODE_IDS.STRONG, 'Yes'),
-  createEdge('e_bonus_possible_no', NODE_IDS.BONUS, NODE_IDS.POSSIBLE, 'No'),
 ];
 
 // Apply dagre layout to position nodes

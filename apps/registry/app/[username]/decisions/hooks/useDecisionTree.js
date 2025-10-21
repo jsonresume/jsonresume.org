@@ -22,7 +22,6 @@ const nodeToPreferenceMap = {
   [NODE_IDS.LOC]: 'location',
   [NODE_IDS.TZ]: 'timezone',
   [NODE_IDS.SAL]: 'salary',
-  [NODE_IDS.BONUS]: 'skills', // Bonus skills uses same preference as core skills
   // WR (work rights) and AVAIL (availability) always enabled
 };
 
@@ -230,7 +229,6 @@ export function useDecisionTree(resume, preferences = {}) {
       const timezoneCheck = decisions.checkTimezone;
       const availCheck = decisions.checkAvailability;
       const salaryCheck = decisions.checkSalary;
-      const bonusCheck = decisions.checkBonusSkills;
 
       // Build reasons array
       if (skillsCheck) reasons.push(['Required Skills', skillsCheck.reasoning]);
@@ -241,7 +239,6 @@ export function useDecisionTree(resume, preferences = {}) {
       if (timezoneCheck) reasons.push(['Timezone', timezoneCheck.reasoning]);
       if (availCheck) reasons.push(['Availability', availCheck.reasoning]);
       if (salaryCheck) reasons.push(['Salary', salaryCheck.reasoning]);
-      if (bonusCheck) reasons.push(['Bonus Skills', bonusCheck.reasoning]);
 
       // COLOR ALL NODES based on their results
       if (skillsCheck) {
@@ -276,10 +273,6 @@ export function useDecisionTree(resume, preferences = {}) {
         updateNodeColor(NODE_IDS.SAL, salaryCheck.salaryAligned);
         if (salaryCheck.salaryAligned) score += 5;
       }
-      if (bonusCheck) {
-        updateNodeColor(NODE_IDS.BONUS, bonusCheck.hasBonusSkills);
-        if (bonusCheck.hasBonusSkills) score += 5;
-      }
 
       // Determine outcome and where we fail on the path
       const matchPct = skillsCheck?.matchPercentage || 0;
@@ -310,9 +303,6 @@ export function useDecisionTree(resume, preferences = {}) {
       } else if (salaryCheck && !salaryCheck.salaryAligned) {
         finalOutcome = 'possibleMatch';
         failedAtNode = NODE_IDS.SAL;
-      } else if (bonusCheck && !bonusCheck.hasBonusSkills) {
-        finalOutcome = 'possibleMatch';
-        failedAtNode = NODE_IDS.BONUS;
       }
 
       // Now animate ONLY the actual path taken
@@ -498,27 +488,11 @@ export function useDecisionTree(resume, preferences = {}) {
                 // PASSED - continue
                 updateNodeColor(NODE_IDS.SAL, true);
                 score += 5;
-                highlightEdge('e_sal_bonus_yes', colors.paths.blue);
-
-                // Check 7: Bonus Skills
-                if (bonusCheck) {
-                  if (!bonusCheck.hasBonusSkills) {
-                    // FAILED - end as possible match
-                    updateNodeColor(NODE_IDS.BONUS, false);
-                    highlightEdge(
-                      'e_bonus_possible_no',
-                      colors.outcomes.possibleMatch.border
-                    );
-                  } else {
-                    // PASSED - strong match!
-                    updateNodeColor(NODE_IDS.BONUS, true);
-                    score += 5;
-                    highlightEdge(
-                      'e_bonus_strong_yes',
-                      colors.outcomes.strongMatch.border
-                    );
-                  }
-                }
+                // PASSED salary - strong match!
+                highlightEdge(
+                  'e_sal_strong_yes',
+                  colors.outcomes.strongMatch.border
+                );
               }
             }
           }
