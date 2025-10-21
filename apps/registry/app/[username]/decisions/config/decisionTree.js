@@ -27,7 +27,7 @@ const x = (i) => 320 * i;
 const y = (i) => 100 * i;
 
 // Node style generators
-function nodeStyle(kind = 'default') {
+export function nodeStyle(kind = 'default') {
   const base = {
     padding: '12px 16px',
     borderRadius: '14px',
