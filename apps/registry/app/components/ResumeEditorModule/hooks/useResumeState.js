@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { logger } from '@/lib/logger';
 import { defaultResume } from '../data/defaultResume';
 
@@ -29,10 +29,15 @@ export const useResumeState = (initialResume) => {
 
   const [hasChanges, setHasChanges] = useState(false);
 
+  // Memoize the stringified resume to avoid repeated JSON.stringify calls
+  const currentResumeStr = useMemo(
+    () => JSON.stringify(resume, null, 2),
+    [resume]
+  );
+
   useEffect(() => {
-    const currentResumeStr = JSON.stringify(resume, null, 2);
     setHasChanges(currentResumeStr !== originalResume);
-  }, [resume, originalResume]);
+  }, [currentResumeStr, originalResume]);
 
   return {
     resume,

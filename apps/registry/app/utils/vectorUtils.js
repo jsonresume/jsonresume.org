@@ -5,6 +5,7 @@
 
 /**
  * Compute cosine similarity between two vectors
+ * Optimized to calculate dot product and magnitudes in a single pass
  * @param {number[]} a - First vector
  * @param {number[]} b - Second vector
  * @returns {number} Similarity score between 0 and 1
@@ -12,9 +13,22 @@
 export const cosineSimilarity = (a, b) => {
   if (!Array.isArray(a) || !Array.isArray(b) || a.length !== b.length) return 0;
 
-  const dotProduct = a.reduce((sum, _, i) => sum + a[i] * b[i], 0);
-  const magnitudeA = Math.sqrt(a.reduce((sum, val) => sum + val * val, 0));
-  const magnitudeB = Math.sqrt(b.reduce((sum, val) => sum + val * val, 0));
+  // Single pass calculation for better performance
+  let dotProduct = 0;
+  let magnitudeA = 0;
+  let magnitudeB = 0;
+
+  for (let i = 0; i < a.length; i++) {
+    dotProduct += a[i] * b[i];
+    magnitudeA += a[i] * a[i];
+    magnitudeB += b[i] * b[i];
+  }
+
+  magnitudeA = Math.sqrt(magnitudeA);
+  magnitudeB = Math.sqrt(magnitudeB);
+
+  // Avoid division by zero
+  if (magnitudeA === 0 || magnitudeB === 0) return 0;
 
   return dotProduct / (magnitudeA * magnitudeB);
 };
@@ -35,15 +49,28 @@ export const normalizeVector = (vector) => {
 
 /**
  * Calculate average embedding from multiple embeddings
+ * Optimized to reduce memory allocations
  * @param {number[][]} embeddings - Array of embedding vectors
  * @returns {number[]|null} Average embedding or null if invalid
  */
 export const getAverageEmbedding = (embeddings) => {
   if (!Array.isArray(embeddings) || embeddings.length === 0) return null;
 
-  const sum = embeddings.reduce((acc, curr) => {
-    return acc.map((val, i) => val + curr[i]);
-  }, new Array(embeddings[0].length).fill(0));
+  const length = embeddings[0].length;
+  const sum = new Array(length).fill(0);
+  const count = embeddings.length;
 
-  return sum.map((val) => val / embeddings.length);
+  // Single loop through all embeddings
+  for (let i = 0; i < count; i++) {
+    for (let j = 0; j < length; j++) {
+      sum[j] += embeddings[i][j];
+    }
+  }
+
+  // Divide by count to get average
+  for (let j = 0; j < length; j++) {
+    sum[j] /= count;
+  }
+
+  return sum;
 };
