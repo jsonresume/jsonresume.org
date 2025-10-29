@@ -1,4 +1,4 @@
 packages:
   - 'apps/*'
   - 'packages/*'
-  - 'themes/*'
+  - 'packages/themes/*'
