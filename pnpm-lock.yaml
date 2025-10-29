@@ -669,10 +669,20 @@ importers:
         version: 5.9.2
 
   packages/resume-core:
+    dependencies:
+      styled-components:
+        specifier: ^6.1.11
+        version: 6.1.11(react-dom@18.3.1)(react@18.3.1)
     devDependencies:
       '@repo/eslint-config-custom':
         specifier: workspace:^
         version: link:../eslint-config-custom
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.3.1
+        version: 18.3.1(react@18.3.1)
       typescript:
         specifier: ^5
         version: 5.9.2
@@ -27276,7 +27286,7 @@ packages:
     hasBin: true
     dependencies:
       cac: 6.7.14
-      debug: 4.4.1
+      debug: 4.4.3(supports-color@5.5.0)
       es-module-lexer: 1.7.0
       pathe: 2.0.3
       vite: 5.4.21(@types/node@20.19.9)

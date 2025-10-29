@@ -21,10 +21,18 @@
   },
   "devDependencies": {
     "@repo/eslint-config-custom": "workspace:^",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "typescript": "^5",
     "vitest": "^2"
   },
-  "peerDependencies": {},
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "dependencies": {
+    "styled-components": "^6.1.11"
+  },
   "keywords": [
     "resume",
     "cv",

@@ -1,18 +1,19 @@
 /**
  * @resume/core
- * Framework-agnostic resume components core
- * Design tokens, primitives, and utilities for building ATS-friendly resume themes
+ * React component library for building ATS-friendly resume themes
+ * Design tokens, primitives, and utilities with JSX
  */
 
-// Export all primitives
+// Export all React primitives
 export {
   Section,
   SectionTitle,
   ListItem,
   DateRange,
+  formatDateRange,
   Badge,
   BadgeList,
-} from './primitives/index.js';
+} from './primitives/index.jsx';
 
 // Export design tokens
 export {
