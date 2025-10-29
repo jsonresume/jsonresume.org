@@ -159,7 +159,7 @@ const SkillsGrid = styled.div`
 `;
 
 const SkillCategory = styled.div`
-  padding: 18px;
+  padding: 20px;
   background: white;
   border-radius: 4px;
   border-left: 3px solid #2f4f4f;

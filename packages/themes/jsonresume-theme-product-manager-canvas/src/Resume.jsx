@@ -46,12 +46,12 @@ const Summary = styled.p`
 `;
 
 const StyledSectionTitle = styled(SectionTitle)`
-  font-size: 24px;
-  font-weight: 700;
+  font-size: 26px;
+  font-weight: 800;
   color: #111827;
   margin: 48px 0 28px 0;
   padding-bottom: 12px;
-  border-bottom: 2px solid #7c3aed;
+  border-bottom: 3px solid #7c3aed;
 
   &:first-child {
     margin-top: 0;
@@ -63,7 +63,7 @@ const WorkItem = styled.div`
   padding: 28px;
   background: #fafafa;
   border-radius: 8px;
-  border-left: 4px solid #7c3aed;
+  border-left: 6px solid #7c3aed;
 
   &:last-child {
     margin-bottom: 0;
@@ -112,12 +112,12 @@ const WorkSummary = styled.p`
 `;
 
 const ImpactLabel = styled.div`
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 800;
   color: #7c3aed;
-  margin: 20px 0 12px;
+  margin: 24px 0 14px;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.2px;
 `;
 
 const Highlights = styled.ul`
@@ -138,7 +138,7 @@ const EducationItem = styled.div`
   padding: 20px;
   background: #fafafa;
   border-radius: 8px;
-  border-left: 3px solid #7c3aed;
+  border-left: 5px solid #7c3aed;
 
   &:last-child {
     margin-bottom: 0;
@@ -175,13 +175,20 @@ const SkillsGrid = styled.div`
 `;
 
 const SkillCard = styled.div`
-  padding: 18px;
-  background: #fafafa;
-  border-radius: 6px;
-  border-left: 3px solid #7c3aed;
+  padding: 16px 18px;
+  background: white;
+  border-radius: 8px;
+  border: 2px solid #e9d5ff;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: #7c3aed;
+    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.1);
+  }
 
   @media print {
-    background: #fafafa;
+    background: white;
+    border-color: #e9d5ff;
   }
 `;
 

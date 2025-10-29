@@ -37,6 +37,14 @@ const Label = styled.div`
   font-weight: 500;
 `;
 
+const StyledContactInfo = styled(ContactInfo)`
+  font-size: 15px;
+
+  a {
+    font-size: 15px;
+  }
+`;
+
 const Summary = styled.p`
   font-size: 15px;
   line-height: 1.7;
@@ -50,7 +58,7 @@ const StyledSectionTitle = styled(SectionTitle)`
   color: #111827;
   margin: 40px 0 24px 0;
   padding-bottom: 8px;
-  border-bottom: 2px solid #0066cc;
+  border-bottom: 3px solid #0066cc;
 `;
 
 const WorkItem = styled.div`
@@ -150,7 +158,7 @@ const SkillsGrid = styled.div`
 
 const SkillCategory = styled.div`
   padding: 16px;
-  background: #f9fafb;
+  background: #f3f4f6;
   border-radius: 6px;
   border-left: 3px solid #0066cc;
 `;
@@ -188,7 +196,7 @@ function Resume({ resume }) {
       <Header>
         <Name>{basics.name}</Name>
         {basics.label && <Label>{basics.label}</Label>}
-        <ContactInfo basics={basics} />
+        <StyledContactInfo basics={basics} />
         {basics.summary && <Summary>{basics.summary}</Summary>}
       </Header>
 
