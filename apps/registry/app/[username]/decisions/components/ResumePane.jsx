@@ -23,7 +23,6 @@ export function ResumePane({ resume, user, onPreferencesChange }) {
   const work = resume.work || [];
   const education = resume.education || [];
   const languages = resume.languages || [];
-  const awards = resume.awards || [];
   const certificates = resume.certificates || [];
 
   // Calculate years of experience

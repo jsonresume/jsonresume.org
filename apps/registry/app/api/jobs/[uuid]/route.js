@@ -13,6 +13,7 @@ export const dynamic = 'force-dynamic';
  */
 function stripEmbeddings(job) {
   if (!job) return job;
+  /* eslint-disable no-unused-vars */
   const {
     embedding,
     embedding_v2,
@@ -21,6 +22,7 @@ function stripEmbeddings(job) {
     embedding_v5,
     ...jobWithoutEmbeddings
   } = job;
+  /* eslint-enable no-unused-vars */
   return jobWithoutEmbeddings;
 }
 

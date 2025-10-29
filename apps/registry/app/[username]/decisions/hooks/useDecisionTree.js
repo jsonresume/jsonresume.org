@@ -210,6 +210,7 @@ export function useDecisionTree(resume, preferences = {}) {
         });
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [resetHighlights, preferences]
   );
 
@@ -219,6 +220,7 @@ export function useDecisionTree(resume, preferences = {}) {
       const reasons = [];
       let score = 0;
       let finalOutcome = 'strongMatch'; // Assume best case, downgrade as needed
+      // eslint-disable-next-line no-unused-vars
       let failedAtNode = null; // Track where the critical failure happened
 
       // Collect all evaluation results first
@@ -296,13 +298,13 @@ export function useDecisionTree(resume, preferences = {}) {
         !timezoneCheck.timezoneCompatible
       ) {
         finalOutcome = 'noMatch';
-        failedAtNode = NODE_IDS.TZ;
+        failedAtNode = NODE_IDS.TZ; // eslint-disable-line no-unused-vars
       } else if (availCheck && !availCheck.availableInTime) {
         finalOutcome = 'possibleMatch';
-        failedAtNode = NODE_IDS.AVAIL;
+        // failedAtNode = NODE_IDS.AVAIL;
       } else if (salaryCheck && !salaryCheck.salaryAligned) {
         finalOutcome = 'possibleMatch';
-        failedAtNode = NODE_IDS.SAL;
+        // failedAtNode = NODE_IDS.SAL;
       }
 
       // Now animate ONLY the actual path taken
