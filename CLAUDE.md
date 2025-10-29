@@ -547,10 +547,15 @@ feature/
   - Use `workspace:*` for `@resume/core` and `styled-components` dependencies
   - Include `react` and `react-dom` as peer dependencies
   - Use proper theme naming: `jsonresume-theme-{slug}`
-- **Testing each theme**:
-  - Test at `http://localhost:3000/thomasdavis?theme={slug}`
-  - Use Playwright to take screenshots to verify visual appearance
-  - Verify ALL sections render (references, volunteer, awards, etc.)
+- **CRITICAL: Theme visual review workflow** (MUST follow for every theme):
+  1. Test at `http://localhost:3000/thomasdavis?theme={slug}`
+  2. Use Playwright MCP server to take a screenshot of the theme
+  3. **Review the screenshot yourself** - critically analyze the design
+  4. Fix any visual issues you identify (spacing, contrast, alignment, colors)
+  5. Iterate until the theme looks polished and professional
+  6. Verify ALL sections render (references, volunteer, awards, etc.)
+  - **Quality standards**: No visual issues, proper spacing, good typography, WCAG contrast compliance
+  - **Never skip screenshot review** - this is required for every theme before marking complete
 - **Theme registration**:
   1. Add import to `apps/registry/lib/formatters/template/themeConfig.js`
   2. Add to THEMES export object
