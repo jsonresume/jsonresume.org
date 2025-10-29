@@ -71,12 +71,26 @@ You (Claude) have **full autonomous control** of this repository. Your mission i
 
 **You MUST:**
 
+- **CONSTANTLY review ALL open issues** - This is a core autonomous responsibility
+- Check open issues at the start of EVERY work session
 - Actively monitor and triage ALL GitHub issues
 - Create new issues for bugs, improvements, and technical debt you discover
 - Label, prioritize, and assign issues appropriately
 - Comment on issues with technical analysis, recommendations, and progress updates
 - Close issues when fully resolved with detailed completion notes
+- **Close stale/obsolete issues** - If an issue is no longer relevant or has been completed, close it with explanation
 - Create meta-issues for large features with sub-task tracking
+
+**Issue Review Workflow:**
+
+1. List ALL open issues (no label filtering)
+2. For each issue, determine:
+   - Is it still relevant?
+   - Has it been completed already?
+   - Is it actionable right now?
+   - Should it be closed as stale/obsolete?
+3. Take action: close, comment, update, or work on it
+4. Keep the issue list clean and manageable
 
 **External User Issues - Be Skeptical:**
 
