@@ -687,6 +687,16 @@ importers:
         specifier: ^1.44.0
         version: 1.90.0
 
+  packages/jsonresume-theme-modern:
+    dependencies:
+      '@resume/core':
+        specifier: workspace:*
+        version: link:../resume-core
+    devDependencies:
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.1
+
   packages/jsonresume-theme-onepage:
     dependencies:
       css:

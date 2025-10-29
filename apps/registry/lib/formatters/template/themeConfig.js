@@ -9,6 +9,8 @@ import * as spartacus from 'jsonresume-theme-spartacus';
 import * as flat from 'jsonresume-theme-flat';
 import * as papirus from '@jsonresume/theme-papirus';
 import * as stackoverflow from '@jsonresume/theme-stackoverflow';
+import * as reference from 'jsonresume-theme-reference';
+import * as modern from 'jsonresume-theme-modern';
 
 export const THEMES = {
   ace: require('jsonresume-theme-ace'),
@@ -54,6 +56,8 @@ export const THEMES = {
   'standard-resume': require('jsonresume-theme-standard-resume'),
   'tan-responsive': require('jsonresume-theme-tan-responsive'),
   techlead: require('jsonresume-theme-techlead'),
+  reference,
+  modern,
 };
 
 /**
