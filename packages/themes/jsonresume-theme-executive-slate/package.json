@@ -1,0 +1,23 @@
+{
+  "name": "jsonresume-theme-executive-slate",
+  "version": "1.0.0",
+  "description": "Executive Slate - Authoritative resume theme for senior professionals",
+  "main": "src/index.js",
+  "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "resume",
+    "cv",
+    "jsonresume-theme",
+    "executive",
+    "professional"
+  ],
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "dependencies": {
+    "@resume/core": "workspace:*",
+    "styled-components": "^6.1.11"
+  }
+}

@@ -1,4 +1,7 @@
-export const themes = [
+import themesData from '../../../public/themes.json';
+
+// Original existing themes
+const existingThemes = [
   {
     name: 'Elegant',
     slug: 'elegant',
@@ -70,3 +73,32 @@ export const themes = [
     link: '',
   },
 ];
+
+// New themes from themes.json
+const newThemes = themesData.themes.map((theme) => ({
+  name: theme.name,
+  slug: theme.id,
+  author: theme.author,
+  link:
+    theme.previewUrl ||
+    `https://registry.jsonresume.org/thomasdavis?theme=${theme.id}`,
+  description: theme.description,
+  tags: theme.tags,
+  screenshot: theme.screenshot,
+}));
+
+// Combine existing themes with new themes, removing duplicates by slug
+const existingSlugs = new Set(existingThemes.map((t) => t.slug));
+const uniqueNewThemes = newThemes.filter((t) => !existingSlugs.has(t.slug));
+
+// Also update existing themes to use new screenshots if available
+const newThemesMap = new Map(newThemes.map((t) => [t.slug, t]));
+const updatedExistingThemes = existingThemes.map((theme) => {
+  const newTheme = newThemesMap.get(theme.slug);
+  if (newTheme && newTheme.screenshot) {
+    return { ...theme, screenshot: newTheme.screenshot };
+  }
+  return theme;
+});
+
+export const themes = [...updatedExistingThemes, ...uniqueNewThemes];

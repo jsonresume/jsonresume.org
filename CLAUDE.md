@@ -501,6 +501,91 @@ feature/
 - Optimize performance bottlenecks
 - Improve error handling and user feedback
 
+**Theme Development Rules:**
+
+- **ALWAYS reuse @resume/core components** - NEVER create inline/custom components when a reusable one makes sense
+- **Create new core components when needed** - If a theme needs a component that would be useful across multiple themes, add it to `packages/resume-core/src/primitives/`
+- **Component creation pattern**:
+  1. Create the component file in `packages/resume-core/src/primitives/ComponentName.jsx`
+  2. Export it from `packages/resume-core/src/primitives/index.jsx`
+  3. Use it in themes by importing from `@resume/core`
+- **Available core components**: Section, SectionTitle, ListItem, DateRange, Badge, BadgeList, ContactInfo, Link
+- **Security utilities**: Always use `safeUrl()` and `isExternalUrl()` from `@resume/core` for any user-provided URLs
+- **Theme structure**:
+  ```
+  packages/themes/jsonresume-theme-{name}/
+    ├── package.json          # Workspace dependencies
+    ├── src/
+    │   ├── Resume.jsx        # Main React component
+    │   └── index.js          # Render function with ServerStyleSheet for SSR
+  ```
+- **Styled-components SSR pattern** (CRITICAL for themes using styled-components):
+
+  ```javascript
+  import { renderToString } from 'react-dom/server';
+  import { ServerStyleSheet } from 'styled-components';
+  import Resume from './Resume.jsx';
+
+  export function render(resume) {
+    const sheet = new ServerStyleSheet();
+    const html = renderToString(
+      sheet.collectStyles(<Resume resume={resume} />)
+    );
+    const styles = sheet.getStyleTags();
+    return `<!DOCTYPE html><head>
+      <title>${resume.basics.name} - Resume</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      ${styles}
+    </head><body>${html}</body></html>`;
+  }
+  ```
+
+  Without `ServerStyleSheet`, styled-components will not inject CSS and the theme will have no styles!
+
+- **Theme package.json requirements**:
+  - Use `workspace:*` for `@resume/core` and `styled-components` dependencies
+  - Include `react` and `react-dom` as peer dependencies
+  - Use proper theme naming: `jsonresume-theme-{slug}`
+- **Testing each theme**:
+  - Test at `http://localhost:3000/thomasdavis?theme={slug}`
+  - Use Playwright to take screenshots to verify visual appearance
+  - Verify ALL sections render (references, volunteer, awards, etc.)
+- **Theme registration**:
+  1. Add import to `apps/registry/lib/formatters/template/themeConfig.js`
+  2. Add to THEMES export object
+  3. Add workspace dependency to `apps/registry/package.json`
+- **Styling with styled-components**:
+  - Use theming tokens for consistency: `props.theme?.colors?.primary`
+  - Provide fallback CSS variables: `var(--resume-color-primary, #000)`
+  - Include `@media print` styles for PDF exports
+  - Keep component styles colocated with the component
+- **File size compliance**: Theme files must follow 200-line limit - extract sections/components as needed
+- **JSON Resume schema**: Follow official JSON Resume schema structure for all data access
+- **CRITICAL: Full spec implementation**: ALL themes MUST render ALL sections from the JSON Resume spec:
+  - **Required sections**: basics, work, education, skills
+  - **Optional but MUST implement**: projects, volunteer, awards, publications, languages, interests, references
+  - Even if a section is empty, the theme should support it when data is present
+  - Test with a complete resume that has all sections populated
+- **Accessibility**: Use semantic HTML, proper heading hierarchy (h1 for name, h2 for sections), ARIA labels where appropriate
+- **CRITICAL: Google Fonts via CDN**: ALL themes MUST load fonts from Google Fonts CDN in the HTML head
+  - Include font link tags in the `render()` function's HTML output
+  - Example: `<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">`
+  - Choose 2-3 font weights to keep performance good
+  - Use `preconnect` for performance optimization
+  - Apply fonts in CSS using the loaded font family names
+- **CRITICAL: Contrast Ratios for Readability**: ALL text must meet WCAG AA contrast requirements
+  - **Normal text** (< 18pt or < 14pt bold): Minimum 4.5:1 contrast ratio
+  - **Large text** (≥ 18pt or ≥ 14pt bold): Minimum 3:1 contrast ratio
+  - Test all text colors against their backgrounds using a contrast checker
+  - Common safe combinations:
+    - Light backgrounds: Use dark text (#111827, #1f2937, #374151 on white/light gray)
+    - Dark backgrounds: Use light text (#f9fafb, #f3f4f6, #e5e7eb on dark navy/black)
+    - Colored backgrounds: Ensure sufficient contrast with text color
+  - **Never use**: Light gray text on white, dark gray text on black, low-contrast color combinations
+  - Better to err on the side of too much contrast than too little
+- **Example theme**: See `packages/themes/jsonresume-theme-modern-classic/` for reference implementation
+
 ### 4. Work Planning & Execution
 
 **CRITICAL: Use GitHub Issues for ALL Work Tracking**

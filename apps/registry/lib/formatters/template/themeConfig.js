@@ -13,6 +13,9 @@ import * as reference from 'jsonresume-theme-reference';
 import * as modern from 'jsonresume-theme-modern';
 import * as sidebar from 'jsonresume-theme-sidebar';
 import * as elegantpink from 'jsonresume-theme-elegant-pink';
+import * as modernclassic from 'jsonresume-theme-modern-classic';
+import * as executiveslate from 'jsonresume-theme-executive-slate';
+import * as productmanagercanvas from 'jsonresume-theme-product-manager-canvas';
 
 export const THEMES = {
   ace: require('jsonresume-theme-ace'),
@@ -62,6 +65,9 @@ export const THEMES = {
   modern,
   sidebar,
   'elegant-pink': elegantpink,
+  'modern-classic': modernclassic,
+  'executive-slate': executiveslate,
+  'product-manager-canvas': productmanagercanvas,
 };
 
 /**

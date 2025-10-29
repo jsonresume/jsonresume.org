@@ -1,0 +1,23 @@
+{
+  "name": "jsonresume-theme-modern-classic",
+  "version": "1.0.0",
+  "description": "A universal, default style for engineers and professionals",
+  "main": "src/index.js",
+  "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "jsonresume",
+    "theme",
+    "professional",
+    "classic",
+    "ats"
+  ],
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "dependencies": {
+    "@resume/core": "workspace:*",
+    "styled-components": "^6.1.11"
+  }
+}

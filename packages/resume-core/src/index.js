@@ -13,6 +13,8 @@ export {
   formatDateRange,
   Badge,
   BadgeList,
+  ContactInfo,
+  Link,
 } from './primitives/index.jsx';
 
 // Export design tokens

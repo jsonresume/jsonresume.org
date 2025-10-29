@@ -1,5 +1,3 @@
-import Image from 'next/image';
-
 export function ThemeCard({ theme }) {
   return (
     <div className="col-sm-4 col-md-3">
@@ -9,13 +7,26 @@ export function ThemeCard({ theme }) {
             <a
               href={`https://registry.jsonresume.org/thomasdavis?theme=${theme.slug}`}
             >
-              <Image
-                style={{ height: '100px' }}
-                height="129"
-                width="163"
-                alt={theme.name}
-                src={`/img/themes/${theme.slug}.png`}
-              />
+              <div
+                style={{
+                  height: '100px',
+                  overflow: 'hidden',
+                  position: 'relative',
+                  background: '#f5f5f5',
+                }}
+              >
+                <img
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                  }}
+                  alt={theme.name}
+                  src={theme.screenshot || `/img/themes/${theme.slug}.png`}
+                />
+              </div>
             </a>
           </div>
           <div className="col-sm-12 col-xs-6 meta">

@@ -60,7 +60,7 @@ importers:
         specifier: ^15.2.0
         version: 15.5.2
       playwright:
-        specifier: ^1.40.0
+        specifier: ^1.55.1
         version: 1.56.1
       prettier:
         specifier: ^2.8.0
@@ -379,6 +379,9 @@ importers:
       jsonresume-theme-even:
         specifier: ^0.18.1
         version: 0.18.1
+      jsonresume-theme-executive-slate:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-executive-slate
       jsonresume-theme-flat:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-flat
@@ -421,6 +424,9 @@ importers:
       jsonresume-theme-modern:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-modern
+      jsonresume-theme-modern-classic:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-modern-classic
       jsonresume-theme-msresume:
         specifier: ^0.1.0
         version: 0.1.0
@@ -445,6 +451,9 @@ importers:
       jsonresume-theme-paper-plus-plus:
         specifier: ^0.5.1
         version: 0.5.1
+      jsonresume-theme-product-manager-canvas:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-product-manager-canvas
       jsonresume-theme-pumpkin:
         specifier: ^1.1.4
         version: 1.1.4
@@ -740,6 +749,21 @@ importers:
         specifier: ^1.6.0
         version: 1.6.1
 
+  packages/themes/jsonresume-theme-executive-slate:
+    dependencies:
+      '@resume/core':
+        specifier: workspace:*
+        version: link:../../resume-core
+      react:
+        specifier: ^18.0.0
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.0.0
+        version: 18.3.1(react@18.3.1)
+      styled-components:
+        specifier: ^6.1.11
+        version: 6.1.11(react-dom@18.3.1)(react@18.3.1)
+
   packages/themes/jsonresume-theme-flat:
     dependencies:
       handlebars:
@@ -765,6 +789,21 @@ importers:
       vitest:
         specifier: ^1.6.0
         version: 1.6.1
+
+  packages/themes/jsonresume-theme-modern-classic:
+    dependencies:
+      '@resume/core':
+        specifier: workspace:*
+        version: link:../../resume-core
+      react:
+        specifier: ^18.0.0
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.0.0
+        version: 18.3.1(react@18.3.1)
+      styled-components:
+        specifier: ^6.1.11
+        version: 6.1.11(react-dom@18.3.1)(react@18.3.1)
 
   packages/themes/jsonresume-theme-onepage:
     dependencies:
@@ -793,6 +832,21 @@ importers:
       eslint-plugin-react:
         specifier: ^7.33.2
         version: 7.37.5(eslint@9.32.0)
+
+  packages/themes/jsonresume-theme-product-manager-canvas:
+    dependencies:
+      '@resume/core':
+        specifier: workspace:*
+        version: link:../../resume-core
+      react:
+        specifier: ^18.0.0
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.0.0
+        version: 18.3.1(react@18.3.1)
+      styled-components:
+        specifier: ^6.1.11
+        version: 6.1.11(react-dom@18.3.1)(react@18.3.1)
 
   packages/themes/jsonresume-theme-professional:
     dependencies:

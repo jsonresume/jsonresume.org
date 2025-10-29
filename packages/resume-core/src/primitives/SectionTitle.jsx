@@ -41,11 +41,10 @@ export function SectionTitle({
   className,
   ...rest
 }) {
-  // Use dynamic component based on level (h1, h2, h3, etc.)
-  const Component = StyledTitle.withComponent(`h${level}`);
-
+  // Use 'as' prop for dynamic heading level
   return (
-    <Component
+    <StyledTitle
+      as={`h${level}`}
       className={`resume-section-title ${className || ''}`.trim()}
       {...rest}
     >
@@ -55,7 +54,7 @@ export function SectionTitle({
         </Icon>
       )}
       {children}
-    </Component>
+    </StyledTitle>
   );
 }
 
