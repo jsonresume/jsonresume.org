@@ -5,6 +5,8 @@ import {
   ListItem,
   DateRange,
   BadgeList,
+  safeUrl,
+  getLinkRel,
 } from '@resume/core';
 
 /**
@@ -109,10 +111,18 @@ function Resume({ resume }) {
 
           <Contact>
             {basics.email && (
-              <a href={`mailto:${basics.email}`}>{basics.email}</a>
+              <a href={safeUrl(`mailto:${basics.email}`)}>{basics.email}</a>
             )}
             {basics.phone && <span>{basics.phone}</span>}
-            {basics.url && <a href={basics.url}>{basics.url}</a>}
+            {basics.url && (
+              <a
+                href={safeUrl(basics.url)}
+                target="_blank"
+                rel={getLinkRel(basics.url, true)}
+              >
+                {basics.url}
+              </a>
+            )}
             {basics.location && (
               <span>
                 {[
@@ -124,11 +134,21 @@ function Resume({ resume }) {
                   .join(', ')}
               </span>
             )}
-            {basics.profiles?.map((profile) => (
-              <a key={profile.network} href={profile.url}>
-                {profile.network}
-              </a>
-            ))}
+            {basics.profiles?.map((profile) => {
+              const profileUrl = safeUrl(profile.url);
+              return (
+                profileUrl && (
+                  <a
+                    key={profile.network}
+                    href={profileUrl}
+                    target="_blank"
+                    rel={getLinkRel(profileUrl, true)}
+                  >
+                    {profile.network}
+                  </a>
+                )
+              );
+            })}
           </Contact>
 
           {basics.summary && <Summary>{basics.summary}</Summary>}
@@ -222,10 +242,16 @@ function Resume({ resume }) {
               description={
                 <>
                   {project.description}
-                  {project.url && (
+                  {project.url && safeUrl(project.url) && (
                     <>
                       <br />
-                      <a href={project.url}>{project.url}</a>
+                      <a
+                        href={safeUrl(project.url)}
+                        target="_blank"
+                        rel={getLinkRel(project.url, true)}
+                      >
+                        {project.url}
+                      </a>
                     </>
                   )}
                   {project.keywords && project.keywords.length > 0 && (
@@ -292,10 +318,16 @@ function Resume({ resume }) {
               description={
                 <>
                   {pub.summary}
-                  {pub.url && (
+                  {pub.url && safeUrl(pub.url) && (
                     <>
                       <br />
-                      <a href={pub.url}>{pub.url}</a>
+                      <a
+                        href={safeUrl(pub.url)}
+                        target="_blank"
+                        rel={getLinkRel(pub.url, true)}
+                      >
+                        {pub.url}
+                      </a>
                     </>
                   )}
                 </>

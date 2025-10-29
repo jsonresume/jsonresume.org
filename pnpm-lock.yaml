@@ -451,6 +451,9 @@ importers:
       jsonresume-theme-rocketspacer:
         specifier: ^1.2.2
         version: 1.2.2
+      jsonresume-theme-sidebar:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-sidebar
       jsonresume-theme-simple-red:
         specifier: ^1.0.4
         version: 1.0.4
@@ -786,6 +789,25 @@ importers:
         version: 6.1.11(react-dom@18.3.1)(react@18.3.1)
 
   packages/themes/jsonresume-theme-reference:
+    dependencies:
+      '@resume/core':
+        specifier: workspace:*
+        version: link:../../resume-core
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.3.1
+        version: 18.3.1(react@18.3.1)
+      styled-components:
+        specifier: ^6.1.11
+        version: 6.1.11(react-dom@18.3.1)(react@18.3.1)
+    devDependencies:
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.1
+
+  packages/themes/jsonresume-theme-sidebar:
     dependencies:
       '@resume/core':
         specifier: workspace:*

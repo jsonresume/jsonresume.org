@@ -8,10 +8,12 @@
     ".": "./src/index.js",
     "./tokens": "./src/tokens/index.js",
     "./primitives": "./src/primitives/index.js",
-    "./styles": "./src/styles/tokens.css"
+    "./styles": "./src/styles/tokens.css",
+    "./tokens.css": "./dist/tokens.css"
   },
   "files": [
-    "src"
+    "src",
+    "dist"
   ],
   "scripts": {
     "test": "vitest run",

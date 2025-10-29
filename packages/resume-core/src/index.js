@@ -27,5 +27,13 @@ export {
   rawTokens,
 } from './tokens/index.js';
 
+// Export security utilities
+export {
+  safeUrl,
+  getLinkRel,
+  sanitizeHtml,
+  isExternalUrl,
+} from './utils/security.js';
+
 // Package metadata
 export const version = '0.1.0';

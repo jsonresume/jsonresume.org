@@ -11,6 +11,7 @@ import * as papirus from '@jsonresume/theme-papirus';
 import * as stackoverflow from '@jsonresume/theme-stackoverflow';
 import * as reference from 'jsonresume-theme-reference';
 import * as modern from 'jsonresume-theme-modern';
+import * as sidebar from 'jsonresume-theme-sidebar';
 
 export const THEMES = {
   ace: require('jsonresume-theme-ace'),
@@ -58,6 +59,7 @@ export const THEMES = {
   techlead: require('jsonresume-theme-techlead'),
   reference,
   modern,
+  sidebar,
 };
 
 /**

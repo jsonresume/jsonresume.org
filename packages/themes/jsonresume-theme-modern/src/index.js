@@ -27,7 +27,22 @@ export function render(resume) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${basics.name || 'Resume'}</title>
-  <link rel="stylesheet" href="https://unpkg.com/@resume/core@0.1.0/src/styles/tokens.css">
+  <style>
+    /* Design Tokens from @resume/core (inlined) */
+    :root {
+      --resume-font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      --resume-size-name: 36px;
+      --resume-size-heading: 16px;
+      --resume-size-body: 11px;
+      --resume-size-small: 10px;
+      --resume-color-primary: #1a1a1a;
+      --resume-color-secondary: #4a4a4a;
+      --resume-color-accent: #2563eb;
+      --resume-space-section: 24px;
+      --resume-space-item: 16px;
+      --resume-max-width: 660px;
+    }
+  </style>
   <style>
     * {
       margin: 0;

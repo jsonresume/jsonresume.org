@@ -1,0 +1,425 @@
+/**
+ * Resume Print Styles
+ * Professional @page rules and print optimizations for PDF generation
+ *
+ * Features:
+ * - A4 and US Letter page sizes
+ * - Proper margins and spacing
+ * - Page break control (widows, orphans)
+ * - Hyphenation for long words
+ * - Header/footer areas
+ * - Color profile for print
+ */
+
+/* ========================================
+   Page Setup - A4 (default)
+   ======================================== */
+
+@page {
+  size: A4 portrait;
+  margin: 0.75in 0.75in 0.75in 0.75in; /* Top Right Bottom Left */
+}
+
+/* Alternative: US Letter format */
+@page :root[data-page-size="letter"] {
+  size: letter portrait;
+  margin: 1in 1in 1in 1in;
+}
+
+/* First page - extra top margin for header */
+@page :first {
+  margin-top: 0.5in;
+}
+
+/* Named pages for different sections */
+@page resume-main {
+  size: A4 portrait;
+  margin: 0.75in;
+}
+
+@page resume-references {
+  size: A4 portrait;
+  margin: 1in;
+}
+
+/* ========================================
+   Page Break Control
+   ======================================== */
+
+/* Prevent awkward page breaks */
+.resume-section,
+.resume-item,
+.resume-education,
+.resume-work,
+.resume-project {
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+/* Keep section titles with content */
+.resume-section-title {
+  page-break-after: avoid;
+  break-after: avoid;
+}
+
+/* Keep list items together */
+.resume-highlights li,
+.resume-item-content {
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+/* Widows and orphans - minimum 3 lines */
+p,
+li,
+.resume-description {
+  widows: 3;
+  orphans: 3;
+}
+
+/* Allow breaks before sections (not inside) */
+.resume-section {
+  page-break-before: auto;
+  page-break-after: auto;
+}
+
+/* Force page break if needed (add class manually) */
+.page-break {
+  page-break-before: always;
+  break-before: page;
+}
+
+/* Avoid page break (add class manually) */
+.no-page-break {
+  page-break-inside: avoid !important;
+  break-inside: avoid !important;
+}
+
+/* ========================================
+   Typography & Hyphenation
+   ======================================== */
+
+/* Enable hyphenation for long words */
+.resume-description,
+.resume-summary,
+.resume-highlights li,
+p {
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphenate-limit-chars: 10 5 3; /* word min, before, after */
+  hyphenate-limit-lines: 2;
+  hyphenate-limit-last: always;
+}
+
+/* Don't hyphenate headings, names, titles */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.resume-name,
+.resume-section-title,
+.resume-item-title {
+  hyphens: none;
+  -webkit-hyphens: none;
+}
+
+/* ========================================
+   Color Management for Print
+   ======================================== */
+
+@media print {
+  /* Ensure proper color rendering for PDF */
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    color-adjust: exact;
+  }
+
+  /* Background colors/images - be careful with ink! */
+  .resume-badge,
+  .resume-tag {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Optimize colors for print (slightly darker for better readability) */
+  body {
+    background: white;
+    color: #000;
+  }
+
+  /* Links - show URL in print */
+  a[href^="http"]:after {
+    content: " (" attr(href) ")";
+    font-size: 90%;
+    color: #666;
+    word-break: break-all;
+  }
+
+  /* Don't show URLs for internal links or mailto */
+  a[href^="#"]:after,
+  a[href^="mailto:"]:after,
+  a[href^="tel:"]:after {
+    content: "";
+  }
+
+  /* Optional: Remove underlines from links in print */
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+}
+
+/* ========================================
+   Hide Elements in Print
+   ======================================== */
+
+@media print {
+  /* Common elements to hide */
+  .no-print,
+  .print-hide,
+  [data-print="hide"],
+  nav,
+  .navigation,
+  .sidebar,
+  button,
+  .button,
+  .controls,
+  .form,
+  form,
+  input,
+  textarea,
+  select {
+    display: none !important;
+  }
+
+  /* Hide interactive elements */
+  .tooltip,
+  .dropdown,
+  .modal,
+  .popup {
+    display: none !important;
+  }
+}
+
+/* ========================================
+   Show Print-Only Elements
+   ======================================== */
+
+/* Elements that only appear in print */
+.print-only,
+.show-print,
+[data-print="show"] {
+  display: none;
+}
+
+@media print {
+  .print-only,
+  .show-print,
+  [data-print="show"] {
+    display: block !important;
+  }
+
+  .print-only-inline {
+    display: inline !important;
+  }
+}
+
+/* ========================================
+   Spacing Optimizations
+   ======================================== */
+
+@media print {
+  /* Reduce spacing for print to fit more content */
+  .resume-section {
+    margin-bottom: 18px;
+  }
+
+  .resume-item {
+    margin-bottom: 12px;
+  }
+
+  /* Adjust fonts for print */
+  body {
+    font-size: 11pt;
+    line-height: 1.4;
+  }
+
+  h1 {
+    font-size: 24pt;
+  }
+
+  h2 {
+    font-size: 14pt;
+  }
+
+  h3 {
+    font-size: 12pt;
+  }
+
+  /* Ensure consistent sizing */
+  * {
+    box-sizing: border-box;
+  }
+}
+
+/* ========================================
+   Header & Footer Areas (Optional)
+   ======================================== */
+
+@page {
+  @top-center {
+    content: "";
+  }
+
+  @bottom-right {
+    content: counter(page) " of " counter(pages);
+    font-size: 9pt;
+    color: #666;
+  }
+}
+
+/* Remove page numbers on first page */
+@page :first {
+  @bottom-right {
+    content: "";
+  }
+}
+
+/* ========================================
+   PDF Metadata (for better PDF output)
+   ======================================== */
+
+/*
+ * Some PDF generators respect these CSS properties
+ * Set via HTML meta tags as well for best compatibility
+ */
+
+@media print {
+  html {
+    /* Optimize rendering */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Ensure images render at full quality */
+  img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* ========================================
+   ATS-Friendly Print Styles
+   ======================================== */
+
+@media print {
+  /* Ensure semantic HTML is preserved */
+  /* ATS parsers prefer semantic tags */
+
+  /* Clear floats and absolute positioning for ATS */
+  .resume-item,
+  .resume-section {
+    position: static;
+    float: none;
+    clear: both;
+  }
+
+  /* Tables can confuse ATS - ensure proper linearization */
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  /* Icons should have text alternatives */
+  .icon:before {
+    speak: none; /* Screen reader compatibility */
+  }
+}
+
+/* ========================================
+   Multi-Page Resume Support
+   ======================================== */
+
+/* Continuation indicators (optional) */
+.resume-section:has(+ .resume-section) {
+  position: relative;
+}
+
+.resume-section:has(+ .resume-section):after {
+  content: "";
+  /* Add visual indicator if section continues to next page */
+}
+
+/* ========================================
+   Accessibility in Print
+   ======================================== */
+
+@media print {
+  /* Maintain accessible color contrast */
+  :root {
+    --print-text: #000;
+    --print-bg: #fff;
+    --print-accent: #333;
+  }
+
+  /* Ensure sufficient contrast ratios (WCAG AA: 4.5:1) */
+  .resume-item-title {
+    color: var(--print-text);
+    font-weight: 600;
+  }
+
+  .resume-date,
+  .resume-meta {
+    color: #333; /* Sufficient contrast on white */
+  }
+}
+
+/* ========================================
+   Print Preview Simulation
+   ======================================== */
+
+/*
+ * Optional: Add a class to <html> to preview print styles
+ * Usage: <html class="print-preview">
+ */
+
+html.print-preview {
+  background: #f5f5f5;
+}
+
+html.print-preview body {
+  max-width: 8.5in; /* US Letter width */
+  margin: 0 auto;
+  padding: 1in;
+  background: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* ========================================
+   Browser-Specific Print Fixes
+   ======================================== */
+
+/* Chrome/Safari */
+@media print and (-webkit-min-device-pixel-ratio: 0) {
+  body {
+    zoom: 1;
+  }
+}
+
+/* Firefox */
+@media print and (min--moz-device-pixel-ratio: 0) {
+  body {
+    transform: scale(1);
+  }
+}
+
+/* ========================================
+   END OF PRINT STYLES
+   ======================================== */
