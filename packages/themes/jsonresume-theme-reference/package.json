@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "description": "Reference theme demonstrating @resume/core best practices - ATS-friendly, framework-agnostic",
   "type": "module",
-  "main": "./src/index.js",
+  "main": "./src/index-jsx.js",
   "exports": {
-    ".": "./src/index.js"
+    ".": "./src/index-jsx.js",
+    "./legacy": "./src/index.js"
   },
   "scripts": {
     "test": "vitest run",
@@ -20,9 +21,16 @@
     "reference"
   ],
   "dependencies": {
-    "@resume/core": "workspace:*"
+    "@resume/core": "workspace:*",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "styled-components": "^6.1.11"
   },
   "devDependencies": {
     "vitest": "^1.6.0"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   }
 }

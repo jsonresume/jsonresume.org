@@ -790,6 +790,15 @@ importers:
       '@resume/core':
         specifier: workspace:*
         version: link:../../resume-core
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.3.1
+        version: 18.3.1(react@18.3.1)
+      styled-components:
+        specifier: ^6.1.11
+        version: 6.1.11(react-dom@18.3.1)(react@18.3.1)
     devDependencies:
       vitest:
         specifier: ^1.6.0
