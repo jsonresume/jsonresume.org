@@ -1,0 +1,24 @@
+{
+  "name": "jsonresume-theme-sales-hunter",
+  "version": "0.1.0",
+  "description": "Sales professionals - numbers, quotas, performance metrics highly visible",
+  "main": "src/index.js",
+  "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "jsonresume",
+    "theme",
+    "sales",
+    "performance",
+    "metrics",
+    "ats"
+  ],
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "dependencies": {
+    "@resume/core": "workspace:*",
+    "styled-components": "^6.1.11"
+  }
+}

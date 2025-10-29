@@ -1,0 +1,24 @@
+{
+  "name": "jsonresume-theme-operations-precision",
+  "version": "0.1.0",
+  "description": "Operations professionals - show your systematic approach, process improvements",
+  "main": "src/index.js",
+  "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "jsonresume",
+    "theme",
+    "operations",
+    "precision",
+    "efficiency",
+    "systems"
+  ],
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "dependencies": {
+    "@resume/core": "workspace:*",
+    "styled-components": "^6.1.11"
+  }
+}

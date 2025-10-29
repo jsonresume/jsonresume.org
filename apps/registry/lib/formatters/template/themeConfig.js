@@ -15,6 +15,17 @@ import * as sidebar from 'jsonresume-theme-sidebar';
 import * as modernclassic from 'jsonresume-theme-modern-classic';
 import * as executiveslate from 'jsonresume-theme-executive-slate';
 import * as productmanagercanvas from 'jsonresume-theme-product-manager-canvas';
+import * as governmentstandard from 'jsonresume-theme-government-standard';
+import * as developermono from 'jsonresume-theme-developer-mono';
+import * as minimalistgrid from 'jsonresume-theme-minimalist-grid';
+import * as creativestudio from 'jsonresume-theme-creative-studio';
+import * as datadriven from 'jsonresume-theme-data-driven';
+import * as consultantpolished from 'jsonresume-theme-consultant-polished';
+import * as universityfirst from 'jsonresume-theme-university-first';
+import * as academiccvlite from 'jsonresume-theme-academic-cv-lite';
+import * as saleshunter from 'jsonresume-theme-sales-hunter';
+import * as marketingnarrative from 'jsonresume-theme-marketing-narrative';
+import * as operationsprecision from 'jsonresume-theme-operations-precision';
 
 export const THEMES = {
   ace: require('jsonresume-theme-ace'),
@@ -66,6 +77,17 @@ export const THEMES = {
   'modern-classic': modernclassic,
   'executive-slate': executiveslate,
   'product-manager-canvas': productmanagercanvas,
+  'government-standard': governmentstandard,
+  'developer-mono': developermono,
+  'minimalist-grid': minimalistgrid,
+  'creative-studio': creativestudio,
+  'data-driven': datadriven,
+  'consultant-polished': consultantpolished,
+  'university-first': universityfirst,
+  'academic-cv-lite': academiccvlite,
+  'sales-hunter': saleshunter,
+  'marketing-narrative': marketingnarrative,
+  'operations-precision': operationsprecision,
 };
 
 /**

@@ -1,0 +1,24 @@
+{
+  "name": "jsonresume-theme-marketing-narrative",
+  "version": "0.1.0",
+  "description": "Marketing professionals - your narrative and campaigns are the focus",
+  "main": "src/index.js",
+  "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "jsonresume",
+    "theme",
+    "marketing",
+    "narrative",
+    "creative",
+    "storytelling"
+  ],
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "dependencies": {
+    "@resume/core": "workspace:*",
+    "styled-components": "^6.1.11"
+  }
+}

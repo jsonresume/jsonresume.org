@@ -1,0 +1,31 @@
+{
+  "private": false,
+  "name": "@jsonresume/jsonresume-theme-consultant-polished",
+  "version": "1.0.0",
+  "main": "./src/index.js",
+  "license": "MIT",
+  "description": "Elegant, structured JSON Resume theme optimized for narrative-driven consulting roles",
+  "keywords": [
+    "jsonresume",
+    "theme",
+    "consultant",
+    "elegant",
+    "polished"
+  ],
+  "devDependencies": {
+    "@repo/eslint-config-custom": "workspace:^",
+    "react": "^18",
+    "styled-components": "^6"
+  },
+  "peerDependencies": {
+    "styled-components": "^6"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "publish": "npm publish --access public"
+  },
+  "dependencies": {
+    "marked": "^16.3.0",
+    "react-icons": "^5.0.1"
+  }
+}

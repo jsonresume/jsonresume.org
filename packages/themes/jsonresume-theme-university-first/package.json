@@ -1,0 +1,25 @@
+{
+  "name": "jsonresume-theme-university-first",
+  "version": "0.1.0",
+  "description": "For fresh grads - education credentials come first, work second",
+  "main": "src/index.js",
+  "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "jsonresume",
+    "theme",
+    "student",
+    "graduate",
+    "education",
+    "university",
+    "fresh-grad"
+  ],
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "dependencies": {
+    "@resume/core": "workspace:*",
+    "styled-components": "^6.1.11"
+  }
+}

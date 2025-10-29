@@ -1,0 +1,25 @@
+{
+  "private": false,
+  "name": "@jsonresume/jsonresume-theme-creative-studio",
+  "version": "1.0.0",
+  "main": "./src/index.js",
+  "license": "MIT",
+  "description": "Creative Studio theme - artistic yet professional with warm coral accents and rounded typography",
+  "devDependencies": {
+    "@repo/eslint-config-custom": "workspace:^",
+    "react": "^18",
+    "styled-components": "^6"
+  },
+  "peerDependencies": {
+    "styled-components": "^6"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "publish": "npm publish --access public"
+  },
+  "dependencies": {
+    "marked": "^16.3.0",
+    "prismjs": "^1.29.0",
+    "react-icons": "^5.0.1"
+  }
+}

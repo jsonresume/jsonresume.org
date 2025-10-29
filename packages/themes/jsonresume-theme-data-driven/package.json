@@ -1,0 +1,36 @@
+{
+  "name": "jsonresume-theme-data-driven",
+  "version": "0.1.0",
+  "description": "Data-driven analytical theme with sky blue accent - built with @resume/core",
+  "type": "module",
+  "main": "./src/index.jsx",
+  "exports": {
+    ".": "./src/index.jsx"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": [
+    "jsonresume",
+    "theme",
+    "resume",
+    "cv",
+    "data-driven",
+    "analytical",
+    "metrics",
+    "compact"
+  ],
+  "dependencies": {
+    "@resume/core": "workspace:*",
+    "react": "^18",
+    "react-dom": "^18",
+    "styled-components": "^6"
+  },
+  "devDependencies": {
+    "vitest": "^1.6.0"
+  },
+  "peerDependencies": {
+    "styled-components": "^6"
+  }
+}

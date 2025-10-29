@@ -1,0 +1,24 @@
+{
+  "name": "jsonresume-theme-minimalist-grid",
+  "version": "1.0.0",
+  "description": "A minimalist theme with perfect spacing and geometric clarity",
+  "main": "src/index.js",
+  "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "jsonresume",
+    "theme",
+    "minimalist",
+    "grid",
+    "modern",
+    "clean"
+  ],
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "dependencies": {
+    "@resume/core": "workspace:*",
+    "styled-components": "^6.1.11"
+  }
+}
