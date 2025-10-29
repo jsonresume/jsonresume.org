@@ -1,0 +1,39 @@
+{
+  "name": "jsonresume-theme-elegant-pink",
+  "version": "0.1.0",
+  "description": "Super girly resume theme with soft pink colors, elegant typography, and floral accents",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": [
+    "jsonresume",
+    "theme",
+    "resume",
+    "cv",
+    "pink",
+    "girly",
+    "elegant",
+    "feminine",
+    "pretty",
+    "ats-friendly"
+  ],
+  "dependencies": {
+    "@resume/core": "workspace:*",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "styled-components": "^6.1.11"
+  },
+  "devDependencies": {
+    "vitest": "^1.6.0"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  }
+}

@@ -1,0 +1,76 @@
+name: Test Themes
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'packages/themes/**'
+      - 'apps/registry/lib/formatters/template/themeConfig.js'
+      - 'packages/test-fixtures/**'
+      - '.github/workflows/test-themes.yml'
+  pull_request:
+    branches: [master]
+    paths:
+      - 'packages/themes/**'
+      - 'apps/registry/lib/formatters/template/themeConfig.js'
+      - 'packages/test-fixtures/**'
+      - '.github/workflows/test-themes.yml'
+
+jobs:
+  test-themes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate theme screenshots
+        run: pnpm serve:registry
+        env:
+          REGISTRY_URL: http://localhost:3000
+
+      - name: Upload theme screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: theme-screenshots
+          path: apps/homepage2/public/theme-screenshots/
+          retention-days: 30
+
+      - name: Upload themes metadata
+        uses: actions/upload-artifact@v4
+        with:
+          name: themes-metadata
+          path: apps/homepage2/public/themes.json
+          retention-days: 30
+
+      - name: Comment on PR with screenshot count
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const metadata = JSON.parse(fs.readFileSync('apps/homepage2/public/themes.json', 'utf8'));
+            const successCount = metadata.themes.filter(t => t.screenshot).length;
+            const errorCount = metadata.themes.filter(t => t.error).length;
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `## 🎨 Theme Screenshot Results\n\n✅ **${successCount}** themes rendered successfully\n❌ **${errorCount}** themes had errors\n\nTotal themes tested: **${metadata.count}**`
+            });

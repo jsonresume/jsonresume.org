@@ -91,6 +91,7 @@
     "jsonresume-theme-reference": "workspace:*",
     "jsonresume-theme-modern": "workspace:*",
     "jsonresume-theme-sidebar": "workspace:*",
+    "jsonresume-theme-elegant-pink": "workspace:*",
     "jsonresume-theme-tan-responsive": "^0.0.7",
     "jsonresume-theme-techlead": "^1.0.1",
     "jsonschema": "^1.4.1",

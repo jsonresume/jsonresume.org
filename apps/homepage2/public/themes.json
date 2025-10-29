@@ -1,0 +1,96 @@
+{
+  "generated": "2025-10-29T20:56:25.070Z",
+  "count": 10,
+  "themes": [
+    {
+      "id": "cv",
+      "name": "CV",
+      "description": "Traditional CV layout",
+      "author": "JSON Resume",
+      "tags": ["traditional", "cv"],
+      "screenshot": "/theme-screenshots/cv.png",
+      "previewUrl": "http://localhost:3000/thomasdavis?theme=cv"
+    },
+    {
+      "id": "elegant",
+      "name": "Elegant",
+      "description": "Elegant and refined design",
+      "author": "JSON Resume",
+      "tags": ["elegant", "refined"],
+      "screenshot": "/theme-screenshots/elegant.png",
+      "previewUrl": "http://localhost:3000/thomasdavis?theme=elegant"
+    },
+    {
+      "id": "elegant-pink",
+      "name": "Elegant Pink",
+      "description": "Beautiful feminine theme with soft pink colors and floral accents",
+      "author": "JSON Resume Team",
+      "tags": ["feminine", "pink", "elegant", "pretty"],
+      "screenshot": "/theme-screenshots/elegant-pink.png",
+      "previewUrl": "http://localhost:3000/thomasdavis?theme=elegant-pink"
+    },
+    {
+      "id": "flat",
+      "name": "Flat",
+      "description": "Flat design with minimalist aesthetic",
+      "author": "JSON Resume",
+      "tags": ["flat", "minimalist"],
+      "screenshot": "/theme-screenshots/flat.png",
+      "previewUrl": "http://localhost:3000/thomasdavis?theme=flat"
+    },
+    {
+      "id": "modern",
+      "name": "Modern",
+      "description": "Contemporary design with purple accents and card-based layout",
+      "author": "JSON Resume Team",
+      "tags": ["modern", "purple", "cards"],
+      "screenshot": "/theme-screenshots/modern.png",
+      "previewUrl": "http://localhost:3000/thomasdavis?theme=modern"
+    },
+    {
+      "id": "professional",
+      "name": "Professional",
+      "description": "Clean professional theme with serif typography",
+      "author": "JSON Resume",
+      "tags": ["professional", "serif", "classic"],
+      "screenshot": "/theme-screenshots/professional.png",
+      "previewUrl": "http://localhost:3000/thomasdavis?theme=professional"
+    },
+    {
+      "id": "reference",
+      "name": "Reference",
+      "description": "Clean and professional reference theme showcasing all JSON Resume features",
+      "author": "JSON Resume Team",
+      "tags": ["professional", "clean", "reference"],
+      "screenshot": "/theme-screenshots/reference.png",
+      "previewUrl": "http://localhost:3000/thomasdavis?theme=reference"
+    },
+    {
+      "id": "sidebar",
+      "name": "Sidebar",
+      "description": "Two-column layout with dark blue sidebar and professional appearance",
+      "author": "JSON Resume Team",
+      "tags": ["professional", "two-column", "sidebar"],
+      "screenshot": "/theme-screenshots/sidebar.png",
+      "previewUrl": "http://localhost:3000/thomasdavis?theme=sidebar"
+    },
+    {
+      "id": "spartacus",
+      "name": "Spartacus",
+      "description": "Bold theme with strong typography",
+      "author": "JSON Resume",
+      "tags": ["bold", "modern"],
+      "screenshot": "/theme-screenshots/spartacus.png",
+      "previewUrl": "http://localhost:3000/thomasdavis?theme=spartacus"
+    },
+    {
+      "id": "standard",
+      "name": "Standard",
+      "description": "Classic JSON Resume standard theme",
+      "author": "JSON Resume",
+      "tags": ["classic", "standard"],
+      "screenshot": "/theme-screenshots/standard.png",
+      "previewUrl": "http://localhost:3000/thomasdavis?theme=standard"
+    }
+  ]
+}

@@ -12,6 +12,7 @@ import * as stackoverflow from '@jsonresume/theme-stackoverflow';
 import * as reference from 'jsonresume-theme-reference';
 import * as modern from 'jsonresume-theme-modern';
 import * as sidebar from 'jsonresume-theme-sidebar';
+import * as elegantpink from 'jsonresume-theme-elegant-pink';
 
 export const THEMES = {
   ace: require('jsonresume-theme-ace'),
@@ -60,6 +61,7 @@ export const THEMES = {
   reference,
   modern,
   sidebar,
+  'elegant-pink': elegantpink,
 };
 
 /**

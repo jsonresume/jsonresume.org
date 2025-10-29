@@ -9,13 +9,17 @@
     "prepare": "husky install",
     "ui:add": "pnpm --filter @repo/ui ui:add",
     "storybook": "pnpm --filter @repo/ui storybook",
-    "build-storybook": "pnpm --filter @repo/ui build-storybook"
+    "build-storybook": "pnpm --filter @repo/ui build-storybook",
+    "generate:screenshots": "node scripts/generate-theme-screenshots.mjs",
+    "serve:registry": "start-server-and-test 'pnpm --filter registry dev' http://localhost:3000 generate:screenshots"
   },
   "devDependencies": {
-    "eslint": "^8",
+    "@playwright/test": "^1.40.0",
     "@repo/eslint-config-custom": "workspace:*",
+    "eslint": "^8",
     "husky": "^8.0.3",
     "lint-staged": "^15.2.0",
+    "playwright": "^1.40.0",
     "prettier": "^2.8.0",
     "start-server-and-test": "^2.0.3",
     "turbo": "^2.0.6"
