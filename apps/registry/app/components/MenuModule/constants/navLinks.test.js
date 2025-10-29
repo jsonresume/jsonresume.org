@@ -69,8 +69,8 @@ describe('NAV_LINKS', () => {
     });
   });
 
-  it('has exactly 5 navigation links', () => {
-    expect(NAV_LINKS).toHaveLength(5);
+  it('has exactly 6 navigation links', () => {
+    expect(NAV_LINKS).toHaveLength(6);
   });
 
   it('all internal links start with /', () => {
