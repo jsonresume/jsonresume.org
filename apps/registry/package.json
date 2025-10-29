@@ -88,6 +88,8 @@
     "jsonresume-theme-standard": "workspace:*",
     "jsonresume-theme-standard-resume": "^2.1.0",
     "jsonresume-theme-tailwind": "workspace:*",
+    "jsonresume-theme-reference": "workspace:*",
+    "jsonresume-theme-modern": "workspace:*",
     "jsonresume-theme-tan-responsive": "^0.0.7",
     "jsonresume-theme-techlead": "^1.0.1",
     "jsonschema": "^1.4.1",

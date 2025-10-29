@@ -409,6 +409,9 @@ importers:
       jsonresume-theme-mocha-responsive:
         specifier: ^1.1.1
         version: 1.1.1
+      jsonresume-theme-modern:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-modern
       jsonresume-theme-msresume:
         specifier: ^0.1.0
         version: 0.1.0
@@ -436,6 +439,9 @@ importers:
       jsonresume-theme-pumpkin:
         specifier: ^1.1.4
         version: 1.1.4
+      jsonresume-theme-reference:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-reference
       jsonresume-theme-relaxed:
         specifier: ^0.1.8
         version: 0.1.12
@@ -8651,7 +8657,7 @@ packages:
     peerDependencies:
       '@testing-library/dom': '>=7.21.4'
     dependencies:
-      '@babel/runtime': 7.28.4
+      '@babel/runtime': 7.28.2
       '@testing-library/dom': 8.20.1
     dev: true
 
