@@ -15,17 +15,18 @@ import * as sidebar from 'jsonresume-theme-sidebar';
 import * as modernclassic from 'jsonresume-theme-modern-classic';
 import * as executiveslate from 'jsonresume-theme-executive-slate';
 import * as productmanagercanvas from 'jsonresume-theme-product-manager-canvas';
-import * as governmentstandard from 'jsonresume-theme-government-standard';
-import * as developermono from 'jsonresume-theme-developer-mono';
-import * as minimalistgrid from 'jsonresume-theme-minimalist-grid';
-import * as creativestudio from 'jsonresume-theme-creative-studio';
-import * as datadriven from 'jsonresume-theme-data-driven';
-import * as consultantpolished from 'jsonresume-theme-consultant-polished';
-import * as universityfirst from 'jsonresume-theme-university-first';
-import * as academiccvlite from 'jsonresume-theme-academic-cv-lite';
-import * as saleshunter from 'jsonresume-theme-sales-hunter';
-import * as marketingnarrative from 'jsonresume-theme-marketing-narrative';
-import * as operationsprecision from 'jsonresume-theme-operations-precision';
+// TEMPORARILY DISABLED - styled-components version conflict
+// import * as governmentstandard from 'jsonresume-theme-government-standard'; // FAILS - separate styles.js
+import * as developermono from 'jsonresume-theme-developer-mono'; // TESTING
+import * as minimalistgrid from 'jsonresume-theme-minimalist-grid'; // TESTING
+// import * as creativestudio from '@jsonresume/jsonresume-theme-creative-studio'; // FAILS - window is not defined (SSR incompatible)
+import * as datadriven from 'jsonresume-theme-data-driven'; // TESTING
+// import * as consultantpolished from '@jsonresume/jsonresume-theme-consultant-polished'; // FAILS - Date is not a constructor
+import * as universityfirst from 'jsonresume-theme-university-first'; // TESTING
+import * as academiccvlite from 'jsonresume-theme-academic-cv-lite'; // TESTING
+import * as saleshunter from 'jsonresume-theme-sales-hunter'; // TESTING
+// import * as marketingnarrative from 'jsonresume-theme-marketing-narrative'; // FAILS - separate styles.js
+import * as operationsprecision from 'jsonresume-theme-operations-precision'; // TESTING
 
 export const THEMES = {
   ace: require('jsonresume-theme-ace'),
@@ -77,17 +78,18 @@ export const THEMES = {
   'modern-classic': modernclassic,
   'executive-slate': executiveslate,
   'product-manager-canvas': productmanagercanvas,
-  'government-standard': governmentstandard,
-  'developer-mono': developermono,
-  'minimalist-grid': minimalistgrid,
-  'creative-studio': creativestudio,
-  'data-driven': datadriven,
-  'consultant-polished': consultantpolished,
-  'university-first': universityfirst,
-  'academic-cv-lite': academiccvlite,
-  'sales-hunter': saleshunter,
-  'marketing-narrative': marketingnarrative,
-  'operations-precision': operationsprecision,
+  // TEMPORARILY DISABLED - styled-components version conflict
+  // 'government-standard': governmentstandard, // FAILS - separate styles.js
+  'developer-mono': developermono, // TESTING
+  'minimalist-grid': minimalistgrid, // TESTING
+  // 'creative-studio': creativestudio, // FAILS - window is not defined (SSR incompatible)
+  'data-driven': datadriven, // TESTING
+  // 'consultant-polished': consultantpolished, // FAILS - Date is not a constructor
+  'university-first': universityfirst, // TESTING
+  'academic-cv-lite': academiccvlite, // TESTING
+  'sales-hunter': saleshunter, // TESTING
+  // 'marketing-narrative': marketingnarrative, // FAILS - separate styles.js
+  'operations-precision': operationsprecision, // TESTING
 };
 
 /**
