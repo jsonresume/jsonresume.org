@@ -7,7 +7,6 @@
   "devDependencies": {
     "@repo/eslint-config-custom": "workspace:*",
     "react": "^18",
-
     "styled-components": "^6"
   },
   "peerDependencies": {
