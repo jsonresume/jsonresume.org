@@ -547,15 +547,18 @@ feature/
   - Use `workspace:*` for `@resume/core` and `styled-components` dependencies
   - Include `react` and `react-dom` as peer dependencies
   - Use proper theme naming: `jsonresume-theme-{slug}`
-- **CRITICAL: Theme visual review workflow** (MUST follow for every theme):
-  1. Test at `http://localhost:3000/thomasdavis?theme={slug}`
-  2. Use Playwright MCP server to take a screenshot of the theme
-  3. **Review the screenshot yourself** - critically analyze the design
-  4. Fix any visual issues you identify (spacing, contrast, alignment, colors)
-  5. Iterate until the theme looks polished and professional
-  6. Verify ALL sections render (references, volunteer, awards, etc.)
-  - **Quality standards**: No visual issues, proper spacing, good typography, WCAG contrast compliance
-  - **Never skip screenshot review** - this is required for every theme before marking complete
+- **CRITICAL: Iterative theme visual verification workflow** (MUST follow for every theme):
+  1. **Start dev server**: `cd apps/registry && pnpm dev`
+  2. **Build complete iteration**: Implement full theme (structure, typography, colors, all sections)
+  3. **Take screenshot**: Use Playwright to capture full-page screenshot
+  4. **Review screenshot yourself**: Critically analyze design, check against spec from `packages/themes/ideas.md`
+  5. **Fix issues**: If problems found (spacing, colors wrong, sections missing), fix them
+  6. **Re-screenshot and verify**: Take new screenshot after fixes
+  7. **Iterate until polished**: Repeat steps 5-6 until theme matches spec perfectly
+  8. **Test URL**: `http://localhost:3000/thomasdavis?theme={slug}`
+  - **Quality standards**: No visual issues, proper spacing, good typography, WCAG contrast compliance, distinct from other themes
+  - **Reference guide**: See `docs/AGENT_THEME_DEVELOPMENT.md` for complete workflow
+  - **Never skip screenshot review** - visual verification prevents building wrong theme
 - **Theme registration**:
   1. Add import to `apps/registry/lib/formatters/template/themeConfig.js`
   2. Add to THEMES export object
