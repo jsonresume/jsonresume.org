@@ -1,0 +1,42 @@
+{
+  "name": "@resume/core",
+  "version": "0.1.0",
+  "description": "Framework-agnostic resume component core - design tokens, primitives, and validators",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "exports": {
+    ".": "./src/index.js",
+    "./tokens": "./src/tokens/index.js",
+    "./primitives": "./src/primitives/index.js",
+    "./styles": "./src/styles/tokens.css"
+  },
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@repo/eslint-config-custom": "workspace:^",
+    "typescript": "^5",
+    "vitest": "^2"
+  },
+  "peerDependencies": {},
+  "keywords": [
+    "resume",
+    "cv",
+    "json-resume",
+    "design-tokens",
+    "ats-friendly",
+    "components"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jsonresume/jsonresume.org",
+    "directory": "packages/resume-core"
+  },
+  "license": "MIT"
+}

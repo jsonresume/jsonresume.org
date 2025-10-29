@@ -1,0 +1,28 @@
+{
+  "name": "jsonresume-theme-reference",
+  "version": "0.1.0",
+  "description": "Reference theme demonstrating @resume/core best practices - ATS-friendly, framework-agnostic",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": [
+    "jsonresume",
+    "theme",
+    "resume",
+    "cv",
+    "ats-friendly",
+    "reference"
+  ],
+  "dependencies": {
+    "@resume/core": "workspace:*"
+  },
+  "devDependencies": {
+    "vitest": "^1.6.0"
+  }
+}

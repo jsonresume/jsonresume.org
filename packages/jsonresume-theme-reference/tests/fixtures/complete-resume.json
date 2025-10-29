@@ -1,0 +1,197 @@
+{
+  "basics": {
+    "name": "Alex Chen",
+    "label": "Senior Software Engineer",
+    "image": "",
+    "email": "alex.chen@example.com",
+    "phone": "+1 (555) 123-4567",
+    "url": "https://alexchen.dev",
+    "summary": "Full-stack engineer with 8+ years building scalable web applications. Passionate about developer experience, clean architecture, and mentoring junior developers.",
+    "location": {
+      "city": "San Francisco",
+      "region": "CA",
+      "countryCode": "US"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "alexchen",
+        "url": "https://github.com/alexchen"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "alexchen",
+        "url": "https://linkedin.com/in/alexchen"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "TechCorp Inc",
+      "position": "Senior Software Engineer",
+      "location": "San Francisco, CA",
+      "startDate": "2021-03-01",
+      "endDate": null,
+      "summary": "Tech lead for core product platform serving 2M+ users",
+      "highlights": [
+        "Led migration from monolith to microservices, reducing deployment time by 75%",
+        "Architected real-time messaging system handling 100k messages/second",
+        "Mentored team of 6 engineers, 3 promoted to senior roles",
+        "Reduced cloud costs by $200k/year through optimization initiatives"
+      ]
+    },
+    {
+      "name": "StartupXYZ",
+      "position": "Software Engineer",
+      "location": "Remote",
+      "startDate": "2018-06-01",
+      "endDate": "2021-02-28",
+      "summary": "Full-stack engineer building fintech products from 0 to 1",
+      "highlights": [
+        "Built payment processing system handling $50M+ in transactions",
+        "Implemented automated testing pipeline, increasing coverage from 20% to 85%",
+        "Developed customer-facing dashboard using React and GraphQL",
+        "Collaborated with design team to improve user experience metrics by 40%"
+      ]
+    },
+    {
+      "name": "Digital Agency Co",
+      "position": "Junior Developer",
+      "location": "New York, NY",
+      "startDate": "2016-08-01",
+      "endDate": "2018-05-31",
+      "summary": "Web developer for client projects across various industries",
+      "highlights": [
+        "Delivered 15+ client websites using WordPress, React, and Vue.js",
+        "Implemented responsive designs with 98% cross-browser compatibility",
+        "Reduced page load times by 60% through optimization techniques"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University of California, Berkeley",
+      "area": "Computer Science",
+      "studyType": "Bachelor of Science",
+      "startDate": "2012-09-01",
+      "endDate": "2016-05-31",
+      "score": "3.8",
+      "courses": [
+        "CS 61A: Structure and Interpretation of Computer Programs",
+        "CS 170: Efficient Algorithms and Intractable Problems",
+        "CS 186: Database Systems"
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "name": "Languages",
+      "keywords": ["JavaScript", "TypeScript", "Python", "Go", "SQL"]
+    },
+    {
+      "name": "Frontend",
+      "keywords": ["React", "Next.js", "Vue.js", "Tailwind CSS", "GraphQL"]
+    },
+    {
+      "name": "Backend",
+      "keywords": ["Node.js", "Express", "PostgreSQL", "Redis", "Docker"]
+    },
+    {
+      "name": "Cloud & DevOps",
+      "keywords": ["AWS", "Vercel", "GitHub Actions", "Kubernetes", "Terraform"]
+    }
+  ],
+  "projects": [
+    {
+      "name": "OpenSource CMS",
+      "description": "Headless CMS with visual editor used by 5k+ developers",
+      "highlights": [
+        "Built plugin architecture supporting 50+ community extensions",
+        "Achieved 4.5k GitHub stars and 200+ contributors",
+        "Featured in Tech Crunch and Product Hunt #1 product of the day"
+      ],
+      "keywords": ["React", "Node.js", "PostgreSQL", "TypeScript"],
+      "startDate": "2020-01-01",
+      "endDate": null,
+      "url": "https://github.com/alexchen/opensource-cms"
+    },
+    {
+      "name": "DevTools Extension",
+      "description": "Browser extension for debugging GraphQL applications",
+      "highlights": [
+        "Used by 50k+ developers with 4.7 star rating",
+        "Integrated with Apollo, Relay, and URQL clients"
+      ],
+      "keywords": ["JavaScript", "GraphQL", "Chrome Extension"],
+      "startDate": "2019-06-01",
+      "endDate": "2021-12-31",
+      "url": "https://devtools.example.com"
+    }
+  ],
+  "volunteer": [
+    {
+      "organization": "Code for America",
+      "position": "Volunteer Developer",
+      "startDate": "2019-01-01",
+      "endDate": null,
+      "summary": "Building civic tech tools to improve government services",
+      "highlights": [
+        "Developed public benefits enrollment system used by 10k+ citizens",
+        "Mentored 5 new volunteers in full-stack development"
+      ]
+    }
+  ],
+  "awards": [
+    {
+      "title": "Hackathon Winner - Best Developer Tool",
+      "date": "2020-11-15",
+      "awarder": "TechConf 2020",
+      "summary": "Built AI-powered code review assistant in 24 hours"
+    },
+    {
+      "title": "Employee of the Year",
+      "date": "2019-12-01",
+      "awarder": "StartupXYZ",
+      "summary": "Recognized for exceptional technical contributions and team leadership"
+    }
+  ],
+  "publications": [
+    {
+      "name": "Building Scalable GraphQL APIs",
+      "publisher": "Medium Engineering",
+      "releaseDate": "2021-06-15",
+      "url": "https://medium.com/engineering/building-scalable-graphql",
+      "summary": "Deep dive into GraphQL architecture patterns for high-traffic applications"
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Native"
+    },
+    {
+      "language": "Mandarin",
+      "fluency": "Professional working proficiency"
+    },
+    {
+      "language": "Spanish",
+      "fluency": "Elementary proficiency"
+    }
+  ],
+  "interests": [
+    {
+      "name": "Technology",
+      "keywords": ["Open Source", "Web3", "AI/ML", "DevTools"]
+    },
+    {
+      "name": "Other",
+      "keywords": ["Rock Climbing", "Photography", "Coffee Roasting", "Travel"]
+    }
+  ],
+  "references": [
+    {
+      "name": "Sarah Johnson, Engineering Manager at TechCorp",
+      "reference": "Alex is one of the most talented engineers I've worked with. Their technical expertise and mentorship have been invaluable to our team's growth."
+    }
+  ]
+}
