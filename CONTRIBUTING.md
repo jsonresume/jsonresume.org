@@ -114,12 +114,15 @@ jsonresume.org/
 │   ├── homepage2/         # New marketing site
 │   └── registry/          # Main resume registry app
 ├── packages/
+│   ├── resume-core/      # Framework-agnostic theme primitives
+│   ├── ats-validator/    # ATS compatibility validation
+│   ├── themes/           # Resume theme implementations
+│   │   ├── jsonresume-theme-reference/
+│   │   ├── jsonresume-theme-modern/
+│   │   ├── jsonresume-theme-standard/
+│   │   └── ... (13+ themes)
 │   ├── ui/               # Shared UI components
 │   └── eslint-config/    # Shared ESLint config
-├── themes/               # Resume themes
-│   ├── papirus/
-│   ├── professional/
-│   └── ...
 └── scripts/              # Utility scripts
 ```
 
@@ -349,6 +352,111 @@ Fixes #456
 
 Want to add your resume theme to the registry? Here's everything you need to know.
 
+### Quick Start: Using @resume/core Components (Recommended)
+
+The fastest way to build a new theme is using our composable component library:
+
+```javascript
+// index.js
+import {
+  Section,
+  SectionTitle,
+  ListItem,
+  DateRange,
+  BadgeList,
+} from '@resume/core';
+
+export function render(resume) {
+  const html = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <title>${resume.basics.name}</title>
+      <link rel="stylesheet" href="https://unpkg.com/@resume/core@0.1.0/src/styles/tokens.css">
+      <style>
+        body {
+          font-family: var(--resume-font-sans);
+          max-width: var(--resume-max-width);
+          margin: 0 auto;
+          padding: 40px 20px;
+        }
+      </style>
+    </head>
+    <body>
+      ${Section({
+        children: `
+          <h1>${resume.basics.name}</h1>
+          <p>${resume.basics.label}</p>
+        `,
+      })}
+
+      ${Section({
+        children: `
+          ${SectionTitle({ text: 'Work Experience' })}
+          ${resume.work
+            .map(
+              (job) => `
+            ${ListItem({
+              title: job.position,
+              subtitle: job.company,
+              date: DateRange({
+                startDate: job.startDate,
+                endDate: job.endDate,
+              }),
+              description: job.summary,
+            })}
+          `
+            )
+            .join('')}
+        `,
+      })}
+
+      ${Section({
+        children: `
+          ${SectionTitle({ text: 'Skills' })}
+          ${resume.skills
+            .map(
+              (skill) => `
+            <div>
+              <strong>${skill.name}</strong>
+              ${BadgeList({ items: skill.keywords })}
+            </div>
+          `
+            )
+            .join('')}
+        `,
+      })}
+    </body>
+    </html>
+  `;
+
+  return html;
+}
+```
+
+**Benefits:**
+
+- ✅ **ATS-friendly by default** - semantic HTML, standard fonts
+- ✅ **10x faster development** - no need to write HTML from scratch
+- ✅ **Tested components** - all primitives have unit tests
+- ✅ **Design tokens** - consistent styling with CSS variables
+- ✅ **Framework-agnostic** - works with any setup
+
+**Available Components:**
+
+- `Section()` - Wrapper for resume sections
+- `SectionTitle()` - Styled section headings
+- `ListItem()` - Experience/education entries
+- `DateRange()` - Start/end date display
+- `Badge()` / `BadgeList()` - Skills, keywords, tags
+
+**See Working Examples:**
+
+- `packages/themes/jsonresume-theme-reference/` - Complete implementation
+- `packages/themes/jsonresume-theme-modern/` - Card-based modern design
+- `packages/resume-core/README.md` - Full API documentation
+
 ### Theme Requirements
 
 **CRITICAL:** Themes must be **serverless-compatible**. The registry runs on Vercel's serverless functions, which means:
@@ -365,6 +473,7 @@ Want to add your resume theme to the registry? Here's everything you need to kno
 - ES6 imports for templates and styles
 - Build-time bundling (Vite, webpack, rollup)
 - All assets inlined at compile time
+- **OR** @resume/core components (recommended)
 
 ### Quick Start: Converting Your Theme
 
@@ -522,9 +631,11 @@ export function render(resume) {
 
 Check these themes in the repo for reference:
 
-- **Simple approach:** `packages/jsonresume-theme-standard`
-- **Vite bundling:** `packages/jsonresume-theme-professional`
-- **Handlebars templates:** `packages/jsonresume-theme-spartacus`
+- **@resume/core components:** `packages/themes/jsonresume-theme-reference` (complete example)
+- **@resume/core with custom styles:** `packages/themes/jsonresume-theme-modern` (card-based design)
+- **Simple approach:** `packages/themes/jsonresume-theme-standard`
+- **Vite bundling:** `packages/themes/jsonresume-theme-professional`
+- **Handlebars templates:** `packages/themes/jsonresume-theme-spartacus`
 
 ### Common Issues
 
