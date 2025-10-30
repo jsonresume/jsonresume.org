@@ -66,7 +66,7 @@ export const THEMES = {
   kendall: require('jsonresume-theme-kendall'),
   lucide: require('jsonresume-theme-lucide'),
   macchiato: require('jsonresume-theme-macchiato'),
-  mantra: require('jsonresume-theme-mantra'),
+  // mantra: require('jsonresume-theme-mantra'), // REMOVED - causes build failure due to ansi-colors dependency
   minyma: require('jsonresume-theme-minyma'),
   'paper-plus-plus': require('jsonresume-theme-paper-plus-plus'),
   pumpkin: require('jsonresume-theme-pumpkin'),
