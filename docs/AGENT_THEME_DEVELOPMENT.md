@@ -525,34 +525,6 @@ const THEME_METADATA = {
 
 Next time you run `pnpm generate:screenshots`, your theme will have rich metadata.
 
-### GitHub Actions Automation
-
-**Location**: `.github/workflows/test-themes.yml`
-
-The CI workflow automatically:
-
-- Runs on every push to master
-- Starts the registry dev server
-- Generates screenshots for all themes
-- Uploads screenshots as build artifacts
-
-**Important:** Screenshots are committed manually, not by CI. The CI workflow verifies theme rendering but doesn't commit changes.
-
-**Workflow excerpt:**
-
-```yaml
-- name: Generate theme screenshots
-  run: pnpm serve:registry
-  env:
-    REGISTRY_URL: http://localhost:3000
-
-- name: Upload theme screenshots
-  uses: actions/upload-artifact@v4
-  with:
-    name: theme-screenshots
-    path: apps/homepage2/public/theme-screenshots/
-```
-
 ### Screenshot Generation Script Internals
 
 **File**: `scripts/generate-theme-screenshots.mjs`
@@ -1005,6 +977,190 @@ open https://jsonresume.org/themes
 
 ---
 
+## Theme Metadata Configuration
+
+### Shared Package: @repo/theme-config
+
+**Location**: `packages/theme-config/`
+
+The `@repo/theme-config` package is the single source of truth for theme metadata, shared between the registry app and homepage2 app.
+
+**Structure:**
+
+```
+packages/theme-config/
+├── package.json
+├── src/
+│   ├── index.js      # Re-exports metadata
+│   └── metadata.js   # THEME_METADATA object
+```
+
+**Why it exists:**
+
+- Both `apps/registry` and `apps/homepage2` need access to theme metadata
+- Relative imports across apps in monorepo don't work reliably
+- Shared workspace package with `workspace:*` protocol solves this
+- Prevents duplication and keeps metadata in sync
+
+**Usage in registry:**
+
+```javascript
+// apps/registry/lib/formatters/template/themeConfig.js
+export {
+  THEME_METADATA,
+  THEME_NAMES,
+  getRandomTheme,
+} from '@repo/theme-config';
+```
+
+**Usage in homepage2:**
+
+```javascript
+// apps/homepage2/app/themes/data/themes.js
+import { THEME_METADATA } from '@repo/theme-config';
+```
+
+**Adding new theme metadata:**
+
+Edit `packages/theme-config/src/metadata.js`:
+
+```javascript
+export const THEME_METADATA = {
+  'your-theme': {
+    name: 'Your Theme Name',
+    description: 'Brief description from spec',
+    author: 'JSON Resume Team',
+    tags: ['professional', 'modern', 'clean'],
+  },
+  // ... other themes
+};
+```
+
+**Important:** After updating metadata, run `pnpm install` at root to ensure workspace links are updated.
+
+### Screenshot Generator Scripts
+
+**Location**: `apps/registry/scripts/`
+
+Two scripts are available for generating theme screenshots:
+
+**1. Planning Script: `generate-theme-screenshots.js`**
+
+Identifies missing screenshots without taking action:
+
+```bash
+node apps/registry/scripts/generate-theme-screenshots.js
+```
+
+**What it does:**
+
+- Reads theme list from `@repo/theme-config`
+- Checks if screenshots exist in `apps/homepage2/public/img/themes/`
+- Checks if dev server is running on http://localhost:3000
+- Outputs task list of missing screenshots
+
+**Use case:** Quick audit to see what themes need screenshots.
+
+**2. Automated Script: `generate-theme-screenshots-auto.js`**
+
+Fully automated screenshot generation using Playwright:
+
+```bash
+node apps/registry/scripts/generate-theme-screenshots-auto.js
+```
+
+**What it does:**
+
+- Launches headless Chromium browser
+- Navigates to each theme URL: `http://localhost:3000/thomasdavis?theme=THEME_NAME`
+- Captures full-page screenshot (1280x1024 viewport)
+- Saves to temporary directory first
+- Moves to final location: `apps/homepage2/public/img/themes/THEME_NAME.png`
+- Processes all missing themes automatically
+
+**Prerequisites:**
+
+- Dev server running: `cd apps/registry && pnpm dev`
+- Playwright installed: `npx playwright install chromium`
+- Sufficient disk space for screenshots
+
+**Configuration:**
+
+```javascript
+const REGISTRY_URL = 'http://localhost:3000';
+const TEST_USERNAME = 'thomasdavis'; // User with comprehensive resume data
+const SCREENSHOTS_DIR = path.join(
+  REPO_ROOT,
+  'apps/homepage2/public/img/themes'
+);
+```
+
+**Screenshot settings:**
+
+- Viewport: 1280x1024 (desktop size)
+- Format: PNG
+- Type: Full-page screenshot (captures entire resume)
+- Wait strategy: `networkidle` (waits for network requests to finish)
+
+**Example usage:**
+
+```bash
+# Terminal 1: Start dev server
+cd apps/registry && pnpm dev
+
+# Terminal 2: Generate all missing screenshots
+node apps/registry/scripts/generate-theme-screenshots-auto.js
+
+# Review generated screenshots
+open apps/homepage2/public/img/themes/
+```
+
+**Error handling:**
+
+- Skips themes that already have screenshots
+- Logs errors but continues processing other themes
+- Uses temporary directory to avoid partial writes
+- Validates URL accessibility before screenshot
+
+**Output:**
+
+```
+✓ Checking dev server at http://localhost:3000...
+✓ Dev server is running
+
+Processing themes...
+  ✓ modern-classic (screenshot exists, skipping)
+  → executive-slate (missing, generating...)
+  ✓ Screenshot saved: executive-slate.png
+  → product-manager-canvas (missing, generating...)
+  ✓ Screenshot saved: product-manager-canvas.png
+
+Summary: Generated 2 new screenshots, skipped 15 existing
+```
+
+### Integration with pnpm Scripts
+
+The automated screenshot generation is available as a package script:
+
+```json
+// Root package.json
+{
+  "scripts": {
+    "generate:screenshots": "node apps/registry/scripts/generate-theme-screenshots-auto.js"
+  }
+}
+```
+
+**Usage:**
+
+```bash
+pnpm generate:screenshots
+```
+
+This is the recommended way to run screenshot generation in the workflow.
+
+---
+
 ## Common Mistakes to Avoid
 
 ❌ **Forgetting to add to ALL_THEMES array** → Theme won't appear on homepage
@@ -1015,6 +1171,8 @@ open https://jsonresume.org/themes
 ❌ **Skipping screenshot review** → Visual issues missed
 ❌ **Ignoring spec colors** → Theme doesn't match intended design
 ❌ **Missing sections** → Theme incomplete, users frustrated
+❌ **Not updating @repo/theme-config** → Metadata out of sync
+❌ **Running screenshot script without dev server** → Scripts fail silently
 
 ---
 

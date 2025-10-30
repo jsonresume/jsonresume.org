@@ -1,0 +1,28 @@
+{
+  "name": "jsonresume-theme-graph-paper-grid",
+  "version": "1.0.0",
+  "description": "Technical design precision with subtle graph paper grid and monospace typography",
+  "main": "src/index.js",
+  "type": "module",
+  "keywords": [
+    "jsonresume",
+    "theme",
+    "resume",
+    "grid",
+    "technical",
+    "engineer",
+    "architect"
+  ],
+  "author": "JSON Resume Team",
+  "license": "MIT",
+  "dependencies": {
+    "@resume/core": "workspace:*",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "styled-components": "^6.1.19"
+  },
+  "peerDependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  }
+}

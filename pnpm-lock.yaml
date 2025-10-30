@@ -401,6 +401,9 @@ importers:
       jsonresume-theme-government-standard:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-government-standard
+      jsonresume-theme-graph-paper-grid:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-graph-paper-grid
       jsonresume-theme-jacrys:
         specifier: ^1.0.4
         version: 1.0.4
@@ -867,6 +870,21 @@ importers:
         version: 19.2.0
       react-dom:
         specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.0(react@19.2.0)
+      styled-components:
+        specifier: ^6.1.19
+        version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+
+  packages/themes/jsonresume-theme-graph-paper-grid:
+    dependencies:
+      '@resume/core':
+        specifier: workspace:*
+        version: link:../../resume-core
+      react:
+        specifier: ^19.2.0
+        version: 19.2.0
+      react-dom:
+        specifier: ^19.2.0
         version: 19.2.0(react@19.2.0)
       styled-components:
         specifier: ^6.1.19

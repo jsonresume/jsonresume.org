@@ -237,6 +237,21 @@ export const THEME_METADATA = {
       'steel-blue',
     ],
   },
+  'graph-paper-grid': {
+    name: 'Graph Paper Grid',
+    description:
+      'Technical design precision with subtle graph paper grid background and monospace typography. Built for engineers, architects, and UX designers.',
+    author: 'JSON Resume Team',
+    tags: [
+      'technical',
+      'engineer',
+      'architect',
+      'grid',
+      'monospace',
+      'systematic',
+      'precision',
+    ],
+  },
 };
 
 // List of available theme names (derived from THEME_METADATA)
