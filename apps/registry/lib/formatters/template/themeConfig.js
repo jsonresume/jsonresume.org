@@ -23,6 +23,7 @@ import * as writersportfolio from 'jsonresume-theme-writers-portfolio'; // NEW
 import * as tokyomodernist from '@jsonresume/jsonresume-theme-tokyo-modernist'; // NEW
 import * as nordicminimal from 'jsonresume-theme-nordic-minimal'; // NEW
 import * as graphpapergrid from 'jsonresume-theme-graph-paper-grid'; // NEW
+import * as monochrome from 'jsonresume-theme-monochrome-noir'; // NEW
 
 // Import theme metadata from shared package
 export {
@@ -69,4 +70,5 @@ export const THEMES = {
   'tokyo-modernist': tokyomodernist, // NEW
   'nordic-minimal': nordicminimal, // NEW
   'graph-paper-grid': graphpapergrid, // NEW
+  'monochrome-noir': monochrome, // NEW
 };

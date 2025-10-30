@@ -1,0 +1,29 @@
+{
+  "name": "jsonresume-theme-monochrome-noir",
+  "version": "1.0.0",
+  "description": "Sharp, modern, ultra-clean theme with bold contrasts and minimal design",
+  "main": "src/index.js",
+  "type": "module",
+  "keywords": [
+    "jsonresume",
+    "theme",
+    "resume",
+    "monochrome",
+    "noir",
+    "minimal",
+    "editorial",
+    "creative-tech"
+  ],
+  "author": "JSON Resume Team",
+  "license": "MIT",
+  "dependencies": {
+    "@resume/core": "workspace:*",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "styled-components": "^6.1.19"
+  },
+  "peerDependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  }
+}

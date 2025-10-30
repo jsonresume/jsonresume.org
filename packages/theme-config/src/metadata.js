@@ -252,6 +252,21 @@ export const THEME_METADATA = {
       'precision',
     ],
   },
+  'monochrome-noir': {
+    name: 'Monochrome Noir',
+    description:
+      'Sharp, modern, ultra-clean theme with bold contrasts and minimal design. Reads like an art catalog with condensed sans typography and thin white separator lines.',
+    author: 'JSON Resume Team',
+    tags: [
+      'monochrome',
+      'minimal',
+      'editorial',
+      'creative-tech',
+      'bold',
+      'noir',
+      'black-and-white',
+    ],
+  },
 };
 
 // List of available theme names (derived from THEME_METADATA)
