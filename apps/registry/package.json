@@ -106,6 +106,7 @@
     "jsonresume-theme-sales-hunter": "workspace:*",
     "jsonresume-theme-marketing-narrative": "workspace:*",
     "jsonresume-theme-operations-precision": "workspace:*",
+    "jsonresume-theme-writers-portfolio": "workspace:*",
     "jsonresume-theme-tan-responsive": "^0.0.7",
     "jsonresume-theme-techlead": "^1.0.1",
     "jsonschema": "^1.4.1",

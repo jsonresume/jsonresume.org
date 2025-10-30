@@ -1,0 +1,42 @@
+{
+  "name": "jsonresume-theme-writers-portfolio",
+  "version": "0.1.0",
+  "description": "Literary and elegant resume theme for content writers, editors, and communications professionals. Features transitional serif typography, generous spacing, and prose-like readability.",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": [
+    "jsonresume",
+    "theme",
+    "resume",
+    "cv",
+    "writer",
+    "portfolio",
+    "literary",
+    "elegant",
+    "serif",
+    "editorial",
+    "content",
+    "communications",
+    "ats-friendly"
+  ],
+  "dependencies": {
+    "@resume/core": "workspace:*",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "styled-components": "^6.1.11"
+  },
+  "devDependencies": {
+    "vitest": "^1.6.0"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  }
+}

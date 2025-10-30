@@ -533,6 +533,9 @@ importers:
       jsonresume-theme-university-first:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-university-first
+      jsonresume-theme-writers-portfolio:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-writers-portfolio
       jsonschema:
         specifier: ^1.4.1
         version: 1.5.0
@@ -1206,6 +1209,25 @@ importers:
       styled-components:
         specifier: ^6.1.11
         version: 6.1.11(react-dom@18.3.1)(react@18.3.1)
+
+  packages/themes/jsonresume-theme-writers-portfolio:
+    dependencies:
+      '@resume/core':
+        specifier: workspace:*
+        version: link:../../resume-core
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.3.1
+        version: 18.3.1(react@18.3.1)
+      styled-components:
+        specifier: ^6.1.11
+        version: 6.1.11(react-dom@18.3.1)(react@18.3.1)
+    devDependencies:
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.1
 
   packages/themes/papirus:
     dependencies:
