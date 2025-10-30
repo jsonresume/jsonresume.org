@@ -85,7 +85,7 @@ importers:
         specifier: ^2.0.3
         version: 2.1.2
       turbo:
-        specifier: ^2.0.6
+        specifier: ^2.5.8
         version: 2.5.8
 
   apps/docs:
