@@ -1,0 +1,36 @@
+{
+  "private": false,
+  "name": "@jsonresume/jsonresume-theme-tokyo-modernist",
+  "version": "1.0.0",
+  "main": "./src/index.js",
+  "license": "MIT",
+  "description": "Tokyo Modernist theme - Minimal futurism with geometric precision, built on 8pt grid with Outfit typography and deep magenta accents",
+  "keywords": [
+    "resume",
+    "json-resume",
+    "theme",
+    "modern",
+    "futuristic",
+    "geometric",
+    "minimalist",
+    "tokyo"
+  ],
+  "devDependencies": {
+    "@repo/eslint-config-custom": "workspace:^",
+    "react": "^19.2.0",
+    "styled-components": "^6.1.19"
+  },
+  "peerDependencies": {
+    "styled-components": "^6"
+  },
+  "scripts": {
+    "lint": "eslint src || exit 0",
+    "publish": "npm publish --access public"
+  },
+  "dependencies": {
+    "@resume/core": "workspace:^",
+    "marked": "^16.3.0",
+    "prismjs": "^1.29.0",
+    "react-icons": "^5.0.1"
+  }
+}

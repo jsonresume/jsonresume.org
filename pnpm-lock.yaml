@@ -1047,6 +1047,31 @@ importers:
         specifier: ^3.4.3
         version: 3.4.18
 
+  packages/themes/jsonresume-theme-tokyo-modernist:
+    dependencies:
+      '@resume/core':
+        specifier: workspace:^
+        version: link:../../resume-core
+      marked:
+        specifier: ^16.3.0
+        version: 16.4.1
+      prismjs:
+        specifier: ^1.30.0
+        version: 1.30.0
+      react-icons:
+        specifier: ^5.0.1
+        version: 5.5.0(react@19.2.0)
+    devDependencies:
+      '@repo/eslint-config-custom':
+        specifier: workspace:^
+        version: link:../../eslint-config-custom
+      react:
+        specifier: ^19.2.0
+        version: 19.2.0
+      styled-components:
+        specifier: ^6.1.19
+        version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+
   packages/themes/jsonresume-theme-university-first:
     dependencies:
       '@resume/core':

@@ -168,7 +168,7 @@ These are print-perfect, modern, and emotionally resonant — designed for peopl
 
 ---
 
-- [ ] **Tokyo Modernist**
+- [x] **Tokyo Modernist**
       **Vibe:** Minimal futurism with typographic focus
       **Layout:** Vertical rhythm built on 8pt grid, slightly tighter line spacing
       **Typography:** Variable-width geometric sans (e.g., Outfit, Noto Sans JP)

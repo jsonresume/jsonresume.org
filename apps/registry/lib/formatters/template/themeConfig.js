@@ -20,6 +20,7 @@ import * as saleshunter from 'jsonresume-theme-sales-hunter'; // TESTING
 import * as marketingnarrative from 'jsonresume-theme-marketing-narrative'; // FIXED
 import * as operationsprecision from 'jsonresume-theme-operations-precision'; // TESTING
 import * as writersportfolio from 'jsonresume-theme-writers-portfolio'; // NEW
+import * as tokyomodernist from '@jsonresume/jsonresume-theme-tokyo-modernist'; // NEW
 
 // List of available theme names (used by UI components without triggering imports)
 export const THEME_NAMES = [
@@ -52,6 +53,7 @@ export const THEME_NAMES = [
   'sidebar',
   'stackoverflow',
   'tan-responsive',
+  'tokyo-modernist',
   'university-first',
   'writers-portfolio',
 ];
@@ -91,6 +93,7 @@ export const THEMES = {
   'marketing-narrative': marketingnarrative, // FIXED
   'operations-precision': operationsprecision, // TESTING
   'writers-portfolio': writersportfolio, // NEW
+  'tokyo-modernist': tokyomodernist, // NEW
 };
 
 /**
