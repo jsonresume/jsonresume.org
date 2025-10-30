@@ -21,6 +21,7 @@
     "@jsonresume/jsonresume-theme-consultant-polished": "workspace:*",
     "@jsonresume/jsonresume-theme-creative-studio": "workspace:*",
     "@jsonresume/jsonresume-theme-professional": "workspace:*",
+    "@jsonresume/jsonresume-theme-tokyo-modernist": "workspace:^",
     "@jsonresume/schema": "^1.2.0",
     "@jsonresume/theme-stackoverflow": "^2",
     "@mdx-js/loader": "^3.1.0",

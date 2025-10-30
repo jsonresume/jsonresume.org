@@ -281,6 +281,9 @@ importers:
       '@jsonresume/jsonresume-theme-professional':
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-professional
+      '@jsonresume/jsonresume-theme-tokyo-modernist':
+        specifier: workspace:^
+        version: link:../../packages/themes/jsonresume-theme-tokyo-modernist
       '@jsonresume/schema':
         specifier: ^1.2.0
         version: 1.2.1
