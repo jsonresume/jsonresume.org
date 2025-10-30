@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { safeUrl } from '@resume/core';
+import { safeUrl, DateRange } from '@resume/core';
 
 // Layout
 const Container = styled.div`
   display: grid;
-  grid-template-columns: 30% 70%;
+  grid-template-columns: 35% 65%;
   gap: 3rem;
   max-width: 1200px;
   margin: 0 auto;
@@ -32,6 +32,15 @@ const LeftColumn = styled.aside`
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  background: #f9fafb;
+  padding: 2rem 1.5rem;
+  border-right: 2px solid #e5e7eb;
+
+  @media (max-width: 768px) {
+    background: transparent;
+    padding: 0;
+    border-right: none;
+  }
 `;
 
 const RightColumn = styled.main`
@@ -42,7 +51,7 @@ const RightColumn = styled.main`
 
 const Divider = styled.hr`
   border: none;
-  border-top: 1px solid #d1d5db;
+  border-top: 2px solid #cbd5e1;
   margin: 0;
 `;
 
@@ -77,12 +86,14 @@ const Contact = styled.div`
   color: #4b5563;
 
   a {
-    color: #1f1f1f;
+    color: #2563eb;
     text-decoration: none;
+    font-weight: 500;
     transition: color 0.2s;
 
     &:hover {
-      color: #6b7280;
+      color: #1d4ed8;
+      text-decoration: underline;
     }
   }
 `;
@@ -382,7 +393,7 @@ function WorkSection({ work }) {
               {job.name && <EntryOrganization>{job.name}</EntryOrganization>}
               {(job.startDate || job.endDate) && (
                 <EntryDate>
-                  {job.startDate} – {job.endDate || 'Present'}
+                  <DateRange startDate={job.startDate} endDate={job.endDate} />
                 </EntryDate>
               )}
             </EntryMeta>
@@ -421,7 +432,7 @@ function EducationSection({ education }) {
               )}
               {(edu.startDate || edu.endDate) && (
                 <EntryDate>
-                  {edu.startDate} – {edu.endDate || 'Present'}
+                  <DateRange startDate={edu.startDate} endDate={edu.endDate} />
                 </EntryDate>
               )}
             </EntryMeta>
@@ -453,7 +464,10 @@ function ProjectsSection({ projects }) {
             {(project.startDate || project.endDate) && (
               <EntryMeta>
                 <EntryDate>
-                  {project.startDate} – {project.endDate || 'Present'}
+                  <DateRange
+                    startDate={project.startDate}
+                    endDate={project.endDate}
+                  />
                 </EntryDate>
               </EntryMeta>
             )}
@@ -516,7 +530,7 @@ function VolunteerSection({ volunteer }) {
               )}
               {(vol.startDate || vol.endDate) && (
                 <EntryDate>
-                  {vol.startDate} – {vol.endDate || 'Present'}
+                  <DateRange startDate={vol.startDate} endDate={vol.endDate} />
                 </EntryDate>
               )}
             </EntryMeta>

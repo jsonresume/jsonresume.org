@@ -119,7 +119,8 @@ const ContentBlock = styled.div`
   background: #fafafa;
   padding: 32px;
   border-radius: 8px;
-  border-left: 4px solid #0f766e;
+  border-left: 5px solid #0f766e;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 
   &:last-child {
     margin-bottom: 0;
@@ -194,16 +195,17 @@ const Highlights = styled.ul`
 // Skills section
 const SkillsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 28px;
 `;
 
 const SkillCategory = styled.div`
-  padding: 24px;
+  padding: 28px;
   background: white;
   border-radius: 8px;
   border: 2px solid #0f766e;
   transition: transform 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 `;
 
 const SkillName = styled.h4`

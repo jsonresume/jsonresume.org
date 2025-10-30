@@ -184,8 +184,8 @@ const SkillsGrid = styled.div`
 
 const SkillCategory = styled.div`
   padding: 12px;
-  background: #f9f9e8;
-  border: 1px solid #333333;
+  background: #fefce8;
+  border: 2px solid #333333;
 `;
 
 const SkillName = styled.h4`
@@ -281,6 +281,114 @@ function Skills({ skills = [] }) {
   );
 }
 
+function Projects({ projects = [] }) {
+  if (!projects?.length) return null;
+
+  return (
+    <>
+      {projects.map((project, index) => (
+        <WorkItem key={index}>
+          <DateText>
+            {project.startDate && (
+              <DateRange
+                startDate={project.startDate}
+                endDate={project.endDate}
+              />
+            )}
+          </DateText>
+          <Position>{project.name}</Position>
+          {project.description && <Company>{project.description}</Company>}
+          {project.summary && <WorkSummary>{project.summary}</WorkSummary>}
+          {project.highlights?.length > 0 && (
+            <Highlights>
+              {project.highlights.map((highlight, i) => (
+                <li key={i}>{highlight}</li>
+              ))}
+            </Highlights>
+          )}
+        </WorkItem>
+      ))}
+    </>
+  );
+}
+
+function Volunteer({ volunteer = [] }) {
+  if (!volunteer?.length) return null;
+
+  return (
+    <>
+      {volunteer.map((vol, index) => (
+        <WorkItem key={index}>
+          <DateText>
+            {(vol.startDate || vol.endDate) && (
+              <DateRange startDate={vol.startDate} endDate={vol.endDate} />
+            )}
+          </DateText>
+          <Position>{vol.position}</Position>
+          {vol.organization && <Company>{vol.organization}</Company>}
+          {vol.summary && <WorkSummary>{vol.summary}</WorkSummary>}
+          {vol.highlights?.length > 0 && (
+            <Highlights>
+              {vol.highlights.map((highlight, i) => (
+                <li key={i}>{highlight}</li>
+              ))}
+            </Highlights>
+          )}
+        </WorkItem>
+      ))}
+    </>
+  );
+}
+
+function Awards({ awards = [] }) {
+  if (!awards?.length) return null;
+
+  return (
+    <>
+      {awards.map((award, index) => (
+        <EducationItem key={index}>
+          <DateText>{award.date || ''}</DateText>
+          <Institution>{award.title}</Institution>
+          {award.awarder && <Degree>Awarded by {award.awarder}</Degree>}
+          {award.summary && <WorkSummary>{award.summary}</WorkSummary>}
+        </EducationItem>
+      ))}
+    </>
+  );
+}
+
+function Publications({ publications = [] }) {
+  if (!publications?.length) return null;
+
+  return (
+    <>
+      {publications.map((pub, index) => (
+        <EducationItem key={index}>
+          <DateText>{pub.releaseDate || ''}</DateText>
+          <Institution>{pub.name}</Institution>
+          {pub.publisher && <Degree>Published by {pub.publisher}</Degree>}
+          {pub.summary && <WorkSummary>{pub.summary}</WorkSummary>}
+        </EducationItem>
+      ))}
+    </>
+  );
+}
+
+function References({ references = [] }) {
+  if (!references?.length) return null;
+
+  return (
+    <>
+      {references.map((ref, index) => (
+        <EducationItem key={index}>
+          <Institution>{ref.name}</Institution>
+          {ref.reference && <WorkSummary>{ref.reference}</WorkSummary>}
+        </EducationItem>
+      ))}
+    </>
+  );
+}
+
 // Main component
 function Resume({ resume }) {
   const {
@@ -325,32 +433,28 @@ function Resume({ resume }) {
       {projects?.length > 0 && (
         <Section>
           <StyledSectionTitle>Projects</StyledSectionTitle>
-          <WorkExperience work={projects} />
+          <Projects projects={projects} />
         </Section>
       )}
 
       {volunteer?.length > 0 && (
         <Section>
           <StyledSectionTitle>Volunteer</StyledSectionTitle>
-          <WorkExperience work={volunteer} />
+          <Volunteer volunteer={volunteer} />
         </Section>
       )}
 
       {awards?.length > 0 && (
         <Section>
           <StyledSectionTitle>Awards</StyledSectionTitle>
-          <Education
-            education={awards.map((a) => ({ ...a, institution: a.title }))}
-          />
+          <Awards awards={awards} />
         </Section>
       )}
 
       {publications?.length > 0 && (
         <Section>
           <StyledSectionTitle>Publications</StyledSectionTitle>
-          <Education
-            education={publications.map((p) => ({ ...p, institution: p.name }))}
-          />
+          <Publications publications={publications} />
         </Section>
       )}
 
@@ -376,9 +480,7 @@ function Resume({ resume }) {
       {references?.length > 0 && (
         <Section>
           <StyledSectionTitle>References</StyledSectionTitle>
-          <Education
-            education={references.map((r) => ({ ...r, institution: r.name }))}
-          />
+          <References references={references} />
         </Section>
       )}
     </Layout>

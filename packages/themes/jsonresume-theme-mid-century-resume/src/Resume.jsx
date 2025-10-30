@@ -6,7 +6,7 @@ const Layout = styled.div`
   max-width: 800px;
   margin: 0 auto;
   padding: 60px 50px;
-  background: #fef3c7;
+  background: #fef8e7;
   font-family: 'League Spartan', 'Josefin Sans', 'Futura', sans-serif;
   color: #2c1810;
   position: relative;
@@ -25,7 +25,7 @@ const DecorativeCircle = styled.div`
   height: 80px;
   border: 3px solid #b45309;
   border-radius: 50%;
-  opacity: 0.3;
+  opacity: 0.5;
 
   @media print {
     display: none;
@@ -39,7 +39,7 @@ const DecorativeRectangle = styled.div`
   width: 60px;
   height: 60px;
   background: #b45309;
-  opacity: 0.15;
+  opacity: 0.25;
 
   @media print {
     display: none;
@@ -93,7 +93,7 @@ const Summary = styled.p`
   line-height: 1.8;
   color: #4a3426;
   margin: 24px auto 0;
-  text-align: justify;
+  text-align: left;
   max-width: 700px;
 `;
 
@@ -106,23 +106,38 @@ const StyledSectionTitle = styled(SectionTitle)`
   letter-spacing: 3px;
   text-transform: uppercase;
   position: relative;
+  padding: 0 100px;
 
   &::before,
   &::after {
     content: '';
     position: absolute;
     top: 50%;
-    width: 80px;
+    width: 60px;
     height: 3px;
     background: #b45309;
   }
 
   &::before {
-    left: 0;
+    left: 20px;
   }
 
   &::after {
-    right: 0;
+    right: 20px;
+  }
+
+  @media (max-width: 640px) {
+    padding: 0 80px;
+
+    &::before {
+      left: 10px;
+      width: 50px;
+    }
+
+    &::after {
+      right: 10px;
+      width: 50px;
+    }
   }
 `;
 
@@ -179,7 +194,7 @@ const WorkSummary = styled.p`
   color: #4a3426;
   line-height: 1.8;
   font-size: 15px;
-  text-align: justify;
+  text-align: left;
 `;
 
 const Highlights = styled.ul`
@@ -228,8 +243,8 @@ const EducationDate = styled.div`
 
 const SkillsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 24px;
 `;
 
 const SkillCategory = styled.div`

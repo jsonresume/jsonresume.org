@@ -19,13 +19,14 @@ const Layout = styled.div`
     position: fixed;
     top: -10%;
     left: -5%;
-    width: 10px;
+    width: 6px;
     height: 150%;
     background: linear-gradient(180deg, #e11d48 0%, #be123c 50%, #9f1239 100%);
     transform: rotate(-30deg);
     transform-origin: top left;
     z-index: 1;
-    box-shadow: 0 0 20px rgba(225, 29, 72, 0.3);
+    opacity: 0.85;
+    box-shadow: 0 0 15px rgba(225, 29, 72, 0.2);
   }
 
   /* Content wrapper to sit above diagonal bar */
@@ -120,7 +121,7 @@ const StyledSectionTitle = styled(SectionTitle)`
 `;
 
 const WorkItem = styled.div`
-  margin-bottom: 32px;
+  margin-bottom: 36px;
   padding-left: 40px;
 
   &:last-child {
@@ -227,16 +228,18 @@ const EducationDate = styled.div`
 
 const SkillsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 20px;
   padding-left: 40px;
 `;
 
 const SkillCategory = styled.div`
-  padding: 16px;
-  background: #fef2f2;
+  padding: 18px;
+  background: white;
   border-radius: 6px;
-  border-left: 3px solid #e11d48;
+  border: 1px solid #e5e7eb;
+  border-left: 4px solid #e11d48;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 `;
 
 const SkillName = styled.h4`
