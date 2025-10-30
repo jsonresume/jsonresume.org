@@ -84,6 +84,7 @@
     "jsonresume-theme-tan-responsive": "^0.0.7",
     "jsonresume-theme-university-first": "workspace:*",
     "jsonresume-theme-writers-portfolio": "workspace:*",
+    "jsonresume-theme-nordic-minimal": "workspace:*",
     "jsonschema": "^1.4.1",
     "lodash": "^4.17.21",
     "lucide-react": "^0.407.0",

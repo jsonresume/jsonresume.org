@@ -431,6 +431,9 @@ importers:
       jsonresume-theme-modern-classic:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-modern-classic
+      jsonresume-theme-nordic-minimal:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-nordic-minimal
       jsonresume-theme-onepage-plus:
         specifier: '*'
         version: 1.0.1
@@ -909,6 +912,21 @@ importers:
         version: 19.2.0
       react-dom:
         specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.0(react@19.2.0)
+      styled-components:
+        specifier: ^6.1.19
+        version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+
+  packages/themes/jsonresume-theme-nordic-minimal:
+    dependencies:
+      '@resume/core':
+        specifier: workspace:*
+        version: link:../../resume-core
+      react:
+        specifier: ^19.2.0
+        version: 19.2.0
+      react-dom:
+        specifier: ^19.2.0
         version: 19.2.0(react@19.2.0)
       styled-components:
         specifier: ^6.1.19

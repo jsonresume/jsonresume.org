@@ -223,6 +223,20 @@ export const THEME_METADATA = {
     author: 'JSON Resume Team',
     tags: ['writer', 'literary', 'elegant', 'minimal', 'serif'],
   },
+  'nordic-minimal': {
+    name: 'Nordic Minimal',
+    description:
+      'Scandinavian restraint with white space worship and quiet confidence. Two-column layout with wide margins and extra line height for air.',
+    author: 'JSON Resume Team',
+    tags: [
+      'nordic',
+      'minimal',
+      'scandinavian',
+      'two-column',
+      'clean',
+      'steel-blue',
+    ],
+  },
 };
 
 // List of available theme names (derived from THEME_METADATA)
