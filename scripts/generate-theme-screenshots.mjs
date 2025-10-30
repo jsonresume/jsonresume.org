@@ -107,19 +107,74 @@ function formatThemeName(themeName) {
     .join(' ');
 }
 
+// Full list of themes from themeConfig.js (manually synced)
+// TODO: Auto-generate this list from themeConfig.js during build
+const ALL_THEMES = [
+  'ace',
+  'actual',
+  'autumn',
+  'cora',
+  'cv',
+  'professional',
+  'elegant',
+  'full',
+  'flat',
+  'el-santo',
+  'even',
+  'github',
+  'github2',
+  'jacrys',
+  'kards',
+  'kendall',
+  'lucide',
+  'macchiato',
+  'mantra',
+  'mocha-responsive',
+  'minyma',
+  'msresume',
+  'one',
+  'onepage',
+  'onepage-plus',
+  'onepageresume',
+  'orbit',
+  'paper',
+  'papirus',
+  'paper-plus-plus',
+  'pumpkin',
+  'relaxed',
+  'rocketspacer',
+  'simple-red',
+  'rickosborne',
+  'spartan',
+  'spartacus',
+  'standard',
+  'stackoverflow',
+  'standard-resume',
+  'tan-responsive',
+  'techlead',
+  'reference',
+  'modern',
+  'sidebar',
+  'modern-classic',
+  'executive-slate',
+  'product-manager-canvas',
+  'government-standard',
+  'developer-mono',
+  'minimalist-grid',
+  'creative-studio',
+  'data-driven',
+  'consultant-polished',
+  'university-first',
+  'academic-cv-lite',
+  'sales-hunter',
+  'marketing-narrative',
+  'operations-precision',
+  'writers-portfolio',
+];
+
 // Get list of themes from the registry themeConfig
 async function getThemesList() {
-  try {
-    // Import THEMES from themeConfig to support ALL themes (old and new)
-    const { THEMES } = await import(
-      '../apps/registry/lib/formatters/template/themeConfig.js'
-    );
-    return Object.keys(THEMES);
-  } catch (error) {
-    console.error('❌ Failed to load themes from themeConfig:', error.message);
-    // Fallback to metadata keys if import fails
-    return Object.keys(THEME_METADATA);
-  }
+  return ALL_THEMES;
 }
 
 async function generateScreenshots() {
