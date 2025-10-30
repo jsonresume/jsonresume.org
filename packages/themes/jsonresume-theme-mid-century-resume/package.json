@@ -1,0 +1,25 @@
+{
+  "name": "jsonresume-theme-mid-century-resume",
+  "version": "1.0.0",
+  "description": "Retro modernist elegance inspired by 1960s design offices with vintage typography",
+  "main": "src/index.js",
+  "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "jsonresume",
+    "theme",
+    "mid-century",
+    "retro",
+    "vintage",
+    "modernist",
+    "1960s"
+  ],
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "dependencies": {
+    "@resume/core": "workspace:*",
+    "styled-components": "^6.1.19"
+  }
+}

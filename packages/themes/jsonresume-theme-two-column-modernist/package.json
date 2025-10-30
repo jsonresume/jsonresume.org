@@ -1,0 +1,27 @@
+{
+  "name": "jsonresume-theme-two-column-modernist",
+  "version": "1.0.0",
+  "description": "Structured European minimalism with asymmetric two-column layout and neutral grotesk typography",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "jsonresume",
+    "theme",
+    "two-column",
+    "european",
+    "minimalist",
+    "structured",
+    "grotesk",
+    "swiss-design"
+  ],
+  "dependencies": {
+    "@resume/core": "workspace:*",
+    "styled-components": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  }
+}

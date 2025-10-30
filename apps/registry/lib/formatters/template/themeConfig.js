@@ -24,6 +24,14 @@ import * as tokyomodernist from '@jsonresume/jsonresume-theme-tokyo-modernist'; 
 import * as nordicminimal from 'jsonresume-theme-nordic-minimal'; // NEW
 import * as graphpapergrid from 'jsonresume-theme-graph-paper-grid'; // NEW
 import * as monochrome from 'jsonresume-theme-monochrome-noir'; // NEW
+import * as twocolumnmodernist from 'jsonresume-theme-two-column-modernist'; // NEW
+import * as sidebarphotostrip from 'jsonresume-theme-sidebar-photo-strip'; // NEW
+import * as architectsportfolio from 'jsonresume-theme-architects-portfolio'; // NEW
+import * as diagonalaccentbar from 'jsonresume-theme-diagonal-accent-bar'; // NEW
+import * as asymmetrictimeline from 'jsonresume-theme-asymmetric-timeline'; // NEW
+import * as midcenturyresume from 'jsonresume-theme-mid-century-resume'; // NEW
+import * as boldheaderstatement from 'jsonresume-theme-bold-header-statement'; // NEW
+import * as typewritermodern from 'jsonresume-theme-typewriter-modern'; // NEW
 
 // Import theme metadata from shared package
 export {
@@ -71,4 +79,12 @@ export const THEMES = {
   'nordic-minimal': nordicminimal, // NEW
   'graph-paper-grid': graphpapergrid, // NEW
   'monochrome-noir': monochrome, // NEW
+  'two-column-modernist': twocolumnmodernist, // NEW
+  'sidebar-photo-strip': sidebarphotostrip, // NEW
+  'architects-portfolio': architectsportfolio, // NEW
+  'diagonal-accent-bar': diagonalaccentbar, // NEW
+  'asymmetric-timeline': asymmetrictimeline, // NEW
+  'mid-century-resume': midcenturyresume, // NEW
+  'bold-header-statement': boldheaderstatement, // NEW
+  'typewriter-modern': typewritermodern, // NEW
 };

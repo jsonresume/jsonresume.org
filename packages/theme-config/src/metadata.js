@@ -13,6 +13,35 @@ export const THEME_METADATA = {
     author: 'JSON Resume Team',
     tags: ['academic', 'scholarly', 'cv', 'serif', 'print-first'],
   },
+  'bold-header-statement': {
+    name: 'Bold Header Statement',
+    description:
+      'Magazine-inspired layout with commanding header and confident personal brand aesthetic.',
+    author: 'JSON Resume Team',
+    tags: [
+      'bold',
+      'header',
+      'magazine',
+      'personal-brand',
+      'creative',
+      'modern',
+    ],
+  },
+  'architects-portfolio': {
+    name: "Architect's Portfolio",
+    description:
+      'Structural elegance with horizontal keylines and geometric precision like a drafting sheet.',
+    author: 'JSON Resume Team',
+    tags: [
+      'architect',
+      'portfolio',
+      'geometric',
+      'precision',
+      'designer',
+      'structural',
+      'minimal',
+    ],
+  },
   'consultant-polished': {
     name: 'Consultant Polished',
     description:
@@ -265,6 +294,95 @@ export const THEME_METADATA = {
       'bold',
       'noir',
       'black-and-white',
+    ],
+  },
+  'mid-century-resume': {
+    name: 'Mid-Century Resume',
+    description:
+      'Retro modernist elegance inspired by 1960s design offices with vintage typography.',
+    author: 'JSON Resume Team',
+    tags: [
+      'mid-century',
+      'retro',
+      'vintage',
+      'modernist',
+      '1960s',
+      'geometric',
+      'creative',
+    ],
+  },
+  'two-column-modernist': {
+    name: 'Two-Column Modernist',
+    description:
+      'Structured European minimalism with asymmetric two-column layout and neutral grotesk typography.',
+    author: 'JSON Resume Team',
+    tags: [
+      'two-column',
+      'european',
+      'minimalist',
+      'structured',
+      'grotesk',
+      'swiss-design',
+    ],
+  },
+  'sidebar-photo-strip': {
+    name: 'Sidebar Photo Strip',
+    description:
+      'European creative layout with integrated grayscale photo sidebar and minimal aesthetic.',
+    author: 'JSON Resume Team',
+    tags: [
+      'sidebar',
+      'photo',
+      'european',
+      'creative',
+      'minimal',
+      'two-column',
+      'portrait',
+    ],
+  },
+  'diagonal-accent-bar': {
+    name: 'Diagonal Accent Bar',
+    description:
+      'Dynamic architectural design with bold diagonal accent and kinetic energy. Wide sans headings with condensed body text.',
+    author: 'JSON Resume Team',
+    tags: [
+      'diagonal',
+      'bold',
+      'dynamic',
+      'architectural',
+      'marketing',
+      'creative',
+      'startup',
+      'rose',
+    ],
+  },
+  'asymmetric-timeline': {
+    name: 'Asymmetric Timeline',
+    description:
+      'Cinematic storytelling with staggered timeline layout and serif-sans typography mix. Experiences arranged in alternating left-right bands along a central rule.',
+    author: 'JSON Resume Team',
+    tags: [
+      'timeline',
+      'asymmetric',
+      'storytelling',
+      'project-driven',
+      'narrative',
+      'visual-flow',
+    ],
+  },
+  'typewriter-modern': {
+    name: 'Typewriter Modern',
+    description:
+      'Nostalgic typewriter aesthetic with monospace body and contemporary clarity.',
+    author: 'JSON Resume Team',
+    tags: [
+      'typewriter',
+      'monospace',
+      'vintage',
+      'writer',
+      'researcher',
+      'developer',
+      'retro',
     ],
   },
 };

@@ -1,0 +1,25 @@
+{
+  "name": "jsonresume-theme-bold-header-statement",
+  "version": "1.0.0",
+  "description": "Magazine-inspired layout with commanding header and confident personal brand aesthetic",
+  "main": "src/index.js",
+  "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "jsonresume",
+    "theme",
+    "bold",
+    "header",
+    "magazine",
+    "personal-brand",
+    "creative"
+  ],
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "dependencies": {
+    "@resume/core": "workspace:*",
+    "styled-components": "^6.1.19"
+  }
+}

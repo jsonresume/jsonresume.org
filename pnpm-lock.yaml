@@ -374,12 +374,24 @@ importers:
       jsonresume-theme-academic-cv-lite:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-academic-cv-lite
+      jsonresume-theme-architects-portfolio:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-architects-portfolio
+      jsonresume-theme-asymmetric-timeline:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-asymmetric-timeline
+      jsonresume-theme-bold-header-statement:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-bold-header-statement
       jsonresume-theme-data-driven:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-data-driven
       jsonresume-theme-developer-mono:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-developer-mono
+      jsonresume-theme-diagonal-accent-bar:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-diagonal-accent-bar
       jsonresume-theme-elegant:
         specifier: ^1.16.1
         version: 1.16.1
@@ -425,6 +437,9 @@ importers:
       jsonresume-theme-marketing-narrative:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-marketing-narrative
+      jsonresume-theme-mid-century-resume:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-mid-century-resume
       jsonresume-theme-minimalist-grid:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-minimalist-grid
@@ -467,6 +482,9 @@ importers:
       jsonresume-theme-sidebar:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-sidebar
+      jsonresume-theme-sidebar-photo-strip:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-sidebar-photo-strip
       jsonresume-theme-srt:
         specifier: ^0.1.3
         version: 0.1.3
@@ -476,6 +494,12 @@ importers:
       jsonresume-theme-tan-responsive:
         specifier: ^0.0.7
         version: 0.0.7
+      jsonresume-theme-two-column-modernist:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-two-column-modernist
+      jsonresume-theme-typewriter-modern:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-typewriter-modern
       jsonresume-theme-university-first:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-university-first
@@ -730,6 +754,51 @@ importers:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
 
+  packages/themes/jsonresume-theme-architects-portfolio:
+    dependencies:
+      '@resume/core':
+        specifier: workspace:*
+        version: link:../../resume-core
+      react:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.0
+      react-dom:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.0(react@19.2.0)
+      styled-components:
+        specifier: ^6.1.19
+        version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+
+  packages/themes/jsonresume-theme-asymmetric-timeline:
+    dependencies:
+      '@resume/core':
+        specifier: workspace:*
+        version: link:../../resume-core
+      react:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.0
+      react-dom:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.0(react@19.2.0)
+      styled-components:
+        specifier: ^6.1.19
+        version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+
+  packages/themes/jsonresume-theme-bold-header-statement:
+    dependencies:
+      '@resume/core':
+        specifier: workspace:*
+        version: link:../../resume-core
+      react:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.0
+      react-dom:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.0(react@19.2.0)
+      styled-components:
+        specifier: ^6.1.19
+        version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+
   packages/themes/jsonresume-theme-consultant-polished:
     dependencies:
       marked:
@@ -823,6 +892,21 @@ importers:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
 
+  packages/themes/jsonresume-theme-diagonal-accent-bar:
+    dependencies:
+      '@resume/core':
+        specifier: workspace:*
+        version: link:../../resume-core
+      react:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.0
+      react-dom:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.0(react@19.2.0)
+      styled-components:
+        specifier: ^6.1.19
+        version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+
   packages/themes/jsonresume-theme-elegant-pink:
     dependencies:
       '@resume/core':
@@ -894,6 +978,21 @@ importers:
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
 
   packages/themes/jsonresume-theme-marketing-narrative:
+    dependencies:
+      '@resume/core':
+        specifier: workspace:*
+        version: link:../../resume-core
+      react:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.0
+      react-dom:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.0(react@19.2.0)
+      styled-components:
+        specifier: ^6.1.19
+        version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+
+  packages/themes/jsonresume-theme-mid-century-resume:
     dependencies:
       '@resume/core':
         specifier: workspace:*
@@ -1073,6 +1172,21 @@ importers:
         specifier: ^1.6.0
         version: 1.6.1
 
+  packages/themes/jsonresume-theme-sidebar-photo-strip:
+    dependencies:
+      '@resume/core':
+        specifier: workspace:*
+        version: link:../../resume-core
+      react:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.0
+      react-dom:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.0(react@19.2.0)
+      styled-components:
+        specifier: ^6.1.19
+        version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+
   packages/themes/jsonresume-theme-tailwind:
     dependencies:
       '@radix-ui/react-avatar':
@@ -1137,6 +1251,36 @@ importers:
       react:
         specifier: ^19.2.0
         version: 19.2.0
+      styled-components:
+        specifier: ^6.1.19
+        version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+
+  packages/themes/jsonresume-theme-two-column-modernist:
+    dependencies:
+      '@resume/core':
+        specifier: workspace:*
+        version: link:../../resume-core
+      react:
+        specifier: '>=18.0.0'
+        version: 19.2.0
+      react-dom:
+        specifier: '>=18.0.0'
+        version: 19.2.0(react@19.2.0)
+      styled-components:
+        specifier: ^6.1.19
+        version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+
+  packages/themes/jsonresume-theme-typewriter-modern:
+    dependencies:
+      '@resume/core':
+        specifier: workspace:*
+        version: link:../../resume-core
+      react:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.0
+      react-dom:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.0(react@19.2.0)
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)

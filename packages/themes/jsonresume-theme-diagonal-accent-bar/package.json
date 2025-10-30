@@ -1,0 +1,27 @@
+{
+  "name": "jsonresume-theme-diagonal-accent-bar",
+  "version": "1.0.0",
+  "description": "Dynamic architectural design with bold diagonal accent and kinetic energy",
+  "main": "src/index.js",
+  "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "jsonresume",
+    "theme",
+    "diagonal",
+    "bold",
+    "dynamic",
+    "architectural",
+    "marketing",
+    "creative",
+    "startup"
+  ],
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "dependencies": {
+    "@resume/core": "workspace:*",
+    "styled-components": "workspace:*"
+  }
+}
