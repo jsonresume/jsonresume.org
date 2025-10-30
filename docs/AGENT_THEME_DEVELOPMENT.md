@@ -494,39 +494,13 @@ export { THEME_METADATA, THEME_NAMES } from '@repo/theme-config';
 import { THEME_METADATA } from '@repo/theme-config';
 ```
 
-## File Size Limit Compliance
+## Theme File Structure
 
-**CRITICAL: All theme files must be under 200 lines**
+**Theme Resume.jsx files can be any length - no line limit**
 
-- **Production code**: Maximum 200 lines per file
-- **Tests**: Maximum 500 lines per file
-- **Stories/Config**: Maximum 500 lines per file
+Keep all theme code in a single Resume.jsx file. The system currently requires all styled-components and component logic to be in one file for proper rendering.
 
-**If Resume.jsx exceeds 200 lines:**
-
-1. Extract styled components to separate file:
-
-   ```
-   src/
-   ├── Resume.jsx         (main component, <200 lines)
-   ├── styles.js          (styled components)
-   └── components/        (sub-components if needed)
-   ```
-
-2. Extract section components:
-
-   ```javascript
-   // src/components/WorkSection.jsx
-   export function WorkSection({ work }) {
-     return <Section>...</Section>;
-   }
-   ```
-
-3. Import and use:
-   ```javascript
-   // src/Resume.jsx
-   import { WorkSection } from './components/WorkSection.jsx';
-   ```
+**Note:** This is a temporary architectural decision. Future refactoring will support modular theme components, but for now, prioritize functionality over file size.
 
 ## Checklist: Theme Completion
 
@@ -547,7 +521,6 @@ Before marking theme complete:
 - [ ] Re-generated screenshot to verify fixes
 - [ ] Tested print preview (Cmd/Ctrl + P)
 - [ ] Verified contrast ratios (WCAG AA compliance)
-- [ ] All files under 200 lines
 - [ ] Committed all changes (theme, config, metadata, screenshot)
 - [ ] Pushed to master
 - [ ] Verified theme works after deployment
@@ -566,7 +539,6 @@ Before marking theme complete:
 ❌ **Not testing print preview** → Users can't print resume
 ❌ **Missing sections** → Theme incomplete
 ❌ **Not committing screenshots** → Broken images on homepage
-❌ **Files over 200 lines** → Violates code standards
 
 ## Key Learnings (October 2025)
 
