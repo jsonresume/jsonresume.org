@@ -1,6 +1,11 @@
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ['@repo/ui'],
+  // Skip TypeScript type checking during build to avoid memory issues with 60+ theme imports
+  // Type checking still happens in dev (tsc --watch) and CI (separate step)
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   webpack: (config, { isServer }) => {
     if (isServer) {
       // Externalize pdf-parse and its dependencies for server-side only
