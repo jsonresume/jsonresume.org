@@ -1,0 +1,32 @@
+{
+  "name": "@repo/theme-config",
+  "version": "0.1.0",
+  "description": "Shared theme configuration and metadata for JSON Resume themes",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "exports": {
+    ".": "./src/index.js",
+    "./metadata": "./src/metadata.js",
+    "./themes": "./src/themes.js"
+  },
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "lint": "eslint src || exit 0"
+  },
+  "devDependencies": {
+    "@repo/eslint-config-custom": "workspace:^"
+  },
+  "keywords": [
+    "json-resume",
+    "themes",
+    "config"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jsonresume/jsonresume.org",
+    "directory": "packages/theme-config"
+  },
+  "license": "MIT"
+}

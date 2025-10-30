@@ -29,6 +29,7 @@
     "@monaco-editor/react": "^4.6.0",
     "@next/mdx": "^15.5.6",
     "@prisma/client": "^6.16.3",
+    "@repo/theme-config": "workspace:*",
     "@repo/ui": "workspace:*",
     "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/supabase-js": "^2.39.6",

@@ -31,9 +31,32 @@ You (Claude) have **full autonomous control** of this repository. Your mission i
 **Development Tools:**
 
 - **Supabase CLI**: Installed and authenticated
+
   - Database name: `registry` (associated with registry app)
   - Use for local development and migrations
   - Run `supabase` commands for database operations
+
+- **Theme Screenshot Generator**: Automated script for generating theme preview images
+  - Location: `apps/registry/scripts/generate-theme-screenshots-auto.js`
+  - Prerequisites: Dev server running (`cd apps/registry && pnpm dev`)
+  - Usage: `node apps/registry/scripts/generate-theme-screenshots-auto.js [options]`
+  - Options:
+    - `--force` - Regenerate all screenshots, even if they exist
+    - `--theme=NAME` - Generate screenshot for specific theme only
+    - `--port=3000` - Dev server port (default: 3000)
+    - `--username=USER` - Test username for resume (default: thomasdavis)
+  - Output: Saves PNG screenshots to `apps/homepage2/public/img/themes/`
+  - How it works:
+    1. Checks if dev server is running on specified port
+    2. Reads theme list from `apps/registry/lib/formatters/template/themeConfig.js`
+    3. Identifies themes missing screenshots (or all themes with `--force`)
+    4. Launches headless Chromium browser via Playwright
+    5. Navigates to each theme URL and captures viewport screenshot
+    6. Saves screenshots to the themes directory
+  - When to use:
+    - After adding new themes to the registry
+    - When theme designs have been updated and need new previews
+    - To regenerate all screenshots with `--force` flag
 
 **Testing Features:**
 

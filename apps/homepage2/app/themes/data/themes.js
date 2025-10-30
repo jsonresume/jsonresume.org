@@ -1,5 +1,5 @@
-// Import from the single source of truth - registry themeConfig.js
-import { THEME_METADATA } from '../../../registry/lib/formatters/template/themeConfig.js';
+// Import from the single source of truth - shared theme-config package
+import { THEME_METADATA } from '@repo/theme-config';
 
 const REGISTRY_URL = 'https://registry.jsonresume.org';
 
@@ -54,6 +54,6 @@ export const themes = Object.entries(THEME_METADATA).map(([slug, metadata]) => {
     link: legacy?.link || `${REGISTRY_URL}/thomasdavis?theme=${slug}`,
     description: metadata.description,
     tags: metadata.tags,
-    screenshot: `/theme-screenshots/${slug}.png`,
+    screenshot: `/img/themes/${slug}.png`,
   };
 });
