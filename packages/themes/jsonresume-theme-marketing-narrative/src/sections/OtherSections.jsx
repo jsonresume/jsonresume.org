@@ -20,7 +20,7 @@ import {
   SkillName,
   SkillTags,
   QuoteBlock,
-} from '../styles.js';
+} from '../Resume.jsx';
 
 export function VolunteerSection({ volunteer }) {
   if (!volunteer?.length) return null;

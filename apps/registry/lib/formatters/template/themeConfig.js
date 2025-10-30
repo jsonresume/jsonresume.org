@@ -25,7 +25,7 @@ import * as datadriven from 'jsonresume-theme-data-driven'; // TESTING
 import * as universityfirst from 'jsonresume-theme-university-first'; // TESTING
 import * as academiccvlite from 'jsonresume-theme-academic-cv-lite'; // TESTING
 import * as saleshunter from 'jsonresume-theme-sales-hunter'; // TESTING
-// import * as marketingnarrative from 'jsonresume-theme-marketing-narrative'; // FAILS - separate styles.js
+import * as marketingnarrative from 'jsonresume-theme-marketing-narrative'; // FIXED
 import * as operationsprecision from 'jsonresume-theme-operations-precision'; // TESTING
 
 export const THEMES = {
@@ -88,7 +88,7 @@ export const THEMES = {
   'university-first': universityfirst, // TESTING
   'academic-cv-lite': academiccvlite, // TESTING
   'sales-hunter': saleshunter, // TESTING
-  // 'marketing-narrative': marketingnarrative, // FAILS - separate styles.js
+  'marketing-narrative': marketingnarrative, // FIXED
   'operations-precision': operationsprecision, // TESTING
 };
 

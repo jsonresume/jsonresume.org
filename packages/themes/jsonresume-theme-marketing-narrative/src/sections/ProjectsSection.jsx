@@ -7,7 +7,7 @@ import {
   Narrative,
   Achievements,
   AchievementItem,
-} from '../styles.js';
+} from '../Resume.jsx';
 
 export function ProjectsSection({ projects }) {
   if (!projects?.length) return null;

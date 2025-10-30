@@ -11,7 +11,7 @@ import {
   Narrative,
   Achievements,
   AchievementItem,
-} from '../styles.js';
+} from '../Resume.jsx';
 
 export function WorkSection({ work }) {
   if (!work?.length) return null;
