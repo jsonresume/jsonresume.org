@@ -5,7 +5,7 @@ import {
   SkillsList,
   SkillName,
   SkillTags,
-} from '../styles.js';
+} from '../Resume.jsx';
 
 export function SkillsSection({ skills }) {
   if (!skills?.length) return null;

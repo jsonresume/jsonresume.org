@@ -6,7 +6,7 @@ import {
   Institution,
   Degree,
   EducationDate,
-} from '../styles.js';
+} from '../Resume.jsx';
 
 export function EducationSection({ education }) {
   if (!education?.length) return null;

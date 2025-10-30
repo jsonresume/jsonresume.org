@@ -58,7 +58,8 @@
       "next-auth@<4.24.12": "^4.24.12",
       "html-minifier@<=4.0.0": "npm:html-minifier-terser@^7.2.0",
       "lodash.template@<=4.5.0": "npm:lodash@^4.17.21",
-      "webpack-dev-server@<=5.2.0": "^5.2.1"
+      "webpack-dev-server@<=5.2.0": "^5.2.1",
+      "styled-components": "^6.1.11"
     }
   }
 }

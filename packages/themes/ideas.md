@@ -87,7 +87,7 @@ Each one is distinct, desirable, and realistic enough for production use — per
 
 ---
 
-- [ ] **University First**
+- [x] **University First**
       **Vibe:** Fresh, optimistic, student-oriented
       **Layout:** Education-first; projects and activities follow
       **Typography:** Friendly sans-serif, large headings
@@ -107,7 +107,7 @@ Each one is distinct, desirable, and realistic enough for production use — per
 
 ---
 
-- [ ] **Sales Hunter**
+- [x] **Sales Hunter**
       **Vibe:** Energetic, confident, measurable success
       **Layout:** Single column; quotas and wins emphasized
       **Typography:** Bold sans-serif; numbers highlighted
@@ -117,7 +117,7 @@ Each one is distinct, desirable, and realistic enough for production use — per
 
 ---
 
-- [ ] **Marketing Narrative**
+- [x] **Marketing Narrative**
       **Vibe:** Creative, persuasive, storytelling-focused
       **Layout:** Flows like an article; section titles act as chapter headings
       **Typography:** Rounded, humanist sans-serif
@@ -137,11 +137,11 @@ Each one is distinct, desirable, and realistic enough for production use — per
 
 ---
 
-- [ ] **Government Standard**
+- [x] **Government Standard**
       **Vibe:** Formal, structured, by-the-book
       **Layout:** Single column, clear section separations, no color dependence
-      **Typography:** Neutral sans-serif (Arial or Noto)
-      **Colors:** Black text with grayscale borders
+      **Typography:** Serif (Times New Roman fallback to Georgia), 12pt body
+      **Colors:** Grayscale only - black, dark gray, white
       **Notes:** Perfect for civil service, defense, or government contracts
       **Description:** Straightforward and timeless — a layout that mirrors official documentation styles, prioritizing clarity and compliance over aesthetics.
 

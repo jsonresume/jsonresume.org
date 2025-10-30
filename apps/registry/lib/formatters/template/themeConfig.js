@@ -15,8 +15,8 @@ import * as sidebar from 'jsonresume-theme-sidebar';
 import * as modernclassic from 'jsonresume-theme-modern-classic';
 import * as executiveslate from 'jsonresume-theme-executive-slate';
 import * as productmanagercanvas from 'jsonresume-theme-product-manager-canvas';
-// TEMPORARILY DISABLED - styled-components version conflict
-// import * as governmentstandard from 'jsonresume-theme-government-standard'; // FAILS - separate styles.js
+// styled-components moved inline to fix webpack resolution
+import * as governmentstandard from 'jsonresume-theme-government-standard'; // FIXED
 import * as developermono from 'jsonresume-theme-developer-mono'; // TESTING
 import * as minimalistgrid from 'jsonresume-theme-minimalist-grid'; // TESTING
 // import * as creativestudio from '@jsonresume/jsonresume-theme-creative-studio'; // FAILS - window is not defined (SSR incompatible)
@@ -78,8 +78,8 @@ export const THEMES = {
   'modern-classic': modernclassic,
   'executive-slate': executiveslate,
   'product-manager-canvas': productmanagercanvas,
-  // TEMPORARILY DISABLED - styled-components version conflict
-  // 'government-standard': governmentstandard, // FAILS - separate styles.js
+  // styled-components moved inline to fix webpack resolution
+  'government-standard': governmentstandard, // FIXED
   'developer-mono': developermono, // TESTING
   'minimalist-grid': minimalistgrid, // TESTING
   // 'creative-studio': creativestudio, // FAILS - window is not defined (SSR incompatible)
