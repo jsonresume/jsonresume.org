@@ -6,7 +6,7 @@ import {
   Label,
   StyledContactInfo,
   Summary,
-} from './components/layout-styles';
+} from './components/layout-styles.jsx';
 import { WorkSection } from './components/WorkSection';
 import { SkillsSection } from './components/SkillsSection';
 import { EducationSection } from './components/EducationSection';

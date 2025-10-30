@@ -1,12 +1,12 @@
 import React from 'react';
 import { Section, DateRange } from '@resume/core';
-import { SectionTitle } from './layout-styles';
+import { SectionTitle } from './layout-styles.jsx';
 import {
   EducationItem,
   Institution,
   Degree,
   EducationDate,
-} from './section-styles';
+} from './section-styles.jsx';
 
 export function EducationSection({ education = [] }) {
   if (!education?.length) return null;

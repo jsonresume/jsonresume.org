@@ -15,7 +15,7 @@ import {
   Summary,
   SkillList,
   SkillItem,
-} from './sharedStyles';
+} from './sharedStyles.jsx';
 
 export function WorkSection({ work }) {
   if (!work || work.length === 0) return null;

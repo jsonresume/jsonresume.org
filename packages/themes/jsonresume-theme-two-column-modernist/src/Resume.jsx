@@ -4,7 +4,7 @@ import {
   LeftColumn,
   RightColumn,
   Divider,
-} from './components/styles';
+} from './components/styles.jsx';
 import { Header } from './components/Header';
 import { Skills } from './components/Skills';
 import { Languages } from './components/Languages';

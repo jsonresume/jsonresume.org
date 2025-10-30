@@ -9,7 +9,7 @@ import {
   StyledSectionTitle,
   GridSection,
   SimpleSection,
-} from './styles.js';
+} from './styles.jsx';
 
 function Resume({ resume }) {
   const {

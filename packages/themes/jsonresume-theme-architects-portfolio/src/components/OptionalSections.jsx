@@ -1,6 +1,6 @@
 import React from 'react';
 import { Section, DateRange } from '@resume/core';
-import { SectionTitle } from './layout-styles';
+import { SectionTitle } from './layout-styles.jsx';
 import {
   WorkItem,
   WorkHeader,
@@ -17,7 +17,7 @@ import {
   SkillCategory,
   SkillName,
   SkillTags,
-} from './section-styles';
+} from './section-styles.jsx';
 
 export function ProjectsSection({ projects = [] }) {
   if (!projects?.length) return null;

@@ -1,12 +1,12 @@
 import React from 'react';
 import { Section } from '@resume/core';
-import { SectionTitle } from './layout-styles';
+import { SectionTitle } from './layout-styles.jsx';
 import {
   SkillsGrid,
   SkillCategory,
   SkillName,
   SkillTags,
-} from './section-styles';
+} from './section-styles.jsx';
 
 export function SkillsSection({ skills = [] }) {
   if (!skills?.length) return null;

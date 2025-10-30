@@ -12,7 +12,7 @@ import {
   EntryDescription,
   HighlightsList,
   HighlightItem,
-} from './sharedStyles';
+} from './sharedStyles.jsx';
 
 export function VolunteerSection({ volunteer }) {
   if (!volunteer || volunteer.length === 0) return null;
