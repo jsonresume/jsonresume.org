@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@faker-js/faker": "^8.0.2",
-    "@jsonresume/theme-papirus": "workspace:*",
     "@jsonresume/theme-stackoverflow": "^2",
     "@repo/ui": "workspace:*",
     "@pinecone-database/pinecone": "^0.1.6",

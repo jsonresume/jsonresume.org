@@ -1,7 +1,0 @@
-node_modules/*
-resume.json
-build/
-*.DS_Store
-public/
-src/templates.cjs
-src/partials.cjs
