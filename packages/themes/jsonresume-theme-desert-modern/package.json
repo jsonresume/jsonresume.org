@@ -1,0 +1,23 @@
+{
+  "name": "jsonresume-theme-desert-modern",
+  "version": "0.1.0",
+  "description": "Warm minimalist resume theme inspired by desert modern aesthetics",
+  "main": "src/index.js",
+  "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "jsonresume",
+    "theme",
+    "desert",
+    "minimalist",
+    "modern"
+  ],
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "dependencies": {
+    "@resume/core": "workspace:*",
+    "styled-components": "^6.1.11"
+  }
+}

@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { logger } from '@/lib/logger';
-import { render } from '../../../../../../packages/jsonresume-theme-professional';
+import { render } from '@jsonresume/jsonresume-theme-professional';
 import { applyChanges } from '../utils/resumeMerge';
 
 export const useResumeHandlers = (

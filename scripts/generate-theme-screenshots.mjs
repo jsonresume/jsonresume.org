@@ -97,6 +97,13 @@ const THEME_METADATA = {
     author: 'JSON Resume',
     tags: ['elegant', 'refined'],
   },
+  'desert-modern': {
+    title: 'Desert Modern',
+    description:
+      'Warm minimalist resume with amber accents and cream background',
+    author: 'JSON Resume Team',
+    tags: ['warm', 'minimal', 'single-column'],
+  },
 };
 
 // Format theme name for display (e.g., "elegant-pink" -> "Elegant Pink")
@@ -170,6 +177,7 @@ const ALL_THEMES = [
   'marketing-narrative',
   'operations-precision',
   'writers-portfolio',
+  'desert-modern',
 ];
 
 // Get list of themes from the registry themeConfig

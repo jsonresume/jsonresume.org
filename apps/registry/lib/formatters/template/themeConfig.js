@@ -28,6 +28,7 @@ import * as saleshunter from 'jsonresume-theme-sales-hunter'; // TESTING
 import * as marketingnarrative from 'jsonresume-theme-marketing-narrative'; // FIXED
 import * as operationsprecision from 'jsonresume-theme-operations-precision'; // TESTING
 import * as writersportfolio from 'jsonresume-theme-writers-portfolio'; // NEW
+import * as desertmodern from 'jsonresume-theme-desert-modern'; // NEW
 
 export const THEMES = {
   ace: require('jsonresume-theme-ace'),
