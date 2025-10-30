@@ -1,0 +1,38 @@
+{
+  "name": "@jsonresume/job-schema",
+  "version": "0.1.0",
+  "description": "Shared Job Description schema, types, and validation helpers for JSON Resume projects",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./schema.json": "./dist/job-description.schema.json"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "pnpm run clean && tsc -p tsconfig.json && node scripts/write-json-schema.cjs",
+    "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\"",
+    "prepare": "pnpm run build",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "zod": "^3.23.8",
+    "zod-to-json-schema": "^3.22.5"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jsonresume/jsonresume.org",
+    "directory": "packages/job-schema"
+  }
+}

@@ -13,6 +13,7 @@
   "dependencies": {
     "@faker-js/faker": "^8.0.2",
     "@jsonresume/theme-stackoverflow": "^2",
+    "@jsonresume/job-schema": "workspace:*",
     "@repo/ui": "workspace:*",
     "@pinecone-database/pinecone": "^0.1.6",
     "@prisma/client": "^4.15.0",

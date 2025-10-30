@@ -1,17 +1,14 @@
 /* eslint-disable */
 
 module.exports = {
-  root: true,
-  extends: ['@repo/eslint-config-custom/next'],
+  extends: ['@repo/eslint-config-custom'],
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
     ecmaFeatures: {
-      jsx: true,
+      jsx: false,
     },
   },
-  env: {
-    jquery: true,
-    commonjs: true,
-  },
+  ignorePatterns: ['dist', 'scripts'],
 };

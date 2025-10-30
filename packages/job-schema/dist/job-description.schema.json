@@ -1,0 +1,156 @@
+{
+  "$ref": "#/definitions/JobDescription",
+  "definitions": {
+    "JobDescription": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "company": {
+          "$ref": "#/definitions/JobDescription/properties/title"
+        },
+        "companyDescription": {
+          "$ref": "#/definitions/JobDescription/properties/title"
+        },
+        "department": {
+          "$ref": "#/definitions/JobDescription/properties/title"
+        },
+        "companyContext": {
+          "$ref": "#/definitions/JobDescription/properties/title"
+        },
+        "location": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "$ref": "#/definitions/JobDescription/properties/title"
+            },
+            "postalCode": {
+              "$ref": "#/definitions/JobDescription/properties/title"
+            },
+            "city": {
+              "$ref": "#/definitions/JobDescription/properties/title"
+            },
+            "countryCode": {
+              "$ref": "#/definitions/JobDescription/properties/title"
+            },
+            "region": {
+              "$ref": "#/definitions/JobDescription/properties/title"
+            }
+          },
+          "additionalProperties": false
+        },
+        "position": {
+          "$ref": "#/definitions/JobDescription/properties/title"
+        },
+        "type": {
+          "$ref": "#/definitions/JobDescription/properties/title"
+        },
+        "salary": {
+          "$ref": "#/definitions/JobDescription/properties/title"
+        },
+        "compensation": {
+          "type": "object",
+          "properties": {
+            "currency": {
+              "$ref": "#/definitions/JobDescription/properties/title"
+            },
+            "interval": {
+              "$ref": "#/definitions/JobDescription/properties/title"
+            },
+            "minimum": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "maximum": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          },
+          "additionalProperties": false
+        },
+        "date": {
+          "$ref": "#/definitions/JobDescription/properties/title"
+        },
+        "remote": {
+          "$ref": "#/definitions/JobDescription/properties/title"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "applicationUrl": {
+          "$ref": "#/definitions/JobDescription/properties/url"
+        },
+        "applicationEmail": {
+          "$ref": "#/definitions/JobDescription/properties/title"
+        },
+        "contact": {
+          "$ref": "#/definitions/JobDescription/properties/title"
+        },
+        "description": {
+          "$ref": "#/definitions/JobDescription/properties/title"
+        },
+        "responsibilities": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "qualifications": {
+          "$ref": "#/definitions/JobDescription/properties/responsibilities"
+        },
+        "skills": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "$ref": "#/definitions/JobDescription/properties/title"
+              },
+              "level": {
+                "$ref": "#/definitions/JobDescription/properties/title"
+              },
+              "keywords": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 1
+              }
+            },
+            "additionalProperties": false
+          },
+          "minItems": 1
+        },
+        "experience": {
+          "$ref": "#/definitions/JobDescription/properties/title"
+        },
+        "education": {
+          "$ref": "#/definitions/JobDescription/properties/title"
+        },
+        "benefits": {
+          "$ref": "#/definitions/JobDescription/properties/responsibilities"
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": {}
+        },
+        "schemaVersion": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "description": "JSON Resume job description schema"
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://jsonresume.org/schema/job-description",
+  "title": "Job Description",
+  "description": "Structured representation of a job description used by JSON Resume.",
+  "$comment": "1.0.0"
+}

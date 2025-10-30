@@ -1,6 +1,11 @@
+/* eslint-disable no-console */
 const { generateObject } = require('ai');
 const { openai } = require('@ai-sdk/openai');
-const { jobDescriptionSchema } = require('../openaiFunction');
+const {
+  jobDescriptionSchema,
+  parseJobDescription,
+  JOB_DESCRIPTION_SCHEMA_VERSION,
+} = require('@jsonresume/job-schema');
 const { getJobProcessingPrompt } = require('../prompts');
 
 /**
@@ -18,10 +23,14 @@ async function initialProcessing(job) {
     temperature: 0.75,
   });
 
-  const details1 = JSON.stringify(jobJson);
+  const parsedJob = parseJobDescription(jobJson);
+  const details1 = JSON.stringify({
+    ...parsedJob,
+    schemaVersion: JOB_DESCRIPTION_SCHEMA_VERSION,
+  });
 
-  console.log(JSON.stringify(details1, null, 2));
-  console.log({ jobId: job.id, jobJson });
+  console.log(JSON.stringify(parsedJob, null, 2));
+  console.log({ jobId: job.id, jobJson: parsedJob });
 
   // Build messages array for next steps
   const messages = [
@@ -32,7 +41,7 @@ async function initialProcessing(job) {
     },
   ];
 
-  return { messages, details1, jobJson };
+  return { messages, details1, jobJson: parsedJob };
 }
 
 module.exports = { initialProcessing };

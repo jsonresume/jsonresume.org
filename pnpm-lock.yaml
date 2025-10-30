@@ -115,6 +115,9 @@ importers:
       '@faker-js/faker':
         specifier: ^8.0.2
         version: 8.4.1
+      '@jsonresume/job-schema':
+        specifier: workspace:*
+        version: link:../../packages/job-schema
       '@jsonresume/theme-stackoverflow':
         specifier: ^2
         version: link:../../packages/themes/stackoverflow
@@ -257,6 +260,9 @@ importers:
       '@faker-js/faker':
         specifier: ^8.0.2
         version: 8.4.1
+      '@jsonresume/job-schema':
+        specifier: workspace:*
+        version: link:../../packages/job-schema
       '@jsonresume/jsonresume-theme-consultant-polished':
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-consultant-polished
@@ -632,6 +638,19 @@ importers:
       eslint:
         specifier: ^8.54.0
         version: 8.57.1
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+
+  packages/job-schema:
+    dependencies:
+      zod:
+        specifier: ^3.23.8
+        version: 3.25.76
+      zod-to-json-schema:
+        specifier: ^3.22.5
+        version: 3.24.6(zod@3.25.76)
+    devDependencies:
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -20339,6 +20358,14 @@ packages:
       validator: 13.15.20
     optionalDependencies:
       commander: 2.20.3
+    dev: false
+
+  /zod-to-json-schema@3.24.6(zod@3.25.76):
+    resolution: {integrity: sha512-h/z3PKvcTcTetyjl1fkj79MHNEjm+HpD6NXheWjzOekY7kV+lwDYnHw+ivHkijnCSMz1yJaWBD9vu/Fcmk+vEg==}
+    peerDependencies:
+      zod: ^3.24.1
+    dependencies:
+      zod: 3.25.76
     dev: false
 
   /zod-validation-error@4.0.2(zod@3.25.76):

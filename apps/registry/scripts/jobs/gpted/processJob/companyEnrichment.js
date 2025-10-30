@@ -1,6 +1,11 @@
+/* eslint-disable no-console */
 const { generateObject } = require('ai');
 const { openai } = require('@ai-sdk/openai');
-const { jobDescriptionSchema } = require('../openaiFunction');
+const {
+  jobDescriptionSchema,
+  parseJobDescription,
+  JOB_DESCRIPTION_SCHEMA_VERSION,
+} = require('@jsonresume/job-schema');
 const { getCompanyContextPrompt } = require('../prompts');
 const { getCompanyData } = require('../database');
 
@@ -36,9 +41,16 @@ async function companyEnrichment(supabase, job, messages, company) {
     temperature: 0.75,
   });
 
-  console.log({ jobId: job.id, jobJson2 });
+  const parsedJob = parseJobDescription(jobJson2);
+  const enrichedJob = {
+    ...parsedJob,
+    schemaVersion: JOB_DESCRIPTION_SCHEMA_VERSION,
+    companyContext: companyContext || undefined,
+  };
 
-  return jobJson2;
+  console.log({ jobId: job.id, jobJson2: enrichedJob });
+
+  return enrichedJob;
 }
 
 module.exports = { companyEnrichment };

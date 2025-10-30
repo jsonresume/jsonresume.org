@@ -19,6 +19,7 @@
     "@dagrejs/dagre": "^1.1.4",
     "@faker-js/faker": "^8.0.2",
     "@jsonresume/jsonresume-theme-consultant-polished": "workspace:*",
+    "@jsonresume/job-schema": "workspace:*",
     "@jsonresume/jsonresume-theme-creative-studio": "workspace:*",
     "@jsonresume/jsonresume-theme-professional": "workspace:*",
     "@jsonresume/schema": "^1.2.0",
