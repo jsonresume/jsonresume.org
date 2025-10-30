@@ -6,51 +6,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@repo/ui';
+import { THEMES } from '@/lib/formatters/template/themeConfig';
 
-const AVAILABLE_THEMES = [
-  'ace',
-  'actual',
-  'autumn',
-  'cora',
-  'cv',
-  'elegant',
-  'el-santo',
-  'even',
-  'flat',
-  'full',
-  'github',
-  'github2',
-  'jacrys',
-  'kards',
-  'kendall',
-  'lucide',
-  'macchiato',
-  'mantra',
-  'minyma',
-  'mocha-responsive',
-  'msresume',
-  'one',
-  'onepage',
-  'onepage-plus',
-  'onepageresume',
-  'orbit',
-  'paper',
-  'paper-plus-plus',
-  'papirus',
-  'professional',
-  'pumpkin',
-  'relaxed',
-  'rickosborne',
-  'rocketspacer',
-  'simple-red',
-  'spartan',
-  'spartacus',
-  'stackoverflow',
-  'standard',
-  'standard-resume',
-  'tan-responsive',
-  'techlead',
-];
+const AVAILABLE_THEMES = Object.keys(THEMES).sort();
 
 export const ThemeSelector = ({ selectedTheme, setSelectedTheme }) => {
   return (
