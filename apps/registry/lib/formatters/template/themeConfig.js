@@ -93,6 +93,7 @@ export const THEMES = {
   'marketing-narrative': marketingnarrative, // FIXED
   'operations-precision': operationsprecision, // TESTING
   'writers-portfolio': writersportfolio, // NEW
+  'desert-modern': desertmodern, // NEW
 };
 
 /**

@@ -377,6 +377,9 @@ importers:
       jsonresume-theme-data-driven:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-data-driven
+      jsonresume-theme-desert-modern:
+        specifier: workspace:^
+        version: link:../../packages/themes/jsonresume-theme-desert-modern
       jsonresume-theme-developer-mono:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-developer-mono
@@ -862,6 +865,21 @@ importers:
       vitest:
         specifier: ^1.6.0
         version: 1.6.1
+
+  packages/themes/jsonresume-theme-desert-modern:
+    dependencies:
+      '@resume/core':
+        specifier: workspace:*
+        version: link:../../resume-core
+      react:
+        specifier: ^18.0.0
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.0.0
+        version: 18.3.1(react@18.3.1)
+      styled-components:
+        specifier: ^6.1.11
+        version: 6.1.11(react-dom@18.3.1)(react@18.3.1)
 
   packages/themes/jsonresume-theme-developer-mono:
     dependencies:
