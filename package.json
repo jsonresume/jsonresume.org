@@ -16,6 +16,8 @@
   "devDependencies": {
     "@playwright/test": "^1.40.0",
     "@repo/eslint-config-custom": "workspace:*",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
     "eslint": "^8",
     "husky": "^8.0.3",
     "lint-staged": "^15.2.0",
@@ -28,7 +30,10 @@
   "name": "jsonresume.org",
   "dependencies": {
     "@changesets/cli": "^2.27.1",
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "next": "16.0.1",
+    "react": "19.2.0",
+    "react-dom": "19.2.0"
   },
   "pnpm": {
     "overrides": {
