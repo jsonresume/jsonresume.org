@@ -6,9 +6,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@repo/ui';
-import { THEMES } from '@/lib/formatters/template/themeConfig';
+import { THEME_NAMES } from '@/lib/formatters/template/themeConfig';
 
-const AVAILABLE_THEMES = Object.keys(THEMES).sort();
+const AVAILABLE_THEMES = THEME_NAMES;
 
 export const ThemeSelector = ({ selectedTheme, setSelectedTheme }) => {
   return (

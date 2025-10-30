@@ -21,6 +21,41 @@ import * as marketingnarrative from 'jsonresume-theme-marketing-narrative'; // F
 import * as operationsprecision from 'jsonresume-theme-operations-precision'; // TESTING
 import * as writersportfolio from 'jsonresume-theme-writers-portfolio'; // NEW
 
+// List of available theme names (used by UI components without triggering imports)
+export const THEME_NAMES = [
+  'academic-cv-lite',
+  'consultant-polished',
+  'creative-studio',
+  'data-driven',
+  'developer-mono',
+  'elegant',
+  'even',
+  'executive-slate',
+  'flat',
+  'government-standard',
+  'jacrys',
+  'kendall',
+  'lucide',
+  'macchiato',
+  'marketing-narrative',
+  'minimalist-grid',
+  'minyma',
+  'modern-classic',
+  'operations-precision',
+  'paper-plus-plus',
+  'product-manager-canvas',
+  'professional',
+  'pumpkin',
+  'reference',
+  'rickosborne',
+  'sales-hunter',
+  'sidebar',
+  'stackoverflow',
+  'tan-responsive',
+  'university-first',
+  'writers-portfolio',
+];
+
 export const THEMES = {
   professional,
   // tailwind,
