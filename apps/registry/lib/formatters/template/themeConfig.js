@@ -19,7 +19,7 @@ import * as productmanagercanvas from 'jsonresume-theme-product-manager-canvas';
 import * as governmentstandard from 'jsonresume-theme-government-standard'; // FIXED
 import * as developermono from 'jsonresume-theme-developer-mono'; // TESTING
 import * as minimalistgrid from 'jsonresume-theme-minimalist-grid'; // TESTING
-// import * as creativestudio from '@jsonresume/jsonresume-theme-creative-studio'; // FAILS - window is not defined (SSR incompatible)
+import * as creativestudio from '@jsonresume/jsonresume-theme-creative-studio'; // FIXED
 import * as datadriven from 'jsonresume-theme-data-driven'; // TESTING
 // import * as consultantpolished from '@jsonresume/jsonresume-theme-consultant-polished'; // FAILS - Date is not a constructor
 import * as universityfirst from 'jsonresume-theme-university-first'; // TESTING
@@ -82,7 +82,7 @@ export const THEMES = {
   'government-standard': governmentstandard, // FIXED
   'developer-mono': developermono, // TESTING
   'minimalist-grid': minimalistgrid, // TESTING
-  // 'creative-studio': creativestudio, // FAILS - window is not defined (SSR incompatible)
+  'creative-studio': creativestudio, // FIXED
   'data-driven': datadriven, // TESTING
   // 'consultant-polished': consultantpolished, // FAILS - Date is not a constructor
   'university-first': universityfirst, // TESTING

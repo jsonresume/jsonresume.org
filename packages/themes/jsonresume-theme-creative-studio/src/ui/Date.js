@@ -1,7 +1,8 @@
 const Date = ({ date }) => {
   if (!date) return null;
 
-  const dateObj = new window.Date(date);
+  // Use global Date constructor instead of window.Date for SSR compatibility
+  const dateObj = new globalThis.Date(date);
   const month = dateObj.toLocaleString('default', { month: 'short' });
   const year = dateObj.getFullYear();
 
