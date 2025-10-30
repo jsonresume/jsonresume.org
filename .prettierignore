@@ -1,10 +1,10 @@
 **/.next/**/*
 pnpm-lock.yaml
 dist
-themes/stackoverflow/public
+packages/themes/stackoverflow/public
 apps/registry/playwright-report
-themes/papirus/src/partials.cjs
-themes/papirus/src/templates.cjs
+packages/themes/papirus/src/partials.cjs
+packages/themes/papirus/src/templates.cjs
 apps/**/*.css
 packages/**/*.css
 README.md
