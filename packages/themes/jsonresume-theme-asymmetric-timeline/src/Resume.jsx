@@ -65,17 +65,25 @@ const Summary = styled.p`
 const TimelineSection = styled(Section)`
   position: relative;
   padding-left: 0;
+  padding-top: 40px;
 
   /* Central timeline line */
   &::before {
     content: '';
     position: absolute;
     left: 50%;
-    top: 0;
+    top: 80px;
     bottom: 0;
-    width: 3px;
+    width: 4px;
     background: #334155;
     transform: translateX(-50%);
+    z-index: 0;
+  }
+
+  @media print {
+    &::before {
+      background: #94a3b8;
+    }
   }
 `;
 
@@ -108,32 +116,33 @@ const TimelineItem = styled.div`
     content: '';
     position: absolute;
     left: 50%;
-    top: 0;
-    width: 16px;
-    height: 16px;
-    background: #334155;
-    border: 4px solid white;
+    top: 20px;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border: 5px solid #334155;
     border-radius: 50%;
     transform: translateX(-50%);
-    z-index: 2;
-    box-shadow: 0 0 0 2px #334155;
+    z-index: 3;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   }
 
   /* Connector line from dot to content */
   &::after {
     content: '';
     position: absolute;
-    top: 8px;
-    width: calc(50% - 40px);
-    height: 2px;
-    background: #64748b;
+    top: 30px;
+    width: calc(50% - 50px);
+    height: 3px;
+    background: #94a3b8;
+    z-index: 1;
     ${(props) =>
       props.$isLeft
         ? `
-      left: 32px;
+      left: 40px;
     `
         : `
-      right: 32px;
+      right: 40px;
     `}
   }
 
@@ -155,10 +164,15 @@ const TimelineItem = styled.div`
 
 const TimelineContent = styled.div`
   width: calc(50% - 60px);
-  padding: 24px 32px;
-  background: #f8fafc;
+  padding: 28px 32px;
+  background: white;
   border-radius: 8px;
-  border-left: 4px solid #64748b;
+  border: 2px solid #e2e8f0;
+  border-left: 5px solid #334155;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  z-index: 2;
+  position: relative;
 
   @media (max-width: 768px) {
     width: 100%;
@@ -247,9 +261,11 @@ const SkillsGridContainer = styled.div`
 
 const SkillCategory = styled.div`
   padding: 20px;
-  background: #f8fafc;
+  background: white;
   border-radius: 6px;
-  border-left: 3px solid #334155;
+  border: 2px solid #cbd5e1;
+  border-left: 4px solid #334155;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 `;
 
 const SkillName = styled.h4`

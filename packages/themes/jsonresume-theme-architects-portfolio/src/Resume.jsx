@@ -22,7 +22,7 @@ const Layout = styled.div`
 const Header = styled.header`
   margin-bottom: 56px;
   padding-bottom: 32px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 2px solid #d1d5db;
 `;
 
 const Name = styled.h1`
@@ -45,18 +45,22 @@ const Label = styled.div`
 
 const StyledContactInfo = styled(ContactInfo)`
   font-size: 14px;
-  color: #6b7280;
+  color: #4b5563;
 
   a {
     font-size: 14px;
-    color: #6b7280;
+    color: #4b5563;
     text-decoration: none;
     border-bottom: 1px solid transparent;
     transition: border-color 0.2s;
 
     &:hover {
-      border-bottom-color: #6b7280;
+      border-bottom-color: #4b5563;
     }
+  }
+
+  span {
+    color: #9ca3af;
   }
 `;
 
@@ -70,9 +74,9 @@ const Summary = styled.p`
 
 const SectionTitle = styled.h2`
   font-size: 12px;
-  font-weight: 400;
-  color: #6b7280;
-  margin: 48px 0 24px 0;
+  font-weight: 500;
+  color: #4b5563;
+  margin: 56px 0 28px 0;
   letter-spacing: 3px;
   text-transform: uppercase;
   position: relative;
@@ -80,21 +84,22 @@ const SectionTitle = styled.h2`
   &::after {
     content: '';
     position: absolute;
-    bottom: -8px;
+    bottom: -10px;
     left: 0;
     right: 0;
     height: 1px;
-    background: #e5e7eb;
+    background: #d1d5db;
   }
 `;
 
 // Section styled components
 const WorkItem = styled.div`
-  padding: 24px 0;
+  padding: 28px 0;
   border-bottom: 1px solid #e5e7eb;
 
   &:last-child {
     border-bottom: none;
+    padding-bottom: 0;
   }
 `;
 
@@ -196,30 +201,31 @@ const EducationDate = styled.div`
 
 const SkillsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 1px;
-  background: #e5e7eb;
-  border: 1px solid #e5e7eb;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 24px;
 `;
 
 const SkillCategory = styled.div`
-  padding: 20px;
-  background: #fafaf9;
+  padding: 24px;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 2px;
 `;
 
 const SkillName = styled.h4`
-  font-size: 13px;
-  font-weight: 400;
-  color: #6b7280;
-  margin: 0 0 8px 0;
-  letter-spacing: 2px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #111827;
+  margin: 0 0 10px 0;
+  letter-spacing: 1px;
   text-transform: uppercase;
 `;
 
 const SkillTags = styled.div`
-  font-size: 14px;
-  color: #4b5563;
-  line-height: 1.6;
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.7;
   font-weight: 300;
 `;
 
