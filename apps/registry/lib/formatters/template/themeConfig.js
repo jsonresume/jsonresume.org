@@ -27,6 +27,7 @@ import * as academiccvlite from 'jsonresume-theme-academic-cv-lite'; // TESTING
 import * as saleshunter from 'jsonresume-theme-sales-hunter'; // TESTING
 import * as marketingnarrative from 'jsonresume-theme-marketing-narrative'; // FIXED
 import * as operationsprecision from 'jsonresume-theme-operations-precision'; // TESTING
+import * as writersportfolio from 'jsonresume-theme-writers-portfolio'; // NEW
 
 export const THEMES = {
   ace: require('jsonresume-theme-ace'),
@@ -90,6 +91,7 @@ export const THEMES = {
   'sales-hunter': saleshunter, // TESTING
   'marketing-narrative': marketingnarrative, // FIXED
   'operations-precision': operationsprecision, // TESTING
+  'writers-portfolio': writersportfolio, // NEW
 };
 
 /**
