@@ -21,7 +21,7 @@ import * as developermono from 'jsonresume-theme-developer-mono'; // TESTING
 import * as minimalistgrid from 'jsonresume-theme-minimalist-grid'; // TESTING
 import * as creativestudio from '@jsonresume/jsonresume-theme-creative-studio'; // FIXED
 import * as datadriven from 'jsonresume-theme-data-driven'; // TESTING
-// import * as consultantpolished from '@jsonresume/jsonresume-theme-consultant-polished'; // FAILS - Date is not a constructor
+import * as consultantpolished from '@jsonresume/jsonresume-theme-consultant-polished'; // FIXED
 import * as universityfirst from 'jsonresume-theme-university-first'; // TESTING
 import * as academiccvlite from 'jsonresume-theme-academic-cv-lite'; // TESTING
 import * as saleshunter from 'jsonresume-theme-sales-hunter'; // TESTING
@@ -84,7 +84,7 @@ export const THEMES = {
   'minimalist-grid': minimalistgrid, // TESTING
   'creative-studio': creativestudio, // FIXED
   'data-driven': datadriven, // TESTING
-  // 'consultant-polished': consultantpolished, // FAILS - Date is not a constructor
+  'consultant-polished': consultantpolished, // FIXED
   'university-first': universityfirst, // TESTING
   'academic-cv-lite': academiccvlite, // TESTING
   'sales-hunter': saleshunter, // TESTING

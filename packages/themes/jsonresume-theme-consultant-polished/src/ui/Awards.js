@@ -20,7 +20,7 @@ const Title = styled.h3`
   margin: 0;
 `;
 
-const Date = styled.div`
+const DateText = styled.div`
   font-size: 0.9rem;
   color: #666;
 `;
@@ -52,7 +52,7 @@ const Awards = ({ awards }) => {
         <AwardItem key={i}>
           <Header>
             <Title>{award.title}</Title>
-            {award.date && <Date>{formatDate(award.date)}</Date>}
+            {award.date && <DateText>{formatDate(award.date)}</DateText>}
           </Header>
           {award.awarder && <Awarder>{award.awarder}</Awarder>}
           {award.summary && <Summary>{award.summary}</Summary>}
