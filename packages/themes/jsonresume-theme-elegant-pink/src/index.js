@@ -3,8 +3,9 @@ import { ServerStyleSheet } from 'styled-components';
 import Resume from './Resume.jsx';
 
 /**
- * Elegant Pink Resume Theme
- * Super girly theme with soft pinks, elegant typography, and floral accents
+ * Marketing Narrative Resume Theme (elegant-pink)
+ * Professional storytelling theme with warm rose red tones, compelling narratives,
+ * and strong visual hierarchy for marketing and communications professionals
  *
  * @param {Object} resume - JSON Resume object
  * @param {Object} [options] - Rendering options
@@ -28,10 +29,10 @@ export function render(resume, options = {}) {
 
     const designTokens = `
     :root {
-      --resume-color-primary: #d63384;
-      --resume-color-secondary: #9d5b7a;
-      --resume-color-accent: #ff9fc7;
-      --resume-color-bg: #fff5f7;
+      --resume-color-primary: #9f1239;
+      --resume-color-secondary: #be123c;
+      --resume-color-accent: #e11d48;
+      --resume-color-bg: #fff1f2;
       --resume-color-card: #ffffff;
     }
   `;
@@ -45,7 +46,7 @@ export function render(resume, options = {}) {
 
     body {
       margin: 0;
-      background: linear-gradient(135deg, #fff5f7 0%, #ffe4e8 100%);
+      background: linear-gradient(to bottom, #fff1f2 0%, #ffffff 400px);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }

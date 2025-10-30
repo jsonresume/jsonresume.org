@@ -1,7 +1,7 @@
 {
   "name": "jsonresume-theme-elegant-pink",
   "version": "0.1.0",
-  "description": "Super girly resume theme with soft pink colors, elegant typography, and floral accents",
+  "description": "Professional storytelling resume theme with warm rose red tones, compelling narratives, and strong visual hierarchy for marketing and communications professionals",
   "type": "module",
   "main": "./src/index.js",
   "exports": {
