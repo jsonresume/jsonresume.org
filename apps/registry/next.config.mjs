@@ -6,6 +6,10 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  // Enable styled-components SSR support
+  compiler: {
+    styledComponents: true,
+  },
   webpack: (config, { isServer }) => {
     if (isServer) {
       // Externalize pdf-parse and its dependencies for server-side only
