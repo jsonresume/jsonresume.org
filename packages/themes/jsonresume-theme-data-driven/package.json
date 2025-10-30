@@ -23,9 +23,9 @@
   ],
   "dependencies": {
     "@resume/core": "workspace:*",
-    "react": "^18",
-    "react-dom": "^18",
-    "styled-components": "^6"
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "styled-components": "^6.1.19"
   },
   "devDependencies": {
     "vitest": "^1.6.0"

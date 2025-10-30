@@ -1,12 +1,13 @@
 import { Layout, Navbar, Footer } from 'nextra-theme-docs';
-import { Banner, Head } from 'nextra/components';
+import { Head } from 'nextra/components';
 import { getPageMap } from 'nextra/page-map';
 import 'nextra-theme-docs/style.css';
+import type { ReactNode } from 'react';
 
 export default async function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   const pageMap = await getPageMap();
 

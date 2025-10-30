@@ -1,4 +1,4 @@
-export default {
+const navigation = {
   index: 'Introduction',
   'getting-started': 'Getting Started',
   schema: 'Schema & Structure',
@@ -14,3 +14,5 @@ export default {
   faq: 'FAQ',
   contributing: 'Contributing',
 };
+
+export default navigation;

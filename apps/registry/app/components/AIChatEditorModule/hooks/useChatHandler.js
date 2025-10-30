@@ -1,4 +1,4 @@
-import { useApplyChanges, useMessageSubmit } from './useChatHandler';
+import { useApplyChanges, useMessageSubmit } from './useChatHandler/index';
 
 export const useChatHandler = ({
   resume,

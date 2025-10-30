@@ -9,17 +9,17 @@
     "lint": "next lint --max-warnings=0"
   },
   "dependencies": {
-    "next": "^14.2.33",
-    "nextra": "^3.2.6",
-    "nextra-theme-docs": "^3.2.6",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "next": "^15.5.6",
+    "nextra": "^4.6.0",
+    "nextra-theme-docs": "^4.6.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
   },
   "devDependencies": {
     "@types/node": "^22",
-    "@types/react": "^18",
-    "typescript": "^5",
+    "@types/react": "^19.2.2",
+    "typescript": "^5.9.3",
     "eslint": "^8",
-    "eslint-config-next": "14.2.33"
+    "eslint-config-next": "^15.5.6"
   }
 }

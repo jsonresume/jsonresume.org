@@ -6,8 +6,8 @@
   "license": "MIT",
   "devDependencies": {
     "@repo/eslint-config-custom": "workspace:*",
-    "react": "^18",
-    "styled-components": "^6"
+    "react": "^19.2.0",
+    "styled-components": "^6.1.19"
   },
   "peerDependencies": {
     "styled-components": "^6"

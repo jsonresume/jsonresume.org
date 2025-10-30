@@ -37,7 +37,7 @@
       "tar@<6.2.1": "^6.2.1",
       "marked@<4.0.10": "^4.0.10",
       "prismjs@<1.30.0": "^1.30.0",
-      "next@<14.2.32": "^14.2.32",
+      "next@<15.5.6": "^15.5.6",
       "cookie@<0.7.0": "^0.7.0",
       "tmp@<0.2.4": "^0.2.4",
       "nth-check@<2.0.1": "^2.1.1",
@@ -59,7 +59,7 @@
       "html-minifier@<=4.0.0": "npm:html-minifier-terser@^7.2.0",
       "lodash.template@<=4.5.0": "npm:lodash@^4.17.21",
       "webpack-dev-server@<=5.2.0": "^5.2.1",
-      "styled-components": "^6.1.11"
+      "styled-components": "^6.1.19"
     }
   }
 }

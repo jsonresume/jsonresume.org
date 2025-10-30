@@ -1,11 +1,7 @@
 import { Suspense } from 'react';
 import { logger } from '@/lib/logger';
 import { createClient } from '@supabase/supabase-js';
-import dynamic from 'next/dynamic';
-
-const ClientJobBoard = dynamic(() => import('./ClientJobBoard'), {
-  ssr: false,
-});
+import ClientJobBoard from './ClientJobBoard';
 
 const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
 

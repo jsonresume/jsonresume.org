@@ -3,7 +3,7 @@ import ProfileLayout from './ProfileLayout';
 import { auth } from '../../auth';
 
 export default async function Layout({ children, params }) {
-  const { username } = params;
+  const { username } = await params;
   const session = await auth();
 
   return (
