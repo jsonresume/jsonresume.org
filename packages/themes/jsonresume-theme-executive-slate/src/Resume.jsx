@@ -3,62 +3,124 @@ import styled from 'styled-components';
 import { Section, SectionTitle, DateRange, ContactInfo } from '@resume/core';
 
 const Layout = styled.div`
-  max-width: 850px;
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 80px 60px;
-  background: #faf9f7;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    sans-serif;
-  color: #1f2937;
+  background: white;
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.12);
+  min-height: 100vh;
 
   @media print {
-    background: white;
+    box-shadow: none;
+    min-height: auto;
+  }
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const Sidebar = styled.aside`
+  background: linear-gradient(to bottom, #475569 0%, #334155 100%);
+  color: white;
+  padding: 60px 40px;
+
+  @media print {
+    background: #475569;
+  }
+`;
+
+const MainContent = styled.main`
+  padding: 60px 50px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    sans-serif;
+  color: #334155;
+
+  @media print {
     padding: 40px;
   }
 `;
 
 const Header = styled.header`
-  text-align: center;
-  margin-bottom: 60px;
-  padding-bottom: 40px;
-  border-bottom: 1px solid #d1d5db;
+  margin-bottom: 50px;
 `;
 
 const Name = styled.h1`
   font-family: 'Merriweather', Georgia, serif;
-  font-size: 48px;
+  font-size: 36px;
   font-weight: 700;
-  color: #2f4f4f;
-  margin: 0 0 16px 0;
+  color: white;
+  margin: 0 0 12px 0;
   letter-spacing: -0.5px;
+  line-height: 1.2;
 `;
 
 const Label = styled.div`
-  font-size: 16px;
-  color: #6b7280;
-  margin-bottom: 24px;
+  font-size: 15px;
+  color: #cbd5e1;
+  margin-bottom: 30px;
   font-weight: 500;
   letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding-bottom: 30px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+`;
+
+const StyledContactInfo = styled(ContactInfo)`
+  font-size: 13px;
+  color: #e2e8f0;
+
+  a {
+    color: #e2e8f0;
+    text-decoration: none;
+
+    &:hover {
+      color: white;
+    }
+  }
 `;
 
 const Summary = styled.p`
   font-size: 15px;
   line-height: 1.8;
-  color: #4b5563;
-  margin: 24px auto 0;
-  max-width: 700px;
+  color: #475569;
+  margin: 0 0 30px 0;
+`;
+
+const SidebarSectionTitle = styled(SectionTitle)`
+  font-family: 'Merriweather', Georgia, serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  margin: 40px 0 20px 0;
+  padding-bottom: 10px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 `;
 
 const StyledSectionTitle = styled(SectionTitle)`
   font-family: 'Merriweather', Georgia, serif;
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 700;
-  color: #2f4f4f;
+  color: #475569;
   margin: 50px 0 30px 0;
-  padding-bottom: 10px;
-  border-bottom: 2px solid #2f4f4f;
+  padding-bottom: 12px;
+  border-bottom: 3px solid #475569;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: #94a3b8;
+  }
 `;
 
 const WorkItem = styled.div`
@@ -159,10 +221,17 @@ const SkillsGrid = styled.div`
 `;
 
 const SkillCategory = styled.div`
-  padding: 20px;
+  padding: 20px 24px;
   background: white;
-  border-radius: 4px;
-  border-left: 3px solid #2f4f4f;
+  border-radius: 6px;
+  border-left: 4px solid #475569;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+  }
 `;
 
 const SkillName = styled.h4`
@@ -177,6 +246,40 @@ const SkillTags = styled.div`
   font-size: 14px;
   color: #6b7280;
   line-height: 1.7;
+`;
+
+const SidebarSkill = styled.div`
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: #e2e8f0;
+  line-height: 1.7;
+
+  strong {
+    display: block;
+    color: white;
+    font-weight: 600;
+    margin-bottom: 6px;
+    font-size: 13px;
+  }
+`;
+
+const SidebarEducation = styled.div`
+  margin-bottom: 20px;
+
+  h4 {
+    font-family: 'Merriweather', Georgia, serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+    margin: 0 0 6px 0;
+  }
+
+  p {
+    font-size: 13px;
+    color: #cbd5e1;
+    line-height: 1.6;
+    margin: 0 0 4px 0;
+  }
 `;
 
 function Resume({ resume }) {
@@ -196,198 +299,189 @@ function Resume({ resume }) {
 
   return (
     <Layout>
-      <Header>
-        <Name>{basics.name}</Name>
-        {basics.label && <Label>{basics.label}</Label>}
-        <ContactInfo basics={basics} />
-        {basics.summary && <Summary>{basics.summary}</Summary>}
-      </Header>
+      <Sidebar>
+        <Header>
+          <Name>{basics.name}</Name>
+          {basics.label && <Label>{basics.label}</Label>}
+        </Header>
 
-      {work?.length > 0 && (
-        <Section>
-          <StyledSectionTitle>Professional Experience</StyledSectionTitle>
-          {work.map((job, index) => (
-            <WorkItem key={index}>
-              <WorkHeader>
-                <div>
-                  <Position>{job.position}</Position>
-                  {job.name && <Company>{job.name}</Company>}
-                </div>
-                <DateText>
-                  <DateRange startDate={job.startDate} endDate={job.endDate} />
-                </DateText>
-              </WorkHeader>
-              {job.summary && <WorkSummary>{job.summary}</WorkSummary>}
-              {job.highlights?.length > 0 && (
-                <Highlights>
-                  {job.highlights.map((highlight, i) => (
-                    <li key={i}>{highlight}</li>
-                  ))}
-                </Highlights>
-              )}
-            </WorkItem>
-          ))}
-        </Section>
-      )}
+        <StyledContactInfo basics={basics} />
 
-      {skills?.length > 0 && (
-        <Section>
-          <StyledSectionTitle>Core Competencies</StyledSectionTitle>
-          <SkillsGrid>
+        {skills?.length > 0 && (
+          <Section>
+            <SidebarSectionTitle>Skills</SidebarSectionTitle>
             {skills.map((skill, index) => (
-              <SkillCategory key={index}>
-                <SkillName>{skill.name}</SkillName>
-                {skill.keywords?.length > 0 && (
-                  <SkillTags>{skill.keywords.join(', ')}</SkillTags>
-                )}
-              </SkillCategory>
+              <SidebarSkill key={index}>
+                <strong>{skill.name}</strong>
+                {skill.keywords?.length > 0 && skill.keywords.join(', ')}
+              </SidebarSkill>
             ))}
-          </SkillsGrid>
-        </Section>
-      )}
+          </Section>
+        )}
 
-      {education?.length > 0 && (
-        <Section>
-          <StyledSectionTitle>Education</StyledSectionTitle>
-          {education.map((edu, index) => (
-            <EducationItem key={index}>
-              <Institution>{edu.institution}</Institution>
-              <Degree>
-                {edu.studyType} in {edu.area}
-                {edu.score && ` • ${edu.score}`}
-              </Degree>
-              <EducationDate>
-                <DateRange startDate={edu.startDate} endDate={edu.endDate} />
-              </EducationDate>
-            </EducationItem>
-          ))}
-        </Section>
-      )}
+        {education?.length > 0 && (
+          <Section>
+            <SidebarSectionTitle>Education</SidebarSectionTitle>
+            {education.map((edu, index) => (
+              <SidebarEducation key={index}>
+                <h4>{edu.institution}</h4>
+                <p>
+                  {edu.studyType} in {edu.area}
+                </p>
+                {(edu.startDate || edu.endDate) && (
+                  <p>
+                    <DateRange
+                      startDate={edu.startDate}
+                      endDate={edu.endDate}
+                    />
+                  </p>
+                )}
+              </SidebarEducation>
+            ))}
+          </Section>
+        )}
 
-      {projects?.length > 0 && (
-        <Section>
-          <StyledSectionTitle>Notable Projects</StyledSectionTitle>
-          {projects.map((project, index) => (
-            <WorkItem key={index}>
-              <Position>{project.name}</Position>
-              {project.description && (
-                <WorkSummary>{project.description}</WorkSummary>
-              )}
-              {project.highlights?.length > 0 && (
-                <Highlights>
-                  {project.highlights.map((highlight, i) => (
-                    <li key={i}>{highlight}</li>
-                  ))}
-                </Highlights>
-              )}
-            </WorkItem>
-          ))}
-        </Section>
-      )}
+        {languages?.length > 0 && (
+          <Section>
+            <SidebarSectionTitle>Languages</SidebarSectionTitle>
+            {languages.map((lang, index) => (
+              <SidebarSkill key={index}>
+                <strong>{lang.language}</strong>
+                {lang.fluency}
+              </SidebarSkill>
+            ))}
+          </Section>
+        )}
+      </Sidebar>
 
-      {volunteer?.length > 0 && (
-        <Section>
-          <StyledSectionTitle>Volunteer Work</StyledSectionTitle>
-          {volunteer.map((vol, index) => (
-            <WorkItem key={index}>
-              <WorkHeader>
-                <div>
-                  <Position>{vol.position}</Position>
-                  {vol.organization && <Company>{vol.organization}</Company>}
-                </div>
-                {(vol.startDate || vol.endDate) && (
+      <MainContent>
+        {basics.summary && <Summary>{basics.summary}</Summary>}
+
+        {work?.length > 0 && (
+          <Section>
+            <StyledSectionTitle>Professional Experience</StyledSectionTitle>
+            {work.map((job, index) => (
+              <WorkItem key={index}>
+                <WorkHeader>
+                  <div>
+                    <Position>{job.position}</Position>
+                    {job.name && <Company>{job.name}</Company>}
+                  </div>
                   <DateText>
                     <DateRange
-                      startDate={vol.startDate}
-                      endDate={vol.endDate}
+                      startDate={job.startDate}
+                      endDate={job.endDate}
                     />
                   </DateText>
+                </WorkHeader>
+                {job.summary && <WorkSummary>{job.summary}</WorkSummary>}
+                {job.highlights?.length > 0 && (
+                  <Highlights>
+                    {job.highlights.map((highlight, i) => (
+                      <li key={i}>{highlight}</li>
+                    ))}
+                  </Highlights>
                 )}
-              </WorkHeader>
-              {vol.summary && <WorkSummary>{vol.summary}</WorkSummary>}
-              {vol.highlights?.length > 0 && (
-                <Highlights>
-                  {vol.highlights.map((highlight, i) => (
-                    <li key={i}>{highlight}</li>
-                  ))}
-                </Highlights>
-              )}
-            </WorkItem>
-          ))}
-        </Section>
-      )}
-
-      {awards?.length > 0 && (
-        <Section>
-          <StyledSectionTitle>Awards & Recognition</StyledSectionTitle>
-          {awards.map((award, index) => (
-            <EducationItem key={index}>
-              <Institution>{award.title}</Institution>
-              {award.awarder && <Degree>Awarded by {award.awarder}</Degree>}
-              {award.date && <EducationDate>{award.date}</EducationDate>}
-              {award.summary && <WorkSummary>{award.summary}</WorkSummary>}
-            </EducationItem>
-          ))}
-        </Section>
-      )}
-
-      {publications?.length > 0 && (
-        <Section>
-          <StyledSectionTitle>Publications</StyledSectionTitle>
-          {publications.map((pub, index) => (
-            <EducationItem key={index}>
-              <Institution>{pub.name}</Institution>
-              {pub.publisher && <Degree>Published by {pub.publisher}</Degree>}
-              {pub.releaseDate && (
-                <EducationDate>{pub.releaseDate}</EducationDate>
-              )}
-              {pub.summary && <WorkSummary>{pub.summary}</WorkSummary>}
-            </EducationItem>
-          ))}
-        </Section>
-      )}
-
-      {languages?.length > 0 && (
-        <Section>
-          <StyledSectionTitle>Languages</StyledSectionTitle>
-          <SkillsGrid>
-            {languages.map((lang, index) => (
-              <SkillCategory key={index}>
-                <SkillName>{lang.language}</SkillName>
-                {lang.fluency && <SkillTags>{lang.fluency}</SkillTags>}
-              </SkillCategory>
+              </WorkItem>
             ))}
-          </SkillsGrid>
-        </Section>
-      )}
+          </Section>
+        )}
 
-      {interests?.length > 0 && (
-        <Section>
-          <StyledSectionTitle>Interests</StyledSectionTitle>
-          <SkillsGrid>
-            {interests.map((interest, index) => (
-              <SkillCategory key={index}>
-                <SkillName>{interest.name}</SkillName>
-                {interest.keywords?.length > 0 && (
-                  <SkillTags>{interest.keywords.join(', ')}</SkillTags>
+        {projects?.length > 0 && (
+          <Section>
+            <StyledSectionTitle>Notable Projects</StyledSectionTitle>
+            {projects.map((project, index) => (
+              <WorkItem key={index}>
+                <Position>{project.name}</Position>
+                {project.description && (
+                  <WorkSummary>{project.description}</WorkSummary>
                 )}
-              </SkillCategory>
+                {project.highlights?.length > 0 && (
+                  <Highlights>
+                    {project.highlights.map((highlight, i) => (
+                      <li key={i}>{highlight}</li>
+                    ))}
+                  </Highlights>
+                )}
+              </WorkItem>
             ))}
-          </SkillsGrid>
-        </Section>
-      )}
+          </Section>
+        )}
 
-      {references?.length > 0 && (
-        <Section>
-          <StyledSectionTitle>References</StyledSectionTitle>
-          {references.map((ref, index) => (
-            <EducationItem key={index}>
-              <Institution>{ref.name}</Institution>
-              {ref.reference && <WorkSummary>{ref.reference}</WorkSummary>}
-            </EducationItem>
-          ))}
-        </Section>
-      )}
+        {volunteer?.length > 0 && (
+          <Section>
+            <StyledSectionTitle>Volunteer Work</StyledSectionTitle>
+            {volunteer.map((vol, index) => (
+              <WorkItem key={index}>
+                <WorkHeader>
+                  <div>
+                    <Position>{vol.position}</Position>
+                    {vol.organization && <Company>{vol.organization}</Company>}
+                  </div>
+                  {(vol.startDate || vol.endDate) && (
+                    <DateText>
+                      <DateRange
+                        startDate={vol.startDate}
+                        endDate={vol.endDate}
+                      />
+                    </DateText>
+                  )}
+                </WorkHeader>
+                {vol.summary && <WorkSummary>{vol.summary}</WorkSummary>}
+                {vol.highlights?.length > 0 && (
+                  <Highlights>
+                    {vol.highlights.map((highlight, i) => (
+                      <li key={i}>{highlight}</li>
+                    ))}
+                  </Highlights>
+                )}
+              </WorkItem>
+            ))}
+          </Section>
+        )}
+
+        {awards?.length > 0 && (
+          <Section>
+            <StyledSectionTitle>Awards & Recognition</StyledSectionTitle>
+            {awards.map((award, index) => (
+              <EducationItem key={index}>
+                <Institution>{award.title}</Institution>
+                {award.awarder && <Degree>Awarded by {award.awarder}</Degree>}
+                {award.date && <EducationDate>{award.date}</EducationDate>}
+                {award.summary && <WorkSummary>{award.summary}</WorkSummary>}
+              </EducationItem>
+            ))}
+          </Section>
+        )}
+
+        {publications?.length > 0 && (
+          <Section>
+            <StyledSectionTitle>Publications</StyledSectionTitle>
+            {publications.map((pub, index) => (
+              <EducationItem key={index}>
+                <Institution>{pub.name}</Institution>
+                {pub.publisher && <Degree>Published by {pub.publisher}</Degree>}
+                {pub.releaseDate && (
+                  <EducationDate>{pub.releaseDate}</EducationDate>
+                )}
+                {pub.summary && <WorkSummary>{pub.summary}</WorkSummary>}
+              </EducationItem>
+            ))}
+          </Section>
+        )}
+
+        {references?.length > 0 && (
+          <Section>
+            <StyledSectionTitle>References</StyledSectionTitle>
+            {references.map((ref, index) => (
+              <EducationItem key={index}>
+                <Institution>{ref.name}</Institution>
+                {ref.reference && <WorkSummary>{ref.reference}</WorkSummary>}
+              </EducationItem>
+            ))}
+          </Section>
+        )}
+      </MainContent>
     </Layout>
   );
 }

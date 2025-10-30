@@ -2,13 +2,16 @@ import React from 'react';
 import styled from 'styled-components';
 import { Section, SectionTitle, DateRange, ContactInfo } from '@resume/core';
 
+// Developer Mono Theme - Technical, efficient, minimalist
+// Monospace headers with sans-serif body, code-style aesthetics
+// Color: #2563eb (developer blue)
+
 const Layout = styled.div`
   max-width: 850px;
   margin: 0 auto;
   padding: 60px 40px;
   background: white;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   color: #1f2937;
 
   @media print {
@@ -18,30 +21,49 @@ const Layout = styled.div`
 
 const Header = styled.header`
   margin-bottom: 48px;
-  padding-bottom: 24px;
-  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #2563eb;
 `;
 
 const Name = styled.h1`
-  font-size: 36px;
+  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Consolas', 'Courier New',
+    monospace;
+  font-size: 32px;
   font-weight: 600;
   color: #111827;
   margin: 0 0 8px 0;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.01em;
+
+  &::before {
+    content: '// ';
+    color: #2563eb;
+  }
 `;
 
 const Label = styled.div`
-  font-size: 15px;
+  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Consolas', 'Courier New',
+    monospace;
+  font-size: 14px;
   color: #6b7280;
   margin-bottom: 16px;
-  font-weight: 400;
+  font-weight: 500;
+
+  &::before {
+    content: '/* ';
+    color: #94a3b8;
+  }
+
+  &::after {
+    content: ' */';
+    color: #94a3b8;
+  }
 `;
 
 const StyledContactInfo = styled(ContactInfo)`
-  font-size: 14px;
+  font-size: 13px;
 
   a {
-    font-size: 14px;
+    font-size: 13px;
     color: #2563eb;
     text-decoration: none;
 
@@ -52,21 +74,28 @@ const StyledContactInfo = styled(ContactInfo)`
 `;
 
 const Summary = styled.p`
-  font-size: 15px;
-  line-height: 1.6;
+  font-size: 14px;
+  line-height: 1.7;
   color: #4b5563;
   margin: 16px 0 0 0;
 `;
 
 const StyledSectionTitle = styled(SectionTitle)`
-  font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
-  font-size: 16px;
-  font-weight: 600;
-  color: #2563eb;
-  margin: 36px 0 20px 0;
+  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Consolas', 'Courier New',
+    monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: #64748b;
+  margin: 40px 0 20px 0;
   padding-bottom: 8px;
   border-bottom: 1px solid #e5e7eb;
-  letter-spacing: -0.3px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+
+  &::before {
+    content: '// ';
+    color: #94a3b8;
+  }
 `;
 
 const WorkItem = styled.div`
@@ -92,23 +121,26 @@ const WorkHeader = styled.div`
 `;
 
 const Position = styled.h3`
-  font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
-  font-size: 16px;
+  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Consolas', 'Courier New',
+    monospace;
+  font-size: 15px;
   font-weight: 600;
   color: #111827;
   margin: 0;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.01em;
 `;
 
 const Company = styled.div`
-  font-size: 15px;
+  font-size: 14px;
   color: #4b5563;
   font-weight: 500;
   margin-top: 4px;
 `;
 
 const DateText = styled.div`
-  font-size: 13px;
+  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Consolas', 'Courier New',
+    monospace;
+  font-size: 12px;
   color: #6b7280;
   font-weight: 400;
   white-space: nowrap;
@@ -124,14 +156,25 @@ const WorkSummary = styled.p`
 const Highlights = styled.ul`
   margin: 10px 0 0 0;
   padding-left: 18px;
-  list-style-type: disc;
+  list-style-type: none;
 
   li {
     margin: 6px 0;
     color: #4b5563;
     line-height: 1.6;
-    font-size: 14px;
+    font-size: 13px;
     padding-left: 4px;
+    position: relative;
+
+    &:before {
+      content: '>';
+      position: absolute;
+      left: -14px;
+      color: #2563eb;
+      font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Consolas',
+        'Courier New', monospace;
+      font-weight: 600;
+    }
   }
 `;
 
@@ -144,49 +187,54 @@ const EducationItem = styled.div`
 `;
 
 const Institution = styled.h3`
-  font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
-  font-size: 15px;
+  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Consolas', 'Courier New',
+    monospace;
+  font-size: 14px;
   font-weight: 600;
   color: #111827;
   margin: 0 0 6px 0;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.01em;
 `;
 
 const Degree = styled.div`
-  font-size: 14px;
+  font-size: 13px;
   color: #4b5563;
   margin-bottom: 4px;
 `;
 
 const EducationDate = styled.div`
-  font-size: 13px;
+  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Consolas', 'Courier New',
+    monospace;
+  font-size: 12px;
   color: #6b7280;
 `;
 
 const SkillsGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 16px;
+  gap: 12px;
 `;
 
 const SkillCategory = styled.div`
   padding: 12px;
-  background: #f9fafb;
-  border-radius: 4px;
-  border-left: 2px solid #2563eb;
+  background: #f8fafc;
+  border-radius: 2px;
+  border-left: 3px solid #2563eb;
+  border: 1px solid #e2e8f0;
 `;
 
 const SkillName = styled.h4`
-  font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
-  font-size: 14px;
+  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Consolas', 'Courier New',
+    monospace;
+  font-size: 12px;
   font-weight: 600;
-  color: #111827;
+  color: #2563eb;
   margin: 0 0 6px 0;
-  letter-spacing: -0.3px;
+  letter-spacing: 0.01em;
 `;
 
 const SkillTags = styled.div`
-  font-size: 13px;
+  font-size: 12px;
   color: #6b7280;
   line-height: 1.5;
 `;

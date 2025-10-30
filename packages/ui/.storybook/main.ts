@@ -15,6 +15,9 @@ const config: StorybookConfig = {
     '../src/DesignTokens.mdx',
     '../src/**/*.mdx',
     '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    // Resume Core components
+    '../../resume-core/src/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    '../../resume-core/src/**/*.mdx',
   ],
   addons: [
     getAbsolutePath('@storybook/addon-docs'),

@@ -1,6 +1,8 @@
 # @resume/core
 
-**Framework-agnostic resume component library for building ATS-friendly themes**
+**React component library for building ATS-friendly, print-optimized resume themes**
+
+🎉 **NEW: 67+ Components Available!** - Massively expanded from 7 to 67+ components with comprehensive layout, typography, data visualization, and specialized resume components.
 
 A collection of design tokens, primitives, and utilities that enable rapid development of professional resume themes. Built for AI agents and developers to quickly create consistent, accessible, and ATS-optimized resume templates.
 
@@ -401,13 +403,37 @@ This is a foundational library for the JSON Resume ecosystem. Contributions welc
 - Keep functions pure (no side effects)
 - Document with JSDoc comments
 
+## Recent Updates
+
+### v0.2.0 - Component Library Expansion
+
+**Added 60+ new components across 20 categories:**
+
+✅ ThemeProvider with 5 theme variants
+✅ 5 Layout components (Grid, Sidebar, Stack, Card, Flex)
+✅ 6 Skills components (Bar, Pill, Rating, Group, Cloud, Category)
+✅ 4 Profile components (Avatar, ProfileCard, ContactGrid, SocialLinks)
+✅ 3 Typography components (Heading, Text, Label)
+✅ 3 Data display components (ProgressCircle, StatCard, MetricBar)
+✅ 4 Experience components (Card, Timeline, Grid, Compact)
+✅ 5 Header/Footer components
+✅ 9 Quote/Award/Certification components
+✅ 6 Language/Publication components
+✅ 6 Table/Matrix components
+✅ 8 Callout/List components
+✅ 6 Date/Visual components
+✅ 4 Print utilities (KeepTogether, PageBreak, PrintOnly, ScreenOnly)
+
+See `BUILD_COMPONENTS.md` for full component list and `COMPONENT_EXPANSION_PROPOSAL.md` for design rationale.
+
 ## Roadmap
 
-- [ ] More section primitives (Timeline, Grid layouts)
+- [x] More section primitives (Timeline, Grid layouts) - **COMPLETE**
+- [ ] Storybook documentation for all components
+- [ ] TypeScript type definitions
 - [ ] ATS validation utilities
 - [ ] Icon system
 - [ ] RTL (right-to-left) text support
-- [ ] PDF optimization helpers
 - [ ] Accessibility audit tools
 
 ## License
