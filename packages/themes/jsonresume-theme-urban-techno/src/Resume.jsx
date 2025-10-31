@@ -20,7 +20,6 @@ const Layout = styled.div`
   color: #111;
   line-height: 1.4;
   font-size: 13px;
-  border: 3px solid #111;
 
   @media print {
     border: none;
@@ -30,12 +29,12 @@ const Layout = styled.div`
 const Header = styled.header`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  border-bottom: 3px solid #111;
+  border-bottom: 2px solid #111;
 `;
 
 const NameSection = styled.div`
   padding: 24px;
-  border-right: 3px solid #111;
+  border-right: 2px solid #111;
   background: #111;
   color: white;
 `;
@@ -45,7 +44,7 @@ const Name = styled.h1`
   font-weight: 900;
   margin: 0;
   text-transform: uppercase;
-  letter-spacing: -1px;
+  letter-spacing: 0.5px;
   line-height: 0.9;
 `;
 
@@ -90,8 +89,8 @@ const MainGrid = styled.div`
 `;
 
 const Sidebar = styled.aside`
-  border-right: 3px solid #111;
-  background: #f5f5f5;
+  border-right: 2px solid #111;
+  background: #e8e8e8;
 `;
 
 const MainContent = styled.main`
@@ -99,7 +98,7 @@ const MainContent = styled.main`
 `;
 
 const SidebarSection = styled(Section)`
-  border-bottom: 1px solid #666;
+  border-bottom: 1px solid #999;
 
   &:last-child {
     border-bottom: none;
@@ -157,7 +156,7 @@ const StyledBadge = styled(Badge)`
 `;
 
 const MainSection = styled(Section)`
-  border-bottom: 3px solid #111;
+  border-bottom: 2px solid #111;
 
   &:last-child {
     border-bottom: none;
@@ -167,12 +166,12 @@ const MainSection = styled(Section)`
 const MainSectionTitle = styled(SectionTitle)`
   background: #111;
   color: white;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 900;
   margin: 0;
-  padding: 12px 24px;
+  padding: 10px 20px;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
+  letter-spacing: 1.2px;
 `;
 
 const WorkGrid = styled.div`
@@ -187,8 +186,8 @@ const WorkGrid = styled.div`
 
 const DateColumn = styled.div`
   padding: 16px 12px;
-  border-right: 1px solid #666;
-  background: #fafafa;
+  border-right: 1px solid #999;
+  background: white;
   font-size: 9px;
   font-weight: 900;
   text-transform: uppercase;
@@ -229,13 +228,24 @@ const WorkDescription = styled.p`
 const WorkHighlights = styled.ul`
   margin: 8px 0 0 0;
   padding-left: 20px;
-  list-style: square;
+  list-style: none;
 
   li {
     margin-bottom: 4px;
     font-size: 12px;
     line-height: 1.4;
     color: #333;
+    position: relative;
+    padding-left: 12px;
+
+    &::before {
+      content: '■';
+      position: absolute;
+      left: 0;
+      color: #111;
+      font-size: 8px;
+      top: 2px;
+    }
   }
 `;
 
