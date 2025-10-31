@@ -29,13 +29,13 @@ Pull fonts from google fonts cdn, always look at all components from resume-core
 
 ---
 
-- [ ] **Product Manager Canvas**
+- [x] **Product Manager Canvas**
       **Vibe:** Analytical yet creative
       **Layout:** Single column; highlights metrics and achievements inline
       **Typography:** Neutral sans-serif (Inter), comfortable 11pt body
       **Colors:** `--accent: #7c3aed` (indigo)
       **Notes:** Prioritizes brevity and measurable impact
-      **Description:** Feels like a clean Notion document turned into a resume. White space around each role, bold metrics, and clearly labeled “Impact” areas. Designed for clarity in storytelling.
+      **Description:** Feels like a clean Notion document turned into a resume. White space around each role, bold metrics, and clearly labeled "Impact" areas. Designed for clarity in storytelling.
 
 ---
 
