@@ -416,6 +416,9 @@ importers:
       jsonresume-theme-flat:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-flat
+      jsonresume-theme-french-atelier:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-french-atelier
       jsonresume-theme-government-standard:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-government-standard
@@ -431,6 +434,9 @@ importers:
       jsonresume-theme-latex:
         specifier: ^0.1.2
         version: 0.1.2
+      jsonresume-theme-london-bureau:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-london-bureau
       jsonresume-theme-lucide:
         specifier: ^1.0.1
         version: 1.1.0
@@ -470,6 +476,9 @@ importers:
       jsonresume-theme-operations-precision:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-operations-precision
+      jsonresume-theme-pacific-horizon:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-pacific-horizon
       jsonresume-theme-paper-plus-plus:
         specifier: ^0.5.1
         version: 0.5.1
@@ -512,6 +521,9 @@ importers:
       jsonresume-theme-university-first:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-university-first
+      jsonresume-theme-urban-techno:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-urban-techno
       jsonresume-theme-writers-portfolio:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-writers-portfolio
@@ -986,6 +998,21 @@ importers:
         specifier: latest
         version: 4.7.8
 
+  packages/themes/jsonresume-theme-french-atelier:
+    dependencies:
+      '@resume/core':
+        specifier: workspace:*
+        version: link:../../resume-core
+      react:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.0
+      react-dom:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.0(react@19.2.0)
+      styled-components:
+        specifier: ^6.1.19
+        version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+
   packages/themes/jsonresume-theme-government-standard:
     dependencies:
       '@resume/core':
@@ -1011,6 +1038,21 @@ importers:
         version: 19.2.0
       react-dom:
         specifier: ^19.2.0
+        version: 19.2.0(react@19.2.0)
+      styled-components:
+        specifier: ^6.1.19
+        version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+
+  packages/themes/jsonresume-theme-london-bureau:
+    dependencies:
+      '@resume/core':
+        specifier: workspace:*
+        version: link:../../resume-core
+      react:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.0
+      react-dom:
+        specifier: ^18.0.0 || ^19.0.0
         version: 19.2.0(react@19.2.0)
       styled-components:
         specifier: ^6.1.19
@@ -1122,6 +1164,21 @@ importers:
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
 
   packages/themes/jsonresume-theme-operations-precision:
+    dependencies:
+      '@resume/core':
+        specifier: workspace:*
+        version: link:../../resume-core
+      react:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.0
+      react-dom:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.0(react@19.2.0)
+      styled-components:
+        specifier: ^6.1.19
+        version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+
+  packages/themes/jsonresume-theme-pacific-horizon:
     dependencies:
       '@resume/core':
         specifier: workspace:*
@@ -1340,6 +1397,21 @@ importers:
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
 
   packages/themes/jsonresume-theme-university-first:
+    dependencies:
+      '@resume/core':
+        specifier: workspace:*
+        version: link:../../resume-core
+      react:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.0
+      react-dom:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.0(react@19.2.0)
+      styled-components:
+        specifier: ^6.1.19
+        version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+
+  packages/themes/jsonresume-theme-urban-techno:
     dependencies:
       '@resume/core':
         specifier: workspace:*

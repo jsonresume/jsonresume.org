@@ -238,7 +238,7 @@ These are print-perfect, modern, and emotionally resonant — designed for peopl
 
 ---
 
-- [ ] **Urban Techno**
+- [x] **Urban Techno**
       **Vibe:** Brutalist tech, high contrast, bold typographic expression
       **Layout:** Strong section titles, tight spacing, uppercase accents
       **Typography:** Compact sans-serif, letterspacing reduced

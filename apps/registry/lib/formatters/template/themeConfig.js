@@ -38,6 +38,7 @@ import * as californianwarm from 'jsonresume-theme-californian-warm'; // NEW
 import * as londonbureau from 'jsonresume-theme-london-bureau'; // NEW
 import * as pacifichorizon from 'jsonresume-theme-pacific-horizon'; // NEW
 import * as frenchatelier from 'jsonresume-theme-french-atelier'; // NEW
+import * as urbantechno from 'jsonresume-theme-urban-techno'; // NEW
 
 // Import theme metadata from shared package
 export {
@@ -99,4 +100,5 @@ export const THEMES = {
   'london-bureau': londonbureau, // NEW
   'pacific-horizon': pacifichorizon, // NEW
   'french-atelier': frenchatelier, // NEW
+  'urban-techno': urbantechno, // NEW
 };

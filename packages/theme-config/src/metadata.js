@@ -474,6 +474,21 @@ export const THEME_METADATA = {
       'plum',
     ],
   },
+  'urban-techno': {
+    name: 'Urban Techno',
+    description:
+      'Brutalist tech theme with high contrast, dense two-column layout, and bold typography. Black borders, uppercase section titles, and monochrome palette — power through simplicity.',
+    author: 'JSON Resume Team',
+    tags: [
+      'brutalist',
+      'tech',
+      'dense',
+      'technical',
+      'monochrome',
+      'grid',
+      'urban',
+    ],
+  },
 };
 
 // List of available theme names (derived from THEME_METADATA)
