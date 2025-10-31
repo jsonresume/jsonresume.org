@@ -1,23 +1,16 @@
 {
   "name": "jsonresume-theme-product-manager-canvas",
-  "version": "1.0.0",
-  "description": "Product Manager Canvas - Analytical resume theme focusing on metrics and impact",
-  "main": "src/index.js",
+  "version": "0.1.0",
   "type": "module",
-  "license": "MIT",
-  "keywords": [
-    "resume",
-    "cv",
-    "jsonresume-theme",
-    "product-manager",
-    "metrics"
-  ],
-  "peerDependencies": {
-    "react": "^18.0.0 || ^19.0.0",
-    "react-dom": "^18.0.0 || ^19.0.0"
-  },
+  "main": "index.js",
   "dependencies": {
-    "@resume/core": "workspace:*",
-    "styled-components": "^6.1.19"
+    "styled-components": "workspace:*",
+    "react": "workspace:*",
+    "react-dom": "workspace:*",
+    "@resume/core": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   }
 }
