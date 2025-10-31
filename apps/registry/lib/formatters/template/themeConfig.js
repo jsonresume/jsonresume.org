@@ -33,6 +33,7 @@ import * as midcenturyresume from 'jsonresume-theme-mid-century-resume'; // NEW
 import * as boldheaderstatement from 'jsonresume-theme-bold-header-statement'; // NEW
 import * as typewritermodern from 'jsonresume-theme-typewriter-modern'; // NEW
 import * as newyorkeditorial from 'jsonresume-theme-new-york-editorial'; // NEW
+import * as berlingrid from 'jsonresume-theme-berlin-grid'; // NEW
 
 // Import theme metadata from shared package
 export {
@@ -89,4 +90,5 @@ export const THEMES = {
   'bold-header-statement': boldheaderstatement, // NEW
   'typewriter-modern': typewritermodern, // NEW
   'new-york-editorial': newyorkeditorial, // NEW
+  'berlin-grid': berlingrid, // NEW
 };

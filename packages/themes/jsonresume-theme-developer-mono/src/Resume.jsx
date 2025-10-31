@@ -1,71 +1,66 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Section, SectionTitle, DateRange, ContactInfo } from '@resume/core';
-
-// Developer Mono Theme - Technical, efficient, minimalist
-// Monospace headers with sans-serif body, code-style aesthetics
-// Color: #2563eb (developer blue)
+import {
+  Section,
+  SectionTitle,
+  DateRange,
+  ContactInfo,
+  Link,
+} from '@resume/core';
 
 const Layout = styled.div`
-  max-width: 850px;
+  max-width: 900px;
   margin: 0 auto;
-  padding: 60px 40px;
-  background: white;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  padding: 60px 50px;
+  background: #ffffff;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    sans-serif;
   color: #1f2937;
+  line-height: 1.7;
 
   @media print {
     padding: 40px;
+  }
+
+  @media (max-width: 640px) {
+    padding: 40px 20px;
   }
 `;
 
 const Header = styled.header`
   margin-bottom: 48px;
-  padding-bottom: 20px;
-  border-bottom: 2px solid #2563eb;
+  padding-bottom: 24px;
+  border-bottom: 3px solid #2563eb;
 `;
 
 const Name = styled.h1`
-  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Consolas', 'Courier New',
-    monospace;
-  font-size: 32px;
-  font-weight: 600;
+  font-size: 48px;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
   color: #111827;
-  margin: 0 0 8px 0;
-  letter-spacing: -0.01em;
-
-  &::before {
-    content: '// ';
-    color: #2563eb;
-  }
+  margin: 0 0 12px 0;
+  letter-spacing: -1px;
 `;
 
-const Label = styled.div`
-  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Consolas', 'Courier New',
-    monospace;
-  font-size: 14px;
-  color: #6b7280;
-  margin-bottom: 16px;
+const Label = styled.p`
+  font-size: 18px;
   font-weight: 500;
-
-  &::before {
-    content: '/* ';
-    color: #94a3b8;
-  }
-
-  &::after {
-    content: ' */';
-    color: #94a3b8;
-  }
+  font-family: 'JetBrains Mono', monospace;
+  color: #2563eb;
+  margin: 0 0 20px 0;
+  letter-spacing: 0.5px;
 `;
 
 const StyledContactInfo = styled(ContactInfo)`
-  font-size: 13px;
+  font-size: 15px;
+  color: #6b7280;
+  margin-bottom: 20px;
 
   a {
-    font-size: 13px;
+    font-size: 15px;
     color: #2563eb;
     text-decoration: none;
+    font-family: 'JetBrains Mono', monospace;
 
     &:hover {
       text-decoration: underline;
@@ -74,169 +69,281 @@ const StyledContactInfo = styled(ContactInfo)`
 `;
 
 const Summary = styled.p`
-  font-size: 14px;
-  line-height: 1.7;
-  color: #4b5563;
-  margin: 16px 0 0 0;
+  font-size: 16px;
+  line-height: 1.8;
+  color: #374151;
+  margin: 20px 0 0 0;
+  max-width: 750px;
+`;
+
+const StyledSection = styled(Section)`
+  margin-bottom: 48px;
 `;
 
 const StyledSectionTitle = styled(SectionTitle)`
-  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Consolas', 'Courier New',
-    monospace;
-  font-size: 13px;
+  font-size: 20px;
   font-weight: 700;
-  color: #64748b;
-  margin: 40px 0 20px 0;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #e5e7eb;
-  letter-spacing: 0.05em;
+  font-family: 'JetBrains Mono', monospace;
+  color: #111827;
+  margin: 0 0 24px 0;
   text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 8px 0;
+  border-bottom: 2px solid #e5e7eb;
+  display: inline-block;
+  min-width: 200px;
 
   &::before {
-    content: '// ';
-    color: #94a3b8;
+    content: '# ';
+    color: #2563eb;
   }
 `;
 
 const WorkItem = styled.div`
-  margin-bottom: 28px;
+  margin-bottom: 36px;
+  padding-left: 20px;
+  border-left: 3px solid #e5e7eb;
 
   &:last-child {
     margin-bottom: 0;
   }
-`;
 
-const WorkHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 6px;
-  gap: 16px;
-
-  @media (max-width: 640px) {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
+  &:hover {
+    border-left-color: #2563eb;
   }
 `;
 
+const WorkHeader = styled.div`
+  margin-bottom: 12px;
+`;
+
+const WorkTitle = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 8px;
+`;
+
 const Position = styled.h3`
-  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Consolas', 'Courier New',
-    monospace;
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
   color: #111827;
   margin: 0;
-  letter-spacing: -0.01em;
 `;
 
 const Company = styled.div`
-  font-size: 14px;
-  color: #4b5563;
+  font-size: 16px;
   font-weight: 500;
+  color: #2563eb;
   margin-top: 4px;
 `;
 
-const DateText = styled.div`
-  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Consolas', 'Courier New',
-    monospace;
-  font-size: 12px;
+const StyledDateRange = styled(DateRange)`
+  font-size: 14px;
+  font-family: 'JetBrains Mono', monospace;
   color: #6b7280;
-  font-weight: 400;
-  white-space: nowrap;
 `;
 
 const WorkSummary = styled.p`
-  margin: 10px 0;
+  margin: 12px 0;
   color: #4b5563;
-  line-height: 1.6;
-  font-size: 14px;
+  line-height: 1.7;
+  font-size: 15px;
 `;
 
-const Highlights = styled.ul`
-  margin: 10px 0 0 0;
-  padding-left: 18px;
-  list-style-type: none;
+const HighlightsList = styled.ul`
+  margin: 12px 0 0 0;
+  padding-left: 20px;
+  list-style: none;
 
   li {
-    margin: 6px 0;
-    color: #4b5563;
-    line-height: 1.6;
-    font-size: 13px;
-    padding-left: 4px;
     position: relative;
+    margin-bottom: 8px;
+    padding-left: 0;
+    color: #374151;
+    line-height: 1.7;
 
-    &:before {
-      content: '>';
+    &::before {
+      content: '→';
       position: absolute;
-      left: -14px;
+      left: -20px;
       color: #2563eb;
-      font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Consolas',
-        'Courier New', monospace;
-      font-weight: 600;
+      font-weight: bold;
     }
   }
 `;
 
 const EducationItem = styled.div`
-  margin-bottom: 20px;
+  margin-bottom: 28px;
+  padding: 20px;
+  background: #f9fafb;
+  border-left: 3px solid #2563eb;
+  border-radius: 2px;
 
   &:last-child {
     margin-bottom: 0;
   }
 `;
 
-const Institution = styled.h3`
-  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Consolas', 'Courier New',
-    monospace;
-  font-size: 14px;
+const EducationHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+`;
+
+const Degree = styled.h3`
+  font-size: 17px;
   font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
   color: #111827;
-  margin: 0 0 6px 0;
-  letter-spacing: -0.01em;
+  margin: 0;
 `;
 
-const Degree = styled.div`
-  font-size: 13px;
-  color: #4b5563;
-  margin-bottom: 4px;
-`;
-
-const EducationDate = styled.div`
-  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Consolas', 'Courier New',
-    monospace;
-  font-size: 12px;
+const Institution = styled.div`
+  font-size: 15px;
   color: #6b7280;
+  margin-top: 4px;
+`;
+
+const StudyType = styled.div`
+  font-size: 14px;
+  color: #2563eb;
+  margin-top: 4px;
 `;
 
 const SkillsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
 `;
 
-const SkillCategory = styled.div`
-  padding: 12px;
-  background: #f8fafc;
+const SkillCard = styled.div`
+  padding: 16px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
   border-radius: 2px;
-  border-left: 3px solid #2563eb;
-  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: #2563eb;
+    background: #eff6ff;
+  }
 `;
 
 const SkillName = styled.h4`
-  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Consolas', 'Courier New',
-    monospace;
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 600;
-  color: #2563eb;
-  margin: 0 0 6px 0;
-  letter-spacing: 0.01em;
+  font-family: 'JetBrains Mono', monospace;
+  color: #111827;
+  margin: 0 0 10px 0;
 `;
 
-const SkillTags = styled.div`
-  font-size: 12px;
+const KeywordList = styled.div`
+  font-size: 13px;
   color: #6b7280;
-  line-height: 1.5;
+  line-height: 1.6;
+`;
+
+const ProjectItem = styled.div`
+  margin-bottom: 32px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid #e5e7eb;
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+`;
+
+const ProjectHeader = styled.div`
+  margin-bottom: 12px;
+`;
+
+const ProjectName = styled.h3`
+  font-size: 17px;
+  font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
+  color: #111827;
+  margin: 0 0 8px 0;
+`;
+
+const ProjectDescription = styled.p`
+  font-size: 15px;
+  color: #4b5563;
+  line-height: 1.7;
+  margin: 0;
+`;
+
+const ProjectHighlights = styled.ul`
+  margin: 12px 0 0 0;
+  padding-left: 20px;
+  list-style: none;
+
+  li {
+    position: relative;
+    margin-bottom: 6px;
+    padding-left: 0;
+    color: #4b5563;
+    font-size: 14px;
+
+    &::before {
+      content: '•';
+      position: absolute;
+      left: -20px;
+      color: #2563eb;
+    }
+  }
+`;
+
+const SimpleList = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+`;
+
+const SimpleItem = styled.div`
+  padding: 16px;
+  background: #f9fafb;
+  border-left: 2px solid #2563eb;
+  border-radius: 2px;
+`;
+
+const ItemTitle = styled.h4`
+  font-size: 15px;
+  font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
+  color: #111827;
+  margin: 0 0 8px 0;
+`;
+
+const ItemMeta = styled.div`
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 6px;
+`;
+
+const ItemDescription = styled.p`
+  font-size: 14px;
+  color: #4b5563;
+  margin: 8px 0 0 0;
+  line-height: 1.6;
+`;
+
+const CodeBlock = styled.pre`
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: #1f2937;
+  background: #f9fafb;
+  padding: 2px 6px;
+  border-radius: 2px;
+  display: inline;
 `;
 
 function Resume({ resume }) {
@@ -263,190 +370,223 @@ function Resume({ resume }) {
         {basics.summary && <Summary>{basics.summary}</Summary>}
       </Header>
 
-      {work?.length > 0 && (
-        <Section>
+      {work && work.length > 0 && (
+        <StyledSection>
           <StyledSectionTitle>Experience</StyledSectionTitle>
           {work.map((job, index) => (
             <WorkItem key={index}>
               <WorkHeader>
-                <div>
-                  <Position>{job.position}</Position>
-                  {job.name && <Company>{job.name}</Company>}
-                </div>
-                <DateText>
-                  <DateRange startDate={job.startDate} endDate={job.endDate} />
-                </DateText>
+                <WorkTitle>
+                  <div>
+                    <Position>{job.position}</Position>
+                    <Company>{job.name}</Company>
+                  </div>
+                  <StyledDateRange
+                    startDate={job.startDate}
+                    endDate={job.endDate}
+                  />
+                </WorkTitle>
               </WorkHeader>
               {job.summary && <WorkSummary>{job.summary}</WorkSummary>}
-              {job.highlights?.length > 0 && (
-                <Highlights>
+              {job.highlights && job.highlights.length > 0 && (
+                <HighlightsList>
                   {job.highlights.map((highlight, i) => (
-                    <li key={i}>{highlight}</li>
+                    <li
+                      key={i}
+                      dangerouslySetInnerHTML={{ __html: highlight }}
+                    />
                   ))}
-                </Highlights>
+                </HighlightsList>
               )}
             </WorkItem>
           ))}
-        </Section>
+        </StyledSection>
       )}
 
-      {skills?.length > 0 && (
-        <Section>
+      {skills && skills.length > 0 && (
+        <StyledSection>
           <StyledSectionTitle>Skills</StyledSectionTitle>
           <SkillsGrid>
             {skills.map((skill, index) => (
-              <SkillCategory key={index}>
+              <SkillCard key={index}>
                 <SkillName>{skill.name}</SkillName>
-                {skill.keywords?.length > 0 && (
-                  <SkillTags>{skill.keywords.join(', ')}</SkillTags>
+                {skill.keywords && skill.keywords.length > 0 && (
+                  <KeywordList>{skill.keywords.join(' • ')}</KeywordList>
                 )}
-              </SkillCategory>
+              </SkillCard>
             ))}
           </SkillsGrid>
-        </Section>
+        </StyledSection>
       )}
 
-      {education?.length > 0 && (
-        <Section>
+      {education && education.length > 0 && (
+        <StyledSection>
           <StyledSectionTitle>Education</StyledSectionTitle>
           {education.map((edu, index) => (
             <EducationItem key={index}>
-              <Institution>{edu.institution}</Institution>
-              <Degree>
-                {edu.studyType} in {edu.area}
-                {edu.score && ` • ${edu.score}`}
-              </Degree>
-              <EducationDate>
-                <DateRange startDate={edu.startDate} endDate={edu.endDate} />
-              </EducationDate>
+              <EducationHeader>
+                <div>
+                  <Degree>{edu.area}</Degree>
+                  {edu.studyType && <StudyType>{edu.studyType}</StudyType>}
+                  <Institution>{edu.institution}</Institution>
+                </div>
+                <StyledDateRange
+                  startDate={edu.startDate}
+                  endDate={edu.endDate}
+                />
+              </EducationHeader>
+              {edu.score && <ItemMeta>GPA: {edu.score}</ItemMeta>}
+              {edu.courses && edu.courses.length > 0 && (
+                <ItemDescription>{edu.courses.join(', ')}</ItemDescription>
+              )}
             </EducationItem>
           ))}
-        </Section>
+        </StyledSection>
       )}
 
-      {projects?.length > 0 && (
-        <Section>
+      {projects && projects.length > 0 && (
+        <StyledSection>
           <StyledSectionTitle>Projects</StyledSectionTitle>
           {projects.map((project, index) => (
-            <WorkItem key={index}>
-              <Position>{project.name}</Position>
-              {project.description && (
-                <WorkSummary>{project.description}</WorkSummary>
-              )}
-              {project.highlights?.length > 0 && (
-                <Highlights>
+            <ProjectItem key={index}>
+              <ProjectHeader>
+                <ProjectName>
+                  {project.url ? (
+                    <Link href={project.url}>{project.name}</Link>
+                  ) : (
+                    project.name
+                  )}
+                </ProjectName>
+                {project.description && (
+                  <ProjectDescription>{project.description}</ProjectDescription>
+                )}
+              </ProjectHeader>
+              {project.highlights && project.highlights.length > 0 && (
+                <ProjectHighlights>
                   {project.highlights.map((highlight, i) => (
                     <li key={i}>{highlight}</li>
                   ))}
-                </Highlights>
+                </ProjectHighlights>
               )}
-            </WorkItem>
+            </ProjectItem>
           ))}
-        </Section>
+        </StyledSection>
       )}
 
-      {volunteer?.length > 0 && (
-        <Section>
+      {volunteer && volunteer.length > 0 && (
+        <StyledSection>
           <StyledSectionTitle>Volunteer</StyledSectionTitle>
-          {volunteer.map((vol, index) => (
-            <WorkItem key={index}>
-              <WorkHeader>
-                <div>
-                  <Position>{vol.position}</Position>
-                  {vol.organization && <Company>{vol.organization}</Company>}
-                </div>
-                {(vol.startDate || vol.endDate) && (
-                  <DateText>
-                    <DateRange
-                      startDate={vol.startDate}
-                      endDate={vol.endDate}
-                    />
-                  </DateText>
+          <SimpleList>
+            {volunteer.map((vol, index) => (
+              <SimpleItem key={index}>
+                <ItemTitle>{vol.position}</ItemTitle>
+                <ItemMeta>
+                  {vol.organization}
+                  {vol.startDate && (
+                    <>
+                      {' • '}
+                      <DateRange
+                        startDate={vol.startDate}
+                        endDate={vol.endDate}
+                      />
+                    </>
+                  )}
+                </ItemMeta>
+                {vol.summary && (
+                  <ItemDescription>{vol.summary}</ItemDescription>
                 )}
-              </WorkHeader>
-              {vol.summary && <WorkSummary>{vol.summary}</WorkSummary>}
-              {vol.highlights?.length > 0 && (
-                <Highlights>
-                  {vol.highlights.map((highlight, i) => (
-                    <li key={i}>{highlight}</li>
-                  ))}
-                </Highlights>
-              )}
-            </WorkItem>
-          ))}
-        </Section>
+              </SimpleItem>
+            ))}
+          </SimpleList>
+        </StyledSection>
       )}
 
-      {awards?.length > 0 && (
-        <Section>
+      {awards && awards.length > 0 && (
+        <StyledSection>
           <StyledSectionTitle>Awards</StyledSectionTitle>
-          {awards.map((award, index) => (
-            <EducationItem key={index}>
-              <Institution>{award.title}</Institution>
-              {award.awarder && <Degree>Awarded by {award.awarder}</Degree>}
-              {award.date && <EducationDate>{award.date}</EducationDate>}
-              {award.summary && <WorkSummary>{award.summary}</WorkSummary>}
-            </EducationItem>
-          ))}
-        </Section>
+          <SimpleList>
+            {awards.map((award, index) => (
+              <SimpleItem key={index}>
+                <ItemTitle>{award.title}</ItemTitle>
+                <ItemMeta>
+                  {award.awarder}
+                  {award.date && <> • {award.date}</>}
+                </ItemMeta>
+                {award.summary && (
+                  <ItemDescription>{award.summary}</ItemDescription>
+                )}
+              </SimpleItem>
+            ))}
+          </SimpleList>
+        </StyledSection>
       )}
 
-      {publications?.length > 0 && (
-        <Section>
+      {publications && publications.length > 0 && (
+        <StyledSection>
           <StyledSectionTitle>Publications</StyledSectionTitle>
           {publications.map((pub, index) => (
-            <EducationItem key={index}>
-              <Institution>{pub.name}</Institution>
-              {pub.publisher && <Degree>Published by {pub.publisher}</Degree>}
-              {pub.releaseDate && (
-                <EducationDate>{pub.releaseDate}</EducationDate>
+            <ProjectItem key={index}>
+              <ProjectHeader>
+                <ProjectName>
+                  {pub.url ? <Link href={pub.url}>{pub.name}</Link> : pub.name}
+                </ProjectName>
+                <ItemMeta>
+                  {pub.publisher}
+                  {pub.releaseDate && <> • {pub.releaseDate}</>}
+                </ItemMeta>
+              </ProjectHeader>
+              {pub.summary && (
+                <ProjectDescription>{pub.summary}</ProjectDescription>
               )}
-              {pub.summary && <WorkSummary>{pub.summary}</WorkSummary>}
-            </EducationItem>
+            </ProjectItem>
           ))}
-        </Section>
+        </StyledSection>
       )}
 
-      {languages?.length > 0 && (
-        <Section>
+      {languages && languages.length > 0 && (
+        <StyledSection>
           <StyledSectionTitle>Languages</StyledSectionTitle>
-          <SkillsGrid>
+          <SimpleList>
             {languages.map((lang, index) => (
-              <SkillCategory key={index}>
-                <SkillName>{lang.language}</SkillName>
-                {lang.fluency && <SkillTags>{lang.fluency}</SkillTags>}
-              </SkillCategory>
+              <SimpleItem key={index}>
+                <ItemTitle>{lang.language}</ItemTitle>
+                {lang.fluency && <ItemMeta>{lang.fluency}</ItemMeta>}
+              </SimpleItem>
             ))}
-          </SkillsGrid>
-        </Section>
+          </SimpleList>
+        </StyledSection>
       )}
 
-      {interests?.length > 0 && (
-        <Section>
+      {interests && interests.length > 0 && (
+        <StyledSection>
           <StyledSectionTitle>Interests</StyledSectionTitle>
-          <SkillsGrid>
+          <SimpleList>
             {interests.map((interest, index) => (
-              <SkillCategory key={index}>
-                <SkillName>{interest.name}</SkillName>
-                {interest.keywords?.length > 0 && (
-                  <SkillTags>{interest.keywords.join(', ')}</SkillTags>
+              <SimpleItem key={index}>
+                <ItemTitle>{interest.name}</ItemTitle>
+                {interest.keywords && interest.keywords.length > 0 && (
+                  <ItemDescription>
+                    {interest.keywords.join(', ')}
+                  </ItemDescription>
                 )}
-              </SkillCategory>
+              </SimpleItem>
             ))}
-          </SkillsGrid>
-        </Section>
+          </SimpleList>
+        </StyledSection>
       )}
 
-      {references?.length > 0 && (
-        <Section>
+      {references && references.length > 0 && (
+        <StyledSection>
           <StyledSectionTitle>References</StyledSectionTitle>
           {references.map((ref, index) => (
-            <EducationItem key={index}>
-              <Institution>{ref.name}</Institution>
-              {ref.reference && <WorkSummary>{ref.reference}</WorkSummary>}
-            </EducationItem>
+            <ProjectItem key={index}>
+              <ItemTitle>{ref.name}</ItemTitle>
+              {ref.reference && (
+                <ItemDescription>{ref.reference}</ItemDescription>
+              )}
+            </ProjectItem>
           ))}
-        </Section>
+        </StyledSection>
       )}
     </Layout>
   );

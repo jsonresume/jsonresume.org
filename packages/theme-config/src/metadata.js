@@ -399,6 +399,21 @@ export const THEME_METADATA = {
       'writer',
     ],
   },
+  'berlin-grid': {
+    name: 'Berlin Grid',
+    description:
+      'Geometric precision with modular grid layout and grotesk sans-serif typography. Feels engineered — angular, structured, and meticulously aligned.',
+    author: 'JSON Resume Team',
+    tags: [
+      'grid',
+      'geometric',
+      'precise',
+      'engineer',
+      'architect',
+      'systematic',
+      'minimal',
+    ],
+  },
 };
 
 // List of available theme names (derived from THEME_METADATA)

@@ -1,19 +1,8 @@
 {
   "name": "jsonresume-theme-developer-mono",
-  "version": "1.0.0",
-  "description": "Technical, efficient, minimalist theme with monospace accents for developers",
-  "main": "src/index.js",
+  "version": "0.1.0",
   "type": "module",
-  "license": "MIT",
-  "keywords": [
-    "jsonresume",
-    "theme",
-    "developer",
-    "monospace",
-    "technical",
-    "ats",
-    "minimalist"
-  ],
+  "main": "index.js",
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
     "react-dom": "^18.0.0 || ^19.0.0"

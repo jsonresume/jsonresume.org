@@ -380,6 +380,9 @@ importers:
       jsonresume-theme-asymmetric-timeline:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-asymmetric-timeline
+      jsonresume-theme-berlin-grid:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-berlin-grid
       jsonresume-theme-bold-header-statement:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-bold-header-statement
@@ -452,6 +455,9 @@ importers:
       jsonresume-theme-monochrome-noir:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-monochrome-noir
+      jsonresume-theme-new-york-editorial:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-new-york-editorial
       jsonresume-theme-nordic-minimal:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-nordic-minimal
@@ -784,6 +790,21 @@ importers:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
 
+  packages/themes/jsonresume-theme-berlin-grid:
+    dependencies:
+      '@resume/core':
+        specifier: workspace:*
+        version: link:../../resume-core
+      react:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.0
+      react-dom:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.0(react@19.2.0)
+      styled-components:
+        specifier: ^6.1.19
+        version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+
   packages/themes/jsonresume-theme-bold-header-statement:
     dependencies:
       '@resume/core':
@@ -1047,6 +1068,21 @@ importers:
         version: 19.2.0
       react-dom:
         specifier: ^19.2.0
+        version: 19.2.0(react@19.2.0)
+      styled-components:
+        specifier: ^6.1.19
+        version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+
+  packages/themes/jsonresume-theme-new-york-editorial:
+    dependencies:
+      '@resume/core':
+        specifier: workspace:*
+        version: link:../../resume-core
+      react:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.0
+      react-dom:
+        specifier: ^18.0.0 || ^19.0.0
         version: 19.2.0(react@19.2.0)
       styled-components:
         specifier: ^6.1.19
