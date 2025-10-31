@@ -176,7 +176,7 @@ const MainSectionTitle = styled(SectionTitle)`
 
 const WorkGrid = styled.div`
   display: grid;
-  grid-template-columns: 140px 1fr;
+  grid-template-columns: 160px 1fr;
   border-bottom: 1px solid #666;
 
   &:last-child {
