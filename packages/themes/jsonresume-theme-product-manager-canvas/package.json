@@ -1,6 +1,7 @@
 {
   "name": "jsonresume-theme-product-manager-canvas",
   "version": "0.1.0",
+  "description": "Analytical yet creative theme with Notion-like layout, inline metrics, and clearly labeled Impact areas for product managers",
   "type": "module",
   "main": "index.js",
   "peerDependencies": {
