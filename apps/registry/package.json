@@ -103,6 +103,7 @@
     "jsonresume-theme-french-atelier": "workspace:*",
     "jsonresume-theme-urban-techno": "workspace:*",
     "jsonresume-theme-coastal-creative": "workspace:*",
+    "jsonresume-theme-investor-brief": "workspace:*",
     "jsonschema": "^1.4.1",
     "lodash": "^4.17.21",
     "lucide-react": "^0.407.0",

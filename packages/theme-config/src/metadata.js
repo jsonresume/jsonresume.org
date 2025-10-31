@@ -505,6 +505,22 @@ export const THEME_METADATA = {
       'educator',
     ],
   },
+  'investor-brief': {
+    name: 'Investor Brief',
+    description:
+      'Crisp, analytical, results-focused theme resembling a fund report. Features Key Metrics section and data-first presentation.',
+    author: 'JSON Resume Team',
+    tags: [
+      'analytical',
+      'professional',
+      'finance',
+      'metrics',
+      'corporate',
+      'data-driven',
+      'crisp',
+      'vc',
+    ],
+  },
 };
 
 // List of available theme names (derived from THEME_METADATA)

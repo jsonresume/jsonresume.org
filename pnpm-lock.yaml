@@ -389,6 +389,9 @@ importers:
       jsonresume-theme-californian-warm:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-californian-warm
+      jsonresume-theme-coastal-creative:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-coastal-creative
       jsonresume-theme-data-driven:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-data-driven
@@ -425,6 +428,9 @@ importers:
       jsonresume-theme-graph-paper-grid:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-graph-paper-grid
+      jsonresume-theme-investor-brief:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-investor-brief
       jsonresume-theme-jacrys:
         specifier: ^1.0.4
         version: 1.0.4
@@ -850,6 +856,21 @@ importers:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
 
+  packages/themes/jsonresume-theme-coastal-creative:
+    dependencies:
+      '@resume/core':
+        specifier: workspace:*
+        version: link:../../resume-core
+      react:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.0
+      react-dom:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.0(react@19.2.0)
+      styled-components:
+        specifier: ^6.1.19
+        version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+
   packages/themes/jsonresume-theme-consultant-polished:
     dependencies:
       marked:
@@ -1038,6 +1059,21 @@ importers:
         version: 19.2.0
       react-dom:
         specifier: ^19.2.0
+        version: 19.2.0(react@19.2.0)
+      styled-components:
+        specifier: ^6.1.19
+        version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+
+  packages/themes/jsonresume-theme-investor-brief:
+    dependencies:
+      '@resume/core':
+        specifier: workspace:*
+        version: link:../../resume-core
+      react:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.0
+      react-dom:
+        specifier: ^18.0.0 || ^19.0.0
         version: 19.2.0(react@19.2.0)
       styled-components:
         specifier: ^6.1.19
