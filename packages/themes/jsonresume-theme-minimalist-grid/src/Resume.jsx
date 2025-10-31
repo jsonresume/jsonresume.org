@@ -1,79 +1,102 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Section, SectionTitle, DateRange, ContactInfo } from '@resume/core';
+import {
+  Section,
+  SectionTitle,
+  DateRange,
+  Badge,
+  BadgeList,
+  ContactInfo,
+  Link,
+  safeUrl,
+} from '@resume/core';
 
 const Layout = styled.div`
   max-width: 800px;
   margin: 0 auto;
-  padding: 80px 60px;
+  padding: 48px 32px;
   background: white;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   color: #374151;
+  line-height: 1.75;
+  font-size: 15px;
   font-weight: 300;
-  line-height: 1.8;
 
   @media print {
-    padding: 40px;
+    padding: 24px;
   }
 `;
 
 const Header = styled.header`
-  margin-bottom: 64px;
-  padding-bottom: 40px;
+  margin-bottom: 48px;
+  padding-bottom: 24px;
   border-bottom: 1px solid #e5e7eb;
 `;
 
 const Name = styled.h1`
-  font-size: 40px;
+  font-size: 36px;
   font-weight: 300;
+  margin: 0 0 8px 0;
   color: #111827;
-  margin: 0 0 12px 0;
-  letter-spacing: 0.08em;
+  letter-spacing: 2px;
   text-transform: uppercase;
 `;
 
 const Label = styled.div`
   font-size: 14px;
   color: #6b7280;
-  margin-bottom: 24px;
-  font-weight: 300;
-  letter-spacing: 0.1em;
+  font-weight: 400;
+  margin-bottom: 16px;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
 `;
 
-const StyledContactInfo = styled(ContactInfo)`
-  font-size: 14px;
-  letter-spacing: 0.05em;
+const ContactWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 13px;
+  color: #9ca3af;
+  letter-spacing: 0.5px;
+`;
 
-  a {
-    font-size: 14px;
-    font-weight: 300;
+const SummarySection = styled(Section)`
+  margin-bottom: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid #e5e7eb;
+`;
+
+const SummaryText = styled.p`
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.75;
+  color: #374151;
+  font-weight: 300;
+`;
+
+const MainSection = styled(Section)`
+  margin-bottom: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid #e5e7eb;
+
+  &:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
   }
 `;
 
-const Summary = styled.p`
-  font-size: 15px;
-  line-height: 1.9;
-  color: #4b5563;
-  margin: 28px 0 0 0;
-  font-weight: 300;
-  letter-spacing: 0.02em;
-`;
-
-const StyledSectionTitle = styled(SectionTitle)`
-  font-size: 14px;
-  font-weight: 400;
-  color: #111827;
-  margin: 56px 0 32px 0;
-  padding-bottom: 12px;
-  border-bottom: 1px solid #e5e7eb;
-  letter-spacing: 0.12em;
+const MainSectionTitle = styled(SectionTitle)`
+  font-size: 12px;
+  font-weight: 500;
+  color: #9ca3af;
+  margin: 0 0 32px 0;
   text-transform: uppercase;
+  letter-spacing: 2px;
 `;
 
 const WorkItem = styled.div`
-  margin-bottom: 40px;
+  margin-bottom: 32px;
 
   &:last-child {
     margin-bottom: 0;
@@ -84,130 +107,122 @@ const WorkHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: 12px;
-  gap: 20px;
-
-  @media (max-width: 640px) {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 8px;
 `;
 
-const Position = styled.h3`
+const WorkTitle = styled.h3`
   font-size: 17px;
   font-weight: 400;
-  color: #111827;
   margin: 0;
-  letter-spacing: 0.04em;
+  color: #111827;
+  letter-spacing: 0.5px;
 `;
 
-const Company = styled.div`
-  font-size: 15px;
-  color: #6b7280;
-  font-weight: 300;
-  margin-top: 6px;
-  letter-spacing: 0.03em;
-`;
-
-const DateText = styled.div`
-  font-size: 13px;
+const WorkMeta = styled.div`
+  font-size: 12px;
   color: #9ca3af;
-  font-weight: 300;
-  white-space: nowrap;
-  letter-spacing: 0.05em;
+  font-weight: 400;
+  letter-spacing: 0.5px;
 `;
 
-const WorkSummary = styled.p`
-  margin: 16px 0;
-  color: #4b5563;
-  line-height: 1.9;
+const WorkCompany = styled.div`
+  font-size: 14px;
+  color: #6b7280;
+  font-weight: 400;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+`;
+
+const WorkDescription = styled.p`
   font-size: 15px;
+  line-height: 1.75;
+  margin: 12px 0;
+  color: #374151;
   font-weight: 300;
-  letter-spacing: 0.02em;
 `;
 
-const Highlights = styled.ul`
-  margin: 16px 0 0 0;
-  padding-left: 24px;
-  list-style-type: none;
+const WorkHighlights = styled.ul`
+  margin: 12px 0 0 0;
+  padding-left: 20px;
+  list-style: none;
 
   li {
-    margin: 10px 0;
-    color: #4b5563;
-    line-height: 1.9;
-    padding-left: 0;
+    margin-bottom: 8px;
+    font-size: 15px;
+    line-height: 1.75;
+    color: #374151;
     font-weight: 300;
-    letter-spacing: 0.02em;
     position: relative;
+    padding-left: 12px;
 
-    &:before {
-      content: '·';
+    &::before {
+      content: '–';
       position: absolute;
-      left: -16px;
+      left: 0;
       color: #d1d5db;
+      font-weight: 300;
     }
   }
 `;
 
-const EducationItem = styled.div`
-  margin-bottom: 32px;
+const SkillsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+`;
+
+const SkillItem = styled.div`
+  margin-bottom: 16px;
 
   &:last-child {
     margin-bottom: 0;
   }
 `;
 
-const Institution = styled.h3`
-  font-size: 16px;
-  font-weight: 400;
-  color: #111827;
-  margin: 0 0 8px 0;
-  letter-spacing: 0.04em;
-`;
-
-const Degree = styled.div`
-  font-size: 15px;
-  color: #4b5563;
-  margin-bottom: 6px;
-  font-weight: 300;
-  letter-spacing: 0.02em;
-`;
-
-const EducationDate = styled.div`
-  font-size: 13px;
-  color: #9ca3af;
-  font-weight: 300;
-  letter-spacing: 0.05em;
-`;
-
-const SkillsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 24px;
-`;
-
-const SkillCategory = styled.div`
-  padding: 20px;
-  background: #fafafa;
-  border-left: 1px solid #e5e7eb;
-`;
-
 const SkillName = styled.h4`
-  font-size: 14px;
-  font-weight: 400;
-  color: #111827;
+  font-size: 12px;
+  font-weight: 500;
   margin: 0 0 12px 0;
-  letter-spacing: 0.06em;
+  color: #6b7280;
   text-transform: uppercase;
+  letter-spacing: 1.5px;
 `;
 
-const SkillTags = styled.div`
-  font-size: 14px;
+const StyledBadgeList = styled(BadgeList)`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+`;
+
+const StyledBadge = styled(Badge)`
+  font-size: 12px;
+  padding: 6px 12px;
+  background: white;
+  border: 1px solid #e5e7eb;
   color: #6b7280;
-  line-height: 1.8;
+  font-weight: 400;
+  border-radius: 0;
+  letter-spacing: 0.3px;
+`;
+
+const SimpleList = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+`;
+
+const SimpleItem = styled.div`
+  font-size: 15px;
+  line-height: 1.75;
   font-weight: 300;
-  letter-spacing: 0.02em;
+
+  strong {
+    font-weight: 400;
+    color: #111827;
+    letter-spacing: 0.3px;
+  }
 `;
 
 function Resume({ resume }) {
@@ -228,196 +243,253 @@ function Resume({ resume }) {
   return (
     <Layout>
       <Header>
-        <Name>{basics.name}</Name>
+        {basics.name && <Name>{basics.name}</Name>}
         {basics.label && <Label>{basics.label}</Label>}
-        <StyledContactInfo basics={basics} />
-        {basics.summary && <Summary>{basics.summary}</Summary>}
+        <ContactWrapper>
+          {basics.email && (
+            <ContactInfo type="email">{basics.email}</ContactInfo>
+          )}
+          {basics.phone && (
+            <ContactInfo type="phone">{basics.phone}</ContactInfo>
+          )}
+          {basics.location?.city && basics.location?.region && (
+            <ContactInfo type="location">
+              {basics.location.city}, {basics.location.region}
+            </ContactInfo>
+          )}
+          {basics.url && (
+            <ContactInfo type="url">
+              <a href={safeUrl(basics.url)}>{basics.url}</a>
+            </ContactInfo>
+          )}
+          {basics.profiles?.map((profile, index) => (
+            <ContactInfo key={index} type="social">
+              <a href={safeUrl(profile.url)}>{profile.network}</a>
+            </ContactInfo>
+          ))}
+        </ContactWrapper>
       </Header>
 
-      {work?.length > 0 && (
-        <Section>
-          <StyledSectionTitle>Experience</StyledSectionTitle>
+      {basics.summary && (
+        <SummarySection>
+          <SummaryText>{basics.summary}</SummaryText>
+        </SummarySection>
+      )}
+
+      {work.length > 0 && (
+        <MainSection>
+          <MainSectionTitle>Experience</MainSectionTitle>
           {work.map((job, index) => (
             <WorkItem key={index}>
               <WorkHeader>
-                <div>
-                  <Position>{job.position}</Position>
-                  {job.name && <Company>{job.name}</Company>}
-                </div>
-                <DateText>
+                <WorkTitle>{job.position || job.name}</WorkTitle>
+                <WorkMeta>
                   <DateRange startDate={job.startDate} endDate={job.endDate} />
-                </DateText>
+                </WorkMeta>
               </WorkHeader>
-              {job.summary && <WorkSummary>{job.summary}</WorkSummary>}
-              {job.highlights?.length > 0 && (
-                <Highlights>
+              {job.name && <WorkCompany>{job.name}</WorkCompany>}
+              {job.summary && <WorkDescription>{job.summary}</WorkDescription>}
+              {job.highlights && job.highlights.length > 0 && (
+                <WorkHighlights>
                   {job.highlights.map((highlight, i) => (
                     <li key={i}>{highlight}</li>
                   ))}
-                </Highlights>
+                </WorkHighlights>
               )}
             </WorkItem>
           ))}
-        </Section>
+        </MainSection>
       )}
 
-      {skills?.length > 0 && (
-        <Section>
-          <StyledSectionTitle>Skills</StyledSectionTitle>
+      {skills.length > 0 && (
+        <MainSection>
+          <MainSectionTitle>Skills</MainSectionTitle>
           <SkillsGrid>
             {skills.map((skill, index) => (
-              <SkillCategory key={index}>
+              <SkillItem key={index}>
                 <SkillName>{skill.name}</SkillName>
-                {skill.keywords?.length > 0 && (
-                  <SkillTags>{skill.keywords.join(', ')}</SkillTags>
-                )}
-              </SkillCategory>
+                <StyledBadgeList>
+                  {skill.keywords?.map((keyword, i) => (
+                    <StyledBadge key={i}>{keyword}</StyledBadge>
+                  ))}
+                </StyledBadgeList>
+              </SkillItem>
             ))}
           </SkillsGrid>
-        </Section>
+        </MainSection>
       )}
 
-      {education?.length > 0 && (
-        <Section>
-          <StyledSectionTitle>Education</StyledSectionTitle>
-          {education.map((edu, index) => (
-            <EducationItem key={index}>
-              <Institution>{edu.institution}</Institution>
-              <Degree>
-                {edu.studyType} in {edu.area}
-                {edu.score && ` • ${edu.score}`}
-              </Degree>
-              <EducationDate>
-                <DateRange startDate={edu.startDate} endDate={edu.endDate} />
-              </EducationDate>
-            </EducationItem>
-          ))}
-        </Section>
-      )}
-
-      {projects?.length > 0 && (
-        <Section>
-          <StyledSectionTitle>Projects</StyledSectionTitle>
+      {projects.length > 0 && (
+        <MainSection>
+          <MainSectionTitle>Projects</MainSectionTitle>
           {projects.map((project, index) => (
             <WorkItem key={index}>
-              <Position>{project.name}</Position>
+              <WorkHeader>
+                <WorkTitle>
+                  {project.url ? (
+                    <Link href={safeUrl(project.url)}>{project.name}</Link>
+                  ) : (
+                    project.name
+                  )}
+                </WorkTitle>
+                {(project.startDate || project.endDate) && (
+                  <WorkMeta>
+                    <DateRange
+                      startDate={project.startDate}
+                      endDate={project.endDate}
+                    />
+                  </WorkMeta>
+                )}
+              </WorkHeader>
               {project.description && (
-                <WorkSummary>{project.description}</WorkSummary>
+                <WorkDescription>{project.description}</WorkDescription>
               )}
-              {project.highlights?.length > 0 && (
-                <Highlights>
+              {project.highlights && project.highlights.length > 0 && (
+                <WorkHighlights>
                   {project.highlights.map((highlight, i) => (
                     <li key={i}>{highlight}</li>
                   ))}
-                </Highlights>
+                </WorkHighlights>
               )}
             </WorkItem>
           ))}
-        </Section>
+        </MainSection>
       )}
 
-      {volunteer?.length > 0 && (
-        <Section>
-          <StyledSectionTitle>Volunteer</StyledSectionTitle>
+      {education.length > 0 && (
+        <MainSection>
+          <MainSectionTitle>Education</MainSectionTitle>
+          {education.map((edu, index) => (
+            <WorkItem key={index}>
+              <WorkHeader>
+                <WorkTitle>{edu.institution}</WorkTitle>
+                <WorkMeta>
+                  <DateRange startDate={edu.startDate} endDate={edu.endDate} />
+                </WorkMeta>
+              </WorkHeader>
+              {edu.studyType && edu.area && (
+                <WorkCompany>
+                  {edu.studyType} in {edu.area}
+                </WorkCompany>
+              )}
+              {edu.score && <WorkDescription>GPA: {edu.score}</WorkDescription>}
+            </WorkItem>
+          ))}
+        </MainSection>
+      )}
+
+      {volunteer.length > 0 && (
+        <MainSection>
+          <MainSectionTitle>Volunteer</MainSectionTitle>
           {volunteer.map((vol, index) => (
             <WorkItem key={index}>
               <WorkHeader>
-                <div>
-                  <Position>{vol.position}</Position>
-                  {vol.organization && <Company>{vol.organization}</Company>}
-                </div>
-                {(vol.startDate || vol.endDate) && (
-                  <DateText>
-                    <DateRange
-                      startDate={vol.startDate}
-                      endDate={vol.endDate}
-                    />
-                  </DateText>
-                )}
+                <WorkTitle>{vol.position}</WorkTitle>
+                <WorkMeta>
+                  <DateRange startDate={vol.startDate} endDate={vol.endDate} />
+                </WorkMeta>
               </WorkHeader>
-              {vol.summary && <WorkSummary>{vol.summary}</WorkSummary>}
-              {vol.highlights?.length > 0 && (
-                <Highlights>
+              <WorkCompany>{vol.organization}</WorkCompany>
+              {vol.summary && <WorkDescription>{vol.summary}</WorkDescription>}
+              {vol.highlights && vol.highlights.length > 0 && (
+                <WorkHighlights>
                   {vol.highlights.map((highlight, i) => (
                     <li key={i}>{highlight}</li>
                   ))}
-                </Highlights>
+                </WorkHighlights>
               )}
             </WorkItem>
           ))}
-        </Section>
+        </MainSection>
       )}
 
-      {awards?.length > 0 && (
-        <Section>
-          <StyledSectionTitle>Awards</StyledSectionTitle>
-          {awards.map((award, index) => (
-            <EducationItem key={index}>
-              <Institution>{award.title}</Institution>
-              {award.awarder && <Degree>Awarded by {award.awarder}</Degree>}
-              {award.date && <EducationDate>{award.date}</EducationDate>}
-              {award.summary && <WorkSummary>{award.summary}</WorkSummary>}
-            </EducationItem>
-          ))}
-        </Section>
-      )}
-
-      {publications?.length > 0 && (
-        <Section>
-          <StyledSectionTitle>Publications</StyledSectionTitle>
-          {publications.map((pub, index) => (
-            <EducationItem key={index}>
-              <Institution>{pub.name}</Institution>
-              {pub.publisher && <Degree>Published by {pub.publisher}</Degree>}
-              {pub.releaseDate && (
-                <EducationDate>{pub.releaseDate}</EducationDate>
-              )}
-              {pub.summary && <WorkSummary>{pub.summary}</WorkSummary>}
-            </EducationItem>
-          ))}
-        </Section>
-      )}
-
-      {languages?.length > 0 && (
-        <Section>
-          <StyledSectionTitle>Languages</StyledSectionTitle>
-          <SkillsGrid>
-            {languages.map((lang, index) => (
-              <SkillCategory key={index}>
-                <SkillName>{lang.language}</SkillName>
-                {lang.fluency && <SkillTags>{lang.fluency}</SkillTags>}
-              </SkillCategory>
-            ))}
-          </SkillsGrid>
-        </Section>
-      )}
-
-      {interests?.length > 0 && (
-        <Section>
-          <StyledSectionTitle>Interests</StyledSectionTitle>
-          <SkillsGrid>
-            {interests.map((interest, index) => (
-              <SkillCategory key={index}>
-                <SkillName>{interest.name}</SkillName>
-                {interest.keywords?.length > 0 && (
-                  <SkillTags>{interest.keywords.join(', ')}</SkillTags>
+      {awards.length > 0 && (
+        <MainSection>
+          <MainSectionTitle>Awards</MainSectionTitle>
+          <SimpleList>
+            {awards.map((award, index) => (
+              <SimpleItem key={index}>
+                <strong>{award.title}</strong>
+                {award.awarder && ` — ${award.awarder}`}
+                {award.date && (
+                  <div
+                    style={{
+                      fontSize: '12px',
+                      color: '#9ca3af',
+                      marginTop: '4px',
+                    }}
+                  >
+                    {award.date}
+                  </div>
                 )}
-              </SkillCategory>
+              </SimpleItem>
             ))}
-          </SkillsGrid>
-        </Section>
+          </SimpleList>
+        </MainSection>
       )}
 
-      {references?.length > 0 && (
-        <Section>
-          <StyledSectionTitle>References</StyledSectionTitle>
+      {publications.length > 0 && (
+        <MainSection>
+          <MainSectionTitle>Publications</MainSectionTitle>
+          <SimpleList>
+            {publications.map((pub, index) => (
+              <SimpleItem key={index}>
+                <strong>{pub.name}</strong>
+                {pub.publisher && ` — ${pub.publisher}`}
+                {pub.releaseDate && (
+                  <div
+                    style={{
+                      fontSize: '12px',
+                      color: '#9ca3af',
+                      marginTop: '4px',
+                    }}
+                  >
+                    {pub.releaseDate}
+                  </div>
+                )}
+              </SimpleItem>
+            ))}
+          </SimpleList>
+        </MainSection>
+      )}
+
+      {languages.length > 0 && (
+        <MainSection>
+          <MainSectionTitle>Languages</MainSectionTitle>
+          <SimpleList>
+            {languages.map((lang, index) => (
+              <SimpleItem key={index}>
+                <strong>{lang.language}</strong>
+                {lang.fluency && ` — ${lang.fluency}`}
+              </SimpleItem>
+            ))}
+          </SimpleList>
+        </MainSection>
+      )}
+
+      {interests.length > 0 && (
+        <MainSection>
+          <MainSectionTitle>Interests</MainSectionTitle>
+          <SimpleList>
+            {interests.map((interest, index) => (
+              <SimpleItem key={index}>{interest.name}</SimpleItem>
+            ))}
+          </SimpleList>
+        </MainSection>
+      )}
+
+      {references.length > 0 && (
+        <MainSection>
+          <MainSectionTitle>References</MainSectionTitle>
           {references.map((ref, index) => (
-            <EducationItem key={index}>
-              <Institution>{ref.name}</Institution>
-              {ref.reference && <WorkSummary>{ref.reference}</WorkSummary>}
-            </EducationItem>
+            <WorkItem key={index}>
+              <WorkTitle>{ref.name}</WorkTitle>
+              {ref.reference && (
+                <WorkDescription>{ref.reference}</WorkDescription>
+              )}
+            </WorkItem>
           ))}
-        </Section>
+        </MainSection>
       )}
     </Layout>
   );

@@ -1,18 +1,9 @@
 {
   "name": "jsonresume-theme-minimalist-grid",
-  "version": "1.0.0",
-  "description": "A minimalist theme with perfect spacing and geometric clarity",
-  "main": "src/index.js",
+  "version": "0.1.0",
+  "description": "Clean, contemporary theme with geometric precision and baseline grid alignment. For minimalists and designers.",
   "type": "module",
-  "license": "MIT",
-  "keywords": [
-    "jsonresume",
-    "theme",
-    "minimalist",
-    "grid",
-    "modern",
-    "clean"
-  ],
+  "main": "index.js",
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
     "react-dom": "^18.0.0 || ^19.0.0"
