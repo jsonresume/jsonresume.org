@@ -489,6 +489,22 @@ export const THEME_METADATA = {
       'urban',
     ],
   },
+  'coastal-creative': {
+    name: 'Coastal Creative',
+    description:
+      'Calm, spacious theme with ocean blue accents and generous line heights. Design-forward yet approachable with rounded corners and soft shadows.',
+    author: 'JSON Resume Team',
+    tags: [
+      'calm',
+      'spacious',
+      'creative',
+      'ocean',
+      'blue',
+      'approachable',
+      'designer',
+      'educator',
+    ],
+  },
 };
 
 // List of available theme names (derived from THEME_METADATA)
