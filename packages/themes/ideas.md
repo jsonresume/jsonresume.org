@@ -188,7 +188,7 @@ These are print-perfect, modern, and emotionally resonant — designed for peopl
 
 ---
 
-- [ ] **Berlin Grid**
+- [x] **Berlin Grid**
       **Vibe:** Precision meets modern structure
       **Layout:** Modular column grid, consistent section alignment
       **Typography:** Grotesk sans-serif (e.g., IBM Plex Sans, Satoshi)
@@ -198,7 +198,7 @@ These are print-perfect, modern, and emotionally resonant — designed for peopl
 
 ---
 
-- [ ] **Californian Warm**
+- [x] **Californian Warm**
       **Vibe:** Friendly, inviting, optimistic
       **Layout:** Relaxed spacing with strong top summary block
       **Typography:** Rounded sans-serif, slightly larger text for readability
@@ -208,7 +208,7 @@ These are print-perfect, modern, and emotionally resonant — designed for peopl
 
 ---
 
-- [ ] **London Bureau**
+- [x] **London Bureau**
       **Vibe:** Traditional professionalism, heritage feel
       **Layout:** Tight column, consistent rule dividers, restrained typographic play
       **Typography:** Serif (Georgia, Freight Text), body size 10.5pt
@@ -218,7 +218,7 @@ These are print-perfect, modern, and emotionally resonant — designed for peopl
 
 ---
 
-- [ ] **Pacific Horizon**
+- [x] **Pacific Horizon**
       **Vibe:** Contemporary corporate, clean typography with blue tones
       **Layout:** Section dividers separated by soft horizontal rules
       **Typography:** Open Sans or Inter; readable at small point sizes
@@ -228,7 +228,7 @@ These are print-perfect, modern, and emotionally resonant — designed for peopl
 
 ---
 
-- [ ] **French Atelier**
+- [x] **French Atelier**
       **Vibe:** Artistic precision, editorial-inspired
       **Layout:** Two-column illusion created by rule spacing, not actual columns
       **Typography:** High-contrast serif for titles, fine sans body
