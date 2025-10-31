@@ -1,0 +1,15 @@
+{
+  "name": "jsonresume-theme-pacific-horizon",
+  "version": "0.1.0",
+  "description": "Contemporary corporate resume with clean typography and blue tones, inspired by SaaS landing pages",
+  "type": "module",
+  "main": "index.js",
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "dependencies": {
+    "@resume/core": "workspace:*",
+    "styled-components": "^6.1.19"
+  }
+}

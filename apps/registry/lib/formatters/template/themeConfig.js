@@ -36,6 +36,7 @@ import * as newyorkeditorial from 'jsonresume-theme-new-york-editorial'; // NEW
 import * as berlingrid from 'jsonresume-theme-berlin-grid'; // NEW
 import * as californianwarm from 'jsonresume-theme-californian-warm'; // NEW
 import * as londonbureau from 'jsonresume-theme-london-bureau'; // NEW
+import * as pacifichorizon from 'jsonresume-theme-pacific-horizon'; // NEW
 
 // Import theme metadata from shared package
 export {
@@ -95,4 +96,5 @@ export const THEMES = {
   'berlin-grid': berlingrid, // NEW
   'californian-warm': californianwarm, // NEW
   'london-bureau': londonbureau, // NEW
+  'pacific-horizon': pacifichorizon, // NEW
 };

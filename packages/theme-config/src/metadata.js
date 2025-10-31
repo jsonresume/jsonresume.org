@@ -444,6 +444,21 @@ export const THEME_METADATA = {
       'formal',
     ],
   },
+  'pacific-horizon': {
+    name: 'Pacific Horizon',
+    description:
+      'Contemporary corporate theme with clean typography and blue tones. Layout feels like a SaaS landing page distilled into a resume.',
+    author: 'JSON Resume Team',
+    tags: [
+      'corporate',
+      'modern',
+      'professional',
+      'tech',
+      'blue',
+      'clean',
+      'saas',
+    ],
+  },
 };
 
 // List of available theme names (derived from THEME_METADATA)
