@@ -39,7 +39,7 @@ Pull fonts from google fonts cdn, always look at all components from resume-core
 
 ---
 
-- [ ] **Developer Mono**
+- [x] **Developer Mono**
       **Vibe:** Technical, efficient, minimalist
       **Layout:** Single column with precise spacing and subtle grid alignment
       **Typography:** Monospace headers with sans-serif body
