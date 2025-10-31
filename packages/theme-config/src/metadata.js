@@ -459,6 +459,21 @@ export const THEME_METADATA = {
       'saas',
     ],
   },
+  'french-atelier': {
+    name: 'French Atelier',
+    description:
+      "Artistic precision with editorial-inspired layout. High-contrast serif titles with fine sans body and deep plum accents. Like a typographer's resume.",
+    author: 'JSON Resume Team',
+    tags: [
+      'artistic',
+      'editorial',
+      'designer',
+      'creative',
+      'elegant',
+      'typographic',
+      'plum',
+    ],
+  },
 };
 
 // List of available theme names (derived from THEME_METADATA)
