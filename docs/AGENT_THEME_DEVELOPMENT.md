@@ -3,39 +3,139 @@
 ## Critical Rules
 
 1. **Read the spec from `/packages/themes/ideas.md` BEFORE writing any code**
-2. **Each theme MUST have a visually distinct layout** - NEVER reuse the same layout pattern as the previous theme
-3. **Take screenshots after EACH iteration** to verify visual correctness
-4. **Use the automated screenshot script** at `apps/registry/scripts/generate-theme-screenshots-auto.js`
-5. **Fix design issues immediately** when identified in screenshots - do not skip fixes
-6. **Test ALL 12 schema sections** render correctly before considering theme complete
+2. **Design layout structure FIRST, then style** - Wireframe the grid/columns/structure before adding colors/typography
+3. **Each theme MUST have a visually distinct layout** - NEVER reuse the same layout pattern as the previous theme
+4. **Take screenshots after EACH iteration** to verify visual correctness
+5. **Use the automated screenshot script** at `apps/registry/scripts/generate-theme-screenshots-auto.js`
+6. **Be hyper-critical when reviewing screenshots** - Fix ALL design issues immediately, iterate until polished
+7. **Test ALL 12 schema sections** render correctly before considering theme complete
 
-## Layout Variation Requirement
+## Layout-First Design Process (NEW October 2025)
 
-**CRITICAL**: Each new theme must have a fundamentally different visual layout from the previous theme.
+**CRITICAL**: Design the LAYOUT STRUCTURE first, THEN add styling. This prevents themes from looking identical.
 
-**What to vary:**
+### Step 1: Wireframe the Layout (BEFORE any CSS)
 
-- **Column width**: Narrow (680px) → Standard (850px) → Wide (900px)
-- **Margins**: Tight margins → Wide editorial margins → Asymmetric margins
-- **Header style**: Centered → Left-aligned → Full-width with border
-- **Work item layout**: Cards with background → Timeline with left border → Flat list → Grid-based
-- **Section dividers**: Underline accent → Full-width border → No divider (whitespace only) → Colored backgrounds
-- **Date positioning**: Right-aligned → Inline with title → Below title → In metadata line
+**Think about structure, NOT colors:**
 
-**Examples of distinct layouts:**
+1. **Grid Pattern**: Single column? Two columns? Sidebar? Three-column sections?
+2. **Header Layout**: Centered name? Split header? Stacked? Inline?
+3. **Content Flow**: Vertical stack? Grid? Cards? Timeline?
+4. **Section Structure**: Borders? Backgrounds? Whitespace dividers?
+5. **Date Positioning**: Left column? Inline? Separate metadata row?
 
-1. **Magazine Editorial** (like New York Editorial): Narrow column (680px), wide margins (100px), centered header, serif typography, em-dash bullets
-2. **Product Canvas** (like Product Manager Canvas): Standard width (850px), card-based work items with colored backgrounds, thick left borders, indigo accents
-3. **Timeline Style**: Left border accent on all items, no card backgrounds, monospace headers
-4. **Grid-Based**: Precise alignment to grid, geometric spacing, structured sections
-5. **Minimalist**: Maximum whitespace, thin dividers, no backgrounds, subtle accents
+**Example wireframe thinking:**
 
-**Before starting a new theme:**
+```
+GOOD (specific structure):
+- Split header: name LEFT (black bg) | contact RIGHT (white bg)
+- Two-column main: sidebar (280px gray) | content (fluid white)
+- Work items: date column (160px) | content column
+- Thick borders (2px) throughout
 
-1. Look at the screenshot of the most recently created theme
-2. Identify its layout pattern (cards? timeline? editorial? grid?)
-3. Choose a DIFFERENT pattern for your new theme
-4. Vary at least 3-4 layout characteristics from the previous theme
+BAD (vague):
+- "Professional layout"
+- "Clean design"
+- "Modern feel"
+```
+
+### Step 2: Identify What Makes This Layout DIFFERENT
+
+**Compare to most recent theme screenshot:**
+
+- Previous theme: Single column, centered header, stacked sections
+- NEW theme: Two columns, split header, sidebar layout
+- DISTINCT because: Fundamentally different grid structure
+
+### Layout Variation Patterns
+
+**Column Structures:**
+
+- **Single Column**: All content in one vertical flow (680-900px wide)
+- **Two-Column Sidebar**: Fixed sidebar (280px) + fluid content
+- **Two-Column Split**: Equal 50/50 split
+- **Three-Column Grid**: Skills | Work | Education side by side
+- **Asymmetric**: 40/60 or 30/70 column splits
+
+**Header Patterns:**
+
+- **Centered**: Name centered, contact below
+- **Left-aligned**: Name top-left, contact inline or below
+- **Split**: Name left side, contact right side (different backgrounds)
+- **Full-width banner**: Name spans full width with background
+- **Minimal**: Name only, contact in sidebar or footer
+
+**Work Item Layouts:**
+
+- **Cards**: Background colors, rounded corners, shadows
+- **Timeline**: Left border accent, dots, vertical flow
+- **Table-like**: Date column + content column with borders
+- **Flat list**: No backgrounds, whitespace dividers only
+- **Grid**: Work items in 2-column grid
+
+**Section Dividers:**
+
+- **Thick borders**: 2-3px solid lines between sections
+- **Backgrounds**: Alternate section backgrounds
+- **Whitespace only**: No visible dividers
+- **Accent lines**: Thin colored underlines
+- **Headers**: Black bars with white text
+
+**Visual Structures:**
+
+1. **Brutalist** (like Urban Techno): Thick borders, two-column sidebar, table-like layouts, monochrome
+2. **Editorial** (like New York Editorial): Narrow column, wide margins, serif, whitespace
+3. **Timeline** (like French Atelier): Left border accents, vertical flow, timeline dots
+4. **Grid** (like Berlin Grid): Modular sections, precise alignment, geometric
+5. **Cards** (like Californian Warm): Work items as cards with backgrounds
+6. **Minimalist** (like Nordic Minimal): Maximum whitespace, minimal borders, clean
+
+### Step 3: Build Structure First, Style Second
+
+**DO THIS:**
+
+```javascript
+// 1. Define grid structure
+const Layout = styled.div`
+  display: grid;
+  grid-template-columns: 280px 1fr; // STRUCTURE
+`;
+
+// 2. Define section positioning
+const Header = styled.header`
+  display: grid;
+  grid-template-columns: 1fr 1fr; // STRUCTURE
+`;
+
+// 3. THEN add colors/fonts
+const Name = styled.h1`
+  background: #111; // STYLE
+  color: white; // STYLE
+`;
+```
+
+**NOT THIS:**
+
+```javascript
+// Starting with colors without structure
+const Layout = styled.div`
+  background: #fef8e7; // ❌ Started with style
+  color: #2a2a2a; // ❌ No structure defined
+`;
+```
+
+### Before Starting Any New Theme
+
+**CHECKLIST:**
+
+1. [ ] Read spec from ideas.md for this theme
+2. [ ] Look at screenshot of MOST RECENT theme
+3. [ ] Identify previous theme's layout pattern
+4. [ ] Choose DIFFERENT layout structure for new theme
+5. [ ] Wireframe grid/columns/sections on paper or in comments
+6. [ ] Build structure CSS FIRST (grid, flexbox, positioning)
+7. [ ] THEN add styling CSS (colors, fonts, spacing)
+8. [ ] Take screenshot and verify layout is VISUALLY DISTINCT
 
 ## Development Workflow
 
@@ -223,7 +323,7 @@ open http://localhost:3000/thomasdavis?theme=your-theme
 # Verify theme is print-friendly
 ```
 
-### Step 7: Take Screenshot and Review
+### Step 7: Take Screenshot and Be HYPER-CRITICAL
 
 **CRITICAL: Use the automated script**
 
@@ -246,18 +346,78 @@ node apps/registry/scripts/generate-theme-screenshots-auto.js --force
 open apps/homepage2/public/img/themes/your-theme.png
 ```
 
-**Check for issues:**
+### HYPER-CRITICAL Review Checklist
 
-- [ ] Background color matches spec
-- [ ] Accent color matches spec exactly
-- [ ] Section titles prominent (font-weight 700+, adequate size)
-- [ ] Contact info readable (15px+ font size)
-- [ ] Borders visible (3px+ for dividers, 4-6px for accent borders)
-- [ ] Skills cards have sufficient contrast
-- [ ] Text alignment correct (avoid justify for body text)
-- [ ] Decorative elements visible but not overwhelming
-- [ ] White space feels comfortable
-- [ ] Theme looks distinct from other themes
+**Be ruthless. Look for EVERY design flaw:**
+
+**Layout & Structure:**
+
+- [ ] Does layout look VISUALLY DIFFERENT from previous theme?
+- [ ] Is grid structure clear and intentional?
+- [ ] Are columns balanced (not too wide/narrow)?
+- [ ] Do borders look deliberate (not too heavy/light)?
+- [ ] Is vertical spacing consistent throughout?
+- [ ] Does header layout feel purposeful?
+
+**Typography:**
+
+- [ ] Name has good kerning (not too tight: letter-spacing > 0)?
+- [ ] Section headers are readable (not too cramped)?
+- [ ] Body text is legible (15px+ font size)?
+- [ ] Line heights feel comfortable (1.5-1.7 for body)?
+- [ ] Font weights create clear hierarchy (900 for headers, 400 for body)?
+
+**Colors & Contrast:**
+
+- [ ] Background color matches spec EXACTLY (check hex)?
+- [ ] Accent color matches spec EXACTLY?
+- [ ] Text has sufficient contrast (4.5:1 minimum)?
+- [ ] Borders are visible (not too subtle)?
+- [ ] Backgrounds don't look washed out or too bright?
+
+**Spacing & Padding:**
+
+- [ ] Sections have breathing room (not cramped)?
+- [ ] Work items don't overlap or touch?
+- [ ] Padding feels intentional (not arbitrary)?
+- [ ] Whitespace serves a purpose?
+- [ ] Margins are balanced?
+
+**Common Issues to Catch:**
+
+- [ ] Date column wide enough (no text cutoff)?
+- [ ] Contact info not cramped in header?
+- [ ] Skills badges wrap properly?
+- [ ] Bullet points align correctly?
+- [ ] Section dividers consistent throughout?
+- [ ] No random blue accent lines (unless spec requires)?
+
+**Polish Details:**
+
+- [ ] Borders are consistent weight?
+- [ ] Corners don't have weird alignment?
+- [ ] Text doesn't overflow containers?
+- [ ] Icons/decorative elements visible (opacity > 0.4)?
+- [ ] Theme has a cohesive visual identity?
+
+### If You Find ANY Issues
+
+**DO NOT SKIP FIXES. Fix immediately:**
+
+1. Note the specific issue (e.g., "date column cuts off MAY 2021")
+2. Edit the Resume.jsx file to fix it
+3. Regenerate screenshot: `node apps/registry/scripts/generate-theme-screenshots-auto.js --theme=your-theme --force`
+4. Review again
+5. Repeat until ZERO issues remain
+
+**Examples of issues to fix immediately:**
+
+- Border too heavy (3px → 2px)
+- Name kerning too tight (-1px → +0.5px)
+- Sidebar color too subtle (#f5f5f5 → #e8e8e8)
+- Date column too narrow (140px → 160px)
+- Section header padding excessive (12px → 10px)
+- Bullet points wrong style (square → custom ■)
 
 ### Step 8: Fix Issues Found in Screenshot
 
@@ -571,16 +731,20 @@ Before marking theme complete:
 
 ## Key Learnings (October 2025)
 
-1. **Screenshots catch what code review misses** - Visual issues obvious in screenshots
-2. **Exact colors matter** - `#fef3c7` vs `#fef8e7` is significant difference
-3. **Small adjustments compound** - Opacity 0.3 → 0.5 transforms theme
-4. **Text justification creates problems** - Use `text-align: left` for body text
-5. **Decorative elements must be visible** - Opacity < 0.4 is too subtle
-6. **Padding prevents overlap** - Add padding around decorative elements
-7. **Border thickness matters** - 3px+ for dividers, 4-6px for accent borders
-8. **Skills grid spacing** - 250px minimum, 24px gap for comfortable layout
-9. **Automated script is essential** - Manual screenshots inconsistent
-10. **Iterate based on screenshots** - One pass never enough
+1. **Design layout structure FIRST, style SECOND** - Prevents themes from looking identical
+2. **Be hyper-critical of screenshots** - Fix ALL issues immediately, iterate until polished
+3. **Screenshots catch what code review misses** - Visual issues obvious in screenshots
+4. **Layout variety is essential** - Single-column layouts all look the same, vary grid structure
+5. **Exact colors matter** - `#fef3c7` vs `#fef8e7` is significant difference
+6. **Small adjustments compound** - Opacity 0.3 → 0.5, border 3px → 2px transforms theme
+7. **Typography details critical** - Letter-spacing, font-weight, line-height affect readability
+8. **Text justification creates problems** - Use `text-align: left` for body text
+9. **Decorative elements must be visible** - Opacity < 0.4 is too subtle
+10. **Border thickness matters** - 2-3px for dividers, consistency throughout
+11. **Date columns need space** - 160px minimum to prevent truncation
+12. **Sidebar contrast matters** - #f5f5f5 too subtle, use #e8e8e8 or darker
+13. **Automated script is essential** - Manual screenshots inconsistent
+14. **Iterate until perfect** - One pass never enough, fix every flaw
 
 ## Quick Reference
 
