@@ -1,6 +1,7 @@
 {
   "name": "jsonresume-theme-developer-mono",
   "version": "0.1.0",
+  "description": "Technical, efficient theme with monospace headers and sans-serif body. Code-style aesthetics for developers.",
   "type": "module",
   "main": "index.js",
   "peerDependencies": {
