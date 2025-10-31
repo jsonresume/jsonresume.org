@@ -429,6 +429,21 @@ export const THEME_METADATA = {
       'amber',
     ],
   },
+  'london-bureau': {
+    name: 'London Bureau',
+    description:
+      'Traditional professionalism with heritage feel. Modeled after Financial Times style with serif typography, tight columns, and consistent rule dividers.',
+    author: 'JSON Resume Team',
+    tags: [
+      'traditional',
+      'heritage',
+      'professional',
+      'serif',
+      'editorial',
+      'classic',
+      'formal',
+    ],
+  },
 };
 
 // List of available theme names (derived from THEME_METADATA)
