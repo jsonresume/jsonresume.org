@@ -570,6 +570,12 @@ feature/
   - Use `workspace:*` for `@resume/core` and `styled-components` dependencies
   - Include `react` and `react-dom` as peer dependencies
   - Use proper theme naming: `jsonresume-theme-{slug}`
+- **CRITICAL: Layout variation requirement**: Each theme MUST have a visually distinct layout from previously created themes
+  - **NEVER reuse the same layout pattern** - if the last theme used card-based work items, the next theme should use a different approach (timeline, list, bordered sections, etc.)
+  - **Vary the visual structure**: column width, margins, header placement, section styling, spacing approach
+  - **Different positioning**: Try centered headers vs left-aligned, full-width content vs narrow columns, different date positioning
+  - **Example layout variations**: magazine editorial (narrow column, wide margins) → card-based (full width with cards) → timeline (left border accent) → grid-based (structured alignment)
+  - **Check previous theme before starting**: Look at the last committed theme's layout and intentionally design something different
 - **CRITICAL: Iterative theme visual verification workflow** (MUST follow for every theme):
   1. **Start dev server**: `cd apps/registry && pnpm dev`
   2. **Build complete iteration**: Implement full theme (structure, typography, colors, all sections)

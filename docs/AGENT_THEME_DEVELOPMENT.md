@@ -3,10 +3,39 @@
 ## Critical Rules
 
 1. **Read the spec from `/packages/themes/ideas.md` BEFORE writing any code**
-2. **Take screenshots after EACH iteration** to verify visual correctness
-3. **Use the automated screenshot script** at `apps/registry/scripts/generate-theme-screenshots-auto.js`
-4. **Fix design issues immediately** when identified in screenshots - do not skip fixes
-5. **Test ALL 12 schema sections** render correctly before considering theme complete
+2. **Each theme MUST have a visually distinct layout** - NEVER reuse the same layout pattern as the previous theme
+3. **Take screenshots after EACH iteration** to verify visual correctness
+4. **Use the automated screenshot script** at `apps/registry/scripts/generate-theme-screenshots-auto.js`
+5. **Fix design issues immediately** when identified in screenshots - do not skip fixes
+6. **Test ALL 12 schema sections** render correctly before considering theme complete
+
+## Layout Variation Requirement
+
+**CRITICAL**: Each new theme must have a fundamentally different visual layout from the previous theme.
+
+**What to vary:**
+
+- **Column width**: Narrow (680px) → Standard (850px) → Wide (900px)
+- **Margins**: Tight margins → Wide editorial margins → Asymmetric margins
+- **Header style**: Centered → Left-aligned → Full-width with border
+- **Work item layout**: Cards with background → Timeline with left border → Flat list → Grid-based
+- **Section dividers**: Underline accent → Full-width border → No divider (whitespace only) → Colored backgrounds
+- **Date positioning**: Right-aligned → Inline with title → Below title → In metadata line
+
+**Examples of distinct layouts:**
+
+1. **Magazine Editorial** (like New York Editorial): Narrow column (680px), wide margins (100px), centered header, serif typography, em-dash bullets
+2. **Product Canvas** (like Product Manager Canvas): Standard width (850px), card-based work items with colored backgrounds, thick left borders, indigo accents
+3. **Timeline Style**: Left border accent on all items, no card backgrounds, monospace headers
+4. **Grid-Based**: Precise alignment to grid, geometric spacing, structured sections
+5. **Minimalist**: Maximum whitespace, thin dividers, no backgrounds, subtle accents
+
+**Before starting a new theme:**
+
+1. Look at the screenshot of the most recently created theme
+2. Identify its layout pattern (cards? timeline? editorial? grid?)
+3. Choose a DIFFERENT pattern for your new theme
+4. Vary at least 3-4 layout characteristics from the previous theme
 
 ## Development Workflow
 
