@@ -248,7 +248,7 @@ These are print-perfect, modern, and emotionally resonant — designed for peopl
 
 ---
 
-- [ ] **Coastal Creative**
+- [x] **Coastal Creative**
       **Vibe:** Calm, spacious, design-forward
       **Layout:** Soft layout with larger-than-average line heights
       **Typography:** Elegant geometric sans (Circular, Inter)
