@@ -386,6 +386,9 @@ importers:
       jsonresume-theme-bold-header-statement:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-bold-header-statement
+      jsonresume-theme-californian-warm:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-californian-warm
       jsonresume-theme-data-driven:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-data-driven
@@ -806,6 +809,21 @@ importers:
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
 
   packages/themes/jsonresume-theme-bold-header-statement:
+    dependencies:
+      '@resume/core':
+        specifier: workspace:*
+        version: link:../../resume-core
+      react:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.0
+      react-dom:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.0(react@19.2.0)
+      styled-components:
+        specifier: ^6.1.19
+        version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+
+  packages/themes/jsonresume-theme-californian-warm:
     dependencies:
       '@resume/core':
         specifier: workspace:*

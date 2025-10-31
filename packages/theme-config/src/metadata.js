@@ -414,6 +414,21 @@ export const THEME_METADATA = {
       'minimal',
     ],
   },
+  'californian-warm': {
+    name: 'Californian Warm',
+    description:
+      'Friendly and inviting with relaxed spacing, warm amber tones, and rounded corners. Optimistic energy with generous whitespace.',
+    author: 'JSON Resume Team',
+    tags: [
+      'warm',
+      'friendly',
+      'optimistic',
+      'relaxed',
+      'creative',
+      'approachable',
+      'amber',
+    ],
+  },
 };
 
 // List of available theme names (derived from THEME_METADATA)
