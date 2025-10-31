@@ -385,6 +385,20 @@ export const THEME_METADATA = {
       'retro',
     ],
   },
+  'new-york-editorial': {
+    name: 'New York Editorial',
+    description:
+      'Magazine-quality editorial polish with tight column layout, serif headings, and typographic elegance. Inspired by The Atlantic.',
+    author: 'JSON Resume Team',
+    tags: [
+      'editorial',
+      'magazine',
+      'serif',
+      'literary',
+      'journalism',
+      'writer',
+    ],
+  },
 };
 
 // List of available theme names (derived from THEME_METADATA)

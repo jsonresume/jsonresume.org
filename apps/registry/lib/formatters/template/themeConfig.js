@@ -32,6 +32,7 @@ import * as asymmetrictimeline from 'jsonresume-theme-asymmetric-timeline'; // N
 import * as midcenturyresume from 'jsonresume-theme-mid-century-resume'; // NEW
 import * as boldheaderstatement from 'jsonresume-theme-bold-header-statement'; // NEW
 import * as typewritermodern from 'jsonresume-theme-typewriter-modern'; // NEW
+import * as newyorkeditorial from 'jsonresume-theme-new-york-editorial'; // NEW
 
 // Import theme metadata from shared package
 export {
@@ -87,4 +88,5 @@ export const THEMES = {
   'mid-century-resume': midcenturyresume, // NEW
   'bold-header-statement': boldheaderstatement, // NEW
   'typewriter-modern': typewritermodern, // NEW
+  'new-york-editorial': newyorkeditorial, // NEW
 };
