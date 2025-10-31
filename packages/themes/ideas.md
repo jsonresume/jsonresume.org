@@ -49,7 +49,7 @@ Pull fonts from google fonts cdn, always look at all components from resume-core
 
 ---
 
-- [ ] **Minimalist Grid**
+- [x] **Minimalist Grid**
       **Vibe:** Clean, contemporary, geometric
       **Layout:** Single column aligned to a consistent baseline grid
       **Typography:** Light-weight sans-serif with ample letter spacing
