@@ -521,6 +521,24 @@ export const THEME_METADATA = {
       'vc',
     ],
   },
+  'community-garden': {
+    name: 'Community Garden',
+    description:
+      'Beautiful, warm theme celebrating education and community service. Sky blue and garden green colors with prominent certifications and volunteer sections.',
+    author: 'JSON Resume Team',
+    tags: [
+      'community',
+      'volunteer',
+      'education',
+      'certifications',
+      'warm',
+      'friendly',
+      'colorful',
+      'blue',
+      'green',
+      'growth',
+    ],
+  },
 };
 
 // List of available theme names (derived from THEME_METADATA)

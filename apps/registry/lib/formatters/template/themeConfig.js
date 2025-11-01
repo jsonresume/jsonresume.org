@@ -41,6 +41,7 @@ import * as frenchatelier from 'jsonresume-theme-french-atelier'; // NEW
 import * as urbantechno from 'jsonresume-theme-urban-techno'; // NEW
 import * as coastalcreative from 'jsonresume-theme-coastal-creative'; // NEW
 import * as investorbrief from 'jsonresume-theme-investor-brief'; // NEW
+import * as communitygarden from 'jsonresume-theme-community-garden'; // NEW
 
 // Import theme metadata from shared package
 export {
@@ -105,4 +106,5 @@ export const THEMES = {
   'urban-techno': urbantechno, // NEW
   'coastal-creative': coastalcreative, // NEW
   'investor-brief': investorbrief, // NEW
+  'community-garden': communitygarden, // NEW
 };

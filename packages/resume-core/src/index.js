@@ -46,6 +46,29 @@ export {
   isExternalUrl,
 } from './utils/security.js';
 
+// Export calculation helpers
+export {
+  calculateTotalExperience,
+  calculateCurrentRoleExperience,
+  countCompanies,
+  countProjects,
+  countPublications,
+  countAwards,
+  countTotalSkills,
+  countSkillCategories,
+  countLanguages,
+  calculateVolunteerYears,
+  calculateEducationYears,
+  getHighestDegree,
+  countCareerPositions,
+  getCareerProgressionRate,
+  countTotalHighlights,
+  getUniqueIndustries,
+  getCurrentEmployer,
+  isCurrentlyEmployed,
+  calculateKeyMetrics,
+} from './helpers/calculations.js';
+
 // Export layouts
 export {
   GridLayout,
