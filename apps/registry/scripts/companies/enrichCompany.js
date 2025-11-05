@@ -16,11 +16,11 @@ async function enrichCompany(companyName, apiKey, context = {}) {
   // Build context hint for disambiguation
   let contextHint = '';
   if (context.locations && context.locations.length > 0) {
-    const topLocations = context.locations.slice(0, 3).join(', ');
+    const topLocations = context.locations.slice(0, 5).join(', ');
     contextHint += `\nCommon locations where employees worked: ${topLocations}`;
   }
   if (context.positions && context.positions.length > 0) {
-    const topPositions = context.positions.slice(0, 3).join(', ');
+    const topPositions = context.positions.slice(0, 5).join(', ');
     contextHint += `\nCommon positions held: ${topPositions}`;
   }
 
