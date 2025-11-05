@@ -5,13 +5,13 @@ on:
   schedule:
     - cron: '0 9 * * *'
 
-  # Allow manual trigger from GitHub UI
+  # Allow manual trigger from GitHub UI (fetches new jobs by default)
   workflow_dispatch:
     inputs:
-      skip_fetch:
-        description: 'Skip fetching new jobs (only process existing)'
+      fetch_jobs:
+        description: 'Fetch new jobs from Hacker News?'
         required: false
-        default: 'false'
+        default: 'true'
         type: choice
         options:
           - 'true'
@@ -58,7 +58,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Fetch latest HN jobs
-        if: github.event.inputs.skip_fetch != 'true'
+        if: github.event.inputs.fetch_jobs != 'false'
         id: fetch
         working-directory: apps/registry
         env:
@@ -134,7 +134,7 @@ jobs:
           if [ "${{ steps.fetch.outcome }}" == "success" ]; then
             echo "| 🔍 Fetch | ✅ Success | Fetched: ${{ steps.fetch.outputs.jobs_fetched }}, Inserted: ${{ steps.fetch.outputs.jobs_inserted }} |" >> $GITHUB_STEP_SUMMARY
           elif [ "${{ steps.fetch.outcome }}" == "skipped" ]; then
-            echo "| 🔍 Fetch | ⏭️ Skipped | Manual skip requested |" >> $GITHUB_STEP_SUMMARY
+            echo "| 🔍 Fetch | ⏭️ Skipped | User disabled fetch (processing existing jobs only) |" >> $GITHUB_STEP_SUMMARY
           else
             echo "| 🔍 Fetch | ❌ Failed | See logs for details |" >> $GITHUB_STEP_SUMMARY
           fi
