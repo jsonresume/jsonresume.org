@@ -5,7 +5,21 @@
  * Uses batching and error handling for production reliability
  */
 
-require('dotenv').config({ path: __dirname + '/./../../.env' });
+const path = require('path');
+const fs = require('fs');
+
+// Try to load .env from multiple locations (monorepo root or apps/registry)
+const envPaths = [
+  path.resolve(__dirname, '../../../.env'), // Monorepo root
+  path.resolve(__dirname, '../../.env'), // apps/registry
+];
+
+for (const envPath of envPaths) {
+  if (fs.existsSync(envPath)) {
+    require('dotenv').config({ path: envPath });
+    break;
+  }
+}
 const { createClient } = require('@supabase/supabase-js');
 const async = require('async');
 const { enrichCompany } = require('./enrichCompany');
