@@ -1,0 +1,246 @@
+name: Enrich Resume Companies
+
+on:
+  schedule:
+    - cron: '0 2 * * 0' # Weekly on Sunday at 02:00 UTC
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '20'
+  PNPM_VERSION: '8.15.9'
+
+jobs:
+  enrich_companies:
+    name: Enrich Resume Companies Pipeline
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Extract companies from resumes
+        id: extract
+        working-directory: apps/registry
+        env:
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          echo "::group::Extracting companies"
+          node scripts/companies/extract-companies-from-resumes.js 2>&1 | tee extract.log
+
+          # Extract summary stats
+          COMPANIES_FOUND=$(grep -oP 'Found \K\d+(?= unique companies)' extract.log || echo "0")
+          COMPANIES_PROCESSED=$(grep -oP 'Successfully processed \K\d+(?= companies)' extract.log || echo "0")
+
+          echo "companies_found=${COMPANIES_FOUND}" >> $GITHUB_OUTPUT
+          echo "companies_processed=${COMPANIES_PROCESSED}" >> $GITHUB_OUTPUT
+          echo "::endgroup::"
+        continue-on-error: false
+
+      - name: Enrich companies with Perplexity
+        id: enrich
+        working-directory: apps/registry
+        env:
+          PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          echo "::group::Enriching companies"
+
+          # Run with timeout
+          timeout 7200 node scripts/companies/enrich-resume-companies.js 2>&1 | tee enrich.log
+
+          # Extract enrichment stats
+          COMPANIES_ENRICHED=$(grep -oP 'Successfully enriched \K\d+(?= companies)' enrich.log | tr -d ' ' || echo "0")
+          COMPANIES_FAILED=$(grep -oP 'Failed to enrich \K\d+(?= companies)' enrich.log | tr -d ' ' || echo "0")
+          COMPANIES_TOTAL=$(grep -oP 'Found \K\d+(?= companies to process)' enrich.log | tr -d ' ' || echo "0")
+
+          # Ensure all values are non-empty
+          COMPANIES_ENRICHED=${COMPANIES_ENRICHED:-0}
+          COMPANIES_FAILED=${COMPANIES_FAILED:-0}
+          COMPANIES_TOTAL=${COMPANIES_TOTAL:-0}
+
+          echo "companies_enriched=${COMPANIES_ENRICHED}" >> $GITHUB_OUTPUT
+          echo "companies_failed=${COMPANIES_FAILED}" >> $GITHUB_OUTPUT
+          echo "companies_total=${COMPANIES_TOTAL}" >> $GITHUB_OUTPUT
+          echo "::endgroup::"
+        continue-on-error: true
+
+      - name: Generate workflow summary
+        if: always()
+        run: |
+          echo "# Resume Company Enrichment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Date:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          echo "## Pipeline Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Stage | Status | Metrics |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|---------|" >> $GITHUB_STEP_SUMMARY
+
+          # Extract stage
+          if [ "${{ steps.extract.outcome }}" == "success" ]; then
+            echo "| 📊 Extract | ✅ Success | Found: ${{ steps.extract.outputs.companies_found }}, Processed: ${{ steps.extract.outputs.companies_processed }} |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| 📊 Extract | ❌ Failed | See logs for details |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          # Enrich stage
+          if [ "${{ steps.enrich.outcome }}" == "success" ]; then
+            echo "| 🔮 Enrich | ✅ Success | Enriched: ${{ steps.enrich.outputs.companies_enriched }}/${{ steps.enrich.outputs.companies_total }}, Failed: ${{ steps.enrich.outputs.companies_failed }} |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| 🔮 Enrich | ❌ Failed | Enriched: ${{ steps.enrich.outputs.companies_enriched }}/${{ steps.enrich.outputs.companies_total }}, Failed: ${{ steps.enrich.outputs.companies_failed }} |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Add failure notice if any step failed
+          if [ "${{ steps.extract.outcome }}" == "failure" ] || [ "${{ steps.enrich.outcome }}" == "failure" ]; then
+            echo "## ⚠️ Pipeline Issues Detected" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "One or more stages failed. Check the logs above for details." >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "## 📊 Success Rate" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          TOTAL="${{ steps.enrich.outputs.companies_total }}"
+          ENRICHED="${{ steps.enrich.outputs.companies_enriched }}"
+
+          # Ensure variables have default values
+          TOTAL=${TOTAL:-0}
+          ENRICHED=${ENRICHED:-0}
+
+          if [ "$TOTAL" -gt 0 ] 2>/dev/null; then
+            SUCCESS_RATE=$(awk "BEGIN {printf \"%.1f\", ($ENRICHED / $TOTAL) * 100}")
+            echo "**Enrichment:** ${SUCCESS_RATE}% (${ENRICHED}/${TOTAL} companies)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "**Enrichment:** No companies to enrich" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Upload logs as artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: company-enrichment-logs-${{ github.run_number }}
+          path: |
+            apps/registry/extract.log
+            apps/registry/enrich.log
+          retention-days: 30
+
+      - name: Notify Discord on completion
+        if: always()
+        run: |
+          # Determine status and emoji
+          if [ "${{ job.status }}" == "success" ]; then
+            STATUS_EMOJI="✅"
+            STATUS_TEXT="Success"
+            COLOR="3066993"
+          else
+            STATUS_EMOJI="❌"
+            STATUS_TEXT="Failed"
+            COLOR="15158332"
+          fi
+
+          # Get stats with defaults
+          COMPANIES_FOUND="${{ steps.extract.outputs.companies_found }}"
+          COMPANIES_PROCESSED="${{ steps.extract.outputs.companies_processed }}"
+          COMPANIES_ENRICHED="${{ steps.enrich.outputs.companies_enriched }}"
+          COMPANIES_TOTAL="${{ steps.enrich.outputs.companies_total }}"
+          COMPANIES_FAILED="${{ steps.enrich.outputs.companies_failed }}"
+
+          # Build the Discord embed
+          curl -H "Content-Type: application/json" \
+            -X POST \
+            -d "{
+              \"embeds\": [{
+                \"title\": \"${STATUS_EMOJI} Resume Company Enrichment ${STATUS_TEXT}\",
+                \"color\": ${COLOR},
+                \"fields\": [
+                  {
+                    \"name\": \"📊 Extraction\",
+                    \"value\": \"Found: ${COMPANIES_FOUND:-0}\\nProcessed: ${COMPANIES_PROCESSED:-0}\",
+                    \"inline\": true
+                  },
+                  {
+                    \"name\": \"🔮 Enrichment\",
+                    \"value\": \"Enriched: ${COMPANIES_ENRICHED:-0}/${COMPANIES_TOTAL:-0}\\nFailed: ${COMPANIES_FAILED:-0}\",
+                    \"inline\": true
+                  }
+                ],
+                \"footer\": {
+                  \"text\": \"Run #${{ github.run_number }}\"
+                },
+                \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",
+                \"url\": \"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
+              }]
+            }" \
+            https://discord.com/api/webhooks/1435731659541446678/p_19MdMzay79WDJ1g5EtfHAC5jAxG93nVMob0bUW4_Igyzl55fb-Uir8z1FpwZPx3bJf
+
+      - name: Create issue on repeated failure
+        if: failure() && github.event_name == 'schedule'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'automated-companies,bug',
+              per_page: 1
+            });
+
+            if (issues.data.length === 0) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: '🚨 Resume Company Enrichment Pipeline Failure',
+                body: `## Pipeline Failure Alert
+
+            The automated resume company enrichment pipeline has failed.
+
+            **Workflow Run:** https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}
+
+            **Date:** ${new Date().toISOString()}
+
+            ### Debugging Steps
+
+            1. Check the workflow logs for error messages
+            2. Verify all required secrets are set:
+               - \`PERPLEXITY_API_KEY\`
+               - \`SUPABASE_KEY\`
+            3. Check Perplexity API rate limits and quotas
+            4. Review recent code changes that may have broken the pipeline
+            5. Check database connectivity and migration status
+
+            This issue was automatically created by the GitHub Actions workflow.`,
+                labels: ['automated-companies', 'bug', 'critical']
+              });
+            }
