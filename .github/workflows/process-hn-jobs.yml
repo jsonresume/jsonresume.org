@@ -65,7 +65,7 @@ jobs:
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
         run: |
           echo "::group::Fetching HN jobs"
-          node scripts/jobs/getLatestWhoIsHiring.js 2>&1 | tee fetch.log
+          node scripts/jobs/import-hn-latest-thread.js 2>&1 | tee fetch.log
 
           # Extract summary stats
           JOBS_FETCHED=$(grep -oP 'Fetched \K\d+' fetch.log || echo "0")
@@ -86,7 +86,7 @@ jobs:
           echo "::group::AI Processing"
 
           # Run with timeout and capture output
-          timeout 3600 node scripts/jobs/gpted.js 2>&1 | tee process.log
+          timeout 3600 node scripts/jobs/parse-job-descriptions.js 2>&1 | tee process.log
 
           # Extract processing stats
           JOBS_PROCESSED=$(grep -oP 'Successfully processed \K\d+' process.log | tail -1 || echo "0")
@@ -105,12 +105,10 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-          PINECONE_API_KEY: ${{ secrets.PINECONE_API_KEY }}
-          PINECONE_ENVIRONMENT: ${{ secrets.PINECONE_ENVIRONMENT }}
         run: |
           echo "::group::Vectorization"
 
-          timeout 1800 node scripts/jobs/vectorize.js 2>&1 | tee vectorize.log
+          timeout 1800 node scripts/jobs/generate-embeddings-jobs.js 2>&1 | tee vectorize.log
 
           # Extract vectorization stats
           JOBS_VECTORIZED=$(grep -oP 'Vectorized \K\d+' vectorize.log || echo "0")
