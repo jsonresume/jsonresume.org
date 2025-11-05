@@ -1,21 +1,11 @@
 name: Process Hacker News Jobs
 
 on:
-  # Run daily at 9 AM UTC (1 AM PST / 4 AM EST)
-  schedule:
-    - cron: '0 9 * * *'
-
-  # Allow manual trigger from GitHub UI (fetches new jobs by default)
+  # Schedule updates (00:30 UTC daily)
+  schedule: [{ cron: '30 0 * * *' }]
+  # Lines below let you run workflow manually and on each commit
   workflow_dispatch:
-    inputs:
-      fetch_jobs:
-        description: 'Fetch new jobs from Hacker News?'
-        required: false
-        default: 'true'
-        type: choice
-        options:
-          - 'true'
-          - 'false'
+  push: { branches: ['master'] }
 
 env:
   NODE_VERSION: '20'
@@ -58,7 +48,6 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Fetch latest HN jobs
-        if: github.event.inputs.fetch_jobs != 'false'
         id: fetch
         working-directory: apps/registry
         env:
