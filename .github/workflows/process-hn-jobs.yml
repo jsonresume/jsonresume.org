@@ -22,7 +22,7 @@ env:
   PNPM_VERSION: '8.15.9'
 
 jobs:
-  process-jobs:
+  process_jobs:
     name: Process HN Jobs Pipeline
     runs-on: ubuntu-latest
     timeout-minutes: 60
