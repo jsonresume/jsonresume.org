@@ -81,12 +81,17 @@ jobs:
           # Extract processing stats with proper regex patterns
           JOBS_TOTAL=$(grep -oP 'Found \K\d+(?= jobs)' process.log | head -1 || echo "0")
           JOBS_NEED_PROCESSING=$(grep -oP '\K\d+(?= need processing)' process.log | head -1 || echo "0")
-          JOBS_PROCESSED=$(grep -oP '✅ Job #\d+' process.log | wc -l || echo "0")
-          JOBS_FAILED=$(grep -c '❌ Job #' process.log || echo "0")
+          JOBS_PROCESSED=$(grep -oP '✅ Job #\d+' process.log | wc -l | tr -d ' ' || echo "0")
+          JOBS_FAILED=$(grep -c '❌ Job #' process.log | tr -d ' ' || echo "0")
+
+          # Ensure all values are non-empty
+          JOBS_PROCESSED=${JOBS_PROCESSED:-0}
+          JOBS_FAILED=${JOBS_FAILED:-0}
+          JOBS_NEED_PROCESSING=${JOBS_NEED_PROCESSING:-0}
 
           echo "jobs_processed=${JOBS_PROCESSED}" >> $GITHUB_OUTPUT
           echo "jobs_failed=${JOBS_FAILED}" >> $GITHUB_OUTPUT
-          echo "jobs_total=${JOBS_NEED_PROCESSING:-0}" >> $GITHUB_OUTPUT
+          echo "jobs_total=${JOBS_NEED_PROCESSING}" >> $GITHUB_OUTPUT
           echo "::endgroup::"
         continue-on-error: true
 
