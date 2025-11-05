@@ -58,11 +58,11 @@ jobs:
           node scripts/jobs/import-hn-latest-thread.js 2>&1 | tee fetch.log
 
           # Extract summary stats
-          JOBS_FETCHED=$(grep -oP 'Fetched \K\d+' fetch.log || echo "0")
-          JOBS_INSERTED=$(grep -oP 'Inserted \K\d+' fetch.log || echo "0")
+          JOBS_FETCHED=$(grep -oP 'Found \K\d+(?= job postings)' fetch.log || echo "0")
+          JOBS_INSERTED=$(grep -oP '✅ \K\d+(?= jobs imported)' fetch.log || echo "0")
 
-          echo "jobs_fetched=$JOBS_FETCHED" >> $GITHUB_OUTPUT
-          echo "jobs_inserted=$JOBS_INSERTED" >> $GITHUB_OUTPUT
+          echo "jobs_fetched=${JOBS_FETCHED}" >> $GITHUB_OUTPUT
+          echo "jobs_inserted=${JOBS_INSERTED}" >> $GITHUB_OUTPUT
           echo "::endgroup::"
         continue-on-error: false
 
@@ -78,14 +78,15 @@ jobs:
           # Run with timeout and capture output
           timeout 3600 node scripts/jobs/parse-job-descriptions.js 2>&1 | tee process.log
 
-          # Extract processing stats
-          JOBS_PROCESSED=$(grep -oP 'Successfully processed \K\d+' process.log | tail -1 || echo "0")
-          JOBS_FAILED=$(grep -c 'Error processing' process.log || echo "0")
-          JOBS_TOTAL=$(grep -oP '\K\d+(?= jobs need processing)' process.log | head -1 || echo "0")
+          # Extract processing stats with proper regex patterns
+          JOBS_TOTAL=$(grep -oP 'Found \K\d+(?= jobs)' process.log | head -1 || echo "0")
+          JOBS_NEED_PROCESSING=$(grep -oP '\K\d+(?= need processing)' process.log | head -1 || echo "0")
+          JOBS_PROCESSED=$(grep -oP '✅ Job #\d+' process.log | wc -l || echo "0")
+          JOBS_FAILED=$(grep -c '❌ Job #' process.log || echo "0")
 
-          echo "jobs_processed=$JOBS_PROCESSED" >> $GITHUB_OUTPUT
-          echo "jobs_failed=$JOBS_FAILED" >> $GITHUB_OUTPUT
-          echo "jobs_total=$JOBS_TOTAL" >> $GITHUB_OUTPUT
+          echo "jobs_processed=${JOBS_PROCESSED}" >> $GITHUB_OUTPUT
+          echo "jobs_failed=${JOBS_FAILED}" >> $GITHUB_OUTPUT
+          echo "jobs_total=${JOBS_NEED_PROCESSING:-0}" >> $GITHUB_OUTPUT
           echo "::endgroup::"
         continue-on-error: true
 
@@ -101,9 +102,9 @@ jobs:
           timeout 1800 node scripts/jobs/generate-embeddings-jobs.js 2>&1 | tee vectorize.log
 
           # Extract vectorization stats
-          JOBS_VECTORIZED=$(grep -oP 'Vectorized \K\d+' vectorize.log || echo "0")
+          JOBS_VECTORIZED=$(grep -oP '✅ \K\d+(?= embeddings created)' vectorize.log || echo "0")
 
-          echo "jobs_vectorized=$JOBS_VECTORIZED" >> $GITHUB_OUTPUT
+          echo "jobs_vectorized=${JOBS_VECTORIZED}" >> $GITHUB_OUTPUT
           echo "::endgroup::"
         continue-on-error: true
 
@@ -156,10 +157,14 @@ jobs:
           echo "## 📊 Success Rate" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
-          TOTAL=${{ steps.process.outputs.jobs_total }}
-          PROCESSED=${{ steps.process.outputs.jobs_processed }}
+          TOTAL="${{ steps.process.outputs.jobs_total }}"
+          PROCESSED="${{ steps.process.outputs.jobs_processed }}"
 
-          if [ "$TOTAL" -gt 0 ]; then
+          # Ensure variables have default values
+          TOTAL=${TOTAL:-0}
+          PROCESSED=${PROCESSED:-0}
+
+          if [ "$TOTAL" -gt 0 ] 2>/dev/null; then
             SUCCESS_RATE=$(awk "BEGIN {printf \"%.1f\", ($PROCESSED / $TOTAL) * 100}")
             echo "**AI Processing:** ${SUCCESS_RATE}% (${PROCESSED}/${TOTAL} jobs)" >> $GITHUB_STEP_SUMMARY
           else
