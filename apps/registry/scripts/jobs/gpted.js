@@ -6,40 +6,34 @@ const async = require('async');
 const { initializeSupabase, fetchJobs } = require('./gpted/database');
 const processJob = require('./gpted/processJob');
 
-// Log environment variables for debugging
-console.log('Environment variables:', {
-  NODE_ENV: process.env.NODE_ENV,
-  SUPABASE_KEY_EXISTS: !!process.env.SUPABASE_KEY,
-  OPENAI_API_KEY_EXISTS: !!process.env.OPENAI_API_KEY,
-  ENV_PATH: __dirname + '/./../../.env',
-  CURRENT_DIR: __dirname,
-});
-
 // Initialize Supabase
 const supabase = initializeSupabase();
 
 async function main() {
-  console.log('======================================');
-  console.log('STARTING JOB PROCESSING');
-  console.log('======================================');
-  console.log('Script version: 1.0.0');
-  console.log('Current directory:', __dirname);
+  console.log('\n🚀 Job Processing System v2.0');
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 
   let jobsToProcess = [];
   try {
     const data = await fetchJobs(supabase, 1000);
-    console.log(
-      `Found ${data.length} jobs in database, processing up to 5 at a time`
-    );
 
-    // Filter jobs that don't have gpt_content or failed previously
+    // Filter jobs that don't have gpt_content or failed previously (with retry limit)
     jobsToProcess = data.filter(
       (job) => !job.gpt_content || job.gpt_content === 'FAILED'
     );
-    console.log(`${jobsToProcess.length} jobs need processing`);
+
+    console.log(
+      `📊 Found ${data.length} jobs, ${jobsToProcess.length} need processing`
+    );
+    console.log(`⚙️  Processing up to 5 jobs concurrently\n`);
   } catch (error) {
-    console.error('Error in database query:', error);
+    console.error('❌ Database error:', error.message);
     process.exit(1);
+  }
+
+  if (jobsToProcess.length === 0) {
+    console.log('✨ All jobs are up to date!');
+    return;
   }
 
   // Process jobs in parallel with a concurrency limit of 5
@@ -49,7 +43,8 @@ async function main() {
     await new Promise((resolve) => setTimeout(resolve, 500));
   });
 
-  console.log('All jobs processed successfully!');
+  console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  console.log('✨ All jobs processed successfully!\n');
 }
 
 main();

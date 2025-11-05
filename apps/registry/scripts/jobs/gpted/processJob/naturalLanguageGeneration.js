@@ -20,8 +20,6 @@ async function naturalLanguageGeneration(job, messages) {
     temperature: 0.75,
   });
 
-  console.log({ jobId: job.id, content });
-
   return content;
 }
 

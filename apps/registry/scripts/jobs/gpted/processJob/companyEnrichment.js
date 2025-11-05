@@ -9,18 +9,14 @@ const { getCompanyData } = require('../database');
  */
 async function companyEnrichment(supabase, job, messages, company) {
   const companyDetails = await getCompanyData(supabase, company);
-  let companyContext = '';
 
   if (companyDetails) {
-    console.log({ jobId: job.id, companyDetails });
-    companyContext = getCompanyContextPrompt(companyDetails);
+    const companyContext = getCompanyContextPrompt(companyDetails);
     messages.push({
       role: 'system',
       content: companyContext,
     });
   }
-
-  console.log({ jobId: job.id, messages });
 
   // Build system prompt from all system messages
   const systemPrompts = messages
@@ -35,8 +31,6 @@ async function companyEnrichment(supabase, job, messages, company) {
     schema: jobDescriptionSchema,
     temperature: 0.75,
   });
-
-  console.log({ jobId: job.id, jobJson2 });
 
   return jobJson2;
 }

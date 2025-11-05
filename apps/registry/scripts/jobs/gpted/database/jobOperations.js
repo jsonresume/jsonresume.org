@@ -1,11 +1,11 @@
 /**
- * Fetch jobs from database
+ * Fetch jobs from database (excludes jobs that have already been retried)
  */
 async function fetchJobs(supabase, limit = 1000) {
-  console.log('Fetching jobs from database...');
   const { data, error } = await supabase
     .from('jobs')
     .select()
+    .or('retry_count.is.null,retry_count.lt.1') // Only get jobs with 0 retries or NULL
     .order('id', { ascending: false })
     .limit(limit);
 
@@ -13,7 +13,6 @@ async function fetchJobs(supabase, limit = 1000) {
     throw new Error(`Error fetching jobs from database: ${error.message}`);
   }
 
-  console.log(`Found ${data.length} jobs in database`);
   return data;
 }
 
@@ -32,11 +31,28 @@ async function updateJob(supabase, jobId, updates) {
 }
 
 /**
- * Mark job as failed
+ * Mark job as failed with error tracking
  */
-async function markJobAsFailed(supabase, jobId) {
-  console.log(`Marking job ${jobId} as FAILED in database`);
-  await supabase.from('jobs').update({ gpt_content: 'FAILED' }).eq('id', jobId);
+async function markJobAsFailed(supabase, jobId, errorMessage = '') {
+  // Get current retry count
+  const { data: currentJob } = await supabase
+    .from('jobs')
+    .select('retry_count')
+    .eq('id', jobId)
+    .single();
+
+  const retryCount = (currentJob?.retry_count || 0) + 1;
+
+  console.log(`❌ Job ${jobId} failed (attempt ${retryCount})`);
+
+  await supabase
+    .from('jobs')
+    .update({
+      gpt_content: 'FAILED',
+      retry_count: retryCount,
+      error_message: errorMessage,
+    })
+    .eq('id', jobId);
 }
 
 module.exports = { fetchJobs, updateJob, markJobAsFailed };

@@ -9,7 +9,6 @@ const { getJobProcessingPrompt } = require('../prompts');
 async function initialProcessing(job) {
   const systemPrompt = getJobProcessingPrompt(job.content);
 
-  console.log('Starting AI processing for job:', job.id);
   const { object: jobJson } = await generateObject({
     model: openai('gpt-5-mini'),
     system: systemPrompt,
@@ -19,9 +18,6 @@ async function initialProcessing(job) {
   });
 
   const details1 = JSON.stringify(jobJson);
-
-  console.log(JSON.stringify(details1, null, 2));
-  console.log({ jobId: job.id, jobJson });
 
   // Build messages array for next steps
   const messages = [
