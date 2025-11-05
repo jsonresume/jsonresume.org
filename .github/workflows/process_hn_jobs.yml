@@ -2,10 +2,13 @@ name: Process Hacker News Jobs
 
 on:
   # Schedule updates (00:30 UTC daily)
-  schedule: [{ cron: '30 0 * * *' }]
+  schedule:
+    - cron: '30 0 * * *'
   # Lines below let you run workflow manually and on each commit
   workflow_dispatch:
-  push: { branches: ['master'] }
+  push:
+    branches:
+      - master
 
 env:
   NODE_VERSION: '20'
