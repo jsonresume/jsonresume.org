@@ -189,6 +189,67 @@ async function main() {
   );
   console.log(`⚙️  Processing up to ${CONCURRENCY} companies concurrently\n`);
 
+  // Calculate estimated cost
+  // Perplexity sonar-pro pricing (as of Nov 2024):
+  // - Input: $3 per 1M tokens
+  // - Output: $15 per 1M tokens
+  // - Request fee (medium context): $10 per 1K requests
+  const avgPromptTokens = 350; // Estimated prompt size with context
+  const avgOutputTokens = 2000; // Estimated output (comprehensive dossier)
+  const totalInputTokens = companies.length * avgPromptTokens;
+  const totalOutputTokens = companies.length * avgOutputTokens;
+  const inputCost = (totalInputTokens / 1_000_000) * 3;
+  const outputCost = (totalOutputTokens / 1_000_000) * 15;
+  const requestCost = (companies.length / 1000) * 10; // Medium context
+  const totalEstimatedCost = inputCost + outputCost + requestCost;
+
+  console.log('💰 Estimated Cost Analysis:');
+  console.log(
+    `   - Input tokens: ~${totalInputTokens.toLocaleString()} ($${inputCost.toFixed(
+      2
+    )})`
+  );
+  console.log(
+    `   - Output tokens: ~${totalOutputTokens.toLocaleString()} ($${outputCost.toFixed(
+      2
+    )})`
+  );
+  console.log(
+    `   - Request fees: ${companies.length} requests ($${requestCost.toFixed(
+      2
+    )})`
+  );
+  console.log(`   - Total estimated cost: $${totalEstimatedCost.toFixed(2)}\n`);
+
+  // Check for --yes flag to skip confirmation
+  const yesFlag = args.includes('--yes') || args.includes('-y');
+
+  if (!yesFlag) {
+    // Prompt for confirmation
+    const readline = require('readline').createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
+
+    const answer = await new Promise((resolve) => {
+      readline.question(
+        '❓ Do you want to proceed with enrichment? (yes/no): ',
+        resolve
+      );
+    });
+
+    readline.close();
+
+    if (answer.toLowerCase() !== 'yes' && answer.toLowerCase() !== 'y') {
+      console.log('\n❌ Enrichment cancelled by user\n');
+      process.exit(0);
+    }
+
+    console.log('');
+  } else {
+    console.log('✅ Auto-confirmed with --yes flag\n');
+  }
+
   // Process companies with concurrency control
   let successCount = 0;
   let errorCount = 0;

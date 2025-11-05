@@ -121,15 +121,22 @@ node scripts/companies/extract-companies-from-resumes.js
 **Usage:**
 ```bash
 cd apps/registry
-# Process default batch size (50 companies)
+# Process default batch size (50 companies) - shows cost estimate and prompts for confirmation
 node scripts/companies/enrich-resume-companies.js
 
 # Process specific number of companies (useful for testing)
 node scripts/companies/enrich-resume-companies.js --limit=3
+
+# Auto-confirm without prompting (useful for automated workflows)
+node scripts/companies/enrich-resume-companies.js --yes
+
+# Combine flags
+node scripts/companies/enrich-resume-companies.js --limit=10 --yes
 ```
 
 **Command Line Arguments:**
 - `--limit=N` - Process only N companies (default: 50)
+- `--yes` or `-y` - Skip confirmation prompt (auto-approve)
 
 **Environment Variables:**
 - `PERPLEXITY_API_KEY` - Perplexity API key
@@ -139,6 +146,13 @@ node scripts/companies/enrich-resume-companies.js --limit=3
 - `MAX_RETRIES`: 3 (max failed attempts before skipping)
 - `CONCURRENCY`: 2 (process 2 companies at a time)
 - `BATCH_SIZE`: 50 (max companies per run, override with --limit)
+
+**Cost Estimation:**
+The script displays estimated costs before running:
+- Input tokens: ~350 tokens per company ($3 per 1M tokens)
+- Output tokens: ~2,000 tokens per company ($15 per 1M tokens)
+- Request fees: $10 per 1,000 requests (medium context)
+- Example: 50 companies ≈ $1.80 total cost
 
 **Output:**
 - Enrichment data stored in `resume_companies` table
