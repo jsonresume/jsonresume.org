@@ -1,10 +1,8 @@
 name: Process Hacker News Jobs
 
 on:
-  # Schedule updates (00:30 UTC daily)
   schedule:
     - cron: '30 0 * * *'
-  # Lines below let you run workflow manually and on each commit
   workflow_dispatch:
   push:
     branches:
@@ -210,24 +208,24 @@ jobs:
                 title: '🚨 HN Jobs Processing Pipeline Failure',
                 body: `## Pipeline Failure Alert
 
-The automated HN jobs processing pipeline has failed.
+            The automated HN jobs processing pipeline has failed.
 
-**Workflow Run:** https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}
+            **Workflow Run:** https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}
 
-**Date:** ${new Date().toISOString()}
+            **Date:** ${new Date().toISOString()}
 
-### Debugging Steps
+            ### Debugging Steps
 
-1. Check the workflow logs for error messages
-2. Verify all required secrets are set:
-   - \`OPENAI_API_KEY\`
-   - \`SUPABASE_KEY\`
-   - \`PINECONE_API_KEY\`
-   - \`PINECONE_ENVIRONMENT\`
-3. Check API rate limits and quotas
-4. Review recent code changes that may have broken the pipeline
+            1. Check the workflow logs for error messages
+            2. Verify all required secrets are set:
+               - \`OPENAI_API_KEY\`
+               - \`SUPABASE_KEY\`
+               - \`PINECONE_API_KEY\`
+               - \`PINECONE_ENVIRONMENT\`
+            3. Check API rate limits and quotas
+            4. Review recent code changes that may have broken the pipeline
 
-This issue was automatically created by the GitHub Actions workflow.`,
+            This issue was automatically created by the GitHub Actions workflow.`,
                 labels: ['automated-jobs', 'bug', 'critical']
               });
             }
