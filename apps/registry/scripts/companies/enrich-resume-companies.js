@@ -10,7 +10,7 @@ const fs = require('fs');
 
 // Try to load .env from multiple locations (monorepo root or apps/registry)
 const envPaths = [
-  path.resolve(__dirname, '../../../.env'), // Monorepo root
+  path.resolve(__dirname, '../../../../.env'), // Monorepo root
   path.resolve(__dirname, '../../.env'), // apps/registry
 ];
 
