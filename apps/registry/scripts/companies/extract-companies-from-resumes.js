@@ -76,7 +76,7 @@ async function upsertCompany(companyName, context = {}) {
     // First try to get existing record
     const { data: existing } = await supabase
       .from('resume_companies')
-      .select('id, context_data')
+      .select('id, context_data, resume_count')
       .eq('normalized_name', normalizedName)
       .single();
 
@@ -103,7 +103,10 @@ async function upsertCompany(companyName, context = {}) {
         .eq('id', existing.id);
 
       if (updateError) {
-        console.error(`❌ Error updating ${companyName}:`, updateError);
+        console.error(
+          `❌ Error updating ${companyName}:`,
+          JSON.stringify(updateError, null, 2)
+        );
         return false;
       }
     } else {
@@ -118,14 +121,20 @@ async function upsertCompany(companyName, context = {}) {
         });
 
       if (insertError) {
-        console.error(`❌ Error inserting ${companyName}:`, insertError);
+        console.error(
+          `❌ Error inserting ${companyName}:`,
+          JSON.stringify(insertError, null, 2)
+        );
         return false;
       }
     }
 
     return true;
   } catch (error) {
-    console.error(`❌ Error processing ${companyName}:`, error);
+    console.error(
+      `❌ Error processing ${companyName}:`,
+      error.message || JSON.stringify(error, null, 2)
+    );
     return false;
   }
 }
@@ -144,8 +153,8 @@ async function main() {
 
   while (hasMore) {
     const { data: resumes, error } = await supabase
-      .from('gists')
-      .select('data')
+      .from('resumes')
+      .select('resume')
       .range(page * pageSize, (page + 1) * pageSize - 1);
 
     if (error) {
@@ -175,7 +184,9 @@ async function main() {
   allResumes.forEach((resume) => {
     try {
       const resumeData =
-        typeof resume.data === 'string' ? JSON.parse(resume.data) : resume.data;
+        typeof resume.resume === 'string'
+          ? JSON.parse(resume.resume)
+          : resume.resume;
 
       const companies = extractCompaniesFromResume(resumeData);
 
@@ -221,19 +232,34 @@ async function main() {
   });
   console.log('');
 
+  // Parse command line arguments for limit parameter
+  const args = process.argv.slice(2);
+  const limitArg = args.find((arg) => arg.startsWith('--limit='));
+  const limit = limitArg
+    ? parseInt(limitArg.split('=')[1], 10)
+    : sortedCompanies.length;
+
+  const companiesToProcess =
+    limit < sortedCompanies.length
+      ? sortedCompanies.slice(0, limit)
+      : sortedCompanies;
+
   // Upsert companies into database
   console.log('💾 Upserting companies into database...');
+  if (limitArg) {
+    console.log(`🔧 Processing only ${limit} companies for testing\n`);
+  }
   let successCount = 0;
   let errorCount = 0;
 
-  for (const company of sortedCompanies) {
+  for (const company of companiesToProcess) {
     const context = allCompanies.get(company);
     const success = await upsertCompany(company, context);
     if (success) {
       successCount++;
       if (successCount % 100 === 0) {
         console.log(
-          `  ✓ Processed ${successCount}/${uniqueCompanies.length}...`
+          `  ✓ Processed ${successCount}/${companiesToProcess.length}...`
         );
       }
     } else {

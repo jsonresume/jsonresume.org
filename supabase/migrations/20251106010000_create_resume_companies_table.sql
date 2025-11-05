@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS resume_companies (
 CREATE INDEX IF NOT EXISTS idx_resume_companies_normalized_name ON resume_companies(normalized_name);
 CREATE INDEX IF NOT EXISTS idx_resume_companies_enriched_at ON resume_companies(enriched_at) WHERE enriched_at IS NOT NULL;
 CREATE INDEX IF NOT EXISTS idx_resume_companies_needs_enrichment ON resume_companies(enriched_at, retry_count)
-  WHERE enriched_at IS NULL OR enriched_at < NOW() - INTERVAL '1 year';
+  WHERE enriched_at IS NULL;
 
 -- Create updated_at trigger
 CREATE OR REPLACE FUNCTION update_resume_companies_updated_at()
