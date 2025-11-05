@@ -14,7 +14,6 @@ async function initialProcessing(job) {
     system: systemPrompt,
     prompt: 'Parse this job description into structured data',
     schema: jobDescriptionSchema,
-    temperature: 0.75,
   });
 
   const details1 = JSON.stringify(jobJson);

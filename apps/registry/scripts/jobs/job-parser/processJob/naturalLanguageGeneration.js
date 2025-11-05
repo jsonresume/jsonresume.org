@@ -17,7 +17,6 @@ async function naturalLanguageGeneration(job, messages) {
     model: openai('gpt-5-mini'),
     messages: userMessages,
     system: systemPrompt,
-    temperature: 0.75,
   });
 
   return content;

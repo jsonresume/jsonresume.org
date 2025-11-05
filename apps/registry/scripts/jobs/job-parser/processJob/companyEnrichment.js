@@ -29,7 +29,6 @@ async function companyEnrichment(supabase, job, messages, company) {
     system: systemPrompts,
     prompt: 'Re-parse the job description with the additional company context',
     schema: jobDescriptionSchema,
-    temperature: 0.75,
   });
 
   return jobJson2;
