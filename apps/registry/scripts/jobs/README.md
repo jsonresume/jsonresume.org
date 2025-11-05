@@ -20,7 +20,7 @@ This pipeline automatically:
                  │
                  ▼
 ┌────────────────────────────────────────────────────────────────┐
-│  Step 1: Fetch HN Jobs (getLatestWhoIsHiring.js)              │
+│  Step 1: Fetch HN Jobs (import-hn-latest-thread.js)           │
 │  • Scrape HN API for latest "Who is Hiring?" thread           │
 │  • Extract job postings from comments                          │
 │  • Store raw HTML in Supabase \`jobs\` table                     │
@@ -28,7 +28,7 @@ This pipeline automatically:
                  │
                  ▼
 ┌────────────────────────────────────────────────────────────────┐
-│  Step 2: AI Processing (gpted.js)                             │
+│  Step 2: AI Processing (parse-job-descriptions.js)            │
 │  • Initial parsing with GPT-5-mini                             │
 │  • Company enrichment (fetch company data)                     │
 │  • Natural language generation (descriptions)                  │
@@ -37,16 +37,16 @@ This pipeline automatically:
                  │
                  ▼
 ┌────────────────────────────────────────────────────────────────┐
-│  Step 3: Vectorization (vectorize.js)                         │
-│  • Generate embeddings with OpenAI text-embedding-3-small      │
-│  • Store vectors in Pinecone for semantic search               │
+│  Step 3: Vectorization (generate-embeddings-jobs.js)          │
+│  • Generate embeddings with OpenAI text-embedding-3-large      │
+│  • Store vectors in Supabase for semantic search               │
 │  • Enable job matching based on resume similarity              │
 └────────────────────────────────────────────────────────────────┘
 ```
 
 ## Scripts
 
-### 1. \`getLatestWhoIsHiring.js\`
+### 1. \`import-hn-latest-thread.js\`
 
 **Purpose:** Scrape HN "Who is Hiring?" threads and extract job postings
 
@@ -59,7 +59,7 @@ This pipeline automatically:
 **Usage:**
 \`\`\`bash
 cd apps/registry
-node scripts/jobs/getLatestWhoIsHiring.js
+node scripts/jobs/import-hn-latest-thread.js
 \`\`\`
 
 **Environment Variables:**
@@ -73,7 +73,7 @@ node scripts/jobs/getLatestWhoIsHiring.js
   - \`posted_at\` - Job posting date
   - \`gpt_content\` - Initially \`null\` (populated by gpted.js)
 
-### 2. \`gpted.js\`
+### 2. \`parse-job-descriptions.js\`
 
 **Purpose:** Process jobs with AI to extract structured data
 
@@ -96,7 +96,7 @@ node scripts/jobs/getLatestWhoIsHiring.js
 **Usage:**
 \`\`\`bash
 cd apps/registry
-node scripts/jobs/gpted.js
+node scripts/jobs/parse-job-descriptions.js
 \`\`\`
 
 **Environment Variables:**
@@ -134,27 +134,25 @@ node scripts/jobs/gpted.js
 }
 \`\`\`
 
-### 3. \`vectorize.js\`
+### 3. \`generate-embeddings-jobs.js\`
 
 **Purpose:** Generate embeddings for semantic job search
 
 **How it works:**
 - Queries jobs with valid \`gpt_content\` but no vector embedding
 - Creates embedding text from job title, company, skills, description
-- Calls OpenAI \`text-embedding-3-small\` model
-- Stores 1536-dimension vector in Pinecone index
+- Calls OpenAI \`text-embedding-3-large\` model (3072 dimensions)
+- Stores vectors in Supabase \`embedding_v5\` column
 
 **Usage:**
 \`\`\`bash
 cd apps/registry
-node scripts/jobs/vectorize.js
+node scripts/jobs/generate-embeddings-jobs.js
 \`\`\`
 
 **Environment Variables:**
 - \`OPENAI_API_KEY\` - OpenAI API key
 - \`SUPABASE_KEY\` - Supabase service role key
-- \`PINECONE_API_KEY\` - Pinecone API key
-- \`PINECONE_ENVIRONMENT\` - Pinecone environment (e.g., \`asia-southeast1-gcp-free\`)
 
 **Output:**
 - Vectors stored in Pinecone with metadata:
@@ -167,16 +165,23 @@ node scripts/jobs/vectorize.js
 \`\`\`
 scripts/jobs/
 ├── README.md                           # This file
-├── getLatestWhoIsHiring.js            # Step 1: Scrape HN jobs
-├── gpted.js                           # Step 2: AI processing orchestrator
-├── vectorize.js                       # Step 3: Generate embeddings
-└── gpted/                             # AI processing modules
+├── import-hn-latest-thread.js         # Fetch latest HN "Who is Hiring?" thread
+├── import-hn-job.js                   # Import a specific HN thread
+├── parse-job-descriptions.js          # AI processing orchestrator
+├── generate-embeddings-jobs.js        # Generate job embeddings
+├── generate-embeddings-resumes.js     # Generate resume embeddings
+├── enrich-companies.js                # Fetch company data from Perplexity
+└── job-parser/                        # AI processing modules
+    ├── database/                      # Database operations
+    │   ├── initializeSupabase.js      # Supabase client setup
+    │   ├── jobOperations.js           # Job CRUD operations
+    │   └── companyData.js             # Company data fetching
+    ├── processJob/
+    │   ├── initialProcessing.js       # Extract structured data
+    │   ├── companyEnrichment.js       # Enrich with company data
+    │   └── naturalLanguageGeneration.js # Generate descriptions
     ├── prompts.js                     # System prompts for AI
-    ├── schema.js                      # Zod schema for job data
-    └── processJob/
-        ├── initialProcessing.js       # Extract structured data
-        ├── companyEnrichment.js       # Enrich with company data
-        └── naturalLanguageGeneration.js # Generate descriptions
+    └── openaiFunction.js              # Zod schema for job data
 \`\`\`
 
 ## GitHub Actions Workflow
@@ -231,13 +236,16 @@ PINECONE_ENVIRONMENT=...
 \`\`\`bash
 # Fetch jobs from HN
 cd apps/registry
-node scripts/jobs/getLatestWhoIsHiring.js
+node scripts/jobs/import-hn-latest-thread.js
 
 # Process with AI (can take 30-60 min for hundreds of jobs)
-node scripts/jobs/gpted.js
+node scripts/jobs/parse-job-descriptions.js
 
 # Vectorize processed jobs
-node scripts/jobs/vectorize.js
+node scripts/jobs/generate-embeddings-jobs.js
+
+# Enrich companies with Perplexity
+node scripts/jobs/enrich-companies.js
 \`\`\`
 
 ### Running the Full Pipeline
@@ -245,10 +253,10 @@ node scripts/jobs/vectorize.js
 \`\`\`bash
 cd apps/registry
 
-# Run all three steps sequentially
-node scripts/jobs/getLatestWhoIsHiring.js && \\
-  node scripts/jobs/gpted.js && \\
-  node scripts/jobs/vectorize.js
+# Run all steps sequentially
+node scripts/jobs/import-hn-latest-thread.js && \\
+  node scripts/jobs/parse-job-descriptions.js && \\
+  node scripts/jobs/generate-embeddings-jobs.js
 \`\`\`
 
 ### Testing Changes
@@ -258,11 +266,10 @@ Before pushing changes to the workflow:
 1. **Test scripts locally:**
 \`\`\`bash
 # Fetch a small batch
-node scripts/jobs/getLatestWhoIsHiring.js
+node scripts/jobs/import-hn-latest-thread.js
 
 # Process 1-2 jobs to verify AI processing works
-# (edit gpted.js temporarily to process only 2 jobs for testing)
-node scripts/jobs/gpted.js
+node scripts/jobs/parse-job-descriptions.js
 \`\`\`
 
 2. **Validate workflow syntax:**

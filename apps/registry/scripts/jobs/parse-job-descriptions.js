@@ -3,8 +3,8 @@
 require('dotenv').config({ path: __dirname + '/./../../.env' });
 
 const async = require('async');
-const { initializeSupabase, fetchJobs } = require('./gpted/database');
-const processJob = require('./gpted/processJob');
+const { initializeSupabase, fetchJobs } = require('./job-parser/database');
+const processJob = require('./job-parser/processJob');
 
 // Initialize Supabase
 const supabase = initializeSupabase();
