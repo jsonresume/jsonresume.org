@@ -35,6 +35,27 @@ const CONCURRENCY = 2; // Process 2 companies at a time to avoid rate limits
 const BATCH_SIZE = 50; // Process in batches of 50 companies
 
 /**
+ * Get count of companies needing enrichment
+ * @returns {Promise<number>} Total count of companies needing enrichment
+ */
+async function getUnenrichedCount() {
+  const oneYearAgo = new Date();
+  oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+
+  const { count, error } = await supabase
+    .from('resume_companies')
+    .select('*', { count: 'exact', head: true })
+    .or(`enriched_at.is.null,enriched_at.lt.${oneYearAgo.toISOString()}`)
+    .lt('retry_count', MAX_RETRIES);
+
+  if (error) {
+    throw new Error(`Failed to get count: ${error.message}`);
+  }
+
+  return count || 0;
+}
+
+/**
  * Fetch companies that need enrichment
  * @param {number} limit - Maximum number of companies to fetch
  * @returns {Promise<Array>} Array of companies needing enrichment
@@ -184,40 +205,55 @@ async function main() {
     console.log(`🔧 Using custom limit: ${limit} companies\n`);
   }
 
-  // Fetch companies needing enrichment
-  console.log('📊 Fetching companies needing enrichment...');
-  const companies = await fetchCompaniesNeedingEnrichment(limit);
+  // Get total count of unenriched companies for cost estimation
+  console.log('📊 Checking total unenriched companies...');
+  const totalUnenriched = await getUnenrichedCount();
 
-  if (companies.length === 0) {
+  if (totalUnenriched === 0) {
     console.log('✨ All companies are up to date!\n');
     return;
   }
 
+  // Fetch batch to process
+  console.log('📊 Fetching companies needing enrichment...');
+  const companies = await fetchCompaniesNeedingEnrichment(limit);
+
   const newCompanies = companies.filter((c) => !c.enriched_at).length;
   const refreshCompanies = companies.filter((c) => c.enriched_at).length;
 
-  console.log(`📊 Found ${companies.length} companies to process:`);
+  console.log(`📊 Total unenriched companies in database: ${totalUnenriched}`);
+  console.log(`📊 Will process ${companies.length} companies in this batch:`);
   console.log(`   - ${newCompanies} new companies`);
   console.log(
     `   - ${refreshCompanies} companies needing refresh (>1 year old)`
   );
   console.log(`⚙️  Processing up to ${CONCURRENCY} companies concurrently\n`);
 
-  // Calculate estimated cost
+  // Calculate estimated cost for ALL unenriched companies
   // Perplexity sonar-pro pricing (as of Nov 2024):
   // - Input: $3 per 1M tokens
   // - Output: $15 per 1M tokens
   // - Request fee (medium context): $10 per 1K requests
   const avgPromptTokens = 350; // Estimated prompt size with context
   const avgOutputTokens = 2000; // Estimated output (comprehensive dossier)
-  const totalInputTokens = companies.length * avgPromptTokens;
-  const totalOutputTokens = companies.length * avgOutputTokens;
+  const totalInputTokens = totalUnenriched * avgPromptTokens;
+  const totalOutputTokens = totalUnenriched * avgOutputTokens;
   const inputCost = (totalInputTokens / 1_000_000) * 3;
   const outputCost = (totalOutputTokens / 1_000_000) * 15;
-  const requestCost = (companies.length / 1000) * 10; // Medium context
+  const requestCost = (totalUnenriched / 1000) * 10; // Medium context
   const totalEstimatedCost = inputCost + outputCost + requestCost;
 
+  // Calculate cost for this batch
+  const batchInputTokens = companies.length * avgPromptTokens;
+  const batchOutputTokens = companies.length * avgOutputTokens;
+  const batchInputCost = (batchInputTokens / 1_000_000) * 3;
+  const batchOutputCost = (batchOutputTokens / 1_000_000) * 15;
+  const batchRequestCost = (companies.length / 1000) * 10;
+  const batchEstimatedCost =
+    batchInputCost + batchOutputCost + batchRequestCost;
+
   console.log('💰 Estimated Cost Analysis:');
+  console.log('\n📊 Total Cost (all unenriched companies):');
   console.log(
     `   - Input tokens: ~${totalInputTokens.toLocaleString()} ($${inputCost.toFixed(
       2
@@ -229,11 +265,37 @@ async function main() {
     )})`
   );
   console.log(
-    `   - Request fees: ${companies.length} requests ($${requestCost.toFixed(
+    `   - Request fees: ${totalUnenriched} requests ($${requestCost.toFixed(
       2
     )})`
   );
-  console.log(`   - Total estimated cost: $${totalEstimatedCost.toFixed(2)}\n`);
+  console.log(
+    `   - TOTAL for all ${totalUnenriched} companies: $${totalEstimatedCost.toFixed(
+      2
+    )}`
+  );
+
+  console.log('\n📦 This Batch Cost:');
+  console.log(
+    `   - Input tokens: ~${batchInputTokens.toLocaleString()} ($${batchInputCost.toFixed(
+      2
+    )})`
+  );
+  console.log(
+    `   - Output tokens: ~${batchOutputTokens.toLocaleString()} ($${batchOutputCost.toFixed(
+      2
+    )})`
+  );
+  console.log(
+    `   - Request fees: ${
+      companies.length
+    } requests ($${batchRequestCost.toFixed(2)})`
+  );
+  console.log(
+    `   - BATCH cost for ${
+      companies.length
+    } companies: $${batchEstimatedCost.toFixed(2)}\n`
+  );
 
   // Check for --yes flag to skip confirmation
   const yesFlag = args.includes('--yes') || args.includes('-y');
