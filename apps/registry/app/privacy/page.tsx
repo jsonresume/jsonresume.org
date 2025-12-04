@@ -1,7 +1,7 @@
 'use client';
 
 import { Card, CardContent } from '@repo/ui';
-import { PrivacyHeader, ContactFooter } from './components';
+import { PrivacyHeader, ContactFooter, DeleteCacheSection } from './components';
 import {
   InformationWeCollect,
   HowWeUseInfo,
@@ -27,6 +27,7 @@ export default function PrivacyPage() {
             <DataSharing />
             <CookiesAndTracking />
             <YourRights />
+            <DeleteCacheSection />
             <ChildrensPrivacy />
             <PolicyChanges />
             <ContactFooter />

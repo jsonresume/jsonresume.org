@@ -66,6 +66,7 @@ export const YourRights = () => (
     <ul className="list-disc pl-6 mt-2">
       <li>Access your resume data (through your GitHub account)</li>
       <li>Delete your resume data (by deleting your GitHub Gist)</li>
+      <li>Delete your cached resume data (see section 7 below)</li>
       <li>Revoke JSON Resume's access to your GitHub account</li>
       <li>Request information about what data we have about you</li>
     </ul>
@@ -73,7 +74,7 @@ export const YourRights = () => (
 );
 
 export const ChildrensPrivacy = () => (
-  <PrivacySection number="7" title="Children's Privacy">
+  <PrivacySection number="8" title="Children's Privacy">
     <p>
       Our service is not directed to children under 13. We do not knowingly
       collect personal information from children under 13. If you are under 13,
@@ -83,7 +84,7 @@ export const ChildrensPrivacy = () => (
 );
 
 export const PolicyChanges = () => (
-  <PrivacySection number="8" title="Changes to This Policy">
+  <PrivacySection number="9" title="Changes to This Policy">
     <p>
       We may update this privacy policy from time to time. We will notify users
       of any material changes by posting the new privacy policy on this page.
