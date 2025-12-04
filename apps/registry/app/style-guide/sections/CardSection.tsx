@@ -5,7 +5,7 @@ import {
   CodeBlock,
   PropsTable,
 } from '../components';
-import { Button } from '@repo/ui/button';
+import { Button } from '@repo/ui';
 
 export function CardSection() {
   return (

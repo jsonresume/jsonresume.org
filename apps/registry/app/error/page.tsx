@@ -3,7 +3,7 @@
 import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Card, CardContent } from '@repo/ui';
-import { Button } from '@repo/ui/button';
+import { Button } from '@repo/ui';
 import Link from 'next/link';
 import {
   getReservedUsernameError,

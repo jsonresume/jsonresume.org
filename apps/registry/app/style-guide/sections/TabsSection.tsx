@@ -1,4 +1,4 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@repo/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@repo/ui';
 import { ComponentSection, Example, CodeBlock } from '../components';
 
 export function TabsSection() {

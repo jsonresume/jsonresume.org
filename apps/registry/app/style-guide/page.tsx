@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@repo/ui/tabs';
-import { ScrollArea } from '@repo/ui/scroll-area';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@repo/ui';
+import { ScrollArea } from '@repo/ui';
 import {
   ButtonSection,
   InputSection,
