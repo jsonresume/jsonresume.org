@@ -2648,6 +2648,40 @@ async function fetchResume(username) {
 }
 ```
 
+## Community Projects
+
+### Format Converters
+
+#### JSON Resume to RenderCV
+
+[jsonresume-to-rendercv](https://github.com/guruor/jsonresume-to-rendercv) - Convert your JSON Resume to RenderCV format for advanced LaTeX-based PDF generation.
+
+**Features:**
+
+- High-quality PDF output via LaTeX
+- Academic CV templates
+- Professional formatting
+- Preserves all JSON Resume data
+
+**Installation:**
+
+```bash
+npm install -g jsonresume-to-rendercv
+
+# Convert your resume
+jsonresume-to-rendercv resume.json output.yaml
+
+# Generate PDF with RenderCV
+rendercv render output.yaml
+```
+
+**Use Cases:**
+
+- Academic CVs requiring specific formatting
+- Publications and research-heavy resumes
+- Multi-page professional CVs
+- Print-optimized output
+
 ## Resources
 
 - [JSON Resume Schema](https://jsonresume.org/schema/)
