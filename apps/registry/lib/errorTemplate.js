@@ -16,6 +16,13 @@ function errorTemplate(errorObject) {
         </head>
         <body>
             <div class="error-container">
+                <div class="cache-warning">
+                    ℹ️ <strong>Seeing outdated errors?</strong> This page shows cached data for performance.
+                    If you've recently fixed these errors in your gist,
+                    <a href="https://registry.jsonresume.org/privacy" target="_blank">clear your cache</a>
+                    to refresh with the latest data.
+                </div>
+
                 <h1>⚠️ Resume Validation Failed</h1>
                 <p class="help-text">
                     Your resume.json file has <strong>${errorCount} validation ${

@@ -21,6 +21,27 @@ export const errorStyles = `
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     }
 
+    .cache-warning {
+        background: #e3f2fd;
+        border: 1px solid #90caf9;
+        border-left: 4px solid #2196f3;
+        padding: 16px;
+        margin-bottom: 24px;
+        border-radius: 6px;
+        color: #0d47a1;
+        line-height: 1.6;
+    }
+
+    .cache-warning a {
+        color: #1976d2;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .cache-warning a:hover {
+        text-decoration: underline;
+    }
+
     h1 {
         color: #d32f2f;
         margin-top: 0;
