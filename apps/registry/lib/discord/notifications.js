@@ -9,6 +9,14 @@ export {
   notifyDeployment,
   notifyUserSignup,
   notifyFeatureUsage,
+  notifyResumePublished,
+  notifyResumeUpdated,
+  notifyJobsFound,
+  notifyJobMatches,
+  notifyCoverLetterGenerated,
+  notifyInterviewSession,
+  notifyAISuggestionsAccepted,
+  notifySecurityVulnerability,
 } from './notifiers.js';
 
 // Default export for backward compatibility
@@ -18,6 +26,14 @@ import {
   notifyDeployment,
   notifyUserSignup,
   notifyFeatureUsage,
+  notifyResumePublished,
+  notifyResumeUpdated,
+  notifyJobsFound,
+  notifyJobMatches,
+  notifyCoverLetterGenerated,
+  notifyInterviewSession,
+  notifyAISuggestionsAccepted,
+  notifySecurityVulnerability,
 } from './notifiers.js';
 
 export const DiscordNotifications = {
@@ -26,6 +42,14 @@ export const DiscordNotifications = {
   notifyDeployment,
   notifyUserSignup,
   notifyFeatureUsage,
+  notifyResumePublished,
+  notifyResumeUpdated,
+  notifyJobsFound,
+  notifyJobMatches,
+  notifyCoverLetterGenerated,
+  notifyInterviewSession,
+  notifyAISuggestionsAccepted,
+  notifySecurityVulnerability,
 };
 
 export default DiscordNotifications;
