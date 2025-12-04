@@ -55,5 +55,12 @@
     "url": "https://github.com/jsonresume/jsonresume.org",
     "directory": "packages/resume-core"
   },
+  "homepage": "https://github.com/jsonresume/jsonresume.org/tree/master/packages/resume-core",
+  "bugs": {
+    "url": "https://github.com/jsonresume/jsonresume.org/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "license": "MIT"
 }

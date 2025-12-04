@@ -2,439 +2,683 @@
 
 **React component library for building ATS-friendly, print-optimized resume themes**
 
-🎉 **NEW: 67+ Components Available!** - Massively expanded from 7 to 67+ components with comprehensive layout, typography, data visualization, and specialized resume components.
+A comprehensive collection of 200+ React components, design tokens, and utilities that enable rapid development of professional resume themes. Built with styled-components for maximum flexibility and SSR support.
 
-A collection of design tokens, primitives, and utilities that enable rapid development of professional resume themes. Built for AI agents and developers to quickly create consistent, accessible, and ATS-optimized resume templates.
+## Features
 
-## Philosophy
-
-- **Framework-Agnostic**: Pure functions returning HTML strings - works with React, Vue, vanilla JS, or any framework
-- **ATS-Friendly by Default**: Best practices baked in (single column, semantic HTML, standard fonts)
-- **Composable**: Small primitives that combine to build complete resumes
-- **Themeable**: CSS variables for runtime customization
-- **Zero Dependencies**: No framework lock-in, no bloat
+- **200+ React Components** - Comprehensive primitives across 20 categories
+- **Design Tokens System** - Typography, colors, spacing, layout, radius, shadows
+- **Security Utilities** - URL validation, HTML sanitization, external link detection
+- **Calculation Helpers** - 20+ functions for resume metrics and statistics
+- **SSR Support** - Full server-side rendering with styled-components
+- **Print Optimization** - Perfect PDF exports with @media print styles
+- **ATS-Friendly** - Semantic HTML, proper heading hierarchy, accessibility features
+- **Theme Support** - ThemeProvider with customizable design tokens
 
 ## Installation
 
 ```bash
 npm install @resume/core
+# or
+yarn add @resume/core
+# or
+pnpm add @resume/core
+```
+
+**Peer Dependencies:**
+
+This package requires React 18 or 19 and styled-components:
+
+```bash
+npm install react react-dom styled-components
 ```
 
 ## Quick Start
 
-```javascript
-import { Section, SectionTitle, ListItem, DateRange, BadgeList } from '@resume/core';
-import '@resume/core/styles'; // Import CSS tokens
+```jsx
+import React from 'react';
+import {
+  ThemeProvider,
+  Section,
+  SectionTitle,
+  ListItem,
+  DateRange,
+  Badge,
+  BadgeList,
+} from '@resume/core';
 
-// Build a work experience section
-const workSection = Section({
-  id: 'work',
-  content: `
-    ${SectionTitle({ title: 'Work Experience' })}
-    ${ListItem({
-      title: 'Senior Software Engineer',
-      subtitle: 'TechCorp Inc',
-      dateRange: DateRange({ startDate: '2020-01', endDate: null }),
-      location: 'San Francisco, CA',
-      highlights: [
-        'Led team of 6 engineers',
-        'Reduced cloud costs by $200k/year',
-      ],
-    })}
-  `,
-});
+function Resume({ resume }) {
+  return (
+    <ThemeProvider>
+      <Section id="work">
+        <SectionTitle>Work Experience</SectionTitle>
+        {resume.work.map((job) => (
+          <ListItem
+            key={job.name}
+            title={job.position}
+            subtitle={job.name}
+            dateRange={<DateRange start={job.startDate} end={job.endDate} />}
+            location={job.location}
+            highlights={job.highlights}
+          />
+        ))}
+      </Section>
 
-// workSection is just an HTML string - use it anywhere!
-document.body.innerHTML = workSection;
+      <Section id="skills">
+        <SectionTitle>Skills</SectionTitle>
+        {resume.skills.map((skill) => (
+          <div key={skill.name}>
+            <h3>{skill.name}</h3>
+            <BadgeList items={skill.keywords} />
+          </div>
+        ))}
+      </Section>
+    </ThemeProvider>
+  );
+}
+
+export default Resume;
 ```
 
-## API Reference
+## Component Categories
 
-### Primitives
+### Core Primitives (7 components)
 
-All primitives are pure functions that return HTML strings.
+Basic building blocks for resume sections:
 
-#### `Section({ content, className?, id? })`
+- `Section` - Semantic section wrapper with print optimization
+- `SectionTitle` - Styled section headings
+- `ListItem` - Experience/education entries with metadata
+- `DateRange` - Smart date formatting with "Present" support
+- `Badge` - Skill tags and keywords
+- `BadgeList` - Multiple badges with consistent styling
+- `ContactInfo` - Contact details with icons
+- `Link` - Safe external links with security validation
 
-Wrapper for resume sections with consistent spacing.
+### Layout Components (6 components)
 
-```javascript
-Section({
-  id: 'work',
-  className: 'custom-section',
-  content: '<h2>Work Experience</h2>...',
-})
-// Returns: <section class="resume-section custom-section" id="work">...</section>
-```
+Structure and organization:
 
-#### `SectionTitle({ title, icon?, level?, className? })`
+- `GridLayout` - Multi-column responsive grids
+- `SidebarLayout` - Two-column layout with sidebar
+- `StackLayout` - Vertical stacking with spacing
+- `CardLayout` - Card-based content containers
+- `FlexLayout` - Flexible box layouts
+- `TwoColumnMicroGrid` - Compact two-column grids
 
-Styled section headings with optional icons.
+### Skills Components (6 components)
 
-```javascript
-SectionTitle({
-  title: 'Work Experience',
-  icon: '💼',
-  level: 'h2' // default
-})
-// Returns: <h2 class="resume-section-title"><span class="resume-icon">💼</span> Work Experience</h2>
-```
+Visual skill representations:
 
-#### `ListItem({ title, subtitle?, dateRange?, location?, description?, highlights?, className? })`
+- `SkillBar` - Progress bar visualization
+- `SkillPill` - Pill-shaped skill badges
+- `SkillRating` - Star or dot rating display
+- `SkillGroup` - Grouped skill categories
+- `SkillCloud` - Tag cloud visualization
+- `SkillCategory` - Categorized skill lists
 
-Experience/education list item with full metadata support.
+### Profile Components (4 components)
 
-```javascript
-ListItem({
-  title: 'Senior Software Engineer',
-  subtitle: 'TechCorp Inc',
-  dateRange: 'Jan 2020 - Present',
-  location: 'San Francisco, CA',
-  description: 'Tech lead for core product platform',
-  highlights: [
-    'Led migration to microservices',
-    'Reduced deployment time by 75%',
-  ],
-})
-```
+Header and contact sections:
 
-**Output structure:**
-```html
-<div class="resume-item">
-  <div class="resume-item-header">
-    <h3 class="resume-item-title">Senior Software Engineer</h3>
-  </div>
-  <div class="resume-item-subtitle">TechCorp Inc</div>
-  <div class="resume-item-meta">
-    <span class="resume-date">Jan 2020 - Present</span>
-    <span class="resume-location">San Francisco, CA</span>
-  </div>
-  <div class="resume-description">Tech lead for core product platform</div>
-  <ul class="resume-highlights">
-    <li>Led migration to microservices</li>
-    <li>Reduced deployment time by 75%</li>
-  </ul>
-</div>
-```
+- `Avatar` - Profile image with fallback
+- `ProfileCard` - Complete profile header
+- `ContactGrid` - Grid of contact methods
+- `SocialLinks` - Social media icon links
 
-#### `DateRange({ startDate, endDate?, format? })`
+### Typography Components (6 components)
 
-Formats date ranges with automatic "Present" for ongoing roles.
+Text styling and formatting:
 
-```javascript
-DateRange({ startDate: '2020-01-15', endDate: null })
-// Returns: "Jan 2020 - Present"
+- `Heading` - Semantic headings (h1-h6)
+- `Text` - Body text with variants
+- `Label` - Small labels and captions
+- `SectionIntroParagraph` - Section introductions
+- `QuoteStripe` - Pull quotes
+- `HyphenationSafeParagraph` - Print-safe paragraphs
 
-DateRange({
-  startDate: '2020-01-15',
-  endDate: '2022-06-30',
-  format: 'long' // 'short' (default), 'long', 'numeric'
-})
-// Returns: "January 2020 - June 2022"
-```
+### Data Display Components (10 components)
 
-#### `Badge({ text, variant?, size?, className? })`
+Metrics and statistics:
 
-Display skills, keywords, tags in badge format.
+- `ProgressCircle` - Circular progress indicators
+- `StatCard` - Statistic cards
+- `MetricBar` - Horizontal metric bars
+- `MetricInline` - Inline metric display
+- `MetricBullet` - Bullet-style metrics
+- `MetricBulletList` - List of bullet metrics
+- `KPIChipLine` - Key performance indicator chips
+- `KPIChip` - Single KPI chip
+- `KeyValueInline` - Inline key-value pairs
+- `KeyValue` - Block key-value pairs
 
-```javascript
-Badge({
-  text: 'JavaScript',
-  variant: 'accent', // 'default', 'accent', 'secondary'
-  size: 'md' // 'sm', 'md', 'lg'
-})
-// Returns: <span class="resume-badge resume-badge-accent resume-badge-md">JavaScript</span>
-```
+### Experience Components (4 components)
 
-#### `BadgeList({ items, variant?, size?, className? })`
+Work history layouts:
 
-Render multiple badges with consistent styling.
+- `ExperienceCard` - Card-based job entries
+- `ExperienceTimeline` - Timeline visualization
+- `ExperienceGrid` - Grid layout for multiple jobs
+- `ExperienceCompact` - Condensed job listings
 
-```javascript
-BadgeList({
-  items: ['React', 'TypeScript', 'Node.js'],
-  variant: 'accent'
-})
-```
+### Header/Footer Components (11 components)
 
-**Output:**
-```html
-<div class="resume-badge-list">
-  <span class="resume-badge resume-badge-accent">React</span>
-  <span class="resume-badge resume-badge-accent">TypeScript</span>
-  <span class="resume-badge resume-badge-accent">Node.js</span>
-</div>
-```
+Page headers and footers:
 
-### Design Tokens
+- `HeaderCentered` - Centered header layout
+- `HeaderSplit` - Two-column header
+- `HeaderMinimal` - Minimal header design
+- `CornerInitials` - Initials in corner
+- `Footer` - Page footer
+- `PageBreak` - Explicit page breaks
+- `HeroNameBlock` - Large name display
+- `ContactRowLine` - Single-line contact row
+- `SectionRuleTitle` - Title with horizontal rule
+- `SectionFlagTitle` - Title with accent flag
+- `NameStackElegant` - Elegant name stack
 
-#### CSS Variables
+### Timeline Components (4 components)
 
-Import the stylesheet to use CSS custom properties:
+Chronological displays:
 
-```javascript
-import '@resume/core/styles';
-```
+- `TimelineSection` - Full timeline section
+- `TimelineItem` - Individual timeline entry
+- `TimelineRuleMinimal` - Minimal timeline rule
+- `TimelineInline` - Inline timeline display
 
-**Available tokens:**
+### Quote/Testimonial Components (3 components)
 
-```css
-/* Typography - ATS-friendly fonts */
---resume-font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
---resume-font-serif: Cambria, Georgia, "Times New Roman", serif;
+Highlighted quotes:
 
-/* Font Sizes - Optimal readability */
---resume-size-name: 36px;
---resume-size-heading: 16px;
---resume-size-body: 11px;
+- `PullQuote` - Sidebar pull quotes
+- `Testimonial` - Testimonial cards
+- `BlockQuote` - Block quote styling
 
-/* Colors - Professional theme (customizable) */
---resume-color-primary: #1a1a1a;
---resume-color-secondary: #6b7280;
---resume-color-tertiary: #9ca3af;
---resume-color-accent: #2563eb;
---resume-color-accent-light: #dbeafe;
---resume-color-muted: #f3f4f6;
+### Certification/Award Components (4 components)
 
-/* Spacing */
---resume-space-section: 24px;
---resume-space-item: 16px;
+Credentials and honors:
 
-/* Layout */
---resume-max-width: 660px;
+- `CertificationBadge` - Certification badges
+- `CertificationRow` - Row-based cert display
+- `AwardCard` - Award cards
+- `HonorsList` - List of honors
 
-/* Border Radius */
---resume-radius-sm: 4px;
---resume-radius-md: 6px;
-```
+### Language Components (4 components)
 
-#### JavaScript/TypeScript Exports
+Language proficiency:
 
-Access tokens programmatically:
+- `LanguageBar` - Progress bar for proficiency
+- `LanguageLevelBarLite` - Compact proficiency bar
+- `LanguageGrid` - Grid of languages
+- `ProficiencyScale` - Visual proficiency scale
 
-```javascript
-import { typography, colors, spacing, layout, rawTokens } from '@resume/core/tokens';
+### Publication/Portfolio Components (4 components)
 
+Academic and creative work:
+
+- `PublicationItem` - Publication entries
+- `PublicationEntryPlain` - Plain publication format
+- `PortfolioGrid` - Portfolio item grid
+- `ProjectCard` - Project showcase cards
+
+### Table Components (3 components)
+
+Structured data:
+
+- `SkillMatrix` - Skills matrix table
+- `ComparisonTable` - Comparison tables
+- `DataTable` - Generic data tables
+
+### List Components (11 components)
+
+Various list styles:
+
+- `CheckList` - Checkmark lists
+- `IconList` - Lists with icons
+- `NumberedList` - Numbered lists
+- `BulletList` - Bullet point lists
+- `CompactList` - Condensed lists
+- `AchievementListTight` - Tight achievement lists
+- `AchievementListSpacious` - Spacious achievements
+- `HangingBulletList` - Hanging indent bullets
+- `ListDashCompact` - Dash-separated lists
+- `MiniDotLeaderList` - Dot leader lists
+- `DefinitionKeyline` - Definition lists
+
+### Callout Components (3 components)
+
+Highlighted content:
+
+- `Callout` - Callout boxes
+- `InfoBox` - Information boxes
+- `HighlightCard` - Highlighted cards
+
+### Visual Components (4 components)
+
+Decorative elements:
+
+- `BackgroundPattern` - Background patterns
+- `ColorBlock` - Colored blocks
+- `DividerVariants` - Various divider styles
+- `BorderAccent` - Border accents
+
+### Date Components (2 components)
+
+Date formatting:
+
+- `DateBadge` - Date badges
+- `RelativeDate` - Relative date formatting
+
+### Print Utilities (8 components)
+
+Print optimization:
+
+- `KeepTogether` - Prevent page breaks
+- `ColumnBreak` - Force column breaks
+- `PrintOnly` - Show only in print
+- `ScreenOnly` - Show only on screen
+- `PageHeaderLine` - Print headers
+- `PageFooterLine` - Print footers
+- `LetterheadBar` - Letterhead styling
+- `SoftShadowEmulation` - Print-safe shadows
+
+### Metadata Components (5 components)
+
+Supplementary information:
+
+- `InlineKicker` - Inline kickers
+- `MetaRow` - Metadata rows
+- `SubsectionLabel` - Subsection labels
+- `GreyLabelCaps` - Small caps labels
+- `SmallCapsHeading` - Small caps headings
+
+### Container Components (4 components)
+
+Content containers:
+
+- `MutedPanel` - Muted background panels
+- `AccentCalloutPanel` - Accent panels
+- `SoftCardOutline` - Soft card outlines
+- `RoleBlockFramed` - Framed role blocks
+
+### Tag/Badge Components (2 components)
+
+Tags and badges:
+
+- `ToolTagRibbon` - Tool tag ribbons
+- `BadgeRowOutline` - Outlined badge rows
+
+## Design Tokens
+
+Access design tokens for consistent theming:
+
+```jsx
+import { typography, colors, spacing, layout, radius, shadows } from '@resume/core';
+
+console.log(colors.primary); // 'var(--resume-color-primary)'
 console.log(typography.fonts.sans); // 'var(--resume-font-sans)'
-console.log(rawTokens.typography.fonts.sans); // '"Helvetica Neue", Helvetica, Arial, sans-serif'
 ```
 
-**Use cases:**
-- PDF generation (use `rawTokens`)
-- Dynamic theming
-- Server-side rendering
+**Available token categories:**
 
-### Theming
+- `typography` - Font families, sizes, weights, line heights
+- `colors` - Primary, secondary, accent, muted, background colors
+- `spacing` - Margins, padding, gaps
+- `layout` - Max widths, container sizes
+- `radius` - Border radius values
+- `shadows` - Box shadow definitions
 
-#### Built-in Theme Variants
+**Raw tokens** (for SSR/PDF generation):
 
-Apply theme variants with `data-theme` attribute:
+```jsx
+import { rawTokens } from '@resume/core';
 
-```html
-<body data-theme="modern">
-  <!-- All content uses modern theme colors -->
-</body>
+console.log(rawTokens.typography.fonts.sans);
+// '"Helvetica Neue", Helvetica, Arial, sans-serif'
 ```
 
-**Available themes:**
-- `modern` - Purple accent (#8b5cf6)
-- `classic` - Blue accent (#0066cc)
-- `minimal` - Grayscale (#374151)
-- `high-contrast` - Black and white for accessibility
+## Security Utilities
 
-#### Custom Themes
+Protect against XSS and malicious URLs:
 
-Override CSS variables in your stylesheet:
+```jsx
+import { safeUrl, sanitizeHtml, isExternalUrl, getLinkRel } from '@resume/core';
 
-```css
-/* Custom brand theme */
-:root {
-  --resume-color-accent: #ff6b35; /* Custom orange */
-  --resume-font-sans: 'Inter', sans-serif;
+// Validate URLs before rendering
+const url = safeUrl(userProvidedUrl); // Returns safe URL or '#'
+
+// Sanitize HTML content
+const clean = sanitizeHtml(userHTML); // Strips dangerous tags/attributes
+
+// Check if URL is external
+if (isExternalUrl(url)) {
+  // Add external link indicators
+}
+
+// Get appropriate rel attribute
+const rel = getLinkRel(url); // Returns 'noopener noreferrer' for external
+```
+
+**Best practices:**
+
+- Always use `safeUrl()` for user-provided URLs
+- Use `sanitizeHtml()` for any user HTML content
+- Apply `getLinkRel()` to external links
+
+## Calculation Helpers
+
+Calculate resume metrics and statistics:
+
+```jsx
+import {
+  calculateTotalExperience,
+  countCompanies,
+  getHighestDegree,
+  isCurrentlyEmployed,
+} from '@resume/core';
+
+const resume = { work: [...], education: [...] };
+
+const experience = calculateTotalExperience(resume.work); // Years of experience
+const companies = countCompanies(resume.work); // Number of companies
+const degree = getHighestDegree(resume.education); // Highest degree
+const employed = isCurrentlyEmployed(resume.work); // Boolean
+```
+
+**Available calculations:**
+
+- `calculateTotalExperience(work)` - Total years of experience
+- `calculateCurrentRoleExperience(work)` - Current role duration
+- `countCompanies(work)` - Number of companies worked at
+- `countProjects(projects)` - Number of projects
+- `countPublications(publications)` - Number of publications
+- `countAwards(awards)` - Number of awards
+- `countTotalSkills(skills)` - Total skill count
+- `countSkillCategories(skills)` - Number of skill categories
+- `countLanguages(languages)` - Number of languages
+- `calculateVolunteerYears(volunteer)` - Years of volunteer work
+- `calculateEducationYears(education)` - Years of education
+- `getHighestDegree(education)` - Highest degree earned
+- `countCareerPositions(work)` - Total positions held
+- `getCareerProgressionRate(work)` - Career progression rate
+- `countTotalHighlights(work)` - Total highlights across jobs
+- `getUniqueIndustries(work)` - Unique industries worked in
+- `getCurrentEmployer(work)` - Current employer name
+- `isCurrentlyEmployed(work)` - Employment status
+- `calculateKeyMetrics(resume)` - All metrics in one object
+
+## Server-Side Rendering (SSR)
+
+Full SSR support with styled-components:
+
+```jsx
+import { renderToString } from 'react-dom/server';
+import { ServerStyleSheet } from 'styled-components';
+import Resume from './Resume';
+
+export function render(resume) {
+  const sheet = new ServerStyleSheet();
+
+  try {
+    const html = renderToString(sheet.collectStyles(<Resume resume={resume} />));
+    const styleTags = sheet.getStyleTags();
+
+    return `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <title>${resume.basics.name} - Resume</title>
+          ${styleTags}
+        </head>
+        <body>
+          ${html}
+        </body>
+      </html>
+    `;
+  } finally {
+    sheet.seal();
+  }
 }
 ```
 
-Or programmatically:
+**IMPORTANT:** Without `ServerStyleSheet`, styled-components won't inject CSS and your theme will have no styles!
 
-```javascript
-document.documentElement.style.setProperty('--resume-color-accent', '#ff6b35');
-```
+## Theme Building Tutorial
 
-## Design Principles
-
-### 1. ATS-Friendly by Default
-
-Research shows that 68% of hiring managers prefer sans-serif fonts (Adobe 2025 study). Our defaults follow best practices:
-
-- **Single-column layout** - ATS parsers struggle with multi-column
-- **Semantic HTML** - `<header>`, `<section>`, proper heading hierarchy
-- **Standard fonts** - Helvetica, Arial, Calibri (widely supported)
-- **No tables** - Tables confuse ATS systems
-- **Optimal font sizes** - 36px name, 16px headings, 11px body
-
-### 2. Print-Optimized
-
-Built-in `@media print` rules ensure resumes print perfectly:
-
-```css
-@media print {
-  @page {
-    size: A4;
-    margin: 0.5in;
-  }
-
-  .resume-section {
-    page-break-inside: avoid;
-  }
-
-  body {
-    orphans: 3;
-    widows: 3;
-  }
-}
-```
-
-### 3. Framework-Agnostic
-
-Pure functions returning strings work everywhere:
-
-```javascript
-// React
-function Resume({ data }) {
-  return <div dangerouslySetInnerHTML={{ __html: Section({ content: data }) }} />;
-}
-
-// Vue
-<template>
-  <div v-html="section" />
-</template>
-
-// Vanilla JS
-document.getElementById('resume').innerHTML = Section({ content });
-```
-
-### 4. Accessible
-
-- Semantic HTML for screen readers
-- Proper ARIA labels where needed
-- High contrast mode support
-- Keyboard navigation friendly
-
-## Testing
-
-All primitives are fully tested:
+### Step 1: Create Theme Package
 
 ```bash
-pnpm test
+mkdir packages/jsonresume-theme-myname
+cd packages/jsonresume-theme-myname
+pnpm init
 ```
 
-**Coverage:**
-- Section wrapper and attributes
-- SectionTitle with icons and levels
-- ListItem with all metadata fields
-- DateRange formatting and "Present" handling
-- Badge variants and sizes
-- BadgeList rendering
+### Step 2: Configure package.json
+
+```json
+{
+  "name": "jsonresume-theme-myname",
+  "version": "1.0.0",
+  "main": "./src/index.js",
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "dependencies": {
+    "@resume/core": "workspace:*",
+    "styled-components": "workspace:*"
+  }
+}
+```
+
+### Step 3: Create Resume Component
+
+```jsx
+// src/Resume.jsx
+import React from 'react';
+import {
+  ThemeProvider,
+  Section,
+  SectionTitle,
+  ProfileCard,
+  ExperienceTimeline,
+  BadgeList,
+} from '@resume/core';
+
+export default function Resume({ resume }) {
+  const { basics, work, education, skills } = resume;
+
+  return (
+    <ThemeProvider>
+      <ProfileCard
+        name={basics.name}
+        label={basics.label}
+        email={basics.email}
+        phone={basics.phone}
+        url={basics.url}
+        summary={basics.summary}
+      />
+
+      <Section id="work">
+        <SectionTitle>Experience</SectionTitle>
+        <ExperienceTimeline items={work} />
+      </Section>
+
+      <Section id="education">
+        <SectionTitle>Education</SectionTitle>
+        {education.map((edu) => (
+          <div key={edu.institution}>
+            <h3>{edu.institution}</h3>
+            <p>
+              {edu.studyType} in {edu.area}
+            </p>
+          </div>
+        ))}
+      </Section>
+
+      <Section id="skills">
+        <SectionTitle>Skills</SectionTitle>
+        {skills.map((skill) => (
+          <div key={skill.name}>
+            <h4>{skill.name}</h4>
+            <BadgeList items={skill.keywords} />
+          </div>
+        ))}
+      </Section>
+    </ThemeProvider>
+  );
+}
+```
+
+### Step 4: Create Render Function
+
+```jsx
+// src/index.js
+import { renderToString } from 'react-dom/server';
+import { ServerStyleSheet } from 'styled-components';
+import Resume from './Resume.jsx';
+
+export function render(resume) {
+  const sheet = new ServerStyleSheet();
+
+  try {
+    const html = renderToString(sheet.collectStyles(<Resume resume={resume} />));
+    const styles = sheet.getStyleTags();
+
+    return `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <title>${resume.basics.name} - Resume</title>
+          ${styles}
+        </head>
+        <body>
+          ${html}
+        </body>
+      </html>
+    `;
+  } finally {
+    sheet.seal();
+  }
+}
+```
+
+### Step 5: Register Theme
+
+Add to `apps/registry/lib/formatters/template/themeConfig.js`:
+
+```javascript
+import * as myTheme from 'jsonresume-theme-myname';
+
+export const THEMES = {
+  // ...
+  myname: {
+    name: 'My Theme',
+    theme: myTheme,
+    description: 'A beautiful custom theme',
+  },
+};
+```
 
 ## Examples
 
-### Complete Resume Theme
+### Complete Resume
 
-See [jsonresume-theme-reference](../jsonresume-theme-reference) for a full implementation using all primitives.
+```jsx
+import Resume from 'jsonresume-theme-myname';
 
-### Minimal Example
+const resumeData = {
+  basics: {
+    name: 'John Doe',
+    label: 'Software Engineer',
+    email: 'john@example.com',
+    // ...
+  },
+  work: [
+    {
+      name: 'TechCorp',
+      position: 'Senior Engineer',
+      startDate: '2020-01',
+      endDate: null,
+      highlights: ['Led team of 6', 'Reduced costs by $200k'],
+    },
+  ],
+  // ...
+};
 
-```javascript
-import { Section, SectionTitle, BadgeList } from '@resume/core';
-
-const skillsSection = Section({
-  content: `
-    ${SectionTitle({ title: 'Skills' })}
-    ${BadgeList({ items: ['JavaScript', 'TypeScript', 'React', 'Node.js'] })}
-  `,
-});
-
-console.log(skillsSection);
+const html = Resume.render(resumeData);
 ```
 
-### Advanced: PDF Generation
+### Custom Styling
 
-```javascript
-import { rawTokens } from '@resume/core/tokens';
-import puppeteer from 'puppeteer';
+```jsx
+import styled from 'styled-components';
+import { Section as BaseSection } from '@resume/core';
 
-const resume = render(resumeData);
+const CustomSection = styled(BaseSection)`
+  background: linear-gradient(to right, #f0f0f0, #ffffff);
+  padding: 2rem;
+  border-radius: 8px;
+`;
+```
 
-const browser = await puppeteer.launch();
-const page = await browser.newPage();
-await page.setContent(resume);
-await page.pdf({
-  path: 'resume.pdf',
-  format: 'A4',
-  printBackground: true,
-});
+## TypeScript Support
+
+TypeScript definitions are included:
+
+```typescript
+import { Section, SectionTitle, ListItem } from '@resume/core';
+import type { Resume } from '@resume/core';
+
+function MyResume({ resume }: { resume: Resume }) {
+  // Full type safety
+}
 ```
 
 ## Browser Support
 
-- **Modern Browsers**: Chrome 90+, Firefox 88+, Safari 14+, Edge 90+
-- **CSS Custom Properties**: Required (all modern browsers)
-- **Print**: Full support for PDF generation
+- Chrome 90+
+- Firefox 88+
+- Safari 14+
+- Edge 90+
+
+**Requirements:**
+
+- CSS Custom Properties support
+- ES6+ JavaScript
 
 ## Performance
 
-- **Bundle Size**: ~3KB minified + gzipped
-- **Zero Dependencies**: No framework required
-- **Tree-Shakeable**: Import only what you need
-- **Render Time**: <1ms per primitive
+- **Bundle Size:** ~15KB minified + gzipped (core components only)
+- **Tree-Shakeable:** Import only what you need
+- **SSR Optimized:** Fast server-side rendering
+- **Print Optimized:** Perfect PDF generation
 
 ## Contributing
 
-This is a foundational library for the JSON Resume ecosystem. Contributions welcome for:
+Contributions welcome! Please follow these guidelines:
 
-- New primitives (keep them simple and composable)
-- Additional theme variants
-- Accessibility improvements
-- Bug fixes
+1. **Add Tests:** All new components must have tests
+2. **Follow Conventions:** Use existing naming patterns
+3. **Document:** Add JSDoc comments and examples
+4. **Keep Components Small:** Under 200 lines per file
+5. **Use Styled Components:** Consistent with existing code
 
-**Guidelines:**
-- All new primitives must have tests
-- Follow existing naming conventions
-- Keep functions pure (no side effects)
-- Document with JSDoc comments
+## Related Packages
 
-## Recent Updates
+- [jsonresume-theme-standard](../jsonresume-theme-standard) - Classic theme
+- [jsonresume-theme-professional](../jsonresume-theme-professional) - Professional theme
+- [jsonresume-theme-spartacus](../jsonresume-theme-spartacus) - Spartacus theme
 
-### v0.2.0 - Component Library Expansion
+## Support
 
-**Added 60+ new components across 20 categories:**
-
-✅ ThemeProvider with 5 theme variants
-✅ 5 Layout components (Grid, Sidebar, Stack, Card, Flex)
-✅ 6 Skills components (Bar, Pill, Rating, Group, Cloud, Category)
-✅ 4 Profile components (Avatar, ProfileCard, ContactGrid, SocialLinks)
-✅ 3 Typography components (Heading, Text, Label)
-✅ 3 Data display components (ProgressCircle, StatCard, MetricBar)
-✅ 4 Experience components (Card, Timeline, Grid, Compact)
-✅ 5 Header/Footer components
-✅ 9 Quote/Award/Certification components
-✅ 6 Language/Publication components
-✅ 6 Table/Matrix components
-✅ 8 Callout/List components
-✅ 6 Date/Visual components
-✅ 4 Print utilities (KeepTogether, PageBreak, PrintOnly, ScreenOnly)
-
-See `BUILD_COMPONENTS.md` for full component list and `COMPONENT_EXPANSION_PROPOSAL.md` for design rationale.
-
-## Roadmap
-
-- [x] More section primitives (Timeline, Grid layouts) - **COMPLETE**
-- [ ] Storybook documentation for all components
-- [ ] TypeScript type definitions
-- [ ] ATS validation utilities
-- [ ] Icon system
-- [ ] RTL (right-to-left) text support
-- [ ] Accessibility audit tools
+- **Issues:** [GitHub Issues](https://github.com/jsonresume/jsonresume.org/issues)
+- **Discussions:** [GitHub Discussions](https://github.com/jsonresume/jsonresume.org/discussions)
+- **Documentation:** [jsonresume.org](https://jsonresume.org)
 
 ## License
 
@@ -442,4 +686,4 @@ MIT
 
 ---
 
-**Part of the [JSON Resume](https://jsonresume.org) ecosystem** - Open source resume standard used by thousands of developers
+**Part of the [JSON Resume](https://jsonresume.org) ecosystem** - Open source resume standard used by thousands of developers worldwide.
