@@ -1,5 +1,6 @@
 const { generateText } = require('ai');
 const { openai } = require('@ai-sdk/openai');
+const { notifyFeatureUsage } = require('../../lib/discord/notifiers.js');
 
 /*
 #wishlist
@@ -56,6 +57,19 @@ export default async function handler(req, res) {
       temperature: 0.85,
       prompt: prompt.join(''),
     });
+
+    // Send Discord notification for AI feature usage
+    try {
+      await notifyFeatureUsage('cover_letter_generated', {
+        username,
+        tone,
+        hasJobDescription: !!jobDescription,
+        wordCount: text.split(' ').length,
+      });
+    } catch (discordError) {
+      // Don't fail the request if Discord notification fails
+      console.error('Discord notification failed:', discordError.message);
+    }
 
     return res.status(200).send(text);
   } catch (error) {

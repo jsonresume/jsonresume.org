@@ -10,6 +10,7 @@ const async = require('async');
 const fs = require('fs');
 const path = require('path');
 const { createClient } = require('@supabase/supabase-js');
+const { notifyFeatureUsage } = require('../../lib/discord/notifiers.js');
 
 const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
 const supabaseKey = process.env.SUPABASE_KEY;
@@ -134,6 +135,22 @@ async function findLatestWhoIsHiringThread() {
       console.log(`❌ ${errorCount} errors`);
     }
     console.log('✨ Import complete!\n');
+
+    // Send Discord notification
+    try {
+      await notifyFeatureUsage('hn_jobs_imported', {
+        inserted: insertedCount,
+        duplicates: duplicateCount,
+        errors: errorCount,
+        total: comments.length,
+        threadTitle: latestThread.title,
+        threadUrl: `https://news.ycombinator.com/item?id=${threadId}`,
+      });
+      console.log('📢 Discord notification sent');
+    } catch (discordError) {
+      console.error('⚠️  Discord notification failed:', discordError.message);
+      // Don't fail the import if Discord notification fails
+    }
 
     return result;
   } catch (error) {

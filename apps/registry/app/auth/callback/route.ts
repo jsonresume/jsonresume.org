@@ -2,6 +2,7 @@ import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import logger from '@/lib/logger';
+import { notifyUserSignup } from '@/lib/discord/notifiers';
 
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
@@ -54,6 +55,30 @@ export async function GET(request: Request) {
           },
           'Error updating user metadata'
         );
+      } else {
+        // Notify Discord of new user signup
+        const username = userData.user.user_metadata.user_name;
+        const avatarUrl = userData.user.user_metadata.avatar_url;
+
+        try {
+          await notifyUserSignup(username, 'github', avatarUrl);
+          logger.debug(
+            { username },
+            'Discord notification sent for user signup'
+          );
+        } catch (discordError) {
+          // Don't fail the auth flow if Discord notification fails
+          logger.error(
+            {
+              error:
+                discordError instanceof Error
+                  ? discordError.message
+                  : 'Unknown error',
+              username,
+            },
+            'Failed to send Discord signup notification'
+          );
+        }
       }
     }
   }
