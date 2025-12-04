@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { DELETE } from './route';
-import { NextResponse } from 'next/server';
 
 // Mock dependencies
 vi.mock('@supabase/auth-helpers-nextjs', () => ({
