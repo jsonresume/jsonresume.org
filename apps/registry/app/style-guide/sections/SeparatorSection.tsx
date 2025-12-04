@@ -1,4 +1,4 @@
-import { Separator } from '@repo/ui/separator';
+import { Separator } from '@repo/ui';
 import { ComponentSection, Example, CodeBlock } from '../components';
 
 export function SeparatorSection() {

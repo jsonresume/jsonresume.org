@@ -3,7 +3,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '@repo/ui/accordion';
+} from '@repo/ui';
 import { ComponentSection, Example, CodeBlock } from '../components';
 
 export function AccordionSection() {

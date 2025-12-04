@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@repo/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@repo/ui';
 import { ComponentSection, Example, CodeBlock } from '../components';
 
 export function AvatarSection() {

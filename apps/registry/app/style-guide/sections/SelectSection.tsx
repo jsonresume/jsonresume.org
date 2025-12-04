@@ -4,7 +4,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@repo/ui/select';
+} from '@repo/ui';
 import { ComponentSection, Example, CodeBlock } from '../components';
 
 export function SelectSection() {

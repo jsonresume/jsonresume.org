@@ -5,7 +5,7 @@ import {
   TimelineContent,
   TimelineHeading,
   TimelineLine,
-} from '@repo/ui/timeline';
+} from '@repo/ui';
 import { ComponentSection, Example, CodeBlock } from '../components';
 
 export function TimelineSection() {

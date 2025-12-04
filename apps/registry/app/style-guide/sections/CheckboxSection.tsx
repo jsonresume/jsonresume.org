@@ -1,4 +1,4 @@
-import { Checkbox } from '@repo/ui/checkbox';
+import { Checkbox } from '@repo/ui';
 import { ComponentSection, Example, CodeBlock } from '../components';
 
 export function CheckboxSection() {

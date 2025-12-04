@@ -1,4 +1,4 @@
-import { Progress } from '@repo/ui/progress';
+import { Progress } from '@repo/ui';
 import { ComponentSection, Example, CodeBlock } from '../components';
 
 export function ProgressSection() {

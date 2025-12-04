@@ -1,5 +1,5 @@
-import { Input } from '@repo/ui/input';
-import { Textarea } from '@repo/ui/textarea';
+import { Input } from '@repo/ui';
+import { Textarea } from '@repo/ui';
 import {
   ComponentSection,
   Example,
