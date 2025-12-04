@@ -2,6 +2,72 @@
 
 Utility scripts for the jsonresume.org registry application.
 
+## Database Maintenance
+
+### `cleanup-deleted-gists.js`
+
+Removes cached resume data for users whose GitHub gists have been deleted. This keeps the /explore page clean and up-to-date by removing stale entries.
+
+**Purpose**: Over time, users may delete their GitHub gists without using the registry's privacy page. This leaves stale cached data in the database that shows up in /explore search results. This script identifies and removes those stale entries.
+
+**Prerequisites:**
+- `SUPABASE_KEY` environment variable with admin/service role permissions
+
+**Usage:**
+
+```bash
+# Dry run (recommended first) - shows what would be deleted
+cd apps/registry
+SUPABASE_KEY=your_key_here pnpm cleanup:gists:dry-run
+
+# With limit for testing
+SUPABASE_KEY=your_key_here pnpm cleanup:gists:dry-run -- --limit=10
+
+# Actual deletion
+SUPABASE_KEY=your_key_here pnpm cleanup:gists
+
+# With limit for incremental cleanup
+SUPABASE_KEY=your_key_here pnpm cleanup:gists -- --limit=100
+```
+
+**Options:**
+- `--dry-run` - Show what would be deleted without actually deleting
+- `--limit=N` - Only process N users (useful for testing or incremental cleanup)
+
+**How It Works:**
+
+1. Fetches cached resumes from Supabase `resumes` table
+2. For each cached resume, checks if the gist still exists via HEAD request to `https://gist.githubusercontent.com/{username}/raw/resume.json`
+3. Identifies gists that return non-200 status (deleted or inaccessible)
+4. Deletes cache entries for deleted gists from the `resumes` table
+5. Includes 100ms delay between checks to avoid rate limiting
+
+**Example Output:**
+
+```json
+{"level":30,"msg":"Starting cleanup of deleted gists","isDryRun":true,"limit":"unlimited"}
+{"level":30,"msg":"Checking gists for users","count":245}
+{"level":30,"msg":"Found deleted gist","username":"deleteduser123","createdAt":"2024-01-15"}
+{"level":30,"msg":"Gist check complete","total":245,"existing":243,"deleted":2}
+{"level":30,"msg":"DRY RUN: Would delete these users","usernames":["deleteduser123","olduser456"]}
+```
+
+**Automation:**
+
+For production environments, consider running this script:
+- As a scheduled cron job (weekly or monthly)
+- Via GitHub Actions on a schedule
+- As a Vercel cron job (see Vercel docs)
+
+**Security:**
+- Never commit `SUPABASE_KEY` to version control
+- The script requires admin/service role permissions
+- Always run with `--dry-run` first to verify behavior
+
+**Related:**
+- `/api/privacy/delete-cache` - User-facing API for manual cache deletion
+- `/explore` - Public search page displaying cached resume data
+
 ## Theme Screenshot Generator
 
 Automatically generates preview images for resume themes.

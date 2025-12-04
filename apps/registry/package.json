@@ -12,7 +12,9 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "cleanup:gists": "node scripts/cleanup-deleted-gists.js",
+    "cleanup:gists:dry-run": "node scripts/cleanup-deleted-gists.js --dry-run"
   },
   "dependencies": {
     "@ai-sdk/openai": "^2.0.42",
