@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Initial public release of @resume/core
+- Initial public release of @jsonresume/core (published under @jsonresume scope for consistency with @jsonresume/schema)
 - React primitives for resume components (Section, SectionTitle, ListItem, DateRange, Badge, etc.)
 - Design tokens system (typography, colors, spacing, layout, radius, shadows)
 - Security utilities (safeUrl, sanitizeHtml, isExternalUrl, getLinkRel)
@@ -64,4 +64,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GitHub repository links
 - MIT license
 
-[0.1.0]: https://github.com/jsonresume/jsonresume.org/releases/tag/@resume/core@0.1.0
+[0.1.0]: https://github.com/jsonresume/jsonresume.org/releases/tag/@jsonresume/core@0.1.0

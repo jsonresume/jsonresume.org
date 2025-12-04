@@ -1,5 +1,5 @@
 {
-  "name": "@resume/core",
+  "name": "@jsonresume/core",
   "version": "0.1.0",
   "description": "Framework-agnostic resume component core - design tokens, primitives, and validators",
   "main": "./src/index.js",

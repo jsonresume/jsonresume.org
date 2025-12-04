@@ -1,4 +1,4 @@
-# @resume/core
+# @jsonresume/core
 
 **React component library for building ATS-friendly, print-optimized resume themes**
 
@@ -18,11 +18,11 @@ A comprehensive collection of 200+ React components, design tokens, and utilitie
 ## Installation
 
 ```bash
-npm install @resume/core
+npm install @jsonresume/core
 # or
-yarn add @resume/core
+yarn add @jsonresume/core
 # or
-pnpm add @resume/core
+pnpm add @jsonresume/core
 ```
 
 **Peer Dependencies:**
@@ -45,7 +45,7 @@ import {
   DateRange,
   Badge,
   BadgeList,
-} from '@resume/core';
+} from '@jsonresume/core';
 
 function Resume({ resume }) {
   return (
@@ -313,7 +313,7 @@ Tags and badges:
 Access design tokens for consistent theming:
 
 ```jsx
-import { typography, colors, spacing, layout, radius, shadows } from '@resume/core';
+import { typography, colors, spacing, layout, radius, shadows } from '@jsonresume/core';
 
 console.log(colors.primary); // 'var(--resume-color-primary)'
 console.log(typography.fonts.sans); // 'var(--resume-font-sans)'
@@ -331,7 +331,7 @@ console.log(typography.fonts.sans); // 'var(--resume-font-sans)'
 **Raw tokens** (for SSR/PDF generation):
 
 ```jsx
-import { rawTokens } from '@resume/core';
+import { rawTokens } from '@jsonresume/core';
 
 console.log(rawTokens.typography.fonts.sans);
 // '"Helvetica Neue", Helvetica, Arial, sans-serif'
@@ -342,7 +342,7 @@ console.log(rawTokens.typography.fonts.sans);
 Protect against XSS and malicious URLs:
 
 ```jsx
-import { safeUrl, sanitizeHtml, isExternalUrl, getLinkRel } from '@resume/core';
+import { safeUrl, sanitizeHtml, isExternalUrl, getLinkRel } from '@jsonresume/core';
 
 // Validate URLs before rendering
 const url = safeUrl(userProvidedUrl); // Returns safe URL or '#'
@@ -375,7 +375,7 @@ import {
   countCompanies,
   getHighestDegree,
   isCurrentlyEmployed,
-} from '@resume/core';
+} from '@jsonresume/core';
 
 const resume = { work: [...], education: [...] };
 
@@ -467,7 +467,7 @@ pnpm init
     "react-dom": "^18.0.0 || ^19.0.0"
   },
   "dependencies": {
-    "@resume/core": "workspace:*",
+    "@jsonresume/core": "workspace:*",
     "styled-components": "workspace:*"
   }
 }
@@ -485,7 +485,7 @@ import {
   ProfileCard,
   ExperienceTimeline,
   BadgeList,
-} from '@resume/core';
+} from '@jsonresume/core';
 
 export default function Resume({ resume }) {
   const { basics, work, education, skills } = resume;
@@ -617,7 +617,7 @@ const html = Resume.render(resumeData);
 
 ```jsx
 import styled from 'styled-components';
-import { Section as BaseSection } from '@resume/core';
+import { Section as BaseSection } from '@jsonresume/core';
 
 const CustomSection = styled(BaseSection)`
   background: linear-gradient(to right, #f0f0f0, #ffffff);
@@ -631,8 +631,8 @@ const CustomSection = styled(BaseSection)`
 TypeScript definitions are included:
 
 ```typescript
-import { Section, SectionTitle, ListItem } from '@resume/core';
-import type { Resume } from '@resume/core';
+import { Section, SectionTitle, ListItem } from '@jsonresume/core';
+import type { Resume } from '@jsonresume/core';
 
 function MyResume({ resume }: { resume: Resume }) {
   // Full type safety
