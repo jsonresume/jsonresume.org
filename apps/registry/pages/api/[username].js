@@ -43,6 +43,14 @@ export default async function handler(req, res) {
   );
   res.setHeader('Access-Control-Allow-Origin', '*');
 
+  // Add 24-hour cache for agent endpoint (AI-generated, expensive)
+  if (extension === 'agent') {
+    res.setHeader(
+      'Cache-Control',
+      'public, s-maxage=86400, stale-while-revalidate=3600'
+    );
+  }
+
   // if there is an extension, render the file as if it were present
   // some formatters require special response headers
   headers.forEach((header) => {
