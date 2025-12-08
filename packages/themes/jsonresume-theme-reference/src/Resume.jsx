@@ -7,14 +7,14 @@ import {
   BadgeList,
   safeUrl,
   getLinkRel,
-} from '@resume/core';
+} from '@jsonresume/core';
 
 /**
  * Resume Component
- * THE PERFECT SHOWCASE of @resume/core and resume design best practices
+ * THE PERFECT SHOWCASE of @jsonresume/core and resume design best practices
  *
  * This demonstrates:
- * - All 5 @resume/core primitives with JSX
+ * - All 5 @jsonresume/core primitives with JSX
  * - All 11 JSON Resume schema sections
  * - ATS-friendly patterns
  * - Design token usage

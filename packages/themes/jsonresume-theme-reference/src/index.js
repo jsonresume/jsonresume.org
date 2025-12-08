@@ -5,13 +5,13 @@ import Resume from './Resume.jsx';
 /**
  * JSON Resume Reference Theme (JSX Edition)
  *
- * THE PERFECT SHOWCASE of @resume/core with beautiful React components.
+ * THE PERFECT SHOWCASE of @jsonresume/core with beautiful React components.
  *
  * This is the NEW architecture that demonstrates:
  * - Clean JSX syntax (no template strings)
  * - React component composition
  * - styled-components with design tokens
- * - All @resume/core primitives as React components
+ * - All @jsonresume/core primitives as React components
  * - Beautiful developer experience
  *
  * @param {Object} resume - JSON Resume object
@@ -64,7 +64,7 @@ export function render(resume, options = {}) {
     const globalStyles = `
     /*
      * Global Styles
-     * Base styles that complement @resume/core design tokens
+     * Base styles that complement @jsonresume/core design tokens
      */
     * {
       margin: 0;
@@ -90,7 +90,7 @@ export function render(resume, options = {}) {
     }
   `;
 
-    // Design tokens CSS (inlined from @resume/core)
+    // Design tokens CSS (inlined from @jsonresume/core)
     const designTokens = `
     :root {
       --resume-font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;

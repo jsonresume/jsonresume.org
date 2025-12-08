@@ -1,5 +1,5 @@
 import React from 'react';
-import { Section } from '@resume/core';
+import { Section } from '@jsonresume/core';
 import {
   StyledSectionTitle,
   SkillsList,

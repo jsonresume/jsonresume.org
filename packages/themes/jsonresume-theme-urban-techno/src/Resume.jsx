@@ -9,7 +9,7 @@ import {
   ContactInfo,
   Link,
   safeUrl,
-} from '@resume/core';
+} from '@jsonresume/core';
 
 const Layout = styled.div`
   max-width: 1000px;

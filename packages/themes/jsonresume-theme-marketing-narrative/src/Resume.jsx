@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { SectionTitle, ContactInfo } from '@resume/core';
+import { SectionTitle, ContactInfo } from '@jsonresume/core';
 import { WorkSection } from './sections/WorkSection.jsx';
 import { SkillsSection } from './sections/SkillsSection.jsx';
 import { ProjectsSection } from './sections/ProjectsSection.jsx';

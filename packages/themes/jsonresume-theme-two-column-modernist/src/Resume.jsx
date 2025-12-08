@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { safeUrl, DateRange } from '@resume/core';
+import { safeUrl, DateRange } from '@jsonresume/core';
 
 // Layout
 const Container = styled.div`

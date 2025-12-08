@@ -1,7 +1,7 @@
 /**
  * JSON Resume Data-Driven Theme
  * Analytical design with metrics-focused layout and sky blue accent
- * Built with @resume/core primitives and React SSR
+ * Built with @jsonresume/core primitives and React SSR
  */
 
 import { renderToString } from 'react-dom/server';

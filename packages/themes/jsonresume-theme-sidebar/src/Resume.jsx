@@ -7,7 +7,7 @@ import {
   BadgeList,
   safeUrl,
   getLinkRel,
-} from '@resume/core';
+} from '@jsonresume/core';
 
 /**
  * Sidebar Resume Theme

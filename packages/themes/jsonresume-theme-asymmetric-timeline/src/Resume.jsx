@@ -1,6 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Section, SectionTitle, ContactInfo, DateRange } from '@resume/core';
+import {
+  Section,
+  SectionTitle,
+  ContactInfo,
+  DateRange,
+} from '@jsonresume/core';
 
 // Layout
 const Layout = styled.div`

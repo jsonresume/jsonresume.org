@@ -10,7 +10,7 @@ import {
   ContactInfo,
   Link,
   safeUrl,
-} from '@resume/core';
+} from '@jsonresume/core';
 
 const GRID_SIZE = 8;
 

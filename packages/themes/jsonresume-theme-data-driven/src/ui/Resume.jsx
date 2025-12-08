@@ -1,5 +1,5 @@
 import styled, { createGlobalStyle } from 'styled-components';
-import { formatDateRange } from '@resume/core';
+import { formatDateRange } from '@jsonresume/core';
 
 const GlobalStyle = createGlobalStyle`
   * {

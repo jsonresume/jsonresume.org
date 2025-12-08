@@ -1,5 +1,5 @@
 import React from 'react';
-import { Section, DateRange } from '@resume/core';
+import { Section, DateRange } from '@jsonresume/core';
 import {
   Layout,
   Header,

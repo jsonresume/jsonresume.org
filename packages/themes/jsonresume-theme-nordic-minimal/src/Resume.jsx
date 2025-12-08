@@ -9,7 +9,7 @@ import {
   Link,
   safeUrl,
   isExternalUrl,
-} from '@resume/core';
+} from '@jsonresume/core';
 
 const ResumeContainer = styled.div`
   max-width: 1200px;

@@ -1,6 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Section, SectionTitle, DateRange, ContactInfo } from '@resume/core';
+import {
+  Section,
+  SectionTitle,
+  DateRange,
+  ContactInfo,
+} from '@jsonresume/core';
 
 // Creative Studio Theme - Artistic yet professional
 // Rounded sans-serif with slightly taller line height

@@ -139,14 +139,14 @@ describe('Reference Theme', () => {
     expect(html).toContain('</html>');
   });
 
-  it('includes @resume/core stylesheet', () => {
+  it('includes @jsonresume/core stylesheet', () => {
     const html = render(completeResume);
 
-    expect(html).toContain('@resume/core');
+    expect(html).toContain('@jsonresume/core');
     expect(html).toContain('tokens.css');
   });
 
-  it('uses all @resume/core primitives', () => {
+  it('uses all @jsonresume/core primitives', () => {
     const html = render(completeResume);
 
     // Section wrapper used

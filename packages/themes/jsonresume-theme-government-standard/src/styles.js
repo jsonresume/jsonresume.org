@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { SectionTitle, ContactInfo } from '@resume/core';
+import { SectionTitle, ContactInfo } from '@jsonresume/core';
 
 export const Layout = styled.div`
   max-width: 8.5in;

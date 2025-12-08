@@ -6,7 +6,7 @@ import {
   DateRange,
   ContactInfo,
   Link,
-} from '@resume/core';
+} from '@jsonresume/core';
 
 const Layout = styled.div`
   max-width: 680px;
