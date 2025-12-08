@@ -17,7 +17,7 @@
     "swiss-design"
   ],
   "dependencies": {
-    "@resume/core": "workspace:*",
+    "@jsonresume/core": "workspace:*",
     "styled-components": "workspace:*"
   },
   "peerDependencies": {
