@@ -1,73 +1,74 @@
-import OpenAI from 'openai';
-import { writeFile } from 'fs/promises';
-import { NextResponse } from 'next/server';
-import { join } from 'path';
-import fs from 'fs';
-import { logger } from '@/lib/logger';
+import { experimental_transcribe as transcribe } from 'ai';
+import { openai } from '@ai-sdk/openai';
 
-export async function POST(req) {
-  if (!process.env.OPENAI_API_KEY) {
-    return NextResponse.json(
-      { message: 'API not available during build' },
-      { status: 503 }
-    );
-  }
+export const runtime = 'edge';
 
-  const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-  });
-
+export async function POST(request) {
   try {
-    const formData = await req.formData();
+    // Get the audio data from the request
+    const formData = await request.formData();
     const audioFile = formData.get('audio');
 
     if (!audioFile) {
-      return Response.json(
-        { error: 'No audio file provided' },
-        { status: 400 }
-      );
+      return new Response(JSON.stringify({ error: 'No audio file provided' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
-    // Create a temporary file
-    const bytes = await audioFile.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    const tmpFilePath = join('/tmp', `audio-${Date.now()}.webm`);
-    await writeFile(tmpFilePath, buffer);
+    console.log('Transcription request received:', {
+      fileName: audioFile.name,
+      fileType: audioFile.type,
+      fileSize: audioFile.size,
+    });
 
-    try {
-      const transcription = await openai.audio.transcriptions.create({
-        file: fs.createReadStream(tmpFilePath),
-        model: 'whisper-1',
-        language: 'en',
-        response_format: 'text',
-      });
+    // Get the audio data as an ArrayBuffer
+    const audioArrayBuffer = await audioFile.arrayBuffer();
 
-      // Clean up the temporary file
-      fs.unlink(tmpFilePath, (err) => {
-        if (err)
-          logger.error(
-            { error: err.message, filePath: tmpFilePath },
-            'Error deleting temporary file'
-          );
-      });
+    console.log('Audio data prepared:', {
+      type: audioFile.type,
+      size: audioArrayBuffer.byteLength,
+    });
 
-      return Response.json({ text: transcription });
-    } finally {
-      // Ensure we try to clean up the temp file even if transcription fails
-      try {
-        fs.unlinkSync(tmpFilePath);
-      } catch (e) {
-        // Ignore errors during cleanup
-      }
-    }
-  } catch (error) {
-    logger.error({ error: error.message }, 'Error transcribing audio');
-    return Response.json(
+    // Use the AI SDK transcribe function with the ArrayBuffer directly
+    const result = await transcribe({
+      model: openai.transcription('whisper-1'),
+      audio: audioArrayBuffer,
+    });
+
+    console.log('Transcription result:', {
+      textLength: result.text?.length,
+      language: result.language,
+      duration: result.durationInSeconds,
+    });
+
+    // Return the transcription result
+    return new Response(
+      JSON.stringify({
+        text: result.text,
+        language: result.language,
+        duration: result.durationInSeconds,
+      }),
       {
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
+  } catch (error) {
+    console.error('Transcription error:', {
+      message: error.message,
+      name: error.name,
+      cause: error.cause,
+    });
+
+    return new Response(
+      JSON.stringify({
         error: 'Failed to transcribe audio',
         details: error.message,
-      },
-      { status: 500 }
+      }),
+      {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      }
     );
   }
 }
