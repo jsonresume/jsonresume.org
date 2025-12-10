@@ -14,6 +14,7 @@ import { useJobFiltering } from './hooks/useJobFiltering';
 import { useSalaryRange } from './hooks/useSalaryRange';
 import { usePathFinding } from './hooks/usePathFinding';
 import { useGraphStyling } from './hooks/useGraphStyling';
+import { useGraphFiltering } from './hooks/useGraphFiltering';
 import './styles.css';
 
 export default function JobsGraph({ params }) {
@@ -28,6 +29,7 @@ export default function JobsGraph({ params }) {
   const [filterText, setFilterText] = useState('');
   const [showSalaryGradient, setShowSalaryGradient] = useState(false);
   const [remoteOnly, setRemoteOnly] = useState(false);
+  const [hideFiltered, setHideFiltered] = useState(false);
 
   // Custom hooks
   const { jobInfo, isLoading } = useJobGraphData(username, setNodes, setEdges);
@@ -36,9 +38,23 @@ export default function JobsGraph({ params }) {
   const salaryRange = useSalaryRange(jobInfo);
   const findPathToResume = usePathFinding(nodes);
 
-  const { nodesWithStyle, edgesWithStyle } = useGraphStyling({
+  // Check if any filter is active
+  const hasActiveFilter = Boolean(filterText || remoteOnly);
+
+  // Filter and reconnect nodes when hideFiltered is enabled
+  const { visibleNodes, visibleEdges } = useGraphFiltering({
     nodes,
     edges,
+    filteredNodes,
+    readJobs,
+    hideFiltered,
+    username,
+    hasActiveFilter,
+  });
+
+  const { nodesWithStyle, edgesWithStyle } = useGraphStyling({
+    nodes: visibleNodes,
+    edges: visibleEdges,
     jobInfo,
     username,
     readJobs,
@@ -49,6 +65,7 @@ export default function JobsGraph({ params }) {
     selectedNode,
     findPathToResume,
     remoteOnly,
+    hideFiltered,
   });
 
   const handleNodeClick = useCallback((_, node) => {
@@ -73,6 +90,8 @@ export default function JobsGraph({ params }) {
             setShowSalaryGradient={setShowSalaryGradient}
             remoteOnly={remoteOnly}
             setRemoteOnly={setRemoteOnly}
+            hideFiltered={hideFiltered}
+            setHideFiltered={setHideFiltered}
           />
           <GraphVisualization
             nodesWithStyle={nodesWithStyle}
