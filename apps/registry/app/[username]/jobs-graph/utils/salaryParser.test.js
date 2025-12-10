@@ -1,5 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import { parseSalary, calculateSalaryRange } from './salaryParser';
+import {
+  parseSalary,
+  calculateSalaryRange,
+  calculateSalaryRangeWithPercentiles,
+} from './salaryParser';
 
 describe('parseSalary', () => {
   it('returns null for falsy values', () => {
@@ -165,5 +169,127 @@ describe('calculateSalaryRange', () => {
       min: 50000,
       max: 50000,
     });
+  });
+});
+
+describe('calculateSalaryRangeWithPercentiles', () => {
+  it('returns zeros for empty jobInfo', () => {
+    expect(calculateSalaryRangeWithPercentiles({})).toEqual({
+      min: 0,
+      max: 0,
+      p5: 0,
+      p95: 0,
+    });
+  });
+
+  it('calculates min, max, and percentiles from job salaries', () => {
+    // Create 20 jobs with evenly distributed salaries
+    const jobInfo = {};
+    for (let i = 0; i < 20; i++) {
+      jobInfo[`job${i}`] = { salary: `${50 + i * 5}k` }; // 50k to 145k
+    }
+
+    const result = calculateSalaryRangeWithPercentiles(jobInfo);
+
+    expect(result.min).toBe(50000);
+    expect(result.max).toBe(145000);
+    // p5 should be near the lower end, p95 near the upper
+    expect(result.p5).toBeLessThan(result.p95);
+  });
+
+  it('handles outliers by clamping to percentile range', () => {
+    // Create 20 jobs with most salaries around 50-80k, with extreme outliers
+    const jobInfo = {};
+    // 18 jobs in the 50-80k range
+    for (let i = 0; i < 18; i++) {
+      jobInfo[`job${i}`] = { salary: `${50 + i * 2}k` }; // 50k to 84k
+    }
+    // Add outliers at the extremes
+    jobInfo.outlierLow = { salary: '10k' }; // Low outlier
+    jobInfo.outlierHigh = { salary: '500k' }; // High outlier
+
+    const result = calculateSalaryRangeWithPercentiles(jobInfo);
+
+    expect(result.min).toBe(10000);
+    expect(result.max).toBe(500000);
+    // With 20 jobs, p95 should exclude the top 5% (1 job)
+    // So p95 should be less than the max outlier
+    expect(result.p95).toBeLessThan(500000);
+    // p5 should exclude the bottom 5% (1 job)
+    expect(result.p5).toBeGreaterThan(10000);
+  });
+
+  it('handles single job', () => {
+    const jobInfo = {
+      job1: { salary: '75000' },
+    };
+
+    const result = calculateSalaryRangeWithPercentiles(jobInfo);
+
+    expect(result).toEqual({
+      min: 75000,
+      max: 75000,
+      p5: 75000,
+      p95: 75000,
+    });
+  });
+
+  it('handles two jobs', () => {
+    const jobInfo = {
+      job1: { salary: '50000' },
+      job2: { salary: '100000' },
+    };
+
+    const result = calculateSalaryRangeWithPercentiles(jobInfo);
+
+    expect(result.min).toBe(50000);
+    expect(result.max).toBe(100000);
+  });
+
+  it('ignores jobs without valid salary', () => {
+    const jobInfo = {
+      job1: { salary: '50k' },
+      job2: { salary: null },
+      job3: { salary: '100k' },
+      job4: { title: 'No salary field' },
+    };
+
+    const result = calculateSalaryRangeWithPercentiles(jobInfo);
+
+    expect(result.min).toBe(50000);
+    expect(result.max).toBe(100000);
+  });
+
+  it('handles all same salary values', () => {
+    const jobInfo = {
+      job1: { salary: '75k' },
+      job2: { salary: '75k' },
+      job3: { salary: '75k' },
+    };
+
+    const result = calculateSalaryRangeWithPercentiles(jobInfo);
+
+    expect(result).toEqual({
+      min: 75000,
+      max: 75000,
+      p5: 75000,
+      p95: 75000,
+    });
+  });
+
+  it('accepts custom percentile values', () => {
+    // Create 100 jobs for cleaner percentile calculation
+    const jobInfo = {};
+    for (let i = 0; i < 100; i++) {
+      jobInfo[`job${i}`] = { salary: `${i + 1}k` }; // 1k to 100k
+    }
+
+    // Use 10th and 90th percentile
+    const result = calculateSalaryRangeWithPercentiles(jobInfo, 10, 90);
+
+    expect(result.min).toBe(1000);
+    expect(result.max).toBe(100000);
+    expect(result.p5).toBeGreaterThanOrEqual(10000);
+    expect(result.p95).toBeLessThanOrEqual(90000);
   });
 });

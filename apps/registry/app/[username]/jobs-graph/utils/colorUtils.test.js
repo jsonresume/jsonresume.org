@@ -77,7 +77,7 @@ describe('getNodeBackground', () => {
   it('returns salary gradient when enabled with salary data', () => {
     const node = { id: 'job1', data: {} };
     const jobData = { salary: '75000' };
-    const salaryRange = { min: 50000, max: 100000 };
+    const salaryRange = { min: 50000, max: 100000, p5: 50000, p95: 100000 };
 
     const result = getNodeBackground({
       node,
@@ -104,7 +104,7 @@ describe('getNodeBackground', () => {
       username: 'test',
       readJobs: new Set(),
       showSalaryGradient: true,
-      salaryRange: { min: 0, max: 100000 },
+      salaryRange: { min: 0, max: 100000, p5: 0, p95: 100000 },
       filterText: '',
       filteredNodes: new Set(),
     });
@@ -169,7 +169,7 @@ describe('getNodeBackground', () => {
     const node = { id: 'job1', data: {} };
     const jobDataHigh = { salary: '95000' };
     const jobDataLow = { salary: '55000' };
-    const salaryRange = { min: 50000, max: 100000 };
+    const salaryRange = { min: 50000, max: 100000, p5: 50000, p95: 100000 };
 
     const highSalaryColor = getNodeBackground({
       node,
@@ -195,5 +195,80 @@ describe('getNodeBackground', () => {
 
     // High salary should be darker (lower RGB values for blue gradient)
     expect(highSalaryColor).not.toBe(lowSalaryColor);
+  });
+
+  it('clamps outliers to percentile range for gradient', () => {
+    const node = { id: 'job1', data: {} };
+    // Salary range with outlier: most salaries 50-80k, but max is 500k
+    const salaryRange = { min: 50000, max: 500000, p5: 50000, p95: 80000 };
+
+    // Outlier at 500k should clamp to p95 (80k) for gradient calculation
+    const outlierColor = getNodeBackground({
+      node,
+      jobData: { salary: '500000' },
+      username: 'test',
+      readJobs: new Set(),
+      showSalaryGradient: true,
+      salaryRange,
+      filterText: '',
+      filteredNodes: new Set(),
+    });
+
+    // Should be the darkest blue (clamped to p95)
+    const p95Color = getNodeBackground({
+      node,
+      jobData: { salary: '80000' },
+      username: 'test',
+      readJobs: new Set(),
+      showSalaryGradient: true,
+      salaryRange,
+      filterText: '',
+      filteredNodes: new Set(),
+    });
+
+    // Both should be the same color (both at max of gradient range)
+    expect(outlierColor).toBe(p95Color);
+  });
+
+  it('distributes gradient across percentile range not full range', () => {
+    const node = { id: 'job1', data: {} };
+    // Range with outliers: p5=50k, p95=80k, but actual min/max are 30k/500k
+    const salaryRange = { min: 30000, max: 500000, p5: 50000, p95: 80000 };
+
+    // 65k is exactly middle of p5-p95 range
+    const middleSalaryColor = getNodeBackground({
+      node,
+      jobData: { salary: '65000' },
+      username: 'test',
+      readJobs: new Set(),
+      showSalaryGradient: true,
+      salaryRange,
+      filterText: '',
+      filteredNodes: new Set(),
+    });
+
+    // With linear interpolation at 50%, should be mid-blue
+    // lightBlue = [219, 234, 254], darkBlue = [30, 64, 175]
+    // At 50%: r = 219 + (30-219)*0.5 = 125, g = 234 + (64-234)*0.5 = 149, b = 254 + (175-254)*0.5 = 215
+    expect(middleSalaryColor).toBe('rgb(125, 149, 215)');
+  });
+
+  it('falls back to min/max when percentiles are not provided', () => {
+    const node = { id: 'job1', data: {} };
+    const salaryRange = { min: 50000, max: 100000 }; // No p5/p95
+
+    const result = getNodeBackground({
+      node,
+      jobData: { salary: '75000' },
+      username: 'test',
+      readJobs: new Set(),
+      showSalaryGradient: true,
+      salaryRange,
+      filterText: '',
+      filteredNodes: new Set(),
+    });
+
+    // Should still work, falling back to min/max
+    expect(result).toMatch(/^rgb\(\d+, \d+, \d+\)$/);
   });
 });

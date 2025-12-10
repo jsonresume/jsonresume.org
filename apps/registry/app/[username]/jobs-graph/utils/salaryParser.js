@@ -51,3 +51,38 @@ export const calculateSalaryRange = (jobInfo) => {
 
   return { min, max };
 };
+
+/**
+ * Calculates salary range with percentile boundaries for outlier handling
+ * Uses percentiles to prevent extreme outliers from compressing the gradient
+ * @param {Object} jobInfo - Job info map
+ * @param {number} lowerPct - Lower percentile (default 5)
+ * @param {number} upperPct - Upper percentile (default 95)
+ * @returns {Object} { min, max, p5, p95 } salary range with percentile bounds
+ */
+export const calculateSalaryRangeWithPercentiles = (
+  jobInfo,
+  lowerPct = 5,
+  upperPct = 95
+) => {
+  const salaries = Object.values(jobInfo)
+    .map((job) => parseSalary(job.salary))
+    .filter((s) => s !== null)
+    .sort((a, b) => a - b);
+
+  if (salaries.length === 0) {
+    return { min: 0, max: 0, p5: 0, p95: 0 };
+  }
+
+  const min = salaries[0];
+  const max = salaries[salaries.length - 1];
+
+  // Calculate percentile indices
+  const p5Index = Math.floor(salaries.length * (lowerPct / 100));
+  const p95Index = Math.ceil(salaries.length * (upperPct / 100)) - 1;
+
+  const p5 = salaries[Math.max(0, p5Index)];
+  const p95 = salaries[Math.min(salaries.length - 1, p95Index)];
+
+  return { min, max, p5, p95 };
+};

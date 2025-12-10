@@ -25,8 +25,15 @@ export const getNodeBackground = ({
   if (showSalaryGradient && jobData) {
     const salary = parseSalary(jobData.salary);
     if (salary) {
-      const percentage =
-        (salary - salaryRange.min) / (salaryRange.max - salaryRange.min);
+      // Use percentile range for gradient calculation to handle outliers
+      const p5 = salaryRange.p5 || salaryRange.min;
+      const p95 = salaryRange.p95 || salaryRange.max;
+
+      // Clamp salary to percentile range for better gradient distribution
+      const clampedSalary = Math.max(p5, Math.min(p95, salary));
+      const range = p95 - p5;
+      const percentage = range > 0 ? (clampedSalary - p5) / range : 0;
+
       const lightBlue = [219, 234, 254]; // bg-blue-100
       const darkBlue = [30, 64, 175]; // bg-blue-800
 
@@ -34,7 +41,7 @@ export const getNodeBackground = ({
         lightBlue[0] + (darkBlue[0] - lightBlue[0]) * percentage
       );
       const g = Math.round(
-        lightBlue[1] + (darkBlue[1] - lightBlue[0]) * percentage
+        lightBlue[1] + (darkBlue[1] - lightBlue[1]) * percentage
       );
       const b = Math.round(
         lightBlue[2] + (darkBlue[2] - lightBlue[2]) * percentage
