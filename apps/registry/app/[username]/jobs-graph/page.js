@@ -15,6 +15,7 @@ import { useSalaryRange } from './hooks/useSalaryRange';
 import { usePathFinding } from './hooks/usePathFinding';
 import { useGraphStyling } from './hooks/useGraphStyling';
 import { useGraphFiltering } from './hooks/useGraphFiltering';
+import { useKeyboardNavigation } from './hooks/useKeyboardNavigation';
 import './styles.css';
 
 export default function JobsGraph({ params }) {
@@ -30,6 +31,7 @@ export default function JobsGraph({ params }) {
   const [showSalaryGradient, setShowSalaryGradient] = useState(false);
   const [remoteOnly, setRemoteOnly] = useState(false);
   const [hideFiltered, setHideFiltered] = useState(false);
+  const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
   // Custom hooks
   const { jobInfo, isLoading } = useJobGraphData(username, setNodes, setEdges);
@@ -66,6 +68,15 @@ export default function JobsGraph({ params }) {
     findPathToResume,
     remoteOnly,
     hideFiltered,
+  });
+
+  // Enable keyboard navigation (arrow keys to move between nodes)
+  useKeyboardNavigation({
+    selectedNode,
+    setSelectedNode,
+    edges: visibleEdges,
+    nodes: visibleNodes,
+    reactFlowInstance,
   });
 
   const handleNodeClick = useCallback((_, node) => {
@@ -105,6 +116,7 @@ export default function JobsGraph({ params }) {
             username={username}
             readJobs={readJobs}
             onMarkAsRead={markJobAsRead}
+            onReactFlowInit={setReactFlowInstance}
           />
         </>
       )}

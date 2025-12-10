@@ -14,6 +14,7 @@ export function GraphVisualization({
   username,
   readJobs,
   onMarkAsRead,
+  onReactFlowInit,
 }) {
   return (
     <div className="flex-1 relative">
@@ -28,6 +29,10 @@ export function GraphVisualization({
         maxZoom={4}
         defaultZoom={1.2}
         onInit={(reactFlowInstance) => {
+          // Store the instance for keyboard navigation
+          if (onReactFlowInit) {
+            onReactFlowInit(reactFlowInstance);
+          }
           setTimeout(() => {
             const resumeNode = nodes.find((node) => node.data.isResume);
             if (resumeNode) {
