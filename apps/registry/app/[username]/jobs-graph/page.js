@@ -70,13 +70,14 @@ export default function JobsGraph({ params }) {
     hideFiltered,
   });
 
-  // Enable keyboard navigation (arrow keys to move between nodes)
+  // Enable keyboard navigation (arrow keys to move between nodes, M to mark as read)
   useKeyboardNavigation({
     selectedNode,
     setSelectedNode,
     edges: visibleEdges,
     nodes: visibleNodes,
     reactFlowInstance,
+    onMarkAsRead: markJobAsRead,
   });
 
   const handleNodeClick = useCallback((_, node) => {

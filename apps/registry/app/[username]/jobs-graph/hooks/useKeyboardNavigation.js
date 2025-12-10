@@ -5,6 +5,7 @@ import { useEffect, useCallback } from 'react';
  * - Up arrow: Move to parent node
  * - Down arrow: Move to first child node
  * - Left/Right arrows: Move between sibling nodes
+ * - M key: Mark selected node as read
  *
  * @param {Object} options - Hook options
  * @param {Object} options.selectedNode - Currently selected node
@@ -12,6 +13,7 @@ import { useEffect, useCallback } from 'react';
  * @param {Array} options.edges - Graph edges
  * @param {Array} options.nodes - Graph nodes
  * @param {Object} options.reactFlowInstance - React Flow instance for viewport control
+ * @param {Function} options.onMarkAsRead - Function to mark a job as read
  */
 export function useKeyboardNavigation({
   selectedNode,
@@ -19,6 +21,7 @@ export function useKeyboardNavigation({
   edges,
   nodes,
   reactFlowInstance,
+  onMarkAsRead,
 }) {
   // Find parent node (source of edge where current node is target)
   const findParent = useCallback(
@@ -85,17 +88,25 @@ export function useKeyboardNavigation({
     (event) => {
       if (!selectedNode) return;
 
-      // Only handle arrow keys
-      if (
-        !['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)
-      ) {
-        return;
-      }
-
       // Don't interfere with input fields
       if (
         event.target.tagName === 'INPUT' ||
         event.target.tagName === 'TEXTAREA'
+      ) {
+        return;
+      }
+
+      // Handle 'M' key for marking as read
+      if (event.key === 'm' || event.key === 'M') {
+        if (onMarkAsRead && selectedNode.id && !selectedNode.data?.isResume) {
+          onMarkAsRead(selectedNode.id);
+        }
+        return;
+      }
+
+      // Only handle arrow keys for navigation
+      if (
+        !['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)
       ) {
         return;
       }
@@ -149,7 +160,14 @@ export function useKeyboardNavigation({
         }
       }
     },
-    [selectedNode, findParent, findChildren, findSiblings, navigateToNode]
+    [
+      selectedNode,
+      findParent,
+      findChildren,
+      findSiblings,
+      navigateToNode,
+      onMarkAsRead,
+    ]
   );
 
   // Add event listener
