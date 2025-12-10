@@ -27,11 +27,12 @@ export default function JobsGraph({ params }) {
   const [selectedNode, setSelectedNode] = useState(null);
   const [filterText, setFilterText] = useState('');
   const [showSalaryGradient, setShowSalaryGradient] = useState(false);
+  const [remoteOnly, setRemoteOnly] = useState(false);
 
   // Custom hooks
   const { jobInfo, isLoading } = useJobGraphData(username, setNodes, setEdges);
   const { readJobs, markJobAsRead } = useReadJobs(username);
-  const filteredNodes = useJobFiltering(filterText, jobInfo);
+  const filteredNodes = useJobFiltering(filterText, jobInfo, remoteOnly);
   const salaryRange = useSalaryRange(jobInfo);
   const findPathToResume = usePathFinding(nodes);
 
@@ -47,6 +48,7 @@ export default function JobsGraph({ params }) {
     filteredNodes,
     selectedNode,
     findPathToResume,
+    remoteOnly,
   });
 
   const handleNodeClick = useCallback((_, node) => {
@@ -69,6 +71,8 @@ export default function JobsGraph({ params }) {
             setFilterText={setFilterText}
             showSalaryGradient={showSalaryGradient}
             setShowSalaryGradient={setShowSalaryGradient}
+            remoteOnly={remoteOnly}
+            setRemoteOnly={setRemoteOnly}
           />
           <GraphVisualization
             nodesWithStyle={nodesWithStyle}

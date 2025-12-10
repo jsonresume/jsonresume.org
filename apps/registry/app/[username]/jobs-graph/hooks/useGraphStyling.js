@@ -13,7 +13,11 @@ export function useGraphStyling({
   filteredNodes,
   selectedNode,
   findPathToResume,
+  remoteOnly,
 }) {
+  // Check if any filter is active
+  const hasActiveFilter = filterText || remoteOnly;
+
   const nodesWithStyle = useMemo(
     () =>
       nodes.map((node) => ({
@@ -21,7 +25,9 @@ export function useGraphStyling({
         style: {
           ...node.style,
           opacity:
-            filterText && !node.data.isResume && !filteredNodes.has(node.id)
+            hasActiveFilter &&
+            !node.data.isResume &&
+            !filteredNodes.has(node.id)
               ? 0.2
               : 1,
           background: getNodeBackground({
@@ -31,7 +37,7 @@ export function useGraphStyling({
             readJobs,
             showSalaryGradient,
             salaryRange,
-            filterText,
+            filterText: hasActiveFilter ? 'active' : '', // Signal that filter is active
             filteredNodes,
           }),
         },
@@ -43,7 +49,7 @@ export function useGraphStyling({
       readJobs,
       showSalaryGradient,
       salaryRange,
-      filterText,
+      hasActiveFilter,
       filteredNodes,
     ]
   );

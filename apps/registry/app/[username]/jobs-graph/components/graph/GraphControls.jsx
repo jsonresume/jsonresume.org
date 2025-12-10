@@ -5,6 +5,8 @@ export function GraphControls({
   setFilterText,
   showSalaryGradient,
   setShowSalaryGradient,
+  remoteOnly,
+  setRemoteOnly,
 }) {
   return (
     <div className="px-4 py-2 bg-white border-b flex items-center gap-4">
@@ -15,6 +17,10 @@ export function GraphControls({
         onChange={(e) => setFilterText(e.target.value)}
         className="flex-1 max-w-xl"
       />
+      <label className="flex items-center gap-2 cursor-pointer">
+        <Checkbox checked={remoteOnly} onCheckedChange={setRemoteOnly} />
+        <span className="text-sm font-medium text-gray-900">Remote Only</span>
+      </label>
       <label className="flex items-center gap-2 cursor-pointer">
         <Checkbox
           checked={showSalaryGradient}
