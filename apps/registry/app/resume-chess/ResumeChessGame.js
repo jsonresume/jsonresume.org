@@ -1,24 +1,18 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   Crown,
-  Shield,
   Sword,
   Castle,
   Zap,
-  Users,
   Trophy,
   RotateCcw,
   Info,
   Star,
   Briefcase,
   Code,
-  Database,
-  Palette,
-  Settings,
-  Smartphone,
 } from 'lucide-react';
 
 // Chess piece types mapped to job roles
@@ -312,7 +306,9 @@ export default function ResumeChessGame({ resumes = [], jobs = [] }) {
     // Filter out moves that would put own king in check
     return moves.filter(([newRow, newCol]) => {
       const newBoard = board.map((r) => [...r]);
-      const capturedPiece = newBoard[newRow][newCol];
+      // Store captured piece for simulation (unused but part of game logic)
+      const _capturedPiece = newBoard[newRow][newCol];
+      void _capturedPiece; // Acknowledge unused variable
       newBoard[newRow][newCol] = newBoard[row][col];
       newBoard[row][col] = null;
 

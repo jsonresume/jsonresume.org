@@ -1,10 +1,6 @@
 import { Suspense } from 'react';
 import { createClient } from '@supabase/supabase-js';
-import dynamic from 'next/dynamic';
-
-const CosmicJobsGame = dynamic(() => import('./CosmicJobsGame'), {
-  ssr: false,
-});
+import CosmicJobsWrapper from './CosmicJobsWrapper';
 
 const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
 
@@ -90,7 +86,7 @@ export default async function CosmicJobsPage() {
           </div>
         }
       >
-        <CosmicJobsGame jobs={jobs} resumes={resumes} />
+        <CosmicJobsWrapper jobs={jobs} resumes={resumes} />
       </Suspense>
     </div>
   );

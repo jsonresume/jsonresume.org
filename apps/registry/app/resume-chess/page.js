@@ -1,10 +1,6 @@
 import { Suspense } from 'react';
 import { createClient } from '@supabase/supabase-js';
-import dynamic from 'next/dynamic';
-
-const ResumeChessGame = dynamic(() => import('./ResumeChessGame'), {
-  ssr: false,
-});
+import ResumeChessWrapper from './ResumeChessWrapper';
 
 const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
 
@@ -90,7 +86,7 @@ export default async function ResumeChessPage() {
           </div>
         }
       >
-        <ResumeChessGame resumes={resumes} jobs={jobs} />
+        <ResumeChessWrapper resumes={resumes} jobs={jobs} />
       </Suspense>
     </div>
   );

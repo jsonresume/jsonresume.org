@@ -155,7 +155,9 @@ export default function Pathways() {
                   setResumeJson(code || '');
                   try {
                     setResumeData(JSON.parse(code));
-                  } catch {}
+                  } catch {
+                    // Invalid JSON, ignore
+                  }
                 }}
                 options={{
                   minimap: { enabled: false },

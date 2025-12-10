@@ -4,12 +4,9 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import * as d3 from 'd3-force';
 import {
-  Zap,
-  Sparkles,
   Rocket,
   Star,
   Heart,
-  Cat,
   Atom,
   Orbit,
   Gamepad2,
@@ -18,7 +15,6 @@ import {
 
 const CANVAS_WIDTH = 1200;
 const CANVAS_HEIGHT = 800;
-const PARTICLE_COUNT = 100;
 
 // Cosmic cat names for fun
 const COSMIC_CAT_NAMES = [
@@ -93,6 +89,7 @@ export default function CosmicJobsGame({ jobs = [], resumes = [] }) {
   const simulationRef = useRef(null);
   const particlesRef = useRef([]);
   const animationRef = useRef(null);
+  // eslint-disable-next-line no-unused-vars
   const [gameState, setGameState] = useState('playing');
   const [score, setScore] = useState(0);
   const [selectedParticle, setSelectedParticle] = useState(null);
@@ -223,6 +220,7 @@ export default function CosmicJobsGame({ jobs = [], resumes = [] }) {
     let lastTime = 0;
 
     const animate = (currentTime) => {
+      // eslint-disable-next-line no-unused-vars
       const deltaTime = currentTime - lastTime;
       lastTime = currentTime;
 
