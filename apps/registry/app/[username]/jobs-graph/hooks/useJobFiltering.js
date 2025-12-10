@@ -1,6 +1,31 @@
 import { useState, useEffect } from 'react';
 
 /**
+ * Check if a job is remote-friendly based on the remote field
+ * Matches: "Full", "Remote", "Yes", "100%", or location containing "remote"
+ * @param {Object} job - Job object with remote and location fields
+ * @returns {boolean} True if job is remote-friendly
+ */
+const isRemoteJob = (job) => {
+  const remoteValue = (job.remote || '').toLowerCase();
+  const locationCity = (job.location?.city || '').toLowerCase();
+  const locationAddress = (job.location?.address || '').toLowerCase();
+
+  // Check remote field for remote-friendly values
+  const remoteKeywords = ['full', 'remote', 'yes', '100%', 'fully'];
+  if (remoteKeywords.some((keyword) => remoteValue.includes(keyword))) {
+    return true;
+  }
+
+  // Check if location indicates remote
+  if (locationCity.includes('remote') || locationAddress.includes('remote')) {
+    return true;
+  }
+
+  return false;
+};
+
+/**
  * Hook to manage job filtering based on search text and remote filter
  * @param {string} filterText - Search text
  * @param {Object} jobInfo - Job info map
@@ -27,7 +52,7 @@ export const useJobFiltering = (filterText, jobInfo, remoteOnly = false) => {
 
     Object.entries(jobInfo).forEach(([id, job]) => {
       // Check remote filter first
-      if (remoteOnly && !job.remote) {
+      if (remoteOnly && !isRemoteJob(job)) {
         return; // Skip non-remote jobs
       }
 
