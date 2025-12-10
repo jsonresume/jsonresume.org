@@ -130,6 +130,39 @@
   color: #059669;
 }
 
+/* Auto-contrast for dark backgrounds (salary gradient) */
+.light-text .job-title {
+  color: #ffffff;
+}
+
+.light-text .company-name {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.light-text .company-icon {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.light-text .meta-pill {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.light-text .meta-pill.type {
+  background-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+.light-text .meta-pill.remote {
+  background-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+.light-text .meta-pill.salary {
+  background-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
 /* Loading Animation Styles */
 .loading-container {
   display: flex;

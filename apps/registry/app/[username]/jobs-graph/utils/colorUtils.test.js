@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { getNodeBackground, getEdgeStyle } from './colorUtils';
+import {
+  getNodeBackground,
+  getEdgeStyle,
+  getLuminance,
+  needsLightText,
+} from './colorUtils';
 
 describe('getEdgeStyle', () => {
   it('returns default style when no pathEdges', () => {
@@ -270,5 +275,72 @@ describe('getNodeBackground', () => {
 
     // Should still work, falling back to min/max
     expect(result).toMatch(/^rgb\(\d+, \d+, \d+\)$/);
+  });
+});
+
+describe('getLuminance', () => {
+  it('returns 0 for black', () => {
+    expect(getLuminance(0, 0, 0)).toBe(0);
+  });
+
+  it('returns 1 for white', () => {
+    expect(getLuminance(255, 255, 255)).toBeCloseTo(1, 2);
+  });
+
+  it('returns mid-range luminance for gray', () => {
+    const luminance = getLuminance(128, 128, 128);
+    expect(luminance).toBeGreaterThan(0.2);
+    expect(luminance).toBeLessThan(0.3);
+  });
+
+  it('returns higher luminance for bright colors', () => {
+    const yellow = getLuminance(255, 255, 0);
+    const darkBlue = getLuminance(30, 64, 175);
+    expect(yellow).toBeGreaterThan(darkBlue);
+  });
+});
+
+describe('needsLightText', () => {
+  it('returns false for white background', () => {
+    expect(needsLightText('white')).toBe(false);
+  });
+
+  it('returns false for null/undefined', () => {
+    expect(needsLightText(null)).toBe(false);
+    expect(needsLightText(undefined)).toBe(false);
+  });
+
+  it('returns false for light blue (low salary)', () => {
+    // bg-blue-100: rgb(219, 234, 254)
+    expect(needsLightText('rgb(219, 234, 254)')).toBe(false);
+  });
+
+  it('returns true for dark blue (high salary)', () => {
+    // bg-blue-800: rgb(30, 64, 175)
+    expect(needsLightText('rgb(30, 64, 175)')).toBe(true);
+  });
+
+  it('returns false for yellow background', () => {
+    // Default job color: rgb(255, 241, 143)
+    expect(needsLightText('rgb(255, 241, 143)')).toBe(false);
+  });
+
+  it('handles hex colors', () => {
+    expect(needsLightText('#ffffff')).toBe(false);
+    expect(needsLightText('#000000')).toBe(true);
+    expect(needsLightText('#1e40af')).toBe(true); // Dark blue
+  });
+
+  it('returns true for mid-range blues that are still dark', () => {
+    // Test threshold - mid-gradient blues
+    // rgb(125, 149, 215) has luminance ~0.31, below 0.4 threshold
+    const midBlue = 'rgb(125, 149, 215)';
+    const result = needsLightText(midBlue);
+    // Mid-blue needs light text since luminance < 0.4
+    expect(result).toBe(true);
+  });
+
+  it('returns false for light gray (read jobs)', () => {
+    expect(needsLightText('#f1f5f9')).toBe(false);
   });
 });

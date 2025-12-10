@@ -1,6 +1,46 @@
 import { parseSalary } from './salaryParser';
 
 /**
+ * Calculates relative luminance of an RGB color (WCAG formula)
+ * @param {number} r - Red (0-255)
+ * @param {number} g - Green (0-255)
+ * @param {number} b - Blue (0-255)
+ * @returns {number} Luminance value (0-1)
+ */
+export const getLuminance = (r, g, b) => {
+  const [rs, gs, bs] = [r, g, b].map((c) => {
+    const sRGB = c / 255;
+    return sRGB <= 0.03928
+      ? sRGB / 12.92
+      : Math.pow((sRGB + 0.055) / 1.055, 2.4);
+  });
+  return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs;
+};
+
+/**
+ * Determines if a background color needs light text for contrast
+ * Uses WCAG luminance threshold
+ * @param {string} bgColor - RGB color string like "rgb(30, 64, 175)"
+ * @returns {boolean} True if text should be light/white
+ */
+export const needsLightText = (bgColor) => {
+  if (!bgColor || bgColor === 'white') return false;
+  if (bgColor.startsWith('#')) {
+    // Handle hex colors
+    const hex = bgColor.slice(1);
+    const r = parseInt(hex.slice(0, 2), 16);
+    const g = parseInt(hex.slice(2, 4), 16);
+    const b = parseInt(hex.slice(4, 6), 16);
+    return getLuminance(r, g, b) < 0.4;
+  }
+  const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+  if (!match) return false;
+  const [, r, g, b] = match.map(Number);
+  // Threshold of 0.4 provides good contrast - below this, use light text
+  return getLuminance(r, g, b) < 0.4;
+};
+
+/**
  * Calculates background color for a node based on salary gradient
  * @param {Object} node - React Flow node
  * @param {Object} jobData - Job data for this node

@@ -1,5 +1,9 @@
 import { useMemo } from 'react';
-import { getNodeBackground, getEdgeStyle } from '../utils/colorUtils';
+import {
+  getNodeBackground,
+  getEdgeStyle,
+  needsLightText,
+} from '../utils/colorUtils';
 
 export function useGraphStyling({
   nodes,
@@ -30,21 +34,29 @@ export function useGraphStyling({
           !node.data.isResume &&
           !filteredNodes.has(node.id);
 
+        const background = getNodeBackground({
+          node,
+          jobData: jobInfo[node.id],
+          username,
+          readJobs,
+          showSalaryGradient,
+          salaryRange,
+          filterText: hasActiveFilter && !hideFiltered ? 'active' : '', // Only signal filter when not hiding
+          filteredNodes,
+        });
+
+        // Add light-text class if background is dark
+        const existingClass = node.className || '';
+        const lightTextClass = needsLightText(background) ? 'light-text' : '';
+        const className = `${existingClass} ${lightTextClass}`.trim();
+
         return {
           ...node,
+          className,
           style: {
             ...node.style,
             opacity: shouldDim ? 0.2 : 1,
-            background: getNodeBackground({
-              node,
-              jobData: jobInfo[node.id],
-              username,
-              readJobs,
-              showSalaryGradient,
-              salaryRange,
-              filterText: hasActiveFilter && !hideFiltered ? 'active' : '', // Only signal filter when not hiding
-              filteredNodes,
-            }),
+            background,
           },
         };
       }),
