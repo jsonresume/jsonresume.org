@@ -78,8 +78,7 @@ export default function useJobToolsHandler({
               break;
             }
             case 'getJobInsights': {
-              const { insightType } = args ?? {};
-              // Insights are already returned in the tool result
+              // Insights are already returned in the tool result from server
               handledToolCalls.current.add(toolCallId);
               break;
             }
