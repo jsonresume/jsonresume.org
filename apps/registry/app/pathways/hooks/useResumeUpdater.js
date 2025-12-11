@@ -5,11 +5,15 @@ import applyResumeChanges from '../utils/applyResumeChanges';
 
 export default function useResumeUpdater({
   messages,
-  addToolResult,
-  setResumeData,
-  setResumeJson,
+  resumeData, // Current resume data (needed for merging)
+  setResumeData, // updateResume function (takes direct value, NOT functional update)
 }) {
   const handledToolCalls = useRef(new Set());
+  // Keep a ref to the latest resume data to avoid stale closures
+  const resumeDataRef = useRef(resumeData);
+  useEffect(() => {
+    resumeDataRef.current = resumeData;
+  }, [resumeData]);
 
   useEffect(() => {
     console.log(
@@ -48,29 +52,18 @@ export default function useResumeUpdater({
 
           if (changes && typeof changes === 'object') {
             console.log('[useResumeUpdater] Applying changes to resume...');
-            setResumeData((prev) => {
-              console.log(
-                '[useResumeUpdater] Previous resume:',
-                JSON.stringify(prev, null, 2)
-              );
-              const updated = applyResumeChanges(prev, changes);
-              console.log(
-                '[useResumeUpdater] Updated resume:',
-                JSON.stringify(updated, null, 2)
-              );
-              return updated;
-            });
-            setResumeJson((prev) => {
-              try {
-                const prevObj = JSON.parse(prev);
-                const updated = applyResumeChanges(prevObj, changes);
-                console.log('[useResumeUpdater] Updated JSON resume');
-                return JSON.stringify(updated, null, 2);
-              } catch (e) {
-                console.error('[useResumeUpdater] Error updating JSON:', e);
-                return prev;
-              }
-            });
+            const currentResume = resumeDataRef.current;
+            console.log(
+              '[useResumeUpdater] Previous resume:',
+              JSON.stringify(currentResume, null, 2)
+            );
+            const updated = applyResumeChanges(currentResume, changes);
+            console.log(
+              '[useResumeUpdater] Updated resume:',
+              JSON.stringify(updated, null, 2)
+            );
+            // updateResume takes a direct value (not functional update)
+            setResumeData(updated);
           } else {
             console.warn('[useResumeUpdater] No valid changes object found');
           }
@@ -95,25 +88,21 @@ export default function useResumeUpdater({
           );
           if (changes && typeof changes === 'object') {
             console.log('[useResumeUpdater] Applying changes (input-avail)...');
-            setResumeData((prev) => applyResumeChanges(prev, changes));
-            setResumeJson((prev) => {
-              try {
-                return JSON.stringify(
-                  applyResumeChanges(JSON.parse(prev), changes),
-                  null,
-                  2
-                );
-              } catch {
-                return prev;
-              }
-            });
+            const currentResume = resumeDataRef.current;
+            const updated = applyResumeChanges(currentResume, changes);
+            console.log(
+              '[useResumeUpdater] Updated resume:',
+              JSON.stringify(updated, null, 2)
+            );
+            // updateResume takes a direct value (not functional update)
+            setResumeData(updated);
           }
           // Mark as handled so we don't re-process on output-available
           handledToolCalls.current.add(part.toolCallId);
         }
       }
     }
-  }, [messages, addToolResult, setResumeData, setResumeJson]);
+  }, [messages, setResumeData]);
 
   return null; // This hook only handles side effects
 }

@@ -86,11 +86,11 @@ export default function CopilotChat({
   } = useVoiceRecording(handleTranscriptionComplete);
 
   // Handle resume updates from tool invocations
+  // Note: setResumeData is actually updateResume which takes a direct value, NOT a functional update
   useResumeUpdater({
     messages,
-    addToolResult,
+    resumeData,
     setResumeData,
-    setResumeJson,
   });
 
   // Handle job-related tool invocations
