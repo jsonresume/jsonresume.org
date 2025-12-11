@@ -80,6 +80,15 @@ export const updateResume = tool({
       .string()
       .describe('Friendly explanation of the changes being made'),
   }),
+  execute: async ({ changes, explanation }) => {
+    // This will be handled client-side by the useResumeUpdater hook
+    return {
+      success: true,
+      changes,
+      explanation,
+      message: explanation || 'Resume updated',
+    };
+  },
 });
 
 export const runtime = 'edge';
