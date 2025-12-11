@@ -1,0 +1,1642 @@
+### Install OpenAI AI SDK Package (Bash)
+
+Source: https://v6.ai-sdk.dev/docs/getting-started/nodejs
+
+Provides commands for different package managers to install the `@ai-sdk/openai` package. This step is necessary before using the OpenAI provider directly with the AI SDK.
+
+```bash
+pnpm add @ai-sdk/openai@beta
+```
+
+```bash
+npm install @ai-sdk/openai@beta
+```
+
+```bash
+yarn add @ai-sdk/openai@beta
+```
+
+```bash
+bun add @ai-sdk/openai@beta
+```
+
+--------------------------------
+
+### Guide Agent Tool Usage with Specific Instructions (TypeScript)
+
+Source: https://v6.ai-sdk.dev/docs/agents/building-agents
+
+This example provides instructions to guide an agent on how to effectively use its available tools. It outlines a step-by-step process for a research assistant using tools like `webSearch` and `analyzeDocument` to ensure thorough and reliable information gathering.
+
+```ts
+const researchAgent = new ToolLoopAgent({
+  model: 'openai/gpt-4o',
+  instructions: `You are a research assistant with access to search and document tools.
+
+  When researching:
+  1. Always start with a broad search to understand the topic
+  2. Use document analysis for detailed information
+  3. Cross-reference multiple sources before drawing conclusions
+  4. Cite your sources when presenting information
+  5. If information conflicts, present both viewpoints`,
+  tools: {
+    webSearch,
+    analyzeDocument,
+    extractQuotes,
+  },
+});
+```
+
+--------------------------------
+
+### Install AI SDK and Zod Dependencies
+
+Source: https://v6.ai-sdk.dev/docs/getting-started/nuxt
+
+These commands install the necessary packages for integrating the AI SDK into your Nuxt.js project. It includes the core `ai` package, the `@ai-sdk/vue` integration for Vue.js, and `zod` for schema validation, typically installing beta versions as specified.
+
+```pnpm
+pnpm add ai@beta @ai-sdk/vue@beta zod
+```
+
+```npm
+npm install ai@beta @ai-sdk/vue@beta zod
+```
+
+```yarn
+yarn add ai@beta @ai-sdk/vue@beta zod
+```
+
+```bun
+bun add ai@beta @ai-sdk/vue@beta zod
+```
+
+--------------------------------
+
+### Create Next.js Application with pnpm
+
+Source: https://v6.ai-sdk.dev/docs/getting-started/nextjs-pages-router
+
+This command initializes a new Next.js project using pnpm, creating a directory named 'my-ai-app' with a basic application setup. Ensure 'App Router' is not selected during setup.
+
+```shell
+pnpm create next-app@latest my-ai-app
+```
+
+--------------------------------
+
+### Install AI SDK and DeepSeek Provider for Next.js
+
+Source: https://v6.ai-sdk.dev/docs/guides/r1
+
+This command installs the necessary packages for integrating the AI SDK with DeepSeek R1 and React in a Next.js project. It includes the core AI SDK, the DeepSeek provider, and the AI SDK React hooks.
+
+```bash
+pnpm install ai @ai-sdk/deepseek @ai-sdk/react
+```
+
+--------------------------------
+
+### Install AI SDK and Development Dependencies
+
+Source: https://v6.ai-sdk.dev/docs/getting-started/nodejs
+
+Installs the core AI SDK package (`ai`), `zod` for schema definition, and `dotenv` for environment variable management. It also installs development dependencies like `@types/node`, `tsx`, and `typescript` for TypeScript support and execution.
+
+```bash
+pnpm add ai@beta zod dotenv
+pnpm add -D @types/node tsx typescript
+```
+
+--------------------------------
+
+### Navigate into Nuxt.js Project Directory
+
+Source: https://v6.ai-sdk.dev/docs/getting-started/nuxt
+
+After successfully creating the Nuxt.js application, this command changes the current working directory to the newly generated 'my-ai-app' folder. This step is essential before proceeding with dependency installation and further project configuration.
+
+```shell
+cd my-ai-app
+```
+
+--------------------------------
+
+### Start Expo Development Server
+
+Source: https://v6.ai-sdk.dev/docs/getting-started/expo
+
+Command to launch the Expo development server for the AI chatbot application. After running this command, the application becomes accessible at http://localhost:8081 where users can interact with the AI chatbot interface in real-time.
+
+```bash
+pnpm expo
+```
+
+--------------------------------
+
+### Provider Registry Setup
+
+Source: https://v6.ai-sdk.dev/docs/ai-sdk-core/provider-management
+
+Demonstrates the setup of a provider registry using `createProviderRegistry`. This allows for mixing multiple AI providers and accessing them via simple string IDs. The example shows registering the 'anthropic' provider directly and the 'openai' provider with custom setup, including an API key from environment variables.
+
+```typescript
+import { anthropic } from '@ai-sdk/anthropic';
+import { createOpenAI } from '@ai-sdk/openai';
+import { createProviderRegistry } from 'ai';
+
+export const registry = createProviderRegistry({
+  // register provider with prefix and default setup:
+  anthropic,
+
+  // register provider with prefix and custom setup:
+  openai: createOpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  }),
+});
+```
+
+--------------------------------
+
+### Run Svelte AI Chatbot Application
+
+Source: https://v6.ai-sdk.dev/docs/getting-started/svelte
+
+This command starts the development server for your Svelte application, making the chatbot accessible in your web browser. Ensure all dependencies are installed before running this command. The application will typically be available on `http://localhost:5173`.
+
+```bash
+pnpm run dev
+```
+
+--------------------------------
+
+### Provider Configuration API
+
+Source: https://v6.ai-sdk.dev/docs/getting-started/nextjs-pages-router
+
+Documentation for configuring and managing AI model providers in the AI SDK. Covers default gateway provider setup, alternative provider imports, and global provider configuration options for consistent provider usage across the application.
+
+```APIDOC
+## Provider Configuration
+
+### Description
+The AI SDK supports multiple model providers through first-party, OpenAI-compatible, and community packages. This documentation covers how to configure and switch between different providers.
+
+### Default Provider - Vercel AI Gateway
+
+The Vercel AI Gateway is the default global provider, allowing simple string-based model references.
+
+#### Usage
+```typescript
+model: 'openai/gpt-5.1'
+```
+
+### Alternative Gateway Provider Imports
+
+#### Option 1: Import from 'ai' package
+```typescript
+import { gateway } from 'ai';
+
+model: gateway('openai/gpt-5.1');
+```
+
+#### Option 2: Import from '@ai-sdk/gateway' package
+```typescript
+import { gateway } from '@ai-sdk/gateway';
+
+model: gateway('openai/gpt-5.1');
+```
+
+### Using Other Providers
+
+#### OpenAI Provider
+
+**Installation**
+```bash
+# Using pnpm
+pnpm add @ai-sdk/openai@beta
+
+# Using npm
+npm install @ai-sdk/openai@beta
+
+# Using yarn
+yarn add @ai-sdk/openai@beta
+
+# Using bun
+bun add @ai-sdk/openai@beta
+```
+
+**Implementation**
+```typescript
+import { openai } from '@ai-sdk/openai';
+
+model: openai('gpt-5.1');
+```
+
+### Provider Types
+
+#### First-Party Providers
+- Officially supported by the AI SDK
+- Full feature support and compatibility
+- Regular updates and maintenance
+
+#### OpenAI-Compatible Providers
+- Providers that implement OpenAI's API specification
+- Compatible with OpenAI SDK interfaces
+- May require additional configuration
+
+#### Community Providers
+- Community-maintained provider packages
+- Extended provider ecosystem support
+- Variable feature support
+
+### Global Provider Configuration
+
+You can configure a default global provider for your entire application, allowing string model references to use your preferred provider everywhere.
+
+#### Benefits
+- Consistent provider usage across the application
+- Simplified model references
+- Easy provider switching
+- Centralized configuration management
+
+#### Configuration Approach
+Refer to the provider management documentation for detailed global provider configuration instructions.
+
+### Provider Selection Guidelines
+
+#### When to Use Gateway Provider
+- Quick prototyping and development
+- Access to multiple model providers through single interface
+- Simplified provider management
+- Built-in by default
+
+#### When to Use Direct Provider
+- Need provider-specific features
+- Direct API control requirements
+- Custom provider configuration
+- Specific performance optimizations
+
+### Model Reference Formats
+
+#### String Format (Gateway)
+```typescript
+model: 'provider/model-name'
+// Example: 'openai/gpt-5.1'
+```
+
+#### Function Format (Direct Provider)
+```typescript
+model: providerInstance('model-name')
+// Example: openai('gpt-5.1')
+```
+
+### Best Practices
+
+1. **Choose the Right Approach**: Select provider management strategy based on application needs
+2. **Consistent Usage**: Use the same provider configuration pattern throughout your application
+3. **Environment Variables**: Store API keys and provider configurations in environment variables
+4. **Provider Documentation**: Refer to specific provider documentation for advanced features
+5. **Version Management**: Keep provider packages updated for latest features and fixes
+
+### Provider Package Structure
+
+#### Core Package
+- `ai` - Main AI SDK package with gateway provider
+
+#### Provider Packages
+- `@ai-sdk/openai` - OpenAI provider
+- `@ai-sdk/gateway` - Gateway provider (standalone)
+- Additional provider packages as needed
+
+### Migration Between Providers
+
+Switching providers typically requires:
+1. Installing the new provider package
+2. Updating import statements
+3. Modifying model references
+4. Updating API key configuration
+5. Testing compatibility with existing code
+
+### Related Documentation
+- AI SDK Core Settings
+- Provider Management Guide
+- Model Configuration Options
+- Global Provider Configuration
+```
+
+--------------------------------
+
+### Start Development Server - Bash
+
+Source: https://v6.ai-sdk.dev/docs/guides/multi-modal-chatbot
+
+Command to start the Next.js development server using pnpm package manager. Launches the application on localhost:3000 for local development and testing.
+
+```bash
+pnpm run dev
+```
+
+--------------------------------
+
+### Install AI SDK and Schema Validation Dependencies
+
+Source: https://v6.ai-sdk.dev/docs/getting-started/nextjs-pages-router
+
+Installs the core AI SDK package (`ai`), its React hooks (`@ai-sdk/react`), and the `zod` library for schema validation. These packages are essential for building AI-powered applications and defining tool inputs.
+
+```pnpm
+pnpm add ai@beta @ai-sdk/react@beta zod@beta
+```
+
+```npm
+npm install ai@beta @ai-sdk/react@beta zod@beta
+```
+
+```yarn
+yarn add ai@beta @ai-sdk/react@beta zod@beta
+```
+
+```bun
+bun add ai@beta @ai-sdk/react@beta zod@beta
+```
+
+--------------------------------
+
+### Initial Setup with hasToolCall() and openai Model
+
+Source: https://v6.ai-sdk.dev/docs/reference/ai-sdk-core/has-tool-call
+
+Shows the initial setup for using `hasToolCall()` with the OpenAI model. This example imports necessary functions and configures `generateText` to stop when the 'finalAnswer' tool is invoked, demonstrating a typical use case for structured AI responses.
+
+```typescript
+import { openai } from '@ai-sdk/openai';
+import { generateText, hasToolCall } from 'ai';
+
+const result = await generateText({
+  model: openai('gpt-4o'),
+  tools: {
+    weather: weatherTool,
+    finalAnswer: finalAnswerTool,
+  },
+  // Stop when the finalAnswer tool is called
+  stopWhen: hasToolCall('finalAnswer'),
+});
+```
+
+--------------------------------
+
+### Install AI SDK Polyfill Packages
+
+Source: https://v6.ai-sdk.dev/docs/getting-started/expo
+
+Installs necessary polyfill packages like `@ungap/structured-clone` and `@stardazed/streams-text-encoding` which provide `structuredClone`, `TextEncoderStream`, and `TextDecoderStream` for Expo/React Native environments.
+
+```pnpm
+pnpm add @ungap/structured-clone @stardazed/streams-text-encoding
+```
+
+```npm
+npm install @ungap/structured-clone @stardazed/streams-text-encoding
+```
+
+```yarn
+yarn add @ungap/structured-clone @stardazed/streams-text-encoding
+```
+
+```bun
+bun add @ungap/structured-clone @stardazed/streams-text-encoding
+```
+
+--------------------------------
+
+### Run Node.js AI Chat Application
+
+Source: https://v6.ai-sdk.dev/docs/getting-started/nodejs
+
+Executes the TypeScript AI chat application using `tsx`, a command-line tool that allows running TypeScript files directly. This command starts the interactive AI agent in your terminal.
+
+```bash
+pnpm tsx index.ts
+```
+
+--------------------------------
+
+### Copy Example Environment File
+
+Source: https://v6.ai-sdk.dev/docs/guides/rag-chatbot
+
+This command creates a new `.env` file by copying the `.env.example`, which serves as a template for configuring environment variables like `DATABASE_URL` and `OPENAI_API_KEY`.
+
+```bash
+cp .env.example .env
+```
+
+--------------------------------
+
+### Initialize Node.js Project with pnpm
+
+Source: https://v6.ai-sdk.dev/docs/getting-started/nodejs
+
+Initializes a new Node.js project by creating a directory, navigating into it, and setting up a `package.json` file using the pnpm package manager. This is the first step in setting up any Node.js project.
+
+```bash
+mkdir my-ai-app
+cd my-ai-app
+pnpm init
+```
+
+--------------------------------
+
+### Generate Text with DeepSeek R1 via Groq
+
+Source: https://v6.ai-sdk.dev/docs/guides/r1
+
+Implementation using Groq provider with DeepSeek R1 distilled model and reasoning extraction middleware. Requires @ai-sdk/groq and ai packages.
+
+```typescript
+import { groq } from '@ai-sdk/groq';
+import {
+  generateText,
+  wrapLanguageModel,
+  extractReasoningMiddleware,
+} from 'ai';
+
+// middleware to extract reasoning tokens
+const enhancedModel = wrapLanguageModel({
+  model: groq('deepseek-r1-distill-llama-70b'),
+  middleware: extractReasoningMiddleware({ tagName: 'think' }),
+});
+
+const { reasoningText, text } = await generateText({
+  model: enhancedModel,
+  prompt: 'Explain quantum entanglement.',
+});
+```
+
+--------------------------------
+
+### Install Project Dependencies with pnpm
+
+Source: https://v6.ai-sdk.dev/docs/guides/rag-chatbot
+
+Run this command to install all necessary project dependencies as defined in the `package.json` using the pnpm package manager.
+
+```bash
+pnpm install
+```
+
+--------------------------------
+
+### Configure Model with OpenAI Provider (TypeScript)
+
+Source: https://v6.ai-sdk.dev/docs/getting-started/nodejs
+
+Demonstrates how to import the OpenAI provider and configure a specific OpenAI model directly, allowing for direct integration without relying on the Vercel AI Gateway.
+
+```typescript
+import { openai } from '@ai-sdk/openai';
+
+model: openai('gpt-5.1');
+```
+
+--------------------------------
+
+### Initialize AI SDK ToolLoopAgent with Tools and Generate Response
+
+Source: https://v6.ai-sdk.dev/docs/reference/ai-sdk-core/tool-loop-agent
+
+This TypeScript example demonstrates the setup of a `ToolLoopAgent` with multiple tools (weather, calculator) and custom instructions. It then uses the `generate()` method to process a complex prompt, showcasing how the agent leverages tools to produce a result and captures the steps taken.
+
+```typescript
+import { ToolLoopAgent, stepCountIs } from 'ai';
+import { weatherTool, calculatorTool } from './tools';
+
+const assistant = new ToolLoopAgent({
+  model: 'openai/gpt-4o',
+  instructions: 'You are a helpful assistant.',
+  tools: {
+    weather: weatherTool,
+    calculator: calculatorTool,
+  },
+  stopWhen: stepCountIs(3),
+});
+
+const result = await assistant.generate({
+  prompt: 'What is the weather in NYC and what is 100 * 25?',
+});
+
+console.log(result.text);
+console.log(result.steps); // Array of all steps taken by the agent
+```
+
+--------------------------------
+
+### Example of Running a Specific AI SDK v5 Codemod
+
+Source: https://v6.ai-sdk.dev/docs/migration-guides/migration-guide-5-0
+
+This provides a concrete example of running a particular v5 codemod, `rename-format-stream-part`, on the `src/` directory. This is useful for applying a specific fix or transformation to a designated part of your project.
+
+```sh
+npx @ai-sdk/codemod v5/rename-format-stream-part src/
+```
+
+--------------------------------
+
+### Install AI SDK 6 Beta Packages
+
+Source: https://v6.ai-sdk.dev/docs/announcing-ai-sdk-6-beta
+
+This command installs the AI SDK 6 Beta, along with its OpenAI and React packages, using npm. It's important to note that APIs might change during the beta phase, so pinning to specific versions is recommended to avoid unexpected breaking changes in patch releases.
+
+```bash
+npm install ai@beta @ai-sdk/openai@beta @ai-sdk/react@beta
+```
+
+--------------------------------
+
+### Format LLM Prompt with AI SDK Documentation
+
+Source: https://v6.ai-sdk.dev/docs/index
+
+This example demonstrates a structured prompt format for querying a Large Language Model (LLM) with specific documentation content. It requires pasting documentation into the "{paste documentation here}" section and formulating a question within "{your question}" to guide the LLM's response based on the provided text.
+
+```text
+Documentation:
+{paste documentation here}
+---
+Based on the above documentation, answer the following:
+{your question}
+
+```
+
+--------------------------------
+
+### Generate Image with AI SDK and OpenAI DALL-E 3
+
+Source: https://v6.ai-sdk.dev/docs/ai-sdk-core/image-generation
+
+This example demonstrates how to use the `generateImage` function from the AI SDK to create an image using the OpenAI DALL-E 3 model with a given prompt. It shows the basic setup for importing the function and calling it asynchronously.
+
+```tsx
+import { experimental_generateImage as generateImage } from 'ai';
+import { openai } from '@ai-sdk/openai';
+
+const { image } = await generateImage({
+  model: openai.image('dall-e-3'),
+  prompt: 'Santa Claus driving a Cadillac',
+});
+```
+
+--------------------------------
+
+### Generate Text with DeepSeek R1 Model
+
+Source: https://v6.ai-sdk.dev/docs/guides/r1
+
+Basic implementation to generate text and reasoning using DeepSeek R1 model directly with the AI SDK. Requires @ai-sdk/deepseek and ai packages.
+
+```typescript
+import { deepseek } from '@ai-sdk/deepseek';
+import { generateText } from 'ai';
+
+const { reasoningText, text } = await generateText({
+  model: deepseek('deepseek-reasoner'),
+  prompt: 'Explain quantum entanglement.',
+});
+```
+
+--------------------------------
+
+### Install AI SDK and OpenAI Provider Dependencies
+
+Source: https://v6.ai-sdk.dev/docs/guides/multi-modal-chatbot
+
+Installs the core `ai` package (AI SDK), `@ai-sdk/react` for React integration, and `@ai-sdk/openai` (the OpenAI provider) into your project using `pnpm`. These are essential for interacting with large language models through the AI SDK.
+
+```bash
+pnpm add ai @ai-sdk/react @ai-sdk/openai
+```
+
+--------------------------------
+
+### Create Basic ToolLoopAgent
+
+Source: https://v6.ai-sdk.dev/docs/agents/building-agents
+
+Instantiate a ToolLoopAgent with basic model configuration and system instructions. Provides foundation for agent setup.
+
+```TypeScript
+import { ToolLoopAgent } from 'ai';
+
+const myAgent = new ToolLoopAgent({
+  model: 'openai/gpt-4o',
+  instructions: 'You are a helpful assistant.',
+  tools: {
+    // Your tools here
+  },
+});
+```
+
+--------------------------------
+
+### Create .env File for API Key
+
+Source: https://v6.ai-sdk.dev/docs/getting-started/nodejs
+
+Creates an empty `.env` file in the project's root directory. This file is used to store sensitive environment variables, such as API keys, securely and outside of version control.
+
+```bash
+touch .env
+```
+
+--------------------------------
+
+### Initialize Nuxt.js Application with pnpm
+
+Source: https://v6.ai-sdk.dev/docs/getting-started/nuxt
+
+This command utilizes the pnpm package manager to scaffold a new Nuxt.js project. It creates a directory named 'my-ai-app' and sets up the fundamental project structure required for a Nuxt application.
+
+```shell
+pnpm create nuxt my-ai-app
+```
+
+--------------------------------
+
+### Generate Text with DeepSeek R1 via Fireworks
+
+Source: https://v6.ai-sdk.dev/docs/guides/r1
+
+Implementation using Fireworks provider with DeepSeek R1 model and reasoning extraction middleware. Requires @ai-sdk/fireworks and ai packages.
+
+```typescript
+import { fireworks } from '@ai-sdk/fireworks';
+import {
+  generateText,
+  wrapLanguageModel,
+  extractReasoningMiddleware,
+} from 'ai';
+
+// middleware to extract reasoning tokens
+const enhancedModel = wrapLanguageModel({
+  model: fireworks('accounts/fireworks/models/deepseek-r1'),
+  middleware: extractReasoningMiddleware({ tagName: 'think' }),
+});
+
+const { reasoningText, text } = await generateText({
+  model: enhancedModel,
+  prompt: 'Explain quantum entanglement.',
+});
+```
+
+--------------------------------
+
+### Define System Messages for AI Model Behavior (JavaScript)
+
+Source: https://v6.ai-sdk.dev/docs/ai-sdk-core/prompts
+
+This JavaScript example demonstrates how to set a system message using the AI SDK's `generateText` function to guide the AI model's behavior. By including a message with `role: 'system'` before user messages, you can provide initial instructions or context, influencing how the model responds to subsequent user input. The example sets a travel planning persona for the assistant.
+
+```javascript
+const result = await generateText({
+  model: 'openai/gpt-4.1',
+  messages: [
+    { role: 'system', content: 'You help planning travel itineraries.' },
+    {
+      role: 'user',
+      content:
+        'I am planning a trip to Berlin for 3 days. Please suggest the best tourist activities for me to do.',
+    },
+  ],
+});
+```
+
+--------------------------------
+
+### Usage Example: Applying default settings with streamText - TypeScript
+
+Source: https://v6.ai-sdk.dev/docs/reference/ai-sdk-core/default-settings-middleware
+
+Illustrates a comprehensive usage example of defaultSettingsMiddleware. It shows how to wrap a language model with default settings and then use it with the streamText function, demonstrating how explicit parameters override defaults.
+
+```typescript
+import { streamText } from 'ai';
+import { wrapLanguageModel } from 'ai';
+import { defaultSettingsMiddleware } from 'ai';
+import { openai } from 'ai';
+
+// Create a model with default settings
+const modelWithDefaults = wrapLanguageModel({
+  model: openai.ChatTextGenerator({ model: 'gpt-4' }),
+  middleware: defaultSettingsMiddleware({
+    settings: {
+      temperature: 0.5,
+      maxOutputTokens: 800,
+      providerMetadata: {
+        openai: {
+          tags: ['production'],
+        },
+      },
+    },
+  }),
+});
+
+// Use the model - default settings will be applied
+const result = await streamText({
+  model: modelWithDefaults,
+  prompt: 'Your prompt here',
+  // These parameters will override the defaults
+  temperature: 0.8,
+});
+```
+
+--------------------------------
+
+### Log AI agent tool calls and results using ai SDK (TypeScript)
+
+Source: https://v6.ai-sdk.dev/docs/getting-started/nodejs
+
+This snippet extends the previous example by adding console logs for the agent's tool calls and their results. After streaming the text response, it asynchronously retrieves and prints 'result.toolCalls' and 'result.toolResults'. This helps in debugging and understanding when and how the AI agent decides to invoke a tool.
+
+```typescript
+import { ModelMessage, streamText, tool } from 'ai';
+import 'dotenv/config';
+import { z } from 'zod';
+import * as readline from 'node:readline/promises';
+
+const terminal = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+
+const messages: ModelMessage[] = [];
+
+async function main() {
+  while (true) {
+    const userInput = await terminal.question('You: ');
+
+    messages.push({ role: 'user', content: userInput });
+
+    const result = streamText({
+      model: 'openai/gpt-5.1',
+      messages,
+      tools: {
+        weather: tool({
+          description: 'Get the weather in a location (fahrenheit)',
+          inputSchema: z.object({
+            location: z
+              .string()
+              .describe('The location to get the weather for'),
+          }),
+          execute: async ({ location }) => {
+            const temperature = Math.round(Math.random() * (90 - 32) + 32);
+            return {
+              location,
+              temperature,
+            };
+          },
+        }),
+      },
+    });
+
+    let fullResponse = '';
+    process.stdout.write('\nAssistant: ');
+    for await (const delta of result.textStream) {
+      fullResponse += delta;
+      process.stdout.write(delta);
+    }
+    process.stdout.write('\n\n');
+
+    console.log(await result.toolCalls);
+    console.log(await result.toolResults);
+    messages.push({ role: 'assistant', content: fullResponse });
+  }
+}
+
+main().catch(console.error);
+```
+
+--------------------------------
+
+### Create .env.local File for Environment Variables
+
+Source: https://v6.ai-sdk.dev/docs/getting-started/nextjs-pages-router
+
+This command creates an empty `.env.local` file in the project root. This file is used to store sensitive environment variables, such as API keys, which are not committed to version control.
+
+```shell
+touch .env.local
+```
+
+--------------------------------
+
+### Configure Vercel AI Gateway API Key
+
+Source: https://v6.ai-sdk.dev/docs/getting-started/nodejs
+
+Adds the Vercel AI Gateway API key to the `.env` file. This key is essential for authenticating your application with the Vercel AI Gateway service, enabling access to AI models.
+
+```env
+AI_GATEWAY_API_KEY=xxxxxxxxx
+```
+
+--------------------------------
+
+### Install a Ready-Made AI SDK Tool Package
+
+Source: https://v6.ai-sdk.dev/docs/foundations/tools
+
+To utilize pre-built tools, install the desired tool package as you would any other npm library. This command adds 'some-tool-package' to your project's dependencies, making its exported tools available for use with AI SDK functions.
+
+```bash
+pnpm add some-tool-package
+```
+
+--------------------------------
+
+### Node.js HTTP Server Example with `streamToResponse`
+
+Source: https://v6.ai-sdk.dev/docs/reference/stream-helpers/stream-to-response
+
+This example demonstrates using `streamToResponse` to pipe a streaming AI response to a Node.js HTTP server. It initializes an AI stream, appends data, and forwards it to the `ServerResponse` object, handling completion and closing the data stream.
+
+```typescript
+import { openai } from '@ai-sdk/openai';
+import { StreamData, streamText, streamToResponse } from 'ai';
+import { createServer } from 'http';
+
+createServer(async (req, res) => {
+  const result = streamText({
+    model: openai('gpt-4.1'),
+    prompt: 'What is the weather in San Francisco?',
+  });
+
+  // use stream data
+  const data = new StreamData();
+
+  data.append('initialized call');
+
+  streamToResponse(
+    result.toAIStream({
+      onFinal() {
+        data.append('call completed');
+        data.close();
+      },
+    }),
+    res,
+    {},
+    data,
+  );
+}).listen(8080);
+```
+
+--------------------------------
+
+### createIdGenerator() - Function Documentation
+
+Source: https://v6.ai-sdk.dev/docs/reference/ai-sdk-core/create-id-generator
+
+Documentation for the createIdGenerator() function, including its parameters, return value, and usage examples.
+
+```APIDOC
+## `createIdGenerator()`
+
+Creates a customizable ID generator function. You can configure the alphabet, prefix, separator, and default size of the generated IDs.
+
+### Description
+
+This function returns a new function that generates unique IDs based on the provided configuration options. It allows for customization of the ID's components, such as a prefix, separator, character set (alphabet), and the length of the random part.
+
+### Method
+
+`createIdGenerator(options?: CreateIdGeneratorOptions)`
+
+### Parameters
+
+#### Path Parameters
+
+None
+
+#### Query Parameters
+
+None
+
+#### Request Body
+
+- **options** (object) - Optional. Configuration object for the ID generator.
+  - **options.alphabet** (string) - Optional. The characters to use for generating the random part of the ID. Defaults to alphanumeric characters (0-9, A-Z, a-z).
+  - **options.prefix** (string) - Optional. A string to prepend to all generated IDs. Defaults to none.
+  - **options.separator** (string) - Optional. The character(s) to use between the prefix and the random part. Defaults to "-".
+  - **options.size** (number) - Optional. The default length of the random part of the ID. Defaults to 16.
+
+### Request Example
+
+```javascript
+import { createIdGenerator } from 'ai';
+
+const generateCustomId = createIdGenerator({
+  prefix: 'user',
+  separator: '_',
+  size: 8
+});
+
+const id = generateCustomId(); // Example: "user_1a2b3c4d"
+```
+
+### Response
+
+#### Success Response (200)
+
+- **Function** - Returns a function that generates IDs based on the configured options.
+
+#### Response Example
+
+```javascript
+// The returned function signature is:
+// () => string
+
+const generatedId = createIdGenerator({ prefix: 'order' })();
+console.log(generatedId); // Example output: "order_abcdef1234567890"
+```
+
+### Notes
+
+- The generator uses non-secure random generation and should not be used for security-critical purposes.
+- The separator character must not be part of the alphabet to ensure reliable prefix checking.
+```
+
+--------------------------------
+
+### Example: Hono/Express Route Handler with `pipeAgentUIStreamToResponse`
+
+Source: https://v6.ai-sdk.dev/docs/reference/ai-sdk-core/pipe-agent-ui-stream-to-response
+
+Illustrates how to integrate `pipeAgentUIStreamToResponse` into a route handler for frameworks like Hono or Express. This example shows streaming responses from an `openaiWebSearchAgent`.
+
+```typescript
+import { pipeAgentUIStreamToResponse } from 'ai';
+import { openaiWebSearchAgent } from './openai-web-search-agent';
+
+// Hono/Express handler signature
+app.post('/chat', async (req, res) => {
+  const { messages } = await getJsonBody(req);
+
+  await pipeAgentUIStreamToResponse({
+    response: res,
+    agent: openaiWebSearchAgent,
+    messages,
+    // status: 200,
+    // headers: { 'X-Custom': 'foo' },
+    // ...additional streaming options
+  });
+});
+```
+
+--------------------------------
+
+### Configure Default AI Gateway Model (TypeScript)
+
+Source: https://v6.ai-sdk.dev/docs/getting-started/nodejs
+
+Illustrates the concise method to specify a model using a simple string, which defaults to the Vercel AI Gateway when it's set as the global provider in the AI SDK.
+
+```typescript
+model: 'openai/gpt-5.1';
+```
+
+--------------------------------
+
+### Define Detailed Behavioral Instructions for an Agent (TypeScript)
+
+Source: https://v6.ai-sdk.dev/docs/agents/building-agents
+
+This example illustrates how to provide specific, multi-line guidelines for an agent's behavior and decision-making process. It outlines a structured approach for a code review agent, covering priorities like security, performance, and feedback style.
+
+```ts
+const codeReviewAgent = new ToolLoopAgent({
+  model: 'openai/gpt-4o',
+  instructions: `You are a senior software engineer conducting code reviews.
+
+  Your approach:
+  - Focus on security vulnerabilities first
+  - Identify performance bottlenecks
+  - Suggest improvements for readability and maintainability
+  - Be constructive and educational in your feedback
+  - Always explain why something is an issue and how to fix it`,
+});
+```
+
+--------------------------------
+
+### Explicitly Use Vercel AI Gateway Provider (TypeScript)
+
+Source: https://v6.ai-sdk.dev/docs/getting-started/nodejs
+
+Shows two equivalent ways to explicitly import and use the Vercel AI Gateway provider for model configuration. This provides clarity and ensures the gateway is used, even if not set globally.
+
+```typescript
+// Option 1: Import from 'ai' package (included by default)
+import { gateway } from 'ai';
+model: gateway('openai/gpt-5.1');
+```
+
+```typescript
+// Option 2: Install and import from '@ai-sdk/gateway' package
+import { gateway } from '@ai-sdk/gateway';
+model: gateway('openai/gpt-5.1');
+```
+
+--------------------------------
+
+### Prompt AI SDK 5 Migration with MCP Server
+
+Source: https://v6.ai-sdk.dev/docs/migration-guides/migration-guide-5-0
+
+This prompt string is used to initiate the AI SDK 5 migration process when leveraging the configured MCP server. It instructs the coding agent to start the migration and first create a checklist.
+
+```plaintext
+Please migrate this project to AI SDK 5 using the ai-sdk-5-migration mcp server. Start by creating a checklist.
+```
+
+--------------------------------
+
+### Generate text with a system prompt and a user prompt (AI SDK)
+
+Source: https://v6.ai-sdk.dev/docs/ai-sdk-core/prompts
+
+Shows how to use a `system` prompt to provide initial, guiding instructions to the LLM, in conjunction with a user `prompt`. This helps constrain and direct the model's behavior and responses, as demonstrated by making the model act as a travel planner.
+
+```javascript
+const result = await generateText({
+  model: 'openai/gpt-4.1',
+  system:
+    `You help planning travel itineraries. ` +
+    `Respond to the users' request with a list ` +
+    `of the best stops to make in their destination.`,
+  prompt:
+    `I am planning a trip to ${destination} for ${lengthOfStay} days. ` +
+    `Please suggest the best tourist activities for me to do.`,
+});
+```
+
+--------------------------------
+
+### List MCP Resource Templates (TypeScript)
+
+Source: https://v6.ai-sdk.dev/docs/ai-sdk-core/mcp-tools
+
+This example shows how to list all available resource templates from the MCP server. Resource templates define dynamic URI patterns for flexible data queries.
+
+```typescript
+const templates = await mcpClient.listResourceTemplates();
+```
+
+--------------------------------
+
+### Add Temperature Conversion Tool to AI SDK API Route (TypeScript)
+
+Source: https://v6.ai-sdk.dev/docs/getting-started/nuxt
+
+This TypeScript example extends the existing AI SDK API route by adding a second tool, `convertFahrenheitToCelsius`. This tool allows the model to convert Fahrenheit temperatures to Celsius, demonstrating how to expand the model's capabilities with additional utilities. It showcases handling multiple tools within the `tools` object of the `streamText` configuration.
+
+```typescript
+import {
+  createGateway,
+  streamText,
+  UIMessage,
+  convertToModelMessages,
+  tool,
+  stepCountIs,
+} from 'ai';
+import { z } from 'zod';
+
+export default defineLazyEventHandler(async () => {
+  const apiKey = useRuntimeConfig().aiGatewayApiKey;
+  if (!apiKey) throw new Error('Missing AI Gateway API key');
+  const gateway = createGateway({
+    apiKey: apiKey,
+  });
+
+  return defineEventHandler(async (event: any) => {
+    const { messages }: { messages: UIMessage[] } = await readBody(event);
+
+    const result = streamText({
+      model: gateway('openai/gpt-5.1'),
+      messages: convertToModelMessages(messages),
+      stopWhen: stepCountIs(5),
+      tools: {
+        weather: tool({
+          description: 'Get the weather in a location (fahrenheit)',
+          inputSchema: z.object({
+            location: z
+              .string()
+              .describe('The location to get the weather for'),
+          }),
+          execute: async ({ location }) => {
+            const temperature = Math.round(Math.random() * (90 - 32) + 32);
+            return {
+              location,
+              temperature,
+            };
+          },
+        }),
+        convertFahrenheitToCelsius: tool({
+          description: 'Convert a temperature in fahrenheit to celsius',
+          inputSchema: z.object({
+            temperature: z
+              .number()
+              .describe('The temperature in fahrenheit to convert'),
+          }),
+          execute: async ({ temperature }) => {
+            const celsius = Math.round((temperature - 32) * (5 / 9));
+            return {
+              celsius,
+            };
+          },
+        }),
+      },
+    });
+
+    return result.toUIMessageStreamResponse();
+  });
+});
+```
+
+--------------------------------
+
+### Example: Convert StringOutputParser Stream
+
+Source: https://v6.ai-sdk.dev/docs/reference/stream-helpers/langchain-adapter
+
+Illustrates converting a stream from a LangChain model piped through `StringOutputParser` using `toUIMessageStream`.
+
+```APIDOC
+## Convert StringOutputParser Stream
+
+### Description
+This example demonstrates converting a LangChain stream that has been processed by `StringOutputParser` into a UI message stream response using `toUIMessageStream`.
+
+### Method
+`POST`
+
+### Endpoint
+`/api/completion`
+
+### Request Body
+- **prompt** (string) - Required - The prompt to send to the LangChain model.
+
+### Request Example
+```json
+{
+  "prompt": "Tell me a short story."
+}
+```
+
+### Response
+#### Success Response (200)
+A `Response` object containing a UI message stream.
+
+#### Response Example
+(Stream of UI messages, format depends on `createUIMessageStreamResponse` implementation)
+```
+
+--------------------------------
+
+### Clone AI SDK RAG Starter Repository
+
+Source: https://v6.ai-sdk.dev/docs/guides/rag-chatbot
+
+Use this command to clone the starter repository from GitHub, providing a pre-configured base for the project.
+
+```bash
+git clone https://github.com/vercel/ai-sdk-rag-starter
+```
+
+--------------------------------
+
+### Initialize MCP Client with HTTP Transport
+
+Source: https://v6.ai-sdk.dev/docs/ai-sdk-core/mcp-tools
+
+Demonstrates how to create an MCP client using HTTP transport, recommended for production deployments. Configuration options include URL, headers, and an OAuth provider. Examples show direct configuration and using `StreamableHTTPClientTransport`.
+
+```APIDOC
+## SDK Function: `experimental_createMCPClient`
+
+### Description
+Initializes an MCP client using HTTP transport to connect to an MCP server. This method is recommended for production deployments due to its robustness and configurability.
+
+### Function Signature
+`experimental_createMCPClient(config: MCPClientConfig)`
+
+### Configuration Object (`MCPClientConfig`)
+- **transport** (object) - Required - Configuration for the HTTP transport layer.
+  - **type** (string) - Required - Must be `'http'`.
+  - **url** (string) - Required - The base URL of the MCP server, e.g., `'https://your-server.com/mcp'`.
+  - **headers** (object) - Optional - Key-value pairs for custom HTTP headers, e.g., `{ Authorization: 'Bearer my-api-key' }`.
+  - **authProvider** (object) - Optional - An OAuth client provider instance for automatic authorization.
+
+### Example Usage: Direct HTTP Configuration
+```typescript
+import { experimental_createMCPClient as createMCPClient } from '@ai-sdk/mcp';
+
+const mcpClient = await createMCPClient({
+  transport: {
+    type: 'http',
+    url: 'https://your-server.com/mcp',
+    headers: { Authorization: 'Bearer my-api-key' },
+    authProvider: myOAuthClientProvider,
+  },
+});
+```
+
+### Example Usage: Using `StreamableHTTPClientTransport`
+```typescript
+import { experimental_createMCPClient as createMCPClient } from '@ai-sdk/mcp';
+import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
+
+const url = new URL('https://your-server.com/mcp');
+const mcpClient = await createMCPClient({
+  transport: new StreamableHTTPClientTransport(url, {
+    sessionId: 'session_123', // Optional session ID
+  }),
+});
+```
+
+### Return Value
+- **mcpClient** (object) - An instance of the configured MCP client.
+```
+
+--------------------------------
+
+### Import Polyfills in Root Layout
+
+Source: https://v6.ai-sdk.dev/docs/getting-started/expo
+
+Imports the `polyfills.js` file into the root `_layout.tsx` of an Expo/React Native project. This ensures the polyfills are loaded and applied before the main application logic.
+
+```ts
+import '@/polyfills';
+```
+
+--------------------------------
+
+### Build Streaming AI Chat Application in Node.js
+
+Source: https://v6.ai-sdk.dev/docs/getting-started/nodejs
+
+Implements an interactive streaming AI chat application using the AI SDK in Node.js. This code sets up a readline interface for terminal input, maintains conversation history, and streams responses from an AI model in real-time.
+
+```typescript
+import { ModelMessage, streamText } from 'ai';
+import 'dotenv/config';
+import * as readline from 'node:readline/promises';
+
+const terminal = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+
+const messages: ModelMessage[] = [];
+
+async function main() {
+  while (true) {
+    const userInput = await terminal.question('You: ');
+
+    messages.push({ role: 'user', content: userInput });
+
+    const result = streamText({
+      model: 'openai/gpt-5.1',
+      messages,
+    });
+
+    let fullResponse = '';
+    process.stdout.write('\nAssistant: ');
+    for await (const delta of result.textStream) {
+      fullResponse += delta;
+      process.stdout.write(delta);
+    }
+    process.stdout.write('\n\n');
+
+    messages.push({ role: 'assistant', content: fullResponse });
+  }
+}
+
+main().catch(console.error);
+```
+
+--------------------------------
+
+### Add and Commit Local Changes to Git Repository
+
+Source: https://v6.ai-sdk.dev/docs/advanced/vercel-deployment-guide
+
+These commands stage all modified files, commit them with a message, and are typically used to track local changes before pushing to a remote repository. Ensure your .gitignore file excludes sensitive information like environment variables and node_modules.
+
+```bash
+git add .
+git commit -m "init"
+```
+
+--------------------------------
+
+### Accessing Usage Data in AI SDK v4 (onFinish Callback)
+
+Source: https://v6.ai-sdk.dev/docs/migration-guides/migration-guide-5-0
+
+This snippet demonstrates how usage information was directly accessible through the `options.usage` parameter within the `onFinish` callback of the `useChat` hook in AI SDK v4. It shows a simple `console.log` example for retrieving and displaying this data.
+
+```tsx
+const { messages } = useChat({
+  onFinish(message, options) {
+    const usage = options.usage;
+    console.log('Usage:', usage);
+  },
+});
+```
+
+--------------------------------
+
+### Example: Logging a meal with AI SDK
+
+Source: https://v6.ai-sdk.dev/docs/advanced/multistep-interfaces
+
+Demonstrates a simple interaction where a user logs a meal. The AI SDK processes the request, identifies the 'log_meal' tool, and generates the corresponding tool call with parameters extracted from the user's input. This showcases basic tool usage and output.
+
+```text
+User: Log a chicken shawarma for lunch.
+Tool: log_meal("chicken shawarma", "250g", "12:00 PM")
+Model: Chicken shawarma has been logged for lunch.
+```
+
+--------------------------------
+
+### Use ToolLoopAgent with createAgentUIStream (TypeScript)
+
+Source: https://v6.ai-sdk.dev/docs/reference/ai-sdk-core/agent
+
+This TypeScript example illustrates how to integrate and use an AI SDK agent, specifically the `ToolLoopAgent`, with the `createAgentUIStream` utility. It demonstrates instantiating an agent and then streaming its interactive output, processing each chunk as it becomes available. This is a common pattern for building AI-powered UIs.
+
+```typescript
+import { ToolLoopAgent, createAgentUIStream } from "ai";
+
+const agent = new ToolLoopAgent({ ... });
+
+const stream = await createAgentUIStream({
+  agent,
+  messages: [{ role: "user", content: "What is the weather in NYC?" }]
+});
+
+for await (const chunk of stream) {
+  console.log(chunk);
+}
+```
+
+--------------------------------
+
+### Configure Vercel AI Gateway API Key in .env
+
+Source: https://v6.ai-sdk.dev/docs/getting-started/nuxt
+
+This snippet demonstrates how to add your Vercel AI Gateway API key to the `.env` file. Replace the placeholder `xxxxxxxxx` with your actual API key. Nuxt will automatically load this variable if prefixed with `NUXT_`, making it accessible within your application.
+
+```env
+NUXT_AI_GATEWAY_API_KEY=xxxxxxxxx
+```
+
+--------------------------------
+
+### MCPClient.tools() - Get Available Tools
+
+Source: https://v6.ai-sdk.dev/docs/reference/ai-sdk-core/create-mcp-client
+
+Retrieves the tools available from the MCP server. Supports optional schema definitions for compile-time type checking. When schemas are not provided, they are automatically inferred from the server.
+
+```APIDOC
+## tools()
+
+### Description
+Gets the tools available from the MCP server with optional schema definitions for type checking.
+
+### Method
+Async
+
+### Signature
+```typescript
+async (options?: {
+  schemas?: TOOL_SCHEMAS
+}) => Promise<McpToolSet<TOOL_SCHEMAS>>
+```
+
+### Parameters
+#### Options (Optional)
+- **schemas** (TOOL_SCHEMAS) - Optional - Schema definitions for compile-time type checking. When not provided, schemas are inferred from the server.
+
+### Returns
+Promise<McpToolSet<TOOL_SCHEMAS>> - A promise that resolves to the set of available tools.
+
+### Example Usage
+```typescript
+const toolSet = await client.tools();
+
+// With schemas
+const toolSet = await client.tools({
+  schemas: mySchemaDefinitions
+});
+```
+```
+
+--------------------------------
+
+### Example Usage of pipeUIMessageStreamToResponse (TypeScript)
+
+Source: https://v6.ai-sdk.dev/docs/reference/ai-sdk-ui/pipe-ui-message-stream-to-response
+
+Demonstrates how to use pipeUIMessageStreamToResponse to pipe a UI message stream to a Node.js ServerResponse. It includes basic response configuration and an optional stream consumer.
+
+```typescript
+pipeUIMessageStreamToResponse({
+  response: serverResponse,
+  status: 200,
+  statusText: 'OK',
+  headers: {
+    'Custom-Header': 'value',
+  },
+  stream: myUIMessageStream,
+  consumeSseStream: ({ stream }) => {
+    // Optional: consume the SSE stream independently
+    console.log('Consuming SSE stream:', stream);
+  },
+});
+```
+
+--------------------------------
+
+### Provider Registry Setup with Custom Separator
+
+Source: https://v6.ai-sdk.dev/docs/ai-sdk-core/provider-management
+
+Illustrates how to create a provider registry with a custom separator character between the provider ID and the model ID. Instead of the default colon (':'), this example uses ' > ' as the separator, offering more flexibility in naming conventions.
+
+```typescript
+import { createProviderRegistry } from 'ai';
+import { anthropic } from '@ai-sdk/anthropic';
+import { openai } from '@ai-sdk/openai';
+
+export const customSeparatorRegistry = createProviderRegistry(
+  {
+    anthropic,
+    openai,
+  },
+  { separator: ' > ' },
+);
+```
+
+--------------------------------
+
+### Provide Seed for Reproducible Image Generation with OpenAI DALL-E 3
+
+Source: https://v6.ai-sdk.dev/docs/ai-sdk-core/image-generation
+
+This example shows how to use the `seed` parameter to ensure reproducible image generation. If supported by the model, providing the same seed will consistently produce the same image for a given prompt.
+
+```tsx
+import { experimental_generateImage as generateImage } from 'ai';
+import { openai } from '@ai-sdk/openai';
+
+const { image } = await generateImage({
+  model: openai.image('dall-e-3'),
+  prompt: 'Santa Claus driving a Cadillac',
+  seed: 1234567890,
+});
+```
+
+--------------------------------
+
+### Inspecting HTTP Request Bodies for AI Models
+
+Source: https://v6.ai-sdk.dev/docs/ai-sdk-core/prompt-engineering
+
+This example shows how to access the raw HTTP request body sent to an AI model provider, such as OpenAI. Accessing `result.request.body` allows for detailed inspection of the exact payload being sent, which is valuable for debugging provider-specific interactions.
+
+```typescript
+const result = await generateText({
+  model: openai('gpt-4o'),
+  prompt: 'Hello, world!',
+});
+
+console.log(result.request.body);
+```
+
+--------------------------------
+
+### Access Warnings from Speech Generation
+
+Source: https://v6.ai-sdk.dev/docs/ai-sdk-core/speech
+
+This example illustrates how to retrieve warnings generated during the speech synthesis process. Warnings are available on the `warnings` property of the returned audio object and can indicate issues like unsupported parameters.
+
+```typescript
+import { openai } from '@ai-sdk/openai';
+import { experimental_generateSpeech as generateSpeech } from 'ai';
+
+const audio = await generateSpeech({
+  model: openai.speech('tts-1'),
+  text: 'Hello, world!',
+});
+
+const warnings = audio.warnings;
+```
+
+--------------------------------
+
+### Migrate LlamaIndex Adapter to `@ai-sdk/llamaindex` (AI SDK v5)
+
+Source: https://v6.ai-sdk.dev/docs/migration-guides/migration-guide-5-0
+
+Similar to LangChain, the `LlamaIndexAdapter` is now in its own `@ai-sdk/llamaindex` package in v5. It also adopts the UI message stream pattern for consistent streaming behavior. Ensure you install the new package.
+
+```tsx
+import { LlamaIndexAdapter } from 'ai';
+
+const response = LlamaIndexAdapter.toDataStreamResponse(stream);
+```
+
+```tsx
+import { toUIMessageStream } from '@ai-sdk/llamaindex';
+import { createUIMessageStreamResponse } from 'ai';
+
+const response = createUIMessageStreamResponse({
+  stream: toUIMessageStream(stream),
+});
+```
+
+--------------------------------
+
+### Setting Temperature for Deterministic Tool Calls and Object Generation
+
+Source: https://v6.ai-sdk.dev/docs/ai-sdk-core/prompt-engineering
+
+This example shows how to set the `temperature` parameter to `0` for AI model calls, which is recommended for ensuring deterministic and consistent results. This is crucial for precise tool calls and generating data that adheres to specific formats or schemas.
+
+```typescript
+const result = await generateText({
+  model: openai('gpt-4o'),
+  temperature: 0, // Recommended for tool calls
+  tools: {
+    myTool: tool({
+      description: 'Execute a command',
+      inputSchema: z.object({
+        command: z.string(),
+      }),
+    }),
+  },
+  prompt: 'Execute the ls command',
+});
+```
+
+--------------------------------
+
+### Server-Side Message ID Generation with `createUIMessageStream`
+
+Source: https://v6.ai-sdk.dev/docs/ai-sdk-ui/chatbot-message-persistence
+
+This example shows an alternative method for server-side message ID generation using `createUIMessageStream`. It involves explicitly writing a 'start' message part with a custom `messageId` generated by `generateId()`. This approach offers fine-grained control over the initial message part of the stream, ensuring persistence compatibility.
+
+```tsx
+import {
+  generateId,
+  streamText,
+  createUIMessageStream,
+  createUIMessageStreamResponse,
+} from 'ai';
+
+export async function POST(req: Request) {
+  const { messages, chatId } = await req.json();
+
+  const stream = createUIMessageStream({
+    execute: ({ writer }) => {
+      // Write start message part with custom ID
+      writer.write({
+        type: 'start',
+        messageId: generateId(), // Generate server-side ID for persistence
+      });
+
+      const result = streamText({
+        model: openai('gpt-4o-mini'),
+        messages: convertToModelMessages(messages),
+      });
+
+      writer.merge(result.toUIMessageStream({ sendStart: false })); // omit start message part
+    },
+    originalMessages: messages,
+    onFinish: ({ responseMessage }) => {
+      // save your chat here
+    },
+  });
+
+  return createUIMessageStreamResponse({ stream });
+}
+```
