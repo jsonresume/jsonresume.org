@@ -3,13 +3,13 @@ import { openai } from '@ai-sdk/openai';
 import { z } from 'zod';
 import { jobTools } from './tools/jobTools';
 
-// Define the update_resume tool with simplified Zod schema
+// Define the update_resume tool with AI SDK v6 syntax (inputSchema instead of parameters)
 export const updateResume = tool({
   description:
     'Update specific sections of the resume with new information. Pass the changes object with the sections to update.',
-  parameters: z.object({
+  inputSchema: z.object({
     changes: z
-      .record(z.any())
+      .record(z.string(), z.any())
       .describe(
         'Object containing resume sections to update (basics, work, education, skills). Each section follows JSON Resume schema.'
       ),

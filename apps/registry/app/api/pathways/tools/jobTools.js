@@ -5,11 +5,10 @@ import { z } from 'zod';
  * Tool to filter/mark multiple jobs based on criteria
  */
 export const filterJobs = tool({
-  name: 'filterJobs',
   description: `Mark multiple jobs based on criteria like company name, industry keywords,
     salary range, or job type. Use this when users say things like "mark all gambling jobs as read"
     or "hide all jobs below $100k" or "I'm interested in all remote jobs".`,
-  parameters: z.object({
+  inputSchema: z.object({
     criteria: z
       .object({
         companies: z
@@ -62,11 +61,10 @@ export const filterJobs = tool({
  * Tool to focus/highlight specific jobs in the graph
  */
 export const showJobs = tool({
-  name: 'showJobs',
   description: `Focus the graph view on jobs matching a search query. Use this when users
     want to see specific types of jobs or explore opportunities. Examples: "show me all
     senior roles", "find Python jobs", "what React positions are available?"`,
-  parameters: z.object({
+  inputSchema: z.object({
     query: z
       .string()
       .describe(
@@ -92,10 +90,9 @@ export const showJobs = tool({
  * Tool to get job recommendations based on resume
  */
 export const getJobInsights = tool({
-  name: 'getJobInsights',
   description: `Provide insights about the matched jobs. Use when users ask things like
     "what's the salary range?", "which companies are hiring?", "what skills are most in demand?"`,
-  parameters: z.object({
+  inputSchema: z.object({
     insightType: z
       .enum([
         'salary_range',
@@ -123,10 +120,9 @@ export const getJobInsights = tool({
  * Tool to refresh the job graph with current resume
  */
 export const refreshJobMatches = tool({
-  name: 'refreshJobMatches',
   description: `Refresh the job matches after resume updates. Use this after making
     significant resume changes to see updated job recommendations.`,
-  parameters: z.object({
+  inputSchema: z.object({
     reason: z.string().optional().describe('Why the refresh was requested'),
   }),
   execute: async ({ reason }) => {
