@@ -42,3 +42,21 @@ model views {
   created_at DateTime @default(now()) @db.Timestamptz(6)
   username   String?
 }
+
+/// Job states for read/interested/hidden tracking
+/// Supports both authenticated users and anonymous sessions
+model job_states {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id    String?   @db.Uuid
+  session_id String?   @db.Uuid
+  job_id     BigInt
+  state      String    // 'read', 'interested', 'hidden'
+  created_at DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at DateTime  @default(now()) @db.Timestamptz(6)
+
+  @@unique([user_id, job_id])
+  @@unique([session_id, job_id])
+  @@index([user_id])
+  @@index([session_id])
+  @@index([job_id])
+}

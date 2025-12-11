@@ -1,0 +1,147 @@
+import { tool } from 'ai';
+import { z } from 'zod';
+
+/**
+ * Tool to filter/mark multiple jobs based on criteria
+ */
+export const filterJobs = tool({
+  name: 'filterJobs',
+  description: `Mark multiple jobs based on criteria like company name, industry keywords,
+    salary range, or job type. Use this when users say things like "mark all gambling jobs as read"
+    or "hide all jobs below $100k" or "I'm interested in all remote jobs".`,
+  parameters: z.object({
+    criteria: z
+      .object({
+        companies: z
+          .array(z.string())
+          .optional()
+          .describe('Company names to match (partial match)'),
+        keywords: z
+          .array(z.string())
+          .optional()
+          .describe('Keywords to search in title, description, skills'),
+        industries: z
+          .array(z.string())
+          .optional()
+          .describe('Industry keywords like "gambling", "crypto", "finance"'),
+        salaryMin: z
+          .number()
+          .optional()
+          .describe('Minimum salary in thousands (e.g., 100 for $100k)'),
+        salaryMax: z
+          .number()
+          .optional()
+          .describe('Maximum salary in thousands'),
+        remoteOnly: z.boolean().optional().describe('Only match remote jobs'),
+        jobTypes: z
+          .array(z.string())
+          .optional()
+          .describe('Job types like "Full-time", "Contract", "Part-time"'),
+      })
+      .describe('Criteria to match jobs'),
+    action: z
+      .enum(['mark_read', 'mark_interested', 'mark_hidden', 'unmark'])
+      .describe('Action to perform on matching jobs'),
+  }),
+  execute: async ({ criteria, action }) => {
+    // This will be handled client-side by the CopilotChat component
+    // Return the criteria and action for client-side processing
+    return {
+      success: true,
+      criteria,
+      action,
+      message: `Ready to ${action.replace(
+        '_',
+        ' '
+      )} jobs matching your criteria`,
+    };
+  },
+});
+
+/**
+ * Tool to focus/highlight specific jobs in the graph
+ */
+export const showJobs = tool({
+  name: 'showJobs',
+  description: `Focus the graph view on jobs matching a search query. Use this when users
+    want to see specific types of jobs or explore opportunities. Examples: "show me all
+    senior roles", "find Python jobs", "what React positions are available?"`,
+  parameters: z.object({
+    query: z
+      .string()
+      .describe(
+        'Search query to filter jobs (searches title, company, skills, description)'
+      ),
+    sortBy: z
+      .enum(['similarity', 'salary', 'date'])
+      .optional()
+      .describe('How to sort the results'),
+  }),
+  execute: async ({ query, sortBy }) => {
+    // This will be handled client-side
+    return {
+      success: true,
+      query,
+      sortBy: sortBy || 'similarity',
+      message: `Filtering graph to show jobs matching "${query}"`,
+    };
+  },
+});
+
+/**
+ * Tool to get job recommendations based on resume
+ */
+export const getJobInsights = tool({
+  name: 'getJobInsights',
+  description: `Provide insights about the matched jobs. Use when users ask things like
+    "what's the salary range?", "which companies are hiring?", "what skills are most in demand?"`,
+  parameters: z.object({
+    insightType: z
+      .enum([
+        'salary_range',
+        'top_companies',
+        'common_skills',
+        'job_types',
+        'locations',
+      ])
+      .describe('Type of insight to provide'),
+  }),
+  execute: async ({ insightType }) => {
+    // This will be handled client-side using available job data
+    return {
+      success: true,
+      insightType,
+      message: `Analyzing ${insightType.replace(
+        '_',
+        ' '
+      )} from your matched jobs`,
+    };
+  },
+});
+
+/**
+ * Tool to refresh the job graph with current resume
+ */
+export const refreshJobMatches = tool({
+  name: 'refreshJobMatches',
+  description: `Refresh the job matches after resume updates. Use this after making
+    significant resume changes to see updated job recommendations.`,
+  parameters: z.object({
+    reason: z.string().optional().describe('Why the refresh was requested'),
+  }),
+  execute: async ({ reason }) => {
+    return {
+      success: true,
+      action: 'refresh_graph',
+      reason,
+      message: 'Refreshing job matches based on your updated resume',
+    };
+  },
+});
+
+export const jobTools = {
+  filterJobs,
+  showJobs,
+  getJobInsights,
+  refreshJobMatches,
+};

@@ -5,106 +5,20 @@ import { Settings } from 'lucide-react';
 import Editor from '@monaco-editor/react';
 import CopilotChat from './components/CopilotChat';
 import ResumePreview from './components/ResumePreview';
+import PathwaysGraph from './components/PathwaysGraph';
+import { usePathways } from './context/PathwaysContext';
+import usePathwaysSession from './hooks/usePathwaysSession';
 
-export default function Pathways() {
+/**
+ * Main Pathways content component (uses context)
+ */
+function PathwaysContent() {
   const [activeTab, setActiveTab] = useState('graph');
-  const sampleResume = {
-    basics: {
-      name: 'Jane Doe',
-      label: 'Full-Stack Developer',
-      email: 'jane.doe@example.com',
-      phone: '+1-555-0123',
-      url: 'https://janedoe.dev',
-      location: { city: 'San Francisco', region: 'CA', countryCode: 'US' },
-      summary:
-        'Experienced full-stack developer with 5+ years building scalable web applications. Passionate about clean code, user experience, and mentoring junior developers.',
-      profiles: [
-        {
-          network: 'GitHub',
-          username: 'janedoe',
-          url: 'https://github.com/janedoe',
-        },
-        {
-          network: 'LinkedIn',
-          username: 'janedoe',
-          url: 'https://linkedin.com/in/janedoe',
-        },
-      ],
-    },
-    work: [
-      {
-        name: 'Tech Solutions Inc.',
-        position: 'Senior Software Engineer',
-        startDate: '2022-03-01',
-        summary:
-          'Lead development of microservices architecture and mentored team of 5 developers.',
-        highlights: [
-          'Architected and implemented microservices reducing response time by 40%',
-          'Led migration from monolithic to containerized architecture',
-          'Mentored 5 junior developers and conducted code reviews',
-        ],
-      },
-      {
-        name: 'StartupCo',
-        position: 'Full-Stack Developer',
-        startDate: '2020-01-01',
-        endDate: '2022-02-01',
-        summary: 'Built features for B2B SaaS platform serving 10,000+ users.',
-        highlights: [
-          'Developed real-time collaboration features using WebSockets',
-          'Improved application performance by 60% through optimization',
-          'Implemented CI/CD pipeline reducing deployment time by 70%',
-        ],
-      },
-    ],
-    education: [
-      {
-        institution: 'University of California, Berkeley',
-        area: 'Computer Science',
-        studyType: 'Bachelor',
-        startDate: '2016-09-01',
-        endDate: '2020-05-01',
-        score: '3.8',
-        courses: [
-          'Data Structures',
-          'Algorithms',
-          'Web Development',
-          'Database Systems',
-        ],
-      },
-    ],
-    skills: [
-      {
-        name: 'JavaScript',
-        level: 'Expert',
-        keywords: ['ES6+', 'TypeScript', 'Node.js', 'React', 'Vue.js'],
-      },
-      {
-        name: 'Backend Development',
-        level: 'Advanced',
-        keywords: ['Python', 'Django', 'PostgreSQL', 'Redis', 'Docker'],
-      },
-      {
-        name: 'Cloud & DevOps',
-        level: 'Intermediate',
-        keywords: ['AWS', 'CI/CD', 'Kubernetes', 'Terraform'],
-      },
-    ],
-    awards: [
-      {
-        title: 'Best Innovation Award',
-        date: '2023-06-01',
-        awarder: 'Tech Solutions Inc.',
-        summary: 'For developing an AI-powered code review system',
-      },
-    ],
-  };
+  const { resume, resumeJson, updateResume, updateResumeJson, setResumeJson } =
+    usePathways();
 
-  const [resumeData, setResumeData] = useState(sampleResume);
-
-  const [resumeJson, setResumeJson] = useState(() =>
-    JSON.stringify(sampleResume, null, 2)
-  );
+  // Auto-migrate anonymous session data when user logs in
+  usePathwaysSession();
 
   return (
     <div className="flex flex-col h-screen">
@@ -143,21 +57,16 @@ export default function Pathways() {
 
           <div className="flex-1 overflow-auto">
             {activeTab === 'graph' ? (
-              <MockGraph />
+              <PathwaysGraph />
             ) : activeTab === 'preview' ? (
-              <ResumePreview resumeData={resumeData} />
+              <ResumePreview resumeData={resume} />
             ) : (
               <Editor
                 height="100%"
                 defaultLanguage="json"
                 value={resumeJson}
                 onChange={(code) => {
-                  setResumeJson(code || '');
-                  try {
-                    setResumeData(JSON.parse(code));
-                  } catch {
-                    // Invalid JSON, ignore
-                  }
+                  updateResumeJson(code || '');
                 }}
                 options={{
                   minimap: { enabled: false },
@@ -170,8 +79,8 @@ export default function Pathways() {
         </section>
 
         <CopilotChat
-          resumeData={resumeData}
-          setResumeData={setResumeData}
+          resumeData={resume}
+          setResumeData={updateResume}
           setResumeJson={setResumeJson}
         />
       </div>
@@ -179,30 +88,4 @@ export default function Pathways() {
   );
 }
 
-function MockGraph() {
-  return (
-    <div className="flex items-center justify-center h-full w-full text-gray-400 select-none">
-      <svg
-        width="200"
-        height="200"
-        viewBox="0 0 200 200"
-        className="opacity-50"
-        aria-hidden="true"
-      >
-        <circle
-          cx="100"
-          cy="100"
-          r="80"
-          stroke="currentColor"
-          strokeWidth="4"
-          fill="none"
-        />
-        <circle cx="100" cy="40" r="8" fill="currentColor" />
-        <circle cx="160" cy="100" r="8" fill="currentColor" />
-        <circle cx="100" cy="160" r="8" fill="currentColor" />
-        <circle cx="40" cy="100" r="8" fill="currentColor" />
-      </svg>
-      <span className="ml-4">Mock Graph</span>
-    </div>
-  );
-}
+export default PathwaysContent;

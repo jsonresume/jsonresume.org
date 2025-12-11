@@ -1,12 +1,13 @@
 import { streamText, smoothStream, tool, convertToModelMessages } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { z } from 'zod';
+import { jobTools } from './tools/jobTools';
+
 // Define the update_resume tool with Zod schema
 export const updateResume = tool({
-  // name inferred as key when passed in array; ensure matches 'updateResume'
   name: 'updateResume',
   description: 'Update specific sections of the resume with new information',
-  inputSchema: z.object({
+  parameters: z.object({
     changes: z.object({
       basics: z
         .object({
@@ -83,6 +84,31 @@ export const updateResume = tool({
 
 export const runtime = 'edge';
 
+const SYSTEM_PROMPT = `You are a helpful career copilot that helps users navigate their job search.
+
+You have access to the following capabilities:
+1. **Resume Updates** - Modify the user's resume (basics, work, education, skills)
+2. **Job Filtering** - Mark jobs as read/interested/hidden based on criteria
+3. **Job Search** - Focus the graph on specific jobs matching a query
+4. **Job Insights** - Analyze salary ranges, top companies, required skills
+5. **Refresh Matches** - Update job recommendations after resume changes
+
+When the user asks to update their resume, ADD SAMPLE DATA directly instead of asking
+follow-up questions, unless absolutely necessary.
+
+When the user wants to manage jobs (mark as read, hide, etc.), use the filterJobs tool.
+When they want to find specific jobs, use the showJobs tool.
+When they ask about job statistics, use the getJobInsights tool.
+After significant resume changes, suggest refreshing job matches.
+
+The matched jobs graph shows opportunities based on resume similarity. Users can:
+- Use arrow keys to navigate between job nodes
+- Press 'M' to mark a job as read
+- Click jobs to see details
+
+Current resume:
+`;
+
 const errorHandler = (err) => err?.message || 'Something went wrong';
 
 export async function POST(request) {
@@ -91,13 +117,12 @@ export async function POST(request) {
 
     const result = await streamText({
       model: openai('gpt-4.1'),
-      system: `You are a helpful career copilot. When the user requests changes, generally ADD SAMPLE DATA directly instead of asking follow-up questions, unless absolutely necessary. The current resume JSON: ${JSON.stringify(
-        currentResume || {},
-        null,
-        2
-      )}`,
+      system: `${SYSTEM_PROMPT}${JSON.stringify(currentResume || {}, null, 2)}`,
       messages: convertToModelMessages(messages),
-      tools: { updateResume },
+      tools: {
+        updateResume,
+        ...jobTools,
+      },
       experimental_transform: smoothStream({
         delayInMs: 20,
         chunking: 'word',

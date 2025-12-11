@@ -10,14 +10,17 @@ import ResumeParseResult from './ResumeParseResult';
 import useSpeech from '../hooks/useSpeech';
 import useVoiceRecording from '../hooks/useVoiceRecording';
 import useResumeUpdater from '../hooks/useResumeUpdater';
+import useJobToolsHandler from '../hooks/useJobToolsHandler';
+import { usePathways } from '../context/PathwaysContext';
 
 const INITIAL_MESSAGE = {
   role: 'assistant',
-  content: "Hi! I'm your Copilot. Ask me anything about your career pathway.",
+  content:
+    "Hi! I'm your Career Copilot. I can help you with your resume and find matching jobs. Try asking me to update your resume, filter jobs, or show specific opportunities!",
   parts: [
     {
       type: 'text',
-      text: "Hi! I'm your Copilot. Ask me anything about your career pathway.",
+      text: "Hi! I'm your Career Copilot. I can help you with your resume and find matching jobs. Try asking me to update your resume, filter jobs, or show specific opportunities!",
     },
   ],
 };
@@ -30,6 +33,16 @@ export default function CopilotChat({
   const [input, setInput] = useState('');
   const [pendingResumeData, setPendingResumeData] = useState(null);
   const [isApplyingResume, setIsApplyingResume] = useState(false);
+
+  // Get job-related functions from context
+  const {
+    markAsRead,
+    markAsInterested,
+    markAsHidden,
+    clearJobState,
+    triggerGraphRefresh,
+    refreshEmbedding,
+  } = usePathways();
 
   // Initialize chat with AI SDK
   const { messages, sendMessage, status, addToolResult } = useChat({
@@ -56,7 +69,6 @@ export default function CopilotChat({
   const handleTranscriptionComplete = useCallback(
     (text) => {
       setInput(text);
-      // Auto-submit the transcribed message
       sendMessage({ text });
       setInput('');
     },
@@ -79,6 +91,32 @@ export default function CopilotChat({
     setResumeJson,
   });
 
+  // Handle job-related tool invocations
+  useJobToolsHandler({
+    messages,
+    addToolResult,
+    markAsRead,
+    markAsInterested,
+    markAsHidden,
+    clearJobState,
+    triggerGraphRefresh,
+  });
+
+  // Trigger embedding refresh when resume changes significantly
+  const prevResumeRef = useRef(resumeData);
+  useEffect(() => {
+    const hasSignificantChange =
+      JSON.stringify(prevResumeRef.current) !== JSON.stringify(resumeData);
+    if (hasSignificantChange && refreshEmbedding) {
+      // Debounce the refresh
+      const timeout = setTimeout(() => {
+        refreshEmbedding();
+      }, 1000);
+      prevResumeRef.current = resumeData;
+      return () => clearTimeout(timeout);
+    }
+  }, [resumeData, refreshEmbedding]);
+
   // Handle message submission
   const handleSubmit = useCallback(
     (text) => {
@@ -95,10 +133,8 @@ export default function CopilotChat({
 
   // Handle file upload and resume extraction
   const handleFileUpload = useCallback((extractedData) => {
-    // For now, we'll take the first file's data (can extend for multiple files later)
     const firstFile = extractedData[0];
     if (firstFile) {
-      // Show the parsed resume data in the review UI
       setPendingResumeData({
         filename: firstFile.filename,
         data: firstFile.data,
@@ -111,7 +147,6 @@ export default function CopilotChat({
     async (selectedData) => {
       setIsApplyingResume(true);
       try {
-        // Create a message to the AI with the selected data for processing
         const uploadMessage = `I've uploaded a resume file (${
           pendingResumeData.filename
         }). Please analyze and update my resume with this information: ${JSON.stringify(
@@ -119,11 +154,7 @@ export default function CopilotChat({
           null,
           2
         )}`;
-
-        // Send to AI for processing
         sendMessage({ text: uploadMessage });
-
-        // Clear pending data
         setPendingResumeData(null);
       } catch (error) {
         console.error('Error applying resume data:', error);
@@ -139,18 +170,16 @@ export default function CopilotChat({
     setPendingResumeData(null);
   }, []);
 
-  // Track what we've already spoken using a ref so it persists across renders
+  // Track what we've already spoken
   const lastSpokenTextRef = useRef('');
 
   // Speak new assistant messages
   useEffect(() => {
     if (!isSpeechEnabled) return;
 
-    // Get the last message
     const lastMessage = messages[messages.length - 1];
     if (!lastMessage || lastMessage.role !== 'assistant') return;
 
-    // Extract text content to speak
     let textToSpeak = '';
 
     if (lastMessage.content) {
@@ -163,7 +192,6 @@ export default function CopilotChat({
           part.type === 'tool-updateResume' &&
           part.state === 'input-available'
         ) {
-          // Speak the explanation for resume updates
           if (part.input?.explanation) {
             textToSpeak += part.input.explanation + ' ';
           }
@@ -173,20 +201,15 @@ export default function CopilotChat({
 
     const trimmedText = textToSpeak.trim();
 
-    // Only speak if we're not still streaming and haven't spoken this exact text already
     if (
       trimmedText &&
       status !== 'streaming' &&
       trimmedText !== lastSpokenTextRef.current
     ) {
-      // Update the ref to remember what we're speaking
       lastSpokenTextRef.current = trimmedText;
-
-      // Add a small delay to make it feel more natural
       const timeoutId = setTimeout(() => {
         speakText(trimmedText);
       }, 300);
-
       return () => clearTimeout(timeoutId);
     }
   }, [messages, isSpeechEnabled, status, speakText]);
@@ -221,7 +244,6 @@ export default function CopilotChat({
       <div className="flex-1 overflow-auto p-4 text-sm text-gray-500">
         <Messages messages={messages} isLoading={isLoading} />
 
-        {/* Show resume parse result if available */}
         {pendingResumeData && (
           <ResumeParseResult
             parsedData={pendingResumeData.data}
