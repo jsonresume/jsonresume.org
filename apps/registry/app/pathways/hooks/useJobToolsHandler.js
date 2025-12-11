@@ -54,67 +54,93 @@ export default function useJobToolsHandler({
   useEffect(() => {
     for (const msg of messages) {
       for (const part of msg.parts ?? []) {
-        // Handle filterJobs tool
-        if (
-          part.type === 'tool-filterJobs' &&
-          part.state === 'input-available' &&
-          !handledToolCalls.current.has(part.toolCallId)
-        ) {
-          const { criteria, action } = part.input ?? {};
-          handleFilterJobs(criteria, action);
-          addToolResult({
-            toolCallId: part.toolCallId,
-            result: `Processed ${action} for jobs matching criteria`,
-          });
-          handledToolCalls.current.add(part.toolCallId);
-        }
+        // AI SDK v6 format: tool-invocation with toolInvocation object
+        if (part.type === 'tool-invocation' && part.toolInvocation) {
+          const { toolName, toolCallId, args, state } = part.toolInvocation;
 
-        // Handle showJobs tool
-        if (
-          part.type === 'tool-showJobs' &&
-          part.state === 'input-available' &&
-          !handledToolCalls.current.has(part.toolCallId)
-        ) {
-          const { query } = part.input ?? {};
-          if (setFilterText && query) {
-            setFilterText(query);
+          // Only process when result is available (server has processed)
+          if (state !== 'result' || handledToolCalls.current.has(toolCallId))
+            continue;
+
+          switch (toolName) {
+            case 'filterJobs': {
+              const { criteria, action } = args ?? {};
+              handleFilterJobs(criteria, action);
+              handledToolCalls.current.add(toolCallId);
+              break;
+            }
+            case 'showJobs': {
+              const { query } = args ?? {};
+              if (setFilterText && query) {
+                setFilterText(query);
+              }
+              handledToolCalls.current.add(toolCallId);
+              break;
+            }
+            case 'getJobInsights': {
+              const { insightType } = args ?? {};
+              // Insights are already returned in the tool result
+              handledToolCalls.current.add(toolCallId);
+              break;
+            }
+            case 'refreshJobMatches': {
+              if (triggerGraphRefresh) {
+                triggerGraphRefresh();
+              }
+              handledToolCalls.current.add(toolCallId);
+              break;
+            }
           }
-          addToolResult({
-            toolCallId: part.toolCallId,
-            result: `Applied filter: "${query}"`,
-          });
-          handledToolCalls.current.add(part.toolCallId);
         }
 
-        // Handle getJobInsights tool
+        // Legacy v5 format support - tool-{name}
         if (
-          part.type === 'tool-getJobInsights' &&
+          part.type?.startsWith('tool-') &&
           part.state === 'input-available' &&
           !handledToolCalls.current.has(part.toolCallId)
         ) {
-          const { insightType } = part.input ?? {};
-          const insights = generateInsights(insightType, jobs, jobInfo);
-          addToolResult({
-            toolCallId: part.toolCallId,
-            result: JSON.stringify(insights),
-          });
-          handledToolCalls.current.add(part.toolCallId);
-        }
+          const toolName = part.type.replace('tool-', '');
+          const { criteria, action, query, insightType } = part.input ?? {};
 
-        // Handle refreshJobMatches tool
-        if (
-          part.type === 'tool-refreshJobMatches' &&
-          part.state === 'input-available' &&
-          !handledToolCalls.current.has(part.toolCallId)
-        ) {
-          if (triggerGraphRefresh) {
-            triggerGraphRefresh();
+          switch (toolName) {
+            case 'filterJobs':
+              handleFilterJobs(criteria, action);
+              addToolResult?.({
+                toolCallId: part.toolCallId,
+                result: `Processed ${action} for jobs matching criteria`,
+              });
+              handledToolCalls.current.add(part.toolCallId);
+              break;
+            case 'showJobs':
+              if (setFilterText && query) {
+                setFilterText(query);
+              }
+              addToolResult?.({
+                toolCallId: part.toolCallId,
+                result: `Applied filter: "${query}"`,
+              });
+              handledToolCalls.current.add(part.toolCallId);
+              break;
+            case 'getJobInsights': {
+              const insights = generateInsights(insightType, jobs, jobInfo);
+              addToolResult?.({
+                toolCallId: part.toolCallId,
+                result: JSON.stringify(insights),
+              });
+              handledToolCalls.current.add(part.toolCallId);
+              break;
+            }
+            case 'refreshJobMatches':
+              if (triggerGraphRefresh) {
+                triggerGraphRefresh();
+              }
+              addToolResult?.({
+                toolCallId: part.toolCallId,
+                result: 'Graph refresh triggered',
+              });
+              handledToolCalls.current.add(part.toolCallId);
+              break;
           }
-          addToolResult({
-            toolCallId: part.toolCallId,
-            result: 'Graph refresh triggered',
-          });
-          handledToolCalls.current.add(part.toolCallId);
         }
       }
     }

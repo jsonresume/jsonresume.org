@@ -14,7 +14,9 @@ import useJobToolsHandler from '../hooks/useJobToolsHandler';
 import { usePathways } from '../context/PathwaysContext';
 
 const INITIAL_MESSAGE = {
+  id: 'initial-greeting',
   role: 'assistant',
+  status: 'ready',
   content:
     "Hi! I'm your Career Copilot. I can help you with your resume and find matching jobs. Try asking me to update your resume, filter jobs, or show specific opportunities!",
   parts: [

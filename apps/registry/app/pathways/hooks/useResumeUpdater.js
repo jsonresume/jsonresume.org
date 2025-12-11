@@ -14,7 +14,32 @@ export default function useResumeUpdater({
   useEffect(() => {
     for (const msg of messages) {
       for (const part of msg.parts ?? []) {
-        // Check for tool-updateResume parts (v5 format)
+        // AI SDK v6 format: tool-invocation with toolName
+        if (
+          part.type === 'tool-invocation' &&
+          part.toolInvocation?.toolName === 'updateResume' &&
+          part.toolInvocation?.state === 'result' &&
+          !handledToolCalls.current.has(part.toolInvocation?.toolCallId)
+        ) {
+          const { changes } = part.toolInvocation?.args ?? {};
+          if (changes && typeof changes === 'object') {
+            setResumeData((prev) => applyResumeChanges(prev, changes));
+            setResumeJson((prev) => {
+              try {
+                return JSON.stringify(
+                  applyResumeChanges(JSON.parse(prev), changes),
+                  null,
+                  2
+                );
+              } catch {
+                return prev;
+              }
+            });
+          }
+          handledToolCalls.current.add(part.toolInvocation.toolCallId);
+        }
+
+        // Also check for legacy format (tool-updateResume)
         if (
           part.type === 'tool-updateResume' &&
           part.state === 'input-available' &&
@@ -23,15 +48,19 @@ export default function useResumeUpdater({
           const { changes } = part.input ?? {};
           if (changes && typeof changes === 'object') {
             setResumeData((prev) => applyResumeChanges(prev, changes));
-            setResumeJson((prev) =>
-              JSON.stringify(
-                applyResumeChanges(JSON.parse(prev), changes),
-                null,
-                2
-              )
-            );
+            setResumeJson((prev) => {
+              try {
+                return JSON.stringify(
+                  applyResumeChanges(JSON.parse(prev), changes),
+                  null,
+                  2
+                );
+              } catch {
+                return prev;
+              }
+            });
           }
-          addToolResult({
+          addToolResult?.({
             toolCallId: part.toolCallId,
             result: 'Changes applied',
           });

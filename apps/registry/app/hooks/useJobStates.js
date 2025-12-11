@@ -204,6 +204,9 @@ export function useJobStates({ sessionId, username, isAuthenticated }) {
     [updateJobState]
   );
 
+  // Alias for unmarkJob - clears the job state
+  const clearJobState = unmarkJob;
+
   // Check job state
   const getJobState = useCallback(
     (jobId) => jobStates[String(jobId)] || null,
@@ -297,6 +300,7 @@ export function useJobStates({ sessionId, username, isAuthenticated }) {
     markAsInterested,
     markAsHidden,
     unmarkJob,
+    clearJobState,
 
     // Queries
     getJobState,
