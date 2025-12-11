@@ -102,8 +102,15 @@ export default function useResumeUpdater({
           part.state === 'input-available' &&
           !handledToolCalls.current.has(part.toolCallId)
         ) {
+          console.log('[useResumeUpdater] LEGACY format detected!');
+          console.log('[useResumeUpdater] Legacy part:', part);
           const { changes } = part.input ?? {};
+          console.log(
+            '[useResumeUpdater] Legacy changes:',
+            JSON.stringify(changes, null, 2)
+          );
           if (changes && typeof changes === 'object') {
+            console.log('[useResumeUpdater] LEGACY: Applying changes...');
             setResumeData((prev) => applyResumeChanges(prev, changes));
             setResumeJson((prev) => {
               try {
