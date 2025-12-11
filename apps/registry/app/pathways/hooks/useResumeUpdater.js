@@ -18,7 +18,18 @@ export default function useResumeUpdater({
     );
 
     for (const msg of messages) {
+      // Log message structure
+      console.log('[useResumeUpdater] Message:', {
+        id: msg.id,
+        role: msg.role,
+        partsCount: msg.parts?.length ?? 0,
+        partTypes: msg.parts?.map((p) => p.type) ?? [],
+      });
+
       for (const part of msg.parts ?? []) {
+        // Log ALL part types
+        console.log('[useResumeUpdater] Part type:', part.type, part);
+
         // Log all parts for debugging
         if (part.type === 'tool-invocation') {
           console.log(
