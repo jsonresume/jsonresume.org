@@ -12,6 +12,7 @@ import useVoiceRecording from '../hooks/useVoiceRecording';
 import useResumeUpdater from '../hooks/useResumeUpdater';
 import useJobToolsHandler from '../hooks/useJobToolsHandler';
 import { usePathways } from '../context/PathwaysContext';
+import styles from './chat.module.css';
 
 const INITIAL_MESSAGE = {
   id: 'initial-greeting',
@@ -234,7 +235,7 @@ export default function CopilotChat({
   const isLoading = status === 'streaming';
 
   return (
-    <aside className="w-[360px] border-l bg-white flex flex-col">
+    <aside className={`w-[380px] flex flex-col ${styles.chatContainer}`}>
       <ChatHeader
         isSpeechEnabled={isSpeechEnabled}
         isGeneratingSpeech={isGeneratingSpeech}
@@ -243,7 +244,7 @@ export default function CopilotChat({
         onVoiceChange={setSelectedVoice}
       />
 
-      <div className="flex-1 overflow-auto p-4 text-sm text-gray-500">
+      <div className={`flex-1 overflow-auto p-4 ${styles.messagesContainer}`}>
         <Messages messages={messages} isLoading={isLoading} />
 
         {pendingResumeData && (

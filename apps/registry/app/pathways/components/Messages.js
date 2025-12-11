@@ -1,5 +1,19 @@
 import { useEffect, useRef } from 'react';
 import Message from './Message';
+import styles from './chat.module.css';
+
+function LoadingIndicator() {
+  return (
+    <div className={styles.loadingIndicator}>
+      <div className={styles.loadingDots}>
+        <span className={styles.loadingDot} />
+        <span className={styles.loadingDot} />
+        <span className={styles.loadingDot} />
+      </div>
+      <span className={styles.loadingText}>Thinking...</span>
+    </div>
+  );
+}
 
 export default function Messages({ messages, isLoading }) {
   const listRef = useRef(null);
@@ -11,7 +25,7 @@ export default function Messages({ messages, isLoading }) {
     if (!container) return;
 
     const handleScroll = () => {
-      const threshold = 20; // px from bottom considered as "at bottom"
+      const threshold = 20;
       const atBottom =
         container.scrollHeight - container.scrollTop - container.clientHeight <=
         threshold;
@@ -29,14 +43,13 @@ export default function Messages({ messages, isLoading }) {
       container.scrollTop = container.scrollHeight;
     }
   }, [messages, isLoading]);
+
   return (
-    <div ref={listRef} className="space-y-3">
+    <div ref={listRef} className="space-y-4">
       {messages?.map((m) => (
         <Message key={m.id} message={m} />
       ))}
-      {isLoading && (
-        <p className="text-sm text-gray-500">Copilot is thinking…</p>
-      )}
+      {isLoading && <LoadingIndicator />}
     </div>
   );
 }
