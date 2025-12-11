@@ -30,39 +30,20 @@ export default function useResumeUpdater({
         // Log ALL part types
         console.log('[useResumeUpdater] Part type:', part.type, part);
 
-        // Log all parts for debugging
-        if (part.type === 'tool-invocation') {
-          console.log(
-            '[useResumeUpdater] Found tool-invocation part:',
-            JSON.stringify(
-              {
-                toolName: part.toolInvocation?.toolName,
-                state: part.toolInvocation?.state,
-                toolCallId: part.toolInvocation?.toolCallId,
-                argsKeys: Object.keys(part.toolInvocation?.args || {}),
-              },
-              null,
-              2
-            )
-          );
-        }
-
-        // AI SDK v6 format: tool-invocation with toolName
+        // AI SDK v6 format: part.type === 'tool-{toolName}'
+        // per docs: state is 'output-available' when complete, part.input has args
         if (
-          part.type === 'tool-invocation' &&
-          part.toolInvocation?.toolName === 'updateResume' &&
-          part.toolInvocation?.state === 'result' &&
-          !handledToolCalls.current.has(part.toolInvocation?.toolCallId)
+          part.type === 'tool-updateResume' &&
+          part.state === 'output-available' &&
+          !handledToolCalls.current.has(part.toolCallId)
         ) {
-          const { changes } = part.toolInvocation?.args ?? {};
-          console.log('[useResumeUpdater] updateResume detected!');
+          console.log('[useResumeUpdater] v6 tool-updateResume detected!');
+          console.log('[useResumeUpdater] Part state:', part.state);
+          console.log('[useResumeUpdater] Part input:', part.input);
+          const { changes } = part.input ?? {};
           console.log(
             '[useResumeUpdater] Changes received:',
             JSON.stringify(changes, null, 2)
-          );
-          console.log(
-            '[useResumeUpdater] Changes keys:',
-            Object.keys(changes || {})
           );
 
           if (changes && typeof changes === 'object') {
@@ -93,24 +74,27 @@ export default function useResumeUpdater({
           } else {
             console.warn('[useResumeUpdater] No valid changes object found');
           }
-          handledToolCalls.current.add(part.toolInvocation.toolCallId);
+          handledToolCalls.current.add(part.toolCallId);
         }
 
-        // Also check for legacy format (tool-updateResume)
+        // Fallback: also check 'input-available' state (streaming in progress)
+        // This allows processing as soon as input is available
         if (
           part.type === 'tool-updateResume' &&
           part.state === 'input-available' &&
           !handledToolCalls.current.has(part.toolCallId)
         ) {
-          console.log('[useResumeUpdater] LEGACY format detected!');
-          console.log('[useResumeUpdater] Legacy part:', part);
+          console.log(
+            '[useResumeUpdater] v6 tool-updateResume input-available!'
+          );
+          console.log('[useResumeUpdater] Part:', part);
           const { changes } = part.input ?? {};
           console.log(
-            '[useResumeUpdater] Legacy changes:',
+            '[useResumeUpdater] Changes:',
             JSON.stringify(changes, null, 2)
           );
           if (changes && typeof changes === 'object') {
-            console.log('[useResumeUpdater] LEGACY: Applying changes...');
+            console.log('[useResumeUpdater] Applying changes (input-avail)...');
             setResumeData((prev) => applyResumeChanges(prev, changes));
             setResumeJson((prev) => {
               try {
@@ -124,10 +108,7 @@ export default function useResumeUpdater({
               }
             });
           }
-          addToolResult?.({
-            toolCallId: part.toolCallId,
-            result: 'Changes applied',
-          });
+          // Mark as handled so we don't re-process on output-available
           handledToolCalls.current.add(part.toolCallId);
         }
       }

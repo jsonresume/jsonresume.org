@@ -132,9 +132,10 @@ export default function Part({ part }) {
       );
     }
 
-    // AI SDK v5 tool format - tool-updateResume (legacy support)
+    // AI SDK v6 format: part.type === 'tool-{toolName}'
+    // per docs: state is 'output-available' when complete, part.input has args
     case 'tool-updateResume': {
-      // Only show when input is available (not while streaming)
+      // Show while streaming (input-available) or complete (output-available)
       if (
         part.state !== 'input-available' &&
         part.state !== 'output-available'
@@ -164,7 +165,99 @@ export default function Part({ part }) {
               ✓{' '}
               {typeof part.output === 'string'
                 ? part.output
-                : 'Changes applied'}
+                : part.output?.message || 'Changes applied'}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    case 'tool-filterJobs': {
+      if (
+        part.state !== 'input-available' &&
+        part.state !== 'output-available'
+      ) {
+        return null;
+      }
+      return (
+        <div className="p-2 rounded-lg bg-purple-50 text-purple-900 text-xs space-y-2">
+          <div className="font-semibold">🔍 Filtering jobs...</div>
+          {part.input?.criteria && (
+            <div className="text-sm">
+              Action: {part.input.action || 'filter'}
+            </div>
+          )}
+          {part.state === 'output-available' && (
+            <div className="text-green-700 font-medium mt-2">
+              ✓ Filter applied
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    case 'tool-showJobs': {
+      if (
+        part.state !== 'input-available' &&
+        part.state !== 'output-available'
+      ) {
+        return null;
+      }
+      return (
+        <div className="p-2 rounded-lg bg-indigo-50 text-indigo-900 text-xs space-y-2">
+          <div className="font-semibold">👁️ Showing jobs...</div>
+          {part.input?.query && (
+            <div className="text-sm">Query: "{part.input.query}"</div>
+          )}
+          {part.state === 'output-available' && (
+            <div className="text-green-700 font-medium mt-2">
+              ✓ Jobs filtered
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    case 'tool-getJobInsights': {
+      if (
+        part.state !== 'input-available' &&
+        part.state !== 'output-available'
+      ) {
+        return null;
+      }
+      return (
+        <div className="p-2 rounded-lg bg-amber-50 text-amber-900 text-xs space-y-2">
+          <div className="font-semibold">📊 Getting job insights...</div>
+          {part.input?.insightType && (
+            <div className="text-sm">Type: {part.input.insightType}</div>
+          )}
+          {part.state === 'output-available' && part.output?.data && (
+            <details className="mt-2">
+              <summary className="cursor-pointer text-xs font-medium">
+                View insights
+              </summary>
+              <pre className="whitespace-pre-wrap break-words bg-white/50 p-2 rounded mt-1 text-xs">
+                {JSON.stringify(part.output.data, null, 2)}
+              </pre>
+            </details>
+          )}
+        </div>
+      );
+    }
+
+    case 'tool-refreshJobMatches': {
+      if (
+        part.state !== 'input-available' &&
+        part.state !== 'output-available'
+      ) {
+        return null;
+      }
+      return (
+        <div className="p-2 rounded-lg bg-green-50 text-green-900 text-xs space-y-2">
+          <div className="font-semibold">🔄 Refreshing job matches...</div>
+          {part.state === 'output-available' && (
+            <div className="text-green-700 font-medium mt-2">
+              ✓ Graph refreshed
             </div>
           )}
         </div>

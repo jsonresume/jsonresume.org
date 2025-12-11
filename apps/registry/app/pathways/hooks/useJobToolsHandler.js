@@ -54,48 +54,13 @@ export default function useJobToolsHandler({
   useEffect(() => {
     for (const msg of messages) {
       for (const part of msg.parts ?? []) {
-        // AI SDK v6 format: tool-invocation with toolInvocation object
-        if (part.type === 'tool-invocation' && part.toolInvocation) {
-          const { toolName, toolCallId, args, state } = part.toolInvocation;
-
-          // Only process when result is available (server has processed)
-          if (state !== 'result' || handledToolCalls.current.has(toolCallId))
-            continue;
-
-          switch (toolName) {
-            case 'filterJobs': {
-              const { criteria, action } = args ?? {};
-              handleFilterJobs(criteria, action);
-              handledToolCalls.current.add(toolCallId);
-              break;
-            }
-            case 'showJobs': {
-              const { query } = args ?? {};
-              if (setFilterText && query) {
-                setFilterText(query);
-              }
-              handledToolCalls.current.add(toolCallId);
-              break;
-            }
-            case 'getJobInsights': {
-              // Insights are already returned in the tool result from server
-              handledToolCalls.current.add(toolCallId);
-              break;
-            }
-            case 'refreshJobMatches': {
-              if (triggerGraphRefresh) {
-                triggerGraphRefresh();
-              }
-              handledToolCalls.current.add(toolCallId);
-              break;
-            }
-          }
-        }
-
-        // Legacy v5 format support - tool-{name}
+        // AI SDK v6 format: part.type === 'tool-{toolName}'
+        // Per docs: state is 'output-available' when complete, part.input has args
+        // We also check 'input-available' to process early during streaming
         if (
           part.type?.startsWith('tool-') &&
-          part.state === 'input-available' &&
+          (part.state === 'output-available' ||
+            part.state === 'input-available') &&
           !handledToolCalls.current.has(part.toolCallId)
         ) {
           const toolName = part.type.replace('tool-', '');
@@ -104,28 +69,16 @@ export default function useJobToolsHandler({
           switch (toolName) {
             case 'filterJobs':
               handleFilterJobs(criteria, action);
-              addToolResult?.({
-                toolCallId: part.toolCallId,
-                result: `Processed ${action} for jobs matching criteria`,
-              });
               handledToolCalls.current.add(part.toolCallId);
               break;
             case 'showJobs':
               if (setFilterText && query) {
                 setFilterText(query);
               }
-              addToolResult?.({
-                toolCallId: part.toolCallId,
-                result: `Applied filter: "${query}"`,
-              });
               handledToolCalls.current.add(part.toolCallId);
               break;
             case 'getJobInsights': {
-              const insights = generateInsights(insightType, jobs, jobInfo);
-              addToolResult?.({
-                toolCallId: part.toolCallId,
-                result: JSON.stringify(insights),
-              });
+              // Insights are already returned in the tool result from server
               handledToolCalls.current.add(part.toolCallId);
               break;
             }
@@ -133,10 +86,6 @@ export default function useJobToolsHandler({
               if (triggerGraphRefresh) {
                 triggerGraphRefresh();
               }
-              addToolResult?.({
-                toolCallId: part.toolCallId,
-                result: 'Graph refresh triggered',
-              });
               handledToolCalls.current.add(part.toolCallId);
               break;
           }
