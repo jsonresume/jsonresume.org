@@ -5,76 +5,85 @@ import { jobTools } from './tools/jobTools';
 
 // Define the update_resume tool with strict JSON Resume schema
 export const updateResume = tool({
-  description: 'Update specific sections of the resume with new information',
+  description: `Update the user's resume by providing ONLY the changes/additions.
+IMPORTANT: The 'changes' object should contain ONLY fields being modified or added.
+- To ADD a new work entry: include just that one entry in the work array
+- To UPDATE basics.name: include just { basics: { name: "New Name" } }
+- To DELETE an entry: include the entry with _delete: true
+DO NOT include unchanged fields or the entire resume.`,
   inputSchema: z.object({
-    changes: z.object({
-      basics: z
-        .object({
-          name: z.string().optional(),
-          label: z.string().optional(),
-          email: z.string().optional(),
-          phone: z.string().optional(),
-          url: z.string().optional(),
-          summary: z.string().optional(),
-          location: z
-            .object({
-              address: z.string().optional(),
-              postalCode: z.string().optional(),
-              city: z.string().optional(),
-              countryCode: z.string().optional(),
-              region: z.string().optional(),
-            })
-            .optional(),
-          profiles: z
-            .array(
-              z.object({
-                network: z.string().optional(),
-                username: z.string().optional(),
-                url: z.string().optional(),
-              })
-            )
-            .optional(),
-        })
-        .optional(),
-      work: z
-        .array(
-          z.object({
+    changes: z
+      .object({
+        basics: z
+          .object({
             name: z.string().optional(),
-            position: z.string().optional(),
+            label: z.string().optional(),
+            email: z.string().optional(),
+            phone: z.string().optional(),
             url: z.string().optional(),
-            startDate: z.string().optional(),
-            endDate: z.string().optional(),
             summary: z.string().optional(),
-            highlights: z.array(z.string()).optional(),
-            technologies: z.array(z.string()).optional(),
-            _delete: z.boolean().optional(),
+            location: z
+              .object({
+                address: z.string().optional(),
+                postalCode: z.string().optional(),
+                city: z.string().optional(),
+                countryCode: z.string().optional(),
+                region: z.string().optional(),
+              })
+              .optional(),
+            profiles: z
+              .array(
+                z.object({
+                  network: z.string().optional(),
+                  username: z.string().optional(),
+                  url: z.string().optional(),
+                })
+              )
+              .optional(),
           })
-        )
-        .optional(),
-      education: z
-        .array(
-          z.object({
-            institution: z.string().optional(),
-            area: z.string().optional(),
-            studyType: z.string().optional(),
-            startDate: z.string().optional(),
-            endDate: z.string().optional(),
-            score: z.string().optional(),
-            _delete: z.boolean().optional(),
-          })
-        )
-        .optional(),
-      skills: z
-        .array(
-          z.object({
-            name: z.string().optional(),
-            level: z.string().optional(),
-            keywords: z.array(z.string()).optional(),
-            _delete: z.boolean().optional(),
-          })
-        )
-        .optional(),
-    }),
+          .optional(),
+        work: z
+          .array(
+            z.object({
+              name: z.string().optional(),
+              position: z.string().optional(),
+              url: z.string().optional(),
+              startDate: z.string().optional(),
+              endDate: z.string().optional(),
+              summary: z.string().optional(),
+              highlights: z.array(z.string()).optional(),
+              technologies: z.array(z.string()).optional(),
+              _delete: z.boolean().optional(),
+            })
+          )
+          .optional(),
+        education: z
+          .array(
+            z.object({
+              institution: z.string().optional(),
+              area: z.string().optional(),
+              studyType: z.string().optional(),
+              startDate: z.string().optional(),
+              endDate: z.string().optional(),
+              score: z.string().optional(),
+              _delete: z.boolean().optional(),
+            })
+          )
+          .optional(),
+        skills: z
+          .array(
+            z.object({
+              name: z.string().optional(),
+              level: z.string().optional(),
+              keywords: z.array(z.string()).optional(),
+              _delete: z.boolean().optional(),
+            })
+          )
+          .optional(),
+      })
+      .describe(
+        'Partial update object - include ONLY the fields/entries being added or modified, not the entire resume'
+      ),
     explanation: z
       .string()
       .describe('Friendly explanation of the changes being made'),
@@ -100,6 +109,14 @@ You have access to the following capabilities:
 3. **Job Search** - Focus the graph on specific jobs matching a query
 4. **Job Insights** - Analyze salary ranges, top companies, required skills
 5. **Refresh Matches** - Update job recommendations after resume changes
+
+## CRITICAL: Resume Update Rules
+When using the updateResume tool, the 'changes' object must contain ONLY the diff:
+- To ADD a new work entry: { work: [{ name: "Company", position: "Role", ... }] }
+- To UPDATE a field: { basics: { name: "New Name" } } - only include changed fields
+- To DELETE an entry: { work: [{ name: "Company", position: "Role", _delete: true }] }
+- NEVER include the entire resume or unchanged sections in the changes object
+- If adding a new job, include ONLY that new job entry in the work array
 
 When the user asks to update their resume, ADD SAMPLE DATA directly instead of asking
 follow-up questions, unless absolutely necessary.
