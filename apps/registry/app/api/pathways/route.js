@@ -3,79 +3,16 @@ import { openai } from '@ai-sdk/openai';
 import { z } from 'zod';
 import { jobTools } from './tools/jobTools';
 
-// Define the update_resume tool with Zod schema
+// Define the update_resume tool with simplified Zod schema
 export const updateResume = tool({
-  name: 'updateResume',
-  description: 'Update specific sections of the resume with new information',
+  description:
+    'Update specific sections of the resume with new information. Pass the changes object with the sections to update.',
   parameters: z.object({
-    changes: z.object({
-      basics: z
-        .object({
-          name: z.string().optional(),
-          label: z.string().optional(),
-          email: z.string().optional(),
-          phone: z.string().optional(),
-          url: z.string().optional(),
-          summary: z.string().optional(),
-          location: z
-            .object({
-              address: z.string().optional(),
-              postalCode: z.string().optional(),
-              city: z.string().optional(),
-              countryCode: z.string().optional(),
-              region: z.string().optional(),
-            })
-            .optional(),
-          profiles: z
-            .array(
-              z.object({
-                network: z.string().optional(),
-                username: z.string().optional(),
-                url: z.string().optional(),
-              })
-            )
-            .optional(),
-        })
-        .optional(),
-      work: z
-        .array(
-          z.object({
-            name: z.string().optional(),
-            position: z.string().optional(),
-            url: z.string().optional(),
-            startDate: z.string().optional(),
-            endDate: z.string().optional(),
-            summary: z.string().optional(),
-            highlights: z.array(z.string()).optional(),
-            technologies: z.array(z.string()).optional(),
-            _delete: z.boolean().optional(),
-          })
-        )
-        .optional(),
-      education: z
-        .array(
-          z.object({
-            institution: z.string().optional(),
-            area: z.string().optional(),
-            studyType: z.string().optional(),
-            startDate: z.string().optional(),
-            endDate: z.string().optional(),
-            score: z.string().optional(),
-            _delete: z.boolean().optional(),
-          })
-        )
-        .optional(),
-      skills: z
-        .array(
-          z.object({
-            name: z.string().optional(),
-            level: z.string().optional(),
-            keywords: z.array(z.string()).optional(),
-            _delete: z.boolean().optional(),
-          })
-        )
-        .optional(),
-    }),
+    changes: z
+      .record(z.any())
+      .describe(
+        'Object containing resume sections to update (basics, work, education, skills). Each section follows JSON Resume schema.'
+      ),
     explanation: z
       .string()
       .describe('Friendly explanation of the changes being made'),
@@ -96,11 +33,17 @@ export const runtime = 'edge';
 const SYSTEM_PROMPT = `You are a helpful career copilot that helps users navigate their job search.
 
 You have access to the following capabilities:
-1. **Resume Updates** - Modify the user's resume (basics, work, education, skills)
+1. **Resume Updates** - Modify the user's resume using the updateResume tool
 2. **Job Filtering** - Mark jobs as read/interested/hidden based on criteria
 3. **Job Search** - Focus the graph on specific jobs matching a query
 4. **Job Insights** - Analyze salary ranges, top companies, required skills
 5. **Refresh Matches** - Update job recommendations after resume changes
+
+When updating the resume with updateResume, structure the changes object following JSON Resume schema:
+- basics: { name, label, email, phone, url, summary, location: { city, region, countryCode }, profiles: [{ network, username, url }] }
+- work: [{ name, position, startDate, endDate, summary, highlights: [], _delete: true to remove }]
+- education: [{ institution, area, studyType, startDate, endDate, _delete: true to remove }]
+- skills: [{ name, level, keywords: [], _delete: true to remove }]
 
 When the user asks to update their resume, ADD SAMPLE DATA directly instead of asking
 follow-up questions, unless absolutely necessary.
