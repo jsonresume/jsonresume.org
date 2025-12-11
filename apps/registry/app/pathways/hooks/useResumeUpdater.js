@@ -12,8 +12,30 @@ export default function useResumeUpdater({
   const handledToolCalls = useRef(new Set());
 
   useEffect(() => {
+    console.log(
+      '[useResumeUpdater] Processing messages, count:',
+      messages.length
+    );
+
     for (const msg of messages) {
       for (const part of msg.parts ?? []) {
+        // Log all parts for debugging
+        if (part.type === 'tool-invocation') {
+          console.log(
+            '[useResumeUpdater] Found tool-invocation part:',
+            JSON.stringify(
+              {
+                toolName: part.toolInvocation?.toolName,
+                state: part.toolInvocation?.state,
+                toolCallId: part.toolInvocation?.toolCallId,
+                argsKeys: Object.keys(part.toolInvocation?.args || {}),
+              },
+              null,
+              2
+            )
+          );
+        }
+
         // AI SDK v6 format: tool-invocation with toolName
         if (
           part.type === 'tool-invocation' &&
@@ -22,19 +44,43 @@ export default function useResumeUpdater({
           !handledToolCalls.current.has(part.toolInvocation?.toolCallId)
         ) {
           const { changes } = part.toolInvocation?.args ?? {};
+          console.log('[useResumeUpdater] updateResume detected!');
+          console.log(
+            '[useResumeUpdater] Changes received:',
+            JSON.stringify(changes, null, 2)
+          );
+          console.log(
+            '[useResumeUpdater] Changes keys:',
+            Object.keys(changes || {})
+          );
+
           if (changes && typeof changes === 'object') {
-            setResumeData((prev) => applyResumeChanges(prev, changes));
+            console.log('[useResumeUpdater] Applying changes to resume...');
+            setResumeData((prev) => {
+              console.log(
+                '[useResumeUpdater] Previous resume:',
+                JSON.stringify(prev, null, 2)
+              );
+              const updated = applyResumeChanges(prev, changes);
+              console.log(
+                '[useResumeUpdater] Updated resume:',
+                JSON.stringify(updated, null, 2)
+              );
+              return updated;
+            });
             setResumeJson((prev) => {
               try {
-                return JSON.stringify(
-                  applyResumeChanges(JSON.parse(prev), changes),
-                  null,
-                  2
-                );
-              } catch {
+                const prevObj = JSON.parse(prev);
+                const updated = applyResumeChanges(prevObj, changes);
+                console.log('[useResumeUpdater] Updated JSON resume');
+                return JSON.stringify(updated, null, 2);
+              } catch (e) {
+                console.error('[useResumeUpdater] Error updating JSON:', e);
                 return prev;
               }
             });
+          } else {
+            console.warn('[useResumeUpdater] No valid changes object found');
           }
           handledToolCalls.current.add(part.toolInvocation.toolCallId);
         }

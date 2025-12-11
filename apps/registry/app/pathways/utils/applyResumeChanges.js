@@ -18,6 +18,14 @@ import cloneDeep from 'lodash/cloneDeep';
  * @returns {object} A NEW resume object with the changes applied.
  */
 export default function applyResumeChanges(prev, changes) {
+  console.log('[applyResumeChanges] Called with:');
+  console.log('[applyResumeChanges] prev keys:', Object.keys(prev || {}));
+  console.log(
+    '[applyResumeChanges] changes:',
+    JSON.stringify(changes, null, 2)
+  );
+  console.log('[applyResumeChanges] changes keys:', Object.keys(changes || {}));
+
   const next = cloneDeep(prev);
 
   function getItemKey(item, arrayKey) {
@@ -129,5 +137,9 @@ export default function applyResumeChanges(prev, changes) {
   }
 
   recurse(next, changes);
+  console.log(
+    '[applyResumeChanges] Final result:',
+    JSON.stringify(next, null, 2)
+  );
   return next;
 }
