@@ -45,7 +45,7 @@ export default function PathwaysGraph() {
   const [hideFiltered, setHideFiltered] = useState(false);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
-  // Fetch jobs data
+  // Fetch jobs data using the cached embedding
   const { jobInfo, isLoading } = usePathwaysJobData({
     embedding,
     graphVersion,

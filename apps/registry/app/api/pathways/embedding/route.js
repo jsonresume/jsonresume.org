@@ -1,69 +1,56 @@
 import { NextResponse } from 'next/server';
-import { embed } from 'ai';
+import { generateText, embed } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { logger } from '@/lib/logger';
 
 /**
- * Generate a professional description from a resume
+ * Generate a professional description from resume using AI
  */
-function generateResumeDescription(resume) {
-  const parts = [];
+async function generateResumeDescription(resume) {
+  const { text: resumeDescription } = await generateText({
+    model: openai('gpt-4o-mini'),
+    system:
+      "You are a professional resume analyzer. Create a detailed professional summary that describes this candidate's background, skills, and experience in natural language. Focus on their expertise, achievements, and what makes them unique. Write it in a style similar to job descriptions to optimize for semantic matching. Do not include the candidates name. Make sure to include everything significant to the users career. Describe the type of industries they have experience in.",
+    prompt: JSON.stringify(resume),
+    temperature: 0.85,
+  });
 
-  if (resume.basics?.name) {
-    parts.push(`${resume.basics.name}`);
-  }
-  if (resume.basics?.label) {
-    parts.push(`${resume.basics.label}`);
-  }
-  if (resume.basics?.summary) {
-    parts.push(resume.basics.summary);
-  }
+  return resumeDescription;
+}
 
-  // Add work experience
-  if (resume.work?.length > 0) {
-    const workDesc = resume.work
-      .slice(0, 3)
-      .map((w) => `${w.position} at ${w.name}`)
-      .join(', ');
-    parts.push(`Experience: ${workDesc}`);
+/**
+ * Create embedding from text
+ */
+async function createEmbedding(text) {
+  const { embedding: rawEmbedding } = await embed({
+    model: openai.embedding('text-embedding-3-large'),
+    value: text,
+  });
 
-    // Add highlights
-    const highlights = resume.work
-      .flatMap((w) => w.highlights || [])
-      .slice(0, 5);
-    if (highlights.length > 0) {
-      parts.push(`Key achievements: ${highlights.join('. ')}`);
-    }
-  }
-
-  // Add skills
-  if (resume.skills?.length > 0) {
-    const allKeywords = resume.skills.flatMap((s) => [
-      s.name,
-      ...(s.keywords || []),
-    ]);
-    parts.push(`Skills: ${allKeywords.slice(0, 15).join(', ')}`);
+  // Pad to 3072 dimensions if needed
+  const desiredLength = 3072;
+  let embedding = rawEmbedding;
+  if (embedding.length < desiredLength) {
+    embedding = embedding.concat(
+      Array(desiredLength - embedding.length).fill(0)
+    );
   }
 
-  // Add education
-  if (resume.education?.length > 0) {
-    const eduDesc = resume.education
-      .slice(0, 2)
-      .map(
-        (e) => `${e.studyType || 'Degree'} in ${e.area} from ${e.institution}`
-      )
-      .join('; ');
-    parts.push(`Education: ${eduDesc}`);
-  }
-
-  return parts.join('. ');
+  return embedding;
 }
 
 /**
  * POST /api/pathways/embedding
- * Generate embedding for a resume
+ * Generate an embedding for a resume
  */
 export async function POST(request) {
+  if (!process.env.OPENAI_API_KEY) {
+    return NextResponse.json(
+      { error: 'API not available during build' },
+      { status: 503 }
+    );
+  }
+
   try {
     const { resume } = await request.json();
 
@@ -74,28 +61,21 @@ export async function POST(request) {
       );
     }
 
-    // Generate description
-    const description = generateResumeDescription(resume);
+    logger.info('Generating embedding for resume');
 
-    // Generate embedding
-    const { embedding } = await embed({
-      model: openai.embedding('text-embedding-3-small'),
-      value: description,
-    });
+    // Generate description and embedding
+    const description = await generateResumeDescription(resume);
+    const embedding = await createEmbedding(description);
 
     logger.info(
       {
         descriptionLength: description.length,
         embeddingLength: embedding.length,
       },
-      'Generated resume embedding'
+      'Generated embedding from resume'
     );
 
-    return NextResponse.json({
-      success: true,
-      embedding,
-      description,
-    });
+    return NextResponse.json({ embedding, description });
   } catch (error) {
     logger.error({ error: error.message }, 'Error generating embedding');
     return NextResponse.json(

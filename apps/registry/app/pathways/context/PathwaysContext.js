@@ -110,7 +110,7 @@ export function PathwaysProvider({
   );
   const [isResumeLoading, setIsResumeLoading] = useState(false);
 
-  // Embedding state
+  // Embedding state - cached on client
   const [embedding, setEmbedding] = useState(null);
   const [isEmbeddingLoading, setIsEmbeddingLoading] = useState(false);
 
