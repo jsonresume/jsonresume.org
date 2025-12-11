@@ -89,15 +89,7 @@ DO NOT include unchanged fields or the entire resume.`,
       .describe('Friendly explanation of the changes being made'),
   }),
   execute: async ({ changes, explanation }) => {
-    // Log the changes for debugging
-    console.log(
-      '[updateResume] Tool called with changes:',
-      JSON.stringify(changes, null, 2)
-    );
-    console.log('[updateResume] Explanation:', explanation);
-    console.log('[updateResume] Changes keys:', Object.keys(changes || {}));
-
-    // This will be handled client-side by the useResumeUpdater hook
+    // Tool execution returns data for client-side processing via useResumeUpdater
     return {
       success: true,
       changes,
