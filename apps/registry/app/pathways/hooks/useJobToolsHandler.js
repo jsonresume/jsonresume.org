@@ -64,7 +64,7 @@ export default function useJobToolsHandler({
           !handledToolCalls.current.has(part.toolCallId)
         ) {
           const toolName = part.type.replace('tool-', '');
-          const { criteria, action, query, insightType } = part.input ?? {};
+          const { criteria, action, query } = part.input ?? {};
 
           switch (toolName) {
             case 'filterJobs':
@@ -203,85 +203,5 @@ function parseSalary(salaryStr) {
   return null;
 }
 
-/**
- * Generate insights about the jobs
- */
-function generateInsights(insightType, jobs, jobInfo) {
-  const insights = { type: insightType, data: {} };
-
-  switch (insightType) {
-    case 'salary_range': {
-      const salaries = jobs
-        .map((j) => parseSalary(jobInfo[j.uuid]?.salary))
-        .filter(Boolean);
-      if (salaries.length) {
-        insights.data = {
-          min: Math.min(...salaries),
-          max: Math.max(...salaries),
-          median: salaries.sort((a, b) => a - b)[
-            Math.floor(salaries.length / 2)
-          ],
-          count: salaries.length,
-        };
-      }
-      break;
-    }
-    case 'top_companies': {
-      const companies = {};
-      jobs.forEach((j) => {
-        const company = jobInfo[j.uuid]?.company;
-        if (company) {
-          companies[company] = (companies[company] || 0) + 1;
-        }
-      });
-      insights.data = Object.entries(companies)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 10)
-        .map(([name, count]) => ({ name, count }));
-      break;
-    }
-    case 'common_skills': {
-      const skills = {};
-      jobs.forEach((j) => {
-        (jobInfo[j.uuid]?.skills || []).forEach((s) => {
-          const name = s.name || s;
-          skills[name] = (skills[name] || 0) + 1;
-        });
-      });
-      insights.data = Object.entries(skills)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 15)
-        .map(([name, count]) => ({ name, count }));
-      break;
-    }
-    case 'job_types': {
-      const types = {};
-      jobs.forEach((j) => {
-        const type = jobInfo[j.uuid]?.type || 'Unknown';
-        types[type] = (types[type] || 0) + 1;
-      });
-      insights.data = Object.entries(types).map(([type, count]) => ({
-        type,
-        count,
-      }));
-      break;
-    }
-    case 'locations': {
-      const locations = {};
-      jobs.forEach((j) => {
-        const loc = jobInfo[j.uuid]?.location;
-        const locStr = loc
-          ? [loc.city, loc.region].filter(Boolean).join(', ')
-          : 'Unknown';
-        locations[locStr] = (locations[locStr] || 0) + 1;
-      });
-      insights.data = Object.entries(locations)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 10)
-        .map(([location, count]) => ({ location, count }));
-      break;
-    }
-  }
-
-  return insights;
-}
+// Note: generateInsights function was removed - insights are now computed server-side
+// in the getJobInsights tool execute function and returned in the tool result
