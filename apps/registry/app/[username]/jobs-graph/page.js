@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, use } from 'react';
 import { useNodesState, useEdgesState } from '@xyflow/react';
 
 import { LoadingAnimation } from './components/LoadingAnimation';
@@ -19,7 +19,7 @@ import { useKeyboardNavigation } from './hooks/useKeyboardNavigation';
 import './styles.css';
 
 export default function JobsGraph({ params }) {
-  const { username } = params;
+  const { username } = use(params);
 
   // React Flow state
   const [nodes, setNodes, onNodesChange] = useNodesState([]);

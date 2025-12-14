@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { use } from 'react';
 import styled from 'styled-components';
 import { usePublicResume } from '../../providers/PublicResumeProvider';
 import { PublicViewBanner } from '../../components/PublicViewBanner';
@@ -11,7 +11,7 @@ const Container = styled.div`
 `;
 
 const Timeline = ({ params }) => {
-  const { username } = params;
+  const { username } = use(params);
   const { resume, loading, error } = usePublicResume();
 
   if (loading) {

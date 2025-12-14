@@ -10,7 +10,7 @@
 
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, use } from 'react';
 import { usePublicResume } from '../../providers/PublicResumeProvider';
 import { useAuth } from '../../components/MenuModule/hooks/useAuth';
 import { ResumePane } from './components/ResumePane';
@@ -21,7 +21,7 @@ import { useDecisionTree } from './hooks/useDecisionTree';
 import { logger } from '@/lib/logger';
 
 export default function DecisionsPage({ params }) {
-  const { username } = params;
+  const { username } = use(params);
   const { user } = useAuth();
   const {
     resume,

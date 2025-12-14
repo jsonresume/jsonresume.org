@@ -2,14 +2,14 @@
 
 import axios from 'axios';
 import { logger } from '@/lib/logger';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, use } from 'react';
 import Hero from '../../../src/ui/Hero';
 import ReactMarkdown from 'react-markdown';
 import Loading from '../../components/Loading';
 import { Button } from '@repo/ui';
 
 export default function Suggestions({ params }) {
-  const { username } = params;
+  const { username } = use(params);
 
   const [submitting, setSubmitting] = useState(false);
   const [focus, setFocus] = useState('general');

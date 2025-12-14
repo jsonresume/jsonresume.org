@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { use } from 'react';
 import { usePublicResume } from '../../providers/PublicResumeProvider';
 import { PublicViewBanner } from '../../components/PublicViewBanner';
 import { ChecksList } from './ATSScoreModule/components/ChecksList';
@@ -20,7 +20,7 @@ import {
 } from './components/AnalysisPhases';
 
 const ATSScore = ({ params }) => {
-  const { username } = params;
+  const { username } = use(params);
   const {
     resume,
     loading: resumeLoading,

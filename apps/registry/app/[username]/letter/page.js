@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, use } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Hero from '../../../src/ui/Hero';
 import { useLetterGeneration } from './components/useLetterGeneration';
@@ -9,7 +9,7 @@ import { LetterPreview } from './components/LetterPreview';
 
 export default function Letter({ params }) {
   const searchParams = useSearchParams();
-  const { username } = params;
+  const { username } = use(params);
   const job = searchParams.get('job');
   const [jobDescription, setJobDescription] = useState(
     typeof window !== 'undefined'

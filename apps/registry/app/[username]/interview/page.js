@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, use } from 'react';
 import { INTERVIEWER, CANDIDATE } from './InterviewModule/constants/roles';
 import { useInterviewMessages } from './InterviewModule/hooks/useInterviewMessages';
 import { PositionSwitch } from './InterviewModule/components/PositionSwitch';
@@ -8,7 +8,7 @@ import { MessageList } from './InterviewModule/components/MessageList';
 import { InterviewInput } from './InterviewModule/components/InterviewInput';
 
 export default function Talk({ params }) {
-  const { username } = params;
+  const { username } = use(params);
   const [showAbout] = useState(false);
   const [position, setPosition] = useState(CANDIDATE);
 
