@@ -1,8 +1,7 @@
-import { use } from 'react';
 import { PublicResumeProvider } from '../../providers/PublicResumeProvider';
 
-export default function TimelineLayout({ children, params }) {
-  const { username } = use(params);
+export default async function TimelineLayout({ children, params }) {
+  const { username } = await params;
 
   return (
     <PublicResumeProvider username={username}>{children}</PublicResumeProvider>

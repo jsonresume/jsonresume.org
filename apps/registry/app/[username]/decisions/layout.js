@@ -5,11 +5,10 @@
  * Uses PublicResumeProvider for unauthenticated access
  */
 
-import { use } from 'react';
 import { PublicResumeProvider } from '../../providers/PublicResumeProvider';
 
-export default function DecisionsLayout({ children, params }) {
-  const { username } = use(params);
+export default async function DecisionsLayout({ children, params }) {
+  const { username } = await params;
 
   return (
     <PublicResumeProvider username={username}>
