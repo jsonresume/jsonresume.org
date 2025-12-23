@@ -1,4 +1,5 @@
 import dynamic from 'next/dynamic';
+import { useState, useEffect } from 'react';
 
 const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), {
   ssr: false,
@@ -55,6 +56,35 @@ export const GraphCanvas = ({
   onNodeHover,
   onNodeClick,
 }) => {
+  // Use state for dimensions to avoid direct window access during render
+  const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
+
+  useEffect(() => {
+    // Set initial dimensions
+    setDimensions({
+      width: window.innerWidth,
+      height: 600,
+    });
+
+    // Handle window resize with debouncing
+    let timeoutId;
+    const handleResize = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        setDimensions({
+          width: window.innerWidth,
+          height: 600,
+        });
+      }, 150); // Debounce resize events
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   if (!graphData) return null;
 
   return (
@@ -75,8 +105,8 @@ export const GraphCanvas = ({
       d3AlphaDecay={0.02}
       d3VelocityDecay={0.3}
       warmupTicks={100}
-      width={window.innerWidth}
-      height={600}
+      width={dimensions.width}
+      height={dimensions.height}
     />
   );
 };
