@@ -128,7 +128,14 @@ function getSalaryColor(level, hasSalary) {
  * Custom Job Node with rich design
  */
 function JobNode({ data, selected }) {
-  const { jobInfo, isResume, isRead, showSalaryGradient, salaryLevel } = data;
+  const {
+    jobInfo,
+    isResume,
+    isRead,
+    isInterested,
+    showSalaryGradient,
+    salaryLevel,
+  } = data;
   const [imgError, setImgError] = useState(false);
 
   // Resume node rendering
@@ -164,7 +171,9 @@ function JobNode({ data, selected }) {
     <div
       className={`job-node-custom ${selected ? 'selected' : ''} ${
         isRead ? 'read' : ''
-      } ${showSalaryGradient ? 'salary-gradient' : ''}`}
+      } ${isInterested ? 'interested' : ''} ${
+        showSalaryGradient ? 'salary-gradient' : ''
+      }`}
       style={
         showSalaryGradient && salaryColors
           ? {

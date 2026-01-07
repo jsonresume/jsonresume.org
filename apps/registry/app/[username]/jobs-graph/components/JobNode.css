@@ -42,6 +42,29 @@
   opacity: 1;
 }
 
+/* Interested state - distinctive purple highlight */
+.job-node-custom.interested {
+  background: linear-gradient(135deg, #f3e8ff 0%, #ede9fe 100%);
+  border-color: #a78bfa;
+  box-shadow:
+    0 2px 8px rgba(167, 139, 250, 0.2),
+    0 1px 2px rgba(167, 139, 250, 0.1);
+}
+
+.job-node-custom.interested:hover {
+  border-color: #8b5cf6;
+  box-shadow:
+    0 8px 24px rgba(139, 92, 246, 0.25),
+    0 4px 8px rgba(139, 92, 246, 0.15);
+}
+
+.job-node-custom.interested.selected {
+  border-color: #8b5cf6;
+  box-shadow:
+    0 0 0 2px rgba(139, 92, 246, 0.3),
+    0 8px 24px rgba(139, 92, 246, 0.2);
+}
+
 /* Node Header */
 .job-node-custom .node-header {
   display: flex;

@@ -41,6 +41,7 @@ export default function PathwaysGraph() {
     embeddingStage,
     graphVersion,
     readJobIds,
+    interestedJobIds,
     markAsRead,
     resume,
     promptJobFeedback,
@@ -89,9 +90,12 @@ export default function PathwaysGraph() {
       setEdges,
     });
 
-  // Convert readJobIds Set to the format expected by jobs-graph hooks
+  // Convert job state Sets to the format expected by jobs-graph hooks
   // The jobs-graph hooks expect keys like `${username}_${jobId}` but we just use jobId
   const readJobs = new Set([...readJobIds].map((id) => `pathways_${id}`));
+  const interestedJobs = new Set(
+    [...(interestedJobIds || [])].map((id) => `pathways_${id}`)
+  );
 
   // Filtering and styling hooks
   const filteredNodes = useJobFiltering(filterText, jobInfo, remoteOnly);
@@ -122,6 +126,7 @@ export default function PathwaysGraph() {
     jobInfo,
     username: 'pathways',
     readJobs,
+    interestedJobs,
     showSalaryGradient,
     salaryRange,
     filterText,

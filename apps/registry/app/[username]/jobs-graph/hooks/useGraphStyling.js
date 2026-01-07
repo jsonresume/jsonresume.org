@@ -43,6 +43,7 @@ export function useGraphStyling({
   jobInfo,
   username,
   readJobs,
+  interestedJobs,
   showSalaryGradient,
   salaryRange,
   filterText,
@@ -68,6 +69,7 @@ export function useGraphStyling({
 
         const jobData = jobInfo[node.id];
         const isRead = readJobs?.has(`${username}_${node.id}`);
+        const isInterested = interestedJobs?.has(`${username}_${node.id}`);
         const salaryLevel = getSalaryLevel(jobData, salaryRange);
 
         return {
@@ -77,6 +79,7 @@ export function useGraphStyling({
             ...node.data,
             jobInfo: jobData,
             isRead,
+            isInterested,
             showSalaryGradient,
             salaryLevel,
             salaryRange, // Pass for JobNode fallback calculations
@@ -92,6 +95,7 @@ export function useGraphStyling({
       jobInfo,
       username,
       readJobs,
+      interestedJobs,
       showSalaryGradient,
       salaryRange,
       hasActiveFilter,
