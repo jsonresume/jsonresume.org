@@ -3,6 +3,14 @@ import { reconnectEdges } from '../utils/graphReconnection';
 import { getLayoutedElements } from '../utils/graphLayout';
 import { getJobSalary } from '../utils/salaryParser';
 
+// Time range configurations (days)
+const TIME_RANGE_DAYS = {
+  all: null,
+  '1m': 35,
+  '2m': 70,
+  '3m': 100,
+};
+
 /**
  * Hook to filter nodes and edges, with intelligent reconnection
  * When hideFiltered is enabled, removes hidden nodes and reconnects orphans
@@ -20,6 +28,7 @@ export function useGraphFiltering({
   jobInfo,
   salaryFilterRange,
   showSalaryGradient = false,
+  timeRange = 'all',
 }) {
   return useMemo(() => {
     // If not hiding filtered nodes, return original nodes/edges
@@ -46,6 +55,8 @@ export function useGraphFiltering({
       // Salary-based filtering
       let isOutsideSalaryRange = false;
       let hasNoSalary = false;
+      let isOutsideTimeRange = false;
+
       if (jobInfo) {
         const job = jobInfo[nodeId];
         const salary = job ? getJobSalary(job) : null;
@@ -60,9 +71,23 @@ export function useGraphFiltering({
         if (showSalaryGradient && salary === null) {
           hasNoSalary = true;
         }
+
+        // Time-based filtering
+        const days = TIME_RANGE_DAYS[timeRange];
+        if (days && job?.createdAt) {
+          const jobDate = new Date(job.createdAt);
+          const cutoffDate = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+          isOutsideTimeRange = jobDate < cutoffDate;
+        }
       }
 
-      if (isFilteredOut || isRead || isOutsideSalaryRange || hasNoSalary) {
+      if (
+        isFilteredOut ||
+        isRead ||
+        isOutsideSalaryRange ||
+        hasNoSalary ||
+        isOutsideTimeRange
+      ) {
         hiddenNodeIds.add(nodeId);
       }
     });
@@ -96,5 +121,6 @@ export function useGraphFiltering({
     jobInfo,
     salaryFilterRange,
     showSalaryGradient,
+    timeRange,
   ]);
 }

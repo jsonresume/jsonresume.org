@@ -1,4 +1,4 @@
-import { Search, X, Globe, EyeOff, DollarSign } from 'lucide-react';
+import { Search, X, Globe, EyeOff, DollarSign, Calendar } from 'lucide-react';
 import { Input, Button } from '@repo/ui';
 import { SalaryHistogramSlider } from '@/app/[username]/jobs-graph/components/SalaryHistogramSlider';
 
@@ -39,6 +39,13 @@ function StatBadge({ children, variant = 'default' }) {
   );
 }
 
+const TIME_RANGES = [
+  { value: 'all', label: 'All time', days: null },
+  { value: '1m', label: '1 month', days: 35 },
+  { value: '2m', label: '2 months', days: 70 },
+  { value: '3m', label: '3 months', days: 100 },
+];
+
 export function PathwaysGraphControls({
   filterText,
   setFilterText,
@@ -48,6 +55,8 @@ export function PathwaysGraphControls({
   setRemoteOnly,
   hideFiltered,
   setHideFiltered,
+  timeRange,
+  setTimeRange,
   totalJobs = 0,
   visibleJobs = 0,
   hasActiveFilter = false,
@@ -107,6 +116,22 @@ export function PathwaysGraphControls({
           >
             Salary
           </FilterPill>
+
+          {/* Time range selector */}
+          <div className="flex items-center gap-1.5 ml-2 pl-2 border-l border-slate-200">
+            <Calendar className="w-3.5 h-3.5 text-slate-400" />
+            <select
+              value={timeRange}
+              onChange={(e) => setTimeRange(e.target.value)}
+              className="text-xs bg-transparent border-none text-slate-600 font-medium cursor-pointer focus:outline-none focus:ring-0"
+            >
+              {TIME_RANGES.map((range) => (
+                <option key={range.value} value={range.value}>
+                  {range.label}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
         {/* Stats */}

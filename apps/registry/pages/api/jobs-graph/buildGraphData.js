@@ -130,6 +130,7 @@ export function buildJobInfoMap(jobs) {
         salaryUsd: job.salary_usd,
         salaryMin: job.salary_min,
         salaryMax: job.salary_max,
+        createdAt: job.created_at,
       };
     } catch (error) {
       console.error(`Error parsing job content for ${job.uuid}:`, error);

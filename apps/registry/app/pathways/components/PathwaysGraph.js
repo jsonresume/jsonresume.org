@@ -54,6 +54,7 @@ export default function PathwaysGraph() {
   const [showSalaryGradient, setShowSalaryGradient] = useState(false);
   const [remoteOnly, setRemoteOnly] = useState(false);
   const [hideFiltered, setHideFiltered] = useState(false);
+  const [timeRange, setTimeRange] = useState('all');
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
   // Fetch jobs data using the cached embedding
@@ -75,7 +76,9 @@ export default function PathwaysGraph() {
   const salaryRange = useSalaryRange(jobInfo);
   const findPathToResume = usePathFinding(nodes);
 
-  const hasActiveFilter = Boolean(filterText || remoteOnly);
+  const hasActiveFilter = Boolean(
+    filterText || remoteOnly || timeRange !== 'all'
+  );
 
   const { visibleNodes, visibleEdges } = useGraphFiltering({
     nodes,
@@ -88,6 +91,7 @@ export default function PathwaysGraph() {
     jobInfo,
     salaryFilterRange: salaryRange.filterRange,
     showSalaryGradient,
+    timeRange,
   });
 
   const { nodesWithStyle, edgesWithStyle } = useGraphStyling({
@@ -142,6 +146,7 @@ export default function PathwaysGraph() {
     setFilterText('');
     setRemoteOnly(false);
     setHideFiltered(false);
+    setTimeRange('all');
   }, []);
 
   // Calculate job counts (exclude resume node)
@@ -218,6 +223,8 @@ export default function PathwaysGraph() {
         setRemoteOnly={setRemoteOnly}
         hideFiltered={hideFiltered}
         setHideFiltered={setHideFiltered}
+        timeRange={timeRange}
+        setTimeRange={setTimeRange}
         totalJobs={totalJobs}
         visibleJobs={visibleJobCount}
         hasActiveFilter={hasActiveFilter}
