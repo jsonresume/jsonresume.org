@@ -1,11 +1,14 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  );
+}
 
 export async function POST(request) {
+  const supabase = getSupabase();
   try {
     const { userId, jobId, feedback, sentiment, jobTitle, jobCompany } =
       await request.json();
@@ -46,6 +49,7 @@ export async function POST(request) {
 }
 
 export async function GET(request) {
+  const supabase = getSupabase();
   try {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get('userId');
