@@ -52,6 +52,8 @@ export default function JobsGraph({ params }) {
     hideFiltered,
     username,
     hasActiveFilter,
+    jobInfo,
+    salaryFilterRange: salaryRange.filterRange,
   });
 
   const { nodesWithStyle, edgesWithStyle } = useGraphStyling({
@@ -104,6 +106,7 @@ export default function JobsGraph({ params }) {
             setRemoteOnly={setRemoteOnly}
             hideFiltered={hideFiltered}
             setHideFiltered={setHideFiltered}
+            salaryRange={salaryRange}
           />
           <GraphVisualization
             nodesWithStyle={nodesWithStyle}

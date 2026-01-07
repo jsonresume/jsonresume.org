@@ -29,6 +29,35 @@ export const parseSalary = (salary) => {
 };
 
 /**
+ * Gets salary value for a job, preferring normalized database values
+ * @param {Object} job - Job object with potential salaryMax/salaryUsd fields
+ * @returns {number|null} Salary value (prefers salaryMax, falls back to parsing)
+ */
+export const getJobSalary = (job) => {
+  // Prefer normalized database values
+  if (job.salaryMax) return job.salaryMax;
+  if (job.salaryUsd) return job.salaryUsd;
+  // Fall back to parsing salary string
+  return parseSalary(job.salary);
+};
+
+/**
+ * Gets salary range for a job from normalized data
+ * @param {Object} job - Job object
+ * @returns {Object} { min, max } or null if no salary data
+ */
+export const getJobSalaryRange = (job) => {
+  if (job.salaryMin && job.salaryMax) {
+    return { min: job.salaryMin, max: job.salaryMax };
+  }
+  if (job.salaryUsd) {
+    return { min: job.salaryUsd, max: job.salaryUsd };
+  }
+  const parsed = parseSalary(job.salary);
+  return parsed ? { min: parsed, max: parsed } : null;
+};
+
+/**
  * Calculates min/max salary range from job data
  * @param {Object} jobInfo - Job info map
  * @returns {Object} { min, max } salary range
@@ -38,7 +67,7 @@ export const calculateSalaryRange = (jobInfo) => {
   let max = -Infinity;
 
   Object.values(jobInfo).forEach((job) => {
-    const salary = parseSalary(job.salary);
+    const salary = getJobSalary(job);
     if (salary) {
       min = Math.min(min, salary);
       max = Math.max(max, salary);
@@ -58,7 +87,7 @@ export const calculateSalaryRange = (jobInfo) => {
  * @param {Object} jobInfo - Job info map
  * @param {number} lowerPct - Lower percentile (default 5)
  * @param {number} upperPct - Upper percentile (default 95)
- * @returns {Object} { min, max, p5, p95 } salary range with percentile bounds
+ * @returns {Object} { min, max, p5, p95, salaries, histogram } salary range with percentile bounds and histogram data
  */
 export const calculateSalaryRangeWithPercentiles = (
   jobInfo,
@@ -66,12 +95,12 @@ export const calculateSalaryRangeWithPercentiles = (
   upperPct = 95
 ) => {
   const salaries = Object.values(jobInfo)
-    .map((job) => parseSalary(job.salary))
-    .filter((s) => s !== null)
+    .map((job) => getJobSalary(job))
+    .filter((s) => s !== null && s > 0)
     .sort((a, b) => a - b);
 
   if (salaries.length === 0) {
-    return { min: 0, max: 0, p5: 0, p95: 0 };
+    return { min: 0, max: 0, p5: 0, p95: 0, salaries: [], histogram: [] };
   }
 
   const min = salaries[0];
@@ -84,5 +113,40 @@ export const calculateSalaryRangeWithPercentiles = (
   const p5 = salaries[Math.max(0, p5Index)];
   const p95 = salaries[Math.min(salaries.length - 1, p95Index)];
 
-  return { min, max, p5, p95 };
+  // Build histogram data (20 buckets)
+  const histogram = buildSalaryHistogram(salaries, 20);
+
+  return { min, max, p5, p95, salaries, histogram };
+};
+
+/**
+ * Builds histogram data for salary distribution
+ * @param {number[]} salaries - Sorted array of salaries
+ * @param {number} bucketCount - Number of histogram buckets
+ * @returns {Array} Array of { min, max, count } objects
+ */
+export const buildSalaryHistogram = (salaries, bucketCount = 20) => {
+  if (salaries.length === 0) return [];
+
+  const min = salaries[0];
+  const max = salaries[salaries.length - 1];
+  const bucketSize = (max - min) / bucketCount || 1;
+
+  const histogram = [];
+  for (let i = 0; i < bucketCount; i++) {
+    const bucketMin = min + i * bucketSize;
+    const bucketMax = min + (i + 1) * bucketSize;
+    const count = salaries.filter(
+      (s) =>
+        s >= bucketMin &&
+        (i === bucketCount - 1 ? s <= bucketMax : s < bucketMax)
+    ).length;
+    histogram.push({
+      min: bucketMin,
+      max: bucketMax,
+      count,
+    });
+  }
+
+  return histogram;
 };

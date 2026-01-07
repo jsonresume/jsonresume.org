@@ -129,13 +129,22 @@ function buildGraphData(resumeId, topJobs, otherJobs) {
 }
 
 /**
- * Build job info map
+ * Build job info map with normalized salary data
  */
 function buildJobInfoMap(jobs) {
   const jobInfoMap = {};
   jobs.forEach((job) => {
     try {
-      jobInfoMap[job.uuid] = JSON.parse(job.gpt_content);
+      const parsed = JSON.parse(job.gpt_content);
+      // Include normalized salary data from database columns
+      jobInfoMap[job.uuid] = {
+        ...parsed,
+        // Override with normalized salary data if available
+        salaryUsd: job.salary_usd,
+        salaryMin: job.salary_min,
+        salaryMax: job.salary_max,
+        salaryCurrency: job.salary_currency,
+      };
     } catch {
       jobInfoMap[job.uuid] = { title: 'Unknown Job', error: 'Failed to parse' };
     }

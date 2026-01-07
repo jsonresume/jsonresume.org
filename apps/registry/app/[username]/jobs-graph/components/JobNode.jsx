@@ -29,25 +29,27 @@ function extractDomain(url) {
 }
 
 /**
- * Format salary for display with optional currency conversion
+ * Format salary for display - prefers normalized USD values from database
  */
-function formatSalary(salary, rates, userCurrency) {
-  if (!salary) return null;
+function formatSalary(jobInfo, rates, userCurrency) {
+  // Prefer normalized salary data from database
+  if (jobInfo?.salaryMin || jobInfo?.salaryMax || jobInfo?.salaryUsd) {
+    const min = jobInfo.salaryMin || jobInfo.salaryUsd;
+    const max = jobInfo.salaryMax || jobInfo.salaryUsd;
 
-  // Handle structured salary object
-  if (typeof salary === 'object' && salary.min) {
-    const sourceCurrency = salary.currency || 'USD';
-    let min = salary.min;
-    let max = salary.max || salary.min;
+    if (!min && !max) return null;
 
-    // Convert if we have rates and currencies differ
-    if (rates && userCurrency && sourceCurrency !== userCurrency) {
-      min = convertCurrency(min, sourceCurrency, userCurrency, rates);
-      max = convertCurrency(max, sourceCurrency, userCurrency, rates);
+    // Already in USD from database, convert to user currency if needed
+    let displayMin = min;
+    let displayMax = max;
+    let displayCurrency = 'USD';
+
+    if (rates && userCurrency && userCurrency !== 'USD') {
+      displayMin = convertCurrency(min, 'USD', userCurrency, rates);
+      displayMax = convertCurrency(max, 'USD', userCurrency, rates);
+      displayCurrency = userCurrency;
     }
 
-    const displayCurrency =
-      rates && userCurrency ? userCurrency : sourceCurrency;
     const symbol =
       displayCurrency === 'USD'
         ? '$'
@@ -55,12 +57,19 @@ function formatSalary(salary, rates, userCurrency) {
         ? '€'
         : displayCurrency === 'GBP'
         ? '£'
-        : '';
+        : '$';
 
-    return `${symbol}${Math.round(min / 1000)}k-${symbol}${Math.round(
-      max / 1000
+    if (displayMin === displayMax) {
+      return `${symbol}${Math.round(displayMin / 1000)}k`;
+    }
+    return `${symbol}${Math.round(displayMin / 1000)}k-${Math.round(
+      displayMax / 1000
     )}k`;
   }
+
+  // Fallback to parsing salary string
+  const salary = jobInfo?.salary;
+  if (!salary) return null;
 
   // Handle string salary like "$120,000 - $150,000" or "120k-150k"
   const str = String(salary).toLowerCase();
@@ -95,18 +104,34 @@ function formatSalary(salary, rates, userCurrency) {
   if (values.length >= 2) {
     const min = Math.min(...values);
     const max = Math.max(...values);
-    return `${symbol}${Math.round(min / 1000)}k-${symbol}${Math.round(
-      max / 1000
-    )}k`;
+    return `${symbol}${Math.round(min / 1000)}k-${Math.round(max / 1000)}k`;
   }
 
   return `${symbol}${Math.round(values[0] / 1000)}k`;
 }
 
 /**
- * Get salary level (0-1) for gradient
+ * Get salary level (0-1) for gradient - uses salaryMax from normalized data
  */
-function getSalaryLevel(salary) {
+function getSalaryLevel(jobInfo, salaryRange) {
+  // Use normalized salaryMax from database (preferred)
+  const salaryMax = jobInfo?.salaryMax || jobInfo?.salaryUsd;
+
+  if (salaryMax && salaryRange?.p5 && salaryRange?.p95) {
+    // Use percentile range for better distribution
+    const range = salaryRange.p95 - salaryRange.p5;
+    if (range > 0) {
+      return Math.min(1, Math.max(0, (salaryMax - salaryRange.p5) / range));
+    }
+  }
+
+  if (salaryMax) {
+    // Fallback to static range if no salaryRange provided
+    return Math.min(1, Math.max(0, (salaryMax - 50000) / 250000));
+  }
+
+  // Fallback to parsing salary string
+  const salary = jobInfo?.salary;
   if (!salary) return 0.5;
 
   const str = String(salary).toLowerCase();
@@ -115,10 +140,10 @@ function getSalaryLevel(salary) {
 
   const values = numbers.map((n) => parseInt(n.replace(/,/g, ''), 10));
   const normalized = values.map((v) => (v < 1000 ? v * 1000 : v));
-  const avg = normalized.reduce((a, b) => a + b, 0) / normalized.length;
+  const max = Math.max(...normalized);
 
   // Normalize to 0-1 scale (assuming $50k-$300k range)
-  return Math.min(1, Math.max(0, (avg - 50000) / 250000));
+  return Math.min(1, Math.max(0, (max - 50000) / 250000));
 }
 
 /**
@@ -188,7 +213,7 @@ function JobNode({ data, selected }) {
 
   const title = jobInfo?.title || 'Unknown Position';
   const company = jobInfo?.company || 'Unknown Company';
-  const salary = formatSalary(jobInfo?.salary, rates, userCurrency);
+  const salary = formatSalary(jobInfo, rates, userCurrency);
   const isRemote =
     jobInfo?.remote === true ||
     jobInfo?.remote === 'true' ||
@@ -199,7 +224,7 @@ function JobNode({ data, selected }) {
 
   // Calculate background based on salary when gradient mode is enabled
   const hasSalary = Boolean(salary);
-  const level = salaryLevel ?? getSalaryLevel(jobInfo?.salary);
+  const level = salaryLevel ?? getSalaryLevel(jobInfo, data.salaryRange);
   const salaryColors = showSalaryGradient
     ? getSalaryColor(level, hasSalary)
     : null;

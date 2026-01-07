@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { reconnectEdges } from '../utils/graphReconnection';
 import { getLayoutedElements } from '../utils/graphLayout';
+import { getJobSalary } from '../utils/salaryParser';
 
 /**
  * Hook to filter nodes and edges, with intelligent reconnection
@@ -16,6 +17,8 @@ export function useGraphFiltering({
   hideFiltered,
   username,
   hasActiveFilter,
+  jobInfo,
+  salaryFilterRange,
 }) {
   return useMemo(() => {
     // If not hiding filtered nodes, return original nodes/edges
@@ -39,7 +42,18 @@ export function useGraphFiltering({
       const readKey = `${username}_${nodeId}`;
       const isRead = readJobs.has(readKey);
 
-      if (isFilteredOut || isRead) {
+      // Hide if outside salary filter range
+      let isOutsideSalaryRange = false;
+      if (salaryFilterRange && jobInfo) {
+        const job = jobInfo[nodeId];
+        const salary = job ? getJobSalary(job) : null;
+        if (salary !== null) {
+          isOutsideSalaryRange =
+            salary < salaryFilterRange.min || salary > salaryFilterRange.max;
+        }
+      }
+
+      if (isFilteredOut || isRead || isOutsideSalaryRange) {
         hiddenNodeIds.add(nodeId);
       }
     });
@@ -70,5 +84,7 @@ export function useGraphFiltering({
     hideFiltered,
     username,
     hasActiveFilter,
+    jobInfo,
+    salaryFilterRange,
   ]);
 }

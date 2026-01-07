@@ -3,9 +3,28 @@ import { getEdgeStyle } from '../utils/colorUtils';
 
 /**
  * Calculate salary level (0-1) for gradient coloring
+ * Uses normalized salaryMax from database for accurate percentile-based distribution
  */
-function getSalaryLevel(salary, salaryRange) {
-  if (!salary || !salaryRange) return 0.5;
+function getSalaryLevel(jobData, salaryRange) {
+  // Prefer normalized salaryMax from database
+  const salaryMax = jobData?.salaryMax || jobData?.salaryUsd;
+
+  if (salaryMax && salaryRange?.p5 && salaryRange?.p95) {
+    // Use percentile range for better distribution (handles outliers)
+    const range = salaryRange.p95 - salaryRange.p5;
+    if (range > 0) {
+      return Math.min(1, Math.max(0, (salaryMax - salaryRange.p5) / range));
+    }
+  }
+
+  if (salaryMax) {
+    // Fallback to static range if no salaryRange provided
+    return Math.min(1, Math.max(0, (salaryMax - 50000) / 250000));
+  }
+
+  // Fallback to parsing salary string for legacy data
+  const salary = jobData?.salary;
+  if (!salary) return 0.5;
 
   const str = String(salary).toLowerCase();
   const numbers = str.match(/[\d,]+/g);
@@ -13,13 +32,9 @@ function getSalaryLevel(salary, salaryRange) {
 
   const values = numbers.map((n) => parseInt(n.replace(/,/g, ''), 10));
   const normalized = values.map((v) => (v < 1000 ? v * 1000 : v));
-  const avg = normalized.reduce((a, b) => a + b, 0) / normalized.length;
+  const max = Math.max(...normalized);
 
-  // Use salaryRange if available, otherwise use defaults
-  const min = salaryRange?.min || 50000;
-  const max = salaryRange?.max || 300000;
-
-  return Math.min(1, Math.max(0, (avg - min) / (max - min)));
+  return Math.min(1, Math.max(0, (max - 50000) / 250000));
 }
 
 export function useGraphStyling({
@@ -53,7 +68,7 @@ export function useGraphStyling({
 
         const jobData = jobInfo[node.id];
         const isRead = readJobs?.has(`${username}_${node.id}`);
-        const salaryLevel = getSalaryLevel(jobData?.salary, salaryRange);
+        const salaryLevel = getSalaryLevel(jobData, salaryRange);
 
         return {
           ...node,
@@ -64,6 +79,7 @@ export function useGraphStyling({
             isRead,
             showSalaryGradient,
             salaryLevel,
+            salaryRange, // Pass for JobNode fallback calculations
           },
           style: {
             ...node.style,
