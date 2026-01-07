@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS pathways_preferences (
   show_salary_gradient BOOLEAN DEFAULT false,
   remote_only BOOLEAN DEFAULT false,
   hide_filtered BOOLEAN DEFAULT false,
-  time_range TEXT DEFAULT 'all',
+  time_range TEXT DEFAULT '1m',
 
   -- Viewport settings (zoom/pan)
   viewport_x DOUBLE PRECISION DEFAULT 0,

@@ -5,7 +5,6 @@ import { getJobSalary } from '../utils/salaryParser';
 
 // Time range configurations (days)
 const TIME_RANGE_DAYS = {
-  all: null,
   '1m': 35,
   '2m': 70,
   '3m': 100,
@@ -28,14 +27,9 @@ export function useGraphFiltering({
   jobInfo,
   salaryFilterRange,
   showSalaryGradient = false,
-  timeRange = 'all',
+  timeRange = '1m',
 }) {
   return useMemo(() => {
-    // If not hiding filtered nodes, return original nodes/edges
-    if (!hideFiltered) {
-      return { visibleNodes: nodes, visibleEdges: edges };
-    }
-
     // Identify nodes to hide
     const hiddenNodeIds = new Set();
 
@@ -44,6 +38,27 @@ export function useGraphFiltering({
       if (node.data?.isResume) return;
 
       const nodeId = node.id;
+
+      // Time-based filtering ALWAYS applies (independent of hideFiltered)
+      let isOutsideTimeRange = false;
+      if (jobInfo) {
+        const job = jobInfo[nodeId];
+        const days = TIME_RANGE_DAYS[timeRange];
+        if (days && job?.createdAt) {
+          const jobDate = new Date(job.createdAt);
+          const cutoffDate = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+          isOutsideTimeRange = jobDate < cutoffDate;
+        }
+      }
+
+      // Time filter always hides old jobs
+      if (isOutsideTimeRange) {
+        hiddenNodeIds.add(nodeId);
+        return;
+      }
+
+      // Other filters only apply when hideFiltered is enabled
+      if (!hideFiltered) return;
 
       // Hide if filtered out (when a filter is active)
       const isFilteredOut = hasActiveFilter && !filteredNodes.has(nodeId);
@@ -55,7 +70,6 @@ export function useGraphFiltering({
       // Salary-based filtering
       let isOutsideSalaryRange = false;
       let hasNoSalary = false;
-      let isOutsideTimeRange = false;
 
       if (jobInfo) {
         const job = jobInfo[nodeId];
@@ -71,23 +85,9 @@ export function useGraphFiltering({
         if (showSalaryGradient && salary === null) {
           hasNoSalary = true;
         }
-
-        // Time-based filtering
-        const days = TIME_RANGE_DAYS[timeRange];
-        if (days && job?.createdAt) {
-          const jobDate = new Date(job.createdAt);
-          const cutoffDate = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
-          isOutsideTimeRange = jobDate < cutoffDate;
-        }
       }
 
-      if (
-        isFilteredOut ||
-        isRead ||
-        isOutsideSalaryRange ||
-        hasNoSalary ||
-        isOutsideTimeRange
-      ) {
+      if (isFilteredOut || isRead || isOutsideSalaryRange || hasNoSalary) {
         hiddenNodeIds.add(nodeId);
       }
     });

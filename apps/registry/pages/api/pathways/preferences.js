@@ -33,7 +33,7 @@ export default async function handler(req, res) {
         showSalaryGradient: false,
         remoteOnly: false,
         hideFiltered: false,
-        timeRange: 'all',
+        timeRange: '1m',
         viewport: { x: 0, y: 0, zoom: 1 },
       });
     }
@@ -43,7 +43,7 @@ export default async function handler(req, res) {
       showSalaryGradient: data.show_salary_gradient || false,
       remoteOnly: data.remote_only || false,
       hideFiltered: data.hide_filtered || false,
-      timeRange: data.time_range || 'all',
+      timeRange: data.time_range || '1m',
       viewport: {
         x: data.viewport_x || 0,
         y: data.viewport_y || 0,
@@ -70,7 +70,7 @@ export default async function handler(req, res) {
         show_salary_gradient: showSalaryGradient || false,
         remote_only: remoteOnly || false,
         hide_filtered: hideFiltered || false,
-        time_range: timeRange || 'all',
+        time_range: timeRange || '1m',
         viewport_x: viewport?.x || 0,
         viewport_y: viewport?.y || 0,
         viewport_zoom: viewport?.zoom || 1,

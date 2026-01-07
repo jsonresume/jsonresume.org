@@ -35,6 +35,8 @@ export default function CopilotChat({
     triggerGraphRefresh,
     refreshEmbedding,
     saveResumeChanges,
+    pendingJobFeedback,
+    clearPendingJobFeedback,
   } = usePathways();
 
   const {
@@ -122,6 +124,7 @@ export default function CopilotChat({
     markAsHidden,
     clearJobState,
     triggerGraphRefresh,
+    userId,
   });
 
   // File upload handling
@@ -144,6 +147,26 @@ export default function CopilotChat({
       return () => clearTimeout(timeout);
     }
   }, [resumeData, refreshEmbedding]);
+
+  // Handle pending job feedback prompt from graph panel
+  useEffect(() => {
+    if (pendingJobFeedback) {
+      const { jobInfo, sentiment } = pendingJobFeedback;
+      const sentimentLabel =
+        {
+          interested: 'interested in',
+          not_interested: 'not interested in',
+          maybe: 'unsure about',
+          applied: 'applying to',
+        }[sentiment] || sentiment;
+
+      // Send the prompt as a user message with job context for the AI
+      sendMessage({
+        text: `[Job Review] Job ID: ${jobInfo.id} | Title: "${jobInfo.title}" | Company: ${jobInfo.company} | Sentiment: ${sentiment}. I want to mark this job as ${sentimentLabel}. Ask me why briefly.`,
+      });
+      clearPendingJobFeedback();
+    }
+  }, [pendingJobFeedback, sendMessage, clearPendingJobFeedback]);
 
   const handleSubmit = useCallback(
     (text) => {

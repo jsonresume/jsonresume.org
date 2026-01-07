@@ -49,6 +49,9 @@ export function PathwaysProvider({ children }) {
   const [graphVersion, setGraphVersion] = useState(0);
   const lastResumeHashRef = useRef(null);
 
+  // Job feedback prompt state
+  const [pendingJobFeedback, setPendingJobFeedback] = useState(null);
+
   useEffect(() => {
     setSessionId(getSessionId());
   }, []);
@@ -192,6 +195,15 @@ export function PathwaysProvider({ children }) {
     setGraphVersion((v) => v + 1);
   }, []);
 
+  // Prompt for job feedback - triggers chat to ask for feedback
+  const promptJobFeedback = useCallback((jobInfo, sentiment) => {
+    setPendingJobFeedback({ jobInfo, sentiment });
+  }, []);
+
+  const clearPendingJobFeedback = useCallback(() => {
+    setPendingJobFeedback(null);
+  }, []);
+
   const migrateToUser = useCallback(
     async (newUsername) => {
       if (!sessionId)
@@ -263,6 +275,9 @@ export function PathwaysProvider({ children }) {
     graphVersion,
     triggerGraphRefresh,
     migrateToUser,
+    pendingJobFeedback,
+    promptJobFeedback,
+    clearPendingJobFeedback,
   };
 
   return (

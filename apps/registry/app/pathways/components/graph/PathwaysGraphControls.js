@@ -40,7 +40,6 @@ function StatBadge({ children, variant = 'default' }) {
 }
 
 const TIME_RANGES = [
-  { value: 'all', label: 'All time', days: null },
   { value: '1m', label: '1 month', days: 35 },
   { value: '2m', label: '2 months', days: 70 },
   { value: '3m', label: '3 months', days: 100 },

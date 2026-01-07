@@ -19,6 +19,8 @@ export default function useJobToolsHandler({
   setFilterText,
   jobs = [],
   jobInfo = {},
+  // For job feedback
+  userId,
 }) {
   const handledToolCalls = useRef(new Set());
 
@@ -49,6 +51,43 @@ export default function useJobToolsHandler({
       });
     },
     [jobs, jobInfo, markAsRead, markAsInterested, markAsHidden, clearJobState]
+  );
+
+  /**
+   * Handle saveJobFeedback tool - save feedback to DB and mark as read
+   */
+  const handleSaveJobFeedback = useCallback(
+    async ({ jobId, jobTitle, jobCompany, feedback, sentiment }) => {
+      if (!userId || !jobId || !feedback) return;
+
+      try {
+        // Save feedback to database
+        await fetch('/api/pathways/feedback', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId,
+            jobId,
+            feedback,
+            sentiment,
+            jobTitle,
+            jobCompany,
+          }),
+        });
+
+        // Mark the job based on sentiment
+        if (sentiment === 'interested') {
+          markAsInterested?.(jobId);
+        } else if (sentiment === 'applied') {
+          markAsInterested?.(jobId);
+        } else {
+          markAsRead?.(jobId);
+        }
+      } catch (error) {
+        console.error('Failed to save job feedback:', error);
+      }
+    },
+    [userId, markAsRead, markAsInterested]
   );
 
   useEffect(() => {
@@ -88,6 +127,19 @@ export default function useJobToolsHandler({
               }
               handledToolCalls.current.add(part.toolCallId);
               break;
+            case 'saveJobFeedback': {
+              const { jobId, jobTitle, jobCompany, feedback, sentiment } =
+                part.input ?? {};
+              handleSaveJobFeedback({
+                jobId,
+                jobTitle,
+                jobCompany,
+                feedback,
+                sentiment,
+              });
+              handledToolCalls.current.add(part.toolCallId);
+              break;
+            }
           }
         }
       }
@@ -96,6 +148,7 @@ export default function useJobToolsHandler({
     messages,
     addToolResult,
     handleFilterJobs,
+    handleSaveJobFeedback,
     triggerGraphRefresh,
     setFilterText,
     jobs,

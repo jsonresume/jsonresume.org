@@ -43,6 +43,7 @@ export default function PathwaysGraph() {
     readJobIds,
     markAsRead,
     resume,
+    promptJobFeedback,
   } = usePathways();
 
   // React Flow state
@@ -63,7 +64,7 @@ export default function PathwaysGraph() {
   const [showSalaryGradient, setShowSalaryGradient] = useState(false);
   const [remoteOnly, setRemoteOnly] = useState(false);
   const [hideFiltered, setHideFiltered] = useState(false);
-  const [timeRange, setTimeRange] = useState('all');
+  const [timeRange, setTimeRange] = useState('1m');
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [initialViewport, setInitialViewport] = useState(null);
 
@@ -75,7 +76,7 @@ export default function PathwaysGraph() {
       setShowSalaryGradient(preferences.showSalaryGradient || false);
       setRemoteOnly(preferences.remoteOnly || false);
       setHideFiltered(preferences.hideFiltered || false);
-      setTimeRange(preferences.timeRange || 'all');
+      setTimeRange(preferences.timeRange || '1m');
       if (preferences.viewport) {
         setInitialViewport(preferences.viewport);
       }
@@ -102,7 +103,7 @@ export default function PathwaysGraph() {
   const findPathToResume = usePathFinding(nodes);
 
   const hasActiveFilter = Boolean(
-    filterText || remoteOnly || timeRange !== 'all'
+    filterText || remoteOnly || timeRange !== '1m'
   );
 
   const { visibleNodes, visibleEdges } = useGraphFiltering({
@@ -171,7 +172,7 @@ export default function PathwaysGraph() {
     setFilterText('');
     setRemoteOnly(false);
     setHideFiltered(false);
-    setTimeRange('all');
+    setTimeRange('1m');
   }, []);
 
   // Save preferences when filters change
@@ -329,6 +330,7 @@ export default function PathwaysGraph() {
           readJobIds={readJobIds}
           onMarkAsRead={handleMarkAsReadAndMove}
           onClose={() => setSelectedNode(null)}
+          onPromptFeedback={promptJobFeedback}
         />
       </div>
     </div>

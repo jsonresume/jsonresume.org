@@ -135,9 +135,43 @@ export const refreshJobMatches = tool({
   },
 });
 
+/**
+ * Tool to save feedback about a job and mark it as read
+ */
+export const saveJobFeedback = tool({
+  description: `Save the user's feedback about a specific job and mark it as read.
+    Use this after the user explains why they're marking a job as read/dismissed/interested.
+    This captures their reasoning for future reference and learning.`,
+  inputSchema: z.object({
+    jobId: z.string().describe('The unique ID of the job'),
+    jobTitle: z.string().optional().describe('The job title for context'),
+    jobCompany: z.string().optional().describe('The company name for context'),
+    feedback: z
+      .string()
+      .describe("The user's feedback/reasoning about the job"),
+    sentiment: z
+      .enum(['interested', 'not_interested', 'maybe', 'applied', 'dismissed'])
+      .describe("The user's overall sentiment about the job"),
+  }),
+  execute: async ({ jobId, jobTitle, jobCompany, feedback, sentiment }) => {
+    // Return data for client-side processing
+    return {
+      success: true,
+      jobId,
+      jobTitle,
+      jobCompany,
+      feedback,
+      sentiment,
+      action: 'save_feedback',
+      message: `Feedback saved for ${jobTitle || jobId}`,
+    };
+  },
+});
+
 export const jobTools = {
   filterJobs,
   showJobs,
   getJobInsights,
   refreshJobMatches,
+  saveJobFeedback,
 };
