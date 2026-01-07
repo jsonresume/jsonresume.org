@@ -228,12 +228,12 @@ describe('calculateSalaryRangeWithPercentiles', () => {
 
     const result = calculateSalaryRangeWithPercentiles(jobInfo);
 
-    expect(result).toEqual({
-      min: 75000,
-      max: 75000,
-      p5: 75000,
-      p95: 75000,
-    });
+    expect(result.min).toBe(75000);
+    expect(result.max).toBe(75000);
+    expect(result.p5).toBe(75000);
+    expect(result.p95).toBe(75000);
+    expect(result.salaries).toHaveLength(1);
+    expect(result.histogram).toBeDefined();
   });
 
   it('handles two jobs', () => {
@@ -271,12 +271,12 @@ describe('calculateSalaryRangeWithPercentiles', () => {
 
     const result = calculateSalaryRangeWithPercentiles(jobInfo);
 
-    expect(result).toEqual({
-      min: 75000,
-      max: 75000,
-      p5: 75000,
-      p95: 75000,
-    });
+    expect(result.min).toBe(75000);
+    expect(result.max).toBe(75000);
+    expect(result.p5).toBe(75000);
+    expect(result.p95).toBe(75000);
+    expect(result.salaries).toHaveLength(3);
+    expect(result.histogram).toBeDefined();
   });
 
   it('accepts custom percentile values', () => {
