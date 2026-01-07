@@ -5,15 +5,16 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-export default async function handler(req, res) {
-  if (req.method === 'POST') {
+export async function POST(request) {
+  try {
     const { userId, jobId, feedback, sentiment, jobTitle, jobCompany } =
-      req.body;
+      await request.json();
 
     if (!userId || !jobId || !feedback) {
-      return res.status(400).json({
-        error: 'userId, jobId, and feedback are required',
-      });
+      return Response.json(
+        { error: 'userId, jobId, and feedback are required' },
+        { status: 400 }
+      );
     }
 
     const { data, error } = await supabase
@@ -31,17 +32,27 @@ export default async function handler(req, res) {
 
     if (error) {
       console.error('Error saving feedback:', error);
-      return res.status(500).json({ error: 'Failed to save feedback' });
+      return Response.json(
+        { error: 'Failed to save feedback' },
+        { status: 500 }
+      );
     }
 
-    return res.status(200).json({ success: true, data });
+    return Response.json({ success: true, data });
+  } catch (error) {
+    console.error('Error in feedback POST:', error);
+    return Response.json({ error: 'Internal server error' }, { status: 500 });
   }
+}
 
-  if (req.method === 'GET') {
-    const { userId, jobId } = req.query;
+export async function GET(request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get('userId');
+    const jobId = searchParams.get('jobId');
 
     if (!userId) {
-      return res.status(400).json({ error: 'userId is required' });
+      return Response.json({ error: 'userId is required' }, { status: 400 });
     }
 
     let query = supabase
@@ -58,11 +69,15 @@ export default async function handler(req, res) {
 
     if (error) {
       console.error('Error loading feedback:', error);
-      return res.status(500).json({ error: 'Failed to load feedback' });
+      return Response.json(
+        { error: 'Failed to load feedback' },
+        { status: 500 }
+      );
     }
 
-    return res.status(200).json(data);
+    return Response.json(data);
+  } catch (error) {
+    console.error('Error in feedback GET:', error);
+    return Response.json({ error: 'Internal server error' }, { status: 500 });
   }
-
-  return res.status(405).json({ error: 'Method not allowed' });
 }
