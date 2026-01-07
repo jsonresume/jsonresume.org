@@ -33,6 +33,7 @@ export default function CopilotChat({
     clearJobState,
     triggerGraphRefresh,
     refreshEmbedding,
+    saveResumeChanges,
   } = usePathways();
 
   const {
@@ -95,7 +96,7 @@ export default function CopilotChat({
     cleanup: cleanupRecording,
   } = useVoiceRecording(handleTranscriptionComplete);
 
-  useResumeUpdater({ messages, resumeData, setResumeData });
+  useResumeUpdater({ messages, resumeData, setResumeData, saveResumeChanges });
 
   useJobToolsHandler({
     messages,

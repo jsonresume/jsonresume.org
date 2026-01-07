@@ -7,7 +7,9 @@ import {
   useCallback,
   useEffect,
 } from 'react';
+import { useAuth } from '@/app/context/auth';
 import { useJobStates } from '@/app/hooks/useJobStates';
+import usePathwaysResume from '../hooks/usePathwaysResume';
 import { SAMPLE_RESUME } from './sampleResume';
 import {
   getSessionId,
@@ -19,17 +21,13 @@ import pathwaysToast from '../utils/toastMessages';
 
 const PathwaysContext = createContext(null);
 
-export function PathwaysProvider({
-  children,
-  username = null,
-  isAuthenticated = false,
-}) {
+export function PathwaysProvider({ children }) {
+  const { user } = useAuth();
+  const userId = user?.id || null;
+  const username = user?.user_metadata?.user_name || null;
+  const isAuthenticated = !!user;
+
   const [sessionId, setSessionId] = useState(null);
-  const [resume, setResume] = useState(SAMPLE_RESUME);
-  const [resumeJson, setResumeJson] = useState(() =>
-    JSON.stringify(SAMPLE_RESUME, null, 2)
-  );
-  const [isResumeLoading, setIsResumeLoading] = useState(false);
   const [embedding, setEmbedding] = useState(null);
   const [isEmbeddingLoading, setIsEmbeddingLoading] = useState(false);
   const [graphVersion, setGraphVersion] = useState(0);
@@ -38,26 +36,58 @@ export function PathwaysProvider({
     setSessionId(getSessionId());
   }, []);
 
+  // Use the new Pathways resume persistence hook
+  const {
+    resume: dbResume,
+    isLoading: isResumeLoading,
+    isSaving: isResumeSaving,
+    saveChanges: saveResumeChanges,
+    applyAndSave,
+    setFullResume,
+    updateLocal: updateResumeLocal,
+  } = usePathwaysResume({ sessionId, userId });
+
+  // Derive resume state - use DB resume or sample if not loaded yet
+  const resume = dbResume || SAMPLE_RESUME;
+  const [resumeJson, setResumeJson] = useState(() =>
+    JSON.stringify(SAMPLE_RESUME, null, 2)
+  );
+
+  // Sync resumeJson when resume changes
+  useEffect(() => {
+    if (resume) {
+      setResumeJson(JSON.stringify(resume, null, 2));
+    }
+  }, [resume]);
+
   const jobStatesHook = useJobStates({
     sessionId,
     username,
     isAuthenticated,
   });
 
-  const updateResume = useCallback((newResume) => {
-    setResume(newResume);
-    setResumeJson(JSON.stringify(newResume, null, 2));
-  }, []);
+  // Update resume locally (for immediate UI feedback)
+  const updateResume = useCallback(
+    (newResume) => {
+      updateResumeLocal(newResume);
+      setResumeJson(JSON.stringify(newResume, null, 2));
+    },
+    [updateResumeLocal]
+  );
 
-  const updateResumeJson = useCallback((json) => {
-    setResumeJson(json);
-    try {
-      const parsed = JSON.parse(json);
-      setResume(parsed);
-    } catch {
-      // Invalid JSON, don't update object
-    }
-  }, []);
+  // Update resume JSON string (from editor)
+  const updateResumeJson = useCallback(
+    (json) => {
+      setResumeJson(json);
+      try {
+        const parsed = JSON.parse(json);
+        updateResumeLocal(parsed);
+      } catch {
+        // Invalid JSON, don't update object
+      }
+    },
+    [updateResumeLocal]
+  );
 
   const refreshEmbedding = useCallback(async () => {
     if (!resume) return null;
@@ -124,26 +154,7 @@ export function PathwaysProvider({
     [sessionId]
   );
 
-  // Load user's resume on mount if authenticated
-  useEffect(() => {
-    if (isAuthenticated && username) {
-      setIsResumeLoading(true);
-      fetch(`/api/resumes?username=${username}`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.resume) {
-            const parsed =
-              typeof data.resume === 'string'
-                ? JSON.parse(data.resume)
-                : data.resume;
-            setResume(parsed);
-            setResumeJson(JSON.stringify(parsed, null, 2));
-          }
-        })
-        .catch((err) => console.error('Failed to load resume:', err))
-        .finally(() => setIsResumeLoading(false));
-    }
-  }, [isAuthenticated, username]);
+  // Resume loading is now handled by usePathwaysResume hook
 
   // Generate initial embedding when resume is set
   useEffect(() => {
@@ -154,15 +165,18 @@ export function PathwaysProvider({
 
   const value = {
     sessionId,
+    userId,
     isAuthenticated,
     username,
     resume,
     resumeJson,
     isResumeLoading,
+    isResumeSaving,
     updateResume,
     updateResumeJson,
-    setResume,
-    setResumeJson,
+    saveResumeChanges, // Save diff to DB with history
+    applyAndSave, // Apply locally + save to DB
+    setFullResume, // For file uploads
     embedding,
     isEmbeddingLoading,
     refreshEmbedding,

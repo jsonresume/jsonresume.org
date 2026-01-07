@@ -14,6 +14,7 @@ export default function useResumeUpdater({
   messages,
   resumeData,
   setResumeData,
+  saveResumeChanges,
 }) {
   const handledToolCalls = useRef(new Set());
   // Keep a ref to the latest resume data to avoid stale closures
@@ -33,19 +34,26 @@ export default function useResumeUpdater({
             part.state === 'input-available') &&
           !handledToolCalls.current.has(part.toolCallId)
         ) {
-          const { changes } = part.input ?? {};
+          const { changes, explanation } = part.input ?? {};
 
           if (changes && typeof changes === 'object') {
             const currentResume = resumeDataRef.current;
             const updated = applyResumeChanges(currentResume, changes);
             // updateResume takes a direct value (not functional update)
             setResumeData(updated);
+
+            // Persist to database with history
+            if (saveResumeChanges) {
+              saveResumeChanges(changes, explanation, 'ai_update').catch(
+                (err) => console.error('Failed to persist resume changes:', err)
+              );
+            }
           }
           handledToolCalls.current.add(part.toolCallId);
         }
       }
     }
-  }, [messages, setResumeData]);
+  }, [messages, setResumeData, saveResumeChanges]);
 
   return null;
 }
