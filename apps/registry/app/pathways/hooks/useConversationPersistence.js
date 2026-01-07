@@ -5,6 +5,7 @@ import pathwaysToast from '../utils/toastMessages';
 import { activityLogger } from '../utils/activityLogger';
 
 const SAVE_DEBOUNCE_MS = 2000;
+const MESSAGES_PER_PAGE = 50;
 
 export default function useConversationPersistence({
   sessionId,
@@ -12,10 +13,15 @@ export default function useConversationPersistence({
   resume,
 }) {
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [initialMessages, setInitialMessages] = useState(null);
+  const [totalMessages, setTotalMessages] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
+  const [currentOffset, setCurrentOffset] = useState(0);
   const saveTimeoutRef = useRef(null);
   const lastSavedRef = useRef(null);
+  const fetchedWithRef = useRef({ sessionId: null, userId: null });
 
   // Load conversation on mount
   useEffect(() => {
@@ -23,6 +29,14 @@ export default function useConversationPersistence({
       setIsLoading(false);
       return;
     }
+
+    // Skip if already fetched with same IDs
+    const alreadyFetched =
+      fetchedWithRef.current.sessionId === sessionId &&
+      fetchedWithRef.current.userId === userId;
+    if (alreadyFetched) return;
+
+    fetchedWithRef.current = { sessionId, userId };
 
     const loadConversation = async () => {
       try {
@@ -32,13 +46,18 @@ export default function useConversationPersistence({
         } else if (sessionId) {
           params.set('sessionId', sessionId);
         }
+        params.set('limit', String(MESSAGES_PER_PAGE));
+        params.set('offset', '0');
 
         const response = await fetch(`/api/pathways/conversations?${params}`);
         if (!response.ok) throw new Error('Failed to load');
 
-        const { conversation } = await response.json();
-        if (conversation?.messages?.length > 0) {
-          setInitialMessages(conversation.messages);
+        const { messages, total, hasMore: more } = await response.json();
+        if (messages?.length > 0) {
+          setInitialMessages(messages);
+          setTotalMessages(total);
+          setHasMore(more);
+          setCurrentOffset(0);
         }
       } catch (error) {
         pathwaysToast.conversationLoadError();
@@ -93,6 +112,39 @@ export default function useConversationPersistence({
     [sessionId, userId, resume]
   );
 
+  // Load more older messages (for infinite scroll upward)
+  const loadMore = useCallback(async () => {
+    if (!sessionId && !userId) return [];
+    if (!hasMore || isLoadingMore) return [];
+
+    setIsLoadingMore(true);
+    try {
+      const newOffset = currentOffset + MESSAGES_PER_PAGE;
+      const params = new URLSearchParams();
+      if (userId) {
+        params.set('userId', userId);
+      } else if (sessionId) {
+        params.set('sessionId', sessionId);
+      }
+      params.set('limit', String(MESSAGES_PER_PAGE));
+      params.set('offset', String(newOffset));
+
+      const response = await fetch(`/api/pathways/conversations?${params}`);
+      if (!response.ok) throw new Error('Failed to load more');
+
+      const { messages, hasMore: more } = await response.json();
+      setCurrentOffset(newOffset);
+      setHasMore(more);
+
+      return messages || [];
+    } catch (error) {
+      pathwaysToast.apiError('Failed to load older messages');
+      return [];
+    } finally {
+      setIsLoadingMore(false);
+    }
+  }, [sessionId, userId, hasMore, isLoadingMore, currentOffset]);
+
   // Clear conversation
   const clearConversation = useCallback(async () => {
     if (!sessionId && !userId) return;
@@ -111,6 +163,9 @@ export default function useConversationPersistence({
 
       lastSavedRef.current = null;
       setInitialMessages(null);
+      setTotalMessages(0);
+      setHasMore(false);
+      setCurrentOffset(0);
       pathwaysToast.conversationCleared();
       activityLogger.conversationCleared(sessionId, userId);
     } catch (error) {
@@ -129,9 +184,13 @@ export default function useConversationPersistence({
 
   return {
     isLoading,
+    isLoadingMore,
     isSaving,
     initialMessages,
+    totalMessages,
+    hasMore,
     saveConversation,
+    loadMore,
     clearConversation,
   };
 }

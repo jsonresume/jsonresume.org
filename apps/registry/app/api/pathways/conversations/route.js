@@ -16,6 +16,8 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const sessionId = searchParams.get('sessionId');
     const userId = searchParams.get('userId');
+    const limit = parseInt(searchParams.get('limit') || '50', 10);
+    const offset = parseInt(searchParams.get('offset') || '0', 10);
 
     if (!sessionId && !userId) {
       return Response.json(
@@ -42,7 +44,31 @@ export async function GET(request) {
       throw error;
     }
 
-    return Response.json({ conversation: data || null });
+    if (!data || !data.messages) {
+      return Response.json({
+        conversation: null,
+        messages: [],
+        total: 0,
+        hasMore: false,
+      });
+    }
+
+    // Messages are stored newest-last, so we need to slice from the end
+    const allMessages = data.messages || [];
+    const total = allMessages.length;
+
+    // For pagination, we load from the end (most recent) and go backwards
+    // offset 0 = most recent messages, offset 50 = older messages
+    const startIdx = Math.max(0, total - offset - limit);
+    const endIdx = Math.max(0, total - offset);
+    const paginatedMessages = allMessages.slice(startIdx, endIdx);
+
+    return Response.json({
+      conversation: { ...data, messages: undefined }, // Don't send full messages
+      messages: paginatedMessages,
+      total,
+      hasMore: startIdx > 0,
+    });
   } catch (error) {
     console.error('Failed to load conversation:', error.message);
     return Response.json(

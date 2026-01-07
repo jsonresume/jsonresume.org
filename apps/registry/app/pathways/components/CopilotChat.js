@@ -23,6 +23,7 @@ export default function CopilotChat({
   setResumeJson,
 }) {
   const [input, setInput] = useState('');
+  const [olderMessages, setOlderMessages] = useState([]);
 
   const {
     sessionId,
@@ -38,9 +39,12 @@ export default function CopilotChat({
 
   const {
     isLoading: isLoadingConversation,
+    isLoadingMore,
     isSaving,
     initialMessages: persistedMessages,
+    hasMore,
     saveConversation,
+    loadMore,
     clearConversation,
   } = useConversationPersistence({
     sessionId,
@@ -141,6 +145,25 @@ export default function CopilotChat({
     toggleRecording(stopSpeech);
   }, [toggleRecording, stopSpeech]);
 
+  // Handle loading older messages (prepend to existing)
+  const handleLoadMore = useCallback(async () => {
+    const older = await loadMore();
+    if (older?.length > 0) {
+      setOlderMessages((prev) => [...older, ...prev]);
+    }
+    return older;
+  }, [loadMore]);
+
+  // Reset older messages when conversation is cleared
+  useEffect(() => {
+    if (!persistedMessages) {
+      setOlderMessages([]);
+    }
+  }, [persistedMessages]);
+
+  // Combine older loaded messages with current messages
+  const allMessages = [...olderMessages, ...messages];
+
   // Cleanup on unmount
   useEffect(() => {
     return () => {
@@ -171,8 +194,14 @@ export default function CopilotChat({
         onClearConversation={clearConversation}
       />
 
-      <div className="flex-1 overflow-auto p-4 text-sm text-gray-500">
-        <Messages messages={messages} isLoading={status === 'streaming'} />
+      <div className="flex-1 overflow-hidden p-4 text-sm text-gray-500">
+        <Messages
+          messages={allMessages}
+          isLoading={status === 'streaming'}
+          hasMore={hasMore}
+          isLoadingMore={isLoadingMore}
+          onLoadMore={handleLoadMore}
+        />
 
         {pendingResumeData && (
           <ResumeParseResult
