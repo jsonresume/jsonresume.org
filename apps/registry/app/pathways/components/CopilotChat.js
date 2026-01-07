@@ -11,6 +11,7 @@ import useSpeech from '../hooks/useSpeech';
 import useVoiceRecording from '../hooks/useVoiceRecording';
 import useResumeUpdater from '../hooks/useResumeUpdater';
 import useJobToolsHandler from '../hooks/useJobToolsHandler';
+import useConversationPersistence from '../hooks/useConversationPersistence';
 import { usePathways } from '../context/PathwaysContext';
 
 const INITIAL_MESSAGE = {
@@ -36,8 +37,10 @@ export default function CopilotChat({
   const [pendingResumeData, setPendingResumeData] = useState(null);
   const [isApplyingResume, setIsApplyingResume] = useState(false);
 
-  // Get job-related functions from context
+  // Get job-related functions and session info from context
   const {
+    sessionId,
+    username,
     markAsRead,
     markAsInterested,
     markAsHidden,
@@ -46,14 +49,38 @@ export default function CopilotChat({
     refreshEmbedding,
   } = usePathways();
 
+  // Load persisted conversation
+  const {
+    isLoading: isLoadingConversation,
+    isSaving,
+    initialMessages: persistedMessages,
+    saveConversation,
+    clearConversation,
+  } = useConversationPersistence({
+    sessionId,
+    userId: username,
+    resume: resumeData,
+  });
+
+  // Determine initial messages
+  const chatInitialMessages =
+    persistedMessages?.length > 0 ? persistedMessages : [INITIAL_MESSAGE];
+
   // Initialize chat with AI SDK
   const { messages, sendMessage, status, addToolResult } = useChat({
     transport: new DefaultChatTransport({
       api: '/api/pathways',
       body: { currentResume: resumeData },
     }),
-    initialMessages: [INITIAL_MESSAGE],
+    initialMessages: isLoadingConversation ? [] : chatInitialMessages,
   });
+
+  // Save conversation when messages change
+  useEffect(() => {
+    if (messages.length > 1 && !isLoadingConversation) {
+      saveConversation(messages);
+    }
+  }, [messages, saveConversation, isLoadingConversation]);
 
   // Initialize speech synthesis
   const {
@@ -233,6 +260,17 @@ export default function CopilotChat({
 
   const isLoading = status === 'streaming';
 
+  // Show loading state while conversation is being loaded
+  if (isLoadingConversation) {
+    return (
+      <aside className="w-[360px] border-l bg-white flex flex-col items-center justify-center">
+        <div className="animate-pulse text-gray-400">
+          Loading conversation...
+        </div>
+      </aside>
+    );
+  }
+
   return (
     <aside className="w-[360px] border-l bg-white flex flex-col">
       <ChatHeader
@@ -241,6 +279,8 @@ export default function CopilotChat({
         selectedVoice={selectedVoice}
         onToggleSpeech={toggleSpeech}
         onVoiceChange={setSelectedVoice}
+        isSaving={isSaving}
+        onClearConversation={clearConversation}
       />
 
       <div className="flex-1 overflow-auto p-4 text-sm text-gray-500">

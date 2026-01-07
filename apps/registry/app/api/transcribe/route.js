@@ -3,9 +3,10 @@ import { openai } from '@ai-sdk/openai';
 
 export const runtime = 'edge';
 
+const MAX_FILE_SIZE = 25 * 1024 * 1024; // 25MB
+
 export async function POST(request) {
   try {
-    // Get the audio data from the request
     const formData = await request.formData();
     const audioFile = formData.get('audio');
 
@@ -16,59 +17,36 @@ export async function POST(request) {
       });
     }
 
-    console.log('Transcription request received:', {
-      fileName: audioFile.name,
-      fileType: audioFile.type,
-      fileSize: audioFile.size,
-    });
+    if (audioFile.size > MAX_FILE_SIZE) {
+      return new Response(
+        JSON.stringify({ error: 'Audio file exceeds maximum size of 25MB' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
 
-    // Get the audio data as an ArrayBuffer
     const audioArrayBuffer = await audioFile.arrayBuffer();
 
-    console.log('Audio data prepared:', {
-      type: audioFile.type,
-      size: audioArrayBuffer.byteLength,
-    });
-
-    // Use the AI SDK transcribe function with the ArrayBuffer directly
     const result = await transcribe({
       model: openai.transcription('whisper-1'),
       audio: audioArrayBuffer,
     });
 
-    console.log('Transcription result:', {
-      textLength: result.text?.length,
-      language: result.language,
-      duration: result.durationInSeconds,
-    });
-
-    // Return the transcription result
     return new Response(
       JSON.stringify({
         text: result.text,
         language: result.language,
         duration: result.durationInSeconds,
       }),
-      {
-        headers: { 'Content-Type': 'application/json' },
-      }
+      { headers: { 'Content-Type': 'application/json' } }
     );
   } catch (error) {
-    console.error('Transcription error:', {
-      message: error.message,
-      name: error.name,
-      cause: error.cause,
-    });
-
+    console.error('Transcription error:', error.message);
     return new Response(
       JSON.stringify({
         error: 'Failed to transcribe audio',
         details: error.message,
       }),
-      {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      }
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
   }
 }
