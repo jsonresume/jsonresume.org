@@ -25,18 +25,19 @@ export function SalaryHistogramSlider({
   onChange,
   className = '',
 }) {
-  const [isDragging, setIsDragging] = useState(null); // 'min', 'max', or null
+  const [isDragging, setIsDragging] = useState(null);
+  const [hoveredBar, setHoveredBar] = useState(null);
   const sliderRef = useRef(null);
 
-  // Use percentile range to exclude outliers (fallback to full range)
+  // Use percentile range to exclude outliers
   const displayMin = p5 ?? min;
   const displayMax = p95 ?? max;
 
-  // Current range values (defaults to percentile range)
+  // Current range values
   const rangeMin = value?.min ?? displayMin;
   const rangeMax = value?.max ?? displayMax;
 
-  // Calculate positions as percentages (using display range for slider)
+  // Calculate positions as percentages
   const minPercent =
     ((rangeMin - displayMin) / (displayMax - displayMin)) * 100 || 0;
   const maxPercent =
@@ -47,7 +48,7 @@ export function SalaryHistogramSlider({
     return Math.max(...histogram.map((h) => h.count), 1);
   }, [histogram]);
 
-  // Convert position to value (using display range)
+  // Convert position to value
   const positionToValue = useCallback(
     (clientX) => {
       if (!sliderRef.current) return displayMin;
@@ -56,14 +57,12 @@ export function SalaryHistogramSlider({
         0,
         Math.min(1, (clientX - rect.left) / rect.width)
       );
-      // Snap to nearest $5k
       const value = displayMin + percent * (displayMax - displayMin);
       return Math.round(value / 5000) * 5000;
     },
     [displayMin, displayMax]
   );
 
-  // Handle mouse/touch events
   const handlePointerDown = useCallback((e, handle) => {
     e.preventDefault();
     setIsDragging(handle);
@@ -87,7 +86,6 @@ export function SalaryHistogramSlider({
     setIsDragging(null);
   }, []);
 
-  // Add global listeners when dragging
   useEffect(() => {
     if (isDragging) {
       window.addEventListener('pointermove', handlePointerMove);
@@ -99,11 +97,8 @@ export function SalaryHistogramSlider({
     }
   }, [isDragging, handlePointerMove, handlePointerUp]);
 
-  // Check if a histogram bar is within the selected range
   const isBarInRange = useCallback(
-    (bar) => {
-      return bar.max >= rangeMin && bar.min <= rangeMax;
-    },
+    (bar) => bar.max >= rangeMin && bar.min <= rangeMax,
     [rangeMin, rangeMax]
   );
 
@@ -111,50 +106,83 @@ export function SalaryHistogramSlider({
     return null;
   }
 
-  // Filter histogram to only show bars within display range
   const visibleHistogram = histogram.filter(
     (bar) => bar.max >= displayMin && bar.min <= displayMax
   );
 
+  const quickRanges = [
+    { label: 'All', min: displayMin, max: displayMax },
+    { label: '<$100k', min: displayMin, max: 100000 },
+    { label: '$100-200k', min: 100000, max: 200000 },
+    { label: '$200k+', min: 200000, max: displayMax },
+  ];
+
   return (
-    <div className={`salary-histogram-slider ${className}`}>
-      {/* Labels */}
-      <div className="flex justify-between text-xs text-gray-500 mb-1">
-        <span>{formatSalary(rangeMin)}</span>
-        <span className="text-gray-400">Salary Range</span>
-        <span>{formatSalary(rangeMax)}</span>
+    <div className={`${className}`}>
+      {/* Range labels */}
+      <div className="flex justify-between items-baseline mb-2">
+        <span className="text-sm font-semibold text-slate-700">
+          {formatSalary(rangeMin)}
+        </span>
+        <span className="text-xs text-slate-400">
+          {rangeMin === displayMin && rangeMax === displayMax
+            ? 'Full range'
+            : 'Filtered'}
+        </span>
+        <span className="text-sm font-semibold text-slate-700">
+          {formatSalary(rangeMax)}
+        </span>
       </div>
 
       {/* Histogram bars */}
-      <div className="histogram-bars flex items-end h-8 gap-px mb-1">
-        {visibleHistogram.map((bar, index) => {
-          const height = (bar.count / maxCount) * 100;
-          const inRange = isBarInRange(bar);
-          return (
-            <div
-              key={index}
-              className="histogram-bar flex-1 transition-all duration-150"
-              style={{
-                height: `${Math.max(height, 4)}%`,
-                backgroundColor: inRange ? '#22c55e' : '#e5e7eb',
-                opacity: inRange ? 1 : 0.5,
-              }}
-              title={`${formatSalary(bar.min)} - ${formatSalary(bar.max)}: ${
-                bar.count
-              } jobs`}
-            />
-          );
-        })}
+      <div className="relative h-12 mb-2">
+        <div className="absolute inset-0 flex items-end gap-[2px]">
+          {visibleHistogram.map((bar, index) => {
+            const height = (bar.count / maxCount) * 100;
+            const inRange = isBarInRange(bar);
+            const isHovered = hoveredBar === index;
+
+            return (
+              <div
+                key={index}
+                className="flex-1 relative group cursor-pointer"
+                onMouseEnter={() => setHoveredBar(index)}
+                onMouseLeave={() => setHoveredBar(null)}
+              >
+                <div
+                  className={`
+                    w-full rounded-t transition-all duration-150
+                    ${
+                      inRange
+                        ? 'bg-gradient-to-t from-violet-500 to-violet-400'
+                        : 'bg-slate-200'
+                    }
+                    ${isHovered ? 'opacity-80' : 'opacity-100'}
+                  `}
+                  style={{ height: `${Math.max(height, 8)}%` }}
+                />
+                {/* Tooltip */}
+                {isHovered && (
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-slate-800 text-white text-xs rounded shadow-lg whitespace-nowrap z-10">
+                    {formatSalary(bar.min)} - {formatSalary(bar.max)}
+                    <br />
+                    <span className="text-slate-300">{bar.count} jobs</span>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       {/* Slider track */}
       <div
         ref={sliderRef}
-        className="slider-track relative h-2 bg-gray-200 rounded-full cursor-pointer"
+        className="relative h-2 bg-slate-200 rounded-full cursor-pointer"
       >
-        {/* Selected range highlight */}
+        {/* Selected range */}
         <div
-          className="absolute h-full bg-green-500 rounded-full"
+          className="absolute h-full bg-gradient-to-r from-violet-500 to-purple-500 rounded-full"
           style={{
             left: `${minPercent}%`,
             width: `${maxPercent - minPercent}%`,
@@ -163,49 +191,53 @@ export function SalaryHistogramSlider({
 
         {/* Min handle */}
         <div
-          className="slider-handle absolute w-4 h-4 bg-white border-2 border-green-500 rounded-full -top-1 transform -translate-x-1/2 cursor-grab active:cursor-grabbing shadow-md hover:scale-110 transition-transform"
+          className={`
+            absolute w-5 h-5 bg-white rounded-full -top-1.5 -translate-x-1/2
+            border-2 border-violet-500 shadow-md
+            cursor-grab active:cursor-grabbing
+            transition-transform hover:scale-110
+            ${isDragging === 'min' ? 'scale-110 shadow-lg' : ''}
+          `}
           style={{ left: `${minPercent}%` }}
           onPointerDown={(e) => handlePointerDown(e, 'min')}
         />
 
         {/* Max handle */}
         <div
-          className="slider-handle absolute w-4 h-4 bg-white border-2 border-green-500 rounded-full -top-1 transform -translate-x-1/2 cursor-grab active:cursor-grabbing shadow-md hover:scale-110 transition-transform"
+          className={`
+            absolute w-5 h-5 bg-white rounded-full -top-1.5 -translate-x-1/2
+            border-2 border-violet-500 shadow-md
+            cursor-grab active:cursor-grabbing
+            transition-transform hover:scale-110
+            ${isDragging === 'max' ? 'scale-110 shadow-lg' : ''}
+          `}
           style={{ left: `${maxPercent}%` }}
           onPointerDown={(e) => handlePointerDown(e, 'max')}
         />
       </div>
 
       {/* Quick range buttons */}
-      <div className="flex gap-1 mt-2 text-xs">
-        <button
-          type="button"
-          className="px-2 py-0.5 bg-gray-100 hover:bg-gray-200 rounded text-gray-600 transition-colors"
-          onClick={() => onChange(displayMin, displayMax)}
-        >
-          All
-        </button>
-        <button
-          type="button"
-          className="px-2 py-0.5 bg-gray-100 hover:bg-gray-200 rounded text-gray-600 transition-colors"
-          onClick={() => onChange(displayMin, 100000)}
-        >
-          &lt;$100k
-        </button>
-        <button
-          type="button"
-          className="px-2 py-0.5 bg-gray-100 hover:bg-gray-200 rounded text-gray-600 transition-colors"
-          onClick={() => onChange(100000, 200000)}
-        >
-          $100-200k
-        </button>
-        <button
-          type="button"
-          className="px-2 py-0.5 bg-gray-100 hover:bg-gray-200 rounded text-gray-600 transition-colors"
-          onClick={() => onChange(200000, displayMax)}
-        >
-          $200k+
-        </button>
+      <div className="flex gap-1.5 mt-3">
+        {quickRanges.map((range) => {
+          const isActive = rangeMin === range.min && rangeMax === range.max;
+          return (
+            <button
+              key={range.label}
+              type="button"
+              className={`
+                px-2.5 py-1 rounded-md text-xs font-medium transition-all
+                ${
+                  isActive
+                    ? 'bg-violet-100 text-violet-700 border border-violet-200'
+                    : 'bg-white text-slate-500 border border-slate-200 hover:border-slate-300 hover:text-slate-700'
+                }
+              `}
+              onClick={() => onChange(range.min, range.max)}
+            >
+              {range.label}
+            </button>
+          );
+        })}
       </div>
     </div>
   );

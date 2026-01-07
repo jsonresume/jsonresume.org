@@ -1,6 +1,43 @@
-import { X } from 'lucide-react';
-import { Input, Checkbox, Button, Badge } from '@repo/ui';
+import { Search, X, Globe, EyeOff, DollarSign } from 'lucide-react';
+import { Input, Button } from '@repo/ui';
 import { SalaryHistogramSlider } from '@/app/[username]/jobs-graph/components/SalaryHistogramSlider';
+
+function FilterPill({ active, onClick, children, icon: Icon }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`
+        inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium
+        transition-all duration-200 ease-out select-none
+        ${
+          active
+            ? 'bg-gradient-to-r from-violet-500 to-purple-500 text-white shadow-lg shadow-violet-500/25 scale-[1.02]'
+            : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 hover:border-slate-300'
+        }
+      `}
+    >
+      {Icon && <Icon className="w-3.5 h-3.5" />}
+      {children}
+    </button>
+  );
+}
+
+function StatBadge({ children, variant = 'default' }) {
+  const variants = {
+    default: 'bg-slate-100 text-slate-600',
+    success: 'bg-emerald-50 text-emerald-700 border border-emerald-200',
+    accent: 'bg-violet-50 text-violet-700 border border-violet-200',
+  };
+
+  return (
+    <span
+      className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${variants[variant]}`}
+    >
+      {children}
+    </span>
+  );
+}
 
 export function PathwaysGraphControls({
   filterText,
@@ -21,82 +58,99 @@ export function PathwaysGraphControls({
   const jobsWithSalary = salaryRange?.salaries?.length || 0;
 
   return (
-    <div className="bg-white border-b">
+    <div className="bg-gradient-to-b from-white to-slate-50/50 border-b border-slate-200/80">
       {/* Main controls bar */}
-      <div className="px-4 py-2 flex items-center gap-4 flex-wrap">
-        <div className="relative flex-1 min-w-[200px] max-w-xl">
+      <div className="px-4 py-3 flex items-center gap-4 flex-wrap">
+        {/* Search input */}
+        <div className="relative flex-1 min-w-[220px] max-w-md">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
           <Input
             type="text"
-            placeholder="Filter jobs by title, company, skills..."
+            placeholder="Search jobs..."
             value={filterText}
             onChange={(e) => setFilterText(e.target.value)}
-            className="pr-8"
+            className="pl-9 pr-8 bg-white/80 backdrop-blur-sm border-slate-200 focus:border-violet-400 focus:ring-violet-400/20 rounded-lg"
           />
           {filterText && (
             <button
               type="button"
               onClick={() => setFilterText('')}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 p-0.5 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
             >
-              <X className="w-4 h-4" />
+              <X className="w-3.5 h-3.5" />
             </button>
           )}
         </div>
 
-        <div className="flex items-center gap-3">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <Checkbox checked={remoteOnly} onCheckedChange={setRemoteOnly} />
-            <span className="text-sm font-medium text-gray-700">Remote</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <Checkbox
-              checked={hideFiltered}
-              onCheckedChange={setHideFiltered}
-            />
-            <span className="text-sm font-medium text-gray-700">
-              Hide Others
-            </span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <Checkbox
-              checked={showSalaryGradient}
-              onCheckedChange={setShowSalaryGradient}
-            />
-            <span className="text-sm font-medium text-gray-700">Salary</span>
-          </label>
+        {/* Filter pills */}
+        <div className="flex items-center gap-2">
+          <FilterPill
+            active={remoteOnly}
+            onClick={() => setRemoteOnly(!remoteOnly)}
+            icon={Globe}
+          >
+            Remote
+          </FilterPill>
+
+          <FilterPill
+            active={hideFiltered}
+            onClick={() => setHideFiltered(!hideFiltered)}
+            icon={EyeOff}
+          >
+            Hide Others
+          </FilterPill>
+
+          <FilterPill
+            active={showSalaryGradient}
+            onClick={() => setShowSalaryGradient(!showSalaryGradient)}
+            icon={DollarSign}
+          >
+            Salary
+          </FilterPill>
         </div>
 
+        {/* Stats */}
         <div className="flex items-center gap-2 ml-auto">
-          {showSalaryGradient && (
-            <span className="text-xs text-emerald-600 bg-emerald-50 px-2 py-1 rounded">
+          {showSalaryGradient && jobsWithSalary > 0 && (
+            <StatBadge variant="success">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5" />
               {jobsWithSalary} with salary
-            </span>
+            </StatBadge>
           )}
-          <Badge variant="secondary" className="font-normal">
-            {visibleJobs} / {totalJobs} jobs
-          </Badge>
+
+          <StatBadge variant={visibleJobs < totalJobs ? 'accent' : 'default'}>
+            {visibleJobs} / {totalJobs}
+          </StatBadge>
 
           {hasActiveFilter && (
             <Button
               variant="ghost"
               size="sm"
               onClick={onClearFilters}
-              className="text-xs h-7"
+              className="text-xs h-7 text-slate-500 hover:text-slate-700"
             >
               <X className="w-3 h-3 mr-1" />
-              Clear filters
+              Clear
             </Button>
           )}
         </div>
       </div>
 
       {/* Salary histogram panel */}
-      {showSalaryGradient && (
-        <div className="px-4 py-3 bg-gray-50 border-t">
+      <div
+        className={`
+          overflow-hidden transition-all duration-300 ease-out
+          ${showSalaryGradient ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'}
+        `}
+      >
+        <div className="px-4 py-4 bg-gradient-to-b from-slate-50 to-white border-t border-slate-100">
           {hasSalaryData ? (
-            <div className="max-w-xl">
-              <div className="text-xs text-gray-500 mb-2">
-                Drag handles to filter by salary range
+            <div className="max-w-lg">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs font-medium text-slate-500 uppercase tracking-wide">
+                  Salary Distribution
+                </span>
+                <span className="text-xs text-slate-400">Drag to filter</span>
               </div>
               <SalaryHistogramSlider
                 min={salaryRange.min}
@@ -109,12 +163,13 @@ export function PathwaysGraphControls({
               />
             </div>
           ) : (
-            <div className="text-sm text-gray-500">
-              No salary data available for matched jobs
+            <div className="flex items-center gap-2 text-sm text-slate-400">
+              <DollarSign className="w-4 h-4" />
+              No salary data available
             </div>
           )}
         </div>
-      )}
+      </div>
     </div>
   );
 }
