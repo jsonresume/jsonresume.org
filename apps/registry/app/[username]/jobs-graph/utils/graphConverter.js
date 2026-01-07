@@ -41,5 +41,5 @@ export const convertToReactFlowFormat = (graphData, jobInfoMap) => {
     style: { stroke: '#94a3b8', strokeWidth: 2 },
   }));
 
-  return getLayoutedElements(rfNodes, rfEdges, 'TB');
+  return getLayoutedElements(rfNodes, rfEdges, 'LR');
 };
