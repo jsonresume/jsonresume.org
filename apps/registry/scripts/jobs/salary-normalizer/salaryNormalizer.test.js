@@ -3,6 +3,9 @@
  * Covers all possible human-typed salary formats
  */
 
+/* eslint-env jest */
+/* global describe, test, expect */
+
 const { normalizeSalary } = require('./index');
 
 // Mock exchange rates for testing (USD base)

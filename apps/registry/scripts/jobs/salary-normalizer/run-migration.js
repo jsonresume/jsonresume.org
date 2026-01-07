@@ -80,6 +80,7 @@ async function backfillSalaries() {
   let totalSkipped = 0;
   let totalErrors = 0;
 
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     console.log(`Fetching jobs ${offset} to ${offset + batchSize}...`);
 
