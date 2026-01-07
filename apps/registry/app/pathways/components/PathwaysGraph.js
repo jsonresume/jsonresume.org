@@ -135,13 +135,26 @@ export default function PathwaysGraph() {
     hasEmbedding: !!embedding,
   });
 
-  // Show loading state
-  if (isEmbeddingLoading || (isLoading && nodes.length === 0)) {
+  // Show loading state if:
+  // - Embedding is loading, OR
+  // - Graph is loading and we have no nodes, OR
+  // - We have embedding but no nodes yet (gap between embedding complete and graph loading start)
+  const shouldShowLoading =
+    isEmbeddingLoading ||
+    (isLoading && nodes.length === 0) ||
+    (embedding && nodes.length === 0);
+
+  if (shouldShowLoading) {
     console.log('[PathwaysGraph] Showing loading screen', {
       isEmbeddingLoading,
       embeddingStage,
       isLoading,
       loadingStage,
+      reason: isEmbeddingLoading
+        ? 'embedding loading'
+        : isLoading
+        ? 'graph loading'
+        : 'waiting for nodes',
     });
     return (
       <PathwaysGraphLoading
@@ -163,7 +176,7 @@ export default function PathwaysGraph() {
     );
   }
 
-  console.log('[PathwaysGraph] Showing graph');
+  console.log('[PathwaysGraph] Showing graph with', nodes.length, 'nodes');
 
   return (
     <div className="h-full flex flex-col">
