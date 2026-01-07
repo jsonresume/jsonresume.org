@@ -14,9 +14,11 @@ export default function useActivityLog() {
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [total, setTotal] = useState(0);
+  const [error, setError] = useState(null);
   const offsetRef = useRef(0);
   const pendingActivities = useRef([]);
   const flushTimeoutRef = useRef(null);
+  const hasFetchedRef = useRef(false);
 
   const userId = user?.id;
 
@@ -64,7 +66,10 @@ export default function useActivityLog() {
       if (!sessionId && !userId) return;
       if (isLoading) return;
 
+      // Clear error on new fetch attempt
+      setError(null);
       setIsLoading(true);
+      hasFetchedRef.current = true;
       const offset = reset ? 0 : offsetRef.current;
 
       try {
@@ -87,17 +92,19 @@ export default function useActivityLog() {
         }
 
         if (reset) {
-          setActivities(data.activities);
-          offsetRef.current = data.activities.length;
+          setActivities(data.activities || []);
+          offsetRef.current = (data.activities || []).length;
         } else {
-          setActivities((prev) => [...prev, ...data.activities]);
-          offsetRef.current += data.activities.length;
+          setActivities((prev) => [...prev, ...(data.activities || [])]);
+          offsetRef.current += (data.activities || []).length;
         }
 
-        setHasMore(data.hasMore);
-        setTotal(data.total);
-      } catch (error) {
-        console.error('Failed to fetch activities:', error);
+        setHasMore(data.hasMore ?? false);
+        setTotal(data.total ?? 0);
+      } catch (err) {
+        console.error('Failed to fetch activities:', err);
+        setError(err.message || 'Failed to load activities');
+        setHasMore(false);
       } finally {
         setIsLoading(false);
       }
@@ -132,6 +139,8 @@ export default function useActivityLog() {
     isLoading,
     hasMore,
     total,
+    error,
+    hasFetched: hasFetchedRef.current,
     logActivity,
     fetchActivities,
     loadMore,

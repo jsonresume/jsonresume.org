@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { X, RefreshCw, Activity } from 'lucide-react';
+import { X, RefreshCw, Activity, AlertCircle } from 'lucide-react';
 import { Button } from '@repo/ui';
 import ActivityItem from './ActivityItem';
 import ActivityFilters from './ActivityFilters';
@@ -14,6 +14,8 @@ export default function ActivityLog({ isOpen, onClose }) {
     isLoading,
     hasMore,
     total,
+    error,
+    hasFetched,
     fetchActivities,
     loadMore,
     refresh,
@@ -23,12 +25,12 @@ export default function ActivityLog({ isOpen, onClose }) {
   const scrollRef = useRef(null);
   const loadMoreRef = useRef(null);
 
-  // Fetch activities when opened
+  // Fetch activities when opened (only once per session)
   useEffect(() => {
-    if (isOpen && activities.length === 0) {
+    if (isOpen && activities.length === 0 && !hasFetched && !error) {
       fetchActivities(true);
     }
-  }, [isOpen, activities.length, fetchActivities]);
+  }, [isOpen, activities.length, hasFetched, error, fetchActivities]);
 
   // Filter activities client-side
   const filteredActivities = useCallback(() => {
@@ -115,7 +117,24 @@ export default function ActivityLog({ isOpen, onClose }) {
           ref={scrollRef}
           className="flex-1 overflow-y-auto px-4 py-3 space-y-2"
         >
-          {isLoading && activities.length === 0 ? (
+          {error ? (
+            <div className="flex flex-col items-center justify-center h-full text-gray-400">
+              <AlertCircle className="w-10 h-10 mb-3 text-red-400" />
+              <p className="text-sm font-medium text-red-500">
+                Failed to load activities
+              </p>
+              <p className="text-xs mt-1 text-gray-500">{error}</p>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => fetchActivities(true)}
+                className="mt-3 text-gray-600"
+              >
+                <RefreshCw className="w-4 h-4 mr-1" />
+                Try again
+              </Button>
+            </div>
+          ) : isLoading && activities.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-gray-400">
               <RefreshCw className="w-6 h-6 animate-spin mb-2" />
               <p className="text-sm">Loading activities...</p>
