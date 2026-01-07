@@ -47,8 +47,10 @@ export function PathwaysProvider({ children }) {
     updateLocal: updateResumeLocal,
   } = usePathwaysResume({ sessionId, userId });
 
-  // Derive resume state - use DB resume or sample if not loaded yet
-  const resume = dbResume || SAMPLE_RESUME;
+  // Derive resume state - use DB resume if it has content, otherwise sample
+  // Note: empty object {} from DB should show sample, only populated resumes should override
+  const hasResumeContent = dbResume && Object.keys(dbResume).length > 0;
+  const resume = hasResumeContent ? dbResume : SAMPLE_RESUME;
   const [resumeJson, setResumeJson] = useState(() =>
     JSON.stringify(SAMPLE_RESUME, null, 2)
   );

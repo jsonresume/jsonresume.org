@@ -13,17 +13,29 @@ export default function usePathwaysResume({ sessionId, userId }) {
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState(null);
   const [lastSaved, setLastSaved] = useState(null);
-  const hasFetchedRef = useRef(false);
+  // Track which IDs we've fetched with to know when to re-fetch
+  const fetchedWithRef = useRef({ sessionId: null, userId: null });
 
-  // Load resume on mount
+  // Load resume when sessionId or userId changes
   useEffect(() => {
-    if (hasFetchedRef.current) return;
+    // Skip if no identifiers available
     if (!sessionId && !userId) {
       setIsLoading(false);
       return;
     }
 
-    hasFetchedRef.current = true;
+    // Skip if we've already fetched with these exact IDs
+    const alreadyFetched =
+      fetchedWithRef.current.sessionId === sessionId &&
+      fetchedWithRef.current.userId === userId;
+
+    if (alreadyFetched) {
+      return;
+    }
+
+    // Track what we're fetching with
+    fetchedWithRef.current = { sessionId, userId };
+
     setIsLoading(true);
     setError(null);
 
@@ -44,15 +56,15 @@ export default function usePathwaysResume({ sessionId, userId }) {
         if (data.resume?.resume) {
           setResume(data.resume.resume);
         } else {
-          // No resume exists yet, start with empty
-          setResume({});
+          // No resume exists yet, start with null (will show sample in context)
+          setResume(null);
         }
       })
       .catch((err) => {
         console.error('Failed to load resume:', err);
         setError(err.message);
-        // Start with empty on error
-        setResume({});
+        // Start with null on error (will show sample in context)
+        setResume(null);
       })
       .finally(() => {
         setIsLoading(false);

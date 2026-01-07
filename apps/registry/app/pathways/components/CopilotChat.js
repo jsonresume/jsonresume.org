@@ -26,6 +26,7 @@ export default function CopilotChat({
 
   const {
     sessionId,
+    userId,
     username,
     markAsRead,
     markAsInterested,
@@ -44,7 +45,7 @@ export default function CopilotChat({
     clearConversation,
   } = useConversationPersistence({
     sessionId,
-    userId: username,
+    userId,
     resume: resumeData,
   });
 
