@@ -1,11 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { Settings } from 'lucide-react';
 import Editor from '@monaco-editor/react';
 import CopilotChat from './components/CopilotChat';
 import ResumePreview from './components/ResumePreview';
 import PathwaysGraph from './components/PathwaysGraph';
+import PathwaysHeader from './components/PathwaysHeader';
 import { usePathways } from './context/PathwaysContext';
 import usePathwaysSession from './hooks/usePathwaysSession';
 
@@ -22,16 +22,7 @@ function PathwaysContent() {
 
   return (
     <div className="flex flex-col h-screen">
-      <header className="flex items-center justify-between px-6 h-14 border-b bg-white/80 backdrop-blur-md">
-        <h1 className="text-xl font-semibold">Pathways</h1>
-        <button
-          type="button"
-          className="p-2 rounded-md hover:bg-gray-100 focus:outline-none focus-visible:ring focus-visible:ring-indigo-500"
-          aria-label="Settings"
-        >
-          <Settings className="w-5 h-5" />
-        </button>
-      </header>
+      <PathwaysHeader />
 
       <div className="flex flex-1 overflow-hidden">
         <section className="flex flex-col flex-1 overflow-hidden">
