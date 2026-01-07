@@ -31,6 +31,7 @@ export default function PathwaysGraph() {
     graphVersion,
     readJobIds,
     markAsRead,
+    resume,
   } = usePathways();
 
   // React Flow state
@@ -46,12 +47,14 @@ export default function PathwaysGraph() {
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
   // Fetch jobs data using the cached embedding
-  const { jobInfo, isLoading } = usePathwaysJobData({
-    embedding,
-    graphVersion,
-    setNodes,
-    setEdges,
-  });
+  const { jobInfo, isLoading, loadingStage, loadingDetails } =
+    usePathwaysJobData({
+      embedding,
+      resume,
+      graphVersion,
+      setNodes,
+      setEdges,
+    });
 
   // Convert readJobIds Set to the format expected by jobs-graph hooks
   // The jobs-graph hooks expect keys like `${username}_${jobId}` but we just use jobId
@@ -123,7 +126,13 @@ export default function PathwaysGraph() {
 
   // Show loading state
   if (isEmbeddingLoading || (isLoading && nodes.length === 0)) {
-    return <PathwaysGraphLoading />;
+    return (
+      <PathwaysGraphLoading
+        isEmbeddingLoading={isEmbeddingLoading}
+        loadingStage={loadingStage}
+        loadingDetails={loadingDetails}
+      />
+    );
   }
 
   // Show empty state if no embedding
