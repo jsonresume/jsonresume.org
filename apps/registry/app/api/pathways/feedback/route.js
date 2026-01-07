@@ -1,14 +1,31 @@
 import { createClient } from '@supabase/supabase-js';
 
+// Force Node.js runtime for Supabase compatibility
+export const runtime = 'nodejs';
+
 function getSupabase() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY
-  );
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!url || !key) {
+    throw new Error('Missing Supabase environment variables');
+  }
+
+  return createClient(url, key);
 }
 
 export async function POST(request) {
-  const supabase = getSupabase();
+  let supabase;
+  try {
+    supabase = getSupabase();
+  } catch (error) {
+    console.error('Supabase init error:', error);
+    return Response.json(
+      { error: 'Database configuration error' },
+      { status: 500 }
+    );
+  }
+
   try {
     const { userId, jobId, feedback, sentiment, jobTitle, jobCompany } =
       await request.json();
@@ -49,7 +66,17 @@ export async function POST(request) {
 }
 
 export async function GET(request) {
-  const supabase = getSupabase();
+  let supabase;
+  try {
+    supabase = getSupabase();
+  } catch (error) {
+    console.error('Supabase init error:', error);
+    return Response.json(
+      { error: 'Database configuration error' },
+      { status: 500 }
+    );
+  }
+
   try {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get('userId');
