@@ -1,6 +1,6 @@
 'use client';
 
-import { Volume2, VolumeX, Trash2, Cloud, CloudOff } from 'lucide-react';
+import { Volume2, VolumeX, Trash2, Cloud } from 'lucide-react';
 
 const VOICE_OPTIONS = [
   { value: 'alloy', label: 'Alloy (Neutral)' },
