@@ -6,7 +6,7 @@ import {
   hashResume,
   getCachedGraphData,
   setCachedGraphData,
-} from '../utils/resumeHash';
+} from '../utils/pathwaysCache';
 
 // Loading stage definitions
 export const LOADING_STAGES = {
@@ -54,7 +54,7 @@ export function usePathwaysJobData({
 
       // Check cache unless force refresh requested
       if (!forceRefresh) {
-        const cached = getCachedGraphData(resumeHash);
+        const cached = await getCachedGraphData(resumeHash);
         if (cached) {
           setLoadingStage(LOADING_STAGES.CACHE_HIT);
           setLoadingDetails({
@@ -110,7 +110,11 @@ export function usePathwaysJobData({
         });
 
         // Cache the data
-        setCachedGraphData(resumeHash, { graphData, jobInfoMap, allJobs });
+        await setCachedGraphData(resumeHash, {
+          graphData,
+          jobInfoMap,
+          allJobs,
+        });
         lastResumeHashRef.current = resumeHash;
 
         setJobs(allJobs);

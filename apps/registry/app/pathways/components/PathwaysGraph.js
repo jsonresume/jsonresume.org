@@ -28,6 +28,7 @@ export default function PathwaysGraph() {
   const {
     embedding,
     isEmbeddingLoading,
+    embeddingStage,
     graphVersion,
     readJobIds,
     markAsRead,
@@ -129,6 +130,7 @@ export default function PathwaysGraph() {
     return (
       <PathwaysGraphLoading
         isEmbeddingLoading={isEmbeddingLoading}
+        embeddingStage={embeddingStage}
         loadingStage={loadingStage}
         loadingDetails={loadingDetails}
       />

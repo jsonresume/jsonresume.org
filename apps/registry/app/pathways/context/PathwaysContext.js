@@ -6,6 +6,7 @@ import {
   useState,
   useCallback,
   useEffect,
+  useRef,
 } from 'react';
 import { useAuth } from '@/app/context/auth';
 import { useJobStates } from '@/app/hooks/useJobStates';
@@ -18,6 +19,20 @@ import {
   clearLocalJobStates,
 } from './sessionUtils';
 import pathwaysToast from '../utils/toastMessages';
+import {
+  hashResume,
+  getCachedEmbedding,
+  setCachedEmbedding,
+} from '../utils/pathwaysCache';
+
+// Embedding loading stages
+export const EMBEDDING_STAGES = {
+  IDLE: 'idle',
+  CHECKING_CACHE: 'checking_cache',
+  CACHE_HIT: 'cache_hit',
+  GENERATING: 'generating',
+  COMPLETE: 'complete',
+};
 
 const PathwaysContext = createContext(null);
 
@@ -30,7 +45,9 @@ export function PathwaysProvider({ children }) {
   const [sessionId, setSessionId] = useState(null);
   const [embedding, setEmbedding] = useState(null);
   const [isEmbeddingLoading, setIsEmbeddingLoading] = useState(false);
+  const [embeddingStage, setEmbeddingStage] = useState(EMBEDDING_STAGES.IDLE);
   const [graphVersion, setGraphVersion] = useState(0);
+  const lastResumeHashRef = useRef(null);
 
   useEffect(() => {
     setSessionId(getSessionId());
@@ -91,32 +108,63 @@ export function PathwaysProvider({ children }) {
     [updateResumeLocal]
   );
 
-  const refreshEmbedding = useCallback(async () => {
-    if (!resume) return null;
+  const refreshEmbedding = useCallback(
+    async (forceRefresh = false) => {
+      if (!resume) return null;
 
-    setIsEmbeddingLoading(true);
-    try {
-      const response = await fetch('/api/pathways/embedding', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ resume }),
-      });
+      const resumeHash = hashResume(resume);
+      setIsEmbeddingLoading(true);
+      setEmbeddingStage(EMBEDDING_STAGES.CHECKING_CACHE);
 
-      if (!response.ok) {
-        throw new Error('Failed to generate embedding');
+      // Check cache first unless force refresh
+      if (!forceRefresh) {
+        const cached = await getCachedEmbedding(resumeHash);
+        if (cached) {
+          setEmbeddingStage(EMBEDDING_STAGES.CACHE_HIT);
+          // Small delay so user sees cache hit
+          await new Promise((resolve) => setTimeout(resolve, 200));
+          setEmbedding(cached);
+          lastResumeHashRef.current = resumeHash;
+          setEmbeddingStage(EMBEDDING_STAGES.COMPLETE);
+          setIsEmbeddingLoading(false);
+          setGraphVersion((v) => v + 1);
+          return cached;
+        }
       }
 
-      const data = await response.json();
-      setEmbedding(data.embedding);
-      setGraphVersion((v) => v + 1);
-      return data.embedding;
-    } catch (error) {
-      pathwaysToast.embeddingError();
-      return null;
-    } finally {
-      setIsEmbeddingLoading(false);
-    }
-  }, [resume]);
+      setEmbeddingStage(EMBEDDING_STAGES.GENERATING);
+
+      try {
+        const response = await fetch('/api/pathways/embedding', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ resume }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to generate embedding');
+        }
+
+        const data = await response.json();
+
+        // Cache the embedding
+        await setCachedEmbedding(resumeHash, data.embedding);
+        lastResumeHashRef.current = resumeHash;
+
+        setEmbedding(data.embedding);
+        setEmbeddingStage(EMBEDDING_STAGES.COMPLETE);
+        setGraphVersion((v) => v + 1);
+        return data.embedding;
+      } catch (error) {
+        pathwaysToast.embeddingError();
+        setEmbeddingStage(EMBEDDING_STAGES.IDLE);
+        return null;
+      } finally {
+        setIsEmbeddingLoading(false);
+      }
+    },
+    [resume]
+  );
 
   const triggerGraphRefresh = useCallback(() => {
     setGraphVersion((v) => v + 1);
@@ -181,6 +229,7 @@ export function PathwaysProvider({ children }) {
     setFullResume, // For file uploads
     embedding,
     isEmbeddingLoading,
+    embeddingStage,
     refreshEmbedding,
     ...jobStatesHook,
     graphVersion,
