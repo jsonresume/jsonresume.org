@@ -62,6 +62,38 @@ function getSalaryLevel(salary) {
 }
 
 /**
+ * Get solid background color based on salary level (0-1)
+ * Scale: slate -> blue -> teal -> yellow -> gold
+ */
+function getSalaryColor(level) {
+  const colors = [
+    { bg: '#f1f5f9', border: '#e2e8f0' }, // 0.0 - slate-100
+    { bg: '#dbeafe', border: '#bfdbfe' }, // 0.25 - blue-100
+    { bg: '#ccfbf1', border: '#99f6e4' }, // 0.5 - teal-100
+    { bg: '#fef9c3', border: '#fef08a' }, // 0.75 - yellow-100
+    { bg: '#fde68a', border: '#fcd34d' }, // 1.0 - amber-200
+  ];
+
+  const idx = Math.min(
+    Math.floor(level * (colors.length - 1)),
+    colors.length - 2
+  );
+  const t = level * (colors.length - 1) - idx;
+
+  // Simple linear interpolation between two adjacent colors
+  // For solid colors, just pick the nearest
+  return level < 0.125
+    ? colors[0]
+    : level < 0.375
+    ? colors[1]
+    : level < 0.625
+    ? colors[2]
+    : level < 0.875
+    ? colors[3]
+    : colors[4];
+}
+
+/**
  * Custom Job Node with rich design
  */
 function JobNode({ data, selected }) {
@@ -90,19 +122,23 @@ function JobNode({ data, selected }) {
   const website = jobInfo?.website || jobInfo?.url || jobInfo?.companyUrl;
   const domain = extractDomain(website || `${company.replace(/\s+/g, '')}.com`);
 
-  // Calculate background based on salary or read status
-  const level = showSalaryGradient
-    ? salaryLevel ?? getSalaryLevel(jobInfo?.salary)
-    : 0.5;
+  // Calculate background based on salary when gradient mode is enabled
+  const level = salaryLevel ?? getSalaryLevel(jobInfo?.salary);
+  const salaryColors = showSalaryGradient ? getSalaryColor(level) : null;
 
   return (
     <div
       className={`job-node-custom ${selected ? 'selected' : ''} ${
         isRead ? 'read' : ''
-      }`}
-      style={{
-        '--salary-level': level,
-      }}
+      } ${showSalaryGradient ? 'salary-gradient' : ''}`}
+      style={
+        showSalaryGradient && salaryColors
+          ? {
+              background: salaryColors.bg,
+              borderColor: salaryColors.border,
+            }
+          : undefined
+      }
     >
       <Handle type="target" position={Position.Left} />
       <Handle type="source" position={Position.Right} />
