@@ -198,6 +198,7 @@ export function usePathwaysJobData({
       hasEmbedding: !!embedding,
     });
     fetchJobs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- embedding is logged but not a trigger dependency
   }, [fetchJobs, graphVersion]);
 
   return {
