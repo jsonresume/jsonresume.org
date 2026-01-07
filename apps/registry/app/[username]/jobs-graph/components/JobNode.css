@@ -147,6 +147,24 @@
   font-size: 9px;
 }
 
+.job-node-custom .salary-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  line-height: 1.2;
+}
+
+.job-node-custom .salary-normalized {
+  font-weight: 600;
+}
+
+.job-node-custom .salary-original {
+  font-size: 8px;
+  font-weight: 400;
+  color: #64748b;
+  opacity: 0.8;
+}
+
 .job-node-custom .type-badge {
   font-size: 9px;
   font-weight: 500;

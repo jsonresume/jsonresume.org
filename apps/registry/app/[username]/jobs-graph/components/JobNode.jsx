@@ -1,19 +1,7 @@
 'use client';
 
-import { memo, useState, useEffect } from 'react';
+import { memo, useState } from 'react';
 import { Handle, Position } from '@xyflow/react';
-import {
-  getUserCurrency,
-  detectCurrency,
-  fetchExchangeRates,
-  convertCurrency,
-  formatCurrencyAmount,
-} from '../utils/currencyUtils';
-
-// Global state for exchange rates (shared across all nodes)
-let globalRates = null;
-let globalUserCurrency = null;
-let ratesPromise = null;
 
 /**
  * Extract domain from URL for favicon
@@ -29,85 +17,51 @@ function extractDomain(url) {
 }
 
 /**
- * Format salary for display - prefers normalized USD values from database
+ * Format normalized USD salary for display
  */
-function formatSalary(jobInfo, rates, userCurrency) {
-  // Prefer normalized salary data from database
-  if (jobInfo?.salaryMin || jobInfo?.salaryMax || jobInfo?.salaryUsd) {
-    const min = jobInfo.salaryMin || jobInfo.salaryUsd;
-    const max = jobInfo.salaryMax || jobInfo.salaryUsd;
+function formatNormalizedSalary(jobInfo) {
+  const min = jobInfo?.salaryMin || jobInfo?.salaryUsd;
+  const max = jobInfo?.salaryMax || jobInfo?.salaryUsd;
 
-    if (!min && !max) return null;
+  if (!min && !max) return null;
 
-    // Already in USD from database, convert to user currency if needed
-    let displayMin = min;
-    let displayMax = max;
-    let displayCurrency = 'USD';
+  if (min === max || !max) {
+    return `$${Math.round(min / 1000)}k`;
+  }
+  return `$${Math.round(min / 1000)}k-${Math.round(max / 1000)}k`;
+}
 
-    if (rates && userCurrency && userCurrency !== 'USD') {
-      displayMin = convertCurrency(min, 'USD', userCurrency, rates);
-      displayMax = convertCurrency(max, 'USD', userCurrency, rates);
-      displayCurrency = userCurrency;
-    }
+/**
+ * Get salary display info - returns both normalized USD and original string
+ */
+function getSalaryDisplay(jobInfo) {
+  const hasNormalized =
+    jobInfo?.salaryMin || jobInfo?.salaryMax || jobInfo?.salaryUsd;
+  const originalString = jobInfo?.salary;
 
-    const symbol =
-      displayCurrency === 'USD'
-        ? '$'
-        : displayCurrency === 'EUR'
-        ? '€'
-        : displayCurrency === 'GBP'
-        ? '£'
-        : '$';
-
-    if (displayMin === displayMax) {
-      return `${symbol}${Math.round(displayMin / 1000)}k`;
-    }
-    return `${symbol}${Math.round(displayMin / 1000)}k-${Math.round(
-      displayMax / 1000
-    )}k`;
+  if (!hasNormalized && !originalString) {
+    return null;
   }
 
-  // Fallback to parsing salary string
-  const salary = jobInfo?.salary;
-  if (!salary) return null;
+  const normalized = formatNormalizedSalary(jobInfo);
 
-  // Handle string salary like "$120,000 - $150,000" or "120k-150k"
-  const str = String(salary).toLowerCase();
-  const sourceCurrency = detectCurrency(salary);
+  // Check if original is different from normalized (e.g., different currency)
+  const showOriginal =
+    originalString &&
+    normalized &&
+    !originalString.toLowerCase().includes('usd') &&
+    (originalString.includes('€') ||
+      originalString.includes('£') ||
+      originalString.includes('INR') ||
+      originalString.includes('CAD') ||
+      originalString.includes('AUD') ||
+      /\b(EUR|GBP|JPY|CHF)\b/i.test(originalString));
 
-  // Extract numbers
-  const numbers = str.match(/[\d,]+/g);
-  if (!numbers || numbers.length === 0) return null;
-
-  let values = numbers.map((n) => parseInt(n.replace(/,/g, ''), 10));
-
-  // If values are small (like 120), multiply by 1000 (assume "k" notation)
-  values = values.map((v) => (v < 1000 ? v * 1000 : v));
-
-  // Convert if we have rates and currencies differ
-  if (rates && userCurrency && sourceCurrency !== userCurrency) {
-    values = values.map((v) =>
-      convertCurrency(v, sourceCurrency, userCurrency, rates)
-    );
-  }
-
-  const displayCurrency = rates && userCurrency ? userCurrency : sourceCurrency;
-  const symbol =
-    displayCurrency === 'USD'
-      ? '$'
-      : displayCurrency === 'EUR'
-      ? '€'
-      : displayCurrency === 'GBP'
-      ? '£'
-      : '';
-
-  if (values.length >= 2) {
-    const min = Math.min(...values);
-    const max = Math.max(...values);
-    return `${symbol}${Math.round(min / 1000)}k-${Math.round(max / 1000)}k`;
-  }
-
-  return `${symbol}${Math.round(values[0] / 1000)}k`;
+  return {
+    normalized: normalized || null,
+    original: showOriginal ? originalString : null,
+    display: normalized || originalString,
+  };
 }
 
 /**
@@ -176,29 +130,6 @@ function getSalaryColor(level, hasSalary) {
 function JobNode({ data, selected }) {
   const { jobInfo, isResume, isRead, showSalaryGradient, salaryLevel } = data;
   const [imgError, setImgError] = useState(false);
-  const [rates, setRates] = useState(globalRates);
-  const [userCurrency, setUserCurrency] = useState(globalUserCurrency);
-
-  // Fetch exchange rates once (shared across all nodes)
-  useEffect(() => {
-    if (globalRates) {
-      setRates(globalRates);
-      setUserCurrency(globalUserCurrency);
-      return;
-    }
-
-    if (!ratesPromise) {
-      globalUserCurrency = getUserCurrency();
-      setUserCurrency(globalUserCurrency);
-
-      ratesPromise = fetchExchangeRates().then((r) => {
-        globalRates = r;
-        return r;
-      });
-    }
-
-    ratesPromise.then((r) => setRates(r));
-  }, []);
 
   // Resume node rendering
   if (isResume) {
@@ -213,7 +144,7 @@ function JobNode({ data, selected }) {
 
   const title = jobInfo?.title || 'Unknown Position';
   const company = jobInfo?.company || 'Unknown Company';
-  const salary = formatSalary(jobInfo, rates, userCurrency);
+  const salaryInfo = getSalaryDisplay(jobInfo);
   const isRemote =
     jobInfo?.remote === true ||
     jobInfo?.remote === 'true' ||
@@ -223,7 +154,7 @@ function JobNode({ data, selected }) {
   const domain = extractDomain(website || `${company.replace(/\s+/g, '')}.com`);
 
   // Calculate background based on salary when gradient mode is enabled
-  const hasSalary = Boolean(salary);
+  const hasSalary = Boolean(salaryInfo?.display);
   const level = salaryLevel ?? getSalaryLevel(jobInfo, data.salaryRange);
   const salaryColors = showSalaryGradient
     ? getSalaryColor(level, hasSalary)
@@ -274,13 +205,18 @@ function JobNode({ data, selected }) {
 
       {/* Footer with salary and type */}
       <div className="node-footer">
-        {salary && (
+        {salaryInfo && (
           <div className="salary-badge">
             <span className="salary-icon">💰</span>
-            {salary}
+            <span className="salary-text">
+              <span className="salary-normalized">{salaryInfo.display}</span>
+              {salaryInfo.original && (
+                <span className="salary-original">{salaryInfo.original}</span>
+              )}
+            </span>
           </div>
         )}
-        {jobType && !salary && <div className="type-badge">{jobType}</div>}
+        {jobType && !salaryInfo && <div className="type-badge">{jobType}</div>}
       </div>
     </div>
   );
