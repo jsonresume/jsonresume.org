@@ -13,14 +13,14 @@ export const getLayoutedElements = (nodes, edges, direction = 'TB') => {
 
   dagreGraph.setGraph({
     rankdir: direction,
-    align: 'UL',
-    nodesep: 30,
-    ranksep: 80,
-    edgesep: 15,
-    marginx: 20,
-    marginy: 20,
+    align: undefined, // Center alignment
+    nodesep: 40,
+    ranksep: 100,
+    edgesep: 20,
+    marginx: 50,
+    marginy: 50,
     acyclicer: 'greedy',
-    ranker: 'tight-tree',
+    ranker: 'network-simplex',
   });
 
   nodes.forEach((node) => {
