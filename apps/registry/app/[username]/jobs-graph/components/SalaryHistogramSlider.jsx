@@ -107,9 +107,8 @@ export function SalaryHistogramSlider({
     return null;
   }
 
-  const visibleHistogram = histogram.filter(
-    (bar) => bar.max >= displayMin && bar.min <= displayMax
-  );
+  // Histogram is already built from p5-p95 range, use directly
+  const visibleHistogram = histogram;
 
   const quickRanges = [
     { label: 'All', min: displayMin, max: displayMax },

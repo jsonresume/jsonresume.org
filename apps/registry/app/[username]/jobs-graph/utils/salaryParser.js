@@ -113,8 +113,9 @@ export const calculateSalaryRangeWithPercentiles = (
   const p5 = salaries[Math.max(0, p5Index)];
   const p95 = salaries[Math.min(salaries.length - 1, p95Index)];
 
-  // Build histogram data (20 buckets)
-  const histogram = buildSalaryHistogram(salaries, 20);
+  // Build histogram data (20 buckets) from p5 to p95 range to exclude outliers
+  const salariesInRange = salaries.filter((s) => s >= p5 && s <= p95);
+  const histogram = buildSalaryHistogram(salariesInRange, 20, p5, p95);
 
   return { min, max, p5, p95, salaries, histogram };
 };
@@ -123,13 +124,20 @@ export const calculateSalaryRangeWithPercentiles = (
  * Builds histogram data for salary distribution
  * @param {number[]} salaries - Sorted array of salaries
  * @param {number} bucketCount - Number of histogram buckets
+ * @param {number} rangeMin - Explicit minimum for bucket range (optional)
+ * @param {number} rangeMax - Explicit maximum for bucket range (optional)
  * @returns {Array} Array of { min, max, count } objects
  */
-export const buildSalaryHistogram = (salaries, bucketCount = 20) => {
+export const buildSalaryHistogram = (
+  salaries,
+  bucketCount = 20,
+  rangeMin = null,
+  rangeMax = null
+) => {
   if (salaries.length === 0) return [];
 
-  const min = salaries[0];
-  const max = salaries[salaries.length - 1];
+  const min = rangeMin ?? salaries[0];
+  const max = rangeMax ?? salaries[salaries.length - 1];
   const bucketSize = (max - min) / bucketCount || 1;
 
   const histogram = [];
