@@ -117,13 +117,20 @@ export function buildGraphData(username, resume, topJobs, otherJobs) {
 /**
  * Creates job info map from jobs array
  * @param {Array} jobs - Array of job objects
- * @returns {Object} Map of job UUIDs to parsed content
+ * @returns {Object} Map of job UUIDs to parsed content with normalized salary data
  */
 export function buildJobInfoMap(jobs) {
   const jobInfoMap = {};
   jobs.forEach((job) => {
     try {
-      jobInfoMap[job.uuid] = JSON.parse(job.gpt_content);
+      const content = JSON.parse(job.gpt_content);
+      // Include normalized salary data from database columns
+      jobInfoMap[job.uuid] = {
+        ...content,
+        salaryUsd: job.salary_usd,
+        salaryMin: job.salary_min,
+        salaryMax: job.salary_max,
+      };
     } catch (error) {
       console.error(`Error parsing job content for ${job.uuid}:`, error);
       jobInfoMap[job.uuid] = {
