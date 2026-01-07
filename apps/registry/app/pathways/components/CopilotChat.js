@@ -27,7 +27,6 @@ export default function CopilotChat({
   const {
     sessionId,
     userId,
-    username,
     markAsRead,
     markAsInterested,
     markAsHidden,
