@@ -19,6 +19,7 @@ export function useGraphFiltering({
   hasActiveFilter,
   jobInfo,
   salaryFilterRange,
+  showSalaryGradient = false,
 }) {
   return useMemo(() => {
     // If not hiding filtered nodes, return original nodes/edges
@@ -42,18 +43,26 @@ export function useGraphFiltering({
       const readKey = `${username}_${nodeId}`;
       const isRead = readJobs.has(readKey);
 
-      // Hide if outside salary filter range
+      // Salary-based filtering
       let isOutsideSalaryRange = false;
-      if (salaryFilterRange && jobInfo) {
+      let hasNoSalary = false;
+      if (jobInfo) {
         const job = jobInfo[nodeId];
         const salary = job ? getJobSalary(job) : null;
-        if (salary !== null) {
+
+        // Hide if outside salary filter range
+        if (salaryFilterRange && salary !== null) {
           isOutsideSalaryRange =
             salary < salaryFilterRange.min || salary > salaryFilterRange.max;
         }
+
+        // Hide jobs without salary when salary mode is on
+        if (showSalaryGradient && salary === null) {
+          hasNoSalary = true;
+        }
       }
 
-      if (isFilteredOut || isRead || isOutsideSalaryRange) {
+      if (isFilteredOut || isRead || isOutsideSalaryRange || hasNoSalary) {
         hiddenNodeIds.add(nodeId);
       }
     });
@@ -86,5 +95,6 @@ export function useGraphFiltering({
     hasActiveFilter,
     jobInfo,
     salaryFilterRange,
+    showSalaryGradient,
   ]);
 }

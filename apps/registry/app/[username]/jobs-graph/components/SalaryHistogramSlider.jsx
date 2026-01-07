@@ -18,6 +18,8 @@ function formatSalary(value) {
 export function SalaryHistogramSlider({
   min,
   max,
+  p5,
+  p95,
   histogram,
   value,
   onChange,
@@ -26,33 +28,39 @@ export function SalaryHistogramSlider({
   const [isDragging, setIsDragging] = useState(null); // 'min', 'max', or null
   const sliderRef = useRef(null);
 
-  // Current range values (defaults to full range)
-  const rangeMin = value?.min ?? min;
-  const rangeMax = value?.max ?? max;
+  // Use percentile range to exclude outliers (fallback to full range)
+  const displayMin = p5 ?? min;
+  const displayMax = p95 ?? max;
 
-  // Calculate positions as percentages
-  const minPercent = ((rangeMin - min) / (max - min)) * 100 || 0;
-  const maxPercent = ((rangeMax - min) / (max - min)) * 100 || 100;
+  // Current range values (defaults to percentile range)
+  const rangeMin = value?.min ?? displayMin;
+  const rangeMax = value?.max ?? displayMax;
+
+  // Calculate positions as percentages (using display range for slider)
+  const minPercent =
+    ((rangeMin - displayMin) / (displayMax - displayMin)) * 100 || 0;
+  const maxPercent =
+    ((rangeMax - displayMin) / (displayMax - displayMin)) * 100 || 100;
 
   // Find max count for histogram scaling
   const maxCount = useMemo(() => {
     return Math.max(...histogram.map((h) => h.count), 1);
   }, [histogram]);
 
-  // Convert position to value
+  // Convert position to value (using display range)
   const positionToValue = useCallback(
     (clientX) => {
-      if (!sliderRef.current) return min;
+      if (!sliderRef.current) return displayMin;
       const rect = sliderRef.current.getBoundingClientRect();
       const percent = Math.max(
         0,
         Math.min(1, (clientX - rect.left) / rect.width)
       );
       // Snap to nearest $5k
-      const value = min + percent * (max - min);
+      const value = displayMin + percent * (displayMax - displayMin);
       return Math.round(value / 5000) * 5000;
     },
-    [min, max]
+    [displayMin, displayMax]
   );
 
   // Handle mouse/touch events
@@ -99,9 +107,14 @@ export function SalaryHistogramSlider({
     [rangeMin, rangeMax]
   );
 
-  if (max <= min || histogram.length === 0) {
+  if (displayMax <= displayMin || histogram.length === 0) {
     return null;
   }
+
+  // Filter histogram to only show bars within display range
+  const visibleHistogram = histogram.filter(
+    (bar) => bar.max >= displayMin && bar.min <= displayMax
+  );
 
   return (
     <div className={`salary-histogram-slider ${className}`}>
@@ -114,7 +127,7 @@ export function SalaryHistogramSlider({
 
       {/* Histogram bars */}
       <div className="histogram-bars flex items-end h-8 gap-px mb-1">
-        {histogram.map((bar, index) => {
+        {visibleHistogram.map((bar, index) => {
           const height = (bar.count / maxCount) * 100;
           const inRange = isBarInRange(bar);
           return (
@@ -168,14 +181,14 @@ export function SalaryHistogramSlider({
         <button
           type="button"
           className="px-2 py-0.5 bg-gray-100 hover:bg-gray-200 rounded text-gray-600 transition-colors"
-          onClick={() => onChange(min, max)}
+          onClick={() => onChange(displayMin, displayMax)}
         >
           All
         </button>
         <button
           type="button"
           className="px-2 py-0.5 bg-gray-100 hover:bg-gray-200 rounded text-gray-600 transition-colors"
-          onClick={() => onChange(min, 100000)}
+          onClick={() => onChange(displayMin, 100000)}
         >
           &lt;$100k
         </button>
@@ -189,7 +202,7 @@ export function SalaryHistogramSlider({
         <button
           type="button"
           className="px-2 py-0.5 bg-gray-100 hover:bg-gray-200 rounded text-gray-600 transition-colors"
-          onClick={() => onChange(200000, max)}
+          onClick={() => onChange(200000, displayMax)}
         >
           $200k+
         </button>

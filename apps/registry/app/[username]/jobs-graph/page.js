@@ -54,6 +54,7 @@ export default function JobsGraph({ params }) {
     hasActiveFilter,
     jobInfo,
     salaryFilterRange: salaryRange.filterRange,
+    showSalaryGradient,
   });
 
   const { nodesWithStyle, edgesWithStyle } = useGraphStyling({

@@ -86,6 +86,7 @@ export default function PathwaysGraph() {
     hasActiveFilter,
     jobInfo,
     salaryFilterRange: salaryRange.filterRange,
+    showSalaryGradient,
   });
 
   const { nodesWithStyle, edgesWithStyle } = useGraphStyling({

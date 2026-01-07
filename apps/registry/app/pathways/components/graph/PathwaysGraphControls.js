@@ -101,6 +101,8 @@ export function PathwaysGraphControls({
               <SalaryHistogramSlider
                 min={salaryRange.min}
                 max={salaryRange.max}
+                p5={salaryRange.p5}
+                p95={salaryRange.p95}
                 histogram={salaryRange.histogram}
                 value={salaryRange.filterRange}
                 onChange={salaryRange.setFilterRange}
