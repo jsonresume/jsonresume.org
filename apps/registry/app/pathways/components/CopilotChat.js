@@ -52,16 +52,28 @@ export default function CopilotChat({
     resume: resumeData,
   });
 
-  const chatInitialMessages =
-    persistedMessages?.length > 0 ? persistedMessages : [INITIAL_MESSAGE];
+  const { messages, sendMessage, status, addToolResult, setMessages } = useChat(
+    {
+      transport: new DefaultChatTransport({
+        api: '/api/pathways',
+        body: { currentResume: resumeData },
+      }),
+      initialMessages: [INITIAL_MESSAGE],
+    }
+  );
 
-  const { messages, sendMessage, status, addToolResult } = useChat({
-    transport: new DefaultChatTransport({
-      api: '/api/pathways',
-      body: { currentResume: resumeData },
-    }),
-    initialMessages: isLoadingConversation ? [] : chatInitialMessages,
-  });
+  // Set messages when persisted messages are loaded
+  const hasInitializedRef = useRef(false);
+  useEffect(() => {
+    if (
+      !isLoadingConversation &&
+      !hasInitializedRef.current &&
+      persistedMessages?.length > 0
+    ) {
+      setMessages(persistedMessages);
+      hasInitializedRef.current = true;
+    }
+  }, [isLoadingConversation, persistedMessages, setMessages]);
 
   // Save conversation when messages change
   useEffect(() => {
@@ -154,10 +166,11 @@ export default function CopilotChat({
     return older;
   }, [loadMore]);
 
-  // Reset older messages when conversation is cleared
+  // Reset older messages and initialization flag when conversation is cleared
   useEffect(() => {
     if (!persistedMessages) {
       setOlderMessages([]);
+      hasInitializedRef.current = false;
     }
   }, [persistedMessages]);
 
