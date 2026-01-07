@@ -4,7 +4,6 @@
  */
 
 /* eslint-env jest */
-/* global describe, test, expect */
 
 const { normalizeSalary } = require('./index');
 
