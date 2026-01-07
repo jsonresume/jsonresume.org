@@ -131,36 +131,35 @@ export function SalaryHistogramSlider({
           {/* Histogram + Slider container */}
           <div className="flex-1 min-w-0">
             {/* Histogram bars */}
-            <div className="relative h-6 mb-1">
-              <div className="absolute inset-0 flex items-end gap-px">
-                {visibleHistogram.map((bar, index) => {
-                  const height = (bar.count / maxCount) * 100;
-                  const inRange = isBarInRange(bar);
-                  const isHovered = hoveredBar === index;
+            <div className="h-8 flex items-end gap-px mb-1">
+              {visibleHistogram.map((bar, index) => {
+                const height = (bar.count / maxCount) * 100;
+                const inRange = isBarInRange(bar);
+                const isHovered = hoveredBar === index;
 
-                  return (
+                return (
+                  <div
+                    key={index}
+                    className="flex-1 relative cursor-pointer flex items-end"
+                    style={{ height: '100%' }}
+                    onMouseEnter={() => setHoveredBar(index)}
+                    onMouseLeave={() => setHoveredBar(null)}
+                  >
                     <div
-                      key={index}
-                      className="flex-1 relative cursor-pointer"
-                      onMouseEnter={() => setHoveredBar(index)}
-                      onMouseLeave={() => setHoveredBar(null)}
-                    >
-                      <div
-                        className={`w-full rounded-sm transition-colors ${
-                          inRange ? 'bg-violet-400' : 'bg-slate-200'
-                        } ${isHovered ? 'bg-violet-500' : ''}`}
-                        style={{ height: `${Math.max(height, 10)}%` }}
-                      />
-                      {isHovered && (
-                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-1.5 py-0.5 bg-slate-800 text-white text-[10px] rounded shadow-lg whitespace-nowrap z-10">
-                          {formatSalary(bar.min)}-{formatSalary(bar.max)}:{' '}
-                          {bar.count}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
+                      className={`w-full rounded-sm transition-colors ${
+                        inRange ? 'bg-violet-400' : 'bg-slate-300'
+                      } ${isHovered ? 'bg-violet-500' : ''}`}
+                      style={{ height: `${Math.max(height, 10)}%` }}
+                    />
+                    {isHovered && (
+                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-1.5 py-0.5 bg-slate-800 text-white text-[10px] rounded shadow-lg whitespace-nowrap z-10">
+                        {formatSalary(bar.min)}-{formatSalary(bar.max)}:{' '}
+                        {bar.count}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
 
             {/* Slider track */}
