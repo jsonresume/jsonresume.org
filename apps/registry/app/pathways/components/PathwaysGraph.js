@@ -19,6 +19,7 @@ import { usePathFinding } from '@/app/[username]/jobs-graph/hooks/usePathFinding
 import { useGraphFiltering } from '@/app/[username]/jobs-graph/hooks/useGraphFiltering';
 import { useGraphStyling } from '@/app/[username]/jobs-graph/hooks/useGraphStyling';
 import { useKeyboardNavigation } from '@/app/[username]/jobs-graph/hooks/useKeyboardNavigation';
+import { useSiblingNavigation } from '../hooks/useSiblingNavigation';
 
 import JobNode from '@/app/[username]/jobs-graph/components/JobNode';
 import '@/app/[username]/jobs-graph/components/JobNode.css';
@@ -115,9 +116,26 @@ export default function PathwaysGraph() {
     onMarkAsRead: markAsRead,
   });
 
+  // Sibling navigation for mark as read + move
+  const { navigateToNextSibling } = useSiblingNavigation({
+    edges: visibleEdges,
+    nodes: visibleNodes,
+    setSelectedNode,
+    reactFlowInstance,
+  });
+
   const handleNodeClick = useCallback((_, node) => {
     setSelectedNode(node);
   }, []);
+
+  // Handle mark as read and move to next sibling
+  const handleMarkAsReadAndMove = useCallback(
+    (jobId) => {
+      markAsRead(jobId);
+      navigateToNextSibling(jobId);
+    },
+    [markAsRead, navigateToNextSibling]
+  );
 
   // Clear all filters
   const handleClearFilters = useCallback(() => {
@@ -243,7 +261,7 @@ export default function PathwaysGraph() {
           selectedNode={selectedNode}
           filterText={filterText}
           readJobIds={readJobIds}
-          onMarkAsRead={markAsRead}
+          onMarkAsRead={handleMarkAsReadAndMove}
           onClose={() => setSelectedNode(null)}
         />
       </div>

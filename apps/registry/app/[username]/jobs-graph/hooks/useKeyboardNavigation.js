@@ -96,10 +96,40 @@ export function useKeyboardNavigation({
         return;
       }
 
-      // Handle 'M' key for marking as read
+      // Handle 'M' key for marking as read and moving to next sibling
       if (event.key === 'm' || event.key === 'M') {
         if (onMarkAsRead && selectedNode.id && !selectedNode.data?.isResume) {
+          // Find next sibling before marking as read
+          const siblings = findSiblings(selectedNode.id);
+          let nextNode = null;
+
+          if (siblings.length > 1) {
+            // Sort siblings by position
+            const sortedSiblings = [...siblings].sort(
+              (a, b) => a.position.x - b.position.x
+            );
+            const currentIndex = sortedSiblings.findIndex(
+              (s) => s.id === selectedNode.id
+            );
+
+            // Move to next sibling, or first if at end
+            const nextIndex =
+              currentIndex < sortedSiblings.length - 1 ? currentIndex + 1 : 0;
+            nextNode = sortedSiblings[nextIndex];
+
+            // Don't wrap to self
+            if (nextNode.id === selectedNode.id) {
+              nextNode = null;
+            }
+          }
+
+          // Mark current as read
           onMarkAsRead(selectedNode.id);
+
+          // Navigate to next sibling
+          if (nextNode) {
+            navigateToNode(nextNode);
+          }
         }
         return;
       }
