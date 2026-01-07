@@ -51,11 +51,7 @@ export default function PathwaysGraph() {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
   // Load user preferences
-  const {
-    preferences,
-    isLoading: prefsLoading,
-    savePreferences,
-  } = usePathwaysPreferences();
+  const { preferences, savePreferences } = usePathwaysPreferences();
   const initializedRef = useRef(false);
 
   // UI state - initialized from preferences
