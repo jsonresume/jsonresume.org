@@ -179,6 +179,8 @@ describe('calculateSalaryRangeWithPercentiles', () => {
       max: 0,
       p5: 0,
       p95: 0,
+      salaries: [],
+      histogram: [],
     });
   });
 
