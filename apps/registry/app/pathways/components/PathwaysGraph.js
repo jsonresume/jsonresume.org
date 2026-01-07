@@ -84,6 +84,8 @@ export default function PathwaysGraph() {
     hideFiltered,
     username: 'pathways',
     hasActiveFilter,
+    jobInfo,
+    salaryFilterRange: salaryRange.filterRange,
   });
 
   const { nodesWithStyle, edgesWithStyle } = useGraphStyling({
@@ -201,6 +203,7 @@ export default function PathwaysGraph() {
         visibleJobs={visibleJobCount}
         hasActiveFilter={hasActiveFilter}
         onClearFilters={handleClearFilters}
+        salaryRange={salaryRange}
       />
 
       <div className="flex-1 relative">

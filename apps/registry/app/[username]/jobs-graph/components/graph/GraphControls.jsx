@@ -31,8 +31,8 @@ export function GraphControls({
   setShowSalaryGradient,
   remoteOnly,
   setRemoteOnly,
-  hideFiltered,
-  setHideFiltered,
+  showHidden,
+  setShowHidden,
   salaryRange,
 }) {
   const hasSalaryData = salaryRange?.histogram?.length > 0;
@@ -83,11 +83,11 @@ export function GraphControls({
             </TogglePill>
 
             <TogglePill
-              active={hideFiltered}
-              onClick={() => setHideFiltered(!hideFiltered)}
+              active={showHidden}
+              onClick={() => setShowHidden(!showHidden)}
               icon="👁"
             >
-              Hide Read
+              Show Hidden
             </TogglePill>
 
             <TogglePill

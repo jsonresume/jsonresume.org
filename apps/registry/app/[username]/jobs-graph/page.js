@@ -30,7 +30,7 @@ export default function JobsGraph({ params }) {
   const [filterText, setFilterText] = useState('');
   const [showSalaryGradient, setShowSalaryGradient] = useState(false);
   const [remoteOnly, setRemoteOnly] = useState(false);
-  const [hideFiltered, setHideFiltered] = useState(false);
+  const [showHidden, setShowHidden] = useState(false); // false = hide read/filtered by default
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
   // Custom hooks
@@ -43,13 +43,13 @@ export default function JobsGraph({ params }) {
   // Check if any filter is active
   const hasActiveFilter = Boolean(filterText || remoteOnly);
 
-  // Filter and reconnect nodes when hideFiltered is enabled
+  // Filter and reconnect nodes (hide by default unless showHidden is true)
   const { visibleNodes, visibleEdges } = useGraphFiltering({
     nodes,
     edges,
     filteredNodes,
     readJobs,
-    hideFiltered,
+    hideFiltered: !showHidden, // invert: showHidden=false means hide them
     username,
     hasActiveFilter,
     jobInfo,
@@ -69,7 +69,7 @@ export default function JobsGraph({ params }) {
     selectedNode,
     findPathToResume,
     remoteOnly,
-    hideFiltered,
+    hideFiltered: !showHidden,
   });
 
   // Enable keyboard navigation (arrow keys to move between nodes, M to mark as read)
@@ -104,8 +104,8 @@ export default function JobsGraph({ params }) {
             setShowSalaryGradient={setShowSalaryGradient}
             remoteOnly={remoteOnly}
             setRemoteOnly={setRemoteOnly}
-            hideFiltered={hideFiltered}
-            setHideFiltered={setHideFiltered}
+            showHidden={showHidden}
+            setShowHidden={setShowHidden}
             salaryRange={salaryRange}
           />
           <GraphVisualization
