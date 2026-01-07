@@ -6,6 +6,7 @@ import CopilotChat from './components/CopilotChat';
 import ResumePreview from './components/ResumePreview';
 import PathwaysGraph from './components/PathwaysGraph';
 import PathwaysHeader from './components/PathwaysHeader';
+import FeedbackHistory from './components/FeedbackHistory';
 import { ActivityLog } from './components/ActivityLog';
 import { usePathways } from './context/PathwaysContext';
 import usePathwaysSession from './hooks/usePathwaysSession';
@@ -29,7 +30,7 @@ function PathwaysContent() {
       <div className="flex flex-1 overflow-hidden">
         <section className="flex flex-col flex-1 overflow-hidden">
           <nav className="flex border-b bg-gray-50 text-sm font-medium">
-            {['graph', 'preview', 'resume'].map((tab) => (
+            {['graph', 'feedback', 'preview', 'resume'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
@@ -41,6 +42,8 @@ function PathwaysContent() {
               >
                 {tab === 'graph'
                   ? 'Graph'
+                  : tab === 'feedback'
+                  ? 'Feedback'
                   : tab === 'preview'
                   ? 'Preview'
                   : 'Resume'}
@@ -51,6 +54,8 @@ function PathwaysContent() {
           <div className="flex-1 overflow-auto">
             {activeTab === 'graph' ? (
               <PathwaysGraph />
+            ) : activeTab === 'feedback' ? (
+              <FeedbackHistory />
             ) : activeTab === 'preview' ? (
               <ResumePreview resumeData={resume} />
             ) : (
