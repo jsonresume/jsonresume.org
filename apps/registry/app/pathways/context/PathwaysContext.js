@@ -85,6 +85,7 @@ export function PathwaysProvider({ children }) {
   const jobStatesHook = useJobStates({
     sessionId,
     username,
+    userId,
     isAuthenticated,
   });
 

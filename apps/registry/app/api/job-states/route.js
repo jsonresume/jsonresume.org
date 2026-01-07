@@ -21,36 +21,42 @@ export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const username = searchParams.get('username');
+    const providedUserId = searchParams.get('userId');
 
-    if (!username) {
+    if (!username && !providedUserId) {
       return NextResponse.json(
-        { message: 'Missing required query param: username' },
+        { message: 'Missing required query param: username or userId' },
         { status: 400 }
       );
     }
 
     const supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
 
-    // Get user ID from username (via resumes table)
-    const { data: resumeData, error: resumeError } = await supabase
-      .from('resumes')
-      .select('id')
-      .eq('username', username)
-      .maybeSingle();
+    let userId = providedUserId;
 
-    if (resumeError) throw resumeError;
+    // If no userId provided, look up from username
+    if (!userId && username) {
+      const { data: resumeData, error: resumeError } = await supabase
+        .from('resumes')
+        .select('id')
+        .eq('username', username)
+        .maybeSingle();
 
-    if (!resumeData) {
-      // No resume found - return empty states
-      return NextResponse.json({ success: true, states: {} });
+      if (resumeError) throw resumeError;
+
+      if (!resumeData) {
+        // No resume found - return empty states
+        return NextResponse.json({ success: true, states: {} });
+      }
+
+      userId = resumeData.id;
     }
 
-    // Fetch job states using username as user identifier
-    // Note: We use username since we don't have auth.users integration
+    // Fetch job states
     const { data, error } = await supabase
       .from('job_states')
       .select('job_id, state')
-      .eq('user_id', resumeData.id);
+      .eq('user_id', userId);
 
     if (error) throw error;
 
@@ -84,12 +90,19 @@ export async function POST(request) {
 
   try {
     const body = await request.json();
-    const { username, jobId, state } = body;
+    const { username, userId: providedUserId, jobId, state } = body;
 
-    // Validate input
-    if (!username || !jobId) {
+    // Validate input - need either username or userId
+    if (!username && !providedUserId) {
       return NextResponse.json(
-        { message: 'Missing required fields: username, jobId' },
+        { message: 'Missing required fields: username or userId, and jobId' },
+        { status: 400 }
+      );
+    }
+
+    if (!jobId) {
+      return NextResponse.json(
+        { message: 'Missing required field: jobId' },
         { status: 400 }
       );
     }
@@ -107,20 +120,27 @@ export async function POST(request) {
 
     const supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
 
-    // Get user ID from username
-    const { data: resumeData, error: resumeError } = await supabase
-      .from('resumes')
-      .select('id')
-      .eq('username', username)
-      .maybeSingle();
+    let userId = providedUserId;
 
-    if (resumeError) throw resumeError;
+    // If no userId provided, look up from username
+    if (!userId && username) {
+      const { data: resumeData, error: resumeError } = await supabase
+        .from('resumes')
+        .select('id')
+        .eq('username', username)
+        .maybeSingle();
 
-    if (!resumeData) {
-      return NextResponse.json({ message: 'User not found' }, { status: 404 });
+      if (resumeError) throw resumeError;
+
+      if (!resumeData) {
+        return NextResponse.json(
+          { message: 'User not found' },
+          { status: 404 }
+        );
+      }
+
+      userId = resumeData.id;
     }
-
-    const userId = resumeData.id;
 
     if (state === null) {
       // Delete the state

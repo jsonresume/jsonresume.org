@@ -62,10 +62,11 @@ const clearLocalStorage = (sessionId) => {
  * @param {Object} options
  * @param {string} options.sessionId - Session ID (always present)
  * @param {string|null} options.username - Username (if authenticated)
+ * @param {string|null} options.userId - User ID UUID (if authenticated)
  * @param {boolean} options.isAuthenticated - Whether user is logged in
  * @returns {Object} Job states and management functions
  */
-export function useJobStates({ sessionId, username, isAuthenticated }) {
+export function useJobStates({ sessionId, username, userId, isAuthenticated }) {
   const [jobStates, setJobStates] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -77,9 +78,9 @@ export function useJobStates({ sessionId, username, isAuthenticated }) {
       setError(null);
 
       try {
-        if (isAuthenticated && username) {
+        if (isAuthenticated && userId) {
           // Load from Supabase for authenticated users
-          const response = await fetch(`/api/job-states?username=${username}`);
+          const response = await fetch(`/api/job-states?userId=${userId}`);
           if (!response.ok) {
             throw new Error('Failed to fetch job states');
           }
@@ -104,7 +105,7 @@ export function useJobStates({ sessionId, username, isAuthenticated }) {
     };
 
     loadStates();
-  }, [isAuthenticated, username, sessionId]);
+  }, [isAuthenticated, userId, sessionId]);
 
   // Update a single job's state
   const updateJobState = useCallback(
@@ -131,19 +132,19 @@ export function useJobStates({ sessionId, username, isAuthenticated }) {
       }
 
       // Persist to Supabase if authenticated
-      if (isAuthenticated && username) {
+      if (isAuthenticated && userId) {
         try {
           await fetch('/api/job-states', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, jobId: jobIdStr, state }),
+            body: JSON.stringify({ userId, jobId: jobIdStr, state }),
           });
         } catch (err) {
           console.error('Failed to sync job state to server:', err);
         }
       }
     },
-    [isAuthenticated, username, sessionId]
+    [isAuthenticated, userId, sessionId]
   );
 
   // Batch update multiple jobs
@@ -169,19 +170,19 @@ export function useJobStates({ sessionId, username, isAuthenticated }) {
       }
 
       // Persist to Supabase if authenticated
-      if (isAuthenticated && username) {
+      if (isAuthenticated && userId) {
         try {
           await fetch('/api/job-states/batch', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, updates }),
+            body: JSON.stringify({ userId, updates }),
           });
         } catch (err) {
           console.error('Failed to sync job states to server:', err);
         }
       }
     },
-    [jobStates, isAuthenticated, username, sessionId]
+    [jobStates, isAuthenticated, userId, sessionId]
   );
 
   // Convenience methods
