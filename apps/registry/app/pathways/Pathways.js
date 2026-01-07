@@ -6,6 +6,7 @@ import CopilotChat from './components/CopilotChat';
 import ResumePreview from './components/ResumePreview';
 import PathwaysGraph from './components/PathwaysGraph';
 import PathwaysHeader from './components/PathwaysHeader';
+import { ActivityLog } from './components/ActivityLog';
 import { usePathways } from './context/PathwaysContext';
 import usePathwaysSession from './hooks/usePathwaysSession';
 
@@ -14,6 +15,7 @@ import usePathwaysSession from './hooks/usePathwaysSession';
  */
 function PathwaysContent() {
   const [activeTab, setActiveTab] = useState('graph');
+  const [isActivityOpen, setIsActivityOpen] = useState(false);
   const { resume, resumeJson, updateResume, updateResumeJson, setResumeJson } =
     usePathways();
 
@@ -22,7 +24,7 @@ function PathwaysContent() {
 
   return (
     <div className="flex flex-col h-screen">
-      <PathwaysHeader />
+      <PathwaysHeader onOpenActivity={() => setIsActivityOpen(true)} />
 
       <div className="flex flex-1 overflow-hidden">
         <section className="flex flex-col flex-1 overflow-hidden">
@@ -75,6 +77,11 @@ function PathwaysContent() {
           setResumeJson={setResumeJson}
         />
       </div>
+
+      <ActivityLog
+        isOpen={isActivityOpen}
+        onClose={() => setIsActivityOpen(false)}
+      />
     </div>
   );
 }

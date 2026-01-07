@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback } from 'react';
 import pathwaysToast from '../utils/toastMessages';
+import { activityLogger } from '../utils/activityLogger';
 
 export default function useSpeech() {
   const [isSpeechEnabled, setIsSpeechEnabled] = useState(false);
@@ -78,6 +79,7 @@ export default function useSpeech() {
         // Set source and store reference
         audio.src = audioUrl;
         audioRef.current = audio;
+        activityLogger.speechGenerated();
       } catch (error) {
         pathwaysToast.speechError();
       } finally {
@@ -88,6 +90,7 @@ export default function useSpeech() {
   );
 
   const toggleSpeech = useCallback(() => {
+    const newState = !isSpeechEnabled;
     if (isSpeechEnabled) {
       // If turning off, stop any current audio
       if (audioRef.current) {
@@ -95,8 +98,9 @@ export default function useSpeech() {
         audioRef.current = null;
       }
     }
-    setIsSpeechEnabled(!isSpeechEnabled);
-  }, [isSpeechEnabled]);
+    setIsSpeechEnabled(newState);
+    activityLogger.speechToggled(newState, selectedVoice);
+  }, [isSpeechEnabled, selectedVoice]);
 
   const stopSpeech = useCallback(() => {
     if (audioRef.current) {

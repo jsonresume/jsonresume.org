@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import { activityLogger } from '../pathways/utils/activityLogger';
 
 const STORAGE_KEY_PREFIX = 'pathways_job_states';
 
@@ -185,17 +186,26 @@ export function useJobStates({ sessionId, username, isAuthenticated }) {
 
   // Convenience methods
   const markAsRead = useCallback(
-    (jobId) => updateJobState(jobId, 'read'),
+    (jobId, title) => {
+      updateJobState(jobId, 'read');
+      activityLogger.jobRead(jobId, title);
+    },
     [updateJobState]
   );
 
   const markAsInterested = useCallback(
-    (jobId) => updateJobState(jobId, 'interested'),
+    (jobId, title) => {
+      updateJobState(jobId, 'interested');
+      activityLogger.jobInterested(jobId, title);
+    },
     [updateJobState]
   );
 
   const markAsHidden = useCallback(
-    (jobId) => updateJobState(jobId, 'hidden'),
+    (jobId, title) => {
+      updateJobState(jobId, 'hidden');
+      activityLogger.jobHidden(jobId, title);
+    },
     [updateJobState]
   );
 

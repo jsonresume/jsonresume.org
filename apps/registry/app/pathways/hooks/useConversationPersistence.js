@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react';
 import pathwaysToast from '../utils/toastMessages';
+import { activityLogger } from '../utils/activityLogger';
 
 const SAVE_DEBOUNCE_MS = 2000;
 
@@ -111,6 +112,7 @@ export default function useConversationPersistence({
       lastSavedRef.current = null;
       setInitialMessages(null);
       pathwaysToast.conversationCleared();
+      activityLogger.conversationCleared(sessionId, userId);
     } catch (error) {
       pathwaysToast.apiError('Failed to clear conversation');
     }

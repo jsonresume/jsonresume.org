@@ -1,12 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { Github, LogOut, Home } from 'lucide-react';
+import { Github, LogOut, Home, Activity } from 'lucide-react';
 import { Button } from '@repo/ui';
 import { useAuth } from '@/app/context/auth';
 import { supabase } from '@/app/lib/supabase';
 
-export default function PathwaysHeader() {
+export default function PathwaysHeader({ onOpenActivity }) {
   const { user, loading } = useAuth();
 
   const handleSignOut = async () => {
@@ -29,14 +29,24 @@ export default function PathwaysHeader() {
         <h1 className="text-lg font-semibold text-gray-900">Pathways</h1>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={onOpenActivity}
+          className="text-gray-500 hover:text-gray-700"
+          title="View activity"
+        >
+          <Activity className="w-4 h-4" />
+        </Button>
+
         {loading ? (
           <div className="w-20 h-8 bg-gray-100 rounded animate-pulse" />
         ) : user ? (
           <>
             <Link
               href={`/${username}`}
-              className="text-sm text-gray-600 hover:text-gray-900"
+              className="text-sm text-gray-600 hover:text-gray-900 px-2"
             >
               {username}
             </Link>
@@ -44,7 +54,8 @@ export default function PathwaysHeader() {
               variant="ghost"
               size="sm"
               onClick={handleSignOut}
-              className="text-gray-600 hover:text-gray-900"
+              className="text-gray-500 hover:text-gray-700"
+              title="Sign out"
             >
               <LogOut className="w-4 h-4" />
             </Button>

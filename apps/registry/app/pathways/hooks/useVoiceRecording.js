@@ -3,12 +3,14 @@
 import { useState, useRef, useCallback } from 'react';
 import { convertToWav, getAudioExtension } from './audioUtils';
 import pathwaysToast from '../utils/toastMessages';
+import { activityLogger } from '../utils/activityLogger';
 
 export default function useVoiceRecording(onTranscriptionComplete) {
   const [isRecording, setIsRecording] = useState(false);
   const [isTranscribing, setIsTranscribing] = useState(false);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
+  const recordingStartTimeRef = useRef(null);
 
   const transcribeAudio = useCallback(
     async (audioBlob) => {
@@ -37,6 +39,7 @@ export default function useVoiceRecording(onTranscriptionComplete) {
 
         if (text && onTranscriptionComplete) {
           onTranscriptionComplete(text);
+          activityLogger.transcriptionCompleted(text);
         }
       } catch (error) {
         pathwaysToast.transcriptionError(error.message);
@@ -89,6 +92,8 @@ export default function useVoiceRecording(onTranscriptionComplete) {
 
         mediaRecorder.start();
         setIsRecording(true);
+        recordingStartTimeRef.current = Date.now();
+        activityLogger.recordingStarted();
       } catch {
         pathwaysToast.microphonePermission();
       }
@@ -98,8 +103,12 @@ export default function useVoiceRecording(onTranscriptionComplete) {
 
   const stopRecording = useCallback(() => {
     if (mediaRecorderRef.current && isRecording) {
+      const duration = recordingStartTimeRef.current
+        ? Date.now() - recordingStartTimeRef.current
+        : 0;
       mediaRecorderRef.current.stop();
       setIsRecording(false);
+      activityLogger.recordingCompleted(duration);
     }
   }, [isRecording]);
 
