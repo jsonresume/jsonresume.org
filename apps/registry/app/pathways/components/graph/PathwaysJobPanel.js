@@ -1,70 +1,99 @@
-import { Button } from '@repo/ui';
-import { ExternalLink, Check, MapPin, Briefcase } from 'lucide-react';
+import { useState } from 'react';
+import { Button, Badge } from '@repo/ui';
+import {
+  ExternalLink,
+  Check,
+  MapPin,
+  Briefcase,
+  X,
+  Clock,
+  Globe,
+  ChevronDown,
+  ChevronUp,
+} from 'lucide-react';
 
 /**
  * Job detail panel for Pathways graph
- * Simplified version of JobDetailPanel that works with PathwaysContext
  */
 export function PathwaysJobPanel({
   selectedNode,
   filterText,
   readJobIds,
   onMarkAsRead,
+  onClose,
 }) {
+  const [showFullDescription, setShowFullDescription] = useState(false);
+  const [showAllSkills, setShowAllSkills] = useState(false);
+
   if (!selectedNode || !selectedNode.data?.jobInfo) return null;
 
   const jobInfo = selectedNode.data.jobInfo;
   const isRead = readJobIds.has(selectedNode.id);
+  const hasLongDescription = jobInfo.description?.length > 300;
+  const hasMoreSkills = jobInfo.skills?.length > 8;
+
+  const displayedSkills = showAllSkills
+    ? jobInfo.skills
+    : jobInfo.skills?.slice(0, 8);
+
+  const hnUrl = `https://news.ycombinator.com/item?id=${selectedNode.id}`;
 
   return (
-    <div className="absolute top-4 right-4 max-w-lg bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden">
+    <div className="absolute top-4 right-4 w-96 bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden">
       {/* Header */}
-      <div className="p-4 border-b">
-        <div className="flex items-start justify-between gap-3">
+      <div className="p-4 border-b bg-gradient-to-r from-indigo-50 to-white">
+        <div className="flex items-start justify-between gap-2">
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-gray-900 truncate">
+            <h3 className="font-semibold text-gray-900">
               {highlightText(jobInfo.title, filterText)}
             </h3>
-            <p className="text-sm text-gray-600 truncate">
+            <p className="text-sm text-gray-600">
               {highlightText(jobInfo.company, filterText)}
             </p>
           </div>
-          <Button
-            variant={isRead ? 'secondary' : 'default'}
-            size="sm"
-            onClick={() => onMarkAsRead(selectedNode.id)}
-            className="shrink-0"
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600 p-1"
           >
-            {isRead ? (
-              <>
-                <Check className="w-4 h-4 mr-1" /> Read
-              </>
-            ) : (
-              'Mark Read'
-            )}
-          </Button>
+            <X className="w-4 h-4" />
+          </button>
         </div>
 
-        {/* Salary and Type */}
-        <div className="flex items-center gap-3 mt-2 text-sm">
+        {/* Meta info row */}
+        <div className="flex flex-wrap items-center gap-2 mt-3">
           {jobInfo.salary && (
-            <span className="text-green-600 font-medium">{jobInfo.salary}</span>
+            <Badge className="bg-green-100 text-green-700 border-0">
+              {jobInfo.salary}
+            </Badge>
           )}
           {jobInfo.type && (
-            <span className="flex items-center gap-1 text-gray-500">
+            <Badge variant="secondary" className="gap-1">
               <Briefcase className="w-3 h-3" />
               {jobInfo.type}
-            </span>
+            </Badge>
+          )}
+          {jobInfo.experience && (
+            <Badge variant="secondary" className="gap-1">
+              <Clock className="w-3 h-3" />
+              {jobInfo.experience}
+            </Badge>
+          )}
+          {jobInfo.remote && (
+            <Badge variant="secondary" className="gap-1 text-blue-600">
+              <Globe className="w-3 h-3" />
+              Remote
+            </Badge>
           )}
         </div>
       </div>
 
       {/* Content */}
-      <div className="p-4 space-y-3 max-h-[400px] overflow-y-auto">
+      <div className="p-4 space-y-4 max-h-[350px] overflow-y-auto">
         {/* Location */}
         {jobInfo.location && (
           <div className="flex items-start gap-2 text-sm text-gray-600">
-            <MapPin className="w-4 h-4 shrink-0 mt-0.5" />
+            <MapPin className="w-4 h-4 shrink-0 mt-0.5 text-gray-400" />
             <span>
               {[jobInfo.location.city, jobInfo.location.region]
                 .filter(Boolean)
@@ -75,56 +104,95 @@ export function PathwaysJobPanel({
 
         {/* Description */}
         {jobInfo.description && (
-          <p className="text-sm text-gray-600 leading-relaxed">
-            {highlightText(
-              jobInfo.description.length > 300
-                ? jobInfo.description.slice(0, 300) + '...'
-                : jobInfo.description,
-              filterText
+          <div>
+            <p className="text-sm text-gray-600 leading-relaxed">
+              {showFullDescription || !hasLongDescription
+                ? highlightText(jobInfo.description, filterText)
+                : highlightText(
+                    jobInfo.description.slice(0, 300) + '...',
+                    filterText
+                  )}
+            </p>
+            {hasLongDescription && (
+              <button
+                type="button"
+                onClick={() => setShowFullDescription(!showFullDescription)}
+                className="text-xs text-indigo-600 hover:text-indigo-700 mt-1 flex items-center gap-1"
+              >
+                {showFullDescription ? (
+                  <>
+                    Show less <ChevronUp className="w-3 h-3" />
+                  </>
+                ) : (
+                  <>
+                    Show more <ChevronDown className="w-3 h-3" />
+                  </>
+                )}
+              </button>
             )}
-          </p>
+          </div>
         )}
 
         {/* Skills */}
         {jobInfo.skills?.length > 0 && (
           <div>
-            <p className="text-xs font-medium text-gray-500 mb-1">Skills</p>
-            <div className="flex flex-wrap gap-1">
-              {jobInfo.skills.slice(0, 8).map((skill, i) => (
+            <p className="text-xs font-medium text-gray-500 mb-2">
+              Skills {hasMoreSkills && `(${jobInfo.skills.length})`}
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {displayedSkills.map((skill, i) => (
                 <span
                   key={i}
-                  className="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded"
+                  className="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-md"
                 >
                   {highlightText(skill.name || skill, filterText)}
                 </span>
               ))}
             </div>
+            {hasMoreSkills && (
+              <button
+                type="button"
+                onClick={() => setShowAllSkills(!showAllSkills)}
+                className="text-xs text-indigo-600 hover:text-indigo-700 mt-2"
+              >
+                {showAllSkills
+                  ? 'Show fewer'
+                  : `+${jobInfo.skills.length - 8} more`}
+              </button>
+            )}
           </div>
         )}
       </div>
 
       {/* Footer */}
-      <div className="p-3 border-t bg-gray-50">
-        <a
-          href={`/jobs/${selectedNode.id}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center justify-center gap-2 text-sm text-indigo-600 hover:text-indigo-700"
+      <div className="p-3 border-t bg-gray-50 flex items-center gap-2">
+        <Button
+          variant={isRead ? 'secondary' : 'default'}
+          size="sm"
+          onClick={() => onMarkAsRead(selectedNode.id)}
+          className="flex-1"
         >
-          View Full Details
-          <ExternalLink className="w-3 h-3" />
-        </a>
+          {isRead ? (
+            <>
+              <Check className="w-4 h-4 mr-1" /> Read
+            </>
+          ) : (
+            'Mark as Read'
+          )}
+        </Button>
+        <Button variant="outline" size="sm" asChild className="flex-1">
+          <a href={hnUrl} target="_blank" rel="noopener noreferrer">
+            Apply on HN
+            <ExternalLink className="w-3 h-3 ml-1" />
+          </a>
+        </Button>
       </div>
     </div>
   );
 }
 
-/**
- * Highlight matching text
- */
 function highlightText(text, filter) {
   if (!text || !filter) return text;
-
   const parts = text.split(new RegExp(`(${escapeRegex(filter)})`, 'gi'));
   return parts.map((part, i) =>
     part.toLowerCase() === filter.toLowerCase() ? (

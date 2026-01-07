@@ -188,6 +188,7 @@ export default function PathwaysGraph() {
           filterText={filterText}
           readJobIds={readJobIds}
           onMarkAsRead={markAsRead}
+          onClose={() => setSelectedNode(null)}
         />
       </div>
     </div>
