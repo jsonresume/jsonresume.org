@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import {
   useNodesState,
   useEdgesState,
@@ -104,6 +104,23 @@ export default function PathwaysGraph() {
     setSelectedNode(node);
   }, []);
 
+  // Clear all filters
+  const handleClearFilters = useCallback(() => {
+    setFilterText('');
+    setRemoteOnly(false);
+    setHideFiltered(false);
+  }, []);
+
+  // Calculate job counts (exclude resume node)
+  const totalJobs = useMemo(
+    () => nodes.filter((n) => !n.data?.isResume).length,
+    [nodes]
+  );
+  const visibleJobCount = useMemo(
+    () => visibleNodes.filter((n) => !n.data?.isResume).length,
+    [visibleNodes]
+  );
+
   // Show loading state
   if (isEmbeddingLoading || (isLoading && nodes.length === 0)) {
     return <PathwaysGraphLoading />;
@@ -129,6 +146,10 @@ export default function PathwaysGraph() {
         setRemoteOnly={setRemoteOnly}
         hideFiltered={hideFiltered}
         setHideFiltered={setHideFiltered}
+        totalJobs={totalJobs}
+        visibleJobs={visibleJobCount}
+        hasActiveFilter={hasActiveFilter}
+        onClearFilters={handleClearFilters}
       />
 
       <div className="flex-1 relative">
