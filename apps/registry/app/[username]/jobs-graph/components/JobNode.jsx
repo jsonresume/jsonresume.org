@@ -1,7 +1,19 @@
 'use client';
 
-import { memo, useState } from 'react';
+import { memo, useState, useEffect } from 'react';
 import { Handle, Position } from '@xyflow/react';
+import {
+  getUserCurrency,
+  detectCurrency,
+  fetchExchangeRates,
+  convertCurrency,
+  formatCurrencyAmount,
+} from '../utils/currencyUtils';
+
+// Global state for exchange rates (shared across all nodes)
+let globalRates = null;
+let globalUserCurrency = null;
+let ratesPromise = null;
 
 /**
  * Extract domain from URL for favicon
@@ -17,30 +29,78 @@ function extractDomain(url) {
 }
 
 /**
- * Format salary for display
+ * Format salary for display with optional currency conversion
  */
-function formatSalary(salary) {
+function formatSalary(salary, rates, userCurrency) {
   if (!salary) return null;
+
+  // Handle structured salary object
+  if (typeof salary === 'object' && salary.min) {
+    const sourceCurrency = salary.currency || 'USD';
+    let min = salary.min;
+    let max = salary.max || salary.min;
+
+    // Convert if we have rates and currencies differ
+    if (rates && userCurrency && sourceCurrency !== userCurrency) {
+      min = convertCurrency(min, sourceCurrency, userCurrency, rates);
+      max = convertCurrency(max, sourceCurrency, userCurrency, rates);
+    }
+
+    const displayCurrency =
+      rates && userCurrency ? userCurrency : sourceCurrency;
+    const symbol =
+      displayCurrency === 'USD'
+        ? '$'
+        : displayCurrency === 'EUR'
+        ? '€'
+        : displayCurrency === 'GBP'
+        ? '£'
+        : '';
+
+    return `${symbol}${Math.round(min / 1000)}k-${symbol}${Math.round(
+      max / 1000
+    )}k`;
+  }
 
   // Handle string salary like "$120,000 - $150,000" or "120k-150k"
   const str = String(salary).toLowerCase();
+  const sourceCurrency = detectCurrency(salary);
 
   // Extract numbers
   const numbers = str.match(/[\d,]+/g);
   if (!numbers || numbers.length === 0) return null;
 
-  const values = numbers.map((n) => parseInt(n.replace(/,/g, ''), 10));
+  let values = numbers.map((n) => parseInt(n.replace(/,/g, ''), 10));
 
   // If values are small (like 120), multiply by 1000 (assume "k" notation)
-  const normalized = values.map((v) => (v < 1000 ? v * 1000 : v));
+  values = values.map((v) => (v < 1000 ? v * 1000 : v));
 
-  if (normalized.length >= 2) {
-    const min = Math.min(...normalized);
-    const max = Math.max(...normalized);
-    return `$${Math.round(min / 1000)}k-$${Math.round(max / 1000)}k`;
+  // Convert if we have rates and currencies differ
+  if (rates && userCurrency && sourceCurrency !== userCurrency) {
+    values = values.map((v) =>
+      convertCurrency(v, sourceCurrency, userCurrency, rates)
+    );
   }
 
-  return `$${Math.round(normalized[0] / 1000)}k`;
+  const displayCurrency = rates && userCurrency ? userCurrency : sourceCurrency;
+  const symbol =
+    displayCurrency === 'USD'
+      ? '$'
+      : displayCurrency === 'EUR'
+      ? '€'
+      : displayCurrency === 'GBP'
+      ? '£'
+      : '';
+
+  if (values.length >= 2) {
+    const min = Math.min(...values);
+    const max = Math.max(...values);
+    return `${symbol}${Math.round(min / 1000)}k-${symbol}${Math.round(
+      max / 1000
+    )}k`;
+  }
+
+  return `${symbol}${Math.round(values[0] / 1000)}k`;
 }
 
 /**
@@ -63,34 +123,26 @@ function getSalaryLevel(salary) {
 
 /**
  * Get solid background color based on salary level (0-1)
- * Scale: slate -> blue -> teal -> yellow -> gold
+ * Scale: light green -> dark green (gray if no salary)
  */
-function getSalaryColor(level) {
+function getSalaryColor(level, hasSalary) {
+  // No salary = gray
+  if (!hasSalary) {
+    return { bg: '#f1f5f9', border: '#e2e8f0' }; // slate-100
+  }
+
+  // Green scale from light to dark
   const colors = [
-    { bg: '#f1f5f9', border: '#e2e8f0' }, // 0.0 - slate-100
-    { bg: '#dbeafe', border: '#bfdbfe' }, // 0.25 - blue-100
-    { bg: '#ccfbf1', border: '#99f6e4' }, // 0.5 - teal-100
-    { bg: '#fef9c3', border: '#fef08a' }, // 0.75 - yellow-100
-    { bg: '#fde68a', border: '#fcd34d' }, // 1.0 - amber-200
+    { bg: '#dcfce7', border: '#bbf7d0' }, // 0.0 - green-100
+    { bg: '#bbf7d0', border: '#86efac' }, // 0.25 - green-200
+    { bg: '#86efac', border: '#4ade80' }, // 0.5 - green-300
+    { bg: '#4ade80', border: '#22c55e' }, // 0.75 - green-400
+    { bg: '#22c55e', border: '#16a34a' }, // 1.0 - green-500
   ];
 
-  const idx = Math.min(
-    Math.floor(level * (colors.length - 1)),
-    colors.length - 2
-  );
-  const t = level * (colors.length - 1) - idx;
-
-  // Simple linear interpolation between two adjacent colors
-  // For solid colors, just pick the nearest
-  return level < 0.125
-    ? colors[0]
-    : level < 0.375
-    ? colors[1]
-    : level < 0.625
-    ? colors[2]
-    : level < 0.875
-    ? colors[3]
-    : colors[4];
+  // Pick the nearest color based on level
+  const idx = Math.min(Math.floor(level * colors.length), colors.length - 1);
+  return colors[idx];
 }
 
 /**
@@ -99,6 +151,29 @@ function getSalaryColor(level) {
 function JobNode({ data, selected }) {
   const { jobInfo, isResume, isRead, showSalaryGradient, salaryLevel } = data;
   const [imgError, setImgError] = useState(false);
+  const [rates, setRates] = useState(globalRates);
+  const [userCurrency, setUserCurrency] = useState(globalUserCurrency);
+
+  // Fetch exchange rates once (shared across all nodes)
+  useEffect(() => {
+    if (globalRates) {
+      setRates(globalRates);
+      setUserCurrency(globalUserCurrency);
+      return;
+    }
+
+    if (!ratesPromise) {
+      globalUserCurrency = getUserCurrency();
+      setUserCurrency(globalUserCurrency);
+
+      ratesPromise = fetchExchangeRates().then((r) => {
+        globalRates = r;
+        return r;
+      });
+    }
+
+    ratesPromise.then((r) => setRates(r));
+  }, []);
 
   // Resume node rendering
   if (isResume) {
@@ -113,7 +188,7 @@ function JobNode({ data, selected }) {
 
   const title = jobInfo?.title || 'Unknown Position';
   const company = jobInfo?.company || 'Unknown Company';
-  const salary = formatSalary(jobInfo?.salary);
+  const salary = formatSalary(jobInfo?.salary, rates, userCurrency);
   const isRemote =
     jobInfo?.remote === true ||
     jobInfo?.remote === 'true' ||
@@ -123,8 +198,11 @@ function JobNode({ data, selected }) {
   const domain = extractDomain(website || `${company.replace(/\s+/g, '')}.com`);
 
   // Calculate background based on salary when gradient mode is enabled
+  const hasSalary = Boolean(salary);
   const level = salaryLevel ?? getSalaryLevel(jobInfo?.salary);
-  const salaryColors = showSalaryGradient ? getSalaryColor(level) : null;
+  const salaryColors = showSalaryGradient
+    ? getSalaryColor(level, hasSalary)
+    : null;
 
   return (
     <div

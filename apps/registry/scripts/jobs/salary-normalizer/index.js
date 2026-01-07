@@ -331,21 +331,67 @@ function extractNumbers(str) {
     /[+,]\s*\$?\s*[\d,.]+[kK]?\s*(equity|stock|options|rsus?)\b/gi,
     ''
   );
-  // Pattern 2: Remove standalone equity/stock mentions like "+ equity", ", stock options", "+ benefits"
+  // Pattern 2: Remove "$50k+ equity" (number immediately followed by +, then equity - no text between)
+  cleaned = cleaned.replace(
+    /\$?\s*[\d,.]+[kK]?\+\s*(equity|stock|options|rsus?)\b/gi,
+    ''
+  );
+  // Pattern 3: Remove standalone equity/stock mentions like "+ equity", ", stock options", "+ benefits"
   cleaned = cleaned.replace(
     /[+,]\s*(equity|stock|options|rsus?|benefits?|bonus)\b[^,]*/gi,
     ''
   );
-  // Pattern 3: Remove percentage mentions like "20% bonus"
+  // Pattern 4: Remove percentage mentions like "20% bonus"
   cleaned = cleaned.replace(/\d+\s*%[^,]*/gi, '');
   // Now remove remaining + signs (after equity patterns processed)
   cleaned = cleaned.replace(/\+/g, '');
 
-  // Handle LPA (Lakhs Per Annum)
+  // Handle Indian Lakh notation (L, LPA, Lakhs)
+  // LPA = Lakhs Per Annum, L = Lakhs
+
+  // Handle "X-Y LPA" range notation
+  const lpaRangeMatch = cleaned.match(
+    /(\d+(?:\.\d+)?)\s*[-–—]\s*(\d+(?:\.\d+)?)\s*LPA/i
+  );
+  if (lpaRangeMatch) {
+    const min = parseFloat(lpaRangeMatch[1]) * 100000;
+    const max = parseFloat(lpaRangeMatch[2]) * 100000;
+    return { min, max };
+  }
+
+  // Handle single LPA
   const lpaMatch = cleaned.match(/(\d+(?:\.\d+)?)\s*LPA/i);
   if (lpaMatch) {
     const lakhs = parseFloat(lpaMatch[1]);
     const amount = lakhs * 100000; // Convert lakhs to actual number
+    return { min: amount, max: amount };
+  }
+
+  // Handle "XL-YL" or "X-YL" or "X L - Y Lakhs" notation (ranges)
+  // Pattern 1: Both have L suffix (₹19L-30L)
+  const lakhRangeBothMatch = cleaned.match(
+    /(\d+(?:\.\d+)?)\s*(?:L|Lakhs?)\s*[-–—]\s*(\d+(?:\.\d+)?)\s*(?:L|Lakhs?)\b/i
+  );
+  if (lakhRangeBothMatch) {
+    const min = parseFloat(lakhRangeBothMatch[1]) * 100000;
+    const max = parseFloat(lakhRangeBothMatch[2]) * 100000;
+    return { min, max };
+  }
+
+  // Pattern 2: Only second has L suffix (35-80L)
+  const lakhRangeMatch = cleaned.match(
+    /(\d+(?:\.\d+)?)\s*[-–—]\s*(\d+(?:\.\d+)?)\s*(?:L|Lakhs?)\b/i
+  );
+  if (lakhRangeMatch) {
+    const min = parseFloat(lakhRangeMatch[1]) * 100000;
+    const max = parseFloat(lakhRangeMatch[2]) * 100000;
+    return { min, max };
+  }
+
+  // Handle single "XL" notation
+  const lakhSingleMatch = cleaned.match(/(\d+(?:\.\d+)?)\s*(?:L|Lakhs?)\b/i);
+  if (lakhSingleMatch) {
+    const amount = parseFloat(lakhSingleMatch[1]) * 100000;
     return { min: amount, max: amount };
   }
 
