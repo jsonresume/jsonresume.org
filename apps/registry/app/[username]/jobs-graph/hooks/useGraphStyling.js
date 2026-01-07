@@ -1,9 +1,26 @@
 import { useMemo } from 'react';
-import {
-  getNodeBackground,
-  getEdgeStyle,
-  needsLightText,
-} from '../utils/colorUtils';
+import { getEdgeStyle } from '../utils/colorUtils';
+
+/**
+ * Calculate salary level (0-1) for gradient coloring
+ */
+function getSalaryLevel(salary, salaryRange) {
+  if (!salary || !salaryRange) return 0.5;
+
+  const str = String(salary).toLowerCase();
+  const numbers = str.match(/[\d,]+/g);
+  if (!numbers) return 0.5;
+
+  const values = numbers.map((n) => parseInt(n.replace(/,/g, ''), 10));
+  const normalized = values.map((v) => (v < 1000 ? v * 1000 : v));
+  const avg = normalized.reduce((a, b) => a + b, 0) / normalized.length;
+
+  // Use salaryRange if available, otherwise use defaults
+  const min = salaryRange?.min || 50000;
+  const max = salaryRange?.max || 300000;
+
+  return Math.min(1, Math.max(0, (avg - min) / (max - min)));
+}
 
 export function useGraphStyling({
   nodes,
@@ -34,29 +51,23 @@ export function useGraphStyling({
           !node.data.isResume &&
           !filteredNodes.has(node.id);
 
-        const background = getNodeBackground({
-          node,
-          jobData: jobInfo[node.id],
-          username,
-          readJobs,
-          showSalaryGradient,
-          salaryRange,
-          filterText: hasActiveFilter && !hideFiltered ? 'active' : '', // Only signal filter when not hiding
-          filteredNodes,
-        });
-
-        // Add light-text class if background is dark
-        const existingClass = node.className || '';
-        const lightTextClass = needsLightText(background) ? 'light-text' : '';
-        const className = `${existingClass} ${lightTextClass}`.trim();
+        const jobData = jobInfo[node.id];
+        const isRead = readJobs?.has(`${username}_${node.id}`);
+        const salaryLevel = getSalaryLevel(jobData?.salary, salaryRange);
 
         return {
           ...node,
-          className,
+          type: 'jobNode', // Use custom node type
+          data: {
+            ...node.data,
+            jobInfo: jobData,
+            isRead,
+            showSalaryGradient,
+            salaryLevel,
+          },
           style: {
             ...node.style,
             opacity: shouldDim ? 0.2 : 1,
-            background,
           },
         };
       }),

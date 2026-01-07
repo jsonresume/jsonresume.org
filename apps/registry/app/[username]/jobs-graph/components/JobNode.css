@@ -1,0 +1,251 @@
+/* Custom Job Node Styles */
+
+.job-node-custom {
+  width: 180px;
+  min-height: 80px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: linear-gradient(
+    135deg,
+    hsl(calc(200 + var(--salary-level, 0.5) * 60), 70%, 97%) 0%,
+    hsl(calc(200 + var(--salary-level, 0.5) * 60), 60%, 92%) 100%
+  );
+  border: 1.5px solid hsl(calc(200 + var(--salary-level, 0.5) * 60), 40%, 85%);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.06),
+    0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.job-node-custom:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.12),
+    0 4px 8px rgba(0, 0, 0, 0.08);
+  border-color: hsl(calc(200 + var(--salary-level, 0.5) * 60), 50%, 70%);
+}
+
+.job-node-custom.selected {
+  border-color: #3b82f6;
+  box-shadow:
+    0 0 0 2px rgba(59, 130, 246, 0.2),
+    0 8px 24px rgba(59, 130, 246, 0.15);
+}
+
+.job-node-custom.read {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-color: #e2e8f0;
+  opacity: 0.75;
+}
+
+.job-node-custom.read:hover {
+  opacity: 1;
+}
+
+/* Node Header */
+.job-node-custom .node-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.job-node-custom .favicon-wrapper {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.job-node-custom .favicon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+.job-node-custom .favicon-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+}
+
+.job-node-custom .company-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.job-node-custom .company-name {
+  font-size: 10px;
+  font-weight: 600;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.job-node-custom .remote-badge {
+  flex-shrink: 0;
+  font-size: 8px;
+  font-weight: 600;
+  color: #059669;
+  background: #d1fae5;
+  padding: 2px 5px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+/* Job Title */
+.job-node-custom .job-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1e293b;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Node Footer */
+.job-node-custom .node-footer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+}
+
+.job-node-custom .salary-badge {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #0369a1;
+  background: rgba(14, 165, 233, 0.1);
+  padding: 3px 6px;
+  border-radius: 4px;
+}
+
+.job-node-custom .salary-icon {
+  font-size: 9px;
+}
+
+.job-node-custom .type-badge {
+  font-size: 9px;
+  font-weight: 500;
+  color: #6b7280;
+  background: rgba(107, 114, 128, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* Resume Node */
+.resume-node-custom {
+  width: 120px;
+  height: 60px;
+  padding: 10px 16px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow:
+    0 4px 20px rgba(99, 102, 241, 0.4),
+    0 2px 8px rgba(99, 102, 241, 0.2),
+    inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.resume-node-custom:hover {
+  transform: scale(1.05);
+  box-shadow:
+    0 8px 32px rgba(99, 102, 241, 0.5),
+    0 4px 12px rgba(99, 102, 241, 0.3),
+    inset 0 1px 1px rgba(255, 255, 255, 0.3);
+}
+
+.resume-node-custom .resume-icon {
+  font-size: 18px;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+.resume-node-custom .resume-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  letter-spacing: 0.5px;
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow:
+      0 4px 20px rgba(99, 102, 241, 0.4),
+      0 2px 8px rgba(99, 102, 241, 0.2),
+      inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    box-shadow:
+      0 4px 30px rgba(99, 102, 241, 0.6),
+      0 2px 12px rgba(99, 102, 241, 0.3),
+      inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  }
+}
+
+/* Handle Styles */
+.job-node-custom .react-flow__handle,
+.resume-node-custom .react-flow__handle {
+  width: 8px;
+  height: 8px;
+  background: #94a3b8;
+  border: 2px solid white;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.job-node-custom:hover .react-flow__handle,
+.resume-node-custom:hover .react-flow__handle {
+  opacity: 1;
+}
+
+/* High Salary Variant */
+.job-node-custom[style*='--salary-level: 0.8'],
+.job-node-custom[style*='--salary-level: 0.9'],
+.job-node-custom[style*='--salary-level: 1'] {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-color: #f59e0b;
+}
+
+.job-node-custom[style*='--salary-level: 0.8'] .salary-badge,
+.job-node-custom[style*='--salary-level: 0.9'] .salary-badge,
+.job-node-custom[style*='--salary-level: 1'] .salary-badge {
+  color: #b45309;
+  background: rgba(245, 158, 11, 0.2);
+}

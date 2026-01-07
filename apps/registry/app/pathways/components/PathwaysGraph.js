@@ -20,9 +20,17 @@ import { useGraphFiltering } from '@/app/[username]/jobs-graph/hooks/useGraphFil
 import { useGraphStyling } from '@/app/[username]/jobs-graph/hooks/useGraphStyling';
 import { useKeyboardNavigation } from '@/app/[username]/jobs-graph/hooks/useKeyboardNavigation';
 
+import JobNode from '@/app/[username]/jobs-graph/components/JobNode';
+import '@/app/[username]/jobs-graph/components/JobNode.css';
+
 import { PathwaysGraphControls } from './graph/PathwaysGraphControls';
 import { PathwaysJobPanel } from './graph/PathwaysJobPanel';
 import { PathwaysGraphLoading } from './graph/PathwaysGraphLoading';
+
+// Custom node types for React Flow
+const nodeTypes = {
+  jobNode: JobNode,
+};
 
 export default function PathwaysGraph() {
   const {
@@ -199,6 +207,7 @@ export default function PathwaysGraph() {
         <ReactFlow
           nodes={nodesWithStyle}
           edges={edgesWithStyle}
+          nodeTypes={nodeTypes}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onNodeClick={handleNodeClick}
