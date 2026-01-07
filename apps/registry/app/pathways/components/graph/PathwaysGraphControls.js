@@ -136,32 +136,20 @@ export function PathwaysGraphControls({
         </div>
       </div>
 
-      {/* Salary histogram panel */}
-      <div
-        className={`
-          overflow-hidden transition-all duration-300 ease-out
-          ${showSalaryGradient ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'}
-        `}
-      >
-        <div className="px-4 py-4 bg-gradient-to-b from-slate-50 to-white border-t border-slate-100">
+      {/* Salary histogram panel - compact, full width */}
+      {showSalaryGradient && (
+        <div className="px-4 py-2 bg-slate-50/80 border-t border-slate-100">
           {hasSalaryData ? (
-            <div className="max-w-lg">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-medium text-slate-500 uppercase tracking-wide">
-                  Salary Distribution
-                </span>
-                <span className="text-xs text-slate-400">Drag to filter</span>
-              </div>
-              <SalaryHistogramSlider
-                min={salaryRange.min}
-                max={salaryRange.max}
-                p5={salaryRange.p5}
-                p95={salaryRange.p95}
-                histogram={salaryRange.histogram}
-                value={salaryRange.filterRange}
-                onChange={salaryRange.setFilterRange}
-              />
-            </div>
+            <SalaryHistogramSlider
+              min={salaryRange.min}
+              max={salaryRange.max}
+              p5={salaryRange.p5}
+              p95={salaryRange.p95}
+              histogram={salaryRange.histogram}
+              value={salaryRange.filterRange}
+              onChange={salaryRange.setFilterRange}
+              compact
+            />
           ) : (
             <div className="flex items-center gap-2 text-sm text-slate-400">
               <DollarSign className="w-4 h-4" />
@@ -169,7 +157,7 @@ export function PathwaysGraphControls({
             </div>
           )}
         </div>
-      </div>
+      )}
     </div>
   );
 }
