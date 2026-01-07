@@ -119,9 +119,10 @@ function normalizeSalary(salary, rates) {
   const avgAmount = min !== null && max !== null ? (min + max) / 2 : min || max;
   const period = inferPeriodFromAmount(avgAmount, explicitPeriod, str);
 
-  // Annualize if needed
-  const annualMin = min !== null ? annualize(min, period) : null;
-  const annualMax = max !== null ? annualize(max, period) : null;
+  // Annualize if needed - but use smart per-number logic for mixed cases
+  // Large numbers (>= 15000) are likely already annual regardless of detected period
+  const annualMin = min !== null ? smartAnnualize(min, period) : null;
+  const annualMax = max !== null ? smartAnnualize(max, period) : null;
 
   // Calculate average
   let amount;
@@ -489,6 +490,30 @@ function annualize(amount, period) {
     default:
       return amount;
   }
+}
+
+/**
+ * Smart annualize that handles mixed-unit cases
+ * Large numbers (>= 15000) are likely already annual even if period is hourly/daily
+ * This handles cases like "$55/hr - $250k base" where 250k shouldn't be multiplied
+ */
+function smartAnnualize(amount, period) {
+  // Thresholds for what's reasonable for each period
+  const thresholds = {
+    hour: 500, // Max reasonable hourly rate
+    day: 2500, // Max reasonable daily rate
+    week: 10000, // Max reasonable weekly rate
+    month: 50000, // Max reasonable monthly rate
+  };
+
+  // If the amount exceeds the reasonable threshold for this period,
+  // assume it's already an annual figure
+  const threshold = thresholds[period];
+  if (threshold && amount >= threshold) {
+    return amount; // Already annual
+  }
+
+  return annualize(amount, period);
 }
 
 /**
