@@ -13,10 +13,10 @@ export const getLayoutedElements = (nodes, edges, direction = 'TB') => {
 
   dagreGraph.setGraph({
     rankdir: direction,
-    align: 'DL',
-    nodesep: 40,
-    ranksep: 120,
-    edgesep: 20,
+    align: 'UL',
+    nodesep: 30,
+    ranksep: 80,
+    edgesep: 15,
     marginx: 20,
     marginy: 20,
     acyclicer: 'greedy',
@@ -25,8 +25,8 @@ export const getLayoutedElements = (nodes, edges, direction = 'TB') => {
 
   nodes.forEach((node) => {
     dagreGraph.setNode(node.id, {
-      width: node.data.isResume ? 200 : 250,
-      height: node.data.isResume ? 100 : 150,
+      width: node.data.isResume ? 120 : 180,
+      height: node.data.isResume ? 60 : 80,
     });
   });
 
@@ -41,8 +41,8 @@ export const getLayoutedElements = (nodes, edges, direction = 'TB') => {
     return {
       ...node,
       position: {
-        x: nodeWithPosition.x - (node.data.isResume ? 100 : 125),
-        y: nodeWithPosition.y - (node.data.isResume ? 50 : 75),
+        x: nodeWithPosition.x - (node.data.isResume ? 60 : 90),
+        y: nodeWithPosition.y - (node.data.isResume ? 30 : 40),
       },
     };
   });
