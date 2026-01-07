@@ -125,8 +125,24 @@ export default function PathwaysGraph() {
     [visibleNodes]
   );
 
+  // Debug logging
+  console.log('[PathwaysGraph] Render state:', {
+    isEmbeddingLoading,
+    embeddingStage,
+    isLoading,
+    loadingStage,
+    nodesCount: nodes.length,
+    hasEmbedding: !!embedding,
+  });
+
   // Show loading state
   if (isEmbeddingLoading || (isLoading && nodes.length === 0)) {
+    console.log('[PathwaysGraph] Showing loading screen', {
+      isEmbeddingLoading,
+      embeddingStage,
+      isLoading,
+      loadingStage,
+    });
     return (
       <PathwaysGraphLoading
         isEmbeddingLoading={isEmbeddingLoading}
@@ -139,12 +155,15 @@ export default function PathwaysGraph() {
 
   // Show empty state if no embedding
   if (!embedding) {
+    console.log('[PathwaysGraph] Showing empty state (no embedding)');
     return (
       <div className="flex items-center justify-center h-full text-gray-500">
         <p>Loading resume embedding...</p>
       </div>
     );
   }
+
+  console.log('[PathwaysGraph] Showing graph');
 
   return (
     <div className="h-full flex flex-col">

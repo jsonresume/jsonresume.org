@@ -41,7 +41,13 @@ export function usePathwaysJobData({
 
   const fetchJobs = useCallback(
     async (forceRefresh = false) => {
+      console.log('[Graph] fetchJobs called', {
+        forceRefresh,
+        hasEmbedding: !!embedding,
+        embeddingLength: embedding?.length,
+      });
       if (!embedding || !Array.isArray(embedding) || embedding.length === 0) {
+        console.log('[Graph] No embedding, skipping fetch');
         return;
       }
 
@@ -49,18 +55,26 @@ export function usePathwaysJobData({
       setError(null);
       setLoadingStage(LOADING_STAGES.CHECKING_CACHE);
       setLoadingDetails({ message: 'Checking cached data...' });
+      console.log('[Graph] Stage: CHECKING_CACHE');
 
       const resumeHash = hashResume(resume);
+      console.log('[Graph] Resume hash:', resumeHash);
 
       // Check cache unless force refresh requested
       if (!forceRefresh) {
+        console.log('[Graph] Checking IndexedDB cache...');
         const cached = await getCachedGraphData(resumeHash);
+        console.log(
+          '[Graph] Cache result:',
+          cached ? `Found (${cached.allJobs?.length} jobs)` : 'Miss'
+        );
         if (cached) {
           setLoadingStage(LOADING_STAGES.CACHE_HIT);
           setLoadingDetails({
             message: 'Loading from cache...',
             jobCount: cached.allJobs?.length || 0,
           });
+          console.log('[Graph] Stage: CACHE_HIT');
 
           // Small delay so user sees the cache hit message
           await new Promise((resolve) => setTimeout(resolve, 300));
@@ -72,12 +86,17 @@ export function usePathwaysJobData({
             cached.graphData,
             cached.jobInfoMap
           );
+          console.log('[Graph] Loaded from cache:', {
+            nodes: rfNodes.length,
+            edges: rfEdges.length,
+          });
           setNodes(rfNodes);
           setEdges(rfEdges);
 
           lastResumeHashRef.current = resumeHash;
           setLoadingStage(LOADING_STAGES.COMPLETE);
           setIsLoading(false);
+          console.log('[Graph] Stage: COMPLETE (from cache)');
           return;
         }
       }
@@ -88,6 +107,7 @@ export function usePathwaysJobData({
           message: 'Finding matching jobs...',
           embeddingSize: embedding.length,
         });
+        console.log('[Graph] Stage: FETCHING_JOBS (calling API)');
 
         const response = await fetch('/api/pathways/jobs', {
           method: 'POST',
@@ -100,6 +120,10 @@ export function usePathwaysJobData({
         }
 
         const { graphData, jobInfoMap, allJobs } = await response.json();
+        console.log('[Graph] API response:', {
+          jobs: allJobs?.length,
+          nodes: graphData?.nodes?.length,
+        });
 
         setLoadingStage(LOADING_STAGES.BUILDING_GRAPH);
         setLoadingDetails({
@@ -108,6 +132,7 @@ export function usePathwaysJobData({
           nodeCount: graphData?.nodes?.length || 0,
           edgeCount: graphData?.links?.length || 0,
         });
+        console.log('[Graph] Stage: BUILDING_GRAPH');
 
         // Cache the data
         await setCachedGraphData(resumeHash, {
@@ -115,6 +140,7 @@ export function usePathwaysJobData({
           jobInfoMap,
           allJobs,
         });
+        console.log('[Graph] Cached to IndexedDB');
         lastResumeHashRef.current = resumeHash;
 
         setJobs(allJobs);
@@ -124,16 +150,23 @@ export function usePathwaysJobData({
           graphData,
           jobInfoMap
         );
+        console.log('[Graph] Built graph:', {
+          nodes: rfNodes.length,
+          edges: rfEdges.length,
+        });
         setNodes(rfNodes);
         setEdges(rfEdges);
 
         setLoadingStage(LOADING_STAGES.COMPLETE);
+        console.log('[Graph] Stage: COMPLETE (from API)');
       } catch (err) {
+        console.error('[Graph] Error:', err);
         logger.error({ error: err.message }, 'Error fetching pathways jobs');
         setError(err.message);
         pathwaysToast.jobsFetchError();
       } finally {
         setIsLoading(false);
+        console.log('[Graph] isLoading set to false');
       }
     },
     [embedding, resume, setNodes, setEdges]
@@ -142,10 +175,17 @@ export function usePathwaysJobData({
   // Detect resume changes and invalidate cache
   useEffect(() => {
     const currentHash = hashResume(resume);
+    console.log('[Graph] Resume change check:', {
+      currentHash,
+      lastHash: lastResumeHashRef.current,
+      changed:
+        lastResumeHashRef.current && currentHash !== lastResumeHashRef.current,
+    });
     if (
       lastResumeHashRef.current &&
       currentHash !== lastResumeHashRef.current
     ) {
+      console.log('[Graph] Resume changed, forcing refresh');
       // Resume changed - force refresh
       fetchJobs(true);
     }
@@ -153,6 +193,10 @@ export function usePathwaysJobData({
 
   // Initial fetch when embedding becomes available or graphVersion changes
   useEffect(() => {
+    console.log('[Graph] useEffect triggered', {
+      graphVersion,
+      hasEmbedding: !!embedding,
+    });
     fetchJobs();
   }, [fetchJobs, graphVersion]);
 

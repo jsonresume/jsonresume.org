@@ -110,29 +110,43 @@ export function PathwaysProvider({ children }) {
 
   const refreshEmbedding = useCallback(
     async (forceRefresh = false) => {
+      console.log('[Embedding] refreshEmbedding called', {
+        forceRefresh,
+        hasResume: !!resume,
+      });
       if (!resume) return null;
 
       const resumeHash = hashResume(resume);
+      console.log('[Embedding] Resume hash:', resumeHash);
       setIsEmbeddingLoading(true);
       setEmbeddingStage(EMBEDDING_STAGES.CHECKING_CACHE);
+      console.log('[Embedding] Stage: CHECKING_CACHE');
 
       // Check cache first unless force refresh
       if (!forceRefresh) {
+        console.log('[Embedding] Checking IndexedDB cache...');
         const cached = await getCachedEmbedding(resumeHash);
+        console.log(
+          '[Embedding] Cache result:',
+          cached ? `Found (${cached.length} dimensions)` : 'Miss'
+        );
         if (cached) {
           setEmbeddingStage(EMBEDDING_STAGES.CACHE_HIT);
+          console.log('[Embedding] Stage: CACHE_HIT');
           // Small delay so user sees cache hit
           await new Promise((resolve) => setTimeout(resolve, 200));
           setEmbedding(cached);
           lastResumeHashRef.current = resumeHash;
           setEmbeddingStage(EMBEDDING_STAGES.COMPLETE);
           setIsEmbeddingLoading(false);
+          console.log('[Embedding] Stage: COMPLETE (from cache)');
           setGraphVersion((v) => v + 1);
           return cached;
         }
       }
 
       setEmbeddingStage(EMBEDDING_STAGES.GENERATING);
+      console.log('[Embedding] Stage: GENERATING (fetching from API)');
 
       try {
         const response = await fetch('/api/pathways/embedding', {
@@ -146,21 +160,29 @@ export function PathwaysProvider({ children }) {
         }
 
         const data = await response.json();
+        console.log(
+          '[Embedding] API response received, dimensions:',
+          data.embedding?.length
+        );
 
         // Cache the embedding
         await setCachedEmbedding(resumeHash, data.embedding);
+        console.log('[Embedding] Cached to IndexedDB');
         lastResumeHashRef.current = resumeHash;
 
         setEmbedding(data.embedding);
         setEmbeddingStage(EMBEDDING_STAGES.COMPLETE);
+        console.log('[Embedding] Stage: COMPLETE (from API)');
         setGraphVersion((v) => v + 1);
         return data.embedding;
       } catch (error) {
+        console.error('[Embedding] Error:', error);
         pathwaysToast.embeddingError();
         setEmbeddingStage(EMBEDDING_STAGES.IDLE);
         return null;
       } finally {
         setIsEmbeddingLoading(false);
+        console.log('[Embedding] isEmbeddingLoading set to false');
       }
     },
     [resume]
@@ -208,7 +230,13 @@ export function PathwaysProvider({ children }) {
 
   // Generate initial embedding when resume is set
   useEffect(() => {
+    console.log('[PathwaysContext] Embedding effect:', {
+      hasResume: !!resume,
+      hasEmbedding: !!embedding,
+      isEmbeddingLoading,
+    });
     if (resume && !embedding && !isEmbeddingLoading) {
+      console.log('[PathwaysContext] Triggering refreshEmbedding');
       refreshEmbedding();
     }
   }, [resume, embedding, isEmbeddingLoading, refreshEmbedding]);
