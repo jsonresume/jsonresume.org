@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { logger } from '@/lib/logger';
 import { convertToReactFlowFormat } from '@/app/[username]/jobs-graph/utils/graphConverter';
+import pathwaysToast from '../utils/toastMessages';
 
 /**
  * Hook to fetch and manage job data for Pathways graph
@@ -50,6 +51,7 @@ export function usePathwaysJobData({
     } catch (err) {
       logger.error({ error: err.message }, 'Error fetching pathways jobs');
       setError(err.message);
+      pathwaysToast.jobsFetchError();
     } finally {
       setIsLoading(false);
     }

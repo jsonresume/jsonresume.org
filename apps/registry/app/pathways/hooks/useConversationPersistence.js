@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useEffect, useRef } from 'react';
+import pathwaysToast from '../utils/toastMessages';
 
 const SAVE_DEBOUNCE_MS = 2000;
 
@@ -39,7 +40,7 @@ export default function useConversationPersistence({
           setInitialMessages(conversation.messages);
         }
       } catch (error) {
-        console.error('Failed to load conversation:', error);
+        pathwaysToast.conversationLoadError();
       } finally {
         setIsLoading(false);
       }
@@ -82,7 +83,7 @@ export default function useConversationPersistence({
             lastSavedRef.current = messagesJson;
           }
         } catch (error) {
-          console.error('Failed to save conversation:', error);
+          pathwaysToast.conversationSaveError();
         } finally {
           setIsSaving(false);
         }
@@ -109,8 +110,9 @@ export default function useConversationPersistence({
 
       lastSavedRef.current = null;
       setInitialMessages(null);
+      pathwaysToast.conversationCleared();
     } catch (error) {
-      console.error('Failed to clear conversation:', error);
+      pathwaysToast.apiError('Failed to clear conversation');
     }
   }, [sessionId, userId]);
 

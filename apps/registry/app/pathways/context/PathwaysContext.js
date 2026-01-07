@@ -15,6 +15,7 @@ import {
   getLocalJobStates,
   clearLocalJobStates,
 } from './sessionUtils';
+import pathwaysToast from '../utils/toastMessages';
 
 const PathwaysContext = createContext(null);
 
@@ -78,7 +79,7 @@ export function PathwaysProvider({
       setGraphVersion((v) => v + 1);
       return data.embedding;
     } catch (error) {
-      console.error('Failed to refresh embedding:', error);
+      pathwaysToast.embeddingError();
       return null;
     } finally {
       setIsEmbeddingLoading(false);

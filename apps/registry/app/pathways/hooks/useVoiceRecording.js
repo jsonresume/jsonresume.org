@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback } from 'react';
 import { convertToWav, getAudioExtension } from './audioUtils';
+import pathwaysToast from '../utils/toastMessages';
 
 export default function useVoiceRecording(onTranscriptionComplete) {
   const [isRecording, setIsRecording] = useState(false);
@@ -38,7 +39,7 @@ export default function useVoiceRecording(onTranscriptionComplete) {
           onTranscriptionComplete(text);
         }
       } catch (error) {
-        alert(`Failed to transcribe audio: ${error.message}`);
+        pathwaysToast.transcriptionError(error.message);
       } finally {
         setIsTranscribing(false);
       }
@@ -89,7 +90,7 @@ export default function useVoiceRecording(onTranscriptionComplete) {
         mediaRecorder.start();
         setIsRecording(true);
       } catch {
-        alert('Could not access microphone. Please check permissions.');
+        pathwaysToast.microphonePermission();
       }
     },
     [transcribeAudio]

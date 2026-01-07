@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
+import pathwaysToast from '../utils/toastMessages';
 
 export default function useSpeech() {
   const [isSpeechEnabled, setIsSpeechEnabled] = useState(false);
@@ -78,7 +79,7 @@ export default function useSpeech() {
         audio.src = audioUrl;
         audioRef.current = audio;
       } catch (error) {
-        console.error('Speech generation error:', error);
+        pathwaysToast.speechError();
       } finally {
         setIsGeneratingSpeech(false);
       }
