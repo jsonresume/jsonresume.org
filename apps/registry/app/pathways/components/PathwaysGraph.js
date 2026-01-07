@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import {
   useNodesState,
   useEdgesState,
@@ -13,6 +13,7 @@ import '@xyflow/react/dist/style.css';
 
 import { usePathways } from '../context/PathwaysContext';
 import { usePathwaysJobData } from '../hooks/usePathwaysJobData';
+import { usePathwaysPreferences } from '../hooks/usePathwaysPreferences';
 import { useJobFiltering } from '@/app/[username]/jobs-graph/hooks/useJobFiltering';
 import { useSalaryRange } from '@/app/[username]/jobs-graph/hooks/useSalaryRange';
 import { usePathFinding } from '@/app/[username]/jobs-graph/hooks/usePathFinding';
@@ -48,7 +49,15 @@ export default function PathwaysGraph() {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
-  // UI state
+  // Load user preferences
+  const {
+    preferences,
+    isLoading: prefsLoading,
+    savePreferences,
+  } = usePathwaysPreferences();
+  const initializedRef = useRef(false);
+
+  // UI state - initialized from preferences
   const [selectedNode, setSelectedNode] = useState(null);
   const [filterText, setFilterText] = useState('');
   const [showSalaryGradient, setShowSalaryGradient] = useState(false);
@@ -56,6 +65,22 @@ export default function PathwaysGraph() {
   const [hideFiltered, setHideFiltered] = useState(false);
   const [timeRange, setTimeRange] = useState('all');
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
+  const [initialViewport, setInitialViewport] = useState(null);
+
+  // Initialize state from preferences once loaded
+  useEffect(() => {
+    if (preferences && !initializedRef.current) {
+      initializedRef.current = true;
+      setFilterText(preferences.filterText || '');
+      setShowSalaryGradient(preferences.showSalaryGradient || false);
+      setRemoteOnly(preferences.remoteOnly || false);
+      setHideFiltered(preferences.hideFiltered || false);
+      setTimeRange(preferences.timeRange || 'all');
+      if (preferences.viewport) {
+        setInitialViewport(preferences.viewport);
+      }
+    }
+  }, [preferences]);
 
   // Fetch jobs data using the cached embedding
   const { jobInfo, isLoading, loadingStage, loadingDetails } =
@@ -149,6 +174,34 @@ export default function PathwaysGraph() {
     setTimeRange('all');
   }, []);
 
+  // Save preferences when filters change
+  useEffect(() => {
+    if (!initializedRef.current) return;
+    savePreferences({
+      filterText,
+      showSalaryGradient,
+      remoteOnly,
+      hideFiltered,
+      timeRange,
+    });
+  }, [
+    filterText,
+    showSalaryGradient,
+    remoteOnly,
+    hideFiltered,
+    timeRange,
+    savePreferences,
+  ]);
+
+  // Save viewport on move/zoom end
+  const handleMoveEnd = useCallback(
+    (_, viewport) => {
+      if (!initializedRef.current) return;
+      savePreferences({ viewport });
+    },
+    [savePreferences]
+  );
+
   // Calculate job counts (exclude resume node)
   const totalJobs = useMemo(
     () => nodes.filter((n) => !n.data?.isResume).length,
@@ -240,22 +293,28 @@ export default function PathwaysGraph() {
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onNodeClick={handleNodeClick}
+          onMoveEnd={handleMoveEnd}
           fitView={false}
           minZoom={0.05}
           maxZoom={4}
-          defaultZoom={1.2}
+          defaultViewport={initialViewport || { x: 0, y: 0, zoom: 1.2 }}
           onInit={(instance) => {
             setReactFlowInstance(instance);
-            setTimeout(() => {
-              const resumeNode = nodes.find((node) => node.data?.isResume);
-              if (resumeNode) {
-                instance.setCenter(
-                  resumeNode.position.x,
-                  resumeNode.position.y,
-                  { zoom: 1.2, duration: 800 }
-                );
-              }
-            }, 100);
+            // If we have saved viewport, use it; otherwise center on resume
+            if (initialViewport) {
+              instance.setViewport(initialViewport, { duration: 0 });
+            } else {
+              setTimeout(() => {
+                const resumeNode = nodes.find((node) => node.data?.isResume);
+                if (resumeNode) {
+                  instance.setCenter(
+                    resumeNode.position.x,
+                    resumeNode.position.y,
+                    { zoom: 1.2, duration: 800 }
+                  );
+                }
+              }, 100);
+            }
           }}
           proOptions={{ hideAttribution: true }}
         >
