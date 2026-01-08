@@ -6,10 +6,11 @@ import { cosineSimilarity } from '@/app/utils/vectorUtils';
 const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
 
 // Time range configurations (days) - matches frontend
+// Original default was 65 days, so 1m should be at least that
 const TIME_RANGE_DAYS = {
-  '1m': 35,
-  '2m': 70,
-  '3m': 100,
+  '1m': 65,
+  '2m': 95,
+  '3m': 125,
 };
 
 /**

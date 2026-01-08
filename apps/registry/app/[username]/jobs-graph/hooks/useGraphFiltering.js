@@ -4,10 +4,11 @@ import { getLayoutedElements } from '../utils/graphLayout';
 import { getJobSalary } from '../utils/salaryParser';
 
 // Time range configurations (days)
+// Original default was 65 days, so 1m should be at least that
 const TIME_RANGE_DAYS = {
-  '1m': 35,
-  '2m': 70,
-  '3m': 100,
+  '1m': 65,
+  '2m': 95,
+  '3m': 125,
 };
 
 /**
