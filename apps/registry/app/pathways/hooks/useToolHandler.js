@@ -265,6 +265,9 @@ function findMatchingJobs(criteria, jobs, jobInfo) {
           matches = false;
         if (criteria.salaryMax && salary > criteria.salaryMax * 1000)
           matches = false;
+      } else {
+        // No salary data - don't match salary-based filters
+        matches = false;
       }
     }
 
