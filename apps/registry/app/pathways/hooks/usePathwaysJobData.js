@@ -37,8 +37,10 @@ export function usePathwaysJobData({
   const [loadingStage, setLoadingStage] = useState(null);
   const [loadingDetails, setLoadingDetails] = useState({});
 
-  // Track the last resume hash to detect changes
-  const lastResumeHashRef = useRef(null);
+  // Track the last cache key to detect changes
+  const lastCacheKeyRef = useRef(null);
+  // Prevent concurrent fetches
+  const isFetchingRef = useRef(false);
 
   const fetchJobs = useCallback(
     async (forceRefresh = false) => {
@@ -46,11 +48,19 @@ export function usePathwaysJobData({
         forceRefresh,
         hasEmbedding: !!embedding,
         embeddingLength: embedding?.length,
+        isFetching: isFetchingRef.current,
       });
       if (!embedding || !Array.isArray(embedding) || embedding.length === 0) {
         console.log('[Graph] No embedding, skipping fetch');
         return;
       }
+
+      // Prevent concurrent fetches
+      if (isFetchingRef.current) {
+        console.log('[Graph] Fetch already in progress, skipping');
+        return;
+      }
+      isFetchingRef.current = true;
 
       setIsLoading(true);
       setError(null);
@@ -95,9 +105,10 @@ export function usePathwaysJobData({
           setNodes(rfNodes);
           setEdges(rfEdges);
 
-          lastResumeHashRef.current = cacheKey;
+          lastCacheKeyRef.current = cacheKey;
           setLoadingStage(LOADING_STAGES.COMPLETE);
           setIsLoading(false);
+          isFetchingRef.current = false;
           console.log('[Graph] Stage: COMPLETE (from cache)');
           return;
         }
@@ -143,7 +154,7 @@ export function usePathwaysJobData({
           allJobs,
         });
         console.log('[Graph] Cached to IndexedDB');
-        lastResumeHashRef.current = cacheKey;
+        lastCacheKeyRef.current = cacheKey;
 
         setJobs(allJobs);
         setJobInfo(jobInfoMap);
@@ -168,6 +179,7 @@ export function usePathwaysJobData({
         pathwaysToast.jobsFetchError();
       } finally {
         setIsLoading(false);
+        isFetchingRef.current = false;
         console.log('[Graph] isLoading set to false');
       }
     },
@@ -179,11 +191,11 @@ export function usePathwaysJobData({
     const currentKey = `${hashResume(resume)}_${timeRange}`;
     console.log('[Graph] Change check:', {
       currentKey,
-      lastKey: lastResumeHashRef.current,
+      lastKey: lastCacheKeyRef.current,
       changed:
-        lastResumeHashRef.current && currentKey !== lastResumeHashRef.current,
+        lastCacheKeyRef.current && currentKey !== lastCacheKeyRef.current,
     });
-    if (lastResumeHashRef.current && currentKey !== lastResumeHashRef.current) {
+    if (lastCacheKeyRef.current && currentKey !== lastCacheKeyRef.current) {
       console.log('[Graph] Resume or timeRange changed, forcing refresh');
       // Resume or timeRange changed - force refresh
       fetchJobs(true);
