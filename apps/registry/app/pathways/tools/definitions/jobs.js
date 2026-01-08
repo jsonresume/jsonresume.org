@@ -43,8 +43,6 @@ export const filterJobs = tool({
       .describe('Action to perform on matching jobs'),
   }),
   execute: async ({ criteria, action }) => {
-    // This will be handled client-side by the CopilotChat component
-    // Return the criteria and action for client-side processing
     return {
       success: true,
       criteria,
@@ -76,7 +74,6 @@ export const showJobs = tool({
       .describe('How to sort the results'),
   }),
   execute: async ({ query, sortBy }) => {
-    // This will be handled client-side
     return {
       success: true,
       query,
@@ -104,7 +101,6 @@ export const getJobInsights = tool({
       .describe('Type of insight to provide'),
   }),
   execute: async ({ insightType }) => {
-    // This will be handled client-side using available job data
     return {
       success: true,
       insightType,
@@ -154,7 +150,6 @@ export const saveJobFeedback = tool({
       .describe("The user's overall sentiment about the job"),
   }),
   execute: async ({ jobId, jobTitle, jobCompany, feedback, sentiment }) => {
-    // Return data for client-side processing
     return {
       success: true,
       jobId,

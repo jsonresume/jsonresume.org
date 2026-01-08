@@ -1,103 +1,6 @@
-import { streamText, smoothStream, tool, convertToModelMessages } from 'ai';
+import { streamText, smoothStream, convertToModelMessages } from 'ai';
 import { openai } from '@ai-sdk/openai';
-import { z } from 'zod';
-import { jobTools } from './tools/jobTools';
-
-// Define the update_resume tool with strict JSON Resume schema
-export const updateResume = tool({
-  description: `Update the user's resume by providing ONLY the changes/additions.
-IMPORTANT: The 'changes' object should contain ONLY fields being modified or added.
-- To ADD a new work entry: include just that one entry in the work array
-- To UPDATE basics.name: include just { basics: { name: "New Name" } }
-- To DELETE an entry: include the entry with _delete: true
-DO NOT include unchanged fields or the entire resume.`,
-  inputSchema: z.object({
-    changes: z
-      .object({
-        basics: z
-          .object({
-            name: z.string().optional(),
-            label: z.string().optional(),
-            email: z.string().optional(),
-            phone: z.string().optional(),
-            url: z.string().optional(),
-            summary: z.string().optional(),
-            location: z
-              .object({
-                address: z.string().optional(),
-                postalCode: z.string().optional(),
-                city: z.string().optional(),
-                countryCode: z.string().optional(),
-                region: z.string().optional(),
-              })
-              .optional(),
-            profiles: z
-              .array(
-                z.object({
-                  network: z.string().optional(),
-                  username: z.string().optional(),
-                  url: z.string().optional(),
-                })
-              )
-              .optional(),
-          })
-          .optional(),
-        work: z
-          .array(
-            z.object({
-              name: z.string().optional(),
-              position: z.string().optional(),
-              url: z.string().optional(),
-              startDate: z.string().optional(),
-              endDate: z.string().optional(),
-              summary: z.string().optional(),
-              highlights: z.array(z.string()).optional(),
-              technologies: z.array(z.string()).optional(),
-              _delete: z.boolean().optional(),
-            })
-          )
-          .optional(),
-        education: z
-          .array(
-            z.object({
-              institution: z.string().optional(),
-              area: z.string().optional(),
-              studyType: z.string().optional(),
-              startDate: z.string().optional(),
-              endDate: z.string().optional(),
-              score: z.string().optional(),
-              _delete: z.boolean().optional(),
-            })
-          )
-          .optional(),
-        skills: z
-          .array(
-            z.object({
-              name: z.string().optional(),
-              level: z.string().optional(),
-              keywords: z.array(z.string()).optional(),
-              _delete: z.boolean().optional(),
-            })
-          )
-          .optional(),
-      })
-      .describe(
-        'Partial update object - include ONLY the fields/entries being added or modified, not the entire resume'
-      ),
-    explanation: z
-      .string()
-      .describe('Friendly explanation of the changes being made'),
-  }),
-  execute: async ({ changes, explanation }) => {
-    // Tool execution returns data for client-side processing via useResumeUpdater
-    return {
-      success: true,
-      changes,
-      explanation,
-      message: explanation || 'Resume updated',
-    };
-  },
-});
+import { allTools } from '@/app/pathways/tools/definitions';
 
 export const runtime = 'edge';
 
@@ -110,6 +13,12 @@ You have access to the following capabilities:
 4. **Job Insights** - Analyze salary ranges, top companies, required skills
 5. **Refresh Matches** - Update job recommendations after resume changes
 6. **Job Feedback** - Save user feedback about specific jobs with sentiment
+
+## Multi-Step Tool Usage
+You can call multiple tools in sequence to accomplish complex tasks. For example:
+- "Add my new job and refresh matches" -> call updateResume, then refreshJobMatches
+- "Hide all gambling jobs and show me remote positions" -> call filterJobs, then showJobs
+- "Update my skills and find Python jobs" -> call updateResume, then showJobs
 
 ## CRITICAL: Resume Update Rules
 When using the updateResume tool, the 'changes' object must contain ONLY the diff:
@@ -157,10 +66,21 @@ export async function POST(request) {
       model: openai('gpt-4.1'),
       system: `${SYSTEM_PROMPT}${JSON.stringify(currentResume || {}, null, 2)}`,
       messages: convertToModelMessages(messages),
-      tools: {
-        updateResume,
-        ...jobTools,
+      tools: allTools,
+
+      // Enable multi-step tool loop (max 20 tool calls per request)
+      maxSteps: 20,
+
+      // Log step completions for debugging/analytics
+      onStepFinish({ toolCalls, stepType }) {
+        if (toolCalls?.length) {
+          console.log(
+            '[Agent Step]',
+            toolCalls.map((t) => t.toolName)
+          );
+        }
       },
+
       experimental_transform: smoothStream({
         delayInMs: 20,
         chunking: 'word',

@@ -1,89 +1,46 @@
-// Render a single part of a chat message.
-// Handles plain text and tool invocations (updateResume, job tools).
+/**
+ * Part - Renders a single part of a chat message
+ * Uses the tool registry for automatic tool UI lookup
+ */
 import React from 'react';
-import ToolCard from './ToolCard';
-import { ResumeToolInvocation, ResumeToolPart } from './ResumeToolPart';
-import {
-  FilterJobsInvocation,
-  ShowJobsInvocation,
-  JobInsightsInvocation,
-  RefreshMatchesInvocation,
-  FilterJobsPart,
-  ShowJobsPart,
-  JobInsightsPart,
-  RefreshMatchesPart,
-} from './JobToolParts';
-
-const TOOL_INVOCATION_MAP = {
-  updateResume: ResumeToolInvocation,
-  filterJobs: FilterJobsInvocation,
-  showJobs: ShowJobsInvocation,
-  getJobInsights: JobInsightsInvocation,
-  refreshJobMatches: RefreshMatchesInvocation,
-};
+import { renderToolPart, getToolMeta, ToolCard } from '../../tools';
 
 export default function Part({ part }) {
   if (!part || !part.type) {
     return null;
   }
 
-  switch (part.type) {
-    case 'text':
-      return <span>{part.text}</span>;
+  // Plain text rendering
+  if (part.type === 'text') {
+    return <span>{part.text}</span>;
+  }
 
-    // AI SDK v6 tool format - tool-invocation with toolInvocation object
-    case 'tool-invocation': {
-      const { toolInvocation } = part;
-      if (!toolInvocation) return null;
+  // Step indicators (silent)
+  if (part.type === 'step-start' || part.type === 'step-finish') {
+    return null;
+  }
 
-      const { toolName, state } = toolInvocation;
+  // Tool parts: type === 'tool-{toolName}'
+  if (part.type.startsWith('tool-')) {
+    const toolName = part.type.replace('tool-', '');
 
-      // Show loading state while calling
-      if (state === 'call') {
-        return (
-          <ToolCard icon="⏳" title={`Calling ${toolName}...`} color="gray" />
-        );
-      }
-
-      // Route to specific tool handler
-      const ToolComponent = TOOL_INVOCATION_MAP[toolName];
-      if (ToolComponent) {
-        return <ToolComponent toolInvocation={toolInvocation} />;
-      }
-
-      // Generic tool display for unknown tools
+    // Show loading state for 'call' state
+    if (part.state === 'call') {
+      const meta = getToolMeta(toolName);
       return (
         <ToolCard
-          icon="🔧"
-          title={toolName}
+          icon={meta.icon}
+          title={meta.processingMessage}
           color="gray"
-          showSuccess={state === 'result'}
+          state="call"
         />
       );
     }
 
-    // AI SDK v6 format: part.type === 'tool-{toolName}'
-    case 'tool-updateResume':
-      return <ResumeToolPart part={part} />;
-
-    case 'tool-filterJobs':
-      return <FilterJobsPart part={part} />;
-
-    case 'tool-showJobs':
-      return <ShowJobsPart part={part} />;
-
-    case 'tool-getJobInsights':
-      return <JobInsightsPart part={part} />;
-
-    case 'tool-refreshJobMatches':
-      return <RefreshMatchesPart part={part} />;
-
-    // Handle step indicators
-    case 'step-start':
-    case 'step-finish':
-      return null;
-
-    default:
-      return null;
+    // Render using the tool UI registry
+    return renderToolPart(toolName, part);
   }
+
+  // Unknown part types
+  return null;
 }

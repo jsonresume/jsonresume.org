@@ -7,10 +7,10 @@ import Messages from './Messages';
 import ChatHeader from './ChatHeader';
 import ChatInput from './ChatInput';
 import ResumeParseResult from './ResumeParseResult';
+import AgentStatus from './AgentStatus';
 import useSpeech from '../hooks/useSpeech';
 import useVoiceRecording from '../hooks/useVoiceRecording';
-import useResumeUpdater from '../hooks/useResumeUpdater';
-import useJobToolsHandler from '../hooks/useJobToolsHandler';
+import useToolHandler from '../hooks/useToolHandler';
 import useConversationPersistence from '../hooks/useConversationPersistence';
 import useChatSpeech from '../hooks/useChatSpeech';
 import useFileUploadHandler from '../hooks/useFileUploadHandler';
@@ -54,15 +54,13 @@ export default function CopilotChat({
     resume: resumeData,
   });
 
-  const { messages, sendMessage, status, addToolResult, setMessages } = useChat(
-    {
-      transport: new DefaultChatTransport({
-        api: '/api/pathways',
-        body: { currentResume: resumeData },
-      }),
-      initialMessages: [INITIAL_MESSAGE],
-    }
-  );
+  const { messages, sendMessage, status, setMessages } = useChat({
+    transport: new DefaultChatTransport({
+      api: '/api/pathways',
+      body: { currentResume: resumeData },
+    }),
+    initialMessages: [INITIAL_MESSAGE],
+  });
 
   // Set messages when persisted messages are loaded
   const hasInitializedRef = useRef(false);
@@ -114,11 +112,12 @@ export default function CopilotChat({
     cleanup: cleanupRecording,
   } = useVoiceRecording(handleTranscriptionComplete);
 
-  useResumeUpdater({ messages, resumeData, setResumeData, saveResumeChanges });
-
-  useJobToolsHandler({
+  // Unified tool handler for all AI tool invocations
+  useToolHandler({
     messages,
-    addToolResult,
+    resumeData,
+    setResumeData,
+    saveResumeChanges,
     markAsRead,
     markAsInterested,
     markAsHidden,
@@ -247,6 +246,11 @@ export default function CopilotChat({
             isApplying={isApplyingResume}
           />
         )}
+      </div>
+
+      {/* Agent processing status */}
+      <div className="px-4">
+        <AgentStatus status={status} />
       </div>
 
       <ChatInput
