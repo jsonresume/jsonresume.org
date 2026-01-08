@@ -7,7 +7,8 @@ import { z } from 'zod';
 export const filterJobs = tool({
   description: `Mark multiple jobs based on criteria like company name, industry keywords,
     salary range, or job type. Use this when users say things like "mark all gambling jobs as read"
-    or "hide all jobs below $100k" or "I'm interested in all remote jobs".`,
+    or "hide all jobs below $100k" or "I'm interested in all remote jobs".
+    Include a reason when the user explains WHY they want to mark/hide jobs.`,
   inputSchema: z.object({
     criteria: z
       .object({
@@ -41,16 +42,23 @@ export const filterJobs = tool({
     action: z
       .enum(['mark_read', 'mark_interested', 'mark_hidden', 'unmark'])
       .describe('Action to perform on matching jobs'),
+    reason: z
+      .string()
+      .optional()
+      .describe(
+        'Why the user wants to mark these jobs (e.g., "salary too low", "not interested in gambling")'
+      ),
   }),
-  execute: async ({ criteria, action }) => {
+  execute: async ({ criteria, action, reason }) => {
     return {
       success: true,
       criteria,
       action,
+      reason,
       message: `Ready to ${action.replace(
         '_',
         ' '
-      )} jobs matching your criteria`,
+      )} jobs matching your criteria${reason ? ` (reason: ${reason})` : ''}`,
     };
   },
 });

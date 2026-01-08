@@ -51,11 +51,12 @@ export default function useToolHandler({
 
   // Handler: filterJobs
   const handleFilterJobs = useCallback(
-    ({ criteria, action }) => {
+    async ({ criteria, action, reason }) => {
       if (!criteria || !jobs?.length) return;
 
       const matchingIds = findMatchingJobs(criteria, jobs, jobInfo);
 
+      // Apply action to each matching job
       matchingIds.forEach((jobId) => {
         switch (action) {
           case 'mark_read':
@@ -72,8 +73,37 @@ export default function useToolHandler({
             break;
         }
       });
+
+      // Save feedback with reason if provided (batch)
+      if (reason && userId && matchingIds.length > 0) {
+        const feedbacks = matchingIds.map((jobId) => ({
+          jobId,
+          feedback: reason,
+          sentiment: action === 'mark_interested' ? 'interested' : 'dismissed',
+          jobTitle: jobInfo[jobId]?.title,
+          jobCompany: jobInfo[jobId]?.company,
+        }));
+
+        try {
+          await fetch('/api/pathways/feedback/batch', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId, feedbacks }),
+          });
+        } catch (error) {
+          console.error('Failed to save batch feedback:', error);
+        }
+      }
     },
-    [jobs, jobInfo, markAsRead, markAsInterested, markAsHidden, clearJobState]
+    [
+      jobs,
+      jobInfo,
+      userId,
+      markAsRead,
+      markAsInterested,
+      markAsHidden,
+      clearJobState,
+    ]
   );
 
   // Handler: showJobs
