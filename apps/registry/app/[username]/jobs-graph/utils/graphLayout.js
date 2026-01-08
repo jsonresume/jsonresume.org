@@ -2,6 +2,7 @@ import dagre from '@dagrejs/dagre';
 
 /**
  * Applies Dagre graph layout algorithm to React Flow nodes and edges
+ * Creates a hierarchical tree with resume at top center
  * @param {Array} nodes - React Flow nodes
  * @param {Array} edges - React Flow edges
  * @param {string} direction - Layout direction ('TB', 'LR', etc.)
@@ -13,21 +14,27 @@ export const getLayoutedElements = (nodes, edges, direction = 'TB') => {
 
   dagreGraph.setGraph({
     rankdir: direction,
-    align: undefined, // Center alignment
-    nodesep: 40,
-    ranksep: 100,
-    edgesep: 20,
+    align: 'UL', // Upper-left alignment helps with centering
+    nodesep: 50,
+    ranksep: 120,
+    edgesep: 25,
     marginx: 50,
     marginy: 50,
     acyclicer: 'greedy',
-    ranker: 'network-simplex',
+    ranker: 'tight-tree', // Better for tree-like structures
   });
 
+  // Add nodes with explicit rank for resume
   nodes.forEach((node) => {
-    dagreGraph.setNode(node.id, {
+    const nodeConfig = {
       width: node.data.isResume ? 120 : 180,
       height: node.data.isResume ? 60 : 80,
-    });
+    };
+    // Force resume node to rank 0 (top)
+    if (node.data.isResume) {
+      nodeConfig.rank = 0;
+    }
+    dagreGraph.setNode(node.id, nodeConfig);
   });
 
   edges.forEach((edge) => {
@@ -36,13 +43,29 @@ export const getLayoutedElements = (nodes, edges, direction = 'TB') => {
 
   dagre.layout(dagreGraph);
 
+  // Find graph bounds to center everything
+  let minX = Infinity,
+    maxX = -Infinity;
+  nodes.forEach((node) => {
+    const pos = dagreGraph.node(node.id);
+    if (pos) {
+      minX = Math.min(minX, pos.x);
+      maxX = Math.max(maxX, pos.x);
+    }
+  });
+  const centerX = (minX + maxX) / 2;
+
   const layoutedNodes = nodes.map((node) => {
     const nodeWithPosition = dagreGraph.node(node.id);
+    const width = node.data.isResume ? 120 : 180;
+    const height = node.data.isResume ? 60 : 80;
+
     return {
       ...node,
       position: {
-        x: nodeWithPosition.x - (node.data.isResume ? 60 : 90),
-        y: nodeWithPosition.y - (node.data.isResume ? 30 : 40),
+        // Center nodes around x=0
+        x: nodeWithPosition.x - centerX - width / 2,
+        y: nodeWithPosition.y - height / 2,
       },
     };
   });
