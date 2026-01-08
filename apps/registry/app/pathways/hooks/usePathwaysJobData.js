@@ -37,15 +37,29 @@ export function usePathwaysJobData({
   const [loadingStage, setLoadingStage] = useState(null);
   const [loadingDetails, setLoadingDetails] = useState({});
 
-  // Track state for deduplication
-  const lastFetchKeyRef = useRef(null); // Track what we last fetched (resumeHash_timeRange)
-  const fetchIdRef = useRef(0); // Increment to cancel stale fetches
-  const isFetchingRef = useRef(false); // Prevent concurrent fetches
+  // Track state for deduplication - use refs to avoid dependency issues
+  const lastFetchKeyRef = useRef(null);
+  const isFetchingRef = useRef(false);
+
+  // Refs for latest values to avoid stale closures
+  const timeRangeRef = useRef(timeRange);
+  const resumeRef = useRef(resume);
+
+  // Keep refs in sync
+  useEffect(() => {
+    timeRangeRef.current = timeRange;
+  }, [timeRange]);
+
+  useEffect(() => {
+    resumeRef.current = resume;
+  }, [resume]);
 
   const fetchJobs = useCallback(
     async (forceRefresh = false, requestedTimeRange = null) => {
-      const effectiveTimeRange = requestedTimeRange || timeRange;
-      const pureResumeHash = hashResume(resume);
+      // Use refs for latest values
+      const effectiveTimeRange = requestedTimeRange || timeRangeRef.current;
+      const currentResume = resumeRef.current;
+      const pureResumeHash = hashResume(currentResume);
       const cacheKey = `${pureResumeHash}_${effectiveTimeRange}`;
 
       console.log('[Graph] fetchJobs called', {
@@ -53,7 +67,6 @@ export function usePathwaysJobData({
         effectiveTimeRange,
         cacheKey,
         lastFetchKey: lastFetchKeyRef.current,
-        isFetching: isFetchingRef.current,
       });
 
       // Skip if no embedding
@@ -74,10 +87,7 @@ export function usePathwaysJobData({
         return;
       }
 
-      // Track this fetch
-      const fetchId = ++fetchIdRef.current;
       isFetchingRef.current = true;
-
       setIsLoading(true);
       setError(null);
       setLoadingStage(LOADING_STAGES.CHECKING_CACHE);
@@ -87,13 +97,6 @@ export function usePathwaysJobData({
       if (!forceRefresh) {
         console.log('[Graph] Checking IndexedDB cache for:', cacheKey);
         const cached = await getCachedGraphData(cacheKey);
-
-        // Check if this fetch was superseded
-        if (fetchId !== fetchIdRef.current) {
-          console.log('[Graph] Fetch superseded, aborting cache load');
-          isFetchingRef.current = false;
-          return;
-        }
 
         if (cached) {
           console.log('[Graph] Cache hit:', cached.allJobs?.length, 'jobs');
@@ -135,13 +138,6 @@ export function usePathwaysJobData({
           }),
         });
 
-        // Check if this fetch was superseded
-        if (fetchId !== fetchIdRef.current) {
-          console.log('[Graph] Fetch superseded, aborting API response');
-          isFetchingRef.current = false;
-          return;
-        }
-
         if (!response.ok) {
           throw new Error('Failed to fetch jobs');
         }
@@ -154,13 +150,6 @@ export function usePathwaysJobData({
           graphData?.nodes?.length,
           'nodes'
         );
-
-        // Check again after parsing
-        if (fetchId !== fetchIdRef.current) {
-          console.log('[Graph] Fetch superseded after parse, aborting');
-          isFetchingRef.current = false;
-          return;
-        }
 
         setLoadingStage(LOADING_STAGES.BUILDING_GRAPH);
         setLoadingDetails({
@@ -200,10 +189,10 @@ export function usePathwaysJobData({
         isFetchingRef.current = false;
       }
     },
-    [embedding, resume, timeRange, setNodes, setEdges]
+    [embedding, setNodes, setEdges] // Minimal dependencies - use refs for timeRange/resume
   );
 
-  // Single effect to handle all fetch triggers
+  // Effect to fetch when key inputs change
   useEffect(() => {
     if (!embedding) return;
 
@@ -229,6 +218,6 @@ export function usePathwaysJobData({
     error,
     loadingStage,
     loadingDetails,
-    refetch: () => fetchJobs(true, timeRange),
+    refetch: () => fetchJobs(true, timeRangeRef.current),
   };
 }

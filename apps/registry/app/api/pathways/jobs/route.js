@@ -206,7 +206,7 @@ function buildJobInfoMap(jobs) {
   jobs.forEach((job) => {
     try {
       const parsed = JSON.parse(job.gpt_content);
-      // Include normalized salary data from database columns
+      // Include normalized salary data and metadata from database columns
       jobInfoMap[job.uuid] = {
         ...parsed,
         // Override with normalized salary data if available
@@ -214,6 +214,9 @@ function buildJobInfoMap(jobs) {
         salaryMin: job.salary_min,
         salaryMax: job.salary_max,
         salaryCurrency: job.salary_currency,
+        // Include metadata for client-side filtering
+        createdAt: job.created_at,
+        uuid: job.uuid,
       };
     } catch {
       jobInfoMap[job.uuid] = { title: 'Unknown Job', error: 'Failed to parse' };
