@@ -5,26 +5,28 @@ import { cosineSimilarity } from '@/app/utils/vectorUtils';
 
 const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
 
-// Time range configurations (days and max jobs)
-const TIME_RANGE_CONFIG = {
-  '1m': { days: 35, maxJobs: 400 },
-  '2m': { days: 65, maxJobs: 500 },
-  '3m': { days: 95, maxJobs: 600 },
+// Time range configurations (days)
+const TIME_RANGE_DAYS = {
+  '1m': 35,
+  '2m': 65,
+  '3m': 95,
 };
+
+const MAX_JOBS = 300;
 
 /**
  * Match jobs based on embedding similarity
  */
 async function matchJobs(supabase, embedding, timeRange = '1m') {
-  const config = TIME_RANGE_CONFIG[timeRange] || TIME_RANGE_CONFIG['1m'];
+  const days = TIME_RANGE_DAYS[timeRange] || 35;
   const createdAfter = new Date(
-    Date.now() - config.days * 24 * 60 * 60 * 1000
+    Date.now() - days * 24 * 60 * 60 * 1000
   ).toISOString();
 
   const { data: documents } = await supabase.rpc('match_jobs_v5', {
     query_embedding: embedding,
     match_threshold: -1,
-    match_count: config.maxJobs,
+    match_count: MAX_JOBS,
     created_after: createdAfter,
   });
 
@@ -53,37 +55,26 @@ async function matchJobs(supabase, embedding, timeRange = '1m') {
 
 /**
  * Build graph data structure
- * Optimized: Pre-parse embeddings and limit comparisons to top jobs only
  */
 function buildGraphData(resumeId, topJobs, otherJobs) {
   const nodes = [
     { id: resumeId, group: -1, size: 24, color: '#6366f1', x: 0, y: 0 },
   ];
 
-  // Pre-parse embeddings for top jobs (only compare against these)
-  const topJobsWithEmbeddings = topJobs
-    .map((job) => {
-      try {
-        return {
-          ...job,
-          parsedEmbedding: JSON.parse(job.embedding_v5),
-          parsedContent: JSON.parse(job.gpt_content),
-        };
-      } catch {
-        return null;
-      }
-    })
-    .filter(Boolean);
-
   // Add top job nodes
-  topJobsWithEmbeddings.forEach((job) => {
-    nodes.push({
-      id: job.uuid,
-      label: job.parsedContent.title,
-      group: 1,
-      size: 4,
-      color: '#fff18f',
-    });
+  topJobs.forEach((job) => {
+    try {
+      const jobContent = JSON.parse(job.gpt_content);
+      nodes.push({
+        id: job.uuid,
+        label: jobContent.title,
+        group: 1,
+        size: 4,
+        color: '#fff18f',
+      });
+    } catch {
+      // Skip invalid jobs
+    }
   });
 
   // Add other job nodes
@@ -102,27 +93,32 @@ function buildGraphData(resumeId, topJobs, otherJobs) {
     }
   });
 
-  // Build links from resume to top jobs
-  const links = topJobsWithEmbeddings.map((job) => ({
+  // Build links
+  const links = topJobs.map((job) => ({
     source: resumeId,
     target: job.uuid,
     value: job.similarity,
   }));
 
-  // Connect other jobs to most similar TOP job only (not all previous jobs)
-  // This reduces O(n²) to O(n*k) where k=10 (top jobs)
-  otherJobs.forEach((lessRelevantJob) => {
+  // Connect other jobs to most similar job
+  otherJobs.forEach((lessRelevantJob, index) => {
     try {
       const lessRelevantVector = JSON.parse(lessRelevantJob.embedding_v5);
+      const availableJobs = [...topJobs, ...otherJobs.slice(0, index)];
 
       let bestMatch = { job: null, similarity: -1 };
-      topJobsWithEmbeddings.forEach((topJob) => {
-        const similarity = cosineSimilarity(
-          lessRelevantVector,
-          topJob.parsedEmbedding
-        );
-        if (similarity > bestMatch.similarity) {
-          bestMatch = { job: topJob, similarity };
+      availableJobs.forEach((current) => {
+        try {
+          const currentVector = JSON.parse(current.embedding_v5);
+          const similarity = cosineSimilarity(
+            lessRelevantVector,
+            currentVector
+          );
+          if (similarity > bestMatch.similarity) {
+            bestMatch = { job: current, similarity };
+          }
+        } catch {
+          // Skip invalid embeddings
         }
       });
 
