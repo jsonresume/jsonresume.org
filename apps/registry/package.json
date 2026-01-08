@@ -47,6 +47,7 @@
     "compromise": "^14.13.0",
     "d3-force": "^3.0.0",
     "dotenv-cli": "^7.2.1",
+    "effect": "^3.19.14",
     "eventsource-parser": "^1.0.0",
     "express": "^4.18.2",
     "framer-motion": "^11.3.6",
