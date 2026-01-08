@@ -37,3 +37,4 @@ yarn-error.log*
 /blob-report/
 /playwright/.cache/
 supabase/.temp
+.env*.local

@@ -54,12 +54,23 @@ async function matchJobs(supabase, embedding, timeRange = '1m') {
 }
 
 /**
- * Build graph data structure (matches original working implementation)
+ * Build graph data structure with nearest neighbors for smart reconnection
  */
 function buildGraphData(resumeId, topJobs, otherJobs) {
+  const allJobs = [...topJobs, ...otherJobs];
   const nodes = [
     { id: resumeId, group: -1, size: 24, color: '#6366f1', x: 0, y: 0 },
   ];
+
+  // Parse all embeddings once for efficiency
+  const embeddings = new Map();
+  allJobs.forEach((job) => {
+    try {
+      embeddings.set(job.uuid, JSON.parse(job.embedding_v5));
+    } catch {
+      // Skip invalid embeddings
+    }
+  });
 
   // Add top job nodes
   topJobs.forEach((job) => {
@@ -100,41 +111,57 @@ function buildGraphData(resumeId, topJobs, otherJobs) {
     value: job.similarity,
   }));
 
-  // Connect other jobs to most similar job
+  // Compute nearest neighbors for each job (top 5 most similar)
+  // This enables smart reconnection when nodes are filtered out
+  const nearestNeighbors = {};
+
+  allJobs.forEach((job) => {
+    const jobVector = embeddings.get(job.uuid);
+    if (!jobVector) return;
+
+    const similarities = [];
+    allJobs.forEach((other) => {
+      if (other.uuid === job.uuid) return;
+      const otherVector = embeddings.get(other.uuid);
+      if (!otherVector) return;
+
+      const sim = cosineSimilarity(jobVector, otherVector);
+      similarities.push({ id: other.uuid, similarity: sim });
+    });
+
+    // Sort by similarity and take top 5
+    similarities.sort((a, b) => b.similarity - a.similarity);
+    nearestNeighbors[job.uuid] = similarities.slice(0, 5);
+  });
+
+  // Connect other jobs to most similar job (original algorithm)
   otherJobs.forEach((lessRelevantJob, index) => {
-    try {
-      const lessRelevantVector = JSON.parse(lessRelevantJob.embedding_v5);
-      const availableJobs = [...topJobs, ...otherJobs.slice(0, index)];
+    const lessRelevantVector = embeddings.get(lessRelevantJob.uuid);
+    if (!lessRelevantVector) return;
 
-      let bestMatch = { job: null, similarity: -1 };
-      availableJobs.forEach((current) => {
-        try {
-          const currentVector = JSON.parse(current.embedding_v5);
-          const similarity = cosineSimilarity(
-            lessRelevantVector,
-            currentVector
-          );
-          if (similarity > bestMatch.similarity) {
-            bestMatch = { job: current, similarity };
-          }
-        } catch {
-          // Skip invalid embeddings
-        }
-      });
+    const availableJobs = [...topJobs, ...otherJobs.slice(0, index)];
+    let bestMatch = { job: null, similarity: -1 };
 
-      if (bestMatch.job) {
-        links.push({
-          source: bestMatch.job.uuid,
-          target: lessRelevantJob.uuid,
-          value: bestMatch.similarity,
-        });
+    availableJobs.forEach((current) => {
+      const currentVector = embeddings.get(current.uuid);
+      if (!currentVector) return;
+
+      const similarity = cosineSimilarity(lessRelevantVector, currentVector);
+      if (similarity > bestMatch.similarity) {
+        bestMatch = { job: current, similarity };
       }
-    } catch {
-      // Skip invalid embeddings
+    });
+
+    if (bestMatch.job) {
+      links.push({
+        source: bestMatch.job.uuid,
+        target: lessRelevantJob.uuid,
+        value: bestMatch.similarity,
+      });
     }
   });
 
-  return { nodes, links };
+  return { nodes, links, nearestNeighbors };
 }
 
 /**
@@ -211,6 +238,8 @@ export async function POST(request) {
       },
       jobInfoMap,
       allJobs: sortedJobs,
+      // Nearest neighbors for smart reconnection when filtering
+      nearestNeighbors: graphData.nearestNeighbors,
     });
   } catch (error) {
     logger.error({ error: error.message }, 'Error in pathways jobs');

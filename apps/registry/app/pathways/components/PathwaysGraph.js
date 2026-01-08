@@ -81,7 +81,7 @@ export default function PathwaysGraph() {
   }, [preferences]);
 
   // Fetch jobs data using the cached embedding
-  const { jobInfo, isLoading, loadingStage, loadingDetails } =
+  const { jobInfo, nearestNeighbors, isLoading, loadingStage, loadingDetails } =
     usePathwaysJobData({
       embedding,
       resume,
@@ -119,6 +119,7 @@ export default function PathwaysGraph() {
     salaryFilterRange: salaryRange.filterRange,
     showSalaryGradient,
     timeRange,
+    nearestNeighbors,
   });
 
   const { nodesWithStyle, edgesWithStyle } = useGraphStyling({

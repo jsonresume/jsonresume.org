@@ -32,6 +32,7 @@ export function usePathwaysJobData({
 }) {
   const [jobs, setJobs] = useState(null);
   const [jobInfo, setJobInfo] = useState({});
+  const [nearestNeighbors, setNearestNeighbors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [loadingStage, setLoadingStage] = useState(null);
@@ -103,10 +104,13 @@ export function usePathwaysJobData({
       if (!forceRefresh) {
         console.log('[Graph] Checking IndexedDB cache for:', cacheKey);
         const cached = await getCachedGraphData(cacheKey);
-        console.log(
-          '[Graph] Cache result:',
-          cached ? `Found (${cached.allJobs?.length} jobs)` : 'Miss'
-        );
+        console.log('[Graph] Cache result:', {
+          found: !!cached,
+          jobCount: cached?.allJobs?.length || 0,
+          hasNearestNeighbors: cached?.nearestNeighbors
+            ? Object.keys(cached.nearestNeighbors).length
+            : 0,
+        });
         if (cached) {
           setLoadingStage(LOADING_STAGES.CACHE_HIT);
           setLoadingDetails({
@@ -120,6 +124,7 @@ export function usePathwaysJobData({
 
           setJobs(cached.allJobs);
           setJobInfo(cached.jobInfoMap);
+          setNearestNeighbors(cached.nearestNeighbors || {});
 
           const { nodes: rfNodes, edges: rfEdges } = convertToReactFlowFormat(
             cached.graphData,
@@ -178,11 +183,17 @@ export function usePathwaysJobData({
           throw new Error('Failed to fetch jobs');
         }
 
-        const { graphData, jobInfoMap, allJobs } = await response.json();
+        const {
+          graphData,
+          jobInfoMap,
+          allJobs,
+          nearestNeighbors: nn,
+        } = await response.json();
         console.log('[Graph] API response:', {
           jobs: allJobs?.length,
           nodes: graphData?.nodes?.length,
           timeRange: currentTimeRange,
+          hasNearestNeighbors: !!nn,
         });
 
         setLoadingStage(LOADING_STAGES.BUILDING_GRAPH);
@@ -199,12 +210,14 @@ export function usePathwaysJobData({
           graphData,
           jobInfoMap,
           allJobs,
+          nearestNeighbors: nn,
         });
         console.log('[Graph] Cached to IndexedDB with key:', cacheKey);
         lastCacheKeyRef.current = cacheKey;
 
         setJobs(allJobs);
         setJobInfo(jobInfoMap);
+        setNearestNeighbors(nn || {});
 
         const { nodes: rfNodes, edges: rfEdges } = convertToReactFlowFormat(
           graphData,
@@ -293,6 +306,7 @@ export function usePathwaysJobData({
   return {
     jobs,
     jobInfo,
+    nearestNeighbors,
     isLoading,
     error,
     loadingStage,

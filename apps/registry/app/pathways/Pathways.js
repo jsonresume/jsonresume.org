@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import Editor from '@monaco-editor/react';
 import CopilotChat from './components/CopilotChat';
 import ResumePreview from './components/ResumePreview';
@@ -17,8 +17,53 @@ import usePathwaysSession from './hooks/usePathwaysSession';
 function PathwaysContent() {
   const [activeTab, setActiveTab] = useState('graph');
   const [isActivityOpen, setIsActivityOpen] = useState(false);
-  const { resume, resumeJson, updateResume, updateResumeJson, setResumeJson } =
-    usePathways();
+  const {
+    resume,
+    resumeJson,
+    updateResume,
+    updateResumeJson,
+    setResumeJson,
+    setFullResume,
+    isResumeSaving,
+  } = usePathways();
+
+  // Debounced save for JSON editor
+  const saveTimeoutRef = useRef(null);
+  const lastSavedJsonRef = useRef(resumeJson);
+
+  // Save resume to DB with debounce
+  const debouncedSave = useCallback(
+    (json) => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+
+      saveTimeoutRef.current = setTimeout(async () => {
+        try {
+          const parsed = JSON.parse(json);
+          // Only save if JSON is valid and different from last saved
+          if (json !== lastSavedJsonRef.current) {
+            console.log('[Pathways] Auto-saving resume...');
+            await setFullResume(parsed, 'manual_edit');
+            lastSavedJsonRef.current = json;
+            console.log('[Pathways] Resume saved');
+          }
+        } catch {
+          // Invalid JSON, don't save
+        }
+      }, 1500); // 1.5 second debounce
+    },
+    [setFullResume]
+  );
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+    };
+  }, []);
 
   // Auto-migrate anonymous session data when user logs in
   usePathwaysSession();
@@ -59,19 +104,27 @@ function PathwaysContent() {
             ) : activeTab === 'preview' ? (
               <ResumePreview resumeData={resume} />
             ) : (
-              <Editor
-                height="100%"
-                defaultLanguage="json"
-                value={resumeJson}
-                onChange={(code) => {
-                  updateResumeJson(code || '');
-                }}
-                options={{
-                  minimap: { enabled: false },
-                  wordWrap: 'on',
-                  scrollBeyondLastLine: false,
-                }}
-              />
+              <div className="h-full relative">
+                {isResumeSaving && (
+                  <div className="absolute top-2 right-4 z-10 text-xs text-gray-500 bg-white/80 px-2 py-1 rounded">
+                    Saving...
+                  </div>
+                )}
+                <Editor
+                  height="100%"
+                  defaultLanguage="json"
+                  value={resumeJson}
+                  onChange={(code) => {
+                    updateResumeJson(code || '');
+                    debouncedSave(code || '');
+                  }}
+                  options={{
+                    minimap: { enabled: false },
+                    wordWrap: 'on',
+                    scrollBeyondLastLine: false,
+                  }}
+                />
+              </div>
             )}
           </div>
         </section>

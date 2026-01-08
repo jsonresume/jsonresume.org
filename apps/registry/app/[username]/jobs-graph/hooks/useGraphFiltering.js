@@ -28,6 +28,7 @@ export function useGraphFiltering({
   salaryFilterRange,
   showSalaryGradient = false,
   timeRange = '1m',
+  nearestNeighbors = {},
 }) {
   return useMemo(() => {
     // Identify nodes to hide
@@ -100,8 +101,13 @@ export function useGraphFiltering({
     // Filter out hidden nodes
     const visibleNodes = nodes.filter((n) => !hiddenNodeIds.has(n.id));
 
-    // Reconnect edges (orphaned children connect to grandparent)
-    const reconnectedEdges = reconnectEdges(edges, hiddenNodeIds, nodes);
+    // Reconnect edges using nearest neighbors for smart reconnection
+    const reconnectedEdges = reconnectEdges(
+      edges,
+      hiddenNodeIds,
+      nodes,
+      nearestNeighbors
+    );
 
     // Re-run layout on the filtered graph
     const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
@@ -122,5 +128,6 @@ export function useGraphFiltering({
     salaryFilterRange,
     showSalaryGradient,
     timeRange,
+    nearestNeighbors,
   ]);
 }
