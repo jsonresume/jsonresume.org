@@ -56,11 +56,15 @@ async function matchJobs(supabase, embedding, timeRange = '3m') {
 
 /**
  * Build graph data structure
+ * Only creates links between nodes that successfully parsed
  */
 function buildGraphData(resumeId, topJobs, otherJobs) {
   const nodes = [
     { id: resumeId, group: -1, size: 24, color: '#6366f1', x: 0, y: 0 },
   ];
+
+  // Track which jobs successfully became nodes
+  const validNodeIds = new Set([resumeId]);
 
   // Add top job nodes
   topJobs.forEach((job) => {
@@ -73,6 +77,7 @@ function buildGraphData(resumeId, topJobs, otherJobs) {
         size: 4,
         color: '#fff18f',
       });
+      validNodeIds.add(job.uuid);
     } catch {
       // Skip invalid jobs
     }
@@ -89,23 +94,36 @@ function buildGraphData(resumeId, topJobs, otherJobs) {
         size: 4,
         color: '#fff18f',
       });
+      validNodeIds.add(job.uuid);
     } catch {
       // Skip invalid jobs
     }
   });
 
-  // Build links
-  const links = topJobs.map((job) => ({
-    source: resumeId,
-    target: job.uuid,
-    value: job.similarity,
-  }));
+  const links = [];
 
-  // Connect other jobs to most similar job
-  otherJobs.forEach((lessRelevantJob, index) => {
+  // Build links from resume to top jobs (only valid ones)
+  topJobs.forEach((job) => {
+    if (validNodeIds.has(job.uuid)) {
+      links.push({
+        source: resumeId,
+        target: job.uuid,
+        value: job.similarity,
+      });
+    }
+  });
+
+  // Connect other jobs to most similar valid job
+  otherJobs.forEach((lessRelevantJob) => {
+    // Skip if this job isn't a valid node
+    if (!validNodeIds.has(lessRelevantJob.uuid)) return;
+
     try {
       const lessRelevantVector = JSON.parse(lessRelevantJob.embedding_v5);
-      const availableJobs = [...topJobs, ...otherJobs.slice(0, index)];
+      // Only consider jobs that are valid nodes
+      const availableJobs = [...topJobs, ...otherJobs].filter(
+        (j) => validNodeIds.has(j.uuid) && j.uuid !== lessRelevantJob.uuid
+      );
 
       let bestMatch = { job: null, similarity: -1 };
       availableJobs.forEach((current) => {
