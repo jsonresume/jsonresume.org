@@ -241,10 +241,23 @@ export function usePathwaysJobData({
       } finally {
         setIsLoading(false);
         isFetchingRef.current = false;
-        console.log(
-          '[Graph] Fetch complete, isFetching:',
-          isFetchingRef.current
-        );
+
+        // Always check if we need to refetch after completion
+        const finalKey = `${hashResume(resumeRef.current)}_${
+          timeRangeRef.current
+        }`;
+        console.log('[Graph] Fetch complete:', {
+          isFetching: isFetchingRef.current,
+          lastCacheKey: lastCacheKeyRef.current,
+          currentWantedKey: finalKey,
+          needsRefetch: finalKey !== lastCacheKeyRef.current,
+        });
+
+        // If the wanted key doesn't match what we have, schedule a refetch
+        if (finalKey !== lastCacheKeyRef.current) {
+          console.log('[Graph] Scheduling refetch for:', finalKey);
+          setTimeout(() => fetchJobs(false), 10);
+        }
       }
     },
     [embedding, setNodes, setEdges] // Only embedding and setters - timeRange/resume via refs
