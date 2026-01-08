@@ -5,12 +5,11 @@ import { cosineSimilarity } from '@/app/utils/vectorUtils';
 
 const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
 
-// Time range configurations (days) - matches frontend
-// Original default was 65 days, so 1m should be at least that
+// Time range configurations (days)
 const TIME_RANGE_DAYS = {
-  '1m': 65,
-  '2m': 95,
-  '3m': 125,
+  '1m': 35,
+  '2m': 65,
+  '3m': 95,
 };
 
 /**
@@ -45,14 +44,56 @@ async function matchJobs(supabase, embedding, timeRange = '3m') {
     .select('*')
     .in('id', jobIds)
     .gte('created_at', createdAfter)
+    .not('gpt_content', 'is', null)
     .order('created_at', { ascending: false });
 
-  return (
-    jobsData?.map((job) => {
-      const doc = sortedDocuments.find((d) => d.id === job.id);
-      return { ...job, similarity: doc?.similarity || 0 };
-    }) || []
-  );
+  // Filter to only jobs with valid, parseable gpt_content
+  const invalidReasons = { null: 0, empty: 0, parseError: 0 };
+  const parseErrors = [];
+
+  const validJobs = (jobsData || []).filter((job) => {
+    if (!job.gpt_content) {
+      invalidReasons.null++;
+      return false;
+    }
+    if (job.gpt_content.trim() === '') {
+      invalidReasons.empty++;
+      return false;
+    }
+    try {
+      JSON.parse(job.gpt_content);
+      return true;
+    } catch (e) {
+      invalidReasons.parseError++;
+      if (parseErrors.length < 3) {
+        parseErrors.push({
+          jobId: job.id,
+          error: e.message,
+          preview: job.gpt_content.substring(0, 100),
+        });
+      }
+      return false;
+    }
+  });
+
+  const invalidCount = (jobsData?.length || 0) - validJobs.length;
+  if (invalidCount > 0) {
+    logger.warn(
+      {
+        totalJobs: jobsData?.length,
+        validJobs: validJobs.length,
+        invalidCount,
+        invalidReasons,
+        sampleErrors: parseErrors,
+      },
+      'Jobs with invalid gpt_content filtered out'
+    );
+  }
+
+  return validJobs.map((job) => {
+    const doc = sortedDocuments.find((d) => d.id === job.id);
+    return { ...job, similarity: doc?.similarity || 0 };
+  });
 }
 
 /**
