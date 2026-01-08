@@ -1,17 +1,15 @@
 // Reset FAILED jobs from the last 20 days so they can be reprocessed
 // Usage: SUPABASE_KEY=your_key node reset-failed-jobs.js
 
-require('dotenv').config({ path: __dirname + '/../../.env' });
-require('dotenv').config({ path: __dirname + '/../../.env.local' });
+require('dotenv').config({ path: __dirname + '/../../../../.env' });
 
 const { createClient } = require('@supabase/supabase-js');
 
 const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
-const supabaseKey = process.env.SUPABASE_KEY;
+const supabaseKey = process.env.SUPABASE_API_KEY || process.env.SUPABASE_KEY;
 
 if (!supabaseKey) {
-  console.error('❌ SUPABASE_KEY is required');
-  console.log('Run with: SUPABASE_KEY=your_key node reset-failed-jobs.js');
+  console.error('❌ SUPABASE_API_KEY or SUPABASE_KEY is required');
   process.exit(1);
 }
 

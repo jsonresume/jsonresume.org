@@ -37,51 +37,67 @@ export function usePathwaysJobData({
   const [loadingStage, setLoadingStage] = useState(null);
   const [loadingDetails, setLoadingDetails] = useState({});
 
-  // Track the last values to detect changes
-  const lastResumeHashRef = useRef(null);
-  const lastTimeRangeRef = useRef(timeRange);
+  // Track state for deduplication
+  const lastFetchKeyRef = useRef(null); // Track what we last fetched (resumeHash_timeRange)
+  const fetchIdRef = useRef(0); // Increment to cancel stale fetches
+  const isFetchingRef = useRef(false); // Prevent concurrent fetches
 
   const fetchJobs = useCallback(
-    async (forceRefresh = false, overrideTimeRange = null) => {
-      const effectiveTimeRange = overrideTimeRange || timeRange;
+    async (forceRefresh = false, requestedTimeRange = null) => {
+      const effectiveTimeRange = requestedTimeRange || timeRange;
+      const pureResumeHash = hashResume(resume);
+      const cacheKey = `${pureResumeHash}_${effectiveTimeRange}`;
+
       console.log('[Graph] fetchJobs called', {
         forceRefresh,
-        hasEmbedding: !!embedding,
-        embeddingLength: embedding?.length,
-        timeRange: effectiveTimeRange,
+        effectiveTimeRange,
+        cacheKey,
+        lastFetchKey: lastFetchKeyRef.current,
+        isFetching: isFetchingRef.current,
       });
+
+      // Skip if no embedding
       if (!embedding || !Array.isArray(embedding) || embedding.length === 0) {
         console.log('[Graph] No embedding, skipping fetch');
         return;
       }
 
+      // Skip if already fetched this exact data (unless force refresh)
+      if (!forceRefresh && lastFetchKeyRef.current === cacheKey) {
+        console.log('[Graph] Already have this data, skipping fetch');
+        return;
+      }
+
+      // Skip if another fetch is in progress
+      if (isFetchingRef.current) {
+        console.log('[Graph] Fetch already in progress, skipping');
+        return;
+      }
+
+      // Track this fetch
+      const fetchId = ++fetchIdRef.current;
+      isFetchingRef.current = true;
+
       setIsLoading(true);
       setError(null);
       setLoadingStage(LOADING_STAGES.CHECKING_CACHE);
       setLoadingDetails({ message: 'Checking cached data...' });
-      console.log('[Graph] Stage: CHECKING_CACHE');
-
-      // Include timeRange in cache key so different time ranges have separate caches
-      const resumeHash = hashResume(resume) + '_' + effectiveTimeRange;
-      console.log('[Graph] Cache key:', resumeHash);
 
       // Check cache unless force refresh requested
       if (!forceRefresh) {
-        console.log('[Graph] Checking IndexedDB cache...');
-        const cached = await getCachedGraphData(resumeHash);
-        console.log(
-          '[Graph] Cache result:',
-          cached ? `Found (${cached.allJobs?.length} jobs)` : 'Miss'
-        );
-        if (cached) {
-          setLoadingStage(LOADING_STAGES.CACHE_HIT);
-          setLoadingDetails({
-            message: 'Loading from cache...',
-            jobCount: cached.allJobs?.length || 0,
-          });
-          console.log('[Graph] Stage: CACHE_HIT');
+        console.log('[Graph] Checking IndexedDB cache for:', cacheKey);
+        const cached = await getCachedGraphData(cacheKey);
 
-          // Small delay so user sees the cache hit message
+        // Check if this fetch was superseded
+        if (fetchId !== fetchIdRef.current) {
+          console.log('[Graph] Fetch superseded, aborting cache load');
+          isFetchingRef.current = false;
+          return;
+        }
+
+        if (cached) {
+          console.log('[Graph] Cache hit:', cached.allJobs?.length, 'jobs');
+          setLoadingStage(LOADING_STAGES.CACHE_HIT);
           await new Promise((resolve) => setTimeout(resolve, 300));
 
           setJobs(cached.allJobs);
@@ -91,28 +107,23 @@ export function usePathwaysJobData({
             cached.graphData,
             cached.jobInfoMap
           );
-          console.log('[Graph] Loaded from cache:', {
-            nodes: rfNodes.length,
-            edges: rfEdges.length,
-          });
           setNodes(rfNodes);
           setEdges(rfEdges);
 
-          lastResumeHashRef.current = resumeHash;
+          lastFetchKeyRef.current = cacheKey;
           setLoadingStage(LOADING_STAGES.COMPLETE);
           setIsLoading(false);
-          console.log('[Graph] Stage: COMPLETE (from cache)');
+          isFetchingRef.current = false;
+          console.log('[Graph] Loaded from cache:', rfNodes.length, 'nodes');
           return;
         }
+        console.log('[Graph] Cache miss');
       }
 
       try {
         setLoadingStage(LOADING_STAGES.FETCHING_JOBS);
-        setLoadingDetails({
-          message: 'Finding matching jobs...',
-          embeddingSize: embedding.length,
-        });
-        console.log('[Graph] Stage: FETCHING_JOBS (calling API)');
+        setLoadingDetails({ message: 'Finding matching jobs...' });
+        console.log('[Graph] Calling API with timeRange:', effectiveTimeRange);
 
         const response = await fetch('/api/pathways/jobs', {
           method: 'POST',
@@ -124,33 +135,42 @@ export function usePathwaysJobData({
           }),
         });
 
+        // Check if this fetch was superseded
+        if (fetchId !== fetchIdRef.current) {
+          console.log('[Graph] Fetch superseded, aborting API response');
+          isFetchingRef.current = false;
+          return;
+        }
+
         if (!response.ok) {
           throw new Error('Failed to fetch jobs');
         }
 
         const { graphData, jobInfoMap, allJobs } = await response.json();
-        console.log('[Graph] API response:', {
-          jobs: allJobs?.length,
-          nodes: graphData?.nodes?.length,
-        });
+        console.log(
+          '[Graph] API returned:',
+          allJobs?.length,
+          'jobs,',
+          graphData?.nodes?.length,
+          'nodes'
+        );
+
+        // Check again after parsing
+        if (fetchId !== fetchIdRef.current) {
+          console.log('[Graph] Fetch superseded after parse, aborting');
+          isFetchingRef.current = false;
+          return;
+        }
 
         setLoadingStage(LOADING_STAGES.BUILDING_GRAPH);
         setLoadingDetails({
           message: 'Building career graph...',
           jobCount: allJobs?.length || 0,
-          nodeCount: graphData?.nodes?.length || 0,
-          edgeCount: graphData?.links?.length || 0,
         });
-        console.log('[Graph] Stage: BUILDING_GRAPH');
 
         // Cache the data
-        await setCachedGraphData(resumeHash, {
-          graphData,
-          jobInfoMap,
-          allJobs,
-        });
-        console.log('[Graph] Cached to IndexedDB');
-        lastResumeHashRef.current = resumeHash;
+        await setCachedGraphData(cacheKey, { graphData, jobInfoMap, allJobs });
+        lastFetchKeyRef.current = cacheKey;
 
         setJobs(allJobs);
         setJobInfo(jobInfoMap);
@@ -159,15 +179,17 @@ export function usePathwaysJobData({
           graphData,
           jobInfoMap
         );
-        console.log('[Graph] Built graph:', {
-          nodes: rfNodes.length,
-          edges: rfEdges.length,
-        });
+        console.log(
+          '[Graph] Built graph:',
+          rfNodes.length,
+          'nodes,',
+          rfEdges.length,
+          'edges'
+        );
         setNodes(rfNodes);
         setEdges(rfEdges);
 
         setLoadingStage(LOADING_STAGES.COMPLETE);
-        console.log('[Graph] Stage: COMPLETE (from API)');
       } catch (err) {
         console.error('[Graph] Error:', err);
         logger.error({ error: err.message }, 'Error fetching pathways jobs');
@@ -175,57 +197,30 @@ export function usePathwaysJobData({
         pathwaysToast.jobsFetchError();
       } finally {
         setIsLoading(false);
-        console.log('[Graph] isLoading set to false');
+        isFetchingRef.current = false;
       }
     },
-    [embedding, resume, setNodes, setEdges, timeRange]
+    [embedding, resume, timeRange, setNodes, setEdges]
   );
 
-  // Handle timeRange changes explicitly - always force refetch
+  // Single effect to handle all fetch triggers
   useEffect(() => {
-    if (lastTimeRangeRef.current !== timeRange) {
-      console.log(
-        '[Graph] TimeRange changed:',
-        lastTimeRangeRef.current,
-        '->',
-        timeRange
-      );
-      lastTimeRangeRef.current = timeRange;
-      // Force refresh with new timeRange
-      if (embedding) {
-        fetchJobs(true, timeRange);
-      }
-    }
-  }, [timeRange, embedding, fetchJobs]);
+    if (!embedding) return;
 
-  // Detect resume changes and invalidate cache
-  useEffect(() => {
-    const currentHash = hashResume(resume);
-    console.log('[Graph] Resume change check:', {
-      currentHash,
-      lastHash: lastResumeHashRef.current,
-      changed:
-        lastResumeHashRef.current && currentHash !== lastResumeHashRef.current,
-    });
-    if (
-      lastResumeHashRef.current &&
-      currentHash !== lastResumeHashRef.current
-    ) {
-      console.log('[Graph] Resume changed, forcing refresh');
-      fetchJobs(true);
-    }
-  }, [resume, fetchJobs]);
+    const pureResumeHash = hashResume(resume);
+    const currentKey = `${pureResumeHash}_${timeRange}`;
 
-  // Initial fetch when embedding becomes available or graphVersion changes
-  useEffect(() => {
-    console.log('[Graph] Initial fetch effect triggered', {
-      graphVersion,
-      hasEmbedding: !!embedding,
+    console.log('[Graph] Effect check:', {
+      currentKey,
+      lastKey: lastFetchKeyRef.current,
+      needsFetch: currentKey !== lastFetchKeyRef.current,
     });
-    if (embedding) {
-      fetchJobs();
+
+    // Fetch if we don't have this data yet
+    if (currentKey !== lastFetchKeyRef.current) {
+      fetchJobs(false, timeRange);
     }
-  }, [embedding, graphVersion, fetchJobs]);
+  }, [embedding, resume, timeRange, graphVersion, fetchJobs]);
 
   return {
     jobs,
@@ -234,6 +229,6 @@ export function usePathwaysJobData({
     error,
     loadingStage,
     loadingDetails,
-    refetch: () => fetchJobs(true), // Force refresh bypasses cache
+    refetch: () => fetchJobs(true, timeRange),
   };
 }

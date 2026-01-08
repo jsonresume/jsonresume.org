@@ -1,6 +1,6 @@
 // Process job descriptions using Vercel AI SDK to create structured JSON data
 
-require('dotenv').config({ path: __dirname + '/./../../.env' });
+require('dotenv').config({ path: __dirname + '/../../../../.env' });
 
 const async = require('async');
 const { initializeSupabase, fetchJobs } = require('./job-parser/database');
