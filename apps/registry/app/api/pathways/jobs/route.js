@@ -54,13 +54,15 @@ async function matchJobs(supabase, embedding, timeRange = '1m') {
 }
 
 /**
- * Build graph data structure with nearest neighbors for smart reconnection
+ * Build graph data structure using incremental tree algorithm
+ * Each job connects to its most similar already-placed node (job or resume)
+ * This creates natural "career pathways" - chains of related jobs
  */
-function buildGraphData(resumeId, topJobs, otherJobs) {
-  const allJobs = [...topJobs, ...otherJobs];
+function buildGraphData(resumeId, allJobs, resumeEmbedding) {
   const nodes = [
     { id: resumeId, group: -1, size: 24, color: '#6366f1', x: 0, y: 0 },
   ];
+  const links = [];
 
   // Parse all embeddings once for efficiency
   const embeddings = new Map();
@@ -72,93 +74,87 @@ function buildGraphData(resumeId, topJobs, otherJobs) {
     }
   });
 
-  // Add top job nodes
-  topJobs.forEach((job) => {
+  // Filter to jobs with valid embeddings and calculate resume similarity
+  const jobsWithEmbeddings = allJobs
+    .filter((job) => embeddings.has(job.uuid))
+    .map((job) => ({
+      ...job,
+      embedding: embeddings.get(job.uuid),
+      resumeSimilarity: cosineSimilarity(
+        embeddings.get(job.uuid),
+        resumeEmbedding
+      ),
+    }));
+
+  // Sort by resume similarity (highest first - these become branch roots)
+  jobsWithEmbeddings.sort((a, b) => b.resumeSimilarity - a.resumeSimilarity);
+
+  // Track placed nodes with their embeddings (start with resume)
+  const placedNodes = [{ id: resumeId, embedding: resumeEmbedding }];
+
+  // Build tree incrementally
+  jobsWithEmbeddings.forEach((job) => {
+    // Find most similar already-placed node (starting with resume)
+    let bestMatch = { id: resumeId, similarity: job.resumeSimilarity };
+
+    for (const placed of placedNodes) {
+      if (placed.id === resumeId) continue; // Already checked via resumeSimilarity
+      const sim = cosineSimilarity(job.embedding, placed.embedding);
+      if (sim > bestMatch.similarity) {
+        bestMatch = { id: placed.id, similarity: sim };
+      }
+    }
+
+    // Create node
     try {
       const jobContent = JSON.parse(job.gpt_content);
       nodes.push({
         id: job.uuid,
         label: jobContent.title,
-        group: 1,
+        group: bestMatch.id === resumeId ? 1 : 2, // Group 1 = direct from resume
         size: 4,
         color: '#fff18f',
       });
     } catch {
-      // Skip invalid jobs
-    }
-  });
-
-  // Add other job nodes
-  otherJobs.forEach((job) => {
-    try {
-      const jobContent = JSON.parse(job.gpt_content);
       nodes.push({
         id: job.uuid,
-        label: jobContent.title,
+        label: 'Unknown',
         group: 2,
         size: 4,
         color: '#fff18f',
       });
-    } catch {
-      // Skip invalid jobs
     }
-  });
 
-  // Build links - top jobs connect to resume
-  const links = topJobs.map((job) => ({
-    source: resumeId,
-    target: job.uuid,
-    value: job.similarity,
-  }));
+    // Create edge to best match
+    links.push({
+      source: bestMatch.id,
+      target: job.uuid,
+      value: bestMatch.similarity,
+    });
+
+    // Add to placed nodes for future comparisons
+    placedNodes.push({ id: job.uuid, embedding: job.embedding });
+  });
 
   // Compute nearest neighbors for each job (top 5 most similar)
-  // This enables smart reconnection when nodes are filtered out
+  // Include resume in neighbors for smart reconnection when filtering
   const nearestNeighbors = {};
+  const allEmbeddings = [
+    { id: resumeId, embedding: resumeEmbedding },
+    ...jobsWithEmbeddings.map((j) => ({ id: j.uuid, embedding: j.embedding })),
+  ];
 
-  allJobs.forEach((job) => {
-    const jobVector = embeddings.get(job.uuid);
-    if (!jobVector) return;
+  jobsWithEmbeddings.forEach((job) => {
+    const similarities = allEmbeddings
+      .filter((n) => n.id !== job.uuid)
+      .map((n) => ({
+        id: n.id,
+        similarity: cosineSimilarity(job.embedding, n.embedding),
+      }))
+      .sort((a, b) => b.similarity - a.similarity)
+      .slice(0, 5);
 
-    const similarities = [];
-    allJobs.forEach((other) => {
-      if (other.uuid === job.uuid) return;
-      const otherVector = embeddings.get(other.uuid);
-      if (!otherVector) return;
-
-      const sim = cosineSimilarity(jobVector, otherVector);
-      similarities.push({ id: other.uuid, similarity: sim });
-    });
-
-    // Sort by similarity and take top 5
-    similarities.sort((a, b) => b.similarity - a.similarity);
-    nearestNeighbors[job.uuid] = similarities.slice(0, 5);
-  });
-
-  // Connect other jobs to most similar job (original algorithm)
-  otherJobs.forEach((lessRelevantJob, index) => {
-    const lessRelevantVector = embeddings.get(lessRelevantJob.uuid);
-    if (!lessRelevantVector) return;
-
-    const availableJobs = [...topJobs, ...otherJobs.slice(0, index)];
-    let bestMatch = { job: null, similarity: -1 };
-
-    availableJobs.forEach((current) => {
-      const currentVector = embeddings.get(current.uuid);
-      if (!currentVector) return;
-
-      const similarity = cosineSimilarity(lessRelevantVector, currentVector);
-      if (similarity > bestMatch.similarity) {
-        bestMatch = { job: current, similarity };
-      }
-    });
-
-    if (bestMatch.job) {
-      links.push({
-        source: bestMatch.job.uuid,
-        target: lessRelevantJob.uuid,
-        value: bestMatch.similarity,
-      });
-    }
+    nearestNeighbors[job.uuid] = similarities;
   });
 
   return { nodes, links, nearestNeighbors };
@@ -217,14 +213,12 @@ export async function POST(request) {
     const supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
     const sortedJobs = await matchJobs(supabase, embedding, timeRange);
 
-    const topJobs = sortedJobs.slice(0, 10);
-    const otherJobs = sortedJobs.slice(10);
-
-    const graphData = buildGraphData(resumeId, topJobs, otherJobs);
+    // Build tree graph using incremental algorithm
+    const graphData = buildGraphData(resumeId, sortedJobs, embedding);
     const jobInfoMap = buildJobInfoMap(sortedJobs);
 
     logger.info(
-      { jobCount: sortedJobs.length, topCount: topJobs.length, timeRange },
+      { jobCount: sortedJobs.length, timeRange },
       'Matched jobs for pathways'
     );
 
