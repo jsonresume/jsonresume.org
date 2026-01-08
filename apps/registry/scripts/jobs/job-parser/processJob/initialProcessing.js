@@ -10,7 +10,7 @@ async function initialProcessing(job) {
   const systemPrompt = getJobProcessingPrompt(job.content);
 
   const { object: jobJson } = await generateObject({
-    model: openai.responses('gpt-5-mini'),
+    model: openai('gpt-5-mini'),
     system: systemPrompt,
     prompt: 'Parse this job description into structured data',
     schema: jobDescriptionSchema,

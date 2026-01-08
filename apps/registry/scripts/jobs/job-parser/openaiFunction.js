@@ -2,40 +2,39 @@ const { z } = require('zod');
 
 /**
  * Zod schema for job description to JSON conversion (AI SDK)
- * Uses .nullable() instead of .optional() for OpenAI structured output compatibility
  */
 const jobDescriptionSchema = z.object({
-  title: z.string().nullable(),
-  company: z.string().nullable(),
+  title: z.string().optional(),
+  company: z.string().optional(),
   location: z
     .object({
-      address: z.string().nullable(),
-      postalCode: z.string().nullable(),
-      city: z.string().nullable(),
-      countryCode: z.string().nullable(),
-      region: z.string().nullable(),
+      address: z.string().optional(),
+      postalCode: z.string().optional(),
+      city: z.string().optional(),
+      countryCode: z.string().optional(),
+      region: z.string().optional(),
     })
-    .nullable(),
-  position: z.string().nullable(),
-  type: z.string().nullable(),
-  salary: z.string().nullable(),
-  date: z.string().nullable(),
-  remote: z.string().nullable(),
-  description: z.string().nullable(),
-  responsibilities: z.array(z.string()).nullable(),
-  qualifications: z.array(z.string()).nullable(),
+    .optional(),
+  position: z.string().optional(),
+  type: z.string().optional(),
+  salary: z.string().optional(),
+  date: z.string().optional(),
+  remote: z.string().optional(),
+  description: z.string().optional(),
+  responsibilities: z.array(z.string()).optional(),
+  qualifications: z.array(z.string()).optional(),
   skills: z
     .array(
       z.object({
-        name: z.string().nullable(),
-        level: z.string().nullable(),
-        keywords: z.array(z.string()).nullable(),
+        name: z.string().optional(),
+        level: z.string().optional(),
+        keywords: z.array(z.string()).optional(),
       })
     )
-    .nullable(),
-  experience: z.string().nullable(),
-  education: z.string().nullable(),
-  application: z.string().nullable(),
+    .optional(),
+  experience: z.string().optional(),
+  education: z.string().optional(),
+  application: z.string().optional(),
 });
 
 /**

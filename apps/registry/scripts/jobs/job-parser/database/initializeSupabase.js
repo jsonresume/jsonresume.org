@@ -6,9 +6,7 @@ const { createClient } = require('@supabase/supabase-js');
 function initializeSupabase() {
   const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
   const supabaseKey =
-    process.env.SUPABASE_API_KEY ||
-    process.env.SUPABASE_KEY ||
-    'MISSING_KEY_USING_FILE_ONLY_MODE';
+    process.env.SUPABASE_KEY || 'MISSING_KEY_USING_FILE_ONLY_MODE';
 
   try {
     console.log('Attempting to create Supabase client with:', {

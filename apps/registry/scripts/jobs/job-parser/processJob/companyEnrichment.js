@@ -25,7 +25,7 @@ async function companyEnrichment(supabase, job, messages, company) {
     .join('\n\n');
 
   const { object: jobJson2 } = await generateObject({
-    model: openai.responses('gpt-5-mini'),
+    model: openai('gpt-5-mini'),
     system: systemPrompts,
     prompt: 'Re-parse the job description with the additional company context',
     schema: jobDescriptionSchema,

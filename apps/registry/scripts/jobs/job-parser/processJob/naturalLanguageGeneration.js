@@ -14,7 +14,7 @@ async function naturalLanguageGeneration(job, messages) {
     .map((m) => ({ role: m.role, content: m.content }));
 
   const { text: content } = await generateText({
-    model: openai.responses('gpt-5-mini'),
+    model: openai('gpt-5-mini'),
     messages: userMessages,
     system: systemPrompt,
   });

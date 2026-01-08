@@ -28,7 +28,6 @@ export function usePathwaysJobData({
   graphVersion,
   setNodes,
   setEdges,
-  timeRange = '3m',
 }) {
   const [jobs, setJobs] = useState(null);
   const [jobInfo, setJobInfo] = useState({});
@@ -37,70 +36,47 @@ export function usePathwaysJobData({
   const [loadingStage, setLoadingStage] = useState(null);
   const [loadingDetails, setLoadingDetails] = useState({});
 
-  // Track state for deduplication - use refs to avoid dependency issues
-  const lastFetchKeyRef = useRef(null);
-  const isFetchingRef = useRef(false);
-
-  // Refs for latest values to avoid stale closures
-  const timeRangeRef = useRef(timeRange);
-  const resumeRef = useRef(resume);
-
-  // Keep refs in sync
-  useEffect(() => {
-    timeRangeRef.current = timeRange;
-  }, [timeRange]);
-
-  useEffect(() => {
-    resumeRef.current = resume;
-  }, [resume]);
+  // Track the last resume hash to detect changes
+  const lastResumeHashRef = useRef(null);
 
   const fetchJobs = useCallback(
-    async (forceRefresh = false, requestedTimeRange = null) => {
-      // Use refs for latest values
-      const effectiveTimeRange = requestedTimeRange || timeRangeRef.current;
-      const currentResume = resumeRef.current;
-      const pureResumeHash = hashResume(currentResume);
-      const cacheKey = `${pureResumeHash}_${effectiveTimeRange}`;
-
+    async (forceRefresh = false) => {
       console.log('[Graph] fetchJobs called', {
         forceRefresh,
-        effectiveTimeRange,
-        cacheKey,
-        lastFetchKey: lastFetchKeyRef.current,
+        hasEmbedding: !!embedding,
+        embeddingLength: embedding?.length,
       });
-
-      // Skip if no embedding
       if (!embedding || !Array.isArray(embedding) || embedding.length === 0) {
         console.log('[Graph] No embedding, skipping fetch');
         return;
       }
 
-      // Skip if already fetched this exact data (unless force refresh)
-      if (!forceRefresh && lastFetchKeyRef.current === cacheKey) {
-        console.log('[Graph] Already have this data, skipping fetch');
-        return;
-      }
-
-      // Skip if another fetch is in progress
-      if (isFetchingRef.current) {
-        console.log('[Graph] Fetch already in progress, skipping');
-        return;
-      }
-
-      isFetchingRef.current = true;
       setIsLoading(true);
       setError(null);
       setLoadingStage(LOADING_STAGES.CHECKING_CACHE);
       setLoadingDetails({ message: 'Checking cached data...' });
+      console.log('[Graph] Stage: CHECKING_CACHE');
+
+      const resumeHash = hashResume(resume);
+      console.log('[Graph] Resume hash:', resumeHash);
 
       // Check cache unless force refresh requested
       if (!forceRefresh) {
-        console.log('[Graph] Checking IndexedDB cache for:', cacheKey);
-        const cached = await getCachedGraphData(cacheKey);
-
+        console.log('[Graph] Checking IndexedDB cache...');
+        const cached = await getCachedGraphData(resumeHash);
+        console.log(
+          '[Graph] Cache result:',
+          cached ? `Found (${cached.allJobs?.length} jobs)` : 'Miss'
+        );
         if (cached) {
-          console.log('[Graph] Cache hit:', cached.allJobs?.length, 'jobs');
           setLoadingStage(LOADING_STAGES.CACHE_HIT);
+          setLoadingDetails({
+            message: 'Loading from cache...',
+            jobCount: cached.allJobs?.length || 0,
+          });
+          console.log('[Graph] Stage: CACHE_HIT');
+
+          // Small delay so user sees the cache hit message
           await new Promise((resolve) => setTimeout(resolve, 300));
 
           setJobs(cached.allJobs);
@@ -110,32 +86,33 @@ export function usePathwaysJobData({
             cached.graphData,
             cached.jobInfoMap
           );
+          console.log('[Graph] Loaded from cache:', {
+            nodes: rfNodes.length,
+            edges: rfEdges.length,
+          });
           setNodes(rfNodes);
           setEdges(rfEdges);
 
-          lastFetchKeyRef.current = cacheKey;
+          lastResumeHashRef.current = resumeHash;
           setLoadingStage(LOADING_STAGES.COMPLETE);
           setIsLoading(false);
-          isFetchingRef.current = false;
-          console.log('[Graph] Loaded from cache:', rfNodes.length, 'nodes');
+          console.log('[Graph] Stage: COMPLETE (from cache)');
           return;
         }
-        console.log('[Graph] Cache miss');
       }
 
       try {
         setLoadingStage(LOADING_STAGES.FETCHING_JOBS);
-        setLoadingDetails({ message: 'Finding matching jobs...' });
-        console.log('[Graph] Calling API with timeRange:', effectiveTimeRange);
+        setLoadingDetails({
+          message: 'Finding matching jobs...',
+          embeddingSize: embedding.length,
+        });
+        console.log('[Graph] Stage: FETCHING_JOBS (calling API)');
 
         const response = await fetch('/api/pathways/jobs', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            embedding,
-            resumeId: 'resume',
-            timeRange: effectiveTimeRange,
-          }),
+          body: JSON.stringify({ embedding, resumeId: 'resume' }),
         });
 
         if (!response.ok) {
@@ -143,23 +120,28 @@ export function usePathwaysJobData({
         }
 
         const { graphData, jobInfoMap, allJobs } = await response.json();
-        console.log(
-          '[Graph] API returned:',
-          allJobs?.length,
-          'jobs,',
-          graphData?.nodes?.length,
-          'nodes'
-        );
+        console.log('[Graph] API response:', {
+          jobs: allJobs?.length,
+          nodes: graphData?.nodes?.length,
+        });
 
         setLoadingStage(LOADING_STAGES.BUILDING_GRAPH);
         setLoadingDetails({
           message: 'Building career graph...',
           jobCount: allJobs?.length || 0,
+          nodeCount: graphData?.nodes?.length || 0,
+          edgeCount: graphData?.links?.length || 0,
         });
+        console.log('[Graph] Stage: BUILDING_GRAPH');
 
         // Cache the data
-        await setCachedGraphData(cacheKey, { graphData, jobInfoMap, allJobs });
-        lastFetchKeyRef.current = cacheKey;
+        await setCachedGraphData(resumeHash, {
+          graphData,
+          jobInfoMap,
+          allJobs,
+        });
+        console.log('[Graph] Cached to IndexedDB');
+        lastResumeHashRef.current = resumeHash;
 
         setJobs(allJobs);
         setJobInfo(jobInfoMap);
@@ -168,17 +150,15 @@ export function usePathwaysJobData({
           graphData,
           jobInfoMap
         );
-        console.log(
-          '[Graph] Built graph:',
-          rfNodes.length,
-          'nodes,',
-          rfEdges.length,
-          'edges'
-        );
+        console.log('[Graph] Built graph:', {
+          nodes: rfNodes.length,
+          edges: rfEdges.length,
+        });
         setNodes(rfNodes);
         setEdges(rfEdges);
 
         setLoadingStage(LOADING_STAGES.COMPLETE);
+        console.log('[Graph] Stage: COMPLETE (from API)');
       } catch (err) {
         console.error('[Graph] Error:', err);
         logger.error({ error: err.message }, 'Error fetching pathways jobs');
@@ -186,30 +166,40 @@ export function usePathwaysJobData({
         pathwaysToast.jobsFetchError();
       } finally {
         setIsLoading(false);
-        isFetchingRef.current = false;
+        console.log('[Graph] isLoading set to false');
       }
     },
-    [embedding, setNodes, setEdges] // Minimal dependencies - use refs for timeRange/resume
+    [embedding, resume, setNodes, setEdges]
   );
 
-  // Effect to fetch when key inputs change
+  // Detect resume changes and invalidate cache
   useEffect(() => {
-    if (!embedding) return;
-
-    const pureResumeHash = hashResume(resume);
-    const currentKey = `${pureResumeHash}_${timeRange}`;
-
-    console.log('[Graph] Effect check:', {
-      currentKey,
-      lastKey: lastFetchKeyRef.current,
-      needsFetch: currentKey !== lastFetchKeyRef.current,
+    const currentHash = hashResume(resume);
+    console.log('[Graph] Resume change check:', {
+      currentHash,
+      lastHash: lastResumeHashRef.current,
+      changed:
+        lastResumeHashRef.current && currentHash !== lastResumeHashRef.current,
     });
-
-    // Fetch if we don't have this data yet
-    if (currentKey !== lastFetchKeyRef.current) {
-      fetchJobs(false, timeRange);
+    if (
+      lastResumeHashRef.current &&
+      currentHash !== lastResumeHashRef.current
+    ) {
+      console.log('[Graph] Resume changed, forcing refresh');
+      // Resume changed - force refresh
+      fetchJobs(true);
     }
-  }, [embedding, resume, timeRange, graphVersion, fetchJobs]);
+  }, [resume, fetchJobs]);
+
+  // Initial fetch when embedding becomes available or graphVersion changes
+  useEffect(() => {
+    console.log('[Graph] useEffect triggered', {
+      graphVersion,
+      hasEmbedding: !!embedding,
+    });
+    fetchJobs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- embedding is logged but not a trigger dependency
+  }, [fetchJobs, graphVersion]);
 
   return {
     jobs,
@@ -218,6 +208,6 @@ export function usePathwaysJobData({
     error,
     loadingStage,
     loadingDetails,
-    refetch: () => fetchJobs(true, timeRangeRef.current),
+    refetch: () => fetchJobs(true), // Force refresh bypasses cache
   };
 }

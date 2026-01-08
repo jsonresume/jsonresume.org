@@ -6,41 +6,13 @@ import { getJobSalary } from '../utils/salaryParser';
 // Time range configurations (days)
 const TIME_RANGE_DAYS = {
   '1m': 35,
-  '2m': 65,
-  '3m': 95,
+  '2m': 70,
+  '3m': 100,
 };
 
 /**
- * Check if a node matches the salary filter
- */
-function matchesSalaryFilter(
-  nodeId,
-  jobInfo,
-  showSalaryGradient,
-  salaryFilterRange
-) {
-  if (!showSalaryGradient) return true; // No salary filter active
-
-  const job = jobInfo?.[nodeId];
-  const salary = job ? getJobSalary(job) : null;
-
-  // No salary data - doesn't match salary filter
-  if (salary === null) return false;
-
-  // Check range if set
-  if (salaryFilterRange) {
-    if (salary < salaryFilterRange.min || salary > salaryFilterRange.max) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
-/**
  * Hook to filter nodes and edges, with intelligent reconnection
- * Nodes are only hidden when hideFiltered is enabled
- * Otherwise, non-matching nodes are just dimmed (handled by useGraphStyling)
+ * When hideFiltered is enabled, removes hidden nodes and reconnects orphans
  * @param {Object} params - Hook parameters
  * @returns {Object} { visibleNodes, visibleEdges }
  */
@@ -58,13 +30,7 @@ export function useGraphFiltering({
   timeRange = '1m',
 }) {
   return useMemo(() => {
-    // If hideFiltered is not enabled, don't hide anything - just return original
-    // (non-matching nodes will be dimmed by useGraphStyling instead)
-    if (!hideFiltered) {
-      return { visibleNodes: nodes, visibleEdges: edges };
-    }
-
-    // hideFiltered is ON - actually hide non-matching nodes
+    // Identify nodes to hide
     const hiddenNodeIds = new Set();
 
     nodes.forEach((node) => {
@@ -73,42 +39,55 @@ export function useGraphFiltering({
 
       const nodeId = node.id;
 
-      // Time-based filtering
+      // Time-based filtering ALWAYS applies (independent of hideFiltered)
+      let isOutsideTimeRange = false;
       if (jobInfo) {
         const job = jobInfo[nodeId];
         const days = TIME_RANGE_DAYS[timeRange];
         if (days && job?.createdAt) {
           const jobDate = new Date(job.createdAt);
           const cutoffDate = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
-          if (jobDate < cutoffDate) {
-            hiddenNodeIds.add(nodeId);
-            return;
-          }
+          isOutsideTimeRange = jobDate < cutoffDate;
         }
       }
 
-      // Salary filter
-      if (
-        !matchesSalaryFilter(
-          nodeId,
-          jobInfo,
-          showSalaryGradient,
-          salaryFilterRange
-        )
-      ) {
+      // Time filter always hides old jobs
+      if (isOutsideTimeRange) {
         hiddenNodeIds.add(nodeId);
         return;
       }
 
-      // Text/Remote filter (when a filter is active and node doesn't match)
-      if (hasActiveFilter && !filteredNodes.has(nodeId)) {
-        hiddenNodeIds.add(nodeId);
-        return;
-      }
+      // Other filters only apply when hideFiltered is enabled
+      if (!hideFiltered) return;
+
+      // Hide if filtered out (when a filter is active)
+      const isFilteredOut = hasActiveFilter && !filteredNodes.has(nodeId);
 
       // Hide if marked as read
       const readKey = `${username}_${nodeId}`;
-      if (readJobs.has(readKey)) {
+      const isRead = readJobs.has(readKey);
+
+      // Salary-based filtering
+      let isOutsideSalaryRange = false;
+      let hasNoSalary = false;
+
+      if (jobInfo) {
+        const job = jobInfo[nodeId];
+        const salary = job ? getJobSalary(job) : null;
+
+        // Hide if outside salary filter range
+        if (salaryFilterRange && salary !== null) {
+          isOutsideSalaryRange =
+            salary < salaryFilterRange.min || salary > salaryFilterRange.max;
+        }
+
+        // Hide jobs without salary when salary mode is on
+        if (showSalaryGradient && salary === null) {
+          hasNoSalary = true;
+        }
+      }
+
+      if (isFilteredOut || isRead || isOutsideSalaryRange || hasNoSalary) {
         hiddenNodeIds.add(nodeId);
       }
     });
@@ -145,6 +124,3 @@ export function useGraphFiltering({
     timeRange,
   ]);
 }
-
-// Export helper for useGraphStyling
-export { matchesSalaryFilter };

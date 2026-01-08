@@ -5,30 +5,17 @@ import { cosineSimilarity } from '@/app/utils/vectorUtils';
 
 const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
 
-// Time range configurations (days)
-const TIME_RANGE_DAYS = {
-  '1m': 35,
-  '2m': 65,
-  '3m': 95,
-};
-
 /**
  * Match jobs based on embedding similarity
- * @param {Object} supabase - Supabase client
- * @param {Array} embedding - Resume embedding vector
- * @param {string} timeRange - Time range key ('1m', '2m', '3m')
  */
-async function matchJobs(supabase, embedding, timeRange = '3m') {
-  const days = TIME_RANGE_DAYS[timeRange] || 100;
-  const createdAfter = new Date(
-    Date.now() - days * 24 * 60 * 60 * 1000
-  ).toISOString();
-
+async function matchJobs(supabase, embedding) {
   const { data: documents } = await supabase.rpc('match_jobs_v5', {
     query_embedding: embedding,
     match_threshold: -1,
-    match_count: 1000, // Increased to get all jobs in time range
-    created_after: createdAfter,
+    match_count: 200,
+    created_after: new Date(
+      Date.now() - 65 * 24 * 60 * 60 * 1000
+    ).toISOString(),
   });
 
   const sortedDocuments =
@@ -43,70 +30,27 @@ async function matchJobs(supabase, embedding, timeRange = '3m') {
     .from('jobs')
     .select('*')
     .in('id', jobIds)
-    .gte('created_at', createdAfter)
-    .not('gpt_content', 'is', null)
+    .gte(
+      'created_at',
+      new Date(Date.now() - 65 * 24 * 60 * 60 * 1000).toISOString()
+    )
     .order('created_at', { ascending: false });
 
-  // Filter to only jobs with valid, parseable gpt_content
-  const invalidReasons = { null: 0, empty: 0, parseError: 0 };
-  const parseErrors = [];
-
-  const validJobs = (jobsData || []).filter((job) => {
-    if (!job.gpt_content) {
-      invalidReasons.null++;
-      return false;
-    }
-    if (job.gpt_content.trim() === '') {
-      invalidReasons.empty++;
-      return false;
-    }
-    try {
-      JSON.parse(job.gpt_content);
-      return true;
-    } catch (e) {
-      invalidReasons.parseError++;
-      if (parseErrors.length < 3) {
-        parseErrors.push({
-          jobId: job.id,
-          error: e.message,
-          preview: job.gpt_content.substring(0, 100),
-        });
-      }
-      return false;
-    }
-  });
-
-  const invalidCount = (jobsData?.length || 0) - validJobs.length;
-  if (invalidCount > 0) {
-    logger.warn(
-      {
-        totalJobs: jobsData?.length,
-        validJobs: validJobs.length,
-        invalidCount,
-        invalidReasons,
-        sampleErrors: parseErrors,
-      },
-      'Jobs with invalid gpt_content filtered out'
-    );
-  }
-
-  return validJobs.map((job) => {
-    const doc = sortedDocuments.find((d) => d.id === job.id);
-    return { ...job, similarity: doc?.similarity || 0 };
-  });
+  return (
+    jobsData?.map((job) => {
+      const doc = sortedDocuments.find((d) => d.id === job.id);
+      return { ...job, similarity: doc?.similarity || 0 };
+    }) || []
+  );
 }
 
 /**
  * Build graph data structure
- * Only creates links between nodes that successfully parsed
  */
 function buildGraphData(resumeId, topJobs, otherJobs) {
   const nodes = [
     { id: resumeId, group: -1, size: 24, color: '#6366f1', x: 0, y: 0 },
   ];
-
-  // Track which jobs successfully became nodes
-  const validNodeIds = new Set([resumeId]);
 
   // Add top job nodes
   topJobs.forEach((job) => {
@@ -119,7 +63,6 @@ function buildGraphData(resumeId, topJobs, otherJobs) {
         size: 4,
         color: '#fff18f',
       });
-      validNodeIds.add(job.uuid);
     } catch {
       // Skip invalid jobs
     }
@@ -136,36 +79,23 @@ function buildGraphData(resumeId, topJobs, otherJobs) {
         size: 4,
         color: '#fff18f',
       });
-      validNodeIds.add(job.uuid);
     } catch {
       // Skip invalid jobs
     }
   });
 
-  const links = [];
+  // Build links
+  const links = topJobs.map((job) => ({
+    source: resumeId,
+    target: job.uuid,
+    value: job.similarity,
+  }));
 
-  // Build links from resume to top jobs (only valid ones)
-  topJobs.forEach((job) => {
-    if (validNodeIds.has(job.uuid)) {
-      links.push({
-        source: resumeId,
-        target: job.uuid,
-        value: job.similarity,
-      });
-    }
-  });
-
-  // Connect other jobs to most similar valid job
-  otherJobs.forEach((lessRelevantJob) => {
-    // Skip if this job isn't a valid node
-    if (!validNodeIds.has(lessRelevantJob.uuid)) return;
-
+  // Connect other jobs to most similar job
+  otherJobs.forEach((lessRelevantJob, index) => {
     try {
       const lessRelevantVector = JSON.parse(lessRelevantJob.embedding_v5);
-      // Only consider jobs that are valid nodes
-      const availableJobs = [...topJobs, ...otherJobs].filter(
-        (j) => validNodeIds.has(j.uuid) && j.uuid !== lessRelevantJob.uuid
-      );
+      const availableJobs = [...topJobs, ...otherJobs.slice(0, index)];
 
       let bestMatch = { job: null, similarity: -1 };
       availableJobs.forEach((current) => {
@@ -206,7 +136,7 @@ function buildJobInfoMap(jobs) {
   jobs.forEach((job) => {
     try {
       const parsed = JSON.parse(job.gpt_content);
-      // Include normalized salary data and metadata from database columns
+      // Include normalized salary data from database columns
       jobInfoMap[job.uuid] = {
         ...parsed,
         // Override with normalized salary data if available
@@ -214,9 +144,6 @@ function buildJobInfoMap(jobs) {
         salaryMin: job.salary_min,
         salaryMax: job.salary_max,
         salaryCurrency: job.salary_currency,
-        // Include metadata for client-side filtering
-        createdAt: job.created_at,
-        uuid: job.uuid,
       };
     } catch {
       jobInfoMap[job.uuid] = { title: 'Unknown Job', error: 'Failed to parse' };
@@ -238,11 +165,7 @@ export async function POST(request) {
   }
 
   try {
-    const {
-      embedding,
-      resumeId = 'resume',
-      timeRange = '3m',
-    } = await request.json();
+    const { embedding, resumeId = 'resume' } = await request.json();
 
     if (!embedding || !Array.isArray(embedding)) {
       return NextResponse.json(
@@ -252,7 +175,7 @@ export async function POST(request) {
     }
 
     const supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
-    const sortedJobs = await matchJobs(supabase, embedding, timeRange);
+    const sortedJobs = await matchJobs(supabase, embedding);
 
     const topJobs = sortedJobs.slice(0, 10);
     const otherJobs = sortedJobs.slice(10);
@@ -261,13 +184,7 @@ export async function POST(request) {
     const jobInfoMap = buildJobInfoMap(sortedJobs);
 
     logger.info(
-      {
-        jobCount: sortedJobs.length,
-        topCount: topJobs.length,
-        nodeCount: graphData.nodes.length,
-        linkCount: graphData.links.length,
-        timeRange,
-      },
+      { jobCount: sortedJobs.length, topCount: topJobs.length },
       'Matched jobs for pathways'
     );
 
