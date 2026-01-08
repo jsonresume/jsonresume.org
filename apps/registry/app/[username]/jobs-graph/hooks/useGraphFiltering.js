@@ -57,6 +57,28 @@ export function useGraphFiltering({
         return;
       }
 
+      // Salary-based filtering - applies when salary mode is enabled (independent of hideFiltered)
+      if (showSalaryGradient && jobInfo) {
+        const job = jobInfo[nodeId];
+        const salary = job ? getJobSalary(job) : null;
+
+        // Hide jobs without salary when salary mode is on
+        if (salary === null) {
+          hiddenNodeIds.add(nodeId);
+          return;
+        }
+
+        // Hide if outside salary filter range
+        if (salaryFilterRange) {
+          const isOutsideSalaryRange =
+            salary < salaryFilterRange.min || salary > salaryFilterRange.max;
+          if (isOutsideSalaryRange) {
+            hiddenNodeIds.add(nodeId);
+            return;
+          }
+        }
+      }
+
       // Other filters only apply when hideFiltered is enabled
       if (!hideFiltered) return;
 
@@ -67,27 +89,7 @@ export function useGraphFiltering({
       const readKey = `${username}_${nodeId}`;
       const isRead = readJobs.has(readKey);
 
-      // Salary-based filtering
-      let isOutsideSalaryRange = false;
-      let hasNoSalary = false;
-
-      if (jobInfo) {
-        const job = jobInfo[nodeId];
-        const salary = job ? getJobSalary(job) : null;
-
-        // Hide if outside salary filter range
-        if (salaryFilterRange && salary !== null) {
-          isOutsideSalaryRange =
-            salary < salaryFilterRange.min || salary > salaryFilterRange.max;
-        }
-
-        // Hide jobs without salary when salary mode is on
-        if (showSalaryGradient && salary === null) {
-          hasNoSalary = true;
-        }
-      }
-
-      if (isFilteredOut || isRead || isOutsideSalaryRange || hasNoSalary) {
+      if (isFilteredOut || isRead) {
         hiddenNodeIds.add(nodeId);
       }
     });
