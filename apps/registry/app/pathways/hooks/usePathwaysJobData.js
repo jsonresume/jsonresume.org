@@ -28,6 +28,7 @@ export function usePathwaysJobData({
   graphVersion,
   setNodes,
   setEdges,
+  timeRange = '1m',
 }) {
   const [jobs, setJobs] = useState(null);
   const [jobInfo, setJobInfo] = useState({});
@@ -58,12 +59,13 @@ export function usePathwaysJobData({
       console.log('[Graph] Stage: CHECKING_CACHE');
 
       const resumeHash = hashResume(resume);
-      console.log('[Graph] Resume hash:', resumeHash);
+      const cacheKey = `${resumeHash}_${timeRange}`;
+      console.log('[Graph] Cache key:', cacheKey);
 
       // Check cache unless force refresh requested
       if (!forceRefresh) {
         console.log('[Graph] Checking IndexedDB cache...');
-        const cached = await getCachedGraphData(resumeHash);
+        const cached = await getCachedGraphData(cacheKey);
         console.log(
           '[Graph] Cache result:',
           cached ? `Found (${cached.allJobs?.length} jobs)` : 'Miss'
@@ -93,7 +95,7 @@ export function usePathwaysJobData({
           setNodes(rfNodes);
           setEdges(rfEdges);
 
-          lastResumeHashRef.current = resumeHash;
+          lastResumeHashRef.current = cacheKey;
           setLoadingStage(LOADING_STAGES.COMPLETE);
           setIsLoading(false);
           console.log('[Graph] Stage: COMPLETE (from cache)');
@@ -112,7 +114,7 @@ export function usePathwaysJobData({
         const response = await fetch('/api/pathways/jobs', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ embedding, resumeId: 'resume' }),
+          body: JSON.stringify({ embedding, resumeId: 'resume', timeRange }),
         });
 
         if (!response.ok) {
@@ -135,13 +137,13 @@ export function usePathwaysJobData({
         console.log('[Graph] Stage: BUILDING_GRAPH');
 
         // Cache the data
-        await setCachedGraphData(resumeHash, {
+        await setCachedGraphData(cacheKey, {
           graphData,
           jobInfoMap,
           allJobs,
         });
         console.log('[Graph] Cached to IndexedDB');
-        lastResumeHashRef.current = resumeHash;
+        lastResumeHashRef.current = cacheKey;
 
         setJobs(allJobs);
         setJobInfo(jobInfoMap);
@@ -169,27 +171,24 @@ export function usePathwaysJobData({
         console.log('[Graph] isLoading set to false');
       }
     },
-    [embedding, resume, setNodes, setEdges]
+    [embedding, resume, timeRange, setNodes, setEdges]
   );
 
-  // Detect resume changes and invalidate cache
+  // Detect resume or timeRange changes and invalidate cache
   useEffect(() => {
-    const currentHash = hashResume(resume);
-    console.log('[Graph] Resume change check:', {
-      currentHash,
-      lastHash: lastResumeHashRef.current,
+    const currentKey = `${hashResume(resume)}_${timeRange}`;
+    console.log('[Graph] Change check:', {
+      currentKey,
+      lastKey: lastResumeHashRef.current,
       changed:
-        lastResumeHashRef.current && currentHash !== lastResumeHashRef.current,
+        lastResumeHashRef.current && currentKey !== lastResumeHashRef.current,
     });
-    if (
-      lastResumeHashRef.current &&
-      currentHash !== lastResumeHashRef.current
-    ) {
-      console.log('[Graph] Resume changed, forcing refresh');
-      // Resume changed - force refresh
+    if (lastResumeHashRef.current && currentKey !== lastResumeHashRef.current) {
+      console.log('[Graph] Resume or timeRange changed, forcing refresh');
+      // Resume or timeRange changed - force refresh
       fetchJobs(true);
     }
-  }, [resume, fetchJobs]);
+  }, [resume, timeRange, fetchJobs]);
 
   // Initial fetch when embedding becomes available or graphVersion changes
   useEffect(() => {
