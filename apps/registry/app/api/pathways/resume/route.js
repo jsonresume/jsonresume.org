@@ -99,11 +99,12 @@ export async function POST(request) {
 
 /**
  * PATCH - Apply diff to resume and save to history
+ * If replace=true, replaces entire resume instead of merging
  */
 export async function PATCH(request) {
   const supabase = getSupabase();
   try {
-    const { sessionId, userId, diff, explanation, source } =
+    const { sessionId, userId, diff, explanation, source, replace } =
       await request.json();
 
     if (!sessionId && !userId) {
@@ -178,8 +179,10 @@ export async function PATCH(request) {
 
     if (fetchError) throw fetchError;
 
-    // Apply diff to existing resume
-    const updatedResume = applyResumeChanges(existing.resume || {}, diff);
+    // Apply diff to existing resume, or replace entirely if replace=true
+    const updatedResume = replace
+      ? diff
+      : applyResumeChanges(existing.resume || {}, diff);
 
     // Update resume
     const { data: updated, error: updateError } = await supabase

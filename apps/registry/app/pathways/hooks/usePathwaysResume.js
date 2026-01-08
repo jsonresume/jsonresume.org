@@ -165,9 +165,10 @@ export default function usePathwaysResume({ sessionId, userId }) {
 
       try {
         const body = {
-          diff: newResume, // Full resume as diff for initial creation
-          explanation: 'Full resume upload/import',
+          diff: newResume,
+          explanation: 'Full resume replacement',
           source,
+          replace: true, // Replace entire resume, don't merge
         };
 
         if (userId) {
