@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { getEdgeStyle } from '../utils/colorUtils';
+import { matchesSalaryFilter } from './useGraphFiltering';
 
 /**
  * Calculate salary level (0-1) for gradient coloring
@@ -53,28 +54,63 @@ export function useGraphStyling({
   remoteOnly,
   hideFiltered,
 }) {
-  // Check if any filter is active
-  const hasActiveFilter = filterText || remoteOnly;
+  // Check if any filter is active (for text/remote)
+  const hasTextOrRemoteFilter = Boolean(filterText || remoteOnly);
 
   const nodesWithStyle = useMemo(
     () =>
       nodes.map((node) => {
-        // When hideFiltered is on, filtered nodes are already removed
-        // so we don't need to dim them - just show all visible nodes at full opacity
-        const shouldDim =
-          !hideFiltered &&
-          hasActiveFilter &&
-          !node.data.isResume &&
-          !filteredNodes.has(node.id);
+        // Resume node is never dimmed
+        if (node.data.isResume) {
+          return {
+            ...node,
+            type: 'jobNode',
+            data: {
+              ...node.data,
+              jobInfo: jobInfo[node.id],
+              isRead: false,
+              isInterested: false,
+              showSalaryGradient,
+              salaryLevel: 0.5,
+              salaryRange,
+            },
+            style: { ...node.style, opacity: 1 },
+          };
+        }
 
-        const jobData = jobInfo[node.id];
-        const isRead = readJobs?.has(`${username}_${node.id}`);
-        const isInterested = interestedJobs?.has(`${username}_${node.id}`);
+        const nodeId = node.id;
+        const jobData = jobInfo[nodeId];
+        const isRead = readJobs?.has(`${username}_${nodeId}`);
+        const isInterested = interestedJobs?.has(`${username}_${nodeId}`);
         const salaryLevel = getSalaryLevel(jobData, salaryRange);
+
+        // Determine if node should be dimmed (doesn't match active filters)
+        // Only dim when hideFiltered is OFF (otherwise non-matching nodes are hidden)
+        let shouldDim = false;
+
+        if (!hideFiltered) {
+          // Check text/remote filter
+          if (hasTextOrRemoteFilter && !filteredNodes.has(nodeId)) {
+            shouldDim = true;
+          }
+
+          // Check salary filter
+          if (
+            showSalaryGradient &&
+            !matchesSalaryFilter(
+              nodeId,
+              jobInfo,
+              showSalaryGradient,
+              salaryRange?.filterRange
+            )
+          ) {
+            shouldDim = true;
+          }
+        }
 
         return {
           ...node,
-          type: 'jobNode', // Use custom node type
+          type: 'jobNode',
           data: {
             ...node.data,
             jobInfo: jobData,
@@ -82,11 +118,11 @@ export function useGraphStyling({
             isInterested,
             showSalaryGradient,
             salaryLevel,
-            salaryRange, // Pass for JobNode fallback calculations
+            salaryRange,
           },
           style: {
             ...node.style,
-            opacity: shouldDim ? 0.2 : 1,
+            opacity: shouldDim ? 0.15 : 1,
           },
         };
       }),
@@ -98,7 +134,7 @@ export function useGraphStyling({
       interestedJobs,
       showSalaryGradient,
       salaryRange,
-      hasActiveFilter,
+      hasTextOrRemoteFilter,
       filteredNodes,
       hideFiltered,
     ]

@@ -11,8 +11,36 @@ const TIME_RANGE_DAYS = {
 };
 
 /**
+ * Check if a node matches the salary filter
+ */
+function matchesSalaryFilter(
+  nodeId,
+  jobInfo,
+  showSalaryGradient,
+  salaryFilterRange
+) {
+  if (!showSalaryGradient) return true; // No salary filter active
+
+  const job = jobInfo?.[nodeId];
+  const salary = job ? getJobSalary(job) : null;
+
+  // No salary data - doesn't match salary filter
+  if (salary === null) return false;
+
+  // Check range if set
+  if (salaryFilterRange) {
+    if (salary < salaryFilterRange.min || salary > salaryFilterRange.max) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+/**
  * Hook to filter nodes and edges, with intelligent reconnection
- * When hideFiltered is enabled, removes hidden nodes and reconnects orphans
+ * Nodes are only hidden when hideFiltered is enabled
+ * Otherwise, non-matching nodes are just dimmed (handled by useGraphStyling)
  * @param {Object} params - Hook parameters
  * @returns {Object} { visibleNodes, visibleEdges }
  */
@@ -30,7 +58,13 @@ export function useGraphFiltering({
   timeRange = '1m',
 }) {
   return useMemo(() => {
-    // Identify nodes to hide
+    // If hideFiltered is not enabled, don't hide anything - just return original
+    // (non-matching nodes will be dimmed by useGraphStyling instead)
+    if (!hideFiltered) {
+      return { visibleNodes: nodes, visibleEdges: edges };
+    }
+
+    // hideFiltered is ON - actually hide non-matching nodes
     const hiddenNodeIds = new Set();
 
     nodes.forEach((node) => {
@@ -39,57 +73,42 @@ export function useGraphFiltering({
 
       const nodeId = node.id;
 
-      // Time-based filtering ALWAYS applies (independent of hideFiltered)
-      let isOutsideTimeRange = false;
+      // Time-based filtering
       if (jobInfo) {
         const job = jobInfo[nodeId];
         const days = TIME_RANGE_DAYS[timeRange];
         if (days && job?.createdAt) {
           const jobDate = new Date(job.createdAt);
           const cutoffDate = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
-          isOutsideTimeRange = jobDate < cutoffDate;
-        }
-      }
-
-      // Time filter always hides old jobs
-      if (isOutsideTimeRange) {
-        hiddenNodeIds.add(nodeId);
-        return;
-      }
-
-      // Salary-based filtering - applies when salary mode is enabled (independent of hideFiltered)
-      if (showSalaryGradient && jobInfo) {
-        const job = jobInfo[nodeId];
-        const salary = job ? getJobSalary(job) : null;
-
-        // Hide jobs without salary when salary mode is on
-        if (salary === null) {
-          hiddenNodeIds.add(nodeId);
-          return;
-        }
-
-        // Hide if outside salary filter range
-        if (salaryFilterRange) {
-          const isOutsideSalaryRange =
-            salary < salaryFilterRange.min || salary > salaryFilterRange.max;
-          if (isOutsideSalaryRange) {
+          if (jobDate < cutoffDate) {
             hiddenNodeIds.add(nodeId);
             return;
           }
         }
       }
 
-      // Other filters only apply when hideFiltered is enabled
-      if (!hideFiltered) return;
+      // Salary filter
+      if (
+        !matchesSalaryFilter(
+          nodeId,
+          jobInfo,
+          showSalaryGradient,
+          salaryFilterRange
+        )
+      ) {
+        hiddenNodeIds.add(nodeId);
+        return;
+      }
 
-      // Hide if filtered out (when a filter is active)
-      const isFilteredOut = hasActiveFilter && !filteredNodes.has(nodeId);
+      // Text/Remote filter (when a filter is active and node doesn't match)
+      if (hasActiveFilter && !filteredNodes.has(nodeId)) {
+        hiddenNodeIds.add(nodeId);
+        return;
+      }
 
       // Hide if marked as read
       const readKey = `${username}_${nodeId}`;
-      const isRead = readJobs.has(readKey);
-
-      if (isFilteredOut || isRead) {
+      if (readJobs.has(readKey)) {
         hiddenNodeIds.add(nodeId);
       }
     });
@@ -126,3 +145,6 @@ export function useGraphFiltering({
     timeRange,
   ]);
 }
+
+// Export helper for useGraphStyling
+export { matchesSalaryFilter };
