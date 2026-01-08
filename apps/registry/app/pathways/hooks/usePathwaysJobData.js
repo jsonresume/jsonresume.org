@@ -28,6 +28,7 @@ export function usePathwaysJobData({
   graphVersion,
   setNodes,
   setEdges,
+  timeRange = '3m',
 }) {
   const [jobs, setJobs] = useState(null);
   const [jobInfo, setJobInfo] = useState({});
@@ -45,6 +46,7 @@ export function usePathwaysJobData({
         forceRefresh,
         hasEmbedding: !!embedding,
         embeddingLength: embedding?.length,
+        timeRange,
       });
       if (!embedding || !Array.isArray(embedding) || embedding.length === 0) {
         console.log('[Graph] No embedding, skipping fetch');
@@ -57,8 +59,9 @@ export function usePathwaysJobData({
       setLoadingDetails({ message: 'Checking cached data...' });
       console.log('[Graph] Stage: CHECKING_CACHE');
 
-      const resumeHash = hashResume(resume);
-      console.log('[Graph] Resume hash:', resumeHash);
+      // Include timeRange in cache key so different time ranges have separate caches
+      const resumeHash = hashResume(resume) + '_' + timeRange;
+      console.log('[Graph] Cache key:', resumeHash);
 
       // Check cache unless force refresh requested
       if (!forceRefresh) {
@@ -112,7 +115,7 @@ export function usePathwaysJobData({
         const response = await fetch('/api/pathways/jobs', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ embedding, resumeId: 'resume' }),
+          body: JSON.stringify({ embedding, resumeId: 'resume', timeRange }),
         });
 
         if (!response.ok) {
@@ -169,13 +172,13 @@ export function usePathwaysJobData({
         console.log('[Graph] isLoading set to false');
       }
     },
-    [embedding, resume, setNodes, setEdges]
+    [embedding, resume, setNodes, setEdges, timeRange]
   );
 
-  // Detect resume changes and invalidate cache
+  // Detect resume or timeRange changes and invalidate cache
   useEffect(() => {
-    const currentHash = hashResume(resume);
-    console.log('[Graph] Resume change check:', {
+    const currentHash = hashResume(resume) + '_' + timeRange;
+    console.log('[Graph] Resume/timeRange change check:', {
       currentHash,
       lastHash: lastResumeHashRef.current,
       changed:
@@ -185,11 +188,11 @@ export function usePathwaysJobData({
       lastResumeHashRef.current &&
       currentHash !== lastResumeHashRef.current
     ) {
-      console.log('[Graph] Resume changed, forcing refresh');
-      // Resume changed - force refresh
+      console.log('[Graph] Resume or timeRange changed, forcing refresh');
+      // Resume or timeRange changed - force refresh
       fetchJobs(true);
     }
-  }, [resume, fetchJobs]);
+  }, [resume, timeRange, fetchJobs]);
 
   // Initial fetch when embedding becomes available or graphVersion changes
   useEffect(() => {

@@ -88,6 +88,7 @@ export default function PathwaysGraph() {
       graphVersion,
       setNodes,
       setEdges,
+      timeRange,
     });
 
   // Convert job state Sets to the format expected by jobs-graph hooks

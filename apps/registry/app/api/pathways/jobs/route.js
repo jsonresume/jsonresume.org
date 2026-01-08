@@ -5,17 +5,30 @@ import { cosineSimilarity } from '@/app/utils/vectorUtils';
 
 const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
 
+// Time range configurations (days) - matches frontend
+const TIME_RANGE_DAYS = {
+  '1m': 35,
+  '2m': 70,
+  '3m': 100,
+};
+
 /**
  * Match jobs based on embedding similarity
+ * @param {Object} supabase - Supabase client
+ * @param {Array} embedding - Resume embedding vector
+ * @param {string} timeRange - Time range key ('1m', '2m', '3m')
  */
-async function matchJobs(supabase, embedding) {
+async function matchJobs(supabase, embedding, timeRange = '3m') {
+  const days = TIME_RANGE_DAYS[timeRange] || 100;
+  const createdAfter = new Date(
+    Date.now() - days * 24 * 60 * 60 * 1000
+  ).toISOString();
+
   const { data: documents } = await supabase.rpc('match_jobs_v5', {
     query_embedding: embedding,
     match_threshold: -1,
-    match_count: 200,
-    created_after: new Date(
-      Date.now() - 65 * 24 * 60 * 60 * 1000
-    ).toISOString(),
+    match_count: 1000, // Increased to get all jobs in time range
+    created_after: createdAfter,
   });
 
   const sortedDocuments =
@@ -30,10 +43,7 @@ async function matchJobs(supabase, embedding) {
     .from('jobs')
     .select('*')
     .in('id', jobIds)
-    .gte(
-      'created_at',
-      new Date(Date.now() - 65 * 24 * 60 * 60 * 1000).toISOString()
-    )
+    .gte('created_at', createdAfter)
     .order('created_at', { ascending: false });
 
   return (
@@ -165,7 +175,11 @@ export async function POST(request) {
   }
 
   try {
-    const { embedding, resumeId = 'resume' } = await request.json();
+    const {
+      embedding,
+      resumeId = 'resume',
+      timeRange = '3m',
+    } = await request.json();
 
     if (!embedding || !Array.isArray(embedding)) {
       return NextResponse.json(
@@ -175,7 +189,7 @@ export async function POST(request) {
     }
 
     const supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
-    const sortedJobs = await matchJobs(supabase, embedding);
+    const sortedJobs = await matchJobs(supabase, embedding, timeRange);
 
     const topJobs = sortedJobs.slice(0, 10);
     const otherJobs = sortedJobs.slice(10);
