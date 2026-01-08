@@ -255,10 +255,12 @@ function findMatchingJobs(criteria, jobs, jobInfo) {
       if (!industryMatch) matches = false;
     }
 
-    // Check salary range
+    // Check salary range using normalized salary data
     if (matches && (criteria.salaryMin || criteria.salaryMax)) {
-      const salary = parseSalary(info.salary);
+      // Use normalized salaryUsd or salaryMax (already in USD)
+      const salary = info.salaryUsd || info.salaryMax || info.salaryMin;
       if (salary) {
+        // criteria is in thousands (e.g., 150 = $150k)
         if (criteria.salaryMin && salary < criteria.salaryMin * 1000)
           matches = false;
         if (criteria.salaryMax && salary > criteria.salaryMax * 1000)
@@ -292,13 +294,4 @@ function findMatchingJobs(criteria, jobs, jobInfo) {
   }
 
   return matchingIds;
-}
-
-/**
- * Parse salary string to number
- */
-function parseSalary(salaryStr) {
-  if (!salaryStr) return null;
-  const match = salaryStr.match(/\$?([\d,]+)/);
-  return match ? parseInt(match[1].replace(/,/g, ''), 10) : null;
 }
