@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { logger } from '@/lib/logger';
 import { usePathways } from '../context/PathwaysContext';
 
 /**
@@ -30,13 +31,14 @@ export default function usePathwaysSession() {
         migrateToUser(username)
           .then((result) => {
             if (result.success) {
-              console.log(
-                `Migrated ${result.migrated || 0} job states to account`
+              logger.info(
+                { migrated: result.migrated || 0 },
+                'Job states migrated to account'
               );
             }
           })
           .catch((error) => {
-            console.error('Migration failed:', error);
+            logger.error({ error: error.message }, 'Migration failed');
           });
       }
 

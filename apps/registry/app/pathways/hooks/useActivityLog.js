@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useEffect, useRef } from 'react';
+import { logger } from '@/lib/logger';
 import { usePathways } from '../context/PathwaysContext';
 import { useAuth } from '@/app/context/auth';
 
@@ -54,7 +55,9 @@ export default function useActivityLog() {
                 }
               : { sessionId, userId, activities: batch }
           ),
-        }).catch((err) => console.error('Failed to log activity:', err));
+        }).catch((err) =>
+          logger.error({ error: err.message }, 'Failed to log activity')
+        );
       }, 500);
     },
     [sessionId, userId]
@@ -102,7 +105,7 @@ export default function useActivityLog() {
         setHasMore(data.hasMore ?? false);
         setTotal(data.total ?? 0);
       } catch (err) {
-        console.error('Failed to fetch activities:', err);
+        logger.error({ error: err.message }, 'Failed to fetch activities');
         setError(err.message || 'Failed to load activities');
         setHasMore(false);
       } finally {

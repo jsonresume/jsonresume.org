@@ -43,10 +43,8 @@ function PathwaysContent() {
           const parsed = JSON.parse(json);
           // Only save if JSON is valid and different from last saved
           if (json !== lastSavedJsonRef.current) {
-            console.log('[Pathways] Auto-saving resume...');
             await setFullResume(parsed, 'manual_edit');
             lastSavedJsonRef.current = json;
-            console.log('[Pathways] Resume saved');
           }
         } catch {
           // Invalid JSON, don't save

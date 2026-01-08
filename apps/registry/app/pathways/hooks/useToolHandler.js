@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useEffect, useCallback } from 'react';
+import { logger } from '@/lib/logger';
 import applyResumeChanges from '../utils/applyResumeChanges';
 
 /**
@@ -42,7 +43,10 @@ export default function useToolHandler({
 
       if (saveResumeChanges) {
         saveResumeChanges(changes, explanation, 'ai_update').catch((err) =>
-          console.error('Failed to persist resume changes:', err)
+          logger.error(
+            { error: err.message },
+            'Failed to persist resume changes'
+          )
         );
       }
     },
@@ -91,7 +95,10 @@ export default function useToolHandler({
             body: JSON.stringify({ userId, feedbacks }),
           });
         } catch (error) {
-          console.error('Failed to save batch feedback:', error);
+          logger.error(
+            { error: error.message },
+            'Failed to save batch feedback'
+          );
         }
       }
     },
@@ -147,7 +154,7 @@ export default function useToolHandler({
           markAsRead?.(jobId);
         }
       } catch (error) {
-        console.error('Failed to save job feedback:', error);
+        logger.error({ error: error.message }, 'Failed to save job feedback');
       }
     },
     [userId, markAsRead, markAsInterested]

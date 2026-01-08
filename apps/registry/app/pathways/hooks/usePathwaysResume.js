@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useEffect, useRef } from 'react';
+import { logger } from '@/lib/logger';
 import applyResumeChanges from '../utils/applyResumeChanges';
 
 /**
@@ -61,7 +62,7 @@ export default function usePathwaysResume({ sessionId, userId }) {
         }
       })
       .catch((err) => {
-        console.error('Failed to load resume:', err);
+        logger.error({ error: err.message }, 'Failed to load resume');
         setError(err.message);
         // Start with null on error (will show sample in context)
         setResume(null);
@@ -119,7 +120,7 @@ export default function usePathwaysResume({ sessionId, userId }) {
 
         return { success: true, resume: data.resume?.resume };
       } catch (err) {
-        console.error('Failed to save resume:', err);
+        logger.error({ error: err.message }, 'Failed to save resume');
         setError(err.message);
         return { success: false, error: err.message };
       } finally {
@@ -196,7 +197,7 @@ export default function usePathwaysResume({ sessionId, userId }) {
 
         return { success: true, resume: data.resume?.resume };
       } catch (err) {
-        console.error('Failed to set resume:', err);
+        logger.error({ error: err.message }, 'Failed to set resume');
         setError(err.message);
         return { success: false, error: err.message };
       } finally {

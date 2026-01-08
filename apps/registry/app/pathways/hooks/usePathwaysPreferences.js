@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { logger } from '@/lib/logger';
 import { usePathways } from '../context/PathwaysContext';
 
 const SAVE_DEBOUNCE_MS = 1000;
@@ -30,7 +31,7 @@ export function usePathwaysPreferences() {
           setPreferences(data);
         }
       } catch (error) {
-        console.error('Failed to load preferences:', error);
+        logger.error({ error: error.message }, 'Failed to load preferences');
       } finally {
         setIsLoading(false);
       }
@@ -64,7 +65,7 @@ export function usePathwaysPreferences() {
             body: JSON.stringify(prefsToSave),
           });
         } catch (error) {
-          console.error('Failed to save preferences:', error);
+          logger.error({ error: error.message }, 'Failed to save preferences');
         }
       }, SAVE_DEBOUNCE_MS);
     },

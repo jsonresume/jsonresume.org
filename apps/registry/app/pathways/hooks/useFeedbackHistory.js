@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { logger } from '@/lib/logger';
 
 /**
  * Hook to fetch and manage job feedback history
@@ -30,7 +31,7 @@ export default function useFeedbackHistory(userId) {
       const data = await response.json();
       setFeedback(data || []);
     } catch (err) {
-      console.error('Error fetching feedback:', err);
+      logger.error({ error: err.message }, 'Error fetching feedback');
       setError(err.message);
     } finally {
       setIsLoading(false);

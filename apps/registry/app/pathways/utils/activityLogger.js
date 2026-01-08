@@ -3,6 +3,8 @@
  * Can be imported and used anywhere without hooks
  */
 
+import { logger } from '@/lib/logger';
+
 let pendingActivities = [];
 let flushTimeout = null;
 
@@ -20,7 +22,7 @@ export function logActivity(
   const effectiveUserId = userId;
 
   if (!effectiveSessionId && !effectiveUserId) {
-    console.warn('Cannot log activity: no session or user ID');
+    logger.warn('Cannot log activity: no session or user ID');
     return;
   }
 
@@ -78,7 +80,9 @@ function flushActivities() {
       method: activities.length === 1 ? 'POST' : 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
-    }).catch((err) => console.error('Failed to log activity:', err));
+    }).catch((err) =>
+      logger.error({ error: err.message }, 'Failed to log activity')
+    );
   });
 }
 

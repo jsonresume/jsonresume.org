@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
+import { logger } from '@/lib/logger';
 import pathwaysToast from '../utils/toastMessages';
 import { activityLogger } from '../utils/activityLogger';
 
@@ -39,7 +40,7 @@ export default function useSpeech() {
           const errorData = await response
             .json()
             .catch(() => ({ error: 'Unknown error' }));
-          console.error('Speech API error:', errorData);
+          logger.error({ errorData }, 'Speech API error');
           throw new Error(
             errorData.details || errorData.error || 'Failed to generate speech'
           );
@@ -61,7 +62,7 @@ export default function useSpeech() {
         // Set up event listeners
         audio.addEventListener('canplaythrough', () => {
           audio.play().catch((error) => {
-            console.error('Audio playback error:', error);
+            logger.error({ error: error.message }, 'Audio playback error');
           });
         });
 
@@ -71,7 +72,7 @@ export default function useSpeech() {
         });
 
         audio.addEventListener('error', (e) => {
-          console.error('Audio error:', e);
+          logger.error({ error: e.message || 'Audio error' }, 'Audio error');
           URL.revokeObjectURL(audioUrl);
           audioRef.current = null;
         });

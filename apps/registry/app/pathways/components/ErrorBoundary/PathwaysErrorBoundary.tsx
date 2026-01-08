@@ -1,6 +1,7 @@
 'use client';
 
 import { Component, type ReactNode } from 'react';
+import { logger } from '@/lib/logger';
 import { ErrorFallback } from './ErrorFallback';
 
 // ============================================================================
@@ -34,7 +35,10 @@ export class PathwaysErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
     // Log to error reporting service
-    console.error('Pathways Error Boundary caught an error:', error, errorInfo);
+    logger.error(
+      { error: error.message, componentStack: errorInfo.componentStack },
+      'Pathways Error Boundary caught an error'
+    );
     this.props.onError?.(error, errorInfo);
   }
 

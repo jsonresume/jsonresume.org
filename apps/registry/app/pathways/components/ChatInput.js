@@ -2,6 +2,7 @@
 
 import { Send, Mic, MicOff, Paperclip } from 'lucide-react';
 import { useState } from 'react';
+import { logger } from '@/lib/logger';
 import FileUpload from './FileUpload';
 
 export default function ChatInput({
@@ -45,7 +46,7 @@ export default function ChatInput({
         onFileUpload(result.extractedData);
       }
     } catch (error) {
-      console.error('File upload error:', error);
+      logger.error({ error: error.message }, 'File upload error');
       throw error; // Re-throw to show in FileUpload component
     } finally {
       setIsUploading(false);

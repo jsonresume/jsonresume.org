@@ -1,211 +1,54 @@
 'use client';
 
-import { useChat } from '@ai-sdk/react';
-import { DefaultChatTransport } from 'ai';
-import { useState, useEffect, useCallback, useRef } from 'react';
 import Messages from './Messages';
 import ChatHeader from './ChatHeader';
 import ChatInput from './ChatInput';
 import ResumeParseResult from './ResumeParseResult';
 import AgentStatus from './AgentStatus';
-import useSpeech from '../hooks/useSpeech';
-import useVoiceRecording from '../hooks/useVoiceRecording';
-import useToolHandler from '../hooks/useToolHandler';
-import useConversationPersistence from '../hooks/useConversationPersistence';
-import useChatSpeech from '../hooks/useChatSpeech';
-import useFileUploadHandler from '../hooks/useFileUploadHandler';
-import { usePathways } from '../context/PathwaysContext';
-import { INITIAL_MESSAGE } from '../constants/chatMessages';
+import { useCopilotChatState } from '../hooks/useCopilotChatState';
 
 export default function CopilotChat({
   resumeData,
   setResumeData,
   setResumeJson,
 }) {
-  const [input, setInput] = useState('');
-  const [olderMessages, setOlderMessages] = useState([]);
-
   const {
-    sessionId,
-    userId,
-    markAsRead,
-    markAsInterested,
-    markAsHidden,
-    clearJobState,
-    triggerGraphRefresh,
-    refreshEmbedding,
-    saveResumeChanges,
-    pendingJobFeedback,
-    clearPendingJobFeedback,
-  } = usePathways();
+    // Input state
+    input,
+    setInput,
+    allMessages,
 
-  const {
-    isLoading: isLoadingConversation,
+    // Loading states
+    isLoadingConversation,
     isLoadingMore,
     isSaving,
-    initialMessages: persistedMessages,
     hasMore,
-    saveConversation,
-    loadMore,
-    clearConversation,
-  } = useConversationPersistence({
-    sessionId,
-    userId,
-    resume: resumeData,
-  });
+    status,
 
-  const { messages, sendMessage, status, setMessages } = useChat({
-    transport: new DefaultChatTransport({
-      api: '/api/pathways',
-      body: { currentResume: resumeData },
-    }),
-    initialMessages: [INITIAL_MESSAGE],
-  });
-
-  // Set messages when persisted messages are loaded
-  const hasInitializedRef = useRef(false);
-  useEffect(() => {
-    if (
-      !isLoadingConversation &&
-      !hasInitializedRef.current &&
-      persistedMessages?.length > 0
-    ) {
-      setMessages(persistedMessages);
-      hasInitializedRef.current = true;
-    }
-  }, [isLoadingConversation, persistedMessages, setMessages]);
-
-  // Save conversation when messages change
-  useEffect(() => {
-    if (messages.length > 1 && !isLoadingConversation) {
-      saveConversation(messages);
-    }
-  }, [messages, saveConversation, isLoadingConversation]);
-
-  const {
+    // Speech state
     isSpeechEnabled,
     isGeneratingSpeech,
     selectedVoice,
     setSelectedVoice,
-    speakText,
     toggleSpeech,
-    stopSpeech,
-    cleanup: cleanupSpeech,
-  } = useSpeech();
 
-  // Auto-speak assistant messages
-  useChatSpeech({ messages, isSpeechEnabled, status, speakText });
-
-  const handleTranscriptionComplete = useCallback(
-    (text) => {
-      setInput(text);
-      sendMessage({ text });
-      setInput('');
-    },
-    [sendMessage]
-  );
-
-  const {
+    // Recording state
     isRecording,
     isTranscribing,
-    toggleRecording,
-    cleanup: cleanupRecording,
-  } = useVoiceRecording(handleTranscriptionComplete);
 
-  // Unified tool handler for all AI tool invocations
-  useToolHandler({
-    messages,
-    resumeData,
-    setResumeData,
-    saveResumeChanges,
-    markAsRead,
-    markAsInterested,
-    markAsHidden,
-    clearJobState,
-    triggerGraphRefresh,
-    userId,
-  });
-
-  // File upload handling
-  const {
+    // File upload state
     pendingResumeData,
     isApplyingResume,
+
+    // Handlers
+    handleSubmit,
+    handleToggleRecording,
+    handleLoadMore,
     handleFileUpload,
     handleApplyResumeData,
     handleDismissParseResult,
-  } = useFileUploadHandler({ sendMessage });
-
-  // Trigger embedding refresh when resume changes
-  const prevResumeRef = useRef(resumeData);
-  useEffect(() => {
-    const hasChange =
-      JSON.stringify(prevResumeRef.current) !== JSON.stringify(resumeData);
-    if (hasChange && refreshEmbedding) {
-      const timeout = setTimeout(() => refreshEmbedding(), 1000);
-      prevResumeRef.current = resumeData;
-      return () => clearTimeout(timeout);
-    }
-  }, [resumeData, refreshEmbedding]);
-
-  // Handle pending job feedback prompt from graph panel
-  useEffect(() => {
-    if (pendingJobFeedback) {
-      const { jobInfo, sentiment } = pendingJobFeedback;
-      const sentimentLabel =
-        {
-          interested: 'interested in',
-          not_interested: 'not interested in',
-          maybe: 'unsure about',
-          applied: 'applying to',
-        }[sentiment] || sentiment;
-
-      // Send the prompt as a user message with job context for the AI
-      sendMessage({
-        text: `[Job Review] Job ID: ${jobInfo.id} | Title: "${jobInfo.title}" | Company: ${jobInfo.company} | Sentiment: ${sentiment}. I want to mark this job as ${sentimentLabel}. Ask me why briefly.`,
-      });
-      clearPendingJobFeedback();
-    }
-  }, [pendingJobFeedback, sendMessage, clearPendingJobFeedback]);
-
-  const handleSubmit = useCallback(
-    (text) => {
-      sendMessage({ text });
-      setInput('');
-    },
-    [sendMessage]
-  );
-
-  const handleToggleRecording = useCallback(() => {
-    toggleRecording(stopSpeech);
-  }, [toggleRecording, stopSpeech]);
-
-  // Handle loading older messages (prepend to existing)
-  const handleLoadMore = useCallback(async () => {
-    const older = await loadMore();
-    if (older?.length > 0) {
-      setOlderMessages((prev) => [...older, ...prev]);
-    }
-    return older;
-  }, [loadMore]);
-
-  // Reset older messages and initialization flag when conversation is cleared
-  useEffect(() => {
-    if (!persistedMessages) {
-      setOlderMessages([]);
-      hasInitializedRef.current = false;
-    }
-  }, [persistedMessages]);
-
-  // Combine older loaded messages with current messages
-  const allMessages = [...olderMessages, ...messages];
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      cleanupSpeech();
-      cleanupRecording();
-    };
-  }, [cleanupSpeech, cleanupRecording]);
+    clearConversation,
+  } = useCopilotChatState({ resumeData, setResumeData });
 
   if (isLoadingConversation) {
     return (
