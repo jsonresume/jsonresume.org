@@ -1,5 +1,10 @@
 import dagre from '@dagrejs/dagre';
 
+const RESUME_WIDTH = 120;
+const RESUME_HEIGHT = 60;
+const JOB_WIDTH = 180;
+const JOB_HEIGHT = 80;
+
 /**
  * Applies Dagre graph layout algorithm to React Flow nodes and edges
  * Creates a hierarchical tree with resume at top center
@@ -14,58 +19,50 @@ export const getLayoutedElements = (nodes, edges, direction = 'TB') => {
 
   dagreGraph.setGraph({
     rankdir: direction,
-    align: 'UL', // Upper-left alignment helps with centering
-    nodesep: 50,
-    ranksep: 120,
-    edgesep: 25,
-    marginx: 50,
-    marginy: 50,
-    acyclicer: 'greedy',
-    ranker: 'tight-tree', // Better for tree-like structures
+    nodesep: 60,
+    ranksep: 100,
+    edgesep: 20,
+    marginx: 20,
+    marginy: 20,
   });
 
-  // Add nodes with explicit rank for resume
+  // Add all nodes to dagre
   nodes.forEach((node) => {
-    const nodeConfig = {
-      width: node.data.isResume ? 120 : 180,
-      height: node.data.isResume ? 60 : 80,
-    };
-    // Force resume node to rank 0 (top)
-    if (node.data.isResume) {
-      nodeConfig.rank = 0;
-    }
-    dagreGraph.setNode(node.id, nodeConfig);
+    const isResume = node.data?.isResume;
+    dagreGraph.setNode(node.id, {
+      width: isResume ? RESUME_WIDTH : JOB_WIDTH,
+      height: isResume ? RESUME_HEIGHT : JOB_HEIGHT,
+    });
   });
 
+  // Add all edges - dagre uses these to determine hierarchy
   edges.forEach((edge) => {
     dagreGraph.setEdge(edge.source, edge.target);
   });
 
   dagre.layout(dagreGraph);
 
-  // Find graph bounds to center everything
-  let minX = Infinity,
-    maxX = -Infinity;
+  // Find center X for the resume node to position graph
+  let resumeX = 0;
   nodes.forEach((node) => {
-    const pos = dagreGraph.node(node.id);
-    if (pos) {
-      minX = Math.min(minX, pos.x);
-      maxX = Math.max(maxX, pos.x);
+    if (node.data?.isResume) {
+      const pos = dagreGraph.node(node.id);
+      if (pos) resumeX = pos.x;
     }
   });
-  const centerX = (minX + maxX) / 2;
 
+  // Position nodes - center around resume's X position
   const layoutedNodes = nodes.map((node) => {
-    const nodeWithPosition = dagreGraph.node(node.id);
-    const width = node.data.isResume ? 120 : 180;
-    const height = node.data.isResume ? 60 : 80;
+    const pos = dagreGraph.node(node.id);
+    const isResume = node.data?.isResume;
+    const width = isResume ? RESUME_WIDTH : JOB_WIDTH;
+    const height = isResume ? RESUME_HEIGHT : JOB_HEIGHT;
 
     return {
       ...node,
       position: {
-        // Center nodes around x=0
-        x: nodeWithPosition.x - centerX - width / 2,
-        y: nodeWithPosition.y - height / 2,
+        x: pos.x - resumeX - width / 2,
+        y: pos.y - height / 2,
       },
     };
   });

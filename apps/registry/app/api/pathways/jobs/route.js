@@ -55,82 +55,83 @@ async function matchJobs(supabase, embedding, timeRange = '1m') {
 
 /**
  * Build graph data structure
+ * Only includes jobs that have both valid gpt_content AND embedding_v5
  */
 function buildGraphData(resumeId, topJobs, otherJobs) {
+  // Filter to only jobs with valid content AND embeddings (same as original jobs-graph)
+  const validTopJobs = topJobs
+    .map((job) => {
+      try {
+        const content = JSON.parse(job.gpt_content);
+        const vector = JSON.parse(job.embedding_v5);
+        return { ...job, parsedContent: content, vector };
+      } catch {
+        return null;
+      }
+    })
+    .filter(Boolean);
+
+  const validOtherJobs = otherJobs
+    .map((job) => {
+      try {
+        const content = JSON.parse(job.gpt_content);
+        const vector = JSON.parse(job.embedding_v5);
+        return { ...job, parsedContent: content, vector };
+      } catch {
+        return null;
+      }
+    })
+    .filter(Boolean);
+
+  // Build nodes - resume + valid jobs only
   const nodes = [
     { id: resumeId, group: -1, size: 24, color: '#6366f1', x: 0, y: 0 },
+    ...validTopJobs.map((job) => ({
+      id: job.uuid,
+      label: job.parsedContent.title,
+      group: 1,
+      size: 4,
+      color: '#fff18f',
+    })),
+    ...validOtherJobs.map((job) => ({
+      id: job.uuid,
+      label: job.parsedContent.title,
+      group: 2,
+      size: 4,
+      color: '#fff18f',
+    })),
   ];
 
-  // Add top job nodes
-  topJobs.forEach((job) => {
-    try {
-      const jobContent = JSON.parse(job.gpt_content);
-      nodes.push({
-        id: job.uuid,
-        label: jobContent.title,
-        group: 1,
-        size: 4,
-        color: '#fff18f',
-      });
-    } catch {
-      // Skip invalid jobs
-    }
-  });
-
-  // Add other job nodes
-  otherJobs.forEach((job) => {
-    try {
-      const jobContent = JSON.parse(job.gpt_content);
-      nodes.push({
-        id: job.uuid,
-        label: jobContent.title,
-        group: 2,
-        size: 4,
-        color: '#fff18f',
-      });
-    } catch {
-      // Skip invalid jobs
-    }
-  });
-
-  // Build links
-  const links = topJobs.map((job) => ({
+  // Build links - top jobs connect to resume
+  const links = validTopJobs.map((job) => ({
     source: resumeId,
     target: job.uuid,
     value: job.similarity,
   }));
 
-  // Connect other jobs to most similar job
-  otherJobs.forEach((lessRelevantJob, index) => {
-    try {
-      const lessRelevantVector = JSON.parse(lessRelevantJob.embedding_v5);
-      const availableJobs = [...topJobs, ...otherJobs.slice(0, index)];
+  // Connect other jobs to most similar previous job
+  validOtherJobs.forEach((lessRelevantJob, index) => {
+    const availableJobs = [...validTopJobs, ...validOtherJobs.slice(0, index)];
 
-      let bestMatch = { job: null, similarity: -1 };
-      availableJobs.forEach((current) => {
-        try {
-          const currentVector = JSON.parse(current.embedding_v5);
-          const similarity = cosineSimilarity(
-            lessRelevantVector,
-            currentVector
-          );
-          if (similarity > bestMatch.similarity) {
-            bestMatch = { job: current, similarity };
-          }
-        } catch {
-          // Skip invalid embeddings
-        }
+    const bestMatch = availableJobs.reduce(
+      (best, current) => {
+        const similarity = cosineSimilarity(
+          lessRelevantJob.vector,
+          current.vector
+        );
+        return similarity > best.similarity
+          ? { job: current, similarity }
+          : best;
+      },
+      { job: null, similarity: -1 }
+    );
+
+    if (bestMatch.job) {
+      links.push({
+        source: bestMatch.job.uuid,
+        target: lessRelevantJob.uuid,
+        value: bestMatch.similarity,
       });
-
-      if (bestMatch.job) {
-        links.push({
-          source: bestMatch.job.uuid,
-          target: lessRelevantJob.uuid,
-          value: bestMatch.similarity,
-        });
-      }
-    } catch {
-      // Skip invalid embeddings
     }
   });
 
