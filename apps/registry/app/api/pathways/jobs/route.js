@@ -198,7 +198,13 @@ export async function POST(request) {
     const jobInfoMap = buildJobInfoMap(sortedJobs);
 
     logger.info(
-      { jobCount: sortedJobs.length, topCount: topJobs.length },
+      {
+        jobCount: sortedJobs.length,
+        topCount: topJobs.length,
+        nodeCount: graphData.nodes.length,
+        linkCount: graphData.links.length,
+        timeRange,
+      },
       'Matched jobs for pathways'
     );
 

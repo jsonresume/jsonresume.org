@@ -37,16 +37,18 @@ export function usePathwaysJobData({
   const [loadingStage, setLoadingStage] = useState(null);
   const [loadingDetails, setLoadingDetails] = useState({});
 
-  // Track the last resume hash to detect changes
+  // Track the last values to detect changes
   const lastResumeHashRef = useRef(null);
+  const lastTimeRangeRef = useRef(timeRange);
 
   const fetchJobs = useCallback(
-    async (forceRefresh = false) => {
+    async (forceRefresh = false, overrideTimeRange = null) => {
+      const effectiveTimeRange = overrideTimeRange || timeRange;
       console.log('[Graph] fetchJobs called', {
         forceRefresh,
         hasEmbedding: !!embedding,
         embeddingLength: embedding?.length,
-        timeRange,
+        timeRange: effectiveTimeRange,
       });
       if (!embedding || !Array.isArray(embedding) || embedding.length === 0) {
         console.log('[Graph] No embedding, skipping fetch');
@@ -60,7 +62,7 @@ export function usePathwaysJobData({
       console.log('[Graph] Stage: CHECKING_CACHE');
 
       // Include timeRange in cache key so different time ranges have separate caches
-      const resumeHash = hashResume(resume) + '_' + timeRange;
+      const resumeHash = hashResume(resume) + '_' + effectiveTimeRange;
       console.log('[Graph] Cache key:', resumeHash);
 
       // Check cache unless force refresh requested
@@ -115,7 +117,11 @@ export function usePathwaysJobData({
         const response = await fetch('/api/pathways/jobs', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ embedding, resumeId: 'resume', timeRange }),
+          body: JSON.stringify({
+            embedding,
+            resumeId: 'resume',
+            timeRange: effectiveTimeRange,
+          }),
         });
 
         if (!response.ok) {
@@ -175,10 +181,27 @@ export function usePathwaysJobData({
     [embedding, resume, setNodes, setEdges, timeRange]
   );
 
-  // Detect resume or timeRange changes and invalidate cache
+  // Handle timeRange changes explicitly - always force refetch
   useEffect(() => {
-    const currentHash = hashResume(resume) + '_' + timeRange;
-    console.log('[Graph] Resume/timeRange change check:', {
+    if (lastTimeRangeRef.current !== timeRange) {
+      console.log(
+        '[Graph] TimeRange changed:',
+        lastTimeRangeRef.current,
+        '->',
+        timeRange
+      );
+      lastTimeRangeRef.current = timeRange;
+      // Force refresh with new timeRange
+      if (embedding) {
+        fetchJobs(true, timeRange);
+      }
+    }
+  }, [timeRange, embedding, fetchJobs]);
+
+  // Detect resume changes and invalidate cache
+  useEffect(() => {
+    const currentHash = hashResume(resume);
+    console.log('[Graph] Resume change check:', {
       currentHash,
       lastHash: lastResumeHashRef.current,
       changed:
@@ -188,21 +211,21 @@ export function usePathwaysJobData({
       lastResumeHashRef.current &&
       currentHash !== lastResumeHashRef.current
     ) {
-      console.log('[Graph] Resume or timeRange changed, forcing refresh');
-      // Resume or timeRange changed - force refresh
+      console.log('[Graph] Resume changed, forcing refresh');
       fetchJobs(true);
     }
-  }, [resume, timeRange, fetchJobs]);
+  }, [resume, fetchJobs]);
 
   // Initial fetch when embedding becomes available or graphVersion changes
   useEffect(() => {
-    console.log('[Graph] useEffect triggered', {
+    console.log('[Graph] Initial fetch effect triggered', {
       graphVersion,
       hasEmbedding: !!embedding,
     });
-    fetchJobs();
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- embedding is logged but not a trigger dependency
-  }, [fetchJobs, graphVersion]);
+    if (embedding) {
+      fetchJobs();
+    }
+  }, [embedding, graphVersion, fetchJobs]);
 
   return {
     jobs,
