@@ -2,17 +2,20 @@
  * Part - Renders a single part of a chat message
  * Uses the tool registry for automatic tool UI lookup
  */
+'use client';
+
 import React from 'react';
+import { Streamdown } from 'streamdown';
 import { renderToolPart, getToolMeta, ToolCard } from '../../tools';
 
-export default function Part({ part }) {
+export default function Part({ part, isStreaming = false }) {
   if (!part || !part.type) {
     return null;
   }
 
-  // Plain text rendering
+  // Plain text rendering with markdown support
   if (part.type === 'text') {
-    return <span>{part.text}</span>;
+    return <Streamdown isAnimating={isStreaming}>{part.text}</Streamdown>;
   }
 
   // Step indicators (silent)

@@ -137,6 +137,7 @@
     "recharts": "^2.12.7",
     "resume-schema": "^1.0.0",
     "sonner": "^1.5.0",
+    "streamdown": "^1.6.11",
     "styled-components": "^6.1.19",
     "tailwindcss": "^3.4.3",
     "uuid": "^9.0.0",

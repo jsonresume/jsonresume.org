@@ -42,9 +42,18 @@ export default function Messages({
   }, []);
 
   // Render a single message item
-  const itemContent = useCallback((index, message) => {
-    return <Message key={message.id} message={message} />;
-  }, []);
+  const itemContent = useCallback(
+    (index, message) => {
+      // Pass isStreaming to the last assistant message when loading
+      const isLastMessage = index === messages.length - 1;
+      const isStreaming =
+        isLoading && isLastMessage && message.role === 'assistant';
+      return (
+        <Message key={message.id} message={message} isStreaming={isStreaming} />
+      );
+    },
+    [isLoading, messages.length]
+  );
 
   // Header component shown when loading more at top
   const Header = useCallback(() => {
