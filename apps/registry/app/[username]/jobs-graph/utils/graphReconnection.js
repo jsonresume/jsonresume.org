@@ -130,16 +130,73 @@ export function reconnectEdges(
 
   // Deduplicate edges (same source-target pair)
   const seen = new Set();
-  const finalEdges = newEdges.filter((e) => {
+  let finalEdges = newEdges.filter((e) => {
     const key = `${e.source}-${e.target}`;
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
   });
 
+  // POST-RECONNECTION: Detect and fix disconnected components
+  // BFS to find all nodes connected to resume
+  const connectedToResume = new Set([resumeNodeId]);
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const edge of finalEdges) {
+      if (
+        connectedToResume.has(edge.source) &&
+        !connectedToResume.has(edge.target)
+      ) {
+        connectedToResume.add(edge.target);
+        changed = true;
+      }
+    }
+  }
+
+  // Find orphan nodes (visible but not connected to resume)
+  const orphanNodes = [...visibleNodeIds].filter(
+    (id) => id !== resumeNodeId && !connectedToResume.has(id)
+  );
+
+  if (orphanNodes.length > 0) {
+    console.log('[reconnectEdges] Found orphan nodes:', orphanNodes.length);
+
+    // Connect each orphan to resume as fallback
+    for (const orphanId of orphanNodes) {
+      // Try to find best visible connected node from nearestNeighbors
+      let bestConnection = resumeNodeId;
+      let bestSimilarity = 0.5; // default for emergency reconnection
+
+      const neighbors = nearestNeighbors[orphanId];
+      if (neighbors && neighbors.length > 0) {
+        for (const neighbor of neighbors) {
+          if (connectedToResume.has(neighbor.id)) {
+            bestConnection = neighbor.id;
+            bestSimilarity = neighbor.similarity;
+            break;
+          }
+        }
+      }
+
+      finalEdges.push({
+        id: `${bestConnection}-${orphanId}`,
+        source: bestConnection,
+        target: orphanId,
+        value: bestSimilarity,
+      });
+
+      // Mark as connected so subsequent orphans can connect to it
+      connectedToResume.add(orphanId);
+    }
+
+    stats.orphansReconnected = orphanNodes.length;
+  }
+
   console.log('[reconnectEdges] Result:', {
     inputEdges: edges.length,
     outputEdges: finalEdges.length,
+    orphansFixed: orphanNodes.length,
     sample: finalEdges
       .slice(0, 3)
       .map((e) => ({ source: e.source, target: e.target })),
