@@ -15,6 +15,26 @@ const TIME_RANGE_DAYS = {
 const MAX_JOBS = 300;
 
 /**
+ * Check if a job has valid data (title and company)
+ */
+function isValidJob(job) {
+  try {
+    const content = JSON.parse(job.gpt_content);
+    const title = content?.title?.toLowerCase() || '';
+    const company = content?.company?.toLowerCase() || '';
+
+    // Filter out jobs with unknown/missing title or company
+    if (!content?.title || !content?.company) return false;
+    if (title === 'unknown' || title === 'unknown job') return false;
+    if (company === 'unknown' || company === 'unknown company') return false;
+
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Match jobs based on embedding similarity
  */
 async function matchJobs(supabase, embedding, timeRange = '1m') {
@@ -45,12 +65,13 @@ async function matchJobs(supabase, embedding, timeRange = '1m') {
     .gte('created_at', createdAfter)
     .order('created_at', { ascending: false });
 
-  return (
-    jobsData?.map((job) => {
-      const doc = sortedDocuments.find((d) => d.id === job.id);
-      return { ...job, similarity: doc?.similarity || 0 };
-    }) || []
-  );
+  // Filter out invalid jobs and add similarity score
+  const validJobs = (jobsData || []).filter(isValidJob).map((job) => {
+    const doc = sortedDocuments.find((d) => d.id === job.id);
+    return { ...job, similarity: doc?.similarity || 0 };
+  });
+
+  return validJobs;
 }
 
 /**
