@@ -154,50 +154,52 @@ function buildGraphData(
     });
   });
 
-  // Track ALL placed nodes (resume + primary jobs initially)
-  const placedNodes = [
-    { id: resumeId, embedding: resumeEmbedding },
-    ...primaryNodes,
-  ];
+  // Track secondary nodes separately (for secondary-to-secondary comparisons)
+  const secondaryNodes = [];
 
   // Debug: track which nodes are chosen as parents
   const parentChoices = {};
 
-  // Add secondary jobs - connect to most similar ALREADY PLACED node
+  // Add secondary jobs
+  // - First secondary (#21): compares to primaries only
+  // - Subsequent secondaries (#22+): compares to other secondaries only
   secondaryJobs.forEach((job, idx) => {
-    // Find most similar node from ALL placed nodes (grows as we add jobs)
-    let bestMatch = { id: resumeId, similarity: -1 };
-    let allSimilarities = [];
+    let bestMatch = { id: null, similarity: -1 };
+    let comparisonPool = [];
 
-    for (const placed of placedNodes) {
-      const sim = cosineSimilarity(job.embedding, placed.embedding);
-      allSimilarities.push({ id: placed.id, sim });
+    if (idx === 0) {
+      // First secondary: compare to primaries only
+      comparisonPool = primaryNodes;
+    } else {
+      // Subsequent secondaries: compare to other secondaries only
+      comparisonPool = secondaryNodes;
+    }
+
+    for (const node of comparisonPool) {
+      const sim = cosineSimilarity(job.embedding, node.embedding);
       if (sim > bestMatch.similarity) {
-        bestMatch = { id: placed.id, similarity: sim };
+        bestMatch = { id: node.id, similarity: sim };
       }
     }
 
     // Debug: log first few secondary job placements
     if (idx < 5) {
-      const sorted = allSimilarities.sort((a, b) => b.sim - a.sim).slice(0, 5);
       logger.debug(
         {
           jobIdx: idx + 21,
-          bestMatchId:
-            bestMatch.id === resumeId ? 'RESUME' : bestMatch.id.slice(0, 8),
+          bestMatchId: bestMatch.id?.slice(0, 8),
           bestSimilarity: bestMatch.similarity.toFixed(4),
-          top5: sorted.map((s) => ({
-            id: s.id === resumeId ? 'RESUME' : s.id.slice(0, 8),
-            sim: s.sim.toFixed(4),
-          })),
-          placedCount: placedNodes.length,
+          poolSize: comparisonPool.length,
+          poolType: idx === 0 ? 'primaries' : 'secondaries',
         },
         'Secondary job placement debug'
       );
     }
 
     // Track parent choices
-    parentChoices[bestMatch.id] = (parentChoices[bestMatch.id] || 0) + 1;
+    if (bestMatch.id) {
+      parentChoices[bestMatch.id] = (parentChoices[bestMatch.id] || 0) + 1;
+    }
 
     // Create node
     try {
@@ -205,7 +207,7 @@ function buildGraphData(
       nodes.push({
         id: job.uuid,
         label: jobContent.title,
-        group: 2, // Group 2 = branches from placed nodes
+        group: 2, // Group 2 = secondary jobs
         size: 4,
         color: '#fff18f',
       });
@@ -219,15 +221,17 @@ function buildGraphData(
       });
     }
 
-    // Connect to best matching placed node
-    links.push({
-      source: bestMatch.id,
-      target: job.uuid,
-      value: bestMatch.similarity,
-    });
+    // Connect to best matching node
+    if (bestMatch.id) {
+      links.push({
+        source: bestMatch.id,
+        target: job.uuid,
+        value: bestMatch.similarity,
+      });
+    }
 
-    // Add this job to placed nodes for future comparisons
-    placedNodes.push({ id: job.uuid, embedding: job.embedding });
+    // Add this job to secondary nodes pool for future comparisons
+    secondaryNodes.push({ id: job.uuid, embedding: job.embedding });
   });
 
   // Debug: log parent choice distribution
