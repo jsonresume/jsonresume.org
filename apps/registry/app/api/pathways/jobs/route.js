@@ -157,14 +157,22 @@ function buildGraphData(
   // Track secondary nodes separately (for secondary-to-secondary comparisons)
   const secondaryNodes = [];
 
+  // Track child counts for penalty calculation
+  const childCounts = {};
+
   // Debug: track which nodes are chosen as parents
   const parentChoices = {};
+
+  // Child count penalty factor - discourages hub formation
+  // Higher values = stronger penalty for nodes with many children
+  const CHILD_PENALTY_FACTOR = 0.15;
 
   // Add secondary jobs
   // - First secondary (#21): compares to primaries only
   // - Subsequent secondaries (#22+): compares to other secondaries only
+  // - Apply child count penalty to encourage chain formation over hubs
   secondaryJobs.forEach((job, idx) => {
-    let bestMatch = { id: null, similarity: -1 };
+    let bestMatch = { id: null, similarity: -1, rawSimilarity: -1 };
     let comparisonPool = [];
 
     if (idx === 0) {
@@ -176,19 +184,36 @@ function buildGraphData(
     }
 
     for (const node of comparisonPool) {
-      const sim = cosineSimilarity(job.embedding, node.embedding);
-      if (sim > bestMatch.similarity) {
-        bestMatch = { id: node.id, similarity: sim };
+      const rawSim = cosineSimilarity(job.embedding, node.embedding);
+      // Apply penalty for nodes with many children to prevent hub formation
+      const nodeChildCount = childCounts[node.id] || 0;
+      const penalty = 1 / (1 + CHILD_PENALTY_FACTOR * nodeChildCount);
+      const adjustedSim = rawSim * penalty;
+
+      if (adjustedSim > bestMatch.similarity) {
+        bestMatch = {
+          id: node.id,
+          similarity: adjustedSim,
+          rawSimilarity: rawSim,
+        };
       }
+    }
+
+    // Update child count for chosen parent
+    if (bestMatch.id) {
+      childCounts[bestMatch.id] = (childCounts[bestMatch.id] || 0) + 1;
     }
 
     // Debug: log first few secondary job placements
     if (idx < 5) {
+      const parentChildren = childCounts[bestMatch.id] || 0;
       logger.debug(
         {
           jobIdx: idx + 21,
           bestMatchId: bestMatch.id?.slice(0, 8),
-          bestSimilarity: bestMatch.similarity.toFixed(4),
+          rawSimilarity: bestMatch.rawSimilarity?.toFixed(4),
+          adjustedSimilarity: bestMatch.similarity?.toFixed(4),
+          parentChildCount: parentChildren,
           poolSize: comparisonPool.length,
           poolType: idx === 0 ? 'primaries' : 'secondaries',
         },
@@ -221,12 +246,12 @@ function buildGraphData(
       });
     }
 
-    // Connect to best matching node
+    // Connect to best matching node (use raw similarity for link value, not penalty-adjusted)
     if (bestMatch.id) {
       links.push({
         source: bestMatch.id,
         target: job.uuid,
-        value: bestMatch.similarity,
+        value: bestMatch.rawSimilarity,
       });
     }
 
