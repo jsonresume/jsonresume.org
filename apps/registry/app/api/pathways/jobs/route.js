@@ -154,15 +154,21 @@ function buildGraphData(
     });
   });
 
-  // Add secondary jobs - connect to most similar primary job
-  secondaryJobs.forEach((job) => {
-    // Find most similar primary node
-    let bestMatch = { id: primaryNodes[0]?.id, similarity: -1 };
+  // Track ALL placed nodes (resume + primary jobs initially)
+  const placedNodes = [
+    { id: resumeId, embedding: resumeEmbedding },
+    ...primaryNodes,
+  ];
 
-    for (const primary of primaryNodes) {
-      const sim = cosineSimilarity(job.embedding, primary.embedding);
+  // Add secondary jobs - connect to most similar ALREADY PLACED node
+  secondaryJobs.forEach((job) => {
+    // Find most similar node from ALL placed nodes (grows as we add jobs)
+    let bestMatch = { id: resumeId, similarity: -1 };
+
+    for (const placed of placedNodes) {
+      const sim = cosineSimilarity(job.embedding, placed.embedding);
       if (sim > bestMatch.similarity) {
-        bestMatch = { id: primary.id, similarity: sim };
+        bestMatch = { id: placed.id, similarity: sim };
       }
     }
 
@@ -172,7 +178,7 @@ function buildGraphData(
       nodes.push({
         id: job.uuid,
         label: jobContent.title,
-        group: 2, // Group 2 = branches from primary
+        group: 2, // Group 2 = branches from placed nodes
         size: 4,
         color: '#fff18f',
       });
@@ -186,14 +192,15 @@ function buildGraphData(
       });
     }
 
-    // Connect to best matching primary job
-    if (bestMatch.id) {
-      links.push({
-        source: bestMatch.id,
-        target: job.uuid,
-        value: bestMatch.similarity,
-      });
-    }
+    // Connect to best matching placed node
+    links.push({
+      source: bestMatch.id,
+      target: job.uuid,
+      value: bestMatch.similarity,
+    });
+
+    // Add this job to placed nodes for future comparisons
+    placedNodes.push({ id: job.uuid, embedding: job.embedding });
   });
 
   // Compute nearest neighbors for each job (top 5 most similar)
