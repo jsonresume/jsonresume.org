@@ -224,7 +224,25 @@ function buildGraphData(
     nearestNeighbors[job.uuid] = similarities;
   });
 
-  return { nodes, links, nearestNeighbors };
+  // Calculate child count for each node (how many links have it as source)
+  const childCounts = {};
+  links.forEach((link) => {
+    childCounts[link.source] = (childCounts[link.source] || 0) + 1;
+  });
+
+  // Add childCount to each node
+  nodes.forEach((node) => {
+    node.childCount = childCounts[node.id] || 0;
+  });
+
+  // Get top nodes by child count for logging
+  const topBranches = nodes
+    .filter((n) => n.childCount > 0)
+    .sort((a, b) => b.childCount - a.childCount)
+    .slice(0, 10)
+    .map((n) => ({ label: n.label || 'Resume', childCount: n.childCount }));
+
+  return { nodes, links, nearestNeighbors, topBranches };
 }
 
 /**
@@ -291,7 +309,11 @@ export async function POST(request) {
     const jobInfoMap = buildJobInfoMap(sortedJobs);
 
     logger.info(
-      { jobCount: sortedJobs.length, timeRange },
+      {
+        jobCount: sortedJobs.length,
+        timeRange,
+        topBranches: graphData.topBranches,
+      },
       'Matched jobs for pathways'
     );
 
@@ -307,6 +329,8 @@ export async function POST(request) {
       allJobs: sortedJobs,
       // Nearest neighbors for smart reconnection when filtering
       nearestNeighbors: graphData.nearestNeighbors,
+      // Top branches by child count
+      topBranches: graphData.topBranches,
     });
   } catch (error) {
     logger.error({ error: error.message }, 'Error in pathways jobs');
