@@ -298,15 +298,15 @@ function buildGraphData(
     nearestNeighbors[job.uuid] = similarities;
   });
 
-  // Calculate child count for each node (how many links have it as source)
-  const childCounts = {};
+  // Calculate final child count for each node (how many links have it as source)
+  const finalChildCounts = {};
   links.forEach((link) => {
-    childCounts[link.source] = (childCounts[link.source] || 0) + 1;
+    finalChildCounts[link.source] = (finalChildCounts[link.source] || 0) + 1;
   });
 
   // Add childCount to each node
   nodes.forEach((node) => {
-    node.childCount = childCounts[node.id] || 0;
+    node.childCount = finalChildCounts[node.id] || 0;
   });
 
   // Get top nodes by child count for logging
