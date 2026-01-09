@@ -5,7 +5,10 @@
 
 import { describe, it, expect } from 'vitest';
 
-const REGISTRY_URL = 'https://registry.jsonresume.org';
+// Use localhost for testing when LOCAL_TEST env var is set
+const REGISTRY_URL = process.env.LOCAL_TEST
+  ? 'http://localhost:3099'
+  : 'https://registry.jsonresume.org';
 
 describe('Pathways Graph Algorithm Debug', () => {
   it('should analyze parent distribution for thomasdavis', async () => {
