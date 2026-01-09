@@ -13,6 +13,7 @@ const TIME_RANGE_DAYS = {
 };
 
 const MAX_JOBS = 300;
+const PRIMARY_BRANCHES = 20; // Number of jobs that connect directly to resume
 
 /**
  * Check if a job has valid data (title and company)
@@ -75,11 +76,15 @@ async function matchJobs(supabase, embedding, timeRange = '1m') {
 }
 
 /**
- * Build graph data structure using incremental tree algorithm
- * Each job connects to its most similar already-placed node (job or resume)
- * This creates natural "career pathways" - chains of related jobs
+ * Build graph data structure with primary branches from resume
+ * Top N jobs connect directly to resume, others branch from those
  */
-function buildGraphData(resumeId, allJobs, resumeEmbedding) {
+function buildGraphData(
+  resumeId,
+  allJobs,
+  resumeEmbedding,
+  primaryCount = PRIMARY_BRANCHES
+) {
   const nodes = [
     { id: resumeId, group: -1, size: 24, color: '#6366f1', x: 0, y: 0 },
   ];
@@ -107,22 +112,57 @@ function buildGraphData(resumeId, allJobs, resumeEmbedding) {
       ),
     }));
 
-  // Sort by resume similarity (highest first - these become branch roots)
+  // Sort by resume similarity (highest first - these become primary branches)
   jobsWithEmbeddings.sort((a, b) => b.resumeSimilarity - a.resumeSimilarity);
 
-  // Track placed nodes with their embeddings (start with resume)
-  const placedNodes = [{ id: resumeId, embedding: resumeEmbedding }];
+  // Split into primary jobs (connect to resume) and secondary jobs (branch from primary)
+  const primaryJobs = jobsWithEmbeddings.slice(0, primaryCount);
+  const secondaryJobs = jobsWithEmbeddings.slice(primaryCount);
 
-  // Build tree incrementally
-  jobsWithEmbeddings.forEach((job) => {
-    // Find most similar already-placed node (starting with resume)
-    let bestMatch = { id: resumeId, similarity: job.resumeSimilarity };
+  // Track primary nodes for secondary job connections
+  const primaryNodes = primaryJobs.map((job) => ({
+    id: job.uuid,
+    embedding: job.embedding,
+  }));
 
-    for (const placed of placedNodes) {
-      if (placed.id === resumeId) continue; // Already checked via resumeSimilarity
-      const sim = cosineSimilarity(job.embedding, placed.embedding);
+  // Add primary jobs - all connect directly to resume
+  primaryJobs.forEach((job) => {
+    try {
+      const jobContent = JSON.parse(job.gpt_content);
+      nodes.push({
+        id: job.uuid,
+        label: jobContent.title,
+        group: 1, // Group 1 = direct from resume
+        size: 4,
+        color: '#fff18f',
+      });
+    } catch {
+      nodes.push({
+        id: job.uuid,
+        label: 'Unknown',
+        group: 1,
+        size: 4,
+        color: '#fff18f',
+      });
+    }
+
+    // Connect directly to resume
+    links.push({
+      source: resumeId,
+      target: job.uuid,
+      value: job.resumeSimilarity,
+    });
+  });
+
+  // Add secondary jobs - connect to most similar primary job
+  secondaryJobs.forEach((job) => {
+    // Find most similar primary node
+    let bestMatch = { id: primaryNodes[0]?.id, similarity: -1 };
+
+    for (const primary of primaryNodes) {
+      const sim = cosineSimilarity(job.embedding, primary.embedding);
       if (sim > bestMatch.similarity) {
-        bestMatch = { id: placed.id, similarity: sim };
+        bestMatch = { id: primary.id, similarity: sim };
       }
     }
 
@@ -132,7 +172,7 @@ function buildGraphData(resumeId, allJobs, resumeEmbedding) {
       nodes.push({
         id: job.uuid,
         label: jobContent.title,
-        group: bestMatch.id === resumeId ? 1 : 2, // Group 1 = direct from resume
+        group: 2, // Group 2 = branches from primary
         size: 4,
         color: '#fff18f',
       });
@@ -146,15 +186,14 @@ function buildGraphData(resumeId, allJobs, resumeEmbedding) {
       });
     }
 
-    // Create edge to best match
-    links.push({
-      source: bestMatch.id,
-      target: job.uuid,
-      value: bestMatch.similarity,
-    });
-
-    // Add to placed nodes for future comparisons
-    placedNodes.push({ id: job.uuid, embedding: job.embedding });
+    // Connect to best matching primary job
+    if (bestMatch.id) {
+      links.push({
+        source: bestMatch.id,
+        target: job.uuid,
+        value: bestMatch.similarity,
+      });
+    }
   });
 
   // Compute nearest neighbors for each job (top 5 most similar)
@@ -222,6 +261,7 @@ export async function POST(request) {
       embedding,
       resumeId = 'resume',
       timeRange = '1m',
+      primaryBranches = PRIMARY_BRANCHES,
     } = await request.json();
 
     if (!embedding || !Array.isArray(embedding)) {
@@ -234,8 +274,13 @@ export async function POST(request) {
     const supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
     const sortedJobs = await matchJobs(supabase, embedding, timeRange);
 
-    // Build tree graph using incremental algorithm
-    const graphData = buildGraphData(resumeId, sortedJobs, embedding);
+    // Build tree graph with configurable primary branches
+    const graphData = buildGraphData(
+      resumeId,
+      sortedJobs,
+      embedding,
+      primaryBranches
+    );
     const jobInfoMap = buildJobInfoMap(sortedJobs);
 
     logger.info(
