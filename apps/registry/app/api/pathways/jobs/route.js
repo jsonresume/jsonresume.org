@@ -160,17 +160,44 @@ function buildGraphData(
     ...primaryNodes,
   ];
 
+  // Debug: track which nodes are chosen as parents
+  const parentChoices = {};
+
   // Add secondary jobs - connect to most similar ALREADY PLACED node
-  secondaryJobs.forEach((job) => {
+  secondaryJobs.forEach((job, idx) => {
     // Find most similar node from ALL placed nodes (grows as we add jobs)
     let bestMatch = { id: resumeId, similarity: -1 };
+    let allSimilarities = [];
 
     for (const placed of placedNodes) {
       const sim = cosineSimilarity(job.embedding, placed.embedding);
+      allSimilarities.push({ id: placed.id, sim });
       if (sim > bestMatch.similarity) {
         bestMatch = { id: placed.id, similarity: sim };
       }
     }
+
+    // Debug: log first few secondary job placements
+    if (idx < 5) {
+      const sorted = allSimilarities.sort((a, b) => b.sim - a.sim).slice(0, 5);
+      logger.debug(
+        {
+          jobIdx: idx + 21,
+          bestMatchId:
+            bestMatch.id === resumeId ? 'RESUME' : bestMatch.id.slice(0, 8),
+          bestSimilarity: bestMatch.similarity.toFixed(4),
+          top5: sorted.map((s) => ({
+            id: s.id === resumeId ? 'RESUME' : s.id.slice(0, 8),
+            sim: s.sim.toFixed(4),
+          })),
+          placedCount: placedNodes.length,
+        },
+        'Secondary job placement debug'
+      );
+    }
+
+    // Track parent choices
+    parentChoices[bestMatch.id] = (parentChoices[bestMatch.id] || 0) + 1;
 
     // Create node
     try {
@@ -202,6 +229,24 @@ function buildGraphData(
     // Add this job to placed nodes for future comparisons
     placedNodes.push({ id: job.uuid, embedding: job.embedding });
   });
+
+  // Debug: log parent choice distribution
+  const choicesSorted = Object.entries(parentChoices)
+    .map(([id, count]) => ({
+      id: id === resumeId ? 'RESUME' : id.slice(0, 8),
+      count,
+    }))
+    .sort((a, b) => b.count - a.count);
+
+  logger.info(
+    {
+      totalSecondary: secondaryJobs.length,
+      uniqueParents: Object.keys(parentChoices).length,
+      topParents: choicesSorted.slice(0, 10),
+      resumeChosen: parentChoices[resumeId] || 0,
+    },
+    'Parent choice distribution for secondary jobs'
+  );
 
   // Compute nearest neighbors for each job (top 5 most similar)
   // Include resume in neighbors for smart reconnection when filtering
@@ -242,7 +287,18 @@ function buildGraphData(
     .slice(0, 10)
     .map((n) => ({ label: n.label || 'Resume', childCount: n.childCount }));
 
-  return { nodes, links, nearestNeighbors, topBranches };
+  return {
+    nodes,
+    links,
+    nearestNeighbors,
+    topBranches,
+    debug: {
+      totalSecondary: secondaryJobs.length,
+      uniqueParents: Object.keys(parentChoices).length,
+      topParents: choicesSorted.slice(0, 10),
+      resumeChosen: parentChoices[resumeId] || 0,
+    },
+  };
 }
 
 /**
@@ -331,6 +387,8 @@ export async function POST(request) {
       nearestNeighbors: graphData.nearestNeighbors,
       // Top branches by child count
       topBranches: graphData.topBranches,
+      // Debug info for analyzing parent distribution
+      debug: graphData.debug,
     });
   } catch (error) {
     logger.error({ error: error.message }, 'Error in pathways jobs');
