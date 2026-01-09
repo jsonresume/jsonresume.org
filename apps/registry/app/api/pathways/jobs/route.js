@@ -418,6 +418,8 @@ export async function POST(request) {
       topBranches: graphData.topBranches,
       // Debug info for analyzing parent distribution
       debug: graphData.debug,
+      // Version for deployment verification
+      _version: 'v2-child-penalty-0.15',
     });
   } catch (error) {
     logger.error({ error: error.message }, 'Error in pathways jobs');

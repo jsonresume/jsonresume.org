@@ -44,6 +44,10 @@ describe('Pathways Graph Algorithm Debug', () => {
     const jobsData = await jobsRes.json();
     expect(jobsData.graphData).toBeDefined();
 
+    // Check API version to verify deployment
+    console.log('\n=== API Version ===');
+    console.log('Version:', jobsData._version || 'NOT FOUND - old deployment');
+
     const { graphData, debug, topBranches } = jobsData;
     const { nodes, links } = graphData;
 
