@@ -271,3 +271,35 @@
 .job-node-custom.salary-gradient {
   /* Base for salary gradient mode - actual color set via inline style */
 }
+
+/* Child count badge */
+.child-count-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  background: #6366f1;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(99, 102, 241, 0.3);
+}
+
+.job-node-custom {
+  position: relative;
+}
+
+.resume-node-custom {
+  position: relative;
+}
+
+.resume-child-count {
+  background: #713f12;
+  box-shadow: 0 2px 4px rgba(113, 63, 18, 0.3);
+}

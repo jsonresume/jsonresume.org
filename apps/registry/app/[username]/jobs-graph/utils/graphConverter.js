@@ -27,6 +27,7 @@ export const convertToReactFlowFormat = (graphData, jobInfoMap) => {
         ),
         jobInfo: jobInfoMap[node.id],
         isResume,
+        childCount: node.childCount || 0,
       },
       className: isResume ? 'resume-node' : 'job-node',
     };

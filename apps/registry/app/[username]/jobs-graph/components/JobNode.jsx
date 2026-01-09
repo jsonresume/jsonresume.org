@@ -135,6 +135,7 @@ function JobNode({ data, selected }) {
     isInterested,
     showSalaryGradient,
     salaryLevel,
+    childCount,
   } = data;
   const [imgError, setImgError] = useState(false);
 
@@ -145,6 +146,11 @@ function JobNode({ data, selected }) {
         <Handle type="source" position={Position.Right} />
         <div className="resume-icon">📄</div>
         <div className="resume-label">Your Resume</div>
+        {childCount > 0 && (
+          <div className="child-count-badge resume-child-count">
+            {childCount}
+          </div>
+        )}
       </div>
     );
   }
@@ -227,6 +233,9 @@ function JobNode({ data, selected }) {
         )}
         {jobType && !salaryInfo && <div className="type-badge">{jobType}</div>}
       </div>
+
+      {/* Child count badge */}
+      {childCount > 0 && <div className="child-count-badge">{childCount}</div>}
     </div>
   );
 }
