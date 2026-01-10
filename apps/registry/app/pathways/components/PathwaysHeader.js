@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Github, LogOut, Home, Activity } from 'lucide-react';
+import { Github, LogOut, Home, Activity, Layers } from 'lucide-react';
 import { Button } from '@repo/ui';
 import { useAuth } from '@/app/context/auth';
 import { supabase } from '@/app/lib/supabase';
@@ -30,6 +30,16 @@ export default function PathwaysHeader({ onOpenActivity }) {
       </div>
 
       <div className="flex items-center gap-2">
+        <Link href="/pathways/swipe" title="Swipe Mode">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-gray-500 hover:text-gray-700"
+          >
+            <Layers className="w-4 h-4" />
+          </Button>
+        </Link>
+
         <Button
           variant="ghost"
           size="sm"
