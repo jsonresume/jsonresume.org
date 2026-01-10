@@ -235,6 +235,68 @@ function buildGraphData(
     secondaryNodes.push({ id: job.uuid, embedding: job.embedding });
   });
 
+  // === RERANKING PASS ===
+  // Now that all nodes are placed, re-evaluate each secondary's connection
+  // by comparing to ALL placed nodes (primaries + all secondaries)
+  // This creates more natural clustering than the order-dependent first pass
+  const allPlacedNodes = [...primaryNodes, ...secondaryNodes];
+
+  // Build a map of embeddings for quick lookup
+  const embeddingMap = new Map();
+  allPlacedNodes.forEach((node) => {
+    embeddingMap.set(node.id, node.embedding);
+  });
+
+  // Track reranking changes for debugging
+  let rerankedCount = 0;
+  const rerankChoices = {};
+
+  // Re-evaluate each secondary node's connection
+  secondaryNodes.forEach((node) => {
+    // Find current link for this node
+    const currentLinkIdx = links.findIndex((l) => l.target === node.id);
+    if (currentLinkIdx === -1) return;
+
+    const currentLink = links[currentLinkIdx];
+    const currentParent = currentLink.source;
+
+    // Compare to all other nodes (excluding self and resume)
+    let bestMatch = { id: currentParent, similarity: currentLink.value };
+
+    for (const candidate of allPlacedNodes) {
+      if (candidate.id === node.id) continue; // Skip self
+
+      const sim = cosineSimilarity(node.embedding, candidate.embedding);
+      if (sim > bestMatch.similarity) {
+        bestMatch = { id: candidate.id, similarity: sim };
+      }
+    }
+
+    // Update link if we found a better match
+    if (bestMatch.id !== currentParent) {
+      links[currentLinkIdx] = {
+        source: bestMatch.id,
+        target: node.id,
+        value: bestMatch.similarity,
+      };
+      rerankedCount++;
+    }
+
+    // Track choices for debug
+    rerankChoices[bestMatch.id] = (rerankChoices[bestMatch.id] || 0) + 1;
+  });
+
+  logger.info(
+    {
+      rerankedCount,
+      totalSecondary: secondaryNodes.length,
+      percentReranked: ((rerankedCount / secondaryNodes.length) * 100).toFixed(
+        1
+      ),
+    },
+    'Reranking pass completed'
+  );
+
   // Debug: log parent choice distribution
   const choicesSorted = Object.entries(parentChoices)
     .map(([id, count]) => ({
@@ -395,7 +457,7 @@ export async function POST(request) {
       // Debug info for analyzing parent distribution
       debug: graphData.debug,
       // Version for deployment verification
-      _version: 'v3-natural-hubs',
+      _version: 'v4-reranked-hubs',
     });
   } catch (error) {
     logger.error({ error: error.message }, 'Error in pathways jobs');
