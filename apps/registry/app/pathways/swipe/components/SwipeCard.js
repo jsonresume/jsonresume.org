@@ -1,9 +1,11 @@
 'use client';
 
+import { useRef } from 'react';
 import { motion, useMotionValue, useTransform } from 'framer-motion';
 import { MapPin, Building2, DollarSign, Wifi } from 'lucide-react';
 
 const SWIPE_THRESHOLD = 100;
+const TAP_THRESHOLD = 5; // Max pixels moved to count as a tap
 
 export default function SwipeCard({
   job,
@@ -13,17 +15,36 @@ export default function SwipeCard({
   isBackground = false,
 }) {
   const x = useMotionValue(0);
+  const hasDragged = useRef(false);
 
   // Transform x position to rotation and opacity
   const rotate = useTransform(x, [-200, 0, 200], [-15, 0, 15]);
   const likeOpacity = useTransform(x, [0, 100], [0, 1]);
   const nopeOpacity = useTransform(x, [-100, 0], [1, 0]);
 
+  const handleDragStart = () => {
+    hasDragged.current = false;
+  };
+
+  const handleDrag = (event, info) => {
+    // Mark as dragged if moved beyond tap threshold
+    if (Math.abs(info.offset.x) > TAP_THRESHOLD) {
+      hasDragged.current = true;
+    }
+  };
+
   const handleDragEnd = (event, info) => {
     if (info.offset.x > SWIPE_THRESHOLD) {
       onSwipeRight?.();
     } else if (info.offset.x < -SWIPE_THRESHOLD) {
       onSwipeLeft?.();
+    }
+  };
+
+  const handleClick = () => {
+    // Only trigger tap if user didn't drag
+    if (!hasDragged.current) {
+      onTap?.();
     }
   };
 
@@ -71,10 +92,12 @@ export default function SwipeCard({
       drag="x"
       dragConstraints={{ left: 0, right: 0 }}
       dragElastic={0.7}
+      onDragStart={handleDragStart}
+      onDrag={handleDrag}
       onDragEnd={handleDragEnd}
       style={{ x, rotate }}
       whileTap={{ scale: 0.98 }}
-      onClick={onTap}
+      onClick={handleClick}
     >
       {/* Like indicator */}
       <motion.div
