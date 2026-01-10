@@ -81,13 +81,18 @@ export default function SwipeInterface() {
   };
 
   // Show loading screen while embedding or fetching jobs
-  if (isEmbeddingLoading || isJobsLoading) {
+  // Also show loading if we have a resume but no embedding yet (waiting for it to generate)
+  const isWaitingForEmbedding = resume && !embedding && !isEmbeddingLoading;
+  const isLoadingData =
+    isEmbeddingLoading || isJobsLoading || isWaitingForEmbedding;
+
+  if (isLoadingData) {
     return (
       <div className="min-h-screen bg-gray-50">
         <SwipeHeader />
         <LoadingScreen
           stage={isEmbeddingLoading ? embeddingStage : loadingStage}
-          isEmbedding={isEmbeddingLoading}
+          isEmbedding={isEmbeddingLoading || isWaitingForEmbedding}
         />
       </div>
     );
