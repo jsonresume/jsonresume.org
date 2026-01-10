@@ -3,7 +3,7 @@
  * Uses OpenAI's text-embedding-3-large model to create semantic search vectors
  */
 
-require('dotenv').config({ path: __dirname + '/./../../.env' });
+require('dotenv').config({ path: __dirname + '/../../.env.local' });
 
 const async = require('async');
 const { createSupabaseClient } = require('./embeddings/supabase');
@@ -15,15 +15,26 @@ async function main() {
   console.log('\n🔮 Vector Embedding System');
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 
-  // Fetch jobs from last 24 hours that need embeddings
-  const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-  console.log(`📅 Processing jobs since: ${twentyFourHoursAgo.toISOString()}`);
+  const processAll = process.argv.includes('--all');
 
-  const { data, error } = await supabase
+  let query = supabase
     .from('jobs')
     .select('id::text, gpt_content')
     .is('embedding_v5', null)
-    .gte('created_at', twentyFourHoursAgo.toISOString());
+    .not('gpt_content', 'is', null);
+
+  if (!processAll) {
+    // Default: only process jobs from last 24 hours
+    const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    console.log(
+      `📅 Processing jobs since: ${twentyFourHoursAgo.toISOString()}`
+    );
+    query = query.gte('created_at', twentyFourHoursAgo.toISOString());
+  } else {
+    console.log('📅 Processing ALL jobs without embeddings');
+  }
+
+  const { data, error } = await query.limit(500);
 
   if (error) {
     console.error('❌ Database error:', error.message);

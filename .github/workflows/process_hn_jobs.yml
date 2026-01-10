@@ -93,7 +93,6 @@ jobs:
           echo "jobs_failed=${JOBS_FAILED}" >> $GITHUB_OUTPUT
           echo "jobs_total=${JOBS_NEED_PROCESSING}" >> $GITHUB_OUTPUT
           echo "::endgroup::"
-        continue-on-error: true
 
       - name: Vectorize processed jobs
         id: vectorize
@@ -111,7 +110,6 @@ jobs:
 
           echo "jobs_vectorized=${JOBS_VECTORIZED}" >> $GITHUB_OUTPUT
           echo "::endgroup::"
-        continue-on-error: true
 
       - name: Generate workflow summary
         if: always()

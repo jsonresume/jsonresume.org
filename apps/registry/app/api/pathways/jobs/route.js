@@ -14,6 +14,7 @@ const TIME_RANGE_DAYS = {
 
 const MAX_JOBS = 300;
 const PRIMARY_BRANCHES = 20; // Number of jobs that connect directly to resume
+const MAX_CHILDREN_PER_NODE = 15; // Soft cap to prevent mega-hubs
 
 /**
  * Check if a job has valid data (title and company)
@@ -238,7 +239,7 @@ function buildGraphData(
   // === RERANKING PASS ===
   // Now that all nodes are placed, re-evaluate each secondary's connection
   // by comparing to ALL placed nodes (primaries + all secondaries)
-  // This creates more natural clustering than the order-dependent first pass
+  // With MAX_CHILDREN_PER_NODE cap to prevent mega-hubs
   const allPlacedNodes = [...primaryNodes, ...secondaryNodes];
 
   // Build a map of embeddings for quick lookup
@@ -247,11 +248,19 @@ function buildGraphData(
     embeddingMap.set(node.id, node.embedding);
   });
 
+  // Track child counts during reranking (will be updated as we go)
+  const rerankChildCounts = {};
+  links.forEach((l) => {
+    rerankChildCounts[l.source] = (rerankChildCounts[l.source] || 0) + 1;
+  });
+
   // Track reranking changes for debugging
   let rerankedCount = 0;
+  let cappedCount = 0;
   const rerankChoices = {};
 
   // Re-evaluate each secondary node's connection
+  // CRITICAL: Apply cap strictly - force moves away from over-cap parents
   secondaryNodes.forEach((node) => {
     // Find current link for this node
     const currentLinkIdx = links.findIndex((l) => l.target === node.id);
@@ -260,20 +269,49 @@ function buildGraphData(
     const currentLink = links[currentLinkIdx];
     const currentParent = currentLink.source;
 
-    // Compare to all other nodes (excluding self and resume)
-    let bestMatch = { id: currentParent, similarity: currentLink.value };
-
+    // Collect all candidates with their similarities
+    const candidates = [];
     for (const candidate of allPlacedNodes) {
       if (candidate.id === node.id) continue; // Skip self
-
       const sim = cosineSimilarity(node.embedding, candidate.embedding);
-      if (sim > bestMatch.similarity) {
-        bestMatch = { id: candidate.id, similarity: sim };
+      candidates.push({ id: candidate.id, similarity: sim });
+    }
+
+    // Sort by similarity (highest first)
+    candidates.sort((a, b) => b.similarity - a.similarity);
+
+    // Find best match that isn't over the cap
+    let bestMatch = null;
+    let wasCapped = false;
+
+    for (const candidate of candidates) {
+      const candidateChildren = rerankChildCounts[candidate.id] || 0;
+
+      // Only accept candidates under the cap
+      if (candidateChildren < MAX_CHILDREN_PER_NODE) {
+        bestMatch = { id: candidate.id, similarity: candidate.similarity };
+        break; // Found best valid candidate
+      } else {
+        wasCapped = true;
       }
     }
 
-    // Update link if we found a better match
+    // Fallback: if ALL candidates are over cap, keep current parent
+    if (!bestMatch) {
+      bestMatch = { id: currentParent, similarity: currentLink.value };
+    }
+
+    if (wasCapped) cappedCount++;
+
+    // Update link if we found a better match (or forced move)
     if (bestMatch.id !== currentParent) {
+      // Decrement old parent's count
+      rerankChildCounts[currentParent] =
+        (rerankChildCounts[currentParent] || 1) - 1;
+      // Increment new parent's count
+      rerankChildCounts[bestMatch.id] =
+        (rerankChildCounts[bestMatch.id] || 0) + 1;
+
       links[currentLinkIdx] = {
         source: bestMatch.id,
         target: node.id,
@@ -289,6 +327,8 @@ function buildGraphData(
   logger.info(
     {
       rerankedCount,
+      cappedCount,
+      maxChildrenCap: MAX_CHILDREN_PER_NODE,
       totalSecondary: secondaryNodes.length,
       percentReranked: ((rerankedCount / secondaryNodes.length) * 100).toFixed(
         1
@@ -297,8 +337,8 @@ function buildGraphData(
     'Reranking pass completed'
   );
 
-  // Debug: log parent choice distribution
-  const choicesSorted = Object.entries(parentChoices)
+  // Debug: log post-rerank parent choice distribution
+  const rerankSorted = Object.entries(rerankChoices)
     .map(([id, count]) => ({
       id: id === resumeId ? 'RESUME' : id.slice(0, 8),
       count,
@@ -308,11 +348,11 @@ function buildGraphData(
   logger.info(
     {
       totalSecondary: secondaryJobs.length,
-      uniqueParents: Object.keys(parentChoices).length,
-      topParents: choicesSorted.slice(0, 10),
-      resumeChosen: parentChoices[resumeId] || 0,
+      uniqueParents: Object.keys(rerankChoices).length,
+      topParents: rerankSorted.slice(0, 10),
+      maxChildrenCap: MAX_CHILDREN_PER_NODE,
     },
-    'Parent choice distribution for secondary jobs'
+    'Post-rerank parent distribution'
   );
 
   // Compute nearest neighbors for each job (top 5 most similar)
@@ -361,9 +401,11 @@ function buildGraphData(
     topBranches,
     debug: {
       totalSecondary: secondaryJobs.length,
-      uniqueParents: Object.keys(parentChoices).length,
-      topParents: choicesSorted.slice(0, 10),
-      resumeChosen: parentChoices[resumeId] || 0,
+      uniqueParents: Object.keys(rerankChoices).length,
+      topParents: rerankSorted.slice(0, 10),
+      maxChildrenCap: MAX_CHILDREN_PER_NODE,
+      rerankedCount,
+      cappedCount,
     },
   };
 }
@@ -457,7 +499,7 @@ export async function POST(request) {
       // Debug info for analyzing parent distribution
       debug: graphData.debug,
       // Version for deployment verification
-      _version: 'v4-reranked-hubs',
+      _version: 'v5-capped-hubs',
     });
   } catch (error) {
     logger.error({ error: error.message }, 'Error in pathways jobs');
