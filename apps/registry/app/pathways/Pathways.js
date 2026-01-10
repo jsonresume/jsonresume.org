@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useRef, useEffect } from 'react';
+import { RotateCcw } from 'lucide-react';
 import Editor from '@monaco-editor/react';
 import CopilotChat from './components/CopilotChat';
 import ResumePreview from './components/ResumePreview';
@@ -34,6 +35,31 @@ function PathwaysContent() {
   const lastSavedJsonRef = useRef(resumeJson);
   const pendingJsonRef = useRef(null);
   const [hasPendingChanges, setHasPendingChanges] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
+
+  // Reset resume to empty state
+  const handleResetResume = async () => {
+    if (
+      !window.confirm(
+        'This will delete your current resume data. Are you sure?'
+      )
+    ) {
+      return;
+    }
+    setIsResetting(true);
+    try {
+      const params = new URLSearchParams();
+      if (userId) params.set('userId', userId);
+      else if (sessionId) params.set('sessionId', sessionId);
+
+      await fetch(`/api/pathways/resume?${params}`, { method: 'DELETE' });
+      window.location.reload();
+    } catch (err) {
+      console.error('Failed to reset resume:', err);
+    } finally {
+      setIsResetting(false);
+    }
+  };
   // Use refs for beforeunload to always have current values
   const userIdRef = useRef(userId);
   const sessionIdRef = useRef(sessionId);
@@ -169,6 +195,15 @@ function PathwaysContent() {
                       Unsaved changes
                     </span>
                   ) : null}
+                  <button
+                    onClick={handleResetResume}
+                    disabled={isResetting}
+                    className="text-xs text-gray-500 hover:text-red-600 bg-white/80 px-2 py-1 rounded flex items-center gap-1 disabled:opacity-50"
+                    title="Reset resume (clears all data)"
+                  >
+                    <RotateCcw className="w-3 h-3" />
+                    {isResetting ? 'Resetting...' : 'Reset'}
+                  </button>
                 </div>
                 <Editor
                   height="100%"
