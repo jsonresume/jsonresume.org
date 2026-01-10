@@ -1,132 +1,132 @@
 // Node dimensions
 const NODE_WIDTH = 200;
-const NODE_HEIGHT = 120;
-const RESUME_WIDTH = 140;
-const RESUME_HEIGHT = 80;
+const NODE_HEIGHT = 100;
 
 // Spacing
-const HORIZONTAL_SPACING = 30;
-const VERTICAL_SPACING = 150;
+const H_GAP = 20;
+const V_GAP = 120;
 
 /**
- * Tree layout that positions children under their parent
- * Resume at top, jobs branch down in a true tree structure
+ * Simple recursive tree layout
+ * Each node's children are positioned directly below it
  */
 export const getLayoutedElements = (nodes, edges) => {
   if (nodes.length === 0) return { nodes: [], edges };
 
-  // Find resume node (root)
   const resumeNode = nodes.find((n) => n.data?.isResume);
-  if (!resumeNode) {
+  const resumeId = resumeNode?.id;
+
+  if (!resumeId) {
+    // Fallback: stack vertically
     return {
       nodes: nodes.map((node, i) => ({
         ...node,
-        position: { x: 0, y: i * (NODE_HEIGHT + VERTICAL_SPACING) },
+        position: { x: 0, y: i * (NODE_HEIGHT + V_GAP) },
       })),
       edges,
     };
   }
 
-  // Build parent-child relationships
-  const children = new Map();
-  const parent = new Map();
-  nodes.forEach((n) => children.set(n.id, []));
+  // Build adjacency: parent -> [children]
+  const childrenOf = new Map();
+  const hasParent = new Set();
 
-  edges.forEach((edge) => {
-    if (children.has(edge.source)) {
-      children.get(edge.source).push(edge.target);
-      parent.set(edge.target, edge.source);
+  nodes.forEach((n) => childrenOf.set(n.id, []));
+
+  edges.forEach((e) => {
+    if (childrenOf.has(e.source) && childrenOf.has(e.target)) {
+      childrenOf.get(e.source).push(e.target);
+      hasParent.add(e.target);
     }
   });
 
-  // Calculate subtree width for each node (bottom-up)
-  const subtreeWidth = new Map();
+  // Attach orphans (nodes with no parent) to resume
+  nodes.forEach((n) => {
+    if (n.id !== resumeId && !hasParent.has(n.id)) {
+      childrenOf.get(resumeId).push(n.id);
+    }
+  });
 
-  const calcSubtreeWidth = (nodeId) => {
-    const nodeChildren = children.get(nodeId) || [];
-    if (nodeChildren.length === 0) {
-      subtreeWidth.set(nodeId, NODE_WIDTH);
+  // Calculate width needed for each subtree
+  const widthOf = new Map();
+  const visited = new Set();
+
+  const calcWidth = (id) => {
+    if (visited.has(id)) return widthOf.get(id) || NODE_WIDTH;
+    visited.add(id);
+
+    const kids = childrenOf.get(id) || [];
+    if (kids.length === 0) {
+      widthOf.set(id, NODE_WIDTH);
       return NODE_WIDTH;
     }
 
-    let totalWidth = 0;
-    nodeChildren.forEach((childId) => {
-      totalWidth += calcSubtreeWidth(childId);
+    let total = 0;
+    kids.forEach((kid) => {
+      total += calcWidth(kid);
     });
-    // Add spacing between children
-    totalWidth += (nodeChildren.length - 1) * HORIZONTAL_SPACING;
+    total += Math.max(0, kids.length - 1) * H_GAP;
 
-    subtreeWidth.set(nodeId, totalWidth);
-    return totalWidth;
+    widthOf.set(id, Math.max(NODE_WIDTH, total));
+    return widthOf.get(id);
   };
 
-  calcSubtreeWidth(resumeNode.id);
+  calcWidth(resumeId);
 
-  // Handle disconnected nodes - attach them to resume
-  nodes.forEach((node) => {
-    if (node.id !== resumeNode.id && !parent.has(node.id)) {
-      children.get(resumeNode.id).push(node.id);
-      parent.set(node.id, resumeNode.id);
-      subtreeWidth.set(node.id, NODE_WIDTH);
+  // Position nodes
+  const positions = new Map();
+  const placed = new Set();
+
+  const placeNode = (id, centerX, top) => {
+    if (placed.has(id)) return;
+    placed.add(id);
+
+    positions.set(id, { x: centerX - NODE_WIDTH / 2, y: top });
+
+    const kids = childrenOf.get(id) || [];
+    if (kids.length === 0) return;
+
+    const childY = top + NODE_HEIGHT + V_GAP;
+
+    // Total width of all children
+    let totalW = 0;
+    kids.forEach((kid) => {
+      totalW += widthOf.get(kid) || NODE_WIDTH;
+    });
+    totalW += Math.max(0, kids.length - 1) * H_GAP;
+
+    // Start from left edge, centered under parent
+    let x = centerX - totalW / 2;
+
+    kids.forEach((kid) => {
+      const kidW = widthOf.get(kid) || NODE_WIDTH;
+      const kidCenterX = x + kidW / 2;
+      placeNode(kid, kidCenterX, childY);
+      x += kidW + H_GAP;
+    });
+  };
+
+  placeNode(resumeId, 0, 0);
+
+  // Any remaining unplaced nodes go at bottom
+  let bottomY = 0;
+  positions.forEach((pos) => {
+    bottomY = Math.max(bottomY, pos.y);
+  });
+  bottomY += NODE_HEIGHT + V_GAP;
+
+  let unplacedX = 0;
+  nodes.forEach((n) => {
+    if (!positions.has(n.id)) {
+      positions.set(n.id, { x: unplacedX, y: bottomY });
+      unplacedX += NODE_WIDTH + H_GAP;
     }
   });
 
-  // Recalculate resume's subtree width after adding orphans
-  const resumeChildren = children.get(resumeNode.id) || [];
-  if (resumeChildren.length > 0) {
-    let totalWidth = 0;
-    resumeChildren.forEach((childId) => {
-      totalWidth += subtreeWidth.get(childId) || NODE_WIDTH;
-    });
-    totalWidth += (resumeChildren.length - 1) * HORIZONTAL_SPACING;
-    subtreeWidth.set(resumeNode.id, totalWidth);
-  }
-
-  // Position nodes (top-down) - children centered under parent
-  const positions = new Map();
-
-  const positionNode = (nodeId, x, y) => {
-    positions.set(nodeId, { x, y });
-
-    const nodeChildren = children.get(nodeId) || [];
-    if (nodeChildren.length === 0) return;
-
-    // Calculate total width needed for all children
-    let totalChildrenWidth = 0;
-    nodeChildren.forEach((childId) => {
-      totalChildrenWidth += subtreeWidth.get(childId) || NODE_WIDTH;
-    });
-    totalChildrenWidth += (nodeChildren.length - 1) * HORIZONTAL_SPACING;
-
-    // Start position for first child (centered under parent)
-    let childX = x - totalChildrenWidth / 2;
-    const childY = y + NODE_HEIGHT + VERTICAL_SPACING;
-
-    nodeChildren.forEach((childId) => {
-      const childWidth = subtreeWidth.get(childId) || NODE_WIDTH;
-      // Position child at center of its subtree allocation
-      positionNode(childId, childX + childWidth / 2, childY);
-      childX += childWidth + HORIZONTAL_SPACING;
-    });
-  };
-
-  // Start positioning from resume at center
-  positionNode(resumeNode.id, 0, 0);
-
-  // Build final nodes array
-  const layoutedNodes = nodes.map((node) => {
-    const pos = positions.get(node.id) || { x: 0, y: 0 };
-    const isResume = node.data?.isResume;
-    const width = isResume ? RESUME_WIDTH : NODE_WIDTH;
-
-    return {
-      ...node,
-      position: {
-        x: pos.x - width / 2,
-        y: pos.y,
-      },
-    };
-  });
+  const layoutedNodes = nodes.map((node) => ({
+    ...node,
+    position: positions.get(node.id) || { x: 0, y: 0 },
+  }));
 
   return { nodes: layoutedNodes, edges };
 };
