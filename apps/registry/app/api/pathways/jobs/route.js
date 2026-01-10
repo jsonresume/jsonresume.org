@@ -162,20 +162,13 @@ function buildGraphData(
   const parentChoices = {};
 
   // Add secondary jobs
-  // - First secondary (#21): compares to primaries only
-  // - Subsequent secondaries (#22+): compares to other secondaries only
-  // - Pure similarity matching - natural hubs form based on embedding similarity
+  // ALL secondaries compare to ALL placed nodes (primaries + already-placed secondaries)
+  // This ensures every node can find a parent and stay connected to the main tree
   secondaryJobs.forEach((job, idx) => {
     let bestMatch = { id: null, similarity: -1 };
-    let comparisonPool = [];
 
-    if (idx === 0) {
-      // First secondary: compare to primaries only
-      comparisonPool = primaryNodes;
-    } else {
-      // Subsequent secondaries: compare to other secondaries only
-      comparisonPool = secondaryNodes;
-    }
+    // Build comparison pool: all primaries + all already-placed secondaries
+    const comparisonPool = [...primaryNodes, ...secondaryNodes];
 
     for (const node of comparisonPool) {
       const sim = cosineSimilarity(job.embedding, node.embedding);
@@ -184,24 +177,20 @@ function buildGraphData(
       }
     }
 
-    // Debug: log first few secondary job placements
-    if (idx < 5) {
-      logger.debug(
-        {
-          jobIdx: idx + 21,
-          bestMatchId: bestMatch.id?.slice(0, 8),
-          similarity: bestMatch.similarity?.toFixed(4),
-          poolSize: comparisonPool.length,
-          poolType: idx === 0 ? 'primaries' : 'secondaries',
-        },
-        'Secondary job placement debug'
+    // FALLBACK: If no match found (shouldn't happen), connect to resume
+    if (!bestMatch.id) {
+      bestMatch = {
+        id: resumeId,
+        similarity: cosineSimilarity(job.embedding, resumeEmbedding),
+      };
+      logger.warn(
+        { jobUuid: job.uuid, poolSize: comparisonPool.length },
+        'Secondary job had no match, falling back to resume'
       );
     }
 
     // Track parent choices
-    if (bestMatch.id) {
-      parentChoices[bestMatch.id] = (parentChoices[bestMatch.id] || 0) + 1;
-    }
+    parentChoices[bestMatch.id] = (parentChoices[bestMatch.id] || 0) + 1;
 
     // Create node
     try {
@@ -223,14 +212,12 @@ function buildGraphData(
       });
     }
 
-    // Connect to best matching node
-    if (bestMatch.id) {
-      links.push({
-        source: bestMatch.id,
-        target: job.uuid,
-        value: bestMatch.similarity,
-      });
-    }
+    // Connect to best matching node (guaranteed to have a valid id now)
+    links.push({
+      source: bestMatch.id,
+      target: job.uuid,
+      value: bestMatch.similarity,
+    });
 
     // Add this job to secondary nodes pool for future comparisons
     secondaryNodes.push({ id: job.uuid, embedding: job.embedding });
@@ -355,6 +342,51 @@ function buildGraphData(
     'Post-rerank parent distribution'
   );
 
+  // === CONNECTIVITY CHECK ===
+  // Ensure all nodes are reachable from the resume node
+  // Find any orphaned nodes (nodes with no incoming link) and connect them
+  const nodesWithIncomingLinks = new Set(links.map((l) => l.target));
+  const allNodeIds = new Set(nodes.map((n) => n.id));
+  let orphanCount = 0;
+
+  for (const nodeId of allNodeIds) {
+    // Resume has no incoming links (it's the root) - that's expected
+    if (nodeId === resumeId) continue;
+
+    // Check if this node has an incoming link
+    if (!nodesWithIncomingLinks.has(nodeId)) {
+      // Orphan found! Connect it to the resume
+      const orphanNode = secondaryNodes.find((n) => n.id === nodeId);
+      const orphanPrimary = primaryNodes.find((n) => n.id === nodeId);
+
+      if (orphanNode) {
+        const sim = cosineSimilarity(orphanNode.embedding, resumeEmbedding);
+        links.push({
+          source: resumeId,
+          target: nodeId,
+          value: sim,
+        });
+        orphanCount++;
+      } else if (orphanPrimary) {
+        // Primary without a link - shouldn't happen but handle it
+        const sim = cosineSimilarity(orphanPrimary.embedding, resumeEmbedding);
+        links.push({
+          source: resumeId,
+          target: nodeId,
+          value: sim,
+        });
+        orphanCount++;
+      }
+    }
+  }
+
+  if (orphanCount > 0) {
+    logger.warn(
+      { orphanCount, totalNodes: nodes.length },
+      'Found and reconnected orphaned nodes to resume'
+    );
+  }
+
   // Compute nearest neighbors for each job (top 5 most similar)
   // Include resume in neighbors for smart reconnection when filtering
   const nearestNeighbors = {};
@@ -406,6 +438,7 @@ function buildGraphData(
       maxChildrenCap: MAX_CHILDREN_PER_NODE,
       rerankedCount,
       cappedCount,
+      orphanCount,
     },
   };
 }
@@ -499,7 +532,7 @@ export async function POST(request) {
       // Debug info for analyzing parent distribution
       debug: graphData.debug,
       // Version for deployment verification
-      _version: 'v5-capped-hubs',
+      _version: 'v6-connected-graph',
     });
   } catch (error) {
     logger.error({ error: error.message }, 'Error in pathways jobs');
