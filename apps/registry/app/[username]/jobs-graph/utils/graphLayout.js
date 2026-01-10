@@ -1,72 +1,106 @@
-import dagre from '@dagrejs/dagre';
-
-// Node dimensions - must match actual rendered sizes
+// Node dimensions
 const NODE_WIDTH = 200;
 const NODE_HEIGHT = 120;
 const RESUME_WIDTH = 140;
 const RESUME_HEIGHT = 80;
 
-// Spacing - generous to avoid overlap
-const HORIZONTAL_SPACING = 60; // Space between sibling nodes
-const VERTICAL_SPACING = 120; // Space between levels (ranks)
+// Spacing
+const HORIZONTAL_SPACING = 60;
+const VERTICAL_SPACING = 150;
 
 /**
- * Applies a clean top-down tree layout
- * Resume at top, primary jobs below, secondary jobs below those
- * @param {Array} nodes - React Flow nodes
- * @param {Array} edges - React Flow edges
- * @param {string} direction - Layout direction ('TB' = top-bottom)
- * @returns {Object} Layouted nodes and edges
+ * Simple BFS tree layout - Resume at top, jobs flow down
+ * Guarantees resume is always at the top (level 0)
  */
-export const getLayoutedElements = (nodes, edges, direction = 'TB') => {
+export const getLayoutedElements = (nodes, edges) => {
   if (nodes.length === 0) return { nodes: [], edges };
 
-  const dagreGraph = new dagre.graphlib.Graph();
-  dagreGraph.setDefaultEdgeLabel(() => ({}));
-
-  // Configure for a clean top-down tree
-  dagreGraph.setGraph({
-    rankdir: direction,
-    align: 'UL',
-    nodesep: HORIZONTAL_SPACING,
-    ranksep: VERTICAL_SPACING,
-    edgesep: 20,
-    marginx: 50,
-    marginy: 50,
-    ranker: 'tight-tree',
-  });
-
-  // Add nodes to dagre
-  nodes.forEach((node) => {
-    const isResume = node.data?.isResume;
-    dagreGraph.setNode(node.id, {
-      width: isResume ? RESUME_WIDTH : NODE_WIDTH,
-      height: isResume ? RESUME_HEIGHT : NODE_HEIGHT,
-    });
-  });
-
-  // Add edges to dagre
-  edges.forEach((edge) => {
-    dagreGraph.setEdge(edge.source, edge.target);
-  });
-
-  // Run layout
-  dagre.layout(dagreGraph);
-
-  // Apply positions
-  const layoutedNodes = nodes.map((node) => {
-    const pos = dagreGraph.node(node.id);
-    const isResume = node.data?.isResume;
-    const width = isResume ? RESUME_WIDTH : NODE_WIDTH;
-    const height = isResume ? RESUME_HEIGHT : NODE_HEIGHT;
-
+  // Find resume node (root of tree)
+  const resumeNode = nodes.find((n) => n.data?.isResume);
+  if (!resumeNode) {
+    // Fallback: just stack nodes vertically if no resume
     return {
-      ...node,
-      position: {
-        x: pos.x - width / 2,
-        y: pos.y - height / 2,
-      },
+      nodes: nodes.map((node, i) => ({
+        ...node,
+        position: { x: 0, y: i * (NODE_HEIGHT + VERTICAL_SPACING) },
+      })),
+      edges,
     };
+  }
+
+  // Build adjacency list (resume -> children)
+  const children = new Map();
+  nodes.forEach((n) => children.set(n.id, []));
+
+  edges.forEach((edge) => {
+    // Edges go from source to target, but we want resume as root
+    // Check both directions to find connections
+    if (children.has(edge.source)) {
+      children.get(edge.source).push(edge.target);
+    }
+  });
+
+  // BFS to assign levels
+  const levels = new Map();
+  const queue = [resumeNode.id];
+  levels.set(resumeNode.id, 0);
+
+  while (queue.length > 0) {
+    const nodeId = queue.shift();
+    const currentLevel = levels.get(nodeId);
+    const nodeChildren = children.get(nodeId) || [];
+
+    nodeChildren.forEach((childId) => {
+      if (!levels.has(childId)) {
+        levels.set(childId, currentLevel + 1);
+        queue.push(childId);
+      }
+    });
+  }
+
+  // Handle disconnected nodes (no path from resume)
+  let maxLevel = 0;
+  levels.forEach((level) => {
+    maxLevel = Math.max(maxLevel, level);
+  });
+
+  nodes.forEach((node) => {
+    if (!levels.has(node.id)) {
+      // Place disconnected nodes at bottom
+      levels.set(node.id, maxLevel + 1);
+    }
+  });
+
+  // Group nodes by level
+  const nodesByLevel = new Map();
+  nodes.forEach((node) => {
+    const level = levels.get(node.id);
+    if (!nodesByLevel.has(level)) {
+      nodesByLevel.set(level, []);
+    }
+    nodesByLevel.get(level).push(node);
+  });
+
+  // Position nodes at each level
+  const layoutedNodes = [];
+
+  nodesByLevel.forEach((levelNodes, level) => {
+    const y = level * (NODE_HEIGHT + VERTICAL_SPACING);
+    const totalWidth =
+      levelNodes.length * NODE_WIDTH +
+      (levelNodes.length - 1) * HORIZONTAL_SPACING;
+    const startX = -totalWidth / 2;
+
+    levelNodes.forEach((node, index) => {
+      const isResume = node.data?.isResume;
+      const width = isResume ? RESUME_WIDTH : NODE_WIDTH;
+      const x = startX + index * (NODE_WIDTH + HORIZONTAL_SPACING);
+
+      layoutedNodes.push({
+        ...node,
+        position: { x, y },
+      });
+    });
   });
 
   return { nodes: layoutedNodes, edges };
