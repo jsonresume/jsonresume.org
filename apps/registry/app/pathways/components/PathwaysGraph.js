@@ -116,26 +116,19 @@ export default function PathwaysGraph() {
           onEdgesChange={onEdgesChange}
           onNodeClick={handleNodeClick}
           onMoveEnd={handleMoveEnd}
-          fitView={false}
+          fitView
+          fitViewOptions={{ padding: 0.2, maxZoom: 1.5 }}
           minZoom={0.05}
           maxZoom={4}
-          defaultViewport={initialViewport || { x: 0, y: 0, zoom: 1.2 }}
+          defaultViewport={initialViewport || { x: 0, y: 0, zoom: 1 }}
           onInit={(instance) => {
             setReactFlowInstance(instance);
-            // If we have saved viewport, use it; otherwise center on resume
+            // If we have saved viewport, use it; otherwise fit view
             if (initialViewport) {
               instance.setViewport(initialViewport, { duration: 0 });
             } else {
-              setTimeout(() => {
-                const resumeNode = nodes.find((node) => node.data?.isResume);
-                if (resumeNode) {
-                  instance.setCenter(
-                    resumeNode.position.x,
-                    resumeNode.position.y,
-                    { zoom: 1.2, duration: 800 }
-                  );
-                }
-              }, 100);
+              // Fit view to show all nodes
+              setTimeout(() => instance.fitView({ padding: 0.2 }), 100);
             }
           }}
           proOptions={{ hideAttribution: true }}
