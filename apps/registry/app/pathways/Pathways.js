@@ -33,6 +33,16 @@ function PathwaysContent() {
   const saveTimeoutRef = useRef(null);
   const lastSavedJsonRef = useRef(resumeJson);
   const pendingJsonRef = useRef(null);
+  const [hasPendingChanges, setHasPendingChanges] = useState(false);
+  // Use refs for beforeunload to always have current values
+  const userIdRef = useRef(userId);
+  const sessionIdRef = useRef(sessionId);
+
+  // Keep refs in sync with state
+  useEffect(() => {
+    userIdRef.current = userId;
+    sessionIdRef.current = sessionId;
+  }, [userId, sessionId]);
 
   // Immediate save function (no debounce)
   const saveNow = useCallback(
@@ -43,6 +53,7 @@ function PathwaysContent() {
         await setFullResume(parsed, 'manual_edit');
         lastSavedJsonRef.current = json;
         pendingJsonRef.current = null;
+        setHasPendingChanges(false);
       } catch {
         // Invalid JSON, don't save
       }
@@ -54,6 +65,7 @@ function PathwaysContent() {
   const debouncedSave = useCallback(
     (json) => {
       pendingJsonRef.current = json;
+      setHasPendingChanges(json !== lastSavedJsonRef.current);
 
       if (saveTimeoutRef.current) {
         clearTimeout(saveTimeoutRef.current);
@@ -66,7 +78,7 @@ function PathwaysContent() {
     [saveNow]
   );
 
-  // Save pending changes before page unload
+  // Save pending changes before page unload (uses refs to avoid stale closures)
   useEffect(() => {
     const handleBeforeUnload = () => {
       if (
@@ -82,11 +94,11 @@ function PathwaysContent() {
             source: 'manual_edit',
             replace: true,
           };
-          // Include user identifier
-          if (userId) {
-            payload.userId = userId;
-          } else if (sessionId) {
-            payload.sessionId = sessionId;
+          // Include user identifier (read from refs for current values)
+          if (userIdRef.current) {
+            payload.userId = userIdRef.current;
+          } else if (sessionIdRef.current) {
+            payload.sessionId = sessionIdRef.current;
           }
           navigator.sendBeacon(
             '/api/pathways/resume',
@@ -105,7 +117,7 @@ function PathwaysContent() {
         clearTimeout(saveTimeoutRef.current);
       }
     };
-  }, [userId, sessionId]);
+  }, []); // Empty deps since we use refs
 
   // Auto-migrate anonymous session data when user logs in
   usePathwaysSession();
@@ -147,11 +159,17 @@ function PathwaysContent() {
               <ResumePreview resumeData={resume} />
             ) : (
               <div className="h-full relative">
-                {isResumeSaving && (
-                  <div className="absolute top-2 right-4 z-10 text-xs text-gray-500 bg-white/80 px-2 py-1 rounded">
-                    Saving...
-                  </div>
-                )}
+                <div className="absolute top-2 right-4 z-10 flex items-center gap-2">
+                  {isResumeSaving ? (
+                    <span className="text-xs text-gray-500 bg-white/80 px-2 py-1 rounded">
+                      Saving...
+                    </span>
+                  ) : hasPendingChanges ? (
+                    <span className="text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded">
+                      Unsaved changes
+                    </span>
+                  ) : null}
+                </div>
                 <Editor
                   height="100%"
                   defaultLanguage="json"

@@ -221,12 +221,18 @@ export function PathwaysProvider({ children }) {
 
   // Resume loading is now handled by usePathwaysResume hook
 
-  // Generate initial embedding when resume is set
+  // Generate embedding when resume changes (not just initial load)
   useEffect(() => {
-    if (resume && !embedding && !isEmbeddingLoading) {
-      refreshEmbedding();
-    }
-  }, [resume, embedding, isEmbeddingLoading, refreshEmbedding]);
+    if (!resume || isEmbeddingLoading) return;
+
+    const currentHash = hashResume(resume);
+
+    // Skip if hash hasn't changed (same content)
+    if (currentHash === lastResumeHashRef.current) return;
+
+    // Refresh embedding when resume content actually changes
+    refreshEmbedding();
+  }, [resume, isEmbeddingLoading, refreshEmbedding]);
 
   const value = {
     sessionId,
