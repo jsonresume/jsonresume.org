@@ -1,11 +1,12 @@
 'use client';
 
-import { useRef } from 'react';
-import { motion, useMotionValue, useTransform } from 'framer-motion';
+import { useState, useRef } from 'react';
+import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 import { MapPin, Building2, DollarSign, Wifi } from 'lucide-react';
 
 const SWIPE_THRESHOLD = 100;
-const TAP_THRESHOLD = 5; // Max pixels moved to count as a tap
+const TAP_THRESHOLD = 5;
+const FLY_AWAY_DISTANCE = 1000;
 
 export default function SwipeCard({
   job,
@@ -16,6 +17,7 @@ export default function SwipeCard({
 }) {
   const x = useMotionValue(0);
   const hasDragged = useRef(false);
+  const [isExiting, setIsExiting] = useState(false);
 
   // Transform x position to rotation and opacity
   const rotate = useTransform(x, [-200, 0, 200], [-15, 0, 15]);
@@ -27,23 +29,37 @@ export default function SwipeCard({
   };
 
   const handleDrag = (event, info) => {
-    // Mark as dragged if moved beyond tap threshold
     if (Math.abs(info.offset.x) > TAP_THRESHOLD) {
       hasDragged.current = true;
     }
   };
 
   const handleDragEnd = (event, info) => {
-    if (info.offset.x > SWIPE_THRESHOLD) {
-      onSwipeRight?.();
-    } else if (info.offset.x < -SWIPE_THRESHOLD) {
-      onSwipeLeft?.();
+    const { offset, velocity } = info;
+
+    // Check if swipe threshold is met
+    if (offset.x > SWIPE_THRESHOLD || velocity.x > 500) {
+      // Swipe right - fly off to the right
+      setIsExiting(true);
+      animate(x, FLY_AWAY_DISTANCE, {
+        duration: 0.3,
+        onComplete: () => onSwipeRight?.(),
+      });
+    } else if (offset.x < -SWIPE_THRESHOLD || velocity.x < -500) {
+      // Swipe left - fly off to the left
+      setIsExiting(true);
+      animate(x, -FLY_AWAY_DISTANCE, {
+        duration: 0.3,
+        onComplete: () => onSwipeLeft?.(),
+      });
+    } else {
+      // Snap back to center
+      animate(x, 0, { type: 'spring', stiffness: 500, damping: 30 });
     }
   };
 
   const handleClick = () => {
-    // Only trigger tap if user didn't drag
-    if (!hasDragged.current) {
+    if (!hasDragged.current && !isExiting) {
       onTap?.();
     }
   };
@@ -89,14 +105,14 @@ export default function SwipeCard({
   return (
     <motion.div
       className="absolute inset-0 bg-white rounded-2xl shadow-xl cursor-grab active:cursor-grabbing overflow-hidden"
-      drag="x"
+      drag={!isExiting ? 'x' : false}
       dragConstraints={{ left: 0, right: 0 }}
-      dragElastic={0.7}
+      dragElastic={0.9}
       onDragStart={handleDragStart}
       onDrag={handleDrag}
       onDragEnd={handleDragEnd}
       style={{ x, rotate }}
-      whileTap={{ scale: 0.98 }}
+      whileTap={{ scale: isExiting ? 1 : 0.98 }}
       onClick={handleClick}
     >
       {/* Like indicator */}
