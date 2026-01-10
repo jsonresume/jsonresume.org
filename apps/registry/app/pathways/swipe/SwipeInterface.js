@@ -18,7 +18,6 @@ export default function SwipeInterface() {
     resume,
     embedding,
     isEmbeddingLoading,
-    embeddingStage,
     hiddenJobIds,
     interestedJobIds,
     markAsInterested,
