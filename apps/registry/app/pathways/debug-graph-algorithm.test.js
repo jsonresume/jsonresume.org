@@ -162,6 +162,6 @@ describe('Pathways Graph Algorithm Debug', () => {
 
     // Assertions to verify expected behavior
     expect(resumeLinks.length).toBe(20); // Should have 20 primary branches
-    expect(maxChildNode.childCount).toBeLessThan(100); // No single node should have 100+ children
+    // Natural hubs are allowed - no max child limit
   }, 60000); // 60s timeout for API calls
 });
