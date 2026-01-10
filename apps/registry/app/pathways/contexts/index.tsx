@@ -3,11 +3,8 @@
 import { type ReactNode, useEffect, useState } from 'react';
 import { useAuth } from '@/app/context/auth';
 import { ResumeProvider, useResume } from './ResumeContext';
-import {
-  JobGraphProvider,
-  useJobGraph,
-  EMBEDDING_STAGES,
-} from './JobGraphContext';
+import { JobGraphProvider, useJobGraph } from './JobGraphContext';
+import { EMBEDDING_STAGES } from './JobGraphContext';
 import { KeyboardProvider, useKeyboard } from './KeyboardContext';
 import {
   getSessionId,

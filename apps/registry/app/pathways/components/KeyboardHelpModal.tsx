@@ -8,7 +8,7 @@ import { useKeyboard } from '../contexts';
 // ============================================================================
 
 export function KeyboardHelpModal() {
-  const { isHelpOpen, setIsHelpOpen, shortcuts } = useKeyboard();
+  const { isHelpOpen, setIsHelpOpen } = useKeyboard();
 
   // Close on Escape
   const handleKeyDown = useCallback(

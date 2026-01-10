@@ -51,7 +51,7 @@ describe('Pathways Graph Algorithm Debug', () => {
     console.log('\n=== API Version ===');
     console.log('Version:', jobsData._version || 'NOT FOUND - old deployment');
 
-    const { graphData, debug, topBranches } = jobsData;
+    const { graphData, debug } = jobsData;
     const { nodes, links } = graphData;
 
     console.log('\n=== Results ===');

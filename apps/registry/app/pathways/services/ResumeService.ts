@@ -1,10 +1,5 @@
 import { Effect, Context, Layer, pipe } from 'effect';
-import {
-  FetchError,
-  UpdateError,
-  EmbeddingError,
-  ResumeNotFoundError,
-} from '../errors';
+import { FetchError, UpdateError, EmbeddingError } from '../errors';
 
 // ============================================================================
 // Types (JSON Resume format)

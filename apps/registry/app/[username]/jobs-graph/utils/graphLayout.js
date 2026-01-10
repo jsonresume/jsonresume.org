@@ -35,7 +35,6 @@ export const getLayoutedElements = (nodes, edges, direction = 'TB') => {
  * Find connected components in the graph
  */
 function findConnectedComponents(nodes, edges) {
-  const nodeMap = new Map(nodes.map((n) => [n.id, n]));
   const visited = new Set();
   const components = [];
 
