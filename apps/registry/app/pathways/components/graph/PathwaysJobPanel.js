@@ -15,6 +15,7 @@ import {
   ThumbsUp,
   Send,
 } from 'lucide-react';
+import WhyMatch from '../WhyMatch';
 
 const SENTIMENTS = [
   { value: 'dismissed', label: 'Quick dismiss', icon: Check },
@@ -187,6 +188,22 @@ export function PathwaysJobPanel({
             )}
           </div>
         )}
+
+        {/* Why Match AI Analysis */}
+        <WhyMatch
+          job={{
+            id: selectedNode.id,
+            title: jobInfo.title,
+            company: jobInfo.company,
+            description: jobInfo.description,
+            skills: jobInfo.skills,
+            bonusSkills: jobInfo.bonusSkills,
+            location: jobInfo.location,
+            remote: jobInfo.remote,
+            salaryMin: jobInfo.salaryMin,
+            salaryMax: jobInfo.salaryMax,
+          }}
+        />
       </div>
 
       {/* Footer */}

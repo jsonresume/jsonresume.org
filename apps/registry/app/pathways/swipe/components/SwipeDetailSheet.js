@@ -10,6 +10,7 @@ import {
   ExternalLink,
   Heart,
 } from 'lucide-react';
+import WhyMatch from '../../components/WhyMatch';
 
 export default function SwipeDetailSheet({
   job,
@@ -164,6 +165,11 @@ export default function SwipeDetailSheet({
                 <p className="text-gray-600 text-sm whitespace-pre-line">
                   {job.description || 'No description available.'}
                 </p>
+              </div>
+
+              {/* Why Match AI Analysis */}
+              <div className="mb-6">
+                <WhyMatch job={job} />
               </div>
 
               {/* External link */}
