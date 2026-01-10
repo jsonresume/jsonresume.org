@@ -2,14 +2,16 @@
 
 import { useState } from 'react';
 import { usePathways } from '../context/PathwaysContext';
-import { usePathwaysJobData } from '../hooks/usePathwaysJobData';
+import {
+  usePathwaysJobData,
+  LOADING_STAGES,
+} from '../hooks/usePathwaysJobData';
 import { useSwipeQueue } from './hooks/useSwipeQueue';
 import SwipeHeader from './components/SwipeHeader';
 import SwipeCard from './components/SwipeCard';
 import SwipeActions from './components/SwipeActions';
 import SwipeProgress from './components/SwipeProgress';
 import SwipeDetailSheet from './components/SwipeDetailSheet';
-import { LoadingScreen } from '../components/LoadingScreen';
 
 export default function SwipeInterface() {
   const {
@@ -85,14 +87,36 @@ export default function SwipeInterface() {
   const isLoadingData =
     isEmbeddingLoading || isJobsLoading || isWaitingForEmbedding;
 
+  // Get user-friendly loading message
+  const getLoadingMessage = () => {
+    if (isEmbeddingLoading || isWaitingForEmbedding) {
+      return 'Analyzing your resume...';
+    }
+    switch (loadingStage) {
+      case LOADING_STAGES.CHECKING_CACHE:
+        return 'Checking for cached data...';
+      case LOADING_STAGES.CACHE_HIT:
+        return 'Loading from cache...';
+      case LOADING_STAGES.FETCHING_JOBS:
+        return 'Finding matching jobs...';
+      case LOADING_STAGES.BUILDING_GRAPH:
+        return 'Preparing job cards...';
+      default:
+        return 'Loading...';
+    }
+  };
+
   if (isLoadingData) {
     return (
       <div className="min-h-screen bg-gray-50">
         <SwipeHeader />
-        <LoadingScreen
-          stage={isEmbeddingLoading ? embeddingStage : loadingStage}
-          isEmbedding={isEmbeddingLoading || isWaitingForEmbedding}
-        />
+        <div className="flex flex-col items-center justify-center h-[calc(100vh-64px)] p-6">
+          <div className="w-16 h-16 mb-6 relative">
+            <div className="absolute inset-0 rounded-full border-4 border-indigo-200"></div>
+            <div className="absolute inset-0 rounded-full border-4 border-indigo-500 border-t-transparent animate-spin"></div>
+          </div>
+          <p className="text-gray-600 text-lg">{getLoadingMessage()}</p>
+        </div>
       </div>
     );
   }
