@@ -126,7 +126,9 @@ export default function SwipeDetailSheet({
                         key={i}
                         className="px-2.5 py-1 bg-indigo-50 text-indigo-700 text-sm rounded"
                       >
-                        {skill}
+                        {typeof skill === 'string'
+                          ? skill
+                          : skill?.name || 'Unknown'}
                       </span>
                     ))}
                   </div>
@@ -145,7 +147,9 @@ export default function SwipeDetailSheet({
                         key={i}
                         className="px-2.5 py-1 bg-gray-100 text-gray-600 text-sm rounded"
                       >
-                        {skill}
+                        {typeof skill === 'string'
+                          ? skill
+                          : skill?.name || 'Unknown'}
                       </span>
                     ))}
                   </div>

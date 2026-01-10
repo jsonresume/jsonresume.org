@@ -135,7 +135,7 @@ export default function SwipeCard({
                 key={i}
                 className="px-2 py-0.5 bg-indigo-50 text-indigo-700 text-xs rounded"
               >
-                {skill}
+                {typeof skill === 'string' ? skill : skill?.name || 'Unknown'}
               </span>
             ))}
           </div>
