@@ -67,7 +67,9 @@ describe('Pathways Graph Algorithm Debug', () => {
     console.log('\n=== Debug Info ===');
     console.log('Total secondary jobs:', debug.totalSecondary);
     console.log('Unique parents chosen:', debug.uniqueParents);
-    console.log('Times resume was chosen:', debug.resumeChosen);
+    console.log('Reranked count:', debug.rerankedCount);
+    console.log('Capped count:', debug.cappedCount);
+    console.log('Orphan count (fixed by API):', debug.orphanCount);
     console.log('\nTop 10 parents by child count:');
     debug.topParents.forEach((p, i) => {
       console.log(`  ${i + 1}. ${p.id}: ${p.count} children`);
@@ -116,6 +118,48 @@ describe('Pathways Graph Algorithm Debug', () => {
     const isPrimary = maxChildNode.group === 1;
     console.log('\nIs this a primary node?', isPrimary);
 
+    // === CONNECTIVITY CHECK ===
+    console.log('\n=== Connectivity Check ===');
+
+    // Build adjacency list (directed: parent -> children)
+    const children = new Map();
+    links.forEach((link) => {
+      if (!children.has(link.source)) children.set(link.source, []);
+      children.get(link.source).push(link.target);
+    });
+
+    // BFS from resume to find all reachable nodes
+    const reachable = new Set(['resume']);
+    const queue = ['resume'];
+    while (queue.length > 0) {
+      const nodeId = queue.shift();
+      const nodeChildren = children.get(nodeId) || [];
+      for (const child of nodeChildren) {
+        if (!reachable.has(child)) {
+          reachable.add(child);
+          queue.push(child);
+        }
+      }
+    }
+
+    console.log(`Total nodes: ${nodes.length}`);
+    console.log(`Reachable from resume: ${reachable.size}`);
+    console.log(`Disconnected nodes: ${nodes.length - reachable.size}`);
+
+    // Find disconnected nodes
+    const disconnected = nodes.filter((n) => !reachable.has(n.id));
+    if (disconnected.length > 0) {
+      console.log('\nDisconnected nodes:');
+      disconnected.slice(0, 10).forEach((n) => {
+        console.log(`  - ${n.id?.slice(0, 8)} (${n.label?.slice(0, 30)})`);
+      });
+      if (disconnected.length > 10) {
+        console.log(`  ... and ${disconnected.length - 10} more`);
+      }
+    } else {
+      console.log('All nodes are connected to resume!');
+    }
+
     // Analyze links to understand the tree structure
     console.log('\n=== Tree Structure Analysis ===');
     const resumeLinks = links.filter((l) => l.source === 'resume');
@@ -161,7 +205,9 @@ describe('Pathways Graph Algorithm Debug', () => {
     }
 
     // Assertions to verify expected behavior
-    expect(resumeLinks.length).toBe(20); // Should have 20 primary branches
-    // Natural hubs are allowed - no max child limit
+    expect(resumeLinks.length).toBeGreaterThanOrEqual(20); // At least 20 primary branches
+    // Resume may have more direct links due to orphan subgraph reconnection
+    // The important invariant is that ALL nodes are reachable from resume
+    expect(disconnected.length).toBe(0); // CRITICAL: All nodes must be connected
   }, 60000); // 60s timeout for API calls
 });
