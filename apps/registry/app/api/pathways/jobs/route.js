@@ -342,48 +342,81 @@ function buildGraphData(
     'Post-rerank parent distribution'
   );
 
-  // === CONNECTIVITY CHECK ===
-  // Ensure all nodes are reachable from the resume node
-  // Find any orphaned nodes (nodes with no incoming link) and connect them
-  const nodesWithIncomingLinks = new Set(links.map((l) => l.target));
+  // === CONNECTIVITY CHECK (BFS) ===
+  // Use BFS from resume to find ALL reachable nodes
+  // Any node not reachable should be reconnected to resume
+  // Note: Checking for "no incoming link" doesn't work because
+  // disconnected subgraphs can have their own internal structure
+
+  // Build adjacency list (directed: parent -> children)
+  const children = new Map();
+  links.forEach((link) => {
+    if (!children.has(link.source)) children.set(link.source, []);
+    children.get(link.source).push(link.target);
+  });
+
+  // BFS from resume to find all reachable nodes
+  const reachable = new Set([resumeId]);
+  const queue = [resumeId];
+  while (queue.length > 0) {
+    const nodeId = queue.shift();
+    const nodeChildren = children.get(nodeId) || [];
+    for (const child of nodeChildren) {
+      if (!reachable.has(child)) {
+        reachable.add(child);
+        queue.push(child);
+      }
+    }
+  }
+
+  // Find all unreachable nodes (disconnected from resume)
   const allNodeIds = new Set(nodes.map((n) => n.id));
   let orphanCount = 0;
 
+  // Build embedding lookup for reconnection
+  const embeddingLookup = new Map();
+  primaryNodes.forEach((n) => embeddingLookup.set(n.id, n.embedding));
+  secondaryNodes.forEach((n) => embeddingLookup.set(n.id, n.embedding));
+
   for (const nodeId of allNodeIds) {
-    // Resume has no incoming links (it's the root) - that's expected
-    if (nodeId === resumeId) continue;
+    if (nodeId === resumeId) continue; // Resume is the root
+    if (reachable.has(nodeId)) continue; // Already reachable
 
-    // Check if this node has an incoming link
-    if (!nodesWithIncomingLinks.has(nodeId)) {
-      // Orphan found! Connect it to the resume
-      const orphanNode = secondaryNodes.find((n) => n.id === nodeId);
-      const orphanPrimary = primaryNodes.find((n) => n.id === nodeId);
-
-      if (orphanNode) {
-        const sim = cosineSimilarity(orphanNode.embedding, resumeEmbedding);
-        links.push({
-          source: resumeId,
-          target: nodeId,
-          value: sim,
-        });
-        orphanCount++;
-      } else if (orphanPrimary) {
-        // Primary without a link - shouldn't happen but handle it
-        const sim = cosineSimilarity(orphanPrimary.embedding, resumeEmbedding);
-        links.push({
-          source: resumeId,
-          target: nodeId,
-          value: sim,
-        });
-        orphanCount++;
+    // Unreachable node found! Connect it to resume
+    const embedding = embeddingLookup.get(nodeId);
+    if (embedding) {
+      const sim = cosineSimilarity(embedding, resumeEmbedding);
+      links.push({
+        source: resumeId,
+        target: nodeId,
+        value: sim,
+      });
+      orphanCount++;
+      // Add to reachable set and traverse its children too
+      reachable.add(nodeId);
+      queue.push(nodeId);
+      // Continue BFS from this newly connected node
+      while (queue.length > 0) {
+        const nId = queue.shift();
+        const nChildren = children.get(nId) || [];
+        for (const child of nChildren) {
+          if (!reachable.has(child)) {
+            reachable.add(child);
+            queue.push(child);
+          }
+        }
       }
     }
   }
 
   if (orphanCount > 0) {
     logger.warn(
-      { orphanCount, totalNodes: nodes.length },
-      'Found and reconnected orphaned nodes to resume'
+      {
+        orphanCount,
+        totalNodes: nodes.length,
+        reachableAfterFix: reachable.size,
+      },
+      'Found and reconnected orphaned subgraphs to resume'
     );
   }
 
@@ -532,7 +565,7 @@ export async function POST(request) {
       // Debug info for analyzing parent distribution
       debug: graphData.debug,
       // Version for deployment verification
-      _version: 'v6-connected-graph',
+      _version: 'v7-bfs-connectivity',
     });
   } catch (error) {
     logger.error({ error: error.message }, 'Error in pathways jobs');
