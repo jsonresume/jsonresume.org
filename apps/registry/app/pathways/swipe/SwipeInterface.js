@@ -48,7 +48,6 @@ export default function SwipeInterface() {
     undo,
     canUndo,
     isEmpty,
-    isLoading,
     totalJobs,
     processedCount,
   } = useSwipeQueue({
