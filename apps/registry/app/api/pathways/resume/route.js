@@ -53,13 +53,35 @@ export async function GET(request) {
 }
 
 /**
- * POST - Create initial resume
+ * POST - Create initial resume or handle sendBeacon save-on-unload
+ * If diff + replace + source are provided, delegates to PATCH logic for updates
  */
 export async function POST(request) {
   const supabase = getSupabase();
   try {
-    const { sessionId, userId, resume } = await request.json();
+    const body = await request.json();
+    const { sessionId, userId, resume, diff, replace, source, explanation } =
+      body;
 
+    // Handle sendBeacon save-on-unload (POST with diff + replace)
+    if (diff && replace && source) {
+      // Reuse PATCH logic by calling it internally
+      const patchRequest = new Request(request.url, {
+        method: 'PATCH',
+        headers: request.headers,
+        body: JSON.stringify({
+          sessionId,
+          userId,
+          diff,
+          replace,
+          source,
+          explanation,
+        }),
+      });
+      return PATCH(patchRequest);
+    }
+
+    // Original create logic
     if (!sessionId && !userId) {
       return Response.json(
         { error: 'Either sessionId or userId is required' },

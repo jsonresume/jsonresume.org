@@ -25,43 +25,87 @@ function PathwaysContent() {
     setResumeJson,
     setFullResume,
     isResumeSaving,
+    userId,
+    sessionId,
   } = usePathways();
 
-  // Debounced save for JSON editor
+  // Save state for JSON editor
   const saveTimeoutRef = useRef(null);
   const lastSavedJsonRef = useRef(resumeJson);
+  const pendingJsonRef = useRef(null);
 
-  // Save resume to DB with debounce
-  const debouncedSave = useCallback(
-    (json) => {
-      if (saveTimeoutRef.current) {
-        clearTimeout(saveTimeoutRef.current);
+  // Immediate save function (no debounce)
+  const saveNow = useCallback(
+    async (json) => {
+      if (!json || json === lastSavedJsonRef.current) return;
+      try {
+        const parsed = JSON.parse(json);
+        await setFullResume(parsed, 'manual_edit');
+        lastSavedJsonRef.current = json;
+        pendingJsonRef.current = null;
+      } catch {
+        // Invalid JSON, don't save
       }
-
-      saveTimeoutRef.current = setTimeout(async () => {
-        try {
-          const parsed = JSON.parse(json);
-          // Only save if JSON is valid and different from last saved
-          if (json !== lastSavedJsonRef.current) {
-            await setFullResume(parsed, 'manual_edit');
-            lastSavedJsonRef.current = json;
-          }
-        } catch {
-          // Invalid JSON, don't save
-        }
-      }, 1500); // 1.5 second debounce
     },
     [setFullResume]
   );
 
-  // Cleanup timeout on unmount
+  // Save resume to DB with short debounce (for typing)
+  const debouncedSave = useCallback(
+    (json) => {
+      pendingJsonRef.current = json;
+
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+
+      saveTimeoutRef.current = setTimeout(() => {
+        saveNow(json);
+      }, 500); // 500ms debounce (reduced from 1.5s)
+    },
+    [saveNow]
+  );
+
+  // Save pending changes before page unload
   useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (
+        pendingJsonRef.current &&
+        pendingJsonRef.current !== lastSavedJsonRef.current
+      ) {
+        // Use sendBeacon for reliable save on unload
+        try {
+          const parsed = JSON.parse(pendingJsonRef.current);
+          const payload = {
+            diff: parsed,
+            explanation: 'Full resume replacement',
+            source: 'manual_edit',
+            replace: true,
+          };
+          // Include user identifier
+          if (userId) {
+            payload.userId = userId;
+          } else if (sessionId) {
+            payload.sessionId = sessionId;
+          }
+          navigator.sendBeacon(
+            '/api/pathways/resume',
+            new Blob([JSON.stringify(payload)], { type: 'application/json' })
+          );
+        } catch {
+          // Invalid JSON
+        }
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
     return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
       if (saveTimeoutRef.current) {
         clearTimeout(saveTimeoutRef.current);
       }
     };
-  }, []);
+  }, [userId, sessionId]);
 
   // Auto-migrate anonymous session data when user logs in
   usePathwaysSession();
