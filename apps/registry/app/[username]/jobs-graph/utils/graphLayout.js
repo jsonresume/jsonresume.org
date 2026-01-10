@@ -16,12 +16,8 @@ export const getLayoutedElements = (nodes, edges) => {
   const resumeNode = nodes.find((n) => n.data?.isResume);
   const resumeId = resumeNode?.id;
 
-  // DEBUG: Log what we're working with
-  console.log('[LAYOUT] Nodes:', nodes.length, 'Edges:', edges.length);
-  console.log('[LAYOUT] Resume ID:', resumeId);
-
   if (!resumeId) {
-    console.log('[LAYOUT] No resume found, using fallback');
+    // No resume found, stack vertically
     return {
       nodes: nodes.map((node, i) => ({
         ...node,
@@ -44,19 +40,12 @@ export const getLayoutedElements = (nodes, edges) => {
     }
   });
 
-  // DEBUG: How many children does resume have?
-  const resumeChildren = childrenOf.get(resumeId) || [];
-  console.log('[LAYOUT] Resume direct children:', resumeChildren.length);
-
   // Attach orphans (nodes with no parent) to resume
-  let orphanCount = 0;
   nodes.forEach((n) => {
     if (n.id !== resumeId && !hasParent.has(n.id)) {
       childrenOf.get(resumeId).push(n.id);
-      orphanCount++;
     }
   });
-  console.log('[LAYOUT] Orphans attached to resume:', orphanCount);
 
   // Calculate width needed for each subtree
   const widthOf = new Map();
@@ -83,7 +72,6 @@ export const getLayoutedElements = (nodes, edges) => {
   };
 
   calcWidth(resumeId);
-  console.log('[LAYOUT] Total tree width:', widthOf.get(resumeId));
 
   // Position nodes
   const positions = new Map();
@@ -128,20 +116,12 @@ export const getLayoutedElements = (nodes, edges) => {
   bottomY += NODE_HEIGHT + V_GAP;
 
   let unplacedX = 0;
-  let unplacedCount = 0;
   nodes.forEach((n) => {
     if (!positions.has(n.id)) {
       positions.set(n.id, { x: unplacedX, y: bottomY });
       unplacedX += NODE_WIDTH + H_GAP;
-      unplacedCount++;
     }
   });
-
-  console.log('[LAYOUT] Placed:', placed.size, 'Unplaced:', unplacedCount);
-
-  // DEBUG: Show first few positions
-  const resumePos = positions.get(resumeId);
-  console.log('[LAYOUT] Resume position:', resumePos);
 
   const layoutedNodes = nodes.map((node) => ({
     ...node,
