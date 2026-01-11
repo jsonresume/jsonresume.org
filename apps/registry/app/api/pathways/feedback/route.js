@@ -29,7 +29,7 @@ export async function POST(request) {
       .insert({
         user_id: userId,
         job_id: jobId,
-        feedback: feedback || null, // Optional for swipe actions
+        feedback: feedback || '', // Empty string for swipe-only actions
         sentiment: sentiment || 'dismissed',
         job_title: jobTitle || null,
         job_company: jobCompany || null,
