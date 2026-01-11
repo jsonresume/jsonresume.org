@@ -16,9 +16,10 @@ export async function POST(request) {
     const { userId, jobId, feedback, sentiment, jobTitle, jobCompany } =
       await request.json();
 
-    if (!userId || !jobId || !feedback) {
+    // feedback text is optional for swipe actions (interested/dismissed)
+    if (!userId || !jobId) {
       return Response.json(
-        { error: 'userId, jobId, and feedback are required' },
+        { error: 'userId and jobId are required' },
         { status: 400 }
       );
     }
@@ -28,7 +29,7 @@ export async function POST(request) {
       .insert({
         user_id: userId,
         job_id: jobId,
-        feedback,
+        feedback: feedback || null, // Optional for swipe actions
         sentiment: sentiment || 'dismissed',
         job_title: jobTitle || null,
         job_company: jobCompany || null,

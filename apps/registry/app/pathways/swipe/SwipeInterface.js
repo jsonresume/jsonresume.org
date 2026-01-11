@@ -23,6 +23,7 @@ export default function SwipeInterface() {
     markAsInterested,
     markAsHidden,
     clearJobState,
+    userId,
   } = usePathways();
 
   const [selectedJob, setSelectedJob] = useState(null);
@@ -59,11 +60,32 @@ export default function SwipeInterface() {
     isLoading: isJobsLoading,
   });
 
+  // Save feedback to API (for feedback history)
+  const saveFeedback = async (job, sentiment) => {
+    if (!userId) return; // Only save for logged-in users
+    try {
+      await fetch('/api/pathways/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId,
+          jobId: job.id,
+          sentiment,
+          jobTitle: job.title,
+          jobCompany: job.company,
+        }),
+      });
+    } catch (err) {
+      console.error('Failed to save swipe feedback:', err);
+    }
+  };
+
   // Handle swipe right (interested)
   const handleSwipeRight = () => {
     if (!currentJob) return;
     markAsInterested(currentJob.id, currentJob.title);
     handleSwipe(currentJob.id, 'interested');
+    saveFeedback(currentJob, 'interested');
   };
 
   // Handle swipe left (hidden)
@@ -71,6 +93,7 @@ export default function SwipeInterface() {
     if (!currentJob) return;
     markAsHidden(currentJob.id, currentJob.title);
     handleSwipe(currentJob.id, 'hidden');
+    saveFeedback(currentJob, 'dismissed');
   };
 
   // Handle tap to show details
