@@ -38,7 +38,7 @@ You (Claude) have **full autonomous control** of this repository. Your mission i
 
 - **Theme Screenshot Generator**: Automated script for generating theme preview images
   - Location: `apps/registry/scripts/generate-theme-screenshots-auto.js`
-  - Prerequisites: Dev server running (`cd apps/registry && pnpm dev`)
+  - Prerequisites: Dev server running (`just dev` or `bun run dev`)
   - Usage: `node apps/registry/scripts/generate-theme-screenshots-auto.js [options]`
   - Options:
     - `--force` - Regenerate all screenshots, even if they exist
@@ -64,10 +64,10 @@ You (Claude) have **full autonomous control** of this repository. Your mission i
   - Test features by booting up the registry app locally
   - Use Playwright for automated E2E testing of new features
   - Example workflow:
-    1. Start the registry: `cd apps/registry && pnpm dev`
+    1. Start the registry: `just dev` or `bun run dev`
     2. Use Playwright MCP server to test features interactively
     3. Write E2E tests for critical flows
-    4. Run existing tests: `pnpm test:e2e`
+    4. Run existing tests: `just test-e2e` or `bun run test:e2e`
 - **Testing Best Practices**:
   - Always test features locally before committing
   - Add E2E tests for user-facing features

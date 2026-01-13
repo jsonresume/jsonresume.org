@@ -237,7 +237,8 @@ Recommendations:
 ## Testing
 
 ```bash
-pnpm test
+just test
+# or: bun run test
 ```
 
 All 16 validation tests must pass.

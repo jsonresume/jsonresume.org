@@ -76,8 +76,8 @@ body:
       placeholder: |
         - OS: [e.g., macOS 14.1, Windows 11, Ubuntu 22.04]
         - Browser: [e.g., Chrome 120, Firefox 121, Safari 17]
-        - Node.js version: [e.g., 18.19.0]
-        - Package manager: [e.g., pnpm 8.15.9]
+        - Node.js version: [e.g., 20.x]
+        - Bun version: [e.g., 1.2.x]
       render: markdown
 
   - type: textarea

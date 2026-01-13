@@ -64,17 +64,25 @@ JSON Resume includes several AI-powered features to enhance your job search:
 
 ## Prerequisites
 
-This project requires [pnpm](https://pnpm.io/installation), an alternative to npm/yarn.
+This project uses [Bun](https://bun.sh/) as the package manager and runtime.
 
-To install pnpm:
+To install Bun:
 
 ```sh
-curl -fsSL https://get.pnpm.io/install.sh | sh -
+curl -fsSL https://bun.sh/install | bash
+```
+
+Optionally, install [just](https://github.com/casey/just) for convenient task running:
+
+```sh
+# macOS
+brew install just
+
+# Linux
+curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /usr/local/bin
 ```
 
 ## Getting Started
-
-This repository uses [Turborepo](https://turbo.build/) for managing multiple applications and packages.
 
 ### Installation
 
@@ -84,17 +92,19 @@ git clone https://github.com/jsonresume/jsonresume.org.git
 cd jsonresume.org
 
 # Install dependencies
-pnpm i
+bun install
 ```
 
 ### Development
 
 ```sh
-# Start all applications
-pnpm turbo dev
+# Using just (recommended)
+just dev              # Start registry app
+just dev-all          # Start all apps
 
-# Start a specific application (e.g., registry)
-pnpm turbo dev --filter=registry
+# Using bun directly
+bun run dev           # Start registry app
+bun run dev:all       # Start all apps
 ```
 
 ## Application Details
@@ -105,7 +115,9 @@ The registry allows users to publish and share their resumes with unique URLs.
 
 ```sh
 # Start the registry application
-pnpm dev --filter=registry
+just dev
+# or
+bun run dev
 ```
 
 #### Environment Variables
@@ -136,7 +148,9 @@ The homepage serves as the main entry point for the JSON Resume project.
 
 ```sh
 # Start the homepage application
-pnpm dev --filter=homepage2
+just dev-homepage
+# or
+bun run --filter homepage2 dev
 ```
 
 ## Building Themes
@@ -165,7 +179,7 @@ export default function YourTheme({ resume }) {
 
 5. **Test locally**:
 ```sh
-pnpm dev --filter=registry
+just dev
 # Visit http://localhost:3000/thomasdavis?theme=your-theme-name
 ```
 
@@ -186,11 +200,33 @@ AI features use the Vercel AI SDK v5 (`ai` package). See the registry app for im
 ## Testing
 
 ```sh
-# Run tests for all projects
-pnpm turbo test
+# Using just
+just test             # Run unit tests in watch mode
+just test-run         # Run unit tests once
+just test-e2e         # Run E2E tests
+just test-coverage    # Run with coverage
 
-# Run tests for a specific project
-pnpm turbo test --filter=registry
+# Using bun directly
+bun run test          # Run unit tests in watch mode
+bun run test:run      # Run unit tests once
+bun run test:e2e      # Run E2E tests
+```
+
+## Available Commands
+
+Run `just --list` to see all available commands:
+
+```sh
+just install          # Install dependencies
+just dev              # Start registry in dev mode
+just build            # Build all packages
+just lint             # Run ESLint
+just format           # Format with Prettier
+just test             # Run unit tests
+just test-e2e         # Run E2E tests
+just storybook        # Start Storybook
+just db-generate      # Generate Prisma client
+just clean            # Remove node_modules
 ```
 
 ## Documentation
@@ -234,7 +270,3 @@ This project is licensed under the [MIT License](LICENSE).
 - Improve theme customization options
 - Add an option to use your own API key for AI features
 - Create a unified CLI tool for the ecosystem
-
-## Turbo Gotchas
-
-- If you don't import components from `@repo/ui`, it will not work in the build step

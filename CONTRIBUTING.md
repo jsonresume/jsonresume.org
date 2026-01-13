@@ -48,17 +48,18 @@ This project focuses exclusively on technical excellence. We expect all contribu
 
 ### Prerequisites
 
-- **Node.js** 18+ (LTS recommended)
-- **pnpm** 8.15.9+
+- **Node.js** 20+ (LTS recommended)
+- **Bun** (latest version)
 - **Git**
 - **Supabase CLI** (for database operations)
+- **just** (optional, for convenient task running)
 
 ### Installation
 
 1. **Install dependencies**:
 
    ```bash
-   pnpm install
+   bun install
    ```
 
 2. **Set up environment variables**:
@@ -74,13 +75,15 @@ This project focuses exclusively on technical excellence. We expect all contribu
 3. **Generate Prisma client**:
 
    ```bash
-   pnpm --filter registry db:generate
+   just db-generate
+   # or: bun run db:generate
    ```
 
 4. **Start development server**:
 
    ```bash
-   pnpm dev
+   just dev
+   # or: bun run dev
    ```
 
    This starts:
@@ -191,14 +194,15 @@ const { text } = await generateText({
 ### Running Tests
 
 ```bash
-# Run all tests
-pnpm test
+# Using just (recommended)
+just test              # Run tests in watch mode
+just test-run          # Run tests once
+just test-e2e          # Run E2E tests
 
-# Run tests for specific package
-pnpm --filter registry test
-
-# Run E2E tests
-pnpm test:e2e
+# Using bun directly
+bun run test           # Run tests in watch mode
+bun run test:run       # Run tests once
+bun run test:e2e       # Run E2E tests
 ```
 
 ### Test Requirements
@@ -237,10 +241,10 @@ describe('FeatureComponent', () => {
 2. **Run quality checks**:
 
    ```bash
-   pnpm lint          # ESLint
-   pnpm prettier      # Format check
-   pnpm test          # All tests
-   pnpm build         # Build check
+   just lint          # ESLint
+   just format-check  # Format check
+   just test-run      # All tests
+   just build         # Build check
    ```
 
 3. **Verify file sizes**:
@@ -258,7 +262,7 @@ describe('FeatureComponent', () => {
 - [ ] Code formatted with Prettier
 - [ ] All files ≤150 lines
 - [ ] Test coverage maintained/improved
-- [ ] No new security vulnerabilities (`pnpm audit`)
+- [ ] No new security vulnerabilities (`bun audit` or `npm audit`)
 - [ ] Documentation updated (if needed)
 
 ### PR Description Template
@@ -603,7 +607,7 @@ export function render(resume) {
 
    ```bash
    cd jsonresume.org
-   pnpm --filter registry add your-theme-name
+   bun add --filter registry your-theme-name
    ```
 
 2. **Add it to `themeConfig.js`:**
@@ -619,7 +623,8 @@ export function render(resume) {
 3. **Start the dev server:**
 
    ```bash
-   pnpm dev
+   just dev
+   # or: bun run dev
    ```
 
 4. **Test your theme:**

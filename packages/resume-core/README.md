@@ -18,11 +18,9 @@ A comprehensive collection of 200+ React components, design tokens, and utilitie
 ## Installation
 
 ```bash
+bun add @jsonresume/core
+# or
 npm install @jsonresume/core
-# or
-yarn add @jsonresume/core
-# or
-pnpm add @jsonresume/core
 ```
 
 **Peer Dependencies:**
@@ -452,7 +450,7 @@ export function render(resume) {
 ```bash
 mkdir packages/jsonresume-theme-myname
 cd packages/jsonresume-theme-myname
-pnpm init
+bun init
 ```
 
 ### Step 2: Configure package.json

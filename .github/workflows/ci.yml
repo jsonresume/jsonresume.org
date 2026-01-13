@@ -5,8 +5,6 @@ on:
   merge_group:
 
 env:
-  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-  TURBO_TEAM: ${{ vars.TURBO_TEAM }}
   AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
   AUTH_GITHUB_ID: ${{ secrets.AUTH_GITHUB_ID }}
   AUTH_GITHUB_SECRET: ${{ secrets.AUTH_GITHUB_SECRET }}
@@ -15,88 +13,74 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 2
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
-      - uses: actions/setup-node@v3
+      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
-      - run: pnpm install
-      - run: pnpm turbo lint prettier
+      - run: bun install
+      - run: bun run lint
+      - run: bun run prettier
+
   dev-script:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 2
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
-      - uses: actions/setup-node@v3
+      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
-      - run: pnpm install
-      - run: pnpm start-server-and-test 'turbo dev --filter=registry' 3000 'exit 0;'
+      - run: bun install
+      - run: bun run start-server-and-test 'bun run dev' 3000 'exit 0;'
         working-directory: apps/registry
+
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 2
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
-      - uses: actions/setup-node@v3
+      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
-      - run: pnpm install
-      - run: pnpm turbo build
+      - run: bun install
+      - run: bun run build
+
   unit-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
-      - run: pnpm install
+      - run: bun install
       - name: Run unit tests
-        run: pnpm --filter registry test -- --run
+        run: bun run test:run
+
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 20
-          cache: pnpm
-
       - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y libasound2t64 libicu-dev libffi-dev libx264-dev
-      - run: pnpm install
+      - run: bun install
       - name: Install Playwright Browsers
-        run: pnpm exec playwright install --with-deps
+        run: bunx playwright install --with-deps
         working-directory: apps/registry
       - name: Run Playwright tests
-        run: pnpm turbo test:e2e --concurrency 1000 # The high concurrency is due to a bug: https://github.com/vercel/turbo/issues/4291
+        run: bun run test:e2e
       - uses: actions/upload-artifact@v4
         if: always()
         with:

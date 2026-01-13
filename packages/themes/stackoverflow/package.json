@@ -74,10 +74,10 @@
     "dev": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "build": "vite build",
-    "lint": "pnpm eslint .",
-    "prepublishOnly": "pnpm run clean && pnpm run build",
+    "lint": "bun eslint .",
+    "prepublishOnly": "bun run clean && bun run build",
     "clean": "rm -rf dist storybook-static",
-    "prepare": "pnpm run build"
+    "prepare": "bun run build"
   },
   "files": [
     "dist",

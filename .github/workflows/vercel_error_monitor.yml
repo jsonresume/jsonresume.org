@@ -11,13 +11,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
       - name: Install Vercel CLI
-        run: npm i -g vercel
+        run: bun add -g vercel
 
       - name: Fetch and Monitor Errors
         timeout-minutes: 2
