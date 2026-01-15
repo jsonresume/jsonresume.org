@@ -35,8 +35,7 @@ jobs:
         with:
           node-version: 20
       - run: bun install
-      - run: bun run start-server-and-test 'bun run dev' 3000 'exit 0;'
-        working-directory: apps/registry
+      - run: bun run --filter registry start-server-and-test 'bun run dev' 3000 'exit 0;'
 
   build:
     runs-on: ubuntu-latest

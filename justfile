@@ -168,7 +168,7 @@ clean:
 
 # Remove build artifacts
 clean-build:
-    rm -rf apps/*/\.next
+    rm -rf apps/*/.next
     rm -rf apps/*/_site
     rm -rf packages/*/dist
 
