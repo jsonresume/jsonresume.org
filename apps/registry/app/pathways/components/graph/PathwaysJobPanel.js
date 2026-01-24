@@ -15,6 +15,7 @@ import {
   ThumbsUp,
   Send,
   Link2,
+  Building2,
 } from 'lucide-react';
 import WhyMatch from '../WhyMatch';
 
@@ -65,6 +66,7 @@ export function PathwaysJobPanel({
     : jobInfo.skills?.slice(0, 8);
 
   const hnUrl = `https://news.ycombinator.com/item?id=${selectedNode.id}`;
+  const companyUrl = jobInfo.website || jobInfo.url || jobInfo.companyUrl;
 
   return (
     <div className="absolute top-4 right-4 w-96 bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden">
@@ -75,9 +77,26 @@ export function PathwaysJobPanel({
             <h3 className="font-semibold text-gray-900">
               {highlightText(jobInfo.title, filterText)}
             </h3>
-            <p className="text-sm text-gray-600">
-              {highlightText(jobInfo.company, filterText)}
-            </p>
+            {companyUrl ? (
+              <a
+                href={
+                  companyUrl.startsWith('http')
+                    ? companyUrl
+                    : `https://${companyUrl}`
+                }
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-indigo-600 hover:text-indigo-700 flex items-center gap-1"
+              >
+                <Building2 className="w-3 h-3" />
+                {highlightText(jobInfo.company, filterText)}
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            ) : (
+              <p className="text-sm text-gray-600">
+                {highlightText(jobInfo.company, filterText)}
+              </p>
+            )}
           </div>
           <div className="flex items-center gap-1">
             <button
