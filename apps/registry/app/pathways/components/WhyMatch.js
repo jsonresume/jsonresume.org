@@ -19,8 +19,14 @@ export default function WhyMatch({ job, compact = false }) {
   const [error, setError] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // Check for cached insights on mount
+  // Reset state and check for cached insights when job changes
   useEffect(() => {
+    // Reset state when job changes
+    setInsights(null);
+    setIsLoading(false);
+    setError(null);
+    setIsExpanded(false);
+
     if (!effectiveUserId || !job?.id) return;
 
     const checkCache = async () => {
