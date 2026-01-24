@@ -14,6 +14,7 @@ import {
   ThumbsDown,
   ThumbsUp,
   Send,
+  Link2,
 } from 'lucide-react';
 import WhyMatch from '../WhyMatch';
 
@@ -38,6 +39,7 @@ export function PathwaysJobPanel({
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [showAllSkills, setShowAllSkills] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [copied, setCopied] = useState(false);
   const dropdownRef = useRef(null);
 
   // Close dropdown when clicking outside
@@ -77,13 +79,31 @@ export function PathwaysJobPanel({
               {highlightText(jobInfo.company, filterText)}
             </p>
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 p-1"
-          >
-            <X className="w-4 h-4" />
-          </button>
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => {
+                navigator.clipboard.writeText(hnUrl);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+              }}
+              className="text-gray-400 hover:text-gray-600 p-1"
+              title="Copy link"
+            >
+              {copied ? (
+                <Check className="w-4 h-4 text-green-500" />
+              ) : (
+                <Link2 className="w-4 h-4" />
+              )}
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="text-gray-400 hover:text-gray-600 p-1"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
         </div>
 
         {/* Meta info row */}
