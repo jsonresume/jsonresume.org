@@ -5,6 +5,7 @@ export function Sidebar() {
     <aside id="sidebar">
       <Link href="/">Home</Link>
       <Link href="/getting-started/">Getting Started</Link>
+      <Link href="/cli/">CLI Tools</Link>
       <Link href="/schema/">Schema</Link>
       <Link href="/themes/">Themes</Link>
       <Link href="/projects/">Projects</Link>
