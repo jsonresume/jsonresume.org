@@ -20,7 +20,7 @@ import * as saleshunter from 'jsonresume-theme-sales-hunter'; // TESTING
 import * as marketingnarrative from 'jsonresume-theme-marketing-narrative'; // FIXED
 import * as operationsprecision from 'jsonresume-theme-operations-precision'; // TESTING
 import * as writersportfolio from 'jsonresume-theme-writers-portfolio'; // NEW
-import * as tokyomodernist from '@jsonresume/jsonresume-theme-tokyo-modernist'; // NEW
+// import * as tokyomodernist from '@jsonresume/jsonresume-theme-tokyo-modernist'; // DISABLED - styled-components resolution issue
 import * as nordicminimal from 'jsonresume-theme-nordic-minimal'; // NEW
 import * as graphpapergrid from 'jsonresume-theme-graph-paper-grid'; // NEW
 import * as monochrome from 'jsonresume-theme-monochrome-noir'; // NEW
@@ -85,7 +85,7 @@ export const THEMES = {
   'marketing-narrative': marketingnarrative, // FIXED
   'operations-precision': operationsprecision, // TESTING
   'writers-portfolio': writersportfolio, // NEW
-  'tokyo-modernist': tokyomodernist, // NEW
+  // 'tokyo-modernist': tokyomodernist, // DISABLED - styled-components resolution issue
   'nordic-minimal': nordicminimal, // NEW
   'graph-paper-grid': graphpapergrid, // NEW
   'monochrome-noir': monochrome, // NEW
