@@ -5,9 +5,10 @@ import { validateExtension, validateResume } from './generateResume/validation';
 import { cacheResume } from './generateResume/cacheResume';
 import { formatResume } from './generateResume/formatResume';
 import { getRandomTheme } from './formatters/template/themeConfig';
+import { transformResumeWithLLM } from './generateResume/transformResumeWithLLM';
 
 const generateResume = async (username, extension = 'template', query = {}) => {
-  const { theme, gistname } = query;
+  const { theme, gistname, llm } = query;
   const formatter = formatters[extension];
 
   const { error: extensionError } = validateExtension(extension);
@@ -27,7 +28,13 @@ const generateResume = async (username, extension = 'template', query = {}) => {
   const { error: validationError } = validateResume(resume);
   if (validationError) return validationError;
 
-  let selectedTheme = theme || resume.meta?.theme || 'elegant';
+  // Transform resume with LLM if llm parameter is provided
+  let transformedResume = resume;
+  if (llm) {
+    transformedResume = await transformResumeWithLLM(resume, llm);
+  }
+
+  let selectedTheme = theme || transformedResume.meta?.theme || 'elegant';
   selectedTheme = selectedTheme.toLowerCase();
 
   // Handle ?theme=random by returning a redirect page
@@ -114,7 +121,7 @@ const generateResume = async (username, extension = 'template', query = {}) => {
 
   const options = { ...query, theme: selectedTheme, username };
 
-  return formatResume(resume, formatter, options);
+  return formatResume(transformedResume, formatter, options);
 };
 
 export default generateResume;
