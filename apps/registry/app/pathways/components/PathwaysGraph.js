@@ -26,7 +26,6 @@ export default function PathwaysGraph() {
     promptJobFeedback,
 
     // React Flow state
-    nodes,
     onNodesChange,
     onEdgesChange,
     nodesWithStyle,
