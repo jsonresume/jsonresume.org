@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // Mock the AI SDK
 vi.mock('ai', () => ({
-  generateObject: vi.fn(),
+  generateText: vi.fn(),
 }));
 
 vi.mock('@ai-sdk/openai', () => ({
@@ -51,14 +51,14 @@ describe('transformResumeWithLLM', () => {
     process.env.OPENAI_API_KEY = originalKey;
   });
 
-  it('calls generateObject with correct parameters', async () => {
+  it('calls generateText and parses JSON response', async () => {
     process.env.OPENAI_API_KEY = 'test-key';
 
-    const { generateObject } = await import('ai');
-    generateObject.mockResolvedValue({
-      object: {
+    const { generateText } = await import('ai');
+    generateText.mockResolvedValue({
+      text: JSON.stringify({
         basics: { name: 'Test User', label: 'Frontend Developer' },
-      },
+      }),
     });
 
     const { transformResumeWithLLM } = await import(
@@ -71,7 +71,7 @@ describe('transformResumeWithLLM', () => {
       'promote frontend experience'
     );
 
-    expect(generateObject).toHaveBeenCalledWith(
+    expect(generateText).toHaveBeenCalledWith(
       expect.objectContaining({
         system: expect.stringContaining('professional resume editor'),
         prompt: expect.stringContaining('promote frontend experience'),
@@ -81,11 +81,45 @@ describe('transformResumeWithLLM', () => {
     expect(result.basics.label).toBe('Frontend Developer');
   });
 
+  it('handles JSON wrapped in markdown code blocks', async () => {
+    process.env.OPENAI_API_KEY = 'test-key';
+
+    const { generateText } = await import('ai');
+    generateText.mockResolvedValue({
+      text: '```json\n{"basics": {"name": "Test", "label": "Engineer"}}\n```',
+    });
+
+    const { transformResumeWithLLM } = await import(
+      './transformResumeWithLLM.js'
+    );
+    const resume = { basics: { name: 'Test User' } };
+
+    const result = await transformResumeWithLLM(resume, 'some prompt');
+    expect(result.basics.label).toBe('Engineer');
+  });
+
   it('returns original resume on API error', async () => {
     process.env.OPENAI_API_KEY = 'test-key';
 
-    const { generateObject } = await import('ai');
-    generateObject.mockRejectedValue(new Error('API Error'));
+    const { generateText } = await import('ai');
+    generateText.mockRejectedValue(new Error('API Error'));
+
+    const { transformResumeWithLLM } = await import(
+      './transformResumeWithLLM.js'
+    );
+    const resume = { basics: { name: 'Test User' } };
+
+    const result = await transformResumeWithLLM(resume, 'some prompt');
+    expect(result).toEqual(resume);
+  });
+
+  it('returns original resume on JSON parse error', async () => {
+    process.env.OPENAI_API_KEY = 'test-key';
+
+    const { generateText } = await import('ai');
+    generateText.mockResolvedValue({
+      text: 'not valid json',
+    });
 
     const { transformResumeWithLLM } = await import(
       './transformResumeWithLLM.js'
