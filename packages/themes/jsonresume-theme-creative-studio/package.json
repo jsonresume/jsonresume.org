@@ -1,7 +1,7 @@
 {
   "private": false,
   "name": "@jsonresume/jsonresume-theme-creative-studio",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "main": "./src/index.jsx",
   "license": "MIT",
