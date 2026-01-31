@@ -2,25 +2,63 @@ import { generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { logger } from '../logger';
 
-const SYSTEM_PROMPT = `You are a professional resume editor. Your task is to modify a JSON Resume based on user instructions.
+const SYSTEM_PROMPT = `You are a professional resume editor. Given a resume and user instructions, return ONLY a JSON object containing the fields that should be changed.
 
-IMPORTANT RULES:
-1. ONLY modify content that is relevant to the user's request
-2. NEVER invent fake information, companies, or experiences
-3. Keep all dates, company names, and factual information accurate
-4. You may rewrite summaries, highlights, and descriptions to emphasize certain aspects
-5. You may reorder items to prioritize relevant experience
-6. You may adjust the label/title to better match the target role
-7. Preserve the overall structure and all existing sections
-8. Make the changes sound natural and professional
+RULES:
+1. Return ONLY the fields that need modification, not the entire resume
+2. NEVER invent fake information - only modify existing content
+3. Keep dates, company names, and facts accurate
+4. You may rewrite summaries and descriptions to emphasize aspects
+5. You may adjust the label/title to better match target roles
 
-Return the complete modified resume in JSON Resume format.`;
+RESPONSE FORMAT:
+Return a JSON object with only the changed fields. Use dot notation paths for nested fields.
+Example: {"basics.label": "Senior Frontend Developer", "basics.summary": "New summary text..."}
+
+For array items, use index: {"work.0.summary": "Updated summary for first job"}
+To reorder skills, return the full skills array: {"skills": [...]}`;
+
+/**
+ * Deep set a value in an object using a dot-notation path
+ */
+function setByPath(obj, path, value) {
+  const keys = path.split('.');
+  let current = obj;
+
+  for (let i = 0; i < keys.length - 1; i++) {
+    const key = keys[i];
+    const nextKey = keys[i + 1];
+    const isNextArray = !isNaN(parseInt(nextKey, 10));
+
+    if (!(key in current)) {
+      current[key] = isNextArray ? [] : {};
+    }
+    current = current[key];
+  }
+
+  current[keys[keys.length - 1]] = value;
+}
+
+/**
+ * Apply changes from LLM response to the original resume
+ */
+function applyChanges(resume, changes) {
+  // Deep clone the resume
+  const result = JSON.parse(JSON.stringify(resume));
+
+  for (const [path, value] of Object.entries(changes)) {
+    if (path.includes('.')) {
+      setByPath(result, path, value);
+    } else {
+      result[path] = value;
+    }
+  }
+
+  return result;
+}
 
 /**
  * Transform a resume using an LLM based on a user prompt
- * @param {Object} resume - The original JSON Resume object
- * @param {string} prompt - The user's transformation prompt
- * @returns {Promise<Object>} The transformed resume
  */
 export async function transformResumeWithLLM(resume, prompt) {
   if (!process.env.OPENAI_API_KEY) {
@@ -40,14 +78,22 @@ export async function transformResumeWithLLM(resume, prompt) {
       'Starting LLM resume transformation'
     );
 
+    // Only send essential resume data to reduce tokens
+    const essentialResume = {
+      basics: resume.basics,
+      work: resume.work?.slice(0, 5), // First 5 jobs
+      skills: resume.skills?.slice(0, 10), // First 10 skills
+      education: resume.education,
+    };
+
     const result = await generateText({
       model: openai('gpt-4.1-mini'),
       system: SYSTEM_PROMPT,
-      prompt: `Here is the original resume:\n\n${JSON.stringify(
-        resume,
+      prompt: `Resume:\n${JSON.stringify(
+        essentialResume,
         null,
         2
-      )}\n\nUser request: ${prompt}\n\nPlease modify the resume according to the user's request and return the complete updated resume as valid JSON.`,
+      )}\n\nRequest: ${prompt}\n\nReturn ONLY a JSON object with the changed fields.`,
     });
 
     const duration = Date.now() - startTime;
@@ -56,22 +102,22 @@ export async function transformResumeWithLLM(resume, prompt) {
       'LLM transformation completed'
     );
 
-    // Parse the JSON from the response
+    // Parse the changes JSON
     const text = result.text.trim();
-    // Extract JSON from markdown code blocks if present
     const jsonMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/) || [
       null,
       text,
     ];
     const jsonStr = jsonMatch[1].trim();
+    const changes = JSON.parse(jsonStr);
 
-    return JSON.parse(jsonStr);
+    // Apply changes to original resume
+    return applyChanges(resume, changes);
   } catch (error) {
     logger.error(
       { error: error.message, prompt: prompt.substring(0, 100) },
       'LLM transformation failed'
     );
-    // Return original resume on error
     return resume;
   }
 }

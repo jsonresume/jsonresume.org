@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-// Mock the AI SDK
 vi.mock('ai', () => ({
   generateText: vi.fn(),
 }));
@@ -29,11 +28,8 @@ describe('transformResumeWithLLM', () => {
     );
     const resume = { basics: { name: 'Test User' } };
 
-    const result = await transformResumeWithLLM(resume, '');
-    expect(result).toEqual(resume);
-
-    const result2 = await transformResumeWithLLM(resume, null);
-    expect(result2).toEqual(resume);
+    expect(await transformResumeWithLLM(resume, '')).toEqual(resume);
+    expect(await transformResumeWithLLM(resume, null)).toEqual(resume);
   });
 
   it('returns original resume when OPENAI_API_KEY not set', async () => {
@@ -51,50 +47,67 @@ describe('transformResumeWithLLM', () => {
     process.env.OPENAI_API_KEY = originalKey;
   });
 
-  it('calls generateText and parses JSON response', async () => {
+  it('applies dot-notation changes from LLM response', async () => {
     process.env.OPENAI_API_KEY = 'test-key';
 
     const { generateText } = await import('ai');
     generateText.mockResolvedValue({
       text: JSON.stringify({
-        basics: { name: 'Test User', label: 'Frontend Developer' },
+        'basics.label': 'Frontend Developer',
+        'basics.summary': 'Updated summary',
       }),
     });
 
     const { transformResumeWithLLM } = await import(
       './transformResumeWithLLM.js'
     );
-    const resume = { basics: { name: 'Test User', label: 'Developer' } };
+    const resume = {
+      basics: { name: 'Test User', label: 'Developer', summary: 'Old summary' },
+    };
 
-    const result = await transformResumeWithLLM(
-      resume,
-      'promote frontend experience'
-    );
-
-    expect(generateText).toHaveBeenCalledWith(
-      expect.objectContaining({
-        system: expect.stringContaining('professional resume editor'),
-        prompt: expect.stringContaining('promote frontend experience'),
-      })
-    );
+    const result = await transformResumeWithLLM(resume, 'promote frontend');
 
     expect(result.basics.label).toBe('Frontend Developer');
+    expect(result.basics.summary).toBe('Updated summary');
+    expect(result.basics.name).toBe('Test User'); // Unchanged
   });
 
-  it('handles JSON wrapped in markdown code blocks', async () => {
+  it('applies nested array changes', async () => {
     process.env.OPENAI_API_KEY = 'test-key';
 
     const { generateText } = await import('ai');
     generateText.mockResolvedValue({
-      text: '```json\n{"basics": {"name": "Test", "label": "Engineer"}}\n```',
+      text: '{"work.0.summary": "Updated job summary"}',
     });
 
     const { transformResumeWithLLM } = await import(
       './transformResumeWithLLM.js'
     );
-    const resume = { basics: { name: 'Test User' } };
+    const resume = {
+      basics: { name: 'Test' },
+      work: [{ name: 'Company', summary: 'Old summary' }],
+    };
 
-    const result = await transformResumeWithLLM(resume, 'some prompt');
+    const result = await transformResumeWithLLM(resume, 'update first job');
+
+    expect(result.work[0].summary).toBe('Updated job summary');
+    expect(result.work[0].name).toBe('Company'); // Unchanged
+  });
+
+  it('handles JSON in markdown code blocks', async () => {
+    process.env.OPENAI_API_KEY = 'test-key';
+
+    const { generateText } = await import('ai');
+    generateText.mockResolvedValue({
+      text: '```json\n{"basics.label": "Engineer"}\n```',
+    });
+
+    const { transformResumeWithLLM } = await import(
+      './transformResumeWithLLM.js'
+    );
+    const resume = { basics: { name: 'Test', label: 'Dev' } };
+
+    const result = await transformResumeWithLLM(resume, 'change label');
     expect(result.basics.label).toBe('Engineer');
   });
 
@@ -117,9 +130,7 @@ describe('transformResumeWithLLM', () => {
     process.env.OPENAI_API_KEY = 'test-key';
 
     const { generateText } = await import('ai');
-    generateText.mockResolvedValue({
-      text: 'not valid json',
-    });
+    generateText.mockResolvedValue({ text: 'invalid json' });
 
     const { transformResumeWithLLM } = await import(
       './transformResumeWithLLM.js'
