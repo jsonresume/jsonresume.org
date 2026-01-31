@@ -2,7 +2,7 @@
   "name": "jsonresume-theme-architects-portfolio",
   "version": "1.0.0",
   "description": "Structural elegance with horizontal keylines and geometric precision like a drafting sheet",
-  "main": "src/index.js",
+  "main": "./src/index.jsx",
   "type": "module",
   "license": "MIT",
   "keywords": [
@@ -23,5 +23,22 @@
   "dependencies": {
     "@jsonresume/core": "workspace:*",
     "styled-components": "^6.1.19"
+  },
+  "scripts": {
+    "build": "vite build"
+  },
+  "exports": {
+    ".": {
+      "import": "./src/index.jsx",
+      "default": "./src/index.jsx"
+    },
+    "./dist": {
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^5.4.21"
   }
 }

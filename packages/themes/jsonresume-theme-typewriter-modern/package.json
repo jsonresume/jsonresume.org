@@ -2,7 +2,7 @@
   "name": "jsonresume-theme-typewriter-modern",
   "version": "1.0.0",
   "description": "Nostalgic typewriter aesthetic with monospace body and contemporary clarity",
-  "main": "src/index.js",
+  "main": "./src/index.jsx",
   "type": "module",
   "license": "MIT",
   "keywords": [
@@ -20,5 +20,22 @@
   "dependencies": {
     "@jsonresume/core": "workspace:*",
     "styled-components": "workspace:*"
+  },
+  "scripts": {
+    "build": "vite build"
+  },
+  "exports": {
+    ".": {
+      "import": "./src/index.jsx",
+      "default": "./src/index.jsx"
+    },
+    "./dist": {
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^5.4.21"
   }
 }

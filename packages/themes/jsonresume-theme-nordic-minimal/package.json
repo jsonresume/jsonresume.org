@@ -1,10 +1,12 @@
 {
   "name": "jsonresume-theme-nordic-minimal",
   "version": "1.0.0",
+  "type": "module",
   "description": "Scandinavian restraint, white space worship, quietly confident two-column theme",
-  "main": "src/index.js",
+  "main": "./src/index.jsx",
   "scripts": {
-    "test": "echo \"No tests specified\""
+    "test": "echo \"No tests specified\"",
+    "build": "vite build"
   },
   "keywords": [
     "json-resume",
@@ -25,5 +27,19 @@
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
     "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "exports": {
+    ".": {
+      "import": "./src/index.jsx",
+      "default": "./src/index.jsx"
+    },
+    "./dist": {
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^5.4.21"
   }
 }

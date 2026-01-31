@@ -5,9 +5,17 @@
   "type": "module",
   "main": "./src/index.jsx",
   "exports": {
-    ".": "./src/index.jsx"
+    ".": {
+      "import": "./src/index.jsx",
+      "default": "./src/index.jsx"
+    },
+    "./dist": {
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
   },
   "scripts": {
+    "build": "vite build",
     "test": "vitest run",
     "test:watch": "vitest"
   },
@@ -28,6 +36,8 @@
     "styled-components": "^6.1.19"
   },
   "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^5.4.21",
     "vitest": "^1.6.0"
   },
   "peerDependencies": {

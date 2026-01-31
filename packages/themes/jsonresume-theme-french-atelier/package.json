@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Artistic precision with editorial-inspired layout, high-contrast serif titles, and deep plum accents",
   "type": "module",
-  "main": "index.js",
+  "main": "./index.jsx",
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
     "react-dom": "^18.0.0 || ^19.0.0"
@@ -11,5 +11,22 @@
   "dependencies": {
     "@jsonresume/core": "workspace:*",
     "styled-components": "^6.1.19"
+  },
+  "scripts": {
+    "build": "vite build"
+  },
+  "exports": {
+    ".": {
+      "import": "./index.jsx",
+      "default": "./index.jsx"
+    },
+    "./dist": {
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^5.4.21"
   }
 }

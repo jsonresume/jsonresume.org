@@ -28,7 +28,7 @@
       "cache": false
     },
     "build": {
-      "outputs": [".next/**", "!.next/cache/**", "_site/**"],
+      "outputs": [".next/**", "!.next/cache/**", "_site/**", "dist/**"],
       "dependsOn": ["^build"]
     },
     "lint": {},

@@ -1,18 +1,14 @@
-var Handlebars = require('handlebars');
-import css from './style';
-import template from './resume';
+import Handlebars from 'handlebars';
+import css from './style.js';
+import template from './resume.js';
 
-module.exports = {
-  render: render,
-};
+Handlebars.registerHelper('nl2br', function (value) {
+  return (value || '').replace(/\n/g, '</p><p>');
+});
 
-function render(resume) {
+export function render(resume) {
   return Handlebars.compile(template)({
     css: css,
     resume: resume,
   });
 }
-
-Handlebars.registerHelper('nl2br', function (value) {
-  return (value || '').replace(/\n/g, '</p><p>');
-});

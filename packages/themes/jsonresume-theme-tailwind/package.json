@@ -2,19 +2,23 @@
   "private": true,
   "name": "jsonresume-theme-tailwind",
   "version": "0.0.0",
-  "main": "./src/index.js",
+  "type": "module",
+  "main": "./src/index.jsx",
   "license": "MIT",
   "devDependencies": {
     "@repo/eslint-config-custom": "workspace:*",
     "react": "^19.2.0",
     "styled-components": "^6.1.19",
-    "tailwindcss": "^3.4.3"
+    "tailwindcss": "^3.4.3",
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^5.4.21"
   },
   "peerDependencies": {
     "styled-components": "^6"
   },
   "scripts": {
-    "lint": "eslint src || exit 0"
+    "lint": "eslint src || exit 0",
+    "build": "vite build"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.0.4",
@@ -26,5 +30,15 @@
     "server": "link:twind/shim/server",
     "tailwind-merge": "^2.3.0",
     "twind": "^0.16.19"
+  },
+  "exports": {
+    ".": {
+      "import": "./src/index.jsx",
+      "default": "./src/index.jsx"
+    },
+    "./dist": {
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
   }
 }

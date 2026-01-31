@@ -1,15 +1,15 @@
-import head from './templates/head';
-import header from './templates/header';
-import basics from './templates/basics';
-import work from './templates/work';
-import volunteer from './templates/volunteer';
-import education from './templates/education';
-import awards from './templates/awards';
-import publications from './templates/publications';
-import skills from './templates/skills';
-import languages from './templates/languages';
-import interests from './templates/interests';
-import references from './templates/references';
+import head from './templates/head.js';
+import header from './templates/header.js';
+import basics from './templates/basics.js';
+import work from './templates/work.js';
+import volunteer from './templates/volunteer.js';
+import education from './templates/education.js';
+import awards from './templates/awards.js';
+import publications from './templates/publications.js';
+import skills from './templates/skills.js';
+import languages from './templates/languages.js';
+import interests from './templates/interests.js';
+import references from './templates/references.js';
 
 export default head +
   header +

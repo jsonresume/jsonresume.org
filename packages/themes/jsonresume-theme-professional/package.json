@@ -2,23 +2,36 @@
   "private": false,
   "name": "@jsonresume/jsonresume-theme-professional",
   "version": "1.0.18",
-  "main": "./src/index.js",
+  "main": "./src/index.jsx",
   "license": "MIT",
   "devDependencies": {
     "@repo/eslint-config-custom": "workspace:^",
     "react": "^19.2.0",
-    "styled-components": "^6.1.19"
+    "styled-components": "^6.1.19",
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^5.4.21"
   },
   "peerDependencies": {
     "styled-components": "^6"
   },
   "scripts": {
     "lint": "eslint src || exit 0",
-    "publish": "npm publish --access public"
+    "publish": "npm publish --access public",
+    "build": "vite build"
   },
   "dependencies": {
     "marked": "^16.3.0",
     "prismjs": "^1.29.0",
     "react-icons": "^5.0.1"
+  },
+  "exports": {
+    ".": {
+      "import": "./src/index.jsx",
+      "default": "./src/index.jsx"
+    },
+    "./dist": {
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
   }
 }

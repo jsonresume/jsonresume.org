@@ -810,6 +810,13 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-architects-portfolio:
     dependencies:
@@ -825,6 +832,13 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-asymmetric-timeline:
     dependencies:
@@ -840,6 +854,13 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-berlin-grid:
     dependencies:
@@ -855,6 +876,13 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-bold-header-statement:
     dependencies:
@@ -870,6 +898,13 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-californian-warm:
     dependencies:
@@ -885,6 +920,13 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-coastal-creative:
     dependencies:
@@ -900,6 +942,13 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-community-garden:
     dependencies:
@@ -915,6 +964,13 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-consultant-polished:
     dependencies:
@@ -928,12 +984,18 @@ importers:
       '@repo/eslint-config-custom':
         specifier: workspace:^
         version: link:../../eslint-config-custom
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
       react:
         specifier: ^19.2.0
         version: 19.2.0
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-creative-studio:
     dependencies:
@@ -953,12 +1015,18 @@ importers:
       '@repo/eslint-config-custom':
         specifier: workspace:^
         version: link:../../eslint-config-custom
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
       react:
         specifier: ^19.2.0
         version: 19.2.0
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-data-driven:
     dependencies:
@@ -975,6 +1043,12 @@ importers:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
     devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
       vitest:
         specifier: ^1.6.0
         version: 1.6.1
@@ -993,6 +1067,13 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-developer-mono:
     dependencies:
@@ -1008,6 +1089,13 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-diagonal-accent-bar:
     dependencies:
@@ -1023,6 +1111,13 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-elegant-pink:
     dependencies:
@@ -1039,6 +1134,12 @@ importers:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
     devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
       vitest:
         specifier: ^1.6.0
         version: 1.6.1
@@ -1057,6 +1158,13 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-flat:
     dependencies:
@@ -1078,6 +1186,13 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-government-standard:
     dependencies:
@@ -1093,6 +1208,13 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-graph-paper-grid:
     dependencies:
@@ -1108,6 +1230,13 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-investor-brief:
     dependencies:
@@ -1123,6 +1252,13 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-london-bureau:
     dependencies:
@@ -1138,6 +1274,13 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-marketing-narrative:
     dependencies:
@@ -1153,6 +1296,13 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-mid-century-resume:
     dependencies:
@@ -1168,6 +1318,13 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-minimalist-grid:
     dependencies:
@@ -1183,6 +1340,13 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-modern-classic:
     dependencies:
@@ -1198,6 +1362,13 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-monochrome-noir:
     dependencies:
@@ -1213,6 +1384,13 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-new-york-editorial:
     dependencies:
@@ -1228,6 +1406,13 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-nordic-minimal:
     dependencies:
@@ -1243,6 +1428,13 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-operations-precision:
     dependencies:
@@ -1258,6 +1450,13 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-pacific-horizon:
     dependencies:
@@ -1273,6 +1472,13 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-product-manager-canvas:
     dependencies:
@@ -1288,6 +1494,13 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-professional:
     dependencies:
@@ -1304,12 +1517,18 @@ importers:
       '@repo/eslint-config-custom':
         specifier: workspace:^
         version: link:../../eslint-config-custom
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
       react:
         specifier: ^19.2.0
         version: 19.2.0
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-reference:
     dependencies:
@@ -1326,6 +1545,12 @@ importers:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
     devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
       vitest:
         specifier: ^1.6.0
         version: 1.6.1
@@ -1344,6 +1569,13 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-sidebar:
     dependencies:
@@ -1360,6 +1592,12 @@ importers:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
     devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
       vitest:
         specifier: ^1.6.0
         version: 1.6.1
@@ -1378,6 +1616,13 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-tailwind:
     dependencies:
@@ -1412,6 +1657,9 @@ importers:
       '@repo/eslint-config-custom':
         specifier: workspace:*
         version: link:../../eslint-config-custom
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
       react:
         specifier: ^19.2.0
         version: 19.2.0
@@ -1421,6 +1669,9 @@ importers:
       tailwindcss:
         specifier: ^3.4.3
         version: 3.4.18
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-tokyo-modernist:
     dependencies:
@@ -1440,12 +1691,18 @@ importers:
       '@repo/eslint-config-custom':
         specifier: workspace:^
         version: link:../../eslint-config-custom
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
       react:
         specifier: ^19.2.0
         version: 19.2.0
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-two-column-modernist:
     dependencies:
@@ -1461,6 +1718,13 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-typewriter-modern:
     dependencies:
@@ -1476,6 +1740,13 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-university-first:
     dependencies:
@@ -1491,6 +1762,13 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-urban-techno:
     dependencies:
@@ -1506,6 +1784,13 @@ importers:
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-writers-portfolio:
     dependencies:
@@ -1522,6 +1807,12 @@ importers:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
     devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
       vitest:
         specifier: ^1.6.0
         version: 1.6.1
@@ -12725,7 +13016,7 @@ packages:
       '@nolyfill/is-core-module': 1.0.39
       debug: 4.4.3
       eslint: 8.57.1
-      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.49.0)(eslint-import-resolver-typescript@3.10.1)(eslint@8.57.1)
+      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@6.21.0)(eslint-import-resolver-typescript@3.10.1)(eslint@8.57.1)
       get-tsconfig: 4.13.0
       is-bun-module: 2.0.0
       stable-hash: 0.0.5

@@ -1,0 +1,139 @@
+/**
+ * Resume Core Design Tokens
+ * Framework-agnostic CSS variables for theming
+ * Based on 2025 resume best practices and ATS compatibility research
+ */
+
+:root {
+  /* Typography - ATS-friendly fonts */
+  --resume-font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --resume-font-serif: Cambria, Georgia, "Times New Roman", serif;
+  --resume-font-mono: "Courier New", Courier, monospace;
+
+  /* Font Sizes - Optimal readability */
+  --resume-size-name: 36px;        /* Large, prominent name */
+  --resume-size-heading: 16px;     /* Section titles */
+  --resume-size-subheading: 14px;  /* Job titles, degrees */
+  --resume-size-body: 11px;        /* Body text, descriptions */
+  --resume-size-small: 10px;       /* Dates, locations, metadata */
+
+  /* Font Weights */
+  --resume-weight-normal: 400;
+  --resume-weight-medium: 500;
+  --resume-weight-semibold: 600;
+  --resume-weight-bold: 700;
+
+  /* Line Heights */
+  --resume-line-height-tight: 1.2;
+  --resume-line-height-normal: 1.5;
+  --resume-line-height-relaxed: 1.75;
+
+  /* Colors - Professional Theme (default) */
+  --resume-color-primary: #1a1a1a;
+  --resume-color-secondary: #4a4a4a;
+  --resume-color-accent: #2563eb;
+  --resume-color-background: #ffffff;
+  --resume-color-border: #e5e7eb;
+
+  /* Spacing - Consistent rhythm */
+  --resume-space-section: 24px;   /* Between major sections */
+  --resume-space-item: 16px;      /* Between list items */
+  --resume-space-tight: 8px;      /* Within items */
+  --resume-space-margin: 48px;    /* Page margins */
+
+  /* Layout - Optimal line length */
+  --resume-max-width: 660px;      /* ~80 chars at body size */
+  --resume-column-gap: 24px;
+
+  /* Border Radius */
+  --resume-radius-sm: 4px;
+  --resume-radius-md: 8px;
+  --resume-radius-lg: 12px;
+
+  /* Shadows - Subtle depth */
+  --resume-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --resume-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Modern Theme Variant */
+[data-theme="modern"] {
+  --resume-color-primary: #0f172a;
+  --resume-color-secondary: #475569;
+  --resume-color-accent: #8b5cf6;
+  --resume-font-sans: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Classic Theme Variant */
+[data-theme="classic"] {
+  --resume-color-primary: #000000;
+  --resume-color-secondary: #333333;
+  --resume-color-accent: #0066cc;
+  --resume-font-sans: Georgia, "Times New Roman", serif;
+}
+
+/* Minimal Theme Variant */
+[data-theme="minimal"] {
+  --resume-color-primary: #18181b;
+  --resume-color-secondary: #71717a;
+  --resume-color-accent: #000000;
+  --resume-space-section: 32px;
+  --resume-space-item: 20px;
+}
+
+/* High Contrast Variant (Accessibility) */
+[data-theme="high-contrast"] {
+  --resume-color-primary: #000000;
+  --resume-color-secondary: #000000;
+  --resume-color-accent: #0000ff;
+  --resume-color-background: #ffffff;
+  --resume-color-border: #000000;
+}
+
+/* Print Styles - ATS-Friendly PDF Export */
+@media print {
+  :root {
+    /* Optimize for print */
+    --resume-space-section: 18px;
+    --resume-space-item: 12px;
+  }
+
+  @page {
+    size: A4;
+    margin: 0.5in;
+  }
+
+  /* Prevent awkward breaks */
+  .resume-section {
+    page-break-inside: avoid;
+  }
+
+  .resume-item {
+    break-inside: avoid;
+  }
+
+  /* Widows and orphans control */
+  p, li {
+    widows: 3;
+    orphans: 3;
+  }
+
+  /* Hyphenation for long words */
+  .resume-description {
+    hyphens: auto;
+  }
+
+  /* Hide interactive elements */
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* RTL Support */
+[dir="rtl"] {
+  text-align: right;
+}
+
+[dir="rtl"] .resume-item {
+  padding-left: 0;
+  padding-right: var(--resume-space-tight);
+}

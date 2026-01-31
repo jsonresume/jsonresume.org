@@ -2,7 +2,7 @@
   "name": "jsonresume-theme-graph-paper-grid",
   "version": "1.0.0",
   "description": "Technical design precision with subtle graph paper grid and monospace typography",
-  "main": "src/index.js",
+  "main": "./src/index.jsx",
   "type": "module",
   "keywords": [
     "jsonresume",
@@ -24,5 +24,22 @@
   "peerDependencies": {
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
+  },
+  "scripts": {
+    "build": "vite build"
+  },
+  "exports": {
+    ".": {
+      "import": "./src/index.jsx",
+      "default": "./src/index.jsx"
+    },
+    "./dist": {
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^5.4.21"
   }
 }
