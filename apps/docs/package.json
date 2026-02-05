@@ -9,7 +9,7 @@
     "lint": "next lint --max-warnings=0"
   },
   "dependencies": {
-    "next": "^15.5.7",
+    "next": "15.5.9",
     "nextra": "^4.6.0",
     "nextra-theme-docs": "^4.6.0",
     "react": "^19.2.0",
