@@ -1,121 +1,25 @@
 import { Effect, Context, Layer, pipe } from 'effect';
 import { FetchError, UpdateError } from '../errors';
+import { findMatchingJobs } from '../utils/jobFilterMatcher';
+import type {
+  Job,
+  JobsResponse,
+  JobFeedback,
+  FilterCriteria,
+  JobServiceInterface,
+} from './jobServiceTypes';
 
-// ============================================================================
-// Types
-// ============================================================================
-
-export interface Job {
-  uuid: string;
-  title: string;
-  company: string;
-  description?: string;
-  skills?: Array<{ name: string }>;
-  location?: { city?: string; region?: string };
-  remote?: string;
-  type?: string;
-  salaryUsd?: number;
-  salaryMin?: number;
-  salaryMax?: number;
-  salaryCurrency?: string;
-  similarity?: number;
-}
-
-export interface GraphNode {
-  id: string;
-  label?: string;
-  group: number;
-  size: number;
-  color: string;
-  x?: number;
-  y?: number;
-  data?: { isResume?: boolean };
-}
-
-export interface GraphEdge {
-  id: string;
-  source: string;
-  target: string;
-  value: number;
-}
-
-export interface JobsResponse {
-  graphData: {
-    nodes: GraphNode[];
-    links: GraphEdge[];
-  };
-  jobInfoMap: Record<string, Job>;
-  allJobs: Job[];
-  nearestNeighbors: Record<string, Array<{ id: string; similarity: number }>>;
-}
-
-export type JobAction =
-  | 'mark_read'
-  | 'mark_interested'
-  | 'mark_hidden'
-  | 'unmark';
-
-export interface JobFeedback {
-  jobId: string;
-  feedback: string;
-  sentiment:
-    | 'interested'
-    | 'not_interested'
-    | 'maybe'
-    | 'applied'
-    | 'dismissed';
-  jobTitle?: string;
-  jobCompany?: string;
-}
-
-export interface FilterCriteria {
-  companies?: string[];
-  keywords?: string[];
-  industries?: string[];
-  salaryMin?: number;
-  salaryMax?: number;
-  remoteOnly?: boolean;
-  jobTypes?: string[];
-}
-
-// ============================================================================
-// Service Interface
-// ============================================================================
-
-export interface JobServiceInterface {
-  /**
-   * Fetch jobs matching a resume embedding
-   */
-  readonly fetchJobs: (
-    embedding: number[],
-    timeRange?: string
-  ) => Effect.Effect<JobsResponse, FetchError>;
-
-  /**
-   * Save feedback for a single job
-   */
-  readonly saveFeedback: (
-    userId: string,
-    feedback: JobFeedback
-  ) => Effect.Effect<void, UpdateError>;
-
-  /**
-   * Save feedback for multiple jobs (batch)
-   */
-  readonly saveBatchFeedback: (
-    userId: string,
-    feedbacks: JobFeedback[]
-  ) => Effect.Effect<{ count: number }, UpdateError>;
-
-  /**
-   * Find jobs matching filter criteria
-   */
-  readonly filterJobs: (
-    jobs: Job[],
-    jobInfo: Record<string, Job>,
-    criteria: FilterCriteria
-  ) => string[];
-}
+// Re-export types for consumers
+export type {
+  Job,
+  GraphNode,
+  GraphEdge,
+  JobsResponse,
+  JobAction,
+  JobFeedback,
+  FilterCriteria,
+  JobServiceInterface,
+} from './jobServiceTypes';
 
 // ============================================================================
 // Service Tag
@@ -236,91 +140,7 @@ const filterJobsLive = (
   jobs: Job[],
   jobInfo: Record<string, Job>,
   criteria: FilterCriteria
-): string[] => {
-  const matchingIds: string[] = [];
-
-  for (const job of jobs) {
-    const info = jobInfo[job.uuid] || {};
-    let matches = true;
-
-    // Company filter
-    if (criteria.companies?.length) {
-      const company = (info.company || '').toLowerCase();
-      const companyMatch = criteria.companies.some((c) =>
-        company.includes(c.toLowerCase())
-      );
-      if (!companyMatch) matches = false;
-    }
-
-    // Keywords filter
-    if (matches && criteria.keywords?.length) {
-      const searchText = [
-        info.title,
-        info.description,
-        info.skills?.map((s) => s.name).join(' '),
-      ]
-        .filter(Boolean)
-        .join(' ')
-        .toLowerCase();
-      const keywordMatch = criteria.keywords.some((k) =>
-        searchText.includes(k.toLowerCase())
-      );
-      if (!keywordMatch) matches = false;
-    }
-
-    // Industry filter
-    if (matches && criteria.industries?.length) {
-      const searchText = [info.title, info.description, info.company]
-        .filter(Boolean)
-        .join(' ')
-        .toLowerCase();
-      const industryMatch = criteria.industries.some((ind) =>
-        searchText.includes(ind.toLowerCase())
-      );
-      if (!industryMatch) matches = false;
-    }
-
-    // Salary filter (using normalized salary data)
-    if (matches && (criteria.salaryMin || criteria.salaryMax)) {
-      const salary = info.salaryUsd || info.salaryMax || info.salaryMin;
-      if (salary) {
-        if (criteria.salaryMin && salary < criteria.salaryMin * 1000)
-          matches = false;
-        if (criteria.salaryMax && salary > criteria.salaryMax * 1000)
-          matches = false;
-      } else {
-        // No salary data - don't match salary-based filters
-        matches = false;
-      }
-    }
-
-    // Remote filter
-    if (matches && criteria.remoteOnly) {
-      const remote = (info.remote || '').toLowerCase();
-      const location = (info.location?.city || '').toLowerCase();
-      const isRemote =
-        remote.includes('remote') ||
-        remote.includes('full') ||
-        location.includes('remote');
-      if (!isRemote) matches = false;
-    }
-
-    // Job type filter
-    if (matches && criteria.jobTypes?.length) {
-      const jobType = (info.type || '').toLowerCase();
-      const typeMatch = criteria.jobTypes.some((t) =>
-        jobType.includes(t.toLowerCase())
-      );
-      if (!typeMatch) matches = false;
-    }
-
-    if (matches) {
-      matchingIds.push(job.uuid);
-    }
-  }
-
-  return matchingIds;
-};
+): string[] => findMatchingJobs(criteria, jobs, jobInfo);
 
 // ============================================================================
 // Layer

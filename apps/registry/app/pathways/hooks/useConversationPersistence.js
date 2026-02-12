@@ -6,6 +6,7 @@ import { activityLogger } from '../utils/activityLogger';
 
 const SAVE_DEBOUNCE_MS = 2000;
 const MESSAGES_PER_PAGE = 50;
+const MAX_STORED_MESSAGES = 100;
 
 export default function useConversationPersistence({
   sessionId,
@@ -88,13 +89,19 @@ export default function useConversationPersistence({
       saveTimeoutRef.current = setTimeout(async () => {
         setIsSaving(true);
         try {
+          // Cap stored messages to prevent unbounded growth
+          const trimmedMessages =
+            messages.length > MAX_STORED_MESSAGES
+              ? messages.slice(-MAX_STORED_MESSAGES)
+              : messages;
+
           const response = await fetch('/api/pathways/conversations', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               sessionId: userId ? undefined : sessionId,
               userId: userId || undefined,
-              messages,
+              messages: trimmedMessages,
               resumeSnapshot: resume,
             }),
           });

@@ -3,6 +3,7 @@
 import { useRef, useEffect, useCallback } from 'react';
 import { logger } from '@/lib/logger';
 import applyResumeChanges from '../utils/applyResumeChanges';
+import { findMatchingJobs } from '../utils/jobFilterMatcher';
 
 /**
  * Unified hook to handle all tool invocations from the AI agent.
@@ -213,95 +214,4 @@ export default function useToolHandler({
   }, [messages]);
 
   return null;
-}
-
-/**
- * Find jobs matching the given criteria
- */
-function findMatchingJobs(criteria, jobs, jobInfo) {
-  const matchingIds = [];
-
-  for (const job of jobs) {
-    const info = jobInfo[job.uuid] || {};
-    let matches = true;
-
-    // Check company names
-    if (criteria.companies?.length) {
-      const company = (info.company || '').toLowerCase();
-      const companyMatch = criteria.companies.some((c) =>
-        company.includes(c.toLowerCase())
-      );
-      if (!companyMatch) matches = false;
-    }
-
-    // Check keywords in title, description, skills
-    if (matches && criteria.keywords?.length) {
-      const searchText = [
-        info.title,
-        info.description,
-        info.skills?.map((s) => s.name || s).join(' '),
-      ]
-        .filter(Boolean)
-        .join(' ')
-        .toLowerCase();
-      const keywordMatch = criteria.keywords.some((k) =>
-        searchText.includes(k.toLowerCase())
-      );
-      if (!keywordMatch) matches = false;
-    }
-
-    // Check industries
-    if (matches && criteria.industries?.length) {
-      const searchText = [info.title, info.description, info.company]
-        .filter(Boolean)
-        .join(' ')
-        .toLowerCase();
-      const industryMatch = criteria.industries.some((ind) =>
-        searchText.includes(ind.toLowerCase())
-      );
-      if (!industryMatch) matches = false;
-    }
-
-    // Check salary range using normalized salary data
-    if (matches && (criteria.salaryMin || criteria.salaryMax)) {
-      // Use normalized salaryUsd or salaryMax (already in USD)
-      const salary = info.salaryUsd || info.salaryMax || info.salaryMin;
-      if (salary) {
-        // criteria is in thousands (e.g., 150 = $150k)
-        if (criteria.salaryMin && salary < criteria.salaryMin * 1000)
-          matches = false;
-        if (criteria.salaryMax && salary > criteria.salaryMax * 1000)
-          matches = false;
-      } else {
-        // No salary data - don't match salary-based filters
-        matches = false;
-      }
-    }
-
-    // Check remote only
-    if (matches && criteria.remoteOnly) {
-      const remote = (info.remote || '').toLowerCase();
-      const location = (info.location?.city || '').toLowerCase();
-      const isRemote =
-        remote.includes('remote') ||
-        remote.includes('full') ||
-        location.includes('remote');
-      if (!isRemote) matches = false;
-    }
-
-    // Check job types
-    if (matches && criteria.jobTypes?.length) {
-      const jobType = (info.type || '').toLowerCase();
-      const typeMatch = criteria.jobTypes.some((t) =>
-        jobType.includes(t.toLowerCase())
-      );
-      if (!typeMatch) matches = false;
-    }
-
-    if (matches) {
-      matchingIds.push(job.uuid);
-    }
-  }
-
-  return matchingIds;
 }

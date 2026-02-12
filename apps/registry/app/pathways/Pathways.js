@@ -17,6 +17,7 @@ import usePathwaysSession from './hooks/usePathwaysSession';
  */
 function PathwaysContent() {
   const [activeTab, setActiveTab] = useState('graph');
+  const [mobileView, setMobileView] = useState('main'); // 'main' | 'chat'
   const [isActivityOpen, setIsActivityOpen] = useState(false);
   const {
     resume,
@@ -152,8 +153,36 @@ function PathwaysContent() {
     <div className="flex flex-col h-screen">
       <PathwaysHeader onOpenActivity={() => setIsActivityOpen(true)} />
 
+      {/* Mobile view toggle */}
+      <div className="md:hidden flex border-b bg-gray-50 text-sm font-medium">
+        <button
+          onClick={() => setMobileView('main')}
+          className={`flex-1 px-4 py-2 -mb-px border-b-2 transition-colors ${
+            mobileView === 'main'
+              ? 'border-indigo-600 text-indigo-600'
+              : 'border-transparent hover:text-indigo-600'
+          }`}
+        >
+          Workspace
+        </button>
+        <button
+          onClick={() => setMobileView('chat')}
+          className={`flex-1 px-4 py-2 -mb-px border-b-2 transition-colors ${
+            mobileView === 'chat'
+              ? 'border-indigo-600 text-indigo-600'
+              : 'border-transparent hover:text-indigo-600'
+          }`}
+        >
+          Chat
+        </button>
+      </div>
+
       <div className="flex flex-1 overflow-hidden">
-        <section className="flex flex-col flex-1 overflow-hidden">
+        <section
+          className={`flex flex-col flex-1 overflow-hidden ${
+            mobileView === 'chat' ? 'hidden md:flex' : 'flex'
+          }`}
+        >
           <nav className="flex border-b bg-gray-50 text-sm font-medium">
             {['graph', 'feedback', 'preview', 'resume'].map((tab) => (
               <button
@@ -224,11 +253,17 @@ function PathwaysContent() {
           </div>
         </section>
 
-        <CopilotChat
-          resumeData={resume}
-          setResumeData={updateResume}
-          setResumeJson={setResumeJson}
-        />
+        <div
+          className={`${
+            mobileView === 'main' ? 'hidden md:flex' : 'flex'
+          } flex-col`}
+        >
+          <CopilotChat
+            resumeData={resume}
+            setResumeData={updateResume}
+            setResumeJson={setResumeJson}
+          />
+        </div>
       </div>
 
       <ActivityLog

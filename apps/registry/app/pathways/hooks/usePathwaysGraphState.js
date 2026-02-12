@@ -1,6 +1,13 @@
 'use client';
 
-import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
+import {
+  useState,
+  useCallback,
+  useMemo,
+  useEffect,
+  useRef,
+  useDeferredValue,
+} from 'react';
 import { useNodesState, useEdgesState } from '@xyflow/react';
 import { usePathways } from '../context/PathwaysContext';
 import { usePathwaysJobData } from './usePathwaysJobData';
@@ -80,13 +87,20 @@ export function usePathwaysGraphState() {
     [...(interestedJobIds || [])].map((id) => `pathways_${id}`)
   );
 
+  // Defer filter text to avoid blocking UI during typing
+  const deferredFilterText = useDeferredValue(filterText);
+
   // Filtering and styling hooks
-  const filteredNodes = useJobFiltering(filterText, jobInfo, remoteOnly);
+  const filteredNodes = useJobFiltering(
+    deferredFilterText,
+    jobInfo,
+    remoteOnly
+  );
   const salaryRange = useSalaryRange(jobInfo);
   const findPathToResume = usePathFinding(nodes);
 
   const hasActiveFilter = Boolean(
-    filterText || remoteOnly || timeRange !== '1m'
+    deferredFilterText || remoteOnly || timeRange !== '1m'
   );
 
   const { visibleNodes, visibleEdges } = useGraphFiltering({
@@ -113,7 +127,7 @@ export function usePathwaysGraphState() {
     interestedJobs,
     showSalaryGradient,
     salaryRange,
-    filterText,
+    filterText: deferredFilterText,
     filteredNodes,
     selectedNode,
     findPathToResume,

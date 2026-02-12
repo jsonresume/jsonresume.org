@@ -52,7 +52,7 @@ export default function CopilotChat({
 
   if (isLoadingConversation) {
     return (
-      <aside className="w-[360px] border-l bg-white flex flex-col items-center justify-center">
+      <aside className="w-full md:w-[360px] border-l bg-white flex flex-col items-center justify-center">
         <div className="animate-pulse text-gray-400">
           Loading conversation...
         </div>
@@ -61,7 +61,7 @@ export default function CopilotChat({
   }
 
   return (
-    <aside className="w-[360px] border-l bg-white flex flex-col">
+    <aside className="w-full md:w-[360px] border-l bg-white flex flex-col">
       <ChatHeader
         isSpeechEnabled={isSpeechEnabled}
         isGeneratingSpeech={isGeneratingSpeech}

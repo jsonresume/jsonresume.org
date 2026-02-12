@@ -98,6 +98,13 @@ export async function POST(request) {
       );
     }
 
+    // Cap stored messages to prevent unbounded growth
+    const MAX_STORED_MESSAGES = 100;
+    const trimmedMessages =
+      messages.length > MAX_STORED_MESSAGES
+        ? messages.slice(-MAX_STORED_MESSAGES)
+        : messages;
+
     // Check for existing conversation
     const existingQuery = supabase
       .from('pathways_conversations')
@@ -118,7 +125,7 @@ export async function POST(request) {
       const updateQuery = supabase
         .from('pathways_conversations')
         .update({
-          messages,
+          messages: trimmedMessages,
           resume_snapshot: resumeSnapshot || null,
         })
         .eq('id', existing.id)
@@ -129,7 +136,7 @@ export async function POST(request) {
     } else {
       // Insert new conversation
       const insertData = {
-        messages,
+        messages: trimmedMessages,
         resume_snapshot: resumeSnapshot || null,
       };
 

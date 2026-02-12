@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { generateText, embed } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { logger } from '@/lib/logger';
+import { retryWithBackoff } from '@/lib/retry';
 
 /**
  * Generate a professional description from resume using AI
@@ -63,9 +64,15 @@ export async function POST(request) {
 
     logger.info('Generating embedding for resume');
 
-    // Generate description and embedding
-    const description = await generateResumeDescription(resume);
-    const embedding = await createEmbedding(description);
+    // Generate description and embedding (with retry for transient failures)
+    const description = await retryWithBackoff(
+      () => generateResumeDescription(resume),
+      { maxAttempts: 3 }
+    );
+    const embedding = await retryWithBackoff(
+      () => createEmbedding(description),
+      { maxAttempts: 3 }
+    );
 
     logger.info(
       {

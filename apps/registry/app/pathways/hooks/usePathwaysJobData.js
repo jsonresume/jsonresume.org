@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { logger } from '@/lib/logger';
+import { createRetryFetch } from '@/lib/retry';
 import { convertToReactFlowFormat } from '@/app/[username]/jobs-graph/utils/graphConverter';
 import pathwaysToast from '../utils/toastMessages';
 import {
@@ -7,6 +8,11 @@ import {
   getCachedGraphData,
   setCachedGraphData,
 } from '../utils/pathwaysCache';
+
+const fetchWithRetry = createRetryFetch({
+  maxAttempts: 3,
+  retryableStatuses: [429, 500, 502, 503, 504],
+});
 
 // Loading stage definitions
 export const LOADING_STAGES = {
@@ -92,9 +98,6 @@ export function usePathwaysJobData({
             jobCount: cached.allJobs?.length || 0,
           });
 
-          // Small delay so user sees the cache hit message
-          await new Promise((resolve) => setTimeout(resolve, 300));
-
           setJobs(cached.allJobs);
           setJobInfo(cached.jobInfoMap);
           setNearestNeighbors(cached.nearestNeighbors || {});
@@ -129,7 +132,7 @@ export function usePathwaysJobData({
           embeddingSize: embedding.length,
         });
 
-        const response = await fetch('/api/pathways/jobs', {
+        const response = await fetchWithRetry('/api/pathways/jobs', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -138,10 +141,6 @@ export function usePathwaysJobData({
             timeRange: currentTimeRange,
           }),
         });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch jobs');
-        }
 
         const {
           graphData,
