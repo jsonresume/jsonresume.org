@@ -13,7 +13,7 @@
     "src"
   ],
   "scripts": {
-    "lint": "eslint src || exit 0"
+    "lint": "eslint src --cache --cache-location node_modules/.cache/.eslintcache || exit 0"
   },
   "devDependencies": {
     "@repo/eslint-config-custom": "workspace:^"

@@ -31,15 +31,53 @@
       "outputs": [".next/**", "!.next/cache/**", "_site/**", "dist/**"],
       "dependsOn": ["^build"]
     },
-    "lint": {},
+    "lint": {
+      "inputs": [
+        "**/*.js",
+        "**/*.jsx",
+        "**/*.ts",
+        "**/*.tsx",
+        "**/*.mjs",
+        "**/*.cjs",
+        ".eslintrc*",
+        "eslint.config.*",
+        "tsconfig.json",
+        "tsconfig*.json"
+      ],
+      "outputs": ["node_modules/.cache/.eslintcache"]
+    },
+    "typecheck": {
+      "inputs": [
+        "**/*.ts",
+        "**/*.tsx",
+        "**/*.js",
+        "**/*.jsx",
+        "tsconfig.json",
+        "tsconfig*.json"
+      ],
+      "outputs": ["node_modules/.cache/tsbuildinfo"]
+    },
+    "check": {
+      "dependsOn": ["lint", "typecheck"]
+    },
+    "test": {
+      "inputs": [
+        "**/*.ts",
+        "**/*.tsx",
+        "**/*.js",
+        "**/*.jsx",
+        "**/*.test.*",
+        "**/*.spec.*",
+        "vitest.config.*",
+        "vitest.setup.*"
+      ],
+      "outputs": ["coverage/**"]
+    },
     "//#format": {},
     "//#prettier": {},
     "dev": {
       "cache": false,
       "persistent": true
-    },
-    "test": {
-      "cache": false
     },
     "test:e2e": {
       "cache": false,

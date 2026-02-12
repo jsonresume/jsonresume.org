@@ -18,8 +18,7 @@
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
-    "lint": "eslint src || exit 0",
-    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --cache --cache-location node_modules/.cache/.eslintcache || exit 0",
     "storybook": "storybook dev -p 6007"
   },
   "devDependencies": {

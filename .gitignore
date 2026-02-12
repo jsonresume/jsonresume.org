@@ -34,6 +34,12 @@ yarn-error.log*
 # turbo
 .turbo
 
+# eslint cache
+.eslintcache
+
+# typescript incremental
+*.tsbuildinfo
+
 # vercel
 .vercel
 .parcel-cache
