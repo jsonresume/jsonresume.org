@@ -1,5 +1,4 @@
 import applyResumeChanges from '@/app/pathways/utils/applyResumeChanges';
-import { logger } from '@/lib/logger';
 
 /**
  * Build a Supabase query filtered by userId or sessionId

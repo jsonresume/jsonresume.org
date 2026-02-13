@@ -1,5 +1,3 @@
-import { logger } from '@/lib/logger';
-
 /**
  * Send a resume PATCH request to the API.
  * Shared by saveChanges and setFullResume.

@@ -14,12 +14,12 @@
  * Requires: SUPABASE_KEY environment variable
  * Skips gracefully if SUPABASE_KEY is not available.
  */
-import { describe, it, expect, beforeAll, vi } from 'vitest';
+import { describe, it, expect, beforeAll } from 'vitest';
 import { createClient } from '@supabase/supabase-js';
 import { matchJobs, buildJobInfoMap } from './jobMatcher';
 import { buildGraphData } from './graphBuilder';
 import { VPTree } from './vpTree';
-import { dotProduct, normalizeInPlace, preNormalizeAll } from './vectorOps';
+import { dotProduct, normalizeInPlace } from './vectorOps';
 
 vi.mock('@/lib/logger', () => ({
   logger: {
@@ -228,7 +228,7 @@ describeWithDB('Pathways Pipeline Integration (prod data)', () => {
       it('salary fields are included when available', () => {
         const entries = Object.values(jobInfoMap);
         // At least some jobs should have salary data
-        const withSalary = entries.filter(
+        const hasSalary = entries.some(
           (e) => e.salaryUsd || e.salaryMin || e.salaryMax
         );
         // This is informational — some datasets may not have salary data

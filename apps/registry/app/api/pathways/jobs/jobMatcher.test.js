@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { buildJobInfoMap } from './jobMatcher';
 
 // Only test the pure function buildJobInfoMap (matchJobs requires Supabase)
