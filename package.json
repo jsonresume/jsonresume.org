@@ -33,7 +33,7 @@
   "dependencies": {
     "@changesets/cli": "^2.27.1",
     "dotenv": "^16.0.3",
-    "next": "16.0.1",
+    "next": "^16.1.6",
     "react": "19.2.0",
     "react-dom": "19.2.0"
   },
@@ -44,7 +44,7 @@
       "tar@<6.2.1": "^6.2.1",
       "marked@<4.0.10": "^4.0.10",
       "prismjs@<1.30.0": "^1.30.0",
-      "next@<15.5.6": "^15.5.6",
+      "next@>=16.0.0 <16.0.7": "^16.1.6",
       "cookie@<0.7.0": "^0.7.0",
       "tmp@<0.2.4": "^0.2.4",
       "nth-check@<2.0.1": "^2.1.1",
@@ -66,7 +66,9 @@
       "html-minifier@<=4.0.0": "npm:html-minifier-terser@^7.2.0",
       "lodash.template@<=4.5.0": "npm:lodash@^4.17.21",
       "webpack-dev-server@<=5.2.0": "^5.2.1",
-      "styled-components": "^6.1.19"
+      "styled-components": "^6.1.19",
+      "glob@<10.5.0": "^10.5.0",
+      "storybook@>=8.0.0 <8.6.15": "8.6.15"
     }
   }
 }

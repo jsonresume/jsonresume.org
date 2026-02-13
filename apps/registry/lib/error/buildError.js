@@ -21,9 +21,8 @@ export const ERROR_CODE_MESSAGES = Object.freeze({
     'This theme is currently unsupported. Please visit this Github issue to request it https://github.com/jsonresume/jsonresume.org/issues/36 (unfortunately we have recently (11/2023) disabled a bunch of legacy themes due to critical flaws in them, please request if you would like them back.)',
   UNKNOWN_TEMPLATE_ERROR:
     'Cannot format resume, the theme you are using has encountered an error. You will have to get in contact with the theme developer yourself or you may be missing fields that the template requires.',
-  INVALID_EXTENSION: `We only support the following extensions: ${[...[]].join(
-    ', '
-  )}`,
+  INVALID_EXTENSION:
+    'We only support the following extensions: json, html, yaml, tex, txt, qr, rendercv, agent',
   UNKNOWN_FORMATTER:
     'This is a valid extension but we do not have a formatter for it. Please visit github issues.',
   RESUME_NOT_VALID_JSON:

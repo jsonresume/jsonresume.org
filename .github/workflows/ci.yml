@@ -58,7 +58,9 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - name: Run unit tests
-        run: pnpm --filter registry test -- --run
+        run: |
+          pnpm --filter registry test -- --run
+          pnpm --filter ats-validator test
 
   dev-script:
     runs-on: ubuntu-latest

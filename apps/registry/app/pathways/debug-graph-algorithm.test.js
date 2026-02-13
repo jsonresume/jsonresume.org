@@ -1,6 +1,9 @@
 /**
  * Debug test for pathways graph algorithm
  * Tests against thomasdavis resume to understand parent distribution
+ *
+ * This is an integration test that requires a live API.
+ * Run with: LOCAL_TEST=1 pnpm --filter registry test -- --run debug-graph-algorithm
  */
 
 import { describe, it, expect } from 'vitest';
@@ -10,204 +13,217 @@ const REGISTRY_URL = process.env.LOCAL_TEST
   ? 'http://localhost:3099'
   : 'https://registry.jsonresume.org';
 
+const itLive = process.env.LOCAL_TEST ? it : it.skip;
+
 describe('Pathways Graph Algorithm Debug', () => {
-  it('should analyze parent distribution for thomasdavis', async () => {
-    // Step 1: Get resume for thomasdavis
-    console.log('\n=== Step 1: Fetching resume ===');
-    const resumeRes = await fetch(
-      `${REGISTRY_URL}/api/resume?username=thomasdavis`
-    );
-    const resumeData = await resumeRes.json();
-    expect(resumeData).toBeDefined();
-    console.log('Resume fetched for:', resumeData.basics?.name);
+  itLive(
+    'should analyze parent distribution for thomasdavis',
+    async () => {
+      // Step 1: Get resume for thomasdavis
+      console.log('\n=== Step 1: Fetching resume ===');
+      const resumeRes = await fetch(
+        `${REGISTRY_URL}/api/resume?username=thomasdavis`
+      );
+      const resumeData = await resumeRes.json();
+      expect(resumeData).toBeDefined();
+      console.log('Resume fetched for:', resumeData.basics?.name);
 
-    // Step 2: Generate embedding for resume
-    console.log('\n=== Step 2: Generating embedding ===');
-    const embeddingRes = await fetch(`${REGISTRY_URL}/api/pathways/embedding`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ resume: resumeData }),
-    });
-    const embeddingData = await embeddingRes.json();
-    expect(embeddingData.embedding).toBeDefined();
-    console.log('Embedding generated, length:', embeddingData.embedding.length);
+      // Step 2: Generate embedding for resume
+      console.log('\n=== Step 2: Generating embedding ===');
+      const embeddingRes = await fetch(
+        `${REGISTRY_URL}/api/pathways/embedding`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ resume: resumeData }),
+        }
+      );
+      const embeddingData = await embeddingRes.json();
+      expect(embeddingData.embedding).toBeDefined();
+      console.log(
+        'Embedding generated, length:',
+        embeddingData.embedding.length
+      );
 
-    // Step 3: Fetch jobs with the embedding
-    console.log('\n=== Step 3: Fetching jobs ===');
-    const jobsRes = await fetch(`${REGISTRY_URL}/api/pathways/jobs`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        embedding: embeddingData.embedding,
-        resumeId: 'resume',
-        timeRange: '1m',
-        primaryBranches: 20,
-      }),
-    });
-    const jobsData = await jobsRes.json();
-    expect(jobsData.graphData).toBeDefined();
+      // Step 3: Fetch jobs with the embedding
+      console.log('\n=== Step 3: Fetching jobs ===');
+      const jobsRes = await fetch(`${REGISTRY_URL}/api/pathways/jobs`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          embedding: embeddingData.embedding,
+          resumeId: 'resume',
+          timeRange: '1m',
+          primaryBranches: 20,
+        }),
+      });
+      const jobsData = await jobsRes.json();
+      expect(jobsData.graphData).toBeDefined();
 
-    // Check API version to verify deployment
-    console.log('\n=== API Version ===');
-    console.log('Version:', jobsData._version || 'NOT FOUND - old deployment');
+      // Check API version to verify deployment
+      console.log('\n=== API Version ===');
+      console.log(
+        'Version:',
+        jobsData._version || 'NOT FOUND - old deployment'
+      );
 
-    const { graphData, debug } = jobsData;
-    const { nodes, links } = graphData;
+      const { graphData, debug } = jobsData;
+      const { nodes, links } = graphData;
 
-    console.log('\n=== Results ===');
-    console.log('Total nodes:', nodes.length);
-    console.log('Total links:', links.length);
-    console.log(
-      'Resume node has',
-      nodes.find((n) => n.id === 'resume')?.childCount,
-      'children'
-    );
+      console.log('\n=== Results ===');
+      console.log('Total nodes:', nodes.length);
+      console.log('Total links:', links.length);
+      console.log(
+        'Resume node has',
+        nodes.find((n) => n.id === 'resume')?.childCount,
+        'children'
+      );
 
-    // Analyze debug info
-    console.log('\n=== Debug Info ===');
-    console.log('Total secondary jobs:', debug.totalSecondary);
-    console.log('Unique parents chosen:', debug.uniqueParents);
-    console.log('Reranked count:', debug.rerankedCount);
-    console.log('Capped count:', debug.cappedCount);
-    console.log('Orphan count (fixed by API):', debug.orphanCount);
-    console.log('\nTop 10 parents by child count:');
-    debug.topParents.forEach((p, i) => {
-      console.log(`  ${i + 1}. ${p.id}: ${p.count} children`);
-    });
+      // Analyze debug info
+      console.log('\n=== Debug Info ===');
+      console.log('Total secondary jobs:', debug.totalSecondary);
+      console.log('Capped count:', debug.cappedCount);
+      console.log('Orphan count (fixed by API):', debug.orphanCount);
+      console.log('Max children cap:', debug.maxChildrenCap);
 
-    // Analyze node child counts
-    console.log('\n=== Node Child Count Distribution ===');
-    const nodesWithChildren = nodes.filter((n) => n.childCount > 0);
-    console.log('Nodes with children:', nodesWithChildren.length);
+      // Analyze node child counts
+      console.log('\n=== Node Child Count Distribution ===');
+      const nodesWithChildren = nodes.filter((n) => n.childCount > 0);
+      console.log('Nodes with children:', nodesWithChildren.length);
 
-    const childCountBuckets = {};
-    nodesWithChildren.forEach((n) => {
-      const bucket =
-        n.childCount <= 5
-          ? '1-5'
-          : n.childCount <= 10
-          ? '6-10'
-          : n.childCount <= 20
-          ? '11-20'
-          : n.childCount <= 50
-          ? '21-50'
-          : n.childCount <= 100
-          ? '51-100'
-          : '100+';
-      childCountBuckets[bucket] = (childCountBuckets[bucket] || 0) + 1;
-    });
-    console.log('Distribution:', childCountBuckets);
+      const childCountBuckets = {};
+      nodesWithChildren.forEach((n) => {
+        const bucket =
+          n.childCount <= 5
+            ? '1-5'
+            : n.childCount <= 10
+            ? '6-10'
+            : n.childCount <= 20
+            ? '11-20'
+            : n.childCount <= 50
+            ? '21-50'
+            : n.childCount <= 100
+            ? '51-100'
+            : '100+';
+        childCountBuckets[bucket] = (childCountBuckets[bucket] || 0) + 1;
+      });
+      console.log('Distribution:', childCountBuckets);
 
-    // Find the problematic node
-    const maxChildNode = nodesWithChildren.reduce(
-      (max, n) => (n.childCount > max.childCount ? n : max),
-      { childCount: 0 }
-    );
+      // Find the problematic node
+      const maxChildNode = nodesWithChildren.reduce(
+        (max, n) => (n.childCount > max.childCount ? n : max),
+        { childCount: 0 }
+      );
 
-    console.log('\n=== Most Connected Node ===');
-    console.log('Node ID:', maxChildNode.id);
-    console.log('Label:', maxChildNode.label);
-    console.log('Child count:', maxChildNode.childCount);
-    console.log(
-      'Group:',
-      maxChildNode.group,
-      maxChildNode.group === 1 ? '(primary)' : '(secondary)'
-    );
+      console.log('\n=== Most Connected Node ===');
+      console.log('Node ID:', maxChildNode.id);
+      console.log('Label:', maxChildNode.label);
+      console.log('Child count:', maxChildNode.childCount);
+      console.log(
+        'Group:',
+        maxChildNode.group,
+        maxChildNode.group === 1 ? '(primary)' : '(secondary)'
+      );
 
-    // Check if the problematic node is a primary or secondary
-    const isPrimary = maxChildNode.group === 1;
-    console.log('\nIs this a primary node?', isPrimary);
+      // Check if the problematic node is a primary or secondary
+      const isPrimary = maxChildNode.group === 1;
+      console.log('\nIs this a primary node?', isPrimary);
 
-    // === CONNECTIVITY CHECK ===
-    console.log('\n=== Connectivity Check ===');
+      // === CONNECTIVITY CHECK ===
+      console.log('\n=== Connectivity Check ===');
 
-    // Build adjacency list (directed: parent -> children)
-    const children = new Map();
-    links.forEach((link) => {
-      if (!children.has(link.source)) children.set(link.source, []);
-      children.get(link.source).push(link.target);
-    });
+      // Build adjacency list (directed: parent -> children)
+      const children = new Map();
+      links.forEach((link) => {
+        if (!children.has(link.source)) children.set(link.source, []);
+        children.get(link.source).push(link.target);
+      });
 
-    // BFS from resume to find all reachable nodes
-    const reachable = new Set(['resume']);
-    const queue = ['resume'];
-    while (queue.length > 0) {
-      const nodeId = queue.shift();
-      const nodeChildren = children.get(nodeId) || [];
-      for (const child of nodeChildren) {
-        if (!reachable.has(child)) {
-          reachable.add(child);
-          queue.push(child);
+      // BFS from resume to find all reachable nodes
+      const reachable = new Set(['resume']);
+      const queue = ['resume'];
+      while (queue.length > 0) {
+        const nodeId = queue.shift();
+        const nodeChildren = children.get(nodeId) || [];
+        for (const child of nodeChildren) {
+          if (!reachable.has(child)) {
+            reachable.add(child);
+            queue.push(child);
+          }
         }
       }
-    }
 
-    console.log(`Total nodes: ${nodes.length}`);
-    console.log(`Reachable from resume: ${reachable.size}`);
-    console.log(`Disconnected nodes: ${nodes.length - reachable.size}`);
+      console.log(`Total nodes: ${nodes.length}`);
+      console.log(`Reachable from resume: ${reachable.size}`);
+      console.log(`Disconnected nodes: ${nodes.length - reachable.size}`);
 
-    // Find disconnected nodes
-    const disconnected = nodes.filter((n) => !reachable.has(n.id));
-    if (disconnected.length > 0) {
-      console.log('\nDisconnected nodes:');
-      disconnected.slice(0, 10).forEach((n) => {
-        console.log(`  - ${n.id?.slice(0, 8)} (${n.label?.slice(0, 30)})`);
-      });
-      if (disconnected.length > 10) {
-        console.log(`  ... and ${disconnected.length - 10} more`);
+      // Find disconnected nodes
+      const disconnected = nodes.filter((n) => !reachable.has(n.id));
+      if (disconnected.length > 0) {
+        console.log('\nDisconnected nodes:');
+        disconnected.slice(0, 10).forEach((n) => {
+          console.log(`  - ${n.id?.slice(0, 8)} (${n.label?.slice(0, 30)})`);
+        });
+        if (disconnected.length > 10) {
+          console.log(`  ... and ${disconnected.length - 10} more`);
+        }
+      } else {
+        console.log('All nodes are connected to resume!');
       }
-    } else {
-      console.log('All nodes are connected to resume!');
-    }
 
-    // Analyze links to understand the tree structure
-    console.log('\n=== Tree Structure Analysis ===');
-    const resumeLinks = links.filter((l) => l.source === 'resume');
-    console.log(
-      'Links from resume:',
-      resumeLinks.length,
-      '(should be',
-      20,
-      ')'
-    );
+      // Analyze links to understand the tree structure
+      console.log('\n=== Tree Structure Analysis ===');
+      const resumeLinks = links.filter((l) => l.source === 'resume');
+      console.log(
+        'Links from resume:',
+        resumeLinks.length,
+        '(should be',
+        20,
+        ')'
+      );
 
-    // Count children per primary node
-    const primaryNodes = nodes.filter((n) => n.group === 1);
-    console.log('Primary nodes:', primaryNodes.length);
+      // Count children per primary node
+      const primaryNodes = nodes.filter((n) => n.group === 1);
+      console.log('Primary nodes:', primaryNodes.length);
 
-    const primaryChildCounts = primaryNodes
-      .map((pn) => ({
-        id: pn.id.slice(0, 8),
-        label: pn.label?.slice(0, 30),
-        children: pn.childCount,
-      }))
-      .sort((a, b) => b.children - a.children);
+      const primaryChildCounts = primaryNodes
+        .map((pn) => ({
+          id: pn.id.slice(0, 8),
+          label: pn.label?.slice(0, 30),
+          children: pn.childCount,
+        }))
+        .sort((a, b) => b.children - a.children);
 
-    console.log('\nPrimary nodes by child count:');
-    primaryChildCounts.slice(0, 10).forEach((p, i) => {
-      console.log(`  ${i + 1}. ${p.label}: ${p.children} children`);
-    });
-
-    // Check if secondary nodes have children (indicating depth > 2)
-    const secondaryNodes = nodes.filter((n) => n.group === 2);
-    const secondaryWithChildren = secondaryNodes.filter(
-      (n) => n.childCount > 0
-    );
-    console.log('\n=== Depth Analysis ===');
-    console.log('Secondary nodes:', secondaryNodes.length);
-    console.log('Secondary nodes with children:', secondaryWithChildren.length);
-
-    if (secondaryWithChildren.length > 0) {
-      console.log('Secondary nodes acting as parents:');
-      secondaryWithChildren.slice(0, 5).forEach((n) => {
-        console.log(`  - ${n.label?.slice(0, 30)}: ${n.childCount} children`);
+      console.log('\nPrimary nodes by child count:');
+      primaryChildCounts.slice(0, 10).forEach((p, i) => {
+        console.log(`  ${i + 1}. ${p.label}: ${p.children} children`);
       });
-    }
 
-    // Assertions to verify expected behavior
-    expect(resumeLinks.length).toBeGreaterThanOrEqual(20); // At least 20 primary branches
-    // Resume may have more direct links due to orphan subgraph reconnection
-    // The important invariant is that ALL nodes are reachable from resume
-    expect(disconnected.length).toBe(0); // CRITICAL: All nodes must be connected
-  }, 60000); // 60s timeout for API calls
+      // Check if secondary nodes have children (indicating depth > 2)
+      const secondaryNodes = nodes.filter((n) => n.group === 2);
+      const secondaryWithChildren = secondaryNodes.filter(
+        (n) => n.childCount > 0
+      );
+      console.log('\n=== Depth Analysis ===');
+      console.log('Secondary nodes:', secondaryNodes.length);
+      console.log(
+        'Secondary nodes with children:',
+        secondaryWithChildren.length
+      );
+
+      if (secondaryWithChildren.length > 0) {
+        console.log('Secondary nodes acting as parents:');
+        secondaryWithChildren.slice(0, 5).forEach((n) => {
+          console.log(`  - ${n.label?.slice(0, 30)}: ${n.childCount} children`);
+        });
+      }
+
+      // Assertions to verify expected behavior
+      expect(resumeLinks.length).toBeGreaterThanOrEqual(20); // At least 20 primary branches
+      // Resume may have more direct links due to orphan subgraph reconnection
+      // The important invariant is that ALL nodes are reachable from resume
+      expect(disconnected.length).toBe(0); // CRITICAL: All nodes must be connected
+    },
+    60000
+  ); // 60s timeout for API calls
 });

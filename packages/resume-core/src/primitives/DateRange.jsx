@@ -106,6 +106,10 @@ export function formatDateRange({
   };
 
   const start = formatDate(startDate);
+
+  // undefined = single date (no range), null = ongoing (show "Present")
+  if (endDate === undefined) return start;
+
   const end = formatDate(endDate);
 
   return `${start} - ${end}`;

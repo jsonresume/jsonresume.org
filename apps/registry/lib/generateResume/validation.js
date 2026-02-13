@@ -4,18 +4,19 @@ import logger from '../logger';
 
 const Validator = require('jsonschema').Validator;
 
-export const validateExtension = (extension) => {
-  const EXTENSIONS = new Set([
-    'qr',
-    'json',
-    'tex',
-    'txt',
-    'template',
-    'yaml',
-    'rendercv',
-    'agent',
-  ]);
+export const EXTENSIONS = new Set([
+  'qr',
+  'json',
+  'tex',
+  'txt',
+  'template',
+  'html',
+  'yaml',
+  'rendercv',
+  'agent',
+]);
 
+export const validateExtension = (extension) => {
   if (!EXTENSIONS.has(extension)) {
     return { error: buildError(ERROR_CODES.INVALID_EXTENSION) };
   }

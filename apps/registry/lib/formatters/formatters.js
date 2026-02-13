@@ -14,6 +14,7 @@ const formatters = {
   tex,
   txt,
   template,
+  html: template,
   yaml,
   rendercv,
 };
