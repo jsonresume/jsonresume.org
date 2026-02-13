@@ -1457,6 +1457,7 @@ function formatDateRange({
     return formatter.format(date);
   };
   const start = formatDate(startDate);
+  if (endDate === void 0) return start;
   const end = formatDate(endDate);
   return `${start} - ${end}`;
 }
