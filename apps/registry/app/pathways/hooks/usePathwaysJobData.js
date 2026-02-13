@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import {
   tryLoadFromCache,
   fetchJobsFromAPI,
@@ -52,13 +52,12 @@ export function usePathwaysJobData({
     setLoadingDetails(details);
   }, []);
 
-  const stateSetters = {
-    setJobs,
-    setJobInfo,
-    setNearestNeighbors,
-    setNodes,
-    setEdges,
-  };
+  // Memoize to avoid recreating on every render (all setters are stable refs)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const stateSetters = useMemo(
+    () => ({ setJobs, setJobInfo, setNearestNeighbors, setNodes, setEdges }),
+    []
+  );
 
   const fetchJobs = useCallback(
     async (forceRefresh = false) => {
@@ -130,7 +129,7 @@ export function usePathwaysJobData({
         }
       }
     },
-    [embedding, setNodes, setEdges, setStage, stateSetters]
+    [embedding, setStage, stateSetters]
   );
 
   // Refetch when timeRange or resume changes

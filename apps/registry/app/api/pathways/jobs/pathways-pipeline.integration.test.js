@@ -227,12 +227,11 @@ describeWithDB('Pathways Pipeline Integration (prod data)', () => {
 
       it('salary fields are included when available', () => {
         const entries = Object.values(jobInfoMap);
-        // At least some jobs should have salary data
-        const hasSalary = entries.some(
-          (e) => e.salaryUsd || e.salaryMin || e.salaryMax
-        );
-        // This is informational — some datasets may not have salary data
         expect(entries.length).toBeGreaterThan(0);
+        // Verify salary fields exist on entries (values may be null)
+        entries.forEach((e) => {
+          expect(e).toHaveProperty('salaryUsd');
+        });
       });
     });
   });
