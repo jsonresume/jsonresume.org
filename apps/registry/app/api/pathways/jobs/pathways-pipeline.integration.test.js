@@ -14,7 +14,7 @@
  * Requires: SUPABASE_KEY environment variable
  * Skips gracefully if SUPABASE_KEY is not available.
  */
-import { describe, it, expect, beforeAll } from 'vitest';
+import { describe, it, expect, beforeAll, vi } from 'vitest';
 import { createClient } from '@supabase/supabase-js';
 import { matchJobs, buildJobInfoMap } from './jobMatcher';
 import { buildGraphData } from './graphBuilder';
