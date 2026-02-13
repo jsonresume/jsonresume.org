@@ -53,10 +53,9 @@ export function usePathwaysJobData({
   }, []);
 
   // Memoize to avoid recreating on every render (all setters are stable refs)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const stateSetters = useMemo(
     () => ({ setJobs, setJobInfo, setNearestNeighbors, setNodes, setEdges }),
-    []
+    [setJobs, setJobInfo, setNearestNeighbors, setNodes, setEdges]
   );
 
   const fetchJobs = useCallback(
