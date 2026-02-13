@@ -1,17 +1,10 @@
 'use client';
 
-import {
-  useState,
-  useCallback,
-  useMemo,
-  useEffect,
-  useRef,
-  useDeferredValue,
-} from 'react';
+import { useState, useCallback, useMemo, useDeferredValue } from 'react';
 import { useNodesState, useEdgesState } from '@xyflow/react';
 import { usePathways } from '../context/PathwaysContext';
 import { usePathwaysJobData } from './usePathwaysJobData';
-import { usePathwaysPreferences } from './usePathwaysPreferences';
+import { useGraphPreferences } from './useGraphPreferences';
 import { useJobFiltering } from '@/app/[username]/jobs-graph/hooks/useJobFiltering';
 import { useSalaryRange } from '@/app/[username]/jobs-graph/hooks/useSalaryRange';
 import { usePathFinding } from '@/app/[username]/jobs-graph/hooks/usePathFinding';
@@ -22,7 +15,6 @@ import { useSiblingNavigation } from './useSiblingNavigation';
 
 /**
  * Hook to manage PathwaysGraph state, filtering, and styling.
- * Extracts complex state management from the PathwaysGraph component.
  */
 export function usePathwaysGraphState() {
   const {
@@ -37,40 +29,16 @@ export function usePathwaysGraphState() {
     promptJobFeedback,
   } = usePathways();
 
-  // React Flow state
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-
-  // Load user preferences
-  const { preferences, savePreferences } = usePathwaysPreferences();
-  const initializedRef = useRef(false);
-
-  // UI state - initialized from preferences
   const [selectedNode, setSelectedNode] = useState(null);
-  const [filterText, setFilterText] = useState('');
-  const [showSalaryGradient, setShowSalaryGradient] = useState(false);
-  const [remoteOnly, setRemoteOnly] = useState(false);
-  const [hideFiltered, setHideFiltered] = useState(false);
-  const [timeRange, setTimeRange] = useState('1m');
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
-  const [initialViewport, setInitialViewport] = useState(null);
 
-  // Initialize state from preferences once loaded
-  useEffect(() => {
-    if (preferences && !initializedRef.current) {
-      initializedRef.current = true;
-      setFilterText(preferences.filterText || '');
-      setShowSalaryGradient(preferences.showSalaryGradient || false);
-      setRemoteOnly(preferences.remoteOnly || false);
-      setHideFiltered(preferences.hideFiltered || false);
-      setTimeRange(preferences.timeRange || '1m');
-      if (preferences.viewport) {
-        setInitialViewport(preferences.viewport);
-      }
-    }
-  }, [preferences]);
+  // Preferences (filter state + persistence)
+  const prefs = useGraphPreferences();
+  const deferredFilterText = useDeferredValue(prefs.filterText);
 
-  // Fetch jobs data using the cached embedding
+  // Fetch jobs data
   const { jobInfo, nearestNeighbors, isLoading, loadingStage, loadingDetails } =
     usePathwaysJobData({
       embedding,
@@ -78,29 +46,25 @@ export function usePathwaysGraphState() {
       graphVersion,
       setNodes,
       setEdges,
-      timeRange,
+      timeRange: prefs.timeRange,
     });
 
-  // Convert job state Sets to the format expected by jobs-graph hooks
+  // Convert job state Sets to prefixed format
   const readJobs = new Set([...readJobIds].map((id) => `pathways_${id}`));
   const interestedJobs = new Set(
     [...(interestedJobIds || [])].map((id) => `pathways_${id}`)
   );
 
-  // Defer filter text to avoid blocking UI during typing
-  const deferredFilterText = useDeferredValue(filterText);
-
-  // Filtering and styling hooks
+  // Filtering and styling
   const filteredNodes = useJobFiltering(
     deferredFilterText,
     jobInfo,
-    remoteOnly
+    prefs.remoteOnly
   );
   const salaryRange = useSalaryRange(jobInfo);
   const findPathToResume = usePathFinding(nodes);
-
   const hasActiveFilter = Boolean(
-    deferredFilterText || remoteOnly || timeRange !== '1m'
+    deferredFilterText || prefs.remoteOnly || prefs.timeRange !== '1m'
   );
 
   const { visibleNodes, visibleEdges } = useGraphFiltering({
@@ -108,13 +72,13 @@ export function usePathwaysGraphState() {
     edges,
     filteredNodes,
     readJobs,
-    hideFiltered,
+    hideFiltered: prefs.hideFiltered,
     username: 'pathways',
     hasActiveFilter,
     jobInfo,
     salaryFilterRange: salaryRange.filterRange,
-    showSalaryGradient,
-    timeRange,
+    showSalaryGradient: prefs.showSalaryGradient,
+    timeRange: prefs.timeRange,
     nearestNeighbors,
   });
 
@@ -125,17 +89,17 @@ export function usePathwaysGraphState() {
     username: 'pathways',
     readJobs,
     interestedJobs,
-    showSalaryGradient,
+    showSalaryGradient: prefs.showSalaryGradient,
     salaryRange,
     filterText: deferredFilterText,
     filteredNodes,
     selectedNode,
     findPathToResume,
-    remoteOnly,
-    hideFiltered,
+    remoteOnly: prefs.remoteOnly,
+    hideFiltered: prefs.hideFiltered,
   });
 
-  // Keyboard navigation
+  // Navigation
   useKeyboardNavigation({
     selectedNode,
     setSelectedNode,
@@ -145,7 +109,6 @@ export function usePathwaysGraphState() {
     onMarkAsRead: markAsRead,
   });
 
-  // Sibling navigation for mark as read + move
   const { navigateToNextSibling } = useSiblingNavigation({
     edges: visibleEdges,
     nodes: visibleNodes,
@@ -154,10 +117,7 @@ export function usePathwaysGraphState() {
   });
 
   // Event handlers
-  const handleNodeClick = useCallback((_, node) => {
-    setSelectedNode(node);
-  }, []);
-
+  const handleNodeClick = useCallback((_, node) => setSelectedNode(node), []);
   const handleMarkAsReadAndMove = useCallback(
     (jobId) => {
       markAsRead(jobId);
@@ -166,41 +126,7 @@ export function usePathwaysGraphState() {
     [markAsRead, navigateToNextSibling]
   );
 
-  const handleClearFilters = useCallback(() => {
-    setFilterText('');
-    setRemoteOnly(false);
-    setHideFiltered(false);
-    setTimeRange('1m');
-  }, []);
-
-  // Save preferences when filters change
-  useEffect(() => {
-    if (!initializedRef.current) return;
-    savePreferences({
-      filterText,
-      showSalaryGradient,
-      remoteOnly,
-      hideFiltered,
-      timeRange,
-    });
-  }, [
-    filterText,
-    showSalaryGradient,
-    remoteOnly,
-    hideFiltered,
-    timeRange,
-    savePreferences,
-  ]);
-
-  const handleMoveEnd = useCallback(
-    (_, viewport) => {
-      if (!initializedRef.current) return;
-      savePreferences({ viewport });
-    },
-    [savePreferences]
-  );
-
-  // Calculate job counts
+  // Job counts
   const totalJobs = useMemo(
     () => nodes.filter((n) => !n.data?.isResume).length,
     [nodes]
@@ -210,64 +136,47 @@ export function usePathwaysGraphState() {
     [visibleNodes]
   );
 
-  // Loading state determination
   const shouldShowLoading =
     isEmbeddingLoading ||
     (isLoading && nodes.length === 0) ||
     (embedding && nodes.length === 0);
 
   return {
-    // Context values
     embedding,
     isEmbeddingLoading,
     embeddingStage,
     readJobIds,
     promptJobFeedback,
-
-    // React Flow state
-    nodes,
-    edges,
     onNodesChange,
     onEdgesChange,
     nodesWithStyle,
     edgesWithStyle,
-
-    // UI state
     selectedNode,
     setSelectedNode,
-    filterText,
-    setFilterText,
-    showSalaryGradient,
-    setShowSalaryGradient,
-    remoteOnly,
-    setRemoteOnly,
-    hideFiltered,
-    setHideFiltered,
-    timeRange,
-    setTimeRange,
-    reactFlowInstance,
+    filterText: prefs.filterText,
+    setFilterText: prefs.setFilterText,
+    showSalaryGradient: prefs.showSalaryGradient,
+    setShowSalaryGradient: prefs.setShowSalaryGradient,
+    remoteOnly: prefs.remoteOnly,
+    setRemoteOnly: prefs.setRemoteOnly,
+    hideFiltered: prefs.hideFiltered,
+    setHideFiltered: prefs.setHideFiltered,
+    timeRange: prefs.timeRange,
+    setTimeRange: prefs.setTimeRange,
     setReactFlowInstance,
-    initialViewport,
-
-    // Data
-    jobInfo,
+    initialViewport: prefs.initialViewport,
     salaryRange,
-    visibleNodes,
     totalJobs,
     visibleJobCount,
     hasActiveFilter,
-
-    // Loading state
     isLoading,
     loadingStage,
     loadingDetails,
     shouldShowLoading,
-
-    // Handlers
     handleNodeClick,
     handleMarkAsReadAndMove,
-    handleClearFilters,
-    handleMoveEnd,
+    handleClearFilters: prefs.handleClearFilters,
+    handleMoveEnd: prefs.handleMoveEnd,
   };
 }
 

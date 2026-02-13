@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport } from 'ai';
 import { usePathways } from '../context/PathwaysContext';
@@ -11,10 +11,15 @@ import useToolHandler from './useToolHandler';
 import useConversationPersistence from './useConversationPersistence';
 import useChatSpeech from './useChatSpeech';
 import useFileUploadHandler from './useFileUploadHandler';
+import {
+  useMessageInitialization,
+  useAutoSave,
+  useResumeChangeDetection,
+  useJobFeedbackPrompt,
+} from './useChatEffects';
 
 /**
  * Hook to manage CopilotChat state, speech, recording, and persistence.
- * Extracts complex state management from the CopilotChat component.
  */
 export function useCopilotChatState({ resumeData, setResumeData }) {
   const [input, setInput] = useState('');
@@ -44,11 +49,7 @@ export function useCopilotChatState({ resumeData, setResumeData }) {
     saveConversation,
     loadMore,
     clearConversation,
-  } = useConversationPersistence({
-    sessionId,
-    userId,
-    resume: resumeData,
-  });
+  } = useConversationPersistence({ sessionId, userId, resume: resumeData });
 
   // AI Chat
   const { messages, sendMessage, status, setMessages } = useChat({
@@ -59,25 +60,19 @@ export function useCopilotChatState({ resumeData, setResumeData }) {
     initialMessages: [INITIAL_MESSAGE],
   });
 
-  // Initialize messages from persistence
-  const hasInitializedRef = useRef(false);
-  useEffect(() => {
-    if (
-      !isLoadingConversation &&
-      !hasInitializedRef.current &&
-      persistedMessages?.length > 0
-    ) {
-      setMessages(persistedMessages);
-      hasInitializedRef.current = true;
-    }
-  }, [isLoadingConversation, persistedMessages, setMessages]);
-
-  // Save conversation on message changes
-  useEffect(() => {
-    if (messages.length > 1 && !isLoadingConversation) {
-      saveConversation(messages);
-    }
-  }, [messages, saveConversation, isLoadingConversation]);
+  // Message initialization + auto-save (extracted effects)
+  const hasInitializedRef = useMessageInitialization({
+    isLoadingConversation,
+    persistedMessages,
+    setMessages,
+  });
+  useAutoSave({ messages, saveConversation, isLoadingConversation });
+  useResumeChangeDetection({ resumeData, refreshEmbedding });
+  useJobFeedbackPrompt({
+    pendingJobFeedback,
+    sendMessage,
+    clearPendingJobFeedback,
+  });
 
   // Speech synthesis
   const {
@@ -91,7 +86,6 @@ export function useCopilotChatState({ resumeData, setResumeData }) {
     cleanup: cleanupSpeech,
   } = useSpeech();
 
-  // Auto-speak assistant messages
   useChatSpeech({ messages, isSpeechEnabled, status, speakText });
 
   // Voice recording
@@ -103,7 +97,6 @@ export function useCopilotChatState({ resumeData, setResumeData }) {
     },
     [sendMessage]
   );
-
   const {
     isRecording,
     isTranscribing,
@@ -134,37 +127,6 @@ export function useCopilotChatState({ resumeData, setResumeData }) {
     handleDismissParseResult,
   } = useFileUploadHandler({ sendMessage });
 
-  // Refresh embedding when resume changes
-  const prevResumeRef = useRef(resumeData);
-  useEffect(() => {
-    const hasChange =
-      JSON.stringify(prevResumeRef.current) !== JSON.stringify(resumeData);
-    if (hasChange && refreshEmbedding) {
-      const timeout = setTimeout(() => refreshEmbedding(), 1000);
-      prevResumeRef.current = resumeData;
-      return () => clearTimeout(timeout);
-    }
-  }, [resumeData, refreshEmbedding]);
-
-  // Handle pending job feedback
-  useEffect(() => {
-    if (pendingJobFeedback) {
-      const { jobInfo, sentiment } = pendingJobFeedback;
-      const sentimentLabel =
-        {
-          interested: 'interested in',
-          not_interested: 'not interested in',
-          maybe: 'unsure about',
-          applied: 'applying to',
-        }[sentiment] || sentiment;
-
-      sendMessage({
-        text: `[Job Review] Job ID: ${jobInfo.id} | Title: "${jobInfo.title}" | Company: ${jobInfo.company} | Sentiment: ${sentiment}. I want to mark this job as ${sentimentLabel}. Ask me why briefly.`,
-      });
-      clearPendingJobFeedback();
-    }
-  }, [pendingJobFeedback, sendMessage, clearPendingJobFeedback]);
-
   // Event handlers
   const handleSubmit = useCallback(
     (text) => {
@@ -173,67 +135,53 @@ export function useCopilotChatState({ resumeData, setResumeData }) {
     },
     [sendMessage]
   );
-
-  const handleToggleRecording = useCallback(() => {
-    toggleRecording(stopSpeech);
-  }, [toggleRecording, stopSpeech]);
-
+  const handleToggleRecording = useCallback(
+    () => toggleRecording(stopSpeech),
+    [toggleRecording, stopSpeech]
+  );
   const handleLoadMore = useCallback(async () => {
     const older = await loadMore();
-    if (older?.length > 0) {
-      setOlderMessages((prev) => [...older, ...prev]);
-    }
+    if (older?.length > 0) setOlderMessages((prev) => [...older, ...prev]);
     return older;
   }, [loadMore]);
 
-  // Reset state when conversation cleared
+  // Reset older messages when conversation cleared
   useEffect(() => {
     if (!persistedMessages) {
       setOlderMessages([]);
       hasInitializedRef.current = false;
     }
-  }, [persistedMessages]);
+  }, [persistedMessages, hasInitializedRef]);
 
-  // Combine messages
   const allMessages = [...olderMessages, ...messages];
 
   // Cleanup
-  useEffect(() => {
-    return () => {
+  useEffect(
+    () => () => {
       cleanupSpeech();
       cleanupRecording();
-    };
-  }, [cleanupSpeech, cleanupRecording]);
+    },
+    [cleanupSpeech, cleanupRecording]
+  );
 
   return {
-    // Input state
     input,
     setInput,
     allMessages,
-
-    // Loading states
     isLoadingConversation,
     isLoadingMore,
     isSaving,
     hasMore,
     status,
-
-    // Speech state
     isSpeechEnabled,
     isGeneratingSpeech,
     selectedVoice,
     setSelectedVoice,
     toggleSpeech,
-
-    // Recording state
     isRecording,
     isTranscribing,
-
-    // File upload state
     pendingResumeData,
     isApplyingResume,
-
-    // Handlers
     handleSubmit,
     handleToggleRecording,
     handleLoadMore,

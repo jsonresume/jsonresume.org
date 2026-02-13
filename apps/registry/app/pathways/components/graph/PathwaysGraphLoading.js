@@ -1,91 +1,6 @@
 import { LOADING_STAGES } from '../../hooks/usePathwaysJobData';
 import { EMBEDDING_STAGES } from '../../context/PathwaysContext';
-
-const STAGE_CONFIG = {
-  // Embedding stages
-  [EMBEDDING_STAGES.CHECKING_CACHE]: {
-    icon: '💾',
-    title: 'Checking Cache',
-    subtitle: 'Looking for cached resume analysis',
-    progress: 10,
-  },
-  [EMBEDDING_STAGES.CACHE_HIT]: {
-    icon: '⚡',
-    title: 'Resume Cache Found!',
-    subtitle: 'Loading your saved analysis instantly',
-    progress: 20,
-  },
-  [EMBEDDING_STAGES.GENERATING]: {
-    icon: '🧠',
-    title: 'Analyzing Resume',
-    subtitle: 'Creating semantic embedding from your experience',
-    progress: 25,
-  },
-  // Graph stages
-  [LOADING_STAGES.CHECKING_CACHE]: {
-    icon: '💾',
-    title: 'Checking Job Cache',
-    subtitle: 'Looking for previously matched jobs',
-    progress: 40,
-  },
-  [LOADING_STAGES.CACHE_HIT]: {
-    icon: '⚡',
-    title: 'Jobs Cache Found!',
-    subtitle: 'Loading your personalized job graph instantly',
-    progress: 90,
-  },
-  [LOADING_STAGES.FETCHING_JOBS]: {
-    icon: '🔍',
-    title: 'Finding Jobs',
-    subtitle: 'Searching through thousands of opportunities',
-    progress: 60,
-  },
-  [LOADING_STAGES.BUILDING_GRAPH]: {
-    icon: '🕸️',
-    title: 'Building Graph',
-    subtitle: 'Connecting jobs by skill similarity',
-    progress: 80,
-  },
-  [LOADING_STAGES.COMPLETE]: {
-    icon: '✅',
-    title: 'Complete',
-    subtitle: 'Your career graph is ready',
-    progress: 100,
-  },
-};
-
-function LoadingStep({ stage, isActive, isComplete, isCacheHit }) {
-  const config = STAGE_CONFIG[stage];
-  if (!config) return null;
-
-  return (
-    <div
-      className={`flex items-center gap-3 py-2 transition-all duration-300 ${
-        isActive ? 'opacity-100' : isComplete ? 'opacity-50' : 'opacity-30'
-      }`}
-    >
-      <span className="text-xl w-8 text-center">{config.icon}</span>
-      <div className="flex-1">
-        <div className="font-medium text-gray-700 text-sm">{config.title}</div>
-        {isActive && (
-          <div className="text-xs text-gray-500">{config.subtitle}</div>
-        )}
-      </div>
-      {isComplete && (
-        <span
-          className={`text-sm ${
-            isCacheHit ? 'text-yellow-500' : 'text-green-500'
-          }`}
-        >
-          {isCacheHit ? '⚡' : '✓'}
-        </span>
-      )}
-      {isActive && !isComplete && (
-        <div className="w-4 h-4 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
-      )}
-    </div>
-  );
-}
+import { STAGE_CONFIG, LoadingStep } from './loadingStageConfig';
 
 export function PathwaysGraphLoading({
   isEmbeddingLoading,
@@ -93,23 +8,19 @@ export function PathwaysGraphLoading({
   loadingStage,
   loadingDetails = {},
 }) {
-  // Determine which phase we're in
   const isInEmbeddingPhase = isEmbeddingLoading;
   const currentStage = isInEmbeddingPhase ? embeddingStage : loadingStage;
   const config =
     STAGE_CONFIG[currentStage] || STAGE_CONFIG[EMBEDDING_STAGES.CHECKING_CACHE];
 
-  // Track if we hit caches
   const embeddingCacheHit = embeddingStage === EMBEDDING_STAGES.CACHE_HIT;
   const graphCacheHit = loadingStage === LOADING_STAGES.CACHE_HIT;
 
-  // Calculate overall progress
   let progress = config?.progress || 10;
   if (!isInEmbeddingPhase && loadingStage) {
     progress = Math.max(progress, 30);
   }
 
-  // Build stages to display
   const embeddingStages = embeddingCacheHit
     ? [EMBEDDING_STAGES.CHECKING_CACHE, EMBEDDING_STAGES.CACHE_HIT]
     : [EMBEDDING_STAGES.CHECKING_CACHE, EMBEDDING_STAGES.GENERATING];
@@ -122,7 +33,6 @@ export function PathwaysGraphLoading({
         LOADING_STAGES.BUILDING_GRAPH,
       ];
 
-  // Find current indices
   const embeddingIndex = embeddingStages.indexOf(embeddingStage);
   const graphIndex = graphStages.indexOf(loadingStage);
 
@@ -135,7 +45,7 @@ export function PathwaysGraphLoading({
             <div className="absolute inset-0 rounded-full border-4 border-indigo-100" />
             <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-indigo-500 animate-spin" />
             <div className="absolute inset-0 flex items-center justify-center text-2xl">
-              {config?.icon || '🔄'}
+              {config?.icon || '\u{1F504}'}
             </div>
           </div>
           <h3 className="text-lg font-semibold text-gray-800">
@@ -219,7 +129,7 @@ export function PathwaysGraphLoading({
         {/* Cache indicator */}
         {(embeddingCacheHit || graphCacheHit) && (
           <div className="mt-4 text-center text-xs text-gray-400">
-            ⚡ Using cached data for faster loading
+            \u26A1 Using cached data for faster loading
           </div>
         )}
       </div>

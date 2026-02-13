@@ -8,6 +8,13 @@ const SAVE_DEBOUNCE_MS = 2000;
 const MESSAGES_PER_PAGE = 50;
 const MAX_STORED_MESSAGES = 100;
 
+function buildParams(userId, sessionId) {
+  const params = new URLSearchParams();
+  if (userId) params.set('userId', userId);
+  else if (sessionId) params.set('sessionId', sessionId);
+  return params;
+}
+
 export default function useConversationPersistence({
   sessionId,
   userId,
@@ -31,22 +38,15 @@ export default function useConversationPersistence({
       return;
     }
 
-    // Skip if already fetched with same IDs
     const alreadyFetched =
       fetchedWithRef.current.sessionId === sessionId &&
       fetchedWithRef.current.userId === userId;
     if (alreadyFetched) return;
-
     fetchedWithRef.current = { sessionId, userId };
 
     const loadConversation = async () => {
       try {
-        const params = new URLSearchParams();
-        if (userId) {
-          params.set('userId', userId);
-        } else if (sessionId) {
-          params.set('sessionId', sessionId);
-        }
+        const params = buildParams(userId, sessionId);
         params.set('limit', String(MESSAGES_PER_PAGE));
         params.set('offset', '0');
 
@@ -127,12 +127,7 @@ export default function useConversationPersistence({
     setIsLoadingMore(true);
     try {
       const newOffset = currentOffset + MESSAGES_PER_PAGE;
-      const params = new URLSearchParams();
-      if (userId) {
-        params.set('userId', userId);
-      } else if (sessionId) {
-        params.set('sessionId', sessionId);
-      }
+      const params = buildParams(userId, sessionId);
       params.set('limit', String(MESSAGES_PER_PAGE));
       params.set('offset', String(newOffset));
 
@@ -142,7 +137,6 @@ export default function useConversationPersistence({
       const { messages, hasMore: more } = await response.json();
       setCurrentOffset(newOffset);
       setHasMore(more);
-
       return messages || [];
     } catch (error) {
       pathwaysToast.apiError('Failed to load older messages');
@@ -157,16 +151,12 @@ export default function useConversationPersistence({
     if (!sessionId && !userId) return;
 
     try {
-      const params = new URLSearchParams();
-      if (userId) {
-        params.set('userId', userId);
-      } else if (sessionId) {
-        params.set('sessionId', sessionId);
-      }
-
-      await fetch(`/api/pathways/conversations?${params}`, {
-        method: 'DELETE',
-      });
+      await fetch(
+        `/api/pathways/conversations?${buildParams(userId, sessionId)}`,
+        {
+          method: 'DELETE',
+        }
+      );
 
       lastSavedRef.current = null;
       setInitialMessages(null);

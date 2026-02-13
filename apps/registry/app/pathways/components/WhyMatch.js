@@ -1,6 +1,5 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import {
   Sparkles,
   Loader2,
@@ -9,84 +8,23 @@ import {
   ChevronUp,
 } from 'lucide-react';
 import { usePathways } from '../context/PathwaysContext';
+import useMatchInsights from '../hooks/useMatchInsights';
 
 export default function WhyMatch({ job, compact = false }) {
   const { resume, userId, sessionId } = usePathways();
-  // Use userId if authenticated, otherwise fall back to sessionId
   const effectiveUserId = userId || sessionId;
-  const [insights, setInsights] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [isExpanded, setIsExpanded] = useState(false);
 
-  // Reset state and check for cached insights when job changes
-  useEffect(() => {
-    // Reset state when job changes
-    setInsights(null);
-    setIsLoading(false);
-    setError(null);
-    setIsExpanded(false);
-
-    if (!effectiveUserId || !job?.id) return;
-
-    const checkCache = async () => {
-      try {
-        const res = await fetch(
-          `/api/pathways/match-insights?userId=${effectiveUserId}&jobId=${job.id}`
-        );
-        if (res.ok) {
-          const data = await res.json();
-          if (data.bullets) {
-            setInsights(data);
-            setIsExpanded(true);
-          }
-        }
-      } catch {
-        // Ignore cache check errors
-      }
-    };
-
-    checkCache();
-  }, [effectiveUserId, job?.id]);
-
-  const generateInsights = async (forceRefresh = false) => {
-    if (!effectiveUserId || !job || !resume) {
-      setError('Missing required data');
-      return;
-    }
-
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const res = await fetch('/api/pathways/match-insights', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId: effectiveUserId,
-          jobId: job.id,
-          resume,
-          job,
-        }),
-      });
-
-      if (!res.ok) {
-        throw new Error('Failed to generate insights');
-      }
-
-      const data = await res.json();
-      setInsights(data);
-      setIsExpanded(true);
-    } catch (err) {
-      setError(err.message || 'Something went wrong');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const {
+    insights,
+    isLoading,
+    error,
+    isExpanded,
+    generateInsights,
+    toggleExpanded,
+  } = useMatchInsights({ job, resume, effectiveUserId });
 
   if (!job) return null;
 
-  // Compact mode: just the button
   if (compact && !insights && !isLoading) {
     return (
       <button
@@ -104,13 +42,7 @@ export default function WhyMatch({ job, compact = false }) {
     <div className="border border-indigo-100 rounded-xl bg-gradient-to-br from-indigo-50/50 to-purple-50/50">
       {/* Header */}
       <button
-        onClick={() => {
-          if (insights) {
-            setIsExpanded(!isExpanded);
-          } else {
-            generateInsights();
-          }
-        }}
+        onClick={toggleExpanded}
         disabled={isLoading || !resume}
         className="w-full flex items-center justify-between p-4 text-left"
       >
@@ -124,7 +56,7 @@ export default function WhyMatch({ job, compact = false }) {
             </h3>
             {insights && (
               <p className="text-sm text-gray-500">
-                {insights.matchScore}% match •{' '}
+                {insights.matchScore}% match &bull;{' '}
                 {insights.cached ? 'Cached' : 'Just generated'}
               </p>
             )}
@@ -175,7 +107,6 @@ export default function WhyMatch({ job, compact = false }) {
         </div>
       )}
 
-      {/* Error state */}
       {error && (
         <div className="px-4 pb-4">
           <p className="text-sm text-red-600">{error}</p>
@@ -185,12 +116,9 @@ export default function WhyMatch({ job, compact = false }) {
       {/* Results */}
       {insights && isExpanded && !isLoading && (
         <div className="px-4 pb-4 space-y-4">
-          {/* Summary */}
           <p className="text-sm text-gray-700 italic">
             &quot;{insights.summary}&quot;
           </p>
-
-          {/* Bullets */}
           <div className="space-y-3">
             {insights.bullets.map((bullet, i) => (
               <div key={i} className="flex gap-3">
@@ -199,7 +127,10 @@ export default function WhyMatch({ job, compact = false }) {
                   <span className="font-medium text-gray-900">
                     {bullet.title}
                   </span>
-                  <span className="text-gray-600"> — {bullet.description}</span>
+                  <span className="text-gray-600">
+                    {' '}
+                    &mdash; {bullet.description}
+                  </span>
                 </div>
               </div>
             ))}

@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
-import { Upload, X, FileText, File, AlertCircle } from 'lucide-react';
+import { Upload, AlertCircle } from 'lucide-react';
+import SelectedFilesList from './SelectedFilesList';
 
 const ACCEPTED_FILE_TYPES = {
   'text/plain': '.txt',
@@ -23,14 +24,10 @@ export default function FileUpload({ onFileUpload, isUploading = false }) {
   const fileInputRef = useRef(null);
 
   const validateFile = useCallback((file) => {
-    if (file.size > MAX_FILE_SIZE) {
+    if (file.size > MAX_FILE_SIZE)
       return `File "${file.name}" is too large. Maximum size is 10MB.`;
-    }
-
-    if (!Object.keys(ACCEPTED_FILE_TYPES).includes(file.type)) {
+    if (!Object.keys(ACCEPTED_FILE_TYPES).includes(file.type))
       return `File "${file.name}" type is not supported. Supported types: PDF, DOC, DOCX, TXT, RTF, PNG, JPG.`;
-    }
-
     return null;
   }, []);
 
@@ -38,8 +35,6 @@ export default function FileUpload({ onFileUpload, isUploading = false }) {
     (files) => {
       setError('');
       const fileList = Array.from(files);
-
-      // Validate all files first
       for (const file of fileList) {
         const validationError = validateFile(file);
         if (validationError) {
@@ -47,7 +42,6 @@ export default function FileUpload({ onFileUpload, isUploading = false }) {
           return;
         }
       }
-
       setSelectedFiles(fileList);
     },
     [validateFile]
@@ -56,11 +50,7 @@ export default function FileUpload({ onFileUpload, isUploading = false }) {
   const handleDrag = useCallback((e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (e.type === 'dragenter' || e.type === 'dragover') {
-      setDragActive(true);
-    } else if (e.type === 'dragleave') {
-      setDragActive(false);
-    }
+    setDragActive(e.type === 'dragenter' || e.type === 'dragover');
   }, []);
 
   const handleDrop = useCallback(
@@ -68,10 +58,7 @@ export default function FileUpload({ onFileUpload, isUploading = false }) {
       e.preventDefault();
       e.stopPropagation();
       setDragActive(false);
-
-      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-        handleFiles(e.dataTransfer.files);
-      }
+      if (e.dataTransfer.files?.[0]) handleFiles(e.dataTransfer.files);
     },
     [handleFiles]
   );
@@ -79,16 +66,13 @@ export default function FileUpload({ onFileUpload, isUploading = false }) {
   const handleChange = useCallback(
     (e) => {
       e.preventDefault();
-      if (e.target.files && e.target.files[0]) {
-        handleFiles(e.target.files);
-      }
+      if (e.target.files?.[0]) handleFiles(e.target.files);
     },
     [handleFiles]
   );
 
   const handleUpload = useCallback(async () => {
     if (selectedFiles.length === 0 || isUploading) return;
-
     try {
       setError('');
       await onFileUpload(selectedFiles);
@@ -101,12 +85,6 @@ export default function FileUpload({ onFileUpload, isUploading = false }) {
   const removeFile = useCallback((index) => {
     setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
   }, []);
-
-  const getFileIcon = (file) => {
-    if (file.type.startsWith('image/')) return File;
-    if (file.type === 'application/pdf') return FileText;
-    return FileText;
-  };
 
   return (
     <div className="w-full space-y-3">
@@ -132,7 +110,6 @@ export default function FileUpload({ onFileUpload, isUploading = false }) {
           className="hidden"
           disabled={isUploading}
         />
-
         <div className="flex flex-col items-center justify-center text-center">
           <Upload
             className={`w-8 h-8 mb-2 ${
@@ -151,57 +128,13 @@ export default function FileUpload({ onFileUpload, isUploading = false }) {
         </div>
       </div>
 
-      {/* Selected Files */}
-      {selectedFiles.length > 0 && (
-        <div className="space-y-2">
-          <p className="text-sm font-medium text-gray-700">
-            Selected Files ({selectedFiles.length})
-          </p>
-          {selectedFiles.map((file, index) => {
-            const IconComponent = getFileIcon(file);
-            return (
-              <div
-                key={index}
-                className="flex items-center justify-between p-2 bg-gray-50 rounded-md"
-              >
-                <div className="flex items-center space-x-2 flex-1 min-w-0">
-                  <IconComponent className="w-4 h-4 text-gray-500 flex-shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate">
-                      {file.name}
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      {(file.size / 1024 / 1024).toFixed(2)} MB
-                    </p>
-                  </div>
-                </div>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    removeFile(index);
-                  }}
-                  className="p-1 text-gray-400 hover:text-gray-600"
-                  disabled={isUploading}
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-            );
-          })}
+      <SelectedFilesList
+        files={selectedFiles}
+        onRemove={removeFile}
+        onUpload={handleUpload}
+        isUploading={isUploading}
+      />
 
-          <button
-            onClick={handleUpload}
-            disabled={isUploading || selectedFiles.length === 0}
-            className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md text-sm font-medium hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            {isUploading
-              ? 'Processing...'
-              : `Parse Resume${selectedFiles.length > 1 ? 's' : ''}`}
-          </button>
-        </div>
-      )}
-
-      {/* Error Message */}
       {error && (
         <div className="flex items-center space-x-2 p-3 bg-red-50 border border-red-200 rounded-md">
           <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
