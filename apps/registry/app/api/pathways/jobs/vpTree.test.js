@@ -169,11 +169,17 @@ describe('VPTree', () => {
     });
 
     it('produces same results as brute force search', () => {
-      // Create points and verify VP-tree matches brute force
+      // Deterministic seeded random to avoid flaky tests
+      let seed = 42;
+      const seededRandom = () => {
+        seed = (seed * 16807 + 0) % 2147483647;
+        return seed / 2147483647;
+      };
+
       const dim = 10;
       const pointData = [];
       for (let i = 0; i < 50; i++) {
-        const embedding = new Array(dim).fill(0).map(() => Math.random());
+        const embedding = new Array(dim).fill(0).map(() => seededRandom());
         let mag = 0;
         for (const v of embedding) mag += v * v;
         mag = Math.sqrt(mag);
@@ -181,7 +187,7 @@ describe('VPTree', () => {
         pointData.push({ id: `p${i}`, embedding });
       }
 
-      const query = new Array(dim).fill(0).map(() => Math.random());
+      const query = new Array(dim).fill(0).map(() => seededRandom());
       let mag = 0;
       for (const v of query) mag += v * v;
       mag = Math.sqrt(mag);
@@ -201,15 +207,14 @@ describe('VPTree', () => {
       const tree = new VPTree([...pointData.map((p) => ({ ...p }))]);
       const vpResults = tree.kNearest(query, 5);
 
-      // Compare top-5 results — similarity values must match but order of
-      // items with identical similarity may differ between VP-tree and brute force
+      // Compare top-5 results
       expect(vpResults).toHaveLength(5);
-      const vpSims = vpResults.map((r) => r.similarity).sort((a, b) => b - a);
-      const bfSims = bruteForceSimilarities
-        .map((r) => r.similarity)
-        .sort((a, b) => b - a);
       for (let i = 0; i < 5; i++) {
-        expect(vpSims[i]).toBeCloseTo(bfSims[i], 5);
+        expect(vpResults[i].id).toBe(bruteForceSimilarities[i].id);
+        expect(vpResults[i].similarity).toBeCloseTo(
+          bruteForceSimilarities[i].similarity,
+          5
+        );
       }
     });
   });
