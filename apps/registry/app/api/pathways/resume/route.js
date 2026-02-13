@@ -1,6 +1,11 @@
-import applyResumeChanges from '@/app/pathways/utils/applyResumeChanges';
 import { getSupabase } from '../supabase';
 import { logger } from '@/lib/logger';
+import {
+  buildUserQuery,
+  buildInsertData,
+  validateIdentifier,
+  applyResumePatch,
+} from './resumeHelpers';
 
 /**
  * GET - Fetch resume for user or session
@@ -12,26 +17,16 @@ export async function GET(request) {
     const sessionId = searchParams.get('sessionId');
     const userId = searchParams.get('userId');
 
-    if (!sessionId && !userId) {
-      return Response.json(
-        { error: 'Either sessionId or userId is required' },
-        { status: 400 }
-      );
-    }
+    const invalid = validateIdentifier({ sessionId, userId });
+    if (invalid) return invalid;
 
-    const query = supabase.from('pathways_resumes').select('*').limit(1);
-
-    if (userId) {
-      query.eq('user_id', userId);
-    } else {
-      query.eq('session_id', sessionId);
-    }
-
+    const query = buildUserQuery(supabase, 'pathways_resumes', {
+      userId,
+      sessionId,
+    });
     const { data, error } = await query.single();
 
-    if (error && error.code !== 'PGRST116') {
-      throw error;
-    }
+    if (error && error.code !== 'PGRST116') throw error;
 
     return Response.json({ resume: data || null });
   } catch (error) {
@@ -44,8 +39,8 @@ export async function GET(request) {
 }
 
 /**
- * POST - Create initial resume or handle sendBeacon save-on-unload
- * If diff + replace + source are provided, delegates to PATCH logic for updates
+ * POST - Create initial resume or handle sendBeacon save-on-unload.
+ * If diff + replace + source are provided, delegates to PATCH logic.
  */
 export async function POST(request) {
   const supabase = getSupabase();
@@ -56,39 +51,23 @@ export async function POST(request) {
 
     // Handle sendBeacon save-on-unload (POST with diff + replace)
     if (diff && replace && source) {
-      // Reuse PATCH logic by calling it internally
-      const patchRequest = new Request(request.url, {
-        method: 'PATCH',
-        headers: request.headers,
-        body: JSON.stringify({
-          sessionId,
-          userId,
-          diff,
-          replace,
-          source,
-          explanation,
-        }),
+      return applyResumePatch(supabase, {
+        sessionId,
+        userId,
+        diff,
+        replace,
+        source,
+        explanation,
       });
-      return PATCH(patchRequest);
     }
 
-    // Original create logic
-    if (!sessionId && !userId) {
-      return Response.json(
-        { error: 'Either sessionId or userId is required' },
-        { status: 400 }
-      );
-    }
+    const invalid = validateIdentifier({ sessionId, userId });
+    if (invalid) return invalid;
 
-    const insertData = {
-      resume: resume || {},
-    };
-
-    if (userId) {
-      insertData.user_id = userId;
-    } else {
-      insertData.session_id = sessionId;
-    }
+    const insertData = buildInsertData(
+      { resume: resume || {} },
+      { userId, sessionId }
+    );
 
     const { data, error } = await supabase
       .from('pathways_resumes')
@@ -96,9 +75,7 @@ export async function POST(request) {
       .select()
       .single();
 
-    if (error) {
-      throw error;
-    }
+    if (error) throw error;
 
     return Response.json({ resume: data });
   } catch (error) {
@@ -112,7 +89,6 @@ export async function POST(request) {
 
 /**
  * PATCH - Apply diff to resume and save to history
- * If replace=true, replaces entire resume instead of merging
  */
 export async function PATCH(request) {
   const supabase = getSupabase();
@@ -120,12 +96,8 @@ export async function PATCH(request) {
     const { sessionId, userId, diff, explanation, source, replace } =
       await request.json();
 
-    if (!sessionId && !userId) {
-      return Response.json(
-        { error: 'Either sessionId or userId is required' },
-        { status: 400 }
-      );
-    }
+    const invalid = validateIdentifier({ sessionId, userId });
+    if (invalid) return invalid;
 
     if (!diff || typeof diff !== 'object') {
       return Response.json(
@@ -133,96 +105,18 @@ export async function PATCH(request) {
         { status: 400 }
       );
     }
-
     if (!source) {
       return Response.json({ error: 'source is required' }, { status: 400 });
     }
 
-    // Fetch existing resume
-    const existingQuery = supabase
-      .from('pathways_resumes')
-      .select('*')
-      .limit(1);
-
-    if (userId) {
-      existingQuery.eq('user_id', userId);
-    } else {
-      existingQuery.eq('session_id', sessionId);
-    }
-
-    const { data: existing, error: fetchError } = await existingQuery.single();
-
-    // Handle case where resume doesn't exist yet
-    if (fetchError && fetchError.code === 'PGRST116') {
-      // Create new resume with the diff as initial data
-      const insertData = {
-        resume: diff,
-      };
-      if (userId) {
-        insertData.user_id = userId;
-      } else {
-        insertData.session_id = sessionId;
-      }
-
-      const { data: newResume, error: insertError } = await supabase
-        .from('pathways_resumes')
-        .insert(insertData)
-        .select()
-        .single();
-
-      if (insertError) throw insertError;
-
-      // Save to history
-      const historyData = {
-        resume_id: newResume.id,
-        diff,
-        explanation: explanation || null,
-        source,
-      };
-      if (userId) {
-        historyData.user_id = userId;
-      } else {
-        historyData.session_id = sessionId;
-      }
-
-      await supabase.from('pathways_resume_history').insert(historyData);
-
-      return Response.json({ resume: newResume, created: true });
-    }
-
-    if (fetchError) throw fetchError;
-
-    // Apply diff to existing resume, or replace entirely if replace=true
-    const updatedResume = replace
-      ? diff
-      : applyResumeChanges(existing.resume || {}, diff);
-
-    // Update resume
-    const { data: updated, error: updateError } = await supabase
-      .from('pathways_resumes')
-      .update({ resume: updatedResume })
-      .eq('id', existing.id)
-      .select()
-      .single();
-
-    if (updateError) throw updateError;
-
-    // Save to history
-    const historyData = {
-      resume_id: existing.id,
+    return applyResumePatch(supabase, {
+      sessionId,
+      userId,
       diff,
-      explanation: explanation || null,
+      explanation,
       source,
-    };
-    if (userId) {
-      historyData.user_id = userId;
-    } else {
-      historyData.session_id = sessionId;
-    }
-
-    await supabase.from('pathways_resume_history').insert(historyData);
-
-    return Response.json({ resume: updated, created: false });
+      replace,
+    });
   } catch (error) {
     logger.error({ error: error.message }, 'Failed to update resume');
     return Response.json(
@@ -242,15 +136,10 @@ export async function DELETE(request) {
     const sessionId = searchParams.get('sessionId');
     const userId = searchParams.get('userId');
 
-    if (!sessionId && !userId) {
-      return Response.json(
-        { error: 'Either sessionId or userId is required' },
-        { status: 400 }
-      );
-    }
+    const invalid = validateIdentifier({ sessionId, userId });
+    if (invalid) return invalid;
 
     const query = supabase.from('pathways_resumes').delete();
-
     if (userId) {
       query.eq('user_id', userId);
     } else {
@@ -258,10 +147,7 @@ export async function DELETE(request) {
     }
 
     const { error } = await query;
-
     if (error) throw error;
-
-    // History is cascade deleted via foreign key
 
     return Response.json({ success: true });
   } catch (error) {
