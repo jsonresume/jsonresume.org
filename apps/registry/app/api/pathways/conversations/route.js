@@ -1,14 +1,5 @@
-import { createClient } from '@supabase/supabase-js';
-
-function getSupabase() {
-  if (!process.env.SUPABASE_KEY) {
-    throw new Error('SUPABASE_KEY environment variable is required');
-  }
-  return createClient(
-    'https://itxuhvvwryeuzuyihpkp.supabase.co',
-    process.env.SUPABASE_KEY
-  );
-}
+import { getSupabase } from '../supabase';
+import { logger } from '@/lib/logger';
 
 export async function GET(request) {
   const supabase = getSupabase();
@@ -70,7 +61,7 @@ export async function GET(request) {
       hasMore: startIdx > 0,
     });
   } catch (error) {
-    console.error('Failed to load conversation:', error.message);
+    logger.error({ error: error.message }, 'Failed to load conversation');
     return Response.json(
       { error: 'Failed to load conversation', details: error.message },
       { status: 500 }
@@ -159,7 +150,7 @@ export async function POST(request) {
 
     return Response.json({ conversation: result.data });
   } catch (error) {
-    console.error('Failed to save conversation:', error.message);
+    logger.error({ error: error.message }, 'Failed to save conversation');
     return Response.json(
       { error: 'Failed to save conversation', details: error.message },
       { status: 500 }
@@ -197,7 +188,7 @@ export async function DELETE(request) {
 
     return Response.json({ success: true });
   } catch (error) {
-    console.error('Failed to delete conversation:', error.message);
+    logger.error({ error: error.message }, 'Failed to delete conversation');
     return Response.json(
       { error: 'Failed to delete conversation', details: error.message },
       { status: 500 }

@@ -1,14 +1,5 @@
-import { createClient } from '@supabase/supabase-js';
-
-function getSupabase() {
-  if (!process.env.SUPABASE_KEY) {
-    throw new Error('SUPABASE_KEY environment variable is required');
-  }
-  return createClient(
-    'https://itxuhvvwryeuzuyihpkp.supabase.co',
-    process.env.SUPABASE_KEY
-  );
-}
+import { getSupabase } from '../supabase';
+import { logger } from '@/lib/logger';
 
 // GET - Fetch activity history with pagination
 export async function GET(request) {
@@ -56,7 +47,7 @@ export async function GET(request) {
       hasMore: offset + limit < (count || 0),
     });
   } catch (error) {
-    console.error('Failed to fetch activities:', error.message);
+    logger.error({ error: error.message }, 'Failed to fetch activities');
     return Response.json(
       { error: 'Failed to fetch activities', details: error.message },
       { status: 500 }
@@ -107,7 +98,7 @@ export async function POST(request) {
 
     return Response.json({ activity: data });
   } catch (error) {
-    console.error('Failed to log activity:', error.message);
+    logger.error({ error: error.message }, 'Failed to log activity');
     return Response.json(
       { error: 'Failed to log activity', details: error.message },
       { status: 500 }
@@ -152,7 +143,7 @@ export async function PUT(request) {
 
     return Response.json({ activities: data });
   } catch (error) {
-    console.error('Failed to log activities:', error.message);
+    logger.error({ error: error.message }, 'Failed to log activities');
     return Response.json(
       { error: 'Failed to log activities', details: error.message },
       { status: 500 }

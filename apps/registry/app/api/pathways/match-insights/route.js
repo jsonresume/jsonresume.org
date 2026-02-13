@@ -1,18 +1,10 @@
 import { generateObject } from 'ai';
 import { openai } from '@ai-sdk/openai';
-import { createClient } from '@supabase/supabase-js';
 import { z } from 'zod';
 import crypto from 'crypto';
-
-function getSupabase() {
-  if (!process.env.SUPABASE_KEY) {
-    throw new Error('SUPABASE_KEY environment variable is required');
-  }
-  return createClient(
-    'https://itxuhvvwryeuzuyihpkp.supabase.co',
-    process.env.SUPABASE_KEY
-  );
-}
+import { getSupabase } from '../supabase';
+import { logger } from '@/lib/logger';
+import { rateLimitResponse } from '../rateLimit';
 
 // Create a hash of content for cache invalidation
 function hashContent(content) {
@@ -57,6 +49,9 @@ Consider:
 - Growth opportunities this role offers`;
 
 export async function POST(request) {
+  const rateLimited = rateLimitResponse(request);
+  if (rateLimited) return rateLimited;
+
   const supabase = getSupabase();
 
   try {
@@ -157,7 +152,7 @@ Provide specific, actionable insights about why this person could be a good fit 
       );
 
     if (upsertError) {
-      console.error('Error caching insights:', upsertError);
+      logger.error({ error: upsertError.message }, 'Error caching insights');
       // Don't fail the request, just log the error
     }
 
@@ -167,7 +162,7 @@ Provide specific, actionable insights about why this person could be a good fit 
       generatedAt: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('Error generating match insights:', error);
+    logger.error({ error: error.message }, 'Error generating match insights');
     return Response.json(
       { error: error.message || 'Failed to generate insights' },
       { status: 500 }
@@ -199,7 +194,7 @@ export async function GET(request) {
 
     if (error && error.code !== 'PGRST116') {
       // PGRST116 = no rows returned
-      console.error('Error fetching insights:', error);
+      logger.error({ error: error.message }, 'Error fetching insights');
       return Response.json(
         { error: 'Failed to fetch insights' },
         { status: 500 }
@@ -216,7 +211,7 @@ export async function GET(request) {
       generatedAt: data.created_at,
     });
   } catch (error) {
-    console.error('Error in insights GET:', error);
+    logger.error({ error: error.message }, 'Error in insights GET');
     return Response.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

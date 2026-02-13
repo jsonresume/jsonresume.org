@@ -1,15 +1,6 @@
-import { createClient } from '@supabase/supabase-js';
 import applyResumeChanges from '@/app/pathways/utils/applyResumeChanges';
-
-function getSupabase() {
-  if (!process.env.SUPABASE_KEY) {
-    throw new Error('SUPABASE_KEY environment variable is required');
-  }
-  return createClient(
-    'https://itxuhvvwryeuzuyihpkp.supabase.co',
-    process.env.SUPABASE_KEY
-  );
-}
+import { getSupabase } from '../supabase';
+import { logger } from '@/lib/logger';
 
 /**
  * GET - Fetch resume for user or session
@@ -44,7 +35,7 @@ export async function GET(request) {
 
     return Response.json({ resume: data || null });
   } catch (error) {
-    console.error('Failed to load resume:', error.message);
+    logger.error({ error: error.message }, 'Failed to load resume');
     return Response.json(
       { error: 'Failed to load resume', details: error.message },
       { status: 500 }
@@ -111,7 +102,7 @@ export async function POST(request) {
 
     return Response.json({ resume: data });
   } catch (error) {
-    console.error('Failed to create resume:', error.message);
+    logger.error({ error: error.message }, 'Failed to create resume');
     return Response.json(
       { error: 'Failed to create resume', details: error.message },
       { status: 500 }
@@ -233,7 +224,7 @@ export async function PATCH(request) {
 
     return Response.json({ resume: updated, created: false });
   } catch (error) {
-    console.error('Failed to update resume:', error.message);
+    logger.error({ error: error.message }, 'Failed to update resume');
     return Response.json(
       { error: 'Failed to update resume', details: error.message },
       { status: 500 }
@@ -274,7 +265,7 @@ export async function DELETE(request) {
 
     return Response.json({ success: true });
   } catch (error) {
-    console.error('Failed to delete resume:', error.message);
+    logger.error({ error: error.message }, 'Failed to delete resume');
     return Response.json(
       { error: 'Failed to delete resume', details: error.message },
       { status: 500 }

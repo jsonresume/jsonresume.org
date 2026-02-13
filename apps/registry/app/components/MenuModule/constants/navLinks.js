@@ -5,6 +5,7 @@ import {
   BookOpen,
   Github,
   MessagesSquare,
+  Route,
 } from 'lucide-react';
 
 /**
@@ -20,6 +21,11 @@ export const NAV_LINKS = [
     href: '/jobs',
     label: 'Jobs',
     icon: Briefcase,
+  },
+  {
+    href: '/pathways',
+    label: 'Pathways',
+    icon: Route,
   },
   {
     href: '/job-similarity',

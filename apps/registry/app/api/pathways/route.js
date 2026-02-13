@@ -74,6 +74,8 @@ export async function POST(request) {
       // Log step completions for debugging/analytics
       onStepFinish({ toolCalls, stepType }) {
         if (toolCalls?.length) {
+          // Edge runtime doesn't support Pino - use console for streaming routes
+          // eslint-disable-next-line no-console
           console.log(
             '[Agent Step]',
             toolCalls.map((t) => t.toolName)

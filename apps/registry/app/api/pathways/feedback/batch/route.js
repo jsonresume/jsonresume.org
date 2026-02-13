@@ -1,14 +1,5 @@
-import { createClient } from '@supabase/supabase-js';
-
-function getSupabase() {
-  if (!process.env.SUPABASE_KEY) {
-    throw new Error('SUPABASE_KEY environment variable is required');
-  }
-  return createClient(
-    'https://itxuhvvwryeuzuyihpkp.supabase.co',
-    process.env.SUPABASE_KEY
-  );
-}
+import { getSupabase } from '../../supabase';
+import { logger } from '@/lib/logger';
 
 /**
  * POST - Save feedback for multiple jobs at once
@@ -42,7 +33,7 @@ export async function POST(request) {
       .select();
 
     if (error) {
-      console.error('Error saving batch feedback:', error);
+      logger.error({ error: error.message }, 'Error saving batch feedback');
       return Response.json(
         { error: 'Failed to save feedback' },
         { status: 500 }
@@ -51,7 +42,7 @@ export async function POST(request) {
 
     return Response.json({ success: true, count: data.length });
   } catch (error) {
-    console.error('Error in feedback batch POST:', error);
+    logger.error({ error: error.message }, 'Error in feedback batch POST');
     return Response.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

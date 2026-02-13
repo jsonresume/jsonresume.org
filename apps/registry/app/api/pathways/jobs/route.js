@@ -1,10 +1,9 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
 import { logger } from '@/lib/logger';
+import { getSupabase } from '../supabase';
 import { matchJobs, buildJobInfoMap } from './jobMatcher';
 import { buildGraphData } from './graphBuilder';
 
-const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
 const PRIMARY_BRANCHES = 20;
 
 /**
@@ -34,7 +33,7 @@ export async function POST(request) {
       );
     }
 
-    const supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
+    const supabase = getSupabase();
     const sortedJobs = await matchJobs(supabase, embedding, timeRange);
 
     const graphData = buildGraphData(

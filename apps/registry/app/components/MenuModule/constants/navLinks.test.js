@@ -69,8 +69,14 @@ describe('NAV_LINKS', () => {
     });
   });
 
-  it('has exactly 6 navigation links', () => {
-    expect(NAV_LINKS).toHaveLength(6);
+  it('has exactly 7 navigation links', () => {
+    expect(NAV_LINKS).toHaveLength(7);
+  });
+
+  it('includes Pathways link', () => {
+    const pathwaysLink = NAV_LINKS.find((link) => link.label === 'Pathways');
+    expect(pathwaysLink).toBeDefined();
+    expect(pathwaysLink?.href).toBe('/pathways');
   });
 
   it('all internal links start with /', () => {

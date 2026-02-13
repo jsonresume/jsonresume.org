@@ -1,14 +1,5 @@
-import { createClient } from '@supabase/supabase-js';
-
-function getSupabase() {
-  if (!process.env.SUPABASE_KEY) {
-    throw new Error('SUPABASE_KEY environment variable is required');
-  }
-  return createClient(
-    'https://itxuhvvwryeuzuyihpkp.supabase.co',
-    process.env.SUPABASE_KEY
-  );
-}
+import { getSupabase } from '../supabase';
+import { logger } from '@/lib/logger';
 
 export async function POST(request) {
   const supabase = getSupabase();
@@ -38,7 +29,7 @@ export async function POST(request) {
       .single();
 
     if (error) {
-      console.error('Error saving feedback:', error);
+      logger.error({ error: error.message }, 'Error saving feedback');
       return Response.json(
         { error: 'Failed to save feedback' },
         { status: 500 }
@@ -47,7 +38,7 @@ export async function POST(request) {
 
     return Response.json({ success: true, data });
   } catch (error) {
-    console.error('Error in feedback POST:', error);
+    logger.error({ error: error.message }, 'Error in feedback POST');
     return Response.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
@@ -76,7 +67,7 @@ export async function GET(request) {
     const { data, error } = await query;
 
     if (error) {
-      console.error('Error loading feedback:', error);
+      logger.error({ error: error.message }, 'Error loading feedback');
       return Response.json(
         { error: 'Failed to load feedback' },
         { status: 500 }
@@ -85,7 +76,7 @@ export async function GET(request) {
 
     return Response.json(data);
   } catch (error) {
-    console.error('Error in feedback GET:', error);
+    logger.error({ error: error.message }, 'Error in feedback GET');
     return Response.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
