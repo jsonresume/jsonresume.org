@@ -67,7 +67,7 @@
       "lodash.template@<=4.5.0": "npm:lodash@^4.17.21",
       "webpack-dev-server@<=5.2.0": "^5.2.1",
       "styled-components": "^6.1.19",
-      "glob@<10.5.0": "^10.5.0",
+      "glob@>=10.0.0 <10.5.0": "^10.5.0",
       "storybook@>=8.0.0 <8.6.15": "8.6.15"
     }
   }
