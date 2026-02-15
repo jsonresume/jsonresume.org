@@ -1,0 +1,65 @@
+# Similarity Graph
+
+An interactive force-directed network visualization showing relationships between job positions across the JSON Resume community.
+
+## How to Access
+
+- **URL**: `registry.jsonresume.org/similarity`
+- **Auth**: Public (no login required)
+
+## Features
+
+### Position Network
+
+The graph displays positions as nodes connected by similarity:
+
+- **Each node** represents a job position (e.g., "Software Engineer", "Product Manager")
+- **Node size** indicates how many resumes contain that position
+- **Connections** link positions that frequently appear in similar resumes
+- **Clusters** form naturally around related career paths
+
+### Force-Directed Layout
+
+The graph uses a physics-based layout where:
+
+- Connected nodes attract each other
+- Unconnected nodes repel each other
+- The layout stabilizes into meaningful clusters
+
+### Interaction
+
+| Action           | Effect                                      |
+| ---------------- | ------------------------------------------- |
+| **Hover** a node | Highlights the node and all its connections |
+| **Click** a node | Opens a list of resumes with that position  |
+| **Drag** a node  | Repositions it (other nodes react)          |
+| **Scroll**       | Zoom in and out                             |
+| **Pan**          | Drag the background to move the view        |
+
+### Visual Encoding
+
+- **Node size**: Number of resumes (larger = more common position)
+- **Edge thickness**: Strength of similarity (thicker = more related)
+- **Highlighted state**: Shows direct connections when hovering
+
+## Usage Guide
+
+1. Navigate to `registry.jsonresume.org/similarity`
+2. Wait for the graph to load and stabilize
+3. Zoom out to see the overall structure of career relationships
+4. Hover over positions to see their connections
+5. Click on a position to find professionals in that role
+6. Look for clusters to identify related career paths
+
+## Tips & Best Practices
+
+- Zoom out first to see the big picture, then zoom into areas of interest
+- Clusters represent career domains — tech, design, management, etc.
+- Use this to discover career transitions others have made
+- The data comes from the public JSON Resume community, so coverage varies
+
+## Related
+
+- [Resume Explorer](/resume-analytics/explorer) — Search and browse individual resumes
+- [Job Graph](/job-tools/graph) — Similar visualization for job listings
+- [Dashboard](/resume-analytics/dashboard) — Your personal career analytics

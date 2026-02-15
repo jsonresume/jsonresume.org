@@ -1,0 +1,72 @@
+# Job Decisions
+
+An AI-powered job evaluation tool with a three-pane layout: your resume, an animated decision tree, and ranked job listings.
+
+## How to Access
+
+- **URL**: `registry.jsonresume.org/{username}/decisions`
+- **Auth**: Public (uses your public resume data, login for saving decisions)
+
+## Features
+
+### Three-Pane Layout
+
+| Pane             | Width          | Content                                         |
+| ---------------- | -------------- | ----------------------------------------------- |
+| **Left** (25%)   | Resume display | Your resume summary with preference controls    |
+| **Center** (50%) | Decision tree  | React Flow visualization of evaluation criteria |
+| **Right** (25%)  | Ranked jobs    | AI-scored job listings                          |
+
+### Decision Tree Visualization
+
+When you select a job, the center pane shows an animated decision tree that evaluates the job against your resume across multiple criteria:
+
+- **Skills Match** — How well your skills align with the job requirements
+- **Experience Level** — Whether your experience matches the seniority expected
+- **Location** — Geographic compatibility including remote status
+- **Salary Range** — Compensation alignment with market data
+- **Industry Fit** — Sector and domain relevance
+- **Growth Potential** — Career development opportunities
+- **Culture Fit** — Company values and work style compatibility
+- **Technical Stack** — Specific technology overlap
+
+Each criterion node animates green (pass) or red (fail) as the evaluation runs, building a visual picture of the job's fit.
+
+### Preference Controls
+
+Customize evaluation weights from the resume pane:
+
+- Enable/disable specific criteria
+- Adjust importance of each factor
+- The ranked list and decision tree update in real-time
+
+### Job Rankings
+
+Jobs are ranked by a composite score derived from all enabled criteria. Select any job to trigger the decision tree evaluation and see a detailed breakdown.
+
+### Decision Persistence
+
+When logged in, record your decisions (interested / not interested) on each job. Decided jobs are filtered from future views.
+
+## Usage Guide
+
+1. Navigate to `registry.jsonresume.org/{username}/decisions`
+2. Review your resume summary in the left pane
+3. Adjust preference weights if needed
+4. Click on a job in the right pane to evaluate it
+5. Watch the decision tree animate through each criterion
+6. Record your decision to filter it from future lists
+7. Continue through the remaining jobs
+
+## Tips & Best Practices
+
+- Adjust preferences before reviewing jobs to get the most relevant rankings
+- Watch the decision tree to understand why a job scores high or low
+- Use this alongside the [Job Graph](/job-tools/graph) for different perspectives
+- Decision history helps the system learn your preferences over time
+
+## Related
+
+- [Job Matching](/job-tools/matching) — Simple ranked list view
+- [Job Graph](/job-tools/graph) — Visual network of all matches
+- [Job Swipe](/job-tools/swipe) — Quick swipe-based evaluation

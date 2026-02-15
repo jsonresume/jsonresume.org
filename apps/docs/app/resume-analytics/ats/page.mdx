@@ -1,0 +1,92 @@
+# ATS Score Analysis
+
+Analyze your resume's compatibility with Applicant Tracking Systems (ATS) through a two-phase analysis: JSON structure validation and PDF content analysis.
+
+## How to Access
+
+- **URL**: `registry.jsonresume.org/{username}/ats`
+- **Auth**: Public (uses your public resume data)
+
+## Features
+
+### Two-Phase Analysis
+
+#### Phase 1: JSON Analysis
+
+Evaluates your structured resume data across multiple categories:
+
+| Category                | What It Checks                                                           |
+| ----------------------- | ------------------------------------------------------------------------ |
+| **Contact Information** | Email, phone, location, profiles present and valid                       |
+| **Work Experience**     | Descriptions quality, date ranges, highlights, quantifiable achievements |
+| **Education**           | Institution, degree, dates, completeness                                 |
+| **Skills**              | Number of skills, keywords, categorization                               |
+| **Summary**             | Length, quality, keyword density                                         |
+| **Formatting**          | Consistent date formats, proper structure                                |
+| **Completeness**        | All recommended sections present                                         |
+
+#### Phase 2: PDF Analysis
+
+Fetches your rendered PDF resume and analyzes the actual document:
+
+| Check                 | What It Evaluates                                   |
+| --------------------- | --------------------------------------------------- |
+| **Parsability**       | Can ATS systems extract text from the PDF?          |
+| **Field Detection**   | Are key fields (name, email, phone) detectable?     |
+| **Section Headers**   | Are sections clearly labeled for ATS parsing?       |
+| **Keyword Density**   | Are important industry keywords present?            |
+| **Formatting Issues** | Tables, images, or layouts that confuse ATS systems |
+
+### Score Breakdown
+
+Each check returns:
+
+- **Score** — Points earned out of maximum
+- **Issues** — Specific problems found
+- **Passed** — Whether the check met the minimum threshold
+
+The overall ATS score is a weighted aggregate of all checks.
+
+### Recommendations
+
+Each issue comes with an actionable recommendation explaining what to fix and why it matters for ATS compatibility.
+
+## Usage Guide
+
+1. Navigate to `registry.jsonresume.org/{username}/ats`
+2. The JSON analysis runs automatically on page load
+3. Review each category's score and issues
+4. Click on individual issues to see detailed recommendations
+5. The PDF analysis runs as a second phase
+6. Address high-priority issues first (contact info, work experience)
+7. Re-run the analysis after making changes
+
+## API Endpoints
+
+| Endpoint       | Method | Description                   |
+| -------------- | ------ | ----------------------------- |
+| `/api/ats`     | POST   | Run ATS analysis on a resume  |
+| `/api/ats/pdf` | POST   | Run PDF-specific ATS analysis |
+
+**Request body:**
+
+```json
+{
+  "username": "johndoe"
+}
+```
+
+## Tips & Best Practices
+
+- Aim for 80+ overall score for good ATS compatibility
+- Contact information issues are the highest priority — if ATS can't find your email, your application is lost
+- Use specific, quantifiable achievements in work descriptions: _"Increased revenue by 30%"_ scores better than _"Helped with revenue growth"_
+- Keep section headers standard: "Work Experience", "Education", "Skills" — avoid creative names
+- Fill in all optional sections for a higher completeness score
+- Run the analysis after every significant resume update
+
+## Related
+
+- [AI Suggestions](/ai-features/suggestions) — AI-powered recommendations (different perspective from ATS)
+- [Dashboard](/resume-analytics/dashboard) — Career metrics overview
+- [Resume Editor](/editor) — Make changes to your resume

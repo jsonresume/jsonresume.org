@@ -1,0 +1,70 @@
+# LLM Transformations
+
+Transform any JSON Resume on-the-fly using natural language prompts via the `?llm=` URL parameter. This feature rewrites the resume content according to your instructions before rendering.
+
+## How to Access
+
+- **URL**: `registry.jsonresume.org/{username}?llm={prompt}`
+- **Auth**: Public
+
+## Features
+
+### URL-Based Transformation
+
+Add the `?llm=` query parameter to any resume URL with a natural language prompt. The AI will transform the resume content before rendering it with the selected theme.
+
+### Example Prompts
+
+```
+# Translate to French
+registry.jsonresume.org/thomasdavis?llm=translate to french
+
+# Make it more concise
+registry.jsonresume.org/thomasdavis?llm=make every description more concise
+
+# Tailor for a specific role
+registry.jsonresume.org/thomasdavis?llm=tailor this resume for a product manager role
+
+# Change tone
+registry.jsonresume.org/thomasdavis?llm=rewrite in a more formal academic tone
+
+# Highlight specific skills
+registry.jsonresume.org/thomasdavis?llm=emphasize leadership and management experience
+```
+
+### Combining with Themes
+
+You can combine the `?llm=` parameter with `?theme=`:
+
+```
+registry.jsonresume.org/thomasdavis?theme=professional&llm=translate to spanish
+```
+
+## Usage Guide
+
+1. Start with any resume URL: `registry.jsonresume.org/{username}`
+2. Add `?llm=` followed by your transformation prompt
+3. The AI processes the resume and returns the transformed version
+4. The transformed resume is rendered with the current theme
+
+## How It Works
+
+1. The resume JSON is fetched from the user's GitHub Gist
+2. The `?llm=` prompt is sent to GPT-4.1 along with the resume data
+3. The AI returns a modified version of the resume JSON
+4. The modified JSON is rendered with the selected theme
+5. The original resume data is never modified — transformations are read-only
+
+## Tips & Best Practices
+
+- Keep prompts clear and specific for best results
+- URL-encode special characters in the prompt (spaces are fine)
+- Transformations are not saved — they're generated fresh each time
+- Use this to quickly preview how your resume would look tailored for different roles
+- Great for creating multiple versions of your resume without editing the source
+
+## Related
+
+- [Themes](/themes) — Choose how your transformed resume is rendered
+- [AI Suggestions](/ai-features/suggestions) — Get improvement recommendations
+- [Resume Editor](/editor) — Make permanent edits to your resume

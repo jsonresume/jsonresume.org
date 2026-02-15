@@ -1,0 +1,60 @@
+# Job Matching
+
+The job matching page shows a ranked list of jobs from Hacker News "Who is Hiring?" threads, scored by semantic similarity to your JSON Resume.
+
+## How to Access
+
+- **URL**: `registry.jsonresume.org/{username}/jobs`
+- **Auth**: Public (uses your public resume data)
+
+## Features
+
+### Similarity-Ranked Results
+
+Jobs are ranked by cosine similarity between your resume's vector embedding and each job's embedding. The most relevant jobs appear at the top.
+
+### Job Details
+
+Each job listing displays:
+
+- **Company name** and posting source
+- **Job title** and location
+- **Salary range** (when available)
+- **Remote status**
+- **Match score** — how well the job aligns with your resume
+- **Full description** from the original posting
+
+### Cover Letter Integration
+
+Each job has a cover letter action button that links to the [Cover Letter Generator](/ai-features/cover-letter) with the job description pre-filled via the `?job=ID` parameter.
+
+### Read Tracking
+
+Mark jobs as "read" to keep track of what you've already reviewed. Read status is stored in localStorage per username.
+
+## Usage Guide
+
+1. Navigate to `registry.jsonresume.org/{username}/jobs`
+2. Browse the ranked list of jobs — top matches appear first
+3. Click on a job to see its full description
+4. Use the cover letter button to generate a tailored letter
+5. Mark reviewed jobs as read to track your progress
+
+## API Endpoints
+
+| Endpoint    | Method | Description                    |
+| ----------- | ------ | ------------------------------ |
+| `/api/jobs` | POST   | Fetch jobs matched to a resume |
+
+## Tips & Best Practices
+
+- A more complete resume produces better matches — fill in all relevant sections
+- Update your resume when your skills change to get fresher matches
+- Use the [Job Graph](/job-tools/graph) for a visual overview of all matches
+- Generate cover letters directly from the matching page
+
+## Related
+
+- [Job Graph](/job-tools/graph) — Visual graph of the same job data
+- [Job Decisions](/job-tools/decisions) — AI evaluation of job fit
+- [Cover Letter Generator](/ai-features/cover-letter) — Generate letters for matched jobs

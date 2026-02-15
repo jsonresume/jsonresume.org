@@ -1,0 +1,65 @@
+# AI Suggestions
+
+The AI Suggestions feature analyzes your JSON Resume and generates actionable recommendations to improve it, with configurable focus areas.
+
+## How to Access
+
+- **URL**: `registry.jsonresume.org/{username}/suggestions`
+- **Auth**: Public (uses your public resume data)
+
+## Features
+
+### Focus Modes
+
+Choose what type of improvements you want:
+
+| Mode         | Description                                                     |
+| ------------ | --------------------------------------------------------------- |
+| **General**  | Broad suggestions covering content, structure, and impact       |
+| **Spelling** | Identifies spelling errors and typos across all resume sections |
+| **Grammar**  | Finds grammatical issues and suggests corrections               |
+
+### How It Works
+
+1. Select a focus mode from the dropdown
+2. Click **Generate**
+3. The AI analyzes your full resume against the selected criteria
+4. Suggestions are returned as formatted Markdown with specific recommendations
+
+## Usage Guide
+
+1. Visit `registry.jsonresume.org/{username}/suggestions`
+2. Choose a focus area (General, Spelling, or Grammar)
+3. Click the **Generate** button
+4. Review the AI-generated suggestions
+5. Apply improvements using the [Resume Editor](/editor) or [Career Pathways](/ai-features/pathways)
+
+## API Endpoints
+
+| Endpoint           | Method | Description                 |
+| ------------------ | ------ | --------------------------- |
+| `/api/suggestions` | POST   | Generate resume suggestions |
+
+**Request body:**
+
+```json
+{
+  "username": "johndoe",
+  "focus": "general"
+}
+```
+
+**Response:** Markdown-formatted string with suggestions.
+
+## Tips & Best Practices
+
+- Run **General** first for the highest-impact improvements
+- Use **Spelling** and **Grammar** modes before sharing your resume with employers
+- Suggestions are based on your current public resume — update your Gist first for the most relevant feedback
+- Combine with the [ATS Score](/resume-analytics/ats) to optimize for automated screening
+
+## Related
+
+- [Career Pathways](/ai-features/pathways) — AI copilot that can apply changes for you
+- [ATS Score Analysis](/resume-analytics/ats) — Automated resume scoring
+- [Resume Editor](/editor) — Edit your resume directly

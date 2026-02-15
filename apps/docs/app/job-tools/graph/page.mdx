@@ -1,0 +1,81 @@
+# Job Graph
+
+An interactive network visualization that places your resume at the center and connects it to matched jobs, showing relationships between positions using React Flow.
+
+## How to Access
+
+- **URL**: `registry.jsonresume.org/{username}/jobs-graph`
+- **Auth**: Public (uses your public resume data)
+
+## Features
+
+### Network Visualization
+
+The graph displays:
+
+- **Your resume** as the central node
+- **Job postings** as connected nodes, positioned by similarity
+- **Edges** connecting your resume to each job, with closer nodes being better matches
+- **Clusters** of similar jobs naturally group together
+
+### Salary Gradient
+
+Toggle the salary gradient overlay to color-code nodes by compensation:
+
+- Nodes are colored from cool (lower salary) to warm (higher salary)
+- Salary range slider lets you filter by compensation band
+- Jobs without salary data are shown in a neutral color
+
+### Filtering
+
+| Filter             | Description                                    |
+| ------------------ | ---------------------------------------------- |
+| **Text search**    | Filter jobs by keyword in title or description |
+| **Remote only**    | Show only remote-friendly positions            |
+| **Salary range**   | Slider to filter by compensation               |
+| **Show/hide read** | Toggle visibility of already-reviewed jobs     |
+
+### Keyboard Navigation
+
+Navigate the graph without a mouse:
+
+| Key            | Action                        |
+| -------------- | ----------------------------- |
+| **Arrow keys** | Move between connected nodes  |
+| **M**          | Mark the selected job as read |
+
+### Node Interaction
+
+- **Click** a node to select it and see full job details
+- **Hover** to highlight the connection path to your resume
+- **Drag** nodes to rearrange the layout
+- **Scroll** to zoom in and out
+- **Pan** by dragging the background
+
+### Read Tracking
+
+Jobs marked as read are visually dimmed. Hidden by default to keep the graph focused on new opportunities. Toggle "Show hidden" to see them.
+
+## Usage Guide
+
+1. Navigate to `registry.jsonresume.org/{username}/jobs-graph`
+2. Wait for the graph to load (it processes all job matches)
+3. Explore clusters of similar jobs near each other
+4. Click on nodes to see detailed job descriptions
+5. Use the salary gradient to identify high-paying opportunities
+6. Filter by text or remote status to narrow results
+7. Use keyboard arrows to navigate between nodes
+
+## Tips & Best Practices
+
+- Zoom out first to see the full graph structure, then zoom into clusters of interest
+- The salary gradient helps quickly identify compensation outliers
+- Use text filtering to find specific technologies or company types
+- Mark jobs as read as you review them to keep the graph focused
+- Path highlighting shows how a job relates back to your resume
+
+## Related
+
+- [Job Matching](/job-tools/matching) — Same data in a list format
+- [Job Decisions](/job-tools/decisions) — AI-powered evaluation of specific jobs
+- [Career Pathways](/ai-features/pathways) — AI copilot with integrated job graph

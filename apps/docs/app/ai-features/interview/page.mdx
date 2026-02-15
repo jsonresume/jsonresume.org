@@ -1,0 +1,65 @@
+# Interview Simulator
+
+Practice job interviews with an AI that knows your resume. Switch between interviewer and candidate modes to prepare from both perspectives.
+
+## How to Access
+
+- **URL**: `registry.jsonresume.org/{username}/interview`
+- **Auth**: Public (uses your public resume data)
+
+## Features
+
+### Two Interview Modes
+
+| Mode                    | You Play        | AI Plays        | Best For                                     |
+| ----------------------- | --------------- | --------------- | -------------------------------------------- |
+| **Candidate** (default) | The candidate   | The interviewer | Practicing answers to common questions       |
+| **Interviewer**         | The interviewer | The candidate   | Understanding how to present your experience |
+
+### Resume-Aware Questions
+
+The AI reads your JSON Resume data and generates questions specific to your experience:
+
+- Technical questions based on your listed skills
+- Behavioral questions about your work history
+- Questions about gaps, transitions, or specific projects
+- Follow-up questions that dig deeper into your answers
+
+### Position Toggle
+
+Switch between modes at any time using the toggle at the top of the page. Switching resets the conversation with an appropriate opening message.
+
+## Usage Guide
+
+1. Navigate to `registry.jsonresume.org/{username}/interview`
+2. You start in **Candidate** mode — the AI interviewer will ask questions
+3. Type your responses in the input field and press Enter
+4. The AI will follow up based on your answers
+5. Toggle to **Interviewer** mode to practice asking questions
+6. The AI will respond as if it has your resume experience
+
+### Practice Tips
+
+- **Candidate mode**: Practice the STAR method (Situation, Task, Action, Result)
+- **Interviewer mode**: Learn which questions reveal the most about your experience
+- Try multiple sessions to cover different areas of your resume
+- Use this before real interviews to identify weak spots in your narrative
+
+## API Endpoints
+
+| Endpoint         | Method | Description                           |
+| ---------------- | ------ | ------------------------------------- |
+| `/api/interview` | POST   | Send a message and get an AI response |
+
+## Tips & Best Practices
+
+- Start with Candidate mode and answer at least 5-6 questions for a realistic simulation
+- Pay attention to follow-up questions — they indicate areas where your answers could be stronger
+- Use Interviewer mode to understand what makes a compelling answer
+- Combine with [AI Suggestions](/ai-features/suggestions) to improve your resume based on weak spots you discover
+
+## Related
+
+- [AI Features Overview](/ai-features) — All AI-powered features
+- [Cover Letter Generator](/ai-features/cover-letter) — Generate cover letters
+- [Career Pathways](/ai-features/pathways) — Full AI career copilot

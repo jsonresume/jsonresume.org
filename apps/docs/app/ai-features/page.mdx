@@ -1,0 +1,44 @@
+# AI Features
+
+JSON Resume's registry includes a suite of AI-powered tools that help you improve your resume, explore career paths, practice interviews, and generate cover letters — all built on top of your structured JSON Resume data.
+
+## Overview
+
+All AI features are powered by the [Vercel AI SDK v5](https://sdk.vercel.ai/) with OpenAI's GPT-4.1 model. They use your resume as context to provide personalized, relevant assistance.
+
+### Available AI Features
+
+| Feature                                             | Description                                                   | Auth Required |
+| --------------------------------------------------- | ------------------------------------------------------------- | ------------- |
+| [Career Pathways](/ai-features/pathways)            | AI copilot chat with tool calling, voice, and resume editing  | Yes           |
+| [AI Suggestions](/ai-features/suggestions)          | GPT-powered resume improvement recommendations                | No            |
+| [Cover Letter Generator](/ai-features/cover-letter) | Generate tailored cover letters from resume + job description | No            |
+| [Interview Simulator](/ai-features/interview)       | Practice interviews with AI in interviewer or candidate mode  | No            |
+| [LLM Transformations](/ai-features/llm-transforms)  | On-the-fly resume transformation via URL parameter            | No            |
+
+## Technology Stack
+
+- **AI SDK v5** — Vercel's unified AI SDK for streaming, tool calling, and speech
+- **GPT-4.1** — OpenAI's latest model for text generation
+- **OpenAI TTS** — Text-to-speech with 6 voice options (alloy, echo, fable, onyx, nova, shimmer)
+- **OpenAI Whisper** — Speech-to-text transcription for voice input
+- **Streaming responses** — All AI features use streaming for real-time output
+
+## Authentication
+
+Most AI features work with any public JSON Resume and don't require authentication. The **Career Pathways** copilot requires GitHub OAuth login because it can modify and save your resume.
+
+Features that only read your resume data (suggestions, cover letters, interviews, LLM transforms) work by fetching the public resume for any username.
+
+## How It Works
+
+1. Your JSON Resume data is fetched from your GitHub Gist
+2. The resume is included as context in the AI system prompt
+3. The AI model generates responses personalized to your experience
+4. Results are streamed back in real-time
+
+## Related
+
+- [Career Pathways](/ai-features/pathways) — The flagship AI copilot experience
+- [API Reference](/api) — API endpoints for AI features
+- [Getting Started](/getting-started) — Set up your JSON Resume

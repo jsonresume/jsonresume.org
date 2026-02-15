@@ -1,0 +1,100 @@
+# Career Pathways
+
+The Career Pathways copilot is an AI-powered career coaching interface that provides real-time conversational guidance while automatically maintaining your resume in JSON Resume format.
+
+## How to Access
+
+- **URL**: `registry.jsonresume.org/pathways`
+- **Auth**: GitHub OAuth login required (resume modifications are saved)
+
+## Features
+
+### AI Chat Interface
+
+The copilot uses a split-pane layout with a chat panel on the right and a workspace on the left. You can have natural conversations about your career, and the AI will:
+
+- Provide career advice tailored to your resume
+- Answer questions about job markets and career transitions
+- Help you articulate your experience and skills
+
+### Tool Calling
+
+The AI can invoke specialized tools during conversation to take actions on your behalf:
+
+| Tool                | Description                                                                 |
+| ------------------- | --------------------------------------------------------------------------- |
+| `updateResume`      | Modifies specific sections of your resume (work, education, skills, basics) |
+| `filterJobs`        | Filters the job graph by criteria you describe                              |
+| `showJobs`          | Focuses the graph on matching jobs                                          |
+| `getJobInsights`    | Analyzes job market data relevant to your profile                           |
+| `refreshJobMatches` | Updates job recommendations based on resume changes                         |
+| `saveJobFeedback`   | Records your feedback on specific jobs                                      |
+
+When the AI calls `updateResume`, changes are applied to your resume in real-time. You can see the changes in the Resume tab and revert if needed.
+
+### Voice Features
+
+Pathways supports both text-to-speech output and voice input:
+
+**Text-to-Speech (Output)**
+
+- Toggle speech on/off with the speaker button
+- Choose from 6 OpenAI TTS voices: Alloy, Echo, Fable, Onyx, Nova (default), Shimmer
+- AI responses are spoken aloud after streaming completes
+
+**Voice Input**
+
+- Click the microphone button to record a voice message
+- Audio is transcribed using OpenAI's Whisper model
+- Transcribed text is sent as a chat message
+
+### Workspace Tabs
+
+The left panel has four tabs:
+
+| Tab          | Description                                          |
+| ------------ | ---------------------------------------------------- |
+| **Graph**    | Visual graph of job matches connected to your resume |
+| **Feedback** | History of your job feedback and preferences         |
+| **Preview**  | Live preview of your resume as rendered HTML         |
+| **Resume**   | JSON editor for your resume with syntax highlighting |
+
+### File Upload
+
+Upload an existing resume file (PDF, DOC, DOCX, TXT) and the AI will extract structured data from it to populate your JSON Resume.
+
+### Session Persistence
+
+Conversations are saved per session. Your resume modifications persist across page reloads as long as you're logged in.
+
+## Usage Guide
+
+1. Navigate to `registry.jsonresume.org/pathways`
+2. Log in with GitHub if prompted
+3. Start chatting with the AI about your career goals
+4. Ask it to update your resume: _"Add my new role as Senior Engineer at Acme Corp"_
+5. Switch to the **Preview** tab to see your updated resume
+6. Use the **Graph** tab to explore matching jobs
+7. Enable voice with the speaker icon for a hands-free experience
+
+## API Endpoints
+
+| Endpoint          | Method | Description                         |
+| ----------------- | ------ | ----------------------------------- |
+| `/api/pathways`   | POST   | AI chat streaming with tool support |
+| `/api/speech`     | POST   | Text-to-speech generation           |
+| `/api/transcribe` | POST   | Voice-to-text transcription         |
+
+## Tips & Best Practices
+
+- Be specific when asking for resume updates: _"Add Python and TypeScript to my skills"_ works better than _"update my skills"_
+- Use the Preview tab to verify changes look correct
+- The Graph tab updates automatically when your resume changes
+- Voice output works best in a quiet environment
+- Upload a PDF of your existing resume to quickly populate your JSON Resume
+
+## Related
+
+- [AI Features Overview](/ai-features) — All AI-powered features
+- [Job Graph](/job-tools/graph) — Interactive job visualization
+- [Resume Editor](/editor) — Direct JSON editing

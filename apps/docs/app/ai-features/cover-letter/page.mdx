@@ -1,0 +1,74 @@
+# Cover Letter Generator
+
+Generate tailored cover letters by combining your JSON Resume with a job description. The AI creates a personalized letter that highlights relevant experience from your resume.
+
+## How to Access
+
+- **URL**: `registry.jsonresume.org/{username}/letter`
+- **Auth**: Public (uses your public resume data)
+
+## Features
+
+### Job Description Input
+
+Paste the full job description into the text area. The AI will extract key requirements and match them against your resume.
+
+### Tone Selection
+
+Choose the writing tone for your cover letter:
+
+| Tone             | Best For                                |
+| ---------------- | --------------------------------------- |
+| **Formal**       | Corporate roles, traditional industries |
+| **Casual**       | Startups, creative roles                |
+| **Enthusiastic** | Roles you're passionate about           |
+
+### Job Integration
+
+If you come from the [Job Matching](/job-tools/matching) page, the job description is pre-filled automatically using the `?job=ID` URL parameter. The job description is loaded from localStorage.
+
+## Usage Guide
+
+1. Navigate to `registry.jsonresume.org/{username}/letter`
+2. Paste a job description into the text area
+3. Select your preferred tone (default: formal)
+4. Click **Generate**
+5. Review the generated cover letter
+6. Copy and customize as needed
+
+### From Job Matching
+
+1. Browse jobs at `registry.jsonresume.org/{username}/jobs`
+2. Click the cover letter icon on any job listing
+3. You'll be redirected to the letter page with the job description pre-filled
+
+## API Endpoints
+
+| Endpoint      | Method | Description             |
+| ------------- | ------ | ----------------------- |
+| `/api/letter` | POST   | Generate a cover letter |
+
+**Request body:**
+
+```json
+{
+  "username": "johndoe",
+  "jobDescription": "We are looking for a Senior Engineer...",
+  "tone": "formal"
+}
+```
+
+**Response:** Generated cover letter as text.
+
+## Tips & Best Practices
+
+- Include the complete job description for best results — the AI extracts requirements to tailor the letter
+- The formal tone works well for most applications
+- Review and personalize the generated letter — add specific details the AI might not know
+- Use the job matching integration for a seamless workflow
+
+## Related
+
+- [Job Matching](/job-tools/matching) — Find jobs and generate cover letters
+- [AI Suggestions](/ai-features/suggestions) — Improve your resume before writing cover letters
+- [Interview Simulator](/ai-features/interview) — Practice for the interview

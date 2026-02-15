@@ -1,0 +1,28 @@
+# Resume Analytics
+
+Visualize and analyze your career data with interactive dashboards, timelines, and scoring tools. These features transform your structured JSON Resume into actionable insights.
+
+## Overview
+
+| Feature                                          | Description                                             | Auth Required |
+| ------------------------------------------------ | ------------------------------------------------------- | ------------- |
+| [Dashboard](/resume-analytics/dashboard)         | Career metrics, skills analysis, and progression charts | Yes           |
+| [ATS Score](/resume-analytics/ats)               | Automated resume scoring for ATS compatibility          | No            |
+| [Timeline](/resume-analytics/timeline)           | Visual career timeline of work and education            | No            |
+| [Resume Explorer](/resume-analytics/explorer)    | Browse and search public resumes                        | No            |
+| [Similarity Graph](/resume-analytics/similarity) | Network visualization of similar positions              | No            |
+
+## Public vs. Authenticated Access
+
+Some analytics features are publicly accessible (anyone can view them for any username), while others require GitHub OAuth login:
+
+- **Public**: ATS Score, Timeline, Explorer, Similarity Graph
+- **Authenticated**: Dashboard (accesses private resume data via GitHub)
+
+Public pages show a banner indicating the view mode with a login prompt.
+
+## Related
+
+- [AI Features](/ai-features) — AI-powered tools for resume improvement
+- [Job Tools](/job-tools) — Job matching and evaluation tools
+- [API Reference](/api) — Analytics API endpoints

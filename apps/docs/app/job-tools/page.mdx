@@ -1,0 +1,40 @@
+# Job Tools
+
+JSON Resume's registry includes a suite of job discovery and evaluation tools powered by vector similarity matching and AI analysis. All job data comes from Hacker News "Who is Hiring?" threads, processed with embeddings for semantic matching against your resume.
+
+## Overview
+
+| Feature                               | Description                                            | Auth Required |
+| ------------------------------------- | ------------------------------------------------------ | ------------- |
+| [Job Matching](/job-tools/matching)   | Ranked list of jobs matched to your resume             | No            |
+| [Job Graph](/job-tools/graph)         | Interactive network visualization of job matches       | No            |
+| [Job Decisions](/job-tools/decisions) | AI-powered evaluation with decision tree visualization | No            |
+| [Job Swipe](/job-tools/swipe)         | Tinder-style job swiping with feedback persistence     | Yes           |
+
+## How Job Matching Works
+
+### Data Pipeline
+
+1. **Collection**: Job posts are scraped from monthly Hacker News "Who is Hiring?" threads
+2. **Processing**: Each job post is parsed to extract company, title, location, salary, remote status, and description
+3. **Embedding**: Job descriptions are converted to vector embeddings using OpenAI's embedding model
+4. **Storage**: Jobs and embeddings are stored in a Supabase database
+
+### Matching Algorithm
+
+When you visit any job tool, your resume is also converted to a vector embedding. Jobs are then ranked by **cosine similarity** between your resume embedding and each job's embedding. Higher similarity scores mean the job description is more semantically aligned with your experience.
+
+### What Gets Matched
+
+The algorithm considers your:
+
+- **Work experience** — Job titles, company types, responsibilities
+- **Skills** — Technical skills, tools, frameworks
+- **Summary** — Your professional summary and objectives
+- **Education** — Relevant educational background
+
+## Related
+
+- [Job Board](/jobs) — General job board information
+- [Career Pathways](/ai-features/pathways) — AI copilot with integrated job tools
+- [API Reference](/api) — Job-related API endpoints

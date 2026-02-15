@@ -1,0 +1,74 @@
+# Resume Editor
+
+A browser-based JSON editor with live validation, syntax highlighting, and direct save to your GitHub Gist. Edit your resume in real-time without leaving the browser.
+
+## How to Access
+
+- **URL**: `registry.jsonresume.org/editor`
+- **Auth**: GitHub OAuth login required (saves to your Gist)
+
+## Features
+
+### Monaco Editor
+
+The editor uses [Monaco Editor](https://microsoft.github.io/monaco-editor/) (the same editor that powers VS Code) providing:
+
+- **Syntax highlighting** for JSON
+- **Auto-completion** for JSON Resume schema fields
+- **Error detection** with inline error markers
+- **Bracket matching** and auto-closing
+- **Find and replace** with regex support
+- **Keyboard shortcuts** (Ctrl/Cmd+S to save, etc.)
+
+### Live Validation
+
+Your resume is validated against the JSON Resume schema in real-time:
+
+- Invalid JSON is highlighted with red underlines
+- Schema violations are shown as warnings
+- Errors appear in the editor's problems panel
+
+### GitHub Gist Integration
+
+The editor saves directly to your GitHub Gist:
+
+- Your existing `resume.json` Gist is loaded on open
+- Changes are saved to the same Gist when you save
+- The save operation uses the GitHub API via your OAuth token
+
+### Multi-Resume Support
+
+You can maintain multiple resume files in your Gist using the `?gistname=` parameter:
+
+```
+registry.jsonresume.org/editor?gistname=resume-en.json
+registry.jsonresume.org/editor?gistname=resume-fr.json
+registry.jsonresume.org/editor?gistname=resume-short.json
+```
+
+This enables maintaining resumes in different languages or different lengths for different purposes.
+
+## Usage Guide
+
+1. Navigate to `registry.jsonresume.org/editor`
+2. Log in with GitHub if prompted
+3. Your current `resume.json` loads automatically
+4. Edit your resume using the Monaco editor
+5. Fix any validation errors shown inline
+6. Save your changes (they're written to your GitHub Gist)
+7. Preview your updated resume at `registry.jsonresume.org/{username}`
+
+## Tips & Best Practices
+
+- Use the schema auto-completion to discover available fields
+- Fix validation errors before saving to ensure compatibility
+- Use `?gistname=` for maintaining translated versions of your resume
+- The editor respects the official [JSON Resume schema](/schema) — refer to the schema docs for field descriptions
+- Combine with [AI Suggestions](/ai-features/suggestions) to get recommendations, then apply them in the editor
+
+## Related
+
+- [Schema & Structure](/schema) — JSON Resume schema reference
+- [Career Pathways](/ai-features/pathways) — AI copilot with built-in resume editing
+- [Getting Started](/getting-started) — Set up your GitHub Gist
+- [Hosting & Publishing](/hosting) — How your resume is hosted

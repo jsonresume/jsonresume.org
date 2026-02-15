@@ -1,95 +1,87 @@
 # API Reference
 
-The JSON Resume API provides programmatic access to resume data, themes, and job matching.
+The JSON Resume Registry API provides programmatic access to resume data, AI features, job matching, and analytics. All endpoints are hosted at `registry.jsonresume.org`.
 
 ## Base URL
 
 ```
-https://jsonresume.org/api
+https://registry.jsonresume.org
 ```
 
 ## Authentication
 
-Most endpoints are public and don't require authentication. For private resume access, you'll need to authenticate with GitHub OAuth.
+Most endpoints are public and don't require authentication. A few endpoints (privacy, data deletion) require GitHub OAuth via NextAuth.js. Authenticate by logging in at the registry — the session cookie handles auth automatically for browser-based requests.
 
-```bash
-# Public resume access (no auth required)
-GET https://jsonresume.org/[username]
+## Resume Endpoints
 
-# Private resume access (requires auth)
-GET https://jsonresume.org/api/resume?token=YOUR_TOKEN
-```
+### Get Resume (HTML)
 
-## Endpoints
-
-### Get Resume
-
-Fetch a resume by GitHub username.
+Render a resume using a theme.
 
 ```http
-GET /[username]
+GET /{username}
 ```
 
-**Parameters:**
-
-- `username` (required) - GitHub username
-
-**Response:**
-
-```json
-{
-  "basics": {
-    "name": "John Doe",
-    "label": "Software Engineer",
-    ...
-  },
-  ...
-}
-```
-
-### Get Resume with Theme
-
-Render a resume using a specific theme.
-
-```http
-GET /[username]?theme=[theme-name]
-```
-
-**Parameters:**
-
-- `username` (required) - GitHub username
-- `theme` (optional) - Theme name (default: `standard`)
-
-**Supported formats:**
-
-- `.html` - HTML rendering
-- `.pdf` - PDF export
-- `.json` - Raw JSON data
+| Parameter  | Type  | Description                                      |
+| ---------- | ----- | ------------------------------------------------ |
+| `username` | path  | GitHub username (required)                       |
+| `theme`    | query | Theme name (default: `standard`)                 |
+| `llm`      | query | Natural language transformation prompt           |
+| `gistname` | query | Alternate gist filename (default: `resume.json`) |
 
 **Examples:**
 
 ```bash
-# Get resume as HTML with professional theme
-curl https://jsonresume.org/johndoe?theme=professional
+# Default theme
+curl https://registry.jsonresume.org/thomasdavis
 
-# Get resume as PDF
-curl https://jsonresume.org/johndoe.pdf
+# With a specific theme
+curl https://registry.jsonresume.org/thomasdavis?theme=professional
 
-# Get raw JSON
-curl https://jsonresume.org/johndoe.json
+# Random theme
+curl https://registry.jsonresume.org/thomasdavis?theme=random
+
+# AI transformation
+curl "https://registry.jsonresume.org/thomasdavis?llm=translate+to+french"
+
+# Alternate resume file
+curl https://registry.jsonresume.org/thomasdavis?gistname=resume-fr.json
 ```
 
-### Validate Resume
-
-Validate a resume against the JSON Resume schema.
+### Get Resume (JSON)
 
 ```http
-POST /api/validate
-Content-Type: application/json
+GET /{username}.json
+```
 
+Returns the raw JSON Resume data.
+
+### Get Resume (PDF)
+
+```http
+GET /{username}.pdf
+```
+
+Returns a PDF rendering of the resume. Supports `?theme=` parameter.
+
+---
+
+## ATS Analysis
+
+### Analyze Resume
+
+```http
+POST /api/ats
+```
+
+Analyzes a resume for ATS compatibility across multiple categories.
+
+**Request:**
+
+```json
 {
-  "basics": { ... },
-  ...
+  "resume": { "basics": {}, "work": [], "...": "..." },
+  "theme": "standard"
 }
 ```
 
@@ -97,253 +89,598 @@ Content-Type: application/json
 
 ```json
 {
-  "valid": true,
-  "errors": []
+  "score": 82,
+  "rating": "Good",
+  "checks": [
+    {
+      "name": "Contact Information",
+      "score": 9,
+      "maxScore": 10,
+      "issues": ["Missing phone number"],
+      "passed": true
+    }
+  ],
+  "recommendations": ["Add a phone number to improve ATS parseability"],
+  "summary": "Your resume scores well overall..."
 }
 ```
 
-Or if invalid:
+**Caching:** 5 minutes
+
+### Analyze PDF
+
+```http
+POST /api/ats/pdf
+```
+
+Analyzes the rendered PDF for ATS parseability.
+
+**Request:**
 
 ```json
 {
-  "valid": false,
-  "errors": [
-    {
-      "path": "basics.email",
-      "message": "Invalid email format"
-    }
-  ]
+  "resume": { "...": "..." },
+  "username": "johndoe",
+  "theme": "standard"
 }
 ```
 
-### Search Jobs
+**Response:**
 
-Search for jobs matched to your resume.
+```json
+{
+  "score": 78,
+  "rating": "Good",
+  "analysis": { "...": "..." },
+  "theme": "standard",
+  "metadata": { "pages": 1, "textLength": 2450 },
+  "summary": "The PDF is parseable by most ATS systems..."
+}
+```
+
+**Caching:** 1 hour
+
+### ATS Documentation
 
 ```http
-POST /api/jobs/search
-Content-Type: application/json
+GET /api/ats
+GET /api/ats/pdf
+```
 
+Returns endpoint documentation and scoring category definitions.
+
+---
+
+## AI Chat & Copilot
+
+### Career Pathways Chat (Streaming)
+
+```http
+POST /api/pathways
+```
+
+AI career copilot with streaming responses and tool calling.
+
+**Request:**
+
+```json
 {
-  "resume": { ... },
-  "filters": {
-    "location": "San Francisco",
-    "remote": true,
-    "types": ["full-time"]
+  "messages": [
+    { "role": "user", "content": "Help me update my skills section" }
+  ],
+  "currentResume": { "...": "..." }
+}
+```
+
+**Response:** Server-sent events stream with text and tool invocations.
+
+**Available tools:** `updateResume`, `filterJobs`, `showJobs`, `getJobInsights`, `refreshJobMatches`, `saveJobFeedback`
+
+**Runtime:** Edge
+
+### Resume Chat
+
+```http
+POST /api/chat
+```
+
+AI chat for resume editing with tool calling.
+
+**Request:**
+
+```json
+{
+  "messages": [{ "role": "user", "content": "Make my summary more concise" }],
+  "currentResume": { "...": "..." }
+}
+```
+
+**Response:** Streaming text with resume update tool calls.
+
+---
+
+## Speech & Transcription
+
+### Text-to-Speech
+
+```http
+POST /api/speech
+```
+
+Generates audio from text using OpenAI TTS.
+
+**Request:**
+
+```json
+{
+  "text": "Hello, welcome to your career coaching session.",
+  "voice": "nova"
+}
+```
+
+**Voices:** `alloy`, `echo`, `fable`, `onyx`, `nova` (default), `shimmer`
+
+**Response:** Binary audio data (`audio/mpeg`)
+
+**Limits:** Max 4,096 characters. **Caching:** 1 hour. **Runtime:** Edge.
+
+### Audio Transcription
+
+```http
+POST /api/transcribe
+```
+
+Transcribes audio to text using OpenAI Whisper.
+
+**Request:** `multipart/form-data` with `audio` file field.
+
+**Response:**
+
+```json
+{
+  "text": "I want to update my work experience",
+  "language": "en",
+  "duration": 3.5
+}
+```
+
+**Limits:** Max 25 MB file size. **Runtime:** Edge.
+
+---
+
+## Job Matching & Decisions
+
+### Get Matched Jobs
+
+```http
+POST /api/pathways/jobs
+```
+
+Returns jobs matched to a resume embedding, structured as a graph.
+
+**Request:**
+
+```json
+{
+  "embedding": [0.012, -0.034, "... (3072 dimensions)"],
+  "resumeId": "user123",
+  "timeRange": "3m",
+  "primaryBranches": 5
+}
+```
+
+**Response:**
+
+```json
+{
+  "graphData": { "nodes": [], "links": [] },
+  "jobInfoMap": {},
+  "allJobs": [],
+  "nearestNeighbors": [],
+  "topBranches": []
+}
+```
+
+### Generate Resume Embedding
+
+```http
+POST /api/pathways/embedding
+```
+
+Generates a vector embedding for job matching.
+
+**Request:**
+
+```json
+{
+  "resume": { "...": "..." }
+}
+```
+
+**Response:**
+
+```json
+{
+  "embedding": [0.012, -0.034, "... (3072 dimensions)"],
+  "description": "Senior software engineer with 8 years of experience..."
+}
+```
+
+**Model:** `text-embedding-3-large` (3072 dimensions)
+
+### Get Job Details
+
+```http
+GET /api/jobs/{uuid}
+```
+
+Fetch a single job posting by UUID.
+
+### Evaluate Job Match
+
+```http
+POST /api/decisions/evaluate
+```
+
+AI-powered evaluation of a job against your resume using 7 criteria.
+
+**Request:**
+
+```json
+{
+  "resume": { "...": "..." },
+  "job": { "title": "...", "description": "..." },
+  "preferences": {}
+}
+```
+
+**Response:**
+
+```json
+{
+  "decisions": {
+    "checkRequiredSkills": { "...": "..." },
+    "checkExperience": { "...": "..." },
+    "checkWorkRights": { "...": "..." },
+    "checkLocation": { "...": "..." },
+    "checkTimezone": { "...": "..." },
+    "checkAvailability": { "...": "..." },
+    "checkSalary": { "...": "..." }
   }
 }
 ```
 
+### Undecided Jobs
+
+```http
+POST /api/decisions/jobs
+```
+
+Fetch jobs the user hasn't decided on yet (from last 90 days).
+
+**Request:**
+
+```json
+{
+  "userId": "user123",
+  "limit": 10
+}
+```
+
+### Save Decision
+
+```http
+POST /api/decisions/decision
+```
+
+Save a decision on a job.
+
+**Request:**
+
+```json
+{
+  "userId": "user123",
+  "jobId": "job456",
+  "decision": "interested"
+}
+```
+
+### Get Decision
+
+```http
+GET /api/decisions/decision?userId=xxx&jobId=yyy
+```
+
+---
+
+## Job State Management
+
+### Get Job States
+
+```http
+GET /api/job-states?username=xxx
+```
+
+Returns all job states (read, interested, hidden) for a user.
+
 **Response:**
 
 ```json
 {
-  "jobs": [
-    {
-      "uuid": "abc-123",
-      "company": "Acme Corp",
-      "title": "Senior Software Engineer",
-      "score": 0.95,
-      ...
-    }
-  ],
-  "total": 42
+  "success": true,
+  "states": {
+    "123": "read",
+    "456": "interested"
+  }
 }
 ```
 
-## Rate Limiting
-
-API requests are rate-limited to prevent abuse:
-
-- **Anonymous**: 60 requests per hour
-- **Authenticated**: 5000 requests per hour
-
-Rate limit headers:
+### Update Job State
 
 ```http
-X-RateLimit-Limit: 60
-X-RateLimit-Remaining: 59
-X-RateLimit-Reset: 1640995200
+POST /api/job-states
 ```
+
+**Request:**
+
+```json
+{
+  "username": "johndoe",
+  "jobId": 123,
+  "state": "read"
+}
+```
+
+Set `state` to `null` to delete the record.
+
+### Batch Update States
+
+```http
+POST /api/job-states/batch
+```
+
+**Request:**
+
+```json
+{
+  "username": "johndoe",
+  "updates": [
+    { "jobId": 123, "state": "read" },
+    { "jobId": 456, "state": "interested" }
+  ]
+}
+```
+
+### Migrate Session States
+
+```http
+POST /api/job-states/migrate
+```
+
+Migrate anonymous session job states to an authenticated user.
+
+---
+
+## Job Feedback
+
+### Save Feedback
+
+```http
+POST /api/pathways/feedback
+```
+
+**Request:**
+
+```json
+{
+  "userId": "user123",
+  "jobId": "job456",
+  "feedback": "Great match for my skills",
+  "sentiment": "positive",
+  "jobTitle": "Senior Engineer",
+  "jobCompany": "Acme Corp"
+}
+```
+
+### Get Feedback
+
+```http
+GET /api/pathways/feedback?userId=xxx
+```
+
+### Batch Save Feedback
+
+```http
+POST /api/pathways/feedback/batch
+```
+
+---
+
+## Pathways Resume Management
+
+### Get Resume
+
+```http
+GET /api/pathways/resume?sessionId=xxx
+```
+
+### Save Resume
+
+```http
+POST /api/pathways/resume
+```
+
+### Update Resume (Diff)
+
+```http
+PATCH /api/pathways/resume
+```
+
+Applies a diff to the resume and saves to history.
+
+**Request:**
+
+```json
+{
+  "sessionId": "session123",
+  "diff": { "basics": { "name": "Updated Name" } },
+  "source": "copilot",
+  "explanation": "Updated name per user request"
+}
+```
+
+### Delete Resume
+
+```http
+DELETE /api/pathways/resume?sessionId=xxx
+```
+
+---
+
+## Conversation Management
+
+### Get Conversations
+
+```http
+GET /api/pathways/conversations?sessionId=xxx
+```
+
+### Save Conversation
+
+```http
+POST /api/pathways/conversations
+```
+
+### Delete Conversations
+
+```http
+DELETE /api/pathways/conversations?sessionId=xxx
+```
+
+---
+
+## File Upload
+
+### Upload Resume File
+
+```http
+POST /api/pathways/upload
+```
+
+Upload PDF, Word, or image files to extract resume data.
+
+**Request:** `multipart/form-data` with `files` field.
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "extractedData": [
+    {
+      "filename": "resume.pdf",
+      "data": { "basics": {}, "work": [] }
+    }
+  ],
+  "message": "Extracted data from 1 file(s)"
+}
+```
+
+---
+
+## Similarity & Visualization
+
+### Resume Similarity Data
+
+```http
+GET /api/similarity?limit=1000
+```
+
+Returns resume data with embeddings for the similarity graph visualization.
+
+**Caching:** 24 hours
+
+### Job Similarity Data
+
+```http
+GET /api/job-similarity?limit=750
+```
+
+Returns job data with embeddings for graph visualization.
+
+**Caching:** 24 hours
+
+### Match Insights
+
+```http
+POST /api/pathways/match-insights
+```
+
+AI-generated insights for a specific job match. Results are cached by content hash.
+
+---
+
+## Other Endpoints
+
+### Resume List
+
+```http
+GET /api/resumes
+```
+
+Returns a list of formatted resumes for the explore page.
+
+### Favicon Proxy
+
+```http
+GET /api/favicon?url=https://company.com
+```
+
+Proxies company favicons via Google's favicon service. **Caching:** 1 week.
+
+### Delete User Cache
+
+```http
+DELETE /api/privacy/delete-cache
+```
+
+**Requires authentication.** Deletes cached resume data for the authenticated user.
+
+### Activity Logging
+
+```http
+POST /api/pathways/activity
+GET /api/pathways/activity?sessionId=xxx&limit=50&offset=0
+PUT /api/pathways/activity  (batch)
+```
+
+---
 
 ## Error Responses
 
-The API uses standard HTTP status codes:
+All endpoints use standard HTTP status codes:
 
-| Status | Description                             |
-| ------ | --------------------------------------- |
-| 200    | Success                                 |
-| 400    | Bad Request - Invalid parameters        |
-| 401    | Unauthorized - Authentication required  |
-| 404    | Not Found - Resume not found            |
-| 429    | Too Many Requests - Rate limit exceeded |
-| 500    | Internal Server Error                   |
+| Status | Description                            |
+| ------ | -------------------------------------- |
+| 200    | Success                                |
+| 400    | Bad request — invalid parameters       |
+| 401    | Unauthorized — authentication required |
+| 404    | Not found                              |
+| 500    | Internal server error                  |
+| 503    | Service unavailable (during builds)    |
 
 **Error format:**
 
 ```json
 {
-  "error": {
-    "code": "RESUME_NOT_FOUND",
-    "message": "Resume not found for user: johndoe"
-  }
+  "error": "Description of what went wrong",
+  "details": "Additional context (in some endpoints)"
 }
-```
-
-## SDK / Client Libraries
-
-### JavaScript / TypeScript
-
-```bash
-npm install @jsonresume/client
-```
-
-```typescript
-import { JSONResumeClient } from '@jsonresume/client';
-
-const client = new JSONResumeClient();
-
-// Get resume
-const resume = await client.getResume('johndoe');
-
-// Validate resume
-const validation = await client.validate(resume);
-
-// Search jobs
-const jobs = await client.searchJobs(resume, {
-  remote: true,
-  location: 'San Francisco',
-});
-```
-
-### Python
-
-```bash
-pip install jsonresume
-```
-
-```python
-from jsonresume import Client
-
-client = Client()
-
-# Get resume
-resume = client.get_resume('johndoe')
-
-# Validate
-validation = client.validate(resume)
-
-# Search jobs
-jobs = client.search_jobs(resume, remote=True)
-```
-
-## Webhooks
-
-Subscribe to resume updates and job matches.
-
-```http
-POST /api/webhooks
-Content-Type: application/json
-Authorization: Bearer YOUR_TOKEN
-
-{
-  "url": "https://yourapp.com/webhook",
-  "events": ["resume.updated", "job.matched"]
-}
-```
-
-**Webhook payload:**
-
-```json
-{
-  "event": "job.matched",
-  "timestamp": "2024-01-15T10:30:00Z",
-  "data": {
-    "job": { ... },
-    "score": 0.92
-  }
-}
-```
-
-## GraphQL API
-
-For advanced queries, use the GraphQL API:
-
-```graphql
-{
-  resume(username: "johndoe") {
-    basics {
-      name
-      email
-      profiles {
-        network
-        url
-      }
-    }
-    work {
-      name
-      position
-      highlights
-    }
-  }
-
-  jobs(first: 10, filters: { remote: true }) {
-    edges {
-      node {
-        company
-        title
-        location {
-          city
-          remote
-        }
-      }
-    }
-  }
-}
-```
-
-## Examples
-
-### Full Resume Workflow
-
-```javascript
-// 1. Fetch resume from GitHub Gist
-const gistUrl =
-  'https://gist.githubusercontent.com/johndoe/abc123/raw/resume.json';
-const resume = await fetch(gistUrl).then((r) => r.json());
-
-// 2. Validate
-const validation = await fetch('https://jsonresume.org/api/validate', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify(resume),
-}).then((r) => r.json());
-
-if (!validation.valid) {
-  console.error('Resume is invalid:', validation.errors);
-  return;
-}
-
-// 3. Search for matching jobs
-const jobs = await fetch('https://jsonresume.org/api/jobs/search', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ resume }),
-}).then((r) => r.json());
-
-console.log(`Found ${jobs.total} matching jobs`);
 ```
 
 ## Next Steps
 
-- [Getting Started](/getting-started) - Create your first resume
-- [Job Board](/jobs) - Learn about job matching
-- [Architecture](/architecture) - Technical details
-- [Contributing](/contributing) - Help improve the API
-
-## Support
-
-For API issues or questions:
-
-- **GitHub Issues**: [jsonresume/jsonresume.org/issues](https://github.com/jsonresume/jsonresume.org/issues)
-- **Documentation**: [https://docs.jsonresume.org](https://docs.jsonresume.org)
+- [Getting Started](/getting-started) — Create your first resume
+- [AI Features](/ai-features) — AI-powered tools documentation
+- [Job Tools](/job-tools) — Job matching and evaluation
+- [Architecture](/architecture) — Technical details

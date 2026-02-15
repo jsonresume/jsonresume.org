@@ -1,0 +1,68 @@
+# Resume Explorer
+
+Browse and search public JSON Resumes from the registry community. Discover how others structure their resumes and find professionals with similar backgrounds.
+
+## How to Access
+
+- **URL**: `registry.jsonresume.org/explore`
+- **Auth**: Public (no login required)
+
+## Features
+
+### Resume Search
+
+Search across all public resumes by keyword. The search matches against:
+
+- Names and job titles
+- Skills and technologies
+- Company names
+- Locations
+
+### Browse Resumes
+
+View paginated results of public resumes with:
+
+- **Name** and current title
+- **Summary** preview
+- **Profile links**
+- **Click through** to view any resume in full
+
+### Pagination
+
+Results are paginated with URL-based navigation:
+
+- `?page=1` — First page
+- `?page=2` — Second page
+- `?search=engineer` — Filtered results
+
+### Server-Side Rendering
+
+The explorer page uses server-side rendering for fast initial loads and SEO-friendly URLs. Results are fetched at request time.
+
+## Usage Guide
+
+1. Navigate to `registry.jsonresume.org/explore`
+2. Browse the latest public resumes
+3. Use the search bar to filter by keyword
+4. Click on any resume to view it in full
+5. Use pagination to browse through all results
+
+## URL Parameters
+
+| Parameter | Description             | Example         |
+| --------- | ----------------------- | --------------- |
+| `page`    | Page number (1-indexed) | `?page=3`       |
+| `search`  | Search keyword          | `?search=react` |
+
+## Tips & Best Practices
+
+- Use the explorer to see examples of well-structured resumes
+- Search for your industry or technology stack to find peer resumes
+- View other resumes with different [themes](/themes) to find your preferred style
+- Great for inspiration when building your own JSON Resume
+
+## Related
+
+- [Similarity Graph](/resume-analytics/similarity) — Network visualization of related positions
+- [Getting Started](/getting-started) — Create your own JSON Resume
+- [Themes](/themes) — View resumes with different themes

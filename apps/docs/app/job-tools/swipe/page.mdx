@@ -1,0 +1,60 @@
+# Job Swipe
+
+A Tinder-style swiping interface for quickly evaluating matched jobs. Swipe right on jobs you're interested in, left on ones you're not.
+
+## How to Access
+
+- **URL**: `registry.jsonresume.org/pathways/swipe`
+- **Auth**: GitHub OAuth login required (feedback is saved)
+
+## Features
+
+### Swipe Interface
+
+Jobs are presented one at a time as cards. Each card shows:
+
+- Company name and job title
+- Location and remote status
+- Match score
+- Key details from the job description
+
+### Swipe Actions
+
+| Action          | Meaning                                        |
+| --------------- | ---------------------------------------------- |
+| **Swipe right** | Interested — the job is saved to your feedback |
+| **Swipe left**  | Not interested — the job is dismissed          |
+
+### Feedback Persistence
+
+Your swipe decisions are saved and used to:
+
+- Filter already-reviewed jobs from other views
+- Inform the [Career Pathways](/ai-features/pathways) copilot about your preferences
+- Improve future job recommendations
+
+### Integration with Pathways
+
+Swipe mode is part of the Pathways ecosystem. The AI copilot can reference your swipe history when providing career advice or job recommendations.
+
+## Usage Guide
+
+1. Navigate to `registry.jsonresume.org/pathways/swipe`
+2. Log in with GitHub if prompted
+3. Review the job card presented to you
+4. Swipe right if interested, left to dismiss
+5. Continue through the deck of matched jobs
+6. Your feedback is saved automatically
+
+## Tips & Best Practices
+
+- Use swipe mode for a quick first pass through new jobs
+- Follow up on right-swiped jobs using [Job Decisions](/job-tools/decisions) for deeper analysis
+- Your swipe history feeds into the AI copilot's understanding of your preferences
+- Combine with the [Career Pathways](/ai-features/pathways) chat to discuss specific jobs
+
+## Related
+
+- [Job Matching](/job-tools/matching) — Full list view of matched jobs
+- [Job Decisions](/job-tools/decisions) — Detailed AI evaluation
+- [Career Pathways](/ai-features/pathways) — AI copilot that uses your swipe feedback
