@@ -13,6 +13,10 @@ vi.mock('../../../utils/vectorUtils', () => ({
     if (a[0] === b[0]) return 0.8;
     return 0.5;
   }),
+  getAverageEmbedding: vi.fn((embeddings) => {
+    // Simple mock: return the first embedding as average
+    return embeddings[0];
+  }),
 }));
 
 vi.mock('../constants/graphConfig', () => ({
@@ -157,10 +161,12 @@ describe('createLinks', () => {
       {
         id: 'Developer',
         embeddings: [[1, 0, 0]],
+        avgEmbedding: [1, 0, 0],
       },
       {
         id: 'Engineer',
         embeddings: [[1, 0, 0]], // Same first value, high similarity
+        avgEmbedding: [1, 0, 0],
       },
     ];
 
@@ -177,10 +183,12 @@ describe('createLinks', () => {
       {
         id: 'Developer',
         embeddings: [[1, 0, 0]],
+        avgEmbedding: [1, 0, 0],
       },
       {
         id: 'Designer',
         embeddings: [[2, 0, 0]], // Different first value, low similarity
+        avgEmbedding: [2, 0, 0],
       },
     ];
 
@@ -198,6 +206,7 @@ describe('createLinks', () => {
           [1, 0, 0],
           [1, 0, 0],
         ],
+        avgEmbedding: [1, 0, 0],
       },
       {
         id: 'Engineer',
@@ -205,19 +214,20 @@ describe('createLinks', () => {
           [1, 0, 0],
           [1, 0, 0],
         ],
+        avgEmbedding: [1, 0, 0],
       },
     ];
 
     const result = createLinks(nodes);
 
-    // All comparisons return 0.8, average is 0.8
+    // Using pre-computed average embeddings
     expect(result[0].value).toBe(0.8);
   });
 
   it('handles single embedding per node', () => {
     const nodes = [
-      { id: 'Dev1', embeddings: [[1, 0, 0]] },
-      { id: 'Dev2', embeddings: [[1, 0, 0]] },
+      { id: 'Dev1', embeddings: [[1, 0, 0]], avgEmbedding: [1, 0, 0] },
+      { id: 'Dev2', embeddings: [[1, 0, 0]], avgEmbedding: [1, 0, 0] },
     ];
 
     const result = createLinks(nodes);
@@ -227,7 +237,9 @@ describe('createLinks', () => {
   });
 
   it('creates no links for single node', () => {
-    const nodes = [{ id: 'Developer', embeddings: [[0.1, 0.2]] }];
+    const nodes = [
+      { id: 'Developer', embeddings: [[0.1, 0.2]], avgEmbedding: [0.1, 0.2] },
+    ];
 
     const result = createLinks(nodes);
 
@@ -236,9 +248,9 @@ describe('createLinks', () => {
 
   it('creates links for all similar node pairs', () => {
     const nodes = [
-      { id: 'Dev1', embeddings: [[1, 0]] },
-      { id: 'Dev2', embeddings: [[1, 0]] },
-      { id: 'Dev3', embeddings: [[1, 0]] },
+      { id: 'Dev1', embeddings: [[1, 0]], avgEmbedding: [1, 0] },
+      { id: 'Dev2', embeddings: [[1, 0]], avgEmbedding: [1, 0] },
+      { id: 'Dev3', embeddings: [[1, 0]], avgEmbedding: [1, 0] },
     ];
 
     const result = createLinks(nodes);
@@ -249,8 +261,8 @@ describe('createLinks', () => {
 
   it('does not create duplicate links', () => {
     const nodes = [
-      { id: 'Dev1', embeddings: [[1, 0]] },
-      { id: 'Dev2', embeddings: [[1, 0]] },
+      { id: 'Dev1', embeddings: [[1, 0]], avgEmbedding: [1, 0] },
+      { id: 'Dev2', embeddings: [[1, 0]], avgEmbedding: [1, 0] },
     ];
 
     const result = createLinks(nodes);
