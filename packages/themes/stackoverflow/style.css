@@ -544,8 +544,7 @@ section .location {
 
 .level.master .bar::after,
 .level.senior .bar::after,
-.level.native .bar::after,
-.level.native.speaker .bar::after {
+.level.native .bar::after {
   background: #59c596;
   width: 10em;
 }
