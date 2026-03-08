@@ -14,6 +14,7 @@ export const EXTENSIONS = new Set([
   'yaml',
   'rendercv',
   'agent',
+  'pdf',
 ]);
 
 export const validateExtension = (extension) => {

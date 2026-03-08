@@ -41,6 +41,7 @@ describe('validateExtension', () => {
       'yaml',
       'rendercv',
       'agent',
+      'pdf',
     ];
 
     validExtensions.forEach((ext) => {
@@ -50,7 +51,7 @@ describe('validateExtension', () => {
   });
 
   it('rejects invalid extensions', () => {
-    const result = validateExtension('pdf');
+    const result = validateExtension('docx');
     expect(result.error).toBeDefined();
     expect(result.error.code).toBe('INVALID_EXTENSION');
   });

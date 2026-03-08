@@ -59,8 +59,11 @@ export default async function handler(req, res) {
 
   trackView(usernameBase);
 
-  if (content instanceof Buffer || content instanceof ReadableStream) {
-    // handles images/binary
+  if (content instanceof Buffer) {
+    // handles binary content (e.g. PDF)
+    return res.status(200).send(content);
+  } else if (content instanceof ReadableStream) {
+    // handles streams (e.g. images)
     content.pipe(res);
   } else {
     return res

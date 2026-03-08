@@ -6,6 +6,7 @@ import json from './json';
 import yaml from './yaml';
 import rendercv from './rendercv';
 import agent from './agent';
+import pdf from './pdf';
 
 const formatters = {
   agent,
@@ -17,6 +18,7 @@ const formatters = {
   html: template,
   yaml,
   rendercv,
+  pdf,
 };
 
 export default formatters;
