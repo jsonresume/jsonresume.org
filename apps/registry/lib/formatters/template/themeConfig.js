@@ -43,6 +43,7 @@ import * as coastalcreative from 'jsonresume-theme-coastal-creative'; // NEW
 import * as investorbrief from 'jsonresume-theme-investor-brief'; // NEW
 import * as claude from 'jsonresume-theme-claude'; // NEW
 import * as communitygarden from 'jsonresume-theme-community-garden'; // NEW
+import * as creativeconfidence from 'jsonresume-theme-creative-confidence'; // NEW
 
 // Import theme metadata from shared package
 export {
@@ -109,4 +110,5 @@ export const THEMES = {
   'investor-brief': investorbrief, // NEW
   claude: claude, // NEW
   'community-garden': communitygarden, // NEW
+  'creative-confidence': creativeconfidence, // NEW
 };

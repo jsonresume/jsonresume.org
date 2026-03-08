@@ -406,6 +406,9 @@ importers:
       jsonresume-theme-community-garden:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-community-garden
+      jsonresume-theme-creative-confidence:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-creative-confidence
       jsonresume-theme-data-driven:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-data-driven
@@ -1004,6 +1007,8 @@ importers:
       vite:
         specifier: ^5.4.21
         version: 5.4.21(@types/node@18.19.130)
+
+  packages/themes/jsonresume-theme-creative-confidence: {}
 
   packages/themes/jsonresume-theme-creative-studio:
     dependencies:

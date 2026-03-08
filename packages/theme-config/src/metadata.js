@@ -528,6 +528,21 @@ export const THEME_METADATA = {
     author: 'Roland Sharp',
     tags: ['modern', 'clean', 'dark-mode', 'ai', 'gradient', 'responsive'],
   },
+  'creative-confidence': {
+    name: 'Creative Confidence',
+    description:
+      'Professional two-column resume theme with dark blue header, profile photo support, and print-optimized layout. Features a clean right sidebar for contact, education, certifications, and skills.',
+    author: 'Scott Lynde',
+    tags: [
+      'professional',
+      'two-column',
+      'print',
+      'photo',
+      'clean',
+      'sidebar',
+      'ats',
+    ],
+  },
   'community-garden': {
     name: 'Community Garden',
     description:

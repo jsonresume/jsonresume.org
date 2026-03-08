@@ -1,0 +1,14 @@
+{
+  "private": true,
+  "name": "jsonresume-theme-creative-confidence",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Creative Confidence JSON Resume theme - two-column layout with dark blue header, profile photo support, and print-optimized styling",
+  "author": "Scott Lynde",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/scottlynde/jsonresume-theme-creative-confidence"
+  },
+  "license": "MIT"
+}
