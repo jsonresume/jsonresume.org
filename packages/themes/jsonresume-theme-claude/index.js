@@ -169,7 +169,6 @@ export function render(resume) {
       font-size: 0.9375rem;
       color: var(--color-text-secondary);
       line-height: 1.8;
-      max-width: 65ch;
     }
 
     .summary p { margin-bottom: var(--spacing-sm); }
