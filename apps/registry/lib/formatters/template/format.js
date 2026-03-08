@@ -36,21 +36,22 @@ function normalizeDates(resume) {
 }
 
 /**
- * Themes loaded via require() (e.g. macchiato, pumpkin) share a single
- * global Handlebars instance and register helpers at load time.
- * When multiple themes define the same helper name (e.g. "formatDate"),
- * the last-loaded theme's helper wins, breaking all other themes.
+ * Multiple external themes (macchiato, pumpkin, etc.) share a single
+ * global Handlebars instance via require('handlebars'). They each
+ * register helpers like "formatDate" at load time, and the last one
+ * loaded wins — breaking all other themes that define the same helper.
  *
- * This map lists themes that need fresh require() on each render so their
- * Handlebars helpers are correctly registered.
+ * Fix: before rendering a Handlebars-based theme, evict handlebars and
+ * the theme from the native Node.js require cache so the theme's
+ * registerHelper() calls run fresh on a clean Handlebars instance.
  */
-const HANDLEBARS_THEMES = new Set([
-  'macchiato',
-  'pumpkin',
-  'lucide',
-  'minyma',
-  'paper-plus-plus',
-]);
+
+/* eslint-disable no-undef */
+const nodeRequire =
+  typeof __non_webpack_require__ !== 'undefined'
+    ? __non_webpack_require__
+    : require;
+/* eslint-enable no-undef */
 
 const THEME_PACKAGES = {
   macchiato: 'jsonresume-theme-macchiato',
@@ -60,38 +61,29 @@ const THEME_PACKAGES = {
   'paper-plus-plus': 'jsonresume-theme-paper-plus-plus',
 };
 
-/**
- * Freshly loads a Handlebars-based theme by clearing the require cache
- * for handlebars and the theme module, ensuring helpers don't collide.
- */
 function freshRequireTheme(themeName) {
   const packageName = THEME_PACKAGES[themeName];
   if (!packageName) return null;
 
-  // Clear cached handlebars so helpers are re-registered cleanly
-  const hbsPath = require.resolve('handlebars');
-  delete require.cache[hbsPath];
-
-  // Clear the theme module so it re-runs its registerHelper calls
   try {
-    const themePath = require.resolve(packageName);
-    delete require.cache[themePath];
+    const hbsPath = nodeRequire.resolve('handlebars');
+    const themePath = nodeRequire.resolve(packageName);
+
+    delete nodeRequire.cache[hbsPath];
+    delete nodeRequire.cache[themePath];
+
+    return nodeRequire(packageName);
   } catch {
     return null;
   }
-
-  return require(packageName);
 }
 
 export const format = async function (resume, options) {
   const theme = options.theme ?? 'elegant';
 
-  let themeRenderer;
-  if (HANDLEBARS_THEMES.has(theme)) {
-    themeRenderer = freshRequireTheme(theme);
-  } else {
-    themeRenderer = getTheme(theme);
-  }
+  const themeRenderer = THEME_PACKAGES[theme]
+    ? freshRequireTheme(theme)
+    : getTheme(theme);
 
   if (!themeRenderer) {
     throw new Error('theme-missing');
