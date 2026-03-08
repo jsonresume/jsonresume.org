@@ -5,6 +5,7 @@ import {
   SectionTitle,
   ListItem,
   DateRange,
+  formatDateRange,
   ContactInfo,
   Link,
   safeUrl,
@@ -274,6 +275,14 @@ const Awarder = styled.div`
   font-weight: 500;
 `;
 
+const SingleDate = styled.span`
+  font-size: 0.8125rem;
+  color: #6b7280;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+`;
+
 const LanguageList = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -483,7 +492,11 @@ function Resume({ resume }) {
             <AwardItem key={index}>
               {award.title && <AwardTitle>{award.title}</AwardTitle>}
               {award.awarder && <Awarder>{award.awarder}</Awarder>}
-              {award.date && <StyledDateRange startDate={award.date} />}
+              {award.date && (
+                <SingleDate>
+                  {formatDateRange({ startDate: award.date })}
+                </SingleDate>
+              )}
               {award.summary && <Description>{award.summary}</Description>}
             </AwardItem>
           ))}
@@ -499,7 +512,9 @@ function Resume({ resume }) {
               {pub.name && <AwardTitle>{pub.name}</AwardTitle>}
               {pub.publisher && <Awarder>{pub.publisher}</Awarder>}
               {pub.releaseDate && (
-                <StyledDateRange startDate={pub.releaseDate} />
+                <SingleDate>
+                  {formatDateRange({ startDate: pub.releaseDate })}
+                </SingleDate>
               )}
               {pub.summary && <Description>{pub.summary}</Description>}
               {pub.url && (

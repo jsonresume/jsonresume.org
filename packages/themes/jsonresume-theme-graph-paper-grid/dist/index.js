@@ -6276,6 +6276,13 @@ const Awarder = dt.div`
   color: #4b5563;
   font-weight: 500;
 `;
+const SingleDate = dt.span`
+  font-size: 0.8125rem;
+  color: #6b7280;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+`;
 const LanguageList = dt.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -6426,7 +6433,7 @@ function Resume({ resume }) {
       awards.map((award, index) => /* @__PURE__ */ jsxs(AwardItem, { children: [
         award.title && /* @__PURE__ */ jsx(AwardTitle, { children: award.title }),
         award.awarder && /* @__PURE__ */ jsx(Awarder, { children: award.awarder }),
-        award.date && /* @__PURE__ */ jsx(StyledDateRange, { startDate: award.date }),
+        award.date && /* @__PURE__ */ jsx(SingleDate, { children: formatDateRange({ startDate: award.date }) }),
         award.summary && /* @__PURE__ */ jsx(Description, { children: award.summary })
       ] }, index))
     ] }),
@@ -6435,7 +6442,7 @@ function Resume({ resume }) {
       publications.map((pub, index) => /* @__PURE__ */ jsxs(AwardItem, { children: [
         pub.name && /* @__PURE__ */ jsx(AwardTitle, { children: pub.name }),
         pub.publisher && /* @__PURE__ */ jsx(Awarder, { children: pub.publisher }),
-        pub.releaseDate && /* @__PURE__ */ jsx(StyledDateRange, { startDate: pub.releaseDate }),
+        pub.releaseDate && /* @__PURE__ */ jsx(SingleDate, { children: formatDateRange({ startDate: pub.releaseDate }) }),
         pub.summary && /* @__PURE__ */ jsx(Description, { children: pub.summary }),
         pub.url && /* @__PURE__ */ jsx(ProjectUrl, { children: /* @__PURE__ */ jsx(
           Link,
