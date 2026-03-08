@@ -7,10 +7,25 @@ function renderMarkdown(text) {
   return md.render(text);
 }
 
+function safeUrl(value = '') {
+  try {
+    const url = new URL(value);
+    return ['http:', 'https:', 'mailto:'].includes(url.protocol) ? value : '#';
+  } catch {
+    return '#';
+  }
+}
+
 function formatDate(dateStr) {
   if (!dateStr) return 'Present';
+  const match = /^(\d{4})-(\d{2})(?:-\d{2})?$/.exec(dateStr);
+  if (match) {
+    return new Date(Date.UTC(Number(match[1]), Number(match[2]) - 1, 1))
+      .toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' });
+  }
   const d = new Date(dateStr);
-  return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+  return Number.isNaN(d.getTime()) ? '' :
+    d.toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' });
 }
 
 function dateRange(start, end) {
@@ -380,9 +395,9 @@ export function render(resume) {
       <div class="contact-row">
         ${location.city ? `<span class="contact-item">${icon('location')}${[location.city, location.region, location.countryCode].filter(Boolean).join(', ')}</span>` : ''}
         ${email ? `<span class="contact-item">${icon('email')}<a href="mailto:${email}">${email}</a></span>` : ''}
-        ${website ? `<span class="contact-item">${icon('link')}<a href="${website}">${website.replace(/^https?:\/\//, '')}</a></span>` : ''}
-        ${githubProfile ? `<span class="contact-item">${icon('github')}<a href="${githubProfile.url}">${githubProfile.username}</a></span>` : ''}
-        ${otherProfiles.map(p => `<span class="contact-item">${icon('link')}<a href="${p.url}">${p.network}</a></span>`).join('')}
+        ${website ? `<span class="contact-item">${icon('link')}<a href="${safeUrl(website)}">${website.replace(/^https?:\/\//, '')}</a></span>` : ''}
+        ${githubProfile ? `<span class="contact-item">${icon('github')}<a href="${safeUrl(githubProfile.url)}">${githubProfile.username}</a></span>` : ''}
+        ${otherProfiles.map(p => `<span class="contact-item">${icon('link')}<a href="${safeUrl(p.url)}">${p.network}</a></span>`).join('')}
       </div>
     </header>
 
@@ -397,7 +412,7 @@ export function render(resume) {
           <span class="entry-title">${job.position || ''}</span>
           <span class="entry-date">${dateRange(job.startDate, job.endDate)}</span>
         </div>
-        <div class="entry-subtitle">${job.website ? `<a href="${job.website}">${job.company || ''}</a>` : job.company || ''}</div>
+        <div class="entry-subtitle">${job.website ? `<a href="${safeUrl(job.website)}">${job.company || ''}</a>` : job.company || ''}</div>
         ${job.summary ? `<div class="entry-body">${renderMarkdown(job.summary)}</div>` : ''}
       </div>`).join('')}
     </section>` : ''}
@@ -422,7 +437,7 @@ export function render(resume) {
       <div class="projects-grid">
         ${projects.map(p => `
         <div class="project-card">
-          <h3>${p.url ? `<a href="${p.url}">${p.name || ''}</a>` : p.name || ''}</h3>
+          <h3>${p.url ? `<a href="${safeUrl(p.url)}">${p.name || ''}</a>` : p.name || ''}</h3>
           ${p.description ? `<p>${p.description}</p>` : ''}
         </div>`).join('')}
       </div>
