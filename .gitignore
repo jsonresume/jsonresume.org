@@ -50,3 +50,4 @@ scripts/.vercel-error-hashes.json
 
 *storybook.log
 storybook-static
+.env*.local

@@ -1,0 +1,67 @@
+name: Sentry Auto-Fix
+description: Production error reported by Sentry for automated fix
+title: "[Sentry] "
+labels: ["auto-fix", "production-error"]
+body:
+  - type: input
+    id: sentry-url
+    attributes:
+      label: Sentry Issue URL
+      description: Link to the Sentry issue
+      placeholder: https://sentry.io/organizations/your-org/issues/12345/
+    validations:
+      required: true
+
+  - type: input
+    id: error-title
+    attributes:
+      label: Error Title
+      description: The error message or exception type
+      placeholder: "TypeError: Cannot read properties of undefined (reading 'slug')"
+    validations:
+      required: true
+
+  - type: textarea
+    id: stack-trace
+    attributes:
+      label: Stack Trace
+      description: The relevant stack trace from Sentry
+      render: text
+    validations:
+      required: true
+
+  - type: input
+    id: affected-route
+    attributes:
+      label: Affected Route
+      description: The route where the error occurs
+      placeholder: /api/tools/[slug]
+    validations:
+      required: false
+
+  - type: input
+    id: release
+    attributes:
+      label: Release / Commit SHA
+      description: The release or commit where this error was introduced
+      placeholder: abc1234
+    validations:
+      required: false
+
+  - type: input
+    id: frequency
+    attributes:
+      label: Frequency
+      description: How often this error occurs
+      placeholder: "42 events in the last 24h"
+    validations:
+      required: false
+
+  - type: input
+    id: affected-users
+    attributes:
+      label: Affected Users
+      description: Number of users affected
+      placeholder: "15 users"
+    validations:
+      required: false

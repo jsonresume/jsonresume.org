@@ -1,0 +1,134 @@
+name: Auto-Fix Production Error
+
+on:
+  issues:
+    types: [labeled]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: 'Issue number to process'
+        required: true
+        type: number
+
+jobs:
+  auto-fix:
+    if: >
+      github.repository_owner == 'jsonresume' &&
+      (github.event.label.name == 'auto-fix' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+      actions: read
+
+    steps:
+      - name: Check for retry loop
+        id: loop-check
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueNumber = context.issue?.number || ${{ inputs.issue_number || 0 }};
+            const events = await github.rest.issues.listEvents({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              per_page: 100
+            });
+
+            const autoFixLabelEvents = events.data.filter(
+              e => e.event === 'labeled' && e.label?.name === 'auto-fix'
+            );
+
+            if (autoFixLabelEvents.length >= 2) {
+              await github.rest.issues.removeLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                name: 'auto-fix'
+              }).catch(() => {});
+
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                labels: ['needs-human-review']
+              });
+
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                body: '## Auto-fix limit reached\n\nThis issue has been through 2+ auto-fix attempts without resolution. Escalating to human review.\n\nPlease investigate manually and remove the `needs-human-review` label when resolved.'
+              });
+
+              core.setOutput('should_continue', 'false');
+              return;
+            }
+
+            core.setOutput('should_continue', 'true');
+
+      - name: Add working label
+        if: steps.loop-check.outputs.should_continue == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueNumber = context.issue?.number || ${{ inputs.issue_number || 0 }};
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              labels: ['claude-working']
+            });
+
+      - name: Build prompt from issue
+        if: steps.loop-check.outputs.should_continue == 'true'
+        id: build-prompt
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueNumber = context.issue?.number || ${{ inputs.issue_number || 0 }};
+            const { data: issue } = await github.rest.issues.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber
+            });
+
+            const prompt = [
+              'Please fix this production error.',
+              '',
+              '## Instructions',
+              '1. Read the pipeline specification at `.claude/pipelines/auto-fix.md`',
+              '2. Follow all steps: parse error, locate source, analyze, fix, validate, create PR',
+              '3. Update labels as you progress (remove `claude-working`, add `fix-submitted` or `needs-human-review`)',
+              '4. Post a summary comment with your findings and the PR link',
+              '',
+              '## Issue Context',
+              `- Issue #${issueNumber}`,
+              `- Author: @${issue.user.login}`,
+              `- Labels: ${issue.labels.map(l => l.name).join(', ')}`,
+              '',
+              '## Issue Body',
+              issue.body,
+              '',
+              'Begin analysis and fix.'
+            ].join('\n');
+
+            core.setOutput('prompt', prompt);
+
+      - name: Checkout repository
+        if: steps.loop-check.outputs.should_continue == 'true'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Run Claude Code
+        if: steps.loop-check.outputs.should_continue == 'true'
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          additional_permissions: |
+            actions: read
+          prompt: ${{ steps.build-prompt.outputs.prompt }}
+          claude_args: '--allowedTools "Edit" "Write" "Bash(gh:*)" "Bash(npm:*)" "Bash(pnpm:*)" "Bash(git:*)" "Bash(npx:*)"'
