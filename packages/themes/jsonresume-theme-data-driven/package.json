@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Data-driven analytical theme with sky blue accent - built with @resume/core",
   "type": "module",
-  "main": "./src/index.jsx",
+  "main": "./dist/index.js",
   "exports": {
     ".": {
       "import": "./src/index.jsx",
-      "default": "./src/index.jsx"
+      "default": "./dist/index.js"
     },
     "./dist": {
       "import": "./dist/index.js",

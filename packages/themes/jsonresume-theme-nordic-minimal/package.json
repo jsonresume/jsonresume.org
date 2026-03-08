@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "description": "Scandinavian restraint, white space worship, quietly confident two-column theme",
-  "main": "./src/index.jsx",
+  "main": "./dist/index.js",
   "scripts": {
     "test": "echo \"No tests specified\"",
     "build": "vite build"
@@ -31,7 +31,7 @@
   "exports": {
     ".": {
       "import": "./src/index.jsx",
-      "default": "./src/index.jsx"
+      "default": "./dist/index.js"
     },
     "./dist": {
       "import": "./dist/index.js",

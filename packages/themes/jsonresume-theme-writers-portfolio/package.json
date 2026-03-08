@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Literary and elegant resume theme for content writers, editors, and communications professionals. Features transitional serif typography, generous spacing, and prose-like readability.",
   "type": "module",
-  "main": "./src/index.jsx",
+  "main": "./dist/index.js",
   "exports": {
     ".": {
       "import": "./src/index.jsx",
-      "default": "./src/index.jsx"
+      "default": "./dist/index.js"
     },
     "./dist": {
       "import": "./dist/index.js",

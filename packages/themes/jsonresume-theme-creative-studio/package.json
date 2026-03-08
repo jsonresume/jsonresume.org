@@ -3,7 +3,7 @@
   "name": "@jsonresume/jsonresume-theme-creative-studio",
   "version": "1.0.1",
   "type": "module",
-  "main": "./src/index.jsx",
+  "main": "./dist/index.js",
   "license": "MIT",
   "description": "Creative Studio theme - artistic yet professional with warm coral accents and rounded typography",
   "devDependencies": {
@@ -30,7 +30,7 @@
   "exports": {
     ".": {
       "import": "./src/index.jsx",
-      "default": "./src/index.jsx"
+      "default": "./dist/index.js"
     },
     "./dist": {
       "import": "./dist/index.js",

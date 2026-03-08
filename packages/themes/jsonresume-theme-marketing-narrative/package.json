@@ -2,7 +2,7 @@
   "name": "jsonresume-theme-marketing-narrative",
   "version": "0.1.0",
   "description": "Marketing professionals - your narrative and campaigns are the focus",
-  "main": "./src/index.jsx",
+  "main": "./dist/index.js",
   "type": "module",
   "license": "MIT",
   "keywords": [
@@ -27,7 +27,7 @@
   "exports": {
     ".": {
       "import": "./src/index.jsx",
-      "default": "./src/index.jsx"
+      "default": "./dist/index.js"
     },
     "./dist": {
       "import": "./dist/index.js",

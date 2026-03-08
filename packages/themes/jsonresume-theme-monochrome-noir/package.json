@@ -2,7 +2,7 @@
   "name": "jsonresume-theme-monochrome-noir",
   "version": "1.0.0",
   "description": "Sharp, modern, ultra-clean theme with bold contrasts and minimal design",
-  "main": "./src/index.jsx",
+  "main": "./dist/index.js",
   "type": "module",
   "keywords": [
     "jsonresume",
@@ -32,7 +32,7 @@
   "exports": {
     ".": {
       "import": "./src/index.jsx",
-      "default": "./src/index.jsx"
+      "default": "./dist/index.js"
     },
     "./dist": {
       "import": "./dist/index.js",

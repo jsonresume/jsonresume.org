@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "description": "Structured European minimalism with asymmetric two-column layout and neutral grotesk typography",
-  "main": "./src/index.jsx",
+  "main": "./dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "vite build"
@@ -29,7 +29,7 @@
   "exports": {
     ".": {
       "import": "./src/index.jsx",
-      "default": "./src/index.jsx"
+      "default": "./dist/index.js"
     },
     "./dist": {
       "import": "./dist/index.js",

@@ -3,7 +3,7 @@
   "name": "jsonresume-theme-tailwind",
   "version": "0.0.0",
   "type": "module",
-  "main": "./src/index.jsx",
+  "main": "./dist/index.js",
   "license": "MIT",
   "devDependencies": {
     "@repo/eslint-config-custom": "workspace:*",
@@ -34,7 +34,7 @@
   "exports": {
     ".": {
       "import": "./src/index.jsx",
-      "default": "./src/index.jsx"
+      "default": "./dist/index.js"
     },
     "./dist": {
       "import": "./dist/index.js",

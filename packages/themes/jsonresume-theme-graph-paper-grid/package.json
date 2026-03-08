@@ -2,7 +2,7 @@
   "name": "jsonresume-theme-graph-paper-grid",
   "version": "1.0.0",
   "description": "Technical design precision with subtle graph paper grid and monospace typography",
-  "main": "./src/index.jsx",
+  "main": "./dist/index.js",
   "type": "module",
   "keywords": [
     "jsonresume",
@@ -31,7 +31,7 @@
   "exports": {
     ".": {
       "import": "./src/index.jsx",
-      "default": "./src/index.jsx"
+      "default": "./dist/index.js"
     },
     "./dist": {
       "import": "./dist/index.js",

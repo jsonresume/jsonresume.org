@@ -3,7 +3,7 @@
   "name": "@jsonresume/jsonresume-theme-tokyo-modernist",
   "version": "1.0.1",
   "type": "module",
-  "main": "./src/index.jsx",
+  "main": "./dist/index.js",
   "license": "MIT",
   "description": "Tokyo Modernist theme - Minimal futurism with geometric precision, built on 8pt grid with Outfit typography and deep magenta accents",
   "keywords": [
@@ -40,7 +40,7 @@
   "exports": {
     ".": {
       "import": "./src/index.jsx",
-      "default": "./src/index.jsx"
+      "default": "./dist/index.js"
     },
     "./dist": {
       "import": "./dist/index.js",

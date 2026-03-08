@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Analytical yet creative theme with Notion-like layout, inline metrics, and clearly labeled Impact areas for product managers",
   "type": "module",
-  "main": "./src/index.jsx",
+  "main": "./dist/index.js",
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
     "react-dom": "^18.0.0 || ^19.0.0"
@@ -18,7 +18,7 @@
   "exports": {
     ".": {
       "import": "./src/index.jsx",
-      "default": "./src/index.jsx"
+      "default": "./dist/index.js"
     },
     "./dist": {
       "import": "./dist/index.js",

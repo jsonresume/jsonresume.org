@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Professional storytelling resume theme with warm rose red tones, compelling narratives, and strong visual hierarchy for marketing and communications professionals",
   "type": "module",
-  "main": "./src/index.jsx",
+  "main": "./dist/index.js",
   "exports": {
     ".": {
       "import": "./src/index.jsx",
-      "default": "./src/index.jsx"
+      "default": "./dist/index.js"
     },
     "./dist": {
       "import": "./dist/index.js",

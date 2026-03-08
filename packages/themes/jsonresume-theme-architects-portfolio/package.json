@@ -2,7 +2,7 @@
   "name": "jsonresume-theme-architects-portfolio",
   "version": "1.0.0",
   "description": "Structural elegance with horizontal keylines and geometric precision like a drafting sheet",
-  "main": "./src/index.jsx",
+  "main": "./dist/index.js",
   "type": "module",
   "license": "MIT",
   "keywords": [
@@ -30,7 +30,7 @@
   "exports": {
     ".": {
       "import": "./src/index.jsx",
-      "default": "./src/index.jsx"
+      "default": "./dist/index.js"
     },
     "./dist": {
       "import": "./dist/index.js",
