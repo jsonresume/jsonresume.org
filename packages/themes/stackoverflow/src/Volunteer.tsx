@@ -1,4 +1,5 @@
 import { Volunteer as VolunteerInterface } from './types';
+import { MY } from './dateHelpers';
 import { withTranslation, WithTranslation } from 'react-i18next';
 interface VolunteerProps {
   volunteer: VolunteerInterface[];
@@ -27,14 +28,12 @@ export const Volunteer = withTranslation()(
                     <div className="date">
                       {item.startDate && (
                         <span className="startDate">
-                          {new Date(item.startDate).toLocaleDateString()}
+                          {MY(item.startDate)}
                           {'\u00A0'}
                         </span>
                       )}
                       {item.endDate ? (
-                        <span className="endDate">
-                          - {new Date(item.endDate).toLocaleDateString()}
-                        </span>
+                        <span className="endDate">- {MY(item.endDate)}</span>
                       ) : (
                         <span className="endDate"> - Current</span>
                       )}

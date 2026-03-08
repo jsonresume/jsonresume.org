@@ -1,4 +1,4 @@
-export default `export default \`<!doctype html>
+export default `<!doctype html>
 <html>
 	<head>
 	

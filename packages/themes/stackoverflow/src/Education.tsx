@@ -1,13 +1,10 @@
 import { EducationProps } from './types';
 import { withTranslation, WithTranslation } from 'react-i18next';
+import { Y } from './dateHelpers';
 
 export const Education = withTranslation()(
   ({ education, t }: { education: EducationProps[] } & WithTranslation) => {
     if (!education.length) return null;
-
-    const formatDate = (date: string) => {
-      return new Date(date).getFullYear();
-    };
 
     return (
       <section className="section">
@@ -24,15 +21,10 @@ export const Education = withTranslation()(
               <header className="clear">
                 <div className="date">
                   {edu.startDate && (
-                    <span className="startDate">
-                      {formatDate(edu.startDate)}
-                    </span>
+                    <span className="startDate">{Y(edu.startDate)}</span>
                   )}
                   {edu.endDate ? (
-                    <span className="endDate">
-                      {' '}
-                      - {formatDate(edu.endDate)}
-                    </span>
+                    <span className="endDate"> - {Y(edu.endDate)}</span>
                   ) : (
                     <span className="endDate"> - Current</span>
                   )}
