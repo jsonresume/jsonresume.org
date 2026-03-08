@@ -8,6 +8,7 @@ on:
       - 'packages/**'
       - 'apps/**'
       - '!**/*.md'
+  workflow_dispatch:
 
 jobs:
   update-docs:
