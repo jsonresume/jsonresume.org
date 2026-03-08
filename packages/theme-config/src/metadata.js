@@ -521,6 +521,13 @@ export const THEME_METADATA = {
       'vc',
     ],
   },
+  claude: {
+    name: 'Claude',
+    description:
+      'Clean, modern theme with gradient accent header, dark mode support, and inline SVG icons. Designed and built entirely by Claude Code.',
+    author: 'Roland Sharp',
+    tags: ['modern', 'clean', 'dark-mode', 'ai', 'gradient', 'responsive'],
+  },
   'community-garden': {
     name: 'Community Garden',
     description:

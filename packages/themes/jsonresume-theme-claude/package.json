@@ -1,0 +1,17 @@
+{
+  "private": true,
+  "name": "jsonresume-theme-claude",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "A JSON Resume theme designed and built entirely by Claude Code in the terminal",
+  "author": "Roland Sharp <rolandnsharp@gmail.com>",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rolandnsharp/jsonresume-theme-claude"
+  },
+  "dependencies": {
+    "markdown-it": "^14.1.1"
+  },
+  "license": "MIT"
+}
