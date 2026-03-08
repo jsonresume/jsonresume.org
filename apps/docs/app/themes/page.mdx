@@ -43,31 +43,31 @@ JSON Resume currently supports **50+ themes** in the registry. Here are some pop
 **Standard** - The official reference theme, clean and professional
 
 ```
-https://jsonresume.org/yourusername?theme=standard
+https://registry.jsonresume.org/yourusername?theme=standard
 ```
 
 **Professional** - Modern and elegant design with great typography
 
 ```
-https://jsonresume.org/yourusername?theme=professional
+https://registry.jsonresume.org/yourusername?theme=professional
 ```
 
 **Spartacus** - Bold and impactful layout with strong visual hierarchy
 
 ```
-https://jsonresume.org/yourusername?theme=spartacus
+https://registry.jsonresume.org/yourusername?theme=spartacus
 ```
 
 **Elegant** - Minimalist design focused on content and readability
 
 ```
-https://jsonresume.org/yourusername?theme=elegant
+https://registry.jsonresume.org/yourusername?theme=elegant
 ```
 
 **Flat** - Contemporary flat design with clean lines
 
 ```
-https://jsonresume.org/yourusername?theme=flat
+https://registry.jsonresume.org/yourusername?theme=flat
 ```
 
 ### Complete Theme List
@@ -159,14 +159,15 @@ https://registry.jsonresume.org/yourusername?theme=THEME_NAME
 All themes are pre-installed on the registry. Just use the theme parameter:
 
 ```
-https://jsonresume.org/yourusername?theme=professional
+https://registry.jsonresume.org/yourusername?theme=professional
 ```
 
 Export to different formats:
 
 ```
-https://jsonresume.org/yourusername.pdf?theme=professional
-https://jsonresume.org/yourusername.html?theme=professional
+https://registry.jsonresume.org/yourusername.json?theme=professional
+https://registry.jsonresume.org/yourusername.yaml?theme=professional
+https://registry.jsonresume.org/yourusername.html?theme=professional
 ```
 
 ### Using the CLI
@@ -211,13 +212,10 @@ Add the `?theme=` query parameter:
 
 ```
 # Default theme
-https://jsonresume.org/thomasdavis
+https://registry.jsonresume.org/thomasdavis
 
 # With specific theme
-https://jsonresume.org/thomasdavis?theme=spartacus
-
-# PDF export with theme
-https://jsonresume.org/thomasdavis.pdf?theme=elegant
+https://registry.jsonresume.org/thomasdavis?theme=spartacus
 ```
 
 ### With the CLI
@@ -501,7 +499,7 @@ export function render(resume) {
 Test with different screen sizes:
 
 ```
-https://jsonresume.org/yourusername?theme=professional
+https://registry.jsonresume.org/yourusername?theme=professional
 ```
 
 Resize your browser window or use responsive design mode.
@@ -521,9 +519,9 @@ Resize your browser window or use responsive design mode.
 Open multiple tabs with different themes:
 
 ```
-Tab 1: https://jsonresume.org/yourusername?theme=professional
-Tab 2: https://jsonresume.org/yourusername?theme=spartacus
-Tab 3: https://jsonresume.org/yourusername?theme=elegant
+Tab 1: https://registry.jsonresume.org/yourusername?theme=professional
+Tab 2: https://registry.jsonresume.org/yourusername?theme=spartacus
+Tab 3: https://registry.jsonresume.org/yourusername?theme=elegant
 ```
 
 ### CLI Side-by-Side
@@ -669,14 +667,14 @@ export function render(resume) {
 
 ## What is the default theme?
 
-The **standard** theme is the default theme used when no theme is specified:
+The **professional** theme is the default theme used when no theme is specified:
 
 ```
-https://jsonresume.org/yourusername
-# Uses standard theme by default
+https://registry.jsonresume.org/yourusername
+# Uses professional theme by default
 ```
 
-**Standard theme** is:
+**professional theme** is:
 
 - The official reference implementation
 - Clean and professional
@@ -687,7 +685,7 @@ https://jsonresume.org/yourusername
 To explicitly use it:
 
 ```
-https://jsonresume.org/yourusername?theme=standard
+https://registry.jsonresume.org/yourusername?theme=professional
 ```
 
 ## Resources

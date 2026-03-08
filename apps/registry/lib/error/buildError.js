@@ -22,7 +22,7 @@ export const ERROR_CODE_MESSAGES = Object.freeze({
   UNKNOWN_TEMPLATE_ERROR:
     'Cannot format resume, the theme you are using has encountered an error. You will have to get in contact with the theme developer yourself or you may be missing fields that the template requires.',
   INVALID_EXTENSION:
-    'We only support the following extensions: json, html, yaml, tex, txt, qr, rendercv, agent',
+    'We only support the following extensions: json, html, yaml, tex, txt, qr, rendercv, agent, template',
   UNKNOWN_FORMATTER:
     'This is a valid extension but we do not have a formatter for it. Please visit github issues.',
   RESUME_NOT_VALID_JSON:
