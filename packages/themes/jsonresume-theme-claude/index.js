@@ -1,10 +1,17 @@
-import markdownIt from 'markdown-it';
-
-const md = markdownIt({ html: false, breaks: true, linkify: false });
-
 function renderMarkdown(text) {
   if (!text) return '';
-  return md.render(text);
+  const escaped = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+  const rendered = escaped
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2">$1</a>');
+  return rendered
+    .split(/\n\n+/)
+    .map((p) => `<p>${p.replace(/\n/g, '<br>')}</p>`)
+    .join('');
 }
 
 function safeUrl(value = '') {
