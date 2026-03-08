@@ -1,7 +1,7 @@
 name: Sentry Auto-Fix
 description: Production error reported by Sentry for automated fix
-title: "[Sentry] "
-labels: ["auto-fix", "production-error"]
+title: '[Sentry] '
+labels: ['auto-fix', 'production-error']
 body:
   - type: input
     id: sentry-url
@@ -53,7 +53,7 @@ body:
     attributes:
       label: Frequency
       description: How often this error occurs
-      placeholder: "42 events in the last 24h"
+      placeholder: '42 events in the last 24h'
     validations:
       required: false
 
@@ -62,6 +62,6 @@ body:
     attributes:
       label: Affected Users
       description: Number of users affected
-      placeholder: "15 users"
+      placeholder: '15 users'
     validations:
       required: false

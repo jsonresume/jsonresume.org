@@ -61,7 +61,7 @@ export async function GET(request: Request) {
         const avatarUrl = userData.user.user_metadata.avatar_url;
 
         try {
-          await notifyUserSignup(username, 'github', avatarUrl);
+          await notifyUserSignup(username, { method: 'github', avatarUrl });
           logger.debug(
             { username },
             'Discord notification sent for user signup'

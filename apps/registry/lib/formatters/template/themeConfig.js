@@ -107,6 +107,6 @@ export const THEMES = {
   'urban-techno': urbantechno, // NEW
   'coastal-creative': coastalcreative, // NEW
   'investor-brief': investorbrief, // NEW
-  'claude': claude, // NEW
+  claude: claude, // NEW
   'community-garden': communitygarden, // NEW
 };

@@ -1,7 +1,9 @@
 {
-  "*.{js,jsx,ts,tsx}": [
+  "apps/**/*.{js,jsx,ts,tsx}": [
     "eslint --fix --cache --cache-location node_modules/.cache/.eslintcache",
     "prettier --write"
   ],
+  "packages/**/*.{js,jsx,ts,tsx}": "prettier --write",
+  "*.{ts,tsx}": "bash -c 'pnpm turbo typecheck'",
   "*": "prettier --write --ignore-unknown"
 }

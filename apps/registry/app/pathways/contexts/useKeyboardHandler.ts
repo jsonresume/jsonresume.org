@@ -100,7 +100,7 @@ export function useKeyboardHandler({
         case '?':
           if (!isInput) {
             event.preventDefault();
-            setIsHelpOpen((prev: boolean) => !prev);
+            setIsHelpOpen(!isHelpOpen);
           }
           break;
       }

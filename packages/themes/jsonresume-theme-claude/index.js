@@ -20,12 +20,22 @@ function formatDate(dateStr) {
   if (!dateStr) return 'Present';
   const match = /^(\d{4})-(\d{2})(?:-\d{2})?$/.exec(dateStr);
   if (match) {
-    return new Date(Date.UTC(Number(match[1]), Number(match[2]) - 1, 1))
-      .toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' });
+    return new Date(
+      Date.UTC(Number(match[1]), Number(match[2]) - 1, 1)
+    ).toLocaleDateString('en-US', {
+      month: 'short',
+      year: 'numeric',
+      timeZone: 'UTC',
+    });
   }
   const d = new Date(dateStr);
-  return Number.isNaN(d.getTime()) ? '' :
-    d.toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' });
+  return Number.isNaN(d.getTime())
+    ? ''
+    : d.toLocaleDateString('en-US', {
+        month: 'short',
+        year: 'numeric',
+        timeZone: 'UTC',
+      });
 }
 
 function dateRange(start, end) {
@@ -44,11 +54,31 @@ function icon(name) {
 }
 
 export function render(resume) {
-  const { basics = {}, work = [], education = [], skills = [], projects = [], languages = [], references = [] } = resume;
-  const { name, label, email, summary, location = {}, website, profiles = [] } = basics;
+  const {
+    basics = {},
+    work = [],
+    education = [],
+    skills = [],
+    projects = [],
+    languages = [],
+    references = [],
+  } = resume;
+  const {
+    name,
+    label,
+    email,
+    summary,
+    location = {},
+    website,
+    profiles = [],
+  } = basics;
 
-  const githubProfile = profiles.find(p => p.network?.toLowerCase() === 'github');
-  const otherProfiles = profiles.filter(p => p.network?.toLowerCase() !== 'github');
+  const githubProfile = profiles.find(
+    (p) => p.network?.toLowerCase() === 'github'
+  );
+  const otherProfiles = profiles.filter(
+    (p) => p.network?.toLowerCase() !== 'github'
+  );
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -393,82 +423,185 @@ export function render(resume) {
       <h1>${name || ''}</h1>
       ${label ? `<div class="label">${label}</div>` : ''}
       <div class="contact-row">
-        ${location.city ? `<span class="contact-item">${icon('location')}${[location.city, location.region, location.countryCode].filter(Boolean).join(', ')}</span>` : ''}
-        ${email ? `<span class="contact-item">${icon('email')}<a href="mailto:${email}">${email}</a></span>` : ''}
-        ${website ? `<span class="contact-item">${icon('link')}<a href="${safeUrl(website)}">${website.replace(/^https?:\/\//, '')}</a></span>` : ''}
-        ${githubProfile ? `<span class="contact-item">${icon('github')}<a href="${safeUrl(githubProfile.url)}">${githubProfile.username}</a></span>` : ''}
-        ${otherProfiles.map(p => `<span class="contact-item">${icon('link')}<a href="${safeUrl(p.url)}">${p.network}</a></span>`).join('')}
+        ${
+          location.city
+            ? `<span class="contact-item">${icon('location')}${[
+                location.city,
+                location.region,
+                location.countryCode,
+              ]
+                .filter(Boolean)
+                .join(', ')}</span>`
+            : ''
+        }
+        ${
+          email
+            ? `<span class="contact-item">${icon(
+                'email'
+              )}<a href="mailto:${email}">${email}</a></span>`
+            : ''
+        }
+        ${
+          website
+            ? `<span class="contact-item">${icon('link')}<a href="${safeUrl(
+                website
+              )}">${website.replace(/^https?:\/\//, '')}</a></span>`
+            : ''
+        }
+        ${
+          githubProfile
+            ? `<span class="contact-item">${icon('github')}<a href="${safeUrl(
+                githubProfile.url
+              )}">${githubProfile.username}</a></span>`
+            : ''
+        }
+        ${otherProfiles
+          .map(
+            (p) =>
+              `<span class="contact-item">${icon('link')}<a href="${safeUrl(
+                p.url
+              )}">${p.network}</a></span>`
+          )
+          .join('')}
       </div>
     </header>
 
     ${summary ? `<div class="summary">${renderMarkdown(summary)}</div>` : ''}
 
-    ${work.length ? `
+    ${
+      work.length
+        ? `
     <section class="section">
       <div class="section-title">Experience</div>
-      ${work.map(job => `
+      ${work
+        .map(
+          (job) => `
       <div class="entry">
         <div class="entry-header">
           <span class="entry-title">${job.position || ''}</span>
-          <span class="entry-date">${dateRange(job.startDate, job.endDate)}</span>
+          <span class="entry-date">${dateRange(
+            job.startDate,
+            job.endDate
+          )}</span>
         </div>
-        <div class="entry-subtitle">${job.website ? `<a href="${safeUrl(job.website)}">${job.company || ''}</a>` : job.company || ''}</div>
-        ${job.summary ? `<div class="entry-body">${renderMarkdown(job.summary)}</div>` : ''}
-      </div>`).join('')}
-    </section>` : ''}
+        <div class="entry-subtitle">${
+          job.website
+            ? `<a href="${safeUrl(job.website)}">${job.company || ''}</a>`
+            : job.company || ''
+        }</div>
+        ${
+          job.summary
+            ? `<div class="entry-body">${renderMarkdown(job.summary)}</div>`
+            : ''
+        }
+      </div>`
+        )
+        .join('')}
+    </section>`
+        : ''
+    }
 
-    ${skills.length ? `
+    ${
+      skills.length
+        ? `
     <section class="section">
       <div class="section-title">Skills</div>
       <div class="skills-grid">
-        ${skills.map(group => `
+        ${skills
+          .map(
+            (group) => `
         <div class="skill-group">
           <h3>${group.name || ''}</h3>
           <div class="skill-tags">
-            ${(group.keywords || []).map(k => `<span class="skill-tag">${k}</span>`).join('')}
+            ${(group.keywords || [])
+              .map((k) => `<span class="skill-tag">${k}</span>`)
+              .join('')}
           </div>
-        </div>`).join('')}
+        </div>`
+          )
+          .join('')}
       </div>
-    </section>` : ''}
+    </section>`
+        : ''
+    }
 
-    ${projects.length ? `
+    ${
+      projects.length
+        ? `
     <section class="section">
       <div class="section-title">Projects</div>
       <div class="projects-grid">
-        ${projects.map(p => `
+        ${projects
+          .map(
+            (p) => `
         <div class="project-card">
-          <h3>${p.url ? `<a href="${safeUrl(p.url)}">${p.name || ''}</a>` : p.name || ''}</h3>
+          <h3>${
+            p.url
+              ? `<a href="${safeUrl(p.url)}">${p.name || ''}</a>`
+              : p.name || ''
+          }</h3>
           ${p.description ? `<p>${p.description}</p>` : ''}
-        </div>`).join('')}
+        </div>`
+          )
+          .join('')}
       </div>
-    </section>` : ''}
+    </section>`
+        : ''
+    }
 
-    ${education.length ? `
+    ${
+      education.length
+        ? `
     <section class="section">
       <div class="section-title">Education</div>
-      ${education.map(edu => `
+      ${education
+        .map(
+          (edu) => `
       <div class="entry">
         <div class="entry-header">
           <span class="entry-title">${edu.institution || ''}</span>
-          <span class="entry-date">${dateRange(edu.startDate, edu.endDate)}</span>
+          <span class="entry-date">${dateRange(
+            edu.startDate,
+            edu.endDate
+          )}</span>
         </div>
-        <div class="entry-subtitle">${[edu.studyType, edu.area].filter(Boolean).join(' of ')}</div>
-        ${edu.courses?.length ? `
+        <div class="entry-subtitle">${[edu.studyType, edu.area]
+          .filter(Boolean)
+          .join(' of ')}</div>
+        ${
+          edu.courses?.length
+            ? `
         <div class="courses">
-          ${edu.courses.map(c => `<span class="skill-tag">${c}</span>`).join('')}
-        </div>` : ''}
-      </div>`).join('')}
-    </section>` : ''}
+          ${edu.courses
+            .map((c) => `<span class="skill-tag">${c}</span>`)
+            .join('')}
+        </div>`
+            : ''
+        }
+      </div>`
+        )
+        .join('')}
+    </section>`
+        : ''
+    }
 
-    ${references.length ? `
+    ${
+      references.length
+        ? `
     <section class="section">
       <div class="section-title">References</div>
-      ${references.map(ref => `
+      ${references
+        .map(
+          (ref) => `
       <div class="reference">
         <blockquote>${ref.reference || ''}</blockquote>
         <cite>— ${ref.name || ''}</cite>
-      </div>`).join('')}
-    </section>` : ''}
+      </div>`
+        )
+        .join('')}
+    </section>`
+        : ''
+    }
   </div>
 </body>
 </html>`;

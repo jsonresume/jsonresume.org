@@ -12,8 +12,8 @@ import {
 
 function ErrorContent() {
   const searchParams = useSearchParams();
-  const code = searchParams.get('code');
-  const username = searchParams.get('username');
+  const code = searchParams?.get('code') ?? null;
+  const username = searchParams?.get('username') ?? null;
 
   let title = 'Error';
   let message = 'An error occurred';

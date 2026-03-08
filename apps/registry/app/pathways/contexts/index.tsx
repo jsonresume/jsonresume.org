@@ -19,7 +19,8 @@ export {
 } from './JobGraphContext';
 export { KeyboardProvider, useKeyboard } from './KeyboardContext';
 export type { EmbeddingStage } from './JobGraphContext';
-export type { FocusArea, KeyboardShortcut } from './KeyboardContext';
+export type { FocusArea } from './KeyboardContext';
+export type { KeyboardShortcut } from './keyboardShortcuts';
 export { usePathways } from './usePathwaysFacade';
 
 // ============================================================================

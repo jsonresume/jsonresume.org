@@ -1,6 +1,7 @@
 # Auto-Fix Pipeline Specification
 
 When a Sentry alert creates a GitHub issue with the `auto-fix` label, Claude automatically:
+
 1. Parses the error details from the issue
 2. Locates the affected source files
 3. Identifies the root cause
@@ -11,6 +12,7 @@ When a Sentry alert creates a GitHub issue with the `auto-fix` label, Claude aut
 ## Fix Constraints
 
 ### Allowed
+
 - Null/undefined checks and guards
 - Error handling (try/catch, error boundaries)
 - Type narrowing and type guards
@@ -21,6 +23,7 @@ When a Sentry alert creates a GitHub issue with the `auto-fix` label, Claude aut
 - Import path corrections
 
 ### Prohibited
+
 - Database schema changes
 - New package dependencies
 - Authentication or authorization changes
@@ -29,6 +32,7 @@ When a Sentry alert creates a GitHub issue with the `auto-fix` label, Claude aut
 - API route signature changes (breaking changes)
 
 ## Scope Limits
+
 - Max files changed: 5
 - Change type: Surgical — minimal diff to fix the error
 - New files: Not allowed
@@ -37,6 +41,7 @@ When a Sentry alert creates a GitHub issue with the `auto-fix` label, Claude aut
 ## Validation Checklist
 
 Before creating the PR, verify:
+
 1. `pnpm turbo lint typecheck` passes
 2. `pnpm turbo build` succeeds
 
@@ -47,6 +52,7 @@ If any validation step fails after 2 fix attempts, escalate to human review.
 Title: `fix: <error title>`
 
 Body should include:
+
 - Sentry Issue URL
 - Affected Route
 - Root Cause (1-2 sentences)
@@ -56,15 +62,16 @@ Body should include:
 
 ## Label Management
 
-| Label | Meaning |
-|-------|---------|
-| `auto-fix` | Initial trigger |
-| `claude-working` | Claude is actively analyzing/fixing |
-| `fix-submitted` | PR has been created |
-| `needs-human-review` | Claude cannot fix automatically |
-| `production-error` | Informational tag |
+| Label                | Meaning                             |
+| -------------------- | ----------------------------------- |
+| `auto-fix`           | Initial trigger                     |
+| `claude-working`     | Claude is actively analyzing/fixing |
+| `fix-submitted`      | PR has been created                 |
+| `needs-human-review` | Claude cannot fix automatically     |
+| `production-error`   | Informational tag                   |
 
 ### Lifecycle
+
 1. `auto-fix` label applied -> workflow triggers
 2. Add `claude-working` label
 3. Claude analyzes and attempts fix
@@ -73,14 +80,14 @@ Body should include:
 
 ## Error Handling
 
-| Scenario | Action |
-|----------|--------|
-| Stack trace points to node_modules | Escalate with explanation |
-| Fix requires schema changes | Escalate with analysis |
-| Fix requires new dependency | Escalate with suggestion |
-| Validation fails after 2 attempts | Escalate with validation output |
-| Cannot reproduce or locate source | Escalate with findings |
-| Fix would change >5 files | Escalate with scope analysis |
+| Scenario                           | Action                          |
+| ---------------------------------- | ------------------------------- |
+| Stack trace points to node_modules | Escalate with explanation       |
+| Fix requires schema changes        | Escalate with analysis          |
+| Fix requires new dependency        | Escalate with suggestion        |
+| Validation fails after 2 attempts  | Escalate with validation output |
+| Cannot reproduce or locate source  | Escalate with findings          |
+| Fix would change >5 files          | Escalate with scope analysis    |
 
 ## Steps for Claude
 

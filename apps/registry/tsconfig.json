@@ -14,7 +14,8 @@
         "./*"
       ]
     },
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "skipLibCheck": true
   },
   "include": [
     "next-env.d.ts",
@@ -28,6 +29,7 @@
   ],
   "exclude": [
     "node_modules",
+    "apps",
     "vitest.config.ts",
     "vitest.setup.ts",
     "**/*.test.ts",
