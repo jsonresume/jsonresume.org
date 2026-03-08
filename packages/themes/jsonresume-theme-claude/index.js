@@ -1,6 +1,6 @@
 import markdownIt from 'markdown-it';
 
-const md = markdownIt({ html: true, breaks: true, linkify: false });
+const md = markdownIt({ html: false, breaks: true, linkify: false });
 
 function renderMarkdown(text) {
   if (!text) return '';
