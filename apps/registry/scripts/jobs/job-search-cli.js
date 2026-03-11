@@ -77,8 +77,9 @@ function stateIcon(state) {
   const icons = {
     interested: '⭐',
     applied: '📨',
-    pass: '✗',
-    hidden: '👁',
+    not_interested: '✗',
+    dismissed: '👁',
+    maybe: '?',
   };
   return icons[state] || ' ';
 }
@@ -201,7 +202,7 @@ async function cmdMark() {
   const state = process.argv[4];
 
   if (!id || !state) {
-    console.error('Usage: mark <job_id> <interested|pass|applied|hidden>');
+    console.error('Usage: mark <job_id> <interested|not_interested|applied|dismissed|maybe>');
     process.exit(1);
   }
 
@@ -222,10 +223,10 @@ async function cmdUnmark() {
 
   await api(`/jobs/${id}`, {
     method: 'PUT',
-    body: JSON.stringify({ state: null }),
+    body: JSON.stringify({ state: 'dismissed' }),
   });
 
-  console.log(`Job #${id} unmarked`);
+  console.log(`Job #${id} dismissed`);
 }
 
 async function cmdMe() {

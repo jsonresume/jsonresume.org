@@ -1,13 +1,26 @@
-import { createClient } from '@supabase/supabase-js';
+import crypto from 'crypto';
 
-const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
+/**
+ * HMAC-based API key authentication.
+ * Key format: jr_{username}_{hmac}
+ * No database table needed — the server verifies the HMAC using a secret.
+ */
 
-let supabase;
-function getSupabase() {
-  if (!supabase) {
-    supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
-  }
-  return supabase;
+function getSecret() {
+  // Use SUPABASE_KEY as the HMAC secret (always available)
+  return process.env.SUPABASE_KEY;
+}
+
+/**
+ * Generate an API key for a username.
+ */
+export function generateKey(username) {
+  const hmac = crypto
+    .createHmac('sha256', getSecret())
+    .update(username)
+    .digest('hex')
+    .slice(0, 32);
+  return `jr_${username}_${hmac}`;
 }
 
 /**
@@ -21,20 +34,14 @@ export async function authenticate(request) {
   const key = authHeader.slice(7);
   if (!key) return null;
 
-  const db = getSupabase();
-  const { data, error } = await db
-    .from('api_keys')
-    .select('username')
-    .eq('key', key)
-    .single();
+  // Parse key: jr_{username}_{hmac}
+  const match = key.match(/^jr_(.+)_([a-f0-9]{32})$/);
+  if (!match) return null;
 
-  if (error || !data) return null;
+  const username = match[1];
+  const expectedKey = generateKey(username);
 
-  // Update last_used_at (fire and forget)
-  db.from('api_keys')
-    .update({ last_used_at: new Date().toISOString() })
-    .eq('key', key)
-    .then();
+  if (key !== expectedKey) return null;
 
-  return { username: data.username };
+  return { username };
 }

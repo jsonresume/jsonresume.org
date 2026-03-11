@@ -99,15 +99,15 @@ export async function GET(request) {
       .select('id, uuid, gpt_content, posted_at, url, salary_usd')
       .in('id', jobIds);
 
-    // Fetch user's job states
-    const { data: states } = await supabase
-      .from('job_states')
-      .select('job_id, state')
-      .eq('session_id', user.username);
+    // Fetch user's job feedback/states
+    const { data: feedback } = await supabase
+      .from('pathways_job_feedback')
+      .select('job_id, sentiment')
+      .eq('user_id', user.username);
 
     const stateMap = {};
-    (states || []).forEach((s) => {
-      stateMap[s.job_id] = s.state;
+    (feedback || []).forEach((f) => {
+      stateMap[f.job_id] = f.sentiment;
     });
 
     // Parse, filter, and rank

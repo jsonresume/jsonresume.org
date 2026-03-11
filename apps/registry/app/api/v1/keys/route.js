@@ -1,14 +1,7 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-import crypto from 'crypto';
+import { generateKey } from '../auth';
 
 export const dynamic = 'force-dynamic';
-
-const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
-
-function getSupabase() {
-  return createClient(supabaseUrl, process.env.SUPABASE_KEY);
-}
 
 /**
  * POST /api/v1/keys — generate an API key for a username
@@ -39,24 +32,10 @@ export async function POST(request) {
     );
   }
 
-  const key = `jr_${crypto.randomBytes(24).toString('hex')}`;
-
-  const supabase = getSupabase();
-  const { error } = await supabase.from('api_keys').insert({
-    key,
-    username: sanitized,
-  });
-
-  if (error) {
-    return NextResponse.json(
-      { error: `Failed to create key: ${error.message}` },
-      { status: 500 }
-    );
-  }
+  const key = generateKey(sanitized);
 
   return NextResponse.json({
     key,
     username: sanitized,
-    message: 'Save this key — it cannot be retrieved later.',
   });
 }

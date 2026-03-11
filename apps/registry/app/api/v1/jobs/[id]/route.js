@@ -12,7 +12,7 @@ function getSupabase() {
 
 /**
  * PUT /api/v1/jobs/:id — update job state
- * Body: { "state": "interested" | "pass" | "applied" | null }
+ * Body: { "state": "interested" | "not_interested" | "applied" | "dismissed" | "maybe", "feedback": "optional reason" }
  */
 export async function PUT(request, { params }) {
   const user = await authenticate(request);
@@ -21,44 +21,60 @@ export async function PUT(request, { params }) {
   }
 
   const { id } = await params;
-  const jobId = parseInt(id, 10);
-  if (!jobId) {
-    return NextResponse.json({ error: 'Invalid job ID' }, { status: 400 });
-  }
+  const jobId = String(id);
 
   const body = await request.json();
-  const { state } = body;
+  const { state, feedback } = body;
 
-  const validStates = ['interested', 'pass', 'applied', 'hidden'];
-  if (state !== null && !validStates.includes(state)) {
+  const validStates = [
+    'interested',
+    'not_interested',
+    'applied',
+    'dismissed',
+    'maybe',
+  ];
+  if (!validStates.includes(state)) {
     return NextResponse.json(
-      { error: `Invalid state. Use: ${validStates.join(', ')} or null` },
+      { error: `Invalid state. Use: ${validStates.join(', ')}` },
       { status: 400 }
     );
   }
 
   const supabase = getSupabase();
 
-  if (state === null) {
-    // Remove state
-    await supabase
-      .from('job_states')
-      .delete()
-      .eq('session_id', user.username)
-      .eq('job_id', jobId);
-
-    return NextResponse.json({ id: jobId, state: null });
+  // Get job title/company for context
+  let jobTitle = null;
+  let jobCompany = null;
+  const { data: job } = await supabase
+    .from('jobs')
+    .select('gpt_content')
+    .eq('id', parseInt(id, 10))
+    .single();
+  if (job?.gpt_content) {
+    try {
+      const parsed = JSON.parse(job.gpt_content);
+      jobTitle = parsed.title;
+      jobCompany = parsed.company;
+    } catch {
+      /* empty */
+    }
   }
 
-  // Upsert state
-  const { error } = await supabase.from('job_states').upsert(
-    {
-      session_id: user.username,
-      job_id: jobId,
-      state,
-    },
-    { onConflict: 'session_id,job_id' }
-  );
+  // Delete existing feedback for this user+job, then insert new
+  await supabase
+    .from('pathways_job_feedback')
+    .delete()
+    .eq('user_id', user.username)
+    .eq('job_id', jobId);
+
+  const { error } = await supabase.from('pathways_job_feedback').insert({
+    user_id: user.username,
+    job_id: jobId,
+    sentiment: state,
+    feedback: feedback || state,
+    job_title: jobTitle,
+    job_company: jobCompany,
+  });
 
   if (error) {
     return NextResponse.json(
@@ -67,7 +83,7 @@ export async function PUT(request, { params }) {
     );
   }
 
-  return NextResponse.json({ id: jobId, state });
+  return NextResponse.json({ id: jobId, state, job_title: jobTitle, job_company: jobCompany });
 }
 
 /**
@@ -101,10 +117,12 @@ export async function GET(request, { params }) {
   }
 
   const { data: stateRow } = await supabase
-    .from('job_states')
-    .select('state')
-    .eq('session_id', user.username)
-    .eq('job_id', jobId)
+    .from('pathways_job_feedback')
+    .select('sentiment')
+    .eq('user_id', user.username)
+    .eq('job_id', String(jobId))
+    .order('created_at', { ascending: false })
+    .limit(1)
     .single();
 
   return NextResponse.json({
@@ -116,6 +134,6 @@ export async function GET(request, { params }) {
     url: job.url,
     salary_usd: job.salary_usd,
     posted_at: job.posted_at,
-    state: stateRow?.state || null,
+    state: stateRow?.sentiment || null,
   });
 }
