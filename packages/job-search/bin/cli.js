@@ -16,7 +16,7 @@
  *      npx @jsonresume/job-search search
  */
 
-const VERSION = '0.2.0';
+const VERSION = '0.3.0';
 
 const BASE_URL =
   getArg('--base-url') ||
@@ -91,8 +91,7 @@ async function cmdSearch() {
   params.set('top', getArg('--top') || '20');
   params.set('days', getArg('--days') || '30');
   if (hasFlag('--remote')) params.set('remote', 'true');
-  if (getArg('--min-salary'))
-    params.set('min_salary', getArg('--min-salary'));
+  if (getArg('--min-salary')) params.set('min_salary', getArg('--min-salary'));
   if (getArg('--search')) params.set('search', getArg('--search'));
 
   const { jobs } = await api(`/jobs?${params}`);
@@ -114,7 +113,9 @@ async function cmdSearch() {
   }
 
   console.log(
-    `\n Found ${filtered.length} matching jobs (last ${params.get('days')} days)\n`
+    `\n Found ${filtered.length} matching jobs (last ${params.get(
+      'days'
+    )} days)\n`
   );
   console.log(
     ' ' +
@@ -161,17 +162,15 @@ async function cmdDetail() {
   console.log(`  ${job.title || 'Unknown'} at ${job.company || 'Unknown'}`);
   console.log(`${'═'.repeat(70)}`);
   console.log(`  ID:         ${job.id}`);
-  console.log(
-    `  Location:   ${formatLocation(job.location, job.remote)}`
-  );
-  console.log(
-    `  Salary:     ${formatSalary(job.salary, job.salary_usd)}`
-  );
+  console.log(`  Location:   ${formatLocation(job.location, job.remote)}`);
+  console.log(`  Salary:     ${formatSalary(job.salary, job.salary_usd)}`);
   console.log(`  Type:       ${job.type || '—'}`);
   console.log(`  Experience: ${job.experience || '—'}`);
   console.log(`  Posted:     ${job.posted_at || '—'}`);
   console.log(
-    `  State:      ${job.state ? `${stateIcon(job.state)} ${job.state}` : 'none'}`
+    `  State:      ${
+      job.state ? `${stateIcon(job.state)} ${job.state}` : 'none'
+    }`
   );
   console.log(`  HN URL:     ${job.url || '—'}`);
 
@@ -180,9 +179,7 @@ async function cmdDetail() {
   }
 
   if (job.skills?.length) {
-    console.log(
-      `\n  Skills: ${job.skills.map((s) => s.name).join(', ')}`
-    );
+    console.log(`\n  Skills: ${job.skills.map((s) => s.name).join(', ')}`);
   }
 
   if (job.responsibilities?.length) {
@@ -235,14 +232,47 @@ async function cmdMe() {
   console.log(`\n  ${r.basics?.name} (${data.username})`);
   console.log(`  ${r.basics?.label || ''}`);
   console.log(
-    `  ${r.basics?.location?.city || ''}, ${r.basics?.location?.countryCode || ''}`
+    `  ${r.basics?.location?.city || ''}, ${
+      r.basics?.location?.countryCode || ''
+    }`
   );
-  console.log(
-    `\n  Skills: ${(r.skills || []).map((s) => s.name).join(', ')}`
-  );
+  console.log(`\n  Skills: ${(r.skills || []).map((s) => s.name).join(', ')}`);
   console.log(`  Work: ${(r.work || []).length} entries`);
   console.log(`  Projects: ${(r.projects || []).length} entries`);
   console.log('');
+}
+
+async function cmdUpdate() {
+  const filePath = process.argv[3];
+  if (!filePath) {
+    console.error('Usage: jsonresume-jobs update <path-to-resume.json>');
+    process.exit(1);
+  }
+
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+  const resolved = path.resolve(filePath);
+
+  let resume;
+  try {
+    const raw = fs.readFileSync(resolved, 'utf-8');
+    resume = JSON.parse(raw);
+  } catch (err) {
+    console.error(`Error reading ${resolved}: ${err.message}`);
+    process.exit(1);
+  }
+
+  if (!resume.basics) {
+    console.error('Invalid resume — must have a "basics" section.');
+    process.exit(1);
+  }
+
+  const result = await api('/resume', {
+    method: 'PUT',
+    body: JSON.stringify(resume),
+  });
+
+  console.log(`Resume updated for ${result.username}.`);
 }
 
 function cmdHelp() {
@@ -263,6 +293,7 @@ COMMANDS
   detail <id>                     Show full details for a job
   mark <id> <state>               Mark a job's state
   me                              Show your resume summary
+  update <file>                   Update your resume on the registry
   help                            Show this help message
 
 SEARCH OPTIONS
@@ -292,6 +323,7 @@ EXAMPLES
   jsonresume-jobs detail 181420
   jsonresume-jobs mark 181420 interested --feedback "great remote role"
   jsonresume-jobs me --json
+  jsonresume-jobs update ./resume.json
 
 ENVIRONMENT
   JSONRESUME_API_KEY              Your API key (required)
@@ -337,6 +369,8 @@ Run "jsonresume-jobs help" for more info.`);
       return cmdMark();
     case 'me':
       return cmdMe();
+    case 'update':
+      return cmdUpdate();
     default:
       console.error(`Unknown command: ${cmd}`);
       console.error('Run "jsonresume-jobs help" for usage.');

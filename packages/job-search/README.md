@@ -6,6 +6,8 @@ Jobs are semantically matched using AI embeddings — your resume is compared ag
 
 ## Setup
 
+Get your API key at **https://jsonresume.org/api-keys** or via curl:
+
 ```bash
 # 1. Get your API key (requires a resume at registry.jsonresume.org)
 curl -s -X POST https://jsonresume.org/api/v1/keys \
@@ -24,6 +26,7 @@ npx @jsonresume/job-search search --remote --min-salary 150
 npx @jsonresume/job-search detail 181420
 npx @jsonresume/job-search mark 181420 interested
 npx @jsonresume/job-search me
+npx @jsonresume/job-search update ./resume.json
 npx @jsonresume/job-search help
 ```
 
@@ -35,6 +38,7 @@ npx @jsonresume/job-search help
 | `detail <id>` | Show full details for a job |
 | `mark <id> <state>` | Mark a job: `interested`, `not_interested`, `applied`, `maybe`, `dismissed` |
 | `me` | Show your resume summary |
+| `update <file>` | Update your resume on the registry |
 | `help` | Show help |
 
 ## Search Options
