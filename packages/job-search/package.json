@@ -1,0 +1,31 @@
+{
+  "name": "@jsonresume/job-search",
+  "version": "0.1.0",
+  "description": "Search Hacker News jobs matched against your JSON Resume",
+  "bin": {
+    "jsonresume-jobs": "./bin/cli.js"
+  },
+  "files": [
+    "bin"
+  ],
+  "keywords": [
+    "jsonresume",
+    "jobs",
+    "hacker-news",
+    "job-search",
+    "cli"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jsonresume/jsonresume.org",
+    "directory": "packages/job-search"
+  },
+  "license": "MIT",
+  "author": "Thomas Davis <thomasalwyndavis@gmail.com>",
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

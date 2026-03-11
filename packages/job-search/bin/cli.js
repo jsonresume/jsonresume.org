@@ -1,34 +1,30 @@
 #!/usr/bin/env node
 
 /**
- * JSON Resume Job Search CLI
+ * @jsonresume/job-search — Search HN jobs matched to your JSON Resume
  *
- * Usage:
- *   export JSONRESUME_API_KEY=jr_xxxx
- *   node job-search-cli.js [command] [options]
+ * Setup:
+ *   1. Get your API key:
+ *      curl -s -X POST https://jsonresume.org/api/v1/keys \
+ *        -H 'Content-Type: application/json' \
+ *        -d '{"username":"YOUR_GITHUB_USERNAME"}'
  *
- * Commands:
- *   search        Find matching jobs (default)
- *   detail <id>   Show full details for a job
- *   mark <id> <state>  Mark a job (interested/pass/applied/hidden)
- *   unmark <id>   Remove a job's state
- *   me            Show your resume summary
+ *   2. Export it:
+ *      export JSONRESUME_API_KEY=jr_yourname_xxxxx
  *
- * Options:
- *   --top N         Number of results (default 20)
- *   --days N        How far back to look (default 30)
- *   --remote        Remote jobs only
- *   --min-salary N  Minimum salary in thousands
- *   --search TERM   Keyword filter
- *   --interested    Show only jobs marked interested
- *   --applied       Show only jobs marked applied
- *   --json          Output raw JSON
- *   --base-url URL  API base URL (default: https://jsonresume.org)
+ *   3. Search:
+ *      npx @jsonresume/job-search search
  */
 
+const VERSION = '0.1.0';
+
 const BASE_URL =
-  getArg('--base-url') || process.env.JSONRESUME_BASE_URL || 'https://jsonresume.org';
+  getArg('--base-url') ||
+  process.env.JSONRESUME_BASE_URL ||
+  'https://jsonresume.org';
 const API_KEY = process.env.JSONRESUME_API_KEY;
+
+// ── Arg parsing ────────────────────────────────────────────
 
 function getArg(name) {
   const idx = process.argv.indexOf(name);
@@ -39,6 +35,8 @@ function getArg(name) {
 function hasFlag(name) {
   return process.argv.includes(name);
 }
+
+// ── API client ─────────────────────────────────────────────
 
 async function api(path, options = {}) {
   const url = `${BASE_URL}/api/v1${path}`;
@@ -58,6 +56,8 @@ async function api(path, options = {}) {
   }
   return data;
 }
+
+// ── Formatters ─────────────────────────────────────────────
 
 function formatSalary(salary, salaryUsd) {
   if (salaryUsd) return `$${Math.round(salaryUsd / 1000)}k`;
@@ -91,7 +91,8 @@ async function cmdSearch() {
   params.set('top', getArg('--top') || '20');
   params.set('days', getArg('--days') || '30');
   if (hasFlag('--remote')) params.set('remote', 'true');
-  if (getArg('--min-salary')) params.set('min_salary', getArg('--min-salary'));
+  if (getArg('--min-salary'))
+    params.set('min_salary', getArg('--min-salary'));
   if (getArg('--search')) params.set('search', getArg('--search'));
 
   const { jobs } = await api(`/jobs?${params}`);
@@ -139,16 +140,13 @@ async function cmdSearch() {
       formatSalary(j.salary, j.salary_usd).padEnd(10);
     console.log(line);
   }
-
-  console.log(
-    '\n Commands: detail <id> | mark <id> interested|pass|applied | unmark <id>\n'
-  );
+  console.log('');
 }
 
 async function cmdDetail() {
   const id = process.argv[3];
   if (!id) {
-    console.error('Usage: detail <job_id>');
+    console.error('Usage: jsonresume-jobs detail <job_id>');
     process.exit(1);
   }
 
@@ -163,12 +161,18 @@ async function cmdDetail() {
   console.log(`  ${job.title || 'Unknown'} at ${job.company || 'Unknown'}`);
   console.log(`${'═'.repeat(70)}`);
   console.log(`  ID:         ${job.id}`);
-  console.log(`  Location:   ${formatLocation(job.location, job.remote)}`);
-  console.log(`  Salary:     ${formatSalary(job.salary, job.salary_usd)}`);
+  console.log(
+    `  Location:   ${formatLocation(job.location, job.remote)}`
+  );
+  console.log(
+    `  Salary:     ${formatSalary(job.salary, job.salary_usd)}`
+  );
   console.log(`  Type:       ${job.type || '—'}`);
   console.log(`  Experience: ${job.experience || '—'}`);
   console.log(`  Posted:     ${job.posted_at || '—'}`);
-  console.log(`  State:      ${job.state ? `${stateIcon(job.state)} ${job.state}` : 'none'}`);
+  console.log(
+    `  State:      ${job.state ? `${stateIcon(job.state)} ${job.state}` : 'none'}`
+  );
   console.log(`  HN URL:     ${job.url || '—'}`);
 
   if (job.description) {
@@ -190,43 +194,33 @@ async function cmdDetail() {
     console.log(`\n  Qualifications:`);
     job.qualifications.forEach((q) => console.log(`    • ${q}`));
   }
-
-  if (job.full_description) {
-    console.log(`\n  Full Description:\n  ${job.full_description}`);
-  }
   console.log('');
 }
 
 async function cmdMark() {
   const id = process.argv[3];
   const state = process.argv[4];
+  const feedback = getArg('--feedback');
 
   if (!id || !state) {
-    console.error('Usage: mark <job_id> <interested|not_interested|applied|dismissed|maybe>');
+    console.error(
+      'Usage: jsonresume-jobs mark <job_id> <interested|not_interested|applied|dismissed|maybe> [--feedback "reason"]'
+    );
     process.exit(1);
   }
+
+  const body = { state };
+  if (feedback) body.feedback = feedback;
 
   const result = await api(`/jobs/${id}`, {
     method: 'PUT',
-    body: JSON.stringify({ state }),
+    body: JSON.stringify(body),
   });
 
-  console.log(`${stateIcon(result.state)} Job #${result.id} marked as ${result.state}`);
-}
-
-async function cmdUnmark() {
-  const id = process.argv[3];
-  if (!id) {
-    console.error('Usage: unmark <job_id>');
-    process.exit(1);
-  }
-
-  await api(`/jobs/${id}`, {
-    method: 'PUT',
-    body: JSON.stringify({ state: 'dismissed' }),
-  });
-
-  console.log(`Job #${id} dismissed`);
+  const desc = result.job_title
+    ? `${result.job_title} at ${result.job_company}`
+    : `#${result.id}`;
+  console.log(`${stateIcon(result.state)} Marked ${desc} as ${result.state}`);
 }
 
 async function cmdMe() {
@@ -243,24 +237,96 @@ async function cmdMe() {
   console.log(
     `  ${r.basics?.location?.city || ''}, ${r.basics?.location?.countryCode || ''}`
   );
-  console.log(`\n  Skills: ${(r.skills || []).map((s) => s.name).join(', ')}`);
+  console.log(
+    `\n  Skills: ${(r.skills || []).map((s) => s.name).join(', ')}`
+  );
   console.log(`  Work: ${(r.work || []).length} entries`);
   console.log(`  Projects: ${(r.projects || []).length} entries`);
   console.log('');
 }
 
+function cmdHelp() {
+  console.log(`
+jsonresume-jobs v${VERSION} — Search HN "Who is Hiring" jobs matched to your JSON Resume
+
+SETUP
+  1. Get your API key:
+     curl -s -X POST https://jsonresume.org/api/v1/keys \\
+       -H 'Content-Type: application/json' \\
+       -d '{"username":"YOUR_GITHUB_USERNAME"}'
+
+  2. Export it:
+     export JSONRESUME_API_KEY=jr_yourname_xxxxx
+
+COMMANDS
+  search                          Find matching jobs (default command)
+  detail <id>                     Show full details for a job
+  mark <id> <state>               Mark a job's state
+  me                              Show your resume summary
+  help                            Show this help message
+
+SEARCH OPTIONS
+  --top N                         Number of results (default: 20, max: 100)
+  --days N                        How far back to look (default: 30)
+  --remote                        Remote jobs only
+  --min-salary N                  Minimum salary in thousands (e.g. 150)
+  --search TERM                   Keyword filter (searches title, company, skills)
+  --interested                    Show only jobs you marked interested
+  --applied                       Show only jobs you marked applied
+
+MARK STATES
+  interested                      You want this job
+  not_interested                  Not for you
+  applied                         You've applied
+  maybe                           Considering it
+  dismissed                       Hide from results
+
+GLOBAL OPTIONS
+  --json                          Output raw JSON (for piping / Claude Code)
+  --base-url URL                  API base URL (default: https://jsonresume.org)
+  --feedback "reason"             Add a reason when marking (with mark command)
+
+EXAMPLES
+  jsonresume-jobs search --remote --min-salary 150
+  jsonresume-jobs search --search "react" --top 10 --days 60
+  jsonresume-jobs detail 181420
+  jsonresume-jobs mark 181420 interested --feedback "great remote role"
+  jsonresume-jobs me --json
+
+ENVIRONMENT
+  JSONRESUME_API_KEY              Your API key (required)
+  JSONRESUME_BASE_URL             API base URL override
+`);
+}
+
 // ── Main ───────────────────────────────────────────────────
 
 async function main() {
-  if (!API_KEY) {
-    console.error(
-      'Set JSONRESUME_API_KEY environment variable.\n' +
-        'Generate one: curl -X POST https://jsonresume.org/api/v1/keys -d \'{"username":"your-github-username"}\''
-    );
-    process.exit(1);
+  const cmd = process.argv[2] || 'search';
+
+  if (cmd === 'help' || cmd === '--help' || cmd === '-h') {
+    return cmdHelp();
   }
 
-  const cmd = process.argv[2] || 'search';
+  if (cmd === '--version' || cmd === '-v') {
+    console.log(VERSION);
+    return;
+  }
+
+  if (!API_KEY) {
+    console.error(`Error: JSONRESUME_API_KEY not set.
+
+Get your key:
+  curl -s -X POST https://jsonresume.org/api/v1/keys \\
+    -H 'Content-Type: application/json' \\
+    -d '{"username":"YOUR_GITHUB_USERNAME"}'
+
+Then export it:
+  export JSONRESUME_API_KEY=jr_yourname_xxxxx
+
+Run "jsonresume-jobs help" for more info.`);
+    process.exit(1);
+  }
 
   switch (cmd) {
     case 'search':
@@ -269,13 +335,11 @@ async function main() {
       return cmdDetail();
     case 'mark':
       return cmdMark();
-    case 'unmark':
-      return cmdUnmark();
     case 'me':
       return cmdMe();
     default:
       console.error(`Unknown command: ${cmd}`);
-      console.error('Commands: search | detail <id> | mark <id> <state> | unmark <id> | me');
+      console.error('Run "jsonresume-jobs help" for usage.');
       process.exit(1);
   }
 }
