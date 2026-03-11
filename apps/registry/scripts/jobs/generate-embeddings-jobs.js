@@ -24,12 +24,12 @@ async function main() {
     .not('gpt_content', 'is', null);
 
   if (!processAll) {
-    // Default: only process jobs from last 24 hours
-    const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    // Default: process jobs from last 7 days (covers weekend gaps + retries)
+    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
     console.log(
-      `📅 Processing jobs since: ${twentyFourHoursAgo.toISOString()}`
+      `📅 Processing jobs since: ${sevenDaysAgo.toISOString()}`
     );
-    query = query.gte('created_at', twentyFourHoursAgo.toISOString());
+    query = query.gte('created_at', sevenDaysAgo.toISOString());
   } else {
     console.log('📅 Processing ALL jobs without embeddings');
   }
@@ -46,14 +46,15 @@ async function main() {
     return;
   }
 
-  console.log(`📊 Found ${data.length} jobs needing embeddings`);
-  console.log(`⚙️  Processing up to 3 jobs concurrently\n`);
+  // Exclude jobs with FAILED gpt_content (would produce garbage embeddings)
+  const validJobs = data.filter((job) => job.gpt_content !== 'FAILED');
+  console.log(`📊 Found ${validJobs.length} jobs needing embeddings (${data.length - validJobs.length} FAILED skipped)`);
+  console.log(`⚙️  Processing up to 10 jobs concurrently\n`);
 
   let successCount = 0;
   let errorCount = 0;
 
-  // Process jobs with concurrency limit of 3
-  await async.eachLimit(data, 3, async (job) => {
+  await async.eachLimit(validJobs, 10, async (job) => {
     try {
       await createEmbedding(job, supabase);
       successCount++;

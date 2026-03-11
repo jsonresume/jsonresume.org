@@ -1,12 +1,14 @@
 /**
- * Fetch jobs from database (excludes jobs that have already been retried)
+ * Fetch unprocessed jobs from database.
+ * Filters server-side for jobs needing processing (null or FAILED with retries left).
  */
-async function fetchJobs(supabase, limit = 1000) {
+async function fetchJobs(supabase, limit = 500) {
   const { data, error } = await supabase
     .from('jobs')
     .select()
-    .or('retry_count.is.null,retry_count.lt.1') // Only get jobs with 0 retries or NULL
-    .order('id', { ascending: false })
+    .or('gpt_content.is.null,gpt_content.eq.FAILED')
+    .lt('retry_count', 3)
+    .order('posted_at', { ascending: false })
     .limit(limit);
 
   if (error) {
