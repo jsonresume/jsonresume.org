@@ -50,13 +50,42 @@ npx @jsonresume/job-search help
 | `--applied` | Show only jobs marked applied |
 | `--json` | Output raw JSON |
 
-## Claude Code Integration
+## Claude Code Skill: `/jsonresume-hunt`
 
-If you use [Claude Code](https://docs.anthropic.com/en/docs/claude-code), this repo includes a `/jobs` skill that wraps the CLI for interactive job searching:
+This package includes a [Claude Code skill](https://code.claude.com/docs/en/skills) that turns job searching into a guided, interactive experience.
+
+### Install the skill
+
+Copy the skill into your personal Claude Code skills directory:
+
+```bash
+# Install globally (works in any project)
+mkdir -p ~/.claude/skills/jsonresume-hunt
+cp node_modules/@jsonresume/job-search/skills/jsonresume-hunt/SKILL.md \
+   ~/.claude/skills/jsonresume-hunt/SKILL.md
+
+# Or link it
+ln -sf $(npm root -g)/@jsonresume/job-search/skills/jsonresume-hunt \
+   ~/.claude/skills/jsonresume-hunt
+```
+
+### Use it
+
+In Claude Code, type:
 
 ```
-/jobs find me remote React jobs paying over $150k
+/jsonresume-hunt
+/jsonresume-hunt remote React jobs over $150k
 ```
+
+The skill will:
+
+1. **Interview you** — understand what you're looking for (role, salary, remote, company type, dealbreakers)
+2. **Search & filter** — run multiple searches, deduplicate, tier results (Strong / Worth a look / Long shot)
+3. **Deep research** — for top matches: company research, skill gap analysis, fit ratings
+4. **Collect decisions** — walk through each job, mark interested/pass/maybe with reasons
+5. **Create tracker** — generate `job-hunt-YYYY-MM-DD.md` with your full shortlist, research notes, and next steps
+6. **Draft outreach** — personalized messages to HN posters referencing your experience
 
 ## How It Works
 

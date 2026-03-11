@@ -16,7 +16,7 @@
  *      npx @jsonresume/job-search search
  */
 
-const VERSION = '0.1.0';
+const VERSION = '0.2.0';
 
 const BASE_URL =
   getArg('--base-url') ||
