@@ -412,6 +412,11 @@ function App({ baseUrl, apiKey, apiClient }) {
               ai.clear();
               setView(selectedJob ? 'detail' : 'list');
             },
+            onExport: () => {
+              const f = ai.exportDossier(selectedJob);
+              if (f) showToast(`Saved ./${f}`, 'export');
+              return f;
+            },
             isActive: true,
           })
         )

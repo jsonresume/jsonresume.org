@@ -106,6 +106,7 @@ export function useAI(resume) {
     async (job, api) => {
       setMode('cover');
       setError(null);
+      setText('');
 
       // Check server for existing dossier
       try {
@@ -114,7 +115,9 @@ export function useAI(resume) {
           setText(content);
           return;
         }
-      } catch {}
+      } catch {
+        /* no cached dossier */
+      }
 
       // Check if claude CLI is available
       const { execSync } = await import('child_process');
@@ -137,7 +140,17 @@ export function useAI(resume) {
       }
 
       setLoading(true);
-      setText('');
+
+      // Fetch resume if not available yet
+      let currentResume = resume;
+      if (!currentResume) {
+        try {
+          const me = await api.fetchMe();
+          currentResume = me.resume;
+        } catch {
+          /* proceed without resume */
+        }
+      }
 
       // Fetch full job detail for raw content
       let rawContent = '';
@@ -146,7 +159,7 @@ export function useAI(resume) {
         rawContent = detail.raw_content || detail.full_description || '';
       } catch {}
 
-      const resumeText = buildResumeText(resume);
+      const resumeText = buildResumeText(currentResume);
       const jobText = buildJobText(job, rawContent);
 
       const prompt = `You are a job search research assistant. A candidate is considering applying to this role. Do thorough research and produce a comprehensive dossier.
@@ -377,6 +390,20 @@ Be thorough, specific, and opinionated. Reference the candidate's actual experie
     }
   }, []);
 
+  const exportDossier = useCallback(
+    (job) => {
+      if (!text) return null;
+      const { writeFileSync } = require('fs');
+      const company = (job?.company || 'unknown')
+        .replace(/[^a-zA-Z0-9]+/g, '-')
+        .toLowerCase();
+      const filename = `dossier-${company}.md`;
+      writeFileSync(filename, text, 'utf-8');
+      return filename;
+    },
+    [text]
+  );
+
   return {
     text,
     loading,
@@ -386,6 +413,7 @@ Be thorough, specific, and opinionated. Reference the candidate's actual experie
     summarizeJob,
     dossier,
     batchReview,
+    exportDossier,
     cancel,
     clear: () => {
       cancel();

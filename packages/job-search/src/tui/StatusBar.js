@@ -41,7 +41,12 @@ const KEYS = {
     ['d', 'delete'],
     ['esc', 'close'],
   ],
-  ai: [['esc', 'dismiss']],
+  ai: [
+    ['j/k', 'scroll'],
+    ['g/G', 'top/bottom'],
+    ['e', 'export'],
+    ['esc', 'dismiss'],
+  ],
   help: [['?/esc', 'close']],
 };
 

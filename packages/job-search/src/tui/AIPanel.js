@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Box, Text, useInput } from 'ink';
 import Spinner from 'ink-spinner';
 import { h } from './h.js';
@@ -8,27 +8,59 @@ export default function AIPanel({
   loading,
   error,
   onDismiss,
+  onExport,
   isActive,
   mode,
 }) {
   const [scroll, setScroll] = useState(0);
   const maxRows = Math.max((process.stdout.rows || 30) - 8, 10);
+  const exportMsg = useRef(null);
+
+  // Enable mouse reporting for scroll wheel
+  useEffect(() => {
+    if (!process.stdout.isTTY) return;
+    // Enable mouse wheel reporting (SGR mode)
+    process.stdout.write('\x1b[?1000h\x1b[?1006h');
+    const onData = (data) => {
+      const str = data.toString();
+      // SGR mouse: \x1b[<button;col;row(M|m)
+      const match = str.match(/\x1b\[<(\d+);(\d+);(\d+)([Mm])/);
+      if (match) {
+        const btn = parseInt(match[1], 10);
+        if (btn === 64) setScroll((s) => Math.max(0, s - 3));
+        if (btn === 65) setScroll((s) => s + 3);
+      }
+    };
+    process.stdin.on('data', onData);
+    return () => {
+      process.stdin.removeListener('data', onData);
+      if (process.stdout.isTTY) {
+        process.stdout.write('\x1b[?1000l\x1b[?1006l');
+      }
+    };
+  }, []);
 
   useInput(
     (input, key) => {
       if (key.escape) onDismiss();
-      if (!loading) {
-        if (key.upArrow || input === 'k') setScroll((s) => Math.max(0, s - 1));
-        if (key.downArrow || input === 'j') setScroll((s) => s + 1);
-        if (key.pageUp || (key.ctrl && input === 'u'))
-          setScroll((s) => Math.max(0, s - 20));
-        if (key.pageDown || (key.ctrl && input === 'd'))
-          setScroll((s) => s + 20);
-        if (input === 'g') setScroll(0);
-        if (input === 'G' && text) {
-          const lines = text.split('\n');
-          setScroll(Math.max(0, lines.length - maxRows));
+      if (input === 'e' && !loading && text && onExport) {
+        const filename = onExport();
+        if (filename) {
+          exportMsg.current = filename;
+          setTimeout(() => {
+            exportMsg.current = null;
+          }, 3000);
         }
+      }
+      if (key.upArrow || input === 'k') setScroll((s) => Math.max(0, s - 1));
+      if (key.downArrow || input === 'j') setScroll((s) => s + 1);
+      if (key.pageUp || (key.ctrl && input === 'u'))
+        setScroll((s) => Math.max(0, s - 20));
+      if (key.pageDown || (key.ctrl && input === 'd')) setScroll((s) => s + 20);
+      if (input === 'g') setScroll(0);
+      if (input === 'G' && text) {
+        const lines = text.split('\n');
+        setScroll(Math.max(0, lines.length - maxRows));
       }
     },
     { isActive }
@@ -64,23 +96,22 @@ export default function AIPanel({
         )}/${totalLines}`
       : '';
 
+  const exportHint = !loading && text ? ' · e export' : '';
   const statusLine =
     loading && text
       ? 'Streaming… ESC to cancel'
       : loading
       ? 'ESC to cancel'
       : scrollHint
-      ? `${scrollHint}  ·  ESC to dismiss`
-      : 'Press ESC to dismiss';
+      ? `${scrollHint}${exportHint}  ·  ESC to dismiss`
+      : `ESC to dismiss${exportHint}`;
 
   return h(
     Box,
     {
       flexDirection: 'column',
-      borderStyle: 'double',
-      borderColor: color,
-      padding: 1,
-      marginX: 2,
+      flexGrow: 1,
+      paddingX: 1,
     },
     h(Text, { bold: true, color }, title),
     h(Text, null, ' '),
