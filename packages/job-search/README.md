@@ -91,12 +91,54 @@ The skill will:
 5. **Create tracker** — generate `job-hunt-YYYY-MM-DD.md` with your full shortlist, research notes, and next steps
 6. **Draft outreach** — personalized messages to HN posters referencing your experience
 
-## How It Works
+## Interactive TUI
 
-1. Your JSON Resume is fetched from [registry.jsonresume.org](https://registry.jsonresume.org)
-2. An embedding is generated from your skills, experience, and summary
-3. It's compared against AI-parsed job postings from HN's monthly "Who is Hiring?" threads
-4. Jobs are ranked by semantic similarity and returned with structured data
+Launch the full terminal UI for interactive browsing:
+
+```bash
+npx @jsonresume/job-search browse
+```
+
+Features:
+- Tab-based views: All / Interested / Applied / Maybe / Passed
+- Persistent filters (remote, salary, keyword, days) saved to disk
+- AI-powered job summaries and batch ranking (requires `OPENAI_API_KEY`)
+- Custom search profiles with AI reranking
+- Vim-style navigation (`j`/`k`, `/` for searches, `f` for filters)
+
+## How Search & Ranking Works
+
+The system uses a multi-stage pipeline to match and rank jobs:
+
+### Stage 1: Embedding Generation
+
+Your JSON Resume is fetched from [registry.jsonresume.org](https://registry.jsonresume.org) and converted to text (label, summary, skills, work history). This text is embedded using OpenAI's `text-embedding-3-large` model into a 3072-dimensional vector.
+
+Job postings from HN's monthly "Who is Hiring?" threads are parsed by GPT into structured data (title, company, skills, salary, remote, etc.) and embedded into the same vector space.
+
+### Stage 2: Vector Similarity Search
+
+Your resume embedding is compared against all job embeddings using cosine similarity via pgvector in Supabase. The top ~300 candidates are retrieved. This is fast (~200ms) but purely semantic — it finds jobs that "sound like" your resume.
+
+### Stage 3: Custom Search Profiles (optional)
+
+When you create a search profile (e.g., "I want to work on rockets in Texas"), two techniques boost the prompt's influence:
+
+**HyDE (Hypothetical Document Embedding):** Instead of naively blending your prompt into resume text, the system uses GPT to generate a hypothetical ideal job posting matching your preferences. This creates a document-to-document comparison against real job embeddings, which is far more effective than query-to-document.
+
+**Embedding Interpolation:** The resume and HyDE job posting are embedded separately, then combined as vectors: `0.65 * hyde_embedding + 0.35 * resume_embedding`. This gives your search intent 65% influence on the final ranking, versus the old approach where the resume dominated ~80% of the signal.
+
+### Stage 4: LLM Reranking
+
+For custom search profiles, the top 30 vector-matched results are re-scored by `gpt-4.1-mini`. Each job gets a 1-10 relevance score considering skill alignment, experience level, location/remote fit, and the user's stated preferences.
+
+The final ranking combines both signals: `0.4 * normalized_vector_score + 0.6 * llm_score`. This lets the LLM override pure semantic similarity — a job that's a great vector match but contradicts your preferences gets pushed down.
+
+In the TUI, this happens as a two-pass load: jobs appear instantly from vector search, then reshuffle when reranking completes in the background.
+
+### Stage 5: Client-side Filtering
+
+After server-side ranking, the TUI applies local filters (remote only, minimum salary, keyword search, posted within N days). These are persisted per search profile so switching profiles restores each one's filters.
 
 ## License
 
