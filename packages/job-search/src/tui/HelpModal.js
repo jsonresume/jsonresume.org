@@ -46,6 +46,7 @@ const SECTIONS = [
     title: 'AI Features (requires OPENAI_API_KEY)',
     keys: [
       ['Space', 'AI summary of current job'],
+      ['c', 'Research dossier (uses Claude Code CLI)'],
       ['S', 'AI batch review of visible jobs'],
     ],
   },

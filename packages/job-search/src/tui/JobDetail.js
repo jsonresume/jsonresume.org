@@ -10,6 +10,7 @@ export default function JobDetail({
   onBack,
   onMark,
   onAISummary,
+  onDossier,
   isActive,
   isPanel,
 }) {
@@ -45,6 +46,7 @@ export default function JobDetail({
       if (input === 'm') onMark(job.id, 'maybe');
       if (input === 'p') onMark(job.id, 'not_interested');
       if (input === ' ') onAISummary(job);
+      if (input === 'c' && onDossier) onDossier(job);
       if (input === 'o' && (detail?.url || job.url)) {
         import('child_process').then(({ exec }) => {
           const url = detail?.url || job.url;

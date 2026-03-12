@@ -296,12 +296,13 @@ export async function GET(request) {
       resumeText = result.text;
     }
 
-    // Get user's feedback for state filtering
+    // Get user's feedback for state filtering (exclude dossier rows)
     const supabase = getSupabase();
     const { data: feedback } = await supabase
       .from('pathways_job_feedback')
       .select('job_id, sentiment')
-      .eq('user_id', user.username);
+      .eq('user_id', user.username)
+      .neq('sentiment', 'dossier');
 
     const stateMap = {};
     (feedback || []).forEach((f) => {

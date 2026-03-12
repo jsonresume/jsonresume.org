@@ -10,6 +10,7 @@ export function createLocalApiClient({ baseUrl, resume }) {
   const base = baseUrl || DEFAULT_BASE_URL;
 
   return {
+    mode: 'local',
     fetchJobs: async (params = {}) => {
       const body = {
         resume,
@@ -68,5 +69,9 @@ export function createLocalApiClient({ baseUrl, resume }) {
     deleteSearch: async () => {
       throw new Error('Search profiles require a registry account');
     },
+
+    // Dossiers — local mode stores in memory only
+    fetchDossier: async () => ({ content: null }),
+    saveDossier: async () => ({ saved: true }),
   };
 }

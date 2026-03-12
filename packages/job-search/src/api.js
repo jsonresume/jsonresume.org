@@ -57,5 +57,13 @@ export function createApiClient({ baseUrl, apiKey }) {
         body: JSON.stringify(updates),
       }),
     deleteSearch: (id) => request(`/searches/${id}`, { method: 'DELETE' }),
+
+    // Dossiers
+    fetchDossier: (id) => request(`/jobs/${id}/dossier`),
+    saveDossier: (id, content) =>
+      request(`/jobs/${id}/dossier`, {
+        method: 'PUT',
+        body: JSON.stringify({ content }),
+      }),
   };
 }

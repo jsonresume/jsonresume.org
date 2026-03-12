@@ -60,12 +60,13 @@ export async function PUT(request, { params }) {
     }
   }
 
-  // Delete existing feedback for this user+job, then insert new
+  // Delete existing feedback for this user+job (preserve dossier rows)
   await supabase
     .from('pathways_job_feedback')
     .delete()
     .eq('user_id', user.username)
-    .eq('job_id', jobId);
+    .eq('job_id', jobId)
+    .neq('sentiment', 'dossier');
 
   const { error } = await supabase.from('pathways_job_feedback').insert({
     user_id: user.username,
@@ -83,7 +84,12 @@ export async function PUT(request, { params }) {
     );
   }
 
-  return NextResponse.json({ id: jobId, state, job_title: jobTitle, job_company: jobCompany });
+  return NextResponse.json({
+    id: jobId,
+    state,
+    job_title: jobTitle,
+    job_company: jobCompany,
+  });
 }
 
 /**
@@ -101,7 +107,9 @@ export async function GET(request, { params }) {
   const supabase = getSupabase();
   const { data: job, error } = await supabase
     .from('jobs')
-    .select('id, uuid, content, gpt_content, gpt_content_full, posted_at, url, salary_usd')
+    .select(
+      'id, uuid, content, gpt_content, gpt_content_full, posted_at, url, salary_usd'
+    )
     .eq('id', jobId)
     .single();
 

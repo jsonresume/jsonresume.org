@@ -12,6 +12,7 @@ const KEYS = {
     ['v', 'select'],
     ['n', 'find'],
     ['space', 'AI'],
+    ['c', 'dossier'],
   ],
   detail: [
     ['j/k', 'nav jobs'],
@@ -19,6 +20,7 @@ const KEYS = {
     ['i/x/m/p', 'mark'],
     ['o', 'open URL'],
     ['space', 'AI'],
+    ['c', 'dossier'],
     ['esc', 'back'],
   ],
   search: [

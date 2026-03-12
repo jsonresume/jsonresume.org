@@ -65,7 +65,9 @@ function App({ baseUrl, apiKey, apiClient }) {
   // Active search profile
   const [activeSearchId, setActiveSearchId] = useState(null);
 
-  // Persistent filters
+  const searchesHook = useSearches(api);
+
+  // Persistent filters (local + server sync for search profiles)
   const [filterStore, setFilterStore] = useState(() => loadFilters());
   const activeFilters = useMemo(
     () => getFiltersForSearch(filterStore, activeSearchId),
@@ -78,8 +80,12 @@ function App({ baseUrl, apiKey, apiClient }) {
         saveFilters(next);
         return next;
       });
+      // Sync to server for search profiles
+      if (activeSearchId) {
+        searchesHook.updateFilters(activeSearchId, newActive);
+      }
     },
-    [activeSearchId]
+    [activeSearchId, searchesHook]
   );
   const filterState = useMemo(
     () => ({ active: activeFilters }),
@@ -89,6 +95,21 @@ function App({ baseUrl, apiKey, apiClient }) {
     (s) => updateFilters(s.active),
     [updateFilters]
   );
+
+  // Sync server-side filters into local store when search profiles load
+  useEffect(() => {
+    if (!searchesHook.searches.length) return;
+    setFilterStore((prev) => {
+      let updated = prev;
+      for (const s of searchesHook.searches) {
+        if (s.filters?.length && !prev.searches?.[s.id]) {
+          updated = setFiltersForSearch(updated, s.id, s.filters);
+        }
+      }
+      if (updated !== prev) saveFilters(updated);
+      return updated;
+    });
+  }, [searchesHook.searches]);
 
   const {
     jobs: rawJobs,
@@ -100,7 +121,6 @@ function App({ baseUrl, apiKey, apiClient }) {
     forceRefresh,
   } = useJobs(api, activeFilters, tab, activeSearchId);
   const ai = useAI(resume);
-  const searchesHook = useSearches(api);
   const { toast, show: showToast } = useToast();
 
   // Apply inline search filter
@@ -128,12 +148,12 @@ function App({ baseUrl, apiKey, apiClient }) {
       .catch(() => {});
   }, [api]);
 
-  // Update selectedJob when cursor moves in detail view
+  // Update selectedJob when cursor moves or jobs list changes in detail view
   useEffect(() => {
     if (view === 'detail' && jobs[cursor]) {
       setSelectedJob(jobs[cursor]);
     }
-  }, [cursor, view]);
+  }, [cursor, view, jobs]);
 
   // Inline search escape handler
   useInput(
@@ -176,6 +196,9 @@ function App({ baseUrl, apiKey, apiClient }) {
         setView('detail');
       }
       if (key.escape && view === 'detail') setView('list');
+      if (input === 'c' && view === 'detail' && selectedJob) {
+        handleDossier(selectedJob);
+      }
 
       if (key.escape && view === 'ai') {
         ai.clear();
@@ -218,6 +241,11 @@ function App({ baseUrl, apiKey, apiClient }) {
     setSelectedJob(job);
     setView('ai');
     ai.summarizeJob(job);
+  };
+  const handleDossier = (job) => {
+    setSelectedJob(job);
+    setView('ai');
+    ai.dossier(job, api);
   };
   const handleAIBatch = (visibleJobs) => {
     setView('ai');
@@ -327,8 +355,64 @@ function App({ baseUrl, apiKey, apiClient }) {
             onBack: handleBack,
             onMark: handleMark,
             onAISummary: handleAISummary,
+            onDossier: handleDossier,
             isActive: false,
             isPanel: true,
+          })
+        )
+      ),
+      statusBar
+    );
+  }
+
+  // Split-pane: compact list on left, AI/dossier on right
+  if (view === 'ai' && selectedJob) {
+    return h(
+      Box,
+      { flexDirection: 'column', height: process.stdout.rows || 40 },
+      header,
+      h(
+        Box,
+        { flexGrow: 1, flexDirection: 'row' },
+        // Left pane: compact job list
+        h(
+          Box,
+          {
+            flexDirection: 'column',
+            width: '40%',
+            borderStyle: 'single',
+            borderColor: 'gray',
+            borderRight: true,
+            borderLeft: false,
+            borderTop: false,
+            borderBottom: false,
+          },
+          h(JobList, {
+            jobs,
+            cursor,
+            tab,
+            onCursorChange: setCursor,
+            onSelect: handleSelect,
+            onMark: handleMark,
+            isActive: false,
+            compact: true,
+            reservedRows: 8,
+          })
+        ),
+        // Right pane: AI/dossier panel
+        h(
+          Box,
+          { flexDirection: 'column', width: '60%' },
+          h(AIPanel, {
+            text: ai.text,
+            loading: ai.loading,
+            error: ai.error,
+            mode: ai.mode,
+            onDismiss: () => {
+              ai.clear();
+              setView(selectedJob ? 'detail' : 'list');
+            },
+            isActive: true,
           })
         )
       ),
@@ -350,6 +434,7 @@ function App({ baseUrl, apiKey, apiClient }) {
           onSelect: handleSelect,
           onMark: handleMark,
           onAISummary: handleAISummary,
+          onDossier: handleDossier,
           onAIBatch: handleAIBatch,
           onExport: handleExport,
           isActive: !inlineSearch,
@@ -384,14 +469,15 @@ function App({ baseUrl, apiKey, apiClient }) {
           onClose: () => setView('list'),
         })
       : null,
-    view === 'ai'
+    view === 'ai' && !selectedJob
       ? h(AIPanel, {
           text: ai.text,
           loading: ai.loading,
           error: ai.error,
+          mode: ai.mode,
           onDismiss: () => {
             ai.clear();
-            setView(selectedJob ? 'detail' : 'list');
+            setView('list');
           },
           isActive: true,
         })

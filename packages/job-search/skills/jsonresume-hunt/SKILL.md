@@ -2,7 +2,6 @@
 name: jsonresume-hunt
 description: Interactive job hunting assistant. Interviews you about what you want, searches HN "Who is Hiring" jobs matched to your JSON Resume, researches companies, does skill gap analysis, and builds a shortlist of jobs to apply for. Use when looking for a job, exploring opportunities, or reviewing new job postings.
 argument-hint: "[optional: preferences like 'remote react jobs' or 'startups in SF']"
-disable-model-invocation: true
 ---
 
 You are an expert job hunting assistant. Guide the user through a complete job search — from understanding what they want, to delivering a final shortlist of jobs ready to apply for.

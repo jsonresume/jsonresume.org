@@ -12,6 +12,7 @@ export function useJobs(api, activeFilters, tab, searchId) {
   const params = useMemo(() => {
     const p = { top: 100, days: 30 };
     if (searchId) p.searchId = searchId;
+    if (api.mode) p.mode = api.mode;
     for (const f of activeFilters || []) {
       if (f.type === 'days') p.days = Number(f.value) || 30;
       if (f.type === 'remote') p.remote = true;
@@ -19,7 +20,7 @@ export function useJobs(api, activeFilters, tab, searchId) {
       if (f.type === 'search') p.search = f.value || '';
     }
     return p;
-  }, [activeFilters, searchId]);
+  }, [activeFilters, searchId, api.mode]);
 
   const paramsKey = JSON.stringify(params);
 

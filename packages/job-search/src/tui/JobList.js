@@ -248,6 +248,7 @@ export default function JobList({
   onSelect,
   onMark,
   onAISummary,
+  onDossier,
   onAIBatch,
   onExport,
   isActive,
@@ -321,6 +322,7 @@ export default function JobList({
       if (input === 'p' && jobs[cursor])
         onMark(jobs[cursor].id, 'not_interested');
       if (input === ' ' && jobs[cursor]) onAISummary(jobs[cursor]);
+      if (input === 'c' && jobs[cursor] && onDossier) onDossier(jobs[cursor]);
       if (input === 'S' && onAIBatch) onAIBatch(jobs);
       if (input === 'e' && onExport) onExport();
     },

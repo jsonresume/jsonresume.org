@@ -3,7 +3,7 @@ import { join } from 'path';
 import { homedir } from 'os';
 
 const CACHE_DIR = join(homedir(), '.jsonresume', 'cache');
-const CACHE_TTL = 24 * 60 * 60 * 1000; // 1 day
+const CACHE_TTL = 2 * 60 * 60 * 1000; // 2 hours
 
 function ensureDir() {
   try {
@@ -14,6 +14,7 @@ function ensureDir() {
 function cacheKey(params) {
   const parts = [`jobs_${params.days || 30}_${params.top || 100}`];
   if (params.searchId) parts.push(`s_${params.searchId.slice(0, 8)}`);
+  if (params.mode) parts.push(params.mode);
   return parts.join('_') + '.json';
 }
 
