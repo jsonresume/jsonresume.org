@@ -43,6 +43,7 @@ async function getResumeEmbedding(resume) {
  *   ?remote=true    — filter remote only
  *   ?min_salary=100 — minimum salary in thousands
  *   ?search=react   — keyword search in parsed content
+ *   ?search_id=uuid — use a saved search profile's embedding instead of resume
  */
 export async function GET(request) {
   const user = await authenticate(request);
@@ -56,22 +57,41 @@ export async function GET(request) {
   const remote = searchParams.get('remote') === 'true';
   const minSalary = parseInt(searchParams.get('min_salary')) || 0;
   const search = searchParams.get('search') || '';
+  const searchId = searchParams.get('search_id') || '';
 
   try {
-    // Fetch resume
-    const res = await fetch(
-      `https://registry.jsonresume.org/${user.username}.json`
-    );
-    if (!res.ok) {
-      return NextResponse.json(
-        { error: 'Resume not found' },
-        { status: 404 }
-      );
-    }
-    const resume = await res.json();
+    let embedding;
 
-    // Generate embedding
-    const embedding = await getResumeEmbedding(resume);
+    if (searchId) {
+      // Use saved search profile's embedding
+      const supabaseForProfile = getSupabase();
+      const { data: profile, error: profileErr } = await supabaseForProfile
+        .from('search_profiles')
+        .select('embedding, user_id')
+        .eq('id', searchId)
+        .single();
+
+      if (profileErr || !profile || profile.user_id !== user.username) {
+        return NextResponse.json(
+          { error: 'Search profile not found' },
+          { status: 404 }
+        );
+      }
+      embedding = profile.embedding;
+    } else {
+      // Default: use resume embedding
+      const res = await fetch(
+        `https://registry.jsonresume.org/${user.username}.json`
+      );
+      if (!res.ok) {
+        return NextResponse.json(
+          { error: 'Resume not found' },
+          { status: 404 }
+        );
+      }
+      const resume = await res.json();
+      embedding = await getResumeEmbedding(resume);
+    }
 
     // Match jobs
     const supabase = getSupabase();

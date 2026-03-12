@@ -16,12 +16,12 @@
  *      npx @jsonresume/job-search search
  */
 
-const VERSION = '0.3.0';
+const VERSION = '0.4.0';
 
 const BASE_URL =
   getArg('--base-url') ||
   process.env.JSONRESUME_BASE_URL ||
-  'https://jsonresume.org';
+  'https://registry.jsonresume.org';
 const API_KEY = process.env.JSONRESUME_API_KEY;
 
 // ── Arg parsing ────────────────────────────────────────────
@@ -290,6 +290,7 @@ SETUP
 
 COMMANDS
   search                          Find matching jobs (default command)
+  browse                          Interactive TUI with AI features
   detail <id>                     Show full details for a job
   mark <id> <state>               Mark a job's state
   me                              Show your resume summary
@@ -363,6 +364,11 @@ Run "jsonresume-jobs help" for more info.`);
   switch (cmd) {
     case 'search':
       return cmdSearch();
+    case 'browse':
+    case 'tui': {
+      const { default: runTUI } = await import('../src/tui/App.js');
+      return runTUI({ baseUrl: BASE_URL, apiKey: API_KEY });
+    }
     case 'detail':
       return cmdDetail();
     case 'mark':

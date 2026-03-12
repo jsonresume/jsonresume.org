@@ -1,12 +1,14 @@
 {
   "name": "@jsonresume/job-search",
-  "version": "0.3.0",
+  "version": "0.4.0",
+  "type": "module",
   "description": "Search Hacker News jobs matched against your JSON Resume",
   "bin": {
     "jsonresume-jobs": "./bin/cli.js"
   },
   "files": [
     "bin",
+    "src",
     "skills",
     "README.md"
   ],
@@ -15,7 +17,9 @@
     "jobs",
     "hacker-news",
     "job-search",
-    "cli"
+    "cli",
+    "tui",
+    "ink"
   ],
   "repository": {
     "type": "git",
@@ -29,5 +33,14 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "@ai-sdk/anthropic": "^3.0.58",
+    "@ai-sdk/openai": "^3.0.41",
+    "ai": "^6.0.116",
+    "ink": "^6.8.0",
+    "ink-spinner": "^5.0.0",
+    "ink-text-input": "^6.0.0",
+    "react": "^19.2.4"
   }
 }
