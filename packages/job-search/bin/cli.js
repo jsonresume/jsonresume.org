@@ -6,7 +6,7 @@
  * Just run:  npx @jsonresume/jobs
  */
 
-const VERSION = '0.5.0';
+const VERSION = '0.6.0';
 
 const BASE_URL =
   getArg('--base-url') ||
