@@ -186,10 +186,11 @@ export async function GET(request) {
       Date.now() - days * 24 * 60 * 60 * 1000
     ).toISOString();
 
+    // Over-fetch to compensate for passed/dismissed jobs being filtered out
     const { data: matched, error } = await supabase.rpc('match_jobs_v5', {
       query_embedding: embedding,
       match_threshold: -1,
-      match_count: top * 3,
+      match_count: top * 5,
       created_after: createdAfter,
     });
 
@@ -214,6 +215,9 @@ export async function GET(request) {
     (feedback || []).forEach((f) => {
       stateMap[f.job_id] = f.sentiment;
     });
+
+    // States that should be excluded from active results
+    const HIDDEN_STATES = new Set(['not_interested', 'dismissed']);
 
     // Parse and filter
     let results = (jobs || [])
@@ -249,6 +253,8 @@ export async function GET(request) {
       })
       .filter(Boolean)
       .filter((j) => {
+        // Exclude passed/dismissed jobs from results
+        if (HIDDEN_STATES.has(j.state)) return false;
         if (remote && j.remote !== 'Full') return false;
         if (minSalary && j.salary_usd && j.salary_usd < minSalary * 1000)
           return false;

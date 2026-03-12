@@ -140,7 +140,10 @@ export function useJobs(api, activeFilters, tab, searchId) {
     if (tab === 'maybe') return filtered.filter((j) => j.state === 'maybe');
     if (tab === 'passed')
       return filtered.filter((j) => j.state === 'not_interested');
-    return filtered;
+    // "All" tab: hide passed and dismissed jobs
+    return filtered.filter(
+      (j) => j.state !== 'not_interested' && j.state !== 'dismissed'
+    );
   }, [allJobs, activeFilters, tab]);
 
   const markJob = useCallback(
