@@ -6,6 +6,8 @@
 
 Search Hacker News "Who is Hiring" jobs matched against your [JSON Resume](https://jsonresume.org). Jobs are semantically ranked using AI embeddings — your resume is compared against hundreds of monthly job postings to surface the best fits.
 
+![demo](./demo.gif)
+
 ## Quick Start
 
 ```bash
