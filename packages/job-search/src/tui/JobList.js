@@ -16,13 +16,26 @@ function useColumns(hasRerank, compact) {
   const cols = stdout?.columns || 120;
   const available = compact ? Math.floor(cols * 0.4) : cols;
 
+  const dossierW = 2;
+
   if (compact) {
-    // Compact mode: just score, title, status
+    // Compact mode: just score, title, dossier, status
     const scoreW = 5;
     const statusW = 2;
     const gaps = GAP * 2;
-    const titleW = Math.max(10, available - scoreW - statusW - gaps - 2);
-    return { cols: available, titleW, compW: 0, locW: 0, scoreW, statusW };
+    const titleW = Math.max(
+      10,
+      available - scoreW - dossierW - statusW - gaps - 2
+    );
+    return {
+      cols: available,
+      titleW,
+      compW: 0,
+      locW: 0,
+      scoreW,
+      statusW,
+      dossierW,
+    };
   }
 
   const scoreW = 5;
@@ -30,8 +43,9 @@ function useColumns(hasRerank, compact) {
   const salaryW = 12;
   const statusW = 2;
   const cursorW = 2;
-  const gaps = GAP * (hasRerank ? 6 : 5);
-  const fixed = cursorW + scoreW + aiW + salaryW + statusW + gaps + 2; // +2 paddingX
+  const gaps = GAP * (hasRerank ? 7 : 6);
+  const fixed =
+    cursorW + scoreW + aiW + salaryW + dossierW + statusW + gaps + 2;
   const flex = Math.max(30, available - fixed);
   const titleW = Math.max(12, Math.floor(flex * 0.35));
   const compW = Math.max(10, Math.floor(flex * 0.3));
@@ -44,6 +58,7 @@ function useColumns(hasRerank, compact) {
     scoreW,
     salaryW,
     statusW,
+    dossierW,
     aiW,
   };
 }
@@ -99,6 +114,11 @@ function HeaderRow({ hasRerank, titleW, compW, locW, compact }) {
       { width: 12, marginRight: GAP },
       h(Text, { bold: true, dimColor: true }, 'Salary')
     ),
+    h(
+      Box,
+      { width: 2, marginRight: GAP },
+      h(Text, { bold: true, dimColor: true }, '📋')
+    ),
     h(Box, { width: 2 }, h(Text, { bold: true, dimColor: true }, '  '))
   );
 }
@@ -148,6 +168,8 @@ function JobRow({
     backgroundColor: bg,
   };
 
+  const dossierColor = dossierStatus === 'generating' ? 'yellow' : 'green';
+
   if (compact) {
     return h(
       Box,
@@ -163,20 +185,15 @@ function JobRow({
         { flexGrow: 1 },
         h(Text, props, truncate(job.title || '—', titleW))
       ),
-      dossierIcon
-        ? h(
-            Box,
-            { width: 2 },
-            h(
-              Text,
-              {
-                ...props,
-                color: dossierStatus === 'generating' ? 'yellow' : 'green',
-              },
-              dossierIcon
-            )
-          )
-        : null,
+      h(
+        Box,
+        { width: 2 },
+        h(
+          Text,
+          { ...props, color: dossierIcon ? dossierColor : undefined },
+          dossierIcon || ' '
+        )
+      ),
       h(Box, { width: 2 }, h(Text, props, icon))
     );
   }
@@ -213,20 +230,15 @@ function JobRow({
       h(Text, props, truncate(loc, locW - 1))
     ),
     h(Box, { width: 12, marginRight: GAP }, h(Text, props, truncate(sal, 11))),
-    dossierIcon
-      ? h(
-          Box,
-          { width: 2 },
-          h(
-            Text,
-            {
-              ...props,
-              color: dossierStatus === 'generating' ? 'yellow' : 'green',
-            },
-            dossierIcon
-          )
-        )
-      : null,
+    h(
+      Box,
+      { width: 2, marginRight: GAP },
+      h(
+        Text,
+        { ...props, color: dossierIcon ? dossierColor : undefined },
+        dossierIcon || ' '
+      )
+    ),
     h(Box, { width: 2 }, h(Text, props, icon))
   );
 }
