@@ -42,8 +42,6 @@ export default function Header({
   const tabElements = tabs.map((t) => {
     const active = t === tab;
     const count = counts[t] || 0;
-    if (count === 0 && !active && t !== 'all') return null;
-
     const label = `${tabLabels[t]} ${count}`;
 
     if (active) {
@@ -64,7 +62,7 @@ export default function Header({
     );
   });
 
-  const tabRow = h(Box, { paddingX: 1 }, ...tabElements.filter(Boolean));
+  const tabRow = h(Box, { paddingX: 1 }, ...tabElements);
 
   // ── Filter pills (only if active) ────────────────
   const tags = [];
