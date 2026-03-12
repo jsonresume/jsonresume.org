@@ -437,18 +437,16 @@ Be thorough, specific, and opinionated. Reference the candidate's actual experie
   textRef.current = text;
 
   const exportDossier = useCallback((job) => {
-    const content = textRef.current;
+    // Use visible text state, or fall back to cache
+    const content =
+      textRef.current || dossierCache.current.get(job?.id)?.text || '';
     if (!content) return null;
-    try {
-      const company = (job?.company || 'unknown')
-        .replace(/[^a-zA-Z0-9]+/g, '-')
-        .toLowerCase();
-      const filename = `dossier-${company}.md`;
-      writeFileSync(filename, content, 'utf-8');
-      return filename;
-    } catch {
-      return null;
-    }
+    const company = (job?.company || 'unknown')
+      .replace(/[^a-zA-Z0-9]+/g, '-')
+      .toLowerCase();
+    const filename = `dossier-${company}.md`;
+    writeFileSync(filename, content, 'utf-8');
+    return filename;
   }, []);
 
   return {

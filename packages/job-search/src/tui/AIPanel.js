@@ -43,7 +43,7 @@ export default function AIPanel({
   useInput(
     (input, key) => {
       if (key.escape) onDismiss();
-      if (input === 'e' && !loading && text && onExport) {
+      if (input === 'e' && text && onExport) {
         const filename = onExport();
         if (filename) {
           exportMsg.current = filename;
@@ -96,7 +96,7 @@ export default function AIPanel({
         )}/${totalLines}`
       : '';
 
-  const exportHint = !loading && text ? ' · e export' : '';
+  const exportHint = text ? ' · e export' : '';
   const statusLine =
     loading && text
       ? 'Streaming… ESC to cancel'
