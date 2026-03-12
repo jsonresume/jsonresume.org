@@ -436,8 +436,9 @@ function App({ baseUrl, apiKey, apiClient }) {
             loading: ai.loading,
             error: ai.error,
             mode: ai.mode,
+            job: selectedJob,
+            onMark: handleMark,
             onDismiss: () => {
-              ai.clear();
               setView(selectedJob ? 'detail' : 'list');
             },
             onExport: () => {

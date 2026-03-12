@@ -9,6 +9,8 @@ export default function AIPanel({
   error,
   onDismiss,
   onExport,
+  onMark,
+  job,
   isActive,
   mode,
 }) {
@@ -51,6 +53,13 @@ export default function AIPanel({
             exportMsg.current = null;
           }, 3000);
         }
+      }
+      // Mark keys
+      if (job && onMark) {
+        if (input === 'i') onMark(job.id, 'interested');
+        if (input === 'x') onMark(job.id, 'applied');
+        if (input === 'm') onMark(job.id, 'maybe');
+        if (input === 'p') onMark(job.id, 'not_interested');
       }
       if (key.upArrow || input === 'k') setScroll((s) => Math.max(0, s - 1));
       if (key.downArrow || input === 'j') setScroll((s) => s + 1);

@@ -44,8 +44,9 @@ const KEYS = {
   ai: [
     ['j/k', 'scroll'],
     ['g/G', 'top/bottom'],
+    ['i/x/m/p', 'mark'],
     ['e', 'export'],
-    ['esc', 'dismiss'],
+    ['esc', 'back'],
   ],
   help: [['?/esc', 'close']],
 };
