@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Box, Text, useInput } from 'ink';
+import { Box, Text, useInput, useStdout } from 'ink';
 import { h } from './h.js';
 import {
   stateIcon,
@@ -7,6 +7,154 @@ import {
   formatSalary,
   formatLocation,
 } from '../formatters.js';
+
+// Fixed-width columns (characters)
+const COL_CURSOR = 2;
+const COL_SCORE = 6;
+const COL_AI = 4;
+const COL_SALARY = 14;
+const COL_STATUS = 3;
+
+function useColumns(hasRerank) {
+  const { stdout } = useStdout();
+  const cols = stdout?.columns || 120;
+  const fixed =
+    COL_CURSOR + COL_SCORE + (hasRerank ? COL_AI : 0) + COL_SALARY + COL_STATUS;
+  const flex = cols - fixed - 2; // 2 for paddingX
+  // Split remaining space: 35% title, 30% company, 35% location
+  const titleW = Math.max(12, Math.floor(flex * 0.35));
+  const compW = Math.max(10, Math.floor(flex * 0.3));
+  const locW = Math.max(10, flex - titleW - compW);
+  return { cols, titleW, compW, locW };
+}
+
+function HeaderRow({ hasRerank, titleW, compW, locW }) {
+  return h(
+    Box,
+    { paddingX: 1 },
+    h(Box, { width: COL_CURSOR }),
+    h(
+      Box,
+      { width: COL_SCORE },
+      h(Text, { bold: true, dimColor: true }, 'Score')
+    ),
+    hasRerank
+      ? h(Box, { width: COL_AI }, h(Text, { bold: true, dimColor: true }, 'AI'))
+      : null,
+    h(Box, { width: titleW }, h(Text, { bold: true, dimColor: true }, 'Title')),
+    h(
+      Box,
+      { width: compW },
+      h(Text, { bold: true, dimColor: true }, 'Company')
+    ),
+    h(
+      Box,
+      { width: locW },
+      h(Text, { bold: true, dimColor: true }, 'Location')
+    ),
+    h(
+      Box,
+      { width: COL_SALARY },
+      h(Text, { bold: true, dimColor: true }, 'Salary')
+    ),
+    h(Box, { width: COL_STATUS }, h(Text, { bold: true, dimColor: true }, 'St'))
+  );
+}
+
+function JobRow({ job, selected, hasRerank, titleW, compW, locW }) {
+  const loc = formatLocation(job.location, job.remote);
+  const sal = formatSalary(job.salary, job.salary_usd);
+  const score =
+    typeof job.similarity === 'number'
+      ? job.similarity.toFixed(2)
+      : String(job.similarity || '—');
+  const icon = stateIcon(job.state);
+
+  const stColor =
+    job.state === 'interested'
+      ? 'green'
+      : job.state === 'applied'
+      ? 'cyan'
+      : job.state === 'maybe'
+      ? 'yellow'
+      : job.state === 'not_interested'
+      ? 'red'
+      : undefined;
+
+  const color = selected ? 'white' : stColor;
+  const bg = selected ? 'blue' : undefined;
+
+  return h(
+    Box,
+    { paddingX: 1 },
+    h(
+      Box,
+      { width: COL_CURSOR },
+      h(
+        Text,
+        { inverse: selected, color, backgroundColor: bg },
+        selected ? '▸ ' : '  '
+      )
+    ),
+    h(
+      Box,
+      { width: COL_SCORE },
+      h(Text, { inverse: selected, color, backgroundColor: bg }, score)
+    ),
+    hasRerank
+      ? h(
+          Box,
+          { width: COL_AI },
+          h(
+            Text,
+            { inverse: selected, color, backgroundColor: bg },
+            job.rerank_score ? String(job.rerank_score) : '—'
+          )
+        )
+      : null,
+    h(
+      Box,
+      { width: titleW },
+      h(
+        Text,
+        { inverse: selected, color, backgroundColor: bg, wrap: 'truncate' },
+        truncate(job.title || '—', titleW - 1)
+      )
+    ),
+    h(
+      Box,
+      { width: compW },
+      h(
+        Text,
+        { inverse: selected, color, backgroundColor: bg, wrap: 'truncate' },
+        truncate(job.company || '—', compW - 1)
+      )
+    ),
+    h(
+      Box,
+      { width: locW },
+      h(
+        Text,
+        { inverse: selected, color, backgroundColor: bg, wrap: 'truncate' },
+        truncate(loc, locW - 1)
+      )
+    ),
+    h(
+      Box,
+      { width: COL_SALARY },
+      h(
+        Text,
+        { inverse: selected, color, backgroundColor: bg, wrap: 'truncate' },
+        truncate(sal, COL_SALARY - 1)
+      )
+    ),
+    h(
+      Box,
+      { width: COL_STATUS },
+      h(Text, { inverse: selected, color, backgroundColor: bg }, icon)
+    )
+  );
+}
 
 export default function JobList({
   jobs,
@@ -67,93 +215,26 @@ export default function JobList({
   }
 
   const visible = jobs.slice(scroll, scroll + visibleRows);
-  const cols = process.stdout.columns || 120;
-  const titleW = Math.max(20, Math.floor(cols * 0.25));
-  const compW = Math.max(15, Math.floor(cols * 0.18));
-  const locW = Math.max(12, Math.floor(cols * 0.15));
-
   const hasRerank = visible.some((j) => j.rerank_score);
-  const lineW = cols - 2; // account for paddingX: 1
-
-  const header = h(
-    Box,
-    { paddingX: 1 },
-    h(
-      Text,
-      { bold: true, dimColor: true },
-      (
-        '  ' +
-        'Score '.padEnd(7) +
-        (hasRerank ? 'AI '.padEnd(4) : '') +
-        'Title'.padEnd(titleW) +
-        'Company'.padEnd(compW) +
-        'Location'.padEnd(locW) +
-        'Salary'.padEnd(12) +
-        'Status'
-      ).padEnd(lineW)
-    )
-  );
+  const { cols, titleW, compW, locW } = useColumns(hasRerank);
 
   const divider = h(
     Box,
     { paddingX: 1 },
-    h(Text, { dimColor: true }, '─'.repeat(lineW))
+    h(Text, { dimColor: true }, '─'.repeat(cols - 2))
   );
 
-  const rows = visible.map((job, i) => {
-    const idx = scroll + i;
-    const selected = idx === cursor;
-    const icon = stateIcon(job.state);
-    const loc = formatLocation(job.location, job.remote);
-    const sal = formatSalary(job.salary, job.salary_usd);
-    const score =
-      typeof job.similarity === 'number'
-        ? job.similarity.toFixed(2)
-        : String(job.similarity || '—');
-
-    const aiScore =
-      hasRerank && job.rerank_score
-        ? String(job.rerank_score).padEnd(4)
-        : hasRerank
-        ? '—   '
-        : '';
-
-    const content =
-      (selected ? '▸ ' : '  ') +
-      score.padEnd(7) +
-      aiScore +
-      truncate(job.title || '—', titleW - 1).padEnd(titleW) +
-      truncate(job.company || '—', compW - 1).padEnd(compW) +
-      truncate(loc, locW - 1).padEnd(locW) +
-      truncate(sal, 11).padEnd(12) +
-      icon;
-    const line = content.padEnd(lineW);
-
-    const stColor =
-      job.state === 'interested'
-        ? 'green'
-        : job.state === 'applied'
-        ? 'cyan'
-        : job.state === 'maybe'
-        ? 'yellow'
-        : job.state === 'not_interested'
-        ? 'red'
-        : undefined;
-
-    return h(
-      Box,
-      { key: job.id, paddingX: 1 },
-      h(
-        Text,
-        {
-          inverse: selected,
-          color: selected ? 'white' : stColor,
-          backgroundColor: selected ? 'blue' : undefined,
-        },
-        line
-      )
-    );
-  });
+  const rows = visible.map((job, i) =>
+    h(JobRow, {
+      key: job.id,
+      job,
+      selected: scroll + i === cursor,
+      hasRerank,
+      titleW,
+      compW,
+      locW,
+    })
+  );
 
   const scrollInfo =
     jobs.length > visibleRows
@@ -177,7 +258,7 @@ export default function JobList({
   return h(
     Box,
     { flexDirection: 'column' },
-    header,
+    h(HeaderRow, { hasRerank, titleW, compW, locW }),
     divider,
     ...rows,
     scrollInfo
