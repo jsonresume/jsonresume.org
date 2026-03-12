@@ -52,6 +52,8 @@ export function useAI(resume) {
   const [mode, setMode] = useState('ai'); // 'ai' | 'cover'
   const hasKey = Boolean(process.env.OPENAI_API_KEY);
   const childRef = useRef(null);
+  const dossierJobId = useRef(null);
+  const dossierDone = useRef(false);
 
   const summarizeJob = useCallback(
     async (job) => {
@@ -104,15 +106,27 @@ export function useAI(resume) {
 
   const dossier = useCallback(
     async (job, api) => {
+      // If dossier is already loading or loaded for this job, just show it
+      if (
+        dossierJobId.current === job.id &&
+        (childRef.current || dossierDone.current)
+      ) {
+        setMode('cover');
+        return;
+      }
+
       setMode('cover');
       setError(null);
       setText('');
+      dossierJobId.current = job.id;
+      dossierDone.current = false;
 
       // Check server for existing dossier
       try {
         const { content } = await api.fetchDossier(job.id);
         if (content) {
           setText(content);
+          dossierDone.current = true;
           return;
         }
       } catch {
@@ -331,6 +345,7 @@ Be thorough, specific, and opinionated. Reference the candidate's actual experie
         }
       } finally {
         childRef.current = null;
+        dossierDone.current = true;
         setLoading(false);
       }
     },
@@ -418,6 +433,8 @@ Be thorough, specific, and opinionated. Reference the candidate's actual experie
     clear: () => {
       cancel();
       setText('');
+      dossierJobId.current = null;
+      dossierDone.current = false;
     },
   };
 }

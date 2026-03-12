@@ -201,7 +201,7 @@ function App({ baseUrl, apiKey, apiClient }) {
       }
 
       if (key.escape && view === 'ai') {
-        ai.clear();
+        // Don't kill running dossier — just hide the panel
         setView(selectedJob ? 'detail' : 'list');
       }
 
