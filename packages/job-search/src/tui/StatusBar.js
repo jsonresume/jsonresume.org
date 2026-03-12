@@ -49,6 +49,7 @@ export default function StatusBar({
   jobCount,
   totalCount,
   loading,
+  reranking,
   error,
   aiEnabled,
   searchName,
@@ -81,6 +82,7 @@ export default function StatusBar({
         Box,
         { gap: 1 },
         loading ? h(Text, { color: 'yellow' }, '⏳') : null,
+        reranking ? h(Text, { color: 'magenta' }, '🧠 AI reranking...') : null,
         h(Text, { dimColor: true }, `${jobCount}/${totalCount} jobs`),
         searchName ? h(Text, { color: 'magenta' }, `🔍`) : null,
         aiEnabled ? null : h(Text, { color: 'gray' }, '(no AI key)')

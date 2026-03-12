@@ -72,12 +72,8 @@ function App({ baseUrl, apiKey }) {
     [updateFilters]
   );
 
-  const { jobs, allJobs, loading, error, markJob, forceRefresh } = useJobs(
-    api,
-    activeFilters,
-    tab,
-    activeSearchId
-  );
+  const { jobs, allJobs, loading, reranking, error, markJob, forceRefresh } =
+    useJobs(api, activeFilters, tab, activeSearchId);
   const ai = useAI(resume);
   const searchesHook = useSearches(api);
 
@@ -224,6 +220,7 @@ function App({ baseUrl, apiKey }) {
       jobCount: jobs.length,
       totalCount: allJobs.length,
       loading,
+      reranking,
       error,
       aiEnabled: ai.hasKey,
       searchName: activeSearch?.name || null,
