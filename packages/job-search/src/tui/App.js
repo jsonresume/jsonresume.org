@@ -24,9 +24,10 @@ import StatusBar from './StatusBar.js';
 import AIPanel from './AIPanel.js';
 import HelpModal from './HelpModal.js';
 
-const TABS = ['all', 'interested', 'applied', 'maybe', 'passed'];
+const TABS = ['all', 'reviewed', 'interested', 'applied', 'maybe', 'passed'];
 const TAB_LABELS = {
   all: 'All',
+  reviewed: 'Reviewed',
   interested: 'Interested',
   applied: 'Applied',
   maybe: 'Maybe',
@@ -111,6 +112,7 @@ function App({ baseUrl, apiKey, apiClient }) {
     });
   }, [searchesHook.searches]);
 
+  const ai = useAI(resume);
   const {
     jobs: rawJobs,
     allJobs,
@@ -119,8 +121,7 @@ function App({ baseUrl, apiKey, apiClient }) {
     error,
     markJob,
     forceRefresh,
-  } = useJobs(api, activeFilters, tab, activeSearchId);
-  const ai = useAI(resume);
+  } = useJobs(api, activeFilters, tab, activeSearchId, ai.getDossierStatus);
   const { toast, show: showToast } = useToast();
   const [confirmExit, setConfirmExit] = useState(false);
 
@@ -309,6 +310,9 @@ function App({ baseUrl, apiKey, apiClient }) {
 
   const counts = {
     all: allJobs.length,
+    reviewed: allJobs.filter(
+      (j) => (j.has_dossier || ai.getDossierStatus(j.id) === 'done') && !j.state
+    ).length,
     interested: allJobs.filter((j) => j.state === 'interested').length,
     applied: allJobs.filter((j) => j.state === 'applied').length,
     maybe: allJobs.filter((j) => j.state === 'maybe').length,

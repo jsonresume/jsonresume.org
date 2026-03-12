@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { getCached, setCache, updateCachedJob } from '../cache.js';
 
-export function useJobs(api, activeFilters, tab, searchId) {
+export function useJobs(api, activeFilters, tab, searchId, getDossierStatus) {
   const [allJobs, setAllJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [reranking, setReranking] = useState(false);
@@ -135,6 +135,13 @@ export function useJobs(api, activeFilters, tab, searchId) {
       }
     }
 
+    if (tab === 'reviewed')
+      return filtered.filter(
+        (j) =>
+          !j.state &&
+          (j.has_dossier ||
+            (getDossierStatus && getDossierStatus(j.id) === 'done'))
+      );
     if (tab === 'interested')
       return filtered.filter((j) => j.state === 'interested');
     if (tab === 'applied') return filtered.filter((j) => j.state === 'applied');
@@ -145,7 +152,7 @@ export function useJobs(api, activeFilters, tab, searchId) {
     return filtered.filter(
       (j) => j.state !== 'not_interested' && j.state !== 'dismissed'
     );
-  }, [allJobs, activeFilters, tab]);
+  }, [allJobs, activeFilters, tab, getDossierStatus]);
 
   const markJob = useCallback(
     async (id, state, feedback) => {
