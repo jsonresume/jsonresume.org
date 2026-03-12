@@ -3,45 +3,46 @@ import { h } from './h.js';
 
 const KEYS = {
   list: [
-    ['↑↓/jk', 'navigate'],
-    ['enter', 'details'],
-    ['i', 'interested'],
-    ['x', 'applied'],
-    ['m', 'maybe'],
-    ['p', 'pass'],
-    ['space', 'AI summary'],
-    ['S', 'AI rank'],
-    ['f', 'filters'],
-    ['/', 'searches'],
-    ['R', 'refresh'],
-    ['tab', 'section'],
+    ['jk', 'nav'],
+    ['enter', 'open'],
+    ['i', '⭐'],
+    ['x', '📨'],
+    ['m', '?'],
+    ['p', '✗'],
+    ['v', 'select'],
+    ['space', 'AI'],
+    ['f', 'filter'],
+    ['/', 'search'],
+    ['e', 'export'],
+    ['?', 'help'],
     ['q', 'quit'],
   ],
   detail: [
-    ['↑↓', 'scroll'],
-    ['i', 'interested'],
-    ['x', 'applied'],
-    ['m', 'maybe'],
-    ['p', 'pass'],
+    ['jk', 'scroll'],
+    ['i', '⭐'],
+    ['x', '📨'],
+    ['m', '?'],
+    ['p', '✗'],
     ['space', 'AI'],
     ['o', 'open URL'],
     ['esc', 'back'],
   ],
   filters: [
-    ['↑↓', 'navigate'],
+    ['jk', 'nav'],
     ['enter', 'edit'],
     ['a', 'add'],
     ['d', 'delete'],
     ['esc', 'close'],
   ],
   searches: [
-    ['↑↓', 'navigate'],
+    ['jk', 'nav'],
     ['enter', 'switch'],
-    ['n', 'new search'],
+    ['n', 'new'],
     ['d', 'delete'],
     ['esc', 'close'],
   ],
   ai: [['esc', 'dismiss']],
+  help: [['?/esc', 'close']],
 };
 
 export default function StatusBar({
@@ -53,6 +54,7 @@ export default function StatusBar({
   error,
   aiEnabled,
   searchName,
+  toast,
 }) {
   const keys = KEYS[view] || KEYS.list;
 
@@ -74,20 +76,31 @@ export default function StatusBar({
       paddingX: 1,
       marginTop: 0,
     },
-    h(
-      Box,
-      { justifyContent: 'space-between' },
-      h(Box, { flexWrap: 'wrap', gap: 0 }, ...keyElements),
-      h(
-        Box,
-        { gap: 1 },
-        loading ? h(Text, { color: 'yellow' }, '⏳') : null,
-        reranking ? h(Text, { color: 'magenta' }, '🧠 AI reranking...') : null,
-        h(Text, { dimColor: true }, `${jobCount}/${totalCount} jobs`),
-        searchName ? h(Text, { color: 'magenta' }, `🔍`) : null,
-        aiEnabled ? null : h(Text, { color: 'gray' }, '(no AI key)')
-      )
-    ),
+    toast
+      ? h(
+          Box,
+          { justifyContent: 'space-between' },
+          toast,
+          h(
+            Box,
+            { gap: 1 },
+            h(Text, { dimColor: true }, `${jobCount}/${totalCount} jobs`)
+          )
+        )
+      : h(
+          Box,
+          { justifyContent: 'space-between' },
+          h(Box, { flexWrap: 'wrap', gap: 0 }, ...keyElements),
+          h(
+            Box,
+            { gap: 1 },
+            loading ? h(Text, { color: 'yellow' }, '⏳') : null,
+            reranking ? h(Text, { color: 'magenta' }, '🧠 reranking…') : null,
+            h(Text, { dimColor: true }, `${jobCount}/${totalCount} jobs`),
+            searchName ? h(Text, { color: 'magenta' }, '🔍') : null,
+            aiEnabled ? null : h(Text, { color: 'gray' }, '(no AI)')
+          )
+        ),
     error ? h(Text, { color: 'red' }, `Error: ${error}`) : null
   );
 }

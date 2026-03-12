@@ -6,11 +6,12 @@ import {
   truncate,
   formatSalary,
   formatLocation,
+  scoreBar,
 } from '../formatters.js';
 
 // Fixed-width columns (characters)
 const COL_CURSOR = 2;
-const COL_SCORE = 6;
+const COL_SCORE = 8; // sparkline + number
 const COL_AI = 4;
 const COL_SALARY = 14;
 const COL_STATUS = 3;
@@ -20,8 +21,7 @@ function useColumns(hasRerank) {
   const cols = stdout?.columns || 120;
   const fixed =
     COL_CURSOR + COL_SCORE + (hasRerank ? COL_AI : 0) + COL_SALARY + COL_STATUS;
-  const flex = cols - fixed - 2; // 2 for paddingX
-  // Split remaining space: 35% title, 30% company, 35% location
+  const flex = cols - fixed - 2;
   const titleW = Math.max(12, Math.floor(flex * 0.35));
   const compW = Math.max(10, Math.floor(flex * 0.3));
   const locW = Math.max(10, flex - titleW - compW);
@@ -61,13 +61,12 @@ function HeaderRow({ hasRerank, titleW, compW, locW }) {
   );
 }
 
-function JobRow({ job, selected, hasRerank, titleW, compW, locW }) {
+function JobRow({ job, selected, hasRerank, titleW, compW, locW, marked }) {
   const loc = formatLocation(job.location, job.remote);
   const sal = formatSalary(job.salary, job.salary_usd);
-  const score =
-    typeof job.similarity === 'number'
-      ? job.similarity.toFixed(2)
-      : String(job.similarity || '—');
+  const bar = scoreBar(job.similarity, 4);
+  const num =
+    typeof job.similarity === 'number' ? job.similarity.toFixed(2) : '—';
   const icon = stateIcon(job.state);
 
   const stColor =
@@ -83,6 +82,7 @@ function JobRow({ job, selected, hasRerank, titleW, compW, locW }) {
 
   const color = selected ? 'white' : stColor;
   const bg = selected ? 'blue' : undefined;
+  const cursorStr = marked ? '● ' : selected ? '▸ ' : '  ';
 
   return h(
     Box,
@@ -92,14 +92,27 @@ function JobRow({ job, selected, hasRerank, titleW, compW, locW }) {
       { width: COL_CURSOR },
       h(
         Text,
-        { inverse: selected, color, backgroundColor: bg },
-        selected ? '▸ ' : '  '
+        {
+          inverse: selected,
+          color: marked ? 'magenta' : color,
+          backgroundColor: bg,
+        },
+        cursorStr
       )
     ),
     h(
       Box,
       { width: COL_SCORE },
-      h(Text, { inverse: selected, color, backgroundColor: bg }, score)
+      h(
+        Text,
+        {
+          inverse: selected,
+          color: selected ? color : 'green',
+          backgroundColor: bg,
+        },
+        bar
+      ),
+      h(Text, { inverse: selected, color, backgroundColor: bg }, num)
     ),
     hasRerank
       ? h(
@@ -156,6 +169,44 @@ function JobRow({ job, selected, hasRerank, titleW, compW, locW }) {
   );
 }
 
+function EmptyState({ tab }) {
+  const messages = {
+    all: [
+      '    No matching jobs found.',
+      '',
+      '  Try these:',
+      '    • Increase the date range    f → days',
+      '    • Remove salary filters      f → delete',
+      '    • Try a different search      / → new',
+      '    • Refresh results             R',
+    ],
+    interested: [
+      '    No jobs marked as interested yet.',
+      '',
+      '  Browse the All tab and press i on jobs you like.',
+    ],
+    applied: [
+      '    No applications tracked yet.',
+      '',
+      '  Press x on a job to mark it as applied.',
+    ],
+    maybe: [
+      '    No maybes yet.',
+      '',
+      '  Press m on jobs you want to revisit later.',
+    ],
+    passed: ['    No passed jobs.', '', "  Press p on jobs that aren't a fit."],
+  };
+
+  const lines = messages[tab] || messages.all;
+
+  return h(
+    Box,
+    { flexDirection: 'column', paddingX: 1, paddingY: 1 },
+    ...lines.map((line, i) => h(Text, { key: i, dimColor: true }, line))
+  );
+}
+
 export default function JobList({
   jobs,
   cursor,
@@ -164,35 +215,82 @@ export default function JobList({
   onMark,
   onAISummary,
   onAIBatch,
+  onExport,
   isActive,
+  tab,
+  previewHeight,
 }) {
   const [scroll, setScroll] = useState(0);
-  const visibleRows = Math.max((process.stdout.rows || 30) - 12, 8);
+  const [selected, setSelected] = useState(new Set());
+  const reservedRows = 12 + (previewHeight || 0);
+  const visibleRows = Math.max((process.stdout.rows || 30) - reservedRows, 5);
 
-  // Clamp cursor if jobs list shrinks
   useEffect(() => {
     if (cursor >= jobs.length && jobs.length > 0) {
       onCursorChange(jobs.length - 1);
     }
   }, [jobs.length]);
 
-  // Keep scroll in sync with cursor
   useEffect(() => {
     if (cursor < scroll) setScroll(cursor);
     if (cursor >= scroll + visibleRows) setScroll(cursor - visibleRows + 1);
   }, [cursor]);
 
+  // Clear batch selection when jobs change
+  useEffect(() => {
+    setSelected(new Set());
+  }, [jobs.length, tab]);
+
   useInput(
     (input, key) => {
       if (key.upArrow || input === 'k') {
-        const next = Math.max(0, cursor - 1);
-        onCursorChange(next);
+        onCursorChange(Math.max(0, cursor - 1));
       }
       if (key.downArrow || input === 'j') {
-        const next = Math.min(jobs.length - 1, cursor + 1);
-        onCursorChange(next);
+        onCursorChange(Math.min(jobs.length - 1, cursor + 1));
+      }
+      // Page up/down
+      if (key.pageUp || (key.ctrl && input === 'u')) {
+        onCursorChange(Math.max(0, cursor - visibleRows));
+      }
+      if (key.pageDown || (key.ctrl && input === 'd')) {
+        onCursorChange(Math.min(jobs.length - 1, cursor + visibleRows));
+      }
+      // Home/End
+      if (key.home || input === 'g') {
+        onCursorChange(0);
+      }
+      if (input === 'G') {
+        onCursorChange(Math.max(0, jobs.length - 1));
       }
       if (key.return && jobs[cursor]) onSelect(jobs[cursor]);
+      // Batch toggle
+      if (input === 'v' && jobs[cursor]) {
+        setSelected((prev) => {
+          const next = new Set(prev);
+          if (next.has(jobs[cursor].id)) {
+            next.delete(jobs[cursor].id);
+          } else {
+            next.add(jobs[cursor].id);
+          }
+          return next;
+        });
+      }
+      // Batch mark
+      if (selected.size > 0 && 'ixmp'.includes(input)) {
+        const states = {
+          i: 'interested',
+          x: 'applied',
+          m: 'maybe',
+          p: 'not_interested',
+        };
+        const st = states[input];
+        if (st) {
+          for (const id of selected) onMark(id, st);
+          setSelected(new Set());
+          return;
+        }
+      }
       if (input === 'i' && jobs[cursor]) onMark(jobs[cursor].id, 'interested');
       if (input === 'x' && jobs[cursor]) onMark(jobs[cursor].id, 'applied');
       if (input === 'm' && jobs[cursor]) onMark(jobs[cursor].id, 'maybe');
@@ -200,20 +298,13 @@ export default function JobList({
         onMark(jobs[cursor].id, 'not_interested');
       if (input === ' ' && jobs[cursor]) onAISummary(jobs[cursor]);
       if (input === 'S') onAIBatch(jobs);
+      if (input === 'e' && onExport) onExport();
     },
     { isActive }
   );
 
   if (jobs.length === 0) {
-    return h(
-      Box,
-      { flexDirection: 'column', padding: 1 },
-      h(
-        Text,
-        { dimColor: true },
-        'No jobs in this section. Try switching tabs or adjusting filters.'
-      )
-    );
+    return h(EmptyState, { tab });
   }
 
   const visible = jobs.slice(scroll, scroll + visibleRows);
@@ -231,6 +322,7 @@ export default function JobList({
       key: job.id,
       job,
       selected: scroll + i === cursor,
+      marked: selected.has(job.id),
       hasRerank,
       titleW,
       compW,
@@ -238,24 +330,27 @@ export default function JobList({
     })
   );
 
-  const scrollInfo =
-    jobs.length > visibleRows
-      ? h(
-          Box,
-          { paddingX: 1, justifyContent: 'space-between' },
-          h(
-            Text,
-            { dimColor: true },
-            `${scroll + 1}–${Math.min(scroll + visibleRows, jobs.length)} of ${
-              jobs.length
-            } jobs`
-          ),
-          scroll > 0 ? h(Text, { dimColor: true }, '↑ more') : null,
-          scroll + visibleRows < jobs.length
-            ? h(Text, { dimColor: true }, '↓ more')
-            : null
-        )
-      : null;
+  const parts = [];
+  parts.push(
+    `${scroll + 1}–${Math.min(scroll + visibleRows, jobs.length)} of ${
+      jobs.length
+    }`
+  );
+  if (selected.size > 0) parts.push(`${selected.size} selected`);
+
+  const scrollInfo = h(
+    Box,
+    { paddingX: 1, justifyContent: 'space-between' },
+    h(Text, { dimColor: true }, parts.join('  ·  ')),
+    h(
+      Box,
+      { gap: 1 },
+      scroll > 0 ? h(Text, { dimColor: true }, '↑') : null,
+      scroll + visibleRows < jobs.length
+        ? h(Text, { dimColor: true }, '↓')
+        : null
+    )
+  );
 
   return h(
     Box,

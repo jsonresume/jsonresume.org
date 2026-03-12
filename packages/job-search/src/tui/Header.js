@@ -15,10 +15,12 @@ export default function Header({
   counts,
   filters,
   searchName,
+  appliedQuery,
 }) {
   const tabElements = tabs.map((t) => {
     const active = t === tab;
-    const label = `${tabLabels[t]} (${counts[t] || 0})`;
+    const count = counts[t] || 0;
+    const label = `${tabLabels[t]} (${count})`;
     return h(
       Box,
       { key: t, marginRight: 1 },
@@ -29,7 +31,7 @@ export default function Header({
           color: active ? 'cyan' : 'gray',
           underline: active,
         },
-        active ? ` ${label} ` : ` ${label} `
+        ` ${label} `
       )
     );
   });
@@ -38,6 +40,8 @@ export default function Header({
     const label = FILTER_LABELS[f.type]?.(f) || `${f.type}: ${f.value}`;
     return h(Text, { key: i, color: 'yellow' }, ` [${label}] `);
   });
+
+  const hasFilters = filterTags.length > 0 || appliedQuery;
 
   return h(
     Box,
@@ -54,21 +58,30 @@ export default function Header({
       h(Text, { bold: true, color: 'white' }, 'JSON Resume Job Search'),
       searchName ? h(Text, { color: 'magenta' }, `  🔍 ${searchName}`) : null,
       h(Text, { color: 'gray' }, '  '),
-      h(Text, { dimColor: true }, 'tab:sections  /:searches')
+      h(Text, { dimColor: true }, 'tab:sections  /:searches  ?:help')
     ),
     h(Box, { paddingX: 1, gap: 0 }, ...tabElements),
-    filterTags.length > 0
+    hasFilters
       ? h(
           Box,
           { paddingX: 1 },
-          h(Text, { dimColor: true }, 'Filters:'),
+          filterTags.length > 0
+            ? h(Text, { dimColor: true }, 'Filters:')
+            : null,
           ...filterTags,
+          appliedQuery
+            ? h(Text, { color: 'yellow' }, ` [Find: "${appliedQuery}"] `)
+            : null,
           h(Text, { dimColor: true }, '  f:manage')
         )
       : h(
           Box,
           { paddingX: 1 },
-          h(Text, { dimColor: true }, 'No filters active  f:add filters')
+          h(
+            Text,
+            { dimColor: true },
+            'No filters active  f:add  n:quick search'
+          )
         )
   );
 }

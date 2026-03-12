@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { render, Box, useInput, useApp } from 'ink';
+import { render, Box, Text, useInput, useApp } from 'ink';
+import TextInput from 'ink-text-input';
 import { h } from './h.js';
 import { createApiClient } from '../api.js';
 import {
@@ -8,9 +9,12 @@ import {
   getFiltersForSearch,
   setFiltersForSearch,
 } from '../filters.js';
+import { exportShortlist } from '../export.js';
 import { useJobs } from './useJobs.js';
 import { useAI } from './useAI.js';
 import { useSearches } from './useSearches.js';
+import { useToast } from './Toast.js';
+import Toast from './Toast.js';
 import Header from './Header.js';
 import JobList from './JobList.js';
 import JobDetail from './JobDetail.js';
@@ -18,6 +22,8 @@ import FilterManager from './FilterManager.js';
 import SearchManager from './SearchManager.js';
 import StatusBar from './StatusBar.js';
 import AIPanel from './AIPanel.js';
+import HelpModal from './HelpModal.js';
+import PreviewPane from './PreviewPane.js';
 
 const TABS = ['all', 'interested', 'applied', 'maybe', 'passed'];
 const TAB_LABELS = {
@@ -27,6 +33,21 @@ const TAB_LABELS = {
   maybe: '? Maybe',
   passed: '✗ Passed',
 };
+
+const PREVIEW_HEIGHT = 5;
+
+function InlineSearch({ query, onChange, onSubmit, onCancel }) {
+  return h(
+    Box,
+    { paddingX: 1 },
+    h(Text, { color: 'yellow', bold: true }, '/ '),
+    h(TextInput, {
+      value: query,
+      onChange,
+      onSubmit,
+    })
+  );
+}
 
 function App({ baseUrl, apiKey }) {
   const { exit } = useApp();
@@ -40,6 +61,12 @@ function App({ baseUrl, apiKey }) {
   const [selectedJob, setSelectedJob] = useState(null);
   const [cursor, setCursor] = useState(0);
   const [resume, setResume] = useState(null);
+  const [showPreview, setShowPreview] = useState(true);
+
+  // Inline search
+  const [inlineSearch, setInlineSearch] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [appliedQuery, setAppliedQuery] = useState('');
 
   // Active search profile (null = default resume)
   const [activeSearchId, setActiveSearchId] = useState(null);
@@ -63,7 +90,6 @@ function App({ baseUrl, apiKey }) {
     [activeSearchId]
   );
 
-  // For FilterManager compatibility — it expects { active: [] }
   const filterState = useMemo(
     () => ({ active: activeFilters }),
     [activeFilters]
@@ -73,10 +99,25 @@ function App({ baseUrl, apiKey }) {
     [updateFilters]
   );
 
-  const { jobs, allJobs, loading, reranking, error, markJob, forceRefresh } =
-    useJobs(api, activeFilters, tab, activeSearchId);
+  const {
+    jobs: rawJobs,
+    allJobs,
+    loading,
+    reranking,
+    error,
+    markJob,
+    forceRefresh,
+  } = useJobs(api, activeFilters, tab, activeSearchId);
   const ai = useAI(resume);
   const searchesHook = useSearches(api);
+  const { toast, show: showToast } = useToast();
+
+  // Apply inline search filter
+  const jobs = useMemo(() => {
+    if (!appliedQuery) return rawJobs;
+    const q = appliedQuery.toLowerCase();
+    return rawJobs.filter((j) => JSON.stringify(j).toLowerCase().includes(q));
+  }, [rawJobs, appliedQuery]);
 
   useEffect(() => {
     api
@@ -85,13 +126,40 @@ function App({ baseUrl, apiKey }) {
       .catch(() => {});
   }, [api]);
 
+  // Inline search input handler
   useInput(
     (input, key) => {
-      if (view === 'filters' || view === 'searches') return;
+      if (key.escape) {
+        setInlineSearch(false);
+        setSearchQuery('');
+        setAppliedQuery('');
+      }
+    },
+    { isActive: inlineSearch }
+  );
+
+  useInput(
+    (input, key) => {
+      if (view === 'filters' || view === 'searches' || view === 'help') return;
+      if (inlineSearch) return;
+
       if (input === 'q' && view === 'list') exit();
-      if (input === 'R' && view === 'list') forceRefresh();
+      if (input === 'R' && view === 'list') {
+        forceRefresh();
+        showToast('Refreshing…', 'info');
+      }
       if (input === 'f' && view === 'list') setView('filters');
       if (input === '/' && view === 'list') setView('searches');
+      if (input === '?' && (view === 'list' || view === 'detail'))
+        setView('help');
+      if (input === 'n' && view === 'list') {
+        setInlineSearch(true);
+        setSearchQuery('');
+      }
+
+      // Toggle preview pane
+      if (input === 'P' && view === 'list') setShowPreview((p) => !p);
+
       if (key.escape && view === 'detail') setView('list');
       if (key.escape && view === 'ai') {
         ai.clear();
@@ -108,16 +176,29 @@ function App({ baseUrl, apiKey }) {
         setCursor(0);
       }
     },
-    { isActive: view !== 'filters' && view !== 'searches' }
+    {
+      isActive: view !== 'filters' && view !== 'searches' && view !== 'help',
+    }
   );
 
   const handleSelect = (job) => {
     setSelectedJob(job);
     setView('detail');
   };
+
   const handleMark = async (id, state) => {
     await markJob(id, state);
+    const job = allJobs.find((j) => j.id === id);
+    const title = job ? `${job.title}` : `#${id}`;
+    const labels = {
+      interested: 'interested',
+      applied: 'applied',
+      maybe: 'maybe',
+      not_interested: 'passed',
+    };
+    showToast(`${title} → ${labels[state] || state}`, state);
   };
+
   const handleAISummary = (job) => {
     setSelectedJob(job);
     setView('ai');
@@ -130,6 +211,14 @@ function App({ baseUrl, apiKey }) {
   const handleBack = () => {
     setSelectedJob(null);
     setView('list');
+  };
+  const handleExport = () => {
+    try {
+      const filename = exportShortlist(allJobs);
+      showToast(`Exported to ${filename}`, 'export');
+    } catch (err) {
+      showToast(`Export failed: ${err.message}`, 'error');
+    }
   };
 
   const handleCreateSearch = async (name, prompt) => {
@@ -159,6 +248,12 @@ function App({ baseUrl, apiKey }) {
     passed: allJobs.filter((j) => j.state === 'not_interested').length,
   };
 
+  // Current job under cursor for preview
+  const previewJob = view === 'list' && showPreview ? jobs[cursor] : null;
+
+  // Toast element to pass to StatusBar
+  const toastEl = toast ? h(Toast, { toast }) : null;
+
   return h(
     Box,
     { flexDirection: 'column', height: process.stdout.rows || 40 },
@@ -169,19 +264,39 @@ function App({ baseUrl, apiKey }) {
       counts,
       filters: activeFilters,
       searchName: activeSearch?.name || null,
+      appliedQuery,
     }),
     view === 'list'
       ? h(JobList, {
           jobs,
           cursor,
+          tab,
           onCursorChange: setCursor,
           onSelect: handleSelect,
           onMark: handleMark,
           onAISummary: handleAISummary,
           onAIBatch: handleAIBatch,
-          isActive: true,
+          onExport: handleExport,
+          isActive: !inlineSearch,
+          previewHeight: showPreview ? PREVIEW_HEIGHT : 0,
         })
       : null,
+    view === 'list' && inlineSearch
+      ? h(InlineSearch, {
+          query: searchQuery,
+          onChange: setSearchQuery,
+          onSubmit: () => {
+            setAppliedQuery(searchQuery);
+            setInlineSearch(false);
+            setCursor(0);
+          },
+          onCancel: () => {
+            setInlineSearch(false);
+            setSearchQuery('');
+          },
+        })
+      : null,
+    view === 'list' && previewJob ? h(PreviewPane, { job: previewJob }) : null,
     view === 'detail' && selectedJob
       ? h(JobDetail, {
           job: selectedJob,
@@ -221,8 +336,9 @@ function App({ baseUrl, apiKey }) {
           isActive: true,
         })
       : null,
+    view === 'help' ? h(HelpModal, { onClose: () => setView('list') }) : null,
     h(StatusBar, {
-      view,
+      view: inlineSearch ? 'search' : view,
       jobCount: jobs.length,
       totalCount: allJobs.length,
       loading,
@@ -230,6 +346,7 @@ function App({ baseUrl, apiKey }) {
       error,
       aiEnabled: ai.hasKey,
       searchName: activeSearch?.name || null,
+      toast: toastEl,
     })
   );
 }
