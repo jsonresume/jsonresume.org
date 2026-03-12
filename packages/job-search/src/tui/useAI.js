@@ -53,7 +53,8 @@ export function useAI(resume) {
   const hasKey = Boolean(process.env.OPENAI_API_KEY);
   const childRef = useRef(null);
   const dossierJobId = useRef(null);
-  const dossierDone = useRef(false);
+  // Local cache: jobId → { text, done, loading }
+  const dossierCache = useRef(new Map());
 
   const summarizeJob = useCallback(
     async (job) => {
@@ -106,12 +107,15 @@ export function useAI(resume) {
 
   const dossier = useCallback(
     async (job, api) => {
+      const cached = dossierCache.current.get(job.id);
+
       // If dossier is already loading or loaded for this job, just show it
-      if (
-        dossierJobId.current === job.id &&
-        (childRef.current || dossierDone.current)
-      ) {
+      if (cached && (cached.loading || cached.done)) {
         setMode('cover');
+        setText(cached.text || '');
+        setLoading(cached.loading || false);
+        setError(null);
+        dossierJobId.current = job.id;
         return;
       }
 
@@ -119,14 +123,30 @@ export function useAI(resume) {
       setError(null);
       setText('');
       dossierJobId.current = job.id;
-      dossierDone.current = false;
+      dossierCache.current.set(job.id, {
+        text: '',
+        done: false,
+        loading: true,
+      });
+
+      // Helper to update both state and cache
+      // Only updates visible state if this job is still the active dossier
+      const updateText = (val) => {
+        const entry = dossierCache.current.get(job.id);
+        if (entry) entry.text = val;
+        if (dossierJobId.current === job.id) setText(val);
+      };
 
       // Check server for existing dossier
       try {
         const { content } = await api.fetchDossier(job.id);
         if (content) {
-          setText(content);
-          dossierDone.current = true;
+          updateText(content);
+          dossierCache.current.set(job.id, {
+            text: content,
+            done: true,
+            loading: false,
+          });
           return;
         }
       } catch {
@@ -270,7 +290,7 @@ Be thorough, specific, and opinionated. Reference the candidate's actual experie
               for (const block of content) {
                 if (block.type === 'text' && block.text) {
                   finalResult = block.text;
-                  setText(
+                  updateText(
                     statusLine ? `${statusLine}\n\n${finalResult}` : finalResult
                   );
                 } else if (block.type === 'tool_use') {
@@ -284,7 +304,7 @@ Be thorough, specific, and opinionated. Reference the candidate's actual experie
                   } else {
                     statusLine = `⚙ Using ${name}…`;
                   }
-                  setText(
+                  updateText(
                     finalResult ? `${statusLine}\n\n${finalResult}` : statusLine
                   );
                 }
@@ -293,7 +313,7 @@ Be thorough, specific, and opinionated. Reference the candidate's actual experie
 
             if (event.type === 'result' && event.result) {
               finalResult = event.result;
-              setText(finalResult);
+              updateText(finalResult);
             }
           } catch {
             // Not valid JSON, skip
@@ -314,7 +334,8 @@ Be thorough, specific, and opinionated. Reference the candidate's actual experie
 
         await new Promise((resolve, reject) => {
           child.on('close', (code) => {
-            childRef.current = null;
+            // Only clear childRef if it's still our process
+            if (childRef.current === child) childRef.current = null;
             // Process any remaining buffer
             if (buffer.trim()) processLine(buffer);
             if (code === 0) {
@@ -326,7 +347,7 @@ Be thorough, specific, and opinionated. Reference the candidate's actual experie
             }
           });
           child.on('error', (err) => {
-            childRef.current = null;
+            if (childRef.current === child) childRef.current = null;
             reject(err);
           });
         });
@@ -344,9 +365,15 @@ Be thorough, specific, and opinionated. Reference the candidate's actual experie
           setError(err.message);
         }
       } finally {
-        childRef.current = null;
-        dossierDone.current = true;
-        setLoading(false);
+        const entry = dossierCache.current.get(job.id);
+        if (entry) {
+          entry.done = true;
+          entry.loading = false;
+        }
+        if (dossierJobId.current === job.id) {
+          childRef.current = null;
+          setLoading(false);
+        }
       }
     },
     [resume]
@@ -434,7 +461,6 @@ Be thorough, specific, and opinionated. Reference the candidate's actual experie
       cancel();
       setText('');
       dossierJobId.current = null;
-      dossierDone.current = false;
     },
   };
 }
