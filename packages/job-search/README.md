@@ -12,12 +12,12 @@ Search Hacker News "Who is Hiring" jobs matched against your [JSON Resume](https
 npx @jsonresume/jobs
 ```
 
-That's it. The CLI will walk you through login if it's your first time — all you need is a resume hosted at [registry.jsonresume.org](https://registry.jsonresume.org).
+That's it. The CLI walks you through login on first run — all you need is a resume hosted at [registry.jsonresume.org](https://registry.jsonresume.org).
 
 ## Prerequisites
 
 - **Node.js** >= 18
-- A JSON Resume hosted on the [JSON Resume Registry](https://registry.jsonresume.org) (free, backed by your GitHub Gist)
+- A JSON Resume on the [JSON Resume Registry](https://registry.jsonresume.org) (free, backed by your GitHub Gist)
 - *(Optional)* `OPENAI_API_KEY` — enables AI summaries and batch ranking in the TUI
 
 ## Installation
@@ -67,12 +67,18 @@ npx @jsonresume/jobs
 
 ### Features
 
-- **Tab-based views** — All / Interested / Applied / Maybe / Passed
+- **Split-pane detail view** — press Enter to see a compact job list on the left and full details on the right, navigate jobs without leaving the detail panel
+- **Tab-based views** — All / Interested / Applied / Maybe / Passed with live counts
 - **Persistent filters** — remote, salary, keyword, days — saved to disk per search profile
-- **Custom search profiles** — create targeted searches like "remote React jobs in climate tech" with AI-powered reranking
-- **Two-pass loading** — results appear instantly from vector search, then reshuffle when LLM reranking completes
+- **Custom search profiles** — targeted searches like "remote React jobs in climate tech" with AI-powered reranking
+- **Two-pass loading** — results appear instantly from vector search, then reshuffle when LLM reranking completes in the background
+- **Batch operations** — select multiple jobs with `v`, then bulk-mark them all at once
+- **Inline search** — press `n` to quickly filter visible jobs by keyword
+- **Export** — press `e` to export your shortlist to a markdown file
+- **Toast notifications** — instant feedback on every action
+- **Help modal** — press `?` for a full keyboard reference
 - **AI summaries** — per-job summaries and batch ranking (requires `OPENAI_API_KEY`)
-- **Vim-style navigation** — `j`/`k` movement, `/` for search profiles, `f` for filters
+- **Vim-style navigation** — `j`/`k`, `g`/`G`, `Ctrl+U`/`Ctrl+D`, `/` for search profiles, `f` for filters
 
 ### Keyboard Shortcuts
 
@@ -82,30 +88,35 @@ npx @jsonresume/jobs
 |-----|--------|
 | `j` / `↓` | Move down |
 | `k` / `↑` | Move up |
-| `Enter` | View job details |
+| `g` / `G` | Jump to first / last job |
+| `Ctrl+U` / `Ctrl+D` | Page up / page down |
+| `Enter` | Open split-pane detail view |
 | `i` | Mark interested |
 | `x` | Mark applied |
 | `m` | Mark maybe |
 | `p` | Mark passed |
-| `Tab` | Next tab |
-| `Shift+Tab` | Previous tab |
-| `f` | Open filters |
-| `/` | Open search profiles |
+| `v` | Toggle batch selection |
+| `Tab` / `Shift+Tab` | Next / previous tab |
+| `n` | Inline keyword search |
+| `f` | Manage filters |
+| `/` | Search profiles |
 | `Space` | AI summary |
 | `S` | AI batch review |
+| `e` | Export shortlist to markdown |
 | `R` | Force refresh |
+| `?` | Help modal |
 | `q` | Quit |
 
-#### Detail View
+#### Detail View (Split Pane)
 
 | Key | Action |
 |-----|--------|
-| `j` / `↓` | Scroll down |
-| `k` / `↑` | Scroll up |
+| `j` / `k` | Navigate jobs (updates detail pane) |
+| `J` / `K` | Scroll detail content |
 | `o` | Open HN post in browser |
 | `i` / `x` / `m` / `p` | Mark job state |
 | `Space` | AI summary |
-| `Esc` | Back to list |
+| `Esc` / `q` | Back to full list |
 
 #### Filters & Search Profiles
 
@@ -180,7 +191,7 @@ Job postings from HN's monthly "Who is Hiring?" threads are parsed by GPT into s
 
 ### Stage 2: Vector Similarity Search
 
-Your resume embedding is compared against all job embeddings using cosine similarity via [pgvector](https://github.com/pgvector/pgvector). The top ~300 candidates are retrieved in ~200ms. This is purely semantic — it finds jobs that "sound like" your resume.
+Your resume embedding is compared against all job embeddings using cosine similarity via [pgvector](https://github.com/pgvector/pgvector). The top ~500 candidates are retrieved in ~200ms. This is purely semantic — it finds jobs that "sound like" your resume. Jobs you've already passed on are excluded server-side so you always get fresh results.
 
 ### Stage 3: Custom Search Profiles
 
