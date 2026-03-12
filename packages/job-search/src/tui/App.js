@@ -122,6 +122,18 @@ function App({ baseUrl, apiKey, apiClient }) {
   } = useJobs(api, activeFilters, tab, activeSearchId);
   const ai = useAI(resume);
   const { toast, show: showToast } = useToast();
+  const [confirmExit, setConfirmExit] = useState(false);
+
+  // Kill claude processes on exit (Ctrl+C)
+  useEffect(() => {
+    const cleanup = () => ai.cancel();
+    process.on('SIGINT', cleanup);
+    process.on('SIGTERM', cleanup);
+    return () => {
+      process.removeListener('SIGINT', cleanup);
+      process.removeListener('SIGTERM', cleanup);
+    };
+  }, [ai]);
 
   // Apply inline search filter
   const jobs = useMemo(() => {
@@ -173,7 +185,19 @@ function App({ baseUrl, apiKey, apiClient }) {
       if (view === 'filters' || view === 'searches' || view === 'help') return;
       if (inlineSearch) return;
 
-      if (input === 'q' && view === 'list') exit();
+      if (input === 'q' && view === 'list') {
+        if (ai.hasActiveProcess && !confirmExit) {
+          showToast(
+            'Claude dossier still running — press q again to quit',
+            'warning'
+          );
+          setConfirmExit(true);
+          return;
+        }
+        ai.cancel();
+        exit();
+      }
+      if (input !== 'q') setConfirmExit(false);
       if (input === 'q' && view === 'detail') setView('list');
       if (input === 'R' && (view === 'list' || view === 'detail')) {
         forceRefresh();

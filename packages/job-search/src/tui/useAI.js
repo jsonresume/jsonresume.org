@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef } from 'react';
+import { writeFileSync } from 'fs';
 import { generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 
@@ -432,19 +433,23 @@ Be thorough, specific, and opinionated. Reference the candidate's actual experie
     }
   }, []);
 
-  const exportDossier = useCallback(
-    (job) => {
-      if (!text) return null;
-      const { writeFileSync } = require('fs');
+  const textRef = useRef('');
+  textRef.current = text;
+
+  const exportDossier = useCallback((job) => {
+    const content = textRef.current;
+    if (!content) return null;
+    try {
       const company = (job?.company || 'unknown')
         .replace(/[^a-zA-Z0-9]+/g, '-')
         .toLowerCase();
       const filename = `dossier-${company}.md`;
-      writeFileSync(filename, text, 'utf-8');
+      writeFileSync(filename, content, 'utf-8');
       return filename;
-    },
-    [text]
-  );
+    } catch {
+      return null;
+    }
+  }, []);
 
   return {
     text,
@@ -452,6 +457,7 @@ Be thorough, specific, and opinionated. Reference the candidate's actual experie
     error,
     hasKey,
     mode,
+    hasActiveProcess: Boolean(childRef.current),
     summarizeJob,
     dossier,
     batchReview,
