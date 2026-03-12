@@ -11,6 +11,7 @@ export default function JobDetail({
   onMark,
   onAISummary,
   isActive,
+  isPanel,
 }) {
   const [detail, setDetail] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -30,12 +31,14 @@ export default function JobDetail({
 
   useInput(
     (input, key) => {
-      if (key.escape || input === 'q') {
-        onBack();
-        return;
+      if (!isPanel) {
+        if (key.escape || input === 'q') {
+          onBack();
+          return;
+        }
       }
-      if (key.upArrow || input === 'k') setScroll((s) => Math.max(0, s - 1));
-      if (key.downArrow || input === 'j') setScroll((s) => s + 1);
+      if (key.upArrow || input === 'K') setScroll((s) => Math.max(0, s - 1));
+      if (key.downArrow || input === 'J') setScroll((s) => s + 1);
       if (input === 'i') onMark(job.id, 'interested');
       if (input === 'x') onMark(job.id, 'applied');
       if (input === 'm') onMark(job.id, 'maybe');
@@ -55,89 +58,91 @@ export default function JobDetail({
   if (loading) {
     return h(
       Box,
-      { padding: 1, flexDirection: 'column' },
-      h(
-        Box,
-        null,
-        h(Spinner, { type: 'dots' }),
-        h(Text, null, ' Loading job details...')
-      )
+      { flexDirection: 'column', paddingX: 2, paddingY: 1 },
+      h(Box, null, h(Spinner, { type: 'dots' }), h(Text, null, ' Loading…'))
     );
   }
 
   const d = detail || job;
+  const state = d.state || job.state;
+  const loc = formatLocation(d.location, d.remote);
+  const sal = formatSalary(d.salary, d.salary_usd);
+
   const lines = [];
 
-  // Header section
-  lines.push({ text: `${d.title || job.title}`, bold: true, color: 'white' });
+  // Title
+  lines.push({ text: d.title || job.title, bold: true, color: 'white' });
   lines.push({ text: `at ${d.company || job.company}`, color: 'cyan' });
-  lines.push({ text: '═'.repeat(60), dimColor: true });
   lines.push({ text: '' });
 
-  // Meta info
-  const state = d.state || job.state;
+  // Meta as key-value pairs
   const meta = [
-    ['Location', formatLocation(d.location, d.remote)],
-    ['Salary', formatSalary(d.salary, d.salary_usd)],
-    ['Type', d.type || '—'],
-    ['Experience', d.experience || '—'],
-    ['Posted', d.posted_at || '—'],
-    ['Score', typeof d.similarity === 'number' ? d.similarity.toFixed(3) : '—'],
-    ...(d.rerank_score ? [['AI Match', `${d.rerank_score}/10`]] : []),
-    ...(d.combined_score ? [['Combined', d.combined_score.toFixed(3)]] : []),
-    ['Status', state ? `${stateIcon(state)} ${state}` : 'unmarked'],
+    ['📍 Location', loc],
+    ['💰 Salary', sal],
+    ['📋 Type', d.type || '—'],
+    ['📊 Experience', d.experience || '—'],
+    ['📅 Posted', d.posted_at || '—'],
+    [
+      '🎯 Match',
+      typeof d.similarity === 'number' ? `${d.similarity.toFixed(3)}` : '—',
+    ],
   ];
-  for (const [label, value] of meta) {
-    lines.push({ text: `  ${label.padEnd(12)} ${value}` });
-  }
+  if (d.rerank_score) meta.push(['🧠 AI Score', `${d.rerank_score}/10`]);
+  if (d.combined_score) meta.push(['📈 Combined', d.combined_score.toFixed(3)]);
+  meta.push(['📌 Status', state ? `${stateIcon(state)} ${state}` : 'unmarked']);
 
+  for (const [label, value] of meta) {
+    lines.push({ text: `  ${label.padEnd(14)} ${value}` });
+  }
   lines.push({ text: '' });
 
   if (d.url || job.url) {
-    lines.push({ text: `  HN Post:     ${d.url || job.url}`, color: 'blue' });
+    lines.push({ text: `  🔗 ${d.url || job.url}`, color: 'blue' });
     lines.push({ text: '' });
   }
 
+  // Skills
+  if (d.skills?.length) {
+    lines.push({ text: 'Skills', bold: true, color: 'yellow' });
+    const skillNames = d.skills.map((s) => s.name || s).join('  ·  ');
+    lines.push({ text: `  ${skillNames}` });
+    lines.push({ text: '' });
+  }
+
+  // Description
   if (d.description) {
     lines.push({ text: 'Description', bold: true, color: 'yellow' });
-    lines.push({ text: '─'.repeat(40), dimColor: true });
     for (const l of d.description.split('\n')) {
       lines.push({ text: `  ${l}` });
     }
     lines.push({ text: '' });
   }
 
-  if (d.skills?.length) {
-    lines.push({ text: 'Skills', bold: true, color: 'yellow' });
-    lines.push({ text: '─'.repeat(40), dimColor: true });
-    lines.push({ text: `  ${d.skills.map((s) => s.name || s).join(' · ')}` });
-    lines.push({ text: '' });
-  }
-
+  // Qualifications
   if (d.qualifications?.length) {
     lines.push({ text: 'Qualifications', bold: true, color: 'yellow' });
-    lines.push({ text: '─'.repeat(40), dimColor: true });
     for (const q of d.qualifications) {
       lines.push({ text: `  • ${q}` });
     }
     lines.push({ text: '' });
   }
 
+  // Responsibilities
   if (d.responsibilities?.length) {
     lines.push({ text: 'Responsibilities', bold: true, color: 'yellow' });
-    lines.push({ text: '─'.repeat(40), dimColor: true });
     for (const r of d.responsibilities) {
       lines.push({ text: `  • ${r}` });
     }
     lines.push({ text: '' });
   }
 
-  const maxRows = Math.max((process.stdout.rows || 30) - 8, 10);
+  const maxRows = Math.max((process.stdout.rows || 30) - (isPanel ? 6 : 8), 8);
   const visible = lines.slice(scroll, scroll + maxRows);
+  const hasMore = lines.length > maxRows;
 
   return h(
     Box,
-    { flexDirection: 'column', paddingX: 2, paddingY: 1 },
+    { flexDirection: 'column', paddingX: 2, paddingY: isPanel ? 0 : 1 },
     ...visible.map((line, i) =>
       h(
         Text,
@@ -151,11 +156,11 @@ export default function JobDetail({
         line.text
       )
     ),
-    lines.length > maxRows
+    hasMore
       ? h(
           Text,
           { dimColor: true },
-          `  ↑↓ scroll (${scroll + 1}–${Math.min(
+          `  J/K scroll detail (${scroll + 1}–${Math.min(
             scroll + maxRows,
             lines.length
           )}/${lines.length})`

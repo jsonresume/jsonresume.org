@@ -23,7 +23,6 @@ import SearchManager from './SearchManager.js';
 import StatusBar from './StatusBar.js';
 import AIPanel from './AIPanel.js';
 import HelpModal from './HelpModal.js';
-import PreviewPane from './PreviewPane.js';
 
 const TABS = ['all', 'interested', 'applied', 'maybe', 'passed'];
 const TAB_LABELS = {
@@ -34,18 +33,12 @@ const TAB_LABELS = {
   passed: '✗ Passed',
 };
 
-const PREVIEW_HEIGHT = 5;
-
-function InlineSearch({ query, onChange, onSubmit, onCancel }) {
+function InlineSearch({ query, onChange, onSubmit }) {
   return h(
     Box,
     { paddingX: 1 },
-    h(Text, { color: 'yellow', bold: true }, '/ '),
-    h(TextInput, {
-      value: query,
-      onChange,
-      onSubmit,
-    })
+    h(Text, { color: 'yellow', bold: true }, 'Find: '),
+    h(TextInput, { value: query, onChange, onSubmit })
   );
 }
 
@@ -56,29 +49,27 @@ function App({ baseUrl, apiKey }) {
     [baseUrl, apiKey]
   );
 
+  // View: 'list' | 'detail' | 'filters' | 'searches' | 'ai' | 'help'
   const [view, setView] = useState('list');
   const [tab, setTab] = useState('all');
   const [selectedJob, setSelectedJob] = useState(null);
   const [cursor, setCursor] = useState(0);
   const [resume, setResume] = useState(null);
-  const [showPreview, setShowPreview] = useState(true);
 
   // Inline search
   const [inlineSearch, setInlineSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [appliedQuery, setAppliedQuery] = useState('');
 
-  // Active search profile (null = default resume)
+  // Active search profile
   const [activeSearchId, setActiveSearchId] = useState(null);
 
-  // Persistent filters keyed by search profile
+  // Persistent filters
   const [filterStore, setFilterStore] = useState(() => loadFilters());
-
   const activeFilters = useMemo(
     () => getFiltersForSearch(filterStore, activeSearchId),
     [filterStore, activeSearchId]
   );
-
   const updateFilters = useCallback(
     (newActive) => {
       setFilterStore((prev) => {
@@ -89,7 +80,6 @@ function App({ baseUrl, apiKey }) {
     },
     [activeSearchId]
   );
-
   const filterState = useMemo(
     () => ({ active: activeFilters }),
     [activeFilters]
@@ -126,7 +116,14 @@ function App({ baseUrl, apiKey }) {
       .catch(() => {});
   }, [api]);
 
-  // Inline search input handler
+  // Update selectedJob when cursor moves in detail view
+  useEffect(() => {
+    if (view === 'detail' && jobs[cursor]) {
+      setSelectedJob(jobs[cursor]);
+    }
+  }, [cursor, view]);
+
+  // Inline search escape handler
   useInput(
     (input, key) => {
       if (key.escape) {
@@ -138,18 +135,22 @@ function App({ baseUrl, apiKey }) {
     { isActive: inlineSearch }
   );
 
+  // Main input handler
   useInput(
     (input, key) => {
       if (view === 'filters' || view === 'searches' || view === 'help') return;
       if (inlineSearch) return;
 
       if (input === 'q' && view === 'list') exit();
-      if (input === 'R' && view === 'list') {
+      if (input === 'q' && view === 'detail') setView('list');
+      if (input === 'R' && (view === 'list' || view === 'detail')) {
         forceRefresh();
         showToast('Refreshing…', 'info');
       }
-      if (input === 'f' && view === 'list') setView('filters');
-      if (input === '/' && view === 'list') setView('searches');
+      if (input === 'f' && (view === 'list' || view === 'detail'))
+        setView('filters');
+      if (input === '/' && (view === 'list' || view === 'detail'))
+        setView('searches');
       if (input === '?' && (view === 'list' || view === 'detail'))
         setView('help');
       if (input === 'n' && view === 'list') {
@@ -157,28 +158,30 @@ function App({ baseUrl, apiKey }) {
         setSearchQuery('');
       }
 
-      // Toggle preview pane
-      if (input === 'P' && view === 'list') setShowPreview((p) => !p);
-
+      // Enter toggles detail panel
+      if (key.return && view === 'list' && jobs[cursor]) {
+        setSelectedJob(jobs[cursor]);
+        setView('detail');
+      }
       if (key.escape && view === 'detail') setView('list');
+
       if (key.escape && view === 'ai') {
         ai.clear();
         setView(selectedJob ? 'detail' : 'list');
       }
-      if (key.tab && view === 'list') {
+
+      if (key.tab && (view === 'list' || view === 'detail')) {
         const idx = TABS.indexOf(tab);
         setTab(TABS[(idx + 1) % TABS.length]);
         setCursor(0);
       }
-      if (key.shift && key.tab && view === 'list') {
+      if (key.shift && key.tab && (view === 'list' || view === 'detail')) {
         const idx = TABS.indexOf(tab);
         setTab(TABS[(idx - 1 + TABS.length) % TABS.length]);
         setCursor(0);
       }
     },
-    {
-      isActive: view !== 'filters' && view !== 'searches' && view !== 'help',
-    }
+    { isActive: view !== 'filters' && view !== 'searches' && view !== 'help' }
   );
 
   const handleSelect = (job) => {
@@ -189,7 +192,7 @@ function App({ baseUrl, apiKey }) {
   const handleMark = async (id, state) => {
     await markJob(id, state);
     const job = allJobs.find((j) => j.id === id);
-    const title = job ? `${job.title}` : `#${id}`;
+    const title = job ? job.title : `#${id}`;
     const labels = {
       interested: 'interested',
       applied: 'applied',
@@ -208,10 +211,7 @@ function App({ baseUrl, apiKey }) {
     setView('ai');
     ai.batchReview(visibleJobs);
   };
-  const handleBack = () => {
-    setSelectedJob(null);
-    setView('list');
-  };
+  const handleBack = () => setView('list');
   const handleExport = () => {
     try {
       const filename = exportShortlist(allJobs);
@@ -225,12 +225,10 @@ function App({ baseUrl, apiKey }) {
     const search = await searchesHook.create(name, prompt);
     setActiveSearchId(search.id);
   };
-
   const handleDeleteSearch = async (id) => {
     await searchesHook.remove(id);
     if (activeSearchId === id) setActiveSearchId(null);
   };
-
   const handleSwitchSearch = (id) => {
     setActiveSearchId(id);
     setCursor(0);
@@ -248,24 +246,90 @@ function App({ baseUrl, apiKey }) {
     passed: allJobs.filter((j) => j.state === 'not_interested').length,
   };
 
-  // Current job under cursor for preview
-  const previewJob = view === 'list' && showPreview ? jobs[cursor] : null;
-
-  // Toast element to pass to StatusBar
   const toastEl = toast ? h(Toast, { toast }) : null;
 
+  // ── Layout ──────────────────────────────────────────
+
+  const header = h(Header, {
+    tab,
+    tabs: TABS,
+    tabLabels: TAB_LABELS,
+    counts,
+    filters: activeFilters,
+    searchName: activeSearch?.name || null,
+    appliedQuery,
+  });
+
+  const statusBar = h(StatusBar, {
+    view: inlineSearch ? 'search' : view,
+    jobCount: jobs.length,
+    totalCount: allJobs.length,
+    loading,
+    reranking,
+    error,
+    aiEnabled: ai.hasKey,
+    searchName: activeSearch?.name || null,
+    toast: toastEl,
+  });
+
+  // Split-pane: compact list on left, detail on right
+  if (view === 'detail' && selectedJob) {
+    return h(
+      Box,
+      { flexDirection: 'column', height: process.stdout.rows || 40 },
+      header,
+      h(
+        Box,
+        { flexGrow: 1, flexDirection: 'row' },
+        // Left pane: compact job list
+        h(
+          Box,
+          {
+            flexDirection: 'column',
+            width: '40%',
+            borderStyle: 'single',
+            borderColor: 'gray',
+            borderRight: true,
+            borderLeft: false,
+            borderTop: false,
+            borderBottom: false,
+          },
+          h(JobList, {
+            jobs,
+            cursor,
+            tab,
+            onCursorChange: setCursor,
+            onSelect: handleSelect,
+            onMark: handleMark,
+            isActive: true,
+            compact: true,
+            reservedRows: 8,
+          })
+        ),
+        // Right pane: job detail
+        h(
+          Box,
+          { flexDirection: 'column', width: '60%' },
+          h(JobDetail, {
+            job: selectedJob,
+            api,
+            onBack: handleBack,
+            onMark: handleMark,
+            onAISummary: handleAISummary,
+            isActive: false,
+            isPanel: true,
+          })
+        )
+      ),
+      statusBar
+    );
+  }
+
+  // Full-width list view
   return h(
     Box,
     { flexDirection: 'column', height: process.stdout.rows || 40 },
-    h(Header, {
-      tab,
-      tabs: TABS,
-      tabLabels: TAB_LABELS,
-      counts,
-      filters: activeFilters,
-      searchName: activeSearch?.name || null,
-      appliedQuery,
-    }),
+    header,
     view === 'list'
       ? h(JobList, {
           jobs,
@@ -278,7 +342,7 @@ function App({ baseUrl, apiKey }) {
           onAIBatch: handleAIBatch,
           onExport: handleExport,
           isActive: !inlineSearch,
-          previewHeight: showPreview ? PREVIEW_HEIGHT : 0,
+          reservedRows: 10,
         })
       : null,
     view === 'list' && inlineSearch
@@ -290,21 +354,6 @@ function App({ baseUrl, apiKey }) {
             setInlineSearch(false);
             setCursor(0);
           },
-          onCancel: () => {
-            setInlineSearch(false);
-            setSearchQuery('');
-          },
-        })
-      : null,
-    view === 'list' && previewJob ? h(PreviewPane, { job: previewJob }) : null,
-    view === 'detail' && selectedJob
-      ? h(JobDetail, {
-          job: selectedJob,
-          api,
-          onBack: handleBack,
-          onMark: handleMark,
-          onAISummary: handleAISummary,
-          isActive: true,
         })
       : null,
     view === 'filters'
@@ -337,17 +386,7 @@ function App({ baseUrl, apiKey }) {
         })
       : null,
     view === 'help' ? h(HelpModal, { onClose: () => setView('list') }) : null,
-    h(StatusBar, {
-      view: inlineSearch ? 'search' : view,
-      jobCount: jobs.length,
-      totalCount: allJobs.length,
-      loading,
-      reranking,
-      error,
-      aiEnabled: ai.hasKey,
-      searchName: activeSearch?.name || null,
-      toast: toastEl,
-    })
+    statusBar
   );
 }
 

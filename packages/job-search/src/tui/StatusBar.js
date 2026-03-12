@@ -18,14 +18,16 @@ const KEYS = {
     ['q', 'quit'],
   ],
   detail: [
-    ['jk', 'scroll'],
+    ['jk', 'nav'],
+    ['JK', 'scroll detail'],
     ['i', '⭐'],
     ['x', '📨'],
     ['m', '?'],
     ['p', '✗'],
+    ['o', 'open'],
     ['space', 'AI'],
-    ['o', 'open URL'],
     ['esc', 'back'],
+    ['q', 'close'],
   ],
   filters: [
     ['jk', 'nav'],
