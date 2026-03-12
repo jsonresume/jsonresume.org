@@ -443,7 +443,10 @@ Be thorough, specific, and opinionated. Reference the candidate's actual experie
     if (!content) return null;
     const company = (job?.company || 'unknown')
       .replace(/[^a-zA-Z0-9]+/g, '-')
-      .toLowerCase();
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '')
+      .toLowerCase()
+      .slice(0, 50);
     const filename = `dossier-${company}.md`;
     writeFileSync(filename, content, 'utf-8');
     return filename;
