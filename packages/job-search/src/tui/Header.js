@@ -2,10 +2,10 @@ import { Box, Text } from 'ink';
 import { h } from './h.js';
 
 const FILTER_LABELS = {
-  remote: (f) => `Remote: ${f.value}`,
-  search: (f) => `Search: "${f.value}"`,
-  minSalary: (f) => `Salary ≥ $${f.value}k`,
-  days: (f) => `Last ${f.value} days`,
+  remote: () => 'Remote',
+  search: (f) => `"${f.value}"`,
+  minSalary: (f) => `≥$${f.value}k`,
+  days: (f) => `${f.value}d`,
 };
 
 export default function Header({
@@ -17,71 +17,93 @@ export default function Header({
   searchName,
   appliedQuery,
 }) {
+  const cols = process.stdout.columns || 80;
+
+  // ── Title row ─────────────────────────────────────
+  const titleRow = h(
+    Box,
+    { paddingX: 1, justifyContent: 'space-between' },
+    h(
+      Box,
+      { gap: 1 },
+      h(
+        Text,
+        { bold: true, color: 'black', backgroundColor: 'cyan' },
+        ' jsonresume-jobs '
+      ),
+      searchName
+        ? h(Text, { color: 'magenta', bold: true }, `  ${searchName}`)
+        : null
+    ),
+    h(Text, { dimColor: true }, '?:help  /:profiles  f:filters  q:quit')
+  );
+
+  // ── Tab row ───────────────────────────────────────
   const tabElements = tabs.map((t) => {
     const active = t === tab;
     const count = counts[t] || 0;
-    const label = `${tabLabels[t]} (${count})`;
+    if (count === 0 && !active && t !== 'all') return null;
+
+    const label = `${tabLabels[t]} ${count}`;
+
+    if (active) {
+      return h(
+        Box,
+        { key: t, marginRight: 1 },
+        h(
+          Text,
+          { bold: true, color: 'black', backgroundColor: 'white' },
+          ` ${label} `
+        )
+      );
+    }
     return h(
       Box,
       { key: t, marginRight: 1 },
-      h(
-        Text,
-        {
-          bold: active,
-          color: active ? 'cyan' : 'gray',
-          underline: active,
-        },
-        ` ${label} `
-      )
+      h(Text, { dimColor: true }, ` ${label} `)
     );
   });
 
-  const filterTags = (filters || []).map((f, i) => {
-    const label = FILTER_LABELS[f.type]?.(f) || `${f.type}: ${f.value}`;
-    return h(Text, { key: i, color: 'yellow' }, ` [${label}] `);
-  });
+  const tabRow = h(Box, { paddingX: 1 }, ...tabElements.filter(Boolean));
 
-  const hasFilters = filterTags.length > 0 || appliedQuery;
+  // ── Filter pills (only if active) ────────────────
+  const tags = [];
+  for (const f of filters || []) {
+    const label = FILTER_LABELS[f.type]?.(f) || f.value;
+    tags.push(
+      h(
+        Text,
+        { key: f.type, color: 'black', backgroundColor: 'yellow' },
+        ` ${label} `
+      )
+    );
+  }
+  if (appliedQuery) {
+    tags.push(
+      h(
+        Text,
+        { key: 'find', color: 'black', backgroundColor: 'green' },
+        ` find:${appliedQuery} `
+      )
+    );
+  }
+
+  const filterRow =
+    tags.length > 0 ? h(Box, { paddingX: 1, gap: 1 }, ...tags) : null;
+
+  // ── Divider ───────────────────────────────────────
+  const divider = h(
+    Box,
+    { paddingX: 1 },
+    h(Text, { dimColor: true }, '─'.repeat(Math.max(10, cols - 2)))
+  );
 
   return h(
     Box,
-    { flexDirection: 'column', marginBottom: 0 },
-    h(
-      Box,
-      {
-        paddingX: 1,
-        borderStyle: 'single',
-        borderColor: 'cyan',
-        borderBottom: false,
-      },
-      h(Text, { bold: true, color: 'cyan' }, '⚡ '),
-      h(Text, { bold: true, color: 'white' }, 'JSON Resume Job Search'),
-      searchName ? h(Text, { color: 'magenta' }, `  🔍 ${searchName}`) : null,
-      h(Text, { color: 'gray' }, '  '),
-      h(Text, { dimColor: true }, 'tab:sections  /:searches  ?:help')
-    ),
-    h(Box, { paddingX: 1, gap: 0 }, ...tabElements),
-    hasFilters
-      ? h(
-          Box,
-          { paddingX: 1 },
-          filterTags.length > 0
-            ? h(Text, { dimColor: true }, 'Filters:')
-            : null,
-          ...filterTags,
-          appliedQuery
-            ? h(Text, { color: 'yellow' }, ` [Find: "${appliedQuery}"] `)
-            : null,
-          h(Text, { dimColor: true }, '  f:manage')
-        )
-      : h(
-          Box,
-          { paddingX: 1 },
-          h(
-            Text,
-            { dimColor: true },
-            'No filters active  f:add  n:quick search'
-          )
-        )
+    { flexDirection: 'column' },
+    titleRow,
+    tabRow,
+    filterRow,
+    divider
   );
 }

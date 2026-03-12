@@ -26,11 +26,11 @@ import HelpModal from './HelpModal.js';
 
 const TABS = ['all', 'interested', 'applied', 'maybe', 'passed'];
 const TAB_LABELS = {
-  all: 'All Jobs',
-  interested: '⭐ Interested',
-  applied: '📨 Applied',
-  maybe: '? Maybe',
-  passed: '✗ Passed',
+  all: 'All',
+  interested: 'Interested',
+  applied: 'Applied',
+  maybe: 'Maybe',
+  passed: 'Passed',
 };
 
 function InlineSearch({ query, onChange, onSubmit }) {
@@ -268,7 +268,6 @@ function App({ baseUrl, apiKey }) {
     reranking,
     error,
     aiEnabled: ai.hasKey,
-    searchName: activeSearch?.name || null,
     toast: toastEl,
   });
 

@@ -3,41 +3,33 @@ import { h } from './h.js';
 
 const KEYS = {
   list: [
-    ['jk', 'nav'],
-    ['enter', 'open'],
-    ['i', '⭐'],
-    ['x', '📨'],
-    ['m', '?'],
-    ['p', '✗'],
+    ['j/k', 'nav'],
+    ['enter', 'detail'],
+    ['i', 'interested'],
+    ['x', 'applied'],
+    ['m', 'maybe'],
+    ['p', 'pass'],
     ['v', 'select'],
+    ['n', 'find'],
     ['space', 'AI'],
-    ['f', 'filter'],
-    ['/', 'search'],
-    ['e', 'export'],
-    ['?', 'help'],
-    ['q', 'quit'],
   ],
   detail: [
-    ['jk', 'nav'],
-    ['JK', 'scroll detail'],
-    ['i', '⭐'],
-    ['x', '📨'],
-    ['m', '?'],
-    ['p', '✗'],
-    ['o', 'open'],
+    ['j/k', 'nav jobs'],
+    ['J/K', 'scroll'],
+    ['i/x/m/p', 'mark'],
+    ['o', 'open URL'],
     ['space', 'AI'],
     ['esc', 'back'],
-    ['q', 'close'],
   ],
   filters: [
-    ['jk', 'nav'],
+    ['j/k', 'nav'],
     ['enter', 'edit'],
     ['a', 'add'],
     ['d', 'delete'],
     ['esc', 'close'],
   ],
   searches: [
-    ['jk', 'nav'],
+    ['j/k', 'nav'],
     ['enter', 'switch'],
     ['n', 'new'],
     ['d', 'delete'],
@@ -47,6 +39,15 @@ const KEYS = {
   help: [['?/esc', 'close']],
 };
 
+function KeyHint({ k, label }) {
+  return h(
+    Box,
+    { marginRight: 1 },
+    h(Text, { color: 'cyan' }, k),
+    h(Text, { dimColor: true }, ` ${label}`)
+  );
+}
+
 export default function StatusBar({
   view,
   jobCount,
@@ -55,54 +56,44 @@ export default function StatusBar({
   reranking,
   error,
   aiEnabled,
-  searchName,
   toast,
 }) {
+  const cols = process.stdout.columns || 80;
   const keys = KEYS[view] || KEYS.list;
 
-  const keyElements = keys.map(([key, label], i) =>
-    h(
-      Box,
-      { key: i, marginRight: 1 },
-      h(Text, { bold: true, color: 'cyan' }, key),
-      h(Text, { dimColor: true }, `:${label}`)
-    )
+  const divider = h(
+    Box,
+    { paddingX: 1 },
+    h(Text, { dimColor: true }, '─'.repeat(Math.max(10, cols - 2)))
   );
+
+  const rightInfo = h(
+    Box,
+    { gap: 1 },
+    loading ? h(Text, { color: 'yellow' }, 'loading…') : null,
+    reranking ? h(Text, { color: 'magenta' }, 'reranking…') : null,
+    h(Text, { dimColor: true }, `${jobCount}/${totalCount}`),
+    aiEnabled ? null : h(Text, { dimColor: true }, 'no-AI')
+  );
+
+  const content = toast
+    ? h(Box, { paddingX: 1, justifyContent: 'space-between' }, toast, rightInfo)
+    : h(
+        Box,
+        { paddingX: 1, justifyContent: 'space-between' },
+        h(
+          Box,
+          { flexWrap: 'wrap' },
+          ...keys.map(([k, label], i) => h(KeyHint, { key: i, k, label }))
+        ),
+        rightInfo
+      );
 
   return h(
     Box,
-    {
-      flexDirection: 'column',
-      borderStyle: 'single',
-      borderColor: 'gray',
-      paddingX: 1,
-      marginTop: 0,
-    },
-    toast
-      ? h(
-          Box,
-          { justifyContent: 'space-between' },
-          toast,
-          h(
-            Box,
-            { gap: 1 },
-            h(Text, { dimColor: true }, `${jobCount}/${totalCount} jobs`)
-          )
-        )
-      : h(
-          Box,
-          { justifyContent: 'space-between' },
-          h(Box, { flexWrap: 'wrap', gap: 0 }, ...keyElements),
-          h(
-            Box,
-            { gap: 1 },
-            loading ? h(Text, { color: 'yellow' }, '⏳') : null,
-            reranking ? h(Text, { color: 'magenta' }, '🧠 reranking…') : null,
-            h(Text, { dimColor: true }, `${jobCount}/${totalCount} jobs`),
-            searchName ? h(Text, { color: 'magenta' }, '🔍') : null,
-            aiEnabled ? null : h(Text, { color: 'gray' }, '(no AI)')
-          )
-        ),
-    error ? h(Text, { color: 'red' }, `Error: ${error}`) : null
+    { flexDirection: 'column' },
+    divider,
+    content,
+    error ? h(Box, { paddingX: 1 }, h(Text, { color: 'red' }, error)) : null
   );
 }
