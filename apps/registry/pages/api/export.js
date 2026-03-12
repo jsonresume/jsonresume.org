@@ -1,4 +1,4 @@
-const { embed } = require('ai');
+const { embed, generateText } = require('ai');
 const { openai } = require('@ai-sdk/openai');
 const { createClient } = require('@supabase/supabase-js');
 
@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   }
 
   const prompt = req.query.prompt;
-  const limit = Math.min(parseInt(req.query.limit) || 100, 500);
+  const limit = Math.min(parseInt(req.query.limit) || 50, 500);
 
   if (!prompt) {
     return res
@@ -20,9 +20,17 @@ export default async function handler(req, res) {
 
   const supabase = createClient(SUPABASE_URL, process.env.SUPABASE_KEY);
 
+  const { text: expandedPrompt } = await generateText({
+    model: openai('gpt-4o-mini'),
+    system:
+      'You are a resume search expert. Given a search query, expand it into a detailed professional profile description that would appear on an ideal candidate resume. Include relevant skills, job titles, industries, tools, responsibilities, and experience. Write in natural language optimized for semantic similarity matching against real resumes. Be thorough but stay focused on the query topic.',
+    prompt,
+    temperature: 0.7,
+  });
+
   const { embedding: rawEmbedding } = await embed({
     model: openai.embedding('text-embedding-3-large'),
-    value: prompt,
+    value: expandedPrompt,
   });
 
   const desiredLength = 3072;
