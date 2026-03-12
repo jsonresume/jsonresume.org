@@ -73,6 +73,7 @@ export default function JobList({
   const locW = Math.max(12, Math.floor(cols * 0.15));
 
   const hasRerank = visible.some((j) => j.rerank_score);
+  const lineW = cols - 2; // account for paddingX: 1
 
   const header = h(
     Box,
@@ -80,7 +81,8 @@ export default function JobList({
     h(
       Text,
       { bold: true, dimColor: true },
-      '  ' +
+      (
+        '  ' +
         'Score '.padEnd(7) +
         (hasRerank ? 'AI '.padEnd(4) : '') +
         'Title'.padEnd(titleW) +
@@ -88,13 +90,14 @@ export default function JobList({
         'Location'.padEnd(locW) +
         'Salary'.padEnd(12) +
         'Status'
+      ).padEnd(lineW)
     )
   );
 
   const divider = h(
     Box,
     { paddingX: 1 },
-    h(Text, { dimColor: true }, '─'.repeat(Math.min(cols - 4, 120)))
+    h(Text, { dimColor: true }, '─'.repeat(lineW))
   );
 
   const rows = visible.map((job, i) => {
@@ -115,7 +118,7 @@ export default function JobList({
         ? '—   '
         : '';
 
-    const line =
+    const content =
       (selected ? '▸ ' : '  ') +
       score.padEnd(7) +
       aiScore +
@@ -124,6 +127,7 @@ export default function JobList({
       truncate(loc, locW - 1).padEnd(locW) +
       truncate(sal, 11).padEnd(12) +
       icon;
+    const line = content.padEnd(lineW);
 
     const stColor =
       job.state === 'interested'
