@@ -118,11 +118,12 @@ The TUI has three main regions:
 - **Export** — press `e` to export your shortlist, applied, and maybe lists to a `job-hunt-YYYY-MM-DD.md` markdown file in the current directory
 - **Toast notifications** — instant feedback on every action (marking, exporting, refreshing)
 - **Help modal** — press `?` for a full keyboard reference organized by section
+- **Dossier research** — press `c` to spawn a Claude Code CLI session that researches the company, role, and generates a comprehensive dossier with fit assessment, talking points, interview prep, and compensation context. Results stream live and are cached server-side so you can revisit them anytime. Supports switching between multiple dossiers without restarting. Requires [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI installed
 - **AI summaries** — press `Space` for a per-job AI summary, or `S` for a batch review of all visible jobs (requires `OPENAI_API_KEY`)
 - **Vim-style navigation** — `j`/`k` to move, `g`/`G` to jump to first/last, `Ctrl+U`/`Ctrl+D` to page up/down
 - **Responsive columns** — job list columns (score, title, company, location, salary) adapt to terminal width on resize
 - **Smart filtering** — passed and dismissed jobs are excluded server-side with 5x over-fetch, so you always get a full set of fresh results
-- **Cached results** — job data is cached locally for 24 hours to minimize API calls; press `R` to force a fresh fetch
+- **Cached results** — job data is cached locally for 2 hours to minimize API calls; press `R` to force a fresh fetch
 
 ### Keyboard Shortcuts
 
@@ -145,6 +146,7 @@ The TUI has three main regions:
 | `f` | Manage filters |
 | `/` | Search profiles |
 | `Space` | AI summary for current job |
+| `c` | Research dossier via Claude Code CLI |
 | `S` | AI batch review of visible jobs |
 | `e` | Export shortlist to markdown |
 | `R` | Force refresh (bypass cache) |
@@ -160,6 +162,7 @@ The TUI has three main regions:
 | `o` | Open HN post in browser |
 | `i` / `x` / `m` / `p` | Mark job state |
 | `Space` | AI summary |
+| `c` | Research dossier |
 | `Esc` / `q` | Back to full list |
 
 #### Filters Panel
@@ -262,6 +265,10 @@ npx @jsonresume/jobs help                                # All options
 | `not_interested` | ✗ | Not for you (hidden from future searches) |
 | `dismissed` | 👁 | Hide from results (hidden from future searches) |
 
+## Architecture
+
+![architecture](./architecture.svg)
+
 ## How Ranking Works
 
 The system uses a five-stage pipeline to match and rank jobs against your resume.
@@ -335,7 +342,7 @@ All local data is stored under `~/.jsonresume/`:
 |------|----------|
 | `~/.jsonresume/config.json` | API key and username (registry mode) |
 | `~/.jsonresume/filters.json` | Saved filter presets per search profile |
-| `~/.jsonresume/cache/` | Cached job results (auto-expires after 24 hours) |
+| `~/.jsonresume/cache/` | Cached job results (auto-expires after 2 hours) |
 | `~/.jsonresume/local-marks.json` | Job marks in local mode |
 
 The export command writes `job-hunt-YYYY-MM-DD.md` to your current working directory.
@@ -363,7 +370,8 @@ The TUI is built with [React Ink](https://github.com/vadimdemedes/ink) v6 using 
 | `src/tui/JobDetail.js` | Full job detail view (standalone and split-pane) |
 | `src/tui/StatusBar.js` | Key hints, loading state, toasts |
 | `src/tui/useJobs.js` | Job fetching, caching, tab filtering |
-| `src/tui/useAI.js` | AI summary and batch review integration |
+| `src/tui/useAI.js` | AI summary, dossier research (Claude CLI), batch review |
+| `src/tui/AIPanel.js` | Dossier/AI split-pane panel with scroll and export |
 | `src/tui/useSearches.js` | Search profile CRUD |
 | `src/filters.js` | Persistent filter storage per search profile |
 | `src/export.js` | Markdown export |

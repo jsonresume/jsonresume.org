@@ -1,0 +1,111 @@
+graph TB
+    subgraph User["🖥️ Terminal"]
+        TUI["Interactive TUI<br/>(React Ink)"]
+    end
+
+    subgraph CLI["CLI Entry Point"]
+        BIN["bin/cli.js"]
+        AUTH["src/auth.js<br/>Login / API Key"]
+    end
+
+    subgraph Views["TUI Views"]
+        APP["App.js<br/>View Router & Layout"]
+        LIST["JobList.js<br/>Responsive Job Table"]
+        DETAIL["JobDetail.js<br/>Split-Pane Detail"]
+        AI_PANEL["AIPanel.js<br/>Dossier / AI Panel"]
+        FILTERS["FilterManager.js"]
+        SEARCH["SearchManager.js"]
+        HELP["HelpModal.js"]
+    end
+
+    subgraph Hooks["React Hooks"]
+        USE_JOBS["useJobs.js<br/>Fetch, Cache, Filter, Tab"]
+        USE_AI["useAI.js<br/>Dossier & AI Summary"]
+        USE_SEARCH["useSearches.js<br/>Search Profiles"]
+    end
+
+    subgraph Dossier["Dossier Research Flow"]
+        CLAUDE_CLI["Claude Code CLI<br/>(spawned subprocess)"]
+        STREAM["Stream JSON Events<br/>stdin:ignore | stdout:pipe"]
+        CACHE_LOCAL["Local Dossier Cache<br/>(per job, in-memory Map)"]
+    end
+
+    subgraph DataLayer["Data Layer"]
+        API["src/api.js<br/>Registry API Client"]
+        LOCAL_API["src/localApi.js<br/>Local Mode Client"]
+        DISK_CACHE["src/cache.js<br/>~/.jsonresume/cache/<br/>2h TTL"]
+        FILTER_STORE["src/filters.js<br/>~/.jsonresume/filters.json"]
+        EXPORT["src/export.js<br/>job-hunt-YYYY-MM-DD.md"]
+    end
+
+    subgraph Server["Registry Server (Supabase)"]
+        JOBS_API["/api/v1/jobs<br/>Vector Search + Rerank"]
+        ME_API["/api/v1/me<br/>Resume Fetch"]
+        MARK_API["/api/v1/jobs/:id<br/>Mark State"]
+        DOSSIER_API["/api/v1/jobs/:id/dossier<br/>Save/Load Dossier"]
+        SEARCH_API["/api/v1/searches<br/>Search Profiles"]
+        DB[("Supabase DB<br/>pgvector + pathways_job_feedback")]
+    end
+
+    subgraph Embedding["Ranking Pipeline"]
+        EMBED["OpenAI Embeddings<br/>text-embedding-3-large"]
+        HYDE["HyDE: Hypothetical<br/>Job Posting Generation"]
+        RERANK["LLM Rerank<br/>gpt-4.1-mini<br/>Score 1-10"]
+        VECTOR["pgvector<br/>Cosine Similarity"]
+    end
+
+    %% User flow
+    User --> BIN
+    BIN --> AUTH
+    AUTH --> APP
+    APP --> LIST & DETAIL & AI_PANEL & FILTERS & SEARCH & HELP
+
+    %% Hook connections
+    APP --> USE_JOBS & USE_AI & USE_SEARCH
+    USE_JOBS --> API & LOCAL_API
+    USE_JOBS --> DISK_CACHE
+    USE_SEARCH --> API
+    USE_AI --> CLAUDE_CLI
+
+    %% Dossier flow
+    CLAUDE_CLI -->|"--print --output-format stream-json<br/>--allowedTools WebSearch WebFetch"| STREAM
+    STREAM -->|"assistant/result events"| CACHE_LOCAL
+    CACHE_LOCAL -->|"setText() if active job"| AI_PANEL
+    USE_AI -->|"save on complete"| DOSSIER_API
+    USE_AI -->|"check cache first"| DOSSIER_API
+
+    %% API connections
+    API --> JOBS_API & ME_API & MARK_API & DOSSIER_API & SEARCH_API
+    JOBS_API --> DB
+    MARK_API --> DB
+    DOSSIER_API --> DB
+
+    %% Ranking pipeline
+    ME_API -->|"resume text"| EMBED
+    EMBED --> VECTOR
+    HYDE --> EMBED
+    VECTOR --> RERANK
+    RERANK --> JOBS_API
+
+    %% Filter flow
+    FILTERS --> FILTER_STORE
+    FILTER_STORE -->|"sync to server"| SEARCH_API
+
+    %% Export
+    LIST -->|"press e"| EXPORT
+    AI_PANEL -->|"press e"| EXPORT
+
+    %% Styling
+    classDef server fill:#1a1a2e,stroke:#e94560,color:#fff
+    classDef client fill:#0f3460,stroke:#16213e,color:#fff
+    classDef hook fill:#533483,stroke:#e94560,color:#fff
+    classDef dossier fill:#2b2d42,stroke:#8d99ae,color:#fff
+    classDef data fill:#16213e,stroke:#0f3460,color:#fff
+    classDef pipeline fill:#1b1b2f,stroke:#e94560,color:#fff
+
+    class JOBS_API,ME_API,MARK_API,DOSSIER_API,SEARCH_API,DB server
+    class APP,LIST,DETAIL,AI_PANEL,FILTERS,SEARCH,HELP client
+    class USE_JOBS,USE_AI,USE_SEARCH hook
+    class CLAUDE_CLI,STREAM,CACHE_LOCAL dossier
+    class API,LOCAL_API,DISK_CACHE,FILTER_STORE,EXPORT data
+    class EMBED,HYDE,RERANK,VECTOR pipeline
