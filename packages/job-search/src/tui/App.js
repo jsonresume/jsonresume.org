@@ -42,11 +42,11 @@ function InlineSearch({ query, onChange, onSubmit }) {
   );
 }
 
-function App({ baseUrl, apiKey }) {
+function App({ baseUrl, apiKey, apiClient }) {
   const { exit } = useApp();
   const api = useMemo(
-    () => createApiClient({ baseUrl, apiKey }),
-    [baseUrl, apiKey]
+    () => apiClient || createApiClient({ baseUrl, apiKey }),
+    [baseUrl, apiKey, apiClient]
   );
 
   // View: 'list' | 'detail' | 'filters' | 'searches' | 'ai' | 'help'
@@ -389,6 +389,6 @@ function App({ baseUrl, apiKey }) {
   );
 }
 
-export default function runTUI({ baseUrl, apiKey }) {
-  render(h(App, { baseUrl, apiKey }));
+export default function runTUI({ baseUrl, apiKey, apiClient }) {
+  render(h(App, { baseUrl, apiKey, apiClient }));
 }

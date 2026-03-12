@@ -6,7 +6,7 @@
  * Just run:  npx @jsonresume/jobs
  */
 
-const VERSION = '0.8.0';
+const VERSION = '0.9.0';
 
 const BASE_URL =
   getArg('--base-url') ||
@@ -23,6 +23,37 @@ function getArg(name) {
 
 function hasFlag(name) {
   return process.argv.includes(name);
+}
+
+// ── Local resume detection ────────────────────────────────
+
+async function findLocalResume() {
+  const explicitPath = getArg('--resume');
+  if (explicitPath) {
+    const fs = await import('node:fs');
+    const path = await import('node:path');
+    const resolved = path.resolve(explicitPath);
+    try {
+      return JSON.parse(fs.readFileSync(resolved, 'utf-8'));
+    } catch (err) {
+      console.error(`Error reading resume at ${resolved}: ${err.message}`);
+      process.exit(1);
+    }
+  }
+
+  // Auto-detect resume.json in CWD
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+  const candidates = ['resume.json', 'Resume.json'];
+  for (const name of candidates) {
+    const filePath = path.resolve(name);
+    try {
+      const raw = fs.readFileSync(filePath, 'utf-8');
+      const resume = JSON.parse(raw);
+      if (resume.basics) return resume;
+    } catch {}
+  }
+  return null;
 }
 
 // ── API client ─────────────────────────────────────────────
@@ -288,6 +319,12 @@ jsonresume-jobs v${VERSION} — Search HN "Who is Hiring" jobs matched to your J
 
 QUICK START
   npx @jsonresume/jobs              Launch the interactive TUI (logs in automatically)
+  npx @jsonresume/jobs --resume resume.json   Use a local resume (no account needed)
+
+LOCAL MODE
+  If a resume.json file exists in the current directory, or you pass --resume,
+  the TUI launches without requiring a registry account. Job matches are fetched
+  from the server using your resume, and marks are saved locally.
 
 COMMANDS
   (default)                         Interactive TUI with AI features
@@ -316,6 +353,7 @@ MARK STATES
   dismissed                         Hide from results
 
 GLOBAL OPTIONS
+  --resume <path>                   Use a local resume file (skips registry auth)
   --json                            Output raw JSON (for piping / Claude Code)
   --base-url URL                    API base URL (default: https://registry.jsonresume.org)
   --feedback "reason"               Add a reason when marking (with mark command)
@@ -326,7 +364,8 @@ ENVIRONMENT
   JSONRESUME_BASE_URL               API base URL override
 
 EXAMPLES
-  npx @jsonresume/jobs                                              # TUI
+  npx @jsonresume/jobs                                              # TUI (registry)
+  npx @jsonresume/jobs --resume ./resume.json                       # TUI (local)
   npx @jsonresume/jobs search --remote --min-salary 150             # CLI search
   npx @jsonresume/jobs detail 181420                                # Job details
   npx @jsonresume/jobs mark 181420 interested --feedback "great"    # Mark job
@@ -366,7 +405,23 @@ async function main() {
     case 'tui':
     case '':
     default: {
-      // Default: launch TUI
+      // Check for local resume first
+      const localResume = await findLocalResume();
+      if (localResume) {
+        console.error(
+          `\n  Using local resume: ${localResume.basics?.name || 'Unknown'}`
+        );
+        console.error('  Marks will be saved locally.\n');
+        const { createLocalApiClient } = await import('../src/localApi.js');
+        const localApi = createLocalApiClient({
+          baseUrl: BASE_URL,
+          resume: localResume,
+        });
+        const { default: runTUI } = await import('../src/tui/App.js');
+        return runTUI({ baseUrl: BASE_URL, apiClient: localApi });
+      }
+
+      // Registry mode
       const apiKey = await getApiKey();
       const { default: runTUI } = await import('../src/tui/App.js');
       return runTUI({ baseUrl: BASE_URL, apiKey });

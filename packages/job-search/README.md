@@ -10,16 +10,26 @@ Search Hacker News "Who is Hiring" jobs matched against your [JSON Resume](https
 
 ## Quick Start
 
+**With a registry account:**
+
 ```bash
 npx @jsonresume/jobs
 ```
 
-That's it. The CLI walks you through login on first run — all you need is a resume hosted at [registry.jsonresume.org](https://registry.jsonresume.org).
+The CLI walks you through login on first run — all you need is a resume hosted at [registry.jsonresume.org](https://registry.jsonresume.org).
+
+**With a local resume file (no account needed):**
+
+```bash
+npx @jsonresume/jobs --resume ./resume.json
+```
+
+Or just drop a `resume.json` in your current directory and run `npx @jsonresume/jobs` — it's auto-detected.
 
 ## Prerequisites
 
 - **Node.js** >= 18
-- A JSON Resume on the [JSON Resume Registry](https://registry.jsonresume.org) (free, backed by your GitHub Gist)
+- A [JSON Resume](https://jsonresume.org/schema/) — either hosted on the [registry](https://registry.jsonresume.org) or as a local `resume.json` file
 - *(Optional)* `OPENAI_API_KEY` — enables AI summaries and batch ranking in the TUI
 
 ## Installation
@@ -58,6 +68,27 @@ To clear saved credentials:
 ```bash
 npx @jsonresume/jobs logout
 ```
+
+## Local Mode (No Account)
+
+You don't need a registry account to use the TUI. If you have a `resume.json` file following the [JSON Resume schema](https://jsonresume.org/schema/), you can use it directly:
+
+```bash
+# Explicit path
+npx @jsonresume/jobs --resume ./my-resume.json
+
+# Auto-detect (looks for resume.json in current directory)
+npx @jsonresume/jobs
+```
+
+In local mode:
+
+- Job matching works the same way (your resume is sent to the server for embedding and vector search)
+- **Marks are saved locally** to `~/.jsonresume/local-marks.json` instead of the server
+- Filters and export work identically
+- Custom search profiles are not available (they require a registry account for server-side storage)
+
+This is useful if you want to try the tool without setting up a registry account, or if you prefer to keep your resume as a local file.
 
 ## Interactive TUI
 
@@ -302,9 +333,10 @@ All local data is stored under `~/.jsonresume/`:
 
 | Path | Contents |
 |------|----------|
-| `~/.jsonresume/config.json` | API key and username |
+| `~/.jsonresume/config.json` | API key and username (registry mode) |
 | `~/.jsonresume/filters.json` | Saved filter presets per search profile |
 | `~/.jsonresume/cache/` | Cached job results (auto-expires after 24 hours) |
+| `~/.jsonresume/local-marks.json` | Job marks in local mode |
 
 The export command writes `job-hunt-YYYY-MM-DD.md` to your current working directory.
 
@@ -335,6 +367,8 @@ The TUI is built with [React Ink](https://github.com/vadimdemedes/ink) v6 using 
 | `src/tui/useSearches.js` | Search profile CRUD |
 | `src/filters.js` | Persistent filter storage per search profile |
 | `src/export.js` | Markdown export |
+| `src/localApi.js` | API client for local mode (no registry account) |
+| `src/localState.js` | Local mark storage for local mode |
 | `src/cache.js` | Local result caching with TTL |
 
 See the repo root [CLAUDE.md](../../CLAUDE.md) for code standards and contribution guidelines.

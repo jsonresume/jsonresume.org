@@ -95,6 +95,124 @@ async function rerankJobs(jobs, resumeText, searchPrompt) {
 }
 
 /**
+ * Shared: fetch, parse, filter, and optionally rerank job matches.
+ */
+async function matchJobs({
+  embedding,
+  resumeText,
+  searchPrompt,
+  top,
+  days,
+  remote,
+  minSalary,
+  search,
+  shouldRerank,
+  stateMap,
+}) {
+  const supabase = getSupabase();
+  const createdAfter = new Date(
+    Date.now() - days * 24 * 60 * 60 * 1000
+  ).toISOString();
+
+  const { data: matched, error } = await supabase.rpc('match_jobs_v5', {
+    query_embedding: embedding,
+    match_threshold: -1,
+    match_count: top * 5,
+    created_after: createdAfter,
+  });
+
+  if (error) throw new Error(error.message);
+
+  const jobIds = (matched || []).map((m) => m.id);
+  if (jobIds.length === 0) return [];
+
+  const { data: jobs } = await supabase
+    .from('jobs')
+    .select('id, uuid, gpt_content, posted_at, url, salary_usd')
+    .in('id', jobIds);
+
+  const HIDDEN_STATES = new Set(['not_interested', 'dismissed']);
+
+  let results = (jobs || [])
+    .map((job) => {
+      try {
+        const parsed = JSON.parse(job.gpt_content);
+        if (!parsed?.title || !parsed?.company) return null;
+
+        const similarity =
+          matched.find((m) => m.id === job.id)?.similarity || 0;
+
+        return {
+          id: job.id,
+          uuid: job.uuid,
+          title: parsed.title,
+          company: parsed.company,
+          location: parsed.location,
+          remote: parsed.remote,
+          salary: parsed.salary,
+          salary_usd: job.salary_usd,
+          experience: parsed.experience,
+          type: parsed.type,
+          description: parsed.description,
+          skills: parsed.skills,
+          url: job.url,
+          posted_at: job.posted_at,
+          similarity: Math.round(similarity * 1000) / 1000,
+          state: stateMap?.[job.id] || null,
+        };
+      } catch {
+        return null;
+      }
+    })
+    .filter(Boolean)
+    .filter((j) => {
+      if (stateMap && HIDDEN_STATES.has(j.state)) return false;
+      if (remote && j.remote !== 'Full') return false;
+      if (minSalary && j.salary_usd && j.salary_usd < minSalary * 1000)
+        return false;
+      if (
+        search &&
+        !JSON.stringify(j).toLowerCase().includes(search.toLowerCase())
+      )
+        return false;
+      return true;
+    })
+    .sort((a, b) => b.similarity - a.similarity);
+
+  if (shouldRerank && results.length > 0) {
+    const toRerank = results.slice(0, Math.min(30, top * 2));
+    const rest = results.slice(Math.min(30, top * 2));
+
+    try {
+      const scores = await rerankJobs(toRerank, resumeText, searchPrompt);
+      const scoreMap = {};
+      scores.forEach((s) => {
+        scoreMap[s.id] = s.rerank_score;
+      });
+
+      const maxSim = Math.max(...toRerank.map((j) => j.similarity), 0.001);
+      const reranked = toRerank
+        .map((j) => ({
+          ...j,
+          rerank_score: scoreMap[j.id] || 5,
+          combined_score:
+            0.4 * (j.similarity / maxSim) + 0.6 * ((scoreMap[j.id] || 5) / 10),
+        }))
+        .sort((a, b) => b.combined_score - a.combined_score);
+
+      results = [...reranked, ...rest];
+    } catch (err) {
+      logger.error(
+        { error: err.message },
+        'Reranking failed, using vector order'
+      );
+    }
+  }
+
+  return results.slice(0, top);
+}
+
+/**
  * GET /api/v1/jobs — matched jobs for the authenticated user
  *
  * Query params:
@@ -120,7 +238,6 @@ export async function GET(request) {
   const search = searchParams.get('search') || '';
   const searchId = searchParams.get('search_id') || '';
   const rerankParam = searchParams.get('rerank');
-  // Rerank by default for custom searches, opt-in for default
   const shouldRerank =
     rerankParam === 'true' || (rerankParam !== 'false' && !!searchId);
 
@@ -146,7 +263,6 @@ export async function GET(request) {
       embedding = profile.embedding;
       searchPrompt = profile.prompt || '';
 
-      // Fetch resume text for reranking context
       if (shouldRerank) {
         const res = await fetch(
           `https://registry.jsonresume.org/${user.username}.json`
@@ -180,32 +296,8 @@ export async function GET(request) {
       resumeText = result.text;
     }
 
-    // Match jobs via vector similarity
+    // Get user's feedback for state filtering
     const supabase = getSupabase();
-    const createdAfter = new Date(
-      Date.now() - days * 24 * 60 * 60 * 1000
-    ).toISOString();
-
-    // Over-fetch to compensate for passed/dismissed jobs being filtered out
-    const { data: matched, error } = await supabase.rpc('match_jobs_v5', {
-      query_embedding: embedding,
-      match_threshold: -1,
-      match_count: top * 5,
-      created_after: createdAfter,
-    });
-
-    if (error) throw new Error(error.message);
-
-    const jobIds = (matched || []).map((m) => m.id);
-    if (jobIds.length === 0) {
-      return NextResponse.json({ jobs: [], total: 0 });
-    }
-
-    const { data: jobs } = await supabase
-      .from('jobs')
-      .select('id, uuid, gpt_content, posted_at, url, salary_usd')
-      .in('id', jobIds);
-
     const { data: feedback } = await supabase
       .from('pathways_job_feedback')
       .select('job_id, sentiment')
@@ -216,95 +308,76 @@ export async function GET(request) {
       stateMap[f.job_id] = f.sentiment;
     });
 
-    // States that should be excluded from active results
-    const HIDDEN_STATES = new Set(['not_interested', 'dismissed']);
-
-    // Parse and filter
-    let results = (jobs || [])
-      .map((job) => {
-        try {
-          const parsed = JSON.parse(job.gpt_content);
-          if (!parsed?.title || !parsed?.company) return null;
-
-          const similarity =
-            matched.find((m) => m.id === job.id)?.similarity || 0;
-
-          return {
-            id: job.id,
-            uuid: job.uuid,
-            title: parsed.title,
-            company: parsed.company,
-            location: parsed.location,
-            remote: parsed.remote,
-            salary: parsed.salary,
-            salary_usd: job.salary_usd,
-            experience: parsed.experience,
-            type: parsed.type,
-            description: parsed.description,
-            skills: parsed.skills,
-            url: job.url,
-            posted_at: job.posted_at,
-            similarity: Math.round(similarity * 1000) / 1000,
-            state: stateMap[job.id] || null,
-          };
-        } catch {
-          return null;
-        }
-      })
-      .filter(Boolean)
-      .filter((j) => {
-        // Exclude passed/dismissed jobs from results
-        if (HIDDEN_STATES.has(j.state)) return false;
-        if (remote && j.remote !== 'Full') return false;
-        if (minSalary && j.salary_usd && j.salary_usd < minSalary * 1000)
-          return false;
-        if (
-          search &&
-          !JSON.stringify(j).toLowerCase().includes(search.toLowerCase())
-        )
-          return false;
-        return true;
-      })
-      .sort((a, b) => b.similarity - a.similarity);
-
-    // LLM reranking on top candidates
-    if (shouldRerank && results.length > 0) {
-      const toRerank = results.slice(0, Math.min(30, top * 2));
-      const rest = results.slice(Math.min(30, top * 2));
-
-      try {
-        const scores = await rerankJobs(toRerank, resumeText, searchPrompt);
-        const scoreMap = {};
-        scores.forEach((s) => {
-          scoreMap[s.id] = s.rerank_score;
-        });
-
-        // Combined score: 40% embedding similarity (normalized) + 60% LLM rerank
-        const maxSim = Math.max(...toRerank.map((j) => j.similarity), 0.001);
-        const reranked = toRerank
-          .map((j) => ({
-            ...j,
-            rerank_score: scoreMap[j.id] || 5,
-            combined_score:
-              0.4 * (j.similarity / maxSim) +
-              0.6 * ((scoreMap[j.id] || 5) / 10),
-          }))
-          .sort((a, b) => b.combined_score - a.combined_score);
-
-        results = [...reranked, ...rest];
-      } catch (err) {
-        logger.error(
-          { error: err.message },
-          'Reranking failed, using vector order'
-        );
-      }
-    }
-
-    results = results.slice(0, top);
+    const results = await matchJobs({
+      embedding,
+      resumeText,
+      searchPrompt,
+      top,
+      days,
+      remote,
+      minSalary,
+      search,
+      shouldRerank,
+      stateMap,
+    });
 
     return NextResponse.json({ jobs: results, total: results.length });
   } catch (err) {
     logger.error({ error: err.message }, 'Error in v1 jobs endpoint');
+    return NextResponse.json(
+      { error: 'Failed to match jobs' },
+      { status: 500 }
+    );
+  }
+}
+
+/**
+ * POST /api/v1/jobs — match jobs against a provided resume (no auth required)
+ *
+ * Body: { resume: {...}, top?: 20, days?: 30, remote?: false, min_salary?: 0, search?: "" }
+ *
+ * This enables local-mode usage: users with a resume.json file can get
+ * matched jobs without a registry account.
+ */
+export async function POST(request) {
+  try {
+    const body = await request.json();
+    const { resume } = body;
+
+    if (!resume?.basics) {
+      return NextResponse.json(
+        {
+          error:
+            'Request body must include a valid resume with a "basics" section',
+        },
+        { status: 400 }
+      );
+    }
+
+    const top = Math.min(parseInt(body.top) || 20, 100);
+    const days = parseInt(body.days) || 30;
+    const remote = body.remote === true;
+    const minSalary = parseInt(body.min_salary) || 0;
+    const search = body.search || '';
+
+    const { embedding, text: resumeText } = await getResumeEmbedding(resume);
+
+    const results = await matchJobs({
+      embedding,
+      resumeText,
+      searchPrompt: '',
+      top,
+      days,
+      remote,
+      minSalary,
+      search,
+      shouldRerank: false,
+      stateMap: null,
+    });
+
+    return NextResponse.json({ jobs: results, total: results.length });
+  } catch (err) {
+    logger.error({ error: err.message }, 'Error in v1 jobs POST endpoint');
     return NextResponse.json(
       { error: 'Failed to match jobs' },
       { status: 500 }

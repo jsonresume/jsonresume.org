@@ -23,7 +23,8 @@ export default function JobDetail({
     api
       .fetchJobDetail(job.id)
       .then((d) => {
-        setDetail(d);
+        // If the detail response only has an id (local mode), use the job data we already have
+        setDetail(d?.title ? d : null);
         setLoading(false);
       })
       .catch(() => setLoading(false));
