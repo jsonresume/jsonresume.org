@@ -33,6 +33,7 @@ export function createApiClient({ baseUrl, apiKey }) {
       if (params.minSalary) qs.set('min_salary', String(params.minSalary));
       if (params.search) qs.set('search', params.search);
       if (params.searchId) qs.set('search_id', params.searchId);
+      if (params.rerank !== undefined) qs.set('rerank', String(params.rerank));
       return request(`/jobs?${qs}`);
     },
     fetchJobDetail: (id) => request(`/jobs/${id}`),

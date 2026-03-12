@@ -83,6 +83,8 @@ export default function JobDetail({
     ['Experience', d.experience || '—'],
     ['Posted', d.posted_at || '—'],
     ['Score', typeof d.similarity === 'number' ? d.similarity.toFixed(3) : '—'],
+    ...(d.rerank_score ? [['AI Match', `${d.rerank_score}/10`]] : []),
+    ...(d.combined_score ? [['Combined', d.combined_score.toFixed(3)]] : []),
     ['Status', state ? `${stateIcon(state)} ${state}` : 'unmarked'],
   ];
   for (const [label, value] of meta) {

@@ -72,6 +72,8 @@ export default function JobList({
   const compW = Math.max(15, Math.floor(cols * 0.18));
   const locW = Math.max(12, Math.floor(cols * 0.15));
 
+  const hasRerank = visible.some((j) => j.rerank_score);
+
   const header = h(
     Box,
     { paddingX: 1 },
@@ -80,6 +82,7 @@ export default function JobList({
       { bold: true, dimColor: true },
       '  ' +
         'Score '.padEnd(7) +
+        (hasRerank ? 'AI '.padEnd(4) : '') +
         'Title'.padEnd(titleW) +
         'Company'.padEnd(compW) +
         'Location'.padEnd(locW) +
@@ -105,9 +108,17 @@ export default function JobList({
         ? job.similarity.toFixed(2)
         : String(job.similarity || '—');
 
+    const aiScore =
+      hasRerank && job.rerank_score
+        ? String(job.rerank_score).padEnd(4)
+        : hasRerank
+        ? '—   '
+        : '';
+
     const line =
       (selected ? '▸ ' : '  ') +
       score.padEnd(7) +
+      aiScore +
       truncate(job.title || '—', titleW - 1).padEnd(titleW) +
       truncate(job.company || '—', compW - 1).padEnd(compW) +
       truncate(loc, locW - 1).padEnd(locW) +
