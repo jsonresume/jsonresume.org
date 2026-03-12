@@ -1,8 +1,8 @@
-# @jsonresume/job-search
+# @jsonresume/jobs
 
-[![npm version](https://img.shields.io/npm/v/@jsonresume/job-search)](https://www.npmjs.com/package/@jsonresume/job-search)
-[![license](https://img.shields.io/npm/l/@jsonresume/job-search)](./LICENSE)
-[![node](https://img.shields.io/node/v/@jsonresume/job-search)](https://nodejs.org)
+[![npm version](https://img.shields.io/npm/v/@jsonresume/jobs)](https://www.npmjs.com/package/@jsonresume/jobs)
+[![license](https://img.shields.io/npm/l/@jsonresume/jobs)](./LICENSE)
+[![node](https://img.shields.io/node/v/@jsonresume/jobs)](https://nodejs.org)
 
 Search Hacker News "Who is Hiring" jobs matched against your [JSON Resume](https://jsonresume.org). Jobs are semantically ranked using AI embeddings — your resume is compared against hundreds of monthly job postings to surface the best fits.
 
@@ -31,7 +31,7 @@ npx @jsonresume/jobs
 Or install globally:
 
 ```bash
-npm install -g @jsonresume/job-search
+npm install -g @jsonresume/jobs
 jsonresume-jobs
 ```
 
@@ -221,7 +221,7 @@ This package includes a [Claude Code skill](https://docs.anthropic.com/en/docs/c
 
 ```bash
 mkdir -p ~/.claude/skills/jsonresume-hunt
-cp node_modules/@jsonresume/job-search/skills/jsonresume-hunt/SKILL.md \
+cp node_modules/@jsonresume/jobs/skills/jsonresume-hunt/SKILL.md \
    ~/.claude/skills/jsonresume-hunt/SKILL.md
 ```
 
