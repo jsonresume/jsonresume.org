@@ -158,37 +158,39 @@ function JobRow({ job, selected, hasRerank, titleW, compW, locW }) {
 
 export default function JobList({
   jobs,
+  cursor,
+  onCursorChange,
   onSelect,
   onMark,
   onAISummary,
   onAIBatch,
   isActive,
 }) {
-  const [cursor, setCursor] = useState(0);
   const [scroll, setScroll] = useState(0);
   const visibleRows = Math.max((process.stdout.rows || 30) - 12, 8);
 
-  // Reset cursor when jobs change
+  // Clamp cursor if jobs list shrinks
   useEffect(() => {
-    setCursor(0);
-    setScroll(0);
+    if (cursor >= jobs.length && jobs.length > 0) {
+      onCursorChange(jobs.length - 1);
+    }
   }, [jobs.length]);
+
+  // Keep scroll in sync with cursor
+  useEffect(() => {
+    if (cursor < scroll) setScroll(cursor);
+    if (cursor >= scroll + visibleRows) setScroll(cursor - visibleRows + 1);
+  }, [cursor]);
 
   useInput(
     (input, key) => {
       if (key.upArrow || input === 'k') {
-        setCursor((c) => {
-          const next = Math.max(0, c - 1);
-          if (next < scroll) setScroll(next);
-          return next;
-        });
+        const next = Math.max(0, cursor - 1);
+        onCursorChange(next);
       }
       if (key.downArrow || input === 'j') {
-        setCursor((c) => {
-          const next = Math.min(jobs.length - 1, c + 1);
-          if (next >= scroll + visibleRows) setScroll(next - visibleRows + 1);
-          return next;
-        });
+        const next = Math.min(jobs.length - 1, cursor + 1);
+        onCursorChange(next);
       }
       if (key.return && jobs[cursor]) onSelect(jobs[cursor]);
       if (input === 'i' && jobs[cursor]) onMark(jobs[cursor].id, 'interested');

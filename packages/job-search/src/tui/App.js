@@ -38,6 +38,7 @@ function App({ baseUrl, apiKey }) {
   const [view, setView] = useState('list');
   const [tab, setTab] = useState('all');
   const [selectedJob, setSelectedJob] = useState(null);
+  const [cursor, setCursor] = useState(0);
   const [resume, setResume] = useState(null);
 
   // Active search profile (null = default resume)
@@ -99,10 +100,12 @@ function App({ baseUrl, apiKey }) {
       if (key.tab && view === 'list') {
         const idx = TABS.indexOf(tab);
         setTab(TABS[(idx + 1) % TABS.length]);
+        setCursor(0);
       }
       if (key.shift && key.tab && view === 'list') {
         const idx = TABS.indexOf(tab);
         setTab(TABS[(idx - 1 + TABS.length) % TABS.length]);
+        setCursor(0);
       }
     },
     { isActive: view !== 'filters' && view !== 'searches' }
@@ -141,6 +144,7 @@ function App({ baseUrl, apiKey }) {
 
   const handleSwitchSearch = (id) => {
     setActiveSearchId(id);
+    setCursor(0);
   };
 
   const activeSearch = activeSearchId
@@ -169,6 +173,8 @@ function App({ baseUrl, apiKey }) {
     view === 'list'
       ? h(JobList, {
           jobs,
+          cursor,
+          onCursorChange: setCursor,
           onSelect: handleSelect,
           onMark: handleMark,
           onAISummary: handleAISummary,
