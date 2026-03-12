@@ -56,6 +56,9 @@ export function useAI(resume) {
   const dossierJobId = useRef(null);
   // Local cache: jobId → { text, done, loading }
   const dossierCache = useRef(new Map());
+  // Bump to trigger re-renders when dossier status changes
+  const [, setDossierTick] = useState(0);
+  const bumpTick = () => setDossierTick((t) => t + 1);
 
   const summarizeJob = useCallback(
     async (job) => {
@@ -129,6 +132,7 @@ export function useAI(resume) {
         done: false,
         loading: true,
       });
+      bumpTick();
 
       // Helper to update both state and cache
       // Only updates visible state if this job is still the active dossier
@@ -148,6 +152,7 @@ export function useAI(resume) {
             done: true,
             loading: false,
           });
+          bumpTick();
           return;
         }
       } catch {
@@ -371,6 +376,7 @@ Be thorough, specific, and opinionated. Reference the candidate's actual experie
           entry.done = true;
           entry.loading = false;
         }
+        bumpTick();
         if (dossierJobId.current === job.id) {
           childRef.current = null;
           setLoading(false);
@@ -452,6 +458,16 @@ Be thorough, specific, and opinionated. Reference the candidate's actual experie
     return filename;
   }, []);
 
+  // Expose dossier status for job list icons
+  // Returns: 'generating' | 'done' | null
+  const getDossierStatus = useCallback((jobId) => {
+    const entry = dossierCache.current.get(jobId);
+    if (!entry) return null;
+    if (entry.loading) return 'generating';
+    if (entry.done) return 'done';
+    return null;
+  }, []);
+
   return {
     text,
     loading,
@@ -459,6 +475,7 @@ Be thorough, specific, and opinionated. Reference the candidate's actual experie
     hasKey,
     mode,
     hasActiveProcess: Boolean(childRef.current),
+    getDossierStatus,
     summarizeJob,
     dossier,
     batchReview,

@@ -366,6 +366,7 @@ function App({ baseUrl, apiKey, apiClient }) {
             onMark: handleMark,
             onAISummary: handleAISummary,
             onDossier: handleDossier,
+            getDossierStatus: ai.getDossierStatus,
             isActive: true,
             compact: true,
             reservedRows: 8,
@@ -382,6 +383,7 @@ function App({ baseUrl, apiKey, apiClient }) {
             onMark: handleMark,
             onAISummary: handleAISummary,
             onDossier: handleDossier,
+            getDossierStatus: ai.getDossierStatus,
             isActive: false,
             isPanel: true,
           })
@@ -422,6 +424,7 @@ function App({ baseUrl, apiKey, apiClient }) {
             onMark: handleMark,
             onAISummary: handleAISummary,
             onDossier: handleDossier,
+            getDossierStatus: ai.getDossierStatus,
             isActive: false,
             compact: true,
             reservedRows: 8,

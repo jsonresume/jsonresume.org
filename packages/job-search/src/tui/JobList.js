@@ -112,12 +112,15 @@ function JobRow({
   locW,
   marked,
   compact,
+  dossierStatus,
 }) {
   const loc = formatLocation(job.location, job.remote);
   const sal = formatSalary(job.salary, job.salary_usd);
   const score =
     typeof job.similarity === 'number' ? job.similarity.toFixed(2) : '—';
   const icon = stateIcon(job.state);
+  const dossierIcon =
+    dossierStatus === 'generating' ? '◌' : dossierStatus === 'done' ? '📋' : '';
 
   const stColor =
     job.state === 'interested'
@@ -160,6 +163,20 @@ function JobRow({
         { flexGrow: 1 },
         h(Text, props, truncate(job.title || '—', titleW))
       ),
+      dossierIcon
+        ? h(
+            Box,
+            { width: 2 },
+            h(
+              Text,
+              {
+                ...props,
+                color: dossierStatus === 'generating' ? 'yellow' : 'green',
+              },
+              dossierIcon
+            )
+          )
+        : null,
       h(Box, { width: 2 }, h(Text, props, icon))
     );
   }
@@ -196,6 +213,20 @@ function JobRow({
       h(Text, props, truncate(loc, locW - 1))
     ),
     h(Box, { width: 12, marginRight: GAP }, h(Text, props, truncate(sal, 11))),
+    dossierIcon
+      ? h(
+          Box,
+          { width: 2 },
+          h(
+            Text,
+            {
+              ...props,
+              color: dossierStatus === 'generating' ? 'yellow' : 'green',
+            },
+            dossierIcon
+          )
+        )
+      : null,
     h(Box, { width: 2 }, h(Text, props, icon))
   );
 }
@@ -251,6 +282,7 @@ export default function JobList({
   onDossier,
   onAIBatch,
   onExport,
+  getDossierStatus,
   isActive,
   tab,
   compact,
@@ -346,6 +378,7 @@ export default function JobList({
       compW,
       locW,
       compact,
+      dossierStatus: getDossierStatus ? getDossierStatus(job.id) : null,
     })
   );
 
