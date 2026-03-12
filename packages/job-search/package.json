@@ -1,10 +1,11 @@
 {
   "name": "@jsonresume/job-search",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "type": "module",
   "description": "Search Hacker News jobs matched against your JSON Resume",
   "bin": {
-    "jsonresume-jobs": "./bin/cli.js"
+    "jsonresume-jobs": "./bin/cli.js",
+    "jobs": "./bin/cli.js"
   },
   "files": [
     "bin",

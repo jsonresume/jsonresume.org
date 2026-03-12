@@ -3,26 +3,15 @@
 /**
  * @jsonresume/job-search — Search HN jobs matched to your JSON Resume
  *
- * Setup:
- *   1. Get your API key:
- *      curl -s -X POST https://jsonresume.org/api/v1/keys \
- *        -H 'Content-Type: application/json' \
- *        -d '{"username":"YOUR_GITHUB_USERNAME"}'
- *
- *   2. Export it:
- *      export JSONRESUME_API_KEY=jr_yourname_xxxxx
- *
- *   3. Search:
- *      npx @jsonresume/job-search search
+ * Just run:  npx @jsonresume/jobs
  */
 
-const VERSION = '0.4.0';
+const VERSION = '0.5.0';
 
 const BASE_URL =
   getArg('--base-url') ||
   process.env.JSONRESUME_BASE_URL ||
   'https://registry.jsonresume.org';
-const API_KEY = process.env.JSONRESUME_API_KEY;
 
 // ── Arg parsing ────────────────────────────────────────────
 
@@ -38,12 +27,22 @@ function hasFlag(name) {
 
 // ── API client ─────────────────────────────────────────────
 
+let _apiKey;
+
+async function getApiKey() {
+  if (_apiKey) return _apiKey;
+  const { ensureApiKey } = await import('../src/auth.js');
+  _apiKey = await ensureApiKey(BASE_URL);
+  return _apiKey;
+}
+
 async function api(path, options = {}) {
+  const apiKey = await getApiKey();
   const url = `${BASE_URL}/api/v1${path}`;
   const res = await fetch(url, {
     ...options,
     headers: {
-      Authorization: `Bearer ${API_KEY}`,
+      Authorization: `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
       ...options.headers,
     },
@@ -275,67 +274,69 @@ async function cmdUpdate() {
   console.log(`Resume updated for ${result.username}.`);
 }
 
+async function cmdLogout() {
+  const { loadConfig, saveConfig } = await import('../src/auth.js');
+  const config = loadConfig();
+  const username = config.username || 'unknown';
+  saveConfig({});
+  console.log(`Logged out (removed saved key for ${username}).`);
+}
+
 function cmdHelp() {
   console.log(`
 jsonresume-jobs v${VERSION} — Search HN "Who is Hiring" jobs matched to your JSON Resume
 
-SETUP
-  1. Get your API key:
-     curl -s -X POST https://jsonresume.org/api/v1/keys \\
-       -H 'Content-Type: application/json' \\
-       -d '{"username":"YOUR_GITHUB_USERNAME"}'
-
-  2. Export it:
-     export JSONRESUME_API_KEY=jr_yourname_xxxxx
+QUICK START
+  npx @jsonresume/jobs              Launch the interactive TUI (logs in automatically)
 
 COMMANDS
-  search                          Find matching jobs (default command)
-  browse                          Interactive TUI with AI features
-  detail <id>                     Show full details for a job
-  mark <id> <state>               Mark a job's state
-  me                              Show your resume summary
-  update <file>                   Update your resume on the registry
-  help                            Show this help message
+  (default)                         Interactive TUI with AI features
+  search                            Find matching jobs (table output)
+  detail <id>                       Show full details for a job
+  mark <id> <state>                 Mark a job's state
+  me                                Show your resume summary
+  update <file>                     Update your resume on the registry
+  logout                            Remove saved API key
+  help                              Show this help message
 
 SEARCH OPTIONS
-  --top N                         Number of results (default: 20, max: 100)
-  --days N                        How far back to look (default: 30)
-  --remote                        Remote jobs only
-  --min-salary N                  Minimum salary in thousands (e.g. 150)
-  --search TERM                   Keyword filter (searches title, company, skills)
-  --interested                    Show only jobs you marked interested
-  --applied                       Show only jobs you marked applied
+  --top N                           Number of results (default: 20, max: 100)
+  --days N                          How far back to look (default: 30)
+  --remote                          Remote jobs only
+  --min-salary N                    Minimum salary in thousands (e.g. 150)
+  --search TERM                     Keyword filter (searches title, company, skills)
+  --interested                      Show only jobs you marked interested
+  --applied                         Show only jobs you marked applied
 
 MARK STATES
-  interested                      You want this job
-  not_interested                  Not for you
-  applied                         You've applied
-  maybe                           Considering it
-  dismissed                       Hide from results
+  interested                        You want this job
+  not_interested                    Not for you
+  applied                           You've applied
+  maybe                             Considering it
+  dismissed                         Hide from results
 
 GLOBAL OPTIONS
-  --json                          Output raw JSON (for piping / Claude Code)
-  --base-url URL                  API base URL (default: https://jsonresume.org)
-  --feedback "reason"             Add a reason when marking (with mark command)
-
-EXAMPLES
-  jsonresume-jobs search --remote --min-salary 150
-  jsonresume-jobs search --search "react" --top 10 --days 60
-  jsonresume-jobs detail 181420
-  jsonresume-jobs mark 181420 interested --feedback "great remote role"
-  jsonresume-jobs me --json
-  jsonresume-jobs update ./resume.json
+  --json                            Output raw JSON (for piping / Claude Code)
+  --base-url URL                    API base URL (default: https://registry.jsonresume.org)
+  --feedback "reason"               Add a reason when marking (with mark command)
 
 ENVIRONMENT
-  JSONRESUME_API_KEY              Your API key (required)
-  JSONRESUME_BASE_URL             API base URL override
+  JSONRESUME_API_KEY                Your API key (optional — auto-login if not set)
+  OPENAI_API_KEY                    Enable AI features (summaries, reranking)
+  JSONRESUME_BASE_URL               API base URL override
+
+EXAMPLES
+  npx @jsonresume/jobs                                              # TUI
+  npx @jsonresume/jobs search --remote --min-salary 150             # CLI search
+  npx @jsonresume/jobs detail 181420                                # Job details
+  npx @jsonresume/jobs mark 181420 interested --feedback "great"    # Mark job
 `);
 }
 
 // ── Main ───────────────────────────────────────────────────
 
 async function main() {
-  const cmd = process.argv[2] || 'search';
+  const cmd = process.argv[2] || '';
 
   if (cmd === 'help' || cmd === '--help' || cmd === '-h') {
     return cmdHelp();
@@ -346,29 +347,13 @@ async function main() {
     return;
   }
 
-  if (!API_KEY) {
-    console.error(`Error: JSONRESUME_API_KEY not set.
-
-Get your key:
-  curl -s -X POST https://jsonresume.org/api/v1/keys \\
-    -H 'Content-Type: application/json' \\
-    -d '{"username":"YOUR_GITHUB_USERNAME"}'
-
-Then export it:
-  export JSONRESUME_API_KEY=jr_yourname_xxxxx
-
-Run "jsonresume-jobs help" for more info.`);
-    process.exit(1);
+  if (cmd === 'logout') {
+    return cmdLogout();
   }
 
   switch (cmd) {
     case 'search':
       return cmdSearch();
-    case 'browse':
-    case 'tui': {
-      const { default: runTUI } = await import('../src/tui/App.js');
-      return runTUI({ baseUrl: BASE_URL, apiKey: API_KEY });
-    }
     case 'detail':
       return cmdDetail();
     case 'mark':
@@ -377,10 +362,15 @@ Run "jsonresume-jobs help" for more info.`);
       return cmdMe();
     case 'update':
       return cmdUpdate();
-    default:
-      console.error(`Unknown command: ${cmd}`);
-      console.error('Run "jsonresume-jobs help" for usage.');
-      process.exit(1);
+    case 'browse':
+    case 'tui':
+    case '':
+    default: {
+      // Default: launch TUI
+      const apiKey = await getApiKey();
+      const { default: runTUI } = await import('../src/tui/App.js');
+      return runTUI({ baseUrl: BASE_URL, apiKey });
+    }
   }
 }
 
