@@ -73,7 +73,7 @@ export default function SearchManager({
         h(
           Text,
           { color: 'magenta' },
-          ' Creating search profile... (AI is blending your resume with the prompt)'
+          ' Creating profile — generating a custom embedding from your resume + search prompt…'
         )
       )
     );
@@ -110,7 +110,7 @@ export default function SearchManager({
       h(
         Text,
         { dimColor: true, marginTop: 1 },
-        'Enter to continue, Ctrl+C to cancel'
+        'Enter to continue, Esc to cancel'
       )
     );
   }
@@ -153,7 +153,7 @@ export default function SearchManager({
       h(
         Text,
         { dimColor: true, marginTop: 1 },
-        'Enter to create, Ctrl+C to cancel'
+        'Enter to create, Esc to cancel'
       )
     );
   }

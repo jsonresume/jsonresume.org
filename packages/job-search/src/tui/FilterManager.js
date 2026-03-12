@@ -124,7 +124,7 @@ export default function FilterManager({ filterState, onUpdate, onClose }) {
               ...next[editIdx],
               value:
                 filter.type === 'minSalary' || filter.type === 'days'
-                  ? parseInt(val) || val
+                  ? parseInt(val) || 0
                   : val,
             };
             onUpdate({ ...filterState, active: next });
@@ -132,11 +132,7 @@ export default function FilterManager({ filterState, onUpdate, onClose }) {
           },
         })
       ),
-      h(
-        Text,
-        { dimColor: true, marginTop: 1 },
-        'Enter to save, Ctrl+C to cancel'
-      )
+      h(Text, { dimColor: true, marginTop: 1 }, 'Enter to save, Esc to cancel')
     );
   }
 
@@ -165,7 +161,7 @@ export default function FilterManager({ filterState, onUpdate, onClose }) {
             if (val.trim()) {
               const value =
                 ft.type === 'minSalary' || ft.type === 'days'
-                  ? parseInt(val) || val
+                  ? parseInt(val) || 0
                   : val;
               onUpdate({
                 ...filterState,

@@ -36,9 +36,10 @@ const TAB_LABELS = {
 function InlineSearch({ query, onChange, onSubmit }) {
   return h(
     Box,
-    { paddingX: 1 },
-    h(Text, { color: 'yellow', bold: true }, 'Find: '),
-    h(TextInput, { value: query, onChange, onSubmit })
+    { paddingX: 1, gap: 1 },
+    h(Text, { color: 'yellow', bold: true }, 'Find:'),
+    h(TextInput, { value: query, onChange, onSubmit }),
+    h(Text, { dimColor: true }, '  Enter to apply, Esc to clear')
   );
 }
 
@@ -106,7 +107,18 @@ function App({ baseUrl, apiKey, apiClient }) {
   const jobs = useMemo(() => {
     if (!appliedQuery) return rawJobs;
     const q = appliedQuery.toLowerCase();
-    return rawJobs.filter((j) => JSON.stringify(j).toLowerCase().includes(q));
+    return rawJobs.filter((j) => {
+      const fields = [
+        j.title,
+        j.company,
+        j.description,
+        j.remote,
+        j.location?.city,
+        j.location?.countryCode,
+        ...(j.skills || []).map((s) => s.name || s),
+      ];
+      return fields.some((f) => f && String(f).toLowerCase().includes(q));
+    });
   }, [rawJobs, appliedQuery]);
 
   useEffect(() => {
@@ -215,7 +227,7 @@ function App({ baseUrl, apiKey, apiClient }) {
   const handleExport = () => {
     try {
       const filename = exportShortlist(allJobs);
-      showToast(`Exported to ${filename}`, 'export');
+      showToast(`Saved ./${filename}`, 'export');
     } catch (err) {
       showToast(`Export failed: ${err.message}`, 'error');
     }

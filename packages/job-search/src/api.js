@@ -40,7 +40,7 @@ export function createApiClient({ baseUrl, apiKey }) {
     markJob: (id, state, feedback) =>
       request(`/jobs/${id}`, {
         method: 'PUT',
-        body: JSON.stringify({ state, feedback: feedback || state }),
+        body: JSON.stringify({ state, feedback: feedback || undefined }),
       }),
     fetchMe: () => request('/me'),
 

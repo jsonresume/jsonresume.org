@@ -25,7 +25,13 @@ export function createLocalApiClient({ baseUrl, resume }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       });
-      const data = await res.json();
+      const text = await res.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        throw new Error(`Non-JSON response: ${res.status}`);
+      }
       if (!res.ok) throw new Error(data.error || res.statusText);
 
       // Overlay local marks onto results
@@ -44,9 +50,9 @@ export function createLocalApiClient({ baseUrl, resume }) {
       return { id };
     },
 
-    markJob: async (id, state) => {
+    markJob: async (id, state, feedback) => {
       setMark(id, state);
-      return { id, state };
+      return { id, state, feedback };
     },
 
     fetchMe: async () => ({ resume, username: 'local' }),

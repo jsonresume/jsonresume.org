@@ -6,7 +6,7 @@
  * Just run:  npx @jsonresume/jobs
  */
 
-const VERSION = '0.9.0';
+const VERSION = '0.10.0';
 
 const BASE_URL =
   getArg('--base-url') ||
@@ -118,10 +118,12 @@ function stateIcon(state) {
 
 async function cmdSearch() {
   const params = new URLSearchParams();
-  params.set('top', getArg('--top') || '20');
-  params.set('days', getArg('--days') || '30');
+  const topArg = parseInt(getArg('--top')) || 20;
+  params.set('top', String(Math.min(Math.max(1, topArg), 100)));
+  params.set('days', String(parseInt(getArg('--days')) || 30));
   if (hasFlag('--remote')) params.set('remote', 'true');
-  if (getArg('--min-salary')) params.set('min_salary', getArg('--min-salary'));
+  const minSalary = parseInt(getArg('--min-salary'));
+  if (minSalary > 0) params.set('min_salary', String(minSalary));
   if (getArg('--search')) params.set('search', getArg('--search'));
 
   const { jobs } = await api(`/jobs?${params}`);

@@ -7,10 +7,12 @@ const SECTIONS = [
     keys: [
       ['j / ↓', 'Move down'],
       ['k / ↑', 'Move up'],
-      ['Enter', 'Open job details'],
+      ['g / G', 'Jump to first / last'],
+      ['Ctrl+U / D', 'Page up / page down'],
+      ['Enter', 'Open split-pane detail view'],
       ['Esc / q', 'Back / quit'],
-      ['Tab', 'Next section tab'],
-      ['Shift+Tab', 'Previous section tab'],
+      ['Tab', 'Next tab'],
+      ['Shift+Tab', 'Previous tab'],
     ],
   },
   {
@@ -20,28 +22,31 @@ const SECTIONS = [
       ['x', 'Mark applied'],
       ['m', 'Mark maybe'],
       ['p', 'Mark passed'],
+      ['v', 'Toggle batch selection'],
     ],
   },
   {
     title: 'Search & Filter',
     keys: [
+      ['n', 'Inline keyword search'],
       ['/', 'Search profiles'],
       ['f', 'Manage filters'],
-      ['R', 'Force refresh'],
-    ],
-  },
-  {
-    title: 'AI Features',
-    keys: [
-      ['Space', 'AI summary of job'],
-      ['S', 'AI batch review'],
+      ['e', 'Export shortlist to markdown'],
+      ['R', 'Force refresh (bypass cache)'],
     ],
   },
   {
     title: 'Detail View',
     keys: [
+      ['J / K', 'Scroll detail content'],
       ['o', 'Open HN post in browser'],
-      ['e', 'Export shortlist to markdown'],
+    ],
+  },
+  {
+    title: 'AI Features (requires OPENAI_API_KEY)',
+    keys: [
+      ['Space', 'AI summary of current job'],
+      ['S', 'AI batch review of visible jobs'],
     ],
   },
 ];
@@ -68,7 +73,7 @@ export default function HelpModal({ onClose }) {
     h(
       Box,
       { justifyContent: 'center', marginBottom: 1 },
-      h(Text, { bold: true, color: 'cyan' }, '⌨  Keyboard Shortcuts')
+      h(Text, { bold: true, color: 'cyan' }, 'Keyboard Shortcuts')
     ),
     ...SECTIONS.flatMap((section) => [
       h(

@@ -11,7 +11,9 @@ export function useAI(resume) {
   const summarizeJob = useCallback(
     async (job) => {
       if (!hasKey) {
-        setError('Set OPENAI_API_KEY to enable AI features');
+        setError(
+          'AI requires OPENAI_API_KEY — run: export OPENAI_API_KEY=sk-...'
+        );
         return;
       }
       setLoading(true);
@@ -57,7 +59,9 @@ export function useAI(resume) {
   const batchReview = useCallback(
     async (jobs) => {
       if (!hasKey) {
-        setError('Set OPENAI_API_KEY to enable AI features');
+        setError(
+          'AI requires OPENAI_API_KEY — run: export OPENAI_API_KEY=sk-...'
+        );
         return;
       }
       setLoading(true);

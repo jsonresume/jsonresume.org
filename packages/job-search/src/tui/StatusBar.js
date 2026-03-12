@@ -21,6 +21,10 @@ const KEYS = {
     ['space', 'AI'],
     ['esc', 'back'],
   ],
+  search: [
+    ['esc', 'clear search'],
+    ['enter', 'apply'],
+  ],
   filters: [
     ['j/k', 'nav'],
     ['enter', 'edit'],
@@ -67,14 +71,21 @@ export default function StatusBar({
     h(Text, { dimColor: true }, '─'.repeat(Math.max(10, cols - 2)))
   );
 
-  const rightInfo = h(
-    Box,
-    { gap: 1 },
-    loading ? h(Text, { color: 'yellow' }, 'loading…') : null,
-    reranking ? h(Text, { color: 'magenta' }, 'reranking…') : null,
-    h(Text, { dimColor: true }, `${jobCount}/${totalCount}`),
-    aiEnabled ? null : h(Text, { dimColor: true }, 'no-AI')
+  const rightParts = [];
+  if (loading)
+    rightParts.push(h(Text, { key: 'l', color: 'yellow' }, 'loading…'));
+  if (reranking)
+    rightParts.push(h(Text, { key: 'r', color: 'magenta' }, 'reranking…'));
+  rightParts.push(
+    h(Text, { key: 'c', dimColor: true }, `${jobCount}/${totalCount}`)
   );
+  if (!aiEnabled) {
+    rightParts.push(
+      h(Text, { key: 'ai', dimColor: true }, 'set OPENAI_API_KEY for AI')
+    );
+  }
+
+  const rightInfo = h(Box, { gap: 1 }, ...rightParts);
 
   const content = toast
     ? h(Box, { paddingX: 1, justifyContent: 'space-between' }, toast, rightInfo)
