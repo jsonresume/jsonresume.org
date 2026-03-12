@@ -458,6 +458,22 @@ Be thorough, specific, and opinionated. Reference the candidate's actual experie
     return filename;
   }, []);
 
+  // Seed cache with server-side dossier flags from job list
+  const seedDossierFlags = useCallback((jobs) => {
+    let changed = false;
+    for (const job of jobs) {
+      if (job.has_dossier && !dossierCache.current.has(job.id)) {
+        dossierCache.current.set(job.id, {
+          text: '',
+          done: true,
+          loading: false,
+        });
+        changed = true;
+      }
+    }
+    if (changed) bumpTick();
+  }, []);
+
   // Expose dossier status for job list icons
   // Returns: 'generating' | 'done' | null
   const getDossierStatus = useCallback((jobId) => {
@@ -476,6 +492,7 @@ Be thorough, specific, and opinionated. Reference the candidate's actual experie
     mode,
     hasActiveProcess: Boolean(childRef.current),
     getDossierStatus,
+    seedDossierFlags,
     summarizeJob,
     dossier,
     batchReview,

@@ -124,6 +124,11 @@ function App({ baseUrl, apiKey, apiClient }) {
   const { toast, show: showToast } = useToast();
   const [confirmExit, setConfirmExit] = useState(false);
 
+  // Seed dossier icons from server-side flags when jobs load
+  useEffect(() => {
+    if (allJobs.length) ai.seedDossierFlags(allJobs);
+  }, [allJobs, ai]);
+
   // Kill claude processes on exit (Ctrl+C)
   useEffect(() => {
     const cleanup = () => ai.cancel();

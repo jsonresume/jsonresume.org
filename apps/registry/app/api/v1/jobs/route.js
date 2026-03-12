@@ -296,17 +296,21 @@ export async function GET(request) {
       resumeText = result.text;
     }
 
-    // Get user's feedback for state filtering (exclude dossier rows)
+    // Get user's feedback for state filtering
     const supabase = getSupabase();
     const { data: feedback } = await supabase
       .from('pathways_job_feedback')
       .select('job_id, sentiment')
-      .eq('user_id', user.username)
-      .neq('sentiment', 'dossier');
+      .eq('user_id', user.username);
 
     const stateMap = {};
+    const dossierSet = new Set();
     (feedback || []).forEach((f) => {
-      stateMap[f.job_id] = f.sentiment;
+      if (f.sentiment === 'dossier') {
+        dossierSet.add(f.job_id);
+      } else {
+        stateMap[f.job_id] = f.sentiment;
+      }
     });
 
     const results = await matchJobs({
@@ -322,7 +326,13 @@ export async function GET(request) {
       stateMap,
     });
 
-    return NextResponse.json({ jobs: results, total: results.length });
+    // Add dossier flag to results
+    const jobs = results.map((job) => ({
+      ...job,
+      has_dossier: dossierSet.has(String(job.id)),
+    }));
+
+    return NextResponse.json({ jobs, total: jobs.length });
   } catch (err) {
     logger.error({ error: err.message }, 'Error in v1 jobs endpoint');
     return NextResponse.json(
