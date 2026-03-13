@@ -18,6 +18,7 @@ export function createLocalApiClient({ baseUrl, resume }) {
         days: params.days || 30,
       };
       if (params.remote) body.remote = true;
+      if (params.globalRemote) body.global_remote = true;
       if (params.minSalary) body.min_salary = params.minSalary;
       if (params.search) body.search = params.search;
 

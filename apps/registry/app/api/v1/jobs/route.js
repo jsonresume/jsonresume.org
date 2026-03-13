@@ -4,6 +4,7 @@ import { embed, generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { authenticate } from '../auth';
 import { logger } from '@/lib/logger';
+import { classifyGlobalRemote } from './globalRemote';
 
 export const dynamic = 'force-dynamic';
 
@@ -223,6 +224,7 @@ async function matchJobs({
  *   ?search=react   — keyword search in parsed content
  *   ?search_id=uuid — use a saved search profile's embedding
  *   ?rerank=true    — enable LLM reranking (default: true for search_id)
+ *   ?global_remote=true — classify and filter to globally remote jobs only
  */
 export async function GET(request) {
   const user = await authenticate(request);
@@ -234,6 +236,7 @@ export async function GET(request) {
   const top = Math.min(parseInt(searchParams.get('top')) || 20, 100);
   const days = parseInt(searchParams.get('days')) || 30;
   const remote = searchParams.get('remote') === 'true';
+  const globalRemote = searchParams.get('global_remote') === 'true';
   const minSalary = parseInt(searchParams.get('min_salary')) || 0;
   const search = searchParams.get('search') || '';
   const searchId = searchParams.get('search_id') || '';
@@ -317,17 +320,26 @@ export async function GET(request) {
       embedding,
       resumeText,
       searchPrompt,
-      top,
+      top: globalRemote ? top * 3 : top,
       days,
-      remote,
+      remote: remote || globalRemote,
       minSalary,
       search,
       shouldRerank,
       stateMap,
     });
 
+    // Classify global remote status
+    await classifyGlobalRemote(results);
+
+    // Filter to global remote if requested
+    let filtered = results;
+    if (globalRemote) {
+      filtered = results.filter((j) => j.global_remote === true);
+    }
+
     // Add dossier flag to results
-    const jobs = results.map((job) => ({
+    const jobs = filtered.slice(0, top).map((job) => ({
       ...job,
       has_dossier: dossierSet.has(String(job.id)),
     }));
@@ -368,6 +380,7 @@ export async function POST(request) {
     const top = Math.min(parseInt(body.top) || 20, 100);
     const days = parseInt(body.days) || 30;
     const remote = body.remote === true;
+    const globalRemoteFlag = body.global_remote === true;
     const minSalary = parseInt(body.min_salary) || 0;
     const search = body.search || '';
 
@@ -377,16 +390,24 @@ export async function POST(request) {
       embedding,
       resumeText,
       searchPrompt: '',
-      top,
+      top: globalRemoteFlag ? top * 3 : top,
       days,
-      remote,
+      remote: remote || globalRemoteFlag,
       minSalary,
       search,
       shouldRerank: false,
       stateMap: null,
     });
 
-    return NextResponse.json({ jobs: results, total: results.length });
+    await classifyGlobalRemote(results);
+
+    let filtered = results;
+    if (globalRemoteFlag) {
+      filtered = results.filter((j) => j.global_remote === true);
+    }
+
+    const jobs = filtered.slice(0, top);
+    return NextResponse.json({ jobs, total: jobs.length });
   } catch (err) {
     logger.error({ error: err.message }, 'Error in v1 jobs POST endpoint');
     return NextResponse.json(

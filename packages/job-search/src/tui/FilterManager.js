@@ -6,6 +6,11 @@ import { h } from './h.js';
 const FILTER_TYPES = [
   { type: 'remote', label: 'Remote only', hasValue: false },
   {
+    type: 'globalRemote',
+    label: 'Global remote (work from anywhere)',
+    hasValue: false,
+  },
+  {
     type: 'search',
     label: 'Keyword search',
     hasValue: true,
@@ -233,6 +238,8 @@ export default function FilterManager({ filterState, onUpdate, onClose }) {
       const label =
         f.type === 'remote'
           ? 'Remote only'
+          : f.type === 'globalRemote'
+          ? 'Global remote'
           : f.type === 'search'
           ? `Search: "${f.value}"`
           : f.type === 'minSalary'

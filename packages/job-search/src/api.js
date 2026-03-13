@@ -30,6 +30,7 @@ export function createApiClient({ baseUrl, apiKey }) {
       qs.set('top', String(params.top || 50));
       qs.set('days', String(params.days || 30));
       if (params.remote) qs.set('remote', 'true');
+      if (params.globalRemote) qs.set('global_remote', 'true');
       if (params.minSalary) qs.set('min_salary', String(params.minSalary));
       if (params.search) qs.set('search', params.search);
       if (params.searchId) qs.set('search_id', params.searchId);

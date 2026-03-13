@@ -16,6 +16,7 @@ export function useJobs(api, activeFilters, tab, searchId, getDossierStatus) {
     for (const f of activeFilters || []) {
       if (f.type === 'days') p.days = Number(f.value) || 30;
       if (f.type === 'remote') p.remote = true;
+      if (f.type === 'globalRemote') p.globalRemote = true;
       if (f.type === 'minSalary') p.minSalary = Number(f.value) || 0;
       if (f.type === 'search') p.search = f.value || '';
     }
@@ -121,6 +122,9 @@ export function useJobs(api, activeFilters, tab, searchId, getDossierStatus) {
         filtered = filtered.filter(
           (j) => j.remote === 'Full' || /remote/i.test(j.location || '')
         );
+      }
+      if (f.type === 'globalRemote') {
+        filtered = filtered.filter((j) => j.global_remote === true);
       }
       if (f.type === 'minSalary' && f.value) {
         filtered = filtered.filter(
