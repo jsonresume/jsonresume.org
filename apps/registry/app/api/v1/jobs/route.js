@@ -128,7 +128,7 @@ export async function GET(request) {
     });
 
     // Negative feedback: subtract rejected job direction from embedding
-    if (rejectedJobIds.length >= 3 && embedding) {
+    if (rejectedJobIds.length >= 2 && embedding) {
       try {
         const ids = rejectedJobIds
           .map(Number)

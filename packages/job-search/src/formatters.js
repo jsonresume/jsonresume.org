@@ -39,6 +39,18 @@ export function truncate(str, len) {
   return str.length > len ? str.slice(0, len - 1) + '…' : str;
 }
 
+export function formatAge(postedAt) {
+  if (!postedAt) return '';
+  const days = Math.floor(
+    (Date.now() - new Date(postedAt).getTime()) / 86400000
+  );
+  if (days === 0) return 'today';
+  if (days === 1) return '1d ago';
+  if (days < 7) return `${days}d ago`;
+  if (days < 30) return `${Math.floor(days / 7)}w ago`;
+  return `${Math.floor(days / 30)}mo ago`;
+}
+
 export function stateLabel(state) {
   const labels = {
     interested: 'Interested',

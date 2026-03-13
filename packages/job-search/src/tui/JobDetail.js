@@ -2,7 +2,12 @@ import { useState, useEffect } from 'react';
 import { Box, Text, useInput } from 'ink';
 import Spinner from 'ink-spinner';
 import { h } from './h.js';
-import { stateIcon, formatSalary, formatLocation } from '../formatters.js';
+import {
+  stateIcon,
+  formatSalary,
+  formatLocation,
+  formatAge,
+} from '../formatters.js';
 
 export default function JobDetail({
   job,
@@ -79,17 +84,25 @@ export default function JobDetail({
   lines.push({ text: '' });
 
   // Meta as key-value pairs
+  const age = formatAge(d.posted_at || job.posted_at);
+  const postedStr = d.posted_at
+    ? `${d.posted_at.slice(0, 10)}${age ? ` (${age})` : ''}`
+    : '—';
+
   const meta = [
     ['📍 Location', loc],
     ['💰 Salary', sal],
     ['📋 Type', d.type || '—'],
     ['📊 Experience', d.experience || '—'],
-    ['📅 Posted', d.posted_at || '—'],
+    ['📅 Posted', postedStr],
     [
       '🎯 Match',
       typeof d.similarity === 'number' ? `${d.similarity.toFixed(3)}` : '—',
     ],
   ];
+  if (d.decayed_similarity && d.decayed_similarity !== d.similarity) {
+    meta.push(['⏳ Recency', d.decayed_similarity.toFixed(3)]);
+  }
   if (d.rerank_score) meta.push(['🧠 AI Score', `${d.rerank_score}/10`]);
   if (d.combined_score) meta.push(['📈 Combined', d.combined_score.toFixed(3)]);
   meta.push(['📌 Status', state ? `${stateIcon(state)} ${state}` : 'unmarked']);
@@ -104,11 +117,20 @@ export default function JobDetail({
     lines.push({ text: '' });
   }
 
-  // Skills
+  // Skills with match indicators
   if (d.skills?.length) {
     lines.push({ text: 'Skills', bold: true, color: 'yellow' });
     const skillNames = d.skills.map((s) => s.name || s).join('  ·  ');
     lines.push({ text: `  ${skillNames}` });
+    // Show keywords for each skill
+    for (const sk of d.skills) {
+      if (sk.keywords?.length) {
+        lines.push({
+          text: `    ${sk.name}: ${sk.keywords.join(', ')}`,
+          dimColor: true,
+        });
+      }
+    }
     lines.push({ text: '' });
   }
 

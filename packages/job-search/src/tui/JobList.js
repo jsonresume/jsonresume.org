@@ -6,6 +6,7 @@ import {
   truncate,
   formatSalary,
   formatLocation,
+  formatAge,
 } from '../formatters.js';
 
 // Column gap between each column
@@ -138,6 +139,7 @@ function JobRow({
   const sal = formatSalary(job.salary, job.salary_usd);
   const score =
     typeof job.similarity === 'number' ? job.similarity.toFixed(2) : '—';
+  const age = formatAge(job.posted_at);
   const icon = stateIcon(job.state);
   const dossierIcon =
     dossierStatus === 'generating' ? '◌' : dossierStatus === 'done' ? '📋' : '';
@@ -227,7 +229,7 @@ function JobRow({
     h(
       Box,
       { width: locW, marginRight: GAP },
-      h(Text, props, truncate(loc, locW - 1))
+      h(Text, props, truncate(age ? `${loc} · ${age}` : loc, locW - 1))
     ),
     h(Box, { width: 12, marginRight: GAP }, h(Text, props, truncate(sal, 11))),
     h(

@@ -87,6 +87,17 @@ export async function getResumeEmbedding(resume) {
     ...(resume.work || []).map(
       (w) => `${w.position} at ${w.name}: ${w.summary || ''}`
     ),
+    ...(resume.education || []).map((e) =>
+      `${e.studyType || ''} ${e.area || ''} at ${e.institution || ''}`.trim()
+    ),
+    ...(resume.projects || []).map(
+      (p) =>
+        `${p.name || ''}: ${p.description || ''} ${(p.highlights || []).join(
+          ', '
+        )}`
+    ),
+    ...(resume.certificates || []).map((c) => c.name || ''),
+    ...(resume.languages || []).map((l) => `${l.language}: ${l.fluency || ''}`),
   ]
     .filter(Boolean)
     .join('\n');
@@ -112,6 +123,13 @@ export async function rerankJobs(jobs, resumeText, searchPrompt) {
   const allScores = [];
   for (const batch of batches) {
     const promises = batch.map(async (job) => {
+      const skillStr = (job.skills || [])
+        .map((s) => {
+          const name = s.name || s;
+          const kws = (s.keywords || []).join(', ');
+          return kws ? `${name} (${kws})` : name;
+        })
+        .join(', ');
       const jobText = [
         `Title: ${job.title}`,
         `Company: ${job.company}`,
@@ -119,11 +137,13 @@ export async function rerankJobs(jobs, resumeText, searchPrompt) {
         job.remote ? `Remote: ${job.remote}` : null,
         job.salary ? `Salary: ${job.salary}` : null,
         job.experience ? `Experience: ${job.experience}` : null,
-        job.description
-          ? `Description: ${job.description.slice(0, 500)}`
+        job.description ? `Description: ${job.description}` : null,
+        skillStr ? `Skills: ${skillStr}` : null,
+        job.qualifications?.length
+          ? `Qualifications: ${job.qualifications.join('; ')}`
           : null,
-        job.skills?.length
-          ? `Skills: ${job.skills.map((s) => s.name || s).join(', ')}`
+        job.responsibilities?.length
+          ? `Responsibilities: ${job.responsibilities.join('; ')}`
           : null,
       ]
         .filter(Boolean)
@@ -209,6 +229,8 @@ export async function matchJobs({
           type: parsed.type,
           description: parsed.description,
           skills: parsed.skills,
+          qualifications: parsed.qualifications,
+          responsibilities: parsed.responsibilities,
           url: job.url,
           posted_at: job.posted_at,
           similarity: Math.round(similarity * 1000) / 1000,
