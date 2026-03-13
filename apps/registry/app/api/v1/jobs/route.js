@@ -146,8 +146,19 @@ export async function GET(request) {
             .in('id', ids)
             .not('embedding_v5', 'is', null);
           const rejEmbs = (rejJobs || [])
-            .map((j) => j.embedding_v5)
-            .filter(Boolean);
+            .map((j) => {
+              const e = j.embedding_v5;
+              if (Array.isArray(e)) return e;
+              if (typeof e === 'string') {
+                try {
+                  return JSON.parse(e);
+                } catch {
+                  return null;
+                }
+              }
+              return null;
+            })
+            .filter((e) => Array.isArray(e) && e.length > 0);
           const negAvg = rejEmbs.length > 0 ? averageEmbeddings(rejEmbs) : null;
           if (negAvg) embedding = subtractDirection(embedding, negAvg, 0.12);
         }
