@@ -20,8 +20,18 @@ const jobDescriptionSchema = z.object({
   position: z.string().nullable(),
   type: z.string().nullable(),
   salary: z.string().nullable(),
+  salary_structured: z
+    .object({
+      min: z.number().nullable(),
+      max: z.number().nullable(),
+      currency: z.string().nullable(),
+      period: z.string().nullable(),
+    })
+    .nullable(),
   date: z.string().nullable(),
   remote: z.string().nullable(),
+  visa_sponsorship: z.string().nullable(),
+  equity: z.string().nullable(),
   description: z.string().nullable(),
   responsibilities: z.array(z.string()).nullable(),
   qualifications: z.array(z.string()).nullable(),

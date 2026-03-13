@@ -24,6 +24,7 @@ import {
   computeArchetypes,
   computeMarketDrift,
   computeReadinessScores,
+  computeBestMatchSimilar,
 } from './analytics-v2';
 
 export const dynamic = 'force-dynamic';
@@ -142,6 +143,11 @@ export async function GET(request, { params }) {
         userSkills,
         resume,
         salary
+      ),
+      bestMatchSimilar: computeBestMatchSimilar(
+        sets.interested,
+        parsedJobs,
+        feedback.map((f) => f.job_id)
       ),
     };
 

@@ -24,10 +24,13 @@ export function parseJobContent(job) {
       experience: parsed.experience,
       type: parsed.type,
       salary: parsed.salary,
+      salary_structured: parsed.salary_structured || null,
       salary_usd: job.salary_usd,
       skills: parsed.skills || [],
       location: parsed.location,
       description: parsed.description,
+      visa_sponsorship: parsed.visa_sponsorship || null,
+      equity: parsed.equity || null,
       posted_at: job.posted_at,
     };
   } catch {
@@ -36,12 +39,57 @@ export function parseJobContent(job) {
 }
 
 export function extractUserSkills(resume) {
-  const skills = [];
+  const skills = new Set();
   for (const s of resume.skills || []) {
-    if (s.name) skills.push(s.name);
-    for (const kw of s.keywords || []) skills.push(kw);
+    if (s.name) skills.add(normalizeSkill(s.name));
+    for (const kw of s.keywords || []) skills.add(normalizeSkill(kw));
   }
-  return skills;
+  return [...skills];
+}
+
+/** Common skill aliases → canonical form */
+const SKILL_ALIASES = {
+  node: 'node.js',
+  nodejs: 'node.js',
+  'react.js': 'react',
+  reactjs: 'react',
+  'vue.js': 'vue',
+  vuejs: 'vue',
+  'angular.js': 'angular',
+  angularjs: 'angular',
+  postgres: 'postgresql',
+  psql: 'postgresql',
+  mongo: 'mongodb',
+  mongoose: 'mongodb',
+  k8s: 'kubernetes',
+  tf: 'terraform',
+  js: 'javascript',
+  es6: 'javascript',
+  ts: 'typescript',
+  py: 'python',
+  python3: 'python',
+  go: 'golang',
+  cpp: 'c++',
+  cplusplus: 'c++',
+  csharp: 'c#',
+  gcp: 'google cloud',
+  'google cloud platform': 'google cloud',
+  'amazon web services': 'aws',
+  ci: 'ci/cd',
+  cd: 'ci/cd',
+  cicd: 'ci/cd',
+  ml: 'machine learning',
+  ai: 'artificial intelligence',
+  dl: 'deep learning',
+  'graphql api': 'graphql',
+  restful: 'rest',
+  'rest api': 'rest',
+  'rest apis': 'rest',
+};
+
+export function normalizeSkill(skill) {
+  const lower = skill.toLowerCase().trim();
+  return SKILL_ALIASES[lower] || lower;
 }
 
 /**
@@ -53,10 +101,10 @@ export function extractUserSkills(resume) {
 export function flattenJobSkills(job) {
   const out = new Set();
   for (const s of job.skills || []) {
-    const name = (s.name || s).toString().toLowerCase().trim();
+    const name = normalizeSkill((s.name || s).toString());
     if (name) out.add(name);
     for (const kw of s.keywords || []) {
-      const k = kw.toString().toLowerCase().trim();
+      const k = normalizeSkill(kw.toString());
       if (k) out.add(k);
     }
   }
@@ -104,4 +152,5 @@ export const EMPTY_REPORT = {
   archetypes: [],
   marketDrift: { trends: [], growing: [], declining: [] },
   readiness: [],
+  bestMatchSimilar: [],
 };

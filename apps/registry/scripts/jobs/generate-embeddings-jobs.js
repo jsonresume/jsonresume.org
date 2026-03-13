@@ -19,16 +19,14 @@ async function main() {
 
   let query = supabase
     .from('jobs')
-    .select('id::text, gpt_content')
+    .select('id::text, gpt_content, gpt_content_full')
     .is('embedding_v5', null)
     .not('gpt_content', 'is', null);
 
   if (!processAll) {
-    // Default: process jobs from last 7 days (covers weekend gaps + retries)
-    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-    console.log(
-      `📅 Processing jobs since: ${sevenDaysAgo.toISOString()}`
-    );
+    // Default: process jobs from last 45 days (covers monthly HN threads)
+    const sevenDaysAgo = new Date(Date.now() - 45 * 24 * 60 * 60 * 1000);
+    console.log(`📅 Processing jobs since: ${sevenDaysAgo.toISOString()}`);
     query = query.gte('created_at', sevenDaysAgo.toISOString());
   } else {
     console.log('📅 Processing ALL jobs without embeddings');
@@ -48,7 +46,11 @@ async function main() {
 
   // Exclude jobs with FAILED gpt_content (would produce garbage embeddings)
   const validJobs = data.filter((job) => job.gpt_content !== 'FAILED');
-  console.log(`📊 Found ${validJobs.length} jobs needing embeddings (${data.length - validJobs.length} FAILED skipped)`);
+  console.log(
+    `📊 Found ${validJobs.length} jobs needing embeddings (${
+      data.length - validJobs.length
+    } FAILED skipped)`
+  );
   console.log(`⚙️  Processing up to 10 jobs concurrently\n`);
 
   let successCount = 0;

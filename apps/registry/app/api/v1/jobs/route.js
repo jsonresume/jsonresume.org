@@ -1,230 +1,30 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-import { embed, generateText } from 'ai';
-import { openai } from '@ai-sdk/openai';
 import { authenticate } from '../auth';
 import { logger } from '@/lib/logger';
 import { classifyGlobalRemote } from './globalRemote';
+import {
+  getSupabase,
+  getResumeEmbedding,
+  generateHydeEmbedding,
+  subtractDirection,
+  averageEmbeddings,
+  matchJobs,
+} from './matchingHelpers';
 
 export const dynamic = 'force-dynamic';
-
-const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
-const RERANK_BATCH_SIZE = 5;
-
-function getSupabase() {
-  return createClient(supabaseUrl, process.env.SUPABASE_KEY);
-}
-
-async function getResumeEmbedding(resume) {
-  const text = [
-    resume.basics?.label,
-    resume.basics?.summary,
-    ...(resume.skills || []).map(
-      (s) => `${s.name}: ${(s.keywords || []).join(', ')}`
-    ),
-    ...(resume.work || []).map(
-      (w) => `${w.position} at ${w.name}: ${w.summary || ''}`
-    ),
-  ]
-    .filter(Boolean)
-    .join('\n');
-
-  const { embedding } = await embed({
-    model: openai.embedding('text-embedding-3-large'),
-    value: text,
-  });
-  return { embedding, text };
-}
-
-/**
- * LLM reranking: score each job 1-10 against the search context.
- * Processes in parallel batches for speed.
- */
-async function rerankJobs(jobs, resumeText, searchPrompt) {
-  const context = searchPrompt
-    ? `The candidate is specifically looking for: ${searchPrompt}\n\nTheir background:\n${resumeText}`
-    : `Candidate background:\n${resumeText}`;
-
-  // Process in parallel batches
-  const batches = [];
-  for (let i = 0; i < jobs.length; i += RERANK_BATCH_SIZE) {
-    batches.push(jobs.slice(i, i + RERANK_BATCH_SIZE));
-  }
-
-  const allScores = [];
-
-  for (const batch of batches) {
-    const promises = batch.map(async (job) => {
-      const jobText = [
-        `Title: ${job.title}`,
-        `Company: ${job.company}`,
-        job.location ? `Location: ${job.location}` : null,
-        job.remote ? `Remote: ${job.remote}` : null,
-        job.salary ? `Salary: ${job.salary}` : null,
-        job.experience ? `Experience: ${job.experience}` : null,
-        job.description
-          ? `Description: ${job.description.slice(0, 500)}`
-          : null,
-        job.skills?.length
-          ? `Skills: ${job.skills.map((s) => s.name || s).join(', ')}`
-          : null,
-      ]
-        .filter(Boolean)
-        .join('\n');
-
-      try {
-        const { text } = await generateText({
-          model: openai('gpt-4.1-mini'),
-          system: `You are a job matching scorer. Given a candidate profile and a job posting, rate the match quality from 1-10. Consider: skill alignment, experience level, location/remote fit, salary expectations, industry match, and the candidate's stated preferences. Output ONLY a JSON object: {"score": N, "reason": "one sentence"}. Be strict — only 8+ for strong matches.`,
-          prompt: `${context}\n\nJob posting:\n${jobText}`,
-          maxTokens: 80,
-        });
-        const parsed = JSON.parse(text);
-        return {
-          id: job.id,
-          rerank_score: Math.min(10, Math.max(1, parsed.score || 5)),
-        };
-      } catch {
-        return { id: job.id, rerank_score: 5 };
-      }
-    });
-    const results = await Promise.all(promises);
-    allScores.push(...results);
-  }
-
-  return allScores;
-}
-
-/**
- * Shared: fetch, parse, filter, and optionally rerank job matches.
- */
-async function matchJobs({
-  embedding,
-  resumeText,
-  searchPrompt,
-  top,
-  days,
-  remote,
-  minSalary,
-  search,
-  shouldRerank,
-  stateMap,
-}) {
-  const supabase = getSupabase();
-  const createdAfter = new Date(
-    Date.now() - days * 24 * 60 * 60 * 1000
-  ).toISOString();
-
-  const { data: matched, error } = await supabase.rpc('match_jobs_v5', {
-    query_embedding: embedding,
-    match_threshold: -1,
-    match_count: top * 5,
-    created_after: createdAfter,
-  });
-
-  if (error) throw new Error(error.message);
-
-  const jobIds = (matched || []).map((m) => m.id);
-  if (jobIds.length === 0) return [];
-
-  const { data: jobs } = await supabase
-    .from('jobs')
-    .select('id, uuid, gpt_content, posted_at, url, salary_usd')
-    .in('id', jobIds);
-
-  const HIDDEN_STATES = new Set(['not_interested', 'dismissed']);
-
-  let results = (jobs || [])
-    .map((job) => {
-      try {
-        const parsed = JSON.parse(job.gpt_content);
-        if (!parsed?.title || !parsed?.company) return null;
-
-        const similarity =
-          matched.find((m) => m.id === job.id)?.similarity || 0;
-
-        return {
-          id: job.id,
-          uuid: job.uuid,
-          title: parsed.title,
-          company: parsed.company,
-          location: parsed.location,
-          remote: parsed.remote,
-          salary: parsed.salary,
-          salary_usd: job.salary_usd,
-          experience: parsed.experience,
-          type: parsed.type,
-          description: parsed.description,
-          skills: parsed.skills,
-          url: job.url,
-          posted_at: job.posted_at,
-          similarity: Math.round(similarity * 1000) / 1000,
-          state: stateMap?.[job.id] || null,
-        };
-      } catch {
-        return null;
-      }
-    })
-    .filter(Boolean)
-    .filter((j) => {
-      if (stateMap && HIDDEN_STATES.has(j.state)) return false;
-      if (remote && j.remote !== 'Full') return false;
-      if (minSalary && j.salary_usd && j.salary_usd < minSalary * 1000)
-        return false;
-      if (
-        search &&
-        !JSON.stringify(j).toLowerCase().includes(search.toLowerCase())
-      )
-        return false;
-      return true;
-    })
-    .sort((a, b) => b.similarity - a.similarity);
-
-  if (shouldRerank && results.length > 0) {
-    const toRerank = results.slice(0, Math.min(30, top * 2));
-    const rest = results.slice(Math.min(30, top * 2));
-
-    try {
-      const scores = await rerankJobs(toRerank, resumeText, searchPrompt);
-      const scoreMap = {};
-      scores.forEach((s) => {
-        scoreMap[s.id] = s.rerank_score;
-      });
-
-      const maxSim = Math.max(...toRerank.map((j) => j.similarity), 0.001);
-      const reranked = toRerank
-        .map((j) => ({
-          ...j,
-          rerank_score: scoreMap[j.id] || 5,
-          combined_score:
-            0.4 * (j.similarity / maxSim) + 0.6 * ((scoreMap[j.id] || 5) / 10),
-        }))
-        .sort((a, b) => b.combined_score - a.combined_score);
-
-      results = [...reranked, ...rest];
-    } catch (err) {
-      logger.error(
-        { error: err.message },
-        'Reranking failed, using vector order'
-      );
-    }
-  }
-
-  return results.slice(0, top);
-}
 
 /**
  * GET /api/v1/jobs — matched jobs for the authenticated user
  *
  * Query params:
- *   ?top=20         — number of results (default 20, max 100)
+ *   ?top=20         — number of results (default 20, max 500)
  *   ?days=30        — how far back to look (default 30)
  *   ?remote=true    — filter remote only
  *   ?min_salary=100 — minimum salary in thousands
  *   ?search=react   — keyword search in parsed content
  *   ?search_id=uuid — use a saved search profile's embedding
- *   ?rerank=true    — enable LLM reranking (default: true for search_id)
- *   ?global_remote=true — classify and filter to globally remote jobs only
+ *   ?rerank=true    — enable LLM reranking (default: always on)
+ *   ?global_remote=true — classify and filter to globally remote jobs
  */
 export async function GET(request) {
   const user = await authenticate(request);
@@ -295,11 +95,18 @@ export async function GET(request) {
       }
       const resume = await res.json();
       const result = await getResumeEmbedding(resume);
-      embedding = result.embedding;
       resumeText = result.text;
+
+      // HyDE: generate ideal job posting from resume for better matching
+      try {
+        embedding = await generateHydeEmbedding(resumeText);
+      } catch (hydeErr) {
+        logger.warn({ error: hydeErr.message }, 'HyDE failed, using direct');
+        embedding = result.embedding;
+      }
     }
 
-    // Get user's feedback for state filtering
+    // Get user feedback for state filtering + negative signal
     const supabase = getSupabase();
     const { data: feedback } = await supabase
       .from('pathways_job_feedback')
@@ -308,13 +115,41 @@ export async function GET(request) {
 
     const stateMap = {};
     const dossierSet = new Set();
+    const rejectedJobIds = [];
     (feedback || []).forEach((f) => {
       if (f.sentiment === 'dossier') {
         dossierSet.add(f.job_id);
       } else {
         stateMap[f.job_id] = f.sentiment;
+        if (f.sentiment === 'not_interested' || f.sentiment === 'dismissed') {
+          rejectedJobIds.push(f.job_id);
+        }
       }
     });
+
+    // Negative feedback: subtract rejected job direction from embedding
+    if (rejectedJobIds.length >= 3 && embedding) {
+      try {
+        const ids = rejectedJobIds
+          .map(Number)
+          .filter((n) => !isNaN(n))
+          .slice(0, 20);
+        if (ids.length > 0) {
+          const { data: rejJobs } = await getSupabase()
+            .from('jobs')
+            .select('embedding_v5')
+            .in('id', ids)
+            .not('embedding_v5', 'is', null);
+          const rejEmbs = (rejJobs || [])
+            .map((j) => j.embedding_v5)
+            .filter(Boolean);
+          const negAvg = rejEmbs.length > 0 ? averageEmbeddings(rejEmbs) : null;
+          if (negAvg) embedding = subtractDirection(embedding, negAvg, 0.12);
+        }
+      } catch (negErr) {
+        logger.warn({ error: negErr.message }, 'Negative feedback failed');
+      }
+    }
 
     const results = await matchJobs({
       embedding,
@@ -329,16 +164,13 @@ export async function GET(request) {
       stateMap,
     });
 
-    // Classify global remote status
     await classifyGlobalRemote(results);
 
-    // Filter to global remote if requested
     let filtered = results;
     if (globalRemote) {
       filtered = results.filter((j) => j.global_remote === true);
     }
 
-    // Add dossier flag to results
     const jobs = filtered.slice(0, top).map((job) => ({
       ...job,
       has_dossier: dossierSet.has(String(job.id)),
@@ -355,12 +187,7 @@ export async function GET(request) {
 }
 
 /**
- * POST /api/v1/jobs — match jobs against a provided resume (no auth required)
- *
- * Body: { resume: {...}, top?: 20, days?: 30, remote?: false, min_salary?: 0, search?: "" }
- *
- * This enables local-mode usage: users with a resume.json file can get
- * matched jobs without a registry account.
+ * POST /api/v1/jobs — match jobs against a provided resume (no auth)
  */
 export async function POST(request) {
   try {

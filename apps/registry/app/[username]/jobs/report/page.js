@@ -19,6 +19,7 @@ import ApplicationNudge from './components/ApplicationNudge';
 import Archetypes from './components/Archetypes';
 import MarketDrift from './components/MarketDrift';
 import ReadinessRadar from './components/ReadinessRadar';
+import BestMatchSimilar from './components/BestMatchSimilar';
 
 const DAY_OPTIONS = [7, 14, 30, 60, 90];
 
@@ -153,6 +154,9 @@ export default function ReportPage() {
         </div>
         <div className="mb-4">
           <ReadinessRadar readiness={data.readiness} />
+        </div>
+        <div className="mb-4">
+          <BestMatchSimilar jobs={data.bestMatchSimilar} />
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
           <AntiResume antiResume={data.antiResume} />

@@ -202,7 +202,9 @@ export function computeReadinessScores(
   return interestedJobs.slice(0, 8).map((job) => {
     // Skill match: flatten both name and keywords, fuzzy match
     const jobSkills = flattenJobSkills(job);
-    const matched = jobSkills.filter((s) => skillMatches(s, userSet)).length;
+    const matchedSkills = jobSkills.filter((s) => skillMatches(s, userSet));
+    const missingSkills = jobSkills.filter((s) => !skillMatches(s, userSet));
+    const matched = matchedSkills.length;
     const skillPct = jobSkills.length ? matched / jobSkills.length : 0.5;
 
     // Experience match
@@ -229,19 +231,92 @@ export function computeReadinessScores(
       else salaryPct = 0.35;
     }
 
+    // Location compatibility (from evaluate criteria)
+    const userCountry = resume?.basics?.location?.countryCode?.toUpperCase();
+    const jobCountry = job.location?.countryCode?.toUpperCase();
+    let locationPct = 0.5;
+    if (remote === 'full') locationPct = 0.95;
+    else if (userCountry && jobCountry) {
+      locationPct = userCountry === jobCountry ? 0.9 : 0.3;
+    }
+
+    // Visa/work rights (from evaluate criteria)
+    let visaPct = 0.7; // neutral default
+    const visa = (job.visa_sponsorship || '').toLowerCase();
+    if (visa === 'yes') visaPct = 0.95;
+    else if (
+      visa === 'no' &&
+      userCountry &&
+      jobCountry &&
+      userCountry !== jobCountry
+    ) {
+      visaPct = 0.2;
+    }
+
+    const scores = {
+      skills: Math.round(skillPct * 100),
+      experience: Math.round(expPct * 100),
+      remote: Math.round(remotePct * 100),
+      salary: Math.round(salaryPct * 100),
+      location: Math.round(locationPct * 100),
+      visa: Math.round(visaPct * 100),
+    };
+    const vals = Object.values(scores);
+    const overall = Math.round(vals.reduce((a, b) => a + b, 0) / vals.length);
+
     return {
       id: job.id,
       title: job.title,
       company: job.company,
-      scores: {
-        skills: Math.round(skillPct * 100),
-        experience: Math.round(expPct * 100),
-        remote: Math.round(remotePct * 100),
-        salary: Math.round(salaryPct * 100),
-      },
-      overall: Math.round(
-        ((skillPct + expPct + remotePct + salaryPct) / 4) * 100
-      ),
+      matchedSkills: matchedSkills.slice(0, 8),
+      missingSkills: missingSkills.slice(0, 5),
+      scores,
+      overall,
     };
   });
+}
+
+/**
+ * Find jobs similar to the user's best-liked jobs.
+ * Uses skill overlap to suggest new jobs the user hasn't reviewed.
+ */
+export function computeBestMatchSimilar(
+  interestedJobs,
+  allParsedJobs,
+  feedbackJobIds
+) {
+  if (!interestedJobs.length || allParsedJobs.length < 5) return [];
+
+  const reviewedIds = new Set(feedbackJobIds.map(String));
+  const intSkillSets = interestedJobs.map((j) => new Set(flattenJobSkills(j)));
+
+  return allParsedJobs
+    .filter((j) => !reviewedIds.has(String(j.id)))
+    .map((job) => {
+      const jobSkills = flattenJobSkills(job);
+      let bestOverlap = 0;
+      let bestMatch = null;
+      for (let i = 0; i < intSkillSets.length; i++) {
+        const overlap = jobSkills.filter((s) =>
+          skillMatches(s, intSkillSets[i])
+        ).length;
+        if (overlap > bestOverlap) {
+          bestOverlap = overlap;
+          bestMatch = interestedJobs[i];
+        }
+      }
+      return {
+        id: job.id,
+        title: job.title,
+        company: job.company,
+        overlap: bestOverlap,
+        totalSkills: jobSkills.length,
+        similarTo: bestMatch
+          ? { title: bestMatch.title, company: bestMatch.company }
+          : null,
+      };
+    })
+    .filter((j) => j.overlap >= 2)
+    .sort((a, b) => b.overlap - a.overlap)
+    .slice(0, 8);
 }

@@ -168,9 +168,10 @@ export async function PATCH(request, { params }) {
     });
   }
 
+  // Null out embedding so it gets re-generated with updated content
   const { error: updateErr } = await supabase
     .from('jobs')
-    .update({ gpt_content: JSON.stringify(parsed) })
+    .update({ gpt_content: JSON.stringify(parsed), embedding_v5: null })
     .eq('id', jobId);
 
   if (updateErr) {

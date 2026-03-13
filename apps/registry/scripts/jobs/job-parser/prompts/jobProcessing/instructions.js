@@ -44,6 +44,17 @@ Carefully analyze the given job description and convert it into a structured JSO
      - Dates should follow ISO 8601 format.
      - Location fields such as 'countryCode' must comply with ISO-3166-1 ALPHA-2 codes (e.g., US, IN).
 
-6. Make sure the company description is a minimum of three sentences.`;
+6. Make sure the company description is a minimum of three sentences.
+
+7. **Salary Structured**:
+   - If salary info is present, also fill "salary_structured" with numeric min/max (annual USD), currency (e.g. "USD"), and period ("year").
+   - Convert hourly/monthly to annual. Convert non-USD currencies to approximate USD.
+   - If only one number given, set both min and max to it.
+
+8. **Visa Sponsorship**:
+   - Possible values: "Yes", "No", or null if not mentioned.
+
+9. **Equity**:
+   - Extract equity info if mentioned (e.g. "0.1-0.5%", "equity available", "stock options"). Set null if not mentioned.`;
 
 module.exports = { getInstructions };

@@ -13,18 +13,22 @@ function getEmbeddingFingerprint(embedding) {
 }
 
 async function createEmbedding(job, supabase) {
-  if (!job.gpt_content) {
-    throw new Error('Job has no gpt_content to embed');
+  // Prefer gpt_content_full (human-readable NL description) over raw JSON
+  // gpt_content_full is designed for semantic matching and avoids JSON noise
+  const embeddingInput = job.gpt_content_full || job.gpt_content;
+  if (!embeddingInput) {
+    throw new Error('Job has no content to embed');
   }
 
-  const contentLength = job.gpt_content.length;
+  const contentLength = embeddingInput.length;
+  const inputType = job.gpt_content_full ? 'NL' : 'JSON';
 
   // Call OpenAI embedding API with explicit error handling
   let rawEmbedding;
   try {
     const result = await embed({
       model: openai.embedding('text-embedding-3-large'),
-      value: job.gpt_content,
+      value: embeddingInput,
     });
     rawEmbedding = result.embedding;
   } catch (apiError) {
@@ -74,7 +78,7 @@ async function createEmbedding(job, supabase) {
   }
 
   console.log(
-    `  ✓ Job #${job.id} (${contentLength} chars, ${embedding.length}D vector)`
+    `  ✓ Job #${job.id} [${inputType}] (${contentLength} chars, ${embedding.length}D vector)`
   );
 }
 

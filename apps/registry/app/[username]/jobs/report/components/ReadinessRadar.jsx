@@ -18,6 +18,8 @@ function RadarCard({ job }) {
     { axis: 'Experience', value: job.scores.experience },
     { axis: 'Remote', value: job.scores.remote },
     { axis: 'Salary', value: job.scores.salary },
+    { axis: 'Location', value: job.scores.location ?? 50 },
+    { axis: 'Visa', value: job.scores.visa ?? 70 },
   ];
 
   const color =
@@ -55,6 +57,34 @@ function RadarCard({ job }) {
           <Tooltip contentStyle={TOOLTIP_STYLE} />
         </RadarChart>
       </ResponsiveContainer>
+      {(job.matchedSkills?.length > 0 || job.missingSkills?.length > 0) && (
+        <div className="mt-1.5 space-y-1">
+          {job.matchedSkills?.length > 0 && (
+            <div className="flex flex-wrap gap-1">
+              {job.matchedSkills.slice(0, 4).map((s) => (
+                <span
+                  key={s}
+                  className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-900/40 text-emerald-400 border border-emerald-800/30"
+                >
+                  {s}
+                </span>
+              ))}
+            </div>
+          )}
+          {job.missingSkills?.length > 0 && (
+            <div className="flex flex-wrap gap-1">
+              {job.missingSkills.slice(0, 3).map((s) => (
+                <span
+                  key={s}
+                  className="text-[9px] px-1.5 py-0.5 rounded bg-red-900/30 text-red-400 border border-red-800/30"
+                >
+                  {s}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
