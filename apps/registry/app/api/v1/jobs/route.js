@@ -233,7 +233,7 @@ export async function GET(request) {
   }
 
   const { searchParams } = new URL(request.url);
-  const top = Math.min(parseInt(searchParams.get('top')) || 20, 100);
+  const top = Math.min(parseInt(searchParams.get('top')) || 20, 500);
   const days = parseInt(searchParams.get('days')) || 30;
   const remote = searchParams.get('remote') === 'true';
   const globalRemote = searchParams.get('global_remote') === 'true';
@@ -377,7 +377,7 @@ export async function POST(request) {
       );
     }
 
-    const top = Math.min(parseInt(body.top) || 20, 100);
+    const top = Math.min(parseInt(body.top) || 20, 500);
     const days = parseInt(body.days) || 30;
     const remote = body.remote === true;
     const globalRemoteFlag = body.global_remote === true;
