@@ -1,6 +1,6 @@
 {
   "name": "@jsonresume/jobs",
-  "version": "0.14.0",
+  "version": "0.14.1",
   "type": "module",
   "description": "Search Hacker News jobs matched against your JSON Resume",
   "bin": {
