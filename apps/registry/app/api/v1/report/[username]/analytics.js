@@ -1,3 +1,5 @@
+import { flattenJobSkills, skillMatches } from './helpers';
+
 export function computePipeline(feedback) {
   const counts = {
     interested: 0,
@@ -164,9 +166,8 @@ export function computeSkillGaps(marketJobs, interestedJobs, userSkills) {
   const countSkills = (jobs) => {
     const counts = {};
     for (const j of jobs)
-      for (const s of j.skills || []) {
-        const n = (s.name || s).toString().toLowerCase();
-        counts[n] = (counts[n] || 0) + 1;
+      for (const s of flattenJobSkills(j)) {
+        counts[s] = (counts[s] || 0) + 1;
       }
     return counts;
   };
@@ -176,7 +177,7 @@ export function computeSkillGaps(marketJobs, interestedJobs, userSkills) {
     .slice(0, 15)
     .map(([skill, count]) => ({ skill, count }));
   const gaps = Object.entries(countSkills(interestedJobs))
-    .filter(([skill]) => !userSet.has(skill))
+    .filter(([skill]) => !skillMatches(skill, userSet))
     .sort((a, b) => b[1] - a[1])
     .slice(0, 10)
     .map(([skill, count]) => ({ skill, count }));
@@ -254,14 +255,11 @@ export function findSecondLookJobs(
   if (!interestedJobs.length || !rejectedJobs.length) return [];
   const intSkills = new Set();
   for (const j of interestedJobs) {
-    for (const s of j.skills || [])
-      intSkills.add((s.name || s).toString().toLowerCase());
+    for (const s of flattenJobSkills(j)) intSkills.add(s);
   }
   return rejectedJobs
     .map((j) => {
-      const jobSkills = (j.skills || []).map((s) =>
-        (s.name || s).toString().toLowerCase()
-      );
+      const jobSkills = flattenJobSkills(j);
       const overlap = jobSkills.filter((s) => intSkills.has(s)).length;
       return { ...j, _overlap: overlap };
     })

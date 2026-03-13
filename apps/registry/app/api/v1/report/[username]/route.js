@@ -110,6 +110,8 @@ export async function GET(request, { params }) {
 
     const userSkills = extractUserSkills(resume);
 
+    const salary = computeSalary(parsedJobs, sets.interested);
+
     const report = {
       username,
       days,
@@ -119,7 +121,7 @@ export async function GET(request, { params }) {
         totalJobsInDb: totalJobsInDb || 0,
       },
       timeline: computeTimeline(feedback, days),
-      salary: computeSalary(parsedJobs, sets.interested),
+      salary,
       remoteIndex: computeRemoteIndex(parsedJobs, sets.interested),
       dealBreakers: computeDealBreakers(sets.interested, sets.not_interested),
       skills: computeSkillGaps(parsedJobs, sets.interested, userSkills),
@@ -135,7 +137,12 @@ export async function GET(request, { params }) {
       skillAdjacency: computeSkillAdjacency(parsedJobs, userSkills),
       archetypes: computeArchetypes(sets.interested),
       marketDrift: computeMarketDrift(parsedJobs),
-      readiness: computeReadinessScores(sets.interested, userSkills, resume),
+      readiness: computeReadinessScores(
+        sets.interested,
+        userSkills,
+        resume,
+        salary
+      ),
     };
 
     return NextResponse.json(report);

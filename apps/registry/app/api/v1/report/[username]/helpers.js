@@ -44,6 +44,38 @@ export function extractUserSkills(resume) {
   return skills;
 }
 
+/**
+ * Flatten a job's skills array into a deduplicated list of lowercase strings.
+ * Extracts both skill.name and skill.keywords to bridge the taxonomy gap
+ * between abstract categories ("Backend Development") and specific
+ * technologies ("Node.js", "Go") that the GPT parser outputs.
+ */
+export function flattenJobSkills(job) {
+  const out = new Set();
+  for (const s of job.skills || []) {
+    const name = (s.name || s).toString().toLowerCase().trim();
+    if (name) out.add(name);
+    for (const kw of s.keywords || []) {
+      const k = kw.toString().toLowerCase().trim();
+      if (k) out.add(k);
+    }
+  }
+  return [...out];
+}
+
+/**
+ * Check if a job skill matches any user skill using fuzzy substring matching.
+ * Handles common variations: "postgres" ↔ "postgresql", "ci/cd" ↔ "ci/cd pipelines",
+ * "apis" ↔ "rest apis", "react" ↔ "react.js", etc.
+ */
+export function skillMatches(jobSkill, userSet) {
+  if (userSet.has(jobSkill)) return true;
+  for (const u of userSet) {
+    if (u.includes(jobSkill) || jobSkill.includes(u)) return true;
+  }
+  return false;
+}
+
 export const EMPTY_REPORT = {
   pipeline: {
     totalJobs: 0,

@@ -28,6 +28,16 @@ Carefully analyze the given job description and convert it into a structured JSO
 4. **Concise Descriptions**:
    - Keep all values short and to the point, especially for arrays such as **responsibilities** and **skills**.
 
+4b. **Skills — IMPORTANT**:
+   - Each skill entry has a "name" and "keywords" array.
+   - The "name" MUST be a specific technology, language, framework, or tool — NOT an abstract category.
+   - GOOD skill names: "React", "Node.js", "PostgreSQL", "Kubernetes", "Python", "TypeScript", "AWS", "Docker"
+   - BAD skill names: "Backend Development", "Frontend Development", "Databases", "Cloud & Infrastructure", "Programming"
+   - The "keywords" array should contain related specific technologies or sub-skills.
+   - Example: { "name": "React", "keywords": ["Next.js", "Hooks", "TypeScript", "Redux"] }
+   - NOT: { "name": "Frontend Development", "keywords": ["React", "Next.js"] }
+   - Extract every specific technology mentioned in the job posting as its own skill entry.
+
 5. **Formatting and Validation**:
    - The output must strictly adhere to the schema format. Ensure data types, enumerations, and patterns are correctly followed.
    - For example:

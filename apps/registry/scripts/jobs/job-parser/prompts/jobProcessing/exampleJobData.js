@@ -24,9 +24,19 @@ module.exports = {
   ],
   skills: [
     {
-      name: 'Web Development',
+      name: 'React',
       level: 'Expert',
-      keywords: ['HTML', 'CSS', 'JavaScript'],
+      keywords: ['Hooks', 'Next.js', 'Component Design'],
+    },
+    {
+      name: 'TypeScript',
+      level: 'Advanced',
+      keywords: ['Type Safety', 'Generics', 'Zod'],
+    },
+    {
+      name: 'Node.js',
+      level: 'Advanced',
+      keywords: ['Express', 'REST APIs', 'Microservices'],
     },
   ],
   meta: {

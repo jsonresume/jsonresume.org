@@ -1,6 +1,7 @@
 /**
  * V2 analytics — Anti-Resume, Skill Adjacency, Archetypes, Market Drift, Readiness
  */
+import { flattenJobSkills, skillMatches } from './helpers';
 
 export function computeAntiResume(interestedJobs, rejectedJobs) {
   if (!rejectedJobs.length) return { skills: [], attributes: [] };
@@ -10,10 +11,7 @@ export function computeAntiResume(interestedJobs, rejectedJobs) {
   const count = (jobs) => {
     const m = {};
     for (const j of jobs)
-      for (const s of j.skills || []) {
-        const n = (s.name || s).toString().toLowerCase();
-        m[n] = (m[n] || 0) + 1;
-      }
+      for (const s of flattenJobSkills(j)) m[s] = (m[s] || 0) + 1;
     return m;
   };
   const rejSkills = count(rejectedJobs);
@@ -62,9 +60,7 @@ export function computeSkillAdjacency(marketJobs, userSkills) {
   const totals = {};
 
   for (const job of marketJobs) {
-    const sk = (job.skills || []).map((s) =>
-      (s.name || s).toString().toLowerCase()
-    );
+    const sk = flattenJobSkills(job);
     for (const s of sk) totals[s] = (totals[s] || 0) + 1;
     for (let i = 0; i < sk.length; i++)
       for (let j = i + 1; j < sk.length; j++) {
@@ -104,9 +100,7 @@ export function computeArchetypes(interestedJobs) {
   const groups = {};
 
   for (const job of interestedJobs) {
-    const sk = (job.skills || []).map((s) =>
-      (s.name || s).toString().toLowerCase()
-    );
+    const sk = flattenJobSkills(job);
     const key = sk.slice(0, 3).sort().join('+') || 'general';
     if (!groups[key]) groups[key] = { jobs: [], skills: {} };
     groups[key].jobs.push(job);
@@ -148,9 +142,8 @@ export function computeMarketDrift(parsedJobs) {
       .slice(0, 10);
     if (!weeks[ws]) weeks[ws] = { week: ws, skills: {}, total: 0 };
     weeks[ws].total++;
-    for (const s of job.skills || []) {
-      const n = (s.name || s).toString().toLowerCase();
-      weeks[ws].skills[n] = (weeks[ws].skills[n] || 0) + 1;
+    for (const s of flattenJobSkills(job)) {
+      weeks[ws].skills[s] = (weeks[ws].skills[s] || 0) + 1;
     }
   }
 
@@ -188,7 +181,12 @@ export function computeMarketDrift(parsedJobs) {
   };
 }
 
-export function computeReadinessScores(interestedJobs, userSkills, resume) {
+export function computeReadinessScores(
+  interestedJobs,
+  userSkills,
+  resume,
+  salaryStats
+) {
   const userSet = new Set(userSkills.map((s) => s.toLowerCase()));
   const workYears = (resume?.work || []).reduce((t, w) => {
     const s = w.startDate ? new Date(w.startDate) : null;
@@ -196,14 +194,18 @@ export function computeReadinessScores(interestedJobs, userSkills, resume) {
     return s ? t + (e - s) / (365.25 * 86400000) : t;
   }, 0);
 
-  return interestedJobs.slice(0, 8).map((job) => {
-    const sk = (job.skills || []).map((s) =>
-      (s.name || s).toString().toLowerCase()
-    );
-    const skillPct = sk.length
-      ? sk.filter((s) => userSet.has(s)).length / sk.length
-      : 0.5;
+  // Use market salary percentiles for scoring
+  const mktP25 = salaryStats?.market?.p25 || 50000;
+  const mktP50 = salaryStats?.market?.p50 || 100000;
+  const mktP75 = salaryStats?.market?.p75 || 150000;
 
+  return interestedJobs.slice(0, 8).map((job) => {
+    // Skill match: flatten both name and keywords, fuzzy match
+    const jobSkills = flattenJobSkills(job);
+    const matched = jobSkills.filter((s) => skillMatches(s, userSet)).length;
+    const skillPct = jobSkills.length ? matched / jobSkills.length : 0.5;
+
+    // Experience match
     let expPct = 0.5;
     const exp = (job.experience || '').toLowerCase();
     if (exp.includes('senior') || exp.includes('5+') || exp.includes('7+'))
@@ -212,13 +214,20 @@ export function computeReadinessScores(interestedJobs, userSkills, resume) {
       expPct = workYears >= 3 ? 1 : workYears >= 1 ? 0.7 : 0.4;
     else if (exp.includes('junior') || exp.includes('entry')) expPct = 1;
 
+    // Remote match — case-insensitive
+    const remote = (job.remote || '').toLowerCase();
     const remotePct =
-      job.remote === 'full' ? 0.9 : job.remote === 'hybrid' ? 0.6 : 0.4;
-    const salaryPct = job.salary_usd
-      ? job.salary_usd > 80000
-        ? 0.85
-        : 0.6
-      : 0.5;
+      remote === 'full' ? 0.95 : remote === 'hybrid' ? 0.7 : 0.4;
+
+    // Salary — percentile-based scoring against market
+    let salaryPct = 0.5;
+    const sal = job.salary_usd;
+    if (sal) {
+      if (sal >= mktP75) salaryPct = 0.95;
+      else if (sal >= mktP50) salaryPct = 0.8;
+      else if (sal >= mktP25) salaryPct = 0.6;
+      else salaryPct = 0.35;
+    }
 
     return {
       id: job.id,
