@@ -5,12 +5,20 @@ import { useEffect, useState, useCallback } from 'react';
 import HeroSection from './components/HeroSection';
 import PipelineChart from './components/PipelineChart';
 import ActivityTimeline from './components/ActivityTimeline';
+import ActivityHeatmap from './components/ActivityHeatmap';
 import SalaryChart from './components/SalaryChart';
+import SalaryIntelligence from './components/SalaryIntelligence';
 import DealBreakers from './components/DealBreakers';
 import SkillGaps from './components/SkillGaps';
+import SkillAdjacency from './components/SkillAdjacency';
 import InsightsPanel from './components/InsightsPanel';
 import RecentActivity from './components/RecentActivity';
 import TopCompanies from './components/TopCompanies';
+import AntiResume from './components/AntiResume';
+import ApplicationNudge from './components/ApplicationNudge';
+import Archetypes from './components/Archetypes';
+import MarketDrift from './components/MarketDrift';
+import ReadinessRadar from './components/ReadinessRadar';
 
 const DAY_OPTIONS = [7, 14, 30, 60, 90];
 
@@ -38,7 +46,6 @@ function ErrorState({ message, onRetry }) {
   return (
     <div className="bg-slate-950 min-h-screen flex items-center justify-center">
       <div className="text-center max-w-md">
-        <div className="text-4xl mb-4">{'\u26A0\uFE0F'}</div>
         <h2 className="text-xl font-semibold text-slate-200 mb-2">
           Unable to load report
         </h2>
@@ -51,6 +58,26 @@ function ErrorState({ message, onRetry }) {
           Try again
         </button>
       </div>
+    </div>
+  );
+}
+
+function DaysSelector({ days, onChange }) {
+  return (
+    <div className="flex items-center gap-1 bg-slate-900 rounded-lg p-0.5 border border-slate-700/50">
+      {DAY_OPTIONS.map((d) => (
+        <button
+          key={d}
+          onClick={() => onChange(d)}
+          className={`px-3 py-1.5 text-xs rounded-md transition-all ${
+            days === d
+              ? 'bg-slate-700 text-white font-medium shadow-sm'
+              : 'text-slate-400 hover:text-slate-200'
+          }`}
+        >
+          {d}d
+        </button>
+      ))}
     </div>
   );
 }
@@ -100,6 +127,9 @@ export default function ReportPage() {
           days={data.days}
           momentum={data.momentum}
         />
+        <div className="mb-4">
+          <ApplicationNudge pipeline={data.pipeline} />
+        </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
           <PipelineChart pipeline={data.pipeline} />
           <InsightsPanel
@@ -109,14 +139,33 @@ export default function ReportPage() {
           />
         </div>
         <div className="mb-4">
+          <ActivityHeatmap timeline={data.timeline} />
+        </div>
+        <div className="mb-4">
           <ActivityTimeline timeline={data.timeline} />
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
           <SalaryChart salary={data.salary} />
+          <SalaryIntelligence salary={data.salary} />
+        </div>
+        <div className="mb-4">
+          <Archetypes archetypes={data.archetypes} />
+        </div>
+        <div className="mb-4">
+          <ReadinessRadar readiness={data.readiness} />
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+          <AntiResume antiResume={data.antiResume} />
           <DealBreakers dealBreakers={data.dealBreakers} />
         </div>
         <div className="mb-4">
           <SkillGaps skills={data.skills} />
+        </div>
+        <div className="mb-4">
+          <SkillAdjacency skillAdjacency={data.skillAdjacency} />
+        </div>
+        <div className="mb-4">
+          <MarketDrift marketDrift={data.marketDrift} />
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <TopCompanies topCompanies={data.topCompanies} />
@@ -127,26 +176,6 @@ export default function ReportPage() {
           Resume
         </footer>
       </div>
-    </div>
-  );
-}
-
-function DaysSelector({ days, onChange }) {
-  return (
-    <div className="flex items-center gap-1 bg-slate-900 rounded-lg p-0.5 border border-slate-700/50">
-      {DAY_OPTIONS.map((d) => (
-        <button
-          key={d}
-          onClick={() => onChange(d)}
-          className={`px-3 py-1.5 text-xs rounded-md transition-all ${
-            days === d
-              ? 'bg-slate-700 text-white font-medium shadow-sm'
-              : 'text-slate-400 hover:text-slate-200'
-          }`}
-        >
-          {d}d
-        </button>
-      ))}
     </div>
   );
 }
