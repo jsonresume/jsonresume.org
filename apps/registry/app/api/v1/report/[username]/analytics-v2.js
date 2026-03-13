@@ -69,10 +69,11 @@ export function computeSkillAdjacency(marketJobs, userSkills) {
       }
   }
 
+  const hasSkill = (s) => skillMatches(s, userSet);
   const recs = {};
   for (const [pair, cnt] of Object.entries(cooc)) {
     const [a, b] = pair.split('|');
-    if (userSet.has(a) && !userSet.has(b)) {
+    if (hasSkill(a) && !hasSkill(b)) {
       if (!recs[b] || cnt > recs[b].coCount)
         recs[b] = {
           skill: b,
@@ -80,7 +81,7 @@ export function computeSkillAdjacency(marketJobs, userSkills) {
           coCount: cnt,
           totalJobs: totals[b] || 0,
         };
-    } else if (userSet.has(b) && !userSet.has(a)) {
+    } else if (hasSkill(b) && !hasSkill(a)) {
       if (!recs[a] || cnt > recs[a].coCount)
         recs[a] = {
           skill: a,
