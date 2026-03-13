@@ -257,10 +257,8 @@ export async function matchJobs({
     })
     .sort((a, b) => b.decayed_similarity - a.decayed_similarity);
 
-  // Always rerank top 30 for better quality
-  const shouldActuallyRerank =
-    results.length > 0 && (shouldRerank || results.length >= 5);
-  if (shouldActuallyRerank) {
+  // Rerank when explicitly requested or for search profiles
+  if (shouldRerank && results.length > 0) {
     const toRerank = results.slice(0, Math.min(30, top * 2));
     const rest = results.slice(Math.min(30, top * 2));
 

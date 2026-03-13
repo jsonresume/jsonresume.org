@@ -43,6 +43,7 @@ export async function GET(request) {
   const rerankParam = searchParams.get('rerank');
   const shouldRerank =
     rerankParam === 'true' || (rerankParam !== 'false' && !!searchId);
+  const useHyde = searchParams.get('hyde') !== 'false';
 
   try {
     let embedding;
@@ -98,10 +99,14 @@ export async function GET(request) {
       resumeText = result.text;
 
       // HyDE: generate ideal job posting from resume for better matching
-      try {
-        embedding = await generateHydeEmbedding(resumeText);
-      } catch (hydeErr) {
-        logger.warn({ error: hydeErr.message }, 'HyDE failed, using direct');
+      if (useHyde) {
+        try {
+          embedding = await generateHydeEmbedding(resumeText);
+        } catch (hydeErr) {
+          logger.warn({ error: hydeErr.message }, 'HyDE failed, using direct');
+          embedding = result.embedding;
+        }
+      } else {
         embedding = result.embedding;
       }
     }
