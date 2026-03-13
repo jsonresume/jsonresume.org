@@ -59,6 +59,13 @@ export function createApiClient({ baseUrl, apiKey }) {
       }),
     deleteSearch: (id) => request(`/searches/${id}`, { method: 'DELETE' }),
 
+    // Enrichment
+    enrichJob: (id, enriched) =>
+      request(`/jobs/${id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ enriched }),
+      }),
+
     // Dossiers
     fetchDossier: (id) => request(`/jobs/${id}/dossier`),
     saveDossier: (id, content) =>

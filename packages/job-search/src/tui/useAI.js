@@ -262,7 +262,19 @@ Research everything you can and produce a complete dossier covering:
 - Questions the candidate should ask
 - Topics to research before interviewing
 
-Be thorough, specific, and opinionated. Reference the candidate's actual experience when making recommendations.`;
+Be thorough, specific, and opinionated. Reference the candidate's actual experience when making recommendations.
+
+### IMPORTANT: Structured Data Block
+At the very end of your response, output a JSON code block tagged \`\`\`enrichment with corrected/discovered job metadata. Only include fields where you found better data than what's in the posting. This helps improve the job database:
+\`\`\`enrichment
+{
+  "salary": "$X - $Y" or null if unknown,
+  "remote": "Full" | "Hybrid" | "None" | null,
+  "location": { "city": "...", "countryCode": "XX", "region": "..." } or null,
+  "experience": "Junior" | "Mid" | "Senior" | "Staff" | "Lead" | null,
+  "type": "Full-time" | "Contract" | "Part-time" | null
+}
+\`\`\``;
 
       try {
         const { spawn } = await import('child_process');
@@ -370,6 +382,16 @@ Be thorough, specific, and opinionated. Reference the candidate's actual experie
         if (finalResult.trim()) {
           try {
             await api.saveDossier(job.id, finalResult);
+          } catch {}
+          // Extract and save enrichment data if present
+          try {
+            const enrichMatch = finalResult.match(
+              /```enrichment\s*\n([\s\S]*?)\n```/
+            );
+            if (enrichMatch) {
+              const enriched = JSON.parse(enrichMatch[1]);
+              await api.enrichJob(job.id, enriched);
+            }
           } catch {}
         }
       } catch (err) {

@@ -93,6 +93,97 @@ export async function PUT(request, { params }) {
 }
 
 /**
+ * PATCH /api/v1/jobs/:id — enrich job metadata from dossier research
+ * Body: { enriched: { salary: "...", remote: "Full", location: {...}, ... } }
+ * Only updates fields that are missing or empty in the existing gpt_content.
+ */
+export async function PATCH(request, { params }) {
+  const user = await authenticate(request);
+  if (!user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const { id } = await params;
+  const jobId = parseInt(id, 10);
+  const body = await request.json();
+  const { enriched } = body;
+
+  if (!enriched || typeof enriched !== 'object') {
+    return NextResponse.json(
+      { error: 'Body must include "enriched" object' },
+      { status: 400 }
+    );
+  }
+
+  const supabase = getSupabase();
+  const { data: job, error } = await supabase
+    .from('jobs')
+    .select('gpt_content')
+    .eq('id', jobId)
+    .single();
+
+  if (error || !job) {
+    return NextResponse.json({ error: 'Job not found' }, { status: 404 });
+  }
+
+  let parsed = {};
+  try {
+    parsed = JSON.parse(job.gpt_content);
+  } catch {
+    return NextResponse.json({ error: 'Invalid job data' }, { status: 500 });
+  }
+
+  // Only fill in missing/empty fields — never overwrite existing data
+  const allowedFields = [
+    'salary',
+    'remote',
+    'location',
+    'experience',
+    'type',
+    'description',
+    'skills',
+    'qualifications',
+    'responsibilities',
+  ];
+  let updated = false;
+  for (const field of allowedFields) {
+    if (enriched[field] === undefined || enriched[field] === null) continue;
+    const existing = parsed[field];
+    const isEmpty =
+      existing === null ||
+      existing === undefined ||
+      existing === '' ||
+      existing === 'Not listed' ||
+      existing === 'Not specified';
+    if (isEmpty) {
+      parsed[field] = enriched[field];
+      updated = true;
+    }
+  }
+
+  if (!updated) {
+    return NextResponse.json({
+      updated: false,
+      message: 'No empty fields to fill',
+    });
+  }
+
+  const { error: updateErr } = await supabase
+    .from('jobs')
+    .update({ gpt_content: JSON.stringify(parsed) })
+    .eq('id', jobId);
+
+  if (updateErr) {
+    return NextResponse.json(
+      { error: `Update failed: ${updateErr.message}` },
+      { status: 500 }
+    );
+  }
+
+  return NextResponse.json({ updated: true, fields: Object.keys(enriched) });
+}
+
+/**
  * GET /api/v1/jobs/:id — get a single job with full details
  */
 export async function GET(request, { params }) {
