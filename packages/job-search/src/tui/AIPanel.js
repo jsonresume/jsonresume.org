@@ -9,6 +9,7 @@ export default function AIPanel({
   error,
   onDismiss,
   onExport,
+  onRegenerate,
   onMark,
   job,
   isActive,
@@ -53,6 +54,9 @@ export default function AIPanel({
             exportMsg.current = null;
           }, 3000);
         }
+      }
+      if (input === 'r' && job && onRegenerate && !loading) {
+        onRegenerate(job);
       }
       // Mark keys
       if (job && onMark) {
@@ -106,14 +110,15 @@ export default function AIPanel({
       : '';
 
   const exportHint = text ? ' · e export' : '';
+  const regenHint = isCover && !loading && job ? ' · r regenerate' : '';
   const statusLine =
     loading && text
       ? 'Streaming… ESC to cancel'
       : loading
       ? 'ESC to cancel'
       : scrollHint
-      ? `${scrollHint}${exportHint}  ·  ESC to dismiss`
-      : `ESC to dismiss${exportHint}`;
+      ? `${scrollHint}${exportHint}${regenHint}  ·  ESC to dismiss`
+      : `ESC to dismiss${exportHint}${regenHint}`;
 
   return h(
     Box,

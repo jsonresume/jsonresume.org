@@ -24,9 +24,18 @@ import StatusBar from './StatusBar.js';
 import AIPanel from './AIPanel.js';
 import HelpModal from './HelpModal.js';
 
-const TABS = ['all', 'reviewed', 'interested', 'applied', 'maybe', 'passed'];
+const TABS = [
+  'all',
+  'new',
+  'reviewed',
+  'interested',
+  'applied',
+  'maybe',
+  'passed',
+];
 const TAB_LABELS = {
   all: 'All',
+  new: 'New',
   reviewed: 'Reviewed',
   interested: 'Interested',
   applied: 'Applied',
@@ -310,6 +319,13 @@ function App({ baseUrl, apiKey, apiClient }) {
 
   const counts = {
     all: allJobs.length,
+    new: allJobs.filter(
+      (j) =>
+        !j.state &&
+        !j.has_dossier &&
+        ai.getDossierStatus(j.id) !== 'done' &&
+        ai.getDossierStatus(j.id) !== 'generating'
+    ).length,
     reviewed: allJobs.filter(
       (j) => (j.has_dossier || ai.getDossierStatus(j.id) === 'done') && !j.state
     ).length,
@@ -457,6 +473,10 @@ function App({ baseUrl, apiKey, apiClient }) {
               const f = ai.exportDossier(selectedJob);
               if (f) showToast(`Saved ./${f}`, 'export');
               return f;
+            },
+            onRegenerate: (job) => {
+              ai.regenerateDossier(job, api);
+              showToast('Regenerating dossier…', 'info');
             },
             isActive: true,
           })

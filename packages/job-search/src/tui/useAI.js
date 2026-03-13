@@ -214,7 +214,20 @@ ${jobText}
 
 Research everything you can and produce a complete dossier covering:
 
-### 1. Company Deep Dive
+### 1. Compensation Context
+- Market rate for this role/level/location
+- How the listed salary compares
+- Negotiation leverage points
+
+### 2. AI Engineering Culture
+- Does the company use or encourage AI coding tools (Copilot, Claude Code, Cursor, agentic workflows)?
+- Any public statements, blog posts, or job descriptions mentioning AI-assisted development?
+- Is the engineering culture likely to embrace engineers who ship faster using AI tools, or is there resistance?
+- Look for signals: do they mention "AI-native", "agentic", "LLM-augmented" workflows, or similar?
+- Are there concerns about AI tool usage (IP policies, code review friction, etc.)?
+- Rating: AI-Forward / AI-Friendly / Neutral / Unknown / AI-Resistant
+
+### 3. Company Deep Dive
 - What the company does, their products/services
 - Funding stage, size, recent news
 - Tech stack and engineering culture
@@ -222,37 +235,32 @@ Research everything you can and produce a complete dossier covering:
 - Employee sentiment and Glassdoor/Blind highlights
 - Any red flags or concerns
 
-### 2. Role Analysis
+### 4. Role Analysis
 - What you'd actually be doing day-to-day
 - Team context — who you'd work with
 - Growth trajectory for this role
 - How this role fits into the company's current priorities
 
-### 3. Fit Assessment
+### 5. Fit Assessment
 - Matching skills and experience (be specific, reference the candidate's actual background)
 - Skill gaps to acknowledge or address
 - Adjacent experience that transfers
 - Overall fit rating: Strong / Good / Stretch
 
-### 4. Cover Letter Talking Points
+### 6. Cover Letter Talking Points
 - 5-7 specific bullet points to mention, each referencing the candidate's real experience
 - What angle to take (technical depth? leadership? domain expertise?)
 - What to emphasize vs. downplay
 
-### 5. Contact Info
+### 7. Contact Info
 - Email addresses from the posting
 - Who posted (HN username from the URL if available)
 - Best way to reach out
 
-### 6. Interview Prep
+### 8. Interview Prep
 - Questions they'll likely ask for this role
 - Questions the candidate should ask
 - Topics to research before interviewing
-
-### 7. Compensation Context
-- Market rate for this role/level/location
-- How the listed salary compares
-- Negotiation leverage points
 
 Be thorough, specific, and opinionated. Reference the candidate's actual experience when making recommendations.`;
 
@@ -484,6 +492,19 @@ Be thorough, specific, and opinionated. Reference the candidate's actual experie
     return null;
   }, []);
 
+  const regenerateDossier = useCallback(
+    (job, api) => {
+      // Clear cached dossier so dossier() starts fresh
+      dossierCache.current.delete(job.id);
+      cancel();
+      setText('');
+      setError(null);
+      bumpTick();
+      dossier(job, api);
+    },
+    [dossier, cancel]
+  );
+
   return {
     text,
     loading,
@@ -495,6 +516,7 @@ Be thorough, specific, and opinionated. Reference the candidate's actual experie
     seedDossierFlags,
     summarizeJob,
     dossier,
+    regenerateDossier,
     batchReview,
     exportDossier,
     cancel,

@@ -102,7 +102,7 @@ npx @jsonresume/jobs
 
 The TUI has three main regions:
 
-- **Header** — shows the app title, active search profile name, tab bar (All / Interested / Applied / Maybe / Passed) with live counts, and any active filter pills
+- **Header** — shows the app title, active search profile name, tab bar (All / New / Reviewed / Interested / Applied / Maybe / Passed) with live counts, and any active filter pills
 - **Content area** — job list in list view, or a split-pane layout (40% compact list + 60% job detail) in detail view
 - **Status bar** — context-sensitive keyboard hints, loading/reranking indicators, and toast notifications
 
@@ -206,6 +206,8 @@ In split-pane detail view, the left pane shows a compact list with just score, t
 | Tab | Shows |
 |-----|-------|
 | All | All jobs from the current search (excludes passed/dismissed) |
+| New | Jobs with no state and no dossier — completely untouched |
+| Reviewed | Jobs with a dossier but no decision yet |
 | Interested | Jobs you marked with `i` |
 | Applied | Jobs you marked with `x` |
 | Maybe | Jobs you marked with `m` |
@@ -268,6 +270,228 @@ npx @jsonresume/jobs help                                # All options
 ## Architecture
 
 ![architecture](./architecture.svg)
+
+## API Reference
+
+All endpoints live at `https://registry.jsonresume.org/api/v1`. Authenticated endpoints require a `Bearer` token in the `Authorization` header.
+
+### Authentication
+
+```bash
+# Generate an API key (no auth required)
+curl -s -X POST https://registry.jsonresume.org/api/v1/keys \
+  -H 'Content-Type: application/json' \
+  -d '{"username":"YOUR_GITHUB_USERNAME"}'
+# → { "key": "jr_username_xxxxx", "username": "username" }
+
+# Use in all subsequent requests
+export JSONRESUME_API_KEY="jr_username_xxxxx"
+AUTH="Authorization: Bearer $JSONRESUME_API_KEY"
+```
+
+### GET /api/v1/me
+
+Returns your resume and profile.
+
+```bash
+curl -s -H "$AUTH" https://registry.jsonresume.org/api/v1/me
+# → { "username": "...", "resume": { ... } }
+```
+
+### GET /api/v1/jobs
+
+Get jobs matched to your resume via vector similarity.
+
+| Param | Type | Default | Description |
+|-------|------|---------|-------------|
+| `top` | int | 20 | Number of results (max 100) |
+| `days` | int | 30 | How far back to search |
+| `remote` | bool | false | Remote jobs only |
+| `min_salary` | int | 0 | Minimum salary in thousands (e.g. `150` = $150k) |
+| `search` | string | | Keyword filter across all fields |
+| `search_id` | uuid | | Use a saved search profile's embedding |
+| `rerank` | bool | auto | LLM reranking (defaults to true when `search_id` is set) |
+
+```bash
+# Basic search
+curl -s -H "$AUTH" "https://registry.jsonresume.org/api/v1/jobs?top=50&days=30"
+
+# Remote jobs, $150k+, keyword filter
+curl -s -H "$AUTH" "https://registry.jsonresume.org/api/v1/jobs?top=50&remote=true&min_salary=150&search=react"
+
+# Using a search profile with reranking
+curl -s -H "$AUTH" "https://registry.jsonresume.org/api/v1/jobs?top=50&search_id=UUID&rerank=true"
+```
+
+**Response:**
+```json
+{
+  "jobs": [
+    {
+      "id": 237247,
+      "uuid": "...",
+      "title": "Full-Stack Engineer",
+      "company": "Acme Corp",
+      "location": { "city": "San Francisco", "countryCode": "US" },
+      "remote": "Full",
+      "salary": "$180k - $220k",
+      "salary_usd": 180000,
+      "experience": "Senior",
+      "type": "Full-time",
+      "description": "...",
+      "skills": [{ "name": "React" }, { "name": "Node.js" }],
+      "url": "https://news.ycombinator.com/item?id=...",
+      "posted_at": "2026-03-01T...",
+      "similarity": 0.654,
+      "rerank_score": 8,
+      "combined_score": 0.74,
+      "state": "interested",
+      "has_dossier": true
+    }
+  ],
+  "total": 50
+}
+```
+
+### POST /api/v1/jobs
+
+Match jobs against a provided resume — **no auth required**. Useful for local mode or one-off queries.
+
+```bash
+curl -s -X POST https://registry.jsonresume.org/api/v1/jobs \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "resume": { "basics": { "name": "...", "label": "..." }, "skills": [...] },
+    "top": 20,
+    "days": 30,
+    "remote": true
+  }'
+```
+
+### GET /api/v1/jobs/:id
+
+Full details for a single job including raw posting content.
+
+```bash
+curl -s -H "$AUTH" https://registry.jsonresume.org/api/v1/jobs/237247
+```
+
+### PUT /api/v1/jobs/:id
+
+Mark a job's state.
+
+| Body Param | Type | Description |
+|------------|------|-------------|
+| `state` | string | `interested`, `applied`, `maybe`, `not_interested`, or `dismissed` |
+| `feedback` | string | Optional reason/notes |
+
+```bash
+# Mark as interested
+curl -s -X PUT -H "$AUTH" -H 'Content-Type: application/json' \
+  https://registry.jsonresume.org/api/v1/jobs/237247 \
+  -d '{"state":"interested","feedback":"great remote role, strong tech stack"}'
+
+# Mark as applied
+curl -s -X PUT -H "$AUTH" -H 'Content-Type: application/json' \
+  https://registry.jsonresume.org/api/v1/jobs/237247 \
+  -d '{"state":"applied","feedback":"applied via email 2026-03-13"}'
+
+# Pass on a job
+curl -s -X PUT -H "$AUTH" -H 'Content-Type: application/json' \
+  https://registry.jsonresume.org/api/v1/jobs/237247 \
+  -d '{"state":"not_interested","feedback":"salary too low"}'
+```
+
+### GET /api/v1/jobs/:id/dossier
+
+Fetch saved research dossier for a job.
+
+```bash
+curl -s -H "$AUTH" https://registry.jsonresume.org/api/v1/jobs/237247/dossier
+# → { "content": "# Dossier\n\n## Compensation...", "created_at": "..." }
+# → { "content": null } if no dossier exists
+```
+
+### PUT /api/v1/jobs/:id/dossier
+
+Save or update a research dossier.
+
+```bash
+curl -s -X PUT -H "$AUTH" -H 'Content-Type: application/json' \
+  https://registry.jsonresume.org/api/v1/jobs/237247/dossier \
+  -d '{"content":"# Company Research\n\n..."}'
+```
+
+### PUT /api/v1/resume
+
+Update your resume on the registry.
+
+```bash
+curl -s -X PUT -H "$AUTH" -H 'Content-Type: application/json' \
+  https://registry.jsonresume.org/api/v1/resume \
+  -d @resume.json
+# → { "username": "...", "message": "Resume updated" }
+```
+
+### GET /api/v1/searches
+
+List your saved search profiles.
+
+```bash
+curl -s -H "$AUTH" https://registry.jsonresume.org/api/v1/searches
+# → { "searches": [{ "id": "uuid", "name": "Remote React", "prompt": "...", "filters": [...] }] }
+```
+
+### POST /api/v1/searches
+
+Create a new search profile. The server generates a HyDE embedding from your prompt + resume.
+
+```bash
+curl -s -X POST -H "$AUTH" -H 'Content-Type: application/json' \
+  https://registry.jsonresume.org/api/v1/searches \
+  -d '{"name":"Remote React","prompt":"remote React roles at climate tech startups"}'
+# → { "search": { "id": "uuid", "name": "Remote React", "prompt": "..." } }
+```
+
+### PUT /api/v1/searches/:id
+
+Update a search profile's name or filters.
+
+```bash
+curl -s -X PUT -H "$AUTH" -H 'Content-Type: application/json' \
+  https://registry.jsonresume.org/api/v1/searches/UUID \
+  -d '{"name":"Updated Name","filters":[{"type":"remote"},{"type":"minSalary","value":"150"}]}'
+```
+
+### DELETE /api/v1/searches/:id
+
+Delete a search profile.
+
+```bash
+curl -s -X DELETE -H "$AUTH" https://registry.jsonresume.org/api/v1/searches/UUID
+# → { "ok": true }
+```
+
+### Example: Automated Job Application Workflow
+
+Use the API to build your own automation — e.g., have Claude in Chrome review your "maybe" jobs and apply:
+
+```bash
+# 1. Get all jobs, filter to "maybe" state
+JOBS=$(curl -s -H "$AUTH" "https://registry.jsonresume.org/api/v1/jobs?top=100" \
+  | jq '[.jobs[] | select(.state == "maybe")]')
+
+# 2. For each, get the full detail + dossier
+for ID in $(echo $JOBS | jq -r '.[].id'); do
+  DETAIL=$(curl -s -H "$AUTH" "https://registry.jsonresume.org/api/v1/jobs/$ID")
+  DOSSIER=$(curl -s -H "$AUTH" "https://registry.jsonresume.org/api/v1/jobs/$ID/dossier")
+  echo "$DETAIL" | jq '{title: .title, company: .company, url: .url}'
+  # ... use the detail + dossier to apply, then mark as applied
+  curl -s -X PUT -H "$AUTH" -H 'Content-Type: application/json' \
+    "https://registry.jsonresume.org/api/v1/jobs/$ID" \
+    -d '{"state":"applied","feedback":"auto-applied via script"}'
+done
+```
 
 ## How Ranking Works
 

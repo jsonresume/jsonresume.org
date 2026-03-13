@@ -135,6 +135,15 @@ export function useJobs(api, activeFilters, tab, searchId, getDossierStatus) {
       }
     }
 
+    if (tab === 'new')
+      return filtered.filter(
+        (j) =>
+          !j.state &&
+          !j.has_dossier &&
+          (!getDossierStatus ||
+            (getDossierStatus(j.id) !== 'done' &&
+              getDossierStatus(j.id) !== 'generating'))
+      );
     if (tab === 'reviewed')
       return filtered.filter(
         (j) =>
