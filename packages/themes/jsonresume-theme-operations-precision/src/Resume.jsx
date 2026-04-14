@@ -1,11 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
+import { marked } from 'marked';
 import {
   Section,
   SectionTitle,
   DateRange,
   ContactInfo,
 } from '@jsonresume/core';
+
+const renderMarkdown = (text) =>
+  text ? marked.parse(text, { breaks: true }) : '';
 
 const Layout = styled.div`
   max-width: 850px;
@@ -63,7 +67,7 @@ const StyledContactInfo = styled(ContactInfo)`
   }
 `;
 
-const Summary = styled.p`
+const Summary = styled.div`
   font-size: 15px;
   line-height: 1.6;
   color: #374151;
@@ -126,7 +130,7 @@ const DateText = styled.div`
   font-variant-numeric: tabular-nums;
 `;
 
-const WorkSummary = styled.p`
+const WorkSummary = styled.div`
   margin: 8px 0;
   color: #4b5563;
   line-height: 1.6;
@@ -276,7 +280,11 @@ function Resume({ resume }) {
         <Name>{basics.name}</Name>
         {basics.label && <Label>{basics.label}</Label>}
         <StyledContactInfo basics={basics} />
-        {basics.summary && <Summary>{basics.summary}</Summary>}
+        {basics.summary && (
+          <Summary
+            dangerouslySetInnerHTML={{ __html: renderMarkdown(basics.summary) }}
+          />
+        )}
       </Header>
 
       {work?.length > 0 && (
@@ -293,11 +301,24 @@ function Resume({ resume }) {
                   <DateRange startDate={job.startDate} endDate={job.endDate} />
                 </DateText>
               </WorkHeader>
-              {job.summary && <WorkSummary>{job.summary}</WorkSummary>}
+              {job.summary && (
+                <WorkSummary
+                  dangerouslySetInnerHTML={{
+                    __html: renderMarkdown(job.summary),
+                  }}
+                />
+              )}
               {job.highlights?.length > 0 && (
                 <Highlights>
                   {job.highlights.map((highlight, i) => (
-                    <li key={i}>{highlight}</li>
+                    <li
+                      key={i}
+                      dangerouslySetInnerHTML={{
+                        __html: marked.parseInline(highlight, {
+                          breaks: true,
+                        }),
+                      }}
+                    />
                   ))}
                 </Highlights>
               )}
@@ -359,12 +380,23 @@ function Resume({ resume }) {
                 )}
               </ProjectHeader>
               {project.description && (
-                <WorkSummary>{project.description}</WorkSummary>
+                <WorkSummary
+                  dangerouslySetInnerHTML={{
+                    __html: renderMarkdown(project.description),
+                  }}
+                />
               )}
               {project.highlights?.length > 0 && (
                 <Highlights>
                   {project.highlights.map((highlight, i) => (
-                    <li key={i}>{highlight}</li>
+                    <li
+                      key={i}
+                      dangerouslySetInnerHTML={{
+                        __html: marked.parseInline(highlight, {
+                          breaks: true,
+                        }),
+                      }}
+                    />
                   ))}
                 </Highlights>
               )}
@@ -392,11 +424,24 @@ function Resume({ resume }) {
                   </DateText>
                 )}
               </WorkHeader>
-              {vol.summary && <WorkSummary>{vol.summary}</WorkSummary>}
+              {vol.summary && (
+                <WorkSummary
+                  dangerouslySetInnerHTML={{
+                    __html: renderMarkdown(vol.summary),
+                  }}
+                />
+              )}
               {vol.highlights?.length > 0 && (
                 <Highlights>
                   {vol.highlights.map((highlight, i) => (
-                    <li key={i}>{highlight}</li>
+                    <li
+                      key={i}
+                      dangerouslySetInnerHTML={{
+                        __html: marked.parseInline(highlight, {
+                          breaks: true,
+                        }),
+                      }}
+                    />
                   ))}
                 </Highlights>
               )}
@@ -413,7 +458,13 @@ function Resume({ resume }) {
               <Institution>{award.title}</Institution>
               {award.awarder && <Degree>Awarded by {award.awarder}</Degree>}
               {award.date && <EducationDate>{award.date}</EducationDate>}
-              {award.summary && <WorkSummary>{award.summary}</WorkSummary>}
+              {award.summary && (
+                <WorkSummary
+                  dangerouslySetInnerHTML={{
+                    __html: renderMarkdown(award.summary),
+                  }}
+                />
+              )}
             </EducationItem>
           ))}
         </Section>
@@ -429,7 +480,13 @@ function Resume({ resume }) {
               {pub.releaseDate && (
                 <EducationDate>{pub.releaseDate}</EducationDate>
               )}
-              {pub.summary && <WorkSummary>{pub.summary}</WorkSummary>}
+              {pub.summary && (
+                <WorkSummary
+                  dangerouslySetInnerHTML={{
+                    __html: renderMarkdown(pub.summary),
+                  }}
+                />
+              )}
             </EducationItem>
           ))}
         </Section>
