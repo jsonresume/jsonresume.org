@@ -6069,7 +6069,7 @@ const StyledContactInfo = dt(ContactInfo)`
     }
   }
 `;
-const Summary = dt.p`
+const Summary = dt.div`
   font-size: 15px;
   line-height: 1.6;
   color: #374151;
@@ -6125,7 +6125,7 @@ const DateText = dt.div`
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 `;
-const WorkSummary = dt.p`
+const WorkSummary = dt.div`
   margin: 8px 0;
   color: #4b5563;
   line-height: 1.6;

@@ -67,7 +67,7 @@ const StyledContactInfo = styled(ContactInfo)`
   }
 `;
 
-const Summary = styled.p`
+const Summary = styled.div`
   font-size: 15px;
   line-height: 1.6;
   color: #374151;
@@ -130,7 +130,7 @@ const DateText = styled.div`
   font-variant-numeric: tabular-nums;
 `;
 
-const WorkSummary = styled.p`
+const WorkSummary = styled.div`
   margin: 8px 0;
   color: #4b5563;
   line-height: 1.6;
