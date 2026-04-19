@@ -1,10 +1,4 @@
-name: Docs — regenerate and deploy
-
-# On every push to master that touches code or config, regenerate docs with
-# Docwright, normalise .mdx → .md (Fumadocs happily consumes both, and .md
-# avoids JSX-expression parse errors on curly braces in tables/types),
-# commit the refresh, then build apps/docs as a static export and publish
-# to GitHub Pages (custom domain: docs.jsonresume.org).
+name: Docs - regenerate and deploy
 on:
   push:
     branches:
@@ -56,19 +50,16 @@ jobs:
           echo "/tmp/docwright/bin" >> "$GITHUB_PATH"
 
       - name: Run docwright generate
-        if: ${{ secrets.OPENAI_API_KEY != '' }}
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: docwright generate --verbose
+        run: |
+          if [ -z "$OPENAI_API_KEY" ]; then
+            echo "::warning::OPENAI_API_KEY secret not set - skipping regeneration"
+            exit 0
+          fi
+          docwright generate --verbose
 
-      - name: Skip generate (no OPENAI_API_KEY secret set)
-        if: ${{ secrets.OPENAI_API_KEY == '' }}
-        run: echo "::warning::OPENAI_API_KEY secret not set — skipping Docwright regeneration. Deploy will use committed content as-is."
-
-      # Docwright's Fumadocs adapter hardcodes .mdx. We rename to .md so
-      # curly braces inside code spans and generic types (Array<string>,
-      # {x,y,z}) don't trip the MDX/JSX parser at build time.
-      - name: Normalise .mdx → .md (skip index.mdx)
+      - name: Normalise .mdx to .md (skip index.mdx)
         run: |
           shopt -s nullglob
           for f in apps/docs/content/docs/*.mdx; do
