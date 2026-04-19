@@ -1,0 +1,69 @@
+version: 1
+
+# Scan only the packages and registry app — avoids ballooning AI cost
+# by excluding generated dossiers, homepage2 marketing code, and the
+# docs site itself.
+codeDir: .
+
+# docsDir is the raw-markdown staging dir. The Fumadocs adapter writes
+# the actual site MDX to `adapter.siteDir/content/docs` (apps/docs/...).
+# Keeping docsDir inside .docwright/ avoids double-writing files.
+docsDir: .docwright/generated-md
+
+provenanceDir: .docwright
+
+languages:
+  - javascript
+  - typescript
+
+ignore:
+  - "**/node_modules/**"
+  - "**/dist/**"
+  - "**/build/**"
+  - "**/out/**"
+  - "**/.next/**"
+  - "**/.docwright/**"
+  - "**/.git/**"
+  - "**/coverage/**"
+  - "**/__pycache__/**"
+  - "**/.venv/**"
+  - "**/vendor/**"
+  - "**/target/**"
+  - "**/.worktrees/**"
+  - "**/.env"
+  - "**/.env.*"
+  - "**/.vercel/**"
+  - "**/.turbo/**"
+  - "**/test/**"
+  - "**/tests/**"
+  - "**/*.test.js"
+  - "**/*.test.ts"
+  - "**/*.spec.js"
+  - "**/*.spec.ts"
+  - "**/scripts/**"
+  - "**/supabase/**"
+  - "**/apps/homepage2/**"
+  - "**/apps/docs/**"
+  - "dossier-*.md"
+  - "gie_result.json"
+  - "ai-sdk-v6-docs.md"
+  - "**/.changeset/**"
+  - "**/public/**"
+
+customLensDir: .docwright/lenses
+lenses:
+  - deepwiki
+
+ai:
+  provider: openai
+  model: openai/gpt-4.1-mini
+  concurrency: 3
+
+validation:
+  structural: true
+
+adapter:
+  name: fumadocs
+  siteDir: apps/docs
+  fumadocs:
+    theme: default

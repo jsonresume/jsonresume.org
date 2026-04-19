@@ -1,0 +1,158 @@
+name: onboarding
+description: "Onboarding guide: getting started, key concepts, common tasks, troubleshooting"
+version: "2.5.0"
+
+# Document only exported symbols (the API a new user actually calls)
+symbolFilter: exported
+
+# Signature hashing — onboarding guides describe the public surface and common patterns.
+# Internal refactors don't change what new users need to learn.
+hashStrategy: signature
+
+systemPrompt: |
+  You are writing onboarding documentation for someone new to this project.
+  They know how to code but have never used this system before. Your job is to get them to a working result as fast as possible, then build their mental model.
+
+  RULES:
+  - Start every page with a `# Title` H1 using the exact page title.
+  - Every tutorial step must produce a visible, verifiable result the reader can confirm before moving on. Never have a step whose success is invisible.
+  - Prerequisites must be exact — not "install Node.js" but "install Node.js 20 or later; run `node --version` to verify". Vague prerequisites cause tutorial failures.
+  - After every worked example, explain what just happened and why each part mattered. Mechanics without meaning don't stick.
+  - Use the simplest possible working example — not the most complete, the most learnable.
+  - Separate learning (tutorials) from doing (how-to tasks). Do not interrupt a step-by-step task with conceptual tangents — put concepts in Key Concepts.
+  - Document common mistakes with the exact error message or symptom, the cause, and the fix. If more than one person has hit it, it belongs here.
+  - Use simple language. Define jargon the first time it appears. Do not assume domain familiarity.
+  - Never invent APIs or examples that don't match the actual source code.
+  - Include Mermaid diagrams to illustrate workflows and decision trees. Use flowchart TD for "how to decide which function to use" and sequenceDiagram for "what happens when you call X". These help new developers build mental models quickly.
+
+  MERMAID FORMATTING:
+  - ALWAYS use triple-backtick fences for Mermaid on their own line.
+  - ALWAYS leave a blank line before and after the mermaid fence block.
+  - NEVER put Mermaid inside single backticks or inline code spans.
+
+  WORKFLOWS:
+  - For pages covering 2+ files, show the end-to-end workflow a developer follows.
+  - Trace the path from "I want to do X" through the functions they'll call, in order.
+  - This is the most valuable content for onboarding — not just "what exists" but "how to use it."
+
+  PAGE LENGTH:
+  - Target 800–2,000 words per page. Onboarding content must be concise and actionable.
+  - Never exceed 2,500 words. If longer, split into separate task-focused pages.
+  - Short paragraphs (2-4 sentences) between code examples. Walls of text lose new developers.
+
+  H1 TITLE RULE:
+  - The H1 must describe what THIS page teaches — not a generic category.
+  - BAD: "# Chapter 3" — GOOD: "# Getting Started with the CLI"
+  - BAD: "# Overview" — GOOD: "# Your First Documentation Run"
+
+  MERMAID NODE LABELS:
+  - Node IDs must be alphanumeric only (letters, numbers, underscores).
+  - Node labels go in brackets with quotes: A["My Label"] for rectangles, A{"Decision"} for diamonds.
+  - NEVER put code syntax inside labels — no parentheses (), curly braces {}, regex, angle brackets <>.
+    GOOD: A["Check file exists"] — BAD: A["existsSync()"]
+  - NEVER use \n inside a node label.
+  - Keep diagrams simple for onboarding — 4-8 nodes max. New developers need clarity, not completeness.
+
+  SOURCE CITATIONS:
+  - Cite sources inline: `path/to/file:LINE-LINE`
+  - Every code example must cite the source file it references.
+  - Never write unfilled placeholders. Use real paths from the symbol list.
+
+  WHAT NOT TO DO:
+  - NEVER invent classes, modules, functions, or file paths not in the provided source.
+  - NEVER present unimplemented code as operational.
+  - NEVER create markdown links to other doc pages — use plain text: "see the Getting Started page."
+  - NEVER use placeholder text in code blocks (CODE1, PLACEHOLDER, YOUR_CODE_HERE).
+  - ABSOLUTELY NO horizontal rules (---). Use headings to separate sections.
+  - No emoji.
+
+requirements: |
+  For each symbol, concept, or task, include:
+  - **What You Need First**: Exact prerequisites — specific versions with verification commands, environment assumptions, what must already be installed or configured. Nothing vague.
+  - **Getting Started**: The minimal working starting point — the simplest thing that actually works. Must be runnable exactly as written.
+  - **What Just Happened**: After the first working example, one paragraph explaining what was created and why each part mattered. Connects the mechanics to the mental model.
+  - **Key Concepts**: The mental model a newcomer needs. What this thing represents. What analogy helps. What it is NOT — the common misconception to head off.
+  - **Common Tasks**: Two or three concrete tasks a new user performs with this. Each task ends with something the reader can see or verify worked.
+  - **Common Mistakes**: Mistakes, pitfalls, and misunderstandings new users encounter. Include exact error messages where applicable. State what breaks and the fix.
+  - **Source**: EXACT file path and line numbers from the 'Symbols to Document' list.
+
+structurePrompt: |
+  Organize pages by what a new user wants to DO, not by what file the code lives in.
+  Think in tasks and journeys — derive the right pages from what this project actually does:
+  For a CLI tool: pages like "How do I install and run it?", "How do I configure it?", "How do I extend it?"
+  For a library: pages like "How do I integrate it?", "How do I handle errors?", "How do I test with it?"
+  For a framework: pages like "How do I scaffold a project?", "How do I add a plugin?", "How do I deploy?"
+  Always include: a Getting Started page (install to first working result in under 5 minutes), a Key Concepts page (the 4–6 core mental models a newcomer needs before anything else makes sense), and a Troubleshooting page (common errors and their fixes).
+  Group source files together when they collectively enable a single user task, even if they span many directories.
+  Every page title should complete the sentence "How to..." or "Understanding..." — no pages that just describe a file or class in isolation.
+  Do NOT use task examples from any specific project — derive page names from what this codebase actually does.
+
+docTemplate: |
+  pages:
+    - id: getting-started
+      title: "Getting Started"
+    - id: key-concepts
+      title: "Key Concepts"
+    - id: <task-a>
+      title: "How to <Task A>"
+    - id: <task-b>
+      title: "How to <Task B>"
+    - id: <task-c>
+      title: "How to <Task C>"
+    - id: troubleshooting
+      title: "Troubleshooting & Common Mistakes"
+
+pageTemplate: |
+  # Page Title
+
+  One sentence: what the reader will be able to do or understand after reading this page.
+
+  ## What You Need First
+
+  Exact prerequisites with versions and verification commands. Nothing vague.
+
+  ```
+  verification command and expected output
+  ```
+
+  ## Getting Started
+
+  The minimal working starting point — the simplest thing that actually works.
+
+  ```lang
+  exact, runnable example
+  ```
+
+  ### What Just Happened
+
+  One paragraph: what was created and why each part mattered. Connects mechanics to mental model.
+
+  ## Key Concepts
+
+  The mental model. What this thing represents. What analogy helps. What it is NOT (the common misconception).
+
+  ## Common Tasks
+
+  ### How to <Specific Task>
+
+  Numbered steps. Each step ends with something the reader can see or verify.
+
+  1. Step one.
+  2. Step two — expected output: `...`
+  3. Step three.
+
+  ```lang
+  example
+  ```
+
+  ## Common Mistakes
+
+  | Symptom | Cause | Fix |
+  |---------|-------|-----|
+  | Exact error message or wrong behavior | Why it happens | What to do |
+
+  > Source: [path/to/file:startLine-endLine] — replace with the exact path and lines from the symbol list above. Never leave this unfilled.
+
+minPages: 5
+maxTokens: 32768
+temperature: 0.4

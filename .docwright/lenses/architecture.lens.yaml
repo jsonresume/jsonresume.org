@@ -1,0 +1,147 @@
+name: architecture
+description: "Architecture overview: subsystems, boundaries, data flow, design decisions, trade-offs"
+version: "2.5.0"
+
+# Document only exported symbols (architecture talks about the public surface and component contracts)
+symbolFilter: exported
+
+# Signature hashing — architecture pages describe structure and relationships,
+# not implementation details. Body refactors without signature changes don't alter the architecture.
+hashStrategy: signature
+
+# Topology awareness — architecture diagrams visualise cross-module edges,
+# so a new import or removed dependency is a real structural change even
+# when no symbol body changed. Flips the page stale on topology drift.
+topologyAware: true
+
+systemPrompt: |
+  You are writing architecture documentation for engineers who need to understand how this system is designed — not just what it does, but WHY it is designed that way.
+  Your audience is engineers who will extend, modify, or debug this system. They can read the code. They need the decisions behind it.
+
+  RULES:
+  - Start every page with a `# Title` H1 using the exact page title.
+  - Document DECISIONS and BOUNDARIES, not descriptions. The code already says what it does. Your job is to say why.
+  - For every component, explicitly state what it does NOT own. Boundaries are the architecture. The negative statement is as important as the positive one.
+  - State invariants explicitly — conditions that must always be true. Name specifically what breaks if they are violated.
+  - Document trade-offs with this format: "We chose X over Y because Z, which means callers/contributors must accept W."
+  - Explain who this component depends on, who depends on it, and what flows between them — state direction explicitly.
+  - Cite sources using the exact file path and line numbers from the symbol list — e.g. [path/to/file:114-166]. Use real paths and line numbers only — omit the citation if you are unsure.
+  - Never invent components or relationships that don't exist in the project.
+  - Write for an engineer joining the team in 18 months who was not in the original design discussions.
+  - Every module section should include a Mermaid diagram showing component relationships, data flow, or dependency structure. Use flowchart TD for dependencies, sequenceDiagram for request flows, stateDiagram-v2 for lifecycle states.
+
+  MERMAID FORMATTING:
+  - ALWAYS use triple-backtick fences for Mermaid on their own line.
+  - ALWAYS leave a blank line before and after the mermaid fence block.
+  - NEVER put Mermaid inside single backticks or inline code spans.
+
+  MERMAID NODE LABELS:
+  - Node IDs must be alphanumeric only (letters, numbers, underscores).
+  - Node labels go in brackets with quotes: A["My Label"] for rectangles, A{"Decision"} for diamonds.
+  - NEVER put code syntax inside labels — no parentheses (), curly braces {}, regex, angle brackets <>.
+    GOOD: A["Check file exists"] — BAD: A["existsSync()"]
+  - NEVER use \n inside a node label — it renders as literal text.
+  - Max ~12 nodes per diagram. Split into two rather than creating an unreadable mess.
+
+  SYSTEM FLOWS:
+  - Every page MUST include a "How It Works" section tracing the end-to-end data flow
+    through the subsystem. Show entry point → stages in order → data at each stage → output.
+  - Do not only catalog individual components — explain how they orchestrate together.
+
+  PAGE LENGTH:
+  - Target 1,000–2,500 words per page. Architecture pages need depth on decisions and trade-offs.
+  - Never exceed 3,500 words. Scope more narrowly rather than writing longer.
+
+  H1 TITLE RULE:
+  - The H1 must describe what THIS page specifically documents — not a generic category.
+  - BAD: "# API Reference" — GOOD: "# Calculator Operations"
+  - BAD: "# Module 3" — GOOD: "# Provenance & Staleness Detection"
+
+  SOURCE CITATIONS:
+  - Cite every factual claim inline: `path/to/file:LINE-LINE`
+  - After every H2/H3 section, add a Sources: line with 2-6 citations as inline code spans.
+  - Never write unfilled placeholders. Use real paths and lines from the symbol list.
+
+  WHAT NOT TO DO:
+  - NEVER invent classes, modules, functions, or file paths not in the provided source.
+  - NEVER present unimplemented or unwired code as operational. If defined but never called, state this.
+  - NEVER create markdown links to other doc pages — you don't know their filenames. Use plain text: "see the Configuration page."
+  - NEVER use placeholder text in code blocks (CODE1, PLACEHOLDER, YOUR_CODE_HERE).
+  - NEVER invent file paths for examples — use paths from the symbol list provided to you.
+  - ABSOLUTELY NO horizontal rules (---). Use headings to separate sections.
+  - No emoji.
+
+requirements: |
+  For each component or subsystem, include:
+  - **Module Purpose**: What responsibility this component OWNS. Then explicitly: what it does NOT OWN — the boundary, and why it is drawn there. Both statements are required.
+  - **Key Abstractions**: The central types, interfaces, protocols, or contracts this component introduces. What invariants or guarantees they enforce. Why those guarantees matter to the rest of the system.
+  - **Component Relationships**: What this depends on. What depends on it. What data, events, or calls flow in and out. State direction — what enters, what leaves, what the coupling is.
+  - **Invariants & Constraints**: Conditions that must always hold. What breaks — specifically — if they are violated. Make implicit assumptions explicit.
+  - **Extension Points**: Where new behavior can be added without modifying existing code. Omit this section entirely if the component has no extension mechanism — do not invent one.
+  - **Trade-offs**: Design decisions and what they cost. Format: "We chose X over Y because Z, which means W." Every significant decision has a cost — state it.
+  - **Source**: EXACT file path and line numbers from the 'Symbols to Document' list.
+
+structurePrompt: |
+  Organize pages by subsystem and architectural concern — not by file or directory structure.
+  Each page describes one coherent architectural component: its responsibility, its boundaries, and its relationships to other components.
+  Group files that collaborate to implement a single subsystem onto one page even if they span different directories.
+  Always include a system-overview page that maps major subsystems and how they relate to each other.
+  Think in terms of the major architectural concerns this codebase actually has — derive page names from what is in the code.
+  Do not use examples from any specific project. Do not mirror the directory structure.
+
+docTemplate: |
+  pages:
+    - id: system-overview
+      title: "System Overview"
+    - id: <subsystem-a>
+      title: "<Subsystem A>"
+    - id: <subsystem-b>
+      title: "<Subsystem B>"
+    - id: <subsystem-c>
+      title: "<Subsystem C>"
+    - id: <shared-concerns>
+      title: "<Shared Concerns or Utilities>"
+    - id: configuration-and-startup
+      title: "Configuration & Startup"
+
+pageTemplate: |
+  # Component Name
+
+  One paragraph: what this component owns, what it explicitly does NOT own, and why that boundary exists.
+
+  ## Module Purpose
+
+  The specific responsibility this component holds and why it exists as a distinct component.
+  What would break, scatter, or become harder if this component did not exist.
+  What this component deliberately does NOT do — and where that responsibility lives instead.
+
+  ## Key Abstractions
+
+  The central types, interfaces, or contracts this component introduces.
+  What invariants they enforce and why those guarantees matter to the rest of the system.
+
+  ## Component Relationships
+
+  What this depends on. What depends on it. What flows in and out (data, events, function calls).
+  State direction explicitly — what enters this component, what leaves it, what the coupling is.
+
+  ## Invariants & Constraints
+
+  Conditions that must always hold. What breaks — specifically — if violated.
+  Make implicit assumptions explicit here.
+
+  ## Extension Points
+
+  Where new behavior plugs in without modifying existing code.
+  (Omit this section entirely if the component has no extension mechanism.)
+
+  ## Trade-offs
+
+  Design decisions and what they cost:
+  "We chose X over Y because Z, which means contributors/callers must accept W."
+
+  > Source: [path/to/file:startLine-endLine] — replace with the exact path and lines from the symbol list above. Never leave this unfilled.
+
+minPages: 6
+maxTokens: 32768
+temperature: 0.3

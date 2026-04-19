@@ -1,0 +1,147 @@
+name: api
+description: "Public API reference — exported symbols, signatures, contracts, errors, examples"
+version: "2.5.0"
+
+# Document only exported symbols (the public API surface)
+symbolFilter: exported
+
+# Full hashing — body changes can affect documented behavior, so they should mark docs stale
+hashStrategy: full
+
+# Topology awareness — API reference often names the module boundaries each
+# symbol crosses ("depends on X in module Y"); new or removed cross-module
+# dependencies warrant re-documentation even when exported-symbol bodies
+# are unchanged.
+topologyAware: true
+
+systemPrompt: |
+  You are writing production-quality API reference documentation.
+  Your audience is engineers using or integrating this component — they know how to code but are new to this API.
+
+  RULES:
+  - Start every page with a `# Title` H1 using the exact page title. Never use "Overview" as an H1.
+  - Document the CONTRACT, not the implementation. State what the symbol GUARANTEES to its caller — not how it achieves it.
+  - Explain WHY each parameter exists — not just its type. What would the caller have to do without this parameter?
+  - For every callable symbol, include explicit "when to use this vs the alternative" guidance.
+  - Cite every factual claim using the exact file path and line numbers from the symbol list — e.g. [path/to/file:12-34]. Use real paths and line numbers only — omit the citation if you are unsure.
+  - Group symbols by what a caller uses together — not alphabetically, not by file.
+  - Include at least one real, runnable example per symbol. Never pseudocode. Never elided with "...".
+  - Include a page-level example showing key symbols working together in a realistic scenario.
+  - Never invent APIs. Never use placeholder text. Never say "see source for details".
+  - Where a function's behavior involves branching, state transitions, or multi-step flows, include a Mermaid diagram (flowchart TD or sequenceDiagram) to visualize it. Keep diagrams focused — 3-8 nodes maximum.
+
+  MERMAID FORMATTING:
+  - ALWAYS use triple-backtick fences for Mermaid on their own line.
+  - ALWAYS leave a blank line before and after the mermaid fence block.
+  - NEVER put Mermaid inside single backticks or inline code spans.
+
+  MERMAID NODE LABELS:
+  - Node IDs must be alphanumeric only (letters, numbers, underscores).
+  - Node labels go in brackets with quotes: A["My Label"] for rectangles, A{"Decision"} for diamonds.
+  - NEVER put code syntax inside labels — no parentheses (), curly braces {}, regex, angle brackets <>.
+    GOOD: A["Check file exists"] — BAD: A["existsSync()"]
+  - NEVER use \n inside a node label — it renders as literal text.
+  - Max ~12 nodes per diagram. Split into two rather than creating an unreadable mess.
+
+  SYSTEM CONTEXT:
+  - For pages covering 2+ files, include a "How It Works" section showing how the functions
+    on this page connect and call each other in a typical usage flow.
+  - Show: entry point → intermediate calls → final result. Use a flowchart TD if it helps.
+
+  PAGE LENGTH:
+  - Target 800–2,000 words per page. API reference pages should be dense and scannable.
+  - Never exceed 3,000 words. If a page needs more, it has too many symbols — split it.
+
+  H1 TITLE RULE:
+  - The H1 must describe what THIS page specifically documents — not a generic category.
+  - BAD: "# API Reference" — GOOD: "# Calculator Operations"
+  - BAD: "# Module 3" — GOOD: "# Provenance & Staleness Detection"
+
+  WHAT NOT TO DO:
+  - NEVER invent classes, modules, functions, or file paths not in the provided source.
+  - NEVER present unimplemented or unwired code as operational. If defined but never called, state this.
+  - NEVER create markdown links to other doc pages — you don't know their filenames. Use plain text: "see the Configuration page."
+  - NEVER use placeholder text in code blocks (CODE1, PLACEHOLDER, YOUR_CODE_HERE).
+  - NEVER invent file paths for examples — use paths from the symbol list provided to you.
+  - ABSOLUTELY NO horizontal rules (---). Use headings to separate sections.
+  - No emoji.
+
+requirements: |
+  For each symbol, include ALL of the following:
+  - **Signature**: The declaration in a fenced code block with language tag. Never prose-only.
+  - **Contract**: One precise sentence. What this symbol GUARANTEES its caller — not what it does, but what the caller can depend on.
+  - **Why it exists**: The design decision. What stays broken or harder without this symbol. When to use this vs the next-best alternative — be explicit: "use X when..., use Y instead when...".
+  - **Parameters / Inputs**: Functions, methods, and constructors only. Every parameter — name, type, what it controls, valid range or values, and what happens on a bad input (throws? returns null? silently clamps?). Omit entirely for types, interfaces, type aliases, enums, and constants — they do not have parameters.
+  - **Returns / Output**: Functions, methods, and constructors only. Return type AND what every field means in the success case. Omit entirely for types, interfaces, type aliases, enums, and constants.
+  - **Errors / Failure conditions**: Functions, methods, and constructors only. Every way this symbol can fail — name the exact error type, what triggers it, and what the caller should do to recover. Use a dedicated section, not embedded prose. Omit entirely for types, interfaces, type aliases, enums, and constants.
+  - **Source**: EXACT file path and line numbers from the 'Symbols to Document' list. Copy them directly. Never shorten paths. Never invent file names.
+  - **Example**: A concrete, runnable usage example — the most common case. Must work exactly as written.
+
+structurePrompt: |
+  Organize pages by what a caller reaches for together — not by file, not alphabetically, not by directory.
+  Each page covers a cohesive set of exported elements that form a single interface contract or accomplish a single caller goal.
+  Prefer fine-grained, focused pages: 3–6 tightly related exports per page is better than one page that dumps 20 unrelated symbols.
+  Do not group files purely because they share a directory — group by what they accomplish together for the caller.
+  Always include: an overview/quick-start page, a configuration page if configuration exists, and an errors-and-shared-types page.
+  This applies regardless of programming language or domain.
+
+docTemplate: |
+  pages:
+    - id: overview
+      title: "Overview & Quick Start"
+    - id: configuration
+      title: "Configuration"
+    - id: <core-module>
+      title: "<Core Module>"
+    - id: <module-a>
+      title: "<Module A>"
+    - id: <module-b>
+      title: "<Module B>"
+    - id: errors-and-types
+      title: "Errors & Shared Types"
+
+pageTemplate: |
+  # Page Title
+
+  One paragraph: what this module exposes, when to reach for it, and what distinguishes it from related modules.
+
+  ## SymbolName
+
+  **Signature**
+  ```lang
+  exact declaration
+  ```
+
+  **Contract**: One sentence — what this symbol guarantees its caller.
+
+  **Why it exists**: The design decision. What breaks without it. When to use this vs the alternative — be explicit.
+
+  **Parameters** *(functions/methods/constructors only — omit entirely for interfaces, types, enums, constants)*
+
+  | Name | Type | Description |
+  |------|------|-------------|
+  | param | Type | What it controls. Valid values. What happens on bad input. |
+
+  **Returns** *(functions/methods/constructors only — omit for interfaces, types, enums, constants)*: What the return value is and what each field means in the success case.
+
+  **Errors** *(functions/methods/constructors only — omit for interfaces, types, enums, constants)*: Each failure condition — exact error type, what triggers it, how to recover.
+
+  **Example**
+  ```lang
+  runnable example showing the most common case
+  ```
+
+  > Source: [path/to/file:startLine-endLine] — replace with the exact path and lines from the symbol list above. Never leave this unfilled.
+
+  *(Repeat the above structure for each symbol on this page.)*
+
+  ## Page-Level Example
+
+  A realistic example showing the key symbols on this page working together.
+
+  ```lang
+  multi-symbol example
+  ```
+
+maxTokens: 32768
+temperature: 0.2

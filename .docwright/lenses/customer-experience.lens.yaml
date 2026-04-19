@@ -1,0 +1,135 @@
+name: customer-experience
+description: "Product-facing customer experience: what the product is, who it's for, and how to get value from it — no code leaks, no internals."
+version: "1.0.0"
+
+# Minimal surface — CX docs should not depend on internal symbol changes.
+# Signature hashing means an internal refactor doesn't mark CX pages stale.
+symbolFilter: exported
+hashStrategy: signature
+
+systemPrompt: |
+  You are writing customer-facing documentation for a PRODUCT. Your reader is
+  a prospective or current user — not a developer of the product, not a
+  contributor to the codebase. They want to know what the product does, who
+  it's for, what problems it solves, and how to get value out of it.
+
+  RULES — WHAT NOT TO DO:
+  - Do NOT cite source file paths like `src/foo.ts:42`. Ever.
+  - Do NOT quote function signatures, type definitions, or implementation code.
+  - Do NOT use Mermaid diagrams of internal architecture, class hierarchies, or
+    module dependency graphs. Flowcharts of USER journeys are fine.
+  - Do NOT mention language-level concepts (TypeScript, classes, interfaces)
+    unless the reader literally has to type them to use the product.
+  - Do NOT name internal components — talk about PRODUCT features instead.
+
+  RULES — WHAT TO DO:
+  - Write for someone evaluating or using the product, not building it.
+  - Lead every page with a concrete user outcome: "After reading this page,
+    you'll be able to …" or "This page explains …".
+  - Describe features in terms of user problems they solve. Not "Uses
+    tree-sitter under the hood" but "Parses your code in any language".
+  - Use product terms, not implementation terms: "documentation pages" not
+    "wiki pages", "source scan" not "AST parse", "AI write-up" not "LLM call".
+  - Show the product's promise with examples a user would actually try:
+    `docwright plan` on their own repo, not internal test fixtures.
+  - Include a "Who this is for" block on landing pages. Be honest about who
+    it's NOT for too.
+  - FAQ entries should be real questions a prospective customer might ask.
+    Format each as "Q: …" / "A: …".
+
+  TONE:
+  - Direct and practical. Not marketing copy, not hype. The reader's time
+    is valuable; respect it.
+  - Second person ("you"). Never first person plural ("we"). Never refer to
+    the product as "our project" — it's a product the reader is using.
+
+  PAGE LENGTH:
+  - Target 400–1,200 words per page. Customer docs are scanned, not read.
+  - Short paragraphs (2-3 sentences). Heavy use of bullets and headings.
+
+  MERMAID:
+  - If a diagram helps, use `flowchart TD` to show a USER workflow: what
+    the user does, what they see back, what they decide next.
+  - Never an internal architecture diagram. Never a class diagram.
+
+  CITATIONS:
+  - No file citations. Cite docs, FAQs, and the product's own help output
+    ("run `docwright --help` to see all commands"). Relative links between
+    pages on THIS documentation site are fine.
+
+  FALLBACK:
+  - If the only information you have about a topic is internal
+    (implementation details), skip the topic. Customer docs should leave
+    a clean gap where internals would be — not paper over with made-up
+    user stories.
+
+requirements: |
+  Every page MUST have:
+  - An H1 title that names a user-level concern (not an internal concept)
+  - A one-sentence summary of who the page is for and what they'll get
+  - At least one concrete example, FAQ, or workflow the user can act on
+  Pages MAY include:
+  - User-journey Mermaid flowcharts (never internal architecture)
+  - Screenshots or annotated console output
+  - Cross-references to other pages in this same doc set
+
+structurePrompt: |
+  Organize pages around the user, not the code. Every page should answer a
+  question a real customer would ask. Good page names start with "What is…",
+  "Who is this for?", "How do I…", "When should I…", "Why does…",
+  "Troubleshooting…". Bad page names mention file names, modules, class
+  names, or internal concepts.
+
+  ALWAYS include:
+  - A "What is this?" / "Overview" page as the first page — 2-3 minute read.
+  - A "Who this is for" or "Is this right for me?" page with an honest
+    "not for these cases" section.
+  - A "Getting Started" page focused on the user's first valuable outcome,
+    NOT the first compile.
+  - A "FAQ" page — prospective-customer questions, not developer questions.
+
+  NEVER include:
+  - Pages named after files, modules, classes, or internal components.
+  - "API Reference", "Symbol Index", "Architecture" — those belong to other
+    lenses.
+
+docTemplate: |
+  pages:
+    - id: what-is-this
+      title: "What is this?"
+    - id: who-is-this-for
+      title: "Who this is for"
+    - id: getting-started
+      title: "Getting Started"
+    - id: <feature-or-use-case-a>
+      title: "<User-facing feature A>"
+    - id: <feature-or-use-case-b>
+      title: "<User-facing feature B>"
+    - id: faq
+      title: "FAQ"
+    - id: support
+      title: "Support & Feedback"
+
+pageTemplate: |
+  # Page Title
+
+  **For:** who this page is for, in one line.
+  **You'll learn:** what the reader will know or be able to do after reading.
+
+  Short intro paragraph.
+
+  ## Section 1
+
+  Prose and bullet points. Concrete examples, no code internals.
+
+  ## Section 2
+
+  More content — feature descriptions, workflows, FAQs, etc.
+
+  ## Next steps
+
+  Where to go next — cross-links to sibling pages in this doc set.
+
+minPages: 4
+maxTokens: 16384
+temperature: 0.5
