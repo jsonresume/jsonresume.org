@@ -1,0 +1,70 @@
+name: Deploy docs to GitHub Pages
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'apps/docs/**'
+      - '.github/workflows/deploy-docs.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-docs-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/pnpm/store
+          key: pnpm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+
+      - name: Build docs
+        run: pnpm --filter docs build
+
+      - name: Write CNAME
+        run: echo 'docs.jsonresume.org' > apps/docs/out/CNAME
+
+      - name: Disable Jekyll
+        run: touch apps/docs/out/.nojekyll
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/docs/out
+
+      - name: Deploy
+        id: deploy
+        uses: actions/deploy-pages@v4
