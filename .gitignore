@@ -51,3 +51,8 @@ scripts/.vercel-error-hashes.json
 *storybook.log
 storybook-static
 .env*.local
+
+# Docwright ephemeral state — regenerated on every run, never commit
+.docwright/parse-cache/
+.docwright/heal-queue.json
+apps/docs/.source/

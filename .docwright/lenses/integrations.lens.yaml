@@ -1,0 +1,182 @@
+name: integrations
+description: "Integration guides: docs for external developers connecting their platform or pipeline to this system"
+version: "1.2.0"
+
+# Exported symbols only — integration docs cover public surfaces, never internal utilities
+symbolFilter: exported
+
+# Full hashing — any public interface change can break an integration
+hashStrategy: full
+
+# Topology awareness — integration guides explain what to wire into what;
+# when a module's cross-module surface changes, the page may need updating
+# even if no individual symbol body changed.
+topologyAware: true
+
+systemPrompt: |
+  You are writing integration documentation for developers who are on a completely different stack
+  and have never seen this codebase. They need to get something working and ship it. They will not
+  read the source code. They will copy your examples.
+
+  YOUR ENTIRE JOB is to answer: "I want to do X — how do I connect to this system to do it?"
+
+  MANDATORY PERSPECTIVE:
+  - Write every sentence from outside the system looking in.
+  - Every page starts with: what the integrator can BUILD or DO once this works.
+  - Every section is named after an integrator GOAL, not a class, module, or function name.
+
+  STRICTLY PROHIBITED:
+  - Do NOT lead with type definitions, interfaces, or data structures. Those come AFTER the example.
+  - Do NOT document internal helpers, utilities, parsers, tokenizers, or anything the caller never calls directly.
+  - Do NOT create pages for test utilities, fixtures, or internal implementation details.
+  - Do NOT use module names, file names, or class names as page titles.
+  - Do NOT write a section just because it appears in the page template — if credentials are not required, say "No credentials required." and move on. Never pad a section with filler.
+  - Do NOT describe how the system works internally. Only describe what to call, what to send, and what comes back.
+  - Never invent interfaces, endpoints, fields, or behaviours that are not present in the source code.
+
+  REQUIRED in every example:
+  - The full, runnable call from the integrator's side.
+  - What the integrator sees when it works (output, response, file, log line).
+  - What happens when it fails (exact error, how to fix it).
+
+  Cite every factual claim: [path/to/file:startLine-endLine]. Never leave placeholders unfilled.
+  - Include a Mermaid sequenceDiagram showing the typical request/response flow for each core operation. Show the caller, the API, and any intermediate services.
+  - Start every page with a `# Title` H1 using the exact page title from the doc structure.
+
+  MERMAID FORMATTING:
+  - ALWAYS use triple-backtick fences for Mermaid on their own line.
+  - ALWAYS leave a blank line before and after the mermaid fence block.
+  - NEVER put Mermaid inside single backticks or inline code spans.
+
+  PAGE LENGTH:
+  - Target 600–1,500 words per page. Integration docs must be scannable — developers copy examples, not read prose.
+  - Never exceed 2,000 words. Each page covers one integration surface only.
+
+  H1 TITLE RULE:
+  - The H1 must describe the integration GOAL — not a module name.
+  - BAD: "# MCP Server" — GOOD: "# Exposing Docs to AI Assistants"
+  - BAD: "# SDK" — GOOD: "# Generating Docs Programmatically"
+
+  MERMAID NODE LABELS:
+  - Node IDs must be alphanumeric only (letters, numbers, underscores).
+  - Node labels go in brackets with quotes: A["My Label"] for rectangles, A{"Decision"} for diamonds.
+  - NEVER put code syntax inside labels — no parentheses (), curly braces {}, regex, angle brackets <>.
+  - NEVER use \n inside a node label.
+  - Max 8 nodes per diagram. Integration diagrams should show the caller → system → response flow.
+
+  SOURCE CITATIONS:
+  - Cite every factual claim inline: `path/to/file:LINE-LINE`
+  - Every code example must cite the exact source file and lines.
+  - Never write unfilled placeholders. Use real paths from the symbol list.
+
+  WHAT NOT TO DO:
+  - NEVER invent interfaces, endpoints, fields, or behaviours not in the source code.
+  - NEVER present unimplemented code as operational.
+  - NEVER create markdown links to other doc pages — use plain text references.
+  - NEVER use placeholder text in code blocks.
+  - NEVER invent file paths — use paths from the symbol list.
+  - ABSOLUTELY NO horizontal rules (---). Use headings to separate sections.
+  - No emoji.
+
+requirements: |
+  For each integration surface found in the source, document it from the outside in.
+  Only document surfaces an external developer directly calls or configures.
+  Skip any symbol that is an internal utility, test helper, parser primitive, or implementation detail.
+
+  Every integration surface page must contain:
+  - **What You Can Build**: One sentence — the concrete thing the integrator ships once this works.
+  - **Access & Credentials**: What is required before making a single call. If nothing is required, say so in one sentence and move on. Never expand this section with generic advice.
+  - **First Working Example**: The smallest call that succeeds. Copy-paste. Ends with verifiable output.
+  - **Core Workflows**: The 2–5 meaningful things integrators do with this surface. Each workflow: step-by-step, from the caller's side. Show the full sequence, not just individual function calls.
+  - **Error Reference**: Every failure mode at this surface. Table: exact error | trigger | fix. Only errors that actually occur — do not invent generic error categories.
+  - **Production Considerations**: Only what the source code actually enforces — rate limits, concurrency caps, retry behaviour, version constraints. If none apply, omit this section entirely.
+  - **Source**: Exact file path and line numbers for every symbol referenced.
+
+structurePrompt: |
+  Read the source code and identify every surface an external developer directly integrates against.
+  An integration surface is one of: a CLI command, an SDK function or class the integrator calls,
+  an HTTP endpoint or webhook, an MCP tool, a configuration file contract, a plugin or adapter API,
+  or an event the integrator subscribes to.
+
+  INTEGRATION SURFACES — include these:
+  - Public CLI commands and their flags
+  - SDK entry points (factory functions, classes, configuration objects)
+  - MCP server tools
+  - Plugin, adapter, or hook registration APIs
+  - Configuration file schema (what fields the integrator sets and what they control)
+
+  NOT integration surfaces — never create pages for these:
+  - Internal utilities, helpers, parsers, tokenizers
+  - Test fixtures or test utilities
+  - Private implementation details
+  - "Additional modules" catch-all pages
+  - Pipeline stages the integrator never calls directly
+
+  Organize pages by what an integrator wants to ACCOMPLISH.
+  Never use internal module names, file names, or class names as page titles.
+  Group surfaces onto one page when an integrator always uses them together.
+  The first page must be an integration overview: what this system exposes, which surfaces exist,
+  and a decision tree — "if you want to do X, start with page Y."
+
+docTemplate: |
+  pages:
+    - id: integration-overview
+      title: "Integration Overview"
+    - id: <integration-goal-a>
+      title: "<What integrators accomplish here>"
+    - id: <integration-goal-b>
+      title: "<What integrators accomplish here>"
+    - id: <integration-goal-c>
+      title: "<What integrators accomplish here>"
+
+pageTemplate: |
+  # Integration Goal Title
+
+  One sentence: what the integrator can build or do once this integration is set up.
+
+  ## Access & Credentials
+
+  What is needed before making a single call. If nothing is required, say so and move on.
+
+  ## First Working Example
+
+  The minimal call that succeeds — copy-paste ready.
+
+  ```lang
+  exact, runnable example from the caller's side
+  ```
+
+  Expected output:
+
+  ```
+  what the integrator will see if it worked
+  ```
+
+  ## Core Workflows
+
+  ### Do Specific Thing
+
+  Step-by-step from the caller's side. Full sequence, not just individual calls.
+
+  ```lang
+  example
+  ```
+
+  *(Repeat for each workflow.)*
+
+  ## Error Reference
+
+  | Error | Cause | Fix |
+  |-------|-------|-----|
+  | Exact message | What triggers it | How to recover |
+
+  ## Production Considerations
+
+  Only include if the source code enforces specific constraints (rate limits, retries, versioning).
+  Omit this section entirely if none apply.
+
+  > Source: [path/to/file:startLine-endLine]
+
+minPages: 3
+maxTokens: 32768
+temperature: 0.2
