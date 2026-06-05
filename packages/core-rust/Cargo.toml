@@ -1,0 +1,11 @@
+[package]
+name = "json-resume-serde"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+email_address = "0.2.9"
+regex = "1.11.1"
+serde = { version = "1.0.219", features = ["derive"] }
+serde_valid = "1.0.5"
+url = "2.5.4"
