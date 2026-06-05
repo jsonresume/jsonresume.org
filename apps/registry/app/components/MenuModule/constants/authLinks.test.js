@@ -5,7 +5,16 @@ describe('getAuthLinks', () => {
   it('returns an array of navigation links', () => {
     const links = getAuthLinks('testuser');
     expect(Array.isArray(links)).toBe(true);
-    expect(links.length).toBe(3);
+    expect(links.length).toBe(4);
+  });
+
+  it('includes my jobs link', () => {
+    const links = getAuthLinks('testuser');
+    const myJobsLink = links.find((link) => link.label === 'My Jobs');
+
+    expect(myJobsLink).toBeDefined();
+    expect(myJobsLink.href).toBe('/my-jobs');
+    expect(myJobsLink.icon).toBeDefined();
   });
 
   it('includes dashboard link with username', () => {

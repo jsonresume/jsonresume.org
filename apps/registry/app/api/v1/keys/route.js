@@ -22,12 +22,12 @@ export async function POST(request) {
   const sanitized = username.toLowerCase().trim();
 
   // Verify the resume exists
-  const res = await fetch(
-    `https://registry.jsonresume.org/${sanitized}.json`
-  );
+  const res = await fetch(`https://registry.jsonresume.org/${sanitized}.json`);
   if (!res.ok) {
     return NextResponse.json(
-      { error: `No resume found for "${sanitized}" on registry.jsonresume.org` },
+      {
+        error: `No resume found for "${sanitized}" on registry.jsonresume.org`,
+      },
       { status: 404 }
     );
   }

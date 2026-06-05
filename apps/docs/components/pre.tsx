@@ -1,17 +1,28 @@
 'use client';
 
-import { Children, isValidElement, useEffect, useRef, useState, type ReactNode } from 'react';
+import {
+  Children,
+  isValidElement,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from 'react';
 
 // Diagram-kind keywords. Match via regex (keyword followed by whitespace
 // or end) so the check works after text.trim() strips trailing newlines.
-const MERMAID_START_RE = /^(graph|flowchart|sequenceDiagram|classDiagram|stateDiagram(?:-v2)?|erDiagram|gantt|pie|gitGraph|journey|mindmap|timeline|quadrantChart|requirementDiagram)(\s|$)/;
+const MERMAID_START_RE =
+  /^(graph|flowchart|sequenceDiagram|classDiagram|stateDiagram(?:-v2)?|erDiagram|gantt|pie|gitGraph|journey|mindmap|timeline|quadrantChart|requirementDiagram)(\s|$)/;
 
 function extractText(children: ReactNode): string {
   if (typeof children === 'string') return children;
   let result = '';
   Children.forEach(children, (child) => {
     if (typeof child === 'string') result += child;
-    else if (isValidElement(child) && (child.props as { children?: ReactNode })?.children) {
+    else if (
+      isValidElement(child) &&
+      (child.props as { children?: ReactNode })?.children
+    ) {
       result += extractText((child.props as { children?: ReactNode }).children);
     }
   });
@@ -29,9 +40,10 @@ function MermaidDiagram({ chart }: { chart: string }) {
       // required because diagram source is LLM-generated and may contain
       // hostile nodes. Theme follows prefers-color-scheme so the diagram
       // matches the page rather than hard-coding dark.
-      const prefersDark = typeof window !== 'undefined'
-        && window.matchMedia
-        && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const prefersDark =
+        typeof window !== 'undefined' &&
+        window.matchMedia &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches;
       mermaid.initialize({
         startOnLoad: false,
         theme: prefersDark ? 'dark' : 'default',
@@ -47,7 +59,13 @@ function MermaidDiagram({ chart }: { chart: string }) {
     });
   }, [chart]);
 
-  return <div ref={ref} dangerouslySetInnerHTML={{ __html: svg }} className="my-4 flex justify-center" />;
+  return (
+    <div
+      ref={ref}
+      dangerouslySetInnerHTML={{ __html: svg }}
+      className="my-4 flex justify-center"
+    />
+  );
 }
 
 export function Pre(props: React.ComponentProps<'pre'>) {
