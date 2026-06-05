@@ -17,38 +17,38 @@ languages:
   - typescript
 
 ignore:
-  - "**/node_modules/**"
-  - "**/dist/**"
-  - "**/build/**"
-  - "**/out/**"
-  - "**/.next/**"
-  - "**/.docwright/**"
-  - "**/.git/**"
-  - "**/coverage/**"
-  - "**/__pycache__/**"
-  - "**/.venv/**"
-  - "**/vendor/**"
-  - "**/target/**"
-  - "**/.worktrees/**"
-  - "**/.env"
-  - "**/.env.*"
-  - "**/.vercel/**"
-  - "**/.turbo/**"
-  - "**/test/**"
-  - "**/tests/**"
-  - "**/*.test.js"
-  - "**/*.test.ts"
-  - "**/*.spec.js"
-  - "**/*.spec.ts"
-  - "**/scripts/**"
-  - "**/supabase/**"
-  - "**/apps/homepage2/**"
-  - "**/apps/docs/**"
-  - "dossier-*.md"
-  - "gie_result.json"
-  - "ai-sdk-v6-docs.md"
-  - "**/.changeset/**"
-  - "**/public/**"
+  - '**/node_modules/**'
+  - '**/dist/**'
+  - '**/build/**'
+  - '**/out/**'
+  - '**/.next/**'
+  - '**/.docwright/**'
+  - '**/.git/**'
+  - '**/coverage/**'
+  - '**/__pycache__/**'
+  - '**/.venv/**'
+  - '**/vendor/**'
+  - '**/target/**'
+  - '**/.worktrees/**'
+  - '**/.env'
+  - '**/.env.*'
+  - '**/.vercel/**'
+  - '**/.turbo/**'
+  - '**/test/**'
+  - '**/tests/**'
+  - '**/*.test.js'
+  - '**/*.test.ts'
+  - '**/*.spec.js'
+  - '**/*.spec.ts'
+  - '**/scripts/**'
+  - '**/supabase/**'
+  - '**/apps/homepage2/**'
+  - '**/apps/docs/**'
+  - 'dossier-*.md'
+  - 'gie_result.json'
+  - 'ai-sdk-v6-docs.md'
+  - '**/.changeset/**'
+  - '**/public/**'
 
 customLensDir: .docwright/lenses
 lenses:
