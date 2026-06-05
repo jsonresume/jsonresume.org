@@ -191,7 +191,7 @@ Checks accessibility features:
 Validate themes built with @resume/core:
 
 ```javascript
-import { render } from 'jsonresume-theme-modern';
+import { render } from 'jsonresume-theme-modern-classic';
 import { validateATS } from '@resume/ats-validator';
 
 const html = render(resumeData);
