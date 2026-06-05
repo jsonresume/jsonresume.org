@@ -23,10 +23,12 @@ export default async function Page(props: {
       <DocsTitle>{page.data.title}</DocsTitle>
       <DocsDescription>{page.data.description}</DocsDescription>
       <DocsBody>
-        <MDX components={{
-          ...defaultMdxComponents,
-          pre: Pre,
-        }} />
+        <MDX
+          components={{
+            ...defaultMdxComponents,
+            pre: Pre,
+          }}
+        />
       </DocsBody>
     </DocsPage>
   );

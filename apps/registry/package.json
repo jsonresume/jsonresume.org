@@ -7,7 +7,7 @@
     "build": "prisma generate && next build --webpack",
     "start": "next start",
     "lint": "eslint . --max-warnings=0 --cache --cache-location node_modules/.cache/.eslintcache",
-    "typecheck": "tsc --noEmit --incremental --tsBuildInfoFile node_modules/.cache/tsbuildinfo",
+    "typecheck": "node --max-old-space-size=8192 ./node_modules/typescript/bin/tsc --noEmit --incremental --tsBuildInfoFile node_modules/.cache/tsbuildinfo",
     "postinstall": "prisma generate --data-proxy",
     "db:generate": "prisma generate",
     "test": "vitest",
