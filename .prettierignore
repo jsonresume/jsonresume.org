@@ -20,3 +20,5 @@ apps/docs/.source/**
 .docwright/**
 # Next.js generated, marked "should not be edited", regenerated on every build
 **/next-env.d.ts
+# Vendored CLI — has its own prettier/babel toolchain
+packages/cli
