@@ -7,7 +7,8 @@ const { initializeSupabase, fetchJobs } = require('./job-parser/database');
 const processJob = require('./job-parser/processJob');
 
 // Time budget: exit gracefully before GH Actions timeout (default 40min)
-const TIME_BUDGET_MS = parseInt(process.env.TIME_BUDGET_MS, 10) || 40 * 60 * 1000;
+const TIME_BUDGET_MS =
+  parseInt(process.env.TIME_BUDGET_MS, 10) || 40 * 60 * 1000;
 const startTime = Date.now();
 let stopAccepting = false;
 
@@ -42,7 +43,11 @@ async function main() {
     const elapsed = Date.now() - startTime;
     if (elapsed > TIME_BUDGET_MS) {
       stopAccepting = true;
-      console.log(`\n⏱️  Time budget reached (${Math.round(elapsed / 60000)}min). Stopping gracefully.`);
+      console.log(
+        `\n⏱️  Time budget reached (${Math.round(
+          elapsed / 60000
+        )}min). Stopping gracefully.`
+      );
       return;
     }
 
@@ -60,7 +65,9 @@ async function main() {
   if (remaining > 0) {
     console.log(`⏭️  ${remaining} deferred to next run`);
   }
-  console.log(`⏱️  Elapsed: ${Math.round((Date.now() - startTime) / 60000)}min`);
+  console.log(
+    `⏱️  Elapsed: ${Math.round((Date.now() - startTime) / 60000)}min`
+  );
   console.log('✨ Done!\n');
 }
 
