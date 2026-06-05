@@ -12,8 +12,8 @@ jest.mock('fs', () => {
 describe('get-resume', () => {
   it('should consume yaml', async () => {
     expect(await getResume({ path: '/resume.yaml' })).toMatchInlineSnapshot(`
-      Object {
-        "basics": Object {
+      {
+        "basics": {
           "email": "thomas@example.com",
           "name": "thomas",
         },
@@ -22,23 +22,23 @@ describe('get-resume', () => {
   });
   it('should consume json', async () => {
     expect(await getResume({ path: '/resume.json' })).toMatchInlineSnapshot(`
-        Object {
-          "basics": Object {
-            "email": "thomas@example.com",
-            "name": "thomas",
-          },
-        }
-      `);
-  });
-  it('should consume an entire directory as if it were a json object', async () => {
-    expect(await getResume({ path: '/quaff' })).toMatchInlineSnapshot(`
-      Object {
-        "basics": Object {
+      {
+        "basics": {
           "email": "thomas@example.com",
           "name": "thomas",
         },
-        "work": Array [
-          Object {
+      }
+    `);
+  });
+  it('should consume an entire directory as if it were a json object', async () => {
+    expect(await getResume({ path: '/quaff' })).toMatchInlineSnapshot(`
+      {
+        "basics": {
+          "email": "thomas@example.com",
+          "name": "thomas",
+        },
+        "work": [
+          {
             "company": "Pied Piper",
             "endDate": "2014-12-01",
             "position": "CEO/President",
@@ -62,8 +62,8 @@ describe('get-resume', () => {
     );
     stdin.send(null);
     expect(await gotResume).toMatchInlineSnapshot(`
-      Object {
-        "basics": Object {
+      {
+        "basics": {
           "email": "thomas@example.com",
           "name": "thomas",
         },

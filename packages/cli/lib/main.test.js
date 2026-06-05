@@ -59,17 +59,17 @@ describe('cli configuration', () => {
                                             \`serve\` or specify a path starting with .
                                             (use . for current directory or
                                             ../some/other/dir) (default:
-                                            \\"jsonresume-theme-even\\")
+                                            "jsonresume-theme-elegant")
         -f, --format <file type extension>  Used by \`export\`.
         -r, --resume <resume filename>      path to the resume in json format. Use
                                             '-' to read from stdin (default:
-                                            \\"resume.json\\")
+                                            "resume.json")
         -p, --port <port>                   Used by \`serve\` (default: 4000) (default:
                                             4000)
         -s, --silent                        Used by \`serve\` to tell it if open
                                             browser auto or not. (default: false)
         -d, --dir <path>                    Used by \`serve\` to indicate a public
-                                            directory path. (default: \\"public\\")
+                                            directory path. (default: "public")
         --schema <relativePath>             Used by \`validate\` to validate against a
                                             custom schema.
         -h, --help                          display help for command
@@ -124,6 +124,11 @@ describe('cli configuration', () => {
           '/test-resumes/exported-resume-from-stdin.html',
           '--resume',
           '-', // this is the dash
+          // The default theme (elegant) throws on resumes missing a
+          // `basics.location`; `even` renders minimal resumes, and this test
+          // only exercises the export plumbing, not a specific theme.
+          '--theme',
+          'even',
         ],
         { stdin: JSON.stringify({ basics: { name: 'thomas-from-stdin' } }) },
       );
@@ -143,6 +148,10 @@ describe('cli configuration', () => {
         '/test-resumes/exported-resume.html',
         '--resume',
         '/test-resumes/resume.json',
+        // See note above: `even` renders minimal resumes; the default
+        // `elegant` theme requires a `basics.location`.
+        '--theme',
+        'even',
       ]);
       expect(stdout).toMatchInlineSnapshot(`
         "

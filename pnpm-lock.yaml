@@ -769,8 +769,8 @@ importers:
         specifier: ^1.16.1
         version: 1.16.1
       jsonresume-theme-even:
-        specifier: ^0.6.0
-        version: 0.6.1
+        specifier: 0.6.0
+        version: 0.6.0
       mime-types:
         specifier: ^2.1.27
         version: 2.1.35
@@ -851,8 +851,8 @@ importers:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.19.24)
       memfs:
-        specifier: 3.2.0
-        version: 3.2.0
+        specifier: 3.6.0
+        version: 3.6.0
       mock-stdin:
         specifier: 1.0.0
         version: 1.0.0
@@ -16005,7 +16005,7 @@ packages:
       cosmiconfig: 7.1.0
       deepmerge: 4.3.1
       fs-extra: 10.1.0
-      memfs: 3.5.3
+      memfs: 3.6.0
       minimatch: 3.1.2
       node-abort-controller: 3.1.1
       schema-utils: 3.3.0
@@ -16923,7 +16923,7 @@ packages:
       for-own: 1.0.0
       get-object: 0.2.0
       get-value: 2.0.6
-      handlebars: 4.7.8
+      handlebars: 4.7.9
       handlebars-helper-create-frame: 0.1.0
       handlebars-utils: 1.0.6
       has-value: 1.0.0
@@ -19071,12 +19071,11 @@ packages:
       - supports-color
     dev: false
 
-  /jsonresume-theme-even@0.6.1:
-    resolution: {integrity: sha512-QLN3Hh8e7v9ZK3xAcvcOoePDpgWjU5xwzrzLxPEdJZ0JS3Nc5A/KRbUAkcPvNbUvZuCXwHgN8zfETVItQVTDRQ==}
+  /jsonresume-theme-even@0.6.0:
+    resolution: {integrity: sha512-y7kLsFc6znWulaXjUKunJpH8dTlOHUPRplV7YpIF3ia5LdnqEukjTDpdkwz9DBlzZ6HuYqj3GuNnT2d3mahszw==}
     dependencies:
       handlebars: 4.7.9
       micromark: 2.11.4
-      striptags: 3.2.0
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -20229,16 +20228,10 @@ packages:
     engines: {node: '>= 0.6'}
     dev: false
 
-  /memfs@3.2.0:
-    resolution: {integrity: sha512-f/xxz2TpdKv6uDn6GtHee8ivFyxwxmPuXatBb1FBwxYNuVpbM3k/Y1Z+vC0mH/dIXXrukYfe3qe5J32Dfjg93A==}
+  /memfs@3.6.0:
+    resolution: {integrity: sha512-EGowvkkgbMcIChjMTMkESFDbZeSh8xZ7kNSF0hAiAN4Jh6jgHCRS0Ga/+C8y6Au+oqpezRHCfPsmJ2+DwAgiwQ==}
     engines: {node: '>= 4.0.0'}
-    dependencies:
-      fs-monkey: 1.0.1
-    dev: true
-
-  /memfs@3.5.3:
-    resolution: {integrity: sha512-UERzLsxzllchadvbPs5aolHh65ISpKpM+ccLbOJ8/vvpBKmAWf+la7dXFy7Mr0ySHbdHrFv5kGFCUHHe6GFEmw==}
-    engines: {node: '>= 4.0.0'}
+    deprecated: this will be v4
     dependencies:
       fs-monkey: 1.1.0
     dev: true
@@ -27240,7 +27233,7 @@ packages:
         optional: true
     dependencies:
       colorette: 2.0.20
-      memfs: 3.5.3
+      memfs: 3.6.0
       mime-types: 2.1.35
       range-parser: 1.2.1
       schema-utils: 4.3.3
