@@ -22,3 +22,6 @@ apps/docs/.source/**
 **/next-env.d.ts
 # Rust crate — not governed by JS prettier
 packages/core-rust
+
+# Vendored CLI — has its own prettier/babel toolchain
+packages/cli
