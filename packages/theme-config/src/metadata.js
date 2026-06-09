@@ -528,6 +528,13 @@ export const THEME_METADATA = {
     author: 'Roland Sharp',
     tags: ['modern', 'clean', 'dark-mode', 'ai', 'gradient', 'responsive'],
   },
+  colophon: {
+    name: 'Colophon',
+    description:
+      'Warm, text-first resume theme with editorial typography, semantic HTML, and polished print styles.',
+    author: 'David Nelson',
+    tags: ['warm', 'editorial', 'text-first', 'ats', 'print', 'accessible'],
+  },
   'creative-confidence': {
     name: 'Creative Confidence',
     description:
