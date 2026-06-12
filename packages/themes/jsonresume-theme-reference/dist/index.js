@@ -6103,7 +6103,7 @@ function Resume({ resume }) {
     references = [],
     projects = []
   } = resume;
-  return /* @__PURE__ */ jsxs(Layout, { children: [
+  return /* @__PURE__ */ jsxs(Layout, { as: "main", children: [
     basics && /* @__PURE__ */ jsxs(Header, { children: [
       /* @__PURE__ */ jsx(Name, { children: basics.name }),
       basics.label && /* @__PURE__ */ jsx(Label, { children: basics.label }),

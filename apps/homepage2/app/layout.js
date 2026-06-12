@@ -82,7 +82,7 @@ export default async function Layout({ children }) {
             <Sidebar />
             <div className="inner">
               <TopNav />
-              {children}
+              <main id="content">{children}</main>
               <Footer />
             </div>
           </div>

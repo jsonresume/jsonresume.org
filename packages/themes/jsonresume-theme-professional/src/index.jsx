@@ -6,7 +6,7 @@ export const render = (resume) => {
   const sheet = new ServerStyleSheet();
   const html = renderToString(sheet.collectStyles(<Resume resume={resume} />));
   const styles = sheet.getStyleTags();
-  return `<!DOCTYPE html><head>
+  return `<!DOCTYPE html><html lang="en"><head>
   <title>${resume.basics.name} - Resume</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -92,7 +92,7 @@ export const render = (resume) => {
 
 
   </style>
-  ${styles}</head><body>${html}</body></html>`;
+  ${styles}</head><body><main>${html}</main></body></html>`;
 };
 
 export { Resume };
