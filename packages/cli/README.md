@@ -1,18 +1,14 @@
 # resume-cli
 
-[![matrix](https://img.shields.io/badge/matrix-join%20chat-%230dbd8b)](https://matrix.to/#/#json-resume:one.ems.host)
-[![Build status](https://img.shields.io/github/actions/workflow/status/jsonresume/resume-cli/test.yml?branch=master)](https://github.com/jsonresume/resume-cli/actions)
 [![npm package](https://badge.fury.io/js/resume-cli.svg)](https://www.npmjs.org/package/resume-cli)
 
 This is the command line tool for [JSON Resume](https://jsonresume.org), the open-source initiative to create a JSON-based standard for resumes.
 
-## Project Status
-
-This repository is not actively maintained. It's recommended to use one of the third-party clients that support the JSON Resume standard instead:
-
-* [Resumed](https://github.com/rbardini/resumed)
+> **Note:** `resume-cli` has been revived and now lives in the [jsonresume.org monorepo](https://github.com/jsonresume/jsonresume.org) as `packages/cli` (modernized for Node.js 18+). It keeps its npm identity as [`resume-cli`](https://www.npmjs.com/package/resume-cli) and is published from this workspace. The old standalone [jsonresume/resume-cli](https://github.com/jsonresume/resume-cli) repository is archived — please open issues and PRs against the monorepo.
 
 ## Getting Started
+
+Requires Node.js 18 or newer.
 
 Install the command-line tool:
 
@@ -90,6 +86,17 @@ Supported resume data MIME types are:
 
 - `application/json`
 - `text/yaml`
+
+## Development
+
+This package is part of the [jsonresume.org monorepo](https://github.com/jsonresume/jsonresume.org). From `packages/cli`:
+
+```
+pnpm dev    # run the CLI from source (babel-node lib/main.js)
+pnpm build  # compile lib/ to build/ with Babel
+pnpm test   # run the Jest test suite
+pnpm lint   # run ESLint
+```
 
 ## License
 
