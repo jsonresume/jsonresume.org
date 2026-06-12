@@ -6019,11 +6019,7 @@ const Layout = dt.div`
   margin: 0 auto;
   padding: 40px 35px;
   background: white;
-  font-family:
-    'Inter',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
     sans-serif;
   color: #1f2937;
   font-size: 15px;
@@ -6249,6 +6245,7 @@ function Resume({ resume }) {
     volunteer = [],
     awards = [],
     publications = [],
+    certificates = [],
     languages = [],
     interests = [],
     references = []
@@ -6423,6 +6420,17 @@ function Resume({ resume }) {
             }
           }
         )
+      ] }, index))
+    ] }),
+    certificates?.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
+      /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Certifications" }),
+      certificates.map((cert, index) => /* @__PURE__ */ jsxs(EducationItem, { children: [
+        /* @__PURE__ */ jsx(Institution, { children: cert.name }),
+        cert.issuer && /* @__PURE__ */ jsxs(Degree, { children: [
+          "Issued by ",
+          cert.issuer
+        ] }),
+        cert.date && /* @__PURE__ */ jsx(EducationDate, { children: cert.date })
       ] }, index))
     ] }),
     languages?.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [

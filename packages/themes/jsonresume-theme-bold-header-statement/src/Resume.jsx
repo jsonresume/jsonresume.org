@@ -358,6 +358,124 @@ function ProjectsSection({ projects }) {
   );
 }
 
+function VolunteerSection({ volunteer }) {
+  if (!volunteer?.length) return null;
+
+  return (
+    <Section>
+      <StyledSectionTitle>Volunteer</StyledSectionTitle>
+      {volunteer.map((vol, index) => (
+        <ContentBlock key={index}>
+          <WorkHeader>
+            <Position>{vol.position}</Position>
+            {vol.organization && <Company>{vol.organization}</Company>}
+            {(vol.startDate || vol.endDate) && (
+              <DateText>
+                <DateRange startDate={vol.startDate} endDate={vol.endDate} />
+              </DateText>
+            )}
+          </WorkHeader>
+          {vol.summary && <WorkSummary>{vol.summary}</WorkSummary>}
+          {vol.highlights?.length > 0 && (
+            <Highlights>
+              {vol.highlights.map((highlight, i) => (
+                <li key={i}>{highlight}</li>
+              ))}
+            </Highlights>
+          )}
+        </ContentBlock>
+      ))}
+    </Section>
+  );
+}
+
+function AwardsSection({ awards }) {
+  if (!awards?.length) return null;
+
+  return (
+    <Section>
+      <StyledSectionTitle>Awards</StyledSectionTitle>
+      {awards.map((award, index) => (
+        <ContentBlock key={index}>
+          <Institution>{award.title}</Institution>
+          {award.awarder && <Degree>Awarded by {award.awarder}</Degree>}
+          {award.date && <EducationDate>{award.date}</EducationDate>}
+          {award.summary && <WorkSummary>{award.summary}</WorkSummary>}
+        </ContentBlock>
+      ))}
+    </Section>
+  );
+}
+
+function CertificatesSection({ certificates }) {
+  if (!certificates?.length) return null;
+
+  return (
+    <Section>
+      <StyledSectionTitle>Certificates</StyledSectionTitle>
+      {certificates.map((cert, index) => (
+        <ContentBlock key={index}>
+          <Institution>{cert.name}</Institution>
+          {cert.issuer && <Degree>Issued by {cert.issuer}</Degree>}
+          {cert.date && <EducationDate>{cert.date}</EducationDate>}
+        </ContentBlock>
+      ))}
+    </Section>
+  );
+}
+
+function PublicationsSection({ publications }) {
+  if (!publications?.length) return null;
+
+  return (
+    <Section>
+      <StyledSectionTitle>Publications</StyledSectionTitle>
+      {publications.map((pub, index) => (
+        <ContentBlock key={index}>
+          <Institution>{pub.name}</Institution>
+          {pub.publisher && <Degree>Published by {pub.publisher}</Degree>}
+          {pub.releaseDate && <EducationDate>{pub.releaseDate}</EducationDate>}
+          {pub.summary && <WorkSummary>{pub.summary}</WorkSummary>}
+        </ContentBlock>
+      ))}
+    </Section>
+  );
+}
+
+function LanguagesSection({ languages }) {
+  if (!languages?.length) return null;
+
+  return (
+    <Section>
+      <StyledSectionTitle>Languages</StyledSectionTitle>
+      <SkillsGrid>
+        {languages.map((lang, index) => (
+          <SkillCategory key={index}>
+            <SkillName>{lang.language}</SkillName>
+            {lang.fluency && <SkillTags>{lang.fluency}</SkillTags>}
+          </SkillCategory>
+        ))}
+      </SkillsGrid>
+    </Section>
+  );
+}
+
+function ReferencesSection({ references }) {
+  if (!references?.length) return null;
+
+  return (
+    <Section>
+      <StyledSectionTitle>References</StyledSectionTitle>
+      {references.map((ref, index) => (
+        <ContentBlock key={index}>
+          <Institution>{ref.name}</Institution>
+          {ref.reference && <WorkSummary>{ref.reference}</WorkSummary>}
+        </ContentBlock>
+      ))}
+    </Section>
+  );
+}
+
 // Main component
 function Resume({ resume }) {
   const {
@@ -366,6 +484,12 @@ function Resume({ resume }) {
     education = [],
     skills = [],
     projects = [],
+    volunteer = [],
+    awards = [],
+    certificates = [],
+    publications = [],
+    languages = [],
+    references = [],
   } = resume;
 
   return (
@@ -377,6 +501,12 @@ function Resume({ resume }) {
         <SkillsSection skills={skills} />
         <EducationSection education={education} />
         <ProjectsSection projects={projects} />
+        <VolunteerSection volunteer={volunteer} />
+        <AwardsSection awards={awards} />
+        <CertificatesSection certificates={certificates} />
+        <PublicationsSection publications={publications} />
+        <LanguagesSection languages={languages} />
+        <ReferencesSection references={references} />
       </ContentWrapper>
     </Layout>
   );

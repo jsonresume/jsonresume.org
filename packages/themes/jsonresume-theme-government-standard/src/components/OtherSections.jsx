@@ -115,6 +115,23 @@ export function PublicationsSection({ publications }) {
   );
 }
 
+export function CertificatesSection({ certificates }) {
+  if (!certificates?.length) return null;
+
+  return (
+    <Section>
+      <StyledSectionTitle>Certifications</StyledSectionTitle>
+      {certificates.map((cert, index) => (
+        <SimpleList key={index}>
+          <ListItemTitle>{cert.name}</ListItemTitle>
+          {cert.issuer && <ListItemText>Issuer: {cert.issuer}</ListItemText>}
+          {cert.date && <ListItemText>Date: {cert.date}</ListItemText>}
+        </SimpleList>
+      ))}
+    </Section>
+  );
+}
+
 export function LanguagesSection({ languages }) {
   if (!languages?.length) return null;
 
