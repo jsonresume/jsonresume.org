@@ -73,8 +73,7 @@ html, body {
 .right-panel .compact-sub li {
   font-size: 9.15pt;
 }
-.photo,
-.photo-empty {
+.photo {
   width: 100%;
   height: 100%;
 }
@@ -87,15 +86,6 @@ html, body {
 .photo {
   object-fit: cover;
   display: block;
-}
-.photo-empty {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  font-size: 8.4pt;
-  color: #1d4ed8;
-  padding: 6px;
 }
 .section {
   margin-top: 7px;
@@ -720,10 +710,12 @@ export function render(resume = {}) {
     : '';
   const footerText = [basics.name, basics.label].filter(Boolean).join(': ');
   const photo = basics.image
-    ? `<img class="photo" src="${escapeHtml(basics.image)}" alt="${escapeHtml(
+    ? `<div class="photo-wrap" aria-label="Profile image">
+        <img class="photo" src="${escapeHtml(basics.image)}" alt="${escapeHtml(
         name
-      )} profile photo" />`
-    : `<div class="photo-empty">Profile Photo</div>`;
+      )} profile photo" />
+      </div>`
+    : '';
 
   const leftColumn = [
     renderSummary(basics),
@@ -759,9 +751,7 @@ export function render(resume = {}) {
         <h1 class="name">${escapeHtml(name)}</h1>
         ${label}
       </div>
-      <div class="photo-wrap" aria-label="Profile image">
-        ${photo}
-      </div>
+      ${photo}
     </header>
     <div class="layout">
       <div>${leftColumn}</div>
