@@ -17,142 +17,120 @@
 
 ## Overview
 
-JSON Resume is an open-source ecosystem of tools designed to create, share, and publish resumes in a standardized JSON format. This monorepo contains all the core applications, themes, and utilities that power the JSON Resume platform.
+JSON Resume is an open-source ecosystem of tools for creating, sharing, and
+publishing resumes in a standardized JSON format. This is the monorepo (Turborepo
++ pnpm) that powers the platform: the marketing site, the hosted registry, the
+documentation site, the schema, the CLI, and the official themes.
 
 With JSON Resume, you can:
+
 - Create a portable, machine-readable resume
-- Publish your resume online with a unique URL
-- Convert your resume to various formats (PDF, HTML, Markdown)
-- Choose from a variety of community-built themes
-- Leverage AI-powered tools to enhance your job search
+- Publish your resume online with a unique URL via the registry
+- Render your resume with dozens of community-built themes
+- Validate your resume against the JSON Resume schema
+- Leverage AI-powered tools to help with your job search
 
-## Applications
+Useful links:
 
-All projects hosted on this domain can be found in the `/apps` folder:
+- Documentation: [docs.jsonresume.org](https://docs.jsonresume.org)
+- Hosted registry: [registry.jsonresume.org](https://registry.jsonresume.org)
+- Marketing site: [jsonresume.org](https://jsonresume.org)
 
-| Application | URL | Source |
-|-------------|-----|--------|
-| **Homepage** | [jsonresume.org](https://jsonresume.org) | [/apps/homepage2](https://github.com/jsonresume/jsonresume.org/tree/master/apps/homepage2) |
-| **Registry** | [registry.jsonresume.org](https://registry.jsonresume.org) | [/apps/registry](https://github.com/jsonresume/jsonresume.org/tree/master/apps/registry) |
+## Monorepo layout
 
-## Themes
+### Apps (`/apps`)
 
-JSON Resume themes allow you to render your resume in different styles. This repository includes several official themes:
+| App                                | URL                                                          | Description                                                            |
+| ---------------------------------- | ------------------------------------------------------------ | ---------------------------------------------------------------------- |
+| [`apps/registry`](apps/registry)   | [registry.jsonresume.org](https://registry.jsonresume.org)   | Next.js app that hosts resumes, renders themes, and serves AI features |
+| [`apps/homepage2`](apps/homepage2) | [jsonresume.org](https://jsonresume.org)                     | Next.js marketing site for the project                                 |
+| [`apps/docs`](apps/docs)           | [docs.jsonresume.org](https://docs.jsonresume.org)           | Fumadocs documentation site, deployed to GitHub Pages                  |
 
-- `jsonresume-theme-cv`
-- `jsonresume-theme-flat`
-- `jsonresume-theme-full`
-- `jsonresume-theme-onepage`
-- `jsonresume-theme-onepage-plus`
-- `jsonresume-theme-papirus`
-- `jsonresume-theme-professional`
-- `jsonresume-theme-spartacus`
-- `jsonresume-theme-standard`
-- `jsonresume-theme-tailwind`
-- `jsonresume-theme-stackoverflow`
+### Key packages (`/packages`)
 
-## AI Features
+| Package                                            | npm / crate                | Description                                                  |
+| -------------------------------------------------- | -------------------------- | ------------------------------------------------------------ |
+| [`packages/schema`](packages/schema)               | `@jsonresume/schema`       | The JSON Resume schema and validator                         |
+| [`packages/cli`](packages/cli)                     | `resume-cli`               | The `resume` command line interface                          |
+| [`packages/core-rust`](packages/core-rust)         | `json-resume-serde` (crate) | Rust serde bindings for the schema                           |
+| [`packages/resume-core`](packages/resume-core)     | `@jsonresume/core`         | Framework-agnostic design tokens, primitives, and validators |
+| [`packages/ats-validator`](packages/ats-validator) | `@resume/ats-validator`    | ATS (Applicant Tracking System) validation for resume HTML   |
+| [`packages/job-search`](packages/job-search)       | `@jsonresume/jobs`         | Hacker News "Who is Hiring" job search matched to a resume   |
+| [`packages/ui`](packages/ui)                       | `@repo/ui`                 | Shared UI components (Button, Input, Textarea, ...)          |
+| [`packages/themes`](packages/themes)               | —                          | ~46 official `jsonresume-theme-*` packages plus `stackoverflow` |
 
-JSON Resume includes several AI-powered features to enhance your job search:
-
-| Feature | Description | URL |
-|---------|-------------|-----|
-| **Job Recommendations** | Matches your resume with job postings from Hacker News Who Is Hiring | `/[username]/recommendations` |
-| **Cover Letter** | Generates personalized cover letters based on your resume | `/[username]/letter` |
-| **Resume Suggestions** | Provides suggestions to improve your resume | `/[username]/suggestions` |
-| **Interview Simulator** | Simulates an interview based on your resume | `/[username]/interview` |
+Other workspace packages include `converters`, `theme-config`, `test-fixtures`,
+and the shared `eslint-config-custom` / `tsconfig` presets.
 
 ## Prerequisites
 
-This project requires [pnpm](https://pnpm.io/installation), an alternative to npm/yarn.
-
-To install pnpm:
+This project uses [pnpm](https://pnpm.io/installation) (see the `packageManager`
+field in `package.json` for the pinned version):
 
 ```sh
 curl -fsSL https://get.pnpm.io/install.sh | sh -
 ```
 
-## Getting Started
-
-This repository uses [Turborepo](https://turbo.build/) for managing multiple applications and packages.
-
-### Installation
+## Quickstart
 
 ```sh
-# Clone the repository
+# Clone and install
 git clone https://github.com/jsonresume/jsonresume.org.git
 cd jsonresume.org
+pnpm install
 
-# Install dependencies
-pnpm i
+# Run the registry app (http://localhost:3000)
+cd apps/registry && pnpm dev
 ```
 
-### Development
+Once the registry is running, open
+[http://localhost:3000/thomasdavis](http://localhost:3000/thomasdavis) to render a
+sample resume, or append `?theme=<slug>` to try a theme.
+
+### Working across the monorepo
 
 ```sh
-# Start all applications
+# Run a task for every workspace
 pnpm turbo dev
+pnpm turbo build
+pnpm turbo lint typecheck
 
-# Start a specific application (e.g., registry)
+# Scope a task to one app or package
 pnpm turbo dev --filter=registry
+pnpm turbo test --filter=registry
 ```
 
-## Application Details
-
-### Registry
-
-The registry allows users to publish and share their resumes with unique URLs.
+## Testing
 
 ```sh
-# Start the registry application
-pnpm dev --filter=registry
+# All workspaces
+pnpm turbo test
+
+# Registry unit tests (Vitest)
+pnpm --filter registry test
+
+# Registry end-to-end tests (Playwright)
+pnpm --filter registry test:e2e
 ```
 
-#### Environment Variables
+## Releases
 
-These variables are optional and used for running different parts of the registry. The main rendering behavior of resumes does not require them.
+npm packages (`@jsonresume/schema`, `resume-cli`, etc.) are released with
+[Changesets](https://github.com/changesets/changesets). Add a changeset with
+`pnpm changeset`; the `release-packages.yml` workflow opens a "Version Packages"
+PR and publishes to npm on merge to `master`. The `json-resume-serde` Rust crate
+is versioned in `packages/core-rust/Cargo.toml`.
 
-```sh
-# GitHub token for authentication
-GITHUB_TOKEN=
+## Building themes
 
-# Database URLs
-DATABASE_URL_RAW=
-DATABASE_URL=
+Themes live in `packages/themes`. React themes rendered by the registry should:
 
-# AI configurations
-PINECONE_API_KEY=
-PINECONE_ENVIRONMENT=
-OPENAI_API_KEY=
-PERPLEXITY_API_KEY=
-SUPABASE_KEY=
-```
+- Export a default component that accepts a `resume` prop
+- Avoid Node-only modules (e.g. `fs`) so they work on Vercel's runtime
+- Use the `@repo/ui` shared components and render all JSON Resume sections
 
-Local server will be available at [http://localhost:3000/thomasdavis](http://localhost:3000/thomasdavis)
-
-### Homepage
-
-The homepage serves as the main entry point for the JSON Resume project.
-
-```sh
-# Start the homepage application
-pnpm dev --filter=homepage2
-```
-
-## Building Themes
-
-### Creating a React Theme for the Registry
-
-The registry can render React-based themes. Here's how to create one:
-
-1. **Create a new theme package** in `/themes/your-theme-name`
-2. **Export a React component** that accepts `resume` prop
-3. **Important**: Avoid using Node.js-specific modules like `fs` - they won't work on Vercel's edge runtime
-4. **Use the `@repo/ui` package** for shared components
-
-Example structure:
 ```jsx
-// themes/your-theme/index.js
+// packages/themes/jsonresume-theme-your-theme/index.js
 export default function YourTheme({ resume }) {
   return (
     <div>
@@ -163,42 +141,36 @@ export default function YourTheme({ resume }) {
 }
 ```
 
-5. **Test locally**:
 ```sh
-pnpm dev --filter=registry
+pnpm turbo dev --filter=registry
 # Visit http://localhost:3000/thomasdavis?theme=your-theme-name
 ```
 
-### AI Features Development
+See [`docs/AGENT_THEME_DEVELOPMENT.md`](docs/AGENT_THEME_DEVELOPMENT.md) for the
+full theme workflow.
 
-The AI-powered features require additional environment variables:
+## AI features
 
-```sh
-# Required for AI features
-OPENAI_API_KEY=your_openai_key
-PERPLEXITY_API_KEY=your_perplexity_key
-PINECONE_API_KEY=your_pinecone_key
-PINECONE_ENVIRONMENT=your_pinecone_env
-```
-
-AI features use the Vercel AI SDK v5 (`ai` package). See the registry app for implementation examples.
-
-## Testing
-
-```sh
-# Run tests for all projects
-pnpm turbo test
-
-# Run tests for a specific project
-pnpm turbo test --filter=registry
-```
+The registry includes AI-powered tools (job recommendations, cover letters,
+resume suggestions, interview simulation). These require provider keys; see
+[`apps/registry/.env.example`](apps/registry/.env.example) for the full list.
+AI code uses the Vercel AI SDK v5 (`ai` + `@ai-sdk/openai`).
 
 ## Documentation
 
-For more detailed documentation about:
-- [JSON Resume Schema](https://jsonresume.org/schema/)
-- [Creating your own theme](https://jsonresume.org/themes/)
-- [API documentation](https://registry.jsonresume.org/api/docs)
+- [JSON Resume docs](https://docs.jsonresume.org)
+- [Schema](https://jsonresume.org/schema/)
+- [Themes](https://jsonresume.org/themes/)
+- [Registry API](https://registry.jsonresume.org/api/docs)
+
+## History
+
+JSON Resume started as a set of standalone repositories. In 2026 the project
+consolidated into this monorepo: the schema (formerly `jsonresume/resume-schema`)
+now lives in `packages/schema`, and the CLI (formerly `jsonresume/resume-cli`)
+now lives in `packages/cli`. Those original repositories are archived and
+redirect here, while the published npm package names (`@jsonresume/schema`,
+`resume-cli`) are unchanged.
 
 ## Contributing
 
@@ -221,22 +193,6 @@ Before opening a PR, please read our [Contributing Guide](CONTRIBUTING.md) for t
 
 Join our [Discord community](https://discord.gg/GTZtn8pTXC) for discussions, support, and collaboration.
 
-## Design System
-
-Brand colors: [Color Hexa](https://www.colorhexa.com/fff18f)
-
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
-
-## Roadmap
-
-- Enhance AI recommendation features
-- Add support for more export formats
-- Improve theme customization options
-- Add an option to use your own API key for AI features
-- Create a unified CLI tool for the ecosystem
-
-## Turbo Gotchas
-
-- If you don't import components from `@repo/ui`, it will not work in the build step
