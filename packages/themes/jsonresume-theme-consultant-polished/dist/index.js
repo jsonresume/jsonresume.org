@@ -1571,7 +1571,7 @@ const Name$2 = dt.h3`
   color: #0b1f3a;
   margin: 0;
 `;
-const Date$2 = dt.div`
+const DateText$2 = dt.div`
   font-size: 0.9rem;
   color: #666;
 `;
@@ -1581,7 +1581,7 @@ const Issuer = dt.div`
 `;
 const formatDate$3 = (date) => {
   if (!date) return "";
-  const d = new Date$2(date);
+  const d = new Date(date);
   return d.toLocaleDateString("en-US", { month: "short", year: "numeric" });
 };
 const Certificates = ({ certificates }) => {
@@ -1589,7 +1589,7 @@ const Certificates = ({ certificates }) => {
   return /* @__PURE__ */ jsx(Section, { title: "Certifications", children: certificates.map((cert, i) => /* @__PURE__ */ jsxs(CertificateItem, { children: [
     /* @__PURE__ */ jsxs(Header$3, { children: [
       /* @__PURE__ */ jsx(Name$2, { children: cert.url ? /* @__PURE__ */ jsx("a", { href: cert.url, target: "_blank", rel: "noopener noreferrer", children: cert.name }) : cert.name }),
-      cert.date && /* @__PURE__ */ jsx(Date$2, { children: formatDate$3(cert.date) })
+      cert.date && /* @__PURE__ */ jsx(DateText$2, { children: formatDate$3(cert.date) })
     ] }),
     cert.issuer && /* @__PURE__ */ jsx(Issuer, { children: cert.issuer })
   ] }, i)) });
@@ -1611,7 +1611,7 @@ const Name$1 = dt.h3`
   margin: 0;
   font-style: italic;
 `;
-const Date$1 = dt.div`
+const DateText$1 = dt.div`
   font-size: 0.9rem;
   color: #666;
 `;
@@ -1627,7 +1627,7 @@ const Summary$1 = dt.div`
 `;
 const formatDate$2 = (date) => {
   if (!date) return "";
-  const d = new Date$1(date);
+  const d = new Date(date);
   return d.toLocaleDateString("en-US", { month: "short", year: "numeric" });
 };
 const Publications = ({ publications }) => {
@@ -1635,7 +1635,7 @@ const Publications = ({ publications }) => {
   return /* @__PURE__ */ jsx(Section, { title: "Publications", children: publications.map((pub, i) => /* @__PURE__ */ jsxs(PublicationItem, { children: [
     /* @__PURE__ */ jsxs(Header$2, { children: [
       /* @__PURE__ */ jsx(Name$1, { children: pub.url ? /* @__PURE__ */ jsx("a", { href: pub.url, target: "_blank", rel: "noopener noreferrer", children: pub.name }) : pub.name }),
-      pub.releaseDate && /* @__PURE__ */ jsx(Date$1, { children: formatDate$2(pub.releaseDate) })
+      pub.releaseDate && /* @__PURE__ */ jsx(DateText$1, { children: formatDate$2(pub.releaseDate) })
     ] }),
     pub.publisher && /* @__PURE__ */ jsx(Publisher, { children: pub.publisher }),
     pub.summary && /* @__PURE__ */ jsx(Summary$1, { children: pub.summary })

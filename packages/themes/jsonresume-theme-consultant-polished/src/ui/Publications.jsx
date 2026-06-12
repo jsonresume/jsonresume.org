@@ -21,7 +21,7 @@ const Name = styled.h3`
   font-style: italic;
 `;
 
-const Date = styled.div`
+const DateText = styled.div`
   font-size: 0.9rem;
   color: #666;
 `;
@@ -61,7 +61,9 @@ const Publications = ({ publications }) => {
                 pub.name
               )}
             </Name>
-            {pub.releaseDate && <Date>{formatDate(pub.releaseDate)}</Date>}
+            {pub.releaseDate && (
+              <DateText>{formatDate(pub.releaseDate)}</DateText>
+            )}
           </Header>
           {pub.publisher && <Publisher>{pub.publisher}</Publisher>}
           {pub.summary && <Summary>{pub.summary}</Summary>}

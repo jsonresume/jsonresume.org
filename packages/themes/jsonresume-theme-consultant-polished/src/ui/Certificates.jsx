@@ -20,7 +20,7 @@ const Name = styled.h3`
   margin: 0;
 `;
 
-const Date = styled.div`
+const DateText = styled.div`
   font-size: 0.9rem;
   color: #666;
 `;
@@ -53,7 +53,7 @@ const Certificates = ({ certificates }) => {
                 cert.name
               )}
             </Name>
-            {cert.date && <Date>{formatDate(cert.date)}</Date>}
+            {cert.date && <DateText>{formatDate(cert.date)}</DateText>}
           </Header>
           {cert.issuer && <Issuer>{cert.issuer}</Issuer>}
         </CertificateItem>
