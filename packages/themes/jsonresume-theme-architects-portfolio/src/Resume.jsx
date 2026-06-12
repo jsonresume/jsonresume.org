@@ -238,6 +238,7 @@ function Resume({ resume }) {
     projects = [],
     volunteer = [],
     awards = [],
+    certificates = [],
     publications = [],
     languages = [],
     interests = [],
@@ -314,6 +315,157 @@ function Resume({ resume }) {
                   <DateRange startDate={edu.startDate} endDate={edu.endDate} />
                 </EducationDate>
               )}
+            </EducationItem>
+          ))}
+        </Section>
+      )}
+
+      {projects && projects.length > 0 && (
+        <Section>
+          <SectionTitle>Projects</SectionTitle>
+          {projects.map((project, index) => (
+            <WorkItem key={index}>
+              <WorkHeader>
+                <div>
+                  {project.name && <Position>{project.name}</Position>}
+                  {project.type && <Company>{project.type}</Company>}
+                </div>
+                {(project.startDate || project.endDate) && (
+                  <DateText>
+                    <DateRange
+                      startDate={project.startDate}
+                      endDate={project.endDate}
+                    />
+                  </DateText>
+                )}
+              </WorkHeader>
+              {project.description && (
+                <WorkSummary>{project.description}</WorkSummary>
+              )}
+              {project.highlights && project.highlights.length > 0 && (
+                <Highlights>
+                  {project.highlights.map((highlight, i) => (
+                    <li key={i}>{highlight}</li>
+                  ))}
+                </Highlights>
+              )}
+            </WorkItem>
+          ))}
+        </Section>
+      )}
+
+      {volunteer && volunteer.length > 0 && (
+        <Section>
+          <SectionTitle>Volunteer</SectionTitle>
+          {volunteer.map((vol, index) => (
+            <WorkItem key={index}>
+              <WorkHeader>
+                <div>
+                  {vol.position && <Position>{vol.position}</Position>}
+                  {vol.organization && <Company>{vol.organization}</Company>}
+                </div>
+                {(vol.startDate || vol.endDate) && (
+                  <DateText>
+                    <DateRange
+                      startDate={vol.startDate}
+                      endDate={vol.endDate}
+                    />
+                  </DateText>
+                )}
+              </WorkHeader>
+              {vol.summary && <WorkSummary>{vol.summary}</WorkSummary>}
+              {vol.highlights && vol.highlights.length > 0 && (
+                <Highlights>
+                  {vol.highlights.map((highlight, i) => (
+                    <li key={i}>{highlight}</li>
+                  ))}
+                </Highlights>
+              )}
+            </WorkItem>
+          ))}
+        </Section>
+      )}
+
+      {awards && awards.length > 0 && (
+        <Section>
+          <SectionTitle>Awards</SectionTitle>
+          {awards.map((award, index) => (
+            <EducationItem key={index}>
+              {award.title && <Institution>{award.title}</Institution>}
+              {award.awarder && <Degree>{award.awarder}</Degree>}
+              {award.date && <EducationDate>{award.date}</EducationDate>}
+              {award.summary && <WorkSummary>{award.summary}</WorkSummary>}
+            </EducationItem>
+          ))}
+        </Section>
+      )}
+
+      {certificates && certificates.length > 0 && (
+        <Section>
+          <SectionTitle>Certificates</SectionTitle>
+          {certificates.map((cert, index) => (
+            <EducationItem key={index}>
+              {cert.name && <Institution>{cert.name}</Institution>}
+              {cert.issuer && <Degree>{cert.issuer}</Degree>}
+              {cert.date && <EducationDate>{cert.date}</EducationDate>}
+            </EducationItem>
+          ))}
+        </Section>
+      )}
+
+      {publications && publications.length > 0 && (
+        <Section>
+          <SectionTitle>Publications</SectionTitle>
+          {publications.map((pub, index) => (
+            <EducationItem key={index}>
+              {pub.name && <Institution>{pub.name}</Institution>}
+              {pub.publisher && <Degree>{pub.publisher}</Degree>}
+              {pub.releaseDate && (
+                <EducationDate>{pub.releaseDate}</EducationDate>
+              )}
+              {pub.summary && <WorkSummary>{pub.summary}</WorkSummary>}
+            </EducationItem>
+          ))}
+        </Section>
+      )}
+
+      {languages && languages.length > 0 && (
+        <Section>
+          <SectionTitle>Languages</SectionTitle>
+          <SkillsGrid>
+            {languages.map((lang, index) => (
+              <SkillCategory key={index}>
+                {lang.language && <SkillName>{lang.language}</SkillName>}
+                {lang.fluency && <SkillTags>{lang.fluency}</SkillTags>}
+              </SkillCategory>
+            ))}
+          </SkillsGrid>
+        </Section>
+      )}
+
+      {interests && interests.length > 0 && (
+        <Section>
+          <SectionTitle>Interests</SectionTitle>
+          <SkillsGrid>
+            {interests.map((interest, index) => (
+              <SkillCategory key={index}>
+                {interest.name && <SkillName>{interest.name}</SkillName>}
+                {interest.keywords && interest.keywords.length > 0 && (
+                  <SkillTags>{interest.keywords.join(', ')}</SkillTags>
+                )}
+              </SkillCategory>
+            ))}
+          </SkillsGrid>
+        </Section>
+      )}
+
+      {references && references.length > 0 && (
+        <Section>
+          <SectionTitle>References</SectionTitle>
+          {references.map((ref, index) => (
+            <EducationItem key={index}>
+              {ref.name && <Institution>{ref.name}</Institution>}
+              {ref.reference && <WorkSummary>{ref.reference}</WorkSummary>}
             </EducationItem>
           ))}
         </Section>

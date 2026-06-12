@@ -271,6 +271,7 @@ function Resume({ resume }) {
     projects = [],
     volunteer = [],
     awards = [],
+    certificates = [],
     publications = [],
     languages = [],
     interests = [],
@@ -451,6 +452,116 @@ function Resume({ resume }) {
                           <li key={i}>{highlight}</li>
                         ))}
                       </WorkHighlights>
+                    )}
+                  </ContentColumn>
+                </WorkGrid>
+              ))}
+            </MainSection>
+          )}
+
+          {volunteer.length > 0 && (
+            <MainSection>
+              <MainSectionTitle>Volunteer</MainSectionTitle>
+              {volunteer.map((vol, index) => (
+                <WorkGrid key={index}>
+                  <DateColumn>
+                    <DateRange
+                      startDate={vol.startDate}
+                      endDate={vol.endDate}
+                    />
+                  </DateColumn>
+                  <ContentColumn>
+                    <WorkTitle>{vol.position}</WorkTitle>
+                    {vol.organization && (
+                      <WorkCompany>{vol.organization}</WorkCompany>
+                    )}
+                    {vol.summary && (
+                      <WorkDescription>{vol.summary}</WorkDescription>
+                    )}
+                    {vol.highlights && vol.highlights.length > 0 && (
+                      <WorkHighlights>
+                        {vol.highlights.map((highlight, i) => (
+                          <li key={i}>{highlight}</li>
+                        ))}
+                      </WorkHighlights>
+                    )}
+                  </ContentColumn>
+                </WorkGrid>
+              ))}
+            </MainSection>
+          )}
+
+          {awards.length > 0 && (
+            <MainSection>
+              <MainSectionTitle>Awards</MainSectionTitle>
+              {awards.map((award, index) => (
+                <WorkGrid key={index}>
+                  <DateColumn>{award.date}</DateColumn>
+                  <ContentColumn>
+                    <WorkTitle>{award.title}</WorkTitle>
+                    {award.awarder && (
+                      <WorkCompany>{award.awarder}</WorkCompany>
+                    )}
+                    {award.summary && (
+                      <WorkDescription>{award.summary}</WorkDescription>
+                    )}
+                  </ContentColumn>
+                </WorkGrid>
+              ))}
+            </MainSection>
+          )}
+
+          {certificates.length > 0 && (
+            <MainSection>
+              <MainSectionTitle>Certificates</MainSectionTitle>
+              {certificates.map((cert, index) => (
+                <WorkGrid key={index}>
+                  <DateColumn>{cert.date}</DateColumn>
+                  <ContentColumn>
+                    <WorkTitle>{cert.name}</WorkTitle>
+                    {cert.issuer && <WorkCompany>{cert.issuer}</WorkCompany>}
+                  </ContentColumn>
+                </WorkGrid>
+              ))}
+            </MainSection>
+          )}
+
+          {publications.length > 0 && (
+            <MainSection>
+              <MainSectionTitle>Publications</MainSectionTitle>
+              {publications.map((pub, index) => (
+                <WorkGrid key={index}>
+                  <DateColumn>{pub.releaseDate}</DateColumn>
+                  <ContentColumn>
+                    <WorkTitle>
+                      {pub.url ? (
+                        <Link href={safeUrl(pub.url)}>{pub.name}</Link>
+                      ) : (
+                        pub.name
+                      )}
+                    </WorkTitle>
+                    {pub.publisher && (
+                      <WorkCompany>{pub.publisher}</WorkCompany>
+                    )}
+                    {pub.summary && (
+                      <WorkDescription>{pub.summary}</WorkDescription>
+                    )}
+                  </ContentColumn>
+                </WorkGrid>
+              ))}
+            </MainSection>
+          )}
+
+          {references.length > 0 && (
+            <MainSection>
+              <MainSectionTitle>References</MainSectionTitle>
+              {references.map((ref, index) => (
+                <WorkGrid key={index}>
+                  <DateColumn />
+                  <ContentColumn>
+                    <WorkTitle>{ref.name}</WorkTitle>
+                    {ref.reference && (
+                      <WorkDescription>{ref.reference}</WorkDescription>
                     )}
                   </ContentColumn>
                 </WorkGrid>

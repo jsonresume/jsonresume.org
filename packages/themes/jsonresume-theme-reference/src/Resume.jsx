@@ -94,6 +94,7 @@ function Resume({ resume }) {
     skills = [],
     volunteer = [],
     awards = [],
+    certificates = [],
     publications = [],
     languages = [],
     interests = [],
@@ -331,6 +332,32 @@ function Resume({ resume }) {
                     </>
                   )}
                 </>
+              }
+            />
+          ))}
+        </Section>
+      )}
+
+      {/* Certificates Section */}
+      {certificates.length > 0 && (
+        <Section id="certificates">
+          <SectionTitle>Certificates</SectionTitle>
+          {certificates.map((cert, index) => (
+            <ListItem
+              key={index}
+              title={cert.name}
+              subtitle={cert.issuer}
+              dateRange={cert.date}
+              description={
+                cert.url && safeUrl(cert.url) ? (
+                  <a
+                    href={safeUrl(cert.url)}
+                    target="_blank"
+                    rel={getLinkRel(cert.url, true)}
+                  >
+                    {cert.url}
+                  </a>
+                ) : undefined
               }
             />
           ))}

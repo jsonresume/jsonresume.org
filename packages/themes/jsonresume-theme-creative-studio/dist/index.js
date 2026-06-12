@@ -6219,6 +6219,7 @@ function Resume({ resume }) {
     projects = [],
     volunteer = [],
     awards = [],
+    certificates = [],
     publications = [],
     languages = [],
     interests = [],
@@ -6303,6 +6304,17 @@ function Resume({ resume }) {
         ] }),
         award.date && /* @__PURE__ */ jsx(EducationDate, { children: award.date }),
         award.summary && /* @__PURE__ */ jsx(WorkSummary, { children: award.summary })
+      ] }, index))
+    ] }),
+    certificates?.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
+      /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Certificates" }),
+      certificates.map((cert, index) => /* @__PURE__ */ jsxs(EducationItem, { children: [
+        /* @__PURE__ */ jsx(Institution, { children: cert.name }),
+        cert.issuer && /* @__PURE__ */ jsxs(Degree, { children: [
+          "Issued by ",
+          cert.issuer
+        ] }),
+        cert.date && /* @__PURE__ */ jsx(EducationDate, { children: cert.date })
       ] }, index))
     ] }),
     publications?.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
