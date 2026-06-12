@@ -234,6 +234,7 @@ function Resume({ resume }) {
     projects = [],
     volunteer = [],
     awards = [],
+    certificates = [],
     publications = [],
     languages = [],
     interests = [],
@@ -477,6 +478,31 @@ function Resume({ resume }) {
                     }}
                   >
                     {award.date}
+                  </div>
+                )}
+              </SimpleCard>
+            ))}
+          </SimpleList>
+        </MainSection>
+      )}
+
+      {certificates.length > 0 && (
+        <MainSection>
+          <MainSectionTitle>Certificates</MainSectionTitle>
+          <SimpleList>
+            {certificates.map((cert, index) => (
+              <SimpleCard key={index}>
+                <strong>{cert.name}</strong>
+                {cert.issuer && ` — ${cert.issuer}`}
+                {cert.date && (
+                  <div
+                    style={{
+                      fontSize: '13px',
+                      color: '#9ca3af',
+                      marginTop: '4px',
+                    }}
+                  >
+                    {cert.date}
                   </div>
                 )}
               </SimpleCard>

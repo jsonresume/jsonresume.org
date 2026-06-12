@@ -6325,6 +6325,30 @@ function AwardsSection({ awards }) {
     ] }, i))
   ] });
 }
+function CertificatesSection({ certificates }) {
+  if (!certificates || certificates.length === 0) return null;
+  return /* @__PURE__ */ jsxs(Section, { children: [
+    /* @__PURE__ */ jsx(SectionTitle, { children: "Certificates" }),
+    certificates.map((cert, i) => /* @__PURE__ */ jsxs(Entry, { children: [
+      /* @__PURE__ */ jsxs(EntryHeader, { children: [
+        cert.name && /* @__PURE__ */ jsx(EntryTitle, { children: cert.name }),
+        /* @__PURE__ */ jsxs(EntryMeta, { children: [
+          cert.issuer && /* @__PURE__ */ jsx(EntryOrganization, { children: cert.issuer }),
+          cert.date && /* @__PURE__ */ jsx(EntryDate, { children: cert.date })
+        ] })
+      ] }),
+      cert.url && /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx(
+        "a",
+        {
+          href: safeUrl(cert.url),
+          target: "_blank",
+          rel: "noopener noreferrer",
+          children: "View Certificate"
+        }
+      ) })
+    ] }, i))
+  ] });
+}
 function PublicationsSection({ publications }) {
   if (!publications || publications.length === 0) return null;
   return /* @__PURE__ */ jsxs(Section, { children: [
@@ -6370,6 +6394,7 @@ function Resume({ resume }) {
     projects,
     volunteer,
     awards,
+    certificates,
     publications,
     interests,
     references
@@ -6395,6 +6420,7 @@ function Resume({ resume }) {
       /* @__PURE__ */ jsx(ProjectsSection, { projects }),
       /* @__PURE__ */ jsx(VolunteerSection, { volunteer }),
       /* @__PURE__ */ jsx(AwardsSection, { awards }),
+      /* @__PURE__ */ jsx(CertificatesSection, { certificates }),
       /* @__PURE__ */ jsx(PublicationsSection, { publications }),
       /* @__PURE__ */ jsx(InterestsSection, { interests }),
       /* @__PURE__ */ jsx(ReferencesSection, { references })

@@ -33,4 +33,4 @@ export default `	<section id="awards" class="row">
 	</section>
 	{{/if}}
 	
-	{{#if resume.publications.length}}`;
+	{{#if resume.certificates.length}}`;

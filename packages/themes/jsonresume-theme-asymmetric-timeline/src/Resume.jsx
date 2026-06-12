@@ -296,6 +296,7 @@ function Resume({ resume }) {
     projects = [],
     volunteer = [],
     awards = [],
+    certificates = [],
     publications = [],
     languages = [],
     interests = [],
@@ -436,6 +437,19 @@ function Resume({ resume }) {
               {award.awarder && <Subtitle>Awarded by {award.awarder}</Subtitle>}
               {award.date && <DateText>{award.date}</DateText>}
               {award.summary && <ItemSummary>{award.summary}</ItemSummary>}
+            </SimpleItem>
+          ))}
+        </SimpleSection>
+      )}
+
+      {certificates?.length > 0 && (
+        <SimpleSection>
+          <StyledSectionTitle>Certificates</StyledSectionTitle>
+          {certificates.map((cert, index) => (
+            <SimpleItem key={index}>
+              <SimpleTitle>{cert.name}</SimpleTitle>
+              {cert.issuer && <Subtitle>Issued by {cert.issuer}</Subtitle>}
+              {cert.date && <DateText>{cert.date}</DateText>}
             </SimpleItem>
           ))}
         </SimpleSection>
