@@ -141,6 +141,9 @@ importers:
       '@faker-js/faker':
         specifier: ^8.0.2
         version: 8.4.1
+      '@jsonresume/schema':
+        specifier: workspace:*
+        version: link:../../packages/schema
       '@jsonresume/theme-stackoverflow':
         specifier: ^2
         version: link:../../packages/themes/stackoverflow
@@ -246,9 +249,6 @@ importers:
       remark-html:
         specifier: ^16.0.1
         version: 16.0.1
-      resume-schema:
-        specifier: ^1.0.0
-        version: 1.0.1
       styled-components:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.0)(react@19.2.0)
@@ -643,9 +643,6 @@ importers:
       recharts:
         specifier: ^2.12.7
         version: 2.15.4(react-dom@19.2.0)(react@19.2.0)
-      resume-schema:
-        specifier: ^1.0.0
-        version: 1.0.1
       sonner:
         specifier: ^1.5.0
         version: 1.7.4(react-dom@19.2.0)(react@19.2.0)
@@ -791,7 +788,7 @@ importers:
         version: 1.0.7
       resume-schema:
         specifier: ^1.0.0
-        version: 1.0.1
+        version: 1.0.0
       stream-to-string:
         specifier: ^1.2.1
         version: 1.2.1
@@ -24341,13 +24338,6 @@ packages:
   /resume-schema@1.0.0:
     resolution: {integrity: sha512-9ZEP3oO1IRrjQWTOfDq7fDNNeJp7gWqfS/l2D02f6f25nRw/wRAkpDyvIlw9uoaDARK7Ebj/CN2D/6Ht27S0zg==}
     engines: {node: '>=10'}
-    dependencies:
-      z-schema: 4.2.4
-    dev: false
-
-  /resume-schema@1.0.1:
-    resolution: {integrity: sha512-Uy52oZI/4n5s97eqdo39sjV5sN+617CvLKCv8xc9qeKq21VkbnH/FTpit7/LfFxI1btGRrldxm9mQjvvn+Gd1A==}
-    engines: {node: '>=20'}
     dependencies:
       z-schema: 4.2.4
     dev: false
