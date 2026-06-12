@@ -6287,13 +6287,98 @@ function ProjectsSection({ projects }) {
     ] }, index))
   ] });
 }
+function VolunteerSection({ volunteer }) {
+  if (!volunteer?.length) return null;
+  return /* @__PURE__ */ jsxs(Section, { children: [
+    /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Volunteer" }),
+    volunteer.map((vol, index) => /* @__PURE__ */ jsxs(ContentBlock, { children: [
+      /* @__PURE__ */ jsxs(WorkHeader, { children: [
+        /* @__PURE__ */ jsx(Position, { children: vol.position }),
+        vol.organization && /* @__PURE__ */ jsx(Company, { children: vol.organization }),
+        (vol.startDate || vol.endDate) && /* @__PURE__ */ jsx(DateText, { children: /* @__PURE__ */ jsx(DateRange, { startDate: vol.startDate, endDate: vol.endDate }) })
+      ] }),
+      vol.summary && /* @__PURE__ */ jsx(WorkSummary, { children: vol.summary }),
+      vol.highlights?.length > 0 && /* @__PURE__ */ jsx(Highlights, { children: vol.highlights.map((highlight, i) => /* @__PURE__ */ jsx("li", { children: highlight }, i)) })
+    ] }, index))
+  ] });
+}
+function AwardsSection({ awards }) {
+  if (!awards?.length) return null;
+  return /* @__PURE__ */ jsxs(Section, { children: [
+    /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Awards" }),
+    awards.map((award, index) => /* @__PURE__ */ jsxs(ContentBlock, { children: [
+      /* @__PURE__ */ jsx(Institution, { children: award.title }),
+      award.awarder && /* @__PURE__ */ jsxs(Degree, { children: [
+        "Awarded by ",
+        award.awarder
+      ] }),
+      award.date && /* @__PURE__ */ jsx(EducationDate, { children: award.date }),
+      award.summary && /* @__PURE__ */ jsx(WorkSummary, { children: award.summary })
+    ] }, index))
+  ] });
+}
+function CertificatesSection({ certificates }) {
+  if (!certificates?.length) return null;
+  return /* @__PURE__ */ jsxs(Section, { children: [
+    /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Certificates" }),
+    certificates.map((cert, index) => /* @__PURE__ */ jsxs(ContentBlock, { children: [
+      /* @__PURE__ */ jsx(Institution, { children: cert.name }),
+      cert.issuer && /* @__PURE__ */ jsxs(Degree, { children: [
+        "Issued by ",
+        cert.issuer
+      ] }),
+      cert.date && /* @__PURE__ */ jsx(EducationDate, { children: cert.date })
+    ] }, index))
+  ] });
+}
+function PublicationsSection({ publications }) {
+  if (!publications?.length) return null;
+  return /* @__PURE__ */ jsxs(Section, { children: [
+    /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Publications" }),
+    publications.map((pub, index) => /* @__PURE__ */ jsxs(ContentBlock, { children: [
+      /* @__PURE__ */ jsx(Institution, { children: pub.name }),
+      pub.publisher && /* @__PURE__ */ jsxs(Degree, { children: [
+        "Published by ",
+        pub.publisher
+      ] }),
+      pub.releaseDate && /* @__PURE__ */ jsx(EducationDate, { children: pub.releaseDate }),
+      pub.summary && /* @__PURE__ */ jsx(WorkSummary, { children: pub.summary })
+    ] }, index))
+  ] });
+}
+function LanguagesSection({ languages }) {
+  if (!languages?.length) return null;
+  return /* @__PURE__ */ jsxs(Section, { children: [
+    /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Languages" }),
+    /* @__PURE__ */ jsx(SkillsGrid, { children: languages.map((lang, index) => /* @__PURE__ */ jsxs(SkillCategory, { children: [
+      /* @__PURE__ */ jsx(SkillName, { children: lang.language }),
+      lang.fluency && /* @__PURE__ */ jsx(SkillTags, { children: lang.fluency })
+    ] }, index)) })
+  ] });
+}
+function ReferencesSection({ references }) {
+  if (!references?.length) return null;
+  return /* @__PURE__ */ jsxs(Section, { children: [
+    /* @__PURE__ */ jsx(StyledSectionTitle, { children: "References" }),
+    references.map((ref, index) => /* @__PURE__ */ jsxs(ContentBlock, { children: [
+      /* @__PURE__ */ jsx(Institution, { children: ref.name }),
+      ref.reference && /* @__PURE__ */ jsx(WorkSummary, { children: ref.reference })
+    ] }, index))
+  ] });
+}
 function Resume({ resume }) {
   const {
     basics = {},
     work = [],
     education = [],
     skills = [],
-    projects = []
+    projects = [],
+    volunteer = [],
+    awards = [],
+    certificates = [],
+    publications = [],
+    languages = [],
+    references = []
   } = resume;
   return /* @__PURE__ */ jsxs(Layout, { children: [
     /* @__PURE__ */ jsx(Header, { basics }),
@@ -6302,7 +6387,13 @@ function Resume({ resume }) {
       /* @__PURE__ */ jsx(WorkSection, { work }),
       /* @__PURE__ */ jsx(SkillsSection, { skills }),
       /* @__PURE__ */ jsx(EducationSection, { education }),
-      /* @__PURE__ */ jsx(ProjectsSection, { projects })
+      /* @__PURE__ */ jsx(ProjectsSection, { projects }),
+      /* @__PURE__ */ jsx(VolunteerSection, { volunteer }),
+      /* @__PURE__ */ jsx(AwardsSection, { awards }),
+      /* @__PURE__ */ jsx(CertificatesSection, { certificates }),
+      /* @__PURE__ */ jsx(PublicationsSection, { publications }),
+      /* @__PURE__ */ jsx(LanguagesSection, { languages }),
+      /* @__PURE__ */ jsx(ReferencesSection, { references })
     ] })
   ] });
 }
