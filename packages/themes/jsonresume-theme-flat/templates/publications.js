@@ -35,4 +35,4 @@ export default `	<section id="publications" class="row">
 	</section>
 	{{/if}}
 	
-	{{#if resume.skills.length}}`;
+	{{#if resume.projects.length}}`;

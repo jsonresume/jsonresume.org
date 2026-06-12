@@ -258,6 +258,10 @@ function Resume({ resume }) {
     projects = [],
     volunteer = [],
     awards = [],
+    certificates = [],
+    publications = [],
+    languages = [],
+    references = [],
   } = resume;
 
   return (
@@ -550,6 +554,83 @@ function Resume({ resume }) {
                     }}
                   />
                 )}
+              </Item>
+            ))}
+          </Section>
+        )}
+
+        {/* Certificates */}
+        {certificates.length > 0 && (
+          <Section>
+            <SectionTitle>Certifications</SectionTitle>
+            {certificates.map((cert, i) => (
+              <Item key={i}>
+                <ItemHeader>
+                  <ItemTitle>{cert.name}</ItemTitle>
+                </ItemHeader>
+                {cert.issuer && <ItemSubtitle>{cert.issuer}</ItemSubtitle>}
+                {cert.date && (
+                  <ItemMeta>
+                    <span>{cert.date}</span>
+                  </ItemMeta>
+                )}
+              </Item>
+            ))}
+          </Section>
+        )}
+
+        {/* Publications */}
+        {publications.length > 0 && (
+          <Section>
+            <SectionTitle>Publications</SectionTitle>
+            {publications.map((pub, i) => (
+              <Item key={i}>
+                <ItemHeader>
+                  <ItemTitle>{pub.name}</ItemTitle>
+                </ItemHeader>
+                {pub.publisher && <ItemSubtitle>{pub.publisher}</ItemSubtitle>}
+                {pub.releaseDate && (
+                  <ItemMeta>
+                    <span>{pub.releaseDate}</span>
+                  </ItemMeta>
+                )}
+                {pub.summary && (
+                  <Description
+                    dangerouslySetInnerHTML={{
+                      __html: boldNumbers(pub.summary),
+                    }}
+                  />
+                )}
+              </Item>
+            ))}
+          </Section>
+        )}
+
+        {/* Languages */}
+        {languages.length > 0 && (
+          <Section>
+            <SectionTitle>Languages</SectionTitle>
+            <BadgeList>
+              {languages.map((lang, i) => (
+                <Badge key={i}>
+                  {lang.language}
+                  {lang.fluency && ` — ${lang.fluency}`}
+                </Badge>
+              ))}
+            </BadgeList>
+          </Section>
+        )}
+
+        {/* References */}
+        {references.length > 0 && (
+          <Section>
+            <SectionTitle>References</SectionTitle>
+            {references.map((ref, i) => (
+              <Item key={i}>
+                <ItemHeader>
+                  <ItemTitle>{ref.name}</ItemTitle>
+                </ItemHeader>
+                {ref.reference && <Description>{ref.reference}</Description>}
               </Item>
             ))}
           </Section>

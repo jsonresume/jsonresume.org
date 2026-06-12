@@ -60,6 +60,10 @@ export function render(resume) {
     education = [],
     skills = [],
     projects = [],
+    volunteer = [],
+    awards = [],
+    certificates = [],
+    publications = [],
     languages = [],
     references = [],
   } = resume;
@@ -581,6 +585,135 @@ export function render(resume) {
       </div>`
         )
         .join('')}
+    </section>`
+        : ''
+    }
+
+    ${
+      volunteer.length
+        ? `
+    <section class="section">
+      <div class="section-title">Volunteer</div>
+      ${volunteer
+        .map(
+          (vol) => `
+      <div class="entry">
+        <div class="entry-header">
+          <span class="entry-title">${vol.position || ''}</span>
+          <span class="entry-date">${dateRange(
+            vol.startDate,
+            vol.endDate
+          )}</span>
+        </div>
+        <div class="entry-subtitle">${vol.organization || ''}</div>
+        ${
+          vol.summary
+            ? `<div class="entry-body">${renderMarkdown(vol.summary)}</div>`
+            : ''
+        }
+      </div>`
+        )
+        .join('')}
+    </section>`
+        : ''
+    }
+
+    ${
+      awards.length
+        ? `
+    <section class="section">
+      <div class="section-title">Awards</div>
+      ${awards
+        .map(
+          (award) => `
+      <div class="entry">
+        <div class="entry-header">
+          <span class="entry-title">${award.title || ''}</span>
+          <span class="entry-date">${formatDate(award.date)}</span>
+        </div>
+        <div class="entry-subtitle">${award.awarder || ''}</div>
+        ${
+          award.summary
+            ? `<div class="entry-body">${renderMarkdown(award.summary)}</div>`
+            : ''
+        }
+      </div>`
+        )
+        .join('')}
+    </section>`
+        : ''
+    }
+
+    ${
+      certificates.length
+        ? `
+    <section class="section">
+      <div class="section-title">Certificates</div>
+      ${certificates
+        .map(
+          (cert) => `
+      <div class="entry">
+        <div class="entry-header">
+          <span class="entry-title">${
+            cert.url
+              ? `<a href="${safeUrl(cert.url)}">${cert.name || ''}</a>`
+              : cert.name || ''
+          }</span>
+          <span class="entry-date">${formatDate(cert.date)}</span>
+        </div>
+        <div class="entry-subtitle">${cert.issuer || ''}</div>
+      </div>`
+        )
+        .join('')}
+    </section>`
+        : ''
+    }
+
+    ${
+      publications.length
+        ? `
+    <section class="section">
+      <div class="section-title">Publications</div>
+      ${publications
+        .map(
+          (pub) => `
+      <div class="entry">
+        <div class="entry-header">
+          <span class="entry-title">${
+            pub.url
+              ? `<a href="${safeUrl(pub.url)}">${pub.name || ''}</a>`
+              : pub.name || ''
+          }</span>
+          <span class="entry-date">${formatDate(pub.releaseDate)}</span>
+        </div>
+        <div class="entry-subtitle">${pub.publisher || ''}</div>
+        ${
+          pub.summary
+            ? `<div class="entry-body">${renderMarkdown(pub.summary)}</div>`
+            : ''
+        }
+      </div>`
+        )
+        .join('')}
+    </section>`
+        : ''
+    }
+
+    ${
+      languages.length
+        ? `
+    <section class="section">
+      <div class="section-title">Languages</div>
+      <div class="skill-tags">
+        ${languages
+          .map(
+            (lang) =>
+              `<span class="skill-tag">${lang.language || ''}${
+                lang.fluency ? ` — ${lang.fluency}` : ''
+              }</span>`
+          )
+          .join('')}
+      </div>
     </section>`
         : ''
     }

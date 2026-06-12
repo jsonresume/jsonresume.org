@@ -6092,7 +6092,11 @@ function Resume({ resume }) {
     skills = [],
     projects = [],
     volunteer = [],
-    awards = []
+    awards = [],
+    certificates = [],
+    publications = [],
+    languages = [],
+    references = []
   } = resume;
   return /* @__PURE__ */ jsxs(Fragment, { children: [
     /* @__PURE__ */ jsx(GlobalStyle, {}),
@@ -6266,6 +6270,44 @@ function Resume({ resume }) {
               }
             }
           )
+        ] }, i))
+      ] }),
+      certificates.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
+        /* @__PURE__ */ jsx(SectionTitle, { children: "Certifications" }),
+        certificates.map((cert, i) => /* @__PURE__ */ jsxs(Item, { children: [
+          /* @__PURE__ */ jsx(ItemHeader, { children: /* @__PURE__ */ jsx(ItemTitle, { children: cert.name }) }),
+          cert.issuer && /* @__PURE__ */ jsx(ItemSubtitle, { children: cert.issuer }),
+          cert.date && /* @__PURE__ */ jsx(ItemMeta, { children: /* @__PURE__ */ jsx("span", { children: cert.date }) })
+        ] }, i))
+      ] }),
+      publications.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
+        /* @__PURE__ */ jsx(SectionTitle, { children: "Publications" }),
+        publications.map((pub, i) => /* @__PURE__ */ jsxs(Item, { children: [
+          /* @__PURE__ */ jsx(ItemHeader, { children: /* @__PURE__ */ jsx(ItemTitle, { children: pub.name }) }),
+          pub.publisher && /* @__PURE__ */ jsx(ItemSubtitle, { children: pub.publisher }),
+          pub.releaseDate && /* @__PURE__ */ jsx(ItemMeta, { children: /* @__PURE__ */ jsx("span", { children: pub.releaseDate }) }),
+          pub.summary && /* @__PURE__ */ jsx(
+            Description,
+            {
+              dangerouslySetInnerHTML: {
+                __html: boldNumbers(pub.summary)
+              }
+            }
+          )
+        ] }, i))
+      ] }),
+      languages.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
+        /* @__PURE__ */ jsx(SectionTitle, { children: "Languages" }),
+        /* @__PURE__ */ jsx(BadgeList, { children: languages.map((lang, i) => /* @__PURE__ */ jsxs(Badge, { children: [
+          lang.language,
+          lang.fluency && ` — ${lang.fluency}`
+        ] }, i)) })
+      ] }),
+      references.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
+        /* @__PURE__ */ jsx(SectionTitle, { children: "References" }),
+        references.map((ref, i) => /* @__PURE__ */ jsxs(Item, { children: [
+          /* @__PURE__ */ jsx(ItemHeader, { children: /* @__PURE__ */ jsx(ItemTitle, { children: ref.name }) }),
+          ref.reference && /* @__PURE__ */ jsx(Description, { children: ref.reference })
         ] }, i))
       ] })
     ] })

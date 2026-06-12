@@ -575,6 +575,40 @@ function AwardsSection({ awards }) {
   );
 }
 
+function CertificatesSection({ certificates }) {
+  if (!certificates || certificates.length === 0) return null;
+
+  return (
+    <Section>
+      <SectionTitle>Certificates</SectionTitle>
+      {certificates.map((cert, i) => (
+        <Entry key={i}>
+          <EntryHeader>
+            {cert.name && <EntryTitle>{cert.name}</EntryTitle>}
+            <EntryMeta>
+              {cert.issuer && (
+                <EntryOrganization>{cert.issuer}</EntryOrganization>
+              )}
+              {cert.date && <EntryDate>{cert.date}</EntryDate>}
+            </EntryMeta>
+          </EntryHeader>
+          {cert.url && (
+            <div>
+              <a
+                href={safeUrl(cert.url)}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View Certificate
+              </a>
+            </div>
+          )}
+        </Entry>
+      ))}
+    </Section>
+  );
+}
+
 function PublicationsSection({ publications }) {
   if (!publications || publications.length === 0) return null;
 
@@ -639,6 +673,7 @@ function Resume({ resume }) {
     projects,
     volunteer,
     awards,
+    certificates,
     publications,
     interests,
     references,
@@ -674,6 +709,7 @@ function Resume({ resume }) {
         <ProjectsSection projects={projects} />
         <VolunteerSection volunteer={volunteer} />
         <AwardsSection awards={awards} />
+        <CertificatesSection certificates={certificates} />
         <PublicationsSection publications={publications} />
         <InterestsSection interests={interests} />
         <ReferencesSection references={references} />
