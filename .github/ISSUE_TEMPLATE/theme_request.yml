@@ -1,0 +1,37 @@
+name: 🎨 Theme Request
+description: Request that a JSON Resume theme be added to the registry
+title: '[Theme]: '
+labels: ['theme']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Want a theme added to the registry? Themes must be serverless-compatible (no `fs` usage). See `docs/AGENT_THEME_DEVELOPMENT.md`.
+  - type: input
+    id: name
+    attributes:
+      label: Theme name
+      placeholder: jsonresume-theme-example
+    validations:
+      required: true
+  - type: input
+    id: npm
+    attributes:
+      label: npm package
+      placeholder: https://www.npmjs.com/package/jsonresume-theme-example
+    validations:
+      required: true
+  - type: input
+    id: repo
+    attributes:
+      label: Source repository
+      placeholder: https://github.com/user/jsonresume-theme-example
+    validations:
+      required: true
+  - type: checkboxes
+    id: serverless
+    attributes:
+      label: Compatibility
+      options:
+        - label: This theme does not use `fs` or other filesystem operations
+          required: true
