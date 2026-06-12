@@ -6265,6 +6265,7 @@ function Resume({ resume }) {
     projects = [],
     volunteer = [],
     awards = [],
+    certificates = [],
     publications = [],
     languages = [],
     interests = [],
@@ -6385,6 +6386,66 @@ function Resume({ resume }) {
               /* @__PURE__ */ jsx(WorkTitle, { children: project.url ? /* @__PURE__ */ jsx(Link, { href: safeUrl(project.url), children: project.name }) : project.name }),
               project.description && /* @__PURE__ */ jsx(WorkDescription, { children: project.description }),
               project.highlights && project.highlights.length > 0 && /* @__PURE__ */ jsx(WorkHighlights, { children: project.highlights.map((highlight, i) => /* @__PURE__ */ jsx("li", { children: highlight }, i)) })
+            ] })
+          ] }, index))
+        ] }),
+        volunteer.length > 0 && /* @__PURE__ */ jsxs(MainSection, { children: [
+          /* @__PURE__ */ jsx(MainSectionTitle, { children: "Volunteer" }),
+          volunteer.map((vol, index) => /* @__PURE__ */ jsxs(WorkGrid, { children: [
+            /* @__PURE__ */ jsx(DateColumn, { children: /* @__PURE__ */ jsx(
+              DateRange,
+              {
+                startDate: vol.startDate,
+                endDate: vol.endDate
+              }
+            ) }),
+            /* @__PURE__ */ jsxs(ContentColumn, { children: [
+              /* @__PURE__ */ jsx(WorkTitle, { children: vol.position }),
+              vol.organization && /* @__PURE__ */ jsx(WorkCompany, { children: vol.organization }),
+              vol.summary && /* @__PURE__ */ jsx(WorkDescription, { children: vol.summary }),
+              vol.highlights && vol.highlights.length > 0 && /* @__PURE__ */ jsx(WorkHighlights, { children: vol.highlights.map((highlight, i) => /* @__PURE__ */ jsx("li", { children: highlight }, i)) })
+            ] })
+          ] }, index))
+        ] }),
+        awards.length > 0 && /* @__PURE__ */ jsxs(MainSection, { children: [
+          /* @__PURE__ */ jsx(MainSectionTitle, { children: "Awards" }),
+          awards.map((award, index) => /* @__PURE__ */ jsxs(WorkGrid, { children: [
+            /* @__PURE__ */ jsx(DateColumn, { children: award.date }),
+            /* @__PURE__ */ jsxs(ContentColumn, { children: [
+              /* @__PURE__ */ jsx(WorkTitle, { children: award.title }),
+              award.awarder && /* @__PURE__ */ jsx(WorkCompany, { children: award.awarder }),
+              award.summary && /* @__PURE__ */ jsx(WorkDescription, { children: award.summary })
+            ] })
+          ] }, index))
+        ] }),
+        certificates.length > 0 && /* @__PURE__ */ jsxs(MainSection, { children: [
+          /* @__PURE__ */ jsx(MainSectionTitle, { children: "Certificates" }),
+          certificates.map((cert, index) => /* @__PURE__ */ jsxs(WorkGrid, { children: [
+            /* @__PURE__ */ jsx(DateColumn, { children: cert.date }),
+            /* @__PURE__ */ jsxs(ContentColumn, { children: [
+              /* @__PURE__ */ jsx(WorkTitle, { children: cert.name }),
+              cert.issuer && /* @__PURE__ */ jsx(WorkCompany, { children: cert.issuer })
+            ] })
+          ] }, index))
+        ] }),
+        publications.length > 0 && /* @__PURE__ */ jsxs(MainSection, { children: [
+          /* @__PURE__ */ jsx(MainSectionTitle, { children: "Publications" }),
+          publications.map((pub, index) => /* @__PURE__ */ jsxs(WorkGrid, { children: [
+            /* @__PURE__ */ jsx(DateColumn, { children: pub.releaseDate }),
+            /* @__PURE__ */ jsxs(ContentColumn, { children: [
+              /* @__PURE__ */ jsx(WorkTitle, { children: pub.url ? /* @__PURE__ */ jsx(Link, { href: safeUrl(pub.url), children: pub.name }) : pub.name }),
+              pub.publisher && /* @__PURE__ */ jsx(WorkCompany, { children: pub.publisher }),
+              pub.summary && /* @__PURE__ */ jsx(WorkDescription, { children: pub.summary })
+            ] })
+          ] }, index))
+        ] }),
+        references.length > 0 && /* @__PURE__ */ jsxs(MainSection, { children: [
+          /* @__PURE__ */ jsx(MainSectionTitle, { children: "References" }),
+          references.map((ref, index) => /* @__PURE__ */ jsxs(WorkGrid, { children: [
+            /* @__PURE__ */ jsx(DateColumn, {}),
+            /* @__PURE__ */ jsxs(ContentColumn, { children: [
+              /* @__PURE__ */ jsx(WorkTitle, { children: ref.name }),
+              ref.reference && /* @__PURE__ */ jsx(WorkDescription, { children: ref.reference })
             ] })
           ] }, index))
         ] })
