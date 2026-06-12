@@ -206,7 +206,7 @@ jobs:
 
       - name: Create issue on repeated failure
         if: failure() && github.event_name == 'schedule'
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             const issues = await github.rest.issues.listForRepo({
