@@ -213,6 +213,8 @@ We welcome contributions from the community! Here's how you can help:
 
 Please make sure to follow our code style and include appropriate tests for your changes.
 
+Before opening a PR, please read our [Contributing Guide](CONTRIBUTING.md) for the full setup, checks, and conventions. All participants are expected to follow our [Code of Conduct](CODE_OF_CONDUCT.md), and security issues should be reported per our [Security Policy](SECURITY.md).
+
 ## Contributors
 
 [![Contributors](https://4.vercel.app/github/contributors/jsonresume/jsonresume.org?strokeopacity=1)](https://github.com/jsonresume/jsonresume.org/graphs/contributors)
