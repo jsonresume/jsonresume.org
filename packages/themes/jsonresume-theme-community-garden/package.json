@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-community-garden",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Beautiful, warm theme celebrating education and community service. Sky blue and garden green colors with prominent certifications and volunteer sections.",
   "type": "module",
   "main": "./index.jsx",
