@@ -1,0 +1,8 @@
+{
+  "valid": {
+    "$schema": "foo-bar-baz"
+  },
+  "invalid": {
+    "$schema": {}
+  }
+}
