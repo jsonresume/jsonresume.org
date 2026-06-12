@@ -42,7 +42,7 @@ module.exports = function resumeBuilder(theme, dir, resumeFilename, cb) {
         chalk.cyan('Using example resume.json from resume-schema instead...'),
       );
 
-      resumeJson = require('resume-schema/sample.resume.json');
+      resumeJson = require('@jsonresume/schema/sample.resume.json');
     } else {
       try {
         // todo: test resume schema

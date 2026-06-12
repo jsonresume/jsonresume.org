@@ -8,7 +8,7 @@ import readCB from 'read';
 
 const writeFile = promisify(fs.writeFile);
 const read = promisify(readCB);
-const resume = require('resume-schema/sample.resume.json');
+const resume = require('@jsonresume/schema/sample.resume.json');
 
 export default async ({ resumePath }) => {
   if (await exists(resumePath)) {

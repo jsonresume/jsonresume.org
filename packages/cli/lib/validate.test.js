@@ -9,12 +9,13 @@ describe('validate', () => {
   it('should not throw an error for a valid resume object', async () => {
     await validate({ resume: { basics: {} }, schema: defaultSchema });
   });
-  it('should throw an error for an invalid resume object', async () => {
+  it('should throw a per-field error for an invalid resume object', async () => {
     await expect(
-      validate({ resume: { notInTheSchema: true }, schema: defaultSchema }),
-    ).rejects.toMatchInlineSnapshot(
-      `[Error: An error occurred 'Additional properties not allowed: notInTheSchema'.]`,
-    );
+      validate({ resume: { basics: { name: 123 } }, schema: defaultSchema }),
+    ).rejects.toMatchInlineSnapshot(`
+      [Error: Invalid resume:
+        data/basics/name must be string]
+    `);
   });
   it('should accept a schema override', async () => {
     await validate({
@@ -26,8 +27,9 @@ describe('validate', () => {
         resume: 'thomas',
         schema: { type: 'number' },
       }),
-    ).rejects.toMatchInlineSnapshot(
-      `[Error: An error occurred 'Expected type number but found type string'.]`,
-    );
+    ).rejects.toMatchInlineSnapshot(`
+      [Error: Invalid resume:
+        data must be number]
+    `);
   });
 });

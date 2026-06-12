@@ -8,8 +8,9 @@ module.exports = ({ mount = '/' } = {}) => {
         'only-number-schema.json': JSON.stringify({ type: 'number' }),
         'only-number.json': '123',
         'invalid-resume.json': JSON.stringify({
-          notAValidKey: {
-            foo: 'bar',
+          basics: {
+            // name must be a string per the JSON Resume schema
+            name: 123,
           },
         }),
         'resume.json': JSON.stringify({
