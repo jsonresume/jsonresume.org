@@ -14,7 +14,7 @@
     "start": "resume serve"
   },
   "dependencies": {
-    "handlebars": "latest"
+    "handlebars": "^4.7.9"
   },
   "license": "MIT"
 }

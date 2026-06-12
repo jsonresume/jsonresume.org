@@ -1,0 +1,89 @@
+# Versioned publishing for monorepo packages via Changesets.
+#
+# Requires NPM_TOKEN repo secret (npm automation token from the thomasdavis
+# account) — publishing is a no-op until it is set.
+#
+# Also uses the APP_ID / APP_PRIVATE_KEY secrets (GitHub App, same as the
+# previous release.yml) so that the "Version Packages" PR opened by
+# changesets/action triggers the required CI checks. The default GITHUB_TOKEN
+# cannot trigger workflows on PRs it creates.
+#
+# Flow on every push to master:
+#   1. If there are pending changesets, open/update a "Version Packages" PR
+#      (pnpm changeset version).
+#   2. If there are no pending changesets (i.e. the Version Packages PR was
+#      just merged), publish any unpublished package versions to npm
+#      (pnpm changeset publish).
+#
+# This workflow replaces .github/workflows/release.yml and the
+# semantic-release config that previously lived in packages/cli — Changesets
+# is the single release path for npm packages in this repo.
+
+name: Release Packages
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+# Job-level permissions for the GITHUB_TOKEN. changesets/action needs
+# contents:write + pull-requests:write to open/update the "Version Packages" PR
+# (though that PR is actually created via the App token below). id-token:write
+# enables npm Trusted Publishing (OIDC): once a package registers this repo +
+# workflow as a Trusted Publisher on npmjs.com, npm exchanges this short-lived
+# OIDC token for publish auth — no NPM_TOKEN needed for that package. It is
+# harmless for packages that have not yet been registered (they keep using the
+# token). See docs/RELEASING.md.
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate a token
+        id: generate_token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 20
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      # npm Trusted Publishing (OIDC) requires npm >= 11.5.0. setup-node with
+      # node 20 ships npm 10, which silently falls back to token auth and cannot
+      # use the id-token:write permission above. Upgrading the global npm CLI is
+      # the activation step for OIDC publishing. This is publish-tooling only —
+      # it does not touch pnpm or the `pnpm changeset publish` command, and is a
+      # no-op for packages still using NPM_TOKEN. See docs/RELEASING.md.
+      - name: Upgrade npm for Trusted Publishing (OIDC)
+        run: npm install -g npm@latest
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: 'true'
+
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          version: pnpm changeset version
+          publish: pnpm changeset publish
+        env:
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
