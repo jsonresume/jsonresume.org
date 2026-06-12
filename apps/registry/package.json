@@ -164,7 +164,7 @@
     "@vitest/ui": "^3.2.4",
     "caniuse-lite": "^1.0.30001566",
     "eslint": "^8.55.0",
-    "eslint-config-next": "^16.1.6",
+    "eslint-config-next": "^15.5.7",
     "jsdom": "^27.0.0",
     "playwright": "^1.40.0",
     "ts-jest": "^29.4.1",
