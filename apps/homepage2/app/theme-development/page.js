@@ -105,8 +105,9 @@ export default function ThemeDevelopment() {
                 </a>
               </ol>
               <ol>
-                <a href="https://github.com/jsonresume/jsonresume-theme-boilerplate">
-                  https://github.com/jsonresume/jsonresume-theme-boilerplate
+                <a href="https://github.com/jsonresume/jsonresume.org/tree/master/packages/themes/jsonresume-theme-reference">
+                  Use this maintained reference theme as a starting point:
+                  packages/themes/jsonresume-theme-reference
                 </a>
               </ol>
             </ul>

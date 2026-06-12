@@ -9,7 +9,8 @@
     "lint": "next lint --max-warnings=0",
     "typecheck": "tsc --noEmit --incremental --tsBuildInfoFile node_modules/.cache/tsbuildinfo",
     "postinstall": "prisma generate --data-proxy",
-    "db:generate": "prisma generate"
+    "db:generate": "prisma generate",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@faker-js/faker": "^8.0.2",
@@ -48,7 +49,7 @@
     "react-syntax-highlighter": "^15.5.0",
     "remark": "^15.0.1",
     "remark-html": "^16.0.1",
-    "resume-schema": "^1.0.0",
+    "@jsonresume/schema": "workspace:*",
     "styled-components": "^6.1.19",
     "uuid": "^9.0.0"
   },

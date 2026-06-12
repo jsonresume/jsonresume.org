@@ -36,7 +36,7 @@ export function CLISection() {
           <br />{' '}
           <a
             target="_blank"
-            href="https://chrome.google.com/webstore/detail/json-resume-exporter/caobgmmcpklomkcckaenhjlokpmfbdec"
+            href="https://chromewebstore.google.com/detail/json-resume-exporter/caobgmmcpklomkcckaenhjlokpmfbdec"
           >
             Download here
           </a>
@@ -45,7 +45,7 @@ export function CLISection() {
         <p>
           If you want to render a Latex resume there is very well put together
           project called{' '}
-          <a target="_blank" href="https://github.com/sinaatalay/rendercv">
+          <a target="_blank" href="https://github.com/rendercv/rendercv">
             RenderCV
           </a>
           . It has it&apos;s own data format for resumes but we have tools to

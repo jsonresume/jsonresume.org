@@ -1,4 +1,4 @@
-# @resume/ats-validator
+# @jsonresume/ats-validator
 
 **Machine-readable ATS compatibility validation for resume HTML**
 
@@ -15,13 +15,13 @@ Validate resume HTML against ATS (Applicant Tracking System) best practices with
 ## Installation
 
 ```bash
-npm install @resume/ats-validator
+npm install @jsonresume/ats-validator
 ```
 
 ## Quick Start
 
 ```javascript
-import { validateATS, getRecommendations } from '@resume/ats-validator';
+import { validateATS, getRecommendations } from '@jsonresume/ats-validator';
 
 const html = `
   <!DOCTYPE html>
@@ -191,8 +191,8 @@ Checks accessibility features:
 Validate themes built with @resume/core:
 
 ```javascript
-import { render } from 'jsonresume-theme-modern';
-import { validateATS } from '@resume/ats-validator';
+import { render } from 'jsonresume-theme-modern-classic';
+import { validateATS } from '@jsonresume/ats-validator';
 
 const html = render(resumeData);
 const result = validateATS(html);

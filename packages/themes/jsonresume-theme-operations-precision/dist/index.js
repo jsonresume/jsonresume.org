@@ -1,6 +1,7 @@
 import { jsx, jsxs, Fragment } from "react/jsx-runtime";
 import o, { useRef, useContext, useState, useMemo, useEffect, useDebugValue, createElement, createContext } from "react";
 import { renderToString } from "react-dom/server";
+import { marked } from "marked";
 var __assign = function() {
   __assign = Object.assign || function __assign2(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -6012,12 +6013,17 @@ dt.span`
     print-color-adjust: exact;
   }
 `;
+const renderMarkdown = (text) => text ? marked.parse(text, { breaks: true }) : "";
 const Layout = dt.div`
   max-width: 850px;
   margin: 0 auto;
   padding: 40px 35px;
   background: white;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
     sans-serif;
   color: #1f2937;
   font-size: 15px;
@@ -6063,7 +6069,7 @@ const StyledContactInfo = dt(ContactInfo)`
     }
   }
 `;
-const Summary = dt.p`
+const Summary = dt.div`
   font-size: 15px;
   line-height: 1.6;
   color: #374151;
@@ -6119,7 +6125,7 @@ const DateText = dt.div`
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 `;
-const WorkSummary = dt.p`
+const WorkSummary = dt.div`
   margin: 8px 0;
   color: #4b5563;
   line-height: 1.6;
@@ -6252,7 +6258,12 @@ function Resume({ resume }) {
       /* @__PURE__ */ jsx(Name, { children: basics.name }),
       basics.label && /* @__PURE__ */ jsx(Label, { children: basics.label }),
       /* @__PURE__ */ jsx(StyledContactInfo, { basics }),
-      basics.summary && /* @__PURE__ */ jsx(Summary, { children: basics.summary })
+      basics.summary && /* @__PURE__ */ jsx(
+        Summary,
+        {
+          dangerouslySetInnerHTML: { __html: renderMarkdown(basics.summary) }
+        }
+      )
     ] }),
     work?.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
       /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Experience" }),
@@ -6264,8 +6275,25 @@ function Resume({ resume }) {
           ] }),
           /* @__PURE__ */ jsx(DateText, { children: /* @__PURE__ */ jsx(DateRange, { startDate: job.startDate, endDate: job.endDate }) })
         ] }),
-        job.summary && /* @__PURE__ */ jsx(WorkSummary, { children: job.summary }),
-        job.highlights?.length > 0 && /* @__PURE__ */ jsx(Highlights, { children: job.highlights.map((highlight, i) => /* @__PURE__ */ jsx("li", { children: highlight }, i)) })
+        job.summary && /* @__PURE__ */ jsx(
+          WorkSummary,
+          {
+            dangerouslySetInnerHTML: {
+              __html: renderMarkdown(job.summary)
+            }
+          }
+        ),
+        job.highlights?.length > 0 && /* @__PURE__ */ jsx(Highlights, { children: job.highlights.map((highlight, i) => /* @__PURE__ */ jsx(
+          "li",
+          {
+            dangerouslySetInnerHTML: {
+              __html: marked.parseInline(highlight, {
+                breaks: true
+              })
+            }
+          },
+          i
+        )) })
       ] }, index))
     ] }),
     skills?.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
@@ -6301,8 +6329,25 @@ function Resume({ resume }) {
             }
           ) })
         ] }),
-        project.description && /* @__PURE__ */ jsx(WorkSummary, { children: project.description }),
-        project.highlights?.length > 0 && /* @__PURE__ */ jsx(Highlights, { children: project.highlights.map((highlight, i) => /* @__PURE__ */ jsx("li", { children: highlight }, i)) })
+        project.description && /* @__PURE__ */ jsx(
+          WorkSummary,
+          {
+            dangerouslySetInnerHTML: {
+              __html: renderMarkdown(project.description)
+            }
+          }
+        ),
+        project.highlights?.length > 0 && /* @__PURE__ */ jsx(Highlights, { children: project.highlights.map((highlight, i) => /* @__PURE__ */ jsx(
+          "li",
+          {
+            dangerouslySetInnerHTML: {
+              __html: marked.parseInline(highlight, {
+                breaks: true
+              })
+            }
+          },
+          i
+        )) })
       ] }, index))
     ] }),
     volunteer?.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
@@ -6321,8 +6366,25 @@ function Resume({ resume }) {
             }
           ) })
         ] }),
-        vol.summary && /* @__PURE__ */ jsx(WorkSummary, { children: vol.summary }),
-        vol.highlights?.length > 0 && /* @__PURE__ */ jsx(Highlights, { children: vol.highlights.map((highlight, i) => /* @__PURE__ */ jsx("li", { children: highlight }, i)) })
+        vol.summary && /* @__PURE__ */ jsx(
+          WorkSummary,
+          {
+            dangerouslySetInnerHTML: {
+              __html: renderMarkdown(vol.summary)
+            }
+          }
+        ),
+        vol.highlights?.length > 0 && /* @__PURE__ */ jsx(Highlights, { children: vol.highlights.map((highlight, i) => /* @__PURE__ */ jsx(
+          "li",
+          {
+            dangerouslySetInnerHTML: {
+              __html: marked.parseInline(highlight, {
+                breaks: true
+              })
+            }
+          },
+          i
+        )) })
       ] }, index))
     ] }),
     awards?.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
@@ -6334,7 +6396,14 @@ function Resume({ resume }) {
           award.awarder
         ] }),
         award.date && /* @__PURE__ */ jsx(EducationDate, { children: award.date }),
-        award.summary && /* @__PURE__ */ jsx(WorkSummary, { children: award.summary })
+        award.summary && /* @__PURE__ */ jsx(
+          WorkSummary,
+          {
+            dangerouslySetInnerHTML: {
+              __html: renderMarkdown(award.summary)
+            }
+          }
+        )
       ] }, index))
     ] }),
     publications?.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
@@ -6346,7 +6415,14 @@ function Resume({ resume }) {
           pub.publisher
         ] }),
         pub.releaseDate && /* @__PURE__ */ jsx(EducationDate, { children: pub.releaseDate }),
-        pub.summary && /* @__PURE__ */ jsx(WorkSummary, { children: pub.summary })
+        pub.summary && /* @__PURE__ */ jsx(
+          WorkSummary,
+          {
+            dangerouslySetInnerHTML: {
+              __html: renderMarkdown(pub.summary)
+            }
+          }
+        )
       ] }, index))
     ] }),
     languages?.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [

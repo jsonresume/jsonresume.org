@@ -1,0 +1,70 @@
+# Permanent npm maintenance tool (manual dispatch only).
+#
+# Runs npm administrative commands (currently: deprecating legacy packages)
+# against the npm registry using the NPM_TOKEN repo secret. Local machines are
+# generally not authenticated to npm, so this workflow is the canonical way to
+# perform npm account maintenance for the org.
+#
+# This is deprecate-only — it NEVER unpublishes. Deprecation leaves packages
+# installable (so existing dependents keep working) while surfacing a warning
+# that points users at the maintained replacements.
+#
+# Every package below was verified to include `thomasdavis` as a maintainer
+# (npm view <pkg> maintainers) before being added here. See PR referencing
+# the org-consolidation tracking issue #275.
+#
+# Usage: Actions tab -> "npm maintenance" -> Run workflow.
+
+name: npm maintenance
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Maintenance action to run'
+        required: true
+        default: 'deprecate-legacy'
+        type: choice
+        options:
+          - deprecate-legacy
+
+jobs:
+  maintenance:
+    name: ${{ inputs.action }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+
+      - name: Deprecate legacy packages
+        if: ${{ inputs.action == 'deprecate-legacy' }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          set -u
+
+          # deprecate <pkg> "<message>": echo the command, run it with `|| true`
+          # so a single failure does not abort the rest, and capture the output.
+          deprecate() {
+            pkg="$1"
+            msg="$2"
+            echo "::group::npm deprecate $pkg"
+            echo "+ npm deprecate \"$pkg\" \"$msg\""
+            npm deprecate "$pkg" "$msg" 2>&1 || true
+            echo "::endgroup::"
+          }
+
+          THEME_MSG="Deprecated and unmaintained. Maintained themes: https://github.com/jsonresume/jsonresume.org (packages/themes)."
+          RESUME_TO_MSG="Deprecated — superseded by the JSON Resume registry (https://registry.jsonresume.org). See https://github.com/jsonresume/jsonresume.org."
+          SCHEMA_MSG="Schema moved to @jsonresume/schema (current spec). This legacy package stays published for compatibility."
+
+          deprecate "jsonresume-theme-boilerplate" "$THEME_MSG"
+          deprecate "jsonresume-theme-business-card" "$THEME_MSG"
+          deprecate "resume-to-markdown" "$RESUME_TO_MSG"
+          deprecate "resume-to-pdf" "$RESUME_TO_MSG"
+          deprecate "resume-to-text" "$RESUME_TO_MSG"
+          deprecate "resume-schema" "$SCHEMA_MSG"
+
+          echo "Done. Review the per-package groups above for any failures."
