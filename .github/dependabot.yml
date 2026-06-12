@@ -1,43 +1,43 @@
 version: 2
 updates:
   # JavaScript / TypeScript dependencies (monorepo root)
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: 'npm'
+    directory: '/'
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
     open-pull-requests-limit: 5
     groups:
       # Bundle all non-major version bumps into a single PR to avoid spamming
       # the monorepo. Security updates remain separate (Dependabot default).
       minor-and-patch:
         patterns:
-          - "*"
+          - '*'
         update-types:
-          - "minor"
-          - "patch"
+          - 'minor'
+          - 'patch'
     ignore:
       # Framework/auth major bumps need human review.
-      - dependency-name: "next"
+      - dependency-name: 'next'
         update-types:
-          - "version-update:semver-major"
-      - dependency-name: "react"
+          - 'version-update:semver-major'
+      - dependency-name: 'react'
         update-types:
-          - "version-update:semver-major"
-      - dependency-name: "react-dom"
+          - 'version-update:semver-major'
+      - dependency-name: 'react-dom'
         update-types:
-          - "version-update:semver-major"
-      - dependency-name: "next-auth"
+          - 'version-update:semver-major'
+      - dependency-name: 'next-auth'
         update-types:
-          - "version-update:semver-major"
+          - 'version-update:semver-major'
 
   # GitHub Actions used by workflows
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: 'github-actions'
+    directory: '/'
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
 
   # Rust crate (packages/core-rust)
-  - package-ecosystem: "cargo"
-    directory: "/packages/core-rust"
+  - package-ecosystem: 'cargo'
+    directory: '/packages/core-rust'
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
