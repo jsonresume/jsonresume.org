@@ -7,5 +7,5 @@ edition = "2024"
 email_address = "0.2.9"
 regex = "1.11.1"
 serde = { version = "1.0.219", features = ["derive"] }
-serde_valid = "1.0.5"
+serde_valid = "2.0.2"
 url = "2.5.4"
