@@ -276,7 +276,7 @@ function Resume({ resume }) {
   } = resume;
 
   return (
-    <Layout>
+    <Layout as="main">
       <Header>
         <Name>{basics.name}</Name>
         {basics.label && <Label>{basics.label}</Label>}

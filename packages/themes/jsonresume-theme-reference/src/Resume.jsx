@@ -103,7 +103,7 @@ function Resume({ resume }) {
   } = resume;
 
   return (
-    <Layout>
+    <Layout as="main">
       {/* Hero Section - Name, Title, Contact */}
       {basics && (
         <Header>

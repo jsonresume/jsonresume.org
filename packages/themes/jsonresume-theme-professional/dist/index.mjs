@@ -1,4 +1,4 @@
-import { jsxs, jsx, Fragment } from "react/jsx-runtime";
+import { jsxs, Fragment, jsx } from "react/jsx-runtime";
 import { renderToString } from "react-dom/server";
 import o, { useState, useMemo, useEffect, useContext, useDebugValue, createElement, useRef } from "react";
 import { marked } from "marked";
@@ -1690,7 +1690,7 @@ const render = (resume) => {
   const sheet = new gt();
   const html = renderToString(sheet.collectStyles(/* @__PURE__ */ jsx(Resume, { resume })));
   const styles = sheet.getStyleTags();
-  return `<!DOCTYPE html><head>
+  return `<!DOCTYPE html><html lang="en"><head>
   <title>${resume.basics.name} - Resume</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -1776,7 +1776,7 @@ const render = (resume) => {
 
 
   </style>
-  ${styles}</head><body>${html}</body></html>`;
+  ${styles}</head><body><main>${html}</main></body></html>`;
 };
 export {
   Resume,
