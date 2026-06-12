@@ -5,11 +5,28 @@ description: "Docwright documentation"
 
 # Documentation Site
 
-This module composes the documentation site for the JSON Resume API, integrating multiple endpoint documentation components and data examples into a cohesive user interface. It serves as the central aggregation point for API overview, resume retrieval, job recommendations, legacy compatibility, and ATS compatibility analysis documentation.
+There are two distinct "docs" surfaces in this repository. This page covers both, but they should not be confused:
+
+1. **The standalone documentation site (`apps/docs`)** — the site you are reading now, served at [docs.jsonresume.org](https://docs.jsonresume.org). See "The `apps/docs` Site" immediately below.
+2. **The registry's in-app API documentation page (`apps/registry/app/docs`)** — a single React route inside the registry app that renders human-readable JSON Resume API reference. The bulk of this page (from "Registry In-App API Docs Page" onward) documents that route.
+
+## The `apps/docs` Site
+
+The standalone documentation site lives at `apps/docs` and is served at `docs.jsonresume.org`.
+
+- **Toolchain:** Built with [Fumadocs](https://fumadocs.dev) (`fumadocs-core`, `fumadocs-mdx`, `fumadocs-ui`) on top of Next.js. Content is authored as MDX under `apps/docs/content/docs`; `fumadocs-mdx` runs on `postinstall` and during `typecheck` to generate the docs source. This replaced the project's earlier Nextra-based setup.
+- **Build:** A static export — `next.config.mjs` sets `output: 'export'`, producing static HTML in `apps/docs/out`. Build with `pnpm --filter docs build`.
+- **Deployment:** The live production site at `docs.jsonresume.org` is served by **Vercel** (responses carry Vercel cache/`x-vercel-id` headers). The repository also retains a `.github/workflows/deploy-docs.yml` workflow that publishes the static export to GitHub Pages (writing a `docs.jsonresume.org` CNAME) on pushes touching `apps/docs/**`; the README still describes that GitHub Pages path. In other words: the repo carries a GitHub Pages workflow, but the domain currently resolves to a Vercel deployment. Treat Vercel as the source of truth for what is live and reconcile `deploy-docs.yml`/`README` if only one path should remain.
+
+For the package layout and how `apps/docs` fits into the monorepo, see the Repository Structure page.
+
+## Registry In-App API Docs Page
+
+The rest of this page documents the in-app API documentation **route inside the registry** (`apps/registry/app/docs`), which composes multiple endpoint documentation components and data examples into a cohesive user interface. It serves as the central aggregation point for API overview, resume retrieval, job recommendations, legacy compatibility, and ATS compatibility analysis documentation. It is a feature of the registry app and is unrelated to the Fumadocs site above.
 
 ## Purpose and Scope
 
-This page documents the core React components and data structures that render the JSON Resume API documentation site. It covers the composition of the main documentation page, the detailed endpoint documentation components, example data used for illustrating API responses, and the ATS compatibility scoring system. It does not cover the backend API implementations, data persistence, or AI processing logic.
+This section documents the core React components and data structures that render the registry's in-app JSON Resume API documentation route. It covers the composition of the main documentation page, the detailed endpoint documentation components, example data used for illustrating API responses, and the ATS compatibility scoring system. It does not cover the backend API implementations, data persistence, or AI processing logic.
 
 For the API backend and AI matching mechanisms, see the Job Matching Engine page. For frontend UI components unrelated to documentation, see the UI Components page.
 

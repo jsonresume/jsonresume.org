@@ -7,6 +7,15 @@ description: "Docwright documentation"
 
 This project implements a comprehensive platform for managing, analyzing, and visualizing professional resumes and job data. It integrates multiple subsystems including resume parsing and analysis, job matching and decision support, interactive job graph visualization, interview facilitation, and user dashboard components. The architecture is modular, with distinct UI components, hooks for state and data management, and backend API endpoints supporting AI-driven analysis and data persistence.
 
+## Repository at a Glance
+
+This is a pnpm + Turborepo monorepo. Following the 2026 org consolidation, several previously standalone repositories now live here:
+
+- **Applications (`apps/`)** — the hosted registry and product app (`apps/registry`), the marketing site at jsonresume.org (`apps/homepage2`), and this documentation site at docs.jsonresume.org (`apps/docs`).
+- **Core ecosystem packages (`packages/`)** — the canonical schema and validator (`packages/schema`, npm `@jsonresume/schema`), the revived command-line tool (`packages/cli`, npm `resume-cli`), a Rust implementation of the schema (`packages/core-rust`, `json-resume-serde`), shared resume components (`packages/resume-core`), the shared UI library (`packages/ui`), the HN job-search CLI (`packages/job-search`), ATS validation (`packages/ats-validator`), format converters (`packages/converters/*`), and ~49 resume themes (`packages/themes/*`).
+
+The subsystems described below live primarily in `apps/registry`. For the full package map and the Changesets-based release process, see the Repository Structure page. For the schema itself, see the Schema Definitions page.
+
 ## Architecture Overview
 
 ```mermaid
