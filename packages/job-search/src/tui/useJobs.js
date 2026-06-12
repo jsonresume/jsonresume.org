@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { getCached, setCache, updateCachedJob } from '../cache.js';
+import { normalizeLocation } from '../formatters.js';
 
 export function useJobs(api, activeFilters, tab, searchId, getDossierStatus) {
   const [allJobs, setAllJobs] = useState([]);
@@ -119,9 +120,11 @@ export function useJobs(api, activeFilters, tab, searchId, getDossierStatus) {
 
     for (const f of activeFilters || []) {
       if (f.type === 'remote') {
-        filtered = filtered.filter(
-          (j) => j.remote === 'Full' || /remote/i.test(j.location || '')
-        );
+        // location may be an object {city,region,countryCode} (canonical wire
+        // shape) or a historic string; normalizeLocation handles both and also
+        // folds in the separate `remote` field. The old `/remote/i.test(...)`
+        // silently failed on object locations (it tested "[object Object]").
+        filtered = filtered.filter((j) => normalizeLocation(j).remote);
       }
       if (f.type === 'globalRemote') {
         filtered = filtered.filter((j) => j.global_remote === true);
