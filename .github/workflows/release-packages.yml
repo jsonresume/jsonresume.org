@@ -29,9 +29,18 @@ on:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
+# Job-level permissions for the GITHUB_TOKEN. changesets/action needs
+# contents:write + pull-requests:write to open/update the "Version Packages" PR
+# (though that PR is actually created via the App token below). id-token:write
+# enables npm Trusted Publishing (OIDC): once a package registers this repo +
+# workflow as a Trusted Publisher on npmjs.com, npm exchanges this short-lived
+# OIDC token for publish auth — no NPM_TOKEN needed for that package. It is
+# harmless for packages that have not yet been registered (they keep using the
+# token). See docs/RELEASING.md.
 permissions:
   contents: write
   pull-requests: write
+  id-token: write
 
 jobs:
   release:
@@ -54,6 +63,15 @@ jobs:
           node-version: 20
           cache: pnpm
           registry-url: https://registry.npmjs.org
+
+      # npm Trusted Publishing (OIDC) requires npm >= 11.5.0. setup-node with
+      # node 20 ships npm 10, which silently falls back to token auth and cannot
+      # use the id-token:write permission above. Upgrading the global npm CLI is
+      # the activation step for OIDC publishing. This is publish-tooling only —
+      # it does not touch pnpm or the `pnpm changeset publish` command, and is a
+      # no-op for packages still using NPM_TOKEN. See docs/RELEASING.md.
+      - name: Upgrade npm for Trusted Publishing (OIDC)
+        run: npm install -g npm@latest
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
