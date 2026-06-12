@@ -38,8 +38,8 @@ resumeSchema.validate(
 Or against a full `resume.json`
 
 ```js
-import fs = require('fs');
-import schema from 'resume-schema';
+const fs = require('fs');
+const resumeSchema = require('@jsonresume/schema');
 const resumeObject = JSON.parse(fs.readFileSync('./resume.json', 'utf8'));
 resumeSchema.validate(resumeObject);
 ```
@@ -47,12 +47,12 @@ resumeSchema.validate(resumeObject);
 The JSON Resume schema is available from:
 
 ```js
-require("resume-schema").schema;
+require('@jsonresume/schema').schema;
 ```
 
 ### Contribute
 
-We encourage anyone who's interested in participating in the formation of this standard to join the discussions [here on GitHub](https://github.com/jsonresume/resume-schema/issues). Also feel free to fork this project and submit new ideas to add to the JSON Resume Schema standard. To make sure all formatting is kept in check, please install the [EditorConfig plugin](http://editorconfig.org/) for your editor of choice.
+We encourage anyone who's interested in participating in the formation of this standard to join the discussions [here on GitHub](https://github.com/jsonresume/jsonresume.org/issues). Also feel free to fork this project and submit new ideas to add to the JSON Resume Schema standard. To make sure all formatting is kept in check, please install the [EditorConfig plugin](http://editorconfig.org/) for your editor of choice.
 
 ### Versioning
 
@@ -65,14 +65,7 @@ a major-version release. As a result of this policy, you can (and should)
 specify any dependency on JSON Resume Schema by using the Pessimistic Version
 Constraint with two digits of precision.
 
-We use automatic semver system.
-
-Pull requests titles should be formatted as such
-
-```
-"fix: added something" - will bump the patch version
-"feat: added something" - will bump the minor version
-```
+Releases are managed from the monorepo with [Changesets](https://github.com/changesets/changesets). Add a changeset describing your change and the appropriate version bump (`patch`/`minor`/`major`) in the same pull request.
 
 `major` version bumps will be few and far between for this schema.
 
@@ -83,7 +76,7 @@ A draft schema for job descriptions is available in this project as well. It is 
 The JSON Job schema is available from:
 
 ```js
-require("resume-schema").jobSchema;
+require('@jsonresume/schema').jobSchema;
 ```
 
 ### Other resume standards
