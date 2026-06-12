@@ -1,4 +1,4 @@
-export const SUPABASE_URL = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
+export { SUPABASE_URL } from '@/lib/supabaseConfig';
 export const ITEMS_PER_PAGE = 100;
 
 export const METADATA = {

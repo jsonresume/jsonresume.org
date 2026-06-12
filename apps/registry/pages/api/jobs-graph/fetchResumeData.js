@@ -5,7 +5,7 @@
  */
 export async function fetchResumeData(username) {
   const { createClient } = require('@supabase/supabase-js');
-  const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
+  const { SUPABASE_URL: supabaseUrl } = require('../../../lib/supabaseConfig');
   const supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
 
   const { data } = await supabase

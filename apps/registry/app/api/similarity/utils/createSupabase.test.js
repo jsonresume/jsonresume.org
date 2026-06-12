@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { createSupabase } from './createSupabase';
+import { SUPABASE_URL } from '../../../../lib/supabaseConfig';
 
 vi.mock('@supabase/supabase-js', () => ({
   createClient: vi.fn((url, key) => ({
@@ -33,7 +34,7 @@ describe('createSupabase', () => {
 
     const client = createSupabase();
 
-    expect(client.url).toBe('https://itxuhvvwryeuzuyihpkp.supabase.co');
+    expect(client.url).toBe(SUPABASE_URL);
   });
 
   it('returns client object', () => {

@@ -20,6 +20,7 @@ import { matchJobs, buildJobInfoMap } from './jobMatcher';
 import { buildGraphData } from './graphBuilder';
 import { VPTree } from './vpTree';
 import { dotProduct, normalizeInPlace } from './vectorOps';
+import { SUPABASE_URL } from '../../../../lib/supabaseConfig';
 
 vi.mock('@/lib/logger', () => ({
   logger: {
@@ -36,7 +37,6 @@ vi.mock('@/lib/retry', () => ({
   createRetryFetch: () => fetch,
 }));
 
-const SUPABASE_URL = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
 const SUPABASE_KEY = process.env.SUPABASE_KEY;
 const HAS_DB = Boolean(SUPABASE_KEY);
 

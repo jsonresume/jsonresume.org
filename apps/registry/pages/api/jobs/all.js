@@ -1,6 +1,6 @@
 const { createClient } = require('@supabase/supabase-js');
 
-const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
+const { SUPABASE_URL: supabaseUrl } = require('../../../lib/supabaseConfig');
 
 export const config = {
   runtime: 'edge',

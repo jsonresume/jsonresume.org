@@ -10,7 +10,7 @@ const trackView = async (username) => {
 
   // Lazy load Supabase client only when needed
   const { createClient } = require('@supabase/supabase-js');
-  const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
+  const { SUPABASE_URL: supabaseUrl } = require('./supabaseConfig');
 
   // insert a view record into the database
   try {
