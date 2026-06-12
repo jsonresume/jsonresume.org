@@ -1,28 +1,14 @@
 # JSON Resume Schema
 
-[![GitHub Releases](https://badgen.net/github/tag/jsonresume/resume-schema)](https://github.com/jsonresume/resume-schema/releases)
-[![NPM Release](https://badgen.net/npm/v/resume-schema)](https://www.npmjs.com/package/resume-schema)
-[![Latest Status](https://github.com/jsonresume/resume-schema/workflows/Latest/badge.svg)](https://github.com/vanillawc/wc-template/actions)
-[![Release Status](https://github.com/jsonresume/resume-schema/workflows/Release/badge.svg)](https://github.com/vanillawc/wc-template/actions)
+[![NPM Release](https://badgen.net/npm/v/@jsonresume/schema)](https://www.npmjs.com/package/@jsonresume/schema)
 
 [![](https://dcbadge.limes.pink/api/server/GTZtn8pTXC)](https://discord.gg/GTZtn8pTXC)
 
 Standard, Specification, Schema
 
-## Important Note  
+> **Note:** This package now lives in the [jsonresume.org monorepo](https://github.com/jsonresume/jsonresume.org) as `packages/schema` (imported with full history from [jsonresume/resume-schema](https://github.com/jsonresume/resume-schema)). It keeps its npm identity as [`@jsonresume/schema`](https://www.npmjs.com/package/@jsonresume/schema) and is published from this workspace. Please open issues and PRs against the monorepo.
 
-The current working version of the schema is `v1.0.0` that is represented by the `master` branch and the files `schema.json` and `sample.resume.json`. 
-
-All PR's for the next version should be made against the `develop` branch. 
-
-This enforces that the schema package always has the official stable release of the schema.
-
-### Homepage and Registry
-
-If you are looking for the homepage, registry, tooling or themes, see the JSON Resume monorepo
-
-[@jsonresume/jsonresume.org](https://github.com/jsonresume/jsonresume.org/)
- 
+The current stable schema is represented by the files `schema.json` and `sample.resume.json`.
 
 ### Getting started
 

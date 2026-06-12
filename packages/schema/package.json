@@ -7,17 +7,16 @@
   "scripts": {
     "test": "npm run validate && npm run test-units",
     "validate": "ajv validate -s node_modules/json-metaschema/draft-07-schema -d schema",
-    "test-units": "tape **/*.spec.js | tap-spec",
-    "preversion": "npm test",
-    "postversion": "git push --follow-tags"
+    "test-units": "tape **/*.spec.js | tap-spec"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/jsonresume/resume-schema.git"
+    "url": "git+https://github.com/jsonresume/jsonresume.org.git",
+    "directory": "packages/schema"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jsonresume/resume-schema/issues"
+    "url": "https://github.com/jsonresume/jsonresume.org/issues"
   },
   "files": [
     "sample.resume.json",

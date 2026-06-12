@@ -134,18 +134,14 @@
   "highlightsItemValid": {
     "volunteer": [
       {
-        "highlights": [
-          "Awarded 'Teacher of the Month'"
-        ]
+        "highlights": ["Awarded 'Teacher of the Month'"]
       }
     ]
   },
   "highlightsItemInvalid": {
     "volunteer": [
       {
-        "highlights": [
-          null
-        ]
+        "highlights": [null]
       }
     ]
   }

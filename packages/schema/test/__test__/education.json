@@ -134,18 +134,14 @@
   "coursesItemValid": {
     "education": [
       {
-        "courses": [
-          "DB1101 - Basic SQL"
-        ]
+        "courses": ["DB1101 - Basic SQL"]
       }
     ]
   },
   "coursesItemInvalid": {
     "education": [
       {
-        "courses": [
-          null
-        ]
+        "courses": [null]
       }
     ]
   }

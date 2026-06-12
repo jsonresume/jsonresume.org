@@ -162,18 +162,14 @@
   "highlightsItemValid": {
     "work": [
       {
-        "highlights": [
-          "Successfully won Techcrunch Disrupt"
-        ]
+        "highlights": ["Successfully won Techcrunch Disrupt"]
       }
     ]
   },
   "highlightsItemInvalid": {
     "work": [
       {
-        "highlights": [
-          null
-        ]
+        "highlights": [null]
       }
     ]
   }

@@ -50,18 +50,14 @@
   "keywordsItemValid": {
     "skills": [
       {
-        "keywords": [
-          "HTML"
-        ]
+        "keywords": ["HTML"]
       }
     ]
   },
   "keywordsItemInvalid": {
     "skills": [
       {
-        "keywords": [
-          null
-        ]
+        "keywords": [null]
       }
     ]
   }

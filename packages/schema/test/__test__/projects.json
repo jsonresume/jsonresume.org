@@ -50,18 +50,14 @@
   "highlightsItemValid": {
     "projects": [
       {
-        "highlights": [
-          "Won award at AIHacks 2016"
-        ]
+        "highlights": ["Won award at AIHacks 2016"]
       }
     ]
   },
   "highlightsItemInvalid": {
     "projects": [
       {
-        "highlights": [
-          null
-        ]
+        "highlights": [null]
       }
     ]
   },
@@ -82,18 +78,14 @@
   "keywordsItemValid": {
     "projects": [
       {
-        "keywords": [
-          "GoogleMaps"
-        ]
+        "keywords": ["GoogleMaps"]
       }
     ]
   },
   "keywordsItemInvalid": {
     "projects": [
       {
-        "keywords": [
-          null
-        ]
+        "keywords": [null]
       }
     ]
   },
@@ -170,18 +162,14 @@
   "rolesItemValid": {
     "projects": [
       {
-        "roles": [
-          "Team lead"
-        ]
+        "roles": ["Team lead"]
       }
     ]
   },
   "rolesItemInvalid": {
     "projects": [
       {
-        "roles": [
-          null
-        ]
+        "roles": [null]
       }
     ]
   },

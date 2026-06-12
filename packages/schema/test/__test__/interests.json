@@ -36,18 +36,14 @@
   "keywordsItemValid": {
     "interests": [
       {
-        "keywords": [
-          "Ferrets"
-        ]
+        "keywords": ["Ferrets"]
       }
     ]
   },
   "keywordsItemInvalid": {
     "interests": [
       {
-        "keywords": [
-          null
-        ]
+        "keywords": [null]
       }
     ]
   }
