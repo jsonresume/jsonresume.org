@@ -11,7 +11,7 @@
     "url": "https://github.com/rolandnsharp/jsonresume-theme-claude"
   },
   "dependencies": {
-    "markdown-it": "^14.1.1"
+    "markdown-it": "^14.2.0"
   },
   "license": "MIT"
 }
