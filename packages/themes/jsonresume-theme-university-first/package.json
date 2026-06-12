@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-university-first",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "For fresh grads - education credentials come first, work second",
   "main": "./dist/index.js",
   "type": "module",
