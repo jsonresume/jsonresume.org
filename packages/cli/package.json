@@ -27,6 +27,9 @@
     "resume": "build/main.js"
   },
   "dependencies": {
+    "@jsonresume/schema": "workspace:*",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
     "async": "^3.2.0",
     "browser-sync": "^2.29.3",
     "btoa": "^1.2.1",
@@ -42,13 +45,10 @@
     "puppeteer": "^23.0.0",
     "quaff": "^4.2.0",
     "read": "^1.0.7",
-    "resume-schema": "^1.0.0",
     "stream-to-string": "^1.2.1",
     "superagent": "^6.0.0",
     "yaml-js": "^0.2.3",
-    "yesno": "^0.3.1",
-    "z-schema": "^5.0.0",
-    "z-schema-errors": "^0.2.1"
+    "yesno": "^0.3.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.25.0",

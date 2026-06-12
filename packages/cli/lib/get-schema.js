@@ -6,7 +6,7 @@ const readFile = promisify(readFileCB);
 export default async ({ path: pathArg } = {}) => {
   let path = pathArg;
   if (!path) {
-    path = require.resolve('resume-schema/schema.json');
+    path = require.resolve('@jsonresume/schema/schema.json');
   }
   return JSON.parse(
     await readFile(path, {
