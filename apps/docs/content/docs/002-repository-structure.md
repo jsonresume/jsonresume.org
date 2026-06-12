@@ -212,7 +212,7 @@ This package provides utilities for validating Applicant Tracking System (ATS) c
 
 ### Key Points
 
-- Named `@resume/ats-validator`.
+- Named `@jsonresume/ats-validator`.
 - Exports a module with main entry `src/index.js`.
 - Depends on `cheerio` for HTML parsing.
 - Dev dependency on Vitest for testing.

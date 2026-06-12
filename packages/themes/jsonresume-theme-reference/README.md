@@ -46,7 +46,7 @@ const html = render(resume);
 
 ```javascript
 import { render } from 'jsonresume-theme-reference';
-import { validateATS } from '@resume/ats-validator';
+import { validateATS } from '@jsonresume/ats-validator';
 import fs from 'fs';
 
 // Complete JSON Resume with all 11 sections
@@ -285,11 +285,11 @@ const html = render(minimalResume); // No errors, renders what's available
 
 ## ATS Validation Integration
 
-This theme is built following ATS-friendly guidelines. You can validate any theme output using `@resume/ats-validator`:
+This theme is built following ATS-friendly guidelines. You can validate any theme output using `@jsonresume/ats-validator`:
 
 ```javascript
 import { render } from 'jsonresume-theme-reference';
-import { validateATS } from '@resume/ats-validator';
+import { validateATS } from '@jsonresume/ats-validator';
 
 const resume = { /* your resume data */ };
 const html = render(resume);

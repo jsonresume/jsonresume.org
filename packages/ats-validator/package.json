@@ -1,5 +1,5 @@
 {
-  "name": "@resume/ats-validator",
+  "name": "@jsonresume/ats-validator",
   "version": "0.1.0",
   "description": "ATS (Applicant Tracking System) validation utilities for resume HTML",
   "type": "module",
