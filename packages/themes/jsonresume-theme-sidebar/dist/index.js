@@ -6131,6 +6131,9 @@ function Resume({ resume }) {
     references = [],
     projects = [],
     awards = [],
+    certificates = [],
+    publications = [],
+    volunteer = [],
     interests = []
   } = resume;
   const nameParts = basics.name ? basics.name.split(" ") : [];
@@ -6264,6 +6267,25 @@ function Resume({ resume }) {
           project.highlights && project.highlights.length > 0 && /* @__PURE__ */ jsx(WorkDescription, { children: project.highlights.map((highlight, idx) => /* @__PURE__ */ jsx("li", { children: highlight }, idx)) })
         ] }, index2))
       ] }),
+      volunteer.length > 0 && /* @__PURE__ */ jsxs(MainSection, { children: [
+        /* @__PURE__ */ jsx(MainSectionTitle, { children: "VOLUNTEER" }),
+        volunteer.map((vol, index2) => /* @__PURE__ */ jsxs(WorkItem, { children: [
+          /* @__PURE__ */ jsxs(WorkHeader, { children: [
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx(WorkTitle, { children: vol.organization }),
+              /* @__PURE__ */ jsx(WorkCompany, { children: vol.position })
+            ] }),
+            /* @__PURE__ */ jsx(WorkDate, { children: vol.startDate && /* @__PURE__ */ jsxs(Fragment, { children: [
+              new Date(vol.startDate).getFullYear(),
+              " -",
+              " ",
+              vol.endDate ? new Date(vol.endDate).getFullYear() : "PRESENT"
+            ] }) })
+          ] }),
+          vol.summary && /* @__PURE__ */ jsx("p", { style: { marginBottom: "10px", color: "#4a4a4a" }, children: vol.summary }),
+          vol.highlights && vol.highlights.length > 0 && /* @__PURE__ */ jsx(WorkDescription, { children: vol.highlights.map((highlight, idx) => /* @__PURE__ */ jsx("li", { children: highlight }, idx)) })
+        ] }, index2))
+      ] }),
       awards.length > 0 && /* @__PURE__ */ jsxs(MainSection, { children: [
         /* @__PURE__ */ jsx(MainSectionTitle, { children: "AWARDS & HONORS" }),
         awards.map((award, index2) => /* @__PURE__ */ jsxs(
@@ -6277,6 +6299,59 @@ function Resume({ resume }) {
                 award.date && ` - ${new Date(award.date).toLocaleDateString()}`
               ] }),
               award.summary && /* @__PURE__ */ jsx("p", { style: { marginTop: "8px", color: "#4a4a4a" }, children: award.summary })
+            ]
+          },
+          index2
+        ))
+      ] }),
+      certificates.length > 0 && /* @__PURE__ */ jsxs(MainSection, { children: [
+        /* @__PURE__ */ jsx(MainSectionTitle, { children: "CERTIFICATES" }),
+        certificates.map((cert, index2) => /* @__PURE__ */ jsxs(
+          "div",
+          {
+            style: { marginBottom: "20px", paddingLeft: "25px" },
+            children: [
+              /* @__PURE__ */ jsx(WorkTitle, { children: cert.url ? /* @__PURE__ */ jsx(
+                "a",
+                {
+                  href: safeUrl(cert.url),
+                  target: "_blank",
+                  rel: getLinkRel(cert.url, true),
+                  style: { color: "#1e3a52" },
+                  children: cert.name
+                }
+              ) : cert.name }),
+              /* @__PURE__ */ jsxs(WorkCompany, { children: [
+                cert.issuer,
+                cert.date && ` - ${new Date(cert.date).toLocaleDateString()}`
+              ] })
+            ]
+          },
+          index2
+        ))
+      ] }),
+      publications.length > 0 && /* @__PURE__ */ jsxs(MainSection, { children: [
+        /* @__PURE__ */ jsx(MainSectionTitle, { children: "PUBLICATIONS" }),
+        publications.map((pub, index2) => /* @__PURE__ */ jsxs(
+          "div",
+          {
+            style: { marginBottom: "20px", paddingLeft: "25px" },
+            children: [
+              /* @__PURE__ */ jsx(WorkTitle, { children: pub.url ? /* @__PURE__ */ jsx(
+                "a",
+                {
+                  href: safeUrl(pub.url),
+                  target: "_blank",
+                  rel: getLinkRel(pub.url, true),
+                  style: { color: "#1e3a52" },
+                  children: pub.name
+                }
+              ) : pub.name }),
+              /* @__PURE__ */ jsxs(WorkCompany, { children: [
+                pub.publisher,
+                pub.releaseDate && ` - ${new Date(pub.releaseDate).toLocaleDateString()}`
+              ] }),
+              pub.summary && /* @__PURE__ */ jsx("p", { style: { marginTop: "8px", color: "#4a4a4a" }, children: pub.summary })
             ]
           },
           index2
