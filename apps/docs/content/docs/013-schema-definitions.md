@@ -7,9 +7,23 @@ description: "Docwright documentation"
 
 This module defines the JSON schema and TypeScript types that model the structure of resumes within the system. It provides a comprehensive, strongly typed contract for all resume sections, including personal information, work history, education, skills, and metadata. These schemas enable validation, tooling, and consistent data interchange across components that consume or produce resume data.
 
+## Canonical Schema (`packages/schema`)
+
+The single source of truth for the JSON Resume structure is `packages/schema`, published to npm as [`@jsonresume/schema`](https://www.npmjs.com/package/@jsonresume/schema). It was imported with full history from the former standalone `jsonresume/resume-schema` repository during the 2026 consolidation.
+
+Key facts about the canonical schema (`packages/schema/schema.json`):
+
+- It is a JSON Schema **draft-07** document (`"$schema": "http://json-schema.org/draft-07/schema#"`).
+- `additionalProperties` is **`true`** at the root and within nested objects — custom/extension fields are explicitly permitted.
+- The package's `validator.js` (the `main` entry) exposes `validate(resumeJson, callback)` backed by the `jsonschema` library, plus the raw `schema` and `jobSchema` objects.
+
+Consumers of the canonical schema include `resume-cli` (`packages/cli`), which validates `resume.json` with **Ajv** (`ajv` + `ajv-formats`, `strict: false`) against `@jsonresume/schema/schema.json`, and the Rust crate `packages/core-rust` (`json-resume-serde`), whose structs mirror this schema.
+
+> **Note on the registry's internal schema:** The sections below document a *separate, registry-internal* copy of the schema under `apps/registry/lib/schema/*.js`. That copy is a JSON Schema **draft-04** object with `additionalProperties: false` and is used only by the registry's own `/api/schema` and `components/schema.js`. It is intentionally stricter than — and distinct from — the canonical `@jsonresume/schema` package above. When the two disagree, the canonical `packages/schema` is authoritative.
+
 ## Purpose and Scope
 
-This page documents the schema definitions and related TypeScript interfaces representing various resume sections. It covers the JSON Schema objects used for validation in the registry app (`apps/registry/lib/schema/*.js`) and the corresponding TypeScript interfaces used in the Stack Overflow theme (`packages/themes/stackoverflow/src/types.ts` and related files). It does not cover resume rendering, persistence, or transformation logic.
+This page documents the canonical schema package (`packages/schema`, above), the registry's internal JSON Schema objects (`apps/registry/lib/schema/*.js`), and the corresponding TypeScript interfaces used in the Stack Overflow theme (`packages/themes/stackoverflow/src/types.ts` and related files). It does not cover resume rendering, persistence, or transformation logic.
 
 For how these schemas integrate into the resume processing pipeline, see the Pipeline Stages page. For UI components consuming these types, see the Theme Components page.
 
@@ -31,12 +45,14 @@ Sources: `apps/registry/lib/schema.js:16-43`, `apps/registry/lib/schema/definiti
 
 ---
 
-## Main Schema Object (`schema`)
+## Registry-Internal Main Schema Object (`schema`)
 
-**Purpose:** Defines the root JSON Schema object for validating complete resume JSON documents, aggregating all section schemas and shared definitions.  
+> The remaining sections on this page describe the registry's internal draft-04 schema copy (`apps/registry/lib/schema/*.js`), not the canonical `@jsonresume/schema` package documented at the top of this page.
+
+**Purpose:** Defines the root JSON Schema object the registry uses internally to validate complete resume JSON documents, aggregating all section schemas and shared definitions.  
 **Primary file:** `apps/registry/lib/schema.js:16-43`
 
-The `schema` object is a JSON Schema Draft-04 schema describing the entire resume structure. It disallows additional properties beyond those defined, ensuring strict validation.
+The `schema` object is a JSON Schema Draft-04 schema describing the entire resume structure. It disallows additional properties beyond those defined, ensuring strict validation. (This differs from the canonical `@jsonresume/schema`, which is draft-07 with `additionalProperties: true`.)
 
 | Field            | Type           | Purpose                                                                                      |
 |------------------|----------------|----------------------------------------------------------------------------------------------|
@@ -677,7 +693,8 @@ Sources: `apps/registry/lib/schema.js:16-43`, `packages/themes/stackoverflow/src
 
 The schema definitions subsystem depends on:
 
-- JSON Schema Draft-04 specification for validation semantics.
+- The canonical `@jsonresume/schema` package (`packages/schema`) as the authoritative draft-07 contract.
+- The registry's internal draft-04 schema copy (`apps/registry/lib/schema/*.js`) for the registry's own `/api/schema` endpoint.
 - Shared definitions for common patterns like flexible ISO 8601 dates.
 - TypeScript interfaces for static typing in UI and tooling layers.
 
