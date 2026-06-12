@@ -362,6 +362,22 @@ function Awards({ awards = [] }) {
   );
 }
 
+function Certificates({ certificates = [] }) {
+  if (!certificates?.length) return null;
+
+  return (
+    <>
+      {certificates.map((cert, index) => (
+        <EducationItem key={index}>
+          <DateText>{cert.date || ''}</DateText>
+          <Institution>{cert.name}</Institution>
+          {cert.issuer && <Degree>Issued by {cert.issuer}</Degree>}
+        </EducationItem>
+      ))}
+    </>
+  );
+}
+
 function Publications({ publications = [] }) {
   if (!publications?.length) return null;
 
@@ -404,6 +420,7 @@ function Resume({ resume }) {
     projects = [],
     volunteer = [],
     awards = [],
+    certificates = [],
     publications = [],
     languages = [],
     interests = [],
@@ -453,6 +470,13 @@ function Resume({ resume }) {
         <Section>
           <StyledSectionTitle>Awards</StyledSectionTitle>
           <Awards awards={awards} />
+        </Section>
+      )}
+
+      {certificates?.length > 0 && (
+        <Section>
+          <StyledSectionTitle>Certificates</StyledSectionTitle>
+          <Certificates certificates={certificates} />
         </Section>
       )}
 

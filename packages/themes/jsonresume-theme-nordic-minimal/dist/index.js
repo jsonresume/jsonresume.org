@@ -6224,9 +6224,11 @@ function Resume({ resume }) {
     skills,
     volunteer,
     awards,
+    certificates,
     publications,
     languages,
     interests,
+    references,
     projects
   } = resume;
   return /* @__PURE__ */ jsxs(ResumeContainer, { children: [
@@ -6370,6 +6372,62 @@ function Resume({ resume }) {
             award.awarder && /* @__PURE__ */ jsx(Degree, { children: award.awarder }),
             award.date && /* @__PURE__ */ jsx(StyledDateRange, { startDate: award.date }),
             award.summary && /* @__PURE__ */ jsx(Description, { children: award.summary })
+          ] }, index))
+        ] }),
+        certificates && certificates.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
+          /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Certificates" }),
+          certificates.map((cert, index) => /* @__PURE__ */ jsxs(EducationItem, { children: [
+            cert.name && /* @__PURE__ */ jsx(Institution, { children: cert.url ? /* @__PURE__ */ jsx(
+              Link,
+              {
+                href: safeUrl(cert.url),
+                target: isExternalUrl(cert.url) ? "_blank" : void 0,
+                children: cert.name
+              }
+            ) : cert.name }),
+            cert.issuer && /* @__PURE__ */ jsx(Degree, { children: cert.issuer }),
+            cert.date && /* @__PURE__ */ jsx(StyledDateRange, { startDate: cert.date })
+          ] }, index))
+        ] }),
+        publications && publications.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
+          /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Publications" }),
+          publications.map((pub, index) => /* @__PURE__ */ jsxs(EducationItem, { children: [
+            pub.name && /* @__PURE__ */ jsx(Institution, { children: pub.url ? /* @__PURE__ */ jsx(
+              Link,
+              {
+                href: safeUrl(pub.url),
+                target: isExternalUrl(pub.url) ? "_blank" : void 0,
+                children: pub.name
+              }
+            ) : pub.name }),
+            pub.publisher && /* @__PURE__ */ jsx(Degree, { children: pub.publisher }),
+            pub.releaseDate && /* @__PURE__ */ jsx(StyledDateRange, { startDate: pub.releaseDate }),
+            pub.summary && /* @__PURE__ */ jsx(Description, { children: pub.summary })
+          ] }, index))
+        ] }),
+        volunteer && volunteer.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
+          /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Volunteer" }),
+          volunteer.map((vol, index) => /* @__PURE__ */ jsxs(ExperienceItem, { children: [
+            /* @__PURE__ */ jsxs(ExperienceHeader, { children: [
+              vol.position && /* @__PURE__ */ jsx(Position, { children: vol.position }),
+              vol.organization && /* @__PURE__ */ jsx(Company, { children: vol.organization }),
+              /* @__PURE__ */ jsx(
+                StyledDateRange,
+                {
+                  startDate: vol.startDate,
+                  endDate: vol.endDate
+                }
+              )
+            ] }),
+            vol.summary && /* @__PURE__ */ jsx(Description, { children: vol.summary }),
+            vol.highlights && vol.highlights.length > 0 && /* @__PURE__ */ jsx(Highlights, { children: vol.highlights.map((highlight, i) => /* @__PURE__ */ jsx(Highlight, { children: highlight }, i)) })
+          ] }, index))
+        ] }),
+        references && references.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
+          /* @__PURE__ */ jsx(StyledSectionTitle, { children: "References" }),
+          references.map((ref, index) => /* @__PURE__ */ jsxs(EducationItem, { children: [
+            ref.name && /* @__PURE__ */ jsx(Institution, { children: ref.name }),
+            ref.reference && /* @__PURE__ */ jsx(Description, { children: ref.reference })
           ] }, index))
         ] })
       ] })

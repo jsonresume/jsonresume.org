@@ -283,6 +283,7 @@ function Resume({ resume }) {
     projects = [],
     volunteer = [],
     awards = [],
+    certificates = [],
     publications = [],
     languages = [],
     interests = [],
@@ -435,6 +436,28 @@ function Resume({ resume }) {
                   {award.awarder} {award.date && `• ${award.date}`}
                 </p>
                 {award.summary && <p>{award.summary}</p>}
+              </SimpleItem>
+            ))}
+          </SimpleList>
+        </StyledSection>
+      )}
+
+      {certificates.length > 0 && (
+        <StyledSection>
+          <StyledSectionTitle>Certificates</StyledSectionTitle>
+          <SimpleList>
+            {certificates.map((cert, index) => (
+              <SimpleItem key={index}>
+                <h4>
+                  {cert.url ? (
+                    <Link href={safeUrl(cert.url)}>{cert.name}</Link>
+                  ) : (
+                    cert.name
+                  )}
+                </h4>
+                <p>
+                  {cert.issuer} {cert.date && `• ${cert.date}`}
+                </p>
               </SimpleItem>
             ))}
           </SimpleList>
