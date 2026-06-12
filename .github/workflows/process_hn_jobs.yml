@@ -173,7 +173,7 @@ jobs:
 
       - name: Upload logs as artifacts
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: job-processing-logs-${{ github.run_number }}
           path: |

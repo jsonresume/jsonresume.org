@@ -92,7 +92,7 @@ jobs:
         working-directory: apps/registry
       - name: Run Playwright tests
         run: pnpm turbo test:e2e --concurrency 1000
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: playwright-report
