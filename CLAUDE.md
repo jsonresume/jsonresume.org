@@ -4,7 +4,7 @@
 
 - **Org/Repo:** `jsonresume/jsonresume.org` — ALWAYS use `owner: "jsonresume"`
 - **Stack:** Next.js monorepo (Turborepo + pnpm), Vercel deployment, Supabase DB (`registry`)
-- **AI SDK:** Use Vercel AI SDK v5 (`ai` + `@ai-sdk/openai`), never vendor SDKs directly
+- **AI SDK:** Use Vercel AI SDK v6 (`ai` + `@ai-sdk/openai`), never vendor SDKs directly
 
 ## Code Standards
 
