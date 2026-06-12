@@ -120,7 +120,7 @@ async function cmdSearch() {
   const params = new URLSearchParams();
   const topArg = parseInt(getArg('--top')) || 20;
   params.set('top', String(Math.min(Math.max(1, topArg), 100)));
-  params.set('days', String(parseInt(getArg('--days')) || 30));
+  params.set('days', String(parseInt(getArg('--days')) || 90));
   if (hasFlag('--remote')) params.set('remote', 'true');
   const minSalary = parseInt(getArg('--min-salary'));
   if (minSalary > 0) params.set('min_salary', String(minSalary));
@@ -340,7 +340,7 @@ COMMANDS
 
 SEARCH OPTIONS
   --top N                           Number of results (default: 20, max: 100)
-  --days N                          How far back to look (default: 30)
+  --days N                          How far back to look (default: 90)
   --remote                          Remote jobs only
   --min-salary N                    Minimum salary in thousands (e.g. 150)
   --search TERM                     Keyword filter (searches title, company, skills)

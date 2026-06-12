@@ -10,7 +10,7 @@ export function useJobs(api, activeFilters, tab, searchId, getDossierStatus) {
 
   // Build API params from active filters array
   const params = useMemo(() => {
-    const p = { top: 100, days: 30 };
+    const p = { top: 200, days: 90 };
     if (searchId) p.searchId = searchId;
     if (api.mode) p.mode = api.mode;
     for (const f of activeFilters || []) {

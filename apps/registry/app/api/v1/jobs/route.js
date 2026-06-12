@@ -18,7 +18,7 @@ export const dynamic = 'force-dynamic';
  *
  * Query params:
  *   ?top=20         — number of results (default 20, max 500)
- *   ?days=30        — how far back to look (default 30)
+ *   ?days=90        — how far back to look (default 90)
  *   ?remote=true    — filter remote only
  *   ?min_salary=100 — minimum salary in thousands
  *   ?search=react   — keyword search in parsed content
@@ -34,7 +34,7 @@ export async function GET(request) {
 
   const { searchParams } = new URL(request.url);
   const top = Math.min(parseInt(searchParams.get('top')) || 20, 500);
-  const days = parseInt(searchParams.get('days')) || 30;
+  const days = parseInt(searchParams.get('days')) || 90;
   const remote = searchParams.get('remote') === 'true';
   const globalRemote = searchParams.get('global_remote') === 'true';
   const minSalary = parseInt(searchParams.get('min_salary')) || 0;
@@ -194,9 +194,12 @@ export async function GET(request) {
 
     return NextResponse.json({ jobs, total: jobs.length });
   } catch (err) {
-    logger.error({ error: err.message }, 'Error in v1 jobs endpoint');
+    logger.error(
+      { error: err.message, stack: err.stack },
+      'Error in v1 jobs endpoint'
+    );
     return NextResponse.json(
-      { error: 'Failed to match jobs' },
+      { error: 'Failed to match jobs', detail: err.message },
       { status: 500 }
     );
   }
@@ -221,7 +224,7 @@ export async function POST(request) {
     }
 
     const top = Math.min(parseInt(body.top) || 20, 500);
-    const days = parseInt(body.days) || 30;
+    const days = parseInt(body.days) || 90;
     const remote = body.remote === true;
     const globalRemoteFlag = body.global_remote === true;
     const minSalary = parseInt(body.min_salary) || 0;
@@ -252,9 +255,12 @@ export async function POST(request) {
     const jobs = filtered.slice(0, top);
     return NextResponse.json({ jobs, total: jobs.length });
   } catch (err) {
-    logger.error({ error: err.message }, 'Error in v1 jobs POST endpoint');
+    logger.error(
+      { error: err.message, stack: err.stack },
+      'Error in v1 jobs POST endpoint'
+    );
     return NextResponse.json(
-      { error: 'Failed to match jobs' },
+      { error: 'Failed to match jobs', detail: err.message },
       { status: 500 }
     );
   }

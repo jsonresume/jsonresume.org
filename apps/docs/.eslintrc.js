@@ -2,5 +2,6 @@
 
 module.exports = {
   root: true,
-  extends: ['@repo/eslint-config-custom/next'],
+  extends: ['next/core-web-vitals'],
+  ignorePatterns: ['.next/**', 'out/**', '.source/**', 'content/**'],
 };
