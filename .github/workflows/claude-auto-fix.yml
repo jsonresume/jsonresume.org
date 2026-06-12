@@ -26,7 +26,7 @@ jobs:
     steps:
       - name: Check for retry loop
         id: loop-check
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const issueNumber = context.issue?.number || ${{ inputs.issue_number || 0 }};
@@ -71,7 +71,7 @@ jobs:
 
       - name: Add working label
         if: steps.loop-check.outputs.should_continue == 'true'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const issueNumber = context.issue?.number || ${{ inputs.issue_number || 0 }};
@@ -85,7 +85,7 @@ jobs:
       - name: Build prompt from issue
         if: steps.loop-check.outputs.should_continue == 'true'
         id: build-prompt
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const issueNumber = context.issue?.number || ${{ inputs.issue_number || 0 }};
@@ -119,7 +119,7 @@ jobs:
 
       - name: Checkout repository
         if: steps.loop-check.outputs.should_continue == 'true'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 1
 
