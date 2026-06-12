@@ -16,26 +16,26 @@
     "serve:registry": "start-server-and-test 'pnpm --filter registry dev' http://localhost:3000 generate:screenshots"
   },
   "devDependencies": {
-    "@playwright/test": "^1.40.0",
+    "@playwright/test": "^1.60.0",
     "@repo/eslint-config-custom": "workspace:*",
-    "@types/react": "^19.2.2",
-    "@types/react-dom": "^19.2.2",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
     "eslint": "^8",
     "husky": "^8.0.3",
     "lint-staged": "^15.2.0",
-    "playwright": "^1.40.0",
+    "playwright": "^1.60.0",
     "prettier": "^2.8.0",
     "start-server-and-test": "^2.0.3",
-    "turbo": "^2.8.6"
+    "turbo": "^2.9.18"
   },
   "packageManager": "pnpm@8.15.9",
   "name": "jsonresume.org",
   "dependencies": {
-    "@changesets/cli": "^2.27.1",
+    "@changesets/cli": "^2.31.0",
     "dotenv": "^16.0.3",
-    "next": "^16.1.6",
-    "react": "19.2.0",
-    "react-dom": "19.2.0"
+    "next": "^15.5.19",
+    "react": "19.2.7",
+    "react-dom": "19.2.7"
   },
   "pnpm": {
     "overrides": {
