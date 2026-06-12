@@ -688,6 +688,7 @@ We'll review and add it to the registry!
 - [Architecture Documentation](CLAUDE.md)
 - [Security Policy](SECURITY.md)
 - [Project Audit](PROJECT_AUDIT.md)
+- [Releasing npm Packages](docs/RELEASING.md)
 
 ---
 
