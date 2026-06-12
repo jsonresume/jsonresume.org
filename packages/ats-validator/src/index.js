@@ -1,5 +1,5 @@
 /**
- * @resume/ats-validator
+ * @jsonresume/ats-validator
  * Machine-readable validation rules for ATS-friendly resume HTML
  *
  * Based on research:

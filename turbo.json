@@ -50,7 +50,7 @@
         "tsconfig.json",
         "tsconfig*.json"
       ],
-      "outputs": ["node_modules/.cache/.eslintcache"]
+      "outputs": []
     },
     "typecheck": {
       "inputs": [
@@ -61,7 +61,7 @@
         "tsconfig.json",
         "tsconfig*.json"
       ],
-      "outputs": ["node_modules/.cache/tsbuildinfo"]
+      "outputs": []
     },
     "check": {
       "dependsOn": ["lint", "typecheck"]
@@ -77,10 +77,14 @@
         "vitest.config.*",
         "vitest.setup.*"
       ],
-      "outputs": ["coverage/**"]
+      "outputs": []
     },
-    "//#format": {},
-    "//#prettier": {},
+    "//#format": {
+      "outputs": []
+    },
+    "//#prettier": {
+      "outputs": []
+    },
     "dev": {
       "cache": false,
       "persistent": true

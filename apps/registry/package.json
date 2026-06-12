@@ -1,6 +1,6 @@
 {
   "name": "registry",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "scripts": {
     "dev": "next dev --webpack",
@@ -140,7 +140,7 @@
     "react-speech-recognition": "^3.10.0",
     "react-virtuoso": "^4.18.1",
     "recharts": "^2.12.7",
-    "resume-schema": "^1.0.0",
+    "@jsonresume/schema": "workspace:*",
     "sonner": "^1.5.0",
     "streamdown": "^1.6.11",
     "styled-components": "^6.1.19",
@@ -164,7 +164,7 @@
     "@vitest/ui": "^3.2.4",
     "caniuse-lite": "^1.0.30001566",
     "eslint": "^8.55.0",
-    "eslint-config-next": "^16.1.6",
+    "eslint-config-next": "^15.5.7",
     "jsdom": "^27.0.0",
     "playwright": "^1.40.0",
     "ts-jest": "^29.4.1",
