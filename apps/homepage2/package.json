@@ -48,7 +48,7 @@
     "react-syntax-highlighter": "^15.5.0",
     "remark": "^15.0.1",
     "remark-html": "^16.0.1",
-    "resume-schema": "^1.0.0",
+    "@jsonresume/schema": "workspace:*",
     "styled-components": "^6.1.19",
     "uuid": "^9.0.0"
   },

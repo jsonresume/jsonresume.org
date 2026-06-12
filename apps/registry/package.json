@@ -140,7 +140,7 @@
     "react-speech-recognition": "^3.10.0",
     "react-virtuoso": "^4.18.1",
     "recharts": "^2.12.7",
-    "resume-schema": "^1.0.0",
+    "@jsonresume/schema": "workspace:*",
     "sonner": "^1.5.0",
     "streamdown": "^1.6.11",
     "styled-components": "^6.1.19",
