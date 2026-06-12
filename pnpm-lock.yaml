@@ -412,6 +412,9 @@ importers:
       jsonresume-theme-coastal-creative:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-coastal-creative
+      jsonresume-theme-colophon:
+        specifier: ^0.2.0
+        version: 0.2.0
       jsonresume-theme-community-garden:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-community-garden
@@ -19231,6 +19234,11 @@ packages:
     optionalDependencies:
       graceful-fs: 4.2.11
     dev: true
+
+  /jsonresume-theme-colophon@0.2.0:
+    resolution: {integrity: sha512-NdVTKrhHP2L7I1hvlNIo+o7HYfK3HNb09llSbljnIplsJqL2EajmlfiYVyz2JzPwEDcyeeoGFYTLwRKb1ep/Lg==}
+    engines: {node: '>=18'}
+    dev: false
 
   /jsonresume-theme-elegant@1.16.1:
     resolution: {integrity: sha512-UHKZx+AoE/zGnsZBgV60b+kP5s7euzLp1wDfOItWCt90iwzXuiY++BETTsaRlQHt4nrKbb5GvjXHkE02xovS1w==}

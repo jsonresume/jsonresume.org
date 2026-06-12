@@ -42,6 +42,7 @@ import * as urbantechno from 'jsonresume-theme-urban-techno'; // NEW
 import * as coastalcreative from 'jsonresume-theme-coastal-creative'; // NEW
 import * as investorbrief from 'jsonresume-theme-investor-brief'; // NEW
 import * as claude from 'jsonresume-theme-claude'; // NEW
+import * as colophon from 'jsonresume-theme-colophon';
 import * as communitygarden from 'jsonresume-theme-community-garden'; // NEW
 import * as creativeconfidence from 'jsonresume-theme-creative-confidence'; // NEW
 
@@ -109,6 +110,7 @@ export const THEMES = {
   'coastal-creative': coastalcreative, // NEW
   'investor-brief': investorbrief, // NEW
   claude: claude, // NEW
+  colophon,
   'community-garden': communitygarden, // NEW
   'creative-confidence': creativeconfidence, // NEW
 };

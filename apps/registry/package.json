@@ -63,6 +63,7 @@
     "jsonresume-theme-californian-warm": "workspace:*",
     "jsonresume-theme-claude": "workspace:*",
     "jsonresume-theme-coastal-creative": "workspace:*",
+    "jsonresume-theme-colophon": "^0.2.0",
     "jsonresume-theme-community-garden": "workspace:*",
     "jsonresume-theme-creative-confidence": "workspace:*",
     "jsonresume-theme-data-driven": "workspace:*",
