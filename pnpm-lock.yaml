@@ -693,6 +693,9 @@ importers:
 
   packages/cli:
     dependencies:
+      '@jsonresume/ats-validator':
+        specifier: workspace:*
+        version: link:../ats-validator
       '@jsonresume/schema':
         specifier: workspace:*
         version: link:../schema

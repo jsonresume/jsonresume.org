@@ -25,6 +25,7 @@ npm install -g resume-cli
 | init | Initialize a `resume.json` file. |
 | validate | Schema validation test your `resume.json`. |
 | export path/to/file.html | Export to `.html`, `.pdf`, `.md` or `.txt`. |
+| audit | Score your resume for ATS (Applicant Tracking System) friendliness. |
 | themes | List the JSON Resume themes installed in `node_modules`. |
 | serve | Serve resume at `http://localhost:4000/`. |
 
@@ -104,6 +105,45 @@ Options:
 
 - `--format <file type>` Example: `--format pdf`
 - `--theme <name>` Example: `--theme even` (only used for `.html` / `.pdf`)
+
+### `resume audit [fileName]`
+
+Scores your resume for **ATS (Applicant Tracking System) friendliness**. It
+renders your resume to HTML with a theme, runs
+[`@jsonresume/ats-validator`](../ats-validator) against the markup, and prints an
+advisory report: an overall score and letter grade, a per-check pass/fail
+breakdown, and recommendations.
+
+```
+$ resume audit resume.json
+
+ATS score: 88/100  (grade B, excellent)
+9/10 checks passed, 1 need attention
+
+Checks:
+  ✓ Semantic HTML (10/10)
+  ✓ ATS-Friendly Fonts (10/15)
+  ✓ No Table Layouts (15/15)
+  ✗ Single-Column Layout (6/15)
+  ✓ Heading Structure (10/10)
+  ...
+
+Recommendations:
+  - 📋 Single-Column Layout: 6/15 - Review and fix issues in this category
+  - ✅ Great! Your resume is highly ATS-compatible. Minor improvements possible.
+```
+
+The audit is **advisory** — a successful audit always exits `0` regardless of
+score. It only exits non-zero when the resume can't be read or the theme can't
+be rendered (the same friendly errors as `export`).
+
+The file argument is optional; it falls back to `--resume` (default
+`resume.json`). The report is rendered with the bundled `even` theme by default;
+pass `--theme <name>` to audit the markup a specific theme produces.
+
+Options:
+
+- `--theme <name>` Example: `--theme elegant` (defaults to `even`)
 
 ### `resume themes`
 

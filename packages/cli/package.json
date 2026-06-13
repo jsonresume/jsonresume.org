@@ -27,6 +27,7 @@
     "resume": "build/main.js"
   },
   "dependencies": {
+    "@jsonresume/ats-validator": "workspace:*",
     "@jsonresume/schema": "workspace:*",
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
