@@ -45,6 +45,7 @@ import * as claude from 'jsonresume-theme-claude'; // NEW
 import * as colophon from 'jsonresume-theme-colophon';
 import * as communitygarden from 'jsonresume-theme-community-garden'; // NEW
 import * as creativeconfidence from 'jsonresume-theme-creative-confidence'; // NEW
+import * as fieldresearcher from 'jsonresume-theme-field-researcher'; // NEW
 
 // Import theme metadata from shared package
 export {
@@ -113,4 +114,5 @@ export const THEMES = {
   colophon,
   'community-garden': communitygarden, // NEW
   'creative-confidence': creativeconfidence, // NEW
+  'field-researcher': fieldresearcher, // NEW
 };

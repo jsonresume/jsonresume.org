@@ -89,6 +89,22 @@ export const THEME_METADATA = {
     author: 'JSON Resume Team',
     tags: ['executive', 'professional', 'senior', 'slate', 'premium'],
   },
+  'field-researcher': {
+    name: 'Field Researcher',
+    description:
+      'Academic-meets-exploratory theme styled like a field notebook: numbered section catalog, teal specimen rails, and Spectral serif body. Tailored for research and sustainability roles — evokes trust, precision, and scientific humility.',
+    author: 'JSON Resume Team',
+    tags: [
+      'academic',
+      'research',
+      'serif',
+      'teal',
+      'field-notes',
+      'science',
+      'sustainability',
+      'print',
+    ],
+  },
   flat: {
     name: 'Flat',
     description: 'Flat design with minimalist aesthetic',
