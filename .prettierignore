@@ -25,3 +25,6 @@ packages/core-rust
 
 # Vendored CLI — has its own prettier/babel toolchain
 packages/cli
+
+# generated coverage artifact (written by themeRenderQa test)
+apps/registry/lib/formatters/template/theme-coverage.json
