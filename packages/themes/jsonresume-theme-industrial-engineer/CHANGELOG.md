@@ -1,5 +1,15 @@
 # jsonresume-theme-industrial-engineer
 
+## 0.2.0
+
+### Minor Changes
+
+- b869586: Add new theme `jsonresume-theme-industrial-engineer`: an engineering-datasheet
+  aesthetic with a precise grid background, IBM Plex Mono technical labels, a
+  spec-table contact block, part-number section headers, dimension-line rules,
+  and a drafting-blue / safety-orange palette. Renders all JSON Resume sections.
+  Refs #275.
+
 ## 0.1.0
 
 ### Minor Changes

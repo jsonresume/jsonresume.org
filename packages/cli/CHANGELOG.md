@@ -1,5 +1,11 @@
 # resume-cli
 
+## 3.4.0
+
+### Minor Changes
+
+- 3bbe2bd: Add `markdown` and `text` export formats to `resume export` (no theme required). Render the resume as clean Markdown (`.md` / `--format markdown`) or readable plain text (`.txt` / `--format text`), covering every JSON Resume section. Reuses the capability of the archived resume-to-markdown / resume-to-text projects inside the maintained CLI.
+
 ## 3.3.0
 
 ### Minor Changes

@@ -1,5 +1,12 @@
 # registry
 
+## 1.1.1
+
+### Patch Changes
+
+- Updated dependencies [b869586]
+  - jsonresume-theme-industrial-engineer@0.2.0
+
 ## 1.1.0
 
 ### Minor Changes
