@@ -39,7 +39,35 @@ Complete the `resume.json` with your text editor. Be sure to follow the schema (
 
 ### `resume validate`
 
-Validates your `resume.json` against our schema to ensure it complies with the standard. Tries to identify where any errors may be occurring.
+Validates your `resume.json` against our schema to ensure it complies with the standard.
+
+On success it prints a one-line summary with the candidate name and a count of
+each populated section:
+
+```
+✓ resume.json is valid (Ada Lovelace — 1 work, 1 education, 2 skills)
+```
+
+On failure it exits non-zero and prints one annotated block per problem, naming
+the exact JSON path, the failing rule, the offending value, and a one-line hint:
+
+```
+Invalid resume: 2 problems found
+
+  ✖ data/basics/email must match format "email"
+    at:    basics.email
+    rule:  format (expected email)
+    found: "nope" (string)
+    hint:  "basics.email" must be a valid email address, e.g. "you@example.com".
+
+  ✖ data/work/0/startDate must match pattern "..."
+    at:    work[0].startDate
+    rule:  pattern
+    found: "13-2020" (string)
+    hint:  "work[0].startDate" must be an ISO-8601 date: YYYY, YYYY-MM, or YYYY-MM-DD.
+```
+
+Validate against a custom schema with `--schema <path>`.
 
 ### `resume export [fileName]`
 

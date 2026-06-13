@@ -14,6 +14,7 @@ const program = require('commander');
 const chalk = require('chalk');
 const path = require('path');
 const { ThemeNotFoundError, formatThemeNotFound } = require('./theme-errors');
+const { formatOkSummary } = require('./validate-errors');
 
 const normalizeTheme = (value, defaultValue) => {
   const theme = value || defaultValue;
@@ -81,9 +82,9 @@ const normalizeTheme = (value, defaultValue) => {
           resume,
           schema,
         });
-        console.log(chalk.green(`✓ ${program.resume} is valid`));
+        console.log(chalk.green(formatOkSummary(resume, program.resume)));
       } catch (e) {
-        console.error(e.message);
+        console.error(chalk.red(e.message));
         process.exitCode = 1;
       }
     });
