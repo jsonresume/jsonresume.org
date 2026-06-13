@@ -73,7 +73,7 @@ describe('Data-Driven Theme', () => {
     const html = render(completeResume);
 
     expect(html).toContain('<!DOCTYPE html>');
-    expect(html).toContain('<html lang="en">');
+    expect(html).toContain('<html lang="en" dir="ltr">');
     expect(html).toContain('</html>');
   });
 
