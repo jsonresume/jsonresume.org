@@ -1,5 +1,12 @@
 # AI Agent Guide: JSON Resume Theme Development
 
+> **Start here:** scaffold a correct-by-construction theme with
+> `pnpm gen:theme <slug> "Display Name"`. It mirrors a known-good template,
+> renders all sections, and passes the `themeRenderQa` gate out of the box. See
+> [`docs/CREATING_A_THEME.md`](./CREATING_A_THEME.md) for the generator usage,
+> the registration checklist, the SSR-inline rule, and the render gate. This
+> document covers the design/iteration process once the package exists.
+
 ## Critical Rules
 
 1. **Read the spec from `/packages/themes/ideas.md` BEFORE writing any code**
