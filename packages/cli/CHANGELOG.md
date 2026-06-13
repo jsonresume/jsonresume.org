@@ -1,5 +1,14 @@
 # resume-cli
 
+## 3.6.1
+
+### Patch Changes
+
+- 716438a: `validate` and `export` now print a friendly, stack-trace-free error and exit
+  non-zero when the resume file is missing, unreadable, or contains malformed
+  JSON/YAML (and when a custom `--schema` fails to load), instead of crashing
+  with an unhandled-rejection Node-internal stack trace.
+
 ## 3.6.0
 
 ### Minor Changes
