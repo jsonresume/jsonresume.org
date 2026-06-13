@@ -1,6 +1,6 @@
 {
   "name": "@repo/theme-config",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "description": "Back-compat shim: re-exports @jsonresume/theme-metadata under the legacy @repo/theme-config import specifier for internal monorepo consumers",
   "type": "module",
