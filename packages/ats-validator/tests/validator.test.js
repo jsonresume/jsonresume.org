@@ -18,6 +18,7 @@ describe('ATS Validator', () => {
           <header>
             <h1>John Doe</h1>
             <p>john@example.com</p>
+            <p>+1 (555) 123-4567</p>
           </header>
           <section>
             <h2>Work Experience</h2>
@@ -318,6 +319,211 @@ describe('ATS Validator', () => {
       // Should have issues from multiple checks
       const issueCategories = new Set(result.issues.map((i) => i.severity));
       expect(issueCategories.size).toBeGreaterThan(0);
+    });
+  });
+
+  describe('Contact Information check', () => {
+    const findCheck = (result) =>
+      result.checks.find((c) => c.name === 'Contact Information');
+
+    it('flags a resume with no email or phone in selectable text', () => {
+      const html = `
+        <html lang="en">
+        <body>
+          <header><h1>John Doe</h1></header>
+          <section><h2>Work</h2><p>Software Engineer</p></section>
+        </body>
+        </html>
+      `;
+
+      const result = validateATS(html);
+      const contact = findCheck(result);
+
+      expect(contact.passed).toBe(false);
+      expect(
+        contact.issues.some(
+          (i) => i.severity === 'error' && i.message.includes('email')
+        )
+      ).toBe(true);
+      expect(contact.issues.some((i) => i.message.includes('phone'))).toBe(
+        true
+      );
+    });
+
+    it('passes when email and phone exist as plain text', () => {
+      const html = `
+        <html lang="en">
+        <body>
+          <header>
+            <h1>Jane Doe</h1>
+            <p>jane.doe@example.com</p>
+            <p>+1 (555) 987-6543</p>
+          </header>
+        </body>
+        </html>
+      `;
+
+      const result = validateATS(html);
+      const contact = findCheck(result);
+
+      expect(contact.passed).toBe(true);
+      expect(contact.issues).toHaveLength(0);
+    });
+
+    it('accepts mailto: and tel: links as parseable contact info', () => {
+      const html = `
+        <html lang="en">
+        <body>
+          <header>
+            <h1>Jane Doe</h1>
+            <p>
+              <a href="mailto:jane@example.com">Email</a>
+              <a href="tel:+15559876543">Call</a>
+            </p>
+          </header>
+        </body>
+        </html>
+      `;
+
+      const result = validateATS(html);
+      const contact = findCheck(result);
+
+      expect(contact.passed).toBe(true);
+      expect(contact.issues).toHaveLength(0);
+    });
+
+    it('does not treat a year range as a phone number', () => {
+      const html = `
+        <html lang="en">
+        <body>
+          <h1>Jane Doe</h1>
+          <p>jane@example.com</p>
+          <section><h2>Work</h2><p>Engineer 2015 to 2020. Born 1990.</p></section>
+        </body>
+        </html>
+      `;
+
+      const result = validateATS(html);
+      const contact = findCheck(result);
+
+      // Email present, so no email error; phone genuinely missing -> warning.
+      expect(contact.issues.some((i) => i.message.includes('email'))).toBe(
+        false
+      );
+      expect(
+        contact.issues.some(
+          (i) => i.severity === 'warning' && i.message.includes('phone')
+        )
+      ).toBe(true);
+    });
+  });
+
+  describe('Special Characters check', () => {
+    const findCheck = (result) =>
+      result.checks.find((c) => c.name === 'Special Characters');
+
+    it('detects icon-font classes (Font Awesome, Material Icons)', () => {
+      const html = `
+        <html lang="en">
+        <body>
+          <header>
+            <h1>John Doe</h1>
+            <p><i class="fa fa-envelope"></i> john@example.com</p>
+            <p><i class="fas fa-phone"></i> 555-123-4567</p>
+            <span class="material-icons">home</span>
+          </header>
+        </body>
+        </html>
+      `;
+
+      const result = validateATS(html);
+      const check = findCheck(result);
+
+      expect(check.passed).toBe(false);
+      expect(
+        check.issues.some((i) => i.message.toLowerCase().includes('icon font'))
+      ).toBe(true);
+    });
+
+    it('does not flag ordinary class names that merely start with icon tokens', () => {
+      const html = `
+        <html lang="en">
+        <body>
+          <h1>Jane Doe</h1>
+          <p>jane@example.com 555-123-4567</p>
+          <div class="fancy biography section-header"><h2>About</h2></div>
+        </body>
+        </html>
+      `;
+
+      const result = validateATS(html);
+      const check = findCheck(result);
+
+      expect(check.passed).toBe(true);
+      expect(check.issues).toHaveLength(0);
+    });
+
+    it('flags excessive emoji used as decorative markers', () => {
+      const html = `
+        <html lang="en">
+        <body>
+          <h1>Jane Doe</h1>
+          <p>jane@example.com 555-123-4567</p>
+          <h2>Skills 🚀 ✨ 🔥 💯 ⭐ 🎯</h2>
+        </body>
+        </html>
+      `;
+
+      const result = validateATS(html);
+      const check = findCheck(result);
+
+      expect(check.passed).toBe(false);
+      expect(
+        check.issues.some(
+          (i) => i.severity === 'warning' && i.message.includes('emoji')
+        )
+      ).toBe(true);
+    });
+
+    it('flags private-use Unicode glyphs leaked from icon fonts', () => {
+      const glyph = String.fromCharCode(0xe001); // Private Use Area glyph (icon-font leak)
+      const html = `
+        <html lang="en">
+        <body>
+          <h1>Jane Doe</h1>
+          <p>jane@example.com</p>
+          <p>Contact: ${glyph} 555-123-4567</p>
+        </body>
+        </html>
+      `;
+
+      const result = validateATS(html);
+      const check = findCheck(result);
+
+      expect(check.passed).toBe(false);
+      expect(
+        check.issues.some(
+          (i) => i.severity === 'error' && i.message.includes('Private-use')
+        )
+      ).toBe(true);
+    });
+
+    it('passes clean plain-text resumes (standard bullets allowed)', () => {
+      const html = `
+        <html lang="en">
+        <body>
+          <h1>Jane Doe</h1>
+          <p>jane@example.com — 555-123-4567</p>
+          <ul><li>• Shipped feature A</li><li>• Led team B</li></ul>
+        </body>
+        </html>
+      `;
+
+      const result = validateATS(html);
+      const check = findCheck(result);
+
+      expect(check.passed).toBe(true);
+      expect(check.issues).toHaveLength(0);
     });
   });
 

@@ -6,7 +6,7 @@ Validate resume HTML against ATS (Applicant Tracking System) best practices with
 
 ## Features
 
-- ✅ **8 Validation Checks**: Semantic HTML, fonts, tables, layout, headings, images, font sizes, accessibility
+- ✅ **10 Validation Checks**: Semantic HTML, fonts, tables, layout, headings, images, font sizes, accessibility, contact information, special characters
 - 📊 **Detailed Scoring**: 0-100 score with letter grade (A-F)
 - 🎯 **ATS Compatibility Rating**: Excellent / Good / Fair / Poor
 - 🔍 **Specific Issues**: Severity levels (error/warning/info) with clear messages
@@ -168,6 +168,23 @@ Checks accessibility features:
 
 **Why it matters:** Accessible HTML works better with ATS parsers and screen readers.
 
+### 9. Contact Information (10 points)
+
+Confirms the candidate's primary contact details are present as selectable text:
+- ❌ No email address in text (or a `mailto:` link)
+- ⚠️ No phone number in text (or a `tel:` link)
+
+**Why it matters:** ATS systems extract the email and phone as primary, indexed fields. If they only live inside an image or icon — or are missing entirely — the parser drops them and the application can be treated as incomplete. Year ranges and other short digit strings are ignored so they don't masquerade as phone numbers.
+
+### 10. Special Characters (10 points)
+
+Detects glyphs that pollute or break plain-text extraction:
+- ⚠️ Icon fonts (Font Awesome, Material Icons, Bootstrap glyphicons) — flagged by class token (`fa`, `fa-*`, `material-icons`, `glyphicon`, `bi-*`, `mdi-*`, `icon-*`) or icon font-family in CSS
+- 🚨 Private Use Area Unicode characters (icon-font glyphs that leak into extracted text as garbage)
+- ⚠️ Excessive emoji / dingbats used as bullets or section markers
+
+**Why it matters:** ATS parsers extract plain text only. Icon glyphs render from a private Unicode range, so they are dropped or extracted as garbage; emoji used as markers can split the words an ATS matches on. Standard punctuation (bullets •, dashes, smart quotes) is intentionally **not** flagged.
+
 ## Severity Levels
 
 - **error** 🚨: Critical issues that will likely prevent ATS parsing
@@ -185,6 +202,8 @@ Checks accessibility features:
 | 0-59 | F | Fair/Poor |
 
 **Target:** Aim for 80+ (Grade B or above) for excellent ATS compatibility.
+
+> Scores are reported as a normalized 0-100 percentage. The raw point total across all checks is 120; `score` divides the points earned by that maximum, so adding or reweighting checks never changes how the grade is interpreted.
 
 ## Usage with @resume/core
 
@@ -240,7 +259,7 @@ Recommendations:
 pnpm test
 ```
 
-All 16 validation tests must pass.
+All validation tests must pass.
 
 ## Contributing
 
