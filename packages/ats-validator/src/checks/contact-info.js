@@ -10,15 +10,15 @@
 
 // Matches the vast majority of real-world email addresses without being so
 // permissive that prose like "see me @ the office" registers as a match.
-const EMAIL_RE = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/;
+export const EMAIL_RE = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/;
 
 // Matches common phone formats: +1 (555) 123-4567, 555-123-4567,
 // 555.123.4567, +44 20 7946 0958, etc. Requires at least 7 digits overall so
 // short numeric strings (dates, zip codes) do not trigger a false positive.
-const PHONE_RE =
+export const PHONE_RE =
   /(?:\+?\d{1,3}[\s.-]?)?(?:\(\d{2,4}\)[\s.-]?)?\d{2,4}[\s.-]?\d{2,4}[\s.-]?\d{0,4}/;
 
-function countDigits(str) {
+export function countDigits(str) {
   return (str.match(/\d/g) || []).length;
 }
 

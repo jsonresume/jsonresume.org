@@ -1,3 +1,29 @@
+// Standard ATS-friendly fonts (lowercase for case-insensitive matching).
+export const ATS_FRIENDLY_FONTS = [
+  'helvetica',
+  'arial',
+  'calibri',
+  'cambria',
+  'georgia',
+  'times new roman',
+  'verdana',
+  'tahoma',
+  'trebuchet',
+  '-apple-system',
+  'system-ui',
+  'segoe ui',
+];
+
+// Decorative / non-standard fonts that hurt ATS parsing.
+export const ATS_BAD_FONTS = [
+  'comic sans',
+  'papyrus',
+  'brush script',
+  'impact',
+  'lucida handwriting',
+  'chalkboard',
+];
+
 /**
  * Check for ATS-friendly fonts
  */
@@ -9,30 +35,8 @@ export function checkFonts($) {
   const styleText = $('style').text() || '';
   const inlineStyles = $('[style*="font"]').length;
 
-  // Standard ATS-friendly fonts
-  const goodFonts = [
-    'helvetica',
-    'arial',
-    'calibri',
-    'cambria',
-    'georgia',
-    'times new roman',
-    'verdana',
-    'tahoma',
-    'trebuchet',
-    '-apple-system',
-    'system-ui',
-    'segoe ui',
-  ];
-
-  const badFonts = [
-    'comic sans',
-    'papyrus',
-    'brush script',
-    'impact',
-    'lucida handwriting',
-    'chalkboard',
-  ];
+  const goodFonts = ATS_FRIENDLY_FONTS;
+  const badFonts = ATS_BAD_FONTS;
 
   // Check for bad fonts
   const foundBadFonts = badFonts.filter((font) =>

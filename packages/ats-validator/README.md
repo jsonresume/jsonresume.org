@@ -95,6 +95,47 @@ const recs = getRecommendations(result);
 // ]
 ```
 
+### `getGrade(percentage: number): 'A' | 'B' | 'C' | 'D' | 'F'`
+
+Maps a 0-100 score to the same letter grade `validateATS` reports. Useful when
+you compute a score yourself, or want to grade an arbitrary percentage.
+
+```javascript
+import { getGrade } from '@jsonresume/ats-validator';
+
+getGrade(95); // 'A'  (>= 90)
+getGrade(82); // 'B'  (80-89)
+getGrade(74); // 'C'  (70-79)
+getGrade(63); // 'D'  (60-69)
+getGrade(40); // 'F'  (< 60)
+```
+
+## Reusable constants (`@jsonresume/ats-validator/constants`)
+
+The building blocks that power the individual checks are exported from a
+dedicated `./constants` subpath so library authors can reuse them (e.g. to lint
+or highlight ATS issues) without running the full validator. These are
+re-exported from the check modules — the values never drift from what
+`validateATS` actually uses.
+
+```javascript
+import {
+  ATS_FRIENDLY_FONTS, // string[] — lowercase ATS-safe font names
+  ATS_BAD_FONTS, // string[] — lowercase decorative fonts to avoid
+  ICON_FONT_TOKENS, // string[] — icon-font class tokens (fa, material-icons, …)
+  ICON_FONT_FAMILIES, // string[] — icon-font family names referenced in CSS
+  EMOJI_RE, // RegExp (global) — emoji / dingbat ranges
+  PRIVATE_USE_RE, // RegExp — Private Use Area code points (leaked icon glyphs)
+  EMAIL_RE, // RegExp — email-address detection
+  PHONE_RE, // RegExp — phone-number detection
+  countDigits, // (str: string) => number — digit count helper for phone checks
+} from '@jsonresume/ats-validator/constants';
+```
+
+> `EMOJI_RE` carries the global (`g`) flag, so it is stateful via `lastIndex`.
+> Use `String#match` / `String#matchAll`, or reset `lastIndex` before reusing it
+> with `RegExp#test` / `RegExp#exec`.
+
 ## Validation Checks
 
 ### 1. Semantic HTML (10 points)
