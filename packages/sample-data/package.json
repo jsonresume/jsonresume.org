@@ -1,0 +1,39 @@
+{
+  "name": "@jsonresume/sample-data",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Sample JSON Resume fixtures: a complete every-section resume and a minimal subset",
+  "type": "module",
+  "main": "./index.js",
+  "exports": {
+    ".": "./index.js",
+    "./complete-resume.json": "./complete-resume.json",
+    "./resume-sample.json": "./resume-sample.json",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.js",
+    "complete-resume.json",
+    "resume-sample.json"
+  ],
+  "keywords": [
+    "resume",
+    "cv",
+    "json-resume",
+    "fixtures",
+    "sample-data"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jsonresume/jsonresume.org",
+    "directory": "packages/sample-data"
+  },
+  "homepage": "https://github.com/jsonresume/jsonresume.org/tree/master/packages/sample-data",
+  "bugs": {
+    "url": "https://github.com/jsonresume/jsonresume.org/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT"
+}

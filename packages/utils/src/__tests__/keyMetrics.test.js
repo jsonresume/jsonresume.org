@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { calculateKeyMetrics } from '../keyMetrics.js';
+import { calculateKeyMetrics } from '../metrics/keyMetrics.js';
 import { fullResume, skills, languages, FIXED_NOW } from './fixtures.js';
 
 beforeEach(() => {

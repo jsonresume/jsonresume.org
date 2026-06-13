@@ -4,7 +4,7 @@ import {
   getUniqueIndustries,
   getCurrentEmployer,
   isCurrentlyEmployed,
-} from '../workHistory.js';
+} from '../metrics/workHistory.js';
 import { work, volunteer, FIXED_NOW } from './fixtures.js';
 
 beforeEach(() => {

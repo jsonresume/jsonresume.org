@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { THEMES } from './themeConfig';
-import completeResume from '../../../../../packages/test-fixtures/complete-resume.json';
+import { completeResume } from '@jsonresume/sample-data';
 import { HANDLEBARS_THEMES, assertThemeRender } from './themeRenderQa';
 
 /**

@@ -1,0 +1,52 @@
+{
+  "name": "@jsonresume/utils",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Framework-free pure utilities for JSON Resume: date formatting, metrics, and URL safety",
+  "type": "module",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "exports": {
+    ".": "./src/index.js",
+    "./dates": "./src/dates.js",
+    "./metrics": "./src/metrics/index.js",
+    "./url": "./src/url.js"
+  },
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint src --cache --cache-location node_modules/.cache/.eslintcache",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "devDependencies": {
+    "@jsonresume/types": "workspace:*",
+    "@repo/eslint-config-custom": "workspace:^",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.9.3",
+    "vitest": "^2"
+  },
+  "keywords": [
+    "resume",
+    "cv",
+    "json-resume",
+    "dates",
+    "metrics",
+    "utilities"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jsonresume/jsonresume.org",
+    "directory": "packages/utils"
+  },
+  "homepage": "https://github.com/jsonresume/jsonresume.org/tree/master/packages/utils",
+  "bugs": {
+    "url": "https://github.com/jsonresume/jsonresume.org/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT"
+}

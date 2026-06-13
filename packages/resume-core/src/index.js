@@ -1,7 +1,11 @@
 /**
- * @resume/core
+ * @jsonresume/core
  * React component library for building ATS-friendly resume themes
  * Design tokens, primitives, and utilities with JSX
+ *
+ * The pure (framework-free) calculation, date, and URL helpers re-exported
+ * below now live in @jsonresume/utils; they are re-exported here so existing
+ * `import { ... } from '@jsonresume/core'` consumers keep working unchanged.
  */
 
 // Export theme provider
@@ -249,5 +253,6 @@ export { ToolTagRibbon } from './tags/index.jsx';
 // Export badge components
 export { BadgeRowOutline } from './badges/index.jsx';
 
-// Package metadata
-export const version = '0.2.0';
+// Package metadata. Kept in sync with package.json's "version" (the canonical,
+// changeset-managed source of truth).
+export const version = '0.1.0';

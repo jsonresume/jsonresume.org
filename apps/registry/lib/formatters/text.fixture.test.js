@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import completeResume from '../../../../packages/test-fixtures/complete-resume.json';
+import { completeResume } from '@jsonresume/sample-data';
 import textFormatter from './text';
 
 /**

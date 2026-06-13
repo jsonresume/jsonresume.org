@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 import { THEMES } from './themeConfig';
 import { format } from './format';
-import completeResume from '../../../../../packages/test-fixtures/complete-resume.json';
+import { completeResume } from '@jsonresume/sample-data';
 import {
   HANDLEBARS_THEMES,
   assertThemeRender,

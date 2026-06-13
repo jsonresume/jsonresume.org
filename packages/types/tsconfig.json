@@ -1,0 +1,11 @@
+{
+  "extends": "tsconfig/base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "allowJs": true,
+    "checkJs": false
+  },
+  "include": ["dist/**/*.d.ts", "index.js"]
+}

@@ -10,11 +10,12 @@ describe('formatDateRange (pure)', () => {
     expect(formatDateRange({ startDate: undefined })).toBe('');
   });
 
-  it('formats a single date when endDate is undefined (no range)', () => {
-    // undefined endDate => single date, NOT a range with "Present"
+  it('renders a single date (no "Present") when endDate is undefined', () => {
+    // An omitted endDate is a point in time (award/certificate/publication
+    // date), not an ongoing range: render just the start, no separator.
     const out = formatDateRange({ startDate: '2020-01-15' });
     expect(out).toContain('2020');
-    expect(out).not.toContain('-');
+    expect(out).not.toContain(' - ');
     expect(out).not.toContain('Present');
   });
 
@@ -73,6 +74,8 @@ describe('formatDateRange (pure)', () => {
   });
 
   it('returns an invalid date string as-is rather than NaN', () => {
+    // A missing endDate renders a single date; the invalid start is passed
+    // through verbatim with no separator.
     const out = formatDateRange({ startDate: 'not-a-date' });
     expect(out).toBe('not-a-date');
   });
