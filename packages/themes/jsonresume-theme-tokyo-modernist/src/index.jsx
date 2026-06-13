@@ -1,19 +1,12 @@
-import { renderToString } from 'react-dom/server';
-import { ServerStyleSheet } from 'styled-components';
+import { renderResumeDocument } from '@jsonresume/core/ssr';
 import Resume from './ui/Resume';
 
 export const render = (resume) => {
-  const sheet = new ServerStyleSheet();
-  const html = renderToString(sheet.collectStyles(<Resume resume={resume} />));
-  const styles = sheet.getStyleTags();
-  return `<!DOCTYPE html><head>
-  <title>${resume.basics.name} - Resume</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
+  return renderResumeDocument(<Resume resume={resume} />, {
+    fonts: [
+      'https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap',
+    ],
+    head: `<style>
     html {
       font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: #fafbfc;
@@ -83,8 +76,12 @@ export const render = (resume) => {
         background: white;
       }
     }
-  </style>
-  ${styles}</head><body>${html}</body></html>`;
+  </style>`,
+    lang: 'en',
+    dir: 'ltr',
+    title: `${resume.basics.name} - Resume`,
+    includeTokensCss: false,
+  });
 };
 
 export { Resume };

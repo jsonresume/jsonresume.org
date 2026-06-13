@@ -1,5 +1,5 @@
 import { jsxs, Fragment, jsx } from "react/jsx-runtime";
-import { renderToString } from "react-dom/server";
+import { renderToStaticMarkup } from "react-dom/server";
 import o, { useState, useMemo, useEffect, useContext, useDebugValue, createElement, useRef } from "react";
 import { marked } from "marked";
 import { FaMapPin, FaEnvelope, FaPhoneAlt, FaLink, FaLinkedin, FaGithub, FaTwitter } from "react-icons/fa";
@@ -1271,6 +1271,66 @@ var vt = /^\s*<\/[a-z]/i, gt = (function() {
 "production" !== process.env.NODE_ENV && "undefined" != typeof navigator && "ReactNative" === navigator.product && console.warn("It looks like you've imported 'styled-components' on React Native.\nPerhaps you're looking to import 'styled-components/native'?\nRead more about this at https://www.styled-components.com/docs/basics#react-native");
 var wt = "__sc-".concat(f, "__");
 "production" !== process.env.NODE_ENV && "test" !== process.env.NODE_ENV && "undefined" != typeof window && (window[wt] || (window[wt] = 0), 1 === window[wt] && console.warn("It looks like there are several instances of 'styled-components' initialized in this application. This may cause dynamic styles to not render properly, errors during the rehydration process, a missing theme prop, and makes your application bigger without good reason.\n\nSee https://s-c.sh/2BAXzed for more info."), window[wt] += 1);
+const CSS_RESET = "<style>*,*::before,*::after{box-sizing:border-box}html,body{margin:0;padding:0}body{-webkit-font-smoothing:antialiased}</style>";
+const TOKENS_CSS_HREF = "https://unpkg.com/@jsonresume/core/dist/tokens.css";
+const FONTS_PRECONNECT = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>';
+function isHref(value) {
+  return /^(https?:)?\/\//.test(value) || value.trim().startsWith("<link");
+}
+function familyParam(family) {
+  const [name, ...rest] = String(family).split(":");
+  const encodedName = name.trim().replace(/\s+/g, "+");
+  return rest.length ? `${encodedName}:${rest.join(":")}` : encodedName;
+}
+function googleFontsLinks(families) {
+  if (!Array.isArray(families) || families.length === 0) return "";
+  const passthrough = [];
+  const names = [];
+  for (const entry of families) {
+    if (entry == null || entry === "") continue;
+    if (isHref(entry)) passthrough.push(entry);
+    else names.push(entry);
+  }
+  const links = passthrough.map(
+    (href) => href.trim().startsWith("<link") ? href : `<link href="${href}" rel="stylesheet">`
+  );
+  if (names.length > 0) {
+    const query = names.map(familyParam).join("&family=");
+    links.unshift(
+      `<link href="https://fonts.googleapis.com/css2?family=${query}&display=swap" rel="stylesheet">`
+    );
+  }
+  if (links.length === 0) return "";
+  return FONTS_PRECONNECT + links.join("");
+}
+function renderResumeDocument(element, options = {}) {
+  const {
+    fonts,
+    title,
+    lang = "en",
+    dir = "ltr",
+    reset = false,
+    head = "",
+    headAfterStyles = "",
+    includeTokensCss = true,
+    bodyClass
+  } = options;
+  const sheet = new gt();
+  let html;
+  let styleTags;
+  try {
+    html = renderToStaticMarkup(sheet.collectStyles(element));
+    styleTags = sheet.getStyleTags();
+  } finally {
+    sheet.seal();
+  }
+  const fontLinks = googleFontsLinks(fonts);
+  const tokensLink = includeTokensCss ? `<link rel="stylesheet" href="${TOKENS_CSS_HREF}">` : "";
+  const resetTag = reset ? CSS_RESET : "";
+  const titleTag = title ? `<title>${title}</title>` : "";
+  const bodyAttr = bodyClass ? ` class="${bodyClass}"` : "";
+  return `<!DOCTYPE html><html lang="${lang}" dir="${dir}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">` + fontLinks + tokensLink + resetTag + head + styleTags + headAfterStyles + titleTag + `</head><body${bodyAttr}>${html}</body></html>`;
+}
 const Section = dt.div`
   max-width: 700px;
   margin: 0 auto 18px;
@@ -1687,14 +1747,10 @@ const Resume = ({ resume }) => {
   ] });
 };
 const render = (resume) => {
-  const sheet = new gt();
-  const html = renderToString(sheet.collectStyles(/* @__PURE__ */ jsx(Resume, { resume })));
-  const styles = sheet.getStyleTags();
-  return `<!DOCTYPE html><html lang="en"><head>
-  <title>${resume.basics.name} - Resume</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <style>
+  return renderResumeDocument(
+    /* @__PURE__ */ jsx("main", { children: /* @__PURE__ */ jsx(Resume, { resume }) }),
+    {
+      head: `<style>
     @font-face {
       font-family: LatinModern;
       font-style: normal;
@@ -1781,8 +1837,13 @@ const render = (resume) => {
 
 
 
-  </style>
-  ${styles}</head><body><main>${html}</main></body></html>`;
+  </style>`,
+      lang: "en",
+      dir: "ltr",
+      title: `${resume.basics.name} - Resume`,
+      includeTokensCss: false
+    }
+  );
 };
 export {
   Resume,

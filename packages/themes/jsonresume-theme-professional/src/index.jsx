@@ -1,16 +1,13 @@
-import { renderToString } from 'react-dom/server';
-import { ServerStyleSheet } from 'styled-components';
+import { renderResumeDocument } from '@jsonresume/core/ssr';
 import Resume from './ui/Resume';
 
 export const render = (resume) => {
-  const sheet = new ServerStyleSheet();
-  const html = renderToString(sheet.collectStyles(<Resume resume={resume} />));
-  const styles = sheet.getStyleTags();
-  return `<!DOCTYPE html><html lang="en"><head>
-  <title>${resume.basics.name} - Resume</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <style>
+  return renderResumeDocument(
+    <main>
+      <Resume resume={resume} />
+    </main>,
+    {
+      head: `<style>
     @font-face {
       font-family: LatinModern;
       font-style: normal;
@@ -97,8 +94,13 @@ export const render = (resume) => {
 
 
 
-  </style>
-  ${styles}</head><body><main>${html}</main></body></html>`;
+  </style>`,
+      lang: 'en',
+      dir: 'ltr',
+      title: `${resume.basics.name} - Resume`,
+      includeTokensCss: false,
+    }
+  );
 };
 
 export { Resume };
