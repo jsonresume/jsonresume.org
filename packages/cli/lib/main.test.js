@@ -96,6 +96,10 @@ describe('cli configuration', () => {
                                             need no theme; pick a theme for
                                             .html/.pdf with --theme
                                             (https://jsonresume.org/themes/).
+        themes                              List JSON Resume themes installed in
+                                            node_modules (the slug to pass to
+                                            --theme). Browse the full gallery at
+                                            https://jsonresume.org/themes/.
         serve                               Serve resume at http://localhost:4000/
         help [command]                      display help for command
       "
@@ -153,6 +157,20 @@ describe('cli configuration', () => {
         "✓ /test-resumes/resume.json is valid (thomas)
         "
       `);
+    });
+  });
+  describe('themes', () => {
+    it('lists installed themes by slug and links the gallery', async () => {
+      const { stdout, code } = await run(['themes'], {
+        waitForVolumeExport: false,
+      });
+      expect(code).toEqual(0);
+      // The CLI bundles the `elegant` and `even` themes as dependencies, so
+      // they are always discoverable from the package's node_modules.
+      expect(stdout).toContain('elegant');
+      expect(stdout).toContain('even');
+      expect(stdout).toContain('--theme');
+      expect(stdout).toContain('https://jsonresume.org/themes/');
     });
   });
   describe('export', () => {

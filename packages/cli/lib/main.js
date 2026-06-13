@@ -15,6 +15,25 @@ const chalk = require('chalk');
 const path = require('path');
 const { ThemeNotFoundError, formatThemeNotFound } = require('./theme-errors');
 const { formatOkSummary } = require('./validate-errors');
+const { discoverThemes, formatThemesList } = require('./list-themes');
+
+// Best-effort guess at the global `node_modules` root so `resume themes` also
+// surfaces globally-installed themes (e.g. `npm install -g`). Derived from the
+// node executable path; no network or extra dependency required.
+const globalNodeModules = () => {
+  try {
+    // <prefix>/bin/node -> <prefix>/lib/node_modules (POSIX),
+    // <prefix>/node.exe -> <prefix>/node_modules (Windows).
+    const binDir = path.dirname(process.execPath);
+    const candidates = [
+      path.join(binDir, '..', 'lib', 'node_modules'),
+      path.join(binDir, 'node_modules'),
+    ];
+    return candidates;
+  } catch (err) {
+    return [];
+  }
+};
 
 const normalizeTheme = (value, defaultValue) => {
   const theme = value || defaultValue;
@@ -118,6 +137,19 @@ const normalizeTheme = (value, defaultValue) => {
           );
         },
       );
+    });
+
+  program
+    .command('themes')
+    .description(
+      'List JSON Resume themes installed in node_modules (the slug to pass to --theme). Browse the full gallery at https://jsonresume.org/themes/.',
+    )
+    .action(async () => {
+      const themes = discoverThemes({
+        cwd: process.cwd(),
+        extraNodeModules: globalNodeModules(),
+      });
+      console.log(formatThemesList(themes));
     });
 
   program

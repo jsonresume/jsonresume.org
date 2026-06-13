@@ -25,6 +25,7 @@ npm install -g resume-cli
 | init | Initialize a `resume.json` file. |
 | validate | Schema validation test your `resume.json`. |
 | export path/to/file.html | Export to `.html`, `.pdf`, `.md` or `.txt`. |
+| themes | List the JSON Resume themes installed in `node_modules`. |
 | serve | Serve resume at `http://localhost:4000/`. |
 
 ### `resume --help`
@@ -103,6 +104,27 @@ Options:
 
 - `--format <file type>` Example: `--format pdf`
 - `--theme <name>` Example: `--theme even` (only used for `.html` / `.pdf`)
+
+### `resume themes`
+
+Lists the JSON Resume themes installed in `node_modules` — both in your project
+and globally — so you don't have to know a theme slug ahead of time. It prints
+the slug to pass to `--theme` for `export` / `serve`:
+
+```
+$ resume themes
+Installed themes (2) — pass the slug to --theme:
+  elegant v1.16.1
+  even    v0.6.0
+
+Use it:         resume export resume.html --theme elegant
+Browse the full gallery:  https://jsonresume.org/themes/
+```
+
+If none are installed yet, it points you at how to install one. Discovery is
+local and network-free; browse the full gallery (with screenshots) at
+https://jsonresume.org/themes/ and `npm install jsonresume-theme-<slug>` the one
+you want.
 
 ### `resume serve`
 
