@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-field-researcher",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private": false,
   "type": "module",
   "main": "./index.jsx",

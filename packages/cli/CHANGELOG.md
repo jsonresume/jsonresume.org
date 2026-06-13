@@ -1,5 +1,12 @@
 # resume-cli
 
+## 3.7.1
+
+### Patch Changes
+
+- Updated dependencies [fa27450]
+  - @jsonresume/ats-validator@0.3.0
+
 ## 3.7.0
 
 ### Minor Changes

@@ -1,5 +1,12 @@
 # jsonresume-theme-art-school-modern
 
+## 0.2.2
+
+### Patch Changes
+
+- Updated dependencies [ff0f85b]
+  - @jsonresume/core@0.3.0
+
 ## 0.2.1
 
 ### Patch Changes

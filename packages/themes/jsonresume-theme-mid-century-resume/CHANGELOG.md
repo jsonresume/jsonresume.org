@@ -1,5 +1,12 @@
 # jsonresume-theme-mid-century-resume
 
+## 1.1.2
+
+### Patch Changes
+
+- Updated dependencies [ff0f85b]
+  - @jsonresume/core@0.3.0
+
 ## 1.1.1
 
 ### Patch Changes

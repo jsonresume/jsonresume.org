@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-art-school-modern",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "type": "module",
   "main": "./index.jsx",
   "description": "Art School Modern JSON Resume theme - avant-garde gallery aesthetic with oversized display type, asymmetric expressive layout, and a single vivid accent",

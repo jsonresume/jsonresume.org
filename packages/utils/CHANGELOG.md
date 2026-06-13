@@ -1,5 +1,13 @@
 # @jsonresume/utils
 
+## 0.2.1
+
+### Patch Changes
+
+- 4556376: Add a README documenting every export grouped by subpath (`.`, `./dates`,
+  `./metrics`, `./url`) with install and usage examples, so the npmjs.com page is
+  no longer bare. (#421)
+
 ## 0.2.0
 
 ### Minor Changes

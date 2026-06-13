@@ -1,6 +1,6 @@
 {
   "name": "@jsonresume/types",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": false,
   "description": "TypeScript types for the JSON Resume and Job schemas, generated from @jsonresume/schema",
   "types": "./dist/index.d.ts",
