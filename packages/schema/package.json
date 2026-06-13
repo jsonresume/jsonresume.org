@@ -23,7 +23,8 @@
     "sample.job.json",
     "schema.json",
     "job-schema.json",
-    "validator.js"
+    "validator.js",
+    "examples"
   ],
   "dependencies": {
     "jsonschema": "^1.4.1"

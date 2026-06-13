@@ -1,0 +1,186 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json",
+  "basics": {
+    "name": "Daniel Reyes",
+    "label": "Junior Data Analyst (former Restaurant Manager)",
+    "image": "",
+    "email": "daniel.reyes@example.com",
+    "phone": "(512) 555-0188",
+    "url": "https://danielreyes.example.com",
+    "summary": "After eight years running high-volume restaurants, I retrained as a data analyst to turn my instinct for operations into measurable impact. I completed a part-time analytics bootcamp and three certifications while still working full time, and I now combine SQL, Python, and dashboarding with hard-won people-and-process experience. I'm looking for a first analytics role on a team that values curiosity and an owner's mindset.",
+    "location": {
+      "address": "920 Lavaca Street",
+      "postalCode": "78701",
+      "city": "Austin",
+      "countryCode": "US",
+      "region": "Texas"
+    },
+    "profiles": [
+      {
+        "network": "LinkedIn",
+        "username": "danielreyesdata",
+        "url": "https://www.linkedin.com/in/danielreyesdata"
+      },
+      {
+        "network": "GitHub",
+        "username": "dreyes-data",
+        "url": "https://github.com/dreyes-data"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Freelance",
+      "location": "Austin, TX",
+      "description": "Independent analytics consulting",
+      "position": "Data Analyst (Contract)",
+      "startDate": "2024-08-01",
+      "endDate": "2025-04-01",
+      "summary": "Took on small analytics engagements for local hospitality businesses while transitioning careers.",
+      "highlights": [
+        "Built a Looker Studio sales dashboard for a 3-location cafe group, surfacing a 12% margin gap by daypart",
+        "Wrote SQL models in dbt to standardize point-of-sale data across vendors",
+        "Automated weekly reporting that saved owners roughly 5 hours per week"
+      ]
+    },
+    {
+      "name": "Salt & Cedar Restaurant Group",
+      "location": "Austin, TX",
+      "description": "Regional restaurant group, four locations",
+      "position": "General Manager",
+      "startDate": "2018-03-01",
+      "endDate": "2024-07-01",
+      "summary": "Ran daily operations, staffing, and P&L for a flagship 120-seat restaurant.",
+      "highlights": [
+        "Grew annual revenue 28% over three years while holding food cost flat",
+        "Introduced a spreadsheet-driven scheduling model that cut overtime spend by 18%",
+        "Hired, trained, and retained a team of 35 across front and back of house"
+      ]
+    },
+    {
+      "name": "Café Lumen",
+      "location": "Austin, TX",
+      "description": "Independent neighborhood cafe",
+      "position": "Shift Supervisor",
+      "startDate": "2016-01-01",
+      "endDate": "2018-02-01",
+      "summary": "Led service shifts and managed inventory ordering.",
+      "highlights": [
+        "Reduced waste 9% by tightening par-level ordering",
+        "Trained six baristas who were later promoted"
+      ]
+    }
+  ],
+  "volunteer": [
+    {
+      "organization": "Central Texas Food Bank",
+      "position": "Data Volunteer",
+      "url": "https://www.centraltexasfoodbank.org/",
+      "startDate": "2024-02-01",
+      "endDate": "2025-03-01",
+      "summary": "Helped the operations team make sense of distribution data.",
+      "highlights": [
+        "Cleaned and consolidated three years of distribution spreadsheets into a single queryable dataset",
+        "Built a monthly volunteer-hours report adopted by the program director"
+      ]
+    },
+    {
+      "organization": "Austin Free-Net",
+      "position": "Digital Literacy Tutor",
+      "url": "https://www.austinfree.net/",
+      "startDate": "2023-09-01",
+      "endDate": "2024-06-01",
+      "summary": "Taught spreadsheet and internet basics to adults re-entering the workforce.",
+      "highlights": ["Ran weekly Excel workshops for groups of 8-10 learners"]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Austin Community College",
+      "url": "https://www.austincc.edu/",
+      "area": "Business Administration",
+      "studyType": "Associate of Applied Science",
+      "startDate": "2012-09-01",
+      "endDate": "2014-05-01",
+      "score": "3.5/4.0",
+      "courses": [
+        "Statistics",
+        "Managerial Accounting",
+        "Operations Management"
+      ]
+    }
+  ],
+  "certificates": [
+    {
+      "name": "Google Data Analytics Professional Certificate",
+      "date": "2024-05-01",
+      "issuer": "Google / Coursera",
+      "url": "https://www.coursera.org/professional-certificates/google-data-analytics"
+    },
+    {
+      "name": "Databases and SQL for Data Science",
+      "date": "2024-09-01",
+      "issuer": "IBM / Coursera",
+      "url": "https://www.coursera.org/learn/sql-data-science"
+    },
+    {
+      "name": "Tableau Desktop Specialist",
+      "date": "2025-01-01",
+      "issuer": "Tableau",
+      "url": "https://www.tableau.com/learn/certification/desktop-specialist"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Data Analysis",
+      "level": "Intermediate",
+      "keywords": ["SQL", "Python", "pandas", "dbt", "Excel"]
+    },
+    {
+      "name": "Data Visualization",
+      "level": "Intermediate",
+      "keywords": ["Tableau", "Looker Studio", "Matplotlib"]
+    },
+    {
+      "name": "Operations & Leadership",
+      "level": "Advanced",
+      "keywords": [
+        "P&L management",
+        "Scheduling",
+        "Team training",
+        "Vendor negotiation"
+      ]
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Native speaker"
+    },
+    {
+      "language": "Spanish",
+      "fluency": "Native speaker"
+    }
+  ],
+  "interests": [
+    {
+      "name": "Home Cooking",
+      "keywords": ["Fermentation", "Bread baking"]
+    },
+    {
+      "name": "Cycling",
+      "keywords": ["Gravel", "Commuting"]
+    }
+  ],
+  "references": [
+    {
+      "name": "Priya Natarajan, Owner, Salt & Cedar Restaurant Group",
+      "reference": "Daniel ran our busiest location with a steady hand and a relentless focus on the numbers. When he started teaching himself SQL on nights off, none of us were surprised. He turns data into decisions."
+    }
+  ],
+  "meta": {
+    "canonical": "https://danielreyes.example.com/resume.json",
+    "version": "v1.0.0",
+    "lastModified": "2025-04-20T14:30:00"
+  }
+}
