@@ -6188,7 +6188,7 @@ const Company = dt.span`
 `;
 const StyledDateRange = dt(DateRange)`
   font-size: 15px;
-  color: #777777;
+  color: #6e6e6e;
   font-variant-numeric: oldstyle-nums;
 `;
 const WorkSummary = dt.p`
@@ -6248,7 +6248,7 @@ const Institution = dt.span`
 `;
 const StudyType = dt.div`
   font-size: 15px;
-  color: #777777;
+  color: #6e6e6e;
   margin-top: 6px;
 `;
 const SkillsContainer = dt.div`
@@ -6324,7 +6324,7 @@ const ItemTitle = dt.h4`
 `;
 const ItemMeta = dt.div`
   font-size: 15px;
-  color: #777777;
+  color: #6e6e6e;
   margin-bottom: 8px;
   font-style: italic;
 `;

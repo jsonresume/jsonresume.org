@@ -48,9 +48,9 @@ pre {
 }
 .btn {
   background: #fff;
-  border: 2px solid #ddd !important; 
-  border-radius: 3px !important; 
-  color: #aaa;
+  border: 2px solid #ddd !important;
+  border-radius: 3px !important;
+  color: #737373;
   display: inline-block;
   font-size: 11px !important;
   letter-spacing: 1px !important;
@@ -278,7 +278,7 @@ pre {
   line-height: 1.2;
 }
 #docs .desc {
-  color: #aaa;
+  color: #737373;
   display: block;
   font-size: 12px;
   margin-top: 8px;
@@ -338,7 +338,7 @@ pre {
   background: #fff !important;
 }
 #schema pre span {
-  color: #bbb !important;
+  color: #737373 !important;
 }
 #schema .header {
   background: #f9f9f9 !important;
@@ -480,7 +480,7 @@ pre {
   margin-right: 6px;
 }
 #footer {
-  color: #bbb;
+  color: #737373;
   font-size: 11px;
   line-height: 1em;
   margin-top: 40px;

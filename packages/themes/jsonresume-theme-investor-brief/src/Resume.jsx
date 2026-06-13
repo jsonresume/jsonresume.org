@@ -140,7 +140,7 @@ const WorkTitle = styled.h3`
 
 const WorkMeta = styled.div`
   font-size: 13px;
-  color: #9ca3af;
+  color: #6b7280;
   font-weight: 400;
 `;
 
@@ -473,7 +473,7 @@ function Resume({ resume }) {
                   <div
                     style={{
                       fontSize: '13px',
-                      color: '#9ca3af',
+                      color: '#6b7280',
                       marginTop: '4px',
                     }}
                   >
@@ -498,7 +498,7 @@ function Resume({ resume }) {
                   <div
                     style={{
                       fontSize: '13px',
-                      color: '#9ca3af',
+                      color: '#6b7280',
                       marginTop: '4px',
                     }}
                   >
@@ -523,7 +523,7 @@ function Resume({ resume }) {
                   <div
                     style={{
                       fontSize: '13px',
-                      color: '#9ca3af',
+                      color: '#6b7280',
                       marginTop: '4px',
                     }}
                   >
