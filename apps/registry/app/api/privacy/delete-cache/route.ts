@@ -3,7 +3,6 @@ import { createClient } from '@supabase/supabase-js';
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import logger from '@/lib/logger';
-// @ts-expect-error - JS config module (triple-export CommonJS)
 import { SUPABASE_URL } from '@/lib/supabaseConfig';
 
 /**
