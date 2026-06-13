@@ -6,6 +6,7 @@ import init from './init';
 import loadResumeOrReport from './load-resume';
 import getSchema from './get-schema';
 import validate from './validate';
+import audit from './audit';
 
 const pkg = require('../package.json');
 const exportResume = require('./export-resume');
@@ -164,6 +165,27 @@ const normalizeTheme = (value, defaultValue) => {
         extraNodeModules: globalNodeModules(),
       });
       console.log(formatThemesList(themes));
+    });
+
+  program
+    .command('audit [resumeFile]')
+    .description(
+      'Score your resume for ATS (Applicant Tracking System) friendliness: renders it with a theme to HTML, runs @jsonresume/ats-validator, and prints a score, per-check results and recommendations. Advisory only (always exits 0 on success). Pick a theme with --theme (default: even).',
+    )
+    .action(async (resumeFile) => {
+      const resume = await loadResumeOrReport(resumeFile || program.resume);
+      if (resume === null) {
+        return;
+      }
+      // The global `-t/--theme` option (default: elegant) is shared by every
+      // command, but `elegant` throws on minimal resumes. Default `audit` to
+      // the bundled, robust `even` theme unless the user explicitly asked for
+      // a theme on the command line.
+      const themeGiven = process.argv.some(
+        (arg) => arg === '-t' || arg === '--theme',
+      );
+      const themePath = themeGiven ? program.theme : 'jsonresume-theme-even';
+      await audit({ resume, themePath });
     });
 
   program

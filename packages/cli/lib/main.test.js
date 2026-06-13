@@ -100,6 +100,14 @@ describe('cli configuration', () => {
                                             node_modules (the slug to pass to
                                             --theme). Browse the full gallery at
                                             https://jsonresume.org/themes/.
+        audit [resumeFile]                  Score your resume for ATS (Applicant
+                                            Tracking System) friendliness: renders it
+                                            with a theme to HTML, runs
+                                            @jsonresume/ats-validator, and prints a
+                                            score, per-check results and
+                                            recommendations. Advisory only (always
+                                            exits 0 on success). Pick a theme with
+                                            --theme (default: even).
         serve                               Serve resume at http://localhost:4000/
         help [command]                      display help for command
       "
