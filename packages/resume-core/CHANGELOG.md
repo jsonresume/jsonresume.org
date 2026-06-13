@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.3.0
+
+### Minor Changes
+
+- ff0f85b: Add a new `@jsonresume/core/ssr` subpath exporting `renderResumeDocument` and
+  `googleFontsLinks`. `renderResumeDocument(element, options)` wraps the
+  styled-components `ServerStyleSheet` boilerplate every JSX theme repeats
+  (collectStyles + getStyleTags + always-seal) and returns a complete
+  `<!DOCTYPE html>` document with Google Font links, optional CSS reset, tokens
+  CSS link, title/lang/dir, and extra head HTML. Existing exports are unchanged.
+  (#421)
+
+### Patch Changes
+
+- Updated dependencies [4556376]
+- Updated dependencies [4556376]
+  - @jsonresume/types@0.2.1
+  - @jsonresume/utils@0.2.1
+
 ## 0.2.0
 
 ### Minor Changes

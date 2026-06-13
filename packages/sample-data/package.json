@@ -1,6 +1,6 @@
 {
   "name": "@jsonresume/sample-data",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": false,
   "description": "Sample JSON Resume fixtures: a complete every-section resume and a minimal subset",
   "type": "module",
