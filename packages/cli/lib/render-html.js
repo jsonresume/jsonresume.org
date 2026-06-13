@@ -1,3 +1,5 @@
+import { ThemeNotFoundError } from './theme-errors';
+
 const tryResolve = (...args) => {
   try {
     return require.resolve(...args);
@@ -12,9 +14,7 @@ export default async ({ resume, themePath }) => {
   if (themePath[0] === '.') {
     path = tryResolve(require('path').join(cwd, themePath), { paths: [cwd] });
     if (!path) {
-      throw new Error(
-        `Theme ${themePath} could not be resolved relative to ${cwd}`,
-      );
+      throw new ThemeNotFoundError(themePath);
     }
   }
   if (!path) {
@@ -24,9 +24,7 @@ export default async ({ resume, themePath }) => {
     path = tryResolve(`jsonresume-theme-${themePath}`, { paths: [cwd] });
   }
   if (!path) {
-    throw new Error(
-      `theme path ${themePath} could not be resolved from current working directory`,
-    );
+    throw new ThemeNotFoundError(themePath);
   }
   const theme = require(path);
   if (typeof theme?.render !== 'function') {
