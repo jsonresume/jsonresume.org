@@ -1,5 +1,12 @@
 # @jsonresume/theme-kit
 
+## 1.0.1
+
+### Patch Changes
+
+- Updated dependencies [ff09f75]
+  - @jsonresume/core@0.3.1
+
 ## 1.0.0
 
 ### Minor Changes

@@ -1,5 +1,13 @@
 # jsonresume-theme-elegant-pink
 
+## 0.1.4
+
+### Patch Changes
+
+- c621133: use @jsonresume/core/ssr renderResumeDocument
+- Updated dependencies [ff09f75]
+  - @jsonresume/core@0.3.1
+
 ## 0.1.3
 
 ### Patch Changes

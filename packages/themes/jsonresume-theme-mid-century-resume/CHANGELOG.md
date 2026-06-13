@@ -1,5 +1,13 @@
 # jsonresume-theme-mid-century-resume
 
+## 1.1.3
+
+### Patch Changes
+
+- 390256c: use @jsonresume/core/ssr renderResumeDocument
+- Updated dependencies [ff09f75]
+  - @jsonresume/core@0.3.1
+
 ## 1.1.2
 
 ### Patch Changes

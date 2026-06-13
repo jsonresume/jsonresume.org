@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-data-driven",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Data-driven analytical theme with sky blue accent - built with @resume/core",
   "type": "module",
   "main": "./dist/index.js",

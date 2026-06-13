@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-urban-techno",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Brutalist tech theme with high contrast, dense two-column layout, and bold typography",
   "type": "module",
   "main": "./index.jsx",

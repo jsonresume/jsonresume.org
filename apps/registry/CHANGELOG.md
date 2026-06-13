@@ -1,5 +1,88 @@
 # registry
 
+## 1.1.8
+
+### Patch Changes
+
+- Updated dependencies [2be531c]
+- Updated dependencies [2be531c]
+- Updated dependencies [2be531c]
+- Updated dependencies [2be531c]
+- Updated dependencies [229ed4b]
+- Updated dependencies [229ed4b]
+- Updated dependencies [d68a1b3]
+- Updated dependencies [c621133]
+- Updated dependencies [c621133]
+- Updated dependencies [c621133]
+- Updated dependencies [229ed4b]
+- Updated dependencies [c621133]
+- Updated dependencies [c621133]
+- Updated dependencies [390256c]
+- Updated dependencies [390256c]
+- Updated dependencies [390256c]
+- Updated dependencies [390256c]
+- Updated dependencies [390256c]
+- Updated dependencies [390256c]
+- Updated dependencies [8973d5a]
+- Updated dependencies [229ed4b]
+- Updated dependencies [965cf57]
+- Updated dependencies [8973d5a]
+- Updated dependencies [8973d5a]
+- Updated dependencies [eb7f950]
+- Updated dependencies [965cf57]
+- Updated dependencies [eb7f950]
+- Updated dependencies [eb7f950]
+- Updated dependencies [eb7f950]
+- Updated dependencies [eb7f950]
+  - jsonresume-theme-academic-cv-lite@0.2.3
+  - jsonresume-theme-architects-portfolio@1.1.3
+  - jsonresume-theme-asymmetric-timeline@1.1.3
+  - jsonresume-theme-bold-header-statement@1.1.3
+  - @jsonresume/jsonresume-theme-consultant-polished@1.0.3
+  - @jsonresume/jsonresume-theme-creative-studio@1.1.3
+  - jsonresume-theme-data-driven@0.2.3
+  - jsonresume-theme-developer-mono@0.2.3
+  - jsonresume-theme-diagonal-accent-bar@1.1.3
+  - jsonresume-theme-elegant-pink@0.1.4
+  - jsonresume-theme-executive-slate@1.1.3
+  - jsonresume-theme-government-standard@0.2.3
+  - jsonresume-theme-graph-paper-grid@1.1.3
+  - jsonresume-theme-marketing-narrative@0.2.3
+  - jsonresume-theme-mid-century-resume@1.1.3
+  - jsonresume-theme-minimalist-grid@0.2.3
+  - jsonresume-theme-modern-classic@1.1.3
+  - jsonresume-theme-monochrome-noir@1.1.3
+  - jsonresume-theme-nordic-minimal@1.1.3
+  - jsonresume-theme-operations-precision@0.3.3
+  - jsonresume-theme-product-manager-canvas@0.2.3
+  - @jsonresume/jsonresume-theme-professional@1.0.20
+  - jsonresume-theme-sales-hunter@0.2.3
+  - jsonresume-theme-sidebar-photo-strip@1.1.3
+  - jsonresume-theme-sidebar@0.2.3
+  - @jsonresume/jsonresume-theme-tokyo-modernist@1.0.5
+  - jsonresume-theme-two-column-modernist@1.1.3
+  - jsonresume-theme-typewriter-modern@1.1.3
+  - jsonresume-theme-university-first@0.2.3
+  - jsonresume-theme-writers-portfolio@0.2.3
+  - @jsonresume/theme-kit@1.0.1
+  - jsonresume-theme-art-deco@0.2.4
+  - jsonresume-theme-art-school-modern@0.2.4
+  - jsonresume-theme-berlin-grid@0.2.4
+  - jsonresume-theme-brutalist@0.2.4
+  - jsonresume-theme-californian-warm@0.2.4
+  - jsonresume-theme-clinical-precision@0.2.4
+  - jsonresume-theme-coastal-creative@0.2.4
+  - jsonresume-theme-community-garden@0.1.5
+  - jsonresume-theme-field-researcher@0.2.4
+  - jsonresume-theme-french-atelier@0.2.4
+  - jsonresume-theme-industrial-engineer@0.2.4
+  - jsonresume-theme-investor-brief@0.2.4
+  - jsonresume-theme-london-bureau@0.2.4
+  - jsonresume-theme-new-york-editorial@0.2.4
+  - jsonresume-theme-pacific-horizon@0.2.4
+  - jsonresume-theme-reference@0.2.3
+  - jsonresume-theme-urban-techno@0.2.4
+
 ## 1.1.7
 
 ### Patch Changes

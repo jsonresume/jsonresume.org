@@ -1,5 +1,13 @@
 # @jsonresume/jsonresume-theme-tokyo-modernist
 
+## 1.0.5
+
+### Patch Changes
+
+- 965cf57: use @jsonresume/core/ssr renderResumeDocument
+- Updated dependencies [ff09f75]
+  - @jsonresume/core@0.3.1
+
 ## 1.0.4
 
 ### Patch Changes
