@@ -1,5 +1,11 @@
 # jsonresume-theme-community-garden
 
+## 0.1.4
+
+### Patch Changes
+
+- 5c23cd2: use @jsonresume/core/ssr renderResumeDocument
+
 ## 0.1.3
 
 ### Patch Changes

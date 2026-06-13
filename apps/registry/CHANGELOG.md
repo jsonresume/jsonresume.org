@@ -1,5 +1,32 @@
 # registry
 
+## 1.1.7
+
+### Patch Changes
+
+- Updated dependencies [5c23cd2]
+- Updated dependencies [5c23cd2]
+- Updated dependencies [5c23cd2]
+- Updated dependencies [5c23cd2]
+- Updated dependencies [5c23cd2]
+- Updated dependencies [5c23cd2]
+- Updated dependencies [9f266c9]
+- Updated dependencies [9f266c9]
+- Updated dependencies [9f266c9]
+- Updated dependencies [9f266c9]
+- Updated dependencies [9f266c9]
+  - jsonresume-theme-art-school-modern@0.2.3
+  - jsonresume-theme-californian-warm@0.2.3
+  - jsonresume-theme-coastal-creative@0.2.3
+  - jsonresume-theme-community-garden@0.1.4
+  - jsonresume-theme-field-researcher@0.2.3
+  - jsonresume-theme-french-atelier@0.2.3
+  - jsonresume-theme-investor-brief@0.2.3
+  - jsonresume-theme-london-bureau@0.2.3
+  - jsonresume-theme-new-york-editorial@0.2.3
+  - jsonresume-theme-pacific-horizon@0.2.3
+  - jsonresume-theme-urban-techno@0.2.3
+
 ## 1.1.6
 
 ### Patch Changes

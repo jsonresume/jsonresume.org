@@ -1,5 +1,11 @@
 # jsonresume-theme-investor-brief
 
+## 0.2.3
+
+### Patch Changes
+
+- 9f266c9: use @jsonresume/core/ssr renderResumeDocument
+
 ## 0.2.2
 
 ### Patch Changes
