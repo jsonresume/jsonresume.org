@@ -7,6 +7,17 @@ const path = require('path');
 const puppeteer = require('puppeteer');
 const btoa = require('btoa');
 const { ThemeNotFoundError } = require('./theme-errors');
+const toMarkdown = require('./formatters/markdown');
+const toText = require('./formatters/text');
+
+// Theme-less formatters keyed by their normalized format. The value pairs the
+// pure renderer with the file extension used on disk.
+const THEMELESS_FORMATTERS = {
+  md: { render: toMarkdown, ext: '.md' },
+  markdown: { render: toMarkdown, ext: '.md' },
+  txt: { render: toText, ext: '.txt' },
+  text: { render: toText, ext: '.txt' },
+};
 
 module.exports = (
   { resume: resumeJson, fileName, theme, format },
@@ -20,6 +31,16 @@ module.exports = (
   const fileNameAndFormat = getFileNameAndFormat(fileName, format);
   fileName = fileNameAndFormat.fileName;
   const fileFormatToUse = fileNameAndFormat.fileFormatToUse;
+  const themeless = THEMELESS_FORMATTERS[(fileFormatToUse || '').toLowerCase()];
+  if (themeless) {
+    createThemeless(resumeJson, fileName, themeless, (error) => {
+      if (error) {
+        console.error(error, '`createThemeless` errored out');
+      }
+      callback(error, fileName, themeless.ext);
+    });
+    return;
+  }
   const formatToUse = '.' + fileFormatToUse;
   if (formatToUse === '.html') {
     createHtml(resumeJson, fileName, theme, formatToUse, (error) => {
@@ -83,6 +104,18 @@ async function createHtml(resumeJson, fileName, themePath, format, callback) {
     stream.close(callback);
   });
 }
+// Render a resume with a pure (theme-less) formatter and write it to disk.
+async function createThemeless(resumeJson, fileName, formatter, callback) {
+  try {
+    const output = formatter.render(resumeJson);
+    const pathToStream = path.resolve(process.cwd(), fileName + formatter.ext);
+    await writeFile(pathToStream, output);
+    callback(null);
+  } catch (err) {
+    callback(err);
+  }
+}
+
 const createPdf = (resumeJson, fileName, theme, format, callback) => {
   (async () => {
     const themePkg = getThemePkg(theme);

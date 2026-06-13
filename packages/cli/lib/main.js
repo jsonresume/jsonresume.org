@@ -91,7 +91,7 @@ const normalizeTheme = (value, defaultValue) => {
   program
     .command('export [fileName]')
     .description(
-      'Export locally to .html or .pdf. Supply a --format <file format> flag and argument to specify export format. Pick a theme with --theme (https://jsonresume.org/themes/).',
+      'Export locally to .html, .pdf, .md (markdown) or .txt (text). Supply a --format <file format> flag and argument to specify export format. .md and .txt need no theme; pick a theme for .html/.pdf with --theme (https://jsonresume.org/themes/).',
     )
     .action(async (fileName) => {
       const resume = await getResume({ path: program.resume });
