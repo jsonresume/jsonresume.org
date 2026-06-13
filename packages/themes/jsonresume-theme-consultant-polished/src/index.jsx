@@ -1,16 +1,9 @@
-import { renderToString } from 'react-dom/server';
-import { ServerStyleSheet } from 'styled-components';
+import { renderResumeDocument } from '@jsonresume/core/ssr';
 import Resume from './ui/Resume';
 
 export const render = (resume) => {
-  const sheet = new ServerStyleSheet();
-  const html = renderToString(sheet.collectStyles(<Resume resume={resume} />));
-  const styles = sheet.getStyleTags();
-  return `<!DOCTYPE html><head>
-  <title>${resume.basics.name} - Resume</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <style>
+  return renderResumeDocument(<Resume resume={resume} />, {
+    head: `<style>
     html {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
       background: #fff;
@@ -76,8 +69,10 @@ export const render = (resume) => {
     *::after {
       box-sizing: border-box;
     }
-  </style>
-  ${styles}</head><body>${html}</body></html>`;
+  </style>`,
+    title: `${resume.basics.name} - Resume`,
+    includeTokensCss: false,
+  });
 };
 
 export { Resume };
