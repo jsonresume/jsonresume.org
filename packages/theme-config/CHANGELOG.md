@@ -1,4 +1,6 @@
-# @repo/theme-config
+# @jsonresume/theme-metadata
+
+> Previously published internally as `@repo/theme-config`.
 
 ## 0.2.0
 

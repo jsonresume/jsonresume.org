@@ -1,14 +1,13 @@
 {
-  "name": "@repo/theme-config",
+  "name": "@jsonresume/theme-metadata",
   "version": "0.2.0",
-  "private": true,
-  "description": "Shared theme configuration and metadata for JSON Resume themes",
+  "private": false,
+  "description": "Theme registry metadata for JSON Resume themes — names, descriptions, tags, authors, and helpers (THEME_METADATA, THEME_NAMES, getRandomTheme) for building theme galleries and pickers",
+  "type": "module",
   "main": "./src/index.js",
-  "types": "./src/index.d.ts",
   "exports": {
     ".": "./src/index.js",
-    "./metadata": "./src/metadata.js",
-    "./themes": "./src/themes.js"
+    "./metadata": "./src/metadata.js"
   },
   "files": [
     "src"
@@ -21,13 +20,24 @@
   },
   "keywords": [
     "json-resume",
+    "resume",
+    "cv",
     "themes",
+    "theme-metadata",
+    "theme-gallery",
     "config"
   ],
   "repository": {
     "type": "git",
     "url": "https://github.com/jsonresume/jsonresume.org",
     "directory": "packages/theme-config"
+  },
+  "homepage": "https://github.com/jsonresume/jsonresume.org/tree/master/packages/theme-config",
+  "bugs": {
+    "url": "https://github.com/jsonresume/jsonresume.org/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "license": "MIT"
 }
