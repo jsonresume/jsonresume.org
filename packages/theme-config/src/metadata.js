@@ -474,6 +474,21 @@ export const THEME_METADATA = {
       'plum',
     ],
   },
+  'clinical-precision': {
+    name: 'Clinical Precision',
+    description:
+      'Clean, clinical, calm resume styled like a medical chart record. Each entry is a chart row with a green-railed vital column of monospaced date codes, lab-panel skill cards, and a "chart note" summary. Clinical green accents on white with mint tints. Tailored for doctors, nurses, and healthcare administrators.',
+    author: 'JSON Resume Team',
+    tags: [
+      'healthcare',
+      'clinical',
+      'medical',
+      'green',
+      'chart',
+      'calm',
+      'professional',
+    ],
+  },
   'field-researcher': {
     name: 'Field Researcher',
     description:
