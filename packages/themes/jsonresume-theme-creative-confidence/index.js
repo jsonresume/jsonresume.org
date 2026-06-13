@@ -1,3 +1,5 @@
+import { formatDateRange, sanitizeHtml } from '@jsonresume/utils';
+
 const css = `:root {
   --text: #0f172a;
   --muted: #334155;
@@ -315,12 +317,7 @@ a {
 }`;
 
 function escapeHtml(value) {
-  return String(value ?? '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/\"/g, '&quot;')
-    .replace(/'/g, '&#039;');
+  return sanitizeHtml(String(value ?? ''));
 }
 
 function formatDate(value) {
@@ -332,10 +329,7 @@ function formatDate(value) {
     /^\d{4}-\d{2}$/.test(normalized) ? `${normalized}-01` : normalized
   );
   if (Number.isNaN(parsed.getTime())) return escapeHtml(value);
-  return parsed.toLocaleDateString('en-US', {
-    month: 'short',
-    year: 'numeric',
-  });
+  return formatDateRange({ startDate: value });
 }
 
 function dateRange(start, end) {

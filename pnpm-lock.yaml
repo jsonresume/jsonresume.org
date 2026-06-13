@@ -1200,6 +1200,9 @@ importers:
 
   packages/themes/jsonresume-theme-claude:
     dependencies:
+      '@jsonresume/utils':
+        specifier: workspace:*
+        version: link:../../utils
       markdown-it:
         specifier: ^14.1.1
         version: 14.1.1
@@ -1298,7 +1301,11 @@ importers:
         specifier: ^5.4.21
         version: 5.4.21(@types/node@20.19.24)
 
-  packages/themes/jsonresume-theme-creative-confidence: {}
+  packages/themes/jsonresume-theme-creative-confidence:
+    dependencies:
+      '@jsonresume/utils':
+        specifier: workspace:*
+        version: link:../../utils
 
   packages/themes/jsonresume-theme-creative-studio:
     dependencies:
