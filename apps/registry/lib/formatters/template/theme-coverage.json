@@ -27,6 +27,20 @@
     "references": true,
     "projects": true
   },
+  "art-school-modern": {
+    "basics": true,
+    "work": true,
+    "volunteer": true,
+    "education": true,
+    "awards": true,
+    "certificates": true,
+    "publications": true,
+    "skills": true,
+    "languages": true,
+    "interests": true,
+    "references": true,
+    "projects": true
+  },
   "asymmetric-timeline": {
     "basics": true,
     "work": true,
