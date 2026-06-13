@@ -10,13 +10,13 @@ describe('formatDateRange (pure)', () => {
     expect(formatDateRange({ startDate: undefined })).toBe('');
   });
 
-  it('shows "Present" when endDate is undefined (W1 bugfix)', () => {
-    // BUGFIX: a missing endDate now behaves like a null endDate (ongoing role):
-    // start + separator + present label, rather than a bare single date.
+  it('renders a single date (no "Present") when endDate is undefined', () => {
+    // An omitted endDate is a point in time (award/certificate/publication
+    // date), not an ongoing range: render just the start, no separator.
     const out = formatDateRange({ startDate: '2020-01-15' });
     expect(out).toContain('2020');
-    expect(out).toContain(' - ');
-    expect(out).toContain('Present');
+    expect(out).not.toContain(' - ');
+    expect(out).not.toContain('Present');
   });
 
   it('shows "Present" for an ongoing role when endDate is null', () => {
@@ -74,10 +74,10 @@ describe('formatDateRange (pure)', () => {
   });
 
   it('returns an invalid date string as-is rather than NaN', () => {
-    // With the W1 bugfix a missing endDate appends " - Present"; the invalid
-    // start is still passed through verbatim.
+    // A missing endDate renders a single date; the invalid start is passed
+    // through verbatim with no separator.
     const out = formatDateRange({ startDate: 'not-a-date' });
-    expect(out).toBe('not-a-date - Present');
+    expect(out).toBe('not-a-date');
   });
 
   it('accepts Date objects as well as strings', () => {
