@@ -1,5 +1,11 @@
 # registry
 
+## 1.1.9
+
+### Patch Changes
+
+- @repo/theme-config@0.2.1
+
 ## 1.1.8
 
 ### Patch Changes
