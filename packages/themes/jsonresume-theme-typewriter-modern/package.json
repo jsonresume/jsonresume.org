@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-typewriter-modern",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Nostalgic typewriter aesthetic with monospace body and contemporary clarity",
   "main": "./dist/index.js",
   "type": "module",

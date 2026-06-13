@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-desert-modern",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Warm minimalist resume theme inspired by desert modern aesthetics",
   "main": "./dist/index.js",
   "type": "module",

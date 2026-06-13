@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-pacific-horizon",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Contemporary corporate resume with clean typography and blue tones, inspired by SaaS landing pages",
   "type": "module",
   "main": "./index.jsx",
