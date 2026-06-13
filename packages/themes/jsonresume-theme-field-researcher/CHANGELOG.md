@@ -1,5 +1,11 @@
 # jsonresume-theme-field-researcher
 
+## 0.2.3
+
+### Patch Changes
+
+- 5c23cd2: use @jsonresume/core/ssr renderResumeDocument
+
 ## 0.2.2
 
 ### Patch Changes

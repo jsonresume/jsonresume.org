@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-investor-brief",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Crisp, analytical, results-focused theme resembling a fund report. Data-first with Key Metrics section.",
   "type": "module",
   "main": "./index.jsx",
