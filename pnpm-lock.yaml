@@ -1844,6 +1844,9 @@ importers:
 
   packages/themes/jsonresume-theme-professional:
     dependencies:
+      '@jsonresume/core':
+        specifier: workspace:*
+        version: link:../../resume-core
       marked:
         specifier: ^16.3.0
         version: 16.4.1
