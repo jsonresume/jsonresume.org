@@ -1,0 +1,216 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json",
+  "basics": {
+    "name": "Dr. Lena Vasquez",
+    "label": "Staff Software Engineer, Distributed Systems",
+    "image": "",
+    "email": "lena.vasquez@example.com",
+    "phone": "(415) 555-0117",
+    "url": "https://lenavasquez.example.com",
+    "summary": "Staff engineer with 14 years building large-scale distributed storage and streaming systems. I lead cross-team technical direction, mentor senior engineers, and still spend most of my week in the codebase. My work spans consensus protocols, multi-region data replication, and the boring-but-critical operability that keeps petabyte-scale systems healthy.",
+    "location": {
+      "address": "88 Harrison Street, Unit 1402",
+      "postalCode": "94105",
+      "city": "San Francisco",
+      "countryCode": "US",
+      "region": "California"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "lvasquez",
+        "url": "https://github.com/lvasquez"
+      },
+      {
+        "network": "Mastodon",
+        "username": "lena",
+        "url": "https://hachyderm.io/@lena"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "lena-vasquez-eng",
+        "url": "https://www.linkedin.com/in/lena-vasquez-eng"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Confluent",
+      "location": "Mountain View, CA",
+      "description": "Data streaming platform built on Apache Kafka",
+      "position": "Staff Software Engineer",
+      "url": "https://www.confluent.io/",
+      "startDate": "2020-02-01",
+      "summary": "Technical lead for the multi-region replication and tiered-storage initiatives.",
+      "highlights": [
+        "Designed the tiered-storage architecture that offloaded 80% of broker disk usage to object stores",
+        "Led a six-engineer working group to ship active-active cluster linking across three cloud regions",
+        "Cut p99 produce latency 40% by reworking the replication fetch path",
+        "Authored the internal design-review rubric now used org-wide"
+      ]
+    },
+    {
+      "name": "Dropbox",
+      "location": "San Francisco, CA",
+      "description": "Cloud storage and collaboration",
+      "position": "Senior Software Engineer",
+      "url": "https://www.dropbox.com/",
+      "startDate": "2015-06-01",
+      "endDate": "2020-01-01",
+      "summary": "Worked on Magic Pocket, Dropbox's exabyte-scale custom storage system.",
+      "highlights": [
+        "Built the erasure-coding pipeline that reduced storage cost per byte by 25%",
+        "Owned the cross-zone repair scheduler responsible for durability SLAs",
+        "Mentored four engineers, two of whom were promoted to senior"
+      ]
+    },
+    {
+      "name": "Rackspace",
+      "location": "San Antonio, TX",
+      "description": "Managed cloud hosting provider",
+      "position": "Software Engineer",
+      "url": "https://www.rackspace.com/",
+      "startDate": "2011-08-01",
+      "endDate": "2015-05-01",
+      "summary": "Contributed to OpenStack Swift, the open-source object storage project.",
+      "highlights": [
+        "Implemented container-sync replication improvements upstreamed to OpenStack Swift",
+        "Reduced cluster rebalance time by redesigning the ring-builder partition assignment"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University of Texas at Austin",
+      "url": "https://www.utexas.edu/",
+      "area": "Computer Science",
+      "studyType": "Ph.D.",
+      "startDate": "2006-09-01",
+      "endDate": "2011-06-01",
+      "score": "Dissertation: Consistency Trade-offs in Geo-Replicated Key-Value Stores"
+    },
+    {
+      "institution": "University of Texas at Austin",
+      "url": "https://www.utexas.edu/",
+      "area": "Computer Science",
+      "studyType": "Bachelor of Science",
+      "startDate": "2002-09-01",
+      "endDate": "2006-05-01",
+      "score": "3.9/4.0"
+    }
+  ],
+  "publications": [
+    {
+      "name": "Bounded Staleness for Geo-Replicated Key-Value Stores",
+      "publisher": "USENIX OSDI",
+      "releaseDate": "2014-10-01",
+      "url": "https://www.usenix.org/conference/osdi14",
+      "summary": "A tunable consistency model that bounds replica staleness while preserving low write latency across regions."
+    },
+    {
+      "name": "Operating Tiered Storage at Streaming Scale",
+      "publisher": "ACM Queue",
+      "releaseDate": "2022-07-01",
+      "url": "https://queue.acm.org/",
+      "summary": "Lessons from offloading streaming log segments to object storage without sacrificing read latency."
+    }
+  ],
+  "awards": [
+    {
+      "title": "Best Paper Award",
+      "date": "2014-10-01",
+      "awarder": "USENIX OSDI",
+      "summary": "Recognized for the geo-replication consistency model paper."
+    },
+    {
+      "title": "Distinguished Engineer Spotlight",
+      "date": "2021-12-01",
+      "awarder": "Confluent",
+      "summary": "Internal recognition for technical leadership on the tiered-storage launch."
+    }
+  ],
+  "certificates": [
+    {
+      "name": "AWS Certified Solutions Architect - Professional",
+      "date": "2019-03-01",
+      "issuer": "Amazon Web Services",
+      "url": "https://aws.amazon.com/certification/certified-solutions-architect-professional/"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Distributed Systems",
+      "level": "Master",
+      "keywords": [
+        "Consensus",
+        "Replication",
+        "Erasure coding",
+        "Consistency models"
+      ]
+    },
+    {
+      "name": "Programming Languages",
+      "level": "Master",
+      "keywords": ["Go", "Rust", "Java", "Python", "C++"]
+    },
+    {
+      "name": "Infrastructure",
+      "level": "Advanced",
+      "keywords": ["Kafka", "Kubernetes", "Terraform", "Prometheus", "S3"]
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Native speaker"
+    },
+    {
+      "language": "Spanish",
+      "fluency": "Fluent"
+    },
+    {
+      "language": "Portuguese",
+      "fluency": "Professional working proficiency"
+    }
+  ],
+  "projects": [
+    {
+      "name": "raft-lab",
+      "description": "A teaching implementation of the Raft consensus protocol with a deterministic network simulator.",
+      "highlights": [
+        "Used in a graduate distributed-systems course at two universities",
+        "Includes a fault-injection harness for partition and clock-skew scenarios"
+      ],
+      "keywords": ["Go", "Raft", "Consensus"],
+      "startDate": "2019-01-01",
+      "url": "https://github.com/lvasquez/raft-lab",
+      "roles": ["Author", "Maintainer"],
+      "type": "application"
+    }
+  ],
+  "interests": [
+    {
+      "name": "Mentoring",
+      "keywords": ["Conference speaking", "Open source"]
+    },
+    {
+      "name": "Cartography",
+      "keywords": ["Topographic maps", "GIS"]
+    }
+  ],
+  "references": [
+    {
+      "name": "Marcus Feng, Engineering Director at Confluent",
+      "reference": "Lena is the engineer other staff engineers go to. She has a rare ability to hold an entire distributed system in her head and still write the cleanest pull request on the team. Her design reviews raised the bar for the whole org."
+    },
+    {
+      "name": "Dr. Anita Bose, Professor of Computer Science, UT Austin",
+      "reference": "Lena was among the strongest doctoral students I have advised. Her OSDI paper continues to be cited, and she has the unusual gift of making hard systems ideas legible to students."
+    }
+  ],
+  "meta": {
+    "canonical": "https://lenavasquez.example.com/resume.json",
+    "version": "v1.0.0",
+    "lastModified": "2025-03-02T11:15:00"
+  }
+}

@@ -1,0 +1,162 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json",
+  "basics": {
+    "name": "Maya Okonkwo",
+    "label": "Computer Science Graduate",
+    "image": "",
+    "email": "maya.okonkwo@example.com",
+    "phone": "(206) 555-0142",
+    "url": "https://mayaokonkwo.example.com",
+    "summary": "Recent computer science graduate with a focus on distributed systems and machine learning. Two summer internships building production web services, plus a capstone project deployed for 400+ campus users. Eager to join an engineering team where I can keep learning from senior mentors while shipping real features.",
+    "location": {
+      "address": "417 Maple Avenue, Apt 6",
+      "postalCode": "98105",
+      "city": "Seattle",
+      "countryCode": "US",
+      "region": "Washington"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "mayaokonkwo",
+        "url": "https://github.com/mayaokonkwo"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "maya-okonkwo",
+        "url": "https://www.linkedin.com/in/maya-okonkwo"
+      }
+    ]
+  },
+  "education": [
+    {
+      "institution": "University of Washington",
+      "url": "https://www.washington.edu/",
+      "area": "Computer Science",
+      "studyType": "Bachelor of Science",
+      "startDate": "2021-09-01",
+      "endDate": "2025-06-01",
+      "score": "3.81/4.0",
+      "courses": [
+        "CSE 451 - Operating Systems",
+        "CSE 444 - Database Systems",
+        "CSE 446 - Machine Learning",
+        "CSE 461 - Computer Networks",
+        "CSE 421 - Algorithms"
+      ]
+    }
+  ],
+  "work": [
+    {
+      "name": "Outreach",
+      "location": "Seattle, WA",
+      "description": "Sales engagement platform",
+      "position": "Software Engineering Intern",
+      "url": "https://www.outreach.io/",
+      "startDate": "2024-06-01",
+      "endDate": "2024-09-01",
+      "summary": "Joined the platform infrastructure team to improve internal developer tooling.",
+      "highlights": [
+        "Built a service-health dashboard in React and TypeScript adopted by three on-call teams",
+        "Cut local test-suite runtime by 35% by parallelizing integration fixtures",
+        "Wrote the onboarding runbook used by the next intern cohort"
+      ]
+    },
+    {
+      "name": "Allen Institute for AI",
+      "location": "Seattle, WA",
+      "description": "Non-profit AI research institute",
+      "position": "Research Intern",
+      "url": "https://allenai.org/",
+      "startDate": "2023-06-01",
+      "endDate": "2023-09-01",
+      "summary": "Supported an NLP research group evaluating retrieval-augmented question answering.",
+      "highlights": [
+        "Implemented a reproducible evaluation harness in Python for three benchmark datasets",
+        "Reduced experiment turnaround from hours to minutes by caching intermediate embeddings"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "DormSwap",
+      "description": "A campus marketplace for students to buy, sell, and trade dorm essentials.",
+      "highlights": [
+        "Deployed to 400+ active students across two residence halls",
+        "Built with Next.js, PostgreSQL, and Prisma on Vercel",
+        "Designed an image-moderation flow to keep listings safe"
+      ],
+      "keywords": ["Next.js", "PostgreSQL", "Prisma", "Vercel"],
+      "startDate": "2024-09-01",
+      "endDate": "2025-05-01",
+      "url": "https://dormswap.example.com",
+      "roles": ["Full-stack developer", "Team lead"],
+      "entity": "University of Washington Capstone",
+      "type": "application"
+    },
+    {
+      "name": "gradient-viz",
+      "description": "An interactive visualizer that animates gradient descent over 2D loss surfaces.",
+      "highlights": [
+        "Open-sourced with 120+ GitHub stars",
+        "Renders surfaces in WebGL with adjustable learning-rate controls"
+      ],
+      "keywords": ["WebGL", "JavaScript", "Machine Learning"],
+      "startDate": "2024-01-01",
+      "endDate": "2024-03-01",
+      "url": "https://github.com/mayaokonkwo/gradient-viz",
+      "roles": ["Author"],
+      "type": "application"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Programming Languages",
+      "level": "Intermediate",
+      "keywords": ["Python", "TypeScript", "Java", "Go", "SQL"]
+    },
+    {
+      "name": "Web Development",
+      "level": "Intermediate",
+      "keywords": ["React", "Next.js", "Node.js", "REST APIs"]
+    },
+    {
+      "name": "Data & Infrastructure",
+      "level": "Beginner",
+      "keywords": ["PostgreSQL", "Docker", "Git", "AWS"]
+    }
+  ],
+  "awards": [
+    {
+      "title": "Dean's List",
+      "date": "2024-12-01",
+      "awarder": "University of Washington",
+      "summary": "Recognized for academic excellence across four consecutive quarters."
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Native speaker"
+    },
+    {
+      "language": "Igbo",
+      "fluency": "Conversational"
+    }
+  ],
+  "interests": [
+    {
+      "name": "Open Source",
+      "keywords": ["Hacktoberfest", "Documentation"]
+    },
+    {
+      "name": "Rock Climbing",
+      "keywords": ["Bouldering", "Top rope"]
+    }
+  ],
+  "meta": {
+    "canonical": "https://mayaokonkwo.example.com/resume.json",
+    "version": "v1.0.0",
+    "lastModified": "2025-06-15T09:00:00"
+  }
+}
