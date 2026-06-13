@@ -1,5 +1,4 @@
-import { renderToString } from 'react-dom/server';
-import { ServerStyleSheet } from 'styled-components';
+import { renderResumeDocument } from '@jsonresume/core/ssr';
 import Resume from './Resume.jsx';
 
 /**
@@ -18,16 +17,7 @@ export function render(resume, options = {}) {
     title = resume.basics?.name || 'Resume',
   } = options;
 
-  const sheet = new ServerStyleSheet();
-
-  try {
-    const html = renderToString(
-      sheet.collectStyles(<Resume resume={resume} />)
-    );
-
-    const styles = sheet.getStyleTags();
-
-    const designTokens = `
+  const designTokens = `
     :root {
       --resume-color-primary: #9f1239;
       --resume-color-secondary: #be123c;
@@ -37,7 +27,7 @@ export function render(resume, options = {}) {
     }
   `;
 
-    const globalStyles = `
+  const globalStyles = `
     * {
       margin: 0;
       padding: 0;
@@ -63,30 +53,18 @@ export function render(resume, options = {}) {
     }
   `;
 
-    return `<!DOCTYPE html>
-<html lang="${locale}" dir="${dir}">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${title}</title>
-
-  <style>
+  return renderResumeDocument(<Resume resume={resume} />, {
+    head: `<style>
     ${designTokens}
-  </style>
-
-  ${styles}
-
-  <style>
+  </style>`,
+    headAfterStyles: `<style>
     ${globalStyles}
-  </style>
-</head>
-<body>
-  ${html}
-</body>
-</html>`;
-  } finally {
-    sheet.seal();
-  }
+  </style>`,
+    lang: locale,
+    dir,
+    title,
+    includeTokensCss: false,
+  });
 }
 
 export { Resume };
