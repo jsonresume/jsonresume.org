@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-minimalist-grid",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Clean, contemporary theme with geometric precision and baseline grid alignment. For minimalists and designers.",
   "type": "module",
   "main": "./dist/index.js",

@@ -1,5 +1,59 @@
 # registry
 
+## 1.1.4
+
+### Patch Changes
+
+- Updated dependencies [36d1759]
+- Updated dependencies [36d1759]
+  - @jsonresume/sample-data@0.2.0
+  - @jsonresume/utils@0.2.0
+  - jsonresume-theme-academic-cv-lite@0.2.1
+  - jsonresume-theme-architects-portfolio@1.1.1
+  - jsonresume-theme-art-deco@0.2.1
+  - jsonresume-theme-art-school-modern@0.2.1
+  - jsonresume-theme-asymmetric-timeline@1.1.1
+  - jsonresume-theme-berlin-grid@0.2.1
+  - jsonresume-theme-bold-header-statement@1.1.1
+  - jsonresume-theme-brutalist@0.2.1
+  - jsonresume-theme-californian-warm@0.2.1
+  - jsonresume-theme-clinical-precision@0.2.1
+  - jsonresume-theme-coastal-creative@0.2.1
+  - jsonresume-theme-community-garden@0.1.2
+  - @jsonresume/jsonresume-theme-creative-studio@1.1.1
+  - jsonresume-theme-data-driven@0.2.1
+  - jsonresume-theme-developer-mono@0.2.1
+  - jsonresume-theme-diagonal-accent-bar@1.1.1
+  - jsonresume-theme-elegant-pink@0.1.2
+  - jsonresume-theme-executive-slate@1.1.1
+  - jsonresume-theme-field-researcher@0.2.1
+  - jsonresume-theme-french-atelier@0.2.1
+  - jsonresume-theme-government-standard@0.2.1
+  - jsonresume-theme-graph-paper-grid@1.1.1
+  - jsonresume-theme-industrial-engineer@0.2.1
+  - jsonresume-theme-investor-brief@0.2.1
+  - jsonresume-theme-london-bureau@0.2.1
+  - jsonresume-theme-marketing-narrative@0.2.1
+  - jsonresume-theme-mid-century-resume@1.1.1
+  - jsonresume-theme-minimalist-grid@0.2.1
+  - jsonresume-theme-modern-classic@1.1.1
+  - jsonresume-theme-monochrome-noir@1.1.1
+  - jsonresume-theme-new-york-editorial@0.2.1
+  - jsonresume-theme-nordic-minimal@1.1.1
+  - jsonresume-theme-operations-precision@0.3.1
+  - jsonresume-theme-pacific-horizon@0.2.1
+  - jsonresume-theme-product-manager-canvas@0.2.1
+  - jsonresume-theme-reference@0.2.1
+  - jsonresume-theme-sales-hunter@0.2.1
+  - jsonresume-theme-sidebar@0.2.1
+  - jsonresume-theme-sidebar-photo-strip@1.1.1
+  - @jsonresume/jsonresume-theme-tokyo-modernist@1.0.3
+  - jsonresume-theme-two-column-modernist@1.1.1
+  - jsonresume-theme-typewriter-modern@1.1.1
+  - jsonresume-theme-university-first@0.2.1
+  - jsonresume-theme-urban-techno@0.2.1
+  - jsonresume-theme-writers-portfolio@0.2.1
+
 ## 1.1.3
 
 ### Patch Changes

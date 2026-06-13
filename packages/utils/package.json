@@ -1,6 +1,6 @@
 {
   "name": "@jsonresume/utils",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": false,
   "description": "Framework-free pure utilities for JSON Resume: date formatting, metrics, and URL safety",
   "type": "module",

@@ -1,5 +1,12 @@
 # @jsonresume/jsonresume-theme-tokyo-modernist
 
+## 1.0.3
+
+### Patch Changes
+
+- Updated dependencies [36d1759]
+  - @jsonresume/core@0.2.0
+
 ## 1.0.2
 
 ### Patch Changes
