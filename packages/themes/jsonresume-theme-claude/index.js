@@ -1,4 +1,5 @@
 import markdownIt from 'markdown-it';
+import { formatLocation } from '@jsonresume/utils';
 
 const md = markdownIt({ html: false, breaks: true, linkify: false });
 
@@ -429,13 +430,9 @@ export function render(resume) {
       <div class="contact-row">
         ${
           location.city
-            ? `<span class="contact-item">${icon('location')}${[
-                location.city,
-                location.region,
-                location.countryCode,
-              ]
-                .filter(Boolean)
-                .join(', ')}</span>`
+            ? `<span class="contact-item">${icon('location')}${formatLocation(
+                location
+              )}</span>`
             : ''
         }
         ${
