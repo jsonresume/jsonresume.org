@@ -56,7 +56,7 @@ const ContactWrapper = styled.div`
   flex-wrap: wrap;
   gap: 16px;
   font-size: 13px;
-  color: #9ca3af;
+  color: #6b7280;
   letter-spacing: 0.5px;
 `;
 
@@ -89,7 +89,7 @@ const MainSection = styled(Section)`
 const MainSectionTitle = styled(SectionTitle)`
   font-size: 12px;
   font-weight: 500;
-  color: #9ca3af;
+  color: #6b7280;
   margin: 0 0 32px 0;
   text-transform: uppercase;
   letter-spacing: 2px;
@@ -122,7 +122,7 @@ const WorkTitle = styled.h3`
 
 const WorkMeta = styled.div`
   font-size: 12px;
-  color: #9ca3af;
+  color: #6b7280;
   font-weight: 400;
   letter-spacing: 0.5px;
 `;
@@ -416,7 +416,7 @@ function Resume({ resume }) {
                   <div
                     style={{
                       fontSize: '12px',
-                      color: '#9ca3af',
+                      color: '#6b7280',
                       marginTop: '4px',
                     }}
                   >
@@ -441,7 +441,7 @@ function Resume({ resume }) {
                   <div
                     style={{
                       fontSize: '12px',
-                      color: '#9ca3af',
+                      color: '#6b7280',
                       marginTop: '4px',
                     }}
                   >
@@ -466,7 +466,7 @@ function Resume({ resume }) {
                   <div
                     style={{
                       fontSize: '12px',
-                      color: '#9ca3af',
+                      color: '#6b7280',
                       marginTop: '4px',
                     }}
                   >

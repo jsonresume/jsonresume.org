@@ -156,7 +156,7 @@ const Company = styled.span`
 
 const StyledDateRange = styled(DateRange)`
   font-size: 15px;
-  color: #777777;
+  color: #6e6e6e;
   font-variant-numeric: oldstyle-nums;
 `;
 
@@ -223,7 +223,7 @@ const Institution = styled.span`
 
 const StudyType = styled.div`
   font-size: 15px;
-  color: #777777;
+  color: #6e6e6e;
   margin-top: 6px;
 `;
 
@@ -311,7 +311,7 @@ const ItemTitle = styled.h4`
 
 const ItemMeta = styled.div`
   font-size: 15px;
-  color: #777777;
+  color: #6e6e6e;
   margin-bottom: 8px;
   font-style: italic;
 `;

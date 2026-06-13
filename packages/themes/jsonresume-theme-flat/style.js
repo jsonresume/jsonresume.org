@@ -48,7 +48,7 @@ blockquote {
 	font-size: 14px;
 }
 em {
-	color: #95a5a6;
+	color: #647274;
 	font-weight: normal;
 	font-style: normal;
 }
@@ -75,7 +75,7 @@ h4 span:first-child {
 	margin-bottom: 30px;
 }
 #header h2 {
-	color: #95a5a6;
+	color: #647274;
 	font-size: 24px;
 }
 #content h3 {

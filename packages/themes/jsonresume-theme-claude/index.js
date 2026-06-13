@@ -98,7 +98,7 @@ export function render(resume) {
       --color-surface: #ffffff;
       --color-text: #1c1917;
       --color-text-secondary: #57534e;
-      --color-text-tertiary: #a8a29e;
+      --color-text-tertiary: #78716c;
       --color-accent: #2563eb;
       --color-accent-subtle: #dbeafe;
       --color-border: #e7e5e4;
