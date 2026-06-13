@@ -1,5 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { calculateEducationYears, getHighestDegree } from '../education.js';
+import {
+  calculateEducationYears,
+  getHighestDegree,
+} from '../metrics/education.js';
 import { education, FIXED_NOW } from './fixtures.js';
 
 beforeEach(() => {
@@ -11,22 +14,26 @@ afterEach(() => {
   vi.useRealTimers();
 });
 
-describe('calculateEducationYears', () => {
-  // KNOWN BUG (documented, not fixed here): the implementation divides by
-  // ((1000 * 60 * 60 * 24) / 365.25) instead of (1000 * 60 * 60 * 24 * 365.25),
-  // so it returns days * 365.25 rather than years. The fixture spans ~5.5 real
-  // years of study but the function reports 733057. These assertions lock in
-  // CURRENT behavior; update them when the formula is fixed.
-  it('returns the current (inflated) value for the fixture', () => {
-    expect(calculateEducationYears(education)).toBe(733057);
+describe('calculateEducationYears (BUGFIX: ms-per-year)', () => {
+  // The original implementation divided by ((ms-per-day) / 365.25) instead of
+  // (ms-per-day * 365.25), inflating results ~133M-fold. The fixture spans ~5.5
+  // real years of study; the fix now reports a sane, rounded number of years.
+  it('returns a realistic number of years for the fixture', () => {
+    expect(calculateEducationYears(education)).toBe(5);
   });
 
-  it('returns the current (inflated) value for a single entry', () => {
+  it('returns realistic years for a single entry (~3.75y => 4)', () => {
     expect(
       calculateEducationYears([
         { startDate: '2012-09-01', endDate: '2016-06-01' },
       ])
-    ).toBe(500027);
+    ).toBe(4);
+  });
+
+  it('is the same order of magnitude as the real elapsed years (not inflated)', () => {
+    // Guards against a regression to the old (end-start)/(ms-per-day/365.25)
+    // formula, which returned 733057 for this fixture.
+    expect(calculateEducationYears(education)).toBeLessThan(20);
   });
 
   it('skips entries without a startDate', () => {

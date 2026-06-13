@@ -7,7 +7,7 @@ import {
   countTotalSkills,
   countSkillCategories,
   countLanguages,
-} from '../counts.js';
+} from '../metrics/counts.js';
 import {
   work,
   skills,

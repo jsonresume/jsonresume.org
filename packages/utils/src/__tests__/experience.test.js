@@ -5,7 +5,7 @@ import {
   countCareerPositions,
   getCareerProgressionRate,
   countTotalHighlights,
-} from '../experience.js';
+} from '../metrics/experience.js';
 import { work, FIXED_NOW } from './fixtures.js';
 
 beforeEach(() => {

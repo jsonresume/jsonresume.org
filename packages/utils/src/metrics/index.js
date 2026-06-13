@@ -4,16 +4,15 @@
  * Pure functions for computing metrics and insights from JSON Resume data.
  * Use these helpers in themes to display calculated metrics, statistics, and insights.
  *
- * This module is a thin re-export barrel. The implementations now live in
- * @jsonresume/utils (framework-free); the sibling modules below re-export them
- * so @jsonresume/core's public surface stays byte-for-byte stable:
+ * This module is a thin re-export barrel. The implementations live in focused
+ * sibling modules grouped by concern:
  *   - ./experience.js   work tenure & career progression
  *   - ./counts.js       simple section tallies
  *   - ./education.js    education years & highest degree
  *   - ./workHistory.js  employment status, industries, volunteer tenure
  *   - ./keyMetrics.js   dashboard metrics aggregation
  *
- * @module @jsonresume/core/helpers/calculations
+ * @module @jsonresume/utils/metrics
  */
 
 export {

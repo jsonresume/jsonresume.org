@@ -1,0 +1,48 @@
+{
+  "name": "@jsonresume/types",
+  "version": "0.1.0",
+  "private": false,
+  "description": "TypeScript types for the JSON Resume and Job schemas, generated from @jsonresume/schema",
+  "types": "./dist/index.d.ts",
+  "main": "./index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "index.js"
+  ],
+  "scripts": {
+    "build": "node ./scripts/generate.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "devDependencies": {
+    "@jsonresume/schema": "workspace:*",
+    "json-schema-to-typescript": "^15.0.4",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.9.3"
+  },
+  "keywords": [
+    "resume",
+    "cv",
+    "json-resume",
+    "types",
+    "typescript"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jsonresume/jsonresume.org",
+    "directory": "packages/types"
+  },
+  "homepage": "https://github.com/jsonresume/jsonresume.org/tree/master/packages/types",
+  "bugs": {
+    "url": "https://github.com/jsonresume/jsonresume.org/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT"
+}

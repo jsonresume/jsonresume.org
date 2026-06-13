@@ -1,0 +1,206 @@
+{
+  "basics": {
+    "name": "Jane Developer",
+    "label": "Full Stack Software Engineer",
+    "image": "https://avatars.githubusercontent.com/u/1?v=4",
+    "email": "jane.developer@example.com",
+    "phone": "(555) 123-4567",
+    "url": "https://janedeveloper.com",
+    "summary": "Passionate software engineer with 5+ years of experience building scalable web applications. Specialized in React, Node.js, and cloud architecture. Love solving complex problems and mentoring junior developers.",
+    "location": {
+      "address": "123 Tech Street",
+      "postalCode": "94102",
+      "city": "San Francisco",
+      "countryCode": "US",
+      "region": "California"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "janedev",
+        "url": "https://github.com/janedev"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "janedeveloper",
+        "url": "https://linkedin.com/in/janedeveloper"
+      },
+      {
+        "network": "Twitter",
+        "username": "janedev",
+        "url": "https://twitter.com/janedev"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "TechCorp Inc",
+      "position": "Senior Software Engineer",
+      "url": "https://techcorp.com",
+      "startDate": "2021-03-01",
+      "summary": "Lead development of microservices architecture serving 10M+ users. Mentored team of 5 junior engineers and improved deployment pipeline reducing release time by 60%.",
+      "highlights": [
+        "Architected and implemented new microservices platform using Node.js and Kubernetes",
+        "Reduced API response time by 40% through caching and database optimization",
+        "Led migration from monolith to microservices, improving system reliability to 99.9% uptime",
+        "Implemented CI/CD pipeline using GitHub Actions, reducing deployment time from 2 hours to 15 minutes"
+      ]
+    },
+    {
+      "name": "StartupXYZ",
+      "position": "Full Stack Developer",
+      "url": "https://startupxyz.com",
+      "startDate": "2019-06-01",
+      "endDate": "2021-02-28",
+      "summary": "Built customer-facing web applications from scratch using React and Node.js. Worked directly with founders to define product roadmap and technical architecture.",
+      "highlights": [
+        "Developed MVP that acquired 50,000 users in first 6 months",
+        "Built real-time collaboration features using WebSockets and Redis",
+        "Implemented authentication system supporting OAuth, SSO, and 2FA",
+        "Optimized bundle size reducing initial load time by 50%"
+      ]
+    },
+    {
+      "name": "Digital Agency Co",
+      "position": "Junior Web Developer",
+      "url": "https://digitalagency.com",
+      "startDate": "2018-01-15",
+      "endDate": "2019-05-31",
+      "summary": "Developed responsive websites for clients using modern frontend technologies. Collaborated with designers to implement pixel-perfect interfaces.",
+      "highlights": [
+        "Built 15+ client websites using React, Vue.js, and WordPress",
+        "Implemented responsive designs achieving 100% mobile compatibility",
+        "Improved website performance scores to 95+ on Lighthouse",
+        "Trained team on modern JavaScript and component-based architecture"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University of California, Berkeley",
+      "url": "https://berkeley.edu",
+      "area": "Computer Science",
+      "studyType": "Bachelor of Science",
+      "startDate": "2014-09-01",
+      "endDate": "2018-05-15",
+      "score": "3.8",
+      "courses": [
+        "Data Structures and Algorithms",
+        "Database Systems",
+        "Web Development",
+        "Machine Learning"
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "name": "Frontend",
+      "level": "Expert",
+      "keywords": [
+        "React",
+        "TypeScript",
+        "Next.js",
+        "Redux",
+        "Tailwind CSS",
+        "Webpack",
+        "Jest"
+      ]
+    },
+    {
+      "name": "Backend",
+      "level": "Advanced",
+      "keywords": [
+        "Node.js",
+        "Express",
+        "PostgreSQL",
+        "MongoDB",
+        "Redis",
+        "GraphQL",
+        "REST APIs"
+      ]
+    },
+    {
+      "name": "DevOps",
+      "level": "Intermediate",
+      "keywords": [
+        "Docker",
+        "Kubernetes",
+        "AWS",
+        "GitHub Actions",
+        "Terraform",
+        "Nginx"
+      ]
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Native speaker"
+    },
+    {
+      "language": "Spanish",
+      "fluency": "Professional working proficiency"
+    }
+  ],
+  "projects": [
+    {
+      "name": "Open Source UI Library",
+      "description": "Created and maintain a popular React component library with 5,000+ GitHub stars. Provides accessible, customizable components used by 100+ companies.",
+      "highlights": [
+        "Built 50+ production-ready components with full TypeScript support",
+        "Achieved 95% test coverage with comprehensive unit and integration tests",
+        "Published detailed documentation site with live code examples",
+        "Gained 5,000+ stars and 200+ contributors on GitHub"
+      ],
+      "keywords": ["React", "TypeScript", "Storybook", "Open Source"],
+      "startDate": "2020-01-01",
+      "url": "https://github.com/janedev/ui-library"
+    },
+    {
+      "name": "JSON Resume",
+      "description": "Core contributor to JSON Resume, an open standard for resumes. Built theme system and contributed to core specification.",
+      "highlights": [
+        "Implemented new JSX-based theme architecture",
+        "Created 5+ official themes",
+        "Improved documentation and developer experience"
+      ],
+      "keywords": ["Open Source", "JavaScript", "React"],
+      "startDate": "2023-06-01",
+      "url": "https://jsonresume.org"
+    }
+  ],
+  "awards": [
+    {
+      "title": "Top Contributor Award",
+      "date": "2023-12-01",
+      "awarder": "GitHub",
+      "summary": "Recognized as top contributor to open source projects in 2023"
+    },
+    {
+      "title": "Hackathon Winner",
+      "date": "2022-08-15",
+      "awarder": "TechConf 2022",
+      "summary": "First place winner for building innovative accessibility tool"
+    }
+  ],
+  "interests": [
+    {
+      "name": "Open Source",
+      "keywords": ["Contributing", "Mentoring", "Community Building"]
+    },
+    {
+      "name": "Technology",
+      "keywords": ["Web Performance", "Accessibility", "Developer Tools"]
+    }
+  ],
+  "references": [
+    {
+      "name": "John Smith, CTO at TechCorp",
+      "reference": "Jane is an exceptional engineer who consistently delivers high-quality work. She has a deep understanding of both frontend and backend technologies and is always willing to help teammates. Her contributions to our microservices architecture were instrumental in scaling our platform to millions of users."
+    },
+    {
+      "name": "Sarah Johnson, Founder at StartupXYZ",
+      "reference": "Working with Jane was a pleasure. She took ownership of our entire tech stack and built a product that exceeded our expectations. Her ability to work independently and make smart technical decisions was invaluable to our early-stage startup."
+    }
+  ]
+}

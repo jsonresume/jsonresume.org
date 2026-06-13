@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import * as barrel from '../calculations.js';
-import { calculateTotalExperience } from '../experience.js';
+import * as barrel from '../metrics/index.js';
+import { calculateTotalExperience } from '../metrics/experience.js';
 import { work } from './fixtures.js';
 
 /** Every public calculation helper, grouped by implementation module. */
@@ -31,7 +31,7 @@ const EXPECTED_EXPORTS = [
   'calculateKeyMetrics',
 ];
 
-describe('calculations barrel', () => {
+describe('metrics barrel', () => {
   it('re-exports exactly the 19 calculation helpers', () => {
     expect(EXPECTED_EXPORTS).toHaveLength(19);
     expect(Object.keys(barrel).sort()).toEqual([...EXPECTED_EXPORTS].sort());

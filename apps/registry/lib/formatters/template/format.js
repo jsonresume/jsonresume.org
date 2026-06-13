@@ -1,41 +1,11 @@
 import { getTheme } from './getTheme';
+import { normalizeDates } from '@jsonresume/utils/dates';
 
 /**
- * Ensures all date fields in the resume are plain strings.
- * Some themes (e.g. macchiato) use moment.js or Handlebars helpers that
- * break when dates are Date objects instead of strings.
+ * normalizeDates (ensures all date fields are plain strings; some themes break
+ * on Date objects) now lives in @jsonresume/utils so the registry and themes
+ * share one implementation. Imported above.
  */
-function normalizeDates(resume) {
-  const dateFields = ['startDate', 'endDate', 'date', 'releaseDate'];
-  const sections = [
-    'work',
-    'education',
-    'volunteer',
-    'projects',
-    'awards',
-    'publications',
-  ];
-
-  const normalized = { ...resume };
-  for (const section of sections) {
-    if (Array.isArray(normalized[section])) {
-      normalized[section] = normalized[section].map((item) => {
-        const copy = { ...item };
-        for (const field of dateFields) {
-          if (copy[field] instanceof Date) {
-            copy[field] = copy[field].toISOString().split('T')[0];
-          }
-          // Non-Date, non-string values (plain objects, arrays, etc.) are left
-          // untouched. Previously these were String()-coerced, which turned a
-          // malformed object date into the literal "[object Object]" and joined
-          // arrays into comma strings — mangling the value handed to the theme.
-        }
-        return copy;
-      });
-    }
-  }
-  return normalized;
-}
 
 /**
  * Multiple external themes (macchiato, pumpkin, etc.) share a single
