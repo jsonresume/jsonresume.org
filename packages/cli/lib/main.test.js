@@ -126,14 +126,20 @@ describe('cli configuration', () => {
         ).code,
       ).toEqual(1);
     });
-    it('should print the per-field error list (not a success line) when validation fails', async () => {
+    it('should print precise, path-pointed errors (not a success line) when validation fails', async () => {
       const { code, stdout, stderr } = await run(
         ['validate', '--resume', '/test-resumes/invalid-resume.json'],
         { waitForVolumeExport: false, captureStderr: true },
       );
       expect(code).toEqual(1);
       expect(stderr).toContain('Invalid resume:');
+      // The classic data-path phrasing is preserved...
       expect(stderr).toContain('data/basics/name must be string');
+      // ...alongside the new annotated path/rule/value/hint lines.
+      expect(stderr).toContain('at:    basics.name');
+      expect(stderr).toContain('rule:  type (expected string)');
+      expect(stderr).toContain('found: 123 (number)');
+      expect(stderr).toContain('must be of type string');
       // The success line must not appear for an invalid resume.
       expect(stdout).not.toContain('is valid');
     });
@@ -144,7 +150,7 @@ describe('cli configuration', () => {
         '/test-resumes/resume.json',
       ]);
       expect(stdout).toMatchInlineSnapshot(`
-        "✓ /test-resumes/resume.json is valid
+        "✓ /test-resumes/resume.json is valid (thomas)
         "
       `);
     });
