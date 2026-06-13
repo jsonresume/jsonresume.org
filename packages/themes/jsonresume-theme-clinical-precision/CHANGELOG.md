@@ -1,5 +1,11 @@
 # jsonresume-theme-clinical-precision
 
+## 0.2.3
+
+### Patch Changes
+
+- 68e336e: use @jsonresume/core/ssr renderResumeDocument
+
 ## 0.2.2
 
 ### Patch Changes
