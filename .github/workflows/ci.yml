@@ -58,6 +58,26 @@ jobs:
           pnpm --filter registry test -- --run
           pnpm --filter ats-validator test
 
+  dist-sync:
+    # Theme packages commit a built dist/ and publish it as-is (changeset
+    # publish has no pre-publish build). This guard rebuilds every dist-tracked
+    # theme and fails if any committed dist/ has drifted from its source,
+    # preventing stale code from shipping to npm.
+    # RECOMMENDED: add to required status checks in branch protection.
+    name: Theme dist sync
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 2
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check:dist-sync
+
   knip:
     # Informational only - dead-code / unused-dependency report.
     # NOT a hard gate (continue-on-error + `|| true`): knip false-positives

@@ -6,6 +6,7 @@
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "check": "turbo run lint typecheck",
+    "check:dist-sync": "node scripts/check-theme-dist-sync.mjs",
     "format": "prettier -w .",
     "prettier": "prettier -c .",
     "prepare": "husky install",

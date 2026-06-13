@@ -1340,6 +1340,7 @@ function renderResumeDocument(element, options = {}) {
     dir = "ltr",
     reset = false,
     head = "",
+    headAfterStyles = "",
     includeTokensCss = true,
     bodyClass
   } = options;
@@ -1357,7 +1358,7 @@ function renderResumeDocument(element, options = {}) {
   const resetTag = reset ? CSS_RESET : "";
   const titleTag = title ? `<title>${title}</title>` : "";
   const bodyAttr = bodyClass ? ` class="${bodyClass}"` : "";
-  return `<!DOCTYPE html><html lang="${lang}" dir="${dir}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">` + fontLinks + tokensLink + resetTag + head + styleTags + titleTag + `</head><body${bodyAttr}>${html}</body></html>`;
+  return `<!DOCTYPE html><html lang="${lang}" dir="${dir}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">` + fontLinks + tokensLink + resetTag + head + styleTags + headAfterStyles + titleTag + `</head><body${bodyAttr}>${html}</body></html>`;
 }
 createContext({
   theme: "professional",
