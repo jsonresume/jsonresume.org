@@ -1,11 +1,17 @@
 # AI Agent Guide: JSON Resume Theme Development
 
 > **Start here:** scaffold a correct-by-construction theme with
-> `pnpm gen:theme <slug> "Display Name"`. It mirrors a known-good template,
-> renders all sections, and passes the `themeRenderQa` gate out of the box. See
-> [`docs/CREATING_A_THEME.md`](./CREATING_A_THEME.md) for the generator usage,
-> the registration checklist, the SSR-inline rule, and the render gate. This
-> document covers the design/iteration process once the package exists.
+> `pnpm gen:theme <slug> "Display Name"`. The generated theme is
+> **ecosystem-native** — its `index.jsx` calls `renderResumeDocument` from
+> `@jsonresume/core/ssr`, `src/Resume.jsx` uses `@jsonresume/utils` helpers
+> (`formatDateRange`, `formatLocation`, `safeUrl`), and it ships a
+> `tests/theme.test.js` that dogfoods `runThemeRenderQa` from
+> `@jsonresume/theme-kit` against `completeResume` from `@jsonresume/sample-data`.
+> It renders all sections and passes the render-QA gate out of the box. See
+> [`docs/CREATING_A_THEME.md`](./CREATING_A_THEME.md) for the ecosystem packages,
+> the generator usage, the registration checklist, the SSR-inline rule, and the
+> render gate. This document covers the design/iteration process once the
+> package exists.
 
 ## Critical Rules
 

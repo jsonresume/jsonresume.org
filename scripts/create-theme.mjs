@@ -2,11 +2,21 @@
 /**
  * Theme scaffolding generator for jsonresume.org.
  *
- * Spins up a new, correct-by-construction theme package under
- * packages/themes/jsonresume-theme-<slug>/ by mirroring the known-good
- * berlin-grid template. It bakes in the hard-won lessons (SSR-inline
- * styled-components, ContactInfo single-basics prop, no styled-component
- * named Date, Google Fonts via CDN, render ALL JSON Resume sections).
+ * Spins up a new, ECOSYSTEM-NATIVE theme package under
+ * packages/themes/jsonresume-theme-<slug>/ built on the published
+ * @jsonresume/* suite:
+ *
+ *   - index.jsx calls renderResumeDocument from '@jsonresume/core/ssr' — no
+ *     hand-rolled ServerStyleSheet / <!DOCTYPE> boilerplate.
+ *   - src/Resume.jsx renders ALL JSON Resume sections with INLINE
+ *     styled-components and leans on @jsonresume/utils helpers
+ *     (formatDateRange, formatLocation, safeUrl) instead of reimplementing them.
+ *   - a theme.test.js dogfoods runThemeRenderQa from '@jsonresume/theme-kit'
+ *     against completeResume from '@jsonresume/sample-data', so a new theme
+ *     ships with the exact registry render-QA gate out of the box.
+ *
+ * It bakes in the hard-won lessons (SSR-inline styled-components, ContactInfo
+ * single-basics prop, no styled-component named Date, render ALL sections).
  *
  * It does NOT edit shared files (themeConfig.js, theme-config metadata,
  * registry package.json, changesets) — instead it PRINTS the manual
@@ -65,15 +75,19 @@ function packageJson(slug) {
       type: 'module',
       main: './index.jsx',
       peerDependencies: {
+        '@jsonresume/core': 'workspace:*',
         react: '^18.0.0 || ^19.0.0',
         'react-dom': '^18.0.0 || ^19.0.0',
       },
       dependencies: {
         '@jsonresume/core': 'workspace:*',
+        '@jsonresume/utils': 'workspace:*',
         'styled-components': '^6.1.19',
       },
       scripts: {
         build: 'vite build',
+        test: 'vitest run',
+        'test:watch': 'vitest',
       },
       publishConfig: {
         access: 'public',
@@ -89,8 +103,11 @@ function packageJson(slug) {
         },
       },
       devDependencies: {
+        '@jsonresume/sample-data': 'workspace:*',
+        '@jsonresume/theme-kit': 'workspace:*',
         '@vitejs/plugin-react': '^4.3.4',
         vite: '^5.4.21',
+        vitest: '^2',
       },
     },
     null,
@@ -133,32 +150,84 @@ export default defineConfig({
 });
 `;
 
+const VITEST_CONFIG = `import { defineConfig } from 'vitest/config';
+
+// The theme renders JSX in its test, so esbuild needs automatic JSX runtime.
+export default defineConfig({
+  esbuild: {
+    jsx: 'automatic',
+  },
+  test: {
+    environment: 'node',
+    globals: true,
+  },
+});
+`;
+
+function themeTest(displayName, slug) {
+  return `import { describe, it, expect } from 'vitest';
+import { runThemeRenderQa } from '@jsonresume/theme-kit';
+import { completeResume } from '@jsonresume/sample-data';
+import { render } from '../index.jsx';
+
+/*
+ * ${displayName} render-QA — the exact gate the registry enforces across every
+ * theme, dogfooded here via @jsonresume/theme-kit. runThemeRenderQa renders the
+ * canonical every-section fixture from @jsonresume/sample-data through this
+ * theme's render() and asserts:
+ *   - render() returns non-empty HTML and does not throw,
+ *   - no raw artifacts leak ([object Object] / undefined / NaN),
+ *   - the baseline sections (basics / work / education / skills) all appear.
+ *
+ * Keep this test green as you redesign src/Resume.jsx — if it fails it almost
+ * always traces back to one of the SSR-inline rules in src/Resume.jsx.
+ */
+describe('jsonresume-theme-${slug}', () => {
+  it('passes the theme-kit render QA against the complete sample resume', async () => {
+    await runThemeRenderQa({
+      render,
+      name: '${slug}',
+      expect,
+      fixture: completeResume,
+    });
+  });
+
+  it('renders a complete HTML document', () => {
+    const html = render(completeResume);
+    expect(html.startsWith('<!DOCTYPE html>')).toBe(true);
+    expect(html).toContain('</html>');
+    expect(html).toContain(completeResume.basics.name);
+  });
+});
+`;
+}
+
 function indexJsx(displayName) {
-  return `import { renderToString } from 'react-dom/server';
-import { ServerStyleSheet } from 'styled-components';
+  return `import { renderResumeDocument } from '@jsonresume/core/ssr';
 import Resume from './src/Resume.jsx';
 
-// SSR render entry. styled-components MUST be collected via ServerStyleSheet
-// so the generated CSS is inlined into <head> — the registry renders themes
-// server-side with no client hydration.
+/*
+ * ${displayName} — SSR render entry.
+ *
+ * renderResumeDocument (from @jsonresume/core/ssr) handles ALL the boilerplate
+ * a theme used to hand-roll: it spins up the styled-components ServerStyleSheet,
+ * collects styles while rendering, links the requested Google Fonts, and emits
+ * the full <!DOCTYPE html> document. We just hand it the React tree + options.
+ *
+ *   - fonts: Google font families (or "Family:wght@400;700" specs). Loaded via
+ *     the Fonts CDN in <head>. Match these to the font-family in src/Resume.jsx.
+ *   - title: the <title> text.
+ *   - includeTokensCss: false — this starter ships its own inline styles and
+ *     does not depend on the @jsonresume/core design-token CSS. Flip to true
+ *     (or drop it) if you start using the --resume-* custom properties.
+ */
 export function render(resume) {
-  const sheet = new ServerStyleSheet();
-  const html = renderToString(sheet.collectStyles(<Resume resume={resume} />));
-  const styles = sheet.getStyleTags();
   const title = (resume.basics && resume.basics.name) || 'Resume';
-
-  return \`<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>\${title}</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  \${styles}
-</head>
-<body>\${html}</body>
-</html>\`;
+  return renderResumeDocument(<Resume resume={resume} />, {
+    fonts: ['Inter:wght@400;500;600;700'],
+    title,
+    includeTokensCss: false,
+  });
 }
 `;
 }
@@ -166,33 +235,40 @@ export function render(resume) {
 function resumeJsx(displayName, slug) {
   return `import React from 'react';
 import styled from 'styled-components';
+// Structural primitives come from @jsonresume/core...
 import {
   Section,
   SectionTitle,
-  DateRange,
   Badge,
   BadgeList,
   ContactInfo,
   Link,
-  safeUrl,
 } from '@jsonresume/core';
+// ...and the pure (framework-free) formatters from @jsonresume/utils. Lean on
+// these instead of reimplementing date / location / url logic in every theme.
+import { formatDateRange, formatLocation, safeUrl } from '@jsonresume/utils';
 
 /*
  * ${displayName} — starter theme scaffolded by scripts/create-theme.mjs.
  *
- * This is a COMPLETE, correct-by-construction starting point: it renders
- * every JSON Resume section and passes the permanent themeRenderQa gate.
- * Redesign the styled-components below into your own distinct layout, but
- * keep these baked-in lessons intact:
+ * This is a COMPLETE, ecosystem-native starting point: it renders every JSON
+ * Resume section and passes the permanent themeRenderQa gate. Redesign the
+ * styled-components below into your own distinct layout, but keep these
+ * baked-in lessons intact:
  *
  *   1. styled-components are declared INLINE in this single file (no fs reads,
- *      no external CSS) — the SSR pipeline collects them via ServerStyleSheet.
- *   2. <ContactInfo basics={basics} /> takes a SINGLE basics prop. Do NOT
+ *      no external CSS). index.jsx feeds this tree to renderResumeDocument
+ *      from '@jsonresume/core/ssr', which collects the styles via the
+ *      ServerStyleSheet and inlines them — themes render server-side with no
+ *      client hydration.
+ *   2. Use the @jsonresume/utils helpers (formatDateRange, formatLocation,
+ *      safeUrl) rather than rolling your own — they are tested, i18n-aware,
+ *      and shared with the rest of the ecosystem.
+ *   3. <ContactInfo basics={basics} /> takes a SINGLE basics prop. Do NOT
  *      spread individual email/phone/url props — the component destructures
  *      them off basics itself.
- *   3. NEVER name a styled-component "Date" — it shadows the global Date and
+ *   4. NEVER name a styled-component "Date" — it shadows the global Date and
  *      crashes SSR. Use DateLabel / MetaDate / Period instead.
- *   4. Load fonts via the Google Fonts CDN in index.jsx (already wired up).
  *   5. Render ALL sections so the theme is complete and passes themeRenderQa.
  */
 
@@ -228,6 +304,12 @@ const Tagline = styled.div\`
   font-size: 16px;
   color: #4a4a4a;
   font-weight: 500;
+  margin-bottom: 8px;
+\`;
+
+const Location = styled.div\`
+  font-size: 13px;
+  color: #6a6a6a;
   margin-bottom: 16px;
 \`;
 
@@ -381,11 +463,14 @@ function Resume({ resume }) {
     references = [],
   } = resume;
 
+  const location = formatLocation(basics.location);
+
   return (
     <Layout>
       <Header>
         {basics.name && <Name>{basics.name}</Name>}
         {basics.label && <Tagline>{basics.label}</Tagline>}
+        {location && <Location>{location}</Location>}
         {basics.summary && <Summary>{basics.summary}</Summary>}
         <StyledContactInfo basics={basics} />
       </Header>
@@ -403,7 +488,10 @@ function Resume({ resume }) {
                   )}
                 </div>
                 <MetaDate>
-                  <DateRange startDate={job.startDate} endDate={job.endDate} />
+                  {formatDateRange({
+                    startDate: job.startDate,
+                    endDate: job.endDate,
+                  })}
                 </MetaDate>
               </ItemHead>
               {job.summary && <ItemDescription>{job.summary}</ItemDescription>}
@@ -434,7 +522,10 @@ function Resume({ resume }) {
                   )}
                 </div>
                 <MetaDate>
-                  <DateRange startDate={edu.startDate} endDate={edu.endDate} />
+                  {formatDateRange({
+                    startDate: edu.startDate,
+                    endDate: edu.endDate,
+                  })}
                 </MetaDate>
               </ItemHead>
               {edu.score && <ItemDescription>GPA: {edu.score}</ItemDescription>}
@@ -484,10 +575,10 @@ function Resume({ resume }) {
                   )}
                 </ItemTitle>
                 <MetaDate>
-                  <DateRange
-                    startDate={project.startDate}
-                    endDate={project.endDate}
-                  />
+                  {formatDateRange({
+                    startDate: project.startDate,
+                    endDate: project.endDate,
+                  })}
                 </MetaDate>
               </ItemHead>
               {project.description && (
@@ -518,7 +609,10 @@ function Resume({ resume }) {
                   )}
                 </div>
                 <MetaDate>
-                  <DateRange startDate={vol.startDate} endDate={vol.endDate} />
+                  {formatDateRange({
+                    startDate: vol.startDate,
+                    endDate: vol.endDate,
+                  })}
                 </MetaDate>
               </ItemHead>
               {vol.summary && <ItemDescription>{vol.summary}</ItemDescription>}
@@ -655,17 +749,29 @@ function readme(displayName, slug) {
 
 > ${displayName} — a theme for [JSON Resume](https://jsonresume.org).
 
-Scaffolded with \`pnpm gen:theme\`. It renders every JSON Resume section and
-passes the permanent \`themeRenderQa\` gate out of the box. Make it your own by
+Scaffolded with \`pnpm gen:theme\`. It is **ecosystem-native**: built on the
+published \`@jsonresume/*\` suite, it renders every JSON Resume section and ships
+with the permanent \`themeRenderQa\` gate as its own test. Make it your own by
 editing the styled-components in \`src/Resume.jsx\`.
+
+## Built on
+
+| Package                 | Used for                                                          |
+| ----------------------- | ----------------------------------------------------------------- |
+| \`@jsonresume/core\`      | \`renderResumeDocument\` (SSR doc) + structural primitives          |
+| \`@jsonresume/utils\`     | \`formatDateRange\` / \`formatLocation\` / \`safeUrl\` (pure helpers)   |
+| \`@jsonresume/theme-kit\` | \`runThemeRenderQa\` render-QA gate (dev)                           |
+| \`@jsonresume/sample-data\` | \`completeResume\` fixture for the test (dev)                     |
 
 ## Structure
 
-| File              | Purpose                                                          |
-| ----------------- | ---------------------------------------------------------------- |
-| \`index.jsx\`       | SSR render entry — collects styled-components, inlines fonts/CSS |
-| \`src/Resume.jsx\`  | The theme: all sections + inline styled-components               |
-| \`vite.config.js\`  | SSR library build (\`vite build\` -> \`dist/\`)                      |
+| File                 | Purpose                                                      |
+| -------------------- | ------------------------------------------------------------ |
+| \`index.jsx\`          | SSR entry — calls \`renderResumeDocument\` from core/ssr       |
+| \`src/Resume.jsx\`     | The theme: all sections + inline styled-components           |
+| \`tests/theme.test.js\`| theme-kit render-QA gate against the sample resume           |
+| \`vite.config.js\`     | SSR library build (\`vite build\` -> \`dist/\`)                  |
+| \`vitest.config.js\`   | test config (node env, automatic JSX)                        |
 
 ## Develop
 
@@ -674,6 +780,12 @@ editing the styled-components in \`src/Resume.jsx\`.
 cd apps/registry && pnpm dev
 # Preview at:
 open http://localhost:3000/thomasdavis?theme=${slug}
+\`\`\`
+
+## Test
+
+\`\`\`bash
+pnpm --filter jsonresume-theme-${slug} test
 \`\`\`
 
 ## Build
@@ -685,9 +797,12 @@ pnpm --filter jsonresume-theme-${slug} build
 ## Rules baked in (keep these)
 
 - styled-components are declared **inline** in \`src/Resume.jsx\` — no \`fs\` reads.
+  \`index.jsx\` hands the tree to \`renderResumeDocument\`, which collects + inlines
+  the CSS server-side.
+- Reach for **\`@jsonresume/utils\`** helpers instead of reimplementing dates,
+  location, or URL handling.
 - \`<ContactInfo basics={basics} />\` takes a **single** \`basics\` prop.
 - Never name a styled-component \`Date\` (it shadows the global and crashes SSR).
-- Fonts load via the **Google Fonts CDN** in \`index.jsx\`.
 - Render **all** JSON Resume sections so the theme stays complete.
 
 See \`docs/CREATING_A_THEME.md\` for the full registration checklist.
@@ -719,30 +834,39 @@ async function main() {
   }
 
   await mkdir(join(dir, 'src'), { recursive: true });
+  await mkdir(join(dir, 'tests'), { recursive: true });
 
   await Promise.all([
     writeFile(join(dir, 'package.json'), packageJson(slug)),
     writeFile(join(dir, 'vite.config.js'), VITE_CONFIG),
+    writeFile(join(dir, 'vitest.config.js'), VITEST_CONFIG),
     writeFile(join(dir, 'index.jsx'), indexJsx(displayName)),
     writeFile(join(dir, 'src', 'Resume.jsx'), resumeJsx(displayName, slug)),
+    writeFile(
+      join(dir, 'tests', 'theme.test.js'),
+      themeTest(displayName, slug)
+    ),
     writeFile(join(dir, 'README.md'), readme(displayName, slug)),
   ]);
 
   const ident = importIdent(slug);
 
   console.log(`
-  Scaffolded jsonresume-theme-${slug}
+  Scaffolded jsonresume-theme-${slug}  (ecosystem-native)
   -> packages/themes/${pkgName}/
        package.json
        vite.config.js
+       vitest.config.js
        index.jsx
        src/Resume.jsx
+       tests/theme.test.js
        README.md
 
-  Next: install workspaces, then build to confirm it renders.
+  Next: install workspaces, then build + test to confirm it renders.
 
     pnpm install
     pnpm --filter ${pkgName} build
+    pnpm --filter ${pkgName} test
 
   -----------------------------------------------------------------
   MANUAL REGISTRATION (the generator does NOT touch shared files)
@@ -780,13 +904,16 @@ async function main() {
      - select ${pkgName}, choose "minor", describe the theme,
        and end the summary with "Refs #275."
 
-  5) verify the permanent render gate stays green:
+  5) verify the render gates stay green:
 
+         pnpm --filter ${pkgName} test            # this theme's own theme-kit gate
          pnpm --filter registry test -- --run themeRenderQa
 
-     This renders EVERY registered theme against the complete fixture and
-     asserts no crashes, no raw artifacts ([object Object]/undefined/NaN),
-     and that basics/work/education/skills all render.
+     The theme ships its OWN render-QA test (tests/theme.test.js, dogfooding
+     runThemeRenderQa from @jsonresume/theme-kit). The registry gate then
+     renders EVERY registered theme against the complete fixture and asserts no
+     crashes, no raw artifacts ([object Object]/undefined/NaN), and that
+     basics/work/education/skills all render.
 
   Preview while developing (registry dev server must be running):
 
