@@ -19,6 +19,8 @@ import { checkHeadings } from './checks/headings.js';
 import { checkImages } from './checks/images.js';
 import { checkFontSizes } from './checks/font-sizes.js';
 import { checkAccessibility } from './checks/accessibility.js';
+import { checkContactInfo } from './checks/contact-info.js';
+import { checkSpecialCharacters } from './checks/special-characters.js';
 import { getGrade } from './grade.js';
 import { getRecommendations } from './recommendations.js';
 
@@ -39,6 +41,8 @@ export function validateATS(html) {
     checkImages($),
     checkFontSizes($),
     checkAccessibility($),
+    checkContactInfo($),
+    checkSpecialCharacters($),
   ];
 
   const totalScore = checks.reduce((sum, check) => sum + check.score, 0);
