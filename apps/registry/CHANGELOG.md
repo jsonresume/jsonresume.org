@@ -1,5 +1,14 @@
 # registry
 
+## 1.1.3
+
+### Patch Changes
+
+- Updated dependencies [536adbf]
+- Updated dependencies [536adbf]
+  - jsonresume-theme-art-deco@0.2.0
+  - jsonresume-theme-brutalist@0.2.0
+
 ## 1.1.2
 
 ### Patch Changes
