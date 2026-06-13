@@ -1262,6 +1262,9 @@ importers:
 
   packages/themes/jsonresume-theme-consultant-polished:
     dependencies:
+      '@jsonresume/core':
+        specifier: workspace:^
+        version: link:../../resume-core
       marked:
         specifier: ^16.3.0
         version: 16.4.1

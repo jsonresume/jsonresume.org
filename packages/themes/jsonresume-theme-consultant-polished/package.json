@@ -29,6 +29,7 @@
     "build": "vite build"
   },
   "dependencies": {
+    "@jsonresume/core": "workspace:^",
     "marked": "^16.3.0",
     "react-icons": "^5.0.1"
   },
