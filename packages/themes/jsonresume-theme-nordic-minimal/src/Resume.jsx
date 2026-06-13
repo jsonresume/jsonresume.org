@@ -43,7 +43,7 @@ const Name = styled.h1`
 const Title = styled.p`
   font-size: 1.25rem;
   font-weight: 300;
-  color: #7f8c8d;
+  color: #5f6c6d;
   margin: 0 0 20px 0;
 `;
 
@@ -121,7 +121,7 @@ const Company = styled.div`
 
 const StyledDateRange = styled(DateRange)`
   font-size: 0.875rem;
-  color: #95a5a6;
+  color: #647274;
   font-weight: 300;
 `;
 
@@ -174,7 +174,7 @@ const Institution = styled.h3`
 
 const Degree = styled.div`
   font-size: 0.9375rem;
-  color: #7f8c8d;
+  color: #5f6c6d;
   font-weight: 300;
   margin-bottom: 4px;
 `;
@@ -218,7 +218,7 @@ const ContactLabel = styled.div`
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: #95a5a6;
+  color: #647274;
   margin-bottom: 4px;
   font-weight: 600;
 `;
@@ -259,7 +259,7 @@ const LanguageName = styled.span`
 `;
 
 const LanguageFluency = styled.span`
-  color: #7f8c8d;
+  color: #5f6c6d;
   font-weight: 300;
   margin-left: 8px;
 `;

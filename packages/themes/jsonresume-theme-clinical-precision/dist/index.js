@@ -1,6 +1,6 @@
 import { jsx, jsxs } from "react/jsx-runtime";
-import o, { useRef, useContext, useState, useMemo, useEffect, useDebugValue, createElement, createContext } from "react";
 import { renderToString } from "react-dom/server";
+import o, { useRef, useContext, useState, useMemo, useEffect, useDebugValue, createElement, createContext } from "react";
 var __assign = function() {
   __assign = Object.assign || function __assign2(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -1320,7 +1320,7 @@ ft`
     background: var(--resume-color-background);
   }
 `;
-const StyledSection = dt.section`
+const StyledSection$1 = dt.section`
   margin-bottom: ${(props) => props.theme?.spacing?.section || "var(--resume-space-section, 2rem)"};
 
   @media print {
@@ -1329,7 +1329,7 @@ const StyledSection = dt.section`
 `;
 function Section({ children, className, id, ...rest }) {
   return /* @__PURE__ */ jsx(
-    StyledSection,
+    StyledSection$1,
     {
       id,
       className: `resume-section ${className || ""}`.trim(),
@@ -6089,197 +6089,371 @@ dt.span`
     print-color-adjust: exact;
   }
 `;
+const GREEN = "#059669";
+const GREEN_DARK = "#047857";
+const INK = "#0f2a25";
+const BODY = "#26433d";
+const META = "#5b746e";
+const MINT = "#f0fdf9";
+const MINT_LINE = "#cdeee2";
+const HAIR = "#dfeae6";
 const Layout = dt.div`
-  max-width: 800px;
+  max-width: 840px;
   margin: 0 auto;
-  padding: 48px 32px;
-  background: white;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  color: #374151;
-  line-height: 1.75;
-  font-size: 15px;
-  font-weight: 300;
+  padding: 56px 52px 72px;
+  background: #ffffff;
+  font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: ${BODY};
+  font-size: 14.5px;
+  line-height: 1.6;
 
   @media print {
-    padding: 24px;
+    padding: 32px 28px;
   }
 `;
 const Header = dt.header`
-  margin-bottom: 48px;
-  padding-bottom: 24px;
-  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 38px;
 `;
-const Name = dt.h1`
-  font-size: 36px;
-  font-weight: 300;
-  margin: 0 0 8px 0;
-  color: #111827;
-  letter-spacing: 2px;
-  text-transform: uppercase;
+const ChartRule = dt.div`
+  height: 6px;
+  background: ${GREEN};
+  border-radius: 3px;
+  margin-bottom: 18px;
 `;
-const Label = dt.div`
-  font-size: 14px;
-  color: #6b7280;
-  font-weight: 400;
-  margin-bottom: 16px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-`;
-const ContactWrapper = dt.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  font-size: 13px;
-  color: #6b7280;
-  letter-spacing: 0.5px;
-`;
-const SummarySection = dt(Section)`
-  margin-bottom: 40px;
-  padding-bottom: 40px;
-  border-bottom: 1px solid #e5e7eb;
-`;
-const SummaryText = dt.p`
-  margin: 0;
-  font-size: 15px;
-  line-height: 1.75;
-  color: #374151;
-  font-weight: 300;
-`;
-const MainSection = dt(Section)`
-  margin-bottom: 40px;
-  padding-bottom: 40px;
-  border-bottom: 1px solid #e5e7eb;
-
-  &:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0;
-  }
-`;
-const MainSectionTitle = dt(SectionTitle)`
-  font-size: 12px;
-  font-weight: 500;
-  color: #6b7280;
-  margin: 0 0 32px 0;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-`;
-const WorkItem = dt.div`
-  margin-bottom: 32px;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-`;
-const WorkHeader = dt.div`
+const ChartTop = dt.div`
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: 8px;
+  gap: 16px;
   flex-wrap: wrap;
-  gap: 8px;
 `;
-const WorkTitle = dt.h3`
-  font-size: 17px;
-  font-weight: 400;
+const Name = dt.h1`
+  font-size: 38px;
+  font-weight: 700;
+  letter-spacing: -0.6px;
   margin: 0;
-  color: #111827;
-  letter-spacing: 0.5px;
+  color: ${INK};
 `;
-const WorkMeta = dt.div`
-  font-size: 12px;
-  color: #6b7280;
-  font-weight: 400;
+const RecordCode = dt.div`
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
   letter-spacing: 0.5px;
+  color: ${META};
+  text-align: right;
+  white-space: nowrap;
+
+  b {
+    display: block;
+    color: ${GREEN_DARK};
+    font-weight: 600;
+  }
 `;
-const WorkCompany = dt.div`
-  font-size: 14px;
-  color: #6b7280;
-  font-weight: 400;
-  margin-bottom: 8px;
-  letter-spacing: 0.5px;
-`;
-const WorkDescription = dt.p`
+const Label = dt.div`
   font-size: 15px;
-  line-height: 1.75;
-  margin: 12px 0;
-  color: #374151;
-  font-weight: 300;
+  font-weight: 500;
+  color: ${GREEN_DARK};
+  margin: 8px 0 0;
+  letter-spacing: 0.2px;
 `;
-const WorkHighlights = dt.ul`
-  margin: 12px 0 0 0;
-  padding-left: 20px;
+const VitalsStrip = dt.div`
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin-top: 18px;
+  padding: 11px 16px;
+  background: ${MINT};
+  border: 1px solid ${MINT_LINE};
+  border-radius: 6px;
+`;
+const VitalsLabel = dt.span`
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.4px;
+  color: ${GREEN_DARK};
+  border-right: 1px solid ${MINT_LINE};
+  padding-right: 14px;
+`;
+const StyledContactInfo = dt(ContactInfo)`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 6px 22px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12.5px;
+  color: ${BODY};
+
+  a {
+    color: ${BODY};
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: ${GREEN_DARK};
+    text-decoration: underline;
+  }
+`;
+const ChartNote = dt.div`
+  margin-top: 22px;
+  padding: 16px 20px 16px 18px;
+  background: ${MINT};
+  border-left: 4px solid ${GREEN};
+  border-radius: 0 6px 6px 0;
+
+  span {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: ${GREEN_DARK};
+    margin-bottom: 6px;
+  }
+
+  p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.65;
+    color: ${INK};
+  }
+`;
+const StyledSection = dt(Section)`
+  margin-bottom: 34px;
+`;
+const TitleRow = dt.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+  border-bottom: 1.5px solid ${GREEN};
+  padding-bottom: 8px;
+`;
+const SectionCode = dt.span`
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: #ffffff;
+  background: ${GREEN};
+  padding: 2px 7px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+`;
+const StyledSectionTitle = dt(SectionTitle)`
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: ${INK};
+  margin: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+`;
+const ChartRow = dt.div`
+  display: grid;
+  grid-template-columns: 158px 1fr;
+  gap: 22px;
+  padding: 14px 0 16px;
+  border-bottom: 1px solid ${HAIR};
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  @media (max-width: 720px) {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+`;
+const VitalRail = dt.div`
+  border-left: 3px solid ${GREEN};
+  padding-left: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  @media (max-width: 720px) {
+    border-left: none;
+    padding-left: 0;
+    border-top: 2px solid ${MINT_LINE};
+    padding-top: 8px;
+  }
+`;
+const RailDate = dt.div`
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+  color: ${GREEN_DARK};
+  font-variant-numeric: tabular-nums;
+`;
+const RailMeta = dt.div`
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: ${META};
+`;
+const Content = dt.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`;
+const ItemTitle = dt.h3`
+  font-size: 17px;
+  font-weight: 700;
+  margin: 0;
+  color: ${INK};
+
+  a {
+    color: ${INK};
+    text-decoration: none;
+    border-bottom: 1.5px solid ${MINT_LINE};
+  }
+  a:hover {
+    border-color: ${GREEN};
+  }
+`;
+const ItemSub = dt.div`
+  font-size: 14px;
+  font-weight: 500;
+  color: ${GREEN_DARK};
+`;
+const ItemDesc = dt.p`
+  margin: 6px 0 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: ${BODY};
+`;
+const Highlights = dt.ul`
+  margin: 8px 0 0;
+  padding: 0;
   list-style: none;
 
   li {
-    margin-bottom: 8px;
-    font-size: 15px;
-    line-height: 1.75;
-    color: #374151;
-    font-weight: 300;
     position: relative;
-    padding-left: 12px;
+    padding-left: 20px;
+    margin-bottom: 6px;
+    font-size: 14px;
+    line-height: 1.55;
+    color: ${BODY};
 
     &::before {
-      content: '–';
+      content: '+';
       position: absolute;
-      left: 0;
-      color: #d1d5db;
-      font-weight: 300;
+      left: 2px;
+      top: -1px;
+      color: ${GREEN};
+      font-weight: 700;
+      font-family: 'IBM Plex Mono', monospace;
     }
   }
 `;
-const SkillsGrid = dt.div`
+const PanelGrid = dt.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
 `;
-const SkillItem = dt.div`
-  margin-bottom: 16px;
+const Panel = dt.div`
+  border: 1px solid ${MINT_LINE};
+  border-radius: 6px;
+  overflow: hidden;
+  background: #ffffff;
+`;
+const PanelHead = dt.div`
+  background: ${MINT};
+  border-bottom: 1px solid ${MINT_LINE};
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: ${GREEN_DARK};
 
-  &:last-child {
-    margin-bottom: 0;
+  small {
+    float: right;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    text-transform: none;
+    color: ${META};
   }
 `;
-const SkillName = dt.h4`
-  font-size: 12px;
-  font-weight: 500;
-  margin: 0 0 12px 0;
-  color: #6b7280;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
+const PanelBody = dt.div`
+  padding: 10px 12px 12px;
 `;
 const StyledBadgeList = dt(BadgeList)`
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
 `;
 const StyledBadge = dt(Badge)`
   font-size: 12px;
-  padding: 6px 12px;
-  background: white;
-  border: 1px solid #e5e7eb;
-  color: #6b7280;
-  font-weight: 400;
-  border-radius: 0;
-  letter-spacing: 0.3px;
+  padding: 2px 9px;
+  border-radius: 3px;
+  background: ${MINT};
+  border: 1px solid ${MINT_LINE};
+  color: ${BODY};
+  font-weight: 500;
 `;
-const SimpleList = dt.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 16px;
+const RecordList = dt.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 `;
-const SimpleItem = dt.div`
-  font-size: 15px;
-  line-height: 1.75;
-  font-weight: 300;
+const RecordItem = dt.div`
+  padding: 12px 16px;
+  border: 1px solid ${HAIR};
+  border-left: 3px solid ${GREEN};
+  border-radius: 0 6px 6px 0;
 
-  strong {
-    font-weight: 400;
-    color: #111827;
-    letter-spacing: 0.3px;
+  h4 {
+    margin: 0 0 3px;
+    font-size: 15px;
+    font-weight: 700;
+    color: ${INK};
+
+    a {
+      color: ${INK};
+      text-decoration: none;
+      border-bottom: 1.5px solid ${MINT_LINE};
+    }
+    a:hover {
+      border-color: ${GREEN};
+    }
+  }
+
+  .meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    color: ${META};
+    margin: 0 0 4px;
+  }
+
+  p {
+    margin: 4px 0 0;
+    font-size: 14px;
+    color: ${BODY};
+    line-height: 1.55;
   }
 `;
+const TwoCol = dt.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+
+  @media (max-width: 720px) {
+    grid-template-columns: 1fr;
+  }
+`;
+function recordCode(name) {
+  const initials = (name || "Resume").split(/\s+/).map((w2) => w2[0]).join("").toUpperCase().slice(0, 3);
+  let hash2 = 0;
+  for (let i = 0; i < (name || "").length; i += 1) {
+    hash2 = (hash2 * 31 + name.charCodeAt(i)) % 1e5;
+  }
+  return `${initials}-${String(hash2).padStart(5, "0")}`;
+}
 function Resume({ resume }) {
   const {
     basics = {},
@@ -6295,208 +6469,227 @@ function Resume({ resume }) {
     interests = [],
     references = []
   } = resume;
+  let code = 0;
+  const nextCode = () => String(code += 1).padStart(2, "0");
   return /* @__PURE__ */ jsxs(Layout, { children: [
     /* @__PURE__ */ jsxs(Header, { children: [
-      basics.name && /* @__PURE__ */ jsx(Name, { children: basics.name }),
+      /* @__PURE__ */ jsx(ChartRule, {}),
+      /* @__PURE__ */ jsxs(ChartTop, { children: [
+        /* @__PURE__ */ jsx("div", { children: basics.name && /* @__PURE__ */ jsx(Name, { children: basics.name }) }),
+        /* @__PURE__ */ jsxs(RecordCode, { children: [
+          "RECORD",
+          /* @__PURE__ */ jsx("b", { children: recordCode(basics.name) }),
+          "STATUS: ACTIVE"
+        ] })
+      ] }),
       basics.label && /* @__PURE__ */ jsx(Label, { children: basics.label }),
-      /* @__PURE__ */ jsxs(ContactWrapper, { children: [
-        basics.email && /* @__PURE__ */ jsx(ContactInfo, { type: "email", children: basics.email }),
-        basics.phone && /* @__PURE__ */ jsx(ContactInfo, { type: "phone", children: basics.phone }),
-        basics.location?.city && basics.location?.region && /* @__PURE__ */ jsxs(ContactInfo, { type: "location", children: [
-          basics.location.city,
-          ", ",
-          basics.location.region
-        ] }),
-        basics.url && /* @__PURE__ */ jsx(ContactInfo, { type: "url", children: /* @__PURE__ */ jsx("a", { href: safeUrl(basics.url), children: basics.url }) }),
-        basics.profiles?.map((profile, index) => /* @__PURE__ */ jsx(ContactInfo, { type: "social", children: /* @__PURE__ */ jsx("a", { href: safeUrl(profile.url), children: profile.network }) }, index))
+      /* @__PURE__ */ jsxs(VitalsStrip, { children: [
+        /* @__PURE__ */ jsx(VitalsLabel, { children: "VITALS" }),
+        /* @__PURE__ */ jsx(StyledContactInfo, { basics, separator: "·" })
+      ] }),
+      basics.summary && /* @__PURE__ */ jsxs(ChartNote, { children: [
+        /* @__PURE__ */ jsx("span", { children: "Chart Note · Summary" }),
+        /* @__PURE__ */ jsx("p", { children: basics.summary })
       ] })
     ] }),
-    basics.summary && /* @__PURE__ */ jsx(SummarySection, { children: /* @__PURE__ */ jsx(SummaryText, { children: basics.summary }) }),
-    work.length > 0 && /* @__PURE__ */ jsxs(MainSection, { children: [
-      /* @__PURE__ */ jsx(MainSectionTitle, { children: "Experience" }),
-      work.map((job, index) => /* @__PURE__ */ jsxs(WorkItem, { children: [
-        /* @__PURE__ */ jsxs(WorkHeader, { children: [
-          /* @__PURE__ */ jsx(WorkTitle, { children: job.position || job.name }),
-          /* @__PURE__ */ jsx(WorkMeta, { children: /* @__PURE__ */ jsx(DateRange, { startDate: job.startDate, endDate: job.endDate }) })
+    work.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
+      /* @__PURE__ */ jsxs(TitleRow, { children: [
+        /* @__PURE__ */ jsxs(SectionCode, { children: [
+          "§",
+          nextCode()
         ] }),
-        job.name && /* @__PURE__ */ jsx(WorkCompany, { children: job.name }),
-        job.summary && /* @__PURE__ */ jsx(WorkDescription, { children: job.summary }),
-        job.highlights && job.highlights.length > 0 && /* @__PURE__ */ jsx(WorkHighlights, { children: job.highlights.map((highlight, i) => /* @__PURE__ */ jsx("li", { children: highlight }, i)) })
-      ] }, index))
-    ] }),
-    skills.length > 0 && /* @__PURE__ */ jsxs(MainSection, { children: [
-      /* @__PURE__ */ jsx(MainSectionTitle, { children: "Skills" }),
-      /* @__PURE__ */ jsx(SkillsGrid, { children: skills.map((skill, index) => /* @__PURE__ */ jsxs(SkillItem, { children: [
-        /* @__PURE__ */ jsx(SkillName, { children: skill.name }),
-        /* @__PURE__ */ jsx(StyledBadgeList, { children: skill.keywords?.map((keyword, i) => /* @__PURE__ */ jsx(StyledBadge, { children: keyword }, i)) })
-      ] }, index)) })
-    ] }),
-    projects.length > 0 && /* @__PURE__ */ jsxs(MainSection, { children: [
-      /* @__PURE__ */ jsx(MainSectionTitle, { children: "Projects" }),
-      projects.map((project, index) => /* @__PURE__ */ jsxs(WorkItem, { children: [
-        /* @__PURE__ */ jsxs(WorkHeader, { children: [
-          /* @__PURE__ */ jsx(WorkTitle, { children: project.url ? /* @__PURE__ */ jsx(Link, { href: safeUrl(project.url), children: project.name }) : project.name }),
-          (project.startDate || project.endDate) && /* @__PURE__ */ jsx(WorkMeta, { children: /* @__PURE__ */ jsx(
-            DateRange,
-            {
-              startDate: project.startDate,
-              endDate: project.endDate
-            }
-          ) })
+        /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Clinical History · Experience" })
+      ] }),
+      work.map((job, i) => /* @__PURE__ */ jsxs(ChartRow, { children: [
+        /* @__PURE__ */ jsxs(VitalRail, { children: [
+          /* @__PURE__ */ jsx(RailDate, { children: /* @__PURE__ */ jsx(DateRange, { startDate: job.startDate, endDate: job.endDate }) }),
+          job.location && /* @__PURE__ */ jsx(RailMeta, { children: job.location })
         ] }),
-        project.description && /* @__PURE__ */ jsx(WorkDescription, { children: project.description }),
-        project.highlights && project.highlights.length > 0 && /* @__PURE__ */ jsx(WorkHighlights, { children: project.highlights.map((highlight, i) => /* @__PURE__ */ jsx("li", { children: highlight }, i)) })
-      ] }, index))
-    ] }),
-    education.length > 0 && /* @__PURE__ */ jsxs(MainSection, { children: [
-      /* @__PURE__ */ jsx(MainSectionTitle, { children: "Education" }),
-      education.map((edu, index) => /* @__PURE__ */ jsxs(WorkItem, { children: [
-        /* @__PURE__ */ jsxs(WorkHeader, { children: [
-          /* @__PURE__ */ jsx(WorkTitle, { children: edu.institution }),
-          /* @__PURE__ */ jsx(WorkMeta, { children: /* @__PURE__ */ jsx(DateRange, { startDate: edu.startDate, endDate: edu.endDate }) })
-        ] }),
-        edu.studyType && edu.area && /* @__PURE__ */ jsxs(WorkCompany, { children: [
-          edu.studyType,
-          " in ",
-          edu.area
-        ] }),
-        edu.score && /* @__PURE__ */ jsxs(WorkDescription, { children: [
-          "GPA: ",
-          edu.score
+        /* @__PURE__ */ jsxs(Content, { children: [
+          /* @__PURE__ */ jsx(ItemTitle, { children: job.url ? /* @__PURE__ */ jsx(Link, { href: safeUrl(job.url), children: job.position || job.name }) : job.position || job.name }),
+          job.name && job.position && /* @__PURE__ */ jsx(ItemSub, { children: job.name }),
+          job.summary && /* @__PURE__ */ jsx(ItemDesc, { children: job.summary }),
+          job.highlights?.length > 0 && /* @__PURE__ */ jsx(Highlights, { children: job.highlights.map((h, j2) => /* @__PURE__ */ jsx("li", { children: h }, j2)) })
         ] })
-      ] }, index))
+      ] }, i))
     ] }),
-    volunteer.length > 0 && /* @__PURE__ */ jsxs(MainSection, { children: [
-      /* @__PURE__ */ jsx(MainSectionTitle, { children: "Volunteer" }),
-      volunteer.map((vol, index) => /* @__PURE__ */ jsxs(WorkItem, { children: [
-        /* @__PURE__ */ jsxs(WorkHeader, { children: [
-          /* @__PURE__ */ jsx(WorkTitle, { children: vol.position }),
-          /* @__PURE__ */ jsx(WorkMeta, { children: /* @__PURE__ */ jsx(DateRange, { startDate: vol.startDate, endDate: vol.endDate }) })
+    education.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
+      /* @__PURE__ */ jsxs(TitleRow, { children: [
+        /* @__PURE__ */ jsxs(SectionCode, { children: [
+          "§",
+          nextCode()
         ] }),
-        /* @__PURE__ */ jsx(WorkCompany, { children: vol.organization }),
-        vol.summary && /* @__PURE__ */ jsx(WorkDescription, { children: vol.summary }),
-        vol.highlights && vol.highlights.length > 0 && /* @__PURE__ */ jsx(WorkHighlights, { children: vol.highlights.map((highlight, i) => /* @__PURE__ */ jsx("li", { children: highlight }, i)) })
-      ] }, index))
+        /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Education" })
+      ] }),
+      education.map((edu, i) => /* @__PURE__ */ jsxs(ChartRow, { children: [
+        /* @__PURE__ */ jsxs(VitalRail, { children: [
+          /* @__PURE__ */ jsx(RailDate, { children: /* @__PURE__ */ jsx(DateRange, { startDate: edu.startDate, endDate: edu.endDate }) }),
+          edu.score && /* @__PURE__ */ jsxs(RailMeta, { children: [
+            "GPA ",
+            edu.score
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxs(Content, { children: [
+          /* @__PURE__ */ jsx(ItemTitle, { children: edu.institution }),
+          (edu.studyType || edu.area) && /* @__PURE__ */ jsx(ItemSub, { children: [edu.studyType, edu.area].filter(Boolean).join(" · ") }),
+          edu.courses?.length > 0 && /* @__PURE__ */ jsx(Highlights, { children: edu.courses.map((c, j2) => /* @__PURE__ */ jsx("li", { children: c }, j2)) })
+        ] })
+      ] }, i))
     ] }),
-    awards.length > 0 && /* @__PURE__ */ jsxs(MainSection, { children: [
-      /* @__PURE__ */ jsx(MainSectionTitle, { children: "Awards" }),
-      /* @__PURE__ */ jsx(SimpleList, { children: awards.map((award, index) => /* @__PURE__ */ jsxs(SimpleItem, { children: [
-        /* @__PURE__ */ jsx("strong", { children: award.title }),
-        award.awarder && ` — ${award.awarder}`,
-        award.date && /* @__PURE__ */ jsx(
-          "div",
-          {
-            style: {
-              fontSize: "12px",
-              color: "#6b7280",
-              marginTop: "4px"
-            },
-            children: award.date
-          }
-        )
-      ] }, index)) })
+    skills.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
+      /* @__PURE__ */ jsxs(TitleRow, { children: [
+        /* @__PURE__ */ jsxs(SectionCode, { children: [
+          "§",
+          nextCode()
+        ] }),
+        /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Diagnostic Panel · Skills" })
+      ] }),
+      /* @__PURE__ */ jsx(PanelGrid, { children: skills.map((skill, i) => /* @__PURE__ */ jsxs(Panel, { children: [
+        /* @__PURE__ */ jsxs(PanelHead, { children: [
+          skill.name,
+          skill.level && /* @__PURE__ */ jsx("small", { children: skill.level })
+        ] }),
+        /* @__PURE__ */ jsx(PanelBody, { children: skill.keywords?.length > 0 && /* @__PURE__ */ jsx(StyledBadgeList, { children: skill.keywords.map((k2, j2) => /* @__PURE__ */ jsx(StyledBadge, { children: k2 }, j2)) }) })
+      ] }, i)) })
     ] }),
-    certificates.length > 0 && /* @__PURE__ */ jsxs(MainSection, { children: [
-      /* @__PURE__ */ jsx(MainSectionTitle, { children: "Certificates" }),
-      /* @__PURE__ */ jsx(SimpleList, { children: certificates.map((cert, index) => /* @__PURE__ */ jsxs(SimpleItem, { children: [
-        /* @__PURE__ */ jsx("strong", { children: cert.name }),
-        cert.issuer && ` — ${cert.issuer}`,
-        cert.date && /* @__PURE__ */ jsx(
-          "div",
-          {
-            style: {
-              fontSize: "12px",
-              color: "#6b7280",
-              marginTop: "4px"
-            },
-            children: cert.date
-          }
-        )
-      ] }, index)) })
+    projects.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
+      /* @__PURE__ */ jsxs(TitleRow, { children: [
+        /* @__PURE__ */ jsxs(SectionCode, { children: [
+          "§",
+          nextCode()
+        ] }),
+        /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Procedures · Projects" })
+      ] }),
+      projects.map((p2, i) => /* @__PURE__ */ jsxs(ChartRow, { children: [
+        /* @__PURE__ */ jsxs(VitalRail, { children: [
+          /* @__PURE__ */ jsx(RailDate, { children: /* @__PURE__ */ jsx(DateRange, { startDate: p2.startDate, endDate: p2.endDate }) }),
+          p2.type && /* @__PURE__ */ jsx(RailMeta, { children: p2.type })
+        ] }),
+        /* @__PURE__ */ jsxs(Content, { children: [
+          /* @__PURE__ */ jsx(ItemTitle, { children: p2.url ? /* @__PURE__ */ jsx(Link, { href: safeUrl(p2.url), children: p2.name }) : p2.name }),
+          p2.description && /* @__PURE__ */ jsx(ItemDesc, { children: p2.description }),
+          p2.highlights?.length > 0 && /* @__PURE__ */ jsx(Highlights, { children: p2.highlights.map((h, j2) => /* @__PURE__ */ jsx("li", { children: h }, j2)) })
+        ] })
+      ] }, i))
     ] }),
-    publications.length > 0 && /* @__PURE__ */ jsxs(MainSection, { children: [
-      /* @__PURE__ */ jsx(MainSectionTitle, { children: "Publications" }),
-      /* @__PURE__ */ jsx(SimpleList, { children: publications.map((pub, index) => /* @__PURE__ */ jsxs(SimpleItem, { children: [
-        /* @__PURE__ */ jsx("strong", { children: pub.name }),
-        pub.publisher && ` — ${pub.publisher}`,
-        pub.releaseDate && /* @__PURE__ */ jsx(
-          "div",
-          {
-            style: {
-              fontSize: "12px",
-              color: "#6b7280",
-              marginTop: "4px"
-            },
-            children: pub.releaseDate
-          }
-        )
-      ] }, index)) })
+    volunteer.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
+      /* @__PURE__ */ jsxs(TitleRow, { children: [
+        /* @__PURE__ */ jsxs(SectionCode, { children: [
+          "§",
+          nextCode()
+        ] }),
+        /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Community Care · Volunteer" })
+      ] }),
+      volunteer.map((v2, i) => /* @__PURE__ */ jsxs(ChartRow, { children: [
+        /* @__PURE__ */ jsx(VitalRail, { children: /* @__PURE__ */ jsx(RailDate, { children: /* @__PURE__ */ jsx(DateRange, { startDate: v2.startDate, endDate: v2.endDate }) }) }),
+        /* @__PURE__ */ jsxs(Content, { children: [
+          /* @__PURE__ */ jsx(ItemTitle, { children: v2.position }),
+          v2.organization && /* @__PURE__ */ jsx(ItemSub, { children: v2.organization }),
+          v2.summary && /* @__PURE__ */ jsx(ItemDesc, { children: v2.summary }),
+          v2.highlights?.length > 0 && /* @__PURE__ */ jsx(Highlights, { children: v2.highlights.map((h, j2) => /* @__PURE__ */ jsx("li", { children: h }, j2)) })
+        ] })
+      ] }, i))
     ] }),
-    languages.length > 0 && /* @__PURE__ */ jsxs(MainSection, { children: [
-      /* @__PURE__ */ jsx(MainSectionTitle, { children: "Languages" }),
-      /* @__PURE__ */ jsx(SimpleList, { children: languages.map((lang, index) => /* @__PURE__ */ jsxs(SimpleItem, { children: [
-        /* @__PURE__ */ jsx("strong", { children: lang.language }),
-        lang.fluency && ` — ${lang.fluency}`
-      ] }, index)) })
+    awards.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
+      /* @__PURE__ */ jsxs(TitleRow, { children: [
+        /* @__PURE__ */ jsxs(SectionCode, { children: [
+          "§",
+          nextCode()
+        ] }),
+        /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Awards" })
+      ] }),
+      /* @__PURE__ */ jsx(RecordList, { children: awards.map((a, i) => /* @__PURE__ */ jsxs(RecordItem, { children: [
+        /* @__PURE__ */ jsx("h4", { children: a.title }),
+        /* @__PURE__ */ jsx("p", { className: "meta", children: [a.awarder, a.date].filter(Boolean).join(" · ") }),
+        a.summary && /* @__PURE__ */ jsx("p", { children: a.summary })
+      ] }, i)) })
     ] }),
-    interests.length > 0 && /* @__PURE__ */ jsxs(MainSection, { children: [
-      /* @__PURE__ */ jsx(MainSectionTitle, { children: "Interests" }),
-      /* @__PURE__ */ jsx(SimpleList, { children: interests.map((interest, index) => /* @__PURE__ */ jsx(SimpleItem, { children: interest.name }, index)) })
+    certificates.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
+      /* @__PURE__ */ jsxs(TitleRow, { children: [
+        /* @__PURE__ */ jsxs(SectionCode, { children: [
+          "§",
+          nextCode()
+        ] }),
+        /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Certificates" })
+      ] }),
+      /* @__PURE__ */ jsx(RecordList, { children: certificates.map((c, i) => /* @__PURE__ */ jsxs(RecordItem, { children: [
+        /* @__PURE__ */ jsx("h4", { children: c.url ? /* @__PURE__ */ jsx(Link, { href: safeUrl(c.url), children: c.name }) : c.name }),
+        /* @__PURE__ */ jsx("p", { className: "meta", children: [c.issuer, c.date].filter(Boolean).join(" · ") })
+      ] }, i)) })
     ] }),
-    references.length > 0 && /* @__PURE__ */ jsxs(MainSection, { children: [
-      /* @__PURE__ */ jsx(MainSectionTitle, { children: "References" }),
-      references.map((ref, index) => /* @__PURE__ */ jsxs(WorkItem, { children: [
-        /* @__PURE__ */ jsx(WorkTitle, { children: ref.name }),
-        ref.reference && /* @__PURE__ */ jsx(WorkDescription, { children: ref.reference })
-      ] }, index))
+    publications.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
+      /* @__PURE__ */ jsxs(TitleRow, { children: [
+        /* @__PURE__ */ jsxs(SectionCode, { children: [
+          "§",
+          nextCode()
+        ] }),
+        /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Publications" })
+      ] }),
+      /* @__PURE__ */ jsx(RecordList, { children: publications.map((pub, i) => /* @__PURE__ */ jsxs(RecordItem, { children: [
+        /* @__PURE__ */ jsx("h4", { children: pub.url ? /* @__PURE__ */ jsx(Link, { href: safeUrl(pub.url), children: pub.name }) : pub.name }),
+        /* @__PURE__ */ jsx("p", { className: "meta", children: [pub.publisher, pub.releaseDate].filter(Boolean).join(" · ") }),
+        pub.summary && /* @__PURE__ */ jsx("p", { children: pub.summary })
+      ] }, i)) })
+    ] }),
+    languages.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
+      /* @__PURE__ */ jsxs(TitleRow, { children: [
+        /* @__PURE__ */ jsxs(SectionCode, { children: [
+          "§",
+          nextCode()
+        ] }),
+        /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Languages" })
+      ] }),
+      /* @__PURE__ */ jsx(StyledBadgeList, { children: languages.map((l, i) => /* @__PURE__ */ jsxs(StyledBadge, { children: [
+        l.language,
+        l.fluency && ` — ${l.fluency}`
+      ] }, i)) })
+    ] }),
+    interests.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
+      /* @__PURE__ */ jsxs(TitleRow, { children: [
+        /* @__PURE__ */ jsxs(SectionCode, { children: [
+          "§",
+          nextCode()
+        ] }),
+        /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Interests" })
+      ] }),
+      /* @__PURE__ */ jsx(TwoCol, { children: interests.map((it2, i) => /* @__PURE__ */ jsxs(RecordItem, { children: [
+        /* @__PURE__ */ jsx("h4", { children: it2.name }),
+        it2.keywords?.length > 0 && /* @__PURE__ */ jsx("p", { children: it2.keywords.join(", ") })
+      ] }, i)) })
+    ] }),
+    references.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
+      /* @__PURE__ */ jsxs(TitleRow, { children: [
+        /* @__PURE__ */ jsxs(SectionCode, { children: [
+          "§",
+          nextCode()
+        ] }),
+        /* @__PURE__ */ jsx(StyledSectionTitle, { children: "References" })
+      ] }),
+      /* @__PURE__ */ jsx(RecordList, { children: references.map((r, i) => /* @__PURE__ */ jsxs(RecordItem, { children: [
+        /* @__PURE__ */ jsx("h4", { children: r.name }),
+        r.reference && /* @__PURE__ */ jsx("p", { children: r.reference })
+      ] }, i)) })
     ] })
   ] });
 }
 function render(resume) {
   const sheet = new gt();
-  try {
-    const html = renderToString(
-      sheet.collectStyles(/* @__PURE__ */ jsx(Resume, { resume }))
-    );
-    const styles = sheet.getStyleTags();
-    return `<!DOCTYPE html>
+  const html = renderToString(sheet.collectStyles(/* @__PURE__ */ jsx(Resume, { resume })));
+  const styles = sheet.getStyleTags();
+  const title = resume.basics && resume.basics.name || "Resume";
+  return `<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${resume.basics?.name || "Resume"} - Resume</title>
+  <meta charset="utf-8">
+  <title>${title}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   ${styles}
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    body {
-      margin: 0;
-      padding: 0;
-      background: #fafafa;
-    }
-    @media print {
-      body {
-        background: white;
-      }
-      @page {
-        margin: 0.5in;
-      }
-    }
-  </style>
 </head>
-<body>
-  ${html}
-</body>
+<body>${html}</body>
 </html>`;
-  } finally {
-    sheet.seal();
-  }
 }
 export {
   render

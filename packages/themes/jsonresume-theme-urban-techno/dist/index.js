@@ -6070,7 +6070,7 @@ const Tagline = dt.div`
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: #666;
+  color: #8c8c8c;
 `;
 const ContactSection = dt.div`
   padding: 24px;

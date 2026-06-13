@@ -13,6 +13,7 @@ const serve = require('./serve');
 const program = require('commander');
 const chalk = require('chalk');
 const path = require('path');
+const { ThemeNotFoundError, formatThemeNotFound } = require('./theme-errors');
 
 const normalizeTheme = (value, defaultValue) => {
   const theme = value || defaultValue;
@@ -36,7 +37,7 @@ const normalizeTheme = (value, defaultValue) => {
     )
     .option(
       '-t, --theme <theme name>',
-      'Specify theme used by `export` and `serve` or specify a path starting with . (use . for current directory or ../some/other/dir)',
+      'Theme used by `export` and `serve` (browse themes at https://jsonresume.org/themes/), or a path starting with . (use . for current directory or ../some/other/dir)',
       normalizeTheme,
       'jsonresume-theme-elegant',
     )
@@ -80,6 +81,7 @@ const normalizeTheme = (value, defaultValue) => {
           resume,
           schema,
         });
+        console.log(chalk.green(`✓ ${program.resume} is valid`));
       } catch (e) {
         console.error(e.message);
         process.exitCode = 1;
@@ -89,13 +91,22 @@ const normalizeTheme = (value, defaultValue) => {
   program
     .command('export [fileName]')
     .description(
-      'Export locally to .html or .pdf. Supply a --format <file format> flag and argument to specify export format.',
+      'Export locally to .html or .pdf. Supply a --format <file format> flag and argument to specify export format. Pick a theme with --theme (https://jsonresume.org/themes/).',
     )
     .action(async (fileName) => {
       const resume = await getResume({ path: program.resume });
       exportResume(
         { ...program, resume, fileName },
         (err, fileName, format) => {
+          if (err) {
+            if (err instanceof ThemeNotFoundError) {
+              console.error(formatThemeNotFound(err.theme));
+            } else {
+              console.error(err.message || err);
+            }
+            process.exitCode = 1;
+            return;
+          }
           console.log(
             chalk.green(
               '\nDone! Find your new',

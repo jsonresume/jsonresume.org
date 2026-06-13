@@ -6168,7 +6168,7 @@ const WorkTitle = dt.h3`
 `;
 const WorkMeta = dt.div`
   font-size: 13px;
-  color: #9ca3af;
+  color: #6b7280;
   font-weight: 400;
 `;
 const WorkCompany = dt.div`
@@ -6391,7 +6391,7 @@ function Resume({ resume }) {
           {
             style: {
               fontSize: "13px",
-              color: "#9ca3af",
+              color: "#6b7280",
               marginTop: "4px"
             },
             children: award.date
@@ -6409,7 +6409,7 @@ function Resume({ resume }) {
           {
             style: {
               fontSize: "13px",
-              color: "#9ca3af",
+              color: "#6b7280",
               marginTop: "4px"
             },
             children: cert.date
@@ -6427,7 +6427,7 @@ function Resume({ resume }) {
           {
             style: {
               fontSize: "13px",
-              color: "#9ca3af",
+              color: "#6b7280",
               marginTop: "4px"
             },
             children: pub.releaseDate
