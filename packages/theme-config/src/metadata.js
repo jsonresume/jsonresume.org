@@ -633,6 +633,42 @@ export const THEME_METADATA = {
       'orange',
     ],
   },
+  brutalist: {
+    name: 'Brutalist',
+    description:
+      'Raw concrete brutalism with heavy 4px black rules, oversized uppercase Archivo Black headings, hard edges, monospace spec labels, numbered sections, and offset block-shadows. Stark black-on-white with a single harsh safety-yellow accent.',
+    author: 'JSON Resume Team',
+    tags: [
+      'brutalist',
+      'raw',
+      'concrete',
+      'bold',
+      'monospace',
+      'high-contrast',
+      'grid',
+      'uppercase',
+      'yellow',
+      'black',
+    ],
+  },
+  'art-deco': {
+    name: 'Art Deco',
+    description:
+      '1920s Gatsby elegance with a symmetric centered masthead on a deep midnight-and-emerald jewel panel, metallic-gold accents, geometric chevron and sunburst dividers, and a high-contrast Cinzel didone-style display serif over a graceful Cormorant Garamond body.',
+    author: 'JSON Resume Team',
+    tags: [
+      'art-deco',
+      'gatsby',
+      '1920s',
+      'elegant',
+      'ornamental',
+      'serif',
+      'gold',
+      'jewel',
+      'symmetric',
+      'luxury',
+    ],
+  },
 };
 
 // List of available theme names (derived from THEME_METADATA)
