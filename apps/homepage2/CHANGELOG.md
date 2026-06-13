@@ -1,5 +1,12 @@
 # registry
 
+## 1.0.2
+
+### Patch Changes
+
+- Updated dependencies [251fe8f]
+  - @repo/theme-config@0.2.0
+
 ## 1.0.1
 
 ### Patch Changes
