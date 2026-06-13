@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { SUPABASE_URL } from '@/lib/supabaseConfig';
 import { embed, generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { authenticate } from '../auth';
@@ -7,7 +8,7 @@ import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
-const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
+const supabaseUrl = SUPABASE_URL;
 const PROMPT_WEIGHT = 0.65;
 
 function getSupabase() {

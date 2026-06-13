@@ -10,7 +10,7 @@ const { createClient } = require('@supabase/supabase-js');
 const { embed } = require('ai');
 const { openai } = require('@ai-sdk/openai');
 
-const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
+const { SUPABASE_URL: supabaseUrl } = require('../../lib/supabaseConfig');
 const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 

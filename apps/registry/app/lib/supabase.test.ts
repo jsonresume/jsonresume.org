@@ -17,8 +17,10 @@ describe('supabase client', () => {
 
   it('creates client with correct URL', async () => {
     const { supabase } = await import('./supabase');
+    // @ts-expect-error - JS config module (triple-export CommonJS)
+    const { SUPABASE_URL } = await import('../../lib/supabaseConfig');
 
-    expect(supabase.url).toBe('https://itxuhvvwryeuzuyihpkp.supabase.co');
+    expect(supabase.url).toBe(SUPABASE_URL);
   });
 
   it('creates client with anon key', async () => {

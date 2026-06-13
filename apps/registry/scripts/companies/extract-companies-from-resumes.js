@@ -22,7 +22,7 @@ for (const envPath of envPaths) {
 const { createClient } = require('@supabase/supabase-js');
 const { normalizeCompanyName } = require('./enrichCompany');
 
-const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
+const { SUPABASE_URL: supabaseUrl } = require('../../lib/supabaseConfig');
 const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 

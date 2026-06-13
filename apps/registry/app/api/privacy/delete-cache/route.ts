@@ -3,8 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import logger from '@/lib/logger';
-
-const SUPABASE_URL = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
+import { SUPABASE_URL } from '@/lib/supabaseConfig';
 
 /**
  * DELETE /api/privacy/delete-cache

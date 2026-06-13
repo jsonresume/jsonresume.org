@@ -24,7 +24,7 @@ const { createClient } = require('@supabase/supabase-js');
 const async = require('async');
 const { enrichCompany } = require('./enrichCompany');
 
-const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
+const { SUPABASE_URL: supabaseUrl } = require('../../lib/supabaseConfig');
 const supabaseKey = process.env.SUPABASE_KEY;
 const perplexityApiKey = process.env.PERPLEXITY_API_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);

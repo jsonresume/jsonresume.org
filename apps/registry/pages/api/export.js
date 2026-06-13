@@ -2,7 +2,7 @@ const { embed, generateText } = require('ai');
 const { openai } = require('@ai-sdk/openai');
 const { createClient } = require('@supabase/supabase-js');
 
-const SUPABASE_URL = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
+const { SUPABASE_URL } = require('../../lib/supabaseConfig');
 
 export default async function handler(req, res) {
   if (!process.env.OPENAI_API_KEY || !process.env.SUPABASE_KEY) {

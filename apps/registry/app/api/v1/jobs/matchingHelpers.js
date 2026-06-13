@@ -1,9 +1,10 @@
 import { createClient } from '@supabase/supabase-js';
+import { SUPABASE_URL } from '@/lib/supabaseConfig';
 import { embed, generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { logger } from '@/lib/logger';
 
-const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
+const supabaseUrl = SUPABASE_URL;
 const RERANK_BATCH_SIZE = 5;
 
 export function getSupabase() {
