@@ -158,6 +158,31 @@ describe('cli configuration', () => {
         "
       `);
     });
+    it('should print a friendly error and exit non-zero when the resume file is missing', async () => {
+      const { code, stderr } = await run(
+        ['validate', '--resume', '/test-resumes/does-not-exist.json'],
+        { waitForVolumeExport: false, captureStderr: true },
+      );
+      expect(code).toEqual(1);
+      expect(stderr).toContain(
+        'Could not read resume: /test-resumes/does-not-exist.json',
+      );
+      // No raw Node unhandled-rejection stack trace must leak.
+      expect(stderr).not.toContain('triggerUncaughtException');
+      expect(stderr).not.toContain('node:internal');
+    });
+    it('should print a friendly error and exit non-zero when the resume JSON is malformed', async () => {
+      const { code, stderr } = await run(
+        ['validate', '--resume', '/test-resumes/malformed-resume.json'],
+        { waitForVolumeExport: false, captureStderr: true },
+      );
+      expect(code).toEqual(1);
+      expect(stderr).toContain(
+        'Could not read resume: /test-resumes/malformed-resume.json',
+      );
+      expect(stderr).not.toContain('triggerUncaughtException');
+      expect(stderr).not.toContain('node:internal');
+    });
   });
   describe('themes', () => {
     it('lists installed themes by slug and links the gallery', async () => {
@@ -275,6 +300,26 @@ describe('cli configuration', () => {
       expect(stderr).toContain('https://jsonresume.org/themes/');
       // The raw stack trace must not leak to the user.
       expect(stderr).not.toContain('at _default');
+    });
+    it('should print a friendly error and exit non-zero when the resume file is missing', async () => {
+      const { code, stderr } = await run(
+        [
+          'export',
+          '/test-resumes/exported-resume.html',
+          '--resume',
+          '/test-resumes/does-not-exist.json',
+          '--theme',
+          'even',
+        ],
+        { waitForVolumeExport: false, captureStderr: true },
+      );
+      expect(code).toEqual(1);
+      expect(stderr).toContain(
+        'Could not read resume: /test-resumes/does-not-exist.json',
+      );
+      // No raw Node unhandled-rejection stack trace must leak.
+      expect(stderr).not.toContain('triggerUncaughtException');
+      expect(stderr).not.toContain('node:internal');
     });
   });
 });

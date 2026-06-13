@@ -13,6 +13,8 @@ module.exports = ({ mount = '/' } = {}) => {
             name: 123,
           },
         }),
+        // Syntactically broken JSON — exercises the parse-error path.
+        'malformed-resume.json': '{ "basics": { "name": "x" ',
         'resume.json': JSON.stringify({
           basics: {
             name: 'thomas',

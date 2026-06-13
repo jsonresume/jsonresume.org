@@ -3,7 +3,7 @@
 import 'dotenv/config';
 
 import init from './init';
-import getResume from './get-resume';
+import loadResumeOrReport from './load-resume';
 import getSchema from './get-schema';
 import validate from './validate';
 
@@ -94,8 +94,19 @@ const normalizeTheme = (value, defaultValue) => {
     .command('validate')
     .description("Validate your resume's schema")
     .action(async () => {
-      const resume = await getResume({ path: program.resume });
-      const schema = await getSchema({ path: program.schema });
+      const resume = await loadResumeOrReport(program.resume);
+      if (resume === null) {
+        return;
+      }
+      let schema;
+      try {
+        schema = await getSchema({ path: program.schema });
+      } catch (e) {
+        console.error(chalk.red('Could not load schema.'));
+        console.error(e.message || String(e));
+        process.exitCode = 1;
+        return;
+      }
       try {
         await validate({
           resume,
@@ -114,7 +125,10 @@ const normalizeTheme = (value, defaultValue) => {
       'Export locally to .html, .pdf, .md (markdown) or .txt (text). Supply a --format <file format> flag and argument to specify export format. .md and .txt need no theme; pick a theme for .html/.pdf with --theme (https://jsonresume.org/themes/).',
     )
     .action(async (fileName) => {
-      const resume = await getResume({ path: program.resume });
+      const resume = await loadResumeOrReport(program.resume);
+      if (resume === null) {
+        return;
+      }
       exportResume(
         { ...program, resume, fileName },
         (err, fileName, format) => {
