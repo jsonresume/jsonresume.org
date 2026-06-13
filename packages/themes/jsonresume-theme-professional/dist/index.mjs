@@ -1699,18 +1699,21 @@ const render = (resume) => {
       font-family: LatinModern;
       font-style: normal;
       font-weight: normal;
+      font-display: swap;
       src: url("/fonts/lmroman10-regular.otf") format("opentype");
     }
 
     @font-face {
       font-family: LatinModern;
       font-weight: bold;
+      font-display: swap;
       src: url("/fonts/lmroman10-bold.otf") format("opentype");
     }
 
     @font-face {
       font-family: LatinModern;
       font-style: italic;
+      font-display: swap;
       src: url("/fonts/lmroman10-italic.otf") format("opentype");
     }
 
@@ -1718,18 +1721,21 @@ const render = (resume) => {
       font-family: LatinModernSans;
       font-style: normal;
       font-weight: normal;
+      font-display: swap;
       src: url("/fonts/lmsans10-regular.otf") format("opentype");
     }
 
     @font-face {
       font-family: LatinModernSans;
       font-weight: bold;
+      font-display: swap;
       src: url("/fonts/lmsans10-bold.otf") format("opentype");
     }
 
     @font-face {
       font-family: LatinModernSans;
       font-style: italic;
+      font-display: swap;
       src: url("/fonts/lmsans10-italic.otf") format("opentype");
     }
 
