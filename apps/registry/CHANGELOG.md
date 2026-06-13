@@ -1,5 +1,14 @@
 # registry
 
+## 1.1.10
+
+### Patch Changes
+
+- Updated dependencies [43281e3]
+- Updated dependencies [43281e3]
+  - jsonresume-theme-claude@1.0.1
+  - jsonresume-theme-creative-confidence@1.0.1
+
 ## 1.1.9
 
 ### Patch Changes
