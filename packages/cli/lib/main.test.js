@@ -89,10 +89,12 @@ describe('cli configuration', () => {
       Commands:
         init                                Initialize a resume.json file
         validate                            Validate your resume's schema
-        export [fileName]                   Export locally to .html or .pdf. Supply
-                                            a --format <file format> flag and
-                                            argument to specify export format. Pick a
-                                            theme with --theme
+        export [fileName]                   Export locally to .html, .pdf, .md
+                                            (markdown) or .txt (text). Supply a
+                                            --format <file format> flag and argument
+                                            to specify export format. .md and .txt
+                                            need no theme; pick a theme for
+                                            .html/.pdf with --theme
                                             (https://jsonresume.org/themes/).
         serve                               Serve resume at http://localhost:4000/
         help [command]                      display help for command
@@ -190,6 +192,46 @@ describe('cli configuration', () => {
          /test-resumes/exported-resume.html
         "
       `);
+    });
+    it('should export markdown without requiring a theme', async () => {
+      const { stdout, volume } = await run(
+        [
+          'export',
+          '/test-resumes/exported-resume.md',
+          '--resume',
+          '-',
+          '--format',
+          'markdown',
+        ],
+        {
+          stdin: JSON.stringify({
+            basics: { name: 'thomas-md' },
+            skills: [{ name: 'JS', keywords: ['Node'] }],
+          }),
+        },
+      );
+      const output = volume['/test-resumes/exported-resume.md'];
+      expect(output).toEqual(expect.stringContaining('# thomas-md'));
+      expect(output).toEqual(expect.stringContaining('## Skills'));
+      expect(stdout).toContain('.md resume at:');
+    });
+    it('should export plain text without requiring a theme', async () => {
+      const { stdout, volume } = await run(
+        [
+          'export',
+          '/test-resumes/exported-resume.txt',
+          '--resume',
+          '-',
+          '--format',
+          'text',
+        ],
+        {
+          stdin: JSON.stringify({ basics: { name: 'thomas-txt' } }),
+        },
+      );
+      const output = volume['/test-resumes/exported-resume.txt'];
+      expect(output).toEqual(expect.stringContaining('thomas-txt'));
+      expect(stdout).toContain('.txt resume at:');
     });
     it('should print a friendly, actionable message and exit non-zero when the theme is not installed', async () => {
       const { code, stderr } = await run(

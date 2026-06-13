@@ -24,7 +24,7 @@ npm install -g resume-cli
 |---|---|
 | init | Initialize a `resume.json` file. |
 | validate | Schema validation test your `resume.json`. |
-| export path/to/file.html | Export to `.html`. |
+| export path/to/file.html | Export to `.html`, `.pdf`, `.md` or `.txt`. |
 | serve | Serve resume at `http://localhost:4000/`. |
 
 ### `resume --help`
@@ -43,9 +43,30 @@ Validates your `resume.json` against our schema to ensure it complies with the s
 
 ### `resume export [fileName]`
 
-Exports your resume in a stylized HTML or PDF format.
+Exports your resume to one of four formats:
 
-A list of available themes can be found here:  
+- `.html` / `.pdf` — stylized output rendered through a theme.
+- `.md` — clean Markdown (one heading per section). No theme required.
+- `.txt` — readable plain text. No theme required.
+
+The format is inferred from the file extension, or set it explicitly with
+`--format`:
+
+```
+resume export resume.md                  # Markdown (inferred)
+resume export resume.txt --format text   # plain text (explicit)
+resume export resume.html --theme even   # themed HTML
+resume export resume.pdf --theme even    # themed PDF
+```
+
+`--format` accepts `html`, `pdf`, `markdown` (or `md`) and `text` (or `txt`).
+
+The Markdown and text formats render every JSON Resume section that is present
+(basics, work, volunteer, education, awards, publications, skills, languages,
+interests, references, projects) and skip any that are missing — so no theme
+install is needed.
+
+A list of available themes (for `.html` / `.pdf`) can be found here:  
 https://jsonresume.org/themes/
 
 Please npm install the theme you wish to use before attempting to export it.
@@ -53,7 +74,7 @@ Please npm install the theme you wish to use before attempting to export it.
 Options:
 
 - `--format <file type>` Example: `--format pdf`
-- `--theme <name>` Example: `--theme even`
+- `--theme <name>` Example: `--theme even` (only used for `.html` / `.pdf`)
 
 ### `resume serve`
 
