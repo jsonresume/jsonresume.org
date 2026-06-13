@@ -6,6 +6,7 @@
   "types": "./src/index.d.ts",
   "exports": {
     ".": "./src/index.js",
+    "./ssr": "./src/ssr/index.js",
     "./helpers": "./src/helpers/index.js",
     "./tokens": "./src/tokens/index.js",
     "./primitives": "./src/primitives/index.js",

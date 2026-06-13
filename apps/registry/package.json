@@ -28,6 +28,7 @@
     "@jsonresume/jsonresume-theme-tokyo-modernist": "workspace:^",
     "@jsonresume/sample-data": "workspace:*",
     "@jsonresume/schema": "workspace:*",
+    "@jsonresume/theme-kit": "workspace:*",
     "@jsonresume/utils": "workspace:*",
     "@jsonresume/theme-stackoverflow": "^2",
     "@monaco-editor/react": "^4.6.0",
