@@ -1,6 +1,6 @@
 import { jsx, jsxs } from "react/jsx-runtime";
 import o, { useRef, useContext, useState, useMemo, useEffect, useDebugValue, createElement, createContext } from "react";
-import { renderToString } from "react-dom/server";
+import { renderToStaticMarkup } from "react-dom/server";
 var __assign = function() {
   __assign = Object.assign || function __assign2(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -1300,6 +1300,66 @@ var vt = /^\s*<\/[a-z]/i, gt = (function() {
 "production" !== process.env.NODE_ENV && "undefined" != typeof navigator && "ReactNative" === navigator.product && console.warn("It looks like you've imported 'styled-components' on React Native.\nPerhaps you're looking to import 'styled-components/native'?\nRead more about this at https://www.styled-components.com/docs/basics#react-native");
 var wt = "__sc-".concat(f, "__");
 "production" !== process.env.NODE_ENV && "test" !== process.env.NODE_ENV && "undefined" != typeof window && (window[wt] || (window[wt] = 0), 1 === window[wt] && console.warn("It looks like there are several instances of 'styled-components' initialized in this application. This may cause dynamic styles to not render properly, errors during the rehydration process, a missing theme prop, and makes your application bigger without good reason.\n\nSee https://s-c.sh/2BAXzed for more info."), window[wt] += 1);
+const CSS_RESET = "<style>*,*::before,*::after{box-sizing:border-box}html,body{margin:0;padding:0}body{-webkit-font-smoothing:antialiased}</style>";
+const TOKENS_CSS_HREF = "https://unpkg.com/@jsonresume/core/dist/tokens.css";
+const FONTS_PRECONNECT = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>';
+function isHref(value) {
+  return /^(https?:)?\/\//.test(value) || value.trim().startsWith("<link");
+}
+function familyParam(family) {
+  const [name, ...rest] = String(family).split(":");
+  const encodedName = name.trim().replace(/\s+/g, "+");
+  return rest.length ? `${encodedName}:${rest.join(":")}` : encodedName;
+}
+function googleFontsLinks(families) {
+  if (!Array.isArray(families) || families.length === 0) return "";
+  const passthrough = [];
+  const names = [];
+  for (const entry of families) {
+    if (entry == null || entry === "") continue;
+    if (isHref(entry)) passthrough.push(entry);
+    else names.push(entry);
+  }
+  const links = passthrough.map(
+    (href) => href.trim().startsWith("<link") ? href : `<link href="${href}" rel="stylesheet">`
+  );
+  if (names.length > 0) {
+    const query = names.map(familyParam).join("&family=");
+    links.unshift(
+      `<link href="https://fonts.googleapis.com/css2?family=${query}&display=swap" rel="stylesheet">`
+    );
+  }
+  if (links.length === 0) return "";
+  return FONTS_PRECONNECT + links.join("");
+}
+function renderResumeDocument(element, options = {}) {
+  const {
+    fonts,
+    title,
+    lang = "en",
+    dir = "ltr",
+    reset = false,
+    head = "",
+    headAfterStyles = "",
+    includeTokensCss = true,
+    bodyClass
+  } = options;
+  const sheet = new gt();
+  let html;
+  let styleTags;
+  try {
+    html = renderToStaticMarkup(sheet.collectStyles(element));
+    styleTags = sheet.getStyleTags();
+  } finally {
+    sheet.seal();
+  }
+  const fontLinks = googleFontsLinks(fonts);
+  const tokensLink = includeTokensCss ? `<link rel="stylesheet" href="${TOKENS_CSS_HREF}">` : "";
+  const resetTag = reset ? CSS_RESET : "";
+  const titleTag = title ? `<title>${title}</title>` : "";
+  const bodyAttr = bodyClass ? ` class="${bodyClass}"` : "";
+  return `<!DOCTYPE html><html lang="${lang}" dir="${dir}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">` + fontLinks + tokensLink + resetTag + head + styleTags + headAfterStyles + titleTag + `</head><body${bodyAttr}>${html}</body></html>`;
+}
 createContext({
   theme: "professional",
   setTheme: () => {
@@ -1477,7 +1537,9 @@ function formatDateRange({
     return formatter.format(date);
   };
   const start = formatDate(startDate);
-  if (endDate === void 0) return start;
+  if (endDate === void 0) {
+    return start;
+  }
   const end = formatDate(endDate);
   return `${start} - ${end}`;
 }
@@ -1562,7 +1624,6 @@ function safeUrl(url) {
   const trimmed = url.trim();
   const dangerousProtocols = /^(javascript|data|vbscript|file|about):/i;
   if (dangerousProtocols.test(trimmed)) {
-    console.warn(`[Security] Blocked dangerous URL: ${trimmed.slice(0, 50)}`);
     return null;
   }
   const safeProtocols = /^(https?|mailto|tel|sms|ftp):/i;
@@ -1578,7 +1639,6 @@ function safeUrl(url) {
   if (/^[a-z0-9][a-z0-9.-]+\.[a-z]{2,}$/i.test(trimmed)) {
     return `https://${trimmed}`;
   }
-  console.warn(`[Security] Uncertain URL safety: ${trimmed.slice(0, 50)}`);
   return trimmed;
 }
 const ContactContainer = dt.div`
@@ -6358,23 +6418,11 @@ function Resume({ resume }) {
   ] });
 }
 function render(resume) {
-  const sheet = new gt();
-  try {
-    const html = renderToString(
-      sheet.collectStyles(/* @__PURE__ */ jsx(Resume, { resume }))
-    );
-    const styles = sheet.getStyleTags();
-    return `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${resume.basics?.name || "Resume"} - Curriculum Vitae</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-  ${styles}
-  <style>
+  return renderResumeDocument(/* @__PURE__ */ jsx(Resume, { resume }), {
+    fonts: [
+      "https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap"
+    ],
+    headAfterStyles: `<style>
     * {
       box-sizing: border-box;
       margin: 0;
@@ -6393,15 +6441,12 @@ function render(resume) {
         margin: 0.75in;
       }
     }
-  </style>
-</head>
-<body>
-  ${html}
-</body>
-</html>`;
-  } finally {
-    sheet.seal();
-  }
+  </style>`,
+    lang: "en",
+    dir: "ltr",
+    title: `${resume.basics?.name || "Resume"} - Curriculum Vitae`,
+    includeTokensCss: false
+  });
 }
 export {
   render
