@@ -474,6 +474,21 @@ export const THEME_METADATA = {
       'plum',
     ],
   },
+  'field-researcher': {
+    name: 'Field Researcher',
+    description:
+      'Academic-meets-exploratory resume styled like a naturalist field notebook. Classic serif narrative, monospaced metadata margins, numbered log sections, and a calm teal-green accent on tinted paper. Tailored for research and sustainability roles.',
+    author: 'JSON Resume Team',
+    tags: [
+      'academic',
+      'research',
+      'serif',
+      'field-notes',
+      'teal',
+      'sustainability',
+      'scholarly',
+    ],
+  },
   'urban-techno': {
     name: 'Urban Techno',
     description:

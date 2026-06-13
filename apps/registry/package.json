@@ -74,6 +74,7 @@
     "jsonresume-theme-eloquent": "^4.1.0",
     "jsonresume-theme-even": "^0.18.1",
     "jsonresume-theme-executive-slate": "workspace:*",
+    "jsonresume-theme-field-researcher": "workspace:*",
     "jsonresume-theme-flat": "workspace:*",
     "jsonresume-theme-french-atelier": "workspace:*",
     "jsonresume-theme-government-standard": "workspace:*",
