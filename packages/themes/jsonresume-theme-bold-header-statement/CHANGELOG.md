@@ -1,5 +1,13 @@
 # jsonresume-theme-bold-header-statement
 
+## 1.1.3
+
+### Patch Changes
+
+- 2be531c: use @jsonresume/core/ssr renderResumeDocument
+- Updated dependencies [ff09f75]
+  - @jsonresume/core@0.3.1
+
 ## 1.1.2
 
 ### Patch Changes

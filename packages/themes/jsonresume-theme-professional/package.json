@@ -1,7 +1,7 @@
 {
   "private": false,
   "name": "@jsonresume/jsonresume-theme-professional",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "main": "./src/index.jsx",
   "license": "MIT",
   "devDependencies": {

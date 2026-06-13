@@ -1,5 +1,13 @@
 # jsonresume-theme-typewriter-modern
 
+## 1.1.3
+
+### Patch Changes
+
+- eb7f950: use @jsonresume/core/ssr renderResumeDocument
+- Updated dependencies [ff09f75]
+  - @jsonresume/core@0.3.1
+
 ## 1.1.2
 
 ### Patch Changes

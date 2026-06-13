@@ -1,5 +1,13 @@
 # jsonresume-theme-minimalist-grid
 
+## 0.2.3
+
+### Patch Changes
+
+- 390256c: use @jsonresume/core/ssr renderResumeDocument
+- Updated dependencies [ff09f75]
+  - @jsonresume/core@0.3.1
+
 ## 0.2.2
 
 ### Patch Changes

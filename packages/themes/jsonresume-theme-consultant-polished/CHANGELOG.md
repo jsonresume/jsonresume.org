@@ -1,5 +1,13 @@
 # @jsonresume/jsonresume-theme-consultant-polished
 
+## 1.0.3
+
+### Patch Changes
+
+- 229ed4b: use @jsonresume/core/ssr renderResumeDocument
+- Updated dependencies [ff09f75]
+  - @jsonresume/core@0.3.1
+
 ## 1.0.2
 
 ### Patch Changes

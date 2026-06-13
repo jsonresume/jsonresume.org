@@ -1,5 +1,12 @@
 # jsonresume-theme-reference
 
+## 0.2.3
+
+### Patch Changes
+
+- Updated dependencies [ff09f75]
+  - @jsonresume/core@0.3.1
+
 ## 0.2.2
 
 ### Patch Changes

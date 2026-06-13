@@ -1,5 +1,13 @@
 # jsonresume-theme-data-driven
 
+## 0.2.3
+
+### Patch Changes
+
+- d68a1b3: use @jsonresume/core/ssr renderResumeDocument
+- Updated dependencies [ff09f75]
+  - @jsonresume/core@0.3.1
+
 ## 0.2.2
 
 ### Patch Changes

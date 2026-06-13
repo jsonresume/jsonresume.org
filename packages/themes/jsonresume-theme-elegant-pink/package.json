@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-elegant-pink",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Professional storytelling resume theme with warm rose red tones, compelling narratives, and strong visual hierarchy for marketing and communications professionals",
   "type": "module",
   "main": "./dist/index.js",
