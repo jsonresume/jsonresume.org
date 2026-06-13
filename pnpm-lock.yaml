@@ -514,6 +514,9 @@ importers:
       jsonresume-theme-graph-paper-grid:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-graph-paper-grid
+      jsonresume-theme-industrial-engineer:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-industrial-engineer
       jsonresume-theme-investor-brief:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-investor-brief
@@ -1473,6 +1476,28 @@ importers:
         version: 5.4.21(@types/node@18.19.130)
 
   packages/themes/jsonresume-theme-graph-paper-grid:
+    dependencies:
+      '@jsonresume/core':
+        specifier: workspace:*
+        version: link:../../resume-core
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+      styled-components:
+        specifier: ^6.1.19
+        version: 6.1.19(react-dom@19.2.7)(react@19.2.7)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@18.19.130)
+
+  packages/themes/jsonresume-theme-industrial-engineer:
     dependencies:
       '@jsonresume/core':
         specifier: workspace:*
@@ -10247,8 +10272,8 @@ packages:
   /@types/babel__core@7.20.5:
     resolution: {integrity: sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==}
     dependencies:
-      '@babel/parser': 7.28.5
-      '@babel/types': 7.28.5
+      '@babel/parser': 7.29.7
+      '@babel/types': 7.29.7
       '@types/babel__generator': 7.27.0
       '@types/babel__template': 7.4.4
       '@types/babel__traverse': 7.28.0
@@ -11402,7 +11427,7 @@ packages:
       '@vitest/spy': 3.2.6
       estree-walker: 3.0.3
       magic-string: 0.30.21
-      vite: 5.4.21(@types/node@18.19.130)
+      vite: 5.4.21(@types/node@20.19.24)
     dev: true
 
   /@vitest/pretty-format@2.0.5:
@@ -14879,7 +14904,7 @@ packages:
     resolution: {integrity: sha512-nRCa7CK3VTrM2NmGkIy4cbK7IZlgBE/PYMn55rrXefr5xXDP0LdtfPnblFDoVdcAfslJ7or6iqAUnx0CCGIWQA==}
     dependencies:
       '@babel/runtime': 7.28.4
-      csstype: 3.1.3
+      csstype: 3.2.3
     dev: false
 
   /dom-serializer@1.4.1:

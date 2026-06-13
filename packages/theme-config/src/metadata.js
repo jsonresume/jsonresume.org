@@ -568,6 +568,24 @@ export const THEME_METADATA = {
       'growth',
     ],
   },
+  'industrial-engineer': {
+    name: 'Industrial Engineer',
+    description:
+      'Engineering-datasheet aesthetic with a precise grid, monospace technical labels, spec-table contact block, part-number section headers, and dimension-line rules. Drafting-blue with safety-orange accents for dense, legible data presentation.',
+    author: 'JSON Resume Team',
+    tags: [
+      'industrial',
+      'engineer',
+      'technical',
+      'datasheet',
+      'blueprint',
+      'monospace',
+      'grid',
+      'spec-table',
+      'blue',
+      'orange',
+    ],
+  },
 };
 
 // List of available theme names (derived from THEME_METADATA)
