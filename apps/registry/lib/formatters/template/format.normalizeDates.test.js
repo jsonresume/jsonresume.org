@@ -126,6 +126,50 @@ describe('format() normalizeDates', () => {
     const out = await renderedResume(resume);
     expect(out.work[0]).toEqual({ name: 'Co', position: 'Dev' });
   });
+
+  it('leaves a malformed (plain object) date value untouched instead of coercing to "[object Object]"', async () => {
+    // Regression: a non-Date object in a date field was String()-coerced to the
+    // literal "[object Object]", which would render as garbage. Such values are
+    // left as-is so the theme can decide how to handle them.
+    const bogus = { year: 2020, month: 3 };
+    const resume = {
+      basics: { name: 'X' },
+      work: [{ name: 'Co', startDate: bogus }],
+    };
+    const out = await renderedResume(resume);
+    expect(out.work[0].startDate).not.toBe('[object Object]');
+    expect(out.work[0].startDate).toEqual({ year: 2020, month: 3 });
+  });
+
+  it('leaves an array date value untouched instead of joining its elements', async () => {
+    // String([...]) silently joins array elements, mangling the value; the
+    // array is now left intact.
+    const resume = {
+      basics: { name: 'X' },
+      work: [{ name: 'Co', endDate: ['2020', '01'] }],
+    };
+    const out = await renderedResume(resume);
+    expect(out.work[0].endDate).toEqual(['2020', '01']);
+  });
+
+  it('leaves a null date value untouched', async () => {
+    const resume = {
+      basics: { name: 'X' },
+      education: [{ institution: 'U', endDate: null }],
+    };
+    const out = await renderedResume(resume);
+    expect(out.education[0].endDate).toBeNull();
+  });
+
+  it('still coerces real Date objects even though they are typeof object', async () => {
+    // Guard: the defensive change must not regress the core Date -> ISO path.
+    const resume = {
+      basics: { name: 'X' },
+      work: [{ name: 'Co', startDate: new Date('2021-03-15T10:00:00Z') }],
+    };
+    const out = await renderedResume(resume);
+    expect(out.work[0].startDate).toBe('2021-03-15');
+  });
 });
 
 describe('format() theme resolution and headers', () => {

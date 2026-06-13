@@ -24,9 +24,11 @@ function normalizeDates(resume) {
         for (const field of dateFields) {
           if (copy[field] instanceof Date) {
             copy[field] = copy[field].toISOString().split('T')[0];
-          } else if (copy[field] && typeof copy[field] === 'object') {
-            copy[field] = String(copy[field]);
           }
+          // Non-Date, non-string values (plain objects, arrays, etc.) are left
+          // untouched. Previously these were String()-coerced, which turned a
+          // malformed object date into the literal "[object Object]" and joined
+          // arrays into comma strings — mangling the value handed to the theme.
         }
         return copy;
       });
