@@ -15,13 +15,14 @@ describe('formatDateRange', () => {
     expect(formatDateRange({ startDate: undefined })).toBe('');
   });
 
-  it('BUGFIX: shows "Present" when endDate is undefined (missing)', () => {
-    // Previously a missing endDate rendered a single date with no separator.
-    // It now behaves like a null endDate: start + separator + present label.
+  it('renders a single date (no "Present") when endDate is undefined', () => {
+    // An omitted endDate is a point in time (award/certificate/publication
+    // date), NOT an ongoing range. It must render just the start with no
+    // separator and no "Present" — single-date theme sections depend on this.
     const out = formatDateRange({ startDate: '2020-01-15' });
     expect(out).toContain('2020');
-    expect(out).toContain('Present');
-    expect(out).toContain(' - ');
+    expect(out).not.toContain('Present');
+    expect(out).not.toContain(' - ');
   });
 
   it('shows "Present" for an ongoing role when endDate is null', () => {
@@ -31,8 +32,8 @@ describe('formatDateRange', () => {
     expect(out).toContain(' - ');
   });
 
-  it('renders the same string for undefined and null endDate', () => {
-    expect(formatDateRange({ startDate: '2020-01-15' })).toBe(
+  it('distinguishes undefined (single date) from null (Present)', () => {
+    expect(formatDateRange({ startDate: '2020-01-15' })).not.toBe(
       formatDateRange({ startDate: '2020-01-15', endDate: null })
     );
   });
@@ -80,8 +81,12 @@ describe('formatDateRange', () => {
     ).toContain('Now');
   });
 
-  it('returns an invalid start date string as-is, still tagged Present', () => {
-    expect(formatDateRange({ startDate: 'not-a-date' })).toBe(
+  it('returns an invalid start date string as-is (single date, undefined end)', () => {
+    expect(formatDateRange({ startDate: 'not-a-date' })).toBe('not-a-date');
+  });
+
+  it('tags an invalid start date with Present when endDate is explicitly null', () => {
+    expect(formatDateRange({ startDate: 'not-a-date', endDate: null })).toBe(
       'not-a-date - Present'
     );
   });

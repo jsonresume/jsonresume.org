@@ -113,9 +113,16 @@ export function formatDateRange({
 
   const start = formatDate(startDate);
 
-  // A missing endDate (null OR undefined) means the role is ongoing: render
-  // start + separator + "Present". Both cases flow through formatDate(endDate),
-  // which returns the localized present label for a falsy value.
+  // A genuinely absent endDate (key omitted -> undefined) is a single point in
+  // time (e.g. an award/certificate/publication date) and renders just the
+  // start. An explicit `null` endDate is the "ongoing" sentinel and renders
+  // start + separator + "Present" (formatDate returns the localized present
+  // label for a falsy-but-not-undefined value). This matches long-standing
+  // behavior; do not collapse the two — single-date sections depend on it.
+  if (endDate === undefined) {
+    return start;
+  }
+
   const end = formatDate(endDate);
 
   return `${start} - ${end}`;
