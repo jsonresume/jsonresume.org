@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-sidebar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Two-column sidebar resume theme with dark sidebar and light main content - ATS-friendly",
   "type": "module",
   "main": "./dist/index.js",

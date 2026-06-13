@@ -18,8 +18,8 @@
 
 import { createClient } from '@supabase/supabase-js';
 import logger from '../lib/logger.js';
+import { SUPABASE_URL } from '../lib/supabaseConfig.js';
 
-const SUPABASE_URL = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
 const GITHUB_GIST_URL = 'https://gist.githubusercontent.com';
 
 // Parse command line arguments

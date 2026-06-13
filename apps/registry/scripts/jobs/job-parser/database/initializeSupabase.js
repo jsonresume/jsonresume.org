@@ -4,7 +4,9 @@ const { createClient } = require('@supabase/supabase-js');
  * Initialize Supabase client with fallback for missing credentials
  */
 function initializeSupabase() {
-  const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
+  const {
+    SUPABASE_URL: supabaseUrl,
+  } = require('../../../../lib/supabaseConfig');
   const supabaseKey =
     process.env.SUPABASE_KEY || 'MISSING_KEY_USING_FILE_ONLY_MODE';
 

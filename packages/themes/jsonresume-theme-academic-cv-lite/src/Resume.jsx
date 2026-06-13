@@ -248,6 +248,7 @@ function Resume({ resume }) {
     volunteer = [],
     awards = [],
     publications = [],
+    certificates = [],
     languages = [],
     interests = [],
     references = [],
@@ -294,6 +295,19 @@ function Resume({ resume }) {
               )}
               {pub.summary && <WorkSummary>{pub.summary}</WorkSummary>}
             </PublicationItem>
+          ))}
+        </Section>
+      )}
+
+      {certificates?.length > 0 && (
+        <Section>
+          <StyledSectionTitle>Certificates</StyledSectionTitle>
+          {certificates.map((cert, index) => (
+            <AwardItem key={index}>
+              <AwardTitle>{cert.name}</AwardTitle>
+              {cert.issuer && <AwardAwarder>{cert.issuer}</AwardAwarder>}
+              {cert.date && <AwardDate>{cert.date}</AwardDate>}
+            </AwardItem>
           ))}
         </Section>
       )}

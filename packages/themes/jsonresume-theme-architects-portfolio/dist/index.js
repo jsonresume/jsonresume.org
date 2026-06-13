@@ -6204,6 +6204,7 @@ function Resume({ resume }) {
     projects = [],
     volunteer = [],
     awards = [],
+    certificates = [],
     publications = [],
     languages = [],
     interests = [],
@@ -6243,6 +6244,93 @@ function Resume({ resume }) {
         edu.institution && /* @__PURE__ */ jsx(Institution, { children: edu.institution }),
         (edu.studyType || edu.area) && /* @__PURE__ */ jsx(Degree, { children: edu.studyType && edu.area ? `${edu.studyType} in ${edu.area}` : edu.studyType || edu.area }),
         (edu.startDate || edu.endDate) && /* @__PURE__ */ jsx(EducationDate, { children: /* @__PURE__ */ jsx(DateRange, { startDate: edu.startDate, endDate: edu.endDate }) })
+      ] }, index))
+    ] }),
+    projects && projects.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
+      /* @__PURE__ */ jsx(SectionTitle, { children: "Projects" }),
+      projects.map((project, index) => /* @__PURE__ */ jsxs(WorkItem, { children: [
+        /* @__PURE__ */ jsxs(WorkHeader, { children: [
+          /* @__PURE__ */ jsxs("div", { children: [
+            project.name && /* @__PURE__ */ jsx(Position, { children: project.name }),
+            project.type && /* @__PURE__ */ jsx(Company, { children: project.type })
+          ] }),
+          (project.startDate || project.endDate) && /* @__PURE__ */ jsx(DateText, { children: /* @__PURE__ */ jsx(
+            DateRange,
+            {
+              startDate: project.startDate,
+              endDate: project.endDate
+            }
+          ) })
+        ] }),
+        project.description && /* @__PURE__ */ jsx(WorkSummary, { children: project.description }),
+        project.highlights && project.highlights.length > 0 && /* @__PURE__ */ jsx(Highlights, { children: project.highlights.map((highlight, i) => /* @__PURE__ */ jsx("li", { children: highlight }, i)) })
+      ] }, index))
+    ] }),
+    volunteer && volunteer.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
+      /* @__PURE__ */ jsx(SectionTitle, { children: "Volunteer" }),
+      volunteer.map((vol, index) => /* @__PURE__ */ jsxs(WorkItem, { children: [
+        /* @__PURE__ */ jsxs(WorkHeader, { children: [
+          /* @__PURE__ */ jsxs("div", { children: [
+            vol.position && /* @__PURE__ */ jsx(Position, { children: vol.position }),
+            vol.organization && /* @__PURE__ */ jsx(Company, { children: vol.organization })
+          ] }),
+          (vol.startDate || vol.endDate) && /* @__PURE__ */ jsx(DateText, { children: /* @__PURE__ */ jsx(
+            DateRange,
+            {
+              startDate: vol.startDate,
+              endDate: vol.endDate
+            }
+          ) })
+        ] }),
+        vol.summary && /* @__PURE__ */ jsx(WorkSummary, { children: vol.summary }),
+        vol.highlights && vol.highlights.length > 0 && /* @__PURE__ */ jsx(Highlights, { children: vol.highlights.map((highlight, i) => /* @__PURE__ */ jsx("li", { children: highlight }, i)) })
+      ] }, index))
+    ] }),
+    awards && awards.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
+      /* @__PURE__ */ jsx(SectionTitle, { children: "Awards" }),
+      awards.map((award, index) => /* @__PURE__ */ jsxs(EducationItem, { children: [
+        award.title && /* @__PURE__ */ jsx(Institution, { children: award.title }),
+        award.awarder && /* @__PURE__ */ jsx(Degree, { children: award.awarder }),
+        award.date && /* @__PURE__ */ jsx(EducationDate, { children: award.date }),
+        award.summary && /* @__PURE__ */ jsx(WorkSummary, { children: award.summary })
+      ] }, index))
+    ] }),
+    certificates && certificates.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
+      /* @__PURE__ */ jsx(SectionTitle, { children: "Certificates" }),
+      certificates.map((cert, index) => /* @__PURE__ */ jsxs(EducationItem, { children: [
+        cert.name && /* @__PURE__ */ jsx(Institution, { children: cert.name }),
+        cert.issuer && /* @__PURE__ */ jsx(Degree, { children: cert.issuer }),
+        cert.date && /* @__PURE__ */ jsx(EducationDate, { children: cert.date })
+      ] }, index))
+    ] }),
+    publications && publications.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
+      /* @__PURE__ */ jsx(SectionTitle, { children: "Publications" }),
+      publications.map((pub, index) => /* @__PURE__ */ jsxs(EducationItem, { children: [
+        pub.name && /* @__PURE__ */ jsx(Institution, { children: pub.name }),
+        pub.publisher && /* @__PURE__ */ jsx(Degree, { children: pub.publisher }),
+        pub.releaseDate && /* @__PURE__ */ jsx(EducationDate, { children: pub.releaseDate }),
+        pub.summary && /* @__PURE__ */ jsx(WorkSummary, { children: pub.summary })
+      ] }, index))
+    ] }),
+    languages && languages.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
+      /* @__PURE__ */ jsx(SectionTitle, { children: "Languages" }),
+      /* @__PURE__ */ jsx(SkillsGrid, { children: languages.map((lang, index) => /* @__PURE__ */ jsxs(SkillCategory, { children: [
+        lang.language && /* @__PURE__ */ jsx(SkillName, { children: lang.language }),
+        lang.fluency && /* @__PURE__ */ jsx(SkillTags, { children: lang.fluency })
+      ] }, index)) })
+    ] }),
+    interests && interests.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
+      /* @__PURE__ */ jsx(SectionTitle, { children: "Interests" }),
+      /* @__PURE__ */ jsx(SkillsGrid, { children: interests.map((interest, index) => /* @__PURE__ */ jsxs(SkillCategory, { children: [
+        interest.name && /* @__PURE__ */ jsx(SkillName, { children: interest.name }),
+        interest.keywords && interest.keywords.length > 0 && /* @__PURE__ */ jsx(SkillTags, { children: interest.keywords.join(", ") })
+      ] }, index)) })
+    ] }),
+    references && references.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
+      /* @__PURE__ */ jsx(SectionTitle, { children: "References" }),
+      references.map((ref, index) => /* @__PURE__ */ jsxs(EducationItem, { children: [
+        ref.name && /* @__PURE__ */ jsx(Institution, { children: ref.name }),
+        ref.reference && /* @__PURE__ */ jsx(WorkSummary, { children: ref.reference })
       ] }, index))
     ] })
   ] });

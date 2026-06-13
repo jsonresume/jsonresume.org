@@ -6327,6 +6327,7 @@ function Resume({ resume }) {
     skills,
     volunteer,
     awards,
+    certificates,
     publications,
     languages,
     interests,
@@ -6435,6 +6436,22 @@ function Resume({ resume }) {
         award.awarder && /* @__PURE__ */ jsx(Awarder, { children: award.awarder }),
         award.date && /* @__PURE__ */ jsx(SingleDate, { children: formatDateRange({ startDate: award.date }) }),
         award.summary && /* @__PURE__ */ jsx(Description, { children: award.summary })
+      ] }, index))
+    ] }),
+    certificates && certificates.length > 0 && /* @__PURE__ */ jsxs(ContentSection, { children: [
+      /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Certificates" }),
+      certificates.map((cert, index) => /* @__PURE__ */ jsxs(AwardItem, { children: [
+        cert.name && /* @__PURE__ */ jsx(AwardTitle, { children: cert.name }),
+        cert.issuer && /* @__PURE__ */ jsx(Awarder, { children: cert.issuer }),
+        cert.date && /* @__PURE__ */ jsx(SingleDate, { children: formatDateRange({ startDate: cert.date }) }),
+        cert.url && /* @__PURE__ */ jsx(ProjectUrl, { children: /* @__PURE__ */ jsx(
+          Link,
+          {
+            href: safeUrl(cert.url),
+            target: isExternalUrl(cert.url) ? "_blank" : void 0,
+            children: cert.url.replace(/^https?:\/\//, "")
+          }
+        ) })
       ] }, index))
     ] }),
     publications && publications.length > 0 && /* @__PURE__ */ jsxs(ContentSection, { children: [

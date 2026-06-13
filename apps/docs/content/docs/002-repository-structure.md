@@ -17,6 +17,8 @@ For details on build orchestration and task execution, see the Turbo Build syste
 
 The repository is structured as a monorepo managed by pnpm and Turbo Build. It contains multiple packages under `packages/` and `packages/themes/`, as well as applications under `apps/`. Each package and app has its own `package.json` defining dependencies, scripts, and exports. TypeScript configuration is layered with base configs extended by app- or package-specific `tsconfig.json` files.
 
+The 2026 org consolidation folded several previously standalone repositories into this monorepo. Most notably, the canonical JSON Resume schema now lives at `packages/schema` (published to npm as [`@jsonresume/schema`](https://www.npmjs.com/package/@jsonresume/schema), imported with full history from `jsonresume/resume-schema`), and the command-line tool now lives at `packages/cli` (revived and published to npm as [`resume-cli`](https://www.npmjs.com/package/resume-cli)). A Rust implementation of the schema lives at `packages/core-rust` (`json-resume-serde`). Three applications live under `apps/`: the hosted registry (`apps/registry`), the marketing site (`apps/homepage2`), and this documentation site (`apps/docs`).
+
 The build and development lifecycle is orchestrated by Turbo Build (`turbo.json`), which defines tasks, caching, and environment variables for the entire monorepo. Documentation generation is configured via Docwright (`docwright.config.yaml`), which scans selected directories and outputs generated MDX content into the docs app.
 
 ```mermaid
@@ -30,10 +32,17 @@ flowchart TD
     Root --> Themes["packages/themes/*"]
 
     Apps --> Registry["apps/registry"]
+    Apps --> Homepage["apps/homepage2"]
+    Apps --> Docs["apps/docs"]
+    Packages --> Schema["packages/schema"]
+    Packages --> CLI["packages/cli"]
+    Packages --> CoreRust["packages/core-rust"]
     Packages --> Core["packages/resume-core"]
     Packages --> UI["packages/ui"]
     Packages --> ATSValidator["packages/ats-validator"]
     Packages --> JobSearch["packages/job-search"]
+    Packages --> Converters["packages/converters/*"]
+    Packages --> ThemeConfigPkg["packages/theme-config"]
     Packages --> ESLintConfig["packages/eslint-config-custom"]
     Packages --> TSConfig["packages/tsconfig"]
     Themes --> ThemePackages["packages/themes/*"]
@@ -150,6 +159,14 @@ The registry app is a Next.js application with Prisma integration, responsible f
 
 Developers interact with this app by running the scripts for development, build, linting, testing, and database client generation. The TypeScript config ensures type safety and module resolution aligned with Next.js conventions.
 
+## Application: Marketing Site (`apps/homepage2`)
+
+The `homepage2` app is the JSON Resume marketing site served at `jsonresume.org`. It is a Next.js app that introduces the project, the schema, and the ecosystem of tools and themes. Its `dev` script defaults to port 3002 (the same default as the docs app), so the two are run one at a time during development.
+
+## Application: Documentation Site (`apps/docs`)
+
+The `docs` app is this documentation site, served at `docs.jsonresume.org`. It is built with Fumadocs on top of Next.js, authoring content as MDX under `apps/docs/content/docs`. The build is a static export (`output: 'export'` in `next.config.mjs`). See the Documentation Site page for details on its toolchain and deployment.
+
 ## UI Package (`packages/ui/package.json` and `tsconfig.json`)
 
 The UI package provides shared React components and styles used across apps and themes.
@@ -212,7 +229,7 @@ This package provides utilities for validating Applicant Tracking System (ATS) c
 
 ### Key Points
 
-- Named `@resume/ats-validator`.
+- Named `@jsonresume/ats-validator`.
 - Exports a module with main entry `src/index.js`.
 - Depends on `cheerio` for HTML parsing.
 - Dev dependency on Vitest for testing.
@@ -221,6 +238,62 @@ This package provides utilities for validating Applicant Tracking System (ATS) c
 ### Interaction
 
 Used to validate that generated resume HTML meets ATS requirements, ensuring compatibility with job application systems.
+
+## Schema Package (`packages/schema/package.json`)
+
+This is the canonical JSON Resume schema and validator, published publicly to npm as `@jsonresume/schema`. It was imported with full history from the former standalone `jsonresume/resume-schema` repository during the 2026 consolidation.
+
+### Key Points
+
+- Named `@jsonresume/schema`; not private (published to npm).
+- Ships `schema.json` (the canonical resume schema), `job-schema.json`, `sample.resume.json`, `sample.job.json`, and a `validator.js` entry point (`main`).
+- `schema.json` is a JSON Schema **draft-07** document with `additionalProperties: true` at the root and within nested objects — extra/custom fields are allowed.
+- `validator.js` exposes a `validate(resumeJson, callback)` API backed by the `jsonschema` library, plus the raw `schema` and `jobSchema` objects.
+- `validate` script runs `ajv validate` against the draft-07 metaschema; unit tests run with `tape`.
+
+### Interaction
+
+This package is the single source of truth for the resume structure. The registry app and `resume-cli` both depend on it (`workspace:*`). The Rust crate in `packages/core-rust` mirrors it, and downstream consumers install it from npm.
+
+## CLI Package (`packages/cli/package.json`)
+
+The revived JSON Resume command-line tool, published publicly to npm as `resume-cli`. The old standalone `jsonresume/resume-cli` repository is archived; the tool now lives here and was modernized for current Node.js.
+
+### Key Points
+
+- Named `resume-cli` (binary: `resume`); version 3.x, not private.
+- Requires Node.js 18 or newer (`engines.node: ">=18"`).
+- Commands: `init`, `validate`, `export`, and `serve` (see `lib/`).
+- `validate` uses **Ajv** (`ajv` + `ajv-formats`, `strict: false`) to check a `resume.json` against the draft-07 schema resolved from `@jsonresume/schema/schema.json`.
+- Depends on `@jsonresume/schema` (`workspace:*`); built with Babel (`lib` → `build`); tested with Jest.
+- Release tooling note: the old semantic-release config that previously lived in this package has been removed — Changesets is now the single release path (see below).
+
+### Interaction
+
+End users install `resume-cli` globally to initialize, validate, export, and serve `resume.json` files. It consumes the canonical schema package for validation.
+
+## Rust Core Package (`packages/core-rust`)
+
+A Rust implementation of the JSON Resume schema, providing strongly typed structs for serialization, deserialization, and validation.
+
+### Key Points
+
+- Cargo crate `json-resume-serde` (this is a Rust crate, not a Node package — it has a `Cargo.toml`, not a `package.json`, so it is not part of the pnpm workspace graph).
+- Built on `serde` and `serde_valid`; mirrors the canonical schema in `packages/schema`.
+- Publishing to crates.io is TBD; consume via a Git or path dependency for now.
+
+### Interaction
+
+Provides a type-safe Rust path for parsing, validating, and re-serializing `resume.json`. Its structs are kept in sync with `packages/schema` by hand when the schema changes.
+
+## Converters (`packages/converters/*`)
+
+Standalone format converters for JSON Resume data.
+
+### Key Points
+
+- Currently contains `@jsonresume/jsonresume-to-rendercv`, a published CLI that converts a JSON Resume into the RenderCV YAML format.
+- Each converter is its own npm package with its own `package.json` and `bin`.
 
 ## Job Search CLI Package (`packages/job-search/package.json`)
 
@@ -282,12 +355,23 @@ The `packages/tsconfig` package provides shared TypeScript configuration presets
 ## Summary of Key Scripts and Build Flow
 
 - Root scripts invoke Turbo Build to run tasks across packages.
-- Each package defines its own build, lint, test, and publish scripts.
+- Each package defines its own build, lint, and test scripts. npm publishing is centralized through Changesets (see Release Process below) rather than per-package publish scripts.
 - The registry app uses Prisma for database client generation and Next.js for SSR.
 - Themes use Vite for building React-based resume themes.
 - UI package uses Storybook for component development.
 - Testing is done with Vitest and Playwright for unit and end-to-end tests.
 - Docwright generates documentation from source code with AI assistance.
+
+## Release Process (Changesets)
+
+npm publishing for the monorepo's public packages (e.g. `@jsonresume/schema`, `resume-cli`) is managed by [Changesets](https://github.com/changesets/changesets), configured in `.changeset/config.json` (base branch `master`, `access: public`). This replaced the previous `release.yml` workflow and the semantic-release config that used to live in the CLI package — Changesets is now the single release path.
+
+The `.github/workflows/release-packages.yml` workflow runs on every push to `master`:
+
+1. If there are pending changesets, it opens or updates a "Version Packages" pull request (`pnpm changeset version`).
+2. When that PR is merged (no pending changesets remain), it publishes any unpublished package versions to npm (`pnpm changeset publish`).
+
+Publishing uses npm Trusted Publishing (OIDC) where a package has registered this repo+workflow as a trusted publisher, and falls back to an `NPM_TOKEN` secret otherwise. See `docs/RELEASING.md` for details.
 
 ## Key Relationships
 

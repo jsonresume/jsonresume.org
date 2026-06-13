@@ -9,6 +9,7 @@ import {
   VolunteerSection,
   AwardsSection,
   PublicationsSection,
+  CertificatesSection,
   LanguagesSection,
   InterestsSection,
   ReferencesSection,
@@ -257,6 +258,7 @@ function Resume({ resume }) {
     volunteer = [],
     awards = [],
     publications = [],
+    certificates = [],
     languages = [],
     interests = [],
     references = [],
@@ -284,6 +286,7 @@ function Resume({ resume }) {
       <VolunteerSection volunteer={volunteer} />
       <AwardsSection awards={awards} />
       <PublicationsSection publications={publications} />
+      <CertificatesSection certificates={certificates} />
       <LanguagesSection languages={languages} />
       <InterestsSection interests={interests} />
       <ReferencesSection references={references} />

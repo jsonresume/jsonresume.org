@@ -43,7 +43,7 @@ const Name = styled.h1`
 const Title = styled.p`
   font-size: 1.25rem;
   font-weight: 300;
-  color: #7f8c8d;
+  color: #5f6c6d;
   margin: 0 0 20px 0;
 `;
 
@@ -121,7 +121,7 @@ const Company = styled.div`
 
 const StyledDateRange = styled(DateRange)`
   font-size: 0.875rem;
-  color: #95a5a6;
+  color: #647274;
   font-weight: 300;
 `;
 
@@ -174,7 +174,7 @@ const Institution = styled.h3`
 
 const Degree = styled.div`
   font-size: 0.9375rem;
-  color: #7f8c8d;
+  color: #5f6c6d;
   font-weight: 300;
   margin-bottom: 4px;
 `;
@@ -218,7 +218,7 @@ const ContactLabel = styled.div`
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: #95a5a6;
+  color: #647274;
   margin-bottom: 4px;
   font-weight: 600;
 `;
@@ -259,7 +259,7 @@ const LanguageName = styled.span`
 `;
 
 const LanguageFluency = styled.span`
-  color: #7f8c8d;
+  color: #5f6c6d;
   font-weight: 300;
   margin-left: 8px;
 `;
@@ -272,9 +272,11 @@ function Resume({ resume }) {
     skills,
     volunteer,
     awards,
+    certificates,
     publications,
     languages,
     interests,
+    references,
     projects,
   } = resume;
 
@@ -511,6 +513,107 @@ function Resume({ resume }) {
                   {award.awarder && <Degree>{award.awarder}</Degree>}
                   {award.date && <StyledDateRange startDate={award.date} />}
                   {award.summary && <Description>{award.summary}</Description>}
+                </EducationItem>
+              ))}
+            </StyledSection>
+          )}
+
+          {/* Certificates */}
+          {certificates && certificates.length > 0 && (
+            <StyledSection>
+              <StyledSectionTitle>Certificates</StyledSectionTitle>
+              {certificates.map((cert, index) => (
+                <EducationItem key={index}>
+                  {cert.name && (
+                    <Institution>
+                      {cert.url ? (
+                        <Link
+                          href={safeUrl(cert.url)}
+                          target={
+                            isExternalUrl(cert.url) ? '_blank' : undefined
+                          }
+                        >
+                          {cert.name}
+                        </Link>
+                      ) : (
+                        cert.name
+                      )}
+                    </Institution>
+                  )}
+                  {cert.issuer && <Degree>{cert.issuer}</Degree>}
+                  {cert.date && <StyledDateRange startDate={cert.date} />}
+                </EducationItem>
+              ))}
+            </StyledSection>
+          )}
+
+          {/* Publications */}
+          {publications && publications.length > 0 && (
+            <StyledSection>
+              <StyledSectionTitle>Publications</StyledSectionTitle>
+              {publications.map((pub, index) => (
+                <EducationItem key={index}>
+                  {pub.name && (
+                    <Institution>
+                      {pub.url ? (
+                        <Link
+                          href={safeUrl(pub.url)}
+                          target={isExternalUrl(pub.url) ? '_blank' : undefined}
+                        >
+                          {pub.name}
+                        </Link>
+                      ) : (
+                        pub.name
+                      )}
+                    </Institution>
+                  )}
+                  {pub.publisher && <Degree>{pub.publisher}</Degree>}
+                  {pub.releaseDate && (
+                    <StyledDateRange startDate={pub.releaseDate} />
+                  )}
+                  {pub.summary && <Description>{pub.summary}</Description>}
+                </EducationItem>
+              ))}
+            </StyledSection>
+          )}
+
+          {/* Volunteer */}
+          {volunteer && volunteer.length > 0 && (
+            <StyledSection>
+              <StyledSectionTitle>Volunteer</StyledSectionTitle>
+              {volunteer.map((vol, index) => (
+                <ExperienceItem key={index}>
+                  <ExperienceHeader>
+                    {vol.position && <Position>{vol.position}</Position>}
+                    {vol.organization && <Company>{vol.organization}</Company>}
+                    <StyledDateRange
+                      startDate={vol.startDate}
+                      endDate={vol.endDate}
+                    />
+                  </ExperienceHeader>
+
+                  {vol.summary && <Description>{vol.summary}</Description>}
+
+                  {vol.highlights && vol.highlights.length > 0 && (
+                    <Highlights>
+                      {vol.highlights.map((highlight, i) => (
+                        <Highlight key={i}>{highlight}</Highlight>
+                      ))}
+                    </Highlights>
+                  )}
+                </ExperienceItem>
+              ))}
+            </StyledSection>
+          )}
+
+          {/* References */}
+          {references && references.length > 0 && (
+            <StyledSection>
+              <StyledSectionTitle>References</StyledSectionTitle>
+              {references.map((ref, index) => (
+                <EducationItem key={index}>
+                  {ref.name && <Institution>{ref.name}</Institution>}
+                  {ref.reference && <Description>{ref.reference}</Description>}
                 </EducationItem>
               ))}
             </StyledSection>

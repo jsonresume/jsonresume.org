@@ -10,22 +10,51 @@ env:
   PNPM_VERSION: '8.15.9'
 
 jobs:
+  # Lightweight guard: the registry Supabase project is currently unreachable
+  # (see issue #332). When it is down, skip the pipeline cleanly instead of
+  # burning ~60 min of Actions minutes on a run that silently inserts 0 rows.
+  # This job self-heals: once Supabase resolves again, supabase_up flips to
+  # 'true' and the pipeline runs as normal.
+  preflight:
+    name: Supabase preflight (#332)
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    outputs:
+      supabase_up: ${{ steps.check.outputs.supabase_up }}
+    steps:
+      - name: Check Supabase reachability
+        id: check
+        run: |
+          URL="https://itxuhvvwryeuzuyihpkp.supabase.co/rest/v1/"
+          # A live Supabase project answers with an HTTP status (e.g. 401
+          # without an apikey). 000 means DNS/connect failure => project down.
+          CODE=$(curl -s -o /dev/null -m 15 -w "%{http_code}" "$URL" || echo "000")
+          echo "Supabase health probe returned HTTP $CODE"
+          if [ "$CODE" = "000" ]; then
+            echo "supabase_up=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Supabase project is unreachable (see issue #332). Skipping the HN jobs pipeline with a neutral status. This job will self-heal once the project is restored."
+          else
+            echo "supabase_up=true" >> "$GITHUB_OUTPUT"
+          fi
+
   process_jobs:
     name: Process HN Jobs Pipeline
+    needs: preflight
+    if: needs.preflight.outputs.supabase_up == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v6
         with:
           version: ${{ env.PNPM_VERSION }}
 
@@ -35,7 +64,7 @@ jobs:
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
       - name: Setup pnpm cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ env.STORE_PATH }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -173,7 +202,7 @@ jobs:
 
       - name: Upload logs as artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: job-processing-logs-${{ github.run_number }}
           path: |
@@ -184,7 +213,7 @@ jobs:
 
       - name: Create issue on repeated failure
         if: failure() && github.event_name == 'schedule'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             // Check if there's already an open issue for pipeline failures

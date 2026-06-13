@@ -14,7 +14,7 @@ Changing the style of your resume can be done easily in a few seconds because al
     <div class="theme">
       <div class="row">
         <div class="col-sm-12 col-xs-6">
-          <a href="https://themes.jsonresume.org/theme/elegant">
+          <a href="https://registry.jsonresume.org/theme/elegant">
             <img style="border: 1px solid #ebebeb; border-radius: 4px; height: 129px;" src="/img/themes/elegant.jpeg">
           </a>
         </div>
@@ -28,7 +28,7 @@ Changing the style of your resume can be done easily in a few seconds because al
     <div class="theme">
       <div class="row">
         <div class="col-sm-12 col-xs-6">
-          <a href="https://themes.jsonresume.org/theme/kendall">
+          <a href="https://registry.jsonresume.org/theme/kendall">
             <img style="border: 1px solid #ebebeb; border-radius: 4px; height: 129px;" src="/img/themes/kendall.jpeg">
           </a>
         </div>
@@ -42,7 +42,7 @@ Changing the style of your resume can be done easily in a few seconds because al
     <div class="theme">
       <div class="row">
         <div class="col-sm-12 col-xs-6">
-          <a href="https://themes.jsonresume.org/theme/paper">
+          <a href="https://registry.jsonresume.org/theme/paper">
             <img style="border: 1px solid #ebebeb; border-radius: 4px; height: 129px;" src="/img/themes/paper.jpeg">
           </a>
         </div>

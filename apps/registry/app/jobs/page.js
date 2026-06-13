@@ -1,9 +1,10 @@
 import { Suspense } from 'react';
 import { logger } from '@/lib/logger';
 import { createClient } from '@supabase/supabase-js';
+import { SUPABASE_URL } from '@/lib/supabaseConfig';
 import ClientJobBoard from './ClientJobBoard';
 
-const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
+const supabaseUrl = SUPABASE_URL;
 
 // Force dynamic rendering - Next.js route config
 export const dynamicParams = true;

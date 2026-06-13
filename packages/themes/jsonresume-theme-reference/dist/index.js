@@ -6096,13 +6096,14 @@ function Resume({ resume }) {
     skills = [],
     volunteer = [],
     awards = [],
+    certificates = [],
     publications = [],
     languages = [],
     interests = [],
     references = [],
     projects = []
   } = resume;
-  return /* @__PURE__ */ jsxs(Layout, { children: [
+  return /* @__PURE__ */ jsxs(Layout, { as: "main", children: [
     basics && /* @__PURE__ */ jsxs(Header, { children: [
       /* @__PURE__ */ jsx(Name, { children: basics.name }),
       basics.label && /* @__PURE__ */ jsx(Label, { children: basics.label }),
@@ -6277,6 +6278,27 @@ function Resume({ resume }) {
               )
             ] })
           ] })
+        },
+        index2
+      ))
+    ] }),
+    certificates.length > 0 && /* @__PURE__ */ jsxs(Section, { id: "certificates", children: [
+      /* @__PURE__ */ jsx(SectionTitle, { children: "Certificates" }),
+      certificates.map((cert, index2) => /* @__PURE__ */ jsx(
+        ListItem,
+        {
+          title: cert.name,
+          subtitle: cert.issuer,
+          dateRange: cert.date,
+          description: cert.url && safeUrl(cert.url) ? /* @__PURE__ */ jsx(
+            "a",
+            {
+              href: safeUrl(cert.url),
+              target: "_blank",
+              rel: getLinkRel(cert.url, true),
+              children: cert.url
+            }
+          ) : void 0
         },
         index2
       ))

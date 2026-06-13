@@ -56,7 +56,7 @@ const ContactWrapper = styled.div`
   flex-wrap: wrap;
   gap: 16px;
   font-size: 13px;
-  color: #9ca3af;
+  color: #6b7280;
   letter-spacing: 0.5px;
 `;
 
@@ -89,7 +89,7 @@ const MainSection = styled(Section)`
 const MainSectionTitle = styled(SectionTitle)`
   font-size: 12px;
   font-weight: 500;
-  color: #9ca3af;
+  color: #6b7280;
   margin: 0 0 32px 0;
   text-transform: uppercase;
   letter-spacing: 2px;
@@ -122,7 +122,7 @@ const WorkTitle = styled.h3`
 
 const WorkMeta = styled.div`
   font-size: 12px;
-  color: #9ca3af;
+  color: #6b7280;
   font-weight: 400;
   letter-spacing: 0.5px;
 `;
@@ -234,6 +234,7 @@ function Resume({ resume }) {
     projects = [],
     volunteer = [],
     awards = [],
+    certificates = [],
     publications = [],
     languages = [],
     interests = [],
@@ -415,11 +416,36 @@ function Resume({ resume }) {
                   <div
                     style={{
                       fontSize: '12px',
-                      color: '#9ca3af',
+                      color: '#6b7280',
                       marginTop: '4px',
                     }}
                   >
                     {award.date}
+                  </div>
+                )}
+              </SimpleItem>
+            ))}
+          </SimpleList>
+        </MainSection>
+      )}
+
+      {certificates.length > 0 && (
+        <MainSection>
+          <MainSectionTitle>Certificates</MainSectionTitle>
+          <SimpleList>
+            {certificates.map((cert, index) => (
+              <SimpleItem key={index}>
+                <strong>{cert.name}</strong>
+                {cert.issuer && ` — ${cert.issuer}`}
+                {cert.date && (
+                  <div
+                    style={{
+                      fontSize: '12px',
+                      color: '#6b7280',
+                      marginTop: '4px',
+                    }}
+                  >
+                    {cert.date}
                   </div>
                 )}
               </SimpleItem>
@@ -440,7 +466,7 @@ function Resume({ resume }) {
                   <div
                     style={{
                       fontSize: '12px',
-                      color: '#9ca3af',
+                      color: '#6b7280',
                       marginTop: '4px',
                     }}
                   >

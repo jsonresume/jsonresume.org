@@ -315,6 +315,9 @@ function Resume({ resume }) {
     references = [],
     projects = [],
     awards = [],
+    certificates = [],
+    publications = [],
+    volunteer = [],
     interests = [],
   } = resume;
 
@@ -543,6 +546,45 @@ function Resume({ resume }) {
           </MainSection>
         )}
 
+        {/* Volunteer Section */}
+        {volunteer.length > 0 && (
+          <MainSection>
+            <MainSectionTitle>VOLUNTEER</MainSectionTitle>
+            {volunteer.map((vol, index) => (
+              <WorkItem key={index}>
+                <WorkHeader>
+                  <div>
+                    <WorkTitle>{vol.organization}</WorkTitle>
+                    <WorkCompany>{vol.position}</WorkCompany>
+                  </div>
+                  <WorkDate>
+                    {vol.startDate && (
+                      <>
+                        {new Date(vol.startDate).getFullYear()} -{' '}
+                        {vol.endDate
+                          ? new Date(vol.endDate).getFullYear()
+                          : 'PRESENT'}
+                      </>
+                    )}
+                  </WorkDate>
+                </WorkHeader>
+                {vol.summary && (
+                  <p style={{ marginBottom: '10px', color: '#4a4a4a' }}>
+                    {vol.summary}
+                  </p>
+                )}
+                {vol.highlights && vol.highlights.length > 0 && (
+                  <WorkDescription>
+                    {vol.highlights.map((highlight, idx) => (
+                      <li key={idx}>{highlight}</li>
+                    ))}
+                  </WorkDescription>
+                )}
+              </WorkItem>
+            ))}
+          </MainSection>
+        )}
+
         {/* Awards Section */}
         {awards.length > 0 && (
           <MainSection>
@@ -561,6 +603,77 @@ function Resume({ resume }) {
                 {award.summary && (
                   <p style={{ marginTop: '8px', color: '#4a4a4a' }}>
                     {award.summary}
+                  </p>
+                )}
+              </div>
+            ))}
+          </MainSection>
+        )}
+
+        {/* Certificates Section */}
+        {certificates.length > 0 && (
+          <MainSection>
+            <MainSectionTitle>CERTIFICATES</MainSectionTitle>
+            {certificates.map((cert, index) => (
+              <div
+                key={index}
+                style={{ marginBottom: '20px', paddingLeft: '25px' }}
+              >
+                <WorkTitle>
+                  {cert.url ? (
+                    <a
+                      href={safeUrl(cert.url)}
+                      target="_blank"
+                      rel={getLinkRel(cert.url, true)}
+                      style={{ color: '#1e3a52' }}
+                    >
+                      {cert.name}
+                    </a>
+                  ) : (
+                    cert.name
+                  )}
+                </WorkTitle>
+                <WorkCompany>
+                  {cert.issuer}
+                  {cert.date &&
+                    ` - ${new Date(cert.date).toLocaleDateString()}`}
+                </WorkCompany>
+              </div>
+            ))}
+          </MainSection>
+        )}
+
+        {/* Publications Section */}
+        {publications.length > 0 && (
+          <MainSection>
+            <MainSectionTitle>PUBLICATIONS</MainSectionTitle>
+            {publications.map((pub, index) => (
+              <div
+                key={index}
+                style={{ marginBottom: '20px', paddingLeft: '25px' }}
+              >
+                <WorkTitle>
+                  {pub.url ? (
+                    <a
+                      href={safeUrl(pub.url)}
+                      target="_blank"
+                      rel={getLinkRel(pub.url, true)}
+                      style={{ color: '#1e3a52' }}
+                    >
+                      {pub.name}
+                    </a>
+                  ) : (
+                    pub.name
+                  )}
+                </WorkTitle>
+                <WorkCompany>
+                  {pub.publisher}
+                  {pub.releaseDate &&
+                    ` - ${new Date(pub.releaseDate).toLocaleDateString()}`}
+                </WorkCompany>
+                {pub.summary && (
+                  <p style={{ marginTop: '8px', color: '#4a4a4a' }}>
+                    {pub.summary}
                   </p>
                 )}
               </div>

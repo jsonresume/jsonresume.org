@@ -6153,7 +6153,7 @@ const SkillCategory = dt.div`
   border-radius: 6px;
   border-left: 3px solid #0066cc;
 `;
-const SkillName = dt.h4`
+const SkillName = dt.h3`
   font-size: 15px;
   font-weight: 600;
   color: #111827;
@@ -6174,11 +6174,12 @@ function Resume({ resume }) {
     volunteer = [],
     awards = [],
     publications = [],
+    certificates = [],
     languages = [],
     interests = [],
     references = []
   } = resume;
-  return /* @__PURE__ */ jsxs(Layout, { children: [
+  return /* @__PURE__ */ jsxs(Layout, { as: "main", children: [
     /* @__PURE__ */ jsxs(Header, { children: [
       /* @__PURE__ */ jsx(Name, { children: basics.name }),
       basics.label && /* @__PURE__ */ jsx(Label, { children: basics.label }),
@@ -6269,6 +6270,17 @@ function Resume({ resume }) {
         ] }),
         pub.releaseDate && /* @__PURE__ */ jsx(EducationDate, { children: pub.releaseDate }),
         pub.summary && /* @__PURE__ */ jsx(WorkSummary, { children: pub.summary })
+      ] }, index))
+    ] }),
+    certificates?.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
+      /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Certificates" }),
+      certificates.map((cert, index) => /* @__PURE__ */ jsxs(EducationItem, { children: [
+        /* @__PURE__ */ jsx(Institution, { children: cert.name }),
+        cert.issuer && /* @__PURE__ */ jsxs(Degree, { children: [
+          "Issued by ",
+          cert.issuer
+        ] }),
+        cert.date && /* @__PURE__ */ jsx(EducationDate, { children: cert.date })
       ] }, index))
     ] }),
     languages?.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [

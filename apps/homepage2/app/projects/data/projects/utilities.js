@@ -34,7 +34,7 @@ export const projects = [
     name: 'jsonresume-nix',
     description:
       'Provides a Nix-based environment for working with JSON Resume, enabling users to build and develop JSON Resume projects with Nix package manager.',
-    link: 'https://github.com/TaserudConsulting/jsonresume-nix',
+    link: 'https://github.com/etu/jsonresume-nix',
     category: 'images',
     language: 'Nix',
   },

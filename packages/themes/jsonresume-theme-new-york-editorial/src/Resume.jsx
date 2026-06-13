@@ -156,7 +156,7 @@ const Company = styled.span`
 
 const StyledDateRange = styled(DateRange)`
   font-size: 15px;
-  color: #777777;
+  color: #6e6e6e;
   font-variant-numeric: oldstyle-nums;
 `;
 
@@ -223,7 +223,7 @@ const Institution = styled.span`
 
 const StudyType = styled.div`
   font-size: 15px;
-  color: #777777;
+  color: #6e6e6e;
   margin-top: 6px;
 `;
 
@@ -311,7 +311,7 @@ const ItemTitle = styled.h4`
 
 const ItemMeta = styled.div`
   font-size: 15px;
-  color: #777777;
+  color: #6e6e6e;
   margin-bottom: 8px;
   font-style: italic;
 `;
@@ -338,6 +338,7 @@ function Resume({ resume }) {
     projects = [],
     volunteer = [],
     awards = [],
+    certificates = [],
     publications = [],
     languages = [],
     interests = [],
@@ -509,6 +510,29 @@ function Resume({ resume }) {
                 {award.summary && (
                   <ItemDescription>{award.summary}</ItemDescription>
                 )}
+              </SimpleItem>
+            ))}
+          </SimpleList>
+        </StyledSection>
+      )}
+
+      {certificates && certificates.length > 0 && (
+        <StyledSection>
+          <StyledSectionTitle>Certificates</StyledSectionTitle>
+          <SimpleList>
+            {certificates.map((cert, index) => (
+              <SimpleItem key={index}>
+                <ItemTitle>
+                  {cert.url ? (
+                    <Link href={cert.url}>{cert.name}</Link>
+                  ) : (
+                    cert.name
+                  )}
+                </ItemTitle>
+                <ItemMeta>
+                  {cert.issuer}
+                  {cert.date && <> • {cert.date}</>}
+                </ItemMeta>
               </SimpleItem>
             ))}
           </SimpleList>

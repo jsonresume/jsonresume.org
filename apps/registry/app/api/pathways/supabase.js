@@ -1,8 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-
-const SUPABASE_URL =
-  process.env.NEXT_PUBLIC_SUPABASE_URL ||
-  'https://itxuhvvwryeuzuyihpkp.supabase.co';
+import { SUPABASE_URL } from '@/lib/supabaseConfig';
 
 export function getSupabase() {
   if (!process.env.SUPABASE_KEY) {

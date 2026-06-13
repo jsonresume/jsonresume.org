@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { SUPABASE_URL } from '@/lib/supabaseConfig';
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { embed } from 'ai';
@@ -8,7 +9,7 @@ import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
-const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
+const supabaseUrl = SUPABASE_URL;
 
 function getServiceSupabase() {
   return createClient(supabaseUrl, process.env.SUPABASE_KEY);

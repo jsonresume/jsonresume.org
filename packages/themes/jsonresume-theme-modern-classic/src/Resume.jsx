@@ -168,7 +168,7 @@ const SkillCategory = styled.div`
   border-left: 3px solid #0066cc;
 `;
 
-const SkillName = styled.h4`
+const SkillName = styled.h3`
   font-size: 15px;
   font-weight: 600;
   color: #111827;
@@ -191,13 +191,14 @@ function Resume({ resume }) {
     volunteer = [],
     awards = [],
     publications = [],
+    certificates = [],
     languages = [],
     interests = [],
     references = [],
   } = resume;
 
   return (
-    <Layout>
+    <Layout as="main">
       <Header>
         <Name>{basics.name}</Name>
         {basics.label && <Label>{basics.label}</Label>}
@@ -344,6 +345,19 @@ function Resume({ resume }) {
                 <EducationDate>{pub.releaseDate}</EducationDate>
               )}
               {pub.summary && <WorkSummary>{pub.summary}</WorkSummary>}
+            </EducationItem>
+          ))}
+        </Section>
+      )}
+
+      {certificates?.length > 0 && (
+        <Section>
+          <StyledSectionTitle>Certificates</StyledSectionTitle>
+          {certificates.map((cert, index) => (
+            <EducationItem key={index}>
+              <Institution>{cert.name}</Institution>
+              {cert.issuer && <Degree>Issued by {cert.issuer}</Degree>}
+              {cert.date && <EducationDate>{cert.date}</EducationDate>}
             </EducationItem>
           ))}
         </Section>

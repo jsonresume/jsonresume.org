@@ -6024,7 +6024,7 @@ const Name = dt.h1`
 const Title = dt.p`
   font-size: 1.25rem;
   font-weight: 300;
-  color: #7f8c8d;
+  color: #5f6c6d;
   margin: 0 0 20px 0;
 `;
 const Summary = dt.p`
@@ -6091,7 +6091,7 @@ const Company = dt.div`
 `;
 const StyledDateRange = dt(DateRange)`
   font-size: 0.875rem;
-  color: #95a5a6;
+  color: #647274;
   font-weight: 300;
 `;
 const Description = dt.p`
@@ -6138,7 +6138,7 @@ const Institution = dt.h3`
 `;
 const Degree = dt.div`
   font-size: 0.9375rem;
-  color: #7f8c8d;
+  color: #5f6c6d;
   font-weight: 300;
   margin-bottom: 4px;
 `;
@@ -6177,7 +6177,7 @@ const ContactLabel = dt.div`
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: #95a5a6;
+  color: #647274;
   margin-bottom: 4px;
   font-weight: 600;
 `;
@@ -6212,7 +6212,7 @@ const LanguageName = dt.span`
   color: #2c3e50;
 `;
 const LanguageFluency = dt.span`
-  color: #7f8c8d;
+  color: #5f6c6d;
   font-weight: 300;
   margin-left: 8px;
 `;
@@ -6224,9 +6224,11 @@ function Resume({ resume }) {
     skills,
     volunteer,
     awards,
+    certificates,
     publications,
     languages,
     interests,
+    references,
     projects
   } = resume;
   return /* @__PURE__ */ jsxs(ResumeContainer, { children: [
@@ -6370,6 +6372,62 @@ function Resume({ resume }) {
             award.awarder && /* @__PURE__ */ jsx(Degree, { children: award.awarder }),
             award.date && /* @__PURE__ */ jsx(StyledDateRange, { startDate: award.date }),
             award.summary && /* @__PURE__ */ jsx(Description, { children: award.summary })
+          ] }, index))
+        ] }),
+        certificates && certificates.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
+          /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Certificates" }),
+          certificates.map((cert, index) => /* @__PURE__ */ jsxs(EducationItem, { children: [
+            cert.name && /* @__PURE__ */ jsx(Institution, { children: cert.url ? /* @__PURE__ */ jsx(
+              Link,
+              {
+                href: safeUrl(cert.url),
+                target: isExternalUrl(cert.url) ? "_blank" : void 0,
+                children: cert.name
+              }
+            ) : cert.name }),
+            cert.issuer && /* @__PURE__ */ jsx(Degree, { children: cert.issuer }),
+            cert.date && /* @__PURE__ */ jsx(StyledDateRange, { startDate: cert.date })
+          ] }, index))
+        ] }),
+        publications && publications.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
+          /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Publications" }),
+          publications.map((pub, index) => /* @__PURE__ */ jsxs(EducationItem, { children: [
+            pub.name && /* @__PURE__ */ jsx(Institution, { children: pub.url ? /* @__PURE__ */ jsx(
+              Link,
+              {
+                href: safeUrl(pub.url),
+                target: isExternalUrl(pub.url) ? "_blank" : void 0,
+                children: pub.name
+              }
+            ) : pub.name }),
+            pub.publisher && /* @__PURE__ */ jsx(Degree, { children: pub.publisher }),
+            pub.releaseDate && /* @__PURE__ */ jsx(StyledDateRange, { startDate: pub.releaseDate }),
+            pub.summary && /* @__PURE__ */ jsx(Description, { children: pub.summary })
+          ] }, index))
+        ] }),
+        volunteer && volunteer.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
+          /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Volunteer" }),
+          volunteer.map((vol, index) => /* @__PURE__ */ jsxs(ExperienceItem, { children: [
+            /* @__PURE__ */ jsxs(ExperienceHeader, { children: [
+              vol.position && /* @__PURE__ */ jsx(Position, { children: vol.position }),
+              vol.organization && /* @__PURE__ */ jsx(Company, { children: vol.organization }),
+              /* @__PURE__ */ jsx(
+                StyledDateRange,
+                {
+                  startDate: vol.startDate,
+                  endDate: vol.endDate
+                }
+              )
+            ] }),
+            vol.summary && /* @__PURE__ */ jsx(Description, { children: vol.summary }),
+            vol.highlights && vol.highlights.length > 0 && /* @__PURE__ */ jsx(Highlights, { children: vol.highlights.map((highlight, i) => /* @__PURE__ */ jsx(Highlight, { children: highlight }, i)) })
+          ] }, index))
+        ] }),
+        references && references.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
+          /* @__PURE__ */ jsx(StyledSectionTitle, { children: "References" }),
+          references.map((ref, index) => /* @__PURE__ */ jsxs(EducationItem, { children: [
+            ref.name && /* @__PURE__ */ jsx(Institution, { children: ref.name }),
+            ref.reference && /* @__PURE__ */ jsx(Description, { children: ref.reference })
           ] }, index))
         ] })
       ] })

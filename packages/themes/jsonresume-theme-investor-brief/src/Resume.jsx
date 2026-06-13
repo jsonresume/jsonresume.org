@@ -140,7 +140,7 @@ const WorkTitle = styled.h3`
 
 const WorkMeta = styled.div`
   font-size: 13px;
-  color: #9ca3af;
+  color: #6b7280;
   font-weight: 400;
 `;
 
@@ -234,6 +234,7 @@ function Resume({ resume }) {
     projects = [],
     volunteer = [],
     awards = [],
+    certificates = [],
     publications = [],
     languages = [],
     interests = [],
@@ -472,11 +473,36 @@ function Resume({ resume }) {
                   <div
                     style={{
                       fontSize: '13px',
-                      color: '#9ca3af',
+                      color: '#6b7280',
                       marginTop: '4px',
                     }}
                   >
                     {award.date}
+                  </div>
+                )}
+              </SimpleCard>
+            ))}
+          </SimpleList>
+        </MainSection>
+      )}
+
+      {certificates.length > 0 && (
+        <MainSection>
+          <MainSectionTitle>Certificates</MainSectionTitle>
+          <SimpleList>
+            {certificates.map((cert, index) => (
+              <SimpleCard key={index}>
+                <strong>{cert.name}</strong>
+                {cert.issuer && ` — ${cert.issuer}`}
+                {cert.date && (
+                  <div
+                    style={{
+                      fontSize: '13px',
+                      color: '#6b7280',
+                      marginTop: '4px',
+                    }}
+                  >
+                    {cert.date}
                   </div>
                 )}
               </SimpleCard>
@@ -497,7 +523,7 @@ function Resume({ resume }) {
                   <div
                     style={{
                       fontSize: '13px',
-                      color: '#9ca3af',
+                      color: '#6b7280',
                       marginTop: '4px',
                     }}
                   >

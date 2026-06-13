@@ -6181,7 +6181,7 @@ const WorkTitle = dt.h3`
 `;
 const WorkMeta = dt.div`
   font-size: 14px;
-  color: #94a3b8;
+  color: #64748b;
   font-weight: 500;
 `;
 const WorkCompany = dt.div`
@@ -6272,6 +6272,7 @@ function Resume({ resume }) {
     projects = [],
     volunteer = [],
     awards = [],
+    certificates = [],
     publications = [],
     languages = [],
     interests = [],
@@ -6370,10 +6371,28 @@ function Resume({ resume }) {
           {
             style: {
               fontSize: "14px",
-              color: "#94a3b8",
+              color: "#64748b",
               marginTop: "8px"
             },
             children: award.date
+          }
+        )
+      ] }, index)) })
+    ] }),
+    certificates.length > 0 && /* @__PURE__ */ jsxs(MainSection, { children: [
+      /* @__PURE__ */ jsx(MainSectionTitle, { children: "Certificates" }),
+      /* @__PURE__ */ jsx(SimpleList, { children: certificates.map((cert, index) => /* @__PURE__ */ jsxs(SimpleCard, { children: [
+        /* @__PURE__ */ jsx("strong", { children: cert.url ? /* @__PURE__ */ jsx(Link, { href: safeUrl(cert.url), children: cert.name }) : cert.name }),
+        cert.issuer && ` — ${cert.issuer}`,
+        cert.date && /* @__PURE__ */ jsx(
+          "div",
+          {
+            style: {
+              fontSize: "14px",
+              color: "#64748b",
+              marginTop: "8px"
+            },
+            children: cert.date
           }
         )
       ] }, index)) })
@@ -6388,7 +6407,7 @@ function Resume({ resume }) {
           {
             style: {
               fontSize: "14px",
-              color: "#94a3b8",
+              color: "#64748b",
               marginTop: "8px"
             },
             children: pub.releaseDate

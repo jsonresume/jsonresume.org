@@ -11,7 +11,7 @@ export const cacheResume = async (username, resume) => {
   try {
     // Lazy load Supabase client only when needed
     const { createClient } = require('@supabase/supabase-js');
-    const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
+    const { SUPABASE_URL: supabaseUrl } = require('../supabaseConfig');
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     await supabase

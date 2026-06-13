@@ -1,11 +1,23 @@
 {
-  "name": "@resume/ats-validator",
+  "name": "@jsonresume/ats-validator",
   "version": "0.1.0",
   "description": "ATS (Applicant Tracking System) validation utilities for resume HTML",
   "type": "module",
   "main": "./src/index.js",
   "exports": {
     ".": "./src/index.js"
+  },
+  "files": [
+    "src"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jsonresume/jsonresume.org",
+    "directory": "packages/ats-validator"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "test": "vitest run",

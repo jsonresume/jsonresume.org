@@ -474,6 +474,36 @@ export const THEME_METADATA = {
       'plum',
     ],
   },
+  'clinical-precision': {
+    name: 'Clinical Precision',
+    description:
+      'Clean, clinical, calm resume styled like a medical chart record. Each entry is a chart row with a green-railed vital column of monospaced date codes, lab-panel skill cards, and a "chart note" summary. Clinical green accents on white with mint tints. Tailored for doctors, nurses, and healthcare administrators.',
+    author: 'JSON Resume Team',
+    tags: [
+      'healthcare',
+      'clinical',
+      'medical',
+      'green',
+      'chart',
+      'calm',
+      'professional',
+    ],
+  },
+  'field-researcher': {
+    name: 'Field Researcher',
+    description:
+      'Academic-meets-exploratory resume styled like a naturalist field notebook. Classic serif narrative, monospaced metadata margins, numbered log sections, and a calm teal-green accent on tinted paper. Tailored for research and sustainability roles.',
+    author: 'JSON Resume Team',
+    tags: [
+      'academic',
+      'research',
+      'serif',
+      'field-notes',
+      'teal',
+      'sustainability',
+      'scholarly',
+    ],
+  },
   'urban-techno': {
     name: 'Urban Techno',
     description:
@@ -528,6 +558,13 @@ export const THEME_METADATA = {
     author: 'Roland Sharp',
     tags: ['modern', 'clean', 'dark-mode', 'ai', 'gradient', 'responsive'],
   },
+  colophon: {
+    name: 'Colophon',
+    description:
+      'Warm, text-first resume theme with editorial typography, semantic HTML, and polished print styles.',
+    author: 'David Nelson',
+    tags: ['warm', 'editorial', 'text-first', 'ats', 'print', 'accessible'],
+  },
   'creative-confidence': {
     name: 'Creative Confidence',
     description:
@@ -541,6 +578,23 @@ export const THEME_METADATA = {
       'clean',
       'sidebar',
       'ats',
+    ],
+  },
+  'art-school-modern': {
+    name: 'Art School Modern',
+    description:
+      'Avant-garde gallery aesthetic for designers and artists. Oversized Archivo Black display type, an asymmetric off-grid header with a framed photo plate, an editorial Fraunces serif statement, catalogue-numbered sections, and a single vivid vermilion accent.',
+    author: 'JSON Resume Team',
+    tags: [
+      'art',
+      'gallery',
+      'avant-garde',
+      'editorial',
+      'expressive',
+      'designer',
+      'creative',
+      'portfolio',
+      'display-type',
     ],
   },
   'community-garden': {
@@ -559,6 +613,24 @@ export const THEME_METADATA = {
       'blue',
       'green',
       'growth',
+    ],
+  },
+  'industrial-engineer': {
+    name: 'Industrial Engineer',
+    description:
+      'Engineering-datasheet aesthetic with a precise grid, monospace technical labels, spec-table contact block, part-number section headers, and dimension-line rules. Drafting-blue with safety-orange accents for dense, legible data presentation.',
+    author: 'JSON Resume Team',
+    tags: [
+      'industrial',
+      'engineer',
+      'technical',
+      'datasheet',
+      'blueprint',
+      'monospace',
+      'grid',
+      'spec-table',
+      'blue',
+      'orange',
     ],
   },
 };

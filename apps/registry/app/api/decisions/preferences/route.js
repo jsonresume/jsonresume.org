@@ -1,7 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
+import { SUPABASE_URL } from '@/lib/supabaseConfig';
 import { NextResponse } from 'next/server';
 
-const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
+const supabaseUrl = SUPABASE_URL;
 
 /**
  * GET - Fetch user's job evaluation preferences

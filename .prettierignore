@@ -18,3 +18,13 @@ apps/docs/content/**
 apps/docs/out/**
 apps/docs/.source/**
 .docwright/**
+# Next.js generated, marked "should not be edited", regenerated on every build
+**/next-env.d.ts
+# Rust crate — not governed by JS prettier
+packages/core-rust
+
+# Vendored CLI — has its own prettier/babel toolchain
+packages/cli
+
+# generated coverage artifact (written by themeRenderQa test)
+apps/registry/lib/formatters/template/theme-coverage.json

@@ -1,8 +1,9 @@
 import { createClient } from '@supabase/supabase-js';
+import { SUPABASE_URL } from '@/lib/supabaseConfig';
 import { NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
 
-const supabaseUrl = 'https://itxuhvvwryeuzuyihpkp.supabase.co';
+const supabaseUrl = SUPABASE_URL;
 
 const VALID_STATES = ['read', 'interested', 'hidden'];
 

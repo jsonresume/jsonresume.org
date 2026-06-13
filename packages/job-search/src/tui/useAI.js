@@ -1,50 +1,15 @@
 import { useState, useCallback, useRef } from 'react';
 import { writeFileSync } from 'fs';
-import { generateText } from 'ai';
-import { openai } from '@ai-sdk/openai';
-
-function buildResumeText(resume) {
-  return [
-    resume?.basics?.name,
-    resume?.basics?.label,
-    resume?.basics?.summary,
-    ...(resume?.skills || []).map(
-      (s) => `${s.name}: ${(s.keywords || []).join(', ')}`
-    ),
-    ...(resume?.work || [])
-      .slice(0, 5)
-      .map(
-        (w) =>
-          `${w.position} at ${w.name}${
-            w.startDate ? ` (${w.startDate})` : ''
-          }: ${w.summary || ''}`
-      ),
-    ...(resume?.projects || [])
-      .slice(0, 3)
-      .map((p) => `Project: ${p.name} — ${p.description || ''}`),
-  ]
-    .filter(Boolean)
-    .join('\n');
-}
-
-function buildJobText(job, rawContent) {
-  return [
-    `Title: ${job.title}`,
-    `Company: ${job.company}`,
-    `Salary: ${job.salary || 'Not listed'}`,
-    `Remote: ${job.remote || 'Not specified'}`,
-    job.experience ? `Experience: ${job.experience}` : '',
-    job.type ? `Type: ${job.type}` : '',
-    job.url ? `HN Post: ${job.url}` : '',
-    `Description: ${job.description || ''}`,
-    `Skills: ${(job.skills || []).map((s) => s.name || s).join(', ')}`,
-    ...(job.qualifications || []).map((q) => `Qualification: ${q}`),
-    ...(job.responsibilities || []).map((r) => `Responsibility: ${r}`),
-    rawContent ? `\nFull original posting:\n${rawContent}` : '',
-  ]
-    .filter(Boolean)
-    .join('\n');
-}
+import {
+  buildResumeText,
+  buildJobText,
+  buildDossierPrompt,
+  extractEnrichment,
+  dossierFilename,
+} from './aiHelpers.js';
+import { resolveClaudePath, runClaudeDossier } from './claudeDossier.js';
+import { runJobSummary, runBatchReview } from './gptReview.js';
+import { dossierStatus, seedDossierFlags } from './dossierCache.js';
 
 export function useAI(resume) {
   const [text, setText] = useState('');
@@ -73,33 +38,7 @@ export function useAI(resume) {
       setError(null);
       setText('');
       try {
-        const resumeText = [
-          resume?.basics?.label,
-          resume?.basics?.summary,
-          ...(resume?.skills || []).map(
-            (s) => `${s.name}: ${(s.keywords || []).join(', ')}`
-          ),
-        ]
-          .filter(Boolean)
-          .join('\n');
-
-        const jobText = [
-          `Title: ${job.title}`,
-          `Company: ${job.company}`,
-          `Salary: ${job.salary || 'Not listed'}`,
-          `Remote: ${job.remote || 'Not specified'}`,
-          `Description: ${job.description || ''}`,
-          `Skills: ${(job.skills || []).map((s) => s.name).join(', ')}`,
-        ].join('\n');
-
-        const { text: result } = await generateText({
-          model: openai('gpt-4o-mini'),
-          system:
-            'You are a career advisor. Given a job posting and resume, provide a concise fit analysis in 4-5 bullet points. Cover: why it fits, skill gaps, salary assessment, and remote compatibility. Be direct and opinionated.',
-          prompt: `Resume:\n${resumeText}\n\nJob:\n${jobText}`,
-          maxTokens: 400,
-        });
-        setText(result);
+        setText(await runJobSummary(resume, job));
       } catch (err) {
         setError(err.message);
       } finally {
@@ -160,10 +99,9 @@ export function useAI(resume) {
       }
 
       // Check if claude CLI is available
-      const { execSync } = await import('child_process');
       let claudePath;
       try {
-        claudePath = execSync('which claude', { encoding: 'utf-8' }).trim();
+        claudePath = await resolveClaudePath();
       } catch {
         setError(
           'Claude Code CLI not found. Install it: npm install -g @anthropic-ai/claude-code'
@@ -201,181 +139,20 @@ export function useAI(resume) {
 
       const resumeText = buildResumeText(currentResume);
       const jobText = buildJobText(job, rawContent);
-
-      const prompt = `You are a job search research assistant. A candidate is considering applying to this role. Do thorough research and produce a comprehensive dossier.
-
-## Candidate Resume
-${resumeText}
-
-## Job Posting
-${jobText}
-
-## Your Task
-
-Research everything you can and produce a complete dossier covering:
-
-### 1. Compensation Context
-- Market rate for this role/level/location
-- How the listed salary compares
-- Negotiation leverage points
-
-### 2. AI Engineering Culture
-- Does the company use or encourage AI coding tools (Copilot, Claude Code, Cursor, agentic workflows)?
-- Any public statements, blog posts, or job descriptions mentioning AI-assisted development?
-- Is the engineering culture likely to embrace engineers who ship faster using AI tools, or is there resistance?
-- Look for signals: do they mention "AI-native", "agentic", "LLM-augmented" workflows, or similar?
-- Are there concerns about AI tool usage (IP policies, code review friction, etc.)?
-- Rating: AI-Forward / AI-Friendly / Neutral / Unknown / AI-Resistant
-
-### 3. Company Deep Dive
-- What the company does, their products/services
-- Funding stage, size, recent news
-- Tech stack and engineering culture
-- Leadership team
-- Employee sentiment and Glassdoor/Blind highlights
-- Any red flags or concerns
-
-### 4. Role Analysis
-- What you'd actually be doing day-to-day
-- Team context — who you'd work with
-- Growth trajectory for this role
-- How this role fits into the company's current priorities
-
-### 5. Fit Assessment
-- Matching skills and experience (be specific, reference the candidate's actual background)
-- Skill gaps to acknowledge or address
-- Adjacent experience that transfers
-- Overall fit rating: Strong / Good / Stretch
-
-### 6. Cover Letter Talking Points
-- 5-7 specific bullet points to mention, each referencing the candidate's real experience
-- What angle to take (technical depth? leadership? domain expertise?)
-- What to emphasize vs. downplay
-
-### 7. Contact Info
-- Email addresses from the posting
-- Who posted (HN username from the URL if available)
-- Best way to reach out
-
-### 8. Interview Prep
-- Questions they'll likely ask for this role
-- Questions the candidate should ask
-- Topics to research before interviewing
-
-Be thorough, specific, and opinionated. Reference the candidate's actual experience when making recommendations.
-
-### IMPORTANT: Structured Data Block
-At the very end of your response, output a JSON code block tagged \`\`\`enrichment with corrected/discovered job metadata. Only include fields where you found better data than what's in the posting. This helps improve the job database:
-\`\`\`enrichment
-{
-  "salary": "$X - $Y" or null if unknown,
-  "remote": "Full" | "Hybrid" | "None" | null,
-  "location": { "city": "...", "countryCode": "XX", "region": "..." } or null,
-  "experience": "Junior" | "Mid" | "Senior" | "Staff" | "Lead" | null,
-  "type": "Full-time" | "Contract" | "Part-time" | null
-}
-\`\`\``;
+      const prompt = buildDossierPrompt(resumeText, jobText);
 
       try {
-        const { spawn } = await import('child_process');
-        // Remove CLAUDECODE env var to allow nested claude sessions
-        const env = { ...process.env };
-        delete env.CLAUDECODE;
-        delete env.CLAUDE_CODE_ENTRYPOINT;
-        delete env.CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS;
-
-        const child = spawn(
+        const finalResult = await runClaudeDossier({
           claudePath,
-          [
-            '--print',
-            '--output-format',
-            'stream-json',
-            '--verbose',
-            '--allowedTools',
-            'WebSearch',
-            'WebFetch',
-            '--',
-            prompt,
-          ],
-          { stdio: ['ignore', 'pipe', 'pipe'], env }
-        );
-        childRef.current = child;
-
-        let finalResult = '';
-        let buffer = '';
-        let statusLine = '';
-
-        function processLine(line) {
-          if (!line.trim()) return;
-          try {
-            const event = JSON.parse(line);
-
-            if (event.type === 'assistant') {
-              // Extract text from assistant message content
-              const content = event.message?.content || [];
-              for (const block of content) {
-                if (block.type === 'text' && block.text) {
-                  finalResult = block.text;
-                  updateText(
-                    statusLine ? `${statusLine}\n\n${finalResult}` : finalResult
-                  );
-                } else if (block.type === 'tool_use') {
-                  // Show what Claude is doing (e.g. WebSearch, WebFetch)
-                  const name = block.name || 'tool';
-                  const input = block.input || {};
-                  if (name === 'WebSearch' || name === 'WebFetch') {
-                    statusLine = `🔍 ${name}: ${
-                      input.query || input.url || ''
-                    }`;
-                  } else {
-                    statusLine = `⚙ Using ${name}…`;
-                  }
-                  updateText(
-                    finalResult ? `${statusLine}\n\n${finalResult}` : statusLine
-                  );
-                }
-              }
-            }
-
-            if (event.type === 'result' && event.result) {
-              finalResult = event.result;
-              updateText(finalResult);
-            }
-          } catch {
-            // Not valid JSON, skip
-          }
-        }
-
-        child.stdout.on('data', (chunk) => {
-          buffer += chunk.toString();
-          // Process complete JSON lines
-          const lines = buffer.split('\n');
-          buffer = lines.pop() || '';
-          for (const line of lines) {
-            processLine(line);
-          }
-        });
-
-        child.stderr.on('data', () => {});
-
-        await new Promise((resolve, reject) => {
-          child.on('close', (code) => {
+          prompt,
+          onText: updateText,
+          onChild: (child) => {
+            childRef.current = child;
+          },
+          onEnd: (child) => {
             // Only clear childRef if it's still our process
             if (childRef.current === child) childRef.current = null;
-            // Process any remaining buffer
-            if (buffer.trim()) processLine(buffer);
-            if (code === 0) {
-              resolve();
-            } else if (code !== null) {
-              reject(new Error(`Claude exited with code ${code}`));
-            } else {
-              resolve(); // killed
-            }
-          });
-          child.on('error', (err) => {
-            if (childRef.current === child) childRef.current = null;
-            reject(err);
-          });
+          },
         });
 
         // Save to server if we got output
@@ -384,15 +161,12 @@ At the very end of your response, output a JSON code block tagged \`\`\`enrichme
             await api.saveDossier(job.id, finalResult);
           } catch {}
           // Extract and save enrichment data if present
-          try {
-            const enrichMatch = finalResult.match(
-              /```enrichment\s*\n([\s\S]*?)\n```/
-            );
-            if (enrichMatch) {
-              const enriched = JSON.parse(enrichMatch[1]);
+          const enriched = extractEnrichment(finalResult);
+          if (enriched) {
+            try {
               await api.enrichJob(job.id, enriched);
-            }
-          } catch {}
+            } catch {}
+          }
         }
       } catch (err) {
         if (err.message?.includes('exited with code')) {
@@ -429,28 +203,7 @@ At the very end of your response, output a JSON code block tagged \`\`\`enrichme
       setError(null);
       setText('');
       try {
-        const resumeText = [resume?.basics?.label, resume?.basics?.summary]
-          .filter(Boolean)
-          .join('\n');
-
-        const jobsList = jobs
-          .slice(0, 15)
-          .map(
-            (j, i) =>
-              `${i + 1}. [${j.similarity}] ${j.title} at ${j.company} | ${
-                j.salary || 'no salary'
-              } | ${j.remote || 'no remote info'}`
-          )
-          .join('\n');
-
-        const { text: result } = await generateText({
-          model: openai('gpt-4o-mini'),
-          system:
-            'You are a career advisor. Rank these jobs by fit for the candidate. For each, give a 1-line verdict. Be direct.',
-          prompt: `Resume:\n${resumeText}\n\nJobs:\n${jobsList}`,
-          maxTokens: 600,
-        });
-        setText(result);
+        setText(await runBatchReview(resume, jobs));
       } catch (err) {
         setError(err.message);
       } finally {
@@ -477,42 +230,22 @@ At the very end of your response, output a JSON code block tagged \`\`\`enrichme
     const content =
       textRef.current || dossierCache.current.get(job?.id)?.text || '';
     if (!content) return null;
-    const company = (job?.company || 'unknown')
-      .replace(/[^a-zA-Z0-9]+/g, '-')
-      .replace(/-+/g, '-')
-      .replace(/^-|-$/g, '')
-      .toLowerCase()
-      .slice(0, 50);
-    const filename = `dossier-${company}.md`;
+    const filename = dossierFilename(job);
     writeFileSync(filename, content, 'utf-8');
     return filename;
   }, []);
 
   // Seed cache with server-side dossier flags from job list
-  const seedDossierFlags = useCallback((jobs) => {
-    let changed = false;
-    for (const job of jobs) {
-      if (job.has_dossier && !dossierCache.current.has(job.id)) {
-        dossierCache.current.set(job.id, {
-          text: '',
-          done: true,
-          loading: false,
-        });
-        changed = true;
-      }
-    }
-    if (changed) bumpTick();
+  const seedFlags = useCallback((jobs) => {
+    if (seedDossierFlags(dossierCache.current, jobs)) bumpTick();
   }, []);
 
   // Expose dossier status for job list icons
   // Returns: 'generating' | 'done' | null
-  const getDossierStatus = useCallback((jobId) => {
-    const entry = dossierCache.current.get(jobId);
-    if (!entry) return null;
-    if (entry.loading) return 'generating';
-    if (entry.done) return 'done';
-    return null;
-  }, []);
+  const getDossierStatus = useCallback(
+    (jobId) => dossierStatus(dossierCache.current, jobId),
+    []
+  );
 
   const regenerateDossier = useCallback(
     (job, api) => {
@@ -535,7 +268,7 @@ At the very end of your response, output a JSON code block tagged \`\`\`enrichme
     mode,
     hasActiveProcess: Boolean(childRef.current),
     getDossierStatus,
-    seedDossierFlags,
+    seedDossierFlags: seedFlags,
     summarizeJob,
     dossier,
     regenerateDossier,

@@ -2,7 +2,7 @@ export function ThemesInfo() {
   return (
     <div className="row">
       <div className="col-md-6">
-        <h3>Browse</h3>
+        <h2>Browse</h2>
 
         <p>
           There are over{' '}
@@ -27,7 +27,7 @@ export function ThemesInfo() {
         </p>
       </div>
       <div className="col-md-6">
-        <h3>Want to develop your own?</h3>
+        <h2>Want to develop your own?</h2>
         <p>
           Read the <a href="/theme-development">theme development guide</a>{' '}
         </p>

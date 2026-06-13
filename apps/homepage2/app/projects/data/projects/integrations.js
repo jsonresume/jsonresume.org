@@ -67,7 +67,7 @@ export const projects = [
     name: 'rendercv',
     description:
       'RenderCV is a latext CV/resume framework. It allows you to create a high-quality CV as a PDF from a YAML file with full Markdown syntax support and complete control over the latex code',
-    link: 'https://github.com/sinaatalay/rendercv',
+    link: 'https://github.com/rendercv/rendercv',
     category: 'framework',
     language: 'Python/Latex',
   },
@@ -172,5 +172,13 @@ export const projects = [
     link: 'https://github.com/kylegrantlucas/resume-exporter',
     category: 'framework',
     language: 'Go/Latex',
+  },
+  {
+    name: 'resume-toolkit',
+    description:
+      'Easy-to-use toolkit to export JSONResume to both HTML (using a custom version of the Even theme, with additional features) and PDF (using a custom Typst exporter using the brilliant-cv template). Supports generating publications lists (both embedded in the CV and as a standalone page/document) from BibTeX files.',
+    link: 'https://github.com/zzamboni/resume-toolkit',
+    category: 'framework',
+    language: 'Python/Javascript/Typst',
   },
 ];

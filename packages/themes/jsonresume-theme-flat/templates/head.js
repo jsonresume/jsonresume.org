@@ -1,9 +1,9 @@
 export default `<!doctype html>
-<html>
+<html lang="en">
 	<head>
-	
+
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, user-scalable=no, minimal-ui">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
 	<title>{{#resume.basics}}{{name}}{{/resume.basics}}</title>
 	

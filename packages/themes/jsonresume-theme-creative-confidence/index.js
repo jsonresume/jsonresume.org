@@ -73,8 +73,7 @@ html, body {
 .right-panel .compact-sub li {
   font-size: 9.15pt;
 }
-.photo,
-.photo-empty {
+.photo {
   width: 100%;
   height: 100%;
 }
@@ -87,15 +86,6 @@ html, body {
 .photo {
   object-fit: cover;
   display: block;
-}
-.photo-empty {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  font-size: 8.4pt;
-  color: #1d4ed8;
-  padding: 6px;
 }
 .section {
   margin-top: 7px;
@@ -554,6 +544,145 @@ function renderCertificates(certificates = []) {
   );
 }
 
+function renderItemList(title, items, className) {
+  if (!items.length) return '';
+  const body = items
+    .map((entry) => {
+      const org = entry.org
+        ? `<p class="item-org">${escapeHtml(entry.org)}</p>`
+        : '';
+      const dates = entry.dates
+        ? `<div class="item-dates">${escapeHtml(entry.dates)}</div>`
+        : '';
+      const summary = entry.summary
+        ? `<p class="item-summary">${escapeHtml(entry.summary)}</p>`
+        : '';
+      const bullets =
+        Array.isArray(entry.highlights) && entry.highlights.length
+          ? `<ul class="bullets">${entry.highlights
+              .map(
+                (h) => `<li>${escapeHtml(String(h).replace(/^\*\s*/, ''))}</li>`
+              )
+              .join('')}</ul>`
+          : '';
+      return `
+      <div class="work-item-keep">
+        <article class="item">
+          <div class="item-head">
+            <div>
+              <h3 class="item-role">${escapeHtml(entry.title || '')}</h3>
+              ${org}
+            </div>
+            ${dates}
+          </div>
+          ${summary}${bullets}
+        </article>
+      </div>
+    `;
+    })
+    .join('');
+  return section(title, body, className);
+}
+
+function renderVolunteer(volunteer = []) {
+  return renderItemList(
+    'Volunteer',
+    volunteer.map((vol) => ({
+      title: vol.position,
+      org: vol.organization,
+      dates: dateRange(vol.startDate, vol.endDate),
+      summary: vol.summary,
+      highlights: vol.highlights,
+    })),
+    'work-section'
+  );
+}
+
+function renderProjects(projects = []) {
+  return renderItemList(
+    'Projects',
+    projects.map((project) => ({
+      title: project.name,
+      summary: project.description,
+      highlights: project.highlights,
+    })),
+    'work-section'
+  );
+}
+
+function renderAwards(awards = []) {
+  return renderItemList(
+    'Awards',
+    awards.map((award) => ({
+      title: award.title,
+      org: award.awarder ? `Awarded by ${award.awarder}` : '',
+      dates: award.date ? formatDate(award.date) : '',
+      summary: award.summary,
+    })),
+    'work-section'
+  );
+}
+
+function renderPublications(publications = []) {
+  return renderItemList(
+    'Publications',
+    publications.map((pub) => ({
+      title: pub.name,
+      org: pub.publisher ? `Published by ${pub.publisher}` : '',
+      dates: pub.releaseDate ? formatDate(pub.releaseDate) : '',
+      summary: pub.summary,
+    })),
+    'work-section'
+  );
+}
+
+function renderReferences(references = []) {
+  if (!references.length) return '';
+  const items = references
+    .map((ref) => {
+      const name = ref.name ? `<strong>${escapeHtml(ref.name)}</strong>` : '';
+      const quote = ref.reference
+        ? `<div class="item-summary">${escapeHtml(ref.reference)}</div>`
+        : '';
+      return `<li>${name}${quote}</li>`;
+    })
+    .join('');
+  return section('References', `<ul class="compact-list">${items}</ul>`);
+}
+
+function renderLanguages(languages = []) {
+  if (!languages.length) return '';
+  const blocks = languages
+    .map(
+      (lang) => `
+      <div class="skill-group">
+        <span class="skill-name">${escapeHtml(lang.language)}:</span>
+        <span>${escapeHtml(lang.fluency || '')}</span>
+      </div>
+    `
+    )
+    .join('');
+  return section('Languages', `<div>${blocks}</div>`);
+}
+
+function renderInterests(interests = []) {
+  if (!interests.length) return '';
+  const blocks = interests
+    .map((interest) => {
+      const keywords = Array.isArray(interest.keywords)
+        ? interest.keywords.join(', ')
+        : '';
+      return `
+      <div class="skill-group">
+        <span class="skill-name">${escapeHtml(interest.name)}</span>
+        ${keywords ? `<span>: ${escapeHtml(keywords)}</span>` : ''}
+      </div>
+    `;
+    })
+    .join('');
+  return section('Interests', `<div>${blocks}</div>`);
+}
+
 function renderSkills(skills = []) {
   if (!skills.length) return '';
   const blocks = skills
@@ -581,14 +710,20 @@ export function render(resume = {}) {
     : '';
   const footerText = [basics.name, basics.label].filter(Boolean).join(': ');
   const photo = basics.image
-    ? `<img class="photo" src="${escapeHtml(basics.image)}" alt="${escapeHtml(
+    ? `<div class="photo-wrap" aria-label="Profile image">
+        <img class="photo" src="${escapeHtml(basics.image)}" alt="${escapeHtml(
         name
-      )} profile photo" />`
-    : `<div class="photo-empty">Profile Photo</div>`;
+      )} profile photo" />
+      </div>`
+    : '';
 
   const leftColumn = [
     renderSummary(basics),
     renderProfessionalExperience(resume.work || []),
+    renderProjects(resume.projects || []),
+    renderVolunteer(resume.volunteer || []),
+    renderAwards(resume.awards || []),
+    renderPublications(resume.publications || []),
   ].join('');
 
   const rightColumn = [
@@ -596,6 +731,9 @@ export function render(resume = {}) {
     renderEducation(resume.education || []),
     renderCertificates(resume.certificates || []),
     renderSkills(resume.skills || []),
+    renderLanguages(resume.languages || []),
+    renderInterests(resume.interests || []),
+    renderReferences(resume.references || []),
   ].join('');
 
   return `<!doctype html>
@@ -613,9 +751,7 @@ export function render(resume = {}) {
         <h1 class="name">${escapeHtml(name)}</h1>
         ${label}
       </div>
-      <div class="photo-wrap" aria-label="Profile image">
-        ${photo}
-      </div>
+      ${photo}
     </header>
     <div class="layout">
       <div>${leftColumn}</div>

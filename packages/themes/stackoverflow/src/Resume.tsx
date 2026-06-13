@@ -14,7 +14,7 @@ import { Skills } from './Skills';
 import { Work } from './Work';
 
 export const Resume: React.FC<ResumeProps> = (resume) => (
-  <div id="resume">
+  <main id="resume">
     <Basics {...resume.basics} />
     {resume.skills && <Skills skills={resume.skills} />}
     {resume.work && <Work work={resume.work} />}
@@ -27,5 +27,5 @@ export const Resume: React.FC<ResumeProps> = (resume) => (
     {resume.languages && <Languages languages={resume.languages} />}
     {resume.interests && <Interests interests={resume.interests} />}
     {resume.references && <References references={resume.references} />}
-  </div>
+  </main>
 );

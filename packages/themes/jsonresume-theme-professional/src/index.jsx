@@ -6,7 +6,7 @@ export const render = (resume) => {
   const sheet = new ServerStyleSheet();
   const html = renderToString(sheet.collectStyles(<Resume resume={resume} />));
   const styles = sheet.getStyleTags();
-  return `<!DOCTYPE html><head>
+  return `<!DOCTYPE html><html lang="en"><head>
   <title>${resume.basics.name} - Resume</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -15,18 +15,21 @@ export const render = (resume) => {
       font-family: LatinModern;
       font-style: normal;
       font-weight: normal;
+      font-display: swap;
       src: url("/fonts/lmroman10-regular.otf") format("opentype");
     }
 
     @font-face {
       font-family: LatinModern;
       font-weight: bold;
+      font-display: swap;
       src: url("/fonts/lmroman10-bold.otf") format("opentype");
     }
 
     @font-face {
       font-family: LatinModern;
       font-style: italic;
+      font-display: swap;
       src: url("/fonts/lmroman10-italic.otf") format("opentype");
     }
 
@@ -34,18 +37,21 @@ export const render = (resume) => {
       font-family: LatinModernSans;
       font-style: normal;
       font-weight: normal;
+      font-display: swap;
       src: url("/fonts/lmsans10-regular.otf") format("opentype");
     }
 
     @font-face {
       font-family: LatinModernSans;
       font-weight: bold;
+      font-display: swap;
       src: url("/fonts/lmsans10-bold.otf") format("opentype");
     }
 
     @font-face {
       font-family: LatinModernSans;
       font-style: italic;
+      font-display: swap;
       src: url("/fonts/lmsans10-italic.otf") format("opentype");
     }
 
@@ -92,7 +98,7 @@ export const render = (resume) => {
 
 
   </style>
-  ${styles}</head><body>${html}</body></html>`;
+  ${styles}</head><body><main>${html}</main></body></html>`;
 };
 
 export { Resume };

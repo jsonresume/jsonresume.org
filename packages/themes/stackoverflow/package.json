@@ -1,6 +1,6 @@
 {
   "name": "@jsonresume/theme-stackoverflow",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "description": "Stack Overflow theme for JSON Resume written with React",
   "contributors": [
     {
@@ -28,7 +28,7 @@
     "i18next": "^22.4.15",
     "i18next-browser-languagedetector": "^7.0.1",
     "i18next-http-backend": "^2.2.0",
-    "jsonresume-theme-stackoverflow": "^2.0.1",
+    "jsonresume-theme-stackoverflow": "^3.3.0",
     "markdown-it": "^13.0.1",
     "moment": "^2.29.4",
     "ramda": "^0.29.0",

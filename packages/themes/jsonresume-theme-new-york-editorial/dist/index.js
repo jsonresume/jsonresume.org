@@ -6188,7 +6188,7 @@ const Company = dt.span`
 `;
 const StyledDateRange = dt(DateRange)`
   font-size: 15px;
-  color: #777777;
+  color: #6e6e6e;
   font-variant-numeric: oldstyle-nums;
 `;
 const WorkSummary = dt.p`
@@ -6248,7 +6248,7 @@ const Institution = dt.span`
 `;
 const StudyType = dt.div`
   font-size: 15px;
-  color: #777777;
+  color: #6e6e6e;
   margin-top: 6px;
 `;
 const SkillsContainer = dt.div`
@@ -6324,7 +6324,7 @@ const ItemTitle = dt.h4`
 `;
 const ItemMeta = dt.div`
   font-size: 15px;
-  color: #777777;
+  color: #6e6e6e;
   margin-bottom: 8px;
   font-style: italic;
 `;
@@ -6348,6 +6348,7 @@ function Resume({ resume }) {
     projects = [],
     volunteer = [],
     awards = [],
+    certificates = [],
     publications = [],
     languages = [],
     interests = [],
@@ -6468,6 +6469,19 @@ function Resume({ resume }) {
           ] })
         ] }),
         award.summary && /* @__PURE__ */ jsx(ItemDescription, { children: award.summary })
+      ] }, index)) })
+    ] }),
+    certificates && certificates.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
+      /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Certificates" }),
+      /* @__PURE__ */ jsx(SimpleList, { children: certificates.map((cert, index) => /* @__PURE__ */ jsxs(SimpleItem, { children: [
+        /* @__PURE__ */ jsx(ItemTitle, { children: cert.url ? /* @__PURE__ */ jsx(Link, { href: cert.url, children: cert.name }) : cert.name }),
+        /* @__PURE__ */ jsxs(ItemMeta, { children: [
+          cert.issuer,
+          cert.date && /* @__PURE__ */ jsxs(Fragment, { children: [
+            " • ",
+            cert.date
+          ] })
+        ] })
       ] }, index)) })
     ] }),
     languages && languages.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [

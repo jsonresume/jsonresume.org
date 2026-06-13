@@ -6268,6 +6268,7 @@ function Resume({ resume }) {
     projects = [],
     volunteer = [],
     awards = [],
+    certificates = [],
     publications = [],
     languages = [],
     interests = [],
@@ -6341,6 +6342,17 @@ function Resume({ resume }) {
         ] }),
         award.date && /* @__PURE__ */ jsx(DateText, { children: award.date }),
         award.summary && /* @__PURE__ */ jsx(ItemSummary, { children: award.summary })
+      ] }, index))
+    ] }),
+    certificates?.length > 0 && /* @__PURE__ */ jsxs(SimpleSection, { children: [
+      /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Certificates" }),
+      certificates.map((cert, index) => /* @__PURE__ */ jsxs(SimpleItem, { children: [
+        /* @__PURE__ */ jsx(SimpleTitle, { children: cert.name }),
+        cert.issuer && /* @__PURE__ */ jsxs(Subtitle, { children: [
+          "Issued by ",
+          cert.issuer
+        ] }),
+        cert.date && /* @__PURE__ */ jsx(DateText, { children: cert.date })
       ] }, index))
     ] }),
     publications?.length > 0 && /* @__PURE__ */ jsxs(SimpleSection, { children: [

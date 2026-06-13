@@ -7,10 +7,16 @@ import { Footer } from './components/layout/Footer';
 import { ExternalScripts } from './components/layout/ExternalScripts';
 import './global.css';
 
+export const metadata = {
+  title: 'JSON Resume',
+  description:
+    'JSON Resume is the open-source initiative to create a JSON-based standard for resumes. For developers, by developers.',
+};
+
 export default async function Layout({ children }) {
   return (
     <html lang="en" className={fontVariables}>
-      <head title="JSON Resume">
+      <head>
         <link rel="dns-prefetch" href="//cdnjs.cloudflare.com" />
         <link rel="dns-prefetch" href="//static.getclicky.com" />
         {(process.env.NODE_ENV === 'development' ||
@@ -40,7 +46,6 @@ export default async function Layout({ children }) {
 
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="description" content="{{site.description}}" />
         <link rel="shortcut icon" href="/img/favicon.png" />
 
         <link
@@ -77,7 +82,7 @@ export default async function Layout({ children }) {
             <Sidebar />
             <div className="inner">
               <TopNav />
-              {children}
+              <main id="content">{children}</main>
               <Footer />
             </div>
           </div>

@@ -317,6 +317,7 @@ function Resume({ resume }) {
     skills,
     volunteer,
     awards,
+    certificates,
     publications,
     languages,
     interests,
@@ -478,6 +479,30 @@ function Resume({ resume }) {
               {award.awarder && <Awarder>{award.awarder}</Awarder>}
               {award.date && <StyledDateRange startDate={award.date} />}
               {award.summary && <Description>{award.summary}</Description>}
+            </AwardItem>
+          ))}
+        </ContentSection>
+      )}
+
+      {/* Certificates */}
+      {certificates && certificates.length > 0 && (
+        <ContentSection>
+          <StyledSectionTitle>Certificates</StyledSectionTitle>
+          {certificates.map((cert, index) => (
+            <AwardItem key={index}>
+              {cert.name && <AwardTitle>{cert.name}</AwardTitle>}
+              {cert.issuer && <Awarder>{cert.issuer}</Awarder>}
+              {cert.date && <StyledDateRange startDate={cert.date} />}
+              {cert.url && (
+                <ProjectUrl>
+                  <Link
+                    href={safeUrl(cert.url)}
+                    target={isExternalUrl(cert.url) ? '_blank' : undefined}
+                  >
+                    {cert.url.replace(/^https?:\/\//, '')}
+                  </Link>
+                </ProjectUrl>
+              )}
             </AwardItem>
           ))}
         </ContentSection>

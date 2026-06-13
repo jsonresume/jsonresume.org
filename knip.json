@@ -1,0 +1,46 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "ignore": ["**/dist/**", "**/build/**", "**/.next/**", "**/*.d.ts"],
+  "ignoreDependencies": ["@vitejs/plugin-react"],
+  "ignoreWorkspaces": [
+    "packages/themes/**",
+    "packages/resume-core",
+    "packages/core-rust"
+  ],
+  "workspaces": {
+    "apps/registry": {
+      "entry": [
+        "app/**/page.{js,jsx,ts,tsx}",
+        "app/**/layout.{js,jsx,ts,tsx}",
+        "app/**/route.{js,jsx,ts,tsx}",
+        "app/**/{loading,error,not-found,template,default}.{js,jsx,ts,tsx}",
+        "middleware.{js,ts}",
+        "next.config.{js,mjs,ts}",
+        "scripts/**/*.{js,mjs}",
+        "vitest.config.ts",
+        "vitest.setup.ts",
+        "**/*.test.{js,jsx,ts,tsx}"
+      ],
+      "vitest": {
+        "config": ["vitest.config.ts"]
+      }
+    },
+    "apps/homepage2": {
+      "entry": [
+        "app/**/page.{js,jsx,ts,tsx}",
+        "app/**/layout.{js,jsx,ts,tsx}",
+        "pages/**/*.{js,jsx,ts,tsx}",
+        "next.config.{js,mjs,ts}",
+        "tests/**/*.spec.{js,ts}"
+      ]
+    },
+    "apps/docs": {
+      "entry": [
+        "app/**/page.{js,jsx,ts,tsx}",
+        "app/**/layout.{js,jsx,ts,tsx}",
+        "source.config.ts",
+        "next.config.{js,mjs,ts}"
+      ]
+    }
+  }
+}
