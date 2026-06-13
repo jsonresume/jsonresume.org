@@ -96,7 +96,13 @@ export function googleFontsLinks(families) {
  * @param {string}   [options.lang='en']        <html lang> attribute.
  * @param {string}   [options.dir='ltr']        <html dir> attribute.
  * @param {boolean}  [options.reset=false]      Include the minimal CSS reset.
- * @param {string}   [options.head='']          Extra raw HTML for the <head>.
+ * @param {string}   [options.head='']          Raw HTML inserted in <head> BEFORE the
+ *   styled-components tags (base styles a theme's components then override — e.g. a
+ *   `:root` design-token block or a CSS reset).
+ * @param {string}   [options.headAfterStyles=''] Raw HTML inserted in <head> AFTER the
+ *   styled-components tags (styles that must OVERRIDE component styles — e.g. a global
+ *   reset, body background, or `@media print`/`@page` rules). Composes with `head`:
+ *   a theme can pass both to reproduce an inline-style block on each side.
  * @param {boolean}  [options.includeTokensCss=true] Link @jsonresume/core tokens.
  * @param {string}   [options.bodyClass]        class attribute on <body>.
  * @returns {string} Full `<!DOCTYPE html>...` document.
@@ -109,6 +115,7 @@ export function renderResumeDocument(element, options = {}) {
     dir = 'ltr',
     reset = false,
     head = '',
+    headAfterStyles = '',
     includeTokensCss = true,
     bodyClass,
   } = options;
@@ -142,6 +149,7 @@ export function renderResumeDocument(element, options = {}) {
     resetTag +
     head +
     styleTags +
+    headAfterStyles +
     titleTag +
     '</head>' +
     `<body${bodyAttr}>${html}</body>` +

@@ -103,6 +103,26 @@ describe('renderResumeDocument', () => {
     expect(out).toContain('<body class="theme-foo">');
   });
 
+  it('places head before, and headAfterStyles after, the styled-components tags', () => {
+    const out = renderResumeDocument(<Box>Hi</Box>, {
+      head: '<style id="before">:root{--x:1}</style>',
+      headAfterStyles: '<style id="after">@page{margin:1cm}</style>',
+    });
+    const before = out.indexOf('id="before"');
+    const styled = out.indexOf('data-styled');
+    const after = out.indexOf('id="after"');
+    expect(before).toBeGreaterThan(-1);
+    expect(after).toBeGreaterThan(-1);
+    // cascade order: head -> styled-components -> headAfterStyles
+    expect(before).toBeLessThan(styled);
+    expect(styled).toBeLessThan(after);
+  });
+
+  it('omits headAfterStyles when not provided', () => {
+    const out = renderResumeDocument(<Box>Hi</Box>);
+    expect(out).not.toContain('id="after"');
+  });
+
   it('always seals the sheet — styles do not leak across calls', () => {
     // Two different styled components rendered in separate calls. If the sheet
     // were not sealed, the second document would carry the first's rules.
