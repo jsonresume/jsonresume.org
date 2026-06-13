@@ -1,0 +1,56 @@
+{
+  "name": "@jsonresume/theme-kit",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Authoring kit for JSON Resume themes: the SSR document helper plus the all-theme render + section-coverage QA gate",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./qa": "./src/qa.js",
+    "./ssr": "./src/ssr.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint src --cache --cache-location node_modules/.cache/.eslintcache"
+  },
+  "devDependencies": {
+    "@repo/eslint-config-custom": "workspace:^",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "styled-components": "^6.1.19",
+    "vitest": "^2"
+  },
+  "dependencies": {
+    "@jsonresume/sample-data": "workspace:*"
+  },
+  "peerDependencies": {
+    "@jsonresume/core": "workspace:*"
+  },
+  "keywords": [
+    "resume",
+    "cv",
+    "json-resume",
+    "theme",
+    "ssr",
+    "testing"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jsonresume/jsonresume.org",
+    "directory": "packages/theme-kit"
+  },
+  "homepage": "https://github.com/jsonresume/jsonresume.org/tree/master/packages/theme-kit",
+  "bugs": {
+    "url": "https://github.com/jsonresume/jsonresume.org/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT"
+}

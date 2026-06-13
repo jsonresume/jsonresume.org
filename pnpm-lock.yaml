@@ -289,6 +289,9 @@ importers:
       '@jsonresume/schema':
         specifier: workspace:*
         version: link:../../packages/schema
+      '@jsonresume/theme-kit':
+        specifier: workspace:*
+        version: link:../../packages/theme-kit
       '@jsonresume/theme-stackoverflow':
         specifier: ^2
         version: link:../../packages/themes/stackoverflow
@@ -961,6 +964,31 @@ importers:
       '@repo/eslint-config-custom':
         specifier: workspace:^
         version: link:../eslint-config-custom
+
+  packages/theme-kit:
+    dependencies:
+      '@jsonresume/core':
+        specifier: workspace:*
+        version: link:../resume-core
+      '@jsonresume/sample-data':
+        specifier: workspace:*
+        version: link:../sample-data
+    devDependencies:
+      '@repo/eslint-config-custom':
+        specifier: workspace:^
+        version: link:../eslint-config-custom
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+      styled-components:
+        specifier: ^6.1.19
+        version: 6.1.19(react-dom@19.2.7)(react@19.2.7)
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
 
   packages/themes/jsonresume-theme-academic-cv-lite:
     dependencies:
