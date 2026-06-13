@@ -1,7 +1,29 @@
 import { jsx, jsxs } from "react/jsx-runtime";
 import { renderToString } from "react-dom/server";
-import { __spreadArray, __assign } from "tslib";
 import o, { useRef, useContext, useState, useMemo, useEffect, useDebugValue, createElement, createContext } from "react";
+var __assign = function() {
+  __assign = Object.assign || function __assign2(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+      for (var p2 in s) if (Object.prototype.hasOwnProperty.call(s, p2)) t[p2] = s[p2];
+    }
+    return t;
+  };
+  return __assign.apply(this, arguments);
+};
+function __spreadArray(to, from2, pack) {
+  if (pack || arguments.length === 2) for (var i = 0, l = from2.length, ar; i < l; i++) {
+    if (ar || !(i in from2)) {
+      if (!ar) ar = Array.prototype.slice.call(from2, 0, i);
+      ar[i] = from2[i];
+    }
+  }
+  return to.concat(ar || Array.prototype.slice.call(from2));
+}
+typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
+  var e = new Error(message);
+  return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
+};
 function memoize(fn) {
   var cache = /* @__PURE__ */ Object.create(null);
   return function(arg) {
@@ -6219,7 +6241,7 @@ const StyledSectionTitle = dt(SectionTitle)`
     align-self: center;
   }
 `;
-const Entry$1 = dt.div`
+const EntryRow = dt.div`
   display: grid;
   grid-template-columns: 154px 1fr;
   gap: 28px;
@@ -6294,7 +6316,7 @@ const EntryText = dt.p`
   line-height: 1.62;
   color: ${INK_SOFT};
 `;
-const Findings$1 = dt.ul`
+const FindingsList = dt.ul`
   margin: 12px 0 0 0;
   padding: 0;
   list-style: none;
@@ -6437,15 +6459,12 @@ function fmtDate(value) {
   const month = m2[2] ? MONTHS[Number(m2[2]) - 1] : null;
   return month ? `${month} ${year}` : year;
 }
-function FieldTitle({ index, children }) {
-  return /* @__PURE__ */ jsx(StyledSectionTitle, { $index: index, children });
-}
 function Findings({ items }) {
   if (!items || items.length === 0) return null;
-  return /* @__PURE__ */ jsx(Findings$1, { children: items.map((h, i) => /* @__PURE__ */ jsx("li", { children: h }, i)) });
+  return /* @__PURE__ */ jsx(FindingsList, { children: items.map((h, i) => /* @__PURE__ */ jsx("li", { children: h }, i)) });
 }
 function Entry({ date, meta, title, href, subtitle, text, highlights }) {
-  return /* @__PURE__ */ jsxs(Entry$1, { children: [
+  return /* @__PURE__ */ jsxs(EntryRow, { children: [
     /* @__PURE__ */ jsxs(Rail, { children: [
       date && /* @__PURE__ */ jsx(RailDate, { children: date }),
       meta && /* @__PURE__ */ jsx(RailMeta, { children: meta })
@@ -6495,7 +6514,7 @@ function Resume({ resume }) {
       basics.summary && /* @__PURE__ */ jsx(Abstract, { children: basics.summary })
     ] }),
     work.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
-      /* @__PURE__ */ jsx(FieldTitle, { index: idx(), children: "Field Experience" }),
+      /* @__PURE__ */ jsx(StyledSectionTitle, { $index: idx(), children: "Field Experience" }),
       work.map((job, i) => /* @__PURE__ */ jsx(
         Entry,
         {
@@ -6511,7 +6530,7 @@ function Resume({ resume }) {
       ))
     ] }),
     projects.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
-      /* @__PURE__ */ jsx(FieldTitle, { index: idx(), children: "Research Projects" }),
+      /* @__PURE__ */ jsx(StyledSectionTitle, { $index: idx(), children: "Research Projects" }),
       projects.map((p2, i) => /* @__PURE__ */ jsx(
         Entry,
         {
@@ -6526,7 +6545,7 @@ function Resume({ resume }) {
       ))
     ] }),
     publications.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
-      /* @__PURE__ */ jsx(FieldTitle, { index: idx(), children: "Publications" }),
+      /* @__PURE__ */ jsx(StyledSectionTitle, { $index: idx(), children: "Publications" }),
       publications.map((p2, i) => /* @__PURE__ */ jsx(
         Entry,
         {
@@ -6540,7 +6559,7 @@ function Resume({ resume }) {
       ))
     ] }),
     education.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
-      /* @__PURE__ */ jsx(FieldTitle, { index: idx(), children: "Education" }),
+      /* @__PURE__ */ jsx(StyledSectionTitle, { $index: idx(), children: "Education" }),
       education.map((e, i) => /* @__PURE__ */ jsx(
         Entry,
         {
@@ -6555,14 +6574,14 @@ function Resume({ resume }) {
       ))
     ] }),
     skills.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
-      /* @__PURE__ */ jsx(FieldTitle, { index: idx(), children: "Methods & Skills" }),
+      /* @__PURE__ */ jsx(StyledSectionTitle, { $index: idx(), children: "Methods & Skills" }),
       /* @__PURE__ */ jsx(SkillsGrid, { children: skills.map((skill, i) => /* @__PURE__ */ jsxs(SkillBlock, { children: [
         /* @__PURE__ */ jsx("h4", { children: skill.name }),
         /* @__PURE__ */ jsx(StyledBadgeList, { children: skill.keywords?.map((k2, j2) => /* @__PURE__ */ jsx(StyledBadge, { children: k2 }, j2)) })
       ] }, i)) })
     ] }),
     volunteer.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
-      /* @__PURE__ */ jsx(FieldTitle, { index: idx(), children: "Volunteer & Fieldwork" }),
+      /* @__PURE__ */ jsx(StyledSectionTitle, { $index: idx(), children: "Volunteer & Fieldwork" }),
       volunteer.map((v2, i) => /* @__PURE__ */ jsx(
         Entry,
         {
@@ -6578,7 +6597,7 @@ function Resume({ resume }) {
       ))
     ] }),
     awards.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
-      /* @__PURE__ */ jsx(FieldTitle, { index: idx(), children: "Awards & Honors" }),
+      /* @__PURE__ */ jsx(StyledSectionTitle, { $index: idx(), children: "Awards & Honors" }),
       /* @__PURE__ */ jsx(CardList, { $two: true, children: awards.map((a, i) => /* @__PURE__ */ jsxs(Card, { children: [
         /* @__PURE__ */ jsx("h4", { children: a.title }),
         /* @__PURE__ */ jsx("div", { className: "meta", children: [a.awarder, fmtDate(a.date)].filter(Boolean).join(" · ") }),
@@ -6586,28 +6605,28 @@ function Resume({ resume }) {
       ] }, i)) })
     ] }),
     certificates.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
-      /* @__PURE__ */ jsx(FieldTitle, { index: idx(), children: "Certificates" }),
+      /* @__PURE__ */ jsx(StyledSectionTitle, { $index: idx(), children: "Certificates" }),
       /* @__PURE__ */ jsx(CardList, { $two: true, children: certificates.map((c, i) => /* @__PURE__ */ jsxs(Card, { children: [
         /* @__PURE__ */ jsx("h4", { children: c.url ? /* @__PURE__ */ jsx(Link, { href: safeUrl(c.url), children: c.name }) : c.name }),
         /* @__PURE__ */ jsx("div", { className: "meta", children: [c.issuer, fmtDate(c.date)].filter(Boolean).join(" · ") })
       ] }, i)) })
     ] }),
     languages.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
-      /* @__PURE__ */ jsx(FieldTitle, { index: idx(), children: "Languages" }),
+      /* @__PURE__ */ jsx(StyledSectionTitle, { $index: idx(), children: "Languages" }),
       /* @__PURE__ */ jsx(LangGrid, { children: languages.map((l, i) => /* @__PURE__ */ jsxs(LangItem, { children: [
         /* @__PURE__ */ jsx("div", { className: "lang", children: l.language }),
         l.fluency && /* @__PURE__ */ jsx("div", { className: "fluency", children: l.fluency })
       ] }, i)) })
     ] }),
     interests.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
-      /* @__PURE__ */ jsx(FieldTitle, { index: idx(), children: "Interests" }),
+      /* @__PURE__ */ jsx(StyledSectionTitle, { $index: idx(), children: "Interests" }),
       /* @__PURE__ */ jsx(CardList, { $two: true, children: interests.map((it2, i) => /* @__PURE__ */ jsxs(Card, { children: [
         /* @__PURE__ */ jsx("h4", { children: it2.name }),
         it2.keywords && it2.keywords.length > 0 && /* @__PURE__ */ jsx("p", { children: it2.keywords.join(", ") })
       ] }, i)) })
     ] }),
     references.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
-      /* @__PURE__ */ jsx(FieldTitle, { index: idx(), children: "References" }),
+      /* @__PURE__ */ jsx(StyledSectionTitle, { $index: idx(), children: "References" }),
       /* @__PURE__ */ jsx(CardList, { children: references.map((r, i) => /* @__PURE__ */ jsxs(Card, { children: [
         /* @__PURE__ */ jsx("h4", { children: r.name }),
         r.reference && /* @__PURE__ */ jsx("p", { children: r.reference })
