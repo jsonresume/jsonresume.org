@@ -6,6 +6,7 @@ const writeFile = promisify(fs.writeFile);
 const path = require('path');
 const puppeteer = require('puppeteer');
 const btoa = require('btoa');
+const { ThemeNotFoundError } = require('./theme-errors');
 
 module.exports = (
   { resume: resumeJson, fileName, theme, format },
@@ -22,14 +23,16 @@ module.exports = (
   const formatToUse = '.' + fileFormatToUse;
   if (formatToUse === '.html') {
     createHtml(resumeJson, fileName, theme, formatToUse, (error) => {
-      if (error) {
+      // ThemeNotFoundError is reported as a friendly message by the caller;
+      // don't dump the raw object here.
+      if (error && !(error instanceof ThemeNotFoundError)) {
         console.error(error, '`createHtml` errored out');
       }
       callback(error, fileName, formatToUse);
     });
   } else if (formatToUse === '.pdf') {
     createPdf(resumeJson, fileName, theme, formatToUse, (error) => {
-      if (error) {
+      if (error && !(error instanceof ThemeNotFoundError)) {
         console.error(error, '`createPdf` errored out');
       }
       callback(error, fileName, formatToUse);
@@ -57,18 +60,22 @@ const getThemePkg = (theme) => {
     const themePkg = require(theme);
     return themePkg;
   } catch (err) {
-    // Theme not installed
-    console.log(
-      'You have to install this theme relative to the folder to use it e.g. `npm install ' +
-        theme +
-        '`',
-    );
-    process.exit();
+    // Theme not installed. Throw a typed error so the caller can render an
+    // actionable, stack-trace-free message and exit with a non-zero code.
+    throw new ThemeNotFoundError(theme);
   }
 };
 
 async function createHtml(resumeJson, fileName, themePath, format, callback) {
-  const html = await renderHTML({ resume: resumeJson, themePath });
+  let html;
+  try {
+    html = await renderHTML({ resume: resumeJson, themePath });
+  } catch (err) {
+    // Surface theme-resolution (and other render) failures to the caller so
+    // they can be reported as an actionable message rather than an
+    // unhandled-rejection stack trace.
+    return callback(err);
+  }
   const pathToStream = path.resolve(process.cwd(), fileName + format);
   await writeFile(pathToStream, ''); // workaround for https://github.com/streamich/unionfs/issues/428
   const stream = fs.createWriteStream(pathToStream);

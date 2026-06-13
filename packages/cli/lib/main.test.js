@@ -5,14 +5,19 @@ import packageJson from '../package.json';
 
 const exec = promisify(execCB);
 
-const run = async (argv, { waitForVolumeExport = true, stdin = '' } = {}) => {
+const run = async (
+  argv,
+  { waitForVolumeExport = true, stdin = '', captureStderr = false } = {},
+) => {
   let volume;
   let exitCode;
   const child = spawn(
     process.execPath,
     ['build/test-utils/cli-test-entry.js', ...argv],
     {
-      stdio: ['pipe', 'pipe', 2, 'ipc'],
+      // When captureStderr is set, pipe fd 2 so the test can read the
+      // friendly error output; otherwise inherit it (existing behavior).
+      stdio: ['pipe', 'pipe', captureStderr ? 'pipe' : 2, 'ipc'],
     },
   );
   const allChecks = Promise.all([
@@ -35,12 +40,18 @@ const run = async (argv, { waitForVolumeExport = true, stdin = '' } = {}) => {
   ]);
   child.stdin.write(stdin);
   child.stdin.end();
-  const stdout = await streamToString(child.stdout);
+  const stdoutPromise = streamToString(child.stdout);
+  const stderrPromise = captureStderr
+    ? streamToString(child.stderr)
+    : Promise.resolve('');
+  const stdout = await stdoutPromise;
+  const stderr = await stderrPromise;
   await allChecks;
   return {
     volume,
     code: exitCode,
     stdout,
+    stderr,
   };
 };
 
@@ -55,10 +66,11 @@ describe('cli configuration', () => {
         -V, --version                       output the version number
         -F, --force                         Used by \`publish\` and \`export\` - bypasses
                                             schema testing.
-        -t, --theme <theme name>            Specify theme used by \`export\` and
-                                            \`serve\` or specify a path starting with .
-                                            (use . for current directory or
-                                            ../some/other/dir) (default:
+        -t, --theme <theme name>            Theme used by \`export\` and \`serve\`
+                                            (browse themes at
+                                            https://jsonresume.org/themes/), or a
+                                            path starting with . (use . for current
+                                            directory or ../some/other/dir) (default:
                                             "jsonresume-theme-elegant")
         -f, --format <file type extension>  Used by \`export\`.
         -r, --resume <resume filename>      path to the resume in json format. Use
@@ -79,7 +91,9 @@ describe('cli configuration', () => {
         validate                            Validate your resume's schema
         export [fileName]                   Export locally to .html or .pdf. Supply
                                             a --format <file format> flag and
-                                            argument to specify export format.
+                                            argument to specify export format. Pick a
+                                            theme with --theme
+                                            (https://jsonresume.org/themes/).
         serve                               Serve resume at http://localhost:4000/
         help [command]                      display help for command
       "
@@ -94,7 +108,10 @@ describe('cli configuration', () => {
         '--resume',
         '/test-resumes/only-number.json',
       ]);
-      expect(stdout).toMatchInlineSnapshot(`""`);
+      expect(stdout).toMatchInlineSnapshot(`
+        "✓ /test-resumes/only-number.json is valid
+        "
+      `);
     });
     it('should fail when trying to validate an invalid resume specified by the --resume option', async () => {
       expect(
@@ -107,13 +124,27 @@ describe('cli configuration', () => {
         ).code,
       ).toEqual(1);
     });
+    it('should print the per-field error list (not a success line) when validation fails', async () => {
+      const { code, stdout, stderr } = await run(
+        ['validate', '--resume', '/test-resumes/invalid-resume.json'],
+        { waitForVolumeExport: false, captureStderr: true },
+      );
+      expect(code).toEqual(1);
+      expect(stderr).toContain('Invalid resume:');
+      expect(stderr).toContain('data/basics/name must be string');
+      // The success line must not appear for an invalid resume.
+      expect(stdout).not.toContain('is valid');
+    });
     it('should validate a resume specified by the --resume option', async () => {
       const { stdout } = await run([
         'validate',
         '--resume',
         '/test-resumes/resume.json',
       ]);
-      expect(stdout).toMatchInlineSnapshot(`""`);
+      expect(stdout).toMatchInlineSnapshot(`
+        "✓ /test-resumes/resume.json is valid
+        "
+      `);
     });
   });
   describe('export', () => {
@@ -159,6 +190,25 @@ describe('cli configuration', () => {
          /test-resumes/exported-resume.html
         "
       `);
+    });
+    it('should print a friendly, actionable message and exit non-zero when the theme is not installed', async () => {
+      const { code, stderr } = await run(
+        [
+          'export',
+          '/test-resumes/exported-resume.html',
+          '--resume',
+          '/test-resumes/resume.json',
+          '--theme',
+          'nonexistent-xyz',
+        ],
+        { waitForVolumeExport: false, captureStderr: true },
+      );
+      expect(code).toEqual(1);
+      expect(stderr).toContain("Theme 'nonexistent-xyz' not found.");
+      expect(stderr).toContain('npm install jsonresume-theme-nonexistent-xyz');
+      expect(stderr).toContain('https://jsonresume.org/themes/');
+      // The raw stack trace must not leak to the user.
+      expect(stderr).not.toContain('at _default');
     });
   });
 });

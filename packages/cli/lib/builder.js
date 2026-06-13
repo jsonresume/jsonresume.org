@@ -4,6 +4,7 @@ const fs = require('fs');
 const request = require('superagent');
 const chalk = require('chalk');
 const renderHtml = require('./render-html').default;
+const { ThemeNotFoundError, formatThemeNotFound } = require('./theme-errors');
 
 const denormalizeTheme = (value) => {
   return value.match(/jsonresume-theme-(.*)/)[1];
@@ -57,7 +58,13 @@ module.exports = function resumeBuilder(theme, dir, resumeFilename, cb) {
       const html = await renderHtml({ resume: resumeJson, themePath: theme });
       cb(null, html);
     } catch (err) {
-      console.log(err);
+      if (err instanceof ThemeNotFoundError) {
+        // Theme isn't installed locally. Show an actionable message, then fall
+        // back to the hosted theme server (preserving existing behavior).
+        console.log(formatThemeNotFound(err.theme));
+      } else {
+        console.log(err);
+      }
       console.log(
         chalk.yellow('Could not run the render function from local theme.'),
       );
