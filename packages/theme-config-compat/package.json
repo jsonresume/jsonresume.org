@@ -1,0 +1,35 @@
+{
+  "name": "@repo/theme-config",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Back-compat shim: re-exports @jsonresume/theme-metadata under the legacy @repo/theme-config import specifier for internal monorepo consumers",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./metadata": "./src/metadata.js"
+  },
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "lint": "eslint src --cache --cache-location node_modules/.cache/.eslintcache || exit 0"
+  },
+  "dependencies": {
+    "@jsonresume/theme-metadata": "workspace:*"
+  },
+  "devDependencies": {
+    "@repo/eslint-config-custom": "workspace:^"
+  },
+  "keywords": [
+    "json-resume",
+    "themes",
+    "config"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jsonresume/jsonresume.org",
+    "directory": "packages/theme-config-compat"
+  },
+  "license": "MIT"
+}
