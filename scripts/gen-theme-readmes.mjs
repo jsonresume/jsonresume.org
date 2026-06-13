@@ -38,7 +38,7 @@ const METADATA_PATH = join(
   'packages',
   'theme-config',
   'src',
-  'metadata.js',
+  'metadata.js'
 );
 const SCREENSHOTS_DIR = join(
   REPO_ROOT,
@@ -46,7 +46,7 @@ const SCREENSHOTS_DIR = join(
   'homepage2',
   'public',
   'img',
-  'themes',
+  'themes'
 );
 
 const RAW_BASE =
@@ -160,15 +160,15 @@ function buildReadme({ slug, meta, pkg }) {
   lines.push('');
   lines.push(
     `Renders all standard JSON Resume sections: ${STANDARD_SECTIONS.join(
-      ', ',
-    )}.`,
+      ', '
+    )}.`
   );
   lines.push('');
 
   lines.push('## Development');
   lines.push('');
   lines.push(
-    'This theme lives in the [jsonresume.org](https://github.com/jsonresume/jsonresume.org) monorepo. Build it from the repo root with:',
+    'This theme lives in the [jsonresume.org](https://github.com/jsonresume/jsonresume.org) monorepo. Build it from the repo root with:'
   );
   lines.push('');
   lines.push('```sh');
@@ -228,13 +228,13 @@ async function main() {
     writeFileSync(readmePath, buildReadme({ slug, meta, pkg }), 'utf8');
     written += 1;
     results.push(
-      `write ${pkg.name}${meta ? '' : ' (no metadata, generic intro)'}`,
+      `write ${pkg.name}${meta ? '' : ' (no metadata, generic intro)'}`
     );
   }
 
   for (const line of results) console.log(line);
   console.log(
-    `\nDone: ${written} written, ${kept} kept, ${skipped} skipped (${dirs.length} theme dirs).`,
+    `\nDone: ${written} written, ${kept} kept, ${skipped} skipped (${dirs.length} theme dirs).`
   );
 }
 
