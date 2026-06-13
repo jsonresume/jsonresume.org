@@ -40,7 +40,7 @@ test('dates - YYYY-MM', (t) => {
 });
 
 test('dates - YYYY', (t) => {
-  dateValidate(fixtures.yearMonthDay, (err, valid) => {
+  dateValidate(fixtures.year, (err, valid) => {
     t.equal(err, null, 'err should be null');
     t.true(valid, 'valid is true');
   });
@@ -52,5 +52,22 @@ test('dates - invalid', (t) => {
     t.notEqual(err, null, 'err should contain an error');
     t.false(valid, 'valid is false');
   });
+  t.end();
+});
+
+// Regression: each fixture must actually match its named iso8601 granularity,
+// so the YYYY / YYYY-MM tests genuinely exercise those branches of the pattern.
+test('dates - fixtures match their named granularity', (t) => {
+  t.match(fixtures.year, /^[1-2][0-9]{3}$/, 'year fixture is a bare YYYY');
+  t.match(
+    fixtures.yearMonth,
+    /^[1-2][0-9]{3}-[0-1][0-9]$/,
+    'yearMonth fixture is YYYY-MM'
+  );
+  t.match(
+    fixtures.yearMonthDay,
+    /^[1-2][0-9]{3}-[0-1][0-9]-[0-3][0-9]$/,
+    'yearMonthDay fixture is YYYY-MM-DD'
+  );
   t.end();
 });
