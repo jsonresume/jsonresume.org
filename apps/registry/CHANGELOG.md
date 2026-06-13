@@ -1,5 +1,12 @@
 # registry
 
+## 1.0.5
+
+### Patch Changes
+
+- Updated dependencies [4715518]
+  - jsonresume-theme-clinical-precision@0.2.0
+
 ## 1.0.4
 
 ### Patch Changes
