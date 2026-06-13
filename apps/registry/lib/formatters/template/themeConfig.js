@@ -45,6 +45,7 @@ import * as claude from 'jsonresume-theme-claude'; // NEW
 import * as colophon from 'jsonresume-theme-colophon';
 import * as communitygarden from 'jsonresume-theme-community-garden'; // NEW
 import * as creativeconfidence from 'jsonresume-theme-creative-confidence'; // NEW
+import * as artschoolmodern from 'jsonresume-theme-art-school-modern'; // NEW
 import * as fieldresearcher from 'jsonresume-theme-field-researcher'; // NEW
 import * as clinicalprecision from 'jsonresume-theme-clinical-precision'; // NEW
 
@@ -115,6 +116,7 @@ export const THEMES = {
   colophon,
   'community-garden': communitygarden, // NEW
   'creative-confidence': creativeconfidence, // NEW
+  'art-school-modern': artschoolmodern, // NEW
   'field-researcher': fieldresearcher, // NEW
   'clinical-precision': clinicalprecision, // NEW
 };

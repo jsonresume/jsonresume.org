@@ -580,6 +580,23 @@ export const THEME_METADATA = {
       'ats',
     ],
   },
+  'art-school-modern': {
+    name: 'Art School Modern',
+    description:
+      'Avant-garde gallery aesthetic for designers and artists. Oversized Archivo Black display type, an asymmetric off-grid header with a framed photo plate, an editorial Fraunces serif statement, catalogue-numbered sections, and a single vivid vermilion accent.',
+    author: 'JSON Resume Team',
+    tags: [
+      'art',
+      'gallery',
+      'avant-garde',
+      'editorial',
+      'expressive',
+      'designer',
+      'creative',
+      'portfolio',
+      'display-type',
+    ],
+  },
   'community-garden': {
     name: 'Community Garden',
     description:
