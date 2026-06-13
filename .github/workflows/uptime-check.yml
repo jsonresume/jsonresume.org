@@ -1,0 +1,276 @@
+name: Uptime Check
+
+# Synthetic uptime monitor for the JSON Resume public surfaces.
+#
+# Why this exists (ref #275): in June 2026 the registry, homepage, docs and
+# database were all effectively down for *months* and nobody noticed, because
+# Vercel deployments were paused behind a stale CDN cache. The existing
+# `vercel_error_monitor.yml` only scrapes the Vercel *logs* API for runtime
+# errors on the registry project -- it cannot detect a hard outage, a paused
+# deployment, or a dead DNS record, because no logs are produced when the app
+# never runs. This workflow complements it with real end-to-end HTTP probes.
+#
+# Each probe is fail-tolerant (curl never aborts the job) and we explicitly
+# detect Vercel's `x-vercel-error: DEPLOYMENT_PAUSED` header so a paused
+# project surfaces as DOWN rather than a misleading 200/402.
+#
+# Alerting is idempotent: a single issue "Uptime: <surface> down" per surface,
+# commented only on state *changes* (up->down, down->up) and auto-closed on
+# recovery. See the alert step for details.
+
+on:
+  schedule:
+    - cron: '*/30 * * * *' # every 30 minutes
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  issues: write
+
+env:
+  # KNOWN-ISSUES ALLOWLIST -------------------------------------------------
+  # Space-separated list of surface keys that are KNOWN to be down and already
+  # tracked elsewhere. A surface in this list is still probed (so we keep an
+  # honest record in the logs), but it will NOT open/comment/close any uptime
+  # issue -- avoiding spam while a separate human-owned issue is open.
+  #
+  # supabase: KNOWN-DOWN, tracked in #332 (the Supabase project host no longer
+  # even resolves in DNS -- the project was deleted/paused). Remove "supabase"
+  # from this list once #332 is closed and the DB is restored.
+  KNOWN_DOWN: 'supabase'
+
+jobs:
+  probe:
+    name: Probe public surfaces
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run uptime probes
+        id: probe
+        env:
+          # cache-buster query string is added per-surface below
+          CB: ${{ github.run_id }}-${{ github.run_attempt }}
+        run: |
+          set -uo pipefail
+
+          # check_http <key> <label> <url> <expect_body_substr|->
+          # Emits: "<key>|<status>|<detail>" to $RESULTS
+          # status is one of: up | down
+          RESULTS="$RUNNER_TEMP/results.txt"
+          : > "$RESULTS"
+
+          check_http() {
+            key="$1"; label="$2"; url="$3"; expect="$4"
+            echo "::group::Probe $label ($url)"
+
+            body_file="$RUNNER_TEMP/${key}.body"
+            hdr_file="$RUNNER_TEMP/${key}.hdr"
+
+            # -s silent, -S show errors, -L follow redirects, generous timeouts.
+            # We never let curl fail the step: capture code, default to 000.
+            code=$(curl -sS -L \
+              --max-time 25 \
+              --connect-timeout 10 \
+              -o "$body_file" \
+              -D "$hdr_file" \
+              -w '%{http_code}' \
+              "$url" 2>"$RUNNER_TEMP/${key}.err") || code="000"
+            code="${code:-000}"
+
+            # Explicitly detect a paused Vercel deployment. Vercel returns the
+            # header `x-vercel-error: DEPLOYMENT_PAUSED` (often with HTTP 402)
+            # when a project's deployments are paused -- which is exactly the
+            # silent-outage mode that motivated this monitor.
+            vercel_err=""
+            if [ -f "$hdr_file" ]; then
+              vercel_err=$(grep -i '^x-vercel-error:' "$hdr_file" | head -1 | sed 's/^[Xx]-[Vv]ercel-[Ee]rror:[[:space:]]*//I' | tr -d '\r' || true)
+            fi
+
+            status="up"
+            detail="HTTP $code"
+
+            if [ -n "$vercel_err" ]; then
+              detail="HTTP $code, x-vercel-error: $vercel_err"
+              if echo "$vercel_err" | grep -qi 'DEPLOYMENT_PAUSED'; then
+                status="down"
+                detail="DEPLOYMENT_PAUSED (HTTP $code) -- Vercel deployments are paused for this project"
+              fi
+            fi
+
+            if [ "$code" != "200" ]; then
+              status="down"
+              if [ "$code" = "000" ]; then
+                err_msg=$(head -1 "$RUNNER_TEMP/${key}.err" 2>/dev/null || true)
+                detail="connection failed (curl could not reach host: ${err_msg:-unknown})"
+              fi
+            fi
+
+            # Optional body-substring assertion.
+            if [ "$status" = "up" ] && [ "$expect" != "-" ]; then
+              if ! grep -q "$expect" "$body_file" 2>/dev/null; then
+                status="down"
+                detail="HTTP $code but body missing expected text \"$expect\""
+              fi
+            fi
+
+            echo "result: $status ($detail)"
+            echo "::endgroup::"
+            printf '%s|%s|%s\n' "$key" "$status" "$detail" >> "$RESULTS"
+          }
+
+          # --- Surfaces ---------------------------------------------------
+          check_http registry  "Registry" "https://registry.jsonresume.org/thomasdavis?cb=${CB}-${RANDOM}" "Thomas"
+          check_http homepage  "Homepage" "https://jsonresume.org?cb=${CB}-${RANDOM}" "-"
+          check_http docs      "Docs"     "https://docs.jsonresume.org?cb=${CB}-${RANDOM}" "-"
+          # supabase auth health endpoint (expect 200). Currently DOWN (#332).
+          check_http supabase  "Supabase" "https://itxuhvvwryeuzuyihpkp.supabase.co/auth/v1/health" "-"
+
+          echo "===== Probe summary ====="
+          cat "$RESULTS"
+          echo "results_file=$RESULTS" >> "$GITHUB_OUTPUT"
+
+      - name: Alert via GitHub issues (idempotent)
+        if: always()
+        uses: actions/github-script@v7
+        env:
+          RESULTS_FILE: ${{ steps.probe.outputs.results_file }}
+          KNOWN_DOWN: ${{ env.KNOWN_DOWN }}
+        with:
+          script: |
+            const fs = require('fs');
+            const { owner, repo } = context.repo;
+
+            // Human-readable labels per surface key.
+            const LABELS = {
+              registry: 'Registry (registry.jsonresume.org)',
+              homepage: 'Homepage (jsonresume.org)',
+              docs: 'Docs (docs.jsonresume.org)',
+              supabase: 'Supabase (database/auth)',
+            };
+
+            const knownDown = new Set(
+              (process.env.KNOWN_DOWN || '').split(/\s+/).filter(Boolean)
+            );
+
+            const raw = fs.readFileSync(process.env.RESULTS_FILE, 'utf8').trim();
+            const rows = raw
+              .split('\n')
+              .filter(Boolean)
+              .map((line) => {
+                const [key, status, ...rest] = line.split('|');
+                return { key, status, detail: rest.join('|') };
+              });
+
+            // Ensure the "ops" label exists (create --force equivalent).
+            try {
+              await github.rest.issues.getLabel({ owner, repo, name: 'ops' });
+            } catch (e) {
+              if (e.status === 404) {
+                await github.rest.issues.createLabel({
+                  owner,
+                  repo,
+                  name: 'ops',
+                  color: 'b60205',
+                  description: 'Operational / infrastructure / uptime',
+                });
+                core.info('Created "ops" label');
+              } else {
+                throw e;
+              }
+            }
+
+            const titleFor = (key) =>
+              `Uptime: ${LABELS[key] || key} down`;
+
+            // Find an existing uptime issue for a surface by exact title.
+            async function findIssue(title) {
+              const q = `repo:${owner}/${repo} in:title "${title}"`;
+              const res = await github.rest.search.issuesAndPullRequests({
+                q,
+                per_page: 20,
+              });
+              return res.data.items.find(
+                (i) => i.title === title && !i.pull_request
+              );
+            }
+
+            for (const { key, status, detail } of rows) {
+              const label = LABELS[key] || key;
+              const title = titleFor(key);
+
+              if (knownDown.has(key)) {
+                core.info(
+                  `[${key}] status=${status} -- in KNOWN_DOWN allowlist, ` +
+                    `skipping issue automation (tracked separately).`
+                );
+                continue;
+              }
+
+              const existing = await findIssue(title);
+              const isOpen = existing && existing.state === 'open';
+
+              if (status === 'down') {
+                const bodyLine = `**${label}** is reporting DOWN.\n\n- Detail: ${detail}\n- Run: ${context.serverUrl}/${owner}/${repo}/actions/runs/${context.runId}\n- Checked: ${new Date().toISOString()}`;
+                if (!existing) {
+                  const created = await github.rest.issues.create({
+                    owner,
+                    repo,
+                    title,
+                    labels: ['ops'],
+                    body:
+                      `Automated uptime monitor detected an outage.\n\n${bodyLine}\n\n` +
+                      `This issue auto-closes when the surface recovers.\n\n— AI`,
+                  });
+                  core.warning(`Opened uptime issue #${created.data.number} for ${key}`);
+                } else if (!isOpen) {
+                  // State change: was closed/recovered, now down again -> reopen + comment.
+                  await github.rest.issues.update({
+                    owner,
+                    repo,
+                    issue_number: existing.number,
+                    state: 'open',
+                    labels: ['ops'],
+                  });
+                  await github.rest.issues.createComment({
+                    owner,
+                    repo,
+                    issue_number: existing.number,
+                    body: `Surface went DOWN again (reopened).\n\n${bodyLine}\n\n— AI`,
+                  });
+                  core.warning(`Reopened uptime issue #${existing.number} for ${key}`);
+                } else {
+                  // Still down: no comment (avoid spam on every run).
+                  core.info(`[${key}] still down, issue #${existing.number} already open -- no comment.`);
+                }
+              } else {
+                // status === 'up'
+                if (isOpen) {
+                  // State change: down -> up -> comment + close.
+                  await github.rest.issues.createComment({
+                    owner,
+                    repo,
+                    issue_number: existing.number,
+                    body: `Recovered. ${label} is back UP (${detail}).\n\n- Run: ${context.serverUrl}/${owner}/${repo}/actions/runs/${context.runId}\n- Checked: ${new Date().toISOString()}\n\nAuto-closing.\n\n— AI`,
+                  });
+                  await github.rest.issues.update({
+                    owner,
+                    repo,
+                    issue_number: existing.number,
+                    state: 'closed',
+                    state_reason: 'completed',
+                  });
+                  core.info(`Closed uptime issue #${existing.number} for ${key} (recovered)`);
+                } else {
+                  core.info(`[${key}] up, no open issue -- nothing to do.`);
+                }
+              }
+            }
+
+            // Fail the job (visibly red) if any non-allowlisted surface is down.
+            const realDown = rows.filter(
+              (r) => r.status === 'down' && !knownDown.has(r.key)
+            );
+            if (realDown.length) {
+              core.setFailed(
+                `Surfaces down: ${realDown.map((r) => r.key).join(', ')}`
+              );
+            }
