@@ -1,5 +1,20 @@
 # registry
 
+## 1.1.6
+
+### Patch Changes
+
+- Updated dependencies [68e336e]
+- Updated dependencies [68e336e]
+- Updated dependencies [68e336e]
+- Updated dependencies [68e336e]
+- Updated dependencies [68e336e]
+  - jsonresume-theme-art-deco@0.2.3
+  - jsonresume-theme-berlin-grid@0.2.3
+  - jsonresume-theme-brutalist@0.2.3
+  - jsonresume-theme-clinical-precision@0.2.3
+  - jsonresume-theme-industrial-engineer@0.2.3
+
 ## 1.1.5
 
 ### Patch Changes
