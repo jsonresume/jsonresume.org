@@ -57,6 +57,7 @@
     "json-to-pretty-yaml": "^1.2.2",
     "jsonresume-theme-academic-cv-lite": "workspace:*",
     "jsonresume-theme-architects-portfolio": "workspace:*",
+    "jsonresume-theme-art-school-modern": "workspace:*",
     "jsonresume-theme-asymmetric-timeline": "workspace:*",
     "jsonresume-theme-berlin-grid": "workspace:*",
     "jsonresume-theme-bold-header-statement": "workspace:*",
