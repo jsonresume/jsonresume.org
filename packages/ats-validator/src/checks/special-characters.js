@@ -11,7 +11,7 @@
 // Icon-font class tokens commonly placed on empty <i>/<span> elements.
 // Matched as whole space-delimited class tokens (exact, or `<token>-*`) so we
 // do not accidentally match unrelated classes like "fancy" or "biography".
-const ICON_FONT_TOKENS = [
+export const ICON_FONT_TOKENS = [
   'fa', // Font Awesome base
   'fas', // Font Awesome solid
   'far', // Font Awesome regular
@@ -26,7 +26,7 @@ const ICON_FONT_TOKENS = [
 ];
 
 // Icon-font families referenced from CSS.
-const ICON_FONT_FAMILIES = [
+export const ICON_FONT_FAMILIES = [
   'font awesome',
   'fontawesome',
   'material icons',
@@ -39,12 +39,12 @@ const ICON_FONT_FAMILIES = [
 // Emoji + common decorative/dingbat ranges. Kept narrow so ordinary
 // punctuation (bullets •, en/em dashes, smart quotes) is NOT flagged — those
 // are well supported by ATS parsers.
-const EMOJI_RE =
+export const EMOJI_RE =
   /[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE00}-\u{FE0F}\u{1F1E6}-\u{1F1FF}]/gu;
 
 // Private Use Area code points — where icon fonts map their glyphs. Real text
 // never contains these, so any occurrence is a strong icon-font signal.
-const PRIVATE_USE_RE = /[\u{E000}-\u{F8FF}\u{F0000}-\u{FFFFD}]/u;
+export const PRIVATE_USE_RE = /[\u{E000}-\u{F8FF}\u{F0000}-\u{FFFFD}]/u;
 
 export function checkSpecialCharacters($) {
   const issues = [];

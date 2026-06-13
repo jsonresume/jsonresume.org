@@ -74,5 +74,6 @@ export function validateATS(html) {
 }
 
 export { getRecommendations };
+export { getGrade };
 
-export default { validateATS, getRecommendations };
+export default { validateATS, getRecommendations, getGrade };
