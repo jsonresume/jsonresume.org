@@ -358,6 +358,9 @@ importers:
       jsonresume-theme-architects-portfolio:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-architects-portfolio
+      jsonresume-theme-art-deco:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-art-deco
       jsonresume-theme-art-school-modern:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-art-school-modern
@@ -370,6 +373,9 @@ importers:
       jsonresume-theme-bold-header-statement:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-bold-header-statement
+      jsonresume-theme-brutalist:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-brutalist
       jsonresume-theme-californian-warm:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-californian-warm
@@ -986,6 +992,28 @@ importers:
         specifier: ^5.4.21
         version: 5.4.21(@types/node@20.19.24)
 
+  packages/themes/jsonresume-theme-art-deco:
+    dependencies:
+      '@jsonresume/core':
+        specifier: workspace:*
+        version: link:../../resume-core
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+      styled-components:
+        specifier: ^6.1.19
+        version: 6.1.19(react-dom@19.2.7)(react@19.2.7)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@20.19.24)
+
   packages/themes/jsonresume-theme-art-school-modern:
     dependencies:
       '@jsonresume/core':
@@ -1053,6 +1081,28 @@ importers:
         version: 5.4.21(@types/node@20.19.24)
 
   packages/themes/jsonresume-theme-bold-header-statement:
+    dependencies:
+      '@jsonresume/core':
+        specifier: workspace:*
+        version: link:../../resume-core
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+      styled-components:
+        specifier: ^6.1.19
+        version: 6.1.19(react-dom@19.2.7)(react@19.2.7)
+    devDependencies:
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.7.0(vite@5.4.21)
+      vite:
+        specifier: ^5.4.21
+        version: 5.4.21(@types/node@20.19.24)
+
+  packages/themes/jsonresume-theme-brutalist:
     dependencies:
       '@jsonresume/core':
         specifier: workspace:*

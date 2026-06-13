@@ -49,6 +49,8 @@ import * as artschoolmodern from 'jsonresume-theme-art-school-modern'; // NEW
 import * as fieldresearcher from 'jsonresume-theme-field-researcher'; // NEW
 import * as clinicalprecision from 'jsonresume-theme-clinical-precision'; // NEW
 import * as industrialengineer from 'jsonresume-theme-industrial-engineer'; // NEW
+import * as brutalist from 'jsonresume-theme-brutalist'; // NEW
+import * as artdeco from 'jsonresume-theme-art-deco'; // NEW
 
 // Import theme metadata from shared package
 export {
@@ -121,4 +123,6 @@ export const THEMES = {
   'field-researcher': fieldresearcher, // NEW
   'clinical-precision': clinicalprecision, // NEW
   'industrial-engineer': industrialengineer, // NEW
+  brutalist, // NEW
+  'art-deco': artdeco, // NEW
 };
