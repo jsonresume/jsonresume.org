@@ -1,6 +1,6 @@
 import { jsx, jsxs } from "react/jsx-runtime";
+import { renderToStaticMarkup } from "react-dom/server";
 import o, { useRef, useContext, useState, useMemo, useEffect, useDebugValue, createElement, createContext } from "react";
-import { renderToString } from "react-dom/server";
 var __assign = function() {
   __assign = Object.assign || function __assign2(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -100,8 +100,8 @@ function replace(value, pattern, replacement) {
 function indexof(value, search, position2) {
   return value.indexOf(search, position2);
 }
-function charat(value, index) {
-  return value.charCodeAt(index) | 0;
+function charat(value, index2) {
+  return value.charCodeAt(index2) | 0;
 }
 function substr(value, begin, end) {
   return value.slice(begin, end);
@@ -219,11 +219,11 @@ function whitespace(type) {
       break;
   return token(type) > 2 || token(character) > 3 ? "" : " ";
 }
-function escaping(index, count) {
+function escaping(index2, count) {
   while (--count && next())
     if (character < 48 || character > 102 || character > 57 && character < 65 || character > 70 && character < 97)
       break;
-  return slice(index, caret() + (count < 6 && peek() == 32 && next() == 32));
+  return slice(index2, caret() + (count < 6 && peek() == 32 && next() == 32));
 }
 function delimiter(type) {
   while (next())
@@ -249,24 +249,24 @@ function delimiter(type) {
     }
   return position;
 }
-function commenter(type, index) {
+function commenter(type, index2) {
   while (next())
     if (type + character === 47 + 10)
       break;
     else if (type + character === 42 + 42 && peek() === 47)
       break;
-  return "/*" + slice(index, position - 1) + "*" + from(type === 47 ? type : next());
+  return "/*" + slice(index2, position - 1) + "*" + from(type === 47 ? type : next());
 }
-function identifier(index) {
+function identifier(index2) {
   while (!token(peek()))
     next();
-  return slice(index, position);
+  return slice(index2, position);
 }
 function compile(value) {
   return dealloc(parse("", null, null, null, [""], value = alloc(value), 0, [0], value));
 }
 function parse(value, root, parent, rule, rules, rulesets, pseudo, points, declarations) {
-  var index = 0;
+  var index2 = 0;
   var offset = 0;
   var length2 = pseudo;
   var atrule = 0;
@@ -286,7 +286,7 @@ function parse(value, root, parent, rule, rules, rulesets, pseudo, points, decla
       // (
       case 40:
         if (previous != 108 && charat(characters2, length2 - 1) == 58) {
-          if (indexof(characters2 += replace(delimit(character2), "&", "&\f"), "&\f", abs(index ? points[index - 1] : 0)) != -1)
+          if (indexof(characters2 += replace(delimit(character2), "&", "&\f"), "&\f", abs(index2 ? points[index2 - 1] : 0)) != -1)
             ampersand = -1;
           break;
         }
@@ -320,7 +320,7 @@ function parse(value, root, parent, rule, rules, rulesets, pseudo, points, decla
         break;
       // {
       case 123 * variable:
-        points[index++] = strlen(characters2) * ampersand;
+        points[index2++] = strlen(characters2) * ampersand;
       // } ; \0
       case 125 * variable:
       case 59:
@@ -341,7 +341,7 @@ function parse(value, root, parent, rule, rules, rulesets, pseudo, points, decla
             characters2 += ";";
           // { rule/at-rule
           default:
-            append(reference = ruleset(characters2, root, parent, index, offset, rules, points, type, props = [], children = [], length2, rulesets), rulesets);
+            append(reference = ruleset(characters2, root, parent, index2, offset, rules, points, type, props = [], children = [], length2, rulesets), rulesets);
             if (character2 === 123)
               if (offset === 0)
                 parse(characters2, root, reference, reference, props, rulesets, length2, points, children);
@@ -358,7 +358,7 @@ function parse(value, root, parent, rule, rules, rulesets, pseudo, points, decla
                     parse(characters2, reference, reference, reference, [""], children, 0, points, children);
                 }
         }
-        index = offset = property = 0, variable = ampersand = 1, type = characters2 = "", length2 = pseudo;
+        index2 = offset = property = 0, variable = ampersand = 1, type = characters2 = "", length2 = pseudo;
         break;
       // :
       case 58:
@@ -377,7 +377,7 @@ function parse(value, root, parent, rule, rules, rulesets, pseudo, points, decla
             break;
           // ,
           case 44:
-            points[index++] = (strlen(characters2) - 1) * ampersand, ampersand = 1;
+            points[index2++] = (strlen(characters2) - 1) * ampersand, ampersand = 1;
             break;
           // @
           case 64:
@@ -393,11 +393,11 @@ function parse(value, root, parent, rule, rules, rulesets, pseudo, points, decla
     }
   return rulesets;
 }
-function ruleset(value, root, parent, index, offset, rules, points, type, props, children, length2, siblings) {
+function ruleset(value, root, parent, index2, offset, rules, points, type, props, children, length2, siblings) {
   var post = offset - 1;
   var rule = offset === 0 ? rules : [""];
   var size = sizeof(rule);
-  for (var i = 0, j2 = 0, k2 = 0; i < index; ++i)
+  for (var i = 0, j2 = 0, k2 = 0; i < index2; ++i)
     for (var x2 = 0, y2 = substr(value, post + 1, post = abs(j2 = points[i])), z2 = value; x2 < size; ++x2)
       if (z2 = trim(j2 > 0 ? rule[x2] + " " + y2 : replace(y2, /&\f/g, rule[x2])))
         props[k2++] = z2;
@@ -517,8 +517,8 @@ function prefix(value, length2, children) {
     // grid-(row|column)-start
     case 4384:
     case 3616:
-      if (children && children.some(function(element, index) {
-        return length2 = index, match(element.props, /grid-\w+-end/);
+      if (children && children.some(function(element, index2) {
+        return length2 = index2, match(element.props, /grid-\w+-end/);
       })) {
         return ~indexof(value + (children = children[length2].value), "span", 0) ? value : MS + replace(value, "-start", "") + value + MS + "grid-row-span:" + (~indexof(children, "span", 0) ? match(children, /\d+/) : +match(children, /\d+/) - +match(value, /\d+/)) + ";";
       }
@@ -600,7 +600,7 @@ function serialize(children, callback) {
     output += callback(children[i], i, children, callback) || "";
   return output;
 }
-function stringify(element, index, children, callback) {
+function stringify(element, index2, children, callback) {
   switch (element.type) {
     case LAYER:
       if (element.children.length) break;
@@ -618,10 +618,10 @@ function stringify(element, index, children, callback) {
 }
 function middleware(collection) {
   var length2 = sizeof(collection);
-  return function(element, index, children, callback) {
+  return function(element, index2, children, callback) {
     var output = "";
     for (var i = 0; i < length2; i++)
-      output += collection[i](element, index, children, callback) || "";
+      output += collection[i](element, index2, children, callback) || "";
     return output;
   };
 }
@@ -633,7 +633,7 @@ function rulesheet(callback) {
     }
   };
 }
-function prefixer(element, index, children, callback) {
+function prefixer(element, index2, children, callback) {
   if (element.length > -1) {
     if (!element.return)
       switch (element.type) {
@@ -1300,6 +1300,66 @@ var vt = /^\s*<\/[a-z]/i, gt = (function() {
 "production" !== process.env.NODE_ENV && "undefined" != typeof navigator && "ReactNative" === navigator.product && console.warn("It looks like you've imported 'styled-components' on React Native.\nPerhaps you're looking to import 'styled-components/native'?\nRead more about this at https://www.styled-components.com/docs/basics#react-native");
 var wt = "__sc-".concat(f, "__");
 "production" !== process.env.NODE_ENV && "test" !== process.env.NODE_ENV && "undefined" != typeof window && (window[wt] || (window[wt] = 0), 1 === window[wt] && console.warn("It looks like there are several instances of 'styled-components' initialized in this application. This may cause dynamic styles to not render properly, errors during the rehydration process, a missing theme prop, and makes your application bigger without good reason.\n\nSee https://s-c.sh/2BAXzed for more info."), window[wt] += 1);
+const CSS_RESET = "<style>*,*::before,*::after{box-sizing:border-box}html,body{margin:0;padding:0}body{-webkit-font-smoothing:antialiased}</style>";
+const TOKENS_CSS_HREF = "https://unpkg.com/@jsonresume/core/dist/tokens.css";
+const FONTS_PRECONNECT = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>';
+function isHref(value) {
+  return /^(https?:)?\/\//.test(value) || value.trim().startsWith("<link");
+}
+function familyParam(family) {
+  const [name, ...rest] = String(family).split(":");
+  const encodedName = name.trim().replace(/\s+/g, "+");
+  return rest.length ? `${encodedName}:${rest.join(":")}` : encodedName;
+}
+function googleFontsLinks(families) {
+  if (!Array.isArray(families) || families.length === 0) return "";
+  const passthrough = [];
+  const names = [];
+  for (const entry of families) {
+    if (entry == null || entry === "") continue;
+    if (isHref(entry)) passthrough.push(entry);
+    else names.push(entry);
+  }
+  const links = passthrough.map(
+    (href) => href.trim().startsWith("<link") ? href : `<link href="${href}" rel="stylesheet">`
+  );
+  if (names.length > 0) {
+    const query = names.map(familyParam).join("&family=");
+    links.unshift(
+      `<link href="https://fonts.googleapis.com/css2?family=${query}&display=swap" rel="stylesheet">`
+    );
+  }
+  if (links.length === 0) return "";
+  return FONTS_PRECONNECT + links.join("");
+}
+function renderResumeDocument(element, options = {}) {
+  const {
+    fonts,
+    title,
+    lang = "en",
+    dir = "ltr",
+    reset = false,
+    head = "",
+    headAfterStyles = "",
+    includeTokensCss = true,
+    bodyClass
+  } = options;
+  const sheet = new gt();
+  let html;
+  let styleTags;
+  try {
+    html = renderToStaticMarkup(sheet.collectStyles(element));
+    styleTags = sheet.getStyleTags();
+  } finally {
+    sheet.seal();
+  }
+  const fontLinks = googleFontsLinks(fonts);
+  const tokensLink = includeTokensCss ? `<link rel="stylesheet" href="${TOKENS_CSS_HREF}">` : "";
+  const resetTag = reset ? CSS_RESET : "";
+  const titleTag = title ? `<title>${title}</title>` : "";
+  const bodyAttr = bodyClass ? ` class="${bodyClass}"` : "";
+  return `<!DOCTYPE html><html lang="${lang}" dir="${dir}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">` + fontLinks + tokensLink + resetTag + head + styleTags + headAfterStyles + titleTag + `</head><body${bodyAttr}>${html}</body></html>`;
+}
 createContext({
   theme: "professional",
   setTheme: () => {
@@ -1477,7 +1537,9 @@ function formatDateRange({
     return formatter.format(date);
   };
   const start = formatDate(startDate);
-  if (endDate === void 0) return start;
+  if (endDate === void 0) {
+    return start;
+  }
   const end = formatDate(endDate);
   return `${start} - ${end}`;
 }
@@ -1562,7 +1624,6 @@ function safeUrl(url) {
   const trimmed = url.trim();
   const dangerousProtocols = /^(javascript|data|vbscript|file|about):/i;
   if (dangerousProtocols.test(trimmed)) {
-    console.warn(`[Security] Blocked dangerous URL: ${trimmed.slice(0, 50)}`);
     return null;
   }
   const safeProtocols = /^(https?|mailto|tel|sms|ftp):/i;
@@ -1578,7 +1639,6 @@ function safeUrl(url) {
   if (/^[a-z0-9][a-z0-9.-]+\.[a-z]{2,}$/i.test(trimmed)) {
     return `https://${trimmed}`;
   }
-  console.warn(`[Security] Uncertain URL safety: ${trimmed.slice(0, 50)}`);
   return trimmed;
 }
 const ContactContainer = dt.div`
@@ -1642,7 +1702,7 @@ function ContactInfo({ basics = {}, separator = "•", className }) {
       ) }, "url")
     );
   }
-  profiles.forEach((profile, index) => {
+  profiles.forEach((profile, index2) => {
     if (profile.url) {
       items.push(
         /* @__PURE__ */ jsx(ContactItem, { children: /* @__PURE__ */ jsx(
@@ -1654,15 +1714,15 @@ function ContactInfo({ basics = {}, separator = "•", className }) {
             "aria-label": profile.network,
             children: profile.network || profile.username
           }
-        ) }, `profile-${index}`)
+        ) }, `profile-${index2}`)
       );
     }
   });
   if (items.length === 0) return null;
-  return /* @__PURE__ */ jsx(ContactContainer, { className: `resume-contact ${className || ""}`.trim(), children: items.map((item, index) => /* @__PURE__ */ jsxs(o.Fragment, { children: [
-    index > 0 && /* @__PURE__ */ jsx(Separator, { "aria-hidden": "true", children: separator }),
+  return /* @__PURE__ */ jsx(ContactContainer, { className: `resume-contact ${className || ""}`.trim(), children: items.map((item, index2) => /* @__PURE__ */ jsxs(o.Fragment, { children: [
+    index2 > 0 && /* @__PURE__ */ jsx(Separator, { "aria-hidden": "true", children: separator }),
     item
-  ] }, index)) });
+  ] }, index2)) });
 }
 dt.a`
   color: ${(props) => props.theme?.colors?.link || "var(--resume-color-link, #0066cc)"};
@@ -6232,7 +6292,7 @@ function Resume({ resume }) {
     ] }),
     work?.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
       /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Experience" }),
-      work.map((job, index) => /* @__PURE__ */ jsxs(WorkItem, { children: [
+      work.map((job, index2) => /* @__PURE__ */ jsxs(WorkItem, { children: [
         /* @__PURE__ */ jsxs(WorkHeader, { children: [
           /* @__PURE__ */ jsxs("div", { children: [
             /* @__PURE__ */ jsx(Position, { children: job.position }),
@@ -6250,18 +6310,18 @@ function Resume({ resume }) {
           },
           i
         )) })
-      ] }, index))
+      ] }, index2))
     ] }),
     skills?.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
       /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Skills" }),
-      /* @__PURE__ */ jsx(SkillsGrid, { children: skills.map((skill, index) => /* @__PURE__ */ jsxs(SkillCategory, { children: [
+      /* @__PURE__ */ jsx(SkillsGrid, { children: skills.map((skill, index2) => /* @__PURE__ */ jsxs(SkillCategory, { children: [
         /* @__PURE__ */ jsx(SkillName, { children: skill.name }),
         skill.keywords?.length > 0 && /* @__PURE__ */ jsx(SkillTags, { children: skill.keywords.join(", ") })
-      ] }, index)) })
+      ] }, index2)) })
     ] }),
     education?.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
       /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Education" }),
-      education.map((edu, index) => /* @__PURE__ */ jsxs(EducationItem, { children: [
+      education.map((edu, index2) => /* @__PURE__ */ jsxs(EducationItem, { children: [
         /* @__PURE__ */ jsx(Institution, { children: edu.institution }),
         /* @__PURE__ */ jsxs(Degree, { children: [
           edu.studyType,
@@ -6270,11 +6330,11 @@ function Resume({ resume }) {
           edu.score && ` • ${edu.score}`
         ] }),
         /* @__PURE__ */ jsx(EducationDate, { children: /* @__PURE__ */ jsx(DateRange, { startDate: edu.startDate, endDate: edu.endDate }) })
-      ] }, index))
+      ] }, index2))
     ] }),
     projects?.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
       /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Projects" }),
-      projects.map((project, index) => /* @__PURE__ */ jsxs(WorkItem, { children: [
+      projects.map((project, index2) => /* @__PURE__ */ jsxs(WorkItem, { children: [
         /* @__PURE__ */ jsx(Position, { children: project.name }),
         project.description && /* @__PURE__ */ jsx(WorkSummary, { children: project.description }),
         project.highlights?.length > 0 && /* @__PURE__ */ jsx(Highlights, { children: project.highlights.map((highlight, i) => /* @__PURE__ */ jsx(
@@ -6286,11 +6346,11 @@ function Resume({ resume }) {
           },
           i
         )) })
-      ] }, index))
+      ] }, index2))
     ] }),
     volunteer?.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
       /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Volunteer" }),
-      volunteer.map((vol, index) => /* @__PURE__ */ jsxs(WorkItem, { children: [
+      volunteer.map((vol, index2) => /* @__PURE__ */ jsxs(WorkItem, { children: [
         /* @__PURE__ */ jsxs(WorkHeader, { children: [
           /* @__PURE__ */ jsxs("div", { children: [
             /* @__PURE__ */ jsx(Position, { children: vol.position }),
@@ -6314,11 +6374,11 @@ function Resume({ resume }) {
           },
           i
         )) })
-      ] }, index))
+      ] }, index2))
     ] }),
     awards?.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
       /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Awards" }),
-      awards.map((award, index) => /* @__PURE__ */ jsxs(EducationItem, { children: [
+      awards.map((award, index2) => /* @__PURE__ */ jsxs(EducationItem, { children: [
         /* @__PURE__ */ jsx(Institution, { children: award.title }),
         award.awarder && /* @__PURE__ */ jsxs(Degree, { children: [
           "Awarded by ",
@@ -6326,22 +6386,22 @@ function Resume({ resume }) {
         ] }),
         award.date && /* @__PURE__ */ jsx(EducationDate, { children: award.date }),
         award.summary && /* @__PURE__ */ jsx(WorkSummary, { children: award.summary })
-      ] }, index))
+      ] }, index2))
     ] }),
     certificates?.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
       /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Certificates" }),
-      certificates.map((cert, index) => /* @__PURE__ */ jsxs(EducationItem, { children: [
+      certificates.map((cert, index2) => /* @__PURE__ */ jsxs(EducationItem, { children: [
         /* @__PURE__ */ jsx(Institution, { children: cert.name }),
         cert.issuer && /* @__PURE__ */ jsxs(Degree, { children: [
           "Issued by ",
           cert.issuer
         ] }),
         cert.date && /* @__PURE__ */ jsx(EducationDate, { children: cert.date })
-      ] }, index))
+      ] }, index2))
     ] }),
     publications?.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
       /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Publications" }),
-      publications.map((pub, index) => /* @__PURE__ */ jsxs(EducationItem, { children: [
+      publications.map((pub, index2) => /* @__PURE__ */ jsxs(EducationItem, { children: [
         /* @__PURE__ */ jsx(Institution, { children: pub.name }),
         pub.publisher && /* @__PURE__ */ jsxs(Degree, { children: [
           "Published by ",
@@ -6349,49 +6409,39 @@ function Resume({ resume }) {
         ] }),
         pub.releaseDate && /* @__PURE__ */ jsx(EducationDate, { children: pub.releaseDate }),
         pub.summary && /* @__PURE__ */ jsx(WorkSummary, { children: pub.summary })
-      ] }, index))
+      ] }, index2))
     ] }),
     languages?.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
       /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Languages" }),
-      /* @__PURE__ */ jsx(SkillsGrid, { children: languages.map((lang, index) => /* @__PURE__ */ jsxs(SkillCategory, { children: [
+      /* @__PURE__ */ jsx(SkillsGrid, { children: languages.map((lang, index2) => /* @__PURE__ */ jsxs(SkillCategory, { children: [
         /* @__PURE__ */ jsx(SkillName, { children: lang.language }),
         lang.fluency && /* @__PURE__ */ jsx(SkillTags, { children: lang.fluency })
-      ] }, index)) })
+      ] }, index2)) })
     ] }),
     interests?.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
       /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Interests" }),
-      /* @__PURE__ */ jsx(SkillsGrid, { children: interests.map((interest, index) => /* @__PURE__ */ jsxs(SkillCategory, { children: [
+      /* @__PURE__ */ jsx(SkillsGrid, { children: interests.map((interest, index2) => /* @__PURE__ */ jsxs(SkillCategory, { children: [
         /* @__PURE__ */ jsx(SkillName, { children: interest.name }),
         interest.keywords?.length > 0 && /* @__PURE__ */ jsx(SkillTags, { children: interest.keywords.join(", ") })
-      ] }, index)) })
+      ] }, index2)) })
     ] }),
     references?.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
       /* @__PURE__ */ jsx(StyledSectionTitle, { children: "References" }),
-      references.map((ref, index) => /* @__PURE__ */ jsxs(EducationItem, { children: [
+      references.map((ref, index2) => /* @__PURE__ */ jsxs(EducationItem, { children: [
         /* @__PURE__ */ jsx(Institution, { children: ref.name }),
         ref.reference && /* @__PURE__ */ jsx(WorkSummary, { children: ref.reference })
-      ] }, index))
+      ] }, index2))
     ] })
   ] });
 }
 function render(resume) {
-  const sheet = new gt();
-  try {
-    const html = renderToString(
-      sheet.collectStyles(/* @__PURE__ */ jsx(Resume, { resume }))
-    );
-    const styles = sheet.getStyleTags();
-    return `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${resume.basics?.name || "Resume"} - Resume</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-  ${styles}
-  <style>
+  return renderResumeDocument(/* @__PURE__ */ jsx(Resume, { resume }), {
+    fonts: ["Inter:wght@400;600;700;800"],
+    title: `${resume.basics?.name || "Resume"} - Resume`,
+    lang: "en",
+    dir: "ltr",
+    includeTokensCss: false,
+    headAfterStyles: `<style>
     * {
       box-sizing: border-box;
       margin: 0;
@@ -6410,16 +6460,11 @@ function render(resume) {
         margin: 0.5in;
       }
     }
-  </style>
-</head>
-<body>
-  ${html}
-</body>
-</html>`;
-  } finally {
-    sheet.seal();
-  }
+  </style>`
+  });
 }
+const index = { render };
 export {
+  index as default,
   render
 };
