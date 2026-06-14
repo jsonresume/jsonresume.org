@@ -44,7 +44,7 @@
   "dependencies": {
     "@jsonresume/types": "workspace:*",
     "@jsonresume/utils": "workspace:*",
-    "styled-components": "^6.1.19"
+    "styled-components": "^6.4.2"
   },
   "keywords": [
     "resume",

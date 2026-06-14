@@ -25,13 +25,13 @@
     "react-syntax-highlighter": "^15.5.0",
     "remark": "^15.0.1",
     "remark-html": "^16.0.1",
-    "styled-components": "^6.1.19"
+    "styled-components": "^6.4.2"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.3",
-    "@playwright/test": "^1.55.1",
+    "@playwright/test": "^1.60.0",
     "@types/node": "^20.10.0",
-    "caniuse-lite": "^1.0.30001566",
+    "caniuse-lite": "^1.0.30001799",
     "eslint": "^8.55.0",
     "@repo/eslint-config-custom": "workspace:*",
     "eslint-config-next": "^15.5.7",

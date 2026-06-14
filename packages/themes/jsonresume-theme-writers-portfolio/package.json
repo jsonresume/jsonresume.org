@@ -38,7 +38,7 @@
     "@jsonresume/core": "workspace:*",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "styled-components": "^6.1.19"
+    "styled-components": "^6.4.2"
   },
   "devDependencies": {
     "vitest": "^1.6.0",
