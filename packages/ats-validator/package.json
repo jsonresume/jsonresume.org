@@ -33,7 +33,7 @@
     "applicant-tracking-system"
   ],
   "dependencies": {
-    "cheerio": "^1.0.0"
+    "cheerio": "^1.2.0"
   },
   "devDependencies": {
     "vitest": "^1.6.0"
