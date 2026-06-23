@@ -19,10 +19,21 @@
       }
     ]
   },
-  "locationValid": {
+  "locationObjectValid": {
     "work": [
       {
-        "location": "Palo Alto, CA"
+        "location": {
+          "city": "Palo Alto",
+          "region": "California",
+          "countryCode": "US"
+        }
+      }
+    ]
+  },
+  "locationStringValid": {
+    "work": [
+      {
+        "location": "Palo Alto, California"
       }
     ]
   },

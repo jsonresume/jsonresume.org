@@ -34,6 +34,22 @@ test('education[].institution - invalid', (t) => {
   t.end();
 });
 
+test('education[].location - valid', (t) => {
+  validate(fixtures.locationValid, (err, valid) => {
+    t.equal(err, null, 'err should be null');
+    t.true(valid, 'valid is true');
+  });
+  t.end();
+});
+
+test('education[].location - invalid', (t) => {
+  validate(fixtures.locationInvalid, (err, valid) => {
+    t.notEqual(err, null, 'err should contain an error');
+    t.false(valid, 'valid is false');
+  });
+  t.end();
+});
+
 test('education[].area - valid', (t) => {
   validate(fixtures.areaValid, (err, valid) => {
     t.equal(err, null, 'err should be null');
