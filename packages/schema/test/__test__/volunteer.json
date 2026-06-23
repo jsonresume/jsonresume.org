@@ -19,6 +19,24 @@
       }
     ]
   },
+  "locationValid": {
+    "volunteer": [
+      {
+        "location": {
+          "city": "San Francisco",
+          "region": "California",
+          "countryCode": "US"
+        }
+      }
+    ]
+  },
+  "locationInvalid": {
+    "volunteer": [
+      {
+        "location": null
+      }
+    ]
+  },
   "positionValid": {
     "volunteer": [
       {

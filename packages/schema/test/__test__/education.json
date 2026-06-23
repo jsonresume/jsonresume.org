@@ -19,6 +19,24 @@
       }
     ]
   },
+  "locationValid": {
+    "education": [
+      {
+        "location": {
+          "city": "Norman",
+          "region": "Oklahoma",
+          "countryCode": "US"
+        }
+      }
+    ]
+  },
+  "locationInvalid": {
+    "education": [
+      {
+        "location": null
+      }
+    ]
+  },
   "areaValid": {
     "education": [
       {
