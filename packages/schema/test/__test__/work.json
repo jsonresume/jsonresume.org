@@ -22,7 +22,11 @@
   "locationValid": {
     "work": [
       {
-        "location": "Palo Alto, CA"
+        "location": {
+          "city": "Palo Alto",
+          "region": "California",
+          "countryCode": "US"
+        }
       }
     ]
   },

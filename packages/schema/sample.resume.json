@@ -31,7 +31,11 @@
   "work": [
     {
       "name": "Pied Piper",
-      "location": "Palo Alto, CA",
+      "location": {
+        "city": "Palo Alto",
+        "region": "California",
+        "countryCode": "US"
+      },
       "description": "Awesome compression company",
       "position": "CEO/President",
       "url": "http://piedpiper.example.com",
@@ -48,6 +52,11 @@
   "volunteer": [
     {
       "organization": "CoderDojo",
+      "location": {
+        "city": "San Francisco",
+        "region": "California",
+        "countryCode": "US"
+      },
       "position": "Teacher",
       "url": "http://coderdojo.example.com/",
       "startDate": "2012-01-01",
@@ -59,6 +68,11 @@
   "education": [
     {
       "institution": "University of Oklahoma",
+      "location": {
+        "city": "Norman",
+        "region": "Oklahoma",
+        "countryCode": "US"
+      },
       "url": "https://www.ou.edu/",
       "area": "Information Technology",
       "studyType": "Bachelor",

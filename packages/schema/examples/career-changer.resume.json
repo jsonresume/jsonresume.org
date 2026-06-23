@@ -31,7 +31,11 @@
   "work": [
     {
       "name": "Freelance",
-      "location": "Austin, TX",
+      "location": {
+        "city": "Austin",
+        "region": "Texas",
+        "countryCode": "US"
+      },
       "description": "Independent analytics consulting",
       "position": "Data Analyst (Contract)",
       "startDate": "2024-08-01",
@@ -45,7 +49,11 @@
     },
     {
       "name": "Salt & Cedar Restaurant Group",
-      "location": "Austin, TX",
+      "location": {
+        "city": "Austin",
+        "region": "Texas",
+        "countryCode": "US"
+      },
       "description": "Regional restaurant group, four locations",
       "position": "General Manager",
       "startDate": "2018-03-01",
@@ -59,7 +67,11 @@
     },
     {
       "name": "Café Lumen",
-      "location": "Austin, TX",
+      "location": {
+        "city": "Austin",
+        "region": "Texas",
+        "countryCode": "US"
+      },
       "description": "Independent neighborhood cafe",
       "position": "Shift Supervisor",
       "startDate": "2016-01-01",
@@ -74,6 +86,11 @@
   "volunteer": [
     {
       "organization": "Central Texas Food Bank",
+      "location": {
+        "city": "Austin",
+        "region": "Texas",
+        "countryCode": "US"
+      },
       "position": "Data Volunteer",
       "url": "https://www.centraltexasfoodbank.org/",
       "startDate": "2024-02-01",
@@ -86,6 +103,11 @@
     },
     {
       "organization": "Austin Free-Net",
+      "location": {
+        "city": "Austin",
+        "region": "Texas",
+        "countryCode": "US"
+      },
       "position": "Digital Literacy Tutor",
       "url": "https://www.austinfree.net/",
       "startDate": "2023-09-01",
@@ -97,6 +119,11 @@
   "education": [
     {
       "institution": "Austin Community College",
+      "location": {
+        "city": "Austin",
+        "region": "Texas",
+        "countryCode": "US"
+      },
       "url": "https://www.austincc.edu/",
       "area": "Business Administration",
       "studyType": "Associate of Applied Science",
