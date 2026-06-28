@@ -130,7 +130,7 @@ jobs:
 
       - name: Alert via GitHub issues (idempotent)
         if: always()
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         env:
           RESULTS_FILE: ${{ steps.probe.outputs.results_file }}
           KNOWN_DOWN: ${{ env.KNOWN_DOWN }}
