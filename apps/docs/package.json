@@ -12,19 +12,19 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
-    "fumadocs-core": "^16.0.0",
+    "fumadocs-core": "^16.10.6",
     "fumadocs-mdx": "^14.0.0",
-    "fumadocs-ui": "^16.0.0",
+    "fumadocs-ui": "^16.10.6",
     "next": "^16.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "mermaid": "^11.0.0"
+    "mermaid": "^11.16.0"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.0.0",
-    "@types/mdx": "^2.0.0",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
+    "@tailwindcss/postcss": "^4.3.1",
+    "@types/mdx": "^2.0.14",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
     "postcss": "^8.4.0",
     "tailwindcss": "^4.0.0",
     "typescript": "^5.0.0"

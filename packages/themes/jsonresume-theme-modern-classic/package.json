@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@jsonresume/core": "workspace:*",
-    "styled-components": "^6.1.19"
+    "styled-components": "^6.4.3"
   },
   "scripts": {
     "build": "vite build"
