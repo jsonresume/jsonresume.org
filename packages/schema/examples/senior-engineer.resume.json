@@ -36,7 +36,11 @@
   "work": [
     {
       "name": "Confluent",
-      "location": "Mountain View, CA",
+      "location": {
+        "city": "Mountain View",
+        "region": "California",
+        "countryCode": "US"
+      },
       "description": "Data streaming platform built on Apache Kafka",
       "position": "Staff Software Engineer",
       "url": "https://www.confluent.io/",
@@ -51,7 +55,11 @@
     },
     {
       "name": "Dropbox",
-      "location": "San Francisco, CA",
+      "location": {
+        "city": "San Francisco",
+        "region": "California",
+        "countryCode": "US"
+      },
       "description": "Cloud storage and collaboration",
       "position": "Senior Software Engineer",
       "url": "https://www.dropbox.com/",
@@ -66,7 +74,11 @@
     },
     {
       "name": "Rackspace",
-      "location": "San Antonio, TX",
+      "location": {
+        "city": "San Antonio",
+        "region": "Texas",
+        "countryCode": "US"
+      },
       "description": "Managed cloud hosting provider",
       "position": "Software Engineer",
       "url": "https://www.rackspace.com/",
@@ -82,6 +94,11 @@
   "education": [
     {
       "institution": "University of Texas at Austin",
+      "location": {
+        "city": "Austin",
+        "region": "Texas",
+        "countryCode": "US"
+      },
       "url": "https://www.utexas.edu/",
       "area": "Computer Science",
       "studyType": "Ph.D.",
@@ -91,6 +108,11 @@
     },
     {
       "institution": "University of Texas at Austin",
+      "location": {
+        "city": "Austin",
+        "region": "Texas",
+        "countryCode": "US"
+      },
       "url": "https://www.utexas.edu/",
       "area": "Computer Science",
       "studyType": "Bachelor of Science",
