@@ -140,7 +140,7 @@
     "styled-components": "^6.1.19",
     "tailwindcss": "^3.4.3",
     "uuid": "^9.0.0",
-    "zod": "^3.24.1"
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.23.5",
