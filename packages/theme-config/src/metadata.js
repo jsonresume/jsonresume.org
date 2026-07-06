@@ -669,6 +669,23 @@ export const THEME_METADATA = {
       'luxury',
     ],
   },
+  'utf8-safe': {
+    name: 'UTF-8 Safe',
+    description:
+      'Clean, two-column layout with SAP OpenUI5 Horizon design tokens — Inter font, accent blue, print-optimized. Designed for SAFT/UTF-8-heavy content.',
+    author: 'Amaury Van Espen',
+    tags: [
+      'utf8',
+      'sap',
+      'horizon',
+      'two-column',
+      'clean',
+      'modern',
+      'blue',
+      'inter',
+      'print',
+    ],
+  },
 };
 
 // List of available theme names (derived from THEME_METADATA)

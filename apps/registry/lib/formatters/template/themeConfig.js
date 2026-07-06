@@ -50,7 +50,8 @@ import * as fieldresearcher from 'jsonresume-theme-field-researcher'; // NEW
 import * as clinicalprecision from 'jsonresume-theme-clinical-precision'; // NEW
 import * as industrialengineer from 'jsonresume-theme-industrial-engineer'; // NEW
 import * as brutalist from 'jsonresume-theme-brutalist'; // NEW
-import * as artdeco from 'jsonresume-theme-art-deco'; // NEW
+import * as artdeco from 'jsonresume-theme-art-deco';
+import * as utf8Safe from 'jsonresume-theme-utf8-safe'; // NEW
 
 // Import theme metadata from shared package
 export {
@@ -125,4 +126,5 @@ export const THEMES = {
   'industrial-engineer': industrialengineer, // NEW
   brutalist, // NEW
   'art-deco': artdeco, // NEW
+  'utf8-safe': utf8Safe, // NEW
 };
