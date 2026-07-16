@@ -7,16 +7,16 @@ description: "Docwright documentation"
 
 There are two distinct "docs" surfaces in this repository. This page covers both, but they should not be confused:
 
-1. **The standalone documentation site (`apps/docs`)** — the site you are reading now, served at [docs.jsonresume.org](https://docs.jsonresume.org). See "The `apps/docs` Site" immediately below.
+1. **The standalone documentation site (`apps/docs`)** — the site you are reading now, served at [jsonresume.org/docs](https://jsonresume.org/docs). See "The `apps/docs` Site" immediately below.
 2. **The registry's in-app API documentation page (`apps/registry/app/docs`)** — a single React route inside the registry app that renders human-readable JSON Resume API reference. The bulk of this page (from "Registry In-App API Docs Page" onward) documents that route.
 
 ## The `apps/docs` Site
 
-The standalone documentation site lives at `apps/docs` and is served at `docs.jsonresume.org`.
+The standalone documentation site lives at `apps/docs` and is served at `jsonresume.org/docs`.
 
 - **Toolchain:** Built with [Fumadocs](https://fumadocs.dev) (`fumadocs-core`, `fumadocs-mdx`, `fumadocs-ui`) on top of Next.js. Content is authored as MDX under `apps/docs/content/docs`; `fumadocs-mdx` runs on `postinstall` and during `typecheck` to generate the docs source. This replaced the project's earlier Nextra-based setup.
 - **Build:** A static export — `next.config.mjs` sets `output: 'export'`, producing static HTML in `apps/docs/out`. Build with `pnpm --filter docs build`.
-- **Deployment:** The live production site at `docs.jsonresume.org` is served by **Vercel** (responses carry Vercel cache/`x-vercel-id` headers). The repository also retains a `.github/workflows/deploy-docs.yml` workflow that publishes the static export to GitHub Pages (writing a `docs.jsonresume.org` CNAME) on pushes touching `apps/docs/**`; the README still describes that GitHub Pages path. In other words: the repo carries a GitHub Pages workflow, but the domain currently resolves to a Vercel deployment. Treat Vercel as the source of truth for what is live and reconcile `deploy-docs.yml`/`README` if only one path should remain.
+- **Deployment:** The `.github/workflows/deploy-docs.yml` workflow publishes the static export to GitHub Pages (`jsonresume.github.io/jsonresume.org`) on pushes touching `apps/docs/**`. The marketing site (`apps/homepage2`, deployed on Vercel at `jsonresume.org`) fronts that deployment with rewrites for `/docs` and `/docs/:path*`, so the public URL is `jsonresume.org/docs`. The app sets `basePath: '/docs'` in `next.config.mjs` so page and asset URLs carry the `/docs` prefix while exported files stay at the artifact root. The former `docs.jsonresume.org` custom domain is retired.
 
 For the package layout and how `apps/docs` fits into the monorepo, see the Repository Structure page.
 

@@ -11,9 +11,8 @@ export function Sidebar() {
       <Link href="/projects/">Projects</Link>
       <Link href="/ai/">AI</Link>
       <Link href="/team/">Team</Link>
-      <Link href="https://docs.jsonresume.org" target="_blank">
-        Docs
-      </Link>
+      {/* Plain anchor: /docs is rewritten to the GitHub Pages docs site. */}
+      <a href="/docs">Docs</a>
       <Link href="/blog/">Blog</Link>
     </aside>
   );
