@@ -33,7 +33,7 @@ export const NAV_LINKS = [
     icon: Sparkles,
   },
   {
-    href: 'https://docs.jsonresume.org',
+    href: 'https://jsonresume.org/docs',
     label: 'Docs',
     icon: BookOpen,
     external: true,
