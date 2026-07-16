@@ -32,7 +32,7 @@ With JSON Resume, you can:
 
 Useful links:
 
-- Documentation: [docs.jsonresume.org](https://docs.jsonresume.org)
+- Documentation: [jsonresume.org/docs](https://jsonresume.org/docs)
 - Hosted registry: [registry.jsonresume.org](https://registry.jsonresume.org)
 - Marketing site: [jsonresume.org](https://jsonresume.org)
 
@@ -44,7 +44,7 @@ Useful links:
 | ---------------------------------- | ------------------------------------------------------------ | ---------------------------------------------------------------------- |
 | [`apps/registry`](apps/registry)   | [registry.jsonresume.org](https://registry.jsonresume.org)   | Next.js app that hosts resumes, renders themes, and serves AI features |
 | [`apps/homepage2`](apps/homepage2) | [jsonresume.org](https://jsonresume.org)                     | Next.js marketing site for the project                                 |
-| [`apps/docs`](apps/docs)           | [docs.jsonresume.org](https://docs.jsonresume.org)           | Fumadocs documentation site, deployed to GitHub Pages                  |
+| [`apps/docs`](apps/docs)           | [jsonresume.org/docs](https://jsonresume.org/docs)           | Fumadocs documentation site, deployed to GitHub Pages                  |
 
 ### Key packages (`/packages`)
 
@@ -158,7 +158,7 @@ AI code uses the Vercel AI SDK v5 (`ai` + `@ai-sdk/openai`).
 
 ## Documentation
 
-- [JSON Resume docs](https://docs.jsonresume.org)
+- [JSON Resume docs](https://jsonresume.org/docs)
 - [Schema](https://jsonresume.org/schema/)
 - [Themes](https://jsonresume.org/themes/)
 - [Registry API](https://registry.jsonresume.org/api/docs)
