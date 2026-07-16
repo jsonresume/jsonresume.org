@@ -1,15 +1,6 @@
 name: Docs - regenerate and deploy
+# Manual dispatch only while Docwright source repo is unavailable — see #478
 on:
-  push:
-    branches:
-      - master
-    paths:
-      - 'packages/**'
-      - 'apps/registry/**'
-      - 'apps/docs/**'
-      - 'docwright.config.yaml'
-      - '.docwright/lenses/**'
-      - '.github/workflows/update-docs.yml'
   workflow_dispatch:
 
 concurrency:
