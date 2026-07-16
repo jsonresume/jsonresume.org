@@ -1,15 +1,13 @@
 import { NextResponse } from 'next/server';
 import { authenticate } from '../auth';
 import { logger } from '@/lib/logger';
-import { classifyGlobalRemote } from './globalRemote';
+import { getSupabase, getResumeEmbedding } from './matchingHelpers';
+import { resolveEmbedding } from './resolveEmbedding';
 import {
-  getSupabase,
-  getResumeEmbedding,
-  generateHydeEmbedding,
-  subtractDirection,
-  averageEmbeddings,
-  matchJobs,
-} from './matchingHelpers';
+  partitionFeedback,
+  applyNegativeSignal,
+  runMatchPipeline,
+} from './matchPipeline';
 
 export const dynamic = 'force-dynamic';
 
@@ -46,70 +44,20 @@ export async function GET(request) {
   const useHyde = searchParams.get('hyde') !== 'false';
 
   try {
-    let embedding;
-    let resumeText = '';
-    let searchPrompt = '';
-
-    if (searchId) {
-      const supabaseForProfile = getSupabase();
-      const { data: profile, error: profileErr } = await supabaseForProfile
-        .from('search_profiles')
-        .select('embedding, user_id, prompt')
-        .eq('id', searchId)
-        .single();
-
-      if (profileErr || !profile || profile.user_id !== user.username) {
-        return NextResponse.json(
-          { error: 'Search profile not found' },
-          { status: 404 }
-        );
-      }
-      embedding = profile.embedding;
-      searchPrompt = profile.prompt || '';
-
-      if (shouldRerank) {
-        const res = await fetch(
-          `https://registry.jsonresume.org/${user.username}.json`
-        );
-        if (res.ok) {
-          const resume = await res.json();
-          resumeText = [
-            resume.basics?.label,
-            resume.basics?.summary,
-            ...(resume.skills || []).map(
-              (s) => `${s.name}: ${(s.keywords || []).join(', ')}`
-            ),
-          ]
-            .filter(Boolean)
-            .join('\n');
-        }
-      }
-    } else {
-      const res = await fetch(
-        `https://registry.jsonresume.org/${user.username}.json`
+    const resolved = await resolveEmbedding({
+      username: user.username,
+      searchId,
+      shouldRerank,
+      useHyde,
+    });
+    if (resolved.error) {
+      return NextResponse.json(
+        { error: resolved.error.message },
+        { status: resolved.error.status }
       );
-      if (!res.ok) {
-        return NextResponse.json(
-          { error: 'Resume not found' },
-          { status: 404 }
-        );
-      }
-      const resume = await res.json();
-      const result = await getResumeEmbedding(resume);
-      resumeText = result.text;
-
-      // HyDE: generate ideal job posting from resume for better matching
-      if (useHyde) {
-        try {
-          embedding = await generateHydeEmbedding(resumeText);
-        } catch (hydeErr) {
-          logger.warn({ error: hydeErr.message }, 'HyDE failed, using direct');
-          embedding = result.embedding;
-        }
-      } else {
-        embedding = result.embedding;
-      }
     }
+    let { embedding } = resolved;
+    const { resumeText, searchPrompt } = resolved;
 
     // Get user feedback for state filtering + negative signal
     const supabase = getSupabase();
@@ -118,76 +66,27 @@ export async function GET(request) {
       .select('job_id, sentiment')
       .eq('user_id', user.username);
 
-    const stateMap = {};
-    const dossierSet = new Set();
-    const rejectedJobIds = [];
-    (feedback || []).forEach((f) => {
-      if (f.sentiment === 'dossier') {
-        dossierSet.add(f.job_id);
-      } else {
-        stateMap[f.job_id] = f.sentiment;
-        if (f.sentiment === 'not_interested' || f.sentiment === 'dismissed') {
-          rejectedJobIds.push(f.job_id);
-        }
-      }
-    });
+    const { stateMap, dossierSet, rejectedJobIds } =
+      partitionFeedback(feedback);
 
     // Negative feedback: subtract rejected job direction from embedding
-    if (rejectedJobIds.length >= 2 && embedding) {
-      try {
-        const ids = rejectedJobIds
-          .map(Number)
-          .filter((n) => !isNaN(n))
-          .slice(0, 20);
-        if (ids.length > 0) {
-          const { data: rejJobs } = await getSupabase()
-            .from('jobs')
-            .select('embedding_v5')
-            .in('id', ids)
-            .not('embedding_v5', 'is', null);
-          const rejEmbs = (rejJobs || [])
-            .map((j) => {
-              const e = j.embedding_v5;
-              if (Array.isArray(e)) return e;
-              if (typeof e === 'string') {
-                try {
-                  return JSON.parse(e);
-                } catch {
-                  return null;
-                }
-              }
-              return null;
-            })
-            .filter((e) => Array.isArray(e) && e.length > 0);
-          const negAvg = rejEmbs.length > 0 ? averageEmbeddings(rejEmbs) : null;
-          if (negAvg) embedding = subtractDirection(embedding, negAvg, 0.12);
-        }
-      } catch (negErr) {
-        logger.warn({ error: negErr.message }, 'Negative feedback failed');
-      }
-    }
+    embedding = await applyNegativeSignal(embedding, rejectedJobIds);
 
-    const results = await matchJobs({
+    const results = await runMatchPipeline({
       embedding,
       resumeText,
       searchPrompt,
-      top: globalRemote ? top * 3 : top,
+      top,
       days,
-      remote: remote || globalRemote,
+      remote,
+      globalRemote,
       minSalary,
       search,
       shouldRerank,
       stateMap,
     });
 
-    await classifyGlobalRemote(results);
-
-    let filtered = results;
-    if (globalRemote) {
-      filtered = results.filter((j) => j.global_remote === true);
-    }
-
-    const jobs = filtered.slice(0, top).map((job) => ({
+    const jobs = results.map((job) => ({
       ...job,
       has_dossier: dossierSet.has(String(job.id)),
     }));
@@ -226,33 +125,26 @@ export async function POST(request) {
     const top = Math.min(parseInt(body.top) || 20, 500);
     const days = parseInt(body.days) || 90;
     const remote = body.remote === true;
-    const globalRemoteFlag = body.global_remote === true;
+    const globalRemote = body.global_remote === true;
     const minSalary = parseInt(body.min_salary) || 0;
     const search = body.search || '';
 
     const { embedding, text: resumeText } = await getResumeEmbedding(resume);
 
-    const results = await matchJobs({
+    const jobs = await runMatchPipeline({
       embedding,
       resumeText,
       searchPrompt: '',
-      top: globalRemoteFlag ? top * 3 : top,
+      top,
       days,
-      remote: remote || globalRemoteFlag,
+      remote,
+      globalRemote,
       minSalary,
       search,
       shouldRerank: false,
       stateMap: null,
     });
 
-    await classifyGlobalRemote(results);
-
-    let filtered = results;
-    if (globalRemoteFlag) {
-      filtered = results.filter((j) => j.global_remote === true);
-    }
-
-    const jobs = filtered.slice(0, top);
     return NextResponse.json({ jobs, total: jobs.length });
   } catch (err) {
     logger.error(
