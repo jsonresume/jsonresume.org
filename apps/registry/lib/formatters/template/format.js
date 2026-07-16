@@ -1,4 +1,5 @@
 import { getTheme } from './getTheme';
+import { ensureHtmlCharset } from './ensureHtmlCharset';
 import { normalizeDates } from '@jsonresume/utils/dates';
 
 /**
@@ -35,7 +36,9 @@ const THEME_PACKAGES = {
 
 function freshRequireTheme(themeName) {
   const packageName = THEME_PACKAGES[themeName];
-  if (!packageName) return null;
+  if (!packageName) {
+    return null;
+  }
 
   try {
     const hbsPath = nodeRequire.resolve('handlebars');
@@ -64,7 +67,7 @@ export const format = async function (resume, options) {
   const resumeHTML = themeRenderer.render(normalizeDates(resume));
 
   return {
-    content: resumeHTML,
+    content: ensureHtmlCharset(resumeHTML),
     headers: [
       {
         key: 'Cache-control',
@@ -72,7 +75,7 @@ export const format = async function (resume, options) {
       },
       {
         key: 'Content-Type',
-        value: 'text/html',
+        value: 'text/html; charset=utf-8',
       },
     ],
   };
