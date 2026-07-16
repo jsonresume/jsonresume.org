@@ -2,16 +2,12 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { DELETE } from './route';
 
 // Mock dependencies
-vi.mock('@supabase/auth-helpers-nextjs', () => ({
-  createRouteHandlerClient: vi.fn(() => ({
+vi.mock('@/lib/supabaseServer', () => ({
+  createRouteHandlerClient: vi.fn(async () => ({
     auth: {
       getSession: vi.fn(),
     },
   })),
-}));
-
-vi.mock('next/headers', () => ({
-  cookies: vi.fn(() => ({})),
 }));
 
 vi.mock('@supabase/supabase-js', () => ({
@@ -38,9 +34,7 @@ describe('DELETE /api/privacy/delete-cache', () => {
   });
 
   it('returns 401 when user is not authenticated', async () => {
-    const { createRouteHandlerClient } = await import(
-      '@supabase/auth-helpers-nextjs'
-    );
+    const { createRouteHandlerClient } = await import('@/lib/supabaseServer');
     (createRouteHandlerClient as any).mockReturnValueOnce({
       auth: {
         getSession: vi.fn().mockResolvedValue({ data: { session: null } }),
@@ -59,9 +53,7 @@ describe('DELETE /api/privacy/delete-cache', () => {
   });
 
   it('returns 400 when username is missing from session', async () => {
-    const { createRouteHandlerClient } = await import(
-      '@supabase/auth-helpers-nextjs'
-    );
+    const { createRouteHandlerClient } = await import('@/lib/supabaseServer');
     (createRouteHandlerClient as any).mockReturnValueOnce({
       auth: {
         getSession: vi.fn().mockResolvedValue({
@@ -91,9 +83,7 @@ describe('DELETE /api/privacy/delete-cache', () => {
   it('successfully deletes cached resume data', async () => {
     const mockDeleteFn = vi.fn().mockResolvedValue({ error: null, count: 1 });
 
-    const { createRouteHandlerClient } = await import(
-      '@supabase/auth-helpers-nextjs'
-    );
+    const { createRouteHandlerClient } = await import('@/lib/supabaseServer');
     (createRouteHandlerClient as any).mockReturnValueOnce({
       auth: {
         getSession: vi.fn().mockResolvedValue({
@@ -134,9 +124,7 @@ describe('DELETE /api/privacy/delete-cache', () => {
   });
 
   it('returns 500 when SUPABASE_KEY is not set', async () => {
-    const { createRouteHandlerClient } = await import(
-      '@supabase/auth-helpers-nextjs'
-    );
+    const { createRouteHandlerClient } = await import('@/lib/supabaseServer');
     (createRouteHandlerClient as any).mockReturnValueOnce({
       auth: {
         getSession: vi.fn().mockResolvedValue({
