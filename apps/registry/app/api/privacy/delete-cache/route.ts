@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+import { createRouteHandlerClient } from '@/lib/supabaseServer';
 import logger from '@/lib/logger';
 import { SUPABASE_URL } from '@/lib/supabaseConfig';
 
@@ -12,8 +11,7 @@ import { SUPABASE_URL } from '@/lib/supabaseConfig';
 export async function DELETE(request: Request) {
   try {
     // Verify user authentication via Supabase Auth
-    const cookieStore = cookies();
-    const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+    const supabase = await createRouteHandlerClient();
 
     const {
       data: { session },

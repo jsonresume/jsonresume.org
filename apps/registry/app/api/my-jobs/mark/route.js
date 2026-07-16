@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { SUPABASE_URL } from '@/lib/supabaseConfig';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+import { createRouteHandlerClient } from '@/lib/supabaseServer';
 import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
@@ -18,8 +17,7 @@ function getServiceSupabase() {
  * Body: { jobId, state }
  */
 export async function POST(request) {
-  const cookieStore = cookies();
-  const authClient = createRouteHandlerClient({ cookies: () => cookieStore });
+  const authClient = await createRouteHandlerClient();
 
   const {
     data: { session },

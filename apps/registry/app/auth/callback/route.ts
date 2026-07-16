@@ -1,5 +1,4 @@
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+import { createRouteHandlerClient } from '@/lib/supabaseServer';
 import { NextResponse } from 'next/server';
 import logger from '@/lib/logger';
 import { notifyUserSignup } from '@/lib/discord/notifiers';
@@ -9,8 +8,7 @@ export async function GET(request: Request) {
   const code = requestUrl.searchParams.get('code');
 
   if (code) {
-    const cookieStore = cookies();
-    const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+    const supabase = await createRouteHandlerClient();
 
     // Exchange code for session
     const {
