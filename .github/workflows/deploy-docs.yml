@@ -50,8 +50,9 @@ jobs:
       - name: Build docs
         run: pnpm --filter docs build
 
-      - name: Write CNAME
-        run: echo 'docs.jsonresume.org' > apps/docs/out/CNAME
+      # No CNAME: docs are served from the GitHub Pages project URL
+      # (jsonresume.github.io/jsonresume.org) behind a jsonresume.org/docs
+      # rewrite in apps/homepage2.
 
       - name: Disable Jekyll
         run: touch apps/docs/out/.nojekyll
