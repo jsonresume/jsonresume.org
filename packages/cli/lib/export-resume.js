@@ -1,4 +1,4 @@
-import renderHTML from './render-html';
+import renderHTML, { resolveThemePath } from './render-html';
 import { promisify } from 'util';
 import fs from 'fs';
 
@@ -72,19 +72,12 @@ const extractFileFormat = (fileName) => {
   return fileName.substring(dotPos + 1).toLowerCase();
 };
 const getThemePkg = (theme) => {
-  if (theme[0] === '.') {
-    theme = path.join(process.cwd(), theme, 'index.js');
-  } else {
-    theme = path.join(process.cwd(), 'node_modules', theme, 'index.js');
-  }
-  try {
-    const themePkg = require(theme);
-    return themePkg;
-  } catch (err) {
-    // Theme not installed. Throw a typed error so the caller can render an
-    // actionable, stack-trace-free message and exit with a non-zero code.
-    throw new ThemeNotFoundError(theme);
-  }
+  // Resolve with the same rules renderHTML uses (require-path lookup with a
+  // `jsonresume-theme-` prefix fallback) so a theme that renders to HTML can
+  // never spuriously fail PDF export (hoisted installs, non-index entries).
+  // resolveThemePath throws ThemeNotFoundError so the caller can render an
+  // actionable, stack-trace-free message and exit with a non-zero code.
+  return require(resolveThemePath(theme));
 };
 
 async function createHtml(resumeJson, fileName, themePath, format, callback) {
