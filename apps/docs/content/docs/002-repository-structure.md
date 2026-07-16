@@ -165,7 +165,7 @@ The `homepage2` app is the JSON Resume marketing site served at `jsonresume.org`
 
 ## Application: Documentation Site (`apps/docs`)
 
-The `docs` app is this documentation site, served at `docs.jsonresume.org`. It is built with Fumadocs on top of Next.js, authoring content as MDX under `apps/docs/content/docs`. The build is a static export (`output: 'export'` in `next.config.mjs`). See the Documentation Site page for details on its toolchain and deployment.
+The `docs` app is this documentation site, served at `jsonresume.org/docs`. It is built with Fumadocs on top of Next.js, authoring content as MDX under `apps/docs/content/docs`. The build is a static export (`output: 'export'` in `next.config.mjs`). See the Documentation Site page for details on its toolchain and deployment.
 
 ## UI Package (`packages/ui/package.json` and `tsconfig.json`)
 

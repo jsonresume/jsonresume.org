@@ -4,7 +4,9 @@ import { format } from './format';
 // Mock getTheme
 vi.mock('./getTheme', () => ({
   getTheme: vi.fn((theme) => {
-    if (theme === 'missing') return null;
+    if (theme === 'missing') {
+      return null;
+    }
     return {
       render: vi.fn(
         (resume) => `<html>${resume.basics?.name || 'Resume'}</html>`
@@ -20,7 +22,7 @@ describe('format', () => {
 
     const result = await format(resume, options);
 
-    expect(result.content).toBe('<html>John Doe</html>');
+    expect(result.content).toBe('<html><meta charset="utf-8">John Doe</html>');
   });
 
   it('renders resume with specified theme', async () => {
@@ -29,7 +31,9 @@ describe('format', () => {
 
     const result = await format(resume, options);
 
-    expect(result.content).toBe('<html>Jane Smith</html>');
+    expect(result.content).toBe(
+      '<html><meta charset="utf-8">Jane Smith</html>'
+    );
   });
 
   it('throws error when theme is missing', async () => {
@@ -52,7 +56,7 @@ describe('format', () => {
       },
       {
         key: 'Content-Type',
-        value: 'text/html',
+        value: 'text/html; charset=utf-8',
       },
     ]);
   });
@@ -72,7 +76,7 @@ describe('format', () => {
 
     const result = await format(resume, options);
 
-    expect(result.content).toBe('<html>Resume</html>');
+    expect(result.content).toBe('<html><meta charset="utf-8">Resume</html>');
   });
 
   it('returns content and headers object', async () => {
