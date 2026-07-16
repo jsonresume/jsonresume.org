@@ -28,6 +28,14 @@ const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL || DEFAULT_SUPABASE_URL;
 
 /**
+ * Public anon key (browser-safe). Prefer env var, fall back to the
+ * documented public anon key so clients keep working if unset.
+ */
+const SUPABASE_ANON_KEY =
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml0eHVodnZ3cnlldXp1eWlocGtwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDc5OTA4NjQsImV4cCI6MjAyMzU2Njg2NH0.oEs0H2aumAHsiLn6i9ic1-iwWDo3bJkFkC7NCeUrIfA';
+
+/**
  * Create a Supabase client with the service-role key (server-only).
  * Throws if SUPABASE_KEY is not configured.
  * @returns {import('@supabase/supabase-js').SupabaseClient}
@@ -55,11 +63,13 @@ function createAnonClient() {
 
 module.exports = {
   SUPABASE_URL,
+  SUPABASE_ANON_KEY,
   DEFAULT_SUPABASE_URL,
   createServiceClient,
   createAnonClient,
 };
 module.exports.SUPABASE_URL = SUPABASE_URL;
+module.exports.SUPABASE_ANON_KEY = SUPABASE_ANON_KEY;
 module.exports.DEFAULT_SUPABASE_URL = DEFAULT_SUPABASE_URL;
 module.exports.createServiceClient = createServiceClient;
 module.exports.createAnonClient = createAnonClient;
