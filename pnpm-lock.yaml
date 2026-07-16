@@ -1447,6 +1447,12 @@ importers:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.7)(react@19.2.7)
     devDependencies:
+      '@jsonresume/sample-data':
+        specifier: workspace:*
+        version: link:../../sample-data
+      '@jsonresume/theme-kit':
+        specifier: workspace:*
+        version: link:../../theme-kit
       '@vitejs/plugin-react':
         specifier: ^4.3.4
         version: 4.7.0(vite@6.4.3)
@@ -1955,6 +1961,12 @@ importers:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.7)(react@19.2.7)
     devDependencies:
+      '@jsonresume/sample-data':
+        specifier: workspace:*
+        version: link:../../sample-data
+      '@jsonresume/theme-kit':
+        specifier: workspace:*
+        version: link:../../theme-kit
       '@vitejs/plugin-react':
         specifier: ^4.3.4
         version: 4.7.0(vite@6.4.3)
@@ -2173,6 +2185,12 @@ importers:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.7)(react@19.2.7)
     devDependencies:
+      '@jsonresume/sample-data':
+        specifier: workspace:*
+        version: link:../../sample-data
+      '@jsonresume/theme-kit':
+        specifier: workspace:*
+        version: link:../../theme-kit
       '@vitejs/plugin-react':
         specifier: ^4.3.4
         version: 4.7.0(vite@6.4.3)
