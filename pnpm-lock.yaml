@@ -313,9 +313,9 @@ importers:
       '@repo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
-      '@supabase/auth-helpers-nextjs':
-        specifier: ^0.10.0
-        version: 0.10.0(@supabase/supabase-js@2.77.0)
+      '@supabase/ssr':
+        specifier: ^0.12.3
+        version: 0.12.3(@supabase/supabase-js@2.77.0)
       '@supabase/supabase-js':
         specifier: ^2.39.6
         version: 2.77.0
@@ -8618,27 +8618,6 @@ packages:
       file-system-cache: 2.3.0
     dev: true
 
-  /@supabase/auth-helpers-nextjs@0.10.0(@supabase/supabase-js@2.77.0):
-    resolution: {integrity: sha512-2dfOGsM4yZt0oS4TPiE7bD4vf7EVz7NRz/IJrV6vLg0GP7sMUx8wndv2euLGq4BjN9lUCpu6DG/uCC8j+ylwPg==}
-    deprecated: This package is now deprecated - please use the @supabase/ssr package instead.
-    peerDependencies:
-      '@supabase/supabase-js': ^2.39.8
-    dependencies:
-      '@supabase/auth-helpers-shared': 0.7.0(@supabase/supabase-js@2.77.0)
-      '@supabase/supabase-js': 2.77.0
-      set-cookie-parser: 2.7.2
-    dev: false
-
-  /@supabase/auth-helpers-shared@0.7.0(@supabase/supabase-js@2.77.0):
-    resolution: {integrity: sha512-FBFf2ei2R7QC+B/5wWkthMha8Ca2bWHAndN+syfuEUUfufv4mLcAgBCcgNg5nJR8L0gZfyuaxgubtOc9aW3Cpg==}
-    deprecated: This package is now deprecated - please use the @supabase/ssr package instead.
-    peerDependencies:
-      '@supabase/supabase-js': ^2.39.8
-    dependencies:
-      '@supabase/supabase-js': 2.77.0
-      jose: 4.15.9
-    dev: false
-
   /@supabase/auth-js@2.77.0:
     resolution: {integrity: sha512-IRxyj2l46EutSX7AbGkHA7LSmrgqnXjPfKouBlGT6NqS1YOm+jMMwfdhf6zP5EZ4giUfdt2u+yHIBgyXU/LEtg==}
     dependencies:
@@ -8678,6 +8657,15 @@ packages:
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
+    dev: false
+
+  /@supabase/ssr@0.12.3(@supabase/supabase-js@2.77.0):
+    resolution: {integrity: sha512-qWXJ/dI7CiYDKyTgIPqJ4Qkh8y5edh2LdF/nkN48z47mmEVzAO2OE+YErYeQ/UemVfonn/F4kFz+lhLqoVMdpw==}
+    peerDependencies:
+      '@supabase/supabase-js': ^2.110.5
+    dependencies:
+      '@supabase/supabase-js': 2.77.0
+      cookie: 1.1.1
     dev: false
 
   /@supabase/storage-js@2.77.0:
@@ -12259,6 +12247,11 @@ packages:
   /cookie@0.7.2:
     resolution: {integrity: sha512-yki5XnKuf750l50uGTllt6kKILY4nQ1eNIQatoXEByZ5dWgnKqbnqmTrBE5B4N7lrMJKQ2ytWMiTO2o0v6Ew/w==}
     engines: {node: '>= 0.6'}
+    dev: false
+
+  /cookie@1.1.1:
+    resolution: {integrity: sha512-ei8Aos7ja0weRpFzJnEA9UHJ/7XQmqglbRwnf2ATjcB9Wq874VKH9kfjjirM6UhU2/E5fFYadylyhFldcqSidQ==}
+    engines: {node: '>=18'}
     dev: false
 
   /cookiejar@2.1.4:
@@ -17410,10 +17403,6 @@ packages:
       '@standard-schema/spec': 1.1.0
     dev: true
 
-  /jose@4.15.9:
-    resolution: {integrity: sha512-1vUQX+IdDMVPj4k8kOxgUqlcK518yluMuGZwqlr44FS1ppZB/5GWh4rZG89erpOBOJjU/OBsnCVFfapsRz6nEA==}
-    dev: false
-
   /jose@6.1.0:
     resolution: {integrity: sha512-TTQJyoEoKcC1lscpVDCSsVgYzUDg/0Bt3WE//WiTPK6uOCQC2KZS4MpugbMWt/zyjkopgZoXhZuCi00gLudfUA==}
     dev: false
@@ -22153,10 +22142,6 @@ packages:
 
   /set-blocking@2.0.0:
     resolution: {integrity: sha512-KiKBS8AnWGEyLzofFfmvKwpdPzqiy16LvQfK3yv/fVH7Bj13/wl3JSR1J+rfgRE9q7xUJK4qvgS8raSOeLUehw==}
-    dev: false
-
-  /set-cookie-parser@2.7.2:
-    resolution: {integrity: sha512-oeM1lpU/UvhTxw+g3cIfxXHyJRc/uidd3yK1P242gzHds0udQBYzs3y8j4gCCW+ZJ7ad0yctld8RYO+bdurlvw==}
     dev: false
 
   /set-function-length@1.2.2:

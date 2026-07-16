@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { SUPABASE_URL } from '@/lib/supabaseConfig';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+import { createRouteHandlerClient } from '@/lib/supabaseServer';
 import { embed } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { logger } from '@/lib/logger';
@@ -40,8 +39,7 @@ async function getResumeEmbedding(resume) {
  * GET /api/my-jobs — matched jobs for the logged-in user (cookie session auth)
  */
 export async function GET() {
-  const cookieStore = cookies();
-  const authClient = createRouteHandlerClient({ cookies: () => cookieStore });
+  const authClient = await createRouteHandlerClient();
 
   const {
     data: { session },
