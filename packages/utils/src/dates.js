@@ -85,6 +85,14 @@ export function formatDateRange({
   const formatDate = (dateStr) => {
     if (!dateStr) return getPresentLabel();
 
+    // Date-only ISO strings (YYYY, YYYY-MM, YYYY-MM-DD — the JSON Resume
+    // date formats) are parsed by `new Date()` as UTC midnight. Formatting
+    // that instant in the local timezone shifts first-of-month dates back a
+    // month/year anywhere west of UTC (e.g. '2020-01-01' -> "Dec 2019" in
+    // America/Los_Angeles). Pin formatting to UTC for these inputs so the
+    // displayed month always matches the input (#450).
+    const isDateOnlyIso =
+      typeof dateStr === 'string' && /^\d{4}(-\d{2}){0,2}$/.test(dateStr);
     const date = typeof dateStr === 'string' ? new Date(dateStr) : dateStr;
 
     if (isNaN(date.getTime())) return dateStr; // Invalid date, return as-is
@@ -100,6 +108,10 @@ export function formatDateRange({
       ...monthFormats[format],
       year: 'numeric',
     };
+
+    if (isDateOnlyIso) {
+      options.timeZone = 'UTC';
+    }
 
     // Add numbering system if provided
     if (numberingSystem) {
