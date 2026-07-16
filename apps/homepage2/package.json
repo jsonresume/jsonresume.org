@@ -13,8 +13,8 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
-    "@repo/theme-config": "workspace:*",
     "@prisma/client": "^4.15.0",
+    "@repo/theme-config": "workspace:*",
     "@vercel/analytics": "^1.3.1",
     "disqus-react": "^1.1.5",
     "gray-matter": "^4.0.3",
@@ -24,16 +24,15 @@
     "react-dom": "^19.2.0",
     "react-syntax-highlighter": "^15.5.0",
     "remark": "^15.0.1",
-    "remark-html": "^16.0.1",
-    "styled-components": "^6.1.19"
+    "remark-html": "^16.0.1"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.3",
     "@playwright/test": "^1.55.1",
+    "@repo/eslint-config-custom": "workspace:*",
     "@types/node": "^20.10.0",
     "caniuse-lite": "^1.0.30001566",
     "eslint": "^8.55.0",
-    "@repo/eslint-config-custom": "workspace:*",
     "eslint-config-next": "^15.5.7",
     "typescript": "^5.9.3"
   }

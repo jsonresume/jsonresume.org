@@ -1,10 +1,18 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
-  "ignore": ["**/dist/**", "**/build/**", "**/.next/**", "**/*.d.ts"],
-  "ignoreDependencies": ["@vitejs/plugin-react"],
+  "ignore": [
+    "**/public/**",
+    "apps/registry/app/api/chat/config/resumeToolSchema/**"
+  ],
+  "ignoreDependencies": [
+    "@vitejs/plugin-react",
+    "@storybook/react",
+    "json-to-pretty-yaml"
+  ],
   "ignoreWorkspaces": [
     "packages/themes/**",
     "packages/resume-core",
+    "packages/converters/**",
     "packages/core-rust"
   ],
   "workspaces": {
@@ -17,13 +25,8 @@
         "middleware.{js,ts}",
         "next.config.{js,mjs,ts}",
         "scripts/**/*.{js,mjs}",
-        "vitest.config.ts",
-        "vitest.setup.ts",
         "**/*.test.{js,jsx,ts,tsx}"
-      ],
-      "vitest": {
-        "config": ["vitest.config.ts"]
-      }
+      ]
     },
     "apps/homepage2": {
       "entry": [
@@ -40,6 +43,13 @@
         "app/**/layout.{js,jsx,ts,tsx}",
         "source.config.ts",
         "next.config.{js,mjs,ts}"
+      ]
+    },
+    "packages/cli": {
+      "entry": [
+        "lib/main.js",
+        "lib/**/*.test.js",
+        "lib/test-utils/cli-test-entry.js"
       ]
     }
   }
