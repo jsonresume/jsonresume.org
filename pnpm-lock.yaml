@@ -264,10 +264,10 @@ importers:
     dependencies:
       '@ai-sdk/openai':
         specifier: ^3.0.41
-        version: 3.0.41(zod@3.25.76)
+        version: 3.0.41(zod@4.4.3)
       '@ai-sdk/react':
         specifier: ^3.0.0-beta.145
-        version: 3.0.0-beta.145(effect@3.21.3)(react@19.2.7)(zod@3.25.76)
+        version: 3.0.0-beta.145(effect@3.21.3)(react@19.2.7)(zod@4.4.3)
       '@dagrejs/dagre':
         specifier: ^1.1.4
         version: 1.1.5
@@ -330,7 +330,7 @@ importers:
         version: 12.9.1(@types/react@19.2.2)(react-dom@19.2.7)(react@19.2.7)
       ai:
         specifier: ^6.0.116
-        version: 6.0.116(zod@3.25.76)
+        version: 6.0.116(zod@4.4.3)
       async:
         specifier: ^3.2.4
         version: 3.2.6
@@ -353,8 +353,8 @@ importers:
         specifier: ^1.0.0
         version: 1.1.2
       framer-motion:
-        specifier: ^11.3.6
-        version: 11.18.2(react-dom@19.2.7)(react@19.2.7)
+        specifier: ^12.40.0
+        version: 12.42.2(react-dom@19.2.7)(react@19.2.7)
       gravatar:
         specifier: ^1.8.2
         version: 1.8.2
@@ -576,7 +576,7 @@ importers:
         version: 4.1.4
       openai:
         specifier: ^4.28.0
-        version: 4.104.0(zod@3.25.76)
+        version: 4.104.0(zod@4.4.3)
       pdf-parse:
         specifier: ^2.2.1
         version: 2.4.5
@@ -629,8 +629,8 @@ importers:
         specifier: ^11.1.1
         version: 11.1.1
       zod:
-        specifier: ^3.24.1
-        version: 3.25.76
+        specifier: ^4.4.3
+        version: 4.4.3
     devDependencies:
       '@babel/preset-env':
         specifier: ^7.23.5
@@ -806,8 +806,8 @@ importers:
         specifier: 7.15.0
         version: 7.15.0
       eslint-config-prettier:
-        specifier: 7.0.0
-        version: 7.0.0(eslint@7.15.0)
+        specifier: ^10.1.8
+        version: 10.1.8(eslint@7.15.0)
       eslint-plugin-jest:
         specifier: 24.1.3
         version: 24.1.3(eslint@7.15.0)(typescript@5.9.3)
@@ -845,8 +845,8 @@ importers:
         specifier: ^15.5.7
         version: 15.5.7(eslint@8.57.1)(typescript@5.9.3)
       eslint-config-prettier:
-        specifier: ^8.3.0
-        version: 8.10.2(eslint@8.57.1)
+        specifier: ^10.1.8
+        version: 10.1.8(eslint@8.57.1)
       eslint-config-turbo:
         specifier: ^2
         version: 2.5.8(eslint@8.57.1)(turbo@2.9.18)
@@ -2433,8 +2433,8 @@ importers:
         specifier: ^15.5.6
         version: 15.5.6(eslint@8.57.1)(typescript@5.9.3)
       eslint-config-prettier:
-        specifier: ^8.3.0
-        version: 8.10.2(eslint@8.57.1)
+        specifier: ^10.1.8
+        version: 10.1.8(eslint@8.57.1)
       eslint-config-turbo:
         specifier: ^2
         version: 2.5.8(eslint@8.57.1)(turbo@2.9.18)
@@ -2510,32 +2510,20 @@ packages:
       zod: 4.4.3
     dev: false
 
-  /@ai-sdk/gateway@2.0.0-beta.75(effect@3.21.3)(zod@3.25.76):
+  /@ai-sdk/gateway@2.0.0-beta.75(effect@3.21.3)(zod@4.4.3):
     resolution: {integrity: sha512-hxfPJLt80SHEuSmhlcbtgextRSH7aHAySWaN2CVuPASfqidigTEsOt+4t0/9Xqf7v3I5lHqlgMEbqfhzc7eGOQ==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
     dependencies:
       '@ai-sdk/provider': 3.0.0-beta.26
-      '@ai-sdk/provider-utils': 4.0.0-beta.46(effect@3.21.3)(zod@3.25.76)
+      '@ai-sdk/provider-utils': 4.0.0-beta.46(effect@3.21.3)(zod@4.4.3)
       '@vercel/oidc': 3.0.5
-      zod: 3.25.76
+      zod: 4.4.3
     transitivePeerDependencies:
       - '@valibot/to-json-schema'
       - arktype
       - effect
-    dev: false
-
-  /@ai-sdk/gateway@3.0.66(zod@3.25.76):
-    resolution: {integrity: sha512-SIQ0YY0iMuv+07HLsZ+bB990zUJ6S4ujORAh+Jv1V2KGNn73qQKnGO0JBk+w+Res8YqOFSycwDoWcFlQrVxS4A==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      zod: ^3.25.76 || ^4.1.8
-    dependencies:
-      '@ai-sdk/provider': 3.0.8
-      '@ai-sdk/provider-utils': 4.0.19(zod@3.25.76)
-      '@vercel/oidc': 3.1.0
-      zod: 3.25.76
     dev: false
 
   /@ai-sdk/gateway@3.0.66(zod@4.4.3):
@@ -2550,17 +2538,6 @@ packages:
       zod: 4.4.3
     dev: false
 
-  /@ai-sdk/openai@3.0.41(zod@3.25.76):
-    resolution: {integrity: sha512-IZ42A+FO+vuEQCVNqlnAPYQnnUpUfdJIwn1BEDOBywiEHa23fw7PahxVtlX9zm3/zMvTW4JKPzWyvAgDu+SQ2A==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      zod: ^3.25.76 || ^4.1.8
-    dependencies:
-      '@ai-sdk/provider': 3.0.8
-      '@ai-sdk/provider-utils': 4.0.19(zod@3.25.76)
-      zod: 3.25.76
-    dev: false
-
   /@ai-sdk/openai@3.0.41(zod@4.4.3):
     resolution: {integrity: sha512-IZ42A+FO+vuEQCVNqlnAPYQnnUpUfdJIwn1BEDOBywiEHa23fw7PahxVtlX9zm3/zMvTW4JKPzWyvAgDu+SQ2A==}
     engines: {node: '>=18'}
@@ -2572,7 +2549,7 @@ packages:
       zod: 4.4.3
     dev: false
 
-  /@ai-sdk/provider-utils@4.0.0-beta.46(effect@3.21.3)(zod@3.25.76):
+  /@ai-sdk/provider-utils@4.0.0-beta.46(effect@3.21.3)(zod@4.4.3):
     resolution: {integrity: sha512-kVCohWGiqR3SkLNMSwW3vOVFUC/g75+3/4me6u1TH4Zv7/Y6kPIU/3wI9OyrsTx3mqsd2SdG6gKzz1AMHwoupQ==}
     engines: {node: '>=18'}
     peerDependencies:
@@ -2592,19 +2569,7 @@ packages:
       '@standard-schema/spec': 1.0.0
       effect: 3.21.3
       eventsource-parser: 3.0.6
-      zod: 3.25.76
-    dev: false
-
-  /@ai-sdk/provider-utils@4.0.19(zod@3.25.76):
-    resolution: {integrity: sha512-3eG55CrSWCu2SXlqq2QCsFjo3+E7+Gmg7i/oRVoSZzIodTuDSfLb3MRje67xE9RFea73Zao7Lm4mADIfUETKGg==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      zod: ^3.25.76 || ^4.1.8
-    dependencies:
-      '@ai-sdk/provider': 3.0.8
-      '@standard-schema/spec': 1.1.0
-      eventsource-parser: 3.0.6
-      zod: 3.25.76
+      zod: 4.4.3
     dev: false
 
   /@ai-sdk/provider-utils@4.0.19(zod@4.4.3):
@@ -2633,14 +2598,14 @@ packages:
       json-schema: 0.4.0
     dev: false
 
-  /@ai-sdk/react@3.0.0-beta.145(effect@3.21.3)(react@19.2.7)(zod@3.25.76):
+  /@ai-sdk/react@3.0.0-beta.145(effect@3.21.3)(react@19.2.7)(zod@4.4.3):
     resolution: {integrity: sha512-9mJdMCu0XRgtLMZYmVRV1DC6SBnaICxuyXGO41BXyLWtDlyNqEr/JdgHvJYllrh5jpupDPCKl4tUhF3glJG9gw==}
     engines: {node: '>=18'}
     peerDependencies:
       react: 19.2.7
     dependencies:
-      '@ai-sdk/provider-utils': 4.0.0-beta.46(effect@3.21.3)(zod@3.25.76)
-      ai: 6.0.0-beta.143(effect@3.21.3)(zod@3.25.76)
+      '@ai-sdk/provider-utils': 4.0.0-beta.46(effect@3.21.3)(zod@4.4.3)
+      ai: 6.0.0-beta.143(effect@3.21.3)(zod@4.4.3)
       react: 19.2.7
       swr: 2.3.7(react@19.2.7)
       throttleit: 2.1.0
@@ -10632,34 +10597,21 @@ packages:
       humanize-ms: 1.2.1
     dev: false
 
-  /ai@6.0.0-beta.143(effect@3.21.3)(zod@3.25.76):
+  /ai@6.0.0-beta.143(effect@3.21.3)(zod@4.4.3):
     resolution: {integrity: sha512-IYv2GWVCSf4c7zNzCmtJ4uENYF+AUNZ/SyiiUhYGYnndVPb+rVxcm87lsKv4vZ9Y5jAzj124vTUy0NZJ7+PtLg==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
     dependencies:
-      '@ai-sdk/gateway': 2.0.0-beta.75(effect@3.21.3)(zod@3.25.76)
+      '@ai-sdk/gateway': 2.0.0-beta.75(effect@3.21.3)(zod@4.4.3)
       '@ai-sdk/provider': 3.0.0-beta.26
-      '@ai-sdk/provider-utils': 4.0.0-beta.46(effect@3.21.3)(zod@3.25.76)
+      '@ai-sdk/provider-utils': 4.0.0-beta.46(effect@3.21.3)(zod@4.4.3)
       '@opentelemetry/api': 1.9.0
-      zod: 3.25.76
+      zod: 4.4.3
     transitivePeerDependencies:
       - '@valibot/to-json-schema'
       - arktype
       - effect
-    dev: false
-
-  /ai@6.0.116(zod@3.25.76):
-    resolution: {integrity: sha512-7yM+cTmyRLeNIXwt4Vj+mrrJgVQ9RMIW5WO0ydoLoYkewIvsMcvUmqS4j2RJTUXaF1HphwmSKUMQ/HypNRGOmA==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      zod: ^3.25.76 || ^4.1.8
-    dependencies:
-      '@ai-sdk/gateway': 3.0.66(zod@3.25.76)
-      '@ai-sdk/provider': 3.0.8
-      '@ai-sdk/provider-utils': 4.0.19(zod@3.25.76)
-      '@opentelemetry/api': 1.9.0
-      zod: 3.25.76
     dev: false
 
   /ai@6.0.116(zod@4.4.3):
@@ -14030,8 +13982,8 @@ packages:
       - eslint-plugin-import-x
       - supports-color
 
-  /eslint-config-prettier@7.0.0(eslint@7.15.0):
-    resolution: {integrity: sha512-8Y8lGLVPPZdaNA7JXqnvETVC7IiVRgAP6afQu9gOQRn90YY3otMNh+x7Vr2vMePQntF+5erdSUBqSzCmU/AxaQ==}
+  /eslint-config-prettier@10.1.8(eslint@7.15.0):
+    resolution: {integrity: sha512-82GZUjRS0p/jganf6q1rEO25VSoHH0hKPCTrgillPjdI/3bgBhAE1QzHrHTizjpRvy6pGAvKjDJtk2pF9NDq8w==}
     hasBin: true
     peerDependencies:
       eslint: '>=7.0.0'
@@ -14039,8 +13991,8 @@ packages:
       eslint: 7.15.0
     dev: true
 
-  /eslint-config-prettier@8.10.2(eslint@8.57.1):
-    resolution: {integrity: sha512-/IGJ6+Dka158JnP5n5YFMOszjDWrXggGz1LaK/guZq9vZTmniaKlHcsscvkAhn9y4U+BU3JuUdYvtAMcv30y4A==}
+  /eslint-config-prettier@10.1.8(eslint@8.57.1):
+    resolution: {integrity: sha512-82GZUjRS0p/jganf6q1rEO25VSoHH0hKPCTrgillPjdI/3bgBhAE1QzHrHTizjpRvy6pGAvKjDJtk2pF9NDq8w==}
     hasBin: true
     peerDependencies:
       eslint: '>=7.0.0'
@@ -14221,8 +14173,8 @@ packages:
       '@babel/core': 7.28.5
       '@babel/parser': 7.28.5
       eslint: 8.57.1
-      zod: 3.25.76
-      zod-validation-error: 4.0.2(zod@3.25.76)
+      zod: 4.4.3
+      zod-validation-error: 4.0.2(zod@4.4.3)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -15079,8 +15031,8 @@ packages:
   /fraction.js@4.3.7:
     resolution: {integrity: sha512-ZsDfxO51wGAXREY55a7la9LScWpwv9RxIrYABrlvOFBlH/ShPnrtsXeuUIfXKKOVicNxQ+o8JTbJvjS4M89yew==}
 
-  /framer-motion@11.18.2(react-dom@19.2.7)(react@19.2.7):
-    resolution: {integrity: sha512-5F5Och7wrvtLVElIpclDT0CBzMVg3dL22B64aZwHtsIY8RB4mXICLrkajK4G9R+ieSAGcgrLeae2SeUTg2pr6w==}
+  /framer-motion@12.42.2(react-dom@19.2.7)(react@19.2.7):
+    resolution: {integrity: sha512-5XY9luDiu0oHfHBjpDthFMh0ES+122w6p/papSJBweMkO8Sn+PW2QaEgRblQBpWFnuvZS5qvarpt/hO2pjGmnw==}
     peerDependencies:
       '@emotion/is-prop-valid': '*'
       react: 19.2.7
@@ -15093,29 +15045,8 @@ packages:
       react-dom:
         optional: true
     dependencies:
-      motion-dom: 11.18.1
-      motion-utils: 11.18.1
-      react: 19.2.7
-      react-dom: 19.2.7(react@19.2.7)
-      tslib: 2.8.1
-    dev: false
-
-  /framer-motion@12.38.0(react-dom@19.2.7)(react@19.2.7):
-    resolution: {integrity: sha512-rFYkY/pigbcswl1XQSb7q424kSTQ8q6eAC+YUsSKooHQYuLdzdHjrt6uxUC+PRAO++q5IS7+TamgIw1AphxR+g==}
-    peerDependencies:
-      '@emotion/is-prop-valid': '*'
-      react: 19.2.7
-      react-dom: 19.2.7
-    peerDependenciesMeta:
-      '@emotion/is-prop-valid':
-        optional: true
-      react:
-        optional: true
-      react-dom:
-        optional: true
-    dependencies:
-      motion-dom: 12.38.0
-      motion-utils: 12.36.0
+      motion-dom: 12.42.2
+      motion-utils: 12.39.0
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
       tslib: 2.8.1
@@ -19601,24 +19532,14 @@ packages:
       marked: 14.0.0
     dev: false
 
-  /motion-dom@11.18.1:
-    resolution: {integrity: sha512-g76KvA001z+atjfxczdRtw/RXOM3OMSdd1f4DL77qCTF/+avrRJiawSG4yDibEQ215sr9kpinSlX2pCTJ9zbhw==}
+  /motion-dom@12.42.2:
+    resolution: {integrity: sha512-5gIMWLp/PycBtJRJWRgjxke5n8dlvkSn2DrYW+tr3XcqAZY1xZh6BJyooJXCM8wdfM7wfMjkBJNLge1CKPUIRA==}
     dependencies:
-      motion-utils: 11.18.1
+      motion-utils: 12.39.0
     dev: false
 
-  /motion-dom@12.38.0:
-    resolution: {integrity: sha512-pdkHLD8QYRp8VfiNLb8xIBJis1byQ9gPT3Jnh2jqfFtAsWUA3dEepDlsWe/xMpO8McV+VdpKVcp+E+TGJEtOoA==}
-    dependencies:
-      motion-utils: 12.36.0
-    dev: false
-
-  /motion-utils@11.18.1:
-    resolution: {integrity: sha512-49Kt+HKjtbJKLtgO/LKj9Ld+6vw9BjH5d9sc40R/kVyH8GLAXgT42M2NnuPcJNuA3s9ZfZBUcwIgpmZWGEE+hA==}
-    dev: false
-
-  /motion-utils@12.36.0:
-    resolution: {integrity: sha512-eHWisygbiwVvf6PZ1vhaHCLamvkSbPIeAYxWUuL3a2PD/TROgE7FvfHWTIH4vMl798QLfMw15nRqIaRDXTlYRg==}
+  /motion-utils@12.39.0:
+    resolution: {integrity: sha512-8nadJAJjTtqRkmRF36FoJTrywK9nnFmnPwnSMyxaOCU7GDjN9RTMJIxx9De8ErM+vpPhMccr/6fo5WciyQLnMQ==}
     dev: false
 
   /motion@12.38.0(react-dom@19.2.7)(react@19.2.7):
@@ -19635,7 +19556,7 @@ packages:
       react-dom:
         optional: true
     dependencies:
-      framer-motion: 12.38.0(react-dom@19.2.7)(react@19.2.7)
+      framer-motion: 12.42.2(react-dom@19.2.7)(react@19.2.7)
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
       tslib: 2.8.1
@@ -20124,7 +20045,7 @@ packages:
       is-wsl: 2.2.0
     dev: true
 
-  /openai@4.104.0(zod@3.25.76):
+  /openai@4.104.0(zod@4.4.3):
     resolution: {integrity: sha512-p99EFNsA/yX6UhVO93f5kJsDRLAg+CTA2RBqdHK4RtK8u5IJw32Hyb2dTGKbnnFmnuoBv5r7Z2CURI9sGZpSuA==}
     hasBin: true
     peerDependencies:
@@ -20143,7 +20064,7 @@ packages:
       form-data-encoder: 1.7.2
       formdata-node: 4.4.1
       node-fetch: 2.7.0
-      zod: 3.25.76
+      zod: 4.4.3
     transitivePeerDependencies:
       - encoding
     dev: false
@@ -25268,21 +25189,18 @@ packages:
       commander: 2.20.3
     dev: false
 
-  /zod-validation-error@4.0.2(zod@3.25.76):
+  /zod-validation-error@4.0.2(zod@4.4.3):
     resolution: {integrity: sha512-Q6/nZLe6jxuU80qb/4uJ4t5v2VEZ44lzQjPDhYJNztRQ4wyWc6VF3D3Kb/fAuPetZQnhS3hnajCf9CsWesghLQ==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       zod: ^3.25.0 || ^4.0.0
     dependencies:
-      zod: 3.25.76
+      zod: 4.4.3
     dev: true
 
   /zod@3.23.8:
     resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
     dev: false
-
-  /zod@3.25.76:
-    resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
   /zod@4.4.3:
     resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
