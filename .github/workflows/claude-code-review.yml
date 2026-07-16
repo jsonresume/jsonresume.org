@@ -12,11 +12,15 @@ on:
 
 jobs:
   claude-review:
-    # Optional: Filter by PR author
-    # if: |
-    #   github.event.pull_request.user.login == 'external-contributor' ||
-    #   github.event.pull_request.user.login == 'new-developer' ||
-    #   github.event.pull_request.author_association == 'FIRST_TIME_CONTRIBUTOR'
+    # Only run where the action can authenticate:
+    # - fork PRs get no secrets and no id-token, so the action always fails
+    # - dependabot-triggered runs read Dependabot secrets (CLAUDE_CODE_OAUTH_TOKEN
+    #   is only an Actions secret), so the token resolves empty
+    # - other bot actors (e.g. jsonresume-bot release PRs) fail the action's
+    #   non-human-actor check
+    if: >-
+      !github.event.pull_request.head.repo.fork &&
+      !endsWith(github.actor, '[bot]')
 
     runs-on: ubuntu-latest
     permissions:
