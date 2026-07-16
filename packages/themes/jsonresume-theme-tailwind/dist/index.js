@@ -2201,8 +2201,10 @@ var create = (config) => {
   };
 };
 var { tw, setup } = /* @__PURE__ */ create();
-var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
-var Tokenizer$2 = {};
+function getDefaultExportFromCjs(x) {
+  return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default") ? x["default"] : x;
+}
+var Tokenizer$1 = {};
 var decode_codepoint = {};
 const require$$0 = {
   "0": 65533,
@@ -2234,34 +2236,40 @@ const require$$0 = {
   "158": 382,
   "159": 376
 };
-var __importDefault$1 = commonjsGlobal && commonjsGlobal.__importDefault || function(mod) {
-  return mod && mod.__esModule ? mod : { "default": mod };
-};
-Object.defineProperty(decode_codepoint, "__esModule", { value: true });
-var decode_json_1 = __importDefault$1(require$$0);
-var fromCodePoint = (
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  String.fromCodePoint || function(codePoint) {
-    var output = "";
-    if (codePoint > 65535) {
-      codePoint -= 65536;
-      output += String.fromCharCode(codePoint >>> 10 & 1023 | 55296);
-      codePoint = 56320 | codePoint & 1023;
+var hasRequiredDecode_codepoint;
+function requireDecode_codepoint() {
+  if (hasRequiredDecode_codepoint) return decode_codepoint;
+  hasRequiredDecode_codepoint = 1;
+  var __importDefault = decode_codepoint && decode_codepoint.__importDefault || function(mod) {
+    return mod && mod.__esModule ? mod : { "default": mod };
+  };
+  Object.defineProperty(decode_codepoint, "__esModule", { value: true });
+  var decode_json_1 = __importDefault(require$$0);
+  var fromCodePoint = (
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    String.fromCodePoint || function(codePoint) {
+      var output = "";
+      if (codePoint > 65535) {
+        codePoint -= 65536;
+        output += String.fromCharCode(codePoint >>> 10 & 1023 | 55296);
+        codePoint = 56320 | codePoint & 1023;
+      }
+      output += String.fromCharCode(codePoint);
+      return output;
     }
-    output += String.fromCharCode(codePoint);
-    return output;
+  );
+  function decodeCodePoint(codePoint) {
+    if (codePoint >= 55296 && codePoint <= 57343 || codePoint > 1114111) {
+      return "�";
+    }
+    if (codePoint in decode_json_1.default) {
+      codePoint = decode_json_1.default[codePoint];
+    }
+    return fromCodePoint(codePoint);
   }
-);
-function decodeCodePoint(codePoint) {
-  if (codePoint >= 55296 && codePoint <= 57343 || codePoint > 1114111) {
-    return "�";
-  }
-  if (codePoint in decode_json_1.default) {
-    codePoint = decode_json_1.default[codePoint];
-  }
-  return fromCodePoint(codePoint);
+  decode_codepoint.default = decodeCodePoint;
+  return decode_codepoint;
 }
-decode_codepoint.default = decodeCodePoint;
 const Aacute$1 = "Á";
 const aacute$1 = "á";
 const Abreve = "Ă";
@@ -6738,25 +6746,38 @@ const require$$3 = {
   lt,
   quot
 };
-var __importDefault = commonjsGlobal && commonjsGlobal.__importDefault || function(mod) {
-  return mod && mod.__esModule ? mod : { "default": mod };
-};
-Object.defineProperty(Tokenizer$2, "__esModule", { value: true });
-var decode_codepoint_1 = __importDefault(decode_codepoint);
-var entities_json_1 = __importDefault(require$$1);
-var legacy_json_1 = __importDefault(require$$2);
-var xml_json_1 = __importDefault(require$$3);
-function whitespace(c) {
-  return c === " " || c === "\n" || c === "	" || c === "\f" || c === "\r";
-}
-function isASCIIAlpha(c) {
-  return c >= "a" && c <= "z" || c >= "A" && c <= "Z";
-}
-function ifElseState(upper, SUCCESS, FAILURE) {
-  var lower = upper.toLowerCase();
-  if (upper === lower) {
+var hasRequiredTokenizer;
+function requireTokenizer() {
+  if (hasRequiredTokenizer) return Tokenizer$1;
+  hasRequiredTokenizer = 1;
+  var __importDefault = Tokenizer$1 && Tokenizer$1.__importDefault || function(mod) {
+    return mod && mod.__esModule ? mod : { "default": mod };
+  };
+  Object.defineProperty(Tokenizer$1, "__esModule", { value: true });
+  var decode_codepoint_1 = __importDefault(/* @__PURE__ */ requireDecode_codepoint());
+  var entities_json_1 = __importDefault(require$$1);
+  var legacy_json_1 = __importDefault(require$$2);
+  var xml_json_1 = __importDefault(require$$3);
+  function whitespace(c) {
+    return c === " " || c === "\n" || c === "	" || c === "\f" || c === "\r";
+  }
+  function isASCIIAlpha(c) {
+    return c >= "a" && c <= "z" || c >= "A" && c <= "Z";
+  }
+  function ifElseState(upper, SUCCESS, FAILURE) {
+    var lower = upper.toLowerCase();
+    if (upper === lower) {
+      return function(t2, c) {
+        if (c === lower) {
+          t2._state = SUCCESS;
+        } else {
+          t2._state = FAILURE;
+          t2._index--;
+        }
+      };
+    }
     return function(t2, c) {
-      if (c === lower) {
+      if (c === lower || c === upper) {
         t2._state = SUCCESS;
       } else {
         t2._state = FAILURE;
@@ -6764,841 +6785,836 @@ function ifElseState(upper, SUCCESS, FAILURE) {
       }
     };
   }
-  return function(t2, c) {
-    if (c === lower || c === upper) {
-      t2._state = SUCCESS;
-    } else {
-      t2._state = FAILURE;
-      t2._index--;
-    }
-  };
-}
-function consumeSpecialNameChar(upper, NEXT_STATE) {
-  var lower = upper.toLowerCase();
-  return function(t2, c) {
-    if (c === lower || c === upper) {
-      t2._state = NEXT_STATE;
-    } else {
-      t2._state = 3;
-      t2._index--;
-    }
-  };
-}
-var stateBeforeCdata1 = ifElseState(
-  "C",
-  24,
-  16
-  /* InDeclaration */
-);
-var stateBeforeCdata2 = ifElseState(
-  "D",
-  25,
-  16
-  /* InDeclaration */
-);
-var stateBeforeCdata3 = ifElseState(
-  "A",
-  26,
-  16
-  /* InDeclaration */
-);
-var stateBeforeCdata4 = ifElseState(
-  "T",
-  27,
-  16
-  /* InDeclaration */
-);
-var stateBeforeCdata5 = ifElseState(
-  "A",
-  28,
-  16
-  /* InDeclaration */
-);
-var stateBeforeScript1 = consumeSpecialNameChar(
-  "R",
-  35
-  /* BeforeScript2 */
-);
-var stateBeforeScript2 = consumeSpecialNameChar(
-  "I",
-  36
-  /* BeforeScript3 */
-);
-var stateBeforeScript3 = consumeSpecialNameChar(
-  "P",
-  37
-  /* BeforeScript4 */
-);
-var stateBeforeScript4 = consumeSpecialNameChar(
-  "T",
-  38
-  /* BeforeScript5 */
-);
-var stateAfterScript1 = ifElseState(
-  "R",
-  40,
-  1
-  /* Text */
-);
-var stateAfterScript2 = ifElseState(
-  "I",
-  41,
-  1
-  /* Text */
-);
-var stateAfterScript3 = ifElseState(
-  "P",
-  42,
-  1
-  /* Text */
-);
-var stateAfterScript4 = ifElseState(
-  "T",
-  43,
-  1
-  /* Text */
-);
-var stateBeforeStyle1 = consumeSpecialNameChar(
-  "Y",
-  45
-  /* BeforeStyle2 */
-);
-var stateBeforeStyle2 = consumeSpecialNameChar(
-  "L",
-  46
-  /* BeforeStyle3 */
-);
-var stateBeforeStyle3 = consumeSpecialNameChar(
-  "E",
-  47
-  /* BeforeStyle4 */
-);
-var stateAfterStyle1 = ifElseState(
-  "Y",
-  49,
-  1
-  /* Text */
-);
-var stateAfterStyle2 = ifElseState(
-  "L",
-  50,
-  1
-  /* Text */
-);
-var stateAfterStyle3 = ifElseState(
-  "E",
-  51,
-  1
-  /* Text */
-);
-var stateBeforeSpecialT = consumeSpecialNameChar(
-  "I",
-  54
-  /* BeforeTitle1 */
-);
-var stateBeforeTitle1 = consumeSpecialNameChar(
-  "T",
-  55
-  /* BeforeTitle2 */
-);
-var stateBeforeTitle2 = consumeSpecialNameChar(
-  "L",
-  56
-  /* BeforeTitle3 */
-);
-var stateBeforeTitle3 = consumeSpecialNameChar(
-  "E",
-  57
-  /* BeforeTitle4 */
-);
-var stateAfterSpecialTEnd = ifElseState(
-  "I",
-  58,
-  1
-  /* Text */
-);
-var stateAfterTitle1 = ifElseState(
-  "T",
-  59,
-  1
-  /* Text */
-);
-var stateAfterTitle2 = ifElseState(
-  "L",
-  60,
-  1
-  /* Text */
-);
-var stateAfterTitle3 = ifElseState(
-  "E",
-  61,
-  1
-  /* Text */
-);
-var stateBeforeEntity = ifElseState(
-  "#",
-  63,
-  64
-  /* InNamedEntity */
-);
-var stateBeforeNumericEntity = ifElseState(
-  "X",
-  66,
-  65
-  /* InNumericEntity */
-);
-var Tokenizer$1 = (
-  /** @class */
-  (function() {
-    function Tokenizer2(options, cbs) {
-      var _a;
-      this._state = 1;
-      this.buffer = "";
-      this.sectionStart = 0;
-      this._index = 0;
-      this.bufferOffset = 0;
-      this.baseState = 1;
-      this.special = 1;
-      this.running = true;
-      this.ended = false;
-      this.cbs = cbs;
-      this.xmlMode = !!(options === null || options === void 0 ? void 0 : options.xmlMode);
-      this.decodeEntities = (_a = options === null || options === void 0 ? void 0 : options.decodeEntities) !== null && _a !== void 0 ? _a : true;
-    }
-    Tokenizer2.prototype.reset = function() {
-      this._state = 1;
-      this.buffer = "";
-      this.sectionStart = 0;
-      this._index = 0;
-      this.bufferOffset = 0;
-      this.baseState = 1;
-      this.special = 1;
-      this.running = true;
-      this.ended = false;
-    };
-    Tokenizer2.prototype.write = function(chunk) {
-      if (this.ended)
-        this.cbs.onerror(Error(".write() after done!"));
-      this.buffer += chunk;
-      this.parse();
-    };
-    Tokenizer2.prototype.end = function(chunk) {
-      if (this.ended)
-        this.cbs.onerror(Error(".end() after done!"));
-      if (chunk)
-        this.write(chunk);
-      this.ended = true;
-      if (this.running)
-        this.finish();
-    };
-    Tokenizer2.prototype.pause = function() {
-      this.running = false;
-    };
-    Tokenizer2.prototype.resume = function() {
-      this.running = true;
-      if (this._index < this.buffer.length) {
-        this.parse();
-      }
-      if (this.ended) {
-        this.finish();
-      }
-    };
-    Tokenizer2.prototype.getAbsoluteIndex = function() {
-      return this.bufferOffset + this._index;
-    };
-    Tokenizer2.prototype.stateText = function(c) {
-      if (c === "<") {
-        if (this._index > this.sectionStart) {
-          this.cbs.ontext(this.getSection());
-        }
-        this._state = 2;
-        this.sectionStart = this._index;
-      } else if (this.decodeEntities && c === "&" && (this.special === 1 || this.special === 4)) {
-        if (this._index > this.sectionStart) {
-          this.cbs.ontext(this.getSection());
-        }
-        this.baseState = 1;
-        this._state = 62;
-        this.sectionStart = this._index;
-      }
-    };
-    Tokenizer2.prototype.isTagStartChar = function(c) {
-      return isASCIIAlpha(c) || this.xmlMode && !whitespace(c) && c !== "/" && c !== ">";
-    };
-    Tokenizer2.prototype.stateBeforeTagName = function(c) {
-      if (c === "/") {
-        this._state = 5;
-      } else if (c === "<") {
-        this.cbs.ontext(this.getSection());
-        this.sectionStart = this._index;
-      } else if (c === ">" || this.special !== 1 || whitespace(c)) {
-        this._state = 1;
-      } else if (c === "!") {
-        this._state = 15;
-        this.sectionStart = this._index + 1;
-      } else if (c === "?") {
-        this._state = 17;
-        this.sectionStart = this._index + 1;
-      } else if (!this.isTagStartChar(c)) {
-        this._state = 1;
+  function consumeSpecialNameChar(upper, NEXT_STATE) {
+    var lower = upper.toLowerCase();
+    return function(t2, c) {
+      if (c === lower || c === upper) {
+        t2._state = NEXT_STATE;
       } else {
-        this._state = !this.xmlMode && (c === "s" || c === "S") ? 32 : !this.xmlMode && (c === "t" || c === "T") ? 52 : 3;
-        this.sectionStart = this._index;
+        t2._state = 3;
+        t2._index--;
       }
     };
-    Tokenizer2.prototype.stateInTagName = function(c) {
-      if (c === "/" || c === ">" || whitespace(c)) {
-        this.emitToken("onopentagname");
-        this._state = 8;
-        this._index--;
-      }
-    };
-    Tokenizer2.prototype.stateBeforeClosingTagName = function(c) {
-      if (whitespace(c)) ;
-      else if (c === ">") {
+  }
+  var stateBeforeCdata1 = ifElseState(
+    "C",
+    24,
+    16
+    /* InDeclaration */
+  );
+  var stateBeforeCdata2 = ifElseState(
+    "D",
+    25,
+    16
+    /* InDeclaration */
+  );
+  var stateBeforeCdata3 = ifElseState(
+    "A",
+    26,
+    16
+    /* InDeclaration */
+  );
+  var stateBeforeCdata4 = ifElseState(
+    "T",
+    27,
+    16
+    /* InDeclaration */
+  );
+  var stateBeforeCdata5 = ifElseState(
+    "A",
+    28,
+    16
+    /* InDeclaration */
+  );
+  var stateBeforeScript1 = consumeSpecialNameChar(
+    "R",
+    35
+    /* BeforeScript2 */
+  );
+  var stateBeforeScript2 = consumeSpecialNameChar(
+    "I",
+    36
+    /* BeforeScript3 */
+  );
+  var stateBeforeScript3 = consumeSpecialNameChar(
+    "P",
+    37
+    /* BeforeScript4 */
+  );
+  var stateBeforeScript4 = consumeSpecialNameChar(
+    "T",
+    38
+    /* BeforeScript5 */
+  );
+  var stateAfterScript1 = ifElseState(
+    "R",
+    40,
+    1
+    /* Text */
+  );
+  var stateAfterScript2 = ifElseState(
+    "I",
+    41,
+    1
+    /* Text */
+  );
+  var stateAfterScript3 = ifElseState(
+    "P",
+    42,
+    1
+    /* Text */
+  );
+  var stateAfterScript4 = ifElseState(
+    "T",
+    43,
+    1
+    /* Text */
+  );
+  var stateBeforeStyle1 = consumeSpecialNameChar(
+    "Y",
+    45
+    /* BeforeStyle2 */
+  );
+  var stateBeforeStyle2 = consumeSpecialNameChar(
+    "L",
+    46
+    /* BeforeStyle3 */
+  );
+  var stateBeforeStyle3 = consumeSpecialNameChar(
+    "E",
+    47
+    /* BeforeStyle4 */
+  );
+  var stateAfterStyle1 = ifElseState(
+    "Y",
+    49,
+    1
+    /* Text */
+  );
+  var stateAfterStyle2 = ifElseState(
+    "L",
+    50,
+    1
+    /* Text */
+  );
+  var stateAfterStyle3 = ifElseState(
+    "E",
+    51,
+    1
+    /* Text */
+  );
+  var stateBeforeSpecialT = consumeSpecialNameChar(
+    "I",
+    54
+    /* BeforeTitle1 */
+  );
+  var stateBeforeTitle1 = consumeSpecialNameChar(
+    "T",
+    55
+    /* BeforeTitle2 */
+  );
+  var stateBeforeTitle2 = consumeSpecialNameChar(
+    "L",
+    56
+    /* BeforeTitle3 */
+  );
+  var stateBeforeTitle3 = consumeSpecialNameChar(
+    "E",
+    57
+    /* BeforeTitle4 */
+  );
+  var stateAfterSpecialTEnd = ifElseState(
+    "I",
+    58,
+    1
+    /* Text */
+  );
+  var stateAfterTitle1 = ifElseState(
+    "T",
+    59,
+    1
+    /* Text */
+  );
+  var stateAfterTitle2 = ifElseState(
+    "L",
+    60,
+    1
+    /* Text */
+  );
+  var stateAfterTitle3 = ifElseState(
+    "E",
+    61,
+    1
+    /* Text */
+  );
+  var stateBeforeEntity = ifElseState(
+    "#",
+    63,
+    64
+    /* InNamedEntity */
+  );
+  var stateBeforeNumericEntity = ifElseState(
+    "X",
+    66,
+    65
+    /* InNumericEntity */
+  );
+  var Tokenizer2 = (
+    /** @class */
+    (function() {
+      function Tokenizer3(options, cbs) {
+        var _a;
         this._state = 1;
-      } else if (this.special !== 1) {
-        if (this.special !== 4 && (c === "s" || c === "S")) {
-          this._state = 33;
-        } else if (this.special === 4 && (c === "t" || c === "T")) {
-          this._state = 53;
-        } else {
+        this.buffer = "";
+        this.sectionStart = 0;
+        this._index = 0;
+        this.bufferOffset = 0;
+        this.baseState = 1;
+        this.special = 1;
+        this.running = true;
+        this.ended = false;
+        this.cbs = cbs;
+        this.xmlMode = !!(options === null || options === void 0 ? void 0 : options.xmlMode);
+        this.decodeEntities = (_a = options === null || options === void 0 ? void 0 : options.decodeEntities) !== null && _a !== void 0 ? _a : true;
+      }
+      Tokenizer3.prototype.reset = function() {
+        this._state = 1;
+        this.buffer = "";
+        this.sectionStart = 0;
+        this._index = 0;
+        this.bufferOffset = 0;
+        this.baseState = 1;
+        this.special = 1;
+        this.running = true;
+        this.ended = false;
+      };
+      Tokenizer3.prototype.write = function(chunk) {
+        if (this.ended)
+          this.cbs.onerror(Error(".write() after done!"));
+        this.buffer += chunk;
+        this.parse();
+      };
+      Tokenizer3.prototype.end = function(chunk) {
+        if (this.ended)
+          this.cbs.onerror(Error(".end() after done!"));
+        if (chunk)
+          this.write(chunk);
+        this.ended = true;
+        if (this.running)
+          this.finish();
+      };
+      Tokenizer3.prototype.pause = function() {
+        this.running = false;
+      };
+      Tokenizer3.prototype.resume = function() {
+        this.running = true;
+        if (this._index < this.buffer.length) {
+          this.parse();
+        }
+        if (this.ended) {
+          this.finish();
+        }
+      };
+      Tokenizer3.prototype.getAbsoluteIndex = function() {
+        return this.bufferOffset + this._index;
+      };
+      Tokenizer3.prototype.stateText = function(c) {
+        if (c === "<") {
+          if (this._index > this.sectionStart) {
+            this.cbs.ontext(this.getSection());
+          }
+          this._state = 2;
+          this.sectionStart = this._index;
+        } else if (this.decodeEntities && c === "&" && (this.special === 1 || this.special === 4)) {
+          if (this._index > this.sectionStart) {
+            this.cbs.ontext(this.getSection());
+          }
+          this.baseState = 1;
+          this._state = 62;
+          this.sectionStart = this._index;
+        }
+      };
+      Tokenizer3.prototype.isTagStartChar = function(c) {
+        return isASCIIAlpha(c) || this.xmlMode && !whitespace(c) && c !== "/" && c !== ">";
+      };
+      Tokenizer3.prototype.stateBeforeTagName = function(c) {
+        if (c === "/") {
+          this._state = 5;
+        } else if (c === "<") {
+          this.cbs.ontext(this.getSection());
+          this.sectionStart = this._index;
+        } else if (c === ">" || this.special !== 1 || whitespace(c)) {
           this._state = 1;
+        } else if (c === "!") {
+          this._state = 15;
+          this.sectionStart = this._index + 1;
+        } else if (c === "?") {
+          this._state = 17;
+          this.sectionStart = this._index + 1;
+        } else if (!this.isTagStartChar(c)) {
+          this._state = 1;
+        } else {
+          this._state = !this.xmlMode && (c === "s" || c === "S") ? 32 : !this.xmlMode && (c === "t" || c === "T") ? 52 : 3;
+          this.sectionStart = this._index;
+        }
+      };
+      Tokenizer3.prototype.stateInTagName = function(c) {
+        if (c === "/" || c === ">" || whitespace(c)) {
+          this.emitToken("onopentagname");
+          this._state = 8;
           this._index--;
         }
-      } else if (!this.isTagStartChar(c)) {
-        this._state = 20;
-        this.sectionStart = this._index;
-      } else {
-        this._state = 6;
-        this.sectionStart = this._index;
-      }
-    };
-    Tokenizer2.prototype.stateInClosingTagName = function(c) {
-      if (c === ">" || whitespace(c)) {
-        this.emitToken("onclosetag");
-        this._state = 7;
-        this._index--;
-      }
-    };
-    Tokenizer2.prototype.stateAfterClosingTagName = function(c) {
-      if (c === ">") {
-        this._state = 1;
-        this.sectionStart = this._index + 1;
-      }
-    };
-    Tokenizer2.prototype.stateBeforeAttributeName = function(c) {
-      if (c === ">") {
-        this.cbs.onopentagend();
-        this._state = 1;
-        this.sectionStart = this._index + 1;
-      } else if (c === "/") {
-        this._state = 4;
-      } else if (!whitespace(c)) {
-        this._state = 9;
-        this.sectionStart = this._index;
-      }
-    };
-    Tokenizer2.prototype.stateInSelfClosingTag = function(c) {
-      if (c === ">") {
-        this.cbs.onselfclosingtag();
-        this._state = 1;
-        this.sectionStart = this._index + 1;
-        this.special = 1;
-      } else if (!whitespace(c)) {
-        this._state = 8;
-        this._index--;
-      }
-    };
-    Tokenizer2.prototype.stateInAttributeName = function(c) {
-      if (c === "=" || c === "/" || c === ">" || whitespace(c)) {
-        this.cbs.onattribname(this.getSection());
-        this.sectionStart = -1;
-        this._state = 10;
-        this._index--;
-      }
-    };
-    Tokenizer2.prototype.stateAfterAttributeName = function(c) {
-      if (c === "=") {
-        this._state = 11;
-      } else if (c === "/" || c === ">") {
-        this.cbs.onattribend(void 0);
-        this._state = 8;
-        this._index--;
-      } else if (!whitespace(c)) {
-        this.cbs.onattribend(void 0);
-        this._state = 9;
-        this.sectionStart = this._index;
-      }
-    };
-    Tokenizer2.prototype.stateBeforeAttributeValue = function(c) {
-      if (c === '"') {
-        this._state = 12;
-        this.sectionStart = this._index + 1;
-      } else if (c === "'") {
-        this._state = 13;
-        this.sectionStart = this._index + 1;
-      } else if (!whitespace(c)) {
-        this._state = 14;
-        this.sectionStart = this._index;
-        this._index--;
-      }
-    };
-    Tokenizer2.prototype.handleInAttributeValue = function(c, quote) {
-      if (c === quote) {
-        this.emitToken("onattribdata");
-        this.cbs.onattribend(quote);
-        this._state = 8;
-      } else if (this.decodeEntities && c === "&") {
-        this.emitToken("onattribdata");
-        this.baseState = this._state;
-        this._state = 62;
-        this.sectionStart = this._index;
-      }
-    };
-    Tokenizer2.prototype.stateInAttributeValueDoubleQuotes = function(c) {
-      this.handleInAttributeValue(c, '"');
-    };
-    Tokenizer2.prototype.stateInAttributeValueSingleQuotes = function(c) {
-      this.handleInAttributeValue(c, "'");
-    };
-    Tokenizer2.prototype.stateInAttributeValueNoQuotes = function(c) {
-      if (whitespace(c) || c === ">") {
-        this.emitToken("onattribdata");
-        this.cbs.onattribend(null);
-        this._state = 8;
-        this._index--;
-      } else if (this.decodeEntities && c === "&") {
-        this.emitToken("onattribdata");
-        this.baseState = this._state;
-        this._state = 62;
-        this.sectionStart = this._index;
-      }
-    };
-    Tokenizer2.prototype.stateBeforeDeclaration = function(c) {
-      this._state = c === "[" ? 23 : c === "-" ? 18 : 16;
-    };
-    Tokenizer2.prototype.stateInDeclaration = function(c) {
-      if (c === ">") {
-        this.cbs.ondeclaration(this.getSection());
-        this._state = 1;
-        this.sectionStart = this._index + 1;
-      }
-    };
-    Tokenizer2.prototype.stateInProcessingInstruction = function(c) {
-      if (c === ">") {
-        this.cbs.onprocessinginstruction(this.getSection());
-        this._state = 1;
-        this.sectionStart = this._index + 1;
-      }
-    };
-    Tokenizer2.prototype.stateBeforeComment = function(c) {
-      if (c === "-") {
-        this._state = 19;
-        this.sectionStart = this._index + 1;
-      } else {
-        this._state = 16;
-      }
-    };
-    Tokenizer2.prototype.stateInComment = function(c) {
-      if (c === "-")
-        this._state = 21;
-    };
-    Tokenizer2.prototype.stateInSpecialComment = function(c) {
-      if (c === ">") {
-        this.cbs.oncomment(this.buffer.substring(this.sectionStart, this._index));
-        this._state = 1;
-        this.sectionStart = this._index + 1;
-      }
-    };
-    Tokenizer2.prototype.stateAfterComment1 = function(c) {
-      if (c === "-") {
-        this._state = 22;
-      } else {
-        this._state = 19;
-      }
-    };
-    Tokenizer2.prototype.stateAfterComment2 = function(c) {
-      if (c === ">") {
-        this.cbs.oncomment(this.buffer.substring(this.sectionStart, this._index - 2));
-        this._state = 1;
-        this.sectionStart = this._index + 1;
-      } else if (c !== "-") {
-        this._state = 19;
-      }
-    };
-    Tokenizer2.prototype.stateBeforeCdata6 = function(c) {
-      if (c === "[") {
-        this._state = 29;
-        this.sectionStart = this._index + 1;
-      } else {
-        this._state = 16;
-        this._index--;
-      }
-    };
-    Tokenizer2.prototype.stateInCdata = function(c) {
-      if (c === "]")
-        this._state = 30;
-    };
-    Tokenizer2.prototype.stateAfterCdata1 = function(c) {
-      if (c === "]")
-        this._state = 31;
-      else
-        this._state = 29;
-    };
-    Tokenizer2.prototype.stateAfterCdata2 = function(c) {
-      if (c === ">") {
-        this.cbs.oncdata(this.buffer.substring(this.sectionStart, this._index - 2));
-        this._state = 1;
-        this.sectionStart = this._index + 1;
-      } else if (c !== "]") {
-        this._state = 29;
-      }
-    };
-    Tokenizer2.prototype.stateBeforeSpecialS = function(c) {
-      if (c === "c" || c === "C") {
-        this._state = 34;
-      } else if (c === "t" || c === "T") {
-        this._state = 44;
-      } else {
-        this._state = 3;
-        this._index--;
-      }
-    };
-    Tokenizer2.prototype.stateBeforeSpecialSEnd = function(c) {
-      if (this.special === 2 && (c === "c" || c === "C")) {
-        this._state = 39;
-      } else if (this.special === 3 && (c === "t" || c === "T")) {
-        this._state = 48;
-      } else
-        this._state = 1;
-    };
-    Tokenizer2.prototype.stateBeforeSpecialLast = function(c, special) {
-      if (c === "/" || c === ">" || whitespace(c)) {
-        this.special = special;
-      }
-      this._state = 3;
-      this._index--;
-    };
-    Tokenizer2.prototype.stateAfterSpecialLast = function(c, sectionStartOffset) {
-      if (c === ">" || whitespace(c)) {
-        this.special = 1;
-        this._state = 6;
-        this.sectionStart = this._index - sectionStartOffset;
-        this._index--;
-      } else
-        this._state = 1;
-    };
-    Tokenizer2.prototype.parseFixedEntity = function(map2) {
-      if (map2 === void 0) {
-        map2 = this.xmlMode ? xml_json_1.default : entities_json_1.default;
-      }
-      if (this.sectionStart + 1 < this._index) {
-        var entity = this.buffer.substring(this.sectionStart + 1, this._index);
-        if (Object.prototype.hasOwnProperty.call(map2, entity)) {
-          this.emitPartial(map2[entity]);
+      };
+      Tokenizer3.prototype.stateBeforeClosingTagName = function(c) {
+        if (whitespace(c)) ;
+        else if (c === ">") {
+          this._state = 1;
+        } else if (this.special !== 1) {
+          if (this.special !== 4 && (c === "s" || c === "S")) {
+            this._state = 33;
+          } else if (this.special === 4 && (c === "t" || c === "T")) {
+            this._state = 53;
+          } else {
+            this._state = 1;
+            this._index--;
+          }
+        } else if (!this.isTagStartChar(c)) {
+          this._state = 20;
+          this.sectionStart = this._index;
+        } else {
+          this._state = 6;
+          this.sectionStart = this._index;
+        }
+      };
+      Tokenizer3.prototype.stateInClosingTagName = function(c) {
+        if (c === ">" || whitespace(c)) {
+          this.emitToken("onclosetag");
+          this._state = 7;
+          this._index--;
+        }
+      };
+      Tokenizer3.prototype.stateAfterClosingTagName = function(c) {
+        if (c === ">") {
+          this._state = 1;
           this.sectionStart = this._index + 1;
         }
-      }
-    };
-    Tokenizer2.prototype.parseLegacyEntity = function() {
-      var start = this.sectionStart + 1;
-      var limit = Math.min(this._index - start, 6);
-      while (limit >= 2) {
-        var entity = this.buffer.substr(start, limit);
-        if (Object.prototype.hasOwnProperty.call(legacy_json_1.default, entity)) {
-          this.emitPartial(legacy_json_1.default[entity]);
-          this.sectionStart += limit + 1;
-          return;
+      };
+      Tokenizer3.prototype.stateBeforeAttributeName = function(c) {
+        if (c === ">") {
+          this.cbs.onopentagend();
+          this._state = 1;
+          this.sectionStart = this._index + 1;
+        } else if (c === "/") {
+          this._state = 4;
+        } else if (!whitespace(c)) {
+          this._state = 9;
+          this.sectionStart = this._index;
         }
-        limit--;
-      }
-    };
-    Tokenizer2.prototype.stateInNamedEntity = function(c) {
-      if (c === ";") {
-        this.parseFixedEntity();
-        if (this.baseState === 1 && this.sectionStart + 1 < this._index && !this.xmlMode) {
-          this.parseLegacyEntity();
+      };
+      Tokenizer3.prototype.stateInSelfClosingTag = function(c) {
+        if (c === ">") {
+          this.cbs.onselfclosingtag();
+          this._state = 1;
+          this.sectionStart = this._index + 1;
+          this.special = 1;
+        } else if (!whitespace(c)) {
+          this._state = 8;
+          this._index--;
         }
-        this._state = this.baseState;
-      } else if ((c < "0" || c > "9") && !isASCIIAlpha(c)) {
-        if (this.xmlMode || this.sectionStart + 1 === this._index) ;
-        else if (this.baseState !== 1) {
-          if (c !== "=") {
-            this.parseFixedEntity(legacy_json_1.default);
-          }
+      };
+      Tokenizer3.prototype.stateInAttributeName = function(c) {
+        if (c === "=" || c === "/" || c === ">" || whitespace(c)) {
+          this.cbs.onattribname(this.getSection());
+          this.sectionStart = -1;
+          this._state = 10;
+          this._index--;
+        }
+      };
+      Tokenizer3.prototype.stateAfterAttributeName = function(c) {
+        if (c === "=") {
+          this._state = 11;
+        } else if (c === "/" || c === ">") {
+          this.cbs.onattribend(void 0);
+          this._state = 8;
+          this._index--;
+        } else if (!whitespace(c)) {
+          this.cbs.onattribend(void 0);
+          this._state = 9;
+          this.sectionStart = this._index;
+        }
+      };
+      Tokenizer3.prototype.stateBeforeAttributeValue = function(c) {
+        if (c === '"') {
+          this._state = 12;
+          this.sectionStart = this._index + 1;
+        } else if (c === "'") {
+          this._state = 13;
+          this.sectionStart = this._index + 1;
+        } else if (!whitespace(c)) {
+          this._state = 14;
+          this.sectionStart = this._index;
+          this._index--;
+        }
+      };
+      Tokenizer3.prototype.handleInAttributeValue = function(c, quote) {
+        if (c === quote) {
+          this.emitToken("onattribdata");
+          this.cbs.onattribend(quote);
+          this._state = 8;
+        } else if (this.decodeEntities && c === "&") {
+          this.emitToken("onattribdata");
+          this.baseState = this._state;
+          this._state = 62;
+          this.sectionStart = this._index;
+        }
+      };
+      Tokenizer3.prototype.stateInAttributeValueDoubleQuotes = function(c) {
+        this.handleInAttributeValue(c, '"');
+      };
+      Tokenizer3.prototype.stateInAttributeValueSingleQuotes = function(c) {
+        this.handleInAttributeValue(c, "'");
+      };
+      Tokenizer3.prototype.stateInAttributeValueNoQuotes = function(c) {
+        if (whitespace(c) || c === ">") {
+          this.emitToken("onattribdata");
+          this.cbs.onattribend(null);
+          this._state = 8;
+          this._index--;
+        } else if (this.decodeEntities && c === "&") {
+          this.emitToken("onattribdata");
+          this.baseState = this._state;
+          this._state = 62;
+          this.sectionStart = this._index;
+        }
+      };
+      Tokenizer3.prototype.stateBeforeDeclaration = function(c) {
+        this._state = c === "[" ? 23 : c === "-" ? 18 : 16;
+      };
+      Tokenizer3.prototype.stateInDeclaration = function(c) {
+        if (c === ">") {
+          this.cbs.ondeclaration(this.getSection());
+          this._state = 1;
+          this.sectionStart = this._index + 1;
+        }
+      };
+      Tokenizer3.prototype.stateInProcessingInstruction = function(c) {
+        if (c === ">") {
+          this.cbs.onprocessinginstruction(this.getSection());
+          this._state = 1;
+          this.sectionStart = this._index + 1;
+        }
+      };
+      Tokenizer3.prototype.stateBeforeComment = function(c) {
+        if (c === "-") {
+          this._state = 19;
+          this.sectionStart = this._index + 1;
         } else {
-          this.parseLegacyEntity();
+          this._state = 16;
+        }
+      };
+      Tokenizer3.prototype.stateInComment = function(c) {
+        if (c === "-")
+          this._state = 21;
+      };
+      Tokenizer3.prototype.stateInSpecialComment = function(c) {
+        if (c === ">") {
+          this.cbs.oncomment(this.buffer.substring(this.sectionStart, this._index));
+          this._state = 1;
+          this.sectionStart = this._index + 1;
+        }
+      };
+      Tokenizer3.prototype.stateAfterComment1 = function(c) {
+        if (c === "-") {
+          this._state = 22;
+        } else {
+          this._state = 19;
+        }
+      };
+      Tokenizer3.prototype.stateAfterComment2 = function(c) {
+        if (c === ">") {
+          this.cbs.oncomment(this.buffer.substring(this.sectionStart, this._index - 2));
+          this._state = 1;
+          this.sectionStart = this._index + 1;
+        } else if (c !== "-") {
+          this._state = 19;
+        }
+      };
+      Tokenizer3.prototype.stateBeforeCdata6 = function(c) {
+        if (c === "[") {
+          this._state = 29;
+          this.sectionStart = this._index + 1;
+        } else {
+          this._state = 16;
+          this._index--;
+        }
+      };
+      Tokenizer3.prototype.stateInCdata = function(c) {
+        if (c === "]")
+          this._state = 30;
+      };
+      Tokenizer3.prototype.stateAfterCdata1 = function(c) {
+        if (c === "]")
+          this._state = 31;
+        else
+          this._state = 29;
+      };
+      Tokenizer3.prototype.stateAfterCdata2 = function(c) {
+        if (c === ">") {
+          this.cbs.oncdata(this.buffer.substring(this.sectionStart, this._index - 2));
+          this._state = 1;
+          this.sectionStart = this._index + 1;
+        } else if (c !== "]") {
+          this._state = 29;
+        }
+      };
+      Tokenizer3.prototype.stateBeforeSpecialS = function(c) {
+        if (c === "c" || c === "C") {
+          this._state = 34;
+        } else if (c === "t" || c === "T") {
+          this._state = 44;
+        } else {
+          this._state = 3;
+          this._index--;
+        }
+      };
+      Tokenizer3.prototype.stateBeforeSpecialSEnd = function(c) {
+        if (this.special === 2 && (c === "c" || c === "C")) {
+          this._state = 39;
+        } else if (this.special === 3 && (c === "t" || c === "T")) {
+          this._state = 48;
+        } else
+          this._state = 1;
+      };
+      Tokenizer3.prototype.stateBeforeSpecialLast = function(c, special) {
+        if (c === "/" || c === ">" || whitespace(c)) {
+          this.special = special;
+        }
+        this._state = 3;
+        this._index--;
+      };
+      Tokenizer3.prototype.stateAfterSpecialLast = function(c, sectionStartOffset) {
+        if (c === ">" || whitespace(c)) {
+          this.special = 1;
+          this._state = 6;
+          this.sectionStart = this._index - sectionStartOffset;
+          this._index--;
+        } else
+          this._state = 1;
+      };
+      Tokenizer3.prototype.parseFixedEntity = function(map2) {
+        if (map2 === void 0) {
+          map2 = this.xmlMode ? xml_json_1.default : entities_json_1.default;
+        }
+        if (this.sectionStart + 1 < this._index) {
+          var entity = this.buffer.substring(this.sectionStart + 1, this._index);
+          if (Object.prototype.hasOwnProperty.call(map2, entity)) {
+            this.emitPartial(map2[entity]);
+            this.sectionStart = this._index + 1;
+          }
+        }
+      };
+      Tokenizer3.prototype.parseLegacyEntity = function() {
+        var start = this.sectionStart + 1;
+        var limit = Math.min(this._index - start, 6);
+        while (limit >= 2) {
+          var entity = this.buffer.substr(start, limit);
+          if (Object.prototype.hasOwnProperty.call(legacy_json_1.default, entity)) {
+            this.emitPartial(legacy_json_1.default[entity]);
+            this.sectionStart += limit + 1;
+            return;
+          }
+          limit--;
+        }
+      };
+      Tokenizer3.prototype.stateInNamedEntity = function(c) {
+        if (c === ";") {
+          this.parseFixedEntity();
+          if (this.baseState === 1 && this.sectionStart + 1 < this._index && !this.xmlMode) {
+            this.parseLegacyEntity();
+          }
+          this._state = this.baseState;
+        } else if ((c < "0" || c > "9") && !isASCIIAlpha(c)) {
+          if (this.xmlMode || this.sectionStart + 1 === this._index) ;
+          else if (this.baseState !== 1) {
+            if (c !== "=") {
+              this.parseFixedEntity(legacy_json_1.default);
+            }
+          } else {
+            this.parseLegacyEntity();
+          }
+          this._state = this.baseState;
+          this._index--;
+        }
+      };
+      Tokenizer3.prototype.decodeNumericEntity = function(offset, base, strict2) {
+        var sectionStart = this.sectionStart + offset;
+        if (sectionStart !== this._index) {
+          var entity = this.buffer.substring(sectionStart, this._index);
+          var parsed = parseInt(entity, base);
+          this.emitPartial(decode_codepoint_1.default(parsed));
+          this.sectionStart = strict2 ? this._index + 1 : this._index;
         }
         this._state = this.baseState;
-        this._index--;
-      }
-    };
-    Tokenizer2.prototype.decodeNumericEntity = function(offset, base, strict2) {
-      var sectionStart = this.sectionStart + offset;
-      if (sectionStart !== this._index) {
-        var entity = this.buffer.substring(sectionStart, this._index);
-        var parsed = parseInt(entity, base);
-        this.emitPartial(decode_codepoint_1.default(parsed));
-        this.sectionStart = strict2 ? this._index + 1 : this._index;
-      }
-      this._state = this.baseState;
-    };
-    Tokenizer2.prototype.stateInNumericEntity = function(c) {
-      if (c === ";") {
-        this.decodeNumericEntity(2, 10, true);
-      } else if (c < "0" || c > "9") {
-        if (!this.xmlMode) {
+      };
+      Tokenizer3.prototype.stateInNumericEntity = function(c) {
+        if (c === ";") {
+          this.decodeNumericEntity(2, 10, true);
+        } else if (c < "0" || c > "9") {
+          if (!this.xmlMode) {
+            this.decodeNumericEntity(2, 10, false);
+          } else {
+            this._state = this.baseState;
+          }
+          this._index--;
+        }
+      };
+      Tokenizer3.prototype.stateInHexEntity = function(c) {
+        if (c === ";") {
+          this.decodeNumericEntity(3, 16, true);
+        } else if ((c < "a" || c > "f") && (c < "A" || c > "F") && (c < "0" || c > "9")) {
+          if (!this.xmlMode) {
+            this.decodeNumericEntity(3, 16, false);
+          } else {
+            this._state = this.baseState;
+          }
+          this._index--;
+        }
+      };
+      Tokenizer3.prototype.cleanup = function() {
+        if (this.sectionStart < 0) {
+          this.buffer = "";
+          this.bufferOffset += this._index;
+          this._index = 0;
+        } else if (this.running) {
+          if (this._state === 1) {
+            if (this.sectionStart !== this._index) {
+              this.cbs.ontext(this.buffer.substr(this.sectionStart));
+            }
+            this.buffer = "";
+            this.bufferOffset += this._index;
+            this._index = 0;
+          } else if (this.sectionStart === this._index) {
+            this.buffer = "";
+            this.bufferOffset += this._index;
+            this._index = 0;
+          } else {
+            this.buffer = this.buffer.substr(this.sectionStart);
+            this._index -= this.sectionStart;
+            this.bufferOffset += this.sectionStart;
+          }
+          this.sectionStart = 0;
+        }
+      };
+      Tokenizer3.prototype.parse = function() {
+        while (this._index < this.buffer.length && this.running) {
+          var c = this.buffer.charAt(this._index);
+          if (this._state === 1) {
+            this.stateText(c);
+          } else if (this._state === 12) {
+            this.stateInAttributeValueDoubleQuotes(c);
+          } else if (this._state === 9) {
+            this.stateInAttributeName(c);
+          } else if (this._state === 19) {
+            this.stateInComment(c);
+          } else if (this._state === 20) {
+            this.stateInSpecialComment(c);
+          } else if (this._state === 8) {
+            this.stateBeforeAttributeName(c);
+          } else if (this._state === 3) {
+            this.stateInTagName(c);
+          } else if (this._state === 6) {
+            this.stateInClosingTagName(c);
+          } else if (this._state === 2) {
+            this.stateBeforeTagName(c);
+          } else if (this._state === 10) {
+            this.stateAfterAttributeName(c);
+          } else if (this._state === 13) {
+            this.stateInAttributeValueSingleQuotes(c);
+          } else if (this._state === 11) {
+            this.stateBeforeAttributeValue(c);
+          } else if (this._state === 5) {
+            this.stateBeforeClosingTagName(c);
+          } else if (this._state === 7) {
+            this.stateAfterClosingTagName(c);
+          } else if (this._state === 32) {
+            this.stateBeforeSpecialS(c);
+          } else if (this._state === 21) {
+            this.stateAfterComment1(c);
+          } else if (this._state === 14) {
+            this.stateInAttributeValueNoQuotes(c);
+          } else if (this._state === 4) {
+            this.stateInSelfClosingTag(c);
+          } else if (this._state === 16) {
+            this.stateInDeclaration(c);
+          } else if (this._state === 15) {
+            this.stateBeforeDeclaration(c);
+          } else if (this._state === 22) {
+            this.stateAfterComment2(c);
+          } else if (this._state === 18) {
+            this.stateBeforeComment(c);
+          } else if (this._state === 33) {
+            this.stateBeforeSpecialSEnd(c);
+          } else if (this._state === 53) {
+            stateAfterSpecialTEnd(this, c);
+          } else if (this._state === 39) {
+            stateAfterScript1(this, c);
+          } else if (this._state === 40) {
+            stateAfterScript2(this, c);
+          } else if (this._state === 41) {
+            stateAfterScript3(this, c);
+          } else if (this._state === 34) {
+            stateBeforeScript1(this, c);
+          } else if (this._state === 35) {
+            stateBeforeScript2(this, c);
+          } else if (this._state === 36) {
+            stateBeforeScript3(this, c);
+          } else if (this._state === 37) {
+            stateBeforeScript4(this, c);
+          } else if (this._state === 38) {
+            this.stateBeforeSpecialLast(
+              c,
+              2
+              /* Script */
+            );
+          } else if (this._state === 42) {
+            stateAfterScript4(this, c);
+          } else if (this._state === 43) {
+            this.stateAfterSpecialLast(c, 6);
+          } else if (this._state === 44) {
+            stateBeforeStyle1(this, c);
+          } else if (this._state === 29) {
+            this.stateInCdata(c);
+          } else if (this._state === 45) {
+            stateBeforeStyle2(this, c);
+          } else if (this._state === 46) {
+            stateBeforeStyle3(this, c);
+          } else if (this._state === 47) {
+            this.stateBeforeSpecialLast(
+              c,
+              3
+              /* Style */
+            );
+          } else if (this._state === 48) {
+            stateAfterStyle1(this, c);
+          } else if (this._state === 49) {
+            stateAfterStyle2(this, c);
+          } else if (this._state === 50) {
+            stateAfterStyle3(this, c);
+          } else if (this._state === 51) {
+            this.stateAfterSpecialLast(c, 5);
+          } else if (this._state === 52) {
+            stateBeforeSpecialT(this, c);
+          } else if (this._state === 54) {
+            stateBeforeTitle1(this, c);
+          } else if (this._state === 55) {
+            stateBeforeTitle2(this, c);
+          } else if (this._state === 56) {
+            stateBeforeTitle3(this, c);
+          } else if (this._state === 57) {
+            this.stateBeforeSpecialLast(
+              c,
+              4
+              /* Title */
+            );
+          } else if (this._state === 58) {
+            stateAfterTitle1(this, c);
+          } else if (this._state === 59) {
+            stateAfterTitle2(this, c);
+          } else if (this._state === 60) {
+            stateAfterTitle3(this, c);
+          } else if (this._state === 61) {
+            this.stateAfterSpecialLast(c, 5);
+          } else if (this._state === 17) {
+            this.stateInProcessingInstruction(c);
+          } else if (this._state === 64) {
+            this.stateInNamedEntity(c);
+          } else if (this._state === 23) {
+            stateBeforeCdata1(this, c);
+          } else if (this._state === 62) {
+            stateBeforeEntity(this, c);
+          } else if (this._state === 24) {
+            stateBeforeCdata2(this, c);
+          } else if (this._state === 25) {
+            stateBeforeCdata3(this, c);
+          } else if (this._state === 30) {
+            this.stateAfterCdata1(c);
+          } else if (this._state === 31) {
+            this.stateAfterCdata2(c);
+          } else if (this._state === 26) {
+            stateBeforeCdata4(this, c);
+          } else if (this._state === 27) {
+            stateBeforeCdata5(this, c);
+          } else if (this._state === 28) {
+            this.stateBeforeCdata6(c);
+          } else if (this._state === 66) {
+            this.stateInHexEntity(c);
+          } else if (this._state === 65) {
+            this.stateInNumericEntity(c);
+          } else if (this._state === 63) {
+            stateBeforeNumericEntity(this, c);
+          } else {
+            this.cbs.onerror(Error("unknown _state"), this._state);
+          }
+          this._index++;
+        }
+        this.cleanup();
+      };
+      Tokenizer3.prototype.finish = function() {
+        if (this.sectionStart < this._index) {
+          this.handleTrailingData();
+        }
+        this.cbs.onend();
+      };
+      Tokenizer3.prototype.handleTrailingData = function() {
+        var data = this.buffer.substr(this.sectionStart);
+        if (this._state === 29 || this._state === 30 || this._state === 31) {
+          this.cbs.oncdata(data);
+        } else if (this._state === 19 || this._state === 21 || this._state === 22) {
+          this.cbs.oncomment(data);
+        } else if (this._state === 64 && !this.xmlMode) {
+          this.parseLegacyEntity();
+          if (this.sectionStart < this._index) {
+            this._state = this.baseState;
+            this.handleTrailingData();
+          }
+        } else if (this._state === 65 && !this.xmlMode) {
           this.decodeNumericEntity(2, 10, false);
-        } else {
-          this._state = this.baseState;
-        }
-        this._index--;
-      }
-    };
-    Tokenizer2.prototype.stateInHexEntity = function(c) {
-      if (c === ";") {
-        this.decodeNumericEntity(3, 16, true);
-      } else if ((c < "a" || c > "f") && (c < "A" || c > "F") && (c < "0" || c > "9")) {
-        if (!this.xmlMode) {
-          this.decodeNumericEntity(3, 16, false);
-        } else {
-          this._state = this.baseState;
-        }
-        this._index--;
-      }
-    };
-    Tokenizer2.prototype.cleanup = function() {
-      if (this.sectionStart < 0) {
-        this.buffer = "";
-        this.bufferOffset += this._index;
-        this._index = 0;
-      } else if (this.running) {
-        if (this._state === 1) {
-          if (this.sectionStart !== this._index) {
-            this.cbs.ontext(this.buffer.substr(this.sectionStart));
+          if (this.sectionStart < this._index) {
+            this._state = this.baseState;
+            this.handleTrailingData();
           }
-          this.buffer = "";
-          this.bufferOffset += this._index;
-          this._index = 0;
-        } else if (this.sectionStart === this._index) {
-          this.buffer = "";
-          this.bufferOffset += this._index;
-          this._index = 0;
+        } else if (this._state === 66 && !this.xmlMode) {
+          this.decodeNumericEntity(3, 16, false);
+          if (this.sectionStart < this._index) {
+            this._state = this.baseState;
+            this.handleTrailingData();
+          }
+        } else if (this._state !== 3 && this._state !== 8 && this._state !== 11 && this._state !== 10 && this._state !== 9 && this._state !== 13 && this._state !== 12 && this._state !== 14 && this._state !== 6) {
+          this.cbs.ontext(data);
+        }
+      };
+      Tokenizer3.prototype.getSection = function() {
+        return this.buffer.substring(this.sectionStart, this._index);
+      };
+      Tokenizer3.prototype.emitToken = function(name) {
+        this.cbs[name](this.getSection());
+        this.sectionStart = -1;
+      };
+      Tokenizer3.prototype.emitPartial = function(value) {
+        if (this.baseState !== 1) {
+          this.cbs.onattribdata(value);
         } else {
-          this.buffer = this.buffer.substr(this.sectionStart);
-          this._index -= this.sectionStart;
-          this.bufferOffset += this.sectionStart;
+          this.cbs.ontext(value);
         }
-        this.sectionStart = 0;
-      }
-    };
-    Tokenizer2.prototype.parse = function() {
-      while (this._index < this.buffer.length && this.running) {
-        var c = this.buffer.charAt(this._index);
-        if (this._state === 1) {
-          this.stateText(c);
-        } else if (this._state === 12) {
-          this.stateInAttributeValueDoubleQuotes(c);
-        } else if (this._state === 9) {
-          this.stateInAttributeName(c);
-        } else if (this._state === 19) {
-          this.stateInComment(c);
-        } else if (this._state === 20) {
-          this.stateInSpecialComment(c);
-        } else if (this._state === 8) {
-          this.stateBeforeAttributeName(c);
-        } else if (this._state === 3) {
-          this.stateInTagName(c);
-        } else if (this._state === 6) {
-          this.stateInClosingTagName(c);
-        } else if (this._state === 2) {
-          this.stateBeforeTagName(c);
-        } else if (this._state === 10) {
-          this.stateAfterAttributeName(c);
-        } else if (this._state === 13) {
-          this.stateInAttributeValueSingleQuotes(c);
-        } else if (this._state === 11) {
-          this.stateBeforeAttributeValue(c);
-        } else if (this._state === 5) {
-          this.stateBeforeClosingTagName(c);
-        } else if (this._state === 7) {
-          this.stateAfterClosingTagName(c);
-        } else if (this._state === 32) {
-          this.stateBeforeSpecialS(c);
-        } else if (this._state === 21) {
-          this.stateAfterComment1(c);
-        } else if (this._state === 14) {
-          this.stateInAttributeValueNoQuotes(c);
-        } else if (this._state === 4) {
-          this.stateInSelfClosingTag(c);
-        } else if (this._state === 16) {
-          this.stateInDeclaration(c);
-        } else if (this._state === 15) {
-          this.stateBeforeDeclaration(c);
-        } else if (this._state === 22) {
-          this.stateAfterComment2(c);
-        } else if (this._state === 18) {
-          this.stateBeforeComment(c);
-        } else if (this._state === 33) {
-          this.stateBeforeSpecialSEnd(c);
-        } else if (this._state === 53) {
-          stateAfterSpecialTEnd(this, c);
-        } else if (this._state === 39) {
-          stateAfterScript1(this, c);
-        } else if (this._state === 40) {
-          stateAfterScript2(this, c);
-        } else if (this._state === 41) {
-          stateAfterScript3(this, c);
-        } else if (this._state === 34) {
-          stateBeforeScript1(this, c);
-        } else if (this._state === 35) {
-          stateBeforeScript2(this, c);
-        } else if (this._state === 36) {
-          stateBeforeScript3(this, c);
-        } else if (this._state === 37) {
-          stateBeforeScript4(this, c);
-        } else if (this._state === 38) {
-          this.stateBeforeSpecialLast(
-            c,
-            2
-            /* Script */
-          );
-        } else if (this._state === 42) {
-          stateAfterScript4(this, c);
-        } else if (this._state === 43) {
-          this.stateAfterSpecialLast(c, 6);
-        } else if (this._state === 44) {
-          stateBeforeStyle1(this, c);
-        } else if (this._state === 29) {
-          this.stateInCdata(c);
-        } else if (this._state === 45) {
-          stateBeforeStyle2(this, c);
-        } else if (this._state === 46) {
-          stateBeforeStyle3(this, c);
-        } else if (this._state === 47) {
-          this.stateBeforeSpecialLast(
-            c,
-            3
-            /* Style */
-          );
-        } else if (this._state === 48) {
-          stateAfterStyle1(this, c);
-        } else if (this._state === 49) {
-          stateAfterStyle2(this, c);
-        } else if (this._state === 50) {
-          stateAfterStyle3(this, c);
-        } else if (this._state === 51) {
-          this.stateAfterSpecialLast(c, 5);
-        } else if (this._state === 52) {
-          stateBeforeSpecialT(this, c);
-        } else if (this._state === 54) {
-          stateBeforeTitle1(this, c);
-        } else if (this._state === 55) {
-          stateBeforeTitle2(this, c);
-        } else if (this._state === 56) {
-          stateBeforeTitle3(this, c);
-        } else if (this._state === 57) {
-          this.stateBeforeSpecialLast(
-            c,
-            4
-            /* Title */
-          );
-        } else if (this._state === 58) {
-          stateAfterTitle1(this, c);
-        } else if (this._state === 59) {
-          stateAfterTitle2(this, c);
-        } else if (this._state === 60) {
-          stateAfterTitle3(this, c);
-        } else if (this._state === 61) {
-          this.stateAfterSpecialLast(c, 5);
-        } else if (this._state === 17) {
-          this.stateInProcessingInstruction(c);
-        } else if (this._state === 64) {
-          this.stateInNamedEntity(c);
-        } else if (this._state === 23) {
-          stateBeforeCdata1(this, c);
-        } else if (this._state === 62) {
-          stateBeforeEntity(this, c);
-        } else if (this._state === 24) {
-          stateBeforeCdata2(this, c);
-        } else if (this._state === 25) {
-          stateBeforeCdata3(this, c);
-        } else if (this._state === 30) {
-          this.stateAfterCdata1(c);
-        } else if (this._state === 31) {
-          this.stateAfterCdata2(c);
-        } else if (this._state === 26) {
-          stateBeforeCdata4(this, c);
-        } else if (this._state === 27) {
-          stateBeforeCdata5(this, c);
-        } else if (this._state === 28) {
-          this.stateBeforeCdata6(c);
-        } else if (this._state === 66) {
-          this.stateInHexEntity(c);
-        } else if (this._state === 65) {
-          this.stateInNumericEntity(c);
-        } else if (this._state === 63) {
-          stateBeforeNumericEntity(this, c);
-        } else {
-          this.cbs.onerror(Error("unknown _state"), this._state);
-        }
-        this._index++;
-      }
-      this.cleanup();
-    };
-    Tokenizer2.prototype.finish = function() {
-      if (this.sectionStart < this._index) {
-        this.handleTrailingData();
-      }
-      this.cbs.onend();
-    };
-    Tokenizer2.prototype.handleTrailingData = function() {
-      var data = this.buffer.substr(this.sectionStart);
-      if (this._state === 29 || this._state === 30 || this._state === 31) {
-        this.cbs.oncdata(data);
-      } else if (this._state === 19 || this._state === 21 || this._state === 22) {
-        this.cbs.oncomment(data);
-      } else if (this._state === 64 && !this.xmlMode) {
-        this.parseLegacyEntity();
-        if (this.sectionStart < this._index) {
-          this._state = this.baseState;
-          this.handleTrailingData();
-        }
-      } else if (this._state === 65 && !this.xmlMode) {
-        this.decodeNumericEntity(2, 10, false);
-        if (this.sectionStart < this._index) {
-          this._state = this.baseState;
-          this.handleTrailingData();
-        }
-      } else if (this._state === 66 && !this.xmlMode) {
-        this.decodeNumericEntity(3, 16, false);
-        if (this.sectionStart < this._index) {
-          this._state = this.baseState;
-          this.handleTrailingData();
-        }
-      } else if (this._state !== 3 && this._state !== 8 && this._state !== 11 && this._state !== 10 && this._state !== 9 && this._state !== 13 && this._state !== 12 && this._state !== 14 && this._state !== 6) {
-        this.cbs.ontext(data);
-      }
-    };
-    Tokenizer2.prototype.getSection = function() {
-      return this.buffer.substring(this.sectionStart, this._index);
-    };
-    Tokenizer2.prototype.emitToken = function(name) {
-      this.cbs[name](this.getSection());
-      this.sectionStart = -1;
-    };
-    Tokenizer2.prototype.emitPartial = function(value) {
-      if (this.baseState !== 1) {
-        this.cbs.onattribdata(value);
-      } else {
-        this.cbs.ontext(value);
-      }
-    };
-    return Tokenizer2;
-  })()
-);
-var _default = Tokenizer$2.default = Tokenizer$1;
+      };
+      return Tokenizer3;
+    })()
+  );
+  Tokenizer$1.default = Tokenizer2;
+  return Tokenizer$1;
+}
+var TokenizerExports = /* @__PURE__ */ requireTokenizer();
+const htmlparser2Tokenizer = /* @__PURE__ */ getDefaultExportFromCjs(TokenizerExports);
 var STYLE_ELEMENT_ID = "__twind";
 var createStorage = () => {
   const callbacks = [];
@@ -7633,7 +7649,7 @@ var getStyleTag = (sheet, attributes) => {
   attributes = { ...attributes, id };
   return `<style${Object.keys(attributes).reduce((attrs, key) => `${attrs} ${key}=${JSON.stringify(attributes[key])}`, "")}>${textContent}</style>`;
 };
-var Tokenizer = _default.default || _default;
+var Tokenizer = htmlparser2Tokenizer.default || htmlparser2Tokenizer;
 var noop = () => void 0;
 var shim = (markup, options = {}) => {
   const { tw: tw$1 = tw } = typeof options == "function" ? { tw: options } : options;
