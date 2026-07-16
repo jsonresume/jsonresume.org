@@ -2,14 +2,14 @@ name: Vercel Error Monitor
 
 on:
   schedule:
-    - cron: '*/10 * * * *' # Every 10 minutes
+    - cron: '*/30 * * * *' # Every 30 minutes (was 10 — each run reinstalls the Vercel CLI; 144 installs/day was waste)
   workflow_dispatch: # Manual trigger
 
 jobs:
   monitor-errors:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Setup Node.js
         uses: actions/setup-node@v6

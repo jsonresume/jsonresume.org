@@ -1,9 +1,11 @@
 # Docs
 
 The JSON Resume documentation site, served at
-[docs.jsonresume.org](https://docs.jsonresume.org). It's built with
-[Fumadocs](https://fumadocs.dev) on top of Next.js, and the
-`deploy-docs.yml` workflow publishes a static export to GitHub Pages.
+[jsonresume.org/docs](https://jsonresume.org/docs). It's built with
+[Fumadocs](https://fumadocs.dev) on top of Next.js with `basePath: '/docs'`,
+and the `deploy-docs.yml` workflow publishes a static export to GitHub Pages
+(`jsonresume.github.io/jsonresume.org`), which `apps/homepage2` fronts via a
+`/docs` rewrite.
 
 Content is authored as MDX; `fumadocs-mdx` runs on `postinstall` and as part of
 `typecheck` to generate the docs source.

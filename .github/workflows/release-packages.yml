@@ -54,7 +54,7 @@ jobs:
           app-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: pnpm/action-setup@v6
 
@@ -70,8 +70,13 @@ jobs:
       # the activation step for OIDC publishing. This is publish-tooling only —
       # it does not touch pnpm or the `pnpm changeset publish` command, and is a
       # no-op for packages still using NPM_TOKEN. See docs/RELEASING.md.
+      #
+      # Pinned to npm 11: npm@latest is now 12, which requires Node >= 22 and
+      # EBADENGINEs on this Node 20 runner (broke every release run from
+      # 2026-07-16). npm 11 satisfies the >= 11.5 OIDC requirement; go back to
+      # npm@latest if node-version above is ever bumped to 22+.
       - name: Upgrade npm for Trusted Publishing (OIDC)
-        run: npm install -g npm@latest
+        run: npm install -g npm@11
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile

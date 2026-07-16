@@ -41,38 +41,46 @@ var isPropValid = /* @__PURE__ */ memoize(
 function getDefaultExportFromCjs(x2) {
   return x2 && x2.__esModule && Object.prototype.hasOwnProperty.call(x2, "default") ? x2["default"] : x2;
 }
-var shallowequal = function shallowEqual(objA, objB, compare, compareContext) {
-  var ret = compare ? compare.call(compareContext, objA, objB) : void 0;
-  if (ret !== void 0) {
-    return !!ret;
-  }
-  if (objA === objB) {
+var shallowequal;
+var hasRequiredShallowequal;
+function requireShallowequal() {
+  if (hasRequiredShallowequal) return shallowequal;
+  hasRequiredShallowequal = 1;
+  shallowequal = function shallowEqual(objA, objB, compare, compareContext) {
+    var ret = compare ? compare.call(compareContext, objA, objB) : void 0;
+    if (ret !== void 0) {
+      return !!ret;
+    }
+    if (objA === objB) {
+      return true;
+    }
+    if (typeof objA !== "object" || !objA || typeof objB !== "object" || !objB) {
+      return false;
+    }
+    var keysA = Object.keys(objA);
+    var keysB = Object.keys(objB);
+    if (keysA.length !== keysB.length) {
+      return false;
+    }
+    var bHasOwnProperty = Object.prototype.hasOwnProperty.bind(objB);
+    for (var idx = 0; idx < keysA.length; idx++) {
+      var key = keysA[idx];
+      if (!bHasOwnProperty(key)) {
+        return false;
+      }
+      var valueA = objA[key];
+      var valueB = objB[key];
+      ret = compare ? compare.call(compareContext, valueA, valueB, key) : void 0;
+      if (ret === false || ret === void 0 && valueA !== valueB) {
+        return false;
+      }
+    }
     return true;
-  }
-  if (typeof objA !== "object" || !objA || typeof objB !== "object" || !objB) {
-    return false;
-  }
-  var keysA = Object.keys(objA);
-  var keysB = Object.keys(objB);
-  if (keysA.length !== keysB.length) {
-    return false;
-  }
-  var bHasOwnProperty = Object.prototype.hasOwnProperty.bind(objB);
-  for (var idx = 0; idx < keysA.length; idx++) {
-    var key = keysA[idx];
-    if (!bHasOwnProperty(key)) {
-      return false;
-    }
-    var valueA = objA[key];
-    var valueB = objB[key];
-    ret = compare ? compare.call(compareContext, valueA, valueB, key) : void 0;
-    if (ret === false || ret === void 0 && valueA !== valueB) {
-      return false;
-    }
-  }
-  return true;
-};
-const p = /* @__PURE__ */ getDefaultExportFromCjs(shallowequal);
+  };
+  return shallowequal;
+}
+var shallowequalExports = requireShallowequal();
+const p = /* @__PURE__ */ getDefaultExportFromCjs(shallowequalExports);
 var MS = "-ms-";
 var MOZ = "-moz-";
 var WEBKIT = "-webkit-";
@@ -1519,6 +1527,7 @@ function formatDateRange({
   };
   const formatDate = (dateStr) => {
     if (!dateStr) return getPresentLabel();
+    const isDateOnlyIso = typeof dateStr === "string" && /^\d{4}(-\d{2}){0,2}$/.test(dateStr);
     const date = typeof dateStr === "string" ? new Date(dateStr) : dateStr;
     if (isNaN(date.getTime())) return dateStr;
     const monthFormats = {
@@ -1530,6 +1539,9 @@ function formatDateRange({
       ...monthFormats[format],
       year: "numeric"
     };
+    if (isDateOnlyIso) {
+      options.timeZone = "UTC";
+    }
     if (numberingSystem) {
       options.numberingSystem = numberingSystem;
     }
@@ -6359,17 +6371,7 @@ function Resume({ resume }) {
     /* @__PURE__ */ jsxs(Header, { children: [
       basics.name && /* @__PURE__ */ jsx(Name, { children: basics.name }),
       basics.label && /* @__PURE__ */ jsx(Label, { children: basics.label }),
-      /* @__PURE__ */ jsxs(ContactWrapper, { children: [
-        basics.email && /* @__PURE__ */ jsx(ContactInfo, { type: "email", children: basics.email }),
-        basics.phone && /* @__PURE__ */ jsx(ContactInfo, { type: "phone", children: basics.phone }),
-        basics.location?.city && basics.location?.region && /* @__PURE__ */ jsxs(ContactInfo, { type: "location", children: [
-          basics.location.city,
-          ", ",
-          basics.location.region
-        ] }),
-        basics.url && /* @__PURE__ */ jsx(ContactInfo, { type: "url", children: /* @__PURE__ */ jsx("a", { href: safeUrl(basics.url), children: basics.url }) }),
-        basics.profiles?.map((profile, index) => /* @__PURE__ */ jsx(ContactInfo, { type: "social", children: /* @__PURE__ */ jsx("a", { href: safeUrl(profile.url), children: profile.network }) }, index))
-      ] })
+      /* @__PURE__ */ jsx(ContactWrapper, { children: /* @__PURE__ */ jsx(ContactInfo, { basics }) })
     ] }),
     basics.summary && /* @__PURE__ */ jsx(SummarySection, { children: /* @__PURE__ */ jsx(SummaryText, { children: basics.summary }) }),
     work.length > 0 && /* @__PURE__ */ jsxs(MainSection, { children: [

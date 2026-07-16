@@ -1,72 +1,103 @@
 import { describe, it, expect, vi } from 'vitest';
 import { getTheme } from './getTheme';
+import { format } from './format';
+import { THEMES } from './themeConfig';
 
+// THEMES values are lazy loader thunks (see themeConfig.js / #476).
 vi.mock('./themeConfig', () => ({
   THEMES: {
-    default: { name: 'default', template: 'default-template' },
-    elegant: { name: 'elegant', template: 'elegant-template' },
-    professional: { name: 'professional', template: 'pro-template' },
+    // ESM-shaped module: render on the namespace.
+    elegant: vi.fn(async () => ({
+      render: (resume) => `<html>elegant:${resume?.basics?.name}</html>`,
+    })),
+    // CJS-shaped module: render on default (module.exports).
+    kendall: vi.fn(async () => ({
+      default: { render: () => '<html>kendall</html>' },
+    })),
+    // Module that throws at import time (the PR #472 failure mode).
+    broken: vi.fn(async () => {
+      throw new Error('boom at import time');
+    }),
   },
 }));
 
-describe('getTheme', () => {
-  it('returns theme when it exists', () => {
-    const theme = getTheme('default');
+vi.mock('../../logger', () => ({
+  default: { error: vi.fn() },
+}));
 
-    expect(theme).toBeDefined();
-    expect(theme.name).toBe('default');
+describe('getTheme (lazy loader)', () => {
+  it('loads an ESM-shaped theme module', async () => {
+    const theme = await getTheme('elegant');
+    expect(typeof theme.render).toBe('function');
   });
 
-  it('returns correct theme configuration', () => {
-    const theme = getTheme('elegant');
-
-    expect(theme.name).toBe('elegant');
-    expect(theme.template).toBe('elegant-template');
+  it('unwraps default export for CJS-shaped theme modules', async () => {
+    const theme = await getTheme('kendall');
+    expect(theme.render()).toBe('<html>kendall</html>');
   });
 
-  it('returns undefined for non-existent theme', () => {
-    const theme = getTheme('nonexistent');
-
-    expect(theme).toBeUndefined();
+  it('caches loaded modules (loader invoked once)', async () => {
+    await getTheme('elegant');
+    await getTheme('elegant');
+    expect(THEMES.elegant.mock.calls.length).toBe(1);
   });
 
-  it('handles null theme name', () => {
-    const theme = getTheme(null);
-
-    expect(theme).toBeUndefined();
+  it('returns null for unknown themes', async () => {
+    expect(await getTheme('nonexistent')).toBeNull();
+    expect(await getTheme('')).toBeNull();
+    expect(await getTheme(null)).toBeNull();
+    expect(await getTheme(undefined)).toBeNull();
+    expect(await getTheme('ELEGANT')).toBeNull(); // case sensitive
   });
 
-  it('handles undefined theme name', () => {
-    const theme = getTheme(undefined);
-
-    expect(theme).toBeUndefined();
+  it('throws a per-theme "theme-load-failed" error when the module throws at import time', async () => {
+    await expect(getTheme('broken')).rejects.toThrow(
+      'theme-load-failed: broken: boom at import time'
+    );
   });
 
-  it('returns professional theme', () => {
-    const theme = getTheme('professional');
-
-    expect(theme.name).toBe('professional');
-    expect(theme.template).toBe('pro-template');
+  it('logs load failures via the structured logger', async () => {
+    const logger = (await import('../../logger')).default;
+    await expect(getTheme('broken')).rejects.toThrow('theme-load-failed');
+    expect(logger.error).toHaveBeenCalledWith(
+      expect.objectContaining({ theme: 'broken' }),
+      'Theme module failed to load'
+    );
   });
 
-  it('is case sensitive', () => {
-    const theme = getTheme('DEFAULT');
+  it('isolates failures: other themes keep loading after a broken one', async () => {
+    await expect(getTheme('broken')).rejects.toThrow('theme-load-failed');
+    const theme = await getTheme('elegant');
+    expect(typeof theme.render).toBe('function');
+  });
+});
 
-    expect(theme).toBeUndefined();
+describe('format() with lazy theme loading (end-to-end isolation)', () => {
+  const resume = { basics: { name: 'John Doe' } };
+
+  it('renders a healthy theme through the lazy path', async () => {
+    const { content } = await format(resume, { theme: 'elegant' });
+    expect(content).toContain('elegant:John Doe');
   });
 
-  it('handles empty string', () => {
-    const theme = getTheme('');
-
-    expect(theme).toBeUndefined();
+  it('a theme whose module throws rejects with theme-load-failed (per-theme 500)', async () => {
+    // formatResume.js catches this and builds a per-theme error response.
+    await expect(format(resume, { theme: 'broken' })).rejects.toThrow(
+      'theme-load-failed: broken'
+    );
   });
 
-  it('retrieves themes from THEMES config', () => {
-    const defaultTheme = getTheme('default');
-    const elegantTheme = getTheme('elegant');
+  it('other themes still render after a broken theme is requested', async () => {
+    await expect(format(resume, { theme: 'broken' })).rejects.toThrow(
+      'theme-load-failed'
+    );
+    const { content } = await format(resume, { theme: 'elegant' });
+    expect(content).toContain('elegant:John Doe');
+  });
 
-    expect(defaultTheme).not.toBe(elegantTheme);
-    expect(defaultTheme.name).toBe('default');
-    expect(elegantTheme.name).toBe('elegant');
+  it('unknown themes still throw theme-missing', async () => {
+    await expect(format(resume, { theme: 'nonexistent' })).rejects.toThrow(
+      'theme-missing'
+    );
   });
 });

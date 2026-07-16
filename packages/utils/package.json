@@ -16,7 +16,7 @@
     "src"
   ],
   "scripts": {
-    "test": "vitest run",
+    "test": "vitest run && TZ=America/Los_Angeles vitest run",
     "test:watch": "vitest",
     "lint": "eslint src --cache --cache-location node_modules/.cache/.eslintcache",
     "typecheck": "tsc --noEmit -p tsconfig.json"
@@ -26,7 +26,7 @@
     "@repo/eslint-config-custom": "workspace:^",
     "tsconfig": "workspace:*",
     "typescript": "^5.9.3",
-    "vitest": "^2"
+    "vitest": "^3.2.6"
   },
   "keywords": [
     "resume",

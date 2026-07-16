@@ -98,6 +98,40 @@ describe('formatDateRange', () => {
   });
 });
 
+describe('formatDateRange timezone safety (#450)', () => {
+  // Date-only ISO strings are parsed as UTC midnight, so they must also be
+  // FORMATTED in UTC — otherwise first-of-month dates shift back a month
+  // (and Jan 1 a whole year) in any timezone west of UTC, e.g. '2020-01-01'
+  // rendered as "Dec 2019" in America/Los_Angeles. These are exact-match
+  // assertions so they fail in a shifted timezone: CI runs in UTC, and the
+  // package test script re-runs the suite under TZ=America/Los_Angeles
+  // (see package.json) for real west-of-UTC coverage.
+  it('never shifts a first-of-month date (YYYY-MM-DD)', () => {
+    expect(formatDateRange({ startDate: '2020-01-01' })).toBe('Jan 2020');
+    expect(
+      formatDateRange({ startDate: '2020-01-01', endDate: '2021-12-01' })
+    ).toBe('Jan 2020 - Dec 2021');
+  });
+
+  it('never shifts year-month precision (YYYY-MM)', () => {
+    expect(formatDateRange({ startDate: '2020-06' })).toBe('Jun 2020');
+    expect(formatDateRange({ startDate: '2020-01' })).toBe('Jan 2020');
+  });
+
+  it('never shifts year precision (YYYY)', () => {
+    expect(formatDateRange({ startDate: '2020' })).toBe('Jan 2020');
+  });
+
+  it('holds across long and numeric formats at the year boundary', () => {
+    expect(formatDateRange({ startDate: '2021-01-01', format: 'long' })).toBe(
+      'January 2021'
+    );
+    expect(
+      formatDateRange({ startDate: '2021-01-01', format: 'numeric' })
+    ).toBe('01/2021');
+  });
+});
+
 describe('getRelativeTime', () => {
   beforeEach(() => {
     vi.useFakeTimers();
