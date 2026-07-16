@@ -16,7 +16,7 @@
     "src"
   ],
   "scripts": {
-    "test": "vitest run",
+    "test": "vitest run && TZ=America/Los_Angeles vitest run",
     "test:watch": "vitest",
     "lint": "eslint src --cache --cache-location node_modules/.cache/.eslintcache",
     "typecheck": "tsc --noEmit -p tsconfig.json"
