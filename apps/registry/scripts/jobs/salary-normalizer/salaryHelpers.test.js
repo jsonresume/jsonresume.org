@@ -119,36 +119,14 @@ describe('extractNumbers', () => {
     });
   });
 
-  // BUG (documented, not fixed in this PR): when a word separator such as
-  // "and"/"between"/"to" sits between two plain numbers, the cleaner replaces
-  // the word with a space, the greedy range regex captures BOTH numbers in its
-  // first group, and parseNumber strips the whitespace — concatenating them
-  // into one garbage value instead of producing a {min,max} range.
-  it('CURRENT BEHAVIOR: word-separated plain numbers are concatenated', () => {
-    expect(extractNumbers('150000 and 100000')).toEqual({
-      min: 150000100000,
-      max: 150000100000,
-    });
-  });
-
-  it.skip('EXPECTED: word-separated plain numbers should parse as a range', () => {
+  it('parses word-separated plain numbers as a range', () => {
     expect(extractNumbers('150000 and 100000')).toEqual({
       min: 100000,
       max: 150000,
     });
   });
 
-  // BUG (documented, not fixed in this PR): the dash/"to" range path returns
-  // numbers in their literal order and never sorts, so a descending range like
-  // "150,000 - 100,000" yields min > max.
-  it('CURRENT BEHAVIOR: descending dash range is not reordered (min > max)', () => {
-    expect(extractNumbers('150,000 - 100,000')).toEqual({
-      min: 150000,
-      max: 100000,
-    });
-  });
-
-  it.skip('EXPECTED: descending dash range should be reordered to min <= max', () => {
+  it('reorders a descending dash range to min <= max', () => {
     expect(extractNumbers('150,000 - 100,000')).toEqual({
       min: 100000,
       max: 150000,

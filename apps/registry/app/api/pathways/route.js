@@ -71,18 +71,6 @@ export async function POST(request) {
       // Enable multi-step tool loop (max 20 tool calls per request)
       maxSteps: 20,
 
-      // Log step completions for debugging/analytics
-      onStepFinish({ toolCalls, stepType }) {
-        if (toolCalls?.length) {
-          // Edge runtime doesn't support Pino - use console for streaming routes
-          // eslint-disable-next-line no-console
-          console.log(
-            '[Agent Step]',
-            toolCalls.map((t) => t.toolName)
-          );
-        }
-      },
-
       experimental_transform: smoothStream({
         delayInMs: 20,
         chunking: 'word',
