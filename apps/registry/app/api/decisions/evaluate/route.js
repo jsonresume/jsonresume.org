@@ -2,6 +2,7 @@ import { openai } from '@ai-sdk/openai';
 import { generateText, tool } from 'ai';
 import { z } from 'zod';
 import { NextResponse } from 'next/server';
+import { logger } from '@/lib/logger';
 
 // Zod schemas for each decision criterion
 // AI SDK v5 uses tool() helper with inputSchema
@@ -122,10 +123,6 @@ export async function POST(request) {
   try {
     const { resume, job, preferences = {} } = await request.json();
 
-    console.log('=== AI EVALUATION DEBUG ===');
-    console.log('Resume basics:', resume.basics?.name, resume.basics?.label);
-    console.log('Job title:', job.title, 'Company:', job.company);
-
     if (!resume || !job) {
       return NextResponse.json(
         { error: 'Resume and job are required' },
@@ -135,11 +132,6 @@ export async function POST(request) {
 
     // Parse job GPT content if available
     const gptJob = job.gpt_content ? JSON.parse(job.gpt_content) : {};
-    console.log('GPT Job parsed:', {
-      hasContent: !!job.gpt_content,
-      skills: gptJob.skills?.length || 0,
-      title: gptJob.title,
-    });
 
     // Prepare FULL resume context for AI - send everything!
     const resumeContext = JSON.stringify(resume, null, 2);
@@ -162,10 +154,6 @@ export async function POST(request) {
       null,
       2
     );
-
-    console.log('Resume context length:', resumeContext.length);
-    console.log('Job context length:', jobContext.length);
-    console.log('User preferences:', preferences);
 
     // Build user preferences context
     const preferencesInfo = Object.entries(preferences)
@@ -237,11 +225,7 @@ Call ALL of these tools in order:
 
 Be thorough, honest, and realistic in your evaluation. Even if the candidate fails one check, continue evaluating all remaining criteria.`;
 
-    console.log('Prompt length:', prompt.length);
-    console.log('Number of tools:', Object.keys(tools).length);
-
     // Call AI with tool definitions
-    console.log('Calling generateText...');
     const result = await generateText({
       model: openai('gpt-4o-mini'),
       prompt,
@@ -249,30 +233,25 @@ Be thorough, honest, and realistic in your evaluation. Even if the candidate fai
       maxSteps: 10, // Allow multiple tool calls
     });
 
-    console.log('generateText result keys:', Object.keys(result));
-    console.log('toolCalls:', result.toolCalls);
-    console.log('toolCalls length:', result.toolCalls?.length || 0);
-    console.log('text response:', result.text?.substring(0, 200));
-
     // Process tool call results
     const decisions = {};
     if (result.toolCalls) {
-      console.log('Processing', result.toolCalls.length, 'tool calls');
       for (const toolCall of result.toolCalls) {
-        console.log('Tool call:', toolCall.toolName, 'Input:', toolCall.input);
         decisions[toolCall.toolName] = toolCall.input; // Use .input instead of .args
       }
     } else {
-      console.log('NO TOOL CALLS RETURNED!');
+      logger.warn(
+        { job: job.title, company: job.company },
+        'AI evaluation returned no tool calls'
+      );
     }
-
-    console.log('Final decisions:', JSON.stringify(decisions, null, 2));
-    console.log('=== END DEBUG ===');
 
     return NextResponse.json({ decisions });
   } catch (error) {
-    console.error('Error evaluating match:', error);
-    console.error('Error stack:', error.stack);
+    logger.error(
+      { error: error.message, stack: error.stack },
+      'Error evaluating match'
+    );
     return NextResponse.json(
       { error: 'Failed to evaluate match', details: error.message },
       { status: 500 }

@@ -23,22 +23,9 @@ export function reconnectEdges(
     nodes.filter((n) => !hiddenNodeIds.has(n.id)).map((n) => n.id)
   );
 
-  console.log('[reconnectEdges] Debug:', {
-    totalEdges: edges.length,
-    hiddenCount: hiddenNodeIds.size,
-    visibleCount: visibleNodeIds.size,
-    resumeNodeId,
-    resumeIsVisible: visibleNodeIds.has(resumeNodeId),
-    hasNearestNeighbors: Object.keys(nearestNeighbors).length,
-  });
-
   // Critical: if no resume node found, we can't reconnect orphans
   if (!resumeNodeId) {
-    console.error('[reconnectEdges] ERROR: Resume node not found in nodes!');
-    console.log(
-      '[reconnectEdges] Sample nodes:',
-      nodes.slice(0, 3).map((n) => ({ id: n.id, isResume: n.data?.isResume }))
-    );
+    console.error('[reconnectEdges] Resume node not found in nodes');
   }
 
   // Build parent lookup: nodeId -> parentNodeId
@@ -109,15 +96,6 @@ export function reconnectEdges(
         stats.reconnected++;
       } else {
         stats.failedReconnect++;
-        if (stats.failedReconnect <= 3) {
-          console.log('[reconnectEdges] Failed to reconnect:', {
-            target: edge.target,
-            connectionSource: connection.source,
-            reason: !connection.source
-              ? 'no source found'
-              : 'source equals target',
-          });
-        }
       }
     } else {
       // Both visible - keep edge as-is
@@ -126,7 +104,12 @@ export function reconnectEdges(
     }
   });
 
-  console.log('[reconnectEdges] Processing stats:', stats);
+  // Failed reconnections drop edges from the graph - surface them as a warning
+  if (stats.failedReconnect > 0) {
+    console.warn(
+      `[reconnectEdges] Failed to reconnect ${stats.failedReconnect} edge(s) with hidden sources`
+    );
+  }
 
   // Deduplicate edges (same source-target pair)
   const seen = new Set();
@@ -160,8 +143,6 @@ export function reconnectEdges(
   );
 
   if (orphanNodes.length > 0) {
-    console.log('[reconnectEdges] Found orphan nodes:', orphanNodes.length);
-
     // Connect each orphan to resume as fallback
     for (const orphanId of orphanNodes) {
       // Try to find best visible connected node from nearestNeighbors
@@ -192,15 +173,6 @@ export function reconnectEdges(
 
     stats.orphansReconnected = orphanNodes.length;
   }
-
-  console.log('[reconnectEdges] Result:', {
-    inputEdges: edges.length,
-    outputEdges: finalEdges.length,
-    orphansFixed: orphanNodes.length,
-    sample: finalEdges
-      .slice(0, 3)
-      .map((e) => ({ source: e.source, target: e.target })),
-  });
 
   return finalEdges;
 }
