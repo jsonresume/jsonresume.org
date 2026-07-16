@@ -54,10 +54,10 @@ Useful links:
 | [`packages/cli`](packages/cli)                     | `resume-cli`               | The `resume` command line interface                          |
 | [`packages/core-rust`](packages/core-rust)         | `json-resume-serde` (crate) | Rust serde bindings for the schema                           |
 | [`packages/resume-core`](packages/resume-core)     | `@jsonresume/core`         | Framework-agnostic design tokens, primitives, and validators |
-| [`packages/ats-validator`](packages/ats-validator) | `@resume/ats-validator`    | ATS (Applicant Tracking System) validation for resume HTML   |
+| [`packages/ats-validator`](packages/ats-validator) | `@jsonresume/ats-validator` | ATS (Applicant Tracking System) validation for resume HTML   |
 | [`packages/job-search`](packages/job-search)       | `@jsonresume/jobs`         | Hacker News "Who is Hiring" job search matched to a resume   |
 | [`packages/ui`](packages/ui)                       | `@repo/ui`                 | Shared UI components (Button, Input, Textarea, ...)          |
-| [`packages/themes`](packages/themes)               | —                          | ~46 official `jsonresume-theme-*` packages plus `stackoverflow` |
+| [`packages/themes`](packages/themes)               | —                          | ~52 official `jsonresume-theme-*` packages plus `stackoverflow` |
 
 Other workspace packages include `converters`, `theme-config`, `test-fixtures`,
 and the shared `eslint-config-custom` / `tsconfig` presets.
