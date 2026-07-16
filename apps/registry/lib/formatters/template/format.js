@@ -56,9 +56,11 @@ function freshRequireTheme(themeName) {
 export const format = async function (resume, options) {
   const theme = options.theme ?? 'elegant';
 
+  // getTheme lazily imports the theme module; a module that throws at import
+  // time rejects here for THIS theme only (see themeConfig.js / #476).
   const themeRenderer = THEME_PACKAGES[theme]
     ? freshRequireTheme(theme)
-    : getTheme(theme);
+    : await getTheme(theme);
 
   if (!themeRenderer) {
     throw new Error('theme-missing');
