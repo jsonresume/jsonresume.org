@@ -38,9 +38,11 @@
     "styled-components": "^6.1.19"
   },
   "devDependencies": {
-    "vitest": "^3.2.6",
+    "@jsonresume/sample-data": "workspace:*",
+    "@jsonresume/theme-kit": "workspace:*",
     "@vitejs/plugin-react": "^4.3.4",
-    "vite": "^6.4.3"
+    "vite": "^6.4.3",
+    "vitest": "^3.2.6"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
