@@ -1520,6 +1520,7 @@ function formatDateRange({
   };
   const formatDate = (dateStr) => {
     if (!dateStr) return getPresentLabel();
+    const isDateOnlyIso = typeof dateStr === "string" && /^\d{4}(-\d{2}){0,2}$/.test(dateStr);
     const date = typeof dateStr === "string" ? new Date(dateStr) : dateStr;
     if (isNaN(date.getTime())) return dateStr;
     const monthFormats = {
@@ -1531,6 +1532,9 @@ function formatDateRange({
       ...monthFormats[format],
       year: "numeric"
     };
+    if (isDateOnlyIso) {
+      options.timeZone = "UTC";
+    }
     if (numberingSystem) {
       options.numberingSystem = numberingSystem;
     }
