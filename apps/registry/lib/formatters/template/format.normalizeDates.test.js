@@ -16,7 +16,9 @@ const renderSpy = vi.fn((resume) => JSON.stringify(resume));
 
 vi.mock('./getTheme', () => ({
   getTheme: vi.fn((theme) => {
-    if (theme === 'missing') return null;
+    if (theme === 'missing') {
+      return null;
+    }
     return { render: renderSpy };
   }),
 }));
@@ -183,7 +185,7 @@ describe('format() theme resolution and headers', () => {
     const { headers } = await format({ basics: { name: 'X' } }, {});
     expect(headers).toEqual([
       { key: 'Cache-control', value: 'public, max-age=90' },
-      { key: 'Content-Type', value: 'text/html' },
+      { key: 'Content-Type', value: 'text/html; charset=utf-8' },
     ]);
   });
 
