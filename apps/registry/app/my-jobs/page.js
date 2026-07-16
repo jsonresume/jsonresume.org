@@ -2,143 +2,9 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '../context/auth';
-
-const STATE_COLORS = {
-  interested: 'bg-green-100 text-green-800',
-  applied: 'bg-blue-100 text-blue-800',
-  maybe: 'bg-yellow-100 text-yellow-800',
-  not_interested: 'bg-gray-100 text-gray-500',
-  dismissed: 'bg-gray-100 text-gray-400',
-};
-
-const STATE_ICONS = {
-  interested: '⭐',
-  applied: '📨',
-  not_interested: '✗',
-  dismissed: '👁',
-  maybe: '?',
-};
-
-function formatSalary(salary, salaryUsd) {
-  if (salaryUsd) return `$${Math.round(salaryUsd / 1000)}k`;
-  if (salary) return salary;
-  return null;
-}
-
-function formatLocation(loc, remote) {
-  const parts = [];
-  if (loc?.city) parts.push(loc.city);
-  if (loc?.countryCode) parts.push(loc.countryCode);
-  if (remote) parts.push(remote);
-  return parts.join(', ') || null;
-}
-
-function JobCard({ job, onStateChange }) {
-  const location = formatLocation(job.location, job.remote);
-  const salary = formatSalary(job.salary, job.salary_usd);
-
-  return (
-    <div className="border rounded-lg p-4 hover:shadow-md transition-shadow bg-white">
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-sm font-mono text-gray-400">
-              {Math.round(job.similarity * 100)}%
-            </span>
-            {job.state && (
-              <span
-                className={`text-xs px-2 py-0.5 rounded-full ${
-                  STATE_COLORS[job.state]
-                }`}
-              >
-                {STATE_ICONS[job.state]} {job.state}
-              </span>
-            )}
-          </div>
-          <h3 className="font-semibold text-gray-900 truncate">{job.title}</h3>
-          <p className="text-sm text-gray-600">{job.company}</p>
-          <div className="flex flex-wrap gap-3 mt-2 text-xs text-gray-500">
-            {location && <span>{location}</span>}
-            {salary && <span>{salary}</span>}
-            {job.type && <span>{job.type}</span>}
-            {job.posted_at && (
-              <span>{new Date(job.posted_at).toLocaleDateString()}</span>
-            )}
-          </div>
-          {job.skills?.length > 0 && (
-            <div className="flex flex-wrap gap-1 mt-2">
-              {job.skills.slice(0, 6).map((s, i) => (
-                <span
-                  key={i}
-                  className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded"
-                >
-                  {s.name}
-                </span>
-              ))}
-              {job.skills.length > 6 && (
-                <span className="text-xs text-gray-400">
-                  +{job.skills.length - 6}
-                </span>
-              )}
-            </div>
-          )}
-        </div>
-        <div className="flex flex-col gap-1 shrink-0">
-          {['interested', 'maybe', 'not_interested'].map((state) => (
-            <button
-              key={state}
-              onClick={() => onStateChange(job.id, state)}
-              className={`text-xs px-2 py-1 rounded border transition-colors ${
-                job.state === state
-                  ? STATE_COLORS[state]
-                  : 'border-gray-200 text-gray-400 hover:border-gray-300'
-              }`}
-            >
-              {STATE_ICONS[state]} {state === 'not_interested' ? 'pass' : state}
-            </button>
-          ))}
-        </div>
-      </div>
-      {job.url && (
-        <a
-          href={job.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-xs text-blue-500 hover:underline mt-2 inline-block"
-        >
-          View on HN →
-        </a>
-      )}
-    </div>
-  );
-}
-
-function Filters({ filters, onChange }) {
-  return (
-    <div className="flex flex-wrap gap-3 items-center">
-      <select
-        value={filters.stateFilter}
-        onChange={(e) => onChange({ ...filters, stateFilter: e.target.value })}
-        className="px-3 py-1.5 border rounded-md text-sm bg-white"
-      >
-        <option value="all">All states</option>
-        <option value="interested">Interested</option>
-        <option value="applied">Applied</option>
-        <option value="maybe">Maybe</option>
-        <option value="unmarked">Unmarked</option>
-      </select>
-      <label className="flex items-center gap-1.5 text-sm">
-        <input
-          type="checkbox"
-          checked={filters.remote}
-          onChange={(e) => onChange({ ...filters, remote: e.target.checked })}
-          className="rounded"
-        />
-        Remote only
-      </label>
-    </div>
-  );
-}
+import { JobCard } from './JobCard';
+import { Filters } from './Filters';
+import { filterJobs } from './jobFormatters';
 
 export default function MyJobsPage() {
   const { user, loading: authLoading } = useAuth();
@@ -192,15 +58,7 @@ export default function MyJobsPage() {
     }
   };
 
-  let filtered = jobs || [];
-  if (filters.stateFilter === 'unmarked') {
-    filtered = filtered.filter((j) => !j.state);
-  } else if (filters.stateFilter !== 'all') {
-    filtered = filtered.filter((j) => j.state === filters.stateFilter);
-  }
-  if (filters.remote) {
-    filtered = filtered.filter((j) => j.remote === 'Full');
-  }
+  const filtered = filterJobs(jobs, filters);
 
   if (authLoading) {
     return (
