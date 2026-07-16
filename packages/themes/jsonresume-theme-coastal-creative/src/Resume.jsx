@@ -230,27 +230,7 @@ function Resume({ resume }) {
         {basics.name && <Name>{basics.name}</Name>}
         {basics.label && <Label>{basics.label}</Label>}
         <ContactWrapper>
-          {basics.email && (
-            <ContactInfo type="email">{basics.email}</ContactInfo>
-          )}
-          {basics.phone && (
-            <ContactInfo type="phone">{basics.phone}</ContactInfo>
-          )}
-          {basics.location?.city && basics.location?.region && (
-            <ContactInfo type="location">
-              {basics.location.city}, {basics.location.region}
-            </ContactInfo>
-          )}
-          {basics.url && (
-            <ContactInfo type="url">
-              <a href={safeUrl(basics.url)}>{basics.url}</a>
-            </ContactInfo>
-          )}
-          {basics.profiles?.map((profile, index) => (
-            <ContactInfo key={index} type="social">
-              <a href={safeUrl(profile.url)}>{profile.network}</a>
-            </ContactInfo>
-          ))}
+          <ContactInfo basics={basics} />
         </ContactWrapper>
       </Header>
 

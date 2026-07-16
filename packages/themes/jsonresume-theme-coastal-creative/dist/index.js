@@ -6354,17 +6354,7 @@ function Resume({ resume }) {
     /* @__PURE__ */ jsxs(Header, { children: [
       basics.name && /* @__PURE__ */ jsx(Name, { children: basics.name }),
       basics.label && /* @__PURE__ */ jsx(Label, { children: basics.label }),
-      /* @__PURE__ */ jsxs(ContactWrapper, { children: [
-        basics.email && /* @__PURE__ */ jsx(ContactInfo, { type: "email", children: basics.email }),
-        basics.phone && /* @__PURE__ */ jsx(ContactInfo, { type: "phone", children: basics.phone }),
-        basics.location?.city && basics.location?.region && /* @__PURE__ */ jsxs(ContactInfo, { type: "location", children: [
-          basics.location.city,
-          ", ",
-          basics.location.region
-        ] }),
-        basics.url && /* @__PURE__ */ jsx(ContactInfo, { type: "url", children: /* @__PURE__ */ jsx("a", { href: safeUrl(basics.url), children: basics.url }) }),
-        basics.profiles?.map((profile, index) => /* @__PURE__ */ jsx(ContactInfo, { type: "social", children: /* @__PURE__ */ jsx("a", { href: safeUrl(profile.url), children: profile.network }) }, index))
-      ] })
+      /* @__PURE__ */ jsx(ContactWrapper, { children: /* @__PURE__ */ jsx(ContactInfo, { basics }) })
     ] }),
     basics.summary && /* @__PURE__ */ jsx(SummarySection, { children: /* @__PURE__ */ jsx(SummaryText, { children: basics.summary }) }),
     work.length > 0 && /* @__PURE__ */ jsxs(MainSection, { children: [
