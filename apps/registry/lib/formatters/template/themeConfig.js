@@ -1,58 +1,22 @@
-import * as professional from '@jsonresume/jsonresume-theme-professional';
-// import * as tailwind from 'jsonresume-theme-tailwind';
-import * as flat from 'jsonresume-theme-flat';
-import * as stackoverflow from '@jsonresume/theme-stackoverflow';
-import * as reference from 'jsonresume-theme-reference';
-import * as sidebar from 'jsonresume-theme-sidebar';
-import * as modernclassic from 'jsonresume-theme-modern-classic';
-import * as executiveslate from 'jsonresume-theme-executive-slate';
-import * as productmanagercanvas from 'jsonresume-theme-product-manager-canvas';
-// styled-components moved inline to fix webpack resolution
-import * as governmentstandard from 'jsonresume-theme-government-standard'; // FIXED
-import * as developermono from 'jsonresume-theme-developer-mono'; // TESTING
-import * as minimalistgrid from 'jsonresume-theme-minimalist-grid'; // TESTING
-import * as creativestudio from '@jsonresume/jsonresume-theme-creative-studio'; // FIXED
-import * as datadriven from 'jsonresume-theme-data-driven'; // TESTING
-import * as consultantpolished from '@jsonresume/jsonresume-theme-consultant-polished'; // FIXED
-import * as universityfirst from 'jsonresume-theme-university-first'; // TESTING
-import * as academiccvlite from 'jsonresume-theme-academic-cv-lite'; // TESTING
-import * as saleshunter from 'jsonresume-theme-sales-hunter'; // TESTING
-import * as marketingnarrative from 'jsonresume-theme-marketing-narrative'; // FIXED
-import * as operationsprecision from 'jsonresume-theme-operations-precision'; // TESTING
-import * as writersportfolio from 'jsonresume-theme-writers-portfolio'; // NEW
-// import * as tokyomodernist from '@jsonresume/jsonresume-theme-tokyo-modernist'; // DISABLED - styled-components resolution issue
-import * as nordicminimal from 'jsonresume-theme-nordic-minimal'; // NEW
-import * as graphpapergrid from 'jsonresume-theme-graph-paper-grid'; // NEW
-import * as monochrome from 'jsonresume-theme-monochrome-noir'; // NEW
-import * as twocolumnmodernist from 'jsonresume-theme-two-column-modernist'; // NEW
-import * as sidebarphotostrip from 'jsonresume-theme-sidebar-photo-strip'; // NEW
-import * as architectsportfolio from 'jsonresume-theme-architects-portfolio'; // NEW
-import * as diagonalaccentbar from 'jsonresume-theme-diagonal-accent-bar'; // NEW
-import * as asymmetrictimeline from 'jsonresume-theme-asymmetric-timeline'; // NEW
-import * as midcenturyresume from 'jsonresume-theme-mid-century-resume'; // NEW
-import * as boldheaderstatement from 'jsonresume-theme-bold-header-statement'; // NEW
-import * as typewritermodern from 'jsonresume-theme-typewriter-modern'; // NEW
-import * as newyorkeditorial from 'jsonresume-theme-new-york-editorial'; // NEW
-import * as berlingrid from 'jsonresume-theme-berlin-grid'; // NEW
-import * as californianwarm from 'jsonresume-theme-californian-warm'; // NEW
-import * as londonbureau from 'jsonresume-theme-london-bureau'; // NEW
-import * as pacifichorizon from 'jsonresume-theme-pacific-horizon'; // NEW
-import * as frenchatelier from 'jsonresume-theme-french-atelier'; // NEW
-import * as urbantechno from 'jsonresume-theme-urban-techno'; // NEW
-import * as coastalcreative from 'jsonresume-theme-coastal-creative'; // NEW
-import * as investorbrief from 'jsonresume-theme-investor-brief'; // NEW
-import * as claude from 'jsonresume-theme-claude'; // NEW
-import * as colophon from 'jsonresume-theme-colophon';
-import * as communitygarden from 'jsonresume-theme-community-garden'; // NEW
-import * as creativeconfidence from 'jsonresume-theme-creative-confidence'; // NEW
-import * as artschoolmodern from 'jsonresume-theme-art-school-modern'; // NEW
-import * as fieldresearcher from 'jsonresume-theme-field-researcher'; // NEW
-import * as clinicalprecision from 'jsonresume-theme-clinical-precision'; // NEW
-import * as industrialengineer from 'jsonresume-theme-industrial-engineer'; // NEW
-import * as brutalist from 'jsonresume-theme-brutalist'; // NEW
-import * as artdeco from 'jsonresume-theme-art-deco'; // NEW
+/**
+ * Theme registry: maps theme slugs to LAZY module loaders (#476).
+ *
+ * Every value is a thunk with a STATIC import specifier:
+ *   slug: () => import('jsonresume-theme-x')
+ *
+ * Static specifiers keep webpack able to resolve and bundle each theme at
+ * build time, while module EVALUATION is deferred until the thunk is invoked
+ * (first render of that theme). A theme whose module throws at import time
+ * therefore fails only its own renders instead of crashing this module — and
+ * with it /api/[username] — for every user and every theme.
+ *
+ * Consumers:
+ * - getTheme.js invokes + caches the loaders (with a try/catch) for rendering.
+ * - Theme listings use Object.keys(THEMES) or @repo/theme-config metadata,
+ *   neither of which evaluates any theme module.
+ */
 
-// Import theme metadata from shared package
+// Theme metadata from the shared package (no theme imports).
 export {
   THEME_METADATA,
   THEME_NAMES,
@@ -60,69 +24,72 @@ export {
 } from '@repo/theme-config';
 
 export const THEMES = {
-  professional,
-  // tailwind,
-  elegant: require('jsonresume-theme-elegant'),
-  flat,
-  even: require('jsonresume-theme-even'),
-  jacrys: require('jsonresume-theme-jacrys'),
-  kendall: require('jsonresume-theme-kendall'),
-  lucide: require('jsonresume-theme-lucide'),
-  macchiato: require('jsonresume-theme-macchiato'),
-  // mantra: require('jsonresume-theme-mantra'), // REMOVED - causes build failure due to ansi-colors dependency
-  minyma: require('jsonresume-theme-minyma'),
-  'paper-plus-plus': require('jsonresume-theme-paper-plus-plus'),
-  pumpkin: require('jsonresume-theme-pumpkin'),
-  rickosborne: require('jsonresume-theme-rickosborne'),
-  stackoverflow,
-  'tan-responsive': require('jsonresume-theme-tan-responsive'),
-  reference,
-  sidebar,
-  'modern-classic': modernclassic,
-  'executive-slate': executiveslate,
-  'product-manager-canvas': productmanagercanvas,
-  // styled-components moved inline to fix webpack resolution
-  'government-standard': governmentstandard, // FIXED
-  'developer-mono': developermono, // TESTING
-  'minimalist-grid': minimalistgrid, // TESTING
-  'creative-studio': creativestudio, // FIXED
-  'data-driven': datadriven, // TESTING
-  'consultant-polished': consultantpolished, // FIXED
-  'university-first': universityfirst, // TESTING
-  'academic-cv-lite': academiccvlite, // TESTING
-  'sales-hunter': saleshunter, // TESTING
-  'marketing-narrative': marketingnarrative, // FIXED
-  'operations-precision': operationsprecision, // TESTING
-  'writers-portfolio': writersportfolio, // NEW
-  // 'tokyo-modernist': tokyomodernist, // DISABLED - styled-components resolution issue
-  'nordic-minimal': nordicminimal, // NEW
-  'graph-paper-grid': graphpapergrid, // NEW
-  'monochrome-noir': monochrome, // NEW
-  'two-column-modernist': twocolumnmodernist, // NEW
-  'sidebar-photo-strip': sidebarphotostrip, // NEW
-  'architects-portfolio': architectsportfolio, // NEW
-  'diagonal-accent-bar': diagonalaccentbar, // NEW
-  'asymmetric-timeline': asymmetrictimeline, // NEW
-  'mid-century-resume': midcenturyresume, // NEW
-  'bold-header-statement': boldheaderstatement, // NEW
-  'typewriter-modern': typewritermodern, // NEW
-  'new-york-editorial': newyorkeditorial, // NEW
-  'berlin-grid': berlingrid, // NEW
-  'californian-warm': californianwarm, // NEW
-  'london-bureau': londonbureau, // NEW
-  'pacific-horizon': pacifichorizon, // NEW
-  'french-atelier': frenchatelier, // NEW
-  'urban-techno': urbantechno, // NEW
-  'coastal-creative': coastalcreative, // NEW
-  'investor-brief': investorbrief, // NEW
-  claude: claude, // NEW
-  colophon,
-  'community-garden': communitygarden, // NEW
-  'creative-confidence': creativeconfidence, // NEW
-  'art-school-modern': artschoolmodern, // NEW
-  'field-researcher': fieldresearcher, // NEW
-  'clinical-precision': clinicalprecision, // NEW
-  'industrial-engineer': industrialengineer, // NEW
-  brutalist, // NEW
-  'art-deco': artdeco, // NEW
+  professional: () => import('@jsonresume/jsonresume-theme-professional'),
+  // tailwind: () => import('jsonresume-theme-tailwind'),
+  elegant: () => import('jsonresume-theme-elegant'),
+  flat: () => import('jsonresume-theme-flat'),
+  even: () => import('jsonresume-theme-even'),
+  jacrys: () => import('jsonresume-theme-jacrys'),
+  kendall: () => import('jsonresume-theme-kendall'),
+  lucide: () => import('jsonresume-theme-lucide'),
+  macchiato: () => import('jsonresume-theme-macchiato'),
+  // mantra: REMOVED - causes build failure due to ansi-colors dependency
+  minyma: () => import('jsonresume-theme-minyma'),
+  'paper-plus-plus': () => import('jsonresume-theme-paper-plus-plus'),
+  pumpkin: () => import('jsonresume-theme-pumpkin'),
+  rickosborne: () => import('jsonresume-theme-rickosborne'),
+  stackoverflow: () => import('@jsonresume/theme-stackoverflow'),
+  'tan-responsive': () => import('jsonresume-theme-tan-responsive'),
+  reference: () => import('jsonresume-theme-reference'),
+  sidebar: () => import('jsonresume-theme-sidebar'),
+  'modern-classic': () => import('jsonresume-theme-modern-classic'),
+  'executive-slate': () => import('jsonresume-theme-executive-slate'),
+  'product-manager-canvas': () =>
+    import('jsonresume-theme-product-manager-canvas'),
+  'government-standard': () => import('jsonresume-theme-government-standard'),
+  'developer-mono': () => import('jsonresume-theme-developer-mono'),
+  'minimalist-grid': () => import('jsonresume-theme-minimalist-grid'),
+  'creative-studio': () =>
+    import('@jsonresume/jsonresume-theme-creative-studio'),
+  'data-driven': () => import('jsonresume-theme-data-driven'),
+  'consultant-polished': () =>
+    import('@jsonresume/jsonresume-theme-consultant-polished'),
+  'university-first': () => import('jsonresume-theme-university-first'),
+  'academic-cv-lite': () => import('jsonresume-theme-academic-cv-lite'),
+  'sales-hunter': () => import('jsonresume-theme-sales-hunter'),
+  'marketing-narrative': () => import('jsonresume-theme-marketing-narrative'),
+  'operations-precision': () => import('jsonresume-theme-operations-precision'),
+  'writers-portfolio': () => import('jsonresume-theme-writers-portfolio'),
+  // 'tokyo-modernist': DISABLED - styled-components resolution issue
+  'nordic-minimal': () => import('jsonresume-theme-nordic-minimal'),
+  'graph-paper-grid': () => import('jsonresume-theme-graph-paper-grid'),
+  'monochrome-noir': () => import('jsonresume-theme-monochrome-noir'),
+  'two-column-modernist': () => import('jsonresume-theme-two-column-modernist'),
+  'sidebar-photo-strip': () => import('jsonresume-theme-sidebar-photo-strip'),
+  'architects-portfolio': () => import('jsonresume-theme-architects-portfolio'),
+  'diagonal-accent-bar': () => import('jsonresume-theme-diagonal-accent-bar'),
+  'asymmetric-timeline': () => import('jsonresume-theme-asymmetric-timeline'),
+  'mid-century-resume': () => import('jsonresume-theme-mid-century-resume'),
+  'bold-header-statement': () =>
+    import('jsonresume-theme-bold-header-statement'),
+  'typewriter-modern': () => import('jsonresume-theme-typewriter-modern'),
+  'new-york-editorial': () => import('jsonresume-theme-new-york-editorial'),
+  'berlin-grid': () => import('jsonresume-theme-berlin-grid'),
+  'californian-warm': () => import('jsonresume-theme-californian-warm'),
+  'london-bureau': () => import('jsonresume-theme-london-bureau'),
+  'pacific-horizon': () => import('jsonresume-theme-pacific-horizon'),
+  'french-atelier': () => import('jsonresume-theme-french-atelier'),
+  'urban-techno': () => import('jsonresume-theme-urban-techno'),
+  'coastal-creative': () => import('jsonresume-theme-coastal-creative'),
+  'investor-brief': () => import('jsonresume-theme-investor-brief'),
+  claude: () => import('jsonresume-theme-claude'),
+  colophon: () => import('jsonresume-theme-colophon'),
+  'community-garden': () => import('jsonresume-theme-community-garden'),
+  'creative-confidence': () => import('jsonresume-theme-creative-confidence'),
+  'art-school-modern': () => import('jsonresume-theme-art-school-modern'),
+  'field-researcher': () => import('jsonresume-theme-field-researcher'),
+  'clinical-precision': () => import('jsonresume-theme-clinical-precision'),
+  'industrial-engineer': () => import('jsonresume-theme-industrial-engineer'),
+  brutalist: () => import('jsonresume-theme-brutalist'),
+  'art-deco': () => import('jsonresume-theme-art-deco'),
 };
