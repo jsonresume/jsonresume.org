@@ -1,5 +1,5 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "additionalProperties": true,
   "definitions": {
     "iso8601": {
@@ -68,7 +68,6 @@
     "responsibilities": {
       "type": "array",
       "description": "what the job entails",
-      "additionalItems": false,
       "items": {
         "type": "string",
         "description": "e.g. Build out a new API for our customer base."
@@ -77,7 +76,6 @@
     "qualifications": {
       "type": "array",
       "description": "List out your qualifications",
-      "additionalItems": false,
       "items": {
         "type": "string",
         "description": "undergraduate degree, etc.  "
@@ -86,7 +84,6 @@
     "skills": {
       "type": "array",
       "description": "List out your professional skill-set",
-      "additionalItems": false,
       "items": {
         "type": "object",
         "additionalProperties": true,
@@ -102,7 +99,6 @@
           "keywords": {
             "type": "array",
             "description": "List some keywords pertaining to this skill",
-            "additionalItems": false,
             "items": {
               "type": "string",
               "description": "e.g. HTML"

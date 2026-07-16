@@ -75,7 +75,6 @@
         "profiles": {
           "type": "array",
           "description": "Specify any number of social networks that you participate in",
-          "additionalItems": false,
           "items": {
             "type": "object",
             "additionalProperties": true,
@@ -100,7 +99,6 @@
     },
     "work": {
       "type": "array",
-      "additionalItems": false,
       "items": {
         "type": "object",
         "additionalProperties": true,
@@ -139,7 +137,6 @@
           "highlights": {
             "type": "array",
             "description": "Specify multiple accomplishments",
-            "additionalItems": false,
             "items": {
               "type": "string",
               "description": "e.g. Increased profits by 20% from 2011-2012 through viral advertising"
@@ -150,7 +147,6 @@
     },
     "volunteer": {
       "type": "array",
-      "additionalItems": false,
       "items": {
         "type": "object",
         "additionalProperties": true,
@@ -181,7 +177,6 @@
           "highlights": {
             "type": "array",
             "description": "Specify accomplishments and achievements",
-            "additionalItems": false,
             "items": {
               "type": "string",
               "description": "e.g. Increased profits by 20% from 2011-2012 through viral advertising"
@@ -192,7 +187,6 @@
     },
     "education": {
       "type": "array",
-      "additionalItems": false,
       "items": {
         "type": "object",
         "additionalProperties": true,
@@ -227,7 +221,6 @@
           "courses": {
             "type": "array",
             "description": "List notable courses/subjects",
-            "additionalItems": false,
             "items": {
               "type": "string",
               "description": "e.g. H1302 - Introduction to American history"
@@ -239,7 +232,6 @@
     "awards": {
       "type": "array",
       "description": "Specify any awards you have received throughout your professional career",
-      "additionalItems": false,
       "items": {
         "type": "object",
         "additionalProperties": true,
@@ -265,7 +257,6 @@
     "certificates": {
       "type": "array",
       "description": "Specify any certificates you have received throughout your professional career",
-      "additionalItems": false,
       "items": {
         "type": "object",
         "additionalProperties": true,
@@ -292,7 +283,6 @@
     "publications": {
       "type": "array",
       "description": "Specify your publications through your career",
-      "additionalItems": false,
       "items": {
         "type": "object",
         "additionalProperties": true,
@@ -323,7 +313,6 @@
     "skills": {
       "type": "array",
       "description": "List out your professional skill-set",
-      "additionalItems": false,
       "items": {
         "type": "object",
         "additionalProperties": true,
@@ -339,7 +328,6 @@
           "keywords": {
             "type": "array",
             "description": "List some keywords pertaining to this skill",
-            "additionalItems": false,
             "items": {
               "type": "string",
               "description": "e.g. HTML"
@@ -351,7 +339,6 @@
     "languages": {
       "type": "array",
       "description": "List any other languages you speak",
-      "additionalItems": false,
       "items": {
         "type": "object",
         "additionalProperties": true,
@@ -369,7 +356,6 @@
     },
     "interests": {
       "type": "array",
-      "additionalItems": false,
       "items": {
         "type": "object",
         "additionalProperties": true,
@@ -380,7 +366,6 @@
           },
           "keywords": {
             "type": "array",
-            "additionalItems": false,
             "items": {
               "type": "string",
               "description": "e.g. Friedrich Nietzsche"
@@ -392,7 +377,6 @@
     "references": {
       "type": "array",
       "description": "List references you have received",
-      "additionalItems": false,
       "items": {
         "type": "object",
         "additionalProperties": true,
@@ -411,7 +395,6 @@
     "projects": {
       "type": "array",
       "description": "Specify career projects",
-      "additionalItems": false,
       "items": {
         "type": "object",
         "additionalProperties": true,
@@ -427,7 +410,6 @@
           "highlights": {
             "type": "array",
             "description": "Specify multiple features",
-            "additionalItems": false,
             "items": {
               "type": "string",
               "description": "e.g. Directs you close but not quite there"
@@ -436,7 +418,6 @@
           "keywords": {
             "type": "array",
             "description": "Specify special elements involved",
-            "additionalItems": false,
             "items": {
               "type": "string",
               "description": "e.g. AngularJS"
@@ -456,7 +437,6 @@
           "roles": {
             "type": "array",
             "description": "Specify your role on this project or in company",
-            "additionalItems": false,
             "items": {
               "type": "string",
               "description": "e.g. Team Lead, Speaker, Writer"
