@@ -2,7 +2,7 @@ name: Vercel Error Monitor
 
 on:
   schedule:
-    - cron: '*/10 * * * *' # Every 10 minutes
+    - cron: '*/30 * * * *' # Every 30 minutes (was 10 — each run reinstalls the Vercel CLI; 144 installs/day was waste)
   workflow_dispatch: # Manual trigger
 
 jobs:
