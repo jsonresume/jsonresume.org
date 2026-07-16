@@ -12,6 +12,11 @@ updates:
       minor-and-patch:
         patterns:
           - '*'
+        # Excluded: apps/homepage2 pins next ^15 while the rest of the repo is
+        # on ^16; grouping next with the semver-major ignore below makes
+        # dependabot "resolve" the group by downgrading next 16 -> 15 repo-wide.
+        exclude-patterns:
+          - 'next'
         update-types:
           - 'minor'
           - 'patch'
@@ -29,6 +34,16 @@ updates:
       - dependency-name: 'next-auth'
         update-types:
           - 'version-update:semver-major'
+      # Deprecated upstream: 0.15.0 is a stub that removes
+      # createRouteHandlerClient. Ignore all updates until the registry
+      # migrates to @supabase/ssr (#480).
+      - dependency-name: '@supabase/auth-helpers-nextjs'
+      # 0.26.x dist requires the ESM-only @rbardini/html from CJS — upstream
+      # packaging bug breaks require(). Majors still surface for review.
+      - dependency-name: 'jsonresume-theme-even'
+        update-types:
+          - 'version-update:semver-minor'
+          - 'version-update:semver-patch'
 
   # GitHub Actions used by workflows
   - package-ecosystem: 'github-actions'
