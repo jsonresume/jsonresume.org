@@ -34,10 +34,9 @@ env:
   # honest record in the logs), but it will NOT open/comment/close any uptime
   # issue -- avoiding spam while a separate human-owned issue is open.
   #
-  # docs: KNOWN-DOWN, tracked in #466 (docs.jsonresume.org DNS points at a
-  # dead Vercel project while the GitHub Pages deployment is healthy -- needs
-  # a dashboard-side DNS fix). Remove "docs" from this list once #466 closes.
-  KNOWN_DOWN: 'docs'
+  # (currently empty -- docs.jsonresume.org was retired in #491; docs are now
+  # probed at their new home, jsonresume.org/docs)
+  KNOWN_DOWN: ''
 
 jobs:
   probe:
@@ -121,7 +120,9 @@ jobs:
           # --- Surfaces ---------------------------------------------------
           check_http registry  "Registry" "https://registry.jsonresume.org/thomasdavis?cb=${CB}-${RANDOM}" "Thomas"
           check_http homepage  "Homepage" "https://jsonresume.org?cb=${CB}-${RANDOM}" "-"
-          check_http docs      "Docs"     "https://docs.jsonresume.org?cb=${CB}-${RANDOM}" "-"
+          # docs moved to jsonresume.org/docs (#491) -- served by homepage2's
+          # rewrite to GitHub Pages, so this also covers that proxy path.
+          check_http docs      "Docs"     "https://jsonresume.org/docs?cb=${CB}-${RANDOM}" "-"
           # supabase auth health endpoint (expect 200). Kong 401s every
           # /auth/v1/* route without an apikey, so send the public anon key
           # (the same browser-safe key hardcoded in apps/registry/app/lib/supabase.ts).
@@ -147,7 +148,7 @@ jobs:
             const LABELS = {
               registry: 'Registry (registry.jsonresume.org)',
               homepage: 'Homepage (jsonresume.org)',
-              docs: 'Docs (docs.jsonresume.org)',
+              docs: 'Docs (jsonresume.org/docs)',
               supabase: 'Supabase (database/auth)',
             };
 
