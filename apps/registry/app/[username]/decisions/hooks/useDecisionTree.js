@@ -97,11 +97,6 @@ export function useDecisionTree(resume, preferences = {}) {
     async (candidate, job) => {
       if (!candidate || !job) return;
 
-      console.log('=== CLIENT: Starting AI Evaluation ===');
-      console.log('Candidate:', candidate.basics?.name);
-      console.log('Job:', job.title, job.company);
-      console.log('Preferences:', preferences);
-
       resetHighlights();
 
       // Show loading state with animated messages
@@ -119,7 +114,6 @@ export function useDecisionTree(resume, preferences = {}) {
 
       try {
         const payload = { resume: candidate, job, preferences };
-        console.log('Sending payload with keys:', Object.keys(payload));
 
         // Call AI evaluation endpoint
         const response = await fetch('/api/decisions/evaluate', {
@@ -128,19 +122,11 @@ export function useDecisionTree(resume, preferences = {}) {
           body: JSON.stringify(payload),
         });
 
-        console.log('Response status:', response.status);
-
         if (!response.ok) {
           throw new Error('AI evaluation failed');
         }
 
         const result = await response.json();
-        console.log('Response data:', result);
-        console.log('Decisions object:', result.decisions);
-        console.log(
-          'Number of decisions:',
-          Object.keys(result.decisions || {}).length
-        );
 
         // Animate path based on AI decisions
         animateAIPath(result.decisions);
