@@ -34,10 +34,9 @@ env:
   # honest record in the logs), but it will NOT open/comment/close any uptime
   # issue -- avoiding spam while a separate human-owned issue is open.
   #
-  # supabase: KNOWN-DOWN, tracked in #332 (the Supabase project host no longer
-  # even resolves in DNS -- the project was deleted/paused). Remove "supabase"
-  # from this list once #332 is closed and the DB is restored.
-  KNOWN_DOWN: 'supabase'
+  # (currently empty -- docs.jsonresume.org was retired in #491; docs are now
+  # probed at their new home, jsonresume.org/docs)
+  KNOWN_DOWN: ''
 
 jobs:
   probe:
@@ -52,14 +51,14 @@ jobs:
         run: |
           set -uo pipefail
 
-          # check_http <key> <label> <url> <expect_body_substr|->
+          # check_http <key> <label> <url> <expect_body_substr|-> [header]
           # Emits: "<key>|<status>|<detail>" to $RESULTS
           # status is one of: up | down
           RESULTS="$RUNNER_TEMP/results.txt"
           : > "$RESULTS"
 
           check_http() {
-            key="$1"; label="$2"; url="$3"; expect="$4"
+            key="$1"; label="$2"; url="$3"; expect="$4"; hdr="${5:-}"
             echo "::group::Probe $label ($url)"
 
             body_file="$RUNNER_TEMP/${key}.body"
@@ -73,6 +72,7 @@ jobs:
               -o "$body_file" \
               -D "$hdr_file" \
               -w '%{http_code}' \
+              ${hdr:+-H "$hdr"} \
               "$url" 2>"$RUNNER_TEMP/${key}.err") || code="000"
             code="${code:-000}"
 
@@ -120,9 +120,14 @@ jobs:
           # --- Surfaces ---------------------------------------------------
           check_http registry  "Registry" "https://registry.jsonresume.org/thomasdavis?cb=${CB}-${RANDOM}" "Thomas"
           check_http homepage  "Homepage" "https://jsonresume.org?cb=${CB}-${RANDOM}" "-"
-          check_http docs      "Docs"     "https://docs.jsonresume.org?cb=${CB}-${RANDOM}" "-"
-          # supabase auth health endpoint (expect 200). Currently DOWN (#332).
-          check_http supabase  "Supabase" "https://itxuhvvwryeuzuyihpkp.supabase.co/auth/v1/health" "-"
+          # docs moved to jsonresume.org/docs (#491) -- served by homepage2's
+          # rewrite to GitHub Pages, so this also covers that proxy path.
+          check_http docs      "Docs"     "https://jsonresume.org/docs?cb=${CB}-${RANDOM}" "-"
+          # supabase auth health endpoint (expect 200). Kong 401s every
+          # /auth/v1/* route without an apikey, so send the public anon key
+          # (the same browser-safe key hardcoded in apps/registry/app/lib/supabase.ts).
+          check_http supabase  "Supabase" "https://itxuhvvwryeuzuyihpkp.supabase.co/auth/v1/health" "-" \
+            "apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml0eHVodnZ3cnlldXp1eWlocGtwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDc5OTA4NjQsImV4cCI6MjAyMzU2Njg2NH0.oEs0H2aumAHsiLn6i9ic1-iwWDo3bJkFkC7NCeUrIfA"
 
           echo "===== Probe summary ====="
           cat "$RESULTS"
@@ -143,7 +148,7 @@ jobs:
             const LABELS = {
               registry: 'Registry (registry.jsonresume.org)',
               homepage: 'Homepage (jsonresume.org)',
-              docs: 'Docs (docs.jsonresume.org)',
+              docs: 'Docs (jsonresume.org/docs)',
               supabase: 'Supabase (database/auth)',
             };
 
