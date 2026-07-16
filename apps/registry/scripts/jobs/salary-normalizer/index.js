@@ -166,8 +166,12 @@ function normalizeObject(salary, rates) {
     max = single;
   }
 
-  if (min !== undefined) min = Number(min);
-  if (max !== undefined) max = Number(max);
+  if (min !== undefined) {
+    min = Number(min);
+  }
+  if (max !== undefined) {
+    max = Number(max);
+  }
 
   if ((min === undefined || isNaN(min)) && (max === undefined || isNaN(max))) {
     return { salaryUsd: null, confidence: 0 };
@@ -218,12 +222,24 @@ function detectCurrency(str) {
 
   // Check for prefixed $ symbols (US$, A$, AU$, C$, CA$, etc.)
   // IMPORTANT: Check longer prefixes first (CA$ before A$) to avoid false matches
-  if (/US\$/i.test(str)) return 'USD';
-  if (/CA\$|C\$/i.test(str)) return 'CAD';
-  if (/AU\$|A\$/i.test(str)) return 'AUD';
-  if (/NZ\$/i.test(str)) return 'NZD';
-  if (/HK\$/i.test(str)) return 'HKD';
-  if (/S\$/i.test(str)) return 'SGD';
+  if (/US\$/i.test(str)) {
+    return 'USD';
+  }
+  if (/CA\$|C\$/i.test(str)) {
+    return 'CAD';
+  }
+  if (/AU\$|A\$/i.test(str)) {
+    return 'AUD';
+  }
+  if (/NZ\$/i.test(str)) {
+    return 'NZD';
+  }
+  if (/HK\$/i.test(str)) {
+    return 'HKD';
+  }
+  if (/S\$/i.test(str)) {
+    return 'SGD';
+  }
 
   // Check for prefixed symbols (A$, C$, etc.) - must check before single $
   for (const [symbol, code] of Object.entries(CURRENCY_MAP)) {
@@ -233,26 +249,50 @@ function detectCurrency(str) {
   }
 
   // Check for single character symbols
-  if (str.includes('€')) return 'EUR';
-  if (str.includes('£')) return 'GBP';
-  if (str.includes('₹')) return 'INR';
-  if (str.includes('₩')) return 'KRW';
-  if (str.includes('₽')) return 'RUB';
-  if (str.includes('₱')) return 'PHP';
-  if (str.includes('฿')) return 'THB';
-  if (str.includes('₪')) return 'ILS';
+  if (str.includes('€')) {
+    return 'EUR';
+  }
+  if (str.includes('£')) {
+    return 'GBP';
+  }
+  if (str.includes('₹')) {
+    return 'INR';
+  }
+  if (str.includes('₩')) {
+    return 'KRW';
+  }
+  if (str.includes('₽')) {
+    return 'RUB';
+  }
+  if (str.includes('₱')) {
+    return 'PHP';
+  }
+  if (str.includes('฿')) {
+    return 'THB';
+  }
+  if (str.includes('₪')) {
+    return 'ILS';
+  }
   if (str.includes('¥')) {
     // Could be JPY or CNY - check for explicit indicator
-    if (/CNY|yuan|rmb/i.test(str)) return 'CNY';
+    if (/CNY|yuan|rmb/i.test(str)) {
+      return 'CNY';
+    }
     return 'JPY'; // Default to JPY
   }
-  if (str.includes('R') && /\bR\s*[\d,]+/.test(str)) return 'ZAR'; // South African Rand
+  if (str.includes('R') && /\bR\s*[\d,]+/.test(str)) {
+    return 'ZAR';
+  } // South African Rand
 
   // Check for LPA (Lakhs Per Annum - Indian)
-  if (/\d+\s*LPA/i.test(str)) return 'INR';
+  if (/\d+\s*LPA/i.test(str)) {
+    return 'INR';
+  }
 
   // Default to USD if $ or no currency
-  if (str.includes('$')) return 'USD';
+  if (str.includes('$')) {
+    return 'USD';
+  }
 
   return 'USD';
 }
@@ -320,9 +360,13 @@ function extractNumbers(str) {
     .replace(/(US|AU|CA|NZ|HK|SG?)\$/gi, '') // Remove prefixed $ symbols
     .replace(/\b(base|salary|total|comp|tc|ote|cash)\b:?/gi, '')
     .replace(
-      /\b(around|about|approximately|approx|up\s*to|starting\s*at|from|between|and|minimum|min|maximum|max|plus)\b/gi,
+      /\b(around|about|approximately|approx|up\s*to|starting\s*at|from|between|minimum|min|maximum|max|plus)\b/gi,
       ' '
     )
+    // Treat "and" as a range separator (not just noise) so word-separated
+    // plain numbers like "150000 and 100000" parse as a range instead of
+    // being concatenated by the greedy whitespace-tolerant number scan.
+    .replace(/\band\b/gi, ' - ')
     .replace(/[~≈]/g, '')
     .trim();
 
@@ -357,7 +401,7 @@ function extractNumbers(str) {
   if (lpaRangeMatch) {
     const min = parseFloat(lpaRangeMatch[1]) * 100000;
     const max = parseFloat(lpaRangeMatch[2]) * 100000;
-    return { min, max };
+    return orderRange(min, max);
   }
 
   // Handle single LPA
@@ -376,7 +420,7 @@ function extractNumbers(str) {
   if (lakhRangeBothMatch) {
     const min = parseFloat(lakhRangeBothMatch[1]) * 100000;
     const max = parseFloat(lakhRangeBothMatch[2]) * 100000;
-    return { min, max };
+    return orderRange(min, max);
   }
 
   // Pattern 2: Only second has L suffix (35-80L)
@@ -386,7 +430,7 @@ function extractNumbers(str) {
   if (lakhRangeMatch) {
     const min = parseFloat(lakhRangeMatch[1]) * 100000;
     const max = parseFloat(lakhRangeMatch[2]) * 100000;
-    return { min, max };
+    return orderRange(min, max);
   }
 
   // Handle single "XL" notation
@@ -404,7 +448,7 @@ function extractNumbers(str) {
   if (shorthandRange) {
     const min = parseFloat(shorthandRange[1]) * 1000;
     const max = parseFloat(shorthandRange[2]) * 1000;
-    return { min, max };
+    return orderRange(min, max);
   }
 
   // Handle K notation: 100k, 150K, etc.
@@ -421,7 +465,7 @@ function extractNumbers(str) {
     const min = parseNumber(rangeMatch[1]);
     const max = parseNumber(rangeMatch[2]);
     if (min !== null && max !== null) {
-      return { min, max };
+      return orderRange(min, max);
     }
   }
 
@@ -450,10 +494,20 @@ function extractNumbers(str) {
 }
 
 /**
+ * Order a pair of range endpoints so min <= max
+ * (handles descending inputs like "150,000 - 100,000")
+ */
+function orderRange(a, b) {
+  return a <= b ? { min: a, max: b } : { min: b, max: a };
+}
+
+/**
  * Parse a number string handling various formats
  */
 function parseNumber(str) {
-  if (!str) return null;
+  if (!str) {
+    return null;
+  }
 
   // Remove spaces, quotes, and normalize
   let cleaned = str.replace(/[\s']/g, '');
@@ -520,7 +574,9 @@ function smartAnnualize(amount, period) {
  * Round to nearest thousand
  */
 function roundToThousand(amount) {
-  if (amount === null || isNaN(amount)) return null;
+  if (amount === null || isNaN(amount)) {
+    return null;
+  }
   return Math.round(amount / 1000) * 1000;
 }
 
