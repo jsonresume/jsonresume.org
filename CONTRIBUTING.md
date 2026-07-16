@@ -352,7 +352,7 @@ Fixes #456
 
 Want to add your resume theme to the registry? Here's everything you need to know.
 
-### Quick Start: Using @resume/core Components (Recommended)
+### Quick Start: Using @jsonresume/core Components (Recommended)
 
 The fastest way to build a new theme is using our composable component library:
 
@@ -364,7 +364,7 @@ import {
   ListItem,
   DateRange,
   BadgeList,
-} from '@resume/core';
+} from '@jsonresume/core';
 
 export function render(resume) {
   const html = `
@@ -373,7 +373,7 @@ export function render(resume) {
     <head>
       <meta charset="UTF-8">
       <title>${resume.basics.name}</title>
-      <link rel="stylesheet" href="https://unpkg.com/@resume/core@0.1.0/src/styles/tokens.css">
+      <link rel="stylesheet" href="https://unpkg.com/@jsonresume/core@0.3.1/src/styles/tokens.css">
       <style>
         body {
           font-family: var(--resume-font-sans);
@@ -473,7 +473,7 @@ export function render(resume) {
 - ES6 imports for templates and styles
 - Build-time bundling (Vite, webpack, rollup)
 - All assets inlined at compile time
-- **OR** @resume/core components (recommended)
+- **OR** @jsonresume/core components (recommended)
 
 ### Quick Start: Converting Your Theme
 
@@ -631,8 +631,8 @@ export function render(resume) {
 
 Check these themes in the repo for reference:
 
-- **@resume/core components:** `packages/themes/jsonresume-theme-reference` (complete example)
-- **@resume/core with custom styles:** `packages/themes/jsonresume-theme-modern` (card-based design)
+- **@jsonresume/core components:** `packages/themes/jsonresume-theme-reference` (complete example)
+- **@jsonresume/core with custom styles:** `packages/themes/jsonresume-theme-modern` (card-based design)
 - **Simple approach:** `packages/themes/jsonresume-theme-standard`
 - **Vite bundling:** `packages/themes/jsonresume-theme-professional`
 - **Handlebars templates:** `packages/themes/jsonresume-theme-spartacus`

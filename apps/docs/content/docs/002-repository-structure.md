@@ -317,7 +317,7 @@ This package centralizes shared theme configuration and metadata for JSON Resume
 
 ### Key Points
 
-- Named `@repo/theme-config`.
+- Named `@jsonresume/theme-metadata`.
 - Exports main module and submodules for metadata and themes.
 - Contains lint script.
 - Private package with MIT license.
@@ -402,7 +402,7 @@ flowchart TD
     RegistryApp --> Core
     RegistryApp --> Themes
     Themes --> Core
-    Themes --> ThemeConfig["@repo/theme-config"]
+    Themes --> ThemeConfig["@jsonresume/theme-metadata"]
     UI --> ESLintConfig
     Core --> ESLintConfig
     Themes --> ESLintConfig
