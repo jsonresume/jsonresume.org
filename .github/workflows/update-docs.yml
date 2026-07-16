@@ -117,8 +117,9 @@ jobs:
       - name: Build docs (Next.js static export)
         run: pnpm --filter docs build
 
-      - name: Write CNAME for custom domain
-        run: echo 'docs.jsonresume.org' > apps/docs/out/CNAME
+      # No CNAME: docs are served from the GitHub Pages project URL
+      # (jsonresume.github.io/jsonresume.org) behind a jsonresume.org/docs
+      # rewrite in apps/homepage2.
 
       - name: Disable Jekyll processing
         run: touch apps/docs/out/.nojekyll
