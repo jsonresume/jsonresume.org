@@ -62,8 +62,8 @@ function buildResumeSchema() {
 function buildJobSchema() {
   const s = clone(jobSchema);
   s.title = 'JobDescription';
-  // job-schema.json declares draft-04; the generator handles it, but the local
-  // location/meta objects do not need named exports for the W1 surface.
+  // job-schema.json is a draft-07 document; the local location/meta objects
+  // do not need named exports for the W1 surface.
   return s;
 }
 

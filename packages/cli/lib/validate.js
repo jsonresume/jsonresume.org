@@ -3,9 +3,9 @@ import addFormats from 'ajv-formats';
 import { formatErrors } from './validate-errors';
 
 export default async ({ resume, schema }) => {
-  // strict:false is required: the JSON Resume schema is an externally authored
-  // draft-07 document that uses keywords (e.g. additionalItems without an
-  // array `items`) that Ajv's strict mode would otherwise reject.
+  // strict:false is the ecosystem baseline: the schema passed in may be an
+  // externally authored draft-07 document (custom/theme schemas) that is not
+  // strict-mode clean, and strict mode would reject it instead of validating.
   const ajv = new Ajv({ allErrors: true, strict: false });
   addFormats(ajv);
 

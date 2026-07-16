@@ -1,14 +1,14 @@
 import { describe, it, expect } from 'vitest';
-import { render } from '../src/index.js';
+import { render } from '../src/index.jsx';
 import completeResume from './fixtures/complete-resume.json';
 
 describe('Reference Theme', () => {
   it('renders complete resume HTML', () => {
     const html = render(completeResume);
 
-    // Should be valid HTML document
+    // Should be valid HTML document (lang + dir come from i18n options)
     expect(html).toContain('<!DOCTYPE html>');
-    expect(html).toContain('<html lang="en">');
+    expect(html).toContain('<html lang="en" dir="ltr">');
     expect(html).toContain('</html>');
   });
 
@@ -86,7 +86,8 @@ describe('Reference Theme', () => {
   it('renders awards section', () => {
     const html = render(completeResume);
 
-    expect(html).toContain('Awards & Honors');
+    // JSX escapes the ampersand in the section title
+    expect(html).toContain('Awards &amp; Honors');
     expect(html).toContain('Hackathon Winner');
     expect(html).toContain('Employee of the Year');
   });
@@ -139,11 +140,14 @@ describe('Reference Theme', () => {
     expect(html).toContain('</html>');
   });
 
-  it('includes @jsonresume/core stylesheet', () => {
+  it('includes @jsonresume/core design tokens (inlined)', () => {
     const html = render(completeResume);
 
+    // Design tokens are inlined in a <style> block (no external CDN link)
+    // so the document is self-contained for print/offline/CLI rendering
     expect(html).toContain('@jsonresume/core');
-    expect(html).toContain('tokens.css');
+    expect(html).toContain('--resume-font-sans:');
+    expect(html).toContain('--resume-max-width:');
   });
 
   it('uses all @jsonresume/core primitives', () => {
@@ -177,15 +181,16 @@ describe('Reference Theme', () => {
     // No tables or complex layouts
     expect(html).not.toContain('<table');
 
-    // Standard fonts (defined in inline styles)
-    expect(html).toContain('font-family: var(--resume-font-sans)');
+    // Standard fonts via design token (styled-components minifies whitespace
+    // and appends font fallbacks inside var())
+    expect(html).toMatch(/font-family:\s*var\(\s*--resume-font-sans/);
   });
 
   it('is print-ready', () => {
     const html = render(completeResume);
 
-    // Should be single-page optimized
-    expect(html).toContain('max-width: var(--resume-max-width)');
+    // Should be single-page optimized (token used with a px fallback)
+    expect(html).toMatch(/max-width:\s*var\(--resume-max-width/);
 
     // Standard A4/Letter dimensions assumed via CSS variables
   });
