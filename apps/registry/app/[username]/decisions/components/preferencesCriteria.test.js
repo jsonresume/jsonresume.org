@@ -36,7 +36,10 @@ describe('mergeWithDefaults', () => {
   it('keeps saved preferences and fills gaps with defaults', () => {
     const saved = { salary: { enabled: false, value: { min: 1, max: 2 } } };
     const merged = mergeWithDefaults(saved);
-    expect(merged.salary).toEqual({ enabled: false, value: { min: 1, max: 2 } });
+    expect(merged.salary).toEqual({
+      enabled: false,
+      value: { min: 1, max: 2 },
+    });
     // Every criterion is present after merge
     expect(Object.keys(merged)).toEqual(DEFAULT_CRITERIA.map((c) => c.id));
     // A criterion not in `saved` falls back to its enabled default

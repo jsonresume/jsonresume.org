@@ -46,7 +46,12 @@ function RangeControls({ criterion, pref, onValueChange, max, step, format }) {
   );
 }
 
-export function PreferencesCriterionRow({ criterion, pref, onToggle, onValueChange }) {
+export function PreferencesCriterionRow({
+  criterion,
+  pref,
+  onToggle,
+  onValueChange,
+}) {
   return (
     <div
       className={`p-3 rounded-lg border transition ${
