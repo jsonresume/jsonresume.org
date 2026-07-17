@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/jsonresume/jsonresume-website/master/public/img/logo.svg" height="100" alt="JSON Resume logo" />
+  <img src="https://raw.githubusercontent.com/jsonresume/jsonresume.org/master/apps/registry/public/favicon.svg" height="100" alt="JSON Resume logo" />
 </p>
 
 <h1 align="center">JSON Resume</h1>
@@ -161,7 +161,7 @@ AI code uses the Vercel AI SDK v5 (`ai` + `@ai-sdk/openai`).
 - [JSON Resume docs](https://jsonresume.org/docs)
 - [Schema](https://jsonresume.org/schema/)
 - [Themes](https://jsonresume.org/themes/)
-- [Registry API](https://registry.jsonresume.org/api/docs)
+- [Registry API](https://registry.jsonresume.org/docs)
 
 ## History
 
