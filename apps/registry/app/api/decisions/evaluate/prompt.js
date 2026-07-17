@@ -51,9 +51,10 @@ export const buildPreferencesInfo = (preferences) =>
  */
 const disabledHint = (pref, text) => (pref?.enabled === false ? text : '');
 
-const salaryHint = (salaryPref) => {
+export const salaryHint = (salaryPref) => {
   if (salaryPref?.enabled === false) return '(User disabled - be lenient)';
-  if (salaryPref?.value?.min) {
+  // Use != null so a legitimate min of 0 still produces a hint (0 is falsy).
+  if (salaryPref?.value?.min != null) {
     return `(User expects ${salaryPref.value.min}-${salaryPref.value.max})`;
   }
   return '';

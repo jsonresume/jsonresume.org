@@ -12,6 +12,17 @@ export function formatDate(dateStr) {
   });
 }
 
+// Format a work date range. "Present" is only ever used for a missing END date
+// (an ongoing role) — a job with only an endDate renders just that date rather
+// than the nonsensical "Present - Jan 2020".
+export function formatDateRange(startDate, endDate) {
+  if (startDate && endDate)
+    return `${formatDate(startDate)} - ${formatDate(endDate)}`;
+  if (startDate) return `${formatDate(startDate)} - Present`;
+  if (endDate) return formatDate(endDate);
+  return '';
+}
+
 // Estimate total years of experience by summing work date ranges.
 // Ongoing roles (no endDate) count through today. Matches the original
 // month-based rounding.
