@@ -1,5 +1,9 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { formatDate, calcYearsOfExperience } from './resumeUtils';
+import {
+  formatDate,
+  formatDateRange,
+  calcYearsOfExperience,
+} from './resumeUtils';
 
 describe('formatDate', () => {
   it('returns "Present" for a missing date', () => {
@@ -10,6 +14,26 @@ describe('formatDate', () => {
 
   it('formats a date as "Mon YYYY"', () => {
     expect(formatDate('2021-03-15')).toBe('Mar 2021');
+  });
+});
+
+describe('formatDateRange', () => {
+  it('joins a closed range', () => {
+    expect(formatDateRange('2018-01-15', '2020-03-15')).toBe(
+      'Jan 2018 - Mar 2020'
+    );
+  });
+
+  it('renders an ongoing role (no endDate) as "… - Present"', () => {
+    expect(formatDateRange('2018-01-15', undefined)).toBe('Jan 2018 - Present');
+  });
+
+  it('renders a lone endDate as just that date, not "Present - …"', () => {
+    expect(formatDateRange(undefined, '2020-03-15')).toBe('Mar 2020');
+  });
+
+  it('returns an empty string when neither date is present', () => {
+    expect(formatDateRange(undefined, undefined)).toBe('');
   });
 });
 

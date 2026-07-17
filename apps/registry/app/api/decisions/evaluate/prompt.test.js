@@ -3,6 +3,7 @@ import {
   buildJobContext,
   buildPreferencesInfo,
   buildEvaluationPrompt,
+  salaryHint,
 } from './prompt';
 
 describe('buildJobContext', () => {
@@ -58,6 +59,29 @@ describe('buildPreferencesInfo', () => {
         '- location: ENABLED (use standard evaluation)',
       ].join('\n')
     );
+  });
+});
+
+describe('salaryHint', () => {
+  it('renders the expected range for a normal min', () => {
+    expect(salaryHint({ enabled: true, value: { min: 100, max: 200 } })).toBe(
+      '(User expects 100-200)'
+    );
+  });
+
+  it('keeps a min of 0 instead of dropping it', () => {
+    expect(salaryHint({ enabled: true, value: { min: 0, max: 50000 } })).toBe(
+      '(User expects 0-50000)'
+    );
+  });
+
+  it('flags a disabled preference as lenient', () => {
+    expect(salaryHint({ enabled: false })).toBe('(User disabled - be lenient)');
+  });
+
+  it('returns empty string when no value is supplied', () => {
+    expect(salaryHint(undefined)).toBe('');
+    expect(salaryHint({ enabled: true, value: {} })).toBe('');
   });
 });
 

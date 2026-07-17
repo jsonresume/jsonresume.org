@@ -6,7 +6,7 @@
 
 'use client';
 
-import { formatDate } from './resumeUtils';
+import { formatDateRange } from './resumeUtils';
 
 export function ResumeIdentity({ basics, yearsOfExperience }) {
   return (
@@ -105,7 +105,7 @@ export function ResumeWork({ work }) {
               {(job.startDate || job.endDate) && (
                 <span className="text-slate-400">
                   {' • '}
-                  {formatDate(job.startDate)} - {formatDate(job.endDate)}
+                  {formatDateRange(job.startDate, job.endDate)}
                 </span>
               )}
             </div>
