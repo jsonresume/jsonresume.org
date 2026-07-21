@@ -1473,7 +1473,7 @@ dt.span`
   color: ${(props) => props.theme?.colors?.tertiary || "var(--resume-color-tertiary, #666)"};
   white-space: nowrap;
 `;
-dt.span`
+const StyledBadge = dt.span`
   display: inline-block;
   padding: ${(props) => {
   if (props.$size === "sm") return "2px 8px";
@@ -1508,12 +1508,48 @@ dt.span`
     color: ${(props) => props.$variant === "accent" ? "#0066cc" : "#000"};
   }
 `;
-dt.div`
+function Badge({
+  children,
+  variant = "default",
+  size = "md",
+  className,
+  ...rest
+}) {
+  return /* @__PURE__ */ jsx(
+    StyledBadge,
+    {
+      $variant: variant,
+      $size: size,
+      className: `resume-badge resume-badge-${variant} ${className || ""}`.trim(),
+      ...rest,
+      children
+    }
+  );
+}
+const BadgeContainer = dt.div`
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   margin: 8px 0;
 `;
+function BadgeList({
+  children,
+  items,
+  variant = "default",
+  size = "md",
+  className,
+  ...rest
+}) {
+  const content = items ? items.map((item, index2) => /* @__PURE__ */ jsx(Badge, { variant, size, children: item }, index2)) : children;
+  return /* @__PURE__ */ jsx(
+    BadgeContainer,
+    {
+      className: `resume-badge-list ${className || ""}`.trim(),
+      ...rest,
+      children: content
+    }
+  );
+}
 function safeUrl(url) {
   if (!url || typeof url !== "string") {
     return null;
@@ -6429,6 +6465,20 @@ function Resume({ resume }) {
           /* @__PURE__ */ jsx("h3", { children: ref.name }),
           /* @__PURE__ */ jsx("div", { className: "title", children: ref.reference })
         ] }, index2)) })
+      ] }),
+      interests.length > 0 && /* @__PURE__ */ jsxs(MainSection, { children: [
+        /* @__PURE__ */ jsx(MainSectionTitle, { children: "INTERESTS" }),
+        interests.map((interest, index2) => /* @__PURE__ */ jsxs(
+          "div",
+          {
+            style: { marginBottom: "20px", paddingLeft: "25px" },
+            children: [
+              /* @__PURE__ */ jsx(WorkTitle, { children: interest.name }),
+              interest.keywords && interest.keywords.length > 0 && /* @__PURE__ */ jsx(BadgeList, { items: interest.keywords, size: "sm" })
+            ]
+          },
+          index2
+        ))
       ] })
     ] })
   ] });

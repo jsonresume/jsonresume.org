@@ -695,6 +695,24 @@ function Resume({ resume }) {
             </ReferenceGrid>
           </MainSection>
         )}
+
+        {/* Interests Section */}
+        {interests.length > 0 && (
+          <MainSection>
+            <MainSectionTitle>INTERESTS</MainSectionTitle>
+            {interests.map((interest, index) => (
+              <div
+                key={index}
+                style={{ marginBottom: '20px', paddingLeft: '25px' }}
+              >
+                <WorkTitle>{interest.name}</WorkTitle>
+                {interest.keywords && interest.keywords.length > 0 && (
+                  <BadgeList items={interest.keywords} size="sm" />
+                )}
+              </div>
+            ))}
+          </MainSection>
+        )}
       </MainContent>
     </Layout>
   );

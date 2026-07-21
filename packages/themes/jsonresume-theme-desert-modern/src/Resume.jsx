@@ -22,7 +22,7 @@ import {
   KeywordList,
   Pill,
   Anchor,
-} from './styles';
+} from './styles.jsx';
 
 const joinParts = (...parts) => parts.filter(Boolean).join(' • ');
 

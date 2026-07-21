@@ -467,7 +467,16 @@ function Resume({ resume }) {
           <MainSectionTitle>Interests</MainSectionTitle>
           <SimpleList>
             {interests.map((interest, index) => (
-              <SimpleCard key={index}>{interest.name}</SimpleCard>
+              <SimpleCard key={index}>
+                <strong>{interest.name}</strong>
+                {interest.keywords && interest.keywords.length > 0 && (
+                  <StyledBadgeList style={{ marginTop: '12px' }}>
+                    {interest.keywords.map((keyword, i) => (
+                      <StyledBadge key={i}>{keyword}</StyledBadge>
+                    ))}
+                  </StyledBadgeList>
+                )}
+              </SimpleCard>
             ))}
           </SimpleList>
         </MainSection>

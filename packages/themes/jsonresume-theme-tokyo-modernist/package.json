@@ -19,7 +19,10 @@
   "devDependencies": {
     "@repo/eslint-config-custom": "workspace:^",
     "@vitejs/plugin-react": "^4.3.4",
-    "vite": "^6.4.3"
+    "vite": "^6.4.3",
+    "@jsonresume/sample-data": "workspace:*",
+    "@jsonresume/theme-kit": "workspace:*",
+    "vitest": "^3.2.6"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
@@ -28,7 +31,9 @@
   "scripts": {
     "lint": "eslint src || exit 0",
     "publish": "npm publish --access public",
-    "build": "vite build"
+    "build": "vite build",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@jsonresume/core": "workspace:^",

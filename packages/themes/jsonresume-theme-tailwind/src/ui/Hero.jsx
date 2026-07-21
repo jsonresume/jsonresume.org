@@ -1,12 +1,16 @@
 import { Avatar, AvatarImage, AvatarFallback } from './Avatar.jsx';
 import { Button } from './Button.jsx';
-import { CiMail, CiPhone, CiGlobe } from 'react-icons/ci';
-import { FaGithub, FaTwitter } from 'react-icons/fa';
+import { CiMail, CiPhone, CiGlobe, CiLink } from 'react-icons/ci';
+import { FaGithub, FaTwitter, FaLinkedin } from 'react-icons/fa';
 
 const socials = {
   github: FaGithub,
   twitter: FaTwitter,
+  linkedin: FaLinkedin,
 };
+
+const getSocialIcon = (network) =>
+  socials[String(network).toLowerCase()] ?? CiLink;
 
 const HeroComponent = ({ basics }) => {
   return (
@@ -39,11 +43,11 @@ const HeroComponent = ({ basics }) => {
               </a>
             </Button>
           ) : null}
-          {basics.profiles?.map((social) => {
-            const SocialIcon = socials[social.network];
+          {basics.profiles?.map((social, index) => {
+            const SocialIcon = getSocialIcon(social.network);
             return (
               <Button
-                key={social.username}
+                key={social.network ?? social.url ?? index}
                 className="size-8"
                 variant="outline"
                 size="icon"
@@ -71,7 +75,15 @@ const HeroComponent = ({ basics }) => {
       </div>
       <Avatar className="size-28">
         <AvatarImage alt={basics.name} src={basics.image} />
-        <AvatarFallback>{'TD'}</AvatarFallback>
+        <AvatarFallback>
+          {String(basics.name ?? '')
+            .split(' ')
+            .map((part) => part[0])
+            .filter(Boolean)
+            .slice(0, 2)
+            .join('')
+            .toUpperCase()}
+        </AvatarFallback>
       </Avatar>
     </div>
   );

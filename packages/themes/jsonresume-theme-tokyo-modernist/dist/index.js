@@ -6133,19 +6133,19 @@ const Name = dt.h1`
   font-variation-settings: 'wght' 800;
 `;
 const Label = dt.div`
-  font-size: 20px;
+  font-size: 14px;
   color: #6b7280;
   margin-bottom: 24px;
   font-weight: 500;
   letter-spacing: 0.5px;
   text-transform: uppercase;
-  font-size: 14px;
 `;
 const StyledContactInfo = dt(ContactInfo)`
   font-size: 15px;
   display: flex;
   gap: 24px;
   flex-wrap: wrap;
+  justify-content: flex-start;
 
   a {
     font-size: 15px;
@@ -6365,13 +6365,12 @@ const SkillCategory = dt.div`
   }
 `;
 const SkillName = dt.h4`
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   color: #1a1d23;
   margin: 0 0 12px 0;
   text-transform: uppercase;
   letter-spacing: 0.3px;
-  font-size: 14px;
 `;
 const SkillTags = dt.div`
   font-size: 14px;
@@ -6391,6 +6390,7 @@ function Resume({ resume }) {
     projects = [],
     volunteer = [],
     awards = [],
+    certificates = [],
     publications = [],
     languages = [],
     interests = [],
@@ -6475,6 +6475,17 @@ function Resume({ resume }) {
         ] }),
         award.date && /* @__PURE__ */ jsx(EducationDate, { children: award.date }),
         award.summary && /* @__PURE__ */ jsx(WorkSummary, { children: award.summary })
+      ] }, index))
+    ] }),
+    certificates?.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
+      /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Certificates" }),
+      certificates.map((cert, index) => /* @__PURE__ */ jsxs(EducationItem, { children: [
+        /* @__PURE__ */ jsx(Institution, { children: cert.name }),
+        cert.issuer && /* @__PURE__ */ jsxs(Degree, { children: [
+          "Issued by ",
+          cert.issuer
+        ] }),
+        cert.date && /* @__PURE__ */ jsx(EducationDate, { children: cert.date })
       ] }, index))
     ] }),
     publications?.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [

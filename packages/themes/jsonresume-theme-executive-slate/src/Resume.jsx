@@ -489,6 +489,20 @@ function Resume({ resume }) {
           </Section>
         )}
 
+        {interests?.length > 0 && (
+          <Section>
+            <StyledSectionTitle>Interests</StyledSectionTitle>
+            {interests.map((interest, index) => (
+              <EducationItem key={index}>
+                <Institution>{interest.name}</Institution>
+                {interest.keywords?.length > 0 && (
+                  <SkillTags>{interest.keywords.join(', ')}</SkillTags>
+                )}
+              </EducationItem>
+            ))}
+          </Section>
+        )}
+
         {references?.length > 0 && (
           <Section>
             <StyledSectionTitle>References</StyledSectionTitle>

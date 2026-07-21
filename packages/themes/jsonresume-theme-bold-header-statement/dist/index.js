@@ -6428,6 +6428,16 @@ function LanguagesSection({ languages }) {
     ] }, index)) })
   ] });
 }
+function InterestsSection({ interests }) {
+  if (!interests?.length) return null;
+  return /* @__PURE__ */ jsxs(Section, { children: [
+    /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Interests" }),
+    /* @__PURE__ */ jsx(SkillsGrid, { children: interests.map((interest, index) => /* @__PURE__ */ jsxs(SkillCategory, { children: [
+      /* @__PURE__ */ jsx(SkillName, { children: interest.name }),
+      interest.keywords?.length > 0 && /* @__PURE__ */ jsx(SkillTags, { children: interest.keywords.join(", ") })
+    ] }, index)) })
+  ] });
+}
 function ReferencesSection({ references }) {
   if (!references?.length) return null;
   return /* @__PURE__ */ jsxs(Section, { children: [
@@ -6450,6 +6460,7 @@ function Resume({ resume }) {
     certificates = [],
     publications = [],
     languages = [],
+    interests = [],
     references = []
   } = resume;
   return /* @__PURE__ */ jsxs(Layout, { children: [
@@ -6465,6 +6476,7 @@ function Resume({ resume }) {
       /* @__PURE__ */ jsx(CertificatesSection, { certificates }),
       /* @__PURE__ */ jsx(PublicationsSection, { publications }),
       /* @__PURE__ */ jsx(LanguagesSection, { languages }),
+      /* @__PURE__ */ jsx(InterestsSection, { interests }),
       /* @__PURE__ */ jsx(ReferencesSection, { references })
     ] })
   ] });

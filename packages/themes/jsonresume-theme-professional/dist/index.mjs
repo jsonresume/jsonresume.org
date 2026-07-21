@@ -1668,7 +1668,7 @@ const OneLineList = ({ name, items }) => {
       name,
       ":"
     ] }),
-    /* @__PURE__ */ jsx(List, { children: /* @__PURE__ */ jsx("div", { class: "secondary", children: items?.join(", ") }) })
+    /* @__PURE__ */ jsx(List, { children: /* @__PURE__ */ jsx("div", { className: "secondary", children: items?.join(", ") }) })
   ] });
 };
 const Skills = ({ skills }) => {

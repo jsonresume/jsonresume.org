@@ -2,6 +2,7 @@ import Section from './Section.jsx';
 import { Card, CardHeader, CardContent } from './Card.jsx';
 
 const Education = ({ education }) => {
+  if (!education?.length) return null;
   return (
     <Section>
       <h2 className="text-xl font-bold">Education</h2>

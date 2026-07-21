@@ -6361,7 +6361,10 @@ function InterestsSection({ interests }) {
   if (!interests || interests.length === 0) return null;
   return /* @__PURE__ */ jsxs(Section, { children: [
     /* @__PURE__ */ jsx(SectionTitle, { children: "Interests" }),
-    /* @__PURE__ */ jsx(SkillList, { children: interests.map((interest, i) => /* @__PURE__ */ jsx(SkillItem, { children: interest.name }, i)) })
+    interests.map((interest, i) => /* @__PURE__ */ jsxs(SkillCategory, { children: [
+      interest.name && /* @__PURE__ */ jsx(SkillName, { children: interest.name }),
+      interest.keywords && interest.keywords.length > 0 && /* @__PURE__ */ jsx(SkillList, { children: interest.keywords.map((keyword, j2) => /* @__PURE__ */ jsx(SkillItem, { children: keyword }, j2)) })
+    ] }, i))
   ] });
 }
 function VolunteerSection({ volunteer }) {

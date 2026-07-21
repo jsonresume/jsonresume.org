@@ -6394,7 +6394,10 @@ function Resume({ resume }) {
         ] }),
         interests.length > 0 && /* @__PURE__ */ jsxs(SidebarSection, { children: [
           /* @__PURE__ */ jsx(SidebarSectionTitle, { children: "Interests" }),
-          /* @__PURE__ */ jsx(SidebarContent, { children: /* @__PURE__ */ jsx(SimpleList, { children: interests.map((interest, index) => /* @__PURE__ */ jsx("div", { children: interest.name }, index)) }) })
+          /* @__PURE__ */ jsx(SidebarContent, { children: interests.map((interest, index) => /* @__PURE__ */ jsxs(SkillItem, { children: [
+            /* @__PURE__ */ jsx("h4", { children: interest.name }),
+            interest.keywords && interest.keywords.length > 0 && /* @__PURE__ */ jsx(StyledBadgeList, { children: interest.keywords.map((keyword, i) => /* @__PURE__ */ jsx(StyledBadge, { children: keyword }, i)) })
+          ] }, index)) })
         ] })
       ] }),
       /* @__PURE__ */ jsxs(MainContent, { children: [
