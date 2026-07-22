@@ -44,6 +44,12 @@ export function averageEmbeddings(embeddings) {
 /**
  * Apply time-decay boost: more recent jobs get a recency bonus.
  * Uses exponential decay with half-life of 14 days.
+ *
+ * Weights: raw cosine similarities for resume-vs-job cluster in a compressed
+ * ~0.37-0.44 band (spread ~0.07), so a large recency term drowns the entire
+ * relevance signal — the 2026-07 ranking eval measured a 0.15 recency weight
+ * outweighing relevance 2.2x and putting stale-stack mismatches at #1.
+ * 0.05 keeps freshness as a tiebreaker within the band, never the headline.
  */
 export function timeDecayScore(similarity, postedAt) {
   if (!postedAt) {
@@ -53,5 +59,25 @@ export function timeDecayScore(similarity, postedAt) {
   const ageDays = ageMs / 86400000;
   const halfLife = 14;
   const recencyBoost = Math.pow(0.5, ageDays / halfLife);
-  return 0.85 * similarity + 0.15 * recencyBoost;
+  return 0.95 * similarity + 0.05 * recencyBoost;
+}
+
+/**
+ * Weighted sum of N vectors, normalized. Used for prompt-steered search
+ * embeddings (HyDE doc + raw prompt + resume).
+ * @param {Array<[number[], number]>} pairs - [vector, weight] pairs
+ */
+export function weightedBlend(pairs) {
+  const usable = pairs.filter(([v]) => Array.isArray(v) && v.length > 0);
+  if (usable.length === 0) {
+    return null;
+  }
+  const dim = usable[0][0].length;
+  const out = new Array(dim).fill(0);
+  for (const [vec, weight] of usable) {
+    for (let i = 0; i < dim; i++) {
+      out[i] += weight * vec[i];
+    }
+  }
+  return normalize(out);
 }

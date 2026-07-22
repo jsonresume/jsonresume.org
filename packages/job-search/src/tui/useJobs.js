@@ -50,10 +50,10 @@ export function useJobs(api, activeFilters, tab, searchId, getDossierStatus) {
         if (cached) {
           setAllJobs(cached);
           setLoading(false);
-          // Still kick off rerank in background if eligible
-          if (searchId) {
-            startRerank(cached);
-          }
+          // Still kick off rerank in background (all views — reranking is
+          // the only ordering with acceptable precision, not just custom
+          // searches).
+          startRerank(cached);
           return;
         }
       }
@@ -69,8 +69,10 @@ export function useJobs(api, activeFilters, tab, searchId, getDossierStatus) {
         setAllJobs(result);
         setLoading(false);
 
-        // Pass 2: rerank in background if using a custom search
-        if (searchId && result.length > 0) {
+        // Pass 2: rerank in background for every view — deep listwise
+        // reranking is what actually orders jobs by fit; the vector-only
+        // pass is just the instant first paint.
+        if (result.length > 0) {
           startRerank(result);
         }
       } catch (err) {

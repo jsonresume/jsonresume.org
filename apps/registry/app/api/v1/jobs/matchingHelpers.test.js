@@ -141,9 +141,9 @@ describe('timeDecayScore', () => {
     vi.useFakeTimers();
     const now = new Date('2026-01-01T00:00:00Z');
     vi.setSystemTime(now);
-    // recencyBoost = 0.5^0 = 1 => 0.85*sim + 0.15*1
+    // recencyBoost = 0.5^0 = 1 => 0.95*sim + 0.05*1
     const out = timeDecayScore(0.5, now.toISOString());
-    expect(out).toBeCloseTo(0.85 * 0.5 + 0.15 * 1, 10);
+    expect(out).toBeCloseTo(0.95 * 0.5 + 0.05 * 1, 10);
   });
 
   it('halves the recency boost after one half-life (14 days)', () => {
@@ -153,17 +153,17 @@ describe('timeDecayScore', () => {
     const posted = new Date('2026-01-01T00:00:00Z'); // 14 days earlier
     const out = timeDecayScore(0.5, posted.toISOString());
     // recencyBoost = 0.5^1 = 0.5
-    expect(out).toBeCloseTo(0.85 * 0.5 + 0.15 * 0.5, 6);
+    expect(out).toBeCloseTo(0.95 * 0.5 + 0.05 * 0.5, 6);
   });
 
-  it('older jobs decay toward 0.85*similarity', () => {
+  it('older jobs decay toward 0.95*similarity', () => {
     vi.useFakeTimers();
     const now = new Date('2026-06-01T00:00:00Z');
     vi.setSystemTime(now);
     const posted = new Date('2025-06-01T00:00:00Z'); // ~1 year old
     const out = timeDecayScore(0.6, posted.toISOString());
-    expect(out).toBeGreaterThan(0.85 * 0.6 - 0.001);
-    expect(out).toBeLessThan(0.85 * 0.6 + 0.01);
+    expect(out).toBeGreaterThan(0.95 * 0.6 - 0.001);
+    expect(out).toBeLessThan(0.95 * 0.6 + 0.01);
   });
 
   it('recent jobs score higher than identical-similarity old jobs', () => {

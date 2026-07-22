@@ -1,11 +1,24 @@
 /**
  * Job matching orchestrator — fetch candidates from the vector RPC, parse,
  * filter, decay-score, and optionally LLM-rerank into the final result set.
+ *
+ * Every result carries a unified `score` field holding the value the list is
+ * actually ordered by (decayed similarity, or the rerank blend when
+ * reranking) — clients must display `score`, not raw `similarity` (the
+ * 2026-07 eval found the CLI/TUI showing raw similarity against a
+ * decay-ordered list, which looks shuffled).
  */
 import { logger } from '@/lib/logger';
 import { getSupabase } from './supabaseClient';
 import { timeDecayScore } from './vectorMath';
 import { rerankJobs } from './rerank';
+import { buildJobFilter } from './filters';
+
+// Candidate pool floor. The RPC cut happens on RAW similarity before decay,
+// filters, and rerank get a say; a pool of top*5 starved every downstream
+// stage (8 of 12 gold-set jobs never surfaced in the eval). With a corpus of
+// only hundreds of jobs per 90 days, fetching wide is nearly free.
+const MIN_POOL = 300;
 
 /** Fetch, parse, filter, and optionally rerank job matches. */
 export async function matchJobs({
@@ -16,9 +29,11 @@ export async function matchJobs({
   days,
   remote,
   minSalary,
+  includeUnknownSalary,
   search,
   shouldRerank,
   stateMap,
+  candidate,
 }) {
   const supabase = getSupabase();
   const createdAfter = new Date(
@@ -28,7 +43,7 @@ export async function matchJobs({
   const { data: matched, error } = await supabase.rpc('match_jobs_v5', {
     query_embedding: embedding,
     match_threshold: -1,
-    match_count: top * 5,
+    match_count: Math.max(MIN_POOL, top * 5),
     created_after: createdAfter,
   });
 
@@ -46,7 +61,13 @@ export async function matchJobs({
     .select('id, uuid, gpt_content, posted_at, url, salary_usd')
     .in('id', jobIds);
 
-  const HIDDEN_STATES = new Set(['not_interested', 'dismissed']);
+  const rowFilter = buildJobFilter({
+    stateMap,
+    remote,
+    minSalary,
+    includeUnknownSalary,
+    search,
+  });
 
   let results = (jobs || [])
     .map((job) => {
@@ -57,6 +78,8 @@ export async function matchJobs({
         }
         const similarity =
           matched.find((m) => m.id === job.id)?.similarity || 0;
+        const decayed =
+          Math.round(timeDecayScore(similarity, job.posted_at) * 1000) / 1000;
         return {
           id: job.id,
           uuid: job.uuid,
@@ -75,8 +98,8 @@ export async function matchJobs({
           url: job.url,
           posted_at: job.posted_at,
           similarity: Math.round(similarity * 1000) / 1000,
-          decayed_similarity:
-            Math.round(timeDecayScore(similarity, job.posted_at) * 1000) / 1000,
+          decayed_similarity: decayed,
+          score: decayed,
           state: stateMap?.[job.id] || null,
         };
       } catch {
@@ -84,33 +107,26 @@ export async function matchJobs({
       }
     })
     .filter(Boolean)
-    .filter((j) => {
-      if (stateMap && HIDDEN_STATES.has(j.state)) {
-        return false;
-      }
-      if (remote && j.remote !== 'Full') {
-        return false;
-      }
-      if (minSalary && j.salary_usd && j.salary_usd < minSalary * 1000) {
-        return false;
-      }
-      if (
-        search &&
-        !JSON.stringify(j).toLowerCase().includes(search.toLowerCase())
-      ) {
-        return false;
-      }
-      return true;
-    })
+    .filter(rowFilter)
     .sort((a, b) => b.decayed_similarity - a.decayed_similarity);
 
-  // Rerank when explicitly requested or for search profiles
+  // Rerank when explicitly requested or for search profiles.
+  // The window is deliberately MUCH deeper than `top`: the raw vector
+  // ordering is weakly discriminative (compressed ~0.37-0.44 band) and the
+  // 2026-07 eval found gold-set jobs at vector ranks 17-147. rerankJobs fans
+  // the window out over parallel ~50-job listwise calls (~3 cheap calls).
   if (shouldRerank && results.length > 0) {
-    const toRerank = results.slice(0, Math.min(30, top * 2));
-    const rest = results.slice(Math.min(30, top * 2));
+    const windowSize = Math.min(150, results.length);
+    const toRerank = results.slice(0, windowSize);
+    const rest = results.slice(windowSize);
 
     try {
-      const scores = await rerankJobs(toRerank, resumeText, searchPrompt);
+      const scores = await rerankJobs(
+        toRerank,
+        resumeText,
+        searchPrompt,
+        candidate
+      );
       const scoreMap = {};
       scores.forEach((s) => {
         scoreMap[s.id] = s.rerank_score;
@@ -120,14 +136,21 @@ export async function matchJobs({
         ...toRerank.map((j) => j.decayed_similarity),
         0.001
       );
+      // Jobs the model omitted get a neutral 50 — visible in the payload as
+      // rerank_score: null rather than a fabricated score.
       const reranked = toRerank
-        .map((j) => ({
-          ...j,
-          rerank_score: scoreMap[j.id] || 5,
-          combined_score:
+        .map((j) => {
+          const llm = scoreMap[j.id];
+          const combined =
             0.35 * (j.decayed_similarity / maxSim) +
-            0.65 * ((scoreMap[j.id] || 5) / 10),
-        }))
+            0.65 * ((llm ?? 50) / 100);
+          return {
+            ...j,
+            rerank_score: llm ?? null,
+            combined_score: Math.round(combined * 1000) / 1000,
+            score: Math.round(combined * 1000) / 1000,
+          };
+        })
         .sort((a, b) => b.combined_score - a.combined_score);
 
       results = [...reranked, ...rest];

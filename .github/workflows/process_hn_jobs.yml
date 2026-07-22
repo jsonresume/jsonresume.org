@@ -137,6 +137,21 @@ jobs:
           echo "jobs_vectorized=${JOBS_VECTORIZED}" >> $GITHUB_OUTPUT
           echo "::endgroup::"
 
+      # Normalize human-typed salary strings into salary_usd/min/max columns.
+      # This was never wired in — salary_usd was NULL on every row, which made
+      # the min_salary filter a silent no-op (2026-07 ranking eval).
+      - name: Normalize salaries
+        id: salaries
+        working-directory: apps/registry
+        env:
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          echo "::group::Salary normalization"
+          timeout 600 node scripts/jobs/salary-normalizer/run-migration.js 2>&1 | tee salaries.log
+          SALARIES_UPDATED=$(grep -oP 'Total updated: \K\d+' salaries.log || echo "0")
+          echo "salaries_updated=${SALARIES_UPDATED}" >> $GITHUB_OUTPUT
+          echo "::endgroup::"
+
       - name: Generate workflow summary
         if: always()
         run: |

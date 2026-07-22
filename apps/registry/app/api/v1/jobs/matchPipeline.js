@@ -86,9 +86,15 @@ export const applyNegativeSignal = async (embedding, rejectedJobIds) => {
 };
 
 /**
- * Run the matcher, classify global-remote, and apply the global-remote filter.
- * Returns results already sliced to `top`. `globalRemote` triples the fetch
- * width before filtering to keep enough candidates.
+ * Run the matcher, classify global-remote, and apply the global-remote
+ * PREFERENCE. Returns results already sliced to `top`. `globalRemote`
+ * triples the fetch width before partitioning to keep enough candidates.
+ *
+ * global_remote is a sparse, LLM-inferred label — using it as a hard filter
+ * collapsed the pool to 8 jobs in the 2026-07 eval (3 of them gold-worst
+ * gigs) and dropped a job that explicitly pays non-US hires. It now sorts
+ * classified-global jobs first and backfills with the remaining remote jobs
+ * instead of discarding them.
  */
 export const runMatchPipeline = async ({
   embedding,
@@ -99,9 +105,11 @@ export const runMatchPipeline = async ({
   remote,
   globalRemote,
   minSalary,
+  includeUnknownSalary,
   search,
   shouldRerank,
   stateMap,
+  candidate,
 }) => {
   const results = await matchJobs({
     embedding,
@@ -111,16 +119,21 @@ export const runMatchPipeline = async ({
     days,
     remote: remote || globalRemote,
     minSalary,
+    includeUnknownSalary,
     search,
     shouldRerank,
     stateMap,
+    candidate,
   });
 
   await classifyGlobalRemote(results);
 
-  const filtered = globalRemote
-    ? results.filter((j) => j.global_remote === true)
-    : results;
+  if (!globalRemote) {
+    return results.slice(0, top);
+  }
 
-  return filtered.slice(0, top);
+  // Stable partition: confirmed-global first, other remote jobs as backfill.
+  const global = results.filter((j) => j.global_remote === true);
+  const backfill = results.filter((j) => j.global_remote !== true);
+  return [...global, ...backfill].slice(0, top);
 };
