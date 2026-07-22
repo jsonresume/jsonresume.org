@@ -38,3 +38,4 @@ yarn-error.log*
 /playwright/.cache/
 supabase/.temp
 .env*.local
+.env*

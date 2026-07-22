@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server';
 import { authenticate } from '../auth';
 import { logger } from '@/lib/logger';
+import { rateLimitResponse } from '../../pathways/rateLimit';
 import { getSupabase, getResumeEmbedding } from './matchingHelpers';
-import { resolveEmbedding } from './resolveEmbedding';
+import { resolveEmbedding, extractLocation } from './resolveEmbedding';
 import {
   partitionFeedback,
   applyNegativeSignal,
@@ -38,9 +39,11 @@ export async function GET(request) {
   const minSalary = parseInt(searchParams.get('min_salary')) || 0;
   const search = searchParams.get('search') || '';
   const searchId = searchParams.get('search_id') || '';
-  const rerankParam = searchParams.get('rerank');
-  const shouldRerank =
-    rerankParam === 'true' || (rerankParam !== 'false' && !!searchId);
+  // Rerank defaults ON for authenticated requests: the 2026-07 eval measured
+  // it as the only strategy with acceptable precision (P@5 0.8 vs 0.2 for
+  // raw vector order). One listwise gpt-4.1-mini call per request.
+  // Opt out with ?rerank=false.
+  const shouldRerank = searchParams.get('rerank') !== 'false';
   const useHyde = searchParams.get('hyde') !== 'false';
 
   try {
@@ -57,7 +60,7 @@ export async function GET(request) {
       );
     }
     let { embedding } = resolved;
-    const { resumeText, searchPrompt } = resolved;
+    const { resumeText, searchPrompt, candidateLocation } = resolved;
 
     // Get user feedback for state filtering + negative signal
     const supabase = getSupabase();
@@ -81,9 +84,15 @@ export async function GET(request) {
       remote,
       globalRemote,
       minSalary,
+      includeUnknownSalary:
+        searchParams.get('include_unknown_salary') === 'true',
       search,
       shouldRerank,
       stateMap,
+      candidate: {
+        location: candidateLocation,
+        remoteOnly: remote || globalRemote,
+      },
     });
 
     const jobs = results.map((job) => ({
@@ -105,9 +114,18 @@ export async function GET(request) {
 }
 
 /**
- * POST /api/v1/jobs — match jobs against a provided resume (no auth)
+ * POST /api/v1/jobs — match jobs against a provided resume.
+ *
+ * Unauthenticated (this powers the CLI's local-resume mode), but rate-limited
+ * per IP and capped tighter than the authed GET — each call burns server-side
+ * OpenAI embedding + classification spend.
  */
 export async function POST(request) {
+  const limited = rateLimitResponse(request);
+  if (limited) {
+    return limited;
+  }
+
   try {
     const body = await request.json();
     const { resume } = body;
@@ -122,8 +140,8 @@ export async function POST(request) {
       );
     }
 
-    const top = Math.min(parseInt(body.top) || 20, 500);
-    const days = parseInt(body.days) || 90;
+    const top = Math.min(parseInt(body.top) || 20, 100);
+    const days = Math.min(parseInt(body.days) || 90, 120);
     const remote = body.remote === true;
     const globalRemote = body.global_remote === true;
     const minSalary = parseInt(body.min_salary) || 0;
@@ -140,9 +158,14 @@ export async function POST(request) {
       remote,
       globalRemote,
       minSalary,
+      includeUnknownSalary: body.include_unknown_salary === true,
       search,
       shouldRerank: false,
       stateMap: null,
+      candidate: {
+        location: extractLocation(resume),
+        remoteOnly: remote || globalRemote,
+      },
     });
 
     return NextResponse.json({ jobs, total: jobs.length });

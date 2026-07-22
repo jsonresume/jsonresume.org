@@ -127,6 +127,10 @@ async function cmdSearch() {
   const minSalary = parseInt(getArg('--min-salary'));
   if (minSalary > 0) params.set('min_salary', String(minSalary));
   if (getArg('--search')) params.set('search', getArg('--search'));
+  // AI reranking is on by default server-side (it is the only ordering with
+  // acceptable precision) but adds ~10-30s; --fast skips it.
+  if (hasFlag('--fast')) params.set('rerank', 'false');
+  else console.error('  Ranking with AI (use --fast to skip)...');
 
   const { jobs } = await api(`/jobs?${params}`);
 
@@ -164,10 +168,14 @@ async function cmdSearch() {
   console.log(' ' + '─'.repeat(112));
 
   for (const j of filtered) {
+    // Display the score the list is actually ordered by (server-computed
+    // decay/rerank blend), falling back for older servers.
+    const score =
+      j.score ?? j.combined_score ?? j.decayed_similarity ?? j.similarity;
     const line =
       ' ' +
       stateIcon(j.state).padEnd(3) +
-      String(j.similarity).padEnd(7) +
+      String(score).padEnd(7) +
       String(j.id).padEnd(8) +
       (j.title || '').slice(0, 33).padEnd(35) +
       (j.company || '').slice(0, 23).padEnd(25) +
@@ -346,6 +354,7 @@ SEARCH OPTIONS
   --remote                          Remote jobs only
   --min-salary N                    Minimum salary in thousands (e.g. 150)
   --search TERM                     Keyword filter (searches title, company, skills)
+  --fast                            Skip AI reranking (faster, lower quality order)
   --interested                      Show only jobs you marked interested
   --applied                         Show only jobs you marked applied
 

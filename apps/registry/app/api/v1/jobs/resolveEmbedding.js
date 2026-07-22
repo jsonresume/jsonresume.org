@@ -7,7 +7,7 @@
  *  - the user's own resume: embed it, optionally blending a HyDE embedding.
  *
  * Returns either { error: { message, status } } for a client-facing failure or
- * { embedding, resumeText, searchPrompt } on success.
+ * { embedding, resumeText, searchPrompt, candidateLocation } on success.
  */
 import { logger } from '@/lib/logger';
 import {
@@ -30,6 +30,21 @@ const buildProfileResumeText = (resume) =>
     .filter(Boolean)
     .join('\n');
 
+/**
+ * Human-readable candidate location for the reranker ("Melbourne, AU").
+ * The embedding text deliberately omits location; the reranker must not
+ * (the 2026-07 eval saw onsite-SF roles in a Melbourne candidate's top 5).
+ */
+export const extractLocation = (resume) => {
+  const loc = resume?.basics?.location;
+  if (!loc) {
+    return '';
+  }
+  return [loc.city, loc.region, loc.countryCode]
+    .filter(Boolean)
+    .join(', ');
+};
+
 const resolveFromProfile = async ({ username, searchId, shouldRerank }) => {
   const { data: profile, error: profileErr } = await getSupabase()
     .from('search_profiles')
@@ -42,10 +57,13 @@ const resolveFromProfile = async ({ username, searchId, shouldRerank }) => {
   }
 
   let resumeText = '';
+  let candidateLocation = '';
   if (shouldRerank) {
     const res = await fetch(`${REGISTRY_BASE}/${username}.json`);
     if (res.ok) {
-      resumeText = buildProfileResumeText(await res.json());
+      const resume = await res.json();
+      resumeText = buildProfileResumeText(resume);
+      candidateLocation = extractLocation(resume);
     }
   }
 
@@ -53,6 +71,7 @@ const resolveFromProfile = async ({ username, searchId, shouldRerank }) => {
     embedding: profile.embedding,
     resumeText,
     searchPrompt: profile.prompt || '',
+    candidateLocation,
   };
 };
 
@@ -75,7 +94,12 @@ const resolveFromResume = async ({ username, useHyde }) => {
     }
   }
 
-  return { embedding, resumeText: result.text, searchPrompt: '' };
+  return {
+    embedding,
+    resumeText: result.text,
+    searchPrompt: '',
+    candidateLocation: extractLocation(resume),
+  };
 };
 
 /**

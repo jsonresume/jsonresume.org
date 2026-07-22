@@ -137,8 +137,11 @@ function JobRow({
 }) {
   const loc = formatLocation(job.location, job.remote);
   const sal = formatSalary(job.salary, job.salary_usd);
-  const score =
-    typeof job.similarity === 'number' ? job.similarity.toFixed(2) : '—';
+  // Display the score the list is actually ordered by (server decay/rerank
+  // blend), falling back for older servers that only send similarity.
+  const sortScore =
+    job.score ?? job.combined_score ?? job.decayed_similarity ?? job.similarity;
+  const score = typeof sortScore === 'number' ? sortScore.toFixed(2) : '—';
   const age = formatAge(job.posted_at);
   const icon = stateIcon(job.state);
   const dossierIcon =
