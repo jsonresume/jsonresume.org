@@ -1,5 +1,11 @@
 # @jsonresume/jsonresume-theme-professional
 
+## 1.0.22
+
+### Patch Changes
+
+- Republish: 1.0.21 collided with a previously published version on npm.
+
 ## 1.0.21
 
 ### Patch Changes

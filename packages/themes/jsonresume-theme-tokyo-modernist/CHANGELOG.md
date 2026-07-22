@@ -1,5 +1,11 @@
 # @jsonresume/jsonresume-theme-tokyo-modernist
 
+## 1.0.7
+
+### Patch Changes
+
+- Republish: 1.0.6 collided with a previously published version on npm.
+
 ## 1.0.6
 
 ### Patch Changes
