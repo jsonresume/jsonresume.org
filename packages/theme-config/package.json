@@ -1,6 +1,6 @@
 {
   "name": "@jsonresume/theme-metadata",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": false,
   "description": "Theme registry metadata for JSON Resume themes — names, descriptions, tags, authors, and helpers (THEME_METADATA, THEME_NAMES, getRandomTheme) for building theme galleries and pickers",
   "type": "module",

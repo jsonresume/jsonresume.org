@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-marketing-narrative",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Marketing professionals - your narrative and campaigns are the focus",
   "main": "./dist/index.js",
   "type": "module",

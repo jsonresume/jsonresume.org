@@ -1,5 +1,11 @@
 # @jsonresume/jobs
 
+## 0.14.3
+
+### Patch Changes
+
+- fb57055: Remove unused dependencies flagged by knip (`async` from resume-cli, `@ai-sdk/anthropic` from @jsonresume/jobs). No runtime behavior change; slims the install footprint.
+
 ## 0.14.2
 
 ### Patch Changes

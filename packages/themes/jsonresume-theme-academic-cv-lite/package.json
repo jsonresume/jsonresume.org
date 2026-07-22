@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-academic-cv-lite",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Academic professionals - publications matter most. Scholarly, formal, elegant simplicity.",
   "main": "./dist/index.js",
   "type": "module",

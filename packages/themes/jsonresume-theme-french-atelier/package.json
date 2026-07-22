@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-french-atelier",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Artistic precision with editorial-inspired layout, high-contrast serif titles, and deep plum accents",
   "type": "module",
   "main": "./index.jsx",
