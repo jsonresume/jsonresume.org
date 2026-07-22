@@ -7,6 +7,32 @@
       "type": "string",
       "description": "Similar to the standard date type, but each section after the year is optional. e.g. 2014-06-29 or 2023-04",
       "pattern": "^([1-2][0-9]{3}-[0-1][0-9]-[0-3][0-9]|[1-2][0-9]{3}-[0-1][0-9]|[1-2][0-9]{3})$"
+    },
+    "location": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "address": {
+          "type": "string",
+          "description": "e.g. Teststraße 1234"
+        },
+        "postalCode": {
+          "type": "string",
+          "description": "e.g. 12345"
+        },
+        "city": {
+          "type": "string",
+          "description": "e.g. Teststadt"
+        },
+        "countryCode": {
+          "type": "string",
+          "description": "ISO 3166-1 alpha-2-based country codes, e.g. DE"
+        },
+        "region": {
+          "type": "string",
+          "description": "e.g. Testregion"
+        }
+      }
     }
   },
   "properties": {
@@ -49,28 +75,7 @@
           "description": "Write a short 2-3 sentence biography about yourself"
         },
         "location": {
-          "type": "object",
-          "additionalProperties": true,
-          "properties": {
-            "address": {
-              "type": "string",
-              "description": "To add multiple address lines, use \n. For example, 1234 Glücklichkeit Straße\nHinterhaus 5. Etage li."
-            },
-            "postalCode": {
-              "type": "string"
-            },
-            "city": {
-              "type": "string"
-            },
-            "countryCode": {
-              "type": "string",
-              "description": "code as per ISO-3166-1 ALPHA-2, e.g. US, AU, IN"
-            },
-            "region": {
-              "type": "string",
-              "description": "The general region where you live. Can be a US state, or a province, for instance."
-            }
-          }
+          "$ref": "#/definitions/location"
         },
         "profiles": {
           "type": "array",
@@ -108,8 +113,7 @@
             "description": "e.g. Facebook"
           },
           "location": {
-            "type": "string",
-            "description": "e.g. Menlo Park, CA"
+            "$ref": "#/definitions/location"
           },
           "description": {
             "type": "string",
@@ -155,6 +159,9 @@
             "type": "string",
             "description": "e.g. Facebook"
           },
+          "location": {
+            "$ref": "#/definitions/location"
+          },
           "position": {
             "type": "string",
             "description": "e.g. Software Engineer"
@@ -194,6 +201,9 @@
           "institution": {
             "type": "string",
             "description": "e.g. Massachusetts Institute of Technology"
+          },
+          "location": {
+            "$ref": "#/definitions/location"
           },
           "url": {
             "type": "string",

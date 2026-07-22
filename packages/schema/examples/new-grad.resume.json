@@ -31,6 +31,11 @@
   "education": [
     {
       "institution": "University of Washington",
+      "location": {
+        "city": "Seattle",
+        "region": "Washington",
+        "countryCode": "US"
+      },
       "url": "https://www.washington.edu/",
       "area": "Computer Science",
       "studyType": "Bachelor of Science",
@@ -49,7 +54,11 @@
   "work": [
     {
       "name": "Outreach",
-      "location": "Seattle, WA",
+      "location": {
+        "city": "Seattle",
+        "region": "Washington",
+        "countryCode": "US"
+      },
       "description": "Sales engagement platform",
       "position": "Software Engineering Intern",
       "url": "https://www.outreach.io/",
@@ -64,7 +73,11 @@
     },
     {
       "name": "Allen Institute for AI",
-      "location": "Seattle, WA",
+      "location": {
+        "city": "Seattle",
+        "region": "Washington",
+        "countryCode": "US"
+      },
       "description": "Non-profit AI research institute",
       "position": "Research Intern",
       "url": "https://allenai.org/",
