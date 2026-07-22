@@ -29,7 +29,9 @@ describe('buildKeywordPredicate', () => {
     const p = buildKeywordPredicate('ai');
     expect(p(job())).toBe(true); // "AI" in title
     expect(
-      p(job({ title: 'Backend Dev', description: 'maintain available domains' }))
+      p(
+        job({ title: 'Backend Dev', description: 'maintain available domains' })
+      )
     ).toBe(false); // "ai" only inside words
   });
 

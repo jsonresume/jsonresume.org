@@ -1,293 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Box, Text, useInput, useStdout } from 'ink';
+import { Box, Text, useInput } from 'ink';
 import { h } from './h.js';
-import {
-  stateIcon,
-  truncate,
-  formatSalary,
-  formatLocation,
-  formatAge,
-} from '../formatters.js';
-
-// Column gap between each column
-const GAP = 2;
-
-function useColumns(hasRerank, compact) {
-  const { stdout } = useStdout();
-  const cols = stdout?.columns || 120;
-  const available = compact ? Math.floor(cols * 0.4) : cols;
-
-  const dossierW = 2;
-
-  if (compact) {
-    // Compact mode: just score, title, dossier, status
-    const scoreW = 5;
-    const statusW = 2;
-    const gaps = GAP * 2;
-    const titleW = Math.max(
-      10,
-      available - scoreW - dossierW - statusW - gaps - 2
-    );
-    return {
-      cols: available,
-      titleW,
-      compW: 0,
-      locW: 0,
-      scoreW,
-      statusW,
-      dossierW,
-    };
-  }
-
-  const scoreW = 5;
-  const aiW = hasRerank ? 3 : 0;
-  const salaryW = 12;
-  const statusW = 2;
-  const cursorW = 2;
-  const gaps = GAP * (hasRerank ? 7 : 6);
-  const fixed =
-    cursorW + scoreW + aiW + salaryW + dossierW + statusW + gaps + 2;
-  const flex = Math.max(30, available - fixed);
-  const titleW = Math.max(12, Math.floor(flex * 0.35));
-  const compW = Math.max(10, Math.floor(flex * 0.3));
-  const locW = Math.max(8, flex - titleW - compW);
-  return {
-    cols: available,
-    titleW,
-    compW,
-    locW,
-    scoreW,
-    salaryW,
-    statusW,
-    dossierW,
-    aiW,
-  };
-}
-
-function HeaderRow({ hasRerank, titleW, compW, locW, compact }) {
-  if (compact) {
-    return h(
-      Box,
-      { paddingX: 1 },
-      h(Box, { width: 2 }),
-      h(
-        Box,
-        { width: 5, marginRight: GAP },
-        h(Text, { bold: true, dimColor: true }, 'Score')
-      ),
-      h(Box, { flexGrow: 1 }, h(Text, { bold: true, dimColor: true }, 'Title'))
-    );
-  }
-
-  return h(
-    Box,
-    { paddingX: 1 },
-    h(Box, { width: 2 }),
-    h(
-      Box,
-      { width: 5, marginRight: GAP },
-      h(Text, { bold: true, dimColor: true }, 'Score')
-    ),
-    hasRerank
-      ? h(
-          Box,
-          { width: 3, marginRight: GAP },
-          h(Text, { bold: true, dimColor: true }, 'AI')
-        )
-      : null,
-    h(
-      Box,
-      { width: titleW, marginRight: GAP },
-      h(Text, { bold: true, dimColor: true }, 'Title')
-    ),
-    h(
-      Box,
-      { width: compW, marginRight: GAP },
-      h(Text, { bold: true, dimColor: true }, 'Company')
-    ),
-    h(
-      Box,
-      { width: locW, marginRight: GAP },
-      h(Text, { bold: true, dimColor: true }, 'Location')
-    ),
-    h(
-      Box,
-      { width: 12, marginRight: GAP },
-      h(Text, { bold: true, dimColor: true }, 'Salary')
-    ),
-    h(
-      Box,
-      { width: 2, marginRight: GAP },
-      h(Text, { bold: true, dimColor: true }, '📋')
-    ),
-    h(Box, { width: 2 }, h(Text, { bold: true, dimColor: true }, '  '))
-  );
-}
-
-function JobRow({
-  job,
-  selected,
-  hasRerank,
-  titleW,
-  compW,
-  locW,
-  marked,
-  compact,
-  dossierStatus,
-}) {
-  const loc = formatLocation(job.location, job.remote);
-  const sal = formatSalary(job.salary, job.salary_usd);
-  // Display the score the list is actually ordered by (server decay/rerank
-  // blend), falling back for older servers that only send similarity.
-  const sortScore =
-    job.score ?? job.combined_score ?? job.decayed_similarity ?? job.similarity;
-  const score = typeof sortScore === 'number' ? sortScore.toFixed(2) : '—';
-  const age = formatAge(job.posted_at);
-  const icon = stateIcon(job.state);
-  const dossierIcon =
-    dossierStatus === 'generating' ? '◌' : dossierStatus === 'done' ? '📋' : '';
-
-  const stColor =
-    job.state === 'interested'
-      ? 'green'
-      : job.state === 'applied'
-      ? 'cyan'
-      : job.state === 'maybe'
-      ? 'yellow'
-      : job.state === 'not_interested'
-      ? 'red'
-      : undefined;
-
-  const color = selected ? 'white' : stColor;
-  const bg = selected ? 'blue' : undefined;
-  const cursorStr = marked ? '● ' : selected ? '▸ ' : '  ';
-  const props = {
-    inverse: selected,
-    color,
-    backgroundColor: bg,
-    wrap: 'truncate',
-  };
-  const markerProps = {
-    inverse: selected,
-    color: marked ? 'magenta' : color,
-    backgroundColor: bg,
-  };
-
-  const dossierColor = dossierStatus === 'generating' ? 'yellow' : 'green';
-
-  if (compact) {
-    return h(
-      Box,
-      { paddingX: 1 },
-      h(Box, { width: 2 }, h(Text, markerProps, cursorStr)),
-      h(
-        Box,
-        { width: 5, marginRight: GAP },
-        h(Text, { ...props, dimColor: !selected }, score)
-      ),
-      h(
-        Box,
-        { flexGrow: 1 },
-        h(Text, props, truncate(job.title || '—', titleW))
-      ),
-      h(
-        Box,
-        { width: 2 },
-        h(
-          Text,
-          { ...props, color: dossierIcon ? dossierColor : undefined },
-          dossierIcon || ' '
-        )
-      ),
-      h(Box, { width: 2 }, h(Text, props, icon))
-    );
-  }
-
-  return h(
-    Box,
-    { paddingX: 1 },
-    h(Box, { width: 2 }, h(Text, markerProps, cursorStr)),
-    h(
-      Box,
-      { width: 5, marginRight: GAP },
-      h(Text, { ...props, dimColor: !selected }, score)
-    ),
-    hasRerank
-      ? h(
-          Box,
-          { width: 3, marginRight: GAP },
-          h(Text, props, job.rerank_score ? String(job.rerank_score) : '—')
-        )
-      : null,
-    h(
-      Box,
-      { width: titleW, marginRight: GAP },
-      h(Text, props, truncate(job.title || '—', titleW - 1))
-    ),
-    h(
-      Box,
-      { width: compW, marginRight: GAP },
-      h(Text, props, truncate(job.company || '—', compW - 1))
-    ),
-    h(
-      Box,
-      { width: locW, marginRight: GAP },
-      h(Text, props, truncate(age ? `${loc} · ${age}` : loc, locW - 1))
-    ),
-    h(Box, { width: 12, marginRight: GAP }, h(Text, props, truncate(sal, 11))),
-    h(
-      Box,
-      { width: 2, marginRight: GAP },
-      h(
-        Text,
-        { ...props, color: dossierIcon ? dossierColor : undefined },
-        dossierIcon || ' '
-      )
-    ),
-    h(Box, { width: 2 }, h(Text, props, icon))
-  );
-}
-
-function EmptyState({ tab }) {
-  const messages = {
-    all: [
-      '',
-      '  No matching jobs found.',
-      '',
-      '  Try:',
-      '    f  Increase date range or remove filters',
-      '    /  Try a different search profile',
-      '    R  Refresh results',
-    ],
-    interested: [
-      '',
-      '  No jobs marked as interested yet.',
-      '',
-      '  Press i on jobs you like.',
-    ],
-    applied: [
-      '',
-      '  No applications tracked yet.',
-      '',
-      '  Press x to mark jobs as applied.',
-    ],
-    maybe: ['', '  No maybes yet.', '', '  Press m on jobs to revisit later.'],
-    passed: [
-      '',
-      '  No passed jobs.',
-      '',
-      "  Press p on jobs that aren't a fit.",
-    ],
-  };
-
-  return h(
-    Box,
-    { flexDirection: 'column', paddingX: 2, paddingY: 1 },
-    ...(messages[tab] || messages.all).map((line, i) =>
-      h(Text, { key: i, dimColor: true }, line)
-    )
-  );
-}
+import { useColumns, HeaderRow } from './jobListLayout.js';
+import JobRow, { TierSeparator } from './JobRow.js';
+import EmptyState from './EmptyState.js';
+import { hasTierData, buildTierRows } from './tierHelpers.js';
 
 export default function JobList({
   jobs,
@@ -304,11 +21,22 @@ export default function JobList({
   tab,
   compact,
   reservedRows,
+  filters,
+  appliedQuery,
+  totalCount,
 }) {
   const [scroll, setScroll] = useState(0);
   const [selected, setSelected] = useState(new Set());
   const reserved = reservedRows || (compact ? 6 : 10);
   const visibleRows = Math.max((process.stdout.rows || 30) - reserved, 5);
+
+  // Flat display rows: job rows plus tier band separators (when tiers exist).
+  // Scrolling operates in flat-row space so separators consume rows too;
+  // with no tier data the flat index equals the job index (today's behavior).
+  const rows = buildTierRows(jobs);
+  const cursorFlat = rows.findIndex(
+    (r) => r.type === 'job' && r.jobIndex === cursor
+  );
 
   useEffect(() => {
     if (cursor >= jobs.length && jobs.length > 0) {
@@ -317,9 +45,14 @@ export default function JobList({
   }, [jobs.length]);
 
   useEffect(() => {
-    if (cursor < scroll) setScroll(cursor);
-    if (cursor >= scroll + visibleRows) setScroll(cursor - visibleRows + 1);
-  }, [cursor, visibleRows]);
+    if (cursorFlat < 0) return;
+    // Scrolling up onto the first job of a band reveals its separator too.
+    const top =
+      rows[cursorFlat - 1]?.type === 'separator' ? cursorFlat - 1 : cursorFlat;
+    if (top < scroll) setScroll(top);
+    if (cursorFlat >= scroll + visibleRows)
+      setScroll(cursorFlat - visibleRows + 1);
+  }, [cursorFlat, visibleRows]);
 
   useEffect(() => {
     setSelected(new Set());
@@ -378,45 +111,50 @@ export default function JobList({
     { isActive }
   );
 
-  if (jobs.length === 0) return h(EmptyState, { tab });
+  if (jobs.length === 0)
+    return h(EmptyState, { tab, filters, appliedQuery, totalCount });
 
-  const visible = jobs.slice(scroll, scroll + visibleRows);
-  const hasRerank = visible.some((j) => j.rerank_score);
+  const visible = rows.slice(scroll, scroll + visibleRows);
+  const hasRerank = visible.some((r) => r.type === 'job' && r.job.rerank_score);
+  const hasTiers = hasTierData(jobs);
   const { cols, titleW, compW, locW } = useColumns(hasRerank, compact);
 
-  const rows = visible.map((job, i) =>
-    h(JobRow, {
-      key: job.id,
-      job,
-      selected: scroll + i === cursor,
-      marked: selected.has(job.id),
-      hasRerank,
-      titleW,
-      compW,
-      locW,
-      compact,
-      dossierStatus: getDossierStatus ? getDossierStatus(job.id) : null,
-    })
+  const rendered = visible.map((row) =>
+    row.type === 'separator'
+      ? h(TierSeparator, { key: `sep-${row.tier}`, label: row.label })
+      : h(JobRow, {
+          key: row.job.id,
+          job: row.job,
+          selected: row.jobIndex === cursor,
+          marked: selected.has(row.job.id),
+          hasRerank,
+          hasTiers,
+          titleW,
+          compW,
+          locW,
+          compact,
+          dossierStatus: getDossierStatus ? getDossierStatus(row.job.id) : null,
+        })
   );
 
+  const visJobs = visible.filter((r) => r.type === 'job');
+  const first = visJobs.length ? visJobs[0].jobIndex + 1 : 0;
+  const last = visJobs.length ? visJobs[visJobs.length - 1].jobIndex + 1 : 0;
+
   const info = [];
-  info.push(
-    `${scroll + 1}–${Math.min(scroll + visibleRows, jobs.length)} of ${
-      jobs.length
-    }`
-  );
+  info.push(`${first}–${last} of ${jobs.length}`);
   if (selected.size > 0) info.push(`${selected.size} selected`);
 
   return h(
     Box,
     { flexDirection: 'column' },
-    h(HeaderRow, { hasRerank, titleW, compW, locW, compact }),
+    h(HeaderRow, { hasRerank, hasTiers, titleW, compW, locW, compact }),
     h(
       Box,
       { paddingX: 1 },
       h(Text, { dimColor: true }, '─'.repeat(Math.max(10, cols - 2)))
     ),
-    ...rows,
+    ...rendered,
     h(
       Box,
       { paddingX: 1, justifyContent: 'space-between' },
@@ -425,7 +163,7 @@ export default function JobList({
         Box,
         { gap: 1 },
         scroll > 0 ? h(Text, { dimColor: true }, '↑') : null,
-        scroll + visibleRows < jobs.length
+        scroll + visibleRows < rows.length
           ? h(Text, { dimColor: true }, '↓')
           : null
       )

@@ -4,9 +4,10 @@ import { logger } from '@/lib/logger';
 import { rateLimitResponse } from '../../pathways/rateLimit';
 import { getSupabase, getResumeEmbedding } from './matchingHelpers';
 import { resolveEmbedding, extractLocation } from './resolveEmbedding';
+import { buildLexicalQuery } from './matching/lexical';
 import {
   partitionFeedback,
-  applyNegativeSignal,
+  applyFeedbackSignal,
   runMatchPipeline,
 } from './matchPipeline';
 
@@ -60,25 +61,31 @@ export async function GET(request) {
       );
     }
     let { embedding } = resolved;
-    const { resumeText, searchPrompt, candidateLocation } = resolved;
+    const { resumeText, searchPrompt, candidateLocation, lexicalQuery } =
+      resolved;
 
-    // Get user feedback for state filtering + negative signal
+    // Get user feedback for state filtering + Rocchio relevance feedback
     const supabase = getSupabase();
     const { data: feedback } = await supabase
       .from('pathways_job_feedback')
       .select('job_id, sentiment')
       .eq('user_id', user.username);
 
-    const { stateMap, dossierSet, rejectedJobIds } =
+    const { stateMap, dossierSet, likedJobIds, rejectedJobIds } =
       partitionFeedback(feedback);
 
-    // Negative feedback: subtract rejected job direction from embedding
-    embedding = await applyNegativeSignal(embedding, rejectedJobIds);
+    // Rocchio: pull toward liked-job centroid, push from rejected centroid
+    embedding = await applyFeedbackSignal(
+      embedding,
+      likedJobIds,
+      rejectedJobIds
+    );
 
     const results = await runMatchPipeline({
       embedding,
       resumeText,
       searchPrompt,
+      lexicalQuery,
       top,
       days,
       remote,
@@ -153,6 +160,7 @@ export async function POST(request) {
       embedding,
       resumeText,
       searchPrompt: '',
+      lexicalQuery: buildLexicalQuery(resume),
       top,
       days,
       remote,

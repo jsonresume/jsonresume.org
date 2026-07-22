@@ -30,6 +30,8 @@ import {
   filterJobsByQuery,
   computeCounts,
 } from './jobFilters.js';
+import { orderJobsByTier, formatDigest } from './tierHelpers.js';
+import { useLastSeenDigest } from './useLastSeen.js';
 import { createAppKeyHandler } from './appKeyHandler.js';
 
 function App({ baseUrl, apiKey, apiClient }) {
@@ -129,11 +131,15 @@ function App({ baseUrl, apiKey, apiClient }) {
     };
   }, [ai]);
 
-  // Apply inline search filter
+  // Apply inline search filter, then group into tier bands (no-op when the
+  // server hasn't sent tier data yet — pre-rerank pass or old server).
   const jobs = useMemo(
-    () => filterJobsByQuery(rawJobs, appliedQuery),
+    () => orderJobsByTier(filterJobsByQuery(rawJobs, appliedQuery)),
     [rawJobs, appliedQuery]
   );
+
+  // Digest for the header ("N jobs · X strong · Y good · Z new since last visit").
+  const digest = useLastSeenDigest(allJobs, loading);
 
   useEffect(() => {
     api
@@ -260,6 +266,7 @@ function App({ baseUrl, apiKey, apiClient }) {
     filters: activeFilters,
     searchName: activeSearch?.name || null,
     appliedQuery,
+    digest,
   });
 
   const statusBar = h(StatusBar, {
@@ -284,6 +291,9 @@ function App({ baseUrl, apiKey, apiClient }) {
     onAISummary: handleAISummary,
     onDossier: handleDossier,
     getDossierStatus: ai.getDossierStatus,
+    filters: activeFilters,
+    appliedQuery,
+    totalCount: allJobs.length,
   };
 
   // Split-pane: compact list on left, detail on right
@@ -347,7 +357,8 @@ function App({ baseUrl, apiKey, apiClient }) {
           onAIBatch: handleAIBatch,
           onExport: handleExport,
           isActive: !inlineSearch,
-          reservedRows: 10,
+          // The digest row in the header consumes one extra line when shown.
+          reservedRows: formatDigest(digest) ? 11 : 10,
         })
       : null,
     view === 'list' && inlineSearch

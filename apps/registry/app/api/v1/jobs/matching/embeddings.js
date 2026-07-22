@@ -18,7 +18,8 @@ const CACHE_MAX = 200;
 const resumeCache = new Map();
 const hydeCache = new Map();
 
-const hashKey = (text) => crypto.createHash('sha256').update(text).digest('hex');
+const hashKey = (text) =>
+  crypto.createHash('sha256').update(text).digest('hex');
 
 const cacheGet = (cache, key) => cache.get(key);
 const cacheSet = (cache, key, value) => {
@@ -55,7 +56,11 @@ export async function generateHydeEmbedding(resumeText) {
     }),
   ]);
 
-  const blended = interpolate(hydeResult.embedding, resumeResult.embedding, 0.35);
+  const blended = interpolate(
+    hydeResult.embedding,
+    resumeResult.embedding,
+    0.35
+  );
   cacheSet(hydeCache, key, blended);
   return blended;
 }

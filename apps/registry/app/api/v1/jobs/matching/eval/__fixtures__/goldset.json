@@ -1,0 +1,127 @@
+{
+  "_provenance": "Hermetic copy of docs/jobs-ranking/goldset-2026-07.json — keep in sync with that file.",
+  "best": [
+    {
+      "id": 267093,
+      "title": "Senior Frontend Engineer",
+      "company": "Zeitlabs",
+      "why": "Near-exact stack match: Next.js App Router, React, TypeScript, Tailwind, monorepo packages, and explicitly Vercel AI SDK + OpenAI API. Fully remote with flexible hours and competitive pay — the UTC+3 target is workable given flexibility. Open-source community (Open edX) suits a career OSS maintainer."
+    },
+    {
+      "id": 265702,
+      "title": "Senior Fullstack Engineer",
+      "company": "Sequent Tech",
+      "why": "Fully remote, no geo restriction, open-source secure voting platform — TypeScript/React/GraphQL/PostgreSQL core with Rust he can grow into. Exceptional mission fit: Thomas worked at EFF, ran anti-surveillance campaigns, and won a 'Defender of the Internet' award for civic-tech work."
+    },
+    {
+      "id": 265775,
+      "title": "Fullstack Engineer (Multiple Positions)",
+      "company": "SerpApi",
+      "why": "Remote-first with explicit international comp ($150-180k US; local avg +20% outside US), async culture, public roadmap, and donates to the EFF where Thomas worked. Rails/React/JS stack matches his Rails + senior JS background. API-platform product suits an API-design veteran (cdnjs, JSON Resume registry)."
+    },
+    {
+      "id": 266615,
+      "title": "Engineering Lead / Senior Engineer",
+      "company": "This Dot Labs",
+      "why": "Senior (7+ yrs) role in exactly his lane: React, TypeScript, Node.js, OpenAI API, AI-enabled workflows. This Dot is deeply embedded in the JS open-source community where he is a known figure (Backbone, cdnjs, JSON Resume). Fully remote; needs some US-timezone overlap, which Melbourne mornings can cover."
+    },
+    {
+      "id": 268565,
+      "title": "Product Engineer",
+      "company": "Orbit",
+      "why": "AI-first product company, fully remote, end-to-end TypeScript (tRPC, zod, Node, React, AWS) with spec-driven agentic development — matches his product-engineer profile and daily AI-agent tooling work. Bootstrapped and profitable, so stable; ownership from idea to production is exactly how he operates."
+    },
+    {
+      "id": 268138,
+      "title": "Senior Software Engineer (Contract)",
+      "company": "BW Events Tech",
+      "why": "Fully remote with no stated geo restriction, senior 8+ yrs, $60-100/hr, high-autonomy end-to-end ownership, and the team explicitly leans on AI tooling for productivity — a culture he already lives. Python/Django plus React/AWS/GCP/Postgres is well within his full-stack range."
+    },
+    {
+      "id": 268136,
+      "title": "Founding Voice AI Engineer",
+      "company": "Namecoach / Euphonia",
+      "why": "Fully remote, flexible part-time/contract ($30-120/hr) 0-to-1 founding AI role with a stated path to Chief AI Officer, working with Claude Code/Cursor/OpenAI. Speech/G2P is a new domain, but his from-scratch GPT training project (custom autograd, tokenizers, Vulkan kernels) shows he can go this deep."
+    },
+    {
+      "id": 265716,
+      "title": "Founding Engineer",
+      "company": "Talk Machine",
+      "why": "Remote-first, well-funded consumer voice-AI startup from the Citymapper founder building voice agents for email/calendar — squarely in his AI-agent wheelhouse with JS/Node/Python overlap. Competitive pay plus meaningful options; founding scope matches his repeated 0-to-1 and CTO history."
+    },
+    {
+      "id": 265713,
+      "title": "Senior Software Engineer (Web / Backend / Forward-Deployed)",
+      "company": "Akkio",
+      "why": "AI-native agentic workflows at product-market fit, $160-240k, senior scope across web/backend — his LLM + TS/Node skill set is a direct hit. Caveats a recruiter would flag: US-listed remote (timezone/eligibility to confirm) and Vue rather than React, a minor switch for a 15-yr JS veteran."
+    },
+    {
+      "id": 266848,
+      "title": "Senior Backend Software Developer",
+      "company": "BitPay",
+      "why": "Senior Node.js/MongoDB/REST backend role — his core backend stack — at an established (2011) global crypto-payments leader, and he has directly relevant crypto experience (lead tech at exchange Blockbid, Bitcoin wallet frontend at Tokenized). Remote, though the 'US-based team' framing needs a conversation."
+    },
+    {
+      "id": 265690,
+      "title": "First Engineer",
+      "company": "Mitty",
+      "why": "Fully remote first-engineer role, $150k base + founding equity, building an AI video product on OpenAI/Anthropic — strong AI-product fit and founding scope he has held before (CTO, multiple 0-to-1 builds). Hawaii timezone overlaps Melbourne well. Swift/iOS emphasis is the stretch to flag."
+    },
+    {
+      "id": 265679,
+      "title": "Senior/Staff Software Engineer — AI / Agentic apps",
+      "company": "Grafana Labs",
+      "why": "The single best skill match in the pool: building agentic systems (Grafana Assistant, AI Observability) with Claude, TypeScript, Go, Python at a top-tier open-source remote company — his MCP/agent-infrastructure and OSS-maintainer profile is tailor-made. Listing says US & Canada, so geo flexibility must be probed, but it is worth the ask."
+    }
+  ],
+  "worst": [
+    {
+      "id": 265717,
+      "title": "Unspecified Position",
+      "company": "Unknown",
+      "why": "Junk posting: no role, no company, no requirements — literally described as containing only a brief negative comment. Should never be shown to anyone."
+    },
+    {
+      "id": 258116,
+      "title": "Growth Marketer (Entry-level)",
+      "company": "We The Flywheel",
+      "why": "Entry-level, part-time marketing role (Google Ads, Mailchimp, Ahrefs) shown to a 15-year senior engineer — wrong profession and wrong seniority in one listing."
+    },
+    {
+      "id": 266841,
+      "title": "Senior Mechanical Engineer",
+      "company": "Cargo Robotics",
+      "why": "Mechanical engineering (SolidWorks, ANSYS, GD&T, 3D printing), onsite Menlo Park. Completely wrong discipline and wrong continent for a software engineer in Melbourne."
+    },
+    {
+      "id": 265622,
+      "title": "Freelance Web Developer (Math Research Site)",
+      "company": "Private Client (Trevor)",
+      "why": "Entry-level freelance gig paying $300-1500 total for a barebones static site, with an explicit ban on using AI — insultingly junior and tiny pay for a senior AI engineer, and contrary to how he works."
+    },
+    {
+      "id": 258345,
+      "title": "AI Model Assessment Specialist",
+      "company": "Confidential",
+      "why": "High-volume RLHF data-labeling contract gig at $22-70/hr with Google Sheets and Labelbox as core tools. 'AI' keyword aside, this is annotation piecework, not engineering — a clear downgrade he would be annoyed to see."
+    },
+    {
+      "id": 268139,
+      "title": "Full-stack Developer",
+      "company": "US enterprise software company",
+      "why": "Maintaining a legacy .NET Framework 4.8 WebForms codebase with SQL Server — a stack he has never used — restricted to LATAM-resident contractors at $3.5-4.9k/mo, mid-level. Wrong stack, wrong geography, wrong seniority, and far below his market rate."
+    },
+    {
+      "id": 263155,
+      "title": "Multiple Open Roles — Android Systems, Full-Stack, Hardware, Founder's Office",
+      "company": "Stpkr Technologies",
+      "why": "Entry/junior roles, in-person in Noida, India, on Android systems and hardware (KiCad, J-Link, LineageOS), with intern-first hiring. Wrong seniority, wrong location, wrong domain."
+    },
+    {
+      "id": 268556,
+      "title": "Founding Technologist + Full Stack Developer",
+      "company": "Hataginow",
+      "why": "Zero salary ('0 + equity') founding role at a pre-funding wellness/spirituality startup run by non-technical founders. A 15-year veteran with paid options should not be pitched unpaid equity-only work."
+    }
+  ]
+}

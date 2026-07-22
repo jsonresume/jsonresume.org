@@ -1,0 +1,5154 @@
+{
+  "_provenance": "Snapshot of 100 real scored jobs for the thomasdavis resume (2026-07 ranking eval). Descriptions trimmed to 300 chars. Regenerate per eval/README.md.",
+  "jobs": [
+    {
+      "id": 268139,
+      "title": "Full-stack Developer",
+      "company": "US enterprise software company",
+      "description": "US enterprise software company building and maintaining legacy web applications for business customers. The company focuses on long-term product support and incremental modernization for enterprise clients. They hire remote developers across LATAM for contract roles and emphasize strong backend and ",
+      "skills": [
+        {
+          "name": "C#",
+          "keywords": [".NET Framework 4.8", "OOP", "LINQ"]
+        },
+        {
+          "name": ".NET Framework",
+          "keywords": ["4.8", "WebForms", "ASP.NET MVC"]
+        },
+        {
+          "name": "ASP.NET WebForms",
+          "keywords": ["WebForms", "postback", "viewstate"]
+        },
+        {
+          "name": "ASP.NET MVC",
+          "keywords": ["Razor", "Controllers", "Views"]
+        },
+        {
+          "name": "Razor",
+          "keywords": ["Razor", "views", "cshtml"]
+        },
+        {
+          "name": "Vue.js",
+          "keywords": ["Vue 2", "components", "single-file components"]
+        },
+        {
+          "name": "Axios",
+          "keywords": ["HTTP requests", "REST"]
+        },
+        {
+          "name": "SCSS",
+          "keywords": ["Sass", "stylesheets"]
+        },
+        {
+          "name": "SQL Server",
+          "keywords": ["T-SQL", "Stored Procedures", "Query Tuning"]
+        },
+        {
+          "name": "IIS",
+          "keywords": ["Deployment", "Configuration"]
+        }
+      ],
+      "remote": "Full",
+      "salary": "$3.5k–$4.9k/mo",
+      "salary_usd": null,
+      "posted_at": "2026-07-13T14:27:55+00:00",
+      "similarity": 0.398,
+      "decayed_similarity": 0.437
+    },
+    {
+      "id": 265804,
+      "title": "Multiple Roles — Prior Labs Open Positions",
+      "company": "Prior Labs",
+      "description": "Prior Labs builds foundation models for tabular data, extending ML capabilities to clinical trials, financial models, and scientific experiments. The team published TabPFN v2 in Nature, scaled capabilities ~20x, and has millions of downloads and thousands of GitHub stars. The company is a ~35 person",
+      "skills": [
+        {
+          "name": "Python",
+          "keywords": ["numpy", "pandas", "scikit-learn"]
+        },
+        {
+          "name": "PyTorch",
+          "keywords": [
+            "distributed training",
+            "Lightning",
+            "model implementation"
+          ]
+        },
+        {
+          "name": "TensorFlow",
+          "keywords": ["SavedModel", "TF Serving"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["containers", "image optimization"]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["Helm", "clusters", "autoscaling"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["EC2", "S3", "ECS", "EKS"]
+        },
+        {
+          "name": "GCP",
+          "keywords": ["GKE", "Cloud Storage", "Compute Engine"]
+        },
+        {
+          "name": "CUDA",
+          "keywords": ["GPU acceleration", "cuDNN"]
+        },
+        {
+          "name": "SQL",
+          "keywords": ["PostgreSQL", "data modeling", "analytics"]
+        },
+        {
+          "name": "Git",
+          "keywords": ["CI/CD", "code reviews"]
+        },
+        {
+          "name": "REST",
+          "keywords": ["API design", "OpenAPI"]
+        }
+      ],
+      "remote": "None",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-02T06:21:04+00:00",
+      "similarity": 0.444,
+      "decayed_similarity": 0.434
+    },
+    {
+      "id": 268136,
+      "title": "Founding Voice AI Engineer",
+      "company": "Namecoach / Euphonia",
+      "description": "Namecoach has built the largest verified pronunciation dataset (~2M recordings and extensive human-verified phonetic spellings). Euphonia is a middleware layer that ensures TTS engines pronounce names, acronyms, and out-of-vocabulary terms correctly by providing phoneme-level control. This is a 0-to",
+      "skills": [
+        {
+          "name": "Claude Code",
+          "keywords": ["agentic development", "model-assisted coding"]
+        },
+        {
+          "name": "Cursor",
+          "keywords": ["agentic development", "IDE tooling"]
+        },
+        {
+          "name": "OpenAI",
+          "keywords": ["TTS models", "API integration"]
+        },
+        {
+          "name": "ElevenLabs",
+          "keywords": ["TTS integration", "voice synthesis"]
+        },
+        {
+          "name": "G2P",
+          "keywords": [
+            "grapheme-to-phoneme",
+            "phoneme modeling",
+            "lexicon generation"
+          ]
+        },
+        {
+          "name": "IPA",
+          "keywords": ["phonetic transcription", "phonology"]
+        },
+        {
+          "name": "ASR",
+          "keywords": ["speech recognition", "acoustic modeling", "decoding"]
+        },
+        {
+          "name": "TTS",
+          "keywords": ["text-to-speech", "prosody", "voice cloning"]
+        },
+        {
+          "name": "Python",
+          "keywords": ["production code", "data pipelines", "scripting"]
+        },
+        {
+          "name": "PyTorch",
+          "keywords": ["model training", "fine-tuning", "speech models"]
+        },
+        {
+          "name": "TensorFlow",
+          "keywords": ["model development", "serving"]
+        }
+      ],
+      "remote": "Full",
+      "salary": "$30-120/hr",
+      "salary_usd": null,
+      "posted_at": "2026-07-14T00:20:28+00:00",
+      "similarity": 0.377,
+      "decayed_similarity": 0.421
+    },
+    {
+      "id": 265622,
+      "title": "Freelance Web Developer (Math Research Site)",
+      "company": "Private Client (Trevor)",
+      "description": "Private client seeking a freelance developer to build a small, barebones math research website. The client requires no AI or AI-generated content to be used in development. Initial work is a small project with potential follow-up tasks based on needs and satisfaction.",
+      "skills": [
+        {
+          "name": "HTML",
+          "keywords": ["semantic HTML", "accessibility", "static pages"]
+        },
+        {
+          "name": "CSS",
+          "keywords": ["responsive design", "Flexbox", "basic layout"]
+        },
+        {
+          "name": "JavaScript",
+          "keywords": ["vanilla JS", "DOM manipulation", "lightweight scripts"]
+        },
+        {
+          "name": "MathJax",
+          "keywords": ["TeX rendering", "display math", "inline math"]
+        },
+        {
+          "name": "KaTeX",
+          "keywords": [
+            "fast math typesetting",
+            "server-side rendering optional"
+          ]
+        },
+        {
+          "name": "LaTeX",
+          "keywords": ["math typesetting", "equations", "paper formatting"]
+        },
+        {
+          "name": "Git",
+          "keywords": ["GitHub", "version control", "commits"]
+        },
+        {
+          "name": "Netlify",
+          "keywords": ["static site deployment", "continuous deploy", "DNS"]
+        }
+      ],
+      "remote": "Full",
+      "salary": "300-1500",
+      "salary_usd": null,
+      "posted_at": "2026-07-02T00:33:14+00:00",
+      "similarity": 0.428,
+      "decayed_similarity": 0.419
+    },
+    {
+      "id": 268562,
+      "title": "Platform Engineer",
+      "company": "Chronograph",
+      "description": "Chronograph builds cloud-based analytics and data management solutions for private capital markets. The company serves large and sophisticated venture capital, private equity, and credit funds, helping them understand investment performance in detail. Chronograph is backed by a $140M+ growth equity ",
+      "skills": [
+        {
+          "name": "Kubernetes",
+          "keywords": ["EKS", "Helm", "cluster management", "operators"]
+        },
+        {
+          "name": "Prometheus",
+          "keywords": ["metrics", "alerting", "PromQL"]
+        },
+        {
+          "name": "Grafana",
+          "keywords": ["dashboards", "alerting", "visualization"]
+        },
+        {
+          "name": "Terraform",
+          "keywords": ["IaC", "modules", "state management"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["EKS", "EC2", "S3", "IAM"]
+        },
+        {
+          "name": "GitHub Actions",
+          "keywords": ["CI/CD", "workflows", "pipelines"]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["performance tuning", "replication", "SQL"]
+        },
+        {
+          "name": "Node.js",
+          "keywords": ["npm", "Express", "server-side JavaScript"]
+        },
+        {
+          "name": "Ruby on Rails",
+          "keywords": ["ActiveRecord", "Rails", "background jobs"]
+        },
+        {
+          "name": "Nix",
+          "keywords": ["NixOS", "Nixpkgs", "reproducible builds"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["containers", "images", "containerization"]
+        }
+      ],
+      "remote": "Full",
+      "salary": "175000-215000 USD",
+      "salary_usd": null,
+      "posted_at": "2026-07-14T22:08:42+00:00",
+      "similarity": 0.361,
+      "decayed_similarity": 0.412
+    },
+    {
+      "id": 268557,
+      "title": "Engineering Manager",
+      "company": "Confidential high-growth technology company (recruited via uctalent.io). The company is scaling rapidly and building a distributed engineering organization across North America and internationally. They focus on fast delivery, improving engineering processes, and raising team throughput while maintaining a caring culture.",
+      "description": "Manage and scale a ~10-person distributed engineering team, owning execution, delivery, and people management. Focus is ~90% people management, improving processes, and increasing delivery throughput. Role requires strong technical judgment and experience with distributed/async teams.",
+      "skills": [
+        {
+          "name": "Git",
+          "keywords": ["GitHub", "branching", "code review"]
+        },
+        {
+          "name": "Jira",
+          "keywords": [
+            "issue tracking",
+            "sprint planning",
+            "backlog management"
+          ]
+        },
+        {
+          "name": "PagerDuty",
+          "keywords": ["on-call", "incident response", "alerting"]
+        },
+        {
+          "name": "Datadog",
+          "keywords": ["monitoring", "metrics", "dashboards"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["EC2", "S3", "cloud infrastructure"]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["containers", "deployments", "orchestration"]
+        }
+      ],
+      "remote": "Full",
+      "salary": "180000-230000",
+      "salary_usd": null,
+      "posted_at": "2026-07-15T01:56:12+00:00",
+      "similarity": 0.356,
+      "decayed_similarity": 0.409
+    },
+    {
+      "id": 268140,
+      "title": "Technical Co-Founder",
+      "company": "Regnitive",
+      "description": "Regnitive is an early-stage startup building AI-powered privacy and data governance software for businesses. The company focuses on tools that help organizations manage data privacy, compliance, and governance at scale. This is a founding, equity-based role intended for someone committed to building",
+      "skills": [
+        {
+          "name": "Python",
+          "keywords": ["FastAPI", "Django", "data-science", "ETL"]
+        },
+        {
+          "name": "PyTorch",
+          "keywords": ["transformers", "model-training", "torch"]
+        },
+        {
+          "name": "React",
+          "keywords": ["Hooks", "Next.js", "TypeScript"]
+        },
+        {
+          "name": "Node.js",
+          "keywords": ["Express", "TypeScript", "APIs"]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["SQL", "indexing", "performance-tuning"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["containers", "docker-compose"]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["EKS", "deployment", "scaling"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["EC2", "S3", "RDS", "Lambda"]
+        },
+        {
+          "name": "Git",
+          "keywords": ["GitHub", "CI/CD", "workflows"]
+        }
+      ],
+      "remote": "Hybrid",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-13T18:44:24+00:00",
+      "similarity": 0.362,
+      "decayed_similarity": 0.407
+    },
+    {
+      "id": 268558,
+      "title": "Technical Lead (Hands-On Distributed Systems)",
+      "company": "OneChronos",
+      "description": "OneChronos builds high-performance trading systems that power periodic auction matching infrastructure. The Technical Lead will be an engineering-first leader who is deeply hands-on building production software while guiding technical direction and mentoring engineers. The role emphasizes low-latenc",
+      "skills": [
+        {
+          "name": "Rust",
+          "keywords": [
+            "ownership",
+            "async",
+            "performance",
+            "systems programming"
+          ]
+        },
+        {
+          "name": "C++",
+          "keywords": ["STL", "memory management", "concurrency", "low-latency"]
+        },
+        {
+          "name": "Java",
+          "keywords": ["JVM", "concurrency", "performance tuning"]
+        },
+        {
+          "name": "Linux",
+          "keywords": ["performance tuning", "profiling", "system programming"]
+        },
+        {
+          "name": "Git",
+          "keywords": ["CI/CD", "code review", "branching"]
+        }
+      ],
+      "remote": "Hybrid",
+      "salary": "$200,000-$250,000",
+      "salary_usd": null,
+      "posted_at": "2026-07-14T23:26:20+00:00",
+      "similarity": 0.354,
+      "decayed_similarity": 0.406
+    },
+    {
+      "id": 267087,
+      "title": "Lead On-Premises SRE",
+      "company": "Wave",
+      "description": "Wave builds mobile financial services with the mission of making Africa the first cashless continent. The company offers zero account fees, instant availability, and focuses on unstoppable reliability even where infrastructure is constrained. Since launching in Senegal in 2017, Wave has grown to ser",
+      "skills": [
+        {
+          "name": "Linux",
+          "keywords": [
+            "System Administration",
+            "kernel tuning",
+            "Bash",
+            "systemd"
+          ]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["Cluster Operations", "kubeadm", "Kubelet", "CNI"]
+        },
+        {
+          "name": "VMware",
+          "keywords": ["vSphere", "ESXi", "vCenter", "virtualization"]
+        },
+        {
+          "name": "Ansible",
+          "keywords": ["Infrastructure as Code", "playbooks", "automation"]
+        },
+        {
+          "name": "Prometheus",
+          "keywords": ["Monitoring", "Alerting", "metrics"]
+        },
+        {
+          "name": "Grafana",
+          "keywords": ["Dashboards", "visualization", "alerting"]
+        },
+        {
+          "name": "BGP",
+          "keywords": ["Routing", "peering", "network design"]
+        },
+        {
+          "name": "Python",
+          "keywords": ["Scripting", "automation", "tooling"]
+        }
+      ],
+      "remote": "Full",
+      "salary": "Up to $185,500 + equity",
+      "salary_usd": null,
+      "posted_at": "2026-07-09T09:17:40+00:00",
+      "similarity": 0.38,
+      "decayed_similarity": 0.403
+    },
+    {
+      "id": 265629,
+      "title": "Applied Research Scientist, Clinical AI / Product Manager, Rhythm360",
+      "company": "RhythmScience",
+      "description": "RhythmScience builds Rhythm360, a platform for monitoring cardiac implantable devices (CIEDs) and managing arrhythmia and heart-failure patients. We are hiring two roles: an Applied Research Scientist focused on clinical AI and a Product Manager for Rhythm360. Both roles are US-remote (US hours) and",
+      "skills": [
+        {
+          "name": "Python",
+          "keywords": ["pandas", "numpy", "scripting"]
+        },
+        {
+          "name": "PyTorch",
+          "keywords": ["model training", "torch", "validation"]
+        },
+        {
+          "name": "SQL",
+          "keywords": ["queries", "data pipelines", "analytics"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["deployment", "S3", "EC2"]
+        },
+        {
+          "name": "LLM",
+          "keywords": ["transformers", "fine-tuning", "Hugging Face"]
+        }
+      ],
+      "remote": "Full",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-01T23:14:48+00:00",
+      "similarity": 0.408,
+      "decayed_similarity": 0.402
+    },
+    {
+      "id": 266848,
+      "title": "Senior Backend Software Developer",
+      "company": "BitPay",
+      "description": "BitPay, Inc., founded in 2011, is the world’s leading blockchain payments company. The company serves top merchants across six continents and builds tools to accept, store, and spend cryptocurrency securely and efficiently. BitPay focuses on scalable, secure payment infrastructure and merchant integ",
+      "skills": [
+        {
+          "name": "Node.js",
+          "keywords": ["Express", "Koa", "Async/await", "TypeScript"]
+        },
+        {
+          "name": "MongoDB",
+          "keywords": ["Mongoose", "Aggregation", "Indexes", "Replica sets"]
+        },
+        {
+          "name": "JavaScript",
+          "keywords": ["ES6+", "Promises", "Event-driven"]
+        },
+        {
+          "name": "REST",
+          "keywords": ["OpenAPI", "JSON", "HTTP"]
+        },
+        {
+          "name": "GitHub",
+          "keywords": ["Git", "Pull requests", "CI/CD"]
+        },
+        {
+          "name": "Bitcoin",
+          "keywords": ["Payments", "Wallets", "On-chain transactions"]
+        }
+      ],
+      "remote": "Full",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-07T13:29:42+00:00",
+      "similarity": 0.385,
+      "decayed_similarity": 0.4
+    },
+    {
+      "id": 265653,
+      "title": "Senior Software Engineer",
+      "company": "Spacelift",
+      "description": "Spacelift is a VC-funded startup building an infrastructure orchestrator and collaborative management platform for Infrastructure-as-Code. The company focuses on integrations with tools like OpenTofu, Terraform, Terragrunt, CloudFormation, Pulumi, Kubernetes and Ansible and aims to deliver a deeply ",
+      "skills": [
+        {
+          "name": "Go",
+          "keywords": ["Golang", "Concurrency", "Modules"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["EC2", "S3", "IAM", "Lambda"]
+        },
+        {
+          "name": "Terraform",
+          "keywords": ["HCL", "Modules", "State management"]
+        },
+        {
+          "name": "OpenTofu",
+          "keywords": ["Terraform-compatible", "IaC"]
+        },
+        {
+          "name": "Terragrunt",
+          "keywords": ["Terraform wrapper", "DRY configurations"]
+        },
+        {
+          "name": "Pulumi",
+          "keywords": ["Infrastructure as code", "Programming model"]
+        },
+        {
+          "name": "Ansible",
+          "keywords": ["Playbooks", "Configuration management"]
+        },
+        {
+          "name": "CloudFormation",
+          "keywords": ["AWS templates", "Stacks"]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["K8s", "Deployments", "Helm"]
+        },
+        {
+          "name": "SaltStack",
+          "keywords": ["Configuration management", "Orchestration"]
+        }
+      ],
+      "remote": "Full",
+      "salary": "$80k-$110k+",
+      "salary_usd": null,
+      "posted_at": "2026-07-01T19:45:20+00:00",
+      "similarity": 0.402,
+      "decayed_similarity": 0.397
+    },
+    {
+      "id": 266843,
+      "title": "Senior AI Research Engineer",
+      "company": "Adyen",
+      "description": "Adyen is a global fintech payments and banking platform serving B2B customers and processing very high transaction volumes daily. The company builds products such as Adyen Agentic and Uplift to innovate in commerce and payments. This role sits on a team focused on discovery AI research and end-to-en",
+      "skills": [
+        {
+          "name": "Python",
+          "keywords": ["numpy", "pandas", "scipy", "scripting"]
+        },
+        {
+          "name": "PyTorch",
+          "keywords": ["transformers", "model training", "custom modules"]
+        },
+        {
+          "name": "Hugging Face",
+          "keywords": ["Transformers", "datasets", "model hub"]
+        },
+        {
+          "name": "TensorFlow",
+          "keywords": ["Keras", "model training", "serving"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["containerization", "image build", "CI"]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["deployment", "scaling", "helm"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["S3", "EC2", "ECS", "Lambda"]
+        },
+        {
+          "name": "SQL",
+          "keywords": ["data querying", "analytics", "Postgres"]
+        },
+        {
+          "name": "Git",
+          "keywords": ["version control", "collaboration", "code review"]
+        }
+      ],
+      "remote": "Hybrid",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-07T15:44:14+00:00",
+      "similarity": 0.379,
+      "decayed_similarity": 0.396
+    },
+    {
+      "id": 266615,
+      "title": "Engineering Lead / Senior Engineer",
+      "company": "This Dot Labs",
+      "description": "This Dot Labs is hiring engineering leads and senior engineers focused on frontend systems and AI-enabled workflows. The team operates fully remotely but requires overlap with US time zones. The role emphasizes building production systems, systems thinking, and technical ownership across teams.",
+      "skills": [
+        {
+          "name": "React",
+          "keywords": ["Hooks", "Component design", "Performance optimization"]
+        },
+        {
+          "name": "TypeScript",
+          "keywords": ["Type safety", "Generics", "Tooling"]
+        },
+        {
+          "name": "JavaScript",
+          "keywords": ["ES6+", "Async patterns", "DOM"]
+        },
+        {
+          "name": "Node.js",
+          "keywords": ["APIs", "Build tooling", "Server-side rendering"]
+        },
+        {
+          "name": "OpenAI API",
+          "keywords": ["LLMs", "Prompt engineering", "Inference integration"]
+        },
+        {
+          "name": "HTML/CSS",
+          "keywords": ["Responsive design", "Accessibility", "CSS-in-JS"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["Containerization", "Local dev environments"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["S3", "Lambda", "Cloud deployments"]
+        },
+        {
+          "name": "Git",
+          "keywords": ["Branching", "Code review", "CI/CD integration"]
+        }
+      ],
+      "remote": "Full",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-06T13:59:19+00:00",
+      "similarity": 0.382,
+      "decayed_similarity": 0.394
+    },
+    {
+      "id": 265741,
+      "title": "Full Stack Engineer (also Backend & AI/ML)",
+      "company": "Shepherd",
+      "description": "Shepherd is an AI-native commercial insurance platform pursuing fully autonomous underwriting. The company focuses on providing coverage for high‑hazard infrastructure such as data centers, semiconductor fabs, and renewable energy assets. Shepherd recently announced a $42M Series B and partners with",
+      "skills": [
+        {
+          "name": "TypeScript",
+          "keywords": ["Type Safety", "Generics", "Node.js", "React"]
+        },
+        {
+          "name": "React",
+          "keywords": ["Hooks", "Next.js", "Component Design", "TypeScript"]
+        },
+        {
+          "name": "Next.js",
+          "keywords": ["SSR", "Routing", "API Routes", "Static Props"]
+        },
+        {
+          "name": "GraphQL",
+          "keywords": ["Schema Design", "Queries", "Mutations", "Performance"]
+        },
+        {
+          "name": "Apollo",
+          "keywords": ["Apollo Client", "Apollo Server", "Caching", "GraphQL"]
+        },
+        {
+          "name": "Node.js",
+          "keywords": ["Express", "APIs", "TypeScript", "Server-side"]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["SQL", "Schema Design", "Indexes", "Performance Tuning"]
+        },
+        {
+          "name": "Redis",
+          "keywords": ["Caching", "Pub/Sub", "Session Store", "Performance"]
+        },
+        {
+          "name": "Python",
+          "keywords": ["Data Processing", "ML Pipelines", "APIs"]
+        },
+        {
+          "name": "PyTorch",
+          "keywords": [
+            "Model Training",
+            "Neural Networks",
+            "Research Prototyping"
+          ]
+        }
+      ],
+      "remote": "None",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-01T15:05:00+00:00",
+      "similarity": 0.399,
+      "decayed_similarity": 0.394
+    },
+    {
+      "id": 268565,
+      "title": "Product Engineer",
+      "company": "Orbit",
+      "description": "Orbit is an AI-first logistics operating system replacing the Excel-and-phone stack used across transport logistics. The company is bootstrapped, profitable, and growing in a market with many VC-funded competitors. Customers tend to stay because the product reliably solves operational needs. The Pro",
+      "skills": [
+        {
+          "name": "TypeScript",
+          "keywords": ["Type safety", "Generics", "TSX"]
+        },
+        {
+          "name": "zod",
+          "keywords": ["schema validation", "runtime validation"]
+        },
+        {
+          "name": "tRPC",
+          "keywords": ["type-safe APIs", "RPC"]
+        },
+        {
+          "name": "Node.js",
+          "keywords": ["server-side", "Lambda"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["Lambda", "DynamoDB", "Bedrock", "SST"]
+        },
+        {
+          "name": "AWS Lambda",
+          "keywords": ["serverless", "function deployment"]
+        },
+        {
+          "name": "DynamoDB",
+          "keywords": ["NoSQL", "single-table design"]
+        },
+        {
+          "name": "ElectroDB",
+          "keywords": ["DynamoDB modeling", "entity modeling"]
+        },
+        {
+          "name": "SST",
+          "keywords": ["infrastructure-as-code", "serverless stacks"]
+        },
+        {
+          "name": "React",
+          "keywords": ["Hooks", "component design", "Remix"]
+        },
+        {
+          "name": "Remix",
+          "keywords": ["server rendering", "routing"]
+        },
+        {
+          "name": "React Native",
+          "keywords": ["mobile", "Expo"]
+        },
+        {
+          "name": "Expo",
+          "keywords": ["managed workflow", "mobile tooling"]
+        },
+        {
+          "name": "Bedrock",
+          "keywords": ["AWS Bedrock", "LLM integrations", "AI layer"]
+        }
+      ],
+      "remote": "Full",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-14T09:19:10+00:00",
+      "similarity": 0.341,
+      "decayed_similarity": 0.392
+    },
+    {
+      "id": 267093,
+      "title": "Senior Frontend Engineer",
+      "company": "Zeitlabs",
+      "description": "Zeitlabs is hiring a senior frontend engineer to own core parts of its frontend platform and shared component library strategy. The role spans a legacy React codebase and a modern Next.js (App Router) application, focusing on modernization and reusable packages in a monorepo. The team works with the",
+      "skills": [
+        {
+          "name": "Next.js",
+          "keywords": ["App Router", "SSR", "routing"]
+        },
+        {
+          "name": "React",
+          "keywords": ["hooks", "legacy codebase", "component patterns"]
+        },
+        {
+          "name": "TypeScript",
+          "keywords": ["typing", "generics", "type safety"]
+        },
+        {
+          "name": "Tailwind CSS",
+          "keywords": ["v3", "v4", "utility-first"]
+        },
+        {
+          "name": "Radix UI",
+          "keywords": ["primitives", "accessibility"]
+        },
+        {
+          "name": "Open edX Paragon",
+          "keywords": ["design system", "component library"]
+        },
+        {
+          "name": "Zustand",
+          "keywords": ["state management", "store"]
+        },
+        {
+          "name": "Jotai",
+          "keywords": ["state management", "atoms"]
+        },
+        {
+          "name": "TanStack Query",
+          "keywords": ["react-query", "data fetching", "caching"]
+        },
+        {
+          "name": "Vercel AI SDK",
+          "keywords": ["edge functions", "Vercel"]
+        },
+        {
+          "name": "OpenAI API",
+          "keywords": ["ChatGPT", "embeddings", "LLM integration"]
+        },
+        {
+          "name": "Jest",
+          "keywords": ["unit testing", "mocking"]
+        },
+        {
+          "name": "Testing Library",
+          "keywords": ["react-testing-library", "DOM testing"]
+        },
+        {
+          "name": "next-intl",
+          "keywords": ["i18n", "RTL", "localization"]
+        },
+        {
+          "name": "Vercel",
+          "keywords": ["deployment", "hosting"]
+        }
+      ],
+      "remote": "Full",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-09T08:17:17+00:00",
+      "similarity": 0.367,
+      "decayed_similarity": 0.392
+    },
+    {
+      "id": 265739,
+      "title": "Rust Developer / Senior React Native Developer (Polycentric)",
+      "company": "FUTO",
+      "description": "FUTO builds technologies and funds projects to resist centralization and industry consolidation. The company combines internal engineering, targeted investments, grants, and public education to support decentralizing infrastructure. Polycentric is an open-source distributed social network focused on",
+      "skills": [
+        {
+          "name": "Rust",
+          "keywords": ["async", "Serde", "Tokio", "systems programming"]
+        },
+        {
+          "name": "React Native",
+          "keywords": ["iOS", "Android", "Expo", "mobile UI"]
+        },
+        {
+          "name": "Git",
+          "keywords": ["GitHub", "open-source", "code review"]
+        },
+        {
+          "name": "libp2p",
+          "keywords": ["p2p", "peer-to-peer", "networking"]
+        }
+      ],
+      "remote": "Full",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-01T15:22:35+00:00",
+      "similarity": 0.396,
+      "decayed_similarity": 0.391
+    },
+    {
+      "id": 265689,
+      "title": "Agentic AI Solutions Manager / AI Solutions Engineer",
+      "company": "Quantum Rise",
+      "description": "Quantum Rise is an AI-forward consulting startup serving the mid-market in the US. We help companies across industries understand how to leverage artificial intelligence in their day-to-day operations and design outcome-driven solutions. The firm focuses on applied machine learning, automation, and ",
+      "skills": [
+        {
+          "name": "Python",
+          "keywords": ["NumPy", "Pandas", "scikit-learn"]
+        },
+        {
+          "name": "PyTorch",
+          "keywords": ["model training", "fine-tuning"]
+        },
+        {
+          "name": "LangChain",
+          "keywords": ["agents", "chains", "tooling"]
+        },
+        {
+          "name": "OpenAI",
+          "keywords": ["API", "GPT", "chat completions"]
+        },
+        {
+          "name": "Hugging Face",
+          "keywords": ["transformers", "model hub"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["containerization", "images"]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["orchestration", "deployments"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["EC2", "S3", "Lambda"]
+        },
+        {
+          "name": "SQL",
+          "keywords": ["data querying", "Postgres", "analytics"]
+        },
+        {
+          "name": "Git",
+          "keywords": ["version control", "CI/CD"]
+        }
+      ],
+      "remote": "Hybrid",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-01T17:28:20+00:00",
+      "similarity": 0.395,
+      "decayed_similarity": 0.391
+    },
+    {
+      "id": 268555,
+      "title": "Multiple Openings — Developer Advocate; GPU Kernel Engineer; Infrastructure Engineer (Kubernetes); Synthetic Data MTS; Product Engineer; Senior Backend/Platform Engineer; Founding Recruiter",
+      "company": "TypeSafe AI",
+      "description": "TypeSafe AI is a seed-stage AI company based in San Francisco led by experienced AI founders with backgrounds at OpenAI and Google Brain. The team is building reliable, fast AI models that combine frontier LLM intelligence with code-level speed and reliability. They offer full health benefits, a 401",
+      "skills": [
+        {
+          "name": "CUDA",
+          "keywords": ["CUDA C++", "GPU programming", "PTX", "cuDNN"]
+        },
+        {
+          "name": "PyTorch",
+          "keywords": ["transformers", "distributed training", "AMP"]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["k8s", "Helm", "Operators", "cluster operations"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["containerization", "OCI", "image optimization"]
+        },
+        {
+          "name": "Python",
+          "keywords": ["asyncio", "data pipelines", "ML tooling"]
+        },
+        {
+          "name": "C++",
+          "keywords": ["performance", "low-level systems", "profiling"]
+        },
+        {
+          "name": "Go",
+          "keywords": ["microservices", "gRPC", "concurrency"]
+        },
+        {
+          "name": "Transformers",
+          "keywords": ["Hugging Face", "fine-tuning", "inference optimization"]
+        },
+        {
+          "name": "Linux",
+          "keywords": ["system administration", "performance tuning", "bash"]
+        },
+        {
+          "name": "Git",
+          "keywords": ["CI/CD", "branching", "code review"]
+        }
+      ],
+      "remote": "None",
+      "salary": "Competitive; top-tier early-stage AI compensation + meaningful equity",
+      "salary_usd": null,
+      "posted_at": "2026-07-15T01:42:41+00:00",
+      "similarity": 0.333,
+      "decayed_similarity": 0.389
+    },
+    {
+      "id": 265756,
+      "title": "Mobile Engineer",
+      "company": "Klutch AI",
+      "description": "Klutch AI builds an AI platform for construction with offline-first mobile and web apps that automate jobsite workflows and connect field teams to the office. The company focuses on document and blueprint understanding and handling real-world jobsite constraints like no-signal conditions and rugged ",
+      "skills": [
+        {
+          "name": "React Native",
+          "keywords": ["Expo", "Hooks", "Native Modules", "Performance"]
+        },
+        {
+          "name": "Expo",
+          "keywords": ["Managed Workflow", "EAS", "OTA updates"]
+        },
+        {
+          "name": "TypeScript",
+          "keywords": ["React", "Web Components", "Typing"]
+        },
+        {
+          "name": "Scala",
+          "keywords": ["JVM", "Functional Programming", "Play Framework"]
+        },
+        {
+          "name": "Play Framework",
+          "keywords": ["Scala", "HTTP APIs", "Routing"]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["SQL", "Indexes", "Migrations"]
+        },
+        {
+          "name": "iOS",
+          "keywords": ["UIKit", "Permissions", "App Store"]
+        },
+        {
+          "name": "Android",
+          "keywords": ["Permissions", "Camera", "Lifecycle"]
+        }
+      ],
+      "remote": "None",
+      "salary": "Competitive",
+      "salary_usd": null,
+      "posted_at": "2026-07-02T22:01:36+00:00",
+      "similarity": 0.388,
+      "decayed_similarity": 0.388
+    },
+    {
+      "id": 268556,
+      "title": "Founding Technologist + Full Stack Developer",
+      "company": "Hataginow",
+      "description": "Early-stage wellness and spirituality startup led by two non-YC entrepreneurs, Andrew and Michal, with backgrounds in blockchain, education, hospitality, and service businesses. The product focuses on high-quality video and audio streaming, strong data privacy, and global payments, and already has a",
+      "skills": [
+        {
+          "name": "Next.js",
+          "keywords": ["React", "SSR", "Static Generation", "Routing"]
+        },
+        {
+          "name": "React Native",
+          "keywords": ["Android", "iOS", "native modules", "Expo"]
+        },
+        {
+          "name": "TypeScript",
+          "keywords": ["types", "generics", "type-safety"]
+        },
+        {
+          "name": "Tailwind",
+          "keywords": ["utility-first CSS", "responsive design", "styling"]
+        },
+        {
+          "name": "Agora",
+          "keywords": [
+            "RTC",
+            "real-time audio",
+            "video streaming",
+            "SDK integration"
+          ]
+        },
+        {
+          "name": "Firebase",
+          "keywords": [
+            "Auth",
+            "Firestore",
+            "Realtime Database",
+            "Cloud Functions"
+          ]
+        },
+        {
+          "name": "Android",
+          "keywords": [
+            "Play Store",
+            "mobile debugging",
+            "platform compatibility"
+          ]
+        },
+        {
+          "name": "iOS",
+          "keywords": [
+            "App Store",
+            "mobile debugging",
+            "platform compatibility"
+          ]
+        }
+      ],
+      "remote": "Full",
+      "salary": "0 + equity",
+      "salary_usd": null,
+      "posted_at": "2026-07-15T12:32:31+00:00",
+      "similarity": 0.329,
+      "decayed_similarity": 0.388
+    },
+    {
+      "id": 266605,
+      "title": "Databricks Engineer (Solutions Architect / Forward Deployed Engineer)",
+      "company": "Lunt",
+      "description": "Lunt is a staffing and consulting firm that places engineering talent on data platform projects, focusing on enterprise Databricks engagements. They source subcontractor Databricks engineers and solutions architects to help large customers migrate and build on the platform. Lunt coordinates both sho",
+      "skills": [
+        {
+          "name": "Databricks",
+          "keywords": [
+            "Databricks Runtime",
+            "Jobs",
+            "Workspace",
+            "Clusters",
+            "Delta Lake"
+          ]
+        },
+        {
+          "name": "Apache Spark",
+          "keywords": [
+            "PySpark",
+            "Spark SQL",
+            "Structured Streaming",
+            "Performance tuning"
+          ]
+        },
+        {
+          "name": "Delta Lake",
+          "keywords": ["ACID", "Time travel", "CDC", "Optimization"]
+        },
+        {
+          "name": "Python",
+          "keywords": ["PySpark", "pandas", "scripting"]
+        },
+        {
+          "name": "SQL",
+          "keywords": ["Spark SQL", "Query optimization", "Analytical queries"]
+        },
+        {
+          "name": "React",
+          "keywords": ["Component development", "Frontend for Databricks apps"]
+        },
+        {
+          "name": "Node.js",
+          "keywords": ["API development", "Express"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["S3", "IAM", "EC2", "Glue"]
+        }
+      ],
+      "remote": "Full",
+      "salary": "120-140/hr",
+      "salary_usd": null,
+      "posted_at": "2026-07-07T00:29:17+00:00",
+      "similarity": 0.372,
+      "decayed_similarity": 0.387
+    },
+    {
+      "id": 267876,
+      "title": "Founding Engineer / CTO",
+      "company": "FanShares (Sports Trading Exchange)",
+      "description": "FanShares is building a peer-to-peer sports trading exchange where fans buy and sell positions in individual athletes using real money and a central limit order book. The product uses a rules-based rating computed from official on-field statistics and provides mechanical settlement with no house — u",
+      "skills": [
+        {
+          "name": "Rust",
+          "keywords": ["low-latency", "concurrency", "systems programming"]
+        },
+        {
+          "name": "Go",
+          "keywords": ["concurrency", "microservices", "networking"]
+        },
+        {
+          "name": "C++",
+          "keywords": ["low-latency", "memory management", "high-performance"]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["ACID", "replication", "partitioning"]
+        },
+        {
+          "name": "Kafka",
+          "keywords": ["streaming", "real-time pipeline", "event sourcing"]
+        },
+        {
+          "name": "Redis",
+          "keywords": ["caching", "in-memory", "pub/sub"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["containerization", "images", "CI/CD"]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["orchestration", "scaling", "deployments"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["EC2", "S3", "RDS", "managed services"]
+        },
+        {
+          "name": "Ethereum",
+          "keywords": [
+            "smart contracts",
+            "on-chain custody",
+            "wallet integration"
+          ]
+        }
+      ],
+      "remote": "Full",
+      "salary": "140000-200000",
+      "salary_usd": null,
+      "posted_at": "2026-07-12T21:59:39+00:00",
+      "similarity": 0.343,
+      "decayed_similarity": 0.387
+    },
+    {
+      "id": 265619,
+      "title": "Senior Product Manager — Earned Wage Access / Onboarding & Activation",
+      "company": "FINN App",
+      "description": "FINN App is a fintech company founded in 2022 that provides full-time employees access to earned wages and financial tools to help them earn and save more. The company is already active in multiple countries and is expanding its product scope and markets rapidly. FINN operates as a small global remo",
+      "skills": [
+        {
+          "name": "SQL",
+          "keywords": ["PostgreSQL", "analytical queries", "data extraction"]
+        },
+        {
+          "name": "Amplitude",
+          "keywords": ["event tracking", "funnel analysis", "cohort analysis"]
+        },
+        {
+          "name": "Mixpanel",
+          "keywords": ["event analytics", "funnels", "retention"]
+        },
+        {
+          "name": "Google Analytics",
+          "keywords": ["web analytics", "conversion tracking", "goals"]
+        },
+        {
+          "name": "Figma",
+          "keywords": ["mockups", "prototyping", "design collaboration"]
+        },
+        {
+          "name": "Jira",
+          "keywords": ["issue tracking", "backlog management", "sprints"]
+        },
+        {
+          "name": "Confluence",
+          "keywords": ["product docs", "knowledge sharing"]
+        },
+        {
+          "name": "Notion",
+          "keywords": ["roadmaps", "specs", "team docs"]
+        },
+        {
+          "name": "Excel",
+          "keywords": ["financial modelling", "pivot tables", "data analysis"]
+        }
+      ],
+      "remote": "Full",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-01T23:48:45+00:00",
+      "similarity": 0.39,
+      "decayed_similarity": 0.387
+    },
+    {
+      "id": 268138,
+      "title": "Senior Software Engineer",
+      "company": "BW Events Tech",
+      "description": "BW Events Tech builds ShowUp, an end-to-end platform that runs live events worldwide, handling check-in, badging, session scanning, lead capture and exhibitor portals. The product is used at hundreds of events annually, including large enterprise customers, and must operate reliably in real-time on-",
+      "skills": [
+        {
+          "name": "Python",
+          "keywords": ["Django", "async", "unit testing"]
+        },
+        {
+          "name": "Django",
+          "keywords": ["ORM", "REST", "middleware"]
+        },
+        {
+          "name": "React",
+          "keywords": ["Hooks", "JSX", "component design"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["EC2", "S3", "Lambda"]
+        },
+        {
+          "name": "GCP",
+          "keywords": ["Compute Engine", "Cloud Storage", "Cloud Functions"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["containers", "Compose", "image builds"]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["SQL", "indexes", "schema design"]
+        },
+        {
+          "name": "Git",
+          "keywords": ["branching", "CI/CD", "code review"]
+        },
+        {
+          "name": "REST",
+          "keywords": ["API design", "JSON", "versioning"]
+        }
+      ],
+      "remote": "Full",
+      "salary": "60-100 USD/hr (DOE)",
+      "salary_usd": null,
+      "posted_at": "2026-07-13T13:39:16+00:00",
+      "similarity": 0.339,
+      "decayed_similarity": 0.387
+    },
+    {
+      "id": 265775,
+      "title": "Multiple Positions: Fullstack Engineer, Customer Success Engineer, Content & SEO Specialists, Developer Advocate",
+      "company": "SerpApi",
+      "description": "SerpApi is the leading API platform for scraping and parsing search engine results, providing 100+ APIs for Google, Google Maps, Google Images, Bing, Baidu and more. The company is remote-first (based in Austin, TX) and emphasizes async communication, continuous integration/deployment, code reviews,",
+      "skills": [
+        {
+          "name": "Ruby",
+          "keywords": ["Rails", "RSpec", "performance"]
+        },
+        {
+          "name": "Ruby on Rails",
+          "keywords": ["ActiveRecord", "ActionController", "Migrations"]
+        },
+        {
+          "name": "MongoDB",
+          "keywords": ["NoSQL", "indexes", "replication"]
+        },
+        {
+          "name": "React",
+          "keywords": ["React.js", "Hooks", "Component Design"]
+        },
+        {
+          "name": "JavaScript",
+          "keywords": ["ES6+", "DOM", "async/await"]
+        },
+        {
+          "name": "Python",
+          "keywords": ["scripting", "APIs"]
+        },
+        {
+          "name": "PHP",
+          "keywords": ["server-side", "web"]
+        },
+        {
+          "name": "Rust",
+          "keywords": ["systems", "performance"]
+        },
+        {
+          "name": "Kotlin",
+          "keywords": ["Android", "JVM"]
+        },
+        {
+          "name": "Swift",
+          "keywords": ["iOS", "Apple SDKs"]
+        },
+        {
+          "name": "Go",
+          "keywords": ["goroutines", "concurrency"]
+        },
+        {
+          "name": "Google APIs",
+          "keywords": ["Google Search", "Google Maps API", "Google Images API"]
+        },
+        {
+          "name": "Bing API",
+          "keywords": ["Bing Search API"]
+        },
+        {
+          "name": "Baidu API",
+          "keywords": ["Baidu Search API"]
+        },
+        {
+          "name": "GitHub",
+          "keywords": ["pull requests", "code reviews", "issues"]
+        },
+        {
+          "name": "REST",
+          "keywords": ["HTTP", "JSON", "API design"]
+        }
+      ],
+      "remote": "Full",
+      "salary": "$150K - $180K a year (1099 for US; local avg +20% outside US)",
+      "salary_usd": null,
+      "posted_at": "2026-07-02T17:21:27+00:00",
+      "similarity": 0.387,
+      "decayed_similarity": 0.386
+    },
+    {
+      "id": 268563,
+      "title": "Senior Backend Engineer",
+      "company": "Instrumentl",
+      "description": "Instrumentl is a profitable, hypergrowth, YC-backed SaaS company building the operating system for grant-funded organizations. More than 5,500 nonprofits use Instrumentl to discover, track, and win grant funding, and the platform has facilitated over $1 billion in funding. This role seeks a strong P",
+      "skills": [
+        {
+          "name": "Python",
+          "keywords": ["asyncio", "typing", "pytest", "performance"]
+        },
+        {
+          "name": "FastAPI",
+          "keywords": ["ASGI", "Pydantic", "REST APIs"]
+        },
+        {
+          "name": "LangChain",
+          "keywords": ["LLMs", "Agents", "Prompting"]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["SQL", "indexes", "performance tuning"]
+        },
+        {
+          "name": "Redis",
+          "keywords": ["caching", "pub/sub", "data structures"]
+        },
+        {
+          "name": "Qdrant",
+          "keywords": ["vector database", "similarity search", "embeddings"]
+        },
+        {
+          "name": "GCP",
+          "keywords": ["GKE", "Cloud Storage", "IAM"]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["Helm", "GKE", "container orchestration"]
+        }
+      ],
+      "remote": "Full",
+      "salary": "175,000 - 220,000",
+      "salary_usd": null,
+      "posted_at": "2026-07-14T18:17:54+00:00",
+      "similarity": 0.328,
+      "decayed_similarity": 0.383
+    },
+    {
+      "id": 266613,
+      "title": "Founding Forward Deployed Engineer / Founding Applied AI Engineer",
+      "company": "Puntt AI",
+      "description": "Puntt AI builds systems to automate review of packaging assets across markets, languages, regulations, and brand standards. The company focuses on production-grade AI that must be almost never wrong, emphasizing retrieval, evaluation, orchestration, and reliability. They are hiring founding engineer",
+      "skills": [
+        {
+          "name": "Python",
+          "keywords": ["numpy", "pandas", "production code", "API integration"]
+        },
+        {
+          "name": "PyTorch",
+          "keywords": ["model training", "fine-tuning", "inference"]
+        },
+        {
+          "name": "TensorFlow",
+          "keywords": ["model serving", "TF Lite", "SavedModel"]
+        },
+        {
+          "name": "LangChain",
+          "keywords": ["retrieval", "prompt orchestration", "chains"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["containerization", "images", "Dockerfile"]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["deployments", "helm", "scaling"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["EC2", "S3", "ECS", "Lambda"]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["schema design", "queries", "indexing"]
+        }
+      ],
+      "remote": "Hybrid",
+      "salary": "$180,000 - $220,000 USD",
+      "salary_usd": null,
+      "posted_at": "2026-07-06T13:25:00+00:00",
+      "similarity": 0.366,
+      "decayed_similarity": 0.38
+    },
+    {
+      "id": 257929,
+      "title": "Software Engineer",
+      "company": "Anterior",
+      "description": "Anterior is an early-stage company building modern web tools and platforms for developer teams. The team focuses on fast, secure, and collaborative product experiences. This listing indicates an onsite hiring need in New York City.",
+      "skills": [
+        {
+          "name": "Python",
+          "keywords": ["Django", "FastAPI", "Flask"]
+        },
+        {
+          "name": "TypeScript",
+          "keywords": ["ES6", "ts-node", "Typed APIs"]
+        },
+        {
+          "name": "React",
+          "keywords": ["Hooks", "Next.js", "Redux"]
+        },
+        {
+          "name": "Node.js",
+          "keywords": ["Express", "REST", "NestJS"]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["SQL", "Indexes", "Migrations"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["EC2", "S3", "RDS"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["Containers", "Dockerfile", "Compose"]
+        }
+      ],
+      "remote": "None",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-05-02T01:25:09+00:00",
+      "similarity": 0.443,
+      "decayed_similarity": 0.379
+    },
+    {
+      "id": 265722,
+      "title": "Full Stack Engineer / AI/ML Engineer / Growth & Marketing Roles",
+      "company": "Sumble",
+      "description": "Sumble is a startup founded by the creators of Kaggle building a knowledge graph from web data focused on go-to-market teams. The product extracts org structure, tech stacks, and signals such as GenAI initiatives and cloud migrations, and already has early revenue and product-market fit. The team of",
+      "skills": [
+        {
+          "name": "Python",
+          "keywords": ["pandas", "requests", "asyncio", "data processing"]
+        },
+        {
+          "name": "SQL",
+          "keywords": ["PostgreSQL", "analytics", "query optimization"]
+        },
+        {
+          "name": "Neo4j",
+          "keywords": ["Cypher", "graph modeling", "knowledge graph"]
+        },
+        {
+          "name": "Elasticsearch",
+          "keywords": ["indexing", "search", "text analysis"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["containerization", "images", "deployment"]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["helm", "cluster management", "scaling"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["EC2", "S3", "IAM", "ECS"]
+        },
+        {
+          "name": "Apache Spark",
+          "keywords": ["big data", "distributed processing", "PySpark"]
+        },
+        {
+          "name": "Apache Airflow",
+          "keywords": ["workflow orchestration", "DAGs", "scheduling"]
+        },
+        {
+          "name": "PyTorch",
+          "keywords": ["deep learning", "model training", "NLP"]
+        },
+        {
+          "name": "TensorFlow",
+          "keywords": ["model deployment", "training", "Keras"]
+        },
+        {
+          "name": "LangChain",
+          "keywords": [
+            "LLM integrations",
+            "prompting",
+            "retrieval-augmented generation"
+          ]
+        },
+        {
+          "name": "React",
+          "keywords": ["hooks", "component design", "frontend features"]
+        },
+        {
+          "name": "TypeScript",
+          "keywords": ["type safety", "frontend tooling", "React"]
+        },
+        {
+          "name": "Node.js",
+          "keywords": ["APIs", "Express", "backend services"]
+        },
+        {
+          "name": "Redis",
+          "keywords": ["caching", "pub/sub", "performance"]
+        },
+        {
+          "name": "Git",
+          "keywords": ["version control", "branching", "review workflows"]
+        },
+        {
+          "name": "Mixpanel",
+          "keywords": ["product analytics", "events", "funnels"]
+        },
+        {
+          "name": "Google Analytics",
+          "keywords": ["web analytics", "conversion tracking"]
+        }
+      ],
+      "remote": null,
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-01T16:05:15+00:00",
+      "similarity": 0.381,
+      "decayed_similarity": 0.378
+    },
+    {
+      "id": 265733,
+      "title": "Senior Software & Product Roles (Multiple)",
+      "company": "Temporal Technologies",
+      "description": "Temporal offers an entirely new way to build scalable and reliable applications. The platform enables developers to focus on business logic instead of managing state or underlying infrastructure. Backed by top venture capital firms, the team is made up of experienced professionals from successful st",
+      "skills": [
+        {
+          "name": "Temporal",
+          "keywords": ["Workflows", "Temporal.io", "Open-source"]
+        },
+        {
+          "name": "Go",
+          "keywords": ["Golang", "Concurrency", "gRPC"]
+        },
+        {
+          "name": "Java",
+          "keywords": ["JVM", "Concurrency", "gRPC"]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["k8s", "EKS", "GKE"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["Containers", "Images", "Dockerfile"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["EC2", "S3", "IAM"]
+        },
+        {
+          "name": "Prometheus",
+          "keywords": ["Monitoring", "Metrics", "Alerting"]
+        },
+        {
+          "name": "Grafana",
+          "keywords": ["Dashboards", "Visualization", "Alerting"]
+        },
+        {
+          "name": "gRPC",
+          "keywords": ["Protobuf", "Streaming", "RPC"]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["SQL", "Transactions", "Replication"]
+        }
+      ],
+      "remote": "Full",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-01T15:58:38+00:00",
+      "similarity": 0.379,
+      "decayed_similarity": 0.377
+    },
+    {
+      "id": 265736,
+      "title": "Fullstack / Product Engineer (multiple roles)",
+      "company": "Yuzu Health",
+      "description": "Yuzu Health is a Series A startup rebuilding health insurance from the ground up with a single integrated platform. The company serves over 1,000 employers and has experienced rapid growth backed by well-known investors. Yuzu's product handles member/HR portals, claims adjudication, invoice automati",
+      "skills": [
+        {
+          "name": "React",
+          "keywords": ["Hooks", "Component Design", "Next.js", "Accessibility"]
+        },
+        {
+          "name": "TypeScript",
+          "keywords": ["Type Safety", "Generics", "tsconfig"]
+        },
+        {
+          "name": "Node.js",
+          "keywords": ["Express", "REST APIs", "Microservices"]
+        },
+        {
+          "name": "Python",
+          "keywords": ["Flask", "Data Processing", "ETL"]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["SQL", "Indexing", "Migrations"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["EC2", "S3", "RDS", "Lambda"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["Containers", "Compose", "Build Pipelines"]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["EKS", "Helm", "Deployment"]
+        },
+        {
+          "name": "Apache Kafka",
+          "keywords": ["Streaming", "Pub/Sub", "Event-driven"]
+        },
+        {
+          "name": "Apache Airflow",
+          "keywords": ["DAGs", "ETL", "Scheduling"]
+        },
+        {
+          "name": "Apache Spark",
+          "keywords": ["PySpark", "Batch Processing", "Distributed Computing"]
+        },
+        {
+          "name": "Snowflake",
+          "keywords": ["Data Warehouse", "Analytics", "SQL"]
+        }
+      ],
+      "remote": "None",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-01T15:23:44+00:00",
+      "similarity": 0.378,
+      "decayed_similarity": 0.376
+    },
+    {
+      "id": 265624,
+      "title": "Member of Technical Staff",
+      "company": "Complement AI",
+      "description": "Complement AI builds AI that autonomously operates factories by connecting fragmented systems and deploying optimization agents. The company unifies factory data sources (ERP, MES, PLCs, spreadsheets) into a single data layer and applies AI to improve operational decisions for profit. Complement emp",
+      "skills": [
+        {
+          "name": "Python",
+          "keywords": ["NumPy", "Pandas", "asyncio", "scripting"]
+        },
+        {
+          "name": "PyTorch",
+          "keywords": ["model training", "GPU", "deep learning"]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["SQL", "data modeling", "analytics"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["containers", "images", "docker-compose"]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["deployments", "pods", "Helm"]
+        },
+        {
+          "name": "React",
+          "keywords": ["hooks", "component design", "TypeScript"]
+        },
+        {
+          "name": "OPC UA",
+          "keywords": ["industrial protocols", "PLC integration", "SCADA"]
+        },
+        {
+          "name": "Excel",
+          "keywords": ["spreadsheets", "data cleaning", "VBA"]
+        },
+        {
+          "name": "REST",
+          "keywords": ["APIs", "HTTP", "integration"]
+        }
+      ],
+      "remote": "None",
+      "salary": "$150K - $300K + Equity",
+      "salary_usd": null,
+      "posted_at": "2026-07-01T23:36:05+00:00",
+      "similarity": 0.376,
+      "decayed_similarity": 0.375
+    },
+    {
+      "id": 265763,
+      "title": "Multiple Technical Staff & Head of Data Acquisition",
+      "company": "Radical Numerics",
+      "description": "Radical Numerics is an AI research lab focused on building general biological intelligence. The company combines distributed systems, model architecture, and numerics research to apply AI to biology and has published in top venues such as Science and Nature. They are scaling research and infrastruct",
+      "skills": [
+        {
+          "name": "Python",
+          "keywords": ["NumPy", "pandas", "scripting", "scientific computing"]
+        },
+        {
+          "name": "PyTorch",
+          "keywords": ["distributed training", "autograd", "custom ops"]
+        },
+        {
+          "name": "JAX",
+          "keywords": ["XLA", "pmap", "jax.numpy"]
+        },
+        {
+          "name": "CUDA",
+          "keywords": ["GPU kernels", "cuDNN", "profiling"]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["EKS", "Helm", "operators"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["containerization", "CI/CD"]
+        },
+        {
+          "name": "Slurm",
+          "keywords": ["HPC", "job scheduling", "cluster management"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["EC2", "S3", "EKS"]
+        },
+        {
+          "name": "Git",
+          "keywords": ["GitHub", "code review", "CI"]
+        },
+        {
+          "name": "Linux",
+          "keywords": ["system administration", "bash", "performance tuning"]
+        }
+      ],
+      "remote": "None",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-02T19:36:10+00:00",
+      "similarity": 0.374,
+      "decayed_similarity": 0.375
+    },
+    {
+      "id": 265671,
+      "title": "Senior Embedded Software Engineer",
+      "company": "PHIOS Group",
+      "description": "PHIOS Group provides specialized software and systems engineering services with a focus on contracting projects across Europe. They engage clients on embedded and fullstack projects and place engineers on-site in multiple locations. This role seeks a senior embedded engineer experienced with C/C++, ",
+      "skills": [
+        {
+          "name": "C",
+          "keywords": ["Embedded C", "C99", "Memory management"]
+        },
+        {
+          "name": "C++",
+          "keywords": ["C++11", "STL", "Templates"]
+        },
+        {
+          "name": "Yocto",
+          "keywords": ["OpenEmbedded", "BitBake", "Custom Linux images"]
+        },
+        {
+          "name": "Bare-metal",
+          "keywords": ["Startup code", "Linker scripts", "Low-level drivers"]
+        },
+        {
+          "name": "Linux",
+          "keywords": ["Embedded Linux", "Kernel", "Device Tree"]
+        },
+        {
+          "name": "Git",
+          "keywords": ["Version control", "Branching", "Code review"]
+        },
+        {
+          "name": "GDB",
+          "keywords": ["Hardware debugging", "Remote debugging", "Tracing"]
+        },
+        {
+          "name": "CMake",
+          "keywords": ["Build systems", "Cross-compilation", "Toolchain files"]
+        }
+      ],
+      "remote": "None",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-01T18:33:57+00:00",
+      "similarity": 0.376,
+      "decayed_similarity": 0.374
+    },
+    {
+      "id": 265746,
+      "title": "Multiple Roles (Engineering & Clinical AI)",
+      "company": "SmarterDx",
+      "description": "SmarterDx builds physician-designed clinical AI that helps hospitals capture appropriate reimbursement across the revenue cycle. The platform analyzes messy clinical records, accounts for complex regulations and payer rules, and reduces manual review burden. The company reached unicorn status in 202",
+      "skills": [
+        {
+          "name": "Python",
+          "keywords": ["pandas", "NumPy", "scikit-learn"]
+        },
+        {
+          "name": "PyTorch",
+          "keywords": ["transformers", "model training", "fine-tuning"]
+        },
+        {
+          "name": "Hugging Face",
+          "keywords": ["transformers", "datasets", "model hub"]
+        },
+        {
+          "name": "SQL",
+          "keywords": ["PostgreSQL", "data querying", "ETL"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["S3", "EC2", "Lambda"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["containerization", "images", "deployment"]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["orchestration", "helm", "cluster management"]
+        },
+        {
+          "name": "FHIR",
+          "keywords": ["clinical data standard", "HL7", "EHR integration"]
+        },
+        {
+          "name": "Large Language Models",
+          "keywords": ["LLMs", "prompting", "contextualization"]
+        },
+        {
+          "name": "HIPAA",
+          "keywords": ["compliance", "data privacy", "security controls"]
+        }
+      ],
+      "remote": "Full",
+      "salary": "150000-250000+ + equity + benefits",
+      "salary_usd": null,
+      "posted_at": "2026-07-01T15:02:50+00:00",
+      "similarity": 0.374,
+      "decayed_similarity": 0.373
+    },
+    {
+      "id": 265787,
+      "title": "Trust & Safety Engineer",
+      "company": "Runway",
+      "description": "Runway builds general-purpose AI world models and tools for creativity, robotics, and science. The company focuses on making advanced generative and simulation models accessible to millions of users while prioritizing safety and responsible deployment. Runway operates across engineering and research",
+      "skills": [
+        {
+          "name": "TypeScript",
+          "keywords": ["API", "Node.js", "Type safety"]
+        },
+        {
+          "name": "Python",
+          "keywords": ["Production code", "Scripting", "Data pipelines"]
+        },
+        {
+          "name": "PyTorch",
+          "keywords": ["Inference", "Model deployment", "TorchServe"]
+        },
+        {
+          "name": "Claude",
+          "keywords": ["LLM moderation", "Anthropic", "Safety prompts"]
+        },
+        {
+          "name": "Gemini",
+          "keywords": ["LLM moderation", "Google", "Safety checks"]
+        },
+        {
+          "name": "ClickHouse",
+          "keywords": ["analytics", "abuse signal detection", "OLAP"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["ECS", "Fargate", "S3", "EC2"]
+        },
+        {
+          "name": "GCP",
+          "keywords": ["Compute", "Storage", "ML tooling"]
+        },
+        {
+          "name": "Terraform",
+          "keywords": ["IaC", "Infrastructure provisioning", "Modules"]
+        },
+        {
+          "name": "Prometheus",
+          "keywords": ["metrics", "alerting", "exporters"]
+        },
+        {
+          "name": "Grafana",
+          "keywords": ["dashboards", "visualization", "alerts"]
+        },
+        {
+          "name": "Amazon ECS",
+          "keywords": ["Fargate", "container orchestration", "tasks"]
+        }
+      ],
+      "remote": "Full",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-02T13:39:37+00:00",
+      "similarity": 0.371,
+      "decayed_similarity": 0.372
+    },
+    {
+      "id": 263278,
+      "title": "Software Engineer (multiple levels)",
+      "company": "Relevant Healthcare",
+      "description": "Relevant builds a data platform that helps safety-net healthcare providers deliver better care using data from their electronic health records. Our customers are non-profit Community Health Centers. We are a small (~25 people), bootstrapped and profitable company with a modern tech stack (Rails, Typ",
+      "skills": [
+        {
+          "name": "Ruby on Rails",
+          "keywords": ["Ruby", "ActiveRecord", "MVC", "RSpec"]
+        },
+        {
+          "name": "TypeScript",
+          "keywords": ["JavaScript", "ES6+", "type safety"]
+        },
+        {
+          "name": "React",
+          "keywords": ["Hooks", "Component design", "State management"]
+        },
+        {
+          "name": "GraphQL",
+          "keywords": ["Schemas", "Resolvers", "Apollo"]
+        },
+        {
+          "name": "D3.js",
+          "keywords": ["Data visualization", "SVG", "Charts"]
+        }
+      ],
+      "remote": "Full",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-06-01T17:33:31+00:00",
+      "similarity": 0.423,
+      "decayed_similarity": 0.372
+    },
+    {
+      "id": 259749,
+      "title": "Software Engineers, Product Managers & Data Scientists (Multiple roles)",
+      "company": "Campus",
+      "description": "Campus is a Series B edtech startup focused on maximizing access to a world-class education. The company is backed by investors including General Catalyst, Founders Fund, Bloomberg Beta, and 8VC. Campus builds technical products and AI to modernize education and is hiring across engineering, data sc",
+      "skills": [
+        {
+          "name": "Python",
+          "keywords": ["PyTorch", "TensorFlow", "Pandas", "scikit-learn"]
+        },
+        {
+          "name": "React",
+          "keywords": ["Hooks", "Next.js", "Redux"]
+        },
+        {
+          "name": "TypeScript",
+          "keywords": ["Type Safety", "Frontend", "Node.js interop"]
+        },
+        {
+          "name": "Node.js",
+          "keywords": ["Express", "REST APIs", "GraphQL"]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["SQL", "Performance", "Indexes"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["EC2", "S3", "Lambda", "RDS"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["Containers", "Docker Compose"]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["EKS", "Helm", "Cluster orchestration"]
+        },
+        {
+          "name": "SQL",
+          "keywords": ["ETL", "Analytics", "PostgreSQL"]
+        },
+        {
+          "name": "Figma",
+          "keywords": ["Prototyping", "Design Systems"]
+        },
+        {
+          "name": "Amplitude",
+          "keywords": ["Product Analytics", "Event Tracking"]
+        }
+      ],
+      "remote": "Hybrid",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-05-08T19:31:06+00:00",
+      "similarity": 0.433,
+      "decayed_similarity": 0.372
+    },
+    {
+      "id": 265959,
+      "title": "Lead DevOps Engineer",
+      "company": "Unexus",
+      "description": "Unexus builds UCS, an omni-channel contact-center platform used by Dutch housing corporations and municipalities. The company is profitable, ~40 people strong and has been in market for 15+ years. The platform is stable but operations and deployment practices are due for modernization. This role wil",
+      "skills": [
+        {
+          "name": ".NET",
+          "keywords": ["C#", ".NET Framework", "Windows services"]
+        },
+        {
+          "name": "PowerShell",
+          "keywords": ["scripting", "deployment automation", "runbooks"]
+        },
+        {
+          "name": "Ansible",
+          "keywords": ["playbooks", "configuration management", "deployment"]
+        },
+        {
+          "name": "Docker Compose",
+          "keywords": ["compose-per-VM", "container orchestration (non-K8s)"]
+        },
+        {
+          "name": "IIS",
+          "keywords": ["web hosting", "Windows integration"]
+        },
+        {
+          "name": "SQL Server",
+          "keywords": ["T-SQL", "backups", "performance tuning"]
+        },
+        {
+          "name": "Azure",
+          "keywords": ["Virtual Machines", "App Services", "Azure DevOps"]
+        },
+        {
+          "name": "Windows Server",
+          "keywords": ["Windows services", "patching", "server administration"]
+        }
+      ],
+      "remote": "Hybrid",
+      "salary": "€85k-€95k",
+      "salary_usd": null,
+      "posted_at": "2026-07-03T13:16:46+00:00",
+      "similarity": 0.366,
+      "decayed_similarity": 0.371
+    },
+    {
+      "id": 266604,
+      "title": "Product & Engineering roles",
+      "company": "Hive (S14)",
+      "description": "Hive powers marketing for 1,500+ live event brands across North America, handling 40M+ emails and SMS monthly and billions of customer data points. The platform integrates in real time with Ticketmaster, Eventbrite, Shopify and 20+ other services. Hive is hiring multiple product and engineering role",
+      "skills": [
+        {
+          "name": "React",
+          "keywords": ["Hooks", "Component design", "Frontend performance"]
+        },
+        {
+          "name": "TypeScript",
+          "keywords": ["Type safety", "Generics", "tsconfig"]
+        },
+        {
+          "name": "JavaScript",
+          "keywords": ["ES6+", "DOM", "Async/Await"]
+        },
+        {
+          "name": "Node.js",
+          "keywords": ["Express", "API development", "Server-side logic"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["EC2", "S3", "Lambda"]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["SQL", "Data modeling", "Indexes"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["Containers", "Image building", "Local development"]
+        },
+        {
+          "name": "Git",
+          "keywords": ["Branching", "PRs", "Code review"]
+        },
+        {
+          "name": "GraphQL",
+          "keywords": ["Schemas", "Resolvers", "Client queries"]
+        },
+        {
+          "name": "REST",
+          "keywords": ["HTTP", "API design", "Authentication"]
+        },
+        {
+          "name": "Shopify",
+          "keywords": ["Platform integration", "Webhooks", "APIs"]
+        },
+        {
+          "name": "Eventbrite",
+          "keywords": ["API integration", "Event data", "Webhooks"]
+        },
+        {
+          "name": "Ticketmaster",
+          "keywords": ["API integration", "Ticketing systems", "Real-time sync"]
+        }
+      ],
+      "remote": "Full",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-06T22:40:52+00:00",
+      "similarity": 0.354,
+      "decayed_similarity": 0.371
+    },
+    {
+      "id": 266842,
+      "title": "Senior Software Engineer, Data Sync",
+      "company": "Ditto",
+      "description": "Ditto is an edge-native data platform that keeps distributed systems in sync in disconnected and contested networks. The company builds an offline-first, CRDT-based sync layer that works across devices and transports (Bluetooth LE, P2P Wi‑Fi, LAN, tactical radio) and is used in both commercial and d",
+      "skills": [
+        {
+          "name": "Rust",
+          "keywords": ["tokio", "async", "systems programming", "memory safety"]
+        },
+        {
+          "name": "CRDT",
+          "keywords": [
+            "conflict-free replication",
+            "convergence",
+            "offline-first",
+            "state-based",
+            "operation-based"
+          ]
+        },
+        {
+          "name": "React Native",
+          "keywords": ["SDK", "mobile", "JavaScript", "native modules"]
+        },
+        {
+          "name": "Android",
+          "keywords": ["Kotlin", "Java", "mobile SDK", "platform integration"]
+        },
+        {
+          "name": "Bluetooth LE",
+          "keywords": ["BLE", "GATT", "pairing", "low-energy"]
+        },
+        {
+          "name": "P2P Wi‑Fi",
+          "keywords": ["ad-hoc", "mesh", "peer-to-peer", "routing"]
+        },
+        {
+          "name": "HF radio",
+          "keywords": ["tactical radio", "low-bandwidth", "long-range links"]
+        }
+      ],
+      "remote": "Full",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-07T23:16:24+00:00",
+      "similarity": 0.349,
+      "decayed_similarity": 0.371
+    },
+    {
+      "id": 265670,
+      "title": "Multiple Openings — SWE, SRE, Infrastructure, Security, Product, Design",
+      "company": "Fluidstack",
+      "description": "Fluidstack builds supercomputers for hyperscalers and frontier labs. The company designs, constructs, and operates gigawatt-scale datacenter campuses and deploys, validates, and operates GPUs and networking equipment inside those sites. Fluidstack is scaling US capacity and partnering with Anthropic",
+      "skills": [
+        {
+          "name": "Linux",
+          "keywords": ["kernel", "systemd", "networking", "performance tuning"]
+        },
+        {
+          "name": "C/C++",
+          "keywords": ["firmware", "low-level", "embedded", "performance"]
+        },
+        {
+          "name": "Python",
+          "keywords": ["automation", "scripting", "tooling", "pytest"]
+        },
+        {
+          "name": "Go",
+          "keywords": ["microservices", "concurrency", "networking", "net/http"]
+        },
+        {
+          "name": "CUDA",
+          "keywords": ["GPU programming", "CUDA kernels", "device memory"]
+        },
+        {
+          "name": "NVIDIA GPUs",
+          "keywords": ["drivers", "NVLink", "CUDA"]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["clusters", "operators", "helm", "workloads"]
+        },
+        {
+          "name": "Terraform",
+          "keywords": ["IaC", "provisioning", "modules"]
+        },
+        {
+          "name": "Ansible",
+          "keywords": ["configuration management", "playbooks", "automation"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["containers", "images", "registries"]
+        },
+        {
+          "name": "BGP",
+          "keywords": ["routing", "peering", "network protocols"]
+        }
+      ],
+      "remote": "None",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-01T18:36:31+00:00",
+      "similarity": 0.371,
+      "decayed_similarity": 0.371
+    },
+    {
+      "id": 265710,
+      "title": "Engineer",
+      "company": "Vitalize",
+      "description": "Vitalize is a Series A startup (~50 people) building the operating system for hospital labor and capacity. The company automates demand prediction using ADT data, historical patterns, and acuity scores to forecast patient census and enable real-time staffing optimization. Vitalize has demonstrated t",
+      "skills": [
+        {
+          "name": "TypeScript",
+          "keywords": ["Node.js", "Type safety", "Async/Promises"]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["SQL", "Indexes", "Query optimization", "Transactions"]
+        },
+        {
+          "name": "Effect",
+          "keywords": ["Effect-TS", "Functional programming", "Pure effects"]
+        }
+      ],
+      "remote": "Hybrid",
+      "salary": "160k - 270k + equity",
+      "salary_usd": null,
+      "posted_at": "2026-07-01T16:55:54+00:00",
+      "similarity": 0.372,
+      "decayed_similarity": 0.371
+    },
+    {
+      "id": 265650,
+      "title": "Multiple Open Roles — Design Engineer, Applied ML Engineer, ML Platform Engineer, Product Manager (Data Platform)",
+      "company": "Foxglove",
+      "description": "Foxglove is the leading data infrastructure and observability platform for robotics and physical AI. The company builds tooling to collect, visualize, and analyze robot telemetry and sensor data to accelerate development and debugging. Foxglove hires across engineering and product to scale its platf",
+      "skills": [
+        {
+          "name": "Python",
+          "keywords": ["NumPy", "pandas", "deployment", "scripting"]
+        },
+        {
+          "name": "C++",
+          "keywords": ["performance", "real-time systems", "ROS integration"]
+        },
+        {
+          "name": "PyTorch",
+          "keywords": ["model training", "torchscript", "deep learning"]
+        },
+        {
+          "name": "TensorFlow",
+          "keywords": ["model serving", "training", "TF Lite"]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["orchestration", "Helm", "scaling"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["containerization", "images", "CI/CD"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["S3", "EC2", "EKS", "managed services"]
+        },
+        {
+          "name": "ROS",
+          "keywords": [
+            "robot middleware",
+            "message passing",
+            "sensor integration"
+          ]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["SQL", "timeseries", "storage"]
+        },
+        {
+          "name": "Linux",
+          "keywords": ["system administration", "shell", "performance tuning"]
+        }
+      ],
+      "remote": "Hybrid",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-01T20:25:12+00:00",
+      "similarity": 0.372,
+      "decayed_similarity": 0.371
+    },
+    {
+      "id": 266380,
+      "title": "Founding CTO / GPU Systems Engineer",
+      "company": "Syntropic",
+      "description": "Syntropic develops high-compression solutions for LLM KV caches and GPU-validated model serving optimizations. The team has demonstrated multi-tenant memory compression (e.g., 22× end-to-end) across models like Mistral, Qwen, and Llama, with 90+ patents pending and active design partnerships. The co",
+      "skills": [
+        {
+          "name": "CUDA",
+          "keywords": [
+            "kernel optimization",
+            "cuBLAS",
+            "memory management",
+            "warp-level programming"
+          ]
+        },
+        {
+          "name": "Triton",
+          "keywords": [
+            "fused kernels",
+            "JIT compilation",
+            "autotuning",
+            "dequantization"
+          ]
+        },
+        {
+          "name": "C++",
+          "keywords": ["performance", "low-level systems", "intrinsics"]
+        },
+        {
+          "name": "Python",
+          "keywords": ["PyTorch", "NumPy", "prototyping"]
+        },
+        {
+          "name": "PyTorch",
+          "keywords": ["model inference", "quantization tooling", "custom ops"]
+        },
+        {
+          "name": "NVIDIA V100",
+          "keywords": [
+            "GPU benchmarking",
+            "multi-tenant workloads",
+            "memory constraints"
+          ]
+        },
+        {
+          "name": "Mistral",
+          "keywords": ["inference", "compatibility testing"]
+        },
+        {
+          "name": "Qwen",
+          "keywords": ["inference", "compatibility testing"]
+        },
+        {
+          "name": "Llama",
+          "keywords": ["inference", "compatibility testing"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["containerized serving", "deployment"]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["orchestration", "multi-tenant serving"]
+        }
+      ],
+      "remote": "Full",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-05T20:40:20+00:00",
+      "similarity": 0.356,
+      "decayed_similarity": 0.37
+    },
+    {
+      "id": 267089,
+      "title": "Full Stack Software Engineer",
+      "company": "Early-stage SaaS startup building data infrastructure and AI features for power systems. The team is small with founders actively involved and expects high ownership from engineers. The company focuses on pipelines, data infra, and adding AI agent capabilities to its platform.",
+      "description": "Build end-to-end features across frontend, backend APIs, and data pipelines for an early-stage SaaS platform focused on data infra and AI agent functionality.",
+      "skills": [
+        {
+          "name": "Python",
+          "keywords": ["backend APIs", "data pipelines"]
+        },
+        {
+          "name": "TypeScript",
+          "keywords": ["frontend", "type-safe code"]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["SQL", "data storage"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["cloud infrastructure", "managed services"]
+        },
+        {
+          "name": "GCP",
+          "keywords": ["cloud infrastructure", "data tooling"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["containers", "deployment"]
+        },
+        {
+          "name": "Svelte",
+          "keywords": ["component development", "frontend"]
+        },
+        {
+          "name": "GraphQL",
+          "keywords": ["schema design", "queries"]
+        },
+        {
+          "name": "Mapbox",
+          "keywords": ["GIS", "mapping"]
+        }
+      ],
+      "remote": "None",
+      "salary": "$150K-$210K + equity",
+      "salary_usd": null,
+      "posted_at": "2026-07-10T03:11:08+00:00",
+      "similarity": 0.338,
+      "decayed_similarity": 0.37
+    },
+    {
+      "id": 266840,
+      "title": "Multiple roles — Staff Developer Advocate; Staff Security Engineer; Forward Deployed Engineer",
+      "company": "LiveKit",
+      "description": "LiveKit builds the infrastructure layer for the voice-driven era of computing. The platform provides developers tools to build, test, deploy, scale, and observe voice and real-time agents in production. LiveKit is hiring multiple senior/staff roles across developer advocacy, security, and forward-de",
+      "skills": [
+        {
+          "name": "WebRTC",
+          "keywords": ["RTCPeerConnection", "MediaStream", "SFU"]
+        },
+        {
+          "name": "LiveKit",
+          "keywords": ["LiveKit Server", "SDKs", "Room API"]
+        },
+        {
+          "name": "VoiceAI",
+          "keywords": ["speech-to-text", "text-to-speech", "voice agents"]
+        },
+        {
+          "name": "JavaScript",
+          "keywords": ["ES6", "event-driven", "browser APIs"]
+        },
+        {
+          "name": "TypeScript",
+          "keywords": ["type safety", "tsconfig", "generics"]
+        },
+        {
+          "name": "Node.js",
+          "keywords": ["Express", "WebSocket", "API servers"]
+        },
+        {
+          "name": "React",
+          "keywords": ["hooks", "component design", "Next.js"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["EC2", "S3", "IAM"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["containers", "Dockerfile", "images"]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["deployments", "Helm", "pods"]
+        },
+        {
+          "name": "TLS",
+          "keywords": ["certificates", "mTLS", "encryption"]
+        }
+      ],
+      "remote": "Full",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-07T19:40:23+00:00",
+      "similarity": 0.347,
+      "decayed_similarity": 0.369
+    },
+    {
+      "id": 266614,
+      "title": "Research Engineer (Science) / Product Engineer (Engineering)",
+      "company": "Electric Twin",
+      "description": "Electric Twin builds science-based synthetic populations and LLM-driven AI agents that simulate human behaviour to help organisations test ideas and explore uncertainty. The company is in a growth phase with new funding, an expanding customer base, and an evolving platform. Small, senior team with b",
+      "skills": [
+        {
+          "name": "Python",
+          "keywords": ["scripting", "model integration", "data processing"]
+        },
+        {
+          "name": "FastAPI",
+          "keywords": ["ASGI", "REST APIs", "backend services"]
+        },
+        {
+          "name": "React",
+          "keywords": ["component design", "hooks", "frontend integration"]
+        },
+        {
+          "name": "Next.js",
+          "keywords": ["SSR", "routing", "React"]
+        },
+        {
+          "name": "SQL",
+          "keywords": ["querying", "data modeling", "ETL"]
+        },
+        {
+          "name": "GCP",
+          "keywords": ["Compute", "Cloud Storage", "deployment"]
+        },
+        {
+          "name": "Claude",
+          "keywords": ["LLM", "agent prompting", "model evaluation"]
+        },
+        {
+          "name": "Cursor",
+          "keywords": ["LLM platform", "agent tooling", "integration"]
+        },
+        {
+          "name": "Codex",
+          "keywords": ["code-generation", "LLM", "model integration"]
+        },
+        {
+          "name": "PyTorch",
+          "keywords": [
+            "model training",
+            "deep learning",
+            "research prototyping"
+          ]
+        },
+        {
+          "name": "TensorFlow",
+          "keywords": ["model training", "deployment", "research"]
+        }
+      ],
+      "remote": "Hybrid",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-06T07:43:32+00:00",
+      "similarity": 0.352,
+      "decayed_similarity": 0.368
+    },
+    {
+      "id": 266619,
+      "title": "Software Engineer",
+      "company": "Tandem Health",
+      "description": "Tandem Health builds a clinician copilot that automates clinical administration so clinicians can focus on patient care. The company’s product captures patient-clinician encounters to generate medical records, saving clinicians 5–10 minutes per patient. Tandem is scaling quickly across major care ch",
+      "skills": [
+        {
+          "name": "Python",
+          "keywords": ["NumPy", "pandas", "asyncio"]
+        },
+        {
+          "name": "PyTorch",
+          "keywords": ["model training", "transformers", "fine-tuning"]
+        },
+        {
+          "name": "TensorFlow",
+          "keywords": ["model serving", "Keras"]
+        },
+        {
+          "name": "TypeScript",
+          "keywords": ["React", "Node.js", "type safety"]
+        },
+        {
+          "name": "React",
+          "keywords": ["hooks", "component design", "Next.js"]
+        },
+        {
+          "name": "Node.js",
+          "keywords": ["Express", "REST APIs", "server-side"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["containerization", "images", "docker-compose"]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["deployments", "helm", "scaling"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["ECS", "S3", "Lambda"]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["SQL", "performance tuning", "data modeling"]
+        }
+      ],
+      "remote": "None",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-06T08:06:58+00:00",
+      "similarity": 0.352,
+      "decayed_similarity": 0.368
+    },
+    {
+      "id": 266846,
+      "title": "Senior Software Engineer (Elixir/React)",
+      "company": "Rabbet",
+      "description": "Rabbet builds cloud software to centralize and automate construction finance for commercial lenders and real estate developers. The company is a small YC-backed startup (~20 people) with a ~7-person engineering team. The stack uses Elixir/Phoenix/Absinthe/Postgres on GCP with a React + TypeScript fr",
+      "skills": [
+        {
+          "name": "Elixir",
+          "keywords": ["OTP", "GenServer", "Phoenix integration", "Concurrency"]
+        },
+        {
+          "name": "Phoenix",
+          "keywords": [
+            "Controllers",
+            "Contexts",
+            "Channels",
+            "Release management"
+          ]
+        },
+        {
+          "name": "Absinthe",
+          "keywords": ["GraphQL schema", "Resolvers", "Subscriptions"]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["SQL", "Indexing", "Migrations", "Performance tuning"]
+        },
+        {
+          "name": "GCP",
+          "keywords": ["Cloud Run", "Compute Engine", "Cloud SQL", "Monitoring"]
+        },
+        {
+          "name": "React",
+          "keywords": [
+            "Hooks",
+            "Component design",
+            "State management",
+            "Migration from JS to TS"
+          ]
+        },
+        {
+          "name": "TypeScript",
+          "keywords": ["Type safety", "Generics", "Refactoring"]
+        },
+        {
+          "name": "JavaScript",
+          "keywords": ["ES6+", "Legacy code conversion", "Tooling"]
+        },
+        {
+          "name": "GraphQL",
+          "keywords": [
+            "Schema design",
+            "Query optimization",
+            "Client-server contracts"
+          ]
+        },
+        {
+          "name": "Anthropic Claude",
+          "keywords": ["LLM integration", "Prompting", "Workflow automation"]
+        },
+        {
+          "name": "OpenAI Codex",
+          "keywords": [
+            "Code generation",
+            "Developer tooling",
+            "LLM-assisted workflows"
+          ]
+        }
+      ],
+      "remote": "Full",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-07T15:42:29+00:00",
+      "similarity": 0.346,
+      "decayed_similarity": 0.368
+    },
+    {
+      "id": 266167,
+      "title": "Senior Flutter/Dart Product Engineer",
+      "company": "Racct",
+      "description": "Racct is building modern cross-platform product experiences focused on rapid iteration and strong UX. The team hires remote engineers who collaborate closely across product and design to ship features. This role is remote with US overlap preferred and supports contract, part-time, or full-time engag",
+      "skills": [
+        {
+          "name": "Flutter",
+          "keywords": [
+            "Widgets",
+            "State management",
+            "Platform channels",
+            "Testing"
+          ]
+        },
+        {
+          "name": "Dart",
+          "keywords": ["Null safety", "async/await", "Streams", "Packages"]
+        },
+        {
+          "name": "Firebase",
+          "keywords": [
+            "Firestore",
+            "Authentication",
+            "Cloud Functions",
+            "Realtime Database"
+          ]
+        },
+        {
+          "name": "Jaspr",
+          "keywords": ["Jaspr UI", "Web widgets", "Integration with Flutter"]
+        },
+        {
+          "name": "Git",
+          "keywords": ["Branching", "PR reviews", "Version control"]
+        },
+        {
+          "name": "REST",
+          "keywords": ["HTTP APIs", "JSON", "API integration"]
+        }
+      ],
+      "remote": "Full",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-04T18:00:24+00:00",
+      "similarity": 0.355,
+      "decayed_similarity": 0.366
+    },
+    {
+      "id": 265738,
+      "title": "Senior & Staff Product Engineers",
+      "company": "Kyra Health",
+      "description": "Kyra Health is building a national ICHRA platform at the intersection of healthcare, fintech, compliance, and AI. The company seeks Senior and Staff Product Engineers to turn ambiguous problems into robust production systems while owning outcomes end-to-end. This remote (USA) role emphasizes strong ",
+      "skills": [
+        {
+          "name": "Python",
+          "keywords": ["FastAPI", "asyncio", "testing"]
+        },
+        {
+          "name": "TypeScript",
+          "keywords": ["Node.js", "frontend", "static typing"]
+        },
+        {
+          "name": "Git",
+          "keywords": ["GitHub", "pull requests", "code review"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["containers", "docker-compose", "images"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["EC2", "S3", "RDS"]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["SQL", "schema design", "indexes"]
+        }
+      ],
+      "remote": "Full",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-01T15:23:05+00:00",
+      "similarity": 0.367,
+      "decayed_similarity": 0.366
+    },
+    {
+      "id": 265753,
+      "title": "Multiple Openings: Staff Frontend Engineer; Senior AI Engineer; Senior Customer Success Manager; Director of Sales",
+      "company": "Weave Bio",
+      "description": "Weave Bio is an AI-native company building a platform to accelerate FDA regulatory submissions for research and discovery scientists. Their platform claims to reduce the regulatory submission time by ~97%, enabling faster research-to-approval workflows. The company is Series A funded and hiring acro",
+      "skills": [
+        {
+          "name": "React",
+          "keywords": ["react.js", "component design", "hooks"]
+        },
+        {
+          "name": "Python",
+          "keywords": ["python", "production services", "data processing"]
+        },
+        {
+          "name": "RAG",
+          "keywords": [
+            "retrieval-augmented generation",
+            "vector search",
+            "document retrieval"
+          ]
+        },
+        {
+          "name": "LLMs",
+          "keywords": [
+            "large language models",
+            "inference",
+            "prompt engineering"
+          ]
+        }
+      ],
+      "remote": "Hybrid",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-02T23:16:21+00:00",
+      "similarity": 0.361,
+      "decayed_similarity": 0.365
+    },
+    {
+      "id": 265791,
+      "title": "Senior Backend / Platform Engineer",
+      "company": "Tower",
+      "description": "Tower is a Python-native serverless data platform that runs plain Python at production scale while handling packaging, dependency resolution, scheduling, and execution. The company focuses on removing infrastructure friction so data teams can run scripts without managing clusters or rewriting pipeli",
+      "skills": [
+        {
+          "name": "Go",
+          "keywords": ["goroutines", "concurrency", "services"]
+        },
+        {
+          "name": "Rust",
+          "keywords": ["async", "ownership", "performance"]
+        },
+        {
+          "name": "Python",
+          "keywords": ["packaging", "dependency resolution", "serverless"]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["EKS", "controllers", "cluster operations"]
+        },
+        {
+          "name": "EKS",
+          "keywords": ["managed Kubernetes", "cluster scaling"]
+        },
+        {
+          "name": "Karpenter",
+          "keywords": ["provisioning", "autoscaling"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["S3", "RDS", "ElastiCache"]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["RDS", "performance tuning", "SQL"]
+        },
+        {
+          "name": "Redis",
+          "keywords": ["ElastiCache", "caching", "pub/sub"]
+        },
+        {
+          "name": "S3",
+          "keywords": ["object storage", "data lakes", "Iceberg storage"]
+        },
+        {
+          "name": "Apache Iceberg",
+          "keywords": ["table format", "data lake", "storage"]
+        },
+        {
+          "name": "WorkOS",
+          "keywords": ["auth", "SSO", "integration"]
+        }
+      ],
+      "remote": "Hybrid",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-02T13:03:00+00:00",
+      "similarity": 0.362,
+      "decayed_similarity": 0.365
+    },
+    {
+      "id": 265714,
+      "title": "Software Engineer / Researcher (Multiple Open Roles)",
+      "company": "PlantingSpace",
+      "description": "PlantingSpace builds a system representing domain knowledge as modular probabilistic models that can be flexibly connected and composed. The platform enforces consistency across models and propagates uncertainty through chained analyses. First applications focus on finance and scientific research, i",
+      "skills": [
+        {
+          "name": "Python",
+          "keywords": ["NumPy", "Pandas", "scientific computing"]
+        },
+        {
+          "name": "PyTorch",
+          "keywords": ["autograd", "GPU", "deep learning"]
+        },
+        {
+          "name": "JAX",
+          "keywords": ["jit", "vmap", "autodiff"]
+        },
+        {
+          "name": "TensorFlow Probability",
+          "keywords": ["probabilistic layers", "Bayesian neural networks"]
+        },
+        {
+          "name": "Stan",
+          "keywords": ["MCMC", "Hamiltonian Monte Carlo", "Bayesian inference"]
+        },
+        {
+          "name": "PyMC",
+          "keywords": ["MCMC", "Variational Inference", "Bayesian modeling"]
+        },
+        {
+          "name": "Git",
+          "keywords": ["version control", "collaboration", "CI"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["containerization", "deployment"]
+        }
+      ],
+      "remote": "Hybrid",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-01T16:21:56+00:00",
+      "similarity": 0.363,
+      "decayed_similarity": 0.363
+    },
+    {
+      "id": 266616,
+      "title": "Software Engineer",
+      "company": "Amodo Design",
+      "description": "Amodo Design builds end-to-end hardware and software systems focused on robotics, scientific tools, automation and AI safety. The company operates with small multidisciplinary teams of software, mechanical, electronics and firmware engineers and emphasises practical, simple solutions. They ship comp",
+      "skills": [
+        {
+          "name": "Linux",
+          "keywords": ["Ubuntu", "bash", "systemd", "server engineering"]
+        },
+        {
+          "name": "ROS",
+          "keywords": ["ROS1", "ROS2", "robotics"]
+        },
+        {
+          "name": "C",
+          "keywords": ["embedded", "gcc", "cross-compilation"]
+        },
+        {
+          "name": "C++",
+          "keywords": ["embedded", "STL", "performance"]
+        },
+        {
+          "name": "CUDA",
+          "keywords": ["GPU", "NVIDIA", "parallel computing"]
+        },
+        {
+          "name": "Python",
+          "keywords": ["numpy", "scipy", "pandas", "simulation"]
+        },
+        {
+          "name": "TypeScript",
+          "keywords": ["Node.js", "frontend", "tooling"]
+        },
+        {
+          "name": "React",
+          "keywords": ["hooks", "TypeScript", "UI"]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["SQL", "psycopg2", "query optimisation"]
+        }
+      ],
+      "remote": "Hybrid",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-06T10:32:58+00:00",
+      "similarity": 0.346,
+      "decayed_similarity": 0.363
+    },
+    {
+      "id": 265713,
+      "title": "Senior Software Engineer (Web / Backend / Forward-Deployed)",
+      "company": "Akkio",
+      "description": "Akkio builds AI-native applications and agentic workflows for large media agencies focused on audience building, distribution, measurement, and media planning. The company has reached product-market fit and is rapidly growing its customer base. They are hiring senior engineers across web, backend, a",
+      "skills": [
+        {
+          "name": "Vue.js",
+          "keywords": ["Vue 2/3", "Composition API", "Vuex", "Nuxt.js"]
+        },
+        {
+          "name": "TypeScript",
+          "keywords": [
+            "Type safety",
+            "Generics",
+            "ESNext",
+            "Tooling (tsconfig)"
+          ]
+        },
+        {
+          "name": "Node.js",
+          "keywords": [
+            "Express",
+            "REST APIs",
+            "Server-side JavaScript",
+            "API design"
+          ]
+        },
+        {
+          "name": "Python",
+          "keywords": ["Data processing", "Pandas", "NumPy", "ML scripting"]
+        },
+        {
+          "name": "LLMs",
+          "keywords": [
+            "Prompting",
+            "Model inference",
+            "Fine-tuning",
+            "Integration"
+          ]
+        },
+        {
+          "name": "Distributed Systems",
+          "keywords": [
+            "Scaling",
+            "Data pipelines",
+            "Concurrency",
+            "Fault tolerance"
+          ]
+        }
+      ],
+      "remote": "Full",
+      "salary": "160000-240000",
+      "salary_usd": null,
+      "posted_at": "2026-07-01T16:28:45+00:00",
+      "similarity": 0.363,
+      "decayed_similarity": 0.363
+    },
+    {
+      "id": 266603,
+      "title": "Java Developer",
+      "company": "Furtim Modus",
+      "description": "Join a venture-backed fintech trading firm focused on US equities and capital markets technology based in New York City. The role is a full-time Java Developer position offering base compensation of $125k-$200k, full benefits, cash bonus and equity. The team emphasizes low-latency electronic trading",
+      "skills": [
+        {
+          "name": "Java",
+          "keywords": ["JVM", "Concurrency", "Low-latency"]
+        },
+        {
+          "name": "Aeron",
+          "keywords": ["Transport", "Cluster", "Archive"]
+        },
+        {
+          "name": "Artio",
+          "keywords": ["FIX", "Market Data", "Order Routing"]
+        },
+        {
+          "name": "Agrona",
+          "keywords": ["Collections", "Memory", "Buffers"]
+        },
+        {
+          "name": "CoinTossX",
+          "keywords": ["Trading Engine", "Exchange Connectivity"]
+        },
+        {
+          "name": "Adaptive Hydra",
+          "keywords": ["Trading Platform", "Order Management"]
+        }
+      ],
+      "remote": "Hybrid",
+      "salary": "$125K-$200K + equity",
+      "salary_usd": null,
+      "posted_at": "2026-07-07T03:01:39+00:00",
+      "similarity": 0.342,
+      "decayed_similarity": 0.362
+    },
+    {
+      "id": 267091,
+      "title": "Founding Mobile Engineer",
+      "company": "Double Holo",
+      "description": "Double Holo is the modern marketplace and intelligence platform for trading cards. The company operates live web and mobile apps and focuses on high-growth product development. As a founding team member you'll work closely with product and web engineers to iterate quickly and drive end-to-end mobile",
+      "skills": [
+        {
+          "name": "React Native",
+          "keywords": [
+            "Hooks",
+            "Native Modules",
+            "Performance Optimization",
+            "Expo"
+          ]
+        },
+        {
+          "name": "React",
+          "keywords": ["Hooks", "Web parity", "Component Design"]
+        },
+        {
+          "name": "TypeScript",
+          "keywords": ["Static typing", "Generics", "Type safety"]
+        },
+        {
+          "name": "JavaScript",
+          "keywords": ["ES6+", "Async/Await", "Promises"]
+        },
+        {
+          "name": "iOS",
+          "keywords": ["App Store Connect", "Swift interop", "Provisioning"]
+        },
+        {
+          "name": "Android",
+          "keywords": ["Google Play Console", "Kotlin interop", "APK/AAB"]
+        },
+        {
+          "name": "Git",
+          "keywords": ["GitHub", "Branching", "Code review"]
+        },
+        {
+          "name": "Fastlane",
+          "keywords": ["Automated releases", "CI/CD"]
+        }
+      ],
+      "remote": "Hybrid",
+      "salary": "$120k-150k",
+      "salary_usd": null,
+      "posted_at": "2026-07-10T03:01:38+00:00",
+      "similarity": 0.328,
+      "decayed_similarity": 0.362
+    },
+    {
+      "id": 267097,
+      "title": "Multiple Open Roles (Engineering, Product & Data)",
+      "company": "Oscilar",
+      "description": "Oscilar operates an AI Risk Decisioning™ platform that helps organizations manage onboarding, fraud, credit, and compliance risks. The company hires remotely across the US, Canada, Brazil, Poland, and the UK for engineering, product, and data roles. Oscilar is recruiting multiple senior- and staff-l",
+      "skills": [
+        {
+          "name": "Java",
+          "keywords": ["Spring", "JVM", "Microservices"]
+        },
+        {
+          "name": "Python",
+          "keywords": ["PyTorch", "TensorFlow", "scikit-learn"]
+        },
+        {
+          "name": "TypeScript",
+          "keywords": ["Web SDK", "React", "Frontend tooling"]
+        },
+        {
+          "name": "JavaScript",
+          "keywords": ["Web SDK", "Node.js", "Browser APIs"]
+        },
+        {
+          "name": "Node.js",
+          "keywords": ["Express", "APIs", "Server-side SDKs"]
+        },
+        {
+          "name": "SQL",
+          "keywords": ["PostgreSQL", "Analytics", "Query optimization"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["EC2", "S3", "Lambda"]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["Containers", "Helm", "Cluster management"]
+        }
+      ],
+      "remote": "Full",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-08T18:17:02+00:00",
+      "similarity": 0.335,
+      "decayed_similarity": 0.362
+    },
+    {
+      "id": 265730,
+      "title": "Developer Relations (DevRel)",
+      "company": "Friendly Captcha",
+      "description": "Friendly Captcha builds privacy-first, accessible anti-bot solutions to protect websites from malicious actors and bots. The company is fully bootstrapped, profitable, and serves mostly medium to large European enterprises and governments. Friendly Captcha focuses on replacing more intrusive solutio",
+      "skills": [
+        {
+          "name": "JavaScript",
+          "keywords": ["ES6", "Browser APIs", "npm"]
+        },
+        {
+          "name": "HTML",
+          "keywords": ["HTML5", "Accessibility", "Forms"]
+        },
+        {
+          "name": "CSS",
+          "keywords": ["Responsive design", "Flexbox", "Styling demos"]
+        },
+        {
+          "name": "Node.js",
+          "keywords": ["Express", "APIs", "npm"]
+        },
+        {
+          "name": "Git",
+          "keywords": ["GitHub", "Version control", "Pull requests"]
+        },
+        {
+          "name": "Markdown",
+          "keywords": ["Technical docs", "README", "Blog posts"]
+        },
+        {
+          "name": "REST API",
+          "keywords": ["HTTP", "JSON", "Integration"]
+        },
+        {
+          "name": "Google reCAPTCHA",
+          "keywords": ["reCAPTCHA", "anti-bot comparison", "migration"]
+        }
+      ],
+      "remote": null,
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-01T15:42:07+00:00",
+      "similarity": 0.362,
+      "decayed_similarity": 0.362
+    },
+    {
+      "id": 265672,
+      "title": "Product Engineer",
+      "company": "Y Combinator",
+      "description": "Y Combinator is hiring Product Engineers to build core products and infrastructure that support startups and the YC ecosystem. The team works on new AI-native products, founder tools, and large-scale services powering Demo Day, Work at a Startup, and investor tools. The role emphasizes rapid shippin",
+      "skills": [
+        {
+          "name": "Rails",
+          "keywords": ["Ruby on Rails", "Server-side rendering", "ActiveRecord"]
+        },
+        {
+          "name": "React",
+          "keywords": ["React", "Component design", "Frontend interactions"]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["Postgres", "SQL", "Indexes"]
+        },
+        {
+          "name": "Python",
+          "keywords": ["Python", "Data tooling", "ML infrastructure"]
+        },
+        {
+          "name": "TypeScript",
+          "keywords": ["TypeScript", "Typed frontend"]
+        },
+        {
+          "name": "LLM APIs",
+          "keywords": ["LLMs", "Agents", "Evals", "Context engineering"]
+        }
+      ],
+      "remote": "None",
+      "salary": "Competitive (not disclosed)",
+      "salary_usd": null,
+      "posted_at": "2026-07-01T18:33:31+00:00",
+      "similarity": 0.36,
+      "decayed_similarity": 0.361
+    },
+    {
+      "id": 263155,
+      "title": "Multiple Open Roles — Android Systems, Full-Stack, Hardware, Founder's Office",
+      "company": "Stpkr Technologies",
+      "description": "Stpkr Technologies builds next-generation wearable devices and is hiring multiple engineering and operational roles. The company prefers in-person work near Noida Sector 18 and values candidates who can start as interns or full-time hires. Pay is competitive and there are opportunities to earn meani",
+      "skills": [
+        {
+          "name": "Android",
+          "keywords": [
+            "AOSP",
+            "BSP",
+            "LineageOS-type projects",
+            "Android platform"
+          ]
+        },
+        {
+          "name": "Linux",
+          "keywords": ["Linux kernel", "kernel-adjacent work", "embedded Linux"]
+        },
+        {
+          "name": "C",
+          "keywords": ["embedded C", "drivers", "low-level code"]
+        },
+        {
+          "name": "C++",
+          "keywords": ["system-level C++", "performance", "embedded"]
+        },
+        {
+          "name": "Java",
+          "keywords": ["Android apps", "platform services"]
+        },
+        {
+          "name": "Python",
+          "keywords": ["backend scripts", "ML glue code"]
+        },
+        {
+          "name": "TypeScript",
+          "keywords": ["frontend/backend", "platform code"]
+        },
+        {
+          "name": "GitHub",
+          "keywords": [
+            "repo hosting",
+            "project examples",
+            "open-source contributions"
+          ]
+        },
+        {
+          "name": "LineageOS",
+          "keywords": ["custom ROM", "device trees", "porting"]
+        },
+        {
+          "name": "J-Link",
+          "keywords": ["JTAG", "debugging", "flash programming"]
+        },
+        {
+          "name": "KiCad",
+          "keywords": ["schematic capture", "PCB layout", "hobby designs"]
+        },
+        {
+          "name": "Altium",
+          "keywords": ["schematics", "PCB layout", "reference designs"]
+        },
+        {
+          "name": "EasyEDA",
+          "keywords": ["hobby PCB", "schematics", "layout"]
+        },
+        {
+          "name": "PetaLinux",
+          "keywords": ["embedded Linux builds", "Yocto", "board bring-up"]
+        },
+        {
+          "name": "Oscilloscope",
+          "keywords": ["signal measurement", "power/RF debugging"]
+        },
+        {
+          "name": "Logic Analyzer",
+          "keywords": ["protocol debugging", "SPI", "digital capture"]
+        },
+        {
+          "name": "SPI",
+          "keywords": ["serial protocols", "sensor interfaces", "debugging"]
+        }
+      ],
+      "remote": "None",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-06-02T10:32:20+00:00",
+      "similarity": 0.408,
+      "decayed_similarity": 0.36
+    },
+    {
+      "id": 263123,
+      "title": "Multiple Openings (NYC)",
+      "company": "Norm Ai",
+      "description": "Norm Ai is an agentic law company serving clients with a combined $30 trillion in assets under management. The company pioneered Legal Engineering, enabling lawyers to build and supervise domain-specific AI agents via a proprietary no-code software suite. Norm Ai technology is deployed at many of th",
+      "skills": [
+        {
+          "name": "Python",
+          "keywords": ["ML tooling", "API integration", "data processing"]
+        },
+        {
+          "name": "JavaScript",
+          "keywords": ["Node.js", "frontend integration", "automation"]
+        },
+        {
+          "name": "React",
+          "keywords": ["component design", "hooks", "UI for no-code tools"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["EC2", "S3", "Lambda", "deployment"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["containerization", "local development", "deployment"]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["data modeling", "query optimization", "transactions"]
+        },
+        {
+          "name": "TensorFlow",
+          "keywords": ["model serving", "inference", "ML pipelines"]
+        }
+      ],
+      "remote": "Hybrid",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-06-02T18:50:33+00:00",
+      "similarity": 0.408,
+      "decayed_similarity": 0.36
+    },
+    {
+      "id": 266381,
+      "title": "Principal Software Engineer; Senior Java Engineer - Cloud; Account Executive",
+      "company": "FusionAuth",
+      "description": "FusionAuth builds authentication and authorization software to make auth simple and secure for developers. The company offers flexible deployment models (self-host, cloud run, or managed) and follows an API-first approach backed by a mature nine-plus year codebase. FusionAuth provides a full-feature",
+      "skills": [
+        {
+          "name": "Java",
+          "keywords": ["JDK", "JVM", "Concurrency"]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["SQL", "Indexes", "Replication"]
+        },
+        {
+          "name": "MySQL",
+          "keywords": ["SQL", "InnoDB", "Replication"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["Containerization", "Dockerfile", "Images"]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["Helm", "Pods", "Operators"]
+        },
+        {
+          "name": "OAuth 2.0",
+          "keywords": ["Authorization Code", "Bearer tokens", "Scopes"]
+        },
+        {
+          "name": "SAML 2.0",
+          "keywords": ["Assertions", "SSO", "Identity Provider"]
+        },
+        {
+          "name": "OpenID Connect",
+          "keywords": ["ID Token", "Discovery", "Claims"]
+        }
+      ],
+      "remote": "Hybrid",
+      "salary": "$225,000 - $270,000",
+      "salary_usd": null,
+      "posted_at": "2026-07-05T14:33:16+00:00",
+      "similarity": 0.345,
+      "decayed_similarity": 0.36
+    },
+    {
+      "id": 265690,
+      "title": "First Engineer",
+      "company": "Mitty",
+      "description": "Mitty is building an AI-driven video creation product that analyzes users' camera rolls and automatically generates finished social videos from existing photos and footage. The product focuses on video understanding, automated editing, and delivering ready-to-post content. Mitty aims to be a categor",
+      "skills": [
+        {
+          "name": "OpenAI",
+          "keywords": ["GPT", "Vision API", "API integration"]
+        },
+        {
+          "name": "Anthropic",
+          "keywords": ["Claude", "LLM API", "API integration"]
+        },
+        {
+          "name": "Swift",
+          "keywords": ["iOS", "AVFoundation", "mobile media pipelines"]
+        },
+        {
+          "name": "iOS",
+          "keywords": ["mobile app", "AVFoundation", "media handling"]
+        },
+        {
+          "name": "PyTorch",
+          "keywords": ["computer vision", "model training", "inference"]
+        },
+        {
+          "name": "TensorFlow",
+          "keywords": ["computer vision", "model training", "inference"]
+        },
+        {
+          "name": "FFmpeg",
+          "keywords": ["video processing", "transcoding", "pipelines"]
+        },
+        {
+          "name": "AVFoundation",
+          "keywords": ["iOS media", "editing", "playback"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["S3", "EC2", "inference hosting"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["containerization", "CI/CD", "deployment"]
+        }
+      ],
+      "remote": "Full",
+      "salary": "$150k base + performance bonus + founding-level equity",
+      "salary_usd": null,
+      "posted_at": "2026-07-01T17:27:21+00:00",
+      "similarity": 0.359,
+      "decayed_similarity": 0.36
+    },
+    {
+      "id": 265716,
+      "title": "Founding Engineer",
+      "company": "Talk Machine",
+      "description": "Talk Machine is an early-stage consumer voice startup founded by the creator of Citymapper. The company is building a voice-first experience over email and has added voice agents for email, calendar and news. It is funded with significant runway, offers competitive pay and quality stock options, and",
+      "skills": [
+        {
+          "name": "React Native",
+          "keywords": ["mobile", "iOS", "Android", "Expo"]
+        },
+        {
+          "name": "Swift",
+          "keywords": ["iOS", "UIKit", "SwiftUI"]
+        },
+        {
+          "name": "Kotlin",
+          "keywords": ["Android", "Jetpack", "Coroutines"]
+        },
+        {
+          "name": "JavaScript",
+          "keywords": ["ES6+", "React", "Node.js"]
+        },
+        {
+          "name": "Node.js",
+          "keywords": ["Express", "APIs", "Serverless"]
+        },
+        {
+          "name": "Python",
+          "keywords": ["backend", "data processing", "APIs"]
+        },
+        {
+          "name": "PyTorch",
+          "keywords": ["speech models", "deep learning", "fine-tuning"]
+        },
+        {
+          "name": "TensorFlow",
+          "keywords": ["speech", "TTS", "ML models"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["Lambda", "EC2", "S3"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["containers", "deployment", "CI/CD"]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["relational DB", "data modeling", "queries"]
+        }
+      ],
+      "remote": "Full",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-01T16:19:15+00:00",
+      "similarity": 0.359,
+      "decayed_similarity": 0.36
+    },
+    {
+      "id": 265696,
+      "title": "Product Engineer / Senior Software Engineer; Founding GTM Lead",
+      "company": "Kinelo",
+      "description": "Kinelo builds systems to solve \"context myopia\" by combining autonomous AI agents with human workflows to deliver accurate task outcomes. The company is focused on organizing humans and AI coworkers into end-to-end workflows and changing how organizations are run. Kinelo is an early-stage, well-fund",
+      "skills": [
+        {
+          "name": "Python",
+          "keywords": ["FastAPI", "data-processing", "scripting"]
+        },
+        {
+          "name": "JavaScript",
+          "keywords": ["React", "frontend", "ES6"]
+        },
+        {
+          "name": "TypeScript",
+          "keywords": ["type-safety", "frontend", "Node.js"]
+        },
+        {
+          "name": "Node.js",
+          "keywords": ["Express", "APIs", "microservices"]
+        },
+        {
+          "name": "OpenAI API",
+          "keywords": [
+            "LLM integration",
+            "prompt engineering",
+            "context management"
+          ]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["containerization", "development", "deployment"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["EC2", "S3", "managed services"]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["SQL", "data-modeling", "queries"]
+        }
+      ],
+      "remote": "Hybrid",
+      "salary": "Competitive salary",
+      "salary_usd": null,
+      "posted_at": "2026-07-01T17:25:47+00:00",
+      "similarity": 0.359,
+      "decayed_similarity": 0.36
+    },
+    {
+      "id": 265810,
+      "title": "Product/Software Engineer, BeNeLux Expansion",
+      "company": "Dashdoc",
+      "description": "Dashdoc is a SaaS Transport Management System focused on road freight, helping carriers and shippers run transport operations on a single shared platform. The company emphasizes simple UX, clean code, and close collaboration with customers and commercial teams. Dashdoc operates with continuous shipp",
+      "skills": [
+        {
+          "name": "React",
+          "keywords": ["Hooks", "Component design"]
+        },
+        {
+          "name": "React Native",
+          "keywords": ["Cross-platform mobile UI", "Native modules"]
+        },
+        {
+          "name": "Python",
+          "keywords": ["Scripting", "Backend services"]
+        },
+        {
+          "name": "Django",
+          "keywords": ["ORM", "Project structure"]
+        },
+        {
+          "name": "Django REST Framework",
+          "keywords": ["Serializers", "ViewSets"]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["SQL", "Indexes", "Migrations"]
+        },
+        {
+          "name": "Google Cloud",
+          "keywords": ["Cloud SQL", "App Engine / Compute"]
+        },
+        {
+          "name": "Claude Code",
+          "keywords": ["AI-assisted coding"]
+        },
+        {
+          "name": "Cursor",
+          "keywords": ["AI coding tool"]
+        },
+        {
+          "name": "Codex",
+          "keywords": ["AI-assisted coding"]
+        }
+      ],
+      "remote": "Full",
+      "salary": "€50,000–€80,000",
+      "salary_usd": null,
+      "posted_at": "2026-07-02T04:41:27+00:00",
+      "similarity": 0.358,
+      "decayed_similarity": 0.36
+    },
+    {
+      "id": 265761,
+      "title": "Full-Stack Engineer (Automotive, AI/ML)",
+      "company": "Cardog",
+      "description": "Cardog is an AI-powered automotive platform building the infrastructure layer for vehicle data. The company handles everything from VIN decoding to market intelligence and powers government and public-sector vehicle programs. Cardog focuses on reliable, privacy-conscious vehicle data for govtech and",
+      "skills": [
+        {
+          "name": "React Native",
+          "keywords": ["Expo", "Mobile UI", "Hooks"]
+        },
+        {
+          "name": "Next.js",
+          "keywords": ["SSR", "Routing", "React"]
+        },
+        {
+          "name": "Hono",
+          "keywords": [
+            "Edge routing",
+            "Cloudflare Workers",
+            "Lightweight framework"
+          ]
+        },
+        {
+          "name": "Cloudflare Workers",
+          "keywords": ["Edge", "Workers KV", "Durable Objects"]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["SQL", "Indexes", "Schema design"]
+        },
+        {
+          "name": "TypeScript",
+          "keywords": ["Static typing", "Node.js", "Full-stack"]
+        },
+        {
+          "name": "Python",
+          "keywords": ["Data processing", "ML libraries", "ETL"]
+        }
+      ],
+      "remote": "Hybrid",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-02T20:18:55+00:00",
+      "similarity": 0.355,
+      "decayed_similarity": 0.36
+    },
+    {
+      "id": 257974,
+      "title": "Multiple Roles — GTM, Product & Engineering",
+      "company": "Cogram",
+      "description": "Cogram (YC W22) builds AI agents for architects and engineers. Their tools automate project management and streamline CAD/BIM workflows for leading firms. The company has engaged customers using their products on real projects and is growing rapidly.",
+      "skills": [
+        {
+          "name": "Revit",
+          "keywords": ["BIM", "Architecture", "Autodesk"]
+        },
+        {
+          "name": "AutoCAD",
+          "keywords": ["CAD", "Drafting", "Autodesk"]
+        },
+        {
+          "name": "Python",
+          "keywords": ["Scripting", "AI", "ML", "Data processing"]
+        },
+        {
+          "name": "PyTorch",
+          "keywords": ["Deep Learning", "Neural Networks", "Model training"]
+        },
+        {
+          "name": "OpenAI API",
+          "keywords": ["LLMs", "AI agents", "Prompting"]
+        },
+        {
+          "name": "Figma",
+          "keywords": ["Prototyping", "UI", "Design systems"]
+        },
+        {
+          "name": "Salesforce",
+          "keywords": ["CRM", "Sales pipeline", "Account management"]
+        },
+        {
+          "name": "Jira",
+          "keywords": ["Project management", "Agile", "Issue tracking"]
+        },
+        {
+          "name": "Git",
+          "keywords": ["Version control", "Collaboration", "Code review"]
+        }
+      ],
+      "remote": "Hybrid",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-05-01T19:43:31+00:00",
+      "similarity": 0.419,
+      "decayed_similarity": 0.359
+    },
+    {
+      "id": 265750,
+      "title": "Lead Software Engineer, Data Sovereignty",
+      "company": "Conservation Metrics",
+      "description": "Conservation Metrics is a small, mission-driven organization building an open-source platform to support territorial monitoring and Indigenous data sovereignty. The team combines remote sensing products, mobile data collection tools, secure data warehousing, and governed access so communities can ex",
+      "skills": [
+        {
+          "name": "PostgreSQL",
+          "keywords": [
+            "PostGIS",
+            "replication",
+            "performance tuning",
+            "backups"
+          ]
+        },
+        {
+          "name": "Auth0",
+          "keywords": ["OAuth2", "OpenID Connect", "JWT", "identity management"]
+        },
+        {
+          "name": "Docker",
+          "keywords": [
+            "containerization",
+            "Dockerfile",
+            "single-tenant deployments",
+            "images"
+          ]
+        }
+      ],
+      "remote": "Full",
+      "salary": "$124,000 - $150,000 (annual)",
+      "salary_usd": null,
+      "posted_at": "2026-07-01T15:03:53+00:00",
+      "similarity": 0.359,
+      "decayed_similarity": 0.359
+    },
+    {
+      "id": 258345,
+      "title": "AI Model Assessment Specialist",
+      "company": "Confidential",
+      "description": "Confidential company scaling AI training operations and hiring contractors to evaluate and refine next-generation AI models. The organization focuses on model evaluation, RLHF workflows, and improving model reasoning and accuracy across varied domains. This is a high-volume, remote contract hiring e",
+      "skills": [
+        {
+          "name": "RLHF",
+          "keywords": ["reward models", "human feedback", "model evaluation"]
+        },
+        {
+          "name": "OpenAI",
+          "keywords": ["API", "model prompting", "chat interfaces"]
+        },
+        {
+          "name": "Hugging Face",
+          "keywords": ["transformers", "model evaluation", "datasets"]
+        },
+        {
+          "name": "Python",
+          "keywords": ["data analysis", " scripting", "pandas"]
+        },
+        {
+          "name": "Google Sheets",
+          "keywords": ["data entry", "collaboration", "formulas"]
+        },
+        {
+          "name": "Labelbox",
+          "keywords": ["annotation", "quality control", "label management"]
+        }
+      ],
+      "remote": "Full",
+      "salary": "$22 - $70/hr",
+      "salary_usd": null,
+      "posted_at": "2026-05-03T13:39:34+00:00",
+      "similarity": 0.417,
+      "decayed_similarity": 0.358
+    },
+    {
+      "id": 266617,
+      "title": "Founding Engineer",
+      "company": "Bead AI",
+      "description": "Bead AI is building an autonomous trust layer to transform audits from a compliance burden into continuous assurance. The company is a small, product-obsessed team based in London and San Francisco and backed by leading investors. They are using AI to reinvent auditing and are hiring a founding engi",
+      "skills": [
+        {
+          "name": "TypeScript",
+          "keywords": ["Node.js", "ts-node", "type safety", "Express"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["S3", "EC2", "Lambda", "RDS", "IAM"]
+        },
+        {
+          "name": "Temporal",
+          "keywords": [
+            "Temporal.io",
+            "workflows",
+            "activities",
+            "workflow orchestration"
+          ]
+        }
+      ],
+      "remote": "None",
+      "salary": "USD$160-220K+",
+      "salary_usd": null,
+      "posted_at": "2026-07-06T10:16:56+00:00",
+      "similarity": 0.339,
+      "decayed_similarity": 0.358
+    },
+    {
+      "id": 266606,
+      "title": "Full-stack Engineer",
+      "company": "Better Stack",
+      "description": "Better Stack is a developer-first company building reliability and observability tools. The founding team (CEO, COO, CTO) are engineers and the company is deeply engineering-driven. The team ships product-focused, high-quality software with strong emphasis on UX and end-to-end ownership.",
+      "skills": [
+        {
+          "name": "React",
+          "keywords": [
+            "Hooks",
+            "Context",
+            "Component design",
+            "Performance optimization"
+          ]
+        },
+        {
+          "name": "TypeScript",
+          "keywords": ["Static types", "Generics", "tsconfig", "Type safety"]
+        },
+        {
+          "name": "Node.js",
+          "keywords": ["Express", "API design", "Async patterns", "Performance"]
+        },
+        {
+          "name": "JavaScript",
+          "keywords": ["ES6+", "Promises", "Event loop", "DOM"]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["SQL", "Indexes", "Query optimization", "Migrations"]
+        },
+        {
+          "name": "Docker",
+          "keywords": [
+            "Containerization",
+            "Dockerfiles",
+            "Docker Compose",
+            "Image optimization"
+          ]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["EC2", "S3", "RDS", "IAM"]
+        },
+        {
+          "name": "HTML",
+          "keywords": ["Semantic HTML", "Accessibility", "SEO"]
+        },
+        {
+          "name": "CSS",
+          "keywords": ["Responsive design", "Flexbox", "Grid", "Preprocessors"]
+        }
+      ],
+      "remote": "Full",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-06T15:37:10+00:00",
+      "similarity": 0.339,
+      "decayed_similarity": 0.358
+    },
+    {
+      "id": 266610,
+      "title": "Senior & Lead Software Engineer (multiple openings)",
+      "company": "Findigs",
+      "description": "Findigs is transforming the rental experience by making renting fairer, less stressful, and more convenient. The company builds high-scale applications that serve millions of users and focuses on modern, scalable infrastructure. The team culture emphasizes ownership, autonomy, and collaboration in a",
+      "skills": [
+        {
+          "name": "Python",
+          "keywords": ["Django", "Flask", "asyncio", "backend"]
+        },
+        {
+          "name": "TypeScript",
+          "keywords": ["type-safety", "frontend", "Node.js"]
+        },
+        {
+          "name": "Node.js",
+          "keywords": ["Express", "APIs", "server-side"]
+        },
+        {
+          "name": "React",
+          "keywords": ["Hooks", "component design", "state management"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["EC2", "S3", "Lambda", "RDS"]
+        }
+      ],
+      "remote": "Hybrid",
+      "salary": "Competitive base salary",
+      "salary_usd": null,
+      "posted_at": "2026-07-06T14:03:33+00:00",
+      "similarity": 0.339,
+      "decayed_similarity": 0.358
+    },
+    {
+      "id": 267088,
+      "title": "Founding Applied AI & Founding Infrastructure Engineer",
+      "company": "Matterhaul",
+      "description": "Matterhaul is building an AI-native ERP for industrial distribution and the hard goods supply chain. The company helps manufacturers and distributors access product information, answer customer questions confidently, and accelerate time to sale. Matterhaul is an early-stage startup (~1 year) moving ",
+      "skills": [
+        {
+          "name": "Python",
+          "keywords": ["PyTorch", "TensorFlow", "scikit-learn"]
+        },
+        {
+          "name": "PyTorch",
+          "keywords": ["model training", "fine-tuning", "distributed training"]
+        },
+        {
+          "name": "LangChain",
+          "keywords": [
+            "LLM orchestration",
+            "prompting",
+            "retrieval augmentation"
+          ]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["SQL", "schema design", "performance tuning"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["EC2", "S3", "Lambda", "Sagemaker"]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["Helm", "workloads", "autoscaling"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["containerization", "images", "CI/CD"]
+        },
+        {
+          "name": "Terraform",
+          "keywords": ["infrastructure as code", "AWS provisioning"]
+        }
+      ],
+      "remote": "Hybrid",
+      "salary": "$200,000 - $260,000",
+      "salary_usd": null,
+      "posted_at": "2026-07-09T16:50:19+00:00",
+      "similarity": 0.326,
+      "decayed_similarity": 0.358
+    },
+    {
+      "id": 265610,
+      "title": "AI Enablement Engineer",
+      "company": "Symetra",
+      "description": "Symetra is a U.S.-based financial services company focused on life insurance and employee benefits. The AI Enablement team builds production AI solutions to solve domain-specific problems across the business, including intelligent document processing for customer forms. This role is remote within th",
+      "skills": [
+        {
+          "name": "Python",
+          "keywords": ["pandas", "numpy", "scripting", "testing"]
+        },
+        {
+          "name": "PyTorch",
+          "keywords": ["model training", "transfer learning", "fine-tuning"]
+        },
+        {
+          "name": "TensorFlow",
+          "keywords": ["SavedModel", "tf.data", "Keras"]
+        },
+        {
+          "name": "scikit-learn",
+          "keywords": ["feature engineering", "classical ML", "pipelines"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["containerization", "image builds", "CI/CD"]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["deployment", "helm", "pods"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["EC2", "S3", "ECS", "Lambda"]
+        },
+        {
+          "name": "SQL",
+          "keywords": ["PostgreSQL", "queries", "data modeling"]
+        },
+        {
+          "name": "Apache Spark",
+          "keywords": ["batch processing", "PySpark", "ETL"]
+        },
+        {
+          "name": "REST",
+          "keywords": ["API design", "Flask", "FastAPI"]
+        }
+      ],
+      "remote": "Full",
+      "salary": "$130k-210k plus eligibility for annual bonus",
+      "salary_usd": null,
+      "posted_at": "2026-07-02T03:42:10+00:00",
+      "similarity": 0.355,
+      "decayed_similarity": 0.358
+    },
+    {
+      "id": 265717,
+      "title": "Unspecified Position",
+      "company": "Unknown",
+      "description": "The posting contains only a brief negative comment and provides no job details. Company name, role, responsibilities, and requirements are not specified. Request a full job description from the poster before proceeding.",
+      "skills": [
+        {
+          "name": "Microsoft Office",
+          "keywords": ["Excel", "Word", "PowerPoint"]
+        },
+        {
+          "name": "Google Workspace",
+          "keywords": ["Gmail", "Docs", "Sheets"]
+        },
+        {
+          "name": "Slack",
+          "keywords": ["Channels", "Notifications", "Integrations"]
+        },
+        {
+          "name": "Git",
+          "keywords": ["GitHub", "Version control", "Commits"]
+        },
+        {
+          "name": "Zoom",
+          "keywords": ["Meetings", "Webinars", "Screen sharing"]
+        }
+      ],
+      "remote": null,
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-01T16:18:31+00:00",
+      "similarity": 0.357,
+      "decayed_similarity": 0.358
+    },
+    {
+      "id": 265669,
+      "title": "Senior Software Engineer (Founding Team)",
+      "company": "Axo Ventures. Axo Ventures builds clinical software that minimizes time clinicians spend on screens so they can focus fully on patients. Their first market is orthotics and prosthetics (O&P), creating a platform designed to scale across providers and medical specialties. The team is mission-oriented and participates in humanitarian prosthetic missions while prioritizing pragmatic, user-centered engineering.",
+      "description": "Founding engineer owning end-to-end platform architecture and implementation for a clinical O&P product. Work closely with founders to design scalable systems, prioritize user simplicity, and deliver production-quality features.",
+      "skills": [
+        {
+          "name": "C#",
+          "keywords": [".NET", "CLR", "async/await"]
+        },
+        {
+          "name": ".NET",
+          "keywords": ["ASP.NET", "Dependency Injection", "xUnit"]
+        },
+        {
+          "name": "gRPC",
+          "keywords": [
+            "contract-first",
+            "protocol buffers",
+            "service definitions"
+          ]
+        },
+        {
+          "name": "SolidJS",
+          "keywords": ["reactive components", "TypeScript", "component design"]
+        },
+        {
+          "name": "TypeScript",
+          "keywords": ["type safety", "frontend tooling", "strict mode"]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["SQL", "schema design", "performance tuning"]
+        }
+      ],
+      "remote": "None",
+      "salary": "$100k–$140k + Founding Equity",
+      "salary_usd": null,
+      "posted_at": "2026-07-01T18:52:43+00:00",
+      "similarity": 0.357,
+      "decayed_similarity": 0.358
+    },
+    {
+      "id": 265721,
+      "title": "Backend & DevOps Engineer (Mid-Senior / Senior)",
+      "company": "Splash Tech",
+      "description": "Splash Tech is a small UK-based free-to-play gaming company with a distributed EU team. The company is growing quickly after recent success and is actively scaling its backend platform. They are hiring multiple mid-senior to senior engineers to strengthen backend and DevOps capabilities, and expect ",
+      "skills": [
+        {
+          "name": "Java",
+          "keywords": ["JVM", "Spring", "backend"]
+        },
+        {
+          "name": "Python",
+          "keywords": ["scripting", "backend", "data"]
+        },
+        {
+          "name": "TypeScript",
+          "keywords": ["Node.js", "typed code", "front-end interop"]
+        },
+        {
+          "name": "Angular",
+          "keywords": ["components", "TypeScript", "frontend"]
+        },
+        {
+          "name": "SQL",
+          "keywords": ["queries", "performance", "Postgres"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["EC2", "ALB", "Route53", "cloud infrastructure"]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["clusters", "deployments", "Helm"]
+        },
+        {
+          "name": "Postgres",
+          "keywords": ["schema design", "query tuning", "backups"]
+        },
+        {
+          "name": "Trino",
+          "keywords": ["distributed SQL", "analytics"]
+        },
+        {
+          "name": "Flux",
+          "keywords": ["GitOps", "FluxCD", "deployments"]
+        },
+        {
+          "name": "Flagger",
+          "keywords": ["progressive delivery", "canary", "traffic shaping"]
+        },
+        {
+          "name": "Terraform",
+          "keywords": ["IaC", "state management", "modules"]
+        },
+        {
+          "name": "EC2",
+          "keywords": ["instances", "autoscaling"]
+        },
+        {
+          "name": "ALB",
+          "keywords": ["load balancing", "routing"]
+        },
+        {
+          "name": "Route53",
+          "keywords": ["DNS", "routing", "health checks"]
+        },
+        {
+          "name": "Cloudflare",
+          "keywords": ["CDN", "DNS", "security"]
+        },
+        {
+          "name": "Git",
+          "keywords": ["git", "Bitbucket", "SourceForge", "code samples"]
+        }
+      ],
+      "remote": "Full",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-01T16:11:41+00:00",
+      "similarity": 0.356,
+      "decayed_similarity": 0.357
+    },
+    {
+      "id": 263038,
+      "title": "Senior Software Engineer",
+      "company": "Upwave",
+      "description": "Upwave builds brand measurement software for large advertisers, agencies, and media partners. The company processes high-volume ad exposure and survey/event data to deliver brand lift, reach validation, optimization recommendations, and AI-assisted analysis for enterprise marketers. Upwave is profit",
+      "skills": [
+        {
+          "name": "Kotlin",
+          "keywords": ["JVM", "Spring Boot", "Coroutines"]
+        },
+        {
+          "name": "Java",
+          "keywords": ["JVM", "Spring", "Spring Boot"]
+        },
+        {
+          "name": "Spring Boot",
+          "keywords": ["REST", "Microservices", "Dependency Injection"]
+        },
+        {
+          "name": "Python",
+          "keywords": ["analytics", "data pipelines", "pandas"]
+        },
+        {
+          "name": "React",
+          "keywords": ["Hooks", "SPA", "Frontend"]
+        },
+        {
+          "name": "MySQL",
+          "keywords": ["RDBMS", "SQL", "data modeling"]
+        },
+        {
+          "name": "DynamoDB",
+          "keywords": ["NoSQL", "key-value", "scalable reads/writes"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["EC2", "S3", "Lambda"]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["containers", "EKS", "helm"]
+        },
+        {
+          "name": "Terraform",
+          "keywords": ["IaC", "provisioning", "modules"]
+        },
+        {
+          "name": "SQL",
+          "keywords": ["queries", "joins", "performance tuning"]
+        },
+        {
+          "name": "LLM orchestration",
+          "keywords": ["LLMs", "AI pipelines", "prompting"]
+        }
+      ],
+      "remote": "Full",
+      "salary": "$150k-$175k + bonus/equity/benefits",
+      "salary_usd": null,
+      "posted_at": "2026-06-12T18:31:16+00:00",
+      "similarity": 0.395,
+      "decayed_similarity": 0.357
+    },
+    {
+      "id": 265794,
+      "title": "Founding Full-stack Software Engineer",
+      "company": "Pango",
+      "description": "Pango is building an Agentic Operating System for e-commerce logistics, aiming to create the AI e-commerce employee of the future. The company is forming its core engineering team in Stockholm and is backed by prominent investors, including YC. In less than a year they have seen rapid growth and are",
+      "skills": [
+        {
+          "name": "PHP",
+          "keywords": ["Laravel", "Composer", "REST APIs"]
+        },
+        {
+          "name": "Laravel",
+          "keywords": ["Eloquent", "Queues", "Middleware"]
+        },
+        {
+          "name": "JavaScript",
+          "keywords": ["ES6+", "Async/Await", "Node.js"]
+        },
+        {
+          "name": "React",
+          "keywords": ["Hooks", "Component Design", "State Management"]
+        },
+        {
+          "name": "Shopify",
+          "keywords": ["Storefront API", "App Integrations", "Shopify Plus"]
+        },
+        {
+          "name": "Magento",
+          "keywords": ["Extensions", "APIs", "Platform Integration"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["Containerization", "Docker Compose", "Image Management"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["EC2", "RDS", "S3"]
+        }
+      ],
+      "remote": "Hybrid",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-02T11:54:24+00:00",
+      "similarity": 0.354,
+      "decayed_similarity": 0.357
+    },
+    {
+      "id": 258340,
+      "title": "Founding Member of Technical Staff",
+      "company": "Eagle",
+      "description": "Eagle acquires civil, structural, and MEP engineering firms and transforms them with applied AI. Backed by Lightspeed Venture Partners, the company aims to automate the large majority of routine engineering work and build the most valuable, talent-dense engineering firm in the United States. This ro",
+      "skills": [
+        {
+          "name": "Python",
+          "keywords": ["numpy", "pandas", "scikit-learn"]
+        },
+        {
+          "name": "PyTorch",
+          "keywords": ["torchscript", "CUDA", "model training"]
+        },
+        {
+          "name": "TensorFlow",
+          "keywords": ["TF2", "Keras", "SavedModel"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["S3", "EC2", "SageMaker"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["containers", "Docker Compose", "image building"]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["EKS", "Helm", "cluster orchestration"]
+        }
+      ],
+      "remote": "None",
+      "salary": "$150K–$300K + equity",
+      "salary_usd": null,
+      "posted_at": "2026-05-03T22:51:50+00:00",
+      "similarity": 0.415,
+      "decayed_similarity": 0.356
+    },
+    {
+      "id": 265958,
+      "title": "Full-stack Product Engineer",
+      "company": "Featurebase",
+      "description": "Featurebase is a modern customer support and product feedback platform used by thousands of teams, including Lovable, Raycast, and n8n. The company is fully bootstrapped, profitable, and growing quickly while focusing on product-led development. They are building an integrated customer-facing suite ",
+      "skills": [
+        {
+          "name": "Next.js",
+          "keywords": ["React", "SSR", "Routing", "API routes"]
+        },
+        {
+          "name": "TypeScript",
+          "keywords": ["Typing", "tsconfig", "Generics"]
+        },
+        {
+          "name": "Node.js",
+          "keywords": ["REST APIs", "Backend services", "npm"]
+        },
+        {
+          "name": "MongoDB",
+          "keywords": ["Document database", "Mongoose", "Indexes"]
+        },
+        {
+          "name": "Redis",
+          "keywords": ["Caching", "In-memory store", "Pub/Sub"]
+        }
+      ],
+      "remote": "Full",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-03T09:20:41+00:00",
+      "similarity": 0.348,
+      "decayed_similarity": 0.356
+    },
+    {
+      "id": 266608,
+      "title": "Senior Software Engineer",
+      "company": "Category Labs",
+      "description": "Category Labs (formerly Monad Labs) is a team of systems engineers and researchers building at the frontier of decentralized technology. The company develops a high-performance, EVM-compatible Layer 1, including a parallel-execution EVM, a custom state database, and a BFT consensus client, with an e",
+      "skills": [
+        {
+          "name": "C++",
+          "keywords": ["STL", "concurrency", "performance", "memory management"]
+        },
+        {
+          "name": "Rust",
+          "keywords": ["ownership", "async", "tokio", "systems programming"]
+        },
+        {
+          "name": "Solidity",
+          "keywords": ["smart contracts", "EVM", "Hardhat", "Foundry"]
+        },
+        {
+          "name": "EVM",
+          "keywords": ["EVM compatibility", "parallel execution", "Ethereum"]
+        },
+        {
+          "name": "Z3",
+          "keywords": [
+            "SMT solving",
+            "formal verification",
+            "symbolic reasoning"
+          ]
+        },
+        {
+          "name": "LLVM",
+          "keywords": ["compiler backend", "codegen", "optimizations"]
+        }
+      ],
+      "remote": "Hybrid",
+      "salary": "200000+ USD",
+      "salary_usd": null,
+      "posted_at": "2026-07-06T19:45:02+00:00",
+      "similarity": 0.336,
+      "decayed_similarity": 0.356
+    },
+    {
+      "id": 265645,
+      "title": "Multiple Roles — Engineering & Product",
+      "company": "Oneleet",
+      "description": "Oneleet is an all-in-one cybersecurity startup building Attack Surface Monitoring, code scanning, dependency management, endpoint protection, and compliance tooling. The company recently closed a Series A and is growing rapidly, working on ambitious security and product initiatives. Oneleet is remot",
+      "skills": [
+        {
+          "name": "Go",
+          "keywords": ["Golang", "microservices", "concurrency"]
+        },
+        {
+          "name": "TypeScript",
+          "keywords": ["Node.js", "type safety", "frontend and backend"]
+        },
+        {
+          "name": "React",
+          "keywords": ["Hooks", "component design", "TypeScript"]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["k8s", "containers", "Helm"]
+        }
+      ],
+      "remote": "Full",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-01T20:40:31+00:00",
+      "similarity": 0.353,
+      "decayed_similarity": 0.355
+    },
+    {
+      "id": 266841,
+      "title": "Senior Mechanical Engineer",
+      "company": "Cargo Robotics",
+      "description": "Cargo Robotics is an early-stage robotics company building the X1 Robotic Cargo Bay for delivery vans. The founders have deep logistics experience and a large parcel carrier is already committed as a customer. The team is well-funded and composed of engineers from top organizations (Tesla, NASA JPL,",
+      "skills": [
+        {
+          "name": "SolidWorks",
+          "keywords": [
+            "CAD modeling",
+            "Assemblies",
+            "Detail drawings",
+            "Configurations"
+          ]
+        },
+        {
+          "name": "ANSYS",
+          "keywords": ["FEA", "Structural analysis", "Thermal analysis"]
+        },
+        {
+          "name": "MATLAB",
+          "keywords": ["Modeling", "Data analysis", "Control system simulation"]
+        },
+        {
+          "name": "GD&T",
+          "keywords": ["Tolerance stack-up", "Dimensioning", "Inspection"]
+        },
+        {
+          "name": "3D Printing",
+          "keywords": ["Rapid prototyping", "SLA", "FDM"]
+        }
+      ],
+      "remote": "None",
+      "salary": "Competitive",
+      "salary_usd": null,
+      "posted_at": "2026-07-07T16:30:39+00:00",
+      "similarity": 0.331,
+      "decayed_similarity": 0.355
+    },
+    {
+      "id": 265685,
+      "title": "Mid-level C#/.NET Developer",
+      "company": "RedLine Solutions, Inc.",
+      "description": "RedLine Solutions is a small, agile, creative and laid-back software team that values work-life balance. The company emphasizes mentorship — the System Architect / Dev Lead provides deep technical coaching that can accelerate your career. The role is fully remote but expects candidates to be located",
+      "skills": [
+        {
+          "name": "C#",
+          "keywords": ["LINQ", "async/await", "Generics"]
+        },
+        {
+          "name": ".NET",
+          "keywords": [".NET Core", ".NET 6+", "CLR"]
+        },
+        {
+          "name": "ASP.NET Core",
+          "keywords": ["Web API", "Middleware", "Routing"]
+        },
+        {
+          "name": "Entity Framework",
+          "keywords": ["EF Core", "Migrations", "LINQ"]
+        },
+        {
+          "name": "SQL Server",
+          "keywords": ["T-SQL", "Stored Procedures", "Query Optimization"]
+        },
+        {
+          "name": "Git",
+          "keywords": ["Branching", "Pull Requests", "Code Reviews"]
+        },
+        {
+          "name": "Azure",
+          "keywords": ["Blob Storage", "App Service", "Azure SQL"]
+        },
+        {
+          "name": "xUnit",
+          "keywords": ["Unit Testing", "Test Fixtures", "Mocking"]
+        }
+      ],
+      "remote": "Full",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-01T17:51:00+00:00",
+      "similarity": 0.354,
+      "decayed_similarity": 0.355
+    },
+    {
+      "id": 265614,
+      "title": "Staff Software Engineer / Staff ML Engineer",
+      "company": "ViyaMD",
+      "description": "ViyaMD builds a physician-grade clinical intelligence platform that converts large, messy medical records into clinically accurate timelines, reasoning, and insights. The product targets legal, insurance, and healthcare teams and focuses on high-stakes, trusted AI. The company is hiring senior engin",
+      "skills": [
+        {
+          "name": "Python",
+          "keywords": ["pandas", "NumPy", "backend", "ML tooling"]
+        },
+        {
+          "name": "TypeScript",
+          "keywords": ["Node.js", "backend", "typing"]
+        },
+        {
+          "name": "LLMs",
+          "keywords": ["GPT", "model evaluation", "inference"]
+        },
+        {
+          "name": "Retrieval-Augmented Generation (RAG)",
+          "keywords": ["vector search", "retrieval", "FAISS", "semantic search"]
+        },
+        {
+          "name": "Agents",
+          "keywords": ["agentic systems", "tool use", "orchestration"]
+        },
+        {
+          "name": "Fine-tuning",
+          "keywords": ["instruction tuning", "LoRA", "model adaptation"]
+        },
+        {
+          "name": "Document Understanding",
+          "keywords": ["OCR", "NER", "information extraction"]
+        }
+      ],
+      "remote": "None",
+      "salary": "Competitive",
+      "salary_usd": null,
+      "posted_at": "2026-07-02T01:30:54+00:00",
+      "similarity": 0.352,
+      "decayed_similarity": 0.355
+    },
+    {
+      "id": 258136,
+      "title": "Software Engineer (Data Platform)",
+      "company": "Latitude AI",
+      "description": "Latitude AI builds automated driving software as an independent company owned by Ford. The company is focused on shipping a consumer-facing fleet-level product in 2026 and emphasizes reliability at scale while retaining the ability to move quickly. The Data Platform team supports company-wide decisi",
+      "skills": [
+        {
+          "name": "BigQuery",
+          "keywords": [
+            "SQL",
+            "data warehousing",
+            "partitioning",
+            "performance tuning"
+          ]
+        },
+        {
+          "name": "dbt",
+          "keywords": ["data transformations", "models", "tests", "CI"]
+        },
+        {
+          "name": "Apache Superset",
+          "keywords": ["dashboards", "visualization", "exploration"]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["k8s", "containers", "deployments", "helm"]
+        },
+        {
+          "name": "Python",
+          "keywords": ["pandas", "ETL", "data processing", "scripting"]
+        },
+        {
+          "name": "SQL",
+          "keywords": [
+            "analytical SQL",
+            "query optimization",
+            "window functions"
+          ]
+        },
+        {
+          "name": "Jupyter",
+          "keywords": ["notebooks", "exploratory analysis", "prototyping"]
+        }
+      ],
+      "remote": "Hybrid",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-05-02T10:40:46+00:00",
+      "similarity": 0.413,
+      "decayed_similarity": 0.354
+    },
+    {
+      "id": 265679,
+      "title": "Senior/Staff Software Engineer - AI / Agentic apps",
+      "company": "Grafana Labs",
+      "description": "Grafana Labs builds open observability software used by engineering teams worldwide. The AI / Agentic apps team develops agentic features like the Grafana Assistant, Investigations, and AI Observability to help users operate and debug systems. This role hires senior/staff engineers to design, build,",
+      "skills": [
+        {
+          "name": "Grafana",
+          "keywords": ["Grafana OSS", "Dashboards", "Panels"]
+        },
+        {
+          "name": "Grafana Cloud CLI (GCX)",
+          "keywords": ["CLI", "Cloud APIs", "Automation"]
+        },
+        {
+          "name": "Anthropic Claude",
+          "keywords": ["Claude Code", "Agent integration", "Prompting"]
+        },
+        {
+          "name": "OpenAI Codex",
+          "keywords": ["Code generation", "Agent tooling"]
+        },
+        {
+          "name": "OpenAI Cursor",
+          "keywords": ["LLM tooling", "Agent orchestration"]
+        },
+        {
+          "name": "Hugging Face",
+          "keywords": ["Transformers", "Model fine-tuning", "Inference"]
+        },
+        {
+          "name": "Kubernetes",
+          "keywords": ["Containers", "Helm", "Cluster operations"]
+        },
+        {
+          "name": "Prometheus",
+          "keywords": ["Metrics", "Alerting", "Instrumentation"]
+        },
+        {
+          "name": "Python",
+          "keywords": ["ML tooling", "APIs", "Data processing"]
+        },
+        {
+          "name": "Go",
+          "keywords": ["CLI tools", "Backend services", "Concurrency"]
+        },
+        {
+          "name": "TypeScript",
+          "keywords": ["Frontend", "Node.js", "SDKs"]
+        }
+      ],
+      "remote": "Full",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-01T18:02:19+00:00",
+      "similarity": 0.352,
+      "decayed_similarity": 0.354
+    },
+    {
+      "id": 265727,
+      "title": "Sr. Data Engineer I",
+      "company": "DoubleVerify (DV Scibids)",
+      "description": "DV Scibids is the AI-powered digital campaign activation arm of DoubleVerify, the market standard for digital media measurement trusted by hundreds of Fortune 500 brands. The Data Engineering team owns the critical integrations and data flows that connect Scibids' optimization engine to the broader ",
+      "skills": [
+        {
+          "name": "Python",
+          "keywords": ["asyncio", "requests", "data processing"]
+        },
+        {
+          "name": "SQL",
+          "keywords": ["query optimization", "analytics"]
+        },
+        {
+          "name": "BigQuery",
+          "keywords": ["analytics", "partitioning"]
+        },
+        {
+          "name": "Cloud SQL",
+          "keywords": ["managed databases", "GCP"]
+        },
+        {
+          "name": "Cloud Datastore",
+          "keywords": ["NoSQL", "GCP"]
+        },
+        {
+          "name": "Cloud Run",
+          "keywords": ["GCP", "containerized services"]
+        },
+        {
+          "name": "Prefect",
+          "keywords": ["workflow orchestration", "scheduling"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["containers", "images"]
+        },
+        {
+          "name": "CI/CD",
+          "keywords": ["pipelines", "automation", "deployment"]
+        },
+        {
+          "name": "Git",
+          "keywords": ["version control", "branching", "merging"]
+        },
+        {
+          "name": "Java",
+          "keywords": ["JVM", "backend"]
+        },
+        {
+          "name": "Rust",
+          "keywords": ["systems programming"]
+        },
+        {
+          "name": "Claude Code",
+          "keywords": ["AI-augmented development"]
+        },
+        {
+          "name": "Cursor",
+          "keywords": ["AI-augmented development"]
+        }
+      ],
+      "remote": "Hybrid",
+      "salary": "$89K–$178K",
+      "salary_usd": null,
+      "posted_at": "2026-07-01T16:04:27+00:00",
+      "similarity": 0.352,
+      "decayed_similarity": 0.354
+    },
+    {
+      "id": 265734,
+      "title": "Full Stack Engineer",
+      "company": "Credo Health",
+      "description": "Credo Health is a seed-stage, HIPAA-compliant health-tech startup focused on delivering the right patient data to clinicians quickly. The company builds an AI platform that reduces delays and administrative burden caused by outdated record-sharing methods. Credo has paying customers using the produc",
+      "skills": [
+        {
+          "name": "Python",
+          "keywords": ["Django", "backend"]
+        },
+        {
+          "name": "Django",
+          "keywords": ["ORM", "REST"]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["SQL", "relational databases"]
+        },
+        {
+          "name": "Vue",
+          "keywords": ["Vue.js", "frontend"]
+        },
+        {
+          "name": "Temporal",
+          "keywords": ["workflows", "long-running jobs"]
+        },
+        {
+          "name": "Google Cloud",
+          "keywords": ["GCP"]
+        },
+        {
+          "name": "OpenAI",
+          "keywords": ["OpenAI API", "GPT"]
+        },
+        {
+          "name": "Gemini",
+          "keywords": ["Google Gemini"]
+        },
+        {
+          "name": "Claude",
+          "keywords": ["Anthropic Claude"]
+        },
+        {
+          "name": "Cursor",
+          "keywords": ["Cursor"]
+        },
+        {
+          "name": "CodeRabbit",
+          "keywords": ["CodeRabbit"]
+        },
+        {
+          "name": "GitHub Copilot",
+          "keywords": ["Copilot"]
+        },
+        {
+          "name": "FHIR",
+          "keywords": ["FHIR"]
+        },
+        {
+          "name": "HL7",
+          "keywords": ["HL7"]
+        }
+      ],
+      "remote": "Hybrid",
+      "salary": "125000-175000",
+      "salary_usd": null,
+      "posted_at": "2026-07-01T15:30:17+00:00",
+      "similarity": 0.352,
+      "decayed_similarity": 0.354
+    },
+    {
+      "id": 265723,
+      "title": "Senior Software Engineer, 3D Measurements",
+      "company": "Hover",
+      "description": "Hover builds software that generates accurate 3D models of buildings for homeowners, contractors, and insurance professionals. These models are used to derive measurements, estimate costs, and visualize remodels and repairs. The company's long-term ambition is to create up-to-date digital twins of b",
+      "skills": [
+        {
+          "name": "C++",
+          "keywords": ["STL", "memory management", "performance optimization"]
+        },
+        {
+          "name": "Python",
+          "keywords": ["numpy", "scipy", "prototyping"]
+        },
+        {
+          "name": "COLMAP",
+          "keywords": ["structure-from-motion", "feature matching"]
+        },
+        {
+          "name": "Open3D",
+          "keywords": ["point cloud processing", "mesh reconstruction"]
+        },
+        {
+          "name": "PCL",
+          "keywords": ["point-cloud algorithms", "filtering", "registration"]
+        },
+        {
+          "name": "CUDA",
+          "keywords": ["GPU acceleration", "parallel processing"]
+        },
+        {
+          "name": "OpenGL",
+          "keywords": ["rendering", "visualization"]
+        },
+        {
+          "name": "PyTorch",
+          "keywords": ["deep learning", "model inference"]
+        }
+      ],
+      "remote": "None",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-01T16:01:11+00:00",
+      "similarity": 0.352,
+      "decayed_similarity": 0.354
+    },
+    {
+      "id": 265702,
+      "title": "Senior Fullstack Engineer",
+      "company": "Sequent Tech",
+      "description": "Sequent builds cryptographically secure online voting infrastructure used in over 200 real elections across multiple countries. The team is fully remote and develops an open-source platform combining Rust, TypeScript, and modern DevOps practices. Their work focuses on end-to-end encrypted voting, cr",
+      "skills": [
+        {
+          "name": "Rust",
+          "keywords": ["actix", "tokio", "wasm-bindgen", "memory-safety"]
+        },
+        {
+          "name": "TypeScript",
+          "keywords": ["strict-types", "tsc", "tooling", "type-safety"]
+        },
+        {
+          "name": "React",
+          "keywords": ["hooks", "state-management", "component-design"]
+        },
+        {
+          "name": "WebAssembly",
+          "keywords": ["wasm-bindgen", "performance", "browser-integration"]
+        },
+        {
+          "name": "GraphQL",
+          "keywords": ["schema-design", "resolvers", "apollo"]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["sql", "indexing", "migrations"]
+        },
+        {
+          "name": "Keycloak",
+          "keywords": ["OIDC", "SSO", "authentication"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["containerization", "images", "docker-compose"]
+        },
+        {
+          "name": "CI/CD",
+          "keywords": ["GitHub Actions", "pipelines", "automated-tests"]
+        }
+      ],
+      "remote": "Full",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-01T16:55:56+00:00",
+      "similarity": 0.353,
+      "decayed_similarity": 0.354
+    },
+    {
+      "id": 258116,
+      "title": "Growth Marketer (Entry-level)",
+      "company": "We The Flywheel",
+      "description": "We The Flywheel is a global media network, digital consultancy, and product studio focused on helping companies grow through technology. The company helps clients reach audiences at scale through integrated product, media, and growth strategies. This role is an entry-level, remote growth marketer po",
+      "skills": [
+        {
+          "name": "Google Analytics",
+          "keywords": ["GA4", "Event tracking", "UTM", "Funnel analysis"]
+        },
+        {
+          "name": "Google Ads",
+          "keywords": [
+            "Search campaigns",
+            "Conversion tracking",
+            "Bidding",
+            "Keyword research"
+          ]
+        },
+        {
+          "name": "Facebook Ads",
+          "keywords": [
+            "Meta Ads Manager",
+            "Audience targeting",
+            "Ad creative testing"
+          ]
+        },
+        {
+          "name": "Mailchimp",
+          "keywords": ["Email campaigns", "Segmentation", "Automation"]
+        },
+        {
+          "name": "Ahrefs",
+          "keywords": ["Keyword research", "Backlink analysis", "Content gap"]
+        },
+        {
+          "name": "Google Tag Manager",
+          "keywords": ["Event setup", "DataLayer", "Tag deployment"]
+        }
+      ],
+      "remote": "Full",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-05-01T15:02:39+00:00",
+      "similarity": 0.412,
+      "decayed_similarity": 0.353
+    },
+    {
+      "id": 265688,
+      "title": "Senior Fullstack Engineer",
+      "company": "Bucket Robotics",
+      "description": "Bucket Robotics turns CAD files into production-ready computer vision models that detect defects instantly with zero manual labeling. The company focuses on automation-first solutions that replace slow legacy inspection processes with instant AI inspection. As a YC S24 early-stage startup, they buil",
+      "skills": [
+        {
+          "name": "React",
+          "keywords": [
+            "Hooks",
+            "Next.js",
+            "Component design",
+            "State management"
+          ]
+        },
+        {
+          "name": "TypeScript",
+          "keywords": ["Type safety", "Generics", "Tooling"]
+        },
+        {
+          "name": "Python",
+          "keywords": ["Data processing", "Scripting", "NumPy"]
+        },
+        {
+          "name": "PyTorch",
+          "keywords": ["Deep learning", "Model training", "Torchvision"]
+        },
+        {
+          "name": "OpenCV",
+          "keywords": ["Image processing", "Feature detection", "cv2"]
+        },
+        {
+          "name": "Docker",
+          "keywords": ["Containerization", "Dockerfiles", "Image builds"]
+        },
+        {
+          "name": "AWS",
+          "keywords": ["S3", "EC2", "ECS", "Lambda"]
+        },
+        {
+          "name": "PostgreSQL",
+          "keywords": ["SQL", "Schema design", "Indexing"]
+        },
+        {
+          "name": "Node.js",
+          "keywords": ["Express", "APIs", "Server-side"]
+        }
+      ],
+      "remote": "None",
+      "salary": null,
+      "salary_usd": null,
+      "posted_at": "2026-07-01T17:36:23+00:00",
+      "similarity": 0.351,
+      "decayed_similarity": 0.353
+    }
+  ]
+}

@@ -15,6 +15,7 @@ import {
   getResumeEmbedding,
   generateHydeEmbedding,
 } from './matchingHelpers';
+import { buildLexicalQuery, promptToLexicalQuery } from './matching/lexical';
 
 const REGISTRY_BASE = 'https://registry.jsonresume.org';
 
@@ -40,9 +41,7 @@ export const extractLocation = (resume) => {
   if (!loc) {
     return '';
   }
-  return [loc.city, loc.region, loc.countryCode]
-    .filter(Boolean)
-    .join(', ');
+  return [loc.city, loc.region, loc.countryCode].filter(Boolean).join(', ');
 };
 
 const resolveFromProfile = async ({ username, searchId, shouldRerank }) => {
@@ -72,6 +71,7 @@ const resolveFromProfile = async ({ username, searchId, shouldRerank }) => {
     resumeText,
     searchPrompt: profile.prompt || '',
     candidateLocation,
+    lexicalQuery: promptToLexicalQuery(profile.prompt || ''),
   };
 };
 
@@ -99,6 +99,7 @@ const resolveFromResume = async ({ username, useHyde }) => {
     resumeText: result.text,
     searchPrompt: '',
     candidateLocation: extractLocation(resume),
+    lexicalQuery: buildLexicalQuery(resume),
   };
 };
 

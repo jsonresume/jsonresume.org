@@ -57,11 +57,12 @@ Hard rules:
 - If the candidate's location makes the role impossible (onsite/hybrid elsewhere, geo-fenced remote excluding them, timezone-incompatible), score it 25 or lower no matter how good the skill fit.
 - Seniority mismatches (junior/entry roles for a senior candidate), per-task gig pay, or salary far below the candidate's level cap at 35.
 - Use the full 0-100 range; avoid ties — differentiate adjacent jobs.
-Output ONLY a JSON array: [{"id": <job id>, "score": <0-100>}, ...] with one entry per job, no prose.`,
+For jobs scoring 60+, add "reason": a grounded ≤12-word phrase naming the concrete overlap (e.g. "wants Vercel AI SDK + senior TS, both proven"). No reason below 60.
+Output ONLY a JSON array: [{"id": <job id>, "score": <0-100>, "reason": "..."}, ...] with one entry per job, no prose.`,
     prompt: `${context}\n${locationLine}\n\nJob postings:\n\n${jobs
       .map(jobBlock)
       .join('\n\n')}`,
-    maxTokens: 1800,
+    maxTokens: 2400,
   });
 
   const parsed = parseScores(text);
@@ -75,6 +76,10 @@ Output ONLY a JSON array: [{"id": <job id>, "score": <0-100>}, ...] with one ent
     scores.push({
       id,
       rerank_score: Math.min(100, Math.max(0, Math.round(row.score))),
+      reason:
+        typeof row.reason === 'string' && row.reason.trim()
+          ? row.reason.trim().slice(0, 120)
+          : null,
     });
   }
   return scores;

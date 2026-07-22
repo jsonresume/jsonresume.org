@@ -1,5 +1,6 @@
 import { Box, Text } from 'ink';
 import { h } from './h.js';
+import { formatDigest } from './tierHelpers.js';
 
 const FILTER_LABELS = {
   remote: () => 'Remote',
@@ -16,6 +17,7 @@ export default function Header({
   filters,
   searchName,
   appliedQuery,
+  digest,
 }) {
   const cols = process.stdout.columns || 80;
 
@@ -64,6 +66,12 @@ export default function Header({
 
   const tabRow = h(Box, { paddingX: 1 }, ...tabElements);
 
+  // ── Digest (tier counts + new since last visit) ───
+  const digestText = formatDigest(digest);
+  const digestRow = digestText
+    ? h(Box, { paddingX: 1 }, h(Text, { dimColor: true }, digestText))
+    : null;
+
   // ── Filter pills (only if active) ────────────────
   const tags = [];
   for (const f of filters || []) {
@@ -101,6 +109,7 @@ export default function Header({
     { flexDirection: 'column' },
     titleRow,
     tabRow,
+    digestRow,
     filterRow,
     divider
   );

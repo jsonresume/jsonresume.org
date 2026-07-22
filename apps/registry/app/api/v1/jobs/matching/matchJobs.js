@@ -25,6 +25,7 @@ export async function matchJobs({
   embedding,
   resumeText,
   searchPrompt,
+  lexicalQuery = '',
   top,
   days,
   remote,
@@ -39,13 +40,25 @@ export async function matchJobs({
   const createdAfter = new Date(
     Date.now() - days * 24 * 60 * 60 * 1000
   ).toISOString();
+  const matchCount = Math.max(MIN_POOL, top * 5);
 
-  const { data: matched, error } = await supabase.rpc('match_jobs_v5', {
-    query_embedding: embedding,
-    match_threshold: -1,
-    match_count: Math.max(MIN_POOL, top * 5),
-    created_after: createdAfter,
-  });
+  // Hybrid retrieval (vector + tsvector fused with RRF) when a lexical
+  // query is available — exact terms like "Rust" or a company name get a
+  // rank-based second chance instead of dissolving into the compressed
+  // dense-similarity band. Falls back to pure vector search otherwise.
+  const { data: matched, error } = lexicalQuery
+    ? await supabase.rpc('match_jobs_v5_hybrid', {
+        query_embedding: embedding,
+        query_text: lexicalQuery,
+        match_count: matchCount,
+        created_after: createdAfter,
+      })
+    : await supabase.rpc('match_jobs_v5', {
+        query_embedding: embedding,
+        match_threshold: -1,
+        match_count: matchCount,
+        created_after: createdAfter,
+      });
 
   if (error) {
     throw new Error(error.message);
@@ -76,11 +89,13 @@ export async function matchJobs({
         if (!parsed?.title || !parsed?.company) {
           return null;
         }
-        const similarity =
-          matched.find((m) => m.id === job.id)?.similarity || 0;
+        const match = matched.find((m) => m.id === job.id);
+        const similarity = Number(match?.similarity) || 0;
+        const rrf = Number(match?.rrf_score) || 0;
         const decayed =
           Math.round(timeDecayScore(similarity, job.posted_at) * 1000) / 1000;
         return {
+          rrf_score: rrf,
           id: job.id,
           uuid: job.uuid,
           title: parsed.title,
@@ -117,8 +132,18 @@ export async function matchJobs({
   // the window out over parallel ~50-job listwise calls (~3 cheap calls).
   if (shouldRerank && results.length > 0) {
     const windowSize = Math.min(150, results.length);
-    const toRerank = results.slice(0, windowSize);
-    const rest = results.slice(windowSize);
+    // Window SELECTION prefers the RRF fusion order when hybrid retrieval
+    // ran (lexical hits deserve a shot at the reranker even with weak
+    // vector similarity); the final order still comes from the rerank blend.
+    const hasRrf = results.some((j) => j.rrf_score > 0);
+    const windowOrder = hasRrf
+      ? [...results].sort((a, b) => b.rrf_score - a.rrf_score)
+      : results;
+    const windowIds = new Set(
+      windowOrder.slice(0, windowSize).map((j) => j.id)
+    );
+    const toRerank = results.filter((j) => windowIds.has(j.id));
+    const rest = results.filter((j) => !windowIds.has(j.id));
 
     try {
       const scores = await rerankJobs(
@@ -129,24 +154,38 @@ export async function matchJobs({
       );
       const scoreMap = {};
       scores.forEach((s) => {
-        scoreMap[s.id] = s.rerank_score;
+        scoreMap[s.id] = s;
       });
 
       const maxSim = Math.max(
         ...toRerank.map((j) => j.decayed_similarity),
         0.001
       );
+      // Tier bands derived from the calibrated 0-100 LLM score — this is
+      // what clients present instead of raw cosine numbers.
+      const tierFor = (llm) =>
+        llm == null
+          ? null
+          : llm >= 80
+          ? 'strong'
+          : llm >= 60
+          ? 'good'
+          : llm >= 40
+          ? 'stretch'
+          : null;
       // Jobs the model omitted get a neutral 50 — visible in the payload as
       // rerank_score: null rather than a fabricated score.
       const reranked = toRerank
         .map((j) => {
-          const llm = scoreMap[j.id];
+          const s = scoreMap[j.id];
+          const llm = s?.rerank_score;
           const combined =
-            0.35 * (j.decayed_similarity / maxSim) +
-            0.65 * ((llm ?? 50) / 100);
+            0.35 * (j.decayed_similarity / maxSim) + 0.65 * ((llm ?? 50) / 100);
           return {
             ...j,
             rerank_score: llm ?? null,
+            tier: tierFor(llm),
+            reason: s?.reason || null,
             combined_score: Math.round(combined * 1000) / 1000,
             score: Math.round(combined * 1000) / 1000,
           };

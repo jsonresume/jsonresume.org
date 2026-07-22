@@ -1,28 +1,41 @@
 /**
  * Shared match orchestration for the /api/v1/jobs GET (authenticated) and POST
  * (resume-in-body) handlers. Keeps the run/classify/global-remote-filter tail
- * and the feedback + negative-signal logic in one place so the route handlers
- * stay thin.
+ * and the feedback (Rocchio) logic in one place so the route handlers stay
+ * thin.
  */
 import { logger } from '@/lib/logger';
 import { classifyGlobalRemote } from './globalRemote';
 import {
   getSupabase,
-  subtractDirection,
+  normalize,
   averageEmbeddings,
   matchJobs,
 } from './matchingHelpers';
+
+// Rocchio relevance-feedback weights (classic defaults, arXiv 2108.11044):
+// q' = ALPHA*q + BETA*centroid(liked) - GAMMA*centroid(rejected).
+// The previous naive subtraction only used negatives and could nuke whole
+// neighborhoods; bounded centroids with a positive term are visible,
+// bounded, and reversible.
+const ROCCHIO_ALPHA = 1.0;
+const ROCCHIO_BETA = 0.75;
+const ROCCHIO_GAMMA = 0.15;
+const FEEDBACK_MIN = 2; // need >=2 signals of a kind before it counts
+const FEEDBACK_CAP = 20; // most recent N of each kind
 
 /**
  * Partition raw feedback rows into the maps the matcher needs:
  *  - stateMap:      job_id -> sentiment (excluding dossier)
  *  - dossierSet:    job_ids flagged with a dossier
+ *  - likedJobIds:   interested/applied ids (positive signal)
  *  - rejectedJobIds: not_interested/dismissed ids (negative signal)
  * @param {Array<{job_id: string, sentiment: string}>} feedback
  */
 export const partitionFeedback = (feedback) => {
   const stateMap = {};
   const dossierSet = new Set();
+  const likedJobIds = [];
   const rejectedJobIds = [];
 
   (feedback || []).forEach((f) => {
@@ -32,55 +45,84 @@ export const partitionFeedback = (feedback) => {
       stateMap[f.job_id] = f.sentiment;
       if (f.sentiment === 'not_interested' || f.sentiment === 'dismissed') {
         rejectedJobIds.push(f.job_id);
+      } else if (f.sentiment === 'interested' || f.sentiment === 'applied') {
+        likedJobIds.push(f.job_id);
       }
     }
   });
 
-  return { stateMap, dossierSet, rejectedJobIds };
+  return { stateMap, dossierSet, likedJobIds, rejectedJobIds };
+};
+
+/** Fetch and parse stored job embeddings for a set of ids. */
+const fetchJobEmbeddings = async (jobIds) => {
+  const ids = jobIds
+    .map(Number)
+    .filter((n) => !isNaN(n))
+    .slice(-FEEDBACK_CAP);
+  if (ids.length === 0) {
+    return [];
+  }
+  const { data } = await getSupabase()
+    .from('jobs')
+    .select('embedding_v5')
+    .in('id', ids)
+    .not('embedding_v5', 'is', null);
+  return (data || [])
+    .map((j) => {
+      const e = j.embedding_v5;
+      if (Array.isArray(e)) return e;
+      if (typeof e === 'string') {
+        try {
+          return JSON.parse(e);
+        } catch {
+          return null;
+        }
+      }
+      return null;
+    })
+    .filter((e) => Array.isArray(e) && e.length > 0);
 };
 
 /**
- * Nudge the query embedding away from rejected jobs by subtracting their
- * average direction. Returns the (possibly) adjusted embedding; failures are
- * logged and the original embedding is returned unchanged.
+ * Rocchio relevance feedback: blend the query embedding toward the centroid
+ * of liked jobs and away from the centroid of rejected jobs. Each term only
+ * applies with >= FEEDBACK_MIN signals. Failures are logged and the original
+ * embedding is returned unchanged.
  */
-export const applyNegativeSignal = async (embedding, rejectedJobIds) => {
-  if (!(rejectedJobIds.length >= 2 && embedding)) {
+export const applyFeedbackSignal = async (
+  embedding,
+  likedJobIds = [],
+  rejectedJobIds = []
+) => {
+  const wantPos = likedJobIds.length >= FEEDBACK_MIN;
+  const wantNeg = rejectedJobIds.length >= FEEDBACK_MIN;
+  if (!embedding || (!wantPos && !wantNeg)) {
     return embedding;
   }
 
   try {
-    const ids = rejectedJobIds
-      .map(Number)
-      .filter((n) => !isNaN(n))
-      .slice(0, 20);
-    if (ids.length === 0) return embedding;
+    const [posEmbs, negEmbs] = await Promise.all([
+      wantPos ? fetchJobEmbeddings(likedJobIds) : [],
+      wantNeg ? fetchJobEmbeddings(rejectedJobIds) : [],
+    ]);
+    const posAvg =
+      posEmbs.length >= FEEDBACK_MIN ? averageEmbeddings(posEmbs) : null;
+    const negAvg =
+      negEmbs.length >= FEEDBACK_MIN ? averageEmbeddings(negEmbs) : null;
+    if (!posAvg && !negAvg) {
+      return embedding;
+    }
 
-    const { data: rejJobs } = await getSupabase()
-      .from('jobs')
-      .select('embedding_v5')
-      .in('id', ids)
-      .not('embedding_v5', 'is', null);
-
-    const rejEmbs = (rejJobs || [])
-      .map((j) => {
-        const e = j.embedding_v5;
-        if (Array.isArray(e)) return e;
-        if (typeof e === 'string') {
-          try {
-            return JSON.parse(e);
-          } catch {
-            return null;
-          }
-        }
-        return null;
-      })
-      .filter((e) => Array.isArray(e) && e.length > 0);
-
-    const negAvg = rejEmbs.length > 0 ? averageEmbeddings(rejEmbs) : null;
-    return negAvg ? subtractDirection(embedding, negAvg, 0.12) : embedding;
-  } catch (negErr) {
-    logger.warn({ error: negErr.message }, 'Negative feedback failed');
+    const adjusted = embedding.map(
+      (v, i) =>
+        ROCCHIO_ALPHA * v +
+        (posAvg ? ROCCHIO_BETA * posAvg[i] : 0) -
+        (negAvg ? ROCCHIO_GAMMA * negAvg[i] : 0)
+    );
+    return normalize(adjusted);
+  } catch (err) {
+    logger.warn({ error: err.message }, 'Rocchio feedback failed');
     return embedding;
   }
 };
@@ -100,6 +142,7 @@ export const runMatchPipeline = async ({
   embedding,
   resumeText,
   searchPrompt = '',
+  lexicalQuery = '',
   top,
   days,
   remote,
@@ -115,6 +158,7 @@ export const runMatchPipeline = async ({
     embedding,
     resumeText,
     searchPrompt,
+    lexicalQuery,
     top: globalRemote ? top * 3 : top,
     days,
     remote: remote || globalRemote,
