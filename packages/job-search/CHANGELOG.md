@@ -1,5 +1,11 @@
 # @jsonresume/jobs
 
+## 0.14.4
+
+### Patch Changes
+
+- fafc9e3: CLI banner now reads its version from package.json instead of a stale hardcoded constant (was stuck at v0.10.0).
+
 ## 0.14.3
 
 ### Patch Changes
