@@ -6,7 +6,9 @@
  * Just run:  npx @jsonresume/jobs
  */
 
-const VERSION = '0.10.0';
+import { createRequire } from 'node:module';
+
+const VERSION = createRequire(import.meta.url)('../package.json').version;
 
 const BASE_URL =
   getArg('--base-url') ||
