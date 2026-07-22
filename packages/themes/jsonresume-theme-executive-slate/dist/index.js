@@ -6300,7 +6300,7 @@ dt.h4`
   color: #1f2937;
   margin: 0 0 10px 0;
 `;
-dt.div`
+const SkillTags = dt.div`
   font-size: 14px;
   color: #6b7280;
   line-height: 1.7;
@@ -6475,6 +6475,13 @@ function Resume({ resume }) {
           ] }),
           pub.releaseDate && /* @__PURE__ */ jsx(EducationDate, { children: pub.releaseDate }),
           pub.summary && /* @__PURE__ */ jsx(WorkSummary, { children: pub.summary })
+        ] }, index2))
+      ] }),
+      interests?.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
+        /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Interests" }),
+        interests.map((interest, index2) => /* @__PURE__ */ jsxs(EducationItem, { children: [
+          /* @__PURE__ */ jsx(Institution, { children: interest.name }),
+          interest.keywords?.length > 0 && /* @__PURE__ */ jsx(SkillTags, { children: interest.keywords.join(", ") })
         ] }, index2))
       ] }),
       references?.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [

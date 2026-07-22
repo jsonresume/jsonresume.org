@@ -2,6 +2,7 @@ import { Card, CardHeader, CardContent } from './Card.jsx';
 import Section from './Section.jsx';
 
 const Work = ({ work }) => {
+  if (!work?.length) return null;
   return (
     <Section>
       <h2 className="text-xl font-bold">Work Experience</h2>
@@ -32,7 +33,9 @@ const Work = ({ work }) => {
                 </div>
               </div>
 
-              <h4 className="font-mono text-sm leading-none">{w.title}</h4>
+              <h4 className="font-mono text-sm leading-none">
+                {w.position ?? w.title}
+              </h4>
             </CardHeader>
             <CardContent className="mt-2 text-xs">
               {w.summary}

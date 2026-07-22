@@ -5,8 +5,9 @@ import {
   CardDescription,
   CardTitle,
 } from './Card.jsx';
+import { Badge } from './Badge.jsx';
 
-export default function ProjectCard({ title, description, link }) {
+export default function ProjectCard({ title, description, link, tags = [] }) {
   return (
     <Card className="flex flex-col overflow-hidden border border-muted p-3">
       <CardHeader className="">
@@ -33,19 +34,21 @@ export default function ProjectCard({ title, description, link }) {
           </CardDescription>
         </div>
       </CardHeader>
-      <CardContent className="mt-auto flex">
-        <div className="mt-2 flex flex-wrap gap-1">
-          {/* {tags.map((tag) => (
-            <Badge
-              className="px-1 py-0 text-[10px]"
-              variant="secondary"
-              key={tag}
-            >
-              {tag}
-            </Badge>
-          ))} */}
-        </div>
-      </CardContent>
+      {tags?.length > 0 && (
+        <CardContent className="mt-auto flex">
+          <div className="mt-2 flex flex-wrap gap-1">
+            {tags.map((tag) => (
+              <Badge
+                className="px-1 py-0 text-[10px]"
+                variant="secondary"
+                key={tag}
+              >
+                {tag}
+              </Badge>
+            ))}
+          </div>
+        </CardContent>
+      )}
     </Card>
   );
 }

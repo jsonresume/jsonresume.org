@@ -8,7 +8,7 @@ const REGISTRY_URL = 'https://registry.jsonresume.org';
 // previewed live, so we hide their cards to avoid broken preview links.
 // Keep this in sync with the commented-out entries in themeConfig.js.
 const UNREGISTERED_THEMES = new Set([
-  'tokyo-modernist', // DISABLED in themeConfig.js - styled-components resolution issue
+  // (empty — every theme with metadata is currently registered in themeConfig.js)
 ]);
 
 // Legacy theme metadata (for themes with specific GitHub author info)

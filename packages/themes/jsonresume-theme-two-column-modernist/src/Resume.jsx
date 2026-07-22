@@ -505,11 +505,18 @@ function InterestsSection({ interests }) {
   return (
     <Section>
       <SectionTitle>Interests</SectionTitle>
-      <SkillList>
-        {interests.map((interest, i) => (
-          <SkillItem key={i}>{interest.name}</SkillItem>
-        ))}
-      </SkillList>
+      {interests.map((interest, i) => (
+        <SkillCategory key={i}>
+          {interest.name && <SkillName>{interest.name}</SkillName>}
+          {interest.keywords && interest.keywords.length > 0 && (
+            <SkillList>
+              {interest.keywords.map((keyword, j) => (
+                <SkillItem key={j}>{keyword}</SkillItem>
+              ))}
+            </SkillList>
+          )}
+        </SkillCategory>
+      ))}
     </Section>
   );
 }

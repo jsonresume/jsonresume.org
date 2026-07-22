@@ -6,6 +6,27 @@
  * Theme imports are handled by the registry app only
  */
 export const THEME_METADATA = {
+  'desert-modern': {
+    name: 'Desert Modern',
+    description:
+      'Sun-baked Southwest palette of warm sand and terracotta with a calm, contemporary single-column layout.',
+    author: 'JSON Resume Team',
+    tags: ['warm', 'desert', 'earthy', 'modern', 'southwest'],
+  },
+  'elegant-pink': {
+    name: 'Elegant Pink',
+    description:
+      'Refined, graceful layout with a soft rose accent and elegant serif headings.',
+    author: 'JSON Resume Team',
+    tags: ['elegant', 'pink', 'soft', 'refined', 'serif'],
+  },
+  tailwind: {
+    name: 'Tailwind',
+    description:
+      'Utility-first, component-driven layout with an avatar hero and social links.',
+    author: 'JSON Resume Team',
+    tags: ['tailwind', 'modern', 'utility', 'avatar', 'developer'],
+  },
   'academic-cv-lite': {
     name: 'Academic CV Lite',
     description:

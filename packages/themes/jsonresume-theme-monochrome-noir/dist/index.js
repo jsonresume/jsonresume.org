@@ -6377,6 +6377,23 @@ const InterestTag = dt.span`
   text-transform: uppercase;
   letter-spacing: 0.5px;
 `;
+const InterestGroup = dt.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+`;
+const InterestKeyword = dt.span`
+  display: inline-block;
+  padding: 6px 12px;
+  background: transparent;
+  color: #000000;
+  border: 1px solid #000000;
+  font-size: 0.75rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+`;
 function Resume({ resume }) {
   const {
     basics,
@@ -6541,7 +6558,10 @@ function Resume({ resume }) {
     ] }),
     interests && interests.length > 0 && /* @__PURE__ */ jsxs(ContentSection, { children: [
       /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Interests" }),
-      /* @__PURE__ */ jsx(InterestsList, { children: interests.map((interest, index) => /* @__PURE__ */ jsx(InterestTag, { children: interest.name }, index)) })
+      /* @__PURE__ */ jsx(InterestsList, { children: interests.map((interest, index) => /* @__PURE__ */ jsxs(InterestGroup, { children: [
+        interest.name && /* @__PURE__ */ jsx(InterestTag, { children: interest.name }),
+        interest.keywords && interest.keywords.length > 0 && interest.keywords.map((keyword, i) => /* @__PURE__ */ jsx(InterestKeyword, { children: keyword }, i))
+      ] }, index)) })
     ] }),
     references && references.length > 0 && /* @__PURE__ */ jsxs(ContentSection, { children: [
       /* @__PURE__ */ jsx(StyledSectionTitle, { children: "References" }),

@@ -1,6 +1,17 @@
 import styled from 'styled-components';
 import { SectionTitle, ContactInfo } from '@jsonresume/core';
 
+// Tokyo Modernist Theme - Minimal futurism with typographic focus
+// Built on 8pt grid system with geometric precision
+// Outfit variable-width geometric sans from Google Fonts
+// Deep magenta accent (#c71585) with subtle gray subheaders
+// Strong headings, clean geometry, restrained asymmetry
+//
+// NOTE: this file must keep the .jsx extension. styled-components defined in
+// a plain .js module lose webpack's ESM interop in the registry production
+// build and crash with "Cannot read properties of undefined (reading
+// 'withConfig')" — see CLAUDE.md "Theme SSR gotcha".
+
 export const Layout = styled.div`
   max-width: 840px;
   margin: 0 auto;
@@ -53,13 +64,12 @@ export const Name = styled.h1`
 `;
 
 export const Label = styled.div`
-  font-size: 20px;
+  font-size: 14px;
   color: #6b7280;
   margin-bottom: 24px;
   font-weight: 500;
   letter-spacing: 0.5px;
   text-transform: uppercase;
-  font-size: 14px;
 `;
 
 export const StyledContactInfo = styled(ContactInfo)`
@@ -67,6 +77,7 @@ export const StyledContactInfo = styled(ContactInfo)`
   display: flex;
   gap: 24px;
   flex-wrap: wrap;
+  justify-content: flex-start;
 
   a {
     font-size: 15px;
@@ -302,13 +313,12 @@ export const SkillCategory = styled.div`
 `;
 
 export const SkillName = styled.h4`
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   color: #1a1d23;
   margin: 0 0 12px 0;
   text-transform: uppercase;
   letter-spacing: 0.3px;
-  font-size: 14px;
 `;
 
 export const SkillTags = styled.div`

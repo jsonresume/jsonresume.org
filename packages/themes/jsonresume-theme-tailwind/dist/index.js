@@ -1,4 +1,4 @@
-import { jsx, jsxs, Fragment } from "react/jsx-runtime";
+import { jsx, jsxs } from "react/jsx-runtime";
 import { renderToString } from "react-dom/server";
 import * as React from "react";
 import * as AvatarPrimitive from "@radix-ui/react-avatar";
@@ -6,8 +6,8 @@ import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { Slot } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
-import { CiGlobe, CiMail, CiPhone } from "react-icons/ci";
-import { FaTwitter, FaGithub } from "react-icons/fa";
+import { CiGlobe, CiMail, CiPhone, CiLink } from "react-icons/ci";
+import { FaLinkedin, FaTwitter, FaGithub } from "react-icons/fa";
 function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
@@ -85,8 +85,10 @@ const Button = React.forwardRef(
 Button.displayName = "Button";
 const socials = {
   github: FaGithub,
-  twitter: FaTwitter
+  twitter: FaTwitter,
+  linkedin: FaLinkedin
 };
+const getSocialIcon = (network) => socials[String(network).toLowerCase()] ?? CiLink;
 const HeroComponent = ({ basics }) => {
   return /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
     /* @__PURE__ */ jsxs("div", { className: "flex-1 space-y-1.5", children: [
@@ -99,8 +101,8 @@ const HeroComponent = ({ basics }) => {
       /* @__PURE__ */ jsxs("div", { className: "flex gap-x-1 pt-1 font-mono text-sm text-muted-foreground print:hidden", children: [
         basics.email ? /* @__PURE__ */ jsx(Button, { className: "size-8", variant: "outline", size: "icon", asChild: true, children: /* @__PURE__ */ jsx("a", { href: `mailto:${basics.email}`, children: /* @__PURE__ */ jsx(CiMail, { className: "size-4" }) }) }) : null,
         basics.phone ? /* @__PURE__ */ jsx(Button, { className: "size-8", variant: "outline", size: "icon", asChild: true, children: /* @__PURE__ */ jsx("a", { href: `tel:${basics.phone}`, children: /* @__PURE__ */ jsx(CiPhone, { className: "size-4" }) }) }) : null,
-        basics.profiles?.map((social) => {
-          const SocialIcon = socials[social.network];
+        basics.profiles?.map((social, index) => {
+          const SocialIcon = getSocialIcon(social.network);
           return /* @__PURE__ */ jsx(
             Button,
             {
@@ -110,7 +112,7 @@ const HeroComponent = ({ basics }) => {
               asChild: true,
               children: /* @__PURE__ */ jsx("a", { href: social.url, children: /* @__PURE__ */ jsx(SocialIcon, { className: "size-4" }) })
             },
-            social.username
+            social.network ?? social.url ?? index
           );
         })
       ] }),
@@ -121,7 +123,7 @@ const HeroComponent = ({ basics }) => {
     ] }),
     /* @__PURE__ */ jsxs(Avatar, { className: "size-28", children: [
       /* @__PURE__ */ jsx(AvatarImage, { alt: basics.name, src: basics.image }),
-      /* @__PURE__ */ jsx(AvatarFallback, { children: "TD" })
+      /* @__PURE__ */ jsx(AvatarFallback, { children: String(basics.name ?? "").split(" ").map((part2) => part2[0]).filter(Boolean).slice(0, 2).join("").toUpperCase() })
     ] })
   ] });
 };
@@ -194,6 +196,7 @@ CardContent.displayName = "CardContent";
 const CardFooter = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx("div", { ref, className: cn("flex items-center", className), ...props }));
 CardFooter.displayName = "CardFooter";
 const Work = ({ work }) => {
+  if (!work?.length) return null;
   return /* @__PURE__ */ jsxs(Section, { children: [
     /* @__PURE__ */ jsx("h2", { className: "text-xl font-bold", children: "Work Experience" }),
     work.map((w, index) => {
@@ -207,7 +210,7 @@ const Work = ({ work }) => {
               w.endDate ?? "Present"
             ] })
           ] }),
-          /* @__PURE__ */ jsx("h4", { className: "font-mono text-sm leading-none", children: w.title })
+          /* @__PURE__ */ jsx("h4", { className: "font-mono text-sm leading-none", children: w.position ?? w.title })
         ] }),
         /* @__PURE__ */ jsxs(CardContent, { className: "mt-2 text-xs", children: [
           w.summary,
@@ -224,63 +227,33 @@ const Work = ({ work }) => {
     })
   ] });
 };
-function ProjectCard({ title, description, link }) {
-  return /* @__PURE__ */ jsxs(Card, { className: "flex flex-col overflow-hidden border border-muted p-3", children: [
-    /* @__PURE__ */ jsx(CardHeader, { className: "", children: /* @__PURE__ */ jsxs("div", { className: "space-y-1", children: [
-      /* @__PURE__ */ jsx(CardTitle, { className: "text-base", children: link ? /* @__PURE__ */ jsxs(
-        "a",
-        {
-          href: link,
-          target: "_blank",
-          className: "inline-flex items-center gap-1 hover:underline",
-          children: [
-            title,
-            " ",
-            /* @__PURE__ */ jsx("span", { className: "size-1 rounded-full bg-green-500" })
-          ]
-        }
-      ) : title }),
-      /* @__PURE__ */ jsx("div", { className: "hidden font-mono text-xs underline print:visible", children: link?.replace("https://", "").replace("www.", "").replace("/", "") }),
-      /* @__PURE__ */ jsx(CardDescription, { className: "font-mono text-xs", children: description })
-    ] }) }),
-    /* @__PURE__ */ jsx(CardContent, { className: "mt-auto flex", children: /* @__PURE__ */ jsx("div", { className: "mt-2 flex flex-wrap gap-1" }) })
-  ] });
-}
-const Projects = ({ projects }) => {
-  return /* @__PURE__ */ jsxs(Section, { className: "print-force-new-page scroll-mb-16", children: [
-    /* @__PURE__ */ jsx("h2", { className: "text-xl font-bold", children: "Projects" }),
-    /* @__PURE__ */ jsx("div", { className: "-mx-3 grid grid-cols-1 gap-3 print:grid-cols-3 print:gap-2 md:grid-cols-2 lg:grid-cols-3", children: projects?.map((project) => {
-      return /* @__PURE__ */ jsxs(Fragment, { children: [
-        "asd",
-        /* @__PURE__ */ jsx(
-          ProjectCard,
-          {
-            title: project.title,
-            description: project.description,
-            tags: project.techStack,
-            link: "link" in project ? project.link.href : void 0
-          },
-          project.title
-        )
-      ] });
-    }) })
-  ] });
-};
-const Education = ({ education }) => {
+const Volunteer = ({ volunteer }) => {
+  if (!volunteer?.length) return null;
   return /* @__PURE__ */ jsxs(Section, { children: [
-    /* @__PURE__ */ jsx("h2", { className: "text-xl font-bold", children: "Education" }),
-    education.map((e) => {
+    /* @__PURE__ */ jsx("h2", { className: "text-xl font-bold", children: "Volunteer" }),
+    volunteer.map((v, index) => {
       return /* @__PURE__ */ jsxs(Card, { children: [
-        /* @__PURE__ */ jsx(CardHeader, { children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-x-2 text-base", children: [
-          /* @__PURE__ */ jsx("h3", { className: "font-semibold leading-none", children: e.institution }),
-          /* @__PURE__ */ jsxs("div", { className: "text-sm tabular-nums text-gray-500", children: [
-            e.startDate,
-            " - ",
-            e.endDate
-          ] })
-        ] }) }),
-        /* @__PURE__ */ jsx(CardContent, { className: "mt-2", children: e.area })
-      ] }, e.institution);
+        /* @__PURE__ */ jsxs(CardHeader, { children: [
+          /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-x-2 text-base", children: [
+            /* @__PURE__ */ jsx("h3", { className: "inline-flex items-center justify-center gap-x-1 font-semibold leading-none", children: v.url ? /* @__PURE__ */ jsx("a", { className: "hover:underline", href: v.url, children: v.organization }) : v.organization }),
+            (v.startDate || v.endDate) && /* @__PURE__ */ jsxs("div", { className: "text-sm tabular-nums text-gray-500", children: [
+              v.startDate,
+              " - ",
+              v.endDate ?? "Present"
+            ] })
+          ] }),
+          /* @__PURE__ */ jsx("h4", { className: "font-mono text-sm leading-none", children: v.position })
+        ] }),
+        /* @__PURE__ */ jsxs(CardContent, { className: "mt-2 text-xs", children: [
+          v.summary,
+          /* @__PURE__ */ jsx("ul", { children: v.highlights?.map((h, index2) => {
+            return /* @__PURE__ */ jsxs("li", { children: [
+              "- ",
+              h
+            ] }, index2);
+          }) })
+        ] })
+      ] }, index);
     })
   ] });
 };
@@ -303,12 +276,171 @@ const badgeVariants = cva(
 function Badge({ className, variant, ...props }) {
   return /* @__PURE__ */ jsx("div", { className: cn(badgeVariants({ variant }), className), ...props });
 }
+function ProjectCard({ title, description, link, tags = [] }) {
+  return /* @__PURE__ */ jsxs(Card, { className: "flex flex-col overflow-hidden border border-muted p-3", children: [
+    /* @__PURE__ */ jsx(CardHeader, { className: "", children: /* @__PURE__ */ jsxs("div", { className: "space-y-1", children: [
+      /* @__PURE__ */ jsx(CardTitle, { className: "text-base", children: link ? /* @__PURE__ */ jsxs(
+        "a",
+        {
+          href: link,
+          target: "_blank",
+          className: "inline-flex items-center gap-1 hover:underline",
+          children: [
+            title,
+            " ",
+            /* @__PURE__ */ jsx("span", { className: "size-1 rounded-full bg-green-500" })
+          ]
+        }
+      ) : title }),
+      /* @__PURE__ */ jsx("div", { className: "hidden font-mono text-xs underline print:visible", children: link?.replace("https://", "").replace("www.", "").replace("/", "") }),
+      /* @__PURE__ */ jsx(CardDescription, { className: "font-mono text-xs", children: description })
+    ] }) }),
+    tags?.length > 0 && /* @__PURE__ */ jsx(CardContent, { className: "mt-auto flex", children: /* @__PURE__ */ jsx("div", { className: "mt-2 flex flex-wrap gap-1", children: tags.map((tag) => /* @__PURE__ */ jsx(
+      Badge,
+      {
+        className: "px-1 py-0 text-[10px]",
+        variant: "secondary",
+        children: tag
+      },
+      tag
+    )) }) })
+  ] });
+}
+const Projects = ({ projects }) => {
+  if (!projects?.length) return null;
+  return /* @__PURE__ */ jsxs(Section, { className: "print-force-new-page scroll-mb-16", children: [
+    /* @__PURE__ */ jsx("h2", { className: "text-xl font-bold", children: "Projects" }),
+    /* @__PURE__ */ jsx("div", { className: "-mx-3 grid grid-cols-1 gap-3 print:grid-cols-3 print:gap-2 md:grid-cols-2 lg:grid-cols-3", children: projects?.map((project, index) => {
+      return /* @__PURE__ */ jsx(
+        ProjectCard,
+        {
+          title: project.name ?? project.title,
+          description: project.description,
+          tags: project.keywords ?? project.techStack,
+          link: project.url ?? project.link?.href
+        },
+        project.name ?? project.title ?? index
+      );
+    }) })
+  ] });
+};
+const Education = ({ education }) => {
+  if (!education?.length) return null;
+  return /* @__PURE__ */ jsxs(Section, { children: [
+    /* @__PURE__ */ jsx("h2", { className: "text-xl font-bold", children: "Education" }),
+    education.map((e) => {
+      return /* @__PURE__ */ jsxs(Card, { children: [
+        /* @__PURE__ */ jsx(CardHeader, { children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-x-2 text-base", children: [
+          /* @__PURE__ */ jsx("h3", { className: "font-semibold leading-none", children: e.institution }),
+          /* @__PURE__ */ jsxs("div", { className: "text-sm tabular-nums text-gray-500", children: [
+            e.startDate,
+            " - ",
+            e.endDate
+          ] })
+        ] }) }),
+        /* @__PURE__ */ jsx(CardContent, { className: "mt-2", children: e.area })
+      ] }, e.institution);
+    })
+  ] });
+};
 const Skills = ({ skills }) => {
+  if (!skills?.length) return null;
   return /* @__PURE__ */ jsxs(Section, { children: [
     /* @__PURE__ */ jsx("h2", { className: "text-xl font-bold", children: "Skills" }),
-    /* @__PURE__ */ jsx("div", { className: "flex flex-wrap gap-1", children: skills.map((skill) => {
-      return /* @__PURE__ */ jsx(Badge, { children: skill.name }, skill.name);
-    }) })
+    /* @__PURE__ */ jsx("div", { className: "flex flex-col gap-2", children: skills.map((skill) => /* @__PURE__ */ jsxs("div", { className: "flex flex-wrap gap-1 items-center", children: [
+      /* @__PURE__ */ jsxs("span", { className: "font-semibold mr-1", children: [
+        skill.name,
+        skill.keywords?.length ? ":" : ""
+      ] }),
+      (skill.keywords || []).map((keyword) => /* @__PURE__ */ jsx(Badge, { children: keyword }, keyword))
+    ] }, skill.name)) })
+  ] });
+};
+const Awards = ({ awards }) => {
+  if (!awards?.length) return null;
+  return /* @__PURE__ */ jsxs(Section, { children: [
+    /* @__PURE__ */ jsx("h2", { className: "text-xl font-bold", children: "Awards" }),
+    awards.map((a2, index) => {
+      return /* @__PURE__ */ jsxs(Card, { children: [
+        /* @__PURE__ */ jsxs(CardHeader, { children: [
+          /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-x-2 text-base", children: [
+            /* @__PURE__ */ jsx("h3", { className: "font-semibold leading-none", children: a2.title }),
+            /* @__PURE__ */ jsx("div", { className: "text-sm tabular-nums text-gray-500", children: a2.date })
+          ] }),
+          a2.awarder && /* @__PURE__ */ jsx("h4", { className: "font-mono text-sm leading-none", children: a2.awarder })
+        ] }),
+        a2.summary && /* @__PURE__ */ jsx(CardContent, { className: "mt-2 text-xs", children: a2.summary })
+      ] }, index);
+    })
+  ] });
+};
+const Certificates = ({ certificates }) => {
+  if (!certificates?.length) return null;
+  return /* @__PURE__ */ jsxs(Section, { children: [
+    /* @__PURE__ */ jsx("h2", { className: "text-xl font-bold", children: "Certificates" }),
+    certificates.map((c, index) => {
+      return /* @__PURE__ */ jsx(Card, { children: /* @__PURE__ */ jsxs(CardHeader, { children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-x-2 text-base", children: [
+          /* @__PURE__ */ jsx("h3", { className: "font-semibold leading-none", children: /* @__PURE__ */ jsx("a", { className: "hover:underline", href: c.url, children: c.name }) }),
+          /* @__PURE__ */ jsx("div", { className: "text-sm tabular-nums text-gray-500", children: c.date })
+        ] }),
+        c.issuer && /* @__PURE__ */ jsx("h4", { className: "font-mono text-sm leading-none", children: c.issuer })
+      ] }) }, index);
+    })
+  ] });
+};
+const Publications = ({ publications }) => {
+  if (!publications?.length) return null;
+  return /* @__PURE__ */ jsxs(Section, { children: [
+    /* @__PURE__ */ jsx("h2", { className: "text-xl font-bold", children: "Publications" }),
+    publications.map((p, index) => {
+      return /* @__PURE__ */ jsxs(Card, { children: [
+        /* @__PURE__ */ jsxs(CardHeader, { children: [
+          /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between gap-x-2 text-base", children: [
+            /* @__PURE__ */ jsx("h3", { className: "font-semibold leading-none", children: /* @__PURE__ */ jsx("a", { className: "hover:underline", href: p.url, children: p.name }) }),
+            /* @__PURE__ */ jsx("div", { className: "text-sm tabular-nums text-gray-500", children: p.releaseDate })
+          ] }),
+          p.publisher && /* @__PURE__ */ jsx("h4", { className: "font-mono text-sm leading-none", children: p.publisher })
+        ] }),
+        p.summary && /* @__PURE__ */ jsx(CardContent, { className: "mt-2 text-xs", children: p.summary })
+      ] }, index);
+    })
+  ] });
+};
+const Languages = ({ languages }) => {
+  if (!languages?.length) return null;
+  return /* @__PURE__ */ jsxs(Section, { children: [
+    /* @__PURE__ */ jsx("h2", { className: "text-xl font-bold", children: "Languages" }),
+    /* @__PURE__ */ jsx("div", { className: "flex flex-wrap gap-1", children: languages.map((l, index) => /* @__PURE__ */ jsxs(Badge, { children: [
+      l.language,
+      l.fluency ? ` — ${l.fluency}` : ""
+    ] }, index)) })
+  ] });
+};
+const Interests = ({ interests }) => {
+  if (!interests?.length) return null;
+  return /* @__PURE__ */ jsxs(Section, { children: [
+    /* @__PURE__ */ jsx("h2", { className: "text-xl font-bold", children: "Interests" }),
+    /* @__PURE__ */ jsx("div", { className: "flex flex-col gap-2", children: interests.map((interest, index) => /* @__PURE__ */ jsxs("div", { className: "flex flex-wrap gap-1 items-center", children: [
+      /* @__PURE__ */ jsx("span", { className: "font-semibold mr-1", children: interest.name }),
+      (interest.keywords || []).map((keyword) => /* @__PURE__ */ jsx(Badge, { children: keyword }, keyword))
+    ] }, index)) })
+  ] });
+};
+const References = ({ references }) => {
+  if (!references?.length) return null;
+  return /* @__PURE__ */ jsxs(Section, { children: [
+    /* @__PURE__ */ jsx("h2", { className: "text-xl font-bold", children: "References" }),
+    references.map((r2, index) => {
+      return /* @__PURE__ */ jsxs(Card, { children: [
+        /* @__PURE__ */ jsx(CardHeader, { children: /* @__PURE__ */ jsx("h3", { className: "font-semibold leading-none", children: r2.name }) }),
+        r2.reference && /* @__PURE__ */ jsxs(CardContent, { className: "mt-2 text-xs italic", children: [
+          "“",
+          r2.reference,
+          "”"
+        ] })
+      ] }, index);
+    })
   ] });
 };
 const Resume = ({ resume }) => {
@@ -316,9 +448,16 @@ const Resume = ({ resume }) => {
     /* @__PURE__ */ jsx(HeroComponent, { basics: resume.basics }),
     /* @__PURE__ */ jsx(About, { basics: resume.basics }),
     /* @__PURE__ */ jsx(Work, { work: resume.work }),
+    /* @__PURE__ */ jsx(Volunteer, { volunteer: resume.volunteer }),
     /* @__PURE__ */ jsx(Education, { education: resume.education }),
     /* @__PURE__ */ jsx(Skills, { skills: resume.skills }),
-    /* @__PURE__ */ jsx(Projects, { projects: resume.projects })
+    /* @__PURE__ */ jsx(Projects, { projects: resume.projects }),
+    /* @__PURE__ */ jsx(Awards, { awards: resume.awards }),
+    /* @__PURE__ */ jsx(Certificates, { certificates: resume.certificates }),
+    /* @__PURE__ */ jsx(Publications, { publications: resume.publications }),
+    /* @__PURE__ */ jsx(Languages, { languages: resume.languages }),
+    /* @__PURE__ */ jsx(Interests, { interests: resume.interests }),
+    /* @__PURE__ */ jsx(References, { references: resume.references })
   ] }) }) }) });
 };
 var i = /* @__PURE__ */ new Map([["align-self", "-ms-grid-row-align"], ["color-adjust", "-webkit-print-color-adjust"], ["column-gap", "grid-column-gap"], ["forced-color-adjust", "-ms-high-contrast-adjust"], ["gap", "grid-gap"], ["grid-template-columns", "-ms-grid-columns"], ["grid-template-rows", "-ms-grid-rows"], ["justify-self", "-ms-grid-column-align"], ["margin-inline-end", "-webkit-margin-end"], ["margin-inline-start", "-webkit-margin-start"], ["mask-border", "-webkit-mask-box-image"], ["mask-border-outset", "-webkit-mask-box-image-outset"], ["mask-border-slice", "-webkit-mask-box-image-slice"], ["mask-border-source", "-webkit-mask-box-image-source"], ["mask-border-repeat", "-webkit-mask-box-image-repeat"], ["mask-border-width", "-webkit-mask-box-image-width"], ["overflow-wrap", "word-wrap"], ["padding-inline-end", "-webkit-padding-end"], ["padding-inline-start", "-webkit-padding-start"], ["print-color-adjust", "color-adjust"], ["row-gap", "grid-row-gap"], ["scroll-margin-bottom", "scroll-snap-margin-bottom"], ["scroll-margin-left", "scroll-snap-margin-left"], ["scroll-margin-right", "scroll-snap-margin-right"], ["scroll-margin-top", "scroll-snap-margin-top"], ["scroll-margin", "scroll-snap-margin"], ["text-combine-upright", "-ms-text-combine-horizontal"]]);

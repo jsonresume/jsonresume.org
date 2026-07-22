@@ -61,11 +61,13 @@ async function loadThemeMetadata() {
   }
 
   const themeNames = [];
-  const keyRegex = /['"]([^'"]+)['"]\s*:/g;
+  // Top-level slug keys open an object literal; they may be quoted
+  // ('desert-modern') or bare identifiers (tailwind — prettier unquotes them).
+  const keyRegex = /^ {2}(?:['"]([^'"]+)['"]|([A-Za-z_$][\w$]*))\s*:\s*\{/gm;
   let match;
 
   while ((match = keyRegex.exec(metadataMatch[1])) !== null) {
-    themeNames.push(match[1]);
+    themeNames.push(match[1] ?? match[2]);
   }
 
   return themeNames;
@@ -83,9 +85,10 @@ async function checkDevServer(port) {
     };
 
     const req = http.request(options, (res) => {
+      // 3xx: `next start` redirects / — the server is up either way.
       resolve(
         res.statusCode === 200 ||
-          res.statusCode === 302 ||
+          (res.statusCode >= 302 && res.statusCode <= 308) ||
           res.statusCode === 404
       );
     });

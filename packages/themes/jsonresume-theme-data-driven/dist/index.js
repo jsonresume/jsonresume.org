@@ -6170,6 +6170,7 @@ function Resume({ resume }) {
     certificates = [],
     publications = [],
     languages = [],
+    interests = [],
     references = []
   } = resume;
   return /* @__PURE__ */ jsxs(Fragment, { children: [
@@ -6376,6 +6377,13 @@ function Resume({ resume }) {
           lang.language,
           lang.fluency && ` — ${lang.fluency}`
         ] }, i)) })
+      ] }),
+      interests.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
+        /* @__PURE__ */ jsx(SectionTitle, { children: "Interests" }),
+        interests.map((interest, i) => /* @__PURE__ */ jsxs(SkillGroup, { children: [
+          interest.name && /* @__PURE__ */ jsx("strong", { children: interest.name }),
+          interest.keywords?.length > 0 && /* @__PURE__ */ jsx(BadgeList, { children: interest.keywords.map((keyword, j2) => /* @__PURE__ */ jsx(Badge, { children: keyword }, j2)) })
+        ] }, i))
       ] }),
       references.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
         /* @__PURE__ */ jsx(SectionTitle, { children: "References" }),

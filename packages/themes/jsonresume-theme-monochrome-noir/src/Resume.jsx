@@ -309,6 +309,25 @@ const InterestTag = styled.span`
   letter-spacing: 0.5px;
 `;
 
+const InterestGroup = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+`;
+
+const InterestKeyword = styled.span`
+  display: inline-block;
+  padding: 6px 12px;
+  background: transparent;
+  color: #000000;
+  border: 1px solid #000000;
+  font-size: 0.75rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+`;
+
 function Resume({ resume }) {
   const {
     basics,
@@ -558,7 +577,14 @@ function Resume({ resume }) {
           <StyledSectionTitle>Interests</StyledSectionTitle>
           <InterestsList>
             {interests.map((interest, index) => (
-              <InterestTag key={index}>{interest.name}</InterestTag>
+              <InterestGroup key={index}>
+                {interest.name && <InterestTag>{interest.name}</InterestTag>}
+                {interest.keywords &&
+                  interest.keywords.length > 0 &&
+                  interest.keywords.map((keyword, i) => (
+                    <InterestKeyword key={i}>{keyword}</InterestKeyword>
+                  ))}
+              </InterestGroup>
             ))}
           </InterestsList>
         </ContentSection>

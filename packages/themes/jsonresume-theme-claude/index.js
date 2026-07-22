@@ -66,6 +66,7 @@ export function render(resume) {
     certificates = [],
     publications = [],
     languages = [],
+    interests = [],
     references = [],
   } = resume;
   const {
@@ -708,6 +709,35 @@ export function render(resume) {
               `<span class="skill-tag">${lang.language || ''}${
                 lang.fluency ? ` — ${lang.fluency}` : ''
               }</span>`
+          )
+          .join('')}
+      </div>
+    </section>`
+        : ''
+    }
+
+    ${
+      interests.length
+        ? `
+    <section class="section">
+      <div class="section-title">Interests</div>
+      <div class="skills-grid">
+        ${interests
+          .map(
+            (interest) => `
+        <div class="skill-group">
+          <h3>${interest.name || ''}</h3>
+          ${
+            interest.keywords?.length
+              ? `
+          <div class="skill-tags">
+            ${interest.keywords
+              .map((k) => `<span class="skill-tag">${k}</span>`)
+              .join('')}
+          </div>`
+              : ''
+          }
+        </div>`
           )
           .join('')}
       </div>

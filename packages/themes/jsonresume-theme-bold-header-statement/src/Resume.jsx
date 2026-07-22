@@ -460,6 +460,26 @@ function LanguagesSection({ languages }) {
   );
 }
 
+function InterestsSection({ interests }) {
+  if (!interests?.length) return null;
+
+  return (
+    <Section>
+      <StyledSectionTitle>Interests</StyledSectionTitle>
+      <SkillsGrid>
+        {interests.map((interest, index) => (
+          <SkillCategory key={index}>
+            <SkillName>{interest.name}</SkillName>
+            {interest.keywords?.length > 0 && (
+              <SkillTags>{interest.keywords.join(', ')}</SkillTags>
+            )}
+          </SkillCategory>
+        ))}
+      </SkillsGrid>
+    </Section>
+  );
+}
+
 function ReferencesSection({ references }) {
   if (!references?.length) return null;
 
@@ -489,6 +509,7 @@ function Resume({ resume }) {
     certificates = [],
     publications = [],
     languages = [],
+    interests = [],
     references = [],
   } = resume;
 
@@ -506,6 +527,7 @@ function Resume({ resume }) {
         <CertificatesSection certificates={certificates} />
         <PublicationsSection publications={publications} />
         <LanguagesSection languages={languages} />
+        <InterestsSection interests={interests} />
         <ReferencesSection references={references} />
       </ContentWrapper>
     </Layout>

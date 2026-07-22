@@ -347,11 +347,18 @@ function Resume({ resume }) {
             <SidebarSection>
               <SidebarSectionTitle>Interests</SidebarSectionTitle>
               <SidebarContent>
-                <SimpleList>
-                  {interests.map((interest, index) => (
-                    <div key={index}>{interest.name}</div>
-                  ))}
-                </SimpleList>
+                {interests.map((interest, index) => (
+                  <SkillItem key={index}>
+                    <h4>{interest.name}</h4>
+                    {interest.keywords && interest.keywords.length > 0 && (
+                      <StyledBadgeList>
+                        {interest.keywords.map((keyword, i) => (
+                          <StyledBadge key={i}>{keyword}</StyledBadge>
+                        ))}
+                      </StyledBadgeList>
+                    )}
+                  </SkillItem>
+                ))}
               </SidebarContent>
             </SidebarSection>
           )}

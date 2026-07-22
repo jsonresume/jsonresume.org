@@ -1588,7 +1588,7 @@ function DateRange({
     }
   );
 }
-dt.span`
+const StyledBadge = dt.span`
   display: inline-block;
   padding: ${(props) => {
   if (props.$size === "sm") return "2px 8px";
@@ -1623,12 +1623,48 @@ dt.span`
     color: ${(props) => props.$variant === "accent" ? "#0066cc" : "#000"};
   }
 `;
-dt.div`
+function Badge({
+  children,
+  variant = "default",
+  size = "md",
+  className,
+  ...rest
+}) {
+  return /* @__PURE__ */ jsx(
+    StyledBadge,
+    {
+      $variant: variant,
+      $size: size,
+      className: `resume-badge resume-badge-${variant} ${className || ""}`.trim(),
+      ...rest,
+      children
+    }
+  );
+}
+const BadgeContainer = dt.div`
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   margin: 8px 0;
 `;
+function BadgeList({
+  children,
+  items,
+  variant = "default",
+  size = "md",
+  className,
+  ...rest
+}) {
+  const content = items ? items.map((item, index) => /* @__PURE__ */ jsx(Badge, { variant, size, children: item }, index)) : children;
+  return /* @__PURE__ */ jsx(
+    BadgeContainer,
+    {
+      className: `resume-badge-list ${className || ""}`.trim(),
+      ...rest,
+      children: content
+    }
+  );
+}
 function safeUrl(url) {
   if (!url || typeof url !== "string") {
     return null;
@@ -6451,7 +6487,17 @@ function Resume({ resume }) {
     ] }),
     interests.length > 0 && /* @__PURE__ */ jsxs(MainSection, { children: [
       /* @__PURE__ */ jsx(MainSectionTitle, { children: "Interests" }),
-      /* @__PURE__ */ jsx(SimpleList, { children: interests.map((interest, index) => /* @__PURE__ */ jsx(SimpleItem, { children: interest.name }, index)) })
+      /* @__PURE__ */ jsx(SimpleList, { children: interests.map((interest, index) => /* @__PURE__ */ jsxs(SimpleItem, { children: [
+        /* @__PURE__ */ jsx("strong", { children: interest.name }),
+        interest.keywords && interest.keywords.length > 0 && /* @__PURE__ */ jsx(
+          BadgeList,
+          {
+            items: interest.keywords,
+            variant: "accent",
+            size: "sm"
+          }
+        )
+      ] }, index)) })
     ] }),
     references.length > 0 && /* @__PURE__ */ jsxs(MainSection, { children: [
       /* @__PURE__ */ jsx(MainSectionTitle, { children: "References" }),

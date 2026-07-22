@@ -25,7 +25,7 @@ export {
 
 export const THEMES = {
   professional: () => import('@jsonresume/jsonresume-theme-professional'),
-  // tailwind: () => import('jsonresume-theme-tailwind'),
+  tailwind: () => import('jsonresume-theme-tailwind'), // RE-ENABLED - SSR crash fixed (social icon resolution)
   elegant: () => import('jsonresume-theme-elegant'),
   flat: () => import('jsonresume-theme-flat'),
   even: () => import('jsonresume-theme-even'),
@@ -60,7 +60,8 @@ export const THEMES = {
   'marketing-narrative': () => import('jsonresume-theme-marketing-narrative'),
   'operations-precision': () => import('jsonresume-theme-operations-precision'),
   'writers-portfolio': () => import('jsonresume-theme-writers-portfolio'),
-  // 'tokyo-modernist': DISABLED - styled-components resolution issue
+  'tokyo-modernist': () =>
+    import('@jsonresume/jsonresume-theme-tokyo-modernist'), // RE-ENABLED - inlined styled-components
   'nordic-minimal': () => import('jsonresume-theme-nordic-minimal'),
   'graph-paper-grid': () => import('jsonresume-theme-graph-paper-grid'),
   'monochrome-noir': () => import('jsonresume-theme-monochrome-noir'),
@@ -92,4 +93,6 @@ export const THEMES = {
   'industrial-engineer': () => import('jsonresume-theme-industrial-engineer'),
   brutalist: () => import('jsonresume-theme-brutalist'),
   'art-deco': () => import('jsonresume-theme-art-deco'),
+  'desert-modern': () => import('jsonresume-theme-desert-modern'), // REGISTERED - was orphaned
+  'elegant-pink': () => import('jsonresume-theme-elegant-pink'), // REGISTERED - was orphaned
 };

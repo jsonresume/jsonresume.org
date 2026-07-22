@@ -6503,7 +6503,10 @@ function Resume({ resume }) {
     ] }),
     interests.length > 0 && /* @__PURE__ */ jsxs(MainSection, { children: [
       /* @__PURE__ */ jsx(MainSectionTitle, { children: "Interests" }),
-      /* @__PURE__ */ jsx(SimpleList, { children: interests.map((interest, index) => /* @__PURE__ */ jsx(SimpleItem, { children: interest.name }, index)) })
+      /* @__PURE__ */ jsx(SimpleList, { children: interests.map((interest, index) => /* @__PURE__ */ jsxs(SimpleItem, { children: [
+        /* @__PURE__ */ jsx("strong", { children: interest.name }),
+        interest.keywords && interest.keywords.length > 0 && /* @__PURE__ */ jsx(StyledBadgeList, { style: { marginTop: "12px" }, children: interest.keywords.map((keyword, i) => /* @__PURE__ */ jsx(StyledBadge, { children: keyword }, i)) })
+      ] }, index)) })
     ] }),
     references.length > 0 && /* @__PURE__ */ jsxs(MainSection, { children: [
       /* @__PURE__ */ jsx(MainSectionTitle, { children: "References" }),

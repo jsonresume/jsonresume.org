@@ -397,6 +397,7 @@ function Resume({ resume }) {
     projects = [],
     volunteer = [],
     awards = [],
+    certificates = [],
     publications = [],
     languages = [],
     interests = [],
@@ -581,6 +582,32 @@ function Resume({ resume }) {
                   {award.awarder && <Degree>Awarded by {award.awarder}</Degree>}
                   {award.date && <DateText>{award.date}</DateText>}
                   {award.summary && <WorkSummary>{award.summary}</WorkSummary>}
+                </AwardCard>
+              ))}
+            </EducationGrid>
+          </Section>
+        )}
+
+        {certificates?.length > 0 && (
+          <Section>
+            <StyledSectionTitle>Certifications</StyledSectionTitle>
+            <EducationGrid>
+              {certificates.map((cert, index) => (
+                <AwardCard key={index}>
+                  <AwardTitle>{cert.name}</AwardTitle>
+                  {cert.issuer && <Degree>Issued by {cert.issuer}</Degree>}
+                  {cert.date && <DateText>{cert.date}</DateText>}
+                  {cert.url && (
+                    <ProjectMeta>
+                      <ProjectLink
+                        href={cert.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        View Credential →
+                      </ProjectLink>
+                    </ProjectMeta>
+                  )}
                 </AwardCard>
               ))}
             </EducationGrid>

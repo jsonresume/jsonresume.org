@@ -261,6 +261,7 @@ function Resume({ resume }) {
     certificates = [],
     publications = [],
     languages = [],
+    interests = [],
     references = [],
   } = resume;
 
@@ -618,6 +619,25 @@ function Resume({ resume }) {
                 </Badge>
               ))}
             </BadgeList>
+          </Section>
+        )}
+
+        {/* Interests */}
+        {interests.length > 0 && (
+          <Section>
+            <SectionTitle>Interests</SectionTitle>
+            {interests.map((interest, i) => (
+              <SkillGroup key={i}>
+                {interest.name && <strong>{interest.name}</strong>}
+                {interest.keywords?.length > 0 && (
+                  <BadgeList>
+                    {interest.keywords.map((keyword, j) => (
+                      <Badge key={j}>{keyword}</Badge>
+                    ))}
+                  </BadgeList>
+                )}
+              </SkillGroup>
+            ))}
           </Section>
         )}
 

@@ -6433,6 +6433,7 @@ function Resume({ resume }) {
     projects = [],
     volunteer = [],
     awards = [],
+    certificates = [],
     publications = [],
     languages = [],
     interests = [],
@@ -6557,6 +6558,26 @@ function Resume({ resume }) {
           ] }),
           award.date && /* @__PURE__ */ jsx(DateText, { children: award.date }),
           award.summary && /* @__PURE__ */ jsx(WorkSummary, { children: award.summary })
+        ] }, index2)) })
+      ] }),
+      certificates?.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
+        /* @__PURE__ */ jsx(StyledSectionTitle, { children: "Certifications" }),
+        /* @__PURE__ */ jsx(EducationGrid, { children: certificates.map((cert, index2) => /* @__PURE__ */ jsxs(AwardCard, { children: [
+          /* @__PURE__ */ jsx(AwardTitle, { children: cert.name }),
+          cert.issuer && /* @__PURE__ */ jsxs(Degree, { children: [
+            "Issued by ",
+            cert.issuer
+          ] }),
+          cert.date && /* @__PURE__ */ jsx(DateText, { children: cert.date }),
+          cert.url && /* @__PURE__ */ jsx(ProjectMeta, { children: /* @__PURE__ */ jsx(
+            ProjectLink,
+            {
+              href: cert.url,
+              target: "_blank",
+              rel: "noopener noreferrer",
+              children: "View Credential →"
+            }
+          ) })
         ] }, index2)) })
       ] }),
       publications?.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [

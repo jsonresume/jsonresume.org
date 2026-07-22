@@ -401,7 +401,18 @@ function Resume({ resume }) {
               <StyledSectionTitle>Interests</StyledSectionTitle>
               <InterestsList>
                 {interests.map((interest, index) => (
-                  <InterestTag key={index}>{interest.name}</InterestTag>
+                  <React.Fragment key={index}>
+                    {interest.name && (
+                      <InterestTag>{interest.name}</InterestTag>
+                    )}
+                    {interest.keywords &&
+                      interest.keywords.length > 0 &&
+                      interest.keywords.map((keyword, i) => (
+                        <InterestTag key={`${index}-kw-${i}`}>
+                          {keyword}
+                        </InterestTag>
+                      ))}
+                  </React.Fragment>
                 ))}
               </InterestsList>
             </StyledSection>

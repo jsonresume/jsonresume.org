@@ -35,6 +35,8 @@
 - **Logger exports:** Triple export pattern (CommonJS default + ES6 default + named)
 - **Themes:** Must use ES6 imports (no `fs.readFileSync`), must render ALL JSON Resume sections, must load Google Fonts via CDN, must use `@jsonresume/core` components, must use `ServerStyleSheet` for styled-components SSR
 - **Theme registration:** Add to `apps/registry/lib/formatters/template/themeConfig.js`
+- **Theme SSR gotcha:** if a theme 400s with `Cannot read properties of undefined (reading 'withConfig')` under the registry's webpack build (but works in plain Node), its styled-components definitions live in a `.js` module — move them into a `.jsx` file (fixed desert-modern; tokyo-modernist was fixed earlier by inlining styles into Resume.jsx). Verify with a production build, not `next dev`.
+- **Bulk live-testing themes:** run `next start` with `GITHUB_TOKEN=$(gh auth token)` — unauthenticated GitHub lookups rate-limit after ~50 requests and surface as bogus `INVALID_USERNAME` 400s.
 - Search codebase before creating new utils — check `apps/registry/app/utils/`, `apps/registry/lib/`, `packages/`
 
 ## CI/CD
