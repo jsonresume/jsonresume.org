@@ -1,6 +1,6 @@
 {
   "name": "@jsonresume/theme-kit",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": false,
   "description": "Authoring kit for JSON Resume themes: the SSR document helper plus the all-theme render + section-coverage QA gate",
   "type": "module",

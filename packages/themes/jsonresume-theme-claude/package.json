@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "jsonresume-theme-claude",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "description": "A JSON Resume theme designed and built entirely by Claude Code in the terminal",
   "author": "Roland Sharp <rolandnsharp@gmail.com>",

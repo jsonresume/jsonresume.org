@@ -1,5 +1,11 @@
 # jsonresume-theme-art-school-modern
 
+## 0.2.5
+
+### Patch Changes
+
+- @jsonresume/core@0.3.2
+
 ## 0.2.4
 
 ### Patch Changes

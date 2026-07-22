@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-executive-slate",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "description": "Executive Slate - Authoritative resume theme for senior professionals",
   "main": "./dist/index.js",
   "type": "module",

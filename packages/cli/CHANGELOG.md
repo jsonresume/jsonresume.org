@@ -1,5 +1,14 @@
 # resume-cli
 
+## 3.7.2
+
+### Patch Changes
+
+- 0d81a91: Fix theme-resolution edge cases from the Wave 16 bug-hunt (#416): the `jsonresume-theme-` prefix fallback guard in renderHTML tested the wrong variable (so it ran unconditionally, even for scoped specifiers); `resume serve` printed a leftover debug object on every rebuild; and PDF export resolved themes with its own `cwd/node_modules/<theme>/index.js` lookup, so hoisted installs or themes with a non-`index.js` entry point could render HTML fine but spuriously fail PDF export. Theme resolution is now shared between the HTML and PDF paths.
+- fb57055: Remove unused dependencies flagged by knip (`async` from resume-cli, `@ai-sdk/anthropic` from @jsonresume/jobs). No runtime behavior change; slims the install footprint.
+- Updated dependencies [d8ebc8c]
+  - @jsonresume/schema@1.3.1
+
 ## 3.7.1
 
 ### Patch Changes

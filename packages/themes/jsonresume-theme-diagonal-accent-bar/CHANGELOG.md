@@ -1,5 +1,11 @@
 # jsonresume-theme-diagonal-accent-bar
 
+## 1.1.4
+
+### Patch Changes
+
+- @jsonresume/core@0.3.2
+
 ## 1.1.3
 
 ### Patch Changes
