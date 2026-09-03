@@ -64,12 +64,12 @@ export const projects = [
     language: 'Javascript',
   },
   {
-    name: 'rendercv',
+    name: 'RenderCV',
     description:
-      'RenderCV is a latext CV/resume framework. It allows you to create a high-quality CV as a PDF from a YAML file with full Markdown syntax support and complete control over the latex code',
+      'RenderCV is a Python/Typst CV/resume framework. It allows you to create a high-quality CV as a PDF from a YAML file with full Markdown syntax support and complete control over the Typst code.',
     link: 'https://github.com/rendercv/rendercv',
     category: 'framework',
-    language: 'Python/Latex',
+    language: 'Python/Typst',
   },
   {
     name: 'hugo-mod-json-resume',
