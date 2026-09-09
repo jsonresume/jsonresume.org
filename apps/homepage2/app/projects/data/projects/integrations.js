@@ -74,7 +74,10 @@ export const projects = [
   {
     name: 'YAMLResume',
     description:
-      'YAMLResume is a TypeScript toolchain that lets you create and version control resumes as code in YAML, and generate pixel-perfect resumes in multiple formats (PDF, HTML, Markdown, etc.) with pro-grade LaTeX typesetting, built-in i18n support and a developer-friendly CLI.',
+      'YAMLResume is a TypeScript toolchain that lets you create and version ' +
+      'control resumes as code in YAML, and generate pixel-perfect resumes in ' +
+      'multiple formats (PDF, HTML, Markdown, etc.) with pro-grade LaTeX ' +
+      'typesetting, built-in i18n support and a developer-friendly CLI.',
     link: 'https://yamlresume.dev',
     category: 'framework',
     language: 'TypeScript',

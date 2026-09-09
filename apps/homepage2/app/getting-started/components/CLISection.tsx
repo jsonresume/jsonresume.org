@@ -81,11 +81,26 @@ export function CLISection() {
           import JSON Resume directly:
         </p>
         <p>
+          YAMLResume requires Node.js 22 or newer. Convert your existing resume:
+          <br />
+          <br />
           <code>npx json2yamlresume resume.json</code>
           <br />
           <br />
-          Then simply
+          Install the YAMLResume CLI:
           <br />
+          <br />
+          <code>npm install -g yamlresume</code>
+          <br />
+          <br />
+          For PDF output, install a supported LaTeX engine following the{' '}
+          <a target="_blank" href="https://yamlresume.dev/docs/installation">
+            YAMLResume installation guide
+          </a>
+          , then verify your environment and build:
+          <br />
+          <br />
+          <code>yamlresume doctor</code>
           <br />
           <code>yamlresume build resume.yml</code>
         </p>
