@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { lookup } from 'mime-types';
 import { resolve as resolvePath } from 'path';
-import quaff from 'quaff';
+import loadDirectory from './quaff-loader';
 import toString from 'stream-to-string';
 import yaml from 'yaml-js';
 import { promisify } from 'util';
@@ -20,7 +20,7 @@ export default async ({ path, mime: inputMime }) => {
     mime = inputMime || lookup('.json');
     input = process.stdin;
   } else if (path && (await stat(path)).isDirectory()) {
-    return quaff(path);
+    return loadDirectory(path);
   }
   if (!input) {
     mime = inputMime || lookup(path);

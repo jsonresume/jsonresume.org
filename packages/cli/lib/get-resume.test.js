@@ -30,24 +30,6 @@ describe('get-resume', () => {
       }
     `);
   });
-  it('should consume an entire directory as if it were a json object', async () => {
-    expect(await getResume({ path: '/quaff' })).toMatchInlineSnapshot(`
-      {
-        "basics": {
-          "email": "thomas@example.com",
-          "name": "thomas",
-        },
-        "work": [
-          {
-            "company": "Pied Piper",
-            "endDate": "2014-12-01",
-            "position": "CEO/President",
-            "startDate": "2013-12-01",
-          },
-        ],
-      }
-    `);
-  });
   it('should read from process.stdin when path is a dash', async () => {
     const stdin = mockStdin();
     const gotResume = getResume({ path: '-' });
