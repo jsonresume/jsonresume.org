@@ -1,5 +1,11 @@
 # jsonresume-theme-sidebar-photo-strip
 
+## 1.1.5
+
+### Patch Changes
+
+- 609b91c: Publish compiled entry points so Node and resume-cli consumers never load raw JSX.
+
 ## 1.1.4
 
 ### Patch Changes

@@ -1,7 +1,7 @@
 {
   "private": false,
   "name": "@jsonresume/jsonresume-theme-professional",
-  "version": "1.0.22",
+  "version": "1.0.23",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "license": "MIT",
