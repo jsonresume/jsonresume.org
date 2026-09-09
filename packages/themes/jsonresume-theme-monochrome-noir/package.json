@@ -31,7 +31,7 @@
   },
   "exports": {
     ".": {
-      "import": "./src/index.jsx",
+      "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
     "./dist": {

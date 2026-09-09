@@ -3,7 +3,7 @@
   "version": "0.2.5",
   "description": "Crisp, analytical, results-focused theme resembling a fund report. Data-first with Key Metrics section.",
   "type": "module",
-  "main": "./index.jsx",
+  "main": "./dist/index.js",
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
     "react-dom": "^18.0.0 || ^19.0.0"
@@ -17,8 +17,8 @@
   },
   "exports": {
     ".": {
-      "import": "./index.jsx",
-      "default": "./index.jsx"
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     },
     "./dist": {
       "import": "./dist/index.js",
