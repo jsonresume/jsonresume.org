@@ -5,17 +5,17 @@ description: "Docwright documentation"
 
 # Pathways Subsystem
 
-The Pathways subsystem implements the core logic, context providers, hooks, components, and services that power the Pathways feature. It orchestrates resume management, job matching, AI-powered chat, and user interaction within the career exploration interface. This subsystem handles data persistence, embedding generation, job graph construction, user session migration, and UI state management.
+The Pathways subsystem implements the core logic, context, hooks, and components that power the Pathways feature. It orchestrates resume management, job matching, AI-powered chat, and user interaction within the career exploration interface. This subsystem handles data persistence, embedding generation, job graph construction, user session migration, and UI state management.
 
 ## Purpose and Scope
 
-This page documents the internal architecture and key mechanisms of the Pathways subsystem, including context providers, hooks, UI components, and service integrations. It covers how user resumes are loaded, saved, and embedded; how job data is fetched and filtered; how AI chat and voice features are integrated; and how user sessions and migrations are managed.
+This page documents the internal architecture and key mechanisms of the Pathways subsystem, including its context provider, hooks, UI components, and API integrations. It covers how user resumes are loaded, saved, and embedded; how job data is fetched and filtered; how AI chat and voice features are integrated; and how user sessions and migrations are managed.
 
 It does not cover the underlying AI models, external API implementations, or unrelated UI components outside the Pathways feature. For authentication and session management, see the Auth subsystem. For job graph visualization details, see the Job Graph subsystem. For AI chat internals, see the Copilot Chat subsystem.
 
 ## Architecture Overview
 
-The Pathways subsystem composes multiple React contexts—ResumeContext, JobGraphContext, KeyboardContext—wrapped by a combined `PathwaysProvider`. This provider manages user session state, resume persistence, embedding generation, job state tracking, and keyboard navigation.
+The Pathways subsystem uses a single `PathwaysContext` exposed by `PathwaysProvider`. The provider composes focused hooks for authentication, resume persistence, embedding generation, job state tracking, and anonymous-session migration, then exposes their state through `usePathways`.
 
 The main UI entry points are `PathwaysPage` and `SwipePage`, which mount the provider and render either the graph-based or swipe-based job exploration interfaces. The `PathwaysContent` component manages tab navigation and mobile view toggling.
 
@@ -24,16 +24,14 @@ Hooks like `usePathwaysResume`, `useEmbedding`, `usePathwaysJobData`, and `useCo
 ```mermaid
 flowchart TD
   A[PathwaysPage / SwipePage] --> B[PathwaysProvider]
-  B --> C[ResumeProvider]
-  B --> D[JobGraphProvider]
-  B --> E[KeyboardProvider]
-  D --> F[useEmbedding]
-  D --> G[usePathwaysJobData]
-  C --> H[usePathwaysResume]
-  E --> I[useKeyboardHandler]
-  B --> J[PathwaysContent]
-  J --> K[PathwaysGraph / SwipeInterface / CopilotChat / ActivityLog]
-  K --> L[Tool Handlers / AI Chat / Job Panels]
+  B --> C[useAuth]
+  B --> D[usePathwaysResume]
+  B --> E[useEmbedding]
+  B --> F[useJobStates]
+  B --> G[useMigration]
+  B --> H[PathwaysContent]
+  H --> I[PathwaysGraph / SwipeInterface / CopilotChat / ActivityLog]
+  I --> J[Tool Handlers / AI Chat / Job Panels]
 ```
 
 **Diagram: High-level component and context relationships in the Pathways subsystem**
@@ -1120,105 +1118,6 @@ Sources: `apps/registry/app/pathways/hooks/fetchPathwaysJobs.js:37-80`
 
 ---
 
-## usePathways
-
-**Purpose:** Facade hook that combines authentication, resume, job graph, keyboard, and migration contexts into a single interface.
-
-- Provides user/session info, resume data and methods, embedding and job states, graph version and refresh, job feedback, keyboard state, and migration function.
-- Maintains backwards compatibility with legacy `usePathways` hook.
-
-Sources: `apps/registry/app/pathways/contexts/usePathwaysFacade.ts:19-113`
-
----
-
-## useEmbeddingState
-
-**Purpose:** Extracted hook managing embedding generation and caching, used by JobGraphContext.
-
-- Similar to `useEmbedding` but typed and extracted for provider separation.
-- Checks cache, generates embedding, handles loading states and errors.
-
-Sources: `apps/registry/app/pathways/contexts/useEmbeddingState.ts:27-99`
-
----
-
-## useKeyboardHandler
-
-**Purpose:** Attaches global keyboard event listeners and delegates key presses to registered handlers based on focus area.
-
-- Handles navigation keys (arrows, enter, escape).
-- Handles action keys (r, i, h).
-- Handles search focus and help toggle.
-- Prevents interference with input fields except for Escape.
-
-Sources: `apps/registry/app/pathways/contexts/useKeyboardHandler.ts:16-112`
-
----
-
-## PathwaysProvider (contexts/index.tsx)
-
-**Purpose:** Combined React context provider composing KeyboardProvider, ResumeProvider, and JobGraphProvider.
-
-- Initializes session ID.
-- Passes user and session info to child providers.
-- Wraps children with all contexts for Pathways feature.
-
-Sources: `apps/registry/app/pathways/contexts/index.tsx:38-64`
-
----
-
-## JobGraphProviderWrapper
-
-**Purpose:** Intermediate component that accesses resume from ResumeContext and passes it to JobGraphProvider.
-
-- Ensures JobGraphProvider receives up-to-date resume data.
-
-Sources: `apps/registry/app/pathways/contexts/index.tsx:70-96`
-
----
-
-## ResumeContextValue and ResumeProvider
-
-**Purpose:** Provides resume data and editing state via React context.
-
-- Loads resume using `usePathwaysResume`.
-- Falls back to sample resume if none loaded.
-- Manages JSON string for editor.
-- Provides update functions for resume and JSON.
-- Exposes save and apply functions.
-
-Sources: `apps/registry/app/pathways/contexts/ResumeContext.tsx:23-140`
-
----
-
-## KeyboardProvider and KeyboardContext
-
-**Purpose:** Manages keyboard focus area, shortcut registration, and action handlers.
-
-- Tracks focus area (graph, chat, details, search, none).
-- Tracks whether help modal is open.
-- Registers and unregisters keyboard shortcuts.
-- Provides handlers for navigation and actions.
-- Uses `useKeyboardHandler` to attach global keyboard events.
-
-Sources: `apps/registry/app/pathways/contexts/KeyboardContext.tsx:14-141`
-
----
-
-## JobGraphContextValue and JobGraphProvider
-
-**Purpose:** Provides embedding state, job states, graph versioning, and job feedback via context.
-
-- Uses `useEmbeddingState` for embedding management.
-- Tracks graph version to trigger refresh.
-- Manages pending job feedback prompts.
-- Uses `useJobStates` for job state management.
-- Exposes mutation functions for job states and feedback.
-
-Sources: `apps/registry/app/pathways/contexts/JobGraphContext.tsx:26-149`
-
----
-
 ## WhyMatch Component
 
 **Purpose:** UI component that displays AI-generated insights explaining why a job matches the user's resume.
@@ -1298,7 +1197,7 @@ Sources: `apps/registry/app/pathways/components/ResumePreview/index.js:11-30`
 
 ## Summary
 
-The Pathways subsystem integrates multiple React contexts, hooks, and components to provide a rich career exploration experience. It manages user resumes, generates semantic embeddings, fetches and filters job data, supports AI chat with voice capabilities, and tracks user activity and feedback. The architecture emphasizes caching, debounced persistence, and seamless migration from anonymous sessions to authenticated users. The UI adapts responsively with tabbed navigation and swipe interfaces, backed by robust error handling and loading states.
+The Pathways subsystem integrates a shared React context, focused hooks, and UI components to provide a rich career exploration experience. It manages user resumes, generates semantic embeddings, fetches and filters job data, supports AI chat with voice capabilities, and tracks user activity and feedback. The architecture emphasizes caching, debounced persistence, and seamless migration from anonymous sessions to authenticated users. The UI adapts responsively with tabbed navigation and swipe interfaces, backed by robust error handling and loading states.
 
 ## Key Relationships
 
@@ -1312,22 +1211,19 @@ The Pathways subsystem depends on:
 
 It provides:
 
-- Contexts consumed by UI components for resume and job graph state.
+- A shared context consumed by UI components for resume and job graph state.
 - Hooks used by chat and graph components for data fetching and interaction.
 - Tool handlers invoked by AI chat messages to update resume and job states.
 
 ```mermaid
 flowchart TD
   AuthContext --> PathwaysProvider
-  PathwaysProvider --> ResumeProvider
-  PathwaysProvider --> JobGraphProvider
-  PathwaysProvider --> KeyboardProvider
-  JobGraphProvider --> useEmbeddingState
-  JobGraphProvider --> useJobStates
-  ResumeProvider --> usePathwaysResume
+  PathwaysProvider --> useEmbedding
+  PathwaysProvider --> useJobStates
+  PathwaysProvider --> usePathwaysResume
   PathwaysProvider --> useMigration
-  PathwaysProvider --> usePathwaysSession
   PathwaysProvider --> PathwaysContent
+  PathwaysContent --> usePathwaysSession
   PathwaysContent --> PathwaysGraph
   PathwaysContent --> CopilotChat
   PathwaysContent --> ActivityLog
@@ -1340,6 +1236,6 @@ flowchart TD
   usePathwaysJobData --> tryLoadFromCache
 ```
 
-**Relationships between Pathways contexts, hooks, and UI components**
+**Relationships between the Pathways context, hooks, and UI components**
 
-Sources: `apps/registry/app/pathways/contexts/index.tsx:19-96`, `apps/registry/app/pathways/contexts/usePathwaysFacade.ts:19-113`
+Sources: `apps/registry/app/pathways/context/PathwaysContext.js:21-144`, `apps/registry/app/pathways/Pathways.js:22-137`
