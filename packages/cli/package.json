@@ -1,6 +1,6 @@
 {
   "name": "resume-cli",
-  "version": "3.7.2",
+  "version": "3.7.3",
   "description": "The JSON Resume command line interface",
   "main": "build/main.js",
   "engines": {
