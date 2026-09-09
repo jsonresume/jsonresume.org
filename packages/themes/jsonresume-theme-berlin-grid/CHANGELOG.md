@@ -1,5 +1,11 @@
 # jsonresume-theme-berlin-grid
 
+## 0.2.6
+
+### Patch Changes
+
+- 609b91c: Publish compiled entry points so Node and resume-cli consumers never load raw JSX.
+
 ## 0.2.5
 
 ### Patch Changes

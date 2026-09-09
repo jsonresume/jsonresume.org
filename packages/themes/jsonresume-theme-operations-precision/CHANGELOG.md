@@ -1,5 +1,11 @@
 # jsonresume-theme-operations-precision
 
+## 0.3.5
+
+### Patch Changes
+
+- 609b91c: Publish compiled entry points so Node and resume-cli consumers never load raw JSX.
+
 ## 0.3.4
 
 ### Patch Changes

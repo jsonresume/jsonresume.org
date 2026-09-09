@@ -1,5 +1,11 @@
 # @jsonresume/jsonresume-theme-professional
 
+## 1.0.23
+
+### Patch Changes
+
+- 609b91c: Publish compiled entry points so Node and resume-cli consumers never load raw JSX.
+
 ## 1.0.22
 
 ### Patch Changes
