@@ -70,6 +70,40 @@ export function CLISection() {
             https://registry.jsonresume.org/thomasdavis.rendercv
           </a>
         </p>
+        <h2>YAML</h2>
+        <p>
+          If you prefer maintaining your resume as YAML,{' '}
+          <a target="_blank" href="https://yamlresume.dev">
+            YAMLResume
+          </a>{' '}
+          is a TypeScript toolchain that renders pixel-perfect PDFs via LaTeX
+          typesetting, with built-in i18n support and schema validation. It can
+          import JSON Resume directly:
+        </p>
+        <p>
+          YAMLResume requires Node.js 22 or newer. Convert your existing resume:
+          <br />
+          <br />
+          <code>npx json2yamlresume resume.json</code>
+          <br />
+          <br />
+          Install the YAMLResume CLI:
+          <br />
+          <br />
+          <code>npm install -g yamlresume</code>
+          <br />
+          <br />
+          For PDF output, install a supported LaTeX engine following the{' '}
+          <a target="_blank" href="https://yamlresume.dev/docs/installation">
+            YAMLResume installation guide
+          </a>
+          , then verify your environment and build:
+          <br />
+          <br />
+          <code>yamlresume doctor</code>
+          <br />
+          <code>yamlresume build resume.yml</code>
+        </p>
         <h2>Maintaining and Deploying Multiple Versions</h2>
         <p>
           The registry supports multiple resume files via the{' '}

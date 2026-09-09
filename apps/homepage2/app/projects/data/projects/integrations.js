@@ -72,6 +72,17 @@ export const projects = [
     language: 'Python/Typst',
   },
   {
+    name: 'YAMLResume',
+    description:
+      'YAMLResume is a TypeScript toolchain that lets you create and version ' +
+      'control resumes as code in YAML, and generate pixel-perfect resumes in ' +
+      'multiple formats (PDF, HTML, Markdown, etc.) with pro-grade LaTeX ' +
+      'typesetting, built-in i18n support and a developer-friendly CLI.',
+    link: 'https://yamlresume.dev',
+    category: 'framework',
+    language: 'TypeScript',
+  },
+  {
     name: 'hugo-mod-json-resume',
     description:
       'A Hugo module containing templates to integrate multilingual JSON Resume data into your Hugo website.',
