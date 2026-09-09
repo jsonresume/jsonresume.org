@@ -1,6 +1,6 @@
 /**
  * Shared job filtering utility.
- * Used by both useToolHandler (client hook) and JobService (Effect service).
+ * Used by useToolHandler to apply client-side job filters.
  */
 export function findMatchingJobs(criteria, jobs, jobInfo) {
   const matchingIds = [];
