@@ -11,7 +11,9 @@ export default defineConfig({
     minify: false,
     lib: {
       entry: './src/index.jsx',
-      formats: ['es'],
+      formats: ['es', 'cjs'],
+      // Without package type=module, Vite emits index.mjs for ESM and
+      // index.js for CommonJS. That preserves legacy require() support.
       fileName: 'index',
     },
     rollupOptions: {
@@ -28,6 +30,9 @@ export default defineConfig({
       '@emotion/is-prop-valid',
       'stylis',
       'shallowequal',
+      // marked is ESM-only. Bundle it so the legacy CommonJS entry remains
+      // usable by resume-cli and require() consumers.
+      'marked',
     ],
   },
 });

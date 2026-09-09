@@ -33,6 +33,41 @@ function git(args, opts = {}) {
   });
 }
 
+function discoverManifestProblems() {
+  const manifests = git(['ls-files', '--', 'packages/themes/*/package.json'])
+    .split('\n')
+    .filter(Boolean);
+  const problems = [];
+
+  for (const rel of manifests) {
+    const dir = dirname(join(repoRoot, rel));
+    const pkg = JSON.parse(readFileSync(join(repoRoot, rel), 'utf8'));
+    if (pkg.private === true) continue;
+
+    const publishedEntries = [
+      ['main', pkg.main],
+      ['module', pkg.module],
+      ['exports["."].import', pkg.exports?.['.']?.import],
+      ['exports["."].require', pkg.exports?.['.']?.require],
+      ['exports["."].default', pkg.exports?.['.']?.default],
+    ];
+    for (const [field, target] of publishedEntries) {
+      if (typeof target === 'string' && /\.[jt]sx$/.test(target)) {
+        problems.push(`${pkg.name}: ${field} points at raw source (${target})`);
+      }
+      if (
+        typeof target === 'string' &&
+        target.startsWith('./') &&
+        !existsSync(join(dir, target))
+      ) {
+        problems.push(`${pkg.name}: ${field} targets missing file ${target}`);
+      }
+    }
+  }
+
+  return problems;
+}
+
 // Discover theme packages that (a) track files under dist/ in git and
 // (b) declare a build script. These are exactly the packages where stale
 // committed dist/ would ship to npm.
@@ -78,6 +113,13 @@ function distIsDirty(themeRel) {
 }
 
 function main() {
+  const manifestProblems = discoverManifestProblems();
+  if (manifestProblems.length > 0) {
+    console.error('Invalid public theme package manifests:');
+    for (const problem of manifestProblems) console.error(`- ${problem}`);
+    process.exit(1);
+  }
+
   const themes = discoverThemes();
   if (themes.length === 0) {
     console.error('No dist-tracked theme packages found — nothing to check.');

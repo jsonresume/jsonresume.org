@@ -1,7 +1,9 @@
-import { jsxs, Fragment, jsx } from "react/jsx-runtime";
-import { renderToStaticMarkup } from "react-dom/server";
-import o, { useState, useMemo, useEffect, useContext, useDebugValue, createElement, useRef } from "react";
-import { FaMapPin, FaEnvelope, FaPhoneAlt, FaLink, FaLinkedin, FaGithub, FaTwitter } from "react-icons/fa";
+"use strict";
+Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
+const jsxRuntime = require("react/jsx-runtime");
+const server = require("react-dom/server");
+const o = require("react");
+const fa = require("react-icons/fa");
 var __assign = function() {
   __assign = Object.assign || function __assign2(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -727,13 +729,13 @@ var unitlessKeys = {
 };
 var f = "undefined" != typeof process && void 0 !== process.env && (process.env.REACT_APP_SC_ATTR || process.env.SC_ATTR) || "data-styled", m$1 = "active", y$1 = "data-styled-version", v$1 = "6.1.19", g = "/*!sc*/\n", S$1 = "undefined" != typeof window && "undefined" != typeof document, w$1 = Boolean("boolean" == typeof SC_DISABLE_SPEEDY ? SC_DISABLE_SPEEDY : "undefined" != typeof process && void 0 !== process.env && void 0 !== process.env.REACT_APP_SC_DISABLE_SPEEDY && "" !== process.env.REACT_APP_SC_DISABLE_SPEEDY ? "false" !== process.env.REACT_APP_SC_DISABLE_SPEEDY && process.env.REACT_APP_SC_DISABLE_SPEEDY : "undefined" != typeof process && void 0 !== process.env && void 0 !== process.env.SC_DISABLE_SPEEDY && "" !== process.env.SC_DISABLE_SPEEDY ? "false" !== process.env.SC_DISABLE_SPEEDY && process.env.SC_DISABLE_SPEEDY : "production" !== process.env.NODE_ENV), E$1 = /invalid hook call/i, N$1 = /* @__PURE__ */ new Set(), P$1 = function(t, n) {
   if ("production" !== process.env.NODE_ENV) {
-    var o2 = n ? ' with the id of "'.concat(n, '"') : "", s = "The component ".concat(t).concat(o2, " has been created dynamically.\n") + "You may see this warning because you've called styled inside another component.\nTo resolve this only create new StyledComponents outside of any render method and function component.\nSee https://styled-components.com/docs/basics#define-styled-components-outside-of-the-render-method for more info.\n", i = console.error;
+    var o$1 = n ? ' with the id of "'.concat(n, '"') : "", s = "The component ".concat(t).concat(o$1, " has been created dynamically.\n") + "You may see this warning because you've called styled inside another component.\nTo resolve this only create new StyledComponents outside of any render method and function component.\nSee https://styled-components.com/docs/basics#define-styled-components-outside-of-the-render-method for more info.\n", i = console.error;
     try {
       var a = true;
       console.error = function(t2) {
-        for (var n2 = [], o3 = 1; o3 < arguments.length; o3++) n2[o3 - 1] = arguments[o3];
+        for (var n2 = [], o2 = 1; o2 < arguments.length; o2++) n2[o2 - 1] = arguments[o2];
         E$1.test(t2) ? (a = false, N$1.delete(s)) : i.apply(void 0, __spreadArray([t2], n2, false));
-      }, useRef(), a && !N$1.has(s) && (console.warn(s), N$1.add(s));
+      }, o.useRef(), a && !N$1.has(s) && (console.warn(s), N$1.add(s));
     } catch (e) {
       E$1.test(e.message) && N$1.delete(s);
     } finally {
@@ -1034,19 +1036,19 @@ var ze$1 = new ke$1(), Me$1 = Fe$1(), $e$1 = o.createContext({ shouldForwardProp
 $e$1.Consumer;
 var Ge$1 = o.createContext(void 0);
 function Le$1() {
-  return useContext($e$1);
+  return o.useContext($e$1);
 }
 function Ye(e) {
-  var t = useState(e.stylisPlugins), n = t[0], r = t[1], c = Le$1().styleSheet, l = useMemo(function() {
+  var t = o.useState(e.stylisPlugins), n = t[0], r = t[1], c = Le$1().styleSheet, l = o.useMemo(function() {
     var t2 = c;
     return e.sheet ? t2 = e.sheet : e.target && (t2 = t2.reconstructWithOptions({ target: e.target }, false)), e.disableCSSOMInjection && (t2 = t2.reconstructWithOptions({ useCSSOMInjection: false })), t2;
-  }, [e.disableCSSOMInjection, e.sheet, e.target, c]), u3 = useMemo(function() {
+  }, [e.disableCSSOMInjection, e.sheet, e.target, c]), u3 = o.useMemo(function() {
     return Fe$1({ options: { namespace: e.namespace, prefix: e.enableVendorPrefixes }, plugins: n });
   }, [e.enableVendorPrefixes, e.namespace, n]);
-  useEffect(function() {
+  o.useEffect(function() {
     p(n, e.stylisPlugins) || r(e.stylisPlugins);
   }, [e.stylisPlugins]);
-  var d = useMemo(function() {
+  var d = o.useMemo(function() {
     return { shouldForwardProp: e.shouldForwardProp, styleSheet: l, stylis: u3 };
   }, [e.shouldForwardProp, l, u3]);
   return o.createElement($e$1.Provider, { value: d }, o.createElement(Ge$1.Provider, { value: u3 }, e.children));
@@ -1162,7 +1164,7 @@ function it(e, r, s) {
   function O2(e2, r2) {
     return (function(e3, r3, s2) {
       var i2 = e3.attrs, a2 = e3.componentStyle, c2 = e3.defaultProps, p3 = e3.foldedComponentIds, d2 = e3.styledComponentId, h3 = e3.target, f3 = o.useContext(et), m3 = Le$1(), y3 = e3.shouldForwardProp || m3.shouldForwardProp;
-      "production" !== process.env.NODE_ENV && useDebugValue(d2);
+      "production" !== process.env.NODE_ENV && o.useDebugValue(d2);
       var v2 = I$1(r3, f3, c2) || C$1, g3 = (function(e4, n, o2) {
         for (var r4, s3 = __assign(__assign({}, n), { className: void 0, theme: o2 }), i3 = 0; i3 < e4.length; i3 += 1) {
           var a3 = re$1(r4 = e4[i3]) ? r4(s3) : r4;
@@ -1172,12 +1174,12 @@ function it(e, r, s) {
       })(i2, r3, v2), S3 = g3.as || h3, w3 = {};
       for (var b3 in g3) void 0 === g3[b3] || "$" === b3[0] || "as" === b3 || "theme" === b3 && g3.theme === v2 || ("forwardedAs" === b3 ? w3.as = g3.forwardedAs : y3 && !y3(b3, S3) || (w3[b3] = g3[b3], y3 || "development" !== process.env.NODE_ENV || isPropValid(b3) || st.has(b3) || !A.has(S3) || (st.add(b3), console.warn('styled-components: it looks like an unknown prop "'.concat(b3, '" is being sent through to the DOM, which will likely trigger a React console error. If you would like automatic filtering of unknown props, you can opt-into that behavior via `<StyleSheetManager shouldForwardProp={...}>` (connect an API like `@emotion/is-prop-valid`) or consider using transient props (`$` prefix for automatic filtering.)')))));
       var E3 = (function(e4, t) {
-        var n = Le$1(), o2 = e4.generateAndInjectStyles(t, n.styleSheet, n.stylis);
-        return "production" !== process.env.NODE_ENV && useDebugValue(o2), o2;
+        var n = Le$1(), o$1 = e4.generateAndInjectStyles(t, n.styleSheet, n.stylis);
+        return "production" !== process.env.NODE_ENV && o.useDebugValue(o$1), o$1;
       })(a2, g3);
       "production" !== process.env.NODE_ENV && e3.warnTooManyClasses && e3.warnTooManyClasses(E3);
       var N3 = ie$1(p3, d2);
-      return E3 && (N3 += " " + E3), g3.className && (N3 += " " + g3.className), w3[G$1(S3) && !A.has(S3) ? "class" : "className"] = N3, s2 && (w3.ref = s2), createElement(S3, w3);
+      return E3 && (N3 += " " + E3), g3.className && (N3 += " " + g3.className), w3[G$1(S3) && !A.has(S3) ? "class" : "className"] = N3, s2 && (w3.ref = s2), o.createElement(S3, w3);
     })(D2, e2, r2);
   }
   O2.displayName = y2;
@@ -1326,7 +1328,7 @@ function renderResumeDocument(element, options = {}) {
   let html;
   let styleTags;
   try {
-    html = renderToStaticMarkup(sheet.collectStyles(element));
+    html = server.renderToStaticMarkup(sheet.collectStyles(element));
     styleTags = sheet.getStyleTags();
   } finally {
     sheet.seal();
@@ -1360,12 +1362,12 @@ const Container$2 = dt.div`
   margin: 0 8px;
 `;
 const SectionComponent = ({ children, title }) => {
-  return /* @__PURE__ */ jsxs(Section, { children: [
-    title && /* @__PURE__ */ jsxs(Fragment, { children: [
-      /* @__PURE__ */ jsx("h2", { children: title }),
-      /* @__PURE__ */ jsx("hr", {})
+  return /* @__PURE__ */ jsxRuntime.jsxs(Section, { children: [
+    title && /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
+      /* @__PURE__ */ jsxRuntime.jsx("h2", { children: title }),
+      /* @__PURE__ */ jsxRuntime.jsx("hr", {})
     ] }),
-    /* @__PURE__ */ jsx(Container$2, { children })
+    /* @__PURE__ */ jsxRuntime.jsx(Container$2, { children })
   ] });
 };
 function L() {
@@ -2470,9 +2472,9 @@ const List$1 = ({ items }) => {
   if (!items) {
     return null;
   }
-  return /* @__PURE__ */ jsx(ListContainer, { children: items.map((item, index) => {
+  return /* @__PURE__ */ jsxRuntime.jsx(ListContainer, { children: items.map((item, index) => {
     const htmlContent = k.parseInline(item, { breaks: true });
-    return /* @__PURE__ */ jsx("li", { dangerouslySetInnerHTML: { __html: htmlContent } }, index);
+    return /* @__PURE__ */ jsxRuntime.jsx("li", { dangerouslySetInnerHTML: { __html: htmlContent } }, index);
   }) });
 };
 const Text = dt.div`
@@ -2481,12 +2483,12 @@ const Text = dt.div`
 `;
 const DateComponent = ({ date }) => {
   if (!date) {
-    return /* @__PURE__ */ jsx(Text, { children: "Present" });
+    return /* @__PURE__ */ jsxRuntime.jsx(Text, { children: "Present" });
   }
   const fullDate = new Date(date);
   const options = { year: "numeric", month: "long" };
   const formattedDate = fullDate.toLocaleDateString("en-US", options);
-  return /* @__PURE__ */ jsx(Text, { children: formattedDate ?? "Present" });
+  return /* @__PURE__ */ jsxRuntime.jsx(Text, { children: formattedDate ?? "Present" });
 };
 const Range = dt.div`
   display: flex;
@@ -2494,10 +2496,10 @@ const Range = dt.div`
   font-size: 13px;
 `;
 const DateRange = ({ startDate, endDate }) => {
-  return /* @__PURE__ */ jsxs(Range, { children: [
-    /* @__PURE__ */ jsx(DateComponent, { date: startDate }),
+  return /* @__PURE__ */ jsxRuntime.jsxs(Range, { children: [
+    /* @__PURE__ */ jsxRuntime.jsx(DateComponent, { date: startDate }),
     " — ",
-    /* @__PURE__ */ jsx(DateComponent, { date: endDate })
+    /* @__PURE__ */ jsxRuntime.jsx(DateComponent, { date: endDate })
   ] });
 };
 const Meta = dt.div`
@@ -2531,15 +2533,15 @@ const Experience = ({
   highlights
 }) => {
   const htmlSummary = summary ? k.parse(summary, { breaks: true }) : "";
-  return /* @__PURE__ */ jsxs(Container$1, { children: [
-    /* @__PURE__ */ jsxs(Meta, { children: [
-      /* @__PURE__ */ jsx(Title$1, { children: title }),
-      /* @__PURE__ */ jsx("div", { className: "secondary", children: date ? /* @__PURE__ */ jsx(DateComponent, { date }) : /* @__PURE__ */ jsx(DateRange, { startDate, endDate }) })
+  return /* @__PURE__ */ jsxRuntime.jsxs(Container$1, { children: [
+    /* @__PURE__ */ jsxRuntime.jsxs(Meta, { children: [
+      /* @__PURE__ */ jsxRuntime.jsx(Title$1, { children: title }),
+      /* @__PURE__ */ jsxRuntime.jsx("div", { className: "secondary", children: date ? /* @__PURE__ */ jsxRuntime.jsx(DateComponent, { date }) : /* @__PURE__ */ jsxRuntime.jsx(DateRange, { startDate, endDate }) })
     ] }),
-    subTitle && /* @__PURE__ */ jsx(SubTitle, { children: subTitle }),
-    /* @__PURE__ */ jsxs("div", { className: "secondary", children: [
-      summary && /* @__PURE__ */ jsx(Summary$1, { dangerouslySetInnerHTML: { __html: htmlSummary } }),
-      /* @__PURE__ */ jsx(List$1, { items: highlights })
+    subTitle && /* @__PURE__ */ jsxRuntime.jsx(SubTitle, { children: subTitle }),
+    /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "secondary", children: [
+      summary && /* @__PURE__ */ jsxRuntime.jsx(Summary$1, { dangerouslySetInnerHTML: { __html: htmlSummary } }),
+      /* @__PURE__ */ jsxRuntime.jsx(List$1, { items: highlights })
     ] })
   ] });
 };
@@ -2547,8 +2549,8 @@ const Work$1 = ({ projects }) => {
   if (!projects) {
     return null;
   }
-  return /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx(SectionComponent, { title: "Projects", children: projects.map((w2, key) => {
-    return /* @__PURE__ */ jsx(
+  return /* @__PURE__ */ jsxRuntime.jsx("div", { children: /* @__PURE__ */ jsxRuntime.jsx(SectionComponent, { title: "Projects", children: projects.map((w2, key) => {
+    return /* @__PURE__ */ jsxRuntime.jsx(
       Experience,
       {
         title: w2.name,
@@ -2602,38 +2604,38 @@ const HeroComponent = ({ basics }) => {
   const twitter = profiles.find(
     ({ network }) => network.toLowerCase() === "twitter"
   );
-  return /* @__PURE__ */ jsxs(SectionComponent, { children: [
-    /* @__PURE__ */ jsx(Title, { children: name }),
-    /* @__PURE__ */ jsx("div", { className: "secondary", children: /* @__PURE__ */ jsxs(BasicInfo, { children: [
-      location && /* @__PURE__ */ jsxs(Info, { children: [
-        /* @__PURE__ */ jsx(FaMapPin, {}),
+  return /* @__PURE__ */ jsxRuntime.jsxs(SectionComponent, { children: [
+    /* @__PURE__ */ jsxRuntime.jsx(Title, { children: name }),
+    /* @__PURE__ */ jsxRuntime.jsx("div", { className: "secondary", children: /* @__PURE__ */ jsxRuntime.jsxs(BasicInfo, { children: [
+      location && /* @__PURE__ */ jsxRuntime.jsxs(Info, { children: [
+        /* @__PURE__ */ jsxRuntime.jsx(fa.FaMapPin, {}),
         location.city,
         ", ",
         location.countryCode
       ] }),
-      email && /* @__PURE__ */ jsxs(Info, { children: [
-        /* @__PURE__ */ jsx(FaEnvelope, {}),
+      email && /* @__PURE__ */ jsxRuntime.jsxs(Info, { children: [
+        /* @__PURE__ */ jsxRuntime.jsx(fa.FaEnvelope, {}),
         email
       ] }),
-      phone && /* @__PURE__ */ jsxs(Info, { children: [
-        /* @__PURE__ */ jsx(FaPhoneAlt, {}),
+      phone && /* @__PURE__ */ jsxRuntime.jsxs(Info, { children: [
+        /* @__PURE__ */ jsxRuntime.jsx(fa.FaPhoneAlt, {}),
         phone
       ] }),
-      url && /* @__PURE__ */ jsxs(Info, { children: [
-        /* @__PURE__ */ jsx(FaLink, {}),
-        /* @__PURE__ */ jsx("a", { target: "_blank", href: url, children: url })
+      url && /* @__PURE__ */ jsxRuntime.jsxs(Info, { children: [
+        /* @__PURE__ */ jsxRuntime.jsx(fa.FaLink, {}),
+        /* @__PURE__ */ jsxRuntime.jsx("a", { target: "_blank", href: url, children: url })
       ] }),
-      linkedin && /* @__PURE__ */ jsxs(Info, { children: [
-        /* @__PURE__ */ jsx(FaLinkedin, {}),
-        /* @__PURE__ */ jsx("a", { href: `https://linkedin.com/in/${linkedin.username}`, children: linkedin.username })
+      linkedin && /* @__PURE__ */ jsxRuntime.jsxs(Info, { children: [
+        /* @__PURE__ */ jsxRuntime.jsx(fa.FaLinkedin, {}),
+        /* @__PURE__ */ jsxRuntime.jsx("a", { href: `https://linkedin.com/in/${linkedin.username}`, children: linkedin.username })
       ] }),
-      github && /* @__PURE__ */ jsxs(Info, { children: [
-        /* @__PURE__ */ jsx(FaGithub, {}),
-        /* @__PURE__ */ jsx("a", { href: `https://github.com/${github.username}`, children: github.username })
+      github && /* @__PURE__ */ jsxRuntime.jsxs(Info, { children: [
+        /* @__PURE__ */ jsxRuntime.jsx(fa.FaGithub, {}),
+        /* @__PURE__ */ jsxRuntime.jsx("a", { href: `https://github.com/${github.username}`, children: github.username })
       ] }),
-      twitter && /* @__PURE__ */ jsxs(Info, { children: [
-        /* @__PURE__ */ jsx(FaTwitter, {}),
-        /* @__PURE__ */ jsx("a", { href: `https://twitter.com/${twitter.username}`, children: twitter.username })
+      twitter && /* @__PURE__ */ jsxRuntime.jsxs(Info, { children: [
+        /* @__PURE__ */ jsxRuntime.jsx(fa.FaTwitter, {}),
+        /* @__PURE__ */ jsxRuntime.jsx("a", { href: `https://twitter.com/${twitter.username}`, children: twitter.username })
       ] })
     ] }) })
   ] });
@@ -2642,18 +2644,18 @@ const Summary = dt.div``;
 const SummaryComponent = ({ basics }) => {
   const { summary } = basics;
   const htmlContent = summary ? k.parse(summary, { breaks: true }) : "";
-  return /* @__PURE__ */ jsx(SectionComponent, { children: /* @__PURE__ */ jsx("div", { className: "secondary", children: /* @__PURE__ */ jsx(Summary, { dangerouslySetInnerHTML: { __html: htmlContent } }) }) });
+  return /* @__PURE__ */ jsxRuntime.jsx(SectionComponent, { children: /* @__PURE__ */ jsxRuntime.jsx("div", { className: "secondary", children: /* @__PURE__ */ jsxRuntime.jsx(Summary, { dangerouslySetInnerHTML: { __html: htmlContent } }) }) });
 };
 const Education = ({ education }) => {
   if (!education) {
     return null;
   }
-  return /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx(SectionComponent, { title: "Education", children: education.map((e, key) => {
+  return /* @__PURE__ */ jsxRuntime.jsx("div", { children: /* @__PURE__ */ jsxRuntime.jsx(SectionComponent, { title: "Education", children: education.map((e, key) => {
     let subTitle = e.area ? `${e.studyType} in ${e.area}` : e.studyType;
     if (e.score) {
       subTitle = `${subTitle} (${e.score})`;
     }
-    return /* @__PURE__ */ jsx(
+    return /* @__PURE__ */ jsxRuntime.jsx(
       Experience,
       {
         title: e.institution,
@@ -2670,8 +2672,8 @@ const Work = ({ work }) => {
   if (!work) {
     return null;
   }
-  return /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx(SectionComponent, { title: "Experience", children: work.map((w2, key) => {
-    return /* @__PURE__ */ jsx(
+  return /* @__PURE__ */ jsxRuntime.jsx("div", { children: /* @__PURE__ */ jsxRuntime.jsx(SectionComponent, { title: "Experience", children: work.map((w2, key) => {
+    return /* @__PURE__ */ jsxRuntime.jsx(
       Experience,
       {
         title: w2.position,
@@ -2689,8 +2691,8 @@ const Certificates = ({ certificates }) => {
   if (!certificates) {
     return null;
   }
-  return /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx(SectionComponent, { title: "Certificates", children: certificates.map((c, key) => {
-    return /* @__PURE__ */ jsx(
+  return /* @__PURE__ */ jsxRuntime.jsx("div", { children: /* @__PURE__ */ jsxRuntime.jsx(SectionComponent, { title: "Certificates", children: certificates.map((c, key) => {
+    return /* @__PURE__ */ jsxRuntime.jsx(
       Experience,
       {
         title: c.name,
@@ -2705,8 +2707,8 @@ const Publications = ({ publications }) => {
   if (!publications) {
     return null;
   }
-  return /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx(SectionComponent, { title: "Publications", children: publications.map((p2, key) => {
-    return /* @__PURE__ */ jsx(
+  return /* @__PURE__ */ jsxRuntime.jsx("div", { children: /* @__PURE__ */ jsxRuntime.jsx(SectionComponent, { title: "Publications", children: publications.map((p2, key) => {
+    return /* @__PURE__ */ jsxRuntime.jsx(
       Experience,
       {
         title: p2.name,
@@ -2722,8 +2724,8 @@ const Awards = ({ awards }) => {
   if (!awards) {
     return null;
   }
-  return /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx(SectionComponent, { title: "Awards", children: awards.map((a, key) => {
-    return /* @__PURE__ */ jsx(
+  return /* @__PURE__ */ jsxRuntime.jsx("div", { children: /* @__PURE__ */ jsxRuntime.jsx(SectionComponent, { title: "Awards", children: awards.map((a, key) => {
+    return /* @__PURE__ */ jsxRuntime.jsx(
       Experience,
       {
         title: a.title,
@@ -2749,36 +2751,36 @@ const Container = dt.div`
   align-items: baseline;
 `;
 const OneLineList = ({ name, items }) => {
-  return /* @__PURE__ */ jsxs(Container, { children: [
-    /* @__PURE__ */ jsxs(Name$1, { children: [
+  return /* @__PURE__ */ jsxRuntime.jsxs(Container, { children: [
+    /* @__PURE__ */ jsxRuntime.jsxs(Name$1, { children: [
       name,
       ":"
     ] }),
-    /* @__PURE__ */ jsx(List, { children: /* @__PURE__ */ jsx("div", { className: "secondary", children: items?.join(", ") }) })
+    /* @__PURE__ */ jsxRuntime.jsx(List, { children: /* @__PURE__ */ jsxRuntime.jsx("div", { className: "secondary", children: items?.join(", ") }) })
   ] });
 };
 const Skills = ({ skills }) => {
   if (!skills) {
     return null;
   }
-  return /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx(SectionComponent, { title: "Skills", children: skills.map((w2, key) => {
-    return /* @__PURE__ */ jsx(OneLineList, { name: w2.name, items: w2.keywords }, key);
+  return /* @__PURE__ */ jsxRuntime.jsx("div", { children: /* @__PURE__ */ jsxRuntime.jsx(SectionComponent, { title: "Skills", children: skills.map((w2, key) => {
+    return /* @__PURE__ */ jsxRuntime.jsx(OneLineList, { name: w2.name, items: w2.keywords }, key);
   }) }) });
 };
 const Interests = ({ interests }) => {
   if (!interests) {
     return null;
   }
-  return /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx(SectionComponent, { title: "Interests", children: interests.map((w2, key) => {
-    return /* @__PURE__ */ jsx(OneLineList, { name: w2.name, items: w2.keywords }, key);
+  return /* @__PURE__ */ jsxRuntime.jsx("div", { children: /* @__PURE__ */ jsxRuntime.jsx(SectionComponent, { title: "Interests", children: interests.map((w2, key) => {
+    return /* @__PURE__ */ jsxRuntime.jsx(OneLineList, { name: w2.name, items: w2.keywords }, key);
   }) }) });
 };
 const Languages = ({ languages }) => {
   if (!languages) {
     return null;
   }
-  return /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx(SectionComponent, { title: "Languages", children: languages.map((l, key) => {
-    return /* @__PURE__ */ jsx(OneLineList, { name: l.language, items: [l.fluency] }, key);
+  return /* @__PURE__ */ jsxRuntime.jsx("div", { children: /* @__PURE__ */ jsxRuntime.jsx(SectionComponent, { title: "Languages", children: languages.map((l, key) => {
+    return /* @__PURE__ */ jsxRuntime.jsx(OneLineList, { name: l.language, items: [l.fluency] }, key);
   }) }) });
 };
 const Name = dt.div`
@@ -2791,10 +2793,10 @@ const References = ({ references }) => {
   if (!references) {
     return null;
   }
-  return /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx(SectionComponent, { title: "References", children: references.map((r, key) => {
-    return /* @__PURE__ */ jsxs("div", { style: { marginBottom: "15px" }, children: [
-      /* @__PURE__ */ jsx(Name, { children: r.name }),
-      /* @__PURE__ */ jsx(Reference, { children: r.reference })
+  return /* @__PURE__ */ jsxRuntime.jsx("div", { children: /* @__PURE__ */ jsxRuntime.jsx(SectionComponent, { title: "References", children: references.map((r, key) => {
+    return /* @__PURE__ */ jsxRuntime.jsxs("div", { style: { marginBottom: "15px" }, children: [
+      /* @__PURE__ */ jsxRuntime.jsx(Name, { children: r.name }),
+      /* @__PURE__ */ jsxRuntime.jsx(Reference, { children: r.reference })
     ] }, key);
   }) }) });
 };
@@ -2802,8 +2804,8 @@ const Volunteer = ({ volunteer }) => {
   if (!volunteer) {
     return null;
   }
-  return /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx(SectionComponent, { title: "Volunteer", children: volunteer.map((w2, key) => {
-    return /* @__PURE__ */ jsx(
+  return /* @__PURE__ */ jsxRuntime.jsx("div", { children: /* @__PURE__ */ jsxRuntime.jsx(SectionComponent, { title: "Volunteer", children: volunteer.map((w2, key) => {
+    return /* @__PURE__ */ jsxRuntime.jsx(
       Experience,
       {
         title: w2.position,
@@ -2824,25 +2826,25 @@ const Layout = dt.div`
   margin-bottom: 40px;
 `;
 const Resume = ({ resume }) => {
-  return /* @__PURE__ */ jsxs(Layout, { children: [
-    /* @__PURE__ */ jsx(HeroComponent, { basics: resume.basics }),
-    /* @__PURE__ */ jsx(SummaryComponent, { basics: resume.basics }),
-    /* @__PURE__ */ jsx(Work, { work: resume.work }),
-    /* @__PURE__ */ jsx(Work$1, { projects: resume.projects }),
-    /* @__PURE__ */ jsx(Education, { education: resume.education }),
-    /* @__PURE__ */ jsx(Certificates, { certificates: resume.certificates }),
-    /* @__PURE__ */ jsx(Publications, { publications: resume.publications }),
-    /* @__PURE__ */ jsx(Awards, { awards: resume.awards }),
-    /* @__PURE__ */ jsx(Volunteer, { volunteer: resume.volunteer }),
-    /* @__PURE__ */ jsx(Languages, { languages: resume.languages }),
-    /* @__PURE__ */ jsx(Skills, { skills: resume.skills }),
-    /* @__PURE__ */ jsx(Interests, { interests: resume.interests }),
-    /* @__PURE__ */ jsx(References, { references: resume.references })
+  return /* @__PURE__ */ jsxRuntime.jsxs(Layout, { children: [
+    /* @__PURE__ */ jsxRuntime.jsx(HeroComponent, { basics: resume.basics }),
+    /* @__PURE__ */ jsxRuntime.jsx(SummaryComponent, { basics: resume.basics }),
+    /* @__PURE__ */ jsxRuntime.jsx(Work, { work: resume.work }),
+    /* @__PURE__ */ jsxRuntime.jsx(Work$1, { projects: resume.projects }),
+    /* @__PURE__ */ jsxRuntime.jsx(Education, { education: resume.education }),
+    /* @__PURE__ */ jsxRuntime.jsx(Certificates, { certificates: resume.certificates }),
+    /* @__PURE__ */ jsxRuntime.jsx(Publications, { publications: resume.publications }),
+    /* @__PURE__ */ jsxRuntime.jsx(Awards, { awards: resume.awards }),
+    /* @__PURE__ */ jsxRuntime.jsx(Volunteer, { volunteer: resume.volunteer }),
+    /* @__PURE__ */ jsxRuntime.jsx(Languages, { languages: resume.languages }),
+    /* @__PURE__ */ jsxRuntime.jsx(Skills, { skills: resume.skills }),
+    /* @__PURE__ */ jsxRuntime.jsx(Interests, { interests: resume.interests }),
+    /* @__PURE__ */ jsxRuntime.jsx(References, { references: resume.references })
   ] });
 };
 const render = (resume) => {
   return renderResumeDocument(
-    /* @__PURE__ */ jsx("main", { children: /* @__PURE__ */ jsx(Resume, { resume }) }),
+    /* @__PURE__ */ jsxRuntime.jsx("main", { children: /* @__PURE__ */ jsxRuntime.jsx(Resume, { resume }) }),
     {
       head: `<style>
     @font-face {
@@ -2939,7 +2941,5 @@ const render = (resume) => {
     }
   );
 };
-export {
-  Resume,
-  render
-};
+exports.Resume = Resume;
+exports.render = render;

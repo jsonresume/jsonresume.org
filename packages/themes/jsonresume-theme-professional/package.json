@@ -2,7 +2,8 @@
   "private": false,
   "name": "@jsonresume/jsonresume-theme-professional",
   "version": "1.0.22",
-  "main": "./src/index.jsx",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "license": "MIT",
   "devDependencies": {
     "@repo/eslint-config-custom": "workspace:^",
@@ -15,7 +16,7 @@
     "styled-components": "^6"
   },
   "scripts": {
-    "lint": "eslint src || exit 0",
+    "lint": "eslint src --ext .js,.jsx",
     "publish": "npm publish --access public",
     "build": "vite build"
   },
@@ -27,11 +28,13 @@
   },
   "exports": {
     ".": {
-      "import": "./src/index.jsx",
-      "default": "./src/index.jsx"
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
     },
     "./dist": {
-      "import": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
       "default": "./dist/index.js"
     }
   }
