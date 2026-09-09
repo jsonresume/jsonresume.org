@@ -1,5 +1,11 @@
 # resume-cli
 
+## 3.7.3
+
+### Patch Changes
+
+- 523e191: Load directory-based resumes through Quaff 5's ESM API and refresh the live-reload dependency.
+
 ## 3.7.2
 
 ### Patch Changes
