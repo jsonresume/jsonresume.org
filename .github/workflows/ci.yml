@@ -123,6 +123,12 @@ jobs:
           cache: pnpm
       - name: Install system dependencies
         run: |
+          # The hosted runner preinstalls Chrome and its apt source, but these
+          # tests use Playwright's own browser. Disable that unrelated source
+          # so a Chrome CDN index rollover cannot break every E2E run.
+          sudo rm -f \
+            /etc/apt/sources.list.d/google-chrome.list \
+            /etc/apt/sources.list.d/google-chrome.sources
           sudo apt-get update
           sudo apt-get install -y libasound2t64 libicu-dev libffi-dev libx264-dev
       - run: pnpm install --frozen-lockfile
