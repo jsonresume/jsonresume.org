@@ -24,7 +24,7 @@ describe('registry resume schema', () => {
 
   it('keeps the top-level rule in sync with the published schema', () => {
     expect(schema.additionalProperties).toBe(
-      publishedSchema.additionalProperties,
+      publishedSchema.additionalProperties
     );
   });
 });
