@@ -38,6 +38,11 @@ const legacyAuthors = {
     author: 'ObserverOfTime',
     link: 'https://github.com/ObserverOfTime',
   },
+  'two-column': {
+    github: 'ekohilas',
+    author: 'Evan Kohilas',
+    link: 'https://github.com/ekohilas/jsonresume-theme-two-column',
+  },
   stackoverflow: {
     github: 'phoinixi',
     author: 'Francesco Esposito',
