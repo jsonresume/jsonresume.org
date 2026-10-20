@@ -1,35 +1,24 @@
 import YAML from 'json-to-pretty-yaml';
-
-const networks = {
-  facebook: 'Facebook',
-  github: 'GitHub',
-  gitlab: 'GitLab',
-  instagram: 'Instagram',
-  linkedin: 'LinkedIn',
-  medium: 'Medium',
-  stackoverflow: 'StackOverflow',
-  twitter: 'Twitter',
-  youtube: 'YouTube',
-};
+import { toSocialNetworks } from './networks.js';
 
 export const convert = async function format(jsonResume) {
   const renderCV = {
     cv: {
       name: jsonResume.basics.name,
-      location: jsonResume.basics.location
-        ? jsonResume.basics.location.city +
-          ', ' +
-          jsonResume.basics.location.countryCode
-        : '',
+      location: [
+        jsonResume.basics.location?.city,
+        jsonResume.basics.location?.countryCode,
+      ]
+        .filter(Boolean)
+        .join(', '),
       email: jsonResume.basics.email,
       phone: jsonResume.basics.phone,
       website: jsonResume.basics.url,
-      social_networks: jsonResume.basics.profiles?.map((profile) => ({
-        network: networks[profile.network],
-        username: profile.username,
-      })),
+      social_networks: toSocialNetworks(jsonResume.basics.profiles),
       sections: {
-        summary: [jsonResume.basics.summary],
+        summary: jsonResume.basics.summary
+          ? [jsonResume.basics.summary]
+          : undefined,
         education: jsonResume.education?.map((edu) => ({
           institution: edu.institution,
           area: edu.area,

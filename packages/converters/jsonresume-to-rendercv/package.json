@@ -13,5 +13,13 @@
   },
   "author": "Thomas Davis",
   "license": "MIT",
-  "private": false
+  "private": false,
+  "scripts": {
+    "test": "node --test"
+  },
+  "files": [
+    "index.js",
+    "convert.js",
+    "networks.js"
+  ]
 }
