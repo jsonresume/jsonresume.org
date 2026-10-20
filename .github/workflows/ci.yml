@@ -57,6 +57,7 @@ jobs:
         run: |
           pnpm --filter registry test -- --run
           pnpm --filter ats-validator test
+          pnpm --filter @jsonresume/jsonresume-to-rendercv test
 
   dist-sync:
     # Theme packages commit a built dist/ and publish it as-is (changeset
