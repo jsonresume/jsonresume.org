@@ -259,6 +259,13 @@ export const THEME_METADATA = {
       'magenta',
     ],
   },
+  'two-column': {
+    name: 'Two Column',
+    description:
+      'Print-ready two-column layout with a contact and skills sidebar, condensed serif body and embedded fonts.',
+    author: 'Evan Kohilas',
+    tags: ['two-column', 'sidebar', 'print', 'serif', 'community'],
+  },
   'university-first': {
     name: 'University First',
     description:

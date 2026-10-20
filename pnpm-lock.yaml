@@ -548,6 +548,9 @@ importers:
       jsonresume-theme-tan-responsive:
         specifier: ^0.0.7
         version: 0.0.7
+      jsonresume-theme-two-column:
+        specifier: ^0.2.0
+        version: 0.2.0
       jsonresume-theme-two-column-modernist:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-two-column-modernist
@@ -18064,6 +18067,11 @@ packages:
       jsonresume-theme-tan-responsive: 0.0.1
       lodash: 4.18.1
       mustache: 2.3.2
+    dev: false
+
+  /jsonresume-theme-two-column@0.2.0:
+    resolution: {integrity: sha512-SSPNZnOXkvAPRM86euyxKZSNIo8Q/A4dOcJLmccq2BCaod2px9qthkc0J1kAjV/DWfGvmgAAGdkfMSDaCKzDrw==}
+    engines: {node: '>=18'}
     dev: false
 
   /jsonresume-themeutils@1.4.3:
