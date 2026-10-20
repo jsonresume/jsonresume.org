@@ -60,21 +60,21 @@ jobs:
 
       - uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 24
           cache: pnpm
           registry-url: https://registry.npmjs.org
 
-      # npm Trusted Publishing (OIDC) requires npm >= 11.5.0. setup-node with
+      # npm Trusted Publishing (OIDC) requires npm >= 11.5.1. setup-node with
       # node 20 ships npm 10, which silently falls back to token auth and cannot
       # use the id-token:write permission above. Upgrading the global npm CLI is
       # the activation step for OIDC publishing. This is publish-tooling only —
       # it does not touch pnpm or the `pnpm changeset publish` command, and is a
       # no-op for packages still using NPM_TOKEN. See docs/RELEASING.md.
       #
-      # Pinned to npm 11: npm@latest is now 12, which requires Node >= 22 and
-      # EBADENGINEs on this Node 20 runner (broke every release run from
-      # 2026-07-16). npm 11 satisfies the >= 11.5 OIDC requirement; go back to
-      # npm@latest if node-version above is ever bumped to 22+.
+      # Pinned to npm 11: npm@latest (12) EBADENGINEd on the old Node 20 runner
+      # (broke every release run from 2026-07-16). The runner is now Node 24,
+      # so npm@latest would install, but npm 11 already satisfies the >= 11.5.1
+      # OIDC requirement; move to 12 deliberately, not via @latest.
       - name: Upgrade npm for Trusted Publishing (OIDC)
         run: npm install -g npm@11
 

@@ -24,7 +24,7 @@ Use this to retry a publish after fixing auth, or to publish versions that were 
 
 Publishing currently authenticates with the `NPM_TOKEN` repo secret (an npm automation token from the `thomasdavis` account). We are migrating packages to **Trusted Publishing**, where npm trades the workflow's short-lived OIDC token (`id-token: write`) for publish auth — no long-lived token required.
 
-> **Note:** OIDC requires **npm >= 11.5.0**. `actions/setup-node` (node 20) ships npm 10, so the workflow has an `npm install -g npm@latest` step that activates OIDC. This is harmless for token-based publishes.
+> **Note:** OIDC requires **npm >= 11.5.1**. The release workflow runs Node 24 and pins `npm install -g npm@11` (which satisfies the OIDC requirement). This is harmless for token-based publishes.
 
 ### Legacy-package gotcha (first version bump)
 
