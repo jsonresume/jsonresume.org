@@ -1,5 +1,11 @@
 # jsonresume-theme-community-garden
 
+## 0.1.7
+
+### Patch Changes
+
+- 609b91c: Publish compiled entry points so Node and resume-cli consumers never load raw JSX.
+
 ## 0.1.6
 
 ### Patch Changes

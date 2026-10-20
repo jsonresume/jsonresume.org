@@ -1,5 +1,11 @@
 # @jsonresume/theme-metadata
 
+## 0.4.0
+
+### Minor Changes
+
+- 2a1b497: Add metadata for the community `two-column` theme (jsonresume-theme-two-column by Evan Kohilas).
+
 ## 0.3.1
 
 ### Patch Changes

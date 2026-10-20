@@ -1,5 +1,11 @@
 # @jsonresume/jsonresume-theme-tokyo-modernist
 
+## 1.0.8
+
+### Patch Changes
+
+- 609b91c: Publish compiled entry points so Node and resume-cli consumers never load raw JSX.
+
 ## 1.0.7
 
 ### Patch Changes
