@@ -20,6 +20,12 @@ test('drops profiles RenderCV would reject', () => {
   assert.deepEqual(networks, [{ network: 'LinkedIn', username: 'jane-doe' }]);
 });
 
+test('tolerates missing or null profiles', () => {
+  assert.deepEqual(toSocialNetworks(null), []);
+  assert.deepEqual(toSocialNetworks(undefined), []);
+  assert.deepEqual(toSocialNetworks([null]), []);
+});
+
 test('converted YAML keeps the network name', async () => {
   const yaml = await convert({
     basics: {

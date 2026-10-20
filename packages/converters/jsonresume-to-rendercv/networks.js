@@ -35,8 +35,9 @@ export const toRenderCVNetwork = (name) => {
   return byNormalizedName.get(key) ?? RENAMED[key];
 };
 
-export const toSocialNetworks = (profiles = []) =>
-  profiles
+export const toSocialNetworks = (profiles) =>
+  (Array.isArray(profiles) ? profiles : [])
+    .filter(Boolean)
     .map((profile) => ({
       network: toRenderCVNetwork(profile.network),
       username: profile.username,
