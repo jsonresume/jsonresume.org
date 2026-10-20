@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-london-bureau",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Traditional professional resume with heritage feel, modeled after Financial Times style",
   "type": "module",
   "main": "./dist/index.js",
