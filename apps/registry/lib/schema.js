@@ -15,7 +15,7 @@ import { meta } from './schema/meta';
 
 const schema = {
   $schema: 'http://json-schema.org/draft-04/schema#',
-  additionalProperties: false,
+  additionalProperties: true,
   definitions,
   properties: {
     $schema: {
