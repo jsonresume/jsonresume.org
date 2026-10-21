@@ -1,0 +1,37 @@
+.media { color: #222; }
+.media h1, .media h2, .media h3 { text-wrap: balance; }
+.media p { max-width: 72ch; text-wrap: pretty; }
+.lead { font-size: 19px; line-height: 1.6; margin: 24px 0; }
+.contact { display: inline-flex; gap: 24px; align-items: center; background: #a92525; color: #fff; padding: 12px 20px; border-radius: 3px; font-weight: 600; }
+.contact:hover { background: #862020; color: #fff; }
+.contact:focus-visible, .media a:focus-visible { outline: 3px solid #1b579b; outline-offset: 4px; }
+.body { padding-bottom: 20px; }
+.jumpLinks { display: flex; flex-wrap: wrap; gap: 14px 28px; padding: 24px 0; border-bottom: 1px solid #ddd; }
+.media a:not(.contact) { color: #a92525; text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+.section { padding: 44px 0; scroll-margin-top: 24px; }
+.section + .section { border-top: 1px solid #ddd; }
+.section h2 { margin-bottom: 22px; font-size: 28px; font-weight: 400; }
+.section h3 { margin-top: 28px; font-size: 19px; font-weight: 600; }
+.section p, .section li, .facts { font-size: 16px; line-height: 1.7; }
+.description { font-size: 19px !important; }
+.facts { margin: 26px 0 34px; }
+.facts > div { display: grid; grid-template-columns: 170px 1fr; gap: 24px; padding: 14px 0; border-bottom: 1px solid #e4e4e4; }
+.facts dt { font-weight: 600; }
+.facts dd { margin: 0; }
+.sourceList { padding-left: 22px; }
+.sourceList li { padding-left: 6px; margin: 16px 0; }
+.sourceList p { margin: 4px 0; }
+.figure { margin: 28px 0; }
+.screenshot { display: block; width: 100%; height: auto; border: 1px solid #ddd; }
+.figure figcaption { margin-top: 12px; font-size: 14px; line-height: 1.6; color: #555; }
+.downloads { padding-left: 22px; }
+.downloads li { margin: 10px 0; padding-left: 6px; }
+.contactLayout { display: grid; grid-template-columns: 1.4fr 1fr; gap: 42px; }
+.contactLayout h3 { margin-top: 0; }
+.enquiryNote { align-self: start; padding: 24px; background: #fff8cf; }
+@media (max-width: 600px) {
+  .facts > div { grid-template-columns: 1fr; gap: 4px; }
+  .contactLayout { grid-template-columns: 1fr; gap: 24px; }
+  .section { padding: 32px 0; }
+  .lead { font-size: 17px; }
+}

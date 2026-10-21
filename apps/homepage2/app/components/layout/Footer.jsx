@@ -11,7 +11,8 @@ export function Footer() {
           </p>
           <p>
             <Link href="/ai/">AI</Link>&nbsp;|&nbsp;
-            <Link href="/blog/">Blog</Link>&nbsp;|
+            <Link href="/blog/">Blog</Link>&nbsp;|&nbsp;
+            <Link href="/media/">Media</Link>
           </p>
         </div>
       </div>
