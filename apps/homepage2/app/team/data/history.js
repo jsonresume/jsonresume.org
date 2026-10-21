@@ -27,6 +27,15 @@ export const history = [
     source: 'Announcing our first service integration',
   },
   {
+    date: '2014-11-09',
+    label: '9 November 2014',
+    title: 'Community theme competition',
+    description:
+      'The team announced a monthly theme competition with a $250 prize, sponsored by Hired.com.',
+    href: '/blog/monthly-theme-competition-sponsored-by-hired/',
+    source: 'Theme Competition — Sponsored by Hired.com',
+  },
+  {
     date: '2019-06-27',
     label: '27 June 2019',
     title: 'Gist-based résumé hosting',

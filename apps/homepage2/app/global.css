@@ -7,10 +7,14 @@ body {
 
 .project-history { padding-top: 40px; padding-bottom: 30px; }
 .project-history > p { max-width: 72ch; }
+.history-narrative { max-width: 72ch; }
+.history-narrative h3 { margin: 30px 0 12px; font-size: 22px; }
+.history-narrative a { color: #a92525; text-decoration: underline; text-underline-offset: 3px; }
+.history-milestones-heading { margin-top: 40px; }
 .history-list { list-style: none; padding: 0; margin: 30px 0; }
 .history-list li { display: grid; grid-template-columns: 145px 1fr; gap: 24px; padding: 22px 0; border-top: 1px solid #ddd; }
 .history-list time { color: #555; }
-.history-list h3 { font-size: 19px; font-weight: 600; margin: 0 0 8px; }
+.history-list h4 { font-size: 19px; font-weight: 600; margin: 0 0 8px; }
 .history-list p { max-width: 68ch; margin: 0 0 8px; }
 .history-list a { color: #a92525; text-decoration: underline; text-underline-offset: 3px; }
 @media (max-width: 600px) {
