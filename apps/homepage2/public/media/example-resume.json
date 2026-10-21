@@ -1,0 +1,44 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jsonresume/jsonresume.org/master/packages/schema/schema.json",
+  "basics": {
+    "name": "Alex Example",
+    "label": "Software Developer",
+    "email": "alex@example.com",
+    "url": "https://example.com",
+    "summary": "I build useful, accessible tools for the web. This fictional profile demonstrates how structured career information can become a readable résumé."
+  },
+  "work": [
+    {
+      "name": "Example Studio",
+      "position": "Software Developer",
+      "startDate": "2023-02-01",
+      "endDate": "2026-09-30",
+      "highlights": [
+        "Built accessible interfaces for a community events platform.",
+        "Maintained automated checks and documented reusable components."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Example University",
+      "area": "Computer Science",
+      "studyType": "Bachelor of Science",
+      "startDate": "2019-09-01",
+      "endDate": "2022-06-30"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Web development",
+      "keywords": ["JavaScript", "HTML", "CSS", "Accessibility"]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Community Events",
+      "description": "A fictional open-source project for finding local events.",
+      "url": "https://example.com/projects/community-events"
+    }
+  ]
+}

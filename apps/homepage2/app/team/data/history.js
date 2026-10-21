@@ -1,0 +1,38 @@
+export const history = [
+  {
+    date: '2014-07-07',
+    label: '7 July 2014',
+    title: 'Public introduction',
+    description:
+      'JSON Resume was discussed on Hacker News as a JSON-based open-source format for résumés.',
+    href: 'https://news.ycombinator.com/item?id=7996464',
+    source: 'Original Hacker News discussion',
+  },
+  {
+    date: '2014-07-31',
+    label: '31 July 2014',
+    title: 'First official specification release',
+    description:
+      'Thomas Davis and Roland Sharp announced version 0.0.0 of the specification, alongside the CLI and modular theme system.',
+    href: '/blog/first-official-release/',
+    source: 'First Official Release',
+  },
+  {
+    date: '2014-09-09',
+    label: '9 September 2014',
+    title: 'First announced service integration',
+    description:
+      'The project announced that Represent had added an option to export profiles in JSON Resume format.',
+    href: '/blog/first-service-integration/',
+    source: 'Announcing our first service integration',
+  },
+  {
+    date: '2019-06-27',
+    label: '27 June 2019',
+    title: 'Gist-based résumé hosting',
+    description:
+      'The fifth-birthday update described a rewritten hosting service that used resume.json files stored in users’ GitHub Gists.',
+    href: '/blog/5th-birthday-new-features/',
+    source: '5th Birthday and New Features',
+  },
+];

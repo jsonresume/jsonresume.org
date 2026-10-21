@@ -5,7 +5,8 @@ import { HistorySection } from './components/HistorySection';
 
 export const metadata = {
   title: 'Team — JSON Resume',
-  description: 'Meet the team behind JSON Resume',
+  description:
+    'Meet the JSON Resume contributors and explore its documented history, starting in 2014.',
   image: 'https://jsonresume.org/images/logo.png',
   url: 'https://jsonresume.org/team/',
 };

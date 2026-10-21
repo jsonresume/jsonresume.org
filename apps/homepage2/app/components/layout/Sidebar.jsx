@@ -11,6 +11,7 @@ export function Sidebar() {
       <Link href="/projects/">Projects</Link>
       <Link href="/ai/">AI</Link>
       <Link href="/team/">Team</Link>
+      <Link href="/media/">Media</Link>
       {/* Plain anchor: /docs is rewritten to the GitHub Pages docs site. */}
       <a href="/docs">Docs</a>
       <Link href="/blog/">Blog</Link>
