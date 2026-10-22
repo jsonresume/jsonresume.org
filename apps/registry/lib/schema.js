@@ -19,6 +19,11 @@ const schema = {
   definitions,
   properties: {
     custom: { $ref: '#/definitions/custom' },
+    objective: {
+      type: 'string',
+      description:
+        'Forward-looking career goal. Distinct from basics.summary, which describes background',
+    },
     $schema: {
       type: 'string',
       description:

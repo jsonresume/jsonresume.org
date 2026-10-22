@@ -109,6 +109,10 @@
         }
       }
     },
+    "objective": {
+      "type": "string",
+      "description": "Forward-looking career goal, e.g. 'Seeking a senior backend role in climate tech'. Distinct from basics.summary, which describes background (#317)"
+    },
     "work": {
       "type": "array",
       "items": {

@@ -16,6 +16,10 @@ export interface Resume {
    */
   $schema?: string;
   basics?: ResumeBasics;
+  /**
+   * Forward-looking career goal, e.g. 'Seeking a senior backend role in climate tech'. Distinct from basics.summary, which describes background (#317)
+   */
+  objective?: string;
   work?: WorkItem[];
   volunteer?: VolunteerItem[];
   education?: EducationItem[];
