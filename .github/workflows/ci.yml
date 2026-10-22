@@ -115,6 +115,9 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    # A normal run takes ~8 minutes; without a limit a hung apt/browser
+    # download holds the job (and the PR merge queue) for 6 hours.
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v6
@@ -136,6 +139,7 @@ jobs:
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
         working-directory: apps/registry
+        timeout-minutes: 10
       - name: Run Playwright tests
         run: pnpm turbo test:e2e --concurrency 1000
       - uses: actions/upload-artifact@v7
