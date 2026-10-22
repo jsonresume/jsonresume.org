@@ -42,7 +42,7 @@ const Name = styled.h1`
 
 const Label = styled.div`
   font-size: 18px;
-  color: #0284c7;
+  color: #0369a1;
   font-weight: 500;
   margin-bottom: 20px;
 `;
@@ -62,7 +62,7 @@ const SummarySection = styled(Section)`
   background: white;
   border-radius: 12px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  border-left: 4px solid #0284c7;
+  border-left: 4px solid #0369a1;
 `;
 
 const SummaryText = styled.p`
@@ -79,7 +79,7 @@ const MainSection = styled(Section)`
 const MainSectionTitle = styled(SectionTitle)`
   font-size: 24px;
   font-weight: 600;
-  color: #0284c7;
+  color: #0369a1;
   margin: 0 0 32px 0;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -121,7 +121,7 @@ const WorkMeta = styled.div`
 
 const WorkCompany = styled.div`
   font-size: 16px;
-  color: #0284c7;
+  color: #0369a1;
   font-weight: 500;
   margin-bottom: 12px;
 `;
@@ -145,7 +145,7 @@ const WorkHighlights = styled.ul`
     color: #475569;
 
     &::marker {
-      color: #0284c7;
+      color: #0369a1;
     }
   }
 `;
@@ -167,7 +167,7 @@ const SkillName = styled.h4`
   font-size: 15px;
   font-weight: 600;
   margin: 0 0 16px 0;
-  color: #0284c7;
+  color: #0369a1;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 `;

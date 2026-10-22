@@ -64,8 +64,8 @@ pre {
   transition: all 0.25s;
 }
 .btn-red {
-  background: #df4848;
-  border: 2px solid #df4848;
+  background: #d23a3a;
+  border: 2px solid #d23a3a;
   color: #fff;
 }
 .btn-red:hover {
