@@ -76,9 +76,12 @@ export const format = async function (resume, options) {
   return {
     content: ensureHtmlCharset(resumeHTML),
     headers: [
+      // no-cache, not a short max-age: Cloudflare raises any max-age below its
+      // Browser Cache TTL (4h) but passes no-cache through, so edits to a
+      // gist show up on the next load (#552)
       {
-        key: 'Cache-control',
-        value: 'public, max-age=90',
+        key: 'Cache-Control',
+        value: 'no-cache',
       },
       {
         key: 'Content-Type',
