@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.3.3
+
+### Patch Changes
+
+- 2fa869c: README: document that the package ships JSX source and must be consumed through a bundler (Vite, Next.js `transpilePackages`, or esbuild), with working setups.
+- Updated dependencies [f14aaac]
+- Updated dependencies [640a5eb]
+- Updated dependencies [788cab8]
+- Updated dependencies [135a859]
+- Updated dependencies [135a859]
+- Updated dependencies [5a2b1a3]
+  - @jsonresume/types@0.3.0
+  - @jsonresume/utils@0.3.0
+
 ## 0.3.2
 
 ### Patch Changes

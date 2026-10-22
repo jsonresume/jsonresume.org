@@ -1,5 +1,12 @@
 # jsonresume-theme-brutalist
 
+## 0.2.7
+
+### Patch Changes
+
+- Updated dependencies [2fa869c]
+  - @jsonresume/core@0.3.3
+
 ## 0.2.6
 
 ### Patch Changes

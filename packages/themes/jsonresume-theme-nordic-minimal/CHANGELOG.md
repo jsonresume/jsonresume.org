@@ -1,5 +1,13 @@
 # jsonresume-theme-nordic-minimal
 
+## 1.1.6
+
+### Patch Changes
+
+- e80265a: Darken the accent colour one step so titles and links meet WCAG AA contrast (nordic-minimal `#4682b4` → `#3d6f9e`, coastal-creative `#0284c7` → `#0369a1`).
+- Updated dependencies [2fa869c]
+  - @jsonresume/core@0.3.3
+
 ## 1.1.5
 
 ### Patch Changes

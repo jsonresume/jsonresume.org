@@ -1,5 +1,30 @@
 # resume-cli
 
+## 3.8.0
+
+### Minor Changes
+
+- 57b78d5: Read `.jsonc` resumes (comments and trailing commas), e.g. `resume export resume.html --resume resume.jsonc`. Comments are dropped on read; the data is the same as the equivalent JSON.
+- 52c3941: - `export`, `serve` and `audit` find the themes bundled with the CLI on global and `npx` installs
+  - ESM-only themes load (including current `jsonresume-theme-even`, whose CommonJS build can't be required)
+  - Scoped theme packages (`--theme @scope/jsonresume-theme-name`) are no longer mangled and are listed by `resume themes`
+  - The default theme is now `even`; `elegant` crashes on resumes without optional sections. Pass `--theme elegant` to keep using it
+  - `init` without a TTY writes the resume (or refuses to overwrite one) instead of exiting silently
+  - PDF launch failures suggest `RESUME_PUPPETEER_NO_SANDBOX=1`, which is now documented
+
+### Patch Changes
+
+- 5a2b1a3: - `@jsonresume/utils`: `withStringLocations(resume)` formats structured `location` objects on work, volunteer and education entries as display strings, for themes written for string locations (#323)
+  - `resume-cli`: applies the same conversion before rendering a theme, so structured entry locations never print as `[object Object]`
+- Updated dependencies [f14aaac]
+- Updated dependencies [640a5eb]
+- Updated dependencies [8f377a4]
+- Updated dependencies [788cab8]
+- Updated dependencies [135a859]
+- Updated dependencies [135a859]
+- Updated dependencies [34ac806]
+  - @jsonresume/schema@1.4.0
+
 ## 3.7.3
 
 ### Patch Changes

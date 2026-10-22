@@ -1,5 +1,12 @@
 # jsonresume-theme-creative-confidence
 
+## 1.0.3
+
+### Patch Changes
+
+- Updated dependencies [5a2b1a3]
+  - @jsonresume/utils@0.3.0
+
 ## 1.0.2
 
 ### Patch Changes

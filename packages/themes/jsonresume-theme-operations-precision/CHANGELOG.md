@@ -1,5 +1,12 @@
 # jsonresume-theme-operations-precision
 
+## 0.3.6
+
+### Patch Changes
+
+- Updated dependencies [2fa869c]
+  - @jsonresume/core@0.3.3
+
 ## 0.3.5
 
 ### Patch Changes
