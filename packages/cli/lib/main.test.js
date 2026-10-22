@@ -71,7 +71,7 @@ describe('cli configuration', () => {
                                             https://jsonresume.org/themes/), or a
                                             path starting with . (use . for current
                                             directory or ../some/other/dir) (default:
-                                            "jsonresume-theme-elegant")
+                                            "jsonresume-theme-even")
         -f, --format <file type extension>  Used by \`export\`.
         -r, --resume <resume filename>      path to the resume in json format. Use
                                             '-' to read from stdin (default:
@@ -95,7 +95,9 @@ describe('cli configuration', () => {
                                             to specify export format. .md and .txt
                                             need no theme; pick a theme for
                                             .html/.pdf with --theme
-                                            (https://jsonresume.org/themes/).
+                                            (https://jsonresume.org/themes/). For
+                                            .pdf on Linux CI or in containers, set
+                                            RESUME_PUPPETEER_NO_SANDBOX=1.
         themes                              List JSON Resume themes installed in
                                             node_modules (the slug to pass to
                                             --theme). Browse the full gallery at
