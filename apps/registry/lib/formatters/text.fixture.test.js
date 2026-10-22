@@ -24,11 +24,13 @@ const SECTION_ORDER = [
 ];
 
 describe('text formatter against complete-resume fixture', () => {
-  it('returns content string and empty headers', async () => {
+  it('returns content string and a Content-Type header', async () => {
     const { content, headers } = await textFormatter.format(completeResume);
     expect(typeof content).toBe('string');
     expect(content.length).toBeGreaterThan(0);
-    expect(headers).toEqual([]);
+    expect(headers).toEqual([
+      { key: 'Content-Type', value: 'text/plain; charset=utf-8' },
+    ]);
   });
 
   it('renders the header block first (name, label, contact)', async () => {
