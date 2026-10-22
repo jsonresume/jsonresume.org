@@ -1,5 +1,11 @@
 # jsonresume-theme-developer-mono
 
+## 0.2.9
+
+### Patch Changes
+
+- @jsonresume/core@0.3.5
+
 ## 0.2.8
 
 ### Patch Changes

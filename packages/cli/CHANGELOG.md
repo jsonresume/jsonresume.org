@@ -1,5 +1,13 @@
 # resume-cli
 
+## 3.8.2
+
+### Patch Changes
+
+- 6748de7: `projects[].summary` is now the preferred field, consistent with `summary` elsewhere; `projects[].description` stays valid as a deprecated alias, and `summary` wins when both are set (#296). `@jsonresume/utils` adds `withProjectSummaries()`, which the registry and resume-cli apply before rendering so themes reading either field show the text.
+- Updated dependencies [6748de7]
+  - @jsonresume/schema@1.6.0
+
 ## 3.8.1
 
 ### Patch Changes
