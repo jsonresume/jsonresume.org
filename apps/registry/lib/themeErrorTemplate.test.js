@@ -83,6 +83,27 @@ describe('themeErrorTemplate', () => {
     expect(html).toContain('alert(&quot;XSS&quot;)');
   });
 
+  it('escapes the user-supplied theme name', () => {
+    const html = themeErrorTemplate({
+      code: 'TEMPLATE_MISSING',
+      message: 'Theme is not supported',
+      extra: { themeName: '<img src=x onerror=alert(1)>' },
+    });
+
+    expect(html).not.toContain('<img src=x');
+    expect(html).toContain('&lt;img src=x onerror=alert(1)&gt;');
+  });
+
+  it('renders non-theme errors with their message', () => {
+    const html = themeErrorTemplate({
+      code: 'INVALID_USERNAME',
+      message: 'This is not a valid Github username',
+    });
+
+    expect(html).toContain('Resume Error');
+    expect(html).toContain('This is not a valid Github username');
+  });
+
   it('handles missing theme name gracefully', () => {
     const errorObject = {
       code: 'TEMPLATE_MISSING',

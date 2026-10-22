@@ -2,6 +2,7 @@ import generateResume from '../../lib/generateResume';
 import errorTemplate from '../../lib/errorTemplate';
 import themeErrorTemplate from '../../lib/themeErrorTemplate';
 import trackView from '../../lib/trackView';
+import { ERROR_CODE_STATUS } from '../../lib/error/buildError';
 
 export default async function handler(req, res) {
   const { forceJSON, username } = req.query;
@@ -22,19 +23,25 @@ export default async function handler(req, res) {
   );
 
   if (error) {
+    const status = ERROR_CODE_STATUS[error.code] || 400;
+    // Never let an edge or browser cache hold on to an error page.
+    res.setHeader('Cache-Control', 'no-store');
+    if (status === 503) res.setHeader('Retry-After', '60');
+
+    const isPage = !extension || extension === 'html';
+    if (isPage || error?.extra?.validation) {
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    }
     if (error?.extra?.validation) {
       // Resume validation errors - show detailed validation error page
-      return res.status(400).send(errorTemplate(error));
-    } else if (
-      error?.code === 'TEMPLATE_MISSING' ||
-      error?.code === 'UNKNOWN_TEMPLATE_ERROR'
-    ) {
-      // Theme-related errors - show user-friendly theme error page
-      return res.status(400).send(themeErrorTemplate(error));
-    } else {
-      // Other errors - return JSON for API consumers
-      return res.status(400).json(error);
+      return res.status(status).send(errorTemplate(error));
     }
+    if (isPage) {
+      // Page requests get a readable error page
+      return res.status(status).send(themeErrorTemplate(error));
+    }
+    // Data formats (.json, .yaml, ...) get JSON for API consumers
+    return res.status(status).json(error);
   }
 
   res.setHeader(

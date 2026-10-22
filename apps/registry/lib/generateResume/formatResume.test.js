@@ -3,7 +3,7 @@ import { formatResume } from './formatResume';
 
 // Mock buildError
 vi.mock('../error/buildError', () => ({
-  default: vi.fn((code, details) => ({ code, details })),
+  default: vi.fn((code, extra) => ({ error: { code, extra } })),
   ERROR_CODES: {
     TEMPLATE_MISSING: 'TEMPLATE_MISSING',
     UNKNOWN_TEMPLATE_ERROR: 'UNKNOWN_TEMPLATE_ERROR',
@@ -85,7 +85,7 @@ describe('formatResume', () => {
 
     expect(result.error).toBeDefined();
     expect(result.error.code).toBe('UNKNOWN_TEMPLATE_ERROR');
-    expect(result.error.details.error).toHaveProperty('stack');
+    expect(result.error.extra.error).toHaveProperty('stack');
   });
 
   it('logs errors with structured logging', async () => {
@@ -139,7 +139,7 @@ describe('formatResume', () => {
 
     const result = await formatResume({}, mockFormatter, {});
 
-    expect(result.error.details.error.stack).toBe('Stack trace here');
+    expect(result.error.extra.error.stack).toBe('Stack trace here');
   });
 
   it('handles empty resume', async () => {

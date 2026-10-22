@@ -4,22 +4,44 @@ import buildError, { ERROR_CODES } from './error/buildError';
 import { RESUME_GIST_NAME } from '../app/providers/ResumeProvider';
 import logger from './logger';
 
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+const fetchGists = async (username) => {
+  const token = process.env.GITHUB_TOKEN;
+  const url = `https://api.github.com/users/${username}/gists?per_page=100`;
+
+  try {
+    // If we have no token and are in development, we can still make some requests.
+    return await axios.get(url, {
+      headers: token ? { Authorization: 'Bearer ' + token } : {},
+    });
+  } catch (e) {
+    if (e.response?.status !== 401 || !token) throw e;
+    // A revoked or expired token 401s for every user. Fall back to anonymous
+    // requests so the registry stays up while the token is rotated.
+    logger.error(
+      { username },
+      'GITHUB_TOKEN rejected by GitHub (401), retrying unauthenticated; rotate the token'
+    );
+    return axios.get(url);
+  }
+};
 
 const getResumeGist = async (username, gistname = RESUME_GIST_NAME) => {
   let gistData = null;
   try {
-    gistData = await axios.get(
-      `https://api.github.com/users/${username}/gists?per_page=100`,
-      {
-        headers: {
-          ...(GITHUB_TOKEN ? { Authorization: 'Bearer ' + GITHUB_TOKEN } : {}), // If we have no token and are in development, we can still make some requests.
-        },
-      }
-    );
+    gistData = await fetchGists(username);
   } catch (e) {
-    logger.error({ error: e.message, username }, 'Failed to fetch gists');
-    return buildError(ERROR_CODES.INVALID_USERNAME);
+    const status = e.response?.status;
+    logger.error(
+      { error: e.message, status, username },
+      'Failed to fetch gists'
+    );
+    // Only a 404 means the user doesn't exist; rate limits, auth failures and
+    // outages are on GitHub's side (or ours), not the user's.
+    return buildError(
+      status === 404
+        ? ERROR_CODES.INVALID_USERNAME
+        : ERROR_CODES.GITHUB_UNAVAILABLE
+    );
   }
 
   if (!gistData.data) {
