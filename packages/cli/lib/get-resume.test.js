@@ -30,6 +30,20 @@ describe('get-resume', () => {
       }
     `);
   });
+  it('should consume jsonc, dropping comments without altering data', async () => {
+    expect(await getResume({ path: '/resume.jsonc' })).toEqual({
+      basics: {
+        name: 'thomas',
+        email: 'thomas@example.com',
+        url: 'https://example.com/a//b',
+      },
+    });
+  });
+  it('should reject malformed jsonc', async () => {
+    await expect(
+      getResume({ path: '/malformed-resume.jsonc' }),
+    ).rejects.toThrow(/Invalid JSONC/);
+  });
   it('should read from process.stdin when path is a dash', async () => {
     const stdin = mockStdin();
     const gotResume = getResume({ path: '-' });

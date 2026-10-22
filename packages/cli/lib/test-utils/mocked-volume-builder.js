@@ -21,6 +21,19 @@ module.exports = ({ mount = '/' } = {}) => {
             email: 'thomas@example.com',
           },
         }),
+        // JSONC: comments (including // and /* inside strings, which must
+        // survive) and a trailing comma
+        'resume.jsonc': dedent`
+        {
+          // who I am
+          "basics": {
+            "name": "thomas", /* shown on every theme */
+            "email": "thomas@example.com",
+            "url": "https://example.com/a//b",
+          },
+        }
+      `,
+        'malformed-resume.jsonc': '{ "basics": { "name": "x" ',
         'resume.yaml': dedent`
         basics: 
           name: thomas
