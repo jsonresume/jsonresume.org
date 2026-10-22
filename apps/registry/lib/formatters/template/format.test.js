@@ -51,8 +51,8 @@ describe('format', () => {
 
     expect(result.headers).toEqual([
       {
-        key: 'Cache-control',
-        value: 'public, max-age=90',
+        key: 'Cache-Control',
+        value: 'no-store',
       },
       {
         key: 'Content-Type',

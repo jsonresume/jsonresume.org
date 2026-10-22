@@ -47,7 +47,7 @@ const format = async function format(resume, options) {
           key: 'Content-Disposition',
           value: `inline; filename="${options?.username || 'resume'}.pdf"`,
         },
-        { key: 'Cache-Control', value: 'public, max-age=90' },
+        { key: 'Cache-Control', value: 'no-store' }, // see template/format.js (#552)
       ],
     };
   } catch (err) {

@@ -76,9 +76,12 @@ export const format = async function (resume, options) {
   return {
     content: ensureHtmlCharset(resumeHTML),
     headers: [
+      // no-store: Cloudflare's zone Browser Cache TTL rewrites both short
+      // max-ages and no-cache to max-age=14400; only no-store passes through,
+      // so edits to a gist show up on the next load (#552)
       {
-        key: 'Cache-control',
-        value: 'public, max-age=90',
+        key: 'Cache-Control',
+        value: 'no-store',
       },
       {
         key: 'Content-Type',

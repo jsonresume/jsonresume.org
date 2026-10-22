@@ -82,4 +82,14 @@ describe('GET /:username error responses', () => {
     expect(res.statusCode).toBe(503);
     expect(res.headers['Retry-After']).toBe('60');
   });
+
+  it('sends no-store on success so Cloudflare does not hold resumes for hours', async () => {
+    generateResume.mockResolvedValue({ content: '<html></html>', headers: [] });
+    const res = mockRes();
+
+    await handler({ query: { username: 'jane' } }, res);
+
+    expect(res.statusCode).toBe(200);
+    expect(res.headers['Cache-Control']).toBe('no-store');
+  });
 });

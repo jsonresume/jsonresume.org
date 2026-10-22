@@ -51,6 +51,11 @@ export default async function handler(req, res) {
     'Origin, X-Requested-With, Content-Type, Accept'
   );
   res.setHeader('Access-Control-Allow-Origin', '*');
+  // Default for every format: never let browsers reuse a stale copy.
+  // Cloudflare's Browser Cache TTL rewrites short max-ages and even no-cache
+  // to 4 hours; only no-store passes through (#552).
+  // Formatter headers and the .agent cache below can override it.
+  res.setHeader('Cache-Control', 'no-store');
 
   // Add 24-hour cache for agent endpoint (AI-generated, expensive)
   if (extension === 'agent') {

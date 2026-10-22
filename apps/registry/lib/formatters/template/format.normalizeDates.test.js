@@ -184,7 +184,7 @@ describe('format() theme resolution and headers', () => {
   it('returns text/html content-type and cache headers', async () => {
     const { headers } = await format({ basics: { name: 'X' } }, {});
     expect(headers).toEqual([
-      { key: 'Cache-control', value: 'public, max-age=90' },
+      { key: 'Cache-Control', value: 'no-store' },
       { key: 'Content-Type', value: 'text/html; charset=utf-8' },
     ]);
   });
