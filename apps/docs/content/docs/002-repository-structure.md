@@ -1,6 +1,6 @@
 ---
 title: "Repository Structure"
-description: "Docwright documentation"
+description: "Internal architecture notes for contributors"
 ---
 
 # Repository Structure
@@ -105,7 +105,12 @@ Turbo runs these tasks in parallel or sequence as configured, leveraging caching
 
 ## Docwright Documentation Configuration (`docwright.config.yaml`)
 
-Docwright is configured to generate documentation from source code and metadata.
+> **Removed (2026-10):** Docwright's source repository no longer exists, so
+> `docwright.config.yaml`, `.docwright/` and the `update-docs` workflow were
+> removed. These Internals pages are now edited by hand; the user guides live
+> under `content/docs/guides/`. The section below is kept for history.
+
+Docwright was configured to generate documentation from source code and metadata.
 
 ### Key Settings
 

@@ -1,6 +1,6 @@
 ---
 title: "Jobs Subsystem"
-description: "Docwright documentation"
+description: "Internal architecture notes for contributors"
 ---
 
 # Jobs Subsystem

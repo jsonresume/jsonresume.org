@@ -1,6 +1,6 @@
 ---
 title: "Glossary"
-description: "Docwright documentation"
+description: "Internal architecture notes for contributors"
 ---
 
 # Glossary

@@ -13,6 +13,7 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@jsonresume/schema": "workspace:*",
     "@prisma/client": "^4.15.0",
     "@repo/theme-config": "workspace:*",
     "@vercel/analytics": "^1.3.1",

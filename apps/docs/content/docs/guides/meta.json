@@ -1,0 +1,5 @@
+{
+  "title": "Guides",
+  "defaultOpen": true,
+  "pages": ["getting-started", "schema", "registry", "cli", "themes"]
+}

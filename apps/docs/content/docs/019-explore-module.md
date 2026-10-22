@@ -1,6 +1,6 @@
 ---
 title: "Explore Module"
-description: "Docwright documentation"
+description: "Internal architecture notes for contributors"
 ---
 
 # Explore Module

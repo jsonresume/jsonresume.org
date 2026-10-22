@@ -1,13 +1,13 @@
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { solarizedlight } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import { pageMetadata } from '../lib/pageMetadata';
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: 'CLI Tools — JSON Resume',
   description:
     'Command-line tools for rendering JSON Resume to HTML, PDF, and more',
-  image: 'https://jsonresume.org/images/logo.png',
   url: 'https://jsonresume.org/cli/',
-};
+});
 
 function CodeBlock({ children, language = 'bash' }) {
   return (
@@ -130,14 +130,11 @@ export default function CLIPage() {
                 <code>resume.json</code> file and a theme:
               </p>
               <CodeBlock>
-                {`# Render to HTML (outputs to stdout)
+                {`# Render to HTML (writes resume.html)
 resumed render resume.json --theme jsonresume-theme-even
 
-# Save to a file
-resumed render resume.json --theme jsonresume-theme-even > resume.html
-
-# Or use the --output flag
-resumed render resume.json --theme jsonresume-theme-even --output resume.html`}
+# Choose the output file
+resumed render resume.json --theme jsonresume-theme-even --output my-resume.html`}
               </CodeBlock>
             </Section>
 
@@ -158,27 +155,26 @@ resumed render resume.json --theme jsonresume-theme-even`}
               <h4>Theme Naming Convention</h4>
               <p>
                 All JSON Resume themes follow the naming pattern{' '}
-                <code>jsonresume-theme-&#123;name&#125;</code>. When specifying
-                a theme, you can use either the full package name or just the
-                theme name:
+                <code>jsonresume-theme-&#123;name&#125;</code>.{' '}
+                <code>resumed</code> needs the full package name (or set{' '}
+                <code>meta.theme</code> in your resume):
               </p>
               <CodeBlock>
-                {`# These are equivalent
-resumed render resume.json --theme jsonresume-theme-even
-resumed render resume.json --theme even`}
+                {`resumed render resume.json --theme jsonresume-theme-even`}
               </CodeBlock>
 
               <h4>Using Local Themes</h4>
               <p>
                 You can also use themes from a local directory, which is useful
-                during theme development:
+                during theme development. Pass an absolute path to the theme's
+                entry file:
               </p>
               <CodeBlock>
                 {`# Use a local theme
-resumed render resume.json --theme ./path/to/my-theme
+resumed render resume.json --theme "$PWD/my-theme/index.js"
 
-# For themes with a build step, use the dist directory
-resumed render resume.json --theme ./my-theme/dist`}
+# For themes with a build step, point at the built entry
+resumed render resume.json --theme "$PWD/my-theme/dist/index.js"`}
               </CodeBlock>
             </Section>
 
@@ -243,7 +239,7 @@ npm install jsonresume-theme-macchiato`}
               <div id="pdf-export"></div>
               <p>
                 To generate a PDF, you can use browser-based tools or Puppeteer.
-                The <code>resumed</code> CLI supports PDF generation with
+                The <code>resumed export</code> command generates PDFs with
                 Puppeteer:
               </p>
               <CodeBlock>
@@ -251,18 +247,20 @@ npm install jsonresume-theme-macchiato`}
 npm install puppeteer
 
 # Generate PDF
-resumed render resume.json --theme jsonresume-theme-even --type pdf --output resume.pdf`}
+resumed export resume.json --theme jsonresume-theme-even --output resume.pdf`}
               </CodeBlock>
               <p>
                 Alternatively, you can render to HTML and use any HTML-to-PDF
                 tool:
               </p>
               <CodeBlock>
-                {`# Using wkhtmltopdf
-resumed render resume.json --theme jsonresume-theme-even | wkhtmltopdf - resume.pdf
+                {`# Render to HTML first
+resumed render resume.json --theme jsonresume-theme-even --output resume.html
 
-# Using Chrome headless
-resumed render resume.json --theme jsonresume-theme-even > resume.html
+# Then convert with wkhtmltopdf
+wkhtmltopdf resume.html resume.pdf
+
+# Or with Chrome headless
 google-chrome --headless --print-to-pdf=resume.pdf resume.html`}
               </CodeBlock>
             </Section>
@@ -415,8 +413,8 @@ resumed validate resume.json
 # Render to HTML
 resumed render resume.json --theme jsonresume-theme-even --output resume.html
 
-# Render to PDF (requires puppeteer)
-resumed render resume.json --theme jsonresume-theme-even --type pdf --output resume.pdf
+# Export to PDF (requires puppeteer)
+resumed export resume.json --theme jsonresume-theme-even --output resume.pdf
 
 # List available options
 resumed --help
