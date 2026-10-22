@@ -1,5 +1,6 @@
 'use client';
 
+import { use } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import MatchingCandidates from '../components/MatchingCandidates';
@@ -16,8 +17,9 @@ import { BackButton } from './components/BackButton';
 import { JobContent } from './components/JobContent';
 
 export default function JobPage({ params }) {
+  const { uuid } = use(params);
   const router = useRouter();
-  const { job, loading } = useJobData(params.uuid);
+  const { job, loading } = useJobData(uuid);
 
   if (loading) return <LoadingState />;
   if (!job) return <NotFoundState onBack={() => router.push('/jobs')} />;
@@ -43,7 +45,7 @@ export default function JobPage({ params }) {
             postedDate={postedDate}
             job={job}
           />
-          <MatchingCandidates jobId={params.uuid} />
+          <MatchingCandidates jobId={uuid} />
         </motion.div>
       </div>
     </div>
