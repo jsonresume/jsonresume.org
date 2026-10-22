@@ -29,6 +29,20 @@ const nextConfig = {
     }
     return config;
   },
+  // API responses are live or per-user data. Cloudflare's 4h Browser Cache
+  // TTL rewrites the default max-age=0 (and no-cache) to max-age=14400, so
+  // browsers reused stale API responses; only no-store passes through (#552).
+  async headers() {
+    return [
+      {
+        // A next.config header overrides the route's own, so skip routes that
+        // set deliberate caching (keep this list in sync with them)
+        source:
+          '/api/:path((?!similarity|job-similarity|ats|favicon|speech|relevant-jobs|[^/]+/jobs$).*)',
+        headers: [{ key: 'Cache-Control', value: 'no-store' }],
+      },
+    ];
+  },
   async redirects() {
     return [
       // The registry's own gallery depended on a paused screenshot service;
