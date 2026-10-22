@@ -1,6 +1,6 @@
 ---
 title: "Resume Editor"
-description: "Docwright documentation"
+description: "Internal architecture notes for contributors"
 ---
 
 # Resume Editor
