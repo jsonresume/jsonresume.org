@@ -18,6 +18,17 @@ const nextConfig = {
     }
     return config;
   },
+  async redirects() {
+    return [
+      // The registry's own gallery depended on a paused screenshot service;
+      // jsonresume.org/themes has maintained static screenshots.
+      {
+        source: '/themes',
+        destination: 'https://jsonresume.org/themes',
+        permanent: false,
+      },
+    ];
+  },
   async rewrites() {
     return [
       {
