@@ -56,7 +56,8 @@ export const projects = [
   },
   {
     name: 'jsonresume-gpt3',
-    description: 'This uses GPT-3 API access to generate fake resumes.',
+    description:
+      'This uses GPT-3 API access to generate fake resumes. (Archived)',
     link: 'https://github.com/jsonresume/jsonresume-gpt3',
     category: 'ai',
     language: 'Python',

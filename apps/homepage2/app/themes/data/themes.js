@@ -31,7 +31,7 @@ const legacyAuthors = {
   macchiato: {
     github: 'biosan',
     author: 'Alessandro Biondi',
-    link: 'https://registry.jsonresume.org/biosan',
+    link: 'https://github.com/biosan',
   },
   relaxed: {
     github: 'ObserverOfTime',

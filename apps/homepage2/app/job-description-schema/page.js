@@ -9,18 +9,18 @@ export default function Schema() {
   return (
     <>
       <header id="header">
-        <div class="container">
-          <div class="row">
-            <div class="col-sm-12">
+        <div className="container">
+          <div className="row">
+            <div className="col-sm-12">
               <h1>Job Description Schema</h1>
             </div>
           </div>
         </div>
       </header>
 
-      <div id="schema" class="container">
-        <div class="row">
-          <div class="col-md-5">
+      <div id="schema" className="container">
+        <div className="row">
+          <div className="col-md-5">
             <h4>What is it?</h4>
             <p>
               The JSONJob schema is a standardized format designed to simplify
@@ -39,7 +39,7 @@ export default function Schema() {
             <h4>Open Source</h4>
             <p>
               The schema is{' '}
-              <a href="https://github.com/jsonresume/resume-schema/blob/master/job-schema.json">
+              <a href="https://github.com/jsonresume/jsonresume.org/blob/master/packages/schema/job-schema.json">
                 open source
               </a>{' '}
               and community-driven. We release everything we do under the MIT
@@ -52,13 +52,13 @@ export default function Schema() {
               they have trained on these schemas.
             </p>
           </div>
-          <div class="col-sm-9 col-md-7">
-            <div class="header">
-              <div class="pull-right version">version 1.0.0</div>
+          <div className="col-sm-9 col-md-7">
+            <div className="header">
+              <div className="pull-right version">version 1.0.0</div>
               job.json
             </div>
             <pre
-              class="schema"
+              className="schema"
               dangerouslySetInnerHTML={{
                 __html: `{
   "title": <span>"Web Developer"</span>,
