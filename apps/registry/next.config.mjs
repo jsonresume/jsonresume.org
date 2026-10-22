@@ -1,6 +1,17 @@
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ['@repo/ui'],
+  // PDF export (lib/formatters/pdf.js) launches serverless Chromium on
+  // Vercel. Keep it out of the bundle and ship its binary pack with the
+  // resume route, which file tracing can't detect on its own.
+  serverExternalPackages: ['@sparticuz/chromium', 'playwright-core'],
+  outputFileTracingIncludes: {
+    // The real path, not pnpm's node_modules/@sparticuz/chromium symlink:
+    // Vercel rejects functions that contain files under symlinked dirs.
+    '/api/[username]': [
+      '../../node_modules/.pnpm/@sparticuz+chromium@*/node_modules/@sparticuz/chromium/bin/**',
+    ],
+  },
   // Skip TypeScript type checking during build to avoid memory issues with 60+ theme imports
   // Type checking still happens in dev (tsc --watch) and CI (separate step)
   typescript: {
