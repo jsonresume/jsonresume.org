@@ -1,5 +1,12 @@
 # jsonresume-theme-community-garden
 
+## 0.1.8
+
+### Patch Changes
+
+- Updated dependencies [2fa869c]
+  - @jsonresume/core@0.3.3
+
 ## 0.1.7
 
 ### Patch Changes

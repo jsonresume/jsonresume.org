@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-art-deco",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "type": "module",
   "main": "./dist/index.js",
   "peerDependencies": {

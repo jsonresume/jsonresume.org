@@ -1,5 +1,24 @@
 # @jsonresume/types
 
+## 0.3.0
+
+### Minor Changes
+
+- f14aaac: - `certificates[].credentialId` (licence or certification number) and `certificates[].summary` (#590)
+  - The date description now states the v1 convention: every date is optional, and an omitted `endDate` means a current position (#309)
+- 640a5eb: Add an optional `custom` object (root, `basics`, and every section entry) for tool- or author-specific data that has no standard field. Contents are free-form and themes don't render it. Existing resumes are unaffected (#316).
+- 788cab8: New optional fields, all additive:
+
+  - `work[].keywords`: skills or technologies used in the role (#293)
+  - `education[].summary`: thesis, honours or other context (#292)
+  - `certificates[].expiryDate`: when a certificate lapses; omit if it doesn't expire (#307)
+  - `publications[].type`: e.g. article, book, patent, thesis, talk (#295)
+
+  The sample resume now includes a certificate and uses each new field (#294).
+
+- 135a859: Optional root-level `objective`: a short, forward-looking career goal, distinct from `basics.summary` (#317).
+- 135a859: Optional `basics.pronouns` (#312).
+
 ## 0.2.1
 
 ### Patch Changes

@@ -1,5 +1,30 @@
 <a id="1.0.0"></a>
 
+## 1.4.0
+
+### Minor Changes
+
+- f14aaac: - `certificates[].credentialId` (licence or certification number) and `certificates[].summary` (#590)
+  - The date description now states the v1 convention: every date is optional, and an omitted `endDate` means a current position (#309)
+- 640a5eb: Add an optional `custom` object (root, `basics`, and every section entry) for tool- or author-specific data that has no standard field. Contents are free-form and themes don't render it. Existing resumes are unaffected (#316).
+- 788cab8: New optional fields, all additive:
+
+  - `work[].keywords`: skills or technologies used in the role (#293)
+  - `education[].summary`: thesis, honours or other context (#292)
+  - `certificates[].expiryDate`: when a certificate lapses; omit if it doesn't expire (#307)
+  - `publications[].type`: e.g. article, book, patent, thesis, talk (#295)
+
+  The sample resume now includes a certificate and uses each new field (#294).
+
+- 135a859: Optional root-level `objective`: a short, forward-looking career goal, distinct from `basics.summary` (#317).
+- 135a859: Optional `basics.pronouns` (#312).
+
+### Patch Changes
+
+- 8f377a4: Set real `$id`s on `schema.json` and `job-schema.json` (the resume schema had the placeholder `http://example.com/example.json`), point the sample and example resumes at the monorepo schema URL, and fix the README examples, which called `validate()` without its required callback.
+- 34ac806: - iso8601 dates reject impossible months and days (e.g. `2013-19-39`, `2013-00`); every real calendar date is still accepted
+  - `validate()` reports an error for input that is not a JSON object (`undefined`, `null`, strings, arrays) instead of calling it valid
+
 ## 1.3.1
 
 ### Patch Changes

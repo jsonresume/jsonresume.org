@@ -1,5 +1,16 @@
 # @jsonresume/theme-kit
 
+## 1.1.0
+
+### Minor Changes
+
+- a33bbec: `findArtifacts` (and so `assertThemeRender`) now flags "Invalid Date", the output of formatting a missing date. Themes must render entries without dates cleanly, since every JSON Resume date is optional.
+
+### Patch Changes
+
+- Updated dependencies [2fa869c]
+  - @jsonresume/core@0.3.3
+
 ## 1.0.2
 
 ### Patch Changes
