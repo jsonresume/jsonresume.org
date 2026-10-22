@@ -1,3 +1,5 @@
+import { JOB_COLUMNS } from '../../../lib/jobColumns';
+
 /**
  * Matches jobs based on embedding similarity
  * @param {number[]} embedding - Resume embedding vector
@@ -24,7 +26,9 @@ export async function matchJobs(embedding) {
   // Fetch full job data
   const { data: jobsData } = await supabase
     .from('jobs')
-    .select('*')
+    // embedding_v5 is needed to link jobs in buildGraphData; the handler
+    // strips it before responding
+    .select(`${JOB_COLUMNS}, embedding_v5`)
     .in('id', jobIds)
     .gte(
       'created_at',
