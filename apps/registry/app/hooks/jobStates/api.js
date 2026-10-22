@@ -1,4 +1,4 @@
-import { supabase } from '../../lib/supabase';
+import { authHeaders } from '../../lib/authHeaders';
 
 /**
  * Server sync for job states.
@@ -8,16 +8,6 @@ import { supabase } from '../../lib/supabase';
  * calls so the hook stays focused on state wiring. The server identifies the
  * user from the Supabase access token sent here, never from the request body.
  */
-
-const authHeaders = async () => {
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  return {
-    'Content-Type': 'application/json',
-    ...(session ? { Authorization: `Bearer ${session.access_token}` } : {}),
-  };
-};
 
 /**
  * Fetch the signed-in user's job states from the server.

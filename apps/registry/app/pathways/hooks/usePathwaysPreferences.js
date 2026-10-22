@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { logger } from '@/lib/logger';
 import { usePathways } from '../context/PathwaysContext';
+import { authHeaders } from '../../lib/authHeaders';
 
 const SAVE_DEBOUNCE_MS = 1000;
 
@@ -8,8 +9,7 @@ const SAVE_DEBOUNCE_MS = 1000;
  * Hook to persist and restore user preferences for Pathways graph
  */
 export function usePathwaysPreferences() {
-  const { session } = usePathways();
-  const userId = session?.user?.id;
+  const { userId } = usePathways();
 
   const [preferences, setPreferences] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -25,7 +25,9 @@ export function usePathwaysPreferences() {
 
     const loadPreferences = async () => {
       try {
-        const res = await fetch(`/api/pathways/preferences?userId=${userId}`);
+        const res = await fetch('/api/pathways/preferences', {
+          headers: await authHeaders(),
+        });
         if (res.ok) {
           const data = await res.json();
           setPreferences(data);
@@ -59,9 +61,9 @@ export function usePathwaysPreferences() {
         pendingPrefsRef.current = null;
 
         try {
-          await fetch(`/api/pathways/preferences?userId=${userId}`, {
+          await fetch('/api/pathways/preferences', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: await authHeaders(),
             body: JSON.stringify(prefsToSave),
           });
         } catch (error) {

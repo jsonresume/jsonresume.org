@@ -35,7 +35,6 @@ describe('validateExtension', () => {
     const validExtensions = [
       'qr',
       'json',
-      'tex',
       'txt',
       'template',
       'yaml',
