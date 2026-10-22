@@ -18,6 +18,7 @@ const schema = {
   additionalProperties: true,
   definitions,
   properties: {
+    custom: { $ref: '#/definitions/custom' },
     $schema: {
       type: 'string',
       description:

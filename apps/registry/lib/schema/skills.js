@@ -9,6 +9,7 @@ export const skills = {
     type: 'object',
     additionalProperties: true,
     properties: {
+      custom: { $ref: '#/definitions/custom' },
       name: {
         type: 'string',
         description: 'e.g. Web Development',

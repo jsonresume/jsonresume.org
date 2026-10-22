@@ -8,6 +8,7 @@ export const education = {
     type: 'object',
     additionalProperties: true,
     properties: {
+      custom: { $ref: '#/definitions/custom' },
       institution: {
         type: 'string',
         description: 'e.g. Massachusetts Institute of Technology',

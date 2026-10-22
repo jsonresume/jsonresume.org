@@ -10,6 +10,7 @@ export const awards = {
     type: 'object',
     additionalProperties: true,
     properties: {
+      custom: { $ref: '#/definitions/custom' },
       title: {
         type: 'string',
         description: 'e.g. One of the 100 greatest minds of the century',
