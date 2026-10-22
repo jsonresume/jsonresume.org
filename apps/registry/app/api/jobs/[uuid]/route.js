@@ -28,6 +28,7 @@ function stripEmbeddings(job) {
 }
 
 export async function GET(request, { params }) {
+  const { uuid } = await params;
   // During build time or when SUPABASE_KEY is not available
   if (!process.env.SUPABASE_KEY) {
     return NextResponse.json(
@@ -42,7 +43,7 @@ export async function GET(request, { params }) {
     const { data: job, error } = await supabase
       .from('jobs')
       .select('*')
-      .eq('uuid', params.uuid)
+      .eq('uuid', uuid)
       .single();
 
     if (error) {
@@ -58,7 +59,7 @@ export async function GET(request, { params }) {
 
     return NextResponse.json(stripEmbeddings(job));
   } catch (error) {
-    logger.error({ error: error.message, uuid: params.uuid }, 'Jobs API error');
+    logger.error({ error: error.message, uuid }, 'Jobs API error');
     return NextResponse.json(
       { message: 'Internal server error' },
       { status: 500 }
