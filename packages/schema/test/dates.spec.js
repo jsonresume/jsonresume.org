@@ -4,12 +4,8 @@ var Validator = require('jsonschema').Validator;
 const fixtures = require('./__test__/dates.json');
 // var mockDateSchema = require('./__test__/mockDateSchema.json');
 
-const mockDateSchema = {
-  type: 'string',
-  description: 'Mock Date Format',
-  pattern:
-    '^([1-2][0-9]{3}-[0-1][0-9]-[0-3][0-9]|[1-2][0-9]{3}-[0-1][0-9]|[1-2][0-9]{3})$',
-};
+// The real iso8601 definition, so these tests break if schema.json drifts
+const mockDateSchema = require('../schema.json').definitions.iso8601;
 
 function dateValidate(resumeJson, callback) {
   var v = new Validator();
@@ -69,5 +65,25 @@ test('dates - fixtures match their named granularity', (t) => {
     /^[1-2][0-9]{3}-[0-1][0-9]-[0-3][0-9]$/,
     'yearMonthDay fixture is YYYY-MM-DD'
   );
+  t.end();
+});
+
+test('dates - impossible months and days are rejected', (t) => {
+  for (const date of [
+    '2013-00',
+    '2013-13',
+    '2013-19-39',
+    '2013-01-00',
+    '2013-01-32',
+  ]) {
+    dateValidate(date, (err, valid) => {
+      t.false(valid, `${date} is invalid`);
+    });
+  }
+  for (const date of ['2013-01', '2013-12', '2013-12-31', '2013-02-29']) {
+    dateValidate(date, (err, valid) => {
+      t.true(valid, `${date} is valid`);
+    });
+  }
   t.end();
 });

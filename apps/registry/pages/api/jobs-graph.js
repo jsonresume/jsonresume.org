@@ -8,6 +8,7 @@ const {
   buildGraphData,
   buildJobInfoMap,
 } = require('./jobs-graph/buildGraphData');
+const { cachedByContent } = require('../../lib/contentCache');
 
 // Embeddings are only needed to build the graph links; sending them made the
 // response ~29MB.
@@ -28,11 +29,14 @@ export default async function handler(req, res) {
     // Fetch and parse resume
     const resume = await fetchResumeData(username);
 
-    // Generate AI description
-    const resumeDescription = await generateResumeDescription(resume);
-
-    // Create embedding
-    const embedding = await createEmbedding(resumeDescription);
+    // Describe the resume with GPT and embed it. Both are slow and depend
+    // only on the resume, so cache by content (a changed gist recomputes).
+    const embedding = await cachedByContent(
+      'jobs-graph-embedding',
+      { v: 1, resume },
+      async () => createEmbedding(await generateResumeDescription(resume)),
+      { ttl: 30 * 24 * 60 * 60, name: `jobs-graph:${username}` }
+    );
 
     // Match jobs
     const sortedJobs = await matchJobs(embedding);

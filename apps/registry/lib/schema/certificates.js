@@ -10,6 +10,7 @@ export const certificates = {
     type: 'object',
     additionalProperties: true,
     properties: {
+      custom: { $ref: '#/definitions/custom' },
       name: {
         type: 'string',
         description: 'e.g. Certified Kubernetes Administrator',
@@ -25,6 +26,9 @@ export const certificates = {
       issuer: {
         type: 'string',
         description: 'e.g. CNCF',
+      },
+      expiryDate: {
+        $ref: '#/definitions/iso8601',
       },
     },
   },

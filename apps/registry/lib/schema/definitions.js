@@ -2,6 +2,12 @@
  * Shared schema definitions
  */
 export const definitions = {
+  custom: {
+    type: 'object',
+    description:
+      'Tool- or author-specific data that has no standard field yet. Keys are free-form; namespace them by tool. Themes are not expected to render it.',
+    additionalProperties: true,
+  },
   iso8601: {
     type: 'string',
     description:
