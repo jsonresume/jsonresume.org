@@ -1,10 +1,17 @@
-const sampleResume = require('../samples/resume');
+import sampleResume from '../../../lib/samples/resume';
 import template from '../../../lib/formatters/template';
 
 export default async function handler(req, res) {
   const { theme } = req.query;
-  const { resume } = req.body;
-  const rendered = await template.format(resume || sampleResume, { theme });
+  const { resume } = req.body || {};
 
-  return res.status(200).send(rendered.content);
+  try {
+    const rendered = await template.format(resume || sampleResume, { theme });
+    return res.status(200).send(rendered.content);
+  } catch (e) {
+    if (e.message === 'theme-missing') {
+      return res.status(404).json({ error: `Unknown theme: ${theme}` });
+    }
+    throw e;
+  }
 }

@@ -3,6 +3,11 @@ const { generateText } = require('ai');
 const { openai } = require('@ai-sdk/openai');
 
 export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    res.setHeader('Allow', 'POST');
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
   const { username } = req.body;
 
   // Lazy load Supabase
@@ -14,6 +19,10 @@ export default async function handler(req, res) {
     .from('resumes')
     .select()
     .eq('username', username);
+
+  if (!data?.[0]) {
+    return res.status(404).json({ error: 'No resume found for this user' });
+  }
 
   const resume = JSON.parse(data[0].resume);
   const content = YAML.stringify(resume);
