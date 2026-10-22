@@ -28,7 +28,8 @@ jobs:
           URL="https://itxuhvvwryeuzuyihpkp.supabase.co/rest/v1/"
           # A live Supabase project answers with an HTTP status (e.g. 401
           # without an apikey). 000 means DNS/connect failure => project down.
-          CODE=$(curl -s -o /dev/null -m 15 -w "%{http_code}" "$URL" || echo "000")
+          CODE=$(curl -s -o /dev/null -m 15 -w "%{http_code}" "$URL") || true
+          CODE=${CODE:-000}
           echo "Supabase health probe returned HTTP $CODE"
           if [ "$CODE" = "000" ]; then
             echo "supabase_up=false" >> "$GITHUB_OUTPUT"
@@ -81,7 +82,9 @@ jobs:
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
         run: |
           echo "::group::Fetching HN jobs"
+          set -o pipefail
           node scripts/jobs/import-hn-latest-thread.js 2>&1 | tee fetch.log
+          set +o pipefail
 
           # Extract summary stats
           JOBS_FETCHED=$(grep -oP 'Found \K\d+(?= job postings)' fetch.log || echo "0")
@@ -102,7 +105,9 @@ jobs:
           echo "::group::AI Processing"
 
           # Run with timeout and capture output
+          set -o pipefail
           timeout 3600 node scripts/jobs/parse-job-descriptions.js 2>&1 | tee process.log
+          set +o pipefail
 
           # Extract processing stats with proper regex patterns
           JOBS_TOTAL=$(grep -oP 'Found \K\d+(?= jobs)' process.log | head -1 || echo "0")
@@ -129,7 +134,11 @@ jobs:
         run: |
           echo "::group::Vectorization"
 
+          set -o pipefail
+
           timeout 900 node scripts/jobs/generate-embeddings-jobs.js 2>&1 | tee vectorize.log
+
+          set +o pipefail
 
           # Extract vectorization stats
           JOBS_VECTORIZED=$(grep -oP '✅ \K\d+(?= embeddings created)' vectorize.log || echo "0")
@@ -147,7 +156,9 @@ jobs:
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
         run: |
           echo "::group::Salary normalization"
+          set -o pipefail
           timeout 600 node scripts/jobs/salary-normalizer/run-migration.js 2>&1 | tee salaries.log
+          set +o pipefail
           SALARIES_UPDATED=$(grep -oP 'Total updated: \K\d+' salaries.log || echo "0")
           echo "salaries_updated=${SALARIES_UPDATED}" >> $GITHUB_OUTPUT
           echo "::endgroup::"
@@ -164,7 +175,9 @@ jobs:
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
         run: |
           echo "::group::Repost dedup"
+          set -o pipefail
           timeout 900 node scripts/jobs/dedup-jobs.js --days=150 2>&1 | tee dedup.log
+          set +o pipefail
           FAMILIES_FOUND=$(grep -oP 'Families found: \K\d+' dedup.log || echo "0")
           ROWS_MARKED=$(grep -oP 'Rows marked: \K\d+' dedup.log || echo "0")
           echo "families_found=${FAMILIES_FOUND}" >> $GITHUB_OUTPUT
