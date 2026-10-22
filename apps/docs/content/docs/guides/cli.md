@@ -25,7 +25,8 @@ npx resume-cli --help
 
 Common options:
 
-- `--resume <file>`: use a file other than `resume.json` (`-` reads stdin)
+- `--resume <file>`: use a file other than `resume.json` (`-` reads stdin). A
+  `.jsonc` file may contain comments and trailing commas
 - `--theme <name>`: theme for HTML and PDF; defaults to `even`
 - `--format <type>`: set the export format explicitly
 
