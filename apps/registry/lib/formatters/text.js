@@ -34,10 +34,17 @@ const formatSection = (items, title, mergedKeys = []) => {
     title,
     '============================',
     items.flatMap((item) => {
-      const mergedLine = mergedKeys.length
+      const present = (k) =>
+        item[k] !== undefined && item[k] !== null && item[k] !== '';
+      // A lone endDate would otherwise print exactly like a lone startDate
+      const loneEndDate =
+        mergedSet.has('endDate') && present('endDate') && !present('startDate');
+      const mergedLine = loneEndDate
+        ? `Until ${item.endDate}`
+        : mergedKeys.length
         ? mergedKeys
+            .filter(present)
             .map((k) => item[k])
-            .filter((v) => v !== undefined && v !== null && v !== '')
             .join(' - ') || undefined
         : undefined;
 

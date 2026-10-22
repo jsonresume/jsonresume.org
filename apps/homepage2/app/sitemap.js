@@ -2,16 +2,16 @@ const BASE = 'https://jsonresume.org';
 
 const ROUTES = [
   '/',
-  '/getting-started/',
-  '/schema/',
-  '/themes/',
-  '/cli/',
-  '/projects/',
-  '/team/',
-  '/ai/',
-  '/media/',
-  '/theme-development/',
-  '/job-description-schema/',
+  '/getting-started',
+  '/schema',
+  '/themes',
+  '/cli',
+  '/projects',
+  '/team',
+  '/ai',
+  '/media',
+  '/theme-development',
+  '/job-description-schema',
   '/docs',
 ];
 

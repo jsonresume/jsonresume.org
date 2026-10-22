@@ -1,15 +1,30 @@
 import { generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
+import { cachedByContent } from '../contentCache';
+
+const HEADERS = [
+  { key: 'Content-Type', value: 'text/markdown; charset=utf-8' },
+];
+
+// Generation takes 25-60s, and Cloudflare reaches Vercel through varying
+// edge locations, so the CDN cache rarely hits (#553). Cache the result by
+// resume content instead: an edited gist gets a new key and regenerates.
+// Bump PROMPT_VERSION when the prompt changes.
+const PROMPT_VERSION = 1;
+const CACHE_TTL_SECONDS = 30 * 24 * 60 * 60;
 
 const format = async function format(resume, options) {
   const resumeJson = JSON.stringify(resume, null, 2);
   const username = options?.username || 'unknown';
   const resumeUrl = `https://registry.jsonresume.org/${username}.json`;
   const name = resume?.basics?.name || 'Unknown Agent';
-
-  const { text } = await generateText({
-    model: openai('gpt-4o-mini'),
-    prompt: `You are an Agent Specification Generator. Your task is to convert the following JSON Resume into a Claude-ready Agent Definition Markdown File.
+  const content = await cachedByContent(
+    'agent-spec',
+    { v: PROMPT_VERSION, username, resume },
+    async () => {
+      const { text } = await generateText({
+        model: openai('gpt-4o-mini'),
+        prompt: `You are an Agent Specification Generator. Your task is to convert the following JSON Resume into a Claude-ready Agent Definition Markdown File.
 
 The output should be a Markdown file that Claude (or any LLM) can use to emulate this person as an **Agent Persona / Capability Specification** — not as a human, but as a skill-spec that can be loaded.
 
@@ -162,12 +177,14 @@ When executing multiple steps, reason using the agent's thinking style.
 7. The output should be directly usable as a Claude system prompt or agent specification.
 
 Generate the complete Agent Specification Markdown now:`,
-  });
+      });
 
-  return {
-    content: text,
-    headers: [{ key: 'Content-Type', value: 'text/markdown; charset=utf-8' }],
-  };
+      return text;
+    },
+    { ttl: CACHE_TTL_SECONDS, name: `agent:${username}` }
+  );
+
+  return { content, headers: HEADERS };
 };
 
 const exports = { format };

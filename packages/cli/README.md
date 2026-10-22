@@ -71,6 +71,20 @@ Invalid resume: 2 problems found
 
 Validate against a custom schema with `--schema <path>`.
 
+### Comments in your resume (`.jsonc`)
+
+Name the file `resume.jsonc` to write comments and trailing commas; pass it
+with `--resume`:
+
+```
+resume validate --resume resume.jsonc
+resume export resume.html --resume resume.jsonc
+```
+
+Comments are dropped when the file is read, so validation and themes see the
+same data as the equivalent plain JSON. (The registry still needs plain JSON
+in your `resume.json` gist.)
+
 ### `resume export [fileName]`
 
 Exports your resume to one of four formats:

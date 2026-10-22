@@ -36,7 +36,12 @@
 - **Themes:** Must use ES6 imports (no `fs.readFileSync`), must render ALL JSON Resume sections, must load Google Fonts via CDN, must use `@jsonresume/core` components, must use `ServerStyleSheet` for styled-components SSR
 - **Theme registration:** Add to `apps/registry/lib/formatters/template/themeConfig.js`
 - **Theme SSR gotcha:** if a theme 400s with `Cannot read properties of undefined (reading 'withConfig')` under the registry's webpack build (but works in plain Node), its styled-components definitions live in a `.js` module — move them into a `.jsx` file (fixed desert-modern; tokyo-modernist was fixed earlier by inlining styles into Resume.jsx). Verify with a production build, not `next dev`.
-- **Bulk live-testing themes:** run `next start` with `GITHUB_TOKEN=$(gh auth token)` — unauthenticated GitHub lookups rate-limit after ~50 requests and surface as bogus `INVALID_USERNAME` 400s.
+- **Bulk live-testing themes:** run `next start` with `GITHUB_TOKEN=$(gh auth token)` or with `AUTH_GITHUB_ID`/`AUTH_GITHUB_SECRET` set — anonymous GitHub lookups rate-limit after ~60 requests and surface as `GITHUB_UNAVAILABLE` 503s.
+- **Gist lookups auth chain** (`lib/getResumeGist.js`): `GITHUB_TOKEN` bearer → on 401, or when unset, the OAuth app credentials as Basic auth (5000/h) → anonymous. Only a GitHub 404 is `INVALID_USERNAME`. A revoked prod token caused the 2026-10-22 outage (#464).
+- **Slow LLM/embedding results:** cache by content with `cachedByContent()` (`lib/contentCache.js`, Vercel Runtime Cache). The CDN alone rarely hits behind Cloudflare.
+- **Never return embedding columns** (`embedding*`, ~40KB/row) to clients; use `JOB_COLUMNS` (`lib/jobColumns.js`). Vercel caps responses at 4.5MB.
+- **`next dev` artifacts:** Next 16 writes `apps/*/AGENTS.md`, `apps/*/CLAUDE.md` and rewrites `next-env.d.ts`. Don't commit them.
+- **Vercel file tracing:** `outputFileTracingIncludes` must use the real `node_modules/.pnpm/...` path; files reached through pnpm's symlinks make Vercel reject the function ("files in symlinked directories"). Verify packaging changes with a `vercel deploy` preview.
 - Search codebase before creating new utils — check `apps/registry/app/utils/`, `apps/registry/lib/`, `packages/`
 
 ## CI/CD
@@ -47,6 +52,8 @@
 - E2E: `pnpm turbo test:e2e` (Playwright) — covers registry + homepage2 + docs
 - turbo.json must have task entries for any `pnpm turbo <task>` command
 - All env vars used must be declared in turbo.json `globalEnv`
+- **Branch protection requires up-to-date branches:** with several PRs queued, update and auto-merge them one at a time (`gh pr update-branch N` then `gh pr merge N --squash --auto`).
+- **Theme `dist/` is committed** and the `Theme dist sync` check compares it to `src/`: rebuild with `pnpm build` in the theme after editing.
 - **LINT GOTCHA:** `eslint-config-next` is PINNED to `^15` in `@repo/eslint-config-custom` via `require.resolve`. v16 ships an ESLint-9 flat-config ARRAY that crashes ESLint 8 with a circular-structure error — and turbo's remote cache can MASK the failure. Never bump it to 16 without migrating to flat config; verify lint changes with `turbo lint --force`.
 
 ## Releases (Changesets)
@@ -74,6 +81,7 @@
 ## Schema Gotcha
 
 - `schema.json` has `additionalProperties: true` — unknown fields are VALID. Invalid-case test fixtures must use **type violations**, not unknown keys.
+- The registry validates against its **own copy** (`apps/registry/lib/schema/`); `lib/schema.test.js` fails if it lacks a field the published schema declares. Schema PRs also regenerate `@jsonresume/types` (`pnpm --filter @jsonresume/types build`). Proposal rules: CONTRIBUTING.md → Proposing Schema Changes.
 
 ## Key Paths
 

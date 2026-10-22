@@ -4,6 +4,9 @@ import themeErrorTemplate from '../../lib/themeErrorTemplate';
 import trackView from '../../lib/trackView';
 import { ERROR_CODE_STATUS } from '../../lib/error/buildError';
 
+// Uncached .agent generation can take close to a minute (lib/formatters/agent.js)
+export const config = { maxDuration: 120 };
+
 export default async function handler(req, res) {
   const { forceJSON, username } = req.query;
   const usernameSplit = username.split('.');

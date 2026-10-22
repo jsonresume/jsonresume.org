@@ -7,6 +7,7 @@ vi.mock('../error/buildError', () => ({
   ERROR_CODES: {
     TEMPLATE_MISSING: 'TEMPLATE_MISSING',
     UNKNOWN_TEMPLATE_ERROR: 'UNKNOWN_TEMPLATE_ERROR',
+    PDF_RENDER_FAILED: 'PDF_RENDER_FAILED',
   },
 }));
 
@@ -71,6 +72,21 @@ describe('formatResume', () => {
 
     expect(result.error).toBeDefined();
     expect(result.error.code).toBe('TEMPLATE_MISSING');
+  });
+
+  it('reports PDF failures without the browser error or stack', async () => {
+    const mockFormatter = {
+      format: vi.fn().mockRejectedValue(
+        Object.assign(new Error('pdf-render-failed'), {
+          code: 'PDF_RENDER_FAILED',
+        })
+      ),
+    };
+
+    const result = await formatResume({}, mockFormatter, {});
+
+    expect(result.error.code).toBe('PDF_RENDER_FAILED');
+    expect(result.error.extra).toBeUndefined();
   });
 
   it('handles unknown template errors', async () => {

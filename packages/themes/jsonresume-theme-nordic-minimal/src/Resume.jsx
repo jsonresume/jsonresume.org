@@ -87,10 +87,10 @@ const StyledSectionTitle = styled(SectionTitle)`
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1.5px;
-  color: #4682b4;
+  color: #3d6f9e;
   margin: 0 0 24px 0;
   padding-bottom: 8px;
-  border-bottom: 2px solid #4682b4;
+  border-bottom: 2px solid #3d6f9e;
 `;
 
 const ExperienceItem = styled.div`
@@ -114,7 +114,7 @@ const Position = styled.h3`
 
 const Company = styled.div`
   font-size: 1rem;
-  color: #4682b4;
+  color: #3d6f9e;
   font-weight: 400;
   margin-bottom: 4px;
 `;
@@ -152,7 +152,7 @@ const Highlight = styled.li`
     content: '•';
     position: absolute;
     left: 0;
-    color: #4682b4;
+    color: #3d6f9e;
     font-weight: 700;
   }
 `;

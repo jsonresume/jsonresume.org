@@ -13,7 +13,9 @@ const IMAGE = {
  * Next.js metadata for a homepage route, including the Open Graph and Twitter
  * tags link previews use.
  */
-export function pageMetadata({ title, description, url }) {
+export function pageMetadata({ title, description, url: rawUrl }) {
+  // The site redirects /path/ to /path, so canonical URLs drop the slash
+  const url = rawUrl.replace(/(?<=[^/])\/$/, '');
   return {
     title,
     description,
