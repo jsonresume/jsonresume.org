@@ -55,4 +55,5 @@ export {
   formatLocation,
   normalizeResume,
   withStringLocations,
+  withProjectSummaries,
 } from './resume.js';

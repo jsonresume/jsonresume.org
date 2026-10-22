@@ -1,7 +1,7 @@
 import { getTheme } from './getTheme';
 import { ensureHtmlCharset } from './ensureHtmlCharset';
 import { normalizeDates } from '@jsonresume/utils/dates';
-import { withStringLocations } from '@jsonresume/utils';
+import { withProjectSummaries, withStringLocations } from '@jsonresume/utils';
 
 /**
  * normalizeDates (ensures all date fields are plain strings; some themes break
@@ -68,9 +68,10 @@ export const format = async function (resume, options) {
   }
 
   // Themes expect string entry locations; structured ones (#323) are
-  // formatted first so no theme prints "[object Object]"
+  // formatted first so no theme prints "[object Object]". Projects get both
+  // summary and description (#296) so themes reading either show the text.
   const resumeHTML = themeRenderer.render(
-    withStringLocations(normalizeDates(resume))
+    withProjectSummaries(withStringLocations(normalizeDates(resume)))
   );
 
   return {

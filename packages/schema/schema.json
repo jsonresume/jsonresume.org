@@ -510,9 +510,13 @@
             "type": "string",
             "description": "e.g. The World Wide Web"
           },
+          "summary": {
+            "type": "string",
+            "description": "Short summary of the project, consistent with summary in other sections (#296). e.g. Collated works of 2017."
+          },
           "description": {
             "type": "string",
-            "description": "Short summary of project. e.g. Collated works of 2017."
+            "description": "Deprecated alias of summary, kept for compatibility; when both are set, summary wins (#296). e.g. Collated works of 2017."
           },
           "highlights": {
             "type": "array",
