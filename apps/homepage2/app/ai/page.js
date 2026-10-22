@@ -15,17 +15,17 @@ export default function GettingStarted() {
         <title>AI — JSON Resume</title>
       </Head>
       <header id="header">
-        <div class="container">
-          <div class="row">
-            <div class="col-sm-12">
+        <div className="container">
+          <div className="row">
+            <div className="col-sm-12">
               <h1>AI</h1>
             </div>
           </div>
         </div>
       </header>
-      <div id="getting-started" class="container">
-        <div class="row">
-          <div class="col-sm-6">
+      <div id="getting-started" className="container">
+        <div className="row">
+          <div className="col-sm-6">
             <section>
               <h2>What is this?</h2>
               <p>
@@ -40,13 +40,22 @@ export default function GettingStarted() {
               </p>
             </section>
           </div>
-          <div class="col-sm-6">
+          <div className="col-sm-6">
             <section>
               <h2>Tooling</h2>
               <p>
-                These urls are integrated with OpenAI ChatGPT, and will pass
-                your resume to them with a predefined prompt to get a new
-                response generated each time.
+                These urls are integrated with OpenAI, and will pass your resume
+                to them with a predefined prompt to get a new response generated
+                each time. Replace <code>thomasdavis</code> with your GitHub
+                username.
+                <br />
+                <br />
+                Recommended Jobs is public. Cover letters, suggestions and
+                interview practice need you to{' '}
+                <a href="https://registry.jsonresume.org/login">
+                  sign in to the registry with GitHub
+                </a>{' '}
+                first.
                 <br />
                 <br />
                 <strong>Recommended Jobs </strong>(tries to match your resume to
@@ -72,8 +81,8 @@ export default function GettingStarted() {
                 <br />
                 <br />
                 <strong>Interview Yourself</strong> <br />
-                (using OpenAI GPT-3 your resume.json gets inserted in the prompt
-                and you can talk to or at yourself) -{' '}
+                (your resume.json gets inserted in the prompt and you can talk
+                to or at yourself) -{' '}
                 <a href="https://registry.jsonresume.org/thomasdavis/interview">
                   https://registry.jsonresume.org/thomasdavis/interview
                 </a>

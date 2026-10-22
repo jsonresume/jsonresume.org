@@ -17,10 +17,12 @@ const readThemePkg = (themeDir) => {
 };
 
 // List the immediate child directories of a node_modules folder that look like
-// JSON Resume theme packages (`jsonresume-theme-*`). Returns one entry per
-// theme with its slug (the name passed to `--theme`), full package name,
-// version and description. Missing/unreadable folders yield an empty list.
-const listThemesInDir = (nodeModulesDir) => {
+// JSON Resume theme packages (`jsonresume-theme-*`, including scoped ones such
+// as `@jsonresume/jsonresume-theme-*`). Returns one entry per theme with its
+// slug (the name passed to `--theme`; the full name for scoped packages), full
+// package name, version and description. Missing/unreadable folders yield an
+// empty list.
+const listThemesInDir = (nodeModulesDir, scope = null) => {
   let entries;
   try {
     entries = fs.readdirSync(nodeModulesDir, { withFileTypes: true });
@@ -31,21 +33,30 @@ const listThemesInDir = (nodeModulesDir) => {
   for (const entry of entries) {
     // Tolerate environments where `withFileTypes` is unavailable.
     const name = entry.name || entry;
-    if (typeof name !== 'string' || !name.startsWith(THEME_PREFIX)) {
+    if (typeof name !== 'string') {
+      continue;
+    }
+    if (!scope && name.startsWith('@')) {
+      themes.push(...listThemesInDir(path.join(nodeModulesDir, name), name));
+      continue;
+    }
+    if (!name.startsWith(THEME_PREFIX)) {
       continue;
     }
     // Ignore the prefix itself with nothing after it.
-    const slug = name.slice(THEME_PREFIX.length);
-    if (!slug) {
+    const shortName = name.slice(THEME_PREFIX.length);
+    if (!shortName) {
       continue;
     }
     const pkg = readThemePkg(path.join(nodeModulesDir, name));
     if (!pkg) {
       continue;
     }
+    const fullName = scope ? `${scope}/${name}` : name;
     themes.push({
-      slug,
-      name,
+      // Scoped themes are passed to --theme by their full name
+      slug: scope ? fullName : shortName,
+      name: fullName,
       version: typeof pkg.version === 'string' ? pkg.version : null,
       description: typeof pkg.description === 'string' ? pkg.description : null,
     });

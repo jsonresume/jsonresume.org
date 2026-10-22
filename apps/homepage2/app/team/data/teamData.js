@@ -28,7 +28,6 @@ export const team = {
       name: 'Mudassir Ali',
       avatar: 'https://avatars.githubusercontent.com/u/1861842?&s=50',
       github: 'mudassir0909',
-      twitter: 'guesswhat4951',
     },
     {
       name: 'Peter Dave Hello',
