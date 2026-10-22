@@ -1,7 +1,11 @@
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
-import renderHTML, { loadTheme, resolveThemePath } from './render-html';
+import renderHTML, {
+  loadTheme,
+  resolveThemePath,
+  withStringLocations,
+} from './render-html';
 import { ThemeNotFoundError } from './theme-errors';
 
 describe('renderHTML', () => {
@@ -189,5 +193,21 @@ describe('loadTheme', () => {
     } finally {
       process.chdir(cwd);
     }
+  });
+});
+
+describe('withStringLocations', () => {
+  it('formats structured entry locations for themes and leaves strings', () => {
+    const out = withStringLocations({
+      work: [
+        { location: { city: 'Oslo', countryCode: 'NO' } },
+        { location: 'Remote' },
+      ],
+      education: [
+        { location: { city: 'Lagos', region: 'LA', countryCode: 'NG' } },
+      ],
+    });
+    expect(out.work.map((w) => w.location)).toEqual(['Oslo, NO', 'Remote']);
+    expect(out.education[0].location).toBe('Lagos, LA, NG');
   });
 });

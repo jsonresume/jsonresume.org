@@ -46,6 +46,39 @@ export function formatLocation(location) {
     .join(', ');
 }
 
+// Sections whose entries may carry a `location` (#323)
+const LOCATED_SECTIONS = ['work', 'volunteer', 'education'];
+
+/**
+ * Return a copy of the resume with structured `location` objects on work,
+ * volunteer and education entries formatted as display strings (via
+ * formatLocation). Most themes were written when `work.location` was always
+ * a string and would print an object as "[object Object]". String locations
+ * and `basics.location` are left as they are. Never mutates the input.
+ *
+ * @param {Object} [resume] - JSON Resume object
+ * @returns {Object} A resume safe for string-location themes
+ *
+ * @example
+ * withStringLocations({ work: [{ location: { city: 'Oslo', countryCode: 'NO' } }] })
+ *   .work[0].location // 'Oslo, NO'
+ */
+export function withStringLocations(resume) {
+  if (!resume || typeof resume !== 'object') {
+    return resume;
+  }
+  const out = { ...resume };
+  for (const section of LOCATED_SECTIONS) {
+    if (!Array.isArray(resume[section])) continue;
+    out[section] = resume[section].map((entry) =>
+      entry && typeof entry.location === 'object' && entry.location !== null
+        ? { ...entry, location: formatLocation(entry.location) }
+        : entry
+    );
+  }
+  return out;
+}
+
 /**
  * Normalize a resume into an object with all twelve standard array sections
  * defaulted to [] and `basics` defaulted to an object. Never mutates the input.
