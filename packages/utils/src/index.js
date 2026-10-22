@@ -51,4 +51,8 @@ export {
 } from './url.js';
 
 // Resume-shape utilities
-export { formatLocation, normalizeResume } from './resume.js';
+export {
+  formatLocation,
+  normalizeResume,
+  withStringLocations,
+} from './resume.js';

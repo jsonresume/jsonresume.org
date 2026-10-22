@@ -1,6 +1,7 @@
 import { getTheme } from './getTheme';
 import { ensureHtmlCharset } from './ensureHtmlCharset';
 import { normalizeDates } from '@jsonresume/utils/dates';
+import { withStringLocations } from '@jsonresume/utils';
 
 /**
  * normalizeDates (ensures all date fields are plain strings; some themes break
@@ -66,7 +67,11 @@ export const format = async function (resume, options) {
     throw new Error('theme-missing');
   }
 
-  const resumeHTML = themeRenderer.render(normalizeDates(resume));
+  // Themes expect string entry locations; structured ones (#323) are
+  // formatted first so no theme prints "[object Object]"
+  const resumeHTML = themeRenderer.render(
+    withStringLocations(normalizeDates(resume))
+  );
 
   return {
     content: ensureHtmlCharset(resumeHTML),

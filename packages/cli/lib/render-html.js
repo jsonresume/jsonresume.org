@@ -112,11 +112,32 @@ export const loadTheme = async (themePath) => {
   return typeof mod?.render === 'function' ? mod : mod?.default ?? mod;
 };
 
+// Entry locations may be structured objects (#323); themes written for
+// strings would print "[object Object]". Same rule as @jsonresume/utils'
+// withStringLocations (kept inline: that package is ESM-only).
+const LOCATED_SECTIONS = ['work', 'volunteer', 'education'];
+export const withStringLocations = (resume) => {
+  if (!resume || typeof resume !== 'object') return resume;
+  const out = { ...resume };
+  for (const section of LOCATED_SECTIONS) {
+    if (!Array.isArray(resume[section])) continue;
+    out[section] = resume[section].map((entry) => {
+      const location = entry && entry.location;
+      if (!location || typeof location !== 'object') return entry;
+      const text = [location.city, location.region, location.countryCode]
+        .filter(Boolean)
+        .join(', ');
+      return { ...entry, location: text };
+    });
+  }
+  return out;
+};
+
 export default async ({ resume, themePath }) => {
   const theme = await loadTheme(themePath);
   if (typeof theme?.render !== 'function') {
     throw new Error('theme.render is not a function');
   }
 
-  return theme.render(resume);
+  return theme.render(withStringLocations(resume));
 };

@@ -1,5 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import { formatLocation, normalizeResume } from '../resume.js';
+import {
+  formatLocation,
+  normalizeResume,
+  withStringLocations,
+} from '../resume.js';
 
 describe('formatLocation', () => {
   it('joins city, region, countryCode with ", "', () => {
@@ -74,5 +78,43 @@ describe('normalizeResume', () => {
 
   it('preserves unknown extra fields', () => {
     expect(normalizeResume({ custom: 1 }).custom).toBe(1);
+  });
+});
+
+describe('withStringLocations', () => {
+  it('formats structured entry locations and keeps strings', () => {
+    const out = withStringLocations({
+      basics: { location: { city: 'Berlin', countryCode: 'DE' } },
+      work: [
+        {
+          name: 'A',
+          location: { city: 'Oslo', region: 'Oslo', countryCode: 'NO' },
+        },
+        { name: 'B', location: 'Remote' },
+        { name: 'C' },
+      ],
+      volunteer: [{ location: { city: 'Lagos', countryCode: 'NG' } }],
+      education: [{ location: {} }],
+    });
+
+    expect(out.work.map((w) => w.location)).toEqual([
+      'Oslo, Oslo, NO',
+      'Remote',
+      undefined,
+    ]);
+    expect(out.volunteer[0].location).toBe('Lagos, NG');
+    expect(out.education[0].location).toBe('');
+    expect(out.basics.location).toEqual({ city: 'Berlin', countryCode: 'DE' });
+  });
+
+  it('does not mutate the input', () => {
+    const resume = { work: [{ location: { city: 'Oslo' } }] };
+    withStringLocations(resume);
+    expect(resume.work[0].location).toEqual({ city: 'Oslo' });
+  });
+
+  it('tolerates missing or malformed input', () => {
+    expect(withStringLocations(undefined)).toBeUndefined();
+    expect(withStringLocations({ work: 'nope' })).toEqual({ work: 'nope' });
   });
 });
