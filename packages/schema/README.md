@@ -53,6 +53,28 @@ The JSON Resume schema is available from:
 require('@jsonresume/schema').schema;
 ```
 
+### Extending with `custom`
+
+Data with no standard field can go in an optional `custom` object, allowed at
+the root, in `basics`, and on every entry of every section. Its contents are
+free-form; namespace keys by tool to avoid collisions:
+
+```json
+{
+  "work": [
+    {
+      "name": "Tech Corp",
+      "position": "Senior Developer",
+      "custom": { "myAts": { "teamSize": 12, "directReports": 5 } }
+    }
+  ]
+}
+```
+
+Themes don't render `custom`, and tools that read and write resumes should
+preserve it unchanged. Unknown top-level properties are also still allowed
+(`additionalProperties: true`); `custom` gives that data a predictable home.
+
 ### Contribute
 
 We encourage anyone who's interested in participating in the formation of this standard to join the discussions [here on GitHub](https://github.com/jsonresume/jsonresume.org/issues). Also feel free to fork this project and submit new ideas to add to the JSON Resume Schema standard. To make sure all formatting is kept in check, please install the [EditorConfig plugin](http://editorconfig.org/) for your editor of choice.
