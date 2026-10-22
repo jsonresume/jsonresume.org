@@ -42,7 +42,7 @@ export function useJobStateActions({
       // Persist to Supabase if authenticated
       if (isAuthenticated && userId) {
         try {
-          await postJobState(userId, jobIdStr, state);
+          await postJobState(jobIdStr, state);
         } catch (err) {
           console.error('Failed to sync job state to server:', err);
         }
@@ -67,7 +67,7 @@ export function useJobStateActions({
       // Persist to Supabase if authenticated
       if (isAuthenticated && userId) {
         try {
-          await postJobStatesBatch(userId, updates);
+          await postJobStatesBatch(updates);
         } catch (err) {
           console.error('Failed to sync job states to server:', err);
         }
