@@ -7,10 +7,22 @@ import { Footer } from './components/layout/Footer';
 import { ExternalScripts } from './components/layout/ExternalScripts';
 import './global.css';
 
+const description =
+  'JSON Resume is the open-source initiative to create a JSON-based standard for resumes. For developers, by developers.';
+
 export const metadata = {
+  metadataBase: new URL('https://jsonresume.org'),
   title: 'JSON Resume',
-  description:
-    'JSON Resume is the open-source initiative to create a JSON-based standard for resumes. For developers, by developers.',
+  description,
+  alternates: { canonical: '/' },
+  openGraph: {
+    title: 'JSON Resume',
+    description,
+    url: '/',
+    siteName: 'JSON Resume',
+    type: 'website',
+  },
+  twitter: { card: 'summary_large_image', title: 'JSON Resume', description },
 };
 
 export default async function Layout({ children }) {

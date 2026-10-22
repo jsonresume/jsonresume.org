@@ -1,13 +1,13 @@
 import { themes } from './data/themes';
 import { ThemeCard } from './components/ThemeCard';
 import { ThemesInfo } from './components/ThemesInfo';
+import { pageMetadata } from '../lib/pageMetadata';
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: 'Themes — JSON Resume',
   description: 'Themes for JSON Resume',
-  image: 'https://jsonresume.org/images/logo.png',
   url: 'https://jsonresume.org/themes/',
-};
+});
 
 export default function GettingStarted() {
   return (

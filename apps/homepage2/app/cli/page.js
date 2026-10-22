@@ -1,13 +1,13 @@
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { solarizedlight } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import { pageMetadata } from '../lib/pageMetadata';
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: 'CLI Tools — JSON Resume',
   description:
     'Command-line tools for rendering JSON Resume to HTML, PDF, and more',
-  image: 'https://jsonresume.org/images/logo.png',
   url: 'https://jsonresume.org/cli/',
-};
+});
 
 function CodeBlock({ children, language = 'bash' }) {
   return (
