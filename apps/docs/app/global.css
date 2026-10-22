@@ -1,3 +1,9 @@
 @import 'tailwindcss';
 @import 'fumadocs-ui/css/neutral.css';
 @import 'fumadocs-ui/css/preset.css';
+
+/* Fumadocs' light muted text (#737373) is 4.1-4.3:1 on its tinted panels;
+   WCAG AA needs 4.5:1 (#390). #666 is 5:1. Dark mode keeps its own .dark value. */
+@theme {
+  --color-fd-muted-foreground: hsl(0, 0%, 40%);
+}
