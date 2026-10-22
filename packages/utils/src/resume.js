@@ -80,6 +80,34 @@ export function withStringLocations(resume) {
 }
 
 /**
+ * Return a copy of the resume where every project has both `summary` and
+ * `description` (#296). `summary` is the preferred field and wins when both
+ * are set; `description` is its deprecated alias. Themes written for either
+ * field then render the same text. Never mutates the input.
+ *
+ * @param {Object} [resume] - JSON Resume object
+ * @returns {Object} A resume whose projects carry both fields when either is set
+ */
+export function withProjectSummaries(resume) {
+  if (
+    !resume ||
+    typeof resume !== 'object' ||
+    !Array.isArray(resume.projects)
+  ) {
+    return resume;
+  }
+  return {
+    ...resume,
+    projects: resume.projects.map((project) => {
+      const text = project?.summary ?? project?.description;
+      return text === undefined
+        ? project
+        : { ...project, summary: text, description: text };
+    }),
+  };
+}
+
+/**
  * Normalize a resume into an object with all twelve standard array sections
  * defaulted to [] and `basics` defaulted to an object. Never mutates the input.
  * Unknown extra fields are preserved (JSON Resume allows additional properties).

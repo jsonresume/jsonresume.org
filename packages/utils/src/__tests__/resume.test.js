@@ -3,6 +3,7 @@ import {
   formatLocation,
   normalizeResume,
   withStringLocations,
+  withProjectSummaries,
 } from '../resume.js';
 
 describe('formatLocation', () => {
@@ -116,5 +117,23 @@ describe('withStringLocations', () => {
   it('tolerates missing or malformed input', () => {
     expect(withStringLocations(undefined)).toBeUndefined();
     expect(withStringLocations({ work: 'nope' })).toEqual({ work: 'nope' });
+  });
+});
+
+describe('withProjectSummaries', () => {
+  it('fills description from summary and summary from description', () => {
+    const out = withProjectSummaries({
+      projects: [{ summary: 'S' }, { description: 'D' }, { name: 'none' }],
+    });
+    expect(out.projects[0]).toMatchObject({ summary: 'S', description: 'S' });
+    expect(out.projects[1]).toMatchObject({ summary: 'D', description: 'D' });
+    expect(out.projects[2]).toEqual({ name: 'none' });
+  });
+
+  it('prefers summary when both are set', () => {
+    const out = withProjectSummaries({
+      projects: [{ summary: 'new', description: 'old' }],
+    });
+    expect(out.projects[0].description).toBe('new');
   });
 });

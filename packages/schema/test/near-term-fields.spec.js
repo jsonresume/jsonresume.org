@@ -70,3 +70,10 @@ test('objective (#317) - optional root-level free text', (t) => {
   t.false(valid({ objective: { text: 'x' } }));
   t.end();
 });
+
+test('projects.summary (#296) - free text; description still accepted', (t) => {
+  t.true(valid({ projects: [{ name: 'X', summary: 'What it is' }] }));
+  t.true(valid({ projects: [{ name: 'X', description: 'Legacy field' }] }));
+  t.false(valid({ projects: [{ summary: 7 }] }));
+  t.end();
+});

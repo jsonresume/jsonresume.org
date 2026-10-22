@@ -385,7 +385,11 @@ export interface ProjectItem {
    */
   name?: string;
   /**
-   * Short summary of project. e.g. Collated works of 2017.
+   * Short summary of the project, consistent with summary in other sections (#296). e.g. Collated works of 2017.
+   */
+  summary?: string;
+  /**
+   * Deprecated alias of summary, kept for compatibility; when both are set, summary wins (#296). e.g. Collated works of 2017.
    */
   description?: string;
   /**

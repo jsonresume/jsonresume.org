@@ -133,11 +133,26 @@ export const withStringLocations = (resume) => {
   return out;
 };
 
+// projects[].summary is preferred over its deprecated alias description
+// (#296); give themes both so either field renders. summary wins.
+export const withProjectSummaries = (resume) => {
+  if (!resume || !Array.isArray(resume.projects)) return resume;
+  return {
+    ...resume,
+    projects: resume.projects.map((project) => {
+      const text = project?.summary ?? project?.description;
+      return text === undefined
+        ? project
+        : { ...project, summary: text, description: text };
+    }),
+  };
+};
+
 export default async ({ resume, themePath }) => {
   const theme = await loadTheme(themePath);
   if (typeof theme?.render !== 'function') {
     throw new Error('theme.render is not a function');
   }
 
-  return theme.render(withStringLocations(resume));
+  return theme.render(withProjectSummaries(withStringLocations(resume)));
 };

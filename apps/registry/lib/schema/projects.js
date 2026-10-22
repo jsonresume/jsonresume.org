@@ -14,6 +14,11 @@ export const projects = {
         type: 'string',
         description: 'e.g. The World Wide Web',
       },
+      summary: {
+        type: 'string',
+        description:
+          'Short summary of the project (preferred over description, #296)',
+      },
       description: {
         type: 'string',
         description: 'Short summary of project. e.g. Collated works of 2017.',

@@ -24,7 +24,7 @@ The schema is published as
 | `languages` | `language`, `fluency` |
 | `interests` | `name`, `keywords` |
 | `references` | `name`, `reference` |
-| `projects` | `name`, `description`, `highlights`, `keywords`, `startDate`, `endDate`, `url`, `roles`, `entity`, `type` |
+| `projects` | `name`, `summary` (preferred; `description` is a deprecated alias), `highlights`, `keywords`, `startDate`, `endDate`, `url`, `roles`, `entity`, `type` |
 | `meta` | `canonical`, `version`, `lastModified`, plus tool settings such as `theme` |
 
 Rules worth knowing:
