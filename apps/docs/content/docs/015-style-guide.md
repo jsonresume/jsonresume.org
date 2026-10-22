@@ -1,6 +1,6 @@
 ---
 title: "Style Guide"
-description: "Docwright documentation"
+description: "Internal architecture notes for contributors"
 ---
 
 # Style Guide

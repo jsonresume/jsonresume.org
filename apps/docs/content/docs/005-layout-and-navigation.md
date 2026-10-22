@@ -1,6 +1,6 @@
 ---
 title: "Layout and Navigation"
-description: "Docwright documentation"
+description: "Internal architecture notes for contributors"
 ---
 
 # Layout and Navigation

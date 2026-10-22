@@ -22,12 +22,6 @@ module.exports = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'in.getclicky.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
         hostname: 'registry.jsonresume.org',
         port: '',
         pathname: '/**',

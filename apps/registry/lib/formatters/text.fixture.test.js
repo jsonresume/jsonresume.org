@@ -153,6 +153,15 @@ describe('text formatter formatSection merge/exclude behavior', () => {
     expect(content).not.toContain('2020-01 - ');
   });
 
+  it('marks a lone endDate so it is not read as a start date', async () => {
+    const resume = {
+      basics: { name: 'N', location: {} },
+      work: [{ name: 'Co', position: 'Dev', endDate: '2022' }],
+    };
+    const { content } = await textFormatter.format(resume);
+    expect(content).toContain('Until 2022');
+  });
+
   it('merges awards as "title - date"', async () => {
     const resume = {
       basics: { name: 'N', location: {} },

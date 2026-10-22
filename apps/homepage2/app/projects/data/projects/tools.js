@@ -46,7 +46,7 @@ export const projects = [
   {
     name: 'resume-cli',
     description: 'Official CLI tool for JSON Resume',
-    link: 'https://github.com/jsonresume/resume-cli',
+    link: 'https://github.com/jsonresume/jsonresume.org/tree/master/packages/cli',
     category: 'cli',
     language: 'Javascript',
   },

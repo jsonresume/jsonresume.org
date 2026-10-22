@@ -1,12 +1,12 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "http://example.com/example.json",
+  "$id": "https://raw.githubusercontent.com/jsonresume/jsonresume.org/master/packages/schema/schema.json",
   "additionalProperties": true,
   "definitions": {
     "iso8601": {
       "type": "string",
       "description": "Similar to the standard date type, but each section after the year is optional. e.g. 2014-06-29 or 2023-04",
-      "pattern": "^([1-2][0-9]{3}-[0-1][0-9]-[0-3][0-9]|[1-2][0-9]{3}-[0-1][0-9]|[1-2][0-9]{3})$"
+      "pattern": "^([1-2][0-9]{3}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])|[1-2][0-9]{3}-(0[1-9]|1[0-2])|[1-2][0-9]{3})$"
     }
   },
   "properties": {

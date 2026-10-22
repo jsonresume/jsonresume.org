@@ -1,6 +1,6 @@
 ---
 title: "Discord Integration"
-description: "Docwright documentation"
+description: "Internal architecture notes for contributors"
 ---
 
 # Discord Integration

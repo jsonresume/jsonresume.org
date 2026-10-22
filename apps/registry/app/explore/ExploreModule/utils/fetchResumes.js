@@ -27,7 +27,10 @@ export async function fetchResumes(page = 1, search = '') {
     const { count: totalCount } = await countQuery;
 
     // Then get the actual data
-    let dataQuery = supabase.from('resumes').select('*');
+    // Only what parseResumeRow reads; '*' also pulled every row's embedding
+    let dataQuery = supabase
+      .from('resumes')
+      .select('username, resume, created_at, updated_at');
 
     if (search && search.trim() !== '') {
       dataQuery = dataQuery.textSearch('resume', search.trim(), {

@@ -1,6 +1,6 @@
 ---
 title: "Additional Modules"
-description: "Docwright documentation"
+description: "Internal architecture notes for contributors"
 ---
 
 # Additional Modules

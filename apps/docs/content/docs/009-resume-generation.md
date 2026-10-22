@@ -1,6 +1,6 @@
 ---
 title: "Resume Generation"
-description: "Docwright documentation"
+description: "Internal architecture notes for contributors"
 ---
 
 # Resume Generation
