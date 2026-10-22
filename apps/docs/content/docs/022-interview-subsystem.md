@@ -1,6 +1,6 @@
 ---
 title: "Interview Subsystem"
-description: "Docwright documentation"
+description: "Internal architecture notes for contributors"
 ---
 
 # Interview Subsystem

@@ -1,6 +1,6 @@
 ---
 title: "Landing Page"
-description: "Docwright documentation"
+description: "Internal architecture notes for contributors"
 ---
 
 # Landing Page

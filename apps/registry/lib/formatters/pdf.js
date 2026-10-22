@@ -1,16 +1,23 @@
 import { format as formatTemplate } from './template/format';
 import logger from '../logger';
 
-let chromiumModule;
-
+// Vercel functions have no browser installed, so production uses the
+// serverless Chromium build from @sparticuz/chromium. Elsewhere (local dev,
+// CI) use the browser installed by `playwright install`.
 async function getBrowser() {
-  if (!chromiumModule) {
-    chromiumModule = await import('playwright');
+  const { chromium } = await import('playwright-core');
+  if (process.env.VERCEL) {
+    const { default: serverlessChromium } = await import('@sparticuz/chromium');
+    return chromium.launch({
+      executablePath: await serverlessChromium.executablePath(),
+      args: serverlessChromium.args,
+      headless: true,
+    });
   }
-  const browser = await chromiumModule.chromium.launch({
+  const { chromium: localChromium } = await import('playwright');
+  return localChromium.launch({
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
   });
-  return browser;
 }
 
 const format = async function format(resume, options) {
@@ -48,7 +55,11 @@ const format = async function format(resume, options) {
       { error: err.message, stack: err.stack },
       'PDF generation failed'
     );
-    throw err;
+    // Not a theme bug, and the browser error is not for the client: report
+    // a plain PDF_RENDER_FAILED instead of a stack trace
+    throw Object.assign(new Error('pdf-render-failed'), {
+      code: 'PDF_RENDER_FAILED',
+    });
   } finally {
     if (browser) {
       await browser.close();

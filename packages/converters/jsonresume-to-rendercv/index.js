@@ -4,15 +4,17 @@ import fs from 'fs';
 import path from 'path';
 import { convert } from './convert.js';
 
-const inputFile = process.argv[2];
+const [inputFile, outputFile = 'resume.yaml'] = process.argv.slice(2);
 
 if (!inputFile) {
-  console.error('Please provide the path to the JSON resume file.');
+  console.error(
+    'Usage: jsonresume-to-rendercv <resume.json> [output.yaml] (default: resume.yaml)'
+  );
   process.exit(1);
 }
 
 const inputPath = path.resolve(inputFile);
-const outputPath = path.resolve(process.cwd(), 'resume.yaml');
+const outputPath = path.resolve(process.cwd(), outputFile);
 
 fs.readFile(inputPath, 'utf8', async (err, data) => {
   if (err) {

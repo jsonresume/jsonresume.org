@@ -12,7 +12,11 @@ export const convert = async function format(jsonResume) {
         .filter(Boolean)
         .join(', '),
       email: jsonResume.basics.email,
-      phone: jsonResume.basics.phone,
+      // RenderCV only accepts international numbers (+<country code> ...);
+      // the country can't be guessed from a local number, so drop those.
+      phone: /^\+\d/.test(jsonResume.basics.phone?.trim() ?? '')
+        ? jsonResume.basics.phone.trim()
+        : undefined,
       website: jsonResume.basics.url,
       social_networks: toSocialNetworks(jsonResume.basics.profiles),
       sections: {
@@ -35,11 +39,15 @@ export const convert = async function format(jsonResume) {
           end_date: work.endDate,
           highlights: work.highlights || [],
         })),
+        // JSON Resume publications have no authors field, but RenderCV
+        // requires a list; they are the resume owner's work.
         publications: jsonResume.publications?.map((pub) => ({
           title: pub.name,
-          authors: pub.authors,
-          doi: pub.doi,
+          authors: jsonResume.basics.name ? [jsonResume.basics.name] : [],
+          journal: pub.publisher,
+          url: pub.url,
           date: pub.releaseDate,
+          summary: pub.summary,
         })),
         projects: jsonResume.projects?.map((proj) => ({
           name: proj.name,

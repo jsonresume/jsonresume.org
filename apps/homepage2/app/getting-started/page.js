@@ -1,12 +1,12 @@
 import { CLISection } from './components/CLISection';
 import { HostingSection } from './components/HostingSection';
+import { pageMetadata } from '../lib/pageMetadata';
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: 'Getting Started - JSON Resume',
   description: 'Getting started with JSON Resume',
-  image: 'https://jsonresume.org/images/logo.png',
   url: 'https://jsonresume.org/getting-started/',
-};
+});
 
 export default function GettingStarted() {
   return (

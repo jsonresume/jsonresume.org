@@ -1,12 +1,12 @@
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { solarizedlight } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import { pageMetadata } from '../lib/pageMetadata';
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: 'Theme Development — JSON Resume',
   description: 'Theme Development for JSON Resume',
-  image: 'https://jsonresume.org/images/logo.png',
   url: 'https://jsonresume.org/theme-development/',
-};
+});
 
 export default function ThemeDevelopment() {
   const codeString = `
@@ -59,28 +59,26 @@ export default function ThemeDevelopment() {
             </SyntaxHighlighter>
             <br />
             <h3>Considerations</h3>
-            <p>
-              <ul>
-                <li>All assets and css has to be inline the output</li>
-                <li>Gotta base64 encoding your images and other assets</li>
-                <li>
-                  The <code>render</code> function should be pure, as in, it
-                  should have no side effects. Which means to say it
-                  shouldn&apos;t read or write from disk or the network. So do
-                  not import <code>fs</code>
-                  or <code>http</code>(or any modules that depend on those) into
-                  your theme.
-                </li>
-                <li>
-                  Your theme is in control of the build process so do whatever
-                  you may there
-                </li>
-                <li>
-                  Feel free to share any opinions on this process in the
-                  repoistory
-                </li>
-              </ul>
-            </p>
+            <ul>
+              <li>All assets and css has to be inline the output</li>
+              <li>Gotta base64 encoding your images and other assets</li>
+              <li>
+                The <code>render</code> function should be pure, as in, it
+                should have no side effects. Which means to say it
+                shouldn&apos;t read or write from disk or the network. So do not
+                import <code>fs</code>
+                or <code>http</code>(or any modules that depend on those) into
+                your theme.
+              </li>
+              <li>
+                Your theme is in control of the build process so do whatever you
+                may there
+              </li>
+              <li>
+                Feel free to share any opinions on this process in the
+                repository
+              </li>
+            </ul>
             <br />
 
             <h3>Examples</h3>
@@ -89,35 +87,35 @@ export default function ThemeDevelopment() {
               built themes
             </p>
             <ul>
-              <ol>
-                <a href="https://github.com/jsonresume/jsonresume.org/tree/master/themes/stackoverflow">
-                  https://github.com/jsonresume/jsonresume.org/tree/master/themes/stackoverflow
+              <li>
+                <a href="https://github.com/jsonresume/jsonresume.org/tree/master/packages/themes/stackoverflow">
+                  https://github.com/jsonresume/jsonresume.org/tree/master/packages/themes/stackoverflow
                 </a>
-              </ol>
-              <ol>
+              </li>
+              <li>
                 <a href="https://github.com/kelyvin/jsonresume-theme-caffeine">
                   https://github.com/kelyvin/jsonresume-theme-caffeine
                 </a>
-              </ol>
-              <ol>
+              </li>
+              <li>
                 <a href="https://github.com/davcd/jsonresume-theme-actual">
                   https://github.com/davcd/jsonresume-theme-actual
                 </a>
-              </ol>
-              <ol>
+              </li>
+              <li>
                 <a href="https://github.com/jsonresume/jsonresume.org/tree/master/packages/themes/jsonresume-theme-reference">
                   Use this maintained reference theme as a starting point:
                   packages/themes/jsonresume-theme-reference
                 </a>
-              </ol>
+              </li>
             </ul>
             <p>
               If there are any official themes you like, find their source and
               see if you can learn from them
             </p>
             <br />
+            <h3>Publishing / Hosting</h3>
             <p>
-              <h3>Publishing / Hosting</h3>
               If you want to add a theme to the official list, you need to
               publish an NPM module named
               <code>jsonresume-theme-&#123;name&#125;</code>. That module needs
