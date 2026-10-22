@@ -28,20 +28,19 @@ export default async function handler(req, res) {
     res.setHeader('Cache-Control', 'no-store');
     if (status === 503) res.setHeader('Retry-After', '60');
 
-    const isPage = !extension || extension === 'html';
-    if (isPage || error?.extra?.validation) {
-      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    const isPage =
+      (!extension || extension === 'html') && forceJSON === undefined;
+    if (!isPage) {
+      // Data formats (.json, .yaml, ...) and ?forceJSON get JSON for API consumers
+      return res.status(status).json(error);
     }
+
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
     if (error?.extra?.validation) {
       // Resume validation errors - show detailed validation error page
       return res.status(status).send(errorTemplate(error));
     }
-    if (isPage) {
-      // Page requests get a readable error page
-      return res.status(status).send(themeErrorTemplate(error));
-    }
-    // Data formats (.json, .yaml, ...) get JSON for API consumers
-    return res.status(status).json(error);
+    return res.status(status).send(themeErrorTemplate(error));
   }
 
   res.setHeader(
