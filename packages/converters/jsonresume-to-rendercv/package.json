@@ -2,7 +2,10 @@
   "name": "@jsonresume/jsonresume-to-rendercv",
   "version": "1.0.14",
   "description": "Convert JSON Resume to rendercv format",
-  "main": "index.js",
+  "main": "convert.js",
+  "exports": {
+    ".": "./convert.js"
+  },
   "type": "module",
   "bin": "./index.js",
   "engines": {

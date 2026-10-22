@@ -1,5 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/jsonresume/jsonresume.org/master/packages/schema/job-schema.json",
   "additionalProperties": true,
   "definitions": {
     "iso8601": {
