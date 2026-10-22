@@ -31,7 +31,7 @@ export function useJobStates({ sessionId, username, userId, isAuthenticated }) {
       try {
         if (isAuthenticated && userId) {
           // Load from Supabase for authenticated users
-          const states = await fetchJobStates(userId);
+          const states = await fetchJobStates();
           setJobStates(states);
         } else if (sessionId) {
           // Load from localStorage for anonymous users
@@ -65,28 +65,28 @@ export function useJobStates({ sessionId, username, userId, isAuthenticated }) {
   const queries = useJobStateQueries(jobStates);
 
   // Migration function for signup
-  const migrateToUser = useCallback(
-    async (newUserId) => {
-      if (!sessionId) return { success: false, error: 'No session ID' };
+  const migrateToUser = useCallback(async () => {
+    if (!sessionId) return { success: false, error: 'No session ID' };
 
-      try {
-        const response = await postMigrate(sessionId, newUserId);
+    try {
+      const response = await postMigrate(
+        sessionId,
+        loadFromLocalStorage(sessionId)
+      );
 
-        if (!response.ok) {
-          throw new Error('Migration failed');
-        }
-
-        // Clear localStorage after successful migration
-        clearLocalStorage(sessionId);
-
-        return { success: true };
-      } catch (err) {
-        console.error('Failed to migrate job states:', err);
-        return { success: false, error: err.message };
+      if (!response.ok) {
+        throw new Error('Migration failed');
       }
-    },
-    [sessionId]
-  );
+
+      // Clear localStorage after successful migration
+      clearLocalStorage(sessionId);
+
+      return { success: true };
+    } catch (err) {
+      console.error('Failed to migrate job states:', err);
+      return { success: false, error: err.message };
+    }
+  }, [sessionId]);
 
   return {
     // State

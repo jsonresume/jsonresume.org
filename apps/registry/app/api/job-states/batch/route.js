@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 import { SUPABASE_URL } from '@/lib/supabaseConfig';
 import { NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
+import { getSessionUserId } from '../sessionUser';
 
 const supabaseUrl = SUPABASE_URL;
 
@@ -19,14 +20,18 @@ export async function POST(request) {
     );
   }
 
+  const userId = await getSessionUserId(request);
+  if (!userId) {
+    return NextResponse.json({ message: 'Sign in required' }, { status: 401 });
+  }
+
   try {
-    const body = await request.json();
-    const { username, updates } = body;
+    const { updates } = await request.json();
 
     // Validate input
-    if (!username || !updates || !Array.isArray(updates)) {
+    if (!Array.isArray(updates)) {
       return NextResponse.json(
-        { message: 'Missing required fields: username, updates (array)' },
+        { message: 'Missing required field: updates (array)' },
         { status: 400 }
       );
     }
@@ -52,21 +57,6 @@ export async function POST(request) {
     }
 
     const supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
-
-    // Get user ID from username
-    const { data: resumeData, error: resumeError } = await supabase
-      .from('resumes')
-      .select('id')
-      .eq('username', username)
-      .maybeSingle();
-
-    if (resumeError) throw resumeError;
-
-    if (!resumeData) {
-      return NextResponse.json({ message: 'User not found' }, { status: 404 });
-    }
-
-    const userId = resumeData.id;
 
     // Separate deletes from upserts
     const deletes = updates.filter((u) => u.state === null);
@@ -101,7 +91,7 @@ export async function POST(request) {
     }
 
     logger.info(
-      { username, upsertCount: upserts.length, deleteCount: deletes.length },
+      { userId, upsertCount: upserts.length, deleteCount: deletes.length },
       'Batch job states updated'
     );
 
