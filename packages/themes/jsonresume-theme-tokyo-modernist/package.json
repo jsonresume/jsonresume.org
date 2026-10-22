@@ -30,7 +30,6 @@
   },
   "scripts": {
     "lint": "eslint src || exit 0",
-    "publish": "npm publish --access public",
     "build": "vite build",
     "test": "vitest run",
     "test:watch": "vitest"
@@ -51,5 +50,8 @@
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     }
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
