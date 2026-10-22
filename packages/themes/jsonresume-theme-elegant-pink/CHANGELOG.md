@@ -1,5 +1,11 @@
 # jsonresume-theme-elegant-pink
 
+## 0.1.9
+
+### Patch Changes
+
+- @jsonresume/core@0.3.5
+
 ## 0.1.8
 
 ### Patch Changes
