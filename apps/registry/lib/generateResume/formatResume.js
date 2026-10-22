@@ -15,22 +15,18 @@ export const formatResume = async (resume, formatter, options) => {
 
     // Theme not found error
     if (e.message === 'theme-missing') {
-      return {
-        error: buildError(ERROR_CODES.TEMPLATE_MISSING, { themeName }),
-      };
+      return buildError(ERROR_CODES.TEMPLATE_MISSING, { themeName });
     }
 
     // Theme runtime error - capture full error details
-    return {
-      error: buildError(ERROR_CODES.UNKNOWN_TEMPLATE_ERROR, {
-        themeName,
-        error: {
-          message: e.message,
-          stack: e.stack,
-          name: e.name,
-        },
-      }),
-    };
+    return buildError(ERROR_CODES.UNKNOWN_TEMPLATE_ERROR, {
+      themeName,
+      error: {
+        message: e.message,
+        stack: e.stack,
+        name: e.name,
+      },
+    });
   }
 
   return { content: formatted.content, headers: formatted.headers || [] };

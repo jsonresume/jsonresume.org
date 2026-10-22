@@ -1,5 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import buildError, { ERROR_CODES, ERROR_CODE_MESSAGES } from './buildError';
+import buildError, {
+  ERROR_CODES,
+  ERROR_CODE_MESSAGES,
+  ERROR_CODE_STATUS,
+} from './buildError';
 
 describe('ERROR_CODES', () => {
   it('contains all error code constants', () => {
@@ -89,6 +93,20 @@ describe('buildError', () => {
 
       expect(result.error.code).toBe(code);
       expect(result.error.message).toBe(ERROR_CODE_MESSAGES[code]);
+    });
+  });
+});
+
+describe('ERROR_CODE_STATUS', () => {
+  it('maps unknown users to 404 and GitHub outages to 503', () => {
+    expect(ERROR_CODE_STATUS.INVALID_USERNAME).toBe(404);
+    expect(ERROR_CODE_STATUS.NON_EXISTENT_GIST).toBe(404);
+    expect(ERROR_CODE_STATUS.GITHUB_UNAVAILABLE).toBe(503);
+  });
+
+  it('only uses known error codes', () => {
+    Object.keys(ERROR_CODE_STATUS).forEach((code) => {
+      expect(ERROR_CODES[code]).toBe(code);
     });
   });
 });

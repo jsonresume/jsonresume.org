@@ -10,16 +10,16 @@ function themeErrorTemplate(errorObject) {
   const { code, message, extra } = errorObject;
 
   // Determine the specific error type and customize the response
-  let title = '⚠️ Theme Error';
-  let helpText = message;
+  let title = '⚠️ Resume Error';
+  let helpText = `<p>${escapeHTML(message)}</p>`;
   let detailsHTML = '';
 
   if (code === 'TEMPLATE_MISSING') {
     title = '🎨 Theme Not Found';
     helpText = `
-      <p>The theme <strong>"${
+      <p>The theme <strong>"${escapeHTML(
         extra?.themeName || 'unknown'
-      }"</strong> could not be loaded.</p>
+      )}"</strong> could not be loaded.</p>
       <p>This might be because:</p>
       <ul class="help-list">
         <li>The theme package doesn't exist on npm</li>
@@ -36,9 +36,9 @@ function themeErrorTemplate(errorObject) {
   } else if (code === 'UNKNOWN_TEMPLATE_ERROR') {
     title = '💥 Theme Rendering Error';
     helpText = `
-      <p>The theme <strong>"${
+      <p>The theme <strong>"${escapeHTML(
         extra?.themeName || 'unknown'
-      }"</strong> encountered an error while rendering your resume.</p>
+      )}"</strong> encountered an error while rendering your resume.</p>
       <p>This is usually caused by:</p>
       <ul class="help-list">
         <li>Missing required fields in your resume that the theme expects</li>

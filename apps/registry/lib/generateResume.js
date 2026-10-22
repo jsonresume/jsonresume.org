@@ -22,7 +22,7 @@ const generateResume = async (username, extension = 'template', query = {}) => {
   const { error: gistError, resume } = await getResumeGist(username, gistname);
 
   if (gistError) {
-    return buildError(gistError);
+    return { error: gistError };
   }
 
   const { error: validationError } = validateResume(resume);

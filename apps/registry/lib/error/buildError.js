@@ -8,6 +8,7 @@ export const ERROR_CODES = Object.freeze({
   INVALID_EXTENSION: 'INVALID_EXTENSION',
   UNKNOWN_FORMATTER: 'UNKNOWN_FORMATTER',
   RESUME_NOT_VALID_JSON: 'RESUME_NOT_VALID_JSON',
+  GITHUB_UNAVAILABLE: 'GITHUB_UNAVAILABLE',
 });
 
 export const ERROR_CODE_MESSAGES = Object.freeze({
@@ -27,6 +28,16 @@ export const ERROR_CODE_MESSAGES = Object.freeze({
     'This is a valid extension but we do not have a formatter for it. Please visit github issues.',
   RESUME_NOT_VALID_JSON:
     'Your resume is not valid JSON. Find an online JSON validator to help you debug this.',
+  GITHUB_UNAVAILABLE:
+    'We could not reach GitHub to load this resume (rate limited or unavailable). Please try again in a few minutes.',
+});
+
+// HTTP status per error code; anything not listed is a 400.
+export const ERROR_CODE_STATUS = Object.freeze({
+  INVALID_USERNAME: 404,
+  NON_EXISTENT_GIST: 404,
+  TEMPLATE_MISSING: 404,
+  GITHUB_UNAVAILABLE: 503,
 });
 
 const buildError = (error, extra) => {
