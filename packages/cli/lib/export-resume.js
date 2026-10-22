@@ -1,4 +1,4 @@
-import renderHTML, { resolveThemePath } from './render-html';
+import renderHTML, { loadTheme } from './render-html';
 import { promisify } from 'util';
 import fs from 'fs';
 
@@ -71,15 +71,6 @@ const extractFileFormat = (fileName) => {
   }
   return fileName.substring(dotPos + 1).toLowerCase();
 };
-const getThemePkg = (theme) => {
-  // Resolve with the same rules renderHTML uses (require-path lookup with a
-  // `jsonresume-theme-` prefix fallback) so a theme that renders to HTML can
-  // never spuriously fail PDF export (hoisted installs, non-index entries).
-  // resolveThemePath throws ThemeNotFoundError so the caller can render an
-  // actionable, stack-trace-free message and exit with a non-zero code.
-  return require(resolveThemePath(theme));
-};
-
 async function createHtml(resumeJson, fileName, themePath, format, callback) {
   let html;
   try {
@@ -111,7 +102,9 @@ async function createThemeless(resumeJson, fileName, formatter, callback) {
 
 const createPdf = (resumeJson, fileName, theme, format, callback) => {
   (async () => {
-    const themePkg = getThemePkg(theme);
+    // Same loader renderHTML uses, so a theme that renders to HTML can never
+    // spuriously fail PDF export. Throws ThemeNotFoundError for the caller.
+    const themePkg = await loadTheme(theme);
     const puppeteerLaunchArgs = [];
 
     if (process.env.RESUME_PUPPETEER_NO_SANDBOX) {
@@ -122,9 +115,17 @@ const createPdf = (resumeJson, fileName, theme, format, callback) => {
       resume: resumeJson,
       themePath: theme,
     });
-    const browser = await puppeteer.launch({
-      args: puppeteerLaunchArgs,
-    });
+    let browser;
+    try {
+      browser = await puppeteer.launch({ args: puppeteerLaunchArgs });
+    } catch (err) {
+      if (!process.env.RESUME_PUPPETEER_NO_SANDBOX) {
+        // The usual cause on Linux CI and in containers
+        err.message +=
+          '\nIf Chrome cannot start its sandbox (common on Linux CI and in containers), retry with RESUME_PUPPETEER_NO_SANDBOX=1.';
+      }
+      throw err;
+    }
     const page = await browser.newPage();
 
     await page.emulateMediaType(

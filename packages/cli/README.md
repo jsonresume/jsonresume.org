@@ -104,7 +104,15 @@ Please npm install the theme you wish to use before attempting to export it.
 Options:
 
 - `--format <file type>` Example: `--format pdf`
-- `--theme <name>` Example: `--theme even` (only used for `.html` / `.pdf`)
+- `--theme <name>` Example: `--theme even` (only used for `.html` / `.pdf`; defaults to `even`). Scoped packages such as `@jsonresume/jsonresume-theme-<name>` are passed by their full name.
+
+PDF export runs headless Chrome via Puppeteer. On Linux CI and in containers,
+where Chrome usually can't start its sandbox, set
+`RESUME_PUPPETEER_NO_SANDBOX=1`:
+
+```
+RESUME_PUPPETEER_NO_SANDBOX=1 resume export resume.pdf
+```
 
 ### `resume audit [fileName]`
 

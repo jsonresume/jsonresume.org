@@ -18,30 +18,33 @@ npm install --save @jsonresume/schema
 
 To use
 
+`validate(resume, callback)` calls back with `(errors, valid)`:
+
 ```js
-import resumeSchema from '@jsonresume/schema';
-resumeSchema.validate(
-  { basics: { name: "Thomas" } },
-  function (err, report) {
-    if (err) {
-      console.error("The resume was invalid:", err);
-      return;
-    }
-    console.log("Resume validated successfully:", report);
-  },
-  function (err) {
-    console.error("The resume was invalid:", err);
+const { validate } = require('@jsonresume/schema');
+
+validate({ basics: { name: 'Thomas' } }, (errors, valid) => {
+  if (!valid) {
+    console.error('The resume was invalid:', errors);
+    return;
   }
-);
+  console.log('Resume validated successfully');
+});
 ```
 
 Or against a full `resume.json`
 
 ```js
 const fs = require('fs');
-const resumeSchema = require('@jsonresume/schema');
-const resumeObject = JSON.parse(fs.readFileSync('./resume.json', 'utf8'));
-resumeSchema.validate(resumeObject);
+const { validate } = require('@jsonresume/schema');
+
+const resume = JSON.parse(fs.readFileSync('./resume.json', 'utf8'));
+validate(resume, (errors, valid) => {
+  if (!valid) {
+    console.error(errors);
+    process.exit(1);
+  }
+});
 ```
 
 The JSON Resume schema is available from:

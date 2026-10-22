@@ -1,6 +1,6 @@
 ---
 title: "Logging and Activity Tracking"
-description: "Docwright documentation"
+description: "Internal architecture notes for contributors"
 ---
 
 # Logging and Activity Tracking

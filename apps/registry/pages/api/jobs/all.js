@@ -2,6 +2,7 @@ const { createClient } = require('@supabase/supabase-js');
 
 const { SUPABASE_URL: supabaseUrl } = require('../../../lib/supabaseConfig');
 import logger from '../../../lib/logger';
+import { JOB_COLUMNS } from '../../../lib/jobColumns';
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -19,10 +20,7 @@ export default async function handler(req, res) {
     // Get all jobs from the last 90 days, sorted by creation date descending
     const { data: jobs, error } = await supabase
       .from('jobs')
-      // Skip the embedding vectors (~40KB per row)
-      .select(
-        'id, uuid, created_at, posted_at, url, type, content, gpt_content, salary_usd, salary_min, salary_max, salary_currency'
-      )
+      .select(JOB_COLUMNS)
       .gte(
         'created_at',
         new Date(Date.now() - 60 * 24 * 60 * 90 * 1000).toISOString()

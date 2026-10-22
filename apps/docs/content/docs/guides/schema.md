@@ -1,0 +1,66 @@
+---
+title: Schema
+description: Sections and fields of resume.json, and validating in code.
+---
+
+The schema is published as
+[`@jsonresume/schema`](https://www.npmjs.com/package/@jsonresume/schema)
+(JSON Schema draft-07). Source:
+[`packages/schema/schema.json`](https://github.com/jsonresume/jsonresume.org/blob/master/packages/schema/schema.json).
+
+## Sections
+
+| Section | Contents |
+| --- | --- |
+| `basics` | `name`, `label`, `image`, `email`, `phone`, `url`, `summary`, `location`, `profiles` |
+| `work` | `name`, `position`, `location`, `description`, `url`, `startDate`, `endDate`, `summary`, `highlights` |
+| `volunteer` | `organization`, `position`, `url`, `startDate`, `endDate`, `summary`, `highlights` |
+| `education` | `institution`, `url`, `area`, `studyType`, `startDate`, `endDate`, `score`, `courses` |
+| `awards` | `title`, `date`, `awarder`, `summary` |
+| `certificates` | `name`, `date`, `issuer`, `url` |
+| `publications` | `name`, `publisher`, `releaseDate`, `url`, `summary` |
+| `skills` | `name`, `level`, `keywords` |
+| `languages` | `language`, `fluency` |
+| `interests` | `name`, `keywords` |
+| `references` | `name`, `reference` |
+| `projects` | `name`, `description`, `highlights`, `keywords`, `startDate`, `endDate`, `url`, `roles`, `entity`, `type` |
+| `meta` | `canonical`, `version`, `lastModified`, plus tool settings such as `theme` |
+
+Rules worth knowing:
+
+- Every field is optional.
+- Dates are ISO 8601 strings: `YYYY`, `YYYY-MM` or `YYYY-MM-DD`. Leave out
+  `endDate` for a current position.
+- Unknown properties are allowed (`additionalProperties: true`), so tools can
+  store their own data alongside the standard fields.
+
+## Validating in code
+
+```bash
+npm install @jsonresume/schema
+```
+
+`validate(resume, callback)` calls back with `(errors, valid)`:
+
+```js
+const { validate } = require('@jsonresume/schema');
+const resume = require('./resume.json');
+
+validate(resume, (errors, valid) => {
+  if (!valid) {
+    console.error(errors);
+    process.exit(1);
+  }
+  console.log('resume.json is valid');
+});
+```
+
+The raw schema is exported as `schema`, for use with any JSON Schema validator
+(for example Ajv with `strict: false` and `ajv-formats`).
+
+## Proposing changes
+
+Schema changes are discussed in the
+[schema roadmap issue](https://github.com/jsonresume/jsonresume.org/issues/329).
+Open a PR against `packages/schema` with a changeset once a proposal has
+consensus.

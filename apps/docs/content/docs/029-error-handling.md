@@ -1,6 +1,6 @@
 ---
 title: "Error Handling"
-description: "Docwright documentation"
+description: "Internal architecture notes for contributors"
 ---
 
 # Error Handling
