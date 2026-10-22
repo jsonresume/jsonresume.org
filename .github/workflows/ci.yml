@@ -138,6 +138,11 @@ jobs:
         working-directory: apps/registry
       - name: Run Playwright tests
         run: pnpm turbo test:e2e --concurrency 1000
+        env:
+          # Registry pages look up gists on GitHub; unauthenticated requests
+          # from shared runner IPs get rate limited and the render test fails.
+          # The Actions token is read-only and available to fork PRs too.
+          GITHUB_TOKEN: ${{ github.token }}
       - uses: actions/upload-artifact@v7
         if: always()
         with:
