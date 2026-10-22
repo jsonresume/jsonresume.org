@@ -1,9 +1,9 @@
-export const metadata = {
+import { pageMetadata } from '../lib/pageMetadata';
+export const metadata = pageMetadata({
   title: 'Job Description Schema — JSON Resume',
   description: 'Job Description Schema',
-  image: 'https://jsonresume.org/images/logo.png',
   url: 'https://jsonresume.org/job-description-schema/',
-};
+});
 
 export default function Schema() {
   return (

@@ -1,12 +1,12 @@
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { solarizedlight } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import { pageMetadata } from '../lib/pageMetadata';
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: 'Theme Development — JSON Resume',
   description: 'Theme Development for JSON Resume',
-  image: 'https://jsonresume.org/images/logo.png',
   url: 'https://jsonresume.org/theme-development/',
-};
+});
 
 export default function ThemeDevelopment() {
   const codeString = `
