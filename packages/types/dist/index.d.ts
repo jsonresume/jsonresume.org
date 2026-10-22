@@ -59,6 +59,10 @@ export interface ResumeBasics {
    */
   label?: string;
   /**
+   * e.g. she/her, they/them (#312)
+   */
+  pronouns?: string;
+  /**
    * URL (as per RFC 3986) to a image in JPEG or PNG format
    */
   image?: string;

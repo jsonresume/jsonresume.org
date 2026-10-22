@@ -56,3 +56,9 @@ test('certificates.credentialId and summary (#590) - free text', (t) => {
   t.false(valid({ certificates: [{ summary: ['x'] }] }));
   t.end();
 });
+
+test('basics.pronouns (#312) - free text', (t) => {
+  t.true(valid({ basics: { name: 'Sam', pronouns: 'they/them' } }));
+  t.false(valid({ basics: { pronouns: ['they', 'them'] } }));
+  t.end();
+});
