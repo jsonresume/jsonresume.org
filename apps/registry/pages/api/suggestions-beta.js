@@ -20,6 +20,11 @@ const BREVITY = {
 };
 
 export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    res.setHeader('Allow', 'POST');
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
   const username = req.body.username || 'thomasdavis';
   const brevity = req.body.brevity || BREVITY.verbose;
   const sentiment = req.body.sentiment || 'modest';
@@ -33,6 +38,10 @@ export default async function handler(req, res) {
     .from('resumes')
     .select()
     .eq('username', username);
+
+  if (!data?.[0]) {
+    return res.status(404).json({ error: 'No resume found for this user' });
+  }
 
   const resume = JSON.parse(data[0].resume);
   const content = YAML.stringify(resume);

@@ -2,58 +2,34 @@ import { createClient } from '@supabase/supabase-js';
 import { SUPABASE_URL } from '@/lib/supabaseConfig';
 import { NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
+import { getSessionUserId } from '@/lib/sessionUser';
 
 const supabaseUrl = SUPABASE_URL;
 
 const VALID_STATES = ['read', 'interested', 'hidden'];
 
+const unavailable = () =>
+  NextResponse.json(
+    { message: 'API not available during build' },
+    { status: 503 }
+  );
+
+const unauthorized = () =>
+  NextResponse.json({ message: 'Sign in required' }, { status: 401 });
+
 /**
- * GET /api/job-states?username=xxx
- * Get all job states for a user
+ * GET /api/job-states
+ * Get all job states for the signed-in user
  */
 export async function GET(request) {
-  if (!process.env.SUPABASE_KEY) {
-    return NextResponse.json(
-      { message: 'API not available during build' },
-      { status: 503 }
-    );
-  }
+  if (!process.env.SUPABASE_KEY) return unavailable();
+
+  const userId = await getSessionUserId(request);
+  if (!userId) return unauthorized();
 
   try {
-    const { searchParams } = new URL(request.url);
-    const username = searchParams.get('username');
-    const providedUserId = searchParams.get('userId');
-
-    if (!username && !providedUserId) {
-      return NextResponse.json(
-        { message: 'Missing required query param: username or userId' },
-        { status: 400 }
-      );
-    }
-
     const supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
 
-    let userId = providedUserId;
-
-    // If no userId provided, look up from username
-    if (!userId && username) {
-      const { data: resumeData, error: resumeError } = await supabase
-        .from('resumes')
-        .select('id')
-        .eq('username', username)
-        .maybeSingle();
-
-      if (resumeError) throw resumeError;
-
-      if (!resumeData) {
-        // No resume found - return empty states
-        return NextResponse.json({ success: true, states: {} });
-      }
-
-      userId = resumeData.id;
-    }
-
-    // Fetch job states
     const { data, error } = await supabase
       .from('job_states')
       .select('job_id, state')
@@ -79,27 +55,16 @@ export async function GET(request) {
 
 /**
  * POST /api/job-states
- * Save or update a job state
+ * Save or update a job state for the signed-in user
  */
 export async function POST(request) {
-  if (!process.env.SUPABASE_KEY) {
-    return NextResponse.json(
-      { message: 'API not available during build' },
-      { status: 503 }
-    );
-  }
+  if (!process.env.SUPABASE_KEY) return unavailable();
+
+  const userId = await getSessionUserId(request);
+  if (!userId) return unauthorized();
 
   try {
-    const body = await request.json();
-    const { username, userId: providedUserId, jobId, state } = body;
-
-    // Validate input - need either username or userId
-    if (!username && !providedUserId) {
-      return NextResponse.json(
-        { message: 'Missing required fields: username or userId, and jobId' },
-        { status: 400 }
-      );
-    }
+    const { jobId, state } = await request.json();
 
     if (!jobId) {
       return NextResponse.json(
@@ -121,28 +86,6 @@ export async function POST(request) {
 
     const supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
 
-    let userId = providedUserId;
-
-    // If no userId provided, look up from username
-    if (!userId && username) {
-      const { data: resumeData, error: resumeError } = await supabase
-        .from('resumes')
-        .select('id')
-        .eq('username', username)
-        .maybeSingle();
-
-      if (resumeError) throw resumeError;
-
-      if (!resumeData) {
-        return NextResponse.json(
-          { message: 'User not found' },
-          { status: 404 }
-        );
-      }
-
-      userId = resumeData.id;
-    }
-
     if (state === null) {
       // Delete the state
       const { error } = await supabase
@@ -153,7 +96,7 @@ export async function POST(request) {
 
       if (error) throw error;
 
-      logger.info({ username, jobId }, 'Job state deleted');
+      logger.info({ userId, jobId }, 'Job state deleted');
       return NextResponse.json({ success: true, deleted: true });
     }
 
@@ -174,7 +117,7 @@ export async function POST(request) {
 
     if (error) throw error;
 
-    logger.info({ username, jobId, state }, 'Job state saved');
+    logger.info({ userId, jobId, state }, 'Job state saved');
     return NextResponse.json({ success: true, data });
   } catch (error) {
     logger.error({ error: error.message }, 'Error saving job state');

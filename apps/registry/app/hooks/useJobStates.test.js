@@ -13,6 +13,22 @@ vi.mock('../pathways/utils/activityLogger', () => ({
 
 import { activityLogger } from '../pathways/utils/activityLogger';
 
+// Signed-in Supabase session; the API helpers send its token, not a userId
+vi.mock('../lib/supabase', () => ({
+  supabase: {
+    auth: {
+      getSession: async () => ({
+        data: { session: { access_token: 'tok-1' } },
+      }),
+    },
+  },
+}));
+
+const AUTH_HEADERS = {
+  'Content-Type': 'application/json',
+  Authorization: 'Bearer tok-1',
+};
+
 // Mock global fetch
 global.fetch = vi.fn();
 
@@ -85,9 +101,9 @@ describe('useJobStates — loading', () => {
     const { result } = renderHook(() => useJobStates(authProps));
 
     await waitFor(() => expect(result.current.isLoading).toBe(false));
-    expect(global.fetch).toHaveBeenCalledWith(
-      '/api/job-states?userId=user-uuid-1'
-    );
+    expect(global.fetch).toHaveBeenCalledWith('/api/job-states', {
+      headers: AUTH_HEADERS,
+    });
     expect(result.current.jobStates).toEqual({ 5: 'hidden' });
   });
 
@@ -155,9 +171,8 @@ describe('useJobStates — updateJobState', () => {
 
     expect(global.fetch).toHaveBeenCalledWith('/api/job-states', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: AUTH_HEADERS,
       body: JSON.stringify({
-        userId: 'user-uuid-1',
         jobId: '11',
         state: 'read',
       }),
@@ -211,8 +226,8 @@ describe('useJobStates — updateJobStates (batch)', () => {
 
     expect(global.fetch).toHaveBeenCalledWith('/api/job-states/batch', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId: 'user-uuid-1', updates }),
+      headers: AUTH_HEADERS,
+      body: JSON.stringify({ updates }),
     });
   });
 });
@@ -332,8 +347,9 @@ describe('useJobStates — migrateToUser', () => {
 
     expect(global.fetch).toHaveBeenCalledWith('/api/job-states/migrate', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sessionId: 'sess-1', userId: 'new-user' }),
+      headers: AUTH_HEADERS,
+      // anonymous states travel with the request so they aren't lost
+      body: JSON.stringify({ sessionId: 'sess-1', states: { 1: 'read' } }),
     });
     expect(outcome).toEqual({ success: true });
     expect(localStorage.getItem(keyFor('sess-1'))).toBe(null);
