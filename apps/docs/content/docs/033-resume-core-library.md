@@ -1,6 +1,6 @@
 ---
 title: "Resume Core Library"
-description: "Docwright documentation"
+description: "Internal architecture notes for contributors"
 ---
 
 # Resume Core Library

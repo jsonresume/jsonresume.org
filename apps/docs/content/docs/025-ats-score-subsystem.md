@@ -1,6 +1,6 @@
 ---
 title: "ATS Score Subsystem"
-description: "Docwright documentation"
+description: "Internal architecture notes for contributors"
 ---
 
 # ATS Score Subsystem
