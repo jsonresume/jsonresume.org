@@ -12,6 +12,32 @@
       "type": "object",
       "description": "Tool- or author-specific data that has no standard field yet (#316). Keys are free-form; namespace them by tool (e.g. \"myTool\": { ... }) to avoid collisions. Themes are not expected to render it, and tools should preserve it unchanged when reading and writing resumes.",
       "additionalProperties": true
+    },
+    "location": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "address": {
+          "type": "string",
+          "description": "To add multiple address lines, use \n. For example, 1234 Glücklichkeit Straße\nHinterhaus 5. Etage li."
+        },
+        "postalCode": {
+          "type": "string",
+          "description": "e.g. 12345"
+        },
+        "city": {
+          "type": "string",
+          "description": "e.g. Teststadt"
+        },
+        "countryCode": {
+          "type": "string",
+          "description": "code as per ISO-3166-1 ALPHA-2, e.g. US, AU, IN"
+        },
+        "region": {
+          "type": "string",
+          "description": "The general region where you live. Can be a US state, or a province, for instance."
+        }
+      }
     }
   },
   "properties": {
@@ -58,28 +84,7 @@
           "description": "Write a short 2-3 sentence biography about yourself"
         },
         "location": {
-          "type": "object",
-          "additionalProperties": true,
-          "properties": {
-            "address": {
-              "type": "string",
-              "description": "To add multiple address lines, use \n. For example, 1234 Glücklichkeit Straße\nHinterhaus 5. Etage li."
-            },
-            "postalCode": {
-              "type": "string"
-            },
-            "city": {
-              "type": "string"
-            },
-            "countryCode": {
-              "type": "string",
-              "description": "code as per ISO-3166-1 ALPHA-2, e.g. US, AU, IN"
-            },
-            "region": {
-              "type": "string",
-              "description": "The general region where you live. Can be a US state, or a province, for instance."
-            }
-          }
+          "$ref": "#/definitions/location"
         },
         "profiles": {
           "type": "array",
@@ -124,8 +129,15 @@
             "description": "e.g. Facebook"
           },
           "location": {
-            "type": "string",
-            "description": "e.g. Menlo Park, CA"
+            "oneOf": [
+              {
+                "type": "string",
+                "description": "Free text, e.g. Menlo Park, CA"
+              },
+              {
+                "$ref": "#/definitions/location"
+              }
+            ]
           },
           "description": {
             "type": "string",
@@ -182,6 +194,17 @@
             "type": "string",
             "description": "e.g. Facebook"
           },
+          "location": {
+            "oneOf": [
+              {
+                "type": "string",
+                "description": "Free text, e.g. Berlin, DE"
+              },
+              {
+                "$ref": "#/definitions/location"
+              }
+            ]
+          },
           "position": {
             "type": "string",
             "description": "e.g. Software Engineer"
@@ -224,6 +247,17 @@
           "institution": {
             "type": "string",
             "description": "e.g. Massachusetts Institute of Technology"
+          },
+          "location": {
+            "oneOf": [
+              {
+                "type": "string",
+                "description": "Free text, e.g. Cambridge, MA"
+              },
+              {
+                "$ref": "#/definitions/location"
+              }
+            ]
           },
           "url": {
             "type": "string",

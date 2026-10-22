@@ -34,8 +34,16 @@ test('work[].name - invalid', (t) => {
   t.end();
 });
 
-test('work[].location - valid', (t) => {
-  validate(fixtures.locationValid, (err, valid) => {
+test('work[].location - valid [object]', (t) => {
+  validate(fixtures.locationObjectValid, (err, valid) => {
+    t.equal(err, null, 'err should be null');
+    t.true(valid, 'valid is true');
+  });
+  t.end();
+});
+
+test('work[].location - valid [string]', (t) => {
+  validate(fixtures.locationStringValid, (err, valid) => {
     t.equal(err, null, 'err should be null');
     t.true(valid, 'valid is true');
   });

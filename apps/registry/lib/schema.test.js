@@ -62,4 +62,15 @@ describe('registry resume schema', () => {
       }
     }
   });
+
+  it('accepts string or structured locations on work, volunteer and education (#323)', () => {
+    const location = { city: 'Oslo', countryCode: 'NO' };
+    for (const section of ['work', 'volunteer', 'education']) {
+      expect(validate({ [section]: [{ location }] }).valid, section).toBe(true);
+      expect(validate({ [section]: [{ location: 'Oslo, NO' }] }).valid).toBe(
+        true
+      );
+      expect(validate({ [section]: [{ location: 42 }] }).valid).toBe(false);
+    }
+  });
 });

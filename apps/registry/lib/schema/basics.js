@@ -41,32 +41,7 @@ export const basics = {
       type: 'string',
       description: 'Write a short 2-3 sentence biography about yourself',
     },
-    location: {
-      type: 'object',
-      additionalProperties: true,
-      properties: {
-        address: {
-          type: 'string',
-          description:
-            'To add multiple address lines, use \n. For example, 1234 Glücklichkeit Straße\nHinterhaus 5. Etage li.',
-        },
-        postalCode: {
-          type: 'string',
-        },
-        city: {
-          type: 'string',
-        },
-        countryCode: {
-          type: 'string',
-          description: 'code as per ISO-3166-1 ALPHA-2, e.g. US, AU, IN',
-        },
-        region: {
-          type: 'string',
-          description:
-            'The general region where you live. Can be a US state, or a province, for instance.',
-        },
-      },
-    },
+    location: { $ref: '#/definitions/location' },
     profiles: {
       type: 'array',
       description:

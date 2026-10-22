@@ -13,6 +13,12 @@ export const volunteer = {
         type: 'string',
         description: 'e.g. Facebook',
       },
+      location: {
+        oneOf: [
+          { type: 'string', description: 'Free text, e.g. Berlin, DE' },
+          { $ref: '#/definitions/location' },
+        ],
+      },
       position: {
         type: 'string',
         description: 'e.g. Software Engineer',

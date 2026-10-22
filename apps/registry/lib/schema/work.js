@@ -14,8 +14,10 @@ export const work = {
         description: 'e.g. Facebook',
       },
       location: {
-        type: 'string',
-        description: 'e.g. Menlo Park, CA',
+        oneOf: [
+          { type: 'string', description: 'Free text, e.g. Menlo Park, CA' },
+          { $ref: '#/definitions/location' },
+        ],
       },
       description: {
         type: 'string',
