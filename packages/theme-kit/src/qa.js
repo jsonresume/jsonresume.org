@@ -76,6 +76,8 @@ const ARTIFACT_PATTERNS = [
   { label: '[object Object]', test: (h) => h.includes('[object Object]') },
   { label: 'undefined', test: (h) => /\bundefined\b/.test(h) },
   { label: 'NaN', test: (h) => /\bNaN\b/.test(h) },
+  // new Date(undefined) formatted for display (#322)
+  { label: 'Invalid Date', test: (h) => /\binvalid date\b/i.test(h) },
 ];
 
 /** Returns the list of raw artifacts found in rendered HTML (empty = clean). */

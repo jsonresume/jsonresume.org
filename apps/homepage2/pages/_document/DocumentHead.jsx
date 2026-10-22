@@ -1,5 +1,3 @@
-import Image from 'next/image';
-
 export function DocumentHead() {
   return (
     <>
@@ -8,7 +6,6 @@ export function DocumentHead() {
 
       <link rel="dns-prefetch" href="//fonts.googleapis.com" />
       <link rel="dns-prefetch" href="//cdnjs.cloudflare.com" />
-      <link rel="dns-prefetch" href="//static.getclicky.com" />
       {(process.env.NODE_ENV === 'development' ||
         process.env.VERCEL_ENV === 'preview') && (
         // eslint-disable-next-line @next/next/no-sync-scripts
@@ -18,25 +15,13 @@ export function DocumentHead() {
           src="https://snippet.meticulous.ai/v1/meticulous.js"
         />
       )}
-      <noscript>
-        <p>
-          <Image
-            alt="Clicky"
-            width="1"
-            height="1"
-            src="https://in.getclicky.com/101412017ns.gif"
-          />
-        </p>
-      </noscript>
-      <script
-        async
-        data-id="101412017"
-        src="https://static.getclicky.com/js"
-      ></script>
 
       <meta charset="utf-8" />
       <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-      <meta name="description" content="{{site.description}}" />
+      <meta
+        name="description"
+        content="JSON Resume is the open-source initiative to create a JSON-based standard for resumes. For developers, by developers."
+      />
 
       <link rel="shortcut icon" href="/img/favicon.png" />
       <link

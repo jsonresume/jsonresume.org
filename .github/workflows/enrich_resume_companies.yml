@@ -28,7 +28,8 @@ jobs:
           URL="https://itxuhvvwryeuzuyihpkp.supabase.co/rest/v1/"
           # A live Supabase project answers with an HTTP status (e.g. 401
           # without an apikey). 000 means DNS/connect failure => project down.
-          CODE=$(curl -s -o /dev/null -m 15 -w "%{http_code}" "$URL" || echo "000")
+          CODE=$(curl -s -o /dev/null -m 15 -w "%{http_code}" "$URL") || true
+          CODE=${CODE:-000}
           echo "Supabase health probe returned HTTP $CODE"
           if [ "$CODE" = "000" ]; then
             echo "supabase_up=false" >> "$GITHUB_OUTPUT"
@@ -81,7 +82,9 @@ jobs:
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
         run: |
           echo "::group::Extracting companies"
+          set -o pipefail
           node scripts/companies/extract-companies-from-resumes.js 2>&1 | tee extract.log
+          set +o pipefail
 
           # Extract summary stats
           COMPANIES_FOUND=$(grep -oP 'Found \K\d+(?= unique companies)' extract.log || echo "0")
@@ -101,8 +104,16 @@ jobs:
         run: |
           echo "::group::Enriching companies"
 
+          if [ -z "$PERPLEXITY_API_KEY" ]; then
+            echo "::warning::PERPLEXITY_API_KEY secret is not set; skipping company enrichment (#539)"
+            echo "::endgroup::"
+            exit 0
+          fi
+
           # Run with timeout
+          set -o pipefail
           timeout 7200 node scripts/companies/enrich-resume-companies.js 2>&1 | tee enrich.log
+          set +o pipefail
 
           # Extract enrichment stats
           COMPANIES_ENRICHED=$(grep -oP 'Successfully enriched \K\d+(?= companies)' enrich.log | tr -d ' ' || echo "0")

@@ -3,6 +3,8 @@ import { logger } from '@/lib/logger';
 import { createSupabase } from './utils/createSupabase';
 import { fetchThomasResume, fetchOtherResumes } from './utils/fetchResumeData';
 import { parseResumeData } from './utils/parseResumeData';
+import { buildSimilarityGraph } from './utils/buildGraph';
+import { GRAPH_CONFIG } from '@/app/similarity/SimilarityModule/constants/graphConfig';
 
 // This ensures the route is always dynamic
 export const dynamic = 'force-dynamic';
@@ -36,10 +38,14 @@ export async function GET(request) {
     // Combine results, putting thomasdavis first if available
     const data = thomasData ? [thomasData, ...(otherData || [])] : otherData;
 
-    // Parse embeddings and extract positions
-    const parsedData = parseResumeData(data);
+    // Parse embeddings and extract positions, then compute the graph here so
+    // the response carries nodes and links instead of every embedding.
+    const graph = buildSimilarityGraph(
+      parseResumeData(data),
+      GRAPH_CONFIG.similarityThreshold
+    );
 
-    return NextResponse.json(parsedData, {
+    return NextResponse.json(graph, {
       headers: {
         'Content-Type': 'application/json',
         'Cache-Control':
