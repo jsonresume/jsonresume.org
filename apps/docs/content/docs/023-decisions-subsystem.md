@@ -1,6 +1,6 @@
 ---
 title: "Decisions Subsystem"
-description: "Docwright documentation"
+description: "Internal architecture notes for contributors"
 ---
 
 # Decisions Subsystem

@@ -1,13 +1,13 @@
 import Head from 'next/head';
 import { SchemaInfo } from './components/SchemaInfo';
 import { SchemaDisplay } from './components/SchemaDisplay';
+import { pageMetadata } from '../lib/pageMetadata';
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: 'Schema — JSON Resume',
   description: 'JSON Resume schema',
-  image: 'https://jsonresume.org/images/logo.png',
   url: 'https://jsonresume.org/schema/',
-};
+});
 
 export default function Schema() {
   return (

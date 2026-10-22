@@ -9,6 +9,11 @@ const {
   buildJobInfoMap,
 } = require('./jobs-graph/buildGraphData');
 
+// Embeddings are only needed to build the graph links; sending them made the
+// response ~29MB.
+const withoutEmbedding = ({ embedding_v5: _embedding, ...job }) => job;
+const withoutVector = ({ vector: _vector, ...node }) => node;
+
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -42,19 +47,23 @@ export default async function handler(req, res) {
     // Create job info map
     const jobInfoMap = buildJobInfoMap(sortedJobs);
 
+    const jobs = sortedJobs.map(withoutEmbedding);
+
     // Ensure consistent ordering of properties for better caching
     const response = {
       graphData: {
-        nodes: graphData.nodes.sort((a, b) => a.id.localeCompare(b.id)),
+        nodes: graphData.nodes
+          .map(withoutVector)
+          .sort((a, b) => a.id.localeCompare(b.id)),
         links: graphData.links.sort(
           (a, b) =>
             a.source.localeCompare(b.source) || a.target.localeCompare(b.target)
         ),
       },
       jobInfoMap,
-      mostRelevant: topJobs,
-      lessRelevant: otherJobs,
-      allJobs: sortedJobs,
+      mostRelevant: jobs.slice(0, 10),
+      lessRelevant: jobs.slice(10),
+      allJobs: jobs,
       resume,
     };
 

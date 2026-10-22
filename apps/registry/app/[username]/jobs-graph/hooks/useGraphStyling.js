@@ -75,6 +75,9 @@ export function useGraphStyling({
         return {
           ...node,
           type: 'jobNode', // Use custom node type
+          // The legacy resume-node/job-node classes size the wrapper for the
+          // default node type and clip the custom card
+          className: undefined,
           data: {
             ...node.data,
             jobInfo: jobData,

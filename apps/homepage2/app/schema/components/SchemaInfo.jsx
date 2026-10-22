@@ -19,7 +19,9 @@ export function SchemaInfo() {
       <h4>Open Source</h4>
       <p>
         The schema is{' '}
-        <a href="https://github.com/jsonresume/resume-schema">open source</a>{' '}
+        <a href="https://github.com/jsonresume/jsonresume.org/tree/master/packages/schema">
+          open source
+        </a>{' '}
         and community-driven. We release everything we do under the MIT license.
       </p>
       <hr />

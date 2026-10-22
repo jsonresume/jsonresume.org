@@ -23,7 +23,9 @@ async function getJobs() {
 
     const { data: jobs, error } = await supabase
       .from('jobs')
-      .select('*')
+      // Only what the board renders; select('*') shipped every job's embedding
+      // vectors to the client (~30MB page).
+      .select('id, uuid, created_at, posted_at, url, gpt_content')
       .gte('posted_at', fourMonthsAgo.toISOString())
       .not('gpt_content', 'is', null)
       .not('gpt_content', 'eq', 'FAILED')

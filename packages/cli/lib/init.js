@@ -10,14 +10,33 @@ const writeFile = promisify(fs.writeFile);
 const read = promisify(readCB);
 const resume = require('@jsonresume/schema/sample.resume.json');
 
-export default async ({ resumePath }) => {
+export default async ({ resumePath, interactive = process.stdin.isTTY }) => {
   if (await exists(resumePath)) {
     console.log(
       chalk.yellow('There is already a resume.json file in this directory.'),
     );
+    if (!interactive) {
+      // Can't ask, so never overwrite silently.
+      console.error(
+        `Not overwriting ${resumePath}: stdin is not interactive. Delete it or run \`resume init\` in a terminal.`,
+      );
+      process.exitCode = 1;
+      return;
+    }
     if (!(await yesno({ question: 'Do you want to override?' }))) {
       return;
     }
+  }
+  if (!interactive) {
+    // No TTY (CI, piped stdin): write the resume as if every prompt was left
+    // blank rather than exiting without a word.
+    console.log('stdin is not interactive; skipping the name/email prompts.');
+    await writeFile(
+      resumePath,
+      JSON.stringify(personalize({ name: '', email: '' }), undefined, 2),
+    );
+    printNextSteps(resumePath);
+    return;
   }
   console.log(`This utility will generate a file at ${resumePath}.`);
   console.log(
@@ -33,12 +52,21 @@ export default async ({ resumePath }) => {
     prompt: 'email: ',
   });
 
-  const personalizedResume = Object.entries({
-    name,
-    email,
-  }).reduce((acc, [key, value]) => set(acc, `basics.${key}`, value), resume);
-  await writeFile(resumePath, JSON.stringify(personalizedResume, undefined, 2));
+  await writeFile(
+    resumePath,
+    JSON.stringify(personalize({ name, email }), undefined, 2),
+  );
+  printNextSteps(resumePath);
+};
 
+function personalize(fields) {
+  return Object.entries(fields).reduce(
+    (acc, [key, value]) => set(acc, `basics.${key}`, value),
+    resume,
+  );
+}
+
+function printNextSteps(resumePath) {
   console.log(`Your resume has been created at ${resumePath}`);
   console.log('');
   console.log(
@@ -53,4 +81,4 @@ export default async ({ resumePath }) => {
   console.log('Example: `resume export myresume.pdf --theme even`');
   console.log('Or simply type: `resume export` and follow the prompts.');
   console.log('');
-};
+}

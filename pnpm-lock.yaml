@@ -205,6 +205,9 @@ importers:
 
   apps/homepage2:
     dependencies:
+      '@jsonresume/schema':
+        specifier: workspace:*
+        version: link:../../packages/schema
       '@prisma/client':
         specifier: ^4.15.0
         version: 4.16.2(prisma@4.16.2)
