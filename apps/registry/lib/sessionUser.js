@@ -5,7 +5,8 @@ import { SUPABASE_URL, SUPABASE_ANON_KEY } from '@/lib/supabaseConfig';
 /**
  * Resolve the Supabase auth user id of the caller.
  *
- * Job states are keyed by `auth.users.id`, and the routes write with the
+ * Per-user rows (job states, pathways preferences) are keyed by the auth user
+ * id, and the routes write with the
  * service-role key (bypassing RLS), so the id must come from a verified
  * session — never from the request body or query string.
  *
