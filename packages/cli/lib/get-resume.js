@@ -31,8 +31,7 @@ const parsers = {
   [JSONC_MIME]: parseJsoncOrThrow,
 };
 
-const mimeFor = (path) =>
-  /\.jsonc$/i.test(path) ? JSONC_MIME : lookup(path);
+const mimeFor = (path) => (/\.jsonc$/i.test(path) ? JSONC_MIME : lookup(path));
 export default async ({ path, mime: inputMime }) => {
   let input;
   let mime;
