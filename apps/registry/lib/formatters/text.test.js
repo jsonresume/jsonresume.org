@@ -175,7 +175,9 @@ describe('text formatter', () => {
     const result = await textFormatter.format(resume);
 
     expect(result.content).toBeDefined();
-    expect(result.headers).toEqual([]);
+    expect(result.headers).toEqual([
+      { key: 'Content-Type', value: 'text/plain; charset=utf-8' },
+    ]);
   });
 
   it('handles empty arrays', async () => {
@@ -193,14 +195,16 @@ describe('text formatter', () => {
     expect(result.content).not.toContain('AWARDS');
   });
 
-  it('returns headers as empty array', async () => {
+  it('sets the Content-Type header', async () => {
     const resume = {
       basics: { name: 'Test', location: {} },
     };
 
     const result = await textFormatter.format(resume);
 
-    expect(result.headers).toEqual([]);
+    expect(result.headers).toEqual([
+      { key: 'Content-Type', value: 'text/plain; charset=utf-8' },
+    ]);
   });
 
   it('handles missing dates in awards', async () => {

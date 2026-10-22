@@ -27,12 +27,14 @@ describe('yaml formatter', () => {
     expect(typeof result.content).toBe('string');
   });
 
-  it('includes empty headers array', async () => {
+  it('sets the Content-Type header', async () => {
     const resume = { basics: {} };
 
     const result = await yamlFormatter.format(resume);
 
-    expect(result.headers).toEqual([]);
+    expect(result.headers).toEqual([
+      { key: 'Content-Type', value: 'application/yaml; charset=utf-8' },
+    ]);
   });
 
   it('handles empty resume', async () => {

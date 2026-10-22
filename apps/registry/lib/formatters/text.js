@@ -96,7 +96,10 @@ const content = function (resume) {
 };
 
 const format = async function (resume) {
-  return { content: content(resume), headers: [] };
+  return {
+    content: content(resume),
+    headers: [{ key: 'Content-Type', value: 'text/plain; charset=utf-8' }],
+  };
 };
 
 const exports = { format };

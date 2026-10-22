@@ -7,7 +7,6 @@ const Validator = require('jsonschema').Validator;
 export const EXTENSIONS = new Set([
   'qr',
   'json',
-  'tex',
   'txt',
   'template',
   'html',
