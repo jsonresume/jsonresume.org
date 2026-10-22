@@ -1,6 +1,6 @@
 ---
 title: "Similarity Engine"
-description: "Docwright documentation"
+description: "Internal architecture notes for contributors"
 ---
 
 # Similarity Engine

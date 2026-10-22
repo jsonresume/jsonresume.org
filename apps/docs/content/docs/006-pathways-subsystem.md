@@ -1,6 +1,6 @@
 ---
 title: "Pathways Subsystem"
-description: "Docwright documentation"
+description: "Internal architecture notes for contributors"
 ---
 
 # Pathways Subsystem

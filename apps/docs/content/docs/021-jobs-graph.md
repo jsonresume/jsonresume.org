@@ -1,6 +1,6 @@
 ---
 title: "Jobs Graph"
-description: "Docwright documentation"
+description: "Internal architecture notes for contributors"
 ---
 
 # Jobs Graph
