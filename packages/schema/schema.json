@@ -31,6 +31,10 @@
           "type": "string",
           "description": "e.g. Web Developer"
         },
+        "pronouns": {
+          "type": "string",
+          "description": "e.g. she/her, they/them (#312)"
+        },
         "image": {
           "type": "string",
           "description": "URL (as per RFC 3986) to a image in JPEG or PNG format"
@@ -104,6 +108,10 @@
           "$ref": "#/definitions/custom"
         }
       }
+    },
+    "objective": {
+      "type": "string",
+      "description": "Forward-looking career goal, e.g. 'Seeking a senior backend role in climate tech'. Distinct from basics.summary, which describes background (#317)"
     },
     "work": {
       "type": "array",
