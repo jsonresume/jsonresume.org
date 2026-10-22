@@ -35,6 +35,9 @@ describe('agent formatter', () => {
 
     expect(result.content).toBe('# Agent Specification');
     expect(result.headers[0].value).toContain('text/markdown');
+    const { prompt } = mockGenerateText.mock.calls[0][0];
+    expect(prompt).toContain('https://registry.jsonresume.org/jane.json');
+    expect(prompt).toContain('"Jane"');
     expect(mockCache.set).toHaveBeenCalledTimes(1);
   });
 
