@@ -5,6 +5,7 @@ export const basics = {
   type: 'object',
   additionalProperties: true,
   properties: {
+    custom: { $ref: '#/definitions/custom' },
     name: {
       type: 'string',
     },

@@ -9,6 +9,7 @@ export const projects = {
     type: 'object',
     additionalProperties: true,
     properties: {
+      custom: { $ref: '#/definitions/custom' },
       name: {
         type: 'string',
         description: 'e.g. The World Wide Web',

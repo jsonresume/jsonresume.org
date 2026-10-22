@@ -25,6 +25,18 @@ yarn add @jsonresume/core
 pnpm add @jsonresume/core
 ```
 
+> **Requires a bundler.** The package ships its React source (`.jsx`), not
+> compiled JavaScript, so `import '@jsonresume/core'` in plain Node.js fails
+> with `ERR_UNKNOWN_FILE_EXTENSION` / `ERR_MODULE_NOT_FOUND`. Use it from a
+> build that transpiles dependencies:
+>
+> - **Vite** (how the themes in this repo build): works as-is.
+> - **Next.js**: add it to `transpilePackages: ['@jsonresume/core']`.
+> - **esbuild**: `esbuild theme.jsx --bundle --platform=node --loader:.js=jsx --jsx=automatic`.
+>
+> Themes should bundle it into their published `dist/` so their own users
+> don't need a bundler.
+
 **Peer Dependencies:**
 
 This package requires React 18 or 19 and styled-components:

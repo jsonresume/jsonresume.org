@@ -247,7 +247,7 @@ importers:
     devDependencies:
       '@axe-core/playwright':
         specifier: ^4.11.3
-        version: 4.11.3(playwright-core@1.63.0)
+        version: 4.11.3(playwright-core@1.56.1)
       '@playwright/test':
         specifier: ^1.55.1
         version: 1.56.1
@@ -320,6 +320,9 @@ importers:
       '@repo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@sparticuz/chromium':
+        specifier: 141.0.0
+        version: 141.0.0
       '@supabase/ssr':
         specifier: ^0.12.3
         version: 0.12.3(@supabase/supabase-js@2.77.0)
@@ -599,6 +602,9 @@ importers:
       pino-pretty:
         specifier: ^13.1.1
         version: 13.1.2
+      playwright-core:
+        specifier: 1.56.1
+        version: 1.56.1
       postcss:
         specifier: ^8.5.23
         version: 8.5.23
@@ -742,6 +748,9 @@ importers:
       jest-extended:
         specifier: ^0.11.5
         version: 0.11.5
+      jsonc-parser:
+        specifier: ^3.3.1
+        version: 3.3.1
       jsonresume-theme-elegant:
         specifier: ^1.16.1
         version: 1.16.1
@@ -2786,13 +2795,13 @@ packages:
       preact-render-to-string: 6.5.11(preact@10.24.3)
     dev: false
 
-  /@axe-core/playwright@4.11.3(playwright-core@1.63.0):
+  /@axe-core/playwright@4.11.3(playwright-core@1.56.1):
     resolution: {integrity: sha512-h/kfksv4F0cVIDlKpT4700OehdRgpvuVskuQ2nb7/JmtWUXpe9ftHAPtwyXGvVSsa6SJ64A9ER7Zrzc/sIvC4w==}
     peerDependencies:
       playwright-core: '>= 1.0.0'
     dependencies:
       axe-core: 4.11.4
-      playwright-core: 1.63.0
+      playwright-core: 1.56.1
     dev: true
 
   /@babel/cli@7.29.7(@babel/core@7.29.7):
@@ -8050,6 +8059,19 @@ packages:
 
   /@socket.io/component-emitter@3.1.2:
     resolution: {integrity: sha512-9BCxFwvbGg/RsZK9tjXd8s4UcwR0MWeFQ1XEKIQVVvAGJyINdrqKMcTRyLoK8Rse1GjzLV9cwjWV1olXRWEXVA==}
+    dev: false
+
+  /@sparticuz/chromium@141.0.0:
+    resolution: {integrity: sha512-JsTp4AqgStkqKki4dUpEM0GoisAjQhsqZ1lQTNMSKK5A9pw6BbIuIvv2HVYMYzSZGyDdQNJYBPPDg2eggCkezA==}
+    engines: {node: '>=20.11.0'}
+    dependencies:
+      follow-redirects: 1.16.0(debug@4.4.3)
+      tar-fs: 3.1.2
+    transitivePeerDependencies:
+      - bare-abort-controller
+      - bare-buffer
+      - debug
+      - react-native-b4a
     dev: false
 
   /@standard-schema/spec@1.0.0:
@@ -17901,6 +17923,10 @@ packages:
     engines: {node: '>=6'}
     hasBin: true
 
+  /jsonc-parser@3.3.1:
+    resolution: {integrity: sha512-HUgH65KyejrUFPvHFPbqOY0rsFip3Bo5wb4ngvdi1EpCYWUQDC5V+Y7mZws+DLkr4M//zQJoanu1SP+87Dv1oQ==}
+    dev: false
+
   /jsonfile@3.0.1:
     resolution: {integrity: sha512-oBko6ZHlubVB5mRFkur5vgYR1UyqX+S6Y/oCfLhqNdcc2fYFlDpIoNc7AfKS1KOGcnNAkvsr0grLck9ANM815w==}
     optionalDependencies:
@@ -20697,12 +20723,6 @@ packages:
     resolution: {integrity: sha512-hutraynyn31F+Bifme+Ps9Vq59hKuUCz7H1kDOcBs+2oGguKkWTU50bBWrtz34OUWmIwpBTWDxaRPXrIXkgvmQ==}
     engines: {node: '>=18'}
     hasBin: true
-
-  /playwright-core@1.63.0:
-    resolution: {integrity: sha512-rYCsBF/M5HjUch52bbtVONEFjv6Xu8sm8h72dNlR5bzIE1fvC/bxgspzkjSfU+MweEMmPM8KJebG6nnyxo5mCg==}
-    engines: {node: '>=20'}
-    hasBin: true
-    dev: true
 
   /playwright@1.56.1:
     resolution: {integrity: sha512-aFi5B0WovBHTEvpM3DzXTUaeN6eN0qWnTkKx4NQaH4Wvcmc153PdaY2UBdSYKaGYw+UyWXSVyxDUg5DoPEttjw==}
