@@ -31,7 +31,6 @@ const EXPECTED_KEYS = [
   'agent',
   'qr',
   'json',
-  'tex',
   'txt',
   'template',
   'html',
