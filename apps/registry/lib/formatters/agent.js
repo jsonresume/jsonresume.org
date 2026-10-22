@@ -1,9 +1,46 @@
+import { createHash } from 'crypto';
 import { generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
+import { getCache } from '@vercel/functions';
+import logger from '../logger';
+
+const HEADERS = [
+  { key: 'Content-Type', value: 'text/markdown; charset=utf-8' },
+];
+
+// Generation takes 25-60s, and Cloudflare reaches Vercel through varying
+// edge locations, so the CDN cache rarely hits (#553). Cache the result by
+// resume content instead: an edited gist gets a new key and regenerates.
+// Bump PROMPT_VERSION when the prompt changes.
+const PROMPT_VERSION = 1;
+const CACHE_TTL_SECONDS = 30 * 24 * 60 * 60;
+
+const cacheKey = (username, resume) =>
+  createHash('sha256')
+    .update(JSON.stringify({ v: PROMPT_VERSION, username, resume }))
+    .digest('hex');
+
+const cacheOrNull = () => {
+  try {
+    return getCache({ namespace: 'agent-spec' });
+  } catch {
+    return null;
+  }
+};
 
 const format = async function format(resume, options) {
   const resumeJson = JSON.stringify(resume, null, 2);
   const username = options?.username || 'unknown';
+  const cache = cacheOrNull();
+  const key = cacheKey(username, resume);
+  const cached = await cache?.get(key).catch((error) => {
+    logger.warn({ error: error.message }, 'Agent cache read failed');
+    return null;
+  });
+  if (typeof cached === 'string') {
+    return { content: cached, headers: HEADERS };
+  }
+
   const resumeUrl = `https://registry.jsonresume.org/${username}.json`;
   const name = resume?.basics?.name || 'Unknown Agent';
 
@@ -164,10 +201,13 @@ When executing multiple steps, reason using the agent's thinking style.
 Generate the complete Agent Specification Markdown now:`,
   });
 
-  return {
-    content: text,
-    headers: [{ key: 'Content-Type', value: 'text/markdown; charset=utf-8' }],
-  };
+  await cache
+    ?.set(key, text, { ttl: CACHE_TTL_SECONDS, name: `agent:${username}` })
+    .catch((error) =>
+      logger.warn({ error: error.message }, 'Agent cache write failed')
+    );
+
+  return { content: text, headers: HEADERS };
 };
 
 const exports = { format };
