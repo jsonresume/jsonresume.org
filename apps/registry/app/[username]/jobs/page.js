@@ -3,14 +3,14 @@
 import axios from 'axios';
 import { logger } from '@/lib/logger';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import { PublicViewBanner } from '../../components/PublicViewBanner';
 import Hero from '../../../src/ui/Hero';
 import JobList from './JobList';
 import Loading from '../../components/Loading';
 
 export default function Jobs({ params }) {
-  const username = params.username;
+  const { username } = use(params);
   const router = useRouter();
   const [jobs, setJobs] = useState(null);
 

@@ -74,9 +74,13 @@ export default async function handler(req, res) {
   const sortedDocuments = documents.sort((a, b) => b.similarity - a.similarity);
   const jobIds = documents ? sortedDocuments.map((doc) => doc.id) : [];
 
+  // Everything except the embedding vectors (~40KB per row), which would
+  // push the response past Vercel's 4.5MB limit.
   const { data: sortedJobs } = await supabase
     .from('jobs')
-    .select('*')
+    .select(
+      'id, uuid, created_at, posted_at, url, type, content, gpt_content, salary_usd, salary_min, salary_max, salary_currency'
+    )
     .in('id', jobIds)
     .order('created_at', { ascending: false });
 
