@@ -23,12 +23,14 @@ describe('rendercv formatter', () => {
     expect(result.content).toContain('John Doe');
   });
 
-  it('includes empty headers array', async () => {
+  it('sets the Content-Type header', async () => {
     const resume = { basics: {} };
 
     const result = await rendercvFormatter.format(resume);
 
-    expect(result.headers).toEqual([]);
+    expect(result.headers).toEqual([
+      { key: 'Content-Type', value: 'application/yaml; charset=utf-8' },
+    ]);
   });
 
   it('calls convert function with resume', async () => {
@@ -55,7 +57,9 @@ describe('rendercv formatter', () => {
     const result = await rendercvFormatter.format({});
 
     expect(result.content).toBeDefined();
-    expect(result.headers).toEqual([]);
+    expect(result.headers).toEqual([
+      { key: 'Content-Type', value: 'application/yaml; charset=utf-8' },
+    ]);
   });
 
   it('format is async function', () => {

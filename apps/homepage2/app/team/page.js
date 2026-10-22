@@ -2,14 +2,14 @@ import { team } from './data/teamData';
 import { ContributingSection } from './components/ContributingSection';
 import { TeamSection } from './components/TeamSection';
 import { HistorySection } from './components/HistorySection';
+import { pageMetadata } from '../lib/pageMetadata';
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: 'Team — JSON Resume',
   description:
     'Meet the JSON Resume contributors and explore its documented history, starting in 2014.',
-  image: 'https://jsonresume.org/images/logo.png',
   url: 'https://jsonresume.org/team/',
-};
+});
 
 export default function Team() {
   return (

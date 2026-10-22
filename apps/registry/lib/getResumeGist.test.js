@@ -24,16 +24,23 @@ const httpError = (status) =>
 const gistList = { data: [{ id: 'abc', files: { 'resume.json': {} } }] };
 
 describe('getResumeGist', () => {
-  let originalToken;
+  const ENV_KEYS = ['GITHUB_TOKEN', 'AUTH_GITHUB_ID', 'AUTH_GITHUB_SECRET'];
+  let originalEnv;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    originalToken = process.env.GITHUB_TOKEN;
+    // CI sets the OAuth app credentials; each test controls them explicitly
+    originalEnv = Object.fromEntries(ENV_KEYS.map((k) => [k, process.env[k]]));
+    delete process.env.AUTH_GITHUB_ID;
+    delete process.env.AUTH_GITHUB_SECRET;
     process.env.GITHUB_TOKEN = 'test-token';
   });
 
   afterEach(() => {
-    process.env.GITHUB_TOKEN = originalToken;
+    for (const [k, v] of Object.entries(originalEnv)) {
+      if (v === undefined) delete process.env[k];
+      else process.env[k] = v;
+    }
   });
 
   it('returns the resume from the user gist', async () => {
@@ -74,7 +81,21 @@ describe('getResumeGist', () => {
 
     expect(result.resume).toEqual({ basics: {} });
     expect(axios.get).toHaveBeenCalledTimes(2);
-    expect(axios.get.mock.calls[1][1]).toBeUndefined();
+    expect(axios.get.mock.calls[1][1]).toEqual({ headers: {} });
+  });
+
+  it('uses the OAuth app credentials when there is no token', async () => {
+    delete process.env.GITHUB_TOKEN;
+    process.env.AUTH_GITHUB_ID = 'app-id';
+    process.env.AUTH_GITHUB_SECRET = 'app-secret';
+    axios.get.mockResolvedValue(gistList);
+    axios.mockResolvedValue({ data: { basics: {} } });
+
+    await getResumeGist('jane');
+
+    expect(axios.get.mock.calls[0][1].headers.Authorization).toBe(
+      'Basic ' + Buffer.from('app-id:app-secret').toString('base64')
+    );
   });
 
   it('reports GitHub unavailable when the unauthenticated retry also fails', async () => {

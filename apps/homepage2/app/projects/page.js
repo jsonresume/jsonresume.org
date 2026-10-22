@@ -1,12 +1,12 @@
 import { PROJECTS, CATEGORIES } from './data/projectsData';
 import { ProjectsSection } from './components/ProjectsSection';
+import { pageMetadata } from '../lib/pageMetadata';
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: 'Projects — JSON Resume',
   description: 'Community projects built around JSON Resume',
-  image: 'https://jsonresume.org/images/logo.png',
   url: 'https://jsonresume.org/projects/',
-};
+});
 
 export default function Projects() {
   return (

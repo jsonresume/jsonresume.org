@@ -1,6 +1,11 @@
 import { ReactFlow, Background, Controls, MiniMap } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { JobDetailPanel } from '../JobDetailPanel';
+import JobNode from '../JobNode';
+import '../JobNode.css';
+
+// Defined at module level so React Flow doesn't re-register on every render
+const nodeTypes = { jobNode: JobNode };
 
 export function GraphVisualization({
   nodesWithStyle,
@@ -21,6 +26,7 @@ export function GraphVisualization({
       <ReactFlow
         nodes={nodesWithStyle}
         edges={edgesWithStyle}
+        nodeTypes={nodeTypes}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onNodeClick={handleNodeClick}
