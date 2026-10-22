@@ -52,7 +52,7 @@ describe('format', () => {
     expect(result.headers).toEqual([
       {
         key: 'Cache-Control',
-        value: 'no-cache',
+        value: 'no-store',
       },
       {
         key: 'Content-Type',
