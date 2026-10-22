@@ -9,6 +9,7 @@ export const ERROR_CODES = Object.freeze({
   UNKNOWN_FORMATTER: 'UNKNOWN_FORMATTER',
   RESUME_NOT_VALID_JSON: 'RESUME_NOT_VALID_JSON',
   GITHUB_UNAVAILABLE: 'GITHUB_UNAVAILABLE',
+  PDF_RENDER_FAILED: 'PDF_RENDER_FAILED',
 });
 
 export const ERROR_CODE_MESSAGES = Object.freeze({
@@ -30,6 +31,8 @@ export const ERROR_CODE_MESSAGES = Object.freeze({
     'Your resume is not valid JSON. Find an online JSON validator to help you debug this.',
   GITHUB_UNAVAILABLE:
     'We could not reach GitHub to load this resume (rate limited or unavailable). Please try again in a few minutes.',
+  PDF_RENDER_FAILED:
+    'We could not generate a PDF of this resume right now. The HTML version is available without the .pdf extension.',
 });
 
 // HTTP status per error code; anything not listed is a 400.
@@ -38,6 +41,7 @@ export const ERROR_CODE_STATUS = Object.freeze({
   NON_EXISTENT_GIST: 404,
   TEMPLATE_MISSING: 404,
   GITHUB_UNAVAILABLE: 503,
+  PDF_RENDER_FAILED: 500,
 });
 
 const buildError = (error, extra) => {
