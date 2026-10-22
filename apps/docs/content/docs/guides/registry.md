@@ -36,6 +36,7 @@ Add an extension to get your resume in another format:
 | `/<username>.json` | the raw resume JSON |
 | `/<username>.yaml` | YAML |
 | `/<username>.txt` | plain text |
+| `/<username>.pdf` | PDF, rendered with your theme |
 | `/<username>.rendercv` | [RenderCV](https://rendercv.com/) YAML |
 | `/<username>.qr` | a QR code linking to your resume |
 | `/<username>.agent` | Markdown written for AI agents and LLM tools |

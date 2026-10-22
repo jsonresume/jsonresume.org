@@ -13,12 +13,12 @@ The schema is published as
 | Section | Contents |
 | --- | --- |
 | `basics` | `name`, `label`, `image`, `email`, `phone`, `url`, `summary`, `location`, `profiles` |
-| `work` | `name`, `position`, `location`, `description`, `url`, `startDate`, `endDate`, `summary`, `highlights` |
+| `work` | `name`, `position`, `location`, `description`, `url`, `startDate`, `endDate`, `summary`, `highlights`, `keywords` |
 | `volunteer` | `organization`, `position`, `url`, `startDate`, `endDate`, `summary`, `highlights` |
-| `education` | `institution`, `url`, `area`, `studyType`, `startDate`, `endDate`, `score`, `courses` |
+| `education` | `institution`, `url`, `area`, `studyType`, `startDate`, `endDate`, `score`, `courses`, `summary` |
 | `awards` | `title`, `date`, `awarder`, `summary` |
-| `certificates` | `name`, `date`, `issuer`, `url` |
-| `publications` | `name`, `publisher`, `releaseDate`, `url`, `summary` |
+| `certificates` | `name`, `date`, `expiryDate`, `issuer`, `url` |
+| `publications` | `name`, `type`, `publisher`, `releaseDate`, `url`, `summary` |
 | `skills` | `name`, `level`, `keywords` |
 | `languages` | `language`, `fluency` |
 | `interests` | `name`, `keywords` |
@@ -33,6 +33,9 @@ Rules worth knowing:
   `endDate` for a current position.
 - Unknown properties are allowed (`additionalProperties: true`), so tools can
   store their own data alongside the standard fields.
+- For data with no standard field, use the optional `custom` object, allowed
+  at the root, in `basics` and on every entry. Namespace keys by tool, e.g.
+  `"custom": { "myTool": { "teamSize": 12 } }`. Themes don't render it.
 
 ## Validating in code
 
