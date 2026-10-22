@@ -7,12 +7,12 @@ export const metadata = {
   title: 'Media — JSON Resume',
   description:
     'Facts, original records, example files, screenshots and interview contact information for reporting on JSON Resume.',
-  alternates: { canonical: 'https://jsonresume.org/media/' },
+  alternates: { canonical: 'https://jsonresume.org/media' },
   openGraph: {
     title: 'JSON Resume — Media resources',
     description:
       'A shared format for résumé data. Project facts, examples and original sources.',
-    url: 'https://jsonresume.org/media/',
+    url: 'https://jsonresume.org/media',
     images: [
       {
         url: 'https://jsonresume.org/media/example-resume.png',
