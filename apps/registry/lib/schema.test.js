@@ -48,4 +48,18 @@ describe('registry resume schema', () => {
     }
     expect(schema.properties.custom).toBeDefined();
   });
+
+  it('declares every field the published schema declares per section', () => {
+    for (const section of Object.keys(publishedSchema.properties)) {
+      const pub =
+        publishedSchema.properties[section].items?.properties ??
+        publishedSchema.properties[section].properties;
+      const local =
+        schema.properties[section]?.items?.properties ??
+        schema.properties[section]?.properties;
+      for (const field of Object.keys(pub ?? {})) {
+        expect(local?.[field], `${section}.${field}`).toBeDefined();
+      }
+    }
+  });
 });

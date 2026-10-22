@@ -45,6 +45,10 @@ export const education = {
           description: 'e.g. H1302 - Introduction to American history',
         },
       },
+      summary: {
+        type: 'string',
+        description: 'Thesis topic, honours, notable projects or other context',
+      },
     },
   },
 };

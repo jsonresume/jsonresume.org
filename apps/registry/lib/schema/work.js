@@ -50,6 +50,14 @@ export const work = {
             'e.g. Increased profits by 20% from 2011-2012 through viral advertising',
         },
       },
+      keywords: {
+        type: 'array',
+        description: 'Skills, tools or technologies used in this role',
+        items: {
+          type: 'string',
+          description: 'e.g. React',
+        },
+      },
     },
   },
 };

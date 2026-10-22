@@ -32,6 +32,10 @@ export const publications = {
         description:
           'Short summary of publication. e.g. Discussion of the World Wide Web, HTTP, HTML.',
       },
+      type: {
+        type: 'string',
+        description: "e.g. 'article', 'book', 'patent', 'thesis', 'talk'",
+      },
     },
   },
 };

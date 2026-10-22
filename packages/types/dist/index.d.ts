@@ -157,6 +157,10 @@ export interface WorkItem {
    * Specify multiple accomplishments
    */
   highlights?: string[];
+  /**
+   * Skills, tools or technologies used in this role (#293)
+   */
+  keywords?: string[];
   custom?: Custom;
   [k: string]: any;
 }
@@ -213,6 +217,10 @@ export interface EducationItem {
    * List notable courses/subjects
    */
   courses?: string[];
+  /**
+   * Thesis topic, honours, notable projects or other context (#292)
+   */
+  summary?: string;
   custom?: Custom;
   [k: string]: any;
 }
@@ -247,6 +255,7 @@ export interface CertificateItem {
    * e.g. CNCF
    */
   issuer?: string;
+  expiryDate?: Iso8601;
   custom?: Custom;
   [k: string]: any;
 }
@@ -268,6 +277,10 @@ export interface PublicationItem {
    * Short summary of publication. e.g. Discussion of the World Wide Web, HTTP, HTML.
    */
   summary?: string;
+  /**
+   * e.g. 'article', 'book', 'patent', 'thesis', 'talk' (#295)
+   */
+  type?: string;
   custom?: Custom;
   [k: string]: any;
 }

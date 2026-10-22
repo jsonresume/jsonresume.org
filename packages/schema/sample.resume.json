@@ -42,7 +42,8 @@
         "Build an algorithm for artist to detect if their music was violating copy right infringement laws",
         "Successfully won Techcrunch Disrupt",
         "Optimized an algorithm that holds the current world record for Weisman Scores"
-      ]
+      ],
+      "keywords": ["Compression", "C++", "Distributed Systems"]
     }
   ],
   "volunteer": [
@@ -65,7 +66,8 @@
       "startDate": "2011-06-01",
       "endDate": "2014-01-01",
       "score": "4.0",
-      "courses": ["DB1101 - Basic SQL", "CS2011 - Java Introduction"]
+      "courses": ["DB1101 - Basic SQL", "CS2011 - Java Introduction"],
+      "summary": "Senior project on lossless compression for streaming media."
     }
   ],
   "awards": [
@@ -76,13 +78,23 @@
       "summary": "There is no spoon."
     }
   ],
+  "certificates": [
+    {
+      "name": "AWS Certified Solutions Architect – Associate",
+      "date": "2014-06-01",
+      "expiryDate": "2017-06-01",
+      "issuer": "Amazon Web Services",
+      "url": "https://certificates.example.com/aws/rhendriks"
+    }
+  ],
   "publications": [
     {
       "name": "Video compression for 3d media",
       "publisher": "Hooli",
       "releaseDate": "2014-10-01",
       "url": "http://en.wikipedia.org/wiki/Silicon_Valley_(TV_series)",
-      "summary": "Innovative middle-out compression algorithm that changes the way we store data."
+      "summary": "Innovative middle-out compression algorithm that changes the way we store data.",
+      "type": "article"
     }
   ],
   "skills": [

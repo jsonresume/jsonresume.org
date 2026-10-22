@@ -150,6 +150,14 @@
               "description": "e.g. Increased profits by 20% from 2011-2012 through viral advertising"
             }
           },
+          "keywords": {
+            "type": "array",
+            "description": "Skills, tools or technologies used in this role (#293)",
+            "items": {
+              "type": "string",
+              "description": "e.g. React"
+            }
+          },
           "custom": {
             "$ref": "#/definitions/custom"
           }
@@ -240,6 +248,10 @@
               "description": "e.g. H1302 - Introduction to American history"
             }
           },
+          "summary": {
+            "type": "string",
+            "description": "Thesis topic, honours, notable projects or other context (#292)"
+          },
           "custom": {
             "$ref": "#/definitions/custom"
           }
@@ -297,6 +309,9 @@
             "type": "string",
             "description": "e.g. CNCF"
           },
+          "expiryDate": {
+            "$ref": "#/definitions/iso8601"
+          },
           "custom": {
             "$ref": "#/definitions/custom"
           }
@@ -329,6 +344,10 @@
           "summary": {
             "type": "string",
             "description": "Short summary of publication. e.g. Discussion of the World Wide Web, HTTP, HTML."
+          },
+          "type": {
+            "type": "string",
+            "description": "e.g. 'article', 'book', 'patent', 'thesis', 'talk' (#295)"
           },
           "custom": {
             "$ref": "#/definitions/custom"
