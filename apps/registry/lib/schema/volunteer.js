@@ -8,6 +8,7 @@ export const volunteer = {
     type: 'object',
     additionalProperties: true,
     properties: {
+      custom: { $ref: '#/definitions/custom' },
       organization: {
         type: 'string',
         description: 'e.g. Facebook',

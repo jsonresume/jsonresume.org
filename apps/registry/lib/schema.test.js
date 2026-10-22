@@ -27,4 +27,25 @@ describe('registry resume schema', () => {
       publishedSchema.additionalProperties
     );
   });
+
+  it('accepts custom objects and rejects non-object custom, like the published schema (#316)', () => {
+    const resume = {
+      custom: { myTool: { v: 1 } },
+      basics: { name: 'Jane', custom: { pronouns: 'she/her' } },
+      work: [{ name: 'Co', custom: { teamSize: 12 } }],
+    };
+    expect(validate(resume).valid).toBe(true);
+    expect(validate({ work: [{ custom: 'text' }] }).valid).toBe(false);
+  });
+
+  it('declares custom wherever the published schema does', () => {
+    for (const section of Object.keys(publishedSchema.properties)) {
+      const published = publishedSchema.properties[section];
+      const local = schema.properties[section];
+      const pub = published.items?.properties ?? published.properties;
+      const loc = local?.items?.properties ?? local?.properties;
+      if (pub?.custom) expect(loc?.custom, section).toBeDefined();
+    }
+    expect(schema.properties.custom).toBeDefined();
+  });
 });

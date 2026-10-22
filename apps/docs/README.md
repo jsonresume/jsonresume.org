@@ -7,8 +7,14 @@ and the `deploy-docs.yml` workflow publishes a static export to GitHub Pages
 (`jsonresume.github.io/jsonresume.org`), which `apps/homepage2` fronts via a
 `/docs` rewrite.
 
-Content is authored as MDX; `fumadocs-mdx` runs on `postinstall` and as part of
-`typecheck` to generate the docs source.
+Content lives in `content/docs/`: user guides in `guides/`, internal
+architecture notes (for contributors) at the top level. Navigation order is
+set by the `meta.json` files. `fumadocs-mdx` runs on `postinstall` and as part
+of `typecheck` to generate the docs source.
+
+The GitHub Pages URL itself isn't meant for readers (its asset paths assume the
+`/docs` prefix), so `app/layout.tsx` redirects visitors there to
+`jsonresume.org/docs`.
 
 ## Development
 

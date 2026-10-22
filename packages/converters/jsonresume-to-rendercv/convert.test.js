@@ -37,3 +37,33 @@ test('converted YAML keeps the network name', async () => {
   assert.doesNotMatch(yaml, /null/);
   assert.doesNotMatch(yaml, /undefined/);
 });
+
+test('publications get the resume owner as author (#545)', async () => {
+  const yaml = await convert({
+    basics: { name: 'Jane Doe' },
+    publications: [
+      {
+        name: 'On Resumes',
+        publisher: 'Journal of JSON',
+        releaseDate: '2020-01-01',
+        url: 'https://example.com/paper',
+      },
+    ],
+  });
+  assert.match(yaml, /title: "On Resumes"/);
+  assert.match(yaml, /authors:\s*\n\s*- "Jane Doe"/);
+  assert.match(yaml, /journal: "Journal of JSON"/);
+  assert.doesNotMatch(yaml, /null/);
+});
+
+test('only international phone numbers are kept', async () => {
+  const local = await convert({ basics: { phone: '(912) 555-4321' } });
+  const intl = await convert({ basics: { phone: '+1 912 555 4321' } });
+  assert.doesNotMatch(local, /phone/);
+  assert.match(intl, /phone: "\+1 912 555 4321"/);
+});
+
+test('package entry is the converter, not the CLI', async () => {
+  const pkg = await import('@jsonresume/jsonresume-to-rendercv');
+  assert.equal(typeof pkg.convert, 'function');
+});

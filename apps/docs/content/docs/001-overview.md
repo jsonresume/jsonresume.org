@@ -1,6 +1,6 @@
 ---
 title: "Overview"
-description: "Docwright documentation"
+description: "Internal architecture notes for contributors"
 ---
 
 # Overview

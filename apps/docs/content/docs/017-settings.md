@@ -1,6 +1,6 @@
 ---
 title: "Settings"
-description: "Docwright documentation"
+description: "Internal architecture notes for contributors"
 ---
 
 # Settings

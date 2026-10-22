@@ -44,6 +44,12 @@ describe('findArtifacts', () => {
     expect(findArtifacts('<p>NaNny</p>')).toEqual([]);
   });
 
+  it('detects "Invalid Date" from formatting a missing date', () => {
+    expect(findArtifacts('<span>Invalid Date - Present</span>')).toEqual([
+      'Invalid Date',
+    ]);
+  });
+
   it('lists multiple artifacts when several are present', () => {
     const out = findArtifacts('[object Object] undefined NaN');
     expect(out).toEqual(['[object Object]', 'undefined', 'NaN']);

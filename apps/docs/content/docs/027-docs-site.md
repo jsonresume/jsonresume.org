@@ -1,6 +1,6 @@
 ---
 title: "Documentation Site"
-description: "Docwright documentation"
+description: "Internal architecture notes for contributors"
 ---
 
 # Documentation Site
