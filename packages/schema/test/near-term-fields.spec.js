@@ -45,3 +45,14 @@ test('sample resume exercises every section (#294)', (t) => {
   }
   t.end();
 });
+
+test('certificates.credentialId and summary (#590) - free text', (t) => {
+  t.true(
+    valid({
+      certificates: [{ credentialId: 'RN-123456', summary: 'Nursing licence' }],
+    })
+  );
+  t.false(valid({ certificates: [{ credentialId: 123456 }] }));
+  t.false(valid({ certificates: [{ summary: ['x'] }] }));
+  t.end();
+});
