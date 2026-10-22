@@ -12,6 +12,7 @@ Thank you for your interest in contributing to JSON Resume! This document provid
 - [Testing](#testing)
 - [Pull Request Process](#pull-request-process)
 - [Commit Message Guidelines](#commit-message-guidelines)
+- [Proposing Schema Changes](#proposing-schema-changes)
 - [Contributing Themes](#contributing-themes)
 
 ## Code of Conduct
@@ -347,6 +348,52 @@ Updated to use dynamic URL based on deployment context.
 
 Fixes #456
 ```
+
+## Proposing Schema Changes
+
+The schema (`packages/schema`, published as `@jsonresume/schema`) is shared by
+thousands of resumes, dozens of themes and many tools, so changes are made
+deliberately. Discuss a change in an issue (use the **Schema proposal** form)
+before opening a schema PR. The roadmap of open proposals is
+[#329](https://github.com/jsonresume/jsonresume.org/issues/329).
+
+### What gets in
+
+- **Broadly useful.** A field most people with that kind of experience would
+  fill in. Niche or tool-specific data belongs in the `custom` object (or any
+  extra property, since unknown properties are allowed), not the core.
+- **Minimal and additive.** In v1 every new field is optional and every
+  existing resume stays valid. Prefer free text over a hard enum unless the
+  values are genuinely closed (themes and regions differ).
+- **Consistent.** Reuse existing conventions: `iso8601` dates, `keywords` as
+  string arrays, `summary` for free text, `url` for links.
+- **Not presentation.** The schema describes the person's history, not how a
+  theme lays it out.
+
+### What a proposal needs
+
+1. The problem, with a real example of a resume that can't express it today.
+2. The proposed JSON, with an example.
+3. Why existing fields, `custom` or extra properties aren't enough.
+4. Who consumes it: themes, the registry, ATS/job matching, other tools.
+5. Migration impact if it changes an existing shape (renaming, type changes,
+   string to object). Those are v2 changes and need a migration plan; they
+   won't land as drive-by edits.
+
+### Making the change
+
+Once a proposal has agreement, a schema PR should:
+
+- update `packages/schema/schema.json` and `sample.resume.json`
+- add tests in `packages/schema/test/` (invalid cases must be **type
+  violations**, since unknown properties are valid)
+- mirror the change in the registry's copy (`apps/registry/lib/schema/`); a
+  test checks they stay in step
+- regenerate types: `pnpm --filter @jsonresume/types build`
+- include a changeset (`pnpm changeset`)
+
+Proposals are closed when they're out of scope, duplicate an existing thread,
+or are covered by an extension mechanism. The issue will say which.
 
 ## Contributing Themes
 

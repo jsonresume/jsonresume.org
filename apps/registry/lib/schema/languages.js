@@ -9,6 +9,7 @@ export const languages = {
     type: 'object',
     additionalProperties: true,
     properties: {
+      custom: { $ref: '#/definitions/custom' },
       language: {
         type: 'string',
         description: 'e.g. English, Spanish',

@@ -115,6 +115,9 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    # A normal run takes ~8 minutes; without a limit a hung apt/browser
+    # download holds the job (and the PR merge queue) for 6 hours.
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v6
@@ -134,8 +137,12 @@ jobs:
           sudo apt-get install -y libasound2t64 libicu-dev libffi-dev libx264-dev
       - run: pnpm install --frozen-lockfile
       - name: Install Playwright Browsers
-        run: pnpm exec playwright install --with-deps
+        # Every e2e suite runs Chromium only. Without a browser argument this
+        # also apt-installs Firefox/WebKit's media stack (gstreamer, ffmpeg,
+        # pulse...), which takes 30+ minutes when the Ubuntu mirror is slow.
+        run: pnpm exec playwright install --with-deps chromium
         working-directory: apps/registry
+        timeout-minutes: 10
       - name: Run Playwright tests
         run: pnpm turbo test:e2e --concurrency 1000
       - uses: actions/upload-artifact@v7

@@ -49,6 +49,7 @@ export interface Resume {
    */
   projects?: ProjectItem[];
   meta?: ResumeMeta;
+  custom?: Custom;
   [k: string]: any;
 }
 export interface ResumeBasics {
@@ -82,6 +83,7 @@ export interface ResumeBasics {
    * Specify any number of social networks that you participate in
    */
   profiles?: ResumeProfile[];
+  custom?: Custom;
   [k: string]: any;
 }
 export interface ResumeLocation {
@@ -118,6 +120,12 @@ export interface ResumeProfile {
   url?: string;
   [k: string]: any;
 }
+/**
+ * Tool- or author-specific data that has no standard field yet (#316). Keys are free-form; namespace them by tool (e.g. "myTool": { ... }) to avoid collisions. Themes are not expected to render it, and tools should preserve it unchanged when reading and writing resumes.
+ */
+export interface Custom {
+  [k: string]: any;
+}
 export interface WorkItem {
   /**
    * e.g. Facebook
@@ -149,6 +157,11 @@ export interface WorkItem {
    * Specify multiple accomplishments
    */
   highlights?: string[];
+  /**
+   * Skills, tools or technologies used in this role (#293)
+   */
+  keywords?: string[];
+  custom?: Custom;
   [k: string]: any;
 }
 export interface VolunteerItem {
@@ -174,6 +187,7 @@ export interface VolunteerItem {
    * Specify accomplishments and achievements
    */
   highlights?: string[];
+  custom?: Custom;
   [k: string]: any;
 }
 export interface EducationItem {
@@ -203,6 +217,11 @@ export interface EducationItem {
    * List notable courses/subjects
    */
   courses?: string[];
+  /**
+   * Thesis topic, honours, notable projects or other context (#292)
+   */
+  summary?: string;
+  custom?: Custom;
   [k: string]: any;
 }
 export interface AwardItem {
@@ -219,6 +238,7 @@ export interface AwardItem {
    * e.g. Received for my work with Quantum Physics
    */
   summary?: string;
+  custom?: Custom;
   [k: string]: any;
 }
 export interface CertificateItem {
@@ -235,6 +255,8 @@ export interface CertificateItem {
    * e.g. CNCF
    */
   issuer?: string;
+  expiryDate?: Iso8601;
+  custom?: Custom;
   [k: string]: any;
 }
 export interface PublicationItem {
@@ -255,6 +277,11 @@ export interface PublicationItem {
    * Short summary of publication. e.g. Discussion of the World Wide Web, HTTP, HTML.
    */
   summary?: string;
+  /**
+   * e.g. 'article', 'book', 'patent', 'thesis', 'talk' (#295)
+   */
+  type?: string;
+  custom?: Custom;
   [k: string]: any;
 }
 export interface SkillItem {
@@ -270,6 +297,7 @@ export interface SkillItem {
    * List some keywords pertaining to this skill
    */
   keywords?: string[];
+  custom?: Custom;
   [k: string]: any;
 }
 export interface LanguageItem {
@@ -281,6 +309,7 @@ export interface LanguageItem {
    * e.g. Fluent, Beginner
    */
   fluency?: string;
+  custom?: Custom;
   [k: string]: any;
 }
 export interface InterestItem {
@@ -289,6 +318,7 @@ export interface InterestItem {
    */
   name?: string;
   keywords?: string[];
+  custom?: Custom;
   [k: string]: any;
 }
 export interface ReferenceItem {
@@ -300,6 +330,7 @@ export interface ReferenceItem {
    * e.g. Joe blogs was a great employee, who turned up to work at least once a week. He exceeded my expectations when it came to doing nothing.
    */
   reference?: string;
+  custom?: Custom;
   [k: string]: any;
 }
 export interface ProjectItem {
@@ -337,6 +368,7 @@ export interface ProjectItem {
    *  e.g. 'volunteering', 'presentation', 'talk', 'application', 'conference'
    */
   type?: string;
+  custom?: Custom;
   [k: string]: any;
 }
 /**

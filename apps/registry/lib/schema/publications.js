@@ -9,6 +9,7 @@ export const publications = {
     type: 'object',
     additionalProperties: true,
     properties: {
+      custom: { $ref: '#/definitions/custom' },
       name: {
         type: 'string',
         description: 'e.g. The World Wide Web',
@@ -30,6 +31,10 @@ export const publications = {
         type: 'string',
         description:
           'Short summary of publication. e.g. Discussion of the World Wide Web, HTTP, HTML.',
+      },
+      type: {
+        type: 'string',
+        description: "e.g. 'article', 'book', 'patent', 'thesis', 'talk'",
       },
     },
   },

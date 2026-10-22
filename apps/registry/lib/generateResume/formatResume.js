@@ -13,6 +13,10 @@ export const formatResume = async (resume, formatter, options) => {
       'Theme rendering error'
     );
 
+    if (e.code === 'PDF_RENDER_FAILED') {
+      return buildError(ERROR_CODES.PDF_RENDER_FAILED);
+    }
+
     // Theme not found error
     if (e.message === 'theme-missing') {
       return buildError(ERROR_CODES.TEMPLATE_MISSING, { themeName });

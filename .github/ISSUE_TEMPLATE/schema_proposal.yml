@@ -1,0 +1,52 @@
+name: 🧩 Schema proposal
+description: Propose a new field or a change to the resume.json schema
+title: '[Schema]: '
+labels: ['schema']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping shape the schema. Please read
+        [Proposing Schema Changes](https://github.com/jsonresume/jsonresume.org/blob/master/CONTRIBUTING.md#proposing-schema-changes)
+        first, and check the [schema roadmap](https://github.com/jsonresume/jsonresume.org/issues/329)
+        for an existing thread.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What can't a resume express today? Include a real example.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed JSON
+      description: The field or shape you propose, with an example value.
+      render: json
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Why existing fields or `custom` aren't enough
+    validations:
+      required: true
+
+  - type: textarea
+    id: consumers
+    attributes:
+      label: Who would use it
+      description: Themes, the registry, ATS/job matching, other tools.
+
+  - type: dropdown
+    id: compatibility
+    attributes:
+      label: Compatibility
+      options:
+        - Additive (optional field, existing resumes stay valid)
+        - Changes an existing field (needs a migration plan)
+    validations:
+      required: true
