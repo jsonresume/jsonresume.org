@@ -27,6 +27,9 @@ export const certificates = {
         type: 'string',
         description: 'e.g. CNCF',
       },
+      expiryDate: {
+        $ref: '#/definitions/iso8601',
+      },
     },
   },
 };
