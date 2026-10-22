@@ -4,24 +4,41 @@ import buildError, { ERROR_CODES } from './error/buildError';
 import { RESUME_GIST_NAME } from '../app/providers/ResumeProvider';
 import logger from './logger';
 
+// GitHub OAuth app credentials (also used for sign-in) as Basic auth get the
+// app-level rate limit for public data, much higher than anonymous requests.
+const appAuthHeaders = () => {
+  const id = process.env.AUTH_GITHUB_ID;
+  const secret = process.env.AUTH_GITHUB_SECRET;
+  return id && secret
+    ? {
+        Authorization:
+          'Basic ' + Buffer.from(`${id}:${secret}`).toString('base64'),
+      }
+    : {};
+};
+
 const fetchGists = async (username) => {
   const token = process.env.GITHUB_TOKEN;
   const url = `https://api.github.com/users/${username}/gists?per_page=100`;
 
+  if (!token) {
+    return axios.get(url, { headers: appAuthHeaders() });
+  }
+
   try {
-    // If we have no token and are in development, we can still make some requests.
     return await axios.get(url, {
-      headers: token ? { Authorization: 'Bearer ' + token } : {},
+      headers: { Authorization: 'Bearer ' + token },
     });
   } catch (e) {
-    if (e.response?.status !== 401 || !token) throw e;
-    // A revoked or expired token 401s for every user. Fall back to anonymous
-    // requests so the registry stays up while the token is rotated.
+    if (e.response?.status !== 401) throw e;
+    // A revoked or expired token 401s for every user. Fall back to the app
+    // credentials (or anonymous) so the registry stays up while the token is
+    // rotated.
     logger.error(
       { username },
-      'GITHUB_TOKEN rejected by GitHub (401), retrying unauthenticated; rotate the token'
+      'GITHUB_TOKEN rejected by GitHub (401), retrying without it; rotate the token'
     );
-    return axios.get(url);
+    return axios.get(url, { headers: appAuthHeaders() });
   }
 };
 

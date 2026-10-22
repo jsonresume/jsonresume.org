@@ -149,3 +149,37 @@ describe('formatThemesList', () => {
     expect(output).toContain('https://jsonresume.org/themes/');
   });
 });
+
+describe('scoped themes', () => {
+  it('discovers @scope/jsonresume-theme-* packages by their full name', () => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'resume-cli-scoped-'));
+    const dir = path.join(
+      root,
+      'node_modules',
+      '@jsonresume',
+      'jsonresume-theme-claude',
+    );
+    fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(
+      path.join(dir, 'package.json'),
+      JSON.stringify({
+        name: '@jsonresume/jsonresume-theme-claude',
+        version: '1.0.0',
+      }),
+    );
+    // A non-theme scoped package is ignored
+    fs.mkdirSync(path.join(root, 'node_modules', '@jsonresume', 'core'), {
+      recursive: true,
+    });
+
+    const themes = discoverThemes({ cwd: root });
+
+    expect(themes).toEqual([
+      expect.objectContaining({
+        slug: '@jsonresume/jsonresume-theme-claude',
+        name: '@jsonresume/jsonresume-theme-claude',
+        version: '1.0.0',
+      }),
+    ]);
+  });
+});

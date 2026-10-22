@@ -152,6 +152,13 @@ async function findLatestWhoIsHiringThread() {
       // Don't fail the import if Discord notification fails
     }
 
+    // Every insert failing means the database is unreachable or rejecting
+    // writes; fail the run instead of reporting success (#539)
+    if (errorCount > 0 && insertedCount === 0) {
+      console.error(`🚨 All ${errorCount} inserts failed`);
+      process.exit(1);
+    }
+
     return result;
   } catch (error) {
     console.error('🚨 Fatal error:', error.message);

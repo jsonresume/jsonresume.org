@@ -1,7 +1,7 @@
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
-import renderHTML, { resolveThemePath } from './render-html';
+import renderHTML, { loadTheme, resolveThemePath } from './render-html';
 import { ThemeNotFoundError } from './theme-errors';
 
 describe('renderHTML', () => {
@@ -157,5 +157,37 @@ describe('resolveThemePath', () => {
     expect(() => resolveThemePath('./missing-local-theme')).toThrow(
       ThemeNotFoundError,
     );
+  });
+});
+
+describe('loadTheme', () => {
+  it('uses the default export when the module does not export render itself', async () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'resume-cli-default-'));
+    fs.writeFileSync(
+      path.join(dir, 'index.js'),
+      "module.exports = { default: { render: () => 'from-default' } };",
+    );
+    const cwd = process.cwd();
+    process.chdir(path.dirname(dir));
+    try {
+      const theme = await loadTheme(`./${path.basename(dir)}`);
+      expect(theme.render()).toBe('from-default');
+    } finally {
+      process.chdir(cwd);
+    }
+  });
+
+  it("falls back to the CLI's own install for themes the project doesn't have", () => {
+    const empty = fs.mkdtempSync(path.join(os.tmpdir(), 'resume-cli-empty-'));
+    const cwd = process.cwd();
+    process.chdir(empty);
+    try {
+      // jsonresume-theme-even is a CLI dependency, not installed in `empty`
+      expect(resolveThemePath('jsonresume-theme-even')).toContain(
+        'jsonresume-theme-even',
+      );
+    } finally {
+      process.chdir(cwd);
+    }
   });
 });
