@@ -2,7 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 import { SUPABASE_URL } from '@/lib/supabaseConfig';
 import { NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
-import { getSessionUserId } from './sessionUser';
+import { getSessionUserId } from '@/lib/sessionUser';
 
 const supabaseUrl = SUPABASE_URL;
 
