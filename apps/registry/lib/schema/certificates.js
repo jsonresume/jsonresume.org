@@ -23,6 +23,15 @@ export const certificates = {
         description: 'e.g. http://example.com',
         format: 'uri',
       },
+      credentialId: {
+        type: 'string',
+        description:
+          'Credential or licence number used to verify the certificate',
+      },
+      summary: {
+        type: 'string',
+        description: 'What the certificate covers',
+      },
       issuer: {
         type: 'string',
         description: 'e.g. CNCF',

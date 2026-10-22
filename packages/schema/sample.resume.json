@@ -28,6 +28,7 @@
       }
     ]
   },
+  "objective": "Lead engineering for a compression-first storage platform.",
   "work": [
     {
       "name": "Pied Piper",
@@ -84,7 +85,9 @@
       "date": "2014-06-01",
       "expiryDate": "2017-06-01",
       "issuer": "Amazon Web Services",
-      "url": "https://certificates.example.com/aws/rhendriks"
+      "url": "https://certificates.example.com/aws/rhendriks",
+      "credentialId": "AWS-ASA-12345",
+      "summary": "Designing distributed systems on AWS."
     }
   ],
   "publications": [

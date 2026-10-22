@@ -6,7 +6,7 @@
 /* eslint-disable */
 
 /**
- * Similar to the standard date type, but each section after the year is optional. e.g. 2014-06-29 or 2023-04
+ * Similar to the standard date type, but each section after the year is optional. e.g. 2014-06-29 or 2023-04. Every date is optional; omit endDate for a current position or ongoing entry (#309).
  */
 export type Iso8601 = string;
 
@@ -16,6 +16,10 @@ export interface Resume {
    */
   $schema?: string;
   basics?: ResumeBasics;
+  /**
+   * Forward-looking career goal, e.g. 'Seeking a senior backend role in climate tech'. Distinct from basics.summary, which describes background (#317)
+   */
+  objective?: string;
   work?: WorkItem[];
   volunteer?: VolunteerItem[];
   education?: EducationItem[];
@@ -58,6 +62,10 @@ export interface ResumeBasics {
    * e.g. Web Developer
    */
   label?: string;
+  /**
+   * e.g. she/her, they/them (#312)
+   */
+  pronouns?: string;
   /**
    * URL (as per RFC 3986) to a image in JPEG or PNG format
    */
@@ -252,10 +260,18 @@ export interface CertificateItem {
    */
   url?: string;
   /**
+   * Credential or licence number used to verify the certificate, e.g. a licence number or a certification ID (#590)
+   */
+  credentialId?: string;
+  /**
    * e.g. CNCF
    */
   issuer?: string;
   expiryDate?: Iso8601;
+  /**
+   * What the certificate covers (#590)
+   */
+  summary?: string;
   custom?: Custom;
   [k: string]: any;
 }

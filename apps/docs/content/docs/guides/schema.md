@@ -12,12 +12,13 @@ The schema is published as
 
 | Section | Contents |
 | --- | --- |
-| `basics` | `name`, `label`, `image`, `email`, `phone`, `url`, `summary`, `location`, `profiles` |
+| `basics` | `name`, `label`, `pronouns`, `image`, `email`, `phone`, `url`, `summary`, `location`, `profiles` |
+| `objective` | a single string: the role or direction you're seeking (distinct from `basics.summary`, which describes your background) |
 | `work` | `name`, `position`, `location`, `description`, `url`, `startDate`, `endDate`, `summary`, `highlights`, `keywords` |
 | `volunteer` | `organization`, `position`, `url`, `startDate`, `endDate`, `summary`, `highlights` |
 | `education` | `institution`, `url`, `area`, `studyType`, `startDate`, `endDate`, `score`, `courses`, `summary` |
 | `awards` | `title`, `date`, `awarder`, `summary` |
-| `certificates` | `name`, `date`, `expiryDate`, `issuer`, `url` |
+| `certificates` | `name`, `date`, `expiryDate`, `issuer`, `url`, `credentialId`, `summary` |
 | `publications` | `name`, `type`, `publisher`, `releaseDate`, `url`, `summary` |
 | `skills` | `name`, `level`, `keywords` |
 | `languages` | `language`, `fluency` |
