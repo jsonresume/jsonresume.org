@@ -45,3 +45,28 @@ test('sample resume exercises every section (#294)', (t) => {
   }
   t.end();
 });
+
+test('certificates.credentialId and summary (#590) - free text', (t) => {
+  t.true(
+    valid({
+      certificates: [{ credentialId: 'RN-123456', summary: 'Nursing licence' }],
+    })
+  );
+  t.false(valid({ certificates: [{ credentialId: 123456 }] }));
+  t.false(valid({ certificates: [{ summary: ['x'] }] }));
+  t.end();
+});
+
+test('basics.pronouns (#312) - free text', (t) => {
+  t.true(valid({ basics: { name: 'Sam', pronouns: 'they/them' } }));
+  t.false(valid({ basics: { pronouns: ['they', 'them'] } }));
+  t.end();
+});
+
+test('objective (#317) - optional root-level free text', (t) => {
+  t.true(
+    valid({ objective: 'Seeking a senior Go role in cloud infrastructure' })
+  );
+  t.false(valid({ objective: { text: 'x' } }));
+  t.end();
+});
