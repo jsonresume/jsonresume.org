@@ -1,9 +1,14 @@
 ---
 '@jsonresume/schema': minor
+'@jsonresume/types': minor
 ---
 
-Consolidate location into a shared definition used across all sections.
+Consolidate location into a shared definition (#323).
 
-The schema previously defined location inconsistently: basics.location was a structured object, work.location was a plain string, and volunteer and education had no location at all. This made it impossible to query or process locations uniformly across a resume.
+`basics.location` was a structured object, `work.location` a plain string, and volunteer and education had no location at all. There is now one shared `location` object (address, postalCode, city, countryCode, region):
 
-All sections now use the same structured location object with address, postalCode, city, countryCode, and region fields. Volunteer and education gain a new optional location field, while work.location remains backwards compatible and accepts either a freetext string like "Palo Alto, CA" or an object.
+- `basics.location` uses it (unchanged shape)
+- `work.location` accepts either the existing free-text string (e.g. "Palo Alto, CA") or the object
+- `volunteer.location` and `education.location` are new, optional, and accept the same string-or-object forms
+
+Existing resumes stay valid. Consumers that need uniform processing should normalise the string form; themes receive display strings via `withStringLocations` in the registry and resume-cli.

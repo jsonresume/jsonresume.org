@@ -13,6 +13,12 @@ export const education = {
         type: 'string',
         description: 'e.g. Massachusetts Institute of Technology',
       },
+      location: {
+        oneOf: [
+          { type: 'string', description: 'Free text, e.g. Cambridge, MA' },
+          { $ref: '#/definitions/location' },
+        ],
+      },
       url: {
         type: 'string',
         description: 'e.g. http://facebook.example.com',

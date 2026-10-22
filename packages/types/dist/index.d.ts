@@ -101,7 +101,13 @@ export interface ResumeLocation {
    * Hinterhaus 5. Etage li.
    */
   address?: string;
+  /**
+   * e.g. 12345
+   */
   postalCode?: string;
+  /**
+   * e.g. Teststadt
+   */
   city?: string;
   /**
    * code as per ISO-3166-1 ALPHA-2, e.g. US, AU, IN
@@ -139,10 +145,7 @@ export interface WorkItem {
    * e.g. Facebook
    */
   name?: string;
-  /**
-   * e.g. Menlo Park, CA
-   */
-  location?: string;
+  location?: string | Location;
   /**
    * e.g. Social Media Company
    */
@@ -172,11 +175,37 @@ export interface WorkItem {
   custom?: Custom;
   [k: string]: any;
 }
+export interface Location {
+  /**
+   * To add multiple address lines, use
+   * . For example, 1234 Glücklichkeit Straße
+   * Hinterhaus 5. Etage li.
+   */
+  address?: string;
+  /**
+   * e.g. 12345
+   */
+  postalCode?: string;
+  /**
+   * e.g. Teststadt
+   */
+  city?: string;
+  /**
+   * code as per ISO-3166-1 ALPHA-2, e.g. US, AU, IN
+   */
+  countryCode?: string;
+  /**
+   * The general region where you live. Can be a US state, or a province, for instance.
+   */
+  region?: string;
+  [k: string]: any;
+}
 export interface VolunteerItem {
   /**
    * e.g. Facebook
    */
   organization?: string;
+  location?: string | Location;
   /**
    * e.g. Software Engineer
    */
@@ -203,6 +232,7 @@ export interface EducationItem {
    * e.g. Massachusetts Institute of Technology
    */
   institution?: string;
+  location?: string | Location;
   /**
    * e.g. http://facebook.example.com
    */
