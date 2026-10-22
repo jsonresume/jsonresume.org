@@ -8,6 +8,11 @@ const { notifyFeatureUsage } = require('../../lib/discord/notifiers.js');
 */
 
 export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    res.setHeader('Allow', 'POST');
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
   const { username, jobDescription, tone } = req.body;
 
   // Lazy load Supabase
@@ -20,6 +25,10 @@ export default async function handler(req, res) {
     .from('resumes')
     .select()
     .eq('username', username);
+
+  if (!data?.[0]) {
+    return res.status(404).json({ error: 'No resume found for this user' });
+  }
 
   const resume = JSON.parse(data[0].resume);
 

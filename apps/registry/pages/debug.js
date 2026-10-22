@@ -1,5 +1,5 @@
 import { Resume } from 'jsonresume-theme-reference';
-import resume from './api/samples/resume';
+import resume from '../lib/samples/resume';
 export default function Talk() {
   // @todo - used to render react templates (purely debug stuff at the moment)
   return (

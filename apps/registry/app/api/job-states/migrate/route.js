@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 import { SUPABASE_URL } from '@/lib/supabaseConfig';
 import { NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
+import { getSessionUserId } from '../sessionUser';
 
 const supabaseUrl = SUPABASE_URL;
 
@@ -17,34 +18,23 @@ export async function POST(request) {
     );
   }
 
+  const userId = await getSessionUserId(request);
+  if (!userId) {
+    return NextResponse.json({ message: 'Sign in required' }, { status: 401 });
+  }
+
   try {
-    const body = await request.json();
-    const { sessionId, username, states } = body;
+    const { sessionId, states } = await request.json();
 
     // Validate input
-    if (!sessionId || !username) {
+    if (!sessionId) {
       return NextResponse.json(
-        { message: 'Missing required fields: sessionId, username' },
+        { message: 'Missing required field: sessionId' },
         { status: 400 }
       );
     }
 
     const supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
-
-    // Get user ID from username
-    const { data: resumeData, error: resumeError } = await supabase
-      .from('resumes')
-      .select('id')
-      .eq('username', username)
-      .maybeSingle();
-
-    if (resumeError) throw resumeError;
-
-    if (!resumeData) {
-      return NextResponse.json({ message: 'User not found' }, { status: 404 });
-    }
-
-    const userId = resumeData.id;
 
     // If states are passed directly from localStorage, use them
     // Otherwise, fetch from session_id in database (if we stored them there)
@@ -71,7 +61,7 @@ export async function POST(request) {
     }
 
     if (Object.keys(statesToMigrate).length === 0) {
-      logger.info({ sessionId, username }, 'No states to migrate');
+      logger.info({ sessionId, userId }, 'No states to migrate');
       return NextResponse.json({
         success: true,
         migrated: 0,
@@ -113,7 +103,7 @@ export async function POST(request) {
     }
 
     logger.info(
-      { sessionId, username, count: upsertData.length },
+      { sessionId, userId, count: upsertData.length },
       'Successfully migrated job states'
     );
 
