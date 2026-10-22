@@ -1,6 +1,6 @@
 ---
 title: "Authentication"
-description: "Docwright documentation"
+description: "Internal architecture notes for contributors"
 ---
 
 # Authentication

@@ -38,8 +38,9 @@ const globalNodeModules = () => {
 
 const normalizeTheme = (value, defaultValue) => {
   const theme = value || defaultValue;
-  // TODO - This is not great, but bypasses this function if it is a relative path
-  if (theme[0] === '.') {
+  // Paths and scoped packages (`@scope/name`) are used as-is; only bare short
+  // names get the `jsonresume-theme-` prefix.
+  if (theme[0] === '.' || theme[0] === '/' || theme[0] === '@') {
     return theme;
   }
   return theme.match('jsonresume-theme-.*')
@@ -60,7 +61,9 @@ const normalizeTheme = (value, defaultValue) => {
       '-t, --theme <theme name>',
       'Theme used by `export` and `serve` (browse themes at https://jsonresume.org/themes/), or a path starting with . (use . for current directory or ../some/other/dir)',
       normalizeTheme,
-      'jsonresume-theme-elegant',
+      // `even` ships with the CLI and renders sparse resumes; `elegant` (the
+      // old default) throws when optional sections are missing.
+      'jsonresume-theme-even',
     )
     .option('-f, --format <file type extension>', 'Used by `export`.')
     .option(
@@ -123,7 +126,7 @@ const normalizeTheme = (value, defaultValue) => {
   program
     .command('export [fileName]')
     .description(
-      'Export locally to .html, .pdf, .md (markdown) or .txt (text). Supply a --format <file format> flag and argument to specify export format. .md and .txt need no theme; pick a theme for .html/.pdf with --theme (https://jsonresume.org/themes/).',
+      'Export locally to .html, .pdf, .md (markdown) or .txt (text). Supply a --format <file format> flag and argument to specify export format. .md and .txt need no theme; pick a theme for .html/.pdf with --theme (https://jsonresume.org/themes/). For .pdf on Linux CI or in containers, set RESUME_PUPPETEER_NO_SANDBOX=1.',
     )
     .action(async (fileName) => {
       const resume = await loadResumeOrReport(program.resume);
@@ -162,7 +165,12 @@ const normalizeTheme = (value, defaultValue) => {
     .action(async () => {
       const themes = discoverThemes({
         cwd: process.cwd(),
-        extraNodeModules: globalNodeModules(),
+        // plus the CLI's own install, where its bundled themes live
+        extraNodeModules: [
+          ...globalNodeModules(),
+          path.join(__dirname, '..', 'node_modules'),
+          path.join(__dirname, '..', '..'),
+        ],
       });
       console.log(formatThemesList(themes));
     });
@@ -177,15 +185,7 @@ const normalizeTheme = (value, defaultValue) => {
       if (resume === null) {
         return;
       }
-      // The global `-t/--theme` option (default: elegant) is shared by every
-      // command, but `elegant` throws on minimal resumes. Default `audit` to
-      // the bundled, robust `even` theme unless the user explicitly asked for
-      // a theme on the command line.
-      const themeGiven = process.argv.some(
-        (arg) => arg === '-t' || arg === '--theme',
-      );
-      const themePath = themeGiven ? program.theme : 'jsonresume-theme-even';
-      await audit({ resume, themePath });
+      await audit({ resume, themePath: program.theme });
     });
 
   program

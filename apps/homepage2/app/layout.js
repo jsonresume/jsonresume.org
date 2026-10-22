@@ -1,5 +1,4 @@
 import { Analytics } from '@vercel/analytics/react';
-import Image from 'next/image';
 import { fontVariables } from './components/layout/fonts';
 import { Sidebar } from './components/layout/Sidebar';
 import { TopNav } from './components/layout/TopNav';
@@ -7,10 +6,22 @@ import { Footer } from './components/layout/Footer';
 import { ExternalScripts } from './components/layout/ExternalScripts';
 import './global.css';
 
+const description =
+  'JSON Resume is the open-source initiative to create a JSON-based standard for resumes. For developers, by developers.';
+
 export const metadata = {
+  metadataBase: new URL('https://jsonresume.org'),
   title: 'JSON Resume',
-  description:
-    'JSON Resume is the open-source initiative to create a JSON-based standard for resumes. For developers, by developers.',
+  description,
+  alternates: { canonical: '/' },
+  openGraph: {
+    title: 'JSON Resume',
+    description,
+    url: '/',
+    siteName: 'JSON Resume',
+    type: 'website',
+  },
+  twitter: { card: 'summary_large_image', title: 'JSON Resume', description },
 };
 
 export default async function Layout({ children }) {
@@ -18,7 +29,6 @@ export default async function Layout({ children }) {
     <html lang="en" className={fontVariables}>
       <head>
         <link rel="dns-prefetch" href="//cdnjs.cloudflare.com" />
-        <link rel="dns-prefetch" href="//static.getclicky.com" />
         {(process.env.NODE_ENV === 'development' ||
           process.env.VERCEL_ENV === 'preview') && (
           // eslint-disable-next-line @next/next/no-sync-scripts
@@ -28,21 +38,6 @@ export default async function Layout({ children }) {
             src="https://snippet.meticulous.ai/v1/meticulous.js"
           />
         )}
-        <noscript>
-          <p>
-            <Image
-              alt="Clicky"
-              width="1"
-              height="1"
-              src="https://in.getclicky.com/101412017ns.gif"
-            />
-          </p>
-        </noscript>
-        <script
-          async
-          data-id="101412017"
-          src="https://static.getclicky.com/js"
-        ></script>
 
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />

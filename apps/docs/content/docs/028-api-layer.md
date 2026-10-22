@@ -1,6 +1,6 @@
 ---
 title: "API Layer"
-description: "Docwright documentation"
+description: "Internal architecture notes for contributors"
 ---
 
 # API Layer

@@ -12,10 +12,13 @@ export function CLISection() {
           <code>npm install -g resume-cli</code>
         </p>
         <p>
-          <strong>Note:</strong> The official CLI tool isn&apos;t that actively
-          maintained. There is an alternative that you might have more success
-          with{' '}
-          <a href="https://github.com/rbardini/resumed">@rbardini/resumed</a>
+          <code>resume-cli</code> is maintained in the{' '}
+          <a href="https://github.com/jsonresume/jsonresume.org/tree/master/packages/cli">
+            jsonresume.org monorepo
+          </a>
+          . <a href="https://github.com/rbardini/resumed">resumed</a> (
+          <code>npm install -g resumed</code>) is a lightweight community
+          alternative.
         </p>
         <h3>Exporting</h3>
         <p>
