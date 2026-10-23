@@ -58,22 +58,22 @@ looks today: each one will be designed fresh in the jsonresume.org style.
 
 ## Data display
 
-| Component                | What it does                                                                       | Uses                                                                   | Have                          | Priority |
-| ------------------------ | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ----------------------------- | -------- |
-| **Stat tile**            | A key number with label and optional trend or comparison                           | Dashboard, job report insights, info cards                             | –                             | P1       |
-| **Job card**             | A job summary: title, company, location, salary, match score, state and actions    | Job board, job lists, matches, graph panels                            | Card (generic)                | P1       |
-| **Resume / person card** | A person summary: avatar, name, label, location, link to resume                    | Explore, matching candidates, profile cards                            | Card, Avatar                  | P1       |
-| **Description list**     | Labelled facts in pairs (Location: Remote, Salary: $150k)                          | Job detail sections, resume panes, API responses                       | –                             | P1       |
-| **Markdown content**     | Render (and stream) Markdown safely in the brand's prose style                     | Chat messages, cover letter preview, suggestions                       | Prose (styles only)           | P1       |
-| **Copy button**          | Copy a value or link with confirmation                                             | Job panel header, API keys                                             | Inside CodeBlock only         | P1       |
-| **Chat message list**    | Conversation turns by role, streaming text, tool-call parts, auto-scroll           | AI editor chat; Pathways copilot                                       | –                             | P2       |
-| **Activity feed**        | Time-stamped events in order, with relative times                                  | Pathways activity log, recent activity                                 | –                             | P2       |
-| **Timeline**             | Vertical career or activity timeline with dated entries                            | Timeline page; report activity timeline                                | – (legacy `@repo/ui` has one) | P2       |
-| **Charts**               | Bar, line, radar and histogram charts on brand tokens, with accessible data tables | Job report: salary, pipeline, readiness radar, activity (via recharts) | –                             | P2       |
-| **Checklist results**    | A list of checks with pass, warn or fail and an explanation each                   | ATS ratings and scoring table                                          | Table, Badge                  | P2       |
-| **Secret field**         | A masked API key with reveal, copy, rotate and revoke                              | API keys page                                                          | –                             | P3       |
-| **Calendar heatmap**     | Activity per day over weeks                                                        | Job report activity heatmap                                            | –                             | P3       |
-| **Resume preview frame** | Sandboxed live preview of a rendered theme, with sizing                            | Resume editor preview; letter preview                                  | –                             | P3       |
+| Component                   | What it does                                                                       | Uses                                                                   | Have                          | Priority |
+| --------------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ----------------------------- | -------- |
+| ✅ **Stat tile**            | A key number with label and optional trend or comparison                           | Dashboard, job report insights, info cards                             | –                             | P1       |
+| ✅ **Job card**             | A job summary: title, company, location, salary, match score, state and actions    | Job board, job lists, matches, graph panels                            | Card (generic)                | P1       |
+| ✅ **Resume / person card** | A person summary: avatar, name, label, location, link to resume                    | Explore, matching candidates, profile cards                            | Card, Avatar                  | P1       |
+| ✅ **Description list**     | Labelled facts in pairs (Location: Remote, Salary: $150k)                          | Job detail sections, resume panes, API responses                       | –                             | P1       |
+| ✅ **Markdown content**     | Render (and stream) Markdown safely in the brand's prose style                     | Chat messages, cover letter preview, suggestions                       | Prose (styles only)           | P1       |
+| ✅ **Copy button**          | Copy a value or link with confirmation                                             | Job panel header, API keys                                             | Inside CodeBlock only         | P1       |
+| ✅ **Chat message list**    | Conversation turns by role, streaming text, tool-call parts, auto-scroll           | AI editor chat; Pathways copilot                                       | –                             | P2       |
+| ✅ **Activity feed**        | Time-stamped events in order, with relative times                                  | Pathways activity log, recent activity                                 | –                             | P2       |
+| ✅ **Timeline**             | Vertical career or activity timeline with dated entries                            | Timeline page; report activity timeline                                | – (legacy `@repo/ui` has one) | P2       |
+| ✅ **Charts**               | Bar, line, radar and histogram charts on brand tokens, with accessible data tables | Job report: salary, pipeline, readiness radar, activity (via recharts) | –                             | P2       |
+| ✅ **Checklist results**    | A list of checks with pass, warn or fail and an explanation each                   | ATS ratings and scoring table                                          | Table, Badge                  | P2       |
+| ✅ **Secret field**         | A masked API key with reveal, copy, rotate and revoke                              | API keys page                                                          | –                             | P3       |
+| ✅ **Calendar heatmap**     | Activity per day over weeks                                                        | Job report activity heatmap                                            | –                             | P3       |
+| ✅ **Resume preview frame** | Sandboxed live preview of a rendered theme, with sizing                            | Resume editor preview; letter preview                                  | –                             | P3       |
 
 ## Layout and interaction
 

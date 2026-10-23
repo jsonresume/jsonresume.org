@@ -132,6 +132,13 @@ export default function ColorPage() {
         >
           <ColorTokenTable group="status" />
         </DocSection>
+        <DocSection
+          id="data"
+          title="Data scale"
+          description="A sequential yellow scale for densities and heatmaps, low to high."
+        >
+          <ColorTokenTable group="data" />
+        </DocSection>
         <DocSection id="focus" title="Focus and overlay">
           <ColorTokenTable group="focus" />
           <ColorTokenTable group="overlay" />

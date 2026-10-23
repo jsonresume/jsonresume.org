@@ -266,3 +266,66 @@ export {
   type StatusOption,
   type StatusToggleProps,
 } from './components/status/status-toggle';
+
+// Data display
+export { StatTile, type StatTileProps } from './components/data/stat-tile';
+export {
+  DescriptionList,
+  type DescriptionItem,
+  type DescriptionListProps,
+} from './components/data/description-list';
+export {
+  JobCard,
+  ResumeCard,
+  type JobCardProps,
+  type ResumeCardProps,
+} from './components/data/entity-cards';
+export { Markdown, type MarkdownProps } from './components/data/markdown';
+export {
+  CopyButton,
+  type CopyButtonProps,
+} from './components/data/copy-button';
+export {
+  Checklist,
+  type CheckResult,
+  type ChecklistProps,
+} from './components/data/checklist';
+export {
+  SecretField,
+  type SecretFieldProps,
+} from './components/data/secret-field';
+export {
+  ChatMessage,
+  ChatMessages,
+  ChatToolCall,
+  type ChatMessageProps,
+  type ChatMessagesProps,
+  type ChatToolCallProps,
+} from './components/chat/chat';
+export {
+  ActivityFeed,
+  Timeline,
+  relativeTime,
+  type ActivityFeedProps,
+  type ActivityItem,
+  type TimelineEntry,
+  type TimelineProps,
+} from './components/viz/feed';
+export {
+  BarChart,
+  LineChart,
+  RadarChart,
+  type BarChartProps,
+  type BarDatum,
+  type LineChartProps,
+  type LineSeries,
+  type RadarChartProps,
+} from './components/viz/charts';
+export {
+  CalendarHeatmap,
+  type CalendarHeatmapProps,
+} from './components/viz/heatmap';
+export {
+  PreviewFrame,
+  type PreviewFrameProps,
+} from './components/viz/preview-frame';
