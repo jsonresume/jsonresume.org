@@ -77,3 +77,26 @@ test('projects.summary (#296) - free text; description still accepted', (t) => {
   t.false(valid({ projects: [{ summary: 7 }] }));
   t.end();
 });
+
+test('publications authors, volume/issue/pages, identifiers (#289)', (t) => {
+  t.true(valid({ publications: [{ name: 'Minimal' }] }));
+  t.true(
+    valid({
+      publications: [
+        {
+          name: 'Middle-out compression',
+          type: 'article',
+          authors: ['Richard Hendriks', 'Bertram Gilfoyle'],
+          volume: '12',
+          issue: '3',
+          pages: '45-67',
+          identifiers: { doi: '10.1000/182', pmid: '12345678' },
+        },
+      ],
+    })
+  );
+  t.false(valid({ publications: [{ authors: 'Richard Hendriks' }] }));
+  t.false(valid({ publications: [{ volume: 12 }] }));
+  t.false(valid({ publications: [{ identifiers: { doi: 182 } }] }));
+  t.end();
+});

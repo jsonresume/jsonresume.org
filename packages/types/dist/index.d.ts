@@ -311,10 +311,44 @@ export interface PublicationItem {
    */
   name?: string;
   /**
-   * e.g. IEEE, Computer Magazine
+   * Authors in published order, including the resume owner. e.g. ['Richard Hendriks', 'Bertram Gilfoyle']
+   */
+  authors?: string[];
+  /**
+   * e.g. IEEE, Computer Magazine. For talks, the event name
    */
   publisher?: string;
   releaseDate?: Iso8601;
+  /**
+   * e.g. 12
+   */
+  volume?: string;
+  /**
+   * e.g. 3
+   */
+  issue?: string;
+  /**
+   * e.g. 45-67
+   */
+  pages?: string;
+  /**
+   * Persistent identifiers keyed by scheme, e.g. doi, isbn, arxiv, pmid
+   */
+  identifiers?: {
+    /**
+     * e.g. 10.1000/182
+     */
+    doi?: string;
+    /**
+     * e.g. 978-3-7502-4718-5
+     */
+    isbn?: string;
+    /**
+     * e.g. 2101.00001
+     */
+    arxiv?: string;
+    [k: string]: string;
+  };
   /**
    * e.g. http://www.computer.org.example.com/csdl/mags/co/1996/10/rx069-abs.html
    */

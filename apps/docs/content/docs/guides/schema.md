@@ -19,7 +19,7 @@ The schema is published as
 | `education` | `institution`, `url`, `area`, `studyType`, `startDate`, `endDate`, `score`, `courses`, `summary` |
 | `awards` | `title`, `date`, `awarder`, `summary` |
 | `certificates` | `name`, `date`, `expiryDate`, `issuer`, `url`, `credentialId`, `summary` |
-| `publications` | `name`, `type`, `publisher`, `releaseDate`, `url`, `summary` |
+| `publications` | `name`, `type`, `authors`, `publisher` (the event name for talks), `releaseDate`, `volume`, `issue`, `pages`, `identifiers` (`doi`, `isbn`, `arxiv`, ...), `url`, `summary` |
 | `skills` | `name`, `level`, `keywords` |
 | `languages` | `language`, `fluency` |
 | `interests` | `name`, `keywords` |
