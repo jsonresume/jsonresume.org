@@ -1,0 +1,166 @@
+{
+  "basics": {
+    "name": "Rosa Fielding",
+    "label": "Product Engineer",
+    "image": "https://example.com/rosa.jpg",
+    "email": "rosa@example.com",
+    "phone": "(07) 3123 4567",
+    "url": "example.com/rosa",
+    "summary": "Builds careful software for clinics.\n\nPrefers small teams and clear writing.",
+    "location": {
+      "address": "12 Fig Tree Lane",
+      "postalCode": "4000",
+      "city": "Brisbane",
+      "region": "QLD",
+      "countryCode": "AU"
+    },
+    "profiles": [
+      {
+        "network": "linkedin",
+        "username": "rosafielding",
+        "url": "https://www.linkedin.com/in/rosafielding"
+      },
+      { "network": "Forgejo", "username": "rosa" },
+      { "network": "Evil", "username": "x", "url": "javascript:alert(1)" }
+    ]
+  },
+  "work": [
+    {
+      "name": "Clinic Systems",
+      "position": "Lead Engineer",
+      "description": "Clinic Systems makes scheduling software for allied health practices.",
+      "summary": "Led a team of four rebuilding the booking engine.",
+      "location": { "city": "Brisbane", "countryCode": "AU" },
+      "url": "https://clinic.example.com",
+      "startDate": "2022-03",
+      "highlights": [
+        "• Cut booking errors by 40%",
+        "Shipped HL7 export",
+        "Mentored two graduates"
+      ],
+      "keywords": ["TypeScript", "Postgres"]
+    },
+    {
+      "name": "Weekend Clinic",
+      "position": "On-call Developer",
+      "startDate": "2023-01",
+      "endDate": "present"
+    },
+    {
+      "name": "Freelance",
+      "startDate": "2019",
+      "endDate": "2022-02",
+      "summary": "Contract work for local councils."
+    },
+    { "position": "Night-shift Analyst", "endDate": "2018-12" }
+  ],
+  "volunteer": [
+    {
+      "organization": "Food Bank Brisbane",
+      "url": "https://foodbank.example.org",
+      "startDate": "2020-06-14",
+      "summary": "Coordinated volunteer rosters.",
+      "highlights": ["Recruited 30 volunteers"]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Queensland University of Technology",
+      "url": "https://qut.example.edu",
+      "area": "Computer Science",
+      "studyType": "Bachelor of Information Technology",
+      "startDate": "2014",
+      "endDate": "2017",
+      "score": "0",
+      "courses": ["CAB201 Programming Principles", "IFB104 Building IT Systems"]
+    },
+    {
+      "area": "Data Visualisation",
+      "studyType": "Short course",
+      "startDate": "2021-07"
+    }
+  ],
+  "awards": [
+    {
+      "title": "Clinician's Choice",
+      "date": "2023-11-02",
+      "awarder": "Allied Health Australia",
+      "summary": "For the booking engine rebuild."
+    }
+  ],
+  "certificates": [
+    {
+      "name": "Certified Accessibility Specialist",
+      "date": "2022-05",
+      "issuer": "IAAP",
+      "url": "https://iaap.example.org",
+      "expiryDate": "2025-05",
+      "credentialId": "CPACC-0042",
+      "summary": "Web accessibility fundamentals."
+    }
+  ],
+  "publications": [
+    {
+      "name": "Booking Without Tears",
+      "publisher": "Health Informatics Journal",
+      "releaseDate": "2021",
+      "url": "https://journal.example.org/booking",
+      "summary": "Lessons from a scheduling rewrite.",
+      "type": "article",
+      "authors": ["Rosa Fielding", "Sam Ortiz"],
+      "volume": "27",
+      "issue": "3",
+      "pages": "45-67",
+      "identifiers": { "doi": "10.1000/182", "isbn": "978-3-7502-4718-5" }
+    }
+  ],
+  "skills": [
+    {
+      "name": "Frontend",
+      "level": "Advanced",
+      "keywords": ["React", "Accessibility"]
+    },
+    { "name": "Backend", "keywords": [] },
+    { "level": "Working knowledge", "keywords": ["Go"] }
+  ],
+  "languages": [
+    { "language": "English", "fluency": "Native speaker" },
+    { "language": "Auslan" }
+  ],
+  "interests": [
+    { "name": "Bushwalking", "keywords": ["Great Walks", "Map reading"] }
+  ],
+  "references": [
+    {
+      "name": "Priya Raman, Clinic Systems CTO",
+      "reference": "Rosa is the engineer I trust with the hard problems.\n\nShe writes things down."
+    },
+    { "name": "Available contact", "availableOnRequest": true }
+  ],
+  "projects": [
+    {
+      "name": "Waitlist",
+      "description": "A waitlist service for cancelled appointments.",
+      "highlights": ["Filled 1,200 cancelled slots"],
+      "keywords": ["Go", "SQS"],
+      "startDate": "2021-02",
+      "endDate": "2021-09",
+      "url": "https://github.com/rosa/waitlist",
+      "roles": ["Maintainer", "Designer"],
+      "entity": "Clinic Systems",
+      "type": "application"
+    },
+    {
+      "name": "Notes",
+      "summary": "Plain-text clinical notes.",
+      "description": "Plain-text clinical notes."
+    }
+  ],
+  "meta": {
+    "canonical": "https://example.com/rosa.json",
+    "version": "v1.0.0",
+    "lastModified": "2024-01-01T00:00",
+    "pro": { "sectionOrder": ["skills", "work", "bogus"] }
+  },
+  "x-internal": { "id": 99 }
+}
