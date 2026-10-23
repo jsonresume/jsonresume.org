@@ -239,9 +239,59 @@ export const componentDocs: ComponentDoc[] = [
     group: 'Layout',
     summary: 'A 1px rule in the default border color.',
     components: ['Divider'],
-    examples: [{ id: 'orientations', title: 'Orientations', block: true }],
+    examples: [
+      { id: 'orientations', title: 'Orientations', block: true },
+      {
+        id: 'label',
+        title: 'With a label',
+        description:
+          'A word between options, such as "or" between sign-in methods.',
+        block: true,
+      },
+    ],
     accessibility: [
       'Decorative by default (aria-hidden). Set decorative={false} for a semantic separator.',
+      'A label is read as plain text; the rules either side are hidden.',
+    ],
+  },
+  {
+    slug: 'app-shell',
+    name: 'App shell',
+    group: 'Layout',
+    summary:
+      'The signed-in, full-screen layout: a sidebar from lg up, a top bar with the account menu, and the same navigation in a sheet on small screens.',
+    components: ['AppShell', 'AppNav', 'AppPage'],
+    examples: [
+      { id: 'dashboard', title: 'Dashboard', bleed: true, block: true },
+    ],
+    guidelines: {
+      do: [
+        'Use one AppPage per screen: its title is the only h1.',
+        'Put filters in the AppPage toolbar, above everything they scope.',
+        'Pass renderLink to AppNav so links use your router.',
+      ],
+      dont: ['Use it for marketing pages; they use SiteHeader and SiteFooter.'],
+    },
+    accessibility: [
+      'A skip link jumps to main. The navigation is a named landmark and marks the current page with aria-current.',
+      'The small-screen menu is a dialog titled "Navigation" and closes when a link is followed.',
+    ],
+  },
+  {
+    slug: 'auth-card',
+    name: 'Auth card',
+    group: 'Layout',
+    summary:
+      'A centred card for sign-in, sign-up and other one-task account pages.',
+    components: ['AuthCard', 'GithubIcon'],
+    examples: [{ id: 'sign-in', title: 'Sign in', block: true }],
+    guidelines: {
+      do: ['Offer GitHub first, then email, separated by a labelled Divider.'],
+      dont: ['Put site navigation inside the card.'],
+    },
+    accessibility: [
+      'The title is the page h1 and names the card.',
+      'GithubIcon is decorative; the button text names the action.',
     ],
   },
   {
@@ -1227,8 +1277,17 @@ export const componentDocs: ComponentDoc[] = [
     name: 'Stat tile',
     group: 'Data display',
     summary: 'A key number with its label and how it changed.',
-    components: ['StatTile'],
-    examples: [{ id: 'dashboard', title: 'Dashboard', block: true }],
+    components: ['StatTile', 'Sparkline'],
+    examples: [
+      { id: 'dashboard', title: 'Dashboard', block: true },
+      {
+        id: 'delta-trend',
+        title: 'Delta and trend',
+        description:
+          'delta is a fraction of the previous period, shown signed and named by its label. trend draws a sparkline: context in gray, the latest point in the accent.',
+        block: true,
+      },
+    ],
     guidelines: {
       do: ['Pair every number with what it means and a comparison.'],
       dont: ['Show more than four or five tiles in a row.'],
@@ -1373,6 +1432,61 @@ export const componentDocs: ComponentDoc[] = [
     accessibility: [
       'Each chart is a figure with a one-sentence summary (role img) and a "Show data" table.',
       'Points and bars carry titles for hover.',
+    ],
+  },
+  {
+    slug: 'time-series-chart',
+    name: 'Time series chart',
+    group: 'Data display',
+    summary:
+      'Change over time for one or two series: an area under the first, a line for the second, a crosshair and one tooltip for every series.',
+    components: ['TimeSeriesChart'],
+    examples: [
+      { id: 'views', title: 'Two series', block: true },
+      {
+        id: 'single',
+        title: 'One series',
+        description: 'One series needs no legend: the title names it.',
+        block: true,
+      },
+      { id: 'empty', title: 'No data', block: true },
+    ],
+    guidelines: {
+      do: [
+        'Write the summary as the conclusion the chart supports.',
+        'Put the date range in the one filter row above the charts, and pass loading while it refetches so the old data stays.',
+      ],
+      dont: [
+        'Plot two measures of different scale together: make two charts.',
+        'Add a third series; fold it into another chart instead.',
+      ],
+    },
+    accessibility: [
+      'A focusable group named by the summary; arrow keys, Home and End step through the days and the readout is announced.',
+      'The tooltip repeats what "Show data" lists, so no value is only on hover.',
+      'Series colours are validated for colour vision deficiency, light and dark; two series also get a legend.',
+    ],
+  },
+  {
+    slug: 'bar-list',
+    name: 'Bar list',
+    group: 'Data display',
+    summary:
+      'Ranked categories as labelled thin bars: top sources, countries, devices.',
+    components: ['BarList'],
+    examples: [
+      { id: 'breakdowns', title: 'Breakdowns', block: true },
+      { id: 'empty', title: 'Empty', block: true },
+    ],
+    guidelines: {
+      do: [
+        'Keep the list short (limit, default 6); the rest folds into "Other".',
+      ],
+      dont: ['Use it for change over time; that is a time series chart.'],
+    },
+    accessibility: [
+      'A list; each row speaks its label, value and share of the total.',
+      'The share shows on hover and focus, and is always in the spoken text.',
     ],
   },
   {

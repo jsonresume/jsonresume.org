@@ -342,6 +342,20 @@ export {
   type TimelineProps,
 } from './components/viz/feed';
 export {
+  TimeSeriesChart,
+  formatDay,
+  type TimeSeriesChartProps,
+  type TimeSeriesPoint,
+  type TimeSeriesSeries,
+} from './components/viz/time-series-chart';
+export {
+  BarList,
+  type BarListItem,
+  type BarListProps,
+} from './components/viz/bar-list';
+export { compactNumber } from './components/viz/scale';
+export { Sparkline, type SparklineProps } from './components/data/sparkline';
+export {
   BarChart,
   LineChart,
   RadarChart,
@@ -359,6 +373,18 @@ export {
   PreviewFrame,
   type PreviewFrameProps,
 } from './components/viz/preview-frame';
+
+// App: the signed-in, full-screen layout
+export { AppShell, type AppShellProps } from './components/app/app-shell';
+export {
+  AppNav,
+  type AppNavItem,
+  type AppNavLinkProps,
+  type AppNavProps,
+} from './components/app/app-nav';
+export { AppPage, type AppPageProps } from './components/app/app-page';
+export { AuthCard, type AuthCardProps } from './components/app/auth-card';
+export { GithubIcon } from './components/app/github-icon';
 
 // Layout and interaction
 export { Panel, type PanelProps } from './components/workspace/panel';

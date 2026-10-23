@@ -216,8 +216,15 @@ export const legendItem = style({
 export const swatchColor = createVar();
 
 export const legendSwatch = style({
-  width: '0.75rem',
-  height: '0.25rem',
+  width: '0.625rem',
+  height: '0.625rem',
+  borderRadius: '2px',
+  backgroundColor: swatchColor,
+});
+
+export const legendLine = style({
+  width: '0.875rem',
+  height: '2px',
   borderRadius: '1px',
   backgroundColor: swatchColor,
 });

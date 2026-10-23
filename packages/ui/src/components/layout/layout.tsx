@@ -1,10 +1,13 @@
 import { Slot } from '@radix-ui/react-slot';
 import { assignInlineVars } from '@vanilla-extract/dynamic';
-import { forwardRef, type HTMLAttributes } from 'react';
+import { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
 import { cx } from '../../utils/cx';
 import {
   container,
   divider,
+  dividerLabelled,
+  dividerLine,
+  dividerText,
   grid,
   minColumn,
   section,
@@ -110,13 +113,30 @@ export interface DividerProps extends HTMLAttributes<HTMLDivElement> {
   orientation?: 'horizontal' | 'vertical';
   /** Decorative dividers are hidden from assistive technology. Defaults to true. */
   decorative?: boolean;
+  /** Text in the middle of a horizontal rule, e.g. "or" between sign-in options. */
+  label?: ReactNode;
 }
 
 export const Divider = forwardRef<HTMLDivElement, DividerProps>(
   function Divider(
-    { orientation = 'horizontal', decorative = true, className, ...props },
+    {
+      orientation = 'horizontal',
+      decorative = true,
+      label,
+      className,
+      ...props
+    },
     ref
   ) {
+    if (label !== undefined && orientation === 'horizontal') {
+      return (
+        <div ref={ref} className={cx(dividerLabelled, className)} {...props}>
+          <span className={dividerLine} aria-hidden="true" />
+          <span className={dividerText}>{label}</span>
+          <span className={dividerLine} aria-hidden="true" />
+        </div>
+      );
+    }
     return (
       <div
         ref={ref}

@@ -48,6 +48,18 @@ describe.each([
     expect(contrast(fg, bg)).toBeGreaterThanOrEqual(4.5);
   });
 
+  it.each(['series1', 'series2'] as const)(
+    'chart %s stands out on page and raised surfaces (3:1)',
+    (key) => {
+      expect(
+        contrast(colors.chart[key], colors.surface.page)
+      ).toBeGreaterThanOrEqual(3);
+      expect(
+        contrast(colors.chart[key], colors.surface.raised)
+      ).toBeGreaterThanOrEqual(3);
+    }
+  );
+
   it('focus ring is visible against the page (3:1)', () => {
     expect(contrast(colors.focus, colors.surface.page)).toBeGreaterThanOrEqual(
       3

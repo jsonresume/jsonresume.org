@@ -32,7 +32,30 @@ export const statValue = style({
   fontSize: font.size['3xl'],
   fontWeight: font.weight.light,
   lineHeight: font.lineHeight.tight,
-  fontVariantNumeric: 'tabular-nums',
+});
+
+export const statRow = style({
+  display: 'flex',
+  flexWrap: 'wrap',
+  alignItems: 'flex-end',
+  justifyContent: 'space-between',
+  gap: space[3],
+});
+
+export const sparkline = style({ display: 'block', flexShrink: 0 });
+
+export const sparkLine = style({
+  fill: 'none',
+  stroke: color.chart.deemphasis,
+  strokeWidth: 1.5,
+  strokeLinejoin: 'round',
+  strokeLinecap: 'round',
+});
+
+export const sparkDot = style({
+  fill: color.chart.series1,
+  stroke: color.surface.raised,
+  strokeWidth: 2,
 });
 
 export const statUnit = style({
