@@ -1,7 +1,7 @@
 import { Badge, Table, Td, Th } from '@jsonresume/ui';
 import { darkColor, lightColor, type ColorTokens } from '@jsonresume/ui/tokens';
 import { contrast } from '@/lib/contrast';
-import styles from './docs.module.css';
+import * as styles from './docs.css';
 
 const texts = ['default', 'strong', 'muted', 'link'] as const;
 const surfaces = ['page', 'subtle', 'muted', 'raised'] as const;

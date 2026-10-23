@@ -4,7 +4,7 @@ import { Card, CardContent, Grid, Stack, Text } from '@jsonresume/ui';
 // stretch (auto-fit) lets a few items fill the row.
 export default function GridStretch() {
   return (
-    <Stack gap={4} style={{ width: '100%' }}>
+    <Stack gap={4}>
       <Text size="xs" tone="muted">
         Default
       </Text>

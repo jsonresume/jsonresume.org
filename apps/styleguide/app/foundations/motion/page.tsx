@@ -2,9 +2,10 @@ import { CodeBlock, Heading, Table, Td, Th } from '@jsonresume/ui';
 import { motion } from '@jsonresume/ui/tokens';
 import type { Metadata } from 'next';
 import { DocSection, DocsLayout } from '@/components/docs-layout';
-import styles from '@/components/docs.module.css';
+import * as styles from '@/components/docs.css';
 import { Example } from '@/components/example';
 import { Guidelines } from '@/components/guidelines';
+import { ReducedMotionNotice } from '@/components/reduced-motion-notice';
 
 export const metadata: Metadata = { title: 'Motion' };
 
@@ -42,6 +43,8 @@ export default function MotionPage() {
             motion.
           </p>
         </header>
+
+        <ReducedMotionNotice />
 
         <DocSection
           id="durations"

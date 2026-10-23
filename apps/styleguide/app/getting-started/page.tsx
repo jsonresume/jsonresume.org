@@ -1,7 +1,7 @@
-import { Callout, CodeBlock, Heading, Prose } from '@jsonresume/ui';
+import { Callout, Code, CodeBlock, Heading, Prose } from '@jsonresume/ui';
 import type { Metadata } from 'next';
 import { DocSection, DocsLayout } from '@/components/docs-layout';
-import styles from '@/components/docs.module.css';
+import * as styles from '@/components/docs.css';
 
 export const metadata: Metadata = { title: 'Getting started' };
 
@@ -96,6 +96,11 @@ export default function GettingStartedPage() {
         >
           <CodeBlock label="notice.module.css" code={css} />
           <CodeBlock label="notice.css.ts" code={ts} />
+          <Callout title="Writing your own .css.ts files in a Next.js app">
+            Add <Code>@vanilla-extract/next-plugin</Code> to next.config and run
+            Next with <Code>--webpack</Code>. The package itself ships compiled,
+            so apps that only use its components need no plugin at all.
+          </Callout>
         </DocSection>
 
         <DocSection id="dark" title="Dark mode">

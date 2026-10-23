@@ -4,7 +4,7 @@ import { Card, CardContent, CardTitle, Grid, Text } from '@jsonresume/ui';
 // above it get elevation.
 export default function ShapeElevation() {
   return (
-    <Grid minColumnWidth="12rem" gap={6} style={{ width: '100%' }}>
+    <Grid minColumnWidth="12rem" gap={6}>
       <Card>
         <CardContent>
           <CardTitle>On the page</CardTitle>

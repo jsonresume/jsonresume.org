@@ -16,7 +16,7 @@ import {
   Text,
 } from '@jsonresume/ui';
 import NextLink from 'next/link';
-import styles from '@/components/docs.module.css';
+import * as styles from '@/components/docs.css';
 import { componentDocs } from '@/lib/components';
 
 const principles = [

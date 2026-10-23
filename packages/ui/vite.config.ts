@@ -29,7 +29,10 @@ export default defineConfig({
       output: {
         preserveModules: true,
         preserveModulesRoot: 'src',
-        entryFileNames: '[name].js',
+        // Compiled style modules are emitted as *.styles.js, not *.css.js, so
+        // a consuming app's vanilla-extract plugin doesn't re-process them.
+        entryFileNames: (chunk) =>
+          `${chunk.name.replace(/\.css$/, '.styles')}.js`,
         assetFileNames: (asset) =>
           asset.names?.some((n) => n.endsWith('.css'))
             ? 'styles.css'

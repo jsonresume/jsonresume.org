@@ -10,18 +10,11 @@ import {
   Stack,
   Text,
 } from '@jsonresume/ui';
-import { vars } from '@jsonresume/ui/tokens';
+import * as styles from './light-dark.css';
 
 function Sample() {
   return (
-    <Stack
-      gap={4}
-      style={{
-        padding: vars.space[5],
-        background: vars.color.surface.page,
-        color: vars.color.text.default,
-      }}
-    >
+    <div className={styles.panel}>
       <Card>
         <CardContent>
           <CardTitle>Pro</CardTitle>
@@ -36,7 +29,7 @@ function Sample() {
         <Badge tone="success">Valid</Badge>
       </Stack>
       <Callout tone="warning">Deprecated field in use.</Callout>
-    </Stack>
+    </div>
   );
 }
 
@@ -44,7 +37,7 @@ function Sample() {
 // re-themed with no extra code.
 export default function ColorLightDark() {
   return (
-    <Grid minColumnWidth="16rem" gap={0} stretch style={{ width: '100%' }}>
+    <Grid minColumnWidth="16rem" gap={0} stretch>
       <div data-theme="light">
         <Sample />
       </div>

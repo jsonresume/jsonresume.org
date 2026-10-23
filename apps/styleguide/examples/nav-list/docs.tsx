@@ -1,8 +1,9 @@
 import { NavList, NavListGroup, NavListItem } from '@jsonresume/ui';
+import * as styles from './docs.css';
 
 export default function NavListDocs() {
   return (
-    <NavList label="Guide" style={{ width: '15rem' }}>
+    <NavList label="Guide" className={styles.root}>
       <NavListGroup label="Start">
         <NavListItem href="#getting-started" active>
           Getting started

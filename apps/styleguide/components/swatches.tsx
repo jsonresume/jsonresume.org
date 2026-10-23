@@ -1,7 +1,8 @@
+import { assignInlineVars } from '@vanilla-extract/dynamic';
 import { Badge, Table, Td, Th } from '@jsonresume/ui';
 import { darkColor, lightColor, type ColorTokens } from '@jsonresume/ui/tokens';
 import { contrast, isHex } from '@/lib/contrast';
-import styles from './docs.module.css';
+import * as styles from './docs.css';
 
 const kebab = (s: string) => s.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
 
@@ -33,7 +34,7 @@ function Chip({ value }: { value: string }) {
       <span
         aria-hidden="true"
         className={styles.chipColor}
-        style={{ background: value }}
+        style={assignInlineVars({ [styles.fill]: value })}
       />
       <span className={styles.mono}>{value}</span>
     </span>

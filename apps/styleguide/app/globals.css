@@ -1,8 +1,0 @@
-/* The styleguide's own chrome uses only public tokens (--jr-*). */
-html {
-  scroll-padding-top: 1rem;
-}
-
-body {
-  min-height: 100vh;
-}

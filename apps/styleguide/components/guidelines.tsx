@@ -1,4 +1,4 @@
-import styles from './docs.module.css';
+import * as styles from './docs.css';
 
 /** Do / Don't columns used across foundation and component pages. */
 export function Guidelines({

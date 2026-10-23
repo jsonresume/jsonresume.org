@@ -1,8 +1,9 @@
 import { Input, Stack } from '@jsonresume/ui';
+import * as styles from './sizes.css';
 
 export default function InputSizes() {
   return (
-    <Stack gap={3} style={{ width: 'min(100%, 28rem)' }}>
+    <Stack gap={3} className={styles.root}>
       <Input size="sm" aria-label="Small" placeholder="Small" />
       <Input aria-label="Medium" placeholder="Medium" />
       <Input

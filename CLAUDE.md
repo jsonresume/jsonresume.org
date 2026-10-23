@@ -12,7 +12,7 @@
 - `packages/schema` (`@jsonresume/schema`) — THE JSON Resume spec. Consumed internally via `workspace:*`.
 - `packages/cli` (`resume-cli`) — Node 18+, Ajv (draft-07, `strict:false` + `ajv-formats`) validation.
 - `packages/core-rust` (`json-resume-serde`) — Cargo crate, NOT a pnpm package; excluded from JS tooling.
-- `packages/resume-core` (`@jsonresume/core`) — shared theme components. UI: `packages/ui` (`@jsonresume/ui`, the design system: vanilla-extract tokens + React, documented by `apps/styleguide` at styleguide.jsonresume.org; no Tailwind). `packages/ui-legacy` (`@repo/ui`) is the old shadcn/Tailwind set the registry still uses.
+- `packages/resume-core` (`@jsonresume/core`) — shared theme components. UI: `packages/ui` (`@jsonresume/ui`, the design system: vanilla-extract tokens + React, documented by `apps/styleguide` at styleguide.jsonresume.org; no Tailwind). `packages/ui-legacy` (`@repo/ui`) is the old shadcn/Tailwind set the registry still uses. Style with vanilla-extract `.css.ts` files and `vars` tokens (dynamic values via `createVar` + `assignInlineVars`), not inline `style={{}}` or plain CSS.
 
 ## Code Standards
 

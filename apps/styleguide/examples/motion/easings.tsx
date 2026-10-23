@@ -1,8 +1,10 @@
 'use client';
 
-import { Button, Stack, Text, useReducedMotion } from '@jsonresume/ui';
+import { Button, Stack, Text } from '@jsonresume/ui';
 import { vars } from '@jsonresume/ui/tokens';
+import { assignInlineVars } from '@vanilla-extract/dynamic';
 import { useState } from 'react';
+import * as styles from './easings.css';
 
 const curves = [
   {
@@ -24,14 +26,12 @@ const curves = [
 
 export default function MotionEasings() {
   const [moved, setMoved] = useState(false);
-  const reduced = useReducedMotion();
-
   return (
-    <Stack gap={4} style={{ width: '100%' }}>
+    <Stack gap={4} data-moved={moved}>
       <Button
         variant="primary"
         onClick={() => setMoved((m) => !m)}
-        style={{ alignSelf: 'flex-start' }}
+        className={styles.start}
       >
         {moved ? 'Reset' : 'Compare'}
       </Button>
@@ -40,25 +40,10 @@ export default function MotionEasings() {
           <Text size="xs" tone="muted">
             <strong>{curve.label}</strong> · {curve.use}
           </Text>
-          <div
-            style={{
-              height: '1.5rem',
-              position: 'relative',
-              background: vars.color.surface.subtle,
-            }}
-          >
+          <div className={styles.track}>
             <div
-              style={{
-                position: 'absolute',
-                insetBlock: 0,
-                width: '1.5rem',
-                background: vars.color.action.ink,
-                transform: moved
-                  ? 'translateX(calc(min(30rem, 70vw)))'
-                  : 'none',
-                // A slow duration so the curve is visible; real UI uses base.
-                transition: reduced ? 'none' : `transform 900ms ${curve.value}`,
-              }}
+              className={styles.box}
+              style={assignInlineVars({ [styles.easing]: curve.value })}
             />
           </div>
         </Stack>

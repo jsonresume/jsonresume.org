@@ -20,7 +20,7 @@ import {
 // rotates. All of it stops under reduced motion.
 export default function MotionInComponents() {
   return (
-    <Stack gap={6} style={{ width: '100%' }}>
+    <Stack gap={6}>
       <Stack direction="row" gap={3} wrap>
         <Dialog>
           <DialogTrigger asChild>

@@ -17,7 +17,7 @@ import {
 } from '@jsonresume/ui';
 import { useState, type ReactNode } from 'react';
 import props from '@/generated/props.json';
-import styles from './docs.module.css';
+import * as styles from './docs.css';
 
 type Value = string | boolean;
 

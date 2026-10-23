@@ -1,7 +1,7 @@
 import { CodeBlock, Heading, Prose } from '@jsonresume/ui';
 import type { Metadata } from 'next';
 import { DocSection, DocsLayout } from '@/components/docs-layout';
-import styles from '@/components/docs.module.css';
+import * as styles from '@/components/docs.css';
 import { Example } from '@/components/example';
 
 export const metadata: Metadata = { title: 'Patterns' };

@@ -1,7 +1,7 @@
 import { Badge, Code, Table, Td, Text, Th } from '@jsonresume/ui';
 import type { ReactNode } from 'react';
 import props from '@/generated/props.json';
-import styles from './docs.module.css';
+import * as styles from './docs.css';
 
 interface PropDoc {
   name: string;

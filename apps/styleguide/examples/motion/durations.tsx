@@ -1,60 +1,41 @@
 'use client';
 
-import { Button, Stack, Text, useReducedMotion } from '@jsonresume/ui';
+import { Button, Stack } from '@jsonresume/ui';
 import { motion, vars } from '@jsonresume/ui/tokens';
+import { assignInlineVars } from '@vanilla-extract/dynamic';
 import { useState } from 'react';
+import * as styles from './durations.css';
 
 const durations = Object.keys(motion.duration) as Array<
   keyof typeof motion.duration
 >;
 
+// Each row sets the duration variable; the stylesheet does the rest.
 export default function MotionDurations() {
   const [moved, setMoved] = useState(false);
-  const reduced = useReducedMotion();
-
   return (
-    <Stack gap={4} style={{ width: '100%' }}>
-      <Stack direction="row" gap={3} align="center">
-        <Button variant="primary" onClick={() => setMoved((m) => !m)}>
-          {moved ? 'Reset' : 'Play'}
-        </Button>
-        {reduced ? (
-          <Text tone="muted">Reduced motion is on, so the boxes jump.</Text>
-        ) : null}
-      </Stack>
+    <Stack gap={4} data-moved={moved}>
+      <Button
+        variant="primary"
+        onClick={() => setMoved((m) => !m)}
+        className={styles.start}
+      >
+        {moved ? 'Reset' : 'Play'}
+      </Button>
       {durations.map((name) => (
-        <Stack key={name} direction="row" gap={4} align="center">
-          <Text
-            as="span"
-            size="xs"
-            tone="muted"
-            style={{
-              width: '12rem',
-              flexShrink: 0,
-              whiteSpace: 'nowrap',
-              fontFamily: vars.font.family.mono,
-            }}
-          >
+        <div key={name} className={styles.row}>
+          <span className={styles.label}>
             duration.{name} · {motion.duration[name]}
-          </Text>
-          <div style={{ flex: 1, height: '2rem', position: 'relative' }}>
+          </span>
+          <div className={styles.track}>
             <div
-              style={{
-                position: 'absolute',
-                insetBlock: 0,
-                width: '2rem',
-                borderRadius: vars.radius.sm,
-                background: vars.color.action.primary,
-                transform: moved
-                  ? 'translateX(calc(min(24rem, 60vw)))'
-                  : 'none',
-                transition: reduced
-                  ? 'none'
-                  : `transform ${vars.motion.duration[name]} ${vars.motion.easing.standard}`,
-              }}
+              className={styles.box}
+              style={assignInlineVars({
+                [styles.duration]: vars.motion.duration[name],
+              })}
             />
           </div>
-        </Stack>
+        </div>
       ))}
     </Stack>
   );

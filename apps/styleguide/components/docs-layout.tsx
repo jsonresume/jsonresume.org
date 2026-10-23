@@ -1,7 +1,7 @@
 import { Container, Heading } from '@jsonresume/ui';
 import type { ReactNode } from 'react';
 import { DocsSidebar } from './docs-sidebar';
-import styles from './docs.module.css';
+import * as styles from './docs.css';
 
 /** Sidebar + content shell used by every documentation page. */
 export function DocsLayout({ children }: { children: ReactNode }) {

@@ -1,17 +1,13 @@
 'use client';
 
-import { Button, Callout, Stack, useReducedMotion } from '@jsonresume/ui';
-import { vars } from '@jsonresume/ui/tokens';
+import { Button, Callout, Stack } from '@jsonresume/ui';
 import { useState } from 'react';
+import * as styles from './enter-exit.css';
 
-// Enter with easing.out (fast start, gentle stop); fade and rise 8px.
-// Only opacity and transform change, so nothing reflows.
 export default function MotionEnterExit() {
   const [open, setOpen] = useState(false);
-  const reduced = useReducedMotion();
-
   return (
-    <Stack gap={4} style={{ width: 'min(100%, 28rem)' }}>
+    <Stack gap={4}>
       <Button
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
@@ -19,17 +15,7 @@ export default function MotionEnterExit() {
       >
         {open ? 'Hide note' : 'Show note'}
       </Button>
-      <div
-        id="saved-note"
-        style={{
-          opacity: open ? 1 : 0,
-          transform: open || reduced ? 'none' : 'translateY(8px)',
-          visibility: open ? 'visible' : 'hidden',
-          transition: reduced
-            ? 'none'
-            : `opacity ${vars.motion.duration.base} ${vars.motion.easing.out}, transform ${vars.motion.duration.base} ${vars.motion.easing.out}, visibility ${vars.motion.duration.base}`,
-        }}
-      >
+      <div id="saved-note" className={styles.note} data-open={open}>
         <Callout tone="success" title="Saved">
           Your resume was published to the registry.
         </Callout>

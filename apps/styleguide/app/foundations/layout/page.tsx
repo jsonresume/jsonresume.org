@@ -2,7 +2,7 @@ import { Heading, Prose, Table, Td, Th } from '@jsonresume/ui';
 import { breakpoints, layout, zIndex } from '@jsonresume/ui/tokens';
 import type { Metadata } from 'next';
 import { DocSection, DocsLayout } from '@/components/docs-layout';
-import styles from '@/components/docs.module.css';
+import * as styles from '@/components/docs.css';
 import { Example } from '@/components/example';
 
 export const metadata: Metadata = { title: 'Layout' };

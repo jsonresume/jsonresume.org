@@ -7,7 +7,7 @@ const copy =
 // eye lose its place when it returns to the start of the next line.
 export default function TypographyMeasure() {
   return (
-    <Stack gap={6} style={{ width: '100%' }}>
+    <Stack gap={6}>
       <Stack gap={1}>
         <Text caps tone="muted">
           Do: measure

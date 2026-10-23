@@ -12,7 +12,7 @@ import {
 export default function MotionReduced() {
   const reduced = useReducedMotion();
   return (
-    <Stack gap={3} style={{ width: '100%' }}>
+    <Stack gap={3}>
       <Text>
         Your system preference:{' '}
         <Badge tone={reduced ? 'warning' : 'neutral'}>

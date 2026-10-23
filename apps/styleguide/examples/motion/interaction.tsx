@@ -7,6 +7,7 @@ import {
   Stack,
   Text,
 } from '@jsonresume/ui';
+import * as styles from './interaction.css';
 
 // Hover and focus changes use duration.base (250ms) on color and border
 // only. Hover these, then Tab through them.
@@ -16,7 +17,7 @@ export default function MotionInteraction() {
       <Button>Hover me</Button>
       <Button variant="primary">And me</Button>
       <Link href="#motion">A link</Link>
-      <Card interactive style={{ width: '12rem' }}>
+      <Card interactive className={styles.root}>
         <CardContent>
           <CardTitle>Interactive card</CardTitle>
           <Text size="xs" tone="muted">
