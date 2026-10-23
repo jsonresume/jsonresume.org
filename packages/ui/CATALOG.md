@@ -1,5 +1,7 @@
 # Component catalog: what the registry needs that @jsonresume/ui lacks
 
+✅ marks components that are built and documented on the styleguide.
+
 A list of the component types the registry uses that the design system
 doesn't provide yet. Entries describe what each component does, not how it
 looks today: each one will be designed fresh in the jsonresume.org style.
@@ -12,22 +14,22 @@ looks today: each one will be designed fresh in the jsonresume.org style.
 
 ## Overlays and notices
 
-| Component          | What it does                                                                                               | Uses                                                                      | Have                   | Priority |
-| ------------------ | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | ---------------------- | -------- |
-| **Toast**          | Brief, non-blocking confirmation or error after an action ("Saved", "Upload failed")                       | Pathways: chat persistence, upload, embedding, voice, speech (via sonner) | –                      | P1       |
-| **Dropdown menu**  | A button that opens a list of actions or options                                                           | Job panel footer; mobile site menu                                        | –                      | P1       |
-| **Sheet / drawer** | A panel that slides over the page from the side or bottom, for details without leaving the view            | Pathways swipe detail sheet; job panel                                    | Dialog (centered only) | P1       |
-| **Popover**        | A small anchored panel of rich content (details, quick filters) that's more than a tooltip                 | Graph node details                                                        | Tooltip (text only)    | P2       |
-| **Banner**         | A dismissible, page-wide notice above content (e.g. "You're viewing a public dashboard. Sign in for more") | Public dashboard, jobs, timeline, JSON, ATS pages                         | Callout (inline only)  | P1       |
+| Component             | What it does                                                                                               | Uses                                                                      | Have                   | Priority |
+| --------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | ---------------------- | -------- |
+| ✅ **Toast**          | Brief, non-blocking confirmation or error after an action ("Saved", "Upload failed")                       | Pathways: chat persistence, upload, embedding, voice, speech (via sonner) | –                      | P1       |
+| ✅ **Dropdown menu**  | A button that opens a list of actions or options                                                           | Job panel footer; mobile site menu                                        | –                      | P1       |
+| ✅ **Sheet / drawer** | A panel that slides over the page from the side or bottom, for details without leaving the view            | Pathways swipe detail sheet; job panel                                    | Dialog (centered only) | P1       |
+| ✅ **Popover**        | A small anchored panel of rich content (details, quick filters) that's more than a tooltip                 | Graph node details                                                        | Tooltip (text only)    | P2       |
+| ✅ **Banner**         | A dismissible, page-wide notice above content (e.g. "You're viewing a public dashboard. Sign in for more") | Public dashboard, jobs, timeline, JSON, ATS pages                         | Callout (inline only)  | P1       |
 
 ## Navigation
 
-| Component                  | What it does                                                                          | Uses                                                  | Have                                           | Priority |
-| -------------------------- | ------------------------------------------------------------------------------------- | ----------------------------------------------------- | ---------------------------------------------- | -------- |
-| **Tab navigation (links)** | Horizontal navigation between sibling pages of one area, showing the current one      | Profile area: dashboard, jobs, timeline, ATS, letter… | NavList (vertical); Tabs (in-page panels only) | P1       |
-| **Account menu**           | Signed-in user's avatar or name in the header, opening profile, settings and sign out | Site header auth links                                | SiteHeader `actions` slot                      | P1       |
-| **Pagination / load more** | Move through long result sets, or append the next page                                | Job board, explore, activity log, chat history        | –                                              | P1       |
-| **Back link**              | Return to the parent list from a detail page                                          | Job detail                                            | Link                                           | P3       |
+| Component                     | What it does                                                                          | Uses                                                  | Have                                           | Priority |
+| ----------------------------- | ------------------------------------------------------------------------------------- | ----------------------------------------------------- | ---------------------------------------------- | -------- |
+| ✅ **Tab navigation (links)** | Horizontal navigation between sibling pages of one area, showing the current one      | Profile area: dashboard, jobs, timeline, ATS, letter… | NavList (vertical); Tabs (in-page panels only) | P1       |
+| ✅ **Account menu**           | Signed-in user's avatar or name in the header, opening profile, settings and sign out | Site header auth links                                | SiteHeader `actions` slot                      | P1       |
+| ✅ **Pagination / load more** | Move through long result sets, or append the next page                                | Job board, explore, activity log, chat history        | –                                              | P1       |
+| ✅ **Back link**              | Return to the parent list from a detail page                                          | Job detail                                            | Link                                           | P3       |
 
 ## Inputs
 

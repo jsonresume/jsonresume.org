@@ -2,7 +2,7 @@ import '@jsonresume/ui/fonts.css';
 import '@jsonresume/ui/styles.css';
 import './global.css';
 
-import { base, SkipLink, TooltipProvider } from '@jsonresume/ui';
+import { base, SkipLink, Toaster, TooltipProvider } from '@jsonresume/ui';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { DocsHeader } from '@/components/docs-header';
@@ -26,6 +26,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <SkipLink />
           <DocsHeader />
           {children}
+          <Toaster />
         </TooltipProvider>
       </body>
     </html>
