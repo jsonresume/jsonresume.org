@@ -1,0 +1,27 @@
+{
+  "name": "@repo/server",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Hono server for prerendered sites, with an Effect HttpApi mounted alongside",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts,.tsx"
+  },
+  "dependencies": {
+    "@hono/node-server": "^2.1.5",
+    "effect": "4.0.6",
+    "hono": "^4.13.13"
+  },
+  "devDependencies": {
+    "@repo/eslint-config-custom": "workspace:*",
+    "@types/node": "^20.19.24",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.6"
+  }
+}

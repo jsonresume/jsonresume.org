@@ -1,5 +1,119 @@
 # Repository Guidelines
 
+Two parts: **the new jsonresume.org stack**, which governs `apps/app` and every
+package it uses, and **general repository guidelines**, which apply everywhere.
+Where they disagree, the new stack wins for new code.
+
+# Part 1: the new jsonresume.org stack
+
+jsonresume.org is being rebuilt from scratch in `apps/app`, served from our own
+server (see `SELF_HOSTING_PLAN.md` and `deploy/README.md`). The older apps
+(`apps/registry`, `apps/homepage2`) are reference material only: read them for
+behaviour and content, never copy their code or patterns.
+
+Everything below applies to `apps/app` and every package it uses. It does not
+apply to the older apps.
+
+## Stack (agreed 2026-10-23)
+
+| Concern             | Use                                                                                                                                                                                                           | Not                                                             |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| Language            | TypeScript, strict. No `any`, no non-null `!` to silence errors                                                                                                                                               | JavaScript                                                      |
+| UI                  | React 19 + `@jsonresume/ui` (vanilla-extract tokens and components)                                                                                                                                           | Tailwind, shadcn, inline `style={{}}`, CSS files                |
+| Build               | Vite 6                                                                                                                                                                                                        | Next.js                                                         |
+| Routing             | TanStack Router (code-based routes, typed params and search)                                                                                                                                                  | React Router, hand-rolled routing                               |
+| State               | Effect Atom: `effect/reactivity` + `@effect/atom-react`                                                                                                                                                       | Zustand, Redux, Jotai, React Query, ad-hoc `useEffect` fetching |
+| Effects and errors  | Effect 4 (`effect`), everywhere: server, data, client                                                                                                                                                         | raw promises with try/catch in app code                         |
+| Data and validation | Effect Schema (`effect/schema` via `Schema`) for every type that crosses a boundary                                                                                                                           | zod, Ajv, hand-written guards (use `Predicate`)                 |
+| HTTP server         | Hono on Node (`@hono/node-server`): static files, pages, middleware                                                                                                                                           | Express, Next API routes, a hand-rolled server                  |
+| API                 | Effect `HttpApi` (`effect/http-api`), mounted in Hono at `/api` via `HttpRouter.toWebHandler`                                                                                                                 | Hono RPC routes, hand-written JSON handlers                     |
+| API contract        | `HttpApi` defined once in `@repo/api`; clients from `HttpApiClient`/`AtomHttpApi`                                                                                                                             | hand-written fetch wrappers                                     |
+| Database            | `effect/sql` + `@effect/sql-pg` against our Postgres                                                                                                                                                          | supabase-js, Prisma                                             |
+| Config              | Effect `Config`                                                                                                                                                                                               | reading `process.env` directly                                  |
+| Rendering           | TanStack Router SSR (`createRequestHandler`, `RouterServer`, `RouterClient`, `HeadContent`, `Scripts`) via `@repo/ssg`: content pages prerendered through it at build time, dynamic pages rendered by it live | client-only rendering, hand-rolled SSR, TanStack Start          |
+| Tests               | Vitest, Testing Library, `@effect/vitest` for Effect code                                                                                                                                                     | Jest                                                            |
+
+Effect 4 ships its own guide and examples in `node_modules/effect/AGENTS.md`
+and `node_modules/effect/ai-docs/`. Read them before writing Effect code; the
+v3 APIs you may remember (`@effect/platform`, `Schema` from `@effect/schema`,
+`Context.Tag`, `Effect.catchAll`) are gone or renamed.
+
+## Packages: build features as reusable packages
+
+Apps are thin. `apps/app` holds routes and wiring; anything with logic, data or
+UI that another app could use lives in `packages/*`. Prefer a new focused
+package over growing an app.
+
+| Package               | What it holds                                                                                                                                 |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@jsonresume/ui`      | Design system: tokens and generic components. No jsonresume.org copy or data. New generic components go here, with a styleguide example.      |
+| `@repo/domain`        | Effect Schema models shared by everything (Project, TeamMember, BlogPost, …). No React, no IO.                                                |
+| `@repo/content`       | Site content: Markdown documents, blog posts and typed data lists, each decoded with a `@repo/domain` schema. No React.                       |
+| `@repo/site`          | The jsonresume.org shell in React: layout, navigation, Markdown and document page templates. Uses `@jsonresume/ui`.                           |
+| `@repo/theme-gallery` | Theme catalog: search and filter logic, its atoms, and the gallery components.                                                                |
+| `@repo/ssg`           | TanStack Router SSR for Vite apps: Vite manifest to router manifest, request renderer, prerendering, hydration, SSR dev server. App-agnostic. |
+| `@repo/api`           | The `HttpApi` contract: groups, endpoints, request/response schemas. Shared by server and clients; no server code.                            |
+| `@repo/server`        | A Hono app factory: static files with cache rules, the 404 page, health, and the Effect `HttpApi` mounted at `/api`.                          |
+
+Dependency direction: `domain` ← `content`, `api` ← `site`, feature packages ←
+`apps/app`. Packages never import from apps. `@jsonresume/ui` imports nothing
+from `@repo/*`.
+
+A new package needs: `package.json` (`"type": "module"`, `exports` pointing at
+`src/index.ts`, scripts `test`, `typecheck`, `lint`), `tsconfig.json` extending
+`tsconfig/base.json`, a short README saying what it is for, and tests.
+
+## Conventions
+
+- **Effect style** (from Effect's own guide): `Effect.gen` inline;
+  `Effect.fn("name")` for reusable functions; services as `Context.Service`
+  classes with a static `layer`; errors as `Schema.TaggedError`; parse untrusted
+  data with `Schema.decodeUnknown*`, never by hand.
+- **Routes** are declared in `apps/app/src/routes` with `createRoute` and a
+  `head` from `pageHead()` (title, description, canonical URL); the page
+  component lives in a `.lazy.tsx` file. The root route renders `<html>` with
+  `<HeadContent />` and `<Scripts />`. Data comes from route `loader`s, which
+  run on the server and are dehydrated into the HTML. Search params are
+  validated with an Effect Schema (`Schema.toStandardSchemaV1`).
+- **State**: derive from the URL first (search params), then atoms. Atoms live
+  next to the feature that owns them (usually in its package) and are exported
+  for reuse; components read them with `useAtomValue` / `useAtom`. Wrap the
+  feature in `RegistryProvider` where it mounts (for example the themes page),
+  not the whole app: Effect's runtime then loads only on pages that use atoms,
+  and each server render gets its own registry. Move it to the root route once
+  there is app-wide state.
+- **Bundle size**: page components load per route (`createRoute(...).lazy()`),
+  data arrives through route loaders (dehydrated into the HTML), and packages
+  expose narrow entry points (`@repo/site/doc`, `@repo/content/slugs`) so the
+  main chunk carries only the shell. Check `pnpm build` output when adding
+  dependencies to anything every page loads.
+- **Content** is data: prose is Markdown in `@repo/content`, lists are typed
+  arrays decoded with a schema. Pages render content; they do not contain it.
+- **Styling**: vanilla-extract `.css.ts` files using `vars` and `media` from
+  `@jsonresume/ui/tokens`. Dynamic values via `createVar` + `assignInlineVars`.
+- **Files** stay under 200 lines (tests and config: 500).
+- **Logging**: Effect's logger on the server; no `console.*` anywhere.
+- **Facts on the site** (counts, dates, commands) must be checked against the
+  source of truth, and computed from data where possible.
+- **Accessibility**: one `h1` per page, landmarks, alt text, keyboard support;
+  component tests run axe.
+
+## Commands
+
+```sh
+pnpm --filter app dev          # Vite + SSR dev server: every page server-rendered, with HMR
+pnpm --filter app build        # client, SSR and server builds, then prerender
+pnpm --filter app start        # serve dist/: Hono, with the Effect API at /api
+pnpm --filter app test         # vitest
+pnpm turbo typecheck lint test --filter=app...   # app and every package it uses
+```
+
+# Part 2: general repository guidelines
+
+These predate the rebuild. The Next.js, Vercel and Supabase specifics describe
+the older apps (`apps/registry`, `apps/homepage2`); the style, testing and
+commit rules apply to all code.
+
 ## Project Philosophy & Scope
 
 This repository is a Turborepo-driven Next.js monorepo focused purely on technical excellence—no community morale docs or Code of Conduct. Always build features with performance, maintainability, and developer experience in mind. When adding AI capabilities, standardize on Vercel AI SDK v5 (`ai` + `@ai-sdk/openai`) with streaming responses and tool calling.

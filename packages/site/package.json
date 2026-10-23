@@ -1,0 +1,54 @@
+{
+  "name": "@repo/site",
+  "version": "0.0.0",
+  "private": true,
+  "description": "The jsonresume.org site in React: layout, navigation, page templates and home page",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./home": "./src/home/index.ts",
+    "./doc": "./src/pages/DocPage.tsx",
+    "./blog": "./src/pages/BlogPages.tsx",
+    "./projects": "./src/pages/ProjectsPage.tsx",
+    "./team": "./src/pages/TeamPage.tsx",
+    "./themes": "./src/pages/ThemesPage.tsx"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts,.tsx"
+  },
+  "dependencies": {
+    "@effect/atom-react": "4.0.6",
+    "@jsonresume/ui": "workspace:*",
+    "@repo/content": "workspace:*",
+    "@repo/domain": "workspace:*",
+    "@repo/theme-gallery": "workspace:*",
+    "effect": "4.0.6"
+  },
+  "peerDependencies": {
+    "@tanstack/react-router": "^1.170.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@repo/eslint-config-custom": "workspace:*",
+    "@tanstack/react-router": "1.170.46",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "@vanilla-extract/css": "^1.21.3",
+    "@vanilla-extract/vite-plugin": "^5.2.6",
+    "jsdom": "^27.0.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.9.3",
+    "vite": "^6.4.3",
+    "vitest": "^3.2.6"
+  },
+  "sideEffects": [
+    "**/*.css.ts"
+  ]
+}

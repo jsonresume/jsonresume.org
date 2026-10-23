@@ -1,0 +1,33 @@
+{
+  "name": "@repo/content",
+  "version": "0.0.0",
+  "private": true,
+  "description": "jsonresume.org content: Markdown documents, blog posts and typed data lists",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./facts": "./src/facts.ts",
+    "./placeholders": "./src/placeholders.ts",
+    "./data": "./src/data.ts",
+    "./documents": "./src/documents.ts",
+    "./slugs": "./src/slugs.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts,.tsx"
+  },
+  "dependencies": {
+    "@jsonresume/schema": "workspace:*",
+    "@jsonresume/theme-metadata": "workspace:*",
+    "@repo/domain": "workspace:*",
+    "effect": "4.0.6"
+  },
+  "devDependencies": {
+    "@repo/eslint-config-custom": "workspace:*",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.9.3",
+    "vite": "^6.4.3",
+    "vitest": "^3.2.6"
+  }
+}

@@ -3,7 +3,8 @@
 ## Project
 
 - **Org/Repo:** `jsonresume/jsonresume.org` — ALWAYS use `owner: "jsonresume"`
-- **Stack:** Next.js monorepo (Turborepo + pnpm), Vercel deployment, Supabase DB (`registry`)
+- **New stack:** jsonresume.org is being rebuilt in `apps/app` with React + Vite, TanStack Router, Effect 4 (Schema, HttpApi server, SQL), Effect Atom and `@jsonresume/ui`, as reusable `packages/*`. Follow AGENTS.md for all new code: @AGENTS.md
+- **Legacy stack:** Next.js monorepo (Turborepo + pnpm), Vercel deployment, Supabase DB (`registry`) — `apps/registry` and `apps/homepage2`, now reference only
 - **AI SDK:** Use Vercel AI SDK (`ai@^6` + `@ai-sdk/openai@^3`), never vendor SDKs directly
 - **Post-consolidation:** This monorepo now absorbs the former standalone repos. The old `resume-schema`, `resume-cli`, `rust-json-resume` repos are **archived** — never link them as live (tracking: #275).
 
