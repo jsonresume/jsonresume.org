@@ -4,6 +4,9 @@ import { notFound } from 'next/navigation';
 import { DocSection, DocsLayout } from '@/components/docs-layout';
 import styles from '@/components/docs.module.css';
 import { Example } from '@/components/example';
+import { Guidelines } from '@/components/guidelines';
+import { Playground } from '@/components/playground';
+import { playgroundSlugs } from '@/lib/playgrounds';
 import { PropsTable } from '@/components/props-table';
 import props from '@/generated/props.json';
 import { componentDocs, getComponentDoc } from '@/lib/components';
@@ -55,6 +58,16 @@ export default async function ComponentPage({ params }: Params) {
           </Stack>
         </header>
 
+        {playgroundSlugs.includes(doc.slug) ? (
+          <DocSection
+            id="playground"
+            title="Playground"
+            description="Change the props and copy the result."
+          >
+            <Playground slug={doc.slug} />
+          </DocSection>
+        ) : null}
+
         <DocSection id="examples" title="Examples">
           {doc.examples.map((example) => (
             <Example key={example.id} slug={doc.slug} example={example} />
@@ -63,24 +76,7 @@ export default async function ComponentPage({ params }: Params) {
 
         {doc.guidelines ? (
           <DocSection id="usage" title="Usage">
-            <div className={styles.guidelines}>
-              <div className={`${styles.guide} ${styles.guideDo}`}>
-                <h3>Do</h3>
-                <ul>
-                  {doc.guidelines.do.map((g) => (
-                    <li key={g}>{g}</li>
-                  ))}
-                </ul>
-              </div>
-              <div className={`${styles.guide} ${styles.guideDont}`}>
-                <h3>Don’t</h3>
-                <ul>
-                  {doc.guidelines.dont.map((g) => (
-                    <li key={g}>{g}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+            <Guidelines do={doc.guidelines.do} dont={doc.guidelines.dont} />
           </DocSection>
         ) : null}
 

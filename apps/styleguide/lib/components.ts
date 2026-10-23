@@ -227,7 +227,10 @@ export const componentDocs: ComponentDoc[] = [
       'A responsive grid without breakpoints: as many columns as fit the minimum width.',
     components: ['Grid'],
     defaults: { gap: '6' },
-    examples: [{ id: 'auto', title: 'Auto-fit columns', block: true }],
+    examples: [
+      { id: 'auto', title: 'Auto-fit columns', block: true },
+      { id: 'stretch', title: 'Stretch to fill', block: true },
+    ],
     accessibility: ['Items flow in reading order at every width.'],
   },
   {
@@ -292,7 +295,10 @@ export const componentDocs: ComponentDoc[] = [
     summary:
       'The title band at the top of inner pages: a light 40px title on light gray.',
     components: ['PageHeader'],
-    examples: [{ id: 'default', title: 'Page header', bleed: true }],
+    examples: [
+      { id: 'default', title: 'Page header', bleed: true },
+      { id: 'brand', title: 'Brand tone', bleed: true },
+    ],
     accessibility: ['Renders the page’s single h1.'],
   },
   {
@@ -338,7 +344,10 @@ export const componentDocs: ComponentDoc[] = [
     summary:
       'Label, hint and error for one control. The control inside picks up its id, aria-describedby, aria-invalid and required automatically.',
     components: ['Field'],
-    examples: [{ id: 'basic', title: 'Label, hint and error', block: true }],
+    examples: [
+      { id: 'basic', title: 'Label, hint and error', block: true },
+      { id: 'form', title: 'A complete form', block: true },
+    ],
     guidelines: {
       do: [
         'Always show a visible label.',
@@ -396,7 +405,15 @@ export const componentDocs: ComponentDoc[] = [
     summary:
       'A square check in ink, with optional indeterminate state and built-in label.',
     components: ['Checkbox'],
-    examples: [{ id: 'basic', title: 'States', block: true }],
+    examples: [
+      { id: 'basic', title: 'States', block: true },
+      {
+        id: 'group',
+        title: 'Group',
+        description: 'A fieldset and legend name the group for screen readers.',
+        block: true,
+      },
+    ],
     accessibility: [
       'Clicking the label toggles the box.',
       'Space toggles it from the keyboard.',
@@ -444,7 +461,10 @@ export const componentDocs: ComponentDoc[] = [
     summary: 'Short status and category labels.',
     components: ['Badge'],
     defaults: { tone: 'neutral' },
-    examples: [{ id: 'tones', title: 'Tones' }],
+    examples: [
+      { id: 'tones', title: 'Tones' },
+      { id: 'in-context', title: 'In context', block: true },
+    ],
     accessibility: ['Every tone meets 4.5:1 text contrast.'],
   },
   {
@@ -479,8 +499,14 @@ export const componentDocs: ComponentDoc[] = [
     summary:
       'What to show when there is nothing yet, and the next step to take.',
     components: ['EmptyState'],
-    examples: [{ id: 'basic', title: 'Basic', block: true }],
-    accessibility: ['Keep the action a real button or link.'],
+    examples: [
+      { id: 'basic', title: 'Basic', block: true },
+      { id: 'with-icon', title: 'With an icon', block: true },
+    ],
+    accessibility: [
+      'Keep the action a real button or link.',
+      'The icon is decorative; the title carries the meaning.',
+    ],
   },
   {
     slug: 'card',
@@ -530,7 +556,10 @@ export const componentDocs: ComponentDoc[] = [
     summary: 'A person’s picture, or their initials when there is none.',
     components: ['Avatar'],
     defaults: { size: 'md', shape: 'square' },
-    examples: [{ id: 'basic', title: 'Sizes and fallback' }],
+    examples: [
+      { id: 'basic', title: 'Sizes and fallback' },
+      { id: 'team', title: 'Team list', block: true },
+    ],
     accessibility: [
       'name is required: it is the alt text and the fallback’s accessible name.',
     ],
@@ -546,7 +575,14 @@ export const componentDocs: ComponentDoc[] = [
       'DialogDescription',
       'DialogFooter',
     ],
-    examples: [{ id: 'confirm', title: 'Confirm a destructive action' }],
+    examples: [
+      { id: 'confirm', title: 'Confirm a destructive action' },
+      {
+        id: 'form',
+        title: 'A short form',
+        description: 'Keep dialog forms to one or two fields.',
+      },
+    ],
     guidelines: {
       do: [
         'Title the dialog with the question being asked.',

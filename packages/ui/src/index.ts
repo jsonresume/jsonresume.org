@@ -3,6 +3,7 @@ export { base } from './styles/base.css';
 export { visuallyHidden } from './styles/shared.css';
 export { vars } from './tokens/contract.css';
 export { cx } from './utils/cx';
+export { useReducedMotion } from './hooks/use-reduced-motion';
 
 // Actions
 export { Button, type ButtonProps } from './components/button/button';

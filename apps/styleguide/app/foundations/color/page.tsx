@@ -3,6 +3,9 @@ import { palette } from '@jsonresume/ui/tokens';
 import type { Metadata } from 'next';
 import { DocSection, DocsLayout } from '@/components/docs-layout';
 import styles from '@/components/docs.module.css';
+import { ContrastMatrix } from '@/components/contrast-matrix';
+import { Example } from '@/components/example';
+import { Guidelines } from '@/components/guidelines';
 import { ColorTokenTable } from '@/components/swatches';
 
 export const metadata: Metadata = { title: 'Color' };
@@ -25,6 +28,77 @@ export default function ColorPage() {
             text pairing is tested to meet WCAG AA.
           </p>
         </header>
+
+        <DocSection
+          id="in-use"
+          title="In use"
+          description="A page is mostly white, with light gray bands for grouping and one yellow band at the top. Red appears only on the main action."
+        >
+          <Example
+            slug="color"
+            example={{
+              id: 'surfaces',
+              title: 'Surfaces and their text',
+              bleed: true,
+            }}
+          />
+        </DocSection>
+
+        <DocSection
+          id="on-brand"
+          title="Text on yellow"
+          description="Brand yellow is identical in both themes, so components placed on it switch to ink-on-yellow tokens automatically."
+        >
+          <Example
+            slug="color"
+            example={{
+              id: 'on-brand',
+              title: 'Section tone="brand"',
+              bleed: true,
+            }}
+          />
+        </DocSection>
+
+        <DocSection
+          id="themes"
+          title="Light and dark"
+          description='data-theme="dark" on any element re-themes everything inside it. Pages are light unless they opt in.'
+        >
+          <Example
+            slug="color"
+            example={{
+              id: 'light-dark',
+              title: 'The same components in both themes',
+              bleed: true,
+            }}
+          />
+        </DocSection>
+
+        <DocSection
+          id="contrast"
+          title="Contrast"
+          description="Computed from the tokens on every build. The same pairs are enforced by unit tests, so a token change that breaks AA fails CI."
+        >
+          <ContrastMatrix theme="light" />
+          <ContrastMatrix theme="dark" />
+        </DocSection>
+
+        <DocSection id="guidelines" title="Guidelines">
+          <Guidelines
+            do={[
+              'Use semantic tokens (text.muted, surface.subtle), never palette values, in components.',
+              'Keep one yellow band per page, at the top.',
+              'Reserve red for the single primary action and for links.',
+              'Pair every status color with an icon or words.',
+            ]}
+            dont={[
+              'Put body text in brand yellow, or yellow on white.',
+              'Use red for decoration or headings.',
+              'Invent a new gray: add a token if one is genuinely missing.',
+              'Rely on color alone to show state.',
+            ]}
+          />
+        </DocSection>
 
         <DocSection
           id="surface"

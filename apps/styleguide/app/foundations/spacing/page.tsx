@@ -3,6 +3,8 @@ import { space } from '@jsonresume/ui/tokens';
 import type { Metadata } from 'next';
 import { DocSection, DocsLayout } from '@/components/docs-layout';
 import styles from '@/components/docs.module.css';
+import { Example } from '@/components/example';
+import { Guidelines } from '@/components/guidelines';
 
 export const metadata: Metadata = { title: 'Spacing' };
 
@@ -20,6 +22,46 @@ export default function SpacingPage() {
             space between sections, not inside them.
           </p>
         </header>
+
+        <DocSection
+          id="in-use"
+          title="Inside and between"
+          description="Group related things tightly and separate groups generously: the space between groups should always be larger than the space within them."
+        >
+          <Example
+            slug="spacing"
+            example={{
+              id: 'inside-between',
+              title: 'Cards in a grid',
+              block: true,
+            }}
+          />
+        </DocSection>
+
+        <DocSection
+          id="rhythm"
+          title="Page rhythm"
+          description="Sections set the vertical rhythm of a page."
+        >
+          <Example
+            slug="spacing"
+            example={{ id: 'rhythm', title: 'Section spacing', bleed: true }}
+          />
+        </DocSection>
+
+        <DocSection id="guidelines" title="Guidelines">
+          <Guidelines
+            do={[
+              'Use Stack and Grid gaps instead of margins on children.',
+              'Step up the scale as elements get bigger: 2 for labels, 4 inside cards, 6 to 8 between cards, 12 to 16 between sections.',
+            ]}
+            dont={[
+              'Use values off the scale (13px, 18px).',
+              'Space groups more tightly than the items inside them.',
+            ]}
+          />
+        </DocSection>
+
         <DocSection id="scale" title="Scale">
           <Table>
             <thead>

@@ -3,6 +3,8 @@ import { radius, shadow } from '@jsonresume/ui/tokens';
 import type { Metadata } from 'next';
 import { DocSection, DocsLayout } from '@/components/docs-layout';
 import styles from '@/components/docs.module.css';
+import { Example } from '@/components/example';
+import { Guidelines } from '@/components/guidelines';
 
 export const metadata: Metadata = { title: 'Radius and elevation' };
 
@@ -20,6 +22,35 @@ export default function ShapePage() {
             the page.
           </p>
         </header>
+
+        <DocSection
+          id="in-use"
+          title="Elevation in use"
+          description="Three card tones cover nearly every case."
+        >
+          <Example
+            slug="shape"
+            example={{
+              id: 'elevation',
+              title: 'On the page, grouped, floating',
+              block: true,
+            }}
+          />
+        </DocSection>
+
+        <DocSection id="guidelines" title="Guidelines">
+          <Guidelines
+            do={[
+              'Use radius.sm (2px) for cards and inputs, radius.md (3px) for buttons.',
+              'Use borders to separate, shadows only to lift things off the page.',
+            ]}
+            dont={[
+              'Round cards or buttons into pills; jsonresume.org is nearly square.',
+              'Stack shadows, or put a shadow on something that does not float.',
+            ]}
+          />
+        </DocSection>
+
         <DocSection id="radius" title="Radius">
           <Grid minColumnWidth="8rem" gap={4}>
             {Object.entries(radius).map(([key, value]) => (
