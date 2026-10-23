@@ -329,3 +329,45 @@ export {
   PreviewFrame,
   type PreviewFrameProps,
 } from './components/viz/preview-frame';
+
+// Layout and interaction
+export { Panel, type PanelProps } from './components/workspace/panel';
+export {
+  Toolbar,
+  ToolbarButton,
+  ToolbarLink,
+  ToolbarSeparator,
+  ToolbarToggleGroup,
+  ToolbarToggleItem,
+  type ToolbarProps,
+} from './components/workspace/toolbar';
+export {
+  SplitView,
+  type SplitViewProps,
+} from './components/workspace/split-view';
+export {
+  VirtualList,
+  type VirtualListProps,
+} from './components/workspace/virtual-list';
+export {
+  ShortcutHelp,
+  formatShortcut,
+  useShortcut,
+  type ShortcutGroup,
+  type ShortcutHelpProps,
+} from './components/workspace/shortcuts';
+export {
+  SwipeDeck,
+  type SwipeDecision,
+  type SwipeDeckProps,
+} from './components/workspace/swipe-deck';
+export {
+  GraphControls,
+  GraphLegend,
+  GraphNodeCard,
+  GraphOverlay,
+  GraphRegion,
+  type GraphControlsProps,
+  type GraphRegionProps,
+  type LegendEntry,
+} from './components/workspace/graph';

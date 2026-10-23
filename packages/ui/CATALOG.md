@@ -1,6 +1,6 @@
 # Component catalog: what the registry needs that @jsonresume/ui lacks
 
-✅ marks components that are built and documented on the styleguide.
+**Status:** all 45 components are built and documented at [styleguide.jsonresume.org](https://styleguide.jsonresume.org). ✅ marks each one.
 
 A list of the component types the registry uses that the design system
 doesn't provide yet. Entries describe what each component does, not how it
@@ -77,15 +77,15 @@ looks today: each one will be designed fresh in the jsonresume.org style.
 
 ## Layout and interaction
 
-| Component              | What it does                                                                          | Uses                                                                  | Have  | Priority |
-| ---------------------- | ------------------------------------------------------------------------------------- | --------------------------------------------------------------------- | ----- | -------- |
-| **Panel**              | A bounded work area with sticky header, scrolling body and footer actions             | Job panels, graph panels, editor panels                               | Card  | P1       |
-| **Toolbar**            | A row of grouped actions and controls for an editor or view                           | Resume editor toolbar; graph controls                                 | Stack | P2       |
-| **Split view**         | Two or three resizable panes side by side (editor and preview; resume, jobs and tree) | Resume editor; decisions page                                         | –     | P2       |
-| **Virtualized list**   | Render very long lists efficiently                                                    | Chat history, activity log, feedback history (via react-virtuoso)     | –     | P2       |
-| **Keyboard shortcuts** | Register shortcuts and show them (with Kbd) in a help overlay                         | Jobs graph navigation                                                 | Kbd   | P3       |
-| **Swipe deck**         | Accept or reject cards by swiping or with keys                                        | Pathways swipe                                                        | –     | P3       |
-| **Graph canvas kit**   | Controls, legend and node details around a network visualisation                      | Jobs graph, job similarity, similarity, Pathways graph, decision tree | –     | P3       |
+| Component                 | What it does                                                                          | Uses                                                                  | Have  | Priority |
+| ------------------------- | ------------------------------------------------------------------------------------- | --------------------------------------------------------------------- | ----- | -------- |
+| ✅ **Panel**              | A bounded work area with sticky header, scrolling body and footer actions             | Job panels, graph panels, editor panels                               | Card  | P1       |
+| ✅ **Toolbar**            | A row of grouped actions and controls for an editor or view                           | Resume editor toolbar; graph controls                                 | Stack | P2       |
+| ✅ **Split view**         | Two or three resizable panes side by side (editor and preview; resume, jobs and tree) | Resume editor; decisions page                                         | –     | P2       |
+| ✅ **Virtualized list**   | Render very long lists efficiently                                                    | Chat history, activity log, feedback history (via react-virtuoso)     | –     | P2       |
+| ✅ **Keyboard shortcuts** | Register shortcuts and show them (with Kbd) in a help overlay                         | Jobs graph navigation                                                 | Kbd   | P3       |
+| ✅ **Swipe deck**         | Accept or reject cards by swiping or with keys                                        | Pathways swipe                                                        | –     | P3       |
+| ✅ **Graph canvas kit**   | Controls, legend and node details around a network visualisation                      | Jobs graph, job similarity, similarity, Pathways graph, decision tree | –     | P3       |
 
 ## Already covered
 
