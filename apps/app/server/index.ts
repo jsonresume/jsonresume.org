@@ -1,65 +1,42 @@
 /**
- * Serves the built app: prerendered pages and hashed assets from
- * dist/client. Server routes (API, auth, resume rendering) will mount here
- * as features move into the app. Runs as jsonresume@app behind Caddy.
+ * The jsonresume.org server: Hono serves the prerendered site from
+ * dist/client and mounts the Effect API at /api. Runs as jsonresume@app
+ * behind Caddy; `vite build --ssr server/index.ts` bundles it.
  */
 import { serve } from '@hono/node-server';
-import { serveStatic } from '@hono/node-server/serve-static';
-import { Hono } from 'hono';
-import { readFile } from 'node:fs/promises';
-import { dirname, join, relative } from 'node:path';
+import { NodeRuntime } from '@effect/platform-node';
+import { createSiteApp, effectWebHandler } from '@repo/server';
+import { Config, Effect } from 'effect';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import pino from 'pino';
+import { apiLayer } from './api';
 
-const logger = pino({ level: process.env.LOG_LEVEL ?? 'info' });
-const clientDir = join(
-  dirname(fileURLToPath(import.meta.url)),
-  '../dist/client'
-);
-// serveStatic resolves `root` against the working directory.
-const root = relative(process.cwd(), clientDir) || '.';
-const notFoundPage = await readFile(join(clientDir, '404.html'), 'utf8');
+const clientDir = join(dirname(fileURLToPath(import.meta.url)), '../client');
 
-const app = new Hono();
+const main = Effect.gen(function* () {
+  const port = yield* Config.Port('PORT').pipe(Config.withDefault(3003));
+  const hostname = yield* Config.String('HOST').pipe(
+    Config.withDefault('127.0.0.1')
+  );
+  const version = yield* Config.String('GIT_COMMIT_SHA').pipe(
+    Config.withDefault('dev')
+  );
 
-app.get('/healthz', (c) => c.text('ok'));
+  const api = yield* Effect.acquireRelease(
+    Effect.sync(() => effectWebHandler(apiLayer(version))),
+    (handler) => Effect.promise(() => handler.dispose())
+  );
+  const app = createSiteApp({
+    clientDir,
+    mount: [{ prefix: '/api', fetch: api.handler }],
+  });
 
-// Vite fingerprints everything under /assets, so it can be cached forever.
-app.use(
-  '/assets/*',
-  serveStatic({
-    root,
-    onFound: (_path, c) => {
-      c.header('Cache-Control', 'public, max-age=31536000, immutable');
-    },
-  })
-);
-
-app.use(
-  '*',
-  serveStatic({
-    root,
-    onFound: (path, c) => {
-      const html = path.endsWith('.html');
-      c.header(
-        'Cache-Control',
-        html ? 'public, max-age=0, must-revalidate' : 'public, max-age=86400'
-      );
-    },
-  })
-);
-
-app.notFound((c) => c.html(notFoundPage, 404));
-
-app.onError((error, c) => {
-  logger.error({ err: error, path: c.req.path }, 'request failed');
-  return c.text('Internal Server Error', 500);
+  yield* Effect.acquireRelease(
+    Effect.sync(() => serve({ fetch: app.fetch, port, hostname })),
+    (server) => Effect.sync(() => server.close())
+  );
+  yield* Effect.logInfo(`listening on http://${hostname}:${port}`, { version });
+  return yield* Effect.never;
 });
 
-const port = Number(process.env.PORT ?? 3003);
-const hostname = process.env.HOST ?? '127.0.0.1';
-serve({ fetch: app.fetch, port, hostname }, () => {
-  logger.info({ port, hostname }, 'app listening');
-});
-
-export { app };
+NodeRuntime.runMain(main.pipe(Effect.scoped));

@@ -1,0 +1,27 @@
+JSON Resume — media factsheet
+Checked: 21 October 2026
+
+SHORT DESCRIPTION
+JSON Resume is a community-developed, open-source schema for expressing a résumé as JSON. Started in 2014 by Thomas Davis and Roland Sharp, it separates career information from presentation so compatible tools can use the same data to build documents and portfolio websites.
+
+FOUNDER BIO
+Thomas Davis co-founded JSON Resume with Roland Sharp in 2014. His contributions include work on the project's schema, command-line tools and hosted registry.
+
+CONTACT
+Thomas Davis — thomasalwyndavis@gmail.com
+Please include your publication, topic, deadline and time zone.
+
+SOURCES AND EXAMPLES
+Media kit: https://jsonresume.org/media/
+Documented history: https://jsonresume.org/team/#history
+2014 announcement: https://jsonresume.org/blog/first-official-release/
+Schema: https://jsonresume.org/schema/
+Source: https://github.com/jsonresume/jsonresume.org
+TechFolios: https://techfolios.github.io/
+LuaLaTeX implementation: https://ctan.org/pkg/jsonresume
+
+LIMITATIONS
+The schema, tools and hosted registry are distinct. Using the format does not guarantee acceptance by an employer or applicant tracking system. Supported fields and output depend on the tool and theme.
+
+MEDIA ASSETS
+The fictional example, demo HTML, screenshots and factsheet in this media kit may be reproduced with attribution to JSON Resume (jsonresume.org). Caption the résumé as a fictional example.

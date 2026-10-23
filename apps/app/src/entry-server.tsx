@@ -1,46 +1,28 @@
-import { base } from '@jsonresume/ui';
-import { StrictMode } from 'react';
-import { renderToString } from 'react-dom/server';
-import { App } from './App';
-import { notFound, routes, type Route } from './routes';
-import { siteUrl } from './site';
+import type { Manifest } from '@tanstack/react-router';
+import {
+  createRenderer,
+  devRouterManifest,
+  staticPaths,
+} from '@repo/ssg/server';
+import { createAppRouter } from './router';
+import { postPaths } from './routes/blog';
+import { docPaths } from './routes/docs';
 
-export { notFound, routes };
+/** The client entry, as Vite's manifest keys it. */
+export const clientEntry = 'src/entry-client.tsx';
 
-/** Class for <body>: the design system's document base. */
-export const bodyClass = base;
+/** Server rendering with the built assets (prerender and the live server). */
+export const createAppRenderer = (manifest: Manifest) =>
+  createRenderer({ createRouter: createAppRouter, manifest });
 
-const escape = (value: string) =>
-  value
-    .replace(/&/g, '&amp;')
-    .replace(/"/g, '&quot;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
+/** Server rendering for `pnpm dev`, with Vite serving source modules. */
+export const render = createAppRenderer(devRouterManifest(clientEntry));
 
-/** Title, description, canonical link and social preview tags for a route. */
-export function renderHead(route: Route): string {
-  const title = escape(route.title);
-  const description = escape(route.description);
-  const url = escape(`${siteUrl}${route.path === '/' ? '/' : route.path}`);
-  return [
-    `<title>${title}</title>`,
-    `<meta name="description" content="${description}" />`,
-    route === notFound ? '<meta name="robots" content="noindex" />' : '',
-    route === notFound ? '' : `<link rel="canonical" href="${url}" />`,
-    `<meta property="og:type" content="website" />`,
-    `<meta property="og:site_name" content="JSON Resume" />`,
-    `<meta property="og:title" content="${title}" />`,
-    `<meta property="og:description" content="${description}" />`,
-    `<meta name="twitter:card" content="summary" />`,
-  ]
-    .filter(Boolean)
-    .join('\n    ');
-}
+/** Every page to prerender: each static route, each document and each post. */
+export const paths = [
+  ...staticPaths(createAppRouter().routesByPath),
+  ...docPaths,
+  ...postPaths,
+];
 
-export function render(route: Route): string {
-  return renderToString(
-    <StrictMode>
-      <App route={route} />
-    </StrictMode>
-  );
-}
+export { prerender, routerManifestFromVite } from '@repo/ssg/server';

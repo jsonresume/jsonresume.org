@@ -4,10 +4,16 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   plugins: [vanillaExtractPlugin(), react()],
+  build: {
+    // The client build starts from the entry, not an index.html (the root
+    // route renders the document), and writes the manifest prerender reads.
+    manifest: true,
+    rollupOptions: { input: 'src/entry-client.tsx' },
+  },
   ssr: {
-    // Bundle the design system into the prerender build so its CSS imports
-    // resolve through Vite rather than Node.
-    noExternal: ['@jsonresume/ui'],
+    // Workspace packages ship TypeScript source and CSS imports, so the
+    // server and prerender builds bundle them instead of asking Node to.
+    noExternal: ['@jsonresume/ui', /^@repo\//],
   },
   test: {
     environment: 'jsdom',

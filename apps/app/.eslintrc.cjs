@@ -15,6 +15,9 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     // TypeScript checks unused code; the base rule misreads type parameters.
     'no-unused-vars': 'off',
+    // `const X = Schema.Struct(...)` with `type X = typeof X.Type` is the
+    // Effect Schema idiom; TypeScript itself rejects real redeclarations.
+    'no-redeclare': 'off',
     // Not a Next.js app: plain <a> and <img> are right here.
     '@next/next/no-html-link-for-pages': 'off',
     '@next/next/no-img-element': 'off',
