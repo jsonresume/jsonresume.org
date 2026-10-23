@@ -30,7 +30,8 @@ export default function RootLayout({ children }) {
         <AuthProvider>
           <Menu />
           <main>{children}</main>
-          <Analytics />
+          {/* Vercel Web Analytics only exists on Vercel deploys */}
+          {process.env.VERCEL && <Analytics />}
         </AuthProvider>
       </body>
     </html>

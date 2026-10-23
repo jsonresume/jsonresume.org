@@ -1,0 +1,30 @@
+# One unit per app: jsonresume@registry, jsonresume@homepage2, ...
+# Install: sudo cp deploy/systemd/jsonresume@.service /etc/systemd/system/
+#
+# /srv/jsonresume/<app>/current points at the live release (see
+# deploy/scripts/deploy.sh). Secrets and PORT come from /etc/jsonresume.
+[Unit]
+Description=jsonresume.org %i
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=deploy
+Group=deploy
+Environment=NODE_ENV=production HOME=/srv/jsonresume
+EnvironmentFile=/etc/jsonresume/%i.env
+EnvironmentFile=-/etc/jsonresume/postgres.env
+WorkingDirectory=/srv/jsonresume/%i/current/apps/%i
+ExecStart=/usr/bin/pnpm exec next start --hostname 127.0.0.1 --port ${PORT}
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target
