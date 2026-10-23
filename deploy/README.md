@@ -15,15 +15,15 @@ its phases are in [`SELF_HOSTING_PLAN.md`](../SELF_HOSTING_PLAN.md).
 | `/var/backups/jsonresume`         | Local dumps, kept 7 days                                   |
 | `/etc/caddy/certs`                | Cloudflare origin certificate for `*.jsonresume.org`       |
 
-Ports: registry 3000, homepage2 3001, styleguide 3002, app 3003.
+Ports: app 3003 (`apps/app`, served at beta.jsonresume.org).
 
 ## Common tasks
 
 ```sh
-sudo deploy/scripts/deploy.sh registry               # build and release origin/master
-sudo deploy/scripts/deploy.sh registry <branch|sha>  # any ref
-sudo deploy/scripts/deploy.sh registry --rollback    # back to the previous release
-journalctl -u jsonresume@registry -f                 # logs
+sudo deploy/scripts/deploy.sh app                    # build and release origin/master
+sudo deploy/scripts/deploy.sh app <branch|sha>       # any ref
+sudo deploy/scripts/deploy.sh app --rollback         # back to the previous release
+journalctl -u jsonresume@app -f                      # logs
 sudo systemctl start jsonresume-backup               # backup now (also nightly, 03:00 UTC)
 sudo deploy/scripts/cloudflare-ips.sh                # refresh Cloudflare ranges (ufw + Caddy)
 ```
@@ -39,7 +39,8 @@ sudo deploy/scripts/cloudflare-ips.sh                # refresh Cloudflare ranges
 2. **Packages.** `postgresql-18 postgresql-18-pgvector`, Caddy from
    `dl.cloudsmith.io/public/caddy/stable` (Ubuntu's 2.6 is too old for
    `trusted_proxies`), rclone from rclone.org (Ubuntu's 1.60 fails R2 uploads),
-   Node 24 with corepack. Chromium for PDF export needs: `libxcomposite1
+   Node 24 with corepack. Chromium (Playwright's Ubuntu 24.04 build, for
+   screenshots and future PDF export) needs: `libxcomposite1
    libxdamage1 libxfixes3 libxrandr2 libasound2t64 libatk1.0-0t64
    libatk-bridge2.0-0t64 libatspi2.0-0t64 libcairo2 libcups2t64 libgbm1
    libpango-1.0-0 libnss3 libxkbcommon0` plus `fonts-liberation fonts-noto-core
@@ -53,9 +54,7 @@ sudo deploy/scripts/cloudflare-ips.sh                # refresh Cloudflare ranges
 
 ## Notes
 
-- Auth.js needs `AUTH_TRUST_HOST=true` and an explicit `AUTH_URL` here;
-  behind `next start` it otherwise builds callback URLs on `localhost:3000`.
-- Playwright has no Ubuntu 26.04 build; `deploy.sh` installs the 24.04 one
-  (`PLAYWRIGHT_HOST_PLATFORM_OVERRIDE=ubuntu24.04-x64`).
+- Playwright has no Ubuntu 26.04 build; install the 24.04 one with
+  `PLAYWRIGHT_HOST_PLATFORM_OVERRIDE=ubuntu24.04-x64`.
 - Cloudflare SSL mode for the zone is still Full, not Full (strict); switch
   only after checking every origin in the zone.

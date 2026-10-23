@@ -5,8 +5,7 @@
 # Cloudflare reach 80/443. Install with:
 #   sudo cp deploy/caddy/Caddyfile /etc/caddy/Caddyfile && sudo systemctl reload caddy
 #
-# App ports (see deploy/systemd): registry 3000, homepage2 3001,
-# styleguide 3002, app 3003.
+# App ports (see deploy/systemd and /etc/jsonresume/<app>.env): app 3003.
 
 {
 	auto_https off
@@ -31,15 +30,9 @@
 	}
 }
 
-# Registry on the box, ahead of cutover (phase 3 of SELF_HOSTING_PLAN.md).
-next.jsonresume.org {
-	import app 3000
-}
-
 # apps/app (React + Vite on @jsonresume/ui) until the full changeover.
 beta.jsonresume.org {
-	import origin_tls
-	respond "beta.jsonresume.org: coming soon" 200
+	import app 3003
 }
 
 # Anything else that reaches the box is not ours to serve.

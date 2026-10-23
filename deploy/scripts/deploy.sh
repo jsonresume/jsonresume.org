@@ -85,13 +85,6 @@ if [ ! -f "$REL/.built" ]; then
   WORKDIR=$REL as_deploy pnpm install --frozen-lockfile --reporter=silent
   log "building"
   WORKDIR=$REL as_deploy pnpm turbo build --filter="$APP" --output-logs=errors-only
-  if [ "$APP" = registry ]; then
-    # PDF export drives Chromium through Playwright (see lib/formatters/pdf.js).
-    # Playwright has no Ubuntu 26.04 build yet; the 24.04 one runs fine with
-    # the libraries listed in deploy/README.md.
-    WORKDIR=$REL/apps/registry as_deploy -E PLAYWRIGHT_HOST_PLATFORM_OVERRIDE=ubuntu24.04-x64 \
-      pnpm exec playwright install chromium
-  fi
   touch "$REL/.built" && chown deploy:deploy "$REL/.built"
 fi
 
