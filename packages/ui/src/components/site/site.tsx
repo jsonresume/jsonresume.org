@@ -120,35 +120,6 @@ export function PageHeader({
   );
 }
 
-/* Hero */
-
-export interface HeroProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
-  title: ReactNode;
-  lede?: ReactNode;
-  actions?: ReactNode;
-}
-
-/** The centered yellow promo band used on the home page. */
-export function Hero({
-  title,
-  lede,
-  actions,
-  className,
-  children,
-  ...props
-}: HeroProps) {
-  return (
-    <section className={cx(s.hero, className)} {...props}>
-      <Container>
-        <h1 className={s.heroTitle}>{title}</h1>
-        {lede ? <p className={s.heroLede}>{lede}</p> : null}
-        {children}
-        {actions ? <div className={s.heroActions}>{actions}</div> : null}
-      </Container>
-    </section>
-  );
-}
-
 /* Feature */
 
 export interface FeatureProps

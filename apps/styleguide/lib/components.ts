@@ -306,9 +306,18 @@ export const componentDocs: ComponentDoc[] = [
     name: 'Hero',
     group: 'Site',
     summary:
-      'The centered yellow promo band from the jsonresume.org home page.',
+      'The yellow promo band from the jsonresume.org home page: centered, or split with media beside the copy.',
     components: ['Hero'],
-    examples: [{ id: 'promo', title: 'Promo', bleed: true }],
+    examples: [
+      { id: 'promo', title: 'Promo', bleed: true },
+      {
+        id: 'split',
+        title: 'Split with media',
+        description:
+          'Pass media (a code sample or screenshot) to put it beside the copy from the lg breakpoint. Below it, the media stacks under the copy.',
+        bleed: true,
+      },
+    ],
     guidelines: {
       do: [
         'Use it once, on landing pages.',
@@ -327,6 +336,39 @@ export const componentDocs: ComponentDoc[] = [
     components: ['Feature'],
     examples: [{ id: 'row', title: 'Feature row', bleed: true }],
     accessibility: ['Set level to fit the page outline (2 by default).'],
+  },
+  {
+    slug: 'steps',
+    name: 'Steps',
+    group: 'Site',
+    summary:
+      'A numbered "how it works" sequence for landing pages: a short title and a sentence per step.',
+    components: ['Steps', 'Step'],
+    examples: [{ id: 'default', title: 'Three steps', block: true }],
+    guidelines: {
+      do: ['Keep it to three or four steps.', 'Start each title with a verb.'],
+      dont: ['Use it for navigation or progress through a form.'],
+    },
+    accessibility: [
+      'Renders an <ol>, so the numbers are announced by the list itself.',
+      'Set level on each Step to fit the page outline (3 by default).',
+    ],
+  },
+  {
+    slug: 'stats',
+    name: 'Stats',
+    group: 'Site',
+    summary:
+      'A row of headline figures for landing pages. For dashboards, use Stat tile.',
+    components: ['Stats', 'Stat'],
+    examples: [{ id: 'default', title: 'Figures', block: true }],
+    guidelines: {
+      do: ['Use real, current numbers and round them for reading.'],
+      dont: ['Show more than four or five figures in a row.'],
+    },
+    accessibility: [
+      'Renders a <dl>; each label is the term and its figure the description.',
+    ],
   },
   {
     slug: 'site-footer',

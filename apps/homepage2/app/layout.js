@@ -84,8 +84,7 @@ export default async function Layout({ children }) {
         </div>
 
         <ExternalScripts />
-        {/* Vercel Web Analytics only exists on Vercel deploys */}
-        {process.env.VERCEL && <Analytics />}
+        <Analytics />
       </body>
     </html>
   );

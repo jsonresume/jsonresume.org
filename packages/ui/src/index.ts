@@ -38,18 +38,29 @@ export {
 // Site
 export {
   Feature,
-  Hero,
   Logo,
   LogoMark,
   PageHeader,
   SiteFooter,
   SkipLink,
   type FeatureProps,
-  type HeroProps,
   type LogoProps,
   type PageHeaderProps,
   type SiteFooterProps,
 } from './components/site/site';
+export { Hero, type HeroProps } from './components/site/hero';
+export {
+  Step,
+  Steps,
+  type StepProps,
+  type StepsProps,
+} from './components/site/steps';
+export {
+  Stat,
+  Stats,
+  type StatProps,
+  type StatsProps,
+} from './components/site/stats';
 export {
   SiteHeader,
   SiteHeaderLink,

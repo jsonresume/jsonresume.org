@@ -18,8 +18,7 @@ export default class MyDocument extends Document {
 
           <NextScript />
           <DocumentScripts />
-          {/* Vercel Web Analytics only exists on Vercel deploys */}
-          {process.env.VERCEL && <Analytics />}
+          <Analytics />
         </body>
       </Html>
     );

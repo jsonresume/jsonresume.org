@@ -192,40 +192,6 @@ export const eyebrow = style({
   textTransform: 'uppercase',
 });
 
-/* Hero: the centered yellow promo band from the jsonresume.org home page. */
-export const hero = style({
-  backgroundColor: color.surface.brand,
-  color: color.text.onBrand,
-  vars: onBrandVars,
-  paddingBlock: `${space[20]} ${space[30]}`,
-  textAlign: 'center',
-});
-
-export const heroTitle = style({
-  margin: 0,
-  color: color.text.onBrand,
-  fontSize: font.size['3xl'],
-  fontWeight: font.weight.light,
-  lineHeight: font.lineHeight.tight,
-  '@media': { [media.md]: { fontSize: font.size['4xl'] } },
-});
-
-export const heroLede = style({
-  maxWidth: '520px',
-  marginInline: 'auto',
-  marginBlockStart: space[6],
-  fontSize: font.size.md,
-  lineHeight: font.lineHeight.normal,
-});
-
-export const heroActions = style({
-  display: 'flex',
-  flexWrap: 'wrap',
-  justifyContent: 'center',
-  gap: space[3],
-  marginBlockStart: space[8],
-});
-
 /* Feature: an icon-free, centered teaser column. */
 export const feature = style({
   display: 'grid',
