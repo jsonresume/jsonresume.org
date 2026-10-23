@@ -1,7 +1,6 @@
 import { keyframes, style } from '@vanilla-extract/css';
 import { focusRing, transition } from '../../styles/shared.css';
 import { vars } from '../../tokens/contract.css';
-import { media } from '../../tokens/theme';
 
 const { color, font, space, radius, zIndex, shadow, motion } = vars;
 
@@ -11,8 +10,6 @@ const rise = keyframes({
   to: { opacity: 1, transform: 'translate(-50%, -50%)' },
 });
 
-const reduced = { '@media': { [media.reducedMotion]: { animation: 'none' } } };
-
 /* Dialog */
 
 export const overlay = style({
@@ -21,7 +18,6 @@ export const overlay = style({
   zIndex: zIndex.overlay,
   backgroundColor: color.overlay,
   animation: `${fadeIn} ${motion.duration.base} ${motion.easing.out}`,
-  ...reduced,
 });
 
 export const dialog = style({
@@ -43,7 +39,6 @@ export const dialog = style({
   boxShadow: shadow.lg,
   animation: `${rise} ${motion.duration.base} ${motion.easing.out}`,
   selectors: { '&:focus': { outline: 'none' } },
-  ...reduced,
 });
 
 export const dialogTitle = style({
@@ -106,7 +101,6 @@ export const tooltip = style({
   lineHeight: font.lineHeight.snug,
   boxShadow: shadow.md,
   animation: `${fadeIn} ${motion.duration.fast} ${motion.easing.out}`,
-  ...reduced,
 });
 
 export const tooltipArrow = style({ fill: color.surface.inverse });

@@ -222,6 +222,5 @@ export const media = {
   md: `screen and (min-width: ${breakpoints.md}px)`,
   lg: `screen and (min-width: ${breakpoints.lg}px)`,
   xl: `screen and (min-width: ${breakpoints.xl}px)`,
-  reducedMotion: '(prefers-reduced-motion: reduce)',
   dark: '(prefers-color-scheme: dark)',
 } as const;

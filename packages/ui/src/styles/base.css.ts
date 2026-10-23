@@ -1,6 +1,5 @@
 import { globalStyle, style } from '@vanilla-extract/css';
 import { vars } from '../tokens/contract.css';
-import { media } from '../tokens/theme';
 
 /**
  * Opt-in document base. Apply to <body> (or any root) to get the brand's
@@ -51,13 +50,4 @@ globalStyle(scope(':focus-visible'), {
 globalStyle(scope('::selection'), {
   backgroundColor: vars.color.surface.brand,
   color: vars.color.text.onBrand,
-});
-
-globalStyle(scope('*'), {
-  '@media': {
-    [media.reducedMotion]: {
-      animationDuration: '0.01ms !important',
-      transitionDuration: '0.01ms !important',
-    },
-  },
 });

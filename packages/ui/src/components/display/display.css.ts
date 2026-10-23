@@ -1,7 +1,6 @@
 import { keyframes, style } from '@vanilla-extract/css';
 import { recipe, type RecipeVariants } from '@vanilla-extract/recipes';
 import { vars } from '../../tokens/contract.css';
-import { media } from '../../tokens/theme';
 
 const { color, font, space, radius } = vars;
 
@@ -138,7 +137,6 @@ export const skeleton = style({
   borderRadius: radius.sm,
   backgroundColor: color.surface.muted,
   animation: `${pulse} 1.6s ${vars.motion.easing.standard} infinite`,
-  '@media': { [media.reducedMotion]: { animation: 'none' } },
 });
 
 export const progress = style({

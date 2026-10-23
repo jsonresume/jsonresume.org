@@ -489,7 +489,6 @@ export const componentDocs: ComponentDoc[] = [
     accessibility: [
       'Spinner is a status region with a spoken label.',
       'Skeletons are decorative: mark the loading region aria-busy.',
-      'Animations stop when reduced motion is requested.',
     ],
   },
   {

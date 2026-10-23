@@ -1,31 +1,12 @@
-import { CodeBlock, Heading, Table, Td, Th } from '@jsonresume/ui';
+import { Heading, Table, Td, Th } from '@jsonresume/ui';
 import { motion } from '@jsonresume/ui/tokens';
 import type { Metadata } from 'next';
 import { DocSection, DocsLayout } from '@/components/docs-layout';
 import * as styles from '@/components/docs.css';
 import { Example } from '@/components/example';
 import { Guidelines } from '@/components/guidelines';
-import { ReducedMotionNotice } from '@/components/reduced-motion-notice';
 
 export const metadata: Metadata = { title: 'Motion' };
-
-const css = `.panel {
-  transition:
-    opacity var(--jr-motion-duration-base) var(--jr-motion-easing-out),
-    transform var(--jr-motion-duration-base) var(--jr-motion-easing-out);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .panel { transition: none; }
-}`;
-
-const ts = `import { style } from '@vanilla-extract/css';
-import { vars } from '@jsonresume/ui/tokens';
-
-export const panel = style({
-  transition: \`opacity \${vars.motion.duration.base} \${vars.motion.easing.out}\`,
-  '@media': { '(prefers-reduced-motion: reduce)': { transition: 'none' } },
-});`;
 
 export default function MotionPage() {
   return (
@@ -39,12 +20,9 @@ export default function MotionPage() {
             Motion on JSON Resume is quick and quiet. It confirms that something
             happened (a color shifts on hover, a dialog fades in) and never
             performs for its own sake. Nothing bounces, nothing slides across
-            the page, and everything stops when the reader asks for reduced
-            motion.
+            the page.
           </p>
         </header>
-
-        <ReducedMotionNotice />
 
         <DocSection
           id="durations"
@@ -174,30 +152,12 @@ export default function MotionPage() {
           />
         </DocSection>
 
-        <DocSection
-          id="reduced"
-          title="Reduced motion"
-          description="Some readers get dizzy or distracted by movement and turn it off in their OS. Respect that everywhere."
-        >
-          <Example
-            slug="motion"
-            example={{
-              id: 'reduced',
-              title: 'Detecting the preference',
-              block: true,
-            }}
-          />
-          <CodeBlock label="plain CSS with tokens" code={css} />
-          <CodeBlock label="vanilla-extract" code={ts} />
-        </DocSection>
-
         <DocSection id="guidelines" title="Guidelines">
           <Guidelines
             do={[
               'Use base for nearly everything; reach for fast only for tiny feedback.',
               'Animate opacity, transform and color.',
               'Make motion explain cause and effect: the thing you clicked is the thing that changes.',
-              'Turn motion off under prefers-reduced-motion.',
             ]}
             dont={[
               'Animate width, height, margins or top/left: they reflow the page.',

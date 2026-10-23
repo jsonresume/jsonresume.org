@@ -17,7 +17,7 @@ import {
 
 // Motion built into components: the dialog overlay fades and the panel
 // rises (base, easing.out); tooltips fade (fast); the accordion chevron
-// rotates. All of it stops under reduced motion.
+// rotates.
 export default function MotionInComponents() {
   return (
     <Stack gap={6}>
