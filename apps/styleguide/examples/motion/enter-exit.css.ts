@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { media, vars } from '@jsonresume/ui/tokens';
+import { vars } from '@jsonresume/ui/tokens';
 
 const { duration, easing } = vars.motion;
 
@@ -16,8 +16,5 @@ export const note = style({
       transform: 'none',
       visibility: 'visible',
     },
-  },
-  '@media': {
-    [media.reducedMotion]: { transition: 'none', transform: 'none' },
   },
 });

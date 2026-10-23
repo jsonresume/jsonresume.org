@@ -1,5 +1,5 @@
 import { createVar, style } from '@vanilla-extract/css';
-import { media, vars } from '@jsonresume/ui/tokens';
+import { vars } from '@jsonresume/ui/tokens';
 
 /** Set per row with assignInlineVars. */
 export const easing = createVar();
@@ -22,7 +22,6 @@ export const box = style({
       transform: 'translateX(calc(min(30rem, 70vw)))',
     },
   },
-  '@media': { [media.reducedMotion]: { transition: 'none' } },
 });
 
 export const start = style({ alignSelf: 'flex-start' });

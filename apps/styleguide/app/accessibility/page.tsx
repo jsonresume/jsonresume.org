@@ -34,7 +34,6 @@ export default function AccessibilityPage() {
                 Field wires labels, hints and errors with for, aria-describedby
                 and aria-invalid.
               </li>
-              <li>Animations stop under prefers-reduced-motion.</li>
             </ul>
           </Prose>
         </DocSection>
