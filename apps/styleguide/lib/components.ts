@@ -664,6 +664,202 @@ export const componentDocs: ComponentDoc[] = [
       '"Copied" is announced through a polite live region.',
     ],
   },
+  {
+    slug: 'dropdown-menu',
+    name: 'Dropdown menu',
+    group: 'Overlays',
+    summary: 'A button that opens a short list of actions or options.',
+    components: [
+      'DropdownMenuContent',
+      'DropdownMenuItem',
+      'DropdownMenuCheckboxItem',
+      'DropdownMenuLabel',
+    ],
+    examples: [
+      {
+        id: 'actions',
+        title: 'Actions',
+        description: 'Icons, a shortcut hint and a destructive item last.',
+      },
+      {
+        id: 'checkboxes',
+        title: 'Options',
+        description: 'Checkbox items keep the menu open while toggling.',
+      },
+    ],
+    guidelines: {
+      do: [
+        'Keep menus to about seven items.',
+        'Put destructive actions last, after a separator, in the danger tone.',
+      ],
+      dont: [
+        'Hide the only way to do something important in a menu.',
+        'Nest menus.',
+      ],
+    },
+    accessibility: [
+      'Opens with Enter, Space or Arrow Down; arrows move, Enter selects, Escape closes and returns focus.',
+      'Type-ahead jumps to items by their first letter.',
+    ],
+  },
+  {
+    slug: 'popover',
+    name: 'Popover',
+    group: 'Overlays',
+    summary:
+      'An anchored panel for rich content: details, small forms, quick filters.',
+    components: ['PopoverContent'],
+    examples: [{ id: 'details', title: 'Details on demand' }],
+    guidelines: {
+      do: [
+        'Use for content richer than a sentence.',
+        'Give the content an aria-label or a heading.',
+      ],
+      dont: [
+        'Use for plain hints: use Tooltip.',
+        'Put a whole form in one: use Dialog or Sheet.',
+      ],
+    },
+    accessibility: [
+      'A non-modal dialog: focus moves in, Escape or clicking outside closes it.',
+    ],
+  },
+  {
+    slug: 'sheet',
+    name: 'Sheet',
+    group: 'Overlays',
+    summary:
+      'A modal panel that slides over the page, for details or filters that keep the list behind in view.',
+    components: [
+      'SheetContent',
+      'SheetHeader',
+      'SheetBody',
+      'SheetFooter',
+      'SheetTitle',
+      'SheetDescription',
+    ],
+    examples: [
+      { id: 'job-details', title: 'Job details' },
+      { id: 'sides', title: 'Sides' },
+    ],
+    accessibility: [
+      'A modal dialog: focus is trapped inside and returns to the trigger on close.',
+      'SheetTitle and SheetDescription name and describe it.',
+    ],
+  },
+  {
+    slug: 'toast',
+    name: 'Toast',
+    group: 'Feedback',
+    summary:
+      'A brief, non-blocking message after an action: saved, hidden, failed.',
+    components: ['Toaster'],
+    examples: [
+      {
+        id: 'tones',
+        title: 'Tones and actions',
+        description:
+          'Success, an undo action, and an error that stays announced assertively.',
+      },
+    ],
+    guidelines: {
+      do: [
+        'Confirm actions that happen out of view.',
+        'Offer Undo instead of asking "Are you sure?".',
+      ],
+      dont: [
+        'Put the only copy of important information in a toast.',
+        'Show more than one at a time for one action.',
+      ],
+    },
+    accessibility: [
+      'Announced through a live region; errors use an assertive announcement.',
+      'Timers pause on hover and focus; F8 moves focus to the notifications region.',
+    ],
+  },
+  {
+    slug: 'banner',
+    name: 'Banner',
+    group: 'Feedback',
+    summary:
+      'A page-wide notice above the content, optionally with an action and a dismiss button.',
+    components: ['Banner'],
+    defaults: { tone: 'brand' },
+    examples: [
+      { id: 'public-view', title: 'Public view', bleed: true },
+      { id: 'tones', title: 'Tones', bleed: true },
+    ],
+    accessibility: [
+      'A named region, so it is easy to find and skip.',
+      'The dismiss button is labelled.',
+    ],
+  },
+  {
+    slug: 'tab-nav',
+    name: 'Tab navigation',
+    group: 'Navigation',
+    summary: 'Tabs that are links: moving between sibling pages of one area.',
+    components: ['TabNav', 'TabNavLink'],
+    examples: [{ id: 'profile', title: 'Profile area', block: true }],
+    guidelines: {
+      do: ['Use when each tab has its own URL.'],
+      dont: [
+        'Use for panels inside one page: use Tabs, which manage focus between panels.',
+      ],
+    },
+    accessibility: [
+      'A named nav landmark; the current page sets aria-current="page".',
+    ],
+  },
+  {
+    slug: 'account-menu',
+    name: 'Account menu',
+    group: 'Navigation',
+    summary:
+      'The signed-in user’s avatar in the header, opening their links and sign out.',
+    components: ['AccountMenu'],
+    examples: [{ id: 'header', title: 'In the site header', bleed: true }],
+    accessibility: [
+      'The trigger is named "Account: <name>" when only the avatar shows.',
+    ],
+  },
+  {
+    slug: 'pagination',
+    name: 'Pagination',
+    group: 'Navigation',
+    summary:
+      'Move through long result sets by page, or append the next page with Load more.',
+    components: ['Pagination', 'LoadMore'],
+    examples: [
+      {
+        id: 'pages',
+        title: 'Pages',
+        description: 'First, last and the pages around the current one.',
+      },
+      { id: 'load-more', title: 'Load more', block: true },
+    ],
+    guidelines: {
+      do: [
+        'Use pages when people return to a position; Load more for browsing feeds.',
+      ],
+      dont: ['Combine both on one list.'],
+    },
+    accessibility: [
+      'A named nav; the current page sets aria-current and every button is labelled ("Page 3", "Next").',
+      'Load more announces the new count politely.',
+    ],
+  },
+  {
+    slug: 'back-link',
+    name: 'Back link',
+    group: 'Navigation',
+    summary: 'Return to the parent list from a detail page.',
+    components: ['BackLink'],
+    examples: [{ id: 'basic', title: 'Basic' }],
+    accessibility: [
+      'Name it after the destination ("Back to jobs"); the arrow is decorative.',
+    ],
+  },
 ];
 
 export const componentGroups: ComponentGroup[] = [
