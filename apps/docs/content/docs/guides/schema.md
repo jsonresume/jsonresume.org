@@ -23,7 +23,7 @@ The schema is published as
 | `skills` | `name`, `level`, `keywords` |
 | `languages` | `language`, `fluency` |
 | `interests` | `name`, `keywords` |
-| `references` | `name`, `reference` |
+| `references` | `name`, `reference`, `relationship`, `organization`, `date`, `availableOnRequest` (no contact fields, by design) |
 | `projects` | `name`, `summary` (preferred; `description` is a deprecated alias), `highlights`, `keywords`, `startDate`, `endDate`, `url`, `roles`, `entity`, `type` |
 | `meta` | `canonical`, `version`, `lastModified`, plus tool settings such as `theme` |
 

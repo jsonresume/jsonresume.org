@@ -410,6 +410,19 @@ export interface ReferenceItem {
    * e.g. Joe blogs was a great employee, who turned up to work at least once a week. He exceeded my expectations when it came to doing nothing.
    */
   reference?: string;
+  /**
+   * How the referee knows you. e.g. Manager, Peer, Client, Thesis advisor
+   */
+  relationship?: string;
+  /**
+   * Where you worked together. e.g. Pied Piper
+   */
+  organization?: string;
+  date?: Iso8601;
+  /**
+   * Show 'available on request' rather than publishing the reference. Contact details are deliberately not part of the schema
+   */
+  availableOnRequest?: boolean;
   custom?: Custom;
   [k: string]: any;
 }

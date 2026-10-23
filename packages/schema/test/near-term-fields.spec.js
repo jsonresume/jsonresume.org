@@ -100,3 +100,25 @@ test('publications authors, volume/issue/pages, identifiers (#289)', (t) => {
   t.false(valid({ publications: [{ identifiers: { doi: 182 } }] }));
   t.end();
 });
+
+test('references relationship, organization, date, availableOnRequest (#291)', (t) => {
+  t.true(valid({ references: [{ name: 'Jane', reference: 'Great' }] }));
+  t.true(
+    valid({
+      references: [
+        {
+          name: 'Jane Smith',
+          relationship: 'Manager',
+          organization: 'Pied Piper',
+          date: '2016-03',
+          reference: 'Consistently great',
+        },
+      ],
+    })
+  );
+  t.true(valid({ references: [{ availableOnRequest: true }] }));
+  t.false(valid({ references: [{ availableOnRequest: 'yes' }] }));
+  t.false(valid({ references: [{ date: 'March 2016' }] }));
+  t.false(valid({ references: [{ relationship: ['Manager'] }] }));
+  t.end();
+});
