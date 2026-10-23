@@ -32,6 +32,9 @@
 
 # apps/app (React + Vite on @jsonresume/ui) until the full changeover.
 beta.jsonresume.org {
+	# A preview of the new site: keep it out of search results until it
+	# replaces jsonresume.org (its pages already declare that canonical URL).
+	header X-Robots-Tag "noindex"
 	import app 3003
 }
 
