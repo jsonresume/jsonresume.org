@@ -1,0 +1,10 @@
+# Nightly database backup to R2. Install with jsonresume-backup.timer:
+#   sudo cp deploy/systemd/jsonresume-backup.* /etc/systemd/system/
+#   sudo systemctl enable --now jsonresume-backup.timer
+[Unit]
+Description=jsonresume.org database backup
+After=postgresql.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/lib/jsonresume/deploy/scripts/backup-db.sh
