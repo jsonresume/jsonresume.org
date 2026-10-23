@@ -1,0 +1,53 @@
+# Caddy config for the self-hosted jsonresume.org box.
+#
+# Cloudflare proxies every hostname, so TLS here uses the Cloudflare origin
+# certificate (/etc/caddy/certs, 15-year, *.jsonresume.org) and ufw only lets
+# Cloudflare reach 80/443. Install with:
+#   sudo cp deploy/caddy/Caddyfile /etc/caddy/Caddyfile && sudo systemctl reload caddy
+#
+# App ports (see deploy/systemd): registry 3000, homepage2 3001,
+# styleguide 3002, app 3003.
+
+{
+	auto_https off
+	servers {
+		# Cloudflare ranges, so {remote_host} and X-Forwarded-For carry the
+		# visitor's address. Refresh with deploy/scripts/cloudflare-ips.sh.
+		import /etc/caddy/cloudflare-trusted-proxies
+	}
+}
+
+(origin_tls) {
+	tls /etc/caddy/certs/jsonresume.org.pem /etc/caddy/certs/jsonresume.org.key
+}
+
+(app) {
+	import origin_tls
+	encode zstd gzip
+	reverse_proxy 127.0.0.1:{args[0]}
+	log {
+		output stdout
+		format json
+	}
+}
+
+# Registry on the box, ahead of cutover (phase 3 of SELF_HOSTING_PLAN.md).
+next.jsonresume.org {
+	import app 3000
+}
+
+# apps/app (React + Vite on @jsonresume/ui) until the full changeover.
+beta.jsonresume.org {
+	import origin_tls
+	respond "beta.jsonresume.org: coming soon" 200
+}
+
+# Anything else that reaches the box is not ours to serve.
+:443 {
+	import origin_tls
+	abort
+}
+
+:80 {
+	redir https://{host}{uri} 308
+}
