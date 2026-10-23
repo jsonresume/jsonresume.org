@@ -59,6 +59,8 @@ The long-term home for jsonresume.org is a new app, **`apps/app`**: React +
 Vite + TypeScript, built entirely on `@jsonresume/ui` (vanilla-extract, no
 Tailwind, no shadcn).
 
+- **Served at `beta.jsonresume.org`** until the full changeover. Then it
+  becomes `jsonresume.org`.
 - **Homepage first.** Port `apps/homepage2` into it. It is the first page
   built on the new design system, and it replaces the homepage's Vercel
   project rather than moving that project to the box.
@@ -72,6 +74,29 @@ Tailwind, no shadcn).
   The same server can serve the built assets.
 - **Shared code.** Put logic both apps need (data access, auth, resume
   rendering) in `packages/*` rather than copying it from the registry.
+
+### URLs after the changeover
+
+Resumes live on the main domain under `@username`, and the registry
+subdomain only redirects:
+
+| Old                                                            | New                                  |
+| -------------------------------------------------------------- | ------------------------------------ |
+| `registry.jsonresume.org/thomasdavis`                          | `jsonresume.org/@thomasdavis`        |
+| `registry.jsonresume.org/thomasdavis/<page>`                   | `jsonresume.org/@thomasdavis/<page>` |
+| `registry.jsonresume.org/thomasdavis.json` (and other formats) | `jsonresume.org/@thomasdavis.json`   |
+| `registry.jsonresume.org/<other route>`                        | `jsonresume.org/<other route>`       |
+
+- Redirects are permanent (301 for `GET`, 308 elsewhere so API `POST`s keep
+  their method and body) and keep the query string, so `?theme=pro` and
+  similar links keep working.
+- The `@` prefix keeps usernames from colliding with site routes (`/jobs`,
+  `/explore`, `/settings`, …).
+- Redirects live in Caddy on the box (one rule for the whole subdomain) and
+  stay in place permanently: resumes are linked from CVs, job sites and
+  LinkedIn profiles we can't update.
+- Before the changeover, list every route the registry serves (from
+  `apps/registry/app` and recent logs) and test each redirect.
 
 ## Phases
 
@@ -97,16 +122,19 @@ Tailwind, no shadcn).
    Supabase dump and restore it, and point `registry.jsonresume.org` at the box.
    Watch errors for 48 hours. Vercel stays deployable as a fallback.
 7. **`apps/app` and the homepage.** Scaffold `apps/app` (Vite, React,
-   `@jsonresume/ui`), port the homepage into it, serve it from the box at a
-   test hostname, then point `jsonresume.org` at it and retire the
-   `homepage2` Vercel project. Move the styleguide to the box the same way
-   (it has no database).
-8. **Port registry features into `apps/app`.** One feature per PR, starting
-   with the simplest pages. Once a route moves, the registry redirects it (or
-   Caddy routes that path to the app).
-9. **Decommission.** After two quiet weeks, remove the Vercel projects and
-   pause, then delete, the Supabase project. Move GitHub Actions secrets
-   from `SUPABASE_*` to the new `DATABASE_URL`.
+   `@jsonresume/ui`), port the homepage into it, and serve it from the box at
+   `beta.jsonresume.org`. Move the styleguide to the box the same way (it has
+   no database).
+8. **Port registry features into `apps/app`.** One feature per PR on
+   `beta.jsonresume.org`, starting with resume pages at `/@username` and then
+   the simplest pages.
+9. **Full changeover.** Point `jsonresume.org` at `apps/app`, retire the
+   `homepage2` Vercel project, and turn `registry.jsonresume.org` into
+   redirects (see "URLs after the changeover"). `beta.jsonresume.org` then
+   redirects to `jsonresume.org` too.
+10. **Decommission.** After two quiet weeks, remove the Vercel projects and
+    pause, then delete, the Supabase project. Move GitHub Actions secrets
+    from `SUPABASE_*` to the new `DATABASE_URL`.
 
 ## Rules for the move
 
