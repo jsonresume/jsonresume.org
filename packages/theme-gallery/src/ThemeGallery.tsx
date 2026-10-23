@@ -1,17 +1,17 @@
 import { useAtom, useAtomValue } from '@effect/atom-react';
 import {
+  ChipGroup,
   EmptyState,
   Field,
   FilterBar,
   SearchField,
-  Select,
 } from '@jsonresume/ui';
 import type { ThemeSummary } from '@repo/domain';
+import { optionParam, textParam, useAtomsInUrl } from '@repo/url-state';
 import { themeQueryAtom, themeTagAtom, visibleThemesAtom } from './atoms';
 import { tagCounts, themes } from './catalog';
 import * as s from './gallery.css';
 import { ThemeCard } from './ThemeCard';
-import { useFilterInUrl } from './useFilterInUrl';
 
 export interface ThemeLinks {
   /** Screenshot URL for a theme. */
@@ -51,11 +51,20 @@ export function ThemeGrid({
   );
 }
 
-const tags = tagCounts(themes).filter(({ count }) => count > 1);
+/** The styles most themes share, as one-tap filters. */
+const STYLE_CHIPS = 12;
+const styles = tagCounts(themes)
+  .slice(0, STYLE_CHIPS)
+  .map(({ tag, count }) => ({ value: tag, label: tag, count }));
+
+const urlBindings = [
+  textParam('q', themeQueryAtom),
+  optionParam('style', themeTagAtom),
+];
 
 /** The full catalog with search and tag filters, kept in the URL. */
 export function ThemeGallery(links: ThemeLinks) {
-  useFilterInUrl();
+  useAtomsInUrl(urlBindings);
   const [query, setQuery] = useAtom(themeQueryAtom);
   const [tag, setTag] = useAtom(themeTagAtom);
   const visible = useAtomValue(visibleThemesAtom);
@@ -80,27 +89,22 @@ export function ThemeGallery(links: ThemeLinks) {
           setTag(null);
         }}
       >
-        <Field label="Search">
+        <Field label="Search" className={s.search}>
           <SearchField
             value={query}
             onValueChange={setQuery}
             placeholder="Name, style or colour"
           />
         </Field>
-        <Field label="Style">
-          <Select
-            value={tag ?? ''}
-            onChange={(e) => setTag(e.target.value || null)}
-          >
-            <option value="">Any style</option>
-            {tags.map(({ tag: t, count }) => (
-              <option key={t} value={t}>
-                {t} ({count})
-              </option>
-            ))}
-          </Select>
-        </Field>
       </FilterBar>
+      <ChipGroup
+        className={s.styles}
+        label="Style"
+        allLabel="All styles"
+        options={styles}
+        value={tag}
+        onValueChange={setTag}
+      />
       {visible.length ? (
         <ThemeGrid themes={visible} eagerCount={4} {...links} />
       ) : (

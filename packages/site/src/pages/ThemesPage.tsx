@@ -1,21 +1,18 @@
 import { RegistryProvider } from '@effect/atom-react';
-import { Container, PageHeader, Section } from '@jsonresume/ui';
+import { Container, Hero, Section } from '@jsonresume/ui';
 import { ThemeGallery, themes } from '@repo/theme-gallery';
 import { paths, themeImageUrl, themePreviewUrl } from '../links';
-import { SiteLink } from '../SiteLink';
+import { NextSteps } from './shared/NextSteps';
 
 export function ThemesPage() {
   return (
     <>
-      <PageHeader
-        title="Themes"
-        description={
-          <>
-            {themes.length} themes, each an open-source npm package. Every card
-            opens a live preview of a real resume. Want your own?{' '}
-            <SiteLink href={paths.themeDevelopment}>Build a theme</SiteLink>.
-          </>
-        }
+      <Hero
+        size="compact"
+        align="start"
+        eyebrow="Themes"
+        title={`${themes.length} ways to look the part`}
+        lede="Every theme is an open-source npm package that renders the same resume.json. Each card opens a live preview of a real resume."
       />
       <Section spacing="lg">
         <Container size="wide">
@@ -29,6 +26,13 @@ export function ThemesPage() {
           </RegistryProvider>
         </Container>
       </Section>
+      <NextSteps
+        title="Want a look of your own?"
+        items={[
+          { label: 'Build a theme', href: paths.themeDevelopment },
+          { label: 'Use a theme with the CLI', href: paths.cli },
+        ]}
+      />
     </>
   );
 }

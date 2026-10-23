@@ -18,13 +18,37 @@ export const postList = style({
 export const postItem = style({
   display: 'grid',
   gap: space[2],
+  maxWidth: '62ch',
   paddingBlockEnd: space[8],
   borderBlockEnd: `1px solid ${color.border.subtle}`,
 });
 
 export const postTitle = style({
+  margin: 0,
   fontSize: font.size.xl,
   fontWeight: font.weight.regular,
+});
+
+export const year = style({
+  display: 'grid',
+  gap: space[6],
+  marginBlockEnd: space[12],
+  '@media': { [media.md]: { gridTemplateColumns: '8rem minmax(0, 1fr)' } },
+});
+
+export const yearTitle = style({
+  margin: 0,
+  color: color.text.muted,
+  fontSize: font.size['2xl'],
+  fontWeight: font.weight.light,
+  fontVariantNumeric: 'tabular-nums',
+});
+
+export const neighbours = style({
+  display: 'grid',
+  gap: space[4],
+  marginBlockStart: space[16],
+  '@media': { [media.md]: { gridTemplateColumns: '1fr 1fr' } },
 });
 
 export const byline = style({
@@ -128,4 +152,40 @@ export const teamTitle = style({
   fontSize: font.size['2xl'],
   fontWeight: font.weight.light,
   '@media': { [media.md]: { fontSize: font.size['3xl'] } },
+});
+
+export const ways = style({
+  display: 'grid',
+  gap: space[2],
+  margin: 0,
+  paddingInlineStart: space[5],
+  fontSize: font.size.md,
+});
+
+export const story = style({
+  display: 'grid',
+  gap: space[10],
+  marginBlockEnd: space[16],
+});
+
+export const chapter = style({
+  display: 'grid',
+  gap: space[4],
+  '@media': {
+    [media.md]: { gridTemplateColumns: '15rem minmax(0, 1fr)', gap: space[10] },
+  },
+});
+
+export const chapterTitle = style({
+  margin: 0,
+  color: color.text.strong,
+  fontSize: font.size.lg,
+  fontWeight: font.weight.semibold,
+  lineHeight: font.lineHeight.snug,
+});
+
+export const chapterBody = style({
+  display: 'grid',
+  gap: space[4],
+  maxWidth: '62ch',
 });

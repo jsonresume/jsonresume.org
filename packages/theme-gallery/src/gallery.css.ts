@@ -52,6 +52,10 @@ export const description = style({
   lineHeight: font.lineHeight.snug,
 });
 
-export const filters = style({ marginBlockEnd: space[8] });
+export const filters = style({ marginBlockEnd: space[4] });
+
+export const styles = style({ marginBlockEnd: space[8] });
 
 export const empty = style({ paddingBlock: space[12] });
+
+export const search = style({ minWidth: 'min(100%, 22rem)' });

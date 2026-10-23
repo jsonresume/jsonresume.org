@@ -125,3 +125,22 @@ describe('schema validation', () => {
     ).not.toThrow();
   });
 });
+
+import { excerpt, loadPostWithNeighbours } from './index';
+
+describe('blog helpers', () => {
+  it('links each post to its newer and older neighbour', async () => {
+    const oldest = posts[posts.length - 1];
+    const result = await loadPostWithNeighbours(oldest.slug);
+    expect(result?.older).toBeUndefined();
+    expect(result?.newer?.slug).toBe(posts[posts.length - 2].slug);
+    expect(await loadPostWithNeighbours('no-such-post')).toBeUndefined();
+  });
+
+  it('turns the first paragraph into plain text', () => {
+    expect(excerpt('Hello [world](https://x.y) and `code`.\n\nSecond.')).toBe(
+      'Hello world and code.'
+    );
+    expect(excerpt('word '.repeat(100), 20).endsWith('…')).toBe(true);
+  });
+});

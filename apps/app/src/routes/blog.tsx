@@ -21,18 +21,20 @@ export const postRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/blog/$slug',
   loader: async ({ params }) => {
-    const post = await (await documents()).loadPost(params.slug);
-    if (!post) throw notFound();
-    return post;
+    const result = await (
+      await documents()
+    ).loadPostWithNeighbours(params.slug);
+    if (!result) throw notFound();
+    return result;
   },
   head: ({ loaderData }) =>
     loaderData
       ? pageHead({
-          title: loaderData.title,
+          title: loaderData.post.title,
           description:
-            loaderData.description ??
-            `${loaderData.title}, from the JSON Resume blog.`,
-          path: paths.post(loaderData.slug),
+            loaderData.post.description ??
+            `${loaderData.post.title}, from the JSON Resume blog.`,
+          path: paths.post(loaderData.post.slug),
           type: 'article',
         })
       : {},

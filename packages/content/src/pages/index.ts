@@ -1,0 +1,10 @@
+// @repo/content/pages: structured copy for the site's designed pages.
+export * as ai from './ai';
+export * as cli from './cli';
+export * as gettingStarted from './gettingStarted';
+export * as media from './media';
+export * as schema from './schema';
+export * as team from './team';
+export * as themeDevelopment from './themeDevelopment';
+export type { CliCommand, CliOption } from './cli';
+export type { Card, Link, Step, UserPath } from './types';

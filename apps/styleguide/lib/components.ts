@@ -317,6 +317,13 @@ export const componentDocs: ComponentDoc[] = [
           'Pass media (a code sample or screenshot) to put it beside the copy from the lg breakpoint. Below it, the media stacks under the copy.',
         bleed: true,
       },
+      {
+        id: 'compact',
+        title: 'Compact, start-aligned',
+        description:
+          'size="compact" and align="start" for inner pages: the same band with less height.',
+        bleed: true,
+      },
     ],
     guidelines: {
       do: [
@@ -344,7 +351,16 @@ export const componentDocs: ComponentDoc[] = [
     summary:
       'A numbered "how it works" sequence for landing pages: a short title and a sentence per step.',
     components: ['Steps', 'Step'],
-    examples: [{ id: 'default', title: 'Three steps', block: true }],
+    examples: [
+      { id: 'default', title: 'Three steps', block: true },
+      {
+        id: 'vertical',
+        title: 'Vertical',
+        description:
+          'layout="vertical" for half-width columns: numbers beside the copy, code inside steps scrolls.',
+        block: true,
+      },
+    ],
     guidelines: {
       do: ['Keep it to three or four steps.', 'Start each title with a verb.'],
       dont: ['Use it for navigation or progress through a form.'],
@@ -368,6 +384,74 @@ export const componentDocs: ComponentDoc[] = [
     },
     accessibility: [
       'Renders a <dl>; each label is the term and its figure the description.',
+    ],
+  },
+  {
+    slug: 'section-intro',
+    name: 'Section intro',
+    group: 'Site',
+    summary:
+      'The opening of a page section: overline, light title and a one-line lede.',
+    components: ['SectionIntro'],
+    examples: [{ id: 'default', title: 'Section intro', block: true }],
+    accessibility: [
+      'Set level to fit the page outline (2 by default); pass headingId to label a <section> with it.',
+    ],
+  },
+  {
+    slug: 'link-card',
+    name: 'Link card',
+    group: 'Navigation',
+    summary:
+      'A whole card that links somewhere: title with an arrow, description and optional details.',
+    components: ['LinkCard'],
+    examples: [{ id: 'grid', title: 'Choices in a grid', block: true }],
+    guidelines: {
+      do: ['Use for a small set of destinations a reader chooses between.'],
+      dont: ['Put other links or buttons inside; the whole card is one link.'],
+    },
+    accessibility: [
+      'The card is a single <a>, named by its text. Use asChild to render through a router link.',
+    ],
+  },
+  {
+    slug: 'code-tabs',
+    name: 'Code tabs',
+    group: 'Data display',
+    summary:
+      'The same step written several ways (npm, pnpm, npx), one tab each, each copyable.',
+    components: ['CodeTabs'],
+    examples: [{ id: 'install', title: 'Install command', block: true }],
+    accessibility: [
+      'Radix tabs: arrow keys move between tabs; label names the tab list.',
+    ],
+  },
+  {
+    slug: 'on-this-page',
+    name: 'On this page',
+    group: 'Navigation',
+    summary:
+      'In-page navigation for long pages, sticky from lg up, marking the section in view.',
+    components: ['OnThisPage'],
+    examples: [{ id: 'default', title: 'Sections', block: true }],
+    accessibility: [
+      'A <nav> landmark named "On this page"; the current link has aria-current.',
+    ],
+  },
+  {
+    slug: 'chip-group',
+    name: 'Chip group',
+    group: 'Forms',
+    summary:
+      'Pick one of many short options, or none, as a row of toggle chips.',
+    components: ['ChipGroup'],
+    examples: [{ id: 'filter', title: 'Category filter', block: true }],
+    guidelines: {
+      do: ['Use for filters with up to a dozen or so options.'],
+      dont: ['Use for choices that need more than a word or two; use Select.'],
+    },
+    accessibility: [
+      'Each chip is a toggle button with aria-pressed, in a group named by label.',
     ],
   },
   {

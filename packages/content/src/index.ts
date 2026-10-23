@@ -4,7 +4,9 @@ export {
   docSlugs,
   loadDoc,
   loadDocs,
+  excerpt,
   loadPost,
+  loadPostWithNeighbours,
   loadPosts,
   postSlugs,
 } from './documents';

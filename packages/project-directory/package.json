@@ -1,0 +1,46 @@
+{
+  "name": "@repo/project-directory",
+  "version": "0.0.0",
+  "private": true,
+  "description": "The community projects directory: search and category filters, Effect Atom state in the URL, and the directory components",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts,.tsx"
+  },
+  "dependencies": {
+    "@effect/atom-react": "4.0.6",
+    "@jsonresume/ui": "workspace:*",
+    "@repo/content": "workspace:*",
+    "@repo/domain": "workspace:*",
+    "@repo/url-state": "workspace:*",
+    "effect": "4.0.6"
+  },
+  "peerDependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@repo/eslint-config-custom": "workspace:*",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "@vanilla-extract/css": "^1.21.3",
+    "@vanilla-extract/vite-plugin": "^5.2.6",
+    "jsdom": "^27.0.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.9.3",
+    "vite": "^6.4.3",
+    "vitest": "^3.2.6"
+  },
+  "sideEffects": [
+    "**/*.css.ts"
+  ]
+}

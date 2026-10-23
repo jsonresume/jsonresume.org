@@ -6,11 +6,26 @@ import {
 import { cx } from '../../utils/cx';
 import * as s from './steps.css';
 
-export type StepsProps = OlHTMLAttributes<HTMLOListElement>;
+export interface StepsProps extends OlHTMLAttributes<HTMLOListElement> {
+  /**
+   * 'horizontal' lays steps out in columns from md up; 'vertical' keeps one
+   * column with the numbers beside the copy, for narrow spaces.
+   */
+  layout?: 'horizontal' | 'vertical';
+}
 
 /** An ordered "how it works" sequence; numbers come from the list order. */
-export function Steps({ className, ...props }: StepsProps) {
-  return <ol className={cx(s.steps, className)} {...props} />;
+export function Steps({
+  layout = 'horizontal',
+  className,
+  ...props
+}: StepsProps) {
+  return (
+    <ol
+      className={cx(s.steps, layout === 'vertical' && s.vertical, className)}
+      {...props}
+    />
+  );
 }
 
 export interface StepProps

@@ -81,3 +81,36 @@ describe('Stats', () => {
     expect(await axeViolations(container)).toEqual([]);
   });
 });
+
+describe('Hero sizes', () => {
+  it('renders compact and start-aligned for inner pages', async () => {
+    const { container } = render(
+      <Hero
+        size="compact"
+        align="start"
+        eyebrow="Reference"
+        title="Schema"
+        lede="Every field."
+      />
+    );
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'Schema' })
+    ).toBeInTheDocument();
+    expect(await axeViolations(container)).toEqual([]);
+  });
+});
+
+describe('Steps vertical', () => {
+  it('keeps an ordered list in the vertical layout', async () => {
+    const { container } = render(
+      <Steps layout="vertical">
+        <Step title="Install">npm i</Step>
+        <Step title="Run">resume</Step>
+      </Steps>
+    );
+    expect(
+      within(screen.getByRole('list')).getAllByRole('listitem')
+    ).toHaveLength(2);
+    expect(await axeViolations(container)).toEqual([]);
+  });
+});

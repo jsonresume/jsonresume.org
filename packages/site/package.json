@@ -7,11 +7,17 @@
   "exports": {
     ".": "./src/index.ts",
     "./home": "./src/home/index.ts",
-    "./doc": "./src/pages/DocPage.tsx",
     "./blog": "./src/pages/BlogPages.tsx",
     "./projects": "./src/pages/ProjectsPage.tsx",
     "./team": "./src/pages/TeamPage.tsx",
-    "./themes": "./src/pages/ThemesPage.tsx"
+    "./themes": "./src/pages/ThemesPage.tsx",
+    "./getting-started": "./src/pages/getting-started/GettingStartedPage.tsx",
+    "./schema": "./src/pages/schema/SchemaPage.tsx",
+    "./job-schema": "./src/pages/schema/JobSchemaPage.tsx",
+    "./cli": "./src/pages/cli/CliPage.tsx",
+    "./ai": "./src/pages/ai/AiPage.tsx",
+    "./theme-development": "./src/pages/theme-development/ThemeDevelopmentPage.tsx",
+    "./media": "./src/pages/media/MediaPage.tsx"
   },
   "scripts": {
     "test": "vitest run",
@@ -20,10 +26,14 @@
   },
   "dependencies": {
     "@effect/atom-react": "4.0.6",
+    "@jsonresume/schema": "workspace:*",
     "@jsonresume/ui": "workspace:*",
     "@repo/content": "workspace:*",
     "@repo/domain": "workspace:*",
+    "@repo/project-directory": "workspace:*",
+    "@repo/schema-explorer": "workspace:*",
     "@repo/theme-gallery": "workspace:*",
+    "@repo/url-state": "workspace:*",
     "effect": "4.0.6"
   },
   "peerDependencies": {

@@ -44,16 +44,19 @@ Apps are thin. `apps/app` holds routes and wiring; anything with logic, data or
 UI that another app could use lives in `packages/*`. Prefer a new focused
 package over growing an app.
 
-| Package               | What it holds                                                                                                                                 |
-| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| `@jsonresume/ui`      | Design system: tokens and generic components. No jsonresume.org copy or data. New generic components go here, with a styleguide example.      |
-| `@repo/domain`        | Effect Schema models shared by everything (Project, TeamMember, BlogPost, …). No React, no IO.                                                |
-| `@repo/content`       | Site content: Markdown documents, blog posts and typed data lists, each decoded with a `@repo/domain` schema. No React.                       |
-| `@repo/site`          | The jsonresume.org shell in React: layout, navigation, Markdown and document page templates. Uses `@jsonresume/ui`.                           |
-| `@repo/theme-gallery` | Theme catalog: search and filter logic, its atoms, and the gallery components.                                                                |
-| `@repo/ssg`           | TanStack Router SSR for Vite apps: Vite manifest to router manifest, request renderer, prerendering, hydration, SSR dev server. App-agnostic. |
-| `@repo/api`           | The `HttpApi` contract: groups, endpoints, request/response schemas. Shared by server and clients; no server code.                            |
-| `@repo/server`        | A Hono app factory: static files with cache rules, the 404 page, health, and the Effect `HttpApi` mounted at `/api`.                          |
+| Package                   | What it holds                                                                                                                                 |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@jsonresume/ui`          | Design system: tokens and generic components. No jsonresume.org copy or data. New generic components go here, with a styleguide example.      |
+| `@repo/domain`            | Effect Schema models shared by everything (Project, TeamMember, BlogPost, …). No React, no IO.                                                |
+| `@repo/content`           | Site content: Markdown documents, blog posts and typed data lists, each decoded with a `@repo/domain` schema. No React.                       |
+| `@repo/site`              | The jsonresume.org shell in React: layout, navigation, Markdown and document page templates. Uses `@jsonresume/ui`.                           |
+| `@repo/theme-gallery`     | Theme catalog: search and filter logic, its atoms, and the gallery components.                                                                |
+| `@repo/project-directory` | Community projects directory: search and category filters, atoms in the URL, directory components.                                            |
+| `@repo/schema-explorer`   | Reads a JSON Schema into sections and readable field rows; renders the reference with examples. Used for both schema pages.                   |
+| `@repo/url-state`         | `useAtomsInUrl`: keeps atoms in search params, read after hydration so prerendered HTML matches.                                              |
+| `@repo/ssg`               | TanStack Router SSR for Vite apps: Vite manifest to router manifest, request renderer, prerendering, hydration, SSR dev server. App-agnostic. |
+| `@repo/api`               | The `HttpApi` contract: groups, endpoints, request/response schemas. Shared by server and clients; no server code.                            |
+| `@repo/server`            | A Hono app factory: static files with cache rules, the 404 page, health, and the Effect `HttpApi` mounted at `/api`.                          |
 
 Dependency direction: `domain` ← `content`, `api` ← `site`, feature packages ←
 `apps/app`. Packages never import from apps. `@jsonresume/ui` imports nothing

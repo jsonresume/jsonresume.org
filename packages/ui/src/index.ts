@@ -68,6 +68,25 @@ export {
   type SiteHeaderProps,
 } from './components/site/site-header';
 
+// Content and docs
+export {
+  CodeTabs,
+  LinkCard,
+  SectionIntro,
+  type CodeTab,
+  type CodeTabsProps,
+  type LinkCardProps,
+  type SectionIntroProps,
+} from './components/content/content';
+export {
+  ChipGroup,
+  OnThisPage,
+  type ChipGroupProps,
+  type ChipOption,
+  type OnThisPageItem,
+  type OnThisPageProps,
+} from './components/content/navigation';
+
 // Forms
 export {
   Field,

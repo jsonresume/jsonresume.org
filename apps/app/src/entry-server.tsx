@@ -6,7 +6,6 @@ import {
 } from '@repo/ssg/server';
 import { createAppRouter } from './router';
 import { postPaths } from './routes/blog';
-import { docPaths } from './routes/docs';
 
 /** The client entry, as Vite's manifest keys it. */
 export const clientEntry = 'src/entry-client.tsx';
@@ -18,10 +17,9 @@ export const createAppRenderer = (manifest: Manifest) =>
 /** Server rendering for `pnpm dev`, with Vite serving source modules. */
 export const render = createAppRenderer(devRouterManifest(clientEntry));
 
-/** Every page to prerender: each static route, each document and each post. */
+/** Every page to prerender: each static route, plus each blog post. */
 export const paths = [
   ...staticPaths(createAppRouter().routesByPath),
-  ...docPaths,
   ...postPaths,
 ];
 

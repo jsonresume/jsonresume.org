@@ -15,4 +15,3 @@ export {
   type ThemeGridProps,
   type ThemeLinks,
 } from './ThemeGallery';
-export { useFilterInUrl } from './useFilterInUrl';

@@ -1,25 +1,29 @@
-import {
-  facts,
-  history,
-  loadDoc,
-  loadPosts,
-  projectCategories,
-  projects,
-  team,
-} from '@repo/content';
-import { fireEvent, screen, within } from '@testing-library/react';
+import schemaJson from '@jsonresume/schema/schema.json';
+import { history, projects, team } from '@repo/content/data';
+import { loadPosts, loadPostWithNeighbours } from '@repo/content/documents';
+import { facts } from '@repo/content/facts';
+import { cli } from '@repo/content/pages';
+import { act, fireEvent, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { featuredThemes, HomePage } from './home';
+import { AiPage } from './pages/ai/AiPage';
 import { BlogIndexPage, BlogPostPage } from './pages/BlogPages';
-import { DocPage } from './pages/DocPage';
+import { CliPage } from './pages/cli/CliPage';
+import { GettingStartedPage } from './pages/getting-started/GettingStartedPage';
+import { MediaPage } from './pages/media/MediaPage';
 import { ProjectsPage } from './pages/ProjectsPage';
+import { SchemaPage } from './pages/schema/SchemaPage';
 import { TeamPage } from './pages/TeamPage';
+import { ThemeDevelopmentPage } from './pages/theme-development/ThemeDevelopmentPage';
 import { SiteLayout } from './SiteLayout';
 import { SiteLink } from './SiteLink';
 import { renderWithRouter } from './test/renderWithRouter';
 
-describe('SiteLink', () => {
-  it('navigates in-app for same-site paths and leaves external links alone', async () => {
+const oneH1 = () =>
+  expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1);
+
+describe('shell', () => {
+  it('SiteLink navigates in-app for site paths and leaves others alone', async () => {
     const { router } = await renderWithRouter(
       <>
         <SiteLink href="/schema">Schema</SiteLink>
@@ -34,10 +38,8 @@ describe('SiteLink', () => {
       'https://github.com'
     );
   });
-});
 
-describe('SiteLayout', () => {
-  it('marks the current section in the header', async () => {
+  it('SiteLayout marks the current section', async () => {
     await renderWithRouter(
       <SiteLayout>page</SiteLayout>,
       '/blog/first-official-release'
@@ -47,73 +49,116 @@ describe('SiteLayout', () => {
       'aria-current',
       'page'
     );
-    expect(
-      within(nav).getByRole('link', { name: 'Schema' })
-    ).not.toHaveAttribute('aria-current');
   });
 });
 
-describe('HomePage', () => {
-  it('has one h1, every section and the featured themes', async () => {
+describe('pages', () => {
+  it('home: sections and featured themes', async () => {
     await renderWithRouter(<HomePage />);
-    expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1);
-    for (const name of [
-      'One file, every format',
-      'A look for every kind of career',
-      'Plain JSON, real tools',
-    ]) {
+    oneH1();
+    expect(
+      within(
+        screen.getByRole('list', { name: 'Featured themes' })
+      ).getAllByRole('listitem')
+    ).toHaveLength(featuredThemes.length);
+  });
+
+  it('getting started: your username rewrites the registry links', async () => {
+    await renderWithRouter(<GettingStartedPage />, '/getting-started');
+    oneH1();
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText('Your GitHub username'), {
+        target: { value: 'octocat' },
+      });
+    });
+    expect(screen.getByRole('link', { name: 'octocat.json' })).toHaveAttribute(
+      'href',
+      'https://registry.jsonresume.org/octocat.json'
+    );
+  });
+
+  it('schema: an anchor for every section of the schema', async () => {
+    await renderWithRouter(<SchemaPage />, '/schema');
+    oneH1();
+    for (const key of Object.keys(schemaJson.properties).filter(
+      (k) => k !== '$schema'
+    )) {
+      expect(document.getElementById(key)).not.toBeNull();
+    }
+    expect(
+      screen.getByText(`Reference · version ${facts.schemaVersion}`)
+    ).toBeInTheDocument();
+  });
+
+  it('cli: a section per command', async () => {
+    await renderWithRouter(<CliPage />, '/cli');
+    oneH1();
+    for (const command of cli.commands) {
       expect(
-        screen.getByRole('heading', { level: 2, name })
+        screen.getByRole('heading', { level: 2, name: command.usage })
       ).toBeInTheDocument();
     }
-    const featured = screen.getByRole('list', { name: 'Featured themes' });
-    expect(within(featured).getAllByRole('listitem')).toHaveLength(
-      featuredThemes.length
-    );
-    expect(
-      screen.getByRole('link', { name: `See all ${facts.themeCount} themes` })
-    ).toHaveAttribute('href', '/themes');
   });
-});
 
-describe('page templates', () => {
-  it('renders a document with facts filled in', async () => {
-    const media = await loadDoc('media');
-    expect(media).toBeDefined();
-    if (!media) return;
-    const { container } = await renderWithRouter(<DocPage doc={media} />);
-    expect(
-      screen.getByRole('heading', { level: 1, name: media.title })
-    ).toBeInTheDocument();
+  it('ai: tool links follow the username', async () => {
+    await renderWithRouter(<AiPage />, '/ai');
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText('Your GitHub username'), {
+        target: { value: 'octocat' },
+      });
+    });
+    expect(screen.getByRole('link', { name: /Cover letter/ })).toHaveAttribute(
+      'href',
+      'https://registry.jsonresume.org/octocat/letter'
+    );
+  });
+
+  it('theme development and media render, with facts filled in', async () => {
+    await renderWithRouter(<ThemeDevelopmentPage />, '/theme-development');
+    oneH1();
+    const { container } = await renderWithRouter(<MediaPage />, '/media');
     expect(container.textContent).not.toMatch(/\{\{/);
     expect(container.textContent).toContain(facts.schemaVersion);
   });
 
-  it('lists every post and renders one', async () => {
-    const posts = await loadPosts();
-    await renderWithRouter(<BlogIndexPage posts={posts} />);
-    expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(
-      posts.length
-    );
-    await renderWithRouter(<BlogPostPage post={posts[0]} />);
-    expect(
-      screen.getByRole('heading', { level: 1, name: posts[0].title })
-    ).toBeInTheDocument();
-  });
-
-  it('groups every project under a category heading', async () => {
-    await renderWithRouter(
-      <ProjectsPage projects={projects} categories={projectCategories} />
-    );
+  it('projects: every project is listed', async () => {
+    await renderWithRouter(<ProjectsPage />, '/projects');
+    // Cards only: a project may link where the page's closing buttons do.
     const cards = screen
       .getAllByRole('link')
-      .filter((a) => projects.some((p) => p.link === a.getAttribute('href')));
+      .filter(
+        (a) =>
+          a.closest('li') &&
+          projects.some((p) => p.link === a.getAttribute('href'))
+      );
     expect(cards).toHaveLength(projects.length);
   });
 
-  it('shows the team and the dated history', async () => {
-    await renderWithRouter(<TeamPage team={team} history={history} />);
+  it('team: people, story and milestones', async () => {
+    await renderWithRouter(<TeamPage team={team} history={history} />, '/team');
+    oneH1();
     expect(screen.getByRole('list', { name: 'Core team' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', {
+        name: 'A shared format for a familiar document',
+      })
+    ).toBeInTheDocument();
     expect(screen.getByText('31 July 2014')).toBeInTheDocument();
+  });
+
+  it('blog: index by year, and a post with its neighbours', async () => {
+    const posts = await loadPosts();
+    await renderWithRouter(<BlogIndexPage posts={posts} />, '/blog');
+    expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(
+      posts.length
+    );
+    const result = await loadPostWithNeighbours(posts[1].slug);
+    if (!result) throw new Error('post missing');
+    await renderWithRouter(
+      <BlogPostPage {...result} />,
+      `/blog/${posts[1].slug}`
+    );
+    const more = screen.getByRole('navigation', { name: 'More posts' });
+    expect(within(more).getAllByRole('link')).toHaveLength(2);
   });
 });

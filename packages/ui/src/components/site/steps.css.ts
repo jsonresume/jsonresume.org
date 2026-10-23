@@ -19,11 +19,20 @@ export const steps = style({
   },
 });
 
+/* Vertical: one column, numbers beside the copy (for narrow columns). */
+export const vertical = style({
+  gap: space[8],
+  '@media': {
+    [media.md]: { gridTemplateColumns: 'minmax(0, 1fr)', gap: space[8] },
+  },
+});
+
 export const step = style({
   counterIncrement: 'jr-step',
   display: 'grid',
   alignContent: 'start',
   gap: space[3],
+  minWidth: 0,
   paddingBlockStart: space[5],
   borderBlockStart: `2px solid ${color.surface.brand}`,
   '::before': {
@@ -34,10 +43,23 @@ export const step = style({
     lineHeight: 1,
     fontVariantNumeric: 'tabular-nums',
   },
+  selectors: {
+    [`${vertical} &`]: {
+      gridTemplateColumns: '2.75rem minmax(0, 1fr)',
+      columnGap: space[4],
+      paddingBlockStart: 0,
+      borderBlockStart: 'none',
+    },
+    [`${vertical} &::before`]: {
+      gridRow: '1 / span 2',
+      paddingBlockStart: space[1],
+    },
+  },
 });
 
 export const title = style({
   margin: 0,
+  selectors: { [`${vertical} &`]: { gridColumn: 2 } },
   color: color.text.strong,
   fontSize: font.size.lg,
   fontWeight: font.weight.semibold,
@@ -45,6 +67,8 @@ export const title = style({
 });
 
 export const body = style({
+  minWidth: 0,
+  selectors: { [`${vertical} &`]: { gridColumn: 2 } },
   color: color.text.default,
   fontSize: font.size.sm,
   lineHeight: font.lineHeight.normal,

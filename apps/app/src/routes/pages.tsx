@@ -1,53 +1,131 @@
 import { facts } from '@repo/content/facts';
 import { pageHead, paths } from '@repo/site';
-import { createRoute } from '@tanstack/react-router';
+import {
+  createRoute,
+  type AnyRoute,
+  type LazyRoute,
+} from '@tanstack/react-router';
 import { rootRoute } from './root';
 
-// Route definitions (path, head) stay small; each page's component is a
-// separate chunk loaded with .lazy().
+/**
+ * A static page: its path and head here (small, in the main bundle), its
+ * component in a .lazy.tsx file loaded when the route is visited.
+ */
+function page<const TPath extends string>(
+  path: TPath,
+  head: { title: string; description: string },
+  load: () => Promise<{ Route: LazyRoute<AnyRoute> }>
+) {
+  return createRoute({
+    getParentRoute: () => rootRoute,
+    path,
+    head: () => pageHead({ ...head, path }),
+  }).lazy(() => load().then((m) => m.Route));
+}
 
-export const homeRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: paths.home,
-  head: () =>
-    pageHead({
-      title: 'JSON Resume: the open standard for resumes',
-      description: `Write your resume once in JSON and publish it anywhere: ${facts.themeCount} open-source themes, a CLI, and free hosting from a GitHub gist.`,
-      path: paths.home,
-    }),
-}).lazy(() => import('./home.lazy').then((m) => m.Route));
+export const homeRoute = page(
+  paths.home,
+  {
+    title: 'JSON Resume: the open standard for resumes',
+    description: `Write your resume once in JSON and publish it anywhere: ${facts.themeCount} open-source themes, a CLI, and free hosting from a GitHub gist.`,
+  },
+  () => import('./home.lazy')
+);
 
-export const themesRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: paths.themes,
-  head: () =>
-    pageHead({
-      title: 'Themes',
-      description: `Browse ${facts.themeCount} open-source resume themes and preview each with a real resume.`,
-      path: paths.themes,
-    }),
-}).lazy(() => import('./themes.lazy').then((m) => m.Route));
+export const gettingStartedRoute = page(
+  paths.gettingStarted,
+  {
+    title: 'Getting started',
+    description:
+      'Publish your resume from a GitHub Gist, use the CLI to export PDF and HTML, or import from LinkedIn.',
+  },
+  () => import('./getting-started.lazy')
+);
 
-export const projectsRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: paths.projects,
-  head: () =>
-    pageHead({
-      title: 'Projects',
-      description:
-        'Tools, libraries and services the community has built on JSON Resume.',
-      path: paths.projects,
-    }),
-}).lazy(() => import('./projects.lazy').then((m) => m.Route));
+export const schemaRoute = page(
+  paths.schema,
+  {
+    title: 'The resume schema',
+    description: `Every section and field of resume.json, schema version ${facts.schemaVersion}, with examples and ways to validate.`,
+  },
+  () => import('./schema.lazy')
+);
 
-export const teamRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: paths.team,
-  head: () =>
-    pageHead({
-      title: 'Team',
-      description:
-        'The volunteers who maintain JSON Resume, and the history of the project since 2014.',
-      path: paths.team,
-    }),
-}).lazy(() => import('./team.lazy').then((m) => m.Route));
+export const jobSchemaRoute = page(
+  paths.jobDescriptionSchema,
+  {
+    title: 'Job description schema',
+    description:
+      'A standard JSON format for job postings: every field of job.json with an example.',
+  },
+  () => import('./job-schema.lazy')
+);
+
+export const themesRoute = page(
+  paths.themes,
+  {
+    title: 'Themes',
+    description: `Browse ${facts.themeCount} open-source resume themes and preview each with a real resume.`,
+  },
+  () => import('./themes.lazy')
+);
+
+export const projectsRoute = page(
+  paths.projects,
+  {
+    title: 'Projects',
+    description:
+      'Tools, libraries and services the community has built on JSON Resume.',
+  },
+  () => import('./projects.lazy')
+);
+
+export const teamRoute = page(
+  paths.team,
+  {
+    title: 'Team',
+    description:
+      'The volunteers who maintain JSON Resume, and the history of the project since 2014.',
+  },
+  () => import('./team.lazy')
+);
+
+export const cliRoute = page(
+  paths.cli,
+  {
+    title: 'CLI reference',
+    description:
+      'resume-cli: create, validate, preview and export your resume to HTML, PDF, Markdown or text, with every command and option.',
+  },
+  () => import('./cli.lazy')
+);
+
+export const aiRoute = page(
+  paths.ai,
+  {
+    title: 'AI tools',
+    description:
+      'Open-source registry tools that use your hosted resume: matching jobs, cover letters, resume feedback and interview practice.',
+  },
+  () => import('./ai.lazy')
+);
+
+export const themeDevelopmentRoute = page(
+  paths.themeDevelopment,
+  {
+    title: 'Theme development',
+    description:
+      'Build a JSON Resume theme: an npm package named jsonresume-theme-{name} that exports a render function returning HTML.',
+  },
+  () => import('./theme-development.lazy')
+);
+
+export const mediaRoute = page(
+  paths.media,
+  {
+    title: 'Media kit',
+    description:
+      'Facts with sources, ready-to-use descriptions, a fictional example resume and contact details for people writing about JSON Resume.',
+  },
+  () => import('./media.lazy')
+);

@@ -42,6 +42,15 @@ globalStyle(scope(':where(button, input, select, textarea)'), {
   color: 'inherit',
 });
 
+// Plain links get the brand link colour. :where() keeps specificity at
+// zero, so any component that styles its own links wins.
+globalStyle(scope(':where(a)'), {
+  color: vars.color.text.link,
+  textUnderlineOffset: '0.15em',
+});
+
+globalStyle(scope(':where(a):hover'), { color: vars.color.text.linkHover });
+
 globalStyle(scope(':focus-visible'), {
   outline: `2px solid ${vars.color.focus}`,
   outlineOffset: '2px',

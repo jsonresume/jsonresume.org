@@ -15,7 +15,8 @@
     "declarationMap": false,
     "types": [
       "vite/client"
-    ]
+    ],
+    "resolveJsonModule": true
   },
   "include": [
     "src"

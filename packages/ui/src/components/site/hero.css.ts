@@ -23,6 +23,12 @@ export const split = style({
   '@media': { [media.lg]: { textAlign: 'start' } },
 });
 
+/* Compact: inner pages. Less height and a smaller title, same band. */
+export const compact = style({ paddingBlock: `${space[12]} ${space[16]}` });
+
+/* Start-aligned copy without media (inner pages). */
+export const start = style({ textAlign: 'start' });
+
 export const splitGrid = style({
   display: 'grid',
   gap: space[12],
@@ -39,7 +45,13 @@ export const heroTitle = style({
   fontWeight: font.weight.light,
   lineHeight: font.lineHeight.tight,
   textWrap: 'balance',
-  '@media': { [media.md]: { fontSize: font.size['4xl'] } },
+  selectors: { [`${compact} &`]: { fontSize: font.size['2xl'] } },
+  '@media': {
+    [media.md]: {
+      fontSize: font.size['4xl'],
+      selectors: { [`${compact} &`]: { fontSize: font.size['3xl'] } },
+    },
+  },
 });
 
 export const eyebrow = style({
@@ -56,6 +68,10 @@ export const heroLede = style({
   marginBlockStart: space[6],
   fontSize: font.size.md,
   lineHeight: font.lineHeight.normal,
+  selectors: {
+    [`${start} &`]: { marginInline: 0, maxWidth: '40rem' },
+    [`${compact} &`]: { marginBlockStart: space[4] },
+  },
   '@media': {
     [media.lg]: {
       selectors: {
@@ -71,6 +87,10 @@ export const heroActions = style({
   justifyContent: 'center',
   gap: space[3],
   marginBlockStart: space[8],
+  selectors: {
+    [`${start} &`]: { justifyContent: 'flex-start' },
+    [`${compact} &`]: { marginBlockStart: space[6] },
+  },
   '@media': {
     [media.lg]: {
       selectors: { [`${split} &`]: { justifyContent: 'flex-start' } },

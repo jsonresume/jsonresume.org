@@ -63,6 +63,13 @@ describe('ThemeGallery', () => {
       '/preview/desert-modern'
     );
     expect(window.location.search).toBe('?q=desert');
+    const style = tagCounts(themes)[0];
+    await act(async () => {
+      fireEvent.click(
+        screen.getByRole('button', { name: new RegExp(`^${style.tag}`) })
+      );
+    });
+    expect(window.location.search).toBe(`?q=desert&style=${style.tag}`);
   });
 
   it('reads a shared filter from the URL after the first render', async () => {

@@ -15,15 +15,21 @@ export interface HeroProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
    * and stacks below it.
    */
   media?: ReactNode;
+  /** 'compact' for inner pages: less height, smaller title. */
+  size?: 'default' | 'compact';
+  /** 'start' left-aligns the copy at every width; by default it is centred (with media: until lg).*/
+  align?: 'center' | 'start';
 }
 
-/** The yellow promo band used on the home page; centered, or split with media. */
+/** The yellow promo band: centered or split with media; compact for inner pages. */
 export function Hero({
   title,
   lede,
   actions,
   eyebrow,
   media,
+  size = 'default',
+  align = 'center',
   className,
   children,
   ...props
@@ -40,14 +46,32 @@ export function Hero({
 
   if (!media) {
     return (
-      <section className={cx(s.hero, s.onBrand, className)} {...props}>
+      <section
+        className={cx(
+          s.hero,
+          s.onBrand,
+          size === 'compact' && s.compact,
+          align === 'start' && s.start,
+          className
+        )}
+        {...props}
+      >
         <Container>{copy}</Container>
       </section>
     );
   }
 
   return (
-    <section className={cx(s.hero, s.split, className)} {...props}>
+    <section
+      className={cx(
+        s.hero,
+        s.split,
+        size === 'compact' && s.compact,
+        align === 'start' && s.start,
+        className
+      )}
+      {...props}
+    >
       <Container className={s.splitGrid}>
         <div className={s.onBrand}>{copy}</div>
         <div className={s.heroMedia}>{media}</div>

@@ -43,6 +43,23 @@ describe('every page', () => {
     }
   );
 
+  it('links only to pages and files that exist', async () => {
+    const { existsSync } = await import('node:fs');
+    const publicDir = new URL('../public', import.meta.url).pathname;
+    const broken: string[] = [];
+    for (const path of paths) {
+      const { html } = await page(path);
+      for (const [, href] of html.matchAll(/href="(\/[^"#?]*)/g)) {
+        const target = href.replace(/\/$/, '') || '/';
+        if (target.startsWith('/assets/') || target === '/favicon.svg')
+          continue;
+        const ok = paths.includes(target) || existsSync(publicDir + target);
+        if (!ok) broken.push(`${path} -> ${href}`);
+      }
+    }
+    expect(broken).toEqual([]);
+  });
+
   it('answers unknown pages and unknown posts with 404, noindex', async () => {
     for (const path of ['/nope', '/blog/no-such-post']) {
       const { html, status } = await page(path);

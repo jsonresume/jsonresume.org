@@ -12,6 +12,6 @@ export const IndexRoute = createLazyRoute('/blog')({
 
 export const PostRoute = createLazyRoute('/blog/$slug')({
   component: function PostRouteComponent() {
-    return <BlogPostPage post={post.useLoaderData()} />;
+    return <BlogPostPage {...post.useLoaderData()} />;
   },
 });
