@@ -3,6 +3,8 @@ import { font } from '@jsonresume/ui/tokens';
 import type { Metadata } from 'next';
 import { DocSection, DocsLayout } from '@/components/docs-layout';
 import styles from '@/components/docs.module.css';
+import { Example } from '@/components/example';
+import { Guidelines } from '@/components/guidelines';
 
 export const metadata: Metadata = { title: 'Typography' };
 
@@ -29,6 +31,53 @@ export default function TypographyPage() {
             height, as on jsonresume.org.
           </p>
         </header>
+
+        <DocSection
+          id="in-use"
+          title="In use"
+          description="Overline, light title, muted lede, then body copy: the opening of every jsonresume.org page."
+        >
+          <Example
+            slug="typography"
+            example={{
+              id: 'composition',
+              title: 'A docs page opening',
+              block: true,
+            }}
+          />
+        </DocSection>
+
+        <DocSection
+          id="measure"
+          title="Line length"
+          description="Running text keeps a 72-character measure. Use the measure prop on Text, or Prose."
+        >
+          <Example
+            slug="typography"
+            example={{
+              id: 'measure',
+              title: 'Measure versus full width',
+              block: true,
+            }}
+          />
+        </DocSection>
+
+        <DocSection id="guidelines" title="Guidelines">
+          <Guidelines
+            do={[
+              'Use light (300) only at 22px and up; it gets thin and faint below that.',
+              'Write headings and labels in sentence case; CSS uppercases buttons.',
+              'Use one h1 per page, and pick heading sizes with the size prop, not the level.',
+              'Keep body text at 14px; step up to md (16px) for long reading.',
+            ]}
+            dont={[
+              'Bold large headings.',
+              'Set paragraphs in uppercase or letter-spaced type.',
+              'Use the wordmark face (Ubuntu) for anything but the logo.',
+              'Center long paragraphs.',
+            ]}
+          />
+        </DocSection>
 
         <DocSection id="families" title="Families">
           <Table>

@@ -5,6 +5,8 @@ import { examples } from '@/generated/examples';
 import type { ExampleRef } from '@/lib/components';
 import styles from './docs.module.css';
 
+const LONG_SOURCE = 25;
+
 /**
  * A live example and its exact source, read from examples/<slug>/<id>.tsx
  * at build time, so the code shown is always the code running.
@@ -44,9 +46,17 @@ export function Example({
       <div className={previewClass}>
         <Component />
       </div>
-      <div className={styles.source}>
-        <CodeBlock label={`${slug}/${example.id}.tsx`} code={source} />
-      </div>
+      {source.split('\n').length > LONG_SOURCE ? (
+        // Long sources start collapsed so the demo stays the focus.
+        <details className={styles.source}>
+          <summary className={styles.sourceSummary}>Show code</summary>
+          <CodeBlock label={`${slug}/${example.id}.tsx`} code={source} />
+        </details>
+      ) : (
+        <div className={styles.source}>
+          <CodeBlock label={`${slug}/${example.id}.tsx`} code={source} />
+        </div>
+      )}
     </figure>
   );
 }

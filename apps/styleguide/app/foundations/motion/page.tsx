@@ -1,10 +1,30 @@
-import { Heading, Prose, Table, Td, Th } from '@jsonresume/ui';
+import { CodeBlock, Heading, Table, Td, Th } from '@jsonresume/ui';
 import { motion } from '@jsonresume/ui/tokens';
 import type { Metadata } from 'next';
 import { DocSection, DocsLayout } from '@/components/docs-layout';
 import styles from '@/components/docs.module.css';
+import { Example } from '@/components/example';
+import { Guidelines } from '@/components/guidelines';
 
 export const metadata: Metadata = { title: 'Motion' };
+
+const css = `.panel {
+  transition:
+    opacity var(--jr-motion-duration-base) var(--jr-motion-easing-out),
+    transform var(--jr-motion-duration-base) var(--jr-motion-easing-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel { transition: none; }
+}`;
+
+const ts = `import { style } from '@vanilla-extract/css';
+import { vars } from '@jsonresume/ui/tokens';
+
+export const panel = style({
+  transition: \`opacity \${vars.motion.duration.base} \${vars.motion.easing.out}\`,
+  '@media': { '(prefers-reduced-motion: reduce)': { transition: 'none' } },
+});`;
 
 export default function MotionPage() {
   return (
@@ -15,61 +35,174 @@ export default function MotionPage() {
             Motion
           </Heading>
           <p className={styles.lede}>
-            Motion is quick and quiet: color changes on hover, overlays fading
-            in. Nothing bounces, and nothing moves when the reader has asked for
-            reduced motion.
+            Motion on JSON Resume is quick and quiet. It confirms that something
+            happened (a color shifts on hover, a dialog fades in) and never
+            performs for its own sake. Nothing bounces, nothing slides across
+            the page, and everything stops when the reader asks for reduced
+            motion.
           </p>
         </header>
-        <DocSection id="tokens" title="Tokens">
+
+        <DocSection
+          id="durations"
+          title="Durations"
+          description="Four steps. base (250ms) is the default for state changes, matching jsonresume.org's hover transitions."
+        >
+          <Example
+            slug="motion"
+            example={{
+              id: 'durations',
+              title: 'Every duration, side by side',
+              block: true,
+            }}
+          />
           <Table>
             <thead>
               <tr>
                 <Th>Token</Th>
                 <Th>Value</Th>
+                <Th>Use for</Th>
               </tr>
             </thead>
             <tbody>
-              {[
-                ...Object.entries(motion.duration).map(([k, v]) => [
-                  `motion.duration.${k}`,
-                  v,
-                ]),
-                ...Object.entries(motion.easing).map(([k, v]) => [
-                  `motion.easing.${k}`,
-                  v,
-                ]),
-              ].map(([k, v]) => (
-                <tr key={k}>
+              {(
+                [
+                  [
+                    'instant',
+                    'State that must not animate (toggling a selection highlight).',
+                  ],
+                  [
+                    'fast',
+                    'Small, local feedback: tooltips, focus, press states.',
+                  ],
+                  [
+                    'base',
+                    'Hover colors, borders, overlays, panels: the default.',
+                  ],
+                  [
+                    'slow',
+                    'Large surfaces entering, e.g. a full-screen sheet. Rare.',
+                  ],
+                ] as const
+              ).map(([key, use]) => (
+                <tr key={key}>
                   <Td>
-                    <span className={styles.propName}>{k}</span>
+                    <span className={styles.propName}>
+                      motion.duration.{key}
+                    </span>
                   </Td>
                   <Td>
-                    <span className={styles.mono}>{v}</span>
+                    <span className={styles.mono}>{motion.duration[key]}</span>
+                  </Td>
+                  <Td>{use}</Td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </DocSection>
+
+        <DocSection
+          id="easing"
+          title="Easing"
+          description="standard for things that change in place, out for things that arrive. Linear looks mechanical, so keep it for spinners."
+        >
+          <Example
+            slug="motion"
+            example={{
+              id: 'easings',
+              title: 'Curves compared at a slow speed',
+              block: true,
+            }}
+          />
+          <Table>
+            <tbody>
+              {Object.entries(motion.easing).map(([key, value]) => (
+                <tr key={key}>
+                  <Td>
+                    <span className={styles.propName}>motion.easing.{key}</span>
+                  </Td>
+                  <Td>
+                    <span className={styles.mono}>{value}</span>
                   </Td>
                 </tr>
               ))}
             </tbody>
           </Table>
         </DocSection>
-        <DocSection id="rules" title="Rules">
-          <Prose>
-            <ul>
-              <li>
-                Animate <code>opacity</code>, <code>transform</code> and colors.
-                Never animate width, height or margins.
-              </li>
-              <li>
-                Use base (250ms) for hover and state changes, fast (100ms) for
-                tooltips.
-              </li>
-              <li>
-                The <code>base</code> class shortens every animation and
-                transition to near zero under{' '}
-                <code>prefers-reduced-motion: reduce</code>; components with
-                continuous animation stop it.
-              </li>
-            </ul>
-          </Prose>
+
+        <DocSection
+          id="interaction"
+          title="Hover and focus"
+          description="Interactive elements change color and border over base. Focus rings appear instantly: they are never animated."
+        >
+          <Example
+            slug="motion"
+            example={{ id: 'interaction', title: 'Hover, then Tab through' }}
+          />
+        </DocSection>
+
+        <DocSection
+          id="enter-exit"
+          title="Entering and leaving"
+          description="Fade with a short rise (8px) using easing.out. Animate only opacity and transform, so the page never reflows mid-animation."
+        >
+          <Example
+            slug="motion"
+            example={{
+              id: 'enter-exit',
+              title: 'Show and hide a confirmation',
+              block: true,
+            }}
+          />
+        </DocSection>
+
+        <DocSection
+          id="components"
+          title="Motion in components"
+          description="What the components already do, so you rarely need to add motion yourself."
+        >
+          <Example
+            slug="motion"
+            example={{
+              id: 'components',
+              title: 'Dialog, tooltip and accordion',
+              block: true,
+            }}
+          />
+        </DocSection>
+
+        <DocSection
+          id="reduced"
+          title="Reduced motion"
+          description="Some readers get dizzy or distracted by movement and turn it off in their OS. Respect that everywhere."
+        >
+          <Example
+            slug="motion"
+            example={{
+              id: 'reduced',
+              title: 'Detecting the preference',
+              block: true,
+            }}
+          />
+          <CodeBlock label="plain CSS with tokens" code={css} />
+          <CodeBlock label="vanilla-extract" code={ts} />
+        </DocSection>
+
+        <DocSection id="guidelines" title="Guidelines">
+          <Guidelines
+            do={[
+              'Use base for nearly everything; reach for fast only for tiny feedback.',
+              'Animate opacity, transform and color.',
+              'Make motion explain cause and effect: the thing you clicked is the thing that changes.',
+              'Turn motion off under prefers-reduced-motion.',
+            ]}
+            dont={[
+              'Animate width, height, margins or top/left: they reflow the page.',
+              'Bounce, spring, or overshoot.',
+              'Animate focus rings or text.',
+              'Run anything longer than slow (400ms) in response to a click.',
+            ]}
+          />
         </DocSection>
       </article>
     </DocsLayout>

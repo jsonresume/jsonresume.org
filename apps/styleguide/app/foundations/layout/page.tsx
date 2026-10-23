@@ -3,6 +3,7 @@ import { breakpoints, layout, zIndex } from '@jsonresume/ui/tokens';
 import type { Metadata } from 'next';
 import { DocSection, DocsLayout } from '@/components/docs-layout';
 import styles from '@/components/docs.module.css';
+import { Example } from '@/components/example';
 
 export const metadata: Metadata = { title: 'Layout' };
 
@@ -52,6 +53,37 @@ export default function LayoutPage() {
             full-width bands. Long text keeps a 72-character measure.
           </p>
         </header>
+
+        <DocSection
+          id="structure"
+          title="Page structure"
+          description="Every page follows the same skeleton."
+        >
+          <Example
+            slug="layout"
+            example={{
+              id: 'page-structure',
+              title: 'Header, title band, content, footer',
+              bleed: true,
+            }}
+          />
+        </DocSection>
+
+        <DocSection
+          id="reflow"
+          title="Intrinsic grids"
+          description="Grids decide their own column count from a minimum width, so most layouts need no breakpoints at all."
+        >
+          <Example
+            slug="layout"
+            example={{
+              id: 'responsive-grid',
+              title: 'Resize the container',
+              block: true,
+            }}
+          />
+        </DocSection>
+
         <DocSection id="widths" title="Widths and gutters">
           <TokenRows prefix="layout" values={layout} />
         </DocSection>

@@ -112,3 +112,13 @@ const lines = [
 ];
 writeFileSync(join(here, '../generated/examples.ts'), lines.join('\n'));
 console.log(`examples: ${exampleIds.length}`);
+
+// public/downloads/tokens.json: the package's token export, for the
+// Resources page. Present after `@jsonresume/ui` builds (turbo runs it first).
+import { copyFileSync, existsSync } from 'node:fs';
+const tokensJson = join(uiRoot, 'dist/tokens.json');
+if (existsSync(tokensJson)) {
+  mkdirSync(join(here, '../public/downloads'), { recursive: true });
+  copyFileSync(tokensJson, join(here, '../public/downloads/tokens.json'));
+  console.log('downloads: tokens.json');
+}

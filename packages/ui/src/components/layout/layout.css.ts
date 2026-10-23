@@ -114,7 +114,16 @@ export const grid = recipe({
     gridTemplateColumns: `repeat(auto-fill, minmax(min(${minColumn}, 100%), 1fr))`,
     vars: { [minColumn]: '16rem' },
   },
-  variants: { gap: gapVariants },
+  variants: {
+    gap: gapVariants,
+    // auto-fit: when there are fewer items than columns, they stretch to
+    // fill the row instead of leaving empty tracks.
+    stretch: {
+      true: {
+        gridTemplateColumns: `repeat(auto-fit, minmax(min(${minColumn}, 100%), 1fr))`,
+      },
+    },
+  },
   defaultVariants: { gap: 6 },
 });
 

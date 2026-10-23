@@ -334,3 +334,50 @@
     display: block;
   }
 }
+
+/* Playground: preview beside controls, code underneath. */
+
+.playground {
+  display: grid;
+}
+
+@media screen and (min-width: 768px) {
+  .playground {
+    grid-template-columns: minmax(0, 1fr) 15rem;
+  }
+}
+
+.playgroundPreview {
+  min-height: 12rem;
+  justify-content: center;
+}
+
+.playgroundControls {
+  padding: var(--jr-space-5);
+  border-left: 1px solid var(--jr-color-border-subtle);
+  background: var(--jr-color-surface-subtle);
+}
+
+.sourceSummary {
+  padding: var(--jr-space-3) var(--jr-space-5);
+  background: var(--jr-color-surface-subtle);
+  color: var(--jr-color-text-muted);
+  font-size: var(--jr-font-size-2xs);
+  font-weight: var(--jr-font-weight-semibold);
+  letter-spacing: var(--jr-font-tracking-caps);
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.sourceSummary:hover {
+  color: var(--jr-color-text-strong);
+}
+
+.sourceSummary:focus-visible {
+  outline: 2px solid var(--jr-color-focus);
+  outline-offset: -2px;
+}
+
+details[open] > .sourceSummary {
+  border-bottom: 1px solid var(--jr-color-border-default);
+}

@@ -88,14 +88,14 @@ export interface GridProps
 }
 
 export const Grid = forwardRef<HTMLDivElement, GridProps>(function Grid(
-  { asChild, gap, minColumnWidth, className, style, ...props },
+  { asChild, gap, stretch, minColumnWidth, className, style, ...props },
   ref
 ) {
   const Comp = asChild ? Slot : 'div';
   return (
     <Comp
       ref={ref}
-      className={cx(grid({ gap }), className)}
+      className={cx(grid({ gap, stretch }), className)}
       style={
         minColumnWidth
           ? { ...assignInlineVars({ [minColumn]: minColumnWidth }), ...style }

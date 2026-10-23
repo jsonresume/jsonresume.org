@@ -17,6 +17,7 @@ export const foundations: NavLink[] = [
   { href: '/foundations/shape', label: 'Radius and elevation' },
   { href: '/foundations/motion', label: 'Motion' },
   { href: '/foundations/layout', label: 'Layout' },
+  { href: '/foundations/iconography', label: 'Iconography' },
 ];
 
 export const navGroups: NavGroup[] = [
@@ -39,8 +40,10 @@ export const navGroups: NavGroup[] = [
     label: 'Guides',
     links: [
       { href: '/patterns', label: 'Patterns' },
+      { href: '/writing', label: 'Writing' },
       { href: '/accessibility', label: 'Accessibility' },
       { href: '/tokens', label: 'Token reference' },
+      { href: '/resources', label: 'Resources' },
       { href: '/contributing', label: 'Contributing' },
     ],
   },
