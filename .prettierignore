@@ -27,3 +27,4 @@ packages/cli
 
 # generated coverage artifact (written by themeRenderQa test)
 apps/registry/lib/formatters/template/theme-coverage.json
+packages/themes/jsonresume-theme-pro/src/fonts.generated.js

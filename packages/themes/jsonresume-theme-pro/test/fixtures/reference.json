@@ -1,0 +1,439 @@
+{
+  "meta": {
+    "theme": "professional",
+    "lastModified": "2026-07-22T00:00:00.000Z"
+  },
+  "basics": {
+    "name": "Thomas Davis",
+    "phone": "+61 411 021 021",
+    "label": "Full Stack Developer & AI Engineer",
+    "image": "https://avatars.githubusercontent.com/u/416209?v=4",
+    "summary": "Full stack developer with 15+ years building products at startups and in open source — founder of JSON Resume, co-founder of cdnjs. These days I build agentic systems end to end: tool-calling copilots with LLM-as-judge gates, autonomous document pipelines on the Claude Agent SDK, a bitemporal knowledge substrate in Rust with Lean-verified invariants, and neural TTS/ASR for Aboriginal language revitalization. Also trained a GPT from scratch in TypeScript and Vulkan just to see how deep the rabbit hole goes. I ship fast and let user feedback steer.",
+    "url": "https://ajaxdavis.dev",
+    "email": "thomasalwyndavis@gmail.com",
+    "location": {
+      "city": "Cairns",
+      "region": "Queensland",
+      "countryCode": "AU"
+    },
+    "profiles": [
+      {
+        "username": "ajaxdavis",
+        "url": "https://twitter.com/ajaxdavis",
+        "network": "twitter"
+      },
+      {
+        "url": "https://github.com/thomasdavis",
+        "username": "thomasdavis",
+        "network": "github"
+      }
+    ]
+  },
+  "education": [
+    {
+      "endDate": "2009-12-12",
+      "startDate": "2008-02-12",
+      "area": "Software Engineering (incomplete)",
+      "studyType": "Bachelors",
+      "institution": "The University of Queensland"
+    }
+  ],
+  "references": [
+    {
+      "reference": "Thomas was hired as a lead developer and, upon the leaving of our co-founder took over as CTO of Earbits. Thomas is, hands down, one of those A Players you hear of companies dying to hire. He is incredibly smart, not just at code but about everything from classical music to Chinese language and culture. Thomas is great to work with and, as a well established contributor to open source projects and several successful ventures, commands the respect of engineers at all levels. I would suggest doing anything you can to have him on your team.",
+      "name": "Joey Flores, Co-founder and CEO of Earbits, Inc."
+    },
+    {
+      "reference": "I've had the great pleasure of working with Thomas for the past three years at Earbits, and on a few side projects. Two years ago our CTO left on a moment's notice, Thomas saved our company by quickly stepping up to fill this role. He has been with our company through thick and thin and made serious personal sacrifices in order to help the company during tough times. He is a phenomenal hacker and a true team player. Highly recommended!",
+      "name": "Yotam Rosenbaum, SVP of Operations, Earbits, Inc."
+    },
+    {
+      "reference": "Thomas is an extremely talented engineer with a very broad range of skills and experience. From being a thought leader in the front-end community via backbonetutorials.com and cdnjs.com, to designing and implementing the API for cdnjs.com, working with Thomas has been fantastic learning experience. Thomas is truly a full stack develop, and his work output is incredible. If there is any opportunity to work with Thomas, I take it. He is the definition of an A player.",
+      "name": "Ryan Kirkman, Senior Software Engineer at Nerdwallet"
+    }
+  ],
+  "skills": [
+    {
+      "name": "AI & LLMs",
+      "level": "Advanced",
+      "keywords": [
+        "Vercel AI SDK",
+        "OpenAI API",
+        "Anthropic API",
+        "Google Gemini",
+        "Structured Outputs",
+        "Tool Calling",
+        "Embeddings / Vector Search",
+        "RAG Pipelines",
+        "LLM Reranking & Evals",
+        "AI Agents",
+        "Model Context Protocol (MCP)",
+        "Claude Code Skills",
+        "Prompt Engineering",
+        "LLM Training (from scratch)",
+        "Autograd / Tensor Operations",
+        "TTS/ASR Fine-tuning (VITS, wav2vec2)",
+        "LLM-as-Judge Pipelines"
+      ]
+    },
+    {
+      "name": "Frontend",
+      "level": "Advanced",
+      "keywords": [
+        "React",
+        "Next.js",
+        "TypeScript",
+        "JavaScript",
+        "HTML / JSX",
+        "Tailwind CSS",
+        "Styled Components",
+        "Redux",
+        "Apollo / GraphQL",
+        "Electron",
+        "Three.js",
+        "Backbone.js"
+      ]
+    },
+    {
+      "name": "Backend",
+      "level": "Advanced",
+      "keywords": [
+        "Node.js",
+        "Go",
+        "Rust",
+        "Python",
+        "Ruby on Rails",
+        "PostgreSQL",
+        "MongoDB",
+        "Redis",
+        "Supabase",
+        "REST APIs",
+        "WebSockets",
+        "Deno"
+      ]
+    },
+    {
+      "name": "Cloud & DevOps",
+      "level": "Advanced",
+      "keywords": [
+        "Google Cloud Platform (GCP)",
+        "Kubernetes",
+        "AWS",
+        "Docker",
+        "Vercel",
+        "Railway",
+        "Heroku",
+        "GitHub Actions",
+        "CI/CD Pipelines",
+        "Serverless",
+        "Cloudflare"
+      ]
+    },
+    {
+      "name": "Architecture & Tooling",
+      "level": "Advanced",
+      "keywords": [
+        "Monorepos (Turborepo)",
+        "System Design",
+        "API Design",
+        "Microservices",
+        "Real-time Systems (Pusher / Yjs)",
+        "CLI Tools",
+        "npm Package Publishing",
+        "Open Source Maintenance",
+        "Formal Verification (Lean 4)"
+      ]
+    },
+    {
+      "name": "Low-Level & GPU",
+      "level": "Intermediate",
+      "keywords": [
+        "C",
+        "Vulkan",
+        "SPIR-V Shader Generation",
+        "GPU Compute",
+        "Mixed Precision (FP16)"
+      ]
+    }
+  ],
+  "awards": [
+    {
+      "title": "Defender of the Internet",
+      "awarder": "Fight For The Future",
+      "date": "2014-10-02",
+      "summary": "For my work against mass surveillance and building out civic tools for digital democracy."
+    }
+  ],
+  "volunteer": [
+    {
+      "organization": "MobTranslate",
+      "position": "Creator & Maintainer",
+      "url": "https://mobtranslate.com",
+      "startDate": "2020-01-01",
+      "summary": "Open-source language revitalization platform for Aboriginal Australian languages — dictionaries for dozens of languages, community voice recording, and a full speech/ML stack built with the community, not just for it.",
+      "highlights": [
+        "Neural TTS pipeline: MMS-TTS (VITS) driven through a grammar-grounded orthography bridge that maps Kuku Yalanji spelling onto a same-family Pama-Nyungan donor voice (per Patz's reference grammar), per-word phonemic IPA for 2,679 dictionary words, deterministic seeded synthesis with full provenance, and a per-language model registry",
+        "ASR for low-resource speech: wav2vec2/Omnilingual CTC fine-tuning pipeline with reproducible dataset builds, serverless training runs, and benchmark harnesses",
+        "LLM translation fine-tunes with research-grade evaluation: lexical censuses, prompt ablations, dose curves, failure taxonomies, and curriculum replay datasets across Kuku Yalanji and Mi'gmaq",
+        "Native Android keyboard (IME), community recording infrastructure where real speaker audio always outranks synthesis, and sentence-corpus pipelines that turn recordings into training manifests",
+        "CARE-aligned governance: synthetic voices are explicitly flagged as scaffolds, donor voices are borrowed until a community licenses its own, and per-speaker (elder) models require explicit, revocable consent"
+      ]
+    }
+  ],
+  "work": [
+    {
+      "summary": "Principal-level contract engineering, most recently owning the AI capability of an HR-tech SaaS end to end: the agentic layer of the product — an in-app copilot with tool-calling over live customer data, autonomous document-generation pipelines, and the server-side compute services underneath — while shipping across the full stack (PHP/GraphQL, React, Go gateway, edge services).",
+      "url": "https://ajaxdavis.dev/",
+      "name": "Independent (contract & advisory)",
+      "location": "Melbourne",
+      "position": "Principal Engineer — AI (contract)",
+      "startDate": "2021-05-05",
+      "highlights": [
+        "Built an in-app AI copilot: multi-provider tool-calling agent (Anthropic + OpenAI via Vercel AI SDK) with data-query and mutation tools, an LLM-as-judge quality gate scoring every response on 8 dimensions, and SSE keep-alive for long agent streams",
+        "Designed an autonomous report pipeline — one model plans the document, Claude Agent SDK runs write it against live data, a second agent pass compiles branded slide decks via a 90+ layout PPTX compiler with chart rasterization and LaTeX PDF output, agents running in a parallel containerized fleet",
+        "Moved heavy analytics server-side (Bun + Hono behind a Go gateway): pure-function ports oracle-verified for numeric parity with the client engine, event-keyed Redis caching, validated at 20k+ entity scale",
+        "AI data enrichment: ingested a ~32-table public occupational dataset, LLM-classified it into customer data structures, and built persona-driven simulation commands generating realistic test data at scale",
+        "Shipped a standalone real-time collaborative app on Cloudflare Workers + Durable Objects — WebSocket presence, optimistic updates with server reconciliation, embedded AI assistant with client-side tool execution",
+        "Hunted down multi-user concurrent-edit data loss with a purpose-built integrity harness: truly-parallel mutation racing, event-chain fork detection, contract tests driving real client reducers against the live API"
+      ]
+    },
+    {
+      "summary": "Tokenized is a Bitcoin wallet for issuing, managing and trading digital tokens. I built the frontend, shipped as an Electron app. The hard part: keys never leave the user's machine, so all transaction and contract signing happens locally — which meant getting key management and security right in the UI layer.",
+      "url": "https://tokenized.com/",
+      "name": "Tokenized",
+      "location": "Melbourne",
+      "position": "Senior Javascript Developer",
+      "startDate": "2020-05-05",
+      "endDate": "2021-05-05",
+      "highlights": ["React", "Redux", "SCSS", "Product"]
+    },
+    {
+      "summary": "Blockbid is an Australian crypto currency exchange. I started off on the frontend but eventually became tech lead and worked on every moving piece of the exchange. I really enjoyed working with liquidity providers and connecting their platforms to help us achieve liquid markets.",
+      "url": "https://platform.blockbid.io",
+      "name": "Blockbid",
+      "location": "Melbourne",
+      "position": "Senior Javascript Developer",
+      "startDate": "2018-03-01",
+      "endDate": "2020-01-01",
+      "highlights": [
+        "React, Apollo, Styled Components",
+        "Node.js / Rails",
+        "Docker / Heroku / GCP",
+        "Used Figma for design and UX work",
+        "Optimizing markets with tens of millions of rows using SQL."
+      ]
+    },
+    {
+      "highlights": [
+        "Worked with Postgres, Redis and Dynamodb for storage.",
+        "Hosted on a mixture of Heroku Apps and EC2 servers.",
+        "Caching by Fastly and Cloudflare",
+        "Hybrid app supported on all platforms"
+      ],
+      "summary": "Built a large React/Redux application that runs everywhere — web, iOS and Android — as a PWA wrapped in a thin React Native shell. One codebase, every platform.",
+      "url": "https://listium.com",
+      "pinned": true,
+      "name": "Listium",
+      "position": "Developer",
+      "startDate": "2016-01-01",
+      "endDate": "2018-01-01"
+    },
+    {
+      "highlights": [
+        "Developed new tools for contacting congress",
+        "Brainstormed campaign ideas to raise maximum awareness about issues",
+        "Lots of social networking integration"
+      ],
+      "summary": "Hired to take EFF's campaigning to the next level by building an action centre in Ruby on Rails. The action centre is built around some large open source tools that lower the barrier to entry when contacting congress.",
+      "url": "http://www.eff.org",
+      "name": "Electronic Frontier Foundation",
+      "position": "Developer",
+      "startDate": "2014-04-01",
+      "endDate": "2016-01-01"
+    },
+    {
+      "highlights": [
+        "Managed a small team of developers and designers",
+        "Built the entire frontend application with Backbone.js",
+        "Transferred all of the infrastructure from Heroku to AWS"
+      ],
+      "summary": "Started off as a front end developer but took on the role of CTO in early 2013. The application frontend is built with Javascript and organized as a single page application that talks to a collection of Rails web servers which are connected to MongoDB.",
+      "url": "http://www.earbits.com",
+      "name": "Earbits",
+      "position": "CTO",
+      "endDate": "2015-01-09",
+      "startDate": "2013-03-08"
+    },
+    {
+      "highlights": [
+        "Generated 37,000,000 banner views",
+        "100,000 phone calls to congress",
+        "500,000 emails",
+        "250,000 signatures"
+      ],
+      "summary": "Worked on many politically charged campaigns against mass surveillance. Not only technically challenging work but also a lot of networking and getting my hands dirty with politics. Our biggest campaign was \"The Day We Fight Back.\"",
+      "url": "http://www.taskforce.is",
+      "name": "Taskforce.is",
+      "position": "Developer",
+      "startDate": "2013-06-01",
+      "endDate": "2016-01-01"
+    },
+    {
+      "highlights": [
+        "Over two million unique visitors a year",
+        "25,000+ ebook downloads",
+        "300,000+ Youtube views"
+      ],
+      "summary": "I write tutorials and blog post regarding the popular Javascript framework Backbone.js. The tutorials cover a range of topics regarding front end development aimed at beginners, experts and anyone in between.",
+      "url": "http://backbonetutorials.com",
+      "name": "BackboneTutorials.com",
+      "position": "Founder",
+      "startDate": "2011-01-01",
+      "endDate": "2014-01-01"
+    },
+    {
+      "summary": "Ephox is a worldwide company who is heavily involved with the development of TinyMce and enterprise editors. My primary role included building front-end widgets and applications. Worked on a major product using Backbone.js as a base. Heavily involved in UI/UX design and wire-framing. Also spend a lot of time designing API specifications and documentation.",
+      "url": "http://ephox.com",
+      "name": "Ephox",
+      "position": "Front-end Developer",
+      "endDate": "2012-06-01",
+      "startDate": "2011-01-01"
+    }
+  ],
+  "projects": [
+    {
+      "name": "JSON Resume",
+      "description": "JSON Resume is the open standard for resumes as JSON. I founded it in 2014 and still run it. What started as a schema is now an ecosystem: a registry that renders any resume in 52 themes, AI job matching that embeds your resume and scores it against live Hacker News hiring posts, an in-browser editor, an MCP server that updates your resume while you code, and a Claude Code skill that interviews you and hunts for jobs on your behalf. The whole thing lives in one open source monorepo.",
+      "highlights": [
+        "This resume is built with JSON Resume",
+        "7,000+ GitHub stars across the project's repos; tens of thousands of users",
+        "Built the AI registry: embedding-based job matching against live Hacker News hiring posts — hybrid retrieval + LLM reranking with a gold-set eval harness that lifted P@5 from 0.2 to 0.8",
+        "52 first-party themes rendered server-side, with render and section-coverage CI gates on every one",
+        "Maintain the published packages: @jsonresume/schema, resume-cli, @jsonresume/jobs, @jsonresume/core, json-resume-serde (Rust)"
+      ],
+      "url": "https://jsonresume.org",
+      "roles": ["Founder", "Maintainer"],
+      "startDate": "2014-04-01",
+      "type": "open source"
+    },
+    {
+      "name": "Donto",
+      "description": "An evidence-first knowledge substrate for LLM-scale extraction: a bitemporal, paraconsistent claim store (Rust + Postgres) that keeps contradictory claims forever, anchors every claim to character-level source spans, and re-ranks by corroboration on an E0-E5 epistemic ladder instead of deleting on conflict.",
+      "highlights": [
+        "22-crate Rust workspace with a custom 19-clause query language (DontoQL) plus a SPARQL subset over the same algebra, and bitemporal AS_OF time travel",
+        "Policy-gated Trust Kernel: default-deny attestations with written rationale, max-restriction provenance inheritance, full audit log",
+        "62 machine-checked Lean 4 theorems proving core model invariants; Ed25519/did:key signed reproducible releases (RO-Crate)",
+        "Live at 42M+ statements, 1.1M model-minted predicates, 3.5M evidence links — embedded by a distributed volunteer compute fleet",
+        "Powers an agentic-memory runtime (MCP), a paraconsistent wiki, and genealogy research"
+      ],
+      "url": "https://donto.org",
+      "roles": ["Creator"],
+      "startDate": "2025-01-01",
+      "type": "application"
+    },
+    {
+      "name": "TPMJS",
+      "startDate": "2025-06-01",
+      "description": "The Tool Package Manager for AI Agents. An open-source registry and execution platform that automatically discovers, validates, and runs npm packages as AI agent tools via MCP, SDK, or CLI.",
+      "highlights": [
+        "Auto-discovers npm packages with tpmjs keyword",
+        "Sandboxed tool execution via Deno runtime",
+        "MCP aggregator for connecting tool collections to Claude, Cursor, etc.",
+        "Agent platform for building, sharing, and forking AI agents"
+      ],
+      "url": "https://tpmjs.com"
+    },
+    {
+      "name": "Omega",
+      "startDate": "2025-06-01",
+      "description": "Self-evolving AI Discord bot with 80+ specialized tools, multi-database architecture, and autonomous development capabilities. Built with Vercel AI SDK, Discord.js, and Next.js.",
+      "highlights": [
+        "80+ AI tools including code execution in 42+ languages",
+        "Self-evolution capability — analyzes behavior and proposes improvements via GitHub issues",
+        "Dual database architecture (PostgreSQL + MongoDB)",
+        "AI-powered decision making for natural conversation participation"
+      ],
+      "url": "https://github.com/thomasdavis/omega"
+    },
+    {
+      "name": "Alpha",
+      "startDate": "2025-09-01",
+      "description": "From-scratch GPT training and inference system built in TypeScript with a hand-written C Vulkan addon for GPU compute. No PyTorch or TensorFlow — custom tensor backend, autograd, tokenizers, training loop, and inference engine.",
+      "highlights": [
+        "Custom tensor backend with tape-based reverse-mode autodiff",
+        "Hand-written Vulkan GPU backend with TS-generated SPIR-V kernels",
+        "Full training pipeline: BPE tokenizers, checkpointing, eval, sampling",
+        "OpenAI-compatible chat API, CLI, web dashboard, and TUI"
+      ],
+      "url": "https://github.com/thomasdavis/alpha2"
+    },
+    {
+      "name": "Blocks",
+      "startDate": "2025-11-01",
+      "description": "AI coding validator with semantic guardrails. A development-time validator that lets AI agents write code freely while maintaining consistency through domain semantics and multi-layer validation.",
+      "highlights": [
+        "Domain specification via blocks.yml for entities, signals, measures, and rules",
+        "Multi-layer validation: Schema, Shape, and AI-powered Domain checks",
+        "Semantic feedback loop for AI coding tools",
+        "Drift detection between code and specification"
+      ],
+      "url": "https://github.com/thomasdavis/blocks"
+    },
+    {
+      "name": "Toiletpaper",
+      "startDate": "2026-04-01",
+      "description": "Adversarial scientific-paper replication engine. Extracts a paper's claims into a statement graph, compiles them into typed replication units — metric recomputes, dataset integrity checks, equation checks, simulations — executes them, and emits verdicts: reproduced, contradicted, or fragile.",
+      "highlights": [
+        "Ran the KAN (Kolmogorov-Arnold Networks) paper through it: 102 claims extracted, 24 reproduced, 3 contradicted",
+        "Built on Donto, a bitemporal knowledge graph that tracks what's known, when it was learned, and with what confidence"
+      ],
+      "url": "https://github.com/thomasdavis/toiletpaper"
+    },
+    {
+      "name": "llm-benchmark",
+      "startDate": "2025-07-01",
+      "description": "CLI that generates LLM-optimized variants of your functions, validates them for functional equivalence, and benchmarks them across providers. Published on npm as llm-benchmark.",
+      "highlights": [
+        "Self-validating: generated variants are proven functionally equivalent before benchmarking",
+        "Cross-provider (OpenAI, Anthropic, Ollama) and polyglot (JS/TS, Python, Rust, Go)",
+        "TUI plus built-in cost analysis"
+      ],
+      "url": "https://github.com/thomasdavis/llm-benchmark"
+    },
+    {
+      "name": "cdnjs",
+      "startDate": "2011-01-08",
+      "description": "Co-founded cdnjs, a free CDN for the JavaScript libraries Google's CDN didn't carry. Community-moderated and open source; we partnered with Cloudflare, who now runs the infrastructure.",
+      "highlights": [
+        "Used by millions of sites in production",
+        "Serves JS/CSS assets to a double-digit share of all websites — billions of requests a month",
+        "10,000+ GitHub stars"
+      ],
+      "url": "https://www.cdnjs.com"
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Native speaker"
+    }
+  ],
+  "interests": [
+    {
+      "name": "Gardening",
+      "keywords": ["Lazy Gardening"]
+    },
+    {
+      "name": "Music",
+      "keywords": ["Guitar", "Singing", "Dancing"]
+    },
+    {
+      "name": "Books",
+      "keywords": ["Reading", "Writing", "History"]
+    },
+    {
+      "name": "Open Source",
+      "keywords": ["All of it"]
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "basics": {
+    "name": "Zoë Ångström-Nguyễn",
+    "label": "Ingénieure logicielle · Програмист · Μηχανικός",
+    "email": "zoe@exemple.fr",
+    "summary": "Travaille entre Paris, Hà Nội et Αθήνα. Decomposed: Zoë and Amália. Mixed script: مرحبا world, 東京 office, עברית.",
+    "location": { "city": "Montréal", "region": "Québec", "countryCode": "CA" },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "zoë-ångström",
+        "url": "https://github.com/zoe-angstrom"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Société Générale de Logiciels",
+      "position": "Ingénieure principale",
+      "startDate": "Spring 2019",
+      "endDate": "2021-13",
+      "summary": "Dates above are malformed on purpose."
+    },
+    {
+      "name": "Ōkami Kōgyō",
+      "position": "Développeuse",
+      "startDate": "",
+      "endDate": "",
+      "highlights": ["Rédaction d'une API « fiable » — 99,9 % de disponibilité"]
+    },
+    {
+      "name": "Ελληνική Εταιρεία",
+      "position": "Μηχανικός",
+      "startDate": "2015-02-29",
+      "endDate": "2016-02-29"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Langues de programmation",
+      "keywords": ["Rust", "OCaml", "Élixir"]
+    }
+  ],
+  "languages": [
+    { "language": "Français", "fluency": "Langue maternelle" },
+    { "language": "Tiếng Việt", "fluency": "Courant" }
+  ],
+  "meta": { "language": "fr-CA" }
+}

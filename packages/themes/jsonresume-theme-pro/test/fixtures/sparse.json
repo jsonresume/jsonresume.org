@@ -1,0 +1,13 @@
+{
+  "basics": {
+    "name": "Ada Ng",
+    "email": "ada@example.com",
+    "location": {},
+    "profiles": []
+  },
+  "work": [{ "name": "Harbour Bakery", "position": "Baker" }],
+  "education": [],
+  "skills": [{ "name": "", "keywords": [] }],
+  "awards": [{}],
+  "interests": [{ "name": "  " }]
+}
