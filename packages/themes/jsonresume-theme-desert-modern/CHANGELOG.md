@@ -1,5 +1,11 @@
 # jsonresume-theme-desert-modern
 
+## 0.1.10
+
+### Patch Changes
+
+- @jsonresume/core@0.3.6
+
 ## 0.1.9
 
 ### Patch Changes

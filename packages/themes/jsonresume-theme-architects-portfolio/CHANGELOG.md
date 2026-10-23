@@ -1,5 +1,11 @@
 # jsonresume-theme-architects-portfolio
 
+## 1.1.9
+
+### Patch Changes
+
+- @jsonresume/core@0.3.6
+
 ## 1.1.8
 
 ### Patch Changes
