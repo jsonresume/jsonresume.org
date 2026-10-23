@@ -1,7 +1,8 @@
 # Self-hosting plan: off Vercel and Supabase
 
 **Goal:** run jsonresume.org on our own server, ending our dependence on Vercel
-(hosting) and Supabase (Postgres, auth). Nothing is shut down until its
+(hosting) and Supabase (Postgres, auth), and move the site onto a new React +
+Vite app built on `@jsonresume/ui`. Nothing is shut down until its
 replacement is live and verified.
 
 ## The box
@@ -38,8 +39,10 @@ replacement is live and verified.
   systemd, one unit per app, restart on failure.
 - **Caddy** in front: one site per hostname, reverse proxy to each app's port.
   TLS via Cloudflare origin certificates, Cloudflare in Full (strict) mode.
-- **Auth: NextAuth (Auth.js) only**, with GitHub OAuth and sessions stored in
-  our Postgres. This replaces Supabase Auth.
+- **One auth system**, with GitHub OAuth and sessions stored in our Postgres,
+  shared by the registry and `apps/app`. This replaces Supabase Auth. Auth.js
+  fits both: the registry already uses NextAuth, and its core runs outside
+  Next.
 - **Data access:** Prisma or plain `pg` against local Postgres. supabase-js
   calls are rewritten; RPCs become SQL functions (already Postgres functions,
   so they move with the dump).
@@ -49,6 +52,26 @@ replacement is live and verified.
 - **Observability:** journald logs, plus an uptime check and error alerts to
   Discord (reusing the existing webhook). Replace `@vercel/analytics` with a
   self-hosted option (e.g. Plausible or Umami) or drop it.
+
+## The new app: `apps/app`
+
+The long-term home for jsonresume.org is a new app, **`apps/app`**: React +
+Vite + TypeScript, built entirely on `@jsonresume/ui` (vanilla-extract, no
+Tailwind, no shadcn).
+
+- **Homepage first.** Port `apps/homepage2` into it. It is the first page
+  built on the new design system, and it replaces the homepage's Vercel
+  project rather than moving that project to the box.
+- **Then registry features, one at a time.** Each feature is rebuilt on
+  `@jsonresume/ui` (using the components in `packages/ui/CATALOG.md`), shipped
+  in `apps/app`, and then removed from the registry. The registry shrinks as
+  the app grows; until a feature has moved, the registry keeps serving it.
+- **Server.** The Vite build is static assets. Anything that needs a server
+  (API routes, auth callbacks, resume rendering, database access) goes in a
+  small Node server alongside it (e.g. Hono), run under systemd like the rest.
+  The same server can serve the built assets.
+- **Shared code.** Put logic both apps need (data access, auth, resume
+  rendering) in `packages/*` rather than copying it from the registry.
 
 ## Phases
 
@@ -66,15 +89,22 @@ replacement is live and verified.
    export and theme rendering with production.
 4. **Switch the database.** Point the box's registry at local Postgres. Port
    supabase-js queries to Prisma or `pg`. Re-run checks.
-5. **Switch auth.** Move all sign-in to NextAuth with a Postgres adapter.
+5. **Switch auth.** Move all sign-in to the one auth system (Postgres-backed).
    Migrate users by matching GitHub IDs and emails so existing accounts keep
    their resumes. Email and password users need a reset flow or a one-time
    migration of bcrypt hashes from `auth.users`.
 6. **Cut over.** Lower the DNS TTL, freeze writes briefly, take a final
    Supabase dump and restore it, and point `registry.jsonresume.org` at the box.
    Watch errors for 48 hours. Vercel stays deployable as a fallback.
-7. **Homepage and styleguide.** Same pattern; these are simpler (no database).
-8. **Decommission.** After two quiet weeks, remove the Vercel projects and
+7. **`apps/app` and the homepage.** Scaffold `apps/app` (Vite, React,
+   `@jsonresume/ui`), port the homepage into it, serve it from the box at a
+   test hostname, then point `jsonresume.org` at it and retire the
+   `homepage2` Vercel project. Move the styleguide to the box the same way
+   (it has no database).
+8. **Port registry features into `apps/app`.** One feature per PR, starting
+   with the simplest pages. Once a route moves, the registry redirects it (or
+   Caddy routes that path to the app).
+9. **Decommission.** After two quiet weeks, remove the Vercel projects and
    pause, then delete, the Supabase project. Move GitHub Actions secrets
    from `SUPABASE_*` to the new `DATABASE_URL`.
 
@@ -91,5 +121,9 @@ replacement is live and verified.
 - Supabase storage and realtime: a code scan found no use of either; confirm in the Supabase dashboard before deleting the project.
 - Should the AI features keep calling OpenAI directly? (Not a hosting question,
   but it affects secrets.)
+- SEO for `apps/app`: the homepage and public pages need real HTML for search
+  engines and link previews. Options: prerender static routes at build time,
+  or render them on the Node server.
+- Which registry feature moves first after the homepage?
 - Do we want staging on the same box (separate ports and database), or
   preview deploys per PR?
