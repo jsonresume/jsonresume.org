@@ -244,3 +244,25 @@ export {
   type CodeEditorProps,
   type Diagnostic,
 } from './components/inputs/code-editor';
+
+// Feedback and status
+export { PageState, type PageStateProps } from './components/status/page-state';
+export {
+  ErrorBoundary,
+  type ErrorBoundaryProps,
+} from './components/status/error-boundary';
+export {
+  SignInGate,
+  type SignInGateProps,
+} from './components/status/sign-in-gate';
+export {
+  ScoreMeter,
+  defaultBands,
+  type ScoreBand,
+  type ScoreMeterProps,
+} from './components/status/score-meter';
+export {
+  StatusToggle,
+  type StatusOption,
+  type StatusToggleProps,
+} from './components/status/status-toggle';

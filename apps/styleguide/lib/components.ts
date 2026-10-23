@@ -1019,6 +1019,83 @@ export const componentDocs: ComponentDoc[] = [
       'Tab indents inside the editor; Escape then Tab moves focus out.',
     ],
   },
+  {
+    slug: 'page-state',
+    name: 'Page states',
+    group: 'Feedback',
+    summary:
+      'Loading, error, not found and empty, for a whole page or a panel.',
+    components: ['PageState'],
+    examples: [{ id: 'kinds', title: 'Kinds', block: true }],
+    guidelines: {
+      do: [
+        'Say what happened and offer the next step.',
+        'Use the panel size for regions inside a page.',
+      ],
+      dont: [
+        'Show a blank page while loading.',
+        'Show stack traces outside “Technical details”.',
+      ],
+    },
+    accessibility: [
+      'Errors are alerts; loading states are announced through a status region and set aria-busy.',
+      'Set level so the title fits the page outline.',
+    ],
+  },
+  {
+    slug: 'error-boundary',
+    name: 'Error boundary',
+    group: 'Feedback',
+    summary:
+      'Catches a crashed region so the rest of the page keeps working, and offers Try again.',
+    components: ['ErrorBoundary'],
+    examples: [{ id: 'panel', title: 'A panel that breaks', block: true }],
+    accessibility: [
+      'The default fallback is an alert with a Try again button.',
+    ],
+  },
+  {
+    slug: 'sign-in-gate',
+    name: 'Sign-in gate',
+    group: 'Feedback',
+    summary:
+      'Explains what signing in unlocks, and offers Sign in with GitHub.',
+    components: ['SignInGate'],
+    examples: [{ id: 'jobs', title: 'Job tracking', block: true }],
+    accessibility: [
+      'The sign-in control is a real link (signInHref) or button (onSignIn).',
+    ],
+  },
+  {
+    slug: 'score-meter',
+    name: 'Score meter',
+    group: 'Feedback',
+    summary: 'A 0–100 score with rating bands, as a ring or a bar.',
+    components: ['ScoreMeter'],
+    examples: [
+      { id: 'ring', title: 'Ring', block: true },
+      { id: 'bar', title: 'Bar' },
+    ],
+    guidelines: {
+      do: ['Say what the score measures and what to do about it nearby.'],
+      dont: ['Rely on the color: the band label is always shown.'],
+    },
+    accessibility: [
+      'An ARIA meter whose value text includes the band ("84 out of 100, Strong").',
+    ],
+  },
+  {
+    slug: 'status-toggle',
+    name: 'Status toggle',
+    group: 'Feedback',
+    summary: 'Mark an item interested, read or hidden; press again to clear.',
+    components: ['StatusToggle'],
+    examples: [{ id: 'job', title: 'Job status with Undo' }],
+    accessibility: [
+      'A labelled group of toggle buttons with aria-pressed.',
+      'Icon-only toggles get their label as aria-label and a title.',
+    ],
+  },
 ];
 
 export const componentGroups: ComponentGroup[] = [

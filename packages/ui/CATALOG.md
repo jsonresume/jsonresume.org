@@ -48,13 +48,13 @@ looks today: each one will be designed fresh in the jsonresume.org style.
 
 ## Feedback and status
 
-| Component                                  | What it does                                                         | Uses                                                                     | Have                                    | Priority |
-| ------------------------------------------ | -------------------------------------------------------------------- | ------------------------------------------------------------------------ | --------------------------------------- | -------- |
-| **Page states: loading, error, not found** | Whole-page or panel-level states, with retry and a way back          | Loading screens, error states and fallbacks, not-found states throughout | Spinner, Skeleton, EmptyState (partial) | P1       |
-| **Error boundary fallback**                | Catches a crashed region and offers retry without losing the page    | Pathways and other client modules                                        | –                                       | P1       |
-| **Sign-in gate**                           | Explains that a feature needs sign-in and offers sign in with GitHub | Auth-required pages, login buttons, GitHub button                        | –                                       | P1       |
-| **Score meter**                            | A 0–100 score with rating bands (circular or bar)                    | ATS score; readiness and insights in job reports                         | Progress (linear, unlabelled)           | P1       |
-| **Item status toggles**                    | Mark an item read, interested or hidden, with quick undo             | Job lists (job states sync)                                              | –                                       | P2       |
+| Component                                     | What it does                                                         | Uses                                                                     | Have                                    | Priority |
+| --------------------------------------------- | -------------------------------------------------------------------- | ------------------------------------------------------------------------ | --------------------------------------- | -------- |
+| ✅ **Page states: loading, error, not found** | Whole-page or panel-level states, with retry and a way back          | Loading screens, error states and fallbacks, not-found states throughout | Spinner, Skeleton, EmptyState (partial) | P1       |
+| ✅ **Error boundary fallback**                | Catches a crashed region and offers retry without losing the page    | Pathways and other client modules                                        | –                                       | P1       |
+| ✅ **Sign-in gate**                           | Explains that a feature needs sign-in and offers sign in with GitHub | Auth-required pages, login buttons, GitHub button                        | –                                       | P1       |
+| ✅ **Score meter**                            | A 0–100 score with rating bands (circular or bar)                    | ATS score; readiness and insights in job reports                         | Progress (linear, unlabelled)           | P1       |
+| ✅ **Item status toggles**                    | Mark an item read, interested or hidden, with quick undo             | Job lists (job states sync)                                              | –                                       | P2       |
 
 ## Data display
 
