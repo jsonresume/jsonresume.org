@@ -860,6 +860,165 @@ export const componentDocs: ComponentDoc[] = [
       'Name it after the destination ("Back to jobs"); the arrow is decorative.',
     ],
   },
+  {
+    slug: 'search-field',
+    name: 'Search field',
+    group: 'Forms',
+    summary:
+      'Search input with an icon, a clear button and a debounced search callback.',
+    components: ['SearchField'],
+    defaults: { size: 'md' },
+    examples: [
+      { id: 'basic', title: 'Debounced search', block: true },
+      { id: 'large', title: 'Large', block: true },
+    ],
+    accessibility: [
+      'A real search input (role searchbox); label it with Field or aria-label.',
+      'Escape clears; the clear button is labelled.',
+    ],
+  },
+  {
+    slug: 'filter-bar',
+    name: 'Filter bar',
+    group: 'Forms',
+    summary:
+      'Facet filters together, with active-filter chips, a result count and Clear all.',
+    components: ['FilterBar', 'Chip'],
+    examples: [{ id: 'jobs', title: 'Job board filters', block: true }],
+    guidelines: {
+      do: [
+        'Apply filters as they change; show the result count.',
+        'Name chips with the value, not the field ("Remote").',
+      ],
+      dont: ['Add an Apply button for instant filters.'],
+    },
+    accessibility: [
+      'A named region; the result count is announced politely.',
+      'Each chip has a "Remove <filter>" button.',
+    ],
+  },
+  {
+    slug: 'segmented-control',
+    name: 'Segmented control',
+    group: 'Forms',
+    summary: 'Pick one of a few modes in place, such as Form, JSON or AI.',
+    components: ['SegmentedControl'],
+    examples: [{ id: 'modes', title: 'Editor modes' }],
+    guidelines: {
+      do: ['Use for two to five short, mutually exclusive modes.'],
+      dont: [
+        'Use to switch panels of content: use Tabs.',
+        'Use for navigation: use TabNav.',
+      ],
+    },
+    accessibility: [
+      'A labelled radio group: Tab enters, arrow keys move and select.',
+    ],
+  },
+  {
+    slug: 'tag-input',
+    name: 'Tag input',
+    group: 'Forms',
+    summary:
+      'Add and remove short values as chips: skills, keywords, highlights.',
+    components: ['TagInput'],
+    examples: [{ id: 'skills', title: 'Skills' }],
+    accessibility: [
+      'Enter or comma adds; Backspace on an empty field removes the last tag.',
+      'Every tag has a labelled remove button; works inside Field.',
+    ],
+  },
+  {
+    slug: 'range-slider',
+    name: 'Range slider',
+    group: 'Forms',
+    summary:
+      'Choose a value or a min–max range, optionally over a distribution.',
+    components: ['RangeSlider'],
+    examples: [
+      {
+        id: 'salary',
+        title: 'Salary range over listings',
+        description: 'Bars show how many jobs fall in each bucket.',
+      },
+      { id: 'single', title: 'Single value' },
+    ],
+    accessibility: [
+      'Each thumb is a slider with a name and a formatted aria-valuetext ("$120k").',
+      'Arrow keys step; Page Up/Down and Home/End jump.',
+    ],
+  },
+  {
+    slug: 'combobox',
+    name: 'Combobox',
+    group: 'Forms',
+    summary: 'A select you can type into, for long option lists.',
+    components: ['Combobox'],
+    examples: [{ id: 'countries', title: 'Countries' }],
+    guidelines: {
+      do: ['Use when there are more than about 15 options.'],
+      dont: ['Use for a handful of options: use Select or SegmentedControl.'],
+    },
+    accessibility: [
+      'Follows the ARIA combobox pattern: arrow keys move through options (aria-activedescendant), Enter picks, Escape closes.',
+    ],
+  },
+  {
+    slug: 'file-dropzone',
+    name: 'File drop zone',
+    group: 'Forms',
+    summary:
+      'Drag files in or browse, with type and size checks and a list of chosen files.',
+    components: ['FileDropzone', 'FileList'],
+    examples: [{ id: 'resume', title: 'Resume upload', block: true }],
+    accessibility: [
+      'Browsing uses a real button, so the drop area is never the only way in.',
+      'Rejected files are explained in an alert.',
+    ],
+  },
+  {
+    slug: 'repeater',
+    name: 'Repeatable entries',
+    group: 'Forms',
+    summary:
+      'Add, remove and reorder entries of one shape: work, education, profiles.',
+    components: ['Repeater'],
+    examples: [{ id: 'work', title: 'Work history' }],
+    accessibility: [
+      'Each entry is a region named by its title, with a heading.',
+      'Move and remove buttons name the entry they act on; changes are announced.',
+    ],
+  },
+  {
+    slug: 'chat-composer',
+    name: 'Chat composer',
+    group: 'Forms',
+    summary:
+      'A multi-line message input that grows with the text: Enter sends, Shift+Enter adds a line.',
+    components: ['ChatComposer'],
+    examples: [
+      { id: 'copilot', title: 'Copilot with voice input', block: true },
+    ],
+    accessibility: [
+      'The textarea is labelled; the Send button shows progress while a reply streams.',
+      'Enter does not send during IME composition.',
+    ],
+  },
+  {
+    slug: 'code-editor',
+    name: 'Code editor',
+    group: 'Forms',
+    summary:
+      'JSON editing with highlighting, live parse errors and your own validation (e.g. the schema).',
+    components: ['CodeEditor'],
+    examples: [
+      { id: 'resume', title: 'resume.json with a schema check', block: true },
+    ],
+    accessibility: [
+      'The editor is labelled; a status line announces the number of problems.',
+      'Tab indents inside the editor; Escape then Tab moves focus out.',
+    ],
+  },
 ];
 
 export const componentGroups: ComponentGroup[] = [

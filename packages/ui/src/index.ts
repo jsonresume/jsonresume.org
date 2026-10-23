@@ -201,3 +201,46 @@ export {
   AccountMenu,
   type AccountMenuProps,
 } from './components/navigation/account-menu';
+
+// Inputs
+export {
+  SearchField,
+  type SearchFieldProps,
+} from './components/inputs/search-field';
+export { Chip, type ChipProps } from './components/inputs/chip';
+export {
+  FilterBar,
+  type ActiveFilter,
+  type FilterBarProps,
+} from './components/inputs/filter-bar';
+export {
+  SegmentedControl,
+  type SegmentedControlProps,
+  type SegmentedOption,
+} from './components/inputs/segmented-control';
+export { TagInput, type TagInputProps } from './components/inputs/tag-input';
+export {
+  RangeSlider,
+  type RangeSliderProps,
+} from './components/inputs/range-slider';
+export {
+  Combobox,
+  type ComboboxOption,
+  type ComboboxProps,
+} from './components/inputs/combobox';
+export {
+  FileDropzone,
+  FileList,
+  type FileDropzoneProps,
+  type FileListProps,
+} from './components/inputs/file-dropzone';
+export { Repeater, type RepeaterProps } from './components/inputs/repeater';
+export {
+  ChatComposer,
+  type ChatComposerProps,
+} from './components/inputs/chat-composer';
+export {
+  CodeEditor,
+  type CodeEditorProps,
+  type Diagnostic,
+} from './components/inputs/code-editor';
