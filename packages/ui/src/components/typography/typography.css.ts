@@ -222,3 +222,8 @@ globalStyle(p(':where(th, td)'), {
   borderBlockEnd: `1px solid ${vars.color.border.default}`,
 });
 globalStyle(p(':where(img)'), { maxWidth: '100%', height: 'auto' });
+// GitHub task lists: the checkbox replaces the bullet.
+globalStyle(p(':where(.contains-task-list)'), {
+  listStyle: 'none',
+  paddingInlineStart: 0,
+});

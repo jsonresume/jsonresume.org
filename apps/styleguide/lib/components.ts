@@ -1096,6 +1096,181 @@ export const componentDocs: ComponentDoc[] = [
       'Icon-only toggles get their label as aria-label and a title.',
     ],
   },
+  {
+    slug: 'stat-tile',
+    name: 'Stat tile',
+    group: 'Data display',
+    summary: 'A key number with its label and how it changed.',
+    components: ['StatTile'],
+    examples: [{ id: 'dashboard', title: 'Dashboard', block: true }],
+    guidelines: {
+      do: ['Pair every number with what it means and a comparison.'],
+      dont: ['Show more than four or five tiles in a row.'],
+    },
+    accessibility: [
+      'A labelled group; the trend arrow is decorative and the change is spoken as "Up 12%".',
+      'lowerIsBetter flips which direction reads as good.',
+    ],
+  },
+  {
+    slug: 'description-list',
+    name: 'Description list',
+    group: 'Data display',
+    summary: 'Labelled facts in pairs: location, salary, type.',
+    components: ['DescriptionList'],
+    examples: [{ id: 'job', title: 'Inline and columns', block: true }],
+    accessibility: ['A real dl with dt and dd pairs.'],
+  },
+  {
+    slug: 'job-card',
+    name: 'Job card',
+    group: 'Data display',
+    summary: 'A job summary: role, company, essentials, match and actions.',
+    components: ['JobCard'],
+    examples: [{ id: 'list', title: 'Job list', block: true }],
+    accessibility: [
+      'An article whose title is the single link; the whole card is clickable through it.',
+      'Footer controls stay separately focusable.',
+    ],
+  },
+  {
+    slug: 'resume-card',
+    name: 'Resume card',
+    group: 'Data display',
+    summary:
+      'A person summary from their resume: avatar, name, headline and skills.',
+    components: ['ResumeCard'],
+    examples: [{ id: 'explore', title: 'Explore', block: true }],
+    accessibility: ['The name is the link; long skill lists collapse to "+n".'],
+  },
+  {
+    slug: 'markdown',
+    name: 'Markdown',
+    group: 'Data display',
+    summary:
+      'Renders Markdown, including streamed model output, in the brand prose style.',
+    components: ['Markdown'],
+    examples: [{ id: 'suggestions', title: 'Suggestions', block: true }],
+    accessibility: [
+      'Raw HTML is ignored, so untrusted text is safe to render.',
+      'Headings keep their levels; tables and task lists use real elements.',
+    ],
+  },
+  {
+    slug: 'copy-button',
+    name: 'Copy button',
+    group: 'Data display',
+    summary: 'Copies a value, such as a link or an API key, and confirms it.',
+    components: ['CopyButton'],
+    examples: [{ id: 'link', title: 'Copy a link' }],
+    accessibility: [
+      'The confirmation is announced through a polite live region.',
+    ],
+  },
+  {
+    slug: 'checklist',
+    name: 'Checklist',
+    group: 'Data display',
+    summary: 'Results of a set of checks, each passed, a warning or failed.',
+    components: ['Checklist'],
+    examples: [{ id: 'ats', title: 'ATS checks', block: true }],
+    accessibility: [
+      'Each result states its outcome in words ("Failed: …"), not only by icon color.',
+    ],
+  },
+  {
+    slug: 'secret-field',
+    name: 'Secret field',
+    group: 'Data display',
+    summary: 'A masked secret with reveal, copy and room for rotate or revoke.',
+    components: ['SecretField'],
+    examples: [{ id: 'api-key', title: 'API key', block: true }],
+    accessibility: [
+      'Masked values are announced as "Hidden, ends in 1234"; Reveal is a toggle button.',
+    ],
+  },
+  {
+    slug: 'chat',
+    name: 'Chat messages',
+    group: 'Data display',
+    summary:
+      'The conversation log for copilots: attributed messages, streaming, tool calls.',
+    components: ['ChatMessages', 'ChatMessage', 'ChatToolCall'],
+    examples: [{ id: 'copilot', title: 'Resume copilot' }],
+    accessibility: [
+      'A labelled log region announcing new messages politely.',
+      'Each message is an article named by its author; the typing state is spoken.',
+      'The view follows new messages only while the reader is at the bottom.',
+    ],
+  },
+  {
+    slug: 'activity-feed',
+    name: 'Activity feed',
+    group: 'Data display',
+    summary: 'Time-stamped events, newest first, with relative times.',
+    components: ['ActivityFeed'],
+    examples: [{ id: 'recent', title: 'Recent activity', block: true }],
+    accessibility: [
+      'Each time is a time element with the exact date in its title.',
+    ],
+  },
+  {
+    slug: 'timeline',
+    name: 'Timeline',
+    group: 'Data display',
+    summary: 'A vertical career or project timeline.',
+    components: ['Timeline'],
+    examples: [{ id: 'career', title: 'Career', block: true }],
+    accessibility: ['An ordered list; each entry has a heading.'],
+  },
+  {
+    slug: 'charts',
+    name: 'Charts',
+    group: 'Data display',
+    summary: 'Bar, line and radar charts on brand tokens, each with its data.',
+    components: ['BarChart', 'LineChart', 'RadarChart'],
+    examples: [
+      { id: 'bar', title: 'Bar chart', block: true },
+      { id: 'line', title: 'Line chart', block: true },
+      { id: 'radar', title: 'Radar chart' },
+    ],
+    guidelines: {
+      do: [
+        'Write the summary as the conclusion the chart supports.',
+        'Highlight the one bar that matters.',
+      ],
+      dont: [
+        'Use more than four line series.',
+        'Use a radar chart for fewer than three dimensions.',
+      ],
+    },
+    accessibility: [
+      'Each chart is a figure with a one-sentence summary (role img) and a "Show data" table.',
+      'Points and bars carry titles for hover.',
+    ],
+  },
+  {
+    slug: 'calendar-heatmap',
+    name: 'Calendar heatmap',
+    group: 'Data display',
+    summary: 'Activity per day over recent weeks, in the data scale.',
+    components: ['CalendarHeatmap'],
+    examples: [{ id: 'applications', title: 'Applications sent', block: true }],
+    accessibility: [
+      'Summarised as one image label; active days are listed in "Show data".',
+    ],
+  },
+  {
+    slug: 'preview-frame',
+    name: 'Preview frame',
+    group: 'Data display',
+    summary: 'A sandboxed live preview of a rendered resume, scaled to fit.',
+    components: ['PreviewFrame'],
+    examples: [{ id: 'resume', title: 'Rendered resume', block: true }],
+    accessibility: [
+      'The iframe has a title; scripts are off unless allowScripts is set.',
+    ],
+  },
 ];
 
 export const componentGroups: ComponentGroup[] = [

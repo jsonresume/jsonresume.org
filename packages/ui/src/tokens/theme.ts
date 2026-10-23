@@ -56,6 +56,13 @@ export const lightColor = {
     danger: p.red[700],
     dangerSurface: p.red[50],
   },
+  /** Sequential scale for data (heatmaps, densities): low to high. */
+  data: {
+    step1: p.yellow[100],
+    step2: p.yellow[200],
+    step3: p.yellow[400],
+    step4: p.yellow[700],
+  },
   focus: p.gray[900],
   overlay: 'rgba(17, 17, 17, 0.45)',
 };
@@ -111,6 +118,12 @@ export const darkColor: ColorTokens = {
     warningSurface: '#2e2211',
     danger: p.red[300],
     dangerSurface: '#2e1515',
+  },
+  data: {
+    step1: '#3a3410',
+    step2: p.yellow[700],
+    step3: '#c4ad1f',
+    step4: p.yellow[200],
   },
   focus: p.yellow[200],
   overlay: 'rgba(0, 0, 0, 0.6)',
