@@ -3,6 +3,7 @@ import type { ResumeProblem } from '@repo/domain';
 import { NotFoundPage, SiteLayout } from '@repo/site';
 import {
   createRootRouteWithContext,
+  createRoute,
   HeadContent,
   Outlet,
   Scripts,
@@ -15,9 +16,7 @@ function RootDocument() {
         <HeadContent />
       </head>
       <body className={base}>
-        <SiteLayout>
-          <Outlet />
-        </SiteLayout>
+        <Outlet />
         <Scripts />
       </body>
     </html>
@@ -41,5 +40,23 @@ export const rootRoute = createRootRouteWithContext<RouterContext>()({
     links: [{ rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' }],
   }),
   component: RootDocument,
-  notFoundComponent: NotFoundPage,
+  notFoundComponent: () => (
+    <SiteLayout>
+      <NotFoundPage />
+    </SiteLayout>
+  ),
+});
+
+/**
+ * The site's pages: header, navigation, footer. The dashboard (./app.tsx)
+ * has its own full-screen layout instead.
+ */
+export const siteRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  id: '_site',
+  component: () => (
+    <SiteLayout>
+      <Outlet />
+    </SiteLayout>
+  ),
 });

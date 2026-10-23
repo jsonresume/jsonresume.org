@@ -1,5 +1,11 @@
 import type { ResumeProblem } from '@repo/domain';
-import { parseHandle, Profiles, type ResolvedResume } from '@repo/profiles';
+import {
+  handlePath,
+  parseHandle,
+  Profiles,
+  type MovedResume,
+  type ResolvedResume,
+} from '@repo/profiles';
 import { formatResume } from '@repo/resume-formats';
 import {
   DEFAULT_THEME,
@@ -7,11 +13,17 @@ import {
   ResumeDocument,
   themeSlugs,
 } from '@repo/resume-themes';
+import { withTracking } from '@repo/analytics';
 import { Effect, Random, Schema } from 'effect';
 
 /** What a /@username request comes to: a response, or a problem to explain. */
 export type ResumeOutcome =
-  | { _tag: 'Respond'; response: Response }
+  | {
+      _tag: 'Respond';
+      response: Response;
+      /** Set when a data format was served, for the server to count the read. */
+      read?: { username: string; format: 'json' | 'yaml' | 'txt' };
+    }
   | { _tag: 'Problem'; problem: ResumeProblem; page: boolean };
 
 /** Resumes change whenever their gist does; never let a cache keep one. */
@@ -21,10 +33,11 @@ const headers = (contentType: string) => ({
   'access-control-allow-origin': '*',
 });
 
-const respond = (response: Response): ResumeOutcome => ({
-  _tag: 'Respond',
-  response,
-});
+const respond = (
+  response: Response,
+  read?: { username: string; format: 'json' | 'yaml' | 'txt' }
+): ResumeOutcome =>
+  read ? { _tag: 'Respond', response, read } : { _tag: 'Respond', response };
 const problem = (p: ResumeProblem, page: boolean): ResumeOutcome => ({
   _tag: 'Problem',
   problem: p,
@@ -79,26 +92,35 @@ export const resumeOutcome = Effect.fn('resumeOutcome')(function* (url: URL) {
   }
 
   const file = url.searchParams.get('gistname') ?? undefined;
-  const resolved: ResolvedResume | ResumeOutcome = yield* (yield* Profiles)
-    .resume(username, file === undefined ? {} : { file })
-    .pipe(
-      Effect.catchTags({
-        ProfileNotFound: (e) =>
-          Effect.succeed(
-            problem({ kind: e.reason, username, file: e.file }, page)
-          ),
-        ResumeNotJson: (e) =>
-          Effect.succeed(
-            problem(
-              { kind: 'not-json', username, file: e.file, message: e.message },
-              page
-            )
-          ),
-        GithubUnavailable: () =>
-          Effect.succeed(problem({ kind: 'github-down', username }, page)),
-      })
-    );
-  if ('_tag' in resolved) return resolved;
+  const resolved: ResolvedResume | MovedResume | ResumeOutcome =
+    yield* (yield* Profiles)
+      .resume(username, file === undefined ? {} : { file })
+      .pipe(
+        Effect.catchTags({
+          ProfileNotFound: (e) =>
+            Effect.succeed(
+              problem({ kind: e.reason, username, file: e.file }, page)
+            ),
+          ResumeNotJson: (e) =>
+            Effect.succeed(
+              problem(
+                {
+                  kind: 'not-json',
+                  username,
+                  file: e.file,
+                  message: e.message,
+                },
+                page
+              )
+            ),
+          GithubUnavailable: () =>
+            Effect.succeed(problem({ kind: 'github-down', username }, page)),
+        })
+      );
+  if (resolved._tag === 'Moved') {
+    return redirect(handlePath(resolved.username, format) + url.search, 301);
+  }
+  if (resolved._tag !== 'Resume') return resolved;
 
   const doc = decodeDocument(resolved.resume);
   if (doc._tag === 'None' || Array.isArray(resolved.resume)) {
@@ -110,14 +132,20 @@ export const resumeOutcome = Effect.fn('resumeOutcome')(function* (url: URL) {
   }
   if (format !== 'html') {
     const { body, contentType } = formatResume(format, doc.value);
-    return respond(new Response(body, { headers: headers(contentType) }));
+    return respond(new Response(body, { headers: headers(contentType) }), {
+      username,
+      format,
+    });
   }
 
   const theme = query ?? metaTheme(doc.value)?.toLowerCase() ?? DEFAULT_THEME;
   return yield* renderTheme(theme, doc.value).pipe(
     Effect.map((html) =>
       respond(
-        new Response(html, { headers: headers('text/html; charset=utf-8') })
+        // Every themed page reports its views (see @repo/analytics).
+        new Response(withTracking(html, username, theme), {
+          headers: headers('text/html; charset=utf-8'),
+        })
       )
     ),
     Effect.catchTags({

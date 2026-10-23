@@ -1,0 +1,27 @@
+{
+  "name": "@repo/database",
+  "version": "0.0.0",
+  "private": true,
+  "description": "The app's Postgres: the client from DATABASE_URL and every schema migration, run at startup",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./testing": "./src/testing.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts"
+  },
+  "dependencies": {
+    "@effect/sql-pg": "4.0.6",
+    "@effect/sql-pglite": "4.0.6",
+    "effect": "4.0.6"
+  },
+  "devDependencies": {
+    "@repo/eslint-config-custom": "workspace:*",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.6"
+  }
+}

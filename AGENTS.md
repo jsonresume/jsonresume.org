@@ -61,6 +61,13 @@ package over growing an app.
 | `@repo/resume-themes`     | Renders a resume with any gallery theme, loading theme packages on first use. Run by Node from source, never bundled (see its README).        |
 | `@repo/resume-formats`    | A resume as JSON, YAML or plain text.                                                                                                         |
 | `@repo/resume-host`       | Serves `/@username`: picks the theme or format and responds, or returns the problem for the app to explain.                                   |
+| `@repo/database`          | The app's Postgres: `PgLive` from `DATABASE_URL` and every migration (`app` schema); PGlite layers for tests and `pnpm dev`.                  |
+| `@repo/accounts`          | Accounts: email/password and GitHub sign-in, sessions, email verification, username claims; their Postgres store.                             |
+| `@repo/analytics`         | Resume views: the beacon script in themed pages, cookie-free visitor counts, and the dashboard's numbers.                                     |
+| `@repo/api-server`        | The server side of `@repo/api`: handlers, the session middleware, GitHub OAuth redirects, cookies.                                            |
+| `@repo/api-client`        | The browser's typed client (`AtomHttpApi`): query and mutation atoms, `useIsClient`, the signed-in hint.                                      |
+| `@repo/auth-pages`        | Sign in, sign up and choose-a-username pages.                                                                                                 |
+| `@repo/dashboard`         | The signed-in app: full-screen shell, overview charts, resume source, settings. Client-rendered.                                              |
 
 Dependency direction: `domain` ← `content`, `api` ← `site`, feature packages ←
 `apps/app`. Packages never import from apps. `@jsonresume/ui` imports nothing
@@ -81,7 +88,8 @@ A new package needs: `package.json` (`"type": "module"`, `exports` pointing at
   component lives in a `.lazy.tsx` file. The root route renders `<html>` with
   `<HeadContent />` and `<Scripts />`. Data comes from route `loader`s, which
   run on the server and are dehydrated into the HTML. Search params are
-  validated with an Effect Schema (`Schema.toStandardSchemaV1`).
+  parsed with `Predicate` in the route file: route files load on every page,
+  and `Schema` there brings Effect's runtime into the main bundle.
 - **State**: derive from the URL first (search params), then atoms. Atoms live
   next to the feature that owns them (usually in its package) and are exported
   for reuse; components read them with `useAtomValue` / `useAtom`. Wrap the

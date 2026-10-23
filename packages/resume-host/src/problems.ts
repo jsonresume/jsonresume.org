@@ -8,6 +8,8 @@ export function describeProblem(problem: ResumeProblem): string {
       return `There is no GitHub user called ${problem.username}.`;
     case 'no-gist':
       return `${problem.username} has no public gist with a file called ${problem.file}.`;
+    case 'unpublished':
+      return `${problem.username} hasn't published a resume yet.`;
     case 'not-json':
       return `${problem.file} in ${problem.username}'s gist is not valid JSON: ${problem.message}`;
     case 'not-object':

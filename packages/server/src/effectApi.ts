@@ -20,9 +20,12 @@ type ServerServices =
  * provided) into a web handler (Request in, Response out) that Hono mounts.
  */
 export function effectWebHandler<E>(
-  routes: Layer.Layer<never, E, ServerServices>
+  routes: Layer.Layer<never, E, ServerServices>,
+  /** Share with other runtimes so they reuse the same layers (one DB pool). */
+  options: { memoMap?: Layer.MemoMap } = {}
 ) {
   return HttpRouter.toWebHandler(
-    routes.pipe(Layer.provide(HttpServer.layerServices))
+    routes.pipe(Layer.provide(HttpServer.layerServices)),
+    options
   );
 }

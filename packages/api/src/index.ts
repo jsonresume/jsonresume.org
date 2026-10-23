@@ -1,6 +1,35 @@
 import { HttpApi, OpenApi } from 'effect/http-api';
+import { AccountApi } from './AccountApi';
+import { AnalyticsApi } from './AnalyticsApi';
+import { AuthApi } from './AuthApi';
+import { EventsApi } from './EventsApi';
 import { SystemApi } from './SystemApi';
 
+export { Account, AccountApi, ResumeSource } from './AccountApi';
+export {
+  AnalyticsApi,
+  AnalyticsRange,
+  Breakdown,
+  Overview,
+  RecentView,
+  Totals,
+} from './AnalyticsApi';
+export {
+  AuthApi,
+  Email,
+  Password,
+  PendingGithub,
+  UsernameCheck,
+} from './AuthApi';
+export {
+  Authentication,
+  CurrentUser,
+  SessionUser,
+  sessionCookie,
+  SIGNED_IN_HINT,
+} from './Authentication';
+export * from './errors';
+export { EventsApi, PingEvent, ViewEvent } from './EventsApi';
 export { Health, SystemApi } from './SystemApi';
 
 /**
@@ -10,5 +39,9 @@ export { Health, SystemApi } from './SystemApi';
  */
 export class JsonResumeApi extends HttpApi.make('jsonresume')
   .add(SystemApi)
+  .add(AuthApi)
+  .add(AccountApi)
+  .add(AnalyticsApi)
+  .add(EventsApi)
   .prefix('/api')
   .annotateMerge(OpenApi.annotations({ title: 'JSON Resume API' })) {}

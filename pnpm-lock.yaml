@@ -168,12 +168,33 @@ importers:
       '@jsonresume/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@repo/accounts':
+        specifier: workspace:^
+        version: link:../../packages/accounts
+      '@repo/analytics':
+        specifier: workspace:^
+        version: link:../../packages/analytics
       '@repo/api':
         specifier: workspace:*
         version: link:../../packages/api
+      '@repo/api-client':
+        specifier: workspace:^
+        version: link:../../packages/api-client
+      '@repo/api-server':
+        specifier: workspace:^
+        version: link:../../packages/api-server
+      '@repo/auth-pages':
+        specifier: workspace:^
+        version: link:../../packages/auth-pages
       '@repo/content':
         specifier: workspace:*
         version: link:../../packages/content
+      '@repo/dashboard':
+        specifier: workspace:^
+        version: link:../../packages/dashboard
+      '@repo/database':
+        specifier: workspace:^
+        version: link:../../packages/database
       '@repo/domain':
         specifier: workspace:*
         version: link:../../packages/domain
@@ -204,6 +225,9 @@ importers:
       effect:
         specifier: 4.0.6
         version: 4.0.6
+      hono:
+        specifier: ^4.13.13
+        version: 4.13.13
       react:
         specifier: 19.2.7
         version: 19.2.7
@@ -211,6 +235,9 @@ importers:
         specifier: 19.2.7
         version: 19.2.7(react@19.2.7)
     devDependencies:
+      '@effect/sql-pglite':
+        specifier: 4.0.6
+        version: 4.0.6(effect@4.0.6)
       '@effect/vitest':
         specifier: 4.0.6
         version: 4.0.6(effect@4.0.6)(vitest@3.2.6)
@@ -858,6 +885,77 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
 
+  packages/accounts:
+    dependencies:
+      '@repo/api':
+        specifier: workspace:*
+        version: link:../api
+      '@repo/database':
+        specifier: workspace:*
+        version: link:../database
+      '@repo/profiles':
+        specifier: workspace:*
+        version: link:../profiles
+      effect:
+        specifier: 4.0.6
+        version: 4.0.6
+    devDependencies:
+      '@effect/sql-pglite':
+        specifier: 4.0.6
+        version: 4.0.6(effect@4.0.6)
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      '@types/node':
+        specifier: ^20.19.24
+        version: 20.19.24
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+
+  packages/analytics:
+    dependencies:
+      '@repo/api':
+        specifier: workspace:*
+        version: link:../api
+      '@repo/database':
+        specifier: workspace:*
+        version: link:../database
+      effect:
+        specifier: 4.0.6
+        version: 4.0.6
+    devDependencies:
+      '@effect/sql-pglite':
+        specifier: 4.0.6
+        version: 4.0.6(effect@4.0.6)
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      '@types/jsdom':
+        specifier: ^21
+        version: 21.1.7
+      '@types/node':
+        specifier: ^20.19.24
+        version: 20.19.24
+      jsdom:
+        specifier: ^27.0.0
+        version: 27.0.1(postcss@8.5.23)
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+
   packages/api:
     dependencies:
       effect:
@@ -877,12 +975,138 @@ importers:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
 
+  packages/api-client:
+    dependencies:
+      '@effect/atom-react':
+        specifier: 4.0.6
+        version: 4.0.6(effect@4.0.6)(react@19.2.7)(scheduler@0.27.0)
+      '@repo/api':
+        specifier: workspace:*
+        version: link:../api
+      effect:
+        specifier: 4.0.6
+        version: 4.0.6
+    devDependencies:
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      '@types/react':
+        specifier: ^19.2.2
+        version: 19.2.18
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+
+  packages/api-server:
+    dependencies:
+      '@repo/accounts':
+        specifier: workspace:*
+        version: link:../accounts
+      '@repo/analytics':
+        specifier: workspace:*
+        version: link:../analytics
+      '@repo/api':
+        specifier: workspace:*
+        version: link:../api
+      '@repo/profiles':
+        specifier: workspace:*
+        version: link:../profiles
+      effect:
+        specifier: 4.0.6
+        version: 4.0.6
+    devDependencies:
+      '@effect/sql-pglite':
+        specifier: 4.0.6
+        version: 4.0.6(effect@4.0.6)
+      '@repo/database':
+        specifier: workspace:*
+        version: link:../database
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      '@types/node':
+        specifier: ^20.19.24
+        version: 20.19.24
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+
   packages/ats-validator:
     dependencies:
       cheerio:
         specifier: ^1.0.0
         version: 1.1.2
     devDependencies:
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+
+  packages/auth-pages:
+    dependencies:
+      '@effect/atom-react':
+        specifier: 4.0.6
+        version: 4.0.6(effect@4.0.6)(react@19.2.7)(scheduler@0.27.0)
+      '@jsonresume/ui':
+        specifier: workspace:*
+        version: link:../ui
+      '@repo/api-client':
+        specifier: workspace:*
+        version: link:../api-client
+      '@repo/content':
+        specifier: workspace:*
+        version: link:../content
+      '@vanilla-extract/css':
+        specifier: ^1.21.3
+        version: 1.21.3
+      effect:
+        specifier: 4.0.6
+        version: 4.0.6
+    devDependencies:
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      '@testing-library/jest-dom':
+        specifier: ^6.9.1
+        version: 6.9.1
+      '@testing-library/react':
+        specifier: ^16.3.0
+        version: 16.3.0(@testing-library/dom@10.4.1)(@types/react-dom@19.2.2)(@types/react@19.2.18)(react-dom@19.2.7)(react@19.2.7)
+      '@types/react':
+        specifier: ^19.2.2
+        version: 19.2.18
+      '@vanilla-extract/vite-plugin':
+        specifier: ^5.2.6
+        version: 5.2.6(@types/node@20.19.24)(vite@6.4.3)
+      jsdom:
+        specifier: ^27.0.0
+        version: 27.0.1(postcss@8.5.23)
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -1054,6 +1278,92 @@ importers:
         specifier: ^1.2.2
         version: 1.2.2
 
+  packages/dashboard:
+    dependencies:
+      '@effect/atom-react':
+        specifier: 4.0.6
+        version: 4.0.6(effect@4.0.6)(react@19.2.7)(scheduler@0.27.0)
+      '@jsonresume/ui':
+        specifier: workspace:*
+        version: link:../ui
+      '@repo/api':
+        specifier: workspace:*
+        version: link:../api
+      '@repo/api-client':
+        specifier: workspace:*
+        version: link:../api-client
+      '@repo/content':
+        specifier: workspace:*
+        version: link:../content
+      '@repo/url-state':
+        specifier: workspace:*
+        version: link:../url-state
+      '@vanilla-extract/css':
+        specifier: ^1.21.3
+        version: 1.21.3
+      effect:
+        specifier: 4.0.6
+        version: 4.0.6
+    devDependencies:
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      '@testing-library/jest-dom':
+        specifier: ^6.9.1
+        version: 6.9.1
+      '@testing-library/react':
+        specifier: ^16.3.0
+        version: 16.3.0(@testing-library/dom@10.4.1)(@types/react-dom@19.2.2)(@types/react@19.2.18)(react-dom@19.2.7)(react@19.2.7)
+      '@types/react':
+        specifier: ^19.2.2
+        version: 19.2.18
+      '@vanilla-extract/vite-plugin':
+        specifier: ^5.2.6
+        version: 5.2.6(@types/node@20.19.24)(vite@6.4.3)
+      jsdom:
+        specifier: ^27.0.0
+        version: 27.0.1(postcss@8.5.23)
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+
+  packages/database:
+    dependencies:
+      '@effect/sql-pg':
+        specifier: 4.0.6
+        version: 4.0.6(effect@4.0.6)
+      '@effect/sql-pglite':
+        specifier: 4.0.6
+        version: 4.0.6(effect@4.0.6)
+      effect:
+        specifier: 4.0.6
+        version: 4.0.6
+    devDependencies:
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+
   packages/db:
     dependencies:
       pg:
@@ -1150,9 +1460,9 @@ importers:
 
   packages/profiles:
     dependencies:
-      '@effect/sql-pg':
-        specifier: 4.0.6
-        version: 4.0.6(effect@4.0.6)
+      '@repo/database':
+        specifier: workspace:*
+        version: link:../database
       effect:
         specifier: 4.0.6
         version: 4.0.6
@@ -1307,6 +1617,9 @@ importers:
 
   packages/resume-host:
     dependencies:
+      '@repo/analytics':
+        specifier: workspace:*
+        version: link:../analytics
       '@repo/domain':
         specifier: workspace:*
         version: link:../domain
@@ -1689,6 +2002,9 @@ importers:
       '@jsonresume/ui':
         specifier: workspace:*
         version: link:../ui
+      '@repo/api-client':
+        specifier: workspace:^
+        version: link:../api-client
       '@repo/content':
         specifier: workspace:*
         version: link:../content
@@ -5671,6 +5987,14 @@ packages:
       effect: 4.0.6
     dev: false
 
+  /@effect/sql-pglite@4.0.6(effect@4.0.6):
+    resolution: {integrity: sha512-pAKT7ZyY4Y6Nud3MlHXyFuLlH4pFUYpUeywtGWIcHOJtuA/8A8UvXijxrCkZ1dmLYThOqr7tWx5/mqN+lb8/EA==}
+    peerDependencies:
+      effect: ^4.0.6
+    dependencies:
+      '@electric-sql/pglite': 0.5.11
+      effect: 4.0.6
+
   /@effect/vitest@4.0.6(effect@4.0.6)(vitest@3.2.6):
     resolution: {integrity: sha512-oKNbtyUHK5+0o730CXwojULEu7f3+c235pYFD4U5T//o+hHrJbYbZU4bRkcv936tPr5IOnmujeyQiC/LuJJjHw==}
     peerDependencies:
@@ -5680,6 +6004,9 @@ packages:
       effect: 4.0.6
       vitest: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
     dev: true
+
+  /@electric-sql/pglite@0.5.11:
+    resolution: {integrity: sha512-SWuqsTjA4DDWqgZ05PC1RJaq8e00p5KACxbqaikDFQ8dIGA0SLRzuPniky7IW+q/c5RDNMdEXwv7mFBWIx9Hxw==}
 
   /@emnapi/core@1.10.0:
     resolution: {integrity: sha512-yq6OkJ4p82CAfPl0u9mQebQHKPJkY7WrIuk205cTYnYe+k2Z8YBh11FrbRG/H6ihirqcacOgl2BIO8oyMQLeXw==}
@@ -12902,6 +13229,14 @@ packages:
       pretty-format: 27.5.1
     dev: true
 
+  /@types/jsdom@21.1.7:
+    resolution: {integrity: sha512-yOriVnggzrnQ3a9OKOCxaVuSug3w3/SbOj5i7VwXWZEyUNl3bLF9V3MfxGbZKuwqJOQyRfqXyROBB1CoZLFWzA==}
+    dependencies:
+      '@types/node': 20.19.24
+      '@types/tough-cookie': 4.0.5
+      parse5: 7.3.0
+    dev: true
+
   /@types/json-schema@7.0.15:
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
@@ -13065,6 +13400,10 @@ packages:
 
   /@types/stylis@4.2.5:
     resolution: {integrity: sha512-1Xve+NMN7FWjY14vLoY5tL3BVEQ/n42YLwaqJIPYhotZ9uBHt87VceMwWQpzmdEt2TNXIorIFG+YeCUUW7RInw==}
+
+  /@types/tough-cookie@4.0.5:
+    resolution: {integrity: sha512-/Ad8+nIOV7Rl++6f1BdKxFSMgmoqEoYbHRpPcx3JEfv8VRsQe9Z4mCXeJBzxs7mbHY/XOZZuXlRNfhpVPbs6ZA==}
+    dev: true
 
   /@types/trusted-types@2.0.7:
     resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
@@ -23949,7 +24288,6 @@ packages:
     resolution: {integrity: sha512-IInvU7fabl34qmi9gY8XOVxhYyMyuH2xUNpb2q8/Y+7552KlejkRvqvD19nMoUW/uQGGbqNpA6Tufu5FL5BZgw==}
     dependencies:
       entities: 6.0.1
-    dev: false
 
   /parse5@8.0.0:
     resolution: {integrity: sha512-9m4m5GSgXjL4AjumKzq1Fgfp3Z8rsvjRNbnkVwfu2ImRqE5D0LnY2QfDen18FSY9C573YU5XxSapdHZTZ2WolA==}

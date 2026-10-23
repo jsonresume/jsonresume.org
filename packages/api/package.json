@@ -5,7 +5,8 @@
   "description": "The jsonresume.org HTTP API contract (Effect HttpApi), shared by server and clients",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./cookies": "./src/cookies.ts"
   },
   "scripts": {
     "test": "vitest run",

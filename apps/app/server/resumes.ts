@@ -1,7 +1,13 @@
 import { resumeProblemStatus } from '@repo/domain';
-import { GithubGists, Profiles, type ProfileStore } from '@repo/profiles';
-import { describeProblem, resumeOutcome } from '@repo/resume-host';
-import { Layer, ManagedRuntime } from 'effect';
+import { Analytics, clientFrom } from '@repo/analytics';
+import type { Profiles } from '@repo/profiles';
+import {
+  describeProblem,
+  resumeOutcome,
+  type ResumeOutcome,
+} from '@repo/resume-host';
+import { Effect, type Layer, ManagedRuntime } from 'effect';
+import { randomUUID } from 'node:crypto';
 import type { RouterContext } from '../src/routes/root';
 
 /** The app's live renderer: a request and router context in, a page out. */
@@ -10,9 +16,24 @@ export type Render = (
   context: RouterContext
 ) => Promise<Response>;
 
-/** Profiles read from GitHub, kept in `store`. */
-export const liveProfiles = <E>(store: Layer.Layer<ProfileStore, E>) =>
-  Profiles.layer.pipe(Layer.provide(Layer.mergeAll(GithubGists.layer, store)));
+/** Count a .json, .yaml or .txt read; themed pages count themselves. */
+const recordRead = (
+  read: NonNullable<Extract<ResumeOutcome, { _tag: 'Respond' }>['read']>,
+  request: Request
+) =>
+  Effect.gen(function* () {
+    const analytics = yield* Analytics;
+    yield* analytics.view(
+      {
+        id: randomUUID(),
+        username: read.username,
+        kind: read.format,
+        theme: null,
+        referrer: request.headers.get('referer'),
+      },
+      clientFrom((name) => request.headers.get(name))
+    );
+  });
 
 /** The Hono path pattern for /@username and /@username.ext. */
 export const resumePath = '/:handle{@[^/]+}';
@@ -24,16 +45,20 @@ export const resumePath = '/:handle{@[^/]+}';
  */
 export function createResumeHandler<E>(
   render: Render,
-  profiles: Layer.Layer<Profiles, E>
+  services: Layer.Layer<Profiles | Analytics, E>,
+  options: { memoMap?: Layer.MemoMap } = {}
 ) {
-  const runtime = ManagedRuntime.make(profiles);
+  const runtime = ManagedRuntime.make(services, options);
 
   const fetch = async (request: Request): Promise<Response | undefined> => {
     const outcome = await runtime.runPromise(
       resumeOutcome(new URL(request.url))
     );
     if (outcome === undefined) return undefined;
-    if (outcome._tag === 'Respond') return outcome.response;
+    if (outcome._tag === 'Respond') {
+      if (outcome.read) runtime.runFork(recordRead(outcome.read, request));
+      return outcome.response;
+    }
 
     const { problem } = outcome;
     const status = resumeProblemStatus(problem);

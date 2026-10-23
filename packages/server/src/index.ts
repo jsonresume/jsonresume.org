@@ -5,3 +5,4 @@ export {
   type SiteAppOptions,
 } from './siteApp';
 export { effectWebHandler } from './effectApi';
+export { sameOrigin } from './sameOrigin';

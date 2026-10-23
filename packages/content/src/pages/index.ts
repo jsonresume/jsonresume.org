@@ -1,4 +1,5 @@
 // @repo/content/pages: structured copy for the site's designed pages.
+export * as account from './account';
 export * as ai from './ai';
 export * as cli from './cli';
 export * as gettingStarted from './gettingStarted';

@@ -52,6 +52,12 @@ function Actions({ problem }: { problem: ResumeProblem }) {
           <a href="https://gist.github.com">Create a gist</a>
         </Button>
       );
+    case 'unpublished':
+      return (
+        <Button asChild variant="primary">
+          <SiteLink href={paths.signIn}>Is this you? Sign in</SiteLink>
+        </Button>
+      );
     case 'github-down':
       return (
         <Button asChild variant="primary">

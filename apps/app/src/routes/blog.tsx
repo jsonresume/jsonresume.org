@@ -3,10 +3,10 @@ import { postSlugs } from '@repo/content/slugs';
 const documents = () => import('@repo/content/documents');
 import { pageHead, paths } from '@repo/site';
 import { createRoute, notFound } from '@tanstack/react-router';
-import { rootRoute } from './root';
+import { siteRoute } from './root';
 
 export const blogRoute = createRoute({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => siteRoute,
   path: paths.blog,
   loader: async () => (await documents()).loadPosts(),
   head: () =>
@@ -18,7 +18,7 @@ export const blogRoute = createRoute({
 }).lazy(() => import('./blog.lazy').then((m) => m.IndexRoute));
 
 export const postRoute = createRoute({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => siteRoute,
   path: '/blog/$slug',
   loader: async ({ params }) => {
     const result = await (

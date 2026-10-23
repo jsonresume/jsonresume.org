@@ -20,6 +20,7 @@ type Copy = (details: {
 export const problems: Record<
   | 'no-user'
   | 'no-gist'
+  | 'unpublished'
   | 'not-json'
   | 'not-object'
   | 'github-down'
@@ -35,6 +36,10 @@ export const problems: Record<
   'no-gist': ({ username, file = 'resume.json' }) => ({
     title: `@${username} hasn’t published a resume`,
     body: `We looked for a public gist with a file named \`${file}\` on ${username}’s GitHub account and didn’t find one.`,
+  }),
+  unpublished: ({ username }) => ({
+    title: `@${username} hasn’t published yet`,
+    body: `This name belongs to a JSON Resume account. The page goes live once its owner confirms their email and adds a resume.`,
   }),
   'not-json': ({ username, file = 'resume.json' }) => ({
     title: 'This resume has a typo',

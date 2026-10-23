@@ -1,11 +1,14 @@
 import { Schema } from 'effect';
 
-/** No resume at this username: no such GitHub user, or no gist with the file. */
+/**
+ * No resume at this username: no such GitHub user, no gist with the file,
+ * or an account that hasn't published (email unverified, or nothing saved).
+ */
 export class ProfileNotFound extends Schema.TaggedError<ProfileNotFound>()(
   'ProfileNotFound',
   {
     username: Schema.String,
-    reason: Schema.Literals(['no-user', 'no-gist']),
+    reason: Schema.Literals(['no-user', 'no-gist', 'unpublished']),
     /** The gist file looked for, e.g. resume.json. */
     file: Schema.String,
   }

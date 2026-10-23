@@ -33,6 +33,7 @@ afterAll(() => api.dispose());
 const app = createSiteApp({
   clientDir: dir,
   mount: [{ prefix: '/api', fetch: api.handler }],
+  protect: { prefix: '/api', exempt: ['/api/events/'] },
   dynamic: [
     {
       path: '/:handle{@[^/]+}',
@@ -88,5 +89,21 @@ describe('createSiteApp', () => {
     expect(res.headers.get('cache-control')).toBe('no-store');
     expect((await get('/@unknown')).status).toBe(404);
     expect((await get('/@known/')).headers.get('location')).toBe('/@known');
+  });
+
+  it('refuses cross-site writes to the API, but not beacons', async () => {
+    const post = (path: string, origin?: string) =>
+      app.request(path, {
+        method: 'POST',
+        headers: { host: 'jsonresume.org', ...(origin ? { origin } : {}) },
+      });
+    expect((await post('/api/ping', 'https://evil.example')).status).toBe(403);
+    expect((await post('/api/ping')).status).toBe(403);
+    expect((await post('/api/ping', 'https://jsonresume.org')).status).not.toBe(
+      403
+    );
+    expect(
+      (await post('/api/events/view', 'https://evil.example')).status
+    ).not.toBe(403);
   });
 });

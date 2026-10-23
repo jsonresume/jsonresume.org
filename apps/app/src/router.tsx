@@ -13,24 +13,41 @@ import {
   themeDevelopmentRoute,
   themesRoute,
 } from './routes/pages';
+import {
+  dashboardRoute,
+  overviewRoute,
+  resumeSettingsRoute,
+  settingsRoute,
+} from './routes/app';
+import { chooseUsernameRoute, signInRoute, signUpRoute } from './routes/auth';
 import { resumeRoute } from './routes/resume';
-import { rootRoute, type RouterContext } from './routes/root';
+import { rootRoute, siteRoute, type RouterContext } from './routes/root';
 
 export const routeTree = rootRoute.addChildren([
-  homeRoute,
-  gettingStartedRoute,
-  schemaRoute,
-  jobSchemaRoute,
-  cliRoute,
-  aiRoute,
-  themesRoute,
-  themeDevelopmentRoute,
-  projectsRoute,
-  teamRoute,
-  mediaRoute,
-  blogRoute,
-  postRoute,
-  resumeRoute,
+  siteRoute.addChildren([
+    homeRoute,
+    gettingStartedRoute,
+    schemaRoute,
+    jobSchemaRoute,
+    cliRoute,
+    aiRoute,
+    themesRoute,
+    themeDevelopmentRoute,
+    projectsRoute,
+    teamRoute,
+    mediaRoute,
+    blogRoute,
+    postRoute,
+    resumeRoute,
+    signInRoute,
+    signUpRoute,
+    chooseUsernameRoute,
+  ]),
+  dashboardRoute.addChildren([
+    overviewRoute,
+    resumeSettingsRoute,
+    settingsRoute,
+  ]),
 ]);
 
 /**

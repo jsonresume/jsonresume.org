@@ -19,9 +19,18 @@ export interface DevServerOptions {
   host?: string;
 }
 
-const toRequest = (req: IncomingMessage, origin: string) =>
+const readBody = async (req: IncomingMessage) => {
+  const chunks: Buffer[] = [];
+  for await (const chunk of req) chunks.push(Buffer.from(chunk));
+  return Buffer.concat(chunks);
+};
+
+const toRequest = async (req: IncomingMessage, origin: string) =>
   new Request(new URL(req.url ?? '/', origin), {
     method: req.method,
+    ...(req.method === 'GET' || req.method === 'HEAD'
+      ? {}
+      : { body: await readBody(req) }),
     headers: Object.entries(req.headers).flatMap(([key, value]) =>
       value === undefined
         ? []
@@ -57,14 +66,19 @@ export async function startDevServer({
   const server = createHttpServer((req, res) => {
     vite.middlewares(req, res, async () => {
       try {
-        const request = toRequest(req, origin);
+        const request = await toRequest(req, origin);
         const live: Response | undefined = handlers
           ? await (await vite.ssrLoadModule(`/${handlers}`)).handle(request)
           : undefined;
         const entry = await vite.ssrLoadModule(`/${entryServer}`);
         const response: Response = live ?? (await entry.render(request));
         res.statusCode = response.status;
-        response.headers.forEach((value, name) => res.setHeader(name, value));
+        response.headers.forEach((value, name) => {
+          if (name !== 'set-cookie') res.setHeader(name, value);
+        });
+        // Each cookie on its own header line; joined they would not parse.
+        const cookies = response.headers.getSetCookie();
+        if (cookies.length > 0) res.setHeader('set-cookie', cookies);
         res.end(await response.text());
       } catch (error) {
         if (error instanceof Error) vite.ssrFixStacktrace(error);

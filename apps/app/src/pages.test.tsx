@@ -30,16 +30,26 @@ describe('every page', () => {
     }
   });
 
+  // Account and dashboard pages stay out of search; the dashboard is an
+  // empty shell until the browser loads the session.
+  const isPrivate = (path: string) => /^\/(signin|signup|dashboard)/.test(path);
+  const isApp = (path: string) => path.startsWith('/dashboard');
+
   it.each(paths)(
     '%s renders with one h1, a title and a canonical link',
     async (path) => {
       const { html, status } = await page(path);
       expect(status).toBe(200);
-      expect(html.match(/<h1[\s>]/g)).toHaveLength(1);
       expect(html).toMatch(/<title>[^<]+<\/title>/);
-      expect(html).toContain(
-        `<link rel="canonical" href="https://jsonresume.org${path}"`
-      );
+      if (!isApp(path)) expect(html.match(/<h1[\s>]/g)).toHaveLength(1);
+      if (isPrivate(path)) {
+        expect(html).toContain('<meta name="robots" content="noindex"/>');
+        expect(html).not.toContain('rel="canonical"');
+      } else {
+        expect(html).toContain(
+          `<link rel="canonical" href="https://jsonresume.org${path}"`
+        );
+      }
     }
   );
 
@@ -53,9 +63,10 @@ describe('every page', () => {
         const target = href.replace(/\/$/, '') || '/';
         if (target.startsWith('/assets/') || target === '/favicon.svg')
           continue;
-        // Resumes (/@name) are served live, not prerendered.
+        // Resumes (/@name) and the API are served live, not prerendered.
         const ok =
           paths.includes(target) ||
+          target.startsWith('/api/') ||
           /^\/@[a-z0-9-]+$/.test(target) ||
           existsSync(publicDir + target);
         if (!ok) broken.push(`${path} -> ${href}`);

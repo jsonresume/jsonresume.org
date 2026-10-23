@@ -13,6 +13,12 @@ export const paths = {
   media: '/media',
   blog: '/blog',
   post: (slug: string) => `/blog/${slug}`,
+  signIn: '/signin',
+  signUp: '/signup',
+  chooseUsername: '/signup/username',
+  dashboard: '/dashboard',
+  dashboardResume: '/dashboard/resume',
+  dashboardSettings: '/dashboard/settings',
 } as const;
 
 export const external = {

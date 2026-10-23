@@ -5,9 +5,18 @@ export {
   GHOST_TTL,
   Profiles,
   RESUME_FILE,
+  type MovedResume,
   type ResolvedResume,
 } from './profiles';
-export { GhostProfile, ProfileStore } from './store';
+export {
+  GhostProfile,
+  GistMirror,
+  memoryStore,
+  ProfileStore,
+  type AccountProfile,
+  type AliasProfile,
+  type Profile,
+} from './store';
 export {
   handlePath,
   parseHandle,
@@ -17,3 +26,4 @@ export {
   type Handle,
   type ResumeFormat,
 } from './username';
+export { Usernames, type Availability } from './usernames';

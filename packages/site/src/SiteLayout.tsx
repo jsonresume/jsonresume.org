@@ -1,5 +1,4 @@
 import {
-  Button,
   Logo,
   SiteFooter,
   SiteHeader,
@@ -8,7 +7,8 @@ import {
 } from '@jsonresume/ui';
 import { useRouterState } from '@tanstack/react-router';
 import type { ReactNode } from 'react';
-import { external, footerNav, headerNav, paths } from './links';
+import { HeaderAuth } from './HeaderAuth';
+import { footerNav, headerNav, paths } from './links';
 import { isSitePath, SiteLink } from './SiteLink';
 
 const isActive = (href: string, pathname: string) =>
@@ -27,11 +27,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             <SiteLink href={paths.home}>JSON Resume</SiteLink>
           </Logo>
         }
-        actions={
-          <Button asChild size="sm">
-            <a href={external.github}>GitHub</a>
-          </Button>
-        }
+        actions={<HeaderAuth />}
       >
         {headerNav.map((item) => (
           <SiteHeaderLink

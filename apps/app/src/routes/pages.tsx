@@ -5,7 +5,7 @@ import {
   type AnyRoute,
   type LazyRoute,
 } from '@tanstack/react-router';
-import { rootRoute } from './root';
+import { siteRoute } from './root';
 
 /**
  * A static page: its path and head here (small, in the main bundle), its
@@ -17,7 +17,7 @@ function page<const TPath extends string>(
   load: () => Promise<{ Route: LazyRoute<AnyRoute> }>
 ) {
   return createRoute({
-    getParentRoute: () => rootRoute,
+    getParentRoute: () => siteRoute,
     path,
     head: () => pageHead({ ...head, path }),
   }).lazy(() => load().then((m) => m.Route));

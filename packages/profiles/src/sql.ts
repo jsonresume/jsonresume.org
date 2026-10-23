@@ -1,65 +1,85 @@
-import { PgClient } from '@effect/sql-pg';
-import { Config, Effect, Layer, Schema } from 'effect';
-import { Migrator, SqlClient, SqlSchema } from 'effect/sql';
-import { GhostProfile, ProfileStore } from './store';
-
-/**
- * Schema changes, run in order at startup. Tables live in the `app` schema,
- * apart from the copy of the old Supabase database in `public`.
- */
-const migrations = Migrator.fromRecord({
-  '1_profiles': Effect.gen(function* () {
-    const sql = yield* SqlClient.SqlClient;
-    yield* sql`CREATE SCHEMA IF NOT EXISTS app`;
-    // One row per username. Only ghosts for now; accounts add their own
-    // columns (docs/ACCOUNTS_AND_USERNAMES.md).
-    yield* sql`
-      CREATE TABLE app.profiles (
-        username text PRIMARY KEY CHECK (username = lower(username)),
-        kind text NOT NULL CHECK (kind IN ('ghost')),
-        github_id bigint NOT NULL,
-        gist_id text NOT NULL,
-        resume jsonb NOT NULL,
-        fetched_at timestamptz NOT NULL,
-        created_at timestamptz NOT NULL DEFAULT now()
-      )
-    `;
-  }),
-});
+import { PgLive } from '@repo/database';
+import { Effect, Layer, Option, Schema } from 'effect';
+import { SqlClient, SqlSchema } from 'effect/sql';
+import { ProfileStore, type GistMirror, type Profile } from './store';
 
 const Row = Schema.Struct({
   username: Schema.String,
-  github_id: Schema.Number,
-  gist_id: Schema.String,
+  kind: Schema.Literals(['ghost', 'account', 'alias']),
+  github_id: Schema.NullOr(Schema.Number),
+  gist_id: Schema.NullOr(Schema.String),
   resume: Schema.Unknown,
-  fetched_at: Schema.Date,
+  fetched_at: Schema.NullOr(Schema.Date),
+  source: Schema.Literals(['gist', 'stored']),
+  stored_resume: Schema.Unknown,
+  user_id: Schema.NullOr(Schema.String),
+  verified: Schema.Boolean,
+  github_login: Schema.NullOr(Schema.String),
+  target: Schema.NullOr(Schema.String),
 });
+type Row = typeof Row.Type;
 
-const toGhost = (row: typeof Row.Type): GhostProfile => ({
-  username: row.username,
-  githubId: row.github_id,
-  gistId: row.gist_id,
-  resume: row.resume,
-  fetchedAt: row.fetched_at,
-});
+const mirrorOf = (row: Row): GistMirror | undefined =>
+  row.github_id !== null && row.gist_id !== null && row.fetched_at !== null
+    ? {
+        githubId: row.github_id,
+        gistId: row.gist_id,
+        resume: row.resume,
+        fetchedAt: row.fetched_at,
+      }
+    : undefined;
+
+const toProfile = (row: Row): Profile | undefined => {
+  switch (row.kind) {
+    case 'ghost': {
+      const mirror = mirrorOf(row);
+      return mirror && { kind: 'ghost', username: row.username, ...mirror };
+    }
+    case 'alias':
+      return row.target === null
+        ? undefined
+        : { kind: 'alias', username: row.username, target: row.target };
+    case 'account':
+      return row.user_id === null
+        ? undefined
+        : {
+            kind: 'account',
+            username: row.username,
+            userId: row.user_id,
+            verified: row.verified,
+            githubLogin: row.github_login ?? undefined,
+            source: row.source,
+            mirror: mirrorOf(row),
+            stored: row.stored_resume,
+          };
+  }
+};
 
 /** ProfileStore on Postgres. Database errors are defects: callers can't fix them. */
 export const PgProfileStore = Layer.effect(
   ProfileStore,
   Effect.gen(function* () {
     const sql = yield* SqlClient.SqlClient;
+    // An account's verification and GitHub login live on its user; an
+    // alias points at the username of its user's account.
     const findOne = SqlSchema.findOneOption({
       Request: Schema.String,
       Result: Row,
-      execute: (username) =>
-        sql`SELECT username, github_id::float8 AS github_id, gist_id, resume, fetched_at
-            FROM app.profiles WHERE username = ${username} AND kind = 'ghost'`,
+      execute: (username) => sql`
+        SELECT p.username, p.kind, p.github_id::float8 AS github_id, p.gist_id,
+               p.resume, p.fetched_at, p.source, p.stored_resume, p.user_id,
+               (u.email_verified_at IS NOT NULL OR u.github_id IS NOT NULL) AS verified,
+               u.github_login, a.username AS target
+        FROM app.profiles p
+        LEFT JOIN app.users u ON u.id = p.user_id
+        LEFT JOIN app.profiles a ON p.kind = 'alias' AND a.user_id = p.user_id AND a.kind = 'account'
+        WHERE p.username = ${username}`,
     });
     return ProfileStore.of({
-      findGhost: (username) =>
+      find: (username) =>
         findOne(username).pipe(
           Effect.map((row) =>
-            row._tag === 'Some' ? toGhost(row.value) : undefined
+            Option.isSome(row) ? toProfile(row.value) : undefined
           ),
           Effect.orDie
         ),
@@ -80,17 +100,18 @@ export const PgProfileStore = Layer.effect(
           Effect.asVoid,
           Effect.orDie
         ),
+      saveMirror: (username, mirror) =>
+        sql`
+          UPDATE app.profiles SET github_id = ${mirror.githubId}, gist_id = ${
+          mirror.gistId
+        },
+            resume = ${JSON.stringify(mirror.resume)}::jsonb, fetched_at = ${
+          mirror.fetchedAt
+        }
+          WHERE username = ${username} AND kind = 'account'
+        `.pipe(Effect.asVoid, Effect.orDie),
     });
   })
-);
-
-/** Postgres from DATABASE_URL, migrated before anything uses it. */
-export const PgLive = Layer.effectDiscard(
-  Migrator.make({})({ loader: migrations, table: 'app_migrations' })
-).pipe(
-  Layer.provideMerge(
-    PgClient.layerConfig({ url: Config.Redacted('DATABASE_URL') })
-  )
 );
 
 /** The profile store on a migrated Postgres. */

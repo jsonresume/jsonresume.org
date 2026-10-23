@@ -1,5 +1,5 @@
 import { createRoute, redirect } from '@tanstack/react-router';
-import { rootRoute } from './root';
+import { siteRoute } from './root';
 
 /**
  * /@username. The server answers it with the resume itself (a theme's whole
@@ -7,7 +7,7 @@ import { rootRoute } from './root';
  * there is none, passing the problem as router context.
  */
 export const resumeRoute = createRoute({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => siteRoute,
   path: '/@{$handle}',
   loader: ({ context, location }) => {
     if (context.resumeProblem) return context.resumeProblem;

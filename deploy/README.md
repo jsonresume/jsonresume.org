@@ -15,6 +15,16 @@ its phases are in [`SELF_HOSTING_PLAN.md`](../SELF_HOSTING_PLAN.md).
 | `/var/backups/jsonresume`         | Local dumps, kept 7 days                                   |
 | `/etc/caddy/certs`                | Cloudflare origin certificate for `*.jsonresume.org`       |
 
+`/etc/jsonresume/app.env` holds, besides `PORT`:
+
+| Variable                                  | What                                                                  |
+| ----------------------------------------- | --------------------------------------------------------------------- |
+| `SITE_URL`                                | The public origin, e.g. `https://beta.jsonresume.org` (OAuth, emails) |
+| `AUTH_SECRET`                             | Random secret signing OAuth state and hashing visitors (`openssl rand -base64 32`) |
+| `GITHUB_TOKEN`                            | Gist lookups; falls back to the OAuth app, then anonymous             |
+| `AUTH_GITHUB_ID`, `AUTH_GITHUB_SECRET`    | The GitHub OAuth app (sign-in and gist lookups). Its callback host must be a parent of `SITE_URL`'s, path `/api/auth/callback/github` |
+| `RESEND_API_KEY`, `MAIL_FROM` (optional)  | Email delivery; without them verification links are only logged       |
+
 Ports: app 3003 (`apps/app`, served at beta.jsonresume.org).
 
 ## Common tasks

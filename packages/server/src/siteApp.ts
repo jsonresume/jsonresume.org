@@ -2,6 +2,7 @@ import { serveStatic } from '@hono/node-server/serve-static';
 import { Hono } from 'hono';
 import { readFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
+import { sameOrigin } from './sameOrigin';
 
 export interface MountedHandler {
   /** Path prefix, e.g. '/api'. Requests under it go to `fetch`. */
@@ -23,6 +24,8 @@ export interface SiteAppOptions {
   mount?: ReadonlyArray<MountedHandler>;
   /** Pages rendered per request, ahead of static files. */
   dynamic?: ReadonlyArray<DynamicHandler>;
+  /** Paths whose writes must come from this site (see sameOrigin). */
+  protect?: { prefix: string; exempt?: ReadonlyArray<string> };
 }
 
 const HTML_CACHE = 'public, max-age=0, must-revalidate';
@@ -40,11 +43,13 @@ export function createSiteApp({
   clientDir,
   mount = [],
   dynamic = [],
+  protect,
 }: SiteAppOptions): Hono {
   // serveStatic resolves `root` against the working directory.
   const root = relative(process.cwd(), clientDir) || '.';
   const notFoundPage = readFileSync(join(clientDir, '404.html'), 'utf8');
   const app = new Hono();
+  if (protect) app.use('*', sameOrigin(protect.prefix, protect.exempt));
 
   for (const { prefix, fetch } of mount) {
     app.all(`${prefix}/*`, (c) => fetch(c.req.raw));

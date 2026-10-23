@@ -6,14 +6,15 @@
  */
 import { serve } from '@hono/node-server';
 import { NodeRuntime } from '@effect/platform-node';
-import { PgProfileStoreLive } from '@repo/profiles/sql';
+import { PurgeUnverified, apiRoutes } from '@repo/api-server';
+import { PgLive } from '@repo/database';
 import { createSiteApp, effectWebHandler } from '@repo/server';
-import { Config, Effect } from 'effect';
+import { Config, Effect, Layer } from 'effect';
 import { readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { apiLayer } from './api';
-import { createResumeHandler, liveProfiles, resumePath } from './resumes';
+import { createResumeHandler, resumePath } from './resumes';
+import { appServices } from './services';
 
 type ServerEntry = typeof import('../src/entry-server');
 
@@ -42,8 +43,17 @@ const main = Effect.gen(function* () {
     Config.withDefault('dev')
   );
 
+  const services = appServices(PgLive);
+  const memoMap = Layer.makeMemoMapUnsafe();
   const api = yield* Effect.acquireRelease(
-    Effect.sync(() => effectWebHandler(apiLayer(version))),
+    Effect.sync(() =>
+      effectWebHandler(
+        Layer.mergeAll(apiRoutes(version), PurgeUnverified).pipe(
+          Layer.provide(services)
+        ),
+        { memoMap }
+      )
+    ),
     (handler) => Effect.promise(() => handler.dispose())
   );
   const render = yield* loadRenderer;
@@ -51,7 +61,8 @@ const main = Effect.gen(function* () {
     Effect.sync(() =>
       createResumeHandler(
         (request, context) => render(request, context),
-        liveProfiles(PgProfileStoreLive)
+        services,
+        { memoMap }
       )
     ),
     (handler) => Effect.promise(() => handler.dispose())
@@ -60,6 +71,7 @@ const main = Effect.gen(function* () {
     clientDir,
     mount: [{ prefix: '/api', fetch: api.handler }],
     dynamic: [{ path: resumePath, fetch: resumes.fetch }],
+    protect: { prefix: '/api', exempt: ['/api/events/'] },
   });
 
   yield* Effect.acquireRelease(

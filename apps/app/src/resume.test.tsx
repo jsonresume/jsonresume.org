@@ -1,4 +1,5 @@
 // @vitest-environment node
+import { Analytics } from '@repo/analytics';
 import { GithubUnavailable, ProfileNotFound, Profiles } from '@repo/profiles';
 import { Effect, Layer } from 'effect';
 import { afterAll, describe, expect, it } from 'vitest';
@@ -36,22 +37,34 @@ describe('/@username page', () => {
 });
 
 describe('the server handler', () => {
+  const reads: string[] = [];
+  const analytics = Layer.succeed(
+    Analytics,
+    Analytics.of({
+      view: (input) =>
+        Effect.sync(() => void reads.push(`${input.username}.${input.kind}`)),
+      ping: () => Effect.void,
+    })
+  );
   const resumes = createResumeHandler(
     render,
-    Layer.succeed(
-      Profiles,
-      Profiles.of({
-        resume: (username) =>
-          username === 'down'
-            ? Effect.fail(new GithubUnavailable({ message: 'down' }))
-            : Effect.fail(
-                new ProfileNotFound({
-                  username,
-                  reason: 'no-gist',
-                  file: 'resume.json',
-                })
-              ),
-      })
+    Layer.merge(
+      analytics,
+      Layer.succeed(
+        Profiles,
+        Profiles.of({
+          resume: (username) =>
+            username === 'down'
+              ? Effect.fail(new GithubUnavailable({ message: 'down' }))
+              : Effect.fail(
+                  new ProfileNotFound({
+                    username,
+                    reason: 'no-gist',
+                    file: 'resume.json',
+                  })
+                ),
+        })
+      )
     )
   );
   afterAll(() => resumes.dispose());
