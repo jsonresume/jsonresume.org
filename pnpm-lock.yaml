@@ -527,6 +527,9 @@ importers:
       jsonresume-theme-paper-plus-plus:
         specifier: ^0.5.1
         version: 0.5.1
+      jsonresume-theme-pro:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-pro
       jsonresume-theme-product-manager-canvas:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-product-manager-canvas
@@ -1870,6 +1873,21 @@ importers:
       vite:
         specifier: ^6.4.3
         version: 6.4.3(@types/node@20.19.24)
+
+  packages/themes/jsonresume-theme-pro:
+    devDependencies:
+      '@jsonresume/sample-data':
+        specifier: workspace:*
+        version: link:../../sample-data
+      '@jsonresume/theme-kit':
+        specifier: workspace:*
+        version: link:../../theme-kit
+      '@repo/eslint-config-custom':
+        specifier: workspace:^
+        version: link:../../eslint-config-custom
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
 
   packages/themes/jsonresume-theme-product-manager-canvas:
     dependencies:

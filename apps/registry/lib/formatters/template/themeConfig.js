@@ -96,4 +96,5 @@ export const THEMES = {
   'desert-modern': () => import('jsonresume-theme-desert-modern'), // REGISTERED - was orphaned
   'elegant-pink': () => import('jsonresume-theme-elegant-pink'), // REGISTERED - was orphaned
   'two-column': () => import('jsonresume-theme-two-column'), // community (#532)
+  pro: () => import('jsonresume-theme-pro'),
 };

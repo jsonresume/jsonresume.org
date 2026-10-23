@@ -1,0 +1,47 @@
+{
+  "basics": {
+    "name": "Maximiliana Wolfeschlegelsteinhausenbergerdorff-Featherstonehaugh",
+    "label": "Principal Distinguished Staff Infrastructure Reliability and Developer Productivity Engineer",
+    "email": "maximiliana.wolfeschlegelsteinhausenbergerdorff@extremely-long-subdomain.example-organisation.co.uk",
+    "phone": "+44 20 7946 0958 ext. 12345",
+    "url": "https://www.example-organisation.co.uk/people/engineering/maximiliana-wolfeschlegelsteinhausenbergerdorff/portfolio",
+    "location": {
+      "city": "Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch",
+      "countryCode": "GB"
+    },
+    "profiles": [
+      {
+        "network": "Mastodon",
+        "username": "maximiliana@social.example-organisation.co.uk",
+        "url": "https://social.example-organisation.co.uk/@maximiliana"
+      },
+      {
+        "url": "https://codeberg.org/maximiliana-wolfeschlegelsteinhausenbergerdorff/a-repository-with-a-long-name"
+      },
+      { "network": "Matrix", "username": "@maximiliana:matrix.example.org" }
+    ]
+  },
+  "work": [
+    {
+      "name": "The International Consortium for Interoperable Distributed Systems Research and Standardisation (Europe, Middle East and Africa Division)",
+      "position": "Principal Distinguished Staff Infrastructure Reliability Engineer, Platform Foundations and Developer Experience",
+      "location": "Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch, Wales, United Kingdom",
+      "url": "https://www.example-organisation.co.uk/divisions/emea/platform-foundations",
+      "startDate": "2019-09-02",
+      "endDate": "2024-11-29",
+      "summary": "Owned https://internal.example-organisation.co.uk/a/very/long/unbroken/path/that/should/wrap/rather/than/overflow/the/container/at/narrow/widths and its successor.",
+      "highlights": [
+        "Supercalifragilisticexpialidociouslylongidentifiernamethatcannotbreak_naturally_without_emergency_wrapping"
+      ]
+    },
+    { "name": "Short Co", "position": "Engineer", "startDate": "2018-01" }
+  ],
+  "skills": [
+    {
+      "name": "Distributed Systems Observability, Tracing and Incident Response",
+      "level": "Expert",
+      "keywords": ["OpenTelemetry", "Prometheus"]
+    },
+    { "keywords": ["A row with values but no label"] }
+  ]
+}

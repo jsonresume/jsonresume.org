@@ -1,0 +1,391 @@
+{
+  "basics": {
+    "name": "Jordan Example",
+    "label": "Platform Engineering Leader",
+    "email": "jordan@example.com",
+    "phone": "+61 2 9999 9999",
+    "url": "https://jordan.example.com",
+    "location": {
+      "city": "Sydney",
+      "region": "NSW",
+      "countryCode": "AU"
+    },
+    "summary": "Twenty years of platform work.\n\nCurrently focused on developer experience."
+  },
+  "work": [
+    {
+      "name": "Company A Pty Ltd",
+      "position": "Head of Platform Engineering",
+      "location": "Sydney",
+      "startDate": "2022-01",
+      "summary": "Responsible for the billing service and its 2 dependent services across three regions.",
+      "highlights": [
+        "Designed the billing service for 3 product teams, cutting median latency by 10% and documenting the operating procedures used by on-call staff afterwards",
+        "Built the search index for 4 product teams, cutting median latency by 17% and documenting the operating procedures used by on-call staff afterwards",
+        "Led the release pipeline for 5 product teams, cutting median latency by 24% and documenting the operating procedures used by on-call staff afterwards",
+        "Migrated the mobile app for 6 product teams, cutting median latency by 31% and documenting the operating procedures used by on-call staff afterwards",
+        "Reduced the data warehouse for 7 product teams, cutting median latency by 38% and documenting the operating procedures used by on-call staff afterwards",
+        "Improved the auth gateway for 8 product teams, cutting median latency by 45% and documenting the operating procedures used by on-call staff afterwards",
+        "Documented the design system for 9 product teams, cutting median latency by 52% and documenting the operating procedures used by on-call staff afterwards",
+        "Automated the support tooling for 3 product teams, cutting median latency by 59% and documenting the operating procedures used by on-call staff afterwards",
+        "Reviewed the billing service for 4 product teams, cutting median latency by 66% and documenting the operating procedures used by on-call staff afterwards",
+        "Launched the search index for 5 product teams, cutting median latency by 13% and documenting the operating procedures used by on-call staff afterwards",
+        "Designed the release pipeline for 6 product teams, cutting median latency by 20% and documenting the operating procedures used by on-call staff afterwards",
+        "Built the mobile app for 7 product teams, cutting median latency by 27% and documenting the operating procedures used by on-call staff afterwards",
+        "Led the data warehouse for 8 product teams, cutting median latency by 34% and documenting the operating procedures used by on-call staff afterwards",
+        "Migrated the auth gateway for 9 product teams, cutting median latency by 41% and documenting the operating procedures used by on-call staff afterwards",
+        "Reduced the design system for 3 product teams, cutting median latency by 48% and documenting the operating procedures used by on-call staff afterwards",
+        "Improved the support tooling for 4 product teams, cutting median latency by 55% and documenting the operating procedures used by on-call staff afterwards",
+        "Documented the billing service for 5 product teams, cutting median latency by 62% and documenting the operating procedures used by on-call staff afterwards",
+        "Automated the search index for 6 product teams, cutting median latency by 69% and documenting the operating procedures used by on-call staff afterwards",
+        "Reviewed the release pipeline for 7 product teams, cutting median latency by 16% and documenting the operating procedures used by on-call staff afterwards",
+        "Launched the mobile app for 8 product teams, cutting median latency by 23% and documenting the operating procedures used by on-call staff afterwards",
+        "Designed the data warehouse for 9 product teams, cutting median latency by 30% and documenting the operating procedures used by on-call staff afterwards",
+        "Built the auth gateway for 3 product teams, cutting median latency by 37% and documenting the operating procedures used by on-call staff afterwards",
+        "Led the design system for 4 product teams, cutting median latency by 44% and documenting the operating procedures used by on-call staff afterwards",
+        "Migrated the support tooling for 5 product teams, cutting median latency by 51% and documenting the operating procedures used by on-call staff afterwards",
+        "Reduced the billing service for 6 product teams, cutting median latency by 58% and documenting the operating procedures used by on-call staff afterwards",
+        "Improved the search index for 7 product teams, cutting median latency by 65% and documenting the operating procedures used by on-call staff afterwards",
+        "Documented the release pipeline for 8 product teams, cutting median latency by 12% and documenting the operating procedures used by on-call staff afterwards",
+        "Automated the mobile app for 9 product teams, cutting median latency by 19% and documenting the operating procedures used by on-call staff afterwards",
+        "Reviewed the data warehouse for 3 product teams, cutting median latency by 26% and documenting the operating procedures used by on-call staff afterwards",
+        "Launched the auth gateway for 4 product teams, cutting median latency by 33% and documenting the operating procedures used by on-call staff afterwards",
+        "Designed the design system for 5 product teams, cutting median latency by 40% and documenting the operating procedures used by on-call staff afterwards",
+        "Built the support tooling for 6 product teams, cutting median latency by 47% and documenting the operating procedures used by on-call staff afterwards",
+        "Led the billing service for 7 product teams, cutting median latency by 54% and documenting the operating procedures used by on-call staff afterwards",
+        "Migrated the search index for 8 product teams, cutting median latency by 61% and documenting the operating procedures used by on-call staff afterwards",
+        "Reduced the release pipeline for 9 product teams, cutting median latency by 68% and documenting the operating procedures used by on-call staff afterwards",
+        "Improved the mobile app for 3 product teams, cutting median latency by 15% and documenting the operating procedures used by on-call staff afterwards",
+        "Documented the data warehouse for 4 product teams, cutting median latency by 22% and documenting the operating procedures used by on-call staff afterwards",
+        "Automated the auth gateway for 5 product teams, cutting median latency by 29% and documenting the operating procedures used by on-call staff afterwards",
+        "Reviewed the design system for 6 product teams, cutting median latency by 36% and documenting the operating procedures used by on-call staff afterwards",
+        "Launched the support tooling for 7 product teams, cutting median latency by 43% and documenting the operating procedures used by on-call staff afterwards",
+        "Designed the billing service for 8 product teams, cutting median latency by 50% and documenting the operating procedures used by on-call staff afterwards",
+        "Built the search index for 9 product teams, cutting median latency by 57% and documenting the operating procedures used by on-call staff afterwards",
+        "Led the release pipeline for 3 product teams, cutting median latency by 64% and documenting the operating procedures used by on-call staff afterwards",
+        "Migrated the mobile app for 4 product teams, cutting median latency by 11% and documenting the operating procedures used by on-call staff afterwards",
+        "Reduced the data warehouse for 5 product teams, cutting median latency by 18% and documenting the operating procedures used by on-call staff afterwards",
+        "Improved the auth gateway for 6 product teams, cutting median latency by 25% and documenting the operating procedures used by on-call staff afterwards",
+        "Documented the design system for 7 product teams, cutting median latency by 32% and documenting the operating procedures used by on-call staff afterwards",
+        "Automated the support tooling for 8 product teams, cutting median latency by 39% and documenting the operating procedures used by on-call staff afterwards"
+      ]
+    },
+    {
+      "name": "Company B Pty Ltd",
+      "position": "Senior Engineer 1",
+      "location": "Sydney",
+      "startDate": "2020-02",
+      "endDate": "2022-05",
+      "summary": "Responsible for the search index and its 3 dependent services across three regions.",
+      "highlights": [
+        "Built the search index for 4 product teams, cutting median latency by 17% and documenting the operating procedures used by on-call staff afterwards",
+        "Led the release pipeline for 5 product teams, cutting median latency by 24% and documenting the operating procedures used by on-call staff afterwards",
+        "Migrated the mobile app for 6 product teams, cutting median latency by 31% and documenting the operating procedures used by on-call staff afterwards",
+        "Reduced the data warehouse for 7 product teams, cutting median latency by 38% and documenting the operating procedures used by on-call staff afterwards"
+      ]
+    },
+    {
+      "name": "Company C Pty Ltd",
+      "position": "Senior Engineer 2",
+      "location": "Sydney",
+      "startDate": "2018-03",
+      "endDate": "2020-06",
+      "summary": "Responsible for the release pipeline and its 4 dependent services across three regions.",
+      "highlights": [
+        "Led the release pipeline for 5 product teams, cutting median latency by 24% and documenting the operating procedures used by on-call staff afterwards",
+        "Migrated the mobile app for 6 product teams, cutting median latency by 31% and documenting the operating procedures used by on-call staff afterwards",
+        "Reduced the data warehouse for 7 product teams, cutting median latency by 38% and documenting the operating procedures used by on-call staff afterwards",
+        "Improved the auth gateway for 8 product teams, cutting median latency by 45% and documenting the operating procedures used by on-call staff afterwards"
+      ]
+    },
+    {
+      "name": "Company D Pty Ltd",
+      "position": "Senior Engineer 3",
+      "location": "Sydney",
+      "startDate": "2016-04",
+      "endDate": "2018-07",
+      "summary": "Responsible for the mobile app and its 5 dependent services across three regions.",
+      "highlights": [
+        "Migrated the mobile app for 6 product teams, cutting median latency by 31% and documenting the operating procedures used by on-call staff afterwards",
+        "Reduced the data warehouse for 7 product teams, cutting median latency by 38% and documenting the operating procedures used by on-call staff afterwards",
+        "Improved the auth gateway for 8 product teams, cutting median latency by 45% and documenting the operating procedures used by on-call staff afterwards",
+        "Documented the design system for 9 product teams, cutting median latency by 52% and documenting the operating procedures used by on-call staff afterwards"
+      ]
+    },
+    {
+      "name": "Company E Pty Ltd",
+      "position": "Senior Engineer 4",
+      "location": "Sydney",
+      "startDate": "2014-05",
+      "endDate": "2016-08",
+      "summary": "Responsible for the data warehouse and its 6 dependent services across three regions.",
+      "highlights": [
+        "Reduced the data warehouse for 7 product teams, cutting median latency by 38% and documenting the operating procedures used by on-call staff afterwards",
+        "Improved the auth gateway for 8 product teams, cutting median latency by 45% and documenting the operating procedures used by on-call staff afterwards",
+        "Documented the design system for 9 product teams, cutting median latency by 52% and documenting the operating procedures used by on-call staff afterwards",
+        "Automated the support tooling for 3 product teams, cutting median latency by 59% and documenting the operating procedures used by on-call staff afterwards"
+      ]
+    },
+    {
+      "name": "Company F Pty Ltd",
+      "position": "Senior Engineer 5",
+      "location": "Sydney",
+      "startDate": "2012-06",
+      "endDate": "2014-09",
+      "summary": "Responsible for the auth gateway and its 7 dependent services across three regions.",
+      "highlights": [
+        "Improved the auth gateway for 8 product teams, cutting median latency by 45% and documenting the operating procedures used by on-call staff afterwards",
+        "Documented the design system for 9 product teams, cutting median latency by 52% and documenting the operating procedures used by on-call staff afterwards",
+        "Automated the support tooling for 3 product teams, cutting median latency by 59% and documenting the operating procedures used by on-call staff afterwards",
+        "Reviewed the billing service for 4 product teams, cutting median latency by 66% and documenting the operating procedures used by on-call staff afterwards"
+      ]
+    },
+    {
+      "name": "Company G Pty Ltd",
+      "position": "Senior Engineer 6",
+      "location": "Sydney",
+      "startDate": "2010-07",
+      "endDate": "2012-01",
+      "summary": "Responsible for the design system and its 8 dependent services across three regions.",
+      "highlights": [
+        "Documented the design system for 9 product teams, cutting median latency by 52% and documenting the operating procedures used by on-call staff afterwards",
+        "Automated the support tooling for 3 product teams, cutting median latency by 59% and documenting the operating procedures used by on-call staff afterwards",
+        "Reviewed the billing service for 4 product teams, cutting median latency by 66% and documenting the operating procedures used by on-call staff afterwards",
+        "Launched the search index for 5 product teams, cutting median latency by 13% and documenting the operating procedures used by on-call staff afterwards"
+      ]
+    },
+    {
+      "name": "Company H Pty Ltd",
+      "position": "Senior Engineer 7",
+      "location": "Sydney",
+      "startDate": "2008-08",
+      "endDate": "2010-02",
+      "summary": "Responsible for the support tooling and its 9 dependent services across three regions.",
+      "highlights": [
+        "Automated the support tooling for 3 product teams, cutting median latency by 59% and documenting the operating procedures used by on-call staff afterwards",
+        "Reviewed the billing service for 4 product teams, cutting median latency by 66% and documenting the operating procedures used by on-call staff afterwards",
+        "Launched the search index for 5 product teams, cutting median latency by 13% and documenting the operating procedures used by on-call staff afterwards",
+        "Designed the release pipeline for 6 product teams, cutting median latency by 20% and documenting the operating procedures used by on-call staff afterwards"
+      ]
+    },
+    {
+      "name": "Company I Pty Ltd",
+      "position": "Senior Engineer 8",
+      "location": "Sydney",
+      "startDate": "2006-09",
+      "endDate": "2008-03",
+      "summary": "Responsible for the billing service and its 10 dependent services across three regions.",
+      "highlights": [
+        "Reviewed the billing service for 4 product teams, cutting median latency by 66% and documenting the operating procedures used by on-call staff afterwards",
+        "Launched the search index for 5 product teams, cutting median latency by 13% and documenting the operating procedures used by on-call staff afterwards",
+        "Designed the release pipeline for 6 product teams, cutting median latency by 20% and documenting the operating procedures used by on-call staff afterwards",
+        "Built the mobile app for 7 product teams, cutting median latency by 27% and documenting the operating procedures used by on-call staff afterwards"
+      ]
+    },
+    {
+      "name": "Company J Pty Ltd",
+      "position": "Senior Engineer 9",
+      "location": "Sydney",
+      "startDate": "2004-01",
+      "endDate": "2006-04",
+      "summary": "Responsible for the search index and its 11 dependent services across three regions.",
+      "highlights": [
+        "Launched the search index for 5 product teams, cutting median latency by 13% and documenting the operating procedures used by on-call staff afterwards",
+        "Designed the release pipeline for 6 product teams, cutting median latency by 20% and documenting the operating procedures used by on-call staff afterwards",
+        "Built the mobile app for 7 product teams, cutting median latency by 27% and documenting the operating procedures used by on-call staff afterwards",
+        "Led the data warehouse for 8 product teams, cutting median latency by 34% and documenting the operating procedures used by on-call staff afterwards"
+      ]
+    },
+    {
+      "name": "Company K Pty Ltd",
+      "position": "Senior Engineer 10",
+      "location": "Sydney",
+      "startDate": "2002-02",
+      "endDate": "2004-05",
+      "summary": "Responsible for the release pipeline and its 12 dependent services across three regions.",
+      "highlights": [
+        "Designed the release pipeline for 6 product teams, cutting median latency by 20% and documenting the operating procedures used by on-call staff afterwards",
+        "Built the mobile app for 7 product teams, cutting median latency by 27% and documenting the operating procedures used by on-call staff afterwards",
+        "Led the data warehouse for 8 product teams, cutting median latency by 34% and documenting the operating procedures used by on-call staff afterwards",
+        "Migrated the auth gateway for 9 product teams, cutting median latency by 41% and documenting the operating procedures used by on-call staff afterwards"
+      ]
+    },
+    {
+      "name": "Company L Pty Ltd",
+      "position": "Senior Engineer 11",
+      "location": "Sydney",
+      "startDate": "2000-03",
+      "endDate": "2002-06",
+      "summary": "Responsible for the mobile app and its 13 dependent services across three regions.",
+      "highlights": [
+        "Built the mobile app for 7 product teams, cutting median latency by 27% and documenting the operating procedures used by on-call staff afterwards",
+        "Led the data warehouse for 8 product teams, cutting median latency by 34% and documenting the operating procedures used by on-call staff afterwards",
+        "Migrated the auth gateway for 9 product teams, cutting median latency by 41% and documenting the operating procedures used by on-call staff afterwards",
+        "Reduced the design system for 3 product teams, cutting median latency by 48% and documenting the operating procedures used by on-call staff afterwards"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Project 1",
+      "startDate": "2010-03",
+      "endDate": "2011-08",
+      "summary": "An internal tool that became a supported product.",
+      "highlights": [
+        "Designed the billing service for 3 product teams, cutting median latency by 10% and documenting the operating procedures used by on-call staff afterwards",
+        "Migrated the mobile app for 6 product teams, cutting median latency by 31% and documenting the operating procedures used by on-call staff afterwards"
+      ],
+      "keywords": ["Go", "Kafka", "Terraform"]
+    },
+    {
+      "name": "Project 2",
+      "startDate": "2011-03",
+      "endDate": "2012-08",
+      "summary": "An internal tool that became a supported product.",
+      "highlights": [
+        "Built the search index for 4 product teams, cutting median latency by 17% and documenting the operating procedures used by on-call staff afterwards",
+        "Reduced the data warehouse for 7 product teams, cutting median latency by 38% and documenting the operating procedures used by on-call staff afterwards"
+      ],
+      "keywords": ["Go", "Kafka", "Terraform"]
+    },
+    {
+      "name": "Project 3",
+      "startDate": "2012-03",
+      "endDate": "2013-08",
+      "summary": "An internal tool that became a supported product.",
+      "highlights": [
+        "Led the release pipeline for 5 product teams, cutting median latency by 24% and documenting the operating procedures used by on-call staff afterwards",
+        "Improved the auth gateway for 8 product teams, cutting median latency by 45% and documenting the operating procedures used by on-call staff afterwards"
+      ],
+      "keywords": ["Go", "Kafka", "Terraform"]
+    },
+    {
+      "name": "Project 4",
+      "startDate": "2013-03",
+      "endDate": "2014-08",
+      "summary": "An internal tool that became a supported product.",
+      "highlights": [
+        "Migrated the mobile app for 6 product teams, cutting median latency by 31% and documenting the operating procedures used by on-call staff afterwards",
+        "Documented the design system for 9 product teams, cutting median latency by 52% and documenting the operating procedures used by on-call staff afterwards"
+      ],
+      "keywords": ["Go", "Kafka", "Terraform"]
+    },
+    {
+      "name": "Project 5",
+      "startDate": "2014-03",
+      "endDate": "2015-08",
+      "summary": "An internal tool that became a supported product.",
+      "highlights": [
+        "Reduced the data warehouse for 7 product teams, cutting median latency by 38% and documenting the operating procedures used by on-call staff afterwards",
+        "Automated the support tooling for 3 product teams, cutting median latency by 59% and documenting the operating procedures used by on-call staff afterwards"
+      ],
+      "keywords": ["Go", "Kafka", "Terraform"]
+    },
+    {
+      "name": "Project 6",
+      "startDate": "2015-03",
+      "endDate": "2016-08",
+      "summary": "An internal tool that became a supported product.",
+      "highlights": [
+        "Improved the auth gateway for 8 product teams, cutting median latency by 45% and documenting the operating procedures used by on-call staff afterwards",
+        "Reviewed the billing service for 4 product teams, cutting median latency by 66% and documenting the operating procedures used by on-call staff afterwards"
+      ],
+      "keywords": ["Go", "Kafka", "Terraform"]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University of Sydney",
+      "studyType": "Master of Engineering",
+      "area": "Software",
+      "startDate": "2004",
+      "endDate": "2006"
+    },
+    {
+      "institution": "UNSW",
+      "studyType": "Bachelor of Science",
+      "area": "Computer Science",
+      "startDate": "2000",
+      "endDate": "2003",
+      "courses": ["Algorithms", "Operating Systems", "Compilers"]
+    }
+  ],
+  "skills": [
+    {
+      "name": "Area 1",
+      "level": "Expert",
+      "keywords": ["Kubernetes", "Terraform", "Go"]
+    },
+    {
+      "name": "Area 2",
+      "level": "Advanced",
+      "keywords": ["Kubernetes", "Terraform", "Go", "Rust"]
+    },
+    {
+      "name": "Area 3",
+      "level": "Expert",
+      "keywords": ["Kubernetes", "Terraform", "Go", "Rust", "PostgreSQL"]
+    },
+    {
+      "name": "Area 4",
+      "level": "Advanced",
+      "keywords": [
+        "Kubernetes",
+        "Terraform",
+        "Go",
+        "Rust",
+        "PostgreSQL",
+        "Kafka"
+      ]
+    },
+    {
+      "name": "Area 5",
+      "level": "Expert",
+      "keywords": [
+        "Kubernetes",
+        "Terraform",
+        "Go",
+        "Rust",
+        "PostgreSQL",
+        "Kafka",
+        "gRPC"
+      ]
+    },
+    {
+      "name": "Area 6",
+      "level": "Advanced",
+      "keywords": [
+        "Kubernetes",
+        "Terraform",
+        "Go",
+        "Rust",
+        "PostgreSQL",
+        "Kafka",
+        "gRPC",
+        "Envoy"
+      ]
+    },
+    {
+      "name": "Area 7",
+      "level": "Expert",
+      "keywords": ["Kubernetes", "Terraform", "Go"]
+    },
+    {
+      "name": "Area 8",
+      "level": "Advanced",
+      "keywords": ["Kubernetes", "Terraform", "Go", "Rust"]
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Native speaker"
+    }
+  ],
+  "references": [
+    {
+      "name": "A. Colleague, VP Engineering",
+      "reference": "Designed the billing service for 3 product teams, cutting median latency by 10% and documenting the operating procedures used by on-call staff afterwards. Built the search index for 4 product teams, cutting median latency by 17% and documenting the operating procedures used by on-call staff afterwards. Led the release pipeline for 5 product teams, cutting median latency by 24% and documenting the operating procedures used by on-call staff afterwards. Migrated the mobile app for 6 product teams, cutting median latency by 31% and documenting the operating procedures used by on-call staff afterwards. Reduced the data warehouse for 7 product teams, cutting median latency by 38% and documenting the operating procedures used by on-call staff afterwards. Improved the auth gateway for 8 product teams, cutting median latency by 45% and documenting the operating procedures used by on-call staff afterwards. Documented the design system for 9 product teams, cutting median latency by 52% and documenting the operating procedures used by on-call staff afterwards. Automated the support tooling for 3 product teams, cutting median latency by 59% and documenting the operating procedures used by on-call staff afterwards. Reviewed the billing service for 4 product teams, cutting median latency by 66% and documenting the operating procedures used by on-call staff afterwards."
+    }
+  ]
+}

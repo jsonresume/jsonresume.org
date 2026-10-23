@@ -697,6 +697,21 @@ export const THEME_METADATA = {
       'luxury',
     ],
   },
+  pro: {
+    name: 'Pro',
+    description:
+      'A typeset professional résumé in Source Serif 4: centered masthead, one continuous reading column with a shared left edge, fine section rules, consistent role, organization and date treatments, and designed print pages for A4 and Letter.',
+    author: 'JSON Resume Team',
+    tags: [
+      'professional',
+      'serif',
+      'single-column',
+      'typographic',
+      'minimal',
+      'print',
+      'classic',
+    ],
+  },
 };
 
 // List of available theme names (derived from THEME_METADATA)
