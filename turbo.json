@@ -63,6 +63,18 @@
       ],
       "outputs": []
     },
+    "styleguide#typecheck": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "**/*.ts",
+        "**/*.tsx",
+        "**/*.js",
+        "**/*.jsx",
+        "tsconfig.json",
+        "tsconfig*.json"
+      ],
+      "outputs": []
+    },
     "check": {
       "dependsOn": ["lint", "typecheck"]
     },

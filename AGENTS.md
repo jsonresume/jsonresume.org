@@ -6,7 +6,7 @@ This repository is a Turborepo-driven Next.js monorepo focused purely on technic
 
 ## Structure & Shared Modules
 
-Core apps live in `apps/`: the `registry` resume platform and the `homepage2` marketing site. Edge routes reside at `app/api`. Shared UI, linting rules, and utilities come from `packages/` (notably `packages/ui` and the `jsonresume-theme-*` packages). Supabase migrations and config live in `supabase/`, reference docs in `docs/`, helper scripts in `scripts/`, and sample resume data in `resume.yaml`. Keep feature logic, hooks, components, and `*.test.*` files co-located under the relevant app or package.
+Core apps live in `apps/`: the `registry` resume platform and the `homepage2` marketing site. Edge routes reside at `app/api`. Shared UI, linting rules, and utilities come from `packages/` (notably `packages/ui`, the `@jsonresume/ui` design system documented by `apps/styleguide`, and the `jsonresume-theme-*` packages). Supabase migrations and config live in `supabase/`, reference docs in `docs/`, helper scripts in `scripts/`, and sample resume data in `resume.yaml`. Keep feature logic, hooks, components, and `*.test.*` files co-located under the relevant app or package.
 
 ## Build, Test & Tooling
 

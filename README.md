@@ -56,7 +56,8 @@ Useful links:
 | [`packages/resume-core`](packages/resume-core)     | `@jsonresume/core`         | Framework-agnostic design tokens, primitives, and validators |
 | [`packages/ats-validator`](packages/ats-validator) | `@jsonresume/ats-validator` | ATS (Applicant Tracking System) validation for resume HTML   |
 | [`packages/job-search`](packages/job-search)       | `@jsonresume/jobs`         | Hacker News "Who is Hiring" job search matched to a resume   |
-| [`packages/ui`](packages/ui)                       | `@repo/ui`                 | Shared UI components (Button, Input, Textarea, ...)          |
+| [`packages/ui`](packages/ui)                       | `@jsonresume/ui`           | Design system: tokens and React components ([styleguide](https://styleguide.jsonresume.org)) |
+| [`packages/ui-legacy`](packages/ui-legacy)         | `@repo/ui`                 | Previous shadcn/Tailwind components, used by the registry    |
 | [`packages/themes`](packages/themes)               | —                          | ~52 official `jsonresume-theme-*` packages plus `stackoverflow` |
 
 Other workspace packages include `converters`, `theme-config`, `test-fixtures`,

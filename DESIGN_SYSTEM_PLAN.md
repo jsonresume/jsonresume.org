@@ -1,3 +1,5 @@
+> **Status (Oct 2026):** superseded. The design system now lives in `packages/ui` (`@jsonresume/ui`: TypeScript tokens and components styled with vanilla-extract, no Tailwind) and is documented at styleguide.jsonresume.org (`apps/styleguide`). The previous shadcn library moved to `packages/ui-legacy`. This plan is kept for history.
+
 # Design System Initiative Plan
 
 ## Vision
