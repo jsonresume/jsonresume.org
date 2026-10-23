@@ -51,6 +51,8 @@ switch_to() {
   local target=$1 old
   old=$(readlink -f "$APPDIR/current" 2>/dev/null || true)
   ln -sfn "$target" "$APPDIR/current.new" && mv -T "$APPDIR/current.new" "$APPDIR/current"
+  # Tell the app which commit it is serving (e.g. /api/health).
+  printf 'GIT_COMMIT_SHA=%s\n' "$(basename "$target")" > "$APPDIR/release.env"
   if [ -n "$old" ] && [ "$old" != "$target" ]; then
     ln -sfn "$old" "$APPDIR/previous.new" && mv -T "$APPDIR/previous.new" "$APPDIR/previous"
   fi
