@@ -1,8 +1,9 @@
 import { Field, Input, Stack } from '@jsonresume/ui';
+import * as styles from './basic.css';
 
 export default function FieldBasic() {
   return (
-    <Stack gap={5} style={{ width: 'min(100%, 22rem)' }}>
+    <Stack gap={5} className={styles.root}>
       <Field label="Full name" required>
         <Input autoComplete="name" />
       </Field>

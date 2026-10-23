@@ -1,8 +1,9 @@
+import { assignInlineVars } from '@vanilla-extract/dynamic';
 import { Heading, Table, Td, Th } from '@jsonresume/ui';
 import { space } from '@jsonresume/ui/tokens';
 import type { Metadata } from 'next';
 import { DocSection, DocsLayout } from '@/components/docs-layout';
-import styles from '@/components/docs.module.css';
+import * as styles from '@/components/docs.css';
 import { Example } from '@/components/example';
 import { Guidelines } from '@/components/guidelines';
 
@@ -84,7 +85,9 @@ export default function SpacingPage() {
                   <Td>
                     <div
                       className={styles.scaleBar}
-                      style={{ width: value === '0' ? '1px' : value }}
+                      style={assignInlineVars({
+                        [styles.barWidth]: value === '0' ? '1px' : value,
+                      })}
                     />
                   </Td>
                 </tr>

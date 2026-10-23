@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "pnpm generate && next dev --port 3005",
-    "build": "pnpm generate && next build",
+    "dev": "pnpm generate && next dev --webpack --port 3005",
+    "build": "pnpm generate && next build --webpack",
     "start": "next start --port 3005",
     "generate": "node scripts/generate.mjs",
     "typecheck": "pnpm generate && tsc --noEmit",
@@ -13,6 +13,8 @@
   },
   "dependencies": {
     "@jsonresume/ui": "workspace:*",
+    "@vanilla-extract/css": "^1.21.3",
+    "@vanilla-extract/dynamic": "^2.1.5",
     "lucide-react": "^0.548.0",
     "next": "^16.3.3",
     "react": "^19.2.0",
@@ -23,6 +25,7 @@
     "@types/node": "^20.10.0",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
+    "@vanilla-extract/next-plugin": "^2.5.2",
     "react-docgen-typescript": "^2.4.0",
     "typescript": "^5.9.3"
   }

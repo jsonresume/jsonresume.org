@@ -13,7 +13,7 @@ import {
 // 4 (16px) inside a card, 6 (24px) between cards.
 export default function SpacingInsideBetween() {
   return (
-    <Grid minColumnWidth="13rem" gap={6} style={{ width: '100%' }}>
+    <Grid minColumnWidth="13rem" gap={6}>
       {['Pro', 'Even', 'Flat'].map((name) => (
         <Card key={name}>
           <CardContent>

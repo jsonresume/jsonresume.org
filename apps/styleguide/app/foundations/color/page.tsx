@@ -1,8 +1,9 @@
+import { assignInlineVars } from '@vanilla-extract/dynamic';
 import { Callout, Heading, Prose } from '@jsonresume/ui';
 import { palette } from '@jsonresume/ui/tokens';
 import type { Metadata } from 'next';
 import { DocSection, DocsLayout } from '@/components/docs-layout';
-import styles from '@/components/docs.module.css';
+import * as styles from '@/components/docs.css';
 import { ContrastMatrix } from '@/components/contrast-matrix';
 import { Example } from '@/components/example';
 import { Guidelines } from '@/components/guidelines';
@@ -150,15 +151,12 @@ export default function ColorPage() {
               <Heading level={3} size="label">
                 {name}
               </Heading>
-              <div
-                className={styles.swatchGrid}
-                style={{ marginTop: 'var(--jr-space-3)' }}
-              >
+              <div className={`${styles.swatchGrid} ${styles.stackTight}`}>
                 {Object.entries(ramp).map(([step, hex]) => (
                   <div key={step} className={styles.swatch}>
                     <div
                       className={styles.swatchColor}
-                      style={{ background: hex }}
+                      style={assignInlineVars({ [styles.fill]: hex })}
                     />
                     <div className={styles.swatchMeta}>
                       <span className={styles.swatchName}>

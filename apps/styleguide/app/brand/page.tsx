@@ -1,3 +1,4 @@
+import { assignInlineVars } from '@vanilla-extract/dynamic';
 import {
   Button,
   Callout,
@@ -12,7 +13,7 @@ import {
 } from '@jsonresume/ui';
 import type { Metadata } from 'next';
 import { DocSection, DocsLayout } from '@/components/docs-layout';
-import styles from '@/components/docs.module.css';
+import * as styles from '@/components/docs.css';
 
 export const metadata: Metadata = { title: 'Brand' };
 
@@ -103,7 +104,7 @@ export default function BrandPage() {
               <div key={name} className={styles.swatch}>
                 <div
                   className={styles.swatchColor}
-                  style={{ background: hex }}
+                  style={assignInlineVars({ [styles.fill]: hex })}
                 />
                 <div className={styles.swatchMeta}>
                   <span className={styles.swatchName}>{name}</span>

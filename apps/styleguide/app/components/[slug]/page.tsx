@@ -2,7 +2,7 @@ import { Badge, Heading, Link, Stack, Text } from '@jsonresume/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { DocSection, DocsLayout } from '@/components/docs-layout';
-import styles from '@/components/docs.module.css';
+import * as styles from '@/components/docs.css';
 import { Example } from '@/components/example';
 import { Guidelines } from '@/components/guidelines';
 import { Playground } from '@/components/playground';

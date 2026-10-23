@@ -1,6 +1,6 @@
 import '@jsonresume/ui/fonts.css';
 import '@jsonresume/ui/styles.css';
-import './globals.css';
+import './global.css';
 
 import { base, SkipLink, TooltipProvider } from '@jsonresume/ui';
 import type { Metadata } from 'next';

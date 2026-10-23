@@ -9,7 +9,7 @@ import {
 
 export default function CardTones() {
   return (
-    <Grid minColumnWidth="12rem" gap={4} style={{ width: '100%' }}>
+    <Grid minColumnWidth="12rem" gap={4}>
       {(['outline', 'subtle', 'raised'] as const).map((tone) => (
         <Card key={tone} tone={tone}>
           <CardHeader>

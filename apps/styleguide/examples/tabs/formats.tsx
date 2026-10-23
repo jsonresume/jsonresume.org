@@ -8,7 +8,7 @@ import {
 
 export default function TabsFormats() {
   return (
-    <Tabs defaultValue="json" style={{ width: '100%' }}>
+    <Tabs defaultValue="json">
       <TabsList aria-label="Resume format">
         <TabsTrigger value="json">JSON</TabsTrigger>
         <TabsTrigger value="yaml">YAML</TabsTrigger>

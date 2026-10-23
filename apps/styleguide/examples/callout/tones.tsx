@@ -2,7 +2,7 @@ import { Callout, Code, Stack } from '@jsonresume/ui';
 
 export default function CalloutTones() {
   return (
-    <Stack gap={3} style={{ width: '100%' }}>
+    <Stack gap={3}>
       <Callout title="Tip">
         Name your gist <Code>resume.json</Code> and the registry finds it
         automatically.

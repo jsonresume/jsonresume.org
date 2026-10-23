@@ -2,7 +2,7 @@ import { Heading, Prose, Table, Td, Th } from '@jsonresume/ui';
 import { darkColor, tokens } from '@jsonresume/ui/tokens';
 import type { Metadata } from 'next';
 import { DocsLayout } from '@/components/docs-layout';
-import styles from '@/components/docs.module.css';
+import * as styles from '@/components/docs.css';
 
 export const metadata: Metadata = { title: 'Token reference' };
 

@@ -1,7 +1,7 @@
 import { CodeBlock, Heading, Prose } from '@jsonresume/ui';
 import type { Metadata } from 'next';
 import { DocSection, DocsLayout } from '@/components/docs-layout';
-import styles from '@/components/docs.module.css';
+import * as styles from '@/components/docs.css';
 
 export const metadata: Metadata = { title: 'Contributing' };
 
@@ -11,6 +11,7 @@ const tree = `packages/ui/src/components/badge/
   badge.test.tsx   behavior + axe
 apps/styleguide/examples/badge/
   tones.tsx        live example, shown with its source
+  tones.css.ts     its styles, if any (shown too); never inline style={{}}
 apps/styleguide/lib/components.ts
                    summary, usage, accessibility notes`;
 

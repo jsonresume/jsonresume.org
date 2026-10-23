@@ -8,10 +8,11 @@ import {
   Link,
   Text,
 } from '@jsonresume/ui';
+import * as styles from './theme.css';
 
 export default function ThemeCard() {
   return (
-    <Card interactive style={{ width: '15rem' }}>
+    <Card interactive className={styles.root}>
       <CardMedia>
         <img
           src="/examples/theme-pro.png"

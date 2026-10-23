@@ -7,7 +7,7 @@ import {
 
 export default function AccordionFaq() {
   return (
-    <Accordion type="single" collapsible style={{ width: '100%' }}>
+    <Accordion type="single" collapsible>
       <AccordionItem value="what">
         <AccordionTrigger>What is JSON Resume?</AccordionTrigger>
         <AccordionContent>

@@ -9,7 +9,5 @@ const sample = `{
 }`;
 
 export default function CodeBlockBasic() {
-  return (
-    <CodeBlock label="resume.json" code={sample} style={{ width: '100%' }} />
-  );
+  return <CodeBlock label="resume.json" code={sample} />;
 }

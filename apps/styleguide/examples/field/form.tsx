@@ -7,11 +7,12 @@ import {
   Stack,
   Textarea,
 } from '@jsonresume/ui';
+import * as styles from './form.css';
 
 // One column, labels above controls, one primary action at the end.
 export default function FieldForm() {
   return (
-    <form style={{ width: 'min(100%, 26rem)' }}>
+    <form className={styles.root}>
       <Stack gap={5}>
         <Field label="Full name" required>
           <Input autoComplete="name" />

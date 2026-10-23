@@ -1,8 +1,9 @@
+import { assignInlineVars } from '@vanilla-extract/dynamic';
 import { Grid, Heading } from '@jsonresume/ui';
 import { radius, shadow } from '@jsonresume/ui/tokens';
 import type { Metadata } from 'next';
 import { DocSection, DocsLayout } from '@/components/docs-layout';
-import styles from '@/components/docs.module.css';
+import * as styles from '@/components/docs.css';
 import { Example } from '@/components/example';
 import { Guidelines } from '@/components/guidelines';
 
@@ -57,7 +58,7 @@ export default function ShapePage() {
               <div key={key}>
                 <div
                   className={`${styles.demoBox} ${styles.demoBorder}`}
-                  style={{ borderRadius: value }}
+                  style={assignInlineVars({ [styles.demoRadius]: value })}
                 >
                   {value}
                 </div>
@@ -74,7 +75,10 @@ export default function ShapePage() {
           <Grid minColumnWidth="8rem" gap={6}>
             {Object.entries(shadow).map(([key, value]) => (
               <div key={key}>
-                <div className={styles.demoBox} style={{ boxShadow: value }}>
+                <div
+                  className={styles.demoBox}
+                  style={assignInlineVars({ [styles.demoShadow]: value })}
+                >
                   {key}
                 </div>
                 <p className={styles.mono}>shadow.{key}</p>

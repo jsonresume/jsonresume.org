@@ -1,5 +1,6 @@
 import { Button, Link, Stack, Tooltip } from '@jsonresume/ui';
 import { Download, ExternalLink, Search } from 'lucide-react';
+import * as styles from './in-components.css';
 
 // Inside buttons, icons size to the label (1em). Icon-only buttons need an
 // aria-label; a tooltip shows the same words to sighted users.
@@ -14,10 +15,7 @@ export default function IconsInComponents() {
           <Search aria-hidden="true" />
         </Button>
       </Tooltip>
-      <Link
-        href="https://jsonresume.org"
-        style={{ display: 'inline-flex', gap: '0.3em', alignItems: 'center' }}
-      >
+      <Link href="https://jsonresume.org" className={styles.iconLink}>
         jsonresume.org <ExternalLink size={14} aria-hidden="true" />
       </Link>
     </Stack>

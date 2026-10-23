@@ -1,8 +1,9 @@
+import { assignInlineVars } from '@vanilla-extract/dynamic';
 import { Heading, Table, Td, Text, Th } from '@jsonresume/ui';
 import { font } from '@jsonresume/ui/tokens';
 import type { Metadata } from 'next';
 import { DocSection, DocsLayout } from '@/components/docs-layout';
-import styles from '@/components/docs.module.css';
+import * as styles from '@/components/docs.css';
 import { Example } from '@/components/example';
 import { Guidelines } from '@/components/guidelines';
 
@@ -101,7 +102,12 @@ export default function TypographyPage() {
                     <span className={styles.propName}>font.family.{key}</span>
                   </Td>
                   <Td>
-                    <span style={{ fontFamily: font.family[key] }}>
+                    <span
+                      className={styles.specimenText}
+                      style={assignInlineVars({
+                        [styles.specimenFamily]: font.family[key],
+                      })}
+                    >
                       {font.family[key].split(',')[0]}
                     </span>
                   </Td>
@@ -128,7 +134,10 @@ export default function TypographyPage() {
         <DocSection id="scale" title="Type scale">
           {Object.entries(font.size).map(([key, value]) => (
             <div key={key} className={styles.specimen}>
-              <span style={{ fontSize: value, lineHeight: 1.3 }}>
+              <span
+                className={styles.specimenText}
+                style={assignInlineVars({ [styles.specimenSize]: value })}
+              >
                 The quick brown fox
               </span>
               <span className={styles.mono}>
@@ -148,10 +157,11 @@ export default function TypographyPage() {
                   </Td>
                   <Td>
                     <span
-                      style={{
-                        fontWeight: Number(value),
-                        fontSize: 'var(--jr-font-size-lg)',
-                      }}
+                      className={styles.specimenText}
+                      style={assignInlineVars({
+                        [styles.specimenWeight]: value,
+                        [styles.specimenSize]: font.size.lg,
+                      })}
                     >
                       Open Sans {value}
                     </span>
