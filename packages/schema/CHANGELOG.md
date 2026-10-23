@@ -1,5 +1,12 @@
 <a id="1.0.0"></a>
 
+## 1.7.0
+
+### Minor Changes
+
+- b16c926: `publications[]` gains `authors` (in published order), `volume`, `issue`, `pages` and an open `identifiers` object (`doi`, `isbn`, `arxiv`, ...). All optional, so a minimal `{ "name": "..." }` entry stays valid. Talks use `type: "talk"` with `publisher` as the event name (#289, #305).
+- 5351df4: `references[]` gains optional `relationship`, `organization`, `date` and `availableOnRequest`. There are deliberately no contact fields, so a public resume never publishes a referee's phone or email; `availableOnRequest: true` lets a resume say "References available on request" (#291, #311).
+
 ## 1.6.0
 
 ### Minor Changes

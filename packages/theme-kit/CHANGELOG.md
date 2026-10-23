@@ -1,5 +1,11 @@
 # @jsonresume/theme-kit
 
+## 1.1.3
+
+### Patch Changes
+
+- @jsonresume/core@0.3.6
+
 ## 1.1.2
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-pro",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Pro: a typeset, single-column serif résumé theme for JSON Resume",
   "type": "module",
   "main": "./src/index.js",
