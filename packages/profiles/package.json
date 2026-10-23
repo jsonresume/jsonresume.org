@@ -1,0 +1,26 @@
+{
+  "name": "@repo/profiles",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Who /@username belongs to: usernames, ghost profiles mirrored from GitHub gists, and their store",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./sql": "./src/sql.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts,.tsx"
+  },
+  "dependencies": {
+    "@effect/sql-pg": "4.0.6",
+    "effect": "4.0.6"
+  },
+  "devDependencies": {
+    "@repo/eslint-config-custom": "workspace:*",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.6"
+  }
+}

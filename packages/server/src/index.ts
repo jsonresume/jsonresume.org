@@ -1,5 +1,6 @@
 export {
   createSiteApp,
+  type DynamicHandler,
   type MountedHandler,
   type SiteAppOptions,
 } from './siteApp';

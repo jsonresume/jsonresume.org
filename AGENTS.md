@@ -31,7 +31,7 @@ apply to the older apps.
 | Database            | `effect/sql` + `@effect/sql-pg` against our Postgres                                                                                                                                                          | supabase-js, Prisma                                             |
 | Config              | Effect `Config`                                                                                                                                                                                               | reading `process.env` directly                                  |
 | Rendering           | TanStack Router SSR (`createRequestHandler`, `RouterServer`, `RouterClient`, `HeadContent`, `Scripts`) via `@repo/ssg`: content pages prerendered through it at build time, dynamic pages rendered by it live | client-only rendering, hand-rolled SSR, TanStack Start          |
-| Tests               | Vitest, Testing Library, `@effect/vitest` for Effect code                                                                                                                                                     | Jest                                                            |
+| Tests               | Vitest, Testing Library; Effect code runs with `Effect.runPromise` and `TestClock.layer()` (`@effect/vitest` 4 needs vitest 5)                                                                                | Jest                                                            |
 
 Effect 4 ships its own guide and examples in `node_modules/effect/AGENTS.md`
 and `node_modules/effect/ai-docs/`. Read them before writing Effect code; the
@@ -57,6 +57,10 @@ package over growing an app.
 | `@repo/ssg`               | TanStack Router SSR for Vite apps: Vite manifest to router manifest, request renderer, prerendering, hydration, SSR dev server. App-agnostic. |
 | `@repo/api`               | The `HttpApi` contract: groups, endpoints, request/response schemas. Shared by server and clients; no server code.                            |
 | `@repo/server`            | A Hono app factory: static files with cache rules, the 404 page, health, and the Effect `HttpApi` mounted at `/api`.                          |
+| `@repo/profiles`          | Who `/@username` belongs to (`docs/ACCOUNTS_AND_USERNAMES.md`): usernames, ghost profiles mirrored from GitHub gists, their Postgres store.   |
+| `@repo/resume-themes`     | Renders a resume with any gallery theme, loading theme packages on first use. Run by Node from source, never bundled (see its README).        |
+| `@repo/resume-formats`    | A resume as JSON, YAML or plain text.                                                                                                         |
+| `@repo/resume-host`       | Serves `/@username`: picks the theme or format and responds, or returns the problem for the app to explain.                                   |
 
 Dependency direction: `domain` ← `content`, `api` ← `site`, feature packages ←
 `apps/app`. Packages never import from apps. `@jsonresume/ui` imports nothing

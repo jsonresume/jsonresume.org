@@ -10,6 +10,7 @@ export {
   paths,
   siteUrl,
   themeImageUrl,
+  resumeUrl,
   themePreviewUrl,
   type NavItem,
 } from './links';

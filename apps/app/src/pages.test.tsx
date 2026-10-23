@@ -53,7 +53,11 @@ describe('every page', () => {
         const target = href.replace(/\/$/, '') || '/';
         if (target.startsWith('/assets/') || target === '/favicon.svg')
           continue;
-        const ok = paths.includes(target) || existsSync(publicDir + target);
+        // Resumes (/@name) are served live, not prerendered.
+        const ok =
+          paths.includes(target) ||
+          /^\/@[a-z0-9-]+$/.test(target) ||
+          existsSync(publicDir + target);
         if (!ok) broken.push(`${path} -> ${href}`);
       }
     }

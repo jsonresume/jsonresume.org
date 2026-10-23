@@ -9,6 +9,12 @@ export interface DevServerOptions {
   root: string;
   /** Server entry, relative to root; must export `render(request): Promise<Response>`. */
   entryServer: string;
+  /**
+   * Optional module, relative to root, exporting
+   * `handle(request): Promise<Response | undefined>`: live pages tried
+   * before rendering, as the production server mounts them.
+   */
+  handlers?: string;
   port: number;
   host?: string;
 }
@@ -36,6 +42,7 @@ const toRequest = (req: IncomingMessage, origin: string) =>
 export async function startDevServer({
   root,
   entryServer,
+  handlers,
   port,
   host = '127.0.0.1',
 }: DevServerOptions) {
@@ -50,8 +57,12 @@ export async function startDevServer({
   const server = createHttpServer((req, res) => {
     vite.middlewares(req, res, async () => {
       try {
+        const request = toRequest(req, origin);
+        const live: Response | undefined = handlers
+          ? await (await vite.ssrLoadModule(`/${handlers}`)).handle(request)
+          : undefined;
         const entry = await vite.ssrLoadModule(`/${entryServer}`);
-        const response: Response = await entry.render(toRequest(req, origin));
+        const response: Response = live ?? (await entry.render(request));
         res.statusCode = response.status;
         response.headers.forEach((value, name) => res.setHeader(name, value));
         res.end(await response.text());

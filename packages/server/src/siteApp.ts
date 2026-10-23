@@ -9,11 +9,20 @@ export interface MountedHandler {
   fetch: (request: Request) => Promise<Response>;
 }
 
+/** A live page handler: answers its requests, or passes them on (undefined). */
+export interface DynamicHandler {
+  /** A Hono path pattern, e.g. '/:handle{@[^/]+}'. */
+  path: string;
+  fetch: (request: Request) => Promise<Response | undefined>;
+}
+
 export interface SiteAppOptions {
   /** Absolute path of the built client: prerendered pages and /assets. */
   clientDir: string;
   /** Handlers mounted ahead of static files, e.g. the Effect API. */
   mount?: ReadonlyArray<MountedHandler>;
+  /** Pages rendered per request, ahead of static files. */
+  dynamic?: ReadonlyArray<DynamicHandler>;
 }
 
 const HTML_CACHE = 'public, max-age=0, must-revalidate';
@@ -27,7 +36,11 @@ const hasExtension = (path: string) => /\.[a-z0-9]+$/i.test(path);
  * fingerprinted /assets are cached forever, '/schema/' redirects to
  * '/schema', and anything unknown gets the site's 404.html with status 404.
  */
-export function createSiteApp({ clientDir, mount = [] }: SiteAppOptions): Hono {
+export function createSiteApp({
+  clientDir,
+  mount = [],
+  dynamic = [],
+}: SiteAppOptions): Hono {
   // serveStatic resolves `root` against the working directory.
   const root = relative(process.cwd(), clientDir) || '.';
   const notFoundPage = readFileSync(join(clientDir, '404.html'), 'utf8');
@@ -45,6 +58,10 @@ export function createSiteApp({ clientDir, mount = [] }: SiteAppOptions): Hono {
     }
     return next();
   });
+
+  for (const { path, fetch } of dynamic) {
+    app.get(path, async (c, next) => (await fetch(c.req.raw)) ?? next());
+  }
 
   // Set after the response exists: serveStatic's onFound runs too late to
   // add headers to the response it returns.

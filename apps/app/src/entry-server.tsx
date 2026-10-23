@@ -5,6 +5,7 @@ import {
   staticPaths,
 } from '@repo/ssg/server';
 import { createAppRouter } from './router';
+import type { RouterContext } from './routes/root';
 import { postPaths } from './routes/blog';
 
 /** The client entry, as Vite's manifest keys it. */
@@ -12,7 +13,10 @@ export const clientEntry = 'src/entry-client.tsx';
 
 /** Server rendering with the built assets (prerender and the live server). */
 export const createAppRenderer = (manifest: Manifest) =>
-  createRenderer({ createRouter: createAppRouter, manifest });
+  createRenderer<ReturnType<typeof createAppRouter>, RouterContext>({
+    createRouter: createAppRouter,
+    manifest,
+  });
 
 /** Server rendering for `pnpm dev`, with Vite serving source modules. */
 export const render = createAppRenderer(devRouterManifest(clientEntry));

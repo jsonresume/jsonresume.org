@@ -13,7 +13,8 @@ import {
   themeDevelopmentRoute,
   themesRoute,
 } from './routes/pages';
-import { rootRoute } from './routes/root';
+import { resumeRoute } from './routes/resume';
+import { rootRoute, type RouterContext } from './routes/root';
 
 export const routeTree = rootRoute.addChildren([
   homeRoute,
@@ -29,11 +30,15 @@ export const routeTree = rootRoute.addChildren([
   mediaRoute,
   blogRoute,
   postRoute,
+  resumeRoute,
 ]);
 
-/** A fresh router: per request on the server, once in the browser. */
-export function createAppRouter() {
-  return createRouter({ routeTree, scrollRestoration: true });
+/**
+ * A fresh router: per request on the server (with what that request found,
+ * as context), once in the browser.
+ */
+export function createAppRouter(context: RouterContext = {}) {
+  return createRouter({ routeTree, context, scrollRestoration: true });
 }
 
 export type AppRouter = ReturnType<typeof createAppRouter>;

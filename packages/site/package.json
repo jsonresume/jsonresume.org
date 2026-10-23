@@ -17,7 +17,8 @@
     "./cli": "./src/pages/cli/CliPage.tsx",
     "./ai": "./src/pages/ai/AiPage.tsx",
     "./theme-development": "./src/pages/theme-development/ThemeDevelopmentPage.tsx",
-    "./media": "./src/pages/media/MediaPage.tsx"
+    "./media": "./src/pages/media/MediaPage.tsx",
+    "./resume-unavailable": "./src/pages/resume/ResumeUnavailablePage.tsx"
   },
   "scripts": {
     "test": "vitest run",

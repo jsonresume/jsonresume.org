@@ -1,17 +1,37 @@
 /**
  * The jsonresume.org server: Hono serves the prerendered site from
- * dist/client and mounts the Effect API at /api. Runs as jsonresume@app
- * behind Caddy; `vite build --ssr server/index.ts` bundles it.
+ * dist/client, resumes at /@username (rendered live, with profiles in
+ * Postgres) and the Effect API at /api. Runs as jsonresume@app behind Caddy;
+ * `vite build --ssr server/index.ts` bundles it.
  */
 import { serve } from '@hono/node-server';
 import { NodeRuntime } from '@effect/platform-node';
+import { PgProfileStoreLive } from '@repo/profiles/sql';
 import { createSiteApp, effectWebHandler } from '@repo/server';
 import { Config, Effect } from 'effect';
+import { readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { apiLayer } from './api';
+import { createResumeHandler, liveProfiles, resumePath } from './resumes';
 
-const clientDir = join(dirname(fileURLToPath(import.meta.url)), '../client');
+type ServerEntry = typeof import('../src/entry-server');
+
+const distDir = join(dirname(fileURLToPath(import.meta.url)), '..');
+const clientDir = join(distDir, 'client');
+
+/** The SSR build's renderer, with the client build's assets. */
+const loadRenderer = Effect.promise(async () => {
+  const entry: ServerEntry = await import(
+    pathToFileURL(join(distDir, 'ssr/entry-server.js')).href
+  );
+  const vite = JSON.parse(
+    await readFile(join(clientDir, '.vite/manifest.json'), 'utf8')
+  );
+  return entry.createAppRenderer(
+    entry.routerManifestFromVite(vite, entry.clientEntry)
+  );
+});
 
 const main = Effect.gen(function* () {
   const port = yield* Config.Port('PORT').pipe(Config.withDefault(3003));
@@ -26,9 +46,20 @@ const main = Effect.gen(function* () {
     Effect.sync(() => effectWebHandler(apiLayer(version))),
     (handler) => Effect.promise(() => handler.dispose())
   );
+  const render = yield* loadRenderer;
+  const resumes = yield* Effect.acquireRelease(
+    Effect.sync(() =>
+      createResumeHandler(
+        (request, context) => render(request, context),
+        liveProfiles(PgProfileStoreLive)
+      )
+    ),
+    (handler) => Effect.promise(() => handler.dispose())
+  );
   const app = createSiteApp({
     clientDir,
     mount: [{ prefix: '/api', fetch: api.handler }],
+    dynamic: [{ path: resumePath, fetch: resumes.fetch }],
   });
 
   yield* Effect.acquireRelease(

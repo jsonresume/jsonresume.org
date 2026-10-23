@@ -1,7 +1,8 @@
 import { base } from '@jsonresume/ui';
+import type { ResumeProblem } from '@repo/domain';
 import { NotFoundPage, SiteLayout } from '@repo/site';
 import {
-  createRootRoute,
+  createRootRouteWithContext,
   HeadContent,
   Outlet,
   Scripts,
@@ -23,7 +24,13 @@ function RootDocument() {
   );
 }
 
-export const rootRoute = createRootRoute({
+/** What the server hands a live render; empty when prerendering. */
+export interface RouterContext {
+  /** Set when /@username has no resume to show (see ./resume.tsx). */
+  resumeProblem?: ResumeProblem;
+}
+
+export const rootRoute = createRootRouteWithContext<RouterContext>()({
   head: () => ({
     meta: [
       { charSet: 'utf-8' },

@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 const { url } = await startDevServer({
   root: join(dirname(fileURLToPath(import.meta.url)), '..'),
   entryServer: 'src/entry-server.tsx',
+  handlers: 'server/dev.ts',
   port: Number(process.env.PORT ?? 5173),
 });
 process.stdout.write(`dev server on ${url}\n`);

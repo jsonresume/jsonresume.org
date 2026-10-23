@@ -33,6 +33,15 @@ afterAll(() => api.dispose());
 const app = createSiteApp({
   clientDir: dir,
   mount: [{ prefix: '/api', fetch: api.handler }],
+  dynamic: [
+    {
+      path: '/:handle{@[^/]+}',
+      fetch: async (request) =>
+        request.url.endsWith('/@known')
+          ? new Response('live', { headers: { 'cache-control': 'no-store' } })
+          : undefined,
+    },
+  ],
 });
 const get = (path: string) => app.request(path);
 
@@ -71,5 +80,13 @@ describe('createSiteApp', () => {
     expect(await res.json()).toEqual({ pong: true });
     // API responses decide their own caching; the static cache rules stay out.
     expect(res.headers.get('cache-control')).toBeNull();
+  });
+
+  it('answers live pages, or passes them on to the 404', async () => {
+    const res = await get('/@known');
+    expect(await res.text()).toBe('live');
+    expect(res.headers.get('cache-control')).toBe('no-store');
+    expect((await get('/@unknown')).status).toBe(404);
+    expect((await get('/@known/')).headers.get('location')).toBe('/@known');
   });
 });

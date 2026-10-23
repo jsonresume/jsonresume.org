@@ -177,6 +177,15 @@ importers:
       '@repo/domain':
         specifier: workspace:*
         version: link:../../packages/domain
+      '@repo/profiles':
+        specifier: workspace:^
+        version: link:../../packages/profiles
+      '@repo/resume-host':
+        specifier: workspace:^
+        version: link:../../packages/resume-host
+      '@repo/resume-themes':
+        specifier: workspace:^
+        version: link:../../packages/resume-themes
       '@repo/server':
         specifier: workspace:*
         version: link:../../packages/server
@@ -243,7 +252,7 @@ importers:
         version: 5.9.3
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -1034,7 +1043,7 @@ importers:
         version: 5.9.3
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -1139,6 +1148,28 @@ importers:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
 
+  packages/profiles:
+    dependencies:
+      '@effect/sql-pg':
+        specifier: 4.0.6
+        version: 4.0.6(effect@4.0.6)
+      effect:
+        specifier: 4.0.6
+        version: 4.0.6
+    devDependencies:
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+
   packages/project-directory:
     dependencies:
       '@effect/atom-react':
@@ -1198,7 +1229,7 @@ importers:
         version: 5.9.3
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -1244,7 +1275,295 @@ importers:
         version: 5.9.3
       vite:
         specifier: 6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+
+  packages/resume-formats:
+    dependencies:
+      effect:
+        specifier: 4.0.6
+        version: 4.0.6
+      yaml:
+        specifier: ^2.8.3
+        version: 2.9.0
+    devDependencies:
+      '@jsonresume/sample-data':
+        specifier: workspace:*
+        version: link:../sample-data
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(yaml@2.9.0)
+
+  packages/resume-host:
+    dependencies:
+      '@repo/domain':
+        specifier: workspace:*
+        version: link:../domain
+      '@repo/profiles':
+        specifier: workspace:*
+        version: link:../profiles
+      '@repo/resume-formats':
+        specifier: workspace:*
+        version: link:../resume-formats
+      '@repo/resume-themes':
+        specifier: workspace:*
+        version: link:../resume-themes
+      effect:
+        specifier: 4.0.6
+        version: 4.0.6
+    devDependencies:
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      '@types/node':
+        specifier: ^20.19.24
+        version: 20.19.24
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+
+  packages/resume-themes:
+    dependencies:
+      '@jsonresume/jsonresume-theme-consultant-polished':
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-consultant-polished
+      '@jsonresume/jsonresume-theme-creative-studio':
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-creative-studio
+      '@jsonresume/jsonresume-theme-professional':
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-professional
+      '@jsonresume/jsonresume-theme-tokyo-modernist':
+        specifier: workspace:^
+        version: link:../themes/jsonresume-theme-tokyo-modernist
+      '@jsonresume/theme-stackoverflow':
+        specifier: ^2
+        version: link:../themes/stackoverflow
+      '@jsonresume/utils':
+        specifier: workspace:*
+        version: link:../utils
+      effect:
+        specifier: 4.0.6
+        version: 4.0.6
+      jsonresume-theme-academic-cv-lite:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-academic-cv-lite
+      jsonresume-theme-architects-portfolio:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-architects-portfolio
+      jsonresume-theme-art-deco:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-art-deco
+      jsonresume-theme-art-school-modern:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-art-school-modern
+      jsonresume-theme-asymmetric-timeline:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-asymmetric-timeline
+      jsonresume-theme-berlin-grid:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-berlin-grid
+      jsonresume-theme-bold-header-statement:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-bold-header-statement
+      jsonresume-theme-brutalist:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-brutalist
+      jsonresume-theme-californian-warm:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-californian-warm
+      jsonresume-theme-claude:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-claude
+      jsonresume-theme-clinical-precision:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-clinical-precision
+      jsonresume-theme-coastal-creative:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-coastal-creative
+      jsonresume-theme-colophon:
+        specifier: ^0.2.0
+        version: 0.2.0
+      jsonresume-theme-community-garden:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-community-garden
+      jsonresume-theme-creative-confidence:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-creative-confidence
+      jsonresume-theme-data-driven:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-data-driven
+      jsonresume-theme-desert-modern:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-desert-modern
+      jsonresume-theme-developer-mono:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-developer-mono
+      jsonresume-theme-diagonal-accent-bar:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-diagonal-accent-bar
+      jsonresume-theme-elegant:
+        specifier: ^1.16.1
+        version: 1.16.1
+      jsonresume-theme-elegant-pink:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-elegant-pink
+      jsonresume-theme-even:
+        specifier: ^0.18.1
+        version: 0.18.1
+      jsonresume-theme-executive-slate:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-executive-slate
+      jsonresume-theme-field-researcher:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-field-researcher
+      jsonresume-theme-flat:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-flat
+      jsonresume-theme-french-atelier:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-french-atelier
+      jsonresume-theme-government-standard:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-government-standard
+      jsonresume-theme-graph-paper-grid:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-graph-paper-grid
+      jsonresume-theme-industrial-engineer:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-industrial-engineer
+      jsonresume-theme-investor-brief:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-investor-brief
+      jsonresume-theme-jacrys:
+        specifier: ^1.0.4
+        version: 1.0.4
+      jsonresume-theme-kendall:
+        specifier: ^0.2.0
+        version: 0.2.0
+      jsonresume-theme-london-bureau:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-london-bureau
+      jsonresume-theme-lucide:
+        specifier: ^1.0.1
+        version: 1.1.0
+      jsonresume-theme-macchiato:
+        specifier: ^1.1.0
+        version: 1.1.0
+      jsonresume-theme-marketing-narrative:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-marketing-narrative
+      jsonresume-theme-mid-century-resume:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-mid-century-resume
+      jsonresume-theme-minimalist-grid:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-minimalist-grid
+      jsonresume-theme-minyma:
+        specifier: ^0.0.5
+        version: 0.0.5
+      jsonresume-theme-modern-classic:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-modern-classic
+      jsonresume-theme-monochrome-noir:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-monochrome-noir
+      jsonresume-theme-new-york-editorial:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-new-york-editorial
+      jsonresume-theme-nordic-minimal:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-nordic-minimal
+      jsonresume-theme-operations-precision:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-operations-precision
+      jsonresume-theme-pacific-horizon:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-pacific-horizon
+      jsonresume-theme-paper-plus-plus:
+        specifier: ^0.5.1
+        version: 0.5.1
+      jsonresume-theme-pro:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-pro
+      jsonresume-theme-product-manager-canvas:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-product-manager-canvas
+      jsonresume-theme-pumpkin:
+        specifier: ^1.1.4
+        version: 1.1.4
+      jsonresume-theme-reference:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-reference
+      jsonresume-theme-rickosborne:
+        specifier: 2022.9.16-T1450
+        version: 2022.9.16-T1450
+      jsonresume-theme-sales-hunter:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-sales-hunter
+      jsonresume-theme-sidebar:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-sidebar
+      jsonresume-theme-sidebar-photo-strip:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-sidebar-photo-strip
+      jsonresume-theme-tailwind:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-tailwind
+      jsonresume-theme-tan-responsive:
+        specifier: ^0.0.7
+        version: 0.0.7
+      jsonresume-theme-two-column:
+        specifier: ^0.2.0
+        version: 0.2.0
+      jsonresume-theme-two-column-modernist:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-two-column-modernist
+      jsonresume-theme-typewriter-modern:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-typewriter-modern
+      jsonresume-theme-university-first:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-university-first
+      jsonresume-theme-urban-techno:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-urban-techno
+      jsonresume-theme-writers-portfolio:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-writers-portfolio
+    devDependencies:
+      '@jsonresume/sample-data':
+        specifier: workspace:*
+        version: link:../sample-data
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      '@types/node':
+        specifier: ^20.19.24
+        version: 20.19.24
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -1326,7 +1645,7 @@ importers:
         version: 5.9.3
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -1433,7 +1752,7 @@ importers:
         version: 5.9.3
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -1472,7 +1791,7 @@ importers:
         version: 5.9.3
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -1552,7 +1871,7 @@ importers:
         version: 5.9.3
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -1602,7 +1921,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-architects-portfolio:
     dependencies:
@@ -1624,7 +1943,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-art-deco:
     dependencies:
@@ -1646,7 +1965,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-art-school-modern:
     dependencies:
@@ -1668,7 +1987,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-asymmetric-timeline:
     dependencies:
@@ -1690,7 +2009,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-berlin-grid:
     dependencies:
@@ -1712,7 +2031,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-bold-header-statement:
     dependencies:
@@ -1734,7 +2053,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-brutalist:
     dependencies:
@@ -1756,7 +2075,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-californian-warm:
     dependencies:
@@ -1778,7 +2097,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-claude:
     dependencies:
@@ -1809,7 +2128,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-coastal-creative:
     dependencies:
@@ -1831,7 +2150,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-community-garden:
     dependencies:
@@ -1853,7 +2172,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-consultant-polished:
     dependencies:
@@ -1881,7 +2200,7 @@ importers:
         version: 6.1.19(react-dom@19.2.7)(react@19.2.7)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-creative-confidence:
     dependencies:
@@ -1918,7 +2237,7 @@ importers:
         version: 6.1.19(react-dom@19.2.7)(react@19.2.7)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-data-driven:
     dependencies:
@@ -1940,7 +2259,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -1971,7 +2290,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -1996,7 +2315,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-diagonal-accent-bar:
     dependencies:
@@ -2018,7 +2337,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-elegant-pink:
     dependencies:
@@ -2046,7 +2365,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -2071,7 +2390,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-field-researcher:
     dependencies:
@@ -2093,7 +2412,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-flat:
     dependencies:
@@ -2121,7 +2440,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-government-standard:
     dependencies:
@@ -2143,7 +2462,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-graph-paper-grid:
     dependencies:
@@ -2165,7 +2484,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-industrial-engineer:
     dependencies:
@@ -2187,7 +2506,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-investor-brief:
     dependencies:
@@ -2209,7 +2528,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-london-bureau:
     dependencies:
@@ -2231,7 +2550,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-marketing-narrative:
     dependencies:
@@ -2253,7 +2572,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-mid-century-resume:
     dependencies:
@@ -2275,7 +2594,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-minimalist-grid:
     dependencies:
@@ -2297,7 +2616,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-modern-classic:
     dependencies:
@@ -2319,7 +2638,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-monochrome-noir:
     dependencies:
@@ -2341,7 +2660,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-new-york-editorial:
     dependencies:
@@ -2363,7 +2682,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-nordic-minimal:
     dependencies:
@@ -2385,7 +2704,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-operations-precision:
     dependencies:
@@ -2410,7 +2729,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-pacific-horizon:
     dependencies:
@@ -2432,7 +2751,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-pro:
     devDependencies:
@@ -2469,7 +2788,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-professional:
     dependencies:
@@ -2500,7 +2819,7 @@ importers:
         version: 6.1.19(react-dom@19.2.7)(react@19.2.7)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-reference:
     dependencies:
@@ -2522,7 +2841,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -2547,7 +2866,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-sidebar:
     dependencies:
@@ -2575,7 +2894,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -2600,7 +2919,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-tailwind:
     dependencies:
@@ -2655,7 +2974,7 @@ importers:
         version: 3.4.18
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -2698,7 +3017,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -2729,7 +3048,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -2754,7 +3073,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-university-first:
     dependencies:
@@ -2776,7 +3095,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-urban-techno:
     dependencies:
@@ -2798,7 +3117,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-writers-portfolio:
     dependencies:
@@ -2826,7 +3145,7 @@ importers:
         version: 4.7.0(vite@6.4.3)
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -3103,7 +3422,7 @@ importers:
         version: 5.9.3
       vite:
         specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -5344,6 +5663,14 @@ packages:
       - utf-8-validate
     dev: false
 
+  /@effect/sql-pg@4.0.6(effect@4.0.6):
+    resolution: {integrity: sha512-mh2Z+Hi1/AWtkoGuzub2PPCHN7ZsMAbY8dlv/YbdJ6PoXVdrVAGsr+FeeoeD6f0rdnln4DQm7PvFjv1htAjY9w==}
+    peerDependencies:
+      effect: ^4.0.6
+    dependencies:
+      effect: 4.0.6
+    dev: false
+
   /@effect/vitest@4.0.6(effect@4.0.6)(vitest@3.2.6):
     resolution: {integrity: sha512-oKNbtyUHK5+0o730CXwojULEu7f3+c235pYFD4U5T//o+hHrJbYbZU4bRkcv936tPr5IOnmujeyQiC/LuJJjHw==}
     peerDependencies:
@@ -6819,7 +7146,7 @@ packages:
       magic-string: 0.27.0
       react-docgen-typescript: 2.4.0(typescript@5.9.3)
       typescript: 5.9.3
-      vite: 6.4.3(@types/node@20.19.24)
+      vite: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
     dev: true
 
   /@joshwooding/vite-plugin-react-docgen-typescript@0.6.1(typescript@5.9.3)(vite@6.4.3):
@@ -6835,7 +7162,7 @@ packages:
       magic-string: 0.30.21
       react-docgen-typescript: 2.4.0(typescript@5.9.3)
       typescript: 5.9.3
-      vite: 6.4.3(@types/node@20.19.24)
+      vite: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
     dev: true
 
   /@jridgewell/gen-mapping@0.3.13:
@@ -10943,7 +11270,7 @@ packages:
       browser-assert: 1.2.1
       storybook: 8.6.17(prettier@2.8.8)
       ts-dedent: 2.2.0
-      vite: 6.4.3(@types/node@20.19.24)
+      vite: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
     dev: true
 
   /@storybook/builder-vite@9.1.17(storybook@9.1.20)(vite@6.4.3):
@@ -10955,7 +11282,7 @@ packages:
       '@storybook/csf-plugin': 9.1.17(storybook@9.1.20)
       storybook: 9.1.20(@testing-library/dom@10.4.1)(prettier@2.8.8)(vite@6.4.3)
       ts-dedent: 2.2.0
-      vite: 6.4.3(@types/node@20.19.24)
+      vite: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
     dev: true
 
   /@storybook/builder-webpack5@8.6.14(esbuild@0.25.12)(postcss@8.5.23)(storybook@8.6.17)(typescript@5.9.3):
@@ -11331,7 +11658,7 @@ packages:
       resolve: 1.22.11
       storybook: 8.6.17(prettier@2.8.8)
       tsconfig-paths: 4.2.0
-      vite: 6.4.3(@types/node@20.19.24)
+      vite: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
     transitivePeerDependencies:
       - rollup
       - supports-color
@@ -11359,7 +11686,7 @@ packages:
       resolve: 1.22.11
       storybook: 9.1.20(@testing-library/dom@10.4.1)(prettier@2.8.8)(vite@6.4.3)
       tsconfig-paths: 4.2.0
-      vite: 6.4.3(@types/node@20.19.24)
+      vite: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
     transitivePeerDependencies:
       - rollup
       - supports-color
@@ -13262,8 +13589,8 @@ packages:
     dependencies:
       '@vanilla-extract/css': 1.21.3
       '@vanilla-extract/integration': 8.0.11
-      vite: 6.4.3(@types/node@20.19.24)
-      vite-node: 3.2.4(@types/node@20.19.24)
+      vite: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vite-node: 3.2.4(@types/node@20.19.24)(yaml@2.9.0)
     transitivePeerDependencies:
       - '@types/node'
       - babel-plugin-macros
@@ -13392,7 +13719,7 @@ packages:
     dependencies:
       '@vanilla-extract/compiler': 0.7.2(@types/node@20.19.24)
       '@vanilla-extract/integration': 8.0.11
-      vite: 6.4.3(@types/node@20.19.24)
+      vite: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
     transitivePeerDependencies:
       - '@types/node'
       - babel-plugin-macros
@@ -13514,7 +13841,7 @@ packages:
       '@rolldown/pluginutils': 1.0.0-beta.27
       '@types/babel__core': 7.20.5
       react-refresh: 0.17.0
-      vite: 6.4.3(@types/node@20.19.24)
+      vite: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -13589,7 +13916,7 @@ packages:
       '@vitest/spy': 3.2.4
       estree-walker: 3.0.3
       magic-string: 0.30.21
-      vite: 6.4.3(@types/node@20.19.24)
+      vite: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
     dev: true
 
   /@vitest/mocker@3.2.6(vite@6.4.3):
@@ -13606,7 +13933,7 @@ packages:
       '@vitest/spy': 3.2.6
       estree-walker: 3.0.3
       magic-string: 0.30.21
-      vite: 6.4.3(@types/node@20.19.24)
+      vite: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
     dev: true
 
   /@vitest/pretty-format@2.0.5:
@@ -25480,6 +25807,7 @@ packages:
   /resume-schema@1.0.0:
     resolution: {integrity: sha512-9ZEP3oO1IRrjQWTOfDq7fDNNeJp7gWqfS/l2D02f6f25nRw/wRAkpDyvIlw9uoaDARK7Ebj/CN2D/6Ht27S0zg==}
     engines: {node: '>=10'}
+    deprecated: Schema moved to @jsonresume/schema (current spec). This legacy package stays published for compatibility.
     dependencies:
       z-schema: 4.2.4
     dev: false
@@ -28058,7 +28386,7 @@ packages:
       d3-timer: 3.0.1
     dev: false
 
-  /vite-node@3.2.4(@types/node@20.19.24):
+  /vite-node@3.2.4(@types/node@20.19.24)(yaml@2.9.0):
     resolution: {integrity: sha512-EbKSKh+bh1E1IFxeO0pg1n4dvoOTt0UDiXMd/qn++r98+jPO1xtJilvXldeuQ8giIB5IkpjCgMleHMNEsGH6pg==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
     hasBin: true
@@ -28067,7 +28395,7 @@ packages:
       debug: 4.4.3
       es-module-lexer: 1.7.0
       pathe: 2.0.3
-      vite: 6.4.3(@types/node@20.19.24)
+      vite: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
     transitivePeerDependencies:
       - '@types/node'
       - jiti
@@ -28124,7 +28452,7 @@ packages:
         optional: true
     dependencies:
       '@types/node': 18.19.130
-      esbuild: 0.25.11
+      esbuild: 0.25.12
       fdir: 6.5.0(picomatch@4.0.4)
       picomatch: 4.0.4
       postcss: 8.5.23
@@ -28134,7 +28462,7 @@ packages:
       fsevents: 2.3.3
     dev: true
 
-  /vite@6.4.3(@types/node@20.19.24):
+  /vite@6.4.3(@types/node@20.19.24)(yaml@2.9.0):
     resolution: {integrity: sha512-NTKlcQjlAK7MlQoyb6LgaqHc8sso/pVyUJYWMws3jg21uTJw/LddqIFPcPqP6PzpgbIcZyKI85sFE4HBrQDA8A==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
     hasBin: true
@@ -28175,12 +28503,13 @@ packages:
         optional: true
     dependencies:
       '@types/node': 20.19.24
-      esbuild: 0.25.11
+      esbuild: 0.25.12
       fdir: 6.5.0(picomatch@4.0.4)
       picomatch: 4.0.4
       postcss: 8.5.23
       rollup: 4.62.0
       tinyglobby: 0.2.16
+      yaml: 2.9.0
     optionalDependencies:
       fsevents: 2.3.3
     dev: true
@@ -28236,8 +28565,75 @@ packages:
       tinyglobby: 0.2.16
       tinypool: 1.1.1
       tinyrainbow: 2.0.0
-      vite: 6.4.3(@types/node@20.19.24)
-      vite-node: 3.2.4(@types/node@20.19.24)
+      vite: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vite-node: 3.2.4(@types/node@20.19.24)(yaml@2.9.0)
+      why-is-node-running: 2.3.0
+    transitivePeerDependencies:
+      - jiti
+      - less
+      - lightningcss
+      - msw
+      - sass
+      - sass-embedded
+      - stylus
+      - sugarss
+      - supports-color
+      - terser
+      - tsx
+      - yaml
+    dev: true
+
+  /vitest@3.2.6(@types/node@20.19.24)(yaml@2.9.0):
+    resolution: {integrity: sha512-xejya+bT/j/+R/AGa1XOfRxLmNUlLtlwjRsFUILF+xHfzElmGcmFydy2gqqIrd62ptIEfwVMofd19uNWD9L7Nw==}
+    engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
+    hasBin: true
+    peerDependencies:
+      '@edge-runtime/vm': '*'
+      '@types/debug': ^4.1.12
+      '@types/node': ^18.0.0 || ^20.0.0 || >=22.0.0
+      '@vitest/browser': 3.2.6
+      '@vitest/ui': 3.2.6
+      happy-dom: '*'
+      jsdom: '*'
+    peerDependenciesMeta:
+      '@edge-runtime/vm':
+        optional: true
+      '@types/debug':
+        optional: true
+      '@types/node':
+        optional: true
+      '@vitest/browser':
+        optional: true
+      '@vitest/ui':
+        optional: true
+      happy-dom:
+        optional: true
+      jsdom:
+        optional: true
+    dependencies:
+      '@types/chai': 5.2.3
+      '@types/node': 20.19.24
+      '@vitest/expect': 3.2.6
+      '@vitest/mocker': 3.2.6(vite@6.4.3)
+      '@vitest/pretty-format': 3.2.6
+      '@vitest/runner': 3.2.6
+      '@vitest/snapshot': 3.2.6
+      '@vitest/spy': 3.2.6
+      '@vitest/utils': 3.2.6
+      chai: 5.3.3
+      debug: 4.4.3
+      expect-type: 1.2.2
+      magic-string: 0.30.21
+      pathe: 2.0.3
+      picomatch: 4.0.4
+      std-env: 3.10.0
+      tinybench: 2.9.0
+      tinyexec: 0.3.2
+      tinyglobby: 0.2.16
+      tinypool: 1.1.1
+      tinyrainbow: 2.0.0
+      vite: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vite-node: 3.2.4(@types/node@20.19.24)(yaml@2.9.0)
       why-is-node-running: 2.3.0
     transitivePeerDependencies:
       - jiti
@@ -28719,7 +29115,6 @@ packages:
     resolution: {integrity: sha512-2AvhNX3mb8zd6Zy7INTtSpl1F15HW6Wnqj0srWlkKLcpYl/gMIMJiyuGq2KeI2YFxUPjdlB+3Lc10seMLtL4cA==}
     engines: {node: '>= 14.6'}
     hasBin: true
-    dev: true
 
   /yargs-parser@18.1.3:
     resolution: {integrity: sha512-o50j0JeToy/4K6OZcaQmW6lyXXKhq7csREXcDwk2omFPJEwUNOVtJKvmDr9EI1fAJZUyZcRF7kxGBWmRXudrCQ==}

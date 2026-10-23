@@ -8,12 +8,19 @@ export default defineConfig({
     // The client build starts from the entry, not an index.html (the root
     // route renders the document), and writes the manifest prerender reads.
     manifest: true,
-    rollupOptions: { input: 'src/entry-client.tsx' },
+    rollupOptions: {
+      input: 'src/entry-client.tsx',
+      // Node loads resume-themes at runtime (see ssr below). Vite never
+      // externalizes a linked workspace package itself, so Rollup is told.
+      external: ['@repo/resume-themes'],
+    },
   },
   ssr: {
     // Workspace packages ship TypeScript source and CSS imports, so the
     // server and prerender builds bundle them instead of asking Node to.
-    noExternal: ['@jsonresume/ui', /^@repo\//],
+    // Except resume-themes: Node loads it at runtime, so each theme package
+    // resolves from its own node_modules and keeps its template files.
+    noExternal: ['@jsonresume/ui', /^@repo\/(?!resume-themes)/],
   },
   test: {
     environment: 'jsdom',

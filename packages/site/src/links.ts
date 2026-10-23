@@ -24,9 +24,13 @@ export const external = {
     'https://github.com/jsonresume/jsonresume.org/blob/master/CONTRIBUTING.md',
 } as const;
 
-/** Live preview of a theme, rendered from a real resume on the registry. */
+/** A resume's page on this site; `extension` for json, yaml or txt. */
+export const resumeUrl = (username: string, extension?: string) =>
+  extension ? `/@${username}.${extension}` : `/@${username}`;
+
+/** Live preview of a theme, rendered from a real resume hosted here. */
 export const themePreviewUrl = (slug: string) =>
-  `${external.registry}/thomasdavis?theme=${encodeURIComponent(slug)}`;
+  `${resumeUrl('thomasdavis')}?theme=${encodeURIComponent(slug)}`;
 
 /** Screenshot of a theme, served by the app from public/img/themes. */
 export const themeImageUrl = (slug: string) => `/img/themes/${slug}.webp`;
