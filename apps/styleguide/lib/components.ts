@@ -1271,6 +1271,111 @@ export const componentDocs: ComponentDoc[] = [
       'The iframe has a title; scripts are off unless allowScripts is set.',
     ],
   },
+  {
+    slug: 'panel',
+    name: 'Panel',
+    group: 'Layout',
+    summary:
+      'A bounded work area: header with actions, scrolling body, footer with actions.',
+    components: ['Panel'],
+    examples: [{ id: 'job', title: 'Job details panel' }],
+    accessibility: [
+      'A region named by its heading; set headingLevel to fit the outline.',
+    ],
+  },
+  {
+    slug: 'toolbar',
+    name: 'Toolbar',
+    group: 'Actions',
+    summary: 'A row of grouped controls for an editor or view.',
+    components: [
+      'Toolbar',
+      'ToolbarButton',
+      'ToolbarToggleGroup',
+      'ToolbarToggleItem',
+    ],
+    examples: [{ id: 'editor', title: 'Resume editor' }],
+    accessibility: [
+      'One Tab stop: arrow keys move between controls (roving focus).',
+      'Icon-only buttons need aria-label.',
+    ],
+  },
+  {
+    slug: 'split-view',
+    name: 'Split view',
+    group: 'Layout',
+    summary: 'Resizable panes side by side, stacked on small screens.',
+    components: ['SplitView'],
+    examples: [{ id: 'editor', title: 'Editor and preview', block: true }],
+    accessibility: [
+      'Separators follow the ARIA window-splitter pattern: focusable, with the size as aria-valuenow.',
+      'Arrow keys resize (Shift for larger steps); Home and End go to the limits.',
+    ],
+  },
+  {
+    slug: 'virtual-list',
+    name: 'Virtual list',
+    group: 'Layout',
+    summary: 'Renders only the rows in view, for very long lists.',
+    components: ['VirtualList'],
+    examples: [{ id: 'log', title: '5,000 rows', block: true }],
+    accessibility: [
+      'Rows keep aria-setsize and aria-posinset so their position in the full list is known.',
+      'The scroll region is focusable and labelled.',
+    ],
+  },
+  {
+    slug: 'shortcuts',
+    name: 'Keyboard shortcuts',
+    group: 'Navigation',
+    summary:
+      'Register shortcuts with useShortcut and list them in a help dialog opened with ?.',
+    components: ['ShortcutHelp'],
+    examples: [
+      { id: 'help', title: 'J / K navigation and ? help', block: true },
+    ],
+    guidelines: {
+      do: [
+        'Use single keys only where focus is not in a text field.',
+        'List every shortcut in the help dialog.',
+      ],
+      dont: ['Override browser or screen-reader shortcuts.'],
+    },
+    accessibility: [
+      'Single-key shortcuts are ignored while typing in a field.',
+      'Keys are shown for the platform (⌘ on Mac, Ctrl elsewhere).',
+    ],
+  },
+  {
+    slug: 'swipe-deck',
+    name: 'Swipe deck',
+    group: 'Data display',
+    summary: 'Decide on cards one at a time: drag, buttons or arrow keys.',
+    components: ['SwipeDeck'],
+    examples: [{ id: 'jobs', title: 'Job matches', block: true }],
+    accessibility: [
+      'Every decision has a button; dragging is never the only way.',
+      'The deck is focusable, arrow keys decide, and decisions are announced.',
+    ],
+  },
+  {
+    slug: 'graph-kit',
+    name: 'Graph kit',
+    group: 'Data display',
+    summary:
+      'The frame around a graph engine: a labelled region, zoom controls, legend and node details.',
+    components: [
+      'GraphRegion',
+      'GraphControls',
+      'GraphLegend',
+      'GraphNodeCard',
+    ],
+    examples: [{ id: 'similarity', title: 'Job similarity', block: true }],
+    accessibility: [
+      'The region is labelled and described; controls are labelled buttons.',
+      'Node details update politely; make nodes focusable in the engine where possible.',
+    ],
+  },
 ];
 
 export const componentGroups: ComponentGroup[] = [
