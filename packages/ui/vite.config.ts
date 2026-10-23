@@ -23,7 +23,7 @@ export default defineConfig({
     },
     rollupOptions: {
       external: (id) =>
-        /^(react|react-dom|@radix-ui|@vanilla-extract\/recipes\/createRuntimeFn)/.test(
+        /^(react|react-dom|@radix-ui|@codemirror|@uiw|@vanilla-extract\/recipes\/createRuntimeFn)/.test(
           id
         ),
       output: {

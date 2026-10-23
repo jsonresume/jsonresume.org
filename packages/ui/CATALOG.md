@@ -33,18 +33,18 @@ looks today: each one will be designed fresh in the jsonresume.org style.
 
 ## Inputs
 
-| Component                  | What it does                                                               | Uses                                                                 | Have                              | Priority |
-| -------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------- | --------------------------------- | -------- |
-| **Search field**           | Text search with icon, clear button and debounced change                   | Job board, explore resumes, both graph control bars                  | Input (plain)                     | P1       |
-| **Filter bar**             | Several facet filters together, with active-filter chips and reset         | Job board filters (type, experience, location, salary, company)      | Select                            | P1       |
-| **Segmented control**      | Pick one of a few modes in place (Form / JSON / AI)                        | Resume editor toolbar mode selector                                  | Tabs (switches panels, not modes) | P1       |
-| **Tag input**              | Add and remove short values as chips (skills, keywords, highlights)        | Resume editor skill and keyword fields                               | Badge (display only)              | P1       |
-| **Range slider**           | Choose a value or a min–max range, optionally over a distribution          | Salary histogram slider; graph thresholds; decision criteria weights | –                                 | P2       |
-| **Combobox**               | A select you can type into, with filtering, for long option lists          | Editor and letter form selects                                       | Select (native)                   | P2       |
-| **File drop zone**         | Drag-and-drop or browse to upload, with progress and errors                | Pathways resume upload                                               | –                                 | P2       |
-| **Repeatable field group** | Add, remove and reorder entries of one shape (work, education, profiles)   | Resume editor sections                                               | Field (single control)            | P2       |
-| **Chat composer**          | Multi-line message input with send, Enter-to-send and optional voice input | AI editor chat; Pathways copilot                                     | Textarea                          | P2       |
-| **Code editor**            | JSON editing with schema validation, errors and formatting                 | Resume editor JSON mode; JSON page; Pathways editor tab              | CodeBlock (read-only)             | P3       |
+| Component                     | What it does                                                               | Uses                                                                 | Have                              | Priority |
+| ----------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------- | --------------------------------- | -------- |
+| ✅ **Search field**           | Text search with icon, clear button and debounced change                   | Job board, explore resumes, both graph control bars                  | Input (plain)                     | P1       |
+| ✅ **Filter bar**             | Several facet filters together, with active-filter chips and reset         | Job board filters (type, experience, location, salary, company)      | Select                            | P1       |
+| ✅ **Segmented control**      | Pick one of a few modes in place (Form / JSON / AI)                        | Resume editor toolbar mode selector                                  | Tabs (switches panels, not modes) | P1       |
+| ✅ **Tag input**              | Add and remove short values as chips (skills, keywords, highlights)        | Resume editor skill and keyword fields                               | Badge (display only)              | P1       |
+| ✅ **Range slider**           | Choose a value or a min–max range, optionally over a distribution          | Salary histogram slider; graph thresholds; decision criteria weights | –                                 | P2       |
+| ✅ **Combobox**               | A select you can type into, with filtering, for long option lists          | Editor and letter form selects                                       | Select (native)                   | P2       |
+| ✅ **File drop zone**         | Drag-and-drop or browse to upload, with progress and errors                | Pathways resume upload                                               | –                                 | P2       |
+| ✅ **Repeatable field group** | Add, remove and reorder entries of one shape (work, education, profiles)   | Resume editor sections                                               | Field (single control)            | P2       |
+| ✅ **Chat composer**          | Multi-line message input with send, Enter-to-send and optional voice input | AI editor chat; Pathways copilot                                     | Textarea                          | P2       |
+| ✅ **Code editor**            | JSON editing with schema validation, errors and formatting                 | Resume editor JSON mode; JSON page; Pathways editor tab              | CodeBlock (read-only)             | P3       |
 
 ## Feedback and status
 
