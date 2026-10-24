@@ -5,7 +5,8 @@
   "description": "The resume editor: a form generated from the JSON Resume schema, a checked JSON view, and a live preview in any theme",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./validate": "./src/validate.ts"
   },
   "scripts": {
     "test": "vitest run",

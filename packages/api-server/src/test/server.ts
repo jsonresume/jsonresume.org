@@ -2,6 +2,7 @@ import {
   Accounts,
   ApiKeys,
   GithubOAuth,
+  OAuth,
   Mailer,
   RateLimiter,
   type GithubIdentity,
@@ -47,6 +48,7 @@ export function testServer() {
     PgProfileStore,
     PgAnalyticsStore,
     ApiKeys.layer,
+    OAuth.layer,
     JobBoard.layer,
     JobMatcher.layer.pipe(
       Layer.provide(embedderFrom(() => new Float32Array(3072).fill(1)))
@@ -97,7 +99,8 @@ export function testServer() {
   const fetch = async (path: string, init: RequestInit = {}) => {
     const headers = new Headers(init.headers);
     headers.set('cookie', [...jar].map(([k, v]) => `${k}=${v}`).join('; '));
-    if (init.body) headers.set('content-type', 'application/json');
+    if (init.body && !headers.has('content-type'))
+      headers.set('content-type', 'application/json');
     headers.set('user-agent', 'Mozilla/5.0 (X11; Linux x86_64) Firefox/130.0');
     const response = await handler(
       new Request(`https://jsonresume.test${path}`, { ...init, headers })

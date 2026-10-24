@@ -8,12 +8,19 @@ import { serve } from '@hono/node-server';
 import { NodeRuntime } from '@effect/platform-node';
 import { PurgeUnverified, apiRoutes } from '@repo/api-server';
 import { PgLive } from '@repo/database';
+import { mcpRoutes } from '@repo/mcp';
 import { createSiteApp, effectWebHandler } from '@repo/server';
 import { Config, Effect, Layer } from 'effect';
 import { readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { registryRedirect } from '@repo/resume-host';
+import {
+  discoveryRoutes,
+  isMcpRequest,
+  openPaths,
+  sessionless,
+} from './agents';
 import { createJobPages, jobPath, jobsPath } from './jobPages';
 import { createResumeHandler, resumePath } from './resumes';
 import { appServices } from './services';
@@ -64,6 +71,17 @@ const main = Effect.gen(function* () {
     ),
     (handler) => Effect.promise(() => handler.dispose())
   );
+  const site = yield* Config.String('SITE_URL').pipe(
+    Config.withDefault('https://jsonresume.org')
+  );
+  const mcp = yield* Effect.acquireRelease(
+    Effect.sync(() =>
+      effectWebHandler(mcpRoutes(site).pipe(Layer.provide(services)), {
+        memoMap,
+      })
+    ),
+    (handler) => Effect.promise(() => handler.dispose())
+  );
   const render = yield* loadRenderer;
   const resumes = yield* Effect.acquireRelease(
     Effect.sync(() =>
@@ -85,16 +103,25 @@ const main = Effect.gen(function* () {
   );
   const app = createSiteApp({
     clientDir,
-    mount: [{ prefix: '/api', fetch: api.handler }],
+    mount: [
+      { prefix: '/api', fetch: api.handler },
+      { prefix: '/mcp', fetch: mcp.handler, when: isMcpRequest },
+    ],
     dynamic: [
       { path: resumePath, fetch: resumes.fetch },
       { path: jobsPath, fetch: jobs.board },
       { path: jobPath, fetch: jobs.job },
       // Where the jobs CLI and its docs send people for a key.
       { path: '/api-keys', fetch: async () => apiKeysRedirect() },
+      ...discoveryRoutes(site),
     ],
-    // Beacons carry no authority; /api/v1 takes API keys, never cookies.
-    protect: { prefix: '/api', exempt: ['/api/events/', '/api/v1/'] },
+    // Beacons carry no authority; /api/v1 takes API keys, never cookies;
+    // OAuth clients register and get tokens without a session.
+    protect: {
+      prefix: '/api',
+      exempt: ['/api/events/', '/api/v1/', ...sessionless],
+    },
+    openPaths,
     // The registry moved here: its links redirect (see registryRedirect).
     redirectHosts: { 'registry.jsonresume.org': registryRedirect },
   });

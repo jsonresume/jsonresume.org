@@ -259,4 +259,116 @@ describe('the API, over HTTP', () => {
     });
     expect((await v1('/me')).status).toBe(401);
   });
+
+  it('runs the OAuth flow an MCP client uses: register, consent, code, tokens', async () => {
+    server = testServer();
+    const registered = await server.post('/api/oauth/register', {
+      client_name: 'Claude',
+      redirect_uris: ['https://claude.ai/api/mcp/auth_callback'],
+    });
+    expect(registered.status).toBe(201);
+    const { client_id } = await registered.json();
+    expect(
+      (
+        await server.post('/api/oauth/register', {
+          redirect_uris: ['http://evil.example/cb'],
+        })
+      ).status
+    ).toBe(400);
+
+    const redirect_uri = 'https://claude.ai/api/mcp/auth_callback';
+    const info = await server.fetch(
+      `/api/oauth/client?client_id=${client_id}&redirect_uri=${encodeURIComponent(
+        redirect_uri
+      )}`
+    );
+    expect(await info.json()).toEqual({
+      name: 'Claude',
+      redirectHost: 'claude.ai',
+    });
+
+    const verifier = 'a-long-random-verifier-string-for-pkce-0123456789';
+    const { createHash } = await import('node:crypto');
+    const code_challenge = createHash('sha256')
+      .update(verifier)
+      .digest('base64url');
+    const decide = (approve: boolean) =>
+      server.post('/api/oauth/decide', {
+        client_id,
+        redirect_uri,
+        code_challenge,
+        state: 'xyz',
+        approve,
+      });
+    expect((await decide(true)).status).toBe(401);
+    await server.post('/api/auth/signup', ada);
+    const denied = new URL((await (await decide(false)).json()).redirect);
+    expect(denied.searchParams.get('error')).toBe('access_denied');
+    const approved = new URL((await (await decide(true)).json()).redirect);
+    expect(approved.searchParams.get('state')).toBe('xyz');
+    const code = approved.searchParams.get('code') ?? '';
+
+    const token = (form: Record<string, string>) =>
+      server.fetch('/api/oauth/token', {
+        method: 'POST',
+        headers: { 'content-type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(form).toString(),
+      });
+    const wrong = await token({
+      grant_type: 'authorization_code',
+      code,
+      client_id,
+      redirect_uri,
+      code_verifier: 'nope',
+    });
+    expect((await wrong.json()).error).toBe('invalid_grant');
+    // A failed exchange spends the code; get another.
+    const code2 =
+      new URL((await (await decide(true)).json()).redirect).searchParams.get(
+        'code'
+      ) ?? '';
+    const tokens = await (
+      await token({
+        grant_type: 'authorization_code',
+        code: code2,
+        client_id,
+        redirect_uri,
+        code_verifier: verifier,
+      })
+    ).json();
+    expect(tokens).toMatchObject({
+      token_type: 'Bearer',
+      expires_in: 3600,
+      scope: 'mcp',
+    });
+    expect(tokens.access_token).toMatch(/^jro_/);
+
+    const refreshed = await (
+      await token({
+        grant_type: 'refresh_token',
+        refresh_token: tokens.refresh_token,
+        client_id,
+      })
+    ).json();
+    expect(refreshed.access_token).toMatch(/^jro_/);
+    const reused = await token({
+      grant_type: 'refresh_token',
+      refresh_token: tokens.refresh_token,
+      client_id,
+    });
+    expect(reused.status).toBe(400);
+
+    const connections = await (
+      await server.fetch('/api/oauth/connections')
+    ).json();
+    expect(connections.map((c: { name: string }) => c.name)).toEqual([
+      'Claude',
+    ]);
+    await server.fetch(`/api/oauth/connections/${client_id}`, {
+      method: 'DELETE',
+    });
+    expect(await (await server.fetch('/api/oauth/connections')).json()).toEqual(
+      []
+    );
+  });
 });

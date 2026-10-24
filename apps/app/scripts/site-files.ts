@@ -8,9 +8,9 @@ import { cp, readdir, stat, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 const ORIGIN = 'https://jsonresume.org';
-/** Account pages and the dashboard stay out of search. */
+/** Account pages, the dashboard and OAuth consent stay out of search. */
 const PRIVATE =
-  /^\/(signin|signup|forgot-password|reset-password|dashboard)(\/|$)/;
+  /^\/(signin|signup|forgot-password|reset-password|dashboard|oauth)(\/|$)/;
 
 export async function writeSiteFiles(
   clientDir: string,

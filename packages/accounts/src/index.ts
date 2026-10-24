@@ -17,3 +17,5 @@ export {
 } from './store';
 export { GistAccess, GistFiles } from './gists';
 export { ApiKeys, MAX_KEYS, type ApiKeyRecord } from './apiKeys';
+export { OAuth } from './oauth';
+export { OAuthFailure, SCOPE as OAUTH_SCOPE } from './oauthUris';

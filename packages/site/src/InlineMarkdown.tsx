@@ -1,20 +1,26 @@
 import { Fragment, type ReactNode } from 'react';
 import { isSitePath, SiteLink } from './SiteLink';
 
-// [label](href) or `code`. Nothing else: page copy is short, and this keeps
-// the full Markdown parser off pages that only need a link or two.
-const TOKEN = /\[([^\]]+)\]\(([^)\s]+)\)|`([^`]+)`/g;
+// [label](href), `code`, **strong** or *emphasis*. Nothing else: page copy
+// is short, and this keeps the full Markdown parser off pages that only
+// need a link or two.
+const TOKEN =
+  /\[([^\]]+)\]\(([^)\s]+)\)|`([^`]+)`|\*\*([^*]+)\*\*|\*([^*\s][^*]*)\*/g;
 
-/** Render one line of page copy with links and inline code. No HTML is parsed. */
+/** Render one line of page copy with links, code and emphasis. No HTML is parsed. */
 export function InlineMarkdown({ children }: { children: string }) {
   const parts: ReactNode[] = [];
   let last = 0;
   for (const match of children.matchAll(TOKEN)) {
     const index = match.index ?? 0;
     if (index > last) parts.push(children.slice(last, index));
-    const [, label, href, code] = match;
+    const [, label, href, code, strong, em] = match;
     if (code !== undefined) {
       parts.push(<code key={index}>{code}</code>);
+    } else if (strong !== undefined) {
+      parts.push(<strong key={index}>{strong}</strong>);
+    } else if (em !== undefined) {
+      parts.push(<em key={index}>{em}</em>);
     } else if (label !== undefined && href !== undefined) {
       parts.push(
         isSitePath(href) || href.startsWith('#') ? (

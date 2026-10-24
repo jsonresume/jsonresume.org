@@ -32,8 +32,16 @@ afterAll(() => api.dispose());
 
 const app = createSiteApp({
   clientDir: dir,
-  mount: [{ prefix: '/api', fetch: api.handler }],
+  mount: [
+    { prefix: '/api', fetch: api.handler },
+    {
+      prefix: '/agent',
+      fetch: async () => new Response('agent'),
+      when: (request) => request.method !== 'GET',
+    },
+  ],
   protect: { prefix: '/api', exempt: ['/api/events/'] },
+  openPaths: ['/api/ping'],
   redirectHosts: {
     'old.example': (url) => `https://new.example${url.pathname}`,
   },
@@ -108,6 +116,32 @@ describe('createSiteApp', () => {
     expect(
       (await post('/api/events/view', 'https://evil.example')).status
     ).not.toBe(403);
+  });
+
+  it('lets any website call open paths, and only those', async () => {
+    const preflight = await app.request('/api/ping', {
+      method: 'OPTIONS',
+      headers: {
+        origin: 'https://inspector.example',
+        'access-control-request-method': 'POST',
+        'access-control-request-headers': 'authorization',
+      },
+    });
+    expect(preflight.headers.get('access-control-allow-origin')).toBe('*');
+    expect(preflight.headers.get('access-control-allow-headers')).toContain(
+      'authorization'
+    );
+    const closed = await app.request('/', {
+      headers: { origin: 'https://inspector.example' },
+    });
+    expect(closed.headers.get('access-control-allow-origin')).toBe(null);
+  });
+
+  it('mounts a handler for only the requests it accepts', async () => {
+    expect(await (await app.request('/agent', { method: 'POST' })).text()).toBe(
+      'agent'
+    );
+    expect((await app.request('/agent')).status).toBe(404);
   });
 
   it('redirects every URL of an old host', async () => {

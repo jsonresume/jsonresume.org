@@ -55,3 +55,22 @@ export const resetPasswordRoute = createRoute({
   validateSearch: TokenSearch,
   head: head('Choose a new password'),
 }).lazy(() => import('./auth.lazy').then((m) => m.ResetPasswordRoute));
+
+const text = (v: unknown) => (Predicate.isString(v) ? v : undefined);
+/** The OAuth request, as an MCP client sent it. */
+const AuthorizeSearch = (search: Record<string, unknown>) => ({
+  responseType: text(search['response_type']),
+  clientId: text(search['client_id']),
+  redirectUri: text(search['redirect_uri']),
+  codeChallenge: text(search['code_challenge']),
+  codeChallengeMethod: text(search['code_challenge_method']),
+  state: text(search['state']),
+});
+
+/** /oauth/authorize: the user lets an MCP client (claude.ai, ChatGPT…) in. */
+export const authorizeRoute = createRoute({
+  getParentRoute: () => siteRoute,
+  path: paths.oauthAuthorize,
+  validateSearch: AuthorizeSearch,
+  head: head('Connect an app'),
+}).lazy(() => import('./auth.lazy').then((m) => m.AuthorizeRoute));

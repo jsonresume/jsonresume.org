@@ -5,6 +5,7 @@ import { AuthApi } from './AuthApi';
 import { EditorApi } from './EditorApi';
 import { EventsApi } from './EventsApi';
 import { KeysApi } from './KeysApi';
+import { OAuthApi, OAuthConsentApi } from './OAuthApi';
 import { JobsApi, MyJobsApi } from './JobsApi';
 import { SystemApi } from './SystemApi';
 import { V1Api, V1PublicApi } from './V1Api';
@@ -36,6 +37,7 @@ export * from './errors';
 export { EditorApi, EditorResume } from './EditorApi';
 export { EventsApi, PingEvent, ViewEvent } from './EventsApi';
 export { ApiKey, KeysApi, TooManyKeys } from './KeysApi';
+export { Connection, OAuthApi, OAuthConsentApi, OAuthError } from './OAuthApi';
 export { Health, SystemApi } from './SystemApi';
 export {
   ApiKeyAuthentication,
@@ -79,5 +81,7 @@ export class JsonResumeApi extends HttpApi.make('jsonresume')
   .add(MyJobsApi)
   .add(V1Api)
   .add(V1PublicApi)
+  .add(OAuthApi)
+  .add(OAuthConsentApi)
   .prefix('/api')
   .annotateMerge(OpenApi.annotations({ title: 'JSON Resume API' })) {}

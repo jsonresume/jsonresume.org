@@ -1,5 +1,6 @@
 import { serveStatic } from '@hono/node-server/serve-static';
-import { Hono } from 'hono';
+import { Hono, type Context, type Next } from 'hono';
+import { cors } from 'hono/cors';
 import { readFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { sameOrigin } from './sameOrigin';
@@ -8,6 +9,8 @@ export interface MountedHandler {
   /** Path prefix, e.g. '/api'. Requests under it go to `fetch`. */
   prefix: string;
   fetch: (request: Request) => Promise<Response>;
+  /** Only requests this accepts; others fall through to pages and files. */
+  when?: (request: Request) => boolean;
 }
 
 /** A live page handler: answers its requests, or passes them on (undefined). */
@@ -28,6 +31,8 @@ export interface SiteAppOptions {
   protect?: { prefix: string; exempt?: ReadonlyArray<string> };
   /** Whole hosts that only redirect (an old domain): host → where a URL goes now. */
   redirectHosts?: Readonly<Record<string, (url: URL) => string>>;
+  /** Path prefixes any website may call (CORS, no cookies): MCP and OAuth. */
+  openPaths?: ReadonlyArray<string>;
 }
 
 const HTML_CACHE = 'public, max-age=0, must-revalidate';
@@ -47,6 +52,7 @@ export function createSiteApp({
   dynamic = [],
   protect,
   redirectHosts = {},
+  openPaths = [],
 }: SiteAppOptions): Hono {
   // serveStatic resolves `root` against the working directory.
   const root = relative(process.cwd(), clientDir) || '.';
@@ -61,10 +67,28 @@ export function createSiteApp({
     return c.redirect(to(new URL(c.req.url)), read ? 301 : 308);
   });
   if (protect) app.use('*', sameOrigin(protect.prefix, protect.exempt));
+  const open = cors({
+    origin: '*',
+    allowHeaders: [
+      'authorization',
+      'content-type',
+      'mcp-protocol-version',
+      'mcp-session-id',
+      'last-event-id',
+    ],
+    exposeHeaders: [
+      'mcp-session-id',
+      'mcp-protocol-version',
+      'www-authenticate',
+    ],
+  });
+  for (const prefix of openPaths) app.use(`${prefix}*`, open);
 
-  for (const { prefix, fetch } of mount) {
-    app.all(`${prefix}/*`, (c) => fetch(c.req.raw));
-    app.all(prefix, (c) => fetch(c.req.raw));
+  for (const { prefix, fetch, when } of mount) {
+    const handle = (c: Context, next: Next) =>
+      !when || when(c.req.raw) ? fetch(c.req.raw) : next();
+    app.all(`${prefix}/*`, handle);
+    app.all(prefix, handle);
   }
 
   app.use('*', async (c, next) => {

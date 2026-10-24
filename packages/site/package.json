@@ -19,7 +19,8 @@
     "./theme-development": "./src/pages/theme-development/ThemeDevelopmentPage.tsx",
     "./media": "./src/pages/media/MediaPage.tsx",
     "./resume-unavailable": "./src/pages/resume/ResumeUnavailablePage.tsx",
-    "./registry": "./src/pages/registry/RegistryPage.tsx"
+    "./registry": "./src/pages/registry/RegistryPage.tsx",
+    "./mcp": "./src/pages/mcp/McpPage.tsx"
   },
   "scripts": {
     "test": "vitest run",
@@ -33,6 +34,7 @@
     "@repo/api-client": "workspace:^",
     "@repo/content": "workspace:*",
     "@repo/domain": "workspace:*",
+    "@repo/mcp": "workspace:*",
     "@repo/project-directory": "workspace:*",
     "@repo/schema-explorer": "workspace:*",
     "@repo/theme-gallery": "workspace:*",

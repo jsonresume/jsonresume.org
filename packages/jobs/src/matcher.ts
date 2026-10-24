@@ -1,7 +1,8 @@
 import { JobMark, NoResume, type JobMatch } from '@repo/api';
-import { Context, Effect, Layer, Schema } from 'effect';
+import { Context, Effect, Layer, Option, Schema } from 'effect';
 import { SqlClient } from 'effect/sql';
 import { matchData } from './matchData';
+import { decodePosting } from './posting';
 import { resumeText } from './resumeText';
 import { toSummary, type JobRow } from './summary';
 import { centroid, dot, fromBytes, normalize } from './vectors';
@@ -10,6 +11,15 @@ const Mark = Schema.Struct({
   job_id: Schema.Number,
   state: JobMark,
   embedding: Schema.NullOr(Schema.Uint8Array),
+});
+const MarkedRow = Schema.Struct({
+  id: Schema.Number,
+  parsed: Schema.Unknown,
+  posted_at: Schema.Date,
+  family_months: Schema.Number,
+  state: JobMark,
+  feedback: Schema.NullOr(Schema.String),
+  updated_at: Schema.Date,
 });
 const rows = <S extends Schema.Constraint>(schema: S) =>
   Schema.decodeUnknownEffect(Schema.Array(schema));
@@ -147,5 +157,39 @@ const make = Effect.gen(function* () {
         `
     ).pipe(Effect.asVoid, Effect.orDie);
 
-  return { rank, matches, markOf, mark, exists };
+  /** The jobs a user has marked, newest mark first; optionally one mark. */
+  const marked = (userId: string, only: JobMark | null = null) =>
+    sql`
+      SELECT j.id::float8 AS id, j.parsed, j.posted_at, j.family_months::float8 AS family_months,
+             m.state, m.feedback, m.updated_at
+      FROM app.job_marks m JOIN app.jobs j ON j.id = m.job_id
+      WHERE m.user_id = ${userId} AND j.parsed IS NOT NULL
+        AND (${only}::text IS NULL OR m.state = ${only})
+      ORDER BY m.updated_at DESC
+    `.pipe(
+      Effect.flatMap(rows(MarkedRow)),
+      Effect.map((found) =>
+        found.flatMap((r) =>
+          Option.match(decodePosting(r.parsed), {
+            onNone: () => [],
+            onSome: (posting) => [
+              {
+                job: toSummary({
+                  id: r.id,
+                  posting,
+                  postedAt: r.posted_at,
+                  months: r.family_months,
+                }),
+                mark: r.state,
+                feedback: r.feedback,
+                markedAt: r.updated_at,
+              },
+            ],
+          })
+        )
+      ),
+      Effect.orDie
+    );
+
+  return { rank, matches, markOf, mark, marked, exists };
 });

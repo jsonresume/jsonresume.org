@@ -70,6 +70,7 @@ package over growing an app.
 | `@repo/dashboard`         | The signed-in app: full-screen shell, overview charts, resume source, settings. Client-rendered.                                              |
 | `@repo/jobs`              | Hacker News jobs: the import pipeline (fetch, parse with OpenAI, embed, repost families), the board's queries, matching against a resume.     |
 | `@repo/job-board`         | The job board in React: job cards, filters kept in the URL, the /jobs and /jobs/:id pages.                                                    |
+| `@repo/mcp`               | jsonresume.org for agents: the MCP server at /mcp (tools, prompts, Bearer auth by API key or OAuth) and the catalog the /mcp page lists.      |
 
 Dependency direction: `domain` ← `content`, `api` ← `site`, feature packages ←
 `apps/app`. Packages never import from apps. `@jsonresume/ui` imports nothing
@@ -80,6 +81,12 @@ A new package needs: `package.json` (`"type": "module"`, `exports` pointing at
 `tsconfig/base.json`, a short README saying what it is for, and tests.
 
 ## Conventions
+
+- **Every feature has MCP tools.** Anything a person can do on jsonresume.org,
+  their agent can do through the MCP server (`@repo/mcp`, served at `/mcp`):
+  a feature isn't done until its tools are in `@repo/mcp`'s catalog and
+  toolkits, with tests through the endpoint. The `/mcp` page lists the
+  catalog, so documenting them is automatic.
 
 - **Effect style** (from Effect's own guide): `Effect.gen` inline;
   `Effect.fn("name")` for reusable functions; services as `Context.Service`

@@ -139,3 +139,13 @@ export const registryRoute = page(
   },
   () => import('./registry.lazy')
 );
+
+export const mcpRoute = page(
+  paths.mcp,
+  {
+    title: 'MCP: connect your agent to JSON Resume',
+    description:
+      'Connect ChatGPT, Claude, Cursor, VS Code, Codex or any MCP client to jsonresume.org: edit your resume, change its theme, see who reads it and find jobs that fit.',
+  },
+  () => import('./mcp.lazy')
+);

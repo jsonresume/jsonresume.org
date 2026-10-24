@@ -205,4 +205,45 @@ export const migrations: Record<
         ADD COLUMN feedback text
     `;
   }),
+
+  // OAuth 2.1 for MCP clients (claude.ai, ChatGPT, …): clients register
+  // themselves (RFC 7591), users approve them, and get short-lived access
+  // tokens with rotating refresh tokens. Only hashes of codes and tokens.
+  '8_oauth': Effect.gen(function* () {
+    const sql = yield* SqlClient.SqlClient;
+    yield* sql`
+      CREATE TABLE app.oauth_clients (
+        id text PRIMARY KEY,
+        name text NOT NULL,
+        redirect_uris jsonb NOT NULL,
+        created_at timestamptz NOT NULL DEFAULT now()
+      )
+    `;
+    yield* sql`
+      CREATE TABLE app.oauth_codes (
+        code_hash text PRIMARY KEY,
+        client_id text NOT NULL REFERENCES app.oauth_clients (id) ON DELETE CASCADE,
+        user_id uuid NOT NULL REFERENCES app.users (id) ON DELETE CASCADE,
+        redirect_uri text NOT NULL,
+        code_challenge text NOT NULL,
+        scope text NOT NULL,
+        expires_at timestamptz NOT NULL
+      )
+    `;
+    yield* sql`
+      CREATE TABLE app.oauth_tokens (
+        id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+        client_id text NOT NULL REFERENCES app.oauth_clients (id) ON DELETE CASCADE,
+        user_id uuid NOT NULL REFERENCES app.users (id) ON DELETE CASCADE,
+        access_hash text NOT NULL UNIQUE,
+        refresh_hash text NOT NULL UNIQUE,
+        scope text NOT NULL,
+        access_expires_at timestamptz NOT NULL,
+        refresh_expires_at timestamptz NOT NULL,
+        created_at timestamptz NOT NULL DEFAULT now(),
+        last_used_at timestamptz
+      )
+    `;
+    yield* sql`CREATE INDEX oauth_tokens_user ON app.oauth_tokens (user_id)`;
+  }),
 };

@@ -204,6 +204,9 @@ importers:
       '@repo/jobs':
         specifier: workspace:^
         version: link:../../packages/jobs
+      '@repo/mcp':
+        specifier: workspace:^
+        version: link:../../packages/mcp
       '@repo/profiles':
         specifier: workspace:^
         version: link:../../packages/profiles
@@ -1085,6 +1088,9 @@ importers:
       '@repo/content':
         specifier: workspace:*
         version: link:../content
+      '@repo/mcp':
+        specifier: workspace:*
+        version: link:../mcp
       '@vanilla-extract/css':
         specifier: ^1.21.3
         version: 1.21.3
@@ -1573,6 +1579,64 @@ importers:
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+
+  packages/mcp:
+    dependencies:
+      '@jsonresume/schema':
+        specifier: workspace:*
+        version: link:../schema
+      '@repo/accounts':
+        specifier: workspace:*
+        version: link:../accounts
+      '@repo/analytics':
+        specifier: workspace:*
+        version: link:../analytics
+      '@repo/api':
+        specifier: workspace:*
+        version: link:../api
+      '@repo/job-board':
+        specifier: workspace:*
+        version: link:../job-board
+      '@repo/jobs':
+        specifier: workspace:*
+        version: link:../jobs
+      '@repo/resume-editor':
+        specifier: workspace:*
+        version: link:../resume-editor
+      '@repo/schema-explorer':
+        specifier: workspace:*
+        version: link:../schema-explorer
+      '@repo/theme-gallery':
+        specifier: workspace:*
+        version: link:../theme-gallery
+      effect:
+        specifier: 4.0.6
+        version: 4.0.6
+    devDependencies:
+      '@effect/sql-pglite':
+        specifier: 4.0.6
+        version: 4.0.6(effect@4.0.6)
+      '@repo/database':
+        specifier: workspace:*
+        version: link:../database
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      '@types/node':
+        specifier: ^20.19.24
+        version: 20.19.24
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vite:
+        specifier: ^6.4.3
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -2206,6 +2270,9 @@ importers:
       '@repo/domain':
         specifier: workspace:*
         version: link:../domain
+      '@repo/mcp':
+        specifier: workspace:*
+        version: link:../mcp
       '@repo/project-directory':
         specifier: workspace:*
         version: link:../project-directory

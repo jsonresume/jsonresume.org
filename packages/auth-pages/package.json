@@ -17,6 +17,7 @@
     "@jsonresume/ui": "workspace:*",
     "@repo/api-client": "workspace:*",
     "@repo/content": "workspace:*",
+    "@repo/mcp": "workspace:*",
     "@vanilla-extract/css": "^1.21.3",
     "effect": "4.0.6"
   },

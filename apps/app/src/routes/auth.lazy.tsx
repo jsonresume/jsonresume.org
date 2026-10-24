@@ -1,4 +1,5 @@
 import {
+  AuthorizePage,
   ChooseUsernamePage,
   ForgotPasswordPage,
   ResetPasswordPage,
@@ -82,5 +83,13 @@ export const ResetPasswordRoute = createLazyRoute('/_site/reset-password')({
         }
       />
     );
+  },
+});
+
+const authorize = getRouteApi('/_site/oauth/authorize');
+
+export const AuthorizeRoute = createLazyRoute('/_site/oauth/authorize')({
+  component: function AuthorizeRouteComponent() {
+    return <AuthorizePage request={authorize.useSearch()} />;
   },
 });

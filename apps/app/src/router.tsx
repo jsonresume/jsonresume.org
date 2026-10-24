@@ -6,6 +6,7 @@ import {
   gettingStartedRoute,
   homeRoute,
   jobSchemaRoute,
+  mcpRoute,
   mediaRoute,
   projectsRoute,
   registryRoute,
@@ -23,6 +24,7 @@ import {
   settingsRoute,
 } from './routes/app';
 import {
+  authorizeRoute,
   chooseUsernameRoute,
   forgotPasswordRoute,
   resetPasswordRoute,
@@ -46,6 +48,7 @@ export const routeTree = rootRoute.addChildren([
     projectsRoute,
     teamRoute,
     mediaRoute,
+    mcpRoute,
     registryRoute,
     jobsRoute,
     jobRoute,
@@ -57,6 +60,7 @@ export const routeTree = rootRoute.addChildren([
     chooseUsernameRoute,
     forgotPasswordRoute,
     resetPasswordRoute,
+    authorizeRoute,
   ]),
   dashboardRoute.addChildren([
     overviewRoute,

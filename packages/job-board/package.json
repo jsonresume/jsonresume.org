@@ -5,7 +5,8 @@
   "description": "The job board: Hacker News jobs as cards, their filters (kept in the URL), the board and job pages",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./filters": "./src/filters.ts"
   },
   "scripts": {
     "test": "vitest run",

@@ -5,7 +5,8 @@
   "description": "The JSON Resume theme catalog: search and tag filtering, its atoms, and gallery components",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./catalog": "./src/catalog.ts"
   },
   "scripts": {
     "test": "vitest run",

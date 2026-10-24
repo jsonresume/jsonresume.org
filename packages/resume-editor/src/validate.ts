@@ -1,4 +1,4 @@
-import type { JsonSchemaNode } from '@repo/schema-explorer';
+import type { JsonSchemaNode } from '@repo/schema-explorer/model';
 import { Predicate } from 'effect';
 import type { Path } from './values';
 

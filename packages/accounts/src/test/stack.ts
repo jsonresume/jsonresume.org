@@ -48,5 +48,5 @@ export function accountsStack() {
   /** The token in the last verification email. */
   const lastToken = () =>
     /token=([\w-]+)/.exec(mail.at(-1)?.text ?? '')?.[1] ?? '';
-  return { github, gists: gists.state, mail, run, lastToken };
+  return { github, gists: gists.state, mail, run, lastToken, layer };
 }

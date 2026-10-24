@@ -24,6 +24,7 @@ export const keys = {
   analytics: ['analytics'],
   jobs: ['jobs'],
   apiKeys: ['apiKeys'],
+  connections: ['connections'],
 } as const;
 
 export const sessionAtom = ApiClient.query('auth', 'session', {
@@ -69,3 +70,16 @@ export const apiKeysAtom = ApiClient.query('keys', 'list', {
 });
 export const createApiKeyAtom = ApiClient.mutation('keys', 'create');
 export const revokeApiKeyAtom = ApiClient.mutation('keys', 'revoke');
+/** Who is asking on the OAuth consent page, if the redirect is theirs. */
+export const oauthClientAtom = Atom.family((key: string) => {
+  const [client_id = '', redirect_uri = ''] = key.split('\n');
+  return ApiClient.query('oauth', 'client', {
+    query: { client_id, redirect_uri },
+  });
+});
+export const oauthDecideAtom = ApiClient.mutation('oauthConsent', 'decide');
+/** Apps connected with OAuth (claude.ai, ChatGPT, …). */
+export const connectionsAtom = ApiClient.query('oauthConsent', 'connections', {
+  reactivityKeys: keys.connections,
+});
+export const disconnectAtom = ApiClient.mutation('oauthConsent', 'disconnect');

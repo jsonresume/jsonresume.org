@@ -30,6 +30,7 @@
     "@repo/domain": "workspace:*",
     "@repo/job-board": "workspace:^",
     "@repo/jobs": "workspace:^",
+    "@repo/mcp": "workspace:^",
     "@repo/profiles": "workspace:^",
     "@repo/resume-editor": "workspace:^",
     "@repo/resume-host": "workspace:^",
