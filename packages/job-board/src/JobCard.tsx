@@ -3,6 +3,7 @@ import type { JobSummary } from '@repo/api';
 import type { ReactNode } from 'react';
 import * as s from './board.css';
 import {
+  companyText,
   employmentLabels,
   monthsText,
   postedText,
@@ -45,7 +46,7 @@ export function JobCard({
     <Card tone="raised" className={`${s.card} ${s.positioned}`}>
       <div className={s.main}>
         <p className={s.overline}>
-          <span className={s.company}>{job.company}</span>
+          <span className={s.company}>{companyText(job.company)}</span>
           <span>{postedText(job.postedAt)}</span>
           {repost && <span>{repost}</span>}
         </p>

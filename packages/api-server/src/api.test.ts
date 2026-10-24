@@ -194,4 +194,69 @@ describe('the API, over HTTP', () => {
     });
     expect(mark.status).toBe(404);
   });
+
+  it('issues API keys that open /api/v1, as the jobs CLI calls it', async () => {
+    server = testServer();
+    await server.post('/api/auth/signup', ada);
+    await server.fetch('/api/account/resume', {
+      method: 'PUT',
+      body: JSON.stringify({
+        resume: { basics: { label: 'Engineer', summary: 'Builds web apps' } },
+      }),
+    });
+    const made = await (
+      await server.post('/api/account/keys', { name: 'laptop' })
+    ).json();
+    expect(made.key).toMatch(/^jr_/);
+    expect(made.apiKey).toMatchObject({
+      name: 'laptop',
+      prefix: made.key.slice(0, 10),
+    });
+    const listed = await (await server.fetch('/api/account/keys')).json();
+    expect(listed.map((k: { id: string }) => k.id)).toEqual([made.apiKey.id]);
+
+    server.jar.clear();
+    const v1 = (path: string, init: RequestInit = {}, key = made.key) =>
+      server.fetch(`/api/v1${path}`, {
+        ...init,
+        headers: { authorization: `Bearer ${key}` },
+      });
+    expect(await (await v1('/me')).json()).toMatchObject({
+      username: 'ada',
+      resume: { basics: { label: 'Engineer' } },
+    });
+    const refused = await v1('/me', {}, 'jr_wrong');
+    expect(refused.status).toBe(401);
+    expect((await refused.json()).error).toMatch(/Invalid API key/);
+    expect(await (await v1('/jobs?top=5&remote=true')).json()).toEqual({
+      jobs: [],
+      total: 0,
+    });
+    const mark = await v1('/jobs/123', {
+      method: 'PUT',
+      body: JSON.stringify({ state: 'applied' }),
+    });
+    expect(mark.status).toBe(404);
+    expect((await v1('/searches')).status).toBe(200);
+    expect(
+      (await v1('/jobs/123/dossier', { method: 'PUT', body: '{}' })).status
+    ).toBe(501);
+
+    const local = await server.post('/api/v1/jobs', {
+      resume: { basics: { label: 'Engineer', summary: 'Builds web apps' } },
+    });
+    expect(await local.json()).toEqual({ jobs: [], total: 0 });
+    expect((await server.post('/api/v1/jobs', { resume: {} })).status).toBe(
+      400
+    );
+
+    await server.post('/api/auth/signin', {
+      email: ada.email,
+      password: ada.password,
+    });
+    await server.fetch(`/api/account/keys/${made.apiKey.id}`, {
+      method: 'DELETE',
+    });
+    expect((await v1('/me')).status).toBe(401);
+  });
 });

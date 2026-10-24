@@ -13,6 +13,7 @@ it('applies every migration to an empty database', async () => {
     }).pipe(Effect.provide(TestDatabase))
   );
   expect(tables.map((t) => t.table_name)).toEqual([
+    'api_keys',
     'email_tokens',
     'embeddings',
     'job_marks',

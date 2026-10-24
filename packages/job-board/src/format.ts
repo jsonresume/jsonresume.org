@@ -75,3 +75,6 @@ export const monthsText = (months: number) =>
 /** The HN discussion for a post. */
 export const hnUrl = (id: number) =>
   `https://news.ycombinator.com/item?id=${id}`;
+
+/** The company, or a note that the post doesn't name one. */
+export const companyText = (company: string) => company || 'Company not named';

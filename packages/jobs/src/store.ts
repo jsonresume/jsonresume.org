@@ -107,11 +107,16 @@ const make = Effect.gen(function* () {
       Effect.orDie
     );
 
-  const toParse = (limit: number, since: Date) =>
+  /**
+   * Posts to parse: new ones, or with `parsedBefore` (a prompt changed) also
+   * those parsed before that time, which stay on the board meanwhile.
+   */
+  const toParse = (limit: number, since: Date, parsedBefore?: Date) =>
     sql`
       SELECT id::float8 AS id, html FROM app.jobs
-      WHERE parsed IS NULL AND removed_at IS NULL
-        AND parse_attempts < ${MAX_PARSE_ATTEMPTS} AND posted_at >= ${since}
+      WHERE removed_at IS NULL AND parse_attempts < ${MAX_PARSE_ATTEMPTS}
+        AND posted_at >= ${since}
+        AND (parsed IS NULL OR parsed_at < ${parsedBefore ?? new Date(0)})
       ORDER BY posted_at DESC LIMIT ${limit}
     `.pipe(Effect.flatMap(decode(ToParse)), Effect.orDie);
 
@@ -121,8 +126,16 @@ const make = Effect.gen(function* () {
         /\\u0000/g,
         ''
       )}::jsonb,
-        parsed_at = now(), parse_attempts = parse_attempts + 1, parse_error = NULL,
+        parsed_at = now(), parse_attempts = 0, parse_error = NULL,
         embedding = NULL
+      WHERE id = ${id}
+    `.pipe(Effect.asVoid, Effect.orDie);
+
+  /** Not a job (someone looking for work, a comment): never parsed again. */
+  const notAJob = (id: number) =>
+    sql`
+      UPDATE app.jobs SET parse_attempts = ${MAX_PARSE_ATTEMPTS},
+        parse_error = 'not a job post', parsed = NULL, embedding = NULL
       WHERE id = ${id}
     `.pipe(Effect.asVoid, Effect.orDie);
 
@@ -184,6 +197,7 @@ const make = Effect.gen(function* () {
     toParse,
     saveParsed,
     parseFailed,
+    notAJob,
     toEmbed,
     saveEmbedding,
     withVectors,

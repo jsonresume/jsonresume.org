@@ -70,6 +70,6 @@ it('ranks open jobs against a resume, and remembers marks', async () => {
 
 it('turns a cosine into a 0 to 100 fit', () => {
   expect(fitScore(0.1)).toBe(0);
-  expect(fitScore(0.425)).toBe(50);
+  expect(fitScore(0.485)).toBe(50);
   expect(fitScore(0.9)).toBe(100);
 });

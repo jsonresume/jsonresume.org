@@ -21,6 +21,7 @@ import type { ReactNode } from 'react';
 import { Notices } from './Notices';
 import { searchParam } from './session';
 import { DeleteAccount } from './settings/DeleteAccount';
+import { ApiKeysCard } from './settings/ApiKeysCard';
 import { UsernameCard } from './settings/UsernameCard';
 
 function GithubFlash() {
@@ -104,7 +105,7 @@ function Details({ account }: { account: Account }) {
   );
 }
 
-/** The account: details, username, GitHub, signing out, deleting. */
+/** The account: details, username, API keys, signing out, deleting. */
 export function SettingsPage() {
   const result = useAtomValue(accountAtom);
   const signOut = useAtomSet(signOutAtom, { mode: 'promiseExit' });
@@ -132,6 +133,7 @@ export function SettingsPage() {
         <Notices />
         <Details account={account} />
         <UsernameCard account={account} />
+        <ApiKeysCard />
         <DeleteAccount username={account.username} />
       </Stack>
     </AppPage>

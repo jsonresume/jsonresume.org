@@ -13,7 +13,7 @@ const VERSION = createRequire(import.meta.url)('../package.json').version;
 const BASE_URL =
   getArg('--base-url') ||
   process.env.JSONRESUME_BASE_URL ||
-  'https://registry.jsonresume.org';
+  'https://jsonresume.org';
 
 // ── Arg parsing ────────────────────────────────────────────
 
@@ -368,7 +368,7 @@ MARK STATES
 GLOBAL OPTIONS
   --resume <path>                   Use a local resume file (skips registry auth)
   --json                            Output raw JSON (for piping / Claude Code)
-  --base-url URL                    API base URL (default: https://registry.jsonresume.org)
+  --base-url URL                    API base URL (default: https://jsonresume.org)
   --feedback "reason"               Add a reason when marking (with mark command)
 
 ENVIRONMENT

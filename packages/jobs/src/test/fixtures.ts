@@ -1,4 +1,4 @@
-import { Effect, Layer } from 'effect';
+import { Effect, Layer, Option } from 'effect';
 import { embedderFrom } from '../embedder';
 import { HackerNews, type Thread } from '../hackerNews';
 import { JobParser, ParseFailed } from '../parser';
@@ -54,16 +54,19 @@ export const FakeParser = Layer.succeed(
       if (html.includes('unparseable')) {
         return Effect.fail(new ParseFailed({ message: 'model refused' }));
       }
+      if (html.includes('seeking work')) return Effect.succeed(Option.none());
       const [title = '', company = '', skills = ''] = html.split(' | ');
       return Effect.succeed(
-        posting({
-          title,
-          company,
-          skills: skills
-            .split(' ')
-            .filter(Boolean)
-            .map((name) => ({ name, keywords: [] })),
-        })
+        Option.some(
+          posting({
+            title,
+            company,
+            skills: skills
+              .split(' ')
+              .filter(Boolean)
+              .map((name) => ({ name, keywords: [] })),
+          })
+        )
       );
     },
   })

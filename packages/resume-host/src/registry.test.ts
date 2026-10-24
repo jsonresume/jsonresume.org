@@ -31,6 +31,10 @@ describe('registryRedirect', () => {
     expect(from('/jobs')).toBe('https://jsonresume.org/jobs');
     expect(from('/jobs/49922593')).toBe('https://jsonresume.org/jobs/49922593');
     expect(from('/my-jobs')).toBe('https://jsonresume.org/dashboard/jobs');
+    expect(from('/api-keys')).toBe('https://jsonresume.org/dashboard/settings');
+    expect(from('/api/v1/jobs?top=5')).toBe(
+      'https://jsonresume.org/api/v1/jobs?top=5'
+    );
   });
 
   it('sends everything else to the page about the move', () => {

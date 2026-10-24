@@ -16,3 +16,4 @@ export {
   type UserRecord,
 } from './store';
 export { GistAccess, GistFiles } from './gists';
+export { ApiKeys, MAX_KEYS, type ApiKeyRecord } from './apiKeys';

@@ -1,5 +1,5 @@
 import { OpenAiLanguageModel } from '@effect/ai-openai';
-import { Context, Effect, Layer, Schema } from 'effect';
+import { Context, Effect, Layer, Option, Schema } from 'effect';
 import { LanguageModel } from 'effect/ai';
 import { Posting } from './posting';
 import { postText } from './postText';
@@ -14,7 +14,9 @@ const MODEL = 'gpt-5-mini';
 const INSTRUCTIONS = `You turn one job post from Hacker News "Who is hiring?" into structured data.
 
 Rules:
+- hiring: true when the post is a company or team hiring. false when it is someone looking for work, a question, a complaint or other comment; then fill the rest as best you can.
 - Use only what the post says. Where it doesn't say, use null, an empty list or "unspecified". Never guess.
+- company: the company's name as the post gives it; an empty string if it names none.
 - A post may list several roles. Describe the main one, or the most senior engineering role, in title; mention the others in summary.
 - summary: two or three plain sentences on what the company does and what the role is.
 - remote: "remote_global" only when the post says anywhere or worldwide. Remote limited to countries, regions or time zones is "remote_region", with remoteRegions listing them (e.g. ["US", "Canada"], ["EU"]). An office is "onsite"; office plus remote days is "hybrid".
@@ -27,10 +29,16 @@ Rules:
 - apply: the URL or email the post says to apply at.
 - countryCode: ISO 3166-1 alpha-2.`;
 
+/** What the model fills: a Posting, and whether the post is hiring at all. */
+const Parsed = Schema.Struct({ hiring: Schema.Boolean, ...Posting.fields });
+
 /** Job posts into Postings, with an OpenAI model. */
 export class JobParser extends Context.Service<
   JobParser,
-  { parse(html: string): Effect.Effect<Posting, ParseFailed> }
+  {
+    /** None when the post isn't hiring (someone looking for work, a comment). */
+    parse(html: string): Effect.Effect<Option.Option<Posting>, ParseFailed>;
+  }
 >()('@repo/jobs/JobParser') {
   /** Needs an OpenAiClient. */
   static readonly layer = Layer.effect(
@@ -43,13 +51,15 @@ export class JobParser extends Context.Service<
         parse: (html) =>
           LanguageModel.generateObject({
             objectName: 'job_posting',
-            schema: Posting,
+            schema: Parsed,
             prompt: [
               { role: 'system', content: INSTRUCTIONS },
               { role: 'user', content: postText(html) },
             ],
           }).pipe(
-            Effect.map((response) => response.value),
+            Effect.map(({ value: { hiring, ...posting } }) =>
+              hiring ? Option.some(posting) : Option.none()
+            ),
             Effect.provide(model),
             Effect.mapError((e) => new ParseFailed({ message: e.message }))
           ),

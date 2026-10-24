@@ -47,6 +47,7 @@ const setup = () => {
           daysAgo(19)
         ),
         post(203, 200, 'unparseable rambling', daysAgo(19)),
+        post(204, 200, 'SEEKING WORK | seeking work, remote', daysAgo(19)),
       ],
     },
   };
@@ -81,9 +82,10 @@ describe('the jobs pipeline', () => {
       }).pipe(Effect.provide(layer))
     );
     expect(result.stats).toMatchObject({
-      fetched: 5,
-      added: 5,
+      fetched: 6,
+      added: 6,
       parsed: 4,
+      notJobs: 1,
       parseFailed: 1,
       embedded: 4,
       families: 1,

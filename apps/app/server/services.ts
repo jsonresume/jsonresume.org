@@ -1,5 +1,6 @@
 import {
   Accounts,
+  ApiKeys,
   GistFiles,
   GithubOAuth,
   Mailer,
@@ -26,6 +27,7 @@ export const appServices = <E>(
     PgProfileStore,
     PgAccountStore,
     PgAnalyticsStore,
+    ApiKeys.layer,
     JobBoard.layer,
     JobMatcher.layer.pipe(Layer.provide(OpenAiJobs))
   ).pipe(Layer.provide(database));

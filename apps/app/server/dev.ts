@@ -25,7 +25,7 @@ const jobs = createJobPages(render, services, { memoMap });
 const PASS = 'x-dev-pass';
 const app = new Hono();
 app.notFound((c) => c.body(null, 404, { [PASS]: '1' }));
-app.use('*', sameOrigin('/api', ['/api/events/']));
+app.use('*', sameOrigin('/api', ['/api/events/', '/api/v1/']));
 app.all('/api/*', (c) => api.handler(c.req.raw));
 app.get(
   '/:handle{@[^/]+}',

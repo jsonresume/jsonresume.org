@@ -36,6 +36,12 @@ const loadRenderer = Effect.promise(async () => {
   );
 });
 
+const apiKeysRedirect = () =>
+  new Response(null, {
+    status: 301,
+    headers: { location: '/dashboard/settings#api-keys' },
+  });
+
 const main = Effect.gen(function* () {
   const port = yield* Config.Port('PORT').pipe(Config.withDefault(3003));
   const hostname = yield* Config.String('HOST').pipe(
@@ -84,8 +90,11 @@ const main = Effect.gen(function* () {
       { path: resumePath, fetch: resumes.fetch },
       { path: jobsPath, fetch: jobs.board },
       { path: jobPath, fetch: jobs.job },
+      // Where the jobs CLI and its docs send people for a key.
+      { path: '/api-keys', fetch: async () => apiKeysRedirect() },
     ],
-    protect: { prefix: '/api', exempt: ['/api/events/'] },
+    // Beacons carry no authority; /api/v1 takes API keys, never cookies.
+    protect: { prefix: '/api', exempt: ['/api/events/', '/api/v1/'] },
     // The registry moved here: its links redirect (see registryRedirect).
     redirectHosts: { 'registry.jsonresume.org': registryRedirect },
   });

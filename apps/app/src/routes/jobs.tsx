@@ -34,12 +34,13 @@ export const jobRoute = createRoute({
     if (context.job) return context.job;
     throw reload(location.href);
   },
-  head: ({ loaderData: job }) =>
-    job
-      ? pageHead({
-          title: `${job.title} at ${job.company}`,
-          description: job.summary || `${job.title} at ${job.company}.`,
-          path: paths.job(job.id),
-        })
-      : {},
+  head: ({ loaderData: job }) => {
+    if (!job) return {};
+    const title = job.company ? `${job.title} at ${job.company}` : job.title;
+    return pageHead({
+      title,
+      description: job.summary || `${title}.`,
+      path: paths.job(job.id),
+    });
+  },
 }).lazy(() => import('./jobs.lazy').then((m) => m.JobRoute));

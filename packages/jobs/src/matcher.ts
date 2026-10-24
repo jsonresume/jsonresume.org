@@ -1,38 +1,38 @@
-import { NoResume, type JobMark, type JobMatch } from '@repo/api';
-import { Context, Duration, Effect, Layer, Option, Schema } from 'effect';
+import { JobMark, NoResume, type JobMatch } from '@repo/api';
+import { Context, Effect, Layer, Schema } from 'effect';
 import { SqlClient } from 'effect/sql';
-import { createHash } from 'node:crypto';
-import { openJobs } from './board';
-import { Embedder } from './embedder';
-import { decodePosting } from './posting';
+import { matchData } from './matchData';
 import { resumeText } from './resumeText';
 import { toSummary, type JobRow } from './summary';
-import { centroid, dot, fromBytes, normalize, toBytes } from './vectors';
+import { centroid, dot, fromBytes, normalize } from './vectors';
 
-const Open = Schema.Struct({
-  id: Schema.Number,
-  parsed: Schema.Unknown,
-  posted_at: Schema.Date,
-  family_months: Schema.Number,
-  embedding: Schema.Uint8Array,
-});
 const Mark = Schema.Struct({
   job_id: Schema.Number,
-  state: Schema.Literals(['interested', 'applied', 'not_interested']),
+  state: JobMark,
   embedding: Schema.NullOr(Schema.Uint8Array),
 });
-const Cached = Schema.Struct({ embedding: Schema.Uint8Array });
 const rows = <S extends Schema.Constraint>(schema: S) =>
   Schema.decodeUnknownEffect(Schema.Array(schema));
 
-/** Matches returned, best first. */
+/** Matches the dashboard shows, best first. */
 export const MATCHES = 100;
+
+/** An open job against a resume: the cosine, as a 0 to 100 fit, and the user's mark. */
+export interface Ranked {
+  row: JobRow;
+  cosine: number;
+  score: number;
+  mark: JobMark | null;
+}
 /** Rocchio weights: toward jobs liked, away from jobs passed on. */
 const TOWARD = 0.5;
 const AWAY = 0.15;
-/** Cosine between a resume and a job, as a 0 to 100 fit. */
-const FLOOR = 0.2;
-const CEILING = 0.65;
+/**
+ * Cosine between a resume and a job, as a 0 to 100 fit. Measured on the
+ * October 2026 board: a resume's best jobs sit near 0.6, its 50th near 0.5.
+ */
+const FLOOR = 0.35;
+const CEILING = 0.62;
 
 export const fitScore = (cosine: number) =>
   Math.round(
@@ -52,57 +52,8 @@ export class JobMatcher extends Context.Service<
 
 const make = Effect.gen(function* () {
   const sql = yield* SqlClient.SqlClient;
-  const embedder = yield* Embedder;
 
-  // Every open job and its vector: a few MB, read at most every 5 minutes.
-  const openJobRows = yield* Effect.cachedWithTTL(
-    sql`
-      SELECT j.id::float8 AS id, j.parsed, j.posted_at,
-             j.family_months::float8 AS family_months, j.embedding
-      FROM app.jobs j WHERE ${sql.literal(openJobs)} AND j.embedding IS NOT NULL
-    `.pipe(
-      Effect.flatMap(rows(Open)),
-      Effect.map((open) =>
-        open.flatMap((r) =>
-          Option.match(decodePosting(r.parsed), {
-            onNone: () => [],
-            onSome: (posting) => [
-              {
-                row: {
-                  id: r.id,
-                  posting,
-                  postedAt: r.posted_at,
-                  months: r.family_months,
-                } satisfies JobRow,
-                vector: fromBytes(r.embedding),
-              },
-            ],
-          })
-        )
-      ),
-      Effect.orDie
-    ),
-    Duration.minutes(5)
-  );
-
-  /** A resume's vector, embedded once per distinct text. */
-  const resumeVector = Effect.fn('JobMatcher.resumeVector')(function* (
-    text: string
-  ) {
-    const hash = createHash('sha256').update(text).digest('hex');
-    const [cached] = yield* sql`
-      SELECT embedding FROM app.embeddings WHERE text_hash = ${hash}
-    `.pipe(Effect.flatMap(rows(Cached)), Effect.orDie);
-    if (cached) return fromBytes(cached.embedding);
-    const vector = yield* embedder.embed(text).pipe(Effect.orDie);
-    yield* sql`
-      INSERT INTO app.embeddings (text_hash, embedding) VALUES (${hash}, ${toBytes(
-      vector
-    )})
-      ON CONFLICT (text_hash) DO NOTHING
-    `.pipe(Effect.orDie);
-    return vector;
-  });
+  const { openJobRows, resumeVector } = yield* matchData;
 
   const marksOf = (userId: string) =>
     sql`
@@ -111,13 +62,17 @@ const make = Effect.gen(function* () {
       WHERE m.user_id = ${userId}
     `.pipe(Effect.flatMap(rows(Mark)), Effect.orDie);
 
-  const matches = Effect.fn('JobMatcher.matches')(function* (
-    userId: string,
-    resume: unknown
+  /**
+   * Every open job, best fit first, with the user's marks. Without a user
+   * (a resume sent to the public API) there are no marks to learn from.
+   */
+  const rank = Effect.fn('JobMatcher.rank')(function* (
+    resume: unknown,
+    userId?: string
   ) {
     const text = resumeText(resume);
     if (text.length < 20) return yield* new NoResume();
-    const marks = yield* marksOf(userId);
+    const marks = userId ? yield* marksOf(userId) : [];
     const vectors = (states: ReadonlyArray<JobMark>) =>
       marks.flatMap((m) =>
         states.includes(m.state) && m.embedding ? [fromBytes(m.embedding)] : []
@@ -134,19 +89,40 @@ const make = Effect.gen(function* () {
       )
     );
     const markOf = new Map(marks.map((m) => [m.job_id, m.state]));
-    const open = yield* openJobRows;
-    return open
-      .map(({ row, vector }) => ({ row, cosine: dot(query, vector) }))
-      .sort((a, b) => b.cosine - a.cosine)
-      .slice(0, MATCHES)
-      .map(
-        ({ row, cosine }): JobMatch => ({
-          ...toSummary(row),
+    return (yield* openJobRows)
+      .map(({ row, vector }): Ranked => {
+        const cosine = dot(query, vector);
+        return {
+          row,
+          cosine,
           score: fitScore(cosine),
           mark: markOf.get(row.id) ?? null,
-        })
-      );
+        };
+      })
+      .sort((a, b) => b.cosine - a.cosine);
   });
+
+  /** The best MATCHES jobs for the dashboard. */
+  const matches = (userId: string, resume: unknown) =>
+    rank(resume, userId).pipe(
+      Effect.map((ranked) =>
+        ranked.slice(0, MATCHES).map(
+          ({ row, score, mark }): JobMatch => ({
+            ...toSummary(row),
+            score,
+            mark,
+          })
+        )
+      )
+    );
+
+  const markOf = (userId: string, jobId: number) =>
+    sql<{ state: JobMark }>`
+      SELECT state FROM app.job_marks WHERE user_id = ${userId} AND job_id = ${jobId}
+    `.pipe(
+      Effect.map(([row]) => row?.state ?? null),
+      Effect.orDie
+    );
 
   const exists = (jobId: number) =>
     sql`SELECT id::float8 AS id FROM app.jobs WHERE id = ${jobId}`.pipe(
@@ -154,14 +130,22 @@ const make = Effect.gen(function* () {
       Effect.orDie
     );
 
-  const mark = (userId: string, jobId: number, state: JobMark | null) =>
+  /** Marks a job (null clears it), with the reason when one is given. */
+  const mark = (
+    userId: string,
+    jobId: number,
+    state: JobMark | null,
+    feedback: string | null = null
+  ) =>
     (state === null
       ? sql`DELETE FROM app.job_marks WHERE user_id = ${userId} AND job_id = ${jobId}`
       : sql`
-          INSERT INTO app.job_marks (user_id, job_id, state) VALUES (${userId}, ${jobId}, ${state})
-          ON CONFLICT (user_id, job_id) DO UPDATE SET state = EXCLUDED.state, updated_at = now()
+          INSERT INTO app.job_marks (user_id, job_id, state, feedback)
+          VALUES (${userId}, ${jobId}, ${state}, ${feedback})
+          ON CONFLICT (user_id, job_id) DO UPDATE SET state = EXCLUDED.state,
+            feedback = coalesce(EXCLUDED.feedback, app.job_marks.feedback), updated_at = now()
         `
     ).pipe(Effect.asVoid, Effect.orDie);
 
-  return { matches, mark, exists };
+  return { rank, matches, markOf, mark, exists };
 });

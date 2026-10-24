@@ -1,5 +1,6 @@
 import {
   Accounts,
+  ApiKeys,
   GithubOAuth,
   Mailer,
   RateLimiter,
@@ -45,6 +46,7 @@ export function testServer() {
     PgAccountStore,
     PgProfileStore,
     PgAnalyticsStore,
+    ApiKeys.layer,
     JobBoard.layer,
     JobMatcher.layer.pipe(
       Layer.provide(embedderFrom(() => new Float32Array(3072).fill(1)))

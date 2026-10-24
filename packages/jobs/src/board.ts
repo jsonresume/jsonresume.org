@@ -95,7 +95,8 @@ const make = Effect.gen(function* () {
     };
   }).pipe(Effect.orDie);
 
-  const job = (id: number) =>
+  /** A parsed job, open or not, with its post. */
+  const find = (id: number) =>
     sql`
       SELECT j.id::float8 AS id, j.parsed, j.posted_at, j.family_months::float8 AS family_months,
              j.html, j.author, NOT (${open}) AS closed
@@ -103,13 +104,16 @@ const make = Effect.gen(function* () {
     `.pipe(
       Effect.flatMap(rows(Full)),
       Effect.orDie,
-      Effect.flatMap(([row]) => {
-        const [parsed] = row ? toRow(row) : [];
-        return row && parsed
-          ? Effect.succeed(toJob(parsed, row))
+      Effect.flatMap(([full]) => {
+        const [row] = full ? toRow(full) : [];
+        return full && row
+          ? Effect.succeed({ row, full })
           : Effect.fail(new JobNotFound());
       })
     );
+
+  const job = (id: number) =>
+    find(id).pipe(Effect.map(({ row, full }) => toJob(row, full)));
 
   const status: Effect.Effect<JobsStatus> = Effect.gen(function* () {
     const [run] = yield* sql`
@@ -139,5 +143,5 @@ const make = Effect.gen(function* () {
     };
   }).pipe(Effect.orDie);
 
-  return { board, job, status };
+  return { board, job, find, status };
 });

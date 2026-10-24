@@ -36,6 +36,7 @@ export type EmploymentType = typeof EmploymentType.Type;
 /** What a signed-in user said about a job. */
 export const JobMark = Schema.Literals([
   'interested',
+  'maybe',
   'applied',
   'not_interested',
 ]);
@@ -46,6 +47,7 @@ export const JobSummary = Schema.Struct({
   /** The Hacker News item id of the post. */
   id: Schema.Number,
   title: Schema.String,
+  /** Empty when the post doesn't name the company. */
   company: Schema.String,
   /** "Berlin, DE", or null when the post names no place. */
   location: Schema.NullOr(Schema.String),

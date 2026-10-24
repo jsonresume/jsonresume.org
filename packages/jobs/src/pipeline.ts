@@ -15,6 +15,8 @@ export interface PipelineOptions {
   /** Posts older than this many days are no longer parsed or embedded. */
   days: number;
   concurrency: number;
+  /** Parse again posts parsed before this time (after a prompt change). */
+  reparseBefore?: Date;
 }
 
 export const defaults: PipelineOptions = {
@@ -55,6 +57,7 @@ export const runPipeline = Effect.fn('Jobs.pipeline')(function* (
     added: 0,
     removed: 0,
     parsed: 0,
+    notJobs: 0,
     parseFailed: 0,
     embedded: 0,
     families: 0,
@@ -81,14 +84,26 @@ export const runPipeline = Effect.fn('Jobs.pipeline')(function* (
 
   const parse = Effect.gen(function* () {
     const since = yield* daysAgo(options.days);
-    const rows = yield* store.toParse(options.parseLimit, since);
+    const rows = yield* store.toParse(
+      options.parseLimit,
+      since,
+      options.reparseBefore
+    );
     yield* Effect.logInfo(`parsing ${rows.length} posts`);
     yield* Effect.forEach(
       rows,
       ({ id, html }) =>
         parser.parse(html).pipe(
-          Effect.flatMap((posting) => store.saveParsed(id, posting)),
-          Effect.andThen(count('parsed')),
+          Effect.flatMap(
+            Option.match({
+              onSome: (posting) =>
+                store
+                  .saveParsed(id, posting)
+                  .pipe(Effect.andThen(count('parsed'))),
+              onNone: () =>
+                store.notAJob(id).pipe(Effect.andThen(count('notJobs'))),
+            })
+          ),
           Effect.catchTag('ParseFailed', (e) =>
             store
               .parseFailed(id, e.message)

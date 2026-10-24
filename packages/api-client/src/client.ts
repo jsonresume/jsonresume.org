@@ -23,6 +23,7 @@ export const keys = {
   account: ['account'],
   analytics: ['analytics'],
   jobs: ['jobs'],
+  apiKeys: ['apiKeys'],
 } as const;
 
 export const sessionAtom = ApiClient.query('auth', 'session', {
@@ -62,3 +63,9 @@ export const renameAtom = ApiClient.mutation('account', 'rename');
 export const deleteAccountAtom = ApiClient.mutation('account', 'delete');
 /** Marks a job; the page shows it at once rather than reranking. */
 export const markJobAtom = ApiClient.mutation('myJobs', 'mark');
+/** The user's API keys; creating or revoking one refreshes the list. */
+export const apiKeysAtom = ApiClient.query('keys', 'list', {
+  reactivityKeys: keys.apiKeys,
+});
+export const createApiKeyAtom = ApiClient.mutation('keys', 'create');
+export const revokeApiKeyAtom = ApiClient.mutation('keys', 'revoke');

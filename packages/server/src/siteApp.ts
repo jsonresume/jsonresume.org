@@ -55,7 +55,10 @@ export function createSiteApp({
   app.use('*', async (c, next) => {
     const host = (c.req.header('host') ?? '').split(':')[0] ?? '';
     const to = redirectHosts[host];
-    return to ? c.redirect(to(new URL(c.req.url)), 301) : next();
+    if (!to) return next();
+    // 308 keeps a POST a POST (API clients); browsers get the usual 301.
+    const read = c.req.method === 'GET' || c.req.method === 'HEAD';
+    return c.redirect(to(new URL(c.req.url)), read ? 301 : 308);
   });
   if (protect) app.use('*', sameOrigin(protect.prefix, protect.exempt));
 

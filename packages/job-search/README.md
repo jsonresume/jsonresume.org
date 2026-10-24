@@ -16,7 +16,7 @@ Search Hacker News "Who is Hiring" jobs matched against your [JSON Resume](https
 npx @jsonresume/jobs
 ```
 
-The CLI walks you through login on first run — all you need is a resume hosted at [registry.jsonresume.org](https://registry.jsonresume.org).
+The CLI walks you through login on first run — all you need is an account with a resume at [jsonresume.org](https://jsonresume.org).
 
 **With a local resume file (no account needed):**
 
@@ -29,7 +29,7 @@ Or just drop a `resume.json` in your current directory and run `npx @jsonresume/
 ## Prerequisites
 
 - **Node.js** >= 18
-- A [JSON Resume](https://jsonresume.org/schema/) — either hosted on the [registry](https://registry.jsonresume.org) or as a local `resume.json` file
+- A [JSON Resume](https://jsonresume.org/schema/) — either on your [jsonresume.org](https://jsonresume.org) account or as a local `resume.json` file
 - *(Optional)* `OPENAI_API_KEY` — enables AI summaries and batch ranking in the TUI
 
 ## Installation
@@ -51,7 +51,7 @@ jsonresume-jobs
 
 API keys are issued only to a signed-in GitHub account, so you create one in the browser and hand it to the CLI.
 
-1. Visit [jsonresume.org/api-keys](https://jsonresume.org/api-keys) and sign in with GitHub.
+1. Sign in at [jsonresume.org](https://jsonresume.org/signin) and open [Settings → API keys](https://jsonresume.org/dashboard/settings#api-keys).
 2. Click **Create API key** and copy it — it is shown once.
 
 On first run the CLI prompts you to paste that key, verifies it, and saves it to `~/.jsonresume/config.json`. Future runs skip straight to the TUI.
@@ -274,35 +274,18 @@ npx @jsonresume/jobs help                                # All options
 
 ## API Reference
 
-All endpoints live at `https://registry.jsonresume.org/api/v1`. Authenticated endpoints require a `Bearer` token in the `Authorization` header.
+All endpoints live at `https://jsonresume.org/api/v1`. Authenticated endpoints require a `Bearer` token in the `Authorization` header.
 
 ### Authentication
 
-Create a key at [jsonresume.org/api-keys](https://jsonresume.org/api-keys) while
-signed in with GitHub. Keys are only ever issued for the account you are signed
-in as, so there is no anonymous way to mint one.
+Create a key on jsonresume.org under
+[Settings → API keys](https://jsonresume.org/dashboard/settings#api-keys).
+Keys are only ever issued for the account you are signed in as, and are shown
+once.
 
 ```bash
 export JSONRESUME_API_KEY="jr_xxxxx"
 AUTH="Authorization: Bearer $JSONRESUME_API_KEY"
-```
-
-Manage keys programmatically with a Supabase session token (this is what the
-website does — an API key cannot mint another API key):
-
-```bash
-SESSION="Authorization: Bearer $SUPABASE_ACCESS_TOKEN"
-
-curl -s -X POST -H "$SESSION" https://registry.jsonresume.org/api/v1/keys \
-  -H 'Content-Type: application/json' -d '{"name":"laptop"}'
-# → { "key": "jr_xxxxx", "username": "...", "id": "...", ... }
-
-curl -s -H "$SESSION" https://registry.jsonresume.org/api/v1/keys
-# → { "username": "...", "keys": [ { "id": "...", "key_prefix": "jr_xxxxxxxx", ... } ] }
-
-curl -s -X DELETE -H "$SESSION" https://registry.jsonresume.org/api/v1/keys \
-  -H 'Content-Type: application/json' -d '{"id":"KEY_ID"}'
-# → { "revoked": true, "id": "KEY_ID" }
 ```
 
 ### GET /api/v1/me
@@ -310,7 +293,7 @@ curl -s -X DELETE -H "$SESSION" https://registry.jsonresume.org/api/v1/keys \
 Returns your resume and profile.
 
 ```bash
-curl -s -H "$AUTH" https://registry.jsonresume.org/api/v1/me
+curl -s -H "$AUTH" https://jsonresume.org/api/v1/me
 # → { "username": "...", "resume": { ... } }
 ```
 
@@ -330,13 +313,13 @@ Get jobs matched to your resume via vector similarity.
 
 ```bash
 # Basic search
-curl -s -H "$AUTH" "https://registry.jsonresume.org/api/v1/jobs?top=50&days=30"
+curl -s -H "$AUTH" "https://jsonresume.org/api/v1/jobs?top=50&days=30"
 
 # Remote jobs, $150k+, keyword filter
-curl -s -H "$AUTH" "https://registry.jsonresume.org/api/v1/jobs?top=50&remote=true&min_salary=150&search=react"
+curl -s -H "$AUTH" "https://jsonresume.org/api/v1/jobs?top=50&remote=true&min_salary=150&search=react"
 
 # Using a search profile with reranking
-curl -s -H "$AUTH" "https://registry.jsonresume.org/api/v1/jobs?top=50&search_id=UUID&rerank=true"
+curl -s -H "$AUTH" "https://jsonresume.org/api/v1/jobs?top=50&search_id=UUID&rerank=true"
 ```
 
 **Response:**
@@ -374,7 +357,7 @@ curl -s -H "$AUTH" "https://registry.jsonresume.org/api/v1/jobs?top=50&search_id
 Match jobs against a provided resume — **no auth required**. Useful for local mode or one-off queries.
 
 ```bash
-curl -s -X POST https://registry.jsonresume.org/api/v1/jobs \
+curl -s -X POST https://jsonresume.org/api/v1/jobs \
   -H 'Content-Type: application/json' \
   -d '{
     "resume": { "basics": { "name": "...", "label": "..." }, "skills": [...] },
@@ -389,7 +372,7 @@ curl -s -X POST https://registry.jsonresume.org/api/v1/jobs \
 Full details for a single job including raw posting content.
 
 ```bash
-curl -s -H "$AUTH" https://registry.jsonresume.org/api/v1/jobs/237247
+curl -s -H "$AUTH" https://jsonresume.org/api/v1/jobs/237247
 ```
 
 ### PUT /api/v1/jobs/:id
@@ -404,87 +387,99 @@ Mark a job's state.
 ```bash
 # Mark as interested
 curl -s -X PUT -H "$AUTH" -H 'Content-Type: application/json' \
-  https://registry.jsonresume.org/api/v1/jobs/237247 \
+  https://jsonresume.org/api/v1/jobs/237247 \
   -d '{"state":"interested","feedback":"great remote role, strong tech stack"}'
 
 # Mark as applied
 curl -s -X PUT -H "$AUTH" -H 'Content-Type: application/json' \
-  https://registry.jsonresume.org/api/v1/jobs/237247 \
+  https://jsonresume.org/api/v1/jobs/237247 \
   -d '{"state":"applied","feedback":"applied via email 2026-03-13"}'
 
 # Pass on a job
 curl -s -X PUT -H "$AUTH" -H 'Content-Type: application/json' \
-  https://registry.jsonresume.org/api/v1/jobs/237247 \
+  https://jsonresume.org/api/v1/jobs/237247 \
   -d '{"state":"not_interested","feedback":"salary too low"}'
 ```
 
 ### GET /api/v1/jobs/:id/dossier
 
+> Not available since the registry moved to jsonresume.org (October 2026): dossiers are not stored and saved searches return an empty list. [Ask for them](https://github.com/jsonresume/jsonresume.org/issues) if you use them.
+
 Fetch saved research dossier for a job.
 
 ```bash
-curl -s -H "$AUTH" https://registry.jsonresume.org/api/v1/jobs/237247/dossier
+curl -s -H "$AUTH" https://jsonresume.org/api/v1/jobs/237247/dossier
 # → { "content": "# Dossier\n\n## Compensation...", "created_at": "..." }
 # → { "content": null } if no dossier exists
 ```
 
 ### PUT /api/v1/jobs/:id/dossier
 
+> Not available since the registry moved to jsonresume.org (October 2026): dossiers are not stored and saved searches return an empty list. [Ask for them](https://github.com/jsonresume/jsonresume.org/issues) if you use them.
+
 Save or update a research dossier.
 
 ```bash
 curl -s -X PUT -H "$AUTH" -H 'Content-Type: application/json' \
-  https://registry.jsonresume.org/api/v1/jobs/237247/dossier \
+  https://jsonresume.org/api/v1/jobs/237247/dossier \
   -d '{"content":"# Company Research\n\n..."}'
 ```
 
 ### PUT /api/v1/resume
 
-Update your resume on the registry.
+Update your resume on jsonresume.org (written to your gist when your page reads from it).
 
 ```bash
 curl -s -X PUT -H "$AUTH" -H 'Content-Type: application/json' \
-  https://registry.jsonresume.org/api/v1/resume \
+  https://jsonresume.org/api/v1/resume \
   -d @resume.json
 # → { "username": "...", "message": "Resume updated" }
 ```
 
 ### GET /api/v1/searches
 
+> Not available since the registry moved to jsonresume.org (October 2026): dossiers are not stored and saved searches return an empty list. [Ask for them](https://github.com/jsonresume/jsonresume.org/issues) if you use them.
+
 List your saved search profiles.
 
 ```bash
-curl -s -H "$AUTH" https://registry.jsonresume.org/api/v1/searches
+curl -s -H "$AUTH" https://jsonresume.org/api/v1/searches
 # → { "searches": [{ "id": "uuid", "name": "Remote React", "prompt": "...", "filters": [...] }] }
 ```
 
 ### POST /api/v1/searches
 
+> Not available since the registry moved to jsonresume.org (October 2026): dossiers are not stored and saved searches return an empty list. [Ask for them](https://github.com/jsonresume/jsonresume.org/issues) if you use them.
+
 Create a new search profile. The server generates a HyDE embedding from your prompt + resume.
 
 ```bash
 curl -s -X POST -H "$AUTH" -H 'Content-Type: application/json' \
-  https://registry.jsonresume.org/api/v1/searches \
+  https://jsonresume.org/api/v1/searches \
   -d '{"name":"Remote React","prompt":"remote React roles at climate tech startups"}'
 # → { "search": { "id": "uuid", "name": "Remote React", "prompt": "..." } }
 ```
 
 ### PUT /api/v1/searches/:id
 
+> Not available since the registry moved to jsonresume.org (October 2026): dossiers are not stored and saved searches return an empty list. [Ask for them](https://github.com/jsonresume/jsonresume.org/issues) if you use them.
+
 Update a search profile's name or filters.
 
 ```bash
 curl -s -X PUT -H "$AUTH" -H 'Content-Type: application/json' \
-  https://registry.jsonresume.org/api/v1/searches/UUID \
+  https://jsonresume.org/api/v1/searches/UUID \
   -d '{"name":"Updated Name","filters":[{"type":"remote"},{"type":"minSalary","value":"150"}]}'
 ```
 
 ### DELETE /api/v1/searches/:id
 
+> Not available since the registry moved to jsonresume.org (October 2026): dossiers are not stored and saved searches return an empty list. [Ask for them](https://github.com/jsonresume/jsonresume.org/issues) if you use them.
+
 Delete a search profile.
 
 ```bash
-curl -s -X DELETE -H "$AUTH" https://registry.jsonresume.org/api/v1/searches/UUID
+curl -s -X DELETE -H "$AUTH" https://jsonresume.org/api/v1/searches/UUID
 # → { "ok": true }
 ```
 
@@ -494,54 +489,43 @@ Use the API to build your own automation — e.g., have Claude in Chrome review 
 
 ```bash
 # 1. Get all jobs, filter to "maybe" state
-JOBS=$(curl -s -H "$AUTH" "https://registry.jsonresume.org/api/v1/jobs?top=100" \
+JOBS=$(curl -s -H "$AUTH" "https://jsonresume.org/api/v1/jobs?top=100" \
   | jq '[.jobs[] | select(.state == "maybe")]')
 
 # 2. For each, get the full detail + dossier
 for ID in $(echo $JOBS | jq -r '.[].id'); do
-  DETAIL=$(curl -s -H "$AUTH" "https://registry.jsonresume.org/api/v1/jobs/$ID")
-  DOSSIER=$(curl -s -H "$AUTH" "https://registry.jsonresume.org/api/v1/jobs/$ID/dossier")
+  DETAIL=$(curl -s -H "$AUTH" "https://jsonresume.org/api/v1/jobs/$ID")
+  DOSSIER=$(curl -s -H "$AUTH" "https://jsonresume.org/api/v1/jobs/$ID/dossier")
   echo "$DETAIL" | jq '{title: .title, company: .company, url: .url}'
   # ... use the detail + dossier to apply, then mark as applied
   curl -s -X PUT -H "$AUTH" -H 'Content-Type: application/json' \
-    "https://registry.jsonresume.org/api/v1/jobs/$ID" \
+    "https://jsonresume.org/api/v1/jobs/$ID" \
     -d '{"state":"applied","feedback":"auto-applied via script"}'
 done
 ```
 
 ## How Ranking Works
 
-The system uses a five-stage pipeline to match and rank jobs against your resume.
+Jobs come from Hacker News "Who is hiring?" threads. Every two hours
+jsonresume.org imports new posts, parses each into structured data (title,
+company, skills, pay, remote policy, location) with `gpt-5-mini`, and embeds
+those parsed fields with OpenAI's `text-embedding-3-large` (3072 dimensions).
+A company reposting the same role each month is grouped into one job, which
+carries how many months it has been posted (`repost.months`).
 
-### Stage 1: Embedding Generation
+Your resume, from your jsonresume.org account or the file you send, is turned
+into text (label, summary, skills, work, projects, education) and embedded
+the same way. Open jobs (the last two monthly threads) are ranked by cosine
+similarity to it. Jobs you mark interested or applied pull the ranking toward
+similar jobs, and jobs you pass on push it away a little.
 
-Your JSON Resume is fetched from [registry.jsonresume.org](https://registry.jsonresume.org) and converted to text (label, summary, skills, work history). This text is embedded using OpenAI's `text-embedding-3-large` model into a 3072-dimensional vector.
+`score` (0 to 1) is that fit; `tier` is `strong`, `good` or `stretch`. The
+filters (`days`, `remote`, `global_remote`, `min_salary`, `search`) apply
+after ranking. The registry's LLM reranking and search profiles have not
+moved yet.
 
-Job postings from HN's monthly "Who is Hiring?" threads are parsed by GPT into structured data (title, company, skills, salary, remote, location) and embedded into the same vector space.
-
-### Stage 2: Vector Similarity Search
-
-Your resume embedding is compared against all job embeddings using cosine similarity via [pgvector](https://github.com/pgvector/pgvector). The top ~500 candidates are retrieved in ~200ms. This is purely semantic — it finds jobs that "sound like" your resume. Jobs you've already passed on or dismissed are excluded server-side (with 5x over-fetch to compensate) so you always get fresh results.
-
-### Stage 3: Custom Search Profiles
-
-When you create a search profile (e.g. "remote React roles at climate tech startups"), two techniques boost the prompt's influence:
-
-**HyDE (Hypothetical Document Embedding):** Instead of naively blending your prompt into resume text, the system generates a hypothetical ideal job posting matching your preferences. This creates a document-to-document comparison, which is far more effective than query-to-document matching.
-
-**Embedding Interpolation:** The resume and HyDE vectors are combined: `0.65 × hyde + 0.35 × resume`. This gives your search intent 65% influence on ranking, versus plain resume matching where the resume dominates ~80% of the signal.
-
-### Stage 4: LLM Reranking
-
-For custom searches, the top 30 vector results are re-scored by `gpt-4.1-mini`. Each job receives a 1–10 relevance score considering skill alignment, experience level, location fit, and your stated preferences.
-
-The final score blends both signals: `0.4 × vector_score + 0.6 × llm_score`. This lets the LLM override semantic similarity — a job that's a great vector match but contradicts your preferences gets pushed down.
-
-In the TUI, this runs as a two-pass load: jobs appear instantly from vector search, then reshuffle when reranking finishes in the background. The status bar shows "reranking..." while this is in progress.
-
-### Stage 5: Client-side Filtering
-
-After server-side ranking, the TUI applies local filters (remote only, minimum salary, keyword, days). Filters are persisted per search profile to `~/.jsonresume/filters.json`, so switching profiles restores each one's filters automatically.
+The same jobs are on the web at [jsonresume.org/jobs](https://jsonresume.org/jobs),
+and ranked for you at [jsonresume.org/dashboard/jobs](https://jsonresume.org/dashboard/jobs).
 
 ## Claude Code Skill
 
@@ -572,7 +556,7 @@ The skill interviews you about what you're looking for, runs multiple searches, 
 |----------|----------|-------------|
 | `JSONRESUME_API_KEY` | No | API key (auto-generated on first run if not set) |
 | `OPENAI_API_KEY` | No | Enables AI summaries and batch ranking in TUI |
-| `JSONRESUME_BASE_URL` | No | API base URL override (default: `https://registry.jsonresume.org`) |
+| `JSONRESUME_BASE_URL` | No | API base URL override (default: `https://jsonresume.org`) |
 
 ## Data Storage
 

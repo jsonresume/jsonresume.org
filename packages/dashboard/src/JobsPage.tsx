@@ -23,6 +23,7 @@ import { useMemo, useState, type ReactNode } from 'react';
 
 const marks: ReadonlyArray<{ value: JobMark; label: string }> = [
   { value: 'interested', label: 'Interested' },
+  { value: 'maybe', label: 'Maybe' },
   { value: 'applied', label: 'Applied' },
   { value: 'not_interested', label: 'Not for me' },
 ];

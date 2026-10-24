@@ -41,9 +41,9 @@ export const moved: { title: string; description: string; href: string }[] = [
     href: '/jobs',
   },
   {
-    title: 'Jobs ranked for you',
+    title: 'Jobs ranked for you, and API keys',
     description:
-      'Open roles ordered by how well they fit your resume, with what you mark remembered.',
+      'Open roles ordered by how well they fit your resume: on the dashboard, or in the terminal with the jobs CLI and a key from Settings.',
     href: '/dashboard/jobs',
   },
 ];
@@ -71,10 +71,6 @@ export const notYet: { title: string; description: string }[] = [
   {
     title: 'Explore',
     description: 'Browsing and comparing other people’s resumes.',
-  },
-  {
-    title: 'API keys',
-    description: 'Programmatic access to registry features.',
   },
 ];
 

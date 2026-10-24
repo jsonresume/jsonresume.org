@@ -9,6 +9,8 @@ import { AuthenticationLive } from './authentication';
 import { EditorHandlers } from './editor';
 import { GithubRoutes } from './github';
 import { JobsHandlers, MyJobsHandlers } from './jobs';
+import { ApiKeyAuthenticationLive, KeysHandlers } from './keys';
+import { V1Handlers, V1PublicHandlers } from './v1';
 
 export { AuthenticationLive } from './authentication';
 export { client } from './http';
@@ -23,7 +25,8 @@ const SystemHandlers = (version: string) =>
 /**
  * Every /api route: the HttpApi groups with their handlers and the session
  * middleware, plus the GitHub redirects. Needs Accounts, RateLimiter,
- * Analytics, AnalyticsStore, GithubOAuth, JobBoard and JobMatcher from the app.
+ * Analytics, AnalyticsStore, GithubOAuth, ApiKeys, JobBoard and JobMatcher
+ * from the app.
  */
 export const apiRoutes = (version: string) =>
   Layer.mergeAll(
@@ -39,8 +42,11 @@ export const apiRoutes = (version: string) =>
         EditorHandlers,
         JobsHandlers,
         MyJobsHandlers,
+        KeysHandlers,
+        V1Handlers,
+        V1PublicHandlers,
       ]),
-      Layer.provide(AuthenticationLive)
+      Layer.provide([AuthenticationLive, ApiKeyAuthenticationLive])
     ),
     GithubRoutes
   );

@@ -2,7 +2,7 @@ export { JobBoard, OPEN_DAYS } from './board';
 export { Embedder, embedderFrom, EmbedFailed } from './embedder';
 export { companyKey, repostFamilies } from './families';
 export { HackerNews, HackerNewsUnavailable, type Thread } from './hackerNews';
-export { fitScore, JobMatcher, MATCHES } from './matcher';
+export { fitScore, JobMatcher, MATCHES, type Ranked } from './matcher';
 export { JobParser, ParseFailed } from './parser';
 export { decodePosting, embeddingText, Posting } from './posting';
 export { postParagraphs, postText } from './postText';
@@ -15,3 +15,4 @@ export {
 } from './pipeline';
 export { OpenAiJobs } from './openai';
 export { fromLegacy } from './legacy';
+export { toV1Job, v1Options, v1Select, type V1Options } from './v1';

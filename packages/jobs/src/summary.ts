@@ -9,6 +9,11 @@ export interface JobRow {
   months: number;
 }
 
+/** Models write "unspecified" or "null" for a company the post doesn't name. */
+const PLACEHOLDER = /^(unspecified|unknown|null|none|n\/a|not specified|)$/i;
+export const companyOf = (p: Posting) =>
+  PLACEHOLDER.test(p.company.trim()) ? '' : p.company.trim();
+
 export const placeOf = (p: Posting): string | null =>
   [p.city, p.region && p.region !== p.city ? p.region : null, p.countryCode]
     .filter(Boolean)
@@ -22,7 +27,7 @@ export const toSummary = ({
 }: JobRow): JobSummary => ({
   id,
   title: p.title,
-  company: p.company,
+  company: companyOf(p),
   location: placeOf(p),
   remote: p.remote,
   remoteRegions: p.remoteRegions,

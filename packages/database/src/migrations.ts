@@ -180,4 +180,29 @@ export const migrations: Record<
       )
     `;
   }),
+
+  // API keys for the jobs CLI (@jsonresume/jobs) and other scripts: only a
+  // hash is kept. Marks gain "maybe" and the reason given, as the CLI sends.
+  '7_api_keys': Effect.gen(function* () {
+    const sql = yield* SqlClient.SqlClient;
+    yield* sql`
+      CREATE TABLE app.api_keys (
+        id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+        user_id uuid NOT NULL REFERENCES app.users (id) ON DELETE CASCADE,
+        name text NOT NULL,
+        key_hash text NOT NULL UNIQUE,
+        prefix text NOT NULL,
+        created_at timestamptz NOT NULL DEFAULT now(),
+        last_used_at timestamptz
+      )
+    `;
+    yield* sql`CREATE INDEX api_keys_user ON app.api_keys (user_id)`;
+    yield* sql`ALTER TABLE app.job_marks DROP CONSTRAINT job_marks_state_check`;
+    yield* sql`
+      ALTER TABLE app.job_marks
+        ADD CONSTRAINT job_marks_state_check
+          CHECK (state IN ('interested', 'maybe', 'applied', 'not_interested')),
+        ADD COLUMN feedback text
+    `;
+  }),
 };

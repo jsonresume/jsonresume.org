@@ -116,5 +116,10 @@ describe('createSiteApp', () => {
     });
     expect(res.status).toBe(301);
     expect(res.headers.get('location')).toBe('https://new.example/thomasdavis');
+    const post = await app.request('/api/v1/jobs', {
+      method: 'POST',
+      headers: { host: 'old.example' },
+    });
+    expect(post.status).toBe(308);
   });
 });

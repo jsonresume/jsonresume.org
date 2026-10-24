@@ -15,7 +15,7 @@ npx @jsonresume/job-search help
 ```
 
 If `JSONRESUME_API_KEY` is not set, tell the user to create one at
-https://jsonresume.org/api-keys — they sign in with GitHub, click **Create API
+https://jsonresume.org/dashboard/settings#api-keys — they sign in, click **Create API
 key**, and copy it (it is shown only once). Keys are issued only for the account
 the user is signed in as, so there is no command you can run on their behalf.
 

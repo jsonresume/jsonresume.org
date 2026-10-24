@@ -12,6 +12,7 @@ import {
 } from '@jsonresume/ui';
 import type { Job } from '@repo/api';
 import {
+  companyText,
   employmentLabels,
   hnUrl,
   monthsText,
@@ -78,7 +79,7 @@ export function JobPage({ job, boardHref }: { job: Job; boardHref: string }) {
       <Container size="wide">
         <Breadcrumbs className={s.crumbs}>
           <BreadcrumbItem href={boardHref}>Jobs</BreadcrumbItem>
-          <BreadcrumbItem current>{job.company}</BreadcrumbItem>
+          <BreadcrumbItem current>{companyText(job.company)}</BreadcrumbItem>
         </Breadcrumbs>
         <div className={s.layout}>
           <article className={s.article}>
@@ -86,7 +87,7 @@ export function JobPage({ job, boardHref }: { job: Job; boardHref: string }) {
               <Heading level={1} size="title">
                 {job.title}
               </Heading>
-              <p className={s.company}>{job.company}</p>
+              <p className={s.company}>{companyText(job.company)}</p>
               <div className={s.badges}>
                 {repost && <Badge tone="brand">{repost}</Badge>}
                 {job.skills.map((skill) => (

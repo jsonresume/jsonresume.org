@@ -11,6 +11,7 @@ const COUNTERPARTS: Record<string, string> = {
   docs: '/docs',
   jobs: '/jobs',
   'my-jobs': '/dashboard/jobs',
+  'api-keys': '/dashboard/settings',
 };
 
 /** The registry's own pages, which are not usernames. */
@@ -65,6 +66,9 @@ export function registryRedirect(url: URL): string {
   const segments = url.pathname.split('/').filter(Boolean);
   const [first, second, ...rest] = segments;
   if (!first) return `${SITE}/registry`;
+  // The jobs CLI's API is here now, at the same paths.
+  if (first === 'api' && second === 'v1')
+    return `${SITE}${url.pathname}${url.search}`;
   // Registry job pages were keyed by the Hacker News item id, as here.
   if (first === 'jobs' && second && /^\d+$/.test(second) && rest.length === 0)
     return `${SITE}/jobs/${second}`;

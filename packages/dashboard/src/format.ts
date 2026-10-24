@@ -34,3 +34,12 @@ const capital = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 export const label = (s: string) => capital(s);
 
 export const rangeDays = { '7d': 7, '30d': 30, '90d': 90 } as const;
+
+/** "24 Oct 2026", from an ISO date. */
+export const date = (iso: string) =>
+  new Date(iso).toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    timeZone: 'UTC',
+  });
