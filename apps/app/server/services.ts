@@ -1,4 +1,10 @@
-import { Accounts, GithubOAuth, Mailer, RateLimiter } from '@repo/accounts';
+import {
+  Accounts,
+  GistFiles,
+  GithubOAuth,
+  Mailer,
+  RateLimiter,
+} from '@repo/accounts';
 import { PgAccountStore } from '@repo/accounts/sql';
 import { Analytics } from '@repo/analytics';
 import { PgAnalyticsStore } from '@repo/analytics/sql';
@@ -28,6 +34,7 @@ export const appServices = <E>(
       Layer.mergeAll(
         profiles,
         RateLimiter.layer,
+        GistFiles.layer,
         Mailer.layer,
         GithubOAuth.layer
       )

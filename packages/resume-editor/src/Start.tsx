@@ -1,5 +1,5 @@
 import resume from '@jsonresume/sample-data/complete-resume.json';
-import { Button, EmptyState, Stack, Text } from '@jsonresume/ui';
+import { Button, Callout, EmptyState, Stack, Text } from '@jsonresume/ui';
 
 /** No resume yet: start blank, or from a complete example to edit. */
 export function Start({ onStart }: { onStart: (resume: unknown) => void }) {
@@ -50,3 +50,22 @@ Start.Restore = function Restore({
     </Stack>
   );
 };
+
+/** Saving to the gist needs GitHub's gist permission, asked for once. */
+export function AllowGist() {
+  return (
+    <Callout tone="warning" title="Allow saving to your gist">
+      <Stack direction="row" wrap align="center" gap={3}>
+        <Text as="span" size="sm">
+          Your page reads your GitHub gist, so saves go there. GitHub needs to
+          let JSON Resume update your gists; it only ever writes resume.json.
+        </Text>
+        <Button asChild size="sm" variant="secondary">
+          <a href="/api/auth/github?intent=link&next=/dashboard/editor">
+            Allow on GitHub
+          </a>
+        </Button>
+      </Stack>
+    </Callout>
+  );
+}

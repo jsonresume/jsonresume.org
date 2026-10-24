@@ -7,6 +7,7 @@ import {
   type Mail,
 } from '@repo/accounts';
 import { PgAccountStore } from '@repo/accounts/sql';
+import { fakeGists } from '@repo/accounts/testing';
 import { Analytics } from '@repo/analytics';
 import { PgAnalyticsStore } from '@repo/analytics/sql';
 import { TestDatabase } from '@repo/database/testing';
@@ -31,6 +32,7 @@ export function testServer() {
     ],
   });
   const identities = new Map<string, GithubIdentity>();
+  const gists = fakeGists();
   const mail: Mail[] = [];
   const config = ConfigProvider.layer(
     ConfigProvider.fromEnvRecord({
@@ -51,6 +53,7 @@ export function testServer() {
       Layer.mergeAll(
         profiles,
         RateLimiter.layer,
+        gists.layer,
         Layer.succeed(
           Mailer,
           Mailer.of({
@@ -105,5 +108,14 @@ export function testServer() {
   };
   const post = (path: string, body: unknown) =>
     fetch(path, { method: 'POST', body: JSON.stringify(body) });
-  return { fetch, post, jar, mail, github, identities, dispose };
+  return {
+    fetch,
+    post,
+    jar,
+    mail,
+    github,
+    gists: gists.state,
+    identities,
+    dispose,
+  };
 }

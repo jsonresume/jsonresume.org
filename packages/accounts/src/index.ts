@@ -4,7 +4,7 @@ export {
   UNVERIFIED_TTL,
   type SignedIn,
 } from './accounts';
-export { hashToken, newToken, sign, unsign } from './crypto';
+export { decrypt, encrypt, hashToken, newToken, sign, unsign } from './crypto';
 export { GithubOAuth, GithubOAuthFailed } from './githubOAuth';
 export { RateLimiter } from './limiter';
 export { Mailer, type Mail } from './mailer';
@@ -15,3 +15,4 @@ export {
   type GithubIdentity,
   type UserRecord,
 } from './store';
+export { GistAccess, GistFiles } from './gists';

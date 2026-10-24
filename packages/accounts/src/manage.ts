@@ -7,6 +7,7 @@ import { Duration, Effect } from 'effect';
 import { accountsCore, normalEmail, normalName, unreachable } from './core';
 import { hashPassword, hashToken, newToken } from './crypto';
 import { passwordResetEmail } from './emails';
+import { gistSync } from './gistSync';
 
 const RESET_TTL = Duration.hours(1);
 /** How long an old name keeps redirecting after a rename. */
@@ -16,6 +17,7 @@ export const RENAME_REDIRECT = Duration.days(90);
 export const accountManagement = Effect.gen(function* () {
   const { store, usernames, mailer, siteUrl, later, startSession } =
     yield* accountsCore;
+  const gist = yield* gistSync;
 
   /** Always succeeds, so it doesn't tell who has an account. */
   const requestPasswordReset = Effect.fn('Accounts.requestPasswordReset')(
@@ -95,7 +97,13 @@ export const accountManagement = Effect.gen(function* () {
   ) {
     const found = yield* store.resumeOf(userId);
     if (!found) return yield* Effect.die(`no account for ${userId}`);
-    const primary = found.source === 'gist' ? found.mirror : found.stored;
+    // From the gist as it is now, so edits made on GitHub aren't overwritten.
+    const fresh =
+      found.source === 'gist' && found.gistId
+        ? yield* gist.readGist(userId, found.gistId)
+        : undefined;
+    const primary =
+      found.source === 'gist' ? fresh ?? found.mirror : found.stored;
     return {
       resume: primary ?? found.stored ?? found.mirror ?? null,
       source: found.source,

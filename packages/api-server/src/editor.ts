@@ -26,7 +26,12 @@ export const EditorHandlers = HttpApiBuilder.group(
           Effect.gen(function* () {
             const user = yield* CurrentUser;
             const current = yield* accounts.currentResume(user.id);
-            return { ...current, github: user.github?.login ?? null };
+            const gistWrite = yield* accounts.canWriteGist(user.id);
+            return {
+              ...current,
+              github: user.github?.login ?? null,
+              gistWrite,
+            };
           }),
         preview: ({ payload }) =>
           Effect.gen(function* () {

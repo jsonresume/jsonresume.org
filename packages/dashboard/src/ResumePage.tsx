@@ -52,8 +52,16 @@ function GistCard({ account, use }: { account: Account; use: () => void }) {
                 <Link href={`https://gist.github.com/${account.github.login}`}>
                   @{account.github.login}’s gists
                 </Link>
-                . Edits show within a minute.
+                . Edits there show within a minute, and saving in the editor
+                writes to it.
               </Text>
+              {account.gistWrite ? null : (
+                <Button asChild variant="secondary">
+                  <a href="/api/auth/github?intent=link&next=/dashboard/resume">
+                    Allow saving to your gist
+                  </a>
+                </Button>
+              )}
               {account.source !== 'gist' ? (
                 <Button variant="secondary" onClick={use}>
                   Use the gist

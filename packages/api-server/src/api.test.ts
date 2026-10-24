@@ -132,7 +132,12 @@ describe('the API, over HTTP', () => {
     server = testServer();
     await server.post('/api/auth/signup', ada);
     const empty = await (await server.fetch('/api/editor/resume')).json();
-    expect(empty).toEqual({ resume: null, source: 'stored', github: null });
+    expect(empty).toEqual({
+      resume: null,
+      source: 'stored',
+      github: null,
+      gistWrite: false,
+    });
 
     const resume = { basics: { name: 'Ada Lovelace' } };
     await server.fetch('/api/account/resume', {

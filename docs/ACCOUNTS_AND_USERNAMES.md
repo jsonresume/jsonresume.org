@@ -69,12 +69,16 @@ lowercase).
 
 ## Where the resume comes from
 
-- Ghosts, and claimed accounts that haven't edited here: the gist, fetched
-  live with a short cache. A deleted gist or GitHub user means 404, and the
-  ghost and its name protection go away.
-- Once the owner saves an edit on jsonresume.org, the stored copy is used. They
-  can switch back to gist sync.
-- Email-only accounts: the stored copy.
+- Ghosts and GitHub accounts: the gist, fetched live with a short cache. A
+  deleted gist or GitHub user means 404, and the ghost and its name
+  protection go away.
+- The gist stays the source of truth (changed 2026-10-24): saving in the
+  editor writes to the person's resume.json gist (creating one if they have
+  none) with their GitHub token, which GitHub grants with the `gist` scope at
+  sign-in and which is stored encrypted. The editor opens on the gist as it
+  is on GitHub, so edits made there aren't overwritten.
+- Email-only accounts, and anyone who chose an uploaded copy on the Resume
+  page: the stored copy.
 - `?gistname=other.json` keeps working for gist-backed profiles.
 
 ## Search engines and old URLs

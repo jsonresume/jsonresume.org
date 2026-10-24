@@ -31,6 +31,7 @@ import {
   UNVERIFIED_TTL,
   type SignedIn,
 } from './core';
+import { gistSync } from './gistSync';
 import { accountManagement } from './manage';
 import type { GithubIdentity, UserRecord } from './store';
 
@@ -57,6 +58,7 @@ const make = Effect.gen(function* () {
     claimable,
   } = yield* accountsCore;
   const management = yield* accountManagement;
+  const gist = yield* gistSync;
   const signUp = Effect.fn('Accounts.signUp')(function* (input: {
     email: string;
     password: string;
@@ -98,8 +100,10 @@ const make = Effect.gen(function* () {
     identity: GithubIdentity
   ) {
     const existing = yield* store.findByGithubId(identity.id);
-    if (existing)
+    if (existing) {
+      yield* gist.keepGrant(existing.id, identity);
       return { _tag: 'SignedIn', ...(yield* startSession(existing)) } as const;
+    }
     const claimant = { githubId: identity.id, githubLogin: identity.login };
     const login = normalName(identity.login);
     const check = yield* usernames
@@ -107,6 +111,7 @@ const make = Effect.gen(function* () {
       .pipe(Effect.mapError(unreachable));
     if (!check.available) return { _tag: 'ChooseUsername' } as const;
     const user = yield* store.createGithubUser(identity, login);
+    yield* gist.keepGrant(user.id, identity);
     return { _tag: 'SignedIn', ...(yield* startSession(user)) } as const;
   });
 
@@ -122,6 +127,7 @@ const make = Effect.gen(function* () {
     const existing = yield* store.findByGithubId(identity.id);
     const user =
       existing ?? (yield* store.createGithubUser(identity, username));
+    yield* gist.keepGrant(user.id, identity);
     return yield* startSession(user);
   });
 
@@ -133,6 +139,11 @@ const make = Effect.gen(function* () {
       return yield* new InvalidResume({
         message: 'A resume is one JSON object, starting with {.',
       });
+    }
+    // A gist that feeds the page stays the source of truth: write to it.
+    const account = yield* store.account(userId);
+    if (account?.source === 'gist' && account.user.githubLogin) {
+      return yield* gist.saveToGist(userId, resume);
     }
     yield* store.saveStoredResume(userId, resume);
   });
@@ -167,7 +178,11 @@ const make = Effect.gen(function* () {
     githubSignIn,
     completeGithub,
     linkGithub: (userId: string, identity: GithubIdentity) =>
-      store.linkGithub(userId, identity),
+      store
+        .linkGithub(userId, identity)
+        .pipe(Effect.tap(() => gist.keepGrant(userId, identity))),
+    /** Whether saves can go to their gist (GitHub granted the gist scope). */
+    canWriteGist: gist.canWrite,
     account: (userId: string) => store.account(userId),
     saveResume,
     setSource,

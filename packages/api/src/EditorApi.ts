@@ -11,6 +11,8 @@ export const EditorResume = Schema.Struct({
   source: ResumeSource,
   /** The linked GitHub login, whose gist feeds the page when source is gist. */
   github: Schema.NullOr(Schema.String),
+  /** Saves can be written to that gist (GitHub granted the gist permission). */
+  gistWrite: Schema.Boolean,
 });
 
 /**

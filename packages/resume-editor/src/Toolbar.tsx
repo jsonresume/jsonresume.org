@@ -67,10 +67,15 @@ export function EditorToolbar({
 export function EditorActions({
   path,
   saving,
+  saveLabel,
+  blocked,
   onSave,
 }: {
   path: string;
   saving: boolean;
+  saveLabel: string;
+  /** Saving can't work yet (the gist permission is missing). */
+  blocked: boolean;
   onSave: () => void;
 }) {
   const dirty = useAtomValue(dirtyAtom);
@@ -103,9 +108,9 @@ export function EditorActions({
         size="sm"
         variant="primary"
         onClick={onSave}
-        disabled={!dirty || saving}
+        disabled={!dirty || saving || blocked}
       >
-        Save
+        {saveLabel}
       </Button>
     </>
   );

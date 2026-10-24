@@ -68,3 +68,10 @@ export class ConfirmationMismatch extends Schema.TaggedError<ConfirmationMismatc
   {},
   { httpApiStatus: 400 }
 ) {}
+
+/** Saving to the gist needs GitHub's gist permission: sign in with GitHub again to grant it. */
+export class GistPermissionNeeded extends Schema.TaggedError<GistPermissionNeeded>()(
+  'GistPermissionNeeded',
+  {},
+  { httpApiStatus: 403 }
+) {}

@@ -1,4 +1,10 @@
-import { sign, unsign, type GithubIdentity } from '@repo/accounts';
+import {
+  decrypt,
+  encrypt,
+  sign,
+  unsign,
+  type GithubIdentity,
+} from '@repo/accounts';
 import { Clock, Config, Effect, Option, type Redacted, Schema } from 'effect';
 
 const Pending = Schema.fromJsonString(
@@ -7,6 +13,13 @@ const Pending = Schema.fromJsonString(
     login: Schema.String,
     avatarUrl: Schema.NullOr(Schema.String),
     email: Schema.NullOr(Schema.String),
+    /** The OAuth token, encrypted: this cookie is signed, not secret. */
+    grant: Schema.optionalKey(
+      Schema.Struct({
+        sealed: Schema.String,
+        scopes: Schema.Array(Schema.String),
+      })
+    ),
     expires: Schema.Number,
   })
 );
@@ -39,14 +52,33 @@ export const sealedCookies = Effect.gen(function* () {
     sealed ? unsign(secret, sealed) : undefined;
 
   return {
-    sealPending: (identity: GithubIdentity) =>
+    sealPending: ({ grant, ...identity }: GithubIdentity) =>
       Effect.map(expiresIn(PENDING_SECONDS), (expires) =>
-        sign(secret, Schema.encodeSync(Pending)({ ...identity, expires }))
+        sign(
+          secret,
+          Schema.encodeSync(Pending)({
+            ...identity,
+            ...(grant
+              ? {
+                  grant: {
+                    sealed: encrypt(secret, grant.token),
+                    scopes: grant.scopes,
+                  },
+                }
+              : {}),
+            expires,
+          })
+        )
       ),
     openPending: (sealed: string | undefined) =>
       fresh(Schema.decodeUnknownOption(Pending)(raw(sealed))).pipe(
         Effect.map(
-          Option.map(({ expires: _, ...identity }): GithubIdentity => identity)
+          Option.map(({ expires: _, grant, ...identity }): GithubIdentity => {
+            const token = grant ? decrypt(secret, grant.sealed) : undefined;
+            return token && grant
+              ? { ...identity, grant: { token, scopes: grant.scopes } }
+              : identity;
+          })
         )
       ),
     sealOAuth: (state: OAuthState) =>

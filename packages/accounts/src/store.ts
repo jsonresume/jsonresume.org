@@ -12,12 +12,20 @@ export interface UserRecord {
   avatarUrl: string | null;
 }
 
+/** What a GitHub sign-in lets us do: its token and the scopes granted. */
+export interface GithubGrant {
+  token: string;
+  scopes: ReadonlyArray<string>;
+}
+
 /** Who GitHub says signed in. `email` is their primary address if verified. */
 export interface GithubIdentity {
   id: number;
   login: string;
   avatarUrl: string | null;
   email: string | null;
+  /** Present after OAuth; kept (encrypted) to save to their gist. */
+  grant?: GithubGrant;
 }
 
 export interface AccountRecord {
@@ -100,12 +108,32 @@ export class AccountStore extends Context.Service<
       retiredUntil: Date
     ): Effect.Effect<UserRecord, UsernameUnavailable>;
     /** The account's resumes: the saved copy and the last gist copy. */
-    resumeOf(
-      userId: string
-    ): Effect.Effect<
-      | { stored: unknown; mirror: unknown; source: 'gist' | 'stored' }
+    resumeOf(userId: string): Effect.Effect<
+      | {
+          stored: unknown;
+          mirror: unknown;
+          source: 'gist' | 'stored';
+          gistId: string | null;
+        }
       | undefined
     >;
+    /** Keep a user's GitHub token (already encrypted) and its scopes. */
+    setGithubGrant(
+      userId: string,
+      sealedToken: string,
+      scopes: ReadonlyArray<string>
+    ): Effect.Effect<void>;
+    /** The stored GitHub token (encrypted) and scopes, if any. */
+    githubGrant(
+      userId: string
+    ): Effect.Effect<
+      { sealedToken: string; scopes: ReadonlyArray<string> } | undefined
+    >;
+    /** The gist copy on the account, after writing to the gist. */
+    saveMirrorFor(
+      userId: string,
+      mirror: { githubId: number; gistId: string; resume: unknown }
+    ): Effect.Effect<void>;
     /** Free names whose rename redirect has run out; how many. */
     purgeRetired(): Effect.Effect<number>;
     account(userId: string): Effect.Effect<AccountRecord | undefined>;

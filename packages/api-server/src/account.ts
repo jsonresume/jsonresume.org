@@ -4,7 +4,11 @@ import { Effect } from 'effect';
 import { HttpApiBuilder } from 'effect/http-api';
 import { clearSession } from './http';
 
-const toAccount = (record: AccountRecord, emailDelivery: boolean) => {
+const toAccount = (
+  record: AccountRecord,
+  emailDelivery: boolean,
+  gistWrite: boolean
+) => {
   const { user } = record;
   const verified = user.emailVerified || user.githubId !== null;
   const hasResume =
@@ -23,6 +27,7 @@ const toAccount = (record: AccountRecord, emailDelivery: boolean) => {
     source: record.source,
     hasStoredResume: record.hasStoredResume,
     emailDelivery,
+    gistWrite,
   });
 };
 
@@ -37,7 +42,11 @@ export const AccountHandlers = HttpApiBuilder.group(
         const user = yield* CurrentUser;
         const record = yield* accounts.account(user.id);
         if (!record) return yield* Effect.die(`no account for ${user.id}`);
-        return toAccount(record, accounts.emailDelivery);
+        return toAccount(
+          record,
+          accounts.emailDelivery,
+          yield* accounts.canWriteGist(user.id)
+        );
       });
       return handlers.handleAll({
         get: () => current,

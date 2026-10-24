@@ -118,4 +118,11 @@ export const migrations: Record<
     `;
     yield* sql`ALTER TABLE app.profiles ADD COLUMN retired_until timestamptz`;
   }),
+
+  // A GitHub user's OAuth token, encrypted with AUTH_SECRET, and the scopes
+  // it has: with gist, the editor saves to their gist.
+  '5_github_grants': Effect.gen(function* () {
+    const sql = yield* SqlClient.SqlClient;
+    yield* sql`ALTER TABLE app.users ADD COLUMN github_token text, ADD COLUMN github_scopes text`;
+  }),
 };

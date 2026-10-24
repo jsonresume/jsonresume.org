@@ -3,6 +3,7 @@ import { HttpApiEndpoint, HttpApiGroup } from 'effect/http-api';
 import { Authentication } from './Authentication';
 import {
   ConfirmationMismatch,
+  GistPermissionNeeded,
   GithubUnreachable,
   InvalidResume,
   UsernameUnavailable,
@@ -30,15 +31,18 @@ export class Account extends Schema.Class<Account>('@repo/api/Account')({
   hasStoredResume: Schema.Boolean,
   /** False while the server can't send email; verification links are then logged. */
   emailDelivery: Schema.Boolean,
+  /** GitHub granted the gist permission, so saves go to their gist. */
+  gistWrite: Schema.Boolean,
 }) {}
 
 export class AccountApi extends HttpApiGroup.make('account')
   .add(
     HttpApiEndpoint.get('get', '/', { success: Account }),
+    /** Saves to their gist when it feeds the page (it stays the source), else stores the copy. */
     HttpApiEndpoint.put('saveResume', '/resume', {
       payload: Schema.Struct({ resume: Schema.Unknown }),
       success: Account,
-      error: InvalidResume,
+      error: [InvalidResume, GistPermissionNeeded, GithubUnreachable],
     }),
     HttpApiEndpoint.put('setSource', '/source', {
       payload: Schema.Struct({ source: ResumeSource }),

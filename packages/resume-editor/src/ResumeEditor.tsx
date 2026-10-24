@@ -19,7 +19,7 @@ import { ResumeForm } from './form/ResumeForm';
 import { JsonPane } from './JsonPane';
 import { formSections } from './model';
 import { PreviewPane } from './PreviewPane';
-import { Start } from './Start';
+import { AllowGist, Start } from './Start';
 import { draftAtom, jsonTextAtom, modeParamAtom, serialize } from './state';
 import { EditorActions, EditorToolbar, type Mode } from './Toolbar';
 import { useEditorSession } from './useEditorSession';
@@ -42,6 +42,7 @@ export function ResumeEditor({ username }: { username: string }) {
   const {
     ready,
     loadedResume,
+    target,
     saving,
     notice,
     onSave,
@@ -56,6 +57,8 @@ export function ResumeEditor({ username }: { username: string }) {
     () => new Map(issues.map((i) => [pathKey(i.path), i.message])),
     [issues]
   );
+  // A gist that feeds the page stays the source of truth: saves go there.
+  const toGist = target.source === 'gist' && target.github !== null;
   const onMode = (next: Mode) => {
     if (next === 'json') setText(serialize(draft));
     setModeParam(next === 'json' ? 'json' : null);
@@ -86,11 +89,17 @@ export function ResumeEditor({ username }: { username: string }) {
     <AppPage
       title="Editor"
       fill
-      description={`The preview follows as you type; Save puts it on /@${username}.`}
+      description={
+        toGist
+          ? `The preview follows as you type; Save writes to your gist (@${target.github}), which /@${username} reads.`
+          : `The preview follows as you type; Save puts it on /@${username}.`
+      }
       actions={
         <EditorActions
           path={`/@${username}`}
           saving={saving}
+          saveLabel={toGist ? 'Save to gist' : 'Save'}
+          blocked={toGist && !target.gistWrite}
           onSave={() => void onSave()}
         />
       }
@@ -114,6 +123,7 @@ export function ResumeEditor({ username }: { username: string }) {
       }
     >
       <Stack gap={4}>
+        {toGist && !target.gistWrite ? <AllowGist /> : null}
         {notice ? <Callout tone={notice.tone}>{notice.text}</Callout> : null}
         {restorable ? (
           <Callout tone="warning" title="You have unsaved changes from before">

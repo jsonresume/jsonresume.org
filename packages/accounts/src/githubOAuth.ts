@@ -23,7 +23,10 @@ export class GithubOAuthFailed extends Schema.TaggedError<GithubOAuthFailed>()(
   }
 ) {}
 
-const Token = Schema.Struct({ access_token: Schema.String });
+const Token = Schema.Struct({
+  access_token: Schema.String,
+  scope: Schema.optionalKey(Schema.String),
+});
 const User = Schema.Struct({
   id: Schema.Number,
   login: Schema.String,
@@ -93,7 +96,7 @@ export class GithubOAuth extends Context.Service<
         code: string,
         redirectUri: string
       ) {
-        const { access_token } = yield* HttpClientRequest.post(
+        const { access_token, scope } = yield* HttpClientRequest.post(
           'https://github.com/login/oauth/access_token'
         ).pipe(
           HttpClientRequest.acceptJson,
@@ -119,6 +122,10 @@ export class GithubOAuth extends Context.Service<
           login: user.login,
           avatarUrl: user.avatar_url,
           email: primary ? primary.email.toLowerCase() : null,
+          grant: {
+            token: access_token,
+            scopes: (scope ?? '').split(/[ ,]+/).filter(Boolean),
+          },
         } satisfies GithubIdentity;
       });
 
@@ -127,7 +134,8 @@ export class GithubOAuth extends Context.Service<
           const url = new URL('https://github.com/login/oauth/authorize');
           url.searchParams.set('client_id', id);
           url.searchParams.set('redirect_uri', redirectUri);
-          url.searchParams.set('scope', 'read:user user:email');
+          // gist: to save the resume to the person's gist from the editor.
+          url.searchParams.set('scope', 'read:user user:email gist');
           url.searchParams.set('state', state);
           url.searchParams.set('allow_signup', 'true');
           return url.toString();

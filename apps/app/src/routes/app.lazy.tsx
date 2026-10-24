@@ -20,6 +20,8 @@ export const DashboardRoute = createLazyRoute('/dashboard')({
         renderLink={(item, props) => (
           <Link
             to={item.href}
+            // /dashboard is a prefix of every dashboard page: match it exactly.
+            activeOptions={{ exact: item.href === '/dashboard' }}
             className={props.className}
             aria-current={props['aria-current']}
           >

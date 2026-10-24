@@ -13,6 +13,13 @@ import {
   serialize,
 } from './state';
 
+const saveError = (tag: string) =>
+  tag === 'GistPermissionNeeded'
+    ? 'GitHub hasn’t let JSON Resume update your gist yet. Allow it above, then save again.'
+    : tag === 'GithubUnreachable'
+    ? 'GitHub isn’t answering, so your gist wasn’t updated. Try again in a minute.'
+    : 'That didn’t save. Check your connection and try again.';
+
 export interface Notice {
   tone: 'success' | 'danger' | 'info';
   text: string;
@@ -58,22 +65,18 @@ export function useEditorSession(username: string) {
       reactivityKeys: keys.account,
     });
     setSaving(false);
-    if (errorTag(exit) !== undefined) {
-      return setNotice({
-        tone: 'danger',
-        text: 'That didn’t save. Check your connection and try again.',
-      });
-    }
+    const tag = errorTag(exit);
+    if (tag !== undefined)
+      return setNotice({ tone: 'danger', text: saveError(tag) });
     setSaved(serialize(draft));
     clearBackup(username);
-    setNotice(
-      source === 'gist'
-        ? {
-            tone: 'info',
-            text: 'Saved. Your page now shows this copy; your gist is unchanged (switch back on the Resume page).',
-          }
-        : { tone: 'success', text: 'Saved. Your page shows it now.' }
-    );
+    setNotice({
+      tone: 'success',
+      text:
+        source === 'gist'
+          ? 'Saved to your gist. Your page shows it now.'
+          : 'Saved. Your page shows it now.',
+    });
   };
   useShortcut('mod+s', (e) => {
     e.preventDefault();
@@ -86,9 +89,19 @@ export function useEditorSession(username: string) {
     setText(serialize(resume));
   };
 
+  /** Where saves go: their gist (and whether GitHub allows it), or the copy here. */
+  const target = ready
+    ? {
+        source: loaded.value.source,
+        github: loaded.value.github,
+        gistWrite: loaded.value.gistWrite,
+      }
+    : { source: 'stored' as const, github: null, gistWrite: false };
+
   return {
     ready,
     loadedResume: ready ? loaded.value.resume : null,
+    target,
     saving,
     notice,
     onSave,
