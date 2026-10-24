@@ -1,0 +1,18 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "jsonresume": {
+      "type": "streamable-http",
+      "url": "https://jsonresume.org/mcp",
+      "extensions": {
+        "com.openai": {
+          "auth": {
+            "type": "oauth",
+            "client": { "mode": "dcr" },
+            "baseScopes": ["mcp"]
+          }
+        }
+      }
+    }
+  }
+}

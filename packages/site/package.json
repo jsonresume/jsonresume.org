@@ -20,7 +20,8 @@
     "./media": "./src/pages/media/MediaPage.tsx",
     "./resume-unavailable": "./src/pages/resume/ResumeUnavailablePage.tsx",
     "./registry": "./src/pages/registry/RegistryPage.tsx",
-    "./mcp": "./src/pages/mcp/McpPage.tsx"
+    "./mcp": "./src/pages/mcp/McpPage.tsx",
+    "./doc": "./src/pages/DocPage.tsx"
   },
   "scripts": {
     "test": "vitest run",

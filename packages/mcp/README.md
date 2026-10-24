@@ -21,3 +21,6 @@ Effect's `McpServer`.
 **Every feature on jsonresume.org gets MCP tools.** Adding one: put it in
 the catalog, add the tool to a toolkit here (or a new toolkit in
 `server.ts`), and test it through the endpoint in `mcp.test.ts`.
+
+`openai-plugin/` is the package for the ChatGPT app directory, with the
+steps to submit it in its README.

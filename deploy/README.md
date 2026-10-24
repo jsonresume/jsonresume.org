@@ -28,6 +28,13 @@ its phases are in [`SELF_HOSTING_PLAN.md`](../SELF_HOSTING_PLAN.md).
 
 Ports: app 3003 (`apps/app`).
 
+Retention, as the privacy policy (/privacy) says: journald keeps logs 30
+days (`deploy/journald/retention.conf` in `/etc/systemd/journald.conf.d/`),
+the backup script prunes R2 copies older than 30 days. `/etc/jsonresume/
+review.env` holds the ChatGPT app reviewers' demo account; an optional
+`OPENAI_APPS_CHALLENGE` in app.env is served at
+`/.well-known/openai-apps-challenge` for OpenAI's domain check.
+
 Jobs: `jsonresume-jobs.timer` runs the pipeline (`apps/app/server/jobs.ts`,
 `@repo/jobs`) every two hours from the live release: it imports the two
 newest Hacker News "Who is hiring?" threads, parses new posts with OpenAI,

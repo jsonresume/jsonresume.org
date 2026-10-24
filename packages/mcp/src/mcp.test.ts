@@ -141,10 +141,26 @@ describe('the MCP server', () => {
     expect(listed.tools.map((t: { name: string }) => t.name).sort()).toEqual(
       tools.map((t) => t.name).sort()
     );
-    const get = listed.tools.find(
-      (t: { name: string }) => t.name === 'get_resume'
-    );
-    expect(get.annotations).toMatchObject({ readOnlyHint: true });
+    type Listed = { name: string; annotations: Record<string, unknown> };
+    for (const t of listed.tools as Listed[]) {
+      expect(typeof t.annotations.readOnlyHint, t.name).toBe('boolean');
+      expect(typeof t.annotations.destructiveHint, t.name).toBe('boolean');
+      expect(t.annotations.openWorldHint, t.name).toBe(false);
+    }
+    const hint = (name: string) =>
+      (listed.tools as Listed[]).find((t) => t.name === name)?.annotations;
+    expect(hint('get_resume')).toMatchObject({
+      readOnlyHint: true,
+      destructiveHint: false,
+    });
+    expect(hint('save_resume')).toMatchObject({
+      readOnlyHint: false,
+      destructiveHint: true,
+    });
+    expect(hint('mark_job')).toMatchObject({
+      readOnlyHint: false,
+      destructiveHint: false,
+    });
     const listedPrompts = await send('prompts/list');
     expect(
       listedPrompts.prompts.map((p: { name: string }) => p.name).sort()

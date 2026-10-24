@@ -1,7 +1,11 @@
 import { authorizationServer, protectedResource } from '@repo/mcp';
 
-/** OAuth discovery for MCP clients, at the paths RFC 9728 and 8414 name. */
-export const discoveryRoutes = (site: string) => {
+/**
+ * OAuth discovery for MCP clients, at the paths RFC 9728 and 8414 name; and,
+ * when OPENAI_APPS_CHALLENGE is set, the token proving to OpenAI that we own
+ * the MCP server's domain (ChatGPT app submission).
+ */
+export const discoveryRoutes = (site: string, openAiChallenge?: string) => {
   const json = (body: unknown) => async () =>
     Response.json(body, {
       headers: {
@@ -17,6 +21,17 @@ export const discoveryRoutes = (site: string) => {
       path: '/.well-known/oauth-authorization-server',
       fetch: json(authorizationServer(site)),
     },
+    ...(openAiChallenge
+      ? [
+          {
+            path: '/.well-known/openai-apps-challenge',
+            fetch: async () =>
+              new Response(openAiChallenge, {
+                headers: { 'content-type': 'text/plain; charset=utf-8' },
+              }),
+          },
+        ]
+      : []),
   ];
 };
 

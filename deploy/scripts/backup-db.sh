@@ -49,4 +49,6 @@ pg dropdb "$CHECK_DB"
 
 rclone copyto --s3-no-check-bucket "$FILE" "r2:$R2_BUCKET/daily/$(basename "$FILE")"
 find "$DIR" -name "$DB-*.dump" -mtime +$KEEP_LOCAL_DAYS -delete
+# Off-site copies go after 30 days, as the privacy policy says (/privacy).
+rclone delete --s3-no-check-bucket --min-age 30d "r2:$R2_BUCKET/daily/"
 echo "backup ok: $(basename "$FILE") $(du -h "$FILE" | cut -f1) counts $restored"

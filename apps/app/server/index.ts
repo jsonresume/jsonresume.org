@@ -10,7 +10,7 @@ import { PurgeUnverified, apiRoutes } from '@repo/api-server';
 import { PgLive } from '@repo/database';
 import { mcpRoutes } from '@repo/mcp';
 import { createSiteApp, effectWebHandler } from '@repo/server';
-import { Config, Effect, Layer } from 'effect';
+import { Config, Effect, Layer, Option } from 'effect';
 import { readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -74,6 +74,9 @@ const main = Effect.gen(function* () {
   const site = yield* Config.String('SITE_URL').pipe(
     Config.withDefault('https://jsonresume.org')
   );
+  const openAiChallenge = yield* Config.option(
+    Config.String('OPENAI_APPS_CHALLENGE')
+  );
   const mcp = yield* Effect.acquireRelease(
     Effect.sync(() =>
       effectWebHandler(mcpRoutes(site).pipe(Layer.provide(services)), {
@@ -113,7 +116,7 @@ const main = Effect.gen(function* () {
       { path: jobPath, fetch: jobs.job },
       // Where the jobs CLI and its docs send people for a key.
       { path: '/api-keys', fetch: async () => apiKeysRedirect() },
-      ...discoveryRoutes(site),
+      ...discoveryRoutes(site, Option.getOrUndefined(openAiChallenge)),
     ],
     // Beacons carry no authority; /api/v1 takes API keys, never cookies;
     // OAuth clients register and get tokens without a session.

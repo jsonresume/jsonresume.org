@@ -58,7 +58,7 @@ export const ResumeToolkit = Toolkit.make(
     parameters: Schema.Struct({ resume: Resume }),
     success: Schema.Struct({ saved: Schema.Boolean, problems: Issues }),
     ...failing,
-  }).annotateMerge(hints('save_resume')),
+  }).annotateMerge(hints('save_resume', true)),
   Tool.make('update_resume_section', {
     description: describe('update_resume_section'),
     parameters: Schema.Struct({
@@ -70,7 +70,7 @@ export const ResumeToolkit = Toolkit.make(
     }),
     success: Schema.Struct({ saved: Schema.Boolean, problems: Issues }),
     ...failing,
-  }).annotateMerge(hints('update_resume_section')),
+  }).annotateMerge(hints('update_resume_section', true)),
   Tool.make('validate_resume', {
     description: describe('validate_resume'),
     parameters: Schema.Struct({ resume: Schema.optional(Resume) }),

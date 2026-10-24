@@ -20,6 +20,8 @@ export const paths = {
   resetPassword: '/reset-password',
   oauthAuthorize: '/oauth/authorize',
   mcp: '/mcp',
+  privacy: '/privacy',
+  terms: '/terms',
   registry: '/registry',
   jobs: '/jobs',
   job: (id: number) => `/jobs/${id}`,
@@ -81,4 +83,6 @@ export const footerNav: NavItem[] = [
   { label: 'Media', href: paths.media },
   { label: 'Blog', href: paths.blog },
   { label: 'GitHub', href: external.github },
+  { label: 'Privacy', href: paths.privacy },
+  { label: 'Terms', href: paths.terms },
 ];

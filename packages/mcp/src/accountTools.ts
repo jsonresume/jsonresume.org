@@ -52,7 +52,7 @@ export const AccountToolkit = Toolkit.make(
     parameters: Schema.Struct({ slug: Schema.String }),
     success: Schema.Struct({ theme: Schema.String, url: Schema.String }),
     ...failing,
-  }).annotateMerge(hints('set_theme')),
+  }).annotateMerge(hints('set_theme', true)),
   Tool.make('get_resume_analytics', {
     description: describe('get_resume_analytics'),
     parameters: Schema.Struct({ range: AnalyticsRange }),

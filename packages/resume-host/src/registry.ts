@@ -12,6 +12,8 @@ const COUNTERPARTS: Record<string, string> = {
   jobs: '/jobs',
   'my-jobs': '/dashboard/jobs',
   'api-keys': '/dashboard/settings',
+  privacy: '/privacy',
+  terms: '/terms',
 };
 
 /** The registry's own pages, which are not usernames. */
