@@ -19,7 +19,7 @@ const SECTIONS = [
 test('custom - accepted at the root, in basics and in every section entry', (t) => {
   const resume = {
     custom: { myTool: { generatedBy: 'ResumeBuilder', version: 2 } },
-    basics: { name: 'Jane', custom: { pronouns: 'she/her' } },
+    basics: { name: 'Jane', custom: { nickname: 'Jay' } },
   };
   for (const section of SECTIONS) {
     resume[section] = [{ custom: { anything: [1, { nested: true }] } }];

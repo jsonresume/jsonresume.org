@@ -57,12 +57,6 @@ test('certificates.credentialId and summary (#590) - free text', (t) => {
   t.end();
 });
 
-test('basics.pronouns (#312) - free text', (t) => {
-  t.true(valid({ basics: { name: 'Sam', pronouns: 'they/them' } }));
-  t.false(valid({ basics: { pronouns: ['they', 'them'] } }));
-  t.end();
-});
-
 test('objective (#317) - optional root-level free text', (t) => {
   t.true(
     valid({ objective: 'Seeking a senior Go role in cloud infrastructure' })

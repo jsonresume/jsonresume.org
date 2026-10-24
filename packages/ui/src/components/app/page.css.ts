@@ -79,6 +79,7 @@ export const description = style({
 export const actions = style({
   display: 'flex',
   flexWrap: 'wrap',
+  alignItems: 'center',
   gap: space[2],
 });
 

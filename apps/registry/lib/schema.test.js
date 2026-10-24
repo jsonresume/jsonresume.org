@@ -31,7 +31,7 @@ describe('registry resume schema', () => {
   it('accepts custom objects and rejects non-object custom, like the published schema (#316)', () => {
     const resume = {
       custom: { myTool: { v: 1 } },
-      basics: { name: 'Jane', custom: { pronouns: 'she/her' } },
+      basics: { name: 'Jane', custom: { nickname: 'Jay' } },
       work: [{ name: 'Co', custom: { teamSize: 12 } }],
     };
     expect(validate(resume).valid).toBe(true);

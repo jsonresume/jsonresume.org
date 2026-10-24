@@ -13,10 +13,6 @@ export const basics = {
       type: 'string',
       description: 'e.g. Web Developer',
     },
-    pronouns: {
-      type: 'string',
-      description: 'e.g. she/her, they/them',
-    },
     image: {
       type: 'string',
       description: 'URL (as per RFC 3986) to a image in JPEG or PNG format',
