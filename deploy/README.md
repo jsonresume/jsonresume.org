@@ -19,13 +19,19 @@ its phases are in [`SELF_HOSTING_PLAN.md`](../SELF_HOSTING_PLAN.md).
 
 | Variable                                  | What                                                                  |
 | ----------------------------------------- | --------------------------------------------------------------------- |
-| `SITE_URL`                                | The public origin, e.g. `https://beta.jsonresume.org` (OAuth, emails) |
+| `SITE_URL`                                | The public origin, `https://jsonresume.org` (OAuth, emails) |
 | `AUTH_SECRET`                             | Random secret signing OAuth state and hashing visitors (`openssl rand -base64 32`) |
 | `GITHUB_TOKEN`                            | Gist lookups; falls back to the OAuth app, then anonymous             |
 | `AUTH_GITHUB_ID`, `AUTH_GITHUB_SECRET`    | The GitHub OAuth app (sign-in and gist lookups). Its callback host must be a parent of `SITE_URL`'s, path `/api/auth/callback/github` |
 | `RESEND_API_KEY`, `MAIL_FROM` (optional)  | Email delivery; without them verification links are only logged       |
 
-Ports: app 3003 (`apps/app`, served at beta.jsonresume.org).
+Ports: app 3003 (`apps/app`).
+
+Hostnames (Cloudflare proxied, `deploy/caddy/Caddyfile`): jsonresume.org is
+the site, with `/docs` proxied to GitHub Pages; www and beta redirect to it;
+registry.jsonresume.org is answered by the app with redirects (resumes to
+`/@username`, the rest to `/registry`). The DNS records as they were before
+the switch, pointing at Vercel, are the way back.
 
 ## Common tasks
 

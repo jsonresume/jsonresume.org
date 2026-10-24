@@ -30,12 +30,44 @@
 	}
 }
 
-# apps/app (React + Vite on @jsonresume/ui) until the full changeover.
-beta.jsonresume.org {
-	# A preview of the new site: keep it out of search results until it
-	# replaces jsonresume.org (its pages already declare that canonical URL).
-	header X-Robots-Tag "noindex"
+# jsonresume.org: the site (apps/app). The docs are a static export on
+# GitHub Pages (apps/docs, basePath /docs), served under /docs as before.
+jsonresume.org {
+	import origin_tls
+	encode zstd gzip
+	handle /docs {
+		rewrite * /jsonresume.org/
+		reverse_proxy https://jsonresume.github.io {
+			header_up Host jsonresume.github.io
+		}
+	}
+	# handle_path strips /docs before the rewrite (a plain rewrite would run
+	# before uri strip_prefix: Caddy orders directives itself).
+	handle_path /docs/* {
+		rewrite * /jsonresume.org{uri}
+		reverse_proxy https://jsonresume.github.io {
+			header_up Host jsonresume.github.io
+		}
+	}
+	handle {
+		reverse_proxy 127.0.0.1:3003
+	}
+	log {
+		output stdout
+		format json
+	}
+}
+
+# The registry is now part of jsonresume.org: the app answers every
+# registry URL with a redirect (resumes to /@username, the rest to /registry).
+registry.jsonresume.org {
 	import app 3003
+}
+
+# One name for the site.
+www.jsonresume.org, beta.jsonresume.org {
+	import origin_tls
+	redir https://jsonresume.org{uri} 301
 }
 
 # Anything else that reaches the box is not ours to serve.

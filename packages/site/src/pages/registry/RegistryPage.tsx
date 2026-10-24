@@ -44,7 +44,7 @@ export function RegistryPage() {
             title="What moved"
             headingId="moved"
           />
-          <ul className={l.cardGrid} aria-label="Moved from the registry">
+          <ul className={l.cardGrid2} aria-label="Moved from the registry">
             {r.moved.map((item) => (
               <li key={item.title}>
                 <LinkCard
