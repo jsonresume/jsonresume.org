@@ -28,6 +28,7 @@
     "@repo/database": "workspace:^",
     "@repo/domain": "workspace:*",
     "@repo/profiles": "workspace:^",
+    "@repo/resume-editor": "workspace:^",
     "@repo/resume-host": "workspace:^",
     "@repo/resume-themes": "workspace:^",
     "@repo/server": "workspace:*",

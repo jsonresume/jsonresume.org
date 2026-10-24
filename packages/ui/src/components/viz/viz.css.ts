@@ -273,6 +273,21 @@ export const previewViewport = style({
   backgroundColor: color.surface.muted,
 });
 
+export const previewFill = style({ height: '100%', minHeight: '20rem' });
+
+// While a new render is on its way, the last one stays, dimmed.
+export const previewBusy = style({
+  opacity: 0.6,
+  transition: `opacity ${vars.motion.duration.base}`,
+});
+
+export const previewStatus = style({
+  position: 'absolute',
+  insetBlockStart: vars.space[2],
+  insetInlineEnd: vars.space[2],
+  zIndex: 1,
+});
+
 // Centered, scaled down to fit (never up), from the top edge.
 export const previewFrame = style({
   position: 'absolute',

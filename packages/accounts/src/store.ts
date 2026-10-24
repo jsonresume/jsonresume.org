@@ -99,6 +99,13 @@ export class AccountStore extends Context.Service<
       username: string,
       retiredUntil: Date
     ): Effect.Effect<UserRecord, UsernameUnavailable>;
+    /** The account's resumes: the saved copy and the last gist copy. */
+    resumeOf(
+      userId: string
+    ): Effect.Effect<
+      | { stored: unknown; mirror: unknown; source: 'gist' | 'stored' }
+      | undefined
+    >;
     /** Free names whose rename redirect has run out; how many. */
     purgeRetired(): Effect.Effect<number>;
     account(userId: string): Effect.Effect<AccountRecord | undefined>;

@@ -15,6 +15,7 @@ import {
 } from './routes/pages';
 import {
   dashboardRoute,
+  editorRoute,
   overviewRoute,
   resumeSettingsRoute,
   settingsRoute,
@@ -53,6 +54,7 @@ export const routeTree = rootRoute.addChildren([
   ]),
   dashboardRoute.addChildren([
     overviewRoute,
+    editorRoute,
     resumeSettingsRoute,
     settingsRoute,
   ]),

@@ -35,3 +35,9 @@ export const settingsRoute = createRoute({
   path: 'settings',
   head: head('Settings'),
 }).lazy(() => import('./app.lazy').then((m) => m.SettingsRoute));
+
+export const editorRoute = createRoute({
+  getParentRoute: () => dashboardRoute,
+  path: 'editor',
+  head: head('Editor'),
+}).lazy(() => import('./editor.lazy').then((m) => m.EditorRoute));

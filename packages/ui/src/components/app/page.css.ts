@@ -1,4 +1,4 @@
-import { style } from '@vanilla-extract/css';
+import { globalStyle, style } from '@vanilla-extract/css';
 import { vars } from '../../tokens/contract.css';
 import { media } from '../../tokens/theme';
 
@@ -8,9 +8,47 @@ const { color, font, space, radius, shadow } = vars;
 
 export const page = style({
   display: 'grid',
+  // minmax(0, …): wide content (code, tables) scrolls inside instead of
+  // widening the page past the screen.
+  gridTemplateColumns: 'minmax(0, 1fr)',
   gap: space[6],
   maxWidth: '84rem',
   marginInline: 'auto',
+});
+
+/**
+ * fill: from lg up the page takes the viewport's height (less the shell's
+ * padding) and its body the rest, so a workspace inside can scroll its own
+ * panes. Smaller screens keep ordinary page scrolling.
+ */
+export const pageFill = style({
+  '@media': {
+    [media.lg]: {
+      display: 'flex',
+      flexDirection: 'column',
+      maxWidth: 'none',
+      height: `calc(100dvh - ${space[8]} - ${space[8]})`,
+      minHeight: '36rem',
+    },
+  },
+});
+
+export const fillBody = style({
+  '@media': {
+    [media.lg]: {
+      flex: 1,
+      minHeight: 0,
+      display: 'flex',
+      flexDirection: 'column',
+      gap: space[4],
+    },
+  },
+});
+
+// Notices and the like sit on top at their own height; the last child (the
+// workspace) takes what is left.
+globalStyle(`${fillBody} > :last-child`, {
+  '@media': { [media.lg]: { flex: 1, minHeight: 0 } },
 });
 
 export const header = style({

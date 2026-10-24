@@ -89,11 +89,25 @@ export const accountManagement = Effect.gen(function* () {
     yield* store.deleteUser(userId);
   });
 
+  /** What the editor opens: the copy the page shows (the gist's when that is the source). */
+  const currentResume = Effect.fn('Accounts.currentResume')(function* (
+    userId: string
+  ) {
+    const found = yield* store.resumeOf(userId);
+    if (!found) return yield* Effect.die(`no account for ${userId}`);
+    const primary = found.source === 'gist' ? found.mirror : found.stored;
+    return {
+      resume: primary ?? found.stored ?? found.mirror ?? null,
+      source: found.source,
+    };
+  });
+
   return {
     requestPasswordReset,
     resetPassword,
     rename,
     deleteAccount,
+    currentResume,
     purgeRetired: store.purgeRetired(),
   };
 });

@@ -127,4 +127,40 @@ describe('the API, over HTTP', () => {
     );
     expect(forged.headers.get('location')).toBe('/signin?error=github-expired');
   });
+
+  it('opens the editor on the saved resume and previews changes in any theme', async () => {
+    server = testServer();
+    await server.post('/api/auth/signup', ada);
+    const empty = await (await server.fetch('/api/editor/resume')).json();
+    expect(empty).toEqual({ resume: null, source: 'stored', github: null });
+
+    const resume = { basics: { name: 'Ada Lovelace' } };
+    await server.fetch('/api/account/resume', {
+      method: 'PUT',
+      body: JSON.stringify({ resume }),
+    });
+    expect(
+      (await (await server.fetch('/api/editor/resume')).json()).resume
+    ).toEqual(resume);
+
+    const preview = await server.post('/api/editor/preview', {
+      resume,
+      theme: 'elegant',
+    });
+    expect(preview.headers.get('content-type')).toContain('text/html');
+    expect(await preview.text()).toContain('Ada Lovelace');
+    expect(
+      await (
+        await server.post('/api/editor/preview', { resume, theme: 'nope' })
+      ).text()
+    ).toContain('No such theme');
+    expect(
+      await (
+        await server.post('/api/editor/preview', {
+          resume: [1],
+          theme: 'elegant',
+        })
+      ).text()
+    ).toContain('Nothing to preview');
+  });
 });

@@ -4,8 +4,9 @@ import { SqlClient, type SqlError } from 'effect/sql';
 import type { UserRecord } from './store';
 
 /**
- * The account changes that touch several tables at once: a new password,
- * deleting the account, and renaming it. Each runs in one transaction.
+ * The account changes that touch several tables at once (a new password,
+ * deleting the account, renaming it), each in one transaction; and reading
+ * its resumes.
  */
 export const accountChanges = (
   nameTaken: (username: string) => Effect.Effect<boolean, SqlError.SqlError>,
@@ -50,6 +51,14 @@ export const accountChanges = (
         return yield* mustFind(userId);
       }).pipe(sql.withTransaction, Effect.catchTag('SqlError', Effect.die));
 
+    const resumeOf = (userId: string) =>
+      sql<{ stored: unknown; mirror: unknown; source: 'gist' | 'stored' }>`
+        SELECT stored_resume AS stored, resume AS mirror, source
+        FROM app.profiles WHERE user_id = ${userId} AND kind = 'account'`.pipe(
+        Effect.map((rows) => rows[0]),
+        Effect.orDie
+      );
+
     const purgeRetired = () =>
       sql<{ username: string }>`DELETE FROM app.profiles
         WHERE kind = 'alias' AND retired_until < now() RETURNING username`.pipe(
@@ -57,5 +66,5 @@ export const accountChanges = (
         Effect.orDie
       );
 
-    return { setPassword, deleteUser, renameUser, purgeRetired };
+    return { setPassword, deleteUser, renameUser, resumeOf, purgeRetired };
   });

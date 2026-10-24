@@ -2,6 +2,7 @@ import { HttpApi, OpenApi } from 'effect/http-api';
 import { AccountApi } from './AccountApi';
 import { AnalyticsApi } from './AnalyticsApi';
 import { AuthApi } from './AuthApi';
+import { EditorApi } from './EditorApi';
 import { EventsApi } from './EventsApi';
 import { SystemApi } from './SystemApi';
 
@@ -29,6 +30,7 @@ export {
   SIGNED_IN_HINT,
 } from './Authentication';
 export * from './errors';
+export { EditorApi, EditorResume } from './EditorApi';
 export { EventsApi, PingEvent, ViewEvent } from './EventsApi';
 export { Health, SystemApi } from './SystemApi';
 
@@ -43,5 +45,6 @@ export class JsonResumeApi extends HttpApi.make('jsonresume')
   .add(AccountApi)
   .add(AnalyticsApi)
   .add(EventsApi)
+  .add(EditorApi)
   .prefix('/api')
   .annotateMerge(OpenApi.annotations({ title: 'JSON Resume API' })) {}

@@ -270,6 +270,7 @@ export const componentDocs: ComponentDoc[] = [
         'Use one AppPage per screen: its title is the only h1.',
         'Put filters in the AppPage toolbar, above everything they scope.',
         'Pass renderLink to AppNav so links use your router.',
+        'Give AppPage fill for editors and split views: from lg up the content gets the rest of the screen and scrolls inside.',
       ],
       dont: ['Use it for marketing pages; they use SiteHeader and SiteFooter.'],
     },
@@ -568,7 +569,7 @@ export const componentDocs: ComponentDoc[] = [
     name: 'Select',
     group: 'Forms',
     summary:
-      'A styled native select: keyboard, mobile and screen-reader friendly with no extra code.',
+      'A styled native select: keyboard, mobile and screen-reader friendly with no extra code. inline sizes it to its options, for toolbars.',
     components: ['Select'],
     examples: [{ id: 'basic', title: 'Basic', block: true }],
     accessibility: [
@@ -1506,11 +1507,13 @@ export const componentDocs: ComponentDoc[] = [
     slug: 'preview-frame',
     name: 'Preview frame',
     group: 'Data display',
-    summary: 'A sandboxed live preview of a rendered resume, scaled to fit.',
+    summary:
+      'A sandboxed live preview of a rendered resume, scaled to fit. height="fill" takes its container\'s height (an editor pane); busy keeps the last render, dimmed, while a new one arrives.',
     components: ['PreviewFrame'],
     examples: [{ id: 'resume', title: 'Rendered resume', block: true }],
     accessibility: [
       'The iframe has a title; scripts are off unless allowScripts is set.',
+      'While busy, the frame is aria-busy and a spinner says "Updating preview".',
     ],
   },
   {

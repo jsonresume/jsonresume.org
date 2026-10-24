@@ -1,9 +1,16 @@
-import { Button, Callout, GithubIcon, Stack, Text } from '@jsonresume/ui';
+import {
+  Button,
+  Callout,
+  GithubIcon,
+  Stack,
+  Text,
+  useSettledValue,
+} from '@jsonresume/ui';
 import { usernameCheckAtom, useIsClient } from '@repo/api-client';
 import { useAtomValue } from '@effect/atom-react';
 import { account } from '@repo/content/pages';
 import { AsyncResult } from 'effect/reactivity';
-import { useEffect, useState, type FormHTMLAttributes } from 'react';
+import type { FormHTMLAttributes } from 'react';
 
 const USERNAME = /^[a-z0-9](?:[a-z0-9]|-(?=[a-z0-9])){0,38}$/;
 export const isUsername = (name: string) => USERNAME.test(name);
@@ -71,16 +78,6 @@ export const refusalMessage = (
   tag: string | undefined
 ) => (reason && refusals[reason]) || errorMessage(tag);
 
-/** A value that settles `ms` after it stops changing (for live checks). */
-export function useSettled<T>(value: T, ms = 350): T {
-  const [settled, setSettled] = useState(value);
-  useEffect(() => {
-    const timer = setTimeout(() => setSettled(value), ms);
-    return () => clearTimeout(timer);
-  }, [value, ms]);
-  return settled;
-}
-
 const Status = ({
   tone,
   children,
@@ -112,7 +109,7 @@ function Check({ name }: { name: string }) {
  * the server (taken, reserved, or a GitHub user's), once typing settles.
  */
 export function UsernameStatus({ name }: { name: string }) {
-  const settled = useSettled(name);
+  const settled = useSettledValue(name, 350);
   const isClient = useIsClient();
   if (name === '') return null;
   if (!isUsername(name))

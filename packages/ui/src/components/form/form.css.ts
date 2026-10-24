@@ -111,6 +111,9 @@ export const select = style([
   },
 ]);
 
+// In a toolbar or beside other controls: as wide as its longest option.
+export const selectInline = style({ width: 'auto', maxWidth: '100%' });
+
 const box = {
   display: 'inline-grid',
   placeItems: 'center',

@@ -201,6 +201,9 @@ importers:
       '@repo/profiles':
         specifier: workspace:^
         version: link:../../packages/profiles
+      '@repo/resume-editor':
+        specifier: workspace:^
+        version: link:../../packages/resume-editor
       '@repo/resume-host':
         specifier: workspace:^
         version: link:../../packages/resume-host
@@ -1020,6 +1023,9 @@ importers:
       '@repo/profiles':
         specifier: workspace:*
         version: link:../profiles
+      '@repo/resume-themes':
+        specifier: workspace:*
+        version: link:../resume-themes
       effect:
         specifier: 4.0.6
         version: 4.0.6
@@ -1589,6 +1595,82 @@ importers:
       vite:
         specifier: 6.4.3
         version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+
+  packages/resume-editor:
+    dependencies:
+      '@effect/atom-react':
+        specifier: 4.0.6
+        version: 4.0.6(effect@4.0.6)(react@19.2.7)(scheduler@0.27.0)
+      '@jsonresume/sample-data':
+        specifier: workspace:*
+        version: link:../sample-data
+      '@jsonresume/schema':
+        specifier: workspace:*
+        version: link:../schema
+      '@jsonresume/theme-metadata':
+        specifier: workspace:*
+        version: link:../theme-config
+      '@jsonresume/ui':
+        specifier: workspace:*
+        version: link:../ui
+      '@repo/api':
+        specifier: workspace:*
+        version: link:../api
+      '@repo/api-client':
+        specifier: workspace:*
+        version: link:../api-client
+      '@repo/content':
+        specifier: workspace:*
+        version: link:../content
+      '@repo/schema-explorer':
+        specifier: workspace:*
+        version: link:../schema-explorer
+      '@repo/url-state':
+        specifier: workspace:*
+        version: link:../url-state
+      '@vanilla-extract/css':
+        specifier: ^1.21.3
+        version: 1.21.3
+      effect:
+        specifier: 4.0.6
+        version: 4.0.6
+      jsonc-parser:
+        specifier: ^3.3.1
+        version: 3.3.1
+    devDependencies:
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      '@testing-library/jest-dom':
+        specifier: ^6.9.1
+        version: 6.9.1
+      '@testing-library/react':
+        specifier: ^16.3.0
+        version: 16.3.0(@testing-library/dom@10.4.1)(@types/react-dom@19.2.2)(@types/react@19.2.18)(react-dom@19.2.7)(react@19.2.7)
+      '@types/react':
+        specifier: ^19.2.2
+        version: 19.2.18
+      '@vanilla-extract/vite-plugin':
+        specifier: ^5.2.6
+        version: 5.2.6(@types/node@20.19.24)(vite@6.4.3)
+      jsdom:
+        specifier: ^27.0.0
+        version: 27.0.1(postcss@8.5.23)
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)

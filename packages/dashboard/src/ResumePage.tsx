@@ -168,11 +168,18 @@ export function ResumePage() {
           </span>
         </Stack>
       }
-      actions={formats.map((f) => (
-        <Button key={f.ext} asChild size="sm" variant="ghost">
-          <a href={`${account.path}.${f.ext}`}>{f.label}</a>
-        </Button>
-      ))}
+      actions={
+        <>
+          {formats.map((f) => (
+            <Button key={f.ext} asChild size="sm" variant="ghost">
+              <a href={`${account.path}.${f.ext}`}>{f.label}</a>
+            </Button>
+          ))}
+          <Button asChild size="sm" variant="primary">
+            <a href="/dashboard/editor">Open the editor</a>
+          </Button>
+        </>
+      }
     >
       <Grid gap={6} minColumnWidth="18rem" stretch>
         <GistCard account={account} use={use('gist')} />

@@ -6,6 +6,7 @@ import { AccountHandlers } from './account';
 import { AnalyticsHandlers, EventsHandlers } from './analytics';
 import { AuthHandlers } from './auth';
 import { AuthenticationLive } from './authentication';
+import { EditorHandlers } from './editor';
 import { GithubRoutes } from './github';
 
 export { AuthenticationLive } from './authentication';
@@ -34,6 +35,7 @@ export const apiRoutes = (version: string) =>
         AccountHandlers,
         AnalyticsHandlers,
         EventsHandlers,
+        EditorHandlers,
       ]),
       Layer.provide(AuthenticationLive)
     ),

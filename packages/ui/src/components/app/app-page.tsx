@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { cx } from '../../utils/cx';
 import * as s from './page.css';
 
 export interface AppPageProps {
@@ -9,6 +10,11 @@ export interface AppPageProps {
   actions?: ReactNode;
   /** The one filter row (date range first), above everything it scopes. */
   toolbar?: ReactNode;
+  /**
+   * Fill the screen from lg up (an editor, a split view): the content gets
+   * the height left under the header and toolbar, and scrolls inside.
+   */
+  fill?: boolean;
   children: ReactNode;
 }
 
@@ -18,10 +24,11 @@ export function AppPage({
   description,
   actions,
   toolbar,
+  fill = false,
   children,
 }: AppPageProps) {
   return (
-    <div className={s.page}>
+    <div className={cx(s.page, fill && s.pageFill)}>
       <div className={s.header}>
         <div className={s.titles}>
           <h1 className={s.title}>{title}</h1>
@@ -34,7 +41,7 @@ export function AppPage({
           {toolbar}
         </div>
       ) : null}
-      {children}
+      {fill ? <div className={s.fillBody}>{children}</div> : children}
     </div>
   );
 }

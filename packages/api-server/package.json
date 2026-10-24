@@ -17,6 +17,7 @@
     "@repo/analytics": "workspace:*",
     "@repo/api": "workspace:*",
     "@repo/profiles": "workspace:*",
+    "@repo/resume-themes": "workspace:*",
     "effect": "4.0.6"
   },
   "devDependencies": {

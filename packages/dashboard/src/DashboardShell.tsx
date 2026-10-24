@@ -14,7 +14,7 @@ import {
 import { sessionAtom, signOutAtom, useIsClient } from '@repo/api-client';
 import { AsyncResult } from 'effect/reactivity';
 import { useEffect, type ReactNode } from 'react';
-import { ChartIcon, FileIcon, GearIcon, OpenIcon } from './icons';
+import { ChartIcon, FileIcon, GearIcon, OpenIcon, PenIcon } from './icons';
 import { SessionProvider, useSession } from './session';
 
 export interface DashboardShellProps {
@@ -27,6 +27,7 @@ export interface DashboardShellProps {
 
 const nav = [
   { label: 'Overview', href: '/dashboard', icon: <ChartIcon /> },
+  { label: 'Editor', href: '/dashboard/editor', icon: <PenIcon /> },
   { label: 'Resume', href: '/dashboard/resume', icon: <FileIcon /> },
   { label: 'Settings', href: '/dashboard/settings', icon: <GearIcon /> },
 ];
