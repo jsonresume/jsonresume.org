@@ -9,6 +9,8 @@ const COUNTERPARTS: Record<string, string> = {
   editor: '/dashboard/editor',
   settings: '/dashboard/settings',
   docs: '/docs',
+  jobs: '/jobs',
+  'my-jobs': '/dashboard/jobs',
 };
 
 /** The registry's own pages, which are not usernames. */
@@ -63,6 +65,9 @@ export function registryRedirect(url: URL): string {
   const segments = url.pathname.split('/').filter(Boolean);
   const [first, second, ...rest] = segments;
   if (!first) return `${SITE}/registry`;
+  // Registry job pages were keyed by the Hacker News item id, as here.
+  if (first === 'jobs' && second && /^\d+$/.test(second) && rest.length === 0)
+    return `${SITE}/jobs/${second}`;
   const counterpart = COUNTERPARTS[first];
   if (counterpart)
     return `${SITE}${counterpart}${counterpart === '/docs' ? '' : url.search}`;

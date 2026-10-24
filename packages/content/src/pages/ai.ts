@@ -1,6 +1,7 @@
 /**
  * The AI tools the registry had, while they move to jsonresume.org.
- * Checked 24 October 2026: none is ported yet (see /registry).
+ * Checked 24 October 2026: recommended jobs is here (href); the rest are
+ * not ported yet (see /registry).
  */
 
 const repo = 'https://github.com/jsonresume/jsonresume.org';
@@ -15,13 +16,16 @@ export const portRequest = (feature: string) =>
 export interface AiTool {
   name: string;
   description: string;
+  /** Where it is on jsonresume.org, once ported. */
+  href?: string;
 }
 
 export const aiTools: AiTool[] = [
   {
-    name: 'Recommended jobs',
+    name: 'Jobs for you',
     description:
-      'Matched your resume against recent Hacker News "Who is hiring?" posts.',
+      'Open roles from Hacker News "Who is hiring?", ranked by how well they fit your resume.',
+    href: '/dashboard/jobs',
   },
   {
     name: 'Cover letter',
@@ -41,7 +45,7 @@ export const aiTools: AiTool[] = [
 export const aiNotes = {
   lede: 'The registry’s AI tools sent your resume to a model with a fixed prompt: matching jobs, a cover letter, feedback, and an interviewer who knows your history. They are moving to jsonresume.org with the rest of the registry.',
   moving:
-    'None of them is ported yet. Tell us which you use and we’ll bring those over first: each card opens a GitHub issue for it.',
+    'Jobs for you is here already. Tell us which of the others you use and we’ll bring those over first: each of their cards opens a GitHub issue for it.',
   openSource: 'They are open source, and so is everything replacing them.',
   source: `${repo}/tree/master/apps/registry`,
   issues: `${repo}/issues`,

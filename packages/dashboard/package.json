@@ -15,13 +15,14 @@
   "dependencies": {
     "@effect/atom-react": "4.0.6",
     "@jsonresume/ui": "workspace:*",
-    "@repo/api-client": "workspace:*",
-    "@repo/content": "workspace:*",
-    "@vanilla-extract/css": "^1.21.3",
-    "effect": "4.0.6",
     "@repo/api": "workspace:*",
+    "@repo/api-client": "workspace:*",
+    "@repo/auth-pages": "workspace:*",
+    "@repo/content": "workspace:*",
+    "@repo/job-board": "workspace:^",
     "@repo/url-state": "workspace:*",
-    "@repo/auth-pages": "workspace:*"
+    "@vanilla-extract/css": "^1.21.3",
+    "effect": "4.0.6"
   },
   "peerDependencies": {
     "react": "^19.2.0"

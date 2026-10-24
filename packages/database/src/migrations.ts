@@ -125,4 +125,59 @@ export const migrations: Record<
     const sql = yield* SqlClient.SqlClient;
     yield* sql`ALTER TABLE app.users ADD COLUMN github_token text, ADD COLUMN github_scopes text`;
   }),
+
+  // Jobs from Hacker News "Who is hiring?" threads (@repo/jobs), keyed by
+  // the comment's item id. The pipeline fills parsed (structured, from a
+  // model), then embedding (float32s, text-embedding-3-large), then the
+  // repost family: companies repost each month, and the board shows the
+  // newest of a family. Marks are what a signed-in user said about a job.
+  '6_jobs': Effect.gen(function* () {
+    const sql = yield* SqlClient.SqlClient;
+    yield* sql`
+      CREATE TABLE app.jobs (
+        id bigint PRIMARY KEY,
+        thread_id bigint NOT NULL,
+        author text NOT NULL,
+        html text NOT NULL,
+        posted_at timestamptz NOT NULL,
+        imported_at timestamptz NOT NULL DEFAULT now(),
+        parsed jsonb,
+        parsed_at timestamptz,
+        parse_attempts smallint NOT NULL DEFAULT 0,
+        parse_error text,
+        embedding bytea,
+        family_id bigint,
+        family_months smallint NOT NULL DEFAULT 1,
+        removed_at timestamptz
+      )
+    `;
+    yield* sql`CREATE INDEX jobs_posted ON app.jobs (posted_at DESC)`;
+    yield* sql`
+      CREATE TABLE app.job_marks (
+        user_id uuid NOT NULL REFERENCES app.users (id) ON DELETE CASCADE,
+        job_id bigint NOT NULL REFERENCES app.jobs (id) ON DELETE CASCADE,
+        state text NOT NULL CHECK (state IN ('interested', 'applied', 'not_interested')),
+        updated_at timestamptz NOT NULL DEFAULT now(),
+        PRIMARY KEY (user_id, job_id)
+      )
+    `;
+    yield* sql`
+      CREATE TABLE app.job_runs (
+        id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+        started_at timestamptz NOT NULL DEFAULT now(),
+        finished_at timestamptz,
+        ok boolean,
+        stats jsonb NOT NULL DEFAULT '{}'::jsonb,
+        error text
+      )
+    `;
+    // Embeddings of resumes, by a hash of the text embedded.
+    yield* sql`
+      CREATE TABLE app.embeddings (
+        text_hash text PRIMARY KEY,
+        embedding bytea NOT NULL,
+        created_at timestamptz NOT NULL DEFAULT now()
+      )
+    `;
+  }),
 };

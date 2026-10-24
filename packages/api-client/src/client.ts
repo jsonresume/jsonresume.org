@@ -22,6 +22,7 @@ export const keys = {
   session: ['session'],
   account: ['account'],
   analytics: ['analytics'],
+  jobs: ['jobs'],
 } as const;
 
 export const sessionAtom = ApiClient.query('auth', 'session', {
@@ -39,6 +40,10 @@ export const overviewAtom = Atom.family((range: AnalyticsRange) =>
 export const usernameCheckAtom = Atom.family((name: string) =>
   ApiClient.query('auth', 'checkUsername', { query: { name } })
 );
+/** Jobs ranked against the resume; a new resume (account key) reranks them. */
+export const jobMatchesAtom = ApiClient.query('myJobs', 'matches', {
+  reactivityKeys: [...keys.jobs, ...keys.account],
+});
 export const pendingGithubAtom = ApiClient.query('auth', 'pendingGithub', {});
 
 export const signUpAtom = ApiClient.mutation('auth', 'signUp');
@@ -55,3 +60,5 @@ export const forgotPasswordAtom = ApiClient.mutation('auth', 'forgotPassword');
 export const resetPasswordAtom = ApiClient.mutation('auth', 'resetPassword');
 export const renameAtom = ApiClient.mutation('account', 'rename');
 export const deleteAccountAtom = ApiClient.mutation('account', 'delete');
+/** Marks a job; the page shows it at once rather than reranking. */
+export const markJobAtom = ApiClient.mutation('myJobs', 'mark');

@@ -68,6 +68,8 @@ package over growing an app.
 | `@repo/api-client`        | The browser's typed client (`AtomHttpApi`): query and mutation atoms, `useIsClient`, the signed-in hint.                                      |
 | `@repo/auth-pages`        | Sign in, sign up and choose-a-username pages.                                                                                                 |
 | `@repo/dashboard`         | The signed-in app: full-screen shell, overview charts, resume source, settings. Client-rendered.                                              |
+| `@repo/jobs`              | Hacker News jobs: the import pipeline (fetch, parse with OpenAI, embed, repost families), the board's queries, matching against a resume.     |
+| `@repo/job-board`         | The job board in React: job cards, filters kept in the URL, the /jobs and /jobs/:id pages.                                                    |
 
 Dependency direction: `domain` ← `content`, `api` ← `site`, feature packages ←
 `apps/app`. Packages never import from apps. `@jsonresume/ui` imports nothing

@@ -17,10 +17,16 @@ function Tools() {
       {ai.aiTools.map((tool) => (
         <li key={tool.name}>
           <LinkCard
-            href={ai.portRequest(tool.name)}
+            href={tool.href ?? ai.portRequest(tool.name)}
             title={tool.name}
             description={tool.description}
-            meta={<Badge tone="warning">Moving from the registry</Badge>}
+            meta={
+              tool.href ? (
+                <Badge tone="success">Available now</Badge>
+              ) : (
+                <Badge tone="warning">Moving from the registry</Badge>
+              )
+            }
           />
         </li>
       ))}

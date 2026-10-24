@@ -19,7 +19,10 @@ export const paths = {
   forgotPassword: '/forgot-password',
   resetPassword: '/reset-password',
   registry: '/registry',
+  jobs: '/jobs',
+  job: (id: number) => `/jobs/${id}`,
   dashboard: '/dashboard',
+  dashboardJobs: '/dashboard/jobs',
   dashboardResume: '/dashboard/resume',
   dashboardSettings: '/dashboard/settings',
 } as const;
@@ -55,6 +58,7 @@ export const headerNav: NavItem[] = [
   { label: 'Schema', href: paths.schema },
   { label: 'Themes', href: paths.themes },
   { label: 'Projects', href: paths.projects },
+  { label: 'Jobs', href: paths.jobs },
   { label: 'Docs', href: external.docs },
   { label: 'Blog', href: paths.blog },
 ];
@@ -68,6 +72,7 @@ export const footerNav: NavItem[] = [
   { label: 'AI', href: paths.ai },
   { label: 'Job description schema', href: paths.jobDescriptionSchema },
   { label: 'Projects', href: paths.projects },
+  { label: 'Jobs', href: paths.jobs },
   { label: 'Team', href: paths.team },
   { label: 'Media', href: paths.media },
   { label: 'Blog', href: paths.blog },

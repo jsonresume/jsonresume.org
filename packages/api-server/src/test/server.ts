@@ -11,6 +11,7 @@ import { fakeGists } from '@repo/accounts/testing';
 import { Analytics } from '@repo/analytics';
 import { PgAnalyticsStore } from '@repo/analytics/sql';
 import { TestDatabase } from '@repo/database/testing';
+import { embedderFrom, JobBoard, JobMatcher } from '@repo/jobs';
 import { Profiles, Usernames } from '@repo/profiles';
 import { PgProfileStore } from '@repo/profiles/sql';
 import { fakeGithub } from '@repo/profiles/testing';
@@ -43,7 +44,11 @@ export function testServer() {
   const stores = Layer.mergeAll(
     PgAccountStore,
     PgProfileStore,
-    PgAnalyticsStore
+    PgAnalyticsStore,
+    JobBoard.layer,
+    JobMatcher.layer.pipe(
+      Layer.provide(embedderFrom(() => new Float32Array(3072).fill(1)))
+    )
   ).pipe(Layer.provideMerge(TestDatabase));
   const profiles = Layer.mergeAll(Usernames.layer, Profiles.layer).pipe(
     Layer.provideMerge(Layer.mergeAll(github.layer(), stores))

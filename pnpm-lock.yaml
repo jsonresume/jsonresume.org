@@ -198,6 +198,12 @@ importers:
       '@repo/domain':
         specifier: workspace:*
         version: link:../../packages/domain
+      '@repo/job-board':
+        specifier: workspace:^
+        version: link:../../packages/job-board
+      '@repo/jobs':
+        specifier: workspace:^
+        version: link:../../packages/jobs
       '@repo/profiles':
         specifier: workspace:^
         version: link:../../packages/profiles
@@ -1020,6 +1026,9 @@ importers:
       '@repo/api':
         specifier: workspace:*
         version: link:../api
+      '@repo/jobs':
+        specifier: workspace:^
+        version: link:../jobs
       '@repo/profiles':
         specifier: workspace:*
         version: link:../profiles
@@ -1304,6 +1313,9 @@ importers:
       '@repo/content':
         specifier: workspace:*
         version: link:../content
+      '@repo/job-board':
+        specifier: workspace:^
+        version: link:../job-board
       '@repo/url-state':
         specifier: workspace:*
         version: link:../url-state
@@ -1442,6 +1454,70 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
 
+  packages/job-board:
+    dependencies:
+      '@effect/atom-react':
+        specifier: 4.0.6
+        version: 4.0.6(effect@4.0.6)(react@19.2.7)(scheduler@0.27.0)
+      '@jsonresume/ui':
+        specifier: workspace:*
+        version: link:../ui
+      '@repo/api':
+        specifier: workspace:*
+        version: link:../api
+      '@repo/url-state':
+        specifier: workspace:*
+        version: link:../url-state
+      effect:
+        specifier: 4.0.6
+        version: 4.0.6
+    devDependencies:
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      '@testing-library/jest-dom':
+        specifier: ^6.9.1
+        version: 6.9.1
+      '@testing-library/react':
+        specifier: ^16.3.0
+        version: 16.3.0(@testing-library/dom@10.4.1)(@types/react-dom@19.2.2)(@types/react@19.2.18)(react-dom@19.2.7)(react@19.2.7)
+      '@types/react':
+        specifier: ^19.2.2
+        version: 19.2.18
+      '@types/react-dom':
+        specifier: ^19.2.2
+        version: 19.2.2(@types/react@19.2.18)
+      '@vanilla-extract/css':
+        specifier: ^1.21.3
+        version: 1.21.3
+      '@vanilla-extract/vite-plugin':
+        specifier: ^5.2.6
+        version: 5.2.6(@types/node@20.19.24)(vite@6.4.3)
+      axe-core:
+        specifier: ^4.14.0
+        version: 4.14.0
+      jsdom:
+        specifier: ^27.0.0
+        version: 27.0.1(postcss@8.5.23)
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vite:
+        specifier: ^6.4.3
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+
   packages/job-search:
     dependencies:
       '@ai-sdk/openai':
@@ -1463,6 +1539,40 @@ importers:
         specifier: 19.2.7
         version: 19.2.7
     devDependencies:
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+
+  packages/jobs:
+    dependencies:
+      '@effect/ai-openai':
+        specifier: 4.0.6
+        version: 4.0.6(effect@4.0.6)
+      '@repo/api':
+        specifier: workspace:*
+        version: link:../api
+      '@repo/database':
+        specifier: workspace:*
+        version: link:../database
+      effect:
+        specifier: 4.0.6
+        version: 4.0.6
+    devDependencies:
+      '@effect/sql-pglite':
+        specifier: 4.0.6
+        version: 4.0.6(effect@4.0.6)
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      '@types/node':
+        specifier: ^20.19.24
+        version: 20.19.24
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -6020,6 +6130,14 @@ packages:
   /@dagrejs/graphlib@2.2.4:
     resolution: {integrity: sha512-mepCf/e9+SKYy1d02/UkvSy6+6MoyXhVxP8lLDfA7BPE1X1d4dR0sZznmbM8/XVJ1GPM+Svnx7Xj6ZweByWUkw==}
     engines: {node: '>17.0.0'}
+    dev: false
+
+  /@effect/ai-openai@4.0.6(effect@4.0.6):
+    resolution: {integrity: sha512-X5fDqE7kUJ9vRlGoi6QfZQQG/shfOzVfVcsJX/4a49gVzvYkh55zte2fY719WfPvHE64kyR7n1dv9TLElQqf2g==}
+    peerDependencies:
+      effect: ^4.0.6
+    dependencies:
+      effect: 4.0.6
     dev: false
 
   /@effect/atom-react@4.0.6(effect@4.0.6)(react@19.2.7)(scheduler@0.27.0):

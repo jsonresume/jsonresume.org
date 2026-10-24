@@ -28,12 +28,14 @@ describe('registryRedirect', () => {
     expect(from('/login')).toBe('https://jsonresume.org/signin');
     expect(from('/editor')).toBe('https://jsonresume.org/dashboard/editor');
     expect(from('/docs/schema')).toBe('https://jsonresume.org/docs');
+    expect(from('/jobs')).toBe('https://jsonresume.org/jobs');
+    expect(from('/jobs/49922593')).toBe('https://jsonresume.org/jobs/49922593');
+    expect(from('/my-jobs')).toBe('https://jsonresume.org/dashboard/jobs');
   });
 
   it('sends everything else to the page about the move', () => {
     for (const path of [
       '/',
-      '/jobs',
       '/pathways',
       '/thomasdavis/jobs',
       '/api/jobs/123',

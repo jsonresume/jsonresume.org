@@ -16,6 +16,7 @@
     "@repo/accounts": "workspace:*",
     "@repo/analytics": "workspace:*",
     "@repo/api": "workspace:*",
+    "@repo/jobs": "workspace:^",
     "@repo/profiles": "workspace:*",
     "@repo/resume-themes": "workspace:*",
     "effect": "4.0.6"

@@ -37,7 +37,8 @@ for (const page of pages) {
 
 const copied = await writeSiteFiles(
   clientDir,
-  entry.paths,
+  // Live pages are in the sitemap too.
+  [...entry.paths, ...entry.livePaths],
   join(root, '../homepage2/public')
 );
 process.stdout.write(

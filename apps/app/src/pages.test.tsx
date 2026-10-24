@@ -64,10 +64,11 @@ describe('every page', () => {
         const target = href.replace(/\/$/, '') || '/';
         if (target.startsWith('/assets/') || target === '/favicon.svg')
           continue;
-        // Resumes (/@name) and the API are served live, not prerendered.
+        // Resumes (/@name), jobs and the API are served live, not prerendered.
         const ok =
           paths.includes(target) ||
           target.startsWith('/api/') ||
+          /^\/jobs(\/\d+)?$/.test(target) ||
           /^\/@[a-z0-9-]+$/.test(target) ||
           existsSync(publicDir + target);
         if (!ok) broken.push(`${path} -> ${href}`);

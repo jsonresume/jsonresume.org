@@ -34,6 +34,18 @@ export const moved: { title: string; description: string; href: string }[] = [
     description: 'Views, time on page, read depth and where readers come from.',
     href: '/dashboard',
   },
+  {
+    title: 'Jobs from Hacker News',
+    description:
+      'Every “Who is hiring?” post, tidied, searchable by skill, place, level and pay.',
+    href: '/jobs',
+  },
+  {
+    title: 'Jobs ranked for you',
+    description:
+      'Open roles ordered by how well they fit your resume, with what you mark remembered.',
+    href: '/dashboard/jobs',
+  },
 ];
 
 /** Registry features not ported yet: each links to a GitHub issue asking for it. */
@@ -49,12 +61,11 @@ export const notYet: { title: string; description: string }[] = [
   },
   {
     title: 'AI tools',
-    description:
-      'Recommended jobs, cover letters, resume suggestions and interview practice.',
+    description: 'Cover letters, resume suggestions and interview practice.',
   },
   {
-    title: 'Job search',
-    description: 'Hacker News jobs matched to your resume, and the job graph.',
+    title: 'The job graph',
+    description: 'Jobs and resumes as a map of similar roles.',
   },
   { title: 'Pathways', description: 'The career-planning assistant.' },
   {

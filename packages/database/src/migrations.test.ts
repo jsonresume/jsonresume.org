@@ -14,6 +14,10 @@ it('applies every migration to an empty database', async () => {
   );
   expect(tables.map((t) => t.table_name)).toEqual([
     'email_tokens',
+    'embeddings',
+    'job_marks',
+    'job_runs',
+    'jobs',
     'profiles',
     'resume_views',
     'sessions',

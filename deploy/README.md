@@ -24,8 +24,17 @@ its phases are in [`SELF_HOSTING_PLAN.md`](../SELF_HOSTING_PLAN.md).
 | `GITHUB_TOKEN`                            | Gist lookups; falls back to the OAuth app, then anonymous             |
 | `AUTH_GITHUB_ID`, `AUTH_GITHUB_SECRET`    | The GitHub OAuth app (sign-in and gist lookups). Its callback host must be a parent of `SITE_URL`'s, path `/api/auth/callback/github` |
 | `RESEND_API_KEY`, `MAIL_FROM` (optional)  | Email delivery; without them verification links are only logged       |
+| `OPENAI_API_KEY`                          | The jobs pipeline (parsing, embeddings) and matching jobs to resumes |
 
 Ports: app 3003 (`apps/app`).
+
+Jobs: `jsonresume-jobs.timer` runs the pipeline (`apps/app/server/jobs.ts`,
+`@repo/jobs`) every two hours from the live release: it imports the two
+newest Hacker News "Who is hiring?" threads, parses new posts with OpenAI,
+embeds them and groups reposts. Each run is a row in `app.job_runs`;
+`/api/jobs/status` shows the last one, and the uptime workflow opens an issue
+when no run has succeeded for 26 hours. It replaced the registry's GitHub
+Action, which wrote to Supabase.
 
 Hostnames (Cloudflare proxied, `deploy/caddy/Caddyfile`): jsonresume.org is
 the site, with `/docs` proxied to GitHub Pages; www and beta redirect to it;
@@ -41,6 +50,8 @@ sudo deploy/scripts/deploy.sh app <branch|sha>       # any ref
 sudo deploy/scripts/deploy.sh app --rollback         # back to the previous release
 journalctl -u jsonresume@app -f                      # logs
 sudo systemctl start jsonresume-backup               # backup now (also nightly, 03:00 UTC)
+sudo systemctl start jsonresume-jobs                 # jobs pipeline now (also every 2 hours)
+journalctl -u jsonresume-jobs                        # its runs; status at /api/jobs/status
 sudo deploy/scripts/cloudflare-ips.sh                # refresh Cloudflare ranges (ufw + Caddy)
 ```
 

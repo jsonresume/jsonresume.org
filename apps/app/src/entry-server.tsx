@@ -21,9 +21,14 @@ export const createAppRenderer = (manifest: Manifest) =>
 /** Server rendering for `pnpm dev`, with Vite serving source modules. */
 export const render = createAppRenderer(devRouterManifest(clientEntry));
 
+/** Rendered per request by the server, never prerendered. */
+export const livePaths = ['/jobs'];
+
 /** Every page to prerender: each static route, plus each blog post. */
 export const paths = [
-  ...staticPaths(createAppRouter().routesByPath),
+  ...staticPaths(createAppRouter().routesByPath).filter(
+    (path) => !livePaths.includes(path)
+  ),
   ...postPaths,
 ];
 

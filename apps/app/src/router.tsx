@@ -17,6 +17,7 @@ import {
 import {
   dashboardRoute,
   editorRoute,
+  jobsMatchesRoute,
   overviewRoute,
   resumeSettingsRoute,
   settingsRoute,
@@ -28,6 +29,7 @@ import {
   signInRoute,
   signUpRoute,
 } from './routes/auth';
+import { jobRoute, jobsRoute } from './routes/jobs';
 import { resumeRoute } from './routes/resume';
 import { rootRoute, siteRoute, type RouterContext } from './routes/root';
 
@@ -45,6 +47,8 @@ export const routeTree = rootRoute.addChildren([
     teamRoute,
     mediaRoute,
     registryRoute,
+    jobsRoute,
+    jobRoute,
     blogRoute,
     postRoute,
     resumeRoute,
@@ -58,6 +62,7 @@ export const routeTree = rootRoute.addChildren([
     overviewRoute,
     editorRoute,
     resumeSettingsRoute,
+    jobsMatchesRoute,
     settingsRoute,
   ]),
 ]);

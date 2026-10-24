@@ -5,7 +5,8 @@
 - **Org/Repo:** `jsonresume/jsonresume.org` — ALWAYS use `owner: "jsonresume"`
 - **New stack (live since 2026-10-24):** jsonresume.org is served by `apps/app` from our own server (see `deploy/README.md`), built with React + Vite, TanStack Router, Effect 4 (Schema, HttpApi server, SQL), Effect Atom and `@jsonresume/ui`, as reusable `packages/*`. Follow AGENTS.md for all new code: @AGENTS.md
 - **Legacy stack:** Next.js monorepo (Turborepo + pnpm), Vercel deployment, Supabase DB (`registry`) — `apps/registry` and `apps/homepage2`, now reference only. The registry is deprecated: registry.jsonresume.org redirects to jsonresume.org (resumes to `/@username`, everything else to `/registry`, which lists what hasn't been ported and asks for GitHub issues). Its data is kept (Supabase, CockroachDB, and the copy in our Postgres).
-- **AI SDK:** Use Vercel AI SDK (`ai@^6` + `@ai-sdk/openai@^3`), never vendor SDKs directly
+- **AI SDK:** In the new stack, Effect AI (`effect/ai` + `@effect/ai-openai`, see `@repo/jobs`). The legacy apps use Vercel AI SDK (`ai@^6` + `@ai-sdk/openai@^3`); never vendor SDKs directly
+- **Jobs:** Hacker News jobs live in `app.jobs`, filled by `@repo/jobs`' pipeline on the box (`jsonresume-jobs.timer`, every 2 hours; status at `/api/jobs/status`). The registry's GitHub Action and its Supabase `jobs` table are retired; its parsed jobs were copied over (`apps/app/scripts/backfill-jobs.ts`). Its `gpt_content_full` text, and the embeddings made from it, were model filler ("please paste the job description") for at least a year: don't reuse them.
 - **Post-consolidation:** This monorepo now absorbs the former standalone repos. The old `resume-schema`, `resume-cli`, `rust-json-resume` repos are **archived** — never link them as live (tracking: #275).
 
 ## Packages (publishable)

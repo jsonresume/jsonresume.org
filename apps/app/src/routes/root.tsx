@@ -1,4 +1,5 @@
 import { base } from '@jsonresume/ui';
+import type { Job, JobBoard } from '@repo/api';
 import type { ResumeProblem } from '@repo/domain';
 import { NotFoundPage, SiteLayout } from '@repo/site';
 import {
@@ -27,6 +28,10 @@ function RootDocument() {
 export interface RouterContext {
   /** Set when /@username has no resume to show (see ./resume.tsx). */
   resumeProblem?: ResumeProblem;
+  /** /jobs, read for this request (see ./jobs.tsx). */
+  jobBoard?: JobBoard;
+  /** /jobs/:id, or null when there is no such job. */
+  job?: Job | null;
 }
 
 export const rootRoute = createRootRouteWithContext<RouterContext>()({

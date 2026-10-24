@@ -8,6 +8,7 @@ import {
 import { PgAccountStore } from '@repo/accounts/sql';
 import { Analytics } from '@repo/analytics';
 import { PgAnalyticsStore } from '@repo/analytics/sql';
+import { JobBoard, JobMatcher, OpenAiJobs } from '@repo/jobs';
 import { GithubGists, Profiles, Usernames } from '@repo/profiles';
 import { PgProfileStore } from '@repo/profiles/sql';
 import { Layer } from 'effect';
@@ -24,7 +25,9 @@ export const appServices = <E>(
   const stores = Layer.mergeAll(
     PgProfileStore,
     PgAccountStore,
-    PgAnalyticsStore
+    PgAnalyticsStore,
+    JobBoard.layer,
+    JobMatcher.layer.pipe(Layer.provide(OpenAiJobs))
   ).pipe(Layer.provide(database));
   const profiles = Layer.mergeAll(Profiles.layer, Usernames.layer).pipe(
     Layer.provideMerge(Layer.mergeAll(GithubGists.layer, stores))

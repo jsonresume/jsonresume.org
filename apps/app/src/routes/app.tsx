@@ -41,3 +41,9 @@ export const editorRoute = createRoute({
   path: 'editor',
   head: head('Editor'),
 }).lazy(() => import('./editor.lazy').then((m) => m.EditorRoute));
+
+export const jobsMatchesRoute = createRoute({
+  getParentRoute: () => dashboardRoute,
+  path: 'jobs',
+  head: head('Jobs for you'),
+}).lazy(() => import('./app.lazy').then((m) => m.JobsRoute));

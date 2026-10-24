@@ -14,6 +14,7 @@ import { readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { registryRedirect } from '@repo/resume-host';
+import { createJobPages, jobPath, jobsPath } from './jobPages';
 import { createResumeHandler, resumePath } from './resumes';
 import { appServices } from './services';
 
@@ -68,10 +69,22 @@ const main = Effect.gen(function* () {
     ),
     (handler) => Effect.promise(() => handler.dispose())
   );
+  const jobs = yield* Effect.acquireRelease(
+    Effect.sync(() =>
+      createJobPages((request, context) => render(request, context), services, {
+        memoMap,
+      })
+    ),
+    (handler) => Effect.promise(() => handler.dispose())
+  );
   const app = createSiteApp({
     clientDir,
     mount: [{ prefix: '/api', fetch: api.handler }],
-    dynamic: [{ path: resumePath, fetch: resumes.fetch }],
+    dynamic: [
+      { path: resumePath, fetch: resumes.fetch },
+      { path: jobsPath, fetch: jobs.board },
+      { path: jobPath, fetch: jobs.job },
+    ],
     protect: { prefix: '/api', exempt: ['/api/events/'] },
     // The registry moved here: its links redirect (see registryRedirect).
     redirectHosts: { 'registry.jsonresume.org': registryRedirect },

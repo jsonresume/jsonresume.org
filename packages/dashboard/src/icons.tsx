@@ -28,3 +28,6 @@ export const OpenIcon = () => (
   <Icon d="M9.5 2.25h4.25V6.5M13.5 2.5 7.75 8.25M12 9.5v4.25H2.25V4H6.5" />
 );
 export const PenIcon = () => <Icon d="M10.5 2.5l3 3L5 14H2v-3zM9 4l3 3" />;
+export const BriefcaseIcon = () => (
+  <Icon d="M2 5.25h12v8H2zM5.75 5.25v-2h4.5v2M2 9h12" />
+);

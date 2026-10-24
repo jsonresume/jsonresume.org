@@ -1,5 +1,6 @@
 import {
   DashboardShell,
+  JobsPage,
   OverviewPage,
   ResumePage,
   SettingsPage,
@@ -43,4 +44,7 @@ export const ResumeRoute = createLazyRoute('/dashboard/resume')({
 });
 export const SettingsRoute = createLazyRoute('/dashboard/settings')({
   component: SettingsPage,
+});
+export const JobsRoute = createLazyRoute('/dashboard/jobs')({
+  component: JobsPage,
 });

@@ -75,3 +75,17 @@ export class GistPermissionNeeded extends Schema.TaggedError<GistPermissionNeede
   {},
   { httpApiStatus: 403 }
 ) {}
+
+/** No such job on the board. */
+export class JobNotFound extends Schema.TaggedError<JobNotFound>()(
+  'JobNotFound',
+  {},
+  { httpApiStatus: 404 }
+) {}
+
+/** Matching needs a resume, and the account has none yet. */
+export class NoResume extends Schema.TaggedError<NoResume>()(
+  'NoResume',
+  {},
+  { httpApiStatus: 409 }
+) {}

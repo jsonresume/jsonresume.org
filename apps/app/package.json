@@ -6,11 +6,12 @@
   "type": "module",
   "scripts": {
     "dev": "node scripts/dev.ts",
-    "build": "vite build --outDir dist/client && vite build --ssr src/entry-server.tsx --outDir dist/ssr && vite build --ssr server/index.ts --outDir dist/server && node scripts/prerender.ts",
+    "build": "vite build --outDir dist/client && vite build --ssr src/entry-server.tsx --outDir dist/ssr && vite build --ssr server/index.ts --outDir dist/server && vite build --ssr server/jobs.ts --outDir dist/jobs && node scripts/prerender.ts",
     "start": "node dist/server/index.js",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint src server scripts --ext .ts,.tsx"
+    "lint": "eslint src server scripts --ext .ts,.tsx",
+    "jobs": "node dist/jobs/jobs.js"
   },
   "dependencies": {
     "@effect/atom-react": "4.0.6",
@@ -27,6 +28,8 @@
     "@repo/dashboard": "workspace:^",
     "@repo/database": "workspace:^",
     "@repo/domain": "workspace:*",
+    "@repo/job-board": "workspace:^",
+    "@repo/jobs": "workspace:^",
     "@repo/profiles": "workspace:^",
     "@repo/resume-editor": "workspace:^",
     "@repo/resume-host": "workspace:^",

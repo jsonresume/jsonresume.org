@@ -168,4 +168,30 @@ describe('the API, over HTTP', () => {
       ).text()
     ).toContain('Nothing to preview');
   });
+
+  it('serves the job board to anyone, and matches only for a signed-in resume', async () => {
+    server = testServer();
+    expect(await (await server.fetch('/api/jobs')).json()).toEqual({
+      jobs: [],
+      thread: null,
+    });
+    expect((await server.fetch('/api/jobs/123')).status).toBe(404);
+    expect((await server.fetch('/api/jobs/status')).status).toBe(200);
+    expect((await server.fetch('/api/me/jobs')).status).toBe(401);
+
+    await server.post('/api/auth/signup', ada);
+    expect((await server.fetch('/api/me/jobs')).status).toBe(409);
+    await server.fetch('/api/account/resume', {
+      method: 'PUT',
+      body: JSON.stringify({
+        resume: { basics: { label: 'Engineer', summary: 'Builds web apps' } },
+      }),
+    });
+    expect(await (await server.fetch('/api/me/jobs')).json()).toEqual([]);
+    const mark = await server.fetch('/api/me/jobs/123', {
+      method: 'PUT',
+      body: JSON.stringify({ mark: 'applied' }),
+    });
+    expect(mark.status).toBe(404);
+  });
 });
