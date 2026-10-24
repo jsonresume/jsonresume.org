@@ -129,3 +129,13 @@ export const mediaRoute = page(
   },
   () => import('./media.lazy')
 );
+
+export const registryRoute = page(
+  paths.registry,
+  {
+    title: 'The registry is now part of jsonresume.org',
+    description:
+      'registry.jsonresume.org moved here: your resume is at jsonresume.org/@username, from the same gist. What moved, what is coming, and how to ask for a feature.',
+  },
+  () => import('./registry.lazy')
+);

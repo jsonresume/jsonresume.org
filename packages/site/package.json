@@ -18,7 +18,8 @@
     "./ai": "./src/pages/ai/AiPage.tsx",
     "./theme-development": "./src/pages/theme-development/ThemeDevelopmentPage.tsx",
     "./media": "./src/pages/media/MediaPage.tsx",
-    "./resume-unavailable": "./src/pages/resume/ResumeUnavailablePage.tsx"
+    "./resume-unavailable": "./src/pages/resume/ResumeUnavailablePage.tsx",
+    "./registry": "./src/pages/registry/RegistryPage.tsx"
   },
   "scripts": {
     "test": "vitest run",

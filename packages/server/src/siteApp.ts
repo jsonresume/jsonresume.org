@@ -26,6 +26,8 @@ export interface SiteAppOptions {
   dynamic?: ReadonlyArray<DynamicHandler>;
   /** Paths whose writes must come from this site (see sameOrigin). */
   protect?: { prefix: string; exempt?: ReadonlyArray<string> };
+  /** Whole hosts that only redirect (an old domain): host → where a URL goes now. */
+  redirectHosts?: Readonly<Record<string, (url: URL) => string>>;
 }
 
 const HTML_CACHE = 'public, max-age=0, must-revalidate';
@@ -44,11 +46,17 @@ export function createSiteApp({
   mount = [],
   dynamic = [],
   protect,
+  redirectHosts = {},
 }: SiteAppOptions): Hono {
   // serveStatic resolves `root` against the working directory.
   const root = relative(process.cwd(), clientDir) || '.';
   const notFoundPage = readFileSync(join(clientDir, '404.html'), 'utf8');
   const app = new Hono();
+  app.use('*', async (c, next) => {
+    const host = (c.req.header('host') ?? '').split(':')[0] ?? '';
+    const to = redirectHosts[host];
+    return to ? c.redirect(to(new URL(c.req.url)), 301) : next();
+  });
   if (protect) app.use('*', sameOrigin(protect.prefix, protect.exempt));
 
   for (const { prefix, fetch } of mount) {

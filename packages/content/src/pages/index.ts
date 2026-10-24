@@ -4,6 +4,7 @@ export * as ai from './ai';
 export * as cli from './cli';
 export * as gettingStarted from './gettingStarted';
 export * as media from './media';
+export * as registry from './registry';
 export * as resumeHosting from './resumeHosting';
 export * as schema from './schema';
 export * as team from './team';

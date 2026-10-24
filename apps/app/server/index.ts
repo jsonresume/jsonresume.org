@@ -13,6 +13,7 @@ import { Config, Effect, Layer } from 'effect';
 import { readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { registryRedirect } from '@repo/resume-host';
 import { createResumeHandler, resumePath } from './resumes';
 import { appServices } from './services';
 
@@ -72,6 +73,8 @@ const main = Effect.gen(function* () {
     mount: [{ prefix: '/api', fetch: api.handler }],
     dynamic: [{ path: resumePath, fetch: resumes.fetch }],
     protect: { prefix: '/api', exempt: ['/api/events/'] },
+    // The registry moved here: its links redirect (see registryRedirect).
+    redirectHosts: { 'registry.jsonresume.org': registryRedirect },
   });
 
   yield* Effect.acquireRelease(

@@ -138,7 +138,7 @@ export const contact = {
   mailto:
     'mailto:thomasalwyndavis@gmail.com?subject=JSON%20Resume%20media%20enquiry',
   github: 'https://github.com/thomasdavis',
-  resume: 'https://registry.jsonresume.org/thomasdavis',
+  resume: 'https://jsonresume.org/@thomasdavis',
   ask: 'Include your publication, topic, deadline and time zone. Questions about a third-party tool are best sent to its maintainers.',
 };
 

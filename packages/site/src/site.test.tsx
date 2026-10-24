@@ -7,6 +7,7 @@ import { act, fireEvent, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { featuredThemes, HomePage } from './home';
 import { AiPage } from './pages/ai/AiPage';
+import { RegistryPage } from './pages/registry/RegistryPage';
 import { BlogIndexPage, BlogPostPage } from './pages/BlogPages';
 import { CliPage } from './pages/cli/CliPage';
 import { GettingStartedPage } from './pages/getting-started/GettingStartedPage';
@@ -63,7 +64,7 @@ describe('pages', () => {
     ).toHaveLength(featuredThemes.length);
   });
 
-  it('getting started: your username rewrites the registry links', async () => {
+  it('getting started: your username rewrites your resume links', async () => {
     await renderWithRouter(<GettingStartedPage />, '/getting-started');
     oneH1();
     await act(async () => {
@@ -71,9 +72,9 @@ describe('pages', () => {
         target: { value: 'octocat' },
       });
     });
-    expect(screen.getByRole('link', { name: 'octocat.json' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: '@octocat.json' })).toHaveAttribute(
       'href',
-      'https://registry.jsonresume.org/octocat.json'
+      'https://jsonresume.org/@octocat.json'
     );
   });
 
@@ -100,17 +101,24 @@ describe('pages', () => {
     }
   });
 
-  it('ai: tool links follow the username', async () => {
+  it('ai: each tool asks for its port on GitHub', async () => {
     await renderWithRouter(<AiPage />, '/ai');
-    await act(async () => {
-      fireEvent.change(screen.getByLabelText('Your GitHub username'), {
-        target: { value: 'octocat' },
-      });
-    });
-    expect(screen.getByRole('link', { name: /Cover letter/ })).toHaveAttribute(
-      'href',
-      'https://registry.jsonresume.org/octocat/letter'
+    oneH1();
+    const link = screen.getByRole('link', { name: /Cover letter/ });
+    expect(link.getAttribute('href')).toMatch(
+      /^https:\/\/github\.com\/jsonresume\/jsonresume\.org\/issues\/new\?title=Port\+from\+the\+registry/
     );
+  });
+
+  it('registry: what moved, what hasn’t, and how to ask', async () => {
+    await renderWithRouter(<RegistryPage />, '/registry');
+    oneH1();
+    expect(
+      screen.getByRole('list', { name: 'Moved from the registry' })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: /PDF download/ }).getAttribute('href')
+    ).toContain('issues/new');
   });
 
   it('theme development and media render, with facts filled in', async () => {

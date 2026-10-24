@@ -18,6 +18,7 @@ export const paths = {
   chooseUsername: '/signup/username',
   forgotPassword: '/forgot-password',
   resetPassword: '/reset-password',
+  registry: '/registry',
   dashboard: '/dashboard',
   dashboardResume: '/dashboard/resume',
   dashboardSettings: '/dashboard/settings',
@@ -26,7 +27,6 @@ export const paths = {
 export const external = {
   // The docs site is a separate static build on GitHub Pages.
   docs: 'https://jsonresume.org/docs',
-  registry: 'https://registry.jsonresume.org',
   github: 'https://github.com/jsonresume/jsonresume.org',
   contributing:
     'https://github.com/jsonresume/jsonresume.org/blob/master/CONTRIBUTING.md',

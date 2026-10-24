@@ -2,9 +2,9 @@ import { gettingStarted as g } from '@repo/content/pages';
 import { GithubUserField, useGithubUser } from '../../githubUser';
 import * as l from '../shared/layout.css';
 
-const HOST = 'https://registry.jsonresume.org/';
+const HOST = 'https://jsonresume.org/';
 
-/** A registry link, shown without the shared host so it reads at a glance. */
+/** A resume link, shown without the shared host so it reads at a glance. */
 function RegistryLink({ href }: { href: string }) {
   return (
     <a className={l.url} href={href}>
@@ -13,13 +13,13 @@ function RegistryLink({ href }: { href: string }) {
   );
 }
 
-/** The reader's registry address and formats, built from their username. */
+/** The reader's resume address and formats, built from their username. */
 export function YourRegistry() {
   const user = useGithubUser();
   const rows = [
     {
       label: 'Resume',
-      href: g.registryUrl(user),
+      href: g.resumeUrl(user),
       title: 'Your resume, in your theme.',
     },
     {
@@ -36,7 +36,7 @@ export function YourRegistry() {
   return (
     <aside className={l.panel} aria-labelledby="your-registry">
       <h3 id="your-registry" className={l.panelTitle}>
-        Your registry address
+        Your resume address
       </h3>
       <GithubUserField />
       <p className={l.muted}>

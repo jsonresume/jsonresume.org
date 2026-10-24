@@ -36,7 +36,11 @@ export function pageHead({
       ...(url
         ? [{ property: 'og:url', content: url }]
         : [{ name: 'robots', content: 'noindex' }]),
-      { name: 'twitter:card', content: 'summary' },
+      // The link-preview card (1200×630), the same for every page.
+      { property: 'og:image', content: `${siteUrl}/og.png` },
+      { property: 'og:image:width', content: '1200' },
+      { property: 'og:image:height', content: '630' },
+      { name: 'twitter:card', content: 'summary_large_image' },
     ],
     links: url ? [{ rel: 'canonical', href: url }] : [],
   };

@@ -68,7 +68,7 @@ export function GettingStartedPage() {
             title="Host it from a Gist"
             headingId="gist-title"
           >
-            The registry renders any public Gist named resume.json, in any
+            jsonresume.org renders any public Gist named resume.json, in any
             theme.
           </SectionIntro>
           <div className={l.twoCol}>

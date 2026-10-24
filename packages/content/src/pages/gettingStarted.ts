@@ -1,6 +1,7 @@
 import type { Card, Step, UserPath } from './types';
 
-const registry = 'https://registry.jsonresume.org';
+/** Resumes are hosted at jsonresume.org/@username (the registry moved here). */
+const site = 'https://jsonresume.org';
 
 /** The three ways in, shown first so people pick one. */
 export const paths: Card[] = [
@@ -8,7 +9,7 @@ export const paths: Card[] = [
     eyebrow: 'No install',
     title: 'Host it from a Gist',
     description:
-      'Save resume.json as a GitHub Gist and it is live on the registry, in any theme.',
+      'Save resume.json as a GitHub Gist and it is live at jsonresume.org/@you, in any theme.',
     href: '#gist',
   },
   {
@@ -30,7 +31,7 @@ export const paths: Card[] = [
 export const gistSteps: Step[] = [
   {
     title: 'Write resume.json',
-    body: 'Start from the [example](/schema) or the [online editor](https://registry.jsonresume.org/editor). Every field is optional.',
+    body: 'Start from the [example](/schema) or the [online editor](/dashboard/editor). Every field is optional.',
   },
   {
     title: 'Save it as a Gist',
@@ -38,7 +39,7 @@ export const gistSteps: Step[] = [
   },
   {
     title: 'Open your page',
-    body: 'Your resume is live at your registry address. It updates whenever you edit the Gist.',
+    body: 'Your resume is live at jsonresume.org/@you. It updates whenever you edit the Gist.',
   },
   {
     title: 'Pick a theme',
@@ -65,7 +66,7 @@ export const cliSteps: Step[] = [
   },
 ];
 
-/** Your resume in other formats, from the registry. */
+/** Your resume in other formats. */
 export const rawFormats: {
   label: string;
   description: string;
@@ -74,36 +75,26 @@ export const rawFormats: {
   {
     label: 'JSON',
     description: 'The data, as stored in your Gist.',
-    path: (u) => `${registry}/${u}.json`,
+    path: (u) => `${site}/@${u}.json`,
   },
   {
     label: 'YAML',
     description: 'The same data as YAML.',
-    path: (u) => `${registry}/${u}.yaml`,
+    path: (u) => `${site}/@${u}.yaml`,
   },
   {
     label: 'Text',
     description: 'Plain text, for forms and email.',
-    path: (u) => `${registry}/${u}.txt`,
-  },
-  {
-    label: 'RenderCV',
-    description: 'For LaTeX output with RenderCV.',
-    path: (u) => `${registry}/${u}.rendercv`,
-  },
-  {
-    label: 'QR code',
-    description: 'A PNG that links to your resume.',
-    path: (u) => `${registry}/${u}.qr`,
+    path: (u) => `${site}/@${u}.txt`,
   },
 ];
 
-export const registryUrl: UserPath = (u) => `${registry}/${u}`;
+export const resumeUrl: UserPath = (u) => `${site}/@${u}`;
 export const themedUrl = (u: string, theme: string) =>
-  `${registry}/${u}?theme=${theme}`;
+  `${site}/@${u}?theme=${theme}`;
 /** Another file in the same Gist, e.g. resume-fr.json. */
 export const gistFileUrl = (u: string, file: string) =>
-  `${registry}/${u}?gistname=${file}`;
+  `${site}/@${u}?gistname=${file}`;
 
 export const importTools: (Card & { code?: string })[] = [
   {

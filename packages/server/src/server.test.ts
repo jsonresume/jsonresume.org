@@ -34,6 +34,9 @@ const app = createSiteApp({
   clientDir: dir,
   mount: [{ prefix: '/api', fetch: api.handler }],
   protect: { prefix: '/api', exempt: ['/api/events/'] },
+  redirectHosts: {
+    'old.example': (url) => `https://new.example${url.pathname}`,
+  },
   dynamic: [
     {
       path: '/:handle{@[^/]+}',
@@ -105,5 +108,13 @@ describe('createSiteApp', () => {
     expect(
       (await post('/api/events/view', 'https://evil.example')).status
     ).not.toBe(403);
+  });
+
+  it('redirects every URL of an old host', async () => {
+    const res = await app.request('/thomasdavis', {
+      headers: { host: 'old.example' },
+    });
+    expect(res.status).toBe(301);
+    expect(res.headers.get('location')).toBe('https://new.example/thomasdavis');
   });
 });

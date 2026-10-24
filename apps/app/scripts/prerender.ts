@@ -6,6 +6,7 @@
 import { readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { writeSiteFiles } from './site-files.ts';
 
 type ServerEntry = typeof import('../src/entry-server.tsx');
 
@@ -33,3 +34,12 @@ for (const page of pages) {
     `prerendered ${page.path} -> ${page.file} (${page.status})\n`
   );
 }
+
+const copied = await writeSiteFiles(
+  clientDir,
+  entry.paths,
+  join(root, '../homepage2/public')
+);
+process.stdout.write(
+  `wrote sitemap.xml and robots.txt; copied ${copied} legacy public files\n`
+);
