@@ -142,6 +142,7 @@ export const headerActions = style({
 
 export const pageHeaderActions = style({
   display: 'flex',
+  flexWrap: 'wrap',
   alignItems: 'center',
   gap: space[2],
 });

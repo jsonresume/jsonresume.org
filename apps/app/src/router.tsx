@@ -19,7 +19,13 @@ import {
   resumeSettingsRoute,
   settingsRoute,
 } from './routes/app';
-import { chooseUsernameRoute, signInRoute, signUpRoute } from './routes/auth';
+import {
+  chooseUsernameRoute,
+  forgotPasswordRoute,
+  resetPasswordRoute,
+  signInRoute,
+  signUpRoute,
+} from './routes/auth';
 import { resumeRoute } from './routes/resume';
 import { rootRoute, siteRoute, type RouterContext } from './routes/root';
 
@@ -42,6 +48,8 @@ export const routeTree = rootRoute.addChildren([
     signInRoute,
     signUpRoute,
     chooseUsernameRoute,
+    forgotPasswordRoute,
+    resetPasswordRoute,
   ]),
   dashboardRoute.addChildren([
     overviewRoute,

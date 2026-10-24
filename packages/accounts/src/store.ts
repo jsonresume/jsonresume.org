@@ -28,6 +28,9 @@ export interface AccountRecord {
   hasMirror: boolean;
 }
 
+/** What an emailed link is for. */
+export type TokenPurpose = 'verify' | 'reset';
+
 /** The GitHub account is already linked to another user. */
 export class GithubTaken extends Schema.TaggedError<GithubTaken>()(
   'GithubTaken',
@@ -72,10 +75,32 @@ export class AccountStore extends Context.Service<
       userId: string,
       email: string,
       tokenHash: string,
-      expiresAt: Date
+      expiresAt: Date,
+      purpose: TokenPurpose
     ): Effect.Effect<void>;
-    /** Marks the email verified when the token is good; the user's id, or undefined. */
-    consumeEmailToken(tokenHash: string): Effect.Effect<string | undefined>;
+    /**
+     * Uses up a link's token: the user's id, or undefined when it is wrong,
+     * used or old. Either purpose proves the inbox, so the email is verified.
+     */
+    consumeEmailToken(
+      tokenHash: string,
+      purpose: TokenPurpose
+    ): Effect.Effect<string | undefined>;
+    /** A new password; every session of the user ends. */
+    setPassword(userId: string, passwordHash: string): Effect.Effect<void>;
+    /** The user, their names (freed at once) and their resume views. */
+    deleteUser(userId: string): Effect.Effect<void>;
+    /**
+     * Move the account to `username`. The old name becomes an alias that
+     * redirects until `retiredUntil`; views move with the account.
+     */
+    renameUser(
+      userId: string,
+      username: string,
+      retiredUntil: Date
+    ): Effect.Effect<UserRecord, UsernameUnavailable>;
+    /** Free names whose rename redirect has run out; how many. */
+    purgeRetired(): Effect.Effect<number>;
     account(userId: string): Effect.Effect<AccountRecord | undefined>;
     saveStoredResume(userId: string, resume: unknown): Effect.Effect<void>;
     setSource(userId: string, source: 'gist' | 'stored'): Effect.Effect<void>;

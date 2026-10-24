@@ -1,15 +1,15 @@
 import { RegistryProvider, useAtomSet } from '@effect/atom-react';
-import { AuthCard, Button, Divider, Field, Input } from '@jsonresume/ui';
+import { AuthCard, Button, Divider, Field, Input, Text } from '@jsonresume/ui';
 import { errorTag, keys, signUpAtom, usernameReason } from '@repo/api-client';
 import { account } from '@repo/content/pages';
 import { useState, type FormEvent, type ReactNode } from 'react';
-import * as s from './auth.css';
 import {
   ErrorNote,
   GithubButton,
   safeNext,
   refusalMessage,
   UsernameStatus,
+  Form,
 } from './shared';
 
 export interface SignUpPageProps {
@@ -55,9 +55,11 @@ function SignUpForm({ next, signInLink }: SignUpPageProps) {
     >
       <ErrorNote message={message} />
       <GithubButton label={copy.github} next={next} />
-      <p className={s.note}>{copy.githubNote}</p>
+      <Text size="xs" tone="muted">
+        {copy.githubNote}
+      </Text>
       <Divider label={copy.or} />
-      <form className={s.form} onSubmit={submit}>
+      <Form onSubmit={submit}>
         <Field
           label={copy.username}
           hint={<UsernameHint name={name} />}
@@ -89,7 +91,7 @@ function SignUpForm({ next, signInLink }: SignUpPageProps) {
         <Button type="submit" variant="primary" fullWidth disabled={busy}>
           {copy.submit}
         </Button>
-      </form>
+      </Form>
     </AuthCard>
   );
 }

@@ -54,3 +54,17 @@ export class InvalidResume extends Schema.TaggedError<InvalidResume>()(
   { message: Schema.String },
   { httpApiStatus: 400 }
 ) {}
+
+/** An emailed link that is wrong, used, or too old. */
+export class InvalidLink extends Schema.TaggedError<InvalidLink>()(
+  'InvalidLink',
+  {},
+  { httpApiStatus: 400 }
+) {}
+
+/** Deleting an account needs its username typed back. */
+export class ConfirmationMismatch extends Schema.TaggedError<ConfirmationMismatch>()(
+  'ConfirmationMismatch',
+  {},
+  { httpApiStatus: 400 }
+) {}

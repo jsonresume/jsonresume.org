@@ -2,6 +2,7 @@ import { GithubUnreachable, UsernameUnavailable } from '@repo/api';
 import { Usernames } from '@repo/profiles';
 import { Clock, Config, Duration, Effect } from 'effect';
 import { hashToken, newToken } from './crypto';
+import { verificationEmail } from './emails';
 import { Mailer } from './mailer';
 import { AccountStore, type UserRecord } from './store';
 
@@ -57,22 +58,12 @@ export const accountsCore = Effect.gen(function* () {
       user.id,
       user.email,
       hashToken(token),
-      yield* later(EMAIL_TOKEN_TTL)
+      yield* later(EMAIL_TOKEN_TTL),
+      'verify'
     );
-    yield* mailer.send({
-      to: user.email,
-      subject: 'Confirm your email for JSON Resume',
-      text: [
-        `Hi @${user.username},`,
-        '',
-        'Confirm your email to put your resume live at',
-        `${siteUrl}/@${user.username}:`,
-        '',
-        `${siteUrl}/api/auth/verify?token=${token}`,
-        '',
-        'The link works for 24 hours. If you didn’t sign up, ignore this email.',
-      ].join('\n'),
-    });
+    yield* mailer.send(
+      verificationEmail(user.email, user.username, siteUrl, token)
+    );
   });
 
   const claimable = Effect.fn('Accounts.claimable')(function* (
@@ -90,6 +81,7 @@ export const accountsCore = Effect.gen(function* () {
     store,
     usernames,
     mailer,
+    siteUrl,
     later,
     startSession,
     sendVerification,

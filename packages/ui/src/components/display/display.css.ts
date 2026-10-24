@@ -211,6 +211,12 @@ export const card = recipe({
         border: `1px solid ${color.border.subtle}`,
         boxShadow: vars.shadow.md,
       },
+      // Irreversible actions ("Delete account"): set apart, never alone in
+      // colour; the heading and button say what happens.
+      danger: {
+        backgroundColor: color.surface.raised,
+        border: `1px solid ${color.status.danger}`,
+      },
     },
     interactive: {
       true: {

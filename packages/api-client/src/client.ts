@@ -51,3 +51,7 @@ export const resendVerificationAtom = ApiClient.mutation(
 );
 export const saveResumeAtom = ApiClient.mutation('account', 'saveResume');
 export const setSourceAtom = ApiClient.mutation('account', 'setSource');
+export const forgotPasswordAtom = ApiClient.mutation('auth', 'forgotPassword');
+export const resetPasswordAtom = ApiClient.mutation('auth', 'resetPassword');
+export const renameAtom = ApiClient.mutation('account', 'rename');
+export const deleteAccountAtom = ApiClient.mutation('account', 'delete');

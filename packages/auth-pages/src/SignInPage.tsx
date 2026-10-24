@@ -1,10 +1,15 @@
 import { RegistryProvider, useAtomSet } from '@effect/atom-react';
-import { AuthCard, Button, Divider, Field, Input } from '@jsonresume/ui';
+import { AuthCard, Button, Divider, Field, Input, Text } from '@jsonresume/ui';
 import { errorTag, keys, signInAtom } from '@repo/api-client';
 import { account } from '@repo/content/pages';
 import { useState, type FormEvent, type ReactNode } from 'react';
-import * as s from './auth.css';
-import { ErrorNote, errorMessage, GithubButton, safeNext } from './shared';
+import {
+  ErrorNote,
+  errorMessage,
+  GithubButton,
+  safeNext,
+  Form,
+} from './shared';
 
 export interface SignInPageProps {
   /** Where to go once signed in (a path on this site). */
@@ -13,9 +18,11 @@ export interface SignInPageProps {
   error?: string | undefined;
   /** The link to the sign-up page, rendered by the app's router. */
   signUpLink: ReactNode;
+  /** The link to the forgotten-password page. */
+  forgotLink?: ReactNode;
 }
 
-function SignInForm({ next, error, signUpLink }: SignInPageProps) {
+function SignInForm({ next, error, signUpLink, forgotLink }: SignInPageProps) {
   const copy = account.signIn;
   const signIn = useAtomSet(signInAtom, { mode: 'promiseExit' });
   const [busy, setBusy] = useState(false);
@@ -54,7 +61,7 @@ function SignInForm({ next, error, signUpLink }: SignInPageProps) {
       <ErrorNote message={message} />
       <GithubButton label={copy.github} next={next} />
       <Divider label={copy.or} />
-      <form className={s.form} onSubmit={submit}>
+      <Form onSubmit={submit}>
         <Field label={copy.email} required>
           <Input name="email" type="email" autoComplete="email" required />
         </Field>
@@ -69,7 +76,12 @@ function SignInForm({ next, error, signUpLink }: SignInPageProps) {
         <Button type="submit" variant="primary" fullWidth disabled={busy}>
           {copy.submit}
         </Button>
-      </form>
+        {forgotLink ? (
+          <Text as="span" size="xs" tone="muted">
+            {forgotLink}
+          </Text>
+        ) : null}
+      </Form>
     </AuthCard>
   );
 }

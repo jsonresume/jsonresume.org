@@ -1,7 +1,6 @@
-import { StatTile } from '@jsonresume/ui';
+import { Grid, StatTile } from '@jsonresume/ui';
 import type { Overview } from '@repo/api';
 import { change, count, duration, rangeDays } from '../format';
-import * as s from '../dashboard.css';
 
 /** The headline numbers for the range, each against the range before. */
 export function Kpis({ overview }: { overview: Overview }) {
@@ -12,7 +11,7 @@ export function Kpis({ overview }: { overview: Overview }) {
     return value === undefined ? {} : { delta: { value, label: vs } };
   };
   return (
-    <div className={s.kpis}>
+    <Grid gap={4} minColumnWidth="9.5rem" stretch>
       <StatTile
         label="Views"
         value={count(totals.views)}
@@ -43,6 +42,6 @@ export function Kpis({ overview }: { overview: Overview }) {
         note="How far down readers scroll, on average"
         {...delta(totals.readDepth, previous.readDepth)}
       />
-    </div>
+    </Grid>
   );
 }

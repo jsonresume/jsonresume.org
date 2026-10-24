@@ -120,13 +120,14 @@ export const componentDocs: ComponentDoc[] = [
     name: 'Text',
     group: 'Typography',
     summary:
-      'Body copy at 14px with generous line height, plus muted, strong and uppercase overline styles.',
+      'Body copy at 14px with generous line height, plus muted, strong and uppercase overline styles, and success, warning and danger tones for status words beside a field.',
     components: ['Text'],
     defaults: { size: 'sm', tone: 'default', weight: 'regular' },
     examples: [{ id: 'tones', title: 'Sizes and tones', block: true }],
     accessibility: [
       'Muted text still meets 4.5:1 on every surface; see Color.',
       'caps is for short labels only: long uppercase text is hard to read.',
+      'Status tones colour the words that already say the status ("Taken"); never rely on the colour alone.',
     ],
   },
   {
@@ -709,6 +710,7 @@ export const componentDocs: ComponentDoc[] = [
     ],
     accessibility: [
       'CardTitle renders a real heading; set level for the outline (3 by default).',
+      'tone="danger" frames irreversible actions; its heading and button must say what happens, not the border alone.',
     ],
   },
   {

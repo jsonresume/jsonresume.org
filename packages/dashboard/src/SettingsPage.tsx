@@ -5,13 +5,23 @@ import {
   Badge,
   Button,
   Callout,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
   DescriptionList,
+  Link,
+  Stack,
+  Text,
 } from '@jsonresume/ui';
+import type { Account } from '@repo/api';
 import { accountAtom, signOutAtom } from '@repo/api-client';
 import { AsyncResult } from 'effect/reactivity';
-import * as s from './dashboard.css';
+import type { ReactNode } from 'react';
 import { Notices } from './Notices';
 import { searchParam } from './session';
+import { DeleteAccount } from './settings/DeleteAccount';
+import { UsernameCard } from './settings/UsernameCard';
 
 function GithubFlash() {
   const github = searchParam('github');
@@ -27,34 +37,41 @@ function GithubFlash() {
   return null;
 }
 
-/** The account: name, email, GitHub, signing out. */
-export function SettingsPage() {
-  const result = useAtomValue(accountAtom);
-  const signOut = useAtomSet(signOutAtom, { mode: 'promiseExit' });
-  if (!AsyncResult.isSuccess(result))
-    return <AppPage title="Settings">{null}</AppPage>;
-  const account = result.value;
+const Inline = ({ children }: { children: ReactNode }) => (
+  <Stack asChild direction="row" wrap align="center" gap={2}>
+    <span>{children}</span>
+  </Stack>
+);
+
+function Details({ account }: { account: Account }) {
   const items = [
-    { term: 'Username', description: <>@{account.username}</> },
+    {
+      term: 'Page',
+      description: (
+        <Link href={account.path}>jsonresume.org{account.path}</Link>
+      ),
+    },
     {
       term: 'Email',
       description: account.email ? (
-        <span className={s.row}>
+        <Inline>
           {account.email}
           {account.emailVerified ? (
             <Badge tone="success">Confirmed</Badge>
           ) : (
             <Badge tone="warning">Not confirmed</Badge>
           )}
-        </span>
+        </Inline>
       ) : (
-        <span className={s.muted}>None (signed up with GitHub)</span>
+        <Text as="span" size="sm" tone="muted">
+          None (signed up with GitHub)
+        </Text>
       ),
     },
     {
       term: 'GitHub',
       description: account.github ? (
-        <span className={s.row}>
+        <Inline>
           <Avatar
             name={account.github.login}
             src={account.github.avatarUrl}
@@ -62,10 +79,10 @@ export function SettingsPage() {
             shape="circle"
             alt=""
           />
-          <a href={`https://github.com/${account.github.login}`}>
+          <Link href={`https://github.com/${account.github.login}`}>
             @{account.github.login}
-          </a>
-        </span>
+          </Link>
+        </Inline>
       ) : (
         <Button asChild size="sm" variant="secondary">
           <a href="/api/auth/github?intent=link&next=/dashboard/settings">
@@ -76,27 +93,47 @@ export function SettingsPage() {
     },
   ];
   return (
-    <AppPage title="Settings" description="Your account.">
-      <div className={s.stack}>
+    <Card>
+      <CardHeader>
+        <CardTitle level={2}>Account</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <DescriptionList items={items} />
+      </CardContent>
+    </Card>
+  );
+}
+
+/** The account: details, username, GitHub, signing out, deleting. */
+export function SettingsPage() {
+  const result = useAtomValue(accountAtom);
+  const signOut = useAtomSet(signOutAtom, { mode: 'promiseExit' });
+  if (!AsyncResult.isSuccess(result))
+    return <AppPage title="Settings">{null}</AppPage>;
+  const account = result.value;
+  return (
+    <AppPage
+      title="Settings"
+      description="Your account."
+      actions={
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={() =>
+            void signOut({}).then(() => window.location.assign('/'))
+          }
+        >
+          Sign out
+        </Button>
+      }
+    >
+      <Stack gap={6}>
         <GithubFlash />
         <Notices />
-        <section className={s.panel} aria-labelledby="account-title">
-          <h2 id="account-title" className={s.panelTitle}>
-            Account
-          </h2>
-          <DescriptionList items={items} />
-        </section>
-        <div>
-          <Button
-            variant="secondary"
-            onClick={() =>
-              void signOut({}).then(() => window.location.assign('/'))
-            }
-          >
-            Sign out
-          </Button>
-        </div>
-      </div>
+        <Details account={account} />
+        <UsernameCard account={account} />
+        <DeleteAccount username={account.username} />
+      </Stack>
     </AppPage>
   );
 }

@@ -3,10 +3,12 @@
 How `jsonresume.org/@username` decides whose resume to show. Agreed
 2026-10-23; items marked _default_ were not discussed and can be revisited.
 
-Built (2026-10-23): ghosts, email and GitHub sign-up and sign-in, the
-reservations, verification (7-day holds), GitHub linking with ghost merges,
-and gist or uploaded resumes. Not built yet: renames (and their 90-day
-redirects), account deletion, and the registry.jsonresume.org redirects.
+Built (2026-10-24): ghosts, email and GitHub sign-up and sign-in, the
+reservations, verification (7-day holds), password resets, GitHub linking
+with ghost merges, gist or uploaded resumes, renames with their 90-day
+redirects, and account deletion (which also deletes the account's views).
+Not built yet: the registry.jsonresume.org redirects, which wait for the
+switch from the registry to this app.
 
 ## Kinds of profile
 

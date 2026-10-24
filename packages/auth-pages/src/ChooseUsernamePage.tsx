@@ -18,12 +18,12 @@ import {
 import { account } from '@repo/content/pages';
 import { AsyncResult } from 'effect/reactivity';
 import { useState, type FormEvent, type ReactNode } from 'react';
-import * as s from './auth.css';
 import {
   ErrorNote,
   errorMessage,
   refusalMessage,
   UsernameStatus,
+  Form,
 } from './shared';
 
 function Choose({
@@ -57,7 +57,7 @@ function Choose({
     <AuthCard title={copy.title} description={copy.description(login)}>
       <Avatar name={login} src={avatarUrl} size="md" shape="circle" alt="" />
       <ErrorNote message={message} />
-      <form className={s.form} onSubmit={submit}>
+      <Form onSubmit={submit}>
         <Field
           label={account.signUp.username}
           hint={
@@ -80,7 +80,7 @@ function Choose({
         <Button type="submit" variant="primary" fullWidth disabled={busy}>
           {copy.submit}
         </Button>
-      </form>
+      </Form>
     </AuthCard>
   );
 }

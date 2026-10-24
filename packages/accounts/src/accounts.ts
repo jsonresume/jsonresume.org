@@ -31,6 +31,7 @@ import {
   UNVERIFIED_TTL,
   type SignedIn,
 } from './core';
+import { accountManagement } from './manage';
 import type { GithubIdentity, UserRecord } from './store';
 
 export { SESSION_TTL, UNVERIFIED_TTL, type SignedIn } from './core';
@@ -55,6 +56,7 @@ const make = Effect.gen(function* () {
     sendVerification,
     claimable,
   } = yield* accountsCore;
+  const management = yield* accountManagement;
   const signUp = Effect.fn('Accounts.signUp')(function* (input: {
     email: string;
     password: string;
@@ -152,12 +154,14 @@ const make = Effect.gen(function* () {
   });
 
   return {
+    ...management,
     signUp,
     signIn,
     session,
     signOut: (token: string) => store.deleteSession(hashToken(token)),
     resendVerification: (user: UserRecord) => sendVerification(user),
-    verifyEmail: (token: string) => store.consumeEmailToken(hashToken(token)),
+    verifyEmail: (token: string) =>
+      store.consumeEmailToken(hashToken(token), 'verify'),
     checkUsername: (name: string) =>
       usernames.check(normalName(name)).pipe(Effect.mapError(unreachable)),
     githubSignIn,

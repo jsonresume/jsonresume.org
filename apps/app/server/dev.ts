@@ -18,7 +18,10 @@ const api = effectWebHandler(apiRoutes('dev').pipe(Layer.provide(services)), {
 });
 const resumes = createResumeHandler(render, services, { memoMap });
 
+// Paths these routes don't answer fall through, marked, to Vite's renderer.
+const PASS = 'x-dev-pass';
 const app = new Hono();
+app.notFound((c) => c.body(null, 404, { [PASS]: '1' }));
 app.use('*', sameOrigin('/api', ['/api/events/']));
 app.all('/api/*', (c) => api.handler(c.req.raw));
 app.get(
@@ -29,8 +32,5 @@ app.get(
 /** A response for API and resume paths; undefined lets Vite render the page. */
 export const handle = async (request: Request) => {
   const response = await app.fetch(request);
-  return response.status === 404 &&
-    !new URL(request.url).pathname.startsWith('/api')
-    ? undefined
-    : response;
+  return response.headers.has(PASS) ? undefined : response;
 };

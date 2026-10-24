@@ -5,6 +5,7 @@ export interface Mail {
   to: string;
   subject: string;
   text: string;
+  html?: string;
 }
 
 /**
@@ -36,7 +37,7 @@ export class Mailer extends Context.Service<
     Effect.gen(function* () {
       const key = yield* Config.option(Config.Redacted('RESEND_API_KEY'));
       const from = yield* Config.String('MAIL_FROM').pipe(
-        Config.withDefault('JSON Resume <hello@jsonresume.org>')
+        Config.withDefault('JSON Resume <no-reply@jsonresume.org>')
       );
       if (Option.isNone(key)) return Mailer.log;
       return Layer.effect(

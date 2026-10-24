@@ -16,6 +16,7 @@ const Row = Schema.Struct({
   verified: Schema.Boolean,
   github_login: Schema.NullOr(Schema.String),
   target: Schema.NullOr(Schema.String),
+  retired: Schema.Boolean,
 });
 type Row = typeof Row.Type;
 
@@ -36,7 +37,8 @@ const toProfile = (row: Row): Profile | undefined => {
       return mirror && { kind: 'ghost', username: row.username, ...mirror };
     }
     case 'alias':
-      return row.target === null
+      // A rename's redirect that has run out: the name is free again.
+      return row.target === null || row.retired
         ? undefined
         : { kind: 'alias', username: row.username, target: row.target };
     case 'account':
@@ -69,7 +71,8 @@ export const PgProfileStore = Layer.effect(
         SELECT p.username, p.kind, p.github_id::float8 AS github_id, p.gist_id,
                p.resume, p.fetched_at, p.source, p.stored_resume, p.user_id,
                (u.email_verified_at IS NOT NULL OR u.github_id IS NOT NULL) AS verified,
-               u.github_login, a.username AS target
+               u.github_login, a.username AS target,
+               coalesce(p.retired_until < now(), false) AS retired
         FROM app.profiles p
         LEFT JOIN app.users u ON u.id = p.user_id
         LEFT JOIN app.profiles a ON p.kind = 'alias' AND a.user_id = p.user_id AND a.kind = 'account'

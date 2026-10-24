@@ -1,10 +1,9 @@
-import { Button, Callout, GithubIcon } from '@jsonresume/ui';
+import { Button, Callout, GithubIcon, Stack, Text } from '@jsonresume/ui';
 import { usernameCheckAtom, useIsClient } from '@repo/api-client';
 import { useAtomValue } from '@effect/atom-react';
 import { account } from '@repo/content/pages';
 import { AsyncResult } from 'effect/reactivity';
-import { useEffect, useState } from 'react';
-import * as s from './auth.css';
+import { useEffect, useState, type FormHTMLAttributes } from 'react';
 
 const USERNAME = /^[a-z0-9](?:[a-z0-9]|-(?=[a-z0-9])){0,38}$/;
 export const isUsername = (name: string) => USERNAME.test(name);
@@ -31,12 +30,19 @@ export function GithubButton({
   return (
     <Button asChild variant="ink" fullWidth>
       <a href={`/api/auth/github?${query}`}>
-        <GithubIcon className={s.icon} />
+        <GithubIcon />
         {label}
       </a>
     </Button>
   );
 }
+
+/** A form with its fields stacked. */
+export const Form = (props: FormHTMLAttributes<HTMLFormElement>) => (
+  <Stack asChild gap={4}>
+    <form {...props} />
+  </Stack>
+);
 
 export function ErrorNote({ message }: { message: string | undefined }) {
   return message ? (
@@ -75,20 +81,30 @@ export function useSettled<T>(value: T, ms = 350): T {
   return settled;
 }
 
+const Status = ({
+  tone,
+  children,
+}: {
+  tone: 'muted' | 'success' | 'danger';
+  children: string;
+}) => (
+  <Text as="span" size="xs" tone={tone}>
+    {children}
+  </Text>
+);
+
 function Check({ name }: { name: string }) {
   const result = useAtomValue(usernameCheckAtom(name));
   const copy = account.username;
   if (AsyncResult.isInitial(result) || AsyncResult.isWaiting(result)) {
-    return <span className={s.muted}>{copy.checking}</span>;
+    return <Status tone="muted">{copy.checking}</Status>;
   }
   if (AsyncResult.isFailure(result))
-    return (
-      <span className={s.muted}>{account.errors['GithubUnreachable']}</span>
-    );
+    return <Status tone="muted">{account.errors['GithubUnreachable']}</Status>;
   const check = result.value;
   if (check.available)
-    return <span className={s.good}>{copy.available(name)}</span>;
-  return <span className={s.bad}>{refusals[check.reason ?? 'taken']}</span>;
+    return <Status tone="success">{copy.available(name)}</Status>;
+  return <Status tone="danger">{refusals[check.reason ?? 'taken']}</Status>;
 }
 
 /**
@@ -100,8 +116,8 @@ export function UsernameStatus({ name }: { name: string }) {
   const isClient = useIsClient();
   if (name === '') return null;
   if (!isUsername(name))
-    return <span className={s.bad}>{account.username.invalid}</span>;
+    return <Status tone="danger">{account.username.invalid}</Status>;
   if (!isClient || settled !== name)
-    return <span className={s.muted}>{account.username.checking}</span>;
+    return <Status tone="muted">{account.username.checking}</Status>;
   return <Check name={settled} />;
 }

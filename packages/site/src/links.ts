@@ -16,6 +16,8 @@ export const paths = {
   signIn: '/signin',
   signUp: '/signup',
   chooseUsername: '/signup/username',
+  forgotPassword: '/forgot-password',
+  resetPassword: '/reset-password',
   dashboard: '/dashboard',
   dashboardResume: '/dashboard/resume',
   dashboardSettings: '/dashboard/settings',

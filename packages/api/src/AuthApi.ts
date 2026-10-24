@@ -5,6 +5,7 @@ import {
   EmailTaken,
   GithubUnreachable,
   InvalidCredentials,
+  InvalidLink,
   NoPendingSignup,
   TooManyAttempts,
   UsernameUnavailable,
@@ -78,6 +79,16 @@ export class AuthApi extends HttpApiGroup.make('auth')
     }),
     HttpApiEndpoint.post('resendVerification', '/verify/resend', {}).middleware(
       Authentication
-    )
+    ),
+    /** Emails a reset link if an account uses the address; 204 either way. */
+    HttpApiEndpoint.post('forgotPassword', '/password/forgot', {
+      payload: Schema.Struct({ email: Schema.String }),
+      error: TooManyAttempts,
+    }),
+    HttpApiEndpoint.post('resetPassword', '/password/reset', {
+      payload: Schema.Struct({ token: Schema.String, password: Password }),
+      success: SessionUser,
+      error: [InvalidLink, TooManyAttempts],
+    })
   )
   .prefix('/auth') {}

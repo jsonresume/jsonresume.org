@@ -12,6 +12,8 @@ const Search = (search: Record<string, unknown>) => ({
   ...(Predicate.isString(search['next']) ? { next: search['next'] } : {}),
   ...(Predicate.isString(search['error']) ? { error: search['error'] } : {}),
 });
+const TokenSearch = (search: Record<string, unknown>) =>
+  Predicate.isString(search['token']) ? { token: search['token'] } : {};
 
 /** Account pages: kept out of search, prerendered as empty forms. */
 const head = (title: string) => () => ({
@@ -40,3 +42,16 @@ export const chooseUsernameRoute = createRoute({
   path: paths.chooseUsername,
   head: head('Choose your username'),
 }).lazy(() => import('./auth.lazy').then((m) => m.ChooseUsernameRoute));
+
+export const forgotPasswordRoute = createRoute({
+  getParentRoute: () => siteRoute,
+  path: paths.forgotPassword,
+  head: head('Forgot your password?'),
+}).lazy(() => import('./auth.lazy').then((m) => m.ForgotPasswordRoute));
+
+export const resetPasswordRoute = createRoute({
+  getParentRoute: () => siteRoute,
+  path: paths.resetPassword,
+  validateSearch: TokenSearch,
+  head: head('Choose a new password'),
+}).lazy(() => import('./auth.lazy').then((m) => m.ResetPasswordRoute));

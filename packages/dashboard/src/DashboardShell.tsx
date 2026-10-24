@@ -5,13 +5,15 @@ import {
   AppShell,
   DropdownMenuItem,
   Logo,
+  Link,
   Skeleton,
+  Stack,
+  Text,
   type AppNavProps,
 } from '@jsonresume/ui';
 import { sessionAtom, signOutAtom, useIsClient } from '@repo/api-client';
 import { AsyncResult } from 'effect/reactivity';
 import { useEffect, type ReactNode } from 'react';
-import * as s from './dashboard.css';
 import { ChartIcon, FileIcon, GearIcon, OpenIcon } from './icons';
 import { SessionProvider, useSession } from './session';
 
@@ -31,11 +33,11 @@ const nav = [
 
 function Loading() {
   return (
-    <div className={s.loading} aria-busy="true">
+    <Stack gap={6} aria-busy="true">
       <Skeleton height="2.25rem" width="12rem" />
       <Skeleton height="7rem" />
       <Skeleton height="16rem" />
-    </div>
+    </Stack>
   );
 }
 
@@ -119,9 +121,11 @@ export function DashboardShell({
       }
       top={top}
       footer={
-        <a className={s.footerLink} href="/">
-          jsonresume.org
-        </a>
+        <Text as="span" size="xs">
+          <Link tone="neutral" href="/">
+            jsonresume.org
+          </Link>
+        </Text>
       }
     >
       {page}

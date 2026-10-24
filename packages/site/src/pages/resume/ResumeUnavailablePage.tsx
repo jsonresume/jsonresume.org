@@ -20,7 +20,7 @@ function Publish({ username }: { username: string }) {
   const [write, gist] = gettingStarted.gistSteps;
   return (
     <Section spacing="lg">
-      <Container className={s.narrow}>
+      <Container size="prose">
         <SectionIntro overline="Is this you?" title="Publish your resume">
           Three steps, all free. The page updates whenever you edit the gist.
         </SectionIntro>
@@ -117,7 +117,7 @@ export function ResumeUnavailablePage({ problem }: { problem: ResumeProblem }) {
       />
       {detail ? (
         <Section spacing="md">
-          <Container className={s.narrow}>
+          <Container size="prose">
             <CodeBlock code={detail} />
           </Container>
         </Section>
@@ -127,7 +127,7 @@ export function ResumeUnavailablePage({ problem }: { problem: ResumeProblem }) {
       ) : null}
       {problem.kind === 'theme-failed' ? (
         <Section spacing="md">
-          <Container className={s.narrow}>
+          <Container size="prose">
             <a href={resumeHosting.reportIssue}>
               Report the theme problem on GitHub
             </a>

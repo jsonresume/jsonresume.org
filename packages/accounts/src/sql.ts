@@ -3,6 +3,7 @@ import { PgLive } from '@repo/database';
 import { Effect, Layer, Option, Schema } from 'effect';
 import { SqlClient, SqlSchema } from 'effect/sql';
 import { AccountStore, GithubTaken, type UserRecord } from './store';
+import { accountChanges } from './sqlChanges';
 import { userQueries } from './sqlUsers';
 
 const AccountRow = Schema.Struct({
@@ -19,8 +20,13 @@ export const PgAccountStore = Layer.effect(
     const q = yield* userQueries;
     const findById = q.byId;
     const nameTaken = (username: string) =>
-      sql<{ n: number }>`SELECT 1 AS n FROM app.profiles
-        WHERE username = ${username} AND kind <> 'ghost'`.pipe(
+      // A rename's alias holds its name until it retires; then it is cleared.
+      sql`DELETE FROM app.profiles WHERE username = ${username}
+          AND kind = 'alias' AND retired_until < now()`.pipe(
+        Effect.andThen(
+          sql<{ n: number }>`SELECT 1 AS n FROM app.profiles
+            WHERE username = ${username} AND kind <> 'ghost'`
+        ),
         Effect.map((r) => r.length > 0)
       );
     const mustFind = (id: string) =>
@@ -38,7 +44,9 @@ export const PgAccountStore = Layer.effect(
         FROM app.profiles WHERE user_id = ${userId} AND kind = 'account'`,
     });
 
+    const changes = yield* accountChanges(nameTaken, mustFind);
     return AccountStore.of({
+      ...changes,
       findByEmail: q.byEmail,
       findByGithubId: q.byGithubId,
       findById,
@@ -122,16 +130,17 @@ export const PgAccountStore = Layer.effect(
           Effect.asVoid,
           Effect.orDie
         ),
-      createEmailToken: (userId, email, tokenHash, expiresAt) =>
-        sql`INSERT INTO app.email_tokens (token_hash, user_id, email, expires_at)
-          VALUES (${tokenHash}, ${userId}, ${email}, ${expiresAt})`.pipe(
+      createEmailToken: (userId, email, tokenHash, expiresAt, purpose) =>
+        sql`INSERT INTO app.email_tokens (token_hash, user_id, email, expires_at, purpose)
+          VALUES (${tokenHash}, ${userId}, ${email}, ${expiresAt}, ${purpose})`.pipe(
           Effect.asVoid,
           Effect.orDie
         ),
-      consumeEmailToken: (tokenHash) =>
+      consumeEmailToken: (tokenHash, purpose) =>
         Effect.gen(function* () {
           const [token] = yield* sql<{ user_id: string; email: string }>`
-            DELETE FROM app.email_tokens WHERE token_hash = ${tokenHash} AND expires_at > now()
+            DELETE FROM app.email_tokens WHERE token_hash = ${tokenHash}
+              AND purpose = ${purpose} AND expires_at > now()
             RETURNING user_id, email`;
           if (!token) return undefined;
           // Only if the address is still the one the link was sent to.

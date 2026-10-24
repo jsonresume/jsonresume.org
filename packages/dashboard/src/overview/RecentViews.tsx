@@ -1,7 +1,15 @@
-import { relativeTime, Table, Td, Th } from '@jsonresume/ui';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  relativeTime,
+  Table,
+  Td,
+  Th,
+} from '@jsonresume/ui';
 import type { Overview } from '@repo/api';
 import { country, duration, label } from '../format';
-import * as s from '../dashboard.css';
 
 const kinds = {
   page: 'Page',
@@ -14,11 +22,11 @@ const kinds = {
 export function RecentViews({ overview }: { overview: Overview }) {
   if (overview.recent.length === 0) return null;
   return (
-    <section className={s.panel} aria-labelledby="recent-title">
-      <h2 id="recent-title" className={s.panelTitle}>
-        Recent views
-      </h2>
-      <div className={s.tableWrap}>
+    <Card>
+      <CardHeader>
+        <CardTitle level={2}>Recent views</CardTitle>
+      </CardHeader>
+      <CardContent>
         <Table>
           <thead>
             <tr>
@@ -33,7 +41,7 @@ export function RecentViews({ overview }: { overview: Overview }) {
           <tbody>
             {overview.recent.map((view) => (
               <tr key={view.viewedAt + view.kind + (view.referrer ?? '')}>
-                <Td className={s.nowrap}>
+                <Td>
                   <time
                     dateTime={view.viewedAt}
                     title={new Date(view.viewedAt).toLocaleString()}
@@ -58,7 +66,7 @@ export function RecentViews({ overview }: { overview: Overview }) {
             ))}
           </tbody>
         </Table>
-      </div>
-    </section>
+      </CardContent>
+    </Card>
   );
 }

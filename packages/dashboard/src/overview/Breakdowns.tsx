@@ -1,7 +1,6 @@
-import { BarList } from '@jsonresume/ui';
+import { BarList, Card, CardContent, Grid } from '@jsonresume/ui';
 import type { Overview } from '@repo/api';
 import { count, country, label } from '../format';
-import * as s from '../dashboard.css';
 
 type Rows = Overview['referrers'];
 
@@ -35,19 +34,21 @@ export function Breakdowns({ overview }: { overview: Overview }) {
     { title: 'Themes', item: 'Theme', rows: items(overview.themes) },
   ];
   return (
-    <div className={s.breakdowns}>
+    <Grid gap={6} minColumnWidth="17rem" stretch>
       {lists.map((list) => (
-        <section key={list.title} className={s.panel}>
-          <BarList
-            title={list.title}
-            itemLabel={list.item}
-            items={list.rows}
-            valueLabel="Views"
-            formatValue={count}
-            emptyLabel="No views in this range"
-          />
-        </section>
+        <Card key={list.title}>
+          <CardContent>
+            <BarList
+              title={list.title}
+              itemLabel={list.item}
+              items={list.rows}
+              valueLabel="Views"
+              formatValue={count}
+              emptyLabel="No views in this range"
+            />
+          </CardContent>
+        </Card>
       ))}
-    </div>
+    </Grid>
   );
 }

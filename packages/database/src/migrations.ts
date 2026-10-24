@@ -106,4 +106,16 @@ export const migrations: Record<
     `;
     yield* sql`CREATE INDEX resume_views_user_time ON app.resume_views (username, viewed_at DESC)`;
   }),
+
+  // Password resets share email tokens, told apart by purpose. Renames
+  // leave an alias that redirects until retired_until, then frees the name;
+  // aliases from merged ghosts have none and stay.
+  '4_resets_and_renames': Effect.gen(function* () {
+    const sql = yield* SqlClient.SqlClient;
+    yield* sql`
+      ALTER TABLE app.email_tokens
+        ADD COLUMN purpose text NOT NULL DEFAULT 'verify' CHECK (purpose IN ('verify', 'reset'))
+    `;
+    yield* sql`ALTER TABLE app.profiles ADD COLUMN retired_until timestamptz`;
+  }),
 };

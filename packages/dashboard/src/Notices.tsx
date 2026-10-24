@@ -1,9 +1,8 @@
 import { useAtomSet, useAtomValue } from '@effect/atom-react';
-import { Button, Callout } from '@jsonresume/ui';
+import { Button, Callout, Stack, Text } from '@jsonresume/ui';
 import { accountAtom, resendVerificationAtom } from '@repo/api-client';
 import { AsyncResult } from 'effect/reactivity';
 import { useState } from 'react';
-import * as s from './dashboard.css';
 import { searchParam } from './session';
 
 /** Links back from email and sign-up land with ?verified= or ?welcome=. */
@@ -32,7 +31,9 @@ function Resend() {
   const resend = useAtomSet(resendVerificationAtom, { mode: 'promiseExit' });
   const [sent, setSent] = useState(false);
   return sent ? (
-    <span className={s.muted}>Sent. Check your inbox.</span>
+    <Text as="span" size="sm" tone="muted">
+      Sent. Check your inbox.
+    </Text>
   ) : (
     <Button
       size="sm"
@@ -56,7 +57,7 @@ export function Notices() {
       <Flash />
       {unverified ? (
         <Callout tone="warning" title="Confirm your email to go live">
-          <div className={s.row}>
+          <Stack direction="row" wrap align="center" gap={3}>
             <span>
               We sent a link to {account.email}. {account.path} stays private
               until you open it.
@@ -65,7 +66,7 @@ export function Notices() {
                 : ' (Email delivery isn’t set up on this server yet.)'}
             </span>
             <Resend />
-          </div>
+          </Stack>
         </Callout>
       ) : null}
       {!unverified && !account.public ? (

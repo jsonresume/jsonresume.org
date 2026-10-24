@@ -1292,6 +1292,9 @@ importers:
       '@repo/api-client':
         specifier: workspace:*
         version: link:../api-client
+      '@repo/auth-pages':
+        specifier: workspace:*
+        version: link:../auth-pages
       '@repo/content':
         specifier: workspace:*
         version: link:../content

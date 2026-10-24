@@ -33,6 +33,39 @@ export const signUp = {
   footer: { text: 'Already have an account?', link: 'Sign in' },
 };
 
+export const forgotPassword = {
+  title: 'Forgot your password?',
+  description: 'Enter your email and we’ll send a link to choose a new one.',
+  email: 'Email',
+  submit: 'Send the link',
+  sent: (email: string) =>
+    `If an account uses ${email}, a link is on its way. It works for an hour; check your spam folder if it doesn’t arrive.`,
+  back: 'Back to sign in',
+  link: 'Forgot your password?',
+};
+
+export const resetPassword = {
+  title: 'Choose a new password',
+  description: 'At least 10 characters. You’ll be signed out everywhere else.',
+  password: 'New password',
+  submit: 'Save and sign in',
+  missing:
+    'This page needs the link from your email. Ask for a new one if it has expired.',
+};
+
+export const settings = {
+  usernameTitle: 'Username',
+  usernameHint:
+    'Your old address keeps redirecting for 90 days, then anyone can take it.',
+  rename: 'Change username',
+  renamed: (name: string) => `Done. Your page is now at /@${name}.`,
+  deleteTitle: 'Delete account',
+  deleteText:
+    'Deletes your account, your saved resume and every view we recorded. Your username is free straight away. A resume in a GitHub gist stays on GitHub. This can’t be undone.',
+  deleteConfirm: (name: string) => `Type ${name} to confirm`,
+  deleteButton: 'Delete my account',
+};
+
 export const chooseUsername = {
   title: 'Choose your username',
   description: (login: string) =>
@@ -59,6 +92,8 @@ export const errors: Record<string, string> = {
   GithubUnreachable:
     'GitHub isn’t answering, so we can’t confirm that username yet. Try again in a minute.',
   NoPendingSignup: 'That GitHub sign-in expired. Start again.',
+  InvalidLink: 'That link is wrong, used or expired. Ask for a new one.',
+  ConfirmationMismatch: 'That isn’t your username. Type it exactly to confirm.',
   InvalidResume: 'That isn’t a resume we can use.',
   Unauthorized: 'Your session ended. Sign in again.',
   default: 'Something went wrong. Try again.',

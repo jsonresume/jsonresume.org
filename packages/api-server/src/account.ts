@@ -2,6 +2,7 @@ import { Accounts, type AccountRecord } from '@repo/accounts';
 import { Account, CurrentUser, JsonResumeApi } from '@repo/api';
 import { Effect } from 'effect';
 import { HttpApiBuilder } from 'effect/http-api';
+import { clearSession } from './http';
 
 const toAccount = (record: AccountRecord, emailDelivery: boolean) => {
   const { user } = record;
@@ -45,6 +46,18 @@ export const AccountHandlers = HttpApiBuilder.group(
             const user = yield* CurrentUser;
             yield* accounts.saveResume(user.id, payload.resume);
             return yield* current;
+          }),
+        rename: ({ payload }) =>
+          Effect.gen(function* () {
+            const user = yield* CurrentUser;
+            yield* accounts.rename(user.id, payload.username);
+            return yield* current;
+          }),
+        delete: ({ payload }) =>
+          Effect.gen(function* () {
+            const user = yield* CurrentUser;
+            yield* accounts.deleteAccount(user.id, payload.confirm);
+            yield* clearSession;
           }),
         setSource: ({ payload }) =>
           Effect.gen(function* () {

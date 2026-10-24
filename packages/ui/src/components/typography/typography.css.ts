@@ -54,6 +54,11 @@ export const text = recipe({
       strong: { color: vars.color.text.strong },
       muted: { color: vars.color.text.muted },
       inherit: { color: 'inherit' },
+      // Status words beside a field ("@ada is free", "Taken"): pair them
+      // with the words themselves, never colour alone.
+      success: { color: vars.color.status.success },
+      warning: { color: vars.color.status.warning },
+      danger: { color: vars.color.status.danger },
     },
     weight: {
       light: { fontWeight: font.weight.light },

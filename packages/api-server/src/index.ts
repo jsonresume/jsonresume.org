@@ -40,14 +40,14 @@ export const apiRoutes = (version: string) =>
     GithubRoutes
   );
 
-/** Frees the names of email accounts never verified, hourly. */
+/** Hourly: frees the names of email accounts never verified, and of renames past their redirect. */
 export const PurgeUnverified = Layer.effectDiscard(
   Effect.gen(function* () {
     const accounts = yield* Accounts;
-    yield* accounts.purgeUnverified.pipe(
-      Effect.tap((n) =>
-        n > 0
-          ? Effect.logInfo('Purged unverified accounts', { n })
+    yield* Effect.all([accounts.purgeUnverified, accounts.purgeRetired]).pipe(
+      Effect.tap(([unverified, retired]) =>
+        unverified + retired > 0
+          ? Effect.logInfo('Freed usernames', { unverified, retired })
           : Effect.void
       ),
       Effect.repeat(Schedule.spaced(Duration.hours(1))),

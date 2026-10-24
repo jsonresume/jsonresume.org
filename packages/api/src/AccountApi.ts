@@ -1,7 +1,12 @@
 import { Schema } from 'effect';
 import { HttpApiEndpoint, HttpApiGroup } from 'effect/http-api';
 import { Authentication } from './Authentication';
-import { InvalidResume } from './errors';
+import {
+  ConfirmationMismatch,
+  GithubUnreachable,
+  InvalidResume,
+  UsernameUnavailable,
+} from './errors';
 
 export const ResumeSource = Schema.Literals(['gist', 'stored']);
 
@@ -39,6 +44,17 @@ export class AccountApi extends HttpApiGroup.make('account')
       payload: Schema.Struct({ source: ResumeSource }),
       success: Account,
       error: InvalidResume,
+    }),
+    /** The old name redirects for 90 days, then is free. */
+    HttpApiEndpoint.put('rename', '/username', {
+      payload: Schema.Struct({ username: Schema.String }),
+      success: Account,
+      error: [UsernameUnavailable, GithubUnreachable],
+    }),
+    /** Deletes the account, its names and its views; `confirm` is the username. */
+    HttpApiEndpoint.post('delete', '/delete', {
+      payload: Schema.Struct({ confirm: Schema.String }),
+      error: ConfirmationMismatch,
     })
   )
   .middleware(Authentication)

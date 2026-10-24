@@ -89,6 +89,21 @@ export const AuthHandlers = HttpApiBuilder.group(
             yield* setSession(token);
             return toSessionUser(user);
           }),
+        forgotPassword: ({ payload }) =>
+          Effect.gen(function* () {
+            yield* limit('forgot', 5, 3600);
+            yield* accounts.requestPasswordReset(payload.email);
+          }),
+        resetPassword: ({ payload }) =>
+          Effect.gen(function* () {
+            yield* limit('reset', 10, 3600);
+            const { user, token } = yield* accounts.resetPassword(
+              payload.token,
+              payload.password
+            );
+            yield* setSession(token);
+            return toSessionUser(user);
+          }),
         resendVerification: () =>
           Effect.gen(function* () {
             const current = yield* CurrentUser;

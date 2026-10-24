@@ -2,9 +2,12 @@ import { useAtom, useAtomValue } from '@effect/atom-react';
 import {
   AppPage,
   Button,
+  Card,
+  CardContent,
   CopyButton,
   EmptyState,
   SegmentedControl,
+  Stack,
   TimeSeriesChart,
 } from '@jsonresume/ui';
 import { AnalyticsRange, type Overview } from '@repo/api';
@@ -13,7 +16,6 @@ import { optionParam, useAtomsInUrl } from '@repo/url-state';
 import { Schema } from 'effect';
 import { Atom, AsyncResult } from 'effect/reactivity';
 import { useRef } from 'react';
-import * as s from './dashboard.css';
 import { count, rangeDays } from './format';
 import { Notices } from './Notices';
 import { Breakdowns } from './overview/Breakdowns';
@@ -67,26 +69,28 @@ function Report({
     );
   }
   return (
-    <div className={s.stack}>
+    <Stack gap={6}>
       <Kpis overview={overview} />
-      <section className={s.panel}>
-        <TimeSeriesChart
-          title="Views and visitors per day"
-          summary={summary(overview)}
-          data={overview.daily.map((d) => ({
-            date: d.date,
-            values: { views: d.views, visitors: d.visitors },
-          }))}
-          series={[
-            { key: 'views', label: 'Views' },
-            { key: 'visitors', label: 'Visitors', mark: 'line' },
-          ]}
-          loading={loading}
-        />
-      </section>
+      <Card>
+        <CardContent>
+          <TimeSeriesChart
+            title="Views and visitors per day"
+            summary={summary(overview)}
+            data={overview.daily.map((d) => ({
+              date: d.date,
+              values: { views: d.views, visitors: d.visitors },
+            }))}
+            series={[
+              { key: 'views', label: 'Views' },
+              { key: 'visitors', label: 'Visitors', mark: 'line' },
+            ]}
+            loading={loading}
+          />
+        </CardContent>
+      </Card>
       <Breakdowns overview={overview} />
       <RecentViews overview={overview} />
-    </div>
+    </Stack>
   );
 }
 
@@ -120,7 +124,7 @@ export function OverviewPage() {
         />
       }
     >
-      <div className={s.stack}>
+      <Stack gap={6}>
         <Notices />
         {shown ? (
           <Report
@@ -132,7 +136,7 @@ export function OverviewPage() {
             Refresh to try again.
           </EmptyState>
         ) : null}
-      </div>
+      </Stack>
     </AppPage>
   );
 }
