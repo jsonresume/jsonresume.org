@@ -9,8 +9,10 @@ const { font, color, space } = vars;
 export const hero = style({
   backgroundColor: color.surface.brand,
   color: color.text.onBrand,
-  paddingBlock: `${space[20]} ${space[30]}`,
+  // Phones get half the height: the band shouldn't fill the first screen.
+  paddingBlock: `${space[12]} ${space[16]}`,
   textAlign: 'center',
+  '@media': { [media.md]: { paddingBlock: `${space[20]} ${space[30]}` } },
 });
 
 /* Ink-on-yellow text tokens. Centered, the whole band gets them; split, only
@@ -19,22 +21,31 @@ export const onBrand = style({ vars: onBrandVars });
 
 /* With media: copy on the left, media on the right from lg up. */
 export const split = style({
-  paddingBlock: `${space[16]} ${space[20]}`,
-  '@media': { [media.lg]: { textAlign: 'start' } },
+  paddingBlock: `${space[10]} ${space[12]}`,
+  '@media': {
+    [media.md]: { paddingBlock: `${space[16]} ${space[20]}` },
+    [media.lg]: { textAlign: 'start' },
+  },
 });
 
 /* Compact: inner pages. Less height and a smaller title, same band. */
-export const compact = style({ paddingBlock: `${space[12]} ${space[16]}` });
+export const compact = style({
+  paddingBlock: `${space[8]} ${space[10]}`,
+  '@media': { [media.md]: { paddingBlock: `${space[12]} ${space[16]}` } },
+});
 
 /* Start-aligned copy without media (inner pages). */
 export const start = style({ textAlign: 'start' });
 
 export const splitGrid = style({
   display: 'grid',
-  gap: space[12],
+  gap: space[8],
   alignItems: 'center',
   '@media': {
-    [media.lg]: { gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)' },
+    [media.lg]: {
+      gap: space[12],
+      gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)',
+    },
   },
 });
 
@@ -86,10 +97,10 @@ export const heroActions = style({
   flexWrap: 'wrap',
   justifyContent: 'center',
   gap: space[3],
-  marginBlockStart: space[8],
+  marginBlockStart: space[6],
   selectors: {
     [`${start} &`]: { justifyContent: 'flex-start' },
-    [`${compact} &`]: { marginBlockStart: space[6] },
+    [`${compact} &`]: { marginBlockStart: space[5] },
   },
   '@media': {
     [media.lg]: {

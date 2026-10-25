@@ -1,13 +1,6 @@
 import { useAtom, useAtomSet, useAtomValue } from '@effect/atom-react';
 import schemaJson from '@jsonresume/schema/schema.json';
-import {
-  AppPage,
-  Callout,
-  SegmentedControl,
-  Skeleton,
-  SplitView,
-  Stack,
-} from '@jsonresume/ui';
+import { AppPage, Callout, Skeleton, SplitView, Stack } from '@jsonresume/ui';
 import { media } from '@jsonresume/ui/tokens';
 import { decodeJsonSchema } from '@repo/schema-explorer';
 import { optionParam, useAtomsInUrl } from '@repo/url-state';
@@ -21,7 +14,13 @@ import { formSections } from './model';
 import { PreviewPane } from './PreviewPane';
 import { AllowGist, Start } from './Start';
 import { draftAtom, jsonTextAtom, modeParamAtom, serialize } from './state';
-import { EditorActions, EditorToolbar, type Mode } from './Toolbar';
+import {
+  CompactToolbar,
+  EditorActions,
+  EditorToolbar,
+  SaveBar,
+  type Mode,
+} from './Toolbar';
 import { useEditorSession } from './useEditorSession';
 import { validate } from './validate';
 
@@ -85,6 +84,13 @@ export function ResumeEditor({ username }: { username: string }) {
     serialize(backup.resume) !== serialize(draft) &&
     serialize(backup.resume) !== serialize(loadedResume);
 
+  const save = {
+    saving,
+    saveLabel: toGist ? 'Save to gist' : 'Save',
+    blocked: toGist && !target.gistWrite,
+    onSave: () => void onSave(),
+  };
+
   return (
     <AppPage
       title="Editor"
@@ -95,31 +101,20 @@ export function ResumeEditor({ username }: { username: string }) {
           : `The preview follows as you type; Save puts it on /@${username}.`
       }
       actions={
-        <EditorActions
-          path={`/@${username}`}
-          saving={saving}
-          saveLabel={toGist ? 'Save to gist' : 'Save'}
-          blocked={toGist && !target.gistWrite}
-          onSave={() => void onSave()}
-        />
+        <EditorActions path={`/@${username}`} withSave={wide} {...save} />
       }
       toolbar={
-        <>
+        wide ? (
           <EditorToolbar mode={mode} onMode={onMode} problems={issues.length} />
-          {wide ? null : (
-            <SegmentedControl
-              label="Show"
-              options={[
-                { value: 'edit', label: 'Edit' },
-                { value: 'preview', label: 'Preview' },
-              ]}
-              value={view}
-              onValueChange={(v) =>
-                setView(v === 'preview' ? 'preview' : 'edit')
-              }
-            />
-          )}
-        </>
+        ) : (
+          <CompactToolbar
+            mode={mode}
+            view={view}
+            onMode={onMode}
+            onView={setView}
+            problems={issues.length}
+          />
+        )
       }
     >
       <Stack gap={4}>
@@ -159,6 +154,7 @@ export function ResumeEditor({ username }: { username: string }) {
       ) : (
         <PreviewPane />
       )}
+      {wide || draft === null ? null : <SaveBar {...save} />}
     </AppPage>
   );
 }

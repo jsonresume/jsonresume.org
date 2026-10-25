@@ -1,5 +1,5 @@
 import { media, vars } from '@jsonresume/ui/tokens';
-import { style } from '@vanilla-extract/css';
+import { globalStyle, style } from '@vanilla-extract/css';
 
 const { color, font, space } = vars;
 
@@ -68,6 +68,13 @@ export const meta = style({
   alignItems: 'center',
 });
 
+// A long place ("San Francisco Bay Area preferred, …") wraps, not overflows.
+globalStyle(`${meta} > *`, {
+  maxWidth: '100%',
+  whiteSpace: 'normal',
+  overflowWrap: 'anywhere',
+});
+
 export const skills = style({
   display: 'flex',
   flexWrap: 'wrap',
@@ -89,12 +96,11 @@ export const skill = style({
 export const aside = style({
   position: 'relative',
   zIndex: 1,
-  display: 'flex',
-  flexWrap: 'wrap',
+  display: 'grid',
   gap: space[2],
-  alignItems: 'center',
+  justifyItems: 'start',
   '@media': {
-    [media.md]: { flexDirection: 'column', alignItems: 'flex-end' },
+    [media.md]: { justifyItems: 'end' },
   },
 });
 
@@ -103,6 +109,11 @@ export const positioned = style({ position: 'relative' });
 export const filters = style({ marginBlockEnd: space[4] });
 
 export const search = style({ flex: '1 1 16rem' });
+
+// On phones the search keeps a row to itself, the selects share the next.
+globalStyle(`${filters} ${search}`, {
+  '@media': { [`screen and (max-width: 767px)`]: { flexBasis: '100%' } },
+});
 
 export const more = style({
   display: 'flex',

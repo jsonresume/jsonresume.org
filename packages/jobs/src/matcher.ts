@@ -30,7 +30,10 @@ export const MATCHES = 100;
 /** An open job against a resume: the cosine, as a 0 to 100 fit, and the user's mark. */
 export interface Ranked {
   row: JobRow;
+  /** Cosine between the resume and the job. */
   cosine: number;
+  /** What the list is ordered by: the cosine, nudged by the user's marks. */
+  order: number;
   score: number;
   mark: JobMark | null;
 }
@@ -39,10 +42,11 @@ const TOWARD = 0.5;
 const AWAY = 0.15;
 /**
  * Cosine between a resume and a job, as a 0 to 100 fit. Measured on the
- * October 2026 board: a resume's best jobs sit near 0.6, its 50th near 0.5.
+ * October 2026 board: a resume's best jobs sit near 0.6 (85 to 90), its
+ * 50th near 0.52 (about 55).
  */
 const FLOOR = 0.35;
-const CEILING = 0.62;
+const CEILING = 0.65;
 
 export const fitScore = (cosine: number) =>
   Math.round(
@@ -99,17 +103,22 @@ const make = Effect.gen(function* () {
       )
     );
     const markOf = new Map(marks.map((m) => [m.job_id, m.state]));
-    return (yield* openJobRows)
-      .map(({ row, vector }): Ranked => {
-        const cosine = dot(query, vector);
-        return {
-          row,
-          cosine,
-          score: fitScore(cosine),
-          mark: markOf.get(row.id) ?? null,
-        };
-      })
-      .sort((a, b) => b.cosine - a.cosine);
+    return (
+      (yield* openJobRows)
+        // Marks change the order (query); the fit is the resume's own (base),
+        // or a liked job's neighbours would all read 100%.
+        .map(({ row, vector }): Ranked => {
+          const cosine = dot(base, vector);
+          return {
+            row,
+            cosine,
+            order: dot(query, vector),
+            score: fitScore(cosine),
+            mark: markOf.get(row.id) ?? null,
+          };
+        })
+        .sort((a, b) => b.order - a.order)
+    );
   });
 
   /** The best MATCHES jobs for the dashboard. */

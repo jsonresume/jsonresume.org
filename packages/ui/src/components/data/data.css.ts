@@ -2,6 +2,7 @@ import { globalStyle, style } from '@vanilla-extract/css';
 import { recipe } from '@vanilla-extract/recipes';
 import { focusRing, transition } from '../../styles/shared.css';
 import { vars } from '../../tokens/contract.css';
+import { breakpoints, media } from '../../tokens/theme';
 
 const { color, font, space, radius } = vars;
 
@@ -88,10 +89,17 @@ export const dl = recipe({
   variants: {
     layout: {
       stacked: { display: 'grid', gap: space[3] },
+      // Label above value on phones, beside it from md up.
       inline: {
         display: 'grid',
-        gridTemplateColumns: 'minmax(7rem, max-content) minmax(0, 1fr)',
-        gap: `${space[2]} ${space[6]}`,
+        gridTemplateColumns: 'minmax(0, 1fr)',
+        gap: space[1],
+        '@media': {
+          [media.md]: {
+            gridTemplateColumns: 'minmax(7rem, max-content) minmax(0, 1fr)',
+            gap: `${space[2]} ${space[6]}`,
+          },
+        },
       },
       columns: {
         display: 'grid',
@@ -112,6 +120,15 @@ export const dd = style({
   color: color.text.strong,
   minWidth: 0,
   overflowWrap: 'anywhere',
+});
+
+// Space between the pairs while they stack.
+globalStyle(`${dl.classNames.variants.layout.inline} ${dd}`, {
+  '@media': {
+    [`screen and (max-width: ${breakpoints.md - 1}px)`]: {
+      marginBlockEnd: space[3],
+    },
+  },
 });
 
 globalStyle(

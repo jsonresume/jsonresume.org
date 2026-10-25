@@ -12,6 +12,7 @@ const ranked = (id: number, days: number, p = {}): Ranked => ({
     months: 1,
   },
   cosine: 0.5,
+  order: 0.5,
   score: 67,
   mark: null,
 });

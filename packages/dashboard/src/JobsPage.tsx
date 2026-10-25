@@ -19,14 +19,16 @@ import {
 } from '@repo/job-board';
 import { Exit } from 'effect';
 import { AsyncResult } from 'effect/reactivity';
+import * as s from './jobs.css';
 import { useMemo, useState, type ReactNode } from 'react';
 
-const marks: ReadonlyArray<{ value: JobMark; label: string }> = [
-  { value: 'interested', label: 'Interested' },
-  { value: 'maybe', label: 'Maybe' },
-  { value: 'applied', label: 'Applied' },
-  { value: 'not_interested', label: 'Not for me' },
-];
+const marks: ReadonlyArray<{ value: JobMark; label: string; short?: string }> =
+  [
+    { value: 'interested', label: 'Interested' },
+    { value: 'maybe', label: 'Maybe' },
+    { value: 'applied', label: 'Applied' },
+    { value: 'not_interested', label: 'Not for me', short: 'Pass' },
+  ];
 
 /** Strong fits stand out; the rest read as plain numbers. */
 const fitTone = (score: number) =>
@@ -42,19 +44,20 @@ function Marks({
   return (
     <>
       <Badge tone={fitTone(job.score)}>{job.score}% fit</Badge>
-      <Stack direction="row" gap={1} wrap>
+      <div className={s.marks} role="group" aria-label="Mark this job">
         {marks.map((m) => (
           <Button
             key={m.value}
             size="sm"
             variant={job.mark === m.value ? 'primary' : 'secondary'}
             aria-pressed={job.mark === m.value}
+            aria-label={m.label}
             onClick={() => onMark(job.mark === m.value ? null : m.value)}
           >
-            {m.label}
+            {m.short ?? m.label}
           </Button>
         ))}
-      </Stack>
+      </div>
     </>
   );
 }

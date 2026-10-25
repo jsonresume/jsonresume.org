@@ -91,7 +91,7 @@ export const V1Handlers = HttpApiBuilder.group(
               .find(params.id)
               .pipe(Effect.mapError(() => noJob));
             const mark = yield* matcher.markOf(user.id, params.id);
-            return toV1Job({ row, cosine: 0, score: 0, mark });
+            return toV1Job({ row, cosine: 0, order: 0, score: 0, mark });
           }),
         mark: ({ params, payload }) =>
           Effect.gen(function* () {

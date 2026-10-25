@@ -2,6 +2,7 @@ import { createVar, globalStyle, style } from '@vanilla-extract/css';
 import { recipe } from '@vanilla-extract/recipes';
 import { focusRing, transition } from '../../styles/shared.css';
 import { vars } from '../../tokens/contract.css';
+import { breakpoints } from '../../tokens/theme';
 
 const { color, font, space, radius, shadow, zIndex } = vars;
 
@@ -140,6 +141,17 @@ export const filterControls = style({
   flexWrap: 'wrap',
   alignItems: 'flex-end',
   gap: space[3],
+});
+
+/* On phones the filters share a row instead of each taking one: every
+   control stretches to an equal share (a search, given a wide basis by its
+   page, keeps a row to itself). */
+const phone = `screen and (max-width: ${breakpoints.md - 1}px)`;
+globalStyle(`${filterControls} > *`, {
+  '@media': { [phone]: { flex: '1 1 6rem', minWidth: 0 } },
+});
+globalStyle(`${filterControls} select`, {
+  '@media': { [phone]: { width: '100%' } },
 });
 
 export const filterSummary = style({
