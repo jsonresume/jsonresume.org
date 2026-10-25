@@ -53,6 +53,7 @@
       "outputs": []
     },
     "typecheck": {
+      "dependsOn": ["@jsonresume/ui#build"],
       "inputs": [
         "**/*.ts",
         "**/*.tsx",
