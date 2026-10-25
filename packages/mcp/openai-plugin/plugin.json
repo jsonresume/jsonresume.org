@@ -82,7 +82,7 @@
             }
           ]
         },
-        "demo_recording_url": "REPLACE_WITH_DEMO_VIDEO_URL",
+        "demo_recording_url": "https://jsonresume.org/media/chatgpt-demo.mp4",
         "commerce": false,
         "commerce_description": "JSON Resume is free. This app does not sell anything or process payments."
       },
