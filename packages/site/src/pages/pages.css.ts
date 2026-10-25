@@ -189,3 +189,14 @@ export const chapterBody = style({
   gap: space[4],
   maxWidth: '62ch',
 });
+
+/* NotFoundPage */
+
+export const lostSearch = style({
+  display: 'grid',
+  gap: space[3],
+  maxWidth: '36rem',
+  '@media': {
+    [media.sm]: { gridTemplateColumns: 'minmax(0, 1fr) auto' },
+  },
+});

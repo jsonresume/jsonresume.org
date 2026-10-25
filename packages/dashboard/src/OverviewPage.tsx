@@ -4,7 +4,6 @@ import {
   Button,
   Card,
   CardContent,
-  CopyButton,
   EmptyState,
   SegmentedControl,
   Stack,
@@ -19,6 +18,7 @@ import { useRef } from 'react';
 import { count, rangeDays } from './format';
 import { Notices } from './Notices';
 import { Breakdowns } from './overview/Breakdowns';
+import { GetStarted } from './overview/GetStarted';
 import { Kpis } from './overview/Kpis';
 import { RecentViews } from './overview/RecentViews';
 import { useSession } from './session';
@@ -58,15 +58,7 @@ function Report({
   const { username } = useSession();
   const url = `${location.origin}/@${username}`;
   if (overview.totals.views === 0 && overview.totals.dataReads === 0) {
-    return (
-      <EmptyState
-        title="No views yet"
-        action={<CopyButton value={url} label="Copy your link" />}
-      >
-        Share your page and views appear here within seconds: where readers come
-        from, how long they read, and how far.
-      </EmptyState>
-    );
+    return <GetStarted url={url} />;
   }
   return (
     <Stack gap={6}>

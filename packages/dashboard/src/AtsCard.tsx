@@ -30,9 +30,11 @@ export function AtsCard() {
       <CardContent>
         <Stack gap={5} align="start">
           <AtsReportView report={report} headingLevel={3} limit={3} />
-          <Button asChild variant="secondary">
-            <a href="/dashboard/editor?panel=check">Fix it in the editor</a>
-          </Button>
+          {report.score < 100 ? (
+            <Button asChild variant="secondary">
+              <a href="/dashboard/editor?panel=check">Fix it in the editor</a>
+            </Button>
+          ) : null}
         </Stack>
       </CardContent>
     </Card>

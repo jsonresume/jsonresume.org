@@ -62,7 +62,7 @@ export function ExplorePage({
                   name="q"
                   defaultValue={query}
                   aria-label="Search resumes"
-                  placeholder="Try “rust berlin” or “product designer”"
+                  placeholder="Try “rust berlin”"
                   size="lg"
                 />
                 <Button type="submit" variant="primary" size="lg">

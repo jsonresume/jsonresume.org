@@ -30,19 +30,31 @@ const relevance = (entry: Entry, terms: ReadonlyArray<string>) => {
 const newest = (a: Entry, b: Entry) =>
   (b.listing.updatedAt ?? '').localeCompare(a.listing.updatedAt ?? '');
 
-/** The skills most resumes list, as they're most often written. */
+/**
+ * The skills most resumes list, as they're most often written ("Python",
+ * not "python"). Compounds such as "JavaScript / TypeScript" are left out:
+ * as a search they'd only find that exact pairing.
+ */
 export const popularSkills = (all: ReadonlyArray<Entry>, count = 16) => {
-  const tally = new Map<string, { label: string; n: number }>();
+  const tally = new Map<
+    string,
+    { n: number; spellings: Map<string, number> }
+  >();
   for (const entry of all)
     for (const skill of entry.listing.skills) {
+      if (/[/,&|]/.test(skill)) continue;
       const key = skill.toLowerCase();
-      const seen = tally.get(key);
-      tally.set(key, { label: seen?.label ?? skill, n: (seen?.n ?? 0) + 1 });
+      const seen = tally.get(key) ?? { n: 0, spellings: new Map() };
+      seen.n += 1;
+      seen.spellings.set(skill, (seen.spellings.get(skill) ?? 0) + 1);
+      tally.set(key, seen);
     }
+  const commonest = (spellings: Map<string, number>) =>
+    [...spellings].sort((a, b) => b[1] - a[1])[0]?.[0] ?? '';
   return [...tally.values()]
     .sort((a, b) => b.n - a.n)
     .slice(0, count)
-    .map((s) => s.label);
+    .map((s) => commonest(s.spellings));
 };
 
 /**

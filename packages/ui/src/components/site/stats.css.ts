@@ -7,11 +7,13 @@ const { font, color, space } = vars;
 export const stats = style({
   margin: 0,
   display: 'grid',
-  gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
-  gap: `${space[8]} ${space[6]}`,
+  // Three figures sit in one row even on a phone; more wrap.
+  gridTemplateColumns: 'repeat(auto-fit, minmax(5.5rem, 1fr))',
+  gap: `${space[8]} ${space[4]}`,
   '@media': {
     [media.md]: {
       gridTemplateColumns: 'repeat(auto-fit, minmax(9rem, 1fr))',
+      columnGap: space[6],
     },
   },
 });
@@ -26,10 +28,11 @@ export const stat = style({
 export const value = style({
   margin: 0,
   color: color.text.strong,
-  fontSize: font.size['3xl'],
+  fontSize: font.size['2xl'],
   fontWeight: font.weight.light,
   lineHeight: 1,
   fontVariantNumeric: 'tabular-nums',
+  '@media': { [media.sm]: { fontSize: font.size['3xl'] } },
 });
 
 export const label = style({

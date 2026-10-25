@@ -21,6 +21,8 @@ export const logo = recipe({
       textDecoration: 'none',
       whiteSpace: 'nowrap',
       borderRadius: vars.radius.sm,
+      // A comfortable tap target without changing how it looks.
+      minHeight: '2.5rem',
     },
   ],
   variants: {
@@ -224,13 +226,16 @@ export const footerLinks = style({
   display: 'flex',
   flexWrap: 'wrap',
   justifyContent: 'center',
-  gap: `${space[2]} ${space[4]}`,
+  gap: `0 ${space[4]}`,
   margin: 0,
   padding: 0,
   listStyle: 'none',
 });
 
 globalStyle(`${footer} a`, {
+  // Padded so each link is easy to tap, even in a wrapped row.
+  display: 'inline-block',
+  paddingBlock: space[2],
   color: color.text.muted,
   textDecoration: 'none',
   transition: `color ${transition}`,

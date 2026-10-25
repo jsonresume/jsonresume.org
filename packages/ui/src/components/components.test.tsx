@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import {
@@ -7,6 +7,7 @@ import {
   AccordionItem,
   AccordionTrigger,
   Avatar,
+  TaskList,
   Badge,
   BreadcrumbItem,
   Breadcrumbs,
@@ -268,6 +269,40 @@ describe('display', () => {
     render(<Avatar name="Thomas Davis" />);
     expect(screen.getByRole('img', { name: 'Thomas Davis' })).toHaveTextContent(
       'TD'
+    );
+  });
+
+  it('lists tasks with their state in words and counts the required ones', () => {
+    render(
+      <TaskList
+        progress
+        label="Setup"
+        tasks={[
+          { id: 'a', title: 'Write', done: true },
+          {
+            id: 'b',
+            title: 'Share',
+            done: false,
+            action: <button>Copy</button>,
+          },
+          { id: 'c', title: 'GitHub', done: false, optional: true },
+        ]}
+      />
+    );
+    expect(screen.getByText('1 of 2 done')).toBeInTheDocument();
+    const items = within(
+      screen.getByRole('list', { name: 'Setup' })
+    ).getAllByRole('listitem');
+    expect(items[0]).toHaveTextContent('Done: Write');
+    expect(items[1]).toHaveTextContent('To do: Share');
+    expect(screen.getByRole('button', { name: 'Copy' })).toBeInTheDocument();
+  });
+
+  it('shows initials when the photo fails to load', () => {
+    render(<Avatar name="Ada Lovelace" src="https://example.com/gone.png" />);
+    fireEvent.error(screen.getByRole('img', { name: 'Ada Lovelace' }));
+    expect(screen.getByRole('img', { name: 'Ada Lovelace' })).toHaveTextContent(
+      'AL'
     );
   });
 

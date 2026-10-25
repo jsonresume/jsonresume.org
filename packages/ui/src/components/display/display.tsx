@@ -2,7 +2,6 @@ import { Slot } from '@radix-ui/react-slot';
 import {
   forwardRef,
   type HTMLAttributes,
-  type ImgHTMLAttributes,
   type ReactNode,
   type TableHTMLAttributes,
   type TdHTMLAttributes,
@@ -303,43 +302,6 @@ export function Td({
   return <td className={cx(s.td, className)} {...props} />;
 }
 
-/* Avatar */
+/* Avatar: in ./avatar.tsx, since it keeps state. */
 
-export interface AvatarProps
-  extends Omit<ImgHTMLAttributes<HTMLImageElement>, 'src'> {
-  src?: string | null;
-  /** The person's name: used for the alt text and the initials fallback. */
-  name: string;
-  size?: 'sm' | 'md' | 'lg';
-  shape?: 'square' | 'circle';
-}
-
-const initials = (name: string) =>
-  name
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase())
-    .join('');
-
-export function Avatar({
-  src,
-  name,
-  size,
-  shape,
-  className,
-  alt,
-  ...props
-}: AvatarProps) {
-  return (
-    <span className={cx(s.avatar({ size, shape }), className)}>
-      {src ? (
-        <img className={s.avatarImage} src={src} alt={alt ?? name} {...props} />
-      ) : (
-        <span role="img" aria-label={name}>
-          {initials(name)}
-        </span>
-      )}
-    </span>
-  );
-}
+export { Avatar, type AvatarProps } from './avatar';

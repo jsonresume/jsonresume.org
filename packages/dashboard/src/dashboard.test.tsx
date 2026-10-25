@@ -1,3 +1,4 @@
+import { hasContent, themeOf } from './overview/GetStarted';
 import { Overview } from '@repo/api';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
@@ -85,5 +86,21 @@ describe('overview panels', () => {
     ).toBeInTheDocument();
     expect(screen.getByText('Mobile · Safari')).toBeInTheDocument();
     expect(screen.getByText('1m 35s')).toBeInTheDocument();
+  });
+});
+
+describe('getting started', () => {
+  it('counts a resume as written once it has a name and something more', () => {
+    expect(hasContent(null)).toBe(false);
+    expect(hasContent({ basics: { name: 'Ada' } })).toBe(false);
+    expect(
+      hasContent({ basics: { name: 'Ada' }, skills: [{ name: 'Go' }] })
+    ).toBe(true);
+  });
+
+  it('reads the chosen theme from meta.theme', () => {
+    expect(themeOf({ meta: { theme: 'elegant' } })).toBe('elegant');
+    expect(themeOf({ meta: { theme: ' ' } })).toBeNull();
+    expect(themeOf({})).toBeNull();
   });
 });

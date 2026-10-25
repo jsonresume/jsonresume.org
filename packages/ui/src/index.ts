@@ -322,6 +322,11 @@ export {
   type ChecklistProps,
 } from './components/data/checklist';
 export {
+  TaskList,
+  type Task,
+  type TaskListProps,
+} from './components/data/task-list';
+export {
   SecretField,
   type SecretFieldProps,
 } from './components/data/secret-field';
