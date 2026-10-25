@@ -1,7 +1,7 @@
 import { base } from '@jsonresume/ui';
 import type { ExploreResults, Job, JobBoard } from '@repo/api';
 import type { ResumeProblem } from '@repo/domain';
-import { NotFoundPage, SiteLayout } from '@repo/site';
+import { authHintScript, NotFoundPage, SiteLayout } from '@repo/site';
 import type { Timeline } from '@repo/timeline';
 import {
   createRootRouteWithContext,
@@ -13,8 +13,10 @@ import {
 
 function RootDocument() {
   return (
-    <html lang="en" data-theme="system">
+    // The pre-paint script marks <html> before React hydrates it.
+    <html lang="en" data-theme="system" suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: authHintScript }} />
         <HeadContent />
       </head>
       <body className={base}>

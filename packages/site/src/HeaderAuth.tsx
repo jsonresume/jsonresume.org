@@ -1,30 +1,46 @@
 import { Button } from '@jsonresume/ui';
+import { SIGNED_IN_HINT } from '@repo/api/cookies';
 import { useSignedInHint } from '@repo/api-client/hints';
+import { useEffect } from 'react';
+import * as s from './headerAuth.css';
 import { paths } from './links';
 import { SiteLink } from './SiteLink';
 
 /**
- * The header's end: Sign in and Sign up, or Dashboard once signed in. Pages
- * are prerendered, so the signed-in state comes from a hint cookie, read
- * after hydration (the server and first client render show signed out).
+ * Runs in <head> before the page paints: marks <html data-auth="in"> when
+ * the hint cookie says this browser is signed in. Pages are prerendered, so
+ * this is what lets the header be right on the first frame.
+ */
+export const authHintScript = `try{if(document.cookie.split('; ').indexOf('${SIGNED_IN_HINT}=1')>-1)document.documentElement.dataset.auth='in'}catch(e){}`;
+
+/**
+ * The header's end: Sign in and Sign up, or Dashboard. Both are rendered
+ * and CSS shows one (see headerAuth.css.ts), so server, first paint and
+ * hydration agree. Signing in or out without a reload updates the mark.
  */
 export function HeaderAuth() {
+  // Read again after each render: the hook reports signed out while
+  // hydrating, and trusting that would flash the wrong buttons.
   const signedIn = useSignedInHint();
-  if (signedIn) {
-    return (
-      <Button asChild size="sm" variant="ink">
-        <SiteLink href={paths.dashboard}>Dashboard</SiteLink>
-      </Button>
-    );
-  }
+  useEffect(() => {
+    const now = document.cookie.split('; ').includes(`${SIGNED_IN_HINT}=1`);
+    document.documentElement.dataset['auth'] = now ? 'in' : 'out';
+  }, [signedIn]);
   return (
     <>
-      <Button asChild size="sm" variant="ghost">
-        <SiteLink href={paths.signIn}>Sign in</SiteLink>
-      </Button>
-      <Button asChild size="sm" variant="primary">
-        <SiteLink href={paths.signUp}>Sign up</SiteLink>
-      </Button>
+      <span className={s.signedOut}>
+        <Button asChild size="sm" variant="ghost">
+          <SiteLink href={paths.signIn}>Sign in</SiteLink>
+        </Button>
+        <Button asChild size="sm" variant="primary">
+          <SiteLink href={paths.signUp}>Sign up</SiteLink>
+        </Button>
+      </span>
+      <span className={s.signedIn}>
+        <Button asChild size="sm" variant="ink">
+          <SiteLink href={paths.dashboard}>Dashboard</SiteLink>
+        </Button>
+      </span>
     </>
   );
 }

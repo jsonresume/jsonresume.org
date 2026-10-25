@@ -15,5 +15,6 @@ export {
   type NavItem,
 } from './links';
 export { NotFoundPage } from './pages/NotFoundPage';
+export { authHintScript } from './HeaderAuth';
 export { SiteLayout } from './SiteLayout';
 export { isSitePath, SiteLink } from './SiteLink';

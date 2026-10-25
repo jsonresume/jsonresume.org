@@ -2523,6 +2523,9 @@ importers:
       '@jsonresume/ui':
         specifier: workspace:*
         version: link:../ui
+      '@repo/api':
+        specifier: workspace:*
+        version: link:../api
       '@repo/api-client':
         specifier: workspace:^
         version: link:../api-client

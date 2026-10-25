@@ -32,6 +32,7 @@
     "@effect/atom-react": "4.0.6",
     "@jsonresume/schema": "workspace:*",
     "@jsonresume/ui": "workspace:*",
+    "@repo/api": "workspace:*",
     "@repo/api-client": "workspace:^",
     "@repo/content": "workspace:*",
     "@repo/domain": "workspace:*",
