@@ -17,6 +17,7 @@
     "@repo/analytics": "workspace:*",
     "@repo/api": "workspace:*",
     "@repo/jobs": "workspace:^",
+    "@repo/pathways": "workspace:*",
     "@repo/profiles": "workspace:*",
     "@repo/resume-themes": "workspace:*",
     "effect": "4.0.6"
@@ -28,6 +29,7 @@
     "@types/node": "^20.19.24",
     "tsconfig": "workspace:*",
     "typescript": "^5.9.3",
+    "vite": "^6.4.3",
     "vitest": "^3.2.6"
   }
 }

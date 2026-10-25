@@ -1,51 +1,19 @@
 import { Accounts } from '@repo/accounts';
-import { Job, JobMark, JobMatch, JobSummary, Seniority } from '@repo/api';
 import {
-  filterJobs,
-  noFilters,
-  type JobFilters,
-} from '@repo/job-board/filters';
-import { JobBoard, JobMatcher, toSummary } from '@repo/jobs';
+  Direction,
+  Job,
+  JobMark,
+  JobMatch,
+  JobSummary,
+  Seniority,
+} from '@repo/api';
+import { filterJobs } from '@repo/job-board/filters';
+import { Filters, filtersOf, limitOf } from './jobFilters';
+import { careerDirections, JobBoard, JobMatcher, toSummary } from '@repo/jobs';
 import { Effect, Schema } from 'effect';
 import { Tool, Toolkit } from 'effect/ai';
 import { caller, describe, failing, failWith, hints } from './context';
 
-const Filters = {
-  query: Schema.optional(Schema.String).annotate({
-    description:
-      'Words that must each start a word of the title, company, place or skills',
-  }),
-  where: Schema.optional(
-    Schema.Literals(['remote', 'anywhere', 'onsite'])
-  ).annotate({
-    description:
-      'remote (any remote), anywhere (remote worldwide), onsite (office or hybrid)',
-  }),
-  seniority: Schema.optional(Seniority),
-  min_salary: Schema.optional(Schema.Number).annotate({
-    description: 'Least yearly pay in USD; jobs that state no pay are left out',
-  }),
-  limit: Schema.optional(Schema.Number).annotate({
-    description: 'How many to return (default 20, at most 100)',
-  }),
-};
-
-type FilterInput = {
-  query?: string | undefined;
-  where?: JobFilters['where'] | undefined;
-  seniority?: JobFilters['seniority'] | undefined;
-  min_salary?: number | undefined;
-  limit?: number | undefined;
-};
-
-const filtersOf = (i: FilterInput): JobFilters => ({
-  ...noFilters,
-  query: i.query ?? '',
-  where: i.where ?? null,
-  seniority: i.seniority && i.seniority !== 'unspecified' ? i.seniority : null,
-  minSalary: i.min_salary ?? null,
-});
-const limitOf = (i: FilterInput) => Math.min(Math.max(i.limit ?? 20, 1), 100);
 const jobUrl = (id: number) => `https://jsonresume.org/jobs/${id}`;
 
 const Marked = Schema.Struct({
@@ -100,6 +68,11 @@ export const JobToolkit = Toolkit.make(
     success: Schema.Struct({ id: Schema.Number, mark: Schema.NullOr(JobMark) }),
     ...failing,
   }).annotateMerge(hints('mark_job')),
+  Tool.make('get_career_directions', {
+    description: describe('get_career_directions'),
+    success: Schema.Array(Direction),
+    ...failing,
+  }).annotateMerge(hints('get_career_directions')),
   Tool.make('list_marked_jobs', {
     description: describe('list_marked_jobs'),
     parameters: Schema.Struct({ mark: Schema.optional(JobMark) }),
@@ -162,6 +135,19 @@ export const JobHandlers = JobToolkit.toLayer(
             return yield* failWith(`No job ${id}.`);
           yield* matcher.mark(user.id, id, mark, note ?? null);
           return { id, mark };
+        }),
+      get_career_directions: () =>
+        Effect.gen(function* () {
+          const user = yield* caller;
+          const { resume } = yield* accounts.currentResume(user.id);
+          const ranked = yield* matcher
+            .rank(resume, user.id)
+            .pipe(
+              Effect.mapError(() =>
+                failWith('Your resume is empty. Add to it first.')
+              )
+            );
+          return careerDirections(ranked, resume);
         }),
       list_marked_jobs: ({ mark }) =>
         Effect.gen(function* () {

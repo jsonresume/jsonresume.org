@@ -31,6 +31,7 @@
     "@repo/job-board": "workspace:^",
     "@repo/jobs": "workspace:^",
     "@repo/mcp": "workspace:^",
+    "@repo/pathways": "workspace:^",
     "@repo/profiles": "workspace:^",
     "@repo/resume-editor": "workspace:^",
     "@repo/resume-host": "workspace:^",

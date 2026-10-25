@@ -17,6 +17,7 @@ import { useEffect, type ReactNode } from 'react';
 import {
   BriefcaseIcon,
   ChartIcon,
+  CompassIcon,
   FileIcon,
   GearIcon,
   OpenIcon,
@@ -36,6 +37,7 @@ const nav = [
   { label: 'Overview', href: '/dashboard', icon: <ChartIcon /> },
   { label: 'Editor', href: '/dashboard/editor', icon: <PenIcon /> },
   { label: 'Resume', href: '/dashboard/resume', icon: <FileIcon /> },
+  { label: 'Pathways', href: '/dashboard/pathways', icon: <CompassIcon /> },
   { label: 'Jobs', href: '/dashboard/jobs', icon: <BriefcaseIcon /> },
   { label: 'Settings', href: '/dashboard/settings', icon: <GearIcon /> },
 ];

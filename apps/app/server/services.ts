@@ -11,6 +11,7 @@ import { PgAccountStore } from '@repo/accounts/sql';
 import { Analytics } from '@repo/analytics';
 import { PgAnalyticsStore } from '@repo/analytics/sql';
 import { JobBoard, JobMatcher, OpenAiJobs } from '@repo/jobs';
+import { Copilot } from '@repo/pathways';
 import { GithubGists, Profiles, Usernames } from '@repo/profiles';
 import { PgProfileStore } from '@repo/profiles/sql';
 import { Layer } from 'effect';
@@ -36,7 +37,7 @@ export const appServices = <E>(
   const profiles = Layer.mergeAll(Profiles.layer, Usernames.layer).pipe(
     Layer.provideMerge(Layer.mergeAll(GithubGists.layer, stores))
   );
-  return Layer.mergeAll(Accounts.layer, Analytics.layer).pipe(
+  const accounts = Layer.mergeAll(Accounts.layer, Analytics.layer).pipe(
     Layer.provideMerge(
       Layer.mergeAll(
         profiles,
@@ -47,4 +48,6 @@ export const appServices = <E>(
       )
     )
   );
+  // Pathways' copilot uses every MCP tool, so everything above.
+  return Copilot.layer.pipe(Layer.provideMerge(accounts));
 };

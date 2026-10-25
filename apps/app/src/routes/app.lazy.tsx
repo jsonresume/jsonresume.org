@@ -2,6 +2,7 @@ import {
   DashboardShell,
   JobsPage,
   OverviewPage,
+  PathwaysPage,
   ResumePage,
   SettingsPage,
 } from '@repo/dashboard';
@@ -47,4 +48,7 @@ export const SettingsRoute = createLazyRoute('/dashboard/settings')({
 });
 export const JobsRoute = createLazyRoute('/dashboard/jobs')({
   component: JobsPage,
+});
+export const PathwaysRoute = createLazyRoute('/dashboard/pathways')({
+  component: PathwaysPage,
 });

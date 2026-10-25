@@ -31,3 +31,6 @@ export const PenIcon = () => <Icon d="M10.5 2.5l3 3L5 14H2v-3zM9 4l3 3" />;
 export const BriefcaseIcon = () => (
   <Icon d="M2 5.25h12v8H2zM5.75 5.25v-2h4.5v2M2 9h12" />
 );
+export const CompassIcon = () => (
+  <Icon d="M8 14.25A6.25 6.25 0 1 0 8 1.75a6.25 6.25 0 0 0 0 12.5ZM10.5 5.5 9 9 5.5 10.5 7 7z" />
+);

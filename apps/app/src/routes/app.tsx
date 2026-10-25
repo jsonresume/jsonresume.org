@@ -47,3 +47,9 @@ export const jobsMatchesRoute = createRoute({
   path: 'jobs',
   head: head('Jobs for you'),
 }).lazy(() => import('./app.lazy').then((m) => m.JobsRoute));
+
+export const pathwaysRoute = createRoute({
+  getParentRoute: () => dashboardRoute,
+  path: 'pathways',
+  head: head('Pathways'),
+}).lazy(() => import('./app.lazy').then((m) => m.PathwaysRoute));

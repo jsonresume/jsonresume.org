@@ -12,6 +12,7 @@ const COUNTERPARTS: Record<string, string> = {
   jobs: '/jobs',
   'my-jobs': '/dashboard/jobs',
   'api-keys': '/dashboard/settings',
+  pathways: '/dashboard/pathways',
   privacy: '/privacy',
   terms: '/terms',
 };

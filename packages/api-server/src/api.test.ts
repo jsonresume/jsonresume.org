@@ -371,4 +371,24 @@ describe('the API, over HTTP', () => {
       []
     );
   });
+
+  it('streams the Pathways copilot to a signed-in user', async () => {
+    server = testServer();
+    const ask = () =>
+      server.post('/api/pathways/chat', {
+        messages: [{ role: 'user', content: 'Where could I go next?' }],
+      });
+    expect((await ask()).status).toBe(401);
+    await server.post('/api/auth/signup', ada);
+    const reply = await ask();
+    expect(reply.headers.get('content-type')).toContain('text/event-stream');
+    const events = (await reply.text())
+      .split('\n')
+      .filter((line) => line.startsWith('data: '))
+      .map((line) => JSON.parse(line.slice(6)));
+    expect(events).toEqual([
+      { type: 'text', delta: 'Hello @ada' },
+      { type: 'done' },
+    ]);
+  });
 });

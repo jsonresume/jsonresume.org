@@ -20,6 +20,7 @@ import {
   editorRoute,
   jobsMatchesRoute,
   overviewRoute,
+  pathwaysRoute,
   resumeSettingsRoute,
   settingsRoute,
 } from './routes/app';
@@ -70,6 +71,7 @@ export const routeTree = rootRoute.addChildren([
     editorRoute,
     resumeSettingsRoute,
     jobsMatchesRoute,
+    pathwaysRoute,
     settingsRoute,
   ]),
 ]);

@@ -155,6 +155,13 @@ export const tools: ReadonlyArray<McpToolInfo> = [
     writes: true,
   },
   {
+    name: 'get_career_directions',
+    group: 'jobs',
+    description:
+      'The directions your career could take now: the open jobs that fit your resume, grouped by kind of role (founding engineer, engineering leadership, AI…), each with its best and typical fit, median pay, how often it is remote, the skills it asks for, and those your resume doesn’t show yet.',
+    writes: false,
+  },
+  {
     name: 'list_marked_jobs',
     group: 'jobs',
     description:

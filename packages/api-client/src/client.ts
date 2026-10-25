@@ -46,6 +46,10 @@ export const usernameCheckAtom = Atom.family((name: string) =>
 export const jobMatchesAtom = ApiClient.query('myJobs', 'matches', {
   reactivityKeys: [...keys.jobs, ...keys.account],
 });
+/** Where the resume could go: the fitting jobs grouped by kind of role. */
+export const directionsAtom = ApiClient.query('myJobs', 'directions', {
+  reactivityKeys: [...keys.jobs, ...keys.account],
+});
 export const pendingGithubAtom = ApiClient.query('auth', 'pendingGithub', {});
 
 export const signUpAtom = ApiClient.mutation('auth', 'signUp');

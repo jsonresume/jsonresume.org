@@ -11,6 +11,7 @@ import { GithubRoutes } from './github';
 import { JobsHandlers, MyJobsHandlers } from './jobs';
 import { ApiKeyAuthenticationLive, KeysHandlers } from './keys';
 import { OAuthConsentHandlers, OAuthHandlers } from './oauth';
+import { PathwaysRoutes } from './pathways';
 import { V1Handlers, V1PublicHandlers } from './v1';
 
 export { AuthenticationLive } from './authentication';
@@ -51,7 +52,8 @@ export const apiRoutes = (version: string) =>
       ]),
       Layer.provide([AuthenticationLive, ApiKeyAuthenticationLive])
     ),
-    GithubRoutes
+    GithubRoutes,
+    PathwaysRoutes
   );
 
 /** Hourly: frees the names of email accounts never verified, and of renames past their redirect. */

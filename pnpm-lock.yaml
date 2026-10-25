@@ -207,6 +207,9 @@ importers:
       '@repo/mcp':
         specifier: workspace:^
         version: link:../../packages/mcp
+      '@repo/pathways':
+        specifier: workspace:^
+        version: link:../../packages/pathways
       '@repo/profiles':
         specifier: workspace:^
         version: link:../../packages/profiles
@@ -1032,6 +1035,9 @@ importers:
       '@repo/jobs':
         specifier: workspace:^
         version: link:../jobs
+      '@repo/pathways':
+        specifier: workspace:*
+        version: link:../pathways
       '@repo/profiles':
         specifier: workspace:*
         version: link:../profiles
@@ -1060,6 +1066,9 @@ importers:
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
+      vite:
+        specifier: ^6.4.3
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -1328,6 +1337,9 @@ importers:
       '@vanilla-extract/css':
         specifier: ^1.21.3
         version: 1.21.3
+      '@vanilla-extract/dynamic':
+        specifier: ^2.1.5
+        version: 2.1.5
       effect:
         specifier: 4.0.6
         version: 4.0.6
@@ -1625,6 +1637,55 @@ importers:
       '@repo/eslint-config-custom':
         specifier: workspace:*
         version: link:../eslint-config-custom
+      '@types/node':
+        specifier: ^20.19.24
+        version: 20.19.24
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vite:
+        specifier: ^6.4.3
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+
+  packages/pathways:
+    dependencies:
+      '@effect/ai-openai':
+        specifier: 4.0.6
+        version: 4.0.6(effect@4.0.6)
+      '@repo/accounts':
+        specifier: workspace:*
+        version: link:../accounts
+      '@repo/api':
+        specifier: workspace:*
+        version: link:../api
+      '@repo/mcp':
+        specifier: workspace:*
+        version: link:../mcp
+      effect:
+        specifier: 4.0.6
+        version: 4.0.6
+    devDependencies:
+      '@effect/sql-pglite':
+        specifier: 4.0.6
+        version: 4.0.6(effect@4.0.6)
+      '@repo/analytics':
+        specifier: workspace:*
+        version: link:../analytics
+      '@repo/database':
+        specifier: workspace:*
+        version: link:../database
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      '@repo/jobs':
+        specifier: workspace:*
+        version: link:../jobs
       '@types/node':
         specifier: ^20.19.24
         version: 20.19.24

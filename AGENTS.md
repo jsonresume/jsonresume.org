@@ -71,6 +71,7 @@ package over growing an app.
 | `@repo/jobs`              | Hacker News jobs: the import pipeline (fetch, parse with OpenAI, embed, repost families), the board's queries, matching against a resume.     |
 | `@repo/job-board`         | The job board in React: job cards, filters kept in the URL, the /jobs and /jobs/:id pages.                                                    |
 | `@repo/mcp`               | jsonresume.org for agents: the MCP server at /mcp (tools, prompts, Bearer auth by API key or OAuth) and the catalog the /mcp page lists.      |
+| `@repo/pathways`          | Pathways' career copilot: an OpenAI agent with every MCP tool, acting as the user, streaming its replies.                                     |
 
 Dependency direction: `domain` ← `content`, `api` ← `site`, feature packages ←
 `apps/app`. Packages never import from apps. `@jsonresume/ui` imports nothing

@@ -14,10 +14,11 @@ import { Analytics } from '@repo/analytics';
 import { PgAnalyticsStore } from '@repo/analytics/sql';
 import { TestDatabase } from '@repo/database/testing';
 import { embedderFrom, JobBoard, JobMatcher } from '@repo/jobs';
+import { Copilot } from '@repo/pathways';
 import { Profiles, Usernames } from '@repo/profiles';
 import { PgProfileStore } from '@repo/profiles/sql';
 import { fakeGithub } from '@repo/profiles/testing';
-import { ConfigProvider, Effect, Layer } from 'effect';
+import { ConfigProvider, Effect, Layer, Stream } from 'effect';
 import { HttpRouter, HttpServer } from 'effect/http';
 import { apiRoutes } from '../index';
 
@@ -49,6 +50,17 @@ export function testServer() {
     PgAnalyticsStore,
     ApiKeys.layer,
     OAuth.layer,
+    // The copilot answers as the user it was given, without a model.
+    Layer.succeed(
+      Copilot,
+      Copilot.of({
+        reply: (user) =>
+          Stream.make(
+            { type: 'text', delta: `Hello @${user.username}` },
+            { type: 'done' }
+          ),
+      })
+    ),
     JobBoard.layer,
     JobMatcher.layer.pipe(
       Layer.provide(embedderFrom(() => new Float32Array(3072).fill(1)))

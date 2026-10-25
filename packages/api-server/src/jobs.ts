@@ -1,6 +1,6 @@
 import { Accounts } from '@repo/accounts';
 import { CurrentUser, JobNotFound, JsonResumeApi } from '@repo/api';
-import { JobBoard, JobMatcher } from '@repo/jobs';
+import { careerDirections, JobBoard, JobMatcher } from '@repo/jobs';
 import { Effect } from 'effect';
 import { HttpApiBuilder } from 'effect/http-api';
 
@@ -33,6 +33,13 @@ export const MyJobsHandlers = HttpApiBuilder.group(
             const user = yield* CurrentUser;
             const { resume } = yield* accounts.currentResume(user.id);
             return yield* matcher.matches(user.id, resume);
+          }),
+        directions: () =>
+          Effect.gen(function* () {
+            const user = yield* CurrentUser;
+            const { resume } = yield* accounts.currentResume(user.id);
+            const ranked = yield* matcher.rank(resume, user.id);
+            return careerDirections(ranked, resume);
           }),
         mark: ({ params, payload }) =>
           Effect.gen(function* () {

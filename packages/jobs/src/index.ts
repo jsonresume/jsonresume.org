@@ -17,3 +17,4 @@ export { OpenAiJobs } from './openai';
 export { fromLegacy } from './legacy';
 export { toV1Job, v1Options, v1Select, type V1Options } from './v1';
 export { companyOf, placeOf, toJob, toSummary, type JobRow } from './summary';
+export { careerDirections, familyOf, resumeSkills } from './directions';

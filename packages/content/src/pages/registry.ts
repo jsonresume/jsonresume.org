@@ -46,6 +46,18 @@ export const moved: { title: string; description: string; href: string }[] = [
       'Open roles ordered by how well they fit your resume: on the dashboard, or in the terminal with the jobs CLI and a key from Settings.',
     href: '/dashboard/jobs',
   },
+  {
+    title: 'Pathways',
+    description:
+      'A career copilot that knows your resume and today’s jobs, the directions open to you, and jobs to sort with a swipe.',
+    href: '/dashboard/pathways',
+  },
+  {
+    title: 'MCP for your agent',
+    description:
+      'ChatGPT, Claude, Cursor and other agents can manage your resume, themes and jobs.',
+    href: '/mcp',
+  },
 ];
 
 /** Registry features not ported yet: each links to a GitHub issue asking for it. */
@@ -67,7 +79,6 @@ export const notYet: { title: string; description: string }[] = [
     title: 'The job graph',
     description: 'Jobs and resumes as a map of similar roles.',
   },
-  { title: 'Pathways', description: 'The career-planning assistant.' },
   {
     title: 'Explore',
     description: 'Browsing and comparing other people’s resumes.',

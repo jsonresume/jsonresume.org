@@ -108,6 +108,28 @@ export const JobMatch = Schema.Struct({
 });
 export type JobMatch = typeof JobMatch.Type;
 
+/** A kind of role the resume could move into, from the open jobs that fit it. */
+export const Direction = Schema.Struct({
+  /** e.g. "Founding engineer", "Engineering leadership". */
+  name: Schema.String,
+  /** Open jobs of this kind among the best fits. */
+  jobs: Schema.Number,
+  bestFit: Schema.Number,
+  typicalFit: Schema.Number,
+  /** Annual USD, of the jobs that state pay. */
+  medianPay: Schema.NullOr(Schema.Number),
+  /** Percent of these jobs that are remote. */
+  remoteShare: Schema.Number,
+  /** The skills these jobs ask for most. */
+  skillsAsked: Schema.Array(Schema.String),
+  /** Of those, the ones the resume doesn't show. */
+  skillsToAdd: Schema.Array(Schema.String),
+  companies: Schema.Array(Schema.String),
+  /** The best-fitting jobs of this kind. */
+  examples: Schema.Array(JobMatch),
+});
+export type Direction = typeof Direction.Type;
+
 /** How the import pipeline is doing, for monitoring. */
 export const JobsStatus = Schema.Struct({
   lastRun: Schema.NullOr(
@@ -145,6 +167,10 @@ export class MyJobsApi extends HttpApiGroup.make('myJobs')
   .add(
     HttpApiEndpoint.get('matches', '/', {
       success: Schema.Array(JobMatch),
+      error: NoResume,
+    }),
+    HttpApiEndpoint.get('directions', '/directions', {
+      success: Schema.Array(Direction),
       error: NoResume,
     }),
     HttpApiEndpoint.put('mark', '/:id', {

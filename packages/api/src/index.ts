@@ -51,6 +51,7 @@ export {
   V1Unauthorized,
 } from './V1Api';
 export {
+  Direction,
   EmploymentType,
   Job,
   JobBoard,
@@ -85,3 +86,4 @@ export class JsonResumeApi extends HttpApi.make('jsonresume')
   .add(OAuthConsentApi)
   .prefix('/api')
   .annotateMerge(OpenApi.annotations({ title: 'JSON Resume API' })) {}
+export { CopilotEvent, CopilotMessage, CopilotRequest } from './PathwaysApi';

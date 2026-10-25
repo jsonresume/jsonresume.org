@@ -1,15 +1,22 @@
 {
   "extends": "tsconfig/base.json",
   "compilerOptions": {
-    "lib": ["ES2023"],
+    "lib": [
+      "ES2023"
+    ],
     "module": "ESNext",
     "moduleResolution": "bundler",
     "target": "ES2022",
     "noEmit": true,
     "declaration": false,
     "declarationMap": false,
-    "types": ["node"],
+    "types": [
+      "node",
+      "vite/client"
+    ],
     "allowImportingTsExtensions": true
   },
-  "include": ["src"]
+  "include": [
+    "src"
+  ]
 }
