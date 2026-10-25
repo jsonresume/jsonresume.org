@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { visuallyHidden } from '../../styles/shared.css';
@@ -10,6 +11,11 @@ export interface MarkdownProps {
   className?: string;
   /** Open links in a new tab (for chat and generated content). */
   externalLinks?: boolean;
+  /**
+   * Render links yourself, e.g. with your router's Link for same-site paths.
+   * Return undefined to fall back to a plain <a>.
+   */
+  renderLink?: (link: { href: string; children: ReactNode }) => ReactNode;
 }
 
 /**
@@ -20,6 +26,7 @@ export function Markdown({
   children,
   className,
   externalLinks = false,
+  renderLink,
 }: MarkdownProps) {
   return (
     <div className={cx(prose, className)}>
@@ -37,13 +44,18 @@ export function Markdown({
                 </span>
               </>
             ) : null,
-          ...(externalLinks
-            ? {
-                a: ({ node: _node, ...props }) => (
-                  <a {...props} target="_blank" rel="noreferrer noopener" />
-                ),
-              }
-            : {}),
+          a: ({ node: _node, ...props }) => {
+            const custom =
+              renderLink && props.href !== undefined
+                ? renderLink({ href: props.href, children: props.children })
+                : undefined;
+            if (custom !== undefined) return custom;
+            return externalLinks ? (
+              <a {...props} target="_blank" rel="noreferrer noopener" />
+            ) : (
+              <a {...props} />
+            );
+          },
         }}
       >
         {children}

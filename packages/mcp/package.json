@@ -1,0 +1,41 @@
+{
+  "name": "@repo/mcp",
+  "version": "0.0.0",
+  "private": true,
+  "description": "jsonresume.org for agents: the MCP server at /mcp, its tools and prompts, and the catalog the /mcp page lists",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./catalog": "./src/catalog.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts"
+  },
+  "dependencies": {
+    "@jsonresume/schema": "workspace:*",
+    "@repo/accounts": "workspace:*",
+    "@repo/analytics": "workspace:*",
+    "@repo/api": "workspace:*",
+    "@repo/ats": "workspace:*",
+    "@repo/explore": "workspace:*",
+    "@repo/job-board": "workspace:*",
+    "@repo/jobs": "workspace:*",
+    "@repo/resume-editor": "workspace:*",
+    "@repo/resume-formats": "workspace:*",
+    "@repo/schema-explorer": "workspace:*",
+    "@repo/theme-gallery": "workspace:*",
+    "effect": "4.0.6"
+  },
+  "devDependencies": {
+    "@effect/sql-pglite": "4.0.6",
+    "@repo/database": "workspace:*",
+    "@repo/eslint-config-custom": "workspace:*",
+    "@types/node": "^20.19.24",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.9.3",
+    "vite": "^6.4.3",
+    "vitest": "^3.2.6"
+  }
+}

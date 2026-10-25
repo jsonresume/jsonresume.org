@@ -63,6 +63,17 @@ export const lightColor = {
     step3: p.yellow[400],
     step4: p.yellow[700],
   },
+  /**
+   * Charts. Two categorical series in fixed order (validated for colour
+   * vision deficiency and 3:1 on the surface, light and dark), hairline
+   * grid, and the gray for context marks.
+   */
+  chart: {
+    series1: '#2a78d6',
+    series2: '#eb6834',
+    grid: p.gray[150],
+    deemphasis: p.gray[300],
+  },
   focus: p.gray[900],
   overlay: 'rgba(17, 17, 17, 0.45)',
 };
@@ -124,6 +135,12 @@ export const darkColor: ColorTokens = {
     step2: p.yellow[700],
     step3: '#c4ad1f',
     step4: p.yellow[200],
+  },
+  chart: {
+    series1: '#3987e5',
+    series2: '#d95926',
+    grid: '#2a2a2a',
+    deemphasis: p.gray[600],
   },
   focus: p.yellow[200],
   overlay: 'rgba(0, 0, 0, 0.6)',

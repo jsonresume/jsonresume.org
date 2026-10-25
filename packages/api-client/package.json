@@ -1,0 +1,32 @@
+{
+  "name": "@repo/api-client",
+  "version": "0.0.0",
+  "private": true,
+  "description": "The browser's client for @repo/api: a typed AtomHttpApi service, its query and mutation atoms, and session hints",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./hints": "./src/hints.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts,.tsx"
+  },
+  "dependencies": {
+    "@effect/atom-react": "4.0.6",
+    "@repo/api": "workspace:*",
+    "effect": "4.0.6"
+  },
+  "peerDependencies": {
+    "react": "^19.2.0"
+  },
+  "devDependencies": {
+    "@repo/eslint-config-custom": "workspace:*",
+    "@types/react": "^19.2.2",
+    "react": "^19.2.0",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.6"
+  }
+}

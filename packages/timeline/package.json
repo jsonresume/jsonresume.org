@@ -1,0 +1,43 @@
+{
+  "name": "@repo/timeline",
+  "version": "0.0.0",
+  "private": true,
+  "description": "A resume as a timeline, for /@username/timeline: jobs, schools, projects and awards in order, with how long each lasted",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./ui": "./src/ui/index.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts,.tsx"
+  },
+  "dependencies": {
+    "@jsonresume/ui": "workspace:*",
+    "@repo/resume-formats": "workspace:*",
+    "effect": "4.0.6"
+  },
+  "devDependencies": {
+    "@jsonresume/sample-data": "workspace:*",
+    "@repo/eslint-config-custom": "workspace:*",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "@vanilla-extract/css": "^1.21.3",
+    "@vanilla-extract/vite-plugin": "^5.2.6",
+    "axe-core": "^4.14.0",
+    "jsdom": "^27.0.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.9.3",
+    "vite": "^6.4.3",
+    "vitest": "^3.2.6"
+  },
+  "peerDependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  }
+}

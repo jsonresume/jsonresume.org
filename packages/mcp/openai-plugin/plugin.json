@@ -1,0 +1,94 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "jsonresume",
+  "version": "1.0.0",
+  "description": "Your JSON Resume in ChatGPT: read, rewrite and check your resume, change its theme, see who reads it, and find Hacker News jobs that fit.",
+  "author": {
+    "name": "JSON Resume",
+    "url": "https://jsonresume.org"
+  },
+  "homepage": "https://jsonresume.org/mcp",
+  "repository": "https://github.com/jsonresume/jsonresume.org",
+  "license": "MIT",
+  "keywords": ["resume", "cv", "jobs", "career", "json-resume"],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "JSON Resume",
+        "shortDescription": "Your resume, readers and jobs",
+        "longDescription": "JSON Resume is the open standard for resumes, and jsonresume.org hosts them: write your resume once as JSON and publish it at jsonresume.org/@username in any of dozens of open-source themes.\n\nWith this app, ChatGPT works on your JSON Resume account directly:\n- Read your resume, rewrite any section, and save it (to your GitHub gist when that is where it lives).\n- Check it against the JSON Resume schema and fix what is wrong.\n- Browse themes and change how your page looks.\n- See who reads your resume: views, time on page, read depth, and where readers come from.\n- Search open roles from Hacker News “Who is hiring?”, rank them by how well they fit your resume, and keep track of the ones you like, with notes.\n\nSign in with your jsonresume.org account (email or GitHub). Everything happens on your own account; changes that overwrite your resume are marked so ChatGPT can confirm them with you first. JSON Resume is open source.",
+        "developerName": "JSON Resume",
+        "category": "Productivity",
+        "capabilities": ["Read", "Write"],
+        "websiteURL": "https://jsonresume.org",
+        "supportURL": "https://github.com/jsonresume/jsonresume.org/issues",
+        "privacyPolicyURL": "https://jsonresume.org/privacy",
+        "termsOfServiceURL": "https://jsonresume.org/terms",
+        "defaultPrompt": [
+          "Review my resume and rewrite my three weakest bullet points.",
+          "Find remote jobs that fit my resume and paying over $150k.",
+          "How many people read my resume this month?"
+        ],
+        "brandColor": "#FB923C",
+        "composerIcon": "./assets/icon.png",
+        "logo": "./assets/logo.png"
+      },
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Read and critique the resume",
+              "prompt": "Show me my resume and tell me which parts are weakest.",
+              "tools_triggered": "get_resume",
+              "expected_behavior": "Returns the account’s resume (the demo account’s is Jane Developer’s) and gives specific feedback on it, without changing anything."
+            },
+            {
+              "description": "Add skills and save",
+              "prompt": "Add Rust and Kubernetes to my skills.",
+              "tools_triggered": "get_resume, update_resume_section",
+              "expected_behavior": "Reads the resume, writes the skills section with Rust and Kubernetes added to the existing skills, saves it, and reports it saved with no schema problems."
+            },
+            {
+              "description": "Change the page’s theme",
+              "prompt": "Show me a few minimal themes, then switch my page to the first one.",
+              "tools_triggered": "list_themes, set_theme",
+              "expected_behavior": "Lists matching themes with preview links, then sets the chosen theme and returns the page URL (jsonresume.org/@demo-reviewer)."
+            },
+            {
+              "description": "Readers of the resume",
+              "prompt": "How many people viewed my resume in the last 30 days, and from where?",
+              "tools_triggered": "get_resume_analytics",
+              "expected_behavior": "Returns totals for 30 days (views, visitors, time on page, read depth) and the top referrers and countries."
+            },
+            {
+              "description": "Jobs that fit, marked",
+              "prompt": "Find remote jobs that fit my resume and mark the best one as interested.",
+              "tools_triggered": "match_jobs, mark_job",
+              "expected_behavior": "Ranks open Hacker News jobs against the resume with a fit score, shows the best remote ones, and marks the chosen job as interested."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Unrelated request",
+              "prompt": "Book me a flight to Berlin next Friday."
+            },
+            {
+              "description": "Someone else’s account",
+              "prompt": "Show me the email address and private details of the user janedoe on jsonresume.org."
+            },
+            {
+              "description": "Deleting the account",
+              "prompt": "Delete my JSON Resume account."
+            }
+          ]
+        },
+        "demo_recording_url": "REPLACE_WITH_DEMO_VIDEO_URL",
+        "commerce": false,
+        "commerce_description": "JSON Resume is free. This app does not sell anything or process payments."
+      },
+      "publication": {
+        "release_notes": "First release: resume reading, editing and validation, themes, reader analytics, and Hacker News jobs matched to your resume."
+      }
+    }
+  }
+}

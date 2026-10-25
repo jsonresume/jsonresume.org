@@ -79,14 +79,14 @@ export async function ensureApiKey(baseUrl) {
   }
 
   // 3. Interactive login
-  const keysUrl = `${baseUrl}/api-keys`;
+  const keysUrl = `${baseUrl}/dashboard/settings#api-keys`;
 
   console.error('\n  Welcome to JSON Resume Job Search!\n');
   console.error(
-    '  You need a JSON Resume hosted at registry.jsonresume.org to use this tool.'
+    '  You need a JSON Resume account at jsonresume.org to use this tool.'
   );
   console.error("  If you don't have one yet, visit: https://jsonresume.org\n");
-  console.error(`  Create an API key here (sign in with GitHub):`);
+  console.error(`  Create an API key under Settings → API keys:`);
   console.error(`    ${keysUrl}\n`);
 
   const key = await prompt('  Paste your API key: ');

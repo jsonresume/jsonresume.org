@@ -1,0 +1,26 @@
+{
+  "name": "@repo/resume-pdf",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Prints a themed resume to PDF with headless Chromium, for /@username.pdf",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts"
+  },
+  "dependencies": {
+    "effect": "4.0.6",
+    "playwright-core": "1.56.1"
+  },
+  "devDependencies": {
+    "@repo/eslint-config-custom": "workspace:*",
+    "@types/node": "^20.19.24",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.6"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "@repo/resume-formats",
+  "version": "0.0.0",
+  "private": true,
+  "description": "A resume as JSON, YAML, plain text, RenderCV or a QR code, for /@username.json and friends",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./read": "./src/read.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts"
+  },
+  "dependencies": {
+    "effect": "4.0.6",
+    "qrcode": "^1.5.4",
+    "yaml": "^2.8.1"
+  },
+  "devDependencies": {
+    "@jsonresume/sample-data": "workspace:*",
+    "@repo/eslint-config-custom": "workspace:*",
+    "@types/qrcode": "^1.5.6",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.6"
+  }
+}

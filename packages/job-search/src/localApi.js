@@ -1,6 +1,6 @@
 import { getMarks, setMark } from './localState.js';
 
-const DEFAULT_BASE_URL = 'https://registry.jsonresume.org';
+const DEFAULT_BASE_URL = 'https://jsonresume.org';
 
 /**
  * Creates an API client for local mode — uses a resume JSON object

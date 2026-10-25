@@ -1,80 +1,7 @@
-import { assignInlineVars } from '@vanilla-extract/dynamic';
-import { useId, type ReactNode } from 'react';
 import { vars } from '../../tokens/contract.css';
-import { Table, Td, Th } from '../display/display';
+import { ChartFrame } from './chart-frame';
+import { nice } from './scale';
 import * as s from './viz.css';
-
-interface ChartFrameProps {
-  title: string;
-  /** One sentence describing what the chart shows, for screen readers. */
-  summary: string;
-  table: { columns: string[]; rows: Array<Array<string | number>> };
-  legend?: Array<{ label: string; color: string }>;
-  children: ReactNode;
-}
-
-/** Title, legend, the SVG, and a "Show data" table so the numbers are always reachable. */
-function ChartFrame({
-  title,
-  summary,
-  table,
-  legend,
-  children,
-}: ChartFrameProps) {
-  const id = useId();
-  return (
-    <figure className={s.chart} aria-labelledby={`${id}-t`}>
-      <figcaption id={`${id}-t`} className={s.chartTitle}>
-        {title}
-      </figcaption>
-      {legend ? (
-        <ul className={s.legend}>
-          {legend.map((l) => (
-            <li key={l.label} className={s.legendItem}>
-              <span
-                className={s.legendSwatch}
-                style={assignInlineVars({ [s.swatchColor]: l.color })}
-              />
-              {l.label}
-            </li>
-          ))}
-        </ul>
-      ) : null}
-      <div role="img" aria-label={summary}>
-        {children}
-      </div>
-      <details className={s.dataToggle}>
-        <summary>Show data</summary>
-        <Table>
-          <thead>
-            <tr>
-              {table.columns.map((c) => (
-                <Th key={c}>{c}</Th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {table.rows.map((r, i) => (
-              <tr key={i}>
-                {r.map((v, j) => (
-                  <Td key={j}>{v}</Td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      </details>
-    </figure>
-  );
-}
-
-const nice = (max: number) => {
-  if (max <= 0) return 1;
-  const magnitude = 10 ** Math.floor(Math.log10(max));
-  return (
-    [1, 2, 2.5, 5, 10].map((f) => f * magnitude).find((v) => v >= max) ?? max
-  );
-};
 
 export interface BarDatum {
   label: string;
@@ -232,6 +159,7 @@ export function LineChart({
           ? series.slice(0, 4).map((s, i) => ({
               label: s.name,
               color: seriesColors[i] as string,
+              mark: 'line' as const,
             }))
           : undefined
       }

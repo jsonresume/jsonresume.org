@@ -1,0 +1,35 @@
+{
+  "name": "@repo/pathways",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Pathways: the career copilot, an agent on OpenAI with every MCP tool, streaming its replies",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts"
+  },
+  "dependencies": {
+    "@effect/ai-openai": "4.0.6",
+    "@repo/accounts": "workspace:*",
+    "@repo/api": "workspace:*",
+    "@repo/mcp": "workspace:*",
+    "effect": "4.0.6"
+  },
+  "devDependencies": {
+    "@effect/sql-pglite": "4.0.6",
+    "@repo/analytics": "workspace:*",
+    "@repo/database": "workspace:*",
+    "@repo/eslint-config-custom": "workspace:*",
+    "@repo/explore": "workspace:*",
+    "@repo/jobs": "workspace:*",
+    "@types/node": "^20.19.24",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.9.3",
+    "vite": "^6.4.3",
+    "vitest": "^3.2.6"
+  }
+}

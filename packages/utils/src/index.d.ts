@@ -30,7 +30,8 @@ export function getDuration(
   startDate: string | Date,
   endDate?: string | Date
 ): string;
-export function normalizeDates(resume: Resume): Resume;
+/** Turns Date values into strings, keeping the rest of the resume as it is. */
+export function normalizeDates<T extends object = Resume>(resume: T): T;
 
 // --- metrics ---
 
@@ -74,3 +75,7 @@ export function formatUrlForDisplay(url: string): string;
 
 export function formatLocation(location?: ResumeLocation): string;
 export function normalizeResume(resume?: Partial<Resume>): Resume;
+/** Formats structured `location` objects in entries as strings (#323). */
+export function withStringLocations<T>(resume: T): T;
+/** Gives projects both `summary` and `description` when either is set (#296). */
+export function withProjectSummaries<T>(resume: T): T;

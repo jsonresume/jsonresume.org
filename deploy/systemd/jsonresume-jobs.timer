@@ -1,0 +1,12 @@
+# Every two hours: new "Who is hiring?" posts arrive over the first days of
+# each month, and runs with nothing new take seconds.
+[Unit]
+Description=Run the jsonresume.org jobs pipeline every two hours
+
+[Timer]
+OnCalendar=*-*-* 00/2:15:00 UTC
+RandomizedDelaySec=5min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

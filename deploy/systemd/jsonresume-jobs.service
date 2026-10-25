@@ -1,0 +1,30 @@
+# The jobs pipeline (@repo/jobs): imports Hacker News "Who is hiring?" posts,
+# parses them with OpenAI, embeds and groups them. One run, started by
+# jsonresume-jobs.timer; each run is recorded in app.job_runs and shown at
+# https://jsonresume.org/api/jobs/status.
+#
+# Install: sudo cp deploy/systemd/jsonresume-jobs.* /etc/systemd/system/
+#          sudo systemctl daemon-reload && sudo systemctl enable --now jsonresume-jobs.timer
+# Run now: sudo systemctl start jsonresume-jobs  (logs: journalctl -u jsonresume-jobs)
+[Unit]
+Description=jsonresume.org jobs pipeline
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=deploy
+Group=deploy
+Environment=NODE_ENV=production HOME=/srv/jsonresume
+# OPENAI_API_KEY is in app.env; DATABASE_URL in postgres.env.
+EnvironmentFile=/etc/jsonresume/app.env
+EnvironmentFile=-/etc/jsonresume/postgres.env
+WorkingDirectory=/srv/jsonresume/app/current/apps/app
+ExecStart=/usr/bin/node dist/jobs/jobs.js
+# The first run after a new thread parses a few hundred posts.
+TimeoutStartSec=90min
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true

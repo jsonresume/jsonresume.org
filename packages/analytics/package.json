@@ -1,0 +1,31 @@
+{
+  "name": "@repo/analytics",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Resume views: the script in themed pages, privacy-preserving visitor counts, and the dashboard's numbers",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./sql": "./src/sql.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts"
+  },
+  "dependencies": {
+    "@repo/api": "workspace:*",
+    "@repo/database": "workspace:*",
+    "effect": "4.0.6"
+  },
+  "devDependencies": {
+    "@effect/sql-pglite": "4.0.6",
+    "@repo/eslint-config-custom": "workspace:*",
+    "@types/jsdom": "^21",
+    "@types/node": "^20.19.24",
+    "jsdom": "^27.0.0",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.6"
+  }
+}

@@ -129,6 +129,26 @@ jobs:
           check_http supabase  "Supabase" "https://itxuhvvwryeuzuyihpkp.supabase.co/auth/v1/health" "-" \
             "apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml0eHVodnZ3cnlldXp1eWlocGtwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDc5OTA4NjQsImV4cCI6MjAyMzU2Njg2NH0.oEs0H2aumAHsiLn6i9ic1-iwWDo3bJkFkC7NCeUrIfA"
 
+          # The jobs pipeline runs on the box every two hours (deploy/systemd/
+          # jsonresume-jobs.timer); a day without a successful run means it
+          # is stuck, even though the site itself is up.
+          check_jobs() {
+            echo "::group::Probe Jobs pipeline"
+            body=$(curl -sS --max-time 25 "https://jsonresume.org/api/jobs/status?cb=${CB}-${RANDOM}" 2>/dev/null || true)
+            last=$(echo "$body" | jq -r '.lastSuccessAt // empty' 2>/dev/null || true)
+            if [ -z "$last" ]; then
+              status=down; detail="no successful run recorded (or status unreachable)"
+            else
+              age=$(( ($(date +%s) - $(date -d "$last" +%s)) / 3600 ))
+              if [ "$age" -gt 26 ]; then status=down; else status=up; fi
+              detail="last successful run ${age}h ago ($last), $(echo "$body" | jq -r '.open') jobs open"
+            fi
+            echo "result: $status ($detail)"
+            echo "::endgroup::"
+            printf '%s|%s|%s\n' jobs "$status" "$detail" >> "$RESULTS"
+          }
+          check_jobs
+
           echo "===== Probe summary ====="
           cat "$RESULTS"
           echo "results_file=$RESULTS" >> "$GITHUB_OUTPUT"
@@ -149,6 +169,7 @@ jobs:
               registry: 'Registry (registry.jsonresume.org)',
               homepage: 'Homepage (jsonresume.org)',
               docs: 'Docs (jsonresume.org/docs)',
+              jobs: 'Jobs pipeline (jsonresume.org/api/jobs/status)',
               supabase: 'Supabase (database/auth)',
             };
 

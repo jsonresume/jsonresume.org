@@ -216,8 +216,15 @@ export const legendItem = style({
 export const swatchColor = createVar();
 
 export const legendSwatch = style({
-  width: '0.75rem',
-  height: '0.25rem',
+  width: '0.625rem',
+  height: '0.625rem',
+  borderRadius: '2px',
+  backgroundColor: swatchColor,
+});
+
+export const legendLine = style({
+  width: '0.875rem',
+  height: '2px',
   borderRadius: '1px',
   backgroundColor: swatchColor,
 });
@@ -264,6 +271,21 @@ export const previewViewport = style({
   border: `1px solid ${color.border.default}`,
   borderRadius: radius.sm,
   backgroundColor: color.surface.muted,
+});
+
+export const previewFill = style({ height: '100%', minHeight: '20rem' });
+
+// While a new render is on its way, the last one stays, dimmed.
+export const previewBusy = style({
+  opacity: 0.6,
+  transition: `opacity ${vars.motion.duration.base}`,
+});
+
+export const previewStatus = style({
+  position: 'absolute',
+  insetBlockStart: vars.space[2],
+  insetInlineEnd: vars.space[2],
+  zIndex: 1,
 });
 
 // Centered, scaled down to fit (never up), from the top edge.

@@ -1,3 +1,5 @@
+'use client';
+
 import { assignInlineVars } from '@vanilla-extract/dynamic';
 import { useId, type HTMLAttributes, type ReactNode } from 'react';
 import { cx } from '../../utils/cx';

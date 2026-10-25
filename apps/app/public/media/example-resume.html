@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Alex Example — fictional JSON Resume demo</title>
+    <meta name="robots" content="noindex" />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #f0f2f4;
+        color: #222;
+        font: 17px/1.65 Arial, sans-serif;
+      }
+      main {
+        max-width: 960px;
+        margin: 44px auto;
+        background: #fff;
+        padding: 48px 60px;
+      }
+      .note {
+        font-size: 14px;
+        color: #555;
+        margin: 0 0 30px;
+      }
+      .name {
+        font-size: 42px;
+        line-height: 1.15;
+        margin: 0 0 8px;
+        letter-spacing: -0.02em;
+      }
+      .role {
+        font-size: 21px;
+        margin: 0 0 12px;
+      }
+      .contacts {
+        font-size: 15px;
+        margin: 0 0 26px;
+      }
+      a {
+        color: #9f2424;
+        text-underline-offset: 3px;
+      }
+      h2 {
+        font-size: 19px;
+        margin: 24px 0 12px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #ddd;
+      }
+      h3 {
+        font-size: 17px;
+        margin: 0;
+      }
+      p {
+        margin: 6px 0 16px;
+      }
+      ul {
+        padding-left: 22px;
+        margin: 8px 0;
+      }
+      .date {
+        color: #555;
+        font-size: 14px;
+      }
+      .columns {
+        display: grid;
+        grid-template-columns: 1.7fr 1fr;
+        gap: 40px;
+      }
+      footer {
+        border-top: 1px solid #ddd;
+        margin-top: 26px;
+        padding-top: 16px;
+        font-size: 13px;
+        color: #555;
+      }
+      a:focus-visible {
+        outline: 3px solid #1b579b;
+        outline-offset: 3px;
+      }
+      @media (max-width: 700px) {
+        main {
+          margin: 0;
+          padding: 28px 24px;
+        }
+        .columns {
+          grid-template-columns: 1fr;
+          gap: 0;
+        }
+        .name {
+          font-size: 34px;
+        }
+      }
+      @media print {
+        body {
+          background: #fff;
+        }
+        main {
+          margin: 0;
+          padding: 24px;
+          max-width: none;
+        }
+        .note,
+        footer {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="note">JSON Resume · Fictional profile for demonstrations</p>
+      <header>
+        <h1 class="name">Alex Example</h1>
+        <p class="role">Software Developer</p>
+        <p class="contacts">
+          <a href="mailto:alex@example.com">alex@example.com</a> ·
+          <a href="https://example.com">example.com</a>
+        </p>
+      </header>
+      <p>
+        I build useful, accessible tools for the web. This fictional profile
+        demonstrates how structured career information can become a readable
+        résumé.
+      </p>
+      <div class="columns">
+        <div>
+          <section>
+            <h2>Work experience</h2>
+            <h3>Software Developer · Example Studio</h3>
+            <p class="date">February 2023 – September 2026</p>
+            <ul>
+              <li>
+                Built accessible interfaces for a community events platform.
+              </li>
+              <li>
+                Maintained automated checks and documented reusable components.
+              </li>
+            </ul>
+          </section>
+          <section>
+            <h2>Projects</h2>
+            <h3>Community Events</h3>
+            <p>A fictional open-source project for finding local events.</p>
+            <a href="https://example.com/projects/community-events"
+              >Project website</a
+            >
+          </section>
+        </div>
+        <div>
+          <section>
+            <h2>Education</h2>
+            <h3>Example University</h3>
+            <p>Bachelor of Science<br />Computer Science</p>
+            <p class="date">2019 – 2022</p>
+          </section>
+          <section>
+            <h2>Skills</h2>
+            <p>JavaScript · HTML · CSS · Accessibility</p>
+          </section>
+        </div>
+      </div>
+      <footer>
+        Rendered from
+        <a href="/media/example-resume.json">example-resume.json</a> ·
+        <a href="/media/">JSON Resume media kit</a><br />
+        Demonstration layout. All people, employers and institutions in this
+        résumé are fictional.
+      </footer>
+    </main>
+  </body>
+</html>

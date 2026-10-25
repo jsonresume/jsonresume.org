@@ -78,6 +78,8 @@ export interface TimelineEntry {
   title: ReactNode;
   subtitle?: ReactNode;
   description?: ReactNode;
+  /** Block content under the description, such as a list of highlights. */
+  details?: ReactNode;
   /** Highlights the current role. */
   current?: boolean;
 }
@@ -110,6 +112,9 @@ export function Timeline({
           ) : null}
           {item.description ? (
             <p className={s.timelineText}>{item.description}</p>
+          ) : null}
+          {item.details ? (
+            <div className={s.timelineText}>{item.details}</div>
           ) : null}
         </li>
       ))}

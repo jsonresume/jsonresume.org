@@ -1,4 +1,4 @@
-const DEFAULT_BASE_URL = 'https://registry.jsonresume.org';
+const DEFAULT_BASE_URL = 'https://jsonresume.org';
 
 export function createApiClient({ baseUrl, apiKey }) {
   const base = baseUrl || DEFAULT_BASE_URL;

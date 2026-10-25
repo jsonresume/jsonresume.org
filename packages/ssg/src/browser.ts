@@ -1,0 +1,1 @@
+export { hydrateRouter } from './client';

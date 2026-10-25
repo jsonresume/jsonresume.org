@@ -6,8 +6,14 @@
   "type": "module",
   "main": "./src/index.js",
   "exports": {
-    ".": "./src/index.js",
-    "./metadata": "./src/metadata.js"
+    ".": {
+      "types": "./src/index.d.ts",
+      "default": "./src/index.js"
+    },
+    "./metadata": {
+      "types": "./src/metadata.d.ts",
+      "default": "./src/metadata.js"
+    }
   },
   "files": [
     "src"
@@ -39,5 +45,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "types": "./src/index.d.ts"
 }

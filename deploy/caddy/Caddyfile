@@ -1,0 +1,81 @@
+# Caddy config for the self-hosted jsonresume.org box.
+#
+# Cloudflare proxies every hostname, so TLS here uses the Cloudflare origin
+# certificate (/etc/caddy/certs, 15-year, *.jsonresume.org) and ufw only lets
+# Cloudflare reach 80/443. Install with:
+#   sudo cp deploy/caddy/Caddyfile /etc/caddy/Caddyfile && sudo systemctl reload caddy
+#
+# App ports (see deploy/systemd and /etc/jsonresume/<app>.env): app 3003.
+
+{
+	auto_https off
+	servers {
+		# Cloudflare ranges, so {remote_host} and X-Forwarded-For carry the
+		# visitor's address. Refresh with deploy/scripts/cloudflare-ips.sh.
+		import /etc/caddy/cloudflare-trusted-proxies
+	}
+}
+
+(origin_tls) {
+	tls /etc/caddy/certs/jsonresume.org.pem /etc/caddy/certs/jsonresume.org.key
+}
+
+(app) {
+	import origin_tls
+	encode zstd gzip
+	reverse_proxy 127.0.0.1:{args[0]}
+	log {
+		output stdout
+		format json
+	}
+}
+
+# jsonresume.org: the site (apps/app). The docs are a static export on
+# GitHub Pages (apps/docs, basePath /docs), served under /docs as before.
+jsonresume.org {
+	import origin_tls
+	encode zstd gzip
+	handle /docs {
+		rewrite * /jsonresume.org/
+		reverse_proxy https://jsonresume.github.io {
+			header_up Host jsonresume.github.io
+		}
+	}
+	# handle_path strips /docs before the rewrite (a plain rewrite would run
+	# before uri strip_prefix: Caddy orders directives itself).
+	handle_path /docs/* {
+		rewrite * /jsonresume.org{uri}
+		reverse_proxy https://jsonresume.github.io {
+			header_up Host jsonresume.github.io
+		}
+	}
+	handle {
+		reverse_proxy 127.0.0.1:3003
+	}
+	log {
+		output stdout
+		format json
+	}
+}
+
+# The registry is now part of jsonresume.org: the app answers every
+# registry URL with a redirect (resumes to /@username, the rest to /registry).
+registry.jsonresume.org {
+	import app 3003
+}
+
+# One name for the site.
+www.jsonresume.org, beta.jsonresume.org {
+	import origin_tls
+	redir https://jsonresume.org{uri} 301
+}
+
+# Anything else that reaches the box is not ours to serve.
+:443 {
+	import origin_tls
+	abort
+}
+
+:80 {
+	redir https://{host}{uri} 308
+}

@@ -157,3 +157,21 @@ export const visuallyHiddenFocusable = style({
     },
   },
 });
+
+export const dividerLabelled = style({
+  display: 'flex',
+  alignItems: 'center',
+  gap: vars.space[3],
+  width: '100%',
+});
+
+export const dividerLine = style({
+  flex: 1,
+  height: '1px',
+  backgroundColor: vars.color.border.default,
+});
+
+export const dividerText = style({
+  color: vars.color.text.muted,
+  fontSize: vars.font.size.xs,
+});

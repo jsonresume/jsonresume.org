@@ -46,13 +46,23 @@ export const Textarea = forwardRef<
 });
 
 /** A styled native <select>: keyboard, mobile and screen-reader friendly by default. */
-export const Select = forwardRef<
-  HTMLSelectElement,
-  SelectHTMLAttributes<HTMLSelectElement>
->(function Select({ className, ...props }, ref) {
-  const control = useFieldControl(props);
-  return <select ref={ref} className={cx(s.select, className)} {...control} />;
-});
+export interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
+  /** Size to the options instead of filling the row (toolbars, filters). */
+  inline?: boolean;
+}
+
+export const Select = forwardRef<HTMLSelectElement, SelectProps>(
+  function Select({ className, inline = false, ...props }, ref) {
+    const control = useFieldControl(props);
+    return (
+      <select
+        ref={ref}
+        className={cx(s.select, inline && s.selectInline, className)}
+        {...control}
+      />
+    );
+  }
+);
 
 interface WithLabel {
   /** Visible label rendered beside the control. */

@@ -120,13 +120,14 @@ export const componentDocs: ComponentDoc[] = [
     name: 'Text',
     group: 'Typography',
     summary:
-      'Body copy at 14px with generous line height, plus muted, strong and uppercase overline styles.',
+      'Body copy at 14px with generous line height, plus muted, strong and uppercase overline styles, and success, warning and danger tones for status words beside a field.',
     components: ['Text'],
     defaults: { size: 'sm', tone: 'default', weight: 'regular' },
     examples: [{ id: 'tones', title: 'Sizes and tones', block: true }],
     accessibility: [
       'Muted text still meets 4.5:1 on every surface; see Color.',
       'caps is for short labels only: long uppercase text is hard to read.',
+      'Status tones colour the words that already say the status ("Taken"); never rely on the colour alone.',
     ],
   },
   {
@@ -239,9 +240,60 @@ export const componentDocs: ComponentDoc[] = [
     group: 'Layout',
     summary: 'A 1px rule in the default border color.',
     components: ['Divider'],
-    examples: [{ id: 'orientations', title: 'Orientations', block: true }],
+    examples: [
+      { id: 'orientations', title: 'Orientations', block: true },
+      {
+        id: 'label',
+        title: 'With a label',
+        description:
+          'A word between options, such as "or" between sign-in methods.',
+        block: true,
+      },
+    ],
     accessibility: [
       'Decorative by default (aria-hidden). Set decorative={false} for a semantic separator.',
+      'A label is read as plain text; the rules either side are hidden.',
+    ],
+  },
+  {
+    slug: 'app-shell',
+    name: 'App shell',
+    group: 'Layout',
+    summary:
+      'The signed-in, full-screen layout: a sidebar from lg up, a top bar with the account menu, and the same navigation in a sheet on small screens.',
+    components: ['AppShell', 'AppNav', 'AppPage'],
+    examples: [
+      { id: 'dashboard', title: 'Dashboard', bleed: true, block: true },
+    ],
+    guidelines: {
+      do: [
+        'Use one AppPage per screen: its title is the only h1.',
+        'Put filters in the AppPage toolbar, above everything they scope.',
+        'Pass renderLink to AppNav so links use your router.',
+        'Give AppPage fill for editors and split views: from lg up the content gets the rest of the screen and scrolls inside.',
+      ],
+      dont: ['Use it for marketing pages; they use SiteHeader and SiteFooter.'],
+    },
+    accessibility: [
+      'A skip link jumps to main. The navigation is a named landmark and marks the current page with aria-current.',
+      'The small-screen menu is a dialog titled "Navigation" and closes when a link is followed.',
+    ],
+  },
+  {
+    slug: 'auth-card',
+    name: 'Auth card',
+    group: 'Layout',
+    summary:
+      'A centred card for sign-in, sign-up and other one-task account pages.',
+    components: ['AuthCard', 'GithubIcon'],
+    examples: [{ id: 'sign-in', title: 'Sign in', block: true }],
+    guidelines: {
+      do: ['Offer GitHub first, then email, separated by a labelled Divider.'],
+      dont: ['Put site navigation inside the card.'],
+    },
+    accessibility: [
+      'The title is the page h1 and names the card.',
+      'GithubIcon is decorative; the button text names the action.',
     ],
   },
   {
@@ -306,9 +358,25 @@ export const componentDocs: ComponentDoc[] = [
     name: 'Hero',
     group: 'Site',
     summary:
-      'The centered yellow promo band from the jsonresume.org home page.',
+      'The yellow promo band from the jsonresume.org home page: centered, or split with media beside the copy.',
     components: ['Hero'],
-    examples: [{ id: 'promo', title: 'Promo', bleed: true }],
+    examples: [
+      { id: 'promo', title: 'Promo', bleed: true },
+      {
+        id: 'split',
+        title: 'Split with media',
+        description:
+          'Pass media (a code sample or screenshot) to put it beside the copy from the lg breakpoint. Below it, the media stacks under the copy.',
+        bleed: true,
+      },
+      {
+        id: 'compact',
+        title: 'Compact, start-aligned',
+        description:
+          'size="compact" and align="start" for inner pages: the same band with less height.',
+        bleed: true,
+      },
+    ],
     guidelines: {
       do: [
         'Use it once, on landing pages.',
@@ -327,6 +395,116 @@ export const componentDocs: ComponentDoc[] = [
     components: ['Feature'],
     examples: [{ id: 'row', title: 'Feature row', bleed: true }],
     accessibility: ['Set level to fit the page outline (2 by default).'],
+  },
+  {
+    slug: 'steps',
+    name: 'Steps',
+    group: 'Site',
+    summary:
+      'A numbered "how it works" sequence for landing pages: a short title and a sentence per step.',
+    components: ['Steps', 'Step'],
+    examples: [
+      { id: 'default', title: 'Three steps', block: true },
+      {
+        id: 'vertical',
+        title: 'Vertical',
+        description:
+          'layout="vertical" for half-width columns: numbers beside the copy, code inside steps scrolls.',
+        block: true,
+      },
+    ],
+    guidelines: {
+      do: ['Keep it to three or four steps.', 'Start each title with a verb.'],
+      dont: ['Use it for navigation or progress through a form.'],
+    },
+    accessibility: [
+      'Renders an <ol>, so the numbers are announced by the list itself.',
+      'Set level on each Step to fit the page outline (3 by default).',
+    ],
+  },
+  {
+    slug: 'stats',
+    name: 'Stats',
+    group: 'Site',
+    summary:
+      'A row of headline figures for landing pages. For dashboards, use Stat tile.',
+    components: ['Stats', 'Stat'],
+    examples: [{ id: 'default', title: 'Figures', block: true }],
+    guidelines: {
+      do: ['Use real, current numbers and round them for reading.'],
+      dont: ['Show more than four or five figures in a row.'],
+    },
+    accessibility: [
+      'Renders a <dl>; each label is the term and its figure the description.',
+    ],
+  },
+  {
+    slug: 'section-intro',
+    name: 'Section intro',
+    group: 'Site',
+    summary:
+      'The opening of a page section: overline, light title and a one-line lede.',
+    components: ['SectionIntro'],
+    examples: [{ id: 'default', title: 'Section intro', block: true }],
+    accessibility: [
+      'Set level to fit the page outline (2 by default); pass headingId to label a <section> with it.',
+    ],
+  },
+  {
+    slug: 'link-card',
+    name: 'Link card',
+    group: 'Navigation',
+    summary:
+      'A whole card that links somewhere: title with an arrow, description and optional details.',
+    components: ['LinkCard'],
+    examples: [{ id: 'grid', title: 'Choices in a grid', block: true }],
+    guidelines: {
+      do: ['Use for a small set of destinations a reader chooses between.'],
+      dont: ['Put other links or buttons inside; the whole card is one link.'],
+    },
+    accessibility: [
+      'The card is a single <a>, named by its text. Use asChild to render through a router link.',
+    ],
+  },
+  {
+    slug: 'code-tabs',
+    name: 'Code tabs',
+    group: 'Data display',
+    summary:
+      'The same step written several ways (npm, pnpm, npx), one tab each, each copyable.',
+    components: ['CodeTabs'],
+    examples: [{ id: 'install', title: 'Install command', block: true }],
+    accessibility: [
+      'Radix tabs: arrow keys move between tabs; label names the tab list.',
+    ],
+  },
+  {
+    slug: 'on-this-page',
+    name: 'On this page',
+    group: 'Navigation',
+    summary:
+      'In-page navigation for long pages, sticky from lg up, marking the section in view.',
+    components: ['OnThisPage'],
+    examples: [{ id: 'default', title: 'Sections', block: true }],
+    accessibility: [
+      'A <nav> landmark named "On this page"; the current link has aria-current.',
+    ],
+  },
+  {
+    slug: 'chip-group',
+    name: 'Chip group',
+    group: 'Forms',
+    summary:
+      'Pick one of many short options, or none, as a row of toggle chips.',
+    components: ['ChipGroup'],
+    examples: [{ id: 'filter', title: 'Category filter', block: true }],
+    guidelines: {
+      do: ['Use for filters with up to a dozen or so options.'],
+      dont: ['Use for choices that need more than a word or two; use Select.'],
+    },
+    accessibility: [
+      'Each chip is a toggle button with aria-pressed, in a group named by label.',
+    ],
   },
   {
     slug: 'site-footer',
@@ -391,7 +569,7 @@ export const componentDocs: ComponentDoc[] = [
     name: 'Select',
     group: 'Forms',
     summary:
-      'A styled native select: keyboard, mobile and screen-reader friendly with no extra code.',
+      'A styled native select: keyboard, mobile and screen-reader friendly with no extra code. inline sizes it to its options, for toolbars.',
     components: ['Select'],
     examples: [{ id: 'basic', title: 'Basic', block: true }],
     accessibility: [
@@ -533,6 +711,7 @@ export const componentDocs: ComponentDoc[] = [
     ],
     accessibility: [
       'CardTitle renders a real heading; set level for the outline (3 by default).',
+      'tone="danger" frames irreversible actions; its heading and button must say what happens, not the border alone.',
     ],
   },
   {
@@ -1101,8 +1280,17 @@ export const componentDocs: ComponentDoc[] = [
     name: 'Stat tile',
     group: 'Data display',
     summary: 'A key number with its label and how it changed.',
-    components: ['StatTile'],
-    examples: [{ id: 'dashboard', title: 'Dashboard', block: true }],
+    components: ['StatTile', 'Sparkline'],
+    examples: [
+      { id: 'dashboard', title: 'Dashboard', block: true },
+      {
+        id: 'delta-trend',
+        title: 'Delta and trend',
+        description:
+          'delta is a fraction of the previous period, shown signed and named by its label. trend draws a sparkline: context in gray, the latest point in the accent.',
+        block: true,
+      },
+    ],
     guidelines: {
       do: ['Pair every number with what it means and a comparison.'],
       dont: ['Show more than four or five tiles in a row.'],
@@ -1250,6 +1438,61 @@ export const componentDocs: ComponentDoc[] = [
     ],
   },
   {
+    slug: 'time-series-chart',
+    name: 'Time series chart',
+    group: 'Data display',
+    summary:
+      'Change over time for one or two series: an area under the first, a line for the second, a crosshair and one tooltip for every series.',
+    components: ['TimeSeriesChart'],
+    examples: [
+      { id: 'views', title: 'Two series', block: true },
+      {
+        id: 'single',
+        title: 'One series',
+        description: 'One series needs no legend: the title names it.',
+        block: true,
+      },
+      { id: 'empty', title: 'No data', block: true },
+    ],
+    guidelines: {
+      do: [
+        'Write the summary as the conclusion the chart supports.',
+        'Put the date range in the one filter row above the charts, and pass loading while it refetches so the old data stays.',
+      ],
+      dont: [
+        'Plot two measures of different scale together: make two charts.',
+        'Add a third series; fold it into another chart instead.',
+      ],
+    },
+    accessibility: [
+      'A focusable group named by the summary; arrow keys, Home and End step through the days and the readout is announced.',
+      'The tooltip repeats what "Show data" lists, so no value is only on hover.',
+      'Series colours are validated for colour vision deficiency, light and dark; two series also get a legend.',
+    ],
+  },
+  {
+    slug: 'bar-list',
+    name: 'Bar list',
+    group: 'Data display',
+    summary:
+      'Ranked categories as labelled thin bars: top sources, countries, devices.',
+    components: ['BarList'],
+    examples: [
+      { id: 'breakdowns', title: 'Breakdowns', block: true },
+      { id: 'empty', title: 'Empty', block: true },
+    ],
+    guidelines: {
+      do: [
+        'Keep the list short (limit, default 6); the rest folds into "Other".',
+      ],
+      dont: ['Use it for change over time; that is a time series chart.'],
+    },
+    accessibility: [
+      'A list; each row speaks its label, value and share of the total.',
+      'The share shows on hover and focus, and is always in the spoken text.',
+    ],
+  },
+  {
     slug: 'calendar-heatmap',
     name: 'Calendar heatmap',
     group: 'Data display',
@@ -1264,11 +1507,13 @@ export const componentDocs: ComponentDoc[] = [
     slug: 'preview-frame',
     name: 'Preview frame',
     group: 'Data display',
-    summary: 'A sandboxed live preview of a rendered resume, scaled to fit.',
+    summary:
+      'A sandboxed live preview of a rendered resume, scaled to fit. height="fill" takes its container\'s height (an editor pane); busy keeps the last render, dimmed, while a new one arrives.',
     components: ['PreviewFrame'],
     examples: [{ id: 'resume', title: 'Rendered resume', block: true }],
     accessibility: [
       'The iframe has a title; scripts are off unless allowScripts is set.',
+      'While busy, the frame is aria-busy and a spinner says "Updating preview".',
     ],
   },
   {

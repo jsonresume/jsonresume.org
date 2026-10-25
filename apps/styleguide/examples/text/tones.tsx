@@ -13,6 +13,12 @@ export default function TextTones() {
       <Text tone="muted" size="xs">
         Last updated 23 Oct 2026
       </Text>
+      <Text as="span" size="xs" tone="success">
+        @ada is free.
+      </Text>
+      <Text as="span" size="xs" tone="danger">
+        Taken. Try another.
+      </Text>
     </Stack>
   );
 }
