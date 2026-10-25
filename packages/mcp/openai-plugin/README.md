@@ -10,7 +10,7 @@ dynamic client registration) and `assets/` (icons from the site's logo).
 1. **Verify the organization** in the OpenAI Platform (Settings → General):
    individual or business verification, as the publisher "JSON Resume". You
    need to be an owner, or have Apps Management Write.
-2. **Record the demo**: in ChatGPT with Developer mode on, add a connector
+2. **Record the demo** (done: https://jsonresume.org/media/chatgpt-demo.mp4, made from live tool calls; to redo it): in ChatGPT with Developer mode on, add a connector
    for `https://jsonresume.org/mcp` (OAuth), sign in as the review account,
    and run the five positive test cases in `plugin.json`. Upload the video
    somewhere viewable without signing in, and put its URL in
