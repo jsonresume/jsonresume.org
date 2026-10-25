@@ -24,6 +24,26 @@ describe('registryRedirect', () => {
     );
   });
 
+  it('sends pages under a username to their new homes', () => {
+    expect(from('/thomasdavis/dashboard')).toBe(
+      'https://jsonresume.org/dashboard'
+    );
+    expect(from('/ThomasDavis/timeline')).toBe(
+      'https://jsonresume.org/@thomasdavis/timeline'
+    );
+    expect(from('/thomasdavis/ats')).toBe(
+      'https://jsonresume.org/dashboard/editor?panel=check'
+    );
+    expect(from('/thomasdavis/letter')).toBe(
+      'https://jsonresume.org/dashboard/pathways'
+    );
+    expect(from('/thomasdavis/json')).toBe(
+      'https://jsonresume.org/@thomasdavis.json'
+    );
+    expect(from('/thomasdavis/nope')).toBe('https://jsonresume.org/registry');
+    expect(from('/explore')).toBe('https://jsonresume.org/explore');
+  });
+
   it('sends pages with a counterpart to it', () => {
     expect(from('/login')).toBe('https://jsonresume.org/signin');
     expect(from('/editor')).toBe('https://jsonresume.org/dashboard/editor');
@@ -41,13 +61,13 @@ describe('registryRedirect', () => {
   it('sends everything else to the page about the move', () => {
     for (const path of [
       '/',
-      '/thomasdavis/jobs',
+      '/thomasdavis/jobs/graph',
       '/api/jobs/123',
       '/api/jobs',
       '/api/letter',
       '/not_a_user',
       '/%E0%A4%A',
-      '/explore',
+      '/similarity',
     ]) {
       expect(from(path)).toBe('https://jsonresume.org/registry');
     }

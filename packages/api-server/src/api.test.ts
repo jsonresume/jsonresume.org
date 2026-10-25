@@ -169,6 +169,46 @@ describe('the API, over HTTP', () => {
     ).toContain('Nothing to preview');
   });
 
+  it('lists verified resumes in Explore, unless their owner opts out', async () => {
+    server = testServer();
+    await server.post('/api/auth/signup', ada);
+    const token = /token=([\w-]+)/.exec(server.mail[0]?.text ?? '')?.[1];
+    await server.fetch(`/api/auth/verify?token=${token}`);
+    await server.fetch('/api/account/resume', {
+      method: 'PUT',
+      body: JSON.stringify({
+        resume: {
+          basics: { name: 'Ada Lovelace', label: 'Analyst' },
+          skills: [{ name: 'Maths', keywords: ['Analysis'] }],
+        },
+      }),
+    });
+    const found = async (q: string) =>
+      (await (await server.fetch(`/api/explore?q=${q}`)).json()).people.map(
+        (p: { username: string }) => p.username
+      );
+    // The index was built before the resume was saved; opting in rebuilds it.
+    expect(await (await server.fetch('/api/me/explore')).json()).toEqual({
+      listed: true,
+    });
+    await server.fetch('/api/me/explore', {
+      method: 'PUT',
+      body: JSON.stringify({ listed: true }),
+    });
+    expect(await found('analysis')).toEqual(['ada']);
+    const off = await server.fetch('/api/me/explore', {
+      method: 'PUT',
+      body: JSON.stringify({ listed: false }),
+    });
+    expect(await off.json()).toEqual({ listed: false });
+    expect(await found('analysis')).toEqual([]);
+    const page = await (await server.fetch('/api/explore?page=x')).json();
+    expect(page).toMatchObject({ page: 1, query: '' });
+    await server.post('/api/auth/signout', {});
+    expect((await server.fetch('/api/me/explore')).status).toBe(401);
+    expect((await server.fetch('/api/explore')).status).toBe(200);
+  });
+
   it('serves the job board to anyone, and matches only for a signed-in resume', async () => {
     server = testServer();
     expect(await (await server.fetch('/api/jobs')).json()).toEqual({

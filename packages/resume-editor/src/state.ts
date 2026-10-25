@@ -33,6 +33,9 @@ export const jsonTextAtom = Atom.make('');
 /** ?mode=json shows the code view; the form is the default. */
 export const modeParamAtom = Atom.make<string | null>(null);
 
+/** ?panel=check shows the ATS check beside the editor; the preview is the default. */
+export const panelParamAtom = Atom.make<string | null>(null);
+
 /** The theme the page uses: meta.theme, or the default. */
 export const themeOf = (resume: Json): string => {
   const meta = Predicate.isObject(resume) ? resume['meta'] : undefined;

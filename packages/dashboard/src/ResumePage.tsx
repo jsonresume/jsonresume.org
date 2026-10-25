@@ -3,33 +3,32 @@ import {
   AppPage,
   Badge,
   Button,
-  Callout,
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-  FileDropzone,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
   Grid,
   Link,
   Stack,
   Text,
 } from '@jsonresume/ui';
 import type { Account } from '@repo/api';
-import {
-  accountAtom,
-  errorTag,
-  keys,
-  saveResumeAtom,
-  setSourceAtom,
-} from '@repo/api-client';
-import { account as copy } from '@repo/content/pages';
+import { accountAtom, keys, setSourceAtom } from '@repo/api-client';
 import { AsyncResult } from 'effect/reactivity';
-import { useState } from 'react';
+import { AtsCard } from './AtsCard';
+import { StoredCard } from './StoredCard';
 
 const formats = [
+  { label: 'PDF', ext: 'pdf' },
   { label: 'JSON', ext: 'json' },
   { label: 'YAML', ext: 'yaml' },
-  { label: 'Text', ext: 'txt' },
+  { label: 'Plain text', ext: 'txt' },
+  { label: 'RenderCV (YAML)', ext: 'rendercv' },
+  { label: 'QR code to your page', ext: 'qr' },
 ];
 
 const InUse = ({ when }: { when: boolean }) =>
@@ -86,72 +85,6 @@ function GistCard({ account, use }: { account: Account; use: () => void }) {
   );
 }
 
-function StoredCard({ account, use }: { account: Account; use: () => void }) {
-  const save = useAtomSet(saveResumeAtom, { mode: 'promiseExit' });
-  const [message, setMessage] = useState<{
-    tone: 'success' | 'danger';
-    text: string;
-  }>();
-
-  const upload = async ([file]: File[]) => {
-    if (!file) return;
-    let resume: unknown;
-    try {
-      resume = JSON.parse(await file.text());
-    } catch {
-      return setMessage({
-        tone: 'danger',
-        text: `${file.name} isn’t valid JSON.`,
-      });
-    }
-    const tag = errorTag(
-      await save({ payload: { resume }, reactivityKeys: keys.account })
-    );
-    setMessage(
-      tag === undefined
-        ? {
-            tone: 'success',
-            text: `Saved ${file.name}. Your page now shows it.`,
-          }
-        : {
-            tone: 'danger',
-            text: copy.errors[tag] ?? copy.errors['default'] ?? '',
-          }
-    );
-  };
-
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle level={2}>
-          Saved here{' '}
-          <InUse
-            when={account.source === 'stored' && account.hasStoredResume}
-          />
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Stack gap={4} align="stretch">
-          {message ? (
-            <Callout tone={message.tone}>{message.text}</Callout>
-          ) : null}
-          <FileDropzone
-            accept=".json,application/json"
-            onFiles={(files) => void upload(files)}
-            title="Upload resume.json"
-            hint="Your page shows it straight away. Upload again to update."
-          />
-          {account.hasStoredResume && account.source !== 'stored' ? (
-            <Button variant="secondary" onClick={use}>
-              Use the saved copy
-            </Button>
-          ) : null}
-        </Stack>
-      </CardContent>
-    </Card>
-  );
-}
-
 /** Where /@username reads the resume, and whether it is live. */
 export function ResumePage() {
   const result = useAtomValue(accountAtom);
@@ -178,11 +111,23 @@ export function ResumePage() {
       }
       actions={
         <>
-          {formats.map((f) => (
-            <Button key={f.ext} asChild size="sm" variant="ghost">
-              <a href={`${account.path}.${f.ext}`}>{f.label}</a>
-            </Button>
-          ))}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button size="sm" variant="ghost">
+                Download
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              {formats.map((f) => (
+                <DropdownMenuItem key={f.ext} asChild>
+                  <a href={`${account.path}.${f.ext}`}>{f.label}</a>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <Button asChild size="sm" variant="ghost">
+            <a href={`${account.path}/timeline`}>Timeline</a>
+          </Button>
           <Button asChild size="sm" variant="primary">
             <a href="/dashboard/editor">Open the editor</a>
           </Button>
@@ -193,6 +138,7 @@ export function ResumePage() {
         <GistCard account={account} use={use('gist')} />
         <StoredCard account={account} use={use('stored')} />
       </Grid>
+      <AtsCard />
     </AppPage>
   );
 }

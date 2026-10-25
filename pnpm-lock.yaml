@@ -198,6 +198,9 @@ importers:
       '@repo/domain':
         specifier: workspace:*
         version: link:../../packages/domain
+      '@repo/explore':
+        specifier: workspace:^
+        version: link:../../packages/explore
       '@repo/job-board':
         specifier: workspace:^
         version: link:../../packages/job-board
@@ -219,6 +222,9 @@ importers:
       '@repo/resume-host':
         specifier: workspace:^
         version: link:../../packages/resume-host
+      '@repo/resume-pdf':
+        specifier: workspace:^
+        version: link:../../packages/resume-pdf
       '@repo/resume-themes':
         specifier: workspace:^
         version: link:../../packages/resume-themes
@@ -234,6 +240,9 @@ importers:
       '@repo/theme-gallery':
         specifier: workspace:*
         version: link:../../packages/theme-gallery
+      '@repo/timeline':
+        specifier: workspace:^
+        version: link:../../packages/timeline
       '@tanstack/react-router':
         specifier: 1.170.46
         version: 1.170.46(react-dom@19.2.7)(react@19.2.7)
@@ -243,6 +252,12 @@ importers:
       hono:
         specifier: ^4.13.13
         version: 4.13.13
+      playwright-core:
+        specifier: 1.56.1
+        version: 1.56.1
+      qrcode:
+        specifier: ^1.5.4
+        version: 1.5.4
       react:
         specifier: 19.2.7
         version: 19.2.7
@@ -1032,6 +1047,9 @@ importers:
       '@repo/api':
         specifier: workspace:*
         version: link:../api
+      '@repo/explore':
+        specifier: workspace:*
+        version: link:../explore
       '@repo/jobs':
         specifier: workspace:^
         version: link:../jobs
@@ -1060,6 +1078,67 @@ importers:
       '@types/node':
         specifier: ^20.19.24
         version: 20.19.24
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vite:
+        specifier: ^6.4.3
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+
+  packages/ats:
+    dependencies:
+      '@jsonresume/ui':
+        specifier: workspace:*
+        version: link:../ui
+      '@repo/resume-formats':
+        specifier: workspace:*
+        version: link:../resume-formats
+      effect:
+        specifier: 4.0.6
+        version: 4.0.6
+    devDependencies:
+      '@jsonresume/sample-data':
+        specifier: workspace:*
+        version: link:../sample-data
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      '@testing-library/jest-dom':
+        specifier: ^6.9.1
+        version: 6.9.1
+      '@testing-library/react':
+        specifier: ^16.3.0
+        version: 16.3.0(@testing-library/dom@10.4.1)(@types/react-dom@19.2.2)(@types/react@19.2.18)(react-dom@19.2.7)(react@19.2.7)
+      '@types/react':
+        specifier: ^19.2.2
+        version: 19.2.18
+      '@types/react-dom':
+        specifier: ^19.2.2
+        version: 19.2.2(@types/react@19.2.18)
+      '@vanilla-extract/css':
+        specifier: ^1.21.3
+        version: 1.21.3
+      '@vanilla-extract/vite-plugin':
+        specifier: ^5.2.6
+        version: 5.2.6(@types/node@20.19.24)(vite@6.4.3)
+      axe-core:
+        specifier: ^4.14.0
+        version: 4.14.0
+      jsdom:
+        specifier: ^27.0.0
+        version: 27.0.1(postcss@8.5.23)
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
       tsconfig:
         specifier: workspace:*
         version: link:../tsconfig
@@ -1322,6 +1401,9 @@ importers:
       '@repo/api-client':
         specifier: workspace:*
         version: link:../api-client
+      '@repo/ats':
+        specifier: workspace:*
+        version: link:../ats
       '@repo/auth-pages':
         specifier: workspace:*
         version: link:../auth-pages
@@ -1472,6 +1554,76 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
 
+  packages/explore:
+    dependencies:
+      '@jsonresume/ui':
+        specifier: workspace:*
+        version: link:../ui
+      '@repo/api':
+        specifier: workspace:*
+        version: link:../api
+      '@repo/profiles':
+        specifier: workspace:*
+        version: link:../profiles
+      '@repo/resume-formats':
+        specifier: workspace:*
+        version: link:../resume-formats
+      effect:
+        specifier: 4.0.6
+        version: 4.0.6
+    devDependencies:
+      '@effect/sql-pglite':
+        specifier: 4.0.6
+        version: 4.0.6(effect@4.0.6)
+      '@repo/database':
+        specifier: workspace:*
+        version: link:../database
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      '@testing-library/jest-dom':
+        specifier: ^6.9.1
+        version: 6.9.1
+      '@testing-library/react':
+        specifier: ^16.3.0
+        version: 16.3.0(@testing-library/dom@10.4.1)(@types/react-dom@19.2.2)(@types/react@19.2.18)(react-dom@19.2.7)(react@19.2.7)
+      '@types/react':
+        specifier: ^19.2.2
+        version: 19.2.18
+      '@types/react-dom':
+        specifier: ^19.2.2
+        version: 19.2.2(@types/react@19.2.18)
+      '@vanilla-extract/css':
+        specifier: ^1.21.3
+        version: 1.21.3
+      '@vanilla-extract/vite-plugin':
+        specifier: ^5.2.6
+        version: 5.2.6(@types/node@20.19.24)(vite@6.4.3)
+      axe-core:
+        specifier: ^4.14.0
+        version: 4.14.0
+      jsdom:
+        specifier: ^27.0.0
+        version: 27.0.1(postcss@8.5.23)
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vite:
+        specifier: ^6.4.3
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+
   packages/job-board:
     dependencies:
       '@effect/atom-react':
@@ -1609,6 +1761,12 @@ importers:
       '@repo/api':
         specifier: workspace:*
         version: link:../api
+      '@repo/ats':
+        specifier: workspace:*
+        version: link:../ats
+      '@repo/explore':
+        specifier: workspace:*
+        version: link:../explore
       '@repo/job-board':
         specifier: workspace:*
         version: link:../job-board
@@ -1618,6 +1776,9 @@ importers:
       '@repo/resume-editor':
         specifier: workspace:*
         version: link:../resume-editor
+      '@repo/resume-formats':
+        specifier: workspace:*
+        version: link:../resume-formats
       '@repo/schema-explorer':
         specifier: workspace:*
         version: link:../schema-explorer
@@ -1683,6 +1844,9 @@ importers:
       '@repo/eslint-config-custom':
         specifier: workspace:*
         version: link:../eslint-config-custom
+      '@repo/explore':
+        specifier: workspace:*
+        version: link:../explore
       '@repo/jobs':
         specifier: workspace:*
         version: link:../jobs
@@ -1857,6 +2021,9 @@ importers:
       '@repo/api-client':
         specifier: workspace:*
         version: link:../api-client
+      '@repo/ats':
+        specifier: workspace:*
+        version: link:../ats
       '@repo/content':
         specifier: workspace:*
         version: link:../content
@@ -1915,6 +2082,9 @@ importers:
       effect:
         specifier: 4.0.6
         version: 4.0.6
+      qrcode:
+        specifier: ^1.5.4
+        version: 1.5.4
       yaml:
         specifier: ^2.8.3
         version: 2.9.0
@@ -1925,6 +2095,9 @@ importers:
       '@repo/eslint-config-custom':
         specifier: workspace:*
         version: link:../eslint-config-custom
+      '@types/qrcode':
+        specifier: ^1.5.6
+        version: 1.5.6
       tsconfig:
         specifier: workspace:*
         version: link:../tsconfig
@@ -1949,12 +2122,40 @@ importers:
       '@repo/resume-formats':
         specifier: workspace:*
         version: link:../resume-formats
+      '@repo/resume-pdf':
+        specifier: workspace:*
+        version: link:../resume-pdf
       '@repo/resume-themes':
         specifier: workspace:*
         version: link:../resume-themes
       effect:
         specifier: 4.0.6
         version: 4.0.6
+    devDependencies:
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      '@types/node':
+        specifier: ^20.19.24
+        version: 20.19.24
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+
+  packages/resume-pdf:
+    dependencies:
+      effect:
+        specifier: 4.0.6
+        version: 4.0.6
+      playwright-core:
+        specifier: 1.56.1
+        version: 1.56.1
     devDependencies:
       '@repo/eslint-config-custom':
         specifier: workspace:*
@@ -3918,6 +4119,67 @@ importers:
       webpack:
         specifier: ^5.104.1
         version: 5.107.2(esbuild@0.25.12)(postcss@8.5.23)
+
+  packages/timeline:
+    dependencies:
+      '@jsonresume/ui':
+        specifier: workspace:*
+        version: link:../ui
+      '@repo/resume-formats':
+        specifier: workspace:*
+        version: link:../resume-formats
+      effect:
+        specifier: 4.0.6
+        version: 4.0.6
+    devDependencies:
+      '@jsonresume/sample-data':
+        specifier: workspace:*
+        version: link:../sample-data
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      '@testing-library/jest-dom':
+        specifier: ^6.9.1
+        version: 6.9.1
+      '@testing-library/react':
+        specifier: ^16.3.0
+        version: 16.3.0(@testing-library/dom@10.4.1)(@types/react-dom@19.2.2)(@types/react@19.2.18)(react-dom@19.2.7)(react@19.2.7)
+      '@types/react':
+        specifier: ^19.2.2
+        version: 19.2.18
+      '@types/react-dom':
+        specifier: ^19.2.2
+        version: 19.2.2(@types/react@19.2.18)
+      '@vanilla-extract/css':
+        specifier: ^1.21.3
+        version: 1.21.3
+      '@vanilla-extract/vite-plugin':
+        specifier: ^5.2.6
+        version: 5.2.6(@types/node@20.19.24)(vite@6.4.3)
+      axe-core:
+        specifier: ^4.14.0
+        version: 4.14.0
+      jsdom:
+        specifier: ^27.0.0
+        version: 27.0.1(postcss@8.5.23)
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vite:
+        specifier: ^6.4.3
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
 
   packages/tsconfig: {}
 
@@ -13646,6 +13908,12 @@ packages:
     resolution: {integrity: sha512-F6bEyamV9jKGAFBEmlQnesRPGOQqS2+Uwi0Em15xenOxHaf2hv6L8YCVn3rPdPJOiJfPiCnLIRyvwVaqMY3MIw==}
     dev: false
 
+  /@types/qrcode@1.5.6:
+    resolution: {integrity: sha512-te7NQcV2BOvdj2b1hCAHzAoMNuj65kNBMz0KBaxM6c3VGBOhU0dURQKOtH8CFNI/dsKkwlv32p26qYQTWoB5bw==}
+    dependencies:
+      '@types/node': 20.19.24
+    dev: true
+
   /@types/qs@6.14.0:
     resolution: {integrity: sha512-eOunJqu0K1923aExK6y8p6fsihYEn/BYuQ4g0CxAAgFc4b/ZLN4CrsRZ55srTdqoiLzU2B2evC+apEIxprEzkQ==}
     dev: true
@@ -17580,6 +17848,10 @@ packages:
   /diff@5.2.2:
     resolution: {integrity: sha512-vtcDfH3TOjP8UekytvnHH1o1P4FcUdt4eQ1Y+Abap1tk/OB2MWQvcwS2ClCd1zuIhc3JKOx6p3kod8Vfys3E+A==}
     engines: {node: '>=0.3.1'}
+    dev: false
+
+  /dijkstrajs@1.0.3:
+    resolution: {integrity: sha512-qiSlmBq9+BCdCA/L46dw8Uy93mloxsPSbwnm5yrKn2vMPiy8KyAskTF6zuV/j5BMsmOGZDPs7KjU+mjb670kfA==}
     dev: false
 
   /dir-glob@3.0.1:
@@ -24928,6 +25200,11 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
+  /pngjs@5.0.0:
+    resolution: {integrity: sha512-40QW5YalBNfQo5yRYmiw7Yz6TKKVr3h6970B2YE+3fQpsWcrbj1PzJgxeJ19DRQjhMbKPIuMY8rFaXc8moolVw==}
+    engines: {node: '>=10.13.0'}
+    dev: false
+
   /points-on-curve@0.2.0:
     resolution: {integrity: sha512-0mYKnYYe9ZcqMCWhUjItv/oHjvgEsfKvnUTg8sAtnHr3GVy7rGkXCb6d5cSyqrWqL4k81b9CPg3urd+T7aop3A==}
     dev: false
@@ -25473,6 +25750,16 @@ packages:
 
   /qr-image@3.2.0:
     resolution: {integrity: sha512-rXKDS5Sx3YipVsqmlMJsJsk6jXylEpiHRC2+nJy66fxA5ExYyGa4PqwteW69SaVmAb2OQ18HbYriT7cGQMbduw==}
+    dev: false
+
+  /qrcode@1.5.4:
+    resolution: {integrity: sha512-1ca71Zgiu6ORjHqFBDpnSMTR2ReToX4l1Au1VFLyVeBTFavzQnv5JxMFr3ukHVKpSrSA2MCk0lNJSykjUfz7Zg==}
+    engines: {node: '>=10.13.0'}
+    hasBin: true
+    dependencies:
+      dijkstrajs: 1.0.3
+      pngjs: 5.0.0
+      yargs: 15.4.1
     dev: false
 
   /qs@6.16.0:

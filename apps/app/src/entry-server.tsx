@@ -22,7 +22,7 @@ export const createAppRenderer = (manifest: Manifest) =>
 export const render = createAppRenderer(devRouterManifest(clientEntry));
 
 /** Rendered per request by the server, never prerendered. */
-export const livePaths = ['/jobs'];
+export const livePaths = ['/jobs', '/explore'];
 
 /** Every page to prerender: each static route, plus each blog post. */
 export const paths = [

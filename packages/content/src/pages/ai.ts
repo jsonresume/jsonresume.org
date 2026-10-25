@@ -1,7 +1,6 @@
 /**
- * The AI tools the registry had, while they move to jsonresume.org.
- * Checked 24 October 2026: recommended jobs is here (href); the rest are
- * not ported yet (see /registry).
+ * The AI tools the registry had, and where they are on jsonresume.org.
+ * Checked 25 October 2026: all are here, in Pathways and the editor.
  */
 
 const repo = 'https://github.com/jsonresume/jsonresume.org';
@@ -29,23 +28,28 @@ export const aiTools: AiTool[] = [
   },
   {
     name: 'Cover letter',
-    description: 'Drafted a cover letter that fits your resume.',
+    description:
+      'A cover letter for any job, from your resume and the post: ask Pathways, or use “Write a cover letter” on a job’s page.',
+    href: '/dashboard/pathways?ask=Write%20a%20cover%20letter%20for%20the%20job%20I%20marked%20interested%20most%20recently.',
   },
   {
     name: 'Resume suggestions',
-    description: 'Gave specific feedback on what to improve in your resume.',
+    description:
+      'Specific feedback on what to improve: the ATS check in the editor, and Pathways for the rest.',
+    href: '/dashboard/editor?panel=check',
   },
   {
-    name: 'Interview yourself',
+    name: 'Interview practice',
     description:
-      'Put your resume.json in the prompt so you could practise answering as yourself.',
+      'A mock interview for a job or your next role, one question at a time, with feedback, in Pathways.',
+    href: '/dashboard/pathways?ask=Give%20me%20a%20mock%20interview%20for%20my%20next%20role%2C%20one%20question%20at%20a%20time.',
   },
 ];
 
 export const aiNotes = {
-  lede: 'The registry’s AI tools sent your resume to a model with a fixed prompt: matching jobs, a cover letter, feedback, and an interviewer who knows your history. They are moving to jsonresume.org with the rest of the registry.',
+  lede: 'The registry’s AI tools sent your resume to a model with a fixed prompt: matching jobs, a cover letter, feedback, and an interviewer who knows your history. On jsonresume.org they are one copilot, Pathways, that reads your resume and the job and can change both.',
   moving:
-    'Jobs for you is here already. Tell us which of the others you use and we’ll bring those over first: each of their cards opens a GitHub issue for it.',
+    'Each card opens it. Missing something the registry did? Tell us on GitHub.',
   openSource: 'They are open source, and so is everything replacing them.',
   source: `${repo}/tree/master/apps/registry`,
   issues: `${repo}/issues`,

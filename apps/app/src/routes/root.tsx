@@ -1,7 +1,8 @@
 import { base } from '@jsonresume/ui';
-import type { Job, JobBoard } from '@repo/api';
+import type { ExploreResults, Job, JobBoard } from '@repo/api';
 import type { ResumeProblem } from '@repo/domain';
 import { NotFoundPage, SiteLayout } from '@repo/site';
+import type { Timeline } from '@repo/timeline';
 import {
   createRootRouteWithContext,
   createRoute,
@@ -32,6 +33,10 @@ export interface RouterContext {
   jobBoard?: JobBoard;
   /** /jobs/:id, or null when there is no such job. */
   job?: Job | null;
+  /** /explore, searched for this request (see ./explore.tsx). */
+  explore?: ExploreResults;
+  /** /@username/timeline, with the server's today (see ./timeline.tsx). */
+  timeline?: { username: string; today: string; timeline: Timeline };
 }
 
 export const rootRoute = createRootRouteWithContext<RouterContext>()({

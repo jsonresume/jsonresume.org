@@ -1,7 +1,7 @@
 // @vitest-environment node
 // Renders through TanStack Router SSR, which needs a server environment.
 import { describe, expect, it } from 'vitest';
-import { createAppRenderer, paths } from './entry-server';
+import { createAppRenderer, livePaths, paths } from './entry-server';
 
 const render = createAppRenderer({ routes: {} });
 const page = async (path: string) => {
@@ -66,12 +66,14 @@ describe('every page', () => {
         const target = href.replace(/\/$/, '') || '/';
         if (target.startsWith('/assets/') || target === '/favicon.svg')
           continue;
-        // Resumes (/@name), jobs and the API are served live, not prerendered.
+        // Resumes (/@name, its formats and timeline), jobs, Explore and the
+        // API are served live, not prerendered.
         const ok =
           paths.includes(target) ||
+          livePaths.includes(target) ||
           target.startsWith('/api/') ||
           /^\/jobs(\/\d+)?$/.test(target) ||
-          /^\/@[a-z0-9-]+$/.test(target) ||
+          /^\/@[a-z0-9-]+(\.[a-z]+|\/timeline)?$/.test(target) ||
           existsSync(publicDir + target);
         if (!ok) broken.push(`${path} -> ${href}`);
       }

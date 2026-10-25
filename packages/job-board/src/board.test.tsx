@@ -142,7 +142,19 @@ describe('JobPage', () => {
       author: 'acme',
       closed: true,
     };
-    const { container } = render(<JobPage job={full} boardHref="/jobs" />);
+    const { container } = render(
+      <JobPage
+        job={full}
+        boardHref="/jobs"
+        ask={(q) => `/ask?q=${encodeURIComponent(q)}`}
+      />
+    );
+    expect(
+      screen.getByRole('link', { name: 'Write a cover letter' })
+    ).toHaveAttribute(
+      'href',
+      expect.stringContaining(encodeURIComponent(`(job ${full.id})`))
+    );
     expect(screen.getByRole('link', { name: 'Apply' })).toHaveAttribute(
       'href',
       'mailto:jobs@acme.com'

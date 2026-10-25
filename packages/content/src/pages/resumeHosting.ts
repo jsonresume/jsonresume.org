@@ -26,6 +26,7 @@ export const problems: Record<
   | 'github-down'
   | 'theme-missing'
   | 'theme-failed'
+  | 'pdf-failed'
   | 'unknown-format',
   Copy
 > = {
@@ -61,17 +62,24 @@ export const problems: Record<
     title: `The ${theme} theme couldn’t show this resume`,
     body: 'The theme stopped on something in this resume. Try another theme; if this one should work, please report it.',
   }),
+  'pdf-failed': ({ username, theme = '' }) => ({
+    title: 'The PDF couldn’t be made just now',
+    body: `Printing ${username}’s resume in the ${theme} theme didn’t finish. Try again in a moment, or open the page and use your browser’s **Print → Save as PDF**.`,
+  }),
   'unknown-format': ({ extension = '' }) => ({
     title: `We don’t serve .${extension} files`,
-    body: 'A resume is available as a web page, or as JSON, YAML or plain text.',
+    body: 'A resume is available as a web page or a PDF, as JSON, YAML, plain text or RenderCV, and as a QR code that links to the page.',
   }),
 };
 
 /** The other formats, linked from the page. */
 export const formats = [
+  { label: 'PDF', extension: 'pdf' },
   { label: 'JSON', extension: 'json' },
   { label: 'YAML', extension: 'yaml' },
   { label: 'Plain text', extension: 'txt' },
+  { label: 'RenderCV', extension: 'rendercv' },
+  { label: 'QR code', extension: 'qr' },
 ] as const;
 
 export const reportIssue =

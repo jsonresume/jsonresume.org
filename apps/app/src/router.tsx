@@ -33,8 +33,10 @@ import {
   signUpRoute,
 } from './routes/auth';
 import { privacyRoute, termsRoute } from './routes/docs';
+import { exploreRoute } from './routes/explore';
 import { jobRoute, jobsRoute } from './routes/jobs';
 import { resumeRoute } from './routes/resume';
+import { timelineRoute } from './routes/timeline';
 import { rootRoute, siteRoute, type RouterContext } from './routes/root';
 
 export const routeTree = rootRoute.addChildren([
@@ -54,11 +56,13 @@ export const routeTree = rootRoute.addChildren([
     registryRoute,
     jobsRoute,
     jobRoute,
+    exploreRoute,
     privacyRoute,
     termsRoute,
     blogRoute,
     postRoute,
     resumeRoute,
+    timelineRoute,
     signInRoute,
     signUpRoute,
     chooseUsernameRoute,

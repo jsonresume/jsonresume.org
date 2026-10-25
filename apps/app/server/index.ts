@@ -21,8 +21,10 @@ import {
   openPaths,
   sessionless,
 } from './agents';
+import { createExplorePage, explorePath } from './explorePage';
 import { createJobPages, jobPath, jobsPath } from './jobPages';
 import { createResumeHandler, resumePath } from './resumes';
+import { createTimelinePage, timelinePath } from './timelinePage';
 import { appServices } from './services';
 
 type ServerEntry = typeof import('../src/entry-server');
@@ -104,6 +106,26 @@ const main = Effect.gen(function* () {
     ),
     (handler) => Effect.promise(() => handler.dispose())
   );
+  const explore = yield* Effect.acquireRelease(
+    Effect.sync(() =>
+      createExplorePage(
+        (request, context) => render(request, context),
+        services,
+        { memoMap }
+      )
+    ),
+    (handler) => Effect.promise(() => handler.dispose())
+  );
+  const timeline = yield* Effect.acquireRelease(
+    Effect.sync(() =>
+      createTimelinePage(
+        (request, context) => render(request, context),
+        services,
+        { memoMap }
+      )
+    ),
+    (handler) => Effect.promise(() => handler.dispose())
+  );
   const app = createSiteApp({
     clientDir,
     mount: [
@@ -112,8 +134,10 @@ const main = Effect.gen(function* () {
     ],
     dynamic: [
       { path: resumePath, fetch: resumes.fetch },
+      { path: timelinePath, fetch: timeline.fetch },
       { path: jobsPath, fetch: jobs.board },
       { path: jobPath, fetch: jobs.job },
+      { path: explorePath, fetch: explore.fetch },
       // Where the jobs CLI and its docs send people for a key.
       { path: '/api-keys', fetch: async () => apiKeysRedirect() },
       ...discoveryRoutes(site, Option.getOrUndefined(openAiChallenge)),

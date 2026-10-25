@@ -1,5 +1,5 @@
 /**
- * What registry.jsonresume.org became (24 October 2026): what moved to
+ * What registry.jsonresume.org became (24 October 2026, updated 25 October): what moved to
  * jsonresume.org and what is still to come. Keep in step with the app.
  */
 import { portRequest } from './ai';
@@ -25,9 +25,33 @@ export const moved: { title: string; description: string; href: string }[] = [
     href: '/themes',
   },
   {
+    title: 'PDF, RenderCV and a QR code',
+    description:
+      'Add .pdf to your page’s address for a PDF in any theme (A4 or Letter), .rendercv for RenderCV, .qr for a code that links to it.',
+    href: '/@thomasdavis.pdf',
+  },
+  {
+    title: 'Your timeline',
+    description:
+      'Every role, school and project in order, at /@username/timeline.',
+    href: '/@thomasdavis/timeline',
+  },
+  {
     title: 'An editor that saves to your gist',
     description: 'A form or JSON, with your page beside it as you type.',
     href: '/dashboard/editor',
+  },
+  {
+    title: 'The ATS check',
+    description:
+      'How applicant tracking systems read your resume, scored as you type in the editor, with what to fix.',
+    href: '/dashboard/editor?panel=check',
+  },
+  {
+    title: 'Explore',
+    description:
+      'Search everyone’s public resume by skill, role, place and name.',
+    href: '/explore',
   },
   {
     title: 'Who reads your resume',
@@ -49,7 +73,7 @@ export const moved: { title: string; description: string; href: string }[] = [
   {
     title: 'Pathways',
     description:
-      'A career copilot that knows your resume and today’s jobs, the directions open to you, and jobs to sort with a swipe.',
+      'A career copilot that knows your resume and today’s jobs: cover letters, tailoring and interview practice for any job, the directions open to you, and jobs to sort with a swipe.',
     href: '/dashboard/pathways',
   },
   {
@@ -61,27 +85,20 @@ export const moved: { title: string; description: string; href: string }[] = [
 ];
 
 /** Registry features not ported yet: each links to a GitHub issue asking for it. */
+/** Registry features not ported yet: each links to a GitHub issue asking for it. */
 export const notYet: { title: string; description: string }[] = [
   {
-    title: 'PDF download',
-    description:
-      'Meanwhile, `resume export resume.pdf` in the CLI makes one from any theme.',
-  },
-  {
-    title: 'QR codes and RenderCV export',
-    description: 'The .qr and .rendercv formats.',
-  },
-  {
-    title: 'AI tools',
-    description: 'Cover letters, resume suggestions and interview practice.',
-  },
-  {
     title: 'The job graph',
-    description: 'Jobs and resumes as a map of similar roles.',
+    description:
+      'Jobs and resumes as a map of similar roles. Pathways’ directions cover the same ground.',
   },
   {
-    title: 'Explore',
-    description: 'Browsing and comparing other people’s resumes.',
+    title: 'Comparing resumes',
+    description: 'Similarity maps between people’s resumes.',
+  },
+  {
+    title: 'Voice',
+    description: 'Talking to Pathways out loud.',
   },
 ];
 

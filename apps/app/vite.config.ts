@@ -21,6 +21,9 @@ export default defineConfig({
     // Except resume-themes: Node loads it at runtime, so each theme package
     // resolves from its own node_modules and keeps its template files.
     noExternal: ['@jsonresume/ui', /^@repo\/(?!resume-themes)/],
+    // Node packages with their own files at runtime (Chromium's driver, the
+    // QR code's PNG encoder): loaded from node_modules, never bundled.
+    external: ['playwright-core', 'qrcode'],
   },
   test: {
     environment: 'jsdom',

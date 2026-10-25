@@ -20,6 +20,8 @@ export function describeProblem(problem: ResumeProblem): string {
       return `There is no theme called ${problem.theme}.`;
     case 'theme-failed':
       return `The ${problem.theme} theme could not render this resume.`;
+    case 'pdf-failed':
+      return `The PDF of this resume in the ${problem.theme} theme could not be made; try again in a moment.`;
     case 'unknown-format':
       return `.${
         problem.extension

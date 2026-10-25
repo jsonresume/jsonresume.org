@@ -101,13 +101,11 @@ describe('pages', () => {
     }
   });
 
-  it('ai: each tool asks for its port on GitHub', async () => {
+  it('ai: each tool opens where it lives now', async () => {
     await renderWithRouter(<AiPage />, '/ai');
     oneH1();
     const link = screen.getByRole('link', { name: /Cover letter/ });
-    expect(link.getAttribute('href')).toMatch(
-      /^https:\/\/github\.com\/jsonresume\/jsonresume\.org\/issues\/new\?title=Port\+from\+the\+registry/
-    );
+    expect(link.getAttribute('href')).toMatch(/^\/dashboard\/pathways\?ask=/);
   });
 
   it('registry: what moved, what hasn’t, and how to ask', async () => {
@@ -117,7 +115,7 @@ describe('pages', () => {
       screen.getByRole('list', { name: 'Moved from the registry' })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('link', { name: /PDF download/ }).getAttribute('href')
+      screen.getByRole('link', { name: /The job graph/ }).getAttribute('href')
     ).toContain('issues/new');
   });
 

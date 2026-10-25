@@ -1,9 +1,13 @@
 import { stringify } from 'yaml';
 import type { Entry } from './read';
+import { toRenderCv } from './rendercv';
 import { toText } from './text';
 
-/** Data formats a resume is served in. HTML comes from a theme instead. */
-export const dataFormats = ['json', 'yaml', 'txt'] as const;
+/**
+ * Text formats a resume is served in. HTML and PDF come from a theme
+ * instead, and the QR code from the page's URL (./qr).
+ */
+export const dataFormats = ['json', 'yaml', 'txt', 'rendercv'] as const;
 export type DataFormat = (typeof dataFormats)[number];
 
 export interface Formatted {
@@ -26,5 +30,10 @@ export function formatResume(format: DataFormat, resume: Entry): Formatted {
       };
     case 'txt':
       return { body: toText(resume), contentType: 'text/plain; charset=utf-8' };
+    case 'rendercv':
+      return {
+        body: toRenderCv(resume),
+        contentType: 'application/yaml; charset=utf-8',
+      };
   }
 }

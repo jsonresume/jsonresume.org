@@ -13,6 +13,7 @@ import { fakeGists } from '@repo/accounts/testing';
 import { Analytics } from '@repo/analytics';
 import { PgAnalyticsStore } from '@repo/analytics/sql';
 import { TestDatabase } from '@repo/database/testing';
+import { Explore } from '@repo/explore';
 import { embedderFrom, JobBoard, JobMatcher } from '@repo/jobs';
 import { Copilot } from '@repo/pathways';
 import { Profiles, Usernames } from '@repo/profiles';
@@ -62,6 +63,7 @@ export function testServer() {
       })
     ),
     JobBoard.layer,
+    Explore.layer,
     JobMatcher.layer.pipe(
       Layer.provide(embedderFrom(() => new Float32Array(3072).fill(1)))
     )

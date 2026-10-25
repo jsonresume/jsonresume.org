@@ -22,3 +22,27 @@ export const saveBar = style({
 
 /** Room under the form for the bar, so it never covers the last field. */
 export const saveBarSpace = style({ height: '5rem' });
+
+/** Beside the editor: a switch for preview or check, then the one chosen. */
+export const side = style({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: space[3],
+  height: '100%',
+  minHeight: 0,
+});
+
+export const sideBody = style({
+  flex: 1,
+  minHeight: 0,
+  display: 'flex',
+  flexDirection: 'column',
+});
+
+/** The check scrolls on its own, like the form beside it. */
+export const check = style({
+  flex: 1,
+  minHeight: 0,
+  overflowY: 'auto',
+  paddingInlineEnd: space[2],
+});

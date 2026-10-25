@@ -3,7 +3,7 @@ title: Privacy policy
 description: What jsonresume.org keeps about you, why, who helps us run it, how long it's kept, and how to see, change or delete it.
 ---
 
-_Last updated 24 October 2026._
+_Last updated 25 October 2026._
 
 JSON Resume is an open-source project, and jsonresume.org is run by its maintainers. This policy covers jsonresume.org, its API and its MCP server (the connection that lets apps such as ChatGPT and Claude use your account). We keep only what the site needs to work, we don't sell data, and we don't show ads.
 
@@ -11,7 +11,7 @@ JSON Resume is an open-source project, and jsonresume.org is run by its maintain
 
 **Your account.** Your email address, your username, and your password stored as a one-way hash (never the password itself). If you sign in with GitHub: your GitHub user id, login and avatar URL, and the GitHub access token GitHub gives us, encrypted, with the permissions you granted (your profile, your email and, if you allow it, your gists). We use these to sign you in and to read and save your resume gist.
 
-**Your resume.** The resume you save here, or a copy of your `resume.json` gist, refreshed when your page is visited. Your resume is published at `jsonresume.org/@username` once your account is confirmed: it's meant to be public, so don't put anything in it you wouldn't share. If you keep a public `resume.json` gist on GitHub, its page at `jsonresume.org/@your-github-login` works without an account.
+**Your resume.** The resume you save here, or a copy of your `resume.json` gist, refreshed when your page is visited. Your resume is published at `jsonresume.org/@username` once your account is confirmed: it's meant to be public, so don't put anything in it you wouldn't share. If you keep a public `resume.json` gist on GitHub, its page at `jsonresume.org/@your-github-login` works without an account. Public resumes are listed in [Explore](/explore), where anyone can search them by name, headline, place and skills; an account can take its resume out.
 
 **Who reads your resume.** When someone views a resume page, we record the page or format read, the theme, the time, how long the page was visible and how far down it was read, the site they came from, their country (from Cloudflare), and their device type and browser. Visitors are counted with a hash that changes every day. We don't set cookies for this and don't store IP addresses. These numbers are shown only to the resume's owner. Owners viewing their own page aren't counted.
 
@@ -39,7 +39,8 @@ Your account and everything in it are kept until you delete your account. Deleti
 
 ## Your choices
 
-- See and download your resume at any time (`/@username.json`, `.yaml` or `.txt`), and edit it in the [editor](/dashboard/editor).
+- See and download your resume at any time (`/@username.pdf`, `.json`, `.yaml`, `.txt` or `.rendercv`), and edit it in the [editor](/dashboard/editor).
+- Take your resume out of [Explore](/explore), the public search of resumes, in [Settings](/dashboard/settings#explore). Your page stays public either way.
 - Disconnect apps and revoke API keys in [Settings](/dashboard/settings).
 - Revoke our GitHub access in your GitHub settings, under Applications.
 - Delete your account in [Settings](/dashboard/settings).

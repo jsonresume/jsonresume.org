@@ -2,6 +2,8 @@ import resume from '@jsonresume/sample-data/complete-resume.json';
 import { describe, expect, it } from 'vitest';
 import { parse } from 'yaml';
 import { formatResume } from './formats';
+import { qrPng } from './qr';
+import { toRenderCv } from './rendercv';
 import { toText } from './text';
 
 describe('formatResume', () => {
@@ -52,5 +54,55 @@ describe('toText', () => {
       })
     ).toBe('Ada\nLondon, GB\n\nWORK\n====\n\nEngines\nuntil 1843\n');
     expect(toText({})).toBe('\n');
+  });
+});
+
+describe('toRenderCv', () => {
+  const cv = parse(formatResume('rendercv', resume).body).cv;
+
+  it('carries the person and each section RenderCV has entries for', () => {
+    expect(cv.name).toBe(resume.basics.name);
+    expect(cv.sections.experience[0].company).toBe(resume.work[0]?.name);
+    expect(cv.sections.education.length).toBe(resume.education.length);
+    expect(cv.sections.skills[0]).toEqual({
+      label: resume.skills[0]?.name,
+      details: resume.skills[0]?.keywords.join(', '),
+    });
+  });
+
+  it('keeps only networks, phones and dates RenderCV accepts', () => {
+    const out = parse(
+      toRenderCv({
+        basics: {
+          name: 'Ada',
+          phone: '0400 000 000',
+          profiles: [
+            { network: 'Twitter', username: 'ada' },
+            { network: 'Myspace', username: 'ada' },
+          ],
+        },
+        work: [{ name: 'Engines', startDate: 'spring 1843' }],
+        skills: [{ name: 'Maths' }],
+      })
+    ).cv;
+    expect(out.phone).toBeUndefined();
+    expect(out.social_networks).toEqual([{ network: 'X', username: 'ada' }]);
+    expect(out.sections.experience).toEqual([{ company: 'Engines' }]);
+    expect(out.sections.skills).toBeUndefined();
+  });
+
+  it('copes with an empty resume', () => {
+    expect(parse(toRenderCv({}))).toEqual({ cv: {} });
+  });
+});
+
+describe('qrPng', () => {
+  it('draws a PNG', async () => {
+    const png = await qrPng('https://jsonresume.org/@ada');
+    expect([...png.slice(1, 4)].map((c) => String.fromCharCode(c))).toEqual([
+      'P',
+      'N',
+      'G',
+    ]);
   });
 });

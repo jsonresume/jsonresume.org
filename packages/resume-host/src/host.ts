@@ -1,11 +1,4 @@
-import type { ResumeProblem } from '@repo/domain';
-import {
-  handlePath,
-  parseHandle,
-  Profiles,
-  type MovedResume,
-  type ResolvedResume,
-} from '@repo/profiles';
+import { handlePath, parseHandle } from '@repo/profiles';
 import { formatResume } from '@repo/resume-formats';
 import {
   DEFAULT_THEME,
@@ -15,41 +8,8 @@ import {
 } from '@repo/resume-themes';
 import { withTracking } from '@repo/analytics';
 import { Effect, Random, Schema } from 'effect';
-
-/** What a /@username request comes to: a response, or a problem to explain. */
-export type ResumeOutcome =
-  | {
-      _tag: 'Respond';
-      response: Response;
-      /** Set when a data format was served, for the server to count the read. */
-      read?: { username: string; format: 'json' | 'yaml' | 'txt' };
-    }
-  | { _tag: 'Problem'; problem: ResumeProblem; page: boolean };
-
-/** Resumes change whenever their gist does; never let a cache keep one. */
-const headers = (contentType: string) => ({
-  'content-type': contentType,
-  'cache-control': 'no-store',
-  'access-control-allow-origin': '*',
-});
-
-const respond = (
-  response: Response,
-  read?: { username: string; format: 'json' | 'yaml' | 'txt' }
-): ResumeOutcome =>
-  read ? { _tag: 'Respond', response, read } : { _tag: 'Respond', response };
-const problem = (p: ResumeProblem, page: boolean): ResumeOutcome => ({
-  _tag: 'Problem',
-  problem: p,
-  page,
-});
-const redirect = (location: string, status: number) =>
-  respond(
-    new Response(null, {
-      status,
-      headers: { location, 'cache-control': 'no-store' },
-    })
-  );
+import { headers, lookup, problem, redirect, respond } from './outcome';
+import { pdfResponse, qrResponse } from './print';
 
 const decodeDocument = Schema.decodeUnknownOption(ResumeDocument);
 const decodeMeta = Schema.decodeUnknownOption(
@@ -61,7 +21,8 @@ const metaTheme = (doc: ResumeDocument) => {
 };
 
 /**
- * Serve `/@name` (a themed page) or `/@name.json|yaml|txt`. Undefined when
+ * Serve `/@name` (a themed page), `/@name.pdf` (that page printed), `/@name.qr`
+ * (a QR code to it) or `/@name.json|yaml|txt|rendercv`. Undefined when
  * the path is not a handle, so the caller serves it as any other page.
  * Theme: ?theme=, then the resume's meta.theme, then elegant; ?theme=random
  * redirects to a random one. Other gist files with ?gistname=.
@@ -72,7 +33,8 @@ export const resumeOutcome = Effect.fn('resumeOutcome')(function* (url: URL) {
   const { username, format } = handle;
   if (!handle.canonical)
     return redirect(url.pathname.toLowerCase() + url.search, 301);
-  const page = format === 'html' || format === undefined;
+  // A person follows these links; programs read the other formats.
+  const page = format === 'html' || format === 'pdf' || format === undefined;
   if (!format)
     return problem(
       { kind: 'unknown-format', username, extension: handle.extension },
@@ -92,31 +54,7 @@ export const resumeOutcome = Effect.fn('resumeOutcome')(function* (url: URL) {
   }
 
   const file = url.searchParams.get('gistname') ?? undefined;
-  const resolved: ResolvedResume | MovedResume | ResumeOutcome =
-    yield* (yield* Profiles)
-      .resume(username, file === undefined ? {} : { file })
-      .pipe(
-        Effect.catchTags({
-          ProfileNotFound: (e) =>
-            Effect.succeed(
-              problem({ kind: e.reason, username, file: e.file }, page)
-            ),
-          ResumeNotJson: (e) =>
-            Effect.succeed(
-              problem(
-                {
-                  kind: 'not-json',
-                  username,
-                  file: e.file,
-                  message: e.message,
-                },
-                page
-              )
-            ),
-          GithubUnavailable: () =>
-            Effect.succeed(problem({ kind: 'github-down', username }, page)),
-        })
-      );
+  const resolved = yield* lookup(username, file, page);
   if (resolved._tag === 'Moved') {
     return redirect(handlePath(resolved.username, format) + url.search, 301);
   }
@@ -130,25 +68,39 @@ export const resumeOutcome = Effect.fn('resumeOutcome')(function* (url: URL) {
       page
     );
   }
-  if (format !== 'html') {
+  if (format === 'qr') return respond(yield* qrResponse(username));
+  if (format !== 'html' && format !== 'pdf') {
     const { body, contentType } = formatResume(format, doc.value);
-    return respond(new Response(body, { headers: headers(contentType) }), {
-      username,
-      format,
-    });
+    return respond(
+      new Response(body, { headers: headers(contentType) }),
+      // Analytics counts the formats people read; RenderCV is for a tool.
+      format === 'rendercv' ? undefined : { username, format }
+    );
   }
 
   const theme = query ?? metaTheme(doc.value)?.toLowerCase() ?? DEFAULT_THEME;
   return yield* renderTheme(theme, doc.value).pipe(
-    Effect.map((html) =>
-      respond(
-        // Every themed page reports its views (see @repo/analytics).
-        new Response(withTracking(html, username, theme), {
-          headers: headers('text/html; charset=utf-8'),
-        })
-      )
+    Effect.flatMap((html) =>
+      format === 'pdf'
+        ? pdfResponse(html, username, doc.value, url.searchParams.get('paper'))
+        : Effect.succeed(
+            // Every themed page reports its views (see @repo/analytics).
+            new Response(withTracking(html, username, theme), {
+              headers: headers('text/html; charset=utf-8'),
+            })
+          )
     ),
+    Effect.map((response) => respond(response)),
     Effect.catchTags({
+      PdfFailed: (e) =>
+        Effect.as(
+          Effect.logWarning('pdf failed', {
+            theme,
+            username,
+            message: e.message,
+          }),
+          problem({ kind: 'pdf-failed', username, theme }, true)
+        ),
       ThemeNotFound: () =>
         Effect.succeed(
           problem({ kind: 'theme-missing', username, theme }, true)

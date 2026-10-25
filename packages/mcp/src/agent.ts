@@ -1,6 +1,8 @@
 import { Layer } from 'effect';
 import { Toolkit } from 'effect/ai';
 import { AccountHandlers, AccountToolkit } from './accountTools';
+import { ExploreHandlers, ExploreToolkit } from './exploreTools';
+import { ExportHandlers, ExportToolkit } from './exportTools';
 import { JobHandlers, JobToolkit } from './jobTools';
 import { ResumeHandlers, ResumeToolkit } from './resumeTools';
 
@@ -10,13 +12,17 @@ import { ResumeHandlers, ResumeToolkit } from './resumeTools';
  */
 export const AgentToolkit = Toolkit.merge(
   ResumeToolkit,
+  ExportToolkit,
   AccountToolkit,
+  ExploreToolkit,
   JobToolkit
 );
 
-/** Needs what the MCP server needs: Accounts, AnalyticsStore, JobBoard, JobMatcher. */
+/** Needs what the MCP server needs: Accounts, AnalyticsStore, Explore, JobBoard, JobMatcher. */
 export const AgentHandlers = Layer.mergeAll(
   ResumeHandlers,
+  ExportHandlers,
   AccountHandlers,
+  ExploreHandlers,
   JobHandlers
 );

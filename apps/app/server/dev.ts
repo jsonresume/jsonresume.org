@@ -1,6 +1,6 @@
 /**
- * Live routes for `pnpm dev` (see scripts/dev.ts): the API, resumes and
- * jobs, as in production, on an in-memory Postgres (PGlite) that starts
+ * Live routes for `pnpm dev` (see scripts/dev.ts): the API, resumes, jobs
+ * and Explore, as in production, on an in-memory Postgres (PGlite) that starts
  * empty (the job board too: run the pipeline against it to fill it).
  */
 import { apiRoutes } from '@repo/api-server';
@@ -11,8 +11,10 @@ import { Hono } from 'hono';
 import { Layer } from 'effect';
 import { render } from '../src/entry-server';
 import { discoveryRoutes, isMcpRequest, sessionless } from './agents';
+import { createExplorePage, explorePath } from './explorePage';
 import { createJobPages, jobPath, jobsPath } from './jobPages';
 import { createResumeHandler } from './resumes';
+import { createTimelinePage, timelinePath } from './timelinePage';
 import { appServices } from './services';
 
 const services = appServices(InMemoryDatabase);
@@ -28,6 +30,8 @@ const mcp = effectWebHandler(
   }
 );
 const jobs = createJobPages(render, services, { memoMap });
+const explore = createExplorePage(render, services, { memoMap });
+const timeline = createTimelinePage(render, services, { memoMap });
 
 // Paths these routes don't answer fall through, marked, to Vite's renderer.
 const PASS = 'x-dev-pass';
@@ -45,8 +49,13 @@ app.get(
   '/:handle{@[^/]+}',
   async (c, next) => (await resumes.fetch(c.req.raw)) ?? next()
 );
+app.get(
+  timelinePath,
+  async (c, next) => (await timeline.fetch(c.req.raw)) ?? next()
+);
 app.get(jobsPath, (c) => jobs.board(c.req.raw));
 app.get(jobPath, (c) => jobs.job(c.req.raw));
+app.get(explorePath, (c) => explore.fetch(c.req.raw));
 
 /** A response for API, resume and job paths; undefined lets Vite render the page. */
 export const handle = async (request: Request) => {

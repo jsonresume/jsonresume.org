@@ -7,6 +7,7 @@ import { AnalyticsHandlers, EventsHandlers } from './analytics';
 import { AuthHandlers } from './auth';
 import { AuthenticationLive } from './authentication';
 import { EditorHandlers } from './editor';
+import { ExploreHandlers, MyListingHandlers } from './explore';
 import { GithubRoutes } from './github';
 import { JobsHandlers, MyJobsHandlers } from './jobs';
 import { ApiKeyAuthenticationLive, KeysHandlers } from './keys';
@@ -27,7 +28,8 @@ const SystemHandlers = (version: string) =>
 /**
  * Every /api route: the HttpApi groups with their handlers and the session
  * middleware, plus the GitHub redirects. Needs Accounts, RateLimiter,
- * Analytics, AnalyticsStore, GithubOAuth, ApiKeys, OAuth, JobBoard and JobMatcher
+ * Analytics, AnalyticsStore, GithubOAuth, ApiKeys, OAuth, JobBoard, JobMatcher
+ * and Explore
  * from the app.
  */
 export const apiRoutes = (version: string) =>
@@ -44,6 +46,8 @@ export const apiRoutes = (version: string) =>
         EditorHandlers,
         JobsHandlers,
         MyJobsHandlers,
+        ExploreHandlers,
+        MyListingHandlers,
         KeysHandlers,
         V1Handlers,
         V1PublicHandlers,

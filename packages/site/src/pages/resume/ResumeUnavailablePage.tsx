@@ -76,6 +76,17 @@ function Actions({ problem }: { problem: ResumeProblem }) {
           </Button>
         </>
       );
+    case 'pdf-failed':
+      return (
+        <>
+          <Button asChild variant="primary">
+            <a href={resumePath(username, 'pdf')}>Try again</a>
+          </Button>
+          <Button asChild variant="secondary">
+            <a href={resumePath(username)}>Open the page</a>
+          </Button>
+        </>
+      );
     case 'unknown-format':
       return (
         <>

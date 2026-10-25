@@ -4,6 +4,8 @@ import { McpProtocol, McpServer } from 'effect/ai';
 import { HttpRouter, HttpServerRequest, HttpServerResponse } from 'effect/http';
 import { AccountHandlers, AccountToolkit } from './accountTools';
 import { McpCaller } from './context';
+import { ExploreHandlers, ExploreToolkit } from './exploreTools';
+import { ExportHandlers, ExportToolkit } from './exportTools';
 import { JobHandlers, JobToolkit } from './jobTools';
 import { Prompts } from './prompts';
 import { ResumeHandlers, ResumeToolkit } from './resumeTools';
@@ -56,12 +58,14 @@ const authentication = (site: string) =>
 /**
  * The MCP server at /mcp (Streamable HTTP, every current protocol
  * revision): the tools, the prompts, and the authentication in front.
- * Needs Accounts, ApiKeys, OAuth, AnalyticsStore, JobBoard and JobMatcher.
+ * Needs Accounts, ApiKeys, OAuth, AnalyticsStore, Explore, JobBoard and JobMatcher.
  */
 export const mcpRoutes = (site: string = SITE) =>
   Layer.mergeAll(
     McpServer.toolkit(ResumeToolkit).pipe(Layer.provide(ResumeHandlers)),
+    McpServer.toolkit(ExportToolkit).pipe(Layer.provide(ExportHandlers)),
     McpServer.toolkit(AccountToolkit).pipe(Layer.provide(AccountHandlers)),
+    McpServer.toolkit(ExploreToolkit).pipe(Layer.provide(ExploreHandlers)),
     McpServer.toolkit(JobToolkit).pipe(Layer.provide(JobHandlers)),
     Prompts
   ).pipe(

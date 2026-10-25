@@ -24,6 +24,7 @@
     "@repo/analytics": "workspace:*",
     "@repo/database": "workspace:*",
     "@repo/eslint-config-custom": "workspace:*",
+    "@repo/explore": "workspace:*",
     "@repo/jobs": "workspace:*",
     "@types/node": "^20.19.24",
     "tsconfig": "workspace:*",

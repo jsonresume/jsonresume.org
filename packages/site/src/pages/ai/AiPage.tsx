@@ -48,7 +48,7 @@ export function AiPage() {
         <Container>
           <SectionIntro
             overline="Four tools"
-            title="Which should come first?"
+            title="All four are here"
             headingId="tools"
           >
             {ai.aiNotes.moving}

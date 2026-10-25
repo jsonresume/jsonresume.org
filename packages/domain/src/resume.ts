@@ -23,9 +23,12 @@ export const ResumeProblem = Schema.Union([
     kind: Schema.Literal('github-down'),
     username: Schema.String,
   }),
-  /** The theme asked for is not one we have, or failed on this resume. */
+  /**
+   * The theme asked for is not one we have, or failed on this resume, or
+   * the page in it could not be printed to PDF.
+   */
   Schema.Struct({
-    kind: Schema.Literals(['theme-missing', 'theme-failed']),
+    kind: Schema.Literals(['theme-missing', 'theme-failed', 'pdf-failed']),
     username: Schema.String,
     theme: Schema.String,
   }),
@@ -51,6 +54,7 @@ export const resumeProblemStatus = (problem: ResumeProblem): number => {
     case 'not-object':
       return 400;
     case 'github-down':
+    case 'pdf-failed':
       return 503;
     case 'theme-failed':
       return 500;

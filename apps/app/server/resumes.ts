@@ -1,6 +1,7 @@
 import { resumeProblemStatus } from '@repo/domain';
 import { Analytics, clientFrom } from '@repo/analytics';
 import type { Profiles } from '@repo/profiles';
+import type { ResumePdf } from '@repo/resume-pdf';
 import {
   describeProblem,
   resumeOutcome,
@@ -45,7 +46,7 @@ export const resumePath = '/:handle{@[^/]+}';
  */
 export function createResumeHandler<E>(
   render: Render,
-  services: Layer.Layer<Profiles | Analytics, E>,
+  services: Layer.Layer<Profiles | Analytics | ResumePdf, E>,
   options: { memoMap?: Layer.MemoMap } = {}
 ) {
   const runtime = ManagedRuntime.make(services, options);

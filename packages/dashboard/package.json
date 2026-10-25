@@ -17,6 +17,7 @@
     "@jsonresume/ui": "workspace:*",
     "@repo/api": "workspace:*",
     "@repo/api-client": "workspace:*",
+    "@repo/ats": "workspace:*",
     "@repo/auth-pages": "workspace:*",
     "@repo/content": "workspace:*",
     "@repo/job-board": "workspace:^",

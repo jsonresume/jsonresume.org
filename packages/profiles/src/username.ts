@@ -23,7 +23,15 @@ export const Username = Schema.String.pipe(
 export type Username = typeof Username.Type;
 
 /** The formats a resume is served in, by file extension. */
-export const resumeFormats = ['html', 'json', 'yaml', 'txt'] as const;
+export const resumeFormats = [
+  'html',
+  'json',
+  'yaml',
+  'txt',
+  'pdf',
+  'qr',
+  'rendercv',
+] as const;
 export type ResumeFormat = (typeof resumeFormats)[number];
 
 export interface Handle {

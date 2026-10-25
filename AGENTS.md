@@ -72,6 +72,10 @@ package over growing an app.
 | `@repo/job-board`         | The job board in React: job cards, filters kept in the URL, the /jobs and /jobs/:id pages.                                                    |
 | `@repo/mcp`               | jsonresume.org for agents: the MCP server at /mcp (tools, prompts, Bearer auth by API key or OAuth) and the catalog the /mcp page lists.      |
 | `@repo/pathways`          | Pathways' career copilot: an OpenAI agent with every MCP tool, acting as the user, streaming its replies.                                     |
+| `@repo/resume-pdf`        | Prints a themed resume to PDF with headless Chromium (`/@username.pdf`), loading only the public web.                                         |
+| `@repo/ats`               | The ATS check: how tracking systems read a resume, scored from its JSON, with fixes (`/ui`: the report view).                                 |
+| `@repo/explore`           | Explore: every public resume, searchable, in an index kept in memory, and the opt-out (`/ui`: the /explore page).                             |
+| `@repo/timeline`          | A resume as a timeline for `/@username/timeline` (`/ui`: the page).                                                                           |
 
 Dependency direction: `domain` ← `content`, `api` ← `site`, feature packages ←
 `apps/app`. Packages never import from apps. `@jsonresume/ui` imports nothing

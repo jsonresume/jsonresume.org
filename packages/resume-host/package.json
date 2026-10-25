@@ -2,7 +2,7 @@
   "name": "@repo/resume-host",
   "version": "0.0.0",
   "private": true,
-  "description": "Serves /@username: the resume in a theme or a data format, or the problem that stopped it",
+  "description": "Serves /@username: the resume in a theme, as a PDF or a data format, or the problem that stopped it",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"
@@ -17,6 +17,7 @@
     "@repo/domain": "workspace:*",
     "@repo/profiles": "workspace:*",
     "@repo/resume-formats": "workspace:*",
+    "@repo/resume-pdf": "workspace:*",
     "@repo/resume-themes": "workspace:*",
     "effect": "4.0.6"
   },

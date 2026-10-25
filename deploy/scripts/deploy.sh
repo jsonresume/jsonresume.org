@@ -87,6 +87,11 @@ if [ ! -f "$REL/.built" ]; then
   WORKDIR=$REL as_deploy pnpm install --frozen-lockfile --reporter=silent
   log "building"
   WORKDIR=$REL as_deploy pnpm turbo build --filter="$APP" --output-logs=errors-only
+  # /@username.pdf prints with Chromium (@repo/resume-pdf), kept in the
+  # deploy user's cache; a no-op once this Playwright's build is there.
+  if [ -d "$REL/apps/$APP/node_modules/playwright-core" ]; then
+    WORKDIR=$REL/apps/$APP as_deploy pnpm exec playwright-core install chromium-headless-shell >/dev/null
+  fi
   touch "$REL/.built" && chown deploy:deploy "$REL/.built"
 fi
 

@@ -1,6 +1,7 @@
 import { Accounts } from '@repo/accounts';
 import { accountsStack } from '@repo/accounts/stack';
 import { PgAnalyticsStore } from '@repo/analytics/sql';
+import { Explore } from '@repo/explore';
 import { embedderFrom, JobBoard, JobMatcher } from '@repo/jobs';
 import { Effect, Layer, Stream } from 'effect';
 import { LanguageModel } from 'effect/ai';
@@ -43,6 +44,7 @@ it('streams a reply that uses the tools as the user, then answers', async () => 
   const services = Layer.mergeAll(
     PgAnalyticsStore,
     JobBoard.layer,
+    Explore.layer,
     JobMatcher.layer.pipe(
       Layer.provide(embedderFrom(() => new Float32Array(3072)))
     )

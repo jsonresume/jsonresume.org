@@ -31,7 +31,7 @@ export class Copilot extends Context.Service<
     ): Stream.Stream<CopilotEvent>;
   }
 >()('@repo/pathways/Copilot') {
-  /** Needs AgentHandlers' services (Accounts, AnalyticsStore, JobBoard, JobMatcher). */
+  /** Needs AgentHandlers' services (Accounts, AnalyticsStore, Explore, JobBoard, JobMatcher). */
   static readonly layer = Layer.effect(
     Copilot,
     Effect.gen(function* () {

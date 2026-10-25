@@ -13,6 +13,8 @@ const COUNTERPARTS: Record<string, string> = {
   'my-jobs': '/dashboard/jobs',
   'api-keys': '/dashboard/settings',
   pathways: '/dashboard/pathways',
+  explore: '/explore',
+  explore2: '/explore',
   privacy: '/privacy',
   terms: '/terms',
 };
@@ -55,6 +57,23 @@ const API_ROUTES = new Set([
   'openAIStream',
 ]);
 
+/**
+ * The registry's pages under a username (/{user}/ats) and where they live
+ * now: the person's own tools in the dashboard, the timeline by the resume.
+ */
+const USER_PAGES: Record<string, (username: string) => string> = {
+  dashboard: () => '/dashboard',
+  ats: () => '/dashboard/editor?panel=check',
+  jobs: () => '/dashboard/jobs',
+  'jobs-graph': () => '/dashboard/pathways?tab=directions',
+  decisions: () => '/dashboard/pathways?tab=swipe',
+  letter: () => '/dashboard/pathways',
+  interview: () => '/dashboard/pathways',
+  suggestions: () => '/dashboard/pathways',
+  timeline: (username) => `/@${username}/timeline`,
+  json: (username) => `/@${username}.json`,
+};
+
 /** Formats the registry served that are pages here: the theme. */
 const PAGE_FORMATS = new Set(['html', 'template']);
 
@@ -75,6 +94,10 @@ export function registryRedirect(url: URL): string {
   // Registry job pages were keyed by the Hacker News item id, as here.
   if (first === 'jobs' && second && /^\d+$/.test(second) && rest.length === 0)
     return `${SITE}/jobs/${second}`;
+  const userPage = second && rest.length === 0 ? USER_PAGES[second] : undefined;
+  const owner = parseHandle(`@${first}`);
+  if (userPage && owner && !FEATURES.has(first) && first !== 'api')
+    return `${SITE}${userPage(owner.username)}`;
   const counterpart = COUNTERPARTS[first];
   if (counterpart)
     return `${SITE}${counterpart}${counterpart === '/docs' ? '' : url.search}`;

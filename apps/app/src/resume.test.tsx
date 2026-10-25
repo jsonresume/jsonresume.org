@@ -1,6 +1,7 @@
 // @vitest-environment node
 import { Analytics } from '@repo/analytics';
 import { GithubUnavailable, ProfileNotFound, Profiles } from '@repo/profiles';
+import { ResumePdf } from '@repo/resume-pdf';
 import { Effect, Layer } from 'effect';
 import { afterAll, describe, expect, it } from 'vitest';
 import { createResumeHandler } from '../server/resumes';
@@ -48,8 +49,12 @@ describe('the server handler', () => {
   );
   const resumes = createResumeHandler(
     render,
-    Layer.merge(
+    Layer.mergeAll(
       analytics,
+      Layer.succeed(
+        ResumePdf,
+        ResumePdf.of({ print: () => Effect.succeed(new Uint8Array()) })
+      ),
       Layer.succeed(
         Profiles,
         Profiles.of({

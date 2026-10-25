@@ -246,4 +246,10 @@ export const migrations: Record<
     `;
     yield* sql`CREATE INDEX oauth_tokens_user ON app.oauth_tokens (user_id)`;
   }),
+
+  // Explore lists every public resume; an account can take theirs out.
+  '9_explore_listing': Effect.gen(function* () {
+    const sql = yield* SqlClient.SqlClient;
+    yield* sql`ALTER TABLE app.profiles ADD COLUMN listed boolean NOT NULL DEFAULT true`;
+  }),
 };

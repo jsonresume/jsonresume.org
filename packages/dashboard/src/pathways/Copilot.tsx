@@ -32,6 +32,10 @@ const toolLabels: Record<string, string> = {
   mark_job: 'Marked a job',
   list_marked_jobs: 'Read your marked jobs',
   get_career_directions: 'Mapped your directions',
+  check_ats: 'Checked how tracking systems read it',
+  export_resume: 'Made a file of your resume',
+  search_resumes: 'Searched public resumes',
+  set_explore_listing: 'Changed your Explore listing',
 };
 
 export const starters = [

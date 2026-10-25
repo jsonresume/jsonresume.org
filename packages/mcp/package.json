@@ -18,9 +18,12 @@
     "@repo/accounts": "workspace:*",
     "@repo/analytics": "workspace:*",
     "@repo/api": "workspace:*",
+    "@repo/ats": "workspace:*",
+    "@repo/explore": "workspace:*",
     "@repo/job-board": "workspace:*",
     "@repo/jobs": "workspace:*",
     "@repo/resume-editor": "workspace:*",
+    "@repo/resume-formats": "workspace:*",
     "@repo/schema-explorer": "workspace:*",
     "@repo/theme-gallery": "workspace:*",
     "effect": "4.0.6"

@@ -75,3 +75,13 @@ export const factLabel = style({
 });
 
 export const factValue = style({ margin: 0, color: color.text.strong });
+
+/** Beside the post on wide screens: the facts, then Pathways. */
+export const aside = style({ display: 'grid', gap: space[4] });
+
+export const prepare = style({
+  display: 'grid',
+  gap: space[3],
+  justifyItems: 'start',
+  padding: space[5],
+});

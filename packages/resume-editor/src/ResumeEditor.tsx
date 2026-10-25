@@ -13,20 +13,26 @@ import { JsonPane } from './JsonPane';
 import { formSections } from './model';
 import { PreviewPane } from './PreviewPane';
 import { AllowGist, Start } from './Start';
-import { draftAtom, jsonTextAtom, modeParamAtom, serialize } from './state';
+import { CheckPane } from './CheckPane';
+import { SidePane } from './SidePane';
 import {
-  CompactToolbar,
-  EditorActions,
-  EditorToolbar,
-  SaveBar,
-  type Mode,
-} from './Toolbar';
+  draftAtom,
+  jsonTextAtom,
+  modeParamAtom,
+  panelParamAtom,
+  serialize,
+} from './state';
+import { EditorActions, SaveBar } from './Actions';
+import { CompactToolbar, EditorToolbar, type Mode, type View } from './Toolbar';
 import { useEditorSession } from './useEditorSession';
 import { validate } from './validate';
 
 const schema = decodeJsonSchema(schemaJson);
 const sections = formSections(schema);
-const bindings = [optionParam('mode', modeParamAtom)];
+const bindings = [
+  optionParam('mode', modeParamAtom),
+  optionParam('panel', panelParamAtom),
+];
 
 /** Edit the resume as a form or as JSON, with the page beside it, live. */
 export function ResumeEditor({ username }: { username: string }) {
@@ -35,7 +41,14 @@ export function ResumeEditor({ username }: { username: string }) {
   const setText = useAtomSet(jsonTextAtom);
   const [modeParam, setModeParam] = useAtom(modeParamAtom);
   const mode: Mode = modeParam === 'json' ? 'json' : 'form';
-  const [view, setView] = useState<'edit' | 'preview'>('edit');
+  const [panel, setPanel] = useAtom(panelParamAtom);
+  const [phoneView, setView] = useState<'edit' | 'preview'>('edit');
+  // ?panel=check (the registry's ATS page, the dashboard's link) opens on it.
+  const view: View = panel === 'check' ? 'check' : phoneView;
+  const onView = (next: View) => {
+    setPanel(next === 'check' ? 'check' : null);
+    if (next !== 'check') setView(next);
+  };
   const [backup, setBackup] = useState(() => readBackup(username));
   const wide = useWide(media.lg);
   const {
@@ -111,7 +124,7 @@ export function ResumeEditor({ username }: { username: string }) {
             mode={mode}
             view={view}
             onMode={onMode}
-            onView={setView}
+            onView={onView}
             problems={issues.length}
           />
         )
@@ -147,10 +160,12 @@ export function ResumeEditor({ username }: { username: string }) {
           paneLabels={['Editor', 'Preview']}
         >
           {editor}
-          <PreviewPane />
+          <SidePane />
         </SplitView>
       ) : view === 'edit' ? (
         editor
+      ) : view === 'check' ? (
+        <CheckPane />
       ) : (
         <PreviewPane />
       )}

@@ -23,6 +23,7 @@ import { searchParam } from './session';
 import { DeleteAccount } from './settings/DeleteAccount';
 import { ApiKeysCard } from './settings/ApiKeysCard';
 import { ConnectionsCard } from './settings/ConnectionsCard';
+import { ExploreCard } from './settings/ExploreCard';
 import { UsernameCard } from './settings/UsernameCard';
 
 function GithubFlash() {
@@ -134,6 +135,7 @@ export function SettingsPage() {
         <Notices />
         <Details account={account} />
         <UsernameCard account={account} />
+        <ExploreCard />
         <ConnectionsCard />
         <ApiKeysCard />
         <DeleteAccount username={account.username} />

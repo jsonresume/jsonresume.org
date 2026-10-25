@@ -27,6 +27,13 @@ export const paths = {
   job: (id: number) => `/jobs/${id}`,
   dashboard: '/dashboard',
   dashboardJobs: '/dashboard/jobs',
+  /** Pathways, putting `ask` to the copilot on arrival. */
+  pathways: (ask?: string) =>
+    ask
+      ? `/dashboard/pathways?ask=${encodeURIComponent(ask)}`
+      : '/dashboard/pathways',
+  explore: '/explore',
+  timeline: (username: string) => `/@${username}/timeline`,
   dashboardResume: '/dashboard/resume',
   dashboardSettings: '/dashboard/settings',
 } as const;
@@ -61,7 +68,7 @@ export const headerNav: NavItem[] = [
   { label: 'Getting started', href: paths.gettingStarted },
   { label: 'Schema', href: paths.schema },
   { label: 'Themes', href: paths.themes },
-  { label: 'Projects', href: paths.projects },
+  { label: 'Explore', href: paths.explore },
   { label: 'Jobs', href: paths.jobs },
   { label: 'MCP', href: paths.mcp },
   { label: 'Docs', href: external.docs },
@@ -78,6 +85,7 @@ export const footerNav: NavItem[] = [
   { label: 'MCP for agents', href: paths.mcp },
   { label: 'Job description schema', href: paths.jobDescriptionSchema },
   { label: 'Projects', href: paths.projects },
+  { label: 'Explore resumes', href: paths.explore },
   { label: 'Jobs', href: paths.jobs },
   { label: 'Team', href: paths.team },
   { label: 'Media', href: paths.media },

@@ -5,7 +5,13 @@
  * here too.
  */
 
-export type McpGroup = 'resume' | 'themes' | 'analytics' | 'account' | 'jobs';
+export type McpGroup =
+  | 'resume'
+  | 'themes'
+  | 'analytics'
+  | 'account'
+  | 'explore'
+  | 'jobs';
 
 export interface McpToolInfo {
   name: string;
@@ -40,6 +46,11 @@ export const groups: Record<McpGroup, { title: string; description: string }> =
     account: {
       title: 'Account',
       description: 'Your username, links and where your resume comes from.',
+    },
+    explore: {
+      title: 'Explore',
+      description:
+        'Find people by what their public resumes say, and choose whether yours is listed.',
     },
     jobs: {
       title: 'Jobs',
@@ -85,6 +96,20 @@ export const tools: ReadonlyArray<McpToolInfo> = [
     writes: false,
   },
   {
+    name: 'check_ats',
+    group: 'resume',
+    description:
+      'How well applicant tracking systems (Greenhouse, Lever, Workday…) will read your resume, or one you pass: a score out of 100, each check (contact details, jobs, skills, headline, achievements, education, dates) and every issue with its fix and the field it is in.',
+    writes: false,
+  },
+  {
+    name: 'export_resume',
+    group: 'resume',
+    description:
+      'Your resume as a file: a PDF of your page in any theme (A4 or Letter), JSON, YAML, plain text, RenderCV (for the rendercv CLI), or a QR code linking to your page. Returns its URL, and the text itself for the text formats.',
+    writes: false,
+  },
+  {
     name: 'list_themes',
     group: 'themes',
     description:
@@ -109,7 +134,7 @@ export const tools: ReadonlyArray<McpToolInfo> = [
     name: 'get_account',
     group: 'account',
     description:
-      'Your username, email, linked GitHub, where your resume comes from (gist or saved here), and your page’s links (page, JSON, YAML, text).',
+      'Your username, email, linked GitHub, where your resume comes from (gist or saved here), and your page’s links (page, PDF, timeline, JSON, YAML, text, RenderCV, QR code).',
     writes: false,
   },
   {
@@ -124,6 +149,20 @@ export const tools: ReadonlyArray<McpToolInfo> = [
     group: 'account',
     description:
       'Change your username, and so your page’s URL. The old URL redirects for 90 days. Ask the user before calling this.',
+    writes: true,
+  },
+  {
+    name: 'search_resumes',
+    group: 'explore',
+    description:
+      'Search the public resumes on jsonresume.org (Explore) by skills, role, place, name or employer: every word must match. Returns people with their headline, location, top skills and page URL, 24 a page.',
+    writes: false,
+  },
+  {
+    name: 'set_explore_listing',
+    group: 'explore',
+    description:
+      'List your resume in Explore (true, the default) or take it out (false). Your page stays public either way.',
     writes: true,
   },
   {

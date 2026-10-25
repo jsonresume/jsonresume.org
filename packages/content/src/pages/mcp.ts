@@ -9,7 +9,7 @@ export const serverUrl = 'https://jsonresume.org/mcp';
 export const intro = {
   eyebrow: 'MCP',
   title: 'Your resume, in your agent',
-  lede: 'Connect ChatGPT, Claude, Cursor or any MCP client to jsonresume.org. Your agent can then read and rewrite your resume, check it against the schema, change its theme, tell you who has been reading it, and find jobs that fit, saving straight to your gist.',
+  lede: 'Connect ChatGPT, Claude, Cursor or any MCP client to jsonresume.org. Your agent can then read and rewrite your resume, check it against the schema and for tracking systems, export it as a PDF, change its theme, tell you who has been reading it, search other resumes and find jobs that fit, saving straight to your gist.',
 };
 
 export const auth = {
@@ -179,6 +179,9 @@ export const examples = [
   'Read my resume and tell me the three weakest bullet points, then rewrite them.',
   'Add my new job at Acme as a Staff Engineer starting this month, and move the old one to past.',
   'Check my resume against the schema and fix anything wrong.',
+  'How will applicant tracking systems read my resume? Fix the three most important problems.',
+  'Give me a PDF of my resume in a clean single-column theme, on Letter paper.',
+  'Find Rust developers in Berlin on Explore and summarise what they have in common.',
   'Show me five themes that suit a designer, then switch my page to the one I pick.',
   'How many people read my resume this month, and where did they come from?',
   'Find remote TypeScript jobs paying over $150k that fit my resume, and mark the best three as interested.',

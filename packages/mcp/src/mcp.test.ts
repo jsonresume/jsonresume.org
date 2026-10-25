@@ -1,6 +1,7 @@
 import { Accounts, ApiKeys, OAuth } from '@repo/accounts';
 import { accountsStack } from '@repo/accounts/stack';
 import { PgAnalyticsStore } from '@repo/analytics/sql';
+import { Explore } from '@repo/explore';
 import { embedderFrom, JobBoard, JobMatcher } from '@repo/jobs';
 import { Effect, Layer, ManagedRuntime } from 'effect';
 import { HttpRouter, HttpServer, HttpServerResponse } from 'effect/http';
@@ -20,6 +21,7 @@ const setup = async () => {
     OAuth.layer,
     PgAnalyticsStore,
     JobBoard.layer,
+    Explore.layer,
     JobMatcher.layer.pipe(
       Layer.provide(embedderFrom(() => new Float32Array(3072).fill(1)))
     )
@@ -217,6 +219,45 @@ describe('the MCP server', () => {
     expect((await call('get_resume_schema')).value.$schema).toContain(
       'json-schema'
     );
+  });
+
+  it('checks the resume for tracking systems and exports it', async () => {
+    const { handler, key } = await setup();
+    const { call } = await connect(handler, key);
+    const ats = (await call('check_ats')).value;
+    expect(ats.checks).toHaveLength(7);
+    expect(ats.checks[0].issues[0]).toMatchObject({
+      severity: 'critical',
+      field: 'basics.email',
+    });
+    const other = (
+      await call('check_ats', {
+        resume: { basics: { name: 'Bo', email: 'bo@example.com' } },
+      })
+    ).value;
+    expect(other.checks[0].issues[0].field).toBe('basics.phone');
+    expect((await call('export_resume', { format: 'txt' })).value).toEqual({
+      url: 'https://jsonresume.org/@ada.txt',
+      content: expect.stringMatching(/^Ada\nEngineer/),
+    });
+    expect(
+      (await call('export_resume', { format: 'pdf', theme: 'even' })).value
+    ).toEqual({
+      url: 'https://jsonresume.org/@ada.pdf?theme=even',
+      content: null,
+    });
+    expect(
+      (await call('export_resume', { format: 'rendercv' })).value.content
+    ).toContain('name: Ada');
+    const listed = await call('set_explore_listing', { listed: false });
+    expect(listed.value).toEqual({ listed: false });
+    expect(
+      (await call('search_resumes', { query: 'ada' })).value
+    ).toMatchObject({ total: 0, people: [] });
+    expect((await call('get_account')).value.links).toMatchObject({
+      pdf: 'https://jsonresume.org/@ada.pdf',
+      timeline: 'https://jsonresume.org/@ada/timeline',
+    });
   });
 
   it('takes an OAuth access token as well as an API key', async () => {

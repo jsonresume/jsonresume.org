@@ -25,12 +25,17 @@ export const keys = {
   jobs: ['jobs'],
   apiKeys: ['apiKeys'],
   connections: ['connections'],
+  explore: ['explore'],
 } as const;
 
 export const sessionAtom = ApiClient.query('auth', 'session', {
   reactivityKeys: keys.session,
 });
 export const accountAtom = ApiClient.query('account', 'get', {
+  reactivityKeys: keys.account,
+});
+/** The resume /@username shows now (the editor's starting point). */
+export const currentResumeAtom = ApiClient.query('editor', 'resume', {
   reactivityKeys: keys.account,
 });
 export const overviewAtom = Atom.family((range: AnalyticsRange) =>
@@ -87,3 +92,8 @@ export const connectionsAtom = ApiClient.query('oauthConsent', 'connections', {
   reactivityKeys: keys.connections,
 });
 export const disconnectAtom = ApiClient.mutation('oauthConsent', 'disconnect');
+
+export const exploreListingAtom = ApiClient.query('myListing', 'get', {
+  reactivityKeys: keys.explore,
+});
+export const setExploreListingAtom = ApiClient.mutation('myListing', 'set');

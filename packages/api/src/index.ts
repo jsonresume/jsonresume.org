@@ -4,6 +4,7 @@ import { AnalyticsApi } from './AnalyticsApi';
 import { AuthApi } from './AuthApi';
 import { EditorApi } from './EditorApi';
 import { EventsApi } from './EventsApi';
+import { ExploreApi, MyListingApi } from './ExploreApi';
 import { KeysApi } from './KeysApi';
 import { OAuthApi, OAuthConsentApi } from './OAuthApi';
 import { JobsApi, MyJobsApi } from './JobsApi';
@@ -36,6 +37,13 @@ export {
 export * from './errors';
 export { EditorApi, EditorResume } from './EditorApi';
 export { EventsApi, PingEvent, ViewEvent } from './EventsApi';
+export {
+  ExploreApi,
+  ExploreListing,
+  ExploreResults,
+  MyListingApi,
+  ResumeListing,
+} from './ExploreApi';
 export { ApiKey, KeysApi, TooManyKeys } from './KeysApi';
 export { Connection, OAuthApi, OAuthConsentApi, OAuthError } from './OAuthApi';
 export { Health, SystemApi } from './SystemApi';
@@ -80,6 +88,8 @@ export class JsonResumeApi extends HttpApi.make('jsonresume')
   .add(EditorApi)
   .add(JobsApi)
   .add(MyJobsApi)
+  .add(ExploreApi)
+  .add(MyListingApi)
   .add(V1Api)
   .add(V1PublicApi)
   .add(OAuthApi)

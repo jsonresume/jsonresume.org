@@ -25,8 +25,8 @@ describe('parseHandle', () => {
   });
 
   it('keeps an extension it does not serve, with no format', () => {
-    expect(parseHandle('@a.pdf')).toMatchObject({
-      extension: 'pdf',
+    expect(parseHandle('@a.docx')).toMatchObject({
+      extension: 'docx',
       format: undefined,
     });
   });

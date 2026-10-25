@@ -24,17 +24,25 @@ const AccountInfo = Schema.Struct({
   source: ResumeSource,
   links: Schema.Struct({
     page: Schema.String,
+    pdf: Schema.String,
+    timeline: Schema.String,
     json: Schema.String,
     yaml: Schema.String,
     text: Schema.String,
+    rendercv: Schema.String,
+    qr: Schema.String,
   }),
 });
 
 const links = (username: string) => ({
   page: `${SITE}/@${username}`,
+  pdf: `${SITE}/@${username}.pdf`,
+  timeline: `${SITE}/@${username}/timeline`,
   json: `${SITE}/@${username}.json`,
   yaml: `${SITE}/@${username}.yaml`,
   text: `${SITE}/@${username}.txt`,
+  rendercv: `${SITE}/@${username}.rendercv`,
+  qr: `${SITE}/@${username}.qr`,
 });
 
 export const AccountToolkit = Toolkit.make(

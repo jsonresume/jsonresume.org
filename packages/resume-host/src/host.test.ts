@@ -4,14 +4,18 @@ import {
   GithubUnavailable,
   type Username,
 } from '@repo/profiles';
+import { PdfFailed, ResumePdf } from '@repo/resume-pdf';
 import { Effect, Layer } from 'effect';
 import { describe, expect, it } from 'vitest';
-import { resumeOutcome, type ResumeOutcome } from './host';
+import { resumeOutcome } from './host';
+import type { ResumeOutcome } from './outcome';
 import { describeProblem } from './problems';
 
 const resumes: Record<string, unknown> = {
   foo: { basics: { name: 'Foo Bar' }, meta: { theme: 'even' } },
   plain: { basics: { name: 'Plain' } },
+  yank: { basics: { name: 'Yank', location: { countryCode: 'US' } } },
+  broken: { basics: { name: 'Broken' } },
   list: [1, 2],
 };
 
@@ -51,10 +55,21 @@ const profiles = Layer.succeed(
   })
 );
 
+/** Prints the page's HTML as the "PDF", with the paper, so tests can read both. */
+const printer = Layer.succeed(
+  ResumePdf,
+  ResumePdf.of({
+    print: (html, paper) =>
+      html.includes('Broken')
+        ? Effect.fail(new PdfFailed({ message: 'x' }))
+        : Effect.succeed(new TextEncoder().encode(`${paper}:${html}`)),
+  })
+);
+
 const get = (path: string) =>
   Effect.runPromise(
     resumeOutcome(new URL(path, 'https://jsonresume.org')).pipe(
-      Effect.provide(profiles)
+      Effect.provide(Layer.merge(profiles, printer))
     )
   );
 
@@ -101,6 +116,44 @@ describe('resumeOutcome', () => {
     );
   });
 
+  it('serves RenderCV, uncounted', async () => {
+    const outcome = await get('/@foo.rendercv');
+    expect(outcome?._tag === 'Respond' && outcome.read).toBeUndefined();
+    expect(await response(outcome).text()).toContain('name: Foo Bar');
+  });
+
+  it('prints the themed page to PDF, on the paper asked for or local', async () => {
+    const res = response(await get('/@foo.pdf'));
+    expect(res.headers.get('content-type')).toBe('application/pdf');
+    expect(res.headers.get('content-disposition')).toBe(
+      'inline; filename="foo.pdf"'
+    );
+    const body = await res.text();
+    expect(body).toMatch(/^a4:/);
+    expect(body).toContain('Foo Bar');
+    // The print is not a page view.
+    expect(body).not.toContain('/api/events/view');
+    expect(await response(await get('/@yank.pdf')).text()).toMatch(/^letter:/);
+    expect(await response(await get('/@foo.pdf?paper=letter')).text()).toMatch(
+      /^letter:/
+    );
+  });
+
+  it('explains a failed print on a page', async () => {
+    const outcome = await get('/@broken.pdf');
+    expect(outcome).toMatchObject({
+      _tag: 'Problem',
+      page: true,
+      problem: { kind: 'pdf-failed', username: 'broken', theme: 'elegant' },
+    });
+  });
+
+  it('draws a QR code to the page', async () => {
+    const res = response(await get('/@foo.qr'));
+    expect(res.headers.get('content-type')).toBe('image/png');
+    expect(new Uint8Array(await res.arrayBuffer()).length).toBeGreaterThan(100);
+  });
+
   it('reads another gist file with ?gistname=', async () => {
     expect(
       await response(await get('/@foo.json?gistname=cv.json')).json()
@@ -131,7 +184,9 @@ describe('resumeOutcome', () => {
     ['/@down', { kind: 'github-down', page: true }],
     ['/@list.json', { kind: 'not-object', page: false }],
     ['/@foo?theme=nope', { kind: 'theme-missing', page: true }],
-    ['/@foo.pdf', { kind: 'unknown-format', page: true }],
+    ['/@foo.docx', { kind: 'unknown-format', page: true }],
+    ['/@nobody.pdf', { kind: 'no-gist', page: true }],
+    ['/@broken.pdf', { kind: 'pdf-failed', page: true }],
   ])('explains %s', async (path, expected) => {
     const outcome = await get(path);
     if (outcome?._tag !== 'Problem') throw new Error('expected a problem');

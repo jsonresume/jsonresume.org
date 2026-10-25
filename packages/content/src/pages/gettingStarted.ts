@@ -73,6 +73,12 @@ export const rawFormats: {
   path: UserPath;
 }[] = [
   {
+    label: 'PDF',
+    description:
+      'Your page printed, in any theme: add ?theme= and ?paper=letter.',
+    path: (u) => `${site}/@${u}.pdf`,
+  },
+  {
     label: 'JSON',
     description: 'The data, as stored in your Gist.',
     path: (u) => `${site}/@${u}.json`,
@@ -86,6 +92,22 @@ export const rawFormats: {
     label: 'Text',
     description: 'Plain text, for forms and email.',
     path: (u) => `${site}/@${u}.txt`,
+  },
+  {
+    label: 'RenderCV',
+    description:
+      'A RenderCV input file: run rendercv render on it for a typeset PDF.',
+    path: (u) => `${site}/@${u}.rendercv`,
+  },
+  {
+    label: 'QR code',
+    description: 'A code that opens your page, for printed resumes and slides.',
+    path: (u) => `${site}/@${u}.qr`,
+  },
+  {
+    label: 'Timeline',
+    description: 'Every role, school and project in order.',
+    path: (u) => `${site}/@${u}/timeline`,
   },
 ];
 

@@ -15,5 +15,11 @@ export const JobsRoute = createLazyRoute('/_site/jobs')({
 });
 
 export const JobRoute = createLazyRoute('/_site/jobs/$id')({
-  component: () => <JobPage job={job.useLoaderData()} boardHref={paths.jobs} />,
+  component: () => (
+    <JobPage
+      job={job.useLoaderData()}
+      boardHref={paths.jobs}
+      ask={paths.pathways}
+    />
+  ),
 });
