@@ -89,8 +89,11 @@ if [ ! -f "$REL/.built" ]; then
   WORKDIR=$REL as_deploy pnpm turbo build --filter="$APP" --output-logs=errors-only
   # /@username.pdf prints with Chromium (@repo/resume-pdf), kept in the
   # deploy user's cache; a no-op once this Playwright's build is there.
+  # Playwright doesn't list Ubuntu 26.04 yet, so it takes the 24.04 build.
   if [ -d "$REL/apps/$APP/node_modules/playwright-core" ]; then
-    WORKDIR=$REL/apps/$APP as_deploy pnpm exec playwright-core install chromium-headless-shell >/dev/null
+    WORKDIR=$REL/apps/$APP as_deploy env PLAYWRIGHT_HOST_PLATFORM_OVERRIDE=ubuntu24.04-x64 \
+      pnpm exec playwright-core install chromium-headless-shell >/dev/null 2>&1 \
+      || log "warning: Chromium was not installed; check /@username.pdf"
   fi
   touch "$REL/.built" && chown deploy:deploy "$REL/.built"
 fi

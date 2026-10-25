@@ -74,7 +74,9 @@ sudo deploy/scripts/cloudflare-ips.sh                # refresh Cloudflare ranges
    `dl.cloudsmith.io/public/caddy/stable` (Ubuntu's 2.6 is too old for
    `trusted_proxies`), rclone from rclone.org (Ubuntu's 1.60 fails R2 uploads),
    Node 24 with corepack. Chromium (Playwright's Ubuntu 24.04 build, for
-   screenshots and future PDF export) needs: `libxcomposite1
+   `/@username.pdf`) lives in the deploy user's cache,
+   `/srv/jsonresume/.cache/ms-playwright`, installed by `deploy.sh` (as the
+   24.04 build: Playwright doesn't list 26.04 yet). It needs: `libxcomposite1
    libxdamage1 libxfixes3 libxrandr2 libasound2t64 libatk1.0-0t64
    libatk-bridge2.0-0t64 libatspi2.0-0t64 libcairo2 libcups2t64 libgbm1
    libpango-1.0-0 libnss3 libxkbcommon0` plus `fonts-liberation fonts-noto-core
