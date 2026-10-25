@@ -36,6 +36,12 @@ describe('renderTheme', () => {
     expect(await render('macchiato')).toContain(name);
   });
 
+  it('keeps dates in English after lucide, which is French', async () => {
+    const english = await render('elegant');
+    expect(await render('lucide')).toMatch(/janv\.|févr\.|sept\.|déc\./i);
+    expect(await render('elegant')).toBe(english);
+  });
+
   it('fails for an unknown theme', async () => {
     const error = await Effect.runPromise(
       Effect.flip(renderTheme('nope', resume))
