@@ -1367,6 +1367,19 @@ export const componentDocs: ComponentDoc[] = [
     ],
   },
   {
+    slug: 'task-list',
+    name: 'Task list',
+    group: 'Data display',
+    summary:
+      'Steps someone works through once, like setting up an account: each done or to do, with its action.',
+    components: ['TaskList'],
+    examples: [{ id: 'setup', title: 'Account setup', block: true }],
+    accessibility: [
+      'Each step states its state in words ("Done: …", "To do: …"), not only by the tick.',
+      'Actions disappear once a step is done, so focus only lands on what is left.',
+    ],
+  },
+  {
     slug: 'secret-field',
     name: 'Secret field',
     group: 'Data display',

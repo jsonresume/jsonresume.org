@@ -90,5 +90,9 @@ describe('every page', () => {
       expect(html).toContain('Page not found');
       expect(html).toContain('content="noindex"');
     }
+    // A bare name is probably someone's resume, which lives at /@name.
+    const { html } = await page('/nope');
+    expect(html).toContain('Looking for @nope?');
+    expect(html).toContain('href="/@nope"');
   });
 });

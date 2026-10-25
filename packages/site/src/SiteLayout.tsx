@@ -10,6 +10,7 @@ import type { ReactNode } from 'react';
 import { HeaderAuth } from './HeaderAuth';
 import { footerNav, headerNav, paths } from './links';
 import { isSitePath, SiteLink } from './SiteLink';
+import * as s from './siteLayout.css';
 
 const isActive = (href: string, pathname: string) =>
   isSitePath(href) && (pathname === href || pathname.startsWith(`${href}/`));
@@ -19,7 +20,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   return (
-    <>
+    <div className={s.page}>
       <SkipLink />
       <SiteHeader
         brand={
@@ -39,7 +40,9 @@ export function SiteLayout({ children }: { children: ReactNode }) {
           </SiteHeaderLink>
         ))}
       </SiteHeader>
-      <main id="main">{children}</main>
+      <main id="main" className={s.main}>
+        {children}
+      </main>
       <SiteFooter
         links={footerNav.map((item) => (
           <SiteLink key={item.label} href={item.href}>
@@ -48,6 +51,6 @@ export function SiteLayout({ children }: { children: ReactNode }) {
         ))}
         note="JSON Resume is open source under the MIT license, built by volunteers since 2014."
       />
-    </>
+    </div>
   );
 }
