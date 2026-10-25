@@ -5,6 +5,7 @@ import { filterThemes, findTheme, themes } from '@repo/theme-gallery/catalog';
 import { Effect, Predicate, Schema } from 'effect';
 import { Tool, Toolkit } from 'effect/ai';
 import { caller, describe, failing, failWith, hints } from './context';
+import { optional } from './params';
 
 const SITE = 'https://jsonresume.org';
 
@@ -49,8 +50,8 @@ export const AccountToolkit = Toolkit.make(
   Tool.make('list_themes', {
     description: describe('list_themes'),
     parameters: Schema.Struct({
-      query: Schema.optional(Schema.String),
-      tag: Schema.optional(Schema.String),
+      query: optional(Schema.String),
+      tag: optional(Schema.String),
     }),
     success: Schema.Array(Theme),
     ...failing,

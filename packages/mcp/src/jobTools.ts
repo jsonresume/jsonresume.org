@@ -13,6 +13,7 @@ import { careerDirections, JobBoard, JobMatcher, toSummary } from '@repo/jobs';
 import { Effect, Schema } from 'effect';
 import { Tool, Toolkit } from 'effect/ai';
 import { caller, describe, failing, failWith, hints } from './context';
+import { Count, optional } from './params';
 
 const jobUrl = (id: number) => `https://jsonresume.org/jobs/${id}`;
 
@@ -37,10 +38,10 @@ export const JobToolkit = Toolkit.make(
     description: describe('match_jobs'),
     parameters: Schema.Struct({
       ...Filters,
-      include_marked: Schema.optional(Schema.Boolean).annotate({
-        description:
-          'Also return jobs already marked (default: only unmarked ones)',
-      }),
+      include_marked: optional(
+        Schema.Boolean,
+        'Also return jobs already marked (default: only unmarked ones)'
+      ),
     }),
     success: Schema.Struct({
       total: Schema.Number,
@@ -50,7 +51,7 @@ export const JobToolkit = Toolkit.make(
   }).annotateMerge(hints('match_jobs')),
   Tool.make('get_job', {
     description: describe('get_job'),
-    parameters: Schema.Struct({ id: Schema.Number }),
+    parameters: Schema.Struct({ id: Count }),
     success: Schema.Struct({
       job: Job,
       url: Schema.String,
@@ -61,9 +62,9 @@ export const JobToolkit = Toolkit.make(
   Tool.make('mark_job', {
     description: describe('mark_job'),
     parameters: Schema.Struct({
-      id: Schema.Number,
+      id: Count,
       mark: Schema.NullOr(JobMark),
-      note: Schema.optional(Schema.String),
+      note: optional(Schema.String),
     }),
     success: Schema.Struct({ id: Schema.Number, mark: Schema.NullOr(JobMark) }),
     ...failing,
@@ -75,7 +76,7 @@ export const JobToolkit = Toolkit.make(
   }).annotateMerge(hints('get_career_directions')),
   Tool.make('list_marked_jobs', {
     description: describe('list_marked_jobs'),
-    parameters: Schema.Struct({ mark: Schema.optional(JobMark) }),
+    parameters: Schema.Struct({ mark: optional(JobMark) }),
     success: Schema.Array(Marked),
     ...failing,
   }).annotateMerge(hints('list_marked_jobs'))

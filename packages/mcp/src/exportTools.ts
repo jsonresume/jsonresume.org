@@ -4,6 +4,7 @@ import { dataFormats, formatResume } from '@repo/resume-formats';
 import { Effect, Predicate, Schema } from 'effect';
 import { Tool, Toolkit } from 'effect/ai';
 import { caller, describe, failing, hints } from './context';
+import { optional } from './params';
 
 const SITE = 'https://jsonresume.org';
 
@@ -45,10 +46,9 @@ export const ExportToolkit = Toolkit.make(
   Tool.make('check_ats', {
     description: describe('check_ats'),
     parameters: Schema.Struct({
-      resume: Schema.optional(
-        Schema.Record(Schema.String, Schema.Unknown).annotate({
-          description: 'A resume to check instead of yours',
-        })
+      resume: optional(
+        Schema.Record(Schema.String, Schema.Unknown),
+        'A resume to check instead of yours'
       ),
     }),
     success: AtsReport,
@@ -58,10 +58,11 @@ export const ExportToolkit = Toolkit.make(
     description: describe('export_resume'),
     parameters: Schema.Struct({
       format: ExportFormat,
-      theme: Schema.optional(Schema.String).annotate({
-        description: 'For pdf: the theme to print in (default: your page’s)',
-      }),
-      paper: Schema.optional(Schema.Literals(['a4', 'letter'])),
+      theme: optional(
+        Schema.String,
+        'For pdf: the theme to print in (default: your page’s)'
+      ),
+      paper: optional(Schema.Literals(['a4', 'letter'])),
     }),
     success: Schema.Struct({
       url: Schema.String,

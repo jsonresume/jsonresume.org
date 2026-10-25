@@ -5,6 +5,7 @@ import type { JsonSchemaNode } from '@repo/schema-explorer/model';
 import { Effect, Predicate, Schema } from 'effect';
 import { Tool, Toolkit } from 'effect/ai';
 import { caller, describe, failing, failWith, hints } from './context';
+import { optional } from './params';
 
 const schema = schemaJson as JsonSchemaNode;
 const SITE = 'https://jsonresume.org';
@@ -73,7 +74,7 @@ export const ResumeToolkit = Toolkit.make(
   }).annotateMerge(hints('update_resume_section', true)),
   Tool.make('validate_resume', {
     description: describe('validate_resume'),
-    parameters: Schema.Struct({ resume: Schema.optional(Resume) }),
+    parameters: Schema.Struct({ resume: optional(Resume) }),
     success: Schema.Struct({ valid: Schema.Boolean, problems: Issues }),
     ...failing,
   }).annotateMerge(hints('validate_resume')),

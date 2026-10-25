@@ -163,6 +163,11 @@ describe('the MCP server', () => {
       readOnlyHint: false,
       destructiveHint: false,
     });
+    // Numbers are plain numbers, without Schema.Number's "Infinity" and "NaN".
+    const inputs = listed.tools.map(
+      (t: { inputSchema: unknown }) => t.inputSchema
+    );
+    expect(JSON.stringify(inputs)).not.toContain('Infinity');
     const listedPrompts = await send('prompts/list');
     expect(
       listedPrompts.prompts.map((p: { name: string }) => p.name).sort()
@@ -193,6 +198,10 @@ describe('the MCP server', () => {
     expect((await call('set_theme', { slug: 'no-such-theme' })).isError).toBe(
       true
     );
+    // Clients send null for optional parameters, as the schemas allow.
+    const all = await call('list_themes', { query: null, tag: null });
+    expect(all.isError).toBeFalsy();
+    expect(all.value.length).toBeGreaterThan(10);
     const themes = (await call('list_themes', { query: 'elegant' })).value;
     expect(themes[0].previewUrl).toContain('/@ada?theme=');
     await call('set_theme', { slug: themes[0].slug });

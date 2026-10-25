@@ -1,26 +1,24 @@
 import { Seniority } from '@repo/api';
 import { noFilters, type JobFilters } from '@repo/job-board/filters';
 import { Schema } from 'effect';
+import { Count, optional } from './params';
 
 /** The job filters search_jobs and match_jobs take, as tool parameters. */
 export const Filters = {
-  query: Schema.optional(Schema.String).annotate({
-    description:
-      'Words that must each start a word of the title, company, place or skills',
-  }),
-  where: Schema.optional(
-    Schema.Literals(['remote', 'anywhere', 'onsite'])
-  ).annotate({
-    description:
-      'remote (any remote), anywhere (remote worldwide), onsite (office or hybrid)',
-  }),
-  seniority: Schema.optional(Seniority),
-  min_salary: Schema.optional(Schema.Number).annotate({
-    description: 'Least yearly pay in USD; jobs that state no pay are left out',
-  }),
-  limit: Schema.optional(Schema.Number).annotate({
-    description: 'How many to return (default 20, at most 100)',
-  }),
+  query: optional(
+    Schema.String,
+    'Words that must each start a word of the title, company, place or skills'
+  ),
+  where: optional(
+    Schema.Literals(['remote', 'anywhere', 'onsite']),
+    'remote (any remote), anywhere (remote worldwide), onsite (office or hybrid)'
+  ),
+  seniority: optional(Seniority),
+  min_salary: optional(
+    Count,
+    'Least yearly pay in USD; jobs that state no pay are left out'
+  ),
+  limit: optional(Count, 'How many to return (default 20, at most 100)'),
 };
 
 type FilterInput = {

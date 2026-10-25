@@ -3,16 +3,17 @@ import { Explore } from '@repo/explore';
 import { Effect, Schema } from 'effect';
 import { Tool, Toolkit } from 'effect/ai';
 import { caller, describe, failing, hints } from './context';
+import { Count, optional } from './params';
 
 export const ExploreToolkit = Toolkit.make(
   Tool.make('search_resumes', {
     description: describe('search_resumes'),
     parameters: Schema.Struct({
-      query: Schema.optional(Schema.String).annotate({
-        description:
-          'Words that must all match: skills, a role, a place, a name or an employer, e.g. "rust berlin"',
-      }),
-      page: Schema.optional(Schema.Number),
+      query: optional(
+        Schema.String,
+        'Words that must all match: skills, a role, a place, a name or an employer, e.g. "rust berlin"'
+      ),
+      page: optional(Count),
     }),
     success: Schema.Struct({
       ...ExploreResults.fields,
