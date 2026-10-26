@@ -4,6 +4,7 @@
  * match) and the /mcp page lists them. A feature isn't done until it is
  * here too.
  */
+import { appTools } from './catalogApps';
 
 export type McpGroup =
   | 'resume'
@@ -11,7 +12,8 @@ export type McpGroup =
   | 'analytics'
   | 'account'
   | 'explore'
-  | 'jobs';
+  | 'jobs'
+  | 'apps';
 
 export interface McpToolInfo {
   name: string;
@@ -56,6 +58,11 @@ export const groups: Record<McpGroup, { title: string; description: string }> =
       title: 'Jobs',
       description:
         'Hacker News “Who is hiring?” jobs: search them, rank them against your resume, and keep track of what you think.',
+    },
+    apps: {
+      title: 'Connected apps',
+      description:
+        'See and disconnect the apps you’ve connected, and register OAuth apps for your own product.',
     },
   };
 
@@ -207,6 +214,7 @@ export const tools: ReadonlyArray<McpToolInfo> = [
       'The jobs you have marked, newest first, optionally only one mark (e.g. applied), with your notes.',
     writes: false,
   },
+  ...appTools,
 ];
 
 /** Conversations the agent can start: the registry's AI tools, as prompts. */

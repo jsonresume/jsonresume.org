@@ -35,16 +35,23 @@ export const discoveryRoutes = (site: string, openAiChallenge?: string) => {
   ];
 };
 
-/** Paths agents' clients call from other sites: MCP, OAuth, discovery. */
-export const openPaths = [
-  '/mcp',
+/**
+ * What OAuth clients call without a session: registration, tokens,
+ * revocation, and what a token reads and writes (userinfo, the resume).
+ */
+const oauthEndpoints = [
   '/api/oauth/register',
   '/api/oauth/token',
-  '/.well-known/',
+  '/api/oauth/revoke',
+  '/api/oauth/userinfo',
+  '/api/oauth/resume',
 ];
 
+/** Paths other sites' clients call: MCP, OAuth, discovery. */
+export const openPaths = ['/mcp', ...oauthEndpoints, '/.well-known/'];
+
 /** Writes that clients make without a session (so no Origin check). */
-export const sessionless = ['/api/oauth/register', '/api/oauth/token'];
+export const sessionless = oauthEndpoints;
 
 /**
  * /mcp is both the MCP server and the page about it: a browser asking for

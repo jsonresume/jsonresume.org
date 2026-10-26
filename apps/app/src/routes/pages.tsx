@@ -100,6 +100,16 @@ export const cliRoute = page(
   () => import('./cli.lazy')
 );
 
+export const developersRoute = page(
+  paths.developers,
+  {
+    title: 'Sign in with JSON Resume',
+    description:
+      'OAuth for HR tools, job boards and applicant trackers: people sign in with jsonresume.org and share their resume.json with your app.',
+  },
+  () => import('./developers.lazy')
+);
+
 export const aiRoute = page(
   paths.ai,
   {

@@ -12,6 +12,8 @@ import { GithubRoutes } from './github';
 import { JobsHandlers, MyJobsHandlers } from './jobs';
 import { ApiKeyAuthenticationLive, KeysHandlers } from './keys';
 import { OAuthConsentHandlers, OAuthHandlers } from './oauth';
+import { OAuthAppsHandlers } from './oauthApps';
+import { OAuthBearerLive, OAuthResourceHandlers } from './oauthResource';
 import { PathwaysRoutes } from './pathways';
 import { V1Handlers, V1PublicHandlers } from './v1';
 
@@ -53,8 +55,14 @@ export const apiRoutes = (version: string) =>
         V1PublicHandlers,
         OAuthHandlers,
         OAuthConsentHandlers,
+        OAuthAppsHandlers,
+        OAuthResourceHandlers,
       ]),
-      Layer.provide([AuthenticationLive, ApiKeyAuthenticationLive])
+      Layer.provide([
+        AuthenticationLive,
+        ApiKeyAuthenticationLive,
+        OAuthBearerLive,
+      ])
     ),
     GithubRoutes,
     PathwaysRoutes

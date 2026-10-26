@@ -25,6 +25,7 @@ export const keys = {
   jobs: ['jobs'],
   apiKeys: ['apiKeys'],
   connections: ['connections'],
+  oauthApps: ['oauthApps'],
   explore: ['explore'],
 } as const;
 
@@ -81,9 +82,9 @@ export const createApiKeyAtom = ApiClient.mutation('keys', 'create');
 export const revokeApiKeyAtom = ApiClient.mutation('keys', 'revoke');
 /** Who is asking on the OAuth consent page, if the redirect is theirs. */
 export const oauthClientAtom = Atom.family((key: string) => {
-  const [client_id = '', redirect_uri = ''] = key.split('\n');
+  const [client_id = '', redirect_uri = '', scope = ''] = key.split('\n');
   return ApiClient.query('oauth', 'client', {
-    query: { client_id, redirect_uri },
+    query: { client_id, redirect_uri, ...(scope && { scope }) },
   });
 });
 export const oauthDecideAtom = ApiClient.mutation('oauthConsent', 'decide');
@@ -92,6 +93,13 @@ export const connectionsAtom = ApiClient.query('oauthConsent', 'connections', {
   reactivityKeys: keys.connections,
 });
 export const disconnectAtom = ApiClient.mutation('oauthConsent', 'disconnect');
+/** The user's own OAuth apps (Sign in with JSON Resume). */
+export const oauthAppsAtom = ApiClient.query('oauthApps', 'list', {
+  reactivityKeys: keys.oauthApps,
+});
+export const createOAuthAppAtom = ApiClient.mutation('oauthApps', 'create');
+export const newOAuthSecretAtom = ApiClient.mutation('oauthApps', 'newSecret');
+export const deleteOAuthAppAtom = ApiClient.mutation('oauthApps', 'delete');
 
 export const exploreListingAtom = ApiClient.query('myListing', 'get', {
   reactivityKeys: keys.explore,

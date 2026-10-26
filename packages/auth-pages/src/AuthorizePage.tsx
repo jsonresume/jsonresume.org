@@ -1,22 +1,15 @@
 import { RegistryProvider, useAtomSet, useAtomValue } from '@effect/atom-react';
-import {
-  AuthCard,
-  Button,
-  Callout,
-  Skeleton,
-  Stack,
-  Text,
-} from '@jsonresume/ui';
+import { AuthCard, Button, Callout, Skeleton, Text } from '@jsonresume/ui';
 import {
   oauthClientAtom,
   oauthDecideAtom,
   sessionAtom,
   useIsClient,
 } from '@repo/api-client';
-import { groups } from '@repo/mcp/catalog';
 import { Exit } from 'effect';
 import { AsyncResult } from 'effect/reactivity';
 import { useState } from 'react';
+import { ConsentMaker, ConsentScopes } from './ConsentScopes';
 import { Form } from './shared';
 
 /** What /oauth/authorize was asked, from its query string. */
@@ -26,10 +19,13 @@ export interface AuthorizeRequest {
   redirectUri?: string;
   codeChallenge?: string;
   codeChallengeMethod?: string;
+  scope?: string;
   state?: string;
 }
 
 const TITLE = 'Connect an app';
+const UNSUPPORTED =
+  'This app asked in a way jsonresume.org doesn’t support (it needs the authorization code flow, with PKCE S256 unless it has a client secret).';
 
 function Problem({ text }: { text: string }) {
   return (
@@ -50,9 +46,11 @@ function Consent({
   request: AuthorizeRequest;
   clientId: string;
   redirectUri: string;
-  codeChallenge: string;
+  codeChallenge: string | undefined;
 }) {
-  const client = useAtomValue(oauthClientAtom(`${clientId}\n${redirectUri}`));
+  const client = useAtomValue(
+    oauthClientAtom(`${clientId}\n${redirectUri}\n${request.scope ?? ''}`)
+  );
   const session = useAtomValue(sessionAtom);
   const decide = useAtomSet(oauthDecideAtom, { mode: 'promiseExit' });
   const [busy, setBusy] = useState(false);
@@ -60,8 +58,16 @@ function Consent({
 
   if (AsyncResult.isFailure(client)) {
     return (
-      <Problem text="This app isn’t registered with jsonresume.org, or it asked to be sent somewhere it didn’t register. Start connecting again from the app." />
+      <Problem text="This app isn’t registered with jsonresume.org, asked to be sent somewhere it didn’t register, or asked for something jsonresume.org doesn’t offer. Start connecting again from the app." />
     );
+  }
+  // Only apps with a secret may leave out PKCE.
+  if (
+    AsyncResult.isSuccess(client) &&
+    !codeChallenge &&
+    !client.value.confidential
+  ) {
+    return <Problem text={UNSUPPORTED} />;
   }
   if (!AsyncResult.isSuccess(client) || AsyncResult.isInitial(session)) {
     return (
@@ -95,7 +101,8 @@ function Consent({
       payload: {
         client_id: clientId,
         redirect_uri: redirectUri,
-        code_challenge: codeChallenge,
+        ...(codeChallenge !== undefined && { code_challenge: codeChallenge }),
+        ...(request.scope !== undefined && { scope: request.scope }),
         ...(request.state !== undefined && { state: request.state }),
         approve,
       },
@@ -122,17 +129,8 @@ function Consent({
         </Text>
       }
     >
-      <Stack asChild gap={2}>
-        <ul>
-          {Object.values(groups).map((g) => (
-            <li key={g.title}>
-              <Text size="sm">
-                <strong>{g.title}:</strong> {g.description}
-              </Text>
-            </li>
-          ))}
-        </ul>
-      </Stack>
+      <ConsentScopes scopes={client.value.scopes} />
+      <ConsentMaker client={client.value} />
       {failed ? (
         <Callout tone="danger" role="alert">
           That didn’t work. Start connecting again from the app.
@@ -165,12 +163,9 @@ function Authorize({ request }: { request: AuthorizeRequest }) {
   }
   if (
     request.responseType !== 'code' ||
-    !codeChallenge ||
-    request.codeChallengeMethod !== 'S256'
+    (codeChallenge !== undefined && request.codeChallengeMethod !== 'S256')
   ) {
-    return (
-      <Problem text="This app asked in a way jsonresume.org doesn’t support (it needs the authorization code flow with PKCE, S256)." />
-    );
+    return <Problem text={UNSUPPORTED} />;
   }
   return (
     <Consent
@@ -182,7 +177,7 @@ function Authorize({ request }: { request: AuthorizeRequest }) {
   );
 }
 
-/** /oauth/authorize: an app (an MCP client) asks to use the user's resume. */
+/** /oauth/authorize: an app (an MCP client, an HR tool) asks to use the user's resume. */
 export function AuthorizePage({ request }: { request: AuthorizeRequest }) {
   const isClient = useIsClient();
   return (

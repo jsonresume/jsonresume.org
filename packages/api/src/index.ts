@@ -7,6 +7,8 @@ import { EventsApi } from './EventsApi';
 import { ExploreApi, MyListingApi } from './ExploreApi';
 import { KeysApi } from './KeysApi';
 import { OAuthApi, OAuthConsentApi } from './OAuthApi';
+import { OAuthAppsApi } from './OAuthAppsApi';
+import { OAuthResourceApi } from './OAuthResourceApi';
 import { JobsApi, MyJobsApi } from './JobsApi';
 import { SystemApi } from './SystemApi';
 import { V1Api, V1PublicApi } from './V1Api';
@@ -45,8 +47,25 @@ export {
   ResumeListing,
 } from './ExploreApi';
 export { ApiKey, KeysApi, TooManyKeys } from './KeysApi';
-export { Connection, OAuthApi, OAuthConsentApi, OAuthError } from './OAuthApi';
+export {
+  Connection,
+  ConsentClient,
+  OAuthApi,
+  OAuthConsentApi,
+  OAuthError,
+} from './OAuthApi';
+export { OAuthApp, OAuthAppInput, OAuthAppsApi } from './OAuthAppsApi';
+export {
+  CurrentGrant,
+  InsufficientScope,
+  InvalidToken,
+  OAuthBearer,
+  OAuthResourceApi,
+  ResumeNotSaved,
+  UserInfo,
+} from './OAuthResourceApi';
 export { Health, SystemApi } from './SystemApi';
+export { allows, parseScope, SCOPE_NAMES, SCOPES, type Scope } from './scopes';
 export {
   ApiKeyAuthentication,
   V1Api,
@@ -94,6 +113,8 @@ export class JsonResumeApi extends HttpApi.make('jsonresume')
   .add(V1PublicApi)
   .add(OAuthApi)
   .add(OAuthConsentApi)
+  .add(OAuthAppsApi)
+  .add(OAuthResourceApi)
   .prefix('/api')
   .annotateMerge(OpenApi.annotations({ title: 'JSON Resume API' })) {}
 export { CopilotEvent, CopilotMessage, CopilotRequest } from './PathwaysApi';

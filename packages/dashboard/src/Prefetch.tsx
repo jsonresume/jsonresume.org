@@ -3,6 +3,7 @@ import { AnalyticsRange } from '@repo/api';
 import {
   accountAtom,
   apiKeysAtom,
+  oauthAppsAtom,
   connectionsAtom,
   currentResumeAtom,
   exploreListingAtom,
@@ -32,7 +33,13 @@ export const pageData = (
     case '/dashboard/resume':
       return [accountAtom, currentResumeAtom];
     case '/dashboard/settings':
-      return [accountAtom, exploreListingAtom, connectionsAtom, apiKeysAtom];
+      return [
+        accountAtom,
+        exploreListingAtom,
+        connectionsAtom,
+        apiKeysAtom,
+        oauthAppsAtom,
+      ];
     case '/dashboard/jobs':
       return [jobMatchesAtom];
     default:

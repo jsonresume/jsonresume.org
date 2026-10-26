@@ -3,6 +3,7 @@ import { blogRoute, postRoute } from './routes/blog';
 import {
   aiRoute,
   cliRoute,
+  developersRoute,
   gettingStartedRoute,
   homeRoute,
   jobSchemaRoute,
@@ -46,6 +47,7 @@ export const routeTree = rootRoute.addChildren([
     schemaRoute,
     jobSchemaRoute,
     cliRoute,
+    developersRoute,
     aiRoute,
     themesRoute,
     themeDevelopmentRoute,

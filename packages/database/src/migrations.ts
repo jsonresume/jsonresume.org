@@ -252,4 +252,19 @@ export const migrations: Record<
     const sql = yield* SqlClient.SqlClient;
     yield* sql`ALTER TABLE app.profiles ADD COLUMN listed boolean NOT NULL DEFAULT true`;
   }),
+
+  // OAuth apps people register (HR tools, job sites): an owner, a secret
+  // (its hash) for apps with a server, a homepage for the consent page.
+  // Apps with a secret may skip PKCE, as OAuth 2.1 allows.
+  '10_oauth_apps': Effect.gen(function* () {
+    const sql = yield* SqlClient.SqlClient;
+    yield* sql`
+      ALTER TABLE app.oauth_clients
+        ADD COLUMN owner_id uuid REFERENCES app.users (id) ON DELETE CASCADE,
+        ADD COLUMN secret_hash text,
+        ADD COLUMN homepage text
+    `;
+    yield* sql`CREATE INDEX oauth_clients_owner ON app.oauth_clients (owner_id)`;
+    yield* sql`ALTER TABLE app.oauth_codes ALTER COLUMN code_challenge DROP NOT NULL`;
+  }),
 };

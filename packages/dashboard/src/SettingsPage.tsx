@@ -24,6 +24,7 @@ import { searchParam } from './session';
 import { DeleteAccount } from './settings/DeleteAccount';
 import { ApiKeysCard } from './settings/ApiKeysCard';
 import { ConnectionsCard } from './settings/ConnectionsCard';
+import { OAuthAppsCard } from './settings/OAuthAppsCard';
 import { ExploreCard } from './settings/ExploreCard';
 import { UsernameCard } from './settings/UsernameCard';
 
@@ -139,6 +140,7 @@ export function SettingsPage() {
         <ExploreCard />
         <ConnectionsCard />
         <ApiKeysCard />
+        <OAuthAppsCard />
         <DeleteAccount username={account.username} />
       </Stack>
     </AppPage>
