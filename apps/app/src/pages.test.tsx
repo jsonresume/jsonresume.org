@@ -64,12 +64,7 @@ describe('every page', () => {
       const { html } = await page(path);
       for (const [, href] of html.matchAll(/href="(\/[^"#?]*)/g)) {
         const target = href.replace(/\/$/, '') || '/';
-        // Built assets; under test, Vite serves them from /@fs.
-        if (
-          target.startsWith('/assets/') ||
-          target.startsWith('/@fs/') ||
-          target === '/favicon.svg'
-        )
+        if (target.startsWith('/assets/') || target === '/favicon.svg')
           continue;
         // Resumes (/@name, its formats and timeline), jobs, Explore and the
         // API are served live, not prerendered.

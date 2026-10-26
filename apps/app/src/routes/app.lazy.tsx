@@ -15,6 +15,8 @@ export const DashboardRoute = createLazyRoute('/dashboard')({
         renderLink={(item, props) => (
           <Link
             to={item.href}
+            // Dashboard routes have no loaders: this fetches the page's code.
+            preload="intent"
             // /dashboard is a prefix of every dashboard page: match it exactly.
             activeOptions={{ exact: item.href === '/dashboard' }}
             className={props.className}
