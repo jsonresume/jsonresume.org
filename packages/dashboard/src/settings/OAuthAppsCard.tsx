@@ -9,11 +9,7 @@ import {
   CodeBlock,
   Link,
   Stack,
-  Table,
-  Td,
   Text,
-  Th,
-  visuallyHidden,
 } from '@jsonresume/ui';
 import {
   deleteOAuthAppAtom,
@@ -25,6 +21,7 @@ import { Exit } from 'effect';
 import { AsyncResult } from 'effect/reactivity';
 import { useState } from 'react';
 import { NewOAuthAppForm, type MadeApp } from './NewOAuthAppForm';
+import * as s from './settings.css';
 
 /**
  * Apps people register to offer "Sign in with JSON Resume" in their own
@@ -77,57 +74,49 @@ export function OAuthAppsCard() {
             </Callout>
           ) : null}
           {list.length > 0 ? (
-            <Table aria-label="Your OAuth apps">
-              <thead>
-                <tr>
-                  <Th>App</Th>
-                  <Th>Client ID</Th>
-                  <Th>Users</Th>
-                  <Th>
-                    <span className={visuallyHidden}>Actions</span>
-                  </Th>
-                </tr>
-              </thead>
-              <tbody>
+            <Stack asChild gap={3} align="stretch">
+              <ul aria-label="Your OAuth apps">
                 {list.map((app) => (
-                  <tr key={app.id}>
-                    <Td>{app.name}</Td>
-                    <Td>
-                      <code>{app.id}</code>
-                    </Td>
-                    <Td>{app.users}</Td>
-                    <Td>
-                      <Stack direction="row" gap={2} wrap>
-                        <Button
-                          size="sm"
-                          variant="secondary"
-                          aria-label={`New secret for ${app.name}`}
-                          onClick={() => void rotate(app)}
-                        >
-                          New secret
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="secondary"
-                          aria-label={`Delete ${app.name}`}
-                          onClick={() =>
-                            window.confirm(
-                              `Delete ${app.name}? Everyone who connected it is disconnected.`
-                            ) &&
-                            void remove({
-                              params: { id: app.id },
-                              reactivityKeys: keys.oauthApps,
-                            })
-                          }
-                        >
-                          Delete
-                        </Button>
-                      </Stack>
-                    </Td>
-                  </tr>
+                  <li key={app.id} className={s.app}>
+                    <Stack gap={1} align="start">
+                      <Text weight="semibold">{app.name}</Text>
+                      <code className={s.clientId}>{app.id}</code>
+                      <Text size="sm" tone="muted">
+                        {app.users === 1
+                          ? '1 person connected'
+                          : `${app.users} people connected`}
+                      </Text>
+                    </Stack>
+                    <Stack direction="row" gap={2} wrap>
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        aria-label={`New secret for ${app.name}`}
+                        onClick={() => void rotate(app)}
+                      >
+                        New secret
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        aria-label={`Delete ${app.name}`}
+                        onClick={() =>
+                          window.confirm(
+                            `Delete ${app.name}? Everyone who connected it is disconnected.`
+                          ) &&
+                          void remove({
+                            params: { id: app.id },
+                            reactivityKeys: keys.oauthApps,
+                          })
+                        }
+                      >
+                        Delete
+                      </Button>
+                    </Stack>
+                  </li>
                 ))}
-              </tbody>
-            </Table>
+              </ul>
+            </Stack>
           ) : null}
           <NewOAuthAppForm onMade={setMade} />
         </Stack>
