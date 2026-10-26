@@ -13,6 +13,9 @@
     "./slugs": "./src/slugs.ts",
     "./pages": "./src/pages/index.ts"
   },
+  "sideEffects": [
+    "**/*.css.ts"
+  ],
   "scripts": {
     "test": "vitest run",
     "typecheck": "tsc --noEmit",

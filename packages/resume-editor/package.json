@@ -8,6 +8,9 @@
     ".": "./src/index.ts",
     "./validate": "./src/validate.ts"
   },
+  "sideEffects": [
+    "**/*.css.ts"
+  ],
   "scripts": {
     "test": "vitest run",
     "typecheck": "tsc --noEmit",

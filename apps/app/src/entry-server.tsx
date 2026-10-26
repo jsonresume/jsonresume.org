@@ -1,8 +1,10 @@
-import type { Manifest } from '@tanstack/react-router';
+import type { AnyRoute, Manifest } from '@tanstack/react-router';
 import {
   createRenderer,
   devRouterManifest,
+  routerManifestFromVite,
   staticPaths,
+  type ViteManifest,
 } from '@repo/ssg/server';
 import { createAppRouter } from './router';
 import type { RouterContext } from './routes/root';
@@ -18,6 +20,32 @@ export const createAppRenderer = (manifest: Manifest) =>
     manifest,
   });
 
+/**
+ * The built client's assets for every route: Vite's manifest, and the lazy
+ * page module behind each route id (.vite/lazy-routes.json, see lazyRoutes).
+ */
+export const appManifest = (
+  vite: ViteManifest,
+  routes: Readonly<Record<string, string>>
+) => {
+  const routesById: Record<string, AnyRoute> = createAppRouter().routesById;
+  // A child whose page is in its parent's module (the dashboard's pages) is
+  // already covered by the parent's preloads.
+  const inherited = (id: string) => {
+    for (let r = routesById[id]?.parentRoute; r; r = r.parentRoute) {
+      if (routes[r.id] === routes[id]) return true;
+    }
+    return false;
+  };
+  const own = Object.entries(routes).filter(([id]) => !inherited(id));
+  return routerManifestFromVite(
+    vite,
+    clientEntry,
+    '/',
+    Object.fromEntries(own)
+  );
+};
+
 /** Server rendering for `pnpm dev`, with Vite serving source modules. */
 export const render = createAppRenderer(devRouterManifest(clientEntry));
 
@@ -32,4 +60,5 @@ export const paths = [
   ...postPaths,
 ];
 
-export { prerender, routerManifestFromVite } from '@repo/ssg/server';
+export { prerender } from '@repo/ssg/server';
+export { LAZY_ROUTES_FILE } from '@repo/ssg/vite';

@@ -7,6 +7,9 @@
   "exports": {
     ".": "./src/index.ts"
   },
+  "sideEffects": [
+    "**/*.css.ts"
+  ],
   "scripts": {
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
@@ -20,6 +23,7 @@
     "@repo/ats": "workspace:*",
     "@repo/auth-pages": "workspace:*",
     "@repo/content": "workspace:*",
+    "@repo/images": "workspace:*",
     "@repo/job-board": "workspace:^",
     "@repo/url-state": "workspace:*",
     "@vanilla-extract/css": "^1.21.3",

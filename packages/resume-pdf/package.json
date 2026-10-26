@@ -5,7 +5,8 @@
   "description": "Prints a themed resume to PDF with headless Chromium, for /@username.pdf",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./policy": "./src/policy.ts"
   },
   "scripts": {
     "test": "vitest run",

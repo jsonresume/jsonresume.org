@@ -6,50 +6,11 @@ import {
   FilterBar,
   SearchField,
 } from '@jsonresume/ui';
-import type { ThemeSummary } from '@repo/domain';
 import { optionParam, textParam, useAtomsInUrl } from '@repo/url-state';
 import { themeQueryAtom, themeTagAtom, visibleThemesAtom } from './atoms';
 import { tagCounts, themes } from './catalog';
 import * as s from './gallery.css';
-import { ThemeCard } from './ThemeCard';
-
-export interface ThemeLinks {
-  /** Screenshot URL for a theme. */
-  image: (theme: ThemeSummary) => string;
-  /** Where a theme card links, e.g. a live preview. */
-  href: (theme: ThemeSummary) => string;
-}
-
-export interface ThemeGridProps extends ThemeLinks {
-  themes: ReadonlyArray<ThemeSummary>;
-  /** How many cards load their screenshot eagerly. */
-  eagerCount?: number;
-  /** Accessible name of the list. */
-  label?: string;
-}
-
-export function ThemeGrid({
-  themes: list,
-  image,
-  href,
-  eagerCount = 0,
-  label = 'Themes',
-}: ThemeGridProps) {
-  return (
-    <ul className={s.grid} role="list" aria-label={label}>
-      {list.map((theme, index) => (
-        <li key={theme.slug}>
-          <ThemeCard
-            theme={theme}
-            image={image(theme)}
-            href={href(theme)}
-            eager={index < eagerCount}
-          />
-        </li>
-      ))}
-    </ul>
-  );
-}
+import { ThemeGrid, type ThemeLinks } from './ThemeGrid';
 
 /** The styles most themes share, as one-tap filters. */
 const STYLE_CHIPS = 12;

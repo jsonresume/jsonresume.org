@@ -76,6 +76,7 @@ package over growing an app.
 | `@repo/ats`               | The ATS check: how tracking systems read a resume, scored from its JSON, with fixes (`/ui`: the report view).                                 |
 | `@repo/explore`           | Explore: every public resume, searchable, in an index kept in memory, and the opt-out (`/ui`: the /explore page).                             |
 | `@repo/timeline`          | A resume as a timeline for `/@username/timeline` (`/ui`: the page).                                                                           |
+| `@repo/images`            | Other sites' images (avatars, photos) resized and cached by our server at `/_img/<width>/<source>.webp`; `proxiedImage()` builds the path.    |
 
 Dependency direction: `domain` ← `content`, `api` ← `site`, feature packages ←
 `apps/app`. Packages never import from apps. `@jsonresume/ui` imports nothing

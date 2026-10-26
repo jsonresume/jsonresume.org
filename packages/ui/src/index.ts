@@ -70,14 +70,16 @@ export {
 
 // Content and docs
 export {
-  CodeTabs,
   LinkCard,
   SectionIntro,
-  type CodeTab,
-  type CodeTabsProps,
   type LinkCardProps,
   type SectionIntroProps,
 } from './components/content/content';
+export {
+  CodeTabs,
+  type CodeTab,
+  type CodeTabsProps,
+} from './components/content/code-tabs';
 export {
   ChipGroup,
   OnThisPage,

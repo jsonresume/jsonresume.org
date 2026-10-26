@@ -16,6 +16,8 @@ Environment=NODE_ENV=production HOME=/srv/jsonresume
 EnvironmentFile=/etc/jsonresume/%i.env
 EnvironmentFile=-/etc/jsonresume/postgres.env
 EnvironmentFile=-/srv/jsonresume/%i/release.env
+# /var/cache/jsonresume/<app>, as $CACHE_DIRECTORY: resized images.
+CacheDirectory=jsonresume/%i
 WorkingDirectory=/srv/jsonresume/%i/current/apps/%i
 # Each app's own start script; it reads PORT from the env file.
 ExecStart=/usr/bin/pnpm start

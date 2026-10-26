@@ -16,6 +16,7 @@ import {
 } from '@jsonresume/ui';
 import type { Account } from '@repo/api';
 import { accountAtom, signOutAtom } from '@repo/api-client';
+import { proxiedImage } from '@repo/images/url';
 import { AsyncResult } from 'effect/reactivity';
 import type { ReactNode } from 'react';
 import { Notices } from './Notices';
@@ -77,7 +78,7 @@ function Details({ account }: { account: Account }) {
         <Inline>
           <Avatar
             name={account.github.login}
-            src={account.github.avatarUrl}
+            src={proxiedImage(account.github.avatarUrl, 64)}
             size="sm"
             shape="circle"
             alt=""

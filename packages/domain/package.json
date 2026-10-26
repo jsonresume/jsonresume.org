@@ -7,6 +7,9 @@
   "exports": {
     ".": "./src/index.ts"
   },
+  "sideEffects": [
+    "**/*.css.ts"
+  ],
   "scripts": {
     "test": "vitest run",
     "typecheck": "tsc --noEmit",

@@ -49,6 +49,8 @@ export const rootRoute = createRootRouteWithContext<RouterContext>()({
       // Every page sets its own title; this one only shows on the 404.
       { title: 'Page not found · JSON Resume' },
     ],
+    // No font preloads: measured, they delay the first paint (they share
+    // the connection with the stylesheet) and make nothing load sooner.
     links: [{ rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' }],
   }),
   component: RootDocument,

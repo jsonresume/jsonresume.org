@@ -22,19 +22,19 @@ export const overviewRoute = createRoute({
   getParentRoute: () => dashboardRoute,
   path: '/',
   head: head('Overview'),
-}).lazy(() => import('./app.lazy').then((m) => m.OverviewRoute));
+}).lazy(() => import('./overview.lazy').then((m) => m.Route));
 
 export const resumeSettingsRoute = createRoute({
   getParentRoute: () => dashboardRoute,
   path: 'resume',
   head: head('Resume'),
-}).lazy(() => import('./app.lazy').then((m) => m.ResumeRoute));
+}).lazy(() => import('./resume-settings.lazy').then((m) => m.Route));
 
 export const settingsRoute = createRoute({
   getParentRoute: () => dashboardRoute,
   path: 'settings',
   head: head('Settings'),
-}).lazy(() => import('./app.lazy').then((m) => m.SettingsRoute));
+}).lazy(() => import('./settings.lazy').then((m) => m.Route));
 
 export const editorRoute = createRoute({
   getParentRoute: () => dashboardRoute,
@@ -46,10 +46,10 @@ export const jobsMatchesRoute = createRoute({
   getParentRoute: () => dashboardRoute,
   path: 'jobs',
   head: head('Jobs for you'),
-}).lazy(() => import('./app.lazy').then((m) => m.JobsRoute));
+}).lazy(() => import('./job-matches.lazy').then((m) => m.Route));
 
 export const pathwaysRoute = createRoute({
   getParentRoute: () => dashboardRoute,
   path: 'pathways',
   head: head('Pathways'),
-}).lazy(() => import('./app.lazy').then((m) => m.PathwaysRoute));
+}).lazy(() => import('./pathways.lazy').then((m) => m.Route));

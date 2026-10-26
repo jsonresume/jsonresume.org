@@ -12,6 +12,7 @@ import {
   Text,
 } from '@jsonresume/ui';
 import type { ExploreResults } from '@repo/api';
+import { proxiedImage } from '@repo/images/url';
 import * as s from './explore.css';
 
 export interface ExploreLinks {
@@ -106,7 +107,7 @@ export function ExplorePage({
                     key={p.username}
                     name={p.name}
                     label={p.label ?? undefined}
-                    avatarUrl={p.image}
+                    avatarUrl={proxiedImage(p.image, 96)}
                     location={p.location ?? undefined}
                     skills={p.skills.slice(0, 5)}
                     updated={updated(p.updatedAt)}
