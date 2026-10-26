@@ -1,4 +1,4 @@
-import { vars } from '@jsonresume/ui/tokens';
+import { media, vars } from '@jsonresume/ui/tokens';
 import { style } from '@vanilla-extract/css';
 
 const { color, font, space, radius } = vars;
@@ -26,6 +26,7 @@ export const mapLink = style({
   fontFamily: font.family.mono,
   fontSize: font.size.xs,
   textDecoration: 'none',
+  '@media': { [media.coarse]: { paddingBlock: space[2] } },
   selectors: {
     '&:hover': { borderColor: color.border.strong, color: color.text.strong },
   },

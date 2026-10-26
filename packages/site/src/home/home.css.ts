@@ -36,8 +36,10 @@ export const lede = style({
   fontSize: font.size.md,
 });
 
-/* Hero media: resume.json in front, the rendered resume behind it. Both
-   share one grid cell, so the pair always fits inside the hero. */
+/* Hero media: the rendered page behind, top right, its name header in
+   view; resume.json in front, bottom left, over the page's body text. Both
+   share one grid cell, so the pair always fits inside the hero. Block
+   margins in % follow the cell's width, so the overlap scales with it. */
 export const demo = style({
   display: 'grid',
   isolation: 'isolate',
@@ -49,26 +51,30 @@ const layer = {
   boxShadow: shadow.lg,
 };
 
+export const demoPreview = style({
+  ...layer,
+  alignSelf: 'start',
+  justifySelf: 'end',
+  // A page, not a browser window: the screenshot's grey margins are cropped.
+  width: '66%',
+  height: 'auto',
+  aspectRatio: '5 / 6',
+  objectFit: 'cover',
+  objectPosition: 'top',
+  border: `1px solid ${color.border.subtle}`,
+  backgroundColor: color.surface.page,
+  '@media': { [md]: { width: '58%' } },
+});
+
 export const demoCode = style({
   ...layer,
   zIndex: 1,
-  alignSelf: 'start',
-  justifySelf: 'start',
-  width: '100%',
-  marginBlockEnd: '58%',
-  fontSize: font.size.xs,
-  '@media': { [md]: { width: '78%', marginBlockEnd: '34%' } },
-});
-
-export const demoPreview = style({
-  ...layer,
   alignSelf: 'end',
-  justifySelf: 'end',
-  width: '72%',
-  height: 'auto',
-  marginBlockStart: '22%',
-  border: `1px solid ${color.border.subtle}`,
-  backgroundColor: color.surface.page,
+  justifySelf: 'start',
+  width: '94%',
+  marginBlockStart: '30%',
+  fontSize: font.size.xs,
+  '@media': { [md]: { width: '84%', marginBlockStart: '24%' } },
 });
 
 /* Theme showcase */

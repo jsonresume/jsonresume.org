@@ -1,5 +1,5 @@
 import { media, vars } from '@jsonresume/ui/tokens';
-import { style } from '@vanilla-extract/css';
+import { globalStyle, style } from '@vanilla-extract/css';
 
 const { space } = vars;
 
@@ -18,6 +18,17 @@ export const skills = style({
   margin: 0,
   padding: 0,
   listStyle: 'none',
+});
+
+// The badges stay small; on touch screens the links around them grow.
+globalStyle(`${skills} a`, {
+  '@media': {
+    [media.coarse]: {
+      display: 'inline-flex',
+      alignItems: 'center',
+      minHeight: '2.5rem',
+    },
+  },
 });
 
 export const results = style({

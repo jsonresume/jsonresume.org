@@ -1,6 +1,7 @@
 import { keyframes, style } from '@vanilla-extract/css';
 import { focusRing, transition } from '../../styles/shared.css';
 import { vars } from '../../tokens/contract.css';
+import { media } from '../../tokens/theme';
 
 const { color, font, space, radius, zIndex, shadow, motion } = vars;
 
@@ -302,6 +303,9 @@ export const copyButton = style([
     alignItems: 'center',
     gap: space[1],
     padding: `${space[1]} ${space[2]}`,
+    '@media': {
+      [media.coarse]: { minHeight: '2.5rem', paddingInline: space[3] },
+    },
     border: `1px solid transparent`,
     borderRadius: radius.md,
     background: 'transparent',

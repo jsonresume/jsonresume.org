@@ -91,6 +91,8 @@ export const example = style({
 
 export const exampleSummary = style({
   cursor: 'pointer',
+  paddingBlock: space[1],
+  '@media': { [media.coarse]: { paddingBlock: space[3] } },
   color: color.text.muted,
   fontSize: font.size.xs,
   fontWeight: font.weight.semibold,

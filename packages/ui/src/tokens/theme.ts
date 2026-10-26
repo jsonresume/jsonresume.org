@@ -253,4 +253,6 @@ export const media = {
   lg: `screen and (min-width: ${breakpoints.lg}px)`,
   xl: `screen and (min-width: ${breakpoints.xl}px)`,
   dark: '(prefers-color-scheme: dark)',
+  /** A finger, not a mouse: give small controls a 40px target. */
+  coarse: '(pointer: coarse)',
 } as const;

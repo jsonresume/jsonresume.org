@@ -12,7 +12,10 @@ export const ResumeListing = Schema.Struct({
   /** basics.image, when it is an https URL. */
   image: Schema.NullOr(Schema.String),
   skills: Schema.Array(Schema.String),
-  /** When the resume last changed here, ISO 8601. */
+  /**
+   * When the resume last changed, ISO 8601: saved here, or its own
+   * meta.lastModified. Null when unknown (fetching a gist isn't an edit).
+   */
   updatedAt: Schema.NullOr(Schema.String),
 });
 export type ResumeListing = typeof ResumeListing.Type;
