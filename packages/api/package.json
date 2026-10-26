@@ -8,6 +8,9 @@
     ".": "./src/index.ts",
     "./cookies": "./src/cookies.ts"
   },
+  "sideEffects": [
+    "**/*.css.ts"
+  ],
   "scripts": {
     "test": "vitest run",
     "typecheck": "tsc --noEmit",

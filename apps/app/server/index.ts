@@ -8,13 +8,15 @@ import { serve } from '@hono/node-server';
 import { NodeRuntime } from '@effect/platform-node';
 import { PurgeUnverified, apiRoutes } from '@repo/api-server';
 import { PgLive } from '@repo/database';
+import { createImageProxy, imageProxyPath } from '@repo/images';
 import { mcpRoutes } from '@repo/mcp';
 import { createSiteApp, effectWebHandler } from '@repo/server';
 import { Config, Effect, Layer, Option } from 'effect';
 import { readFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { registryRedirect } from '@repo/resume-host';
+import { registryRedirect, themeFont, themeFontPath } from '@repo/resume-host';
 import {
   discoveryRoutes,
   isMcpRequest,
@@ -37,11 +39,13 @@ const loadRenderer = Effect.promise(async () => {
   const entry: ServerEntry = await import(
     pathToFileURL(join(distDir, 'ssr/entry-server.js')).href
   );
-  const vite = JSON.parse(
-    await readFile(join(clientDir, '.vite/manifest.json'), 'utf8')
-  );
+  const readJson = async (file: string) =>
+    JSON.parse(await readFile(join(clientDir, file), 'utf8'));
   return entry.createAppRenderer(
-    entry.routerManifestFromVite(vite, entry.clientEntry)
+    entry.appManifest(
+      await readJson('.vite/manifest.json'),
+      await readJson(entry.LAZY_ROUTES_FILE)
+    )
   );
 });
 
@@ -87,6 +91,11 @@ const main = Effect.gen(function* () {
     ),
     (handler) => Effect.promise(() => handler.dispose())
   );
+  // systemd's CacheDirectory on the box (see deploy/systemd).
+  const cacheDir = yield* Config.String('CACHE_DIRECTORY').pipe(
+    Config.withDefault(join(tmpdir(), 'jsonresume'))
+  );
+  const images = createImageProxy({ cacheDir: join(cacheDir, 'images') });
   const render = yield* loadRenderer;
   const resumes = yield* Effect.acquireRelease(
     Effect.sync(() =>
@@ -134,6 +143,8 @@ const main = Effect.gen(function* () {
     ],
     dynamic: [
       { path: resumePath, fetch: resumes.fetch },
+      { path: themeFontPath, fetch: themeFont },
+      { path: imageProxyPath, fetch: images },
       { path: timelinePath, fetch: timeline.fetch },
       { path: jobsPath, fetch: jobs.board },
       { path: jobPath, fetch: jobs.job },

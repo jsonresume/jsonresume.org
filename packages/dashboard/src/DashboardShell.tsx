@@ -12,6 +12,7 @@ import {
   type AppNavProps,
 } from '@jsonresume/ui';
 import { sessionAtom, signOutAtom, useIsClient } from '@repo/api-client';
+import { proxiedImage } from '@repo/images/url';
 import { AsyncResult } from 'effect/reactivity';
 import { useEffect, type ReactNode } from 'react';
 import {
@@ -23,6 +24,7 @@ import {
   OpenIcon,
   PenIcon,
 } from './icons';
+import { Prefetch } from './Prefetch';
 import { SessionProvider, useSession } from './session';
 
 export interface DashboardShellProps {
@@ -59,7 +61,7 @@ function Account() {
     <AccountMenu
       name={user.username}
       email={user.email ?? undefined}
-      avatarUrl={user.github?.avatarUrl ?? null}
+      avatarUrl={proxiedImage(user.github?.avatarUrl, 64)}
       showName
       onSignOut={() => void signOut({}).then(() => window.location.assign('/'))}
     >
@@ -78,9 +80,11 @@ function Account() {
 /** Waits for the session; without one, sends the visitor to sign in. */
 function Gate({
   children,
+  pathname,
   top,
 }: {
   children: ReactNode;
+  pathname: string;
   top: (node: ReactNode) => ReactNode;
 }) {
   const session = useAtomValue(sessionAtom);
@@ -93,9 +97,15 @@ function Gate({
         )}`
       );
   }, [failed]);
-  if (!AsyncResult.isSuccess(session)) return <Loading />;
   return (
-    <SessionProvider value={session.value}>{top(children)}</SessionProvider>
+    <>
+      <Prefetch pathname={pathname} />
+      {AsyncResult.isSuccess(session) ? (
+        <SessionProvider value={session.value}>{top(children)}</SessionProvider>
+      ) : (
+        <Loading />
+      )}
+    </>
   );
 }
 
@@ -145,7 +155,9 @@ export function DashboardShell({
   if (!isClient) return shell(null, <Loading />);
   return (
     <RegistryProvider>
-      <Gate top={(page) => shell(<Account />, page)}>{children}</Gate>
+      <Gate pathname={pathname} top={(page) => shell(<Account />, page)}>
+        {children}
+      </Gate>
     </RegistryProvider>
   );
 }

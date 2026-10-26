@@ -15,14 +15,13 @@ const clientDir = join(root, 'dist/client');
 const entry: ServerEntry = await import(
   pathToFileURL(join(root, 'dist/ssr/entry-server.js')).href
 );
-const viteManifest = JSON.parse(
-  await readFile(join(clientDir, '.vite/manifest.json'), 'utf8')
-);
+const readJson = async (file: string) =>
+  JSON.parse(await readFile(join(clientDir, file), 'utf8'));
+const viteManifest = await readJson('.vite/manifest.json');
+const lazyRoutes = await readJson(entry.LAZY_ROUTES_FILE);
 
 const pages = await entry.prerender({
-  render: entry.createAppRenderer(
-    entry.routerManifestFromVite(viteManifest, entry.clientEntry)
-  ),
+  render: entry.createAppRenderer(entry.appManifest(viteManifest, lazyRoutes)),
   paths: entry.paths,
   outDir: clientDir,
   origin: 'https://jsonresume.org',

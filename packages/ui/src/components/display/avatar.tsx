@@ -51,6 +51,8 @@ export function Avatar({
           className={s.avatarImage}
           src={src ?? undefined}
           alt={alt ?? name}
+          // Lists of people (Explore) show dozens; load those near the screen.
+          loading="lazy"
           decoding="async"
           // Image hosts (imgur among them) refuse hotlinks that carry a referrer.
           referrerPolicy="no-referrer"

@@ -9,9 +9,5 @@ export {
   type ThemeFilter,
 } from './catalog';
 export { ThemeCard, type ThemeCardProps } from './ThemeCard';
-export {
-  ThemeGallery,
-  ThemeGrid,
-  type ThemeGridProps,
-  type ThemeLinks,
-} from './ThemeGallery';
+export { ThemeGallery } from './ThemeGallery';
+export { ThemeGrid, type ThemeGridProps, type ThemeLinks } from './ThemeGrid';

@@ -6,8 +6,12 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./catalog": "./src/catalog.ts"
+    "./catalog": "./src/catalog.ts",
+    "./grid": "./src/ThemeGrid.tsx"
   },
+  "sideEffects": [
+    "**/*.css.ts"
+  ],
   "scripts": {
     "test": "vitest run",
     "typecheck": "tsc --noEmit",

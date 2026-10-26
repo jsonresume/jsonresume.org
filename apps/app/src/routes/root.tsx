@@ -1,3 +1,5 @@
+import openSans from '@fontsource-variable/open-sans/files/open-sans-latin-wght-normal.woff2?url';
+import ubuntuBold from '@fontsource/ubuntu/files/ubuntu-latin-700-normal.woff2?url';
 import { base } from '@jsonresume/ui';
 import type { ExploreResults, Job, JobBoard } from '@repo/api';
 import type { ResumeProblem } from '@repo/domain';
@@ -49,7 +51,18 @@ export const rootRoute = createRootRouteWithContext<RouterContext>()({
       // Every page sets its own title; this one only shows on the 404.
       { title: 'Page not found · JSON Resume' },
     ],
-    links: [{ rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' }],
+    links: [
+      { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' },
+      // Every page's text and the wordmark (see @jsonresume/ui/fonts.css),
+      // fetched with the stylesheet instead of after it.
+      ...[openSans, ubuntuBold].map((href) => ({
+        rel: 'preload',
+        as: 'font',
+        type: 'font/woff2',
+        href,
+        crossOrigin: 'anonymous' as const,
+      })),
+    ],
   }),
   component: RootDocument,
   notFoundComponent: () => (

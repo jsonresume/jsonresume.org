@@ -16,6 +16,7 @@ import {
   usernameReason,
 } from '@repo/api-client';
 import { account } from '@repo/content/pages';
+import { proxiedImage } from '@repo/images/url';
 import { AsyncResult } from 'effect/reactivity';
 import { useState, type FormEvent, type ReactNode } from 'react';
 import {
@@ -55,7 +56,13 @@ function Choose({
 
   return (
     <AuthCard title={copy.title} description={copy.description(login)}>
-      <Avatar name={login} src={avatarUrl} size="md" shape="circle" alt="" />
+      <Avatar
+        name={login}
+        src={proxiedImage(avatarUrl, 96)}
+        size="md"
+        shape="circle"
+        alt=""
+      />
       <ErrorNote message={message} />
       <Form onSubmit={submit}>
         <Field

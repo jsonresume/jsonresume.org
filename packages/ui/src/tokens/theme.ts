@@ -148,8 +148,8 @@ export const darkColor: ColorTokens = {
 
 export const font = {
   family: {
-    sans: "'Open Sans', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-    wordmark: "'Ubuntu', 'Open Sans', system-ui, sans-serif",
+    sans: "'Open Sans Variable', 'Open Sans', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+    wordmark: "'Ubuntu', 'Open Sans Variable', system-ui, sans-serif",
     mono: "ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace",
   },
   weight: { light: '300', regular: '400', semibold: '600', bold: '700' },

@@ -8,6 +8,7 @@ import {
 } from '@repo/resume-themes';
 import { withTracking } from '@repo/analytics';
 import { Effect, Random, Schema } from 'effect';
+import { externalizeFonts } from './fonts';
 import { headers, lookup, problem, redirect, respond } from './outcome';
 import { pdfResponse, qrResponse } from './print';
 
@@ -85,9 +86,12 @@ export const resumeOutcome = Effect.fn('resumeOutcome')(function* (url: URL) {
         ? pdfResponse(html, username, doc.value, url.searchParams.get('paper'))
         : Effect.succeed(
             // Every themed page reports its views (see @repo/analytics).
-            new Response(withTracking(html, username, theme), {
-              headers: headers('text/html; charset=utf-8'),
-            })
+            new Response(
+              withTracking(externalizeFonts(html), username, theme),
+              {
+                headers: headers('text/html; charset=utf-8'),
+              }
+            )
           )
     ),
     Effect.map((response) => respond(response)),

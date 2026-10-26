@@ -8,7 +8,8 @@
     ".": "./src/index.ts",
     "./server": "./src/server.ts",
     "./browser": "./src/browser.ts",
-    "./dev": "./src/dev.ts"
+    "./dev": "./src/dev.ts",
+    "./vite": "./src/vite.ts"
   },
   "scripts": {
     "test": "vitest run",

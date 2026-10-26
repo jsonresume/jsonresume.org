@@ -8,6 +8,9 @@
     ".": "./src/index.ts",
     "./ui": "./src/ui/index.ts"
   },
+  "sideEffects": [
+    "**/*.css.ts"
+  ],
   "scripts": {
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
@@ -16,6 +19,7 @@
   "dependencies": {
     "@jsonresume/ui": "workspace:*",
     "@repo/api": "workspace:*",
+    "@repo/images": "workspace:*",
     "@repo/profiles": "workspace:*",
     "@repo/resume-formats": "workspace:*",
     "effect": "4.0.6"

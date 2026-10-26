@@ -9,6 +9,7 @@ import {
 } from '@jsonresume/ui';
 import type { HistoryEvent, Team, TeamMember } from '@repo/domain';
 import { team as copy } from '@repo/content/pages';
+import { proxiedImage } from '@repo/images/url';
 import { formatDate } from '../format';
 import { InlineParagraphs } from '../InlineMarkdown';
 import { paths } from '../links';
@@ -16,9 +17,6 @@ import { SiteLink } from '../SiteLink';
 import * as s from './pages.css';
 import { NextSteps } from './shared/NextSteps';
 import * as l from './shared/layout.css';
-
-/** GitHub avatars come at 50px in the data; ask for enough for a large avatar. */
-const largeAvatar = (url: string) => url.replace(/([?&])s=\d+/, '$1s=160');
 
 function People({
   people,
@@ -32,7 +30,7 @@ function People({
       {people.map((person) => (
         <li key={person.github} className={s.person}>
           <Avatar
-            src={largeAvatar(person.avatar)}
+            src={proxiedImage(person.avatar, 160)}
             name={person.name}
             size="lg"
             shape="circle"

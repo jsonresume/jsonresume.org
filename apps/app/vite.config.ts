@@ -1,9 +1,10 @@
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
+import { lazyRoutes } from '@repo/ssg/vite';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
-  plugins: [vanillaExtractPlugin(), react()],
+  plugins: [vanillaExtractPlugin(), react(), lazyRoutes()],
   build: {
     // The client build starts from the entry, not an index.html (the root
     // route renders the document), and writes the manifest prerender reads.
@@ -22,8 +23,9 @@ export default defineConfig({
     // resolves from its own node_modules and keeps its template files.
     noExternal: ['@jsonresume/ui', /^@repo\/(?!resume-themes)/],
     // Node packages with their own files at runtime (Chromium's driver, the
-    // QR code's PNG encoder): loaded from node_modules, never bundled.
-    external: ['playwright-core', 'qrcode'],
+    // QR code's PNG encoder, sharp's libvips): loaded from node_modules,
+    // never bundled.
+    external: ['playwright-core', 'qrcode', 'sharp'],
   },
   test: {
     environment: 'jsdom',

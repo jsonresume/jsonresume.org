@@ -1,6 +1,7 @@
 import { Button, Container, Section } from '@jsonresume/ui';
 import { facts } from '@repo/content/facts';
-import { findTheme, ThemeGrid } from '@repo/theme-gallery';
+import { findTheme } from '@repo/theme-gallery/catalog';
+import { ThemeGrid } from '@repo/theme-gallery/grid';
 import type { ThemeSummary } from '@repo/domain';
 import { paths, themeImageUrl, themePreviewUrl } from '../links';
 import { SiteLink } from '../SiteLink';

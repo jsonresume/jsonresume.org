@@ -9,6 +9,7 @@ import {
   Stack,
   Text,
 } from '@jsonresume/ui';
+import { proxiedImage } from '@repo/images/url';
 import { useSession } from '../session';
 import * as s from './pathways.css';
 import type { useCopilot } from './useCopilot';
@@ -82,7 +83,7 @@ export function Copilot({
               key={i}
               role="user"
               author="You"
-              avatarUrl={user.github?.avatarUrl ?? null}
+              avatarUrl={proxiedImage(user.github?.avatarUrl, 64)}
             >
               <Text as="p">{turn.text}</Text>
             </ChatMessage>

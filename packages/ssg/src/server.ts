@@ -6,4 +6,8 @@ export {
   type PrerenderOptions,
   type RenderedPage,
 } from './prerender';
-export { devRouterManifest, routerManifestFromVite } from './manifest';
+export {
+  devRouterManifest,
+  routerManifestFromVite,
+  type ViteManifest,
+} from './manifest';

@@ -1,11 +1,4 @@
-import {
-  DashboardShell,
-  JobsPage,
-  OverviewPage,
-  PathwaysPage,
-  ResumePage,
-  SettingsPage,
-} from '@repo/dashboard';
+import { DashboardShell } from '@repo/dashboard';
 import {
   createLazyRoute,
   Link,
@@ -35,20 +28,4 @@ export const DashboardRoute = createLazyRoute('/dashboard')({
       </DashboardShell>
     );
   },
-});
-
-export const OverviewRoute = createLazyRoute('/dashboard/')({
-  component: OverviewPage,
-});
-export const ResumeRoute = createLazyRoute('/dashboard/resume')({
-  component: ResumePage,
-});
-export const SettingsRoute = createLazyRoute('/dashboard/settings')({
-  component: SettingsPage,
-});
-export const JobsRoute = createLazyRoute('/dashboard/jobs')({
-  component: JobsPage,
-});
-export const PathwaysRoute = createLazyRoute('/dashboard/pathways')({
-  component: PathwaysPage,
 });

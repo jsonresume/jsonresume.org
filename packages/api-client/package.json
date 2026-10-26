@@ -8,6 +8,9 @@
     ".": "./src/index.ts",
     "./hints": "./src/hints.ts"
   },
+  "sideEffects": [
+    "**/*.css.ts"
+  ],
   "scripts": {
     "test": "vitest run",
     "typecheck": "tsc --noEmit",

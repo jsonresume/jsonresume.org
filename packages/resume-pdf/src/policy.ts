@@ -79,7 +79,7 @@ export const mayFetch = (raw: string): boolean => {
 };
 
 /** Whether an address is on the public internet. */
-const publicAddress = (ip: string) =>
+export const publicAddress = (ip: string) =>
   isIP(ip) === 4 ? !privateV4(ip) : !privateV6(ip);
 
 /**

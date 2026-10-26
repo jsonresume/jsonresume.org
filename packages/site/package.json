@@ -36,6 +36,7 @@
     "@repo/api-client": "workspace:^",
     "@repo/content": "workspace:*",
     "@repo/domain": "workspace:*",
+    "@repo/images": "workspace:*",
     "@repo/mcp": "workspace:*",
     "@repo/project-directory": "workspace:*",
     "@repo/schema-explorer": "workspace:*",

@@ -12,6 +12,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { routerManifestFromVite } from './manifest';
+import { lazyRouteIds } from './vite';
 import { createRenderer, fileForPath, prerender, staticPaths } from './server';
 
 const root = createRootRoute({
@@ -79,6 +80,33 @@ describe('routerManifestFromVite', () => {
       scripts: [{ attrs: { type: 'module', src: '/assets/entry-abc.js' } }],
     });
   });
+  it("gives a route its lazy page's chunk, imports and CSS, minus the shell's", () => {
+    const routed = routerManifestFromVite(
+      {
+        'src/entry-client.tsx': {
+          file: 'assets/entry-abc.js',
+          isEntry: true,
+          css: ['assets/entry-abc.css'],
+          imports: ['_vendor.js'],
+        },
+        '_vendor.js': { file: 'assets/vendor-def.js' },
+        'src/about.lazy.tsx': {
+          file: 'assets/about-123.js',
+          css: ['assets/about-123.css'],
+          imports: ['src/entry-client.tsx', '_vendor.js', '_card.js'],
+        },
+        '_card.js': { file: 'assets/card-456.js', css: ['assets/card.css'] },
+      },
+      'src/entry-client.tsx',
+      '/',
+      { '/about': 'src/about.lazy.tsx', '/gone': 'src/gone.lazy.tsx' }
+    );
+    expect(routed.routes['/about']).toEqual({
+      css: ['/assets/about-123.css', '/assets/card.css'],
+      preloads: ['/assets/about-123.js', '/assets/card-456.js'],
+    });
+    expect(routed.routes['/gone']).toBeUndefined();
+  });
 });
 
 describe('createRenderer', () => {
@@ -142,5 +170,13 @@ describe('prerender', () => {
     ]);
     expect(fileForPath('/')).toBe('index.html');
     expect(fileForPath('/blog/hello/')).toBe('blog/hello/index.html');
+  });
+});
+
+describe('lazyRouteIds', () => {
+  it('reads the ids a module declares with createLazyRoute', () => {
+    const code = `export const A = createLazyRoute('/_site/signin')({});
+export const B = createLazyRoute("/dashboard/")({ component: X });`;
+    expect(lazyRouteIds(code)).toEqual(['/_site/signin', '/dashboard/']);
   });
 });
