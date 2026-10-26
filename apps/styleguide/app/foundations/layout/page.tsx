@@ -99,6 +99,11 @@ export default function LayoutPage() {
               width, wrapping <code>Stack</code>s) over breakpoints. Everything
               must reflow at 320px without horizontal scrolling.
             </p>
+            <p>
+              <code>media.coarse</code> matches touch screens. Use it to give
+              small controls (chips, copy buttons, link rows) a 40px target
+              without changing how they look with a mouse.
+            </p>
           </Prose>
         </DocSection>
         <DocSection id="z" title="Layers">

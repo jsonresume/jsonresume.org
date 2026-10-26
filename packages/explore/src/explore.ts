@@ -24,7 +24,7 @@ interface Index {
 
 /** Only what Explore reads of a resume, so rows stay small. */
 const part = (column: string) =>
-  `jsonb_build_object('basics', ${column}->'basics', 'skills', ${column}->'skills', 'work', ${column}->'work')`;
+  `jsonb_build_object('basics', ${column}->'basics', 'skills', ${column}->'skills', 'work', ${column}->'work', 'meta', jsonb_build_object('lastModified', ${column}->'meta'->'lastModified'))`;
 
 /**
  * Explore: every public resume, searchable. Listed are ghosts (gists
@@ -52,15 +52,18 @@ export class Explore extends Context.Service<
                ${part(
                  "CASE WHEN p.kind = 'account' AND p.source = 'stored' THEN p.stored_resume ELSE p.resume END"
                )} AS resume,
-               coalesce(CASE WHEN p.source = 'stored' THEN p.stored_at ELSE p.fetched_at END,
-                        p.created_at) AS updated_at
+               -- Only a save here is an edit we saw; a gist's fetch time is not.
+               CASE WHEN p.kind = 'account' AND p.source = 'stored' THEN p.stored_at END
+                 AS updated_at
         FROM app.profiles p
         LEFT JOIN app.users u ON u.id = p.user_id
         WHERE p.listed AND (p.kind = 'ghost' OR (p.kind = 'account'
           AND (u.email_verified_at IS NOT NULL OR u.github_id IS NOT NULL)))`);
       // The registry's copy, where it was carried over (not in tests).
       const legacy = sql.unsafe(`
-        SELECT r.username, ${part('r.resume::jsonb')} AS resume, r.updated_at
+        -- Its updated_at marks the registry's bulk re-syncs, not edits.
+        SELECT r.username, ${part('r.resume::jsonb')} AS resume,
+               NULL::timestamptz AS updated_at
         FROM public.resumes r
         WHERE pg_input_is_valid(r.resume, 'jsonb')
           AND NOT EXISTS (SELECT 1 FROM app.profiles p WHERE p.username = lower(r.username))`);

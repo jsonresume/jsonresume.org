@@ -128,6 +128,7 @@ export const tocLink = style([
     color: color.text.muted,
     fontSize: font.size.xs,
     textDecoration: 'none',
+    '@media': { [media.coarse]: { paddingBlock: space[2] } },
     selectors: {
       '&:hover': { color: color.text.strong },
       '&[aria-current="true"]': {
@@ -162,6 +163,7 @@ export const choice = style([
     fontSize: font.size.xs,
     cursor: 'pointer',
     transition: `border-color ${transition}, background-color ${transition}`,
+    '@media': { [media.coarse]: { minHeight: '2.5rem' } },
     selectors: {
       '&:hover': { borderColor: color.border.strong },
       '&[aria-pressed="true"]': {

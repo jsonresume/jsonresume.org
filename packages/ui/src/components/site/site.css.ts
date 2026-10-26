@@ -75,13 +75,14 @@ export const navToggle = style([
     background: 'transparent',
     color: 'inherit',
     cursor: 'pointer',
-    '@media': { [media.md]: { display: 'none' } },
+    '@media': { [media.lg]: { display: 'none' } },
     selectors: { '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.06)' } },
   },
 ]);
 
-/* Navigation and actions share one region: collapsible on small screens,
-   inline on wide ones. DOM order matches visual order at every width. */
+/* Navigation and actions share one region: collapsible below lg, inline
+   from lg up, where all eight links fit on one line. DOM order matches
+   visual order at every width. */
 export const navRegion = style({
   display: 'none',
   flexBasis: '100%',
@@ -91,7 +92,7 @@ export const navRegion = style({
   paddingBlockEnd: space[4],
   selectors: { '&[data-open="true"]': { display: 'flex' } },
   '@media': {
-    [media.md]: {
+    [media.lg]: {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
@@ -110,7 +111,7 @@ export const navList = style({
   margin: 0,
   padding: 0,
   listStyle: 'none',
-  '@media': { [media.md]: { flexDirection: 'row', alignItems: 'center' } },
+  '@media': { [media.lg]: { flexDirection: 'row', alignItems: 'center' } },
 });
 
 export const navLink = style([
@@ -132,7 +133,12 @@ export const navLink = style([
         textUnderlineOffset: '6px',
       },
     },
-    '@media': { [media.md]: { paddingBlock: space[6] } },
+    whiteSpace: 'nowrap',
+    // Eight links share the bar from lg up: tighter until there is room.
+    '@media': {
+      [media.lg]: { paddingBlock: space[6], paddingInline: space[2] },
+      [media.xl]: { paddingInline: space[3] },
+    },
   },
 ]);
 

@@ -12,12 +12,26 @@ export interface Entry {
   fullness: number;
 }
 
-/** The raw row: a username, its resume (basics, skills, work) and when it changed. */
+/** The raw row: a username, its resume (basics, skills, work, meta) and when it was saved here. */
 export interface Row {
   username: string;
   resume: unknown;
   updatedAt: Date | null;
 }
+
+// The sample resume's own date, kept by everyone who started from it.
+const SAMPLE_DATE = '2017-12-24';
+
+/** meta.lastModified, when it is a real date: not the sample's, not in the future. */
+export const lastModifiedOf = (value: unknown, now = Date.now()) => {
+  const raw = text(value);
+  if (!raw || raw.startsWith(SAMPLE_DATE)) return null;
+  const at = new Date(raw);
+  const time = at.getTime();
+  return Number.isNaN(time) || time > now || at.getUTCFullYear() < 2000
+    ? null
+    : at;
+};
 
 const town = (location: unknown): string | null => {
   const l = entries([location])[0];
@@ -71,7 +85,11 @@ export const toEntry = (row: Row): Entry | undefined => {
     location,
     image,
     skills: skills.slice(0, 8),
-    updatedAt: row.updatedAt?.toISOString() ?? null,
+    updatedAt:
+      (
+        row.updatedAt ??
+        lastModifiedOf(entries([resume['meta']])[0]?.['lastModified'])
+      )?.toISOString() ?? null,
   };
   const words = [
     row.username,

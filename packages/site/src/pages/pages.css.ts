@@ -1,5 +1,5 @@
 import { media, vars } from '@jsonresume/ui/tokens';
-import { style } from '@vanilla-extract/css';
+import { globalStyle, style } from '@vanilla-extract/css';
 
 const { color, font, space, radius } = vars;
 
@@ -145,6 +145,16 @@ export const personLinks = style({
   display: 'flex',
   gap: space[3],
   fontSize: font.size.xs,
+});
+
+globalStyle(`${personLinks} a`, {
+  '@media': {
+    [media.coarse]: {
+      display: 'inline-flex',
+      alignItems: 'center',
+      minHeight: '2.5rem',
+    },
+  },
 });
 
 export const teamTitle = style({
