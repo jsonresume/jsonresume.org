@@ -17,3 +17,5 @@ export const clientId = style({
   fontSize: font.size.sm,
   overflowWrap: 'anywhere',
 });
+
+export const appList = style({ margin: 0, padding: 0, listStyle: 'none' });

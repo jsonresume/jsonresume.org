@@ -75,7 +75,7 @@ export function OAuthAppsCard() {
           ) : null}
           {list.length > 0 ? (
             <Stack asChild gap={3} align="stretch">
-              <ul aria-label="Your OAuth apps">
+              <ul aria-label="Your OAuth apps" className={s.appList}>
                 {list.map((app) => (
                   <li key={app.id} className={s.app}>
                     <Stack gap={1} align="start">
