@@ -1,8 +1,10 @@
 import { ApiKeys, OAuth } from '@repo/accounts';
+import { allows } from '@repo/api';
 import { Effect, Layer } from 'effect';
 import { McpProtocol, McpServer } from 'effect/ai';
 import { HttpRouter, HttpServerRequest, HttpServerResponse } from 'effect/http';
 import { AccountHandlers, AccountToolkit } from './accountTools';
+import { AppHandlers, AppToolkit } from './appTools';
 import { McpCaller } from './context';
 import { ExploreHandlers, ExploreToolkit } from './exploreTools';
 import { ExportHandlers, ExportToolkit } from './exportTools';
@@ -45,9 +47,17 @@ const authentication = (site: string) =>
           if (!token) {
             return unauthorized(site, 'Sign in to connect to jsonresume.org');
           }
+          // OAuth apps granted only some scopes (an HR tool reading the
+          // resume) can't use the tools: those need the mcp scope.
           const user = token.startsWith('jr_')
             ? yield* keys.authenticate(token)
-            : yield* oauth.authenticate(token);
+            : yield* oauth
+                .authenticate(token)
+                .pipe(
+                  Effect.map((grant) =>
+                    grant && allows(grant.scope, 'mcp') ? grant.user : undefined
+                  )
+                );
           if (!user)
             return unauthorized(site, 'That token is not valid (any more)');
           return yield* Effect.provideService(httpEffect, McpCaller, user);
@@ -67,6 +77,7 @@ export const mcpRoutes = (site: string = SITE) =>
     McpServer.toolkit(AccountToolkit).pipe(Layer.provide(AccountHandlers)),
     McpServer.toolkit(ExploreToolkit).pipe(Layer.provide(ExploreHandlers)),
     McpServer.toolkit(JobToolkit).pipe(Layer.provide(JobHandlers)),
+    McpServer.toolkit(AppToolkit).pipe(Layer.provide(AppHandlers)),
     Prompts
   ).pipe(
     Layer.provideMerge(

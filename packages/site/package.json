@@ -21,6 +21,7 @@
     "./resume-unavailable": "./src/pages/resume/ResumeUnavailablePage.tsx",
     "./registry": "./src/pages/registry/RegistryPage.tsx",
     "./mcp": "./src/pages/mcp/McpPage.tsx",
+    "./developers": "./src/pages/developers/DevelopersPage.tsx",
     "./doc": "./src/pages/DocPage.tsx"
   },
   "scripts": {

@@ -18,4 +18,6 @@ export {
 export { GistAccess, GistFiles } from './gists';
 export { ApiKeys, MAX_KEYS, type ApiKeyRecord } from './apiKeys';
 export { OAuth } from './oauth';
+export { MAX_APPS, type OAuthAppInput, type OAuthAppRecord } from './oauthApps';
+export type { OAuthClient } from './oauthClients';
 export { OAuthFailure, SCOPE as OAUTH_SCOPE } from './oauthUris';

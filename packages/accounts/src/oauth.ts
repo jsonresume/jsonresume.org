@@ -1,20 +1,20 @@
-import { Clock, Context, Effect, Layer, Schema } from 'effect';
+import { parseScope } from '@repo/api';
+import { Clock, Context, Effect, Layer } from 'effect';
 import { SqlClient } from 'effect/sql';
 import { randomBytes } from 'node:crypto';
 import { hashToken, newToken } from './crypto';
-import * as O from './oauthUris';
+import { appQueries } from './oauthApps';
+import { clientQueries, defaultScope } from './oauthClients';
 import { connectionQueries } from './oauthConnections';
+import { tokenQueries } from './oauthTokens';
+import * as O from './oauthUris';
 import { userQueries } from './sqlUsers';
 
-const Client = Schema.Struct({
-  id: Schema.String,
-  name: Schema.String,
-  redirect_uris: Schema.Array(Schema.String),
-});
-const rows = <S extends Schema.Constraint>(schema: S) =>
-  Schema.decodeUnknownEffect(Schema.Array(schema));
-
-/** OAuth 2.1 for MCP clients: registration, codes with PKCE, rotating tokens. */
+/**
+ * OAuth 2.1: apps that register themselves (MCP clients) or are registered
+ * by a person (HR tools, with a secret); codes with PKCE; scoped,
+ * short-lived access tokens with rotating refresh tokens.
+ */
 export class OAuth extends Context.Service<
   OAuth,
   Effect.Success<typeof make>
@@ -28,15 +28,9 @@ export class OAuth extends Context.Service<
 const make = Effect.gen(function* () {
   const sql = yield* SqlClient.SqlClient;
   const users = yield* userQueries;
+  const clients = clientQueries(sql);
   const at = (ms: number) =>
     Effect.map(Clock.currentTimeMillis, (now) => new Date(now + ms));
-
-  const client = (id: string) =>
-    sql`SELECT id, name, redirect_uris FROM app.oauth_clients WHERE id = ${id}`.pipe(
-      Effect.flatMap(rows(Client)),
-      Effect.map(([found]) => found),
-      Effect.orDie
-    );
 
   /** RFC 7591: any client may register; its redirect URIs are checked. */
   const register = Effect.fn('OAuth.register')(function* (input: {
@@ -61,20 +55,26 @@ const make = Effect.gen(function* () {
     return { id, name, redirectUris: input.redirectUris };
   });
 
-  /** The client, if the redirect URI is one it registered. */
+  /**
+   * The client and the scopes it asks for, if the redirect URI is one it
+   * registered and every scope exists.
+   */
   const check = Effect.fn('OAuth.check')(function* (
     clientId: string,
-    redirectUri: string
+    redirectUri: string,
+    scope?: string
   ) {
-    const found = yield* client(clientId);
-    if (!found) return yield* O.fail('invalid_client', 'Unknown client');
-    if (!O.matchesRedirect(found.redirect_uris, redirectUri)) {
+    const client = yield* clients.client(clientId);
+    if (!client) return yield* O.fail('invalid_client', 'Unknown client');
+    if (!O.matchesRedirect(client.redirectUris, redirectUri)) {
       return yield* O.fail(
         'invalid_request',
         'That redirect URI is not registered'
       );
     }
-    return found;
+    const scopes = parseScope(scope, defaultScope(client));
+    if (!scopes) return yield* O.fail('invalid_scope', 'Unknown scope');
+    return { client, scopes };
   });
 
   /** After the user approves: a one-time code for the client's redirect. */
@@ -82,113 +82,56 @@ const make = Effect.gen(function* () {
     clientId: string;
     userId: string;
     redirectUri: string;
-    codeChallenge: string;
+    codeChallenge: string | undefined;
+    scope: string | undefined;
   }) {
-    yield* check(input.clientId, input.redirectUri);
+    const { client, scopes } = yield* check(
+      input.clientId,
+      input.redirectUri,
+      input.scope
+    );
+    // Without a secret, PKCE is what stops a stolen code being used.
+    if (!input.codeChallenge && !client.confidential) {
+      return yield* O.fail('invalid_request', 'PKCE (S256) is required');
+    }
     const code = newToken();
     yield* sql`
       INSERT INTO app.oauth_codes (code_hash, client_id, user_id, redirect_uri, code_challenge, scope, expires_at)
       VALUES (${hashToken(code)}, ${input.clientId}, ${input.userId}, ${
       input.redirectUri
     },
-              ${input.codeChallenge}, ${O.SCOPE}, ${yield* at(O.CODE_TTL)})
+              ${input.codeChallenge ?? null}, ${scopes.join(' ')}, ${yield* at(
+      O.CODE_TTL
+    )})
     `.pipe(Effect.orDie);
     return code;
   });
 
-  const issueTokens = (clientId: string, userId: string) =>
-    Effect.gen(function* () {
-      const access = `jro_${newToken()}`;
-      const refresh = `jrr_${newToken()}`;
-      yield* sql`
-        INSERT INTO app.oauth_tokens (client_id, user_id, access_hash, refresh_hash, scope,
-                                      access_expires_at, refresh_expires_at)
-        VALUES (${clientId}, ${userId}, ${hashToken(access)}, ${hashToken(
-        refresh
-      )}, ${O.SCOPE},
-                ${yield* at(O.ACCESS_TTL)}, ${yield* at(O.REFRESH_TTL)})
-      `.pipe(Effect.orDie);
-      return {
-        access_token: access,
-        token_type: 'Bearer',
-        expires_in: O.ACCESS_TTL / 1000,
-        refresh_token: refresh,
-        scope: O.SCOPE,
-      };
-    });
-
-  const exchangeCode = Effect.fn('OAuth.exchangeCode')(function* (input: {
-    code: string;
-    clientId: string;
-    redirectUri: string;
-    verifier: string;
-  }) {
-    const [row] = yield* sql<{
-      client_id: string;
-      user_id: string;
-      redirect_uri: string;
-      code_challenge: string;
-    }>`
-      DELETE FROM app.oauth_codes WHERE code_hash = ${hashToken(
-        input.code
-      )} AND expires_at > now()
-      RETURNING client_id, user_id, redirect_uri, code_challenge
-    `.pipe(Effect.orDie);
-    const invalid = O.fail(
-      'invalid_grant',
-      'The code is unknown, used or expired'
-    );
-    if (
-      !row ||
-      row.client_id !== input.clientId ||
-      row.redirect_uri !== input.redirectUri
-    ) {
-      return yield* invalid;
-    }
-    if (!O.pkceMatches(input.verifier, row.code_challenge))
-      return yield* invalid;
-    return yield* issueTokens(row.client_id, row.user_id);
-  });
-
-  /** A refresh token is used once: it is replaced with a new pair. */
-  const refresh = Effect.fn('OAuth.refresh')(function* (
-    token: string,
-    clientId: string
-  ) {
-    const [row] = yield* sql<{ client_id: string; user_id: string }>`
-      DELETE FROM app.oauth_tokens WHERE refresh_hash = ${hashToken(
-        token
-      )} AND refresh_expires_at > now()
-      RETURNING client_id, user_id
-    `.pipe(Effect.orDie);
-    if (!row || row.client_id !== clientId) {
-      return yield* O.fail(
-        'invalid_grant',
-        'The refresh token is unknown or expired'
-      );
-    }
-    return yield* issueTokens(row.client_id, row.user_id);
-  });
-
-  /** Who an access token belongs to, noting its use. */
+  /** Who an access token belongs to and what it allows, noting its use. */
   const authenticate = Effect.fn('OAuth.authenticate')(function* (
     access: string
   ) {
-    const [row] = yield* sql<{ user_id: string }>`
+    const [row] = yield* sql<{
+      user_id: string;
+      client_id: string;
+      scope: string;
+    }>`
       UPDATE app.oauth_tokens SET last_used_at = now()
       WHERE access_hash = ${hashToken(access)} AND access_expires_at > now()
-      RETURNING user_id
+      RETURNING user_id, client_id, scope
     `.pipe(Effect.orDie);
-    return row ? yield* users.byId(row.user_id) : undefined;
+    if (!row) return undefined;
+    const user = yield* users.byId(row.user_id);
+    return user && { user, scope: row.scope, clientId: row.client_id };
   });
 
   return {
     register,
     check,
     issueCode,
-    exchangeCode,
-    refresh,
     authenticate,
+    ...tokenQueries(sql, clients),
     ...connectionQueries(sql),
+    ...appQueries(sql),
   };
 });

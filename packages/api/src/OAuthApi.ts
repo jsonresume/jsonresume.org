@@ -9,6 +9,19 @@ export class OAuthError extends Schema.TaggedError<OAuthError>()(
   { httpApiStatus: 400 }
 ) {}
 
+/** Who is asking on the consent page. */
+export const ConsentClient = Schema.Struct({
+  name: Schema.String,
+  redirectHost: Schema.String,
+  homepage: Schema.NullOr(Schema.String),
+  /** The username that registered it; null when it registered itself. */
+  owner: Schema.NullOr(Schema.String),
+  /** Runs on a server with a secret, so PKCE is optional. */
+  confidential: Schema.Boolean,
+  scopes: Schema.Array(Schema.String),
+});
+export type ConsentClient = typeof ConsentClient.Type;
+
 const Tokens = Schema.Struct({
   access_token: Schema.String,
   token_type: Schema.String,
@@ -18,9 +31,10 @@ const Tokens = Schema.Struct({
 });
 
 /**
- * OAuth 2.1 for MCP clients (claude.ai, ChatGPT and other agents): dynamic
- * registration (RFC 7591) and the token endpoint. Clients call these
- * directly, with no session. Discovery documents are at /.well-known.
+ * OAuth 2.1 for MCP clients (claude.ai, ChatGPT and other agents) and apps
+ * people register (HR tools): dynamic registration (RFC 7591), tokens,
+ * revocation. Clients call these directly, with no session; apps with a
+ * secret send it as Basic auth or client_secret. Discovery is at /.well-known.
  */
 export class OAuthApi extends HttpApiGroup.make('oauth')
   .add(
@@ -45,19 +59,32 @@ export class OAuthApi extends HttpApiGroup.make('oauth')
         code: Schema.optional(Schema.String),
         redirect_uri: Schema.optional(Schema.String),
         client_id: Schema.optional(Schema.String),
+        client_secret: Schema.optional(Schema.String),
         code_verifier: Schema.optional(Schema.String),
         refresh_token: Schema.optional(Schema.String),
       }).pipe(HttpApiSchema.asFormUrlEncoded()),
       success: Tokens,
       error: OAuthError,
     }),
-    /** For the consent page: who is asking, if the redirect is theirs. */
+    /** RFC 7009: the client gives up a token it holds. */
+    HttpApiEndpoint.post('revoke', '/revoke', {
+      payload: Schema.Struct({
+        token: Schema.String,
+        token_type_hint: Schema.optional(Schema.String),
+        client_id: Schema.optional(Schema.String),
+        client_secret: Schema.optional(Schema.String),
+      }).pipe(HttpApiSchema.asFormUrlEncoded()),
+      success: Schema.Struct({}),
+      error: OAuthError,
+    }),
+    /** For the consent page: who is asking, for what, if the redirect is theirs. */
     HttpApiEndpoint.get('client', '/client', {
-      query: { client_id: Schema.String, redirect_uri: Schema.String },
-      success: Schema.Struct({
-        name: Schema.String,
-        redirectHost: Schema.String,
-      }),
+      query: {
+        client_id: Schema.String,
+        redirect_uri: Schema.String,
+        scope: Schema.optional(Schema.String),
+      },
+      success: ConsentClient,
       error: OAuthError,
     })
   )
@@ -66,6 +93,7 @@ export class OAuthApi extends HttpApiGroup.make('oauth')
 export const Connection = Schema.Struct({
   clientId: Schema.String,
   name: Schema.String,
+  scopes: Schema.Array(Schema.String),
   connectedAt: Schema.String,
   lastUsedAt: Schema.NullOr(Schema.String),
 });
@@ -78,7 +106,8 @@ export class OAuthConsentApi extends HttpApiGroup.make('oauthConsent')
       payload: Schema.Struct({
         client_id: Schema.String,
         redirect_uri: Schema.String,
-        code_challenge: Schema.String,
+        code_challenge: Schema.optional(Schema.String),
+        scope: Schema.optional(Schema.String),
         state: Schema.optional(Schema.String),
         approve: Schema.Boolean,
       }),

@@ -64,21 +64,33 @@ const setup = async () => {
         redirectUris: [redirectUri],
       });
       const verifier = 'verifier-verifier-verifier-verifier-verifier';
-      const code = yield* oauth.issueCode({
-        clientId: client.id,
-        userId: user.id,
-        redirectUri,
-        codeChallenge: createHash('sha256')
-          .update(verifier)
-          .digest('base64url'),
-      });
-      const tokens = yield* oauth.exchangeCode({
-        code,
-        clientId: client.id,
-        redirectUri,
-        verifier,
-      });
-      return { key: made?.key ?? '', access: tokens.access_token };
+      const tokenFor = (scope: string | undefined) =>
+        Effect.gen(function* () {
+          const code = yield* oauth.issueCode({
+            clientId: client.id,
+            userId: user.id,
+            redirectUri,
+            codeChallenge: createHash('sha256')
+              .update(verifier)
+              .digest('base64url'),
+            scope,
+          });
+          const tokens = yield* oauth.exchangeCode({
+            code,
+            clientId: client.id,
+            secret: undefined,
+            redirectUri,
+            verifier,
+          });
+          return tokens.access_token;
+        });
+      return {
+        key: made?.key ?? '',
+        // A self-registered client asking for nothing gets the mcp scope.
+        access: yield* tokenFor(undefined),
+        // An HR app that may only read the resume.
+        readOnly: yield* tokenFor('resume:read'),
+      };
     })
   );
   return { handler: web.handler, ...key };
@@ -281,5 +293,51 @@ describe('the MCP server', () => {
       })
     );
     expect(bad.status).toBe(401);
+  });
+
+  it('lists connected apps and registers OAuth apps of your own', async () => {
+    const { handler, key } = await setup();
+    const { call } = await connect(handler, key);
+    const connected = (await call('list_connected_apps')).value.apps;
+    expect(connected).toMatchObject([
+      { name: 'Claude', scopes: expect.arrayContaining(['mcp']) },
+    ]);
+    const bad = await call('create_oauth_app', {
+      name: 'Acme ATS',
+      redirect_uris: ['http://evil.example/cb'],
+    });
+    expect(bad.isError).toBe(true);
+    const made = (
+      await call('create_oauth_app', {
+        name: 'Acme ATS',
+        homepage: null,
+        redirect_uris: ['https://ats.example/cb'],
+      })
+    ).value;
+    expect(made.client_secret).toMatch(/^jrs_/);
+    expect((await call('list_oauth_apps')).value.apps).toMatchObject([
+      { name: 'Acme ATS', users: 0, homepage: null },
+    ]);
+    const secret = (
+      await call('new_oauth_app_secret', { client_id: made.app.client_id })
+    ).value.client_secret;
+    expect(secret).not.toBe(made.client_secret);
+    await call('delete_oauth_app', { client_id: made.app.client_id });
+    expect((await call('list_oauth_apps')).value.apps).toEqual([]);
+    const { client_id } = connected[0];
+    await call('disconnect_app', { client_id });
+    expect((await call('list_connected_apps')).value.apps).toEqual([]);
+  });
+
+  it('refuses OAuth tokens granted only some scopes, not mcp', async () => {
+    const { handler, readOnly } = await setup();
+    const response = await handler(
+      new Request('http://x/mcp', {
+        method: 'POST',
+        headers: { authorization: `Bearer ${readOnly}` },
+        body: '{}',
+      })
+    );
+    expect(response.status).toBe(401);
   });
 });

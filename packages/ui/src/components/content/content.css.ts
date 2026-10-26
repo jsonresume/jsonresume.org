@@ -181,4 +181,10 @@ export const choiceCount = style({
 });
 
 /* CodeTabs */
-export const codeTabs = style({ display: 'grid', gap: space[2] });
+// One shrinkable column: long code lines scroll inside the block instead of
+// widening the page.
+export const codeTabs = style({
+  display: 'grid',
+  gridTemplateColumns: 'minmax(0, 1fr)',
+  gap: space[2],
+});

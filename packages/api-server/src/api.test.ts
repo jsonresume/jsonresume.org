@@ -322,9 +322,14 @@ describe('the API, over HTTP', () => {
         redirect_uri
       )}`
     );
+    // It registered itself and asked for nothing: the MCP tools.
     expect(await info.json()).toEqual({
       name: 'Claude',
       redirectHost: 'claude.ai',
+      homepage: null,
+      owner: null,
+      confidential: false,
+      scopes: ['mcp'],
     });
 
     const verifier = 'a-long-random-verifier-string-for-pkce-0123456789';
@@ -342,6 +347,13 @@ describe('the API, over HTTP', () => {
       });
     expect((await decide(true)).status).toBe(401);
     await server.post('/api/auth/signup', ada);
+    // Without a secret, PKCE is required.
+    const noPkce = await server.post('/api/oauth/decide', {
+      client_id,
+      redirect_uri,
+      approve: true,
+    });
+    expect((await noPkce.json()).error).toBe('invalid_request');
     const denied = new URL((await (await decide(false)).json()).redirect);
     expect(denied.searchParams.get('error')).toBe('access_denied');
     const approved = new URL((await (await decide(true)).json()).redirect);
