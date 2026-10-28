@@ -109,6 +109,36 @@ providers: [
 ],`,
   },
   {
+    label: 'No server',
+    code: `# Apps without a secret (browser, mobile, hosted scripts) register themselves
+# once (RFC 7591), then use PKCE (S256) and send client_id instead of a secret.
+curl ${site}/api/oauth/register \\
+  -H 'Content-Type: application/json' \\
+  -d '{"client_name":"My app","redirect_uris":["https://my.app/callback"]}'
+# 201 { "client_id": "jrc_…", "token_endpoint_auth_method": "none", … }
+
+curl ${site}/api/oauth/token \\
+  -d grant_type=authorization_code \\
+  -d client_id=$CLIENT_ID \\
+  -d code=$CODE \\
+  -d code_verifier=$CODE_VERIFIER \\
+  -d redirect_uri=https://my.app/callback`,
+  },
+  {
+    label: 'Apps Script',
+    code: `// Google Apps Script, with googleworkspace/apps-script-oauth2
+// (no secret: register once and keep the client_id in Script Properties).
+// Redirect URI: https://script.google.com/macros/d/{SCRIPT_ID}/usercallback
+OAuth2.createService('jsonresume')
+  .setAuthorizationBaseUrl('${site}/oauth/authorize')
+  .setTokenUrl('${site}/api/oauth/token')
+  .setClientId(clientId)
+  .setScope('resume:read') // always send a scope
+  .generateCodeVerifier() // PKCE S256
+  .setCallbackFunction('authCallback')
+  .setPropertyStore(PropertiesService.getUserProperties());`,
+  },
+  {
     label: 'userinfo',
     code: `{
   "sub": "0d6f2c1e-…",            // stays the same if they rename
@@ -125,6 +155,8 @@ providers: [
 export const notes = [
   'Use `sub` as the user’s ID: usernames can change.',
   'PKCE (S256) is optional for apps with a secret and required for apps without one. Browser and mobile apps without a server can register themselves (RFC 7591, `POST /api/oauth/register`) and must use PKCE.',
+  'Always send `scope`. A self-registered app that asks for nothing gets `mcp`, which is everything.',
+  'Redirect URIs must be `https`, or `http` on loopback only, with no `#fragment`. An app scheme (`myapp://callback`) also works.',
   'People see every app they’ve connected under Settings → Connected apps, and can disconnect it there. Revoke a token yourself when someone disconnects on your side.',
   'Errors follow RFC 6749 and 6750: `invalid_grant`, `invalid_client`, `invalid_token` (401) and `insufficient_scope` (403).',
 ];
