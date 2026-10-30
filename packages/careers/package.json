@@ -6,7 +6,8 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./families": "./src/families.ts"
+    "./families": "./src/families.ts",
+    "./roles": "./src/roles.ts"
   },
   "scripts": {
     "test": "vitest run",

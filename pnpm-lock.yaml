@@ -186,6 +186,9 @@ importers:
       '@repo/auth-pages':
         specifier: workspace:^
         version: link:../../packages/auth-pages
+      '@repo/careers':
+        specifier: workspace:^
+        version: link:../../packages/careers
       '@repo/content':
         specifier: workspace:*
         version: link:../../packages/content
