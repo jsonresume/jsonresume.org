@@ -29,3 +29,4 @@ export type { GraphInputs, GraphJob, GraphStep } from './graph/inputs';
 export { Planner, PlanFailed, plainPlan, type PlanBrief } from './planner';
 export { PlanStore, type StoredPlan } from './plans';
 export { monthOf, Snapshots } from './snapshots';
+export { graphDigest } from './graph/digest';

@@ -9,6 +9,7 @@ import { createHash } from 'node:crypto';
 import { afterEach, describe, expect, it } from 'vitest';
 import { prompts, tools } from './catalog';
 import { mcpRoutes } from './server';
+import { plainCareers } from '@repo/careers/testing';
 
 let dispose: (() => Promise<void>) | undefined;
 afterEach(() => dispose?.());
@@ -26,6 +27,10 @@ const setup = async () => {
       Layer.provide(embedderFrom(() => new Float32Array(3072).fill(1)))
     )
   ).pipe(Layer.provideMerge(stack.layer));
+  const withCareers = Layer.merge(
+    services,
+    plainCareers.pipe(Layer.provide(services))
+  );
   // Another route on the same router, as the API is in the app.
   const neighbour = HttpRouter.add(
     'GET',
@@ -33,13 +38,13 @@ const setup = async () => {
     HttpServerResponse.text('open')
   );
   const app = Layer.mergeAll(mcpRoutes(), neighbour).pipe(
-    Layer.provide(services),
+    Layer.provide(withCareers),
     Layer.provide(HttpServer.layerServices)
   );
   // One MemoMap, so the endpoint and the setup share one database.
   const memoMap = Layer.makeMemoMapUnsafe();
   const web = HttpRouter.toWebHandler(app, { disableLogger: true, memoMap });
-  const runtime = ManagedRuntime.make(services, { memoMap });
+  const runtime = ManagedRuntime.make(withCareers, { memoMap });
   dispose = async () => {
     await web.dispose();
     await runtime.dispose();

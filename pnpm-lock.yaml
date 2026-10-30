@@ -1850,6 +1850,9 @@ importers:
       '@repo/ats':
         specifier: workspace:*
         version: link:../ats
+      '@repo/careers':
+        specifier: workspace:*
+        version: link:../careers
       '@repo/explore':
         specifier: workspace:*
         version: link:../explore
@@ -1924,6 +1927,9 @@ importers:
       '@repo/analytics':
         specifier: workspace:*
         version: link:../analytics
+      '@repo/careers':
+        specifier: workspace:*
+        version: link:../careers
       '@repo/database':
         specifier: workspace:*
         version: link:../database
