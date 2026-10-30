@@ -106,6 +106,12 @@ export const AppHandlers = AppToolkit.toLayer(
       disconnect_app: ({ client_id }) =>
         Effect.gen(function* () {
           const user = yield* caller;
+          const list = yield* oauth.connections(user.id);
+          if (!list.some((c) => c.client_id === client_id)) {
+            return yield* failWith(
+              `No connected app ${client_id}; list_connected_apps lists them.`
+            );
+          }
           yield* oauth.disconnect(user.id, client_id);
           return { disconnected: true };
         }),
@@ -133,6 +139,12 @@ export const AppHandlers = AppToolkit.toLayer(
       delete_oauth_app: ({ client_id }) =>
         Effect.gen(function* () {
           const user = yield* caller;
+          const apps = yield* oauth.apps(user.id);
+          if (!apps.some((a) => a.id === client_id)) {
+            return yield* failWith(
+              `No app ${client_id} of yours; list_oauth_apps lists them.`
+            );
+          }
           yield* oauth.deleteApp(user.id, client_id);
           return { deleted: true };
         }),
