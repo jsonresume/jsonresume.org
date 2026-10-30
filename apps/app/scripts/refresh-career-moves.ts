@@ -5,23 +5,15 @@
  * weekly on the box; `vite build --ssr scripts/refresh-career-moves.ts`
  * bundles it. Needs DATABASE_URL and OPENAI_API_KEY.
  */
-import { OpenAiClient } from '@effect/ai-openai';
 import { NodeRuntime } from '@effect/platform-node';
-import { refreshMoves, TitleReaderLive } from '@repo/careers/moves';
+import { CareerAiFromEnv } from '@repo/careers';
+import { refreshMoves } from '@repo/careers/moves';
 import { PgLive } from '@repo/database';
-import { Config, Effect, Layer } from 'effect';
-import { FetchHttpClient } from 'effect/http';
-
-const reader = Layer.unwrap(
-  Effect.gen(function* () {
-    const apiKey = yield* Config.Redacted('OPENAI_API_KEY');
-    return TitleReaderLive.pipe(
-      Layer.provide(OpenAiClient.layer({ apiKey })),
-      Layer.provide(FetchHttpClient.layer)
-    );
-  })
-);
+import { Effect, Layer } from 'effect';
 
 NodeRuntime.runMain(
-  refreshMoves.pipe(Effect.provide(Layer.mergeAll(PgLive, reader)))
+  refreshMoves.pipe(
+    Effect.tap((stats) => Effect.logInfo('Career moves refreshed', stats)),
+    Effect.provide(Layer.mergeAll(PgLive, CareerAiFromEnv))
+  )
 );

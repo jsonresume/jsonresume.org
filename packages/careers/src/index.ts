@@ -30,3 +30,13 @@ export { Planner, PlanFailed, plainPlan, type PlanBrief } from './planner';
 export { PlanStore, type StoredPlan } from './plans';
 export { monthOf, Snapshots } from './snapshots';
 export { graphDigest } from './graph/digest';
+export { CareerAiFromEnv, CareersLive } from './live';
+export { SkillCatalogLive } from './skills';
+export { ResumeInsightsLive } from './resumeInsights';
+export { InsightReader, InsightReaderLive, ReadFailed } from './insightReader';
+export {
+  INSIGHT_VERSION,
+  resumeEntries,
+  resumeFoundations,
+  resumeKey,
+} from './resumeEntries';
