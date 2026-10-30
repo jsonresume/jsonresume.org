@@ -1,9 +1,10 @@
 import { Accounts } from '@repo/accounts';
 import { checkAts } from '@repo/ats';
 import { dataFormats, formatResume } from '@repo/resume-formats';
+import { findTheme } from '@repo/theme-gallery/catalog';
 import { Effect, Predicate, Schema } from 'effect';
 import { Tool, Toolkit } from 'effect/ai';
-import { caller, describe, failing, hints } from './context';
+import { caller, describe, failing, failWith, hints } from './context';
 import { optional } from './params';
 
 const SITE = 'https://jsonresume.org';
@@ -90,6 +91,12 @@ export const ExportHandlers = ExportToolkit.toLayer(
         ),
       export_resume: ({ format, theme, paper }) =>
         Effect.gen(function* () {
+          // A PDF in a theme that doesn't exist would be a link to a 404.
+          if (format === 'pdf' && theme && !findTheme(theme)) {
+            return yield* failWith(
+              `No theme "${theme}". list_themes gives the slugs.`
+            );
+          }
           const { user, resume } = yield* current;
           const query = new URLSearchParams(
             Object.entries({ theme, paper }).flatMap(([k, v]) =>
