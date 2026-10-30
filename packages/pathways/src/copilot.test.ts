@@ -7,6 +7,7 @@ import { Effect, Layer, Stream } from 'effect';
 import { LanguageModel } from 'effect/ai';
 import { expect, it } from 'vitest';
 import { Copilot } from './copilot';
+import { plainCareers } from '@repo/careers/testing';
 
 /**
  * A model that first asks for get_account, then, seeing its result in the
@@ -49,6 +50,10 @@ it('streams a reply that uses the tools as the user, then answers', async () => 
       Layer.provide(embedderFrom(() => new Float32Array(3072)))
     )
   ).pipe(Layer.provideMerge(stack.layer));
+  const withCareers = Layer.merge(
+    services,
+    plainCareers.pipe(Layer.provide(services))
+  );
   const events = await Effect.runPromise(
     Effect.gen(function* () {
       const accounts = yield* Accounts;
@@ -63,7 +68,7 @@ it('streams a reply that uses the tools as the user, then answers', async () => 
       );
     }).pipe(
       Effect.provide(
-        Copilot.layerWith(scriptedModel).pipe(Layer.provideMerge(services))
+        Copilot.layerWith(scriptedModel).pipe(Layer.provideMerge(withCareers))
       ),
       Effect.scoped
     )

@@ -28,6 +28,12 @@ export interface TreeLayoutOptions {
   levelGap?: number;
   /** The width:height the whole picture aims for, so it fills a screen. */
   aspect?: number;
+  /**
+   * A level for each node, by index, when the levels mean something of their
+   * own (skills, then experience, then jobs): edges are still drawn, but no
+   * longer decide the levels, and nothing goes to the shelf.
+   */
+  levels?: readonly number[];
 }
 
 export interface PlacedNode {

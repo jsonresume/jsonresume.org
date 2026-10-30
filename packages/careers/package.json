@@ -1,0 +1,34 @@
+{
+  "name": "@repo/careers",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Careers: skills and the evidence for them, what jobs require, role families, the moves people make between them, plans, and the career graph Pathways draws",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./families": "./src/families.ts",
+    "./testing": "./src/testing.ts",
+    "./roles": "./src/roles.ts",
+    "./moves": "./src/moves.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts,.tsx"
+  },
+  "dependencies": {
+    "@effect/ai-openai": "4.0.6",
+    "@repo/api": "workspace:*",
+    "@repo/jobs": "workspace:*",
+    "effect": "4.0.6"
+  },
+  "devDependencies": {
+    "@effect/sql-pglite": "4.0.6",
+    "@repo/database": "workspace:*",
+    "@repo/eslint-config-custom": "workspace:*",
+    "@types/node": "^20.19.24",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.6"
+  }
+}

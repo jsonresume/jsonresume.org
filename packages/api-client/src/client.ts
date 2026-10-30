@@ -27,6 +27,7 @@ export const keys = {
   connections: ['connections'],
   oauthApps: ['oauthApps'],
   explore: ['explore'],
+  career: ['career'],
 } as const;
 
 export const sessionAtom = ApiClient.query('auth', 'session', {
@@ -56,10 +57,23 @@ export const jobMatchesAtom = ApiClient.query('myJobs', 'matches', {
 export const directionsAtom = ApiClient.query('myJobs', 'directions', {
   reactivityKeys: [...keys.jobs, ...keys.account],
 });
-/** The same, as a tree: skills, experience, kinds of role, jobs. */
-export const careerTreeAtom = ApiClient.query('myJobs', 'tree', {
-  reactivityKeys: [...keys.jobs, ...keys.account],
+/** The career graph Pathways → Tree draws, and where people go next. */
+export const careerGraphAtom = ApiClient.query('career', 'graph', {
+  reactivityKeys: [...keys.career, ...keys.jobs, ...keys.account],
 });
+/** The graph as it was in a month ("2026-10"). */
+export const careerSnapshotAtom = Atom.family((month: string) =>
+  ApiClient.query('career', 'snapshot', { params: { month } })
+);
+export const careerMovesAtom = ApiClient.query('career', 'moves', {
+  reactivityKeys: [...keys.career, ...keys.account],
+});
+export const plansAtom = ApiClient.query('career', 'plans', {
+  reactivityKeys: keys.career,
+});
+export const createPlanAtom = ApiClient.mutation('career', 'createPlan');
+export const setPlanStepAtom = ApiClient.mutation('career', 'setStep');
+export const deletePlanAtom = ApiClient.mutation('career', 'deletePlan');
 export const pendingGithubAtom = ApiClient.query('auth', 'pendingGithub', {});
 
 export const signUpAtom = ApiClient.mutation('auth', 'signUp');

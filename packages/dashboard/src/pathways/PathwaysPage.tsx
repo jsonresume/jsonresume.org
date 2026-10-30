@@ -10,7 +10,7 @@ import { optionParam, useAtomsInUrl } from '@repo/url-state';
 import { Atom } from 'effect/reactivity';
 import { useEffect } from 'react';
 import { useSession } from '../session';
-import { CareerTree } from './CareerTree';
+import { CareerMap } from './career/CareerTab';
 import { Copilot } from './Copilot';
 import { Directions } from './Directions';
 import { Swipe } from './Swipe';
@@ -76,7 +76,7 @@ export function PathwaysPage() {
           <Copilot copilot={copilot} />
         </TabsContent>
         <TabsContent value="tree">
-          <CareerTree onAsk={ask} />
+          <CareerMap onAsk={ask} />
         </TabsContent>
         <TabsContent value="directions">
           <Directions onAsk={ask} />

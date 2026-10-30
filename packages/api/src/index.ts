@@ -2,6 +2,7 @@ import { HttpApi, OpenApi } from 'effect/http-api';
 import { AccountApi } from './AccountApi';
 import { AnalyticsApi } from './AnalyticsApi';
 import { AuthApi } from './AuthApi';
+import { CareerApi } from './CareerApi';
 import { EditorApi } from './EditorApi';
 import { EventsApi } from './EventsApi';
 import { ExploreApi, MyListingApi } from './ExploreApi';
@@ -10,7 +11,19 @@ import { OAuthApi, OAuthConsentApi } from './OAuthApi';
 import { OAuthAppsApi } from './OAuthAppsApi';
 import { OAuthResourceApi } from './OAuthResourceApi';
 import { JobsApi, MyJobsApi } from './JobsApi';
-export { CareerTree, CareerTreeNode } from './CareerTree';
+export {
+  CareerApi,
+  CareerEdge,
+  CareerGraph,
+  CareerMove,
+  CareerNode,
+  CareerNodeKind,
+  CareerView,
+  PathwayPlan,
+  PlanNotFound,
+  PlanStep,
+  PlanStepKind,
+} from './CareerApi';
 import { SystemApi } from './SystemApi';
 import { V1Api, V1PublicApi } from './V1Api';
 
@@ -108,6 +121,7 @@ export class JsonResumeApi extends HttpApi.make('jsonresume')
   .add(EditorApi)
   .add(JobsApi)
   .add(MyJobsApi)
+  .add(CareerApi)
   .add(ExploreApi)
   .add(MyListingApi)
   .add(V1Api)

@@ -19,6 +19,7 @@
     "@repo/analytics": "workspace:*",
     "@repo/api": "workspace:*",
     "@repo/ats": "workspace:*",
+    "@repo/careers": "workspace:*",
     "@repo/explore": "workspace:*",
     "@repo/job-board": "workspace:*",
     "@repo/jobs": "workspace:*",

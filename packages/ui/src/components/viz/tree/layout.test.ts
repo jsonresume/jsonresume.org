@@ -149,3 +149,17 @@ describe('layoutTree', () => {
     expect(t.width / t.height).toBeLessThan(2.2);
   });
 });
+
+describe('fixed levels', () => {
+  it('puts each node on the level asked, edges or not, with no shelf', () => {
+    const layout = layoutTree(
+      ['skill', 'job', 'lonely', 'role'],
+      [{ from: 'skill', to: 'job', strength: 'strong' }],
+      { levels: [0, 3, 1, 3] }
+    );
+    expect(layout.nodes.map((n) => n.level)).toEqual([0, 3, 1, 3]);
+    // Level 2 holds nothing: no band for it, and nothing on the shelf.
+    expect(layout.bands.map((b) => b.level)).toEqual([3, 1, 0]);
+    expect(layout.edges).toHaveLength(1);
+  });
+});

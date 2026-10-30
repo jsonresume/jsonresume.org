@@ -2,7 +2,6 @@ import { Schema } from 'effect';
 import { HttpApiEndpoint, HttpApiGroup } from 'effect/http-api';
 import { Authentication } from './Authentication';
 import { JobNotFound, NoResume } from './errors';
-import { CareerTree } from './CareerTree';
 
 export const RemoteScope = Schema.Literals([
   'onsite',
@@ -176,10 +175,6 @@ export class MyJobsApi extends HttpApiGroup.make('myJobs')
     }),
     HttpApiEndpoint.get('directions', '/directions', {
       success: Schema.Array(Direction),
-      error: NoResume,
-    }),
-    HttpApiEndpoint.get('tree', '/tree', {
-      success: CareerTree,
       error: NoResume,
     }),
     HttpApiEndpoint.put('mark', '/:id', {

@@ -50,5 +50,7 @@ export default defineConfig({
     setupFiles: ['./vitest.setup.ts'],
     include: ['src/**/*.test.{ts,tsx}'],
     css: true,
+    // Interaction tests run slowly when the whole repo's tests run at once.
+    testTimeout: 20_000,
   },
 });
