@@ -9,9 +9,10 @@ import {
   ResumeNotSaved,
   type Scope,
 } from '@repo/api';
-import { Config, Effect, Layer, Redacted } from 'effect';
+import { Effect, Layer, Redacted } from 'effect';
 import { HttpApiBuilder } from 'effect/http-api';
 import { toSessionUser } from './http';
+import { oidc } from './oidc';
 
 /** An OAuth access token; provides CurrentGrant (the user and the scope). */
 export const OAuthBearerLive = Layer.effect(
@@ -51,9 +52,6 @@ const requires = (scope: Scope) =>
     });
   });
 
-const text = (value: unknown) =>
-  typeof value === 'string' && value.trim() ? value.trim() : undefined;
-
 /** What connected apps read and write: who the user is, and their resume. */
 export const OAuthResourceHandlers = HttpApiBuilder.group(
   JsonResumeApi,
@@ -61,37 +59,13 @@ export const OAuthResourceHandlers = HttpApiBuilder.group(
   (handlers) =>
     Effect.gen(function* () {
       const accounts = yield* Accounts;
-      const site = yield* Config.String('SITE_URL').pipe(
-        Config.withDefault('https://jsonresume.org')
-      );
+      const { site, userClaims } = yield* oidc;
       const page = (username: string) => `${site}/@${username}`;
       return handlers.handleAll({
         userinfo: () =>
           Effect.gen(function* () {
             const { user, scope } = yield* CurrentGrant;
-            const profile = allows(scope, 'profile');
-            const basics = profile
-              ? (
-                  (yield* accounts.currentResume(user.id)).resume as {
-                    basics?: Record<string, unknown>;
-                  } | null
-                )?.basics ?? {}
-              : {};
-            const picture = text(basics.image) ?? user.github?.avatarUrl;
-            return {
-              sub: user.id,
-              ...(profile && {
-                preferred_username: user.username,
-                profile: page(user.username),
-                ...(text(basics.name) && { name: text(basics.name) }),
-                ...(picture && { picture }),
-              }),
-              ...(allows(scope, 'email') &&
-                user.email && {
-                  email: user.email,
-                  email_verified: user.emailVerified,
-                }),
-            };
+            return yield* userClaims(user, scope);
           }),
         resume: () =>
           Effect.gen(function* () {

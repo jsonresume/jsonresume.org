@@ -19,6 +19,7 @@ import { date } from '../format';
 
 const SHORT: Readonly<Record<string, string>> = {
   mcp: 'Everything (MCP)',
+  openid: 'Sign in',
   profile: 'Profile',
   email: 'Email',
   'resume:read': 'Read resume',

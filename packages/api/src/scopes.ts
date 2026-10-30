@@ -1,9 +1,11 @@
 /**
  * What an app connected with OAuth may do, as it asks in `scope` and the
- * consent page shows it. `mcp` is everything an agent's tools can do, so it
+ * consent page shows it. `openid` asks for an OpenID Connect ID token
+ * as well. `mcp` is everything an agent's tools can do, so it
  * includes every other scope.
  */
 export const SCOPES = {
+  openid: 'Sign you in with your JSON Resume account',
   profile: 'See your username, name and photo',
   email: 'See your email address',
   'resume:read': 'Read your resume',

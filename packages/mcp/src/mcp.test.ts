@@ -82,7 +82,7 @@ const setup = async () => {
             redirectUri,
             verifier,
           });
-          return tokens.access_token;
+          return tokens.tokens.access_token;
         });
       return {
         key: made?.key ?? '',
