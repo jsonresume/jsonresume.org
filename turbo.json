@@ -80,6 +80,7 @@
       "dependsOn": ["lint", "typecheck"]
     },
     "test": {
+      "dependsOn": ["@jsonresume/ui#build"],
       "inputs": [
         "**/*.ts",
         "**/*.tsx",
