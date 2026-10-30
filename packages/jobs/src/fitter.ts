@@ -27,7 +27,7 @@ export interface FitJob {
 
 const MODEL = 'gpt-5-mini';
 /** Bump when the instructions change: cached fits are keyed by it. */
-export const FIT_VERSION = 'fit-1';
+export const FIT_VERSION = 'fit-2';
 const CHUNK = 25;
 const POST_CHARS = 1500;
 
@@ -37,7 +37,7 @@ const INSTRUCTIONS = `You judge how well job posts from Hacker News "Who is hiri
 - Weigh what they do now and are moving towards (recent roles and projects) above older experience.
 - Ignore location, pay and level: those are checked separately.
 - Use the whole range; avoid ties.
-"why": under 15 words, the concrete overlap (or gap) in this candidate's terms.`;
+"why": under 15 words, to the candidate as "you": the concrete overlap or gap, e.g. "You've shipped agent harnesses; this role builds one" or "Wants Kubernetes depth your resume doesn't show".`;
 
 const Scores = Schema.Struct({ scores: Schema.Array(Fit) });
 
