@@ -156,6 +156,9 @@ importers:
 
   apps/app:
     dependencies:
+      '@effect/ai-openai':
+        specifier: 4.0.6
+        version: 4.0.6(effect@4.0.6)
       '@effect/atom-react':
         specifier: 4.0.6
         version: 4.0.6(effect@4.0.6)(react@19.2.7)(scheduler@0.27.0)
@@ -186,6 +189,9 @@ importers:
       '@repo/auth-pages':
         specifier: workspace:^
         version: link:../../packages/auth-pages
+      '@repo/careers':
+        specifier: workspace:^
+        version: link:../../packages/careers
       '@repo/content':
         specifier: workspace:*
         version: link:../../packages/content
