@@ -78,14 +78,14 @@ export const tools: ReadonlyArray<McpToolInfo> = [
     name: 'save_resume',
     group: 'resume',
     description:
-      'Replace your whole resume with a JSON Resume object. Saved to your gist when your page reads from it. Returns any schema problems found.',
+      'Replace your whole resume with a JSON Resume object. Saved to your gist when your page reads from it. Refused if it would add schema problems (they are listed); problems the resume already had are returned but don’t block it.',
     writes: true,
   },
   {
     name: 'update_resume_section',
     group: 'resume',
     description:
-      'Replace one top-level section of your resume (basics, work, volunteer, education, awards, certificates, publications, skills, languages, interests, references, projects or meta) and save it.',
+      'Replace one top-level section of your resume (basics, work, volunteer, education, awards, certificates, publications, skills, languages, interests, references, projects or meta) and save it. Refused, like save_resume, if it would add schema problems.',
     writes: true,
   },
   {

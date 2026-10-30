@@ -207,6 +207,21 @@ describe('the MCP server', () => {
       (await call('update_resume_section', { section: 'work', value: {} }))
         .isError
     ).toBe(true);
+    // A save that adds schema problems is refused; the resume is kept.
+    const broken = await call('save_resume', {
+      resume: { basics: { email: 'not-an-email' } },
+    });
+    expect(broken.isError).toBe(true);
+    expect(JSON.stringify(broken.value)).toContain('basics › email');
+    expect((await call('get_resume')).value.resume.skills).toHaveLength(1);
+    expect(
+      (
+        await call('update_resume_section', {
+          section: 'work',
+          value: [{ startDate: 'last year' }],
+        })
+      ).isError
+    ).toBe(true);
     expect((await call('set_theme', { slug: 'no-such-theme' })).isError).toBe(
       true
     );
@@ -324,6 +339,14 @@ describe('the MCP server', () => {
     expect(secret).not.toBe(made.client_secret);
     await call('delete_oauth_app', { client_id: made.app.client_id });
     expect((await call('list_oauth_apps')).value.apps).toEqual([]);
+    // Gone, or never theirs: it says so rather than reporting success.
+    expect(
+      (await call('delete_oauth_app', { client_id: made.app.client_id }))
+        .isError
+    ).toBe(true);
+    expect(
+      (await call('disconnect_app', { client_id: 'jrc_nope' })).isError
+    ).toBe(true);
     const { client_id } = connected[0];
     await call('disconnect_app', { client_id });
     expect((await call('list_connected_apps')).value.apps).toEqual([]);
