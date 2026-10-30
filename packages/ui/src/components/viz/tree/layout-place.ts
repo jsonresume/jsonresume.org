@@ -55,6 +55,8 @@ export function placeLevels(input: PlaceInput) {
   let y = 0;
   for (let l = levels.length - 1; l >= 0; l--) {
     const order = (levels[l] ?? []).flatMap((g) => members[g] ?? []);
+    // A level asked for but empty (fixed levels) takes no room.
+    if (order.length === 0) continue;
     const rows = Math.max(1, Math.ceil(order.length / columns));
     const top = y;
     for (let r = 0; r < rows; r++) {

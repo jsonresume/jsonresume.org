@@ -43,14 +43,20 @@ export function layoutTree(
     dag.inputs(g).length === 0 &&
     dag.outputs(g).length === 0;
 
+  const fixed = options.levels;
+  // A group sits on the highest level asked of any of its members.
+  const levelOf = (g: number) =>
+    fixed
+      ? Math.max(0, ...(members[g] ?? []).map((i) => fixed[i] ?? 0))
+      : (level[g] as number);
   const levels: number[][] = [];
   const shelf: number[] = [];
   for (let g = 0; g < groups; g++) {
-    if (alone(g)) {
+    if (!fixed && alone(g)) {
       shelf.push(g);
       continue;
     }
-    const l = level[g] as number;
+    const l = levelOf(g);
     while (levels.length <= l) levels.push([]);
     levels[l]?.push(g);
   }

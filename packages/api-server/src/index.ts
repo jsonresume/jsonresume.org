@@ -5,6 +5,7 @@ import { HttpApiBuilder } from 'effect/http-api';
 import { AccountHandlers } from './account';
 import { AnalyticsHandlers, EventsHandlers } from './analytics';
 import { AuthHandlers } from './auth';
+import { CareerHandlers } from './career';
 import { AuthenticationLive } from './authentication';
 import { EditorHandlers } from './editor';
 import { ExploreHandlers, MyListingHandlers } from './explore';
@@ -48,6 +49,7 @@ export const apiRoutes = (version: string) =>
         EditorHandlers,
         JobsHandlers,
         MyJobsHandlers,
+        CareerHandlers,
         ExploreHandlers,
         MyListingHandlers,
         KeysHandlers,

@@ -291,4 +291,138 @@ export const migrations: Record<
     `;
     yield* sql`CREATE INDEX job_fits_created ON app.job_fits (created_at)`;
   }),
+
+  // The career graph (@repo/careers): one vocabulary of skills; the evidence
+  // for each on a resume version, and its strengths; the roles in each job
+  // post and what each requires; role families (from jobs and resume titles)
+  // and the moves people make between them; plans; monthly snapshots.
+  '13_career_graph': Effect.gen(function* () {
+    const sql = yield* SqlClient.SqlClient;
+    yield* sql`
+      CREATE TABLE app.skills (
+        id serial PRIMARY KEY,
+        key text NOT NULL UNIQUE,
+        name text NOT NULL,
+        embedding bytea,
+        created_at timestamptz NOT NULL DEFAULT now()
+      )
+    `;
+    yield* sql`
+      CREATE TABLE app.skill_aliases (
+        alias text PRIMARY KEY,
+        skill_id integer NOT NULL REFERENCES app.skills (id) ON DELETE CASCADE
+      )
+    `;
+    yield* sql`
+      CREATE TABLE app.resume_insights (
+        resume_key text PRIMARY KEY,
+        level text NOT NULL,
+        strengths jsonb NOT NULL,
+        foundations jsonb NOT NULL,
+        model text NOT NULL,
+        created_at timestamptz NOT NULL DEFAULT now()
+      )
+    `;
+    yield* sql`
+      CREATE TABLE app.resume_evidence (
+        resume_key text NOT NULL REFERENCES app.resume_insights (resume_key) ON DELETE CASCADE,
+        entry text NOT NULL,
+        skill_id integer NOT NULL REFERENCES app.skills (id) ON DELETE CASCADE,
+        strength smallint NOT NULL,
+        last_year smallint,
+        quote text NOT NULL,
+        PRIMARY KEY (resume_key, entry, skill_id)
+      )
+    `;
+    yield* sql`
+      CREATE TABLE app.job_roles (
+        job_id bigint NOT NULL REFERENCES app.jobs (id) ON DELETE CASCADE,
+        idx smallint NOT NULL,
+        title text NOT NULL,
+        family text NOT NULL,
+        seniority text NOT NULL,
+        summary text NOT NULL,
+        model text NOT NULL,
+        extracted_at timestamptz NOT NULL DEFAULT now(),
+        PRIMARY KEY (job_id, idx)
+      )
+    `;
+    yield* sql`CREATE INDEX job_roles_family ON app.job_roles (family)`;
+    yield* sql`
+      CREATE TABLE app.job_requirements (
+        job_id bigint NOT NULL,
+        idx smallint NOT NULL,
+        skill_id integer NOT NULL REFERENCES app.skills (id) ON DELETE CASCADE,
+        need text NOT NULL CHECK (need IN ('required', 'nice')),
+        years smallint,
+        PRIMARY KEY (job_id, idx, skill_id),
+        FOREIGN KEY (job_id, idx) REFERENCES app.job_roles (job_id, idx) ON DELETE CASCADE
+      )
+    `;
+    yield* sql`
+      CREATE TABLE app.role_archetypes (
+        family text PRIMARY KEY,
+        name text NOT NULL,
+        summary text NOT NULL,
+        skills jsonb NOT NULL,
+        roles integer NOT NULL,
+        pay_p50 integer,
+        remote_share smallint NOT NULL,
+        refreshed_at timestamptz NOT NULL DEFAULT now()
+      )
+    `;
+    yield* sql`
+      CREATE TABLE app.title_families (
+        title_key text PRIMARY KEY,
+        family text NOT NULL,
+        seniority text NOT NULL,
+        model text NOT NULL
+      )
+    `;
+    yield* sql`
+      CREATE TABLE app.career_moves (
+        from_family text NOT NULL,
+        from_seniority text NOT NULL,
+        to_family text NOT NULL,
+        to_seniority text NOT NULL,
+        people integer NOT NULL,
+        median_years real,
+        PRIMARY KEY (from_family, from_seniority, to_family, to_seniority)
+      )
+    `;
+    yield* sql`
+      CREATE TABLE app.pathway_plans (
+        id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+        user_id uuid NOT NULL REFERENCES app.users (id) ON DELETE CASCADE,
+        destination text NOT NULL,
+        family text,
+        seniority text,
+        summary text NOT NULL,
+        created_at timestamptz NOT NULL DEFAULT now(),
+        updated_at timestamptz NOT NULL DEFAULT now()
+      )
+    `;
+    yield* sql`CREATE INDEX pathway_plans_user ON app.pathway_plans (user_id)`;
+    yield* sql`
+      CREATE TABLE app.plan_steps (
+        id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+        plan_id uuid NOT NULL REFERENCES app.pathway_plans (id) ON DELETE CASCADE,
+        position smallint NOT NULL,
+        kind text NOT NULL,
+        title text NOT NULL,
+        detail text NOT NULL,
+        skill_id integer REFERENCES app.skills (id) ON DELETE SET NULL,
+        job_id bigint REFERENCES app.jobs (id) ON DELETE SET NULL,
+        done_at timestamptz
+      )
+    `;
+    yield* sql`
+      CREATE TABLE app.tree_snapshots (
+        user_id uuid NOT NULL REFERENCES app.users (id) ON DELETE CASCADE,
+        taken_on date NOT NULL,
+        graph jsonb NOT NULL,
+        PRIMARY KEY (user_id, taken_on)
+      )
+    `;
+  }),
 };
