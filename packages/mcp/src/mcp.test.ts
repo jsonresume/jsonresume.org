@@ -268,6 +268,10 @@ describe('the MCP server', () => {
       content: null,
     });
     expect(
+      (await call('export_resume', { format: 'pdf', theme: 'no-such-theme' }))
+        .isError
+    ).toBe(true);
+    expect(
       (await call('export_resume', { format: 'rendercv' })).value.content
     ).toContain('name: Ada');
     const listed = await call('set_explore_listing', { listed: false });
