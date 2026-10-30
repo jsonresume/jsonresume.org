@@ -113,6 +113,8 @@ export const JobHandlers = JobToolkit.toLayer(
               ...toSummary(r.row),
               score: r.score,
               mark: r.mark,
+              role: r.role,
+              why: r.why,
             }));
           const found = filterJobs(matches, filtersOf(input));
           return { total: found.length, jobs: found.slice(0, limitOf(input)) };

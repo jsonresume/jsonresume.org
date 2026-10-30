@@ -20,14 +20,17 @@ export interface JobCardProps {
   aside?: ReactNode;
   /** Heading level of the title, for the page's outline. */
   headingLevel?: 'h2' | 'h3';
+  /** Under the title: why it fits the reader. */
+  note?: ReactNode;
 }
 
-/** A job in a list: company and age, title, where and pay, skills. */
+/** A job in a list: company and age, title, a note, where and pay, skills. */
 export function JobCard({
   job,
   href,
   aside,
   headingLevel: Heading = 'h2',
+  note,
 }: JobCardProps) {
   const salary = salaryText(job);
   const repost = monthsText(job.months);
@@ -55,6 +58,7 @@ export function JobCard({
             {job.title}
           </a>
         </Heading>
+        {note && <p className={s.note}>{note}</p>}
         <div className={s.meta}>
           {salary && <Badge tone="success">{salary}</Badge>}
           {facts.map((fact) => (

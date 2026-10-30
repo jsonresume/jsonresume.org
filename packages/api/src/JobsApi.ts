@@ -105,6 +105,10 @@ export const JobMatch = Schema.Struct({
   /** How well the job fits the resume, 0 to 100. */
   score: Schema.Number,
   mark: Schema.NullOr(JobMark),
+  /** The role in the post that fits best (posts can list several), once judged. */
+  role: Schema.optional(Schema.NullOr(Schema.String)),
+  /** Why it fits, or doesn't, in a few words, once judged. */
+  why: Schema.optional(Schema.NullOr(Schema.String)),
 });
 export type JobMatch = typeof JobMatch.Type;
 

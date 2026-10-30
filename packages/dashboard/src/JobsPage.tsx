@@ -30,6 +30,12 @@ const marks: ReadonlyArray<{ value: JobMark; label: string; short?: string }> =
     { value: 'not_interested', label: 'Not for me', short: 'Pass' },
   ];
 
+/** The role that fits (when the post lists another) and why. */
+const fitNote = (job: JobMatch) =>
+  job.why
+    ? `${job.role && job.role !== job.title ? `${job.role}: ` : ''}${job.why}`
+    : null;
+
 /** Strong fits stand out; the rest read as plain numbers. */
 const fitTone = (score: number) =>
   score >= 70 ? 'success' : score >= 45 ? 'info' : 'neutral';
@@ -109,6 +115,7 @@ export function Matches({ jobs }: { jobs: ReadonlyArray<JobMatch> }) {
           <JobCard
             job={job}
             href={`/jobs/${job.id}`}
+            note={fitNote(job)}
             aside={<Marks job={job} onMark={onMark(job.id)} />}
           />
         )}
@@ -123,7 +130,7 @@ export function JobsPage() {
   const page = (children: ReactNode) => (
     <AppPage
       title="Jobs for you"
-      description="Open roles from Hacker News “Who is hiring?”, ranked by how well they fit your resume. What you mark nudges the ranking."
+      description="Open roles from Hacker News “Who is hiring?”, judged against your resume: the role in each post that fits you, and why. Jobs you can’t take from where you live are left out. What you mark nudges the ranking."
       actions={
         <Button asChild variant="secondary">
           <a href="/jobs">Browse every job</a>

@@ -8,6 +8,7 @@ import { JobStore } from './store';
 import {
   daysAgo,
   FakeEmbedder,
+  fakeFitter,
   fakeHackerNews,
   FakeParser,
   post,
@@ -66,6 +67,75 @@ it('ranks open jobs against a resume, and remembers marks', async () => {
   expect(marked.find((j) => j.id === 12)?.mark).toBe('applied');
   expect(marked.find((j) => j.id === 13)?.mark).toBe(null);
   expect(none._tag).toBe('NoResume');
+});
+
+it('has the model judge jobs for a signed-in user, once per resume', async () => {
+  const asked: number[] = [];
+  const judged = Layer.mergeAll(JobStore.layer, JobMatcher.layer).pipe(
+    Layer.provideMerge(
+      Layer.mergeAll(
+        fakeHackerNews(hn),
+        FakeParser,
+        FakeEmbedder,
+        fakeFitter(['Rust'], asked),
+        TestDatabase
+      )
+    )
+  );
+  const [signedIn, again, anonymous] = await Effect.runPromise(
+    Effect.gen(function* () {
+      yield* runPipeline({
+        threads: 1,
+        parseLimit: 10,
+        days: 120,
+        concurrency: 1,
+      });
+      const sql = yield* SqlClient.SqlClient;
+      const [user] = yield* sql<{ id: string }>`
+        INSERT INTO app.users (email) VALUES ('b@example.com') RETURNING id`;
+      const matcher = yield* JobMatcher;
+      const signedIn = yield* matcher.matches(user?.id ?? '', resume);
+      const again = yield* matcher.matches(user?.id ?? '', resume);
+      const anonymous = yield* matcher.rank(resume);
+      return [signedIn, again, anonymous] as const;
+    }).pipe(Effect.provide(judged))
+  );
+  // The model's judgement outranks the embeddings' (which prefer Webby).
+  expect(signedIn[0]).toMatchObject({
+    company: 'Ferrous',
+    score: 90,
+    role: 'Rust role',
+    why: 'Knows Rust',
+  });
+  expect(again).toEqual(signedIn);
+  expect(asked.sort()).toEqual([11, 12, 13]);
+  expect(anonymous[0]?.row.posting.company).toBe('Webby');
+  expect(anonymous[0]?.why).toBe(null);
+});
+
+it('leaves out jobs the candidate can’t take where they live', async () => {
+  const ranked = await Effect.runPromise(
+    Effect.gen(function* () {
+      yield* runPipeline({
+        threads: 1,
+        parseLimit: 10,
+        days: 120,
+        concurrency: 1,
+      });
+      const matcher = yield* JobMatcher;
+      // The fake posts are offices in Germany.
+      const there = yield* matcher.rank({
+        ...resume,
+        basics: { ...resume.basics, location: { countryCode: 'DE' } },
+      });
+      const away = yield* matcher.rank({
+        ...resume,
+        basics: { ...resume.basics, location: { countryCode: 'AU' } },
+      });
+      return [there.length, away.length];
+    }).pipe(Effect.provide(layer))
+  );
+  expect(ranked).toEqual([3, 0]);
 });
 
 it('turns a cosine into a 0 to 100 fit', () => {
