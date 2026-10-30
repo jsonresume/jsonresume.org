@@ -26,7 +26,11 @@ const fakeReader = (asked: string[]) =>
             return {
               title: t.title,
               family,
-              seniority: t.title.includes('senior') ? 'senior' : 'mid',
+              seniority: t.title.includes('manager')
+                ? 'lead_management'
+                : t.title.includes('senior')
+                ? 'senior'
+                : 'mid',
             };
           });
         }),
@@ -123,7 +127,7 @@ it('learns where people go next, once per person, from dated jobs', async () => 
   // manager (not data science: that's the registry's copy); cy to developer.
   expect(fromBackend.map((m) => [m.family, m.seniority, m.people])).toEqual([
     ['backend', 'senior', 2],
-    ['eng_manager', 'mid', 1],
+    ['eng_manager', 'lead_management', 1],
     ['fullstack', 'mid', 1],
   ]);
   expect(fromBackend[0]?.share).toBe(50);
@@ -131,8 +135,10 @@ it('learns where people go next, once per person, from dated jobs', async () => 
   expect(fromBackend[0]?.medianYears).toBe(3);
   // ada, bob and eve.
   expect(fromSenior).toMatchObject([
-    { family: 'eng_manager', people: 3, share: 100 },
+    { family: 'eng_manager', people: 3, share: 100, basis: 'role' },
   ]);
+  // Nobody steps down: senior to mid isn't offered.
+  expect(fromSenior.every((m) => m.seniority !== 'mid')).toBe(true);
 });
 
 it('reads each title once, then from the table', async () => {

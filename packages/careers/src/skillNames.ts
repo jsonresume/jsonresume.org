@@ -72,9 +72,17 @@ export const skillKey = (name: string): string => {
   return ALIASES[key] ?? key;
 };
 
-/** Whether a key names a skill, not a kind of work ("Backend", "APIs"). */
+/** Qualifications, places and notes models write down as skills. */
+const NOT_A_SKILL =
+  /\b(experience|years?|yrs|no specific|not (listed|specified)|unspecified|see linked|location|degree|diploma|eligible|background|interest in|willingness|knowledge of|ability to|comfortable|shipped|shipping|based in|citizenship|residence|obsession|sense)\b|\d+\s*\+|:/;
+
+/** Whether a key names a skill: not a kind of work ("Backend", "APIs"), nor a qualification ("5+ years experience"). */
 export const isSkillKey = (key: string) =>
-  key.length > 0 && key.length <= 60 && !CATEGORIES.has(key);
+  key.length > 0 &&
+  key.length <= 50 &&
+  key.split(' ').length <= 6 &&
+  !CATEGORIES.has(key) &&
+  !NOT_A_SKILL.test(key);
 
 /** The dimensions kept for matching skills by meaning: the start of a text-embedding-3 vector, renormalized. */
 export const SKILL_DIMENSIONS = 256;

@@ -54,7 +54,7 @@ const INSTRUCTIONS = `You read job posts from Hacker News "Who is hiring?" and l
 ${familyPrompt}
 - seniority: intern, junior, mid, senior, staff_plus (staff, principal), lead_management (manager, head of, VP, CTO), or unspecified.
 - summary: one plain sentence on what the role does.
-- requirements: specific technologies, languages, frameworks, tools or skills the post asks of that role (React, PostgreSQL, Kubernetes, LLM evaluation). Never kinds of work ("Backend", "Full-stack", "APIs"). need "required" unless the post says nice-to-have, a plus or bonus. years only when the post states them. When the post lists requirements once for all its roles, give them to each role.
+- requirements: specific technologies, languages, frameworks, tools or skills the post asks of that role, each as a short name (React, PostgreSQL, Kubernetes, LLM evaluation); a list like "Terraform/Pulumi" is one requirement per tool. Never kinds of work ("Backend", "Full-stack", "APIs"), years of experience, degrees, locations, time zones, citizenship or traits; when the post names no skills, give none. need "required" unless the post says nice-to-have, a plus or bonus. years only when the post states them. When the post lists requirements once for all its roles, give them to each role.
 - Use only what the post says. Never guess.`;
 
 const block = (p: PostToRead) => `[${p.id}]\n${p.text.slice(0, POST_CHARS)}`;
