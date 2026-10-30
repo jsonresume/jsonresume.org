@@ -56,6 +56,10 @@ export const jobMatchesAtom = ApiClient.query('myJobs', 'matches', {
 export const directionsAtom = ApiClient.query('myJobs', 'directions', {
   reactivityKeys: [...keys.jobs, ...keys.account],
 });
+/** The same, as a tree: skills, experience, kinds of role, jobs. */
+export const careerTreeAtom = ApiClient.query('myJobs', 'tree', {
+  reactivityKeys: [...keys.jobs, ...keys.account],
+});
 export const pendingGithubAtom = ApiClient.query('auth', 'pendingGithub', {});
 
 export const signUpAtom = ApiClient.mutation('auth', 'signUp');

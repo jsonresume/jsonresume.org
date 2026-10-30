@@ -10,15 +10,16 @@ import { optionParam, useAtomsInUrl } from '@repo/url-state';
 import { Atom } from 'effect/reactivity';
 import { useEffect } from 'react';
 import { useSession } from '../session';
+import { CareerTree } from './CareerTree';
 import { Copilot } from './Copilot';
 import { Directions } from './Directions';
 import { Swipe } from './Swipe';
 import { useCopilot } from './useCopilot';
 
-type Tab = 'copilot' | 'directions' | 'swipe';
-const tabs: ReadonlyArray<string> = ['copilot', 'directions', 'swipe'];
+type Tab = 'copilot' | 'tree' | 'directions' | 'swipe';
+const tabs: ReadonlyArray<string> = ['copilot', 'tree', 'directions', 'swipe'];
 
-/** ?tab=directions|swipe opens on that tab; the copilot is the default. */
+/** ?tab=tree|directions|swipe opens on that tab; the copilot is the default. */
 const tabParamAtom = Atom.make<string | null>(null);
 /**
  * ?ask= puts a question to the copilot on arrival (a job page's "Write a
@@ -32,8 +33,9 @@ const bindings = [
 
 /**
  * /dashboard/pathways: where your career could go. A copilot that knows
- * your resume and today's jobs (and can change both), the directions open to
- * you, and the matching jobs to sort one by one.
+ * your resume and today's jobs (and can change both), the tree of what your
+ * skills and experience lead to, the directions open to you, and the
+ * matching jobs to sort one by one.
  */
 export function PathwaysPage() {
   const user = useSession();
@@ -66,11 +68,15 @@ export function PathwaysPage() {
       <Tabs value={tab} onValueChange={(v) => setTab(v as Tab)}>
         <TabsList aria-label="Pathways">
           <TabsTrigger value="copilot">Copilot</TabsTrigger>
+          <TabsTrigger value="tree">Tree</TabsTrigger>
           <TabsTrigger value="directions">Directions</TabsTrigger>
           <TabsTrigger value="swipe">Sort jobs</TabsTrigger>
         </TabsList>
         <TabsContent value="copilot">
           <Copilot copilot={copilot} />
+        </TabsContent>
+        <TabsContent value="tree">
+          <CareerTree onAsk={ask} />
         </TabsContent>
         <TabsContent value="directions">
           <Directions onAsk={ask} />
