@@ -1,6 +1,6 @@
 {
   "name": "app",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "jsonresume.org: React + Vite on @jsonresume/ui, served by a small Hono server",
   "type": "module",

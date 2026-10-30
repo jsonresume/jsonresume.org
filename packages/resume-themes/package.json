@@ -1,6 +1,6 @@
 {
   "name": "@repo/resume-themes",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "Renders a resume with any of the gallery themes, loading each theme package on first use",
   "type": "module",

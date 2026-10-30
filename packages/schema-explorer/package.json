@@ -1,6 +1,6 @@
 {
   "name": "@repo/schema-explorer",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "Browse a JSON Schema as readable sections and fields, next to an example document",
   "type": "module",

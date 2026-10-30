@@ -1,6 +1,6 @@
 {
   "name": "@repo/site",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "The jsonresume.org site in React: layout, navigation, page templates and home page",
   "type": "module",

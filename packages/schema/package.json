@@ -1,6 +1,6 @@
 {
   "name": "@jsonresume/schema",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "JSON Resume Schema",
   "private": false,
   "main": "validator.js",
