@@ -1,5 +1,5 @@
 import { decodePosting, postText, type Posting } from '@repo/jobs';
-import { Effect, Option, Schema } from 'effect';
+import { Cause, Effect, Option, Schema } from 'effect';
 import { SqlClient } from 'effect/sql';
 import { openJob } from './openJob';
 import {
@@ -64,6 +64,10 @@ export const refreshRoles = Effect.fn('JobRoles.refreshRoles')(function* (
     (_, i) => unread.slice(i * BATCH, (i + 1) * BATCH)
   );
 
+  /** Years asked, when it reads as years (models sometimes put a year or a salary there). */
+  const yearsOf = (years: number | null) =>
+    years !== null && years >= 0 && years <= 40 ? Math.round(years) : null;
+
   const store = (jobId: number, roles: ReadonlyArray<RoleRead>) =>
     Effect.gen(function* () {
       const names = [
@@ -93,7 +97,7 @@ export const refreshRoles = Effect.fn('JobRoles.refreshRoles')(function* (
               ([skillId, q]) => sql`
                 INSERT INTO app.job_requirements (job_id, idx, skill_id, need, years)
                 VALUES (${jobId}, ${idx}, ${skillId}, ${q.need},
-                        ${q.years === null ? null : Math.round(q.years)})
+                        ${yearsOf(q.years)})
               `,
               { discard: true }
             );
@@ -120,8 +124,19 @@ export const refreshRoles = Effect.fn('JobRoles.refreshRoles')(function* (
                       onNone: () => [],
                       onSome: (p) => [fromPosting(p)],
                     });
+              // One post the database refuses doesn't stop the rest.
               return roles.length > 0
-                ? Effect.as(store(job.id, roles), roles.length)
+                ? Effect.as(store(job.id, roles), roles.length).pipe(
+                    Effect.catchCause((cause) =>
+                      Effect.as(
+                        Effect.logWarning('Job roles not stored', {
+                          job: job.id,
+                          cause: Cause.pretty(cause),
+                        }),
+                        0
+                      )
+                    )
+                  )
                 : Effect.succeed(0);
             })
           ),
