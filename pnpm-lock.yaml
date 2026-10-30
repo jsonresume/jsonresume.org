@@ -1053,6 +1053,9 @@ importers:
       '@repo/api':
         specifier: workspace:*
         version: link:../api
+      '@repo/careers':
+        specifier: workspace:*
+        version: link:../careers
       '@repo/explore':
         specifier: workspace:*
         version: link:../explore

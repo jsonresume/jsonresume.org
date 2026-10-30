@@ -119,6 +119,15 @@ export const CareerGraph = Schema.Struct({
   pending: Schema.Boolean,
   /** Months the graph was saved, newest first ("2026-10"). */
   snapshots: Schema.Array(Schema.String),
+  /** Each view's band names, by level. */
+  bands: Schema.Struct({
+    meaning: Schema.Array(Schema.String),
+    distance: Schema.Array(Schema.String),
+    seniority: Schema.Array(Schema.String),
+    time: Schema.Array(Schema.String),
+  }),
+  /** The plan the graph's next steps come from, if any. */
+  planId: Schema.NullOr(Schema.String),
 });
 export type CareerGraph = typeof CareerGraph.Type;
 
