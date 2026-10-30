@@ -39,6 +39,13 @@ export const overline = style({
   fontSize: font.size.xs,
 });
 
+/** Why a job fits the reader, under its title. */
+export const note = style({
+  margin: 0,
+  color: color.text.muted,
+  fontSize: font.size.sm,
+});
+
 export const company = style({
   color: color.text.default,
   fontWeight: font.weight.semibold,

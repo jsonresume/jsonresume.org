@@ -273,4 +273,22 @@ export const migrations: Record<
     const sql = yield* SqlClient.SqlClient;
     yield* sql`ALTER TABLE app.oauth_codes ADD COLUMN nonce text`;
   }),
+
+  // How a model judged each job against a resume, kept per resume version
+  // (resume_key hashes the resume and the instructions) and job.
+  '12_job_fits': Effect.gen(function* () {
+    const sql = yield* SqlClient.SqlClient;
+    yield* sql`
+      CREATE TABLE app.job_fits (
+        resume_key text NOT NULL,
+        job_id bigint NOT NULL REFERENCES app.jobs (id) ON DELETE CASCADE,
+        score smallint NOT NULL,
+        role text NOT NULL,
+        why text NOT NULL,
+        created_at timestamptz NOT NULL DEFAULT now(),
+        PRIMARY KEY (resume_key, job_id)
+      )
+    `;
+    yield* sql`CREATE INDEX job_fits_created ON app.job_fits (created_at)`;
+  }),
 };

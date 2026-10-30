@@ -1,5 +1,6 @@
 import { Effect, Layer, Option } from 'effect';
 import { embedderFrom } from '../embedder';
+import { JobFitter } from '../fitter';
 import { HackerNews, type Thread } from '../hackerNews';
 import { JobParser, ParseFailed } from '../parser';
 import type { Posting } from '../posting';
@@ -94,3 +95,27 @@ export const post = (
   text: string,
   postedAt: Date
 ): NewPost => ({ id, threadId, author: `user${id}`, html: text, postedAt });
+
+/**
+ * A fitter that scores a post 90 when it names a word in `likes`, else 40,
+ * and counts the jobs it was asked about.
+ */
+export const fakeFitter = (likes: ReadonlyArray<string>, asked: number[]) =>
+  Layer.succeed(
+    JobFitter,
+    JobFitter.of({
+      fit: (_, jobs) =>
+        Effect.sync(() => {
+          asked.push(...jobs.map((j) => j.id));
+          return jobs.map((j) => {
+            const hit = likes.find((w) => j.text.includes(w));
+            return {
+              id: j.id,
+              score: hit ? 90 : 40,
+              role: hit ? `${hit} role` : 'Engineer',
+              why: hit ? `Knows ${hit}` : 'Little overlap',
+            };
+          });
+        }),
+    })
+  );

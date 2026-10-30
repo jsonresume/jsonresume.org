@@ -15,6 +15,10 @@ const ranked = (id: number, days: number, p = {}): Ranked => ({
   order: 0.5,
   score: 67,
   mark: null,
+  eligible: 'yes',
+  role: null,
+  why: null,
+  limits: [],
 });
 const jobs = [
   ranked(1, 5, {

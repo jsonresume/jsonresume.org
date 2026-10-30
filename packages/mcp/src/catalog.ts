@@ -183,7 +183,7 @@ export const tools: ReadonlyArray<McpToolInfo> = [
     name: 'match_jobs',
     group: 'jobs',
     description:
-      'Open jobs ranked by how well they fit your resume (a 0 to 100 fit), nudged by the jobs you have marked. Same filters as search_jobs.',
+      'Open jobs ranked by how well they fit your resume: a 0 to 100 fit judged by AI against each post, with the post’s best role for you and why. Jobs you can’t take from where you live (basics.location.countryCode) are left out; low pay or a role below your level caps the fit; your marks nudge the order. Same filters as search_jobs.',
     writes: false,
   },
   {

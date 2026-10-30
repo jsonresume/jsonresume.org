@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { openJobs } from './board';
 import { Embedder } from './embedder';
 import { decodePosting } from './posting';
+import { postText } from './postText';
 import type { JobRow } from './summary';
 import { fromBytes, toBytes } from './vectors';
 
@@ -12,13 +13,14 @@ const Open = Schema.Struct({
   parsed: Schema.Unknown,
   posted_at: Schema.Date,
   family_months: Schema.Number,
+  html: Schema.String,
   embedding: Schema.Uint8Array,
 });
 const Cached = Schema.Struct({ embedding: Schema.Uint8Array });
 const rows = <S extends Schema.Constraint>(schema: S) =>
   Schema.decodeUnknownEffect(Schema.Array(schema));
 
-/** What matching compares: the open jobs' vectors, and a resume's. */
+/** What matching compares: the open jobs' vectors and text, and a resume's vector. */
 export const matchData = Effect.gen(function* () {
   const sql = yield* SqlClient.SqlClient;
   const embedder = yield* Embedder;
@@ -27,7 +29,7 @@ export const matchData = Effect.gen(function* () {
   const openJobRows = yield* Effect.cachedWithTTL(
     sql`
       SELECT j.id::float8 AS id, j.parsed, j.posted_at,
-             j.family_months::float8 AS family_months, j.embedding
+             j.family_months::float8 AS family_months, j.html, j.embedding
       FROM app.jobs j WHERE ${sql.literal(openJobs)} AND j.embedding IS NOT NULL
     `.pipe(
       Effect.flatMap(rows(Open)),
@@ -44,6 +46,7 @@ export const matchData = Effect.gen(function* () {
                   months: r.family_months,
                 } satisfies JobRow,
                 vector: fromBytes(r.embedding),
+                text: postText(r.html),
               },
             ],
           })
