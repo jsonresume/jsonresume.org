@@ -21,6 +21,18 @@ const rows = Schema.decodeUnknownEffect(Schema.Array(Row));
 const TOP = 12;
 /** People a sample needs before its shares mean much. */
 const ENOUGH = 25;
+/** Seniority as a rank: staff and lead are two tracks at one height. */
+const RANK: Record<string, number> = {
+  intern: 0,
+  junior: 1,
+  mid: 2,
+  senior: 3,
+  staff_plus: 4,
+  lead_management: 4,
+};
+const isDown = (from: string, to: string) =>
+  (RANK[to] ?? Infinity) < (RANK[from] ?? -Infinity);
+
 /** Not places to head for. */
 const NOWHERE: ReadonlySet<string> = new Set([
   'other_tech',
@@ -89,6 +101,7 @@ export const CareerMovesLive = Layer.effect(
           .filter(
             (m) =>
               !NOWHERE.has(m.row.to_family) &&
+              !isDown(seniority, m.row.to_seniority) &&
               !(m.row.to_family === family && m.row.to_seniority === seniority)
           )
           .sort(

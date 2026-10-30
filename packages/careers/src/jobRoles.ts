@@ -1,6 +1,7 @@
 import { Seniority } from '@repo/api';
 import { Effect, Layer, Schema } from 'effect';
 import { SqlClient } from 'effect/sql';
+import { isSkillKey } from './skillNames';
 import { familyName, isFamily, type Family } from './families';
 import {
   JobRoles,
@@ -72,7 +73,7 @@ export const JobRolesLive = Layer.effect(
         ORDER BY r.job_id, r.idx, (r.need = 'required') DESC, s.name
       `.pipe(Effect.flatMap(rows(RequirementRow)), Effect.orDie);
       const byRole = new Map<string, Requirement[]>();
-      for (const n of needs) {
+      for (const n of needs.filter((n) => isSkillKey(n.key))) {
         const key = `${n.job_id}:${n.idx}`;
         byRole.set(key, [
           ...(byRole.get(key) ?? []),

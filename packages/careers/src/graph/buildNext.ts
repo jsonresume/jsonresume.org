@@ -12,10 +12,17 @@ const SENIORITY_WORDS: Record<string, string> = {
   lead_management: 'lead',
 };
 
+/** Roles that are leading by name: "Founder (lead)" says it twice. */
+const LEADING: ReadonlySet<string> = new Set([
+  'eng_manager',
+  'eng_executive',
+  'founder',
+]);
+
 const WHO = {
   role: 'people in your role',
-  family: 'people in your kind of role, at any level',
-  level: 'people at your level, in any role',
+  family: 'people in your kind of role (at any level)',
+  level: 'people at your level (in any role)',
 } as const;
 
 const after = (years: number | null) =>
@@ -49,7 +56,9 @@ export const buildNext = (
       id: `destination:${d.family}:${d.seniority}`,
       kind: 'destination',
       label: `${d.name}${
-        SENIORITY_WORDS[d.seniority] ? ` (${SENIORITY_WORDS[d.seniority]})` : ''
+        SENIORITY_WORDS[d.seniority] && !LEADING.has(d.family)
+          ? ` (${SENIORITY_WORDS[d.seniority]})`
+          : ''
       }`,
       detail: `${Math.round(d.share)}% of ${WHO[d.basis]} moved here next (${
         d.people === 1 ? 'one person' : `${Math.round(d.people)} people`
