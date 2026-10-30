@@ -22,9 +22,10 @@ export interface TreeModel {
 
 /**
  * The career tree placed for TreeMap: each square above what it rests on,
- * bands named for what they mostly hold (skills at the bottom, jobs on top).
+ * bands named for what they mostly hold (skills at the bottom, jobs on top),
+ * shaped to `aspect` (width:height) when given.
  */
-export const treeModel = (tree: CareerTree): TreeModel => {
+export const treeModel = (tree: CareerTree, aspect?: number): TreeModel => {
   const ids = tree.nodes.map((n) => n.id);
   const layout = layoutTree(
     ids,
@@ -32,7 +33,8 @@ export const treeModel = (tree: CareerTree): TreeModel => {
       const from = ids[e.from];
       const to = ids[e.to];
       return from && to ? [{ from, to, strength: 'strong' as const }] : [];
-    })
+    }),
+    aspect === undefined ? undefined : { aspect }
   );
   const nodes = tree.nodes.map((n, i): TreeMapNode => {
     const placed = layout.nodes[i];

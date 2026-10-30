@@ -47,7 +47,11 @@ function Legend() {
 }
 
 function TreeArea({ tree, onAsk }: { tree: Tree; onAsk: (q: string) => void }) {
-  const model = useMemo(() => treeModel(tree), [tree]);
+  // A phone's map is taller than it is wide: rows wrap to fill it.
+  const model = useMemo(
+    () => treeModel(tree, window.innerWidth < 640 ? 0.75 : undefined),
+    [tree]
+  );
   const [selected, setSelected] = useState<number | null>(null);
   const focus = useMemo(
     () => (selected === null ? null : related(model, selected)),
