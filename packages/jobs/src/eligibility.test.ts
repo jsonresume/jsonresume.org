@@ -24,8 +24,16 @@ describe('who can take a job, by where they live', () => {
     expect(eligibility(remote('Texas', 'Virginia'), 'US')).toBe('yes');
   });
 
+  it('reads European time zones as Europe (and Africa)', () => {
+    expect(eligibility(remote('CET ±3'), 'AU')).toBe('no');
+    expect(
+      eligibility(remote('GMT-2 to GMT+2 (European timezones)'), 'FR')
+    ).toBe('yes');
+    expect(eligibility(remote('UTC-3 to UTC+3'), 'ZA')).toBe('yes');
+  });
+
   it("is unclear when it can't read a region, rather than ruling them out", () => {
-    expect(eligibility(remote('CET ±3'), 'AU')).toBe('unclear');
+    expect(eligibility(remote('similar timezone'), 'AU')).toBe('unclear');
     expect(eligibility(remote(), 'AU')).toBe('unclear');
     expect(regionCountries('select countries (see the wiki)')).toBeUndefined();
   });

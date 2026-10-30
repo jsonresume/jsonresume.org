@@ -76,6 +76,9 @@ const REGIONS: Record<string, string> = {
   'north macedonia': 'MK',
   'costa rica': 'CR',
 };
+// European time zones ("CET ±2h", "GMT-2 to GMT+2", "UTC+1 to UTC+2").
+const EUROPE_TIME = /^(cet|cest|eet|eest|wet|west|bst|gmt|utc)\b/i;
+const EUROPE_AND_AFRICA = `${EUROPE} ZA NG KE EG MA GH`;
 // US states, US time zones and cities, as fenced US remote is written.
 const US_LIKE =
   /^(us\b|u\.s\.|sf\b|nyc\b|bay area|silicon valley|pst\b|est\b|cst\b|mst\b|pacific time|eastern time|central time|alabama|alaska|arizona|california|colorado|florida|georgia|illinois|massachusetts|michigan|minnesota|mississippi|missouri|new york|north carolina|ohio|oklahoma|oregon|pennsylvania|tennessee|texas|utah|virginia|washington)/i;
@@ -92,6 +95,7 @@ export const regionCountries = (
   if (known) return new Set(known.split(' '));
   if (/^[a-z]{2}$/.test(name)) return new Set([name.toUpperCase()]);
   if (US_LIKE.test(name)) return new Set(['US']);
+  if (EUROPE_TIME.test(name)) return new Set(EUROPE_AND_AFRICA.split(' '));
   return undefined;
 };
 
