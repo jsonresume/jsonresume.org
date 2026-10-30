@@ -1,5 +1,6 @@
 import type { CareerNode } from '@repo/api';
 import { familyName } from '../families';
+import { roleTitle } from '../pickRole';
 import type { Draft } from './draft';
 import { seniorityLevel, type GraphInputs, type GraphJob } from './inputs';
 import type { buildYou } from './buildYou';
@@ -53,11 +54,20 @@ export const buildOpen = (
       });
     }
   }
+  // A skill that is all a job lacks is a step to it: it always shows.
+  const keys = new Set(
+    input.jobs.flatMap((job) => {
+      const m = missingOf(job, have);
+      return m.length === 1 && m[0] ? [m[0].skill.id] : [];
+    })
+  );
+  const ranked = [...need.entries()].sort((a, b) => b[1].score - a[1].score);
   const gaps = new Map(
-    [...need.entries()]
-      .filter(([, n]) => n.score >= 1.5)
-      .sort((a, b) => b[1].score - a[1].score)
-      .slice(0, GAPS)
+    [
+      ...ranked.filter(([, n]) => n.score >= 1.5).slice(0, GAPS),
+      ...ranked.filter(([id]) => keys.has(id)),
+    ]
+      .filter(([id], i, all) => all.findIndex(([x]) => x === id) === i)
       .map(([id, n]) => [
         id,
         g.add({
@@ -91,7 +101,7 @@ export const buildOpen = (
       levels: { meaning: 4 },
     });
     const missing = missingOf(job, have).length;
-    const title = job.role?.title ?? r.role ?? r.row.posting.title;
+    const title = roleTitle(job.role) ?? r.role ?? r.row.posting.title;
     const node = g.add({
       id: `job:${r.row.id}`,
       kind: 'job',

@@ -2,6 +2,7 @@ import type { Ranked } from '@repo/jobs';
 import { expect, it } from 'vitest';
 import type { ResumeInsight, Skill } from '../services';
 import { buildGraph } from './build';
+import { graphDigest } from './digest';
 import type { GraphInputs, GraphJob } from './inputs';
 
 const skill = (id: number, name: string): Skill => ({
@@ -148,6 +149,7 @@ const input: GraphInputs = {
       people: 40,
       share: 23,
       medianYears: 4,
+      basis: 'role',
     },
   ],
   plan: {
@@ -215,4 +217,24 @@ it('rests things on what holds them up, with the resume’s words', () => {
   ).toBeDefined();
   expect(graph.planId).toBe('p');
   expect(graph.strengths).toEqual(['Backend systems']);
+});
+
+it('names the one skill between you and a job, however rare', () => {
+  const GO = skill(5, 'Go');
+  const graph = buildGraph({
+    ...input,
+    jobs: [
+      ...input.jobs,
+      job(13, 85, [
+        [TS, 'required'],
+        [GO, 'required'],
+      ]),
+    ],
+  });
+  expect(graph.nodes.find((n) => n.id === 'gap:5')).toBeDefined();
+  const digest = graphDigest({ ...graph, pending: false, snapshots: [] });
+  expect(digest.oneStep.find((j) => j.id === 13)?.missing).toEqual(['Go']);
+  expect(digest.oneStep.find((j) => j.id === 11)?.missing).toEqual([
+    'Kubernetes',
+  ]);
 });

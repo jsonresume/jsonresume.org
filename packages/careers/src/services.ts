@@ -145,6 +145,8 @@ export interface Move {
   /** Of the people who held the role they came from, the share who moved here next. */
   share: number;
   medianYears: number | null;
+  /** Whose moves these are: people in the role at that level, in the role at any level, or at that level in any role. */
+  basis: 'role' | 'family' | 'level';
 }
 
 /**

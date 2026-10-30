@@ -75,6 +75,8 @@ export const CareerMove = Schema.Struct({
   share: Schema.Number,
   people: Schema.Number,
   medianYears: Schema.NullOr(Schema.Number),
+  /** Whose moves: people in the role at that level, in the role at any level, or at that level in any role. */
+  basis: Schema.Literals(['role', 'family', 'level']),
 });
 export type CareerMove = typeof CareerMove.Type;
 

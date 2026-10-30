@@ -2,13 +2,13 @@ import { familyOf, type Ranked } from '@repo/jobs';
 import { Effect } from 'effect';
 import { familyName, isFamily, type Family } from './families';
 import type { GraphInputs, GraphJob } from './graph/inputs';
+import { pickRole } from './pickRole';
 import { PlanStore } from './plans';
 import {
   CareerMoves,
   JobRoles,
   ResumeInsights,
   SkillCatalog,
-  type JobRole,
 } from './services';
 
 /** Jobs on the graph: the best fits, at least this fit. */
@@ -35,21 +35,6 @@ const FROM_KIND: Record<string, Family> = {
   'Sales, success and operations': 'non_tech',
   'Software engineering': 'fullstack',
   'Founding engineer': 'fullstack',
-};
-
-/** The post's role that fits: the one the matcher named, else the first. */
-const pickRole = (roles: ReadonlyArray<JobRole>, named: string | null) => {
-  const want = named?.toLowerCase() ?? '';
-  return (
-    roles.find(
-      (r) =>
-        want &&
-        (want.includes(r.title.toLowerCase()) ||
-          r.title.toLowerCase().includes(want))
-    ) ??
-    roles[0] ??
-    null
-  );
 };
 
 /**
@@ -81,8 +66,10 @@ export const gather = Effect.fn('Careers.gather')(function* (
   ];
   const resolved = names.length > 0 ? yield* catalog.resolve(names) : new Map();
 
+  const have = new Set(insight.evidence.map((e) => e.skill.id));
+  const worked = new Set(insight.entries.flatMap((e) => e.family ?? []));
   const jobs = shown.map((r): GraphJob => {
-    const role = pickRole(roleMap.get(r.row.id) ?? [], r.role);
+    const role = pickRole(roleMap.get(r.row.id) ?? [], r.role, have, worked);
     return {
       ranked: r,
       role,

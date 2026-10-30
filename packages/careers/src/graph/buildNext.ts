@@ -12,6 +12,21 @@ const SENIORITY_WORDS: Record<string, string> = {
   lead_management: 'lead',
 };
 
+const WHO = {
+  role: 'people in your role',
+  family: 'people in your kind of role, at any level',
+  level: 'people at your level, in any role',
+} as const;
+
+const after = (years: number | null) =>
+  years === null
+    ? ''
+    : years < 1
+    ? ', within a year'
+    : `, after about ${Math.round(years)} year${
+        Math.round(years) === 1 ? '' : 's'
+      }`;
+
 /**
  * What's next: where people in your current role went (resting on that
  * role and on the kind of role it is), and your plan's steps (resting on
@@ -36,13 +51,9 @@ export const buildNext = (
       label: `${d.name}${
         SENIORITY_WORDS[d.seniority] ? ` (${SENIORITY_WORDS[d.seniority]})` : ''
       }`,
-      detail: `${Math.round(
-        d.share
-      )}% of people in your role moved here next (${
-        d.people === 1 ? 'one person' : `${d.people} people`
-      })${
-        d.medianYears ? `, after about ${Math.round(d.medianYears)} years` : ''
-      }`,
+      detail: `${Math.round(d.share)}% of ${WHO[d.basis]} moved here next (${
+        d.people === 1 ? 'one person' : `${Math.round(d.people)} people`
+      })${after(d.medianYears)}`,
       tone: 'open',
       levels: {
         meaning: 6,
