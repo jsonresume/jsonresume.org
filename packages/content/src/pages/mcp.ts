@@ -35,9 +35,9 @@ export const clients: McpClient[] = [
     name: 'ChatGPT',
     auth: 'oauth',
     steps: [
-      'Open **Settings → Apps & Connectors → Advanced settings** and turn on **Developer mode** (Plus, Pro, Business, Enterprise and Edu plans).',
-      `Back in **Apps & Connectors**, choose **Create**. Name it *JSON Resume*, set the MCP server URL to \`${serverUrl}\` and authentication to **OAuth**, then create it.`,
-      'Sign in to jsonresume.org and choose **Allow**. In a chat, pick JSON Resume from the **+** menu (Developer mode) and ask away.',
+      'On chatgpt.com, open **Plugins** (chatgpt.com/plugins), choose **+** and then **Add custom MCP server**. In a Business, Enterprise or Edu workspace, your admin may need to allow it.',
+      `Name it *JSON Resume*, set the **Server URL** to \`${serverUrl}\` and authentication to **OAuth**. Accept the warning and choose **Create as a plugin**.`,
+      'Install it from your plugins: jsonresume.org opens, you sign in and choose **Allow**. In a chat, type **@**, pick JSON Resume and ask away. ChatGPT asks before each change to your resume.',
     ],
   },
   {

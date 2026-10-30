@@ -21,6 +21,7 @@ export interface AuthorizeRequest {
   codeChallengeMethod?: string;
   scope?: string;
   state?: string;
+  nonce?: string;
 }
 
 const TITLE = 'Connect an app';
@@ -104,6 +105,7 @@ function Consent({
         ...(codeChallenge !== undefined && { code_challenge: codeChallenge }),
         ...(request.scope !== undefined && { scope: request.scope }),
         ...(request.state !== undefined && { state: request.state }),
+        ...(request.nonce !== undefined && { nonce: request.nonce }),
         approve,
       },
     });

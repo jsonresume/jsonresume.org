@@ -267,4 +267,10 @@ export const migrations: Record<
     yield* sql`CREATE INDEX oauth_clients_owner ON app.oauth_clients (owner_id)`;
     yield* sql`ALTER TABLE app.oauth_codes ALTER COLUMN code_challenge DROP NOT NULL`;
   }),
+
+  // OpenID Connect: the nonce the client sent, returned in the ID token.
+  '11_oidc_nonce': Effect.gen(function* () {
+    const sql = yield* SqlClient.SqlClient;
+    yield* sql`ALTER TABLE app.oauth_codes ADD COLUMN nonce text`;
+  }),
 };
