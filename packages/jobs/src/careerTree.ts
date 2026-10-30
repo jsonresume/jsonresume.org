@@ -1,8 +1,8 @@
 import type { CareerTree, CareerTreeNode } from '@repo/api';
-import { Predicate } from 'effect';
 import { familyOf } from './directions';
+import { experiences } from './experiences';
 import type { Ranked } from './ranking';
-import { mentions, resumeSkillNames, skillKey } from './skillKeys';
+import { isSkill, mentions, resumeSkillNames, skillKey } from './skillKeys';
 
 /** The best-fitting jobs the tree shows, and the least fit to make it. */
 const JOBS = 40;
@@ -11,33 +11,6 @@ const MIN_FIT = 50;
 const GAPS = 14;
 /** Experiences a direction rests on, at most: those sharing most skills. */
 const EVIDENCE = 4;
-
-const list = (v: unknown): unknown[] => (Array.isArray(v) ? v : []);
-const at = (o: unknown, key: string): unknown =>
-  Predicate.isObject(o) ? (o as Record<string, unknown>)[key] : undefined;
-const str = (v: unknown) => (Predicate.isString(v) ? v.trim() : '');
-
-/** Work, projects and volunteering, each as a name, a line and its text. */
-const experiences = (resume: unknown) =>
-  (
-    [
-      ['work', 'name', 'position'],
-      ['projects', 'name', 'description'],
-      ['volunteer', 'organization', 'position'],
-    ] as const
-  ).flatMap(([section, name, detail]) =>
-    list(at(resume, section)).map((e) => ({
-      label: str(at(e, name)) || str(at(e, 'name')),
-      detail: str(at(e, detail)).slice(0, 90) || null,
-      text: [
-        str(at(e, 'position')),
-        str(at(e, 'summary')),
-        str(at(e, 'description')),
-        ...list(at(e, 'highlights')).map(str),
-        ...list(at(e, 'keywords')).map(str),
-      ].join('\n'),
-    }))
-  );
 
 const jobTone = (r: Ranked): CareerTreeNode['tone'] =>
   r.mark === 'applied'
@@ -65,7 +38,8 @@ export const careerTree = (
     .slice(0, JOBS);
   const have = resumeSkillNames(resume);
   const asked = jobs.map(
-    (r) => new Set(r.row.posting.skills.map((s) => skillKey(s.name)))
+    (r) =>
+      new Set(r.row.posting.skills.map((s) => skillKey(s.name)).filter(isSkill))
   );
   const askedName = new Map(
     jobs.flatMap((r) =>
@@ -116,10 +90,13 @@ export const careerTree = (
           score: null,
         });
 
-  // Kinds of role, and the jobs in each.
+  // Kinds of role with one job join "Other roles".
+  const familyOfJob = jobs.map((r) => familyOf(r.role ?? r.row.posting.title));
+  const sizes = new Map<string, number>();
+  for (const f of familyOfJob) sizes.set(f, (sizes.get(f) ?? 0) + 1);
   const byFamily = new Map<string, number[]>();
-  jobs.forEach((r, i) => {
-    const family = familyOf(r.role ?? r.row.posting.title);
+  familyOfJob.forEach((f, i) => {
+    const family = (sizes.get(f) ?? 0) >= 2 ? f : 'Other roles';
     byFamily.set(family, [...(byFamily.get(family) ?? []), i]);
   });
 

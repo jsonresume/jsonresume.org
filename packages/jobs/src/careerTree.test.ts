@@ -53,6 +53,7 @@ const ranked = [
     'Software Engineer, Agents'
   ),
   job(3, 'Rust Engineer', 40, ['Rust']),
+  job(4, 'ML Engineer', 80, ['TypeScript', 'PostgreSQL', 'APIs']),
 ];
 
 it('rests jobs on kinds of role, experience and skills, with the gaps', () => {
@@ -65,8 +66,13 @@ it('rests jobs on kinds of role, experience and skills, with the gaps', () => {
   expect(byId.has('job:3')).toBe(false);
   // The role that fits names the kind of role, not the post's title.
   expect(has('direction:AI and machine learning', 'job:1')).toBe(true);
-  expect(has('direction:Software engineering', 'job:2')).toBe(true);
   expect(byId.has('direction:Full-stack and product engineering')).toBe(false);
+  // A kind of role with one job joins the others.
+  expect(has('direction:Other roles', 'job:2')).toBe(true);
+  // "APIs" is a kind of work, not a skill.
+  expect(byId.has('skill:apis')).toBe(false);
+  // "Backend" groups the resume's skills; it isn't one.
+  expect(byId.has('skill:backend')).toBe(false);
   // "Postgres" on the resume is the PostgreSQL the job asks for.
   expect(has('skill:postgresql', 'job:1')).toBe(true);
   expect(has('skill:typescript', 'experience:0')).toBe(true);
@@ -87,7 +93,7 @@ it('says in words what holds the most up and what would open the most', () => {
   expect(digest.strengths[0]).toEqual({
     name: 'TypeScript',
     onResume: true,
-    jobs: 2,
+    jobs: 3,
   });
   expect(digest.gaps).toEqual([
     { name: 'Kubernetes', onResume: false, jobs: 2 },
@@ -96,5 +102,5 @@ it('says in words what holds the most up and what would open the most', () => {
     name: 'AI and machine learning',
     evidence: ['Acme'],
   });
-  expect(digest.directions[0]?.jobs.map((j) => j.id)).toEqual([1]);
+  expect(digest.directions[0]?.jobs.map((j) => j.id)).toEqual([1, 4]);
 });
