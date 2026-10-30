@@ -6,14 +6,16 @@
   "type": "module",
   "scripts": {
     "dev": "node scripts/dev.ts",
-    "build": "vite build --outDir dist/client && vite build --ssr src/entry-server.tsx --outDir dist/ssr && vite build --ssr server/index.ts --outDir dist/server && vite build --ssr server/jobs.ts --outDir dist/jobs && node scripts/prerender.ts",
+    "build": "vite build --outDir dist/client && vite build --ssr src/entry-server.tsx --outDir dist/ssr && vite build --ssr server/index.ts --outDir dist/server && vite build --ssr server/jobs.ts --outDir dist/jobs && vite build --ssr scripts/refresh-career-moves.ts --outDir dist/career-moves && node scripts/prerender.ts",
     "start": "node dist/server/index.js",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src server scripts --ext .ts,.tsx",
-    "jobs": "node dist/jobs/jobs.js"
+    "jobs": "node dist/jobs/jobs.js",
+    "career-moves": "node dist/career-moves/refresh-career-moves.js"
   },
   "dependencies": {
+    "@effect/ai-openai": "4.0.6",
     "@effect/atom-react": "4.0.6",
     "@effect/platform-node": "4.0.6",
     "@hono/node-server": "^2.1.5",

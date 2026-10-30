@@ -8,7 +8,8 @@
     ".": "./src/index.ts",
     "./families": "./src/families.ts",
     "./testing": "./src/testing.ts",
-    "./roles": "./src/roles.ts"
+    "./roles": "./src/roles.ts",
+    "./moves": "./src/moves.ts"
   },
   "scripts": {
     "test": "vitest run",
