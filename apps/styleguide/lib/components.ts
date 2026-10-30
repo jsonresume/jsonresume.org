@@ -1634,6 +1634,36 @@ export const componentDocs: ComponentDoc[] = [
       'Node details update politely; make nodes focusable in the engine where possible.',
     ],
   },
+  {
+    slug: 'tree-map',
+    name: 'Tree map',
+    group: 'Data display',
+    summary:
+      'A whole graph as one pannable, zoomable map, each node above what it rests on. layoutTree places it (also on a server, from @jsonresume/ui/tree-layout); TreeMap draws it with WebGL2, or Canvas 2D.',
+    components: ['TreeMap'],
+    examples: [
+      {
+        id: 'skills',
+        title: 'Skills, work and roles',
+        description:
+          'Zoom in for names, then details. Select a square to trace everything beneath it.',
+        block: true,
+      },
+    ],
+    guidelines: {
+      do: [
+        'Give its parent a height; it fills it.',
+        'Lay it out once, ideally on the server, and pass coordinates in.',
+        'Use focus and lit (treeCone) to trace what a node rests on.',
+      ],
+      dont: ['Use it for a handful of items; a list says more.'],
+    },
+    accessibility: [
+      'A focusable application region with a label; arrows pan, + and - zoom, 0 fits, [ and ] step down and up, Enter opens, Escape clears.',
+      'The selected node is announced politely; offer the same data as a list beside the map.',
+      'Colours come from the status tokens, light and dark; tones also differ in shape (fill, outline, hatch, corner).',
+    ],
+  },
 ];
 
 export const componentGroups: ComponentGroup[] = [
