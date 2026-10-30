@@ -381,6 +381,28 @@ export {
   PreviewFrame,
   type PreviewFrameProps,
 } from './components/viz/preview-frame';
+export { TreeMap } from './components/viz/tree/tree-map';
+export {
+  spanView,
+  type TreeMapEdge,
+  type TreeMapHandle,
+  type TreeMapNode,
+  type TreeMapProps,
+  type TreeSpanView,
+} from './components/viz/tree/types';
+export { TREE_TONES, type TreeTone } from './components/viz/tree/render-types';
+export type { TreeCamera, TreeViewport } from './components/viz/tree/scene';
+export {
+  layoutTree,
+  treeCone,
+  type PlacedEdge,
+  type PlacedNode,
+  type TreeBand,
+  type TreeEdgeStrength,
+  type TreeLayout,
+  type TreeLayoutEdge,
+  type TreeLayoutOptions,
+} from './tree-layout';
 
 // App: the signed-in, full-screen layout
 export { AppShell, type AppShellProps } from './components/app/app-shell';

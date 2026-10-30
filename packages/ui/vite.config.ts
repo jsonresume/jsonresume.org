@@ -18,7 +18,11 @@ export default defineConfig({
     sourcemap: true,
     cssCodeSplit: false,
     lib: {
-      entry: { index: 'src/index.ts', 'tokens/index': 'src/tokens/index.ts' },
+      entry: {
+        index: 'src/index.ts',
+        'tokens/index': 'src/tokens/index.ts',
+        'tree-layout': 'src/tree-layout.ts',
+      },
       formats: ['es'],
     },
     rollupOptions: {

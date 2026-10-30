@@ -18,6 +18,10 @@
       "types": "./dist/tokens/index.d.ts",
       "import": "./dist/tokens/index.js"
     },
+    "./tree-layout": {
+      "types": "./dist/tree-layout.d.ts",
+      "import": "./dist/tree-layout.js"
+    },
     "./tokens.json": "./dist/tokens.json",
     "./styles.css": "./dist/styles.css",
     "./fonts.css": "./fonts.css",
