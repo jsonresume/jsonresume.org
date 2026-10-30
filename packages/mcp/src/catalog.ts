@@ -5,6 +5,7 @@
  * here too.
  */
 import { appTools } from './catalogApps';
+import { treeTools } from './catalogTree';
 
 export type McpGroup =
   | 'resume'
@@ -215,6 +216,7 @@ export const tools: ReadonlyArray<McpToolInfo> = [
     writes: false,
   },
   ...appTools,
+  ...treeTools,
 ];
 
 /** Conversations the agent can start: the registry's AI tools, as prompts. */
