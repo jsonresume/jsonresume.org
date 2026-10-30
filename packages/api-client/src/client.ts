@@ -57,10 +57,6 @@ export const jobMatchesAtom = ApiClient.query('myJobs', 'matches', {
 export const directionsAtom = ApiClient.query('myJobs', 'directions', {
   reactivityKeys: [...keys.jobs, ...keys.account],
 });
-/** The same, as a tree: skills, experience, kinds of role, jobs. */
-export const careerTreeAtom = ApiClient.query('myJobs', 'tree', {
-  reactivityKeys: [...keys.jobs, ...keys.account],
-});
 /** The career graph Pathways → Tree draws, and where people go next. */
 export const careerGraphAtom = ApiClient.query('career', 'graph', {
   reactivityKeys: [...keys.career, ...keys.jobs, ...keys.account],

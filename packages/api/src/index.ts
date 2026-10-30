@@ -11,7 +11,6 @@ import { OAuthApi, OAuthConsentApi } from './OAuthApi';
 import { OAuthAppsApi } from './OAuthAppsApi';
 import { OAuthResourceApi } from './OAuthResourceApi';
 import { JobsApi, MyJobsApi } from './JobsApi';
-export { CareerTree, CareerTreeNode } from './CareerTree';
 export {
   CareerApi,
   CareerEdge,
