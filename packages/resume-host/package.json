@@ -1,6 +1,6 @@
 {
   "name": "@repo/resume-host",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "Serves /@username: the resume in a theme, as a PDF or a data format, or the problem that stopped it",
   "type": "module",

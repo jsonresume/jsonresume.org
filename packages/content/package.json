@@ -1,6 +1,6 @@
 {
   "name": "@repo/content",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "jsonresume.org content: Markdown documents, blog posts and typed data lists",
   "type": "module",

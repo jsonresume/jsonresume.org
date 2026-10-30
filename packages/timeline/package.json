@@ -1,6 +1,6 @@
 {
   "name": "@repo/timeline",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "A resume as a timeline, for /@username/timeline: jobs, schools, projects and awards in order, with how long each lasted",
   "type": "module",

@@ -1,5 +1,11 @@
 # jsonresume-theme-field-researcher
 
+## 0.2.11
+
+### Patch Changes
+
+- @jsonresume/core@0.3.7
+
 ## 0.2.10
 
 ### Patch Changes

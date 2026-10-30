@@ -1,6 +1,6 @@
 {
   "name": "@repo/job-board",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "The job board: Hacker News jobs as cards, their filters (kept in the URL), the board and job pages",
   "type": "module",

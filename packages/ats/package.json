@@ -1,6 +1,6 @@
 {
   "name": "@repo/ats",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "How well applicant tracking systems will read a resume: a score, checks and fixes, computed from the JSON alone",
   "type": "module",

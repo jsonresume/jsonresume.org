@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.7
+
+### Patch Changes
+
+- Updated dependencies [77a952e]
+- Updated dependencies [51c4bdf]
+  - @jsonresume/types@0.6.1
+  - @jsonresume/utils@0.4.1
+
 ## 0.3.6
 
 ### Patch Changes
