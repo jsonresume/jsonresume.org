@@ -24,6 +24,7 @@
     "@repo/api-client": "workspace:^",
     "@repo/api-server": "workspace:^",
     "@repo/auth-pages": "workspace:^",
+    "@repo/careers": "workspace:^",
     "@repo/content": "workspace:*",
     "@repo/dashboard": "workspace:^",
     "@repo/database": "workspace:^",
