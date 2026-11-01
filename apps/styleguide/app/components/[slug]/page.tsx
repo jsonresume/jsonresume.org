@@ -1,4 +1,4 @@
-import { Badge, Heading, Link, Stack, Text } from '@jsonresume/ui';
+import { CodeBlock, Heading, Link, Stack, Text } from '@jsonresume/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { DocSection, DocsLayout } from '@/components/docs-layout';
@@ -28,6 +28,12 @@ const source = (component: string) =>
   (props as Record<string, { file: string }>)[component]?.file ??
   'src/index.ts';
 
+/** The import line, one name per line once it would run long. */
+const importOf = (names: readonly string[]) =>
+  names.join(', ').length > 40
+    ? `import {\n  ${names.join(',\n  ')},\n} from '@jsonresume/ui';`
+    : `import { ${names.join(', ')} } from '@jsonresume/ui';`;
+
 export default async function ComponentPage({ params }: Params) {
   const doc = getComponentDoc((await params).slug);
   if (!doc) notFound();
@@ -44,18 +50,15 @@ export default async function ComponentPage({ params }: Params) {
             {doc.name}
           </Heading>
           <p className={styles.lede}>{doc.summary}</p>
-          <Stack direction="row" gap={2} wrap align="center">
-            <Badge tone="outline">
-              import {'{'} {doc.components.join(', ')} {'}'} from
-              &apos;@jsonresume/ui&apos;
-            </Badge>
+          <div className={styles.importRow}>
+            <CodeBlock label="Import" code={importOf(doc.components)} />
             <Link
               href={`https://github.com/jsonresume/jsonresume.org/blob/master/packages/ui/${file}`}
               external
             >
               Source
             </Link>
-          </Stack>
+          </div>
         </header>
 
         {playgroundSlugs.includes(doc.slug) ? (

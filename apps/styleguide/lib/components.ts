@@ -1026,6 +1026,7 @@ export const componentDocs: ComponentDoc[] = [
     accessibility: [
       'A named nav; the current page sets aria-current and every button is labelled ("Page 3", "Next").',
       'Load more announces the new count politely.',
+      'In a column narrower than 22rem it shows only the current page between the first and last; the wider list is display: none, so screen readers meet one list.',
     ],
   },
   {
@@ -1640,7 +1641,7 @@ export const componentDocs: ComponentDoc[] = [
     group: 'Data display',
     summary:
       'A whole graph as one pannable, zoomable map, each node above what it rests on. layoutTree places it (also on a server, from @jsonresume/ui/tree-layout); TreeMap draws it with WebGL2, or Canvas 2D.',
-    components: ['TreeMap'],
+    components: ['TreeMap', 'TreeLegend'],
     examples: [
       {
         id: 'skills',
@@ -1649,12 +1650,21 @@ export const componentDocs: ComponentDoc[] = [
           'Zoom in for names, then details. Select a square to trace everything beneath it.',
         block: true,
       },
+      {
+        id: 'levels',
+        title: 'Fixed levels, with a key',
+        description:
+          'When each row means something, pass levels to layoutTree. TreeLegend draws every tone as the map does.',
+        block: true,
+      },
     ],
     guidelines: {
       do: [
         'Give its parent a height; it fills it.',
         'Lay it out once, ideally on the server, and pass coordinates in.',
         'Use focus and lit (treeCone) to trace what a node rests on.',
+        'Pass levels when rows have fixed meanings, and name them with bandLabel.',
+        'Put a TreeLegend beside the map saying what each tone means there.',
       ],
       dont: ['Use it for a handful of items; a list says more.'],
     },

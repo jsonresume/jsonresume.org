@@ -81,11 +81,16 @@ export interface LabelBox {
   y: number;
   w: number;
   h: number;
+  /** Widest the name may be drawn; longer names end in an ellipsis. */
+  nameMax?: number;
+  /** Other places for the same label, tried in order when this one is taken. */
+  alt?: readonly LabelBox[];
 }
 
 /**
- * Greedy label placement: takes boxes in priority order and keeps each one
- * that overlaps none kept before it. Screen-space buckets keep it linear.
+ * Greedy label placement: takes boxes in priority order and keeps the first
+ * of each box and its alternatives that overlaps none kept before it.
+ * Screen-space buckets keep it linear.
  */
 export function placeLabels(boxes: readonly LabelBox[], gap = 4): LabelBox[] {
   const cell = 96;
@@ -96,30 +101,36 @@ export function placeLabels(boxes: readonly LabelBox[], gap = 4): LabelBox[] {
     r > a.x - a.w / 2 - gap / 2 &&
     t < a.y + a.h / 2 + gap / 2 &&
     b > a.y - a.h / 2 - gap / 2;
-  for (const box of boxes) {
+  const clearOf = (box: LabelBox) => {
     const l = box.x - box.w / 2 - gap / 2;
     const r = box.x + box.w / 2 + gap / 2;
     const t = box.y - box.h / 2 - gap / 2;
     const b = box.y + box.h / 2 + gap / 2;
-    const c0 = Math.floor(l / cell);
-    const c1 = Math.floor(r / cell);
-    const r0 = Math.floor(t / cell);
-    const r1 = Math.floor(b / cell);
-    let clear = true;
-    for (let cx = c0; cx <= c1 && clear; cx++)
-      for (let cy = r0; cy <= r1 && clear; cy++)
-        clear = !(grid.get(cellKey(cx, cy)) ?? []).some((o) =>
-          overlaps(o, l, r, t, b)
-        );
-    if (!clear) continue;
+    for (let cx = Math.floor(l / cell); cx <= Math.floor(r / cell); cx++)
+      for (let cy = Math.floor(t / cell); cy <= Math.floor(b / cell); cy++)
+        if (
+          (grid.get(cellKey(cx, cy)) ?? []).some((o) => overlaps(o, l, r, t, b))
+        )
+          return false;
+    return true;
+  };
+  const keep = (box: LabelBox) => {
     kept.push(box);
-    for (let cx = c0; cx <= c1; cx++)
-      for (let cy = r0; cy <= r1; cy++) {
+    const l = box.x - box.w / 2 - gap / 2;
+    const r = box.x + box.w / 2 + gap / 2;
+    const t = box.y - box.h / 2 - gap / 2;
+    const b = box.y + box.h / 2 + gap / 2;
+    for (let cx = Math.floor(l / cell); cx <= Math.floor(r / cell); cx++)
+      for (let cy = Math.floor(t / cell); cy <= Math.floor(b / cell); cy++) {
         const k = cellKey(cx, cy);
         const bucket = grid.get(k);
         if (bucket) bucket.push(box);
         else grid.set(k, [box]);
       }
+  };
+  for (const box of boxes) {
+    const fits = [box, ...(box.alt ?? [])].find(clearOf);
+    if (fits) keep(fits);
   }
   return kept;
 }

@@ -28,7 +28,8 @@ function rows(group: keyof ColorTokens) {
   }));
 }
 
-function Chip({ value }: { value: string }) {
+/** A colour value with a swatch of it. */
+export function ColorChip({ value }: { value: string }) {
   return (
     <span className={styles.chip}>
       <span
@@ -72,10 +73,10 @@ export function ColorTokenTable({
                 <div className={styles.mono}>{r.cssVar}</div>
               </Td>
               <Td>
-                <Chip value={r.light} />
+                <ColorChip value={r.light} />
               </Td>
               <Td>
-                <Chip value={r.dark} />
+                <ColorChip value={r.dark} />
               </Td>
               {against ? (
                 <Td>

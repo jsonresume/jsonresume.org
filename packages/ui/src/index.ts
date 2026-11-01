@@ -219,17 +219,19 @@ export { Banner, type BannerProps } from './components/banner/banner';
 // Navigation
 export {
   BackLink,
-  LoadMore,
-  Pagination,
   TabNav,
   TabNavLink,
-  pageWindow,
   type BackLinkProps,
-  type LoadMoreProps,
-  type PaginationProps,
   type TabNavLinkProps,
   type TabNavProps,
 } from './components/navigation/navigation';
+export {
+  LoadMore,
+  Pagination,
+  pageWindow,
+  type LoadMoreProps,
+  type PaginationProps,
+} from './components/navigation/pagination';
 export {
   AccountMenu,
   type AccountMenuProps,
@@ -382,6 +384,10 @@ export {
   type PreviewFrameProps,
 } from './components/viz/preview-frame';
 export { TreeMap } from './components/viz/tree/tree-map';
+export {
+  TreeLegend,
+  type TreeLegendProps,
+} from './components/viz/tree/tree-legend';
 export {
   spanView,
   type TreeMapEdge,

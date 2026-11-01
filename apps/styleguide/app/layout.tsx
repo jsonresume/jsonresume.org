@@ -18,9 +18,15 @@ export const metadata: Metadata = {
   icons: { icon: '/favicon.svg' },
 };
 
+/** Applies a saved theme before first paint, so dark readers never see a light flash. */
+const THEME_SCRIPT = `try{var t=localStorage.getItem('jr-styleguide-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}`;
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" data-theme="system" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body className={base}>
         <TooltipProvider>
           <SkipLink />

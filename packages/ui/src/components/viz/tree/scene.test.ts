@@ -101,6 +101,27 @@ describe('placeLabels', () => {
     ]);
     expect(kept.map((b) => b.i)).toEqual([0, 2, 3]);
   });
+
+  it('moves a crowded label to its first free alternative instead of dropping it', () => {
+    const kept = placeLabels([
+      { i: 0, x: 100, y: 100, w: 80, h: 14 },
+      {
+        i: 1,
+        x: 150,
+        y: 100,
+        w: 80,
+        h: 14,
+        alt: [
+          { i: 1, x: 150, y: 100, w: 70, h: 14, nameMax: 70 },
+          { i: 1, x: 150, y: 60, w: 80, h: 14 },
+        ],
+      },
+    ]);
+    expect(kept.map((b) => [b.i, b.y])).toEqual([
+      [0, 100],
+      [1, 60],
+    ]);
+  });
 });
 
 describe('cone', () => {
