@@ -60,6 +60,18 @@ export const lede = style({
   fontSize: font.size.md,
 });
 
+/** The import to copy, with the source link beside it on wide screens. */
+export const importRow = style({
+  display: 'grid',
+  gap: space[2],
+  alignItems: 'end',
+  maxWidth: '64ch',
+  marginTop: space[2],
+  '@media': {
+    [media.md]: { gridTemplateColumns: 'minmax(0, 1fr) auto', gap: space[4] },
+  },
+});
+
 /* Sidebar: a disclosure on small screens, a sticky list on wide ones. */
 
 export const desktopNav = style({
@@ -211,6 +223,20 @@ export const propName = style({
   whiteSpace: 'nowrap',
 });
 export const propType = style({ ...monoXs, color: color.text.muted });
+export const cssVar = style({
+  ...monoXs,
+  color: color.text.muted,
+  whiteSpace: 'nowrap',
+});
+export const tokenGroup = style({ display: 'grid', gap: space[3] });
+
+/** Jump links to each token group. */
+export const groupNav = style({
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: `${space[2]} ${space[5]}`,
+});
+export const count = style({ color: color.text.muted, fontSize: font.size.xs });
 export const mono = style({
   ...monoXs,
   color: color.text.muted,

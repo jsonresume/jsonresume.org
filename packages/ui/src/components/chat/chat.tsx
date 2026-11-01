@@ -113,17 +113,32 @@ export function ChatToolCall({
   summary,
   details,
 }: ChatToolCallProps) {
+  const line = (
+    <>
+      <span aria-hidden="true">
+        {status === 'running' ? '⋯' : status === 'done' ? '✓' : '✕'}
+      </span>
+      <span className={s.toolName}>{name}</span>
+      <span className={s.toolMeta}>· {statusLabel[status]}</span>
+      {summary ? <span>· {summary}</span> : null}
+    </>
+  );
+  // Only a call with details opens; one without isn't dressed as a control.
+  if (!details)
+    return (
+      <div className={s.tool}>
+        <div className={s.toolSummary}>{line}</div>
+      </div>
+    );
   return (
     <details className={s.tool}>
       <summary className={s.toolSummary}>
-        <span aria-hidden="true">
-          {status === 'running' ? '⋯' : status === 'done' ? '✓' : '✕'}
+        {line}
+        <span className={s.toolChevron} aria-hidden="true">
+          ›
         </span>
-        <span className={s.toolName}>{name}</span>
-        <span>· {statusLabel[status]}</span>
-        {summary ? <span>· {summary}</span> : null}
       </summary>
-      {details ? <pre className={s.toolBody}>{details}</pre> : null}
+      <pre className={s.toolBody}>{details}</pre>
     </details>
   );
 }

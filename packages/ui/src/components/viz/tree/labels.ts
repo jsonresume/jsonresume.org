@@ -7,6 +7,8 @@ import { placeLabels, type LabelBox } from './scene-index';
 /** Screen pixels between neighbouring squares at which details join names. */
 const DETAIL_GAP = 110;
 const MAX_LABELS = 400;
+/** Narrowest a clipped name gets, in screen pixels. */
+const MIN_SLOT = 48;
 
 /** Cuts a line to fit `max` pixels, with an ellipsis. */
 function clip(ctx: CanvasRenderingContext2D, value: string, max: number) {
@@ -70,14 +72,29 @@ function chooseLabels(
     if (t.emphasis.visible && !t.emphasis.visible.has(i)) return;
     const [sx, sy] = toScreen(c, v, px[i] as number, py[i] as number);
     const detail = showDetail && node.detail;
-    const w = Math.max(measure(node.label), detail ? detailWidth : 0);
     const h = LABEL_PX + 2 + (detail ? LABEL_PX + 3 : 0);
-    let x = sx;
-    if (x - w / 2 < 2 || x + w / 2 > v.width - 2) {
-      if (!pinned.has(i)) return;
-      x = Math.min(Math.max(x, w / 2 + 2), v.width - w / 2 - 2);
-    }
-    boxes.push({ i, x, y: sy + squarePx(i) / 2 + 4 + h / 2, w, h });
+    const half = squarePx(i) / 2 + 4 + h / 2;
+    // Its own column: wide enough to name it without crowding a neighbour.
+    const slot = Math.max(gap * 0.9, MIN_SLOT);
+    const name = measure(node.label);
+    const at = (y: number, w: number, nameMax?: number): LabelBox | null => {
+      let x = sx;
+      if (x - w / 2 < 2 || x + w / 2 > v.width - 2) {
+        if (!pinned.has(i)) return null;
+        x = Math.min(Math.max(x, w / 2 + 2), v.width - w / 2 - 2);
+      }
+      return { i, x, y, w, h, ...(nameMax !== undefined && { nameMax }) };
+    };
+    const full = Math.max(name, detail ? detailWidth : 0);
+    const short = Math.min(full, slot);
+    // Below in full, below in its column, above in full, above in its column.
+    const [first, ...alt] = [
+      at(sy + half, full),
+      name > slot ? at(sy + half, short, slot) : null,
+      at(sy - half, full),
+      name > slot ? at(sy - half, short, slot) : null,
+    ].filter((b): b is LabelBox => b !== null);
+    if (first) boxes.push({ ...first, alt });
   };
   for (const i of pinned) push(i);
   const focused = t.emphasis.focus;
@@ -136,11 +153,15 @@ export function drawLabels(
     ctx.font = `${box.i === t.selected ? 600 : 500} ${LABEL_PX}px ${
       t.fonts.mono
     }`;
-    ctx.strokeText(node.label, box.x, top);
-    ctx.fillText(node.label, box.x, top);
+    const name =
+      box.nameMax === undefined
+        ? node.label
+        : clip(ctx, node.label, box.nameMax);
+    ctx.strokeText(name, box.x, top);
+    ctx.fillText(name, box.x, top);
     if (showDetail && node.detail) {
       ctx.font = `400 ${LABEL_PX}px ${t.fonts.sans}`;
-      const line = clip(ctx, node.detail, detailWidth);
+      const line = clip(ctx, node.detail, Math.min(detailWidth, box.w));
       ctx.fillStyle = rgba(palette.muted, dim ? 0.6 : 1);
       ctx.strokeText(line, box.x, top + LABEL_PX + 3);
       ctx.fillText(line, box.x, top + LABEL_PX + 3);

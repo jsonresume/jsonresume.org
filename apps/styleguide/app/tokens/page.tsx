@@ -1,10 +1,19 @@
-import { Heading, Prose, Table, Td, Th } from '@jsonresume/ui';
+import { Heading, Link, Prose, Table, Td, Th } from '@jsonresume/ui';
 import { darkColor, tokens } from '@jsonresume/ui/tokens';
 import type { Metadata } from 'next';
 import { DocsLayout } from '@/components/docs-layout';
 import * as styles from '@/components/docs.css';
+import { ColorChip } from '@/components/swatches';
 
 export const metadata: Metadata = { title: 'Token reference' };
+
+/** Colours get a swatch; everything else is shown as written. */
+const isColor = (path: string[], value: string) =>
+  path[0] === 'color' && /^(#|rgb|hsl)/.test(value);
+
+/** A group's heading: "zIndex" reads as "Z-index". */
+const titleOf = (group: string) =>
+  group === 'zIndex' ? 'Z-index' : group[0]?.toUpperCase() + group.slice(1);
 
 const kebab = (s: string) => s.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
 
@@ -31,6 +40,15 @@ function lookup(tree: Tree, path: string[]): string | undefined {
 
 export default function TokensPage() {
   const all = flatten(tokens as unknown as Tree, [], []);
+  const groups = [
+    ...all
+      .reduce((by, t) => {
+        const group = t.path[0] ?? 'other';
+        by.set(group, [...(by.get(group) ?? []), t]);
+        return by;
+      }, new Map<string, typeof all>())
+      .entries(),
+  ];
   return (
     <DocsLayout>
       <article className={styles.article}>
@@ -52,44 +70,73 @@ export default function TokensPage() {
             <code>var(--jr-color-text-default)</code>.
           </p>
         </Prose>
-        <Table caption={`${all.length} tokens`}>
-          <thead>
-            <tr>
-              <Th>Token</Th>
-              <Th>CSS variable</Th>
-              <Th>Value</Th>
-              <Th>Dark</Th>
-            </tr>
-          </thead>
-          <tbody>
-            {all.map(({ path, value }) => {
-              const dark =
-                path[0] === 'color'
-                  ? lookup(darkColor as unknown as Tree, path.slice(1))
-                  : undefined;
-              return (
-                <tr key={path.join('.')}>
-                  <Td>
-                    <span className={styles.propName}>{path.join('.')}</span>
-                  </Td>
-                  <Td>
-                    <span className={styles.mono}>
-                      --jr-{path.map(kebab).join('-')}
-                    </span>
-                  </Td>
-                  <Td>
-                    <span className={styles.mono}>{value}</span>
-                  </Td>
-                  <Td>
-                    <span className={styles.mono}>
-                      {dark && dark !== value ? dark : ''}
-                    </span>
-                  </Td>
+        <nav aria-label="Token groups" className={styles.groupNav}>
+          {groups.map(([group, rows]) => (
+            <Link key={group} href={`#${group}`} tone="neutral">
+              {titleOf(group)}{' '}
+              <span className={styles.count}>{rows.length}</span>
+            </Link>
+          ))}
+        </nav>
+        {groups.map(([group, rows]) => (
+          <section
+            key={group}
+            className={styles.tokenGroup}
+            aria-labelledby={group}
+          >
+            <Heading level={2} size="section" id={group}>
+              {titleOf(group)}
+            </Heading>
+            <Table caption={`${rows.length} ${group} tokens`}>
+              <thead>
+                <tr>
+                  <Th>Token</Th>
+                  <Th>CSS variable</Th>
+                  <Th>Value</Th>
+                  {group === 'color' ? <Th>Dark</Th> : null}
                 </tr>
-              );
-            })}
-          </tbody>
-        </Table>
+              </thead>
+              <tbody>
+                {rows.map(({ path, value }) => {
+                  const dark =
+                    group === 'color'
+                      ? lookup(darkColor as unknown as Tree, path.slice(1))
+                      : undefined;
+                  return (
+                    <tr key={path.join('.')}>
+                      <Td>
+                        <span className={styles.propName}>
+                          {path.slice(1).join('.')}
+                        </span>
+                      </Td>
+                      <Td>
+                        <span className={styles.cssVar}>
+                          --jr-{path.map(kebab).join('-')}
+                        </span>
+                      </Td>
+                      <Td>
+                        {isColor(path, value) ? (
+                          <ColorChip value={value} />
+                        ) : (
+                          <span className={styles.mono}>{value}</span>
+                        )}
+                      </Td>
+                      {group === 'color' ? (
+                        <Td>
+                          {dark && dark !== value ? (
+                            <ColorChip value={dark} />
+                          ) : (
+                            <span className={styles.mono}>same</span>
+                          )}
+                        </Td>
+                      ) : null}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </Table>
+          </section>
+        ))}
       </article>
     </DocsLayout>
   );

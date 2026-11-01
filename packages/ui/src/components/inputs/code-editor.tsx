@@ -1,8 +1,10 @@
 'use client';
 
 import { json, jsonParseLinter } from '@codemirror/lang-json';
+import { HighlightStyle, syntaxHighlighting } from '@codemirror/language';
 import { linter, lintGutter, type Diagnostic } from '@codemirror/lint';
 import { EditorView } from '@codemirror/view';
+import { tags } from '@lezer/highlight';
 import CodeMirror from '@uiw/react-codemirror';
 import { useMemo, useState } from 'react';
 import { vars } from '../../tokens/contract.css';
@@ -50,6 +52,17 @@ const theme = EditorView.theme({
   },
 });
 
+// Syntax in token colours, each at least 6:1 on the editor in both themes.
+const highlight = syntaxHighlighting(
+  HighlightStyle.define([
+    { tag: tags.propertyName, color: vars.color.text.link },
+    { tag: tags.string, color: vars.color.status.success },
+    { tag: tags.number, color: vars.color.status.info },
+    { tag: [tags.bool, tags.null], color: vars.color.status.warning },
+    { tag: [tags.punctuation, tags.separator], color: vars.color.text.muted },
+  ])
+);
+
 /**
  * JSON editing with syntax highlighting, parse errors as you type, and
  * optional extra validation (e.g. the resume schema). A status line
@@ -68,7 +81,7 @@ export function CodeEditor({
     const parse = jsonParseLinter();
     return [
       json(),
-      theme,
+      highlight,
       lintGutter(),
       linter((view) => {
         const found = parse(view);
@@ -89,6 +102,8 @@ export function CodeEditor({
         height={height}
         readOnly={readOnly}
         extensions={extensions}
+        // Ours, not the package's light one, so it follows the page's theme.
+        theme={theme}
         onChange={onChange}
         basicSetup={{
           foldGutter: true,
