@@ -7,8 +7,10 @@ import { placeLabels, type LabelBox } from './scene-index';
 /** Screen pixels between neighbouring squares at which details join names. */
 const DETAIL_GAP = 110;
 const MAX_LABELS = 400;
-/** Narrowest a clipped name gets, in screen pixels. */
-const MIN_SLOT = 48;
+/** Narrowest a clipped name gets, in screen pixels: about eight characters. */
+const MIN_SLOT = 64;
+/** A clipped name keeps at least this share of itself, or it says too little to show. */
+const MIN_KEPT = 0.55;
 
 /** Cuts a line to fit `max` pixels, with an ellipsis. */
 function clip(ctx: CanvasRenderingContext2D, value: string, max: number) {
@@ -87,12 +89,13 @@ function chooseLabels(
     };
     const full = Math.max(name, detail ? detailWidth : 0);
     const short = Math.min(full, slot);
+    const clips = name > slot && slot >= name * MIN_KEPT;
     // Below in full, below in its column, above in full, above in its column.
     const [first, ...alt] = [
       at(sy + half, full),
-      name > slot ? at(sy + half, short, slot) : null,
+      clips ? at(sy + half, short, slot) : null,
       at(sy - half, full),
-      name > slot ? at(sy - half, short, slot) : null,
+      clips ? at(sy - half, short, slot) : null,
     ].filter((b): b is LabelBox => b !== null);
     if (first) boxes.push({ ...first, alt });
   };
