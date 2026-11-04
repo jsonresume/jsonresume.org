@@ -1,6 +1,7 @@
 import { style } from '@vanilla-extract/css';
 import { focusRing, transition } from '../../styles/shared.css';
 import { vars } from '../../tokens/contract.css';
+import { media } from '../../tokens/theme';
 
 const { color, font, space, radius } = vars;
 
@@ -158,11 +159,21 @@ export const accountHeader = style({
   lineHeight: font.lineHeight.snug,
 });
 
+/** A long username ends in an ellipsis instead of wrapping the top bar. */
+export const accountTriggerName = style({
+  maxWidth: '8rem',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+  '@media': { [media.md]: { maxWidth: '14rem' } },
+});
+
 export const accountName = style({
   color: color.text.strong,
   fontWeight: font.weight.semibold,
 });
 export const accountEmail = style({
   color: color.text.muted,
+  overflowWrap: 'anywhere',
   fontSize: font.size.xs,
 });

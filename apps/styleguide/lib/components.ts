@@ -324,7 +324,7 @@ export const componentDocs: ComponentDoc[] = [
     name: 'Site header',
     group: 'Site',
     summary:
-      'The yellow navigation band. Links collapse behind a menu button on small screens.',
+      'The yellow navigation band. On small screens the links fold behind a menu button into a full-screen menu that grows down from the band.',
     components: ['SiteHeader', 'SiteHeaderLink'],
     examples: [{ id: 'default', title: 'Header', bleed: true }],
     guidelines: {
@@ -336,8 +336,11 @@ export const componentDocs: ComponentDoc[] = [
     },
     accessibility: [
       'Renders a <header> with a named <nav> landmark.',
-      'The menu button exposes aria-expanded and aria-controls.',
-      'active sets aria-current="page".',
+      'The menu button exposes aria-expanded and aria-controls, and turns from three lines into a cross.',
+      'While open, the page behind is held still, Tab stays inside the menu, and Escape closes it and returns focus to the button.',
+      'Following a link closes it; so does widening the window past the breakpoint.',
+      'active sets aria-current="page": a red dot in the menu, an underline in the band.',
+      'With reduced motion, the menu and its links appear without animating.',
     ],
   },
   {
@@ -510,10 +513,24 @@ export const componentDocs: ComponentDoc[] = [
     slug: 'site-footer',
     name: 'Site footer',
     group: 'Site',
-    summary: 'Small, centered, uppercase links.',
+    summary:
+      'The foot of the site: the brand and columns of links, or one small centred list.',
     components: ['SiteFooter'],
-    examples: [{ id: 'default', title: 'Footer', bleed: true }],
-    accessibility: ['Renders a <footer> landmark with a list of links.'],
+    examples: [
+      { id: 'columns', title: 'Columns', bleed: true },
+      { id: 'default', title: 'One list', bleed: true },
+    ],
+    guidelines: {
+      do: [
+        'Group links by what people come for; three or four groups.',
+        'Keep privacy and terms in legal, at the very bottom.',
+      ],
+      dont: ['Repeat every header link; the footer is for the rest.'],
+    },
+    accessibility: [
+      'Renders a <footer> landmark; each group is a list under an h2.',
+      'Links get a 40px tall target on touch screens.',
+    ],
   },
   {
     slug: 'field',
@@ -649,11 +666,24 @@ export const componentDocs: ComponentDoc[] = [
     slug: 'progress',
     name: 'Progress',
     group: 'Feedback',
-    summary: 'Determinate progress for uploads, imports and completeness.',
-    components: ['Progress'],
-    examples: [{ id: 'basic', title: 'Basic', block: true }],
+    summary:
+      'Determinate progress for uploads, imports and completeness; RouteProgress for a page on its way.',
+    components: ['Progress', 'RouteProgress'],
+    examples: [
+      { id: 'basic', title: 'Basic', block: true },
+      { id: 'route', title: 'Page loading' },
+    ],
+    guidelines: {
+      do: [
+        "Put one RouteProgress at the root, driven by the router's pending state.",
+      ],
+      dont: [
+        'Show RouteProgress for fast loads: it waits 150ms, so most navigations never see it.',
+      ],
+    },
     accessibility: [
       'role="progressbar" with a required label and aria-valuenow.',
+      'RouteProgress is decorative (aria-hidden): the arriving page, and the focus it moves, are the news.',
     ],
   },
   {

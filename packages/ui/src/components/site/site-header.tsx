@@ -4,7 +4,7 @@ import { Slot } from '@radix-ui/react-slot';
 import {
   forwardRef,
   useId,
-  useState,
+  useRef,
   type AnchorHTMLAttributes,
   type HTMLAttributes,
   type ReactNode,
@@ -12,7 +12,10 @@ import {
 import { visuallyHidden } from '../../styles/shared.css';
 import { cx } from '../../utils/cx';
 import { Container } from '../layout/layout';
-import * as s from './site.css';
+import * as l from './site-header-links.css';
+import * as s from './site-header.css';
+import * as t from './site-header-toggle.css';
+import { useMenu } from './use-menu';
 
 export interface SiteHeaderProps extends HTMLAttributes<HTMLElement> {
   /** The brand slot, usually <Logo />. */
@@ -27,7 +30,8 @@ export interface SiteHeaderProps extends HTMLAttributes<HTMLElement> {
 
 /**
  * The yellow navigation band. Pass <SiteHeaderLink>s as children; on small
- * screens they collapse behind a menu button.
+ * screens they fold behind a menu button into a full-screen menu that
+ * closes on Escape, on a link, or when the screen grows wide enough.
  */
 export function SiteHeader({
   brand,
@@ -38,51 +42,48 @@ export function SiteHeader({
   children,
   ...props
 }: SiteHeaderProps) {
-  const [open, setOpen] = useState(false);
   const id = useId();
+  const bar = useRef<HTMLDivElement>(null);
+  const toggle = useRef<HTMLButtonElement>(null);
+  const menu = useMenu(bar, toggle);
   return (
-    <header className={cx(s.header, className)} {...props}>
-      <Container className={s.headerInner}>
-        <div className={s.headerBrand}>{brand}</div>
-        <button
-          type="button"
-          className={s.navToggle}
-          aria-expanded={open}
-          aria-controls={id}
-          onClick={() => setOpen((v) => !v)}
-        >
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            aria-hidden="true"
-            focusable="false"
+    <header
+      className={cx(s.header, className)}
+      data-state={menu.state}
+      {...props}
+    >
+      <div
+        ref={bar}
+        className={s.headerBar}
+        onClick={menu.onClick}
+        onKeyDown={menu.onKeyDown}
+        onAnimationEnd={menu.onAnimationEnd}
+      >
+        <Container className={s.headerInner}>
+          <div className={s.headerBrand}>{brand}</div>
+          <button
+            ref={toggle}
+            type="button"
+            className={t.navToggle}
+            aria-expanded={menu.open}
+            aria-controls={id}
+            onClick={menu.toggle}
           >
-            {open ? (
-              <path
-                d="M5 5l10 10M15 5 5 15"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            ) : (
-              <path
-                d="M3 6h14M3 10h14M3 14h14"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            )}
-          </svg>
-          <span className={visuallyHidden}>{menuLabel}</span>
-        </button>
-        <div id={id} className={s.navRegion} data-open={open}>
-          <nav className={s.nav} aria-label={navLabel}>
-            <ul className={s.navList}>{children}</ul>
-          </nav>
-          {actions ? <div className={s.headerActions}>{actions}</div> : null}
-        </div>
-      </Container>
+            <span className={t.toggleLines} aria-hidden="true">
+              <span className={t.toggleLine} />
+              <span className={t.toggleLine} />
+              <span className={t.toggleLine} />
+            </span>
+            <span className={visuallyHidden}>{menuLabel}</span>
+          </button>
+          <div id={id} className={s.navRegion}>
+            <nav className={s.nav} aria-label={navLabel}>
+              <ul className={s.navList}>{children}</ul>
+            </nav>
+            {actions ? <div className={l.headerActions}>{actions}</div> : null}
+          </div>
+        </Container>
+      </div>
     </header>
   );
 }
@@ -107,7 +108,7 @@ export const SiteHeaderLink = forwardRef<
     <li>
       <Comp
         ref={ref}
-        className={cx(s.navLink, className)}
+        className={cx(l.navLink, className)}
         aria-current={active ? 'page' : undefined}
         {...props}
       />

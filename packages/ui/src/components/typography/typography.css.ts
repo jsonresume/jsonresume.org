@@ -185,6 +185,8 @@ globalStyle(p(':where(a)'), {
   color: vars.color.text.link,
   textDecoration: 'underline',
   textUnderlineOffset: '3px',
+  // A bare URL breaks rather than pushing a phone screen sideways.
+  overflowWrap: 'anywhere',
 });
 globalStyle(p(':where(a:hover)'), { color: vars.color.text.linkHover });
 globalStyle(p(':where(:not(pre) > code)'), {
@@ -194,6 +196,7 @@ globalStyle(p(':where(:not(pre) > code)'), {
   borderRadius: vars.radius.sm,
   backgroundColor: vars.color.surface.muted,
   color: vars.color.text.strong,
+  overflowWrap: 'anywhere',
 });
 globalStyle(p(':where(pre)'), {
   overflowX: 'auto',

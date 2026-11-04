@@ -149,38 +149,6 @@ export function Feature({
   );
 }
 
-/* SiteFooter */
-
-export interface SiteFooterProps extends HTMLAttributes<HTMLElement> {
-  /** Footer links; rendered as a centered list. */
-  links?: ReactNode[];
-  note?: ReactNode;
-}
-
-export function SiteFooter({
-  links = [],
-  note,
-  className,
-  children,
-  ...props
-}: SiteFooterProps) {
-  return (
-    <footer className={cx(s.footer, className)} {...props}>
-      <Container>
-        {links.length ? (
-          <ul className={s.footerLinks}>
-            {links.map((l, i) => (
-              <li key={i}>{l}</li>
-            ))}
-          </ul>
-        ) : null}
-        {children}
-        {note ? <p className={s.footerNote}>{note}</p> : null}
-      </Container>
-    </footer>
-  );
-}
-
 /* SkipLink */
 
 export function SkipLink({

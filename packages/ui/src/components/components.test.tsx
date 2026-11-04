@@ -135,6 +135,29 @@ describe('site', () => {
     );
   });
 
+  it('closes the menu on Escape and on a link, keeping Tab inside it', async () => {
+    render(
+      <SiteHeader brand={<Logo />}>
+        <SiteHeaderLink href="#schema">Schema</SiteHeaderLink>
+        <SiteHeaderLink href="#themes">Themes</SiteHeaderLink>
+      </SiteHeader>
+    );
+    const toggle = screen.getByRole('button', { name: 'Menu' });
+    await userEvent.click(toggle);
+    expect(document.documentElement).toHaveAttribute('data-menu-open');
+    await userEvent.keyboard('{Escape}');
+    expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    expect(toggle).toHaveFocus();
+    expect(document.documentElement).not.toHaveAttribute('data-menu-open');
+    await userEvent.click(toggle);
+    screen.getByRole('link', { name: 'Themes' }).focus();
+    await userEvent.tab();
+    // Past the last link, Tab comes back to the first thing in the bar.
+    expect(screen.getByRole('link', { name: /JSON Resume/ })).toHaveFocus();
+    await userEvent.click(screen.getByRole('link', { name: 'Schema' }));
+    expect(toggle).toHaveAttribute('aria-expanded', 'false');
+  });
+
   it('renders the wordmark linking home', () => {
     render(<Logo />);
     expect(screen.getByRole('link', { name: 'JSON Resume' })).toHaveAttribute(

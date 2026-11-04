@@ -35,19 +35,26 @@ export {
   type StackProps,
 } from './components/layout/layout';
 
+export {
+  RouteProgress,
+  type RouteProgressProps,
+} from './components/status/route-progress';
 // Site
 export {
   Feature,
   Logo,
   LogoMark,
   PageHeader,
-  SiteFooter,
   SkipLink,
   type FeatureProps,
   type LogoProps,
   type PageHeaderProps,
-  type SiteFooterProps,
 } from './components/site/site';
+export {
+  SiteFooter,
+  type SiteFooterGroup,
+  type SiteFooterProps,
+} from './components/site/site-footer';
 export { Hero, type HeroProps } from './components/site/hero';
 export {
   Step,
