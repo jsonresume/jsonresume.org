@@ -43,6 +43,7 @@ export const external = {
   // The docs site is a separate static build on GitHub Pages.
   docs: 'https://jsonresume.org/docs',
   github: 'https://github.com/jsonresume/jsonresume.org',
+  discord: 'https://discord.gg/GTZtn8pTXC',
   contributing:
     'https://github.com/jsonresume/jsonresume.org/blob/master/CONTRIBUTING.md',
 } as const;
@@ -76,23 +77,53 @@ export const headerNav: NavItem[] = [
   { label: 'Blog', href: paths.blog },
 ];
 
-export const footerNav: NavItem[] = [
-  { label: 'Getting started', href: paths.gettingStarted },
-  { label: 'Schema', href: paths.schema },
-  { label: 'Themes', href: paths.themes },
-  { label: 'Theme development', href: paths.themeDevelopment },
-  { label: 'CLI', href: paths.cli },
-  { label: 'AI', href: paths.ai },
-  { label: 'MCP for agents', href: paths.mcp },
-  { label: 'Sign in with JSON Resume', href: paths.developers },
-  { label: 'Job description schema', href: paths.jobDescriptionSchema },
-  { label: 'Projects', href: paths.projects },
-  { label: 'Explore resumes', href: paths.explore },
-  { label: 'Jobs', href: paths.jobs },
-  { label: 'Team', href: paths.team },
-  { label: 'Media', href: paths.media },
-  { label: 'Blog', href: paths.blog },
-  { label: 'GitHub', href: external.github },
+export interface NavGroup {
+  title: string;
+  items: NavItem[];
+}
+
+export const footerGroups: NavGroup[] = [
+  {
+    title: 'Resume',
+    items: [
+      { label: 'Getting started', href: paths.gettingStarted },
+      { label: 'Schema', href: paths.schema },
+      { label: 'Themes', href: paths.themes },
+      { label: 'Explore resumes', href: paths.explore },
+      { label: 'Jobs', href: paths.jobs },
+    ],
+  },
+  {
+    title: 'Build',
+    items: [
+      { label: 'CLI', href: paths.cli },
+      { label: 'Theme development', href: paths.themeDevelopment },
+      { label: 'Job description schema', href: paths.jobDescriptionSchema },
+      { label: 'MCP for agents', href: paths.mcp },
+      { label: 'AI', href: paths.ai },
+      { label: 'Sign in with JSON Resume', href: paths.developers },
+    ],
+  },
+  {
+    title: 'Project',
+    items: [
+      { label: 'Blog', href: paths.blog },
+      { label: 'Projects', href: paths.projects },
+      { label: 'Team', href: paths.team },
+      { label: 'Media', href: paths.media },
+      { label: 'GitHub', href: external.github },
+      { label: 'Discord', href: external.discord },
+    ],
+  },
+];
+
+export const legalNav: NavItem[] = [
   { label: 'Privacy', href: paths.privacy },
   { label: 'Terms', href: paths.terms },
+];
+
+/** Every footer link, in order. */
+export const footerNav: NavItem[] = [
+  ...footerGroups.flatMap((g) => g.items),
+  ...legalNav,
 ];

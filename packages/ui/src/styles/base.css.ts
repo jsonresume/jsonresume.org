@@ -1,4 +1,4 @@
-import { globalStyle, style } from '@vanilla-extract/css';
+import { globalStyle, keyframes, style } from '@vanilla-extract/css';
 import { vars } from '../tokens/contract.css';
 
 /**
@@ -63,3 +63,21 @@ globalStyle(scope('::selection'), {
   backgroundColor: vars.color.surface.brand,
   color: vars.color.text.onBrand,
 });
+
+/* Page transitions, for apps that turn on view transitions: the old page
+   fades quickly and the new one rises into place. Chrome named with
+   viewTransitionName (the site header, the app's sidebar) stays put. */
+const leave = keyframes({ to: { opacity: 0 } });
+const arrive = keyframes({
+  from: { opacity: 0, transform: 'translateY(6px)' },
+});
+globalStyle('::view-transition-old(root)', {
+  animation: `${leave} 120ms ${vars.motion.easing.standard} both`,
+});
+globalStyle('::view-transition-new(root)', {
+  animation: `${arrive} 220ms ${vars.motion.easing.out} 60ms both`,
+});
+globalStyle(
+  '::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*)',
+  { '@media': { '(prefers-reduced-motion: reduce)': { animation: 'none' } } }
+);

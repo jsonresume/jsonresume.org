@@ -1,9 +1,14 @@
-import { style } from '@vanilla-extract/css';
+import { globalStyle, keyframes, style } from '@vanilla-extract/css';
 import { focusRing, transition } from '../../styles/shared.css';
 import { vars } from '../../tokens/contract.css';
 import { media } from '../../tokens/theme';
 
-const { color, font, space, radius, zIndex } = vars;
+const { color, font, space, radius, zIndex, motion } = vars;
+
+const rise = keyframes({
+  from: { opacity: 0, transform: 'translateX(-0.5rem)' },
+  to: { opacity: 1, transform: 'none' },
+});
 
 /* AppShell: sidebar from lg up, a top bar with a menu button below it. */
 
@@ -16,6 +21,7 @@ export const shell = style({
 
 export const sidebar = style({
   display: 'none',
+  viewTransitionName: 'app-sidebar',
   '@media': {
     [media.lg]: {
       position: 'sticky',
@@ -35,17 +41,41 @@ export const sidebar = style({
   },
 });
 
+/** The navigation sheet: narrower than a form sheet, so the page shows. */
+export const sheet = style({ width: 'min(20rem, 86vw)' });
+
 export const sheetPanel = style({
   display: 'flex',
   flexDirection: 'column',
   gap: space[6],
   height: '100%',
+  overflowY: 'auto',
+  // The brand's row lines up with the sheet's close button.
+  padding: `${space[3]} ${space[3]} max(${space[4]}, env(safe-area-inset-bottom))`,
 });
+
+export const sheetBrand = style({
+  display: 'flex',
+  alignItems: 'center',
+  minHeight: '2.5rem',
+  paddingInline: `${space[3]} ${space[12]}`,
+});
+
+// In the sheet: rows a thumb can hit, arriving one after another.
+globalStyle(`${sheetPanel} li`, {
+  animation: `${rise} ${motion.duration.slow} ${motion.easing.out} both`,
+  '@media': { '(prefers-reduced-motion: reduce)': { animation: 'none' } },
+});
+for (let n = 1; n <= 10; n++)
+  globalStyle(`${sheetPanel} li:nth-child(${n})`, {
+    animationDelay: `${40 + n * 25}ms`,
+  });
 
 export const sidebarNav = style({ flex: 1 });
 
 export const sidebarFooter = style({
   paddingBlockStart: space[4],
+  paddingInline: space[3],
   borderBlockStart: `1px solid ${color.border.subtle}`,
 });
 
@@ -66,6 +96,7 @@ export const topbar = style({
   paddingInline: space[4],
   borderBlockEnd: `1px solid ${color.border.subtle}`,
   backgroundColor: color.surface.page,
+  viewTransitionName: 'app-topbar',
   '@media': { [media.lg]: { paddingInline: space[8] } },
 });
 
@@ -125,8 +156,13 @@ export const navLink = style([
     color: color.text.default,
     fontSize: font.size.sm,
     textDecoration: 'none',
-    transition: `background-color ${transition}`,
+    WebkitTapHighlightColor: 'transparent',
+    transition: `background-color ${transition}, box-shadow ${transition}`,
+    '@media': {
+      [media.coarse]: { minHeight: '2.75rem', fontSize: font.size.md },
+    },
     selectors: {
+      '&:active': { backgroundColor: color.surface.muted },
       '&:hover': {
         backgroundColor: color.surface.muted,
         color: color.text.strong,

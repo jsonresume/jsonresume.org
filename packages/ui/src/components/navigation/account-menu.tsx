@@ -40,7 +40,7 @@ export function AccountMenu({
         aria-label={showName ? undefined : `Account: ${name}`}
       >
         <Avatar name={name} src={avatarUrl} size="sm" shape="circle" alt="" />
-        {showName ? <span>{name}</span> : null}
+        {showName ? <span className={s.accountTriggerName}>{name}</span> : null}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <div className={s.accountHeader}>

@@ -5,7 +5,9 @@ export { formatDate } from './format';
 export { pageHead, type PageHeadInput } from './head';
 export {
   external,
+  footerGroups,
   footerNav,
+  legalNav,
   headerNav,
   paths,
   siteUrl,

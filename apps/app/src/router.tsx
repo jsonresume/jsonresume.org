@@ -87,7 +87,16 @@ export const routeTree = rootRoute.addChildren([
  * as context), once in the browser.
  */
 export function createAppRouter(context: RouterContext = {}) {
-  return createRouter({ routeTree, context, scrollRestoration: true });
+  return createRouter({
+    routeTree,
+    context,
+    scrollRestoration: true,
+    // Pages fade into each other; a filter or search that only changes the
+    // query string updates in place.
+    defaultViewTransition: {
+      types: ({ pathChanged }) => (pathChanged ? ['page'] : false),
+    },
+  });
 }
 
 export type AppRouter = ReturnType<typeof createAppRouter>;

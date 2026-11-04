@@ -56,6 +56,16 @@ export const panel = style({
   backgroundColor: color.surface.raised,
 });
 
+/** Media in a yellow hero: its own raised surface in the page's theme. */
+export const heroPanel = style({
+  display: 'grid',
+  gap: space[3],
+  padding: space[5],
+  borderRadius: radius.md,
+  backgroundColor: color.surface.raised,
+  boxShadow: vars.shadow.md,
+});
+
 export const panelTitle = style({
   margin: 0,
   color: color.text.strong,

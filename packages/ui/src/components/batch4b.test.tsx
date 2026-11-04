@@ -163,4 +163,19 @@ describe('PreviewFrame', () => {
     const frame = screen.getByTitle('Resume preview, Pro theme');
     expect(frame).toHaveAttribute('sandbox', '');
   });
+
+  it('leaves out scripts the sandbox would block', () => {
+    render(
+      <PreviewFrame
+        title="Preview"
+        srcDoc={
+          '<h1>Ada</h1><script>track()</script><SCRIPT src="b.js"></SCRIPT >'
+        }
+      />
+    );
+    expect(screen.getByTitle('Preview')).toHaveAttribute(
+      'srcdoc',
+      '<h1>Ada</h1>'
+    );
+  });
 });

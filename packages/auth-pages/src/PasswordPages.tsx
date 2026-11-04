@@ -5,6 +5,7 @@ import {
   forgotPasswordAtom,
   keys,
   resetPasswordAtom,
+  useIsClient,
 } from '@repo/api-client';
 import { account } from '@repo/content/pages';
 import { useState, type FormEvent, type ReactNode } from 'react';
@@ -65,6 +66,10 @@ function Reset({
   const reset = useAtomSet(resetPasswordAtom, { mode: 'promiseExit' });
   const [message, setMessage] = useState<string>();
   const [busy, setBusy] = useState(false);
+  // The page is prerendered without the link's token: show the form until
+  // the browser can tell whether there is one, so hydration matches.
+  const client = useIsClient();
+  const missing = client && !token;
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -87,8 +92,8 @@ function Reset({
       description={copy.description}
       footer={forgotLink}
     >
-      <ErrorNote message={token ? message : copy.missing} />
-      {token ? (
+      <ErrorNote message={missing ? copy.missing : message} />
+      {!missing ? (
         <Form onSubmit={submit}>
           <Field label={copy.password} required>
             <Input
@@ -99,7 +104,12 @@ function Reset({
               required
             />
           </Field>
-          <Button type="submit" variant="primary" fullWidth disabled={busy}>
+          <Button
+            type="submit"
+            variant="primary"
+            fullWidth
+            disabled={busy || !client}
+          >
             {copy.submit}
           </Button>
         </Form>

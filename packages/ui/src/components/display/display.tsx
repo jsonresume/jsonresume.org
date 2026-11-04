@@ -1,12 +1,5 @@
 import { Slot } from '@radix-ui/react-slot';
-import {
-  forwardRef,
-  type HTMLAttributes,
-  type ReactNode,
-  type TableHTMLAttributes,
-  type TdHTMLAttributes,
-  type ThHTMLAttributes,
-} from 'react';
+import { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
 import { visuallyHidden } from '../../styles/shared.css';
 import { cx } from '../../utils/cx';
 import * as s from './display.css';
@@ -266,41 +259,8 @@ export const CardFooter = forwardRef<
   return <div ref={ref} className={cx(s.cardFooter, className)} {...props} />;
 });
 
-/* Table */
-
-export interface TableProps extends TableHTMLAttributes<HTMLTableElement> {
-  caption?: ReactNode;
-}
-
-/** A data table that scrolls horizontally on narrow screens. */
-export const Table = forwardRef<HTMLTableElement, TableProps>(function Table(
-  { caption, className, children, ...props },
-  ref
-) {
-  return (
-    <div className={s.tableWrap}>
-      <table ref={ref} className={cx(s.table, className)} {...props}>
-        {caption ? <caption className={s.caption}>{caption}</caption> : null}
-        {children}
-      </table>
-    </div>
-  );
-});
-
-export function Th({
-  className,
-  scope = 'col',
-  ...props
-}: ThHTMLAttributes<HTMLTableCellElement>) {
-  return <th scope={scope} className={cx(s.th, className)} {...props} />;
-}
-
-export function Td({
-  className,
-  ...props
-}: TdHTMLAttributes<HTMLTableCellElement>) {
-  return <td className={cx(s.td, className)} {...props} />;
-}
+/* Table: in ./table.tsx, since it watches its width. */
+export { Table, Td, Th, type TableProps } from './table';
 
 /* Avatar: in ./avatar.tsx, since it keeps state. */
 
