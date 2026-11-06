@@ -102,7 +102,8 @@ const make = Effect.gen(function* () {
     const existing = yield* store.findByGithubId(identity.id);
     if (existing) {
       yield* gist.keepGrant(existing.id, identity);
-      return { _tag: 'SignedIn', ...(yield* startSession(existing)) } as const;
+      const session = yield* startSession(existing);
+      return { _tag: 'SignedIn', created: false, ...session } as const;
     }
     const claimant = { githubId: identity.id, githubLogin: identity.login };
     const login = normalName(identity.login);
@@ -112,7 +113,8 @@ const make = Effect.gen(function* () {
     if (!check.available) return { _tag: 'ChooseUsername' } as const;
     const user = yield* store.createGithubUser(identity, login);
     yield* gist.keepGrant(user.id, identity);
-    return { _tag: 'SignedIn', ...(yield* startSession(user)) } as const;
+    const session = yield* startSession(user);
+    return { _tag: 'SignedIn', created: true, ...session } as const;
   });
 
   const completeGithub = Effect.fn('Accounts.completeGithub')(function* (

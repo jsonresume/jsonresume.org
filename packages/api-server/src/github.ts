@@ -94,7 +94,12 @@ export const GithubRoutes = HttpRouter.use((router) =>
 
         const result = yield* accounts.githubSignIn(identity);
         if (result._tag === 'SignedIn') {
-          yield* track(result.user.id, 'user_signed_in', { method: 'github' });
+          // A new account whose GitHub login was free is a sign-up.
+          yield* track(
+            result.user.id,
+            result.created ? 'user_signed_up' : 'user_signed_in',
+            { method: 'github' }
+          );
           return yield* withSession(go(next), result.token);
         }
         const pending = yield* sealPending(identity);

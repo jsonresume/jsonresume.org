@@ -34,4 +34,28 @@ describe('product events', () => {
     ]);
     expect(JSON.stringify(server.events)).not.toMatch(/ada@example|Ada"/);
   });
+
+  it('counts a first GitHub sign-in as a sign-up, and the next as a sign-in', async () => {
+    server = testServer();
+    server.identities.set('c1', {
+      id: 7,
+      login: 'grace',
+      avatarUrl: null,
+      email: null,
+    });
+    const viaGithub = async () => {
+      const start = await server.fetch('/api/auth/github');
+      const state = new URL(
+        start.headers.get('location') ?? ''
+      ).searchParams.get('state');
+      await server.fetch(`/api/auth/callback/github?code=c1&state=${state}`);
+    };
+    await viaGithub();
+    await viaGithub();
+    expect(server.events.map((e) => e.event)).toEqual([
+      'user_signed_up',
+      'user_signed_in',
+    ]);
+    expect(new Set(server.events.map((e) => e.id)).size).toBe(1);
+  });
 });
