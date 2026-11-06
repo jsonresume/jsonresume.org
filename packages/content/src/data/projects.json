@@ -397,5 +397,12 @@
     "link": "https://github.com/panasenco/resume-optimizer",
     "category": "ats",
     "language": "Python"
+  },
+  {
+    "name": "JSON Resume Connect",
+    "description": "A Google Workspace Studio step that signs in with JSON Resume (OAuth, resume:read), checks the resume against the schema, and renders it as a document for Google Docs™ with PDF and DOCX export links. No server; it can only see the files it creates.",
+    "link": "https://github.com/ismailkattakath/jsonresume-connect",
+    "category": "transfer",
+    "language": "Apps Script"
   }
 ]
