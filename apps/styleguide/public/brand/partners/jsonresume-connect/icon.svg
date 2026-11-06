@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="JSON Resume Connect">
+  <title>JSON Resume Connect</title>
+  <!-- The JSON Resume mark, filled with its yellow, in front of the document it becomes. -->
+  <g stroke="#1a1a1a" stroke-linejoin="round">
+    <g transform="translate(14 1.85) scale(4.6)">
+      <path d="M6 2.75h8.5L19.25 7.5v13.75H6z" fill="#ffffff" stroke-width="1.6"/>
+      <path d="M14.25 2.75V7.75h5" fill="none" stroke-width="1.6"/>
+    </g>
+    <g transform="translate(-2.1 15.85) scale(4.6)">
+      <path d="M6 2.75h8.5L19.25 7.5v13.75H6z" fill="#fff18f" stroke-width="1.6"/>
+      <path d="M14.25 2.75V7.75h5" fill="none" stroke-width="1.6"/>
+      <path d="M10.25 11c-1 0-1.25.5-1.25 1.25v.6c0 .55-.3.9-.9.9.6 0 .9.35.9.9v.6c0 .75.25 1.25 1.25 1.25M14.75 11c1 0 1.25.5 1.25 1.25v.6c0 .55.3.9.9.9-.6 0-.9.35-.9.9v.6c0 .75-.25 1.25-1.25 1.25" fill="none" stroke-width="1.5" stroke-linecap="round"/>
+    </g>
+  </g>
+</svg>
