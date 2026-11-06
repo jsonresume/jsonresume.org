@@ -3,6 +3,7 @@ import { accountsStack } from '@repo/accounts/stack';
 import { PgAnalyticsStore } from '@repo/analytics/sql';
 import { Explore } from '@repo/explore';
 import { embedderFrom, JobBoard, JobMatcher } from '@repo/jobs';
+import { ProductEvents } from '@repo/posthog';
 import { Effect, Layer, ManagedRuntime } from 'effect';
 import { HttpRouter, HttpServer, HttpServerResponse } from 'effect/http';
 import { createHash } from 'node:crypto';
@@ -17,7 +18,15 @@ afterEach(() => dispose?.());
 /** The MCP endpoint over a fresh database, and an API key for a user with a resume. */
 const setup = async () => {
   const stack = accountsStack();
+  const events: Array<{ event: string; properties?: unknown }> = [];
   const services = Layer.mergeAll(
+    Layer.succeed(
+      ProductEvents,
+      ProductEvents.of({
+        capture: (_, event, properties) =>
+          Effect.sync(() => void events.push({ event, properties })),
+      })
+    ),
     ApiKeys.layer,
     OAuth.layer,
     PgAnalyticsStore,
@@ -98,7 +107,7 @@ const setup = async () => {
       };
     })
   );
-  return { handler: web.handler, ...key };
+  return { handler: web.handler, events, ...key };
 };
 
 /** A client speaking Streamable HTTP (2025-06-18) with the key. */
@@ -151,6 +160,17 @@ describe('the MCP server', () => {
     // Only /mcp: other routes on the router are not behind it.
     const other = await handler(new Request('http://x/neighbour'));
     expect(await other.text()).toBe('open');
+  });
+
+  it('reports which tool was called, and the tool still reads its request', async () => {
+    const { handler, key, events } = await setup();
+    const { call } = await connect(handler, key);
+    expect((await call('get_resume')).value).toMatchObject({
+      resume: { basics: { name: 'Ada' } },
+    });
+    expect(events).toEqual([
+      { event: 'mcp_tool_called', properties: { tool: 'get_resume' } },
+    ]);
   });
 
   it('lists every tool and prompt in the catalog, with hints', async () => {

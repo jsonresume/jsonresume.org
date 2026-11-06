@@ -9,6 +9,7 @@ import {
 import { Effect, Layer, Redacted } from 'effect';
 import { HttpApiBuilder } from 'effect/http-api';
 import { toSessionUser } from './http';
+import { track } from '@repo/posthog';
 
 const toApiKey = (k: ApiKeyRecord) => ({
   id: k.id,
@@ -32,11 +33,10 @@ export const KeysHandlers = HttpApiBuilder.group(
           ),
         create: ({ payload }) =>
           Effect.gen(function* () {
-            const made = yield* keys.create(
-              (yield* CurrentUser).id,
-              payload.name
-            );
+            const user = yield* CurrentUser;
+            const made = yield* keys.create(user.id, payload.name);
             if (!made) return yield* new TooManyKeys({ max: MAX_KEYS });
+            yield* track(user.id, 'api_key_created');
             return { key: made.key, apiKey: toApiKey(made.record) };
           }),
         revoke: ({ params }) =>

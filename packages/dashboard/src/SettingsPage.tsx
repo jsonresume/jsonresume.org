@@ -27,6 +27,7 @@ import { ConnectionsCard } from './settings/ConnectionsCard';
 import { OAuthAppsCard } from './settings/OAuthAppsCard';
 import { ExploreCard } from './settings/ExploreCard';
 import { UsernameCard } from './settings/UsernameCard';
+import { forget } from '@repo/posthog/browser';
 
 function GithubFlash() {
   const github = searchParam('github');
@@ -125,7 +126,10 @@ export function SettingsPage() {
           variant="secondary"
           size="sm"
           onClick={() =>
-            void signOut({}).then(() => window.location.assign('/'))
+            void signOut({}).then(() => {
+              forget();
+              window.location.assign('/');
+            })
           }
         >
           Sign out

@@ -10,6 +10,7 @@ import { PurgeUnverified, apiRoutes } from '@repo/api-server';
 import { PgLive } from '@repo/database';
 import { createImageProxy, imageProxyPath } from '@repo/images';
 import { mcpRoutes } from '@repo/mcp';
+import { posthogProxy } from '@repo/posthog';
 import { createSiteApp, effectWebHandler } from '@repo/server';
 import { Config, Effect, Layer, Option } from 'effect';
 import { readFile } from 'node:fs/promises';
@@ -140,6 +141,8 @@ const main = Effect.gen(function* () {
     mount: [
       { prefix: '/api', fetch: api.handler },
       { prefix: '/mcp', fetch: mcp.handler, when: isMcpRequest },
+      // PostHog, through our domain (see @repo/posthog).
+      { prefix: '/ingest', fetch: posthogProxy() },
     ],
     dynamic: [
       { path: resumePath, fetch: resumes.fetch },

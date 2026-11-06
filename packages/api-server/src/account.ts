@@ -3,6 +3,7 @@ import { Account, CurrentUser, JsonResumeApi } from '@repo/api';
 import { Effect } from 'effect';
 import { HttpApiBuilder } from 'effect/http-api';
 import { clearSession } from './http';
+import { track } from '@repo/posthog';
 
 const toAccount = (
   record: AccountRecord,
@@ -54,12 +55,14 @@ export const AccountHandlers = HttpApiBuilder.group(
           Effect.gen(function* () {
             const user = yield* CurrentUser;
             yield* accounts.saveResume(user.id, payload.resume);
+            yield* track(user.id, 'resume_saved', { via: 'dashboard' });
             return yield* current;
           }),
         rename: ({ payload }) =>
           Effect.gen(function* () {
             const user = yield* CurrentUser;
             yield* accounts.rename(user.id, payload.username);
+            yield* track(user.id, 'username_changed');
             return yield* current;
           }),
         delete: ({ payload }) =>
@@ -67,11 +70,15 @@ export const AccountHandlers = HttpApiBuilder.group(
             const user = yield* CurrentUser;
             yield* accounts.deleteAccount(user.id, payload.confirm);
             yield* clearSession;
+            yield* track(user.id, 'account_deleted');
           }),
         setSource: ({ payload }) =>
           Effect.gen(function* () {
             const user = yield* CurrentUser;
             yield* accounts.setSource(user.id, payload.source);
+            yield* track(user.id, 'resume_source_changed', {
+              source: payload.source,
+            });
             return yield* current;
           }),
       });
