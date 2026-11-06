@@ -1,35 +1,7 @@
-/** Names one skill goes by, folded to one key. */
-const ALIASES: Record<string, string> = {
-  postgres: 'postgresql',
-  pg: 'postgresql',
-  psql: 'postgresql',
-  k8s: 'kubernetes',
-  js: 'javascript',
-  ts: 'typescript',
-  node: 'node.js',
-  nodejs: 'node.js',
-  'react.js': 'react',
-  reactjs: 'react',
-  'next.js': 'nextjs',
-  next: 'nextjs',
-  golang: 'go',
-  'vue.js': 'vue',
-  vuejs: 'vue',
-  gcp: 'google cloud platform',
-  'google cloud': 'google cloud platform',
-  aws: 'amazon web services',
-  llm: 'llms',
-  'large language models': 'llms',
-  'ai/llms': 'llms',
-  'machine learning': 'ml',
-  'c++': 'cpp',
-  'c#': 'csharp',
-  'ci/cd': 'ci-cd',
-  rails: 'ruby on rails',
-  ror: 'ruby on rails',
-  tf: 'terraform',
-  mongo: 'mongodb',
-};
+import { foldSkill, isKnownSkill, skillKey, skillName } from '@repo/jobs';
+
+/** Keys and names to show, one way everywhere: `@repo/jobs` skillNames. */
+export { foldSkill, isKnownSkill, skillKey, skillName };
 
 /** Kinds of work, not skills: posts and resumes use them as both. */
 const CATEGORIES = new Set([
@@ -61,16 +33,6 @@ const CATEGORIES = new Set([
   'other',
   'tools',
 ]);
-
-/** A skill's key: lower-case, spaces folded, aliases joined. */
-export const skillKey = (name: string): string => {
-  const key = name
-    .toLowerCase()
-    .replace(/[()]/g, '')
-    .replace(/\s+/g, ' ')
-    .trim();
-  return ALIASES[key] ?? key;
-};
 
 /** Qualifications, places and notes models write down as skills. */
 const NOT_A_SKILL =

@@ -3,6 +3,7 @@ import { Effect, Layer, Schema } from 'effect';
 import { SqlClient } from 'effect/sql';
 import { RoleReader, type RoleRead } from '../roleReader';
 import { SkillCatalog, type Skill } from '../services';
+import { skillKey, skillName } from '../skillNames';
 
 export const posting = (overrides: Partial<Posting> = {}): Posting => ({
   title: 'Software Engineer',
@@ -46,7 +47,7 @@ const SkillRow = Schema.Struct({
 });
 const skillRows = Schema.decodeUnknownEffect(Schema.Array(SkillRow));
 
-/** Skills by lower-cased name, kept in app.skills (job_requirements points there). */
+/** Skills by key (`skillKey`), kept in app.skills (job_requirements points there). */
 export const TestCatalog = Layer.effect(
   SkillCatalog,
   Effect.gen(function* () {
@@ -55,7 +56,9 @@ export const TestCatalog = Layer.effect(
       resolve: (names) =>
         Effect.forEach(names, (name) =>
           sql`
-            INSERT INTO app.skills (key, name) VALUES (${name.toLowerCase()}, ${name})
+            INSERT INTO app.skills (key, name) VALUES (${skillKey(
+              name
+            )}, ${skillName(name)})
             ON CONFLICT (key) DO UPDATE SET name = app.skills.name
             RETURNING id::float8 AS id, key, name
           `.pipe(

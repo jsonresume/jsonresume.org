@@ -9,9 +9,10 @@ import {
   type ResumeEntry,
   type Skill,
 } from './services';
+import { skillKey, skillName } from './skillNames';
 import { Snapshots } from './snapshots';
 
-/** Skills in memory: one per lower-cased name. */
+/** Skills in memory: one per key (`skillKey`), named as `skillName` names it. */
 export const memorySkills = () => {
   const skills = new Map<string, Skill>();
   return Layer.succeed(
@@ -21,10 +22,10 @@ export const memorySkills = () => {
         Effect.sync(() => {
           const out = new Map<string, Skill>();
           for (const name of names) {
-            const key = name.toLowerCase().trim();
+            const key = skillKey(name);
             let skill = skills.get(key);
             if (!skill) {
-              skill = { id: skills.size + 1, key, name };
+              skill = { id: skills.size + 1, key, name: skillName(name) };
               skills.set(key, skill);
             }
             out.set(name, skill);
