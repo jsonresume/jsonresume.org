@@ -4,6 +4,7 @@ import { Effect } from 'effect';
 import { HttpServerRequest } from 'effect/http';
 import { HttpApiBuilder } from 'effect/http-api';
 import { oidc } from './oidc';
+import { track } from '@repo/posthog';
 
 const toError = (e: OAuthFailure) =>
   new OAuthError({ error: e.error, error_description: e.description });
@@ -154,6 +155,10 @@ export const OAuthConsentHandlers = HttpApiBuilder.group(
               codeChallenge: p.code_challenge,
               scope: p.scope,
               nonce: p.nonce,
+            });
+            yield* track(user.id, 'oauth_access_granted', {
+              client_id: p.client_id,
+              scope: p.scope ?? null,
             });
             return {
               redirect: withQuery(p.redirect_uri, { code, state: p.state }),

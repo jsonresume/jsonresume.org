@@ -3,7 +3,7 @@ title: Privacy policy
 description: What jsonresume.org keeps about you, why, who helps us run it, how long it's kept, and how to see, change or delete it.
 ---
 
-_Last updated 25 October 2026._
+_Last updated 6 November 2026._
 
 JSON Resume is an open-source project, and jsonresume.org is run by its maintainers. This policy covers jsonresume.org, its API and its MCP server (the connection that lets apps such as ChatGPT and Claude use your account). We keep only what the site needs to work, we don't sell data, and we don't show ads.
 
@@ -14,6 +14,8 @@ JSON Resume is an open-source project, and jsonresume.org is run by its maintain
 **Your resume.** The resume you save here, or a copy of your `resume.json` gist, refreshed when your page is visited. Your resume is published at `jsonresume.org/@username` once your account is confirmed: it's meant to be public, so don't put anything in it you wouldn't share. If you keep a public `resume.json` gist on GitHub, its page at `jsonresume.org/@your-github-login` works without an account. Public resumes are listed in [Explore](/explore), where anyone can search them by name, headline, place and skills; an account can take its resume out.
 
 **Who reads your resume.** When someone views a resume page, we record the page or format read, the theme, the time, how long the page was visible and how far down it was read, the site they came from, their country (from Cloudflare), and their device type and browser. Visitors are counted with a hash that changes every day. We don't set cookies for this and don't store IP addresses. These numbers are shown only to the resume's owner. Owners viewing their own page aren't counted.
+
+**How the site is used.** To learn which pages and features help people, the site (not resume pages) sends page views, clicks and errors to PostHog, with your country (from Cloudflare). When you're signed in, these, and what you do with your account through the site, the API or an app (signing up, saving your resume, making a key, which MCP tool an app called), are tied to your account's id and username, never your email or resume. PostHog runs here without cookies or anything stored in your browser: like our resume statistics, it counts visitors with a hash that changes every day. It doesn't record your screen, and it sends nothing when your browser asks sites not to track you (Do Not Track). Deleting your account doesn't reach into PostHog's history; ask us and we'll delete it there too.
 
 **Jobs.** Job posts come from public Hacker News "Who is hiring?" threads. When you use jobs matched to your resume, the text of your resume is sent to OpenAI to make an embedding (a list of numbers describing it), which we keep, keyed by a hash of that text, so we don't need to send it again. We also keep what you mark about jobs (interested, maybe, applied, not for me) and any note you add.
 
@@ -30,6 +32,7 @@ JSON Resume is an open-source project, and jsonresume.org is run by its maintain
 - **GitHub** signs you in when you choose it, and holds your gist.
 - **OpenAI** reads job posts to tidy them, and makes embeddings of resumes for matching. OpenAI doesn't use API data to train its models.
 - **Resend** sends account emails (confirming your address, resetting your password).
+- **PostHog** counts how the site is used, in the United States.
 
 They process data only to provide those services to us.
 

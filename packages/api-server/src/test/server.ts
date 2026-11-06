@@ -19,6 +19,7 @@ import { Copilot } from '@repo/pathways';
 import { Profiles, Usernames } from '@repo/profiles';
 import { PgProfileStore } from '@repo/profiles/sql';
 import { fakeGithub } from '@repo/profiles/testing';
+import { ProductEvents } from '@repo/posthog';
 import { ConfigProvider, Effect, Layer, Stream } from 'effect';
 import { HttpRouter, HttpServer } from 'effect/http';
 import { apiRoutes } from '../index';
@@ -40,6 +41,7 @@ export function testServer() {
   const identities = new Map<string, GithubIdentity>();
   const gists = fakeGists();
   const mail: Mail[] = [];
+  const events: Array<{ id: string; event: string; properties?: unknown }> = [];
   const config = ConfigProvider.layer(
     ConfigProvider.fromEnvRecord({
       AUTH_SECRET: 'test secret',
@@ -79,6 +81,13 @@ export function testServer() {
         profiles,
         RateLimiter.layer,
         gists.layer,
+        Layer.succeed(
+          ProductEvents,
+          ProductEvents.of({
+            capture: (id, event, properties) =>
+              Effect.sync(() => void events.push({ id, event, properties })),
+          })
+        ),
         Layer.succeed(
           Mailer,
           Mailer.of({
@@ -140,6 +149,7 @@ export function testServer() {
     post,
     jar,
     mail,
+    events,
     github,
     gists: gists.state,
     identities,

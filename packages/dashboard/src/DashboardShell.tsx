@@ -26,6 +26,7 @@ import {
 } from './icons';
 import { Prefetch } from './Prefetch';
 import { SessionProvider, useSession } from './session';
+import { forget, identify } from '@repo/posthog/browser';
 
 export interface DashboardShellProps {
   /** The current path, to mark the open page in the navigation. */
@@ -63,7 +64,12 @@ function Account() {
       email={user.email ?? undefined}
       avatarUrl={proxiedImage(user.github?.avatarUrl, 64)}
       showName
-      onSignOut={() => void signOut({}).then(() => window.location.assign('/'))}
+      onSignOut={() =>
+        void signOut({}).then(() => {
+          forget();
+          window.location.assign('/');
+        })
+      }
     >
       <DropdownMenuItem asChild>
         <a href={`/@${user.username}`}>
@@ -89,6 +95,13 @@ function Gate({
 }) {
   const session = useAtomValue(sessionAtom);
   const failed = AsyncResult.isFailure(session);
+  const user = AsyncResult.isSuccess(session) ? session.value : undefined;
+  const id = user?.id;
+  const username = user?.username;
+  // PostHog keeps nothing between page loads, so this runs on each one.
+  useEffect(() => {
+    if (id && username) identify(id, username);
+  }, [id, username]);
   useEffect(() => {
     if (failed)
       window.location.replace(

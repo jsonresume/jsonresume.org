@@ -13,6 +13,7 @@ import { Effect, Layer, Redacted } from 'effect';
 import { HttpApiBuilder } from 'effect/http-api';
 import { toSessionUser } from './http';
 import { oidc } from './oidc';
+import { track } from '@repo/posthog';
 
 /** An OAuth access token; provides CurrentGrant (the user and the scope). */
 export const OAuthBearerLive = Layer.effect(
@@ -94,6 +95,7 @@ export const OAuthResourceHandlers = HttpApiBuilder.group(
                   })
               )
             );
+            yield* track(user.id, 'resume_saved', { via: 'oauth_app' });
             return { username: user.username, url: page(user.username) };
           }),
       });

@@ -77,6 +77,7 @@ package over growing an app.
 | `@repo/explore`           | Explore: every public resume, searchable, in an index kept in memory, and the opt-out (`/ui`: the /explore page).                             |
 | `@repo/timeline`          | A resume as a timeline for `/@username/timeline` (`/ui`: the page).                                                                           |
 | `@repo/images`            | Other sites' images (avatars, photos) resized and cached by our server at `/_img/<width>/<source>.webp`; `proxiedImage()` builds the path.    |
+| `@repo/posthog`           | Product analytics in PostHog, cookie-free: the browser client, server-side events under the account id, the `/ingest` proxy.                  |
 
 Dependency direction: `domain` ← `content`, `api` ← `site`, feature packages ←
 `apps/app`. Packages never import from apps. `@jsonresume/ui` imports nothing

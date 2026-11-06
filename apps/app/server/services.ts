@@ -19,6 +19,7 @@ import { ResumePdf } from '@repo/resume-pdf';
 import { PgProfileStore } from '@repo/profiles/sql';
 import { Layer } from 'effect';
 import type { SqlClient } from 'effect/sql';
+import { ProductEvents } from '@repo/posthog';
 
 /**
  * Every service the server uses, over one database. Build it once and share
@@ -57,7 +58,9 @@ export const appServices = <E>(
     Layer.provide(Layer.mergeAll(stores, OpenAiJobs, database))
   );
   // Pathways' copilot uses every MCP tool, so everything above.
-  return Layer.mergeAll(Copilot.layer, ResumePdf.layer).pipe(
-    Layer.provideMerge(Layer.merge(accounts, careers))
-  );
+  return Layer.mergeAll(
+    Copilot.layer,
+    ResumePdf.layer,
+    ProductEvents.layer
+  ).pipe(Layer.provideMerge(Layer.merge(accounts, careers)));
 };

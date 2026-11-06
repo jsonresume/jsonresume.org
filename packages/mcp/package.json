@@ -17,6 +17,7 @@
     "@jsonresume/schema": "workspace:*",
     "@repo/accounts": "workspace:*",
     "@repo/analytics": "workspace:*",
+    "@repo/posthog": "workspace:^",
     "@repo/api": "workspace:*",
     "@repo/ats": "workspace:*",
     "@repo/careers": "workspace:*",
