@@ -38,3 +38,39 @@ export const period = (entry: Entry): string | undefined => {
   if (start) return `${start} – ${end ?? 'present'}`;
   return end ? `until ${end}` : undefined;
 };
+
+const MONTHS = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+];
+
+/** "May 2021" from 2021-05 or 2021-05-01; "2021" from 2021. */
+export const monthYear = (iso: string) => {
+  const [year, month] = iso.split('-');
+  const name = month ? MONTHS[Number(month) - 1] : undefined;
+  return name ? `${name} ${year}` : year ?? iso;
+};
+
+/** A date field as people write it ("May 2021"), or absent. */
+export const date = (value: unknown): string | undefined => {
+  const iso = text(value);
+  return iso === undefined ? undefined : monthYear(iso);
+};
+
+/** "May 2021 – present", "2019 – 2021", "until Jun 2021", or absent. */
+export const span = (entry: Entry): string | undefined => {
+  const start = date(entry['startDate']);
+  const end = date(entry['endDate']);
+  if (start) return `${start} – ${end ?? 'present'}`;
+  return end ? `until ${end}` : undefined;
+};
