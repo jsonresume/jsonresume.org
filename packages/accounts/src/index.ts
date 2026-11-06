@@ -4,6 +4,7 @@ export {
   UNVERIFIED_TTL,
   type SignedIn,
 } from './accounts';
+export { ResumeSaved } from './resumes';
 export { decrypt, encrypt, hashToken, newToken, sign, unsign } from './crypto';
 export { GithubOAuth, GithubOAuthFailed } from './githubOAuth';
 export { RateLimiter } from './limiter';

@@ -19,7 +19,7 @@ import {
   type ResumeEntry,
 } from './services';
 
-/** How long a request waits for the reader before answering without it. */
+/** How long a request waits for the reader, by default, before answering without it. */
 const WAIT = Duration.seconds(40);
 /** Marks insights read without a model: a reader, once there, reads again. */
 const NO_MODEL = 'none';
@@ -103,7 +103,8 @@ export const ResumeInsightsLive = Layer.effect(
       );
 
     const insight = Effect.fn('ResumeInsights.insight')(function* (
-      resume: unknown
+      resume: unknown,
+      wait: Duration.Input = WAIT
     ) {
       const key = resumeKey(resume);
       const entries = resumeEntries(resume);
@@ -157,7 +158,7 @@ export const ResumeInsightsLive = Layer.effect(
         running.set(key, started);
         fiber = started;
       }
-      const done = yield* Fiber.join(fiber).pipe(Effect.timeoutOption(WAIT));
+      const done = yield* Fiber.join(fiber).pipe(Effect.timeoutOption(wait));
       const after = yield* usable(key);
       if (Option.isSome(after)) return answer(after.value, false);
       // Still reading (or the reading failed): what the resume shows without it.

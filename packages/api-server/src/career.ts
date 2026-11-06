@@ -1,8 +1,14 @@
 import { Accounts } from '@repo/accounts';
 import { CurrentUser, JsonResumeApi } from '@repo/api';
 import { CareerGraphs } from '@repo/careers';
-import { Effect } from 'effect';
+import { Duration, Effect } from 'effect';
 import { HttpApiBuilder } from 'effect/http-api';
+
+/**
+ * How long the dashboard's graph waits for the models before answering
+ * with what is ready (pending); it asks again until nothing is.
+ */
+const QUICK = Duration.seconds(5);
 
 /** The signed-in user's career graph (and past months'), moves and plans. */
 export const CareerHandlers = HttpApiBuilder.group(
@@ -20,7 +26,7 @@ export const CareerHandlers = HttpApiBuilder.group(
       return handlers.handleAll({
         graph: () =>
           Effect.flatMap(mine, ({ user, resume }) =>
-            careers.graph(user.id, resume)
+            careers.graph(user.id, resume, QUICK)
           ),
         snapshot: ({ params }) =>
           Effect.flatMap(CurrentUser, (user) =>

@@ -1,10 +1,11 @@
-import type { CareerGraph, CareerMove } from '@repo/api';
+import type { CareerGraph, CareerMove, CareerWait } from '@repo/api';
 import { JobMatcher } from '@repo/jobs';
-import { Clock, Context, Effect, Layer, Option } from 'effect';
+import { Clock, Context, Duration, Effect, Layer, Option } from 'effect';
 import { familyName, isFamily, SENIORITY_ORDER } from './families';
 import { gather } from './gather';
 import { buildGraph } from './graph/build';
-import { Planner, plainPlan, type PlanBrief } from './planner';
+import { planBrief } from './planBrief';
+import { Planner, plainPlan } from './planner';
 import { PlanStore } from './plans';
 import {
   CareerMoves,
@@ -30,6 +31,9 @@ export class CareerGraphs extends Context.Service<
   );
 }
 
+/** How long a graph waits for the models by default (they run at once). */
+const WAIT = Duration.seconds(40);
+
 const make = Effect.gen(function* () {
   const context = Layer.succeedContext(
     yield* Effect.context<
@@ -44,30 +48,72 @@ const make = Effect.gen(function* () {
   const insights = yield* ResumeInsights;
   const planner = yield* Effect.serviceOption(Planner);
 
-  const build = (userId: string, resume: unknown) =>
+  // The two model steps (jobs judged against the resume, the resume read)
+  // don't need each other, so they run at once, each waiting up to `wait`.
+  const models = (userId: string, resume: unknown, wait: Duration.Input) =>
+    Effect.all(
+      [
+        matcher.rankWithin(resume, userId, wait),
+        insights.insight(resume, wait),
+      ],
+      { concurrency: 'unbounded' }
+    );
+
+  const build = (userId: string, resume: unknown, wait: Duration.Input) =>
     Effect.gen(function* () {
-      const ranked = yield* matcher.rank(resume, userId);
+      const [{ ranked, judging }, insight] = yield* models(
+        userId,
+        resume,
+        wait
+      );
       const now = new Date(yield* Clock.currentTimeMillis);
       const input = yield* gather(
         userId,
-        resume,
+        insight,
         ranked,
         now.getUTCFullYear()
       ).pipe(Effect.provide(context));
-      return { input, built: buildGraph(input), now };
+      const waitingFor: CareerWait[] = [
+        ...(insight.pending ? (['resume'] as const) : []),
+        ...(judging ? (['jobs'] as const) : []),
+      ];
+      return { input, built: buildGraph(input), now, waitingFor };
     });
 
-  /** The graph; this month's is kept once the AI reading is done. */
+  /**
+   * The graph, waiting up to `wait` for the models; pending (with what it
+   * waits for) when they are still at work. This month's is kept once
+   * nothing is pending.
+   */
   const graph = Effect.fn('Careers.graph')(function* (
     userId: string,
-    resume: unknown
+    resume: unknown,
+    wait: Duration.Input = WAIT
   ) {
-    const { input, built, now } = yield* build(userId, resume);
-    const pending = input.insight.pending;
+    const { built, now, waitingFor } = yield* build(userId, resume, wait);
+    const pending = waitingFor.length > 0;
     const whole: CareerGraph = { ...built, pending, snapshots: [] };
     if (!pending) yield* snapshots.keep(userId, whole, now);
-    return { ...whole, snapshots: yield* snapshots.months(userId) };
+    return {
+      ...whole,
+      waitingFor,
+      snapshots: yield* snapshots.months(userId),
+    };
   });
+
+  /**
+   * Starts the model work a resume version needs (its reading, the jobs'
+   * fits) and returns at once, so the graph is ready by the time it is
+   * opened. Called when a resume is saved or the dashboard opens.
+   */
+  const prepare = (userId: string, resume: unknown) =>
+    models(userId, resume, Duration.zero).pipe(
+      Effect.catchTag('NoResume', () => Effect.void),
+      Effect.withSpan('Careers.prepare'),
+      Effect.ignoreCause({ log: true, message: 'Career prepare failed' }),
+      Effect.forkDetach,
+      Effect.asVoid
+    );
 
   /** Where people in the resume's current role went next. */
   const movesFor = Effect.fn('Careers.moves')(function* (resume: unknown) {
@@ -96,7 +142,7 @@ const make = Effect.gen(function* () {
     resume: unknown,
     destination: string
   ) {
-    const { input, built } = yield* build(userId, resume);
+    const { input, built } = yield* build(userId, resume, WAIT);
     const [, family, seniority] = destination.split(':');
     const known =
       destination.startsWith('destination:') && family && isFamily(family);
@@ -107,27 +153,7 @@ const make = Effect.gen(function* () {
     const archetype = known
       ? input.archetypes.find((a) => a.family === family)
       : undefined;
-    const brief: PlanBrief = {
-      destination: label,
-      strengths: input.insight.strengths.map((s) => `${s.name}: ${s.summary}`),
-      skills: [...new Set(input.insight.evidence.map((e) => e.skill.name))],
-      gaps: built.nodes.filter((n) => n.kind === 'gap').map((n) => n.label),
-      asks: archetype?.skills.slice(0, 12).map((s) => s.skill.name) ?? [],
-      jobs: input.jobs.slice(0, 15).map((j) => ({
-        id: j.ranked.row.id,
-        company: j.ranked.row.posting.company,
-        title: j.role?.title ?? j.ranked.row.posting.title,
-        score: j.ranked.score,
-      })),
-      history: input.insight.entries
-        .filter((e) => e.section === 'work')
-        .map(
-          (e) =>
-            `${e.detail ?? ''} at ${e.label} (${e.startYear ?? '?'}–${
-              e.endYear ?? 'now'
-            })`
-        ),
-    };
+    const brief = planBrief(label, input, built, archetype);
     const drafted = yield* Option.match(planner, {
       onNone: () => Effect.succeed(plainPlan(brief)),
       onSome: (p) =>
@@ -160,6 +186,7 @@ const make = Effect.gen(function* () {
 
   return {
     graph,
+    prepare,
     moves: movesFor,
     createPlan,
     plans: plans.list,

@@ -2,20 +2,11 @@ import {
   EmailTaken,
   GithubUnreachable,
   InvalidCredentials,
-  InvalidResume,
   Unauthorized,
   UsernameUnavailable,
 } from '@repo/api';
 import { Usernames } from '@repo/profiles';
-import {
-  Clock,
-  Config,
-  Context,
-  Duration,
-  Effect,
-  Layer,
-  Predicate,
-} from 'effect';
+import { Clock, Config, Context, Duration, Effect, Layer } from 'effect';
 import {
   decoyHash,
   hashPassword,
@@ -33,6 +24,7 @@ import {
 } from './core';
 import { gistSync } from './gistSync';
 import { accountManagement } from './manage';
+import { resumeSaving } from './resumes';
 import type { GithubIdentity, UserRecord } from './store';
 
 export { SESSION_TTL, UNVERIFIED_TTL, type SignedIn } from './core';
@@ -59,6 +51,7 @@ const make = Effect.gen(function* () {
   } = yield* accountsCore;
   const management = yield* accountManagement;
   const gist = yield* gistSync;
+  const { saveResume, setSource } = yield* resumeSaving(gist);
   const signUp = Effect.fn('Accounts.signUp')(function* (input: {
     email: string;
     password: string;
@@ -131,39 +124,6 @@ const make = Effect.gen(function* () {
       existing ?? (yield* store.createGithubUser(identity, username));
     yield* gist.keepGrant(user.id, identity);
     return yield* startSession(user);
-  });
-
-  const saveResume = Effect.fn('Accounts.saveResume')(function* (
-    userId: string,
-    resume: unknown
-  ) {
-    if (!Predicate.isObject(resume) || Array.isArray(resume)) {
-      return yield* new InvalidResume({
-        message: 'A resume is one JSON object, starting with {.',
-      });
-    }
-    // A gist that feeds the page stays the source of truth: write to it.
-    const account = yield* store.account(userId);
-    if (account?.source === 'gist' && account.user.githubLogin) {
-      return yield* gist.saveToGist(userId, resume);
-    }
-    yield* store.saveStoredResume(userId, resume);
-  });
-
-  const setSource = Effect.fn('Accounts.setSource')(function* (
-    userId: string,
-    source: 'gist' | 'stored'
-  ) {
-    const account = yield* store.account(userId);
-    if (source === 'gist' && !account?.user.githubLogin) {
-      return yield* new InvalidResume({
-        message: 'Link GitHub first to use your gist.',
-      });
-    }
-    if (source === 'stored' && !account?.hasStoredResume) {
-      return yield* new InvalidResume({ message: 'Upload a resume first.' });
-    }
-    yield* store.setSource(userId, source);
   });
 
   return {

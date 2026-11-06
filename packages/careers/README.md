@@ -25,3 +25,12 @@ The career graph behind Pathways → Tree, and the data it stands on:
 
 `families.ts` is the one role-family vocabulary everything above shares.
 Contracts are in `services.ts`; each live layer is in its own file.
+
+**Speed.** Two model steps stand behind a graph: the resume's reading and
+the jobs' fits (`@repo/jobs`, judged per resume version). Both start when a
+resume is saved (`ResumeSaved` in `@repo/accounts`, any route) or the
+dashboard opens (`CareerGraphs.prepare`), so the graph is usually ready
+before Pathways is opened. A graph runs them at once and waits up to its
+`wait` (the dashboard 5s, MCP 40s); what isn't ready comes back `pending`,
+with `waitingFor` naming it, and the rest from the skills list and
+embeddings. Building the graph itself takes about 3ms.

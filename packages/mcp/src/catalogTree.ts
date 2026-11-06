@@ -6,7 +6,7 @@ export const treeTools: ReadonlyArray<McpToolInfo> = [
     name: 'get_career_tree',
     group: 'jobs',
     description:
-      'Your career graph (Pathways → Tree) in words: your strengths; the best-fitting jobs you show every required skill for, and those one skill away (with the skill); the missing skills that would open the most jobs; where people in your current role went next (destination ids for create_pathway_plan); and your plan’s progress.',
+      'Your career graph (Pathways → Tree) in words: your strengths; the best-fitting jobs you show every required skill for, and those one skill away (with the skill); the missing skills that would open the most jobs; where people in your current role went next (destination ids for create_pathway_plan); and your plan’s progress. The first time after a resume changes, a model reads it and judges today’s jobs against it (usually under a minute, started when the resume is saved; this waits up to 40 seconds for it). If it isn’t done, pending is true, waitingFor says which ("resume", "jobs"), and the rest comes from your skills list and embeddings. Call again shortly for the full tree.',
     writes: false,
   },
   {

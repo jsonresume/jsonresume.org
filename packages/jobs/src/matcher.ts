@@ -1,8 +1,8 @@
 import { JobMark, NoResume, type JobMatch } from '@repo/api';
-import { Clock, Context, Effect, Layer, Schema } from 'effect';
+import { Clock, Context, Duration, Effect, Layer, Schema } from 'effect';
 import { SqlClient } from 'effect/sql';
 import { resumeCountry } from './eligibility';
-import { fitStore } from './fits';
+import { FIT_WAIT, fitStore } from './fits';
 import { resumeLevel } from './level';
 import { markQueries } from './marks';
 import { matchData } from './matchData';
@@ -58,12 +58,15 @@ const make = Effect.gen(function* () {
 
   /**
    * Every open job the candidate could take, best fit first, with the
-   * user's marks. The model judges jobs only for a signed-in user: a
-   * resume sent to the public API is ranked by embeddings alone.
+   * user's marks, and whether the model is still judging them (waited up
+   * to `wait`; jobs it hasn't judged yet are scored by embeddings). The
+   * model judges jobs only for a signed-in user: a resume sent to the
+   * public API is ranked by embeddings alone.
    */
-  const rank = Effect.fn('JobMatcher.rank')(function* (
+  const rankWithin = Effect.fn('JobMatcher.rank')(function* (
     resume: unknown,
-    userId?: string
+    userId: string | undefined,
+    wait: Duration.Input
   ) {
     const text = resumeText(resume);
     if (text.length < 20) return yield* new NoResume();
@@ -89,24 +92,30 @@ const make = Effect.gen(function* () {
       query,
       resumeCountry(resume)
     );
-    const fits = userId
+    const { fits, judging } = userId
       ? yield* fitsFor(
           resume,
           retrieved.slice(0, POOL).map(({ job }) => ({
             id: job.row.id,
             company: job.row.posting.company,
             text: job.text,
-          }))
+          })),
+          wait
         )
-      : new Map();
+      : { fits: new Map(), judging: false };
     const level = resumeLevel(resume, yield* Clock.currentTimeMillis);
-    return finish(
+    const ranked = finish(
       retrieved,
       fits,
       level,
       new Map(marks.map((m) => [m.job_id, m.state]))
     );
+    return { ranked, judging };
   });
+
+  /** Ranked, waiting for the model up to FIT_WAIT. */
+  const rank = (resume: unknown, userId?: string) =>
+    Effect.map(rankWithin(resume, userId, FIT_WAIT), (r) => r.ranked);
 
   /** The best MATCHES jobs for the dashboard. */
   const matches = (userId: string, resume: unknown) =>
@@ -124,5 +133,5 @@ const make = Effect.gen(function* () {
       )
     );
 
-  return { rank, matches, ...markQueries(sql) };
+  return { rank, rankWithin, matches, ...markQueries(sql) };
 });
