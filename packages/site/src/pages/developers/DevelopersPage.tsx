@@ -18,6 +18,7 @@ import { InlineMarkdown } from '../../InlineMarkdown';
 import { paths } from '../../links';
 import { SiteLink } from '../../SiteLink';
 import { NextSteps } from '../shared/NextSteps';
+import { BuiltWithApps, WorksWithBadge } from './BuiltWith';
 import * as l from '../shared/layout.css';
 
 const toc = [
@@ -25,6 +26,8 @@ const toc = [
   { id: 'scopes', label: 'Scopes' },
   { id: 'endpoints', label: 'Endpoints' },
   { id: 'notes', label: 'Good to know' },
+  { id: 'apps', label: 'Built with it' },
+  { id: 'badge', label: 'Badge' },
 ];
 
 /** /developers: OAuth for HR tools ("Sign in with JSON Resume"). */
@@ -131,6 +134,8 @@ export function DevelopersPage() {
                   ))}
                 </ul>
               </section>
+              <BuiltWithApps />
+              <WorksWithBadge />
             </div>
             <OnThisPage items={toc} />
           </div>
