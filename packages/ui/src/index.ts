@@ -290,6 +290,12 @@ export {
 // Feedback and status
 export { PageState, type PageStateProps } from './components/status/page-state';
 export {
+  ProgressSteps,
+  type ProgressStep,
+  type ProgressStepState,
+  type ProgressStepsProps,
+} from './components/status/progress-steps';
+export {
   ErrorBoundary,
   type ErrorBoundaryProps,
 } from './components/status/error-boundary';
@@ -395,6 +401,10 @@ export {
   TreeLegend,
   type TreeLegendProps,
 } from './components/viz/tree/tree-legend';
+export {
+  TreeMapSkeleton,
+  type TreeMapSkeletonProps,
+} from './components/viz/tree/tree-map-skeleton';
 export {
   spanView,
   type TreeMapEdge,

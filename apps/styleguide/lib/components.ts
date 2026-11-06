@@ -752,6 +752,27 @@ export const componentDocs: ComponentDoc[] = [
     ],
   },
   {
+    slug: 'progress-steps',
+    name: 'Progress steps',
+    group: 'Feedback',
+    summary:
+      'What a long wait is doing: each step done, under way or still to come. For work the system does; TaskList is for the person’s own steps.',
+    components: ['ProgressSteps'],
+    examples: [{ id: 'waiting', title: 'An import under way' }],
+    guidelines: {
+      do: [
+        'Name each step by what it does, and say how long the slow one usually takes.',
+        'Mark steps done as they finish, from what the server says, not a timer.',
+      ],
+      dont: ['Use it for a wait of a second or two: a Spinner is enough.'],
+    },
+    accessibility: [
+      'An ordered list; each step says its state in words ("Done: …", "Under way: …").',
+      'Put it in a live region (role="status") so finished steps are announced.',
+      'The under-way spinner stops for prefers-reduced-motion.',
+    ],
+  },
+  {
     slug: 'spinner',
     name: 'Spinner and Skeleton',
     group: 'Feedback',
@@ -1835,7 +1856,7 @@ export const componentDocs: ComponentDoc[] = [
     group: 'Data display',
     summary:
       'A whole graph as one pannable, zoomable map, each node above what it rests on. layoutTree places it (also on a server, from @jsonresume/ui/tree-layout); TreeMap draws it with WebGL2, or Canvas 2D.',
-    components: ['TreeMap', 'TreeLegend'],
+    components: ['TreeMap', 'TreeLegend', 'TreeMapSkeleton'],
     examples: [
       {
         id: 'skills',
@@ -1851,6 +1872,13 @@ export const componentDocs: ComponentDoc[] = [
           'When each row means something, pass levels to layoutTree. TreeLegend draws every tone as the map does.',
         block: true,
       },
+      {
+        id: 'loading',
+        title: 'While it loads',
+        description:
+          'TreeMapSkeleton holds the map’s shape, bottom band first, with what the wait is doing laid over it.',
+        block: true,
+      },
     ],
     guidelines: {
       do: [
@@ -1859,6 +1887,7 @@ export const componentDocs: ComponentDoc[] = [
         'Use focus and lit (treeCone) to trace what a node rests on.',
         'Pass levels when rows have fixed meanings, and name them with bandLabel.',
         'Put a TreeLegend beside the map saying what each tone means there.',
+        'While the data loads, show TreeMapSkeleton in the same box, saying honestly what it waits for.',
       ],
       dont: ['Use it for a handful of items; a list says more.'],
     },

@@ -1,6 +1,5 @@
 import { useAtomRefresh, useAtomSet, useAtomValue } from '@effect/atom-react';
 import {
-  Callout,
   EmptyState,
   SegmentedControl,
   Select,
@@ -20,6 +19,7 @@ import {
 import { Exit } from 'effect';
 import { AsyncResult } from 'effect/reactivity';
 import { useEffect, useMemo, useState } from 'react';
+import { GraphProgress } from './GraphProgress';
 import { mapModel, related } from './mapModel';
 import { NodePanel } from './NodePanel';
 import { Legend } from './Legend';
@@ -106,11 +106,7 @@ export function CareerArea({
           </Select>
         ) : null}
       </div>
-      {graph.pending ? (
-        <Callout tone="info" title="Still reading your resume">
-          The first look takes a minute; the tree fills in as it finishes.
-        </Callout>
-      ) : null}
+      {graph.pending ? <GraphProgress graph={graph} /> : null}
       <Legend />
       <TreeMap
         className={s.map}
