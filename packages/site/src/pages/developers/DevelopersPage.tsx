@@ -44,7 +44,11 @@ export function DevelopersPage() {
             </SiteLink>
           </Button>
         }
-        media={<CodeTabs label="Example" tabs={d.examples} />}
+        media={
+          <div className={l.heroPanel}>
+            <CodeTabs label="Example" tabs={d.examples} />
+          </div>
+        }
       />
       <Section spacing="lg">
         <Container>

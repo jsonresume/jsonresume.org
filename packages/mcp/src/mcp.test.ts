@@ -3,12 +3,14 @@ import { accountsStack } from '@repo/accounts/stack';
 import { PgAnalyticsStore } from '@repo/analytics/sql';
 import { Explore } from '@repo/explore';
 import { embedderFrom, JobBoard, JobMatcher } from '@repo/jobs';
+import { ProductEvents } from '@repo/posthog';
 import { Effect, Layer, ManagedRuntime } from 'effect';
 import { HttpRouter, HttpServer, HttpServerResponse } from 'effect/http';
 import { createHash } from 'node:crypto';
 import { afterEach, describe, expect, it } from 'vitest';
 import { prompts, tools } from './catalog';
 import { mcpRoutes } from './server';
+import { plainCareers } from '@repo/careers/testing';
 
 let dispose: (() => Promise<void>) | undefined;
 afterEach(() => dispose?.());
@@ -16,7 +18,15 @@ afterEach(() => dispose?.());
 /** The MCP endpoint over a fresh database, and an API key for a user with a resume. */
 const setup = async () => {
   const stack = accountsStack();
+  const events: Array<{ event: string; properties?: unknown }> = [];
   const services = Layer.mergeAll(
+    Layer.succeed(
+      ProductEvents,
+      ProductEvents.of({
+        capture: (_, event, properties) =>
+          Effect.sync(() => void events.push({ event, properties })),
+      })
+    ),
     ApiKeys.layer,
     OAuth.layer,
     PgAnalyticsStore,
@@ -26,6 +36,10 @@ const setup = async () => {
       Layer.provide(embedderFrom(() => new Float32Array(3072).fill(1)))
     )
   ).pipe(Layer.provideMerge(stack.layer));
+  const withCareers = Layer.merge(
+    services,
+    plainCareers.pipe(Layer.provide(services))
+  );
   // Another route on the same router, as the API is in the app.
   const neighbour = HttpRouter.add(
     'GET',
@@ -33,13 +47,13 @@ const setup = async () => {
     HttpServerResponse.text('open')
   );
   const app = Layer.mergeAll(mcpRoutes(), neighbour).pipe(
-    Layer.provide(services),
+    Layer.provide(withCareers),
     Layer.provide(HttpServer.layerServices)
   );
   // One MemoMap, so the endpoint and the setup share one database.
   const memoMap = Layer.makeMemoMapUnsafe();
   const web = HttpRouter.toWebHandler(app, { disableLogger: true, memoMap });
-  const runtime = ManagedRuntime.make(services, { memoMap });
+  const runtime = ManagedRuntime.make(withCareers, { memoMap });
   dispose = async () => {
     await web.dispose();
     await runtime.dispose();
@@ -82,7 +96,7 @@ const setup = async () => {
             redirectUri,
             verifier,
           });
-          return tokens.access_token;
+          return tokens.tokens.access_token;
         });
       return {
         key: made?.key ?? '',
@@ -93,7 +107,7 @@ const setup = async () => {
       };
     })
   );
-  return { handler: web.handler, ...key };
+  return { handler: web.handler, events, ...key };
 };
 
 /** A client speaking Streamable HTTP (2025-06-18) with the key. */
@@ -146,6 +160,17 @@ describe('the MCP server', () => {
     // Only /mcp: other routes on the router are not behind it.
     const other = await handler(new Request('http://x/neighbour'));
     expect(await other.text()).toBe('open');
+  });
+
+  it('reports which tool was called, and the tool still reads its request', async () => {
+    const { handler, key, events } = await setup();
+    const { call } = await connect(handler, key);
+    expect((await call('get_resume')).value).toMatchObject({
+      resume: { basics: { name: 'Ada' } },
+    });
+    expect(events).toEqual([
+      { event: 'mcp_tool_called', properties: { tool: 'get_resume' } },
+    ]);
   });
 
   it('lists every tool and prompt in the catalog, with hints', async () => {
@@ -206,6 +231,21 @@ describe('the MCP server', () => {
     expect(
       (await call('update_resume_section', { section: 'work', value: {} }))
         .isError
+    ).toBe(true);
+    // A save that adds schema problems is refused; the resume is kept.
+    const broken = await call('save_resume', {
+      resume: { basics: { email: 'not-an-email' } },
+    });
+    expect(broken.isError).toBe(true);
+    expect(JSON.stringify(broken.value)).toContain('basics › email');
+    expect((await call('get_resume')).value.resume.skills).toHaveLength(1);
+    expect(
+      (
+        await call('update_resume_section', {
+          section: 'work',
+          value: [{ startDate: 'last year' }],
+        })
+      ).isError
     ).toBe(true);
     expect((await call('set_theme', { slug: 'no-such-theme' })).isError).toBe(
       true
@@ -268,6 +308,10 @@ describe('the MCP server', () => {
       content: null,
     });
     expect(
+      (await call('export_resume', { format: 'pdf', theme: 'no-such-theme' }))
+        .isError
+    ).toBe(true);
+    expect(
       (await call('export_resume', { format: 'rendercv' })).value.content
     ).toContain('name: Ada');
     const listed = await call('set_explore_listing', { listed: false });
@@ -324,6 +368,14 @@ describe('the MCP server', () => {
     expect(secret).not.toBe(made.client_secret);
     await call('delete_oauth_app', { client_id: made.app.client_id });
     expect((await call('list_oauth_apps')).value.apps).toEqual([]);
+    // Gone, or never theirs: it says so rather than reporting success.
+    expect(
+      (await call('delete_oauth_app', { client_id: made.app.client_id }))
+        .isError
+    ).toBe(true);
+    expect(
+      (await call('disconnect_app', { client_id: 'jrc_nope' })).isError
+    ).toBe(true);
     const { client_id } = connected[0];
     await call('disconnect_app', { client_id });
     expect((await call('list_connected_apps')).value.apps).toEqual([]);

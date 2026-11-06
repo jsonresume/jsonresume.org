@@ -156,6 +156,9 @@ importers:
 
   apps/app:
     dependencies:
+      '@effect/ai-openai':
+        specifier: 4.0.6
+        version: 4.0.6(effect@4.0.6)
       '@effect/atom-react':
         specifier: 4.0.6
         version: 4.0.6(effect@4.0.6)(react@19.2.7)(scheduler@0.27.0)
@@ -186,6 +189,9 @@ importers:
       '@repo/auth-pages':
         specifier: workspace:^
         version: link:../../packages/auth-pages
+      '@repo/careers':
+        specifier: workspace:^
+        version: link:../../packages/careers
       '@repo/content':
         specifier: workspace:*
         version: link:../../packages/content
@@ -216,6 +222,9 @@ importers:
       '@repo/pathways':
         specifier: workspace:^
         version: link:../../packages/pathways
+      '@repo/posthog':
+        specifier: workspace:^
+        version: link:../../packages/posthog
       '@repo/profiles':
         specifier: workspace:^
         version: link:../../packages/profiles
@@ -1053,6 +1062,9 @@ importers:
       '@repo/api':
         specifier: workspace:*
         version: link:../api
+      '@repo/careers':
+        specifier: workspace:*
+        version: link:../careers
       '@repo/explore':
         specifier: workspace:*
         version: link:../explore
@@ -1062,6 +1074,9 @@ importers:
       '@repo/pathways':
         specifier: workspace:*
         version: link:../pathways
+      '@repo/posthog':
+        specifier: workspace:^
+        version: link:../posthog
       '@repo/profiles':
         specifier: workspace:*
         version: link:../profiles
@@ -1222,6 +1237,43 @@ importers:
       react-dom:
         specifier: 19.2.7
         version: 19.2.7(react@19.2.7)
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+
+  packages/careers:
+    dependencies:
+      '@effect/ai-openai':
+        specifier: 4.0.6
+        version: 4.0.6(effect@4.0.6)
+      '@repo/api':
+        specifier: workspace:*
+        version: link:../api
+      '@repo/jobs':
+        specifier: workspace:*
+        version: link:../jobs
+      effect:
+        specifier: 4.0.6
+        version: 4.0.6
+    devDependencies:
+      '@effect/sql-pglite':
+        specifier: 4.0.6
+        version: 4.0.6(effect@4.0.6)
+      '@repo/database':
+        specifier: workspace:*
+        version: link:../database
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      '@types/node':
+        specifier: ^20.19.24
+        version: 20.19.24
       tsconfig:
         specifier: workspace:*
         version: link:../tsconfig
@@ -1428,6 +1480,9 @@ importers:
       '@repo/job-board':
         specifier: workspace:^
         version: link:../job-board
+      '@repo/posthog':
+        specifier: workspace:^
+        version: link:../posthog
       '@repo/url-state':
         specifier: workspace:*
         version: link:../url-state
@@ -1810,6 +1865,9 @@ importers:
       '@repo/ats':
         specifier: workspace:*
         version: link:../ats
+      '@repo/careers':
+        specifier: workspace:*
+        version: link:../careers
       '@repo/explore':
         specifier: workspace:*
         version: link:../explore
@@ -1819,6 +1877,9 @@ importers:
       '@repo/jobs':
         specifier: workspace:*
         version: link:../jobs
+      '@repo/posthog':
+        specifier: workspace:^
+        version: link:../posthog
       '@repo/resume-editor':
         specifier: workspace:*
         version: link:../resume-editor
@@ -1884,6 +1945,9 @@ importers:
       '@repo/analytics':
         specifier: workspace:*
         version: link:../analytics
+      '@repo/careers':
+        specifier: workspace:*
+        version: link:../careers
       '@repo/database':
         specifier: workspace:*
         version: link:../database
@@ -1908,6 +1972,34 @@ importers:
       vite:
         specifier: ^6.4.3
         version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+
+  packages/posthog:
+    dependencies:
+      effect:
+        specifier: 4.0.6
+        version: 4.0.6
+      posthog-js:
+        specifier: ^1.447.2
+        version: 1.447.2(@types/react@19.2.2)(react@19.2.7)
+      posthog-node:
+        specifier: ^5.63.1
+        version: 5.63.1
+    devDependencies:
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      '@types/node':
+        specifier: ^20.19.24
+        version: 20.19.24
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -4255,6 +4347,9 @@ importers:
       '@codemirror/lang-json':
         specifier: ^6.0.2
         version: 6.0.2
+      '@codemirror/language':
+        specifier: ^6.13.1
+        version: 6.13.1
       '@codemirror/lint':
         specifier: ^6.9.7
         version: 6.9.7
@@ -4270,6 +4365,9 @@ importers:
       '@fontsource/ubuntu':
         specifier: ^5.3.0
         version: 5.3.0
+      '@lezer/highlight':
+        specifier: ^1.2.5
+        version: 1.2.5
       '@radix-ui/react-accordion':
         specifier: ^1.3.1
         version: 1.3.1(@types/react-dom@19.2.2)(@types/react@19.2.2)(react-dom@19.2.7)(react@19.2.7)
@@ -8971,6 +9069,27 @@ packages:
   /@polka/url@1.0.0-next.29:
     resolution: {integrity: sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww==}
     dev: true
+
+  /@posthog/browser-common@0.10.7:
+    resolution: {integrity: sha512-1V2SBu7gxVbroZk49YsCM++K9qy3qcrOaylemjkkTPvACgAGwm0Y/AkJN2eRZO1YME0FnagF6QKBaXmq3o0e8g==}
+    dependencies:
+      '@posthog/core': 1.64.1
+      '@posthog/types': 1.421.1
+      dompurify: 3.4.15
+      preact: 10.29.8
+    transitivePeerDependencies:
+      - preact-render-to-string
+    dev: false
+
+  /@posthog/core@1.64.1:
+    resolution: {integrity: sha512-2ziryOLWTxftHrTLhGYQzLHDpPughaRRi/+L1vhg4cQFHJfgTevMzAz21R1zR7MKFDkyJ9lCJD/K2jxIkGbnfg==}
+    dependencies:
+      '@posthog/types': 1.421.1
+    dev: false
+
+  /@posthog/types@1.421.1:
+    resolution: {integrity: sha512-475eg+usYiQ2m7GfxgylnBTVa3aPsEfaE6gQoDvg5nEkWAjcNiGm1u3WsESOErfrFFUajpYcxc71JCzfdoJ8gg==}
+    dev: false
 
   /@prisma/client@4.16.2(prisma@4.16.2):
     resolution: {integrity: sha512-qCoEyxv1ZrQ4bKy39GnylE8Zq31IRmm8bNhNbZx7bF2cU5aiCCnSa93J2imF88MBjn7J9eUQneNxUQVJdl/rPQ==}
@@ -17038,7 +17157,6 @@ packages:
   /core-js@3.49.0:
     resolution: {integrity: sha512-es1U2+YTtzpwkxVLwAFdSpaIMyQaq0PBgm3YD1W3Qpsn1NAmO3KSgZfu+oGSWVu6NvLHoHCV/aYcsE5wiB7ALg==}
     requiresBuild: true
-    dev: true
 
   /core-util-is@1.0.3:
     resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}
@@ -19438,6 +19556,10 @@ packages:
     dependencies:
       classnames: 2.5.1
       core-js: 3.46.0
+    dev: false
+
+  /fflate@0.4.9:
+    resolution: {integrity: sha512-zdxgIEddhfsyCaWpJ2SdXEP8ZMrKJ6+5jl4OupODcywU0IhRk6gdXuVGcPICyfx2H97hVK7xmJtRLPjkxAX8Vw==}
     dev: false
 
   /fflate@0.8.3:
@@ -25422,6 +25544,48 @@ packages:
     dependencies:
       xtend: 4.0.2
 
+  /posthog-js@1.447.2(@types/react@19.2.2)(react@19.2.7):
+    resolution: {integrity: sha512-zO/Y6S9KA88PQOS95G/BJNmal2WiNttWc+SRxsmPFTFh8b6ztNW4/+CeCvC/9bh6O52yvsHU7K18u+fYjOpebw==}
+    peerDependencies:
+      '@types/react': '>=16.8.0'
+      react: 19.2.7
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      react:
+        optional: true
+    dependencies:
+      '@posthog/browser-common': 0.10.7
+      '@posthog/core': 1.64.1
+      '@posthog/types': 1.421.1
+      '@types/react': 19.2.2
+      core-js: 3.49.0
+      dompurify: 3.4.15
+      fflate: 0.4.9
+      preact: 10.29.8
+      query-selector-shadow-dom: 1.0.1
+      react: 19.2.7
+      web-vitals: 6.2.3
+      web-vitals-soft-navs: /web-vitals@6.2.1
+    transitivePeerDependencies:
+      - preact-render-to-string
+    dev: false
+
+  /posthog-node@5.63.1:
+    resolution: {integrity: sha512-CwJ1JEbFYtXYf8rctJdQy8S61bGNenqf1lBd5xw9z6MGMlfRwtWRrs96D3I3yV5MzKPctyGp0wPtYSTECBcLbQ==}
+    engines: {node: ^20.20.0 || >=22.22.0}
+    peerDependencies:
+      '@opentelemetry/api': ^1.2.0
+      rxjs: ^7.0.0
+    peerDependenciesMeta:
+      '@opentelemetry/api':
+        optional: true
+      rxjs:
+        optional: true
+    dependencies:
+      '@posthog/core': 1.64.1
+    dev: false
+
   /preact-render-to-string@6.5.11(preact@10.24.3):
     resolution: {integrity: sha512-ubnauqoGczeGISiOh6RjX0/cdaF8v/oDXIjO85XALCQjwQP+SB4RDXXtvZ6yTYSjG+PC1QRP2AhPgCEsM2EvUw==}
     peerDependencies:
@@ -25436,6 +25600,15 @@ packages:
 
   /preact@10.29.2:
     resolution: {integrity: sha512-7tNmwg/7mzzAoB/8kSg6Hl37JraAZw3Z3A0JSY7VXlZwo82Xn0G7wKbNNs2qoF4ZEEsQGTwDAroNdqKs1ofJxQ==}
+    dev: false
+
+  /preact@10.29.8:
+    resolution: {integrity: sha512-ej2aVZ+vZ8WO7tvlQWRM9N63A0KzF9q4mWJfDUHgYaIofWY9hu74QdnQrjoPMmZi2/nZ5gN0bJCQF49xQqx09Q==}
+    peerDependencies:
+      preact-render-to-string: '>=5'
+    peerDependenciesMeta:
+      preact-render-to-string:
+        optional: true
     dev: false
 
   /prelude-ls@1.2.1:
@@ -25834,6 +26007,10 @@ packages:
 
   /quansync@0.2.11:
     resolution: {integrity: sha512-AifT7QEbW9Nri4tAwR5M/uzpBuqfZf+zwaEM/QkzEjj7NBuFD2rBuy0K3dE+8wltbezDV7JMA0WfnCPYRSYbXA==}
+    dev: false
+
+  /query-selector-shadow-dom@1.0.1:
+    resolution: {integrity: sha512-lT5yCqEBgfoMYpf3F2xQRK7zEr1rhIIZuceDK6+xRkJQ4NMbHTwXqk4NkwDwQMNqXgG9r9fyHnzwNVs6zV5KRw==}
     dev: false
 
   /querystring@0.2.0:
@@ -29724,6 +29901,14 @@ packages:
 
   /web-vitals@2.1.4:
     resolution: {integrity: sha512-sVWcwhU5mX6crfI5Vd2dC4qchyTqxV8URinzt25XqVh+bHEPGH4C3NPrNionCP7Obx59wrYEbNlw4Z8sjALzZg==}
+    dev: false
+
+  /web-vitals@6.2.1:
+    resolution: {integrity: sha512-rLcLXA2sx6+9dE88NHFubwTtGxpK4yYBLj6qHPdFoCaLr0cXGb4efOqtKLlm4loGA4OEKHIQKMKzZkKyOh5ctw==}
+    dev: false
+
+  /web-vitals@6.2.3:
+    resolution: {integrity: sha512-Dmy+vdO1UPMqXiAtZSNayhl4f794Bxfd94W4HIj2HlYtczEQfEOon969memlcpcHrTuOKLa5baFjX7WbgmOq+A==}
     dev: false
 
   /webidl-conversions@3.0.1:

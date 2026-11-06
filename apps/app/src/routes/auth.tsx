@@ -66,6 +66,7 @@ const AuthorizeSearch = (search: Record<string, unknown>) => ({
   codeChallengeMethod: text(search['code_challenge_method']),
   scope: text(search['scope']),
   state: text(search['state']),
+  nonce: text(search['nonce']),
 });
 
 /** /oauth/authorize: the user lets an app in (an MCP client, an HR tool). */

@@ -10,6 +10,7 @@ import {
 import { PgAccountStore } from '@repo/accounts/sql';
 import { Analytics } from '@repo/analytics';
 import { PgAnalyticsStore } from '@repo/analytics/sql';
+import { CareersLive } from '@repo/careers';
 import { Explore } from '@repo/explore';
 import { JobBoard, JobMatcher, OpenAiJobs } from '@repo/jobs';
 import { Copilot } from '@repo/pathways';
@@ -18,6 +19,7 @@ import { ResumePdf } from '@repo/resume-pdf';
 import { PgProfileStore } from '@repo/profiles/sql';
 import { Layer } from 'effect';
 import type { SqlClient } from 'effect/sql';
+import { ProductEvents } from '@repo/posthog';
 
 /**
  * Every service the server uses, over one database. Build it once and share
@@ -51,8 +53,14 @@ export const appServices = <E>(
       )
     )
   );
-  // Pathways' copilot uses every MCP tool, so everything above.
-  return Layer.mergeAll(Copilot.layer, ResumePdf.layer).pipe(
-    Layer.provideMerge(accounts)
+  // The career graph: on the matcher, with OpenAI's embeddings for skills.
+  const careers = CareersLive.pipe(
+    Layer.provide(Layer.mergeAll(stores, OpenAiJobs, database))
   );
+  // Pathways' copilot uses every MCP tool, so everything above.
+  return Layer.mergeAll(
+    Copilot.layer,
+    ResumePdf.layer,
+    ProductEvents.layer
+  ).pipe(Layer.provideMerge(Layer.merge(accounts, careers)));
 };

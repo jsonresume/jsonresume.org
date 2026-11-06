@@ -28,12 +28,19 @@ const Tokens = Schema.Struct({
   expires_in: Schema.Number,
   refresh_token: Schema.String,
   scope: Schema.String,
+  /** OpenID Connect, with the openid scope: a JWT signed with a key from /jwks. */
+  id_token: Schema.optional(Schema.String),
+});
+
+/** RFC 7517: the public keys that sign ID tokens. */
+const Jwks = Schema.Struct({
+  keys: Schema.Array(Schema.Record(Schema.String, Schema.Unknown)),
 });
 
 /**
  * OAuth 2.1 for MCP clients (claude.ai, ChatGPT and other agents) and apps
  * people register (HR tools): dynamic registration (RFC 7591), tokens,
- * revocation. Clients call these directly, with no session; apps with a
+ * revocation, ID-token keys. Clients call these directly, with no session; apps with a
  * secret send it as Basic auth or client_secret. Discovery is at /.well-known.
  */
 export class OAuthApi extends HttpApiGroup.make('oauth')
@@ -77,6 +84,7 @@ export class OAuthApi extends HttpApiGroup.make('oauth')
       success: Schema.Struct({}),
       error: OAuthError,
     }),
+    HttpApiEndpoint.get('jwks', '/jwks', { success: Jwks }),
     /** For the consent page: who is asking, for what, if the redirect is theirs. */
     HttpApiEndpoint.get('client', '/client', {
       query: {
@@ -109,6 +117,8 @@ export class OAuthConsentApi extends HttpApiGroup.make('oauthConsent')
         code_challenge: Schema.optional(Schema.String),
         scope: Schema.optional(Schema.String),
         state: Schema.optional(Schema.String),
+        /** OpenID Connect: returned in the ID token. */
+        nonce: Schema.optional(Schema.String),
         approve: Schema.Boolean,
       }),
       /** Where to send the browser: the client, with a code or an error. */

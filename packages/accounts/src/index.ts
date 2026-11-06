@@ -21,3 +21,4 @@ export { OAuth } from './oauth';
 export { MAX_APPS, type OAuthAppInput, type OAuthAppRecord } from './oauthApps';
 export type { OAuthClient } from './oauthClients';
 export { OAuthFailure, SCOPE as OAUTH_SCOPE } from './oauthUris';
+export { atHash } from './oidcKeys';

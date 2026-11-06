@@ -1,10 +1,12 @@
 import { ApiKeys, OAuth } from '@repo/accounts';
 import { allows } from '@repo/api';
-import { Effect, Layer } from 'effect';
+import { tracker, type ProductEventName } from '@repo/posthog';
+import { Effect, Layer, Option, Schema } from 'effect';
 import { McpProtocol, McpServer } from 'effect/ai';
 import { HttpRouter, HttpServerRequest, HttpServerResponse } from 'effect/http';
 import { AccountHandlers, AccountToolkit } from './accountTools';
 import { AppHandlers, AppToolkit } from './appTools';
+import { TreeHandlers, TreeToolkit } from './treeTools';
 import { McpCaller } from './context';
 import { ExploreHandlers, ExploreToolkit } from './exploreTools';
 import { ExportHandlers, ExportToolkit } from './exportTools';
@@ -29,6 +31,31 @@ const unauthorized = (site: string, message: string) =>
     }
   );
 
+const ToolCall = Schema.fromJsonString(
+  Schema.Struct({
+    method: Schema.Literal('tools/call'),
+    params: Schema.Struct({ name: Schema.String }),
+  })
+);
+
+type Track = (
+  id: string,
+  event: ProductEventName,
+  properties: { tool: string }
+) => Effect.Effect<void>;
+
+/** Which tool a request calls, if it calls one (the body is read once, cached). */
+const toolCalled = (track: Track, userId: string) =>
+  Effect.gen(function* () {
+    const request = yield* HttpServerRequest.HttpServerRequest;
+    if (request.method !== 'POST') return;
+    const call = Schema.decodeUnknownOption(ToolCall)(yield* request.text);
+    if (Option.isSome(call))
+      yield* track(userId, 'mcp_tool_called', {
+        tool: call.value.params.name,
+      });
+  }).pipe(Effect.ignore);
+
 /**
  * Every request needs a Bearer token: an API key (jr_…) or, from OAuth, an
  * access token. Tools see the user as McpCaller.
@@ -38,6 +65,7 @@ const authentication = (site: string) =>
     Effect.gen(function* () {
       const keys = yield* ApiKeys;
       const oauth = yield* OAuth;
+      const track = yield* tracker;
       return (httpEffect) =>
         Effect.gen(function* () {
           const request = yield* HttpServerRequest.HttpServerRequest;
@@ -60,6 +88,7 @@ const authentication = (site: string) =>
                 );
           if (!user)
             return unauthorized(site, 'That token is not valid (any more)');
+          yield* toolCalled(track, user.id);
           return yield* Effect.provideService(httpEffect, McpCaller, user);
         });
     })
@@ -78,6 +107,7 @@ export const mcpRoutes = (site: string = SITE) =>
     McpServer.toolkit(ExploreToolkit).pipe(Layer.provide(ExploreHandlers)),
     McpServer.toolkit(JobToolkit).pipe(Layer.provide(JobHandlers)),
     McpServer.toolkit(AppToolkit).pipe(Layer.provide(AppHandlers)),
+    McpServer.toolkit(TreeToolkit).pipe(Layer.provide(TreeHandlers)),
     Prompts
   ).pipe(
     Layer.provideMerge(

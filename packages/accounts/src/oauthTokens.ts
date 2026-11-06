@@ -4,7 +4,10 @@ import { hashToken, newToken } from './crypto';
 import type { clientQueries } from './oauthClients';
 import * as O from './oauthUris';
 
-/** Tokens for a client: from a code, from a refresh token, and revoked. */
+/**
+ * Tokens for a client: from a code, from a refresh token, and revoked. Each
+ * grant also says whose tokens they are, for an OpenID Connect ID token.
+ */
 export const tokenQueries = (
   sql: SqlClient.SqlClient,
   clients: ReturnType<typeof clientQueries>
@@ -12,7 +15,12 @@ export const tokenQueries = (
   const at = (ms: number) =>
     Effect.map(Clock.currentTimeMillis, (now) => new Date(now + ms));
 
-  const issueTokens = (clientId: string, userId: string, scope: string) =>
+  const issueTokens = (
+    clientId: string,
+    userId: string,
+    scope: string,
+    nonce: string | null = null
+  ) =>
     Effect.gen(function* () {
       const access = `jro_${newToken()}`;
       const refresh = `jrr_${newToken()}`;
@@ -25,11 +33,14 @@ export const tokenQueries = (
                 ${yield* at(O.ACCESS_TTL)}, ${yield* at(O.REFRESH_TTL)})
       `.pipe(Effect.orDie);
       return {
-        access_token: access,
-        token_type: 'Bearer',
-        expires_in: O.ACCESS_TTL / 1000,
-        refresh_token: refresh,
-        scope,
+        tokens: {
+          access_token: access,
+          token_type: 'Bearer',
+          expires_in: O.ACCESS_TTL / 1000,
+          refresh_token: refresh,
+          scope,
+        },
+        grant: { clientId, userId, scope, nonce },
       };
     });
 
@@ -50,11 +61,12 @@ export const tokenQueries = (
       redirect_uri: string;
       code_challenge: string | null;
       scope: string;
+      nonce: string | null;
     }>`
       DELETE FROM app.oauth_codes WHERE code_hash = ${hashToken(
         input.code
       )} AND expires_at > now()
-      RETURNING client_id, user_id, redirect_uri, code_challenge, scope
+      RETURNING client_id, user_id, redirect_uri, code_challenge, scope, nonce
     `.pipe(Effect.orDie);
     const invalid = O.fail(
       'invalid_grant',
@@ -71,7 +83,7 @@ export const tokenQueries = (
       if (!input.verifier || !O.pkceMatches(input.verifier, row.code_challenge))
         return yield* invalid;
     }
-    return yield* issueTokens(row.client_id, row.user_id, row.scope);
+    return yield* issueTokens(row.client_id, row.user_id, row.scope, row.nonce);
   });
 
   /** A refresh token is used once: it is replaced with a new pair. */

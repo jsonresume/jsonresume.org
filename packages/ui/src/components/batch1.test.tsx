@@ -154,25 +154,40 @@ describe('navigation', () => {
 
   it('paginates with links or callbacks', async () => {
     const onPageChange = vi.fn();
+    // Two lists render, one for room and one for a narrow column; CSS shows one.
+    const lists = () => {
+      const [wide, narrow] = [...document.querySelectorAll('nav ul')];
+      if (!(wide instanceof HTMLElement) || !(narrow instanceof HTMLElement))
+        throw new Error('expected both page lists');
+      return { wide: within(wide), narrow: within(narrow) };
+    };
     const { rerender, container } = render(
       <Pagination page={2} pageCount={5} href={(p) => `?page=${p}`} />
     );
-    expect(screen.getByRole('link', { name: 'Page 2' })).toHaveAttribute(
+    expect(lists().wide.getByRole('link', { name: 'Page 2' })).toHaveAttribute(
       'aria-current',
       'page'
     );
-    expect(screen.getByRole('link', { name: 'Next' })).toHaveAttribute(
+    expect(lists().wide.getByRole('link', { name: 'Next' })).toHaveAttribute(
       'href',
       '?page=3'
     );
     expect(await axeViolations(container)).toEqual([]);
+    rerender(<Pagination page={3} pageCount={9} onPageChange={onPageChange} />);
+    // Narrow: only the current page between the first and last.
+    expect(
+      lists()
+        .narrow.getAllByRole('button')
+        .map((b) => b.textContent)
+    ).toEqual(['‹', '1', '2', '3', '9', '›']);
     rerender(<Pagination page={1} pageCount={5} onPageChange={onPageChange} />);
-    expect(screen.getByRole('button', { name: 'Previous' })).toBeDisabled();
+    const { wide } = lists();
+    expect(wide.getByRole('button', { name: 'Previous' })).toBeDisabled();
     // Page 1 of 5 shows 1, 2, …, 5.
     expect(
-      screen.queryByRole('button', { name: 'Page 3' })
+      wide.queryByRole('button', { name: 'Page 3' })
     ).not.toBeInTheDocument();
-    await userEvent.click(screen.getByRole('button', { name: 'Page 2' }));
+    await userEvent.click(wide.getByRole('button', { name: 'Page 2' }));
     expect(onPageChange).toHaveBeenCalledWith(2);
   });
 

@@ -1,4 +1,4 @@
-import { base } from '@jsonresume/ui';
+import { base, RouteProgress } from '@jsonresume/ui';
 import type { ExploreResults, Job, JobBoard } from '@repo/api';
 import type { ResumeProblem } from '@repo/domain';
 import { authHintScript, NotFoundPage, SiteLayout } from '@repo/site';
@@ -9,9 +9,11 @@ import {
   HeadContent,
   Outlet,
   Scripts,
+  useRouterState,
 } from '@tanstack/react-router';
 
 function RootDocument() {
+  const loading = useRouterState({ select: (s) => s.status === 'pending' });
   return (
     // The pre-paint script marks <html> before React hydrates it.
     <html lang="en" data-theme="system" suppressHydrationWarning>
@@ -20,6 +22,7 @@ function RootDocument() {
         <HeadContent />
       </head>
       <body className={base}>
+        <RouteProgress active={loading} />
         <Outlet />
         <Scripts />
       </body>

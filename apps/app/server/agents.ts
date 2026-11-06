@@ -1,7 +1,7 @@
 import { authorizationServer, protectedResource } from '@repo/mcp';
 
 /**
- * OAuth discovery for MCP clients, at the paths RFC 9728 and 8414 name; and,
+ * OAuth discovery, at the paths RFC 9728 and 8414 and OpenID Connect name; and,
  * when OPENAI_APPS_CHALLENGE is set, the token proving to OpenAI that we own
  * the MCP server's domain (ChatGPT app submission).
  */
@@ -21,6 +21,10 @@ export const discoveryRoutes = (site: string, openAiChallenge?: string) => {
       path: '/.well-known/oauth-authorization-server',
       fetch: json(authorizationServer(site)),
     },
+    {
+      path: '/.well-known/openid-configuration',
+      fetch: json(authorizationServer(site)),
+    },
     ...(openAiChallenge
       ? [
           {
@@ -37,7 +41,8 @@ export const discoveryRoutes = (site: string, openAiChallenge?: string) => {
 
 /**
  * What OAuth clients call without a session: registration, tokens,
- * revocation, and what a token reads and writes (userinfo, the resume).
+ * revocation, ID-token keys, and what a token reads and writes (userinfo,
+ * the resume).
  */
 const oauthEndpoints = [
   '/api/oauth/register',
@@ -45,6 +50,7 @@ const oauthEndpoints = [
   '/api/oauth/revoke',
   '/api/oauth/userinfo',
   '/api/oauth/resume',
+  '/api/oauth/jwks',
 ];
 
 /** Paths other sites' clients call: MCP, OAuth, discovery. */

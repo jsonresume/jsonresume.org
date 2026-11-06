@@ -3,6 +3,8 @@ import { CurrentUser, JsonResumeApi, OAuthError } from '@repo/api';
 import { Effect } from 'effect';
 import { HttpServerRequest } from 'effect/http';
 import { HttpApiBuilder } from 'effect/http-api';
+import { oidc } from './oidc';
+import { track } from '@repo/posthog';
 
 const toError = (e: OAuthFailure) =>
   new OAuthError({ error: e.error, error_description: e.description });
@@ -44,13 +46,14 @@ const credentials = (form: { client_id?: string; client_secret?: string }) =>
     return { clientId: form.client_id, secret: form.client_secret };
   });
 
-/** Registration, tokens and revocation, called by clients themselves. */
+/** Registration, tokens (with OIDC ID tokens), revocation and the signing keys, called by clients themselves. */
 export const OAuthHandlers = HttpApiBuilder.group(
   JsonResumeApi,
   'oauth',
   (handlers) =>
     Effect.gen(function* () {
       const oauth = yield* OAuth;
+      const { withIdToken } = yield* oidc;
       return handlers.handleAll({
         register: ({ payload }) =>
           oauth
@@ -75,7 +78,9 @@ export const OAuthHandlers = HttpApiBuilder.group(
             if (!clientId) return yield* missing('client_id');
             if (p.grant_type === 'refresh_token') {
               if (!p.refresh_token) return yield* missing('refresh_token');
-              return yield* oauth.refresh(p.refresh_token, clientId, secret);
+              return yield* withIdToken(
+                yield* oauth.refresh(p.refresh_token, clientId, secret)
+              );
             }
             if (p.grant_type !== 'authorization_code') {
               return yield* new OAuthError({
@@ -84,13 +89,15 @@ export const OAuthHandlers = HttpApiBuilder.group(
               });
             }
             if (!p.code) return yield* missing('code');
-            return yield* oauth.exchangeCode({
-              code: p.code,
-              clientId,
-              secret,
-              redirectUri: p.redirect_uri ?? '',
-              verifier: p.code_verifier,
-            });
+            return yield* withIdToken(
+              yield* oauth.exchangeCode({
+                code: p.code,
+                clientId,
+                secret,
+                redirectUri: p.redirect_uri ?? '',
+                verifier: p.code_verifier,
+              })
+            );
           }).pipe(
             Effect.catchTag('OAuthFailure', (e) => Effect.fail(toError(e)))
           ),
@@ -103,6 +110,7 @@ export const OAuthHandlers = HttpApiBuilder.group(
           }).pipe(
             Effect.catchTag('OAuthFailure', (e) => Effect.fail(toError(e)))
           ),
+        jwks: () => Effect.succeed(oauth.jwks),
         client: ({ query }) =>
           oauth.check(query.client_id, query.redirect_uri, query.scope).pipe(
             Effect.map(({ client, scopes }) => ({
@@ -146,6 +154,11 @@ export const OAuthConsentHandlers = HttpApiBuilder.group(
               redirectUri: p.redirect_uri,
               codeChallenge: p.code_challenge,
               scope: p.scope,
+              nonce: p.nonce,
+            });
+            yield* track(user.id, 'oauth_access_granted', {
+              client_id: p.client_id,
+              scope: p.scope ?? null,
             });
             return {
               redirect: withQuery(p.redirect_uri, { code, state: p.state }),

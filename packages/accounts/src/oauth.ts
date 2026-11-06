@@ -7,6 +7,7 @@ import { appQueries } from './oauthApps';
 import { clientQueries, defaultScope } from './oauthClients';
 import { connectionQueries } from './oauthConnections';
 import { tokenQueries } from './oauthTokens';
+import { signingKey } from './oidcKeys';
 import * as O from './oauthUris';
 import { userQueries } from './sqlUsers';
 
@@ -29,6 +30,7 @@ const make = Effect.gen(function* () {
   const sql = yield* SqlClient.SqlClient;
   const users = yield* userQueries;
   const clients = clientQueries(sql);
+  const keys = yield* signingKey;
   const at = (ms: number) =>
     Effect.map(Clock.currentTimeMillis, (now) => new Date(now + ms));
 
@@ -84,6 +86,7 @@ const make = Effect.gen(function* () {
     redirectUri: string;
     codeChallenge: string | undefined;
     scope: string | undefined;
+    nonce?: string | undefined;
   }) {
     const { client, scopes } = yield* check(
       input.clientId,
@@ -96,13 +99,13 @@ const make = Effect.gen(function* () {
     }
     const code = newToken();
     yield* sql`
-      INSERT INTO app.oauth_codes (code_hash, client_id, user_id, redirect_uri, code_challenge, scope, expires_at)
+      INSERT INTO app.oauth_codes (code_hash, client_id, user_id, redirect_uri, code_challenge, scope, nonce, expires_at)
       VALUES (${hashToken(code)}, ${input.clientId}, ${input.userId}, ${
       input.redirectUri
     },
-              ${input.codeChallenge ?? null}, ${scopes.join(' ')}, ${yield* at(
-      O.CODE_TTL
-    )})
+              ${input.codeChallenge ?? null}, ${scopes.join(' ')}, ${
+      input.nonce ?? null
+    }, ${yield* at(O.CODE_TTL)})
     `.pipe(Effect.orDie);
     return code;
   });
@@ -130,6 +133,9 @@ const make = Effect.gen(function* () {
     check,
     issueCode,
     authenticate,
+    user: users.byId,
+    signJwt: keys.signJwt,
+    jwks: keys.jwks,
     ...tokenQueries(sql, clients),
     ...connectionQueries(sql),
     ...appQueries(sql),

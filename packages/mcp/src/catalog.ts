@@ -5,6 +5,7 @@
  * here too.
  */
 import { appTools } from './catalogApps';
+import { treeTools } from './catalogTree';
 
 export type McpGroup =
   | 'resume'
@@ -78,14 +79,14 @@ export const tools: ReadonlyArray<McpToolInfo> = [
     name: 'save_resume',
     group: 'resume',
     description:
-      'Replace your whole resume with a JSON Resume object. Saved to your gist when your page reads from it. Returns any schema problems found.',
+      'Replace your whole resume with a JSON Resume object. Saved to your gist when your page reads from it. Refused if it would add schema problems (they are listed); problems the resume already had are returned but don’t block it.',
     writes: true,
   },
   {
     name: 'update_resume_section',
     group: 'resume',
     description:
-      'Replace one top-level section of your resume (basics, work, volunteer, education, awards, certificates, publications, skills, languages, interests, references, projects or meta) and save it.',
+      'Replace one top-level section of your resume (basics, work, volunteer, education, awards, certificates, publications, skills, languages, interests, references, projects or meta) and save it. Refused, like save_resume, if it would add schema problems.',
     writes: true,
   },
   {
@@ -183,7 +184,7 @@ export const tools: ReadonlyArray<McpToolInfo> = [
     name: 'match_jobs',
     group: 'jobs',
     description:
-      'Open jobs ranked by how well they fit your resume (a 0 to 100 fit), nudged by the jobs you have marked. Same filters as search_jobs.',
+      'Open jobs ranked by how well they fit your resume: a 0 to 100 fit judged by AI against each post, with the post’s best role for you and why. Jobs you can’t take from where you live (basics.location.countryCode) are left out; low pay or a role below your level caps the fit; your marks nudge the order. Same filters as search_jobs.',
     writes: false,
   },
   {
@@ -215,6 +216,7 @@ export const tools: ReadonlyArray<McpToolInfo> = [
     writes: false,
   },
   ...appTools,
+  ...treeTools,
 ];
 
 /** Conversations the agent can start: the registry's AI tools, as prompts. */

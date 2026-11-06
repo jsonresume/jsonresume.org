@@ -1,8 +1,7 @@
-import { globalStyle, style } from '@vanilla-extract/css';
+import { style } from '@vanilla-extract/css';
 import { recipe } from '@vanilla-extract/recipes';
-import { focusRing, onBrandVars, transition } from '../../styles/shared.css';
+import { focusRing, onBrandVars } from '../../styles/shared.css';
 import { vars } from '../../tokens/contract.css';
-import { media } from '../../tokens/theme';
 
 const { font, color, space } = vars;
 
@@ -39,113 +38,6 @@ export const logoMark = style({
   width: '1.25em',
   height: '1.25em',
   flexShrink: 0,
-});
-
-/* SiteHeader: the yellow navigation band. */
-export const header = style({
-  position: 'relative',
-  backgroundColor: color.surface.brand,
-  color: color.text.onBrand,
-  vars: onBrandVars,
-});
-
-export const headerInner = style({
-  display: 'flex',
-  alignItems: 'center',
-  flexWrap: 'wrap',
-  minHeight: '4.25rem',
-  columnGap: space[6],
-});
-
-export const headerBrand = style({
-  marginInlineEnd: 'auto',
-  paddingBlock: space[4],
-});
-
-export const navToggle = style([
-  focusRing,
-  {
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '2.5rem',
-    height: '2.5rem',
-    border: 0,
-    borderRadius: vars.radius.md,
-    background: 'transparent',
-    color: 'inherit',
-    cursor: 'pointer',
-    '@media': { [media.lg]: { display: 'none' } },
-    selectors: { '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.06)' } },
-  },
-]);
-
-/* Navigation and actions share one region: collapsible below lg, inline
-   from lg up, where all eight links fit on one line. DOM order matches
-   visual order at every width. */
-export const navRegion = style({
-  display: 'none',
-  flexBasis: '100%',
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-  gap: space[3],
-  paddingBlockEnd: space[4],
-  selectors: { '&[data-open="true"]': { display: 'flex' } },
-  '@media': {
-    [media.lg]: {
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      flexBasis: 'auto',
-      gap: space[4],
-      paddingBlockEnd: 0,
-    },
-  },
-});
-
-export const nav = style({ alignSelf: 'stretch' });
-
-export const navList = style({
-  display: 'flex',
-  flexDirection: 'column',
-  margin: 0,
-  padding: 0,
-  listStyle: 'none',
-  '@media': { [media.lg]: { flexDirection: 'row', alignItems: 'center' } },
-});
-
-export const navLink = style([
-  focusRing,
-  {
-    display: 'block',
-    padding: `${space[3]} ${space[3]}`,
-    color: color.text.onBrand,
-    fontSize: font.size.md,
-    fontWeight: font.weight.semibold,
-    textDecoration: 'none',
-    borderRadius: vars.radius.sm,
-    transition: `color ${transition}`,
-    selectors: {
-      '&:hover': { color: color.action.primaryHover },
-      '&[aria-current="page"]': {
-        textDecoration: 'underline',
-        textDecorationThickness: '2px',
-        textUnderlineOffset: '6px',
-      },
-    },
-    whiteSpace: 'nowrap',
-    // Eight links share the bar from lg up: tighter until there is room.
-    '@media': {
-      [media.lg]: { paddingBlock: space[6], paddingInline: space[2] },
-      [media.xl]: { paddingInline: space[3] },
-    },
-  },
-]);
-
-export const headerActions = style({
-  display: 'flex',
-  alignItems: 'center',
-  gap: space[2],
 });
 
 export const pageHeaderActions = style({
@@ -216,39 +108,6 @@ export const featureText = style({
   fontSize: font.size.sm,
   lineHeight: font.lineHeight.normal,
 });
-
-/* SiteFooter: small, centered, uppercase links. */
-export const footer = style({
-  paddingBlock: space[12],
-  borderBlockStart: `1px solid ${color.border.subtle}`,
-  textAlign: 'center',
-  color: color.text.muted,
-  fontSize: font.size['2xs'],
-  letterSpacing: font.tracking.caps,
-  textTransform: 'uppercase',
-});
-
-export const footerLinks = style({
-  display: 'flex',
-  flexWrap: 'wrap',
-  justifyContent: 'center',
-  gap: `0 ${space[4]}`,
-  margin: 0,
-  padding: 0,
-  listStyle: 'none',
-});
-
-globalStyle(`${footer} a`, {
-  // Padded so each link is easy to tap, even in a wrapped row.
-  display: 'inline-block',
-  paddingBlock: space[2],
-  color: color.text.muted,
-  textDecoration: 'none',
-  transition: `color ${transition}`,
-});
-globalStyle(`${footer} a:hover`, { color: color.text.strong });
-
-export const footerNote = style({ marginBlockStart: space[4] });
 
 export const skipLink = style([
   focusRing,

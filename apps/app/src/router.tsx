@@ -1,3 +1,4 @@
+import { captureError } from '@repo/posthog/browser';
 import { createRouter } from '@tanstack/react-router';
 import { blogRoute, postRoute } from './routes/blog';
 import {
@@ -87,7 +88,19 @@ export const routeTree = rootRoute.addChildren([
  * as context), once in the browser.
  */
 export function createAppRouter(context: RouterContext = {}) {
-  return createRouter({ routeTree, context, scrollRestoration: true });
+  return createRouter({
+    routeTree,
+    context,
+    scrollRestoration: true,
+    // Pages fade into each other; a filter or search that only changes the
+    // query string updates in place.
+    defaultViewTransition: {
+      types: ({ pathChanged }) => (pathChanged ? ['page'] : false),
+    },
+    // A route that failed to load or render: the router caught it, so
+    // PostHog's own error capture never sees it.
+    defaultOnCatch: captureError,
+  });
 }
 
 export type AppRouter = ReturnType<typeof createAppRouter>;

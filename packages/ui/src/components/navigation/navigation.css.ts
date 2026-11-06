@@ -1,6 +1,7 @@
 import { style } from '@vanilla-extract/css';
 import { focusRing, transition } from '../../styles/shared.css';
 import { vars } from '../../tokens/contract.css';
+import { media } from '../../tokens/theme';
 
 const { color, font, space, radius } = vars;
 
@@ -41,9 +42,12 @@ export const tabLink = style([
 
 /* Pagination */
 
+/** Measures itself, so the page list fits wherever it is placed. */
+export const paginationNav = style({ containerType: 'inline-size' });
+
 export const pagination = style({
   display: 'flex',
-  flexWrap: 'wrap',
+  flexWrap: 'nowrap',
   alignItems: 'center',
   gap: space[1],
   margin: 0,
@@ -79,6 +83,15 @@ export const pageItem = style([
     },
   },
 ]);
+
+/** Every nearby page, where there is room for it. */
+export const pagesWide = style({
+  '@container': { '(max-width: 22rem)': { display: 'none' } },
+});
+/** Just the current page between the first and last, where there isn't. */
+export const pagesNarrow = style({
+  '@container': { '(min-width: 22.01rem)': { display: 'none' } },
+});
 
 export const pageGap = style({
   minWidth: '1.5rem',
@@ -146,11 +159,21 @@ export const accountHeader = style({
   lineHeight: font.lineHeight.snug,
 });
 
+/** A long username ends in an ellipsis instead of wrapping the top bar. */
+export const accountTriggerName = style({
+  maxWidth: '8rem',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+  '@media': { [media.md]: { maxWidth: '14rem' } },
+});
+
 export const accountName = style({
   color: color.text.strong,
   fontWeight: font.weight.semibold,
 });
 export const accountEmail = style({
   color: color.text.muted,
+  overflowWrap: 'anywhere',
   fontSize: font.size.xs,
 });

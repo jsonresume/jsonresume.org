@@ -1,0 +1,28 @@
+{
+  "name": "@repo/posthog",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Product analytics in PostHog: the cookie-free browser client, server-side events, and the /ingest proxy",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./browser": "./src/browser.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts"
+  },
+  "dependencies": {
+    "effect": "4.0.6",
+    "posthog-js": "^1.447.2",
+    "posthog-node": "^5.63.1"
+  },
+  "devDependencies": {
+    "@repo/eslint-config-custom": "workspace:*",
+    "@types/node": "^20.19.24",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.6"
+  }
+}

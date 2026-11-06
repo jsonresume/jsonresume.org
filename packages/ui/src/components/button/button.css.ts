@@ -25,8 +25,13 @@ export const button = recipe({
       whiteSpace: 'nowrap',
       cursor: 'pointer',
       userSelect: 'none',
-      transition: `background-color ${transition}, border-color ${transition}, color ${transition}`,
+      WebkitTapHighlightColor: 'transparent',
+      transition: `background-color ${transition}, border-color ${transition}, color ${transition}, transform ${vars.motion.duration.fast} ${vars.motion.easing.out}`,
       selectors: {
+        // A press you can feel: the button gives a little under the finger.
+        '&:active:not(:disabled):not([aria-disabled="true"])': {
+          transform: 'scale(0.97)',
+        },
         '&:disabled:not([aria-busy="true"]), &[aria-disabled="true"]': {
           cursor: 'not-allowed',
           opacity: 0.5,

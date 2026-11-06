@@ -59,7 +59,7 @@ const toc = [
     label: `resume ${command.name}`,
   })),
   { id: 'options', label: 'Global options' },
-  { id: 'themes', label: 'Using themes' },
+  { id: 'using-themes', label: 'Using themes' },
 ];
 
 export function CliPage() {
@@ -77,7 +77,7 @@ export function CliPage() {
           </Button>
         }
         media={
-          <div className={s.installPanel}>
+          <div className={l.heroPanel}>
             <CodeTabs label="Install with" tabs={cli.install} />
             <p className={l.muted}>{cli.requirements}</p>
           </div>
@@ -147,11 +147,11 @@ export function CliPage() {
                 />
               </section>
               <section
-                id="themes"
+                id="using-themes"
                 className={s.command}
-                aria-labelledby="themes-title"
+                aria-labelledby="using-themes-title"
               >
-                <h2 id="themes-title" className={s.usage}>
+                <h2 id="using-themes-title" className={s.usage}>
                   Using themes
                 </h2>
                 <ul className={s.tips}>

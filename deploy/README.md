@@ -43,6 +43,12 @@ embeds them and groups reposts. Each run is a row in `app.job_runs`;
 when no run has succeeded for 26 hours. It replaced the registry's GitHub
 Action, which wrote to Supabase.
 
+Career moves: `jsonresume-career-moves.timer` runs
+`apps/app/scripts/refresh-career-moves.ts` (`@repo/careers` refreshMoves)
+weekly: it reads every public resume's job titles into role families (new
+titles with OpenAI, kept in `app.title_families`) and recounts where people
+go next into `app.career_moves`, for Pathways.
+
 Hostnames (Cloudflare proxied, `deploy/caddy/Caddyfile`): jsonresume.org is
 the site, with `/docs` proxied to GitHub Pages; www and beta redirect to it;
 registry.jsonresume.org is answered by the app with redirects (resumes to
@@ -59,6 +65,7 @@ journalctl -u jsonresume@app -f                      # logs
 sudo systemctl start jsonresume-backup               # backup now (also nightly, 03:00 UTC)
 sudo systemctl start jsonresume-jobs                 # jobs pipeline now (also every 2 hours)
 journalctl -u jsonresume-jobs                        # its runs; status at /api/jobs/status
+sudo systemctl start jsonresume-career-moves         # recount career moves now (also weekly)
 sudo deploy/scripts/cloudflare-ips.sh                # refresh Cloudflare ranges (ufw + Caddy)
 ```
 

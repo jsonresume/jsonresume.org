@@ -93,13 +93,28 @@ export const ResumeHandlers = ResumeToolkit.toLayer(
       const user = yield* caller;
       return { user, ...(yield* accounts.currentResume(user.id)) };
     });
+    /**
+     * Saves unless it adds schema problems the saved resume doesn't have:
+     * an agent's mistake then can't replace a good resume (or the gist).
+     * Problems already there don't block it, so they can be fixed in steps.
+     */
     const save = (resume: Record<string, unknown>) =>
       Effect.gen(function* () {
         const user = yield* caller;
+        const found = problems(resume);
+        const before = new Set(problems((yield* current).resume));
+        const added = found.filter((p) => !before.has(p));
+        if (added.length > 0) {
+          return yield* failWith(
+            `Not saved: it would add schema problems. Fix these and save again:\n${added.join(
+              '\n'
+            )}`
+          );
+        }
         yield* accounts
           .saveResume(user.id, resume)
           .pipe(Effect.mapError(saveError));
-        return { saved: true, problems: problems(resume) };
+        return { saved: true, problems: found };
       });
 
     return {

@@ -12,6 +12,7 @@ import { JobBoard, JobMatcher, toV1Job, v1Options, v1Select } from '@repo/jobs';
 import { Effect, Predicate, Schema } from 'effect';
 import { HttpApiBuilder } from 'effect/http-api';
 import { client } from './http';
+import { track } from '@repo/posthog';
 
 const notYet = (what: string) =>
   new V1NotYet({
@@ -72,6 +73,7 @@ export const V1Handlers = HttpApiBuilder.group(
                   })
               )
             );
+            yield* track(user.id, 'resume_saved', { via: 'api' });
             return { username: user.username, message: 'Resume updated' };
           }),
         jobs: ({ query }) =>
@@ -91,7 +93,17 @@ export const V1Handlers = HttpApiBuilder.group(
               .find(params.id)
               .pipe(Effect.mapError(() => noJob));
             const mark = yield* matcher.markOf(user.id, params.id);
-            return toV1Job({ row, cosine: 0, order: 0, score: 0, mark });
+            return toV1Job({
+              row,
+              cosine: 0,
+              order: 0,
+              score: 0,
+              mark,
+              eligible: 'unclear',
+              role: null,
+              why: null,
+              limits: [],
+            });
           }),
         mark: ({ params, payload }) =>
           Effect.gen(function* () {

@@ -16,6 +16,8 @@
     "@repo/accounts": "workspace:*",
     "@repo/analytics": "workspace:*",
     "@repo/api": "workspace:*",
+    "@repo/posthog": "workspace:^",
+    "@repo/careers": "workspace:*",
     "@repo/explore": "workspace:*",
     "@repo/jobs": "workspace:^",
     "@repo/pathways": "workspace:*",
