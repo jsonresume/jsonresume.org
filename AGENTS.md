@@ -59,7 +59,7 @@ package over growing an app.
 | `@repo/server`            | A Hono app factory: static files with cache rules, the 404 page, health, and the Effect `HttpApi` mounted at `/api`.                          |
 | `@repo/profiles`          | Who `/@username` belongs to (`docs/ACCOUNTS_AND_USERNAMES.md`): usernames, ghost profiles mirrored from GitHub gists, their Postgres store.   |
 | `@repo/resume-themes`     | Renders a resume with any gallery theme, loading theme packages on first use. Run by Node from source, never bundled (see its README).        |
-| `@repo/resume-formats`    | A resume as JSON, YAML or plain text.                                                                                                         |
+| `@repo/resume-formats`    | A resume as JSON, YAML, plain text, RenderCV, a Word document (.docx) or a QR code.                                                           |
 | `@repo/resume-host`       | Serves `/@username`: picks the theme or format and responds, or returns the problem for the app to explain.                                   |
 | `@repo/database`          | The app's Postgres: `PgLive` from `DATABASE_URL` and every migration (`app` schema); PGlite layers for tests and `pnpm dev`.                  |
 | `@repo/accounts`          | Accounts: email/password and GitHub sign-in, sessions, email verification, username claims; their Postgres store.                             |

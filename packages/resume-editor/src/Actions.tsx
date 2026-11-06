@@ -55,6 +55,7 @@ export function SaveBar(props: SaveProps) {
 /** What the saved page can be downloaded as (see @repo/resume-host). */
 const pageFormats = [
   { label: 'PDF', ext: 'pdf' },
+  { label: 'Word (.docx)', ext: 'docx' },
   { label: 'RenderCV (YAML)', ext: 'rendercv' },
   { label: 'Plain text', ext: 'txt' },
   { label: 'QR code to your page', ext: 'qr' },

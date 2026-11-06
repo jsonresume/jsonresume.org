@@ -79,6 +79,11 @@ export const rawFormats: {
     path: (u) => `${site}/@${u}.pdf`,
   },
   {
+    label: 'Word',
+    description: 'A .docx with real headings and lists, ready to edit.',
+    path: (u) => `${site}/@${u}.docx`,
+  },
+  {
     label: 'JSON',
     description: 'The data, as stored in your Gist.',
     path: (u) => `${site}/@${u}.json`,

@@ -18,6 +18,7 @@ export const Route = createLazyRoute('/_site/@{$handle}/timeline')({
         links={{
           page: resumeUrl(data.username),
           pdf: resumeUrl(data.username, 'pdf'),
+          docx: resumeUrl(data.username, 'docx'),
         }}
       />
     );

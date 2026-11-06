@@ -48,7 +48,7 @@ export const external = {
     'https://github.com/jsonresume/jsonresume.org/blob/master/CONTRIBUTING.md',
 } as const;
 
-/** A resume's page on this site; `extension` for json, yaml or txt. */
+/** A resume's page on this site; `extension` for pdf, docx, json and the rest. */
 export const resumeUrl = (username: string, extension?: string) =>
   extension ? `/@${username}.${extension}` : `/@${username}`;
 

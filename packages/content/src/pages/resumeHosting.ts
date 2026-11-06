@@ -68,13 +68,14 @@ export const problems: Record<
   }),
   'unknown-format': ({ extension = '' }) => ({
     title: `We don’t serve .${extension} files`,
-    body: 'A resume is available as a web page or a PDF, as JSON, YAML, plain text or RenderCV, and as a QR code that links to the page.',
+    body: 'A resume is available as a web page, a PDF or a Word document, as JSON, YAML, plain text or RenderCV, and as a QR code that links to the page.',
   }),
 };
 
 /** The other formats, linked from the page. */
 export const formats = [
   { label: 'PDF', extension: 'pdf' },
+  { label: 'Word', extension: 'docx' },
   { label: 'JSON', extension: 'json' },
   { label: 'YAML', extension: 'yaml' },
   { label: 'Plain text', extension: 'txt' },

@@ -26,6 +26,7 @@ const AccountInfo = Schema.Struct({
   links: Schema.Struct({
     page: Schema.String,
     pdf: Schema.String,
+    docx: Schema.String,
     timeline: Schema.String,
     json: Schema.String,
     yaml: Schema.String,
@@ -38,6 +39,7 @@ const AccountInfo = Schema.Struct({
 const links = (username: string) => ({
   page: `${SITE}/@${username}`,
   pdf: `${SITE}/@${username}.pdf`,
+  docx: `${SITE}/@${username}.docx`,
   timeline: `${SITE}/@${username}/timeline`,
   json: `${SITE}/@${username}.json`,
   yaml: `${SITE}/@${username}.yaml`,

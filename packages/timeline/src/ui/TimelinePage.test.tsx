@@ -17,7 +17,7 @@ describe('TimelinePage', () => {
         username="jane"
         timeline={toTimeline(resume, 'jane', today)}
         today={today}
-        links={{ page: '/@jane', pdf: '/@jane.pdf' }}
+        links={{ page: '/@jane', pdf: '/@jane.pdf', docx: '/@jane.docx' }}
       />
     );
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
@@ -26,6 +26,10 @@ describe('TimelinePage', () => {
     expect(screen.getByRole('link', { name: 'Download PDF' })).toHaveAttribute(
       'href',
       '/@jane.pdf'
+    );
+    expect(screen.getByRole('link', { name: 'Word (.docx)' })).toHaveAttribute(
+      'href',
+      '/@jane.docx'
     );
     expect(screen.getByText('Years working')).toBeInTheDocument();
     const list = screen.getByRole('list', { name: /timeline/ });

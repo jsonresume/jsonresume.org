@@ -42,7 +42,7 @@ Your account and everything in it are kept until you delete your account. Deleti
 
 ## Your choices
 
-- See and download your resume at any time (`/@username.pdf`, `.json`, `.yaml`, `.txt` or `.rendercv`), and edit it in the [editor](/dashboard/editor).
+- See and download your resume at any time (`/@username.pdf`, `.docx`, `.json`, `.yaml`, `.txt` or `.rendercv`), and edit it in the [editor](/dashboard/editor).
 - Take your resume out of [Explore](/explore), the public search of resumes, in [Settings](/dashboard/settings#explore). Your page stays public either way.
 - Disconnect apps and revoke API keys in [Settings](/dashboard/settings).
 - Revoke our GitHub access in your GitHub settings, under Applications.

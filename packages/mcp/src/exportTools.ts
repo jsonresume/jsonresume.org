@@ -33,6 +33,7 @@ const AtsReport = Schema.Struct({
 
 const ExportFormat = Schema.Literals([
   'pdf',
+  'docx',
   'json',
   'yaml',
   'txt',
@@ -106,7 +107,8 @@ export const ExportHandlers = ExportToolkit.toLayer(
           const url = `${SITE}/@${user.username}.${format}${
             query && format === 'pdf' ? `?${query}` : ''
           }`;
-          // Text comes back inline; the PDF and the QR code are files to open.
+          // Text comes back inline; the PDF, Word document and QR code are
+          // files to open.
           const content =
             isText(format) && Predicate.isObject(resume)
               ? formatResume(format, resume).body
