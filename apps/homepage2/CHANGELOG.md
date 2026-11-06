@@ -1,5 +1,13 @@
 # registry
 
+## 1.0.10
+
+### Patch Changes
+
+- Updated dependencies [77a952e]
+  - @jsonresume/schema@1.7.1
+  - @repo/theme-config@0.2.4
+
 ## 1.0.9
 
 ### Patch Changes
