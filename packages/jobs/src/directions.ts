@@ -1,6 +1,7 @@
 import type { Direction } from '@repo/api';
 import { Predicate } from 'effect';
 import type { Ranked } from './matcher';
+import { skillKey, skillName } from './skillNames';
 import { companyOf, toSummary } from './summary';
 
 /**
@@ -54,12 +55,11 @@ const FAMILIES: ReadonlyArray<[name: string, pattern: RegExp]> = [
 export const familyOf = (title: string): string =>
   FAMILIES.find(([, pattern]) => pattern.test(title))?.[0] ?? 'Other roles';
 
-const str = (v: unknown) =>
-  Predicate.isString(v) ? v.trim().toLowerCase() : '';
+const str = (v: unknown) => (Predicate.isString(v) ? v.trim() : '');
 const at = (o: unknown, key: string): unknown =>
   Predicate.isObject(o) ? (o as Record<string, unknown>)[key] : undefined;
 
-/** Every skill and keyword the resume names, lower-cased. */
+/** Every skill and keyword the resume names, by skill key (`skillKey`). */
 export const resumeSkills = (resume: unknown): Set<string> => {
   const skills = Array.isArray(at(resume, 'skills'))
     ? (at(resume, 'skills') as unknown[])
@@ -70,7 +70,7 @@ export const resumeSkills = (resume: unknown): Set<string> => {
       ? (at(s, 'keywords') as unknown[]).map(str)
       : []),
   ]);
-  return new Set(words.filter(Boolean));
+  return new Set(words.filter(Boolean).map(skillKey));
 };
 
 const median = (values: number[]) => {
@@ -103,8 +103,11 @@ export const careerDirections = (
       const demand = new Map<string, { label: string; count: number }>();
       for (const { row } of jobs) {
         for (const skill of row.posting.skills) {
-          const key = skill.name.toLowerCase();
-          const entry = demand.get(key) ?? { label: skill.name, count: 0 };
+          const key = skillKey(skill.name);
+          const entry = demand.get(key) ?? {
+            label: skillName(skill.name),
+            count: 0,
+          };
           demand.set(key, { ...entry, count: entry.count + 1 });
         }
       }

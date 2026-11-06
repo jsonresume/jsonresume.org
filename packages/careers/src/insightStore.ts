@@ -36,7 +36,7 @@ const Read = Schema.Struct({
   ),
   roles: Schema.Record(Schema.String, EntryRole),
 });
-const decodeRead = Schema.decodeUnknownOption(Read);
+export const decodeRead = Schema.decodeUnknownOption(Read);
 const decodeRows = <S extends Schema.Constraint>(schema: S) =>
   Schema.decodeUnknownEffect(Schema.Array(schema));
 

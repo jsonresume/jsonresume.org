@@ -5,9 +5,11 @@ import { SkillCatalog, type Skill } from './services';
 import { placeByMeaning } from './skillMeaning';
 import {
   fromBytes,
+  isKnownSkill,
   isSkillKey,
   shorten,
   skillKey,
+  skillName,
   toBytes,
 } from './skillNames';
 
@@ -21,10 +23,14 @@ const Vector = Schema.Struct({ ...Row.fields, embedding: Schema.Uint8Array });
 const rows = <S extends Schema.Constraint>(schema: S) =>
   Schema.decodeUnknownEffect(Schema.Array(schema));
 
+/** Names matched only exactly, never by meaning: known skills, and ones too short to mean much ("C", "R", "Go"). */
+const exactOnly = (key: string) => isKnownSkill(key) || key.length <= 2;
+
 /**
- * The shared skill vocabulary on Postgres. A name resolves by its alias,
- * then its key, then (with an Embedder) the nearest skill by meaning, else
- * becomes a new skill; every name it was seen as is kept as an alias.
+ * The shared skill vocabulary on Postgres. A name resolves by its key
+ * (`skillKey`), then an alias, then (with an Embedder) the nearest skill by
+ * meaning, else becomes a new skill under the name `skillName` gives it;
+ * every key it was seen as is kept as an alias.
  */
 export const SkillCatalogLive = Layer.effect(
   SkillCatalog,
@@ -64,24 +70,26 @@ export const SkillCatalogLive = Layer.effect(
           ),
       });
 
+    // By key first: an alias learned by meaning never outranks the skill
+    // a name exactly is.
     const lookUp = (keys: ReadonlyArray<string>) =>
       Effect.gen(function* () {
         const found = new Map<string, Skill>();
         if (keys.length === 0) return found;
+        const keyed = yield* sql`
+          SELECT id, key, name FROM app.skills WHERE key IN ${sql.in(keys)}
+        `.pipe(Effect.flatMap(rows(Row)), Effect.orDie);
+        for (const r of keyed) found.set(r.key, r);
+        const rest = keys.filter((k) => !found.has(k));
+        if (rest.length === 0) return found;
         const aliased = yield* sql`
           SELECT a.alias, s.id, s.key, s.name FROM app.skill_aliases a
           JOIN app.skills s ON s.id = a.skill_id WHERE a.alias IN ${sql.in(
-            keys
+            rest
           )}
         `.pipe(Effect.flatMap(rows(AliasRow)), Effect.orDie);
         for (const r of aliased)
           found.set(r.alias, { id: r.id, key: r.key, name: r.name });
-        const rest = keys.filter((k) => !found.has(k));
-        if (rest.length === 0) return found;
-        const keyed = yield* sql`
-          SELECT id, key, name FROM app.skills WHERE key IN ${sql.in(rest)}
-        `.pipe(Effect.flatMap(rows(Row)), Effect.orDie);
-        for (const r of keyed) found.set(r.key, r);
         return found;
       });
 
@@ -106,7 +114,7 @@ export const SkillCatalogLive = Layer.effect(
       const asked = new Map<string, string>();
       for (const name of names) {
         const key = skillKey(name);
-        if (isSkillKey(key) && !asked.has(key)) asked.set(key, name.trim());
+        if (isSkillKey(key) && !asked.has(key)) asked.set(key, skillName(name));
       }
       const keys = [...asked.keys()];
       const found = yield* lookUp(keys);
@@ -120,7 +128,8 @@ export const SkillCatalogLive = Layer.effect(
             const vector = vectors[i];
             return vector ? [{ key, vector }] : [];
           }),
-          [...(yield* stored), ...recent]
+          [...(yield* stored), ...recent],
+          exactOnly
         );
         for (const [k, s] of placed.known) found.set(k, s);
         if (placed.fresh.length > 0) {

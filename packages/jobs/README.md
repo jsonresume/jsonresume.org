@@ -14,6 +14,12 @@ Jobs from Hacker News "Who is hiring?" threads, server side.
   embedding of the resume, nudged toward jobs the user marked interested or
   applied and away from those marked not for me; and the marks themselves.
 
+**Skill names** (`skillKey`, `skillName`, the list in `skillAliases.ts`):
+one way to compare them, shared with `@repo/careers`. Case, hyphens,
+spacing and ".js" spellings fold away and known aliases ("ML", "k8s",
+"GCP") resolve to one key with one name to show; directions compare a
+resume's skills to what posts ask for by key.
+
 Vectors are float32s in a `bytea` and compared in memory: a few thousand
 jobs is a few milliseconds, and PGlite (tests, `pnpm dev`) has no pgvector.
 

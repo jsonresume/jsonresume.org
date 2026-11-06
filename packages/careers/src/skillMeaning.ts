@@ -27,14 +27,20 @@ const nearest = (v: Float32Array, pool: ReadonlyArray<Float32Array>) => {
 /**
  * New names placed by meaning: each is a known skill when one is alike
  * enough, else alike an earlier new name in the batch, else a new skill.
+ * Names `exact` picks are always new skills: "C" is never "C++".
  */
 export const placeByMeaning = (
   names: ReadonlyArray<{ key: string; vector: Float32Array }>,
-  known: ReadonlyArray<{ skill: Skill; vector: Float32Array }>
+  known: ReadonlyArray<{ skill: Skill; vector: Float32Array }>,
+  exact: (key: string) => boolean = () => false
 ): Placed => {
   const placed: Placed = { known: new Map(), twins: new Map(), fresh: [] };
   const knownVectors = known.map((k) => k.vector);
   for (const { key, vector } of names) {
+    if (exact(key)) {
+      placed.fresh.push({ key, vector });
+      continue;
+    }
     const old = known[nearest(vector, knownVectors)];
     if (old) {
       placed.known.set(key, old.skill);

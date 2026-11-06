@@ -32,6 +32,7 @@ export { monthOf, Snapshots } from './snapshots';
 export { graphDigest } from './graph/digest';
 export { CareerAiFromEnv, CareersLive } from './live';
 export { SkillCatalogLive } from './skills';
+export { mergeSkills } from './skillMerge';
 export { ResumeInsightsLive } from './resumeInsights';
 export { InsightReader, InsightReaderLive, ReadFailed } from './insightReader';
 export {

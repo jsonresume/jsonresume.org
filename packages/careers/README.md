@@ -3,7 +3,15 @@
 The career graph behind Pathways → Tree, and the data it stands on:
 
 - **Skills** (`app.skills`, `app.skill_aliases`): one vocabulary; names as
-  resumes and posts write them resolve to one skill (alias, then meaning).
+  resumes and posts write them resolve to one skill: by key (`skillKey`
+  from `@repo/jobs`: case, punctuation and known aliases folded, so "ML"
+  is "Machine Learning"), then a learned alias, then meaning. Each shows
+  its known name (`skillName`, from the one list in
+  `@repo/jobs/src/skillAliases.ts`), else the name as first written. Known
+  and very short names ("C", "R", "Go") are never matched by meaning.
+  `mergeSkills` (run by the jobs pipeline) folds skills stored under keys
+  that now read as one, moving their evidence and requirements, so a
+  change to the folding or the list needs no re-reading by a model.
 - **Resume insights** (`app.resume_insights`, `app.resume_evidence`): a model
   reads each resume version once: the evidence for each skill (with the
   resume's words), strengths, each entry's role family.
