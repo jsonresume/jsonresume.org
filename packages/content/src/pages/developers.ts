@@ -146,6 +146,8 @@ curl ${site}/api/oauth/token \\
 // version). No secret: register once and keep the client_id in Script Properties.
 // Redirect URI: https://script.google.com/macros/d/{SCRIPT_ID}/usercallback
 function getService() {
+  const clientId = PropertiesService.getScriptProperties()
+    .getProperty('JSONRESUME_CLIENT_ID');
   return OAuth2.createService('jsonresume')
     .setAuthorizationBaseUrl('${site}/oauth/authorize')
     .setTokenUrl('${site}/api/oauth/token')
