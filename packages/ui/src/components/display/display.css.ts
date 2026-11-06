@@ -220,8 +220,16 @@ export const card = recipe({
     },
     interactive: {
       true: {
-        transition: `border-color ${vars.motion.duration.base} ${vars.motion.easing.standard}`,
-        selectors: { '&:hover': { borderColor: color.border.strong } },
+        transition: `border-color ${vars.motion.duration.base} ${vars.motion.easing.standard}, box-shadow ${vars.motion.duration.base} ${vars.motion.easing.standard}`,
+        selectors: {
+          '&:hover': { borderColor: color.border.strong },
+          '&:active': { boxShadow: 'none' },
+        },
+        '@media': {
+          '(hover: hover)': {
+            selectors: { '&:hover': { boxShadow: vars.shadow.md } },
+          },
+        },
       },
     },
   },

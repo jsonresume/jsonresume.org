@@ -1,5 +1,6 @@
 import { keyframes, style } from '@vanilla-extract/css';
 import { focusRing, transition } from '../../styles/shared.css';
+import { fadeOut, sinkOut } from '../../styles/motion.css';
 import { vars } from '../../tokens/contract.css';
 import { media } from '../../tokens/theme';
 
@@ -19,6 +20,11 @@ export const overlay = style({
   zIndex: zIndex.overlay,
   backgroundColor: color.overlay,
   animation: `${fadeIn} ${motion.duration.base} ${motion.easing.out}`,
+  selectors: {
+    '&[data-state="closed"]': {
+      animation: `${fadeOut} ${motion.duration.fast} ${motion.easing.standard}`,
+    },
+  },
 });
 
 export const dialog = style({
@@ -39,7 +45,12 @@ export const dialog = style({
   color: color.text.default,
   boxShadow: shadow.lg,
   animation: `${rise} ${motion.duration.base} ${motion.easing.out}`,
-  selectors: { '&:focus': { outline: 'none' } },
+  selectors: {
+    '&:focus': { outline: 'none' },
+    '&[data-state="closed"]': {
+      animation: `${sinkOut} ${motion.duration.fast} ${motion.easing.standard}`,
+    },
+  },
 });
 
 export const dialogTitle = style({

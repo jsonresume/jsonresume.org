@@ -55,10 +55,22 @@ export const linkCard = style([
     backgroundColor: color.surface.raised,
     color: color.text.default,
     textDecoration: 'none',
-    transition: `border-color ${transition}, transform ${transition}`,
+    WebkitTapHighlightColor: 'transparent',
+    transition: `border-color ${transition}, transform ${transition}, box-shadow ${transition}`,
     selectors: {
       '&:hover': { borderColor: color.border.strong },
-      '&:active': { transform: 'translateY(1px)' },
+      '&:active': { transform: 'translateY(1px)', boxShadow: 'none' },
+    },
+    // With a mouse, the card lifts toward the pointer.
+    '@media': {
+      '(hover: hover)': {
+        selectors: {
+          '&:hover': {
+            transform: 'translateY(-1px)',
+            boxShadow: vars.shadow.md,
+          },
+        },
+      },
     },
   },
 ]);

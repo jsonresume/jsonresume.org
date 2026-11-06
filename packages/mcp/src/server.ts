@@ -5,6 +5,7 @@ import { McpProtocol, McpServer } from 'effect/ai';
 import { HttpRouter, HttpServerRequest, HttpServerResponse } from 'effect/http';
 import { AccountHandlers, AccountToolkit } from './accountTools';
 import { AppHandlers, AppToolkit } from './appTools';
+import { TreeHandlers, TreeToolkit } from './treeTools';
 import { McpCaller } from './context';
 import { ExploreHandlers, ExploreToolkit } from './exploreTools';
 import { ExportHandlers, ExportToolkit } from './exportTools';
@@ -78,6 +79,7 @@ export const mcpRoutes = (site: string = SITE) =>
     McpServer.toolkit(ExploreToolkit).pipe(Layer.provide(ExploreHandlers)),
     McpServer.toolkit(JobToolkit).pipe(Layer.provide(JobHandlers)),
     McpServer.toolkit(AppToolkit).pipe(Layer.provide(AppHandlers)),
+    McpServer.toolkit(TreeToolkit).pipe(Layer.provide(TreeHandlers)),
     Prompts
   ).pipe(
     Layer.provideMerge(

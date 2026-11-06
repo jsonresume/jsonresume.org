@@ -1,6 +1,7 @@
 import { globalStyle, keyframes, style } from '@vanilla-extract/css';
 import { recipe } from '@vanilla-extract/recipes';
 import { focusRing, transition } from '../../styles/shared.css';
+import { fadeOut, popOut, slideOut } from '../../styles/motion.css';
 import { vars } from '../../tokens/contract.css';
 
 const { color, font, space, radius, shadow, motion, zIndex } = vars;
@@ -26,7 +27,12 @@ export const surface = style({
   transformOrigin:
     'var(--radix-dropdown-menu-content-transform-origin, var(--radix-popover-content-transform-origin))',
   animation: `${pop} ${motion.duration.fast} ${motion.easing.out}`,
-  selectors: { '&:focus': { outline: 'none' } },
+  selectors: {
+    '&:focus': { outline: 'none' },
+    '&[data-state="closed"]': {
+      animation: `${popOut} ${motion.duration.fast} ${motion.easing.standard}`,
+    },
+  },
 });
 
 export const popover = style([surface, { padding: space[4] }]);
@@ -142,6 +148,11 @@ export const sheetOverlay = style({
   zIndex: zIndex.overlay,
   backgroundColor: color.overlay,
   animation: `${fadeIn} ${motion.duration.base} ${motion.easing.out}`,
+  selectors: {
+    '&[data-state="closed"]': {
+      animation: `${fadeOut} ${motion.duration.base} ${motion.easing.standard}`,
+    },
+  },
 });
 
 export const sheet = recipe({
@@ -155,7 +166,13 @@ export const sheet = recipe({
     boxShadow: shadow.lg,
     animationDuration: motion.duration.slow,
     animationTimingFunction: motion.easing.out,
-    selectors: { '&:focus': { outline: 'none' } },
+    selectors: {
+      '&:focus': { outline: 'none' },
+      '&[data-state="closed"]': {
+        animationDuration: motion.duration.base,
+        animationTimingFunction: motion.easing.standard,
+      },
+    },
   },
   variants: {
     side: {
@@ -164,6 +181,9 @@ export const sheet = recipe({
         insetInlineEnd: 0,
         width: 'min(28rem, 100vw)',
         animationName: slideIn.right,
+        selectors: {
+          '&[data-state="closed"]': { animationName: slideOut.right },
+        },
         borderInlineStart: `1px solid ${color.border.subtle}`,
       },
       left: {
@@ -171,6 +191,9 @@ export const sheet = recipe({
         insetInlineStart: 0,
         width: 'min(28rem, 100vw)',
         animationName: slideIn.left,
+        selectors: {
+          '&[data-state="closed"]': { animationName: slideOut.left },
+        },
         borderInlineEnd: `1px solid ${color.border.subtle}`,
       },
       bottom: {
@@ -178,6 +201,9 @@ export const sheet = recipe({
         insetBlockEnd: 0,
         maxHeight: '85vh',
         animationName: slideIn.bottom,
+        selectors: {
+          '&[data-state="closed"]': { animationName: slideOut.bottom },
+        },
         borderStartStartRadius: radius.lg,
         borderStartEndRadius: radius.lg,
       },

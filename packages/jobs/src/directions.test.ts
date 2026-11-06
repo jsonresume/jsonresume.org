@@ -24,6 +24,10 @@ const job = (
   order: score / 100,
   score,
   mark: null,
+  eligible: 'yes',
+  role: null,
+  why: null,
+  limits: [],
 });
 
 it('names kinds of role from titles, most specific first', () => {

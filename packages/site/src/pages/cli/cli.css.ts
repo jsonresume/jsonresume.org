@@ -3,15 +3,6 @@ import { style } from '@vanilla-extract/css';
 
 const { color, font, space, radius } = vars;
 
-export const installPanel = style({
-  display: 'grid',
-  gap: space[3],
-  padding: space[5],
-  borderRadius: radius.md,
-  backgroundColor: color.surface.raised,
-  boxShadow: vars.shadow.md,
-});
-
 export const command = style({
   display: 'grid',
   gridTemplateColumns: 'minmax(0, 1fr)',

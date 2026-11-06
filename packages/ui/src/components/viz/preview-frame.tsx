@@ -1,7 +1,7 @@
 'use client';
 
 import { assignInlineVars } from '@vanilla-extract/dynamic';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { cx } from '../../utils/cx';
 import { Spinner } from '../display/display';
 import * as s from './viz.css';
@@ -23,6 +23,11 @@ export interface PreviewFrameProps {
   allowScripts?: boolean;
 }
 
+// The sandbox already stops them; removed too, they don't log a blocked
+// script for every render.
+const withoutScripts = (html: string) =>
+  html.replace(/<script\b[\s\S]*?<\/script\s*>/gi, '');
+
 /**
  * A sandboxed live preview of a rendered resume, laid out at page width and
  * scaled to fit its container.
@@ -37,6 +42,11 @@ export function PreviewFrame({
   allowScripts = false,
 }: PreviewFrameProps) {
   const viewport = useRef<HTMLDivElement>(null);
+  const doc = useMemo(
+    () =>
+      srcDoc === undefined || allowScripts ? srcDoc : withoutScripts(srcDoc),
+    [srcDoc, allowScripts]
+  );
   const [scale, setScale] = useState(1);
   const [filled, setFilled] = useState(560);
   useEffect(() => {
@@ -71,7 +81,7 @@ export function PreviewFrame({
         className={cx(s.previewFrame, busy && s.previewBusy)}
         title={title}
         src={src}
-        srcDoc={srcDoc}
+        srcDoc={doc}
         sandbox={allowScripts ? 'allow-scripts allow-same-origin' : ''}
         width={pageWidth}
         height={(height === 'fill' ? filled : height) / scale}

@@ -22,6 +22,7 @@ import { fakeGithub } from '@repo/profiles/testing';
 import { ConfigProvider, Effect, Layer, Stream } from 'effect';
 import { HttpRouter, HttpServer } from 'effect/http';
 import { apiRoutes } from '../index';
+import { plainCareers } from '@repo/careers/testing';
 
 /**
  * The whole API as a web handler over a fresh in-memory Postgres, with
@@ -68,6 +69,7 @@ export function testServer() {
       Layer.provide(embedderFrom(() => new Float32Array(3072).fill(1)))
     )
   ).pipe(Layer.provideMerge(TestDatabase));
+  const careers = plainCareers.pipe(Layer.provide(stores));
   const profiles = Layer.mergeAll(Usernames.layer, Profiles.layer).pipe(
     Layer.provideMerge(Layer.mergeAll(github.layer(), stores))
   );
@@ -102,6 +104,7 @@ export function testServer() {
     Layer.provideMerge(config)
   );
   const app = apiRoutes('test').pipe(
+    Layer.provide(careers),
     Layer.provide(services),
     Layer.provide(HttpServer.layerServices)
   );

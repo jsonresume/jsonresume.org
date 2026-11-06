@@ -18,7 +18,11 @@ export default defineConfig({
     sourcemap: true,
     cssCodeSplit: false,
     lib: {
-      entry: { index: 'src/index.ts', 'tokens/index': 'src/tokens/index.ts' },
+      entry: {
+        index: 'src/index.ts',
+        'tokens/index': 'src/tokens/index.ts',
+        'tree-layout': 'src/tree-layout.ts',
+      },
       formats: ['es'],
     },
     rollupOptions: {
@@ -46,5 +50,7 @@ export default defineConfig({
     setupFiles: ['./vitest.setup.ts'],
     include: ['src/**/*.test.{ts,tsx}'],
     css: true,
+    // Interaction tests run slowly when the whole repo's tests run at once.
+    testTimeout: 20_000,
   },
 });

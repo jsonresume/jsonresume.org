@@ -72,10 +72,10 @@ export function AppShell({
             <SheetTrigger className={s.menuButton} aria-label="Open navigation">
               <MenuIcon />
             </SheetTrigger>
-            <SheetContent side="left">
+            <SheetContent side="left" className={s.sheet}>
               <SheetTitle className={visuallyHidden}>Navigation</SheetTitle>
               <div className={s.sheetPanel} onClick={closeOnLink}>
-                {brand}
+                <div className={s.sheetBrand}>{brand}</div>
                 <div className={s.sidebarNav}>{nav}</div>
                 {footer ? (
                   <div className={s.sidebarFooter}>{footer}</div>

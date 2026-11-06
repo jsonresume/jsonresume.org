@@ -35,19 +35,26 @@ export {
   type StackProps,
 } from './components/layout/layout';
 
+export {
+  RouteProgress,
+  type RouteProgressProps,
+} from './components/status/route-progress';
 // Site
 export {
   Feature,
   Logo,
   LogoMark,
   PageHeader,
-  SiteFooter,
   SkipLink,
   type FeatureProps,
   type LogoProps,
   type PageHeaderProps,
-  type SiteFooterProps,
 } from './components/site/site';
+export {
+  SiteFooter,
+  type SiteFooterGroup,
+  type SiteFooterProps,
+} from './components/site/site-footer';
 export { Hero, type HeroProps } from './components/site/hero';
 export {
   Step,
@@ -219,17 +226,19 @@ export { Banner, type BannerProps } from './components/banner/banner';
 // Navigation
 export {
   BackLink,
-  LoadMore,
-  Pagination,
   TabNav,
   TabNavLink,
-  pageWindow,
   type BackLinkProps,
-  type LoadMoreProps,
-  type PaginationProps,
   type TabNavLinkProps,
   type TabNavProps,
 } from './components/navigation/navigation';
+export {
+  LoadMore,
+  Pagination,
+  pageWindow,
+  type LoadMoreProps,
+  type PaginationProps,
+} from './components/navigation/pagination';
 export {
   AccountMenu,
   type AccountMenuProps,
@@ -381,6 +390,32 @@ export {
   PreviewFrame,
   type PreviewFrameProps,
 } from './components/viz/preview-frame';
+export { TreeMap } from './components/viz/tree/tree-map';
+export {
+  TreeLegend,
+  type TreeLegendProps,
+} from './components/viz/tree/tree-legend';
+export {
+  spanView,
+  type TreeMapEdge,
+  type TreeMapHandle,
+  type TreeMapNode,
+  type TreeMapProps,
+  type TreeSpanView,
+} from './components/viz/tree/types';
+export { TREE_TONES, type TreeTone } from './components/viz/tree/render-types';
+export type { TreeCamera, TreeViewport } from './components/viz/tree/scene';
+export {
+  layoutTree,
+  treeCone,
+  type PlacedEdge,
+  type PlacedNode,
+  type TreeBand,
+  type TreeEdgeStrength,
+  type TreeLayout,
+  type TreeLayoutEdge,
+  type TreeLayoutOptions,
+} from './tree-layout';
 
 // App: the signed-in, full-screen layout
 export { AppShell, type AppShellProps } from './components/app/app-shell';

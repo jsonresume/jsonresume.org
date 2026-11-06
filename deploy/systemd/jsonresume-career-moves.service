@@ -1,0 +1,30 @@
+# Career moves (@repo/careers): reads every public resume's job titles into
+# role families (new titles with OpenAI) and recounts where people go next
+# (app.career_moves), for Pathways. One run, started weekly by
+# jsonresume-career-moves.timer.
+#
+# Install: sudo cp deploy/systemd/jsonresume-career-moves.* /etc/systemd/system/
+#          sudo systemctl daemon-reload && sudo systemctl enable --now jsonresume-career-moves.timer
+# Run now: sudo systemctl start jsonresume-career-moves  (logs: journalctl -u jsonresume-career-moves)
+[Unit]
+Description=jsonresume.org career moves
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=deploy
+Group=deploy
+Environment=NODE_ENV=production HOME=/srv/jsonresume
+# OPENAI_API_KEY is in app.env; DATABASE_URL in postgres.env.
+EnvironmentFile=/etc/jsonresume/app.env
+EnvironmentFile=-/etc/jsonresume/postgres.env
+WorkingDirectory=/srv/jsonresume/app/current/apps/app
+ExecStart=/usr/bin/node dist/career-moves/refresh-career-moves.js
+# The first run reads every title (~10k); later ones only new titles.
+TimeoutStartSec=60min
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true

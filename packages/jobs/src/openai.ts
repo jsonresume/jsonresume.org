@@ -2,14 +2,15 @@ import { OpenAiClient } from '@effect/ai-openai';
 import { Config, Effect, Layer, Option } from 'effect';
 import { FetchHttpClient } from 'effect/http';
 import { Embedder, EmbedFailed } from './embedder';
+import { JobFitter } from './fitter';
 import { JobParser, ParseFailed } from './parser';
 
 const missing = 'OPENAI_API_KEY is not set';
 
 /**
- * The parser and embedder on OpenAI, with OPENAI_API_KEY. Without the key
- * (local development) they fail each call instead, so the rest of the app
- * still runs.
+ * The parser, embedder and fitter on OpenAI, with OPENAI_API_KEY. Without
+ * the key (local development) the parser and embedder fail each call
+ * instead and there is no fitter, so the rest of the app still runs.
  */
 export const OpenAiJobs = Layer.unwrap(
   Effect.gen(function* () {
@@ -31,7 +32,11 @@ export const OpenAiJobs = Layer.unwrap(
         )
       );
     }
-    return Layer.mergeAll(Embedder.layer, JobParser.layer).pipe(
+    return Layer.mergeAll(
+      Embedder.layer,
+      JobParser.layer,
+      JobFitter.layer
+    ).pipe(
       Layer.provide(OpenAiClient.layer({ apiKey: key.value })),
       Layer.provide(FetchHttpClient.layer)
     );

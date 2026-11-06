@@ -324,7 +324,7 @@ export const componentDocs: ComponentDoc[] = [
     name: 'Site header',
     group: 'Site',
     summary:
-      'The yellow navigation band. Links collapse behind a menu button on small screens.',
+      'The yellow navigation band. On small screens the links fold behind a menu button into a full-screen menu that grows down from the band.',
     components: ['SiteHeader', 'SiteHeaderLink'],
     examples: [{ id: 'default', title: 'Header', bleed: true }],
     guidelines: {
@@ -336,8 +336,11 @@ export const componentDocs: ComponentDoc[] = [
     },
     accessibility: [
       'Renders a <header> with a named <nav> landmark.',
-      'The menu button exposes aria-expanded and aria-controls.',
-      'active sets aria-current="page".',
+      'The menu button exposes aria-expanded and aria-controls, and turns from three lines into a cross.',
+      'While open, the page behind is held still, Tab stays inside the menu, and Escape closes it and returns focus to the button.',
+      'Following a link closes it; so does widening the window past the breakpoint.',
+      'active sets aria-current="page": a red dot in the menu, an underline in the band.',
+      'With reduced motion, the menu and its links appear without animating.',
     ],
   },
   {
@@ -510,10 +513,24 @@ export const componentDocs: ComponentDoc[] = [
     slug: 'site-footer',
     name: 'Site footer',
     group: 'Site',
-    summary: 'Small, centered, uppercase links.',
+    summary:
+      'The foot of the site: the brand and columns of links, or one small centred list.',
     components: ['SiteFooter'],
-    examples: [{ id: 'default', title: 'Footer', bleed: true }],
-    accessibility: ['Renders a <footer> landmark with a list of links.'],
+    examples: [
+      { id: 'columns', title: 'Columns', bleed: true },
+      { id: 'default', title: 'One list', bleed: true },
+    ],
+    guidelines: {
+      do: [
+        'Group links by what people come for; three or four groups.',
+        'Keep privacy and terms in legal, at the very bottom.',
+      ],
+      dont: ['Repeat every header link; the footer is for the rest.'],
+    },
+    accessibility: [
+      'Renders a <footer> landmark; each group is a list under an h2.',
+      'Links get a 40px tall target on touch screens.',
+    ],
   },
   {
     slug: 'field',
@@ -649,11 +666,24 @@ export const componentDocs: ComponentDoc[] = [
     slug: 'progress',
     name: 'Progress',
     group: 'Feedback',
-    summary: 'Determinate progress for uploads, imports and completeness.',
-    components: ['Progress'],
-    examples: [{ id: 'basic', title: 'Basic', block: true }],
+    summary:
+      'Determinate progress for uploads, imports and completeness; RouteProgress for a page on its way.',
+    components: ['Progress', 'RouteProgress'],
+    examples: [
+      { id: 'basic', title: 'Basic', block: true },
+      { id: 'route', title: 'Page loading' },
+    ],
+    guidelines: {
+      do: [
+        "Put one RouteProgress at the root, driven by the router's pending state.",
+      ],
+      dont: [
+        'Show RouteProgress for fast loads: it waits 150ms, so most navigations never see it.',
+      ],
+    },
     accessibility: [
       'role="progressbar" with a required label and aria-valuenow.',
+      'RouteProgress is decorative (aria-hidden): the arriving page, and the focus it moves, are the news.',
     ],
   },
   {
@@ -1026,6 +1056,7 @@ export const componentDocs: ComponentDoc[] = [
     accessibility: [
       'A named nav; the current page sets aria-current and every button is labelled ("Page 3", "Next").',
       'Load more announces the new count politely.',
+      'In a column narrower than 22rem it shows only the current page between the first and last; the wider list is display: none, so screen readers meet one list.',
     ],
   },
   {
@@ -1632,6 +1663,45 @@ export const componentDocs: ComponentDoc[] = [
     accessibility: [
       'The region is labelled and described; controls are labelled buttons.',
       'Node details update politely; make nodes focusable in the engine where possible.',
+    ],
+  },
+  {
+    slug: 'tree-map',
+    name: 'Tree map',
+    group: 'Data display',
+    summary:
+      'A whole graph as one pannable, zoomable map, each node above what it rests on. layoutTree places it (also on a server, from @jsonresume/ui/tree-layout); TreeMap draws it with WebGL2, or Canvas 2D.',
+    components: ['TreeMap', 'TreeLegend'],
+    examples: [
+      {
+        id: 'skills',
+        title: 'Skills, work and roles',
+        description:
+          'Zoom in for names, then details. Select a square to trace everything beneath it.',
+        block: true,
+      },
+      {
+        id: 'levels',
+        title: 'Fixed levels, with a key',
+        description:
+          'When each row means something, pass levels to layoutTree. TreeLegend draws every tone as the map does.',
+        block: true,
+      },
+    ],
+    guidelines: {
+      do: [
+        'Give its parent a height; it fills it.',
+        'Lay it out once, ideally on the server, and pass coordinates in.',
+        'Use focus and lit (treeCone) to trace what a node rests on.',
+        'Pass levels when rows have fixed meanings, and name them with bandLabel.',
+        'Put a TreeLegend beside the map saying what each tone means there.',
+      ],
+      dont: ['Use it for a handful of items; a list says more.'],
+    },
+    accessibility: [
+      'A focusable application region with a label; arrows pan, + and - zoom, 0 fits, [ and ] step down and up, Enter opens, Escape clears.',
+      'The selected node is announced politely; offer the same data as a list beside the map.',
+      'Colours come from the status tokens, light and dark; tones also differ in shape (fill, outline, hatch, corner).',
     ],
   },
 ];

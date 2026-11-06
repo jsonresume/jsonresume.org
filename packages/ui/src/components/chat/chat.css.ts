@@ -104,16 +104,44 @@ export const tool = style({
 
 export const toolSummary = style({
   display: 'flex',
-  alignItems: 'center',
-  gap: space[2],
+  flexWrap: 'wrap',
+  alignItems: 'baseline',
+  gap: `${space[1]} ${space[2]}`,
   padding: `${space[2]} ${space[3]}`,
-  cursor: 'pointer',
   color: color.text.default,
+  listStyle: 'none',
+  selectors: {
+    '&::-webkit-details-marker': { display: 'none' },
+    'summary&': { cursor: 'pointer' },
+    'summary&:focus-visible': {
+      outline: `2px solid ${color.focus}`,
+      outlineOffset: '-2px',
+      borderRadius: radius.md,
+    },
+  },
 });
 
 export const toolName = style({
   fontFamily: font.family.mono,
   color: color.text.strong,
+  overflowWrap: 'anywhere',
+});
+
+/** Status and the like: short words that never break. */
+export const toolMeta = style({
+  whiteSpace: 'nowrap',
+  color: color.text.muted,
+});
+
+/** Turns as the call opens: there is more inside. */
+export const toolChevron = style({
+  marginInlineStart: 'auto',
+  color: color.text.muted,
+  transition: `transform ${motion.duration.fast} ${motion.easing.standard}`,
+  selectors: { [`${tool}[open] &`]: { transform: 'rotate(90deg)' } },
+  '@media': {
+    '(prefers-reduced-motion: reduce)': { transition: 'none' },
+  },
 });
 
 export const toolBody = style({

@@ -59,6 +59,8 @@ jobs:
           pnpm --filter ats-validator test
           pnpm --filter @jsonresume/jsonresume-to-rendercv test
           pnpm --filter @jsonresume/ui test
+      - name: Run the new stack's tests (apps/app and every package it uses)
+        run: pnpm turbo test --filter=app... --concurrency=2
 
   dist-sync:
     # Theme packages commit a built dist/ and publish it as-is (changeset
