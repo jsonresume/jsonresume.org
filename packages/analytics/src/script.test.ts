@@ -88,6 +88,13 @@ describe('visitor details', () => {
     ]);
   });
 
+  it('names the tool behind a download, or Other', () => {
+    expect(browser('TalentMatch-Sourcing/1.0')).toBe('TalentMatch-Sourcing');
+    expect(browser('node')).toBe('node');
+    expect(browser('Mozilla/5.0 (Windows NT 10.0; Win64; x64)')).toBe('Other');
+    expect(browser('<script>/1')).toBe('Other');
+  });
+
   it('keeps only other sites as referrers', () => {
     expect(
       referrerHost('https://www.linkedin.com/in/x', 'jsonresume.org')

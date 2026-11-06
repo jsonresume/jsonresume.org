@@ -31,6 +31,18 @@ const overview = new Overview({
   devices: [{ label: 'desktop', value: 90 }],
   browsers: [{ label: 'Firefox', value: 60 }],
   themes: [{ label: 'elegant', value: 120 }],
+  downloaders: [{ label: 'TalentMatch-Sourcing', value: 6 }],
+  recentDownloads: [
+    {
+      viewedAt: new Date().toISOString(),
+      kind: 'json',
+      country: 'US',
+      device: 'desktop',
+      browser: 'TalentMatch-Sourcing',
+      referrer: null,
+      seconds: 0,
+    },
+  ],
   recent: [
     {
       viewedAt: new Date().toISOString(),
@@ -65,8 +77,9 @@ describe('overview panels', () => {
     expect(screen.getByText('120')).toBeInTheDocument();
     expect(screen.getByText('1m 15s')).toBeInTheDocument();
     expect(screen.getByText('64%')).toBeInTheDocument();
-    expect(screen.getByText(/Plus 6 reads/)).toBeInTheDocument();
-    expect(screen.getAllByText(/vs previous 7 days/)).toHaveLength(3);
+    expect(screen.getByText('Downloads')).toBeInTheDocument();
+    expect(screen.getByText('6')).toBeInTheDocument();
+    expect(screen.getAllByText(/vs previous 7 days/)).toHaveLength(4);
   });
 
   it('ranks sources, linking other sites, and names countries', () => {
@@ -77,6 +90,8 @@ describe('overview panels', () => {
     );
     expect(screen.getByText('Australia')).toBeInTheDocument();
     expect(screen.getByText('Desktop')).toBeInTheDocument();
+    expect(screen.getByText('Downloaded by')).toBeInTheDocument();
+    expect(screen.getByText('TalentMatch-Sourcing')).toBeInTheDocument();
   });
 
   it('lists recent views', () => {
@@ -86,6 +101,16 @@ describe('overview panels', () => {
     ).toBeInTheDocument();
     expect(screen.getByText('Mobile · Safari')).toBeInTheDocument();
     expect(screen.getByText('1m 35s')).toBeInTheDocument();
+  });
+
+  it('lists recent downloads apart, with the tool that made them', () => {
+    render(<RecentViews overview={overview} downloads />);
+    expect(
+      screen.getByRole('heading', { name: 'Recent downloads' })
+    ).toBeInTheDocument();
+    expect(screen.getByText('JSON')).toBeInTheDocument();
+    expect(screen.getByText('TalentMatch-Sourcing')).toBeInTheDocument();
+    expect(screen.queryByText('Read for')).toBeNull();
   });
 });
 

@@ -18,13 +18,15 @@ export function device(
   return 'desktop';
 }
 
+/** A browser by name; otherwise the tool's own name ("TalentMatch-Sourcing/1.0"). */
 export function browser(userAgent: string): string {
   if (/edg\//i.test(userAgent)) return 'Edge';
   if (/opr\/|opera/i.test(userAgent)) return 'Opera';
   if (/firefox|fxios/i.test(userAgent)) return 'Firefox';
   if (/chrome|crios|chromium/i.test(userAgent)) return 'Chrome';
   if (/safari/i.test(userAgent)) return 'Safari';
-  return 'Other';
+  const tool = /^([A-Za-z][\w.-]{1,39})(?:\/|\s|$)/.exec(userAgent)?.[1];
+  return tool && tool.toLowerCase() !== 'mozilla' ? tool : 'Other';
 }
 
 /**

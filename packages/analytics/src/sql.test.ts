@@ -38,7 +38,9 @@ describe('PgAnalyticsStore', () => {
         yield* store.recordView(
           view({ visitor: 'v2', referrer: 'linkedin.com', device: 'mobile' })
         );
-        yield* store.recordView(view({ kind: 'json' }));
+        yield* store.recordView(
+          view({ kind: 'json', browser: 'TalentMatch-Sourcing' })
+        );
         yield* store.recordView(view({ username: 'bea' }));
         // One view ten days ago: outside 7d, inside the previous 7d.
         const old = view({ visitor: 'v3' });
@@ -61,7 +63,14 @@ describe('PgAnalyticsStore', () => {
           { label: 'linkedin.com', value: 1 },
         ]);
         expect(week.devices[0]).toEqual({ label: 'desktop', value: 1 });
-        expect(week.recent).toHaveLength(3);
+        expect(week.recent.map((r) => r.kind)).toEqual(['page', 'page']);
+        expect(week.recentDownloads).toMatchObject([
+          { kind: 'json', browser: 'TalentMatch-Sourcing' },
+        ]);
+        expect(week.downloaders).toEqual([
+          { label: 'TalentMatch-Sourcing', value: 1 },
+        ]);
+        expect(week.browsers).toEqual([{ label: 'Firefox', value: 2 }]);
         expect((yield* store.overview('ada', '30d')).totals.views).toBe(3);
         expect((yield* store.overview('nobody', '90d')).daily).toHaveLength(90);
       })

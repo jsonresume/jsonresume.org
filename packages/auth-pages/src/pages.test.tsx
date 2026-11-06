@@ -102,3 +102,26 @@ describe('safeNext', () => {
     }
   });
 });
+
+describe('LocalHandoff', () => {
+  it('knows apps waiting on this computer from those on the web', async () => {
+    const { isLoopback } = await import('./LocalHandoff');
+    expect(isLoopback('http://localhost:64899/callback?code=x')).toBe(true);
+    expect(isLoopback('http://127.0.0.1:3000/cb')).toBe(true);
+    expect(isLoopback('http://[::1]:3000/cb')).toBe(true);
+    expect(isLoopback('https://claude.ai/api/mcp/auth_callback')).toBe(false);
+    expect(isLoopback('myapp://callback')).toBe(false);
+  });
+
+  it('offers the link here, and to run it on the computer the app is on', async () => {
+    const { LocalHandoff } = await import('./LocalHandoff');
+    const redirect = 'http://localhost:64899/callback?code=abc&state=s';
+    render(<LocalHandoff name="Claude Code" redirect={redirect} />);
+    expect(screen.getByRole('link', { name: 'Continue' })).toHaveAttribute(
+      'href',
+      redirect
+    );
+    expect(screen.getByText(`curl '${redirect}'`)).toBeInTheDocument();
+    expect(screen.getByText(/within 10 minutes/)).toBeInTheDocument();
+  });
+});

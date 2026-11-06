@@ -14,7 +14,7 @@ export const Totals = Schema.Struct({
   medianSeconds: Schema.Number,
   /** Average of how far down readers scrolled, 0 to 100. */
   readDepth: Schema.Number,
-  /** Requests for .json, .yaml and .txt. */
+  /** Downloads: requests for .json, .yaml and .txt. */
   dataReads: Schema.Number,
 });
 export type Totals = typeof Totals.Type;
@@ -52,7 +52,12 @@ export class Overview extends Schema.Class<Overview>('@repo/api/Overview')({
   devices: Breakdown,
   browsers: Breakdown,
   themes: Breakdown,
+  /** Downloads by the browser or tool that made them. */
+  downloaders: Breakdown,
+  /** The latest page views, newest first. */
   recent: Schema.Array(RecentView),
+  /** The latest downloads, newest first. */
+  recentDownloads: Schema.Array(RecentView),
 }) {}
 
 export class AnalyticsApi extends HttpApiGroup.make('analytics')
