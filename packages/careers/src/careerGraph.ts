@@ -110,7 +110,7 @@ const make = Effect.gen(function* () {
     models(userId, resume, Duration.zero).pipe(
       Effect.catchTag('NoResume', () => Effect.void),
       Effect.withSpan('Careers.prepare'),
-      Effect.ignoreCause({ log: true, message: 'Career prepare failed' }),
+      Effect.ignoreCause({ log: 'Warn', message: 'Career prepare failed' }),
       Effect.forkDetach,
       Effect.asVoid
     );
