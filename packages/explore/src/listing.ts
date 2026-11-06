@@ -118,19 +118,28 @@ export const toEntry = (row: Row): Entry | undefined => {
 
 const squash = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
 
+/** The editor's "Start from an example" (`@jsonresume/sample-data`), saved as is. */
+export const SAMPLE_KEYS = new Set([
+  'jane developer|full stack software engineer',
+]);
+
+export const templateKey = (name: string, label: string | null | undefined) =>
+  `${name.toLowerCase()}|${(label ?? '').toLowerCase()}`;
+
 /**
- * Drops copies of a template: when three or more resumes share a name and
- * headline (the schema's sample, "John Doe", someone's resume copied as a
- * start), only one whose username is that name stays.
+ * Drops copies of a template: our own example always; otherwise, when three
+ * or more resumes share a name and headline (the schema's sample, "John
+ * Doe", someone's resume copied as a start), only one whose username is that
+ * name stays.
  */
 export const dropTemplates = (all: ReadonlyArray<Entry>): Entry[] => {
-  const key = (e: Entry) =>
-    `${e.listing.name.toLowerCase()}|${(e.listing.label ?? '').toLowerCase()}`;
+  const key = (e: Entry) => templateKey(e.listing.name, e.listing.label);
   const counts = new Map<string, number>();
   for (const e of all) counts.set(key(e), (counts.get(key(e)) ?? 0) + 1);
   return all.filter(
     (e) =>
-      (counts.get(key(e)) ?? 0) < 3 ||
-      squash(e.listing.username) === squash(e.listing.name)
+      !SAMPLE_KEYS.has(key(e)) &&
+      ((counts.get(key(e)) ?? 0) < 3 ||
+        squash(e.listing.username) === squash(e.listing.name))
   );
 };

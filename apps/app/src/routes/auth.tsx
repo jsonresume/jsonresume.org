@@ -40,6 +40,7 @@ export const signUpRoute = createRoute({
 export const chooseUsernameRoute = createRoute({
   getParentRoute: () => siteRoute,
   path: paths.chooseUsername,
+  validateSearch: Search,
   head: head('Choose your username'),
 }).lazy(() => import('./auth.lazy').then((m) => m.ChooseUsernameRoute));
 
@@ -57,13 +58,16 @@ export const resetPasswordRoute = createRoute({
 }).lazy(() => import('./auth.lazy').then((m) => m.ResetPasswordRoute));
 
 const text = (v: unknown) => (Predicate.isString(v) ? v : undefined);
-/** The OAuth request, as an MCP client or a registered app sent it. */
+/**
+ * The OAuth request, as an MCP client or a registered app sent it. Keys keep
+ * their OAuth names: the router writes the result back into the URL.
+ */
 const AuthorizeSearch = (search: Record<string, unknown>) => ({
-  responseType: text(search['response_type']),
-  clientId: text(search['client_id']),
-  redirectUri: text(search['redirect_uri']),
-  codeChallenge: text(search['code_challenge']),
-  codeChallengeMethod: text(search['code_challenge_method']),
+  response_type: text(search['response_type']),
+  client_id: text(search['client_id']),
+  redirect_uri: text(search['redirect_uri']),
+  code_challenge: text(search['code_challenge']),
+  code_challenge_method: text(search['code_challenge_method']),
   scope: text(search['scope']),
   state: text(search['state']),
   nonce: text(search['nonce']),
