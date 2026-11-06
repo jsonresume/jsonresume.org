@@ -1,5 +1,11 @@
 <a id="1.0.0"></a>
 
+## 1.7.1
+
+### Patch Changes
+
+- 77a952e: Remove `basics.pronouns`. It was added by accident and was never meant to be part of the schema. Resumes that still include it stay valid, since the schema allows extra fields, but themes and tools shouldn't rely on it.
+
 ## 1.7.0
 
 ### Minor Changes

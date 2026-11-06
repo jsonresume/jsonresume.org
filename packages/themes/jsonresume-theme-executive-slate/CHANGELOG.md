@@ -1,5 +1,11 @@
 # jsonresume-theme-executive-slate
 
+## 1.1.10
+
+### Patch Changes
+
+- @jsonresume/core@0.3.7
+
 ## 1.1.9
 
 ### Patch Changes

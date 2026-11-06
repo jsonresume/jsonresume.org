@@ -1,6 +1,6 @@
 {
   "name": "@repo/project-directory",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "The community projects directory: search and category filters, Effect Atom state in the URL, and the directory components",
   "type": "module",

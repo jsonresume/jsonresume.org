@@ -1,6 +1,6 @@
 {
   "name": "@repo/resume-editor",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "The resume editor: a form generated from the JSON Resume schema, a checked JSON view, and a live preview in any theme",
   "type": "module",

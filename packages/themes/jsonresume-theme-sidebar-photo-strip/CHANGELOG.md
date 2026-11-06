@@ -1,5 +1,11 @@
 # jsonresume-theme-sidebar-photo-strip
 
+## 1.1.10
+
+### Patch Changes
+
+- @jsonresume/core@0.3.7
+
 ## 1.1.9
 
 ### Patch Changes

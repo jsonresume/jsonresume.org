@@ -1,6 +1,6 @@
 {
   "name": "@repo/pathways",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "Pathways: the career copilot, an agent on OpenAI with every MCP tool, streaming its replies",
   "type": "module",

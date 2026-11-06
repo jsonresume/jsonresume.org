@@ -1,5 +1,11 @@
 # @jsonresume/theme-metadata
 
+## 0.5.0
+
+### Minor Changes
+
+- f0a2be2: Ship TypeScript declarations for `THEME_METADATA`, `THEME_NAMES`, `getRandomTheme` and the `ThemeMetadata` type.
+
 ## 0.4.0
 
 ### Minor Changes
