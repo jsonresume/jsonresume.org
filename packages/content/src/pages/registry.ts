@@ -25,9 +25,9 @@ export const moved: { title: string; description: string; href: string }[] = [
     href: '/themes',
   },
   {
-    title: 'PDF, RenderCV and a QR code',
+    title: 'PDF, Word, RenderCV and a QR code',
     description:
-      'Add .pdf to your page’s address for a PDF in any theme (A4 or Letter), .rendercv for RenderCV, .qr for a code that links to it.',
+      'Add .pdf to your page’s address for a PDF in any theme (A4 or Letter), .docx for a Word document, .rendercv for RenderCV, .qr for a code that links to it.',
     href: '/@thomasdavis.pdf',
   },
   {

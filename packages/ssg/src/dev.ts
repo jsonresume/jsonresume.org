@@ -79,7 +79,8 @@ export async function startDevServer({
         // Each cookie on its own header line; joined they would not parse.
         const cookies = response.headers.getSetCookie();
         if (cookies.length > 0) res.setHeader('set-cookie', cookies);
-        res.end(await response.text());
+        // Bytes, not text: PDFs, QR codes and .docx files are binary.
+        res.end(Buffer.from(await response.arrayBuffer()));
       } catch (error) {
         if (error instanceof Error) vite.ssrFixStacktrace(error);
         res.statusCode = 500;

@@ -34,7 +34,7 @@ function Publish({ username }: { username: string }) {
           )}
           <Step title="Open your page">
             Your resume appears at <code>{resumePath(username)}</code>, in any
-            theme and as JSON, YAML or plain text.
+            theme, as a PDF or Word document, and as JSON, YAML or plain text.
           </Step>
         </Steps>
       </Container>

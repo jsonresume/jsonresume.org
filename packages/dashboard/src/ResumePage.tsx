@@ -24,6 +24,7 @@ import { StoredCard } from './StoredCard';
 
 const formats = [
   { label: 'PDF', ext: 'pdf' },
+  { label: 'Word (.docx)', ext: 'docx' },
   { label: 'JSON', ext: 'json' },
   { label: 'YAML', ext: 'yaml' },
   { label: 'Plain text', ext: 'txt' },

@@ -7,3 +7,4 @@ export {
 export { toText } from './text';
 export { qrPng } from './qr';
 export { toRenderCv } from './rendercv';
+export { docxContentType, toDocx } from './docx';

@@ -75,4 +75,18 @@ describe('PgAnalyticsStore', () => {
         expect((yield* store.overview('nobody', '90d')).daily).toHaveLength(90);
       })
     ));
+
+  it('counts Word downloads with the other downloads', () =>
+    run(
+      Effect.gen(function* () {
+        const store = yield* AnalyticsStore;
+        yield* store.recordView(
+          view({ username: 'cy', kind: 'docx', theme: null, browser: 'Chrome' })
+        );
+        const week = yield* store.overview('cy', '7d');
+        expect(week.totals.dataReads).toBe(1);
+        expect(week.totals.views).toBe(0);
+        expect(week.recentDownloads).toMatchObject([{ kind: 'docx' }]);
+      })
+    ));
 });

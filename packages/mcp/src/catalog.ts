@@ -114,7 +114,7 @@ export const tools: ReadonlyArray<McpToolInfo> = [
     name: 'export_resume',
     group: 'resume',
     description:
-      'Your resume as a file: a PDF of your page in any theme (A4 or Letter), JSON, YAML, plain text, RenderCV (for the rendercv CLI), or a QR code linking to your page. Returns its URL, and the text itself for the text formats.',
+      'Your resume as a file: a PDF of your page in any theme (A4 or Letter), a Word document (.docx, editable), JSON, YAML, plain text, RenderCV (for the rendercv CLI), or a QR code linking to your page. Returns its URL, and the text itself for the text formats.',
     writes: false,
   },
   {
@@ -135,14 +135,14 @@ export const tools: ReadonlyArray<McpToolInfo> = [
     name: 'get_resume_analytics',
     group: 'analytics',
     description:
-      'Views of your resume over the last 7, 30 or 90 days: visitors, time on page, read depth, day by day, and where readers come from (sites, countries, devices, themes). Also downloads as JSON, YAML or text, and which browsers or tools made them.',
+      'Views of your resume over the last 7, 30 or 90 days: visitors, time on page, read depth, day by day, and where readers come from (sites, countries, devices, themes). Also downloads as JSON, YAML, text or Word, and which browsers or tools made them.',
     writes: false,
   },
   {
     name: 'get_account',
     group: 'account',
     description:
-      'Your username, email, linked GitHub, where your resume comes from (gist or saved here), and your page’s links (page, PDF, timeline, JSON, YAML, text, RenderCV, QR code).',
+      'Your username, email, linked GitHub, where your resume comes from (gist or saved here), and your page’s links (page, PDF, Word, timeline, JSON, YAML, text, RenderCV, QR code).',
     writes: false,
   },
   {

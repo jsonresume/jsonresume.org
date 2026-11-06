@@ -21,7 +21,7 @@ const Day = Schema.Struct({
 });
 const Recent = Schema.Struct({
   viewed_at: Schema.Date,
-  kind: Schema.Literals(['page', 'json', 'yaml', 'txt']),
+  kind: Schema.Literals(['page', 'json', 'yaml', 'txt', 'docx']),
   country: Schema.NullOr(Schema.String),
   device: Schema.NullOr(Schema.String),
   browser: Schema.NullOr(Schema.String),
@@ -69,7 +69,7 @@ export const PgAnalyticsStore = Layer.effect(
       n - 1
     })`;
 
-    // Page views, or downloads (.json, .yaml, .txt).
+    // Page views, or downloads (.json, .yaml, .txt, .docx).
     const ofKind = (pages: boolean) =>
       pages ? sql`kind = 'page'` : sql`kind <> 'page'`;
 

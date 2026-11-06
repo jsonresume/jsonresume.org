@@ -25,6 +25,7 @@ const kindLabels: Record<TimelineKind, string> = {
 export interface TimelineLinks {
   page: string;
   pdf: string;
+  docx: string;
 }
 
 /**
@@ -67,6 +68,9 @@ export function TimelinePage({
             </Button>
             <Button asChild variant="secondary">
               <a href={links.pdf}>Download PDF</a>
+            </Button>
+            <Button asChild variant="secondary">
+              <a href={links.docx}>Word (.docx)</a>
             </Button>
           </>
         }

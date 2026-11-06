@@ -9,7 +9,7 @@ export const serverUrl = 'https://jsonresume.org/mcp';
 export const intro = {
   eyebrow: 'MCP',
   title: 'Your resume, in your agent',
-  lede: 'Connect ChatGPT, Claude, Cursor or any MCP client to jsonresume.org. Your agent can then read and rewrite your resume, check it against the schema and for tracking systems, export it as a PDF, change its theme, tell you who has been reading it, search other resumes and find jobs that fit, saving straight to your gist.',
+  lede: 'Connect ChatGPT, Claude, Cursor or any MCP client to jsonresume.org. Your agent can then read and rewrite your resume, check it against the schema and for tracking systems, export it as a PDF or Word document, change its theme, tell you who has been reading it, search other resumes and find jobs that fit, saving straight to your gist.',
 };
 
 export const auth = {

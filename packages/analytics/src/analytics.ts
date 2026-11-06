@@ -28,7 +28,7 @@ export const clientFrom = (
 export interface ViewInput {
   id: string;
   username: string;
-  kind: 'page' | 'json' | 'yaml' | 'txt';
+  kind: 'page' | 'json' | 'yaml' | 'txt' | 'docx';
   theme: string | null;
   referrer: string | null;
   width?: number;

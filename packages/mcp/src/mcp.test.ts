@@ -314,6 +314,10 @@ describe('the MCP server', () => {
     expect(
       (await call('export_resume', { format: 'rendercv' })).value.content
     ).toContain('name: Ada');
+    // Word is a file to open, like the PDF; the theme doesn't apply.
+    expect(
+      (await call('export_resume', { format: 'docx', theme: 'even' })).value
+    ).toEqual({ url: 'https://jsonresume.org/@ada.docx', content: null });
     const listed = await call('set_explore_listing', { listed: false });
     expect(listed.value).toEqual({ listed: false });
     expect(
@@ -321,6 +325,7 @@ describe('the MCP server', () => {
     ).toMatchObject({ total: 0, people: [] });
     expect((await call('get_account')).value.links).toMatchObject({
       pdf: 'https://jsonresume.org/@ada.pdf',
+      docx: 'https://jsonresume.org/@ada.docx',
       timeline: 'https://jsonresume.org/@ada/timeline',
     });
   });

@@ -38,7 +38,7 @@ export function Kpis({ overview }: { overview: Overview }) {
       <StatTile
         label="Downloads"
         value={count(totals.dataReads)}
-        note="As JSON, YAML or text, often by tools"
+        note="As JSON, YAML, text or Word, often by tools"
         {...delta(totals.dataReads, previous.dataReads)}
       />
     </Grid>

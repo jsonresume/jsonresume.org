@@ -10,7 +10,7 @@ import { withTracking } from '@repo/analytics';
 import { Effect, Random, Schema } from 'effect';
 import { externalizeFonts } from './fonts';
 import { headers, lookup, problem, redirect, respond } from './outcome';
-import { pdfResponse, qrResponse } from './print';
+import { docxResponse, pdfResponse, qrResponse } from './print';
 
 const decodeDocument = Schema.decodeUnknownOption(ResumeDocument);
 const decodeMeta = Schema.decodeUnknownOption(
@@ -23,8 +23,9 @@ const metaTheme = (doc: ResumeDocument) => {
 
 /**
  * Serve `/@name` (a themed page), `/@name.pdf` (that page printed), `/@name.qr`
- * (a QR code to it) or `/@name.json|yaml|txt|rendercv`. Undefined when
- * the path is not a handle, so the caller serves it as any other page.
+ * (a QR code to it), `/@name.docx` (a Word document) or
+ * `/@name.json|yaml|txt|rendercv`. Undefined when the path is not a
+ * handle, so the caller serves it as any other page.
  * Theme: ?theme=, then the resume's meta.theme, then elegant; ?theme=random
  * redirects to a random one. Other gist files with ?gistname=.
  */
@@ -35,7 +36,11 @@ export const resumeOutcome = Effect.fn('resumeOutcome')(function* (url: URL) {
   if (!handle.canonical)
     return redirect(url.pathname.toLowerCase() + url.search, 301);
   // A person follows these links; programs read the other formats.
-  const page = format === 'html' || format === 'pdf' || format === undefined;
+  const page =
+    format === 'html' ||
+    format === 'pdf' ||
+    format === 'docx' ||
+    format === undefined;
   if (!format)
     return problem(
       { kind: 'unknown-format', username, extension: handle.extension },
@@ -70,6 +75,12 @@ export const resumeOutcome = Effect.fn('resumeOutcome')(function* (url: URL) {
     );
   }
   if (format === 'qr') return respond(yield* qrResponse(username));
+  // A download like .json, counted the same way.
+  if (format === 'docx')
+    return respond(yield* docxResponse(username, doc.value), {
+      username,
+      format,
+    });
   if (format !== 'html' && format !== 'pdf') {
     const { body, contentType } = formatResume(format, doc.value);
     return respond(

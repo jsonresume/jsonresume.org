@@ -16,6 +16,7 @@ const kinds = {
   json: 'JSON',
   yaml: 'YAML',
   txt: 'Text',
+  docx: 'Word',
 } as const;
 
 /** The latest page views, or downloads, newest first. */

@@ -29,6 +29,7 @@ export const resumeFormats = [
   'yaml',
   'txt',
   'pdf',
+  'docx',
   'qr',
   'rendercv',
 ] as const;

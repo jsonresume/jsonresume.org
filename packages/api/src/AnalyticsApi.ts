@@ -14,7 +14,7 @@ export const Totals = Schema.Struct({
   medianSeconds: Schema.Number,
   /** Average of how far down readers scrolled, 0 to 100. */
   readDepth: Schema.Number,
-  /** Downloads: requests for .json, .yaml and .txt. */
+  /** Downloads: requests for .json, .yaml, .txt and .docx. */
   dataReads: Schema.Number,
 });
 export type Totals = typeof Totals.Type;
@@ -25,7 +25,7 @@ export const Breakdown = Schema.Array(
 
 export const RecentView = Schema.Struct({
   viewedAt: Schema.String,
-  kind: Schema.Literals(['page', 'json', 'yaml', 'txt']),
+  kind: Schema.Literals(['page', 'json', 'yaml', 'txt', 'docx']),
   country: Schema.NullOr(Schema.String),
   device: Schema.NullOr(Schema.String),
   browser: Schema.NullOr(Schema.String),

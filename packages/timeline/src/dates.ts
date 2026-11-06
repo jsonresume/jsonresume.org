@@ -1,26 +1,7 @@
+import { monthYear } from '@repo/resume-formats/read';
 import type { TimelineItem } from './timeline';
 
-const MONTHS = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec',
-];
-
-/** "May 2021" from 2021-05 or 2021-05-01; "2021" from 2021. */
-export const monthYear = (iso: string) => {
-  const [year, month] = iso.split('-');
-  const name = month ? MONTHS[Number(month) - 1] : undefined;
-  return name ? `${name} ${year}` : year ?? iso;
-};
+export { monthYear };
 
 const months = (iso: string) => {
   const [year = '0', month = '1'] = iso.split('-');
