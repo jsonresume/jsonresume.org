@@ -70,3 +70,21 @@ it('groups the fitting jobs into directions, with the skills to add', () => {
   });
   expect(directions[1]?.skillsToAdd).toEqual(['CSS']);
 });
+
+it('compares skills by key: "ML" on the resume is the "Machine Learning" asked for', () => {
+  const [ai] = careerDirections(
+    [
+      job(1, 'ML Engineer', 90, ['Machine Learning', 'React', 'JavaScript']),
+      job(2, 'ML Engineer', 80, ['machine learning', 'REACT', 'Rust']),
+    ],
+    { skills: [{ name: 'Data', keywords: ['ML', 'react', 'Java'] }] }
+  );
+  expect(ai?.skillsAsked).toEqual([
+    'Machine Learning',
+    'React',
+    'JavaScript',
+    'Rust',
+  ]);
+  // Java is not JavaScript.
+  expect(ai?.skillsToAdd).toEqual(['JavaScript', 'Rust']);
+});
