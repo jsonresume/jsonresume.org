@@ -1,6 +1,6 @@
 {
   "name": "@repo/theme-gallery",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "The JSON Resume theme catalog: search and tag filtering, its atoms, and gallery components",
   "type": "module",

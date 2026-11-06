@@ -1,5 +1,11 @@
 # @jsonresume/utils
 
+## 0.4.1
+
+### Patch Changes
+
+- 51c4bdf: Type `withStringLocations` and `withProjectSummaries`, and let `normalizeDates` keep the type of the resume it is given.
+
 ## 0.4.0
 
 ### Minor Changes

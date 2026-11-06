@@ -1,6 +1,6 @@
 {
   "name": "@repo/mcp",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "jsonresume.org for agents: the MCP server at /mcp, its tools and prompts, and the catalog the /mcp page lists",
   "type": "module",

@@ -1,6 +1,6 @@
 {
   "name": "@repo/api-server",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "The server side of @repo/api: handlers, the session middleware, GitHub sign-in routes and cookies",
   "type": "module",
