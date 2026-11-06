@@ -5,6 +5,7 @@ import {
   ResetPasswordPage,
   SignInPage,
   SignUpPage,
+  useNextHref,
 } from '@repo/auth-pages';
 import { account } from '@repo/content/pages';
 import { paths, SiteLink } from '@repo/site';
@@ -13,16 +14,18 @@ import { createLazyRoute, getRouteApi } from '@tanstack/react-router';
 const signIn = getRouteApi('/_site/signin');
 const signUp = getRouteApi('/_site/signup');
 const reset = getRouteApi('/_site/reset-password');
+const chooseUsername = getRouteApi('/_site/signup/username');
 
 export const SignInRoute = createLazyRoute('/_site/signin')({
   component: function SignInRouteComponent() {
     const { next, error } = signIn.useSearch();
+    const signUpHref = useNextHref(paths.signUp, next);
     return (
       <SignInPage
         next={next}
         error={error}
         signUpLink={
-          <SiteLink href={paths.signUp}>{account.signIn.footer.link}</SiteLink>
+          <SiteLink href={signUpHref}>{account.signIn.footer.link}</SiteLink>
         }
         forgotLink={
           <SiteLink href={paths.forgotPassword}>
@@ -37,11 +40,12 @@ export const SignInRoute = createLazyRoute('/_site/signin')({
 export const SignUpRoute = createLazyRoute('/_site/signup')({
   component: function SignUpRouteComponent() {
     const { next } = signUp.useSearch();
+    const signInHref = useNextHref(paths.signIn, next);
     return (
       <SignUpPage
         next={next}
         signInLink={
-          <SiteLink href={paths.signIn}>{account.signUp.footer.link}</SiteLink>
+          <SiteLink href={signInHref}>{account.signUp.footer.link}</SiteLink>
         }
       />
     );
@@ -50,8 +54,10 @@ export const SignUpRoute = createLazyRoute('/_site/signup')({
 
 export const ChooseUsernameRoute = createLazyRoute('/_site/signup/username')({
   component: function ChooseUsernameRouteComponent() {
+    const { next } = chooseUsername.useSearch();
     return (
       <ChooseUsernamePage
+        next={next}
         restart={<SiteLink href={paths.signIn}>Sign in again</SiteLink>}
       />
     );
@@ -90,6 +96,20 @@ const authorize = getRouteApi('/_site/oauth/authorize');
 
 export const AuthorizeRoute = createLazyRoute('/_site/oauth/authorize')({
   component: function AuthorizeRouteComponent() {
-    return <AuthorizePage request={authorize.useSearch()} />;
+    const s = authorize.useSearch();
+    return (
+      <AuthorizePage
+        request={{
+          responseType: s.response_type,
+          clientId: s.client_id,
+          redirectUri: s.redirect_uri,
+          codeChallenge: s.code_challenge,
+          codeChallengeMethod: s.code_challenge_method,
+          scope: s.scope,
+          state: s.state,
+          nonce: s.nonce,
+        }}
+      />
+    );
   },
 });

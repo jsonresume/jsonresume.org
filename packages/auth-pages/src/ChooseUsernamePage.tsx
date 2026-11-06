@@ -23,6 +23,7 @@ import {
   ErrorNote,
   errorMessage,
   refusalMessage,
+  safeNext,
   UsernameStatus,
   Form,
 } from './shared';
@@ -30,9 +31,11 @@ import {
 function Choose({
   login,
   avatarUrl,
+  next,
 }: {
   login: string;
   avatarUrl: string | null;
+  next: string | undefined;
 }) {
   const copy = account.chooseUsername;
   const complete = useAtomSet(completeGithubAtom, { mode: 'promiseExit' });
@@ -49,7 +52,7 @@ function Choose({
     });
     const tag = errorTag(exit);
     if (tag === undefined)
-      return window.location.assign('/dashboard?welcome=1');
+      return window.location.assign(safeNext(next, '/dashboard?welcome=1'));
     setBusy(false);
     setMessage(refusalMessage(usernameReason(exit), tag));
   };
@@ -92,9 +95,16 @@ function Choose({
   );
 }
 
-function Pending({ restart }: { restart: ReactNode }) {
+interface Props {
+  restart: ReactNode;
+  /** Where to go once the account exists (a path on this site). */
+  next?: string | undefined;
+}
+
+function Pending({ restart, next }: Props) {
   const result = useAtomValue(pendingGithubAtom);
-  if (AsyncResult.isSuccess(result)) return <Choose {...result.value} />;
+  if (AsyncResult.isSuccess(result))
+    return <Choose {...result.value} next={next} />;
   if (AsyncResult.isFailure(result)) {
     return (
       <AuthCard title={account.chooseUsername.title} footer={restart}>
@@ -114,11 +124,11 @@ function Loading() {
 }
 
 /** After GitHub sign-in, when an account here already holds the login. */
-export function ChooseUsernamePage({ restart }: { restart: ReactNode }) {
+export function ChooseUsernamePage(props: Props) {
   const isClient = useIsClient();
   return (
     <RegistryProvider>
-      {isClient ? <Pending restart={restart} /> : <Loading />}
+      {isClient ? <Pending {...props} /> : <Loading />}
     </RegistryProvider>
   );
 }

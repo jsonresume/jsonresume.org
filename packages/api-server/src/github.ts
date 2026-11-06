@@ -99,7 +99,11 @@ export const GithubRoutes = HttpRouter.use((router) =>
         }
         const pending = yield* sealPending(identity);
         return yield* HttpServerResponse.setCookie(
-          go('/signup/username'),
+          go(
+            next === '/dashboard'
+              ? '/signup/username'
+              : `/signup/username?next=${encodeURIComponent(next)}`
+          ),
           PENDING_COOKIE,
           pending,
           {

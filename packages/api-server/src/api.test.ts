@@ -128,6 +128,31 @@ describe('the API, over HTTP', () => {
     expect(forged.headers.get('location')).toBe('/signin?error=github-expired');
   });
 
+  it('keeps ?next= for a GitHub sign-up that has to choose a name', async () => {
+    server = testServer();
+    await server.post('/api/auth/signup', ada);
+    server.jar.clear();
+    server.identities.set('c2', {
+      id: 6,
+      login: 'ada',
+      avatarUrl: null,
+      email: null,
+    });
+    const next = '/oauth/authorize?client_id=jrc_x&scope=resume:read';
+    const start = await server.fetch(
+      `/api/auth/github?next=${encodeURIComponent(next)}`
+    );
+    const state = new URL(start.headers.get('location') ?? '').searchParams.get(
+      'state'
+    );
+    const back = await server.fetch(
+      `/api/auth/callback/github?code=c2&state=${state}`
+    );
+    expect(back.headers.get('location')).toBe(
+      `/signup/username?next=${encodeURIComponent(next)}`
+    );
+  });
+
   it('opens the editor on the saved resume and previews changes in any theme', async () => {
     server = testServer();
     await server.post('/api/auth/signup', ada);

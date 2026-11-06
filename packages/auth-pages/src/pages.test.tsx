@@ -1,5 +1,8 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
+import { hydrateRoot } from 'react-dom/client';
+import { renderToString } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
+import { useNextHref } from './shared';
 import { SignInPage } from './SignInPage';
 import { SignUpPage } from './SignUpPage';
 
@@ -32,6 +35,40 @@ describe('SignInPage', () => {
     expect(screen.getByRole('alert')).toHaveTextContent(
       'GitHub isn’t answering'
     );
+  });
+});
+
+describe('a prerendered page, hydrated with ?next=', () => {
+  // The prerendered HTML has no ?next=; hydration alone keeps that href.
+  it('carries next on GitHub and on the link to the other form', async () => {
+    const next = '/oauth/authorize?client_id=jrc_x';
+    function Page() {
+      const href = useNextHref('/signup', next);
+      return (
+        <SignInPage
+          next={next}
+          signUpLink={<a href={href}>Create an account</a>}
+        />
+      );
+    }
+    const container = document.createElement('div');
+    container.innerHTML = renderToString(
+      <SignInPage signUpLink={<a href="/signup">Create an account</a>} />
+    );
+    document.body.append(container);
+    await act(async () => {
+      hydrateRoot(container, <Page />, { onRecoverableError: () => {} });
+    });
+    const encoded = encodeURIComponent(next);
+    expect(
+      container.querySelector('a[href^="/api/auth/github"]')
+    ).toHaveAttribute('href', `/api/auth/github?intent=signin&next=${encoded}`);
+    expect(
+      [...container.querySelectorAll('a')].find(
+        (a) => a.textContent === 'Create an account'
+      )
+    ).toHaveAttribute('href', `/signup?next=${encoded}`);
+    container.remove();
   });
 });
 

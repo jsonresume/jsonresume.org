@@ -24,6 +24,20 @@ export const safeNext = (next: string | undefined, fallback: string) =>
     ? next
     : fallback;
 
+/**
+ * ?next= for a link. The auth pages are prerendered without it and hydration
+ * keeps the prerendered href, so it is added once the page runs.
+ */
+export function useNext(next: string | undefined) {
+  return useIsClient() ? next : undefined;
+}
+
+/** A path, carrying ?next= along. */
+export function useNextHref(path: string, next: string | undefined) {
+  const kept = useNext(next);
+  return kept ? `${path}?next=${encodeURIComponent(kept)}` : path;
+}
+
 export function GithubButton({
   label,
   next,
@@ -33,7 +47,11 @@ export function GithubButton({
   next?: string;
   intent?: 'signin' | 'link';
 }) {
-  const query = new URLSearchParams({ intent, ...(next ? { next } : {}) });
+  const kept = useNext(next);
+  const query = new URLSearchParams({
+    intent,
+    ...(kept ? { next: kept } : {}),
+  });
   return (
     <Button asChild variant="ink" fullWidth>
       <a href={`/api/auth/github?${query}`}>

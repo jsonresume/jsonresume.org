@@ -3,7 +3,14 @@ import { Effect, Layer } from 'effect';
 import { SqlClient } from 'effect/sql';
 import { describe, expect, it } from 'vitest';
 import { Explore } from './explore';
-import { dropTemplates, toEntry, type Entry } from './listing';
+import sample from '@jsonresume/sample-data/complete-resume.json';
+import {
+  dropTemplates,
+  SAMPLE_KEYS,
+  templateKey,
+  toEntry,
+  type Entry,
+} from './listing';
 import { search } from './search';
 
 const resume = (name: string, label: string, skills: string[], city = '') => ({
@@ -129,6 +136,19 @@ describe('search', () => {
     );
     expect(kept.map((e) => e.listing.username)).toEqual(['thomasdavis']);
     expect(dropTemplates(entries.slice(0, 2))).toHaveLength(2);
+  });
+
+  it('drops the editor example even when only one person saved it', () => {
+    expect(
+      SAMPLE_KEYS.has(templateKey(sample.basics.name, sample.basics.label))
+    ).toBe(true);
+    const entry = toEntry({
+      username: 'tester',
+      resume: sample,
+      updatedAt: null,
+    });
+    expect(entry).toBeDefined();
+    expect(dropTemplates(entry ? [entry] : [])).toEqual([]);
   });
 
   it('ignores http images and empty templates', () => {

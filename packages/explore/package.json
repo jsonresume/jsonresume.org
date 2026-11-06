@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@effect/sql-pglite": "4.0.6",
+    "@jsonresume/sample-data": "workspace:^",
     "@repo/database": "workspace:*",
     "@repo/eslint-config-custom": "workspace:*",
     "@testing-library/jest-dom": "^6.9.1",
