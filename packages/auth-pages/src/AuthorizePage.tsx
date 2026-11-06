@@ -10,6 +10,7 @@ import { Exit } from 'effect';
 import { AsyncResult } from 'effect/reactivity';
 import { useState } from 'react';
 import { ConsentMaker, ConsentScopes } from './ConsentScopes';
+import { LocalHandoff, useHandoff } from './LocalHandoff';
 import { Form } from './shared';
 
 /** What /oauth/authorize was asked, from its query string. */
@@ -56,6 +57,7 @@ function Consent({
   const decide = useAtomSet(oauthDecideAtom, { mode: 'promiseExit' });
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState(false);
+  const [handoff, go] = useHandoff();
 
   if (AsyncResult.isFailure(client)) {
     return (
@@ -96,6 +98,9 @@ function Consent({
     );
   }
 
+  if (handoff)
+    return <LocalHandoff name={client.value.name} redirect={handoff} />;
+
   const answer = async (approve: boolean) => {
     setBusy(true);
     const exit = await decide({
@@ -109,8 +114,7 @@ function Consent({
         approve,
       },
     });
-    if (Exit.isSuccess(exit))
-      return window.location.assign(exit.value.redirect);
+    if (Exit.isSuccess(exit)) return go(exit.value.redirect, approve);
     setBusy(false);
     setFailed(true);
   };

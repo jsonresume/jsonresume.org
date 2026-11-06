@@ -82,6 +82,7 @@ function Report({
       </Card>
       <Breakdowns overview={overview} />
       <RecentViews overview={overview} />
+      <RecentViews overview={overview} downloads />
     </Stack>
   );
 }

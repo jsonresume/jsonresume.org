@@ -16,7 +16,12 @@ const items = (
 
 /** Where views came from and on what, one ranked list each. */
 export function Breakdowns({ overview }: { overview: Overview }) {
-  const lists = [
+  const lists: ReadonlyArray<{
+    title: string;
+    item: string;
+    rows: ReturnType<typeof items>;
+    unit?: string;
+  }> = [
     {
       title: 'Sources',
       item: 'Source',
@@ -32,6 +37,12 @@ export function Breakdowns({ overview }: { overview: Overview }) {
     { title: 'Devices', item: 'Device', rows: items(overview.devices, label) },
     { title: 'Browsers', item: 'Browser', rows: items(overview.browsers) },
     { title: 'Themes', item: 'Theme', rows: items(overview.themes) },
+    {
+      title: 'Downloaded by',
+      item: 'Browser or tool',
+      rows: items(overview.downloaders),
+      unit: 'Downloads',
+    },
   ];
   return (
     <Grid gap={6} minColumnWidth="17rem" stretch>
@@ -42,9 +53,11 @@ export function Breakdowns({ overview }: { overview: Overview }) {
               title={list.title}
               itemLabel={list.item}
               items={list.rows}
-              valueLabel="Views"
+              valueLabel={list.unit ?? 'Views'}
               formatValue={count}
-              emptyLabel="No views in this range"
+              emptyLabel={`No ${(
+                list.unit ?? 'Views'
+              ).toLowerCase()} in this range`}
             />
           </CardContent>
         </Card>

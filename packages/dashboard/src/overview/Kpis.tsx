@@ -17,13 +17,6 @@ export function Kpis({ overview }: { overview: Overview }) {
         value={count(totals.views)}
         trend={daily.map((d) => d.views)}
         {...delta(totals.views, previous.views)}
-        {...(totals.dataReads > 0
-          ? {
-              note: `Plus ${count(
-                totals.dataReads
-              )} reads as JSON, YAML or text`,
-            }
-          : {})}
       />
       <StatTile
         label="Visitors"
@@ -41,6 +34,12 @@ export function Kpis({ overview }: { overview: Overview }) {
         value={totals.readDepth > 0 ? `${totals.readDepth}%` : '—'}
         note="How far down readers scroll, on average"
         {...delta(totals.readDepth, previous.readDepth)}
+      />
+      <StatTile
+        label="Downloads"
+        value={count(totals.dataReads)}
+        note="As JSON, YAML or text, often by tools"
+        {...delta(totals.dataReads, previous.dataReads)}
       />
     </Grid>
   );

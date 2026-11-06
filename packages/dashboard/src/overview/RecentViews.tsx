@@ -18,13 +18,22 @@ const kinds = {
   txt: 'Text',
 } as const;
 
-/** The latest views, newest first. */
-export function RecentViews({ overview }: { overview: Overview }) {
-  if (overview.recent.length === 0) return null;
+/** The latest page views, or downloads, newest first. */
+export function RecentViews({
+  overview,
+  downloads = false,
+}: {
+  overview: Overview;
+  downloads?: boolean;
+}) {
+  const rows = downloads ? overview.recentDownloads : overview.recent;
+  if (rows.length === 0) return null;
   return (
     <Card>
       <CardHeader>
-        <CardTitle level={2}>Recent views</CardTitle>
+        <CardTitle level={2}>
+          {downloads ? 'Recent downloads' : 'Recent views'}
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <Table>
@@ -34,12 +43,12 @@ export function RecentViews({ overview }: { overview: Overview }) {
               <Th>As</Th>
               <Th>From</Th>
               <Th>Where</Th>
-              <Th>Device</Th>
-              <Th>Read for</Th>
+              <Th>{downloads ? 'By' : 'Device'}</Th>
+              {downloads ? null : <Th>Read for</Th>}
             </tr>
           </thead>
           <tbody>
-            {overview.recent.map((view) => (
+            {rows.map((view) => (
               <tr key={view.viewedAt + view.kind + (view.referrer ?? '')}>
                 <Td>
                   <time
@@ -53,15 +62,15 @@ export function RecentViews({ overview }: { overview: Overview }) {
                 <Td>{view.referrer ?? 'Direct'}</Td>
                 <Td>{view.country ? country(view.country) : '—'}</Td>
                 <Td>
-                  {[view.device && label(view.device), view.browser]
-                    .filter(Boolean)
-                    .join(' · ') || '—'}
+                  {(downloads
+                    ? view.browser
+                    : [view.device && label(view.device), view.browser]
+                        .filter(Boolean)
+                        .join(' · ')) || '—'}
                 </Td>
-                <Td>
-                  {view.kind === 'page' && view.seconds > 0
-                    ? duration(view.seconds)
-                    : '—'}
-                </Td>
+                {downloads ? null : (
+                  <Td>{view.seconds > 0 ? duration(view.seconds) : '—'}</Td>
+                )}
               </tr>
             ))}
           </tbody>

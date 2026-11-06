@@ -135,7 +135,7 @@ export const tools: ReadonlyArray<McpToolInfo> = [
     name: 'get_resume_analytics',
     group: 'analytics',
     description:
-      'Views of your resume over the last 7, 30 or 90 days: visitors, time on page, read depth, day by day, and where readers come from (sites, countries, devices, themes).',
+      'Views of your resume over the last 7, 30 or 90 days: visitors, time on page, read depth, day by day, and where readers come from (sites, countries, devices, themes). Also downloads as JSON, YAML or text, and which browsers or tools made them.',
     writes: false,
   },
   {

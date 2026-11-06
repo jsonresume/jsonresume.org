@@ -69,19 +69,39 @@ export const PgAnalyticsStore = Layer.effect(
       n - 1
     })`;
 
+    // Page views, or downloads (.json, .yaml, .txt).
+    const ofKind = (pages: boolean) =>
+      pages ? sql`kind = 'page'` : sql`kind <> 'page'`;
+
     const top = (
       username: string,
       n: number,
       column: 'referrer' | 'country' | 'device' | 'browser' | 'theme',
-      fallback: string
+      fallback: string,
+      pages = true
     ) =>
       sql`
         SELECT coalesce(${sql(
           column
         )}, ${fallback}) AS label, count(*)::int AS value
-        FROM app.resume_views WHERE kind = 'page' AND ${within(username, n)}
+        FROM app.resume_views WHERE ${ofKind(pages)} AND ${within(username, n)}
         GROUP BY 1 ORDER BY 2 DESC, 1 LIMIT 10
       `.pipe(Effect.flatMap(decode(Count)));
+
+    const latest = (username: string, n: number, pages: boolean) =>
+      sql`
+      SELECT viewed_at, kind, country, device, browser, referrer, visible_seconds::int AS seconds
+      FROM app.resume_views WHERE ${ofKind(pages)} AND ${within(username, n)}
+      ORDER BY viewed_at DESC LIMIT 20
+    `.pipe(
+        Effect.flatMap(decode(Recent)),
+        Effect.map((rows) =>
+          rows.map(({ viewed_at, ...r }) => ({
+            ...r,
+            viewedAt: viewed_at.toISOString(),
+          }))
+        )
+      );
 
     const overview = Effect.fn('AnalyticsStore.overview')(function* (
       username: string,
@@ -101,11 +121,6 @@ export const PgAnalyticsStore = Layer.effect(
           AND (v.viewed_at AT TIME ZONE 'UTC')::date = d::date
         GROUP BY d ORDER BY d
       `.pipe(Effect.flatMap(decode(Day)));
-      const recent = yield* sql`
-        SELECT viewed_at, kind, country, device, browser, referrer, visible_seconds::int AS seconds
-        FROM app.resume_views WHERE ${within(username, n)}
-        ORDER BY viewed_at DESC LIMIT 20
-      `.pipe(Effect.flatMap(decode(Recent)));
       const [
         current,
         previous,
@@ -114,6 +129,9 @@ export const PgAnalyticsStore = Layer.effect(
         devices,
         browsers,
         themes,
+        downloaders,
+        recent,
+        recentDownloads,
       ] = yield* Effect.all(
         [
           totals(username, n - 1, 0),
@@ -123,6 +141,9 @@ export const PgAnalyticsStore = Layer.effect(
           top(username, n, 'device', 'Unknown'),
           top(username, n, 'browser', 'Other'),
           top(username, n, 'theme', 'Default'),
+          top(username, n, 'browser', 'Other', false),
+          latest(username, n, true),
+          latest(username, n, false),
         ],
         { concurrency: 'unbounded' }
       );
@@ -136,10 +157,9 @@ export const PgAnalyticsStore = Layer.effect(
         devices,
         browsers,
         themes,
-        recent: recent.map((r) => ({
-          ...r,
-          viewedAt: r.viewed_at.toISOString(),
-        })),
+        downloaders,
+        recent,
+        recentDownloads,
       });
     },
     Effect.orDie);
