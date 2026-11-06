@@ -14,6 +14,7 @@ describe('parseHandle', () => {
       format: 'json',
     });
     expect(parseHandle('@a.yaml')?.format).toBe('yaml');
+    expect(parseHandle('@a.docx')?.format).toBe('docx');
   });
 
   it('lowercases, and marks capitals as not canonical', () => {
@@ -25,8 +26,8 @@ describe('parseHandle', () => {
   });
 
   it('keeps an extension it does not serve, with no format', () => {
-    expect(parseHandle('@a.docx')).toMatchObject({
-      extension: 'docx',
+    expect(parseHandle('@a.odt')).toMatchObject({
+      extension: 'odt',
       format: undefined,
     });
   });

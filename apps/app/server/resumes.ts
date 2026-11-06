@@ -17,7 +17,7 @@ export type Render = (
   context: RouterContext
 ) => Promise<Response>;
 
-/** Count a .json, .yaml or .txt read; themed pages count themselves. */
+/** Count a .json, .yaml, .txt or .docx read; themed pages count themselves. */
 const recordRead = (
   read: NonNullable<Extract<ResumeOutcome, { _tag: 'Respond' }>['read']>,
   request: Request

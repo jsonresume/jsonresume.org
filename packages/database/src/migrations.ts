@@ -1,5 +1,6 @@
 import { Effect } from 'effect';
 import { SqlClient } from 'effect/sql';
+import { laterMigrations } from './laterMigrations';
 
 /**
  * Every schema change, run once each, in order, at startup. Tables live in
@@ -425,4 +426,6 @@ export const migrations: Record<
       )
     `;
   }),
+
+  ...laterMigrations,
 };

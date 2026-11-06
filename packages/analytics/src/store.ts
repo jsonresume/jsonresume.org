@@ -5,7 +5,7 @@ import { Context, type Effect } from 'effect';
 export interface ViewRecord {
   id: string;
   username: string;
-  kind: 'page' | 'json' | 'yaml' | 'txt';
+  kind: 'page' | 'json' | 'yaml' | 'txt' | 'docx';
   theme: string | null;
   referrer: string | null;
   /** Two-letter code from Cloudflare (CF-IPCountry), when known. */

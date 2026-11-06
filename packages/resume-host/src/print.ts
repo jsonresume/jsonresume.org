@@ -1,7 +1,9 @@
 import { handlePath } from '@repo/profiles';
-import { qrPng } from '@repo/resume-formats';
+import { docxContentType, qrPng, toDocx } from '@repo/resume-formats';
+import type { Entry } from '@repo/resume-formats/read';
 import { paperFor, ResumePdf } from '@repo/resume-pdf';
 import { Config, Effect, Predicate } from 'effect';
+import { headers } from './outcome';
 
 /** Where the person lives, for the paper size: basics.location.countryCode. */
 const countryOf = (resume: unknown): string | undefined => {
@@ -54,3 +56,16 @@ export const qrResponse = (username: string) =>
       },
     });
   });
+
+/** The resume as a Word document, saved under the username. */
+export const docxResponse = (username: string, resume: Entry) =>
+  Effect.map(
+    Effect.promise(() => toDocx(resume)),
+    (docx) =>
+      new Response(docx, {
+        headers: {
+          ...headers(docxContentType),
+          'content-disposition': `attachment; filename="${username}.docx"`,
+        },
+      })
+  );

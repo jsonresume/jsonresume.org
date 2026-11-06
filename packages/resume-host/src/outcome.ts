@@ -2,13 +2,16 @@ import type { ResumeProblem } from '@repo/domain';
 import { Profiles, type Username } from '@repo/profiles';
 import { Effect } from 'effect';
 
+/** The downloads counted as reads (see @repo/analytics). */
+export type ReadFormat = 'json' | 'yaml' | 'txt' | 'docx';
+
 /** What a /@username request comes to: a response, or a problem to explain. */
 export type ResumeOutcome =
   | {
       _tag: 'Respond';
       response: Response;
-      /** Set when a data format was served, for the server to count the read. */
-      read?: { username: string; format: 'json' | 'yaml' | 'txt' };
+      /** Set when a download was served, for the server to count the read. */
+      read?: { username: string; format: ReadFormat };
     }
   | { _tag: 'Problem'; problem: ResumeProblem; page: boolean };
 
@@ -21,7 +24,7 @@ export const headers = (contentType: string) => ({
 
 export const respond = (
   response: Response,
-  read?: { username: string; format: 'json' | 'yaml' | 'txt' }
+  read?: { username: string; format: ReadFormat }
 ): ResumeOutcome =>
   read ? { _tag: 'Respond', response, read } : { _tag: 'Respond', response };
 export const problem = (p: ResumeProblem, page: boolean): ResumeOutcome => ({

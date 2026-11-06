@@ -122,6 +122,26 @@ describe('resumeOutcome', () => {
     expect(await response(outcome).text()).toContain('name: Foo Bar');
   });
 
+  it('serves a Word document to download, counted', async () => {
+    const outcome = await get('/@foo.docx');
+    expect(outcome?._tag === 'Respond' && outcome.read).toEqual({
+      username: 'foo',
+      format: 'docx',
+    });
+    const res = response(outcome);
+    expect(res.headers.get('content-type')).toBe(
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    );
+    expect(res.headers.get('content-disposition')).toBe(
+      'attachment; filename="foo.docx"'
+    );
+    expect(res.headers.get('cache-control')).toBe('no-store');
+    expect(res.headers.get('access-control-allow-origin')).toBe('*');
+    // A zip, as every .docx is.
+    const bytes = new Uint8Array(await res.arrayBuffer());
+    expect([...bytes.slice(0, 2)]).toEqual([0x50, 0x4b]);
+  });
+
   it('prints the themed page to PDF, on the paper asked for or local', async () => {
     const res = response(await get('/@foo.pdf'));
     expect(res.headers.get('content-type')).toBe('application/pdf');
@@ -184,7 +204,8 @@ describe('resumeOutcome', () => {
     ['/@down', { kind: 'github-down', page: true }],
     ['/@list.json', { kind: 'not-object', page: false }],
     ['/@foo?theme=nope', { kind: 'theme-missing', page: true }],
-    ['/@foo.docx', { kind: 'unknown-format', page: true }],
+    ['/@foo.odt', { kind: 'unknown-format', page: true }],
+    ['/@nobody.docx', { kind: 'no-gist', page: true }],
     ['/@nobody.pdf', { kind: 'no-gist', page: true }],
     ['/@broken.pdf', { kind: 'pdf-failed', page: true }],
   ])('explains %s', async (path, expected) => {
