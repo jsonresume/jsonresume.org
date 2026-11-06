@@ -117,6 +117,59 @@ providers: [
 ],`,
   },
   {
+    label: 'No server',
+    code: `# Apps without a secret (browser, mobile, hosted scripts) register themselves
+# once (RFC 7591), then use PKCE (S256) and send client_id instead of a secret.
+curl ${site}/api/oauth/register \\
+  -H 'Content-Type: application/json' \\
+  -d '{"client_name":"My app","redirect_uris":["https://my.app/callback"]}'
+# 201 { "client_id": "jrc_…", "token_endpoint_auth_method": "none", … }
+
+# Each sign-in: make a random verifier from a CSPRNG, keep it, send its S256 challenge.
+CODE_VERIFIER=$(openssl rand -base64 48 | tr '+/' '-_' | tr -d '=\\n')
+CODE_CHALLENGE=$(printf %s "$CODE_VERIFIER" | openssl dgst -sha256 -binary \\
+  | openssl base64 | tr '+/' '-_' | tr -d '=\\n')
+# ${site}/oauth/authorize?response_type=code&client_id=$CLIENT_ID
+#   &redirect_uri=https://my.app/callback&scope=resume:read&state=$STATE
+#   &code_challenge=$CODE_CHALLENGE&code_challenge_method=S256
+
+curl ${site}/api/oauth/token \\
+  -d grant_type=authorization_code \\
+  -d client_id=$CLIENT_ID \\
+  -d code=$CODE \\
+  -d code_verifier=$CODE_VERIFIER \\
+  -d redirect_uri=https://my.app/callback`,
+  },
+  {
+    label: 'Apps Script',
+    code: `// Google Apps Script, with googleworkspace/apps-script-oauth2 (pin a library
+// version). No secret: register once and keep the client_id in Script Properties.
+// Redirect URI: https://script.google.com/macros/d/{SCRIPT_ID}/usercallback
+function getService() {
+  const clientId = PropertiesService.getScriptProperties()
+    .getProperty('JSONRESUME_CLIENT_ID');
+  return OAuth2.createService('jsonresume')
+    .setAuthorizationBaseUrl('${site}/oauth/authorize')
+    .setTokenUrl('${site}/api/oauth/token')
+    .setClientId(clientId)
+    .setScope('resume:read') // always send a scope
+    // PKCE S256. Not generateCodeVerifier(): it uses Math.random().
+    // getUuid() is java.util.UUID.randomUUID(), a CSPRNG.
+    .setCodeVerififer((Utilities.getUuid() + Utilities.getUuid()).replace(/-/g, ''))
+    .setCallbackFunction('authCallback')
+    .setPropertyStore(PropertiesService.getUserProperties())
+    .setLock(LockService.getUserLock()); // one refresh at a time
+}
+
+// Start: show this link when getService().hasAccess() is false.
+const url = getService().getAuthorizationUrl();
+
+function authCallback(request) {
+  return HtmlService.createHtmlOutput(
+    getService().handleCallback(request) ? 'Connected.' : 'Denied.');
+}`,
+  },
+  {
     label: 'ID token',
     code: `// The id_token's claims; /api/oauth/userinfo returns the same, minus the first five
 {
@@ -140,6 +193,8 @@ export const notes = [
   'Use `sub` as the user’s ID: usernames can change.',
   'Any OpenID Connect library works from the issuer `https://jsonresume.org` alone: it reads the endpoints and keys from `/.well-known/openid-configuration`. ID tokens are RS256, last an hour, and carry your `nonce`.',
   'PKCE (S256) is optional for apps with a secret and required for apps without one. Browser and mobile apps without a server can register themselves (RFC 7591, `POST /api/oauth/register`) and must use PKCE.',
+  'Always send `scope`. A self-registered app that asks for nothing gets `mcp`, which is everything.',
+  'Redirect URIs must be `https`, or `http` on loopback only, with no `#fragment`. An app scheme (`myapp://callback`) also works.',
   'People see every app they’ve connected under Settings → Connected apps, and can disconnect it there. Revoke a token yourself when someone disconnects on your side.',
   'Errors follow RFC 6749 and 6750: `invalid_grant`, `invalid_client`, `invalid_token` (401) and `insufficient_scope` (403).',
 ];
