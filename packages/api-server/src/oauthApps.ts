@@ -2,6 +2,7 @@ import { OAuth, type OAuthAppRecord, type OAuthFailure } from '@repo/accounts';
 import { CurrentUser, JsonResumeApi, OAuthError } from '@repo/api';
 import { Effect } from 'effect';
 import { HttpApiBuilder } from 'effect/http-api';
+import { track } from '@repo/posthog';
 
 const toError = (e: OAuthFailure) =>
   new OAuthError({ error: e.error, error_description: e.description });
@@ -29,7 +30,11 @@ export const OAuthAppsHandlers = HttpApiBuilder.group(
             Effect.map((apps) => apps.map(toOAuthApp))
           ),
         create: ({ payload }) =>
-          Effect.flatMap(owner, (id) => oauth.createApp(id, payload)).pipe(
+          Effect.flatMap(owner, (id) =>
+            oauth
+              .createApp(id, payload)
+              .pipe(Effect.tap(() => track(id, 'oauth_app_created')))
+          ).pipe(
             Effect.map(({ app, secret }) => ({
               app: toOAuthApp(app),
               clientSecret: secret,

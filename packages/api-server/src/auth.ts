@@ -18,6 +18,7 @@ import {
   toSessionUser,
 } from './http';
 import { sealedCookies } from './pending';
+import { track } from '@repo/posthog';
 
 /** Signing up, in and out; finishing a GitHub sign-up; verification mail. */
 export const AuthHandlers = HttpApiBuilder.group(
@@ -50,6 +51,7 @@ export const AuthHandlers = HttpApiBuilder.group(
             yield* limit('signup', 10, 3600);
             const { user, token } = yield* accounts.signUp(payload);
             yield* setSession(token);
+            yield* track(user.id, 'user_signed_up', { method: 'password' });
             return toSessionUser(user);
           }),
         signIn: ({ payload }) =>
@@ -57,6 +59,7 @@ export const AuthHandlers = HttpApiBuilder.group(
             yield* limit('signin', 10, 600);
             const { user, token } = yield* accounts.signIn(payload);
             yield* setSession(token);
+            yield* track(user.id, 'user_signed_in', { method: 'password' });
             return toSessionUser(user);
           }),
         signOut: () =>
@@ -87,6 +90,7 @@ export const AuthHandlers = HttpApiBuilder.group(
             );
             yield* clearCookie(PENDING_COOKIE);
             yield* setSession(token);
+            yield* track(user.id, 'user_signed_up', { method: 'github' });
             return toSessionUser(user);
           }),
         forgotPassword: ({ payload }) =>

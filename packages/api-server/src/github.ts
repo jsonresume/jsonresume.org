@@ -4,6 +4,7 @@ import { Config, Duration, Effect, Option } from 'effect';
 import { HttpRouter, HttpServerResponse } from 'effect/http';
 import { OAUTH_COOKIE, PENDING_COOKIE, withSession } from './http';
 import { OAUTH_SECONDS, PENDING_SECONDS, sealedCookies } from './pending';
+import { tracker } from '@repo/posthog';
 
 const base = {
   path: '/',
@@ -34,6 +35,7 @@ export const GithubRoutes = HttpRouter.use((router) =>
     // Resolved once here, so the routes need nothing per request.
     const oauth = yield* GithubOAuth;
     const accounts = yield* Accounts;
+    const track = yield* tracker;
     const { sealOAuth, openOAuth, sealPending } = yield* sealedCookies;
     const site = yield* Config.String('SITE_URL');
 
@@ -91,8 +93,10 @@ export const GithubRoutes = HttpRouter.use((router) =>
         }
 
         const result = yield* accounts.githubSignIn(identity);
-        if (result._tag === 'SignedIn')
+        if (result._tag === 'SignedIn') {
+          yield* track(result.user.id, 'user_signed_in', { method: 'github' });
           return yield* withSession(go(next), result.token);
+        }
         const pending = yield* sealPending(identity);
         return yield* HttpServerResponse.setCookie(
           go('/signup/username'),
@@ -124,6 +128,7 @@ export const GithubRoutes = HttpRouter.use((router) =>
         const url = new URL(request.url, 'http://local');
         const token = url.searchParams.get('token');
         const verified = token ? yield* accounts.verifyEmail(token) : undefined;
+        if (verified) yield* track(verified, 'email_verified');
         return go(
           verified ? '/dashboard?verified=1' : '/dashboard?verified=expired'
         );
