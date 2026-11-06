@@ -3,6 +3,7 @@ export * as account from './account';
 export * as ai from './ai';
 export * as cli from './cli';
 export * as developers from './developers';
+export * as builtWith from './builtWith';
 export * as gettingStarted from './gettingStarted';
 export * as mcp from './mcp';
 export * as media from './media';
