@@ -56,6 +56,7 @@ export function ConnectionsCard() {
                   <Th>Can</Th>
                   <Th>Connected</Th>
                   <Th>Last used</Th>
+                  <Th>Changes</Th>
                   <Th>
                     <span className={visuallyHidden}>Disconnect</span>
                   </Th>
@@ -68,6 +69,16 @@ export function ConnectionsCard() {
                     <Td>{can(c.scopes)}</Td>
                     <Td>{date(c.connectedAt)}</Td>
                     <Td>{c.lastUsedAt ? date(c.lastUsedAt) : 'Never'}</Td>
+                    <Td>
+                      {c.changes > 0 && c.lastChangeAt ? (
+                        <Link href="/dashboard/resume#history">
+                          {c.changes === 1 ? '1 save' : `${c.changes} saves`},
+                          last {date(c.lastChangeAt)}
+                        </Link>
+                      ) : (
+                        'None'
+                      )}
+                    </Td>
                     <Td>
                       <Button
                         size="sm"

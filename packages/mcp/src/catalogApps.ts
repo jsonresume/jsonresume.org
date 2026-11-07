@@ -6,7 +6,7 @@ export const appTools: ReadonlyArray<McpToolInfo> = [
     name: 'list_connected_apps',
     group: 'apps',
     description:
-      'The apps and agents you have let use your resume with OAuth (ChatGPT, Claude, an HR tool…): what each may do (its scopes), when you connected it and when it was last used.',
+      'The apps and agents you have let use your resume with OAuth (ChatGPT, Claude, an HR tool…): what each may do (its scopes), when you connected it, when it was last used, and how many times it saved your resume (each save is a version in list_versions).',
     writes: false,
   },
   {
