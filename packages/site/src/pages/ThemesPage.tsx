@@ -23,6 +23,7 @@ export function ThemesPage() {
             <ThemeGallery
               image={(theme) => themeImageUrl(theme.slug)}
               href={(theme) => themePreviewUrl(theme.slug)}
+              page={(theme) => paths.theme(theme.slug)}
               details={(theme) => <ThemeUse theme={theme} />}
             />
           </RegistryProvider>

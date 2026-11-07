@@ -22,6 +22,8 @@ export interface PageHeadInput {
   crumb?: string;
   /** More structured data: WebSite, Organization, BlogPosting, … */
   jsonLd?: ReadonlyArray<JsonLd>;
+  /** The link-preview image, a path here, with its size; else the site's card. */
+  image?: { path: string; width: number; height: number };
 }
 
 /**
@@ -36,6 +38,7 @@ export function pageHead({
   parents = [],
   crumb,
   jsonLd = [],
+  image = { path: '/og.png', width: 1200, height: 630 },
 }: PageHeadInput) {
   const fullTitle = /JSON Resume/.test(title)
     ? title
@@ -57,10 +60,10 @@ export function pageHead({
       ...(url
         ? [{ property: 'og:url', content: url }]
         : [{ name: 'robots', content: 'noindex' }]),
-      // The link-preview card (1200×630), the same for every page.
-      { property: 'og:image', content: `${siteUrl}/og.png` },
-      { property: 'og:image:width', content: '1200' },
-      { property: 'og:image:height', content: '630' },
+      // The link-preview card: the site's (1200×630) unless the page has one.
+      { property: 'og:image', content: `${siteUrl}${image.path}` },
+      { property: 'og:image:width', content: String(image.width) },
+      { property: 'og:image:height', content: String(image.height) },
       { name: 'twitter:card', content: 'summary_large_image' },
       { name: 'twitter:title', content: fullTitle },
       { name: 'twitter:description', content: description },
