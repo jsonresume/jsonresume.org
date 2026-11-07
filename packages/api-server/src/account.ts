@@ -4,6 +4,7 @@ import { Effect } from 'effect';
 import { HttpApiBuilder } from 'effect/http-api';
 import { clearSession } from './http';
 import { track } from '@repo/posthog';
+import { savedProperties, userActor } from '@repo/resume-versions';
 
 const toAccount = (
   record: AccountRecord,
@@ -54,8 +55,15 @@ export const AccountHandlers = HttpApiBuilder.group(
         saveResume: ({ payload }) =>
           Effect.gen(function* () {
             const user = yield* CurrentUser;
-            yield* accounts.saveResume(user.id, payload.resume);
-            yield* track(user.id, 'resume_saved', { via: 'dashboard' });
+            const saved = yield* accounts.saveResume(
+              user.id,
+              payload.resume,
+              userActor
+            );
+            yield* track(user.id, 'resume_saved', {
+              via: 'dashboard',
+              ...savedProperties(saved, 'editor'),
+            });
             return yield* current;
           }),
         rename: ({ payload }) =>

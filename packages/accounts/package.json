@@ -19,9 +19,11 @@
     "@repo/api": "workspace:*",
     "@repo/database": "workspace:*",
     "@repo/profiles": "workspace:*",
+    "@repo/resume-versions": "workspace:*",
     "effect": "4.0.6"
   },
   "devDependencies": {
+    "@jsonresume/sample-data": "workspace:*",
     "@repo/eslint-config-custom": "workspace:*",
     "@types/node": "^20.19.24",
     "tsconfig": "workspace:*",

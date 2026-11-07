@@ -7,13 +7,14 @@ import { HttpRouter, HttpServerRequest, HttpServerResponse } from 'effect/http';
 import { AccountHandlers, AccountToolkit } from './accountTools';
 import { AppHandlers, AppToolkit } from './appTools';
 import { TreeHandlers, TreeToolkit } from './treeTools';
-import { McpCaller } from './context';
+import { McpActor, McpCaller } from './context';
 import { ExploreHandlers, ExploreToolkit } from './exploreTools';
 import { ExportHandlers, ExportToolkit } from './exportTools';
 import { ImportHandlers, ImportToolkit } from './importTools';
 import { JobHandlers, JobToolkit } from './jobTools';
 import { Prompts } from './prompts';
 import { ResumeHandlers, ResumeToolkit } from './resumeTools';
+import { VersionHandlers, VersionToolkit } from './versionTools';
 
 const SITE = 'https://jsonresume.org';
 
@@ -78,19 +79,32 @@ const authentication = (site: string) =>
           }
           // OAuth apps granted only some scopes (an HR tool reading the
           // resume) can't use the tools: those need the mcp scope.
-          const user = token.startsWith('jr_')
-            ? yield* keys.authenticate(token)
-            : yield* oauth
-                .authenticate(token)
+          const found = token.startsWith('jr_')
+            ? yield* keys
+                .identify(token)
                 .pipe(
-                  Effect.map((grant) =>
-                    grant && allows(grant.scope, 'mcp') ? grant.user : undefined
+                  Effect.map(
+                    (k) => k && { user: k.user, id: k.key.id, name: k.key.name }
                   )
-                );
-          if (!user)
+                )
+            : yield* oauth.authenticate(token).pipe(
+                Effect.map(
+                  (grant) =>
+                    grant &&
+                    allows(grant.scope, 'mcp') && {
+                      user: grant.user,
+                      id: grant.clientId,
+                      name: grant.clientName,
+                    }
+                )
+              );
+          if (!found)
             return unauthorized(site, 'That token is not valid (any more)');
+          const { user, id, name } = found;
           yield* toolCalled(track, user.id);
-          return yield* Effect.provideService(httpEffect, McpCaller, user);
+          return yield* Effect.provideService(httpEffect, McpCaller, user).pipe(
+            Effect.provideService(McpActor, { kind: 'assistant', id, name })
+          );
         });
     })
   );
@@ -99,7 +113,7 @@ const authentication = (site: string) =>
  * The MCP server at /mcp (Streamable HTTP, every current protocol
  * revision): the tools, the prompts, and the authentication in front.
  * Needs Accounts, ApiKeys, OAuth, AnalyticsStore, Explore, JobBoard,
- * JobMatcher, RateLimiter, Importer and Downloader.
+ * JobMatcher, RateLimiter, Importer, Downloader and ResumeVersions.
  */
 export const mcpRoutes = (site: string = SITE) =>
   Layer.mergeAll(
@@ -111,6 +125,7 @@ export const mcpRoutes = (site: string = SITE) =>
     McpServer.toolkit(JobToolkit).pipe(Layer.provide(JobHandlers)),
     McpServer.toolkit(AppToolkit).pipe(Layer.provide(AppHandlers)),
     McpServer.toolkit(TreeToolkit).pipe(Layer.provide(TreeHandlers)),
+    McpServer.toolkit(VersionToolkit).pipe(Layer.provide(VersionHandlers)),
     Prompts
   ).pipe(
     Layer.provideMerge(

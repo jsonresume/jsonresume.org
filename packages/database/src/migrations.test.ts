@@ -32,6 +32,7 @@ it('applies every migration to an empty database', async () => {
     'profiles',
     'resume_evidence',
     'resume_insights',
+    'resume_versions',
     'resume_views',
     'role_archetypes',
     'sessions',

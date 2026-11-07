@@ -5,6 +5,7 @@ import { Accounts, ApiKeys } from '@repo/accounts';
 import { apiRoutes } from '@repo/api-server';
 import { InMemoryDatabase } from '@repo/database/testing';
 import { mcpRoutes } from '@repo/mcp';
+import { userActor } from '@repo/resume-versions';
 import { checkMcp } from '@repo/mcp/health';
 import { effectWebHandler } from '@repo/server';
 import { Effect, Layer, ManagedRuntime, Option, Result } from 'effect';
@@ -64,7 +65,11 @@ describe('the MCP health check, against the app', () => {
           password: 'correct horse battery',
           username: 'health',
         });
-        yield* accounts.saveResume(user.id, { basics: { name: 'Health' } });
+        yield* accounts.saveResume(
+          user.id,
+          { basics: { name: 'Health' } },
+          userActor
+        );
         const made = yield* (yield* ApiKeys).create(user.id, 'health check');
         return made?.key ?? '';
       })

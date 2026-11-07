@@ -63,6 +63,7 @@ package over growing an app.
 | `@repo/resume-host`       | Serves `/@username`: picks the theme or format and responds, or returns the problem for the app to explain.                                   |
 | `@repo/database`          | The app's Postgres: `PgLive` from `DATABASE_URL` and every migration (`app` schema); PGlite layers for tests and `pnpm dev`.                  |
 | `@repo/accounts`          | Accounts: email/password and GitHub sign-in, sessions, email verification, username claims; their Postgres store.                             |
+| `@repo/resume-versions`   | Every save of a resume as a version: who made it, what changed, restore (`Accounts.restoreVersion`), `isRealResume`.                          |
 | `@repo/analytics`         | Resume views: the beacon script in themed pages, cookie-free visitor counts, and the dashboard's numbers.                                     |
 | `@repo/api-server`        | The server side of `@repo/api`: handlers, the session middleware, GitHub OAuth redirects, cookies.                                            |
 | `@repo/api-client`        | The browser's typed client (`AtomHttpApi`): query and mutation atoms, `useIsClient`, the signed-in hint.                                      |

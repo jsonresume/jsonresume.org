@@ -14,6 +14,8 @@ import { HttpApiBuilder } from 'effect/http-api';
 import { toSessionUser } from './http';
 import { oidc } from './oidc';
 import { track } from '@repo/posthog';
+import { savedProperties } from '@repo/resume-versions';
+import { RequestActor } from './actor';
 
 /** An OAuth access token; provides CurrentGrant (the user and the scope). */
 export const OAuthBearerLive = Layer.effect(
@@ -36,7 +38,13 @@ export const OAuthBearerLive = Layer.effect(
           user: toSessionUser(grant.user),
           scope: grant.scope,
           clientId: grant.clientId,
-        });
+        }).pipe(
+          Effect.provideService(RequestActor, {
+            kind: 'app',
+            id: grant.clientId,
+            name: grant.clientName,
+          })
+        );
       }),
     });
   })
@@ -81,21 +89,27 @@ export const OAuthResourceHandlers = HttpApiBuilder.group(
         saveResume: ({ payload }) =>
           Effect.gen(function* () {
             const user = yield* requires('resume:write');
-            yield* accounts.saveResume(user.id, payload).pipe(
-              Effect.mapError(
-                (e) =>
-                  new ResumeNotSaved({
-                    error: 'invalid_resume',
-                    error_description:
-                      e._tag === 'InvalidResume'
-                        ? e.message
-                        : e._tag === 'GistPermissionNeeded'
-                        ? 'Their resume comes from a GitHub gist jsonresume.org may not write to yet; they can allow it at https://jsonresume.org/dashboard/resume'
-                        : 'GitHub did not answer; try again in a minute',
-                  })
-              )
-            );
-            yield* track(user.id, 'resume_saved', { via: 'oauth_app' });
+            const actor = yield* RequestActor;
+            const saved = yield* accounts
+              .saveResume(user.id, payload, actor)
+              .pipe(
+                Effect.mapError(
+                  (e) =>
+                    new ResumeNotSaved({
+                      error: 'invalid_resume',
+                      error_description:
+                        e._tag === 'InvalidResume'
+                          ? e.message
+                          : e._tag === 'GistPermissionNeeded'
+                          ? 'Their resume comes from a GitHub gist jsonresume.org may not write to yet; they can allow it at https://jsonresume.org/dashboard/resume'
+                          : 'GitHub did not answer; try again in a minute',
+                    })
+                )
+              );
+            yield* track(user.id, 'resume_saved', {
+              via: 'oauth_app',
+              ...savedProperties(saved, 'oauth_app'),
+            });
             return { username: user.username, url: page(user.username) };
           }),
       });

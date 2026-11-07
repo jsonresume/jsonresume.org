@@ -1,0 +1,29 @@
+{
+  "name": "@repo/resume-versions",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Every save of a resume as an append-only version: who made it, what changed, and the JSON to restore",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts"
+  },
+  "dependencies": {
+    "@jsonresume/sample-data": "workspace:*",
+    "@repo/explore": "workspace:*",
+    "effect": "4.0.6"
+  },
+  "devDependencies": {
+    "@effect/sql-pglite": "4.0.6",
+    "@repo/database": "workspace:*",
+    "@repo/eslint-config-custom": "workspace:*",
+    "@types/node": "^20.19.24",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.6"
+  }
+}

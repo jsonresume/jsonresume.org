@@ -118,14 +118,24 @@ const make = Effect.gen(function* () {
       user_id: string;
       client_id: string;
       scope: string;
+      client_name: string;
     }>`
-      UPDATE app.oauth_tokens SET last_used_at = now()
-      WHERE access_hash = ${hashToken(access)} AND access_expires_at > now()
-      RETURNING user_id, client_id, scope
+      UPDATE app.oauth_tokens t SET last_used_at = now()
+      FROM app.oauth_clients c
+      WHERE t.access_hash = ${hashToken(access)} AND t.access_expires_at > now()
+        AND c.id = t.client_id
+      RETURNING t.user_id, t.client_id, t.scope, c.name AS client_name
     `.pipe(Effect.orDie);
     if (!row) return undefined;
     const user = yield* users.byId(row.user_id);
-    return user && { user, scope: row.scope, clientId: row.client_id };
+    return (
+      user && {
+        user,
+        scope: row.scope,
+        clientId: row.client_id,
+        clientName: row.client_name,
+      }
+    );
   });
 
   return {

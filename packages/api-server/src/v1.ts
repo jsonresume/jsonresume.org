@@ -13,6 +13,8 @@ import { Effect, Predicate, Schema } from 'effect';
 import { HttpApiBuilder } from 'effect/http-api';
 import { client } from './http';
 import { track } from '@repo/posthog';
+import { savedProperties } from '@repo/resume-versions';
+import { RequestActor } from './actor';
 
 const notYet = (what: string) =>
   new V1NotYet({
@@ -60,20 +62,26 @@ export const V1Handlers = HttpApiBuilder.group(
         saveResume: ({ payload }) =>
           Effect.gen(function* () {
             const user = yield* CurrentUser;
-            yield* accounts.saveResume(user.id, payload).pipe(
-              Effect.mapError(
-                (e) =>
-                  new V1BadRequest({
-                    error:
-                      e._tag === 'InvalidResume'
-                        ? e.message
-                        : e._tag === 'GistPermissionNeeded'
-                        ? 'Your resume comes from your gist, and GitHub has not let jsonresume.org write to it. Allow it at https://jsonresume.org/dashboard/resume'
-                        : 'GitHub did not answer; try again in a minute.',
-                  })
-              )
-            );
-            yield* track(user.id, 'resume_saved', { via: 'api' });
+            const actor = yield* RequestActor;
+            const saved = yield* accounts
+              .saveResume(user.id, payload, actor)
+              .pipe(
+                Effect.mapError(
+                  (e) =>
+                    new V1BadRequest({
+                      error:
+                        e._tag === 'InvalidResume'
+                          ? e.message
+                          : e._tag === 'GistPermissionNeeded'
+                          ? 'Your resume comes from your gist, and GitHub has not let jsonresume.org write to it. Allow it at https://jsonresume.org/dashboard/resume'
+                          : 'GitHub did not answer; try again in a minute.',
+                    })
+                )
+              );
+            yield* track(user.id, 'resume_saved', {
+              via: 'api',
+              ...savedProperties(saved, 'api'),
+            });
             return { username: user.username, message: 'Resume updated' };
           }),
         jobs: ({ query }) =>

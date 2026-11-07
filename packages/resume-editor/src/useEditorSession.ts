@@ -4,6 +4,7 @@ import { errorTag, keys, saveResumeAtom } from '@repo/api-client';
 import { AsyncResult } from 'effect/reactivity';
 import { useEffect, useState } from 'react';
 import { clearBackup, useBackup } from './backup';
+import { isUntouchedExample } from './Start';
 import {
   dirtyAtom,
   draftAtom,
@@ -57,8 +58,10 @@ export function useEditorSession(username: string) {
     return () => window.removeEventListener('beforeunload', warn);
   }, [dirty]);
 
+  // The example isn't anyone's resume: it saves once something is changed.
+  const example = isUntouchedExample(draft);
   const onSave = async () => {
-    if (!dirty || saving || !ready) return;
+    if (!dirty || saving || !ready || example) return;
     setSaving(true);
     const exit = await save({
       payload: { resume: draft },
@@ -104,6 +107,7 @@ export function useEditorSession(username: string) {
     target,
     saving,
     notice,
+    example,
     onSave,
     replace,
   };
