@@ -1,6 +1,6 @@
 {
   "name": "@repo/accounts",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "Accounts: email and password or GitHub sign-in, sessions, email verification, and the username each account holds",
   "type": "module",

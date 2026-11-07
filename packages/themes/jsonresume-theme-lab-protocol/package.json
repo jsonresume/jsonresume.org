@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-lab-protocol",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A protocol-like masthead, small marginal dates and strong dark-green labels support appointments and publications. Keep the body uncluttered and permit long technical names.",
   "type": "module",
   "main": "./dist/index.js",

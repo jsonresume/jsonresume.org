@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-chambers-counsel",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A navy nameplate and generous date gutter create the rhythm of a legal brief. Credentials stay close to education and experience remains easy to scan.",
   "type": "module",
   "main": "./dist/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-architecture-atelier",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Fine drafting-like rules, marginal dates and a precise serif identity form an architectural document. Keep project names prominent and resist decorative diagrams or fake measurement marks.",
   "type": "module",
   "main": "./dist/index.js",

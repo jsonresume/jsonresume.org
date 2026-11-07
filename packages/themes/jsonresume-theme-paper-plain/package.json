@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-paper-plain",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "An intentionally ordinary paper resume with a modest serif name and clean sans body. Avoid ornaments, panels and icons; concentrate on comfortable line lengths and reliable pagination.",
   "type": "module",
   "main": "./dist/index.js",

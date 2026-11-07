@@ -1,5 +1,13 @@
 # jsonresume-theme-community-garden
 
+## 0.1.13
+
+### Patch Changes
+
+- 04aae6e: Improve PDF printing with repeating page margins, wrapping for long content, section pagination, and A4/Letter paper selection. Rebuild themes with the shared print fixes.
+- Updated dependencies [04aae6e]
+  - @jsonresume/core@0.3.8
+
 ## 0.1.12
 
 ### Patch Changes

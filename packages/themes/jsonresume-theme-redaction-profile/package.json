@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-redaction-profile",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Use black section bands with white, fully readable labels and a plain white career body. The visual reference is graphic redaction, but no content may be obscured.",
   "type": "module",
   "main": "./dist/index.js",

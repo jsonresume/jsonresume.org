@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-practitioner-record",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A monochrome appointment record with dates in the margin, clear professional titles and compact certification entries. Support both short practitioner resumes and long professional CVs.",
   "type": "module",
   "main": "./dist/index.js",

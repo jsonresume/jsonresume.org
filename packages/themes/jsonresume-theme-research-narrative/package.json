@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-research-narrative",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Lead with education and research evidence in an open serif document. Dark green headings and unusually clear publication entries provide structure without laboratory or nature-themed decoration.",
   "type": "module",
   "main": "./dist/index.js",

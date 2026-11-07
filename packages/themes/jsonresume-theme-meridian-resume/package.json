@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-meridian-resume",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A split identity block, narrow blue rule and light qualifications rail provide a balanced modern default. Keep the main career column broad and the summary unboxed.",
   "type": "module",
   "main": "./dist/index.js",

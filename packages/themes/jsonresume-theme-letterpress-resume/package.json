@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-letterpress-resume",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A strong serif name, double warm-grey rules and spacious margins evoke letterpress typography. Keep the paper white and use real text rather than distressed or rasterised lettering.",
   "type": "module",
   "main": "./dist/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-plain-sans",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A clean sans-only page with a compact identity and natural reading order. Role titles are bold, organisation context is regular and dates remain easy to locate.",
   "type": "module",
   "main": "./dist/index.js",

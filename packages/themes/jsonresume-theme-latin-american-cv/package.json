@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-latin-american-cv",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A warm, light sidebar and generous career column support Spanish-language content. Keep every personal-detail choice optional and let longer careers continue without forced page limits.",
   "type": "module",
   "main": "./dist/index.js",

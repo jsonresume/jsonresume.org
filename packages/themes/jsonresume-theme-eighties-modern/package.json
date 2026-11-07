@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-eighties-modern",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A sharp geometric masthead, violet keylines and an offset supporting rail evoke eighties modernism. Avoid neon body text, gradients and decorative grids behind applicant content.",
   "type": "module",
   "main": "./dist/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-newsprint-brief",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Use a compact newspaper-like nameplate, condensed section labels and an economical single column. Keep paper white and body text comfortably sized despite the dense editorial rhythm.",
   "type": "module",
   "main": "./dist/index.js",

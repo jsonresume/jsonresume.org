@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-essay-profile",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A modest serif name, an unboxed summary and spacious paragraphs create an essay-like opening. Maintain conventional section labels and crisp dates for practical scanning.",
   "type": "module",
   "main": "./dist/index.js",
