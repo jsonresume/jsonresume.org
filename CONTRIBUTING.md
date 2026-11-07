@@ -395,6 +395,22 @@ Once a proposal has agreement, a schema PR should:
 Proposals are closed when they're out of scope, duplicate an existing thread,
 or are covered by an extension mechanism. The issue will say which.
 
+### Decisions, monthly
+
+On the first of each month a workflow (`.github/workflows/schema-review.yml`)
+opens a **Schema review** issue listing every open `schema` issue that has no
+decision yet, oldest first. Each one gets one of three answers, with reasons,
+in a comment on the proposal:
+
+- **Accept** (`decision: accept`): a PR can follow, as described below.
+- **Change** (`decision: change`): accepted in a different form, which the
+  comment spells out.
+- **Decline** (`decision: decline`): closed, saying why (out of scope,
+  duplicate, or covered by `custom`).
+
+Decisions are logged in [packages/schema/DECISIONS.md](packages/schema/DECISIONS.md).
+Index issues such as the roadmap carry the `tracking` label and are skipped.
+
 ## Contributing Themes
 
 Want to add your resume theme to the registry? Here's everything you need to know.
