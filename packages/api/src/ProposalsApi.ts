@@ -1,7 +1,11 @@
 import { Schema } from 'effect';
 import { HttpApiEndpoint, HttpApiGroup } from 'effect/http-api';
 import { Authentication } from './Authentication';
-import { GistPermissionNeeded, GithubUnreachable, InvalidResume } from './errors';
+import {
+  GistPermissionNeeded,
+  GithubUnreachable,
+  InvalidResume,
+} from './errors';
 import { VersionActor, VersionChange } from './ResumeVersionsApi';
 
 /** A change an app or assistant suggested, and what it would change now. */
