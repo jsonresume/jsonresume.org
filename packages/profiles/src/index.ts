@@ -27,3 +27,4 @@ export {
   type ResumeFormat,
 } from './username';
 export { Usernames, type Availability } from './usernames';
+export { HIDEABLE, redact, type Hideable } from './redact';

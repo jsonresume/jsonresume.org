@@ -66,6 +66,17 @@ export const AccountHandlers = HttpApiBuilder.group(
             });
             return yield* current;
           }),
+        privacy: () =>
+          Effect.gen(function* () {
+            const user = yield* CurrentUser;
+            return { hidden: yield* accounts.hiddenFields(user.id) };
+          }),
+        setPrivacy: ({ payload }) =>
+          Effect.gen(function* () {
+            const user = yield* CurrentUser;
+            yield* accounts.setHiddenFields(user.id, payload.hidden);
+            return { hidden: yield* accounts.hiddenFields(user.id) };
+          }),
         rename: ({ payload }) =>
           Effect.gen(function* () {
             const user = yield* CurrentUser;
