@@ -1,0 +1,87 @@
+{
+  "slug": "it-support-specialist",
+  "role": "IT Support Specialist",
+  "field": "Technology",
+  "intro": "An IT support specialist resume that shows how many people you kept working, how fast problems were solved, and what you automated.",
+  "tips": [
+    "Give the size of the environment: users, devices, sites.",
+    "Show response and resolution times, and satisfaction scores.",
+    "List certifications; they matter in this field."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Daniel Mensah",
+      "label": "IT Support Specialist",
+      "email": "daniel@example.com",
+      "location": {
+        "city": "Manchester",
+        "countryCode": "GB"
+      },
+      "summary": "IT support specialist with five years looking after 400 users across three offices. Calm on the phone, quick with a fix, and keen to automate the same fix away."
+    },
+    "work": [
+      {
+        "name": "Northgate Housing",
+        "position": "IT Support Specialist",
+        "startDate": "2021-03",
+        "summary": "400 staff across three offices.",
+        "highlights": [
+          "Resolve 30 tickets a day on average, with 96% satisfaction.",
+          "Automated laptop setup with Intune, cutting a new starter's setup from four hours to 40 minutes.",
+          "Led the move of 400 mailboxes to Microsoft 365 with no lost mail."
+        ]
+      },
+      {
+        "name": "TechAssist",
+        "position": "Service Desk Analyst",
+        "startDate": "2019-01",
+        "endDate": "2021-02",
+        "summary": "Outsourced service desk for 20 clients.",
+        "highlights": [
+          "First-line support by phone and chat, resolving 70% of calls on first contact.",
+          "Wrote 50 knowledge base articles that cut repeat calls."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "Manchester College",
+        "area": "IT Networking",
+        "studyType": "BTEC Level 3",
+        "endDate": "2018"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Support",
+        "keywords": [
+          "Windows",
+          "macOS",
+          "Microsoft 365",
+          "Active Directory",
+          "Intune"
+        ]
+      },
+      {
+        "name": "Networking",
+        "keywords": ["TCP/IP", "VPN", "Wi-Fi"]
+      },
+      {
+        "name": "Tools",
+        "keywords": ["ServiceNow", "PowerShell"]
+      }
+    ],
+    "certificates": [
+      {
+        "name": "CompTIA A+",
+        "issuer": "CompTIA",
+        "date": "2019-03"
+      },
+      {
+        "name": "Microsoft 365 Certified: Modern Desktop Administrator Associate",
+        "issuer": "Microsoft",
+        "date": "2022-06"
+      }
+    ]
+  }
+}

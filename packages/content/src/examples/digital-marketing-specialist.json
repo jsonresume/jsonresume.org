@@ -1,0 +1,76 @@
+{
+  "slug": "digital-marketing-specialist",
+  "role": "Digital Marketing Specialist",
+  "field": "Marketing",
+  "intro": "A digital marketing resume that shows channels run, money spent well, and the leads or sales it bought.",
+  "tips": [
+    "Show return: cost per lead, return on ad spend, conversion rate.",
+    "Name the channels and budgets you managed.",
+    "List analytics and ad tools; they are often screened for."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Mei Lin",
+      "label": "Digital Marketing Specialist",
+      "email": "mei@example.com",
+      "location": {
+        "city": "Singapore",
+        "countryCode": "SG"
+      },
+      "summary": "Digital marketing specialist with five years running search, social and email campaigns for e-commerce and education. I spend budgets as if they were mine."
+    },
+    "work": [
+      {
+        "name": "LearnHub Asia",
+        "position": "Digital Marketing Specialist",
+        "startDate": "2021-06",
+        "summary": "Online courses, 400,000 students.",
+        "highlights": [
+          "Run Google and Meta campaigns with a S$1.5m yearly budget; cost per enrolment fell 35%.",
+          "Rebuilt email journeys; email now brings 18% of enrolments, up from 7%.",
+          "Set up GA4 and server-side tracking for the whole site."
+        ]
+      },
+      {
+        "name": "Kedai Online",
+        "position": "Marketing Executive",
+        "startDate": "2019-02",
+        "endDate": "2021-05",
+        "summary": "Online homewares store.",
+        "highlights": [
+          "Ran search ads and the weekly newsletter for 120,000 subscribers.",
+          "Raised return on ad spend from 2.1 to 4.3 by restructuring campaigns."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "Nanyang Technological University",
+        "area": "Marketing",
+        "studyType": "BBus",
+        "endDate": "2018"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Channels",
+        "keywords": ["Google Ads", "Meta Ads", "Email", "SEO"]
+      },
+      {
+        "name": "Analytics",
+        "keywords": ["GA4", "Looker Studio", "A/B testing"]
+      },
+      {
+        "name": "Tools",
+        "keywords": ["HubSpot", "Klaviyo"]
+      }
+    ],
+    "certificates": [
+      {
+        "name": "Google Ads Search Certification",
+        "issuer": "Google",
+        "date": "2023-02"
+      }
+    ]
+  }
+}

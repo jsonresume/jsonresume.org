@@ -1,0 +1,73 @@
+{
+  "slug": "data-scientist",
+  "role": "Data Scientist",
+  "field": "Technology",
+  "intro": "A data scientist resume that leads with decisions changed by models and analysis, then the methods behind them.",
+  "tips": [
+    "Lead with the business decision or metric your work moved.",
+    "Name the methods and data size briefly; the outcome matters more.",
+    "Link a portfolio, paper or repository if you can."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Priya Raman",
+      "label": "Data Scientist",
+      "email": "priya@example.com",
+      "location": {
+        "city": "Bengaluru",
+        "countryCode": "IN"
+      },
+      "summary": "Data scientist with five years in pricing and demand forecasting. I build models people trust enough to act on, and explain them in plain words."
+    },
+    "work": [
+      {
+        "name": "QuickCart",
+        "position": "Data Scientist",
+        "startDate": "2021-04",
+        "summary": "Grocery delivery in 14 cities.",
+        "highlights": [
+          "Built a demand forecast (gradient boosting, 3 years of orders) that cut fresh-food waste by 18%.",
+          "Designed the A/B testing framework the product teams use for every pricing change.",
+          "Presented monthly findings to the leadership team."
+        ]
+      },
+      {
+        "name": "Insightly Analytics",
+        "position": "Data Analyst",
+        "startDate": "2019-07",
+        "endDate": "2021-03",
+        "highlights": [
+          "Built churn models for telecom clients; one client cut churn 6% with the targeted offers it suggested.",
+          "Automated weekly reporting in Python, saving the team a day a week."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "Indian Institute of Science",
+        "area": "Statistics",
+        "studyType": "MSc",
+        "endDate": "2019"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Methods",
+        "keywords": [
+          "Forecasting",
+          "A/B testing",
+          "Causal inference",
+          "Gradient boosting"
+        ]
+      },
+      {
+        "name": "Tools",
+        "keywords": ["Python", "SQL", "scikit-learn", "PyTorch", "Airflow"]
+      },
+      {
+        "name": "Communication",
+        "keywords": ["Dashboards", "Executive briefings"]
+      }
+    ]
+  }
+}

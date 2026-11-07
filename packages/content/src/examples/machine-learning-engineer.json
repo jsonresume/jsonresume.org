@@ -1,0 +1,68 @@
+{
+  "slug": "machine-learning-engineer",
+  "role": "Machine Learning Engineer",
+  "field": "Technology",
+  "intro": "A machine learning engineer resume about models in production: serving, monitoring and the gains they brought, not just training accuracy.",
+  "tips": [
+    "Show models running in production, with latency and scale.",
+    "Name the metric each model improved for the business.",
+    "Mention the pipeline work: data, evaluation, monitoring."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Lukas Becker",
+      "label": "Machine Learning Engineer",
+      "email": "lukas@example.com",
+      "location": {
+        "city": "Berlin",
+        "countryCode": "DE"
+      },
+      "summary": "Machine learning engineer with six years putting ranking and language models into production. I care about evaluation, cost and what happens after launch."
+    },
+    "work": [
+      {
+        "name": "Streamio",
+        "position": "Senior Machine Learning Engineer",
+        "startDate": "2021-09",
+        "summary": "Music streaming, 20 million listeners.",
+        "highlights": [
+          "Shipped a two-tower recommendation model serving 8,000 requests a second under 30 ms; listening time rose 4%.",
+          "Built the offline evaluation suite that every model change now passes before launch.",
+          "Cut GPU inference costs by 35% by distilling and quantising models."
+        ]
+      },
+      {
+        "name": "Textwerk",
+        "position": "Machine Learning Engineer",
+        "startDate": "2018-10",
+        "endDate": "2021-08",
+        "highlights": [
+          "Fine-tuned language models for document classification; accuracy rose from 81% to 93%.",
+          "Set up drift monitoring that caught two data-quality incidents before customers did."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "Technical University of Munich",
+        "area": "Informatics",
+        "studyType": "MSc",
+        "endDate": "2018"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Machine learning",
+        "keywords": ["Recommendation", "NLP", "Evaluation", "Distillation"]
+      },
+      {
+        "name": "Engineering",
+        "keywords": ["Python", "PyTorch", "Ray", "Kubernetes", "Feature stores"]
+      },
+      {
+        "name": "Data",
+        "keywords": ["Spark", "BigQuery"]
+      }
+    ]
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "slug": "backend-developer",
+  "role": "Backend Developer",
+  "field": "Technology",
+  "intro": "A backend developer resume built around systems that carry load: what each service does, how much traffic it handles, and what got faster or cheaper.",
+  "tips": [
+    "Name the scale: requests a second, data size, users served.",
+    "Show results in latency, cost or reliability, not just the tools used.",
+    "Group skills by languages, data stores and infrastructure so they scan fast."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Javier Ortega",
+      "label": "Backend Developer",
+      "email": "javier@example.com",
+      "location": {
+        "city": "Madrid",
+        "countryCode": "ES"
+      },
+      "summary": "Backend developer with six years building APIs and data pipelines in Go and Python. I like boring, reliable systems: my last service handled 4,000 requests a second at 99.98% uptime."
+    },
+    "work": [
+      {
+        "name": "Paymo",
+        "position": "Senior Backend Developer",
+        "startDate": "2021-03",
+        "summary": "Payments platform for 30,000 small businesses.",
+        "highlights": [
+          "Rebuilt the payouts service in Go; p99 latency fell from 900 ms to 120 ms at 4,000 requests a second.",
+          "Moved nightly reconciliation from cron scripts to an event queue, cutting failed payouts by 70%.",
+          "Led on-call for a team of five and wrote the runbooks we still use."
+        ]
+      },
+      {
+        "name": "Datalia",
+        "position": "Backend Developer",
+        "startDate": "2018-06",
+        "endDate": "2021-02",
+        "summary": "Analytics start-up, Series A.",
+        "highlights": [
+          "Built the ingestion API in Python (FastAPI) that took 2 billion events a month.",
+          "Cut the PostgreSQL bill by 40% by partitioning event tables and archiving to S3."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "Universidad Politécnica de Madrid",
+        "area": "Computer Science",
+        "studyType": "BSc",
+        "endDate": "2018"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Languages",
+        "keywords": ["Go", "Python", "SQL"]
+      },
+      {
+        "name": "Data",
+        "keywords": ["PostgreSQL", "Redis", "Kafka"]
+      },
+      {
+        "name": "Infrastructure",
+        "keywords": ["AWS", "Docker", "Kubernetes", "Terraform"]
+      }
+    ]
+  }
+}

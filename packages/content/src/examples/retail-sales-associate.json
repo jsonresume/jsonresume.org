@@ -1,0 +1,70 @@
+{
+  "slug": "retail-sales-associate",
+  "role": "Retail Sales Associate",
+  "field": "Retail",
+  "intro": "A retail sales associate resume that shows sales results, customer service and the extra responsibilities you took on.",
+  "tips": [
+    "Show sales numbers: targets beaten, add-on sales, rankings.",
+    "Give examples of service: reviews, regular customers.",
+    "Mention extra duties: opening, closing, cash, visual displays."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Emily Nguyen",
+      "label": "Retail Sales Associate",
+      "email": "emily@example.com",
+      "location": {
+        "city": "Vancouver",
+        "countryCode": "CA"
+      },
+      "summary": "Retail sales associate with three years in fashion and electronics. I like helping people find the right thing, and I beat my targets doing it."
+    },
+    "work": [
+      {
+        "name": "NorthPeak Outfitters",
+        "position": "Sales Associate",
+        "startDate": "2022-03",
+        "summary": "Outdoor clothing store, $3m a year.",
+        "highlights": [
+          "Beat my monthly sales target in 20 of the last 24 months.",
+          "Top seller of the store's loyalty programme, with 300 sign-ups.",
+          "Trusted to open and close, run the till and count the safe."
+        ]
+      },
+      {
+        "name": "TechZone",
+        "position": "Sales Associate",
+        "startDate": "2021-01",
+        "endDate": "2022-02",
+        "summary": "Electronics store.",
+        "highlights": [
+          "Advised customers on laptops and phones; 40% of my sales included a protection plan.",
+          "Set up product displays for two big launches."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "Langara College",
+        "area": "Business",
+        "studyType": "Diploma",
+        "endDate": "2022"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Sales",
+        "keywords": [
+          "Customer service",
+          "Upselling",
+          "Loyalty programmes",
+          "Visual merchandising"
+        ]
+      },
+      {
+        "name": "Store",
+        "keywords": ["Point of sale", "Cash handling", "Stock replenishment"]
+      }
+    ]
+  }
+}

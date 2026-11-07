@@ -1,0 +1,78 @@
+{
+  "slug": "graphic-designer",
+  "role": "Graphic Designer",
+  "field": "Design",
+  "intro": "A graphic designer resume that points to the work: brands, campaigns and the results they brought, with a portfolio link up front.",
+  "tips": [
+    "Put your portfolio link where it is seen first.",
+    "Name the brands and campaigns, and what they achieved.",
+    "List tools and the kinds of design you do best."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Mateo Rossi",
+      "label": "Graphic Designer",
+      "email": "mateo@example.com",
+      "url": "https://mateorossi.example.com",
+      "location": {
+        "city": "Milan",
+        "countryCode": "IT"
+      },
+      "summary": "Graphic designer with seven years in branding and campaigns for food, fashion and culture. I make identities that last and campaigns people stop for."
+    },
+    "work": [
+      {
+        "name": "Studio Nove",
+        "position": "Senior Graphic Designer",
+        "startDate": "2020-04",
+        "summary": "Branding studio, 15 people.",
+        "highlights": [
+          "Led 20 brand identities, from logo to packaging, for clients including a 40-store bakery chain.",
+          "Designed a museum exhibition campaign that sold 120,000 tickets, a record for the venue.",
+          "Mentor two junior designers."
+        ]
+      },
+      {
+        "name": "Moda Lab",
+        "position": "Graphic Designer",
+        "startDate": "2017-02",
+        "endDate": "2020-03",
+        "summary": "In-house team at a fashion retailer.",
+        "highlights": [
+          "Designed seasonal campaigns across print, store windows and social media for 60 stores.",
+          "Built the brand's first design system for its online shop."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "Politecnico di Milano",
+        "area": "Communication Design",
+        "studyType": "BA",
+        "endDate": "2016"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Design",
+        "keywords": [
+          "Branding",
+          "Typography",
+          "Packaging",
+          "Campaigns",
+          "Art direction"
+        ]
+      },
+      {
+        "name": "Tools",
+        "keywords": [
+          "Adobe Illustrator",
+          "Photoshop",
+          "InDesign",
+          "Figma",
+          "After Effects"
+        ]
+      }
+    ]
+  }
+}

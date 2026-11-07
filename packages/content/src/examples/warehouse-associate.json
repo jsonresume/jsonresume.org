@@ -1,0 +1,80 @@
+{
+  "slug": "warehouse-associate",
+  "role": "Warehouse Associate",
+  "field": "Operations",
+  "intro": "A warehouse associate resume that shows speed, accuracy and safety, with the equipment you are licensed to use.",
+  "tips": [
+    "Show pick rates, accuracy and attendance.",
+    "List equipment and licences: forklift, reach truck, scanners.",
+    "Mention safety and any extra duties like training others."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Marcus Johnson",
+      "label": "Warehouse Associate",
+      "email": "marcus@example.com",
+      "location": {
+        "city": "Columbus",
+        "countryCode": "US"
+      },
+      "summary": "Warehouse associate with four years in fast-paced distribution centres. Fast, accurate and safe, with forklift and reach truck certification."
+    },
+    "work": [
+      {
+        "name": "Midwest Distribution",
+        "position": "Warehouse Associate II",
+        "startDate": "2021-08",
+        "summary": "Distribution centre, 25,000 orders a day.",
+        "highlights": [
+          "Pick 180 lines an hour against a target of 140, at 99.8% accuracy.",
+          "Operate forklift and reach truck for receiving and putaway.",
+          "Train new starters on scanners and safety; 15 trained so far."
+        ]
+      },
+      {
+        "name": "QuickShip Fulfilment",
+        "position": "Picker and Packer",
+        "startDate": "2020-01",
+        "endDate": "2021-07",
+        "highlights": [
+          "Picked and packed orders for e-commerce clients during peak seasons.",
+          "Perfect attendance for 12 months."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "Columbus State Community College",
+        "area": "Supply Chain Management",
+        "studyType": "Certificate",
+        "endDate": "2020"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Warehouse",
+        "keywords": [
+          "Picking and packing",
+          "Receiving",
+          "Inventory counts",
+          "Shipping"
+        ]
+      },
+      {
+        "name": "Equipment",
+        "keywords": ["Forklift", "Reach truck", "RF scanners", "Pallet jack"]
+      },
+      {
+        "name": "Systems",
+        "keywords": ["Manhattan WMS", "SAP"]
+      }
+    ],
+    "certificates": [
+      {
+        "name": "OSHA Forklift Operator Certification",
+        "issuer": "OSHA",
+        "date": "2021-09"
+      }
+    ]
+  }
+}

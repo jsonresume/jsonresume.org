@@ -1,0 +1,77 @@
+{
+  "slug": "civil-engineer",
+  "role": "Civil Engineer",
+  "field": "Engineering",
+  "intro": "A civil engineer resume that shows projects by type and value, your part in them, and your professional registration.",
+  "tips": [
+    "List projects with type, value and your role.",
+    "Show results: on time, under budget, problems solved.",
+    "Put professional registration and design software up front."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Ahmed Hassan",
+      "label": "Civil Engineer",
+      "email": "ahmed@example.com",
+      "location": {
+        "city": "Perth",
+        "countryCode": "AU"
+      },
+      "summary": "Chartered civil engineer with eight years designing roads, drainage and site works. I deliver designs that are buildable, on budget and approved first time."
+    },
+    "work": [
+      {
+        "name": "Westbuild Consulting",
+        "position": "Senior Civil Engineer",
+        "startDate": "2020-03",
+        "summary": "Engineering consultancy, 250 staff.",
+        "highlights": [
+          "Lead design for road and drainage projects worth up to A$80m.",
+          "Redesigned a highway interchange's drainage, saving A$2.4m in construction cost.",
+          "Manage a team of four engineers and two drafters."
+        ]
+      },
+      {
+        "name": "Shire of Kalamunda",
+        "position": "Civil Engineer",
+        "startDate": "2016-02",
+        "endDate": "2020-02",
+        "summary": "Local government.",
+        "highlights": [
+          "Designed and supervised 30 road and footpath projects.",
+          "Managed the A$6m yearly road resurfacing programme."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "University of Western Australia",
+        "area": "Civil Engineering",
+        "studyType": "BEng (Hons)",
+        "endDate": "2015"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Engineering",
+        "keywords": [
+          "Road design",
+          "Stormwater drainage",
+          "Earthworks",
+          "Contract administration"
+        ]
+      },
+      {
+        "name": "Software",
+        "keywords": ["Civil 3D", "12d Model", "DRAINS", "AutoCAD"]
+      }
+    ],
+    "certificates": [
+      {
+        "name": "Chartered Professional Engineer (CPEng)",
+        "issuer": "Engineers Australia",
+        "date": "2020-11"
+      }
+    ]
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "slug": "medical-assistant",
+  "role": "Medical Assistant",
+  "field": "Healthcare",
+  "intro": "A medical assistant resume that shows both sides of the job, clinical and front desk, with certification and patient volume.",
+  "tips": [
+    "Show both clinical and administrative duties.",
+    "Give patient volume and the kind of practice.",
+    "List certifications and the systems you use."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Jasmine Carter",
+      "label": "Certified Medical Assistant",
+      "email": "jasmine@example.com",
+      "location": {
+        "city": "Atlanta",
+        "countryCode": "US"
+      },
+      "summary": "Certified medical assistant with four years in busy family practices. I keep the day moving, from rooming patients to drawing blood to sorting out insurance."
+    },
+    "work": [
+      {
+        "name": "Peachtree Family Medicine",
+        "position": "Medical Assistant",
+        "startDate": "2021-03",
+        "summary": "Practice with five doctors, 120 patients a day.",
+        "highlights": [
+          "Room patients, take vitals and histories, and give injections for two doctors.",
+          "Draw blood for 25 patients a day.",
+          "Cut no-shows by 20% with reminder calls and texts."
+        ]
+      },
+      {
+        "name": "Midtown Urgent Care",
+        "position": "Front Desk and Medical Assistant",
+        "startDate": "2019-06",
+        "endDate": "2021-02",
+        "highlights": [
+          "Checked in patients and verified insurance for 80 visits a day.",
+          "Assisted with stitches, splints and EKGs."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "Atlanta Technical College",
+        "area": "Medical Assisting",
+        "studyType": "Diploma",
+        "endDate": "2019"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Clinical",
+        "keywords": ["Vitals", "Phlebotomy", "Injections", "EKG"]
+      },
+      {
+        "name": "Administrative",
+        "keywords": ["Scheduling", "Insurance verification", "Medical records"]
+      },
+      {
+        "name": "Systems",
+        "keywords": ["athenahealth", "Epic"]
+      }
+    ],
+    "certificates": [
+      {
+        "name": "Certified Medical Assistant (CMA)",
+        "issuer": "AAMA",
+        "date": "2019-08"
+      },
+      {
+        "name": "Basic Life Support",
+        "issuer": "American Heart Association",
+        "date": "2023-05"
+      }
+    ]
+  }
+}

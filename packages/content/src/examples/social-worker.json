@@ -1,0 +1,77 @@
+{
+  "slug": "social-worker",
+  "role": "Social Worker",
+  "field": "Social services",
+  "intro": "A social worker resume that shows registration, caseload and the outcomes you helped people reach, without breaking confidentiality.",
+  "tips": [
+    "Put registration and your area of practice first.",
+    "Give caseload and the population you serve.",
+    "Show outcomes and the programmes or partnerships you built."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Maria Gonzalez",
+      "label": "Licensed Clinical Social Worker",
+      "email": "maria@example.com",
+      "location": {
+        "city": "Phoenix",
+        "countryCode": "US"
+      },
+      "summary": "Licensed clinical social worker with seven years in child and family services. I work alongside families to keep children safe at home whenever that is possible."
+    },
+    "work": [
+      {
+        "name": "Arizona Department of Child Safety",
+        "position": "Senior Case Manager",
+        "startDate": "2020-02",
+        "highlights": [
+          "Manage a caseload of 18 families, coordinating services with schools, courts and health providers.",
+          "80% of my families reunified or stayed together within 12 months, above the state average.",
+          "Supervise four new case managers in their first year."
+        ]
+      },
+      {
+        "name": "Valley Family Services",
+        "position": "Family Therapist",
+        "startDate": "2017-06",
+        "endDate": "2020-01",
+        "summary": "Non-profit counselling centre.",
+        "highlights": [
+          "Provided therapy to 30 families a week.",
+          "Started a parenting group that ran for three years."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "Arizona State University",
+        "area": "Social Work",
+        "studyType": "MSW",
+        "endDate": "2017"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Practice",
+        "keywords": [
+          "Case management",
+          "Family therapy",
+          "Crisis intervention",
+          "Trauma-informed care",
+          "Court reports"
+        ]
+      },
+      {
+        "name": "Languages",
+        "keywords": ["English", "Spanish"]
+      }
+    ],
+    "certificates": [
+      {
+        "name": "Licensed Clinical Social Worker (LCSW)",
+        "issuer": "Arizona Board of Behavioral Health Examiners",
+        "date": "2019-08"
+      }
+    ]
+  }
+}

@@ -60,12 +60,23 @@ export function ResumeText({ resume }: { resume: Entry }) {
       ) : null}
       <h3 className={s.section}>Education</h3>
       {entries(resume['education']).map((e) => (
-        <p key={text(e['institution'])}>
+        <p key={`${text(e['institution'])}${text(e['area'])}`}>
           {[text(e['studyType']), text(e['area'])].filter(Boolean).join(', ')},{' '}
           {text(e['institution'])}{' '}
           <span className={s.years}>{text(e['endDate'])}</span>
         </p>
       ))}
+      {entries(resume['certificates']).length > 0 ? (
+        <>
+          <h3 className={s.section}>Certifications</h3>
+          {entries(resume['certificates']).map((c) => (
+            <p key={text(c['name'])}>
+              {text(c['name'])}, {text(c['issuer'])}{' '}
+              <span className={s.years}>{text(c['date'])?.slice(0, 4)}</span>
+            </p>
+          ))}
+        </>
+      ) : null}
       <h3 className={s.section}>Skills</h3>
       <ul>
         {entries(resume['skills']).map((g) => (
@@ -77,6 +88,20 @@ export function ResumeText({ resume }: { resume: Entry }) {
           </li>
         ))}
       </ul>
+      {entries(resume['languages']).length > 0 ? (
+        <>
+          <h3 className={s.section}>Languages</h3>
+          <p>
+            {entries(resume['languages'])
+              .map((l) =>
+                [text(l['language']), text(l['fluency'])]
+                  .filter(Boolean)
+                  .join(': ')
+              )
+              .join(' · ')}
+          </p>
+        </>
+      ) : null}
     </article>
   );
 }

@@ -1,4 +1,13 @@
-import { Button, Card, Container, Hero, Section, Text } from '@jsonresume/ui';
+import {
+  Button,
+  Card,
+  Container,
+  Heading,
+  Hero,
+  Link,
+  Section,
+  Text,
+} from '@jsonresume/ui';
 import type { Doc, ExampleResume } from '@repo/domain';
 import { paths } from '../../links';
 import * as s from './examples.css';
@@ -48,6 +57,16 @@ export function ExamplePage({ example }: { example: ExampleResume }) {
 }
 
 /** /examples: an example resume for each common job title. */
+const slugify = (field: string) => field.toLowerCase().replace(/\W+/g, '-');
+
+/** Examples under their field, in the order they come (by field, then role). */
+const byField = (examples: ReadonlyArray<ExampleResume>) => {
+  const groups = new Map<string, ExampleResume[]>();
+  for (const e of examples)
+    groups.set(e.field, [...(groups.get(e.field) ?? []), e]);
+  return [...groups];
+};
+
 export function ExamplesPage({
   examples,
 }: {
@@ -64,20 +83,27 @@ export function ExamplesPage({
       />
       <Section spacing="lg">
         <Container>
-          <ul className={s.list} aria-label="Examples">
-            {examples.map((e) => (
-              <li key={e.slug}>
-                <Card asChild interactive tone="raised">
-                  <a className={s.card} href={paths.example(e.slug)}>
-                    <span className={s.cardRole}>{e.role}</span>
-                    <Text as="span" size="sm" tone="muted">
-                      {e.field}
-                    </Text>
-                  </a>
-                </Card>
-              </li>
+          <div className={s.fields}>
+            {byField(examples).map(([field, group]) => (
+              <section key={field} aria-labelledby={`field-${slugify(field)}`}>
+                <Heading
+                  level={2}
+                  size="group"
+                  id={`field-${slugify(field)}`}
+                  className={s.fieldName}
+                >
+                  {field}
+                </Heading>
+                <ul className={s.roles}>
+                  {group.map((e) => (
+                    <li key={e.slug}>
+                      <Link href={paths.example(e.slug)}>{e.role}</Link>
+                    </li>
+                  ))}
+                </ul>
+              </section>
             ))}
-          </ul>
+          </div>
         </Container>
       </Section>
     </>

@@ -1972,6 +1972,9 @@ importers:
       '@repo/eslint-config-custom':
         specifier: workspace:*
         version: link:../eslint-config-custom
+      jsonschema:
+        specifier: ^1.4.1
+        version: 1.5.0
       tsconfig:
         specifier: workspace:*
         version: link:../tsconfig
@@ -29556,7 +29559,6 @@ packages:
 
   /jsonschema@1.5.0:
     resolution: {integrity: sha512-K+A9hhqbn0f3pJX17Q/7H6yQfD/5OXgdrR5UE12gMXCiN9D5Xq2o5mddV2QEcX/bjla99ASsAAQUyMCCRWAEhw==}
-    dev: false
 
   /jstransformer@1.0.0:
     resolution: {integrity: sha512-C9YK3Rf8q6VAPDCCU9fnqo3mAfOH6vUGnMcP4AQAYIEpWtfGLpwOTmZ+igtdK5y+VvI2n3CyYSzy4Qh34eq24A==}

@@ -1,0 +1,78 @@
+{
+  "slug": "human-resources-manager",
+  "role": "Human Resources Manager",
+  "field": "Human resources",
+  "intro": "An HR manager resume that shows the organisation you supported and how hiring, retention and engagement improved under you.",
+  "tips": [
+    "Give the size of the organisation you supported.",
+    "Show results in retention, time to hire, engagement scores.",
+    "Mention policies and programmes you built."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Fatima Al-Sayed",
+      "label": "Human Resources Manager",
+      "email": "fatima@example.com",
+      "location": {
+        "city": "Dubai",
+        "countryCode": "AE"
+      },
+      "summary": "HR manager with ten years supporting growing companies in the Gulf. I build the policies, people processes and culture that let a company double in size without losing what made it good."
+    },
+    "work": [
+      {
+        "name": "Desert Logistics",
+        "position": "Human Resources Manager",
+        "startDate": "2020-02",
+        "summary": "600 staff in four countries.",
+        "highlights": [
+          "Lead a team of five covering recruitment, payroll, employee relations and learning.",
+          "Cut first-year attrition from 32% to 18% with a new onboarding programme.",
+          "Introduced a performance review cycle and salary bands across all four countries."
+        ]
+      },
+      {
+        "name": "Gulf Hospitality Group",
+        "position": "HR Business Partner",
+        "startDate": "2015-03",
+        "endDate": "2020-01",
+        "summary": "Hotels, 1,200 staff.",
+        "highlights": [
+          "Partnered with three hotel general managers on hiring and staff relations.",
+          "Ran hiring for a hotel opening: 220 staff in four months."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "American University of Sharjah",
+        "area": "Business Administration",
+        "studyType": "BBA",
+        "endDate": "2014"
+      }
+    ],
+    "skills": [
+      {
+        "name": "HR",
+        "keywords": [
+          "Employee relations",
+          "Recruitment",
+          "Performance management",
+          "Compensation",
+          "UAE labour law"
+        ]
+      },
+      {
+        "name": "Systems",
+        "keywords": ["SAP SuccessFactors", "Bayzat", "Excel"]
+      }
+    ],
+    "certificates": [
+      {
+        "name": "SHRM Certified Professional (SHRM-CP)",
+        "issuer": "SHRM",
+        "date": "2018-11"
+      }
+    ]
+  }
+}

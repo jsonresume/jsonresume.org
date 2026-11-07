@@ -1,0 +1,80 @@
+{
+  "slug": "executive-assistant",
+  "role": "Executive Assistant",
+  "field": "Administration",
+  "intro": "An executive assistant resume that shows whose time you managed, at what scale, and how you made their work run smoothly.",
+  "tips": [
+    "Say who you supported: titles and how many.",
+    "Show scale: calendars, travel, events, budgets.",
+    "Highlight discretion, judgement and the projects you ran."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Isabelle Dupont",
+      "label": "Executive Assistant",
+      "email": "isabelle@example.com",
+      "location": {
+        "city": "Paris",
+        "countryCode": "FR"
+      },
+      "summary": "Executive assistant with nine years supporting chief executives in fast-moving companies. I keep calendars sane, decisions moving and confidential matters confidential. Bilingual French and English."
+    },
+    "work": [
+      {
+        "name": "Lumière Group",
+        "position": "Executive Assistant to the CEO",
+        "startDate": "2019-09",
+        "summary": "Media group, 2,000 staff.",
+        "highlights": [
+          "Manage the CEO's calendar, travel and correspondence across 12 countries.",
+          "Organise quarterly board meetings and an annual leadership offsite for 80 people.",
+          "Run the CEO's office budget and coordinate three other assistants."
+        ]
+      },
+      {
+        "name": "Banque Ardent",
+        "position": "Executive Assistant",
+        "startDate": "2015-03",
+        "endDate": "2019-08",
+        "highlights": [
+          "Supported two managing directors in corporate finance.",
+          "Prepared deal documents and managed data rooms for 15 transactions."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "ESCP Business School",
+        "area": "Management",
+        "studyType": "Bachelor",
+        "endDate": "2014"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Support",
+        "keywords": [
+          "Calendar management",
+          "Travel planning",
+          "Board meetings",
+          "Event planning",
+          "Minute-taking"
+        ]
+      },
+      {
+        "name": "Tools",
+        "keywords": ["Microsoft 365", "Google Workspace", "Concur", "Notion"]
+      }
+    ],
+    "languages": [
+      {
+        "language": "French",
+        "fluency": "Native speaker"
+      },
+      {
+        "language": "English",
+        "fluency": "Full professional"
+      }
+    ]
+  }
+}

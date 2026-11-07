@@ -1,0 +1,78 @@
+{
+  "slug": "operations-manager",
+  "role": "Operations Manager",
+  "field": "Operations",
+  "intro": "An operations manager resume that shows the operation you ran, the people in it, and the cost, speed and quality you improved.",
+  "tips": [
+    "Give scale: sites, staff, volume, budget.",
+    "Show improvements in cost, speed, quality or safety, with numbers.",
+    "Mention the systems and methods you introduced."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Carlos Mendoza",
+      "label": "Operations Manager",
+      "email": "carlos@example.com",
+      "location": {
+        "city": "Guadalajara",
+        "countryCode": "MX"
+      },
+      "summary": "Operations manager with nine years in manufacturing and distribution. I run calm, safe operations and keep improving them: last year we shipped 15% more with the same team."
+    },
+    "work": [
+      {
+        "name": "Electromex",
+        "position": "Operations Manager",
+        "startDate": "2020-01",
+        "summary": "Electronics plant, 350 staff, three shifts.",
+        "highlights": [
+          "Run production, quality and maintenance for a plant making 2 million units a year.",
+          "Raised on-time delivery from 88% to 97% with daily planning meetings and lean methods.",
+          "Cut lost-time injuries to zero over 18 months."
+        ]
+      },
+      {
+        "name": "DistriNorte",
+        "position": "Shift Supervisor, then Warehouse Manager",
+        "startDate": "2015-05",
+        "endDate": "2019-12",
+        "summary": "Distribution centre, 120 staff.",
+        "highlights": [
+          "Managed a warehouse shipping 8,000 orders a day.",
+          "Introduced barcode scanning, cutting picking errors by 80%."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "Universidad de Guadalajara",
+        "area": "Industrial Engineering",
+        "studyType": "BEng",
+        "endDate": "2014"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Operations",
+        "keywords": [
+          "Lean",
+          "Six Sigma",
+          "Capacity planning",
+          "Safety management",
+          "Budgeting"
+        ]
+      },
+      {
+        "name": "Systems",
+        "keywords": ["SAP", "WMS", "Excel"]
+      }
+    ],
+    "certificates": [
+      {
+        "name": "Lean Six Sigma Green Belt",
+        "issuer": "ASQ",
+        "date": "2018-04"
+      }
+    ]
+  }
+}

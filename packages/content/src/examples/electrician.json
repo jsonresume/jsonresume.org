@@ -1,0 +1,84 @@
+{
+  "slug": "electrician",
+  "role": "Electrician",
+  "field": "Trades",
+  "intro": "An electrician resume that leads with licences, then shows the kinds of jobs done, their size, and a clean safety record.",
+  "tips": [
+    "Put licence class and number of years first.",
+    "Name the kinds of work: residential, commercial, industrial.",
+    "Show safety record and any jobs you ran yourself."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Liam O'Connor",
+      "label": "Licensed Electrician",
+      "email": "liam@example.com",
+      "location": {
+        "city": "Dublin",
+        "countryCode": "IE"
+      },
+      "summary": "Registered electrician with nine years in commercial and residential work. Tidy, safe and on time; I have run jobs of up to eight electricians."
+    },
+    "work": [
+      {
+        "name": "Brennan Electrical Contractors",
+        "position": "Electrician and Site Lead",
+        "startDate": "2019-04",
+        "summary": "Commercial contractor, 60 electricians.",
+        "highlights": [
+          "Lead crews of up to eight on office and retail fit-outs worth up to €1.5m.",
+          "Install and test lighting, power, fire alarm and data systems to IS 10101.",
+          "Five years with no lost-time incidents on my sites."
+        ]
+      },
+      {
+        "name": "HomeSpark",
+        "position": "Electrician",
+        "startDate": "2015-09",
+        "endDate": "2019-03",
+        "summary": "Residential electrical services.",
+        "highlights": [
+          "Rewired 120 homes and fitted 200 EV chargers and solar systems.",
+          "Trained three apprentices to qualification."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "SOLAS",
+        "area": "Electrical Apprenticeship",
+        "studyType": "Advanced Certificate (Craft)",
+        "endDate": "2015"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Electrical",
+        "keywords": [
+          "Commercial fit-out",
+          "Residential wiring",
+          "Fire alarms",
+          "EV chargers",
+          "Solar PV",
+          "Testing and certification"
+        ]
+      },
+      {
+        "name": "Safety",
+        "keywords": ["Safe Pass", "Working at height", "Lock-out/tag-out"]
+      }
+    ],
+    "certificates": [
+      {
+        "name": "Registered Electrical Contractor",
+        "issuer": "Safe Electric",
+        "date": "2019-01"
+      },
+      {
+        "name": "Safe Pass",
+        "issuer": "SOLAS",
+        "date": "2023-02"
+      }
+    ]
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "slug": "lawyer",
+  "role": "Lawyer",
+  "field": "Legal",
+  "intro": "A lawyer resume that leads with admission and practice area, then shows matters handled, their value and outcomes.",
+  "tips": [
+    "Put bar admission and practice area at the top.",
+    "Describe matters by type, value and outcome, keeping client confidences.",
+    "Show business development and the people you supervise."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Victoria Hughes",
+      "label": "Commercial Lawyer",
+      "email": "victoria@example.com",
+      "location": {
+        "city": "Edinburgh",
+        "countryCode": "GB"
+      },
+      "summary": "Solicitor with eight years in commercial contracts and technology law. I give clear, practical advice that helps clients do deals rather than stop them."
+    },
+    "work": [
+      {
+        "name": "Calder Macleod LLP",
+        "position": "Senior Associate, Commercial",
+        "startDate": "2020-09",
+        "summary": "Law firm, 300 lawyers.",
+        "highlights": [
+          "Advise technology and energy clients on contracts worth up to £50m.",
+          "Led the legal work on a £30m outsourcing deal for a public body, delivered on time.",
+          "Supervise three associates and two trainees."
+        ]
+      },
+      {
+        "name": "Stewart & Grant",
+        "position": "Solicitor",
+        "startDate": "2016-09",
+        "endDate": "2020-08",
+        "highlights": [
+          "Drafted and negotiated supply, licensing and services agreements.",
+          "Wrote the firm's GDPR guidance for 60 business clients."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "University of Edinburgh",
+        "area": "Law",
+        "studyType": "LLB (Hons)",
+        "endDate": "2014"
+      },
+      {
+        "institution": "University of Edinburgh",
+        "area": "Professional Legal Practice",
+        "studyType": "Diploma",
+        "endDate": "2015"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Practice",
+        "keywords": [
+          "Commercial contracts",
+          "Technology law",
+          "Outsourcing",
+          "Data protection"
+        ]
+      },
+      {
+        "name": "Skills",
+        "keywords": ["Negotiation", "Drafting", "Client advice"]
+      }
+    ],
+    "certificates": [
+      {
+        "name": "Admitted as a Solicitor",
+        "issuer": "Law Society of Scotland",
+        "date": "2016-09"
+      }
+    ]
+  }
+}

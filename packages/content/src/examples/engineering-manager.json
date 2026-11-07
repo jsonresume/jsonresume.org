@@ -1,0 +1,68 @@
+{
+  "slug": "engineering-manager",
+  "role": "Engineering Manager",
+  "field": "Technology",
+  "intro": "An engineering manager resume that shows the team and its results: people hired and grown, delivery improved, and products shipped.",
+  "tips": [
+    "Give team size and what the team owned.",
+    "Show people outcomes: hires, promotions, retention.",
+    "Show delivery outcomes: what shipped, faster or more reliably."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Rachel Thompson",
+      "label": "Engineering Manager",
+      "email": "rachel@example.com",
+      "location": {
+        "city": "Austin",
+        "countryCode": "US"
+      },
+      "summary": "Engineering manager with four years leading teams of six to fourteen engineers, after eight years as a developer. I build teams that ship steadily and people who want to stay."
+    },
+    "work": [
+      {
+        "name": "Fieldwise",
+        "position": "Engineering Manager",
+        "startDate": "2021-01",
+        "summary": "Field-service software, 400 customers.",
+        "highlights": [
+          "Lead two teams (14 engineers) owning scheduling and the mobile app.",
+          "Hired eight engineers and promoted three; no regretted departures in two years.",
+          "Moved the teams to weekly releases from monthly, with fewer incidents."
+        ]
+      },
+      {
+        "name": "Pixelbridge",
+        "position": "Senior Software Engineer, then Tech Lead",
+        "startDate": "2015-06",
+        "endDate": "2020-12",
+        "highlights": [
+          "Led a team of six building the customer portal used by 50,000 people.",
+          "Mentored five engineers, two of whom became tech leads."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "University of Texas at Austin",
+        "area": "Computer Science",
+        "studyType": "BS",
+        "endDate": "2012"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Leadership",
+        "keywords": ["Hiring", "Coaching", "Performance reviews", "Roadmapping"]
+      },
+      {
+        "name": "Delivery",
+        "keywords": ["Agile", "Incident management", "Release planning"]
+      },
+      {
+        "name": "Technical",
+        "keywords": ["TypeScript", "Java", "AWS", "System design"]
+      }
+    ]
+  }
+}

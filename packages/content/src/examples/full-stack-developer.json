@@ -1,0 +1,68 @@
+{
+  "slug": "full-stack-developer",
+  "role": "Full-Stack Developer",
+  "field": "Technology",
+  "intro": "A full-stack developer resume that shows whole features shipped end to end, from the database to the screen, and what they did for users.",
+  "tips": [
+    "Describe features you owned end to end, not layers you touched.",
+    "Pair each feature with a user or business result.",
+    "List the front-end and back-end stacks separately."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Grace Okafor",
+      "label": "Full-Stack Developer",
+      "email": "grace@example.com",
+      "location": {
+        "city": "Lagos",
+        "countryCode": "NG"
+      },
+      "summary": "Full-stack developer with five years shipping product features in TypeScript, React and Node.js. Comfortable from the schema to the pixels, and happiest talking to the people who use what I build."
+    },
+    "work": [
+      {
+        "name": "Shoplane",
+        "position": "Full-Stack Developer",
+        "startDate": "2021-01",
+        "summary": "E-commerce platform for 12,000 African merchants.",
+        "highlights": [
+          "Built the merchant analytics dashboard end to end (React, Node.js, PostgreSQL); 60% of merchants use it weekly.",
+          "Added offline-first checkout for weak connections, lifting completed orders by 9%.",
+          "Introduced end-to-end tests with Playwright, halving bugs reported after release."
+        ]
+      },
+      {
+        "name": "Kora Labs",
+        "position": "Junior Developer",
+        "startDate": "2019-02",
+        "endDate": "2020-12",
+        "highlights": [
+          "Built internal tools in Vue and Express for a support team of 40.",
+          "Wrote the API docs that onboarding new partners now starts from."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "University of Lagos",
+        "area": "Computer Engineering",
+        "studyType": "BEng",
+        "endDate": "2018"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Front end",
+        "keywords": ["TypeScript", "React", "Next.js", "CSS"]
+      },
+      {
+        "name": "Back end",
+        "keywords": ["Node.js", "PostgreSQL", "GraphQL"]
+      },
+      {
+        "name": "Tools",
+        "keywords": ["Playwright", "GitHub Actions", "AWS"]
+      }
+    ]
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "slug": "content-writer",
+  "role": "Content Writer",
+  "field": "Marketing",
+  "intro": "A content writer resume that shows what your writing did: traffic, sign-ups, rankings, and the range of formats you can handle.",
+  "tips": [
+    "Show results from your writing: traffic, conversions, rankings.",
+    "Name the formats and subjects you write well.",
+    "Link a portfolio of your best pieces."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Chloe Bennett",
+      "label": "Content Writer",
+      "email": "chloe@example.com",
+      "url": "https://chloebennett.example.com",
+      "location": {
+        "city": "Bristol",
+        "countryCode": "GB"
+      },
+      "summary": "Content writer with five years writing guides, case studies and product copy for software companies. I write clearly about complicated things, and I write to rank."
+    },
+    "work": [
+      {
+        "name": "Cloudkeep",
+        "position": "Senior Content Writer",
+        "startDate": "2021-03",
+        "summary": "Backup software for small businesses.",
+        "highlights": [
+          "Write four long-form guides a month; organic traffic grew from 40,000 to 210,000 visits a month in two years.",
+          "Wrote the case studies sales uses most; they appear in 60% of closed deals.",
+          "Built the style guide all writers and product teams now follow."
+        ]
+      },
+      {
+        "name": "Wordsmith Agency",
+        "position": "Copywriter",
+        "startDate": "2019-01",
+        "endDate": "2021-02",
+        "summary": "Content agency, 30 clients.",
+        "highlights": [
+          "Wrote blogs, emails and landing pages for clients in tech, finance and travel.",
+          "Rewrote a client's pricing page; trial sign-ups rose 27%."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "University of Bristol",
+        "area": "English Literature",
+        "studyType": "BA",
+        "endDate": "2018"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Writing",
+        "keywords": [
+          "Long-form guides",
+          "Case studies",
+          "Product copy",
+          "Email",
+          "Editing"
+        ]
+      },
+      {
+        "name": "SEO",
+        "keywords": ["Keyword research", "Ahrefs", "Search Console"]
+      },
+      {
+        "name": "Tools",
+        "keywords": ["WordPress", "Webflow", "Google Docs"]
+      }
+    ]
+  }
+}

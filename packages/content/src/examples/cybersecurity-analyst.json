@@ -1,0 +1,86 @@
+{
+  "slug": "cybersecurity-analyst",
+  "role": "Cybersecurity Analyst",
+  "field": "Technology",
+  "intro": "A cybersecurity analyst resume that shows incidents handled, risks reduced and the controls you built, with certifications up front.",
+  "tips": [
+    "Quantify: alerts triaged, incidents handled, time to respond.",
+    "Show controls and programmes you built, not just tools you used.",
+    "Put certifications where they are easy to find."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Aisha Rahman",
+      "label": "Cybersecurity Analyst",
+      "email": "aisha@example.com",
+      "location": {
+        "city": "Toronto",
+        "countryCode": "CA"
+      },
+      "summary": "Security analyst with five years in a 24/7 security operations centre and on cloud security. I find the real threats in the noise and fix the gaps that let them in."
+    },
+    "work": [
+      {
+        "name": "Maple Financial",
+        "position": "Cybersecurity Analyst",
+        "startDate": "2021-06",
+        "summary": "Bank with 3,000 staff.",
+        "highlights": [
+          "Triage 200 alerts a day; tuned detection rules to cut false positives by 60%.",
+          "Led response to a phishing campaign: contained in two hours, no accounts lost.",
+          "Ran the phishing simulation programme; click rates fell from 14% to 3%."
+        ]
+      },
+      {
+        "name": "SecureOps",
+        "position": "SOC Analyst",
+        "startDate": "2019-05",
+        "endDate": "2021-05",
+        "summary": "Managed security provider.",
+        "highlights": [
+          "Monitored 30 client networks in Splunk and escalated incidents by playbook.",
+          "Wrote 20 playbooks that became the team standard."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "Ryerson University",
+        "area": "Computer Security",
+        "studyType": "BTech",
+        "endDate": "2019"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Security",
+        "keywords": [
+          "Incident response",
+          "Threat hunting",
+          "Vulnerability management",
+          "Cloud security"
+        ]
+      },
+      {
+        "name": "Tools",
+        "keywords": ["Splunk", "CrowdStrike", "Wireshark", "Nessus"]
+      },
+      {
+        "name": "Cloud",
+        "keywords": ["AWS", "Azure"]
+      }
+    ],
+    "certificates": [
+      {
+        "name": "CompTIA Security+",
+        "issuer": "CompTIA",
+        "date": "2019-08"
+      },
+      {
+        "name": "GIAC Certified Incident Handler (GCIH)",
+        "issuer": "GIAC",
+        "date": "2022-03"
+      }
+    ]
+  }
+}

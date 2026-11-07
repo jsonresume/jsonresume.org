@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import { Validator } from 'jsonschema';
+import schema from '@jsonresume/schema/schema.json';
 import {
   docSlugs,
   factNames,
@@ -150,8 +152,14 @@ describe('examples and guides', () => {
     const { exampleSlugs, loadExamples } = await import('./documents');
     const examples = await loadExamples();
     expect(examples).toHaveLength(exampleSlugs.length);
-    expect(examples.length).toBeGreaterThanOrEqual(15);
+    expect(examples.length).toBeGreaterThanOrEqual(50);
+    const validator = new Validator();
     for (const example of examples) {
+      const { errors } = validator.validate(example.resume, schema);
+      expect([example.slug, errors.map((e) => e.stack)]).toEqual([
+        example.slug,
+        [],
+      ]);
       const work = example.resume['work'];
       expect(Array.isArray(work) && work.length >= 2).toBe(true);
       expect(example.tips.length).toBeGreaterThanOrEqual(3);
@@ -162,6 +170,6 @@ describe('examples and guides', () => {
     const { guideSlugs, loadGuides } = await import('./documents');
     const guides = await loadGuides();
     expect(guides).toHaveLength(guideSlugs.length);
-    expect(guides.length).toBeGreaterThanOrEqual(15);
+    expect(guides.length).toBeGreaterThanOrEqual(20);
   });
 });

@@ -1,0 +1,81 @@
+{
+  "slug": "pharmacist",
+  "role": "Pharmacist",
+  "field": "Healthcare",
+  "intro": "A pharmacist resume that shows registration first, then the setting, the volume, and the clinical and service work you led.",
+  "tips": [
+    "Put your registration and number of years up front.",
+    "Give the setting and volume: scripts a day, patients, beds.",
+    "Show clinical services and improvements you led."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Samuel Adeyemi",
+      "label": "Pharmacist",
+      "email": "samuel@example.com",
+      "location": {
+        "city": "Auckland",
+        "countryCode": "NZ"
+      },
+      "summary": "Registered pharmacist with seven years in community and hospital pharmacy. I make sure patients understand their medicines, and I like improving how a pharmacy runs."
+    },
+    "work": [
+      {
+        "name": "Greenlane Pharmacy",
+        "position": "Pharmacist Manager",
+        "startDate": "2020-05",
+        "summary": "Community pharmacy, 350 scripts a day.",
+        "highlights": [
+          "Manage a team of nine and a busy dispensary with zero serious dispensing errors in four years.",
+          "Started a medicines review service; 600 reviews in its first year.",
+          "Run the flu and COVID vaccination clinic, 3,000 doses a season."
+        ]
+      },
+      {
+        "name": "Auckland City Hospital",
+        "position": "Hospital Pharmacist",
+        "startDate": "2017-01",
+        "endDate": "2020-04",
+        "highlights": [
+          "Clinical pharmacist on medical wards, reviewing 40 charts a day.",
+          "Led a project that cut missed doses on two wards by half."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "University of Auckland",
+        "area": "Pharmacy",
+        "studyType": "BPharm",
+        "endDate": "2016"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Clinical",
+        "keywords": [
+          "Medicines reviews",
+          "Vaccinations",
+          "Clinical checks",
+          "Patient counselling"
+        ]
+      },
+      {
+        "name": "Pharmacy",
+        "keywords": ["Dispensary management", "Compliance", "Stock control"]
+      }
+    ],
+    "certificates": [
+      {
+        "name": "Registered Pharmacist",
+        "issuer": "Pharmacy Council of New Zealand",
+        "date": "2017-01"
+      },
+      {
+        "name": "Authorised Vaccinator",
+        "issuer": "Ministry of Health",
+        "date": "2018-03"
+      }
+    ]
+  }
+}

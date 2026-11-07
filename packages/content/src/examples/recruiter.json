@@ -1,0 +1,70 @@
+{
+  "slug": "recruiter",
+  "role": "Recruiter",
+  "field": "Human resources",
+  "intro": "A recruiter resume that shows hires made, how fast and how well: time to fill, offer acceptance, and how long hires stayed.",
+  "tips": [
+    "Give the number and kinds of roles you filled.",
+    "Show time to fill, offer acceptance and retention of hires.",
+    "Mention sourcing channels and the tools you used."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Ethan Brooks",
+      "label": "Technical Recruiter",
+      "email": "ethan@example.com",
+      "location": {
+        "city": "Denver",
+        "countryCode": "US"
+      },
+      "summary": "Technical recruiter with six years hiring engineers, designers and product managers for fast-growing companies. Candidates remember me for honest, quick answers."
+    },
+    "work": [
+      {
+        "name": "Summit Software",
+        "position": "Senior Technical Recruiter",
+        "startDate": "2021-05",
+        "summary": "SaaS company, grew from 150 to 400 staff.",
+        "highlights": [
+          "Hired 85 engineers and product people in two years; 92% still there after a year.",
+          "Cut average time to fill from 52 days to 34 with structured interviews and faster feedback.",
+          "Built a referral programme that now brings 30% of hires."
+        ]
+      },
+      {
+        "name": "TalentBridge",
+        "position": "Recruitment Consultant",
+        "startDate": "2018-02",
+        "endDate": "2021-04",
+        "summary": "Agency for tech roles.",
+        "highlights": [
+          "Placed 60 candidates a year across 25 client companies.",
+          "Top biller in the Denver office for two years."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "University of Colorado Boulder",
+        "area": "Psychology",
+        "studyType": "BA",
+        "endDate": "2017"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Recruiting",
+        "keywords": [
+          "Sourcing",
+          "Structured interviews",
+          "Offer negotiation",
+          "Employer branding"
+        ]
+      },
+      {
+        "name": "Tools",
+        "keywords": ["Greenhouse", "LinkedIn Recruiter", "Gem"]
+      }
+    ]
+  }
+}
