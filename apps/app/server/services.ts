@@ -18,7 +18,7 @@ import { Copilot } from '@repo/pathways';
 import { GithubGists, Profiles, Usernames } from '@repo/profiles';
 import { Downloader, ImporterLive } from '@repo/resume-import';
 import { ResumePdf } from '@repo/resume-pdf';
-import { ResumeVersions, Variants } from '@repo/resume-versions';
+import { Proposals, ResumeVersions, Variants } from '@repo/resume-versions';
 import { Webhooks, WebhookSender } from '@repo/webhooks';
 import { PgProfileStore } from '@repo/profiles/sql';
 import { Effect, Layer } from 'effect';
@@ -41,6 +41,7 @@ export const appServices = <E>(
     OAuth.layer,
     ResumeVersions.layer,
     Variants.layer,
+    Proposals.layer,
     JobBoard.layer,
     Explore.layer,
     JobMatcher.layer.pipe(Layer.provide(OpenAiJobs))

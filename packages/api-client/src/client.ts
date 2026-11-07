@@ -168,3 +168,10 @@ export const variantsAtom = ApiClient.query('variants', 'list', {
 });
 export const createVariantAtom = ApiClient.mutation('variants', 'create');
 export const deleteVariantAtom = ApiClient.mutation('variants', 'delete');
+
+/** Changes apps and assistants suggested, waiting for you. */
+export const proposalsAtom = ApiClient.query('proposals', 'list', {
+  reactivityKeys: keys.account,
+});
+export const acceptProposalAtom = ApiClient.mutation('proposals', 'accept');
+export const rejectProposalAtom = ApiClient.mutation('proposals', 'reject');

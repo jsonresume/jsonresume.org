@@ -154,4 +154,29 @@ export const laterMigrations: Record<
       )
     `;
   }),
+
+  // Proposals (@repo/resume-versions): changes an app or assistant suggests
+  // instead of saving, for the person to accept or reject.
+  '21_change_proposals': Effect.gen(function* () {
+    const sql = yield* SqlClient.SqlClient;
+    yield* sql`
+      CREATE TABLE app.change_proposals (
+        id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+        user_id uuid NOT NULL REFERENCES app.users (id) ON DELETE CASCADE,
+        actor_kind text NOT NULL,
+        actor_id text,
+        actor_name text,
+        note text,
+        resume json NOT NULL,
+        state text NOT NULL DEFAULT 'pending'
+          CHECK (state IN ('pending', 'accepted', 'rejected', 'dropped')),
+        created_at timestamptz NOT NULL DEFAULT now(),
+        decided_at timestamptz
+      )
+    `;
+    yield* sql`
+      CREATE INDEX change_proposals_pending ON app.change_proposals (user_id)
+        WHERE state = 'pending'
+    `;
+  }),
 };

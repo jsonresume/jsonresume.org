@@ -2,7 +2,7 @@ import { TestDatabase } from '@repo/database/testing';
 import { Profiles, Usernames } from '@repo/profiles';
 import { PgProfileStore } from '@repo/profiles/sql';
 import { fakeGithub } from '@repo/profiles/testing';
-import { ResumeVersions, Variants } from '@repo/resume-versions';
+import { Proposals, ResumeVersions, Variants } from '@repo/resume-versions';
 import { ConfigProvider, Effect, Layer } from 'effect';
 import { Accounts } from '../accounts';
 import { Mailer, type Mail } from '../mailer';
@@ -36,7 +36,8 @@ export function accountsStack() {
     PgAccountStore,
     PgProfileStore,
     ResumeVersions.layer,
-    Variants.layer
+    Variants.layer,
+    Proposals.layer
   ).pipe(Layer.provideMerge(TestDatabase));
   const profiles = Layer.mergeAll(Usernames.layer, Profiles.layer).pipe(
     Layer.provideMerge(Layer.mergeAll(github.layer(), stores))

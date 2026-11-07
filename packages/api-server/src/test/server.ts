@@ -26,8 +26,9 @@ import {
   fakeReader,
   testImporter,
 } from '@repo/resume-import/testing';
-import { ResumeVersions, Variants } from '@repo/resume-versions';
-import { ConfigProvider, Effect, Layer, Stream } from 'effect';
+import { Proposals, ResumeVersions, Variants } from '@repo/resume-versions';
+import { ConfigProvider, Effect, Layer, ManagedRuntime, Stream } from 'effect';
+import { SqlClient } from 'effect/sql';
 import { HttpRouter, HttpServer } from 'effect/http';
 import { apiRoutes } from '../index';
 import { plainCareers } from '@repo/careers/testing';
@@ -63,6 +64,7 @@ export function testServer() {
     OAuth.layer,
     ResumeVersions.layer,
     Variants.layer,
+    Proposals.layer,
     // The copilot answers as the user it was given, without a model.
     Layer.succeed(
       Copilot,
@@ -163,9 +165,24 @@ export function testServer() {
     Layer.provide(services),
     Layer.provide(HttpServer.layerServices)
   );
-  const { handler, dispose } = HttpRouter.toWebHandler(app, {
+  // One MemoMap, so `sql` below reaches the database the API uses.
+  const memoMap = Layer.makeMemoMapUnsafe();
+  const { handler, dispose: closeApi } = HttpRouter.toWebHandler(app, {
     disableLogger: true,
+    memoMap,
   });
+  const runtime = ManagedRuntime.make(stores, { memoMap });
+  /** Run SQL on the test database, to seed what no endpoint makes. */
+  const sql = (strings: TemplateStringsArray, ...values: Array<unknown>) =>
+    runtime.runPromise(
+      Effect.flatMap(SqlClient.SqlClient, (client) =>
+        client(strings, ...(values as Array<string>))
+      )
+    );
+  const dispose = async () => {
+    await closeApi();
+    await runtime.dispose();
+  };
 
   const jar = new Map<string, string>();
   const fetch = async (path: string, init: RequestInit = {}) => {
@@ -204,6 +221,7 @@ export function testServer() {
     github,
     gists: gists.state,
     identities,
+    sql,
     dispose,
   };
 }
