@@ -27,6 +27,10 @@ const externalMargins = new Set([
 
 /** Compatibility fixes for older npm themes; these apply only while printing. */
 const overrides: Readonly<Record<string, string>> = {
+  elegant: `.main,.card-wrapper{padding-bottom:0}
+    .background-card{padding-bottom:0;border-bottom:0}
+    .background-details>.detail:last-child .card-nested:last-child{padding-bottom:0}
+    #references li:last-child blockquote{margin-bottom:0}`,
   jacrys: '.list-group-item{break-inside:avoid}',
   macchiato: `.page{height:auto;min-height:0;padding:0}.container{page-break-inside:auto}
     .resume-content{display:grid;grid-template-columns:minmax(0,.3fr) minmax(0,1fr);gap:18px}

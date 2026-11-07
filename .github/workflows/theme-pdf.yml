@@ -56,7 +56,7 @@ jobs:
       - name: Check every page for content, clipping, blank pages and paper size
         run: |
           python3 -m unittest discover -s scripts -p 'test_theme_pdf_content.py'
-          python3 scripts/check-all-theme-pdfs.py
+          python3 scripts/check-all-theme-pdfs.py --details
       - uses: actions/upload-artifact@v6
         if: failure()
         with:
