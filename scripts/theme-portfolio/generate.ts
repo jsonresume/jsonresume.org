@@ -68,6 +68,7 @@ for (const idea of selectedIdeas) {
   );
   for (const file of [
     'LICENSE',
+    '.eslintrc.cjs',
     'tsconfig.json',
     'tsconfig.build.json',
     'vite.config.ts',
