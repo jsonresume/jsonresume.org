@@ -6,6 +6,8 @@ import {
   GistPermissionNeeded,
   GithubUnreachable,
   InvalidResume,
+  NoResume,
+  UnknownTheme,
   UsernameUnavailable,
 } from './errors';
 
@@ -54,6 +56,18 @@ export class AccountApi extends HttpApiGroup.make('account')
     HttpApiEndpoint.put('setPrivacy', '/privacy', {
       payload: Privacy,
       success: Privacy,
+    }),
+    /** The page's theme (meta.theme), from the gallery: a new version. */
+    HttpApiEndpoint.put('setTheme', '/theme', {
+      payload: Schema.Struct({ theme: Schema.String }),
+      success: Account,
+      error: [
+        UnknownTheme,
+        NoResume,
+        InvalidResume,
+        GistPermissionNeeded,
+        GithubUnreachable,
+      ],
     }),
     HttpApiEndpoint.put('setSource', '/source', {
       payload: Schema.Struct({ source: ResumeSource }),

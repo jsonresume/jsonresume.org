@@ -1,5 +1,6 @@
 import { Accounts, type AccountRecord } from '@repo/accounts';
-import { Account, CurrentUser, JsonResumeApi } from '@repo/api';
+import { THEME_METADATA } from '@jsonresume/theme-metadata';
+import { Account, CurrentUser, JsonResumeApi, UnknownTheme } from '@repo/api';
 import { Effect } from 'effect';
 import { HttpApiBuilder } from 'effect/http-api';
 import { clearSession } from './http';
@@ -76,6 +77,26 @@ export const AccountHandlers = HttpApiBuilder.group(
             const user = yield* CurrentUser;
             yield* accounts.setHiddenFields(user.id, payload.hidden);
             return { hidden: yield* accounts.hiddenFields(user.id) };
+          }),
+        setTheme: ({ payload }) =>
+          Effect.gen(function* () {
+            if (!Object.hasOwn(THEME_METADATA, payload.theme))
+              return yield* new UnknownTheme();
+            const user = yield* CurrentUser;
+            const saved = yield* accounts.setTheme(
+              user.id,
+              payload.theme,
+              userActor
+            );
+            yield* track(user.id, 'resume_saved', {
+              via: 'dashboard',
+              ...savedProperties(saved, 'editor'),
+            });
+            yield* track(user.id, 'theme_chosen', {
+              theme: payload.theme,
+              from: 'gallery',
+            });
+            return yield* current;
           }),
         rename: ({ payload }) =>
           Effect.gen(function* () {

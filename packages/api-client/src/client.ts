@@ -146,3 +146,5 @@ export const privacyAtom = ApiClient.query('account', 'privacy', {
   reactivityKeys: keys.account,
 });
 export const setPrivacyAtom = ApiClient.mutation('account', 'setPrivacy');
+/** Sets the page's theme from the gallery (a new version). */
+export const setThemeAtom = ApiClient.mutation('account', 'setTheme');
