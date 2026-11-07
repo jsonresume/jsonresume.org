@@ -25,6 +25,9 @@ const failure = async <A, E>(effect: Effect.Effect<A, E>) => {
 
 describe('isoDate', () => {
   it('reads the ways resumes write dates', () => {
+    expect(isoDate('2020-02-31')).toBeUndefined();
+    expect(isoDate('31 Feb 2020')).toBeUndefined();
+    expect(isoDate('29 Feb 2020')).toBe('2020-02-29');
     expect(isoDate('2020')).toBe('2020');
     expect(isoDate('2020-03')).toBe('2020-03');
     expect(isoDate('Jan 2020')).toBe('2020-01');

@@ -170,6 +170,22 @@ describe('Importer', () => {
     expect(rows).toEqual([{ kept: false }, { kept: true }]);
   });
 
+  it('forgets what a deleted account imported, keeping the stats', async () => {
+    const { run, importing } = setup();
+    const rows = await run(
+      Effect.gen(function* () {
+        const sql = yield* SqlClient.SqlClient;
+        const [user] = yield* sql<{ id: string }>`
+          INSERT INTO app.users (email) VALUES ('ada@example.com') RETURNING id`;
+        yield* importing(file(textPdf(RESUME_LINES)), user?.id);
+        yield* sql`DELETE FROM app.users`;
+        return yield* sql`
+          SELECT user_id, result IS NOT NULL AS kept FROM app.imports`;
+      })
+    );
+    expect(rows).toEqual([{ user_id: null, kept: false }]);
+  });
+
   it('reads Word documents and pasted text, under the user’s id when signed in', async () => {
     const { run, importing, events } = setup();
     const docx = Effect.promise(() => wordDocx(RESUME_LINES));

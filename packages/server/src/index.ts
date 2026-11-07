@@ -1,5 +1,6 @@
 export {
   createSiteApp,
+  MAX_BODY_BYTES,
   type DynamicHandler,
   type MountedHandler,
   type SiteAppOptions,

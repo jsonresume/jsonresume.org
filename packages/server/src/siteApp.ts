@@ -1,5 +1,6 @@
 import { serveStatic } from '@hono/node-server/serve-static';
 import { Hono, type Context, type Next } from 'hono';
+import { bodyLimit } from 'hono/body-limit';
 import { cors } from 'hono/cors';
 import { readFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
@@ -34,6 +35,13 @@ export interface SiteAppOptions {
   /** Path prefixes any website may call (CORS, no cookies): MCP and OAuth. */
   openPaths?: ReadonlyArray<string>;
 }
+
+/**
+ * The largest request body a mounted handler gets, read or not: bigger
+ * ones are refused with 413 before anything buffers them. Room for a 5 MB
+ * import upload, or pasted text escaped as JSON.
+ */
+export const MAX_BODY_BYTES = 12 * 1024 * 1024;
 
 const HTML_CACHE = 'public, max-age=0, must-revalidate';
 const IMMUTABLE = 'public, max-age=31536000, immutable';
@@ -84,7 +92,13 @@ export function createSiteApp({
   });
   for (const prefix of openPaths) app.use(`${prefix}*`, open);
 
+  const limit = bodyLimit({
+    maxSize: MAX_BODY_BYTES,
+    onError: (c) => c.json({ error: 'Request body too large' }, 413),
+  });
   for (const { prefix, fetch, when } of mount) {
+    app.use(`${prefix}/*`, limit);
+    app.use(prefix, limit);
     const handle = (c: Context, next: Next) =>
       !when || when(c.req.raw) ? fetch(c.req.raw) : next();
     app.all(`${prefix}/*`, handle);

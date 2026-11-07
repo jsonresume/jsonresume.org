@@ -24,6 +24,10 @@ const monthOf = (word: string) => {
 
 const validYear = (y: number) => y >= 1000 && y <= 2999;
 
+/** Days in a month (1-12) of a year: 2020-02 has 29. */
+const daysIn = (y: number, m: number) =>
+  new Date(Date.UTC(y, m, 0)).getUTCDate();
+
 /**
  * A date as JSON Resume writes it (2024-06-30, 2024-06 or 2024), from the
  * ways resumes and LinkedIn write them: "Jan 2020", "January 2020",
@@ -32,7 +36,10 @@ const validYear = (y: number) => y >= 1000 && y <= 2999;
  */
 export const isoDate = (raw: string): string | undefined => {
   const text = raw.trim().replace(/\s+/g, ' ');
-  if (ISO.test(text)) return text;
+  if (ISO.test(text)) {
+    const [y = 0, m = 1, d] = text.split('-').map(Number);
+    return d !== undefined && d > daysIn(y, m) ? undefined : text;
+  }
   // 15 Jan 2020, Jan 15 2020, January 15, 2020
   const dayFirst = /^(\d{1,2}) ([a-z]+)\.?,? (\d{4})$/i.exec(text);
   const dayAfter = /^([a-z]+)\.? (\d{1,2}),? (\d{4})$/i.exec(text);
@@ -45,7 +52,7 @@ export const isoDate = (raw: string): string | undefined => {
     const month = monthOf(full.m ?? '');
     const day = Number(full.d);
     const year = Number(full.y);
-    if (month && validYear(year) && day >= 1 && day <= 31)
+    if (month && validYear(year) && day >= 1 && day <= daysIn(year, month))
       return `${year}-${pad(month)}-${pad(day)}`;
   }
   const named = /^([a-z]+)\.?,? (\d{4})$/i.exec(text);

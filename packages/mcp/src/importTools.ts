@@ -38,7 +38,9 @@ export const ImportHandlers = ImportToolkit.toLayer(
         Effect.gen(function* () {
           const user = yield* caller;
           if ((text === undefined) === (url === undefined))
-            return yield* failWith('Give either text or url, not both.');
+            return yield* failWith(
+              'Give either text or url (exactly one of them).'
+            );
           yield* limiter.hit(`import:user:${user.id}`, PER_HOUR, 3600);
           const input: ImportInput =
             url !== undefined

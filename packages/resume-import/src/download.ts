@@ -7,6 +7,8 @@ import https from 'node:https';
 import type { Upload } from './detect';
 
 const TIMEOUT_MS = 15_000;
+/** The whole download, redirects and body included. */
+const DEADLINE = '30 seconds';
 const MAX_REDIRECTS = 3;
 
 type DownloadError = UnsupportedImport | ImportTooLarge;
@@ -62,7 +64,9 @@ const request = (url: URL) =>
   });
 
 const body = (res: IncomingMessage) =>
-  Effect.callback<Uint8Array, DownloadError>((resume) => {
+  Effect.callback<Uint8Array, DownloadError>((resume, signal) => {
+    // Interrupted (the deadline): stop reading and close the connection.
+    signal.addEventListener('abort', () => res.destroy());
     const chunks: Buffer[] = [];
     let size = 0;
     res.on('data', (chunk: Buffer) => {
@@ -87,36 +91,42 @@ export class Downloader extends Context.Service<
   static readonly layer = Layer.succeed(
     Downloader,
     Downloader.of({
-      download: Effect.fn('Downloader.download')(function* (src: string) {
-        let url = src;
-        for (let hop = 0; hop <= MAX_REDIRECTS; hop++) {
-          if (!mayFetch(url) || !/^https?:/i.test(url))
-            return yield* failed('it isn’t a public web address');
-          const res = yield* request(new URL(url));
-          const status = res.statusCode ?? 0;
-          const location = res.headers.location;
-          if (status >= 300 && status < 400 && location) {
-            res.resume();
-            url = new URL(location, url).href;
-            continue;
+      download: Effect.fn('Downloader.download')(
+        function* (src: string) {
+          let url = src;
+          for (let hop = 0; hop <= MAX_REDIRECTS; hop++) {
+            if (!mayFetch(url) || !/^https?:/i.test(url))
+              return yield* failed('it isn’t a public web address');
+            const res = yield* request(new URL(url));
+            const status = res.statusCode ?? 0;
+            const location = res.headers.location;
+            if (status >= 300 && status < 400 && location) {
+              res.resume();
+              url = new URL(location, url).href;
+              continue;
+            }
+            if (status !== 200) {
+              res.resume();
+              return yield* failed(`the server answered ${status}`);
+            }
+            const length = Number(res.headers['content-length'] ?? 0);
+            if (length > IMPORT_MAX_BYTES) {
+              res.resume();
+              return yield* new ImportTooLarge({ maxBytes: IMPORT_MAX_BYTES });
+            }
+            return {
+              bytes: yield* body(res),
+              name: new URL(url).pathname.split('/').pop(),
+              contentType: res.headers['content-type'],
+            };
           }
-          if (status !== 200) {
-            res.resume();
-            return yield* failed(`the server answered ${status}`);
-          }
-          const length = Number(res.headers['content-length'] ?? 0);
-          if (length > IMPORT_MAX_BYTES) {
-            res.resume();
-            return yield* new ImportTooLarge({ maxBytes: IMPORT_MAX_BYTES });
-          }
-          return {
-            bytes: yield* body(res),
-            name: new URL(url).pathname.split('/').pop(),
-            contentType: res.headers['content-type'],
-          };
-        }
-        return yield* failed('too many redirects');
-      }),
+          return yield* failed('too many redirects');
+        },
+        Effect.timeoutOrElse({
+          duration: DEADLINE,
+          orElse: () => Effect.fail(failed('it took too long')),
+        })
+      ),
     })
   );
 }

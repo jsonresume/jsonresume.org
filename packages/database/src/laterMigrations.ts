@@ -46,5 +46,17 @@ export const laterMigrations: Record<
         WHERE result IS NOT NULL
     `;
     yield* sql`CREATE INDEX imports_created ON app.imports (created_at)`;
+    // Deleting an account forgets what its imports read; the stats stay.
+    yield* sql`
+      CREATE FUNCTION app.forget_user_imports() RETURNS trigger AS $$
+      BEGIN
+        UPDATE app.imports SET result = NULL WHERE user_id = OLD.id;
+        RETURN OLD;
+      END $$ LANGUAGE plpgsql
+    `;
+    yield* sql`
+      CREATE TRIGGER users_forget_imports BEFORE DELETE ON app.users
+        FOR EACH ROW EXECUTE FUNCTION app.forget_user_imports()
+    `;
   }),
 };
