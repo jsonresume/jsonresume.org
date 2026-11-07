@@ -5,7 +5,8 @@
   "description": "Hono server for prerendered sites, with an Effect HttpApi mounted alongside",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./sitemap": "./src/sitemap.ts"
   },
   "scripts": {
     "test": "vitest run",

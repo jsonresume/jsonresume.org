@@ -1,5 +1,11 @@
 import { facts } from '@repo/content/facts';
-import { pageHead, paths } from '@repo/site';
+import {
+  organization,
+  pageHead,
+  paths,
+  webSite,
+  type PageHeadInput,
+} from '@repo/site';
 import {
   createRoute,
   type AnyRoute,
@@ -13,7 +19,7 @@ import { siteRoute } from './root';
  */
 function page<const TPath extends string>(
   path: TPath,
-  head: { title: string; description: string },
+  head: Omit<PageHeadInput, 'path'>,
   load: () => Promise<{ Route: LazyRoute<AnyRoute> }>
 ) {
   return createRoute({
@@ -28,6 +34,7 @@ export const homeRoute = page(
   {
     title: 'JSON Resume: the open standard for resumes',
     description: `Write your resume once in JSON and publish it anywhere: ${facts.themeCount} open-source themes, a CLI, and free hosting from a GitHub gist.`,
+    jsonLd: [webSite(), organization()],
   },
   () => import('./home.lazy')
 );
@@ -144,6 +151,7 @@ export const registryRoute = page(
   paths.registry,
   {
     title: 'The registry is now part of jsonresume.org',
+    crumb: 'Registry',
     description:
       'registry.jsonresume.org moved here: your resume is at jsonresume.org/@username, from the same gist. What moved, what is coming, and how to ask for a feature.',
   },
@@ -154,6 +162,7 @@ export const mcpRoute = page(
   paths.mcp,
   {
     title: 'MCP: connect your agent to JSON Resume',
+    crumb: 'MCP',
     description:
       'Connect ChatGPT, Claude, Cursor, VS Code, Codex or any MCP client to jsonresume.org: edit your resume, change its theme, see who reads it and find jobs that fit.',
   },

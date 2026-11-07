@@ -1,5 +1,5 @@
 import { vars } from '@jsonresume/ui/tokens';
-import { style } from '@vanilla-extract/css';
+import { globalStyle, style } from '@vanilla-extract/css';
 
 const { color, font, space } = vars;
 
@@ -10,6 +10,14 @@ export const grid = style({
   display: 'grid',
   gap: space[6],
   gridTemplateColumns: 'repeat(auto-fill, minmax(14rem, 1fr))',
+});
+
+// The gallery is hundreds of cards: those off screen skip style, layout and
+// paint until scrolled near, which kept the first render of /themes busy.
+// The size stands in for a card's (a 5:4 screenshot and four lines of text).
+globalStyle(`${grid} > li`, {
+  contentVisibility: 'auto',
+  containIntrinsicSize: 'auto 24rem',
 });
 
 export const cardLink = style({

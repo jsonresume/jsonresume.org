@@ -11,6 +11,7 @@ import { Effect, Random, Schema } from 'effect';
 import { externalizeFonts } from './fonts';
 import { headers, lookup, problem, redirect, respond } from './outcome';
 import { docxResponse, pdfResponse, qrResponse } from './print';
+import { withCanonicalLink, withProfileHead } from './seo';
 
 const decodeDocument = Schema.decodeUnknownOption(ResumeDocument);
 const decodeMeta = Schema.decodeUnknownOption(
@@ -74,17 +75,19 @@ export const resumeOutcome = Effect.fn('resumeOutcome')(function* (url: URL) {
       page
     );
   }
-  if (format === 'qr') return respond(yield* qrResponse(username));
+  // Files point search engines at the page (see withCanonicalLink).
+  const asFile = (response: Response) => withCanonicalLink(response, username);
+  if (format === 'qr') return respond(asFile(yield* qrResponse(username)));
   // A download like .json, counted the same way.
   if (format === 'docx')
-    return respond(yield* docxResponse(username, doc.value), {
+    return respond(asFile(yield* docxResponse(username, doc.value)), {
       username,
       format,
     });
   if (format !== 'html' && format !== 'pdf') {
     const { body, contentType } = formatResume(format, doc.value);
     return respond(
-      new Response(body, { headers: headers(contentType) }),
+      asFile(new Response(body, { headers: headers(contentType) })),
       // Analytics counts the formats people read; RenderCV is for a tool.
       format === 'rendercv' ? undefined : { username, format }
     );
@@ -94,11 +97,21 @@ export const resumeOutcome = Effect.fn('resumeOutcome')(function* (url: URL) {
   return yield* renderTheme(theme, doc.value).pipe(
     Effect.flatMap((html) =>
       format === 'pdf'
-        ? pdfResponse(html, username, doc.value, url.searchParams.get('paper'))
+        ? pdfResponse(
+            html,
+            username,
+            doc.value,
+            url.searchParams.get('paper')
+          ).pipe(Effect.map(asFile))
         : Effect.succeed(
-            // Every themed page reports its views (see @repo/analytics).
+            // Every themed page reports its views (see @repo/analytics),
+            // and says what it is to search engines and link previews.
             new Response(
-              withTracking(externalizeFonts(html), username, theme),
+              withTracking(
+                withProfileHead(externalizeFonts(html), username, doc.value),
+                username,
+                theme
+              ),
               {
                 headers: headers('text/html; charset=utf-8'),
               }

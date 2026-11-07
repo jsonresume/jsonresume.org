@@ -22,5 +22,6 @@ export const exploreRoute = createRoute({
         loaderData ? loaderData.total.toLocaleString('en') : 'thousands of'
       } public resumes on JSON Resume by skill, role, place, name and employer.`,
       path: paths.explore,
+      crumb: 'Explore',
     }),
 }).lazy(() => import('./explore.lazy').then((m) => m.Route));

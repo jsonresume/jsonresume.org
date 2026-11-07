@@ -1,7 +1,7 @@
 import { postSlugs } from '@repo/content/slugs';
 
 const documents = () => import('@repo/content/documents');
-import { pageHead, paths } from '@repo/site';
+import { blogPosting, pageHead, paths } from '@repo/site';
 import { createRoute, notFound } from '@tanstack/react-router';
 import { siteRoute } from './root';
 
@@ -27,17 +27,20 @@ export const postRoute = createRoute({
     if (!result) throw notFound();
     return result;
   },
-  head: ({ loaderData }) =>
-    loaderData
-      ? pageHead({
-          title: loaderData.post.title,
-          description:
-            loaderData.post.description ??
-            `${loaderData.post.title}, from the JSON Resume blog.`,
-          path: paths.post(loaderData.post.slug),
-          type: 'article',
-        })
-      : {},
+  head: ({ loaderData }) => {
+    if (!loaderData) return {};
+    const { post } = loaderData;
+    const path = paths.post(post.slug);
+    return pageHead({
+      title: post.title,
+      description:
+        post.description ?? `${post.title}, from the JSON Resume blog.`,
+      path,
+      type: 'article',
+      parents: [{ name: 'Blog', path: paths.blog }],
+      jsonLd: [blogPosting({ ...post, path })],
+    });
+  },
 }).lazy(() => import('./blog.lazy').then((m) => m.PostRoute));
 
 /** Every post's path, for prerendering. */

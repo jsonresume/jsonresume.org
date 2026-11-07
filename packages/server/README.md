@@ -8,5 +8,7 @@ Serving for prerendered sites, on Hono:
   prefix ahead of the files.
 - `effectWebHandler(routes)`: an Effect `HttpApi` (via `HttpApiBuilder.layer`)
   as a web handler to mount, e.g. at `/api`.
+- `@repo/server/sitemap`: `urlSet`, `sitemapIndex` and `robotsTxt`, plain
+  functions (no dependencies) shared by the prerender and the live server.
 
 Start it with `serve` from `@hono/node-server`; see `apps/app/server`.

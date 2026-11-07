@@ -1,4 +1,4 @@
-import type { ExploreResults } from '@repo/api';
+import type { ExploreResults, ResumeListing } from '@repo/api';
 import { parseHandle, reservedUsernames } from '@repo/profiles';
 import { Context, Effect, Layer, Ref, Schema } from 'effect';
 import { SqlClient } from 'effect/sql';
@@ -37,6 +37,8 @@ export class Explore extends Context.Service<
   Explore,
   {
     search(query: string, page: number): Effect.Effect<ExploreResults>;
+    /** Everyone listed (what the sitemap offers search engines). */
+    readonly listings: Effect.Effect<ReadonlyArray<ResumeListing>>;
     listed(userId: string): Effect.Effect<boolean>;
     setListed(userId: string, listed: boolean): Effect.Effect<boolean>;
   }
@@ -127,6 +129,9 @@ export class Explore extends Context.Service<
           Effect.map(current, ({ index, popular }) =>
             search(index, popular, query, page)
           ),
+        listings: Effect.map(current, ({ index }) =>
+          index.map((entry) => entry.listing)
+        ),
         listed,
         setListed: (userId, value) =>
           sql`

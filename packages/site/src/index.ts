@@ -4,6 +4,14 @@
 export { formatDate } from './format';
 export { pageHead, type PageHeadInput } from './head';
 export {
+  blogPosting,
+  breadcrumbList,
+  organization,
+  webSite,
+  type Crumb,
+  type JsonLd,
+} from './structuredData';
+export {
   external,
   footerGroups,
   footerNav,
