@@ -5,6 +5,16 @@
  * own pages. Keep in step with @jsonresume/theme-metadata.
  */
 export const themeLoaders: Readonly<Record<string, () => Promise<unknown>>> = {
+  'academic-classic': () => import('jsonresume-theme-academic-classic'),
+  alta: () => import('jsonresume-theme-alta'),
+  'awesome-professional': () => import('jsonresume-theme-awesome-professional'),
+  deedy: () => import('jsonresume-theme-deedy'),
+  dublin: () => import('jsonresume-theme-dublin'),
+  'europass-inspired': () => import('jsonresume-theme-europass-inspired'),
+  'harvard-classic': () => import('jsonresume-theme-harvard-classic'),
+  'jake-technical': () => import('jsonresume-theme-jake-technical'),
+  'new-york-corporate': () => import('jsonresume-theme-new-york-corporate'),
+  stockholm: () => import('jsonresume-theme-stockholm'),
   professional: () => import('@jsonresume/jsonresume-theme-professional'),
   // Its `import` entry is untranspiled JSX; dist is the built theme.
   tailwind: () => import('jsonresume-theme-tailwind/dist'),

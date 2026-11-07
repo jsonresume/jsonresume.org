@@ -254,6 +254,19 @@ describe('the MCP server', () => {
     const all = await call('list_themes', { query: null, tag: null });
     expect(all.isError).toBeFalsy();
     expect(all.value.length).toBeGreaterThan(10);
+    const researched = await call('list_themes', {
+      query: null,
+      tag: 'research-informed',
+    });
+    expect(researched.value).toHaveLength(10);
+    for (const theme of researched.value) {
+      expect(
+        (await call('set_theme', { slug: theme.slug })).isError
+      ).toBeFalsy();
+      expect((await call('get_resume')).value.resume.meta.theme).toBe(
+        theme.slug
+      );
+    }
     const themes = (await call('list_themes', { query: 'elegant' })).value;
     expect(themes[0].previewUrl).toContain('/@ada?theme=');
     await call('set_theme', { slug: themes[0].slug });

@@ -81,9 +81,20 @@
     "jsonresume-theme-typewriter-modern": "workspace:*",
     "jsonresume-theme-university-first": "workspace:*",
     "jsonresume-theme-urban-techno": "workspace:*",
-    "jsonresume-theme-writers-portfolio": "workspace:*"
+    "jsonresume-theme-writers-portfolio": "workspace:*",
+    "jsonresume-theme-academic-classic": "workspace:*",
+    "jsonresume-theme-alta": "workspace:*",
+    "jsonresume-theme-awesome-professional": "workspace:*",
+    "jsonresume-theme-deedy": "workspace:*",
+    "jsonresume-theme-dublin": "workspace:*",
+    "jsonresume-theme-europass-inspired": "workspace:*",
+    "jsonresume-theme-harvard-classic": "workspace:*",
+    "jsonresume-theme-jake-technical": "workspace:*",
+    "jsonresume-theme-new-york-corporate": "workspace:*",
+    "jsonresume-theme-stockholm": "workspace:*"
   },
   "devDependencies": {
+    "@jsonresume/theme-metadata": "workspace:*",
     "@repo/eslint-config-custom": "workspace:*",
     "tsconfig": "workspace:*",
     "typescript": "^5.9.3",

@@ -1,11 +1,14 @@
+import { RESEARCHED_THEME_METADATA } from './researched.js';
+
 /**
  * Theme metadata for all available themes
  * This is the single source of truth for theme information
  *
  * This file contains ONLY metadata (no theme imports)
- * Theme imports are handled by the registry app only
+ * Theme imports are handled by consuming renderer packages
  */
 export const THEME_METADATA = {
+  ...RESEARCHED_THEME_METADATA,
   'desert-modern': {
     name: 'Desert Modern',
     description:

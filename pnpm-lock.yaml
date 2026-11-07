@@ -117,6 +117,9 @@ importers:
         specifier: 19.2.7
         version: 19.2.7(react@19.2.7)
     devDependencies:
+      '@axe-core/playwright':
+        specifier: ^4.11.0
+        version: 4.11.3(playwright-core@1.56.1)
       '@playwright/test':
         specifier: ^1.40.0
         version: 1.56.1
@@ -129,6 +132,12 @@ importers:
       '@types/react-dom':
         specifier: ^19.2.2
         version: 19.2.2(@types/react@19.2.2)
+      '@vanilla-extract/vite-plugin':
+        specifier: ^5.2.6
+        version: 5.2.6(@types/node@20.19.24)(vite@6.4.3)
+      effect:
+        specifier: 4.0.6
+        version: 4.0.6
       eslint:
         specifier: ^8
         version: 8.57.1
@@ -147,12 +156,18 @@ importers:
       prettier:
         specifier: ^2.8.0
         version: 2.8.8
+      sharp:
+        specifier: 0.35.4
+        version: 0.35.4(@types/node@20.19.24)
       start-server-and-test:
         specifier: ^2.0.3
         version: 2.1.2
       turbo:
         specifier: ^2.9.14
         version: 2.9.18
+      vite:
+        specifier: ^6.4.3
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
   apps/app:
     dependencies:
@@ -336,7 +351,7 @@ importers:
         version: 16.8.0(@types/react@19.2.2)(next@16.3.3)(react-dom@19.2.7)(react@19.2.7)(zod@4.4.3)
       fumadocs-mdx:
         specifier: ^14.0.0
-        version: 14.3.1(@types/mdx@2.0.13)(@types/react@19.2.2)(fumadocs-core@16.8.0)(next@16.3.3)(react@19.2.7)
+        version: 14.3.1(@types/mdx@2.0.13)(@types/react@19.2.2)(fumadocs-core@16.8.0)(next@16.3.3)(react@19.2.7)(vite@6.4.3)
       fumadocs-ui:
         specifier: ^16.0.0
         version: 16.8.0(@types/mdx@2.0.13)(@types/react-dom@19.2.2)(@types/react@19.2.2)(fumadocs-core@16.8.0)(next@16.3.3)(react-dom@19.2.7)(react@19.2.7)(tailwindcss@4.2.2)
@@ -552,9 +567,15 @@ importers:
       json-to-pretty-yaml:
         specifier: ^1.2.2
         version: 1.2.2
+      jsonresume-theme-academic-classic:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-academic-classic
       jsonresume-theme-academic-cv-lite:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-academic-cv-lite
+      jsonresume-theme-alta:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-alta
       jsonresume-theme-architects-portfolio:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-architects-portfolio
@@ -567,6 +588,9 @@ importers:
       jsonresume-theme-asymmetric-timeline:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-asymmetric-timeline
+      jsonresume-theme-awesome-professional:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-awesome-professional
       jsonresume-theme-berlin-grid:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-berlin-grid
@@ -600,6 +624,9 @@ importers:
       jsonresume-theme-data-driven:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-data-driven
+      jsonresume-theme-deedy:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-deedy
       jsonresume-theme-desert-modern:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-desert-modern
@@ -609,6 +636,9 @@ importers:
       jsonresume-theme-diagonal-accent-bar:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-diagonal-accent-bar
+      jsonresume-theme-dublin:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-dublin
       jsonresume-theme-elegant:
         specifier: ^1.16.1
         version: 1.16.1
@@ -618,6 +648,9 @@ importers:
       jsonresume-theme-eloquent:
         specifier: ^4.1.0
         version: 4.1.0
+      jsonresume-theme-europass-inspired:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-europass-inspired
       jsonresume-theme-even:
         specifier: ^0.18.1
         version: 0.18.1
@@ -639,6 +672,9 @@ importers:
       jsonresume-theme-graph-paper-grid:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-graph-paper-grid
+      jsonresume-theme-harvard-classic:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-harvard-classic
       jsonresume-theme-industrial-engineer:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-industrial-engineer
@@ -648,6 +684,9 @@ importers:
       jsonresume-theme-jacrys:
         specifier: ^1.0.4
         version: 1.0.4
+      jsonresume-theme-jake-technical:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-jake-technical
       jsonresume-theme-kendall:
         specifier: ^0.2.0
         version: 0.2.0
@@ -684,6 +723,9 @@ importers:
       jsonresume-theme-monochrome-noir:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-monochrome-noir
+      jsonresume-theme-new-york-corporate:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-new-york-corporate
       jsonresume-theme-new-york-editorial:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-new-york-editorial
@@ -729,6 +771,9 @@ importers:
       jsonresume-theme-srt:
         specifier: ^0.1.3
         version: 0.1.3
+      jsonresume-theme-stockholm:
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-stockholm
       jsonresume-theme-tailwind:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-tailwind
@@ -2343,9 +2388,15 @@ importers:
       effect:
         specifier: 4.0.6
         version: 4.0.6
+      jsonresume-theme-academic-classic:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-academic-classic
       jsonresume-theme-academic-cv-lite:
         specifier: workspace:*
         version: link:../themes/jsonresume-theme-academic-cv-lite
+      jsonresume-theme-alta:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-alta
       jsonresume-theme-architects-portfolio:
         specifier: workspace:*
         version: link:../themes/jsonresume-theme-architects-portfolio
@@ -2358,6 +2409,9 @@ importers:
       jsonresume-theme-asymmetric-timeline:
         specifier: workspace:*
         version: link:../themes/jsonresume-theme-asymmetric-timeline
+      jsonresume-theme-awesome-professional:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-awesome-professional
       jsonresume-theme-berlin-grid:
         specifier: workspace:*
         version: link:../themes/jsonresume-theme-berlin-grid
@@ -2391,6 +2445,9 @@ importers:
       jsonresume-theme-data-driven:
         specifier: workspace:*
         version: link:../themes/jsonresume-theme-data-driven
+      jsonresume-theme-deedy:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-deedy
       jsonresume-theme-desert-modern:
         specifier: workspace:*
         version: link:../themes/jsonresume-theme-desert-modern
@@ -2400,12 +2457,18 @@ importers:
       jsonresume-theme-diagonal-accent-bar:
         specifier: workspace:*
         version: link:../themes/jsonresume-theme-diagonal-accent-bar
+      jsonresume-theme-dublin:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-dublin
       jsonresume-theme-elegant:
         specifier: ^1.16.1
         version: 1.16.1
       jsonresume-theme-elegant-pink:
         specifier: workspace:*
         version: link:../themes/jsonresume-theme-elegant-pink
+      jsonresume-theme-europass-inspired:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-europass-inspired
       jsonresume-theme-even:
         specifier: ^0.18.1
         version: 0.18.1
@@ -2427,6 +2490,9 @@ importers:
       jsonresume-theme-graph-paper-grid:
         specifier: workspace:*
         version: link:../themes/jsonresume-theme-graph-paper-grid
+      jsonresume-theme-harvard-classic:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-harvard-classic
       jsonresume-theme-industrial-engineer:
         specifier: workspace:*
         version: link:../themes/jsonresume-theme-industrial-engineer
@@ -2436,6 +2502,9 @@ importers:
       jsonresume-theme-jacrys:
         specifier: ^1.0.4
         version: 1.0.4
+      jsonresume-theme-jake-technical:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-jake-technical
       jsonresume-theme-kendall:
         specifier: ^0.2.0
         version: 0.2.0
@@ -2466,6 +2535,9 @@ importers:
       jsonresume-theme-monochrome-noir:
         specifier: workspace:*
         version: link:../themes/jsonresume-theme-monochrome-noir
+      jsonresume-theme-new-york-corporate:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-new-york-corporate
       jsonresume-theme-new-york-editorial:
         specifier: workspace:*
         version: link:../themes/jsonresume-theme-new-york-editorial
@@ -2505,6 +2577,9 @@ importers:
       jsonresume-theme-sidebar-photo-strip:
         specifier: workspace:*
         version: link:../themes/jsonresume-theme-sidebar-photo-strip
+      jsonresume-theme-stockholm:
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-stockholm
       jsonresume-theme-tailwind:
         specifier: workspace:*
         version: link:../themes/jsonresume-theme-tailwind
@@ -2533,6 +2608,9 @@ importers:
       '@jsonresume/sample-data':
         specifier: workspace:*
         version: link:../sample-data
+      '@jsonresume/theme-metadata':
+        specifier: workspace:*
+        version: link:../theme-config
       '@repo/eslint-config-custom':
         specifier: workspace:*
         version: link:../eslint-config-custom
@@ -2894,6 +2972,104 @@ importers:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
 
+  packages/theme-primitives:
+    dependencies:
+      '@jsonresume/utils':
+        specifier: workspace:*
+        version: link:../utils
+      effect:
+        specifier: 4.0.6
+        version: 4.0.6
+    devDependencies:
+      '@jsonresume/core':
+        specifier: workspace:*
+        version: link:../resume-core
+      '@jsonresume/sample-data':
+        specifier: workspace:*
+        version: link:../sample-data
+      '@jsonresume/theme-kit':
+        specifier: workspace:*
+        version: link:../theme-kit
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      '@types/jsdom':
+        specifier: ^21.1.7
+        version: 21.1.7
+      '@types/node':
+        specifier: ^20.19.24
+        version: 20.19.24
+      '@types/react':
+        specifier: ^19.2.2
+        version: 19.2.18
+      '@types/react-dom':
+        specifier: ^19.2.2
+        version: 19.2.2(@types/react@19.2.18)
+      '@vanilla-extract/css':
+        specifier: ^1.21.3
+        version: 1.21.3
+      '@vanilla-extract/vite-plugin':
+        specifier: ^5.2.6
+        version: 5.2.6(@types/node@20.19.24)(vite@6.4.3)
+      jsdom:
+        specifier: ^27.0.0
+        version: 27.0.1(postcss@8.5.23)
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vite:
+        specifier: ^6.4.3
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+
+  packages/themes/jsonresume-theme-academic-classic:
+    dependencies:
+      '@jsonresume/theme-primitives':
+        specifier: workspace:*
+        version: link:../../theme-primitives
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+    devDependencies:
+      '@jsonresume/sample-data':
+        specifier: workspace:*
+        version: link:../../sample-data
+      '@jsonresume/theme-kit':
+        specifier: workspace:*
+        version: link:../../theme-kit
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../../eslint-config-custom
+      '@vanilla-extract/css':
+        specifier: ^1.21.3
+        version: 1.21.3
+      tsconfig:
+        specifier: workspace:*
+        version: link:../../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vite:
+        specifier: ^6.4.3
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+
   packages/themes/jsonresume-theme-academic-cv-lite:
     dependencies:
       '@jsonresume/core':
@@ -2915,6 +3091,43 @@ importers:
       vite:
         specifier: ^6.4.3
         version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+
+  packages/themes/jsonresume-theme-alta:
+    dependencies:
+      '@jsonresume/theme-primitives':
+        specifier: workspace:*
+        version: link:../../theme-primitives
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+    devDependencies:
+      '@jsonresume/sample-data':
+        specifier: workspace:*
+        version: link:../../sample-data
+      '@jsonresume/theme-kit':
+        specifier: workspace:*
+        version: link:../../theme-kit
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../../eslint-config-custom
+      '@vanilla-extract/css':
+        specifier: ^1.21.3
+        version: 1.21.3
+      tsconfig:
+        specifier: workspace:*
+        version: link:../../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vite:
+        specifier: ^6.4.3
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
 
   packages/themes/jsonresume-theme-architects-portfolio:
     dependencies:
@@ -3003,6 +3216,43 @@ importers:
       vite:
         specifier: ^6.4.3
         version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+
+  packages/themes/jsonresume-theme-awesome-professional:
+    dependencies:
+      '@jsonresume/theme-primitives':
+        specifier: workspace:*
+        version: link:../../theme-primitives
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+    devDependencies:
+      '@jsonresume/sample-data':
+        specifier: workspace:*
+        version: link:../../sample-data
+      '@jsonresume/theme-kit':
+        specifier: workspace:*
+        version: link:../../theme-kit
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../../eslint-config-custom
+      '@vanilla-extract/css':
+        specifier: ^1.21.3
+        version: 1.21.3
+      tsconfig:
+        specifier: workspace:*
+        version: link:../../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vite:
+        specifier: ^6.4.3
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
 
   packages/themes/jsonresume-theme-berlin-grid:
     dependencies:
@@ -3257,6 +3507,43 @@ importers:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
 
+  packages/themes/jsonresume-theme-deedy:
+    dependencies:
+      '@jsonresume/theme-primitives':
+        specifier: workspace:*
+        version: link:../../theme-primitives
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+    devDependencies:
+      '@jsonresume/sample-data':
+        specifier: workspace:*
+        version: link:../../sample-data
+      '@jsonresume/theme-kit':
+        specifier: workspace:*
+        version: link:../../theme-kit
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../../eslint-config-custom
+      '@vanilla-extract/css':
+        specifier: ^1.21.3
+        version: 1.21.3
+      tsconfig:
+        specifier: workspace:*
+        version: link:../../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vite:
+        specifier: ^6.4.3
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+
   packages/themes/jsonresume-theme-desert-modern:
     dependencies:
       '@jsonresume/core':
@@ -3332,6 +3619,43 @@ importers:
         specifier: ^6.4.3
         version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
+  packages/themes/jsonresume-theme-dublin:
+    dependencies:
+      '@jsonresume/theme-primitives':
+        specifier: workspace:*
+        version: link:../../theme-primitives
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+    devDependencies:
+      '@jsonresume/sample-data':
+        specifier: workspace:*
+        version: link:../../sample-data
+      '@jsonresume/theme-kit':
+        specifier: workspace:*
+        version: link:../../theme-kit
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../../eslint-config-custom
+      '@vanilla-extract/css':
+        specifier: ^1.21.3
+        version: 1.21.3
+      tsconfig:
+        specifier: workspace:*
+        version: link:../../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vite:
+        specifier: ^6.4.3
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+
   packages/themes/jsonresume-theme-elegant-pink:
     dependencies:
       '@jsonresume/core':
@@ -3356,6 +3680,43 @@ importers:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
         version: 4.7.0(vite@6.4.3)
+      vite:
+        specifier: ^6.4.3
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+
+  packages/themes/jsonresume-theme-europass-inspired:
+    dependencies:
+      '@jsonresume/theme-primitives':
+        specifier: workspace:*
+        version: link:../../theme-primitives
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+    devDependencies:
+      '@jsonresume/sample-data':
+        specifier: workspace:*
+        version: link:../../sample-data
+      '@jsonresume/theme-kit':
+        specifier: workspace:*
+        version: link:../../theme-kit
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../../eslint-config-custom
+      '@vanilla-extract/css':
+        specifier: ^1.21.3
+        version: 1.21.3
+      tsconfig:
+        specifier: workspace:*
+        version: link:../../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
       vite:
         specifier: ^6.4.3
         version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
@@ -3479,6 +3840,43 @@ importers:
         specifier: ^6.4.3
         version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
 
+  packages/themes/jsonresume-theme-harvard-classic:
+    dependencies:
+      '@jsonresume/theme-primitives':
+        specifier: workspace:*
+        version: link:../../theme-primitives
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+    devDependencies:
+      '@jsonresume/sample-data':
+        specifier: workspace:*
+        version: link:../../sample-data
+      '@jsonresume/theme-kit':
+        specifier: workspace:*
+        version: link:../../theme-kit
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../../eslint-config-custom
+      '@vanilla-extract/css':
+        specifier: ^1.21.3
+        version: 1.21.3
+      tsconfig:
+        specifier: workspace:*
+        version: link:../../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vite:
+        specifier: ^6.4.3
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+
   packages/themes/jsonresume-theme-industrial-engineer:
     dependencies:
       '@jsonresume/core':
@@ -3522,6 +3920,43 @@ importers:
       vite:
         specifier: ^6.4.3
         version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+
+  packages/themes/jsonresume-theme-jake-technical:
+    dependencies:
+      '@jsonresume/theme-primitives':
+        specifier: workspace:*
+        version: link:../../theme-primitives
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+    devDependencies:
+      '@jsonresume/sample-data':
+        specifier: workspace:*
+        version: link:../../sample-data
+      '@jsonresume/theme-kit':
+        specifier: workspace:*
+        version: link:../../theme-kit
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../../eslint-config-custom
+      '@vanilla-extract/css':
+        specifier: ^1.21.3
+        version: 1.21.3
+      tsconfig:
+        specifier: workspace:*
+        version: link:../../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vite:
+        specifier: ^6.4.3
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
 
   packages/themes/jsonresume-theme-london-bureau:
     dependencies:
@@ -3654,6 +4089,43 @@ importers:
       vite:
         specifier: ^6.4.3
         version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+
+  packages/themes/jsonresume-theme-new-york-corporate:
+    dependencies:
+      '@jsonresume/theme-primitives':
+        specifier: workspace:*
+        version: link:../../theme-primitives
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+    devDependencies:
+      '@jsonresume/sample-data':
+        specifier: workspace:*
+        version: link:../../sample-data
+      '@jsonresume/theme-kit':
+        specifier: workspace:*
+        version: link:../../theme-kit
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../../eslint-config-custom
+      '@vanilla-extract/css':
+        specifier: ^1.21.3
+        version: 1.21.3
+      tsconfig:
+        specifier: workspace:*
+        version: link:../../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vite:
+        specifier: ^6.4.3
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
 
   packages/themes/jsonresume-theme-new-york-editorial:
     dependencies:
@@ -3913,6 +4385,43 @@ importers:
       vite:
         specifier: ^6.4.3
         version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+
+  packages/themes/jsonresume-theme-stockholm:
+    dependencies:
+      '@jsonresume/theme-primitives':
+        specifier: workspace:*
+        version: link:../../theme-primitives
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+    devDependencies:
+      '@jsonresume/sample-data':
+        specifier: workspace:*
+        version: link:../../sample-data
+      '@jsonresume/theme-kit':
+        specifier: workspace:*
+        version: link:../../theme-kit
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../../eslint-config-custom
+      '@vanilla-extract/css':
+        specifier: ^1.21.3
+        version: 1.21.3
+      tsconfig:
+        specifier: workspace:*
+        version: link:../../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vite:
+        specifier: ^6.4.3
+        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
 
   packages/themes/jsonresume-theme-tailwind:
     dependencies:
@@ -6844,7 +7353,6 @@ packages:
     cpu: [ppc64]
     os: [aix]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/aix-ppc64@0.28.1:
@@ -6870,7 +7378,6 @@ packages:
     cpu: [arm64]
     os: [android]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/android-arm64@0.28.1:
@@ -6896,7 +7403,6 @@ packages:
     cpu: [arm]
     os: [android]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/android-arm@0.28.1:
@@ -6922,7 +7428,6 @@ packages:
     cpu: [x64]
     os: [android]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/android-x64@0.28.1:
@@ -6948,7 +7453,6 @@ packages:
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/darwin-arm64@0.28.1:
@@ -6974,7 +7478,6 @@ packages:
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/darwin-x64@0.28.1:
@@ -7000,7 +7503,6 @@ packages:
     cpu: [arm64]
     os: [freebsd]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/freebsd-arm64@0.28.1:
@@ -7026,7 +7528,6 @@ packages:
     cpu: [x64]
     os: [freebsd]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/freebsd-x64@0.28.1:
@@ -7052,7 +7553,6 @@ packages:
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/linux-arm64@0.28.1:
@@ -7078,7 +7578,6 @@ packages:
     cpu: [arm]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/linux-arm@0.28.1:
@@ -7104,7 +7603,6 @@ packages:
     cpu: [ia32]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/linux-ia32@0.28.1:
@@ -7130,7 +7628,6 @@ packages:
     cpu: [loong64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/linux-loong64@0.28.1:
@@ -7156,7 +7653,6 @@ packages:
     cpu: [mips64el]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/linux-mips64el@0.28.1:
@@ -7182,7 +7678,6 @@ packages:
     cpu: [ppc64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/linux-ppc64@0.28.1:
@@ -7208,7 +7703,6 @@ packages:
     cpu: [riscv64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/linux-riscv64@0.28.1:
@@ -7234,7 +7728,6 @@ packages:
     cpu: [s390x]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/linux-s390x@0.28.1:
@@ -7260,7 +7753,6 @@ packages:
     cpu: [x64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/linux-x64@0.28.1:
@@ -7286,7 +7778,6 @@ packages:
     cpu: [arm64]
     os: [netbsd]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/netbsd-arm64@0.28.1:
@@ -7312,7 +7803,6 @@ packages:
     cpu: [x64]
     os: [netbsd]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/netbsd-x64@0.28.1:
@@ -7338,7 +7828,6 @@ packages:
     cpu: [arm64]
     os: [openbsd]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/openbsd-arm64@0.28.1:
@@ -7364,7 +7853,6 @@ packages:
     cpu: [x64]
     os: [openbsd]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/openbsd-x64@0.28.1:
@@ -7390,7 +7878,6 @@ packages:
     cpu: [arm64]
     os: [openharmony]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/openharmony-arm64@0.28.1:
@@ -7416,7 +7903,6 @@ packages:
     cpu: [x64]
     os: [sunos]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/sunos-x64@0.28.1:
@@ -7442,7 +7928,6 @@ packages:
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/win32-arm64@0.28.1:
@@ -7468,7 +7953,6 @@ packages:
     cpu: [ia32]
     os: [win32]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/win32-ia32@0.28.1:
@@ -7494,7 +7978,6 @@ packages:
     cpu: [x64]
     os: [win32]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@esbuild/win32-x64@0.28.1:
@@ -11757,7 +12240,6 @@ packages:
     cpu: [arm]
     os: [android]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-android-arm64@4.62.0:
@@ -11765,7 +12247,6 @@ packages:
     cpu: [arm64]
     os: [android]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-darwin-arm64@4.62.0:
@@ -11773,7 +12254,6 @@ packages:
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-darwin-x64@4.62.0:
@@ -11781,7 +12261,6 @@ packages:
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-freebsd-arm64@4.62.0:
@@ -11789,7 +12268,6 @@ packages:
     cpu: [arm64]
     os: [freebsd]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-freebsd-x64@4.62.0:
@@ -11797,7 +12275,6 @@ packages:
     cpu: [x64]
     os: [freebsd]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-linux-arm-gnueabihf@4.62.0:
@@ -11805,7 +12282,6 @@ packages:
     cpu: [arm]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-linux-arm-musleabihf@4.62.0:
@@ -11813,7 +12289,6 @@ packages:
     cpu: [arm]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-linux-arm64-gnu@4.62.0:
@@ -11821,7 +12296,6 @@ packages:
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-linux-arm64-musl@4.62.0:
@@ -11829,7 +12303,6 @@ packages:
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-linux-loong64-gnu@4.62.0:
@@ -11837,7 +12310,6 @@ packages:
     cpu: [loong64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-linux-loong64-musl@4.62.0:
@@ -11845,7 +12317,6 @@ packages:
     cpu: [loong64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-linux-ppc64-gnu@4.62.0:
@@ -11853,7 +12324,6 @@ packages:
     cpu: [ppc64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-linux-ppc64-musl@4.62.0:
@@ -11861,7 +12331,6 @@ packages:
     cpu: [ppc64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-linux-riscv64-gnu@4.62.0:
@@ -11869,7 +12338,6 @@ packages:
     cpu: [riscv64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-linux-riscv64-musl@4.62.0:
@@ -11877,7 +12345,6 @@ packages:
     cpu: [riscv64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-linux-s390x-gnu@4.62.0:
@@ -11885,7 +12352,6 @@ packages:
     cpu: [s390x]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-linux-x64-gnu@4.62.0:
@@ -11893,7 +12359,6 @@ packages:
     cpu: [x64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-linux-x64-musl@4.62.0:
@@ -11901,7 +12366,6 @@ packages:
     cpu: [x64]
     os: [linux]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-openbsd-x64@4.62.0:
@@ -11909,7 +12373,6 @@ packages:
     cpu: [x64]
     os: [openbsd]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-openharmony-arm64@4.62.0:
@@ -11917,7 +12380,6 @@ packages:
     cpu: [arm64]
     os: [openharmony]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-win32-arm64-msvc@4.62.0:
@@ -11925,7 +12387,6 @@ packages:
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-win32-ia32-msvc@4.62.0:
@@ -11933,7 +12394,6 @@ packages:
     cpu: [ia32]
     os: [win32]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-win32-x64-gnu@4.62.0:
@@ -11941,7 +12401,6 @@ packages:
     cpu: [x64]
     os: [win32]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rollup/rollup-win32-x64-msvc@4.62.0:
@@ -11949,7 +12408,6 @@ packages:
     cpu: [x64]
     os: [win32]
     requiresBuild: true
-    dev: true
     optional: true
 
   /@rtsao/scc@1.1.0:
@@ -18697,7 +19155,6 @@ packages:
       '@esbuild/win32-arm64': 0.25.12
       '@esbuild/win32-ia32': 0.25.12
       '@esbuild/win32-x64': 0.25.12
-    dev: true
 
   /esbuild@0.28.1:
     resolution: {integrity: sha512-HrJrvZv5ayxBzPfwphOoNzkzOIIlifzk0KJrGK2c8R4+LKpMtpYLQeUdjnwjWv/LZlkH2laZk+4w78pi99D4Vw==}
@@ -20042,7 +20499,7 @@ packages:
       - supports-color
     dev: false
 
-  /fumadocs-mdx@14.3.1(@types/mdx@2.0.13)(@types/react@19.2.2)(fumadocs-core@16.8.0)(next@16.3.3)(react@19.2.7):
+  /fumadocs-mdx@14.3.1(@types/mdx@2.0.13)(@types/react@19.2.2)(fumadocs-core@16.8.0)(next@16.3.3)(react@19.2.7)(vite@6.4.3):
     resolution: {integrity: sha512-0u2eXvYrZtrJB14y6fDhP0hhxLgmH8JOmRv6IVHALt5MqR9JIJxV5LJYlho8g8CJXRE8w12rVNFZN0rtUVAqGw==}
     hasBin: true
     peerDependencies:
@@ -20091,6 +20548,7 @@ packages:
       unist-util-remove-position: 5.0.0
       unist-util-visit: 5.1.0
       vfile: 6.0.3
+      vite: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
       zod: 4.4.3
     transitivePeerDependencies:
       - supports-color
@@ -27143,7 +27601,6 @@ packages:
       '@rollup/rollup-win32-x64-gnu': 4.62.0
       '@rollup/rollup-win32-x64-msvc': 4.62.0
       fsevents: 2.3.3
-    dev: true
 
   /roughjs@4.6.6:
     resolution: {integrity: sha512-ZUz/69+SYpFN/g/lUlo2FXcIjRkSu3nDarreVdGGndHEBJ6cXPdKguS8JGxwj5HA5xIbVKSmLgr5b3AWxtRfvQ==}
@@ -29768,7 +30225,6 @@ packages:
       yaml: 2.9.0
     optionalDependencies:
       fsevents: 2.3.3
-    dev: true
 
   /vitest@3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1):
     resolution: {integrity: sha512-xejya+bT/j/+R/AGa1XOfRxLmNUlLtlwjRsFUILF+xHfzElmGcmFydy2gqqIrd62ptIEfwVMofd19uNWD9L7Nw==}

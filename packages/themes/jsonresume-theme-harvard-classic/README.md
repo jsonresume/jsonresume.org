@@ -1,0 +1,23 @@
+# Harvard Classic
+
+A composed, single-column bullet resume with a centered serif masthead, fine rules and generous reading space.
+
+An original implementation of family 1 in the repository's resume theme research. This theme renders every standard JSON Resume section; its HTML includes all styles and requires no JavaScript or runtime filesystem access.
+
+```sh
+npm install jsonresume-theme-harvard-classic
+resume export resume.html --theme harvard-classic
+```
+
+```js
+import { render } from 'jsonresume-theme-harvard-classic';
+const html = render(resume);
+```
+
+Hosted preview: `https://jsonresume.org/@thomasdavis?theme=harvard-classic`.
+
+Preferences are optional under `meta.researchThemes`: `sectionOrder` moves named sections first within each column without hiding others; `layout: "single"` selects one column; `density: "compact"` reduces spacing; `monochrome: true` removes colour; `showPhoto: true` opts into the supplied photo. `meta.language` controls document language and English, French, German or Spanish section headings. Other languages use English headings with their language identified.
+
+The document adapts to mobile screens and prints on A4 or Letter. Font links use Google Fonts with local fallback stacks. PDF text remains selectable; no universal ATS certification is claimed. This is an independently designed theme, not an official or endorsed template from the reference institution or vendor.
+
+Run `pnpm --filter jsonresume-theme-harvard-classic build`, `test`, `typecheck` and `lint` from the monorepo. Build output is committed for Node and CLI consumers.

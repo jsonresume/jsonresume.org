@@ -1,6 +1,7 @@
 import { Effect, Schema } from 'effect';
 import { createRequire } from 'node:module';
 import { describe, expect, it } from 'vitest';
+import { THEME_NAMES } from '@jsonresume/theme-metadata';
 import { ensureHtmlCharset } from './charset.ts';
 import { renderTheme, ResumeDocument, themeSlugs } from './render.ts';
 
@@ -13,7 +14,7 @@ const name = 'Jane Developer';
 
 describe('renderTheme', () => {
   it('knows every gallery theme', () => {
-    expect(themeSlugs).toHaveLength(67);
+    expect([...themeSlugs].sort()).toEqual([...THEME_NAMES].sort());
     expect(themeSlugs).toContain('elegant');
   });
 
