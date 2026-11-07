@@ -27,6 +27,12 @@ export type OAuthAppInput = typeof OAuthAppInput.Type;
 
 const id = { id: Schema.String };
 
+/** An app's webhook: resume.updated is POSTed here, signed with the secret. */
+export const WebhookSettings = Schema.Struct({
+  url: Schema.String,
+  secret: Schema.String,
+});
+
 /**
  * The signed-in user's OAuth apps, for "Sign in with JSON Resume" in their
  * own product. The secret is in the create and new-secret responses only.
@@ -58,6 +64,18 @@ export class OAuthAppsApi extends HttpApiGroup.make('oauthApps')
         description: Schema.String,
       }),
       success: OAuthApp,
+      error: OAuthError,
+    }),
+    /** Where the app is told its readers' resumes changed, and its signing secret. */
+    HttpApiEndpoint.get('webhook', '/:id/webhook', {
+      params: id,
+      success: Schema.NullOr(WebhookSettings),
+    }),
+    /** Set the URL (https), or null to stop; the secret stays once made. */
+    HttpApiEndpoint.put('setWebhook', '/:id/webhook', {
+      params: id,
+      payload: Schema.Struct({ url: Schema.NullOr(Schema.String) }),
+      success: Schema.NullOr(WebhookSettings),
       error: OAuthError,
     }),
     HttpApiEndpoint.delete('delete', '/:id', { params: id })

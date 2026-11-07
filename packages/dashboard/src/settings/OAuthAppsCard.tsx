@@ -21,6 +21,7 @@ import { Exit } from 'effect';
 import { AsyncResult } from 'effect/reactivity';
 import { useState } from 'react';
 import { AppListing } from './AppListing';
+import { AppWebhook } from './AppWebhook';
 import { NewOAuthAppForm, type MadeApp } from './NewOAuthAppForm';
 import * as s from './settings.css';
 
@@ -115,6 +116,7 @@ export function OAuthAppsCard() {
                       </Button>
                     </Stack>
                     <AppListing app={app} />
+                    <AppWebhook app={app} />
                   </li>
                 ))}
               </ul>

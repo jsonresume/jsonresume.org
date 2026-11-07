@@ -153,3 +153,12 @@ export const setThemeAtom = ApiClient.mutation('account', 'setTheme');
 export const setAppListingAtom = ApiClient.mutation('oauthApps', 'setListing');
 /** The public apps directory. */
 export const appsDirectoryAtom = ApiClient.query('appsDirectory', 'list', {});
+
+/** An OAuth app's webhook (its URL and signing secret), by app id. */
+export const appWebhookAtom = Atom.family((id: string) =>
+  ApiClient.query('oauthApps', 'webhook', {
+    params: { id },
+    reactivityKeys: keys.oauthApps,
+  })
+);
+export const setAppWebhookAtom = ApiClient.mutation('oauthApps', 'setWebhook');

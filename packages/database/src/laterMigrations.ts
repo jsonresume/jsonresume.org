@@ -102,4 +102,37 @@ export const laterMigrations: Record<
         ADD COLUMN description text
     `;
   }),
+
+  // Webhooks (@repo/webhooks): an app's URL and signing secret, and the
+  // queue of deliveries, each retried with backoff for a day.
+  '19_webhooks': Effect.gen(function* () {
+    const sql = yield* SqlClient.SqlClient;
+    yield* sql`
+      CREATE TABLE app.webhook_subscriptions (
+        client_id text PRIMARY KEY REFERENCES app.oauth_clients (id) ON DELETE CASCADE,
+        url text NOT NULL,
+        secret text NOT NULL,
+        created_at timestamptz NOT NULL DEFAULT now()
+      )
+    `;
+    yield* sql`
+      CREATE TABLE app.webhook_deliveries (
+        id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+        client_id text NOT NULL REFERENCES app.oauth_clients (id) ON DELETE CASCADE,
+        user_id uuid NOT NULL REFERENCES app.users (id) ON DELETE CASCADE,
+        event text NOT NULL,
+        payload jsonb NOT NULL,
+        attempts integer NOT NULL DEFAULT 0,
+        next_attempt_at timestamptz NOT NULL DEFAULT now(),
+        delivered_at timestamptz,
+        last_status integer,
+        last_error text,
+        created_at timestamptz NOT NULL DEFAULT now()
+      )
+    `;
+    yield* sql`
+      CREATE INDEX webhook_deliveries_due ON app.webhook_deliveries (next_attempt_at)
+        WHERE delivered_at IS NULL
+    `;
+  }),
 };

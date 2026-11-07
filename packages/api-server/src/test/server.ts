@@ -20,6 +20,7 @@ import { Profiles, Usernames } from '@repo/profiles';
 import { PgProfileStore } from '@repo/profiles/sql';
 import { fakeGithub } from '@repo/profiles/testing';
 import { ProductEvents } from '@repo/posthog';
+import { Webhooks, WebhookSender } from '@repo/webhooks';
 import {
   emptyReply,
   fakeReader,
@@ -135,8 +136,28 @@ export function testServer() {
     ),
     Layer.provideMerge(config)
   );
+  // Webhooks over the same database; the sender only records what it'd send.
+  const sent: Array<{ url: string; body: string }> = [];
+  const webhooks = Webhooks.layer.pipe(
+    Layer.provide(
+      Layer.merge(
+        Layer.succeed(
+          WebhookSender,
+          WebhookSender.of({
+            send: (url, body) =>
+              Effect.sync(() => {
+                sent.push({ url, body });
+                return { status: 200 };
+              }),
+          })
+        ),
+        stores
+      )
+    )
+  );
   const app = apiRoutes('test').pipe(
     Layer.provide(careers),
+    Layer.provide(webhooks),
     Layer.provide(importer),
     Layer.provide(services),
     Layer.provide(HttpServer.layerServices)
