@@ -1,0 +1,70 @@
+{
+  "slug": "sales-representative",
+  "role": "Sales Representative",
+  "field": "Sales",
+  "intro": "A sales resume built on numbers: quota attainment, deal sizes and rankings, with the market and product made clear.",
+  "tips": [
+    "Lead with quota attainment and rankings.",
+    "Name your market, deal sizes and sales cycle.",
+    "Show new business you opened, not only revenue you kept."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Chris Johnson",
+      "label": "Account Executive, SaaS",
+      "email": "chris@example.com",
+      "location": {
+        "city": "Austin",
+        "countryCode": "US"
+      },
+      "summary": "Account executive with six years selling SaaS to mid-market companies. 128% of quota on average over three years, and the team's top new-business seller in 2024."
+    },
+    "work": [
+      {
+        "name": "Fieldwise",
+        "position": "Account Executive",
+        "startDate": "2021-04",
+        "summary": "Field service software, average deal $45k a year.",
+        "highlights": [
+          "Closed $2.1m in new annual recurring revenue in 2024: 141% of quota, first of 14 reps.",
+          "Opened the construction vertical: 22 new customers in 18 months.",
+          "Run a full cycle from first call to contract, averaging 70 days."
+        ]
+      },
+      {
+        "name": "BrightPath Software",
+        "position": "Sales Development Representative",
+        "startDate": "2019-01",
+        "endDate": "2021-03",
+        "summary": "HR software.",
+        "highlights": [
+          "Booked 25 qualified meetings a month on average, 120% of target.",
+          "Promoted to account executive after 26 months."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "Texas State University",
+        "area": "Marketing",
+        "studyType": "BBA",
+        "endDate": "2018"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Sales",
+        "keywords": ["Prospecting", "Discovery", "Negotiation", "MEDDICC"]
+      },
+      {
+        "name": "Tools",
+        "keywords": [
+          "Salesforce",
+          "Gong",
+          "Outreach",
+          "LinkedIn Sales Navigator"
+        ]
+      }
+    ]
+  }
+}

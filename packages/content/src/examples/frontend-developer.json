@@ -1,0 +1,73 @@
+{
+  "slug": "frontend-developer",
+  "role": "Frontend Developer",
+  "field": "Technology",
+  "intro": "A frontend developer who shows impact on users: speed, accessibility and conversion, with the stack named in passing rather than listed for its own sake.",
+  "tips": [
+    "Measure frontend work in what users feel: load time, accessibility, conversion.",
+    "Link to a portfolio or live product so the work can be seen.",
+    "Show collaboration with design and product, not only code."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Tomás Herrera",
+      "label": "Frontend Developer",
+      "email": "tomás@example.com",
+      "location": {
+        "city": "Madrid",
+        "countryCode": "ES"
+      },
+      "summary": "Frontend developer with five years building React applications for e-commerce. Rebuilt a checkout that lifted mobile conversion by 12%, and led the accessibility work that took the store to WCAG 2.1 AA."
+    },
+    "work": [
+      {
+        "name": "Tienda Verde",
+        "position": "Frontend Developer",
+        "startDate": "2020-09",
+        "summary": "Online grocery serving 200,000 households.",
+        "highlights": [
+          "Rebuilt checkout in React and TypeScript; mobile conversion up 12% in the first quarter.",
+          "Led the move to WCAG 2.1 AA: keyboard support, contrast and screen reader testing across 60 pages.",
+          "Created the component library six engineers and two designers now share."
+        ]
+      },
+      {
+        "name": "Estudio Norte",
+        "position": "Junior Web Developer",
+        "startDate": "2019-01",
+        "endDate": "2020-08",
+        "summary": "Agency building marketing sites.",
+        "highlights": [
+          "Built 20+ responsive sites for retail and hospitality clients.",
+          "Introduced automated Lighthouse checks; average performance score rose from 61 to 92."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "Universidad Politécnica de Madrid",
+        "area": "Software Engineering",
+        "studyType": "BSc",
+        "endDate": "2018"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Languages",
+        "keywords": ["TypeScript", "JavaScript", "HTML", "CSS"]
+      },
+      {
+        "name": "Frameworks",
+        "keywords": ["React", "Next.js", "Testing Library", "Playwright"]
+      },
+      {
+        "name": "Accessibility",
+        "keywords": ["WCAG 2.1", "ARIA", "Screen reader testing"]
+      },
+      {
+        "name": "Design",
+        "keywords": ["Figma", "Design systems"]
+      }
+    ]
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "slug": "software-engineer",
+  "role": "Software Engineer",
+  "field": "Technology",
+  "intro": "A mid-level engineer who leads with what their code changed for the business, not a list of technologies. Each job shows scale, ownership and a result.",
+  "tips": [
+    "Lead each job with the result you'd most want to discuss in an interview.",
+    "Name the systems and their scale: requests, users, data, money.",
+    "Group skills by kind, using the words job posts use."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Priya Raman",
+      "label": "Software Engineer, Backend",
+      "email": "priya@example.com",
+      "location": {
+        "city": "Toronto",
+        "countryCode": "CA"
+      },
+      "summary": "Backend engineer with six years building payment and billing systems in Go and TypeScript. Moved a monolith's billing to event-driven services handling 3 million invoices a month. Looking for a senior role on a platform team."
+    },
+    "work": [
+      {
+        "name": "Northwind Payments",
+        "position": "Software Engineer",
+        "startDate": "2021-03",
+        "summary": "Billing and invoicing platform for 40,000 small businesses.",
+        "highlights": [
+          "Split billing out of the monolith into four Go services; invoice runs went from 6 hours to 40 minutes.",
+          "Designed idempotent retries for card payments, cutting duplicate charges to zero over 18 months.",
+          "Mentored three graduate engineers; two now own services of their own.",
+          "On call for payments; wrote the runbooks the team uses for its five most common incidents."
+        ]
+      },
+      {
+        "name": "Lumen Health",
+        "position": "Software Developer",
+        "startDate": "2018-07",
+        "endDate": "2021-02",
+        "summary": "Appointment booking for 300 clinics.",
+        "highlights": [
+          "Built the booking API in Node.js and PostgreSQL that took 1.2 million bookings a year.",
+          "Cut page load on the patient booking flow from 4.1s to 1.3s by caching clinic availability."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "University of Waterloo",
+        "area": "Computer Science",
+        "studyType": "BMath",
+        "endDate": "2018"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Languages",
+        "keywords": ["Go", "TypeScript", "SQL"]
+      },
+      {
+        "name": "Backend",
+        "keywords": ["PostgreSQL", "Kafka", "gRPC", "REST APIs"]
+      },
+      {
+        "name": "Cloud",
+        "keywords": ["AWS", "Terraform", "Docker", "Kubernetes"]
+      },
+      {
+        "name": "Practices",
+        "keywords": ["Code review", "Incident response", "Mentoring"]
+      }
+    ]
+  }
+}

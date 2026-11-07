@@ -39,6 +39,12 @@ import {
 import { privacyRoute, termsRoute } from './routes/docs';
 import { exploreRoute } from './routes/explore';
 import { jobRoute, jobsRoute } from './routes/jobs';
+import {
+  exampleRoute,
+  examplesRoute,
+  guideRoute,
+  guidesRoute,
+} from './routes/examples';
 import { resumeRoute } from './routes/resume';
 import { themeRoute } from './routes/theme';
 import { timelineRoute } from './routes/timeline';
@@ -56,6 +62,10 @@ export const routeTree = rootRoute.addChildren([
     startRoute,
     appsRoute,
     themesRoute,
+    examplesRoute,
+    exampleRoute,
+    guidesRoute,
+    guideRoute,
     themeRoute,
     themeDevelopmentRoute,
     projectsRoute,

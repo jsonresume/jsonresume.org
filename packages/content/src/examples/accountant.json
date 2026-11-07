@@ -1,0 +1,69 @@
+{
+  "slug": "accountant",
+  "role": "Accountant",
+  "field": "Finance",
+  "intro": "An accountant resume that shows qualification, scope and improvements: closes made faster, controls tightened, money saved.",
+  "tips": [
+    "Lead with your qualification (CPA, ACA, CA).",
+    "Show the scale you worked at: revenue, entities, team.",
+    "Highlight improvements to close, controls and reporting."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Sofia Bianchi",
+      "label": "Chartered Accountant",
+      "email": "sofia@example.com",
+      "location": {
+        "city": "Milan",
+        "countryCode": "IT"
+      },
+      "summary": "Chartered accountant with seven years in audit and industry. Cut the monthly close from ten days to four at a €200m manufacturer, and led the move to a new ERP across five entities."
+    },
+    "work": [
+      {
+        "name": "Fratelli Rossi Manufacturing",
+        "position": "Financial Controller",
+        "startDate": "2021-02",
+        "summary": "Industrial equipment, €200m revenue, five entities.",
+        "highlights": [
+          "Cut the month-end close from 10 working days to 4 by automating reconciliations.",
+          "Led the finance workstream of the SAP S/4HANA migration across five entities, on time.",
+          "Manage a team of four; built the cash forecast the board reviews monthly."
+        ]
+      },
+      {
+        "name": "PwC Italy",
+        "position": "Senior Auditor",
+        "startDate": "2017-09",
+        "endDate": "2021-01",
+        "summary": "Audit of manufacturing and retail clients.",
+        "highlights": [
+          "Led audit fieldwork for clients with up to €500m revenue.",
+          "Trained 10 junior auditors in the firm's data analytics tools."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "Università Bocconi",
+        "area": "Accounting and Finance",
+        "studyType": "MSc",
+        "endDate": "2017"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Accounting",
+        "keywords": ["IFRS", "Consolidation", "Month-end close", "Audit"]
+      },
+      {
+        "name": "Systems",
+        "keywords": ["SAP S/4HANA", "Excel", "Power BI"]
+      },
+      {
+        "name": "Qualifications",
+        "keywords": ["Chartered Accountant (ODCEC)"]
+      }
+    ]
+  }
+}
