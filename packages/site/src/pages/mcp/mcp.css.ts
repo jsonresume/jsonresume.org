@@ -91,3 +91,12 @@ export const examples = style({
   paddingInlineStart: space[5],
   fontSize: font.size.md,
 });
+
+/** Every tab's panel is in the HTML; only the chosen one shows. */
+export const panel = style({
+  paddingBlockStart: 0,
+  selectors: { '&[data-state="inactive"]': { display: 'none' } },
+});
+
+/** Where /mcp#<app> lands: just above the tabs. */
+export const anchor = style({ scrollMarginTop: space[16] });

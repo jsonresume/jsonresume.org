@@ -1,178 +1,22 @@
 /**
- * /mcp: connecting agents to jsonresume.org. Setup steps per client were
- * checked against each client's docs in October 2026; menus move, so keep
- * them short and say where the setting lives rather than every click.
+ * /mcp: connecting agents to jsonresume.org. The setup steps for each
+ * client are in ./mcpClients (with the docs they were checked against).
  */
 
-export const serverUrl = 'https://jsonresume.org/mcp';
+export { guides, serverUrl, type McpClient, type McpGuide } from './mcpClients';
+export { others } from './mcpOtherClients';
 
 export const intro = {
   eyebrow: 'MCP',
   title: 'Your resume, in your agent',
-  lede: 'Connect ChatGPT, Claude, Cursor or any MCP client to jsonresume.org. Your agent can then read and rewrite your resume, check it against the schema and for tracking systems, export it as a PDF or Word document, change its theme, tell you who has been reading it, search other resumes and find jobs that fit, saving straight to your gist.',
+  lede: 'Connect Claude, ChatGPT, Cursor, Gemini, VS Code or any MCP client to jsonresume.org. Your agent can then read and rewrite your resume, check it against the schema and for tracking systems, export it as a PDF or Word document, change its theme, tell you who has been reading it, search other resumes and find jobs that fit, saving straight to your gist.',
 };
 
 export const auth = {
   oauth:
-    'Apps that sign in for you (ChatGPT, Claude, Claude Code, Cursor, VS Code) open jsonresume.org, you choose **Allow**, and they are connected. Disconnect them any time in [Settings](/dashboard/settings).',
+    'Apps that sign in for you (ChatGPT, Claude, Claude Code, Cursor, Gemini CLI, VS Code, Codex) open jsonresume.org, you choose **Allow**, and they are connected. Disconnect them any time in [Settings](/dashboard/settings).',
   key: 'Everything else sends an API key in the `Authorization` header (`Bearer jr_…`): make one under [Settings → API keys](/dashboard/settings#api-keys). It is shown once.',
 };
-
-export interface McpClient {
-  id: string;
-  name: string;
-  /** Signs in with OAuth (no key to copy), or needs an API key. */
-  auth: 'oauth' | 'key' | 'either';
-  steps: string[];
-  code?: { label: string; code: string };
-}
-
-const header = 'Authorization: Bearer $JSONRESUME_API_KEY';
-
-export const clients: McpClient[] = [
-  {
-    id: 'chatgpt',
-    name: 'ChatGPT',
-    auth: 'oauth',
-    steps: [
-      'On chatgpt.com, open **Plugins** (chatgpt.com/plugins), choose **+** and then **Add custom MCP server**. In a Business, Enterprise or Edu workspace, your admin may need to allow it.',
-      `Name it *JSON Resume*, set the **Server URL** to \`${serverUrl}\` and authentication to **OAuth**. Accept the warning and choose **Create as a plugin**.`,
-      'Install it from your plugins: jsonresume.org opens, you sign in and choose **Allow**. In a chat, type **@**, pick JSON Resume and ask away. ChatGPT asks before each change to your resume.',
-    ],
-  },
-  {
-    id: 'claude',
-    name: 'Claude (claude.ai and the desktop app)',
-    auth: 'oauth',
-    steps: [
-      'Open **Settings → Connectors** and choose **Add custom connector**.',
-      `Name it *JSON Resume*, paste \`${serverUrl}\` and add it. Choose **Connect**, sign in to jsonresume.org and **Allow**.`,
-      'In a chat, turn it on from the tools menu. The prompts (review my resume, cover letter, …) appear under the **+** menu.',
-    ],
-  },
-  {
-    id: 'claude-code',
-    name: 'Claude Code',
-    auth: 'either',
-    steps: [
-      'Add the server, then run `/mcp` inside Claude Code and choose **Authenticate** to sign in.',
-      'Or skip the sign-in with an API key: add `--header "Authorization: Bearer jr_…"`.',
-    ],
-    code: {
-      label: 'Terminal',
-      code: `claude mcp add --transport http jsonresume ${serverUrl}`,
-    },
-  },
-  {
-    id: 'codex',
-    name: 'Codex (CLI and IDE extension)',
-    auth: 'either',
-    steps: [
-      'Add the server to `~/.codex/config.toml`, then run `codex mcp login jsonresume` to sign in.',
-      'Or put your API key in `JSONRESUME_API_KEY` and add `bearer_token_env_var = "JSONRESUME_API_KEY"` instead of logging in.',
-    ],
-    code: {
-      label: '~/.codex/config.toml',
-      code: `[mcp_servers.jsonresume]\nurl = "${serverUrl}"`,
-    },
-  },
-  {
-    id: 'cursor',
-    name: 'Cursor',
-    auth: 'either',
-    steps: [
-      'Add the server to `~/.cursor/mcp.json` (or **Settings → MCP → Add new MCP server**). Cursor shows **Needs login**: click it to sign in.',
-      'With an API key instead, add `"headers": { "Authorization": "Bearer jr_…" }`.',
-    ],
-    code: {
-      label: '~/.cursor/mcp.json',
-      code: `{\n  "mcpServers": {\n    "jsonresume": { "url": "${serverUrl}" }\n  }\n}`,
-    },
-  },
-  {
-    id: 'vscode',
-    name: 'VS Code (GitHub Copilot)',
-    auth: 'either',
-    steps: [
-      'Run **MCP: Add Server…** from the Command Palette, choose **HTTP** and paste the URL, or add it to `.vscode/mcp.json`. Copilot asks you to sign in the first time a tool runs.',
-      'Use the tools in Copilot Chat’s **Agent** mode.',
-    ],
-    code: {
-      label: '.vscode/mcp.json',
-      code: `{\n  "servers": {\n    "jsonresume": { "type": "http", "url": "${serverUrl}" }\n  }\n}`,
-    },
-  },
-  {
-    id: 'gemini',
-    name: 'Gemini CLI',
-    auth: 'either',
-    steps: [
-      'Add the server to `~/.gemini/settings.json`, then run `/mcp auth jsonresume` in Gemini CLI to sign in.',
-      `Or add \`"headers": { "Authorization": "Bearer $JSONRESUME_API_KEY" }\` to use an API key.`,
-    ],
-    code: {
-      label: '~/.gemini/settings.json',
-      code: `{\n  "mcpServers": {\n    "jsonresume": { "httpUrl": "${serverUrl}" }\n  }\n}`,
-    },
-  },
-  {
-    id: 'windsurf',
-    name: 'Windsurf',
-    auth: 'key',
-    steps: [
-      'Add the server to `~/.codeium/windsurf/mcp_config.json` (or **Settings → Cascade → MCP servers → View raw config**), with your API key.',
-    ],
-    code: {
-      label: 'mcp_config.json',
-      code: `{\n  "mcpServers": {\n    "jsonresume": {\n      "serverUrl": "${serverUrl}",\n      "headers": { "Authorization": "Bearer jr_…" }\n    }\n  }\n}`,
-    },
-  },
-  {
-    id: 'cline',
-    name: 'Cline and Roo Code',
-    auth: 'key',
-    steps: [
-      'Open the MCP servers panel, choose **Configure** (or **Edit MCP settings**) and add the server with your API key.',
-    ],
-    code: {
-      label: 'MCP settings',
-      code: `{\n  "mcpServers": {\n    "jsonresume": {\n      "type": "streamableHttp",\n      "url": "${serverUrl}",\n      "headers": { "Authorization": "Bearer jr_…" }\n    }\n  }\n}`,
-    },
-  },
-  {
-    id: 'zed',
-    name: 'Zed',
-    auth: 'key',
-    steps: [
-      'Add a context server to your Zed `settings.json` with your API key, then turn it on in the Agent panel.',
-    ],
-    code: {
-      label: 'settings.json',
-      code: `{\n  "context_servers": {\n    "jsonresume": {\n      "url": "${serverUrl}",\n      "headers": { "Authorization": "Bearer jr_…" }\n    }\n  }\n}`,
-    },
-  },
-  {
-    id: 'goose',
-    name: 'Goose',
-    auth: 'key',
-    steps: [
-      'Run `goose configure`, choose **Add Extension → Remote Extension (Streamable HTTP)**, paste the URL and add the `Authorization` header with your API key. In the desktop app, it is **Extensions → Add custom extension**.',
-    ],
-  },
-  {
-    id: 'other',
-    name: 'Anything else',
-    auth: 'key',
-    steps: [
-      `Any client that speaks Streamable HTTP: the URL is \`${serverUrl}\`, with \`${header}\`.`,
-      'A client that only runs local (stdio) servers can reach it through `mcp-remote`. To try the tools by hand, use the MCP Inspector: `npx @modelcontextprotocol/inspector`.',
-    ],
-    code: {
-      label: 'stdio bridge',
-      code: `npx -y mcp-remote ${serverUrl} --header "${header}"`,
-    },
-  },
-];
 
 /** Things to ask, once it's connected. */
 export const examples = [
