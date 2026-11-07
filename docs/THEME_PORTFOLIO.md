@@ -103,6 +103,7 @@ must be recorded before deployment; this document describes the required matrix.
 
 Existing classifications were audited against current hosted previews and layout
 source, and all 77 existing thumbnails were regenerated with the same sample
-content. Tan Responsive remains for compatibility; its current browser preview
-is blank and the workbook marks it as needing repair. This legacy issue is
-separate from the verified 150-theme portfolio.
+content. Tan Responsive remains for compatibility; its preview needs its legacy entrance
+animation to settle, and it expects legacy company/picture fields. The workbook
+flags that schema compatibility for review. The 150 new designs support current
+standard JSON Resume fields without client-side animation.

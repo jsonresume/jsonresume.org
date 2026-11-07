@@ -59,14 +59,14 @@ const existing = Object.entries(THEME_METADATA)
     ...theme,
     description:
       slug === 'tan-responsive'
-        ? `${theme.description} Current hosted preview is blank; needs repair.`
+        ? `${theme.description} Uses legacy company/picture fields; review compatibility with current resume data.`
         : theme.description,
     styleLabel: THEME_STYLES[theme.style],
     layoutLabel: THEME_LAYOUTS[theme.layout],
     colorLabel: THEME_COLORS[theme.color],
     status:
       slug === 'tan-responsive'
-        ? 'Needs repair'
+        ? 'Legacy schema review'
         : firstTen.has(slug) && !values.deployed
         ? 'Implemented, unreleased'
         : 'Available',

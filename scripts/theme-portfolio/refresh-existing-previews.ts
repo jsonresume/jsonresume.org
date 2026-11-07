@@ -27,6 +27,8 @@ try {
           await writeFile(resolve(folder, 'complete.html'), html);
           await page.setContent(html, { waitUntil: 'load', timeout: 30_000 });
           await page.evaluate(() => document.fonts.ready);
+          // This legacy theme intentionally fades its document in after load.
+          if (slug === 'tan-responsive') await page.waitForTimeout(5000);
           const shot = await page.screenshot({
             path: resolve(folder, 'desktop.png'),
           });

@@ -69,7 +69,7 @@ export const THEME_CLASSIFICATION = {
   stackoverflow: ['technical', 'single', 'blue'],
   stockholm: ['minimal', 'right', 'blue'],
   tailwind: ['minimal', 'single', 'mono'],
-  'tan-responsive': ['modern', 'single', 'warm'],
+  'tan-responsive': ['classic', 'single', 'yellow'],
   'tokyo-modernist': ['technical', 'single', 'purple'],
   'two-column': ['classic', 'columns', 'mono'],
   'two-column-modernist': ['minimal', 'left', 'mono'],
