@@ -152,6 +152,24 @@ describe('Importer', () => {
     expect(events[0]?.id).toBe(events[1]?.id);
   });
 
+  it('forgets a parsed resume after KEEP_DAYS, keeping its stats row', async () => {
+    const { run, importing, calls } = setup();
+    const pdf = textPdf(RESUME_LINES);
+    const rows = await run(
+      Effect.gen(function* () {
+        const sql = yield* SqlClient.SqlClient;
+        yield* importing(file(pdf));
+        yield* sql`UPDATE app.imports SET created_at = now() - interval '31 days'`;
+        // Too old for the cache: read again, and the old result is dropped.
+        yield* importing(file(pdf));
+        return yield* sql`
+          SELECT result IS NOT NULL AS kept FROM app.imports ORDER BY created_at`;
+      })
+    );
+    expect(calls).toHaveLength(2);
+    expect(rows).toEqual([{ kept: false }, { kept: true }]);
+  });
+
   it('reads Word documents and pasted text, under the user’s id when signed in', async () => {
     const { run, importing, events } = setup();
     const docx = Effect.promise(() => wordDocx(RESUME_LINES));

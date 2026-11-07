@@ -282,6 +282,9 @@ importers:
       hono:
         specifier: ^4.13.13
         version: 4.13.13
+      mammoth:
+        specifier: 1.13.0
+        version: 1.13.0
       playwright-core:
         specifier: 1.56.1
         version: 1.56.1
@@ -297,6 +300,9 @@ importers:
       sharp:
         specifier: 0.35.4
         version: 0.35.4(@types/node@20.19.24)
+      unpdf:
+        specifier: 1.9.1
+        version: 1.9.1
     devDependencies:
       '@effect/sql-pglite':
         specifier: 4.0.6

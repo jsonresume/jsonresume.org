@@ -27,6 +27,9 @@ export interface ImportRecord {
   result: Parsed | null;
 }
 
+/** Days a parsed resume is kept for the cache; the stats row stays. */
+export const KEEP_DAYS = 30;
+
 const Row = Schema.Struct({ result: Schema.Unknown });
 const decodeRows = Schema.decodeUnknownEffect(Schema.Array(Row));
 const decodeParsed = Schema.decodeUnknownOption(Parsed);
@@ -56,6 +59,7 @@ export class ImportStore extends Context.Service<
             SELECT result FROM app.imports
             WHERE file_hash = ${fileHash} AND version = ${version}
               AND result IS NOT NULL
+              AND created_at > now() - make_interval(days => ${KEEP_DAYS})
             ORDER BY created_at DESC LIMIT 1
           `.pipe(
             Effect.flatMap(decodeRows),
@@ -81,6 +85,14 @@ export class ImportStore extends Context.Service<
               ${row.result === null ? null : JSON.stringify(row.result)}::jsonb
             )
           `.pipe(
+            // Each import also forgets resumes read more than KEEP_DAYS ago.
+            Effect.andThen(
+              sql`
+                UPDATE app.imports SET result = NULL
+                WHERE result IS NOT NULL
+                  AND created_at < now() - make_interval(days => ${KEEP_DAYS})
+              `
+            ),
             Effect.asVoid,
             Effect.tapError((e) =>
               Effect.logWarning('Import not recorded', { error: String(e) })
