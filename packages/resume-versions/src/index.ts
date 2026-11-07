@@ -16,3 +16,10 @@ export {
   type ResumeVersion,
   type VersionSummary,
 } from './versions';
+export {
+  MAX_VARIANTS,
+  slugOf,
+  Variants,
+  type Variant,
+  type VariantFailure,
+} from './variants';

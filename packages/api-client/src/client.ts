@@ -162,3 +162,9 @@ export const appWebhookAtom = Atom.family((id: string) =>
   })
 );
 export const setAppWebhookAtom = ApiClient.mutation('oauthApps', 'setWebhook');
+/** Variants of your resume (copies for a job): list and make. */
+export const variantsAtom = ApiClient.query('variants', 'list', {
+  reactivityKeys: keys.account,
+});
+export const createVariantAtom = ApiClient.mutation('variants', 'create');
+export const deleteVariantAtom = ApiClient.mutation('variants', 'delete');

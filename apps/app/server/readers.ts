@@ -1,8 +1,8 @@
 import { ApiKeys, RateLimiter } from '@repo/accounts';
 import { Effect, Option } from 'effect';
 
-/** Files programs read from /@username (themed pages are for people). */
-const DATA = /^\/@[^/]+\.(json|yaml|txt|rendercv|docx|pdf)$/;
+/** Files programs read from /@username and its variants (pages are for people). */
+const DATA = /^\/@[^/]+(?:\/[^/.]+)?\.(json|yaml|txt|rendercv|docx|pdf)$/;
 
 /** Reads of those files an hour, from one address without an API key. */
 export const ANONYMOUS_READS_PER_HOUR = 120;

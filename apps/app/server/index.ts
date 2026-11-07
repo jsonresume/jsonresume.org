@@ -26,7 +26,7 @@ import {
 } from './agents';
 import { createExplorePage, explorePath } from './explorePage';
 import { createJobPages, jobPath, jobsPath } from './jobPages';
-import { createResumeHandler, resumePath } from './resumes';
+import { createResumeHandler, resumePath, variantPath } from './resumes';
 import { createSitemaps, liveSitemapPath, sitemapPath } from './sitemaps';
 import { createTimelinePage, timelinePath } from './timelinePage';
 import { appServices } from './services';
@@ -151,6 +151,7 @@ const main = Effect.gen(function* () {
     ],
     dynamic: [
       { path: resumePath, fetch: resumes.fetch },
+      { path: variantPath, fetch: resumes.fetch },
       { path: themeFontPath, fetch: themeFont },
       { path: imageProxyPath, fetch: images },
       { path: timelinePath, fetch: timeline.fetch },

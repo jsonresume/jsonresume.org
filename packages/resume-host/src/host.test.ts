@@ -28,6 +28,23 @@ const profiles = Layer.succeed(
         return Effect.fail(new GithubUnavailable({ message: 'x' }));
       if (username === 'merged')
         return Effect.succeed({ _tag: 'Moved', username: 'mine' });
+      // Ada has one variant, "acme".
+      if (options?.variant !== undefined)
+        return options.variant === 'acme' && username === 'ada'
+          ? Effect.succeed({
+              username,
+              resume: { basics: { name: 'Ada for Acme' } },
+              source: 'account',
+              stale: false,
+              _tag: 'Resume',
+            })
+          : Effect.fail(
+              new ProfileNotFound({
+                username,
+                reason: 'no-variant',
+                file: options.variant,
+              })
+            );
       if (options?.file === 'cv.json')
         return Effect.succeed({
           username,
@@ -88,6 +105,21 @@ const response = (outcome: ResumeOutcome | undefined) => {
 };
 
 describe('resumeOutcome', () => {
+  it('serves a variant at /@name/slug, in every format, and leaves timeline be', async () => {
+    const json = await response(await get('/@ada/acme.json')).json();
+    expect(json).toEqual({ basics: { name: 'Ada for Acme' } });
+    const page = await response(await get('/@ada/acme')).text();
+    expect(page).toContain('Ada for Acme');
+    expect(await get('/@ada/timeline')).toBeUndefined();
+    expect(await get('/@ada/nope.json')).toMatchObject({
+      _tag: 'Problem',
+      problem: { kind: 'no-variant', file: 'nope' },
+    });
+    const moved = response(await get('/@merged/acme.pdf'));
+    expect(moved.status).toBe(301);
+    expect(moved.headers.get('location')).toBe('/@mine/acme.pdf');
+  });
+
   it('leaves other paths alone', async () => {
     expect(await get('/schema')).toBeUndefined();
     expect(await get('/@not_a_name')).toBeUndefined();

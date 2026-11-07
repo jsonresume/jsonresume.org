@@ -14,6 +14,19 @@ import { docxResponse, pdfResponse, qrResponse } from './print';
 import { withCanonicalLink, withProfileHead } from './seo';
 
 const decodeDocument = Schema.decodeUnknownOption(ResumeDocument);
+
+/** /@name/<slug>(.ext): a variant (not /@name/timeline, its own page). */
+const variantPath = (pathname: string) => {
+  const m = /^\/(?:%40|@)([^/.]+)\/([a-z0-9][a-z0-9-]*)(\.[a-z0-9]+)?$/i.exec(
+    pathname
+  );
+  if (!m || m[2]?.toLowerCase() === 'timeline') return undefined;
+  return { handle: `@${m[1]}${m[3] ?? ''}`, variant: m[2] };
+};
+
+/** /@name.pdf → /@name/slug.pdf. */
+const withVariant = (handle: string, variant: string) =>
+  handle.replace(/^(\/@[^/.]+)(\..+)?$/, `$1/${variant}$2`);
 const decodeMeta = Schema.decodeUnknownOption(
   Schema.Struct({ meta: Schema.Struct({ theme: Schema.String }) })
 );
@@ -33,10 +46,15 @@ const metaTheme = (doc: ResumeDocument) => {
  * Other gist files with ?gistname=.
  */
 export const resumeOutcome = Effect.fn('resumeOutcome')(function* (url: URL) {
-  const handle = parseHandle(url.pathname.slice(1).replace(/^%40/i, '@'));
+  const path = variantPath(url.pathname) ?? {
+    handle: url.pathname.slice(1).replace(/^%40/i, '@'),
+    variant: undefined,
+  };
+  const handle = parseHandle(path.handle);
   if (!handle) return undefined;
   const { username, format } = handle;
-  if (!handle.canonical)
+  const { variant } = path;
+  if (!handle.canonical || (variant && variant !== variant.toLowerCase()))
     return redirect(url.pathname.toLowerCase() + url.search, 301);
   // A person follows these links; programs read the other formats.
   const page =
@@ -63,9 +81,13 @@ export const resumeOutcome = Effect.fn('resumeOutcome')(function* (url: URL) {
   }
 
   const file = url.searchParams.get('gistname') ?? undefined;
-  const resolved = yield* lookup(username, file, page);
+  const resolved = yield* lookup(username, file, page, variant);
   if (resolved._tag === 'Moved') {
-    return redirect(handlePath(resolved.username, format) + url.search, 301);
+    const to = handlePath(resolved.username, format);
+    return redirect(
+      (variant ? withVariant(to, variant) : to) + url.search,
+      301
+    );
   }
   if (resolved._tag !== 'Resume') return resolved;
 

@@ -38,7 +38,7 @@ export class Profiles extends Context.Service<
   {
     resume(
       username: Username,
-      options?: { file?: string }
+      options?: { file?: string; variant?: string }
     ): Effect.Effect<ResolvedResume | MovedResume, ResumeError>;
   }
 >()('@repo/profiles/Profiles') {
@@ -113,7 +113,7 @@ export class Profiles extends Context.Service<
 
       const resume = Effect.fn('Profiles.resume')(function* (
         username: Username,
-        options?: { file?: string }
+        options?: { file?: string; variant?: string }
       ) {
         const file = options?.file ?? RESUME_FILE;
         const profile = yield* store.find(username);
@@ -135,6 +135,13 @@ export class Profiles extends Context.Service<
         if (profile?.kind === 'alias') {
           return { _tag: 'Moved', username: profile.target } as const;
         }
+        // Only accounts have variants.
+        if (options?.variant !== undefined && profile?.kind !== 'account')
+          return yield* new ProfileNotFound({
+            username,
+            reason: 'no-variant',
+            file: options.variant,
+          });
         if (profile?.kind === 'account') {
           const unpublished = new ProfileNotFound({
             username,
@@ -142,6 +149,17 @@ export class Profiles extends Context.Service<
             file,
           });
           if (!profile.verified) return yield* unpublished;
+          // A variant (/@name/slug): its own copy, published with the account.
+          if (options?.variant !== undefined) {
+            const found = yield* store.variant(profile.userId, options.variant);
+            if (found === undefined)
+              return yield* new ProfileNotFound({
+                username,
+                reason: 'no-variant',
+                file: options.variant,
+              });
+            return done({ resume: found, stale: false }, 'account');
+          }
           if (profile.source === 'stored') {
             if (profile.stored === null || profile.stored === undefined)
               return yield* unpublished;

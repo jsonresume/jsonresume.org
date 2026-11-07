@@ -81,6 +81,14 @@ export const PgProfileStore = Layer.effect(
         WHERE p.username = ${username}`,
     });
     return ProfileStore.of({
+      variant: (userId, slug) =>
+        sql<{ resume: unknown }>`
+          SELECT resume FROM app.resume_variants
+          WHERE user_id = ${userId} AND slug = ${slug}
+        `.pipe(
+          Effect.map((rows) => rows[0]?.resume),
+          Effect.orDie
+        ),
       find: (username) =>
         findOne(username).pipe(
           Effect.map((row) =>

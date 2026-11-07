@@ -47,10 +47,14 @@ export const redirect = (location: string, status: number) =>
 export const lookup = (
   username: Username,
   file: string | undefined,
-  page: boolean
+  page: boolean,
+  variant?: string
 ) =>
   Effect.flatMap(Profiles, (profiles) =>
-    profiles.resume(username, file === undefined ? {} : { file })
+    profiles.resume(username, {
+      ...(file === undefined ? {} : { file }),
+      ...(variant === undefined ? {} : { variant }),
+    })
   ).pipe(
     Effect.catchTags({
       ProfileNotFound: (e) =>

@@ -8,7 +8,12 @@ export class ProfileNotFound extends Schema.TaggedError<ProfileNotFound>()(
   'ProfileNotFound',
   {
     username: Schema.String,
-    reason: Schema.Literals(['no-user', 'no-gist', 'unpublished']),
+    reason: Schema.Literals([
+      'no-user',
+      'no-gist',
+      'unpublished',
+      'no-variant',
+    ]),
     /** The gist file looked for, e.g. resume.json. */
     file: Schema.String,
   }

@@ -10,6 +10,8 @@ export function describeProblem(problem: ResumeProblem): string {
       return `${problem.username} has no public gist with a file called ${problem.file}.`;
     case 'unpublished':
       return `${problem.username} hasn't published a resume yet.`;
+    case 'no-variant':
+      return `${problem.username} has no version called ${problem.file}.`;
     case 'not-json':
       return `${problem.file} in ${problem.username}'s gist is not valid JSON: ${problem.message}`;
     case 'not-object':

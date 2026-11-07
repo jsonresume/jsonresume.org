@@ -23,6 +23,7 @@ import {
 } from './format';
 import * as s from './job.css';
 import { applyHref, Linkified } from './Linkified';
+import { VariantForJob } from './VariantForJob';
 
 function List({ title, items }: { title: string; items: readonly string[] }) {
   if (items.length === 0) return null;
@@ -163,6 +164,7 @@ export function JobPage({
                   <a href={hnUrl(job.id)}>View on Hacker News</a>
                 </Button>
               </div>
+              <VariantForJob job={job} ask={ask} />
             </header>
             {job.summary && <Text size="md">{job.summary}</Text>}
             <List title="What you’ll do" items={job.responsibilities} />
