@@ -1,5 +1,18 @@
 # @repo/dashboard
 
+## 0.0.2
+
+### Patch Changes
+
+- Updated dependencies [61c8da2]
+- Updated dependencies [b66c2bb]
+- Updated dependencies [d389459]
+  - @jsonresume/ui@0.3.0
+  - @repo/content@0.0.2
+  - @repo/ats@0.0.2
+  - @repo/auth-pages@0.0.2
+  - @repo/job-board@0.0.2
+
 ## 0.0.1
 
 ### Patch Changes

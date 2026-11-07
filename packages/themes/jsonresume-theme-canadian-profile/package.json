@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-canadian-profile",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A restrained full-width masthead and clean single column support either English or French content. Emphasise qualifications and achievements with strong contrast and compact contact details.",
   "type": "module",
   "main": "./dist/index.js",

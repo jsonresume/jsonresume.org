@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-ceramic-portfolio",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A clay-coloured identity rail and broad white work column give a tactile, grounded character. Use soft rectangular dividers and clear project titles without textured backgrounds.",
   "type": "module",
   "main": "./dist/index.js",

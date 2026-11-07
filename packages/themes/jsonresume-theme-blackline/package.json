@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-blackline",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Thick black section rules and a large sans identity give a stark graphic character. Keep generous space around the rules and prevent them from overwhelming shorter entries.",
   "type": "module",
   "main": "./dist/index.js",

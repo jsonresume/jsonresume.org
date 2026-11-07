@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-returner-profile",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Use an approachable, spacious opening for a summary and current capabilities, followed by an honest chronology. Avoid timeline decorations that overemphasise gaps.",
   "type": "module",
   "main": "./dist/index.js",

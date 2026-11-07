@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-makers-mark",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A compact stamp-like identity frame leads a warm, practical resume. Strong project headings and understated section numbers convey care without simulated paper texture or a fabricated logo.",
   "type": "module",
   "main": "./dist/index.js",

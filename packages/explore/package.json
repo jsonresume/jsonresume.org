@@ -1,6 +1,6 @@
 {
   "name": "@repo/explore",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "description": "Explore: every public resume, searchable by name, role, place and skill, and the opt-out",
   "type": "module",

@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-narrow-measure",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A deliberately narrow central reading measure makes long summaries and achievement bullets easier to follow. Use short blue rules and a small masthead instead of a full-width banner.",
   "type": "module",
   "main": "./dist/index.js",

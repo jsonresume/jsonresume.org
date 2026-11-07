@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-charter-serif",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A formal left-aligned serif identity above thin double rules. Keep the dates in a narrow right rail and use small capitals only for section labels.",
   "type": "module",
   "main": "./dist/index.js",

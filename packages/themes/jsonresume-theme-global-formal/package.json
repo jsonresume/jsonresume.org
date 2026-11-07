@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-global-formal",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Use a formal date-gutter structure and a masthead that accepts long names and multiple scripts. Let the applicant choose language, photo and address rather than assuming regional requirements.",
   "type": "module",
   "main": "./dist/index.js",

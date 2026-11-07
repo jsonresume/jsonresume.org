@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-headline-heavy",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A heavy headline-style name spans the page above two disciplined columns. Keep supporting labels compact and body text neutral so the opening does not compete with career evidence.",
   "type": "module",
   "main": "./dist/index.js",

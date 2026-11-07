@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-masthead-edition",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A broad serif masthead, a double blue rule and crisp column boundaries evoke a carefully edited publication. Keep supporting qualifications separate from the career narrative.",
   "type": "module",
   "main": "./dist/index.js",

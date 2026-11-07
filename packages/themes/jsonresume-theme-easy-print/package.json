@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-easy-print",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Use local-first typography, black rules and conservative page geometry. The document should feel complete with web fonts blocked and should avoid large printed background areas.",
   "type": "module",
   "main": "./dist/index.js",

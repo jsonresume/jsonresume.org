@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-mosaic-profile",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Small coloured section tabs organise two clear columns beneath a simple identity. Use colour as a secondary cue, with readable labels and a complete monochrome print treatment.",
   "type": "module",
   "main": "./dist/index.js",

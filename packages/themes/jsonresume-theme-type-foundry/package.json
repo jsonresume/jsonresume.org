@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-type-foundry",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A type-specimen identity introduces two rigorously aligned columns. Pair a distinctive display serif with a neutral body and use small section numbers as typographic details.",
   "type": "module",
   "main": "./dist/index.js",

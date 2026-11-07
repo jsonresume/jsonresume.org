@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-clinic-serif",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A calm blue serif identity sits above a wide practice-history column. A right rail supports certifications and languages without turning the CV into a dashboard.",
   "type": "module",
   "main": "./dist/index.js",

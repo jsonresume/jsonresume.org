@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-focus-header",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A shallow green identity band gives the opening focus while the body remains a plain reading column. The header must expand for long names and multiple contact links.",
   "type": "module",
   "main": "./dist/index.js",
