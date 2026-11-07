@@ -68,6 +68,16 @@ export const jobSchemaRoute = page(
   () => import('./job-schema.lazy')
 );
 
+export const appsRoute = page(
+  paths.apps,
+  {
+    title: 'Apps that work with your resume',
+    description:
+      'Apps you can connect your JSON Resume to with Sign in with JSON Resume: you choose what each may read or change.',
+  },
+  () => import('./apps.lazy')
+);
+
 export const startRoute = page(
   paths.start,
   {

@@ -14,6 +14,8 @@ export const toOAuthApp = (a: OAuthAppRecord) => ({
   redirectUris: a.redirectUris,
   createdAt: a.createdAt.toISOString(),
   users: a.users,
+  listed: a.listed,
+  description: a.description,
 });
 
 /** The signed-in user's OAuth apps: list, register, edit, new secret, delete. */
@@ -50,8 +52,33 @@ export const OAuthAppsHandlers = HttpApiBuilder.group(
             Effect.map((clientSecret) => ({ clientSecret })),
             Effect.mapError(toError)
           ),
+        setListing: ({ params, payload }) =>
+          Effect.gen(function* () {
+            const id = yield* owner;
+            yield* oauth
+              .setListing(id, params.id, payload)
+              .pipe(Effect.mapError(toError));
+            const app = (yield* oauth.apps(id)).find((a) => a.id === params.id);
+            if (!app)
+              return yield* new OAuthError({
+                error: 'invalid_client',
+                error_description: 'No such app',
+              });
+            return toOAuthApp(app);
+          }),
         delete: ({ params }) =>
           Effect.flatMap(owner, (id) => oauth.deleteApp(id, params.id)),
       });
+    })
+);
+
+/** GET /api/apps: the public apps directory. */
+export const AppsDirectoryHandlers = HttpApiBuilder.group(
+  JsonResumeApi,
+  'appsDirectory',
+  (handlers) =>
+    Effect.gen(function* () {
+      const oauth = yield* OAuth;
+      return handlers.handle('list', () => oauth.directory());
     })
 );

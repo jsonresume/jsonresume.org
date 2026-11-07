@@ -14,7 +14,7 @@ import { GithubRoutes } from './github';
 import { JobsHandlers, MyJobsHandlers } from './jobs';
 import { ApiKeyAuthenticationLive, KeysHandlers } from './keys';
 import { OAuthConsentHandlers, OAuthHandlers } from './oauth';
-import { OAuthAppsHandlers } from './oauthApps';
+import { AppsDirectoryHandlers, OAuthAppsHandlers } from './oauthApps';
 import { OAuthBearerLive, OAuthResourceHandlers } from './oauthResource';
 import { PathwaysRoutes } from './pathways';
 import { ResumeVersionsHandlers } from './resumeVersions';
@@ -62,6 +62,7 @@ export const apiRoutes = (version: string) =>
         OAuthHandlers,
         OAuthConsentHandlers,
         OAuthAppsHandlers,
+        AppsDirectoryHandlers,
         OAuthResourceHandlers,
       ]),
       Layer.provide([

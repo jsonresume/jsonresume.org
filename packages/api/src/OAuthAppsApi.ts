@@ -12,6 +12,9 @@ export const OAuthApp = Schema.Struct({
   createdAt: Schema.String,
   /** People with it connected now. */
   users: Schema.Number,
+  /** In the public apps directory (/apps), with this line about it. */
+  listed: Schema.Boolean,
+  description: Schema.NullOr(Schema.String),
 });
 export type OAuthApp = typeof OAuthApp.Type;
 
@@ -47,7 +50,33 @@ export class OAuthAppsApi extends HttpApiGroup.make('oauthApps')
       success: Schema.Struct({ clientSecret: Schema.String }),
       error: OAuthError,
     }),
+    /** List it in the apps directory (needs a homepage and a description). */
+    HttpApiEndpoint.put('setListing', '/:id/listing', {
+      params: id,
+      payload: Schema.Struct({
+        listed: Schema.Boolean,
+        description: Schema.String,
+      }),
+      success: OAuthApp,
+      error: OAuthError,
+    }),
     HttpApiEndpoint.delete('delete', '/:id', { params: id })
   )
   .middleware(Authentication)
   .prefix('/oauth/apps') {}
+
+/** An app in the public directory. */
+export const AppListing = Schema.Struct({
+  id: Schema.String,
+  name: Schema.String,
+  description: Schema.String,
+  homepage: Schema.String,
+  /** People who have connected it. */
+  users: Schema.Number,
+});
+export type AppListing = typeof AppListing.Type;
+
+/** /apps: apps built on JSON Resume accounts, listed by their makers. */
+export class AppsDirectoryApi extends HttpApiGroup.make('appsDirectory').add(
+  HttpApiEndpoint.get('list', '/apps', { success: Schema.Array(AppListing) })
+) {}
