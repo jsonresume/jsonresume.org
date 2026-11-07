@@ -188,3 +188,82 @@ describe('ThemeGallery', () => {
     );
   });
 });
+
+describe('ThemePreview', () => {
+  const renderGallery = async (url = '/themes') => {
+    window.history.replaceState(null, '', url);
+    await act(async () => {
+      render(
+        <RegistryProvider>
+          <ThemeGallery
+            {...links}
+            details={(t) => <p>Use {t.name} like this</p>}
+          />
+        </RegistryProvider>
+      );
+    });
+  };
+
+  const card = (index: number) =>
+    within(screen.getByRole('list', { name: 'Themes' })).getAllByRole('link')[
+      index
+    ];
+
+  it('opens a card in place, flips with the arrow keys and closes', async () => {
+    await renderGallery();
+    const [first, second] = themes;
+    await act(async () => {
+      fireEvent.click(card(0));
+    });
+    const dialog = screen.getByRole('dialog', { name: first.name });
+    expect(
+      within(dialog).getByText(`Use ${first.name} like this`)
+    ).toBeVisible();
+    expect(within(dialog).getByTitle(/previewed on a resume/)).toHaveAttribute(
+      'src',
+      `/preview/${first.slug}`
+    );
+    expect(window.location.search).toBe(`?theme=${first.slug}`);
+
+    await act(async () => {
+      fireEvent.keyDown(dialog, { key: 'ArrowRight' });
+    });
+    expect(screen.getByRole('dialog', { name: second.name })).toBeVisible();
+    await act(async () => {
+      fireEvent.keyDown(screen.getByRole('dialog'), { key: 'ArrowLeft' });
+      fireEvent.keyDown(screen.getByRole('dialog'), { key: 'ArrowLeft' });
+    });
+    // Wraps from the first theme to the last.
+    expect(
+      screen.getByRole('dialog', { name: themes[themes.length - 1].name })
+    ).toBeVisible();
+    expect(screen.getByRole('link', { name: 'Full page' })).toHaveAttribute(
+      'href',
+      `/preview/${themes[themes.length - 1].slug}`
+    );
+
+    await act(async () => {
+      fireEvent.keyDown(screen.getByRole('dialog'), { key: 'Escape' });
+    });
+    expect(screen.queryByRole('dialog')).toBeNull();
+    expect(window.location.search).toBe('');
+  });
+
+  it('opens the theme named in the URL, and leaves modified clicks to the link', async () => {
+    await renderGallery('/themes?theme=kendall');
+    expect(screen.getByRole('dialog', { name: 'Kendall' })).toBeVisible();
+    await act(async () => {
+      fireEvent.keyDown(screen.getByRole('dialog'), { key: 'Escape' });
+    });
+    const link = card(0);
+    const click = new MouseEvent('click', {
+      bubbles: true,
+      cancelable: true,
+      metaKey: true,
+    });
+    await act(async () => {
+      link.dispatchEvent(click);
+    });
+    expect(screen.queryByRole('dialog')).toBeNull();
+  });
+});

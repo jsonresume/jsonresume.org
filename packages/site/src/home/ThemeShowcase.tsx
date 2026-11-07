@@ -3,7 +3,7 @@ import { facts } from '@repo/content/facts';
 import { findTheme } from '@repo/theme-gallery/catalog';
 import { ThemeGrid } from '@repo/theme-gallery/grid';
 import type { ThemeSummary } from '@repo/domain';
-import { paths, themeImageUrl, themePreviewUrl } from '../links';
+import { paths, themeImageUrl, themeInGalleryUrl } from '../links';
 import { SiteLink } from '../SiteLink';
 import * as s from './home.css';
 import { SectionIntro } from './SectionIntro';
@@ -45,7 +45,7 @@ export function ThemeShowcase() {
           label="Featured themes"
           themes={featuredThemes}
           image={(theme) => themeImageUrl(theme.slug)}
-          href={(theme) => themePreviewUrl(theme.slug)}
+          href={(theme) => themeInGalleryUrl(theme.slug)}
         />
         <div className={s.center}>
           <Button asChild size="lg">

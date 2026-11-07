@@ -3,6 +3,7 @@ import { Container, Hero, Section } from '@jsonresume/ui';
 import { ThemeGallery, themes } from '@repo/theme-gallery';
 import { paths, themeImageUrl, themePreviewUrl } from '../links';
 import { NextSteps } from './shared/NextSteps';
+import { ThemeUse } from './themes/ThemeUse';
 
 export function ThemesPage() {
   return (
@@ -10,9 +11,9 @@ export function ThemesPage() {
       <Hero
         size="compact"
         align="start"
-        eyebrow="Themes"
-        title={`${themes.length} ways to look the part`}
-        lede="Every theme is an open-source npm package that renders the same resume.json. Each card opens a live preview of a real resume."
+        eyebrow={`${themes.length} themes`}
+        title="Choose how your resume looks"
+        lede="Every theme renders the same resume.json, so switching is a one-word change. Open one to see it on a real resume, then flip through the rest with the arrow keys."
       />
       <Section spacing="lg">
         <Container size="wide">
@@ -22,6 +23,7 @@ export function ThemesPage() {
             <ThemeGallery
               image={(theme) => themeImageUrl(theme.slug)}
               href={(theme) => themePreviewUrl(theme.slug)}
+              details={(theme) => <ThemeUse theme={theme} />}
             />
           </RegistryProvider>
         </Container>

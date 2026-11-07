@@ -13,7 +13,7 @@ import {
 export default function SheetSides() {
   return (
     <>
-      {(['left', 'right', 'bottom'] as const).map((side) => (
+      {(['left', 'right', 'bottom', 'full'] as const).map((side) => (
         <Sheet key={side}>
           <SheetTrigger asChild>
             <Button>{side}</Button>
@@ -24,7 +24,7 @@ export default function SheetSides() {
             </SheetHeader>
             <SheetBody>
               Use right for details, left for navigation, bottom for actions on
-              small screens.
+              small screens, and full for previews that need the room.
             </SheetBody>
           </SheetContent>
         </Sheet>

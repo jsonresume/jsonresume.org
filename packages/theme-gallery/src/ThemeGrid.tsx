@@ -19,6 +19,8 @@ export interface ThemeGridProps extends ThemeLinks {
   eagerCount?: number;
   /** Accessible name of the list. */
   label?: string;
+  /** Open a theme in place; cards link to href without it. */
+  onOpen?: (theme: ThemeSummary) => void;
 }
 
 export function ThemeGrid({
@@ -27,6 +29,7 @@ export function ThemeGrid({
   href,
   eagerCount = 0,
   label = 'Themes',
+  onOpen,
 }: ThemeGridProps) {
   return (
     <ul className={s.grid} role="list" aria-label={label}>
@@ -37,6 +40,7 @@ export function ThemeGrid({
             image={image(theme)}
             href={href(theme)}
             eager={index < eagerCount}
+            onOpen={onOpen && (() => onOpen(theme))}
           />
         </li>
       ))}

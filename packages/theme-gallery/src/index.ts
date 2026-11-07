@@ -1,4 +1,9 @@
-export { themeQueryAtom, themeTagAtom, visibleThemesAtom } from './atoms';
+export {
+  themeOpenAtom,
+  themeQueryAtom,
+  themeTagAtom,
+  visibleThemesAtom,
+} from './atoms';
 export {
   emptyFilter,
   filterThemes,
@@ -11,5 +16,6 @@ export {
   type ThemeFilter,
 } from './catalog';
 export { ThemeCard, type ThemeCardProps } from './ThemeCard';
-export { ThemeGallery } from './ThemeGallery';
+export { ThemeGallery, type ThemeGalleryProps } from './ThemeGallery';
+export { ThemePreview, type ThemePreviewProps } from './ThemePreview';
 export { ThemeGrid, type ThemeGridProps, type ThemeLinks } from './ThemeGrid';
