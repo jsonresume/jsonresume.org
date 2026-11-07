@@ -76,3 +76,16 @@ export const usage = style({
 export const empty = style({ paddingBlock: space[12] });
 
 export const search = style({ minWidth: 'min(100%, 22rem)' });
+
+export const facet = style({
+  // Override FilterBar's compact phone basis for the longer theme options.
+  selectors: {
+    '&&': { flex: '1 1 10rem', minWidth: 'min(100%, 10rem)' },
+  },
+});
+
+export const sortFacet = style({
+  selectors: {
+    '&&': { flex: '1 1 14rem', minWidth: 'min(100%, 14rem)' },
+  },
+});

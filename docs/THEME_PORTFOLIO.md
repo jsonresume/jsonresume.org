@@ -101,6 +101,16 @@ Generated verification output belongs under `output/theme-portfolio` and is not
 part of the published packages. Actual release checks and any unresolved gaps
 must be recorded before deployment; this document describes the required matrix.
 
+The 7 November 2026 release verification completed 3,316 browser cases with zero
+reported issues, and 608 A4/Letter PDF files covering 2,805 pages with zero
+reported issues. All 150 packages rendered from packed standalone installations
+on Node 18 with React 18, and all 150 exported through the installed resume CLI.
+All nine style groups were visually reviewed as gallery and print contact sheets;
+Arabic, Japanese, Hindi and Korean fixtures were also checked at full page size.
+The complete repository build passed 220 tasks. The registry suite passed 2,685
+tests, with 24 existing integration/debug tests skipped. Automated checks do not
+establish recruiter preference, hiring outcomes or universal ATS compatibility.
+
 Existing classifications were audited against current hosted previews and layout
 source, and all 77 existing thumbnails were regenerated with the same sample
 content. Tan Responsive remains for compatibility; its preview needs its legacy entrance

@@ -1,6 +1,7 @@
 import { Field, Select } from '@jsonresume/ui';
 import { THEME_COLORS, THEME_LAYOUTS } from '@jsonresume/theme-metadata';
 import { facetCounts, themes } from './catalog';
+import * as s from './gallery.css';
 
 const layouts = facetCounts(themes, 'layout');
 const colors = facetCounts(themes, 'color');
@@ -24,7 +25,7 @@ export function ThemeControls({
 }: Props) {
   return (
     <>
-      <Field label="Layout">
+      <Field label="Layout" className={s.facet}>
         <Select
           value={layout ?? ''}
           onChange={(event) => setLayout(event.target.value || null)}
@@ -37,7 +38,7 @@ export function ThemeControls({
           ))}
         </Select>
       </Field>
-      <Field label="Colour">
+      <Field label="Colour" className={s.facet}>
         <Select
           value={color ?? ''}
           onChange={(event) => setColor(event.target.value || null)}
@@ -50,7 +51,7 @@ export function ThemeControls({
           ))}
         </Select>
       </Field>
-      <Field label="Sort by">
+      <Field label="Sort by" className={s.sortFacet}>
         <Select
           value={sort ?? 'usage'}
           onChange={(event) =>
