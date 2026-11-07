@@ -11,3 +11,4 @@ searchable by name, headline, place, skill and employer.
   headline. No query shows the fullest resumes first. 24 per page.
 - **Index:** built in memory from Postgres (only basics, skills and work),
   kept ten minutes, and rebuilt at once when someone opts in or out.
+  `listings` gives everyone in it, for the sitemap (`/sitemap-resumes-N.xml`).

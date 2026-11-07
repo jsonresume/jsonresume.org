@@ -14,6 +14,7 @@ import { discoveryRoutes, isMcpRequest, sessionless } from './agents';
 import { createExplorePage, explorePath } from './explorePage';
 import { createJobPages, jobPath, jobsPath } from './jobPages';
 import { createResumeHandler } from './resumes';
+import { createSitemaps, liveSitemapPath, sitemapPath } from './sitemaps';
 import { createTimelinePage, timelinePath } from './timelinePage';
 import { appServices } from './services';
 
@@ -32,6 +33,9 @@ const mcp = effectWebHandler(
 const jobs = createJobPages(render, services, { memoMap });
 const explore = createExplorePage(render, services, { memoMap });
 const timeline = createTimelinePage(render, services, { memoMap });
+const sitemaps = createSitemaps(process.env.SITE_URL ?? '', services, {
+  memoMap,
+});
 
 // Paths these routes don't answer fall through, marked, to Vite's renderer.
 const PASS = 'x-dev-pass';
@@ -56,6 +60,11 @@ app.get(
 app.get(jobsPath, (c) => jobs.board(c.req.raw));
 app.get(jobPath, (c) => jobs.job(c.req.raw));
 app.get(explorePath, (c) => explore.fetch(c.req.raw));
+app.get(sitemapPath, () => sitemaps.index());
+app.get(
+  liveSitemapPath,
+  async (c, next) => (await sitemaps.file(c.req.raw)) ?? next()
+);
 
 /** A response for API, resume and job paths; undefined lets Vite render the page. */
 export const handle = async (request: Request) => {

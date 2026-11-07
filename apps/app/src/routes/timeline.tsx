@@ -1,4 +1,4 @@
-import { pageHead, paths } from '@repo/site';
+import { pageHead, paths, resumeUrl } from '@repo/site';
 import { createRoute, redirect } from '@tanstack/react-router';
 import { siteRoute } from './root';
 
@@ -24,6 +24,13 @@ export const timelineRoute = createRoute({
             loaderData.timeline.label ? `, ${loaderData.timeline.label}` : ''
           }: every role, school and project in order, on JSON Resume.`,
           path: paths.timeline(loaderData.username),
+          parents: [
+            {
+              name: loaderData.timeline.name,
+              path: resumeUrl(loaderData.username),
+            },
+          ],
+          crumb: 'Timeline',
         })
       : { meta: [{ title: 'Timeline · JSON Resume' }] },
 }).lazy(() => import('./timeline.lazy').then((m) => m.Route));

@@ -101,6 +101,22 @@ describe('Explore', () => {
     );
     expect(names).toEqual([['octo'], ['cy', 'octo']]);
   });
+
+  it('gives everyone listed, for the sitemap, and no one who opted out', async () => {
+    const cy = '00000000-0000-0000-0000-000000000003';
+    const names = await run((e) =>
+      Effect.gen(function* () {
+        const all = (yield* e.listings).map((l) => l.username).sort();
+        yield* e.setListed(cy, false);
+        const after = (yield* e.listings).map((l) => l.username).sort();
+        return [all, after];
+      })
+    );
+    expect(names).toEqual([
+      ['ada', 'cy', 'octo'],
+      ['ada', 'octo'],
+    ]);
+  });
 });
 
 describe('search', () => {

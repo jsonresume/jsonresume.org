@@ -41,5 +41,5 @@ const copied = await writeSiteFiles(
   join(root, '../homepage2/public')
 );
 process.stdout.write(
-  `wrote sitemap.xml and robots.txt; copied ${copied} legacy public files\n`
+  `wrote sitemap-pages.xml and robots.txt; copied ${copied} legacy public files\n`
 );

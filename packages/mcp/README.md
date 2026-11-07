@@ -17,6 +17,10 @@ Effect's `McpServer`.
   (`jr_…`, Settings) or an OAuth access token (`jro_…`, `@repo/accounts`
   OAuth). Tools read the user as `McpCaller`.
 - `discovery.ts`: the OAuth metadata the app serves at `/.well-known`.
+- `health.ts` (`@repo/mcp/health`): `checkMcp`, connecting the way MCP
+  clients do (discovery, registration, consent page, initialize,
+  tools/list, get_resume) and naming the step that broke; run by
+  `apps/app/scripts/mcp-health.ts`.
 
 **Every feature on jsonresume.org gets MCP tools.** Adding one: put it in
 the catalog, add the tool to a toolkit here (or a new toolkit in

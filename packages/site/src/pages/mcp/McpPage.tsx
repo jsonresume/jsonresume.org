@@ -1,5 +1,4 @@
 import {
-  Badge,
   Button,
   Callout,
   CodeBlock,
@@ -10,53 +9,19 @@ import {
   SectionIntro,
 } from '@jsonresume/ui';
 import { mcp } from '@repo/content/pages';
-import type { McpClient } from '@repo/content/pages';
 import { InlineMarkdown } from '../../InlineMarkdown';
 import { paths } from '../../links';
 import { SiteLink } from '../../SiteLink';
 import { NextSteps } from '../shared/NextSteps';
 import * as l from '../shared/layout.css';
+import { Client } from './Client';
+import { ConnectGuides } from './ConnectGuides';
 import * as s from './mcp.css';
 import { PromptList, ToolGroups } from './Tools';
 
-const authBadge: Record<McpClient['auth'], string> = {
-  oauth: 'Sign in',
-  either: 'Sign in or API key',
-  key: 'API key',
-};
-
-function Client({ client }: { client: McpClient }) {
-  return (
-    <section
-      id={client.id}
-      className={s.client}
-      aria-labelledby={`${client.id}-title`}
-    >
-      <div className={s.clientHead}>
-        <h3 id={`${client.id}-title`} className={s.clientName}>
-          {client.name}
-        </h3>
-        <Badge tone={client.auth === 'key' ? 'neutral' : 'success'}>
-          {authBadge[client.auth]}
-        </Badge>
-      </div>
-      <ol className={s.steps}>
-        {client.steps.map((step) => (
-          <li key={step}>
-            <InlineMarkdown>{step}</InlineMarkdown>
-          </li>
-        ))}
-      </ol>
-      {client.code ? (
-        <CodeBlock label={client.code.label} code={client.code.code} copyable />
-      ) : null}
-    </section>
-  );
-}
-
 const toc = [
   { id: 'connect', label: 'Connect' },
-  ...mcp.clients.map((c) => ({ id: c.id, label: c.name })),
+  { id: 'more-clients', label: 'More apps' },
   { id: 'tools', label: 'What it can do' },
   { id: 'prompts', label: 'Prompts' },
   { id: 'ask', label: 'Things to ask' },
@@ -109,8 +74,18 @@ export function McpPage() {
                 <p className={l.body}>
                   <InlineMarkdown>{mcp.auth.key}</InlineMarkdown>
                 </p>
-                {mcp.clients.map((client) => (
-                  <Client key={client.id} client={client} />
+                <ConnectGuides />
+              </section>
+              <section
+                id="more-clients"
+                className={s.section}
+                aria-labelledby="more-clients-title"
+              >
+                <h3 id="more-clients-title" className={s.clientName}>
+                  More apps
+                </h3>
+                {mcp.others.map((client) => (
+                  <Client key={client.id} client={client} heading="h4" />
                 ))}
               </section>
               <section

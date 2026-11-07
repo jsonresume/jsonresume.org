@@ -1,9 +1,11 @@
 /**
- * Files around the pages, written after prerendering: robots.txt and
- * sitemap.xml, and the old homepage's public files the new site doesn't
- * replace (theme PNGs linked from theme READMEs and elsewhere), so their
- * URLs keep working.
+ * Files around the pages, written after prerendering: robots.txt and the
+ * prerendered pages' sitemap (the server's /sitemap.xml indexes it with the
+ * live ones: jobs and resumes, see server/sitemaps.ts), and the old
+ * homepage's public files the new site doesn't replace (theme PNGs linked
+ * from theme READMEs and elsewhere), so their URLs keep working.
  */
+import { robotsTxt, urlSet } from '@repo/server/sitemap';
 import { cp, readdir, stat, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -11,32 +13,26 @@ const ORIGIN = 'https://jsonresume.org';
 /** Account pages, the dashboard and OAuth consent stay out of search. */
 const PRIVATE =
   /^\/(signin|signup|forgot-password|reset-password|dashboard|oauth)(\/|$)/;
+/** What crawlers skip: the signed-in app, the API, consent, analytics. */
+export const DISALLOW = ['/api/', '/dashboard', '/oauth/', '/ingest/'];
+
+/** The prerendered and live pages search engines should find. */
+export const publicPaths = (paths: ReadonlyArray<string>) =>
+  paths.filter((path) => !PRIVATE.test(path) && path !== '/404');
 
 export async function writeSiteFiles(
   clientDir: string,
   paths: ReadonlyArray<string>,
   legacyDir: string
 ) {
-  const urls = paths.filter((path) => !PRIVATE.test(path) && path !== '/404');
   await writeFile(
-    join(clientDir, 'sitemap.xml'),
-    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls
-      .map(
-        (path) => `  <url><loc>${ORIGIN}${path === '/' ? '' : path}</loc></url>`
-      )
-      .join('\n')}\n</urlset>\n`
+    join(clientDir, 'sitemap-pages.xml'),
+    urlSet(
+      ORIGIN,
+      publicPaths(paths).map((path) => ({ path }))
+    )
   );
-  await writeFile(
-    join(clientDir, 'robots.txt'),
-    [
-      'User-agent: *',
-      'Disallow: /api/',
-      'Disallow: /dashboard',
-      '',
-      `Sitemap: ${ORIGIN}/sitemap.xml`,
-      '',
-    ].join('\n')
-  );
+  await writeFile(join(clientDir, 'robots.txt'), robotsTxt(ORIGIN, DISALLOW));
   return copyMissing(legacyDir, clientDir);
 }
 

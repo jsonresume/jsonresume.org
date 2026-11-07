@@ -49,6 +49,59 @@ weekly: it reads every public resume's job titles into role families (new
 titles with OpenAI, kept in `app.title_families`) and recounts where people
 go next into `app.career_moves`, for Pathways.
 
+MCP connect check (proposed, not installed yet): `apps/app/scripts/mcp-health.ts`
+(`pnpm --filter app mcp-health` after a build; `@repo/mcp/health`) connects
+the way Claude, ChatGPT, Cursor, Gemini CLI and VS Code do: the 401 pointing
+at `/.well-known/oauth-protected-resource`, the authorization server's
+metadata, dynamic client registration, the consent page for that client,
+then MCP `initialize`, `tools/list` and `get_resume`. It exits 1 naming the
+step that failed. `MCP_HEALTH_TOKEN` (an API key of a test account, in
+`/etc/jsonresume/mcp-health.env`, mode 600) enables the signed-in steps;
+`MCP_HEALTH_URL` defaults to https://jsonresume.org. Each run registers one
+OAuth client (a row in the OAuth clients table). To run it daily, add:
+
+```ini
+# /etc/systemd/system/jsonresume-mcp-health.service
+[Unit]
+Description=jsonresume.org MCP connect check
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=deploy
+Group=deploy
+Environment=NODE_ENV=production HOME=/srv/jsonresume
+EnvironmentFile=-/etc/jsonresume/mcp-health.env
+WorkingDirectory=/srv/jsonresume/app/current/apps/app
+ExecStart=/usr/bin/node dist/mcp-health/mcp-health.js
+TimeoutStartSec=5min
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+
+# /etc/systemd/system/jsonresume-mcp-health.timer
+[Unit]
+Description=Check every day that MCP clients can connect to jsonresume.org
+
+[Timer]
+OnCalendar=*-*-* 06:30:00 UTC
+RandomizedDelaySec=10min
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+```
+
+A failed run shows in `systemctl --failed` and `journalctl -u
+jsonresume-mcp-health`; wire `OnFailure=` to an alert if one exists.
+
+Search: `/sitemap.xml` is served live (`apps/app/server/sitemaps.ts`), an
+index of the prerendered pages' `sitemap-pages.xml`, `sitemap-jobs.xml` (open
+jobs) and `sitemap-resumes-N.xml` (everyone Explore lists, 40,000 a file).
+`robots.txt` is written by the prerender.
+
 Hostnames (Cloudflare proxied, `deploy/caddy/Caddyfile`): jsonresume.org is
 the site, with `/docs` proxied to GitHub Pages; www and beta redirect to it;
 registry.jsonresume.org is answered by the app with redirects (resumes to

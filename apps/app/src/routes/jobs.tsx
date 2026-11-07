@@ -19,6 +19,7 @@ export const jobsRoute = createRoute({
   head: ({ loaderData }) =>
     pageHead({
       title: 'Jobs from Hacker News',
+      crumb: 'Jobs',
       description: `${
         loaderData?.jobs.length ?? 'Hundreds of'
       } open roles from Hacker News "Who is hiring?", searchable by skill, place, level and pay, and ranked against your resume.`,
@@ -41,6 +42,7 @@ export const jobRoute = createRoute({
       title,
       description: job.summary || `${title}.`,
       path: paths.job(job.id),
+      parents: [{ name: 'Jobs', path: paths.jobs }],
     });
   },
 }).lazy(() => import('./jobs.lazy').then((m) => m.JobRoute));

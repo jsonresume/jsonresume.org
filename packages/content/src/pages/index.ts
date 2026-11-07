@@ -13,6 +13,6 @@ export * as schema from './schema';
 export * as team from './team';
 export * as themeDevelopment from './themeDevelopment';
 export type { CliCommand, CliOption } from './cli';
-export type { McpClient } from './mcp';
+export type { McpClient, McpGuide } from './mcp';
 export type { ProblemCopy } from './resumeHosting';
 export type { Card, Link, Step, UserPath } from './types';
