@@ -6,7 +6,7 @@ import { gather } from './gather';
 import { buildGraph } from './graph/build';
 import { PlanStore } from './plans';
 import { ResumeInsightsLive } from './resumeInsights';
-import { JobRoles, SkillCatalog } from './services';
+import { JobRoles, ResumeInsights, SkillCatalog } from './services';
 import { SkillCatalogLive } from './skills';
 import { posting } from './test/fixtures';
 import { memorySkills, noMoves } from './testing';
@@ -85,7 +85,10 @@ const ranked: Ranked = {
 
 it('a resume saying "ML" meets a job requiring "Machine Learning": no gap', async () => {
   const graph = await Effect.runPromise(
-    gather('00000000-0000-0000-0000-000000000000', resume, [ranked], 2026).pipe(
+    ResumeInsights.use((insights) => insights.insight(resume)).pipe(
+      Effect.flatMap((insight) =>
+        gather('00000000-0000-0000-0000-000000000000', insight, [ranked], 2026)
+      ),
       Effect.map(buildGraph),
       Effect.provide(
         Layer.mergeAll(
