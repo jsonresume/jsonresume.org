@@ -97,7 +97,7 @@ export function HistoryCard({ gist }: { gist: boolean }) {
   };
 
   return (
-    <Card>
+    <Card id="history">
       <CardHeader>
         <CardTitle level={2}>History</CardTitle>
       </CardHeader>

@@ -104,6 +104,9 @@ export const Connection = Schema.Struct({
   scopes: Schema.Array(Schema.String),
   connectedAt: Schema.String,
   lastUsedAt: Schema.NullOr(Schema.String),
+  /** Saves of the resume this app made (each is a version in its history). */
+  changes: Schema.Number,
+  lastChangeAt: Schema.NullOr(Schema.String),
 });
 export type Connection = typeof Connection.Type;
 

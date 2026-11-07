@@ -175,6 +175,8 @@ export const OAuthConsentHandlers = HttpApiBuilder.group(
                 scopes: [...new Set(c.scopes.split(' '))],
                 connectedAt: c.created_at.toISOString(),
                 lastUsedAt: c.last_used_at?.toISOString() ?? null,
+                changes: c.changes,
+                lastChangeAt: c.last_change_at?.toISOString() ?? null,
               }))
             )
           ),
