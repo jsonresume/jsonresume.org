@@ -11,6 +11,8 @@ export const ThemeSummary = Schema.Struct({
   style: NonEmptyText,
   layout: NonEmptyText,
   color: NonEmptyText,
+  /** In the recommended set: ATS-safe and print-tested, shown first. */
+  recommended: Schema.Boolean,
   usage: Schema.Struct({
     resumes: Schema.Number,
     chosen: Schema.Number,

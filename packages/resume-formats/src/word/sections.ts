@@ -7,6 +7,7 @@ import {
   item,
   joined,
   link,
+  direction,
   section,
   subheading,
 } from './blocks';
@@ -133,11 +134,18 @@ export const sections = (resume: Entry): Paragraph[] => {
                   children: [
                     new TextRun({ text: `“${quote}”`, italics: true }),
                   ],
+                  ...direction(quote),
                 }),
               ]
             : []),
           ...(name
-            ? [new Paragraph({ style: 'Details', text: `— ${name}` })]
+            ? [
+                new Paragraph({
+                  style: 'Details',
+                  text: `— ${name}`,
+                  ...direction(name),
+                }),
+              ]
             : []),
         ];
       })

@@ -8,6 +8,7 @@ export const themeQueryAtom = Atom.make('');
 export const themeTagAtom = Atom.make<string | null>(null);
 export const themeLayoutAtom = Atom.make<string | null>(null);
 export const themeColorAtom = Atom.make<string | null>(null);
+/** The gallery's order; null is its default, recommended first. */
 export const themeSortAtom = Atom.make<string | null>(null);
 
 /** The theme open in the preview, or null when it is closed. */
@@ -21,6 +22,6 @@ export const visibleThemesAtom = Atom.make((get) =>
     style: get(themeTagAtom),
     layout: get(themeLayoutAtom),
     color: get(themeColorAtom),
-    sort: get(themeSortAtom),
+    sort: get(themeSortAtom) ?? 'recommended',
   })
 );

@@ -4,6 +4,7 @@ import {
   GithubUnavailable,
   type Username,
 } from '@repo/profiles';
+import { unzip } from '@repo/resume-formats/testing';
 import { PdfFailed, ResumePdf } from '@repo/resume-pdf';
 import { Effect, Layer } from 'effect';
 import { describe, expect, it } from 'vitest';
@@ -55,14 +56,21 @@ const profiles = Layer.succeed(
   })
 );
 
-/** Prints the page's HTML as the "PDF", with the paper, so tests can read both. */
+/**
+ * Prints the page's HTML as the "PDF", with the paper and whether it was
+ * fitted, so tests can read them.
+ */
 const printer = Layer.succeed(
   ResumePdf,
   ResumePdf.of({
-    print: (html, paper) =>
+    print: (html, paper, options) =>
       html.includes('Broken')
         ? Effect.fail(new PdfFailed({ message: 'x' }))
-        : Effect.succeed(new TextEncoder().encode(`${paper}:${html}`)),
+        : Effect.succeed(
+            new TextEncoder().encode(
+              `${paper}${options?.fit ? ':fit' : ''}:${html}`
+            )
+          ),
   })
 );
 
@@ -142,6 +150,19 @@ describe('resumeOutcome', () => {
     expect([...bytes.slice(0, 2)]).toEqual([0x50, 0x4b]);
   });
 
+  it('sets the Word document on the paper the PDF would use', async () => {
+    const size = async (path: string) => {
+      const body = await response(await get(path)).arrayBuffer();
+      const files = unzip(new Uint8Array(body));
+      return /<w:pgSz w:w="(\d+)"/.exec(
+        files.get('word/document.xml') ?? ''
+      )?.[1];
+    };
+    expect(await size('/@foo.docx')).toBe('11906');
+    expect(await size('/@foo.docx?paper=letter')).toBe('12240');
+    expect(await size('/@yank.docx')).toBe('12240');
+  });
+
   it('prints the themed page to PDF, on the paper asked for or local', async () => {
     const res = response(await get('/@foo.pdf'));
     expect(res.headers.get('content-type')).toBe('application/pdf');
@@ -156,6 +177,18 @@ describe('resumeOutcome', () => {
     expect(await response(await get('/@yank.pdf')).text()).toMatch(/^letter:/);
     expect(await response(await get('/@foo.pdf?paper=letter')).text()).toMatch(
       /^letter:/
+    );
+  });
+
+  it('fits the print to one page with ?fit=1', async () => {
+    expect(await response(await get('/@foo.pdf?fit=1')).text()).toMatch(
+      /^a4:fit:/
+    );
+    expect(
+      await response(await get('/@foo.pdf?fit=true&paper=letter')).text()
+    ).toMatch(/^letter:fit:/);
+    expect(await response(await get('/@foo.pdf?fit=0')).text()).toMatch(
+      /^a4:</
     );
   });
 

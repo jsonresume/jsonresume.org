@@ -115,14 +115,14 @@ export const tools: ReadonlyArray<McpToolInfo> = [
     name: 'export_resume',
     group: 'resume',
     description:
-      'Your resume as a file: a PDF of your page in any theme (A4 or Letter), a Word document (.docx, editable), JSON, YAML, plain text, RenderCV (for the rendercv CLI), or a QR code linking to your page. Returns its URL, and the text itself for the text formats.',
+      'Your resume as a file: a PDF of your page in any theme (A4 or Letter; fit: true shrinks one that runs slightly over a page to fit on one), a Word document (.docx, editable), JSON, YAML, plain text, RenderCV (for the rendercv CLI), or a QR code linking to your page. Returns its URL, and the text itself for the text formats.',
     writes: false,
   },
   {
     name: 'list_themes',
     group: 'themes',
     description:
-      'The themes your page can use, ranked by public-resume usage, with style, layout, colour, explicit-choice counts and previews. Filter by words, tag or any discovery facet. Sort by usage, explicitly chosen or name. Counts include inherited defaults unless sorting by chosen; usageAsOf identifies the snapshot.',
+      'The themes your page can use, ranked by public-resume usage, with style, layout, colour, explicit-choice counts and previews. recommended marks the dozen that pass the ATS check and print cleanly on A4 and Letter: suggest those first. Filter by words, tag or any discovery facet. Sort by usage, explicitly chosen, name or recommended (that set first). Counts include inherited defaults unless sorting by chosen; usageAsOf identifies the snapshot.',
     writes: false,
   },
   {

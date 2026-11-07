@@ -7,7 +7,7 @@ export type Mode = 'form' | 'json';
 /** On phones, one thing at a time: the editor, the page, or its ATS check. */
 export type View = 'edit' | 'preview' | 'check';
 
-/** Which theme the page uses (meta.theme). */
+/** Which theme the page uses (meta.theme), the recommended ones first. */
 export function ThemeSelect() {
   const [draft, setDraft] = useAtom(draftAtom);
   return (
@@ -25,10 +25,14 @@ export function ThemeSelect() {
         )
       }
     >
-      {themeOptions.map((t) => (
-        <option key={t.value} value={t.value}>
-          {t.label}
-        </option>
+      {themeOptions.map((group) => (
+        <optgroup key={group.label} label={group.label}>
+          {group.options.map((t) => (
+            <option key={t.value} value={t.value}>
+              {t.label}
+            </option>
+          ))}
+        </optgroup>
       ))}
     </Select>
   );

@@ -15,17 +15,25 @@ const countryOf = (resume: unknown): string | undefined => {
   return Predicate.isString(code) ? code : undefined;
 };
 
-/** A themed page printed to PDF, on the paper ?paper= or the country asks for. */
+/** ?fit=1 (or true): shrink a page that runs slightly over onto one. */
+const fitAsked = (search: URLSearchParams) =>
+  ['1', 'true'].includes(search.get('fit')?.toLowerCase() ?? '');
+
+/**
+ * A themed page printed to PDF, on the paper ?paper= or the country asks
+ * for, fitted to one page when ?fit=1 asks and it nearly fits.
+ */
 export const pdfResponse = (
   html: string,
   username: string,
   resume: unknown,
-  paper: string | null
+  search: URLSearchParams
 ) =>
   Effect.gen(function* () {
     const pdf = yield* (yield* ResumePdf).print(
       html,
-      paperFor(paper, countryOf(resume))
+      paperFor(search.get('paper'), countryOf(resume)),
+      { fit: fitAsked(search) }
     );
     return new Response(pdf, {
       headers: {
@@ -57,10 +65,14 @@ export const qrResponse = (username: string) =>
     });
   });
 
-/** The resume as a Word document, saved under the username. */
-export const docxResponse = (username: string, resume: Entry) =>
+/** The resume as a Word document, saved under the username, on the PDF's paper. */
+export const docxResponse = (
+  username: string,
+  resume: Entry,
+  paper: string | null
+) =>
   Effect.map(
-    Effect.promise(() => toDocx(resume)),
+    Effect.promise(() => toDocx(resume, paperFor(paper, countryOf(resume)))),
     (docx) =>
       new Response(docx, {
         headers: {

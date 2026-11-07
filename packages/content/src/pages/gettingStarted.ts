@@ -75,7 +75,7 @@ export const rawFormats: {
   {
     label: 'PDF',
     description:
-      'Your page printed, in any theme: add ?theme= and ?paper=letter.',
+      'Your page printed, in any theme: add ?theme=, ?paper=letter, or ?fit=1 to fit a resume slightly over a page onto one.',
     path: (u) => `${site}/@${u}.pdf`,
   },
   {

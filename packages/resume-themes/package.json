@@ -244,12 +244,13 @@
     "jsonresume-theme-writers-portfolio": "workspace:*"
   },
   "devDependencies": {
+    "@jsonresume/ats-validator": "workspace:^",
+    "@jsonresume/sample-data": "workspace:*",
     "@jsonresume/theme-metadata": "workspace:*",
     "@repo/eslint-config-custom": "workspace:*",
+    "@types/node": "^20.19.24",
     "tsconfig": "workspace:*",
     "typescript": "^5.9.3",
-    "vitest": "^3.2.6",
-    "@types/node": "^20.19.24",
-    "@jsonresume/sample-data": "workspace:*"
+    "vitest": "^3.2.6"
   }
 }

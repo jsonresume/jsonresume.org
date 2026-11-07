@@ -1,6 +1,7 @@
 import { Clock, Context, Effect, Layer, Schema, Semaphore } from 'effect';
 import { createHash } from 'node:crypto';
 import type { Browser } from 'playwright-core';
+import { fitOnePage } from './fit.ts';
 import { mayLoad, type Paper } from './policy.ts';
 
 /** The browser could not print the page. */
@@ -14,6 +15,11 @@ const CONCURRENT = 2;
 const CACHE_MS = 5 * 60_000;
 const CACHE_SIZE = 40;
 
+/** How to print: `fit` shrinks a page that runs slightly over onto one. */
+export interface PrintOptions {
+  readonly fit?: boolean;
+}
+
 /**
  * Prints a resume's themed page to PDF with headless Chromium, as a reader
  * would with "Save as PDF": backgrounds on, the theme's print styles, no
@@ -25,7 +31,8 @@ export class ResumePdf extends Context.Service<
   {
     print(
       html: string,
-      paper: Paper
+      paper: Paper,
+      options?: PrintOptions
     ): Effect.Effect<Uint8Array<ArrayBuffer>, PdfFailed>;
   }
 >()('@repo/resume-pdf/ResumePdf') {
@@ -62,7 +69,7 @@ export class ResumePdf extends Context.Service<
           catch: (e) => new PdfFailed({ message: `${what}: ${String(e)}` }),
         });
 
-      const render = (html: string, paper: Paper) =>
+      const render = (html: string, paper: Paper, fit: boolean) =>
         Effect.acquireUseRelease(
           Effect.flatMap(open, (chrome) =>
             attempt('context', () =>
@@ -104,14 +111,16 @@ export class ResumePdf extends Context.Service<
                 }),
                 Effect.ignore
               );
-              const pdf = yield* attempt('print', () =>
-                page.pdf({
-                  format: paper === 'letter' ? 'Letter' : 'A4',
-                  printBackground: true,
-                  preferCSSPageSize: false,
-                })
-              );
-              return new Uint8Array(pdf);
+              const at = (scale: number) =>
+                attempt('print', () =>
+                  page.pdf({
+                    format: paper === 'letter' ? 'Letter' : 'A4',
+                    printBackground: true,
+                    preferCSSPageSize: false,
+                    scale,
+                  })
+                ).pipe(Effect.map((pdf) => new Uint8Array(pdf)));
+              return yield* fit ? fitOnePage(at) : at(1);
             }),
           (context) => Effect.promise(() => context.close()).pipe(Effect.ignore)
         ).pipe(
@@ -121,16 +130,17 @@ export class ResumePdf extends Context.Service<
           })
         );
 
-      const print = (html: string, paper: Paper) =>
+      const print = (html: string, paper: Paper, options?: PrintOptions) =>
         Effect.gen(function* () {
+          const fit = options?.fit === true;
           const key = createHash('sha256')
-            .update(paper)
+            .update(`${paper}:${fit ? 'fit' : 'full'}:`)
             .update(html)
             .digest('hex');
           const now = yield* Clock.currentTimeMillis;
           const hit = cache.get(key);
           if (hit && now - hit.at < CACHE_MS) return hit.pdf;
-          const pdf = yield* turns.withPermits(1)(render(html, paper));
+          const pdf = yield* turns.withPermits(1)(render(html, paper, fit));
           if (cache.size >= CACHE_SIZE) {
             const oldest = cache.keys().next().value;
             if (oldest !== undefined) cache.delete(oldest);

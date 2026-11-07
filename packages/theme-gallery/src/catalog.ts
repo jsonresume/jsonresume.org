@@ -1,4 +1,5 @@
 import {
+  RECOMMENDED_THEMES,
   THEME_METADATA,
   THEME_STYLES,
   THEME_LAYOUTS,
@@ -68,18 +69,32 @@ export function filterThemes(
   return sortThemes(selected, sort);
 }
 
+/** Recommended themes in their own order, then every other theme. */
+const recommendedRank = (theme: ThemeSummary) =>
+  theme.recommended
+    ? RECOMMENDED_THEMES.indexOf(theme.slug)
+    : RECOMMENDED_THEMES.length;
+
+type Order = (a: ThemeSummary, b: ThemeSummary) => number;
+const byUsage: Order = (a, b) => b.usage.resumes - a.usage.resumes;
+const orders: Readonly<Record<string, Order>> = {
+  name: () => 0,
+  chosen: (a, b) => b.usage.chosen - a.usage.chosen,
+  usage: byUsage,
+  recommended: (a, b) =>
+    recommendedRank(a) - recommendedRank(b) || byUsage(a, b),
+};
+
+/**
+ * Themes by usage (the default), explicit choices, name, or recommended
+ * first: the ATS-safe, print-tested set in its order, then the rest by usage.
+ */
 export function sortThemes(
   list: ReadonlyArray<ThemeSummary>,
   sort = 'usage' as string | null
 ) {
-  return [...list].sort(
-    (a, b) =>
-      (sort === 'name'
-        ? 0
-        : sort === 'chosen'
-        ? b.usage.chosen - a.usage.chosen
-        : b.usage.resumes - a.usage.resumes) || a.name.localeCompare(b.name)
-  );
+  const order = orders[sort ?? 'usage'] ?? byUsage;
+  return [...list].sort((a, b) => order(a, b) || a.name.localeCompare(b.name));
 }
 
 export function facetCounts(
