@@ -16,7 +16,8 @@ catalogue. The ten original researched families remain available individually.
 The gallery defaults to public-resume usage. Users can instead sort by explicit
 choices or name. Every theme carries the same facets and usage fields in MCP
 `list_themes`, so agents see the same catalogue and ordering as the website.
-Equal usage counts use alphabetical order. Equal counts share a usage rank.
+Styles, layouts and colours are ordered by the public-resume adoption of the
+themes they contain. Equal usage counts use alphabetical order. Equal counts share a usage rank.
 
 ## What usage means
 
@@ -99,3 +100,9 @@ python scripts/verify-researched-theme-pdfs.py --portfolio
 Generated verification output belongs under `output/theme-portfolio` and is not
 part of the published packages. Actual release checks and any unresolved gaps
 must be recorded before deployment; this document describes the required matrix.
+
+Existing classifications were audited against current hosted previews and layout
+source, and all 77 existing thumbnails were regenerated with the same sample
+content. Tan Responsive remains for compatibility; its current browser preview
+is blank and the workbook marks it as needing repair. This legacy issue is
+separate from the verified 150-theme portfolio.

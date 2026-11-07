@@ -57,11 +57,17 @@ const existing = Object.entries(THEME_METADATA)
   .map(([slug, theme]) => ({
     slug,
     ...theme,
+    description:
+      slug === 'tan-responsive'
+        ? `${theme.description} Current hosted preview is blank; needs repair.`
+        : theme.description,
     styleLabel: THEME_STYLES[theme.style],
     layoutLabel: THEME_LAYOUTS[theme.layout],
     colorLabel: THEME_COLORS[theme.color],
     status:
-      firstTen.has(slug) && !values.deployed
+      slug === 'tan-responsive'
+        ? 'Needs repair'
+        : firstTen.has(slug) && !values.deployed
         ? 'Implemented, unreleased'
         : 'Available',
   }))

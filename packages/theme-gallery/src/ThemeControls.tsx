@@ -1,5 +1,9 @@
 import { Field, Select } from '@jsonresume/ui';
 import { THEME_COLORS, THEME_LAYOUTS } from '@jsonresume/theme-metadata';
+import { facetCounts, themes } from './catalog';
+
+const layouts = facetCounts(themes, 'layout');
+const colors = facetCounts(themes, 'color');
 
 interface Props {
   layout: string | null;
@@ -26,9 +30,9 @@ export function ThemeControls({
           onChange={(event) => setLayout(event.target.value || null)}
         >
           <option value="">All layouts</option>
-          {Object.entries(THEME_LAYOUTS).map(([value, label]) => (
+          {layouts.map(({ value }) => (
             <option key={value} value={value}>
-              {label}
+              {THEME_LAYOUTS[value]}
             </option>
           ))}
         </Select>
@@ -39,9 +43,9 @@ export function ThemeControls({
           onChange={(event) => setColor(event.target.value || null)}
         >
           <option value="">All colours</option>
-          {Object.entries(THEME_COLORS).map(([value, label]) => (
+          {colors.map(({ value }) => (
             <option key={value} value={value}>
-              {label}
+              {THEME_COLORS[value]}
             </option>
           ))}
         </Select>

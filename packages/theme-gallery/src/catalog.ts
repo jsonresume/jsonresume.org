@@ -1,4 +1,9 @@
-import { THEME_METADATA } from '@jsonresume/theme-metadata';
+import {
+  THEME_METADATA,
+  THEME_STYLES,
+  THEME_LAYOUTS,
+  THEME_COLORS,
+} from '@jsonresume/theme-metadata';
 import { ThemeSummary } from '@repo/domain';
 import { Schema } from 'effect';
 
@@ -34,7 +39,15 @@ export interface ThemeFilter {
 export const emptyFilter: ThemeFilter = { query: '', tag: null };
 
 const haystack = (theme: ThemeSummary) =>
-  [theme.name, theme.description, theme.author, ...theme.tags]
+  [
+    theme.name,
+    theme.description,
+    theme.author,
+    THEME_STYLES[theme.style],
+    THEME_LAYOUTS[theme.layout],
+    THEME_COLORS[theme.color],
+    ...theme.tags,
+  ]
     .join(' ')
     .toLowerCase();
 

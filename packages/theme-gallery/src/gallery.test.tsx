@@ -78,6 +78,22 @@ describe('catalog', () => {
     ).toHaveLength(themes.length);
   });
 
+  it('matches the visible colour and layout labels in free-text search', () => {
+    expect(
+      filterThemes(themes, { query: 'black and white', tag: null }).map(
+        (t) => t.slug
+      )
+    ).toContain('harvard-classic');
+    expect(
+      filterThemes(themes, { query: 'orange', tag: null }).map((t) => t.slug)
+    ).toContain('flat');
+    expect(
+      filterThemes(themes, { query: 'left sidebar', tag: null }).map(
+        (t) => t.slug
+      )
+    ).toContain('executive-slate');
+  });
+
   it('matches every word of the query, and the tag', () => {
     const tag = tagCounts(themes)[0].tag;
     const tagged = filterThemes(themes, { query: '', tag });

@@ -25,6 +25,7 @@ export const THEME_COLORS = {
   blue: 'Blue',
   green: 'Green',
   warm: 'Warm neutrals',
+  yellow: 'Yellow and orange',
   red: 'Red and coral',
   purple: 'Purple and pink',
   multi: 'Multicolour',
