@@ -1,5 +1,5 @@
 import { Button, CodeBlock, Hero } from '@jsonresume/ui';
-import { paths } from '../links';
+import { paths, themeImageUrl } from '../links';
 import { SiteLink } from '../SiteLink';
 import * as s from './home.css';
 
@@ -28,7 +28,7 @@ function ResumeDemo() {
       <CodeBlock className={s.demoCode} code={sample} label="resume.json" />
       <img
         className={s.demoPreview}
-        src="/img/themes/bold-header-statement.webp"
+        src={themeImageUrl('bold-header-statement')}
         alt="The same resume rendered with the Bold Header Statement theme: a teal header with Jane Developer's name, then her experience at TechCorp Inc."
         width={800}
         height={640}

@@ -117,3 +117,6 @@ content. Tan Responsive remains for compatibility; its preview needs its legacy 
 animation to settle, and it expects legacy company/picture fields. The workbook
 flags that schema compatibility for review. The 150 new designs support current
 standard JSON Resume fields without client-side animation.
+
+When refreshing previews, also update the revision in `themeImageUrl` in
+`packages/site/src/links.ts` so browser/CDN caches receive the new images.
