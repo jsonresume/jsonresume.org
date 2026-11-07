@@ -1,0 +1,182 @@
+[
+  [
+    "Bookplate CV",
+    "single",
+    "warm",
+    "professional",
+    "Writers, editors and specialists",
+    "A fine rectangular identity frame recalls a bookplate, followed by an open serif reading column. Use quiet warm rules and keep long entries clear of the decorative frame.",
+    "bookplate",
+    1
+  ],
+  [
+    "Magazine Desk",
+    "right",
+    "mono",
+    "professional",
+    "Editorial and creative professionals",
+    "An asymmetric magazine masthead sits above a broad narrative column and narrow supporting rail. Use bold serif section openings and small, precise metadata.",
+    "magazine-desk",
+    2
+  ],
+  [
+    "Byline Profile",
+    "single",
+    "red",
+    "professional",
+    "Journalists and communications",
+    "Place a small professional label above a strong byline-style name, with a short red rule. The career body reads as a clean sequence of dated reports.",
+    "byline",
+    2
+  ],
+  [
+    "Longform Career",
+    "single",
+    "warm",
+    "professional",
+    "Narrative-heavy senior careers",
+    "A generous serif text measure and substantial section spacing support a long career narrative. Keep role headings and dates unmistakable even when summaries span several paragraphs.",
+    "longform",
+    2
+  ],
+  [
+    "Journal Record",
+    "dates",
+    "mono",
+    "academic-cv-lite",
+    "Researchers and knowledge professionals",
+    "A scholarly journal-like identity and marginal dates give publications and appointments a consistent rhythm. Use thin rules, strong text contrast and plain bibliographic context.",
+    "journal",
+    2
+  ],
+  [
+    "Gallery Catalogue",
+    "columns",
+    "mono",
+    "professional",
+    "Curators and arts administration",
+    "Use a restrained exhibition-catalogue masthead, numbered section labels and two unequal information columns. Achievements remain text-first, with no dependence on portfolio images.",
+    "catalogue",
+    2
+  ],
+  [
+    "Literary Margin",
+    "right",
+    "purple",
+    "professional",
+    "Authors and humanities",
+    "A tall serif name and a narrow plum marginal rail create a literary page. Keep the main text open and use italic context sparingly for institutions and publishers.",
+    "literary",
+    2
+  ],
+  [
+    "Quiet Column",
+    "single",
+    "mono",
+    "even",
+    "Applicants who prefer understated editorial type",
+    "Set a narrow, quiet reading column beneath a small serif identity. Short horizontal rules and generous line spacing give the page character without a sidebar or coloured panel.",
+    "quiet-column",
+    1
+  ],
+  [
+    "Masthead Edition",
+    "columns",
+    "blue",
+    "professional",
+    "Publishing and communications",
+    "A broad serif masthead, a double blue rule and crisp column boundaries evoke a carefully edited publication. Keep supporting qualifications separate from the career narrative.",
+    "masthead",
+    2
+  ],
+  [
+    "Newsprint Brief",
+    "single",
+    "mono",
+    "short",
+    "Communications and concise applications",
+    "Use a compact newspaper-like nameplate, condensed section labels and an economical single column. Keep paper white and body text comfortably sized despite the dense editorial rhythm.",
+    "newsprint",
+    1
+  ],
+  [
+    "Monograph CV",
+    "dates",
+    "warm",
+    "academic-cv-lite",
+    "Academics and independent scholars",
+    "A dignified monograph-style identity and warm marginal dates support an extended record. Publications, research work and awards should continue across pages without broken headings.",
+    "monograph",
+    2
+  ],
+  [
+    "Footnote Profile",
+    "dates",
+    "blue",
+    "professional",
+    "Policy, research and analysis",
+    "Use small marginal dates and blue section numbers beside an open evidence column. The result should resemble a well-annotated document without adding fake footnotes or invented citations.",
+    "footnote",
+    2
+  ],
+  [
+    "Exhibition Notes",
+    "left",
+    "warm",
+    "professional",
+    "Arts, museums and cultural work",
+    "A pale margin for credentials sits beside a large serif career column. Treat projects and publications like catalogue entries, with clear titles and compact context.",
+    "exhibition",
+    2
+  ],
+  [
+    "Research Narrative",
+    "single",
+    "green",
+    "academic-cv-lite",
+    "Research and policy applicants",
+    "Lead with education and research evidence in an open serif document. Dark green headings and unusually clear publication entries provide structure without laboratory or nature-themed decoration.",
+    "research-narrative",
+    2
+  ],
+  [
+    "Case Study CV",
+    "right",
+    "blue",
+    "elegant",
+    "Consultants and product specialists",
+    "Give project evidence the broad column and supporting capabilities a narrow right rail. Strong project titles, short blue dividers and readable outcomes create a case-study rhythm.",
+    "case-study",
+    1
+  ],
+  [
+    "Essay Profile",
+    "single",
+    "warm",
+    "professional",
+    "Writers and reflective professional careers",
+    "A modest serif name, an unboxed summary and spacious paragraphs create an essay-like opening. Maintain conventional section labels and crisp dates for practical scanning.",
+    "essay",
+    2
+  ],
+  [
+    "Portfolio Colophon",
+    "right",
+    "mono",
+    "professional",
+    "Designers and independent practitioners",
+    "A large serif identity and small colophon-like contact block sit above a clean career body. A quiet right rail holds credentials and interests without competing with work evidence.",
+    "portfolio-colophon",
+    2
+  ],
+  [
+    "Publishers Page",
+    "single",
+    "red",
+    "professional",
+    "Publishing, editing and content",
+    "Use a strong serif masthead, fine red keylines and compact publisher-style metadata. The page should feel typeset, with a single clear reading order and deliberate print continuation.",
+    "publisher",
+    2
+  ]
+]

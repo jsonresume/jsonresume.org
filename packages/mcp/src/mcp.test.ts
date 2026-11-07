@@ -254,6 +254,44 @@ describe('the MCP server', () => {
     const all = await call('list_themes', { query: null, tag: null });
     expect(all.isError).toBeFalsy();
     expect(all.value.length).toBeGreaterThan(10);
+    expect(all.value[0].slug).toBe('elegant');
+    expect(all.value[0].inheritedDefaults).toBeGreaterThan(0);
+    expect(all.value[0].publicResumes).toBeGreaterThan(
+      all.value[1].publicResumes
+    );
+    const classic = await call('list_themes', {
+      style: 'classic',
+      sort: 'chosen',
+    });
+    expect(
+      classic.value.every(
+        (theme: { style: string }) => theme.style === 'classic'
+      )
+    ).toBe(true);
+    const families = new Set([
+      'academic-classic',
+      'alta',
+      'awesome-professional',
+      'deedy',
+      'dublin',
+      'europass-inspired',
+      'harvard-classic',
+      'jake-technical',
+      'new-york-corporate',
+      'stockholm',
+    ]);
+    const implemented = all.value.filter((theme: { slug: string }) =>
+      families.has(theme.slug)
+    );
+    expect(implemented).toHaveLength(10);
+    for (const theme of implemented) {
+      expect(
+        (await call('set_theme', { slug: theme.slug })).isError
+      ).toBeFalsy();
+      expect((await call('get_resume')).value.resume.meta.theme).toBe(
+        theme.slug
+      );
+    }
     const themes = (await call('list_themes', { query: 'elegant' })).value;
     expect(themes[0].previewUrl).toContain('/@ada?theme=');
     await call('set_theme', { slug: themes[0].slug });

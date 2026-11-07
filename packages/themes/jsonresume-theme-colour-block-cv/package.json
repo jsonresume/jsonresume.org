@@ -1,0 +1,63 @@
+{
+  "name": "jsonresume-theme-colour-block-cv",
+  "version": "0.1.0",
+  "description": "A solid plum identity block and a light supporting rail contrast with a white evidence column. Use simple rectangular colour areas rather than gradients or ornamental cards.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./dist": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "jsonresume",
+    "jsonresume-theme",
+    "bold",
+    "left",
+    "purple"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "vite build && tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@jsonresume/theme-primitives": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@jsonresume/sample-data": "workspace:*",
+    "@jsonresume/theme-kit": "workspace:*",
+    "@repo/eslint-config-custom": "workspace:*",
+    "@vanilla-extract/css": "^1.21.3",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.9.3",
+    "vite": "^6.4.3",
+    "vitest": "^3.2.6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jsonresume/jsonresume.org.git",
+    "directory": "packages/themes/jsonresume-theme-colour-block-cv"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

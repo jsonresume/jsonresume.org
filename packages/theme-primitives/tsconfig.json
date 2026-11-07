@@ -1,0 +1,9 @@
+{
+  "extends": "tsconfig/base.json",
+  "compilerOptions": {
+    "target": "ES2022", "module": "ESNext", "moduleResolution": "bundler",
+    "jsx": "react-jsx", "lib": ["ES2023", "DOM"], "noEmit": true,
+    "declaration": false, "declarationMap": false, "types": ["vite/client"]
+  },
+  "include": ["src"]
+}

@@ -5,6 +5,7 @@
   "description": "Authoring kit for JSON Resume themes: the SSR document helper plus the all-theme render + section-coverage QA gate",
   "type": "module",
   "main": "./src/index.js",
+  "types": "./src/index.d.ts",
   "exports": {
     ".": "./src/index.js",
     "./qa": "./src/qa.js",

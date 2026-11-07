@@ -5,17 +5,9 @@ import { filterThemes, findTheme, themes } from '@repo/theme-gallery/catalog';
 import { Effect, Predicate, Schema } from 'effect';
 import { Tool, Toolkit } from 'effect/ai';
 import { caller, describe, failing, failWith, hints } from './context';
-import { optional } from './params';
+import { ListedTheme, ThemeSearch, themeListing } from './themeListing';
 
 const SITE = 'https://jsonresume.org';
-
-const Theme = Schema.Struct({
-  slug: Schema.String,
-  name: Schema.String,
-  description: Schema.String,
-  tags: Schema.Array(Schema.String),
-  previewUrl: Schema.String,
-});
 
 const AccountInfo = Schema.Struct({
   username: Schema.String,
@@ -51,11 +43,8 @@ const links = (username: string) => ({
 export const AccountToolkit = Toolkit.make(
   Tool.make('list_themes', {
     description: describe('list_themes'),
-    parameters: Schema.Struct({
-      query: optional(Schema.String),
-      tag: optional(Schema.String),
-    }),
-    success: Schema.Array(Theme),
+    parameters: ThemeSearch,
+    success: Schema.Array(ListedTheme),
     ...failing,
   }).annotateMerge(hints('list_themes')),
   Tool.make('set_theme', {
@@ -98,20 +87,18 @@ export const AccountHandlers = AccountToolkit.toLayer(
       `${SITE}/@${username}?theme=${encodeURIComponent(slug)}`;
 
     return {
-      list_themes: ({ query, tag }) =>
+      list_themes: ({ query, tag, style, layout, color, sort }) =>
         Effect.gen(function* () {
           const user = yield* Effect.option(caller);
           const name = user._tag === 'Some' ? user.value.username : undefined;
           return filterThemes(themes, {
             query: query ?? '',
             tag: tag ?? null,
-          }).map((t) => ({
-            slug: t.slug,
-            name: t.name,
-            description: t.description,
-            tags: t.tags,
-            previewUrl: preview(t.slug, name),
-          }));
+            style,
+            layout,
+            color,
+            sort,
+          }).map((t) => themeListing(t, preview(t.slug, name)));
         }),
       set_theme: ({ slug }) =>
         Effect.gen(function* () {

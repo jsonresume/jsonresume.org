@@ -3,7 +3,7 @@
 //
 // Guards against stale committed theme dist/.
 //
-// ~46 theme packages under packages/themes/* commit a built dist/ and publish
+// Theme packages and their shared document primitives commit dist/ and publish
 // with `main: ./dist/index.js`. The release pipeline (`pnpm changeset publish`)
 // has NO pre-publish build step, so whatever dist/ is committed is exactly what
 // ships to npm. If a contributor edits a theme's src/ without rebuilding dist/,
@@ -72,16 +72,21 @@ function discoverManifestProblems() {
 // (b) declare a build script. These are exactly the packages where stale
 // committed dist/ would ship to npm.
 function discoverThemes() {
-  const tracked = git(['ls-files', '--', 'packages/themes/*/dist/**'])
+  const tracked = git([
+    'ls-files',
+    '--',
+    'packages/themes/*/dist/**',
+    'packages/theme-primitives/dist/**',
+  ])
     .split('\n')
     .filter(Boolean);
 
   const dirs = new Set();
   for (const file of tracked) {
-    // packages/themes/<theme>/dist/...
     const parts = file.split('/');
-    if (parts.length < 4 || parts[3] !== 'dist') continue;
-    dirs.add(parts.slice(0, 3).join('/'));
+    const distIndex = parts.indexOf('dist');
+    if (distIndex < 2) continue;
+    dirs.add(parts.slice(0, distIndex).join('/'));
   }
 
   const themes = [];

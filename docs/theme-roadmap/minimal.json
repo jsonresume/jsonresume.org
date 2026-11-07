@@ -1,0 +1,222 @@
+[
+  [
+    "One Page Essential",
+    "single",
+    "mono",
+    "onepage",
+    "Concise professional applications",
+    "A compact one-page rhythm for concise content: a small identity block, short section gaps and efficient dates. Longer resumes must continue naturally rather than clip or shrink.",
+    "essential",
+    1
+  ],
+  [
+    "One Page Plus",
+    "right",
+    "blue",
+    "onepage-plus",
+    "Concise applications with supporting detail",
+    "Use a broad evidence column and a narrow qualifications rail beneath a shallow masthead. Designed to use space efficiently while retaining every section on longer documents.",
+    "onepage-plus",
+    1
+  ],
+  [
+    "Short Form",
+    "single",
+    "mono",
+    "short",
+    "Early and mid-career applicants",
+    "A low masthead, short rules and compact role lines minimise overhead. Keep the body comfortable and let concise content produce a short document without enforcing a page limit.",
+    "short-form",
+    1
+  ],
+  [
+    "Spartan Lines",
+    "single",
+    "mono",
+    "spartan",
+    "Applicants wanting almost no decoration",
+    "Use black type, one fine horizontal rule and an exact shared left edge. Distinguish role, organisation and date with weight and spacing alone.",
+    "spartan-lines",
+    1
+  ],
+  [
+    "Paper Plain",
+    "single",
+    "mono",
+    "paper",
+    "Broad applications and plain printing",
+    "An intentionally ordinary paper resume with a modest serif name and clean sans body. Avoid ornaments, panels and icons; concentrate on comfortable line lengths and reliable pagination.",
+    "paper-plain",
+    1
+  ],
+  [
+    "Open Margin",
+    "single",
+    "warm",
+    "relaxed",
+    "Applicants preferring generous space",
+    "Wide outer margins, a small left-aligned identity and relaxed section spacing create an open page. Do not compress long resumes merely to preserve the sparse sample's appearance.",
+    "open-margin",
+    1
+  ],
+  [
+    "Clear Reading",
+    "single",
+    "mono",
+    "flat",
+    "Readers prioritising legibility",
+    "Use a sturdy sans serif, a moderate text measure and clearly separated entries. Keep all essential text dark, links underlined and headings visibly distinct without relying on colour.",
+    "clear-reading",
+    1
+  ],
+  [
+    "Accessible Large Type",
+    "single",
+    "mono",
+    "flat",
+    "Applicants wanting larger readable type",
+    "Start from a larger body size and generous leading with strong contrast. Reduce decorative overhead rather than text size, and allow additional print pages when needed.",
+    "large-type",
+    2
+  ],
+  [
+    "Narrow Measure",
+    "single",
+    "blue",
+    "even",
+    "Narrative-heavy careers",
+    "A deliberately narrow central reading measure makes long summaries and achievement bullets easier to follow. Use short blue rules and a small masthead instead of a full-width banner.",
+    "narrow-measure",
+    1
+  ],
+  [
+    "Wide Measure",
+    "single",
+    "mono",
+    "even",
+    "Dense technical and business records",
+    "Use the available page width with controlled bullet indentation and a compact contact row. Keep very long paragraphs readable through line spacing and clear entry boundaries.",
+    "wide-measure",
+    1
+  ],
+  [
+    "Skills First",
+    "single",
+    "blue",
+    "flat",
+    "Career changes and transferable skills",
+    "Bring skills and projects ahead of the work chronology with a strong but plain opening. Retain employers and dates so the functional emphasis never conceals career history.",
+    "skills-first",
+    2
+  ],
+  [
+    "Returner Profile",
+    "single",
+    "green",
+    "even",
+    "People returning to work",
+    "Use an approachable, spacious opening for a summary and current capabilities, followed by an honest chronology. Avoid timeline decorations that overemphasise gaps.",
+    "returner",
+    2
+  ],
+  [
+    "First Role",
+    "single",
+    "blue",
+    "onepage",
+    "First jobs and internships",
+    "Give education, projects and volunteering useful space before employment. Use a small name, clear section labels and enough breathing room for a genuinely short record.",
+    "first-role",
+    1
+  ],
+  [
+    "Apprenticeship Entry",
+    "left",
+    "mono",
+    "onepage-plus",
+    "Apprentices and trainees",
+    "A slim, light left rail holds practical skills and credentials while education and work examples lead the main column. Empty sections must disappear without leaving a vacant column.",
+    "apprenticeship",
+    2
+  ],
+  [
+    "Compact Developer",
+    "single",
+    "mono",
+    "stackoverflow",
+    "Software and technical applicants",
+    "A compact project-forward resume combines a plain identity with monospace metadata. Keep project links and dates text-based and give achievements more space than tool lists.",
+    "compact-developer",
+    1
+  ],
+  [
+    "Resume Index",
+    "dates",
+    "mono",
+    "even",
+    "Long but structured careers",
+    "Small section numbers and a consistent date gutter create an index-like document. Use plenty of white paper and short rules instead of cards or coloured panels.",
+    "resume-index",
+    1
+  ],
+  [
+    "Bare Serif",
+    "single",
+    "mono",
+    "professional",
+    "Applicants who prefer pure typography",
+    "A single serif family handles the complete resume through careful changes of size and weight. Use no accent colour and only a thin rule beneath the identity.",
+    "bare-serif",
+    1
+  ],
+  [
+    "Plain Sans",
+    "single",
+    "mono",
+    "flat",
+    "General professional",
+    "A clean sans-only page with a compact identity and natural reading order. Role titles are bold, organisation context is regular and dates remain easy to locate.",
+    "plain-sans",
+    1
+  ],
+  [
+    "Contact Rail",
+    "single",
+    "mono",
+    "kendall",
+    "Applicants with many professional links",
+    "Move contact links into a tidy right-aligned masthead rail, leaving the career body in one full reading column. Long URLs must wrap at sensible punctuation.",
+    "contact-rail",
+    1
+  ],
+  [
+    "Space Saver",
+    "columns",
+    "mono",
+    "onepage-plus",
+    "Dense qualifications and experience",
+    "Use two carefully proportioned columns and low-overhead section labels. Preserve all content and body size, with automatic stacking on small screens and continuation on print pages.",
+    "space-saver",
+    1
+  ],
+  [
+    "Easy Print",
+    "single",
+    "mono",
+    "paper",
+    "Frequent printing and offline sharing",
+    "Use local-first typography, black rules and conservative page geometry. The document should feel complete with web fonts blocked and should avoid large printed background areas.",
+    "easy-print",
+    1
+  ],
+  [
+    "Monospaced Minimal",
+    "single",
+    "mono",
+    "stackoverflow",
+    "Technical writers and developers",
+    "A restrained monospace identity and metadata system sits over a highly readable sans body. Use alignment and fine dotted rules instead of terminal effects or fake code.",
+    "mono-minimal",
+    1
+  ]
+]

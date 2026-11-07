@@ -10,6 +10,7 @@ export default defineConfig({
     setupFiles: ['./vitest.setup.ts'],
     exclude: [
       'node_modules/**',
+      '.next/**', // Generated output can contain compiled test modules after a build
       'tests/**', // Exclude Playwright E2E tests
       '**/*.spec.js', // Exclude Playwright specs
     ],

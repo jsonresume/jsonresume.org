@@ -1,0 +1,21 @@
+import { recipes } from './recipes.ts';
+export default recipes([
+  ['bookplate', 'frame', 'plain', 46, 36, 920, 'open', 'italic'],
+  ['magazine-desk', 'offset', 'short', 57, 35, 1080, 'line'],
+  ['byline', 'byline', 'short', 54, 33, 960],
+  ['longform', 'plain', 'plain', 46, 42, 900, 'open', 'italic'],
+  ['journal', 'double', 'rule', 40, 33, 980],
+  ['catalogue', 'plain', 'number', 45, 36, 1080, 'line'],
+  ['literary', 'plain', 'plain', 62, 38, 1040, 'light', 'italic'],
+  ['quiet-column', 'plain', 'short', 34, 40, 820],
+  ['masthead', 'double', 'rule', 58, 34, 1100, 'line'],
+  ['newsprint', 'rule', 'plain', 40, 25, 970, 'open', 'uppercase'],
+  ['monograph', 'plain', 'short', 46, 36, 960, 'open', 'italic'],
+  ['footnote', 'plain', 'number', 38, 33, 990],
+  ['exhibition', 'plain', 'plain', 43, 37, 1080, 'light'],
+  ['research-narrative', 'top', 'rule', 42, 37, 930],
+  ['case-study', 'plain', 'short', 47, 35, 1080, 'line'],
+  ['essay', 'plain', 'plain', 36, 42, 880, 'open', 'italic'],
+  ['portfolio-colophon', 'split', 'plain', 55, 35, 1060, 'line'],
+  ['publisher', 'double', 'short', 49, 32, 960, 'open', 'mono'],
+]);

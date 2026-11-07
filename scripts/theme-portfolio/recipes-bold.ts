@@ -1,0 +1,27 @@
+import { recipes } from './recipes.ts';
+export default recipes([
+  ['type-wall', 'plain', 'plain', 76, 36, 1020],
+  ['signal-red', 'top', 'short', 58, 33, 1000],
+  ['cobalt', 'band', 'plain', 55, 34, 1100, 'light'],
+  ['blackline', 'double', 'double', 62, 36, 1020],
+  ['oblique', 'plain', 'edge', 57, 35, 980, 'open', undefined, 'diagonal'],
+  ['headline-heavy', 'rule', 'plain', 72, 33, 1120, 'line'],
+  ['redaction', 'plain', 'bar', 53, 34, 1000],
+  ['graphic-ledger', 'top', 'number', 58, 34, 1060],
+  ['colour-block', 'band', 'bar', 43, 33, 1100, 'light'],
+  ['contrast-banner', 'band', 'rule', 59, 35, 1020],
+  ['poster', 'byline', 'short', 80, 37, 1020],
+  [
+    'vertical-accent',
+    'plain',
+    'edge',
+    55,
+    34,
+    1080,
+    'line',
+    undefined,
+    'margin',
+  ],
+  ['punchline', 'byline', 'short', 48, 31, 980, 'open', 'uppercase'],
+  ['athletic', 'plain', 'double', 43, 32, 1080, 'light'],
+]);

@@ -1,0 +1,162 @@
+[
+  [
+    "Studio Folio",
+    "right",
+    "purple",
+    "elegant",
+    "Independent designers and studios",
+    "An oversized serif identity and a narrow purple qualifications rail create a studio folio. Projects lead the evidence column, with clear dates and text links to external work.",
+    "studio-folio",
+    2
+  ],
+  [
+    "Botanical Frame",
+    "single",
+    "green",
+    "macchiato",
+    "Environmental and creative applicants",
+    "Use a delicate green perimeter rule, a warm serif identity and generous white space. Suggest botanical calm through line and colour rather than illustrations that compete with content.",
+    "botanical",
+    3
+  ],
+  [
+    "Ceramic Portfolio",
+    "left",
+    "warm",
+    "macchiato",
+    "Makers, designers and creative practice",
+    "A clay-coloured identity rail and broad white work column give a tactile, grounded character. Use soft rectangular dividers and clear project titles without textured backgrounds.",
+    "ceramic",
+    3
+  ],
+  [
+    "Textile Grid",
+    "columns",
+    "purple",
+    "elegant",
+    "Fashion, textile and craft professionals",
+    "An orderly two-column grid and small alternating purple keylines suggest a woven structure. Keep the body plain and use typographic hierarchy rather than decorative pattern behind text.",
+    "textile",
+    3
+  ],
+  [
+    "Abstract Margin",
+    "right",
+    "multi",
+    "elegant",
+    "Artists and design-led applicants",
+    "A small abstract colour composition lives only in the outer identity margin. The career text remains a calm reading column with a narrow supporting rail and dark section labels.",
+    "abstract-margin",
+    3
+  ],
+  [
+    "Illustration Folio",
+    "single",
+    "red",
+    "elegant",
+    "Illustrators and visual storytellers",
+    "A friendly serif identity and pencil-like red dividers support a project-forward resume. Avoid requiring illustrations inside the document; portfolio links and applicant-supplied photos remain optional.",
+    "illustration",
+    3
+  ],
+  [
+    "Photography Index",
+    "left",
+    "mono",
+    "professional",
+    "Photographers and image professionals",
+    "A restrained monochrome identity and narrow information rail evoke a contact-sheet index. Use numbered sections and a broad work column without making image thumbnails essential.",
+    "photography",
+    2
+  ],
+  [
+    "Motion Designer",
+    "asymmetric",
+    "blue",
+    "elegant",
+    "Motion, animation and digital design",
+    "An offset blue identity block and staggered section rules suggest movement on a static page. Keep entry text in a conventional order and avoid animation in the resume itself.",
+    "motion",
+    3
+  ],
+  [
+    "Architecture Atelier",
+    "dates",
+    "mono",
+    "professional",
+    "Architecture and built environment",
+    "Fine drafting-like rules, marginal dates and a precise serif identity form an architectural document. Keep project names prominent and resist decorative diagrams or fake measurement marks.",
+    "atelier",
+    2
+  ],
+  [
+    "Landscape Practice",
+    "right",
+    "green",
+    "macchiato",
+    "Landscape, planning and sustainability",
+    "A broad career column and pale green qualifications rail balance technical and creative work. Use a calm serif identity and short rules that leave long project titles room to wrap.",
+    "landscape",
+    2
+  ],
+  [
+    "Makers Mark",
+    "single",
+    "warm",
+    "macchiato",
+    "Craft, manufacturing and independent makers",
+    "A compact stamp-like identity frame leads a warm, practical resume. Strong project headings and understated section numbers convey care without simulated paper texture or a fabricated logo.",
+    "makers-mark",
+    3
+  ],
+  [
+    "Musician Repertoire",
+    "dates",
+    "mono",
+    "professional",
+    "Musicians and performance professionals",
+    "Use a dignified serif identity and marginal dates for projects, engagements and teaching. Publications and credentials retain clear standard labels, and long programme titles must wrap comfortably.",
+    "musician",
+    2
+  ],
+  [
+    "Theatre Credits",
+    "columns",
+    "red",
+    "professional",
+    "Theatre and live performance",
+    "A large byline-style identity and two disciplined columns recall a programme. Keep credits represented by the resume's supplied projects and work entries, with no invented productions or billing.",
+    "theatre",
+    2
+  ],
+  [
+    "Museum Profile",
+    "right",
+    "warm",
+    "professional",
+    "Museums, archives and cultural work",
+    "A quiet exhibition-label masthead sits above a broad career narrative and narrow credentials rail. Use warm neutrals, plain dates and generous spacing around institutions and publications.",
+    "museum",
+    2
+  ],
+  [
+    "Culinary Portfolio",
+    "left",
+    "green",
+    "macchiato",
+    "Culinary and hospitality careers",
+    "A dark green identity rail and warm serif headings balance practical experience with creative character. Give venues, certifications and languages a clear hierarchy without decorative food imagery.",
+    "culinary",
+    2
+  ],
+  [
+    "Independent Consultant",
+    "single",
+    "blue",
+    "professional",
+    "Freelancers and independent consultants",
+    "A confident personal-letterhead masthead introduces a project-forward single column. Use compact blue keylines and clear client context while retaining the full work chronology.",
+    "independent",
+    1
+  ]
+]

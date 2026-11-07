@@ -1,0 +1,10 @@
+import type { Data } from './types.js';
+export declare const record: (value: unknown) => Data;
+export declare const text: (value: unknown) => string;
+export declare const strings: (value: unknown) => string[];
+export declare const records: (value: unknown) => Data[];
+export declare const join: (...values: unknown[]) => string;
+export declare const link: (value: unknown) => string;
+export declare const location: (value: unknown) => string;
+export declare const escapeHtml: (value: string) => string;
+export declare function paragraphs(...values: unknown[]): string[];

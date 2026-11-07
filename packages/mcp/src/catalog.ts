@@ -121,7 +121,7 @@ export const tools: ReadonlyArray<McpToolInfo> = [
     name: 'list_themes',
     group: 'themes',
     description:
-      'The themes your page can use, with a description, tags and a live preview link for each. Filter by words or a tag.',
+      'The themes your page can use, ranked by public-resume usage, with style, layout, colour, explicit-choice counts and previews. Filter by words, tag or any discovery facet. Sort by usage, explicitly chosen or name. Counts include inherited defaults unless sorting by chosen; usageAsOf identifies the snapshot.',
     writes: false,
   },
   {

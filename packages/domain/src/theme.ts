@@ -8,5 +8,14 @@ export const ThemeSummary = Schema.Struct({
   description: NonEmptyText,
   author: NonEmptyText,
   tags: Schema.Array(NonEmptyText),
+  style: NonEmptyText,
+  layout: NonEmptyText,
+  color: NonEmptyText,
+  usage: Schema.Struct({
+    resumes: Schema.Number,
+    chosen: Schema.Number,
+    inherited: Schema.Number,
+    views: Schema.Number,
+  }),
 });
 export type ThemeSummary = typeof ThemeSummary.Type;

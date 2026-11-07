@@ -56,8 +56,9 @@ export const resumeUrl = (username: string, extension?: string) =>
 export const themePreviewUrl = (slug: string) =>
   `${resumeUrl('thomasdavis')}?theme=${encodeURIComponent(slug)}`;
 
-/** Screenshot of a theme, served by the app from public/img/themes. */
-export const themeImageUrl = (slug: string) => `/img/themes/${slug}.webp`;
+/** Bump the revision when previews change: static images are cached for a day. */
+export const themeImageUrl = (slug: string) =>
+  `/img/themes/${slug}.webp?v=20261107`;
 
 export const siteUrl = 'https://jsonresume.org';
 

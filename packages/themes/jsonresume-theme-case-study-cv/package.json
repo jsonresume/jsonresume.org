@@ -1,0 +1,63 @@
+{
+  "name": "jsonresume-theme-case-study-cv",
+  "version": "0.1.0",
+  "description": "Give project evidence the broad column and supporting capabilities a narrow right rail. Strong project titles, short blue dividers and readable outcomes create a case-study rhythm.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./dist": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "jsonresume",
+    "jsonresume-theme",
+    "editorial",
+    "right",
+    "blue"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "vite build && tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@jsonresume/theme-primitives": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@jsonresume/sample-data": "workspace:*",
+    "@jsonresume/theme-kit": "workspace:*",
+    "@repo/eslint-config-custom": "workspace:*",
+    "@vanilla-extract/css": "^1.21.3",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.9.3",
+    "vite": "^6.4.3",
+    "vitest": "^3.2.6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jsonresume/jsonresume.org.git",
+    "directory": "packages/themes/jsonresume-theme-case-study-cv"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

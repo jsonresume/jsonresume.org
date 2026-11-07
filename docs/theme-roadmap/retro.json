@@ -1,0 +1,102 @@
+[
+  [
+    "Letterpress Resume",
+    "single",
+    "warm",
+    "professional",
+    "Applicants who like print heritage",
+    "A strong serif name, double warm-grey rules and spacious margins evoke letterpress typography. Keep the paper white and use real text rather than distressed or rasterised lettering.",
+    "letterpress",
+    3
+  ],
+  [
+    "Type Foundry",
+    "columns",
+    "mono",
+    "professional",
+    "Typography and design professionals",
+    "A type-specimen identity introduces two rigorously aligned columns. Pair a distinctive display serif with a neutral body and use small section numbers as typographic details.",
+    "type-foundry",
+    3
+  ],
+  [
+    "Swiss Archive",
+    "columns",
+    "red",
+    "even",
+    "Design-conscious professional applicants",
+    "A disciplined Swiss-style grid uses an offset sans identity, red section numbers and clear column boundaries. Preserve reading order and let mobile screens collapse to a single sequence.",
+    "swiss-archive",
+    2
+  ],
+  [
+    "Bauhaus Record",
+    "asymmetric",
+    "multi",
+    "elegant",
+    "Creative and design applicants",
+    "An asymmetric identity and a few primary-colour geometric accents create a Bauhaus reference. Confine shapes to margins and use black body text on a plain white field.",
+    "bauhaus",
+    3
+  ],
+  [
+    "Library Card",
+    "dates",
+    "warm",
+    "professional",
+    "Libraries, archives and humanities",
+    "A compact serif identity, ruled date gutter and small catalogue-like labels evoke a library record. Keep every entry as ordinary readable text, without fake accession numbers.",
+    "library-card",
+    2
+  ],
+  [
+    "Telegram CV",
+    "single",
+    "mono",
+    "short",
+    "Applicants wanting compact vintage type",
+    "A small monospace identity and short, widely spaced section labels create a telegram-like rhythm. The body remains a comfortable sans serif with conventional dates and no forced all-caps prose.",
+    "telegram",
+    3
+  ],
+  [
+    "Art Nouveau Profile",
+    "single",
+    "green",
+    "professional",
+    "Arts and creative applicants",
+    "A graceful serif identity and curved green rules suggest Art Nouveau restraint. Keep ornament at section edges and retain a clean reading column with strong contrast.",
+    "nouveau",
+    3
+  ],
+  [
+    "Seventies Studio",
+    "left",
+    "warm",
+    "macchiato",
+    "Creative and independent practitioners",
+    "A warm brown identity rail and rounded display serif reference seventies studio graphics. Use plenty of white paper, plain dates and a neutral body to keep the nostalgia practical.",
+    "seventies",
+    3
+  ],
+  [
+    "Eighties Modern",
+    "right",
+    "purple",
+    "elegant",
+    "Creative technology and design",
+    "A sharp geometric masthead, violet keylines and an offset supporting rail evoke eighties modernism. Avoid neon body text, gradients and decorative grids behind applicant content.",
+    "eighties",
+    3
+  ],
+  [
+    "Letterhead Heritage",
+    "single",
+    "blue",
+    "professional",
+    "Traditional professional applications",
+    "A restrained blue perimeter rule and classic personal-letterhead masthead introduce the resume. Use serif headings, compact contact details and an open chronology with deliberate continuation pages.",
+    "heritage",
+    2
+  ]
+]

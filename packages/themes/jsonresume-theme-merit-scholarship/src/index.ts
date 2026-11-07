@@ -1,0 +1,13 @@
+import { createTheme } from '@jsonresume/theme-primitives';
+import { design } from './design.css';
+
+export const render = createTheme({
+  slug: 'merit-scholarship',
+  layout: 'left',
+  defaultLanguage: 'en',
+  fonts: ['Literata:wght@400;600;700', 'Public Sans:wght@400;600;700'],
+  sectionOrder: ['education', 'projects', 'awards', 'work'],
+  className: design,
+  css: '__JSONRESUME_INLINE_CSS__',
+});
+export default { render };

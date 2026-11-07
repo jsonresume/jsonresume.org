@@ -23,7 +23,20 @@ export {
   getRandomTheme,
 } from '@repo/theme-config';
 
+import { portfolioLoaders } from './portfolioLoaders';
+
 export const THEMES = {
+  ...portfolioLoaders,
+  'academic-classic': () => import('jsonresume-theme-academic-classic'),
+  alta: () => import('jsonresume-theme-alta'),
+  'awesome-professional': () => import('jsonresume-theme-awesome-professional'),
+  deedy: () => import('jsonresume-theme-deedy'),
+  dublin: () => import('jsonresume-theme-dublin'),
+  'europass-inspired': () => import('jsonresume-theme-europass-inspired'),
+  'harvard-classic': () => import('jsonresume-theme-harvard-classic'),
+  'jake-technical': () => import('jsonresume-theme-jake-technical'),
+  'new-york-corporate': () => import('jsonresume-theme-new-york-corporate'),
+  stockholm: () => import('jsonresume-theme-stockholm'),
   professional: () => import('@jsonresume/jsonresume-theme-professional'),
   tailwind: () => import('jsonresume-theme-tailwind'), // RE-ENABLED - SSR crash fixed (social icon resolution)
   elegant: () => import('jsonresume-theme-elegant'),

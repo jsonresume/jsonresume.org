@@ -1,0 +1,23 @@
+import { recipes } from './recipes.ts';
+export default recipes([
+  ['charter', 'double', 'plain', 40, 30, 930, 'open', 'uppercase'],
+  ['counsel', 'band', 'rule', 38, 32, 960, 'open'],
+  ['diplomat', 'frame', 'plain', 34, 30, 940, 'open'],
+  ['capital', 'rule', 'short', 44, 30, 980, 'line'],
+  ['ledger', 'top', 'rule', 37, 27, 950, 'open'],
+  ['academy', 'plain', 'short', 40, 36, 900, 'open', 'italic'],
+  ['service', 'rule', 'number', 34, 28, 960, 'open'],
+  ['fellowship', 'double', 'rule', 41, 33, 950, 'open'],
+  ['clinic', 'plain', 'rule', 39, 34, 980, 'light'],
+  ['stewardship', 'rule', 'edge', 37, 33, 920, 'open'],
+  ['trustee', 'plain', 'short', 43, 36, 980, 'line'],
+  ['boardroom', 'top', 'plain', 35, 26, 970, 'open', 'uppercase'],
+  ['civic', 'plain', 'edge', 36, 31, 940, 'open'],
+  ['merit', 'plain', 'short', 32, 36, 1000, 'light'],
+  ['practitioner', 'rule', 'plain', 38, 28, 960, 'open'],
+  ['chronicle', 'plain', 'bar', 42, 32, 950, 'open'],
+  ['authority', 'plain', 'short', 58, 38, 910, 'open'],
+  ['global', 'split', 'rule', 37, 32, 990, 'open'],
+  ['correspondence', 'top', 'plain', 37, 32, 920, 'open', 'italic'],
+  ['council', 'rule', 'rule', 42, 32, 1020, 'line'],
+]);

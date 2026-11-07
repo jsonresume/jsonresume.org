@@ -1,0 +1,142 @@
+[
+  [
+    "Type Wall",
+    "single",
+    "mono",
+    "elegant",
+    "Applicants wanting strong typography",
+    "A very large, tightly spaced name anchors a plain white document. Pair heavy section labels with a readable body and let long names wrap rather than collide with contacts.",
+    "type-wall",
+    3
+  ],
+  [
+    "Signal Red",
+    "single",
+    "red",
+    "elegant",
+    "Communications and creative business",
+    "A strong red rule and bold sans identity create a clear signal at the top. Keep colour limited to headings and structure, with normal text and clean print continuation.",
+    "signal-red",
+    3
+  ],
+  [
+    "Cobalt Statement",
+    "right",
+    "blue",
+    "kendall",
+    "Business applicants wanting a bolder identity",
+    "A cobalt masthead and a pale right qualifications rail frame a wide career column. Use high-contrast white text in the header and a plain white body.",
+    "cobalt",
+    3
+  ],
+  [
+    "Blackline",
+    "single",
+    "mono",
+    "professional",
+    "Design-conscious professional applicants",
+    "Thick black section rules and a large sans identity give a stark graphic character. Keep generous space around the rules and prevent them from overwhelming shorter entries.",
+    "blackline",
+    3
+  ],
+  [
+    "Oblique Resume",
+    "single",
+    "blue",
+    "elegant",
+    "Creative and product applicants",
+    "A clipped diagonal accent sits at the edge of a conventional reading column. Use angular heading underlines, but keep all applicant text horizontal and selectable.",
+    "oblique",
+    3
+  ],
+  [
+    "Headline Heavy",
+    "columns",
+    "mono",
+    "professional",
+    "Editorial, marketing and leadership",
+    "A heavy headline-style name spans the page above two disciplined columns. Keep supporting labels compact and body text neutral so the opening does not compete with career evidence.",
+    "headline-heavy",
+    3
+  ],
+  [
+    "Redaction Profile",
+    "single",
+    "mono",
+    "professional",
+    "Applicants who like strong black bands",
+    "Use black section bands with white, fully readable labels and a plain white career body. The visual reference is graphic redaction, but no content may be obscured.",
+    "redaction",
+    3
+  ],
+  [
+    "Graphic Ledger",
+    "dates",
+    "red",
+    "professional",
+    "Visual thinkers in business and design",
+    "A strong red date rail and oversized section numbers create an assertive ledger. Keep the evidence column calm and ensure decorative numbering cannot be mistaken for applicant data.",
+    "graphic-ledger",
+    3
+  ],
+  [
+    "Colour Block CV",
+    "left",
+    "purple",
+    "kendall",
+    "Creative professional applicants",
+    "A solid plum identity block and a light supporting rail contrast with a white evidence column. Use simple rectangular colour areas rather than gradients or ornamental cards.",
+    "colour-block",
+    3
+  ],
+  [
+    "Contrast Banner",
+    "single",
+    "green",
+    "elegant",
+    "Applicants wanting a prominent masthead",
+    "A dark green banner carries a large white identity and a compact contact row. The rest of the document stays open, with strong black text and restrained section rules.",
+    "contrast-banner",
+    3
+  ],
+  [
+    "Poster Professional",
+    "single",
+    "mono",
+    "professional",
+    "Creative leadership and presentation roles",
+    "A poster-like identity pairs a huge sans name with a small professional label. Beneath it, use conventional resume sections and comfortable body sizing rather than poster-scale content.",
+    "poster",
+    3
+  ],
+  [
+    "Vertical Accent",
+    "right",
+    "red",
+    "elegant",
+    "Applicants wanting a strong graphic edge",
+    "A narrow red vertical strip runs beside the identity and section system. Keep all text in a horizontal reading flow and use a quiet right rail for supporting qualifications.",
+    "vertical-accent",
+    3
+  ],
+  [
+    "Punchline Profile",
+    "single",
+    "blue",
+    "elegant",
+    "Sales, marketing and communications",
+    "A bold, compact professional label and short cobalt rules create a punchy opening. Use strong role titles and readable achievement bullets without invented headline claims.",
+    "punchline",
+    3
+  ],
+  [
+    "Athletic Profile",
+    "left",
+    "blue",
+    "kendall",
+    "Sport, coaching and performance careers",
+    "A sturdy condensed identity and bold blue section rules suit practical performance careers. Keep coaching, work and volunteer evidence in text, with certifications in a clear supporting rail.",
+    "athletic",
+    2
+  ]
+]
