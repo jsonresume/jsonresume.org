@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-engineering-matrix",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Use two clearly separated information columns and a tight technical heading system. Skills remain text lists, with no matrix cells implying levels that the resume never supplied.",
   "type": "module",
   "main": "./dist/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-contrast-banner",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A dark green banner carries a large white identity and a compact contact row. The rest of the document stays open, with strong black text and restrained section rules.",
   "type": "module",
   "main": "./dist/index.js",

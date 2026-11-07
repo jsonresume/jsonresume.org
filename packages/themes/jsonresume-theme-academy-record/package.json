@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-academy-record",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Education and publications lead an extended CV. Use wide outer margins, a precise date gutter and hanging publication context that continues cleanly across pages.",
   "type": "module",
   "main": "./dist/index.js",

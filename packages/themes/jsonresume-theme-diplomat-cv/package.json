@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-diplomat-cv",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Use a compact bilingual-friendly masthead, a thin navy perimeter rule and open chronological entries. Long institutions and multilingual names must wrap without shrinking.",
   "type": "module",
   "main": "./dist/index.js",

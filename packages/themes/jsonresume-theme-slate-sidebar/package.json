@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-slate-sidebar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A slate identity sidebar carries contacts and concise qualifications, beside a white experience column. Use a broad enough rail for long credentials and natural mobile stacking.",
   "type": "module",
   "main": "./dist/index.js",

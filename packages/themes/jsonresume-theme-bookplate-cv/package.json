@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-bookplate-cv",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A fine rectangular identity frame recalls a bookplate, followed by an open serif reading column. Use quiet warm rules and keep long entries clear of the decorative frame.",
   "type": "module",
   "main": "./dist/index.js",

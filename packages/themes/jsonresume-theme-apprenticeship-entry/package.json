@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-apprenticeship-entry",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A slim, light left rail holds practical skills and credentials while education and work examples lead the main column. Empty sections must disappear without leaving a vacant column.",
   "type": "module",
   "main": "./dist/index.js",

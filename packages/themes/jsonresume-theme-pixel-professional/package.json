@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-pixel-professional",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A blocky monospace identity and tiny square section markers suggest pixel graphics. Keep the body in a normal readable sans serif and avoid bitmap text or a simulated game interface.",
   "type": "module",
   "main": "./dist/index.js",

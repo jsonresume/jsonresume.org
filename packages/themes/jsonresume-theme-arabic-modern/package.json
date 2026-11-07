@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-arabic-modern",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Use Arabic-capable typography, right-to-left document flow and a supporting rail that respects reading direction. Localise controlled labels while preserving Latin links and mixed-script dates.",
   "type": "module",
   "main": "./dist/index.js",

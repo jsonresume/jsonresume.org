@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-chronicle-senior",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Use a dignified serif name, warm grey section bands and an uninterrupted chronology. Long careers should extend to additional pages without shrinking the body or dropping older roles.",
   "type": "module",
   "main": "./dist/index.js",

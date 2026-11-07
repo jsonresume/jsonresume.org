@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-journal-record",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A scholarly journal-like identity and marginal dates give publications and appointments a consistent rhythm. Use thin rules, strong text contrast and plain bibliographic context.",
   "type": "module",
   "main": "./dist/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-infrastructure-map",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A narrow, light technical rail supports skills and certifications beside a broad career column. Fine connector-like rules provide structure without drawing a literal system diagram.",
   "type": "module",
   "main": "./dist/index.js",

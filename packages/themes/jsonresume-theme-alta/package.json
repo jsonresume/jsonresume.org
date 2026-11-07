@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-alta",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "An achievement-focused resume with plum headings, a generous main column and flexible supporting accomplishments.",
   "type": "module",
   "main": "./dist/index.js",

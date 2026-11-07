@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-wide-measure",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Use the available page width with controlled bullet indentation and a compact contact row. Keep very long paragraphs readable through line spacing and clear entry boundaries.",
   "type": "module",
   "main": "./dist/index.js",

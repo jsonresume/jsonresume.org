@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-abstract-margin",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A small abstract colour composition lives only in the outer identity margin. The career text remains a calm reading column with a narrow supporting rail and dark section labels.",
   "type": "module",
   "main": "./dist/index.js",

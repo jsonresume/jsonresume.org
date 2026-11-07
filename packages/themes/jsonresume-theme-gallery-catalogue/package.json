@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-gallery-catalogue",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Use a restrained exhibition-catalogue masthead, numbered section labels and two unequal information columns. Achievements remain text-first, with no dependence on portfolio images.",
   "type": "module",
   "main": "./dist/index.js",

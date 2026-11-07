@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-terminal-light",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A light terminal-inspired identity uses monospace labels, a small prompt-like decorative mark and black body text. Preserve a normal resume reading order and restrained typography.",
   "type": "module",
   "main": "./dist/index.js",

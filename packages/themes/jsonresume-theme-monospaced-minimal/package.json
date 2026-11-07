@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-monospaced-minimal",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A restrained monospace identity and metadata system sits over a highly readable sans body. Use alignment and fine dotted rules instead of terminal effects or fake code.",
   "type": "module",
   "main": "./dist/index.js",

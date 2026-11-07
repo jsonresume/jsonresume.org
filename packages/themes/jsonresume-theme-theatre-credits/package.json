@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-theatre-credits",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A large byline-style identity and two disciplined columns recall a programme. Keep credits represented by the resume's supplied projects and work entries, with no invented productions or billing.",
   "type": "module",
   "main": "./dist/index.js",

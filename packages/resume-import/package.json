@@ -1,6 +1,6 @@
 {
   "name": "@repo/resume-import",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "Imports a resume from a PDF, a Word document, a LinkedIn data export or pasted text into JSON Resume, with how sure it is of each field",
   "type": "module",

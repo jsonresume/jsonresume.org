@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-quiet-authority",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "An oversized but quiet serif identity, a short rule and very simple entries create authority through typography. Leave the summary unboxed and reserve bold weight for evidence hierarchy.",
   "type": "module",
   "main": "./dist/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-resume-index",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Small section numbers and a consistent date gutter create an index-like document. Use plenty of white paper and short rules instead of cards or coloured panels.",
   "type": "module",
   "main": "./dist/index.js",

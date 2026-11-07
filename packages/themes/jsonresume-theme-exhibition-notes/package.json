@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-exhibition-notes",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A pale margin for credentials sits beside a large serif career column. Treat projects and publications like catalogue entries, with clear titles and compact context.",
   "type": "module",
   "main": "./dist/index.js",

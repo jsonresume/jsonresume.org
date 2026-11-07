@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-quiet-column",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Set a narrow, quiet reading column beneath a small serif identity. Short horizontal rules and generous line spacing give the page character without a sidebar or coloured panel.",
   "type": "module",
   "main": "./dist/index.js",

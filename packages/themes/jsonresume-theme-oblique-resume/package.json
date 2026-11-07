@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-oblique-resume",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A clipped diagonal accent sits at the edge of a conventional reading column. Use angular heading underlines, but keep all applicant text horizontal and selectable.",
   "type": "module",
   "main": "./dist/index.js",

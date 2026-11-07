@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-new-york-corporate",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A formal serif-led resume with a restrained career timeline and a quiet rail for supporting qualifications.",
   "type": "module",
   "main": "./dist/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-independent-consultant",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A confident personal-letterhead masthead introduces a project-forward single column. Use compact blue keylines and clear client context while retaining the full work chronology.",
   "type": "module",
   "main": "./dist/index.js",

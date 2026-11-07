@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-telegram-cv",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A small monospace identity and short, widely spaced section labels create a telegram-like rhythm. The body remains a comfortable sans serif with conventional dates and no forced all-caps prose.",
   "type": "module",
   "main": "./dist/index.js",

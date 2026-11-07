@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-spartan-lines",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Use black type, one fine horizontal rule and an exact shared left edge. Distinguish role, organisation and date with weight and spacing alone.",
   "type": "module",
   "main": "./dist/index.js",

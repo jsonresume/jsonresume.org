@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-test-report",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A neat report-style masthead and date gutter support a detailed quality career. Use blue underlines and clear entry boundaries, with no pass-rate graphics unless the applicant supplied the figures.",
   "type": "module",
   "main": "./dist/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-architecture-spec",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A specification-style identity and slim qualifications rail frame a broad project and experience column. Use careful alignment and fine black rules rather than decorative blueprints.",
   "type": "module",
   "main": "./dist/index.js",
