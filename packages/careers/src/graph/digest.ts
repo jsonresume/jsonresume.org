@@ -3,7 +3,8 @@ import type { CareerGraph } from '@repo/api';
 /**
  * The career graph in words, for agents: strengths; jobs by how close they
  * are (ready now, one skill away and which); the missing skills that would
- * open the most; where people in this role went next; the plan's progress.
+ * open the most; where people in this role went next; the plan's progress;
+ * and what is still being worked out, if anything.
  */
 export const graphDigest = (graph: CareerGraph) => {
   const { nodes, edges } = graph;
@@ -50,5 +51,6 @@ export const graphDigest = (graph: CareerGraph) => {
         }
       : null,
     pending: graph.pending,
+    waitingFor: graph.waitingFor ?? [],
   };
 };

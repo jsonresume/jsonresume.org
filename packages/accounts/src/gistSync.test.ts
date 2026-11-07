@@ -18,7 +18,7 @@ const ghosty = (token: string, scopes?: string[]) => ({
 
 describe('saving to the gist', () => {
   it('writes the editor’s save to the gist, which stays the source', async () => {
-    const { run, gists } = accountsStack();
+    const { run, gists, saved } = accountsStack();
     gists.owners.set('tok', 5);
     gists.gists.set('g5', { ownerId: 5, content: '{}' });
     await run(
@@ -35,6 +35,10 @@ describe('saving to the gist', () => {
         expect(JSON.parse(gists.gists.get('g5')?.content ?? '')).toEqual({
           basics: { name: 'Saved here' },
         });
+        // Told, so work on the new version starts before anyone asks.
+        expect(saved).toEqual([
+          { userId: id, resume: { basics: { name: 'Saved here' } } },
+        ]);
         const account = yield* accounts.account(id);
         expect(account?.source).toBe('gist');
         expect(account?.hasStoredResume).toBe(false);
@@ -78,7 +82,7 @@ describe('saving to the gist', () => {
   });
 
   it('asks for the gist permission when GitHub didn’t grant it, and says when GitHub is down', async () => {
-    const { run, gists } = accountsStack();
+    const { run, gists, saved } = accountsStack();
     gists.owners.set('tok', 6);
     await run(
       Effect.gen(function* () {
@@ -109,6 +113,8 @@ describe('saving to the gist', () => {
         expect(
           (yield* Effect.flip(accounts.saveResume(id, { basics: {} })))._tag
         ).toBe('GithubUnreachable');
+        // Nothing saved, so nothing to start work on.
+        expect(saved).toEqual([]);
       })
     );
   });

@@ -41,7 +41,7 @@ const SENIORITY = [
  */
 export const buildGraph = (
   input: GraphInputs
-): Omit<CareerGraph, 'pending' | 'snapshots'> => {
+): Omit<CareerGraph, 'pending' | 'waitingFor' | 'snapshots'> => {
   const g = draft();
   const you = buildYou(g, input);
   const open = buildOpen(g, input, you);

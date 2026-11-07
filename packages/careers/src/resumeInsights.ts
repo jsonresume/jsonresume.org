@@ -1,5 +1,5 @@
-import { resumeLevel } from '@repo/jobs';
-import { Clock, Duration, Effect, Fiber, Layer, Option } from 'effect';
+import { resumeLevel, sharedRuns, type RunOptions } from '@repo/jobs';
+import { Clock, Duration, Effect, Layer, Option } from 'effect';
 import { SqlClient } from 'effect/sql';
 import {
   listedEvidence,
@@ -19,7 +19,7 @@ import {
   type ResumeEntry,
 } from './services';
 
-/** How long a request waits for the reader before answering without it. */
+/** How long a request waits for the reader, by default, before answering without it. */
 const WAIT = Duration.seconds(40);
 /** Marks insights read without a model: a reader, once there, reads again. */
 const NO_MODEL = 'none';
@@ -39,7 +39,7 @@ export const ResumeInsightsLive = Layer.effect(
     const reader = yield* Effect.serviceOption(InsightReader);
     const store = insightStore(sql);
     // One reading per resume version at a time, shared by concurrent requests.
-    const running = new Map<string, Fiber.Fiber<void>>();
+    const runs = sharedRuns();
 
     const resolved = (found: ReadonlyArray<Found>) =>
       Effect.map(catalog.resolve(found.map((f) => f.name)), (skills) =>
@@ -103,7 +103,8 @@ export const ResumeInsightsLive = Layer.effect(
       );
 
     const insight = Effect.fn('ResumeInsights.insight')(function* (
-      resume: unknown
+      resume: unknown,
+      options: RunOptions = { wait: WAIT }
     ) {
       const key = resumeKey(resume);
       const entries = resumeEntries(resume);
@@ -148,20 +149,11 @@ export const ResumeInsightsLive = Layer.effect(
         yield* store.save(key, { ...made, foundations });
         return answer(made, false);
       }
-      let fiber = running.get(key);
-      if (!fiber) {
-        const started = yield* read(key, resume, entries).pipe(
-          Effect.ensuring(Effect.sync(() => running.delete(key))),
-          Effect.forkDetach
-        );
-        running.set(key, started);
-        fiber = started;
-      }
-      const done = yield* Fiber.join(fiber).pipe(Effect.timeoutOption(WAIT));
+      const state = yield* runs.run(key, read(key, resume, entries), options);
       const after = yield* usable(key);
       if (Option.isSome(after)) return answer(after.value, false);
       // Still reading (or the reading failed): what the resume shows without it.
-      return answer(yield* withoutModel, Option.isNone(done));
+      return answer(yield* withoutModel, state !== 'done');
     });
 
     return ResumeInsights.of({ insight });

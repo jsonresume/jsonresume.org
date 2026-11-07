@@ -19,7 +19,7 @@ const identity = (id: number, login: string, email: string | null = null) => ({
 
 describe('email accounts', () => {
   it('signs up, holds the name unpublished, and publishes once verified', async () => {
-    const { run, mail, lastToken } = accountsStack();
+    const { run, mail, lastToken, saved } = accountsStack();
     await run(
       Effect.gen(function* () {
         const accounts = yield* Accounts;
@@ -34,6 +34,7 @@ describe('email accounts', () => {
         expect(mail[0]?.text).toContain('/api/auth/verify?token=');
 
         yield* accounts.saveResume(user.id, { basics: { name: 'Ada' } });
+        expect(saved.map((s) => s.userId)).toEqual([user.id]);
         const before = yield* Effect.flip(profiles.resume('ada' as Username));
         expect(before).toMatchObject({ reason: 'unpublished' });
 

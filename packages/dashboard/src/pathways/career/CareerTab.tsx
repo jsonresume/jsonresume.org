@@ -1,5 +1,5 @@
 import { useAtomRefresh, useAtomValue } from '@effect/atom-react';
-import { Callout, EmptyState, Skeleton } from '@jsonresume/ui';
+import { Callout, EmptyState } from '@jsonresume/ui';
 import type { CareerGraph } from '@repo/api';
 import {
   careerGraphAtom,
@@ -10,6 +10,7 @@ import { Exit } from 'effect';
 import { AsyncResult } from 'effect/reactivity';
 import { useEffect, useState } from 'react';
 import { CareerArea } from './CareerMap';
+import { GraphLoading } from './GraphProgress';
 
 type Loaded = AsyncResult.AsyncResult<CareerGraph, { readonly _tag: string }>;
 
@@ -35,8 +36,7 @@ function Loaded({
       </Callout>
     );
   }
-  if (!AsyncResult.isSuccess(result))
-    return <Skeleton height="60vh" aria-label="Growing your tree" />;
+  if (!AsyncResult.isSuccess(result)) return <GraphLoading />;
   return (
     <CareerArea
       graph={result.value}
@@ -57,10 +57,11 @@ function Live({
   const result = useAtomValue(careerGraphAtom);
   const refresh = useAtomRefresh(careerGraphAtom);
   const pending = AsyncResult.isSuccess(result) && result.value.pending;
-  // While the resume is being read, look again every 20 seconds.
+  // While the models work, ask again: the server holds each request up to
+  // 5 seconds, so the tree fills in soon after each finishes.
   useEffect(() => {
     if (!pending) return;
-    const t = setTimeout(refresh, 20_000);
+    const t = setTimeout(refresh, 1_500);
     return () => clearTimeout(t);
   }, [pending, result, refresh]);
   return (

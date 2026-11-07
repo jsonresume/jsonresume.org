@@ -112,6 +112,10 @@ export const PathwayPlan = Schema.Struct({
 });
 export type PathwayPlan = typeof PathwayPlan.Type;
 
+/** Model work a graph can wait on: the resume's reading, the jobs' fits. */
+export const CareerWait = Schema.Literals(['resume', 'jobs']);
+export type CareerWait = typeof CareerWait.Type;
+
 export const CareerGraph = Schema.Struct({
   nodes: Schema.Array(CareerNode),
   edges: Schema.Array(CareerEdge),
@@ -119,6 +123,8 @@ export const CareerGraph = Schema.Struct({
   strengths: Schema.Array(Schema.String),
   /** Whether the AI parts are still being worked out (call again shortly). */
   pending: Schema.Boolean,
+  /** While pending, what is still being worked out: the resume's reading, the jobs' fits. */
+  waitingFor: Schema.optionalKey(Schema.Array(CareerWait)),
   /** Months the graph was saved, newest first ("2026-10"). */
   snapshots: Schema.Array(Schema.String),
   /** Each view's band names, by level. */

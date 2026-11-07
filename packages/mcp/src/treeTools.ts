@@ -1,5 +1,5 @@
 import { Accounts } from '@repo/accounts';
-import { CareerMove, PathwayPlan } from '@repo/api';
+import { CareerMove, CareerWait, PathwayPlan } from '@repo/api';
 import { CareerGraphs, graphDigest } from '@repo/careers';
 import { Effect, Schema } from 'effect';
 import { Tool, Toolkit } from 'effect/ai';
@@ -41,6 +41,7 @@ export const TreeToolkit = Toolkit.make(
         })
       ),
       pending: Schema.Boolean,
+      waitingFor: Schema.Array(CareerWait),
     }),
     ...failing,
   }).annotateMerge(hints('get_career_tree')),

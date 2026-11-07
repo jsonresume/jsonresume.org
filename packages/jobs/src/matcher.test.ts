@@ -1,7 +1,8 @@
 import { TestDatabase } from '@repo/database/testing';
-import { Effect, Layer } from 'effect';
+import { Deferred, Effect, Layer } from 'effect';
 import { SqlClient } from 'effect/sql';
 import { expect, it } from 'vitest';
+import { JobFitter } from './fitter';
 import { fitScore, JobMatcher } from './matcher';
 import { runPipeline } from './pipeline';
 import { JobStore } from './store';
@@ -142,4 +143,66 @@ it('turns a cosine into a 0 to 100 fit', () => {
   expect(fitScore(0.1)).toBe(0);
   expect(fitScore(0.5)).toBe(50);
   expect(fitScore(0.9)).toBe(100);
+});
+
+it('answers with embeddings while the model is still judging, then with its fits', async () => {
+  const asked: number[] = [];
+  // A fitter that takes its time: it answers once the gate opens.
+  const gate = Effect.runSync(Deferred.make<void>());
+  const slow = Layer.succeed(
+    JobFitter,
+    JobFitter.of({
+      fit: (_, jobs) =>
+        Deferred.await(gate).pipe(
+          Effect.andThen(
+            Effect.sync(() => {
+              asked.push(...jobs.map((j) => j.id));
+              return jobs.map((j) => ({
+                id: j.id,
+                score: 77,
+                role: 'Engineer',
+                why: 'Judged',
+              }));
+            })
+          )
+        ),
+    })
+  );
+  const layer = Layer.mergeAll(JobStore.layer, JobMatcher.layer).pipe(
+    Layer.provideMerge(
+      Layer.mergeAll(
+        fakeHackerNews(hn),
+        FakeParser,
+        FakeEmbedder,
+        slow,
+        TestDatabase
+      )
+    )
+  );
+  const [early, late] = await Effect.runPromise(
+    Effect.gen(function* () {
+      yield* runPipeline({
+        threads: 1,
+        parseLimit: 10,
+        days: 120,
+        concurrency: 1,
+      });
+      const sql = yield* SqlClient.SqlClient;
+      const [user] = yield* sql<{ id: string }>`
+        INSERT INTO app.users (email) VALUES ('c@example.com') RETURNING id`;
+      const matcher = yield* JobMatcher;
+      const early = yield* matcher.rankWithin(resume, user?.id, { wait: 0 });
+      yield* Deferred.succeed(gate, undefined);
+      const late = yield* matcher.rankWithin(resume, user?.id, {
+        wait: '10 seconds',
+      });
+      return [early, late] as const;
+    }).pipe(Effect.provide(layer))
+  );
+  expect(early.judging).toBe(true);
+  expect(early.ranked.every((r) => r.why === null)).toBe(true);
+  expect(late.judging).toBe(false);
+  expect(late.ranked.every((r) => r.why === 'Judged')).toBe(true);
+  // One judging run, shared by both calls.
+  expect(asked.sort()).toEqual([11, 12, 13]);
 });

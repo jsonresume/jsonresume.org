@@ -5,12 +5,14 @@ import { fakeGithub } from '@repo/profiles/testing';
 import { ConfigProvider, Effect, Layer } from 'effect';
 import { Accounts } from '../accounts';
 import { Mailer, type Mail } from '../mailer';
+import { ResumeSaved } from '../resumes';
 import { PgAccountStore } from '../sql';
 import { fakeGists } from './fakeGists';
 
 /**
  * Accounts on a fresh in-memory Postgres, GitHub faked, mail captured.
  * GitHub user `ghosty` (id 5) has a resume gist; `plain` (id 6) has none.
+ * `saved` lists the resumes ResumeSaved was told of.
  */
 export function accountsStack() {
   const github = fakeGithub();
@@ -39,8 +41,18 @@ export function accountsStack() {
   const config = ConfigProvider.layer(
     ConfigProvider.fromEnvRecord({ AUTH_SECRET: 'test secret' })
   );
+  const saved: Array<{ userId: string; resume: unknown }> = [];
+  const listener = Layer.succeed(
+    ResumeSaved,
+    ResumeSaved.of({
+      saved: (userId, resume) =>
+        Effect.sync(() => void saved.push({ userId, resume })),
+    })
+  );
   const layer = Accounts.layer.pipe(
-    Layer.provideMerge(Layer.mergeAll(profiles, mailer, gists.layer, config))
+    Layer.provideMerge(
+      Layer.mergeAll(profiles, mailer, gists.layer, config, listener)
+    )
   );
   const run = <A, E>(
     effect: Effect.Effect<A, E, Layer.Success<typeof layer>>
@@ -48,5 +60,5 @@ export function accountsStack() {
   /** The token in the last verification email. */
   const lastToken = () =>
     /token=([\w-]+)/.exec(mail.at(-1)?.text ?? '')?.[1] ?? '';
-  return { github, gists: gists.state, mail, run, lastToken, layer };
+  return { github, gists: gists.state, mail, saved, run, lastToken, layer };
 }
