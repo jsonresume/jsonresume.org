@@ -23,3 +23,4 @@ export {
   type Variant,
   type VariantFailure,
 } from './variants';
+export { MAX_PENDING, proposerOf, Proposals, type Proposal } from './proposals';

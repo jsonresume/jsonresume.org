@@ -15,6 +15,7 @@ it('applies every migration to an empty database', async () => {
   expect(tables.map((t) => t.table_name)).toEqual([
     'api_keys',
     'career_moves',
+    'change_proposals',
     'email_tokens',
     'embeddings',
     'imports',

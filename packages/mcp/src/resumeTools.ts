@@ -1,7 +1,7 @@
 import schemaJson from '@jsonresume/schema/schema.json';
 import { Accounts } from '@repo/accounts';
 import { track } from '@repo/posthog';
-import { savedProperties } from '@repo/resume-versions';
+import { Proposals, savedProperties } from '@repo/resume-versions';
 import { pathLabel, validate } from '@repo/resume-editor/validate';
 import type { JsonSchemaNode } from '@repo/schema-explorer/model';
 import { Effect, Predicate, Schema } from 'effect';
@@ -44,7 +44,7 @@ const Issues = Schema.Array(Schema.String);
 export const problems = (resume: unknown): string[] =>
   validate(resume, schema).map((i) => `${pathLabel(i.path)}: ${i.message}`);
 
-const saveError = (e: { _tag: string; message?: string }) =>
+export const saveError = (e: { _tag: string; message?: string }) =>
   failWith(
     e._tag === 'InvalidResume'
       ? e.message ?? 'That is not a resume.'
@@ -52,6 +52,21 @@ const saveError = (e: { _tag: string; message?: string }) =>
       ? 'Your page reads your resume from your GitHub gist, and GitHub has not let jsonresume.org write to it. Ask the user to allow it at https://jsonresume.org/dashboard/resume, or switch the source with set_resume_source.'
       : 'GitHub did not answer, so the gist was not updated. Try again in a minute.'
   );
+
+/** Suggest instead of save: the person accepts or rejects it. */
+const Propose = {
+  propose: optional(
+    Schema.Boolean,
+    'true: suggest this for the person to accept on jsonresume.org instead of saving it'
+  ),
+  note: optional(Schema.String, 'With propose: what you changed and why'),
+};
+const Saved = Schema.Struct({
+  saved: Schema.Boolean,
+  problems: Issues,
+  /** With propose: the proposal waiting for the person. */
+  proposal_id: Schema.optional(Schema.String),
+});
 
 export const ResumeToolkit = Toolkit.make(
   Tool.make('get_resume', {
@@ -65,8 +80,8 @@ export const ResumeToolkit = Toolkit.make(
   }).annotateMerge(hints('get_resume')),
   Tool.make('save_resume', {
     description: describe('save_resume'),
-    parameters: Schema.Struct({ resume: Resume }),
-    success: Schema.Struct({ saved: Schema.Boolean, problems: Issues }),
+    parameters: Schema.Struct({ resume: Resume, ...Propose }),
+    success: Saved,
     ...failing,
   }).annotateMerge(hints('save_resume', true)),
   Tool.make('update_resume_section', {
@@ -77,8 +92,9 @@ export const ResumeToolkit = Toolkit.make(
         description:
           'The whole section: an object for basics and meta, an array for the rest',
       }),
+      ...Propose,
     }),
-    success: Schema.Struct({ saved: Schema.Boolean, problems: Issues }),
+    success: Saved,
     ...failing,
   }).annotateMerge(hints('update_resume_section', true)),
   Tool.make('validate_resume', {
@@ -94,10 +110,11 @@ export const ResumeToolkit = Toolkit.make(
   }).annotateMerge(hints('get_resume_schema'))
 );
 
-/** Needs Accounts. */
+/** Needs Accounts and Proposals. */
 export const ResumeHandlers = ResumeToolkit.toLayer(
   Effect.gen(function* () {
     const accounts = yield* Accounts;
+    const proposals = yield* Proposals;
     const current = Effect.gen(function* () {
       const user = yield* caller;
       return { user, ...(yield* accounts.currentResume(user.id)) };
@@ -107,7 +124,10 @@ export const ResumeHandlers = ResumeToolkit.toLayer(
      * an agent's mistake then can't replace a good resume (or the gist).
      * Problems already there don't block it, so they can be fixed in steps.
      */
-    const save = (resume: Record<string, unknown>) =>
+    const save = (
+      resume: Record<string, unknown>,
+      options: { propose?: boolean | undefined; note?: string | undefined } = {}
+    ) =>
       Effect.gen(function* () {
         const user = yield* caller;
         const found = problems(resume);
@@ -119,6 +139,15 @@ export const ResumeHandlers = ResumeToolkit.toLayer(
               '\n'
             )}`
           );
+        }
+        if (options.propose) {
+          const id = yield* proposals.propose(
+            user.id,
+            resume,
+            yield* McpActor,
+            options.note ?? null
+          );
+          return { saved: false, problems: found, proposal_id: id };
         }
         const saved = yield* accounts
           .saveResume(user.id, resume, yield* McpActor)
@@ -137,8 +166,9 @@ export const ResumeHandlers = ResumeToolkit.toLayer(
           source,
           url: `${SITE}/@${user.username}`,
         })),
-      save_resume: ({ resume }) => save(resume),
-      update_resume_section: ({ section, value }) =>
+      save_resume: ({ resume, propose, note }) =>
+        save(resume, { propose, note }),
+      update_resume_section: ({ section, value, propose, note }) =>
         Effect.gen(function* () {
           const object = section === 'basics' || section === 'meta';
           if (
@@ -154,7 +184,7 @@ export const ResumeHandlers = ResumeToolkit.toLayer(
           const base = Predicate.isObject(resume)
             ? (resume as Record<string, unknown>)
             : {};
-          return yield* save({ ...base, [section]: value });
+          return yield* save({ ...base, [section]: value }, { propose, note });
         }),
       validate_resume: ({ resume }) =>
         Effect.gen(function* () {
