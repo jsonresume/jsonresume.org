@@ -47,6 +47,10 @@ const recordRead = (
 /** The Hono path pattern for /@username and /@username.ext. */
 export const resumePath = '/:handle{@[^/]+}';
 
+/** /@username/<variant>(.ext); /@username/timeline passes on to its page. */
+export const variantPath =
+  '/:handle{@[^/]+}/:variant{[a-zA-Z0-9][a-zA-Z0-9.-]*}';
+
 /**
  * Serves /@username: the resume (@repo/resume-host), or the reason there is
  * none, as the app's page for themed requests and as JSON for data formats.

@@ -13,7 +13,7 @@ import { render } from '../src/entry-server';
 import { discoveryRoutes, isMcpRequest, sessionless } from './agents';
 import { createExplorePage, explorePath } from './explorePage';
 import { createJobPages, jobPath, jobsPath } from './jobPages';
-import { createResumeHandler } from './resumes';
+import { createResumeHandler, variantPath } from './resumes';
 import { createSitemaps, liveSitemapPath, sitemapPath } from './sitemaps';
 import { createTimelinePage, timelinePath } from './timelinePage';
 import { appServices } from './services';
@@ -51,6 +51,10 @@ for (const route of discoveryRoutes(process.env.SITE_URL ?? '')) {
 }
 app.get(
   '/:handle{@[^/]+}',
+  async (c, next) => (await resumes.fetch(c.req.raw)) ?? next()
+);
+app.get(
+  variantPath,
   async (c, next) => (await resumes.fetch(c.req.raw)) ?? next()
 );
 app.get(

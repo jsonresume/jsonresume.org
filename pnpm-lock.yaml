@@ -2282,6 +2282,9 @@ importers:
       '@repo/api':
         specifier: workspace:*
         version: link:../api
+      '@repo/api-client':
+        specifier: workspace:*
+        version: link:../api-client
       '@repo/url-state':
         specifier: workspace:*
         version: link:../url-state

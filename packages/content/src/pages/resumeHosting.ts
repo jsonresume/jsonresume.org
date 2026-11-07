@@ -21,6 +21,7 @@ export const problems: Record<
   | 'no-user'
   | 'no-gist'
   | 'unpublished'
+  | 'no-variant'
   | 'not-json'
   | 'not-object'
   | 'github-down'
@@ -41,6 +42,10 @@ export const problems: Record<
   unpublished: ({ username }) => ({
     title: `@${username} hasn’t published yet`,
     body: `This name belongs to a JSON Resume account. The page goes live once its owner confirms their email and adds a resume.`,
+  }),
+  'no-variant': ({ username, file = '' }) => ({
+    title: `@${username} has no version called ${file}`,
+    body: `It may have been renamed or removed. Their main resume is at /@${username}.`,
   }),
   'not-json': ({ username, file = 'resume.json' }) => ({
     title: 'This resume has a typo',

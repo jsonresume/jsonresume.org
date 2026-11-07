@@ -58,6 +58,12 @@ function Actions({ problem }: { problem: ResumeProblem }) {
           <SiteLink href={paths.signIn}>Is this you? Sign in</SiteLink>
         </Button>
       );
+    case 'no-variant':
+      return (
+        <Button asChild variant="primary">
+          <a href={resumePath(username)}>Open their resume</a>
+        </Button>
+      );
     case 'github-down':
       return (
         <Button asChild variant="primary">

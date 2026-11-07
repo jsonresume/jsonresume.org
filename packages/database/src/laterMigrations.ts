@@ -135,4 +135,23 @@ export const laterMigrations: Record<
         WHERE delivered_at IS NULL
     `;
   }),
+
+  // Variants (@repo/resume-versions): named copies of a resume, each at
+  // /@name/slug, with its own theme and, often, the job it was made for.
+  '20_resume_variants': Effect.gen(function* () {
+    const sql = yield* SqlClient.SqlClient;
+    yield* sql`
+      CREATE TABLE app.resume_variants (
+        id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+        user_id uuid NOT NULL REFERENCES app.users (id) ON DELETE CASCADE,
+        slug text NOT NULL CHECK (slug ~ '^[a-z0-9][a-z0-9-]{0,39}$'),
+        name text NOT NULL,
+        job_id bigint,
+        resume json NOT NULL,
+        created_at timestamptz NOT NULL DEFAULT now(),
+        updated_at timestamptz NOT NULL DEFAULT now(),
+        UNIQUE (user_id, slug)
+      )
+    `;
+  }),
 };

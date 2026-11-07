@@ -21,6 +21,7 @@ import { accountAtom, keys, setSourceAtom } from '@repo/api-client';
 import { AsyncResult } from 'effect/reactivity';
 import { AtsCard } from './AtsCard';
 import { HistoryCard } from './history/HistoryCard';
+import { VariantsCard } from './VariantsCard';
 import { StoredCard } from './StoredCard';
 
 const formats = [
@@ -141,6 +142,7 @@ export function ResumePage() {
         <StoredCard account={account} use={use('stored')} />
       </Grid>
       <AtsCard />
+      <VariantsCard />
       <HistoryCard gist={account.source === 'gist'} />
     </AppPage>
   );

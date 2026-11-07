@@ -56,6 +56,8 @@ export class ProfileStore extends Context.Service<
     removeGhost(username: string): Effect.Effect<void>;
     /** Keep the latest gist copy on an account. */
     saveMirror(username: string, mirror: GistMirror): Effect.Effect<void>;
+    /** A variant of an account's resume (/@name/slug), or undefined. */
+    variant(userId: string, slug: string): Effect.Effect<unknown>;
   }
 >()('@repo/profiles/ProfileStore') {
   /** A store in memory, for tests and local development without a database. */
@@ -79,6 +81,7 @@ export const memoryStore = (
     Effect.sync(() => {
       if (profiles.get(username)?.kind === 'ghost') profiles.delete(username);
     }),
+  variant: () => Effect.succeed(undefined),
   saveMirror: (username, mirror) =>
     Effect.sync(() => {
       const current = profiles.get(username);

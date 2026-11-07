@@ -12,6 +12,7 @@ import { OAuthApi, OAuthConsentApi } from './OAuthApi';
 import { AppsDirectoryApi, OAuthAppsApi } from './OAuthAppsApi';
 import { OAuthResourceApi } from './OAuthResourceApi';
 import { ResumeVersionsApi } from './ResumeVersionsApi';
+import { VariantsApi } from './VariantsApi';
 import { JobsApi, MyJobsApi } from './JobsApi';
 export {
   CareerApi,
@@ -154,6 +155,7 @@ export class JsonResumeApi extends HttpApi.make('jsonresume')
   .add(AuthApi)
   .add(AccountApi)
   .add(ResumeVersionsApi)
+  .add(VariantsApi)
   .add(KeysApi)
   .add(AnalyticsApi)
   .add(EventsApi)
@@ -174,3 +176,9 @@ export class JsonResumeApi extends HttpApi.make('jsonresume')
   .prefix('/api')
   .annotateMerge(OpenApi.annotations({ title: 'JSON Resume API' })) {}
 export { CopilotEvent, CopilotMessage, CopilotRequest } from './PathwaysApi';
+export {
+  Variant,
+  VariantNotFound,
+  VariantsApi,
+  VariantSummary,
+} from './VariantsApi';

@@ -5,9 +5,12 @@ import { Schema } from 'effect';
  * that explains it (and the JSON error for data formats) reads it.
  */
 export const ResumeProblem = Schema.Union([
-  /** No GitHub user, no gist with the file, or an account not public yet. */
+  /**
+   * No GitHub user, no gist with the file, an account not public yet, or
+   * no variant of that name (/@name/variant, the name in `file`).
+   */
   Schema.Struct({
-    kind: Schema.Literals(['no-user', 'no-gist', 'unpublished']),
+    kind: Schema.Literals(['no-user', 'no-gist', 'unpublished', 'no-variant']),
     username: Schema.String,
     file: Schema.String,
   }),
@@ -47,6 +50,7 @@ export const resumeProblemStatus = (problem: ResumeProblem): number => {
     case 'no-user':
     case 'no-gist':
     case 'unpublished':
+    case 'no-variant':
     case 'theme-missing':
     case 'unknown-format':
       return 404;
