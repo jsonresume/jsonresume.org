@@ -3,6 +3,7 @@
 import 'dotenv/config';
 
 import init from './init';
+import importResume from './import-resume';
 import loadResumeOrReport from './load-resume';
 import getSchema from './get-schema';
 import validate from './validate';
@@ -92,6 +93,20 @@ const normalizeTheme = (value, defaultValue) => {
     .description('Initialize a resume.json file')
     .action(async () => {
       await init({ resumePath: program.resume });
+    });
+
+  program
+    .command('import <file>')
+    .description(
+      'Make resume.json from a PDF, Word .docx, LinkedIn export .zip or .txt (read by jsonresume.org; nothing is saved there)',
+    )
+    .option('-f, --force', 'Replace resume.json if it exists')
+    .action(async (file, options) => {
+      await importResume({
+        file,
+        resumePath: program.resume,
+        force: Boolean(options.force),
+      });
     });
 
   program

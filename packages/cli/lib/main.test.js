@@ -88,6 +88,10 @@ describe('cli configuration', () => {
 
       Commands:
         init                                Initialize a resume.json file
+        import [options] <file>             Make resume.json from a PDF, Word
+                                            .docx, LinkedIn export .zip or .txt (read
+                                            by jsonresume.org; nothing is saved
+                                            there)
         validate                            Validate your resume's schema
         export [fileName]                   Export locally to .html, .pdf, .md
                                             (markdown) or .txt (text). Supply a
