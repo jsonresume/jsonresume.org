@@ -42,6 +42,7 @@
     "@repo/profiles": "workspace:^",
     "@repo/resume-editor": "workspace:^",
     "@repo/resume-host": "workspace:^",
+    "@repo/resume-import": "workspace:^",
     "@repo/resume-pdf": "workspace:^",
     "@repo/resume-themes": "workspace:^",
     "@repo/server": "workspace:*",

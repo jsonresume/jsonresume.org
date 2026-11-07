@@ -16,6 +16,7 @@ import { Explore } from '@repo/explore';
 import { JobBoard, JobMatcher, OpenAiJobs } from '@repo/jobs';
 import { Copilot } from '@repo/pathways';
 import { GithubGists, Profiles, Usernames } from '@repo/profiles';
+import { Downloader, ImporterLive } from '@repo/resume-import';
 import { ResumePdf } from '@repo/resume-pdf';
 import { PgProfileStore } from '@repo/profiles/sql';
 import { Effect, Layer } from 'effect';
@@ -69,10 +70,18 @@ export const appServices = <E>(
       )
     )
   );
+  // Resume imports (POST /api/import, MCP import_resume), with their events.
+  const imports = Layer.merge(
+    ImporterLive.pipe(
+      Layer.provide(Layer.merge(database, ProductEvents.layer))
+    ),
+    Downloader.layer
+  );
   // Pathways' copilot uses every MCP tool, so everything above.
   return Layer.mergeAll(
     Copilot.layer,
     ResumePdf.layer,
-    ProductEvents.layer
+    ProductEvents.layer,
+    imports
   ).pipe(Layer.provideMerge(Layer.merge(accounts, careers)));
 };

@@ -20,4 +20,31 @@ export const laterMigrations: Record<
           CHECK (kind IN ('page', 'json', 'yaml', 'txt', 'docx'))
     `;
   }),
+
+  // Resume imports (@repo/resume-import), for quality and cost: never the
+  // file or its text. `result` is the parsed resume, kept on the row that
+  // read it so the same input (by SHA-256, at the same version) is read once.
+  '15_imports': Effect.gen(function* () {
+    const sql = yield* SqlClient.SqlClient;
+    yield* sql`
+      CREATE TABLE app.imports (
+        id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+        user_id uuid REFERENCES app.users (id) ON DELETE SET NULL,
+        kind text NOT NULL CHECK (kind IN ('pdf', 'docx', 'linkedin', 'text')),
+        file_hash text NOT NULL,
+        ms integer NOT NULL,
+        fields integer NOT NULL,
+        model text,
+        version text NOT NULL,
+        cached boolean NOT NULL DEFAULT false,
+        result jsonb,
+        created_at timestamptz NOT NULL DEFAULT now()
+      )
+    `;
+    yield* sql`
+      CREATE INDEX imports_cache ON app.imports (file_hash, version)
+        WHERE result IS NOT NULL
+    `;
+    yield* sql`CREATE INDEX imports_created ON app.imports (created_at)`;
+  }),
 };

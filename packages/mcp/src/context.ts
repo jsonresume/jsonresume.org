@@ -37,13 +37,14 @@ export const describe = (name: string) => info(name).description;
 /**
  * MCP hints from the catalog, always all three: read-only unless it
  * writes; destructive when it overwrites (a resume, a section, the theme, a
- * username), as the ChatGPT app guidelines define it; never open-world, as
- * every tool works on the user's own account or our catalog.
+ * username), as the ChatGPT app guidelines define it; open-world only when
+ * it reaches the web beyond the user's account and our catalog
+ * (import_resume downloads a URL).
  */
-export const hints = (name: string, destructive = false) =>
+export const hints = (name: string, destructive = false, openWorld = false) =>
   Context.make(Tool.Readonly, !info(name).writes).pipe(
     Context.add(Tool.Destructive, destructive),
-    Context.add(Tool.OpenWorld, false)
+    Context.add(Tool.OpenWorld, openWorld)
   );
 
 /** What every tool shares: errors come back to the agent as results. */

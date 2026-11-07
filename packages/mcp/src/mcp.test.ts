@@ -1,4 +1,4 @@
-import { Accounts, ApiKeys, OAuth } from '@repo/accounts';
+import { Accounts, ApiKeys, OAuth, RateLimiter } from '@repo/accounts';
 import { accountsStack } from '@repo/accounts/stack';
 import { PgAnalyticsStore } from '@repo/analytics/sql';
 import { Explore } from '@repo/explore';
@@ -11,6 +11,13 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { prompts, tools } from './catalog';
 import { mcpRoutes } from './server';
 import { plainCareers } from '@repo/careers/testing';
+import { textPdf } from '@repo/resume-import/fixtures';
+import {
+  emptyReply,
+  fakeDownloader,
+  fakeReader,
+  testImporter,
+} from '@repo/resume-import/testing';
 
 let dispose: (() => Promise<void>) | undefined;
 afterEach(() => dispose?.());
@@ -19,14 +26,34 @@ afterEach(() => dispose?.());
 const setup = async () => {
   const stack = accountsStack();
   const events: Array<{ event: string; properties?: unknown }> = [];
+  const productEvents = Layer.succeed(
+    ProductEvents,
+    ProductEvents.of({
+      capture: (_, event, properties) =>
+        Effect.sync(() => void events.push({ event, properties })),
+    })
+  );
+  // Imports: the model "reads" the first line as the name; one PDF online.
+  const reader = fakeReader((text) => {
+    const reply = emptyReply();
+    const name = text.split('\n')[0] ?? null;
+    const basics = { ...reply.resume.basics, name };
+    return { ...reply, resume: { ...reply.resume, basics } };
+  });
+  const downloads = fakeDownloader(
+    new Map([
+      [
+        'https://example.com/cv.pdf',
+        {
+          bytes: textPdf(['Grace Hopper', 'Rear Admiral', 'Navy, 1943 - 1986']),
+        },
+      ],
+    ])
+  );
   const services = Layer.mergeAll(
-    Layer.succeed(
-      ProductEvents,
-      ProductEvents.of({
-        capture: (_, event, properties) =>
-          Effect.sync(() => void events.push({ event, properties })),
-      })
-    ),
+    productEvents,
+    RateLimiter.layer,
+    downloads,
     ApiKeys.layer,
     OAuth.layer,
     PgAnalyticsStore,
@@ -36,9 +63,10 @@ const setup = async () => {
       Layer.provide(embedderFrom(() => new Float32Array(3072).fill(1)))
     )
   ).pipe(Layer.provideMerge(stack.layer));
-  const withCareers = Layer.merge(
+  const withCareers = Layer.mergeAll(
     services,
-    plainCareers.pipe(Layer.provide(services))
+    plainCareers.pipe(Layer.provide(services)),
+    testImporter(reader.layer).pipe(Layer.provide(services))
   );
   // Another route on the same router, as the API is in the app.
   const neighbour = HttpRouter.add(
@@ -184,7 +212,10 @@ describe('the MCP server', () => {
     for (const t of listed.tools as Listed[]) {
       expect(typeof t.annotations.readOnlyHint, t.name).toBe('boolean');
       expect(typeof t.annotations.destructiveHint, t.name).toBe('boolean');
-      expect(t.annotations.openWorldHint, t.name).toBe(false);
+      // Only import_resume reaches beyond the account: it downloads a URL.
+      expect(t.annotations.openWorldHint, t.name).toBe(
+        t.name === 'import_resume'
+      );
     }
     const hint = (name: string) =>
       (listed.tools as Listed[]).find((t) => t.name === name)?.annotations;
@@ -366,6 +397,42 @@ describe('the MCP server', () => {
       docx: 'https://jsonresume.org/@ada.docx',
       timeline: 'https://jsonresume.org/@ada/timeline',
     });
+  });
+
+  it('imports a resume from text or a URL without saving it', async () => {
+    const { handler, key, events } = await setup();
+    const { call } = await connect(handler, key);
+    const fromUrl = await call('import_resume', {
+      url: 'https://example.com/cv.pdf',
+    });
+    expect(fromUrl.isError).toBeFalsy();
+    expect(fromUrl.value).toMatchObject({
+      kind: 'pdf',
+      resume: { basics: { name: 'Grace Hopper' } },
+      confidence: { '/basics/name': 'high' },
+      cached: false,
+    });
+    const pasted = await call('import_resume', {
+      text: 'Ada Lovelace\nAnalytical Engineer\nLondon, 1842 to 1843',
+      url: null,
+    });
+    expect(pasted.value).toMatchObject({
+      kind: 'text',
+      resume: { basics: { name: 'Ada Lovelace' } },
+    });
+    // Nothing saved: the account's resume is as it was.
+    expect((await call('get_resume')).value).toMatchObject({
+      resume: { basics: { name: 'Ada' } },
+    });
+    expect(events.map((e) => e.event)).toContain('import_finished');
+
+    const missing = await call('import_resume', {
+      url: 'https://example.com/nope.pdf',
+    });
+    expect(missing.isError).toBe(true);
+    const neither = await call('import_resume', {});
+    expect(neither).toMatchObject({ isError: true });
+    expect(JSON.stringify(neither.value)).toContain('either text or url');
   });
 
   it('takes an OAuth access token as well as an API key', async () => {

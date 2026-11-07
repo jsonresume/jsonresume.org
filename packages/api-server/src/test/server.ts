@@ -20,6 +20,11 @@ import { Profiles, Usernames } from '@repo/profiles';
 import { PgProfileStore } from '@repo/profiles/sql';
 import { fakeGithub } from '@repo/profiles/testing';
 import { ProductEvents } from '@repo/posthog';
+import {
+  emptyReply,
+  fakeReader,
+  testImporter,
+} from '@repo/resume-import/testing';
 import { ConfigProvider, Effect, Layer, Stream } from 'effect';
 import { HttpRouter, HttpServer } from 'effect/http';
 import { apiRoutes } from '../index';
@@ -72,6 +77,28 @@ export function testServer() {
     )
   ).pipe(Layer.provideMerge(TestDatabase));
   const careers = plainCareers.pipe(Layer.provide(stores));
+  const productEvents = Layer.succeed(
+    ProductEvents,
+    ProductEvents.of({
+      capture: (id, event, properties) =>
+        Effect.sync(() => void events.push({ id, event, properties })),
+    })
+  );
+  // Imports read by a scripted model: the first line is the name.
+  const reader = fakeReader((text) => {
+    const reply = emptyReply();
+    const name = text.split('\n')[0] ?? null;
+    return {
+      ...reply,
+      resume: {
+        ...reply.resume,
+        basics: { ...reply.resume.basics, name, email: 'not an email' },
+      },
+    };
+  });
+  const importer = testImporter(reader.layer).pipe(
+    Layer.provide(Layer.merge(stores, productEvents))
+  );
   const profiles = Layer.mergeAll(Usernames.layer, Profiles.layer).pipe(
     Layer.provideMerge(Layer.mergeAll(github.layer(), stores))
   );
@@ -81,13 +108,7 @@ export function testServer() {
         profiles,
         RateLimiter.layer,
         gists.layer,
-        Layer.succeed(
-          ProductEvents,
-          ProductEvents.of({
-            capture: (id, event, properties) =>
-              Effect.sync(() => void events.push({ id, event, properties })),
-          })
-        ),
+        productEvents,
         Layer.succeed(
           Mailer,
           Mailer.of({
@@ -114,6 +135,7 @@ export function testServer() {
   );
   const app = apiRoutes('test').pipe(
     Layer.provide(careers),
+    Layer.provide(importer),
     Layer.provide(services),
     Layer.provide(HttpServer.layerServices)
   );
@@ -125,7 +147,11 @@ export function testServer() {
   const fetch = async (path: string, init: RequestInit = {}) => {
     const headers = new Headers(init.headers);
     headers.set('cookie', [...jar].map(([k, v]) => `${k}=${v}`).join('; '));
-    if (init.body && !headers.has('content-type'))
+    if (
+      init.body &&
+      !(init.body instanceof FormData) &&
+      !headers.has('content-type')
+    )
       headers.set('content-type', 'application/json');
     headers.set('user-agent', 'Mozilla/5.0 (X11; Linux x86_64) Firefox/130.0');
     const response = await handler(
@@ -150,6 +176,7 @@ export function testServer() {
     jar,
     mail,
     events,
+    modelCalls: reader.calls,
     github,
     gists: gists.state,
     identities,

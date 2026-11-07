@@ -17,6 +17,7 @@ it('applies every migration to an empty database', async () => {
     'career_moves',
     'email_tokens',
     'embeddings',
+    'imports',
     'job_fits',
     'job_marks',
     'job_requirements',
