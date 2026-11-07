@@ -43,14 +43,17 @@ export function HomeHero() {
     <Hero
       eyebrow="The open resume standard"
       title="Your resume, as data."
-      lede="Write your career once in JSON, then publish it as a website, a PDF or anything else you can build. Open source and free, since 2014."
+      lede="Write your career once, or bring the resume you have, and publish it as a website, a PDF, a Word file or anything else you can build. Open source and free, since 2014."
       actions={
         <>
           <Button asChild variant="primary" size="lg">
-            <SiteLink href={paths.gettingStarted}>Get started</SiteLink>
+            <SiteLink href={paths.start}>Make your resume</SiteLink>
           </Button>
           <Button asChild size="lg">
             <SiteLink href={paths.themes}>Browse themes</SiteLink>
+          </Button>
+          <Button asChild variant="ghost" size="lg">
+            <SiteLink href={paths.gettingStarted}>For developers</SiteLink>
           </Button>
         </>
       }

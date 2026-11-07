@@ -91,5 +91,13 @@ export class ImportApi extends HttpApiGroup.make('import').add(
       ImportFailed,
       TooManyAttempts,
     ],
+  }),
+  // The start page's preview: an unsaved resume in a theme, before sign-up.
+  HttpApiEndpoint.post('preview', '/import/preview', {
+    payload: Schema.Struct({ resume: Schema.Unknown, theme: Schema.String }),
+    success: Schema.String.pipe(
+      HttpApiSchema.asText({ contentType: 'text/html' })
+    ),
+    error: TooManyAttempts,
   })
 ) {}

@@ -313,6 +313,9 @@ importers:
       '@effect/vitest':
         specifier: 4.0.6
         version: 4.0.6(effect@4.0.6)(vitest@3.2.6)
+      '@playwright/test':
+        specifier: 1.56.1
+        version: 1.56.1
       '@repo/eslint-config-custom':
         specifier: workspace:*
         version: link:../../packages/eslint-config-custom
