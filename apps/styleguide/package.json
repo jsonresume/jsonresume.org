@@ -9,7 +9,8 @@
     "start": "next start --port 3005",
     "generate": "node scripts/generate.mjs",
     "typecheck": "pnpm generate && tsc --noEmit",
-    "lint": "eslint . --ext .ts,.tsx"
+    "lint": "eslint . --ext .ts,.tsx",
+    "test": "vitest run"
   },
   "dependencies": {
     "@jsonresume/ui": "workspace:*",
@@ -27,6 +28,7 @@
     "@types/react-dom": "^19.2.2",
     "@vanilla-extract/next-plugin": "^2.5.2",
     "react-docgen-typescript": "^2.4.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.6"
   }
 }

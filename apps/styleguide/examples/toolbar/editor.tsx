@@ -3,11 +3,12 @@
 import {
   Toolbar,
   ToolbarButton,
+  ToolbarLink,
   ToolbarSeparator,
   ToolbarToggleGroup,
   ToolbarToggleItem,
 } from '@jsonresume/ui';
-import { Download, Eye, Redo2, Undo2, Wand2 } from 'lucide-react';
+import { Download, ExternalLink, Eye, Redo2, Undo2, Wand2 } from 'lucide-react';
 
 export default function ToolbarEditor() {
   return (
@@ -37,6 +38,10 @@ export default function ToolbarEditor() {
       <ToolbarButton>
         <Download aria-hidden="true" /> Export
       </ToolbarButton>
+      {/* Navigation in a toolbar is a ToolbarLink: same look, a real link. */}
+      <ToolbarLink href="https://jsonresume.org/@thomasdavis">
+        <ExternalLink aria-hidden="true" /> View page
+      </ToolbarLink>
     </Toolbar>
   );
 }

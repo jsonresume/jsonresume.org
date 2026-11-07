@@ -277,6 +277,7 @@ export const componentDocs: ComponentDoc[] = [
     accessibility: [
       'A skip link jumps to main. The navigation is a named landmark and marks the current page with aria-current.',
       'The small-screen menu is a dialog titled "Navigation" and closes when a link is followed.',
+      'On phones the menu button and account menu are 44px targets, the account menu shows the avatar alone (still named), and AppPage actions move under the title, sharing a row at 44px tall.',
     ],
   },
   {
@@ -302,9 +303,17 @@ export const componentDocs: ComponentDoc[] = [
     group: 'Site',
     summary:
       'The "JSON Resume" wordmark in Ubuntu Bold, optionally with the document mark.',
-    components: ['Logo'],
+    components: ['Logo', 'LogoMark'],
     defaults: { size: 'md' },
-    examples: [{ id: 'sizes', title: 'Sizes and mark' }],
+    examples: [
+      { id: 'sizes', title: 'Sizes and mark' },
+      {
+        id: 'mark',
+        title: 'The mark alone',
+        description:
+          'LogoMark is 1.25em and takes currentColor: an app icon, or a small sign beside text.',
+      },
+    ],
     guidelines: {
       do: [
         'Keep the wordmark black on yellow or white.',
@@ -317,6 +326,34 @@ export const componentDocs: ComponentDoc[] = [
     },
     accessibility: [
       'The mark is decorative; the link name is the wordmark text.',
+    ],
+  },
+  {
+    slug: 'skip-link',
+    name: 'Skip link',
+    group: 'Site',
+    summary:
+      'The first thing on every page: a link, hidden until focused, that jumps past the header to the content.',
+    components: ['SkipLink'],
+    examples: [
+      {
+        id: 'page',
+        title: 'Hidden until focused',
+        description:
+          'Tab into the frame, or press the button, to see it. It goes to #main unless href says otherwise.',
+        block: true,
+      },
+    ],
+    guidelines: {
+      do: [
+        'Render it first in the body, before the header.',
+        'Give the target an id and tabIndex={-1} so focus moves there, as AppShell does with #app-main.',
+      ],
+      dont: ['Hide it with display: none; it must stay focusable.'],
+    },
+    accessibility: [
+      'Slides into view on focus, above everything else, in inverse colours with the focus ring.',
+      'Its frame needs position: relative (the page usually is).',
     ],
   },
   {
@@ -558,6 +595,34 @@ export const componentDocs: ComponentDoc[] = [
       'The label is a real <label for>.',
       'Hint and error are linked with aria-describedby; errors set aria-invalid.',
       'Required fields set the required attribute; the asterisk is hidden from screen readers.',
+    ],
+  },
+  {
+    slug: 'label',
+    name: 'Label',
+    group: 'Forms',
+    summary:
+      'The form label on its own, for layouts Field cannot make: a control beside its label, or a custom control.',
+    components: ['Label'],
+    examples: [
+      {
+        id: 'standalone',
+        title: 'Beside and above a control',
+        description:
+          'Wire it up yourself: htmlFor matches the control id, and aria-describedby points at any hint.',
+        block: true,
+      },
+    ],
+    guidelines: {
+      do: [
+        'Reach for Field first; it wires the id, hint and error for you.',
+        'Keep labels short nouns: "Website", "Sort by".',
+      ],
+      dont: ['Leave htmlFor off: a label that is not linked names nothing.'],
+    },
+    accessibility: [
+      "A real <label>: clicking it focuses the control, and its text is the control's accessible name.",
+      'Hints and errors are not linked automatically outside Field; add aria-describedby.',
     ],
   },
   {
@@ -811,7 +876,10 @@ export const componentDocs: ComponentDoc[] = [
     components: ['Tooltip'],
     examples: [{ id: 'basic', title: 'Basic' }],
     guidelines: {
-      do: ['Use for supplementary hints only.'],
+      do: [
+        'Use for supplementary hints only.',
+        'Wrap the app in one TooltipProvider, as this site does in its root layout.',
+      ],
       dont: ['Put essential information or links in a tooltip.'],
     },
     accessibility: [
@@ -895,6 +963,12 @@ export const componentDocs: ComponentDoc[] = [
         title: 'Options',
         description: 'Checkbox items keep the menu open while toggling.',
       },
+      {
+        id: 'groups',
+        title: 'Groups and links',
+        description:
+          'DropdownMenuGroup gathers items under a label. asChild renders an item as the link it wraps.',
+      },
     ],
     guidelines: {
       do: [
@@ -918,7 +992,16 @@ export const componentDocs: ComponentDoc[] = [
     summary:
       'An anchored panel for rich content: details, small forms, quick filters.',
     components: ['PopoverContent'],
-    examples: [{ id: 'details', title: 'Details on demand' }],
+    examples: [
+      { id: 'details', title: 'Details on demand' },
+      {
+        id: 'anchor',
+        title: 'Anchored to a row, with a close button',
+        description:
+          'PopoverAnchor positions the panel against something other than the trigger. PopoverClose closes it from inside.',
+        block: true,
+      },
+    ],
     guidelines: {
       do: [
         'Use for content richer than a sentence.',
@@ -1093,7 +1176,7 @@ export const componentDocs: ComponentDoc[] = [
     group: 'Forms',
     summary:
       'Facet filters together, with active-filter chips, a result count and Clear all.',
-    components: ['FilterBar', 'Chip'],
+    components: ['FilterBar'],
     examples: [{ id: 'jobs', title: 'Job board filters', block: true }],
     guidelines: {
       do: [
@@ -1105,6 +1188,42 @@ export const componentDocs: ComponentDoc[] = [
     accessibility: [
       'A named region; the result count is announced politely.',
       'Each chip has a "Remove <filter>" button.',
+    ],
+  },
+  {
+    slug: 'chip',
+    name: 'Chip',
+    group: 'Forms',
+    summary:
+      'A small value on a quiet pill: an active filter or a tag, with an optional remove button.',
+    components: ['Chip'],
+    examples: [
+      {
+        id: 'removable',
+        title: 'Removable',
+        description:
+          'onRemove adds the button. When the content is more than plain text, label names it for the button.',
+      },
+      {
+        id: 'read-only',
+        title: 'Read-only',
+        description: 'Without onRemove a chip only shows a value.',
+        block: true,
+      },
+    ],
+    guidelines: {
+      do: [
+        'Name chips by the value ("Remote"), not the field ("Location: Remote").',
+        'Put a list of read-only chips in a <ul>.',
+      ],
+      dont: [
+        'Use a chip as a button or a link: use Button, or ChipGroup to choose between options.',
+        'Rely on chips alone to show what a filter does; the result count changes with them.',
+      ],
+    },
+    accessibility: [
+      'The remove button is named "Remove <label>"; its icon is hidden.',
+      'Move focus somewhere sensible after a remove, such as the next chip or the filter it came from.',
     ],
   },
   {
@@ -1311,7 +1430,7 @@ export const componentDocs: ComponentDoc[] = [
     name: 'Stat tile',
     group: 'Data display',
     summary: 'A key number with its label and how it changed.',
-    components: ['StatTile', 'Sparkline'],
+    components: ['StatTile'],
     examples: [
       { id: 'dashboard', title: 'Dashboard', block: true },
       {
@@ -1329,6 +1448,43 @@ export const componentDocs: ComponentDoc[] = [
     accessibility: [
       'A labelled group; the trend arrow is decorative and the change is spoken as "Up 12%".',
       'lowerIsBetter flips which direction reads as good.',
+    ],
+  },
+  {
+    slug: 'sparkline',
+    name: 'Sparkline',
+    group: 'Data display',
+    summary:
+      'A word-sized trend line beside a number: context in gray, the latest point in the accent.',
+    components: ['Sparkline'],
+    examples: [
+      {
+        id: 'inline',
+        title: 'In a table',
+        description:
+          'The number carries the value; the line shows which way it is heading.',
+        block: true,
+      },
+      {
+        id: 'sizes',
+        title: 'Sizes',
+        description:
+          'width and height set the drawing in pixels. The line fills the height between the lowest and highest value, so a flat series draws level. Fewer than two values draw nothing.',
+      },
+    ],
+    guidelines: {
+      do: [
+        'Put the number it summarises right beside it.',
+        'Use the same time span for every sparkline in a set.',
+      ],
+      dont: [
+        'Compare sparklines by height: each one scales to its own range.',
+        'Use one where the exact values matter: use LineChart or TimeSeriesChart.',
+      ],
+    },
+    accessibility: [
+      'Decorative (aria-hidden): say the trend in text too, as StatTile does with "Up 12%".',
+      'The line and dot use the chart tokens, so they follow light and dark.',
     ],
   },
   {
@@ -1580,10 +1736,18 @@ export const componentDocs: ComponentDoc[] = [
     components: [
       'Toolbar',
       'ToolbarButton',
+      'ToolbarLink',
       'ToolbarToggleGroup',
       'ToolbarToggleItem',
     ],
-    examples: [{ id: 'editor', title: 'Resume editor' }],
+    examples: [
+      {
+        id: 'editor',
+        title: 'Resume editor',
+        description:
+          'Buttons, a toggle group and, for navigation, a ToolbarLink.',
+      },
+    ],
     accessibility: [
       'One Tab stop: arrow keys move between controls (roving focus).',
       'Icon-only buttons need aria-label.',
