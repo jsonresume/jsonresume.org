@@ -54,7 +54,6 @@ export function render(resume, options = {}) {
       aside[class] { padding: 20px 16px; min-width: 0; }
       main[class] { padding: 20px 22px; min-width: 0; }
       h1[class] { font-size: 28pt; }
-      h1, h2, h3, h4 { break-inside: avoid; break-after: avoid; }
       h1, h2, h3, p, li, a { overflow-wrap: anywhere; }
     }
   `;

@@ -1314,7 +1314,7 @@ const PRINT_DEFAULTS = `<style data-jsonresume-core-print>
 @media print{
 body,h1,h2,h3,h4,p,li,a{overflow-wrap:anywhere}
 :where(main,aside,section,article,header,div){min-width:0}
-h1,h2,h3,h4,h5,h6{break-after:avoid}
+h1,h2,h3,h4,h5,h6{break-inside:avoid;break-after:avoid}
 p,li{orphans:2;widows:2}
 }
 </style>`;
@@ -6579,7 +6579,6 @@ function render(resume) {
   return renderResumeDocument(/* @__PURE__ */ jsx(Resume, { resume }), {
     fonts: ["IBM Plex Sans:wght@400;500;600;700"],
     title,
-    headAfterStyles: "<style>@media print{h1,h2,h3,h4{break-inside:avoid;break-after:avoid}}</style>",
     includeTokensCss: false
   });
 }

@@ -20,8 +20,12 @@ export function render(resume) {
         padding: 0;
       }
       @page {
-        margin: 0.5cm;
+        margin: 12mm;
       }
+      body > div[class] { grid-template-columns: minmax(0, .35fr) minmax(0, .65fr); gap: 6mm; padding: 0; }
+      aside[class], main[class] { display: block; min-width: 0; }
+      aside[class] { padding: 5mm 3mm; }
+      aside[class] > *, main[class] > * { margin-bottom: 6mm; }
     }
   </style>`,
     lang: 'en',

@@ -25,6 +25,8 @@ It rejects missing required content, missing files, nearly blank pages, text
 within 10 points of a sheet edge, and incorrect page dimensions. Older designs
 that omit an optional field are checked against their rendered HTML; they cannot
 silently drop a work entry or narrative paragraph supplied by their HTML renderer.
+Column-aware streams distinguish a paragraph continuing across pages from actual
+content loss; marker indices are checked exactly, so entry 10 cannot mask entry 1.
 
 `--render` renders complete and dense A4 PDFs and creates per-theme contact
 sheets for visual review. `--render-all` renders every fixture and paper size.

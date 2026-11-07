@@ -10,7 +10,6 @@
 'jsonresume-theme-art-deco': patch
 'jsonresume-theme-art-school-modern': patch
 'jsonresume-theme-asymmetric-timeline': patch
-'jsonresume-theme-australian-professional': patch
 'jsonresume-theme-berlin-grid': patch
 'jsonresume-theme-bold-header-statement': patch
 'jsonresume-theme-brutalist': patch
@@ -36,7 +35,6 @@
 'jsonresume-theme-minimalist-grid': patch
 'jsonresume-theme-modern-classic': patch
 'jsonresume-theme-monochrome-noir': patch
-'jsonresume-theme-musician-repertoire': patch
 'jsonresume-theme-new-york-editorial': patch
 'jsonresume-theme-nordic-minimal': patch
 'jsonresume-theme-operations-precision': patch

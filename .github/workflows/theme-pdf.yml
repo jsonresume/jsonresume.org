@@ -54,7 +54,9 @@ jobs:
       - name: Print every registered theme through the live exporter implementation
         run: node scripts/verify-all-theme-pdfs.ts --exporter
       - name: Check every page for content, clipping, blank pages and paper size
-        run: python3 scripts/check-all-theme-pdfs.py
+        run: |
+          python3 -m unittest discover -s scripts -p 'test_theme_pdf_content.py'
+          python3 scripts/check-all-theme-pdfs.py
       - uses: actions/upload-artifact@v6
         if: failure()
         with:

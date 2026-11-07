@@ -1,14 +1,12 @@
 """Check every exported page and render compact per-theme visual review sheets."""
 import json
 import math
-import re
 import subprocess
 import sys
-import unicodedata
 import xml.etree.ElementTree as ET
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
-from html.parser import HTMLParser
+from theme_pdf_content import DocumentText, column_streams, contains_content, normalise
 
 from PIL import Image, ImageDraw
 
@@ -28,39 +26,13 @@ EXPECTED = {
 }
 
 
-def normalise(value):
-    return re.sub(r'\s+', '', unicodedata.normalize('NFKC', value)).replace('\u00ad', '').casefold()
-
-
-class DocumentText(HTMLParser):
-    """Exclude CSS and structured data, which are not printed document content."""
-    def __init__(self, html):
-        super().__init__(convert_charrefs=True)
-        self.skip, self.parts = 0, []
-        self.feed(html)
-
-    def handle_starttag(self, tag, attrs):
-        if tag == 'body':
-            self.skip = 0
-        elif tag in ('head', 'script', 'style', 'noscript'):
-            self.skip += 1
-
-    def handle_endtag(self, tag):
-        if tag in ('head', 'script', 'style', 'noscript'):
-            self.skip = max(0, self.skip - 1)
-
-    def handle_data(self, data):
-        if not self.skip:
-            self.parts.append(data)
-
-
 def check_folder(folder):
     results, tiles, probes = [], [], {}
     for pdf in sorted(folder.glob('*.pdf')):
         fixture, paper = pdf.stem.rsplit('-', 1)
         issues = []
         extracted = subprocess.check_output(['pdftotext', '-raw', str(pdf), '-'], text=True, stderr=subprocess.DEVNULL)
-        text = normalise(extracted)
+        missing = []
         html = normalise(''.join(DocumentText((folder / f'{fixture}.html').read_text()).parts))
         for sentinel in EXPECTED[fixture]:
             if sentinel.startswith('NARRATIVE-') and normalise(sentinel) not in html:
@@ -69,15 +41,21 @@ def check_folder(folder):
             # must preserve what their renderer actually supplies.
             if fixture in ('complete', 'wrapping') and normalise(sentinel) not in html:
                 continue
-            if normalise(sentinel) not in text:
-                issues.append(f'Missing content: {sentinel}')
+            if not contains_content(sentinel, extracted):
+                missing.append(sentinel)
         bbox = subprocess.check_output(['pdftotext', '-bbox', str(pdf), '-'], stderr=subprocess.DEVNULL)
         pages = [node for node in ET.fromstring(bbox).iter() if node.tag.endswith('}page')]
+        streams = list(column_streams(pages)) if missing else []
+        for sentinel in missing:
+            # A long heading should stay together, even if its fragments can
+            # be recovered. Paragraphs may legitimately continue across pages.
+            if sentinel.startswith('DistributedInternational') or not any(contains_content(sentinel, stream) for stream in streams):
+                issues.append(f'Missing or fragmented content: {sentinel}')
         smallest = 100
         heights = {word: [] for word in ('postgresql', 'typescript', 'kubernetes')}
         for number, page in enumerate(pages, 1):
             words = [node for node in page.iter() if node.tag.endswith('}word')]
-            if sum(len(word.text or '') for word in words) < (3 if fixture == 'sparse' else 15):
+            if sum(len(word.text or '') for word in words) < (3 if fixture == 'sparse' and number == 1 else 15):
                 issues.append(f'Nearly blank page {number}')
             width, height = float(page.attrib['width']), float(page.attrib['height'])
             expected_width, expected_height = (595.28, 841.89) if paper == 'A4' else (612, 792)
