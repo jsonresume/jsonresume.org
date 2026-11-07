@@ -10,6 +10,7 @@ import { TreeHandlers, TreeToolkit } from './treeTools';
 import { McpActor, McpCaller } from './context';
 import { ExploreHandlers, ExploreToolkit } from './exploreTools';
 import { ExportHandlers, ExportToolkit } from './exportTools';
+import { DirectoryHandlers, DirectoryToolkit } from './directoryTools';
 import { ImportHandlers, ImportToolkit } from './importTools';
 import { PrivacyHandlers, PrivacyToolkit } from './privacyTools';
 import { JobHandlers, JobToolkit } from './jobTools';
@@ -126,6 +127,7 @@ export const mcpRoutes = (site: string = SITE) =>
     McpServer.toolkit(ExploreToolkit).pipe(Layer.provide(ExploreHandlers)),
     McpServer.toolkit(JobToolkit).pipe(Layer.provide(JobHandlers)),
     McpServer.toolkit(AppToolkit).pipe(Layer.provide(AppHandlers)),
+    McpServer.toolkit(DirectoryToolkit).pipe(Layer.provide(DirectoryHandlers)),
     McpServer.toolkit(TreeToolkit).pipe(Layer.provide(TreeHandlers)),
     McpServer.toolkit(VersionToolkit).pipe(Layer.provide(VersionHandlers)),
     Prompts

@@ -148,3 +148,8 @@ export const privacyAtom = ApiClient.query('account', 'privacy', {
 export const setPrivacyAtom = ApiClient.mutation('account', 'setPrivacy');
 /** Sets the page's theme from the gallery (a new version). */
 export const setThemeAtom = ApiClient.mutation('account', 'setTheme');
+
+/** List an OAuth app of yours in the public directory (/apps). */
+export const setAppListingAtom = ApiClient.mutation('oauthApps', 'setListing');
+/** The public apps directory. */
+export const appsDirectoryAtom = ApiClient.query('appsDirectory', 'list', {});

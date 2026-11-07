@@ -91,4 +91,15 @@ export const laterMigrations: Record<
         ADD COLUMN hidden_fields text[] NOT NULL DEFAULT '{}'
     `;
   }),
+
+  // The apps directory (/apps): OAuth apps their owners list, with a line
+  // about what each does.
+  '18_app_directory': Effect.gen(function* () {
+    const sql = yield* SqlClient.SqlClient;
+    yield* sql`
+      ALTER TABLE app.oauth_clients
+        ADD COLUMN listed boolean NOT NULL DEFAULT false,
+        ADD COLUMN description text
+    `;
+  }),
 };

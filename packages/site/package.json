@@ -11,6 +11,7 @@
     "./projects": "./src/pages/ProjectsPage.tsx",
     "./team": "./src/pages/TeamPage.tsx",
     "./themes": "./src/pages/ThemesPage.tsx",
+    "./apps": "./src/pages/apps/AppsPage.tsx",
     "./theme": "./src/pages/themes/ThemePage.tsx",
     "./getting-started": "./src/pages/getting-started/GettingStartedPage.tsx",
     "./schema": "./src/pages/schema/SchemaPage.tsx",

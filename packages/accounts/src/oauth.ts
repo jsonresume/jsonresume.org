@@ -3,6 +3,7 @@ import { Clock, Context, Effect, Layer } from 'effect';
 import { SqlClient } from 'effect/sql';
 import { randomBytes } from 'node:crypto';
 import { hashToken, newToken } from './crypto';
+import { directoryQueries } from './appDirectory';
 import { appQueries } from './oauthApps';
 import { clientQueries, defaultScope } from './oauthClients';
 import { connectionQueries } from './oauthConnections';
@@ -149,5 +150,6 @@ const make = Effect.gen(function* () {
     ...tokenQueries(sql, clients),
     ...connectionQueries(sql),
     ...appQueries(sql),
+    ...directoryQueries(sql),
   };
 });

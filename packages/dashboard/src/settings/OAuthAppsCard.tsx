@@ -20,6 +20,7 @@ import {
 import { Exit } from 'effect';
 import { AsyncResult } from 'effect/reactivity';
 import { useState } from 'react';
+import { AppListing } from './AppListing';
 import { NewOAuthAppForm, type MadeApp } from './NewOAuthAppForm';
 import * as s from './settings.css';
 
@@ -113,6 +114,7 @@ export function OAuthAppsCard() {
                         Delete
                       </Button>
                     </Stack>
+                    <AppListing app={app} />
                   </li>
                 ))}
               </ul>

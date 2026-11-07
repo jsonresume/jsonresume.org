@@ -37,6 +37,7 @@ export const paths = {
       ? `/dashboard/pathways?ask=${encodeURIComponent(ask)}`
       : '/dashboard/pathways',
   explore: '/explore',
+  apps: '/apps',
   timeline: (username: string) => `/@${username}/timeline`,
   dashboardResume: '/dashboard/resume',
   dashboardEditor: '/dashboard/editor',
@@ -99,6 +100,7 @@ export const footerGroups: NavGroup[] = [
       { label: 'Schema', href: paths.schema },
       { label: 'Themes', href: paths.themes },
       { label: 'Explore resumes', href: paths.explore },
+      { label: 'Apps', href: paths.apps },
       { label: 'Jobs', href: paths.jobs },
     ],
   },

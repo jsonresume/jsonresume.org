@@ -14,6 +14,8 @@ const AppRow = Schema.Struct({
   redirect_uris: Schema.Array(Schema.String),
   created_at: Schema.Date,
   users: Schema.Number,
+  listed: Schema.Boolean,
+  description: Schema.NullOr(Schema.String),
 });
 const decode = Schema.decodeUnknownEffect(Schema.Array(AppRow));
 
@@ -25,6 +27,9 @@ export interface OAuthAppRecord {
   createdAt: Date;
   /** People with the app connected now. */
   users: number;
+  /** In the public apps directory (/apps), with this line about it. */
+  listed: boolean;
+  description: string | null;
 }
 
 export interface OAuthAppInput {
@@ -69,7 +74,7 @@ const checkInput = (input: OAuthAppInput) =>
 export const appQueries = (sql: SqlClient.SqlClient) => {
   const list = (ownerId: string, id?: string) =>
     sql`
-      SELECT c.id, c.name, c.homepage, c.redirect_uris, c.created_at,
+      SELECT c.id, c.name, c.homepage, c.redirect_uris, c.created_at, c.listed, c.description,
              (SELECT count(DISTINCT t.user_id)::int FROM app.oauth_tokens t WHERE t.client_id = c.id) AS users
       FROM app.oauth_clients c
       WHERE c.owner_id = ${ownerId} ${id ? sql`AND c.id = ${id}` : sql``}
@@ -157,4 +162,6 @@ const toRecord = (row: typeof AppRow.Type): OAuthAppRecord => ({
   redirectUris: row.redirect_uris,
   createdAt: row.created_at,
   users: row.users,
+  listed: row.listed,
+  description: row.description,
 });

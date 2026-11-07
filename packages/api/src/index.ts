@@ -9,7 +9,7 @@ import { ImportApi } from './ImportApi';
 import { ExploreApi, MyListingApi } from './ExploreApi';
 import { KeysApi } from './KeysApi';
 import { OAuthApi, OAuthConsentApi } from './OAuthApi';
-import { OAuthAppsApi } from './OAuthAppsApi';
+import { AppsDirectoryApi, OAuthAppsApi } from './OAuthAppsApi';
 import { OAuthResourceApi } from './OAuthResourceApi';
 import { ResumeVersionsApi } from './ResumeVersionsApi';
 import { JobsApi, MyJobsApi } from './JobsApi';
@@ -89,7 +89,13 @@ export {
   OAuthConsentApi,
   OAuthError,
 } from './OAuthApi';
-export { OAuthApp, OAuthAppInput, OAuthAppsApi } from './OAuthAppsApi';
+export {
+  AppListing,
+  AppsDirectoryApi,
+  OAuthApp,
+  OAuthAppInput,
+  OAuthAppsApi,
+} from './OAuthAppsApi';
 export {
   CurrentGrant,
   InsufficientScope,
@@ -162,6 +168,7 @@ export class JsonResumeApi extends HttpApi.make('jsonresume')
   .add(OAuthApi)
   .add(OAuthConsentApi)
   .add(OAuthAppsApi)
+  .add(AppsDirectoryApi)
   .add(OAuthResourceApi)
   .prefix('/api')
   .annotateMerge(OpenApi.annotations({ title: 'JSON Resume API' })) {}
