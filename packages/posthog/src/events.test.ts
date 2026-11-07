@@ -41,6 +41,15 @@ describe('browserOptions', () => {
   it('adds the country to every event when it is known', () => {
     const send = browserOptions('https://us.posthog.com', 'CA').before_send;
     expect(typeof send).toBe('function');
+    const sent =
+      typeof send === 'function'
+        ? send({ uuid: 'u', event: '$pageview', properties: { a: 1 } })
+        : null;
+    expect(sent?.properties).toEqual({
+      a: 1,
+      country: 'CA',
+      $geoip_country_code: 'CA',
+    });
     expect(countryOf('h=jsonresume.org\nloc=CA\ntls=TLSv1.3')).toBe('CA');
     expect(countryOf('')).toBeUndefined();
     expect(

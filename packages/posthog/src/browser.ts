@@ -23,10 +23,18 @@ export const browserOptions = (
   // Typing in the editor is resume text: never recorded.
   disable_session_recording: true,
   disable_surveys: true,
-  // Cookieless mode drops the address before PostHog could place it.
+  // Cookieless mode drops the address before PostHog could place it. The
+  // country goes in our own property and in PostHog's, for its world map.
   before_send: country
     ? (event) =>
-        event && { ...event, properties: { ...event.properties, country } }
+        event && {
+          ...event,
+          properties: {
+            ...event.properties,
+            country,
+            $geoip_country_code: country,
+          },
+        }
     : undefined,
 });
 
