@@ -19,6 +19,10 @@ You own your resume and anything else you put here. You give us permission to st
 
 You may use the API and the MCP server, yourself or through apps you connect, to manage your own account. Don't use them to get at other people's accounts, to overload the service, or to get around rate limits or access controls. Apps you connect act as you: you're responsible for what you let them do, and you can disconnect them at any time in Settings.
 
+## Reading public resumes with a program
+
+Public resumes are also available as files (`/@username.json`, `.yaml`, `.txt`, `.pdf`, `.docx`). A program reading more than 120 of them an hour from one address needs a free API key, made under Settings and sent as `Authorization: Bearer jr_…`; reads with a key are counted under its name, so people can see who reads their resume. Respect the people behind the resumes: don't use them for spam, or to build profiles they haven't agreed to, and honour what they keep off their page.
+
 ## Jobs
 
 Job posts come from Hacker News and belong to their authors. We tidy and match them to help you, but we don't check them and aren't party to any application or hiring. Apply the way each post asks, and check the details with the employer.
