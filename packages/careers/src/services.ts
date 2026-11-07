@@ -1,4 +1,5 @@
 import type { Seniority } from '@repo/api';
+import type { RunOptions } from '@repo/jobs';
 import { Context, type Effect } from 'effect';
 import type { Family } from './families';
 
@@ -92,7 +93,18 @@ export interface ResumeInsight {
  */
 export class ResumeInsights extends Context.Service<
   ResumeInsights,
-  { insight(resume: unknown): Effect.Effect<ResumeInsight> }
+  {
+    /**
+     * The insight, starting the reading if this version has none (or
+     * joining the one under way); waits up to `options.wait` (40 seconds by
+     * default) for it, else answers pending. An owned reading stops if the
+     * caller is interrupted.
+     */
+    insight(
+      resume: unknown,
+      options?: RunOptions
+    ): Effect.Effect<ResumeInsight>;
+  }
 >()('@repo/careers/ResumeInsights') {}
 
 export interface Requirement {

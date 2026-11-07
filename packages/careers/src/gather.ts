@@ -7,8 +7,8 @@ import { PlanStore } from './plans';
 import {
   CareerMoves,
   JobRoles,
-  ResumeInsights,
   SkillCatalog,
+  type ResumeInsight,
 } from './services';
 
 /** Jobs on the graph: the best fits, at least this fit. */
@@ -38,28 +38,38 @@ const FROM_KIND: Record<string, Family> = {
 };
 
 /**
- * Everything the career graph is built from, for a resume and its owner:
- * the resume read into evidence, the best-fitting jobs with the role in
- * each that fits and what it requires, role families, where people in the
- * current role went next, and the latest plan.
+ * Everything the career graph is built from, for a resume's insight and its
+ * owner: the best-fitting jobs with the role in each that fits and what it
+ * requires, role families, where people in the current role went next, and
+ * the latest plan. The lookups that don't depend on each other run at once.
  */
 export const gather = Effect.fn('Careers.gather')(function* (
   userId: string,
-  resume: unknown,
+  insight: ResumeInsight,
   ranked: ReadonlyArray<Ranked>,
   year: number
 ) {
-  const insights = yield* ResumeInsights;
   const roles = yield* JobRoles;
   const catalog = yield* SkillCatalog;
   const moves = yield* CareerMoves;
   const plans = yield* PlanStore;
 
-  const insight = yield* insights.insight(resume);
   const shown = ranked
     .filter((r) => r.mark !== 'not_interested' && r.score >= MIN_FIT)
     .slice(0, JOBS);
-  const roleMap = yield* roles.rolesOf(shown.map((r) => r.row.id));
+  const work = insight.entries.filter((e) => e.section === 'work' && e.family);
+  const current = work.find((e) => e.endYear === null) ?? work[0];
+  const [roleMap, next, plan, archetypes] = yield* Effect.all(
+    [
+      roles.rolesOf(shown.map((r) => r.row.id)),
+      current?.family && current.seniority
+        ? moves.from(current.family, current.seniority)
+        : Effect.succeed([]),
+      plans.latest(userId),
+      roles.archetypes,
+    ],
+    { concurrency: 'unbounded' }
+  );
   const unread = shown.filter((r) => !roleMap.get(r.row.id)?.length);
   const names = [
     ...new Set(unread.flatMap((r) => r.row.posting.skills.map((s) => s.name))),
@@ -88,18 +98,10 @@ export const gather = Effect.fn('Careers.gather')(function* (
     };
   });
 
-  const work = insight.entries.filter((e) => e.section === 'work' && e.family);
-  const current = work.find((e) => e.endYear === null) ?? work[0];
-  const next =
-    current?.family && current.seniority
-      ? yield* moves.from(current.family, current.seniority)
-      : [];
-  const plan = yield* plans.latest(userId);
-
   const input: GraphInputs = {
     insight,
     jobs,
-    archetypes: yield* roles.archetypes,
+    archetypes,
     destinations: next
       .slice(0, DESTINATIONS)
       .map((m) => ({ ...m, name: familyName(m.family) })),

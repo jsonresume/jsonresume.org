@@ -1,7 +1,8 @@
-import { Duration, Effect, Fiber, Option, Predicate, Schema } from 'effect';
+import { Duration, Effect, Option, Predicate, Schema } from 'effect';
 import { SqlClient } from 'effect/sql';
 import { createHash } from 'node:crypto';
 import { FIT_VERSION, JobFitter, type Fit, type FitJob } from './fitter';
+import { sharedRuns, type RunOptions } from './sharedRuns';
 
 const Cached = Schema.Struct({
   job_id: Schema.Number,
@@ -12,7 +13,7 @@ const Cached = Schema.Struct({
 const rows = Schema.decodeUnknownEffect(Schema.Array(Cached));
 
 /** How long a request waits for new fits before answering without them. */
-const WAIT = Duration.seconds(40);
+export const FIT_WAIT = Duration.seconds(40);
 
 /** The resume as the fitter reads it: everything but references and meta. */
 export const candidateText = (resume: unknown) => {
@@ -34,8 +35,8 @@ export const candidateText = (resume: unknown) => {
 export const fitStore = Effect.gen(function* () {
   const sql = yield* SqlClient.SqlClient;
   const fitter = yield* Effect.serviceOption(JobFitter);
-  // One judging run per resume at a time, shared by concurrent requests.
-  const running = new Map<string, Fiber.Fiber<void>>();
+  // One judging run per resume at a time, shared by everyone asking.
+  const runs = sharedRuns();
 
   const cached = (key: string, ids: ReadonlyArray<number>) =>
     sql`
@@ -82,13 +83,20 @@ export const fitStore = Effect.gen(function* () {
 
   /**
    * Fits of these jobs to the resume: those already judged, plus new ones
-   * if the model answers within WAIT (it keeps going after, for next time).
+   * if the model answers within `wait` (it keeps going after, for next
+   * time, unless owned and its owner stops), and whether it is still
+   * judging. Joins a run already judging this resume.
    */
   const fitsFor = Effect.fn('JobMatcher.fits')(function* (
     resume: unknown,
-    jobs: ReadonlyArray<FitJob>
+    jobs: ReadonlyArray<FitJob>,
+    options: RunOptions = { wait: FIT_WAIT }
   ) {
-    if (jobs.length === 0) return new Map<number, typeof Cached.Type>();
+    const none = {
+      fits: new Map<number, typeof Cached.Type>(),
+      judging: false,
+    };
+    if (jobs.length === 0) return none;
     const candidate = candidateText(resume);
     const key = createHash('sha256')
       .update(`${FIT_VERSION}\n${candidate}`)
@@ -96,18 +104,10 @@ export const fitStore = Effect.gen(function* () {
     const ids = jobs.map((j) => j.id);
     const have = yield* cached(key, ids);
     const missing = jobs.filter((j) => !have.has(j.id));
-    if (missing.length === 0 || Option.isNone(fitter)) return have;
-    let fiber = running.get(key);
-    if (!fiber) {
-      const started = yield* judge(key, candidate, missing).pipe(
-        Effect.ensuring(Effect.sync(() => running.delete(key))),
-        Effect.forkDetach
-      );
-      running.set(key, started);
-      fiber = started;
-    }
-    yield* Fiber.join(fiber).pipe(Effect.timeoutOption(WAIT));
-    return yield* cached(key, ids);
+    if (missing.length === 0 || Option.isNone(fitter))
+      return { fits: have, judging: false };
+    const state = yield* runs.run(key, judge(key, candidate, missing), options);
+    return { fits: yield* cached(key, ids), judging: state !== 'done' };
   });
 
   return { fitsFor };

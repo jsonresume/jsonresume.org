@@ -19,6 +19,7 @@ export {
   CareerNode,
   CareerNodeKind,
   CareerView,
+  CareerWait,
   PathwayPlan,
   PlanNotFound,
   PlanStep,

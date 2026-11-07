@@ -6,18 +6,19 @@ import {
   GithubOAuth,
   Mailer,
   RateLimiter,
+  ResumeSaved,
 } from '@repo/accounts';
 import { PgAccountStore } from '@repo/accounts/sql';
 import { Analytics } from '@repo/analytics';
 import { PgAnalyticsStore } from '@repo/analytics/sql';
-import { CareersLive } from '@repo/careers';
+import { CareerGraphs, CareersLive } from '@repo/careers';
 import { Explore } from '@repo/explore';
 import { JobBoard, JobMatcher, OpenAiJobs } from '@repo/jobs';
 import { Copilot } from '@repo/pathways';
 import { GithubGists, Profiles, Usernames } from '@repo/profiles';
 import { ResumePdf } from '@repo/resume-pdf';
 import { PgProfileStore } from '@repo/profiles/sql';
-import { Layer } from 'effect';
+import { Effect, Layer } from 'effect';
 import type { SqlClient } from 'effect/sql';
 import { ProductEvents } from '@repo/posthog';
 
@@ -42,6 +43,20 @@ export const appServices = <E>(
   const profiles = Layer.mergeAll(Profiles.layer, Usernames.layer).pipe(
     Layer.provideMerge(Layer.mergeAll(GithubGists.layer, stores))
   );
+  // The career graph: on the matcher, with OpenAI's embeddings for skills.
+  const careers = CareersLive.pipe(
+    Layer.provide(Layer.mergeAll(stores, OpenAiJobs, database))
+  );
+  // A saved resume starts the career graph's model work once saves settle.
+  const prepareOnSave = Layer.effect(
+    ResumeSaved,
+    Effect.gen(function* () {
+      const graphs = yield* CareerGraphs;
+      return ResumeSaved.of({
+        saved: (userId, resume) => graphs.prepare(userId, resume, 'saved'),
+      });
+    })
+  ).pipe(Layer.provide(careers));
   const accounts = Layer.mergeAll(Accounts.layer, Analytics.layer).pipe(
     Layer.provideMerge(
       Layer.mergeAll(
@@ -49,13 +64,10 @@ export const appServices = <E>(
         RateLimiter.layer,
         GistFiles.layer,
         Mailer.layer,
-        GithubOAuth.layer
+        GithubOAuth.layer,
+        prepareOnSave
       )
     )
-  );
-  // The career graph: on the matcher, with OpenAI's embeddings for skills.
-  const careers = CareersLive.pipe(
-    Layer.provide(Layer.mergeAll(stores, OpenAiJobs, database))
   );
   // Pathways' copilot uses every MCP tool, so everything above.
   return Layer.mergeAll(

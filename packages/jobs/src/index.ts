@@ -9,7 +9,9 @@ export { fitLimit, resumeLevel } from './level';
 export { JobParser, ParseFailed } from './parser';
 export { decodePosting, embeddingText, Posting } from './posting';
 export { postParagraphs, postText } from './postText';
+export { candidateText } from './fits';
 export { resumeText } from './resumeText';
+export { sharedRuns, type RunOptions, type RunState } from './sharedRuns';
 export { JobStore, MAX_PARSE_ATTEMPTS, type NewPost } from './store';
 export {
   defaults as pipelineDefaults,
