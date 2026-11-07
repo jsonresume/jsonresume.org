@@ -211,6 +211,22 @@ export const sheet = recipe({
         borderStartStartRadius: radius.lg,
         borderStartEndRadius: radius.lg,
       },
+      // The whole screen on phones; a large centred panel from md up.
+      full: {
+        inset: 0,
+        animationName: pop,
+        selectors: {
+          '&[data-state="closed"]': { animationName: popOut },
+        },
+        '@media': {
+          [media.md]: {
+            inset: space[6],
+            border: `1px solid ${color.border.subtle}`,
+            borderRadius: radius.lg,
+            overflow: 'hidden',
+          },
+        },
+      },
     },
   },
   defaultVariants: { side: 'right' },

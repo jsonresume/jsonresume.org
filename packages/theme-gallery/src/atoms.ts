@@ -10,6 +10,9 @@ export const themeLayoutAtom = Atom.make<string | null>(null);
 export const themeColorAtom = Atom.make<string | null>(null);
 export const themeSortAtom = Atom.make<string | null>(null);
 
+/** The theme open in the preview, or null when it is closed. */
+export const themeOpenAtom = Atom.make<string | null>(null);
+
 /** Themes matching the current query and tag. */
 export const visibleThemesAtom = Atom.make((get) =>
   filterThemes(themes, {

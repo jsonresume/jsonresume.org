@@ -17,8 +17,8 @@ export const SheetClose = DialogPrimitive.Close;
 
 export interface SheetContentProps
   extends ComponentPropsWithoutRef<typeof DialogPrimitive.Content> {
-  /** Edge the sheet slides in from. */
-  side?: 'right' | 'left' | 'bottom';
+  /** Edge the sheet slides in from, or full: the screen on phones, a large centred panel on wider screens. */
+  side?: 'right' | 'left' | 'bottom' | 'full';
   closeLabel?: string;
 }
 

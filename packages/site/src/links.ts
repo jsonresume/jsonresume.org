@@ -36,6 +36,7 @@ export const paths = {
   explore: '/explore',
   timeline: (username: string) => `/@${username}/timeline`,
   dashboardResume: '/dashboard/resume',
+  dashboardEditor: '/dashboard/editor',
   dashboardSettings: '/dashboard/settings',
 } as const;
 
@@ -55,6 +56,10 @@ export const resumeUrl = (username: string, extension?: string) =>
 /** Live preview of a theme, rendered from a real resume hosted here. */
 export const themePreviewUrl = (slug: string) =>
   `${resumeUrl('thomasdavis')}?theme=${encodeURIComponent(slug)}`;
+
+/** The theme open in the gallery's preview, where the rest are a click away. */
+export const themeInGalleryUrl = (slug: string) =>
+  `${paths.themes}?theme=${encodeURIComponent(slug)}`;
 
 /** Bump the revision when previews change: static images are cached for a day. */
 export const themeImageUrl = (slug: string) =>

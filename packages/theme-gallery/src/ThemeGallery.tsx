@@ -1,4 +1,4 @@
-import { useAtom, useAtomValue } from '@effect/atom-react';
+import { useAtom, useAtomSet, useAtomValue } from '@effect/atom-react';
 import {
   ChipGroup,
   EmptyState,
@@ -19,12 +19,20 @@ import {
   themeLayoutAtom,
   themeColorAtom,
   themeSortAtom,
+  themeOpenAtom,
   visibleThemesAtom,
 } from './atoms';
 import { facetCounts, themes } from './catalog';
 import { ThemeControls } from './ThemeControls';
 import * as s from './gallery.css';
 import { ThemeGrid, type ThemeLinks } from './ThemeGrid';
+import { GalleryPreview } from './GalleryPreview';
+import type { ThemePreviewProps } from './ThemePreview';
+
+export interface ThemeGalleryProps extends ThemeLinks {
+  /** More in the preview, under the theme's description. */
+  details?: ThemePreviewProps['details'];
+}
 
 const styles = facetCounts(themes, 'style').map(({ value, count }) => ({
   value,
@@ -44,16 +52,21 @@ const urlBindings = [
   optionParam('layout', themeLayoutAtom),
   optionParam('color', themeColorAtom),
   optionParam('sort', themeSortAtom),
+  optionParam('theme', themeOpenAtom),
 ];
 
-/** The full catalog with search and tag filters, kept in the URL. */
-export function ThemeGallery(links: ThemeLinks) {
+/**
+ * The full catalog with search and tag filters, kept in the URL. A card
+ * opens its theme in a preview (?theme=), which flips through the results.
+ */
+export function ThemeGallery({ details, ...links }: ThemeGalleryProps) {
   useAtomsInUrl(urlBindings);
   const [query, setQuery] = useAtom(themeQueryAtom);
   const [tag, setTag] = useAtom(themeTagAtom);
   const [layout, setLayout] = useAtom(themeLayoutAtom);
   const [color, setColor] = useAtom(themeColorAtom);
   const [sort, setSort] = useAtom(themeSortAtom);
+  const setOpen = useAtomSet(themeOpenAtom);
   const visible = useAtomValue(visibleThemesAtom);
 
   const active = [
@@ -135,12 +148,18 @@ export function ThemeGallery(links: ThemeLinks) {
         Updated {updated}.
       </p>
       {visible.length ? (
-        <ThemeGrid themes={visible} eagerCount={4} {...links} />
+        <ThemeGrid
+          themes={visible}
+          eagerCount={4}
+          onOpen={(theme) => setOpen(theme.slug)}
+          {...links}
+        />
       ) : (
         <EmptyState className={s.empty} title="No themes match">
           Try another word, or clear the filters.
         </EmptyState>
       )}
+      <GalleryPreview themes={visible} details={details} {...links} />
     </>
   );
 }
