@@ -11,6 +11,7 @@ import { KeysApi } from './KeysApi';
 import { OAuthApi, OAuthConsentApi } from './OAuthApi';
 import { AppsDirectoryApi, OAuthAppsApi } from './OAuthAppsApi';
 import { OAuthResourceApi } from './OAuthResourceApi';
+import { ProposalsApi } from './ProposalsApi';
 import { ResumeVersionsApi } from './ResumeVersionsApi';
 import { VariantsApi } from './VariantsApi';
 import { JobsApi, MyJobsApi } from './JobsApi';
@@ -156,6 +157,7 @@ export class JsonResumeApi extends HttpApi.make('jsonresume')
   .add(AccountApi)
   .add(ResumeVersionsApi)
   .add(VariantsApi)
+  .add(ProposalsApi)
   .add(KeysApi)
   .add(AnalyticsApi)
   .add(EventsApi)
@@ -182,3 +184,8 @@ export {
   VariantsApi,
   VariantSummary,
 } from './VariantsApi';
+export {
+  ProposalNotFound,
+  ProposalsApi,
+  ProposalSummary,
+} from './ProposalsApi';

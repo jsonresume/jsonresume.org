@@ -22,6 +22,7 @@ import { AsyncResult } from 'effect/reactivity';
 import { AtsCard } from './AtsCard';
 import { HistoryCard } from './history/HistoryCard';
 import { VariantsCard } from './VariantsCard';
+import { ProposalsCard } from './ProposalsCard';
 import { StoredCard } from './StoredCard';
 
 const formats = [
@@ -143,6 +144,7 @@ export function ResumePage() {
       </Grid>
       <AtsCard />
       <VariantsCard />
+      <ProposalsCard />
       <HistoryCard gist={account.source === 'gist'} />
     </AppPage>
   );

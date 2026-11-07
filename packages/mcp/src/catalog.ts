@@ -8,6 +8,7 @@ import { appTools } from './catalogApps';
 import { directoryTools } from './catalogDirectory';
 import { importTools } from './catalogImport';
 import { webhookTools } from './catalogWebhooks';
+import { proposalTools } from './catalogProposals';
 import { variantTools } from './catalogVariants';
 import { privacyTools } from './catalogPrivacy';
 import { treeTools } from './catalogTree';
@@ -85,14 +86,14 @@ export const tools: ReadonlyArray<McpToolInfo> = [
     name: 'save_resume',
     group: 'resume',
     description:
-      'Replace your whole resume with a JSON Resume object. Saved to your gist when your page reads from it. Refused if it would add schema problems (they are listed); problems the resume already had are returned but don’t block it.',
+      'Replace your whole resume with a JSON Resume object. Saved to your gist when your page reads from it. Refused if it would add schema problems (they are listed); problems the resume already had are returned but don’t block it. With propose: true it is suggested instead, for the person to accept or reject on jsonresume.org.',
     writes: true,
   },
   {
     name: 'update_resume_section',
     group: 'resume',
     description:
-      'Replace one top-level section of your resume (basics, work, volunteer, education, awards, certificates, publications, skills, languages, interests, references, projects or meta) and save it. Refused, like save_resume, if it would add schema problems.',
+      'Replace one top-level section of your resume (basics, work, volunteer, education, awards, certificates, publications, skills, languages, interests, references, projects or meta) and save it. Refused, like save_resume, if it would add schema problems; propose: true suggests it instead.',
     writes: true,
   },
   {
@@ -225,6 +226,7 @@ export const tools: ReadonlyArray<McpToolInfo> = [
   ...directoryTools,
   ...webhookTools,
   ...variantTools,
+  ...proposalTools,
   ...privacyTools,
   ...appTools,
   ...treeTools,
