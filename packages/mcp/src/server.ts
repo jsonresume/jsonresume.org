@@ -11,6 +11,7 @@ import { McpActor, McpCaller } from './context';
 import { ExploreHandlers, ExploreToolkit } from './exploreTools';
 import { ExportHandlers, ExportToolkit } from './exportTools';
 import { ImportHandlers, ImportToolkit } from './importTools';
+import { PrivacyHandlers, PrivacyToolkit } from './privacyTools';
 import { JobHandlers, JobToolkit } from './jobTools';
 import { Prompts } from './prompts';
 import { ResumeHandlers, ResumeToolkit } from './resumeTools';
@@ -121,6 +122,7 @@ export const mcpRoutes = (site: string = SITE) =>
     McpServer.toolkit(ExportToolkit).pipe(Layer.provide(ExportHandlers)),
     McpServer.toolkit(ImportToolkit).pipe(Layer.provide(ImportHandlers)),
     McpServer.toolkit(AccountToolkit).pipe(Layer.provide(AccountHandlers)),
+    McpServer.toolkit(PrivacyToolkit).pipe(Layer.provide(PrivacyHandlers)),
     McpServer.toolkit(ExploreToolkit).pipe(Layer.provide(ExploreHandlers)),
     McpServer.toolkit(JobToolkit).pipe(Layer.provide(JobHandlers)),
     McpServer.toolkit(AppToolkit).pipe(Layer.provide(AppHandlers)),

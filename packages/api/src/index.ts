@@ -30,7 +30,13 @@ export {
 import { SystemApi } from './SystemApi';
 import { V1Api, V1PublicApi } from './V1Api';
 
-export { Account, AccountApi, ResumeSource } from './AccountApi';
+export {
+  Account,
+  AccountApi,
+  HiddenField,
+  Privacy,
+  ResumeSource,
+} from './AccountApi';
 export {
   AnalyticsApi,
   AnalyticsRange,

@@ -183,6 +183,9 @@ importers:
       '@hono/node-server':
         specifier: ^2.1.5
         version: 2.1.5(hono@4.13.13)
+      '@jsonresume/theme-metadata':
+        specifier: workspace:*
+        version: link:../../packages/theme-config
       '@jsonresume/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -313,6 +316,9 @@ importers:
       '@effect/vitest':
         specifier: 4.0.6
         version: 4.0.6(effect@4.0.6)(vitest@3.2.6)
+      '@playwright/test':
+        specifier: 1.56.1
+        version: 1.56.1
       '@repo/eslint-config-custom':
         specifier: workspace:*
         version: link:../../packages/eslint-config-custom
@@ -3800,6 +3806,9 @@ importers:
       '@jsonresume/schema':
         specifier: workspace:*
         version: link:../schema
+      '@jsonresume/theme-metadata':
+        specifier: workspace:*
+        version: link:../theme-config
       '@jsonresume/ui':
         specifier: workspace:*
         version: link:../ui

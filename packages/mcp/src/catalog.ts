@@ -6,6 +6,7 @@
  */
 import { appTools } from './catalogApps';
 import { importTools } from './catalogImport';
+import { privacyTools } from './catalogPrivacy';
 import { treeTools } from './catalogTree';
 import { versionTools } from './catalogVersions';
 
@@ -218,6 +219,7 @@ export const tools: ReadonlyArray<McpToolInfo> = [
     writes: false,
   },
   ...importTools,
+  ...privacyTools,
   ...appTools,
   ...treeTools,
   ...versionTools,

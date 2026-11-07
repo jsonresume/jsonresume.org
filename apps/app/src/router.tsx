@@ -13,6 +13,7 @@ import {
   projectsRoute,
   registryRoute,
   schemaRoute,
+  startRoute,
   teamRoute,
   themeDevelopmentRoute,
   themesRoute,
@@ -38,6 +39,7 @@ import { privacyRoute, termsRoute } from './routes/docs';
 import { exploreRoute } from './routes/explore';
 import { jobRoute, jobsRoute } from './routes/jobs';
 import { resumeRoute } from './routes/resume';
+import { themeRoute } from './routes/theme';
 import { timelineRoute } from './routes/timeline';
 import { rootRoute, siteRoute, type RouterContext } from './routes/root';
 
@@ -50,7 +52,9 @@ export const routeTree = rootRoute.addChildren([
     cliRoute,
     developersRoute,
     aiRoute,
+    startRoute,
     themesRoute,
+    themeRoute,
     themeDevelopmentRoute,
     projectsRoute,
     teamRoute,

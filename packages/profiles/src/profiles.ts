@@ -1,6 +1,7 @@
 import { Clock, Context, Duration, Effect, Layer } from 'effect';
 import { ProfileNotFound, type ResumeError } from './errors';
 import { GithubGists, type GistResume } from './github';
+import { redact } from './redact';
 import { ProfileStore, type GistMirror } from './store';
 import type { Username } from './username';
 
@@ -116,10 +117,20 @@ export class Profiles extends Context.Service<
       ) {
         const file = options?.file ?? RESUME_FILE;
         const profile = yield* store.find(username);
+        // An account's choice of what stays off its page applies to every
+        // public read: the page, its formats and its feeds.
+        const hidden = profile?.kind === 'account' ? profile.hidden ?? [] : [];
         const done = (
           r: { resume: unknown; stale: boolean },
           source: ResolvedResume['source']
-        ) => ({ _tag: 'Resume', username, source, ...r } as const);
+        ) =>
+          ({
+            _tag: 'Resume',
+            username,
+            source,
+            stale: r.stale,
+            resume: redact(r.resume, hidden),
+          } as const);
 
         if (profile?.kind === 'alias') {
           return { _tag: 'Moved', username: profile.target } as const;

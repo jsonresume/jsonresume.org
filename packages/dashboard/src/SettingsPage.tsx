@@ -26,6 +26,7 @@ import { ApiKeysCard } from './settings/ApiKeysCard';
 import { ConnectionsCard } from './settings/ConnectionsCard';
 import { OAuthAppsCard } from './settings/OAuthAppsCard';
 import { ExploreCard } from './settings/ExploreCard';
+import { PrivacyCard } from './settings/PrivacyCard';
 import { UsernameCard } from './settings/UsernameCard';
 import { forget } from '@repo/posthog/browser';
 
@@ -142,6 +143,7 @@ export function SettingsPage() {
         <Details account={account} />
         <UsernameCard account={account} />
         <ExploreCard />
+        <PrivacyCard />
         <ConnectionsCard />
         <ApiKeysCard />
         <OAuthAppsCard />

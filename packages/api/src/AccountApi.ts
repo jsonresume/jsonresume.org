@@ -35,6 +35,11 @@ export class Account extends Schema.Class<Account>('@repo/api/Account')({
   gistWrite: Schema.Boolean,
 }) {}
 
+/** Contact details an account can keep off its public page. */
+export const HiddenField = Schema.Literals(['email', 'phone', 'address']);
+export type HiddenField = typeof HiddenField.Type;
+export const Privacy = Schema.Struct({ hidden: Schema.Array(HiddenField) });
+
 export class AccountApi extends HttpApiGroup.make('account')
   .add(
     HttpApiEndpoint.get('get', '/', { success: Account }),
@@ -43,6 +48,12 @@ export class AccountApi extends HttpApiGroup.make('account')
       payload: Schema.Struct({ resume: Schema.Unknown }),
       success: Account,
       error: [InvalidResume, GistPermissionNeeded, GithubUnreachable],
+    }),
+    /** What stays off the public page (and its formats); the owner sees all. */
+    HttpApiEndpoint.get('privacy', '/privacy', { success: Privacy }),
+    HttpApiEndpoint.put('setPrivacy', '/privacy', {
+      payload: Privacy,
+      success: Privacy,
     }),
     HttpApiEndpoint.put('setSource', '/source', {
       payload: Schema.Struct({ source: ResumeSource }),

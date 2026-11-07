@@ -53,6 +53,41 @@ describe('email accounts', () => {
     );
   });
 
+  it('keeps hidden contact details off the public resume, not the owner’s', async () => {
+    const { run, lastToken } = accountsStack();
+    await run(
+      Effect.gen(function* () {
+        const accounts = yield* Accounts;
+        const profiles = yield* Profiles;
+        const { user } = yield* accounts.signUp(signUp);
+        yield* accounts.verifyEmail(lastToken());
+        const basics = {
+          name: 'Ada',
+          email: 'ada@example.com',
+          phone: '555',
+          location: { address: '12 Byron St', city: 'London' },
+        };
+        yield* accounts.saveResume(user.id, { basics }, userActor);
+        yield* accounts.setHiddenFields(user.id, ['phone', 'address']);
+        expect(yield* accounts.hiddenFields(user.id)).toEqual([
+          'phone',
+          'address',
+        ]);
+        const page = yield* profiles.resume('ada' as Username);
+        expect(page._tag === 'Resume' ? page.resume : null).toEqual({
+          basics: {
+            name: 'Ada',
+            email: 'ada@example.com',
+            location: { city: 'London' },
+          },
+        });
+        expect((yield* accounts.currentResume(user.id)).resume).toEqual({
+          basics,
+        });
+      })
+    );
+  });
+
   it('refuses taken, reserved and GitHub names, and a second account per email', async () => {
     const { run } = accountsStack();
     await run(

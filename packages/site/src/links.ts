@@ -4,6 +4,9 @@ export const paths = {
   gettingStarted: '/getting-started',
   schema: '/schema',
   themes: '/themes',
+  start: '/start',
+  /** A theme's own page: what it is, its preview and how to use it. */
+  theme: (slug: string) => `/themes/${slug}`,
   projects: '/projects',
   team: '/team',
   cli: '/cli',

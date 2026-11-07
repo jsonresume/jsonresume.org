@@ -31,6 +31,8 @@ export interface AccountProfile {
   source: 'gist' | 'stored';
   mirror: GistMirror | undefined;
   stored: unknown;
+  /** Contact details kept off the public page (see redact). */
+  hidden?: ReadonlyArray<string>;
 }
 
 /** A name that redirects to an account (a merged ghost, or a rename). */
