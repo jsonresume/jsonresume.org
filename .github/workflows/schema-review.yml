@@ -1,0 +1,48 @@
+name: Schema review
+
+# Once a month, an issue lists every open schema proposal still waiting for
+# a decision (no `decision: …` label), oldest first, so each one gets an
+# accept, change or decline with reasons. See CONTRIBUTING.md → Proposing
+# Schema Changes, and packages/schema/DECISIONS.md for the log.
+on:
+  schedule:
+    - cron: '0 9 1 * *'
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  open-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Open this month's review issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          label() { gh label create "$1" -R "$REPO" --color "$2" --description "$3" --force >/dev/null; }
+          label 'decision: accept' 0e8a16 'Schema proposal accepted; a PR can follow'
+          label 'decision: change' fbca04 'Schema proposal accepted in a changed form'
+          label 'decision: decline' b60205 'Schema proposal declined, with reasons'
+          label 'schema-review' 5319e7 'The monthly schema review'
+          label 'tracking' c5def5 'An index of other issues, not a proposal'
+
+          title="Schema review: $(date -u +'%B %Y')"
+          if gh issue list -R "$REPO" --label schema-review --state all --search "\"$title\" in:title" --json number --jq '.[0].number' | grep -q .; then
+            echo "Already opened: $title"; exit 0
+          fi
+
+          waiting=$(gh issue list -R "$REPO" --label schema --state open --limit 300 \
+            --json number,title,labels,createdAt \
+            --jq '[.[] | select([.labels[].name] | any(startswith("decision:") or . == "tracking") | not)]
+                  | sort_by(.createdAt)
+                  | .[] | "- [ ] #\(.number) \(.title) (open since \(.createdAt[:10]))"')
+          if [ -z "$waiting" ]; then echo "Nothing waiting for a decision."; exit 0; fi
+
+          body=$(printf '%s\n\n%s\n\n%s\n' \
+            "Schema proposals waiting for a decision, oldest first. For each, comment **accept**, **change** (and how) or **decline**, with the reasons, add the matching \`decision: …\` label, and record it in [packages/schema/DECISIONS.md](https://github.com/$REPO/blob/master/packages/schema/DECISIONS.md)." \
+            "$waiting" \
+            "Rules: CONTRIBUTING.md → [Proposing Schema Changes](https://github.com/$REPO/blob/master/CONTRIBUTING.md#proposing-schema-changes).")
+          gh issue create -R "$REPO" --title "$title" --label schema-review --body "$body"
