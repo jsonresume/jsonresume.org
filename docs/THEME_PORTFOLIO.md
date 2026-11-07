@@ -114,9 +114,9 @@ establish recruiter preference, hiring outcomes or universal ATS compatibility.
 Existing classifications were audited against current hosted previews and layout
 source, and all 77 existing thumbnails were regenerated with the same sample
 content. Tan Responsive remains for compatibility; its screen preview needs its
-entrance animation to settle. The hosted renderer supplies its legacy company
-field and preserves work summaries, and printing disables the animation. Its
-upstream picture-field compatibility still needs review. The 150 new designs
+entrance animation to settle. The hosted renderer adapts employer, photo and
+website fields and preserves work summaries; printing disables the animation.
+The upstream package still expects those older fields. The 150 new designs
 support current standard JSON Resume fields without client-side animation.
 
 The catalogue-wide [PDF verification gate](THEME_PRINT_QA.md) extends these

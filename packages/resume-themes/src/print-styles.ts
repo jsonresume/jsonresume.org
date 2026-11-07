@@ -33,6 +33,8 @@ const overrides: Readonly<Record<string, string>> = {
   h1{font-size:28pt}h2{font-size:16pt}h3{font-size:12pt}`,
   'tan-responsive': `.instaFade,.quickFade{opacity:1!important}
   #cv{margin:0;width:100%;max-width:none}#mainArea{padding:0}
+  #headshot:has(img[src]:not([src=""])){display:block}
+  #headshot img{max-height:28mm;object-fit:cover}
   section .sectionTitle,section .sectionContent{float:none;width:auto}
   section .sectionTitle{margin-bottom:3mm}section{break-inside:auto}`,
 };

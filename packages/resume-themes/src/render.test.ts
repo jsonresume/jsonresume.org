@@ -36,6 +36,21 @@ describe('renderTheme', () => {
     await render('pumpkin');
     expect(await render('macchiato')).toContain(name);
   });
+  it('renders a supplied photo and website in the actual Tan template', async () => {
+    const html = await Effect.runPromise(
+      renderTheme('tan-responsive', {
+        basics: {
+          name: 'Sample',
+          image: 'https://example.com/photo.jpg',
+          url: 'https://example.com',
+        },
+      })
+    );
+    // Mustache entity-escapes slashes in attribute values.
+    const decoded = html.replace(/&#x2f;/gi, '/');
+    expect(decoded).toContain('src="https://example.com/photo.jpg"');
+    expect(decoded).toContain('href="https://example.com"');
+  });
   it('preserves achievement bullets and current employer names in Claude', async () => {
     const html = await Effect.runPromise(
       renderTheme('claude', {

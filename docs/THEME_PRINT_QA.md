@@ -3,6 +3,8 @@
 Every registered gallery theme must print on both A4 and Letter. The audit
 discovers the catalogue from the hosted renderer, so new themes join the check
 automatically. `.github/workflows/theme-pdf.yml` runs it for print-related changes.
+CI prints the committed theme bundles; the separate dist-sync gate verifies that
+they match their source before release.
 
 ```sh
 pnpm exec turbo build --filter=@repo/resume-themes... --concurrency=4

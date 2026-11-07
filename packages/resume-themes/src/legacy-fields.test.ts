@@ -1,7 +1,31 @@
 import { describe, expect, it } from 'vitest';
-import { withLegacyWorkNames } from './legacy-fields.ts';
+import { withLegacyBasics, withLegacyWorkNames } from './legacy-fields.ts';
 
-describe('legacy work headings', () => {
+describe('legacy schema fields', () => {
+  it('preserves a supplied photo even without work entries', () => {
+    const input = {
+      basics: { name: 'Sample', image: 'https://example.com/photo.jpg' },
+    };
+    expect(withLegacyBasics('tan-responsive', input)['basics']).toEqual({
+      ...input.basics,
+      picture: input.basics.image,
+      photo: input.basics.image,
+      website: undefined,
+    });
+    expect(input.basics).not.toHaveProperty('picture');
+    const legacy = {
+      basics: {
+        image: 'https://example.com/new.jpg',
+        picture: 'https://example.com/legacy.jpg',
+      },
+    };
+    expect(withLegacyBasics('tan-responsive', legacy)['basics']).toEqual({
+      ...legacy.basics,
+      photo: legacy.basics.picture,
+      website: undefined,
+    });
+    expect(withLegacyBasics('elegant', input)).toBe(input);
+  });
   it.each(['paper-plus-plus', 'tan-responsive'])(
     'preserves current employer names in %s',
     (theme) => {

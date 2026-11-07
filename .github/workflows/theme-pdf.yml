@@ -47,7 +47,8 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm exec turbo build --filter=@repo/resume-themes... --concurrency=4
+      # Print the committed bundles that ship. The separate Theme dist sync
+      # check rebuilds them and enforces parity with their source.
       - run: pnpm exec playwright install --with-deps chromium
       - run: sudo apt-get update && sudo apt-get install -y poppler-utils python3-pil
       - name: Print every registered theme through the live exporter implementation
