@@ -20,6 +20,7 @@
     "@repo/analytics": "workspace:*",
     "@repo/posthog": "workspace:^",
     "@repo/resume-versions": "workspace:*",
+    "@repo/webhooks": "workspace:*",
     "@repo/api": "workspace:*",
     "@repo/ats": "workspace:*",
     "@repo/careers": "workspace:*",

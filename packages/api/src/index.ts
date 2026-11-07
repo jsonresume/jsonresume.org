@@ -95,6 +95,7 @@ export {
   OAuthApp,
   OAuthAppInput,
   OAuthAppsApi,
+  WebhookSettings,
 } from './OAuthAppsApi';
 export {
   CurrentGrant,

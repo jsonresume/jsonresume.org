@@ -19,6 +19,7 @@ import { GithubGists, Profiles, Usernames } from '@repo/profiles';
 import { Downloader, ImporterLive } from '@repo/resume-import';
 import { ResumePdf } from '@repo/resume-pdf';
 import { ResumeVersions } from '@repo/resume-versions';
+import { Webhooks, WebhookSender } from '@repo/webhooks';
 import { PgProfileStore } from '@repo/profiles/sql';
 import { Effect, Layer } from 'effect';
 import type { SqlClient } from 'effect/sql';
@@ -50,16 +51,26 @@ export const appServices = <E>(
   const careers = CareersLive.pipe(
     Layer.provide(Layer.mergeAll(stores, OpenAiJobs, database))
   );
-  // A saved resume starts the career graph's model work once saves settle.
+  // Webhooks: deliveries queued on save, sent every minute while we run.
+  const webhooks = Webhooks.running.pipe(
+    Layer.provide(Layer.merge(WebhookSender.layer, database))
+  );
+  // A saved resume starts the career graph's model work once saves settle,
+  // and tells the apps the person connected.
   const prepareOnSave = Layer.effect(
     ResumeSaved,
     Effect.gen(function* () {
       const graphs = yield* CareerGraphs;
+      const hooks = yield* Webhooks;
       return ResumeSaved.of({
-        saved: (userId, resume) => graphs.prepare(userId, resume, 'saved'),
+        saved: (userId, resume) =>
+          Effect.andThen(
+            graphs.prepare(userId, resume, 'saved'),
+            hooks.resumeUpdated(userId)
+          ),
       });
     })
-  ).pipe(Layer.provide(careers));
+  ).pipe(Layer.provide(Layer.merge(careers, webhooks)));
   const accounts = Layer.mergeAll(Accounts.layer, Analytics.layer).pipe(
     Layer.provideMerge(
       Layer.mergeAll(
@@ -86,6 +97,7 @@ export const appServices = <E>(
     Copilot.layer,
     ResumePdf.layer,
     ProductEvents.layer,
-    imports
+    imports,
+    webhooks
   ).pipe(Layer.provideMerge(Layer.merge(accounts, careers)));
 };

@@ -279,6 +279,9 @@ importers:
       '@repo/timeline':
         specifier: workspace:^
         version: link:../../packages/timeline
+      '@repo/webhooks':
+        specifier: workspace:*
+        version: link:../../packages/webhooks
       '@tanstack/react-router':
         specifier: 1.170.46
         version: 1.170.46(react-dom@19.2.7)(react@19.2.7)
@@ -1614,6 +1617,9 @@ importers:
       '@repo/resume-versions':
         specifier: workspace:*
         version: link:../resume-versions
+      '@repo/webhooks':
+        specifier: workspace:*
+        version: link:../webhooks
       effect:
         specifier: 4.0.6
         version: 4.0.6
@@ -2441,6 +2447,9 @@ importers:
       '@repo/theme-gallery':
         specifier: workspace:*
         version: link:../theme-gallery
+      '@repo/webhooks':
+        specifier: workspace:*
+        version: link:../webhooks
       effect:
         specifier: 4.0.6
         version: 4.0.6
@@ -11812,6 +11821,37 @@ importers:
       '@repo/eslint-config-custom':
         specifier: workspace:^
         version: link:../eslint-config-custom
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+
+  packages/webhooks:
+    dependencies:
+      '@repo/resume-pdf':
+        specifier: workspace:*
+        version: link:../resume-pdf
+      effect:
+        specifier: 4.0.6
+        version: 4.0.6
+    devDependencies:
+      '@effect/sql-pglite':
+        specifier: 4.0.6
+        version: 4.0.6(effect@4.0.6)
+      '@repo/database':
+        specifier: workspace:*
+        version: link:../database
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      '@types/node':
+        specifier: ^20.19.24
+        version: 20.19.24
       tsconfig:
         specifier: workspace:*
         version: link:../tsconfig

@@ -12,6 +12,7 @@ import { ExploreHandlers, ExploreToolkit } from './exploreTools';
 import { ExportHandlers, ExportToolkit } from './exportTools';
 import { DirectoryHandlers, DirectoryToolkit } from './directoryTools';
 import { ImportHandlers, ImportToolkit } from './importTools';
+import { WebhookHandlers, WebhookToolkit } from './webhookTools';
 import { PrivacyHandlers, PrivacyToolkit } from './privacyTools';
 import { JobHandlers, JobToolkit } from './jobTools';
 import { Prompts } from './prompts';
@@ -128,6 +129,7 @@ export const mcpRoutes = (site: string = SITE) =>
     McpServer.toolkit(JobToolkit).pipe(Layer.provide(JobHandlers)),
     McpServer.toolkit(AppToolkit).pipe(Layer.provide(AppHandlers)),
     McpServer.toolkit(DirectoryToolkit).pipe(Layer.provide(DirectoryHandlers)),
+    McpServer.toolkit(WebhookToolkit).pipe(Layer.provide(WebhookHandlers)),
     McpServer.toolkit(TreeToolkit).pipe(Layer.provide(TreeHandlers)),
     McpServer.toolkit(VersionToolkit).pipe(Layer.provide(VersionHandlers)),
     Prompts

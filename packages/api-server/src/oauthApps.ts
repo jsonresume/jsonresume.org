@@ -3,6 +3,7 @@ import { CurrentUser, JsonResumeApi, OAuthError } from '@repo/api';
 import { Effect } from 'effect';
 import { HttpApiBuilder } from 'effect/http-api';
 import { track } from '@repo/posthog';
+import { Webhooks } from '@repo/webhooks';
 
 const toError = (e: OAuthFailure) =>
   new OAuthError({ error: e.error, error_description: e.description });
@@ -25,6 +26,7 @@ export const OAuthAppsHandlers = HttpApiBuilder.group(
   (handlers) =>
     Effect.gen(function* () {
       const oauth = yield* OAuth;
+      const hooks = yield* Webhooks;
       const owner = Effect.map(CurrentUser, (u) => u.id);
       return handlers.handleAll({
         list: () =>
@@ -65,6 +67,22 @@ export const OAuthAppsHandlers = HttpApiBuilder.group(
                 error_description: 'No such app',
               });
             return toOAuthApp(app);
+          }),
+        webhook: ({ params }) =>
+          Effect.flatMap(owner, (id) => hooks.subscription(id, params.id)),
+        setWebhook: ({ params, payload }) =>
+          Effect.gen(function* () {
+            const made = yield* hooks.subscribe(
+              yield* owner,
+              params.id,
+              payload.url
+            );
+            return made.ok
+              ? made.subscription
+              : yield* new OAuthError({
+                  error: 'invalid_client_metadata',
+                  error_description: made.reason,
+                });
           }),
         delete: ({ params }) =>
           Effect.flatMap(owner, (id) => oauth.deleteApp(id, params.id)),

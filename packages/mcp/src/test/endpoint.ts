@@ -13,6 +13,7 @@ import {
   testImporter,
 } from '@repo/resume-import/testing';
 import { userActor } from '@repo/resume-versions';
+import { Webhooks, WebhookSender } from '@repo/webhooks';
 import { Effect, Layer, ManagedRuntime } from 'effect';
 import { HttpRouter, HttpServer, HttpServerResponse } from 'effect/http';
 import { createHash } from 'node:crypto';
@@ -63,8 +64,20 @@ export const setup = async () => {
       Layer.provide(embedderFrom(() => new Float32Array(3072).fill(1)))
     )
   ).pipe(Layer.provideMerge(stack.layer));
+  const webhooks = Webhooks.layer.pipe(
+    Layer.provide(
+      Layer.merge(
+        Layer.succeed(
+          WebhookSender,
+          WebhookSender.of({ send: () => Effect.succeed({ status: 200 }) })
+        ),
+        services
+      )
+    )
+  );
   const withCareers = Layer.mergeAll(
     services,
+    webhooks,
     plainCareers.pipe(Layer.provide(services)),
     testImporter(reader.layer).pipe(Layer.provide(services))
   );

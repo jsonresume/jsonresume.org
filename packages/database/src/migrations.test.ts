@@ -41,5 +41,7 @@ it('applies every migration to an empty database', async () => {
     'title_families',
     'tree_snapshots',
     'users',
+    'webhook_deliveries',
+    'webhook_subscriptions',
   ]);
 });

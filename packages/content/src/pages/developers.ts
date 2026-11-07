@@ -1,7 +1,6 @@
 /**
  * /developers: "Sign in with JSON Resume" for HR tools, job boards and ATSs.
- * Endpoints and scopes as @repo/api's OAuthApi and OAuthResourceApi define
- * them; keep the two in step.
+ * Endpoints and scopes as @repo/api's OAuth APIs define them; keep in step.
  */
 import type { Step } from './types';
 
@@ -196,5 +195,6 @@ export const notes = [
   'Always send `scope`. A self-registered app that asks for nothing gets `mcp`, which is everything.',
   'Redirect URIs must be `https`, or `http` on loopback only, with no `#fragment`. An app scheme (`myapp://callback`) also works.',
   'People see every app they’ve connected under Settings → Connected apps, and can disconnect it there. Revoke a token yourself when someone disconnects on your side.',
+  'Webhooks: set an `https` URL for your app under Settings → Your OAuth apps (or MCP `set_app_webhook`). When someone who granted a resume scope changes their resume, we POST `{"id", "type": "resume.updated", "created_at", "user": {"sub", "username"}}`, retried for a day until you answer 2xx. Check `JSONResume-Signature: t=…,v1=…` (the hex HMAC-SHA256 of `<t>.<body>` with your signing secret), then read the resume with your token.',
   'Errors follow RFC 6749 and 6750: `invalid_grant`, `invalid_client`, `invalid_token` (401) and `insufficient_scope` (403).',
 ];
