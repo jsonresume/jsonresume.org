@@ -47,12 +47,14 @@ export const appServices = <E>(
   const careers = CareersLive.pipe(
     Layer.provide(Layer.mergeAll(stores, OpenAiJobs, database))
   );
-  // A saved resume starts the career graph's model work straight away.
+  // A saved resume starts the career graph's model work once saves settle.
   const prepareOnSave = Layer.effect(
     ResumeSaved,
     Effect.gen(function* () {
       const graphs = yield* CareerGraphs;
-      return ResumeSaved.of({ saved: graphs.prepare });
+      return ResumeSaved.of({
+        saved: (userId, resume) => graphs.prepare(userId, resume, 'saved'),
+      });
     })
   ).pipe(Layer.provide(careers));
   const accounts = Layer.mergeAll(Accounts.layer, Analytics.layer).pipe(

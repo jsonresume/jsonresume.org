@@ -31,7 +31,7 @@ export const EditorHandlers = HttpApiBuilder.group(
             // The dashboard is open: get the career graph's model work
             // under way for this version (a gist may have changed on GitHub).
             if (current.resume !== null)
-              yield* careers.prepare(user.id, current.resume);
+              yield* careers.prepare(user.id, current.resume, 'opened');
             const gistWrite = yield* accounts.canWriteGist(user.id);
             return {
               ...current,

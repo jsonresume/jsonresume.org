@@ -191,9 +191,11 @@ it('answers with embeddings while the model is still judging, then with its fits
       const [user] = yield* sql<{ id: string }>`
         INSERT INTO app.users (email) VALUES ('c@example.com') RETURNING id`;
       const matcher = yield* JobMatcher;
-      const early = yield* matcher.rankWithin(resume, user?.id, 0);
+      const early = yield* matcher.rankWithin(resume, user?.id, { wait: 0 });
       yield* Deferred.succeed(gate, undefined);
-      const late = yield* matcher.rankWithin(resume, user?.id, '10 seconds');
+      const late = yield* matcher.rankWithin(resume, user?.id, {
+        wait: '10 seconds',
+      });
       return [early, late] as const;
     }).pipe(Effect.provide(layer))
   );

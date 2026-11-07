@@ -1,5 +1,6 @@
 import type { Seniority } from '@repo/api';
-import { Context, type Duration, type Effect } from 'effect';
+import type { RunOptions } from '@repo/jobs';
+import { Context, type Effect } from 'effect';
 import type { Family } from './families';
 
 /* The contracts between the career graph's parts. Each is a service whose
@@ -94,12 +95,14 @@ export class ResumeInsights extends Context.Service<
   ResumeInsights,
   {
     /**
-     * The insight, starting the reading if this version has none; waits up
-     * to `wait` (40 seconds by default) for it, else answers pending.
+     * The insight, starting the reading if this version has none (or
+     * joining the one under way); waits up to `options.wait` (40 seconds by
+     * default) for it, else answers pending. An owned reading stops if the
+     * caller is interrupted.
      */
     insight(
       resume: unknown,
-      wait?: Duration.Input
+      options?: RunOptions
     ): Effect.Effect<ResumeInsight>;
   }
 >()('@repo/careers/ResumeInsights') {}

@@ -1,5 +1,5 @@
-import { resumeLevel } from '@repo/jobs';
-import { Clock, Duration, Effect, Fiber, Layer, Option } from 'effect';
+import { resumeLevel, sharedRuns, type RunOptions } from '@repo/jobs';
+import { Clock, Duration, Effect, Layer, Option } from 'effect';
 import { SqlClient } from 'effect/sql';
 import {
   listedEvidence,
@@ -39,7 +39,7 @@ export const ResumeInsightsLive = Layer.effect(
     const reader = yield* Effect.serviceOption(InsightReader);
     const store = insightStore(sql);
     // One reading per resume version at a time, shared by concurrent requests.
-    const running = new Map<string, Fiber.Fiber<void>>();
+    const runs = sharedRuns();
 
     const resolved = (found: ReadonlyArray<Found>) =>
       Effect.map(catalog.resolve(found.map((f) => f.name)), (skills) =>
@@ -104,7 +104,7 @@ export const ResumeInsightsLive = Layer.effect(
 
     const insight = Effect.fn('ResumeInsights.insight')(function* (
       resume: unknown,
-      wait: Duration.Input = WAIT
+      options: RunOptions = { wait: WAIT }
     ) {
       const key = resumeKey(resume);
       const entries = resumeEntries(resume);
@@ -149,20 +149,11 @@ export const ResumeInsightsLive = Layer.effect(
         yield* store.save(key, { ...made, foundations });
         return answer(made, false);
       }
-      let fiber = running.get(key);
-      if (!fiber) {
-        const started = yield* read(key, resume, entries).pipe(
-          Effect.ensuring(Effect.sync(() => running.delete(key))),
-          Effect.forkDetach
-        );
-        running.set(key, started);
-        fiber = started;
-      }
-      const done = yield* Fiber.join(fiber).pipe(Effect.timeoutOption(wait));
+      const state = yield* runs.run(key, read(key, resume, entries), options);
       const after = yield* usable(key);
       if (Option.isSome(after)) return answer(after.value, false);
       // Still reading (or the reading failed): what the resume shows without it.
-      return answer(yield* withoutModel, Option.isNone(done));
+      return answer(yield* withoutModel, state !== 'done');
     });
 
     return ResumeInsights.of({ insight });

@@ -1,5 +1,5 @@
 import type { CareerGraph, CareerMove, CareerWait } from '@repo/api';
-import { JobMatcher } from '@repo/jobs';
+import { JobMatcher, type RunOptions } from '@repo/jobs';
 import { Clock, Context, Duration, Effect, Layer, Option } from 'effect';
 import { familyName, isFamily, SENIORITY_ORDER } from './families';
 import { gather } from './gather';
@@ -7,6 +7,7 @@ import { buildGraph } from './graph/build';
 import { planBrief } from './planBrief';
 import { Planner, plainPlan } from './planner';
 import { PlanStore } from './plans';
+import { preparer } from './prepare';
 import {
   CareerMoves,
   JobRoles,
@@ -49,23 +50,22 @@ const make = Effect.gen(function* () {
   const planner = yield* Effect.serviceOption(Planner);
 
   // The two model steps (jobs judged against the resume, the resume read)
-  // don't need each other, so they run at once, each waiting up to `wait`.
-  const models = (userId: string, resume: unknown, wait: Duration.Input) =>
+  // don't need each other, so they run at once, each waiting up to `wait`
+  // and joining a run already under way for the same content.
+  const models = (userId: string, resume: unknown, options: RunOptions) =>
     Effect.all(
       [
-        matcher.rankWithin(resume, userId, wait),
-        insights.insight(resume, wait),
+        matcher.rankWithin(resume, userId, options),
+        insights.insight(resume, options),
       ],
       { concurrency: 'unbounded' }
     );
 
   const build = (userId: string, resume: unknown, wait: Duration.Input) =>
     Effect.gen(function* () {
-      const [{ ranked, judging }, insight] = yield* models(
-        userId,
-        resume,
-        wait
-      );
+      const [{ ranked, judging }, insight] = yield* models(userId, resume, {
+        wait,
+      });
       const now = new Date(yield* Clock.currentTimeMillis);
       const input = yield* gather(
         userId,
@@ -101,19 +101,12 @@ const make = Effect.gen(function* () {
     };
   });
 
-  /**
-   * Starts the model work a resume version needs (its reading, the jobs'
-   * fits) and returns at once, so the graph is ready by the time it is
-   * opened. Called when a resume is saved or the dashboard opens.
-   */
-  const prepare = (userId: string, resume: unknown) =>
-    models(userId, resume, Duration.zero).pipe(
-      Effect.catchTag('NoResume', () => Effect.void),
-      Effect.withSpan('Careers.prepare'),
-      Effect.ignoreCause({ log: 'Warn', message: 'Career prepare failed' }),
-      Effect.forkDetach,
-      Effect.asVoid
-    );
+  /** Starts a version's model work before anyone asks (see preparer). */
+  const prepare = preparer((userId, resume, options) =>
+    models(userId, resume, options).pipe(
+      Effect.catchTag('NoResume', () => Effect.void)
+    )
+  );
 
   /** Where people in the resume's current role went next. */
   const movesFor = Effect.fn('Careers.moves')(function* (resume: unknown) {

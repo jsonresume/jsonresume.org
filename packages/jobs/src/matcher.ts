@@ -1,8 +1,9 @@
 import { JobMark, NoResume, type JobMatch } from '@repo/api';
-import { Clock, Context, Duration, Effect, Layer, Schema } from 'effect';
+import { Clock, Context, Effect, Layer, Schema } from 'effect';
 import { SqlClient } from 'effect/sql';
 import { resumeCountry } from './eligibility';
 import { FIT_WAIT, fitStore } from './fits';
+import type { RunOptions } from './sharedRuns';
 import { resumeLevel } from './level';
 import { markQueries } from './marks';
 import { matchData } from './matchData';
@@ -59,14 +60,15 @@ const make = Effect.gen(function* () {
   /**
    * Every open job the candidate could take, best fit first, with the
    * user's marks, and whether the model is still judging them (waited up
-   * to `wait`; jobs it hasn't judged yet are scored by embeddings). The
+   * to `options.wait`; jobs it hasn't judged yet are scored by
+   * embeddings; a run already judging this resume is joined). The
    * model judges jobs only for a signed-in user: a resume sent to the
    * public API is ranked by embeddings alone.
    */
   const rankWithin = Effect.fn('JobMatcher.rank')(function* (
     resume: unknown,
     userId: string | undefined,
-    wait: Duration.Input
+    options: RunOptions
   ) {
     const text = resumeText(resume);
     if (text.length < 20) return yield* new NoResume();
@@ -100,7 +102,7 @@ const make = Effect.gen(function* () {
             company: job.row.posting.company,
             text: job.text,
           })),
-          wait
+          options
         )
       : { fits: new Map(), judging: false };
     const level = resumeLevel(resume, yield* Clock.currentTimeMillis);
@@ -115,7 +117,7 @@ const make = Effect.gen(function* () {
 
   /** Ranked, waiting for the model up to FIT_WAIT. */
   const rank = (resume: unknown, userId?: string) =>
-    Effect.map(rankWithin(resume, userId, FIT_WAIT), (r) => r.ranked);
+    Effect.map(rankWithin(resume, userId, { wait: FIT_WAIT }), (r) => r.ranked);
 
   /** The best MATCHES jobs for the dashboard. */
   const matches = (userId: string, resume: unknown) =>
