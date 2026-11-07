@@ -18,6 +18,7 @@ import { Copilot } from '@repo/pathways';
 import { GithubGists, Profiles, Usernames } from '@repo/profiles';
 import { Downloader, ImporterLive } from '@repo/resume-import';
 import { ResumePdf } from '@repo/resume-pdf';
+import { ResumeVersions } from '@repo/resume-versions';
 import { PgProfileStore } from '@repo/profiles/sql';
 import { Effect, Layer } from 'effect';
 import type { SqlClient } from 'effect/sql';
@@ -37,6 +38,7 @@ export const appServices = <E>(
     PgAnalyticsStore,
     ApiKeys.layer,
     OAuth.layer,
+    ResumeVersions.layer,
     JobBoard.layer,
     Explore.layer,
     JobMatcher.layer.pipe(Layer.provide(OpenAiJobs))

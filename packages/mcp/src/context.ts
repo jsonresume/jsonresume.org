@@ -1,4 +1,5 @@
 import type { UserRecord } from '@repo/accounts';
+import type { Actor } from '@repo/resume-versions';
 import { Context, Effect, Schema } from 'effect';
 import { Tool } from 'effect/ai';
 import { tools } from './catalog';
@@ -8,6 +9,14 @@ export const McpCaller = Context.Reference<UserRecord | undefined>(
   '@repo/mcp/McpCaller',
   { defaultValue: () => undefined }
 );
+
+/**
+ * Who the tools save as, for the resume's history: an assistant, named by
+ * its OAuth app or API key (see auth in server.ts).
+ */
+export const McpActor = Context.Reference<Actor>('@repo/mcp/McpActor', {
+  defaultValue: () => ({ kind: 'assistant', id: null, name: null }),
+});
 
 /** A tool call that can't be done; the message is for the agent and the user. */
 export class ToolError extends Schema.TaggedError<ToolError>()('ToolError', {

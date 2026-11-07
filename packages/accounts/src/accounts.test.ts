@@ -1,5 +1,6 @@
 import type { Username } from '@repo/profiles';
 import { Profiles } from '@repo/profiles';
+import { userActor } from '@repo/resume-versions';
 import { Effect } from 'effect';
 import { describe, expect, it } from 'vitest';
 import { Accounts } from './accounts';
@@ -33,7 +34,11 @@ describe('email accounts', () => {
         expect((yield* accounts.session(token)).id).toBe(user.id);
         expect(mail[0]?.text).toContain('/api/auth/verify?token=');
 
-        yield* accounts.saveResume(user.id, { basics: { name: 'Ada' } });
+        yield* accounts.saveResume(
+          user.id,
+          { basics: { name: 'Ada' } },
+          userActor
+        );
         expect(saved.map((s) => s.userId)).toEqual([user.id]);
         const before = yield* Effect.flip(profiles.resume('ada' as Username));
         expect(before).toMatchObject({ reason: 'unpublished' });

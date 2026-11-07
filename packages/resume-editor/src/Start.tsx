@@ -1,5 +1,12 @@
 import resume from '@jsonresume/sample-data/complete-resume.json';
 import { Button, Callout, EmptyState, Stack, Text } from '@jsonresume/ui';
+import { serialize } from './state';
+
+const EXAMPLE = serialize(resume);
+
+/** The example as it came: a preview, never saved as someone's resume. */
+export const isUntouchedExample = (draft: unknown) =>
+  draft !== null && serialize(draft) === EXAMPLE;
 
 /** No resume yet: start blank, or from a complete example to edit. */
 export function Start({ onStart }: { onStart: (resume: unknown) => void }) {

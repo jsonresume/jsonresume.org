@@ -1,10 +1,19 @@
 import schemaJson from '@jsonresume/schema/schema.json';
 import { Accounts } from '@repo/accounts';
+import { track } from '@repo/posthog';
+import { savedProperties } from '@repo/resume-versions';
 import { pathLabel, validate } from '@repo/resume-editor/validate';
 import type { JsonSchemaNode } from '@repo/schema-explorer/model';
 import { Effect, Predicate, Schema } from 'effect';
 import { Tool, Toolkit } from 'effect/ai';
-import { caller, describe, failing, failWith, hints } from './context';
+import {
+  caller,
+  describe,
+  failing,
+  failWith,
+  hints,
+  McpActor,
+} from './context';
 import { optional } from './params';
 
 const schema = schemaJson as JsonSchemaNode;
@@ -111,9 +120,13 @@ export const ResumeHandlers = ResumeToolkit.toLayer(
             )}`
           );
         }
-        yield* accounts
-          .saveResume(user.id, resume)
+        const saved = yield* accounts
+          .saveResume(user.id, resume, yield* McpActor)
           .pipe(Effect.mapError(saveError));
+        yield* track(user.id, 'resume_saved', {
+          via: 'mcp',
+          ...savedProperties(saved, 'mcp'),
+        });
         return { saved: true, problems: found };
       });
 

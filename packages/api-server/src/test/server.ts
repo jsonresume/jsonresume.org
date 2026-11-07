@@ -25,6 +25,7 @@ import {
   fakeReader,
   testImporter,
 } from '@repo/resume-import/testing';
+import { ResumeVersions } from '@repo/resume-versions';
 import { ConfigProvider, Effect, Layer, Stream } from 'effect';
 import { HttpRouter, HttpServer } from 'effect/http';
 import { apiRoutes } from '../index';
@@ -59,6 +60,7 @@ export function testServer() {
     PgAnalyticsStore,
     ApiKeys.layer,
     OAuth.layer,
+    ResumeVersions.layer,
     // The copilot answers as the user it was given, without a model.
     Layer.succeed(
       Copilot,

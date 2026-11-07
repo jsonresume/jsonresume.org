@@ -7,6 +7,7 @@ export type ProductEventName =
   | 'user_signed_in'
   | 'email_verified'
   | 'resume_saved'
+  | 'version_restored'
   | 'resume_source_changed'
   | 'username_changed'
   | 'account_deleted'

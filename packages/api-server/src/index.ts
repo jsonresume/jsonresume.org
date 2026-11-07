@@ -17,6 +17,7 @@ import { OAuthConsentHandlers, OAuthHandlers } from './oauth';
 import { OAuthAppsHandlers } from './oauthApps';
 import { OAuthBearerLive, OAuthResourceHandlers } from './oauthResource';
 import { PathwaysRoutes } from './pathways';
+import { ResumeVersionsHandlers } from './resumeVersions';
 import { V1Handlers, V1PublicHandlers } from './v1';
 
 export { AuthenticationLive } from './authentication';
@@ -45,6 +46,7 @@ export const apiRoutes = (version: string) =>
         SystemHandlers(version),
         AuthHandlers,
         AccountHandlers,
+        ResumeVersionsHandlers,
         AnalyticsHandlers,
         EventsHandlers,
         EditorHandlers,
