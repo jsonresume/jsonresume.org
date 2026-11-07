@@ -113,10 +113,15 @@ establish recruiter preference, hiring outcomes or universal ATS compatibility.
 
 Existing classifications were audited against current hosted previews and layout
 source, and all 77 existing thumbnails were regenerated with the same sample
-content. Tan Responsive remains for compatibility; its preview needs its legacy entrance
-animation to settle, and it expects legacy company/picture fields. The workbook
-flags that schema compatibility for review. The 150 new designs support current
-standard JSON Resume fields without client-side animation.
+content. Tan Responsive remains for compatibility; its screen preview needs its
+entrance animation to settle. The hosted renderer supplies its legacy company
+field and preserves work summaries, and printing disables the animation. Its
+upstream picture-field compatibility still needs review. The 150 new designs
+support current standard JSON Resume fields without client-side animation.
+
+The catalogue-wide [PDF verification gate](THEME_PRINT_QA.md) extends these
+checks to every registered theme, including the older designs, through the
+actual PDF export service on both A4 and Letter.
 
 When refreshing previews, also update the revision in `themeImageUrl` in
 `packages/site/src/links.ts` so browser/CDN caches receive the new images.

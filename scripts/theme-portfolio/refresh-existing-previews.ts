@@ -9,7 +9,13 @@ import { themeFixtures } from '../researched-theme-fixtures.ts';
 import { portfolioIdeas } from './ideas.ts';
 
 const added = new Set(portfolioIdeas().map((idea) => idea.slug));
-const queue = THEME_NAMES.filter((slug) => !added.has(slug));
+const selected = process.argv
+  .find((arg) => arg.startsWith('--themes='))
+  ?.slice(9)
+  .split(',');
+const queue = THEME_NAMES.filter(
+  (slug) => !added.has(slug) && (!selected || selected.includes(slug))
+);
 const { complete = {} } = await themeFixtures();
 const browser = await chromium.launch({ headless: true, channel: 'chromium' });
 const issues: { theme: string; error: string }[] = [];

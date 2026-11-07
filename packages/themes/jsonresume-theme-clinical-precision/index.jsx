@@ -9,6 +9,8 @@ export function render(resume) {
       'IBM Plex Sans:wght@400;500;600;700',
     ],
     title,
+    headAfterStyles:
+      '<style>@media print{h1,h2,h3,h4{break-inside:avoid;break-after:avoid}}</style>',
     includeTokensCss: false,
   });
 }

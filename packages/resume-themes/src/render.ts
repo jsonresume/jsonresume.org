@@ -8,6 +8,8 @@ import { createRequire } from 'node:module';
 import { ensureHtmlCharset } from './charset.ts';
 import { themeLoaders } from './loaders.ts';
 import { setThemeLocale } from './locale.ts';
+import { withPrintStyles } from './print-styles.ts';
+import { withLegacyWorkNames } from './legacy-fields.ts';
 
 /** The theme used when neither the request nor the resume names one. */
 export const DEFAULT_THEME = 'elegant';
@@ -131,8 +133,11 @@ export const renderTheme = Effect.fn('renderTheme')(function* (
   if (!isTheme(theme)) return yield* new ThemeNotFound({ theme });
   const renderable = yield* load(theme);
   // Some themes (elegant) rewrite the resume they're given; give them a copy.
-  const prepared = withProjectSummaries(
-    withStringLocations(normalizeDates(withBasics(structuredClone(resume))))
+  const prepared = withLegacyWorkNames(
+    theme,
+    withProjectSummaries(
+      withStringLocations(normalizeDates(withBasics(structuredClone(resume))))
+    )
   );
   const html = yield* Effect.tryPromise({
     try: async () => {
@@ -147,5 +152,5 @@ export const renderTheme = Effect.fn('renderTheme')(function* (
       message: 'the theme did not return HTML',
     });
   }
-  return ensureHtmlCharset(html);
+  return withPrintStyles(ensureHtmlCharset(html), theme);
 });

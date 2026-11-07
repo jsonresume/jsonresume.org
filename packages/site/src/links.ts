@@ -63,7 +63,7 @@ export const themeInGalleryUrl = (slug: string) =>
 
 /** Bump the revision when previews change: static images are cached for a day. */
 export const themeImageUrl = (slug: string) =>
-  `/img/themes/${slug}.webp?v=20261107`;
+  `/img/themes/${slug}.webp?v=20261107-print`;
 
 export const siteUrl = 'https://jsonresume.org';
 

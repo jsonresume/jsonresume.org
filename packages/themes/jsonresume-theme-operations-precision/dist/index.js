@@ -1310,6 +1310,15 @@ var vt = /^\s*<\/[a-z]/i, gt = (function() {
 var wt = "__sc-".concat(f, "__");
 "production" !== process.env.NODE_ENV && "test" !== process.env.NODE_ENV && "undefined" != typeof window && (window[wt] || (window[wt] = 0), 1 === window[wt] && console.warn("It looks like there are several instances of 'styled-components' initialized in this application. This may cause dynamic styles to not render properly, errors during the rehydration process, a missing theme prop, and makes your application bigger without good reason.\n\nSee https://s-c.sh/2BAXzed for more info."), window[wt] += 1);
 const CSS_RESET = "<style>*,*::before,*::after{box-sizing:border-box}html,body{margin:0;padding:0}body{-webkit-font-smoothing:antialiased}</style>";
+const PRINT_DEFAULTS = `<style data-jsonresume-core-print>
+@page{size:auto;margin:12mm}
+@media print{
+body,h1,h2,h3,h4,p,li,a{overflow-wrap:anywhere}
+:where(main,aside,section,article,header,div){min-width:0}
+h1,h2,h3,h4,h5,h6{break-after:avoid}
+p,li{orphans:2;widows:2}
+}
+</style>`;
 const TOKENS_CSS_HREF = "https://unpkg.com/@jsonresume/core/dist/tokens.css";
 const FONTS_PRECONNECT = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>';
 function isHref(value) {
@@ -1367,7 +1376,7 @@ function renderResumeDocument(element, options = {}) {
   const resetTag = reset ? CSS_RESET : "";
   const titleTag = title ? `<title>${title}</title>` : "";
   const bodyAttr = bodyClass ? ` class="${bodyClass}"` : "";
-  return `<!DOCTYPE html><html lang="${lang}" dir="${dir}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">` + fontLinks + tokensLink + resetTag + head + styleTags + headAfterStyles + titleTag + `</head><body${bodyAttr}>${html}</body></html>`;
+  return `<!DOCTYPE html><html lang="${lang}" dir="${dir}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">` + fontLinks + tokensLink + resetTag + PRINT_DEFAULTS + head + styleTags + headAfterStyles + titleTag + `</head><body${bodyAttr}>${html}</body></html>`;
 }
 createContext({
   theme: "professional",
@@ -1393,7 +1402,8 @@ const StyledSection = dt.section`
   margin-bottom: ${(props) => props.theme?.spacing?.section || "var(--resume-space-section, 2rem)"};
 
   @media print {
-    page-break-inside: avoid;
+    /* Sections can span pages; their headings stay with the first entry. */
+    page-break-inside: auto;
   }
 `;
 function Section({ children, className, id, ...rest }) {

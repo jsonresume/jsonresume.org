@@ -11,7 +11,9 @@ function renderMarkdown(text) {
 function safeUrl(value = '') {
   try {
     const url = new URL(value);
-    return ['http:', 'https:', 'mailto:'].includes(url.protocol) ? value : '#';
+    return ['http:', 'https:', 'mailto:'].includes(url.protocol)
+      ? md.utils.escapeHtml(url.href)
+      : '#';
   } catch {
     return '#';
   }
@@ -397,6 +399,8 @@ export function render(resume) {
 
     /* Print styles */
     @media print {
+      @page { size: auto; margin: 12mm; }
+      body, h1, h2, h3, p, li, a { overflow-wrap: anywhere; }
       html { font-size: 13px; }
       body { padding: 0; background: white; }
       .container {
@@ -487,13 +491,23 @@ export function render(resume) {
           )}</span>
         </div>
         <div class="entry-subtitle">${
-          job.website
-            ? `<a href="${safeUrl(job.website)}">${job.company || ''}</a>`
-            : job.company || ''
+          job.url || job.website
+            ? `<a href="${safeUrl(
+                job.url || job.website
+              )}">${md.utils.escapeHtml(job.name || job.company || '')}</a>`
+            : md.utils.escapeHtml(job.name || job.company || '')
         }</div>
         ${
           job.summary
             ? `<div class="entry-body">${renderMarkdown(job.summary)}</div>`
+            : ''
+        }
+        ${
+          Array.isArray(job.highlights)
+            ? `<div class="entry-body"><ul>${job.highlights
+                .filter((text) => typeof text === 'string')
+                .map((text) => `<li>${md.renderInline(text)}</li>`)
+                .join('')}</ul></div>`
             : ''
         }
       </div>`

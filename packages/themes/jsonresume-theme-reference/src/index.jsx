@@ -171,7 +171,7 @@ export function render(resume, options = {}) {
       }
 
       .resume-section {
-        page-break-inside: avoid;
+        page-break-inside: auto;
       }
 
       .resume-item {

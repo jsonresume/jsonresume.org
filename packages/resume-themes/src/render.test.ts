@@ -36,6 +36,22 @@ describe('renderTheme', () => {
     await render('pumpkin');
     expect(await render('macchiato')).toContain(name);
   });
+  it('preserves achievement bullets and current employer names in Claude', async () => {
+    const html = await Effect.runPromise(
+      renderTheme('claude', {
+        basics: { name: 'Sample' },
+        work: [
+          {
+            name: 'Current Employer',
+            position: 'Engineer',
+            highlights: ['Distinct achievement <text>'],
+          },
+        ],
+      })
+    );
+    expect(html).toContain('Current Employer');
+    expect(html).toContain('Distinct achievement &lt;text&gt;');
+  });
 
   it('keeps dates in English after lucide, which is French', async () => {
     const english = await render('elegant');
