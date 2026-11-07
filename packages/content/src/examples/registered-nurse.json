@@ -1,0 +1,74 @@
+{
+  "slug": "registered-nurse",
+  "role": "Registered Nurse",
+  "field": "Healthcare",
+  "intro": "A registered nurse resume that leads with registration and specialty, then shows clinical scope, leadership and improvements to patient care.",
+  "tips": [
+    "Put your registration and specialty in the headline and summary.",
+    "Give the unit, its size and its patients for each role.",
+    "Show quality improvements and teaching as well as clinical care."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Hannah Walsh",
+      "label": "Registered Nurse, Intensive Care",
+      "email": "hannah@example.com",
+      "location": {
+        "city": "Dublin",
+        "countryCode": "IE"
+      },
+      "summary": "Registered nurse (NMBI) with nine years in emergency and intensive care. Charge nurse on a 20-bed ICU, preceptor for new graduates, and part of the team that brought in sepsis screening across the hospital."
+    },
+    "work": [
+      {
+        "name": "St. Brigid's University Hospital",
+        "position": "Clinical Nurse Manager (Charge Nurse), ICU",
+        "startDate": "2020-04",
+        "summary": "20-bed adult intensive care unit.",
+        "highlights": [
+          "Lead a shift team of 12 nurses caring for ventilated and post-surgical patients.",
+          "Co-led the hospital's sepsis screening programme; time to antibiotics fell from 3 hours to under 1.",
+          "Preceptor to 15 new graduate nurses, all retained past their first year."
+        ]
+      },
+      {
+        "name": "Mater Hospital",
+        "position": "Staff Nurse, Emergency Department",
+        "startDate": "2016-01",
+        "endDate": "2020-03",
+        "summary": "Emergency department, 70,000 attendances a year.",
+        "highlights": [
+          "Triaged and treated patients across resuscitation, majors and minors.",
+          "Trained colleagues in the new electronic triage system."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "Trinity College Dublin",
+        "area": "General Nursing",
+        "studyType": "BSc",
+        "endDate": "2015"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Clinical",
+        "keywords": [
+          "Critical care",
+          "Ventilation",
+          "Sepsis management",
+          "Triage"
+        ]
+      },
+      {
+        "name": "Certifications",
+        "keywords": ["ACLS", "BLS", "PALS"]
+      },
+      {
+        "name": "Leadership",
+        "keywords": ["Charge nurse", "Preceptorship", "Quality improvement"]
+      }
+    ]
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "slug": "marketing-manager",
+  "role": "Marketing Manager",
+  "field": "Marketing",
+  "intro": "A marketing manager resume measured in pipeline and revenue rather than campaigns run, with channels and budgets made explicit.",
+  "tips": [
+    "Tie campaigns to pipeline, revenue or customer numbers.",
+    "Name the budget and team you managed.",
+    "Show what you tested and learned, not just what you shipped."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Laura Schmidt",
+      "label": "Marketing Manager, B2B",
+      "email": "laura@example.com",
+      "location": {
+        "city": "Berlin",
+        "countryCode": "DE"
+      },
+      "summary": "B2B marketing manager with eight years in SaaS. Built the demand generation programme that grew marketing-sourced pipeline from €2m to €9m a year, with a team of five and a €1.2m budget."
+    },
+    "work": [
+      {
+        "name": "Cloudbase GmbH",
+        "position": "Marketing Manager",
+        "startDate": "2020-06",
+        "summary": "Database tools for developers, 3,000 customers.",
+        "highlights": [
+          "Grew marketing-sourced pipeline from €2m to €9m a year across paid search, content and events.",
+          "Rebuilt the website's conversion paths; demo requests up 60%.",
+          "Manage a team of five and a €1.2m annual budget."
+        ]
+      },
+      {
+        "name": "Talentio",
+        "position": "Content Marketing Lead",
+        "startDate": "2017-03",
+        "endDate": "2020-05",
+        "summary": "Recruiting software.",
+        "highlights": [
+          "Started the company blog and newsletter; 40,000 subscribers in three years.",
+          "Ran the webinar programme that generated a quarter of all leads."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "Humboldt-Universität zu Berlin",
+        "area": "Communication Studies",
+        "studyType": "BA",
+        "endDate": "2016"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Channels",
+        "keywords": ["Paid search", "SEO", "Content", "Events", "Email"]
+      },
+      {
+        "name": "Tools",
+        "keywords": ["HubSpot", "Google Analytics", "Salesforce"]
+      },
+      {
+        "name": "Leadership",
+        "keywords": ["Budgeting", "Team management", "Agency management"]
+      }
+    ]
+  }
+}

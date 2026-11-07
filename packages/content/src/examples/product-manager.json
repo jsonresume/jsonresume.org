@@ -1,0 +1,69 @@
+{
+  "slug": "product-manager",
+  "role": "Product Manager",
+  "field": "Technology",
+  "intro": "A product manager who shows outcomes, not activity: launches with adoption and revenue numbers, and evidence of working through other people.",
+  "tips": [
+    "Write outcomes (adoption, revenue, retention), not ceremonies (ran standups).",
+    "Show how you decided: research, data, experiments.",
+    "Make your scope clear: team size, product, customers."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Daniel Kim",
+      "label": "Senior Product Manager",
+      "email": "daniel@example.com",
+      "location": {
+        "city": "Seoul",
+        "countryCode": "KR"
+      },
+      "summary": "Product manager with seven years in B2B SaaS. Took a scheduling product from 0 to 4,000 paying teams, and led the pricing change that grew average revenue per account by 22%."
+    },
+    "work": [
+      {
+        "name": "Shiftly",
+        "position": "Senior Product Manager",
+        "startDate": "2021-05",
+        "summary": "Workforce scheduling for hospitality, 4,000 paying teams.",
+        "highlights": [
+          "Launched the mobile app that 70% of shift workers now use weekly.",
+          "Led a pricing and packaging change, informed by 40 customer interviews, that grew revenue per account by 22%.",
+          "Worked with a team of 8 engineers and 2 designers; introduced quarterly outcome goals the company adopted."
+        ]
+      },
+      {
+        "name": "Brightdesk",
+        "position": "Product Manager",
+        "startDate": "2018-03",
+        "endDate": "2021-04",
+        "summary": "Help desk software for mid-sized companies.",
+        "highlights": [
+          "Shipped the knowledge base that deflected 18% of support tickets for customers who used it.",
+          "Ran 25 A/B tests on onboarding; activation rose from 31% to 46%."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "Seoul National University",
+        "area": "Business Administration",
+        "studyType": "BBA",
+        "endDate": "2016"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Product",
+        "keywords": ["Discovery", "Roadmapping", "Pricing", "Experimentation"]
+      },
+      {
+        "name": "Data",
+        "keywords": ["SQL", "Amplitude", "Mixpanel"]
+      },
+      {
+        "name": "Leadership",
+        "keywords": ["Stakeholder management", "Hiring"]
+      }
+    ]
+  }
+}

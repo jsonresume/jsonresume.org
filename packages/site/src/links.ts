@@ -5,6 +5,11 @@ export const paths = {
   schema: '/schema',
   themes: '/themes',
   start: '/start',
+  examples: '/examples',
+  /** An example resume for a job title. */
+  example: (slug: string) => `/examples/${slug}`,
+  guides: '/guides',
+  guide: (slug: string) => `/guides/${slug}`,
   /** A theme's own page: what it is, its preview and how to use it. */
   theme: (slug: string) => `/themes/${slug}`,
   projects: '/projects',
@@ -99,6 +104,8 @@ export const footerGroups: NavGroup[] = [
       { label: 'Getting started', href: paths.gettingStarted },
       { label: 'Schema', href: paths.schema },
       { label: 'Themes', href: paths.themes },
+      { label: 'Resume examples', href: paths.examples },
+      { label: 'Resume guides', href: paths.guides },
       { label: 'Explore resumes', href: paths.explore },
       { label: 'Apps', href: paths.apps },
       { label: 'Jobs', href: paths.jobs },

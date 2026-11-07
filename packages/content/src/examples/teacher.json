@@ -1,0 +1,73 @@
+{
+  "slug": "teacher",
+  "role": "Teacher",
+  "field": "Education",
+  "intro": "A teacher resume that shows impact on students and the school: results, programmes started, and responsibilities beyond the classroom.",
+  "tips": [
+    "Name your subjects, year levels and certification up front.",
+    "Show student outcomes and programmes you created, with numbers.",
+    "Include responsibilities beyond teaching: coordination, mentoring, clubs."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Michael Brennan",
+      "label": "Secondary Science Teacher",
+      "email": "michael@example.com",
+      "location": {
+        "city": "Brisbane",
+        "countryCode": "AU"
+      },
+      "summary": "Registered secondary teacher (QCT) with eight years teaching science and physics to Years 7–12. Head of the junior science program, and founder of a robotics club that reached the national finals."
+    },
+    "work": [
+      {
+        "name": "Riverside State High School",
+        "position": "Science Teacher and Junior Science Coordinator",
+        "startDate": "2019-01",
+        "summary": "Co-educational state school, 1,400 students.",
+        "highlights": [
+          "Teach physics and general science to five classes a week across Years 9–12.",
+          "Rewrote the Year 9 science program around hands-on inquiry; the share of students choosing senior science rose from 38% to 51%.",
+          "Founded the robotics club; 40 students a year, two national finals."
+        ]
+      },
+      {
+        "name": "St. Columba's College",
+        "position": "Science Teacher",
+        "startDate": "2016-01",
+        "endDate": "2018-12",
+        "summary": "Independent school, 900 students.",
+        "highlights": [
+          "Taught Years 7–10 science and coached the debating team.",
+          "Mentored two graduate teachers through registration."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "Queensland University of Technology",
+        "area": "Secondary Education (Science)",
+        "studyType": "BEd",
+        "endDate": "2015"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Teaching",
+        "keywords": [
+          "Inquiry-based learning",
+          "Differentiation",
+          "Assessment design"
+        ]
+      },
+      {
+        "name": "Subjects",
+        "keywords": ["Physics", "Chemistry", "General science"]
+      },
+      {
+        "name": "Technology",
+        "keywords": ["OneNote", "Microsoft Teams", "Arduino"]
+      }
+    ]
+  }
+}

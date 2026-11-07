@@ -1,0 +1,74 @@
+{
+  "slug": "administrative-assistant",
+  "role": "Administrative Assistant",
+  "field": "Administration",
+  "intro": "An administrative assistant resume that shows the office ran better because of you: calendars, events, systems and savings, with the scale of the support.",
+  "tips": [
+    "Say who you supported and how many: executives, teams, offices.",
+    "Show systems you set up or improved, and the time or money saved.",
+    "List software you're fluent in."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Emma Thompson",
+      "label": "Executive Assistant",
+      "email": "emma@example.com",
+      "location": {
+        "city": "London",
+        "countryCode": "GB"
+      },
+      "summary": "Executive assistant with eight years supporting senior leaders in professional services. Runs complex calendars across time zones, plans events for up to 300 guests, and set up the office's travel and expenses process."
+    },
+    "work": [
+      {
+        "name": "Harcourt & Lane LLP",
+        "position": "Executive Assistant to the Managing Partner",
+        "startDate": "2019-06",
+        "summary": "Law firm, 400 staff.",
+        "highlights": [
+          "Manage the managing partner's calendar, travel and correspondence across three time zones.",
+          "Organised the firm's annual conference for 300 guests, within a £120k budget.",
+          "Set up a new travel and expenses process in SAP Concur; reimbursement time fell from 3 weeks to 5 days."
+        ]
+      },
+      {
+        "name": "Brightwell Consulting",
+        "position": "Team Administrator",
+        "startDate": "2016-02",
+        "endDate": "2019-05",
+        "summary": "Management consultancy.",
+        "highlights": [
+          "Supported a team of 12 consultants with diaries, travel and client meetings.",
+          "Digitised the filing system, freeing a room for meetings."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "University of Bristol",
+        "area": "English Literature",
+        "studyType": "BA",
+        "endDate": "2015"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Administration",
+        "keywords": [
+          "Diary management",
+          "Travel",
+          "Event planning",
+          "Minute taking"
+        ]
+      },
+      {
+        "name": "Tools",
+        "keywords": ["Microsoft 365", "SAP Concur", "Salesforce"]
+      },
+      {
+        "name": "Strengths",
+        "keywords": ["Discretion", "Prioritisation", "Communication"]
+      }
+    ]
+  }
+}

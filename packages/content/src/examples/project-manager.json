@@ -1,0 +1,74 @@
+{
+  "slug": "project-manager",
+  "role": "Project Manager",
+  "field": "Operations",
+  "intro": "A project manager resume that proves delivery: budgets, timelines and teams, with what the project achieved once it landed.",
+  "tips": [
+    "Give each project's budget, timeline and team size.",
+    "Say what the project achieved once delivered, not just that it shipped.",
+    "List your certification (PMP, PRINCE2) where readers look first."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Ahmed Hassan",
+      "label": "Project Manager, PMP",
+      "email": "ahmed@example.com",
+      "location": {
+        "city": "Dubai",
+        "countryCode": "AE"
+      },
+      "summary": "PMP-certified project manager with nine years delivering construction and fit-out projects up to AED 120m. Known for bringing troubled projects back on schedule."
+    },
+    "work": [
+      {
+        "name": "Gulf Interiors LLC",
+        "position": "Senior Project Manager",
+        "startDate": "2019-08",
+        "summary": "Commercial fit-out contractor.",
+        "highlights": [
+          "Delivered 14 office fit-outs worth AED 300m in total, 12 on or ahead of schedule.",
+          "Took over a hotel refurbishment running 9 weeks late and handed it over 2 weeks behind the original date.",
+          "Manage teams of up to 60 site staff and 15 subcontractors."
+        ]
+      },
+      {
+        "name": "Al Noor Construction",
+        "position": "Project Engineer",
+        "startDate": "2015-02",
+        "endDate": "2019-07",
+        "summary": "Residential and commercial construction.",
+        "highlights": [
+          "Coordinated design changes and procurement for a 30-storey residential tower.",
+          "Introduced weekly look-ahead planning that cut site idle time by a fifth."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "American University of Sharjah",
+        "area": "Civil Engineering",
+        "studyType": "BSc",
+        "endDate": "2014"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Delivery",
+        "keywords": [
+          "Scheduling (Primavera P6)",
+          "Budget control",
+          "Risk management",
+          "Procurement"
+        ]
+      },
+      {
+        "name": "Certifications",
+        "keywords": ["PMP"]
+      },
+      {
+        "name": "Leadership",
+        "keywords": ["Stakeholder management", "Subcontractor management"]
+      }
+    ]
+  }
+}

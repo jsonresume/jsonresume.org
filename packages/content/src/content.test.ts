@@ -144,3 +144,24 @@ describe('blog helpers', () => {
     expect(excerpt('word '.repeat(100), 20).endsWith('…')).toBe(true);
   });
 });
+
+describe('examples and guides', () => {
+  it('decodes every example resume, each a full one', async () => {
+    const { exampleSlugs, loadExamples } = await import('./documents');
+    const examples = await loadExamples();
+    expect(examples).toHaveLength(exampleSlugs.length);
+    expect(examples.length).toBeGreaterThanOrEqual(15);
+    for (const example of examples) {
+      const work = example.resume['work'];
+      expect(Array.isArray(work) && work.length >= 2).toBe(true);
+      expect(example.tips.length).toBeGreaterThanOrEqual(3);
+    }
+  });
+
+  it('loads every guide with a title and description', async () => {
+    const { guideSlugs, loadGuides } = await import('./documents');
+    const guides = await loadGuides();
+    expect(guides).toHaveLength(guideSlugs.length);
+    expect(guides.length).toBeGreaterThanOrEqual(15);
+  });
+});

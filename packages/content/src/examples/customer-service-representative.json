@@ -1,0 +1,73 @@
+{
+  "slug": "customer-service-representative",
+  "role": "Customer Service Representative",
+  "field": "Customer service",
+  "intro": "A customer service resume that turns busy days into evidence: volumes handled, satisfaction scores and the improvements that made customers' lives easier.",
+  "tips": [
+    "Give volumes and scores: tickets a day, satisfaction, first-contact resolution.",
+    "Show an improvement you suggested and what it changed.",
+    "Name the tools you used every day."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Maria Santos",
+      "label": "Customer Service Representative",
+      "email": "maria@example.com",
+      "location": {
+        "city": "Manila",
+        "countryCode": "PH"
+      },
+      "summary": "Customer service representative with four years supporting customers by phone, chat and email for e-commerce and telecoms. Consistently above 95% satisfaction, and trainer for new hires."
+    },
+    "work": [
+      {
+        "name": "Shopwise PH",
+        "position": "Senior Customer Service Representative",
+        "startDate": "2022-01",
+        "summary": "E-commerce marketplace, 2 million customers.",
+        "highlights": [
+          "Handle 70–90 chats and emails a day with a 96% satisfaction score.",
+          "Wrote 40 help-centre answers that reduced repeat contacts about refunds by 25%.",
+          "Train new team members in their first two weeks; 30 trained so far."
+        ]
+      },
+      {
+        "name": "Telcom Connect",
+        "position": "Customer Service Representative",
+        "startDate": "2020-03",
+        "endDate": "2021-12",
+        "summary": "Mobile network contact centre.",
+        "highlights": [
+          "Answered 60+ calls a day on billing and technical issues.",
+          "Top team performer for first-contact resolution three quarters running."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "University of Santo Tomas",
+        "area": "Communication",
+        "studyType": "BA",
+        "endDate": "2019"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Support",
+        "keywords": [
+          "Phone, chat and email support",
+          "De-escalation",
+          "Refunds and billing"
+        ]
+      },
+      {
+        "name": "Tools",
+        "keywords": ["Zendesk", "Salesforce Service Cloud", "Freshdesk"]
+      },
+      {
+        "name": "Languages",
+        "keywords": ["English", "Filipino", "Spanish (conversational)"]
+      }
+    ]
+  }
+}

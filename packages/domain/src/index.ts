@@ -4,3 +4,4 @@ export { HistoryEvent, Team, TeamMember } from './people';
 export { BlogPost, BlogPostMeta, Doc, DocMeta } from './documents';
 export { ThemeSummary } from './theme';
 export { ResumeProblem, resumeProblemStatus } from './resume';
+export { ExampleResume } from './example';

@@ -37,6 +37,7 @@
     "react": "^19.2.0"
   },
   "devDependencies": {
+    "@jsonresume/sample-data": "workspace:*",
     "@repo/eslint-config-custom": "workspace:*",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
@@ -47,7 +48,7 @@
     "react-dom": "^19.2.0",
     "tsconfig": "workspace:*",
     "typescript": "^5.9.3",
-    "vitest": "^3.2.6",
-    "@jsonresume/sample-data": "workspace:*"
+    "vite": "^6.4.3",
+    "vitest": "^3.2.6"
   }
 }
