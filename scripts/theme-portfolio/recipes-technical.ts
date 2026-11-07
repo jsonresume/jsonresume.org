@@ -1,0 +1,21 @@
+import { recipes } from './recipes.ts';
+export default recipes([
+  ['build-log', 'rule', 'number', 34, 25, 970, 'open', 'mono'],
+  ['systems-ledger', 'top', 'edge', 37, 31, 1000, 'open', 'mono'],
+  ['api-reference', 'plain', 'bracket', 38, 30, 1060, 'line', 'mono'],
+  ['research-engineer', 'split', 'rule', 37, 33, 1020],
+  ['security', 'top', 'plain', 35, 30, 960, 'open', 'mono'],
+  ['data-notebook', 'plain', 'number', 37, 29, 960, 'open', 'mono'],
+  ['infrastructure', 'plain', 'edge', 34, 31, 1060, 'light', 'mono'],
+  ['release-notes', 'rule', 'double', 38, 28, 970, 'open', 'mono'],
+  ['platform-record', 'plain', 'short', 39, 33, 1060, 'light', 'mono'],
+  ['terminal-light', 'top', 'dotted', 34, 30, 940, 'open', 'mono', 'squares'],
+  ['terminal-contrast', 'plain', 'plain', 34, 29, 1060, 'open', 'mono'],
+  ['maintainer', 'rule', 'bracket', 35, 29, 980, 'open', 'mono'],
+  ['engineering-matrix', 'top', 'plain', 37, 27, 1100, 'line', 'mono'],
+  ['lab-protocol', 'frame', 'plain', 36, 31, 1000, 'open', 'mono'],
+  ['quant', 'plain', 'number', 40, 28, 960, 'open', 'mono'],
+  ['architecture-spec', 'plain', 'rule', 34, 32, 1060, 'line', 'mono'],
+  ['operator-manual', 'top', 'number', 38, 31, 980],
+  ['test-report', 'rule', 'rule', 35, 30, 1000, 'open', 'mono'],
+]);

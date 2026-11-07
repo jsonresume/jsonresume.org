@@ -4,7 +4,10 @@
  * the first time it renders, so one that throws on import fails only its
  * own pages. Keep in step with @jsonresume/theme-metadata.
  */
+import { portfolioLoaders } from './portfolio-loaders.ts';
+
 export const themeLoaders: Readonly<Record<string, () => Promise<unknown>>> = {
+  ...portfolioLoaders,
   'academic-classic': () => import('jsonresume-theme-academic-classic'),
   alta: () => import('jsonresume-theme-alta'),
   'awesome-professional': () => import('jsonresume-theme-awesome-professional'),

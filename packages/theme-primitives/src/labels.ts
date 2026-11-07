@@ -1,3 +1,4 @@
+import { regionalLabels } from './regional-labels.js';
 import type { SectionId } from './types.js';
 
 export const order: SectionId[] = [
@@ -27,6 +28,7 @@ const en = [
   'References',
 ];
 const translations: Record<string, { sections: string[]; present: string }> = {
+  ...regionalLabels,
   en: { sections: en, present: 'Present' },
   fr: {
     sections: [

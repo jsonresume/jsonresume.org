@@ -1,5 +1,6 @@
 import { Card } from '@jsonresume/ui';
 import type { ThemeSummary } from '@repo/domain';
+import { THEME_STYLES, THEME_LAYOUTS } from '@jsonresume/theme-metadata';
 import * as s from './gallery.css';
 
 export interface ThemeCardProps {
@@ -32,7 +33,13 @@ export function ThemeCard({
         />
         <span className={s.body}>
           <span className={s.name}>{theme.name}</span>
+          <span className={s.category}>
+            {THEME_STYLES[theme.style]} · {THEME_LAYOUTS[theme.layout]}
+          </span>
           <span className={s.description}>{theme.description}</span>
+          <span className={s.usage}>
+            {theme.usage.resumes.toLocaleString('en')} public resumes
+          </span>
         </span>
       </a>
     </Card>

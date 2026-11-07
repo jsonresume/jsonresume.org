@@ -46,6 +46,7 @@ export interface ThemeOptions {
   className: string;
   layout:
     | 'single'
+    | 'balanced'
     | 'right'
     | 'left'
     | 'deedy'
@@ -53,6 +54,7 @@ export interface ThemeOptions {
     | 'timeline'
     | 'academic'
     | 'european';
+  defaultLanguage?: string;
   fonts: string[];
   css: string;
   sectionOrder?: SectionId[];

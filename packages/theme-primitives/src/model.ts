@@ -29,7 +29,8 @@ export function documentModel(
   const basics = record(resume.basics);
   const meta = record(resume.meta);
   const preferences = record(meta.researchThemes);
-  const requestedLanguage = text(meta.language) || 'en';
+  const requestedLanguage =
+    text(meta.language) || options.defaultLanguage || 'en';
   const language =
     Option.getOrElse(canonicalLocales(requestedLanguage), () => ['en'])[0] ??
     'en';

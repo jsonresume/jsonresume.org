@@ -158,6 +158,7 @@ globalStyle(`.${page}[data-monochrome="true"]`, {
     [t.color.accent]: '#222222',
     [t.color.sidebar]: '#292929',
     [t.color.sidebarInk]: '#ffffff',
+    [t.color.soft]: '#f4f4f4',
   },
 });
 

@@ -1,4 +1,5 @@
 import './layout.css.js';
+import './balanced.css.js';
 import './print.css.js';
 import type { ThemeOptions } from './types.js';
 export declare function createTheme(options: ThemeOptions): (resume: unknown) => string;

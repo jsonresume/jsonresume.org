@@ -4,6 +4,5 @@
     "prettier --write"
   ],
   "packages/**/*.{js,jsx,ts,tsx}": "prettier --write",
-  "*.{ts,tsx}": "bash -c 'pnpm turbo typecheck'",
   "*": "prettier --write --ignore-unknown"
 }

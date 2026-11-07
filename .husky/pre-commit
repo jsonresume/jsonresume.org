@@ -1,4 +1,8 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-pnpm lint-staged
+pnpm lint-staged || exit $?
+# Global checks belong outside lint-staged's argument-length batches.
+if git diff --cached --name-only --diff-filter=ACMRD | grep -Eq '\.tsx?$'; then
+  pnpm turbo typecheck --concurrency=4
+fi

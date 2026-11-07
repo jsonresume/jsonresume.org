@@ -6,8 +6,18 @@ export const themeQueryAtom = Atom.make('');
 
 /** The selected tag, or null for every theme. */
 export const themeTagAtom = Atom.make<string | null>(null);
+export const themeLayoutAtom = Atom.make<string | null>(null);
+export const themeColorAtom = Atom.make<string | null>(null);
+export const themeSortAtom = Atom.make<string | null>(null);
 
 /** Themes matching the current query and tag. */
 export const visibleThemesAtom = Atom.make((get) =>
-  filterThemes(themes, { query: get(themeQueryAtom), tag: get(themeTagAtom) })
+  filterThemes(themes, {
+    query: get(themeQueryAtom),
+    tag: null,
+    style: get(themeTagAtom),
+    layout: get(themeLayoutAtom),
+    color: get(themeColorAtom),
+    sort: get(themeSortAtom),
+  })
 );

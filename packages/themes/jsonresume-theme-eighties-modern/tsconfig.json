@@ -1,0 +1,6 @@
+{
+  "extends": "../../theme-primitives/tsconfig.json",
+  "include": [
+    "src"
+  ]
+}

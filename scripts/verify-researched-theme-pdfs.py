@@ -1,20 +1,20 @@
-"""Inspect generated theme PDFs with pdfplumber and render page contact sheets.
+"""Inspect generated theme PDFs with Poppler and render page contact sheets.
 
-Run after verify-researched-themes.ts. Requires pdfplumber, Pillow and Poppler.
+Run after verify-researched-themes.ts. Requires Pillow and Poppler.
 """
 import json
-import logging
 import math
 import re
 import subprocess
+import sys
+import xml.etree.ElementTree as ET
 from pathlib import Path
+from concurrent.futures import ProcessPoolExecutor
 
-import pdfplumber
 from PIL import Image, ImageDraw
 
-logging.getLogger('pdfminer').setLevel(logging.ERROR)
 
-root = Path('output/researched-themes')
+root = Path('output/theme-portfolio' if '--portfolio' in sys.argv else 'output/researched-themes')
 expected = {
     'basics': 'Jane Developer', 'work': 'Senior Software Engineer',
     'projects': 'Open Source UI Library', 'education': 'University of California',
@@ -24,10 +24,10 @@ expected = {
     'languages': 'Spanish', 'interests': 'Community Building',
     'references': 'Sarah Johnson',
 }
-results = []
-for folder in sorted(root.iterdir()):
-    if not folder.is_dir() or folder.name == 'review':
-        continue
+selected = next((arg.split('=', 1)[1].split(',') for arg in sys.argv if arg.startswith('--themes=')), None)
+
+def check_folder(folder):
+    results = []
     tiles = []
     for pdf in sorted(folder.glob('*.pdf')):
         issues = []
@@ -37,20 +37,28 @@ for folder in sorted(root.iterdir()):
             for section, sentinel in expected.items():
                 if re.sub(r'\s+', '', sentinel).casefold() not in normalised:
                     issues.append(f'Missing {section}: {sentinel}')
+        elif pdf.name.startswith('regional'):
+            if 'regional-sentinel' not in normalised:
+                issues.append('Missing regional project')
         else:
             for index in range(1, 13):
                 if f'dense-sentinel-{index}' not in normalised:
                     issues.append(f'Missing dense entry {index}')
-        with pdfplumber.open(pdf) as doc:
-            for number, page in enumerate(doc.pages, 1):
-                chars = [char for char in page.chars if char['text'].strip()]
-                if len(chars) < 15:
-                    issues.append(f'Nearly blank page {number}')
-                if any(char['x0'] < 10 or char['x1'] > page.width - 10
-                       or char['top'] < 10 or char['bottom'] > page.height - 10
-                       for char in chars):
-                    issues.append(f'Content outside printable bounds on page {number}')
-            pages = len(doc.pages)
+        # Poppler supplies each word's actual PDF coordinates. Parsing the
+        # bounding-box stream avoids reconstructing thousands of glyph objects.
+        bbox = subprocess.check_output(['pdftotext', '-bbox', str(pdf), '-'])
+        page_nodes = [node for node in ET.fromstring(bbox).iter()
+                      if node.tag.endswith('}page')]
+        for number, page in enumerate(page_nodes, 1):
+            words = [node for node in page.iter() if node.tag.endswith('}word')]
+            if sum(len(word.text or '') for word in words) < 15:
+                issues.append(f'Nearly blank page {number}')
+            width, height = float(page.attrib['width']), float(page.attrib['height'])
+            if any(float(word.attrib['xMin']) < 10 or float(word.attrib['xMax']) > width - 10
+                   or float(word.attrib['yMin']) < 10 or float(word.attrib['yMax']) > height - 10
+                   for word in words):
+                issues.append(f'Content outside printable bounds on page {number}')
+        pages = len(page_nodes)
         prefix = folder / pdf.stem
         for old_render in folder.glob(f'{pdf.stem}-*.png'):
             old_render.unlink()
@@ -70,9 +78,17 @@ for folder in sorted(root.iterdir()):
             sheet.paste(tile, ((index % columns)*270, (index//columns)*385))
         sheet.save(folder / 'print-contact-sheet.png')
     print(f'{folder.name}: PDF content, bounds and page renders checked', flush=True)
-(root / 'pdf-results.json').write_text(json.dumps(results, indent=2))
-failures = [result for result in results if result['issues']]
-print(f'{len(results)} PDFs, {sum(result["pages"] for result in results)} pages, {len(failures)} with issues.')
-if failures:
-    print(json.dumps(failures, indent=2))
-    raise SystemExit(1)
+    return results
+
+if __name__ == '__main__':
+    folders = [folder for folder in sorted(root.iterdir()) if folder.is_dir() and folder.name != 'review' and (not selected or folder.name in selected)]
+    results = []
+    with ProcessPoolExecutor(max_workers=2) as pool:
+        for batch in pool.map(check_folder, folders):
+            results.extend(batch)
+    (root / ('pdf-results-pilot.json' if selected else 'pdf-results.json')).write_text(json.dumps(results, indent=2))
+    failures = [result for result in results if result['issues']]
+    print(f'{len(results)} PDFs, {sum(result["pages"] for result in results)} pages, {len(failures)} with issues.')
+    if failures:
+        print(json.dumps(failures, indent=2))
+        raise SystemExit(1)

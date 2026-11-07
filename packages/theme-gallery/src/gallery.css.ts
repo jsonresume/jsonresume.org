@@ -54,7 +54,24 @@ export const description = style({
 
 export const filters = style({ marginBlockEnd: space[4] });
 
-export const styles = style({ marginBlockEnd: space[8] });
+export const styles = style({ marginBlockEnd: space[3] });
+
+export const usageNote = style({
+  fontSize: font.size.xs,
+  color: color.text.muted,
+  lineHeight: font.lineHeight.normal,
+  marginBlockEnd: space[6],
+  maxWidth: '70ch',
+});
+export const category = style({
+  fontSize: font.size.xs,
+  color: color.text.muted,
+});
+export const usage = style({
+  fontSize: font.size.xs,
+  fontWeight: font.weight.semibold,
+  marginBlockStart: space[2],
+});
 
 export const empty = style({ paddingBlock: space[12] });
 

@@ -2,6 +2,8 @@ export { themeQueryAtom, themeTagAtom, visibleThemesAtom } from './atoms';
 export {
   emptyFilter,
   filterThemes,
+  sortThemes,
+  facetCounts,
   findTheme,
   tagCounts,
   themes,

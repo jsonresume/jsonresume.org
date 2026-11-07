@@ -108,12 +108,12 @@ describe('published document renderer', () => {
     expect(french.documentElement.lang).toBe('fr-FR');
     expect(french.querySelector('h2')?.textContent).toBe('Expérience');
     expect(french.body.textContent).toContain('Aujourd’hui');
-    const arabic = document({
+    const persian = document({
       skills: [{ name: 'البرمجة' }],
-      meta: { language: 'ar' },
+      meta: { language: 'fa' },
     });
-    expect(arabic.documentElement.dir).toBe('rtl');
-    expect(arabic.querySelector('h2')?.lang).toBe('en');
+    expect(persian.documentElement.dir).toBe('rtl');
+    expect(persian.querySelector('h2')?.lang).toBe('en');
   });
 
   it('makes photos and full street addresses explicit opt-ins', () => {

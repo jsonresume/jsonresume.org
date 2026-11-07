@@ -1,4 +1,6 @@
+import { PORTFOLIO_THEME_METADATA } from './portfolio.js';
 import { RESEARCHED_THEME_METADATA } from './researched.js';
+import { classifyMetadata } from './classify.js';
 
 /**
  * Theme metadata for all available themes
@@ -7,7 +9,8 @@ import { RESEARCHED_THEME_METADATA } from './researched.js';
  * This file contains ONLY metadata (no theme imports)
  * Theme imports are handled by consuming renderer packages
  */
-export const THEME_METADATA = {
+const METADATA = {
+  ...PORTFOLIO_THEME_METADATA,
   ...RESEARCHED_THEME_METADATA,
   'desert-modern': {
     name: 'Desert Modern',
@@ -716,6 +719,8 @@ export const THEME_METADATA = {
     ],
   },
 };
+
+export const THEME_METADATA = classifyMetadata(METADATA);
 
 // List of available theme names (derived from THEME_METADATA)
 export const THEME_NAMES = Object.keys(THEME_METADATA);

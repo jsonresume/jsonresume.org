@@ -3,7 +3,19 @@ import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { ThemeSummary } from '@repo/domain';
 import { Schema } from 'effect';
 import { describe, expect, it } from 'vitest';
-import { filterThemes, findTheme, tagCounts, themes } from './catalog';
+import {
+  facetCounts,
+  filterThemes,
+  findTheme,
+  sortThemes,
+  tagCounts,
+  themes,
+} from './catalog';
+import {
+  THEME_STYLES,
+  THEME_LAYOUTS,
+  THEME_COLORS,
+} from '@jsonresume/theme-metadata';
 import { ThemeGallery } from './ThemeGallery';
 
 const links = {
@@ -12,15 +24,58 @@ const links = {
 };
 
 describe('catalog', () => {
-  it('decodes every theme, A to Z', () => {
+  it('decodes every theme and ranks by public-resume usage', () => {
     // Decode explicitly: the module skips decoding outside SSR (jsdom here).
     expect(() =>
       Schema.decodeUnknownSync(Schema.Array(ThemeSummary))(themes)
     ).not.toThrow();
     expect(themes.length).toBeGreaterThan(50);
-    const names = themes.map((t) => t.name);
-    expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b)));
+    expect(themes[0].slug).toBe('elegant');
+    expect(themes[0].usage.inherited).toBeGreaterThan(0);
+    expect(themes.map((t) => t.usage.resumes)).toEqual(
+      themes.map((t) => t.usage.resumes).sort((a, b) => b - a)
+    );
     expect(findTheme('kendall')?.name).toBe('Kendall');
+  });
+
+  it('gives every theme independent, valid discovery facets', () => {
+    for (const theme of themes) {
+      expect(Object.hasOwn(THEME_STYLES, theme.style)).toBe(true);
+      expect(Object.hasOwn(THEME_LAYOUTS, theme.layout)).toBe(true);
+      expect(Object.hasOwn(THEME_COLORS, theme.color)).toBe(true);
+      expect(theme.tags).not.toContain('research-informed');
+      expect(theme.usage.chosen + theme.usage.inherited).toBe(
+        theme.usage.resumes
+      );
+    }
+    expect(
+      facetCounts(themes, 'style').reduce((n, row) => n + row.count, 0)
+    ).toBe(themes.length);
+  });
+
+  it('combines facets and changes sort without mutating the catalogue', () => {
+    const selected = filterThemes(themes, {
+      query: '',
+      tag: null,
+      style: 'modern',
+      layout: 'left',
+      color: 'green',
+    });
+    expect(selected.map((t) => t.slug)).toContain('macchiato');
+    expect(
+      selected.every(
+        (t) =>
+          t.style === 'modern' && t.layout === 'left' && t.color === 'green'
+      )
+    ).toBe(true);
+    const alphabetical = sortThemes(themes, 'name').map((t) => t.name);
+    expect(alphabetical).toEqual(
+      [...alphabetical].sort((a, b) => a.localeCompare(b))
+    );
+    expect(themes[0].slug).toBe('elegant');
+    expect(
+      filterThemes(themes, { query: '', tag: null, style: 'research-informed' })
+    ).toHaveLength(themes.length);
   });
 
   it('matches every word of the query, and the tag', () => {
@@ -63,13 +118,40 @@ describe('ThemeGallery', () => {
       '/preview/desert-modern'
     );
     expect(window.location.search).toBe('?q=desert');
-    const style = tagCounts(themes)[0];
+    const style = { tag: 'modern' };
     await act(async () => {
-      fireEvent.click(
-        screen.getByRole('button', { name: new RegExp(`^${style.tag}`) })
-      );
+      fireEvent.click(screen.getByRole('button', { name: /^Modern/ }));
     });
     expect(window.location.search).toBe(`?q=desert&style=${style.tag}`);
+  });
+
+  it('offers separate layouts and colours and preserves sort in the URL', async () => {
+    window.history.replaceState(null, '', '/themes');
+    await act(async () => {
+      render(
+        <RegistryProvider>
+          <ThemeGallery {...links} />
+        </RegistryProvider>
+      );
+    });
+    expect(
+      screen.queryByRole('button', { name: /research-informed/ })
+    ).toBeNull();
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText('Layout'), {
+        target: { value: 'left' },
+      });
+      fireEvent.change(screen.getByLabelText('Colour'), {
+        target: { value: 'green' },
+      });
+      fireEvent.change(screen.getByLabelText('Sort by'), {
+        target: { value: 'name' },
+      });
+    });
+    expect(window.location.search).toContain('layout=left');
+    expect(window.location.search).toContain('color=green');
+    expect(window.location.search).toContain('sort=name');
+    expect(screen.getByRole('link', { name: /Macchiato/ })).toBeInTheDocument();
   });
 
   it('reads a shared filter from the URL after the first render', async () => {

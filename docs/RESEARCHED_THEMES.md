@@ -17,7 +17,8 @@ useful composition and hierarchy without importing their source or branding.
 | `academic-classic`     | Date gutter, education and publications first         | Extended academic CVs                         |
 | `europass-inspired`    | Blue labels, explicit date gutter                     | Structured European CVs                       |
 
-The catalogue tag `research-informed` selects exactly this collection. Existing
+The catalogue uses familiar style, layout and colour facets. The former
+`research-informed` filter has been retired. Existing
 themes are unchanged. None of these themes is an official or endorsed Harvard,
 Europass, Overleaf, or commercial vendor product.
 

@@ -4,6 +4,7 @@ import { Document } from './Document.js';
 import { documentModel } from './model.js';
 import { escapeHtml } from './data.js';
 import './layout.css.js';
+import './balanced.css.js';
 import './print.css.js';
 import type { ThemeOptions } from './types.js';
 

@@ -37,7 +37,8 @@ export interface DocumentModel {
 export interface ThemeOptions {
     slug: string;
     className: string;
-    layout: 'single' | 'right' | 'left' | 'deedy' | 'achievement' | 'timeline' | 'academic' | 'european';
+    layout: 'single' | 'balanced' | 'right' | 'left' | 'deedy' | 'achievement' | 'timeline' | 'academic' | 'european';
+    defaultLanguage?: string;
     fonts: string[];
     css: string;
     sectionOrder?: SectionId[];

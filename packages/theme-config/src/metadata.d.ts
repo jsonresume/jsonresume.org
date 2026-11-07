@@ -4,6 +4,10 @@ export interface ThemeMetadata {
   description: string;
   author: string;
   tags: string[];
+  style: string;
+  layout: string;
+  color: string;
+  usage: { resumes: number; chosen: number; inherited: number; views: number };
 }
 
 /** Every theme the registry can render, keyed by slug. */

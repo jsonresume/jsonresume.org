@@ -1,0 +1,251 @@
+[
+  [
+    "Meridian Resume",
+    "right",
+    "blue",
+    "elegant",
+    "General professional",
+    "A split identity block, narrow blue rule and light qualifications rail provide a balanced modern default. Keep the main career column broad and the summary unboxed.",
+    "meridian",
+    1
+  ],
+  [
+    "Soft Panel",
+    "left",
+    "warm",
+    "macchiato",
+    "Applicants wanting a softer page",
+    "A pale warm identity panel and rounded section dividers give a gentle visual character. Keep body text dark and use square, quiet print geometry when space is tight.",
+    "soft-panel",
+    1
+  ],
+  [
+    "Slate Sidebar",
+    "left",
+    "blue",
+    "kendall",
+    "Business and technology",
+    "A slate identity sidebar carries contacts and concise qualifications, beside a white experience column. Use a broad enough rail for long credentials and natural mobile stacking.",
+    "slate-sidebar",
+    1
+  ],
+  [
+    "Open Column",
+    "right",
+    "green",
+    "elegant",
+    "General professional",
+    "Open the masthead across the page and place a light green supporting column on the right. Fine vertical rules separate information without enclosing each entry in a card.",
+    "open-column",
+    1
+  ],
+  [
+    "Northstar Profile",
+    "single",
+    "blue",
+    "kendall",
+    "General professional",
+    "A precise blue name and small uppercase professional label lead an open single column. Small square section markers add orientation without icons or decorative ratings.",
+    "northstar",
+    1
+  ],
+  [
+    "Product Story",
+    "right",
+    "purple",
+    "elegant",
+    "Product management and strategy",
+    "Use a wide narrative column and a compact evidence rail for skills and credentials. Purple keylines, prominent projects and clear organisation context support a coherent product career story.",
+    "product-story",
+    1
+  ],
+  [
+    "Focus Header",
+    "single",
+    "green",
+    "elegant",
+    "Applicants who prefer a strong opening",
+    "A shallow green identity band gives the opening focus while the body remains a plain reading column. The header must expand for long names and multiple contact links.",
+    "focus-header",
+    1
+  ],
+  [
+    "Friendly Professional",
+    "single",
+    "warm",
+    "macchiato",
+    "General professional",
+    "A warm neutral masthead with rounded type and soft section underlines feels approachable. Keep the evidence hierarchy crisp and avoid turning a professional resume into lifestyle stationery.",
+    "friendly-pro",
+    1
+  ],
+  [
+    "Bilingual Modern",
+    "single",
+    "blue",
+    "elegant",
+    "Applicants working across languages",
+    "A balanced split masthead and language-aware headings support mixed-language content. Keep bilingual names and qualification titles intact, with a simple full-width reading order.",
+    "bilingual",
+    2
+  ],
+  [
+    "Arabic Modern",
+    "right",
+    "green",
+    "elegant",
+    "Arabic-reading applicants",
+    "Use Arabic-capable typography, right-to-left document flow and a supporting rail that respects reading direction. Localise controlled labels while preserving Latin links and mixed-script dates.",
+    "arabic",
+    2,
+    "ar"
+  ],
+  [
+    "CJK Modern",
+    "single",
+    "blue",
+    "elegant",
+    "Japanese-reading applicants",
+    "A compact Japanese-capable masthead, restrained blue labels and generous glyph spacing support dense mixed-script records. Do not assume a photo, age or other regional personal details.",
+    "japanese",
+    2,
+    "ja"
+  ],
+  [
+    "Indic Modern",
+    "single",
+    "red",
+    "elegant",
+    "Hindi-reading applicants",
+    "Use Devanagari-capable typography with comfortable line height and an open single column. The heading system should support Hindi and Latin content without clipping marks or shrinking names.",
+    "indic",
+    2,
+    "hi"
+  ],
+  [
+    "Korean Modern",
+    "left",
+    "blue",
+    "kendall",
+    "Korean-reading applicants",
+    "A light identity rail and Korean-capable sans typography create a compact professional page. Keep qualifications as text and give long mixed-script employer names a reliable wrap.",
+    "korean",
+    2,
+    "ko"
+  ],
+  [
+    "Portuguese Modern",
+    "single",
+    "green",
+    "elegant",
+    "Portuguese-reading applicants",
+    "Portuguese labels, an open left-aligned masthead and green section rules form a straightforward modern CV. Support long accented names and optional local contact formats.",
+    "portuguese",
+    2,
+    "pt"
+  ],
+  [
+    "German Business",
+    "dates",
+    "blue",
+    "professional",
+    "German-reading applicants",
+    "German labels and a clear date gutter give long qualifications room to breathe. Use restrained blue type and keep portrait and full-address display under the applicant's control.",
+    "german",
+    2,
+    "de"
+  ],
+  [
+    "French Professionnel",
+    "right",
+    "purple",
+    "professional",
+    "French-reading applicants",
+    "A narrow lavender qualifications rail complements a crisp French-labelled career column. Use a confident sans identity and clean role/date alignment rather than ornamental flourishes.",
+    "french",
+    2,
+    "fr"
+  ],
+  [
+    "Spanish Profesional",
+    "single",
+    "blue",
+    "elegant",
+    "Spanish-reading applicants",
+    "Spanish labels, a compact split masthead and a single reading column create a versatile CV. Use blue section brackets and comfortable spacing for multi-part surnames.",
+    "spanish",
+    2,
+    "es"
+  ],
+  [
+    "Latin American CV",
+    "left",
+    "warm",
+    "macchiato",
+    "Spanish-reading applicants",
+    "A warm, light sidebar and generous career column support Spanish-language content. Keep every personal-detail choice optional and let longer careers continue without forced page limits.",
+    "latin-american",
+    2,
+    "es"
+  ],
+  [
+    "Canadian Profile",
+    "single",
+    "blue",
+    "professional",
+    "English and French applications",
+    "A restrained full-width masthead and clean single column support either English or French content. Emphasise qualifications and achievements with strong contrast and compact contact details.",
+    "canadian",
+    2
+  ],
+  [
+    "Australian Professional",
+    "right",
+    "green",
+    "elegant",
+    "Professional and technical applicants",
+    "Use an open masthead and a light right rail for credentials and practical capabilities. Leave room for longer role descriptions and make multi-page continuation look intentional.",
+    "australian",
+    2
+  ],
+  [
+    "Startup Operator",
+    "left",
+    "blue",
+    "kendall",
+    "Startup operators and generalists",
+    "A compact dark identity rail and energetic sans headings create a practical startup resume. Projects and cross-functional evidence lead the main column without hiding the employment chronology.",
+    "startup",
+    1
+  ],
+  [
+    "Care Path",
+    "single",
+    "green",
+    "elegant",
+    "Care, health and support work",
+    "A calm green masthead and large, plain section labels prioritise practical experience and certifications. Give volunteer work the same careful structure as paid roles.",
+    "care-path",
+    2
+  ],
+  [
+    "Hospitality Profile",
+    "left",
+    "warm",
+    "macchiato",
+    "Hospitality and customer service",
+    "Use a warm neutral identity rail and a clear main column for service experience. Languages and credentials stay visible, and long lists of venues remain easy to scan.",
+    "hospitality",
+    2
+  ],
+  [
+    "Skilled Trades",
+    "single",
+    "blue",
+    "professional",
+    "Trades and construction",
+    "A sturdy sans masthead and strong blue section rules frame practical work history. Certifications and skills appear early, with readable project evidence and no graphical proficiency scales.",
+    "trades",
+    2
+  ]
+]

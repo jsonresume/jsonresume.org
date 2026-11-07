@@ -1,0 +1,202 @@
+[
+  [
+    "Charter Serif",
+    "single",
+    "mono",
+    "professional",
+    "General professional",
+    "A formal left-aligned serif identity above thin double rules. Keep the dates in a narrow right rail and use small capitals only for section labels.",
+    "charter",
+    1
+  ],
+  [
+    "Chambers Counsel",
+    "dates",
+    "blue",
+    "professional",
+    "Legal and policy",
+    "A navy nameplate and generous date gutter create the rhythm of a legal brief. Credentials stay close to education and experience remains easy to scan.",
+    "counsel",
+    1
+  ],
+  [
+    "Diplomat CV",
+    "single",
+    "blue",
+    "professional",
+    "International and public affairs",
+    "Use a compact bilingual-friendly masthead, a thin navy perimeter rule and open chronological entries. Long institutions and multilingual names must wrap without shrinking.",
+    "diplomat",
+    1
+  ],
+  [
+    "Capital Brief",
+    "right",
+    "mono",
+    "professional",
+    "Finance and business",
+    "Pair a confident serif masthead with a narrow right qualifications rail. Short section rules and sharply aligned dates should feel like a financial briefing.",
+    "capital",
+    1
+  ],
+  [
+    "Ledger Professional",
+    "single",
+    "warm",
+    "professional",
+    "Accounting and operations",
+    "Use warm grey rules, aligned role and organisation lines, and an understated ledger rhythm. Keep achievements as readable bullets rather than decorative metric boxes.",
+    "ledger",
+    1
+  ],
+  [
+    "Academy Record",
+    "dates",
+    "mono",
+    "academic-cv-lite",
+    "Academic and research",
+    "Education and publications lead an extended CV. Use wide outer margins, a precise date gutter and hanging publication context that continues cleanly across pages.",
+    "academy",
+    2
+  ],
+  [
+    "Public Service Ledger",
+    "single",
+    "mono",
+    "government-standard",
+    "Government and public service",
+    "A restrained government-style document with a clear identity block and numbered section labels. Preserve full appointment history and avoid photos, icons and decorative skill scales.",
+    "service",
+    2
+  ],
+  [
+    "Fellowship Dossier",
+    "dates",
+    "green",
+    "academic-cv-lite",
+    "Fellowships and grants",
+    "A dark green heading system separates appointments, publications and awards. Give long research entries enough space and keep dates in a consistent left gutter.",
+    "fellowship",
+    2
+  ],
+  [
+    "Clinic Serif",
+    "right",
+    "blue",
+    "professional",
+    "Healthcare and clinical practice",
+    "A calm blue serif identity sits above a wide practice-history column. A right rail supports certifications and languages without turning the CV into a dashboard.",
+    "clinic",
+    2
+  ],
+  [
+    "Stewardship CV",
+    "single",
+    "green",
+    "professional",
+    "Nonprofit and community",
+    "Use a modest serif masthead, green keylines and unusually clear volunteer entries. Paid and unpaid experience share the same strong hierarchy and readable dates.",
+    "stewardship",
+    2
+  ],
+  [
+    "Trustee Profile",
+    "right",
+    "warm",
+    "executive-slate",
+    "Boards and governance",
+    "Create an uncluttered board profile with an open summary, prominent appointments and a quiet credentials rail. Fine bronze rules provide character without a large coloured banner.",
+    "trustee",
+    2
+  ],
+  [
+    "Boardroom Register",
+    "single",
+    "blue",
+    "professional",
+    "Executive leadership",
+    "A compact navy masthead and broad single reading column suit a substantial career. Use strong organisation labels and restrained spacing that rewards evidence over slogans.",
+    "boardroom",
+    1
+  ],
+  [
+    "Civic Standard",
+    "single",
+    "mono",
+    "professional",
+    "Public sector and administration",
+    "Use familiar black-on-white typography with a narrow black rule beside each section heading. Keep every contact detail as selectable text and every entry in natural reading order.",
+    "civic",
+    1
+  ],
+  [
+    "Merit Scholarship",
+    "left",
+    "blue",
+    "academic-cv-lite",
+    "Students and scholarships",
+    "Education occupies the main opening position while awards and skills sit in a light left column. Use a small serif name and generous line spacing for short resumes.",
+    "merit",
+    2
+  ],
+  [
+    "Practitioner Record",
+    "dates",
+    "mono",
+    "professional",
+    "Licensed professionals",
+    "A monochrome appointment record with dates in the margin, clear professional titles and compact certification entries. Support both short practitioner resumes and long professional CVs.",
+    "practitioner",
+    1
+  ],
+  [
+    "Chronicle Senior",
+    "single",
+    "warm",
+    "professional",
+    "Experienced applicants",
+    "Use a dignified serif name, warm grey section bands and an uninterrupted chronology. Long careers should extend to additional pages without shrinking the body or dropping older roles.",
+    "chronicle",
+    1
+  ],
+  [
+    "Quiet Authority",
+    "single",
+    "mono",
+    "professional",
+    "Leadership and consulting",
+    "An oversized but quiet serif identity, a short rule and very simple entries create authority through typography. Leave the summary unboxed and reserve bold weight for evidence hierarchy.",
+    "authority",
+    1
+  ],
+  [
+    "Global Formal",
+    "dates",
+    "blue",
+    "professional",
+    "International applications",
+    "Use a formal date-gutter structure and a masthead that accepts long names and multiple scripts. Let the applicant choose language, photo and address rather than assuming regional requirements.",
+    "global",
+    2
+  ],
+  [
+    "Correspondence Classic",
+    "single",
+    "warm",
+    "professional",
+    "General professional",
+    "A personal-letterhead identity uses a fine top rule and compact contact line. Body sections stay plain, with subtle italic organisation context and no sidebar.",
+    "correspondence",
+    1
+  ],
+  [
+    "Council Profile",
+    "columns",
+    "green",
+    "professional",
+    "Policy, governance and community",
+    "A full-width serif identity leads two purposeful columns: career evidence and supporting qualifications. Dark green section titles and hairline dividers should survive monochrome printing.",
+    "council",
+    2
+  ]
+]
