@@ -8,6 +8,8 @@ import {
 } from '@repo/ssg/server';
 import { createAppRouter } from './router';
 import type { RouterContext } from './routes/root';
+import { THEME_NAMES } from '@jsonresume/theme-metadata';
+import { paths as site } from '@repo/site';
 import { postPaths } from './routes/blog';
 
 /** The client entry, as Vite's manifest keys it. */
@@ -52,12 +54,13 @@ export const render = createAppRenderer(devRouterManifest(clientEntry));
 /** Rendered per request by the server, never prerendered. */
 export const livePaths = ['/jobs', '/explore'];
 
-/** Every page to prerender: each static route, plus each blog post. */
+/** Every page to prerender: each static route, blog post and theme. */
 export const paths = [
   ...staticPaths(createAppRouter().routesByPath).filter(
     (path) => !livePaths.includes(path)
   ),
   ...postPaths,
+  ...THEME_NAMES.map(site.theme),
 ];
 
 export { prerender } from '@repo/ssg/server';

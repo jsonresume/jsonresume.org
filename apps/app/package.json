@@ -50,6 +50,7 @@
     "@repo/server": "workspace:*",
     "@repo/site": "workspace:*",
     "@repo/ssg": "workspace:*",
+    "@jsonresume/theme-metadata": "workspace:*",
     "@repo/theme-gallery": "workspace:*",
     "@repo/timeline": "workspace:^",
     "@tanstack/react-router": "1.170.46",

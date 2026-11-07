@@ -11,6 +11,7 @@
     "./projects": "./src/pages/ProjectsPage.tsx",
     "./team": "./src/pages/TeamPage.tsx",
     "./themes": "./src/pages/ThemesPage.tsx",
+    "./theme": "./src/pages/themes/ThemePage.tsx",
     "./getting-started": "./src/pages/getting-started/GettingStartedPage.tsx",
     "./schema": "./src/pages/schema/SchemaPage.tsx",
     "./job-schema": "./src/pages/schema/JobSchemaPage.tsx",
@@ -41,6 +42,7 @@
     "@repo/mcp": "workspace:*",
     "@repo/project-directory": "workspace:*",
     "@repo/schema-explorer": "workspace:*",
+    "@jsonresume/theme-metadata": "workspace:*",
     "@repo/theme-gallery": "workspace:*",
     "@repo/url-state": "workspace:*",
     "effect": "4.0.6"
