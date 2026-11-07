@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-quant-record",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A precise serif identity above technical sans entries balances formality and analytical character. Use compact dates and small blue section numbers without graphical performance claims.",
   "type": "module",
   "main": "./dist/index.js",

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.8
+
+### Patch Changes
+
+- 04aae6e: Improve PDF printing with repeating page margins, wrapping for long content, section pagination, and A4/Letter paper selection. Rebuild themes with the shared print fixes.
+
 ## 0.3.7
 
 ### Patch Changes

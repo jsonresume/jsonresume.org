@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-indic-modern",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Use Devanagari-capable typography with comfortable line height and an open single column. The heading system should support Hindi and Latin content without clipping marks or shrinking names.",
   "type": "module",
   "main": "./dist/index.js",

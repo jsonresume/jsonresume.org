@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-publishers-page",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Use a strong serif masthead, fine red keylines and compact publisher-style metadata. The page should feel typeset, with a single clear reading order and deliberate print continuation.",
   "type": "module",
   "main": "./dist/index.js",

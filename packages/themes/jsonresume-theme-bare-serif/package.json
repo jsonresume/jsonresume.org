@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-bare-serif",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A single serif family handles the complete resume through careful changes of size and weight. Use no accent colour and only a thin rule beneath the identity.",
   "type": "module",
   "main": "./dist/index.js",

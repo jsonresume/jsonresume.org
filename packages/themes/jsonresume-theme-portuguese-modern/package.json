@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-portuguese-modern",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Portuguese labels, an open left-aligned masthead and green section rules form a straightforward modern CV. Support long accented names and optional local contact formats.",
   "type": "module",
   "main": "./dist/index.js",

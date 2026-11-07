@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-short-form",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A low masthead, short rules and compact role lines minimise overhead. Keep the body comfortable and let concise content produce a short document without enforcing a page limit.",
   "type": "module",
   "main": "./dist/index.js",

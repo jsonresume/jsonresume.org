@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-dublin",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A confident professional resume pairing a deep green identity sidebar with a clear white experience column.",
   "type": "module",
   "main": "./dist/index.js",

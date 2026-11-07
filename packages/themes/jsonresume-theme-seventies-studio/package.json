@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-seventies-studio",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A warm brown identity rail and rounded display serif reference seventies studio graphics. Use plenty of white paper, plain dates and a neutral body to keep the nostalgia practical.",
   "type": "module",
   "main": "./dist/index.js",

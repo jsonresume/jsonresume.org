@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-clear-reading",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Use a sturdy sans serif, a moderate text measure and clearly separated entries. Keep all essential text dark, links underlined and headings visibly distinct without relying on colour.",
   "type": "module",
   "main": "./dist/index.js",
