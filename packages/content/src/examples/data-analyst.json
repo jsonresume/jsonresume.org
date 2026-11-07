@@ -1,0 +1,69 @@
+{
+  "slug": "data-analyst",
+  "role": "Data Analyst",
+  "field": "Technology",
+  "intro": "A data analyst whose bullets end in decisions: each analysis is tied to what the business did with it, which is what hiring managers look for.",
+  "tips": [
+    "Show the decision your analysis informed, not just the dashboard you built.",
+    "Name the tools once, in skills; in experience, talk about questions and answers.",
+    "Quantify the money, time or customers affected."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Grace Okafor",
+      "label": "Data Analyst",
+      "email": "grace@example.com",
+      "location": {
+        "city": "Manchester",
+        "countryCode": "GB"
+      },
+      "summary": "Data analyst with four years in retail and subscription businesses, fluent in SQL, Python and Tableau. Built the churn model that guided a retention programme saving £1.4m a year."
+    },
+    "work": [
+      {
+        "name": "Parcel & Co",
+        "position": "Data Analyst",
+        "startDate": "2022-02",
+        "summary": "Subscription meal kits, 150,000 customers.",
+        "highlights": [
+          "Built a churn model in Python that flagged at-risk subscribers; the retention offers it guided saved £1.4m in a year.",
+          "Replaced 30 weekly spreadsheets with three Tableau dashboards used by the leadership team.",
+          "Ran pricing experiments on 40,000 customers that settled a £5 price rise without lifting churn."
+        ]
+      },
+      {
+        "name": "Highstreet Retail Group",
+        "position": "Junior Analyst",
+        "startDate": "2020-09",
+        "endDate": "2022-01",
+        "summary": "Fashion retail, 120 stores.",
+        "highlights": [
+          "Wrote the SQL behind weekly store performance reports for 120 managers.",
+          "Found £200k of annual waste in overstocked sizes, changing how stores were allocated stock."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "University of Leeds",
+        "area": "Mathematics",
+        "studyType": "BSc",
+        "endDate": "2020"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Analysis",
+        "keywords": ["SQL", "Python (pandas)", "Excel", "A/B testing"]
+      },
+      {
+        "name": "Visualisation",
+        "keywords": ["Tableau", "Looker"]
+      },
+      {
+        "name": "Data",
+        "keywords": ["BigQuery", "dbt"]
+      }
+    ]
+  }
+}

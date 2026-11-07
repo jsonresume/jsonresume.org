@@ -1,0 +1,73 @@
+{
+  "slug": "devops-engineer",
+  "role": "DevOps Engineer",
+  "field": "Technology",
+  "intro": "A DevOps engineer resume that measures infrastructure work in reliability, speed and cost: the outcomes engineering leaders care about.",
+  "tips": [
+    "Measure work in uptime, deploy frequency, recovery time and cost.",
+    "Name the scale: services, clusters, traffic, spend.",
+    "Show what you automated and how much time it saved."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Lars Eriksson",
+      "label": "DevOps Engineer",
+      "email": "lars@example.com",
+      "location": {
+        "city": "Stockholm",
+        "countryCode": "SE"
+      },
+      "summary": "DevOps engineer with seven years running Kubernetes platforms on AWS and GCP. Took deploys from weekly to 40 a day, and cut cloud spend by 30% without slowing teams down."
+    },
+    "work": [
+      {
+        "name": "Nordbank Digital",
+        "position": "Senior DevOps Engineer",
+        "startDate": "2020-09",
+        "summary": "Mobile banking for 1.5 million customers.",
+        "highlights": [
+          "Built the CI/CD platform 25 teams deploy with; from weekly releases to 40 deploys a day.",
+          "Cut AWS spend by 30% ($600k a year) with rightsizing, spot capacity and better autoscaling.",
+          "Led incident response improvements; mean time to recovery fell from 2 hours to 25 minutes."
+        ]
+      },
+      {
+        "name": "Spelfabriken",
+        "position": "Systems Engineer",
+        "startDate": "2017-05",
+        "endDate": "2020-08",
+        "summary": "Mobile games studio.",
+        "highlights": [
+          "Moved game servers from VMs to Kubernetes on GCP, handling launch peaks of 2 million players.",
+          "Automated environment setup with Terraform, from two days to 20 minutes."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "KTH Royal Institute of Technology",
+        "area": "Computer Engineering",
+        "studyType": "MSc",
+        "endDate": "2017"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Cloud",
+        "keywords": ["AWS", "GCP", "Kubernetes", "Terraform"]
+      },
+      {
+        "name": "Delivery",
+        "keywords": ["GitHub Actions", "Argo CD", "Helm"]
+      },
+      {
+        "name": "Observability",
+        "keywords": ["Prometheus", "Grafana", "OpenTelemetry"]
+      },
+      {
+        "name": "Languages",
+        "keywords": ["Go", "Python", "Bash"]
+      }
+    ]
+  }
+}

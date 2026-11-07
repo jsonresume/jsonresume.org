@@ -7,16 +7,35 @@ import { Guided } from './Guided';
 import { Preview } from './Preview';
 import { Review } from './Review';
 import * as s from './start.css';
-import { startStepAtom, startThemeAtom } from './state';
+import { startResumeAtom, startStepAtom, startThemeAtom } from './state';
+
+const examples = () => import('@repo/content/documents');
 
 function Step() {
   const step = useAtomValue(startStepAtom);
   const setTheme = useAtomSet(startThemeAtom);
-  // ?theme= from a theme's "start one in this theme" link.
+  const setResume = useAtomSet(startResumeAtom);
+  const setStep = useAtomSet(startStepAtom);
+  // ?theme= from a theme's "start one in this theme" link, and ?example=
+  // from an example resume's "start with this example".
   useEffect(() => {
-    const slug = new URL(window.location.href).searchParams.get('theme');
+    const params = new URL(window.location.href).searchParams;
+    const slug = params.get('theme');
     if (slug && Object.hasOwn(THEME_METADATA, slug)) setTheme(slug);
-  }, [setTheme]);
+    const example = params.get('example');
+    if (!example) return;
+    let live = true;
+    void examples()
+      .then((m) => m.loadExample(example))
+      .then((found) => {
+        if (!live || !found) return;
+        setResume(found.resume);
+        setStep('preview');
+      });
+    return () => {
+      live = false;
+    };
+  }, [setTheme, setResume, setStep]);
   return step === 'review' ? (
     <Review />
   ) : step === 'guided' ? (

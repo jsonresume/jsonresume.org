@@ -10,6 +10,7 @@ import { createAppRouter } from './router';
 import type { RouterContext } from './routes/root';
 import { THEME_NAMES } from '@jsonresume/theme-metadata';
 import { paths as site } from '@repo/site';
+import { exampleSlugs, guideSlugs } from '@repo/content/slugs';
 import { postPaths } from './routes/blog';
 
 /** The client entry, as Vite's manifest keys it. */
@@ -61,6 +62,8 @@ export const paths = [
   ),
   ...postPaths,
   ...THEME_NAMES.map(site.theme),
+  ...exampleSlugs.map(site.example),
+  ...guideSlugs.map(site.guide),
 ];
 
 export { prerender } from '@repo/ssg/server';

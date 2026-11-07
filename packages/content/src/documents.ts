@@ -1,4 +1,5 @@
-import { BlogPost, Doc } from '@repo/domain';
+import { BlogPost, Doc, ExampleResume } from '@repo/domain';
+import { Schema } from 'effect';
 import { decodeContent } from './decode';
 import { parseFrontMatter } from './frontMatter';
 
@@ -12,8 +13,16 @@ const postSources = import.meta.glob<string>('./blog/*.md', {
   query: '?raw',
   import: 'default',
 });
+const guideSources = import.meta.glob<string>('./guides/*.md', {
+  query: '?raw',
+  import: 'default',
+});
 
-const slugOf = (path: string) => path.replace(/^.*\/|\.md$/g, '');
+const exampleSources = import.meta.glob<unknown>('./examples/*.json', {
+  import: 'default',
+});
+
+const slugOf = (path: string) => path.replace(/^.*\/|\.(md|json)$/g, '');
 
 const decodeDoc = decodeContent(Doc);
 const decodePost = decodeContent(BlogPost);
@@ -40,6 +49,20 @@ export const postSlugs: ReadonlyArray<string> =
 /** One document, or undefined for an unknown slug. */
 export const loadDoc = (slug: string): Promise<Doc | undefined> =>
   load(docSources, `./docs/${slug}.md`, decodeDoc);
+
+/** Slugs of every resume-writing guide (/guides/<slug>). */
+export const guideSlugs: ReadonlyArray<string> =
+  Object.keys(guideSources).map(slugOf);
+
+/** One guide, or undefined for an unknown slug. */
+export const loadGuide = (slug: string): Promise<Doc | undefined> =>
+  load(guideSources, `./guides/${slug}.md`, decodeDoc);
+
+/** Every guide, by title. */
+export const loadGuides = async (): Promise<Doc[]> =>
+  (await loadAll(guideSlugs, loadGuide)).sort((a, b) =>
+    a.title.localeCompare(b.title)
+  );
 
 /** One blog post, or undefined for an unknown slug. */
 export const loadPost = (slug: string): Promise<BlogPost | undefined> =>
@@ -101,3 +124,23 @@ export function excerpt(body: string, max = 220): string {
     ? `${text.slice(0, max).replace(/\s+\S*$/, '')}…`
     : text;
 }
+
+const decodeExample = Schema.decodeUnknownSync(ExampleResume);
+
+/** Slugs of every example resume (/examples/<slug>). */
+export const exampleSlugs: ReadonlyArray<string> =
+  Object.keys(exampleSources).map(slugOf);
+
+/** One example resume, or undefined for an unknown slug. */
+export const loadExample = async (
+  slug: string
+): Promise<ExampleResume | undefined> => {
+  const source = exampleSources[`./examples/${slug}.json`];
+  return source ? decodeExample(await source()) : undefined;
+};
+
+/** Every example, by field then role. */
+export const loadExamples = async (): Promise<ExampleResume[]> =>
+  (await loadAll(exampleSlugs, loadExample)).sort(
+    (a, b) => a.field.localeCompare(b.field) || a.role.localeCompare(b.role)
+  );

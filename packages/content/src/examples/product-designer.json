@@ -1,0 +1,74 @@
+{
+  "slug": "product-designer",
+  "role": "Product Designer",
+  "field": "Technology",
+  "intro": "A product designer whose resume reads like a short portfolio: each role names the problem, the design work, and what changed for users.",
+  "tips": [
+    "Link your portfolio in the first lines; the resume points to it.",
+    "Describe research and testing, not only screens.",
+    "Show outcomes from your designs: completion, satisfaction, support load."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Amélie Laurent",
+      "label": "Product Designer",
+      "email": "amélie@example.com",
+      "location": {
+        "city": "Lyon",
+        "countryCode": "FR"
+      },
+      "summary": "Product designer with six years in fintech and health. Redesigned a loan application that cut drop-off by a third, and built the design system three squads ship with."
+    },
+    "work": [
+      {
+        "name": "Crédit Clair",
+        "position": "Senior Product Designer",
+        "startDate": "2021-01",
+        "summary": "Online consumer loans.",
+        "highlights": [
+          "Redesigned the loan application after 25 usability sessions; drop-off fell by 34%.",
+          "Built the design system (Figma and React) used by 3 squads and 20 engineers.",
+          "Ran monthly research sessions with customers that set the product team's quarterly priorities."
+        ]
+      },
+      {
+        "name": "Santé Plus",
+        "position": "Product Designer",
+        "startDate": "2018-06",
+        "endDate": "2020-12",
+        "summary": "Patient app for clinics.",
+        "highlights": [
+          "Designed appointment booking used by 80,000 patients a month.",
+          "Worked with clinicians to simplify the symptom checker; support calls about it fell by half."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "École de design Nantes Atlantique",
+        "area": "Interaction Design",
+        "studyType": "Master",
+        "endDate": "2018"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Design",
+        "keywords": [
+          "User research",
+          "Prototyping",
+          "Interaction design",
+          "Design systems"
+        ]
+      },
+      {
+        "name": "Tools",
+        "keywords": ["Figma", "Maze", "Principle"]
+      },
+      {
+        "name": "Collaboration",
+        "keywords": ["Workshops", "Design critique"]
+      }
+    ]
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "slug": "first-job",
+  "role": "First Job / Graduate",
+  "field": "Entry level",
+  "intro": "A first resume without full-time experience that still shows reliability, initiative and skill, through part-time work, study and a project.",
+  "tips": [
+    "Lead with your strongest section: often education or a project.",
+    "Treat part-time work seriously: reliability and customers are real skills.",
+    "Keep it to one full page."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Jordan Lee",
+      "label": "Business Graduate",
+      "email": "jordan@example.com",
+      "location": {
+        "city": "Auckland",
+        "countryCode": "NZ"
+      },
+      "summary": "Business graduate with a major in marketing, three years of part-time retail work and a student project that tripled a club's membership. Looking for a graduate role in marketing or operations."
+    },
+    "work": [
+      {
+        "name": "Kiwi Coffee Co.",
+        "position": "Barista and Shift Lead (part-time)",
+        "startDate": "2022-02",
+        "summary": "Busy café, 400 customers a day.",
+        "highlights": [
+          "Trusted to open and close and to run shifts of four staff.",
+          "Trained six new baristas; introduced a checklist that cut morning set-up time by 15 minutes."
+        ]
+      },
+      {
+        "name": "University of Auckland Marketing Club",
+        "position": "Events Coordinator (volunteer)",
+        "startDate": "2023-03",
+        "endDate": "2024-11",
+        "summary": "Student club.",
+        "highlights": [
+          "Planned 12 events a year, including a careers night with 8 employers and 150 students.",
+          "Ran the club's Instagram; membership grew from 60 to 190."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "University of Auckland",
+        "area": "Marketing",
+        "studyType": "BCom",
+        "endDate": "2024"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Marketing",
+        "keywords": ["Social media", "Event planning", "Market research"]
+      },
+      {
+        "name": "Tools",
+        "keywords": ["Excel", "Canva", "Google Analytics"]
+      },
+      {
+        "name": "Work",
+        "keywords": ["Customer service", "Team leadership"]
+      }
+    ],
+    "projects": [
+      {
+        "name": "Café loyalty study",
+        "description": "Final-year marketing project",
+        "highlights": [
+          "Surveyed 220 customers of a local café and designed a loyalty card the owner adopted; repeat visits rose 18% in three months."
+        ]
+      }
+    ]
+  }
+}
