@@ -4,6 +4,7 @@ export const paths = {
   gettingStarted: '/getting-started',
   schema: '/schema',
   themes: '/themes',
+  start: '/start',
   projects: '/projects',
   team: '/team',
   cli: '/cli',

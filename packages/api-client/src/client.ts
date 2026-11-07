@@ -138,3 +138,5 @@ export const exploreListingAtom = ApiClient.query('myListing', 'get', {
   reactivityKeys: keys.explore,
 });
 export const setExploreListingAtom = ApiClient.mutation('myListing', 'set');
+/** Reads a resume from a file or text, without saving (the start page). */
+export const importResumeAtom = ApiClient.mutation('import', 'resume');

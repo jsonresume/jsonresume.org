@@ -60,3 +60,7 @@ packages/mcp/jsonresume-chatgpt.zip
 
 # Claude Code agent worktrees
 .claude/worktrees/
+
+# Playwright output (pnpm test:e2e)
+test-results/
+playwright-report/

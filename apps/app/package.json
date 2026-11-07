@@ -13,7 +13,8 @@
     "lint": "eslint src server scripts --ext .ts,.tsx",
     "jobs": "node dist/jobs/jobs.js",
     "career-moves": "node dist/career-moves/refresh-career-moves.js",
-    "mcp-health": "node dist/mcp-health/mcp-health.js"
+    "mcp-health": "node dist/mcp-health/mcp-health.js",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@effect/ai-openai": "4.0.6",
@@ -78,6 +79,7 @@
     "tsconfig": "workspace:*",
     "typescript": "^5.9.3",
     "vite": "^6.4.3",
-    "vitest": "^3.2.6"
+    "vitest": "^3.2.6",
+    "@playwright/test": "1.56.1"
   }
 }

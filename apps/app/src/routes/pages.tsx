@@ -68,6 +68,16 @@ export const jobSchemaRoute = page(
   () => import('./job-schema.lazy')
 );
 
+export const startRoute = page(
+  paths.start,
+  {
+    title: 'Make your resume',
+    description:
+      'Upload the resume you have, paste it, or answer a few questions, then see it in a professional theme. Free, and no account until you save.',
+  },
+  () => import('./start.lazy')
+);
+
 export const themesRoute = page(
   paths.themes,
   {

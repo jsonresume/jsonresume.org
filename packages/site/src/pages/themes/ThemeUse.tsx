@@ -20,6 +20,13 @@ export function ThemeUse({ theme }: { theme: ThemeSummary }) {
         <Button asChild variant="secondary" size="sm" className={s.action}>
           <a href={paths.dashboardEditor}>Open the editor</a>
         </Button>
+        <p className={s.text}>
+          No resume here yet?{' '}
+          <a href={`${paths.start}?theme=${encodeURIComponent(theme.slug)}`}>
+            Start one in {theme.name}
+          </a>
+          : upload the one you have or answer a few questions.
+        </p>
       </div>
       <div className={s.way}>
         <h4 className={s.title}>In your resume.json</h4>
