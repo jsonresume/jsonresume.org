@@ -2,6 +2,7 @@ import { Button, CodeBlock } from '@jsonresume/ui';
 import type { ThemeSummary } from '@repo/domain';
 import { paths } from '../../links';
 import * as s from './themeUse.css';
+import { UseTheme } from './UseTheme';
 
 /** Every way to put a theme on your own resume, from the preview. */
 export function ThemeUse({ theme }: { theme: ThemeSummary }) {
@@ -13,6 +14,7 @@ export function ThemeUse({ theme }: { theme: ThemeSummary }) {
       </h3>
       <div className={s.way}>
         <h4 className={s.title}>On jsonresume.org</h4>
+        <UseTheme theme={theme} />
         <p className={s.text}>
           In the editor, pick <strong>{theme.name}</strong> from the Theme menu
           and save. Your page at jsonresume.org/@you changes straight away.

@@ -118,21 +118,14 @@ export const AccountHandlers = AccountToolkit.toLayer(
             );
           }
           const user = yield* caller;
-          const { resume } = yield* accounts.currentResume(user.id);
-          const base = Predicate.isObject(resume)
-            ? (resume as Record<string, unknown>)
-            : {};
-          const meta = Predicate.isObject(base.meta) ? base.meta : {};
           const saved = yield* accounts
-            .saveResume(
-              user.id,
-              { ...base, meta: { ...meta, theme: slug } },
-              yield* McpActor
-            )
+            .setTheme(user.id, slug, yield* McpActor)
             .pipe(
-              Effect.mapError(() =>
+              Effect.mapError((e) =>
                 failWith(
-                  'The resume could not be saved (see save_resume for why saves fail).'
+                  e._tag === 'NoResume'
+                    ? 'There is no resume to theme yet. Save one with save_resume first.'
+                    : 'The resume could not be saved (see save_resume for why saves fail).'
                 )
               )
             );
@@ -140,6 +133,7 @@ export const AccountHandlers = AccountToolkit.toLayer(
             via: 'mcp',
             ...savedProperties(saved, 'mcp'),
           });
+          yield* track(user.id, 'theme_chosen', { theme: slug, from: 'mcp' });
           return { theme: slug, url: `${SITE}/@${user.username}` };
         }),
       get_resume_analytics: ({ range }) =>
