@@ -3,7 +3,7 @@ title: Terms of service
 description: The terms for using jsonresume.org, its API and its MCP server.
 ---
 
-_Last updated 24 October 2026._
+_Last updated 7 November 2026._
 
 jsonresume.org is a free service run by the maintainers of the open-source JSON Resume project. By using it you agree to these terms. Our [privacy policy](/privacy) explains what we keep about you.
 
@@ -37,4 +37,4 @@ You can stop using the service and delete your account at any time. We may suspe
 
 ## Changes
 
-We may update these terms. We'll post the new version here with a new date; using the service after a change means you accept it. Questions? Ask [on GitHub](https://github.com/jsonresume/jsonresume.org/issues) or on [Discord](https://discord.gg/GTZtn8pTXC).
+We may update these terms. We'll post the new version here with a new date; using the service after a change means you accept it. Questions? Email [thomasalwyndavis@gmail.com](mailto:thomasalwyndavis@gmail.com), or ask [on GitHub](https://github.com/jsonresume/jsonresume.org/issues) or on [Discord](https://discord.gg/GTZtn8pTXC).
