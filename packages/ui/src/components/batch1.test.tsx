@@ -52,6 +52,34 @@ describe('DropdownMenu', () => {
     await userEvent.keyboard('{ArrowDown}{Enter}');
     expect(onDelete).toHaveBeenCalledOnce();
   });
+
+  it('renders asChild items as the link, with the icon inside', async () => {
+    render(
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button>Account</Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem asChild icon={<svg data-testid="icon" />}>
+            <a href="/@thomas">View your page</a>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <a href="/settings">Settings</a>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+    await userEvent.click(screen.getByRole('button', { name: 'Account' }));
+    const page = await screen.findByRole('menuitem', {
+      name: 'View your page',
+    });
+    expect(page.tagName).toBe('A');
+    expect(page).toContainElement(screen.getByTestId('icon'));
+    expect(screen.getByRole('menuitem', { name: 'Settings' })).toHaveAttribute(
+      'href',
+      '/settings'
+    );
+  });
 });
 
 describe('Popover', () => {

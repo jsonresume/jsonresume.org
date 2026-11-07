@@ -1,9 +1,10 @@
 import { globalStyle, keyframes, style } from '@vanilla-extract/css';
 import { focusRing, transition } from '../../styles/shared.css';
 import { vars } from '../../tokens/contract.css';
-import { media } from '../../tokens/theme';
+import { breakpoints, media } from '../../tokens/theme';
 
 const { color, font, space, radius, zIndex, motion } = vars;
+const phone = `screen and (max-width: ${breakpoints.sm - 0.02}px)`;
 
 const rise = keyframes({
   from: { opacity: 0, transform: 'translateX(-0.5rem)' },
@@ -100,24 +101,33 @@ export const topbar = style({
   '@media': { [media.lg]: { paddingInline: space[8] } },
 });
 
+// The brand gives way first, so the menu button and account stay whole.
 export const topbarBrand = style({
+  display: 'flex',
+  minWidth: 0,
+  overflow: 'hidden',
+  whiteSpace: 'nowrap',
   '@media': { [media.lg]: { display: 'none' } },
 });
 
 export const topbarEnd = style({
   display: 'flex',
+  flexShrink: 0,
   alignItems: 'center',
   gap: space[3],
   marginInlineStart: 'auto',
+  '@media': { [phone]: { gap: space[1] } },
 });
 
 export const menuButton = style([
   focusRing,
   {
     display: 'inline-grid',
+    flexShrink: 0,
     placeItems: 'center',
-    width: '2.25rem',
-    height: '2.25rem',
+    // A thumb-sized target; the button only shows below lg.
+    width: '2.75rem',
+    height: '2.75rem',
     padding: 0,
     border: `1px solid ${color.border.default}`,
     borderRadius: radius.md,

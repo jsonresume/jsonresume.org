@@ -1,6 +1,7 @@
 'use client';
 
 import * as Menu from '@radix-ui/react-dropdown-menu';
+import { Slottable } from '@radix-ui/react-slot';
 import {
   forwardRef,
   type ComponentPropsWithoutRef,
@@ -60,7 +61,8 @@ export const DropdownMenuItem = forwardRef<
           {icon}
         </span>
       ) : null}
-      {children}
+      {/* asChild: the child is the item; icon and shortcut go inside it. */}
+      <Slottable>{children}</Slottable>
       {shortcut ? <span className={s.menuShortcut}>{shortcut}</span> : null}
     </Menu.Item>
   );

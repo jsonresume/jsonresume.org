@@ -19,7 +19,7 @@ export interface AccountMenuProps {
   children?: ReactNode;
   onSignOut?: () => void;
   signOutLabel?: string;
-  /** Show the name beside the avatar in the trigger. */
+  /** Show the name beside the avatar in the trigger (phones show the avatar). */
   showName?: boolean;
 }
 

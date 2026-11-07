@@ -3,6 +3,7 @@ import { recipe } from '@vanilla-extract/recipes';
 import { focusRing, transition } from '../../styles/shared.css';
 import { fadeOut, popOut, slideOut } from '../../styles/motion.css';
 import { vars } from '../../tokens/contract.css';
+import { media } from '../../tokens/theme';
 
 const { color, font, space, radius, shadow, motion, zIndex } = vars;
 
@@ -53,9 +54,12 @@ export const menuItem = recipe({
     borderRadius: radius.md,
     color: color.text.default,
     lineHeight: font.lineHeight.snug,
+    // Items rendered as links (asChild) read as menu rows, not running text.
+    textDecoration: 'none',
     cursor: 'pointer',
     userSelect: 'none',
     outline: 'none',
+    '@media': { [media.coarse]: { minHeight: '2.75rem' } },
     selectors: {
       '&[data-highlighted]': {
         backgroundColor: color.surface.muted,
