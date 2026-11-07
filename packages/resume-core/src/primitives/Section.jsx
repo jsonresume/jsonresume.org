@@ -18,7 +18,8 @@ const StyledSection = styled.section`
     props.theme?.spacing?.section || 'var(--resume-space-section, 2rem)'};
 
   @media print {
-    page-break-inside: avoid;
+    /* Sections can span pages; their headings stay with the first entry. */
+    page-break-inside: auto;
   }
 `;
 

@@ -98,13 +98,13 @@
   }
 
   @page {
-    size: A4;
+    size: auto;
     margin: 0.5in;
   }
 
   /* Prevent awkward breaks */
   .resume-section {
-    page-break-inside: avoid;
+    page-break-inside: auto;
   }
 
   .resume-item {

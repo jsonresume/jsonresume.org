@@ -1332,7 +1332,8 @@ const StyledSection = dt.section`
   margin-bottom: ${(props) => props.theme?.spacing?.section || "var(--resume-space-section, 2rem)"};
 
   @media print {
-    page-break-inside: avoid;
+    /* Sections can span pages; their headings stay with the first entry. */
+    page-break-inside: auto;
   }
 `;
 function Section({ children, className, id, ...rest }) {
@@ -6467,7 +6468,7 @@ function render(resume, options = {}) {
       }
 
       .resume-section {
-        page-break-inside: avoid;
+        page-break-inside: auto;
       }
 
       .resume-item {

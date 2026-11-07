@@ -10,6 +10,8 @@ backgrounds on.
   and themes name fonts, but nothing may reach the box or its network.
 - Paper: `?paper=a4|letter`, else Letter where it's the norm (US, Canada, …),
   else A4 (`paperFor`).
+- The requested paper overrides a theme's fixed page size. Fonts get a bounded
+  chance to load before printing with the available fallbacks.
 
 Chromium must be installed for the user the server runs as: the deploy script
 runs `playwright-core install chromium-headless-shell` (see `deploy/README.md`).

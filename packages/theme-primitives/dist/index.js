@@ -1280,6 +1280,15 @@ var vt = /^\s*<\/[a-z]/i, gt = (function() {
 var wt = "__sc-".concat(f, "__");
 "production" !== process.env.NODE_ENV && "test" !== process.env.NODE_ENV && "undefined" != typeof window && (window[wt] || (window[wt] = 0), 1 === window[wt] && console.warn("It looks like there are several instances of 'styled-components' initialized in this application. This may cause dynamic styles to not render properly, errors during the rehydration process, a missing theme prop, and makes your application bigger without good reason.\n\nSee https://s-c.sh/2BAXzed for more info."), window[wt] += 1);
 const CSS_RESET = "<style>*,*::before,*::after{box-sizing:border-box}html,body{margin:0;padding:0}body{-webkit-font-smoothing:antialiased}</style>";
+const PRINT_DEFAULTS = `<style data-jsonresume-core-print>
+@page{size:auto;margin:12mm}
+@media print{
+body,h1,h2,h3,h4,p,li,a{overflow-wrap:anywhere}
+:where(main,aside,section,article,header,div){min-width:0}
+h1,h2,h3,h4,h5,h6{break-inside:avoid;break-after:avoid}
+p,li{orphans:2;widows:2}
+}
+</style>`;
 const TOKENS_CSS_HREF = "https://unpkg.com/@jsonresume/core/dist/tokens.css";
 const FONTS_PRECONNECT = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>';
 function isHref(value) {
@@ -1337,7 +1346,7 @@ function renderResumeDocument(element, options = {}) {
   const resetTag = reset ? CSS_RESET : "";
   const titleTag = title ? `<title>${title}</title>` : "";
   const bodyAttr = bodyClass ? ` class="${bodyClass}"` : "";
-  return `<!DOCTYPE html><html lang="${lang}" dir="${dir}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">` + fontLinks + tokensLink + resetTag + head + styleTags + headAfterStyles + titleTag + `</head><body${bodyAttr}>${html}</body></html>`;
+  return `<!DOCTYPE html><html lang="${lang}" dir="${dir}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">` + fontLinks + tokensLink + resetTag + PRINT_DEFAULTS + head + styleTags + headAfterStyles + titleTag + `</head><body${bodyAttr}>${html}</body></html>`;
 }
 var classes = { page: "_1t9tjcq0", masthead: "_1t9tjcq1", identity: "_1t9tjcq2", name: "_1t9tjcq3", label: "_1t9tjcq4", contact: "_1t9tjcq5", summary: "_1t9tjcq6", portrait: "_1t9tjcq7", body: "_1t9tjcq8", primary: "_1t9tjcq9", secondary: "_1t9tjcqa", section: "_1t9tjcqb", sectionTitle: "_1t9tjcqc", entry: "_1t9tjcqd", entryHead: "_1t9tjcqe", entryTitle: "_1t9tjcqf", date: "_1t9tjcqg", context: "_1t9tjcqh", paragraph: "_1t9tjcqi", bullets: "_1t9tjcqj", details: "_1t9tjcqk", taxonomy: "_1t9tjcql", taxonomyRow: "_1t9tjcqm", term: "_1t9tjcqn", definition: "_1t9tjcqo" };
 var tokens = { color: { ink: "var(--_1ucpvn50)", muted: "var(--_1ucpvn51)", accent: "var(--_1ucpvn52)", rule: "var(--_1ucpvn53)", soft: "var(--_1ucpvn54)", sidebar: "var(--_1ucpvn55)", sidebarInk: "var(--_1ucpvn56)" }, font: { body: "var(--_1ucpvn57)", display: "var(--_1ucpvn58)" }, space: { section: "var(--_1ucpvn59)", entry: "var(--_1ucpvn5a)", gutter: "var(--_1ucpvn5b)" }, type: { size: "var(--_1ucpvn5c)", leading: "var(--_1ucpvn5d)", name: "var(--_1ucpvn5e)", heading: "var(--_1ucpvn5f)" }, width: "var(--_1ucpvn5g)" };

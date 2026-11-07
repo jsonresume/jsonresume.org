@@ -48,7 +48,7 @@ export function render(resume, options = {}) {
       }
 
       @page {
-        size: A4;
+        size: auto;
         margin: 0.75in;
       }
     }

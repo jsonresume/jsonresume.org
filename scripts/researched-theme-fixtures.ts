@@ -86,8 +86,10 @@ export async function themeFixtures(): Promise<Record<string, Data>> {
           index === 0
             ? Array.from(
                 { length: 14 },
-                () =>
-                  'Led an international engineering team building reliable public infrastructure. The programme improved access and reduced operational cost while maintaining service availability.'
+                (_, paragraph) =>
+                  `Led an international engineering team building reliable public infrastructure. The programme improved access and reduced operational cost while maintaining service availability. NARRATIVE-SENTINEL-${
+                    paragraph + 1
+                  }`
               ).join('\n\n')
             : 'Led product and infrastructure delivery across several teams.',
         highlights: [
