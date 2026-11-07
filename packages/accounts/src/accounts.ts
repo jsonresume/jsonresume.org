@@ -6,6 +6,8 @@ import {
   UsernameUnavailable,
 } from '@repo/api';
 import { Usernames } from '@repo/profiles';
+import { SqlClient } from 'effect/sql';
+import { privacyQueries } from './privacy';
 import { Clock, Config, Context, Duration, Effect, Layer } from 'effect';
 import {
   decoyHash,
@@ -51,6 +53,7 @@ const make = Effect.gen(function* () {
   } = yield* accountsCore;
   const management = yield* accountManagement;
   const gist = yield* gistSync;
+  const privacy = privacyQueries(yield* SqlClient.SqlClient);
   const { saveResume, restoreVersion, setSource } = yield* resumeSaving(gist);
   const signUp = Effect.fn('Accounts.signUp')(function* (input: {
     email: string;
@@ -147,6 +150,7 @@ const make = Effect.gen(function* () {
     canWriteGist: gist.canWrite,
     account: (userId: string) => store.account(userId),
     saveResume,
+    ...privacy,
     restoreVersion,
     setSource,
     emailDelivery: mailer.enabled,

@@ -68,7 +68,9 @@ export const appServices = <E>(
         GistFiles.layer,
         Mailer.layer,
         GithubOAuth.layer,
-        prepareOnSave
+        prepareOnSave,
+        // Accounts' own queries (privacy) use the database directly.
+        database
       )
     )
   );

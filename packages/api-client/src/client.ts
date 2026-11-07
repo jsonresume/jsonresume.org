@@ -140,3 +140,9 @@ export const exploreListingAtom = ApiClient.query('myListing', 'get', {
 export const setExploreListingAtom = ApiClient.mutation('myListing', 'set');
 /** Reads a resume from a file or text, without saving (the start page). */
 export const importResumeAtom = ApiClient.mutation('import', 'resume');
+
+/** What stays off the public page: email, phone, street address. */
+export const privacyAtom = ApiClient.query('account', 'privacy', {
+  reactivityKeys: keys.account,
+});
+export const setPrivacyAtom = ApiClient.mutation('account', 'setPrivacy');
