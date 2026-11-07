@@ -1,0 +1,40 @@
+{
+  "name": "@repo/resume-import",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Imports a resume from a PDF, a Word document, a LinkedIn data export or pasted text into JSON Resume, with how sure it is of each field",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./testing": "./src/testing.ts",
+    "./fixtures": "./src/test/fixtures.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts"
+  },
+  "dependencies": {
+    "@effect/ai-openai": "4.0.6",
+    "@jsonresume/schema": "workspace:*",
+    "@repo/api": "workspace:*",
+    "@repo/database": "workspace:*",
+    "@repo/posthog": "workspace:^",
+    "@repo/resume-editor": "workspace:*",
+    "@repo/resume-pdf": "workspace:*",
+    "@repo/schema-explorer": "workspace:*",
+    "effect": "4.0.6",
+    "fflate": "0.8.3",
+    "mammoth": "1.13.0",
+    "unpdf": "1.9.1"
+  },
+  "devDependencies": {
+    "@effect/sql-pglite": "4.0.6",
+    "@repo/eslint-config-custom": "workspace:*",
+    "@types/node": "^20.19.24",
+    "docx": "9.13.0",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.6"
+  }
+}

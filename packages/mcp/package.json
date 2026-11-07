@@ -30,7 +30,8 @@
     "@repo/schema-explorer": "workspace:*",
     "@repo/theme-gallery": "workspace:*",
     "effect": "4.0.6",
-    "@jsonresume/theme-metadata": "workspace:*"
+    "@jsonresume/theme-metadata": "workspace:*",
+    "@repo/resume-import": "workspace:*"
   },
   "devDependencies": {
     "@effect/sql-pglite": "4.0.6",

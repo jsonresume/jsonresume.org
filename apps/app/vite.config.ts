@@ -23,9 +23,10 @@ export default defineConfig({
     // resolves from its own node_modules and keeps its template files.
     noExternal: ['@jsonresume/ui', /^@repo\/(?!resume-themes)/],
     // Node packages with their own files at runtime (Chromium's driver, the
-    // QR code's PNG encoder, sharp's libvips): loaded from node_modules,
-    // never bundled.
-    external: ['playwright-core', 'qrcode', 'sharp'],
+    // QR code's PNG encoder, sharp's libvips, PDF.js's fonts and worker,
+    // mammoth's CommonJS that requires fs): loaded from node_modules, never
+    // bundled.
+    external: ['playwright-core', 'qrcode', 'sharp', 'unpdf', 'mammoth'],
   },
   test: {
     environment: 'jsdom',

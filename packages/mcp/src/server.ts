@@ -10,6 +10,7 @@ import { TreeHandlers, TreeToolkit } from './treeTools';
 import { McpCaller } from './context';
 import { ExploreHandlers, ExploreToolkit } from './exploreTools';
 import { ExportHandlers, ExportToolkit } from './exportTools';
+import { ImportHandlers, ImportToolkit } from './importTools';
 import { JobHandlers, JobToolkit } from './jobTools';
 import { Prompts } from './prompts';
 import { ResumeHandlers, ResumeToolkit } from './resumeTools';
@@ -97,12 +98,14 @@ const authentication = (site: string) =>
 /**
  * The MCP server at /mcp (Streamable HTTP, every current protocol
  * revision): the tools, the prompts, and the authentication in front.
- * Needs Accounts, ApiKeys, OAuth, AnalyticsStore, Explore, JobBoard and JobMatcher.
+ * Needs Accounts, ApiKeys, OAuth, AnalyticsStore, Explore, JobBoard,
+ * JobMatcher, RateLimiter, Importer and Downloader.
  */
 export const mcpRoutes = (site: string = SITE) =>
   Layer.mergeAll(
     McpServer.toolkit(ResumeToolkit).pipe(Layer.provide(ResumeHandlers)),
     McpServer.toolkit(ExportToolkit).pipe(Layer.provide(ExportHandlers)),
+    McpServer.toolkit(ImportToolkit).pipe(Layer.provide(ImportHandlers)),
     McpServer.toolkit(AccountToolkit).pipe(Layer.provide(AccountHandlers)),
     McpServer.toolkit(ExploreToolkit).pipe(Layer.provide(ExploreHandlers)),
     McpServer.toolkit(JobToolkit).pipe(Layer.provide(JobHandlers)),

@@ -5,6 +5,7 @@
  * here too.
  */
 import { appTools } from './catalogApps';
+import { importTools } from './catalogImport';
 import { treeTools } from './catalogTree';
 
 export type McpGroup =
@@ -215,6 +216,7 @@ export const tools: ReadonlyArray<McpToolInfo> = [
       'The jobs you have marked, newest first, optionally only one mark (e.g. applied), with your notes.',
     writes: false,
   },
+  ...importTools,
   ...appTools,
   ...treeTools,
 ];

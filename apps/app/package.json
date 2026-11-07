@@ -42,6 +42,7 @@
     "@repo/profiles": "workspace:^",
     "@repo/resume-editor": "workspace:^",
     "@repo/resume-host": "workspace:^",
+    "@repo/resume-import": "workspace:^",
     "@repo/resume-pdf": "workspace:^",
     "@repo/resume-themes": "workspace:^",
     "@repo/server": "workspace:*",
@@ -52,11 +53,13 @@
     "@tanstack/react-router": "1.170.46",
     "effect": "4.0.6",
     "hono": "^4.13.13",
+    "mammoth": "1.13.0",
     "playwright-core": "1.56.1",
     "qrcode": "^1.5.4",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "sharp": "0.35.4"
+    "sharp": "0.35.4",
+    "unpdf": "1.9.1"
   },
   "devDependencies": {
     "@effect/sql-pglite": "4.0.6",

@@ -6,7 +6,7 @@ import { join } from 'node:path';
 import { afterAll, describe, expect, it } from 'vitest';
 import { HttpApi, HttpApiEndpoint, HttpApiGroup } from 'effect/http-api';
 import { Schema } from 'effect';
-import { createSiteApp, effectWebHandler } from './index';
+import { createSiteApp, effectWebHandler, MAX_BODY_BYTES } from './index';
 
 const dir = mkdtempSync(join(tmpdir(), 'site-'));
 mkdirSync(join(dir, 'schema'));
@@ -92,6 +92,16 @@ describe('createSiteApp', () => {
     expect(await res.json()).toEqual({ pong: true });
     // API responses decide their own caching; the static cache rules stay out.
     expect(res.headers.get('cache-control')).toBeNull();
+  });
+
+  it('refuses request bodies over MAX_BODY_BYTES before any handler', async () => {
+    const big = await app.request('/agent', {
+      method: 'POST',
+      body: 'x'.repeat(MAX_BODY_BYTES + 1),
+    });
+    expect(big.status).toBe(413);
+    const small = await app.request('/agent', { method: 'POST', body: 'x' });
+    expect(await small.text()).toBe('agent');
   });
 
   it('answers live pages, or passes them on to the 404', async () => {

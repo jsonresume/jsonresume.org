@@ -13,7 +13,9 @@ export type ProductEventName =
   | 'api_key_created'
   | 'oauth_app_created'
   | 'oauth_access_granted'
-  | 'mcp_tool_called';
+  | 'mcp_tool_called'
+  | 'import_started'
+  | 'import_finished';
 
 /** Plain values only: never an email, a name or resume text. */
 export type ProductEventProperties = Readonly<
