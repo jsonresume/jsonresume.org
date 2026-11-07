@@ -1,3 +1,4 @@
+import type { ApiKeys, RateLimiter } from '@repo/accounts';
 import { resumeProblemStatus } from '@repo/domain';
 import { Analytics, clientFrom } from '@repo/analytics';
 import type { Profiles } from '@repo/profiles';
@@ -10,6 +11,7 @@ import {
 import { Effect, type Layer, ManagedRuntime } from 'effect';
 import { randomUUID } from 'node:crypto';
 import type { RouterContext } from '../src/routes/root';
+import { gateRead } from './readers';
 
 /** The app's live renderer: a request and router context in, a page out. */
 export type Render = (
@@ -20,7 +22,8 @@ export type Render = (
 /** Count a .json, .yaml, .txt or .docx read; themed pages count themselves. */
 const recordRead = (
   read: NonNullable<Extract<ResumeOutcome, { _tag: 'Respond' }>['read']>,
-  request: Request
+  request: Request,
+  reader?: string
 ) =>
   Effect.gen(function* () {
     const analytics = yield* Analytics;
@@ -32,7 +35,12 @@ const recordRead = (
         theme: null,
         referrer: request.headers.get('referer'),
       },
-      clientFrom((name) => request.headers.get(name))
+      // A keyed reader is counted by its key's name (Downloaded by).
+      clientFrom((name) =>
+        name === 'user-agent' && reader
+          ? `${reader.replace(/[\s/]+/g, '-')}/api-key`
+          : request.headers.get(name)
+      )
     );
   });
 
@@ -46,18 +54,25 @@ export const resumePath = '/:handle{@[^/]+}';
  */
 export function createResumeHandler<E>(
   render: Render,
-  services: Layer.Layer<Profiles | Analytics | ResumePdf, E>,
+  services: Layer.Layer<
+    Profiles | Analytics | ResumePdf | ApiKeys | RateLimiter,
+    E
+  >,
   options: { memoMap?: Layer.MemoMap } = {}
 ) {
   const runtime = ManagedRuntime.make(services, options);
 
   const fetch = async (request: Request): Promise<Response | undefined> => {
+    const gate = await runtime.runPromise(gateRead(request));
+    if (gate._tag === 'Refused') return gate.response;
+    const reader = gate._tag === 'Keyed' ? gate.reader : undefined;
     const outcome = await runtime.runPromise(
       resumeOutcome(new URL(request.url))
     );
     if (outcome === undefined) return undefined;
     if (outcome._tag === 'Respond') {
-      if (outcome.read) runtime.runFork(recordRead(outcome.read, request));
+      if (outcome.read)
+        runtime.runFork(recordRead(outcome.read, request, reader));
       return outcome.response;
     }
 
