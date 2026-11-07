@@ -11,6 +11,7 @@ import { KeysApi } from './KeysApi';
 import { OAuthApi, OAuthConsentApi } from './OAuthApi';
 import { OAuthAppsApi } from './OAuthAppsApi';
 import { OAuthResourceApi } from './OAuthResourceApi';
+import { ResumeVersionsApi } from './ResumeVersionsApi';
 import { JobsApi, MyJobsApi } from './JobsApi';
 export {
   CareerApi,
@@ -92,6 +93,16 @@ export {
   ResumeNotSaved,
   UserInfo,
 } from './OAuthResourceApi';
+export {
+  RestoredVersion,
+  ResumeVersion,
+  ResumeVersionDiff,
+  ResumeVersionPage,
+  ResumeVersionsApi,
+  ResumeVersionSummary,
+  VersionActor,
+  VersionChange,
+} from './ResumeVersionsApi';
 export { Health, SystemApi } from './SystemApi';
 export { allows, parseScope, SCOPE_NAMES, SCOPES, type Scope } from './scopes';
 export {
@@ -129,6 +140,7 @@ export class JsonResumeApi extends HttpApi.make('jsonresume')
   .add(SystemApi)
   .add(AuthApi)
   .add(AccountApi)
+  .add(ResumeVersionsApi)
   .add(KeysApi)
   .add(AnalyticsApi)
   .add(EventsApi)

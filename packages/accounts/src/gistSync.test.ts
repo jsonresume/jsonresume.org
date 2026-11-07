@@ -1,4 +1,5 @@
 import { Profiles, type Username } from '@repo/profiles';
+import { userActor } from '@repo/resume-versions';
 import { Effect } from 'effect';
 import { describe, expect, it } from 'vitest';
 import { Accounts } from './accounts';
@@ -31,7 +32,11 @@ describe('saving to the gist', () => {
         const id = result.user.id;
         expect(yield* accounts.canWriteGist(id)).toBe(true);
 
-        yield* accounts.saveResume(id, { basics: { name: 'Saved here' } });
+        yield* accounts.saveResume(
+          id,
+          { basics: { name: 'Saved here' } },
+          userActor
+        );
         expect(JSON.parse(gists.gists.get('g5')?.content ?? '')).toEqual({
           basics: { name: 'Saved here' },
         });
@@ -73,9 +78,11 @@ describe('saving to the gist', () => {
           grant: grant('tok'),
         });
         if (result._tag !== 'SignedIn') throw new Error('expected sign-in');
-        yield* accounts.saveResume(result.user.id, {
-          basics: { name: 'First' },
-        });
+        yield* accounts.saveResume(
+          result.user.id,
+          { basics: { name: 'First' } },
+          userActor
+        );
         expect([...gists.gists.values()].map((g) => g.ownerId)).toEqual([6]);
       })
     );
@@ -98,7 +105,9 @@ describe('saving to the gist', () => {
         const id = result.user.id;
         expect(yield* accounts.canWriteGist(id)).toBe(false);
         expect(
-          (yield* Effect.flip(accounts.saveResume(id, { basics: {} })))._tag
+          (yield* Effect.flip(
+            accounts.saveResume(id, { basics: {} }, userActor)
+          ))._tag
         ).toBe('GistPermissionNeeded');
 
         // Signing in again with the permission fixes it.
@@ -111,7 +120,9 @@ describe('saving to the gist', () => {
         });
         gists.down = true;
         expect(
-          (yield* Effect.flip(accounts.saveResume(id, { basics: {} })))._tag
+          (yield* Effect.flip(
+            accounts.saveResume(id, { basics: {} }, userActor)
+          ))._tag
         ).toBe('GithubUnreachable');
         // Nothing saved, so nothing to start work on.
         expect(saved).toEqual([]);

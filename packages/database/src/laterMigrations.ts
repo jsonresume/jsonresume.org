@@ -59,4 +59,26 @@ export const laterMigrations: Record<
         FOR EACH ROW EXECUTE FUNCTION app.forget_user_imports()
     `;
   }),
+
+  // Every save of an account's resume, append-only (@repo/resume-versions).
+  // By account, as profiles are keyed by a username that can change. `json`
+  // keeps the text as saved, key order too, so a restore is exact.
+  '16_resume_versions': Effect.gen(function* () {
+    const sql = yield* SqlClient.SqlClient;
+    yield* sql`
+      CREATE TABLE app.resume_versions (
+        id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+        user_id uuid NOT NULL REFERENCES app.users (id) ON DELETE CASCADE,
+        version integer NOT NULL CHECK (version > 0),
+        resume json NOT NULL,
+        actor_kind text NOT NULL
+          CHECK (actor_kind IN ('user', 'app', 'assistant', 'restore')),
+        actor_id text,
+        actor_name text,
+        note text,
+        created_at timestamptz NOT NULL DEFAULT now(),
+        UNIQUE (user_id, version)
+      )
+    `;
+  }),
 };

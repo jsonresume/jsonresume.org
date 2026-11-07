@@ -89,3 +89,10 @@ export class NoResume extends Schema.TaggedError<NoResume>()(
   {},
   { httpApiStatus: 409 }
 ) {}
+
+/** No version with that number in the signed-in account's history. */
+export class VersionNotFound extends Schema.TaggedError<VersionNotFound>()(
+  'VersionNotFound',
+  {},
+  { httpApiStatus: 404 }
+) {}

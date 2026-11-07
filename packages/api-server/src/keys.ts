@@ -10,6 +10,7 @@ import { Effect, Layer, Redacted } from 'effect';
 import { HttpApiBuilder } from 'effect/http-api';
 import { toSessionUser } from './http';
 import { track } from '@repo/posthog';
+import { RequestActor } from './actor';
 
 const toApiKey = (k: ApiKeyRecord) => ({
   id: k.id,
@@ -55,8 +56,8 @@ export const ApiKeyAuthenticationLive = Layer.effect(
         httpEffect,
         { credential }
       ) {
-        const user = yield* keys.authenticate(Redacted.value(credential));
-        if (!user) {
+        const found = yield* keys.identify(Redacted.value(credential));
+        if (!found) {
           return yield* new V1Unauthorized({
             error:
               'Invalid API key. Create one at https://jsonresume.org/dashboard/settings',
@@ -65,7 +66,13 @@ export const ApiKeyAuthenticationLive = Layer.effect(
         return yield* Effect.provideService(
           httpEffect,
           CurrentUser,
-          toSessionUser(user)
+          toSessionUser(found.user)
+        ).pipe(
+          Effect.provideService(RequestActor, {
+            kind: 'app',
+            id: found.key.id,
+            name: found.key.name,
+          })
         );
       }),
     });

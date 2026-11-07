@@ -29,7 +29,17 @@ describe('product events', () => {
         properties: { method: 'password' },
       },
       { id: user.id, event: 'email_verified', properties: undefined },
-      { id: user.id, event: 'resume_saved', properties: { via: 'dashboard' } },
+      {
+        id: user.id,
+        event: 'resume_saved',
+        properties: {
+          via: 'dashboard',
+          source: 'editor',
+          real: false,
+          first: true,
+          sections: 1,
+        },
+      },
       { id: user.id, event: 'api_key_created', properties: undefined },
     ]);
     expect(JSON.stringify(server.events)).not.toMatch(/ada@example|Ada"/);

@@ -7,6 +7,7 @@
 import { appTools } from './catalogApps';
 import { importTools } from './catalogImport';
 import { treeTools } from './catalogTree';
+import { versionTools } from './catalogVersions';
 
 export type McpGroup =
   | 'resume'
@@ -219,6 +220,7 @@ export const tools: ReadonlyArray<McpToolInfo> = [
   ...importTools,
   ...appTools,
   ...treeTools,
+  ...versionTools,
 ];
 
 /** Conversations the agent can start: the registry's AI tools, as prompts. */

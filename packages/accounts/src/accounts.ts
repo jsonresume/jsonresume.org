@@ -51,7 +51,7 @@ const make = Effect.gen(function* () {
   } = yield* accountsCore;
   const management = yield* accountManagement;
   const gist = yield* gistSync;
-  const { saveResume, setSource } = yield* resumeSaving(gist);
+  const { saveResume, restoreVersion, setSource } = yield* resumeSaving(gist);
   const signUp = Effect.fn('Accounts.signUp')(function* (input: {
     email: string;
     password: string;
@@ -147,6 +147,7 @@ const make = Effect.gen(function* () {
     canWriteGist: gist.canWrite,
     account: (userId: string) => store.account(userId),
     saveResume,
+    restoreVersion,
     setSource,
     emailDelivery: mailer.enabled,
     /** Free the names of email accounts never verified within UNVERIFIED_TTL. */

@@ -258,6 +258,9 @@ importers:
       '@repo/resume-themes':
         specifier: workspace:^
         version: link:../../packages/resume-themes
+      '@repo/resume-versions':
+        specifier: workspace:*
+        version: link:../../packages/resume-versions
       '@repo/server':
         specifier: workspace:*
         version: link:../../packages/server
@@ -1448,6 +1451,9 @@ importers:
       '@repo/profiles':
         specifier: workspace:*
         version: link:../profiles
+      '@repo/resume-versions':
+        specifier: workspace:*
+        version: link:../resume-versions
       effect:
         specifier: 4.0.6
         version: 4.0.6
@@ -1455,6 +1461,9 @@ importers:
       '@effect/sql-pglite':
         specifier: 4.0.6
         version: 4.0.6(effect@4.0.6)
+      '@jsonresume/sample-data':
+        specifier: workspace:*
+        version: link:../sample-data
       '@repo/eslint-config-custom':
         specifier: workspace:*
         version: link:../eslint-config-custom
@@ -1593,6 +1602,9 @@ importers:
       '@repo/resume-themes':
         specifier: workspace:*
         version: link:../resume-themes
+      '@repo/resume-versions':
+        specifier: workspace:*
+        version: link:../resume-versions
       effect:
         specifier: 4.0.6
         version: 4.0.6
@@ -1600,6 +1612,9 @@ importers:
       '@effect/sql-pglite':
         specifier: 4.0.6
         version: 4.0.6(effect@4.0.6)
+      '@jsonresume/sample-data':
+        specifier: workspace:*
+        version: link:../sample-data
       '@repo/database':
         specifier: workspace:*
         version: link:../database
@@ -2021,6 +2036,9 @@ importers:
       '@vanilla-extract/vite-plugin':
         specifier: ^5.2.6
         version: 5.2.6(@types/node@20.19.24)(vite@6.4.3)
+      axe-core:
+        specifier: ^4.14.0
+        version: 4.14.0
       jsdom:
         specifier: ^27.0.0
         version: 27.0.1(postcss@8.5.23)
@@ -2405,6 +2423,9 @@ importers:
       '@repo/resume-import':
         specifier: workspace:*
         version: link:../resume-import
+      '@repo/resume-versions':
+        specifier: workspace:*
+        version: link:../resume-versions
       '@repo/schema-explorer':
         specifier: workspace:*
         version: link:../schema-explorer
@@ -3611,6 +3632,40 @@ importers:
       '@jsonresume/theme-metadata':
         specifier: workspace:*
         version: link:../theme-config
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      '@types/node':
+        specifier: ^20.19.24
+        version: 20.19.24
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+
+  packages/resume-versions:
+    dependencies:
+      '@jsonresume/sample-data':
+        specifier: workspace:*
+        version: link:../sample-data
+      '@repo/explore':
+        specifier: workspace:*
+        version: link:../explore
+      effect:
+        specifier: 4.0.6
+        version: 4.0.6
+    devDependencies:
+      '@effect/sql-pglite':
+        specifier: 4.0.6
+        version: 4.0.6(effect@4.0.6)
+      '@repo/database':
+        specifier: workspace:*
+        version: link:../database
       '@repo/eslint-config-custom':
         specifier: workspace:*
         version: link:../eslint-config-custom

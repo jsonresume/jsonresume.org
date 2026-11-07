@@ -1,7 +1,7 @@
 import { OpenAiClient, OpenAiLanguageModel } from '@effect/ai-openai';
 import type { UserRecord } from '@repo/accounts';
 import type { CopilotEvent, CopilotMessage } from '@repo/api';
-import { AgentHandlers, AgentToolkit, McpCaller } from '@repo/mcp';
+import { AgentHandlers, AgentToolkit, McpActor, McpCaller } from '@repo/mcp';
 import { Config, Context, Effect, Layer, Option, Ref, Stream } from 'effect';
 import { type AiError, Chat, type LanguageModel } from 'effect/ai';
 import { FetchHttpClient } from 'effect/http';
@@ -125,7 +125,13 @@ const replyWith = (model: Layer.Layer<LanguageModel.LanguageModel>) =>
 
           return step(1).pipe(
             Stream.concat(Stream.make({ type: 'done' as const })),
-            Stream.provideService(McpCaller, user)
+            Stream.provideService(McpCaller, user),
+            // Its saves show in the resume's history as Pathways'.
+            Stream.provideService(McpActor, {
+              kind: 'assistant',
+              id: null,
+              name: 'Pathways',
+            })
           );
         })
       ).pipe(

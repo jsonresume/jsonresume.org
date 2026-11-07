@@ -57,6 +57,7 @@ export function ResumeEditor({ username }: { username: string }) {
     target,
     saving,
     notice,
+    example,
     onSave,
     replace: start,
   } = useEditorSession(username);
@@ -100,7 +101,7 @@ export function ResumeEditor({ username }: { username: string }) {
   const save = {
     saving,
     saveLabel: toGist ? 'Save to gist' : 'Save',
-    blocked: toGist && !target.gistWrite,
+    blocked: (toGist && !target.gistWrite) || example,
     onSave: () => void onSave(),
   };
 
@@ -133,6 +134,12 @@ export function ResumeEditor({ username }: { username: string }) {
       <Stack gap={4}>
         {toGist && !target.gistWrite ? <AllowGist /> : null}
         {notice ? <Callout tone={notice.tone}>{notice.text}</Callout> : null}
+        {example ? (
+          <Callout tone="info">
+            This is the example. Change it to make it yours; it can’t be saved
+            as it is.
+          </Callout>
+        ) : null}
         {restorable ? (
           <Callout tone="warning" title="You have unsaved changes from before">
             <Start.Restore

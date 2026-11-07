@@ -34,7 +34,8 @@ export const gistSync = Effect.gen(function* () {
   const canWrite = (userId: string) =>
     Effect.map(writer(userId), (token) => token !== undefined);
 
-  const saveToGist = Effect.fn('Accounts.saveToGist')(function* (
+  /** Writes the gist (a new one if it went missing); its owner and id. */
+  const writeGist = Effect.fn('Accounts.writeGist')(function* (
     userId: string,
     resume: unknown
   ) {
@@ -63,11 +64,7 @@ export const gistSync = Effect.gen(function* () {
             : Effect.fail(new GistPermissionNeeded())
       )
     );
-    yield* store.saveMirrorFor(userId, {
-      githubId: saved.ownerId,
-      gistId: saved.gistId,
-      resume,
-    });
+    return saved;
   });
 
   /** The gist's resume as it is on GitHub now, or undefined if it can't be read. */
@@ -89,5 +86,5 @@ export const gistSync = Effect.gen(function* () {
       }
     });
 
-  return { keepGrant, canWrite, saveToGist, readGist };
+  return { keepGrant, canWrite, writeGist, readGist };
 });

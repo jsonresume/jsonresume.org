@@ -83,17 +83,25 @@ const make = Effect.gen(function* () {
       Effect.orDie
     );
 
-  /** Who a key belongs to, noting its use; undefined for an unknown key. */
-  const authenticate = Effect.fn('ApiKeys.authenticate')(function* (
-    key: string
-  ) {
+  /**
+   * Who a key belongs to and which key it is (its id and name, to say who
+   * saved a resume), noting its use; undefined for an unknown key.
+   */
+  const identify = Effect.fn('ApiKeys.identify')(function* (key: string) {
     const hash = hashToken(key);
-    const [owner] = yield* sql<{ user_id: string }>`
+    const [owner] = yield* sql<{ user_id: string; id: string; name: string }>`
       UPDATE app.api_keys SET last_used_at = now() WHERE key_hash = ${hash}
-      RETURNING user_id
+      RETURNING user_id, id::text AS id, name
     `.pipe(Effect.orDie);
-    return owner ? yield* users.byId(owner.user_id) : undefined;
+    const user = owner ? yield* users.byId(owner.user_id) : undefined;
+    return owner && user
+      ? { user, key: { id: owner.id, name: owner.name } }
+      : undefined;
   });
 
-  return { list, create, revoke, authenticate };
+  /** Who a key belongs to, noting its use; undefined for an unknown key. */
+  const authenticate = (key: string) =>
+    Effect.map(identify(key), (found) => found?.user);
+
+  return { list, create, revoke, identify, authenticate };
 });

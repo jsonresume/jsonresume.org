@@ -28,6 +28,7 @@ export const keys = {
   oauthApps: ['oauthApps'],
   explore: ['explore'],
   career: ['career'],
+  versions: ['versions'],
 } as const;
 
 export const sessionAtom = ApiClient.query('auth', 'session', {
@@ -86,6 +87,20 @@ export const resendVerificationAtom = ApiClient.mutation(
 );
 export const saveResumeAtom = ApiClient.mutation('account', 'saveResume');
 export const setSourceAtom = ApiClient.mutation('account', 'setSource');
+/**
+ * The resume's history, a page at a time (0: the newest), refetched after
+ * any save; restoring refreshes the account and the history.
+ */
+export const resumeVersionsAtom = Atom.family((before: number) =>
+  ApiClient.query('resumeVersions', 'list', {
+    query: before > 0 ? { before } : {},
+    reactivityKeys: [...keys.versions, ...keys.account],
+  })
+);
+export const restoreVersionAtom = ApiClient.mutation(
+  'resumeVersions',
+  'restore'
+);
 export const forgotPasswordAtom = ApiClient.mutation('auth', 'forgotPassword');
 export const resetPasswordAtom = ApiClient.mutation('auth', 'resetPassword');
 export const renameAtom = ApiClient.mutation('account', 'rename');

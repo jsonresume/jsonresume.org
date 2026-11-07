@@ -1,10 +1,19 @@
 import { Accounts } from '@repo/accounts';
+import { track } from '@repo/posthog';
+import { savedProperties } from '@repo/resume-versions';
 import { AnalyticsStore } from '@repo/analytics';
 import { AnalyticsRange, Overview, ResumeSource } from '@repo/api';
 import { filterThemes, findTheme, themes } from '@repo/theme-gallery/catalog';
 import { Effect, Predicate, Schema } from 'effect';
 import { Tool, Toolkit } from 'effect/ai';
-import { caller, describe, failing, failWith, hints } from './context';
+import {
+  caller,
+  describe,
+  failing,
+  failWith,
+  hints,
+  McpActor,
+} from './context';
 import { ListedTheme, ThemeSearch, themeListing } from './themeListing';
 
 const SITE = 'https://jsonresume.org';
@@ -114,8 +123,12 @@ export const AccountHandlers = AccountToolkit.toLayer(
             ? (resume as Record<string, unknown>)
             : {};
           const meta = Predicate.isObject(base.meta) ? base.meta : {};
-          yield* accounts
-            .saveResume(user.id, { ...base, meta: { ...meta, theme: slug } })
+          const saved = yield* accounts
+            .saveResume(
+              user.id,
+              { ...base, meta: { ...meta, theme: slug } },
+              yield* McpActor
+            )
             .pipe(
               Effect.mapError(() =>
                 failWith(
@@ -123,6 +136,10 @@ export const AccountHandlers = AccountToolkit.toLayer(
                 )
               )
             );
+          yield* track(user.id, 'resume_saved', {
+            via: 'mcp',
+            ...savedProperties(saved, 'mcp'),
+          });
           return { theme: slug, url: `${SITE}/@${user.username}` };
         }),
       get_resume_analytics: ({ range }) =>
