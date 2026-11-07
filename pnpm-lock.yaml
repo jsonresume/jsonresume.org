@@ -183,6 +183,9 @@ importers:
       '@hono/node-server':
         specifier: ^2.1.5
         version: 2.1.5(hono@4.13.13)
+      '@jsonresume/theme-metadata':
+        specifier: workspace:*
+        version: link:../../packages/theme-config
       '@jsonresume/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -1572,6 +1575,9 @@ importers:
 
   packages/api-server:
     dependencies:
+      '@jsonresume/theme-metadata':
+        specifier: workspace:*
+        version: link:../theme-config
       '@repo/accounts':
         specifier: workspace:*
         version: link:../accounts
@@ -3803,6 +3809,9 @@ importers:
       '@jsonresume/schema':
         specifier: workspace:*
         version: link:../schema
+      '@jsonresume/theme-metadata':
+        specifier: workspace:*
+        version: link:../theme-config
       '@jsonresume/ui':
         specifier: workspace:*
         version: link:../ui

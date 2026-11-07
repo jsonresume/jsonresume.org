@@ -9,8 +9,10 @@ import { ThemeCard } from './ThemeCard';
 export interface ThemeLinks {
   /** Screenshot URL for a theme. */
   image: (theme: ThemeSummary) => string;
-  /** Where a theme card links, e.g. a live preview. */
+  /** The live preview of a theme (the preview frame, and Full page). */
   href: (theme: ThemeSummary) => string;
+  /** Where a card links when it isn't opened in place: the theme's page. */
+  page?: (theme: ThemeSummary) => string;
 }
 
 export interface ThemeGridProps extends ThemeLinks {
@@ -27,6 +29,7 @@ export function ThemeGrid({
   themes: list,
   image,
   href,
+  page,
   eagerCount = 0,
   label = 'Themes',
   onOpen,
@@ -38,7 +41,7 @@ export function ThemeGrid({
           <ThemeCard
             theme={theme}
             image={image(theme)}
-            href={href(theme)}
+            href={(page ?? href)(theme)}
             eager={index < eagerCount}
             onOpen={onOpen && (() => onOpen(theme))}
           />

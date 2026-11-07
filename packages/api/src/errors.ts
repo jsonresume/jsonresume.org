@@ -96,3 +96,10 @@ export class VersionNotFound extends Schema.TaggedError<VersionNotFound>()(
   {},
   { httpApiStatus: 404 }
 ) {}
+
+/** No theme with that slug in the gallery. */
+export class UnknownTheme extends Schema.TaggedError<UnknownTheme>()(
+  'UnknownTheme',
+  {},
+  { httpApiStatus: 404 }
+) {}

@@ -16,7 +16,8 @@ export type ProductEventName =
   | 'oauth_access_granted'
   | 'mcp_tool_called'
   | 'import_started'
-  | 'import_finished';
+  | 'import_finished'
+  | 'theme_chosen';
 
 /** Plain values only: never an email, a name or resume text. */
 export type ProductEventProperties = Readonly<
