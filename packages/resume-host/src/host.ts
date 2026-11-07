@@ -28,7 +28,9 @@ const metaTheme = (doc: ResumeDocument) => {
  * `/@name.json|yaml|txt|rendercv`. Undefined when the path is not a
  * handle, so the caller serves it as any other page.
  * Theme: ?theme=, then the resume's meta.theme, then elegant; ?theme=random
- * redirects to a random one. Other gist files with ?gistname=.
+ * redirects to a random one. Paper (PDF and Word): ?paper=a4|letter, else
+ * the owner's country's. ?fit=1 fits a PDF slightly over a page onto one.
+ * Other gist files with ?gistname=.
  */
 export const resumeOutcome = Effect.fn('resumeOutcome')(function* (url: URL) {
   const handle = parseHandle(url.pathname.slice(1).replace(/^%40/i, '@'));
@@ -80,10 +82,12 @@ export const resumeOutcome = Effect.fn('resumeOutcome')(function* (url: URL) {
   if (format === 'qr') return respond(asFile(yield* qrResponse(username)));
   // A download like .json, counted the same way.
   if (format === 'docx')
-    return respond(asFile(yield* docxResponse(username, doc.value)), {
-      username,
-      format,
-    });
+    return respond(
+      asFile(
+        yield* docxResponse(username, doc.value, url.searchParams.get('paper'))
+      ),
+      { username, format }
+    );
   if (format !== 'html' && format !== 'pdf') {
     const { body, contentType } = formatResume(format, doc.value);
     return respond(
@@ -97,12 +101,9 @@ export const resumeOutcome = Effect.fn('resumeOutcome')(function* (url: URL) {
   return yield* renderTheme(theme, doc.value).pipe(
     Effect.flatMap((html) =>
       format === 'pdf'
-        ? pdfResponse(
-            html,
-            username,
-            doc.value,
-            url.searchParams.get('paper')
-          ).pipe(Effect.map(asFile))
+        ? pdfResponse(html, username, doc.value, url.searchParams).pipe(
+            Effect.map(asFile)
+          )
         : Effect.succeed(
             // Every themed page reports its views (see @repo/analytics),
             // and says what it is to search engines and link previews.

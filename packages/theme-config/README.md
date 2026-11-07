@@ -18,6 +18,7 @@ npm install @jsonresume/theme-metadata
 import {
   THEME_METADATA,
   THEME_NAMES,
+  RECOMMENDED_THEMES,
   getRandomTheme,
 } from '@jsonresume/theme-metadata';
 ```
@@ -27,7 +28,14 @@ import {
   - `description` — one-line summary of the look/intent
   - `author` — theme author
   - `tags` — string array for filtering/search
+  - `style`, `layout`, `color` — discovery facets
+  - `usage` — public-resume counts from the last snapshot
+  - `recommended` — `true` for the recommended themes (below)
 - `THEME_NAMES` — `Object.keys(THEME_METADATA)`, the array of theme slugs.
+- `RECOMMENDED_THEMES` — about a dozen slugs to show first, in order: each is
+  ATS-safe (one reading column or a date gutter, the name as the only `h1`,
+  standard section headings, contact details as real text, no icon fonts or
+  photo) and prints on A4 and Letter with every word inside the page.
 - `getRandomTheme()` — returns a random theme slug (useful for "surprise me" / preview UIs).
 
 The metadata is also available directly via the `./metadata` subpath:

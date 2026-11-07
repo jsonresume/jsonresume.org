@@ -75,6 +75,7 @@ export const category = style({
   fontSize: font.size.xs,
   color: color.text.muted,
 });
+export const recommended = style({ justifySelf: 'start' });
 export const usage = style({
   fontSize: font.size.xs,
   fontWeight: font.weight.semibold,

@@ -2,24 +2,29 @@ import { BorderStyle, type IStylesOptions } from 'docx';
 
 const INK = '1F2933';
 const MUTED = '5F6B7A';
+/**
+ * Calibri for Latin text; Arial for Arabic and Hebrew, which Calibri lacks;
+ * East Asian text keeps the reader's own default font.
+ */
+const FONT = { ascii: 'Calibri', hAnsi: 'Calibri', cs: 'Arial' };
 
 /**
- * One plain layout: Calibri 11pt, Word's own Title and Heading styles
+ * One plain layout: Calibri 11pt (Arial for right-to-left scripts), Word's own Title and Heading styles
  * (so the navigation pane and outline work), and a muted Details style
  * for dates, places and links.
  */
 export const styles: IStylesOptions = {
   default: {
     document: {
-      run: { font: 'Calibri', size: 22, color: INK },
+      run: { font: FONT, size: 22, color: INK },
       paragraph: { spacing: { after: 80, line: 276 } },
     },
     title: {
-      run: { font: 'Calibri', size: 48, bold: true, color: INK },
+      run: { font: FONT, size: 48, bold: true, color: INK },
       paragraph: { spacing: { after: 40 } },
     },
     heading1: {
-      run: { font: 'Calibri', size: 26, bold: true, color: INK },
+      run: { font: FONT, size: 26, bold: true, color: INK },
       paragraph: {
         spacing: { before: 280, after: 120 },
         keepNext: true,
@@ -34,7 +39,7 @@ export const styles: IStylesOptions = {
       },
     },
     heading2: {
-      run: { font: 'Calibri', size: 23, bold: true, color: INK },
+      run: { font: FONT, size: 23, bold: true, color: INK },
       paragraph: { spacing: { before: 160, after: 20 }, keepNext: true },
     },
   },

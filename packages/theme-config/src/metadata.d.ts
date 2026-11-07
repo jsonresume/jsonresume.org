@@ -7,6 +7,8 @@ export interface ThemeMetadata {
   style: string;
   layout: string;
   color: string;
+  /** One of RECOMMENDED_THEMES: ATS-safe and print-tested. */
+  recommended: boolean;
   usage: { resumes: number; chosen: number; inherited: number; views: number };
 }
 

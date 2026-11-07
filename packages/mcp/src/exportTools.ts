@@ -64,7 +64,14 @@ export const ExportToolkit = Toolkit.make(
         Schema.String,
         'For pdf: the theme to print in (default: your page’s)'
       ),
-      paper: optional(Schema.Literals(['a4', 'letter'])),
+      paper: optional(
+        Schema.Literals(['a4', 'letter']),
+        'For pdf and docx: the paper (default: Letter in the US and Canada, else A4)'
+      ),
+      fit: optional(
+        Schema.Boolean,
+        'For pdf: shrink a resume that runs slightly over one page (by up to 15%) so it fits on one'
+      ),
     }),
     success: Schema.Struct({
       url: Schema.String,
@@ -90,7 +97,7 @@ export const ExportHandlers = ExportToolkit.toLayer(
             : Effect.succeed(resume),
           checkAts
         ),
-      export_resume: ({ format, theme, paper }) =>
+      export_resume: ({ format, theme, paper, fit }) =>
         Effect.gen(function* () {
           // A PDF in a theme that doesn't exist would be a link to a 404.
           if (format === 'pdf' && theme && !findTheme(theme)) {
@@ -99,13 +106,17 @@ export const ExportHandlers = ExportToolkit.toLayer(
             );
           }
           const { user, resume } = yield* current;
+          const asked =
+            format === 'pdf'
+              ? { theme, paper, fit: fit ? '1' : undefined }
+              : format === 'docx'
+              ? { paper }
+              : {};
           const query = new URLSearchParams(
-            Object.entries({ theme, paper }).flatMap(([k, v]) =>
-              v ? [[k, v]] : []
-            )
+            Object.entries(asked).flatMap(([k, v]) => (v ? [[k, v]] : []))
           ).toString();
           const url = `${SITE}/@${user.username}.${format}${
-            query && format === 'pdf' ? `?${query}` : ''
+            query ? `?${query}` : ''
           }`;
           // Text comes back inline; the PDF, Word document and QR code are
           // files to open.

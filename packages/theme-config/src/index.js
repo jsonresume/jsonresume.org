@@ -9,3 +9,4 @@
 export { THEME_METADATA, THEME_NAMES, getRandomTheme } from './metadata.js';
 export { THEME_STYLES, THEME_LAYOUTS, THEME_COLORS } from './facets.js';
 export { THEME_USAGE_SOURCE } from './usage.js';
+export { RECOMMENDED_THEMES } from './recommended.js';

@@ -2779,6 +2779,9 @@ importers:
       '@types/qrcode':
         specifier: ^1.5.6
         version: 1.5.6
+      saxes:
+        specifier: ^6.0.0
+        version: 6.0.0
       tsconfig:
         specifier: workspace:*
         version: link:../tsconfig
@@ -2899,12 +2902,27 @@ importers:
         specifier: 1.56.1
         version: 1.56.1
     devDependencies:
+      '@jsonresume/sample-data':
+        specifier: workspace:^
+        version: link:../sample-data
+      '@jsonresume/theme-metadata':
+        specifier: workspace:^
+        version: link:../theme-config
+      '@napi-rs/canvas':
+        specifier: 0.1.80
+        version: 0.1.80
       '@repo/eslint-config-custom':
         specifier: workspace:*
         version: link:../eslint-config-custom
+      '@repo/resume-themes':
+        specifier: workspace:^
+        version: link:../resume-themes
       '@types/node':
         specifier: ^20.19.24
         version: 20.19.24
+      pdfjs-dist:
+        specifier: 5.4.296
+        version: 5.4.296
       tsconfig:
         specifier: workspace:*
         version: link:../tsconfig
@@ -3605,6 +3623,9 @@ importers:
         specifier: workspace:*
         version: link:../themes/jsonresume-theme-writers-portfolio
     devDependencies:
+      '@jsonresume/ats-validator':
+        specifier: workspace:^
+        version: link:../ats-validator
       '@jsonresume/sample-data':
         specifier: workspace:*
         version: link:../sample-data
@@ -15259,7 +15280,6 @@ packages:
     cpu: [arm64]
     os: [android]
     requiresBuild: true
-    dev: false
     optional: true
 
   /@napi-rs/canvas-darwin-arm64@0.1.80:
@@ -15268,7 +15288,6 @@ packages:
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
-    dev: false
     optional: true
 
   /@napi-rs/canvas-darwin-x64@0.1.80:
@@ -15277,7 +15296,6 @@ packages:
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
-    dev: false
     optional: true
 
   /@napi-rs/canvas-linux-arm-gnueabihf@0.1.80:
@@ -15286,7 +15304,6 @@ packages:
     cpu: [arm]
     os: [linux]
     requiresBuild: true
-    dev: false
     optional: true
 
   /@napi-rs/canvas-linux-arm64-gnu@0.1.80:
@@ -15295,7 +15312,6 @@ packages:
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
-    dev: false
     optional: true
 
   /@napi-rs/canvas-linux-arm64-musl@0.1.80:
@@ -15304,7 +15320,6 @@ packages:
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
-    dev: false
     optional: true
 
   /@napi-rs/canvas-linux-riscv64-gnu@0.1.80:
@@ -15313,7 +15328,6 @@ packages:
     cpu: [riscv64]
     os: [linux]
     requiresBuild: true
-    dev: false
     optional: true
 
   /@napi-rs/canvas-linux-x64-gnu@0.1.80:
@@ -15322,7 +15336,6 @@ packages:
     cpu: [x64]
     os: [linux]
     requiresBuild: true
-    dev: false
     optional: true
 
   /@napi-rs/canvas-linux-x64-musl@0.1.80:
@@ -15331,7 +15344,6 @@ packages:
     cpu: [x64]
     os: [linux]
     requiresBuild: true
-    dev: false
     optional: true
 
   /@napi-rs/canvas-win32-x64-msvc@0.1.80:
@@ -15340,7 +15352,6 @@ packages:
     cpu: [x64]
     os: [win32]
     requiresBuild: true
-    dev: false
     optional: true
 
   /@napi-rs/canvas@0.1.80:
@@ -15357,7 +15368,6 @@ packages:
       '@napi-rs/canvas-linux-x64-gnu': 0.1.80
       '@napi-rs/canvas-linux-x64-musl': 0.1.80
       '@napi-rs/canvas-win32-x64-msvc': 0.1.80
-    dev: false
 
   /@napi-rs/wasm-runtime@0.2.12:
     resolution: {integrity: sha512-ZVWUcfwY4E/yPitQJl481FjFo3K22D6qF0DuFH6Y/nbnE11GY5uguDxZMGXPQ8WQ0128MXQD7TnfHyK4oWoIJQ==}
@@ -32029,7 +32039,6 @@ packages:
     engines: {node: '>=20.16.0 || >=22.3.0'}
     optionalDependencies:
       '@napi-rs/canvas': 0.1.80
-    dev: false
 
   /pend@1.2.0:
     resolution: {integrity: sha512-F3asv42UuXchdzt+xXqfW1OGlVBe+mxa2mqI0pg5yAHZPvFmY3Y6drSf/GQ1A86WgWEN9Kzh/WrgKa6iGcHXLg==}

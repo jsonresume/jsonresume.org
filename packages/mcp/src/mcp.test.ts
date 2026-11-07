@@ -119,6 +119,21 @@ describe('the MCP server', () => {
     expect(all.value[0].publicResumes).toBeGreaterThan(
       all.value[1].publicResumes
     );
+    // The recommended set is marked, and comes first when asked.
+    expect(all.value[0].recommended).toBe(false);
+    const marked = all.value.filter(
+      (theme: { recommended: boolean }) => theme.recommended
+    );
+    expect(marked.length).toBeGreaterThanOrEqual(10);
+    const recommendedFirst = (
+      await call('list_themes', { sort: 'recommended' })
+    ).value;
+    expect(
+      recommendedFirst
+        .slice(0, marked.length)
+        .every((theme: { recommended: boolean }) => theme.recommended)
+    ).toBe(true);
+    expect(recommendedFirst[0].slug).toBe('pro');
     const classic = await call('list_themes', {
       style: 'classic',
       sort: 'chosen',
@@ -205,6 +220,23 @@ describe('the MCP server', () => {
       url: 'https://jsonresume.org/@ada.pdf?theme=even',
       content: null,
     });
+    expect(
+      (
+        await call('export_resume', {
+          format: 'pdf',
+          theme: 'pro',
+          paper: 'letter',
+          fit: true,
+        })
+      ).value.url
+    ).toBe('https://jsonresume.org/@ada.pdf?theme=pro&paper=letter&fit=1');
+    expect(
+      (await call('export_resume', { format: 'pdf', fit: false })).value.url
+    ).toBe('https://jsonresume.org/@ada.pdf');
+    expect(
+      (await call('export_resume', { format: 'docx', paper: 'letter' })).value
+        .url
+    ).toBe('https://jsonresume.org/@ada.docx?paper=letter');
     expect(
       (await call('export_resume', { format: 'pdf', theme: 'no-such-theme' }))
         .isError

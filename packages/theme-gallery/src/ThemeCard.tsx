@@ -1,4 +1,4 @@
-import { Card } from '@jsonresume/ui';
+import { Badge, Card } from '@jsonresume/ui';
 import type { MouseEvent } from 'react';
 import type { ThemeSummary } from '@repo/domain';
 import { THEME_STYLES, THEME_LAYOUTS } from '@jsonresume/theme-metadata';
@@ -23,7 +23,10 @@ const plainClick = (event: MouseEvent<HTMLAnchorElement>) =>
   event.button === 0 &&
   !(event.metaKey || event.ctrlKey || event.shiftKey || event.altKey);
 
-/** A theme as a card: screenshot, name and a clamped description. */
+/**
+ * A theme as a card: screenshot, name, whether it is recommended and a
+ * clamped description.
+ */
 export function ThemeCard({
   theme,
   image,
@@ -52,6 +55,15 @@ export function ThemeCard({
         />
         <span className={s.body}>
           <span className={s.name}>{theme.name}</span>
+          {theme.recommended ? (
+            <Badge
+              tone="success"
+              className={s.recommended}
+              title="ATS-safe, and tested printing on A4 and Letter"
+            >
+              Recommended
+            </Badge>
+          ) : null}
           <span className={s.category}>
             {THEME_STYLES[theme.style]} · {THEME_LAYOUTS[theme.layout]}
           </span>

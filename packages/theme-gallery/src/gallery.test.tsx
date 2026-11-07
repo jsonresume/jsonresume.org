@@ -12,6 +12,7 @@ import {
   themes,
 } from './catalog';
 import {
+  RECOMMENDED_THEMES,
   THEME_STYLES,
   THEME_LAYOUTS,
   THEME_COLORS,
@@ -76,6 +77,21 @@ describe('catalog', () => {
     expect(
       filterThemes(themes, { query: '', tag: null, style: 'research-informed' })
     ).toHaveLength(themes.length);
+  });
+
+  it('sorts the recommended themes first, in their order, then by usage', () => {
+    const sorted = sortThemes(themes, 'recommended');
+    const count = RECOMMENDED_THEMES.length;
+    expect(sorted.slice(0, count).map((t) => t.slug)).toEqual([
+      ...RECOMMENDED_THEMES,
+    ]);
+    expect(sorted.slice(0, count).every((t) => t.recommended)).toBe(true);
+    const rest = sorted.slice(count);
+    expect(rest.some((t) => t.recommended)).toBe(false);
+    expect(rest.map((t) => t.usage.resumes)).toEqual(
+      rest.map((t) => t.usage.resumes).sort((a, b) => b - a)
+    );
+    expect(sorted).toHaveLength(themes.length);
   });
 
   it('matches the visible colour and layout labels in free-text search', () => {
@@ -170,6 +186,33 @@ describe('ThemeGallery', () => {
     expect(screen.getByRole('link', { name: /Macchiato/ })).toBeInTheDocument();
   });
 
+  it('shows the recommended themes first, marked, until another sort is chosen', async () => {
+    window.history.replaceState(null, '', '/themes');
+    await act(async () => {
+      render(
+        <RegistryProvider>
+          <ThemeGallery {...links} />
+        </RegistryProvider>
+      );
+    });
+    const cards = () =>
+      within(screen.getByRole('list', { name: 'Themes' })).getAllByRole('link');
+    expect(screen.getByLabelText('Sort by')).toHaveValue('recommended');
+    const [first] = RECOMMENDED_THEMES;
+    expect(cards()[0]).toHaveAttribute('href', `/preview/${first}`);
+    expect(within(cards()[0]).getByText('Recommended')).toBeVisible();
+    expect(
+      screen.getAllByText('Recommended', { selector: 'span' })
+    ).toHaveLength(RECOMMENDED_THEMES.length);
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText('Sort by'), {
+        target: { value: 'usage' },
+      });
+    });
+    expect(window.location.search).toBe('?sort=usage');
+    expect(cards()[0]).toHaveAttribute('href', `/preview/${themes[0].slug}`);
+  });
+
   it('reads a shared filter from the URL after the first render', async () => {
     window.history.replaceState(null, '', '/themes?q=kendall');
     await act(async () => {
@@ -211,7 +254,8 @@ describe('ThemePreview', () => {
 
   it('opens a card in place, flips with the arrow keys and closes', async () => {
     await renderGallery();
-    const [first, second] = themes;
+    const shown = sortThemes(themes, 'recommended');
+    const [first, second] = shown;
     await act(async () => {
       fireEvent.click(card(0));
     });
@@ -235,11 +279,11 @@ describe('ThemePreview', () => {
     });
     // Wraps from the first theme to the last.
     expect(
-      screen.getByRole('dialog', { name: themes[themes.length - 1].name })
+      screen.getByRole('dialog', { name: shown[shown.length - 1].name })
     ).toBeVisible();
     expect(screen.getByRole('link', { name: 'Full page' })).toHaveAttribute(
       'href',
-      `/preview/${themes[themes.length - 1].slug}`
+      `/preview/${shown[shown.length - 1].slug}`
     );
 
     await act(async () => {
