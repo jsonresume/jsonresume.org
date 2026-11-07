@@ -41,7 +41,13 @@ describe('search and link-preview tags', () => {
       expect(meta(html, 'og:url')).toBe(url);
       expect(meta(html, 'og:title')).toBe(meta(html, 'twitter:title'));
       expect(meta(html, 'og:description')).toBe(meta(html, 'description'));
-      expect(meta(html, 'og:image')).toBe('https://jsonresume.org/og.png');
+      // A theme's page previews with its screenshot; the rest, the site's card.
+      const theme = /^\/themes\/([^/]+)$/.exec(path)?.[1];
+      expect(meta(html, 'og:image')).toBe(
+        theme
+          ? `https://jsonresume.org/img/themes/${theme}.webp`
+          : 'https://jsonresume.org/og.png'
+      );
       expect(html.match(/rel="canonical"/g)).toHaveLength(1);
       for (const data of jsonLd(html))
         expect(data['@context']).toBe('https://schema.org');
