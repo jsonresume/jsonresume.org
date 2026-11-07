@@ -76,6 +76,7 @@ export function FieldEditor({ spec, value, path }: Props) {
     <Field
       label={spec.label}
       hint={hint ?? spec.description}
+      data-path={pathKey(path)}
       {...(error ? { error } : {})}
     >
       {control}
@@ -158,7 +159,7 @@ export function FieldEditor({ spec, value, path }: Props) {
 
 function Group({ spec, value, path }: Props) {
   return (
-    <Stack gap={3}>
+    <Stack gap={3} data-path={pathKey(path)}>
       <Text as="span" size="sm" weight="semibold" tone="strong">
         {spec.label}
       </Text>

@@ -1,4 +1,4 @@
-import { useAtomValue } from '@effect/atom-react';
+import { useAtom, useAtomValue } from '@effect/atom-react';
 import {
   Accordion,
   AccordionContent,
@@ -6,9 +6,10 @@ import {
   AccordionTrigger,
   Badge,
 } from '@jsonresume/ui';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import type { SectionSpec } from '../model';
-import { draftAtom } from '../state';
+import { draftAtom, goToFieldAtom, openSectionsAtom } from '../state';
+import { reveal } from './goTo';
 import { pathKey } from './context';
 import { Fields, FieldEditor, List } from './FieldEditor';
 
@@ -28,6 +29,17 @@ export function ResumeForm({
   issues: ReadonlyMap<string, string>;
 }) {
   const draft = useAtomValue(draftAtom);
+  const [open, setOpen] = useAtom(openSectionsAtom);
+  const [goTo, setGoTo] = useAtom(goToFieldAtom);
+  // After its section has opened, bring the field asked for into view.
+  useEffect(() => {
+    if (goTo === null) return;
+    const frame = requestAnimationFrame(() => {
+      reveal(goTo);
+      setGoTo(null);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [goTo, setGoTo]);
   const problems = useMemo(() => {
     const bySection = new Map<string, number>();
     for (const key of issues.keys()) {
@@ -42,13 +54,17 @@ export function ResumeForm({
       : undefined;
 
   return (
-    <Accordion type="multiple" defaultValue={['basics']}>
+    <Accordion type="multiple" value={[...open]} onValueChange={setOpen}>
       {sections.map((section) => {
         const value = valueOf(section.key);
         const count = countOf(value);
         const issuesHere = problems.get(section.key);
         return (
-          <AccordionItem key={section.key} value={section.key}>
+          <AccordionItem
+            key={section.key}
+            value={section.key}
+            data-path={section.key}
+          >
             <AccordionTrigger>
               {section.label}
               {count ? <Badge tone="neutral">{count}</Badge> : null}

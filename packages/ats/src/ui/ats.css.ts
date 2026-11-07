@@ -19,3 +19,5 @@ export const issue = style({
 
 /** The fix and the field sit under the message, beside the badge. */
 export const detail = style({ gridColumn: '2' });
+
+export const goTo = style({ gridColumn: '2', justifySelf: 'start' });

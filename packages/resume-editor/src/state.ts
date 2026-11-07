@@ -45,6 +45,12 @@ export const dirtyAtom = Atom.make((get) => {
  */
 export const jsonTextAtom = Atom.make('');
 
+/** The form's open sections: Basics first; the ATS check's "Go to it" opens more. */
+export const openSectionsAtom = Atom.make<ReadonlyArray<string>>(['basics']);
+
+/** A field to bring into view and focus, as an ATS issue names it (work[].highlights). */
+export const goToFieldAtom = Atom.make<string | null>(null);
+
 /** ?mode=json shows the code view; the form is the default. */
 export const modeParamAtom = Atom.make<string | null>(null);
 

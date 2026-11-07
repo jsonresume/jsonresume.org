@@ -81,4 +81,14 @@ export const laterMigrations: Record<
       )
     `;
   }),
+
+  // Contact details an account keeps off its public page (@repo/profiles
+  // redact): any of 'email', 'phone', 'address'.
+  '17_hidden_fields': Effect.gen(function* () {
+    const sql = yield* SqlClient.SqlClient;
+    yield* sql`
+      ALTER TABLE app.users
+        ADD COLUMN hidden_fields text[] NOT NULL DEFAULT '{}'
+    `;
+  }),
 };

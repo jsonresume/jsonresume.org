@@ -2,11 +2,23 @@ import {
   EmailTaken,
   GithubUnreachable,
   InvalidCredentials,
+  NoResume,
   Unauthorized,
   UsernameUnavailable,
 } from '@repo/api';
+import type { Actor } from '@repo/resume-versions';
 import { Usernames } from '@repo/profiles';
-import { Clock, Config, Context, Duration, Effect, Layer } from 'effect';
+import { SqlClient } from 'effect/sql';
+import { privacyQueries } from './privacy';
+import {
+  Clock,
+  Config,
+  Context,
+  Duration,
+  Effect,
+  Layer,
+  Predicate,
+} from 'effect';
 import {
   decoyHash,
   hashPassword,
@@ -51,7 +63,21 @@ const make = Effect.gen(function* () {
   } = yield* accountsCore;
   const management = yield* accountManagement;
   const gist = yield* gistSync;
+  const privacy = privacyQueries(yield* SqlClient.SqlClient);
   const { saveResume, restoreVersion, setSource } = yield* resumeSaving(gist);
+  /** The page's theme (meta.theme), saved as a version like any change. */
+  const setTheme = Effect.fn('Accounts.setTheme')(function* (
+    userId: string,
+    slug: string,
+    actor: Actor
+  ) {
+    const { resume } = yield* management.currentResume(userId);
+    if (!Predicate.isObject(resume) || Array.isArray(resume))
+      return yield* new NoResume();
+    const meta = Predicate.isObject(resume['meta']) ? resume['meta'] : {};
+    const themed = { ...resume, meta: { ...meta, theme: slug } };
+    return yield* saveResume(userId, themed, actor);
+  });
   const signUp = Effect.fn('Accounts.signUp')(function* (input: {
     email: string;
     password: string;
@@ -147,6 +173,8 @@ const make = Effect.gen(function* () {
     canWriteGist: gist.canWrite,
     account: (userId: string) => store.account(userId),
     saveResume,
+    ...privacy,
+    setTheme,
     restoreVersion,
     setSource,
     emailDelivery: mailer.enabled,

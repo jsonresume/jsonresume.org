@@ -23,6 +23,7 @@ npm install -g resume-cli
 | Command | Description |
 |---|---|
 | init | Initialize a `resume.json` file. |
+| import path/to/cv.pdf | Make `resume.json` from a PDF, Word `.docx`, LinkedIn export `.zip` or `.txt`. |
 | validate | Schema validation test your `resume.json`. |
 | export path/to/file.html | Export to `.html`, `.pdf`, `.md` or `.txt`. |
 | audit | Score your resume for ATS (Applicant Tracking System) friendliness. |
@@ -38,6 +39,10 @@ Show a list of options and commands for the <abbr title="Command-line Interface"
 Creates a new `resume.json` file in your current working directory.
 
 Complete the `resume.json` with your text editor. Be sure to follow the schema (available at https://jsonresume.org/schema/).
+
+### `resume import <file>`
+
+Makes `resume.json` from the resume you already have: a PDF, a Word `.docx`, a LinkedIn data export `.zip` or a `.txt` file. The file is read by jsonresume.org's importer (the same one as [jsonresume.org/start](https://jsonresume.org/start)); nothing is saved there and the file is not kept. It lists the fields it was less sure of, so you can check them. It won't replace an existing `resume.json` unless you pass `--force`; `--resume` writes elsewhere.
 
 ### `resume validate`
 
