@@ -7,16 +7,21 @@ const Connection = Schema.Struct({
   scopes: Schema.String,
   created_at: Schema.Date,
   last_used_at: Schema.NullOr(Schema.Date),
+  /** Resume versions this app saved for the user (resume_versions.actor_id). */
+  changes: Schema.Number,
+  last_change_at: Schema.NullOr(Schema.Date),
 });
 const rows = <S extends Schema.Constraint>(schema: S) =>
   Schema.decodeUnknownEffect(Schema.Array(schema));
 
 /** The apps a user connected with OAuth, and disconnecting one. */
 export const connectionQueries = (sql: SqlClient.SqlClient) => {
-  /** The apps a user has connected, one row each. */
+  /** The apps a user has connected, one row each, with what each changed. */
   const connections = (userId: string) =>
     sql`
-      SELECT c.id AS client_id, c.name, string_agg(DISTINCT t.scope, ' ') AS scopes, min(t.created_at) AS created_at, max(t.last_used_at) AS last_used_at
+      SELECT c.id AS client_id, c.name, string_agg(DISTINCT t.scope, ' ') AS scopes, min(t.created_at) AS created_at, max(t.last_used_at) AS last_used_at,
+        (SELECT count(*)::int FROM app.resume_versions v WHERE v.user_id = ${userId} AND v.actor_id = c.id) AS changes,
+        (SELECT max(v.created_at) FROM app.resume_versions v WHERE v.user_id = ${userId} AND v.actor_id = c.id) AS last_change_at
       FROM app.oauth_tokens t JOIN app.oauth_clients c ON c.id = t.client_id
       WHERE t.user_id = ${userId} GROUP BY c.id, c.name ORDER BY min(t.created_at) DESC
     `.pipe(Effect.flatMap(rows(Connection)), Effect.orDie);

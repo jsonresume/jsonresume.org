@@ -39,6 +39,9 @@ export const AppToolkit = Toolkit.make(
           scopes: Schema.Array(Schema.String),
           connected_at: Schema.String,
           last_used_at: Schema.NullOr(Schema.String),
+          /** Saves of the resume it made; list_versions shows each. */
+          changes: Schema.Number,
+          last_change_at: Schema.NullOr(Schema.String),
         })
       ),
     }),
@@ -100,6 +103,8 @@ export const AppHandlers = AppToolkit.toLayer(
               scopes: [...new Set(c.scopes.split(' '))],
               connected_at: c.created_at.toISOString(),
               last_used_at: c.last_used_at?.toISOString() ?? null,
+              changes: c.changes,
+              last_change_at: c.last_change_at?.toISOString() ?? null,
             })),
           };
         }),

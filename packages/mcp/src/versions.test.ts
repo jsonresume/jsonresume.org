@@ -84,3 +84,22 @@ describe('resume history tools', () => {
     });
   });
 });
+
+describe('connected apps', () => {
+  it('counts the saves each app made, from its versions', async () => {
+    const { handler, access } = await setup();
+    const claude = await connect(handler, access);
+    const before = (await claude.call('list_connected_apps')).value.apps;
+    expect(before).toMatchObject([
+      { name: 'Claude', changes: 0, last_change_at: null },
+    ]);
+    await claude.call('update_resume_section', {
+      section: 'skills',
+      value: [{ name: 'Poetry' }],
+    });
+    const after = (await claude.call('list_connected_apps')).value.apps;
+    expect(after).toMatchObject([
+      { name: 'Claude', changes: 1, last_change_at: expect.any(String) },
+    ]);
+  });
+});
