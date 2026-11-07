@@ -1,0 +1,78 @@
+{
+  "slug": "financial-analyst",
+  "role": "Financial Analyst",
+  "field": "Finance",
+  "intro": "A financial analyst resume that shows forecasts, models and the decisions they informed, with the sums involved.",
+  "tips": [
+    "Give the size of the budgets or deals you worked on.",
+    "Show decisions your analysis informed.",
+    "List modelling skills and systems, and any CFA progress."
+  ],
+  "resume": {
+    "basics": {
+      "name": "James Whitfield",
+      "label": "Financial Analyst",
+      "email": "james@example.com",
+      "location": {
+        "city": "London",
+        "countryCode": "GB"
+      },
+      "summary": "Financial analyst with five years in FP&A at a retail group. I build models that leadership plans with, and explain the numbers behind them."
+    },
+    "work": [
+      {
+        "name": "Harbour Retail Group",
+        "position": "Senior Financial Analyst",
+        "startDate": "2021-04",
+        "summary": "Retailer with 180 stores and £600m revenue.",
+        "highlights": [
+          "Own the annual budget and monthly forecast for a £120m division.",
+          "Built the store-level profitability model used to decide 14 closures and 6 openings.",
+          "Cut month-end reporting from eight days to four by automating consolidations."
+        ]
+      },
+      {
+        "name": "Grant & Co.",
+        "position": "Financial Analyst",
+        "startDate": "2019-01",
+        "endDate": "2021-03",
+        "summary": "Mid-sized accounting and advisory firm.",
+        "highlights": [
+          "Built valuation models for eight mid-market acquisitions, from £5m to £40m.",
+          "Prepared board packs and variance analysis for three clients."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "University of Warwick",
+        "area": "Economics",
+        "studyType": "BSc",
+        "endDate": "2018"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Finance",
+        "keywords": [
+          "Forecasting",
+          "Budgeting",
+          "Financial modelling",
+          "Valuation",
+          "Variance analysis"
+        ]
+      },
+      {
+        "name": "Tools",
+        "keywords": ["Excel", "Power BI", "SAP", "Anaplan"]
+      }
+    ],
+    "certificates": [
+      {
+        "name": "CFA Level II",
+        "issuer": "CFA Institute",
+        "date": "2022-08"
+      }
+    ]
+  }
+}

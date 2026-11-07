@@ -71,3 +71,21 @@ export const cardRole = style({
   fontSize: font.size.lg,
   fontWeight: font.weight.semibold,
 });
+
+/** /examples: a directory of fields, each a heading over its roles. */
+export const fields = style({
+  display: 'grid',
+  gap: `${space[8]} ${space[6]}`,
+  gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 15rem), 1fr))',
+  alignItems: 'start',
+});
+
+export const fieldName = style({ marginBottom: space[3] });
+
+export const roles = style({
+  margin: 0,
+  padding: 0,
+  listStyle: 'none',
+  display: 'grid',
+  gap: space[2],
+});

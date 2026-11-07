@@ -1,0 +1,70 @@
+{
+  "slug": "chef",
+  "role": "Chef",
+  "field": "Hospitality",
+  "intro": "A chef resume that shows the kitchens you ran, covers a night, the food you are known for, and the costs you kept in line.",
+  "tips": [
+    "Give the kitchen's size: covers, brigade, style.",
+    "Show menus you created and any awards or reviews.",
+    "Mention food cost, waste and hygiene results."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Antoine Moreau",
+      "label": "Head Chef",
+      "email": "antoine@example.com",
+      "location": {
+        "city": "Lyon",
+        "countryCode": "FR"
+      },
+      "summary": "Head chef with twelve years in French and modern European kitchens. I run calm, clean kitchens, cook seasonally and keep food cost under 28%."
+    },
+    "work": [
+      {
+        "name": "Maison Garnier",
+        "position": "Head Chef",
+        "startDate": "2019-03",
+        "summary": "Bistro, 90 covers a night, brigade of 8.",
+        "highlights": [
+          "Write a seasonal menu that changes every six weeks; the restaurant gained a Bib Gourmand in 2022.",
+          "Brought food cost from 34% to 27% with better buying and less waste.",
+          "Top hygiene rating at every inspection."
+        ]
+      },
+      {
+        "name": "Le Comptoir",
+        "position": "Sous Chef",
+        "startDate": "2014-06",
+        "endDate": "2019-02",
+        "summary": "Brasserie, 200 covers a night.",
+        "highlights": [
+          "Ran the kitchen on the head chef's days off and led the sauce section.",
+          "Trained 10 commis chefs."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "Institut Paul Bocuse",
+        "area": "Culinary Arts",
+        "studyType": "Bachelor",
+        "endDate": "2012"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Kitchen",
+        "keywords": [
+          "French cuisine",
+          "Seasonal menus",
+          "Butchery",
+          "Pastry basics"
+        ]
+      },
+      {
+        "name": "Management",
+        "keywords": ["Food cost", "Ordering", "Rotas", "HACCP", "Training"]
+      }
+    ]
+  }
+}

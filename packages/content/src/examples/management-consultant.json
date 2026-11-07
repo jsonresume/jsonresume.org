@@ -1,0 +1,69 @@
+{
+  "slug": "management-consultant",
+  "role": "Management Consultant",
+  "field": "Business",
+  "intro": "A consultant resume built from engagements: the client's problem, what you did, and what it was worth to them.",
+  "tips": [
+    "Describe each engagement as problem, action, result.",
+    "Give the value: savings, growth, or the decision made.",
+    "Name industries and the kinds of problems you solve."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Benjamin Clarke",
+      "label": "Management Consultant",
+      "email": "benjamin@example.com",
+      "location": {
+        "city": "Sydney",
+        "countryCode": "AU"
+      },
+      "summary": "Management consultant with six years in strategy and operations for retail, health and government clients. I turn ambiguous problems into decisions, and help clients carry them out."
+    },
+    "work": [
+      {
+        "name": "Harbourside Partners",
+        "position": "Senior Consultant",
+        "startDate": "2020-07",
+        "summary": "Strategy firm, 120 consultants.",
+        "highlights": [
+          "Led a cost review for a national retailer that found A$45m in savings; A$30m delivered in year one.",
+          "Designed the operating model for a new state health agency of 1,500 staff.",
+          "Manage teams of three to five consultants on each engagement."
+        ]
+      },
+      {
+        "name": "Deloitte",
+        "position": "Consultant",
+        "startDate": "2017-02",
+        "endDate": "2020-06",
+        "highlights": [
+          "Worked on 12 engagements in operations and supply chain.",
+          "Built the network model that a grocer used to choose the site of a new distribution centre."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "University of Sydney",
+        "area": "Commerce",
+        "studyType": "BCom (Hons)",
+        "endDate": "2016"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Consulting",
+        "keywords": [
+          "Strategy",
+          "Operating models",
+          "Cost reduction",
+          "Change management"
+        ]
+      },
+      {
+        "name": "Analysis",
+        "keywords": ["Financial modelling", "Excel", "PowerPoint", "Tableau"]
+      }
+    ]
+  }
+}

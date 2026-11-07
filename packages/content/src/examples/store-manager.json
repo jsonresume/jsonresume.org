@@ -1,0 +1,80 @@
+{
+  "slug": "store-manager",
+  "role": "Store Manager",
+  "field": "Retail",
+  "intro": "A store manager resume that shows the store you ran, the team you built, and the sales, margin and shrink you improved.",
+  "tips": [
+    "Give the store's size: revenue, staff, square footage.",
+    "Show sales growth, margin, shrink and staff turnover.",
+    "Mention people you developed into leaders."
+  ],
+  "resume": {
+    "basics": {
+      "name": "David Kowalski",
+      "label": "Store Manager",
+      "email": "david@example.com",
+      "location": {
+        "city": "Warsaw",
+        "countryCode": "PL"
+      },
+      "summary": "Store manager with ten years in grocery and home retail. I run profitable stores with low staff turnover, and I have promoted six people into management."
+    },
+    "work": [
+      {
+        "name": "DomPlus",
+        "position": "Store Manager",
+        "startDate": "2019-02",
+        "summary": "Home and garden store, 45 staff, PLN 60m a year.",
+        "highlights": [
+          "Grew sales 22% in three years, the fastest in the region of 18 stores.",
+          "Cut shrink from 2.1% to 1.2% of sales with better stock control and training.",
+          "Halved staff turnover by rebuilding rotas around people's lives."
+        ]
+      },
+      {
+        "name": "FreshMarket",
+        "position": "Assistant Store Manager",
+        "startDate": "2014-05",
+        "endDate": "2019-01",
+        "summary": "Supermarket, 80 staff.",
+        "highlights": [
+          "Ran fresh food departments and the night replenishment team.",
+          "Led the store through a full refit while staying open."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "Warsaw School of Economics",
+        "area": "Management",
+        "studyType": "BA",
+        "endDate": "2013"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Retail",
+        "keywords": [
+          "P&L",
+          "Merchandising",
+          "Stock control",
+          "Shrink reduction"
+        ]
+      },
+      {
+        "name": "People",
+        "keywords": ["Hiring", "Coaching", "Scheduling", "Performance reviews"]
+      }
+    ],
+    "languages": [
+      {
+        "language": "Polish",
+        "fluency": "Native speaker"
+      },
+      {
+        "language": "English",
+        "fluency": "Professional working"
+      }
+    ]
+  }
+}

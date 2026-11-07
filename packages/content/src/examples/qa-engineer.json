@@ -1,0 +1,80 @@
+{
+  "slug": "qa-engineer",
+  "role": "QA Engineer",
+  "field": "Technology",
+  "intro": "A QA engineer resume that shows quality as numbers: bugs caught before release, test time saved, and automation that teams relied on.",
+  "tips": [
+    "Measure quality: escaped bugs, test coverage, release time.",
+    "Show automation you built and who used it.",
+    "Mention how you work with developers, not just after them."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Sofia Lindqvist",
+      "label": "QA Engineer",
+      "email": "sofia@example.com",
+      "location": {
+        "city": "Stockholm",
+        "countryCode": "SE"
+      },
+      "summary": "QA engineer with five years in test automation for web and mobile apps. I help teams ship faster by making tests fast, reliable and owned by everyone."
+    },
+    "work": [
+      {
+        "name": "Bokadirekt",
+        "position": "QA Engineer",
+        "startDate": "2021-02",
+        "summary": "Booking platform, 3 million users.",
+        "highlights": [
+          "Built the Playwright suite (600 tests) that runs on every pull request in eight minutes.",
+          "Cut bugs found in production by 45% in a year by testing earlier, with developers.",
+          "Introduced contract tests between the app and 12 backend services."
+        ]
+      },
+      {
+        "name": "Mobilia",
+        "position": "Test Analyst",
+        "startDate": "2019-01",
+        "endDate": "2021-01",
+        "highlights": [
+          "Wrote and ran test plans for iOS and Android releases every two weeks.",
+          "Automated the smoke tests with Appium, freeing two days per release."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "KTH Royal Institute of Technology",
+        "area": "Information Technology",
+        "studyType": "BSc",
+        "endDate": "2018"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Testing",
+        "keywords": [
+          "Test automation",
+          "Exploratory testing",
+          "Contract testing",
+          "Performance testing"
+        ]
+      },
+      {
+        "name": "Tools",
+        "keywords": ["Playwright", "Cypress", "Appium", "k6", "GitHub Actions"]
+      },
+      {
+        "name": "Languages",
+        "keywords": ["TypeScript", "Python"]
+      }
+    ],
+    "certificates": [
+      {
+        "name": "ISTQB Certified Tester Foundation Level",
+        "issuer": "ISTQB",
+        "date": "2019-05"
+      }
+    ]
+  }
+}

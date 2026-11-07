@@ -1,0 +1,71 @@
+{
+  "slug": "ux-researcher",
+  "role": "UX Researcher",
+  "field": "Design",
+  "intro": "A UX researcher resume that connects studies to decisions: what was learned, what changed in the product, and what it was worth.",
+  "tips": [
+    "For each study, say what decision it changed.",
+    "Name methods and sample sizes briefly.",
+    "Show how you shared findings so teams acted on them."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Hannah Kim",
+      "label": "UX Researcher",
+      "email": "hannah@example.com",
+      "location": {
+        "city": "Seattle",
+        "countryCode": "US"
+      },
+      "summary": "UX researcher with six years of mixed-methods research on consumer and B2B products. I help teams decide what to build by finding out what people actually do."
+    },
+    "work": [
+      {
+        "name": "Trailhead Health",
+        "position": "Senior UX Researcher",
+        "startDate": "2021-05",
+        "summary": "Telehealth app, 2 million patients.",
+        "highlights": [
+          "Ran a diary study with 40 patients that reshaped onboarding; completed sign-ups rose 22%.",
+          "Built a research repository so findings are searchable by every team.",
+          "Trained 15 designers and product managers to run their own usability tests."
+        ]
+      },
+      {
+        "name": "Ledgerly",
+        "position": "UX Researcher",
+        "startDate": "2018-08",
+        "endDate": "2021-04",
+        "summary": "Accounting software for small businesses.",
+        "highlights": [
+          "Interviewed 60 bookkeepers to map month-end close; the resulting feature cut close time by a day.",
+          "Ran quarterly usability benchmarks across the product."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "University of Washington",
+        "area": "Human Centered Design and Engineering",
+        "studyType": "MS",
+        "endDate": "2018"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Methods",
+        "keywords": [
+          "Interviews",
+          "Usability testing",
+          "Diary studies",
+          "Surveys",
+          "Journey mapping"
+        ]
+      },
+      {
+        "name": "Tools",
+        "keywords": ["Dovetail", "Maze", "Figma", "Qualtrics"]
+      }
+    ]
+  }
+}

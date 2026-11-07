@@ -1,0 +1,84 @@
+{
+  "slug": "account-manager",
+  "role": "Account Manager",
+  "field": "Sales",
+  "intro": "An account manager resume that shows the book you looked after: revenue kept, revenue grown, and customers who stayed.",
+  "tips": [
+    "Give the size of your book: accounts and revenue.",
+    "Show retention, renewal and growth rates.",
+    "Mention big saves and expansions, with figures."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Noah Fischer",
+      "label": "Account Manager",
+      "email": "noah@example.com",
+      "location": {
+        "city": "Zurich",
+        "countryCode": "CH"
+      },
+      "summary": "Account manager with six years looking after enterprise software customers. I keep customers because I understand their business, and they grow with us because of it."
+    },
+    "work": [
+      {
+        "name": "Alpenstack",
+        "position": "Senior Account Manager",
+        "startDate": "2021-02",
+        "summary": "Data platform for banks and insurers.",
+        "highlights": [
+          "Manage 25 enterprise accounts worth CHF 9m a year; 98% renewed.",
+          "Grew my book by 32% in 2023 through new products and departments.",
+          "Saved a CHF 1.2m account at risk by running a recovery plan with its CIO."
+        ]
+      },
+      {
+        "name": "SwissDocs",
+        "position": "Account Executive",
+        "startDate": "2018-03",
+        "endDate": "2021-01",
+        "summary": "Document management software.",
+        "highlights": [
+          "Sold to mid-sized companies; reached 115% of quota two years running.",
+          "Moved to account management for the top 40 customers."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "University of St. Gallen",
+        "area": "Business Administration",
+        "studyType": "BA",
+        "endDate": "2017"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Account management",
+        "keywords": [
+          "Renewals",
+          "Expansion",
+          "Executive relationships",
+          "Quarterly business reviews"
+        ]
+      },
+      {
+        "name": "Tools",
+        "keywords": ["Salesforce", "Gainsight", "HubSpot"]
+      }
+    ],
+    "languages": [
+      {
+        "language": "German",
+        "fluency": "Native speaker"
+      },
+      {
+        "language": "English",
+        "fluency": "Full professional"
+      },
+      {
+        "language": "French",
+        "fluency": "Professional working"
+      }
+    ]
+  }
+}

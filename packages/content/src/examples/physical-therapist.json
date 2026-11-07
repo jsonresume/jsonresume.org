@@ -1,0 +1,81 @@
+{
+  "slug": "physical-therapist",
+  "role": "Physical Therapist",
+  "field": "Healthcare",
+  "intro": "A physical therapist resume that shows licence, specialty and caseload, with the outcomes your patients reached.",
+  "tips": [
+    "Put licence and specialty first.",
+    "Give caseload and settings: clinic, hospital, sport.",
+    "Show patient outcomes and programmes you built."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Laura Schmidt",
+      "label": "Physical Therapist",
+      "email": "laura@example.com",
+      "location": {
+        "city": "Chicago",
+        "countryCode": "US"
+      },
+      "summary": "Licensed physical therapist with eight years in orthopaedic and sports rehabilitation. I help people get back to what they love, and stay there."
+    },
+    "work": [
+      {
+        "name": "Lakeshore Sports Rehab",
+        "position": "Senior Physical Therapist",
+        "startDate": "2019-08",
+        "summary": "Outpatient clinic, six therapists.",
+        "highlights": [
+          "Treat 14 patients a day, mostly after knee and shoulder surgery.",
+          "Built a return-to-run programme; 85% of patients ran again within six months.",
+          "Supervise physical therapy students from two universities."
+        ]
+      },
+      {
+        "name": "Northwestern Memorial Hospital",
+        "position": "Physical Therapist",
+        "startDate": "2016-06",
+        "endDate": "2019-07",
+        "highlights": [
+          "Inpatient and outpatient orthopaedic rehabilitation.",
+          "Helped cut average stay after hip replacement by a day with early mobility."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "Northwestern University",
+        "area": "Physical Therapy",
+        "studyType": "DPT",
+        "endDate": "2016"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Clinical",
+        "keywords": [
+          "Orthopaedic rehabilitation",
+          "Sports injuries",
+          "Manual therapy",
+          "Exercise prescription"
+        ]
+      },
+      {
+        "name": "Systems",
+        "keywords": ["Epic", "WebPT"]
+      }
+    ],
+    "certificates": [
+      {
+        "name": "Licensed Physical Therapist",
+        "issuer": "Illinois Department of Financial and Professional Regulation",
+        "date": "2016-07"
+      },
+      {
+        "name": "Orthopaedic Clinical Specialist (OCS)",
+        "issuer": "ABPTS",
+        "date": "2020-06"
+      }
+    ]
+  }
+}

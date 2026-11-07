@@ -1,0 +1,73 @@
+{
+  "slug": "mobile-developer",
+  "role": "Mobile Developer",
+  "field": "Technology",
+  "intro": "A mobile developer resume built on apps people use: store ratings, installs, crash rates and performance.",
+  "tips": [
+    "Name the apps, with installs and store ratings.",
+    "Show crash rate, start time or battery wins.",
+    "Say which platforms and frameworks: native, cross-platform or both."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Kenji Watanabe",
+      "label": "Mobile Developer",
+      "email": "kenji@example.com",
+      "location": {
+        "city": "Osaka",
+        "countryCode": "JP"
+      },
+      "summary": "Mobile developer with six years building iOS and Android apps in Swift, Kotlin and React Native. I care about fast starts, smooth scrolling and a crash-free release."
+    },
+    "work": [
+      {
+        "name": "Tabearuki",
+        "position": "Senior Mobile Developer",
+        "startDate": "2020-10",
+        "summary": "Restaurant discovery app, 5 million installs, rated 4.7.",
+        "highlights": [
+          "Rewrote the iOS app in SwiftUI; cold start fell from 2.8 s to 1.1 s.",
+          "Cut the crash rate from 1.2% to 0.15% of sessions with better error handling and monitoring.",
+          "Led the move to a shared React Native layer for booking, used by both apps."
+        ]
+      },
+      {
+        "name": "AppWorks",
+        "position": "Android Developer",
+        "startDate": "2018-04",
+        "endDate": "2020-09",
+        "summary": "Agency building apps for retail clients.",
+        "highlights": [
+          "Built six Android apps in Kotlin for clients with up to 1 million users.",
+          "Introduced automated UI tests with Espresso."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "Osaka University",
+        "area": "Information Science",
+        "studyType": "BSc",
+        "endDate": "2018"
+      }
+    ],
+    "skills": [
+      {
+        "name": "iOS",
+        "keywords": ["Swift", "SwiftUI", "UIKit"]
+      },
+      {
+        "name": "Android",
+        "keywords": ["Kotlin", "Jetpack Compose"]
+      },
+      {
+        "name": "Cross platform",
+        "keywords": ["React Native", "TypeScript"]
+      },
+      {
+        "name": "Tools",
+        "keywords": ["Firebase", "Fastlane", "Sentry"]
+      }
+    ]
+  }
+}

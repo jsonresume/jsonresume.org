@@ -1,0 +1,75 @@
+{
+  "slug": "paralegal",
+  "role": "Paralegal",
+  "field": "Legal",
+  "intro": "A paralegal resume that shows the practice areas, the volume of matters, and how you kept them organised and on deadline.",
+  "tips": [
+    "Name practice areas and the kinds of documents you prepare.",
+    "Show volume: matters, filings, document reviews.",
+    "List the case management and research tools you use."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Ashley Park",
+      "label": "Paralegal",
+      "email": "ashley@example.com",
+      "location": {
+        "city": "Los Angeles",
+        "countryCode": "US"
+      },
+      "summary": "Litigation paralegal with five years supporting trial teams in employment and commercial disputes. Organised, precise and calm the week before trial."
+    },
+    "work": [
+      {
+        "name": "Morrison & Vale LLP",
+        "position": "Senior Litigation Paralegal",
+        "startDate": "2021-01",
+        "summary": "Litigation firm, 80 attorneys.",
+        "highlights": [
+          "Support four attorneys on 30 active employment and commercial cases.",
+          "Managed document review for a case of 400,000 documents, finished two weeks early.",
+          "Prepared trial binders and exhibits for six trials."
+        ]
+      },
+      {
+        "name": "Garcia Law Group",
+        "position": "Paralegal",
+        "startDate": "2019-03",
+        "endDate": "2020-12",
+        "highlights": [
+          "Drafted pleadings, discovery requests and subpoenas.",
+          "Kept the firm's calendar of court deadlines; no missed deadlines in two years."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "University of California, Los Angeles",
+        "area": "Paralegal Studies",
+        "studyType": "Certificate",
+        "endDate": "2019"
+      },
+      {
+        "institution": "University of California, Irvine",
+        "area": "Political Science",
+        "studyType": "BA",
+        "endDate": "2018"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Litigation",
+        "keywords": [
+          "Discovery",
+          "Trial preparation",
+          "Legal research",
+          "E-filing"
+        ]
+      },
+      {
+        "name": "Tools",
+        "keywords": ["Relativity", "Westlaw", "Clio", "Microsoft 365"]
+      }
+    ]
+  }
+}

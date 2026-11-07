@@ -1,0 +1,73 @@
+{
+  "slug": "mechanical-engineer",
+  "role": "Mechanical Engineer",
+  "field": "Engineering",
+  "intro": "A mechanical engineer resume that shows products designed and improved, with the cost, weight or reliability gains they brought.",
+  "tips": [
+    "Show products and parts you designed, start to finish.",
+    "Give results: cost, weight, reliability, time to market.",
+    "List CAD and analysis tools and any certifications."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Erik Johansson",
+      "label": "Mechanical Engineer",
+      "email": "erik@example.com",
+      "location": {
+        "city": "Gothenburg",
+        "countryCode": "SE"
+      },
+      "summary": "Mechanical engineer with six years designing components for vehicles and industrial machines. I like the whole journey, from a sketch to a part that is easy to make."
+    },
+    "work": [
+      {
+        "name": "Volvo Group",
+        "position": "Mechanical Design Engineer",
+        "startDate": "2020-08",
+        "highlights": [
+          "Design cab components for heavy trucks, from concept to production.",
+          "Redesigned a bracket family; 22% lighter and SEK 3m a year cheaper to make.",
+          "Lead design reviews with suppliers and the production plant."
+        ]
+      },
+      {
+        "name": "Nordic Machines",
+        "position": "Mechanical Engineer",
+        "startDate": "2018-01",
+        "endDate": "2020-07",
+        "summary": "Packaging machinery.",
+        "highlights": [
+          "Designed parts for a new packaging line; first machine delivered in 11 months.",
+          "Used FEA to fix a fatigue failure that had caused 40 field returns."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "Chalmers University of Technology",
+        "area": "Mechanical Engineering",
+        "studyType": "MSc",
+        "endDate": "2017"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Design",
+        "keywords": [
+          "CAD",
+          "Design for manufacture",
+          "GD&T",
+          "Tolerance analysis"
+        ]
+      },
+      {
+        "name": "Analysis",
+        "keywords": ["FEA", "ANSYS", "MATLAB"]
+      },
+      {
+        "name": "Software",
+        "keywords": ["CATIA", "SolidWorks", "Teamcenter"]
+      }
+    ]
+  }
+}

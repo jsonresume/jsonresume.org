@@ -1,0 +1,72 @@
+{
+  "slug": "social-media-manager",
+  "role": "Social Media Manager",
+  "field": "Marketing",
+  "intro": "A social media manager resume that shows audiences grown, campaigns run and the business those channels brought in.",
+  "tips": [
+    "Show growth and engagement with numbers, per channel.",
+    "Tie social results to sales, sign-ups or leads.",
+    "Name the channels, tools and the budget you managed."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Zoe Martinez",
+      "label": "Social Media Manager",
+      "email": "zoe@example.com",
+      "location": {
+        "city": "Miami",
+        "countryCode": "US"
+      },
+      "summary": "Social media manager with six years growing brands on Instagram, TikTok and LinkedIn. I mix creative ideas with careful measurement, and I know which posts sell."
+    },
+    "work": [
+      {
+        "name": "Coastline Swim",
+        "position": "Social Media Manager",
+        "startDate": "2021-01",
+        "summary": "Swimwear brand, online and 12 stores.",
+        "highlights": [
+          "Grew Instagram from 80,000 to 450,000 followers and TikTok from zero to 300,000.",
+          "Social now drives 25% of online sales, up from 8%.",
+          "Manage a $600,000 yearly paid social budget and 30 creator partnerships."
+        ]
+      },
+      {
+        "name": "Brightside Agency",
+        "position": "Social Media Coordinator",
+        "startDate": "2018-06",
+        "endDate": "2020-12",
+        "summary": "Agency for hospitality brands.",
+        "highlights": [
+          "Ran content calendars for nine restaurant and hotel clients.",
+          "Launched a hotel's TikTok; one series reached 4 million views and filled a slow season."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "Florida International University",
+        "area": "Communication",
+        "studyType": "BA",
+        "endDate": "2018"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Social",
+        "keywords": [
+          "Instagram",
+          "TikTok",
+          "LinkedIn",
+          "Paid social",
+          "Creator partnerships",
+          "Community management"
+        ]
+      },
+      {
+        "name": "Tools",
+        "keywords": ["Sprout Social", "Meta Ads Manager", "Canva", "CapCut"]
+      }
+    ]
+  }
+}

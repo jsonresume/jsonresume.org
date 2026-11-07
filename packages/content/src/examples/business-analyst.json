@@ -1,0 +1,77 @@
+{
+  "slug": "business-analyst",
+  "role": "Business Analyst",
+  "field": "Business",
+  "intro": "A business analyst resume that shows problems understood, requirements turned into working systems, and the savings or gains that followed.",
+  "tips": [
+    "Show the problem, your analysis, and the result in one line.",
+    "Name the stakeholders and systems you worked across.",
+    "List methods and tools: process mapping, SQL, the systems you know."
+  ],
+  "resume": {
+    "basics": {
+      "name": "Olivia Martin",
+      "label": "Business Analyst",
+      "email": "olivia@example.com",
+      "location": {
+        "city": "Melbourne",
+        "countryCode": "AU"
+      },
+      "summary": "Business analyst with six years turning messy processes into clear requirements and working systems, in insurance and logistics. Equally at home in a workshop and in a spreadsheet."
+    },
+    "work": [
+      {
+        "name": "Southern Cross Insurance",
+        "position": "Senior Business Analyst",
+        "startDate": "2021-02",
+        "summary": "Insurer with 1.2 million policies.",
+        "highlights": [
+          "Mapped the claims process with 30 staff and wrote requirements for its new system; average claim time fell from 12 days to 5.",
+          "Built the SQL reporting that finance now uses for monthly claims analysis.",
+          "Ran user acceptance testing with 25 claims officers."
+        ]
+      },
+      {
+        "name": "FreightCo",
+        "position": "Business Analyst",
+        "startDate": "2018-03",
+        "endDate": "2021-01",
+        "summary": "Logistics company, 900 staff.",
+        "highlights": [
+          "Gathered requirements for a new warehouse management system across four sites.",
+          "Found $400,000 a year in duplicate carrier charges through invoice analysis."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "Monash University",
+        "area": "Business Information Systems",
+        "studyType": "BBIS",
+        "endDate": "2017"
+      }
+    ],
+    "skills": [
+      {
+        "name": "Analysis",
+        "keywords": [
+          "Requirements",
+          "Process mapping (BPMN)",
+          "User stories",
+          "UAT"
+        ]
+      },
+      {
+        "name": "Tools",
+        "keywords": ["SQL", "Excel", "Power BI", "Jira", "Visio"]
+      }
+    ],
+    "certificates": [
+      {
+        "name": "Certification of Capability in Business Analysis (CCBA)",
+        "issuer": "IIBA",
+        "date": "2020-09"
+      }
+    ]
+  }
+}
