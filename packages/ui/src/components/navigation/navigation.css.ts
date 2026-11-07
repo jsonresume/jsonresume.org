@@ -1,9 +1,14 @@
 import { style } from '@vanilla-extract/css';
-import { focusRing, transition } from '../../styles/shared.css';
+import {
+  focusRing,
+  transition,
+  visuallyHiddenRules,
+} from '../../styles/shared.css';
 import { vars } from '../../tokens/contract.css';
-import { media } from '../../tokens/theme';
+import { breakpoints, media } from '../../tokens/theme';
 
 const { color, font, space, radius } = vars;
+const phone = `screen and (max-width: ${breakpoints.sm - 0.02}px)`;
 
 /* TabNav: page-level tabs that are links. */
 
@@ -132,6 +137,7 @@ export const backLink = style([
 export const accountTrigger = style([
   focusRing,
   {
+    position: 'relative',
     display: 'inline-flex',
     alignItems: 'center',
     gap: space[2],
@@ -145,6 +151,17 @@ export const accountTrigger = style([
     fontWeight: font.weight.semibold,
     cursor: 'pointer',
     transition: `background-color ${transition}`,
+    WebkitTapHighlightColor: 'transparent',
+    // 44px targets for touch; on phones the avatar alone, centred.
+    '@media': {
+      [media.coarse]: { minHeight: '2.75rem', minWidth: '2.75rem' },
+      [phone]: {
+        justifyContent: 'center',
+        minHeight: '2.75rem',
+        minWidth: '2.75rem',
+        paddingInlineEnd: space[1],
+      },
+    },
     selectors: {
       '&:hover, &[data-state="open"]': {
         backgroundColor: 'rgba(0, 0, 0, 0.06)',
@@ -159,13 +176,16 @@ export const accountHeader = style({
   lineHeight: font.lineHeight.snug,
 });
 
-/** A long username ends in an ellipsis instead of wrapping the top bar. */
+/** A long name ends in an ellipsis. Phones show the avatar alone (named). */
 export const accountTriggerName = style({
   maxWidth: '8rem',
   overflow: 'hidden',
   textOverflow: 'ellipsis',
   whiteSpace: 'nowrap',
-  '@media': { [media.md]: { maxWidth: '14rem' } },
+  '@media': {
+    [media.md]: { maxWidth: '14rem' },
+    [phone]: visuallyHiddenRules,
+  },
 });
 
 export const accountName = style({

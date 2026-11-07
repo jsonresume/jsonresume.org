@@ -12,7 +12,8 @@ export const focusRing = style({
   },
 });
 
-export const visuallyHidden = style({
+/** The rules behind visuallyHidden, to apply inside a media query. */
+export const visuallyHiddenRules = {
   position: 'absolute',
   width: '1px',
   height: '1px',
@@ -22,7 +23,9 @@ export const visuallyHidden = style({
   clipPath: 'inset(50%)',
   whiteSpace: 'nowrap',
   border: 0,
-});
+} as const;
+
+export const visuallyHidden = style(visuallyHiddenRules);
 
 export const transition = `${vars.motion.duration.base} ${vars.motion.easing.standard}`;
 

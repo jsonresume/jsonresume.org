@@ -929,6 +929,9 @@ importers:
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
+      vitest:
+        specifier: ^3.2.6
+        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
 
   packages/accounts:
     dependencies:

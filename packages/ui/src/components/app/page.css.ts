@@ -1,8 +1,10 @@
 import { globalStyle, style } from '@vanilla-extract/css';
 import { vars } from '../../tokens/contract.css';
-import { media } from '../../tokens/theme';
+import { breakpoints, media } from '../../tokens/theme';
+import { button } from '../button/button.css';
 
 const { color, font, space, radius, shadow } = vars;
+const phone = `screen and (max-width: ${breakpoints.sm - 0.02}px)`;
 
 /* AppPage */
 
@@ -57,6 +59,8 @@ export const header = style({
   alignItems: 'flex-end',
   justifyContent: 'space-between',
   gap: space[4],
+  // Phones: the actions get their own row under the title.
+  '@media': { [phone]: { flexDirection: 'column', alignItems: 'stretch' } },
 });
 
 export const titles = style({ display: 'grid', gap: space[1], minWidth: 0 });
@@ -81,6 +85,24 @@ export const actions = style({
   flexWrap: 'wrap',
   alignItems: 'center',
   gap: space[2],
+});
+
+// ...thumb-sized; two or more share the row instead of leaving one stranded.
+globalStyle(`${actions} > *`, {
+  '@media': { [phone]: { minHeight: '2.75rem' } },
+});
+globalStyle(`${actions} > :not(:only-child)`, {
+  '@media': { [phone]: { flex: '1 1 auto' } },
+});
+// A stretched ghost button would be loose text; give it the secondary's edge.
+globalStyle(`${actions} > ${button.classNames.variants.variant.ghost}`, {
+  '@media': {
+    [phone]: {
+      borderColor: color.action.neutralBorder,
+      backgroundColor: color.action.neutral,
+      color: color.action.neutralText,
+    },
+  },
 });
 
 export const toolbar = style({
