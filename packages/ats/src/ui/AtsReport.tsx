@@ -1,5 +1,6 @@
 import {
   Badge,
+  Button,
   Checklist,
   Code,
   Heading,
@@ -53,11 +54,14 @@ export function AtsReportView({
   report,
   headingLevel = 2,
   limit,
+  onGoTo,
 }: {
   report: AtsReport;
   headingLevel?: 2 | 3;
   /** Show only the first few issues. */
   limit?: number;
+  /** In an editor: take the person to the field an issue is about. */
+  onGoTo?: (field: string) => void;
 }) {
   const all = issuesOf(report);
   const shown = limit === undefined ? all : all.slice(0, limit);
@@ -98,6 +102,16 @@ export function AtsReportView({
                 <Text size="sm" tone="muted" className={s.detail}>
                   {issue.fix} <Code>{issue.field}</Code>
                 </Text>
+                {onGoTo ? (
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    className={s.goTo}
+                    onClick={() => onGoTo(issue.field)}
+                  >
+                    Go to it
+                  </Button>
+                ) : null}
               </li>
             ))}
           </ol>
