@@ -1,0 +1,67 @@
+name: Theme PDF quality
+
+on:
+  pull_request:
+    paths:
+      - 'packages/themes/**'
+      - 'packages/resume-core/**'
+      - 'packages/theme-primitives/**'
+      - 'packages/resume-themes/**'
+      - 'packages/resume-pdf/**'
+      - 'scripts/*theme*pdf*'
+      - 'scripts/researched-theme-fixtures.ts'
+      - 'scripts/theme-portfolio/regional-fixtures.ts'
+      - 'packages/sample-data/**'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/theme-pdf.yml'
+  push:
+    branches: [master]
+    paths:
+      - 'packages/themes/**'
+      - 'packages/resume-core/**'
+      - 'packages/theme-primitives/**'
+      - 'packages/resume-themes/**'
+      - 'packages/resume-pdf/**'
+      - 'scripts/*theme*pdf*'
+      - 'scripts/researched-theme-fixtures.ts'
+      - 'scripts/theme-portfolio/regional-fixtures.ts'
+      - 'packages/sample-data/**'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/theme-pdf.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: theme-pdf-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  print:
+    name: All themes on A4 and Letter
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # Print the committed bundles that ship. The separate Theme dist sync
+      # check rebuilds them and enforces parity with their source.
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: sudo apt-get update && sudo apt-get install -y poppler-utils python3-pil
+      - name: Print every registered theme through the live exporter implementation
+        run: node scripts/verify-all-theme-pdfs.ts --exporter
+      - name: Check every page for content, clipping, blank pages and paper size
+        run: |
+          python3 -m unittest discover -s scripts -p 'test_theme_pdf_content.py'
+          python3 scripts/check-all-theme-pdfs.py --details
+      - uses: actions/upload-artifact@v6
+        if: failure()
+        with:
+          name: theme-pdf-failures
+          path: |
+            output/all-theme-pdfs/**/*.pdf
+            output/all-theme-pdfs/*results*.json
+          retention-days: 3

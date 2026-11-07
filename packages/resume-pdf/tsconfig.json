@@ -8,6 +8,7 @@
     "moduleResolution": "bundler",
     "target": "ES2022",
     "noEmit": true,
+    "allowImportingTsExtensions": true,
     "declaration": false,
     "declarationMap": false
   },

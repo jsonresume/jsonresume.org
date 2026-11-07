@@ -1,6 +1,11 @@
 export default `@import url(
 	https://fonts.googleapis.com/css?family=Lato:400,700
 );
+@page { size: auto; margin: 12mm; }
+@media print {
+  body, h1, h2, h3, p, li, a { overflow-wrap: anywhere; }
+  h1, h2, h3 { break-after: avoid; }
+}
 body {
 	background: #fff;
 	font-family: Lato, sans-serif;

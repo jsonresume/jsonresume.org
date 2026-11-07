@@ -1,7 +1,7 @@
 import { Clock, Context, Effect, Layer, Schema, Semaphore } from 'effect';
 import { createHash } from 'node:crypto';
 import type { Browser } from 'playwright-core';
-import { mayLoad, type Paper } from './policy';
+import { mayLoad, type Paper } from './policy.ts';
 
 /** The browser could not print the page. */
 export class PdfFailed extends Schema.TaggedError<PdfFailed>()('PdfFailed', {
@@ -79,19 +79,36 @@ export class ResumePdf extends Context.Service<
                 )
               );
               const page = yield* attempt('page', () => context.newPage());
+              // Insert before loading: style onload callbacks do not run with
+              // scripts disabled. The requested sheet beats template defaults.
+              const sizedHtml = html.replace(
+                /<\/head>/i,
+                `<style>@page{size:${
+                  paper === 'letter' ? 'Letter' : 'A4'
+                }!important}</style></head>`
+              );
               // Fonts and images get a while to arrive, then it prints with
               // what it has.
               yield* attempt('load', () =>
-                page.setContent(html, {
+                page.setContent(sizedHtml, {
                   waitUntil: 'networkidle',
                   timeout: 15_000,
                 })
               ).pipe(Effect.ignore);
+              yield* attempt('fonts', () =>
+                page.evaluate(() => document.fonts.ready.then(() => undefined))
+              ).pipe(
+                Effect.timeoutOrElse({
+                  duration: '5 seconds',
+                  orElse: () => Effect.succeed(undefined),
+                }),
+                Effect.ignore
+              );
               const pdf = yield* attempt('print', () =>
                 page.pdf({
                   format: paper === 'letter' ? 'Letter' : 'A4',
                   printBackground: true,
-                  preferCSSPageSize: true,
+                  preferCSSPageSize: false,
                 })
               );
               return new Uint8Array(pdf);

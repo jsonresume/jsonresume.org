@@ -25,6 +25,18 @@ const CSS_RESET =
   '<style>*,*::before,*::after{box-sizing:border-box}' +
   'html,body{margin:0;padding:0}body{-webkit-font-smoothing:antialiased}</style>';
 
+// Page margins repeat on continuation pages; body padding does not. Themes
+// can override these defaults with their own print rules later in the head.
+const PRINT_DEFAULTS = `<style data-jsonresume-core-print>
+@page{size:auto;margin:12mm}
+@media print{
+body,h1,h2,h3,h4,p,li,a{overflow-wrap:anywhere}
+:where(main,aside,section,article,header,div){min-width:0}
+h1,h2,h3,h4,h5,h6{break-inside:avoid;break-after:avoid}
+p,li{orphans:2;widows:2}
+}
+</style>`;
+
 /** Stylesheet href for the @jsonresume/core design tokens (CSS custom props). */
 const TOKENS_CSS_HREF = 'https://unpkg.com/@jsonresume/core/dist/tokens.css';
 
@@ -147,6 +159,7 @@ export function renderResumeDocument(element, options = {}) {
     fontLinks +
     tokensLink +
     resetTag +
+    PRINT_DEFAULTS +
     head +
     styleTags +
     headAfterStyles +
