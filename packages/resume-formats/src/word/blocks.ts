@@ -8,6 +8,21 @@ import {
 
 type Parts = ReadonlyArray<string | undefined>;
 
+/** Hebrew, Arabic, Syriac, Thaana, N'Ko and their presentation forms. */
+const RTL = /[\u0590-\u08FF\uFB1D-\uFDFF\uFE70-\uFEFF]/;
+const STRONG = /[\p{L}]/u;
+
+/**
+ * Right to left when its first letter is, as browsers read dir="auto":
+ * an Arabic or Hebrew name or paragraph then starts at the right margin.
+ */
+const rtl = (value: string | undefined) =>
+  RTL.test(value?.match(STRONG)?.[0] ?? '');
+
+/** A paragraph's direction for its text: right to left, or Word's default. */
+export const direction = (value: string | undefined) =>
+  rtl(value) ? { bidirectional: true } : {};
+
 /** The parts that are present. */
 export const present = (parts: Parts): ReadonlyArray<string> =>
   parts.filter((part) => part !== undefined);
@@ -51,7 +66,13 @@ export const section = (
 /** An entry's title as a Heading 2. */
 export const subheading = (title: string | undefined): Paragraph[] =>
   title
-    ? [new Paragraph({ text: title, heading: HeadingLevel.HEADING_2 })]
+    ? [
+        new Paragraph({
+          text: title,
+          heading: HeadingLevel.HEADING_2,
+          ...direction(title),
+        }),
+      ]
     : [];
 
 /** Dates, places and links under a title, in the muted Details style. */
@@ -66,11 +87,18 @@ export const details = (
 
 /** A paragraph of body text, when there is some. */
 export const body = (value: string | undefined): Paragraph[] =>
-  value ? [new Paragraph({ text: value })] : [];
+  value ? [new Paragraph({ text: value, ...direction(value) })] : [];
 
 /** A bulleted list, one item each. */
 export const bullets = (items: ReadonlyArray<string>): Paragraph[] =>
-  items.map((item) => new Paragraph({ text: item, bullet: { level: 0 } }));
+  items.map(
+    (item) =>
+      new Paragraph({
+        text: item,
+        bullet: { level: 0 },
+        ...direction(item),
+      })
+  );
 
 /** A bullet with a bold lead: "Frontend (Expert): React, TypeScript". */
 export const item = (
@@ -84,5 +112,7 @@ export const item = (
     ...(lead && after.length > 0 ? [new TextRun(': ')] : []),
     ...after,
   ];
-  return [new Paragraph({ children, bullet: { level: 0 } })];
+  return [
+    new Paragraph({ children, bullet: { level: 0 }, ...direction(lead) }),
+  ];
 };

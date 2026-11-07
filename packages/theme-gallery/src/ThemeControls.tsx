@@ -53,11 +53,14 @@ export function ThemeControls({
       </Field>
       <Field label="Sort by" className={s.sortFacet}>
         <Select
-          value={sort ?? 'usage'}
+          value={sort ?? 'recommended'}
           onChange={(event) =>
-            setSort(event.target.value === 'usage' ? null : event.target.value)
+            setSort(
+              event.target.value === 'recommended' ? null : event.target.value
+            )
           }
         >
+          <option value="recommended">Recommended first</option>
           <option value="usage">Most used</option>
           <option value="chosen">Most explicitly chosen</option>
           <option value="name">Name A–Z</option>

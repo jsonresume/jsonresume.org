@@ -9,7 +9,10 @@ export const ThemeSearch = Schema.Struct({
   style: optional(Schema.String),
   layout: optional(Schema.String),
   color: optional(Schema.String),
-  sort: optional(Schema.Literals(['usage', 'chosen', 'name'])),
+  sort: optional(
+    Schema.Literals(['usage', 'chosen', 'name', 'recommended']),
+    'usage (default), chosen, name, or recommended: the recommended set first'
+  ),
 });
 
 export const ListedTheme = Schema.Struct({
@@ -21,6 +24,7 @@ export const ListedTheme = Schema.Struct({
   style: Schema.String,
   layout: Schema.String,
   color: Schema.String,
+  recommended: Schema.Boolean,
   publicResumes: Schema.Number,
   explicitChoices: Schema.Number,
   inheritedDefaults: Schema.Number,
@@ -41,6 +45,7 @@ export function themeListing(
     style: theme.style,
     layout: theme.layout,
     color: theme.color,
+    recommended: theme.recommended,
     publicResumes: theme.usage.resumes,
     explicitChoices: theme.usage.chosen,
     inheritedDefaults: theme.usage.inherited,

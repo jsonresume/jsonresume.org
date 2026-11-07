@@ -142,7 +142,8 @@ export function ThemeGallery({ details, ...links }: ThemeGalleryProps) {
         onValueChange={setTag}
       />
       <p className={s.usageNote}>
-        Ranked by stored choices across{' '}
+        Recommended themes come first: each passes the ATS check and prints on
+        A4 and Letter without clipping. Most used ranks stored choices across{' '}
         {THEME_USAGE_SOURCE.population.toLocaleString('en')} public resumes.
         Most used includes unchanged defaults; explicitly chosen excludes them.
         Updated {updated}.

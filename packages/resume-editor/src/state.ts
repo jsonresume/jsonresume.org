@@ -1,13 +1,28 @@
-import { THEME_METADATA } from '@jsonresume/theme-metadata';
+import { RECOMMENDED_THEMES, THEME_METADATA } from '@jsonresume/theme-metadata';
 import { ApiClient } from '@repo/api-client';
 import { Predicate } from 'effect';
 import { Atom } from 'effect/reactivity';
 import type { Json } from './values';
 
-/** Every theme, by name, for the picker. */
-export const themeOptions = Object.entries(THEME_METADATA)
-  .map(([slug, meta]) => ({ value: slug, label: meta.name }))
-  .sort((a, b) => a.label.localeCompare(b.label));
+const option = (slug: string) => ({
+  value: slug,
+  label: THEME_METADATA[slug]?.name ?? slug,
+});
+
+/**
+ * The picker's groups: the recommended themes (ATS-safe, print-tested) in
+ * their order, then every other theme by name.
+ */
+export const themeOptions = [
+  { label: 'Recommended', options: RECOMMENDED_THEMES.map(option) },
+  {
+    label: 'All themes',
+    options: Object.keys(THEME_METADATA)
+      .filter((slug) => !RECOMMENDED_THEMES.includes(slug))
+      .map(option)
+      .sort((a, b) => a.label.localeCompare(b.label)),
+  },
+];
 
 export const DEFAULT_THEME = 'elegant';
 

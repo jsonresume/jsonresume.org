@@ -18,8 +18,13 @@
     "playwright-core": "1.56.1"
   },
   "devDependencies": {
+    "@jsonresume/sample-data": "workspace:^",
+    "@jsonresume/theme-metadata": "workspace:^",
+    "@napi-rs/canvas": "0.1.80",
     "@repo/eslint-config-custom": "workspace:*",
+    "@repo/resume-themes": "workspace:^",
     "@types/node": "^20.19.24",
+    "pdfjs-dist": "5.4.296",
     "tsconfig": "workspace:*",
     "typescript": "^5.9.3",
     "vitest": "^3.2.6"

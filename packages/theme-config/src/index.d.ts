@@ -17,3 +17,9 @@ export declare const THEME_USAGE_SOURCE: {
   firstRecordedView: string | null;
   viewWindowDays: number;
 };
+
+/**
+ * Slugs of the recommended themes (ATS-safe and print-tested), in the
+ * order to show them.
+ */
+export declare const RECOMMENDED_THEMES: readonly string[];
