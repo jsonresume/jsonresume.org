@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-australian-professional",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Use an open masthead and a light right rail for credentials and practical capabilities. Leave room for longer role descriptions and make multi-page continuation look intentional.",
   "type": "module",
   "main": "./dist/index.js",

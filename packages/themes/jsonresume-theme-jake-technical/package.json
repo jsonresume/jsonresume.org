@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-jake-technical",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A compact technical resume with disciplined alignment, crisp section rules and prominent projects and skills.",
   "type": "module",
   "main": "./dist/index.js",

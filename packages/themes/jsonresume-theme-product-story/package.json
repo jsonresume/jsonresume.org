@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-product-story",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Use a wide narrative column and a compact evidence rail for skills and credentials. Purple keylines, prominent projects and clear organisation context support a coherent product career story.",
   "type": "module",
   "main": "./dist/index.js",

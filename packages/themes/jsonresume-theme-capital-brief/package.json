@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-capital-brief",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Pair a confident serif masthead with a narrow right qualifications rail. Short section rules and sharply aligned dates should feel like a financial briefing.",
   "type": "module",
   "main": "./dist/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-deedy",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "An asymmetric technical resume with a large name, narrow education column and a wide project and experience narrative.",
   "type": "module",
   "main": "./dist/index.js",

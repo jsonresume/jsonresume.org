@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-musician-repertoire",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Use a dignified serif identity and marginal dates for projects, engagements and teaching. Publications and credentials retain clear standard labels, and long programme titles must wrap comfortably.",
   "type": "module",
   "main": "./dist/index.js",

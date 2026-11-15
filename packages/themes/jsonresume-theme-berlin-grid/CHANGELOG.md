@@ -1,5 +1,13 @@
 # jsonresume-theme-berlin-grid
 
+## 0.2.12
+
+### Patch Changes
+
+- 04aae6e: Improve PDF printing with repeating page margins, wrapping for long content, section pagination, and A4/Letter paper selection. Rebuild themes with the shared print fixes.
+- Updated dependencies [04aae6e]
+  - @jsonresume/core@0.3.8
+
 ## 0.2.11
 
 ### Patch Changes

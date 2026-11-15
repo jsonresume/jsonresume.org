@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-open-margin",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Wide outer margins, a small left-aligned identity and relaxed section spacing create an open page. Do not compress long resumes merely to preserve the sparse sample's appearance.",
   "type": "module",
   "main": "./dist/index.js",

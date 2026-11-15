@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-data-notebook",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Numbered sections and compact monospace context evoke a clean research notebook. Keep the white body unruled and present outcomes as text, without fabricated plots or skill scores.",
   "type": "module",
   "main": "./dist/index.js",

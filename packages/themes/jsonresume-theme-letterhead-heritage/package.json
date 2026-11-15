@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-letterhead-heritage",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A restrained blue perimeter rule and classic personal-letterhead masthead introduce the resume. Use serif headings, compact contact details and an open chronology with deliberate continuation pages.",
   "type": "module",
   "main": "./dist/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-open-column",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Open the masthead across the page and place a light green supporting column on the right. Fine vertical rules separate information without enclosing each entry in a card.",
   "type": "module",
   "main": "./dist/index.js",

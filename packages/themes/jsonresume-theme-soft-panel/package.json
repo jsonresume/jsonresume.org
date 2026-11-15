@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-soft-panel",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A pale warm identity panel and rounded section dividers give a gentle visual character. Keep body text dark and use square, quiet print geometry when space is tight.",
   "type": "module",
   "main": "./dist/index.js",

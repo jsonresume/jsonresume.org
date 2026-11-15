@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-bubblegum-minimal",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A compact plum identity, pale pink section strips and generous white space create a playful minimal page. Keep body text dark and avoid oversized rounded cards or decorative badges.",
   "type": "module",
   "main": "./dist/index.js",

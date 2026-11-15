@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-correspondence-classic",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A personal-letterhead identity uses a fine top rule and compact contact line. Body sections stay plain, with subtle italic organisation context and no sidebar.",
   "type": "module",
   "main": "./dist/index.js",

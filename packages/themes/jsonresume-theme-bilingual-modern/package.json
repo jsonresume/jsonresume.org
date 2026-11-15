@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-bilingual-modern",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A balanced split masthead and language-aware headings support mixed-language content. Keep bilingual names and qualification titles intact, with a simple full-width reading order.",
   "type": "module",
   "main": "./dist/index.js",

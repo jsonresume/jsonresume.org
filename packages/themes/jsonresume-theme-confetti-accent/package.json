@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-confetti-accent",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A few small colour dots decorate an otherwise restrained identity margin. Keep all career content on a plain white field with dark text and conventional, easily scanned section labels.",
   "type": "module",
   "main": "./dist/index.js",

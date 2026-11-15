@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-vertical-accent",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A narrow red vertical strip runs beside the identity and section system. Keep all text in a horizontal reading flow and use a quiet right rail for supporting qualifications.",
   "type": "module",
   "main": "./dist/index.js",

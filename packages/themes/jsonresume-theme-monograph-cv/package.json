@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-monograph-cv",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A dignified monograph-style identity and warm marginal dates support an extended record. Publications, research work and awards should continue across pages without broken headings.",
   "type": "module",
   "main": "./dist/index.js",

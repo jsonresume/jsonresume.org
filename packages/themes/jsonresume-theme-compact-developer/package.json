@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-compact-developer",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A compact project-forward resume combines a plain identity with monospace metadata. Keep project links and dates text-based and give achievements more space than tool lists.",
   "type": "module",
   "main": "./dist/index.js",

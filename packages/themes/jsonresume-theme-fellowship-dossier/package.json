@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-fellowship-dossier",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A dark green heading system separates appointments, publications and awards. Give long research entries enough space and keep dates in a consistent left gutter.",
   "type": "module",
   "main": "./dist/index.js",

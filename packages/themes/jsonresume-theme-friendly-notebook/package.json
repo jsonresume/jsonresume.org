@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-friendly-notebook",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A light notebook-style margin, rounded identity and short blue rules support an approachable record. Keep ruled decoration outside the body text and make short resumes feel complete.",
   "type": "module",
   "main": "./dist/index.js",

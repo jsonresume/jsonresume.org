@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-council-profile",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A full-width serif identity leads two purposeful columns: career evidence and supporting qualifications. Dark green section titles and hairline dividers should survive monochrome printing.",
   "type": "module",
   "main": "./dist/index.js",
