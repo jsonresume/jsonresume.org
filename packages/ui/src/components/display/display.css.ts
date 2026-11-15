@@ -177,7 +177,8 @@ export const emptyIcon = style({
 export const emptyTitle = style({
   margin: 0,
   fontSize: font.size.xl,
-  fontWeight: font.weight.light,
+  fontWeight: font.weight.semibold,
+  letterSpacing: font.tracking.tight,
   color: color.text.strong,
 });
 export const emptyText = style({
@@ -193,14 +194,15 @@ export const card = recipe({
     display: 'flex',
     flexDirection: 'column',
     minWidth: 0,
-    borderRadius: radius.sm,
+    borderRadius: radius.lg,
     color: color.text.default,
   },
   variants: {
     tone: {
       outline: {
         backgroundColor: color.surface.raised,
-        border: `1px solid ${color.border.default}`,
+        border: `1px solid ${color.border.subtle}`,
+        boxShadow: vars.shadow.sm,
       },
       subtle: {
         backgroundColor: color.surface.subtle,
@@ -220,14 +222,17 @@ export const card = recipe({
     },
     interactive: {
       true: {
-        transition: `border-color ${vars.motion.duration.base} ${vars.motion.easing.standard}, box-shadow ${vars.motion.duration.base} ${vars.motion.easing.standard}`,
+        transition: `border-color ${vars.motion.duration.base} ${vars.motion.easing.standard}, box-shadow ${vars.motion.duration.base} ${vars.motion.easing.standard}, transform ${vars.motion.duration.base} ${vars.motion.easing.standard}`,
         selectors: {
-          '&:hover': { borderColor: color.border.strong },
-          '&:active': { boxShadow: 'none' },
+          '&:hover': { borderColor: color.border.default },
+          '&:active': { boxShadow: vars.shadow.sm, transform: 'none' },
         },
         '@media': {
           '(hover: hover)': {
-            selectors: { '&:hover': { boxShadow: vars.shadow.md } },
+            selectors: { '&:hover': { boxShadow: vars.shadow.lg } },
+          },
+          '(hover: hover) and (prefers-reduced-motion: no-preference)': {
+            selectors: { '&:hover': { transform: 'translateY(-2px)' } },
           },
         },
       },

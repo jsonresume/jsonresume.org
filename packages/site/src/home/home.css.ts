@@ -27,7 +27,8 @@ export const overline = style({
 
 export const title = style({
   fontSize: font.size['2xl'],
-  fontWeight: font.weight.light,
+  fontWeight: font.weight.semibold,
+  letterSpacing: font.tracking.tight,
   '@media': { [md]: { fontSize: font.size['3xl'] } },
 });
 

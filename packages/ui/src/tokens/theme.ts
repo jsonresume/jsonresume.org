@@ -15,6 +15,8 @@ export const lightColor = {
     subtle: p.gray[50],
     muted: p.gray[100],
     brand: p.yellow[200],
+    /** Where the brand band fades to: always light, so ink stays readable. */
+    brandSoft: p.yellow[100],
     brandSubtle: p.yellow[50],
     raised: p.white,
     inverse: p.gray[900],
@@ -89,6 +91,7 @@ export const darkColor: ColorTokens = {
     subtle: p.gray[850],
     muted: '#242424',
     brand: p.yellow[200],
+    brandSoft: p.yellow[100],
     brandSubtle: '#26230f',
     raised: p.gray[850],
     inverse: p.white,
@@ -152,7 +155,13 @@ export const font = {
     wordmark: "'Ubuntu', 'Open Sans Variable', system-ui, sans-serif",
     mono: "ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace",
   },
-  weight: { light: '300', regular: '400', semibold: '600', bold: '700' },
+  weight: {
+    light: '300',
+    regular: '400',
+    medium: '500',
+    semibold: '600',
+    bold: '700',
+  },
   size: {
     '2xs': '0.6875rem', // 11px: button labels, overlines
     xs: '0.75rem',
@@ -165,7 +174,8 @@ export const font = {
     '4xl': '3.25rem',
   },
   lineHeight: { tight: '1.15', snug: '1.35', normal: '1.6' },
-  tracking: { normal: '0', caps: '0.09em' },
+  /** `tight` for large headings; `caps` for small uppercase overlines. */
+  tracking: { tight: '-0.022em', normal: '0', caps: '0.09em' },
 };
 
 /** 4px base grid. */
@@ -188,17 +198,18 @@ export const space = {
 
 export const radius = {
   none: '0',
-  sm: '2px',
-  md: '3px',
-  lg: '6px',
+  sm: '6px',
+  md: '10px',
+  lg: '16px',
   full: '9999px',
 };
 
 export const shadow = {
   none: 'none',
-  sm: '0 1px 2px rgba(0, 0, 0, 0.06)',
-  md: '0 4px 12px rgba(0, 0, 0, 0.08)',
-  lg: '0 12px 32px rgba(0, 0, 0, 0.14)',
+  // Soft and layered: a close contact shadow under a wide, faint one.
+  sm: '0 1px 2px rgba(28, 24, 10, 0.05), 0 1px 3px rgba(28, 24, 10, 0.04)',
+  md: '0 1px 3px rgba(28, 24, 10, 0.05), 0 8px 24px rgba(28, 24, 10, 0.07)',
+  lg: '0 2px 6px rgba(28, 24, 10, 0.06), 0 24px 48px rgba(28, 24, 10, 0.13)',
 };
 
 export const motion = {

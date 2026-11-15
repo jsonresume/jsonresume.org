@@ -15,18 +15,18 @@ export const button = recipe({
       justifyContent: 'center',
       gap: vars.space[2],
       border: '2px solid transparent',
-      borderRadius: vars.radius.md,
+      // Pill-shaped, in sentence case: friendlier than boxed capitals.
+      borderRadius: vars.radius.full,
       fontFamily: vars.font.family.sans,
       fontWeight: vars.font.weight.semibold,
       lineHeight: 1,
-      letterSpacing: vars.font.tracking.caps,
-      textTransform: 'uppercase',
+      letterSpacing: vars.font.tracking.normal,
       textDecoration: 'none',
       whiteSpace: 'nowrap',
       cursor: 'pointer',
       userSelect: 'none',
       WebkitTapHighlightColor: 'transparent',
-      transition: `background-color ${transition}, border-color ${transition}, color ${transition}, transform ${vars.motion.duration.fast} ${vars.motion.easing.out}`,
+      transition: `background-color ${transition}, border-color ${transition}, color ${transition}, box-shadow ${transition}, transform ${vars.motion.duration.fast} ${vars.motion.easing.out}`,
       selectors: {
         // A press you can feel: the button gives a little under the finger.
         '&:active:not(:disabled):not([aria-disabled="true"])': {
@@ -39,6 +39,15 @@ export const button = recipe({
         // Loading is busy, not unavailable: keep full strength.
         '&[aria-busy="true"]': { cursor: 'progress' },
       },
+      '@media': {
+        '(hover: hover) and (prefers-reduced-motion: no-preference)': {
+          selectors: {
+            '&:hover:not(:disabled):not([aria-disabled="true"])': {
+              transform: 'translateY(-1px)',
+            },
+          },
+        },
+      },
     },
   ],
   variants: {
@@ -47,10 +56,15 @@ export const button = recipe({
         backgroundColor: action.primary,
         borderColor: action.primary,
         color: action.primaryText,
+        // A soft glow in its own colour, lifting a little on hover.
+        boxShadow:
+          '0 1px 2px rgba(169, 37, 37, 0.22), 0 4px 14px rgba(210, 58, 58, 0.22)',
         selectors: {
           '&:hover:not(:disabled)': {
             backgroundColor: action.primaryHover,
             borderColor: action.primaryHover,
+            boxShadow:
+              '0 2px 4px rgba(169, 37, 37, 0.24), 0 8px 22px rgba(210, 58, 58, 0.28)',
           },
         },
       },
@@ -58,6 +72,7 @@ export const button = recipe({
         backgroundColor: action.neutral,
         borderColor: action.neutralBorder,
         color: action.neutralText,
+        boxShadow: vars.shadow.sm,
         selectors: {
           '&:hover:not(:disabled)': {
             borderColor: action.neutralBorderHover,
@@ -99,8 +114,6 @@ export const button = recipe({
         border: 0,
         backgroundColor: 'transparent',
         color: text.link,
-        textTransform: 'none',
-        letterSpacing: vars.font.tracking.normal,
         fontWeight: vars.font.weight.regular,
         textDecoration: 'underline',
         textUnderlineOffset: '3px',
@@ -111,17 +124,17 @@ export const button = recipe({
     },
     size: {
       sm: {
-        fontSize: vars.font.size['2xs'],
+        fontSize: vars.font.size.xs,
         padding: `${vars.space[1]} ${vars.space[3]}`,
         minHeight: '2rem',
       },
       md: {
-        fontSize: vars.font.size['2xs'],
-        padding: `${vars.space[2]} ${vars.space[4]}`,
+        fontSize: vars.font.size.sm,
+        padding: `${vars.space[2]} ${vars.space[5]}`,
         minHeight: '2.25rem',
       },
       lg: {
-        fontSize: vars.font.size.xs,
+        fontSize: vars.font.size.md,
         padding: `${vars.space[3]} ${vars.space[6]}`,
         minHeight: '2.75rem',
       },
