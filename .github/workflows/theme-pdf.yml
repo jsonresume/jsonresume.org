@@ -37,7 +37,8 @@ concurrency:
 jobs:
   print:
     name: All themes on A4 and Letter
-    runs-on: ubuntu-latest
+    # Playwright 1.56 has no Chromium for ubuntu-latest (26.04) yet.
+    runs-on: ubuntu-24.04
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v7
