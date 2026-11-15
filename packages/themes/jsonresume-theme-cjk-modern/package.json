@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-cjk-modern",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A compact Japanese-capable masthead, restrained blue labels and generous glyph spacing support dense mixed-script records. Do not assume a photo, age or other regional personal details.",
   "type": "module",
   "main": "./dist/index.js",

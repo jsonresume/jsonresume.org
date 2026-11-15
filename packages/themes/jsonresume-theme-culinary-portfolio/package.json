@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-culinary-portfolio",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A dark green identity rail and warm serif headings balance practical experience with creative character. Give venues, certifications and languages a clear hierarchy without decorative food imagery.",
   "type": "module",
   "main": "./dist/index.js",

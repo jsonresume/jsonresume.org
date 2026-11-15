@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-motion-designer",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "An offset blue identity block and staggered section rules suggest movement on a static page. Keep entry text in a conventional order and avoid animation in the resume itself.",
   "type": "module",
   "main": "./dist/index.js",

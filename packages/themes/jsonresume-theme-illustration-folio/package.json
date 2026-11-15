@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-illustration-folio",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A friendly serif identity and pencil-like red dividers support a project-forward resume. Avoid requiring illustrations inside the document; portfolio links and applicant-supplied photos remain optional.",
   "type": "module",
   "main": "./dist/index.js",

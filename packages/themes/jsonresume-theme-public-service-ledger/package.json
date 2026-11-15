@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-public-service-ledger",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A restrained government-style document with a clear identity block and numbered section labels. Preserve full appointment history and avoid photos, icons and decorative skill scales.",
   "type": "module",
   "main": "./dist/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-byline-profile",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Place a small professional label above a strong byline-style name, with a short red rule. The career body reads as a clean sequence of dated reports.",
   "type": "module",
   "main": "./dist/index.js",

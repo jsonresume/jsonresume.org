@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-sunbeam-cv",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A small amber identity accent and warm rounded headings give a sunny character. Use dark brown text, plenty of white space and no large coloured backgrounds behind career details.",
   "type": "module",
   "main": "./dist/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-startup-operator",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A compact dark identity rail and energetic sans headings create a practical startup resume. Projects and cross-functional evidence lead the main column without hiding the employment chronology.",
   "type": "module",
   "main": "./dist/index.js",

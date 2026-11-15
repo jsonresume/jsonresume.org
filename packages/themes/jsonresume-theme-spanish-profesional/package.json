@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-spanish-profesional",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Spanish labels, a compact split masthead and a single reading column create a versatile CV. Use blue section brackets and comfortable spacing for multi-part surnames.",
   "type": "module",
   "main": "./dist/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-systems-ledger",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A precise date gutter, strong system-oriented headings and fine blue rails create an engineering ledger. Keep organisations and project context readable alongside long technical titles.",
   "type": "module",
   "main": "./dist/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-accessible-large-type",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Start from a larger body size and generous leading with strong contrast. Reduce decorative overhead rather than text size, and allow additional print pages when needed.",
   "type": "module",
   "main": "./dist/index.js",

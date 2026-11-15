@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-harvard-classic",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A composed, single-column bullet resume with a centered serif masthead, fine rules and generous reading space.",
   "type": "module",
   "main": "./dist/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-space-saver",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Use two carefully proportioned columns and low-overhead section labels. Preserve all content and body size, with automatic stacking on small screens and continuation on print pages.",
   "type": "module",
   "main": "./dist/index.js",

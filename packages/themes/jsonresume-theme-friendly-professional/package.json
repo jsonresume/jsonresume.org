@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-friendly-professional",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A warm neutral masthead with rounded type and soft section underlines feels approachable. Keep the evidence hierarchy crisp and avoid turning a professional resume into lifestyle stationery.",
   "type": "module",
   "main": "./dist/index.js",

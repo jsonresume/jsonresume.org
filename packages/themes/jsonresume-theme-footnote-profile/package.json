@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-footnote-profile",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Use small marginal dates and blue section numbers beside an open evidence column. The result should resemble a well-annotated document without adding fake footnotes or invented citations.",
   "type": "module",
   "main": "./dist/index.js",

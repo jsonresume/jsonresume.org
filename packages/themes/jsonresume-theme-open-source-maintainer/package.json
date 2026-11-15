@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-open-source-maintainer",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Projects lead the main sequence, followed by employment and credentials. A compact technical masthead and clear project links keep contributions visible without inventing repository statistics.",
   "type": "module",
   "main": "./dist/index.js",

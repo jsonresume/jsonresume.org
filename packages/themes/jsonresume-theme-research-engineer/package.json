@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-research-engineer",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Combine a technical sans identity with a publication-friendly date gutter. Projects and research evidence should share one precise hierarchy, with dark violet section labels.",
   "type": "module",
   "main": "./dist/index.js",

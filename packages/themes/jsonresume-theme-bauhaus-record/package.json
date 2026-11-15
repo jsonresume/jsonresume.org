@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-bauhaus-record",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "An asymmetric identity and a few primary-colour geometric accents create a Bauhaus reference. Confine shapes to margins and use black body text on a plain white field.",
   "type": "module",
   "main": "./dist/index.js",
