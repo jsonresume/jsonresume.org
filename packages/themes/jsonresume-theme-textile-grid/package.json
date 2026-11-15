@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-textile-grid",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "An orderly two-column grid and small alternating purple keylines suggest a woven structure. Keep the body plain and use typographic hierarchy rather than decorative pattern behind text.",
   "type": "module",
   "main": "./dist/index.js",

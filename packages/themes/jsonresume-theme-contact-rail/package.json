@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-contact-rail",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Move contact links into a tidy right-aligned masthead rail, leaving the career body in one full reading column. Long URLs must wrap at sensible punctuation.",
   "type": "module",
   "main": "./dist/index.js",

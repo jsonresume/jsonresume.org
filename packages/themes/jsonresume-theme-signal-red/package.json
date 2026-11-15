@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-signal-red",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A strong red rule and bold sans identity create a clear signal at the top. Keep colour limited to headings and structure, with normal text and clean print continuation.",
   "type": "module",
   "main": "./dist/index.js",

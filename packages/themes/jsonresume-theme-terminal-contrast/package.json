@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-terminal-contrast",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A dark green monospace identity rail sits beside a white evidence column. Confine the terminal aesthetic to the rail and headings, with a sensible white-paper print treatment.",
   "type": "module",
   "main": "./dist/index.js",

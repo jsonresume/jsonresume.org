@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-cobalt-statement",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A cobalt masthead and a pale right qualifications rail frame a wide career column. Use high-contrast white text in the header and a plain white body.",
   "type": "module",
   "main": "./dist/index.js",

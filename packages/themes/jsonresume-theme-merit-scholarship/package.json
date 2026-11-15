@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-merit-scholarship",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Education occupies the main opening position while awards and skills sit in a light left column. Use a small serif name and generous line spacing for short resumes.",
   "type": "module",
   "main": "./dist/index.js",

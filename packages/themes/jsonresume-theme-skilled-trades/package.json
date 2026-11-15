@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-skilled-trades",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A sturdy sans masthead and strong blue section rules frame practical work history. Certifications and skills appear early, with readable project evidence and no graphical proficiency scales.",
   "type": "module",
   "main": "./dist/index.js",

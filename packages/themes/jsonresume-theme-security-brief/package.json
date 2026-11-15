@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-security-brief",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Use a dark green identity rule, plain technical typography and disciplined section labels. Emphasise certifications and evidence without locks, shield icons or decorative security claims.",
   "type": "module",
   "main": "./dist/index.js",

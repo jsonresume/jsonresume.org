@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-build-log",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A compact monospace masthead and dated release-like entries make a readable engineering record. Use small section numbers and plain bullet evidence rather than fake terminal commands.",
   "type": "module",
   "main": "./dist/index.js",

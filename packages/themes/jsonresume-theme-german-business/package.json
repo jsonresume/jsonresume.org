@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-german-business",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "German labels and a clear date gutter give long qualifications room to breathe. Use restrained blue type and keep portrait and full-address display under the applicant's control.",
   "type": "module",
   "main": "./dist/index.js",

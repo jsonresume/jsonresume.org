@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-ledger-professional",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Use warm grey rules, aligned role and organisation lines, and an understated ledger rhythm. Keep achievements as readable bullets rather than decorative metric boxes.",
   "type": "module",
   "main": "./dist/index.js",

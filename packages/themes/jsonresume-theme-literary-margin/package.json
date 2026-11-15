@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-literary-margin",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A tall serif name and a narrow plum marginal rail create a literary page. Keep the main text open and use italic context sparingly for institutions and publishers.",
   "type": "module",
   "main": "./dist/index.js",

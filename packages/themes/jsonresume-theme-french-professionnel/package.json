@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-french-professionnel",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A narrow lavender qualifications rail complements a crisp French-labelled career column. Use a confident sans identity and clean role/date alignment rather than ornamental flourishes.",
   "type": "module",
   "main": "./dist/index.js",

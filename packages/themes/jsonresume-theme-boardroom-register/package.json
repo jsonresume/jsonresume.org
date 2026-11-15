@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-boardroom-register",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A compact navy masthead and broad single reading column suit a substantial career. Use strong organisation labels and restrained spacing that rewards evidence over slogans.",
   "type": "module",
   "main": "./dist/index.js",

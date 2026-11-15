@@ -1,5 +1,18 @@
 # @repo/theme-gallery
 
+## 0.0.2
+
+### Patch Changes
+
+- Updated dependencies [fd9771c]
+- Updated dependencies [2bfd7ec]
+- Updated dependencies [fd9771c]
+- Updated dependencies [61c8da2]
+- Updated dependencies [b66c2bb]
+- Updated dependencies [d389459]
+  - @jsonresume/theme-metadata@0.6.0
+  - @jsonresume/ui@0.3.0
+
 ## 0.0.1
 
 ### Patch Changes

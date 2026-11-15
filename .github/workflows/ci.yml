@@ -117,7 +117,8 @@ jobs:
         working-directory: apps/registry
 
   test:
-    runs-on: ubuntu-latest
+    # Playwright 1.56 has no Chromium for ubuntu-latest (26.04) yet.
+    runs-on: ubuntu-24.04
     # A normal run takes ~8 minutes; without a limit a hung apt/browser
     # download holds the job (and the PR merge queue) for 6 hours.
     timeout-minutes: 30

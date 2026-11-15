@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-stewardship-cv",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Use a modest serif masthead, green keylines and unusually clear volunteer entries. Paid and unpaid experience share the same strong hierarchy and readable dates.",
   "type": "module",
   "main": "./dist/index.js",

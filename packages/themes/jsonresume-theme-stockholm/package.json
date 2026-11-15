@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-stockholm",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "An airy modern resume with a wide experience column and a quiet right rail for concise supporting details.",
   "type": "module",
   "main": "./dist/index.js",

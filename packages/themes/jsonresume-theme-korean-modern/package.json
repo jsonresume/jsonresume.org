@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-korean-modern",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A light identity rail and Korean-capable sans typography create a compact professional page. Keep qualifications as text and give long mixed-script employer names a reliable wrap.",
   "type": "module",
   "main": "./dist/index.js",

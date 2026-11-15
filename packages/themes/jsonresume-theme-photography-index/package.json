@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-photography-index",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A restrained monochrome identity and narrow information rail evoke a contact-sheet index. Use numbered sections and a broad work column without making image thumbnails essential.",
   "type": "module",
   "main": "./dist/index.js",

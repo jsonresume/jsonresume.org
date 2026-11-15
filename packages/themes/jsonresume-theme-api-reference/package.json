@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-api-reference",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A clean documentation-like identity pairs a wide evidence column with a narrow capabilities rail. Use monospace metadata and blue section brackets without turning prose into code blocks.",
   "type": "module",
   "main": "./dist/index.js",

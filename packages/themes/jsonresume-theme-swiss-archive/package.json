@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-swiss-archive",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A disciplined Swiss-style grid uses an offset sans identity, red section numbers and clear column boundaries. Preserve reading order and let mobile screens collapse to a single sequence.",
   "type": "module",
   "main": "./dist/index.js",

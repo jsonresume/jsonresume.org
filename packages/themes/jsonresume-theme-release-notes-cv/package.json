@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-release-notes-cv",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Use a strong version-note rhythm: section keylines, prominent role titles and compact dates. Keep achievements readable as ordinary bullets and avoid invented version numbers.",
   "type": "module",
   "main": "./dist/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-one-page-essential",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A compact one-page rhythm for concise content: a small identity block, short section gaps and efficient dates. Longer resumes must continue naturally rather than clip or shrink.",
   "type": "module",
   "main": "./dist/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "@repo/resume-versions",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "Every save of a resume as an append-only version: who made it, what changed, and the JSON to restore",
   "type": "module",

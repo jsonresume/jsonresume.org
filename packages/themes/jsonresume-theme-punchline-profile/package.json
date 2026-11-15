@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-punchline-profile",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A bold, compact professional label and short cobalt rules create a punchy opening. Use strong role titles and readable achievement bullets without invented headline claims.",
   "type": "module",
   "main": "./dist/index.js",

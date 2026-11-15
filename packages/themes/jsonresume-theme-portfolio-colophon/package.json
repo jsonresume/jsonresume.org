@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-portfolio-colophon",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A large serif identity and small colophon-like contact block sit above a clean career body. A quiet right rail holds credentials and interests without competing with work evidence.",
   "type": "module",
   "main": "./dist/index.js",

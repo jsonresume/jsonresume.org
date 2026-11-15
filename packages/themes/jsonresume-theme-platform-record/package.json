@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-platform-record",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A wide white evidence column and pale green right rail keep complex engineering careers readable. Use a small monospace identity label and short rules rather than large coloured panels.",
   "type": "module",
   "main": "./dist/index.js",

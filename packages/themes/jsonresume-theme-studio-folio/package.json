@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-studio-folio",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "An oversized serif identity and a narrow purple qualifications rail create a studio folio. Projects lead the evidence column, with clear dates and text links to external work.",
   "type": "module",
   "main": "./dist/index.js",

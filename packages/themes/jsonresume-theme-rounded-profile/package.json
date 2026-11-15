@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-rounded-profile",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Rounded sans typography and soft blue section tabs create an approachable page. Use a quiet right rail and avoid enclosing every entry in a separate card.",
   "type": "module",
   "main": "./dist/index.js",

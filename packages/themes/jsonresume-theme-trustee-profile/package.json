@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-trustee-profile",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Create an uncluttered board profile with an open summary, prominent appointments and a quiet credentials rail. Fine bronze rules provide character without a large coloured banner.",
   "type": "module",
   "main": "./dist/index.js",

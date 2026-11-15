@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-hospitality-profile",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Use a warm neutral identity rail and a clear main column for service experience. Languages and credentials stay visible, and long lists of venues remain easy to scan.",
   "type": "module",
   "main": "./dist/index.js",

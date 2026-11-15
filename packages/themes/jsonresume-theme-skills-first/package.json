@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-skills-first",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Bring skills and projects ahead of the work chronology with a strong but plain opening. Retain employers and dates so the functional emphasis never conceals career history.",
   "type": "module",
   "main": "./dist/index.js",

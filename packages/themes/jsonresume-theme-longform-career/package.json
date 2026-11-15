@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-longform-career",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A generous serif text measure and substantial section spacing support a long career narrative. Keep role headings and dates unmistakable even when summaries span several paragraphs.",
   "type": "module",
   "main": "./dist/index.js",
