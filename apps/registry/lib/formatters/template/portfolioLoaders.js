@@ -23,7 +23,7 @@ export const portfolioLoaders = {
     import('jsonresume-theme-correspondence-classic'),
   'council-profile': () => import('jsonresume-theme-council-profile'),
   'one-page-essential': () => import('jsonresume-theme-one-page-essential'),
-  'one-page-plus': () => import('jsonresume-theme-one-page-plus'),
+  'one-page-plus': () => import('@jsonresume/jsonresume-theme-one-page-plus'),
   'short-form': () => import('jsonresume-theme-short-form'),
   'spartan-lines': () => import('jsonresume-theme-spartan-lines'),
   'paper-plain': () => import('jsonresume-theme-paper-plain'),
