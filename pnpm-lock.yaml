@@ -501,6 +501,9 @@ importers:
       '@jsonresume/jsonresume-theme-creative-studio':
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-creative-studio
+      '@jsonresume/jsonresume-theme-one-page-plus':
+        specifier: workspace:*
+        version: link:../../packages/themes/jsonresume-theme-one-page-plus
       '@jsonresume/jsonresume-theme-professional':
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-professional
@@ -1035,9 +1038,6 @@ importers:
       jsonresume-theme-one-page-essential:
         specifier: workspace:*
         version: link:../../packages/themes/jsonresume-theme-one-page-essential
-      jsonresume-theme-one-page-plus:
-        specifier: workspace:*
-        version: link:../../packages/themes/jsonresume-theme-one-page-plus
       jsonresume-theme-onepage-plus:
         specifier: '*'
         version: 1.0.1
@@ -2968,6 +2968,9 @@ importers:
       '@jsonresume/jsonresume-theme-creative-studio':
         specifier: workspace:*
         version: link:../themes/jsonresume-theme-creative-studio
+      '@jsonresume/jsonresume-theme-one-page-plus':
+        specifier: workspace:*
+        version: link:../themes/jsonresume-theme-one-page-plus
       '@jsonresume/jsonresume-theme-professional':
         specifier: workspace:*
         version: link:../themes/jsonresume-theme-professional
@@ -3421,9 +3424,6 @@ importers:
       jsonresume-theme-one-page-essential:
         specifier: workspace:*
         version: link:../themes/jsonresume-theme-one-page-essential
-      jsonresume-theme-one-page-plus:
-        specifier: workspace:*
-        version: link:../themes/jsonresume-theme-one-page-plus
       jsonresume-theme-open-column:
         specifier: workspace:*
         version: link:../themes/jsonresume-theme-open-column

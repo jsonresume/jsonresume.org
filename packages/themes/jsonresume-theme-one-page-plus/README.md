@@ -4,7 +4,7 @@ Use a broad evidence column and a narrow qualifications rail beneath a shallow m
 
 Concise applications with supporting detail. Style: minimal; layout: right; default language: en.
 
-Install with `npm install jsonresume-theme-one-page-plus`. The package exports a synchronous `render(resume)` function and a default object containing it.
+Install with `npm install @jsonresume/jsonresume-theme-one-page-plus`. The package exports a synchronous `render(resume)` function and a default object containing it.
 
 All standard JSON Resume sections render when populated. Text remains selectable, optional web fonts have system fallbacks, and styles are embedded at build time without runtime filesystem access. Narrow screens stack automatically; long resumes continue across A4 and Letter pages.
 

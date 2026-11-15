@@ -202,7 +202,7 @@
     "jsonresume-theme-northstar-profile": "workspace:*",
     "jsonresume-theme-oblique-resume": "workspace:*",
     "jsonresume-theme-one-page-essential": "workspace:*",
-    "jsonresume-theme-one-page-plus": "workspace:*",
+    "@jsonresume/jsonresume-theme-one-page-plus": "workspace:*",
     "jsonresume-theme-onepage-plus": "*",
     "jsonresume-theme-open-column": "workspace:*",
     "jsonresume-theme-open-margin": "workspace:*",
