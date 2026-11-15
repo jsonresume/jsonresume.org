@@ -21,12 +21,20 @@ export const heading = recipe({
     size: {
       display: {
         fontSize: font.size['4xl'],
-        fontWeight: font.weight.light,
-        letterSpacing: '-0.01em',
+        fontWeight: font.weight.semibold,
+        letterSpacing: font.tracking.tight,
       },
-      title: { fontSize: font.size['3xl'], fontWeight: font.weight.light },
-      section: { fontSize: font.size['2xl'], fontWeight: font.weight.light },
-      subsection: { fontSize: font.size.xl, fontWeight: font.weight.regular },
+      title: {
+        fontSize: font.size['3xl'],
+        fontWeight: font.weight.semibold,
+        letterSpacing: font.tracking.tight,
+      },
+      section: {
+        fontSize: font.size['2xl'],
+        fontWeight: font.weight.semibold,
+        letterSpacing: font.tracking.tight,
+      },
+      subsection: { fontSize: font.size.xl, fontWeight: font.weight.semibold },
       group: { fontSize: font.size.lg, fontWeight: font.weight.semibold },
       label: {
         fontSize: font.size.md,
@@ -161,7 +169,8 @@ globalStyle(p('> * + *'), { marginBlockStart: '1em' });
 globalStyle(p(':where(h2)'), {
   marginBlockStart: '2em',
   fontSize: font.size['2xl'],
-  fontWeight: font.weight.light,
+  fontWeight: font.weight.semibold,
+  letterSpacing: font.tracking.tight,
   lineHeight: font.lineHeight.tight,
   color: vars.color.text.strong,
 });

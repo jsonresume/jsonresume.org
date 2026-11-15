@@ -13,7 +13,8 @@ export const band = style({
 export const title = style({
   margin: 0,
   fontSize: font.size['2xl'],
-  fontWeight: font.weight.light,
+  fontWeight: font.weight.semibold,
+  letterSpacing: font.tracking.tight,
 });
 
 export const actions = style({

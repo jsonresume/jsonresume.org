@@ -40,7 +40,8 @@ export const yearTitle = style({
   margin: 0,
   color: color.text.muted,
   fontSize: font.size['2xl'],
-  fontWeight: font.weight.light,
+  fontWeight: font.weight.semibold,
+  letterSpacing: font.tracking.tight,
   fontVariantNumeric: 'tabular-nums',
 });
 
@@ -89,7 +90,8 @@ export const category = style({
 export const categoryTitle = style({
   marginBlockEnd: space[5],
   fontSize: font.size['2xl'],
-  fontWeight: font.weight.light,
+  fontWeight: font.weight.semibold,
+  letterSpacing: font.tracking.tight,
   textTransform: 'capitalize',
 });
 
@@ -160,7 +162,8 @@ globalStyle(`${personLinks} a`, {
 export const teamTitle = style({
   marginBlockEnd: space[6],
   fontSize: font.size['2xl'],
-  fontWeight: font.weight.light,
+  fontWeight: font.weight.semibold,
+  letterSpacing: font.tracking.tight,
   '@media': { [media.md]: { fontSize: font.size['3xl'] } },
 });
 

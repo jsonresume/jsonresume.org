@@ -8,6 +8,9 @@ const { font, color, space } = vars;
 /* Hero: the yellow promo band from the jsonresume.org home page. */
 export const hero = style({
   backgroundColor: color.surface.brand,
+  // A soft light behind the media side, fading from brand yellow to cream: the
+  // band eases into the page instead of stopping at a hard edge.
+  backgroundImage: `radial-gradient(45% 65% at 80% 55%, rgba(255, 255, 255, 0.5), transparent 70%), linear-gradient(180deg, ${color.surface.brand} 0%, ${color.surface.brandSoft} 100%)`,
   color: color.text.onBrand,
   // Phones get half the height: the band shouldn't fill the first screen.
   paddingBlock: `${space[12]} ${space[16]}`,
@@ -53,7 +56,8 @@ export const heroTitle = style({
   margin: 0,
   color: color.text.onBrand,
   fontSize: font.size['3xl'],
-  fontWeight: font.weight.light,
+  fontWeight: font.weight.semibold,
+  letterSpacing: font.tracking.tight,
   lineHeight: font.lineHeight.tight,
   textWrap: 'balance',
   selectors: { [`${compact} &`]: { fontSize: font.size['2xl'] } },

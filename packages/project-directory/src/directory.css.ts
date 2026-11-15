@@ -19,7 +19,8 @@ export const groupTitle = style({
   marginBlockEnd: space[5],
   color: color.text.strong,
   fontSize: font.size.xl,
-  fontWeight: font.weight.light,
+  fontWeight: font.weight.semibold,
+  letterSpacing: font.tracking.tight,
 });
 
 export const grid = style({

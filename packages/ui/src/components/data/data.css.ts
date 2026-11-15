@@ -31,7 +31,8 @@ export const statValue = style({
   margin: 0,
   color: color.text.strong,
   fontSize: font.size['3xl'],
-  fontWeight: font.weight.light,
+  fontWeight: font.weight.semibold,
+  letterSpacing: font.tracking.tight,
   lineHeight: font.lineHeight.tight,
 });
 
@@ -252,7 +253,8 @@ export const match = style({
 
 export const matchNumber = style({
   fontSize: font.size.xl,
-  fontWeight: font.weight.light,
+  fontWeight: font.weight.semibold,
+  letterSpacing: font.tracking.tight,
   fontVariantNumeric: 'tabular-nums',
 });
 
