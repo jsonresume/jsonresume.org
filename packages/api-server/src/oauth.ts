@@ -139,8 +139,12 @@ export const OAuthConsentHandlers = HttpApiBuilder.group(
         decide: ({ payload: p }) =>
           Effect.gen(function* () {
             const user = yield* CurrentUser;
+            const { client } = yield* oauth.check(
+              p.client_id,
+              p.redirect_uri,
+              p.scope
+            );
             if (!p.approve) {
-              yield* oauth.check(p.client_id, p.redirect_uri, p.scope);
               return {
                 redirect: withQuery(p.redirect_uri, {
                   error: 'access_denied',
@@ -158,6 +162,7 @@ export const OAuthConsentHandlers = HttpApiBuilder.group(
             });
             yield* track(user.id, 'oauth_access_granted', {
               client_id: p.client_id,
+              client_name: client.name,
               scope: p.scope ?? null,
             });
             return {

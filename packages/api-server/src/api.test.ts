@@ -384,6 +384,10 @@ describe('the API, over HTTP', () => {
     const approved = new URL((await (await decide(true)).json()).redirect);
     expect(approved.searchParams.get('state')).toBe('xyz');
     const code = approved.searchParams.get('code') ?? '';
+    // Which app was let in, by the name it registered.
+    expect(
+      server.events.find((e) => e.event === 'oauth_access_granted')?.properties
+    ).toEqual({ client_id, client_name: 'Claude', scope: null });
 
     const token = (form: Record<string, string>) =>
       server.fetch('/api/oauth/token', {

@@ -1,7 +1,7 @@
 import { ApiKeys, OAuth } from '@repo/accounts';
 import { allows } from '@repo/api';
-import { tracker, type ProductEventName } from '@repo/posthog';
-import { Effect, Layer, Option, Schema } from 'effect';
+import { tracker } from '@repo/posthog';
+import { Effect, Layer } from 'effect';
 import { McpProtocol, McpServer } from 'effect/ai';
 import { HttpRouter, HttpServerRequest, HttpServerResponse } from 'effect/http';
 import { AccountHandlers, AccountToolkit } from './accountTools';
@@ -20,6 +20,7 @@ import { JobHandlers, JobToolkit } from './jobTools';
 import { Prompts } from './prompts';
 import { ResumeHandlers, ResumeToolkit } from './resumeTools';
 import { VersionHandlers, VersionToolkit } from './versionTools';
+import { reportUsage, type Caller } from './usage';
 
 const SITE = 'https://jsonresume.org';
 
@@ -37,31 +38,6 @@ const unauthorized = (site: string, message: string) =>
       },
     }
   );
-
-const ToolCall = Schema.fromJsonString(
-  Schema.Struct({
-    method: Schema.Literal('tools/call'),
-    params: Schema.Struct({ name: Schema.String }),
-  })
-);
-
-type Track = (
-  id: string,
-  event: ProductEventName,
-  properties: { tool: string }
-) => Effect.Effect<void>;
-
-/** Which tool a request calls, if it calls one (the body is read once, cached). */
-const toolCalled = (track: Track, userId: string) =>
-  Effect.gen(function* () {
-    const request = yield* HttpServerRequest.HttpServerRequest;
-    if (request.method !== 'POST') return;
-    const call = Schema.decodeUnknownOption(ToolCall)(yield* request.text);
-    if (Option.isSome(call))
-      yield* track(userId, 'mcp_tool_called', {
-        tool: call.value.params.name,
-      });
-  }).pipe(Effect.ignore);
 
 /**
  * Every request needs a Bearer token: an API key (jr_…) or, from OAuth, an
@@ -85,13 +61,17 @@ const authentication = (site: string) =>
           // OAuth apps granted only some scopes (an HR tool reading the
           // resume) can't use the tools: those need the mcp scope.
           const found = token.startsWith('jr_')
-            ? yield* keys
-                .identify(token)
-                .pipe(
-                  Effect.map(
-                    (k) => k && { user: k.user, id: k.key.id, name: k.key.name }
-                  )
+            ? yield* keys.identify(token).pipe(
+                Effect.map(
+                  (k) =>
+                    k && {
+                      user: k.user,
+                      id: k.key.id,
+                      name: k.key.name,
+                      caller: { via: 'api_key', app: null } satisfies Caller,
+                    }
                 )
+              )
             : yield* oauth.authenticate(token).pipe(
                 Effect.map(
                   (grant) =>
@@ -100,13 +80,17 @@ const authentication = (site: string) =>
                       user: grant.user,
                       id: grant.clientId,
                       name: grant.clientName,
+                      caller: {
+                        via: 'oauth',
+                        app: grant.clientName,
+                      } satisfies Caller,
                     }
                 )
               );
           if (!found)
             return unauthorized(site, 'That token is not valid (any more)');
-          const { user, id, name } = found;
-          yield* toolCalled(track, user.id);
+          const { user, id, name, caller } = found;
+          yield* reportUsage(track, user.id, caller);
           return yield* Effect.provideService(httpEffect, McpCaller, user).pipe(
             Effect.provideService(McpActor, { kind: 'assistant', id, name })
           );
