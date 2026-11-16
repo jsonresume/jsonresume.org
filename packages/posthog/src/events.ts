@@ -15,6 +15,7 @@ export type ProductEventName =
   | 'oauth_app_created'
   | 'oauth_access_granted'
   | 'mcp_tool_called'
+  | 'mcp_client_connected'
   | 'import_started'
   | 'import_finished'
   | 'theme_chosen';

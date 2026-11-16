@@ -26,7 +26,29 @@ describe('the MCP server', () => {
       resume: { basics: { name: 'Ada' } },
     });
     expect(events).toEqual([
-      { event: 'mcp_tool_called', properties: { tool: 'get_resume' } },
+      {
+        event: 'mcp_client_connected',
+        properties: {
+          client: 'test',
+          client_version: '1',
+          via: 'api_key',
+          app: null,
+        },
+      },
+      {
+        event: 'mcp_tool_called',
+        properties: { tool: 'get_resume', via: 'api_key', app: null },
+      },
+    ]);
+  });
+
+  it('reports the OAuth app a client connected through', async () => {
+    const { handler, access, events } = await setup();
+    const { call } = await connect(handler, access);
+    await call('get_resume');
+    expect(events.map((e) => e.properties)).toEqual([
+      { client: 'test', client_version: '1', via: 'oauth', app: 'Claude' },
+      { tool: 'get_resume', via: 'oauth', app: 'Claude' },
     ]);
   });
 
