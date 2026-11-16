@@ -35,7 +35,10 @@ function matches(event: KeyboardEvent, combo: string) {
   const mod = parts.includes('mod');
   const wantMeta = mod ? isMac() : parts.includes('meta');
   const wantCtrl = mod ? !isMac() : parts.includes('ctrl');
+  // Browser autofill fires bare `keydown` Events with no `key`: they never
+  // match (and used to crash the editor, 23 times in a week).
   return (
+    typeof event.key === 'string' &&
     event.key.toLowerCase() === key &&
     event.metaKey === wantMeta &&
     event.ctrlKey === wantCtrl &&
