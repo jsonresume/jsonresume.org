@@ -11,6 +11,7 @@ import { EditorHandlers } from './editor';
 import { ExploreHandlers, MyListingHandlers } from './explore';
 import { ImportHandlers } from './import';
 import { GithubRoutes } from './github';
+import { JobDecisionsHandlers } from './jobDecisions';
 import { JobsHandlers, MyJobsHandlers } from './jobs';
 import { ApiKeyAuthenticationLive, KeysHandlers } from './keys';
 import { OAuthConsentHandlers, OAuthHandlers } from './oauth';
@@ -57,6 +58,7 @@ export const apiRoutes = (version: string) =>
         ImportHandlers,
         JobsHandlers,
         MyJobsHandlers,
+        JobDecisionsHandlers,
         CareerHandlers,
         ExploreHandlers,
         MyListingHandlers,

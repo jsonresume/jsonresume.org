@@ -1,3 +1,4 @@
+import { noFacts } from '@repo/jobs';
 import { TestDatabase } from '@repo/database/testing';
 import type { Ranked } from '@repo/jobs';
 import { Effect, Layer } from 'effect';
@@ -81,6 +82,9 @@ const ranked: Ranked = {
   role: null,
   why: null,
   limits: [],
+  facts: noFacts,
+  toward: null,
+  fit: null,
 };
 
 it('a resume saying "ML" meets a job requiring "Machine Learning": no gap', async () => {

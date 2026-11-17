@@ -1,5 +1,7 @@
 import { Effect, Layer, Predicate } from 'effect';
+import { PreferenceStore } from '@repo/jobs';
 import { CareerGraphs } from './careerGraph';
+import { JobDecisions } from './decisions';
 import { PlanStore } from './plans';
 import {
   CareerMoves,
@@ -93,10 +95,15 @@ export const noMoves = Layer.succeed(
 );
 
 /**
- * CareerGraphs on the database with nothing read by a model, for app tests.
- * Needs a SqlClient and a JobMatcher.
+ * CareerGraphs and JobDecisions on the database with nothing read by a
+ * model, for app tests; PreferenceStore too. Needs a SqlClient and a
+ * JobMatcher.
  */
-export const plainCareers = CareerGraphs.layer.pipe(
+export const plainCareers = Layer.mergeAll(
+  CareerGraphs.layer,
+  JobDecisions.layer
+).pipe(
+  Layer.provideMerge(PreferenceStore.layer),
   Layer.provide(
     Layer.mergeAll(
       PlanStore.layer,

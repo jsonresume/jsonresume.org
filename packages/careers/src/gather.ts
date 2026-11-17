@@ -47,7 +47,9 @@ export const gather = Effect.fn('Careers.gather')(function* (
   userId: string,
   insight: ResumeInsight,
   ranked: ReadonlyArray<Ranked>,
-  year: number
+  year: number,
+  /** How much they'd want each job, 0 to 1, when decided. */
+  appeal: ReadonlyMap<number, number> = new Map()
 ) {
   const roles = yield* JobRoles;
   const catalog = yield* SkillCatalog;
@@ -82,6 +84,7 @@ export const gather = Effect.fn('Careers.gather')(function* (
     const role = pickRole(roleMap.get(r.row.id) ?? [], r.role, have, worked);
     return {
       ranked: r,
+      appeal: appeal.get(r.row.id) ?? 0.5,
       role,
       family:
         role?.family ??

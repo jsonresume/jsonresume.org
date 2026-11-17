@@ -13,6 +13,18 @@ Jobs from Hacker News "Who is hiring?" threads, server side.
 - **Matching** (`JobMatcher`): open jobs ranked by cosine against an
   embedding of the resume, nudged toward jobs the user marked interested or
   applied and away from those marked not for me; and the marks themselves.
+  Every mark is also kept in `app.job_mark_events`, with its reason, where
+  it was made and the decision it was made against.
+- **Company facts** (`FactsReader`, `refreshFacts`, `app.job_facts`): each
+  open post's industries, stage, team size and stated signals, read 20
+  posts a call after each pipeline run.
+- **Decisions** (`decision/`, pure): apply, stretch, skip or ruled out for
+  a person, from dealbreakers (`screen`), the chance they'd get it
+  (`chance`), how much they'd want it (`appeal`), and suggestions from
+  their marks (`suggest`); `auc` and `precisionAt` measure a ranking.
+  What people want is `PreferenceStore` (`app.job_preferences`, every
+  change kept). See docs/jobs-ranking/DECISION-MODEL.md; `@repo/careers`
+  `JobDecisions` puts it together with the resume's evidence.
 
 **Skill names** (`skillKey`, `skillName`, the list in `skillAliases.ts`):
 one way to compare them, shared with `@repo/careers`. Case, hyphens,

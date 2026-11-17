@@ -1,6 +1,7 @@
 import { Accounts } from '@repo/accounts';
 import { CurrentUser, JobNotFound, JsonResumeApi } from '@repo/api';
 import { careerDirections, JobBoard, JobMatcher } from '@repo/jobs';
+import { track } from '@repo/posthog';
 import { Effect } from 'effect';
 import { HttpApiBuilder } from 'effect/http-api';
 
@@ -47,7 +48,21 @@ export const MyJobsHandlers = HttpApiBuilder.group(
             if (!(yield* matcher.exists(params.id))) {
               return yield* new JobNotFound();
             }
-            yield* matcher.mark(user.id, params.id, payload.mark);
+            const shown = yield* matcher.mark(
+              user.id,
+              params.id,
+              payload.mark,
+              null,
+              payload
+            );
+            yield* track(user.id, 'job_marked', {
+              job_id: params.id,
+              mark: payload.mark,
+              reason: payload.reason ?? null,
+              source: payload.source ?? 'jobs',
+              position: payload.position ?? null,
+              ...shown,
+            });
           }),
       });
     })

@@ -15,6 +15,7 @@ import { ImportHandlers, ImportToolkit } from './importTools';
 import { WebhookHandlers, WebhookToolkit } from './webhookTools';
 import { ProposalHandlers, ProposalToolkit } from './proposalTools';
 import { VariantHandlers, VariantToolkit } from './variantTools';
+import { DecisionHandlers, DecisionToolkit } from './decisionTools';
 import { PrivacyHandlers, PrivacyToolkit } from './privacyTools';
 import { JobHandlers, JobToolkit } from './jobTools';
 import { Prompts } from './prompts';
@@ -119,6 +120,7 @@ export const mcpRoutes = (site: string = SITE) =>
     McpServer.toolkit(TreeToolkit).pipe(Layer.provide(TreeHandlers)),
     McpServer.toolkit(VersionToolkit).pipe(Layer.provide(VersionHandlers)),
     McpServer.toolkit(VariantToolkit).pipe(Layer.provide(VariantHandlers)),
+    McpServer.toolkit(DecisionToolkit).pipe(Layer.provide(DecisionHandlers)),
     McpServer.toolkit(ProposalToolkit).pipe(Layer.provide(ProposalHandlers)),
     Prompts
   ).pipe(

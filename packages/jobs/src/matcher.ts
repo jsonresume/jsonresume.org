@@ -68,7 +68,10 @@ const make = Effect.gen(function* () {
   const rankWithin = Effect.fn('JobMatcher.rank')(function* (
     resume: unknown,
     userId: string | undefined,
-    options: RunOptions
+    options: RunOptions & {
+      /** Where they want to go, in words: each job's cosine to it is kept. */
+      toward?: string;
+    }
   ) {
     const text = resumeText(resume);
     if (text.length < 20) return yield* new NoResume();
@@ -88,11 +91,15 @@ const make = Effect.gen(function* () {
           (passed ? AWAY * (passed[i] ?? 0) : 0)
       )
     );
+    const toward = options.toward?.trim()
+      ? yield* resumeVector(options.toward.trim())
+      : null;
     const retrieved = retrieve(
       yield* openJobRows,
       base,
       query,
-      resumeCountry(resume)
+      resumeCountry(resume),
+      toward
     );
     const { fits, judging } = userId
       ? yield* fitsFor(

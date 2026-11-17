@@ -1,8 +1,8 @@
 import type { CareerGraph, CareerMove, CareerWait } from '@repo/api';
-import { JobMatcher, type RunOptions } from '@repo/jobs';
+import { JobMatcher, PreferenceStore, type RunOptions } from '@repo/jobs';
 import { Clock, Context, Duration, Effect, Layer, Option } from 'effect';
 import { familyName, isFamily, SENIORITY_ORDER } from './families';
-import { gather } from './gather';
+import { gatherWanted, preferencesFor } from './graphDecisions';
 import { buildGraph } from './graph/build';
 import { planBrief } from './planBrief';
 import { Planner, plainPlan } from './planner';
@@ -48,11 +48,16 @@ const make = Effect.gen(function* () {
   const moves = yield* CareerMoves;
   const insights = yield* ResumeInsights;
   const planner = yield* Effect.serviceOption(Planner);
+  const preferences = yield* Effect.serviceOption(PreferenceStore);
 
   // The two model steps (jobs judged against the resume, the resume read)
   // don't need each other, so they run at once, each waiting up to `wait`
   // and joining a run already under way for the same content.
-  const models = (userId: string, resume: unknown, options: RunOptions) =>
+  const models = (
+    userId: string,
+    resume: unknown,
+    options: RunOptions & { toward?: string }
+  ) =>
     Effect.all(
       [
         matcher.rankWithin(resume, userId, options),
@@ -63,16 +68,17 @@ const make = Effect.gen(function* () {
 
   const build = (userId: string, resume: unknown, wait: Duration.Input) =>
     Effect.gen(function* () {
+      const want = yield* preferencesFor(preferences, userId);
       const [{ ranked, judging }, insight] = yield* models(userId, resume, {
         wait,
+        toward: want.direction,
       });
       const now = new Date(yield* Clock.currentTimeMillis);
-      const input = yield* gather(
-        userId,
-        insight,
-        ranked,
-        now.getUTCFullYear()
-      ).pipe(Effect.provide(context));
+      const input = yield* gatherWanted(userId, insight, ranked, {
+        resume,
+        preferences: want,
+        year: now.getUTCFullYear(),
+      }).pipe(Effect.provide(context));
       const waitingFor: CareerWait[] = [
         ...(insight.pending ? (['resume'] as const) : []),
         ...(judging ? (['jobs'] as const) : []),

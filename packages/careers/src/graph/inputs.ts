@@ -12,6 +12,8 @@ import type {
 /** A job on the graph: its match, the role in the post that fits, what that role asks. */
 export interface GraphJob {
   ranked: Ranked;
+  /** How much they'd want it, 0 to 1 (0.5 when unknown). */
+  appeal: number;
   role: JobRole | null;
   family: Family;
   requirements: ReadonlyArray<Requirement>;

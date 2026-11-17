@@ -25,3 +25,21 @@ export { companyOf, placeOf, toJob, toSummary, type JobRow } from './summary';
 export { careerDirections, familyOf, resumeSkills } from './directions';
 export { SKILL_ALIASES } from './skillAliases';
 export { foldSkill, isKnownSkill, skillKey, skillName } from './skillNames';
+export * from './decision';
+export {
+  CompanyFacts,
+  FACTS_VERSION,
+  FactsFailed,
+  FactsReader,
+  noFacts,
+  type FactsPost,
+} from './facts';
+export { factsOf, refreshFacts } from './factsRefresh';
+export type { MarkMeta } from './marks';
+export {
+  isStated,
+  noPreferences,
+  PreferenceStore,
+  type PreferenceSource,
+} from './preferences';
+export { decisionStore } from './decisionStore';

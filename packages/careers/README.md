@@ -22,6 +22,12 @@ The career graph behind Pathways → Tree, and the data it stands on:
   next, from every public resume.
 - **Plans** (`app.pathway_plans`, `app.plan_steps`) and **snapshots**
   (`app.tree_snapshots`).
+- **Job decisions** (`JobDecisions`): every open job decided for a person
+  (`@repo/jobs` `decision/`) from the ranking, the resume's evidence
+  (`skillsShown`: depth, recency, years), each job's role requirements
+  (`needsOf`) and their preferences; kept in `app.job_decisions`. The Tree
+  leaves out jobs their dealbreakers rule out and weighs gaps by appeal
+  (`graphDecisions.ts`).
 
 `families.ts` is the one role-family vocabulary everything above shares.
 Contracts are in `services.ts`; each live layer is in its own file.
