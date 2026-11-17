@@ -49,7 +49,11 @@ const glyph = { good: '✓', bad: '✗', note: '•' } as const;
 const spoken = { good: 'For it', bad: 'Against it', note: 'Note' } as const;
 
 const ORDER = { good: 0, bad: 1, note: 2 } as const;
-const capital = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
+/** The model's line as a sentence: without its "you:" lead-in, capitalised. */
+const sentence = (t: string) => {
+  const line = t.trim().replace(/^you\s*:\s*/i, '');
+  return line.charAt(0).toUpperCase() + line.slice(1);
+};
 
 /**
  * Why: the role in the post that fits, the model's one line, then the
@@ -63,7 +67,7 @@ export function Reasons({ job }: { job: DecidedJob }) {
       {job.role && job.role !== job.title ? (
         <span className={s.roleLabel}>Your role here: {job.role}</span>
       ) : null}
-      {job.why ? <span className={s.why}>{capital(job.why)}</span> : null}
+      {job.why ? <span className={s.why}>{sentence(job.why)}</span> : null}
       <ul className={s.reasons} aria-label="Why">
         {[...reasons]
           .sort((a, b) => ORDER[a.tone] - ORDER[b.tone])

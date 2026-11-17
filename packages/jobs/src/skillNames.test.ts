@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { SKILL_ALIASES } from './skillAliases';
-import { foldSkill, isKnownSkill, skillKey, skillName } from './skillNames';
+import {
+  foldSkill,
+  isKnownSkill,
+  skillChoices,
+  skillKey,
+  skillName,
+} from './skillNames';
 
 const same = (...names: string[]) =>
   expect(new Set(names.map(skillKey)).size, names.join(', ')).toBe(1);
@@ -103,5 +109,27 @@ describe('skill names', () => {
     expect(skillName('Restate (durable  execution)')).toBe(
       'Restate (durable execution)'
     );
+  });
+});
+
+describe('skill choices', () => {
+  it('name each skill a combined requirement lists', () => {
+    expect(skillChoices('React/TypeScript')).toEqual([
+      skillKey('React'),
+      skillKey('TypeScript'),
+    ]);
+    expect(skillChoices('Go and/or Rust')).toEqual(['go', 'rust']);
+    expect(skillChoices('TypeScript or Go')).toEqual(['typescript', 'go']);
+    expect(skillChoices('AWS (ECS/Fargate, RDS, Lambda, S3)')).toEqual([
+      skillKey('AWS'),
+    ]);
+  });
+
+  it('leave one skill, or a sentence, alone', () => {
+    expect(skillChoices('TypeScript')).toEqual([]);
+    expect(skillChoices('Kubernetes (k8s)')).toEqual([]);
+    expect(
+      skillChoices('8+ years of software or data engineering experience')
+    ).toEqual([]);
   });
 });

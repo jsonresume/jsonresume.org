@@ -25,6 +25,10 @@ The final model recomputed on the previous run's rows scored 0.77. Its verdicts 
 - **Direction is a z-score among the open jobs, weighed gently.** As a fixed cut-off on the cosine it marked 95% of wanted and 85% of passed jobs "where you want to go". Alone, the stated direction predicts little (AUC 0.55): it is the roadmap's words, not theirs. At ±0.10 over two standard deviations the decision AUC is 0.77, and stays there for nearby weights (0.77–0.78), so it is not a tuned peak.
 - **Pay is the strongest stated signal:** "at or above your target" was on 51% of wanted jobs and 11% of passed ones.
 
+## Re-run after the review fixes (2026-11-17)
+
+Kinds of work left out of the required skills and combined requirements credited by their parts: the decision model with stated preferences scored **0.75** (top 10: 80%, top 20: 75%), today's engine 0.61 in the same run. Stretch now sorts better: 55% of stretch jobs were wanted (was 37–50%), skip 16%. The marks' z-score isn't replayed (marks are what is predicted).
+
 ## Caveats
 
 - One person's decisions. It shows whether the structure works, not the best weights for everyone; `job_mark_events` now stores every mark with the decision it was made against, so the next replay has many people.

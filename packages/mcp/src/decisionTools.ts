@@ -8,7 +8,7 @@ import {
   Verdict,
 } from '@repo/api';
 import { JobDecisions } from '@repo/careers';
-import { PreferenceStore } from '@repo/jobs';
+import { preferenceSummary, PreferenceStore } from '@repo/jobs';
 import { track } from '@repo/posthog';
 import { Duration, Effect, Schema } from 'effect';
 import { Tool, Toolkit } from 'effect/ai';
@@ -98,7 +98,8 @@ export const DecisionHandlers = DecisionToolkit.toLayer(
           );
           yield* track(user.id, 'job_preferences_saved', {
             source: 'agent',
-            fields: Object.keys(change).join(','),
+            changed: Object.keys(change).join(','),
+            ...preferenceSummary(saved),
           });
           return saved;
         }),

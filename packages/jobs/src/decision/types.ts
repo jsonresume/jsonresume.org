@@ -27,8 +27,12 @@ export interface DecisionInput {
   /** The model's fit, 0 to 100, once it has judged the post. */
   fit: number | null;
   cosine: number;
-  /** Retrieval order: the cosine, nudged by the person's marks. */
-  order: number;
+  /**
+   * How much more like the jobs they saved (and less like the ones they
+   * passed on) this job is than the other open jobs, in standard
+   * deviations; null without marks.
+   */
+  marks: number | null;
   /** What the fitting role asks for; null until the post's roles are read. */
   needs: ReadonlyArray<Need> | null;
   /** Skills the resume shows, by skillKey. */

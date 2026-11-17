@@ -163,6 +163,7 @@ export const mark = styleVariants({
 });
 
 export const why = style({
+  display: 'block',
   color: vars.color.text.muted,
   fontStyle: 'italic',
   fontSize: vars.font.size.sm,
@@ -177,6 +178,7 @@ export const actions = style({
 });
 
 export const roleLabel = style({
+  display: 'block',
   fontSize: vars.font.size.xs,
   fontWeight: vars.font.weight.semibold,
   color: vars.color.text.default,

@@ -2,6 +2,7 @@ import { familyOf, type Ranked } from '@repo/jobs';
 import { Effect } from 'effect';
 import { familyName, isFamily, type Family } from './families';
 import type { GraphInputs, GraphJob } from './graph/inputs';
+import { asShown } from './decisionInputs';
 import { pickRole } from './pickRole';
 import { PlanStore } from './plans';
 import {
@@ -79,6 +80,7 @@ export const gather = Effect.fn('Careers.gather')(function* (
   const resolved = names.length > 0 ? yield* catalog.resolve(names) : new Map();
 
   const have = new Set(insight.evidence.map((e) => e.skill.id));
+  const byKey = new Map(insight.evidence.map((e) => [e.skill.key, e.skill]));
   const worked = new Set(insight.entries.flatMap((e) => e.family ?? []));
   const jobs = shown.map((r): GraphJob => {
     const role = pickRole(roleMap.get(r.row.id) ?? [], r.role, have, worked);
@@ -91,7 +93,7 @@ export const gather = Effect.fn('Careers.gather')(function* (
         FROM_KIND[familyOf(r.role ?? r.row.posting.title)] ??
         'other_tech',
       requirements: role
-        ? role.requirements
+        ? asShown(role.requirements, have, byKey)
         : r.row.posting.skills.flatMap((s) => {
             const skill = resolved.get(s.name);
             return skill

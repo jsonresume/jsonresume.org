@@ -96,6 +96,11 @@ export const finish = (
   level: Seniority,
   markOf: ReadonlyMap<number, JobMark>
 ): Ranked[] => {
+  // Marks move every job's similarity by much the same amount; only the
+  // difference from the average move says a job is like the ones they saved.
+  const shift =
+    retrieved.reduce((sum, r) => sum + r.order - r.cosine, 0) /
+    Math.max(1, retrieved.length);
   const ranked = retrieved.map(
     ({ job, cosine, order, eligible, placed, toward }) => {
       const fit = fits.get(job.row.id);
@@ -106,7 +111,7 @@ export const finish = (
       );
       const score = Math.min(fit ? fit.score : fitScore(cosine), cap);
       // Marks move a job a few points: the fit stays the resume's own.
-      const nudge = Math.max(-8, Math.min(8, 100 * (order - cosine)));
+      const nudge = Math.max(-8, Math.min(8, 100 * (order - cosine - shift)));
       return {
         sortBy: score + nudge,
         ranked: {

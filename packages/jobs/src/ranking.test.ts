@@ -120,4 +120,22 @@ describe('ranking', () => {
       finish(retrieved, new Map(), 'senior', new Map([[5, 'applied' as const]]))
     ).toHaveLength(2);
   });
+
+  it('moves jobs by how much more like their saved ones they are than the rest', () => {
+    const a = open(1, { company: 'A', remote: 'remote_global' }, 0.6);
+    const b = open(2, { company: 'B', remote: 'remote_global' }, 0.6);
+    // Marks raise every job's similarity; B's more than A's.
+    const retrieved = retrieve([a, b], resume, resume, 'AU').map((r) => ({
+      ...r,
+      order: r.cosine + (r.job.row.id === 1 ? 0.2 : 0.24),
+    }));
+    const fits = new Map([
+      [1, { score: 82, role: 'A', why: 'a' }],
+      [2, { score: 80, role: 'B', why: 'b' }],
+    ]);
+    // Uncentred, both moves hit the cap and A stays first; centred, B leads.
+    expect(
+      finish(retrieved, fits, 'senior', new Map()).map((r) => r.row.id)
+    ).toEqual([2, 1]);
+  });
 });

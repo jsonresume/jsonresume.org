@@ -29,13 +29,21 @@ describe('decision tools', () => {
     });
     expect(events.filter((e) => e.event === 'job_preferences_saved')).toEqual([
       expect.objectContaining({
-        properties: {
+        properties: expect.objectContaining({
           source: 'agent',
-          fields: 'workplaces,payFloor,avoidSectors',
-        },
+          changed: 'workplaces,payFloor,avoidSectors',
+          workplaces: 'remote_global',
+          pay_floor: true,
+          avoid_sectors: 'gambling',
+          direction: false,
+        }),
       }),
       expect.objectContaining({
-        properties: { source: 'agent', fields: 'direction' },
+        properties: expect.objectContaining({
+          changed: 'direction',
+          avoid_sectors: 'gambling',
+          direction: true,
+        }),
       }),
     ]);
   });

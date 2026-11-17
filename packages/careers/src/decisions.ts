@@ -9,6 +9,7 @@ import {
   PreferenceStore,
   resumeCountry,
   suggestions,
+  titleOf,
   toSummary,
   zScores,
   type Ranked,
@@ -56,6 +57,11 @@ export const decideRanked = Effect.fn('JobDecisions.decideRanked')(function* (
   const toward = preferences.direction
     ? zScores(ranked.map((r) => r.toward ?? 0))
     : null;
+  // What marks taught retrieval, against the other jobs: the shift itself
+  // is shared by every job, so only how far each moved says anything.
+  const lean = ranked.some((r) => r.order !== r.cosine)
+    ? zScores(ranked.map((r) => r.order - r.cosine))
+    : null;
   return ranked
     .map((r, at): DecidedJob => {
       const role = pickRole(
@@ -66,6 +72,8 @@ export const decideRanked = Effect.fn('JobDecisions.decideRanked')(function* (
       );
       return {
         ...toSummary(r.row),
+        // A post without a title is named by the role in it that fits.
+        title: titleOf(r.row.posting) || r.role || 'Open roles',
         score: r.score,
         mark: r.mark,
         role: r.role,
@@ -77,7 +85,7 @@ export const decideRanked = Effect.fn('JobDecisions.decideRanked')(function* (
           placed,
           fit: r.fit,
           cosine: r.cosine,
-          order: r.order,
+          marks: lean ? lean[at] ?? 0 : null,
           needs: needsOf(role, r.row.posting),
           have,
           level: insight.level,

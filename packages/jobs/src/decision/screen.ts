@@ -24,6 +24,14 @@ const employmentText: Record<string, string> = {
   cofounder: 'A co-founder role',
 };
 
+const kindText: Record<string, string> = {
+  full_time: 'full-time',
+  part_time: 'part-time',
+  contract: 'contract',
+  internship: 'internship',
+  cofounder: 'co-founder',
+};
+
 const levelText: Record<string, string> = {
   intern: 'An internship',
   junior: 'A junior role',
@@ -94,21 +102,32 @@ export const screen = (input: DecisionInput): Weighed | null => {
     p.employmentType !== 'unspecified' &&
     !want.employment.includes(p.employmentType)
   ) {
-    return ruled('employment', `${employmentText[p.employmentType]} work`);
+    return ruled(
+      'employment',
+      `${employmentText[p.employmentType]}; you want ${listText(
+        want.employment.map((e) => kindText[e])
+      )} work`
+    );
   }
   if (
     want.levels.length > 0 &&
     p.seniority !== 'unspecified' &&
     !want.levels.includes(p.seniority)
   ) {
-    return ruled('level', levelText[p.seniority] ?? 'Not a level you want');
+    return ruled(
+      'level',
+      `${levelText[p.seniority] ?? 'A level'} isn’t one you’d take`
+    );
   }
   if (want.needsVisa && p.visa === 'no') {
     return ruled('visa', 'No visa sponsorship');
   }
   const avoided = facts.sectors.filter((s) => want.avoidSectors.includes(s));
   if (avoided.length > 0) {
-    return ruled('sector', listText(avoided.map((s) => sectorLabels[s])));
+    return ruled(
+      'sector',
+      `${listText(avoided.map((s) => sectorLabels[s]))}, which you avoid`
+    );
   }
   const avoid = new Set(want.avoidSkills.map(skillKey));
   const required = input.needs

@@ -21,10 +21,23 @@ export {
 export { OpenAiJobs } from './openai';
 export { fromLegacy } from './legacy';
 export { toV1Job, v1Options, v1Select, type V1Options } from './v1';
-export { companyOf, placeOf, toJob, toSummary, type JobRow } from './summary';
+export {
+  companyOf,
+  placeOf,
+  titleOf,
+  toJob,
+  toSummary,
+  type JobRow,
+} from './summary';
 export { careerDirections, familyOf, resumeSkills } from './directions';
 export { SKILL_ALIASES } from './skillAliases';
-export { foldSkill, isKnownSkill, skillKey, skillName } from './skillNames';
+export {
+  foldSkill,
+  isKnownSkill,
+  skillChoices,
+  skillKey,
+  skillName,
+} from './skillNames';
 export * from './decision';
 export {
   CompanyFacts,
@@ -39,6 +52,7 @@ export type { MarkMeta } from './marks';
 export {
   isStated,
   noPreferences,
+  preferenceSummary,
   PreferenceStore,
   type PreferenceSource,
 } from './preferences';

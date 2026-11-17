@@ -17,6 +17,7 @@ import { writeFileSync } from 'node:fs';
 import type { JobPreferences } from '@repo/api';
 import {
   insightStore,
+  isSkillKey,
   resumeEntries,
   resumeKey,
   skillsShown,
@@ -119,14 +120,16 @@ const main = Effect.gen(function* () {
       read.find(
         (r) => fit && r.title.toLowerCase() === fit.role.toLowerCase()
       ) ?? read[0];
-    const needs = role?.requirements.length
-      ? role.requirements.map((r) => ({
-          key: skillKey(r.skill),
-          name: r.skill,
-          need: r.need,
-          years: r.years,
-        }))
-      : null;
+    // As needsOf: kinds of work and qualifications aren't skills.
+    const asked = (role?.requirements ?? [])
+      .map((r) => ({
+        key: skillKey(r.skill),
+        name: r.skill,
+        need: r.need,
+        years: r.years,
+      }))
+      .filter((n) => isSkillKey(n.key));
+    const needs = asked.length > 0 ? asked : null;
     const inputFor = (preferences: JobPreferences) => ({
       posting: j.posting,
       facts: facts.get(j.id) ?? noFacts,
@@ -135,7 +138,7 @@ const main = Effect.gen(function* () {
       fit: fit?.score ?? null,
       cosine,
       // No marks: they are what's being predicted.
-      order: cosine,
+      marks: null,
       needs,
       have,
       level,

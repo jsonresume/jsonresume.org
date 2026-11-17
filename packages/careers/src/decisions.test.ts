@@ -159,7 +159,10 @@ describe('job decisions', () => {
         [j.decision.verdict, j.decision.reasons[0]?.text],
       ])
     );
-    expect(verdicts['Ads Co']).toEqual(['ruled_out', 'Adtech and marketing']);
+    expect(verdicts['Ads Co']).toEqual([
+      'ruled_out',
+      'Adtech and marketing, which you avoid',
+    ]);
     expect(verdicts['Office Co']).toEqual([
       'ruled_out',
       'In an office; you want remote work anywhere',
