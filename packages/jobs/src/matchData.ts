@@ -3,6 +3,7 @@ import { SqlClient } from 'effect/sql';
 import { createHash } from 'node:crypto';
 import { openJobs } from './board';
 import { Embedder } from './embedder';
+import { CompanyFacts, noFacts } from './facts';
 import { decodePosting } from './posting';
 import { postText } from './postText';
 import type { JobRow } from './summary';
@@ -15,6 +16,7 @@ const Open = Schema.Struct({
   family_months: Schema.Number,
   html: Schema.String,
   embedding: Schema.Uint8Array,
+  facts: Schema.NullOr(Schema.fromJsonString(CompanyFacts)),
 });
 const Cached = Schema.Struct({ embedding: Schema.Uint8Array });
 const rows = <S extends Schema.Constraint>(schema: S) =>
@@ -29,8 +31,11 @@ export const matchData = Effect.gen(function* () {
   const openJobRows = yield* Effect.cachedWithTTL(
     sql`
       SELECT j.id::float8 AS id, j.parsed, j.posted_at,
-             j.family_months::float8 AS family_months, j.html, j.embedding
-      FROM app.jobs j WHERE ${sql.literal(openJobs)} AND j.embedding IS NOT NULL
+             j.family_months::float8 AS family_months, j.html, j.embedding,
+             f.facts::text AS facts
+      FROM app.jobs j LEFT JOIN app.job_facts f ON f.job_id = j.id WHERE ${sql.literal(
+        openJobs
+      )} AND j.embedding IS NOT NULL
     `.pipe(
       Effect.flatMap(rows(Open)),
       Effect.map((open) =>
@@ -47,6 +52,7 @@ export const matchData = Effect.gen(function* () {
                 } satisfies JobRow,
                 vector: fromBytes(r.embedding),
                 text: postText(r.html),
+                facts: r.facts ?? noFacts,
               },
             ],
           })

@@ -41,3 +41,5 @@ export {
   resumeFoundations,
   resumeKey,
 } from './resumeEntries';
+export { decideRanked, JobDecisions } from './decisions';
+export { needsOf, skillsShown } from './decisionInputs';

@@ -2,6 +2,7 @@ import { Schema } from 'effect';
 import { HttpApiEndpoint, HttpApiGroup } from 'effect/http-api';
 import { Authentication } from './Authentication';
 import { JobNotFound, NoResume } from './errors';
+import { MarkSource, PassReason } from './jobMarks';
 
 export const RemoteScope = Schema.Literals([
   'onsite',
@@ -179,7 +180,13 @@ export class MyJobsApi extends HttpApiGroup.make('myJobs')
     }),
     HttpApiEndpoint.put('mark', '/:id', {
       params: { id: Schema.NumberFromString },
-      payload: Schema.Struct({ mark: Schema.NullOr(JobMark) }),
+      payload: Schema.Struct({
+        mark: Schema.NullOr(JobMark),
+        reason: Schema.optionalKey(PassReason),
+        source: Schema.optionalKey(MarkSource),
+        /** Where the job sat in the list when marked, from 0. */
+        position: Schema.optionalKey(Schema.Number),
+      }),
       error: JobNotFound,
     })
   )

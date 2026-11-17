@@ -5,11 +5,13 @@ import {
   JobMark,
   JobMatch,
   JobSummary,
+  PassReason,
   Seniority,
 } from '@repo/api';
 import { filterJobs } from '@repo/job-board/filters';
 import { Filters, filtersOf, limitOf } from './jobFilters';
 import { careerDirections, JobBoard, JobMatcher, toSummary } from '@repo/jobs';
+import { track } from '@repo/posthog';
 import { Effect, Schema } from 'effect';
 import { Tool, Toolkit } from 'effect/ai';
 import { caller, describe, failing, failWith, hints } from './context';
@@ -65,6 +67,7 @@ export const JobToolkit = Toolkit.make(
       id: Count,
       mark: Schema.NullOr(JobMark),
       note: optional(Schema.String),
+      reason: optional(PassReason, 'Why it is not for you (not_interested)'),
     }),
     success: Schema.Struct({ id: Schema.Number, mark: Schema.NullOr(JobMark) }),
     ...failing,
@@ -131,12 +134,22 @@ export const JobHandlers = JobToolkit.toLayer(
               : null;
           return { job, url: jobUrl(id), mark };
         }),
-      mark_job: ({ id, mark, note }) =>
+      mark_job: ({ id, mark, note, reason }) =>
         Effect.gen(function* () {
           const user = yield* caller;
           if (!(yield* matcher.exists(id)))
             return yield* failWith(`No job ${id}.`);
-          yield* matcher.mark(user.id, id, mark, note ?? null);
+          const shown = yield* matcher.mark(user.id, id, mark, note ?? null, {
+            reason,
+            source: 'mcp',
+          });
+          yield* track(user.id, 'job_marked', {
+            job_id: id,
+            mark,
+            reason: reason ?? null,
+            source: 'mcp',
+            ...shown,
+          });
           return { id, mark };
         }),
       get_career_directions: () =>

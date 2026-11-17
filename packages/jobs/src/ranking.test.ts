@@ -1,3 +1,4 @@
+import { noFacts } from './facts';
 import { describe, expect, it } from 'vitest';
 import { fitLimit, resumeLevel } from './level';
 import { finish, retrieve, type OpenJob } from './ranking';
@@ -57,6 +58,7 @@ const open = (id: number, p: Partial<Posting>, x: number): OpenJob => {
     row: { id, posting: posting(p), postedAt: new Date(now), months: 1 },
     vector,
     text: '',
+    facts: noFacts,
   };
 };
 

@@ -15,6 +15,9 @@ import { ProposalsApi } from './ProposalsApi';
 import { ResumeVersionsApi } from './ResumeVersionsApi';
 import { VariantsApi } from './VariantsApi';
 import { JobsApi, MyJobsApi } from './JobsApi';
+export * from './JobDecisionsApi';
+export { MarkSource, PassReason, passReasonLabels } from './jobMarks';
+import { JobDecisionsApi } from './JobDecisionsApi';
 export {
   CareerApi,
   CareerEdge,
@@ -165,6 +168,7 @@ export class JsonResumeApi extends HttpApi.make('jsonresume')
   .add(ImportApi)
   .add(JobsApi)
   .add(MyJobsApi)
+  .add(JobDecisionsApi)
   .add(CareerApi)
   .add(ExploreApi)
   .add(MyListingApi)

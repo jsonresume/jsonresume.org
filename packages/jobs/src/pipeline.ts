@@ -1,6 +1,7 @@
 import { Cause, Clock, Effect, Option } from 'effect';
 import { Embedder } from './embedder';
 import { repostFamilies } from './families';
+import { refreshFacts } from './factsRefresh';
 import { HackerNews } from './hackerNews';
 import { JobParser } from './parser';
 import { decodePosting, embeddingText, type Posting } from './posting';
@@ -61,6 +62,7 @@ export const runPipeline = Effect.fn('Jobs.pipeline')(function* (
     parseFailed: 0,
     embedded: 0,
     families: 0,
+    facts: 0,
   };
   const count = (key: string, n = 1) =>
     Effect.sync(() => {
@@ -172,6 +174,9 @@ export const runPipeline = Effect.fn('Jobs.pipeline')(function* (
     importPosts.pipe(
       Effect.andThen(parse),
       Effect.andThen(embed),
+      Effect.andThen(
+        refreshFacts().pipe(Effect.flatMap(({ read }) => count('facts', read)))
+      ),
       // Families only change when jobs come or go.
       Effect.andThen(
         Effect.suspend(() =>

@@ -1,7 +1,9 @@
 import { OpenAiClient } from '@effect/ai-openai';
 import { Config, Effect, Layer, Option } from 'effect';
 import { FetchHttpClient } from 'effect/http';
+import { PreferenceStore } from '@repo/jobs';
 import { CareerGraphs } from './careerGraph';
+import { JobDecisions } from './decisions';
 import { CareerMovesLive } from './careerMoves';
 import { InsightReaderLive } from './insightReader';
 import { JobRolesLive } from './jobRoles';
@@ -35,18 +37,22 @@ export const CareerAiFromEnv: Layer.Layer<never> = Layer.unwrap(
 );
 
 /**
- * CareerGraphs and everything under it, over the database. Needs a
- * SqlClient and a JobMatcher; an Embedder, when given, matches skills by
- * meaning.
+ * CareerGraphs and JobDecisions, and everything under them, over the
+ * database. Needs a SqlClient and a JobMatcher; an Embedder, when given,
+ * matches skills by meaning.
  */
-export const CareersLive = CareerGraphs.layer.pipe(
+export const CareersLive = Layer.mergeAll(
+  CareerGraphs.layer,
+  JobDecisions.layer
+).pipe(
   Layer.provideMerge(
     Layer.mergeAll(
       ResumeInsightsLive,
       JobRolesLive,
       CareerMovesLive,
       PlanStore.layer,
-      Snapshots.layer
+      Snapshots.layer,
+      PreferenceStore.layer
     )
   ),
   Layer.provideMerge(SkillCatalogLive),

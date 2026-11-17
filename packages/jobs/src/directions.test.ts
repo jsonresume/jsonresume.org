@@ -1,3 +1,4 @@
+import { noFacts } from './facts';
 import { expect, it } from 'vitest';
 import { careerDirections, familyOf } from './directions';
 import type { Ranked } from './matcher';
@@ -28,6 +29,9 @@ const job = (
   role: null,
   why: null,
   limits: [],
+  facts: noFacts,
+  toward: null,
+  fit: null,
 });
 
 it('names kinds of role from titles, most specific first', () => {

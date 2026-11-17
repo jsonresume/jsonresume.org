@@ -49,7 +49,9 @@ export const buildOpen = (
       };
       need.set(r.skill.id, {
         name: r.skill.name,
-        score: was.score + (r.need === 'required' ? 1 : 0.5),
+        // Gaps in jobs they'd want count for more (appeal 0.5 counts once).
+        score:
+          was.score + (r.need === 'required' ? 1 : 0.5) * (0.5 + job.appeal),
         jobs: was.jobs + 1,
       });
     }

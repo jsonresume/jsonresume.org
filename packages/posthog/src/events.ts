@@ -18,7 +18,10 @@ export type ProductEventName =
   | 'mcp_client_connected'
   | 'import_started'
   | 'import_finished'
-  | 'theme_chosen';
+  | 'theme_chosen'
+  | 'jobs_decided'
+  | 'job_marked'
+  | 'job_preferences_saved';
 
 /** Plain values only: never an email, a name or resume text. */
 export type ProductEventProperties = Readonly<

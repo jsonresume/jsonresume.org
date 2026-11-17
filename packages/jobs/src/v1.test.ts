@@ -1,3 +1,4 @@
+import { noFacts } from './facts';
 import { expect, it } from 'vitest';
 import type { Ranked } from './matcher';
 import { posting } from './test/fixtures';
@@ -19,6 +20,9 @@ const ranked = (id: number, days: number, p = {}): Ranked => ({
   role: null,
   why: null,
   limits: [],
+  facts: noFacts,
+  toward: null,
+  fit: null,
 });
 const jobs = [
   ranked(1, 5, {

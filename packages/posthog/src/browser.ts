@@ -81,6 +81,12 @@ export const identify = (accountId: string, username: string) =>
 /** On sign out: later events belong to nobody. */
 export const forget = () => withClient((posthog) => posthog.reset());
 
+/** Something a person did on the page, with plain values only (never their words). */
+export const track = (
+  event: string,
+  properties: Readonly<Record<string, string | number | boolean | null>> = {}
+) => withClient((posthog) => void posthog.capture(event, properties));
+
 /** An error React caught, so it never reached window.onerror. */
 export const captureError = (error: unknown) =>
   withClient((posthog) => posthog.captureException(error));
