@@ -31,7 +31,7 @@ const input = (
     placed: true,
     fit: 80,
     cosine: 0.55,
-    order: 0.55,
+    marks: null,
     needs: [need('TypeScript'), need('React')],
     have: new Map([
       ['typescript', { weight: 1, years: 8 }],
@@ -49,7 +49,7 @@ describe('the decision model', () => {
     const d = decide(input());
     expect(d.verdict).toBe('apply');
     expect(d.shown).toEqual(['TypeScript', 'React']);
-    expect(d.reasons[0]?.text).toBe('You show all 2 required skills');
+    expect(d.reasons[0]?.text).toBe('You show both required skills');
     expect(d.value).toBe(Math.round(d.appeal * (0.5 + d.chance / 200)));
   });
 
@@ -74,6 +74,16 @@ describe('the decision model', () => {
       })
     );
     expect(gambling.verdict).toBe('ruled_out');
+    expect(gambling.reasons[0]?.text).toBe('Gambling, which you avoid');
+    const contract = decide(
+      input({
+        want: { employment: ['full_time', 'part_time'] },
+        posting: { employmentType: 'contract' },
+      })
+    );
+    expect(contract.reasons[0]?.text).toBe(
+      'Contract; you want full-time and part-time work'
+    );
     expect(decide(input({ eligible: 'no' })).verdict).toBe('ruled_out');
     const php = decide(input({ want: { avoidSkills: ['typescript'] } }));
     expect(php.reasons[0]?.text).toBe(
@@ -94,6 +104,25 @@ describe('the decision model', () => {
     expect(d.missing).toEqual(['Kubernetes', 'Go']);
     expect(d.reasons.map((r) => r.text)).toContain('Missing Kubernetes and Go');
     expect(d.reasons.map((r) => r.text)).toContain('Developer tools');
+  });
+
+  it('credits a requirement naming several skills by the ones shown', () => {
+    const d = decide(input({ needs: [need('React/TypeScript'), need('Go')] }));
+    expect(d.shown).toEqual(['React/TypeScript']);
+    expect(d.missing).toEqual(['Go']);
+    const one = decide(input({ needs: [need('TypeScript')] }));
+    expect(one.reasons[0]?.text).toBe(
+      'You show TypeScript, the one required skill'
+    );
+  });
+
+  it('counts marks against the other jobs, gently, and not at all when slight', () => {
+    const plain = decide(input()).appeal;
+    expect(decide(input({ marks: 0.3 })).appeal).toBe(plain);
+    const liked = decide(input({ marks: 2 }));
+    expect(liked.appeal).toBe(plain + 10);
+    expect(liked.reasons.map((r) => r.text)).toContain('Like jobs you saved');
+    expect(decide(input({ marks: -5 })).appeal).toBe(plain - 10);
   });
 
   it('counts years: a requirement shown for too few years is partly met', () => {

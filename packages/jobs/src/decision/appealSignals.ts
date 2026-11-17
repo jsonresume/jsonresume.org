@@ -43,7 +43,7 @@ export const stack = (input: DecisionInput) => {
 /**
  * Where they want to go (a z-score, gently: two standard deviations closer
  * is the most it counts; measured, a stated direction says less than pay),
- * the level, and what their marks taught retrieval.
+ * the level, and how like the jobs they saved it is, against the rest.
  */
 export const direction = (input: DecisionInput) => {
   const found: Contribution[] = [];
@@ -74,14 +74,15 @@ export const direction = (input: DecisionInput) => {
     found.push(
       add(0.04, { factor: 'level', tone: 'good', text: 'A step up' }, 'growth')
     );
-  const nudge = clamp((input.order - input.cosine) * 4, -0.1, 0.1);
-  if (Math.abs(nudge) > 0.02) {
-    const text = nudge > 0 ? 'Like jobs you saved' : 'Like jobs you passed on';
+  if (input.marks !== null && Math.abs(input.marks) >= 0.5) {
+    // Gently, as direction: two standard deviations is the most it counts.
+    const m = clamp(input.marks / 2, -1, 1);
+    const text = m > 0 ? 'Like jobs you saved' : 'Like jobs you passed on';
     found.push(
       add(
-        nudge,
-        Math.abs(nudge) > 0.04
-          ? { factor: 'marks', tone: nudge > 0 ? 'good' : 'bad', text }
+        0.1 * m,
+        Math.abs(m) > 0.5
+          ? { factor: 'marks', tone: m > 0 ? 'good' : 'bad', text }
           : null
       )
     );

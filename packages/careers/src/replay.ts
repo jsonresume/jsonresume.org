@@ -2,3 +2,4 @@
 export { needsOf, skillsShown } from './decisionInputs';
 export { insightStore } from './insightStore';
 export { resumeEntries, resumeKey } from './resumeEntries';
+export { isSkillKey } from './skillNames';

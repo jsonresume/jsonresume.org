@@ -66,8 +66,8 @@ const job = (
   months: 1,
   score: 82,
   mark,
-  role: null,
-  why: 'You built this kind of thing',
+  role: id === 1 ? 'Design Engineer' : null,
+  why: 'you: built this kind of thing',
   decision: decision(over),
 });
 
@@ -114,6 +114,8 @@ describe('the decided jobs page', () => {
     expect(
       screen.getByText('You show all 4 required skills')
     ).toBeInTheDocument();
+    expect(screen.getByText('Your role here: Design Engineer')).toBeVisible();
+    expect(screen.getByText('Built this kind of thing')).toBeInTheDocument();
     expect(screen.getByRole('meter', { name: 'Chance' })).toHaveAttribute(
       'aria-valuenow',
       '80'

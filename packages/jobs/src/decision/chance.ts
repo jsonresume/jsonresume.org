@@ -1,4 +1,5 @@
 import { fitScore } from '../ranking';
+import { skillChoices } from '../skillNames';
 import {
   clamp,
   levelGap,
@@ -29,6 +30,21 @@ export interface Coverage {
   short: ReadonlyArray<string>;
 }
 
+/**
+ * How the resume shows a requirement: by its own name, else (for one that
+ * names several, "React/TypeScript") the best shown of the skills it names.
+ */
+const shownFor = (need: Need, have: ReadonlyMap<string, Shown>) => {
+  const own = have.get(need.key);
+  if (own) return own;
+  let best: Shown | undefined;
+  for (const key of skillChoices(need.name)) {
+    const s = have.get(key);
+    if (s && (!best || s.weight > best.weight)) best = s;
+  }
+  return best;
+};
+
 /** How much of what the role requires the resume shows; null when nothing is known. */
 export const coverage = (
   needs: ReadonlyArray<Need> | null,
@@ -36,9 +52,9 @@ export const coverage = (
 ): Coverage | null => {
   const required = (needs ?? []).filter((n) => n.need === 'required');
   if (required.length === 0) return null;
-  const credits = required.map((n) => ({ n, c: credit(n, have.get(n.key)) }));
+  const credits = required.map((n) => ({ n, c: credit(n, shownFor(n, have)) }));
   const nice = (needs ?? []).filter(
-    (n) => n.need === 'nice' && have.has(n.key)
+    (n) => n.need === 'nice' && shownFor(n, have) !== undefined
   ).length;
   const base = credits.reduce((sum, { c }) => sum + c, 0) / required.length;
   return {
@@ -55,6 +71,20 @@ export const coverage = (
 /** How much a level gap leaves of the chance: a step up halves it, two more. */
 const levelFactor = (gap: number) =>
   gap >= 2 ? 0.45 : gap === 1 ? 0.75 : gap <= -2 ? 0.9 : 1;
+
+/** "You show TypeScript, the one required skill", "You show all 4 required skills". */
+const shownText = (n: number, of: number, shown: ReadonlyArray<string>) =>
+  of === 1
+    ? n === 1
+      ? `You show ${shown[0] ?? 'it'}, the one required skill`
+      : 'You don’t show its one required skill'
+    : n === of
+    ? of === 2
+      ? `You show both required skills`
+      : `You show all ${of} required skills`
+    : n === 0
+    ? `You show none of the ${of} required skills`
+    : `You show ${n} of ${of} required skills`;
 
 const levelWords: Record<number, string> = {
   1: 'A level above yours',
@@ -84,10 +114,7 @@ export const chance = (input: DecisionInput) => {
     reasons.push({
       factor: 'skills',
       tone: share >= 0.75 ? 'good' : share < 0.5 ? 'bad' : 'note',
-      text:
-        n === cover.required
-          ? `You show all ${cover.required} required skills`
-          : `You show ${n} of ${cover.required} required skills`,
+      text: shownText(n, cover.required, cover.shown),
       weight: Math.abs(cover.value - 0.5) + 0.2,
     });
     if (cover.missing.length > 0) {

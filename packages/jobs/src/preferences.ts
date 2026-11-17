@@ -29,6 +29,11 @@ const clean = (p: JobPreferences): JobPreferences => {
   return {
     ...p,
     workplaces: [...new Set(p.workplaces)],
+    employment: [...new Set(p.employment)],
+    levels: [...new Set(p.levels)],
+    avoidSectors: [...new Set(p.avoidSectors)],
+    likeSectors: [...new Set(p.likeSectors)],
+    stages: [...new Set(p.stages)],
     payFloor: pay(p.payFloor),
     payTarget: pay(p.payTarget),
     wantSkills: words(p.wantSkills),
@@ -43,6 +48,26 @@ const clean = (p: JobPreferences): JobPreferences => {
 export const isStated = (p: JobPreferences) =>
   encode(clean({ ...p, dismissed: [] })) !==
   encode({ ...noPreferences, dismissed: [] });
+
+/**
+ * Which preferences are set, for analytics: the chosen options (fixed
+ * vocabularies) and counts, never pay amounts, skills or the words they wrote.
+ */
+export const preferenceSummary = (p: JobPreferences) => ({
+  workplaces: p.workplaces.join(',') || null,
+  pay_floor: p.payFloor !== null,
+  pay_target: p.payTarget !== null,
+  employment: p.employment.join(',') || null,
+  levels: p.levels.join(',') || null,
+  avoid_sectors: p.avoidSectors.join(',') || null,
+  like_sectors: p.likeSectors.join(',') || null,
+  stages: p.stages.join(',') || null,
+  want_skills: p.wantSkills.length,
+  avoid_skills: p.avoidSkills.length,
+  direction: p.direction.length > 0,
+  priorities: p.priorities.join(',') || null,
+  needs_visa: p.needsVisa,
+});
 
 /** What each person wants from their next job, and every change to it. */
 export class PreferenceStore extends Context.Service<

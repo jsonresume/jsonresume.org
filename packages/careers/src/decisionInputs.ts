@@ -1,12 +1,20 @@
 import {
   resumeSkills,
+  skillChoices,
   skillKey,
   type Need,
   type Posting,
   type Shown,
 } from '@repo/jobs';
 import { evidenceWeight } from './graph/inputs';
-import type { JobRole, ResumeEntry, ResumeInsight } from './services';
+import type {
+  JobRole,
+  Requirement,
+  ResumeEntry,
+  ResumeInsight,
+  Skill,
+} from './services';
+import { isSkillKey } from './skillNames';
 
 /** Years an entry covers, current ones to this year. */
 const span = (e: ResumeEntry, year: number) =>
@@ -51,25 +59,50 @@ export const skillsShown = (
 
 /**
  * What a job asks for: the fitting role's requirements once its post is
- * read; until then the skills the post names, all as required.
+ * read; until then the skills the post names, all as required. Kinds of
+ * work ("Backend", "AI") and qualifications ("5+ years") aren't skills to
+ * show, as on the Tree.
  */
 export const needsOf = (
   role: JobRole | null,
   posting: Posting
 ): ReadonlyArray<Need> | null => {
-  if (role && role.requirements.length > 0) {
-    return role.requirements.map((r) => ({
-      key: r.skill.key,
-      name: r.skill.name,
-      need: r.need,
-      years: r.years,
-    }));
-  }
-  if (posting.skills.length === 0) return null;
-  return posting.skills.map((s) => ({
-    key: skillKey(s.name),
-    name: s.name,
-    need: 'required',
-    years: null,
-  }));
+  const needs: ReadonlyArray<Need> =
+    role && role.requirements.length > 0
+      ? role.requirements.map((r) => ({
+          key: r.skill.key,
+          name: r.skill.name,
+          need: r.need,
+          years: r.years,
+        }))
+      : posting.skills.map((s) => ({
+          key: skillKey(s.name),
+          name: s.name,
+          need: 'required' as const,
+          years: null,
+        }));
+  const skills = needs.filter((n) => isSkillKey(n.key));
+  return skills.length > 0 ? skills : null;
+};
+
+/**
+ * Requirements as the resume meets them: one naming several skills
+ * ("React/TypeScript") that the resume shows one of becomes that skill,
+ * not a gap to close.
+ */
+export const asShown = (
+  requirements: ReadonlyArray<Requirement>,
+  have: ReadonlySet<number>,
+  byKey: ReadonlyMap<string, Skill>
+): ReadonlyArray<Requirement> => {
+  const met = requirements.map((r) => {
+    if (have.has(r.skill.id)) return r;
+    const shown = skillChoices(r.skill.name).flatMap(
+      (key) => byKey.get(key) ?? []
+    )[0];
+    return shown ? { ...r, skill: shown } : r;
+  });
+  // A skill named twice ("TypeScript", "React/TypeScript") counts once.
+  const seen = new Set<number>();
+  return met.filter((r) => !seen.has(r.skill.id) && !!seen.add(r.skill.id));
 };
