@@ -4,6 +4,7 @@ import {
   DEFAULT_THEME,
   renderTheme,
   ResumeDocument,
+  themeSlug,
   themeSlugs,
 } from '@repo/resume-themes';
 import { withTracking } from '@repo/analytics';
@@ -119,7 +120,8 @@ export const resumeOutcome = Effect.fn('resumeOutcome')(function* (url: URL) {
     );
   }
 
-  const theme = query ?? metaTheme(doc.value)?.toLowerCase() ?? DEFAULT_THEME;
+  const written = query ?? metaTheme(doc.value);
+  const theme = written ? themeSlug(written) : DEFAULT_THEME;
   return yield* renderTheme(theme, doc.value).pipe(
     Effect.flatMap((html) =>
       format === 'pdf'
@@ -162,6 +164,7 @@ export const resumeOutcome = Effect.fn('resumeOutcome')(function* (url: URL) {
             theme,
             username,
             message: e.message,
+            at: e.at,
           }),
           problem({ kind: 'theme-failed', username, theme }, true)
         ),
