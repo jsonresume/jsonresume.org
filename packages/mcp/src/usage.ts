@@ -1,6 +1,7 @@
 import type { ProductEventName, ProductEventProperties } from '@repo/posthog';
 import { Effect, Option, Schema } from 'effect';
-import { HttpServerRequest } from 'effect/http';
+import { HttpServerRequest, type HttpServerResponse } from 'effect/http';
+import { toolOutcome } from './toolOutcome';
 
 /**
  * How a caller reached /mcp: through an OAuth app (by its registered name,
@@ -35,29 +36,50 @@ export type Track = (
 ) => Effect.Effect<void>;
 
 /**
- * Counts what a request does: a tool call, or a client connecting (with the
- * name and version it gives itself, "claude-ai", "cursor"). The body is read
- * once and cached, so the MCP server still reads it.
+ * Counts a client connecting (with the name and version it gives itself,
+ * "claude-ai", "cursor"), and gives back the tool a tools/call names, for
+ * reportToolCall once it has answered. The body is read once and cached,
+ * so the MCP server still reads it.
  */
 export const reportUsage = (track: Track, userId: string, caller: Caller) =>
   Effect.gen(function* () {
     const request = yield* HttpServerRequest.HttpServerRequest;
-    if (request.method !== 'POST') return;
+    if (request.method !== 'POST') return undefined;
     const body = Schema.decodeUnknownOption(McpRequest)(yield* request.text);
-    if (Option.isNone(body)) return;
-    const { via, app } = caller;
-    if (body.value.method === 'tools/call') {
-      return yield* track(userId, 'mcp_tool_called', {
-        tool: body.value.params.name,
-        via,
-        app,
-      });
-    }
+    if (Option.isNone(body)) return undefined;
+    if (body.value.method === 'tools/call') return body.value.params.name;
     const { name, version } = body.value.params.clientInfo;
     yield* track(userId, 'mcp_client_connected', {
       client: name.slice(0, 64),
       client_version: version?.slice(0, 32) ?? null,
-      via,
-      app,
+      via: caller.via,
+      app: caller.app,
     });
+    return undefined;
+  }).pipe(Effect.orElseSucceed(() => undefined));
+
+/**
+ * Counts a tool call once answered: whether it worked (and if not, what
+ * kind of failure; null when the answer is still streaming) and how long
+ * it took.
+ */
+export const reportToolCall = (
+  track: Track,
+  userId: string,
+  caller: Caller,
+  call: {
+    tool: string;
+    ms: number;
+    response: HttpServerResponse.HttpServerResponse;
+  }
+) => {
+  const outcome = toolOutcome(call.response);
+  return track(userId, 'mcp_tool_called', {
+    tool: call.tool,
+    via: caller.via,
+    app: caller.app,
+    ok: outcome?.ok ?? null,
+    error: outcome?.error ?? null,
+    ms: Math.round(call.ms),
   }).pipe(Effect.ignore);
+};

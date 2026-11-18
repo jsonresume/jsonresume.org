@@ -37,9 +37,32 @@ describe('the MCP server', () => {
       },
       {
         event: 'mcp_tool_called',
-        properties: { tool: 'get_resume', via: 'api_key', app: null },
+        properties: {
+          tool: 'get_resume',
+          via: 'api_key',
+          app: null,
+          ok: true,
+          error: null,
+          ms: expect.any(Number),
+        },
       },
     ]);
+  });
+
+  it('reports a tool call that failed, by the kind of failure only', async () => {
+    const { handler, key, events } = await setup();
+    const { call, send } = await connect(handler, key);
+    expect((await call('import_resume', {})).isError).toBe(true);
+    await send('tools/call', { name: 'no_such_tool', arguments: {} });
+    const calls = events
+      .filter((e) => e.event === 'mcp_tool_called')
+      .map((e) => e.properties);
+    expect(calls[0]).toMatchObject({
+      tool: 'import_resume',
+      ok: false,
+      error: expect.stringMatching(/^[A-Za-z_]+$/),
+    });
+    expect(calls[1]).toMatchObject({ tool: 'no_such_tool', ok: false });
   });
 
   it('reports the OAuth app a client connected through', async () => {
@@ -48,7 +71,14 @@ describe('the MCP server', () => {
     await call('get_resume');
     expect(events.map((e) => e.properties)).toEqual([
       { client: 'test', client_version: '1', via: 'oauth', app: 'Claude' },
-      { tool: 'get_resume', via: 'oauth', app: 'Claude' },
+      {
+        tool: 'get_resume',
+        via: 'oauth',
+        app: 'Claude',
+        ok: true,
+        error: null,
+        ms: expect.any(Number),
+      },
     ]);
   });
 
