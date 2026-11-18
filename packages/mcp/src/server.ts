@@ -1,7 +1,7 @@
 import { ApiKeys, OAuth } from '@repo/accounts';
 import { allows } from '@repo/api';
 import { tracker } from '@repo/posthog';
-import { Effect, Layer } from 'effect';
+import { Clock, Effect, Layer } from 'effect';
 import { McpProtocol, McpServer } from 'effect/ai';
 import { HttpRouter, HttpServerRequest, HttpServerResponse } from 'effect/http';
 import { AccountHandlers, AccountToolkit } from './accountTools';
@@ -21,7 +21,7 @@ import { JobHandlers, JobToolkit } from './jobTools';
 import { Prompts } from './prompts';
 import { ResumeHandlers, ResumeToolkit } from './resumeTools';
 import { VersionHandlers, VersionToolkit } from './versionTools';
-import { reportUsage, type Caller } from './usage';
+import { reportToolCall, reportUsage, type Caller } from './usage';
 
 const SITE = 'https://jsonresume.org';
 
@@ -91,10 +91,24 @@ const authentication = (site: string) =>
           if (!found)
             return unauthorized(site, 'That token is not valid (any more)');
           const { user, id, name, caller } = found;
-          yield* reportUsage(track, user.id, caller);
-          return yield* Effect.provideService(httpEffect, McpCaller, user).pipe(
+          const tool = yield* reportUsage(track, user.id, caller);
+          const started = yield* Clock.currentTimeMillis;
+          const response = yield* Effect.provideService(
+            httpEffect,
+            McpCaller,
+            user
+          ).pipe(
             Effect.provideService(McpActor, { kind: 'assistant', id, name })
           );
+          if (tool !== undefined) {
+            const ms = (yield* Clock.currentTimeMillis) - started;
+            yield* reportToolCall(track, user.id, caller, {
+              tool,
+              ms,
+              response,
+            });
+          }
+          return response;
         });
     })
   );
