@@ -62,9 +62,10 @@ const capitals = (word: string) => word.replace(/[^A-Z]/g, '').length;
  * Whether one word of the resume is a one-word name: "AWS" and "PyTorch"
  * as written, with their capitals; "Python" capitalised but not just for
  * starting a sentence (so "Support ..." isn't support); a lower-case name
- * when it is a known skill ("kubernetes"), or the resume writes it alone
- * as a name ("claude" in "agents on Claude"), not in a title ("Senior
- * Software Engineer") or as a plain word ("network").
+ * when it is a known skill ("kubernetes"), or the resume writes it
+ * as a name ("claude" in "agents on Claude", "runs Claude Agent SDK"),
+ * not inside a title ("Senior Software Engineer") or as a plain word
+ * ("network").
  */
 const sameWord = (name: string, words: ReadonlyArray<string>, i: number) => {
   const word = words[i] ?? '';
@@ -72,7 +73,9 @@ const sameWord = (name: string, words: ReadonlyArray<string>, i: number) => {
   if (caps >= 2) return capitals(word) >= 2;
   const named = capitals(word) >= 1 && (i > 0 || words.length <= 3);
   if (caps === 1) return named;
-  const titled = [words[i - 1], words[i + 1]].some(
+  // Inside a title, capitals stand on both sides; a product name ("Claude
+  // Agent SDK") has its own word before it.
+  const titled = [words[i - 1], words[i + 1]].every(
     (w) => w !== undefined && /^[A-Z]/.test(w)
   );
   return (named && !titled) || isKnownSkill(skillKey(name));
@@ -87,7 +90,12 @@ const sameWord = (name: string, words: ReadonlyArray<string>, i: number) => {
  * named when any of them is.
  */
 export const resumeMentions = (resume: unknown) => {
-  const sentences = [...resumeLines(resume), ...languages(resume)]
+  const sentences = [
+    // Employers' names say nothing of skills: "Electronic Frontier
+    // Foundation" isn't electronics.
+    ...resumeLines(resume, { employers: false }),
+    ...languages(resume),
+  ]
     .flatMap((line) => line.split(/(?<=[.!?])\s+/))
     .map(tokens);
   const at = new Map<string, Array<{ line: number; i: number }>>();

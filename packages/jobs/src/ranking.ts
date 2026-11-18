@@ -6,6 +6,16 @@ import { fitLimit } from './level';
 import type { JobRow } from './summary';
 import { dot } from './vectors';
 
+/**
+ * The model's why as a sentence: told to speak to the candidate as "you",
+ * it sometimes starts "you: ..."; that lead-in goes, the first letter is
+ * capitalised.
+ */
+export const whyText = (why: string): string => {
+  const line = why.trim().replace(/^you\s*:\s*/i, '');
+  return line.charAt(0).toUpperCase() + line.slice(1);
+};
+
 /** An open job against a resume: how well it fits, and why. */
 export interface Ranked {
   row: JobRow;
@@ -123,7 +133,7 @@ export const finish = (
           mark: markOf.get(job.row.id) ?? null,
           eligible,
           role: fit?.role ?? null,
-          why: fit?.why ?? null,
+          why: fit ? whyText(fit.why) : null,
           limits: notes,
           facts: job.facts,
           toward,

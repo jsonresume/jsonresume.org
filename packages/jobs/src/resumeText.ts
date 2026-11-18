@@ -10,10 +10,15 @@ const words = (v: unknown) => list(v).map(str).filter(Boolean).join(', ');
 
 /**
  * A resume as lines of text: the role, skills, then experience, projects
- * and education. Location and contact details are left out.
+ * and education. Location and contact details are left out; employers and
+ * schools too with `employers: false`.
  */
-export const resumeLines = (resume: unknown): string[] => {
+export const resumeLines = (
+  resume: unknown,
+  { employers = true }: { employers?: boolean } = {}
+): string[] => {
   const basics = at(resume, 'basics');
+  const named = (o: unknown, key: string) => (employers ? str(at(o, key)) : '');
   return [
     str(at(basics, 'label')),
     str(at(basics, 'summary')),
@@ -27,9 +32,7 @@ export const resumeLines = (resume: unknown): string[] => {
       .join('\n'),
     ...list(at(resume, 'work')).map((w) =>
       [
-        [str(at(w, 'position')), str(at(w, 'name'))]
-          .filter(Boolean)
-          .join(' at '),
+        [str(at(w, 'position')), named(w, 'name')].filter(Boolean).join(' at '),
         str(at(w, 'summary')),
         list(at(w, 'highlights')).map(str).filter(Boolean).join('\n'),
       ]
@@ -42,7 +45,7 @@ export const resumeLines = (resume: unknown): string[] => {
         .join(': ')
     ),
     ...list(at(resume, 'education')).map((e) =>
-      [str(at(e, 'studyType')), str(at(e, 'area')), str(at(e, 'institution'))]
+      [str(at(e, 'studyType')), str(at(e, 'area')), named(e, 'institution')]
         .filter(Boolean)
         .join(' ')
     ),
