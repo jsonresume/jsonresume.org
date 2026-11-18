@@ -3,6 +3,7 @@ import { Config, Effect, Layer, type Redacted } from 'effect';
 import { Migrator, SqlClient, type SqlError } from 'effect/sql';
 import { migrations } from './migrations';
 
+export { jsonbText } from './jsonb';
 export { migrations } from './migrations';
 
 /** Postgres from DATABASE_URL, migrated before anything uses it. */
