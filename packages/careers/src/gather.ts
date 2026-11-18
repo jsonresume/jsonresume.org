@@ -9,6 +9,7 @@ import {
   CareerMoves,
   JobRoles,
   SkillCatalog,
+  type Requirement,
   type ResumeInsight,
 } from './services';
 
@@ -50,7 +51,9 @@ export const gather = Effect.fn('Careers.gather')(function* (
   ranked: ReadonlyArray<Ranked>,
   year: number,
   /** How much they'd want each job, 0 to 1, when decided. */
-  appeal: ReadonlyMap<number, number> = new Map()
+  appeal: ReadonlyMap<number, number> = new Map(),
+  /** Whether the resume's text names a skill (`resumeMentions`). */
+  mentions: (name: string) => boolean = () => false
 ) {
   const roles = yield* JobRoles;
   const catalog = yield* SkillCatalog;
@@ -82,6 +85,10 @@ export const gather = Effect.fn('Careers.gather')(function* (
   const have = new Set(insight.evidence.map((e) => e.skill.id));
   const byKey = new Map(insight.evidence.map((e) => [e.skill.key, e.skill]));
   const worked = new Set(insight.entries.flatMap((e) => e.family ?? []));
+  // A skill the resume names, though no evidence was read for it, isn't a
+  // gap to close: the decisions count it as shown too.
+  const toClose = (r: Requirement) =>
+    have.has(r.skill.id) || !mentions(r.skill.name);
   const jobs = shown.map((r): GraphJob => {
     const role = pickRole(roleMap.get(r.row.id) ?? [], r.role, have, worked);
     return {
@@ -92,14 +99,13 @@ export const gather = Effect.fn('Careers.gather')(function* (
         role?.family ??
         FROM_KIND[familyOf(r.role ?? r.row.posting.title)] ??
         'other_tech',
-      requirements: role
+      requirements: (role
         ? asShown(role.requirements, have, byKey)
-        : r.row.posting.skills.flatMap((s) => {
+        : r.row.posting.skills.flatMap((s): Requirement[] => {
             const skill = resolved.get(s.name);
-            return skill
-              ? [{ skill, need: 'required' as const, years: null }]
-              : [];
-          }),
+            return skill ? [{ skill, need: 'required', years: null }] : [];
+          })
+      ).filter(toClose),
     };
   });
 

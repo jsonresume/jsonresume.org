@@ -21,6 +21,7 @@ import {
   resumeEntries,
   resumeKey,
   skillsShown,
+  withMentions,
 } from '@repo/careers/replay';
 import { ensureReadOnly, pgReadOnly } from '@repo/database';
 import {
@@ -35,6 +36,7 @@ import {
   noPreferences,
   resumeCountry,
   resumeLevel,
+  resumeMentions,
   resumeText,
   skillKey,
   zScores,
@@ -103,19 +105,15 @@ const main = Effect.gen(function* () {
     foundations: [],
     pending: false,
   };
-  const have = skillsShown(insight, resume, year);
   const country = resumeCountry(resume);
   const level = resumeLevel(resume, Date.now());
 
   const toward = zScores(
     jobs.map((j) => (direction ? dot(direction, j.vec) : 0))
   );
-  const scored: Row[] = jobs.map((j, at) => {
-    const fit = fits.get(j.id) ?? null;
-    const cosine = base && j.vec.length ? dot(base, j.vec) : 0;
-    const eligible = eligibility(j.posting, country);
-    const cap = fitLimit(j.posting, level, country ? eligible : 'yes').cap;
-    const read = roles.get(j.id) ?? [];
+  const needsFor = (id: number) => {
+    const fit = fits.get(id);
+    const read = roles.get(id) ?? [];
     const role =
       read.find(
         (r) => fit && r.title.toLowerCase() === fit.role.toLowerCase()
@@ -129,7 +127,20 @@ const main = Effect.gen(function* () {
         years: r.years,
       }))
       .filter((n) => isSkillKey(n.key));
-    const needs = asked.length > 0 ? asked : null;
+    return asked.length > 0 ? asked : null;
+  };
+  // As decideRanked: skills the text names count as mentions.
+  const have = withMentions(
+    skillsShown(insight, resume, year),
+    jobs.flatMap((j) => needsFor(j.id) ?? []),
+    resumeMentions(resume)
+  );
+  const scored: Row[] = jobs.map((j, at) => {
+    const fit = fits.get(j.id) ?? null;
+    const cosine = base && j.vec.length ? dot(base, j.vec) : 0;
+    const eligible = eligibility(j.posting, country);
+    const cap = fitLimit(j.posting, level, country ? eligible : 'yes').cap;
+    const needs = needsFor(j.id);
     const inputFor = (preferences: JobPreferences) => ({
       posting: j.posting,
       facts: facts.get(j.id) ?? noFacts,

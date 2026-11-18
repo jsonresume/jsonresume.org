@@ -5,7 +5,7 @@ import { screen } from './screen';
 import type { DecisionInput } from './types';
 
 /** Bump when the model changes: stored decisions say which made them. */
-export const DECISION_MODEL = 'decide-2';
+export const DECISION_MODEL = 'decide-3';
 
 /**
  * The expected value of applying: how much they'd want it, discounted by

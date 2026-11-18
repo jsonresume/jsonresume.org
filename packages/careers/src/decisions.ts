@@ -8,6 +8,7 @@ import {
   JobMatcher,
   PreferenceStore,
   resumeCountry,
+  resumeMentions,
   suggestions,
   titleOf,
   toSummary,
@@ -16,7 +17,7 @@ import {
 } from '@repo/jobs';
 import { Clock, Context, Duration, Effect, Layer } from 'effect';
 import { SqlClient } from 'effect/sql';
-import { needsOf, skillsShown } from './decisionInputs';
+import { needsOf, skillsShown, withMentions } from './decisionInputs';
 import { pickRole } from './pickRole';
 import { JobRoles, ResumeInsights, type ResumeInsight } from './services';
 
@@ -50,9 +51,19 @@ export const decideRanked = Effect.fn('JobDecisions.decideRanked')(function* (
 ) {
   const roles = yield* JobRoles;
   const roleMap = yield* roles.rolesOf(ranked.map((r) => r.row.id));
-  const have = skillsShown(insight, resume, year);
   const haveIds = new Set(insight.evidence.map((e) => e.skill.id));
   const worked = new Set(insight.entries.flatMap((e) => e.family ?? []));
+  const needs = ranked.map((r) =>
+    needsOf(
+      pickRole(roleMap.get(r.row.id) ?? [], r.role, haveIds, worked),
+      r.row.posting
+    )
+  );
+  const have = withMentions(
+    skillsShown(insight, resume, year),
+    needs.flatMap((n) => n ?? []),
+    resumeMentions(resume)
+  );
   const placed = resumeCountry(resume) !== undefined;
   const toward = preferences.direction
     ? zScores(ranked.map((r) => r.toward ?? 0))
@@ -63,14 +74,8 @@ export const decideRanked = Effect.fn('JobDecisions.decideRanked')(function* (
     ? zScores(ranked.map((r) => r.order - r.cosine))
     : null;
   return ranked
-    .map((r, at): DecidedJob => {
-      const role = pickRole(
-        roleMap.get(r.row.id) ?? [],
-        r.role,
-        haveIds,
-        worked
-      );
-      return {
+    .map(
+      (r, at): DecidedJob => ({
         ...toSummary(r.row),
         // A post without a title is named by the role in it that fits.
         title: titleOf(r.row.posting) || r.role || 'Open roles',
@@ -86,14 +91,14 @@ export const decideRanked = Effect.fn('JobDecisions.decideRanked')(function* (
           fit: r.fit,
           cosine: r.cosine,
           marks: lean ? lean[at] ?? 0 : null,
-          needs: needsOf(role, r.row.posting),
+          needs: needs[at] ?? null,
           have,
           level: insight.level,
           preferences,
           direction: toward ? toward[at] ?? 0 : null,
         }),
-      };
-    })
+      })
+    )
     .sort(byDecision);
 });
 

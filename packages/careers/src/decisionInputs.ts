@@ -85,6 +85,27 @@ export const needsOf = (
   return skills.length > 0 ? skills : null;
 };
 
+/** How a skill the resume only names in its text counts: as a listed one. */
+export const MENTIONED: Shown = { weight: 0.4, years: 0 };
+
+/**
+ * What the resume shows, with the skills jobs ask for that its evidence
+ * missed but its text names ("LLMs" in "LLM-as-judge"), as mentions.
+ */
+export const withMentions = (
+  have: ReadonlyMap<string, Shown>,
+  needs: Iterable<Need>,
+  mentions: (name: string) => boolean
+): ReadonlyMap<string, Shown> => {
+  const out = new Map(have);
+  for (const n of needs) {
+    const shown =
+      out.has(n.key) || skillChoices(n.name).some((k) => out.has(k));
+    if (!shown && mentions(n.name)) out.set(n.key, MENTIONED);
+  }
+  return out;
+};
+
 /**
  * Requirements as the resume meets them: one naming several skills
  * ("React/TypeScript") that the resume shows one of becomes that skill,

@@ -61,17 +61,23 @@ export const skillName = (name: string): string =>
 const CHOICE = /\s*(?:\band\/or\b|\/|,|\s+or\s+|\s+and\s+|&)\s*/i;
 
 /**
- * The skills a combined requirement names, as keys: "React/TypeScript" and
- * "Go or Rust" are each part, "AWS (ECS, Lambda)" is AWS. Empty when the
- * name is one skill, or a sentence rather than a list of skills.
+ * The skills a combined requirement names, as written: "React/TypeScript"
+ * and "Go or Rust" are each part, "AWS (ECS, Lambda)" is AWS. Empty when
+ * the name is one skill, or a sentence rather than a list of skills.
  */
-export const skillChoices = (name: string): string[] => {
+export const choiceNames = (name: string): string[] => {
   const head = name.replace(/\s*\([^()]*\)\s*$/, '').trim();
   const parts = head
     .split(CHOICE)
     .map((part) => part.trim())
     .filter((part) => part.length > 0 && part.split(/\s+/).length <= 3);
-  const keys = parts.length >= 2 ? parts.map(skillKey) : [];
-  if (head !== name.trim() && head.length > 0) keys.push(skillKey(head));
-  return [...new Set(keys)].filter((k) => k !== skillKey(name));
+  const names = parts.length >= 2 ? parts : [];
+  if (head !== name.trim() && head.length > 0) names.push(head);
+  return names;
 };
+
+/** choiceNames as keys, other than the requirement's own. */
+export const skillChoices = (name: string): string[] =>
+  [...new Set(choiceNames(name).map(skillKey))].filter(
+    (k) => k !== skillKey(name)
+  );
