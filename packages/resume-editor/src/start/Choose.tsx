@@ -8,7 +8,7 @@ import {
   Textarea,
 } from '@jsonresume/ui';
 import { IMPORT_MAX_BYTES } from '@repo/api';
-import { errorTag, importResumeAtom } from '@repo/api-client';
+import { errorTag, importResumeAtom, useSignedInHint } from '@repo/api-client';
 import { Exit } from 'effect';
 import { useState } from 'react';
 import * as s from './start.css';
@@ -34,6 +34,7 @@ export function Choose() {
   const [text, setText] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string>();
+  const signedIn = useSignedInHint();
 
   const read = async (send: () => ReturnType<typeof run>) => {
     setBusy(true);
@@ -116,8 +117,9 @@ export function Choose() {
         </section>
       </div>
       <Text size="sm" tone="muted">
-        Nothing is saved until you sign up. Your resume stays in this browser
-        until then.
+        {signedIn
+          ? 'Nothing is saved until you choose Save it. Your resume stays in this browser until then.'
+          : 'Nothing is saved until you sign up. Your resume stays in this browser until then.'}
       </Text>
     </>
   );
