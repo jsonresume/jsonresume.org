@@ -5,6 +5,8 @@ import {
 } from '@jsonresume/utils';
 import { Effect, Schema } from 'effect';
 import { createRequire } from 'node:module';
+import { withRegionCodes } from './regions.ts';
+import { withSchemaShapes } from './shapes.ts';
 import { ensureHtmlCharset } from './charset.ts';
 import { themeLoaders } from './loaders.ts';
 import { setThemeLocale } from './locale.ts';
@@ -31,8 +33,20 @@ export class ThemeFailed extends Schema.TaggedError<ThemeFailed>()(
   {
     theme: Schema.String,
     message: Schema.String,
+    /** Where in the theme it threw: the first lines of the stack. */
+    at: Schema.optional(Schema.String),
   }
 ) {}
+
+/** A theme's error as ThemeFailed, with where it threw. */
+const failed = (theme: string, error: unknown) =>
+  new ThemeFailed({
+    theme,
+    message: String(error),
+    ...(error instanceof Error && error.stack
+      ? { at: error.stack.split('\n').slice(1, 4).join(' | ').trim() }
+      : {}),
+  });
 
 interface Renderable {
   render: (resume: unknown) => string | Promise<string>;
@@ -118,7 +132,7 @@ const load = (theme: string) =>
       if (!packageName) loaded.set(theme, renderable);
       return renderable;
     },
-    catch: (error) => new ThemeFailed({ theme, message: String(error) }),
+    catch: (error) => failed(theme, error),
   });
 
 /**
@@ -138,7 +152,14 @@ export const renderTheme = Effect.fn('renderTheme')(function* (
     withLegacyBasics(
       theme,
       withProjectSummaries(
-        withStringLocations(normalizeDates(withBasics(structuredClone(resume))))
+        withStringLocations(
+          normalizeDates(
+            withRegionCodes(
+              theme,
+              withSchemaShapes(withBasics(structuredClone(resume)))
+            )
+          )
+        )
       )
     )
   );
@@ -147,7 +168,7 @@ export const renderTheme = Effect.fn('renderTheme')(function* (
       setThemeLocale(theme);
       return renderable.render(prepared);
     },
-    catch: (error) => new ThemeFailed({ theme, message: String(error) }),
+    catch: (error) => failed(theme, error),
   });
   if (typeof html !== 'string') {
     return yield* new ThemeFailed({

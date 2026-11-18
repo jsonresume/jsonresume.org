@@ -8,3 +8,4 @@ export {
   ThemeNotFound,
   themeSlugs,
 } from './render.ts';
+export { themeSlug } from './themeSlug.ts';
