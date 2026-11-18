@@ -8,15 +8,26 @@ const EXAMPLE = serialize(resume);
 export const isUntouchedExample = (draft: unknown) =>
   draft !== null && serialize(draft) === EXAMPLE;
 
-/** No resume yet: start blank, or from a complete example to edit. */
+/** Where a resume is read from a file or pasted text (/start), coming back here to save. */
+export const IMPORT_PATH = '/start';
+
+/**
+ * No resume yet: bring one in (a PDF, Word file, LinkedIn export or pasted
+ * text, read on /start and saved here), start blank, or from a complete
+ * example to edit. Of new accounts that started blank or from the example,
+ * a third left without saving (14 days to 2026-11-18).
+ */
 export function Start({ onStart }: { onStart: (resume: unknown) => void }) {
   return (
     <EmptyState
       title="Start your resume"
       action={
         <Stack direction="row" wrap gap={3} justify="center">
+          <Button asChild variant="primary">
+            <a href={IMPORT_PATH}>Import your resume</a>
+          </Button>
           <Button
-            variant="primary"
+            variant="secondary"
             onClick={() => onStart({ basics: { name: '' } })}
           >
             Start blank
@@ -27,8 +38,9 @@ export function Start({ onStart }: { onStart: (resume: unknown) => void }) {
         </Stack>
       }
     >
-      Every section is optional. The example fills each one in, so you can see
-      what goes where and replace it.
+      Have one already? Import a PDF, a Word file or your LinkedIn profile and
+      check what we read. Or fill the form yourself: every section is optional,
+      and the example shows what goes where.
     </EmptyState>
   );
 }
