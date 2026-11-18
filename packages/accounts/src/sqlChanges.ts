@@ -1,4 +1,5 @@
 import { UsernameUnavailable } from '@repo/api';
+import { jsonbText } from '@repo/database';
 import { Effect } from 'effect';
 import { SqlClient, type SqlError } from 'effect/sql';
 import type { UserRecord } from './store';
@@ -95,7 +96,7 @@ export const accountChanges = (
       sql`UPDATE app.profiles SET github_id = ${mirror.githubId}, gist_id = ${
         mirror.gistId
       },
-          resume = ${JSON.stringify(mirror.resume)}::jsonb, fetched_at = now()
+          resume = ${jsonbText(mirror.resume)}::jsonb, fetched_at = now()
         WHERE user_id = ${userId} AND kind = 'account'`.pipe(
         Effect.asVoid,
         Effect.orDie

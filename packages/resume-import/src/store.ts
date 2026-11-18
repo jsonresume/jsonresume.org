@@ -1,4 +1,5 @@
 import { FieldConfidence, type ImportKind } from '@repo/api';
+import { jsonbText } from '@repo/database';
 import { Context, Effect, Layer, Option, Schema } from 'effect';
 import { SqlClient } from 'effect/sql';
 
@@ -82,7 +83,7 @@ export class ImportStore extends Context.Service<
             row.ms
           )},
               ${row.fields}, ${row.model}, ${row.version}, ${row.cached},
-              ${row.result === null ? null : JSON.stringify(row.result)}::jsonb
+              ${row.result === null ? null : jsonbText(row.result)}::jsonb
             )
           `.pipe(
             // Each import also forgets resumes read more than KEEP_DAYS ago.
