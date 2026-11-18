@@ -13,3 +13,4 @@ export {
 export { RoleReaderFromEnv } from './roleReaderEnv';
 export { refreshRoles } from './roleRefresh';
 export { mergePlan, mergeSkills, type Merge } from './skillMerge';
+export { embedSkills } from './skillVectors';

@@ -2,14 +2,16 @@
  * The jobs pipeline, run once: import the newest Hacker News "Who is
  * hiring?" posts, parse, embed and group them (see @repo/jobs); then read
  * the roles in new posts and what each requires, and sum up role families
- * (@repo/careers/roles), after folding together skills stored under names
- * that now read as one (mergeSkills). The jsonresume-jobs timer runs it on the box;
+ * (@repo/careers/roles), after giving skills stored without a vector one
+ * (embedSkills) and folding together skills stored under names that now
+ * read as one (mergeSkills). The jsonresume-jobs timer runs it on the box;
  * `vite build --ssr server/jobs.ts` bundles it. JOBS_DAYS widens how far
  * back it parses and embeds; JOBS_REPARSE_BEFORE (an ISO time) parses again
  * posts parsed before it, after a prompt change.
  */
 import { NodeRuntime } from '@effect/platform-node';
 import {
+  embedSkills,
   mergeSkills,
   refreshArchetypes,
   refreshRoles,
@@ -29,10 +31,16 @@ import { CareerSkills } from './careerSkills';
 
 /** Roles and archetypes: a failure here is logged, and the pipeline's run stands. */
 const careers = Effect.gen(function* () {
+  const vectors = yield* embedSkills();
   const skills = yield* mergeSkills();
   const roles = yield* refreshRoles();
   const archetypes = yield* refreshArchetypes();
-  yield* Effect.logInfo('Job roles refreshed', { skills, roles, archetypes });
+  yield* Effect.logInfo('Job roles refreshed', {
+    vectors,
+    skills,
+    roles,
+    archetypes,
+  });
 }).pipe(
   Effect.provide(Layer.mergeAll(CareerSkills, RoleReaderFromEnv)),
   Effect.catchCause((cause) =>

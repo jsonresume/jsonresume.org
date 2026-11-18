@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { asShown, needsOf } from './decisionInputs';
+import { resumeMentions, type Need } from '@repo/jobs';
+import { asShown, MENTIONED, needsOf, withMentions } from './decisionInputs';
 import type { Requirement, Skill } from './services';
 import { posting } from './test/fixtures';
 
@@ -61,5 +62,35 @@ describe('what a job asks for', () => {
     expect(
       needsOf(null, posting({ skills: [{ name: 'Backend', keywords: [] }] }))
     ).toBeNull();
+  });
+});
+
+describe('skills the resume names but its evidence missed', () => {
+  const need = (key: string, name: string): Need => ({
+    key,
+    name,
+    need: 'required',
+    years: null,
+  });
+  const mentions = resumeMentions({
+    work: [{ highlights: ['Built an LLM-as-judge gate in TypeScript.'] }],
+  });
+  const shown = { weight: 0.9, years: 4 };
+
+  it('count as mentions; evidence and combined names stay as they were', () => {
+    const have = withMentions(
+      new Map([['typescript', shown]]),
+      [
+        need('llms', 'LLMs'),
+        need('typescript', 'TypeScript'),
+        need('react/typescript', 'React/TypeScript'),
+        need('kubernetes', 'Kubernetes'),
+      ],
+      mentions
+    );
+    expect(have.get('llms')).toEqual(MENTIONED);
+    expect(have.get('typescript')).toEqual(shown);
+    expect(have.has('react/typescript')).toBe(false);
+    expect(have.has('kubernetes')).toBe(false);
   });
 });

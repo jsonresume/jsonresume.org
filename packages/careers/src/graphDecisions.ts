@@ -1,5 +1,10 @@
 import type { JobPreferences } from '@repo/api';
-import { noPreferences, PreferenceStore, type Ranked } from '@repo/jobs';
+import {
+  noPreferences,
+  PreferenceStore,
+  resumeMentions,
+  type Ranked,
+} from '@repo/jobs';
 import { Effect, Option } from 'effect';
 import { decideRanked } from './decisions';
 import { gather } from './gather';
@@ -58,5 +63,12 @@ export const gatherWanted = Effect.fn('Careers.gatherWanted')(function* (
     on.preferences,
     on.year
   );
-  return yield* gather(userId, insight, wanted.ranked, on.year, wanted.appeal);
+  return yield* gather(
+    userId,
+    insight,
+    wanted.ranked,
+    on.year,
+    wanted.appeal,
+    resumeMentions(on.resume)
+  );
 });

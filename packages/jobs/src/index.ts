@@ -10,7 +10,8 @@ export { JobParser, ParseFailed } from './parser';
 export { decodePosting, embeddingText, Posting } from './posting';
 export { postParagraphs, postText } from './postText';
 export { candidateText } from './fits';
-export { resumeText } from './resumeText';
+export { resumeLines, resumeText } from './resumeText';
+export { resumeMentions } from './resumeMentions';
 export { sharedRuns, type RunOptions, type RunState } from './sharedRuns';
 export { JobStore, MAX_PARSE_ATTEMPTS, type NewPost } from './store';
 export {
@@ -32,6 +33,7 @@ export {
 export { careerDirections, familyOf, resumeSkills } from './directions';
 export { SKILL_ALIASES } from './skillAliases';
 export {
+  choiceNames,
   foldSkill,
   isKnownSkill,
   skillChoices,

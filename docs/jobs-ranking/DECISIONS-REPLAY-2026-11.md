@@ -29,6 +29,17 @@ The final model recomputed on the previous run's rows scored 0.77. Its verdicts 
 
 Kinds of work left out of the required skills and combined requirements credited by their parts: the decision model with stated preferences scored **0.75** (top 10: 80%, top 20: 75%), today's engine 0.61 in the same run. Stretch now sorts better: 55% of stretch jobs were wanted (was 37–50%), skip 16%. The marks' z-score isn't replayed (marks are what is predicted).
 
+## Skills the resume names (2026-11-18)
+
+Required skills the resume's evidence missed but its text names now count as mentioned (`resumeMentions`). Compared within one run, so the fits are the same, on a pinned copy of the resume:
+
+| Resume as read                         | "Missing" per job | Chance AUC    | Decision AUC  |
+| -------------------------------------- | ----------------- | ------------- | ------------- |
+| With its stored reading                | 1.57 → 1.47       | 0.618 → 0.611 | 0.765 → 0.761 |
+| Listed skills only (before it is read) | 1.73 → 1.48       | 0.606 → 0.590 | 0.748 → 0.744 |
+
+What it adds is right (Claude, PyTorch, LLMs, SQL, OpenAI, Ruby); ranking moves within noise, slightly down: these past choices weren't made on skill coverage, and passed-on jobs gain shown skills too. Kept for what the reasons say. Runs that fetch the live resume aren't comparable while it is being edited: a version not yet read falls back to its listed skills.
+
 ## Caveats
 
 - One person's decisions. It shows whether the structure works, not the best weights for everyone; `job_mark_events` now stores every mark with the decision it was made against, so the next replay has many people.
