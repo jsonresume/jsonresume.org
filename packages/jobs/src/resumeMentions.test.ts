@@ -9,12 +9,13 @@ const resume = {
   skills: [{ name: 'Frontend', keywords: ['React', 'PyTorch'] }],
   work: [
     {
-      name: 'Acme',
+      name: 'Oracle Electronics',
       position: 'Senior Security Engineer',
       highlights: [
         'Built an LLM-as-judge quality gate for every response.',
         'Wrote a purpose agent execution harness for persistent sessions.',
         'Analytics ports oracle-verified for parity; can run on Claude agents.',
+        'Planned the document, then Gemini Agent runs wrote it.',
         'Shipped machine learning features with RAG over Postgres.',
       ],
     },
@@ -48,6 +49,7 @@ describe('resumeMentions', () => {
   it('needs capitals written as capitals for one-word names', () => {
     expect(mentions('Oracle')).toBe(false);
     expect(mentions('CAN')).toBe(false);
+    expect(mentions('electronics')).toBe(false);
   });
 
   it('reads a capital that only starts a sentence as no name', () => {
@@ -59,6 +61,7 @@ describe('resumeMentions', () => {
     expect(mentions('response')).toBe(false);
     expect(mentions('sessions')).toBe(false);
     expect(mentions('security')).toBe(false);
+    expect(mentions('gemini')).toBe(true);
     expect(mentions('react')).toBe(true);
   });
 

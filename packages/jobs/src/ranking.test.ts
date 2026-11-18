@@ -1,7 +1,7 @@
 import { noFacts } from './facts';
 import { describe, expect, it } from 'vitest';
 import { fitLimit, resumeLevel } from './level';
-import { finish, retrieve, type OpenJob } from './ranking';
+import { finish, retrieve, whyText, type OpenJob } from './ranking';
 import { posting } from './test/fixtures';
 import type { Posting } from './posting';
 
@@ -137,5 +137,17 @@ describe('ranking', () => {
     expect(
       finish(retrieved, fits, 'senior', new Map()).map((r) => r.row.id)
     ).toEqual([2, 1]);
+  });
+});
+
+describe("the model's why", () => {
+  it('reads as a sentence, without a "you:" lead-in', () => {
+    expect(whyText('you: cloud and distributed systems align')).toBe(
+      'Cloud and distributed systems align'
+    );
+    expect(whyText("You've shipped agent harnesses")).toBe(
+      "You've shipped agent harnesses"
+    );
+    expect(whyText('your resume shows React')).toBe('Your resume shows React');
   });
 });
