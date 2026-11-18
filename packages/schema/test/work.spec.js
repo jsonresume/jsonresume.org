@@ -217,3 +217,19 @@ test('work[].highlights[item] - invalid', (t) => {
   });
   t.end();
 });
+
+test('work[].type - valid', (t) => {
+  validate(fixtures.typeValid, (err, valid) => {
+    t.equal(err, null, 'err should be null');
+    t.true(valid, 'valid is true');
+  });
+  t.end();
+});
+
+test('work[].type - invalid', (t) => {
+  validate(fixtures.typeInvalid, (err, valid) => {
+    t.notEqual(err, null, 'err should contain an error');
+    t.false(valid, 'valid is false');
+  });
+  t.end();
+});

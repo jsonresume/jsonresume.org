@@ -151,6 +151,10 @@ export interface WorkItem {
    */
   position?: string;
   /**
+   * Employment type, free text: e.g. 'full-time', 'part-time', 'contract', 'freelance', 'internship', 'temporary'. Combinations such as 'part-time contract' are fine. The role as it was, not what you're looking for (#599).
+   */
+  type?: string;
+  /**
    * e.g. http://facebook.example.com
    */
   url?: string;

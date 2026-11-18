@@ -143,6 +143,10 @@
             "type": "string",
             "description": "e.g. Software Engineer"
           },
+          "type": {
+            "type": "string",
+            "description": "Employment type, free text: e.g. 'full-time', 'part-time', 'contract', 'freelance', 'internship', 'temporary'. Combinations such as 'part-time contract' are fine. The role as it was, not what you're looking for (#599)."
+          },
           "url": {
             "type": "string",
             "description": "e.g. http://facebook.example.com",

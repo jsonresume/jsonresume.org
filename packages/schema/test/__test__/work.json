@@ -183,5 +183,21 @@
         "highlights": [null]
       }
     ]
+  },
+  "typeValid": {
+    "work": [
+      {
+        "name": "Acme",
+        "position": "Engineer",
+        "type": "part-time contract"
+      }
+    ]
+  },
+  "typeInvalid": {
+    "work": [
+      {
+        "type": 1
+      }
+    ]
   }
 }
