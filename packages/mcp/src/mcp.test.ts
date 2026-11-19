@@ -136,6 +136,12 @@ describe('the MCP server', () => {
       value: [{ name: 'TypeScript', keywords: ['Effect'] }],
     });
     expect(updated.value).toEqual({ saved: true, problems: [] });
+    // Some clients (Raycast) send an untyped parameter's JSON as text.
+    const asText = await call('update_resume_section', {
+      section: 'skills',
+      value: JSON.stringify([{ name: 'TypeScript', keywords: ['Effect'] }]),
+    });
+    expect(asText.value).toEqual({ saved: true, problems: [] });
     expect(
       (await call('validate_resume', { resume: { basics: { email: 7 } } }))
         .value.valid

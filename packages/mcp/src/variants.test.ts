@@ -25,6 +25,14 @@ describe('variant tools', () => {
     expect((await call('get_resume')).value.resume).toMatchObject({
       basics: { label: 'Engineer' },
     });
+    // The resume as JSON text, as some clients (Raycast) send it.
+    await call('save_variant', {
+      slug: 'acme',
+      resume: JSON.stringify({ basics: { name: 'Ada', label: 'SRE' } }),
+    });
+    expect((await call('get_variant', { slug: 'acme' })).value.resume).toEqual({
+      basics: { name: 'Ada', label: 'SRE' },
+    });
     expect((await call('list_variants')).value.variants).toHaveLength(1);
     expect((await call('delete_variant', { slug: 'acme' })).value).toEqual({
       deleted: true,
