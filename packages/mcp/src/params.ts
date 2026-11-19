@@ -22,3 +22,22 @@ export const optional = <S extends Schema.Top>(
 
 /** A number parameter, without the "Infinity" and "NaN" Schema.Number allows. */
 export const Count = Schema.Finite;
+
+const JsonObject = Schema.Record(Schema.String, Schema.Unknown);
+const JsonSection = Schema.Union([JsonObject, Schema.Array(Schema.Unknown)]);
+
+/**
+ * A JSON object parameter, also taken as that JSON in a string: given an
+ * untyped parameter, some clients (Raycast) send the JSON as text, which
+ * every update_resume_section and save_variant from them failed on.
+ */
+export const ObjectArg = Schema.Union([
+  JsonObject,
+  Schema.fromJsonString(JsonObject),
+]);
+
+/** A resume section: an object or an array, or either as JSON text. */
+export const SectionArg = Schema.Union([
+  JsonSection,
+  Schema.fromJsonString(JsonSection),
+]);

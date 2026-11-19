@@ -58,6 +58,14 @@ describe('registryRedirect', () => {
     );
   });
 
+  it('sends the files every site has to the same file here', () => {
+    expect(from('/robots.txt')).toBe('https://jsonresume.org/robots.txt');
+    expect(from('/favicon.ico')).toBe('https://jsonresume.org/favicon.ico');
+    expect(from('/apple-touch-icon.png')).toBe(
+      'https://jsonresume.org/apple-touch-icon.png'
+    );
+  });
+
   it('sends everything else to the page about the move', () => {
     for (const path of [
       '/',
