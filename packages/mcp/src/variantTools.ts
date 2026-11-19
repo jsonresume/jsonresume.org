@@ -3,7 +3,7 @@ import { Variants, type Variant } from '@repo/resume-versions';
 import { Effect, Predicate, Schema } from 'effect';
 import { Tool, Toolkit } from 'effect/ai';
 import { caller, describe, failing, failWith, hints } from './context';
-import { Count, optional } from './params';
+import { Count, ObjectArg, optional } from './params';
 
 const SITE = 'https://jsonresume.org';
 
@@ -46,7 +46,7 @@ export const VariantToolkit = Toolkit.make(
         'The job it is for, from search_jobs or match_jobs'
       ),
       resume: optional(
-        Schema.Unknown,
+        ObjectArg,
         'The resume to start from; your resume when left out'
       ),
     }),
@@ -61,7 +61,12 @@ export const VariantToolkit = Toolkit.make(
   }).annotateMerge(hints('get_variant')),
   Tool.make('save_variant', {
     description: describe('save_variant'),
-    parameters: Schema.Struct({ slug: Slug, resume: Schema.Unknown }),
+    parameters: Schema.Struct({
+      slug: Slug,
+      resume: ObjectArg.annotate({
+        description: 'The whole resume (a JSON Resume object)',
+      }),
+    }),
     success: VariantInfo,
     ...failing,
   }).annotateMerge(hints('save_variant', true)),
