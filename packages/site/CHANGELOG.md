@@ -1,5 +1,16 @@
 # @repo/site
 
+## 0.0.3
+
+### Patch Changes
+
+- Updated dependencies [6cc6b92]
+  - @jsonresume/ui@0.4.0
+  - @repo/project-directory@0.0.3
+  - @repo/schema-explorer@0.0.3
+  - @repo/theme-gallery@0.0.3
+  - @repo/mcp@0.0.3
+
 ## 0.0.2
 
 ### Patch Changes
