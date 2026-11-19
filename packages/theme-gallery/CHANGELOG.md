@@ -1,5 +1,12 @@
 # @repo/theme-gallery
 
+## 0.0.3
+
+### Patch Changes
+
+- Updated dependencies [6cc6b92]
+  - @jsonresume/ui@0.4.0
+
 ## 0.0.2
 
 ### Patch Changes

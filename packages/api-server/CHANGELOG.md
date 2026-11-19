@@ -1,5 +1,15 @@
 # @repo/api-server
 
+## 0.0.3
+
+### Patch Changes
+
+- @repo/explore@0.0.3
+- @repo/pathways@0.0.3
+- @repo/resume-versions@0.0.2
+- @repo/resume-import@0.0.2
+- @repo/accounts@0.0.2
+
 ## 0.0.2
 
 ### Patch Changes

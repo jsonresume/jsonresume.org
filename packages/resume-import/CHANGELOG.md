@@ -1,5 +1,12 @@
 # @repo/resume-import
 
+## 0.0.2
+
+### Patch Changes
+
+- @repo/resume-editor@0.0.3
+- @repo/schema-explorer@0.0.3
+
 ## 0.0.1
 
 ### Patch Changes
