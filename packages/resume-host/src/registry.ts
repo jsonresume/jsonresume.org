@@ -74,6 +74,20 @@ const USER_PAGES: Record<string, (username: string) => string> = {
   json: (username) => `/@${username}.json`,
 };
 
+/**
+ * Files every site has at its root, asked for by browsers and crawlers;
+ * as resumes they'd go to /@robots.txt, which is no one.
+ */
+const SITE_FILES = new Set([
+  'robots.txt',
+  'sitemap.xml',
+  'favicon.ico',
+  'favicon.png',
+  'favicon.svg',
+  'apple-touch-icon.png',
+  'apple-touch-icon-precomposed.png',
+]);
+
 /** Formats the registry served that are pages here: the theme. */
 const PAGE_FORMATS = new Set(['html', 'template']);
 
@@ -88,6 +102,7 @@ export function registryRedirect(url: URL): string {
   const segments = url.pathname.split('/').filter(Boolean);
   const [first, second, ...rest] = segments;
   if (!first) return `${SITE}/registry`;
+  if (SITE_FILES.has(first) && second === undefined) return `${SITE}/${first}`;
   // The jobs CLI's API is here now, at the same paths.
   if (first === 'api' && second === 'v1')
     return `${SITE}${url.pathname}${url.search}`;
