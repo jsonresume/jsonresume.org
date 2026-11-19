@@ -14,7 +14,7 @@ import {
   hints,
   McpActor,
 } from './context';
-import { optional } from './params';
+import { optional, SectionArg } from './params';
 
 const schema = schemaJson as JsonSchemaNode;
 const SITE = 'https://jsonresume.org';
@@ -88,7 +88,7 @@ export const ResumeToolkit = Toolkit.make(
     description: describe('update_resume_section'),
     parameters: Schema.Struct({
       section: Schema.Literals(SECTIONS),
-      value: Schema.Unknown.annotate({
+      value: SectionArg.annotate({
         description:
           'The whole section: an object for basics and meta, an array for the rest',
       }),
