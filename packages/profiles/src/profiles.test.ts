@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { Duration, Effect, Layer } from 'effect';
 import { TestClock } from 'effect/testing';
-import { Profiles } from './profiles';
+import { GHOST_STALE, Profiles } from './profiles';
 import { memoryStore, ProfileStore, type Profile } from './store';
 import { fakeGithub } from './test/fakeGithub';
 import type { Username } from './username';
@@ -46,6 +46,9 @@ const run =
       effect.pipe(Effect.provide(Layer.merge(layer, TestClock.layer())))
     );
 
+/** Lets the background refresh run. */
+const settle = Effect.repeat(Effect.yieldNow, { times: 20 });
+
 describe('Profiles.resume', () => {
   it('creates a ghost from the resume.json gist', () => {
     const { github, layer } = setup();
@@ -67,16 +70,35 @@ describe('Profiles.resume', () => {
     }).pipe(run(layer));
   });
 
-  it('serves the ghost for a minute, then reads the known gist again', () => {
+  it('serves the ghost for a minute, then refreshes it after serving the copy', () => {
     const { github, layer } = setup();
+    const edited = { basics: { name: 'Foo, edited' } };
     return Effect.gen(function* () {
       const profiles = yield* Profiles;
       yield* profiles.resume(foo);
       yield* profiles.resume(foo);
       expect(github.state.requests).toHaveLength(2);
+      github.state.users.set('foo', {
+        id: 7,
+        gists: [{ id: 'g2', files: { 'resume.json': JSON.stringify(edited) } }],
+      });
       yield* TestClock.adjust(Duration.seconds(61));
-      yield* profiles.resume(foo);
+      // Served at once from the copy; GitHub is asked in the background.
+      expect(yield* profiles.resume(foo)).toMatchObject({ resume });
+      yield* settle;
       expect(github.state.requests.at(-1)?.path).toBe('/gists/g2');
+      expect(github.state.requests).toHaveLength(3);
+      expect(yield* profiles.resume(foo)).toMatchObject({ resume: edited });
+    }).pipe(run(layer));
+  });
+
+  it('waits for GitHub when the copy is over a week old', () => {
+    const { github, layer } = setup();
+    return Effect.gen(function* () {
+      const profiles = yield* Profiles;
+      yield* profiles.resume(foo);
+      yield* TestClock.adjust(GHOST_STALE);
+      yield* profiles.resume(foo);
       expect(github.state.requests).toHaveLength(3);
     }).pipe(run(layer));
   });
@@ -86,7 +108,7 @@ describe('Profiles.resume', () => {
     return Effect.gen(function* () {
       const profiles = yield* Profiles;
       yield* profiles.resume(foo);
-      yield* TestClock.adjust(Duration.minutes(5));
+      yield* TestClock.adjust(GHOST_STALE);
       github.state.status = 503;
       expect(yield* profiles.resume(foo)).toMatchObject({
         resume,
@@ -111,6 +133,9 @@ describe('Profiles.resume', () => {
       yield* profiles.resume(foo);
       github.state.users.set('foo', { id: 7, gists: [] });
       yield* TestClock.adjust(Duration.minutes(5));
+      // This visit gets the copy; the refresh behind it finds no gist.
+      yield* profiles.resume(foo);
+      yield* settle;
       const error = yield* Effect.flip(profiles.resume(foo));
       expect(error).toMatchObject({
         _tag: 'ProfileNotFound',

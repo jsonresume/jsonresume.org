@@ -2,6 +2,7 @@ export * from './errors';
 export { GithubGists, type GistResume } from './github';
 export { githubCredentials, type GithubCredentials } from './githubApi';
 export {
+  GHOST_STALE,
   GHOST_TTL,
   Profiles,
   RESUME_FILE,
