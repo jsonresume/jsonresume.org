@@ -2,6 +2,7 @@ import { handlePath, parseHandle } from '@repo/profiles';
 import { formatResume } from '@repo/resume-formats';
 import {
   DEFAULT_THEME,
+  isTheme,
   renderTheme,
   ResumeDocument,
   themeSlug,
@@ -120,8 +121,12 @@ export const resumeOutcome = Effect.fn('resumeOutcome')(function* (url: URL) {
     );
   }
 
+  // A theme in the address is what the visitor asked for: a missing one is
+  // explained. One in meta.theme is the owner's, often a theme since
+  // removed: their visitors get the resume in the default theme instead.
   const written = query ?? metaTheme(doc.value);
-  const theme = written ? themeSlug(written) : DEFAULT_THEME;
+  const slug = written ? themeSlug(written) : DEFAULT_THEME;
+  const theme = query || isTheme(slug) ? slug : DEFAULT_THEME;
   return yield* renderTheme(theme, doc.value).pipe(
     Effect.flatMap((html) =>
       format === 'pdf'
