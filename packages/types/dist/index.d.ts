@@ -151,6 +151,10 @@ export interface WorkItem {
    */
   position?: string;
   /**
+   * How the role was held. Free text; recommended values: 'full-time', 'part-time', 'contract', 'freelance', 'internship', 'temporary'. Combine them as needed, e.g. 'part-time contract'. Describes past roles, not what you are looking for (#599)
+   */
+  type?: string;
+  /**
    * e.g. http://facebook.example.com
    */
   url?: string;
