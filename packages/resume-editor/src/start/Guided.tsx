@@ -12,7 +12,7 @@ import { getAt, setAt, type Json } from '../values';
 import { parseSkills, SECTIONS, skillsText, type Section } from './guided';
 import { Questions } from './Questions';
 import * as s from './start.css';
-import { startResumeAtom, startStepAtom } from './state';
+import { startResumeAtom, startSectionAtom, startStepAtom } from './state';
 
 const entriesOf = (resume: Json, section: Section) => {
   const list = getAt(resume, section.path);
@@ -96,8 +96,9 @@ function SectionForm({
 export function Guided() {
   const [resume, setResume] = useAtom(startResumeAtom);
   const setStep = useAtomSet(startStepAtom);
-  const [at, setIndex] = useState(0);
-  const section = SECTIONS[at] ?? SECTIONS[0];
+  const [index, setIndex] = useAtom(startSectionAtom);
+  const at = Math.min(Math.max(index, 0), SECTIONS.length - 1);
+  const section = SECTIONS[at];
   if (!section) return null;
   const last = at === SECTIONS.length - 1;
   return (
@@ -135,6 +136,11 @@ export function Guided() {
         >
           Back
         </Button>
+        {!last && (
+          <Button variant="ghost" onClick={() => setStep('preview')}>
+            See it in a theme
+          </Button>
+        )}
       </div>
     </>
   );
