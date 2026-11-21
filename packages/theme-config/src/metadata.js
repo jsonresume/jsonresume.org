@@ -272,6 +272,13 @@ const METADATA = {
     author: 'Evan Kohilas',
     tags: ['two-column', 'sidebar', 'print', 'serif', 'community'],
   },
+  editorial: {
+    name: 'Editorial',
+    description:
+      'A large serif name, the summary set as an opening paragraph and italic section names in an accent colour, on sepia paper, with embedded fonts.',
+    author: 'Phillip Chaffee',
+    tags: ['editorial', 'serif', 'print', 'single-column', 'community'],
+  },
   'university-first': {
     name: 'University First',
     description:
