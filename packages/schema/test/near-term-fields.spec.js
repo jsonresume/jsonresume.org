@@ -36,6 +36,14 @@ test('publications.type (#295) - free text', (t) => {
   t.end();
 });
 
+test('work.type (#599) - free text', (t) => {
+  t.true(valid({ work: [{ name: 'X', type: 'full-time' }] }));
+  t.true(valid({ work: [{ type: 'part-time contract' }] }));
+  t.false(valid({ work: [{ type: 42 }] }));
+  t.false(valid({ work: [{ type: ['contract'] }] }));
+  t.end();
+});
+
 test('sample resume exercises every section (#294)', (t) => {
   const sample = require('../sample.resume.json');
   const schema = require('../schema.json');
