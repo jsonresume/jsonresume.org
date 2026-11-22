@@ -18,7 +18,8 @@
     "gen:theme-readmes": "node scripts/gen-theme-readmes.mjs",
     "generate:screenshots": "node apps/registry/scripts/generate-theme-screenshots-auto.js",
     "serve:registry": "start-server-and-test 'pnpm --filter registry dev' http://localhost:3000 generate:screenshots",
-    "knip": "knip --no-exit-code"
+    "knip": "knip --no-exit-code",
+    "version-packages": "changeset version && pnpm install --lockfile-only"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.0",
