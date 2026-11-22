@@ -1,5 +1,11 @@
 # jsonresume-theme-reference
 
+## 0.2.13
+
+### Patch Changes
+
+- 2b3af11: Render inline Markdown (bold, emphasis, code, links) in summaries, descriptions and highlights with the shared renderer from @jsonresume/core (#600).
+
 ## 0.2.12
 
 ### Patch Changes
