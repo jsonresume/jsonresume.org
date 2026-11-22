@@ -1,6 +1,7 @@
 import { Layer } from 'effect';
 import { Toolkit } from 'effect/ai';
 import { AccountHandlers, AccountToolkit } from './accountTools';
+import { CompanyHandlers, CompanyToolkit } from './companyTools';
 import { DecisionHandlers, DecisionToolkit } from './decisionTools';
 import { ExploreHandlers, ExploreToolkit } from './exploreTools';
 import { ExportHandlers, ExportToolkit } from './exportTools';
@@ -18,6 +19,7 @@ export const AgentToolkit = Toolkit.merge(
   AccountToolkit,
   ExploreToolkit,
   JobToolkit,
+  CompanyToolkit,
   DecisionToolkit,
   VersionToolkit
 );
@@ -29,6 +31,7 @@ export const AgentHandlers = Layer.mergeAll(
   AccountHandlers,
   ExploreHandlers,
   JobHandlers,
+  CompanyHandlers,
   DecisionHandlers,
   VersionHandlers
 );

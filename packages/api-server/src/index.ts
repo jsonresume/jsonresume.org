@@ -12,7 +12,7 @@ import { ExploreHandlers, MyListingHandlers } from './explore';
 import { ImportHandlers } from './import';
 import { GithubRoutes } from './github';
 import { JobDecisionsHandlers } from './jobDecisions';
-import { JobsHandlers, MyJobsHandlers } from './jobs';
+import { CompaniesHandlers, JobsHandlers, MyJobsHandlers } from './jobs';
 import { ApiKeyAuthenticationLive, KeysHandlers } from './keys';
 import { OAuthConsentHandlers, OAuthHandlers } from './oauth';
 import { AppsDirectoryHandlers, OAuthAppsHandlers } from './oauthApps';
@@ -58,6 +58,7 @@ export const apiRoutes = (version: string) =>
         ImportHandlers,
         JobsHandlers,
         MyJobsHandlers,
+        CompaniesHandlers,
         JobDecisionsHandlers,
         CareerHandlers,
         ExploreHandlers,

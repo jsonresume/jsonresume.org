@@ -63,6 +63,25 @@ describe('toJobDocument (#353)', () => {
     expect(doc.facets.remoteScope).toBe('unspecified');
   });
 
+  it('links the post, how to apply and the company site', () => {
+    const html =
+      'Acme | Berlin | <a href="https:&#x2F;&#x2F;acme.com" rel="nofollow">https:&#x2F;&#x2F;acme.com</a><p>Hi';
+    const doc = toJobDocument(
+      row({ apply: 'https://acme.com/jobs/1' }),
+      url,
+      html
+    );
+    expect(valid(doc)).toBe(true);
+    expect(doc).toMatchObject({
+      url: 'https://news.ycombinator.com/item?id=42',
+      apply: { url: 'https://acme.com/jobs/1' },
+      companyUrl: 'https://acme.com',
+    });
+    const bare = toJobDocument(row(), url);
+    expect(bare).not.toHaveProperty('apply');
+    expect(bare).not.toHaveProperty('companyUrl');
+  });
+
   it('marks pay absent when the post gives none', () => {
     expect(toJobDocument(row(), url).facets.salaryProvenance).toBe('absent');
   });

@@ -59,6 +59,7 @@ const services = (people: ReadonlyArray<ResumeListing>) =>
         board: Effect.succeed({ jobs: [job(41), job(42)], thread: null }),
         job: () => unused,
         document: () => unused,
+        company: () => unused,
         find: () => unused,
         status: unused,
       })
