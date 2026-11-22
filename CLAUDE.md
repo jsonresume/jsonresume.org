@@ -59,6 +59,7 @@ Then check:
 - **Tests:** `pnpm --filter @repo/resume-themes test` renders every theme.
 - **Preview:** `pnpm --filter app dev`, then open http://localhost:5173/@thomasdavis?theme=<slug>.
 - **Built files:** theme `dist/` is committed and CI's `Theme dist sync` compares it with `src/`. Rebuild with `pnpm build` in the theme after editing; our workspace themes load from `dist/`.
+- **Console output:** themes render with the console muted (`quiet.ts`), so a theme can't write resume text into the server's logs.
 - **Fonts:** use absolute URLs (Google Fonts, or `https://jsonresume.org/fonts/...`) or embed them, so PDFs get them too.
 
 Don't remove or deprecate themes without the maintainer's approval. 27 legacy themes were removed on purpose (2025-10-31): don't restore them.
@@ -96,6 +97,8 @@ Don't remove or deprecate themes without the maintainer's approval. 27 legacy th
   - `test` (Playwright e2e);
   - `dev-script` (still boots the registry).
 - Branches must be up to date to merge. Queue one PR at a time: `gh pr update-branch N`, then `gh pr merge N --squash --auto`.
+- **Fork PRs get every secret as an empty string.** Default env with `||=`, not `??=` (which keeps `''`), and skip tests that need credentials when they're absent (see `apps/registry/tests/render.spec.js`). `github.token` can't read gists.
+- **Turbo's remote cache needs `TURBO_TOKEN`** (a Vercel token for the `jsonresume` team, as a repo secret). Without a working one, every CI run builds all ~220 tasks (about 9 minutes).
 - **LINT GOTCHA:** `eslint-config-next` is pinned to `^15` in `@repo/eslint-config-custom`. v16's flat config crashes ESLint 8, and turbo's cache can hide it. Verify lint changes with `turbo lint --force`.
 - **Releases:** Changesets (`docs/RELEASING.md`). Merging to `master` updates the "Version Packages" PR; merging that publishes to npm. Add a changeset with any change to a published package.
 - `pnpm.overrides` in the root `package.json` holds security patches. Dependabot runs weekly.
@@ -112,7 +115,10 @@ Don't remove or deprecate themes without the maintainer's approval. 27 legacy th
 
 - `schema.json` allows additional properties, so unknown fields are valid. Invalid-case fixtures must use type violations.
 - Schema PRs regenerate `@jsonresume/types` (`pnpm --filter @jsonresume/types build`). `apps/registry/lib/schema.test.js` fails if the registry's copy of the schema lacks a field the published schema declares.
-- `objective` is in the schema (#604), but no theme or format renders it yet.
+- `objective` is in the schema (#604). No theme or format renders it, but it steers job matching when the person hasn't stated a direction (`directionOf` in `@repo/jobs`).
+- **Before defining a field, check live resumes for the name** (read-only psql on `app.profiles`; `jsonb_` functions there). A document that already uses the name with another type stops validating. #315 (`languages[].proficiency`) and #313 (`work[].skills`) are on hold for that reason.
+- The normative description is `packages/schema/SPEC.md`; update it with the schema. Decisions are recorded in `packages/schema/DECISIONS.md`.
+- `packages/core-rust` (Rust) lags the schema: it covers 1.0's fields, and nothing in CI builds it.
 
 ## Legacy app gotchas (only when touching apps/registry or homepage2)
 
