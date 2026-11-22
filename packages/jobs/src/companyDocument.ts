@@ -9,15 +9,6 @@ const SCHEMA =
 /** How many technologies a company document lists, most asked for first. */
 const TOP_TECHNOLOGIES = 15;
 
-/** A company's name as a URL segment: `Acme, Inc.` is `acme-inc`. */
-export const companySlug = (name: string) =>
-  name
-    .normalize('NFKD')
-    .replace(/[̀-ͯ]/g, '')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-
 export interface CompanyPost {
   readonly row: JobRow;
   readonly html: string;
