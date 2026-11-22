@@ -1,5 +1,5 @@
 import React from 'react';
-import { Section } from '@jsonresume/core';
+import { Section, InlineMarkdown } from '@jsonresume/core';
 import {
   StyledSectionTitle,
   StoryItem,
@@ -18,11 +18,13 @@ export function ProjectsSection({ projects }) {
       {projects.map((project, index) => (
         <StoryItem key={index}>
           <Position>{project.name}</Position>
-          {project.description && <Narrative>{project.description}</Narrative>}
+          {project.description && (
+            <InlineMarkdown as={Narrative} text={project.description} />
+          )}
           {project.highlights?.length > 0 && (
             <Achievements>
               {project.highlights.map((highlight, i) => (
-                <AchievementItem key={i}>{highlight}</AchievementItem>
+                <InlineMarkdown as={AchievementItem} key={i} text={highlight} />
               ))}
             </Achievements>
           )}

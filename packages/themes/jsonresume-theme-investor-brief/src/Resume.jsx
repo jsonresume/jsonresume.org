@@ -7,6 +7,7 @@ import {
   ContactInfo,
   Link,
   safeUrl,
+  InlineMarkdown,
 } from '@jsonresume/core';
 
 const Layout = styled.div`
@@ -298,7 +299,7 @@ function Resume({ resume }) {
 
       {basics.summary && (
         <SummarySection>
-          <SummaryText>{basics.summary}</SummaryText>
+          <InlineMarkdown as={SummaryText} text={basics.summary} />
         </SummarySection>
       )}
 
@@ -328,11 +329,13 @@ function Resume({ resume }) {
                 </WorkMeta>
               </WorkHeader>
               {job.name && <WorkCompany>{job.name}</WorkCompany>}
-              {job.summary && <WorkDescription>{job.summary}</WorkDescription>}
+              {job.summary && (
+                <InlineMarkdown as={WorkDescription} text={job.summary} />
+              )}
               {job.highlights && job.highlights.length > 0 && (
                 <WorkHighlights>
                   {job.highlights.map((highlight, i) => (
-                    <li key={i}>{highlight}</li>
+                    <InlineMarkdown as="li" key={i} text={highlight} />
                   ))}
                 </WorkHighlights>
               )}
@@ -380,12 +383,15 @@ function Resume({ resume }) {
                 )}
               </WorkHeader>
               {project.description && (
-                <WorkDescription>{project.description}</WorkDescription>
+                <InlineMarkdown
+                  as={WorkDescription}
+                  text={project.description}
+                />
               )}
               {project.highlights && project.highlights.length > 0 && (
                 <WorkHighlights>
                   {project.highlights.map((highlight, i) => (
-                    <li key={i}>{highlight}</li>
+                    <InlineMarkdown as="li" key={i} text={highlight} />
                   ))}
                 </WorkHighlights>
               )}
@@ -428,11 +434,13 @@ function Resume({ resume }) {
                 </WorkMeta>
               </WorkHeader>
               <WorkCompany>{vol.organization}</WorkCompany>
-              {vol.summary && <WorkDescription>{vol.summary}</WorkDescription>}
+              {vol.summary && (
+                <InlineMarkdown as={WorkDescription} text={vol.summary} />
+              )}
               {vol.highlights && vol.highlights.length > 0 && (
                 <WorkHighlights>
                   {vol.highlights.map((highlight, i) => (
-                    <li key={i}>{highlight}</li>
+                    <InlineMarkdown as="li" key={i} text={highlight} />
                   ))}
                 </WorkHighlights>
               )}

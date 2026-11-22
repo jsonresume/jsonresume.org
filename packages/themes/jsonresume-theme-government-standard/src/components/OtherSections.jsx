@@ -1,5 +1,5 @@
 import React from 'react';
-import { Section, DateRange } from '@jsonresume/core';
+import { Section, DateRange, InlineMarkdown } from '@jsonresume/core';
 import {
   StyledSectionTitle,
   WorkItem,
@@ -27,12 +27,12 @@ export function ProjectsSection({ projects }) {
         <WorkItem key={index}>
           <Position>{project.name}</Position>
           {project.description && (
-            <WorkSummary>{project.description}</WorkSummary>
+            <InlineMarkdown as={WorkSummary} text={project.description} />
           )}
           {project.highlights?.length > 0 && (
             <Highlights>
               {project.highlights.map((highlight, i) => (
-                <li key={i}>{highlight}</li>
+                <InlineMarkdown as="li" key={i} text={highlight} />
               ))}
             </Highlights>
           )}
@@ -59,11 +59,13 @@ export function VolunteerSection({ volunteer }) {
               </DateText>
             )}
           </WorkHeader>
-          {vol.summary && <WorkSummary>{vol.summary}</WorkSummary>}
+          {vol.summary && (
+            <InlineMarkdown as={WorkSummary} text={vol.summary} />
+          )}
           {vol.highlights?.length > 0 && (
             <Highlights>
               {vol.highlights.map((highlight, i) => (
-                <li key={i}>{highlight}</li>
+                <InlineMarkdown as="li" key={i} text={highlight} />
               ))}
             </Highlights>
           )}
@@ -86,7 +88,9 @@ export function AwardsSection({ awards }) {
             <ListItemText>Awarded by: {award.awarder}</ListItemText>
           )}
           {award.date && <ListItemText>Date: {award.date}</ListItemText>}
-          {award.summary && <ListItemText>{award.summary}</ListItemText>}
+          {award.summary && (
+            <InlineMarkdown as={ListItemText} text={award.summary} />
+          )}
         </SimpleList>
       ))}
     </Section>
@@ -108,7 +112,9 @@ export function PublicationsSection({ publications }) {
           {pub.releaseDate && (
             <ListItemText>Published: {pub.releaseDate}</ListItemText>
           )}
-          {pub.summary && <ListItemText>{pub.summary}</ListItemText>}
+          {pub.summary && (
+            <InlineMarkdown as={ListItemText} text={pub.summary} />
+          )}
         </SimpleList>
       ))}
     </Section>

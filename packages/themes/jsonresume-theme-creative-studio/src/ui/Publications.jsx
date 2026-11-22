@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import Section from './Section.jsx';
 import Date from './Date';
 
+import { InlineMarkdown } from '@jsonresume/core';
 const PubItem = styled.div`
   margin-bottom: 1.5rem;
 
@@ -57,7 +58,7 @@ const Publications = ({ publications }) => {
               <Date date={pub.releaseDate} />
             </PubDate>
           )}
-          {pub.summary && <Summary>{pub.summary}</Summary>}
+          {pub.summary && <InlineMarkdown as={Summary} text={pub.summary} />}
           {pub.url && (
             <PubLink href={pub.url} target="_blank" rel="noopener noreferrer">
               Read Publication →

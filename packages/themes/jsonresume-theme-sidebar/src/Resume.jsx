@@ -7,6 +7,7 @@ import {
   BadgeList,
   safeUrl,
   getLinkRel,
+  InlineMarkdown,
 } from '@jsonresume/core';
 
 /**
@@ -454,7 +455,7 @@ function Resume({ resume }) {
         {basics.summary && (
           <MainSection>
             <MainSectionTitle>PROFILE</MainSectionTitle>
-            <ProfileText>{basics.summary}</ProfileText>
+            <InlineMarkdown as={ProfileText} text={basics.summary} />
           </MainSection>
         )}
 
@@ -481,14 +482,16 @@ function Resume({ resume }) {
                   </WorkDate>
                 </WorkHeader>
                 {job.summary && (
-                  <p style={{ marginBottom: '10px', color: '#4a4a4a' }}>
-                    {job.summary}
-                  </p>
+                  <InlineMarkdown
+                    as="p"
+                    style={{ marginBottom: '10px', color: '#4a4a4a' }}
+                    text={job.summary}
+                  />
                 )}
                 {job.highlights && job.highlights.length > 0 && (
                   <WorkDescription>
                     {job.highlights.map((highlight, idx) => (
-                      <li key={idx}>{highlight}</li>
+                      <InlineMarkdown as="li" key={idx} text={highlight} />
                     ))}
                   </WorkDescription>
                 )}
@@ -530,14 +533,16 @@ function Resume({ resume }) {
                   </WorkDate>
                 </WorkHeader>
                 {project.description && (
-                  <p style={{ marginBottom: '10px', color: '#4a4a4a' }}>
-                    {project.description}
-                  </p>
+                  <InlineMarkdown
+                    as="p"
+                    style={{ marginBottom: '10px', color: '#4a4a4a' }}
+                    text={project.description}
+                  />
                 )}
                 {project.highlights && project.highlights.length > 0 && (
                   <WorkDescription>
                     {project.highlights.map((highlight, idx) => (
-                      <li key={idx}>{highlight}</li>
+                      <InlineMarkdown as="li" key={idx} text={highlight} />
                     ))}
                   </WorkDescription>
                 )}
@@ -569,14 +574,16 @@ function Resume({ resume }) {
                   </WorkDate>
                 </WorkHeader>
                 {vol.summary && (
-                  <p style={{ marginBottom: '10px', color: '#4a4a4a' }}>
-                    {vol.summary}
-                  </p>
+                  <InlineMarkdown
+                    as="p"
+                    style={{ marginBottom: '10px', color: '#4a4a4a' }}
+                    text={vol.summary}
+                  />
                 )}
                 {vol.highlights && vol.highlights.length > 0 && (
                   <WorkDescription>
                     {vol.highlights.map((highlight, idx) => (
-                      <li key={idx}>{highlight}</li>
+                      <InlineMarkdown as="li" key={idx} text={highlight} />
                     ))}
                   </WorkDescription>
                 )}
@@ -601,9 +608,11 @@ function Resume({ resume }) {
                     ` - ${new Date(award.date).toLocaleDateString()}`}
                 </WorkCompany>
                 {award.summary && (
-                  <p style={{ marginTop: '8px', color: '#4a4a4a' }}>
-                    {award.summary}
-                  </p>
+                  <InlineMarkdown
+                    as="p"
+                    style={{ marginTop: '8px', color: '#4a4a4a' }}
+                    text={award.summary}
+                  />
                 )}
               </div>
             ))}
@@ -672,9 +681,11 @@ function Resume({ resume }) {
                     ` - ${new Date(pub.releaseDate).toLocaleDateString()}`}
                 </WorkCompany>
                 {pub.summary && (
-                  <p style={{ marginTop: '8px', color: '#4a4a4a' }}>
-                    {pub.summary}
-                  </p>
+                  <InlineMarkdown
+                    as="p"
+                    style={{ marginTop: '8px', color: '#4a4a4a' }}
+                    text={pub.summary}
+                  />
                 )}
               </div>
             ))}

@@ -9,6 +9,7 @@ import {
   ContactInfo,
   Link,
   safeUrl,
+  InlineMarkdown,
 } from '@jsonresume/core';
 
 /*
@@ -470,7 +471,7 @@ function Resume({ resume }) {
         {basics.summary && (
           <ChartNote>
             <span>Chart Note · Summary</span>
-            <p>{basics.summary}</p>
+            <InlineMarkdown as="p" text={basics.summary} />
           </ChartNote>
         )}
       </Header>
@@ -502,11 +503,13 @@ function Resume({ resume }) {
                   )}
                 </ItemTitle>
                 {job.name && job.position && <ItemSub>{job.name}</ItemSub>}
-                {job.summary && <ItemDesc>{job.summary}</ItemDesc>}
+                {job.summary && (
+                  <InlineMarkdown as={ItemDesc} text={job.summary} />
+                )}
                 {job.highlights?.length > 0 && (
                   <Highlights>
                     {job.highlights.map((h, j) => (
-                      <li key={j}>{h}</li>
+                      <InlineMarkdown as="li" key={j} text={h} />
                     ))}
                   </Highlights>
                 )}
@@ -596,11 +599,13 @@ function Resume({ resume }) {
                 <ItemTitle>
                   {p.url ? <Link href={safeUrl(p.url)}>{p.name}</Link> : p.name}
                 </ItemTitle>
-                {p.description && <ItemDesc>{p.description}</ItemDesc>}
+                {p.description && (
+                  <InlineMarkdown as={ItemDesc} text={p.description} />
+                )}
                 {p.highlights?.length > 0 && (
                   <Highlights>
                     {p.highlights.map((h, j) => (
-                      <li key={j}>{h}</li>
+                      <InlineMarkdown as="li" key={j} text={h} />
                     ))}
                   </Highlights>
                 )}
@@ -626,11 +631,11 @@ function Resume({ resume }) {
               <Content>
                 <ItemTitle>{v.position}</ItemTitle>
                 {v.organization && <ItemSub>{v.organization}</ItemSub>}
-                {v.summary && <ItemDesc>{v.summary}</ItemDesc>}
+                {v.summary && <InlineMarkdown as={ItemDesc} text={v.summary} />}
                 {v.highlights?.length > 0 && (
                   <Highlights>
                     {v.highlights.map((h, j) => (
-                      <li key={j}>{h}</li>
+                      <InlineMarkdown as="li" key={j} text={h} />
                     ))}
                   </Highlights>
                 )}
@@ -653,7 +658,7 @@ function Resume({ resume }) {
                 <p className="meta">
                   {[a.awarder, a.date].filter(Boolean).join(' · ')}
                 </p>
-                {a.summary && <p>{a.summary}</p>}
+                {a.summary && <InlineMarkdown as="p" text={a.summary} />}
               </RecordItem>
             ))}
           </RecordList>
@@ -700,7 +705,7 @@ function Resume({ resume }) {
                 <p className="meta">
                   {[pub.publisher, pub.releaseDate].filter(Boolean).join(' · ')}
                 </p>
-                {pub.summary && <p>{pub.summary}</p>}
+                {pub.summary && <InlineMarkdown as="p" text={pub.summary} />}
               </RecordItem>
             ))}
           </RecordList>

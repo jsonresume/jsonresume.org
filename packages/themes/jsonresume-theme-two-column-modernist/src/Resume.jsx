@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { safeUrl, DateRange } from '@jsonresume/core';
+import { safeUrl, DateRange, InlineMarkdown } from '@jsonresume/core';
 
 // Layout
 const Container = styled.div`
@@ -374,7 +374,7 @@ function SummarySection({ summary }) {
 
   return (
     <Section>
-      <Summary>{summary}</Summary>
+      <InlineMarkdown as={Summary} text={summary} />
     </Section>
   );
 }
@@ -398,11 +398,13 @@ function WorkSection({ work }) {
               )}
             </EntryMeta>
           </EntryHeader>
-          {job.summary && <EntryDescription>{job.summary}</EntryDescription>}
+          {job.summary && (
+            <InlineMarkdown as={EntryDescription} text={job.summary} />
+          )}
           {job.highlights && job.highlights.length > 0 && (
             <HighlightsList>
               {job.highlights.map((highlight, j) => (
-                <HighlightItem key={j}>{highlight}</HighlightItem>
+                <InlineMarkdown as={HighlightItem} key={j} text={highlight} />
               ))}
             </HighlightsList>
           )}
@@ -473,12 +475,12 @@ function ProjectsSection({ projects }) {
             )}
           </EntryHeader>
           {project.description && (
-            <EntryDescription>{project.description}</EntryDescription>
+            <InlineMarkdown as={EntryDescription} text={project.description} />
           )}
           {project.highlights && project.highlights.length > 0 && (
             <HighlightsList>
               {project.highlights.map((highlight, j) => (
-                <HighlightItem key={j}>{highlight}</HighlightItem>
+                <InlineMarkdown as={HighlightItem} key={j} text={highlight} />
               ))}
             </HighlightsList>
           )}
@@ -542,11 +544,13 @@ function VolunteerSection({ volunteer }) {
               )}
             </EntryMeta>
           </EntryHeader>
-          {vol.summary && <EntryDescription>{vol.summary}</EntryDescription>}
+          {vol.summary && (
+            <InlineMarkdown as={EntryDescription} text={vol.summary} />
+          )}
           {vol.highlights && vol.highlights.length > 0 && (
             <HighlightsList>
               {vol.highlights.map((highlight, j) => (
-                <HighlightItem key={j}>{highlight}</HighlightItem>
+                <InlineMarkdown as={HighlightItem} key={j} text={highlight} />
               ))}
             </HighlightsList>
           )}
@@ -574,7 +578,7 @@ function AwardsSection({ awards }) {
             </EntryMeta>
           </EntryHeader>
           {award.summary && (
-            <EntryDescription>{award.summary}</EntryDescription>
+            <InlineMarkdown as={EntryDescription} text={award.summary} />
           )}
         </Entry>
       ))}
@@ -633,7 +637,9 @@ function PublicationsSection({ publications }) {
               {pub.releaseDate && <EntryDate>{pub.releaseDate}</EntryDate>}
             </EntryMeta>
           </EntryHeader>
-          {pub.summary && <EntryDescription>{pub.summary}</EntryDescription>}
+          {pub.summary && (
+            <InlineMarkdown as={EntryDescription} text={pub.summary} />
+          )}
           {pub.url && (
             <div>
               <a

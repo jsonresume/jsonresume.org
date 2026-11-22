@@ -1698,16 +1698,16 @@ const StyledLink = dt.a`
   }
 `;
 function Link({ href, children, className, ...rest }) {
-  const safeHref = safeUrl(href);
-  if (!safeHref) {
+  const safeHref2 = safeUrl(href);
+  if (!safeHref2) {
     return /* @__PURE__ */ jsx("span", { className, children });
   }
-  const isExternal = isExternalUrl(safeHref);
+  const isExternal = isExternalUrl(safeHref2);
   const externalProps = isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {};
   return /* @__PURE__ */ jsx(
     StyledLink,
     {
-      href: safeHref,
+      href: safeHref2,
       className: `resume-link ${className || ""}`.trim(),
       ...externalProps,
       ...rest,
@@ -1735,6 +1735,59 @@ dt.span`
     }
   }
 `;
+const ESCAPES = {
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+  "'": "&#39;"
+};
+const escapeHtml = (text) => text.replace(/[&<>"']/g, (c) => ESCAPES[c]);
+const ESCAPABLE = /\\([\\`*_[\]()!#])/g;
+const CODE = /`([^`]+)`/g;
+const LINK = /\[([^\]]+)\]\(([^)\s]+)\)/g;
+const STRONG = /\*\*(?=\S)([^*]*?\S)\*\*|__(?=\S)([^_]*?\S)__/g;
+const EMPHASIS = /\*(?=\S)([^*]*?\S)\*|(^|[^\p{L}\p{N}_])_(?=\S)([^_]*?\S)_(?![\p{L}\p{N}_])/gu;
+const safeHref = (url) => /^(https?:\/\/|mailto:)/i.test(url) ? url : void 0;
+const emphasis = (text, strong, em) => text.replace(STRONG, (_2, a, b2) => strong(a ?? b2)).replace(
+  EMPHASIS,
+  (_2, a, before, b2) => a !== void 0 ? em(a) : `${before}${em(b2)}`
+);
+const inline = (text, out) => {
+  const kept = [];
+  const keep = (value) => `${kept.push(value) - 1}`;
+  const marks = (t) => emphasis(t, out.strong, out.em);
+  const rest = text.replace(/\uE000/g, "").replace(ESCAPABLE, (_2, c) => keep(out.text(c))).replace(CODE, (_2, body) => keep(out.code(body))).replace(
+    LINK,
+    (_2, label, url) => keep(out.link(marks(out.text(label)), url))
+  );
+  return marks(out.text(rest)).replace(
+    /\uE000(\d+)\uE000/g,
+    (_2, i) => kept[Number(i)]
+  );
+};
+function renderInlineMarkdown(text) {
+  if (typeof text !== "string") return "";
+  return inline(text, {
+    text: escapeHtml,
+    code: (body) => `<code>${escapeHtml(body)}</code>`,
+    link: (label, url) => {
+      const href = safeHref(url);
+      return href ? `<a href="${escapeHtml(href)}">${label}</a>` : label;
+    },
+    strong: (t) => `<strong>${t}</strong>`,
+    em: (t) => `<em>${t}</em>`
+  });
+}
+function InlineMarkdown({ text, as: Tag2 = "span", ...rest }) {
+  return /* @__PURE__ */ jsx(
+    Tag2,
+    {
+      ...rest,
+      dangerouslySetInnerHTML: { __html: renderInlineMarkdown(text) }
+    }
+  );
+}
 dt.hr`
   border: none;
   border-top: 0.5pt solid
@@ -6386,7 +6439,7 @@ function locationString(loc) {
 }
 function Highlights({ items }) {
   if (!items || items.length === 0) return null;
-  return /* @__PURE__ */ jsx(Bullets, { children: items.map((h, i) => /* @__PURE__ */ jsx("li", { children: h }, i)) });
+  return /* @__PURE__ */ jsx(Bullets, { children: items.map((h, i) => /* @__PURE__ */ jsx(InlineMarkdown, { as: "li", text: h }, i)) });
 }
 function SectionBlock({ index: index2, title, children }) {
   return /* @__PURE__ */ jsxs(Block, { children: [
@@ -6454,7 +6507,7 @@ function Resume({ resume }) {
     ] }),
     basics.summary && /* @__PURE__ */ jsxs(Statement, { children: [
       /* @__PURE__ */ jsx(StatementMark, { children: "— Statement" }),
-      /* @__PURE__ */ jsx(StatementText, { children: basics.summary })
+      /* @__PURE__ */ jsx(InlineMarkdown, { as: StatementText, text: basics.summary })
     ] }),
     work.length > 0 && /* @__PURE__ */ jsx(SectionBlock, { index: next2(), title: "Work", children: work.map((job, i) => /* @__PURE__ */ jsxs(Entry, { children: [
       /* @__PURE__ */ jsxs(EntryTop, { children: [
@@ -6469,7 +6522,7 @@ function Resume({ resume }) {
       ] }),
       job.name && job.position && /* @__PURE__ */ jsx(EntrySub, { children: job.name }),
       job.location && /* @__PURE__ */ jsx(EntryMeta, { children: job.location }),
-      job.summary && /* @__PURE__ */ jsx(EntryText, { children: job.summary }),
+      job.summary && /* @__PURE__ */ jsx(InlineMarkdown, { as: EntryText, text: job.summary }),
       /* @__PURE__ */ jsx(Highlights, { items: job.highlights })
     ] }, i)) }),
     projects.length > 0 && /* @__PURE__ */ jsx(SectionBlock, { index: next2(), title: "Works", children: projects.map((proj, i) => /* @__PURE__ */ jsxs(Entry, { children: [
@@ -6484,7 +6537,7 @@ function Resume({ resume }) {
         ) })
       ] }),
       proj.type && /* @__PURE__ */ jsx(EntrySub, { children: proj.type }),
-      proj.description && /* @__PURE__ */ jsx(EntryText, { children: proj.description }),
+      proj.description && /* @__PURE__ */ jsx(InlineMarkdown, { as: EntryText, text: proj.description }),
       /* @__PURE__ */ jsx(Highlights, { items: proj.highlights }),
       proj.keywords && proj.keywords.length > 0 && /* @__PURE__ */ jsx(TagWrap, { children: proj.keywords.map((k2, j2) => /* @__PURE__ */ jsx(Tag, { children: k2 }, j2)) })
     ] }, i)) }),
@@ -6519,7 +6572,7 @@ function Resume({ resume }) {
         a.date && /* @__PURE__ */ jsx(EntryMeta, { children: a.date })
       ] }),
       a.awarder && /* @__PURE__ */ jsx(EntrySub, { children: a.awarder }),
-      a.summary && /* @__PURE__ */ jsx(EntryText, { children: a.summary })
+      a.summary && /* @__PURE__ */ jsx(InlineMarkdown, { as: EntryText, text: a.summary })
     ] }, i)) }) }),
     certificates.length > 0 && /* @__PURE__ */ jsx(SectionBlock, { index: next2(), title: "Certificates", children: /* @__PURE__ */ jsx(Rows, { children: certificates.map((c, i) => /* @__PURE__ */ jsxs(Entry, { children: [
       /* @__PURE__ */ jsxs(EntryTop, { children: [
@@ -6534,7 +6587,7 @@ function Resume({ resume }) {
         p2.releaseDate && /* @__PURE__ */ jsx(EntryMeta, { children: p2.releaseDate })
       ] }),
       p2.publisher && /* @__PURE__ */ jsx(EntrySub, { children: p2.publisher }),
-      p2.summary && /* @__PURE__ */ jsx(EntryText, { children: p2.summary })
+      p2.summary && /* @__PURE__ */ jsx(InlineMarkdown, { as: EntryText, text: p2.summary })
     ] }, i)) }) }),
     volunteer.length > 0 && /* @__PURE__ */ jsx(SectionBlock, { index: next2(), title: "Service", children: volunteer.map((v2, i) => /* @__PURE__ */ jsxs(Entry, { children: [
       /* @__PURE__ */ jsxs(EntryTop, { children: [
@@ -6542,7 +6595,7 @@ function Resume({ resume }) {
         /* @__PURE__ */ jsx(EntryMeta, { children: /* @__PURE__ */ jsx(DateRange, { startDate: v2.startDate, endDate: v2.endDate }) })
       ] }),
       v2.organization && v2.position && /* @__PURE__ */ jsx(EntrySub, { children: v2.organization }),
-      v2.summary && /* @__PURE__ */ jsx(EntryText, { children: v2.summary }),
+      v2.summary && /* @__PURE__ */ jsx(InlineMarkdown, { as: EntryText, text: v2.summary }),
       /* @__PURE__ */ jsx(Highlights, { items: v2.highlights })
     ] }, i)) }),
     languages.length > 0 && /* @__PURE__ */ jsx(SectionBlock, { index: next2(), title: "Languages", children: /* @__PURE__ */ jsx(InlineList, { children: languages.map((l, i) => /* @__PURE__ */ jsxs(Pair, { children: [
