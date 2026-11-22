@@ -8,7 +8,7 @@ Standard, Specification, Schema
 
 > **Note:** This package now lives in the [jsonresume.org monorepo](https://github.com/jsonresume/jsonresume.org) as `packages/schema` (imported with full history from [jsonresume/resume-schema](https://github.com/jsonresume/resume-schema)). It keeps its npm identity as [`@jsonresume/schema`](https://www.npmjs.com/package/@jsonresume/schema) and is published from this workspace. Please open issues and PRs against the monorepo.
 
-The current stable schema is represented by the files `schema.json` and `sample.resume.json`.
+The current stable schema is represented by the files `schema.json` and `sample.resume.json`. [`SPEC.md`](SPEC.md) is the normative description of the 1.x format: what a conforming document is, what each field means, and the compatibility promise.
 
 ### Getting started
 

@@ -24,6 +24,7 @@
     "schema.json",
     "job-schema.json",
     "validator.js",
+    "SPEC.md",
     "examples"
   ],
   "dependencies": {
