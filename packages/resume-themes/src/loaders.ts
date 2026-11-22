@@ -90,5 +90,6 @@ export const themeLoaders: Readonly<Record<string, () => Promise<unknown>>> = {
   'desert-modern': () => import('jsonresume-theme-desert-modern'),
   'elegant-pink': () => import('jsonresume-theme-elegant-pink'),
   'two-column': () => import('jsonresume-theme-two-column'),
+  editorial: () => import('jsonresume-theme-editorial'),
   pro: () => import('jsonresume-theme-pro'),
 };

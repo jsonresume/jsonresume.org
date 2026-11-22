@@ -1,4 +1,4 @@
-import { RegistryProvider, useAtomValue } from '@effect/atom-react';
+import { RegistryProvider, useAtom, useAtomValue } from '@effect/atom-react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 import { clearStartDraft, readStartDraft, writeStartDraft } from './draft';
@@ -12,6 +12,16 @@ import {
   startStepAtom,
   withTheme,
 } from './state';
+
+/** Guided while writing; a stand-in preview with its way back otherwise. */
+function Steps() {
+  const [step, setStep] = useAtom(startStepAtom);
+  return step === 'guided' ? (
+    <Guided />
+  ) : (
+    <button onClick={() => setStep('guided')}>Back to editing</button>
+  );
+}
 
 function Resume() {
   return (
@@ -140,5 +150,18 @@ describe('Guided', () => {
       basics: { name: 'Ada Lovelace' },
       work: [{ name: 'Engines' }, { name: 'Looms' }],
     });
+  });
+
+  it('looks at a theme from any section, and comes back to it', () => {
+    render(
+      <RegistryProvider initialValues={[[startStepAtom, 'guided']]}>
+        <Steps />
+      </RegistryProvider>
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+    expect(screen.getByLabelText('Company')).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'See it in a theme' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Back to editing' }));
+    expect(screen.getByLabelText('Company')).toBeTruthy();
   });
 });
