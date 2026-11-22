@@ -1,5 +1,20 @@
 <a id="1.0.0"></a>
 
+## 1.8.0
+
+### Minor Changes
+
+- a6ba9ed: Inline Markdown in resume prose (#600), as the November 2026 schema review decided: every `summary`, `work[].highlights[]`, `projects[].description` and `projects[].highlights[]` may use CommonMark inline syntax (`**strong**`, `*emphasis*`, `` `code` ``, `[links](https://…)`); block syntax isn't part of the format, and no flag is needed. `@jsonresume/utils` adds the one shared renderer, `renderInlineMarkdown` (escapes the text first, keeps only http(s) and mailto links) and `stripInlineMarkdown` for plain-text consumers, also at `@jsonresume/utils/markdown`; `@jsonresume/core` re-exports both and adds an `InlineMarkdown` component. The field descriptions and `SPEC.md` say so.
+- b05f681: Job schema: optional `compensation` (`min`, `max`, `currency` as ISO 4217, `period` one of `hour`, `day`, `week`, `month`, `year`) beside the display `salary` text (#319), and optional `facets`, the fixed vocabulary tools filter on: `remoteScope`, `remoteRegions`, `timezoneRange`, `seniority`, `employmentType`, `visaSponsorship` and `salaryProvenance`, each with `unspecified` for a post that doesn't say (#353). These are the values jsonresume.org's jobs pipeline already uses. Existing job documents stay valid.
+- a6277b9: Add optional `meta.language`, the language a resume is written in as a BCP 47 tag (`en`, `pt-BR`), and `meta.translations`, the same resume in other languages as `{ language, url }` entries: one document per language, as the November 2026 schema review decided (#288). Both are new optional fields; the 26 resumes on jsonresume.org that already set `meta.language` used a string and stay valid.
+- 453ea3e: Add optional `work[].type`: how a role was held, as free text. Recommended values are `full-time`, `part-time`, `contract`, `freelance`, `internship` and `temporary`, and they combine ("part-time contract"). It describes past roles, not what someone is looking for. It must be a string: a resume that already put a non-string value under `work[].type` (allowed before as an extra field), such as an array, no longer validates and should join the values into one string, e.g. `"part-time contract"`.
+
+### Patch Changes
+
+- 32299c9: Document career breaks (#589): a `work` entry with `type: "career-break"`, its dates and an optional `summary`, and no `name`. No new section: every theme already shows work entries in date order, and the reason stays optional free text.
+- 813e211: `SPEC.md` lists `json-resume-serde`, the Rust implementation, as covering all of 1.x (it now does).
+- 2950fa8: Ship `SPEC.md`, a normative description of JSON Resume 1.x: conforming documents, the date, URL, country and language conventions, what every field means, extension through `custom`, what producers and consumers must do, and the compatibility promise (#310).
+
 ## 1.7.1
 
 ### Patch Changes

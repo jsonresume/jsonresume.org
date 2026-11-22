@@ -1,5 +1,13 @@
 # @repo/resume-host
 
+## 0.0.3
+
+### Patch Changes
+
+- @repo/resume-formats@0.0.1
+- @repo/resume-themes@0.0.3
+- @repo/resume-pdf@0.0.0
+
 ## 0.0.2
 
 ### Patch Changes

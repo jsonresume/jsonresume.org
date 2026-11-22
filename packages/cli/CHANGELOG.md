@@ -1,5 +1,18 @@
 # resume-cli
 
+## 3.9.1
+
+### Patch Changes
+
+- Updated dependencies [32299c9]
+- Updated dependencies [a6ba9ed]
+- Updated dependencies [b05f681]
+- Updated dependencies [a6277b9]
+- Updated dependencies [813e211]
+- Updated dependencies [2950fa8]
+- Updated dependencies [453ea3e]
+  - @jsonresume/schema@1.8.0
+
 ## 3.9.0
 
 ### Minor Changes

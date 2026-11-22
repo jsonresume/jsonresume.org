@@ -4041,7 +4041,7 @@ importers:
   packages/theme-kit:
     dependencies:
       '@jsonresume/core':
-        specifier: workspace:>=0.3.0
+        specifier: workspace:>=0.4.0
         version: link:../resume-core
       '@jsonresume/sample-data':
         specifier: workspace:*

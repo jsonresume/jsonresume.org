@@ -1,5 +1,20 @@
 # @repo/content
 
+## 0.0.3
+
+### Patch Changes
+
+- Updated dependencies [32299c9]
+- Updated dependencies [a6ba9ed]
+- Updated dependencies [b05f681]
+- Updated dependencies [a6277b9]
+- Updated dependencies [813e211]
+- Updated dependencies [2950fa8]
+- Updated dependencies [cd7f535]
+- Updated dependencies [453ea3e]
+  - @jsonresume/schema@1.8.0
+  - @jsonresume/theme-metadata@0.7.0
+
 ## 0.0.2
 
 ### Patch Changes
