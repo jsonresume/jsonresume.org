@@ -16,7 +16,8 @@ import { createAppRenderer } from '../src/entry-server';
 import { discoveryRoutes } from './agents';
 import { appServices } from './services';
 
-process.env['AUTH_SECRET'] ??= 'test only';
+// Fork PRs get secrets as empty strings, which ??= keeps.
+process.env['AUTH_SECRET'] ||= 'test only';
 const site = 'http://local.test';
 process.env['SITE_URL'] = site;
 const services = appServices(InMemoryDatabase);

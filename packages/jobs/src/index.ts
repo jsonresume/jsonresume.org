@@ -52,6 +52,7 @@ export {
 export { factsOf, refreshFacts } from './factsRefresh';
 export type { MarkMeta } from './marks';
 export {
+  directionOf,
   isStated,
   noPreferences,
   preferenceSummary,

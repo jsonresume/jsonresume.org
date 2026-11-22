@@ -143,6 +143,10 @@
             "type": "string",
             "description": "e.g. Software Engineer"
           },
+          "type": {
+            "type": "string",
+            "description": "How the role was held. Free text; recommended values: 'full-time', 'part-time', 'contract', 'freelance', 'internship', 'temporary'. Combine them as needed, e.g. 'part-time contract'. Describes past roles, not what you are looking for (#599)"
+          },
           "url": {
             "type": "string",
             "description": "e.g. http://facebook.example.com",
