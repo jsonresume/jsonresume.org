@@ -8,6 +8,7 @@ import {
   BadgeList,
   Link,
   safeUrl,
+  InlineMarkdown,
 } from '@jsonresume/core';
 
 /*
@@ -583,7 +584,9 @@ function Resume({ resume = {} }) {
           )}
         </Station>
 
-        {basics.summary && <Abstract>{basics.summary}</Abstract>}
+        {basics.summary && (
+          <InlineMarkdown as={Abstract} text={basics.summary} />
+        )}
       </Header>
 
       {work.length > 0 && (
@@ -613,11 +616,13 @@ function Resume({ resume = {} }) {
                 {job.position && job.name && (
                   <EntrySubtitle>{job.name}</EntrySubtitle>
                 )}
-                {job.summary && <EntryText>{job.summary}</EntryText>}
+                {job.summary && (
+                  <InlineMarkdown as={EntryText} text={job.summary} />
+                )}
                 {job.highlights && job.highlights.length > 0 && (
                   <Findings>
                     {job.highlights.map((h, i) => (
-                      <li key={i}>{h}</li>
+                      <InlineMarkdown as="li" key={i} text={h} />
                     ))}
                   </Findings>
                 )}
@@ -653,12 +658,12 @@ function Resume({ resume = {} }) {
                   )}
                 </EntryTitle>
                 {project.description && (
-                  <EntryText>{project.description}</EntryText>
+                  <InlineMarkdown as={EntryText} text={project.description} />
                 )}
                 {project.highlights && project.highlights.length > 0 && (
                   <Findings>
                     {project.highlights.map((h, i) => (
-                      <li key={i}>{h}</li>
+                      <InlineMarkdown as="li" key={i} text={h} />
                     ))}
                   </Findings>
                 )}
@@ -741,11 +746,13 @@ function Resume({ resume = {} }) {
                 {vol.position && vol.organization && (
                   <EntrySubtitle>{vol.organization}</EntrySubtitle>
                 )}
-                {vol.summary && <EntryText>{vol.summary}</EntryText>}
+                {vol.summary && (
+                  <InlineMarkdown as={EntryText} text={vol.summary} />
+                )}
                 {vol.highlights && vol.highlights.length > 0 && (
                   <Findings>
                     {vol.highlights.map((h, i) => (
-                      <li key={i}>{h}</li>
+                      <InlineMarkdown as="li" key={i} text={h} />
                     ))}
                   </Findings>
                 )}
@@ -801,7 +808,9 @@ function Resume({ resume = {} }) {
                       pub.name
                     )}
                   </LedgerTitle>
-                  {pub.summary && <LedgerText>{pub.summary}</LedgerText>}
+                  {pub.summary && (
+                    <InlineMarkdown as={LedgerText} text={pub.summary} />
+                  )}
                 </div>
               </LedgerRow>
             ))}
@@ -824,7 +833,12 @@ function Resume({ resume = {} }) {
                   {award.awarder && (
                     <LedgerText>
                       {award.awarder}
-                      {award.summary ? ` — ${award.summary}` : ''}
+                      {award.summary && (
+                        <>
+                          {' — '}
+                          <InlineMarkdown text={award.summary} />
+                        </>
+                      )}
                     </LedgerText>
                   )}
                 </div>

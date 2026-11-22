@@ -9,6 +9,7 @@ import {
   Link,
   safeUrl,
   isExternalUrl,
+  InlineMarkdown,
 } from '@jsonresume/core';
 
 const ResumeContainer = styled.div`
@@ -287,7 +288,9 @@ function Resume({ resume }) {
           <>
             {basics.name && <Name>{basics.name}</Name>}
             {basics.label && <Title>{basics.label}</Title>}
-            {basics.summary && <Summary>{basics.summary}</Summary>}
+            {basics.summary && (
+              <InlineMarkdown as={Summary} text={basics.summary} />
+            )}
           </>
         )}
       </Header>
@@ -435,12 +438,18 @@ function Resume({ resume }) {
                     />
                   </ExperienceHeader>
 
-                  {job.summary && <Description>{job.summary}</Description>}
+                  {job.summary && (
+                    <InlineMarkdown as={Description} text={job.summary} />
+                  )}
 
                   {job.highlights && job.highlights.length > 0 && (
                     <Highlights>
                       {job.highlights.map((highlight, i) => (
-                        <Highlight key={i}>{highlight}</Highlight>
+                        <InlineMarkdown
+                          as={Highlight}
+                          key={i}
+                          text={highlight}
+                        />
                       ))}
                     </Highlights>
                   )}
@@ -499,13 +508,20 @@ function Resume({ resume }) {
                   </ExperienceHeader>
 
                   {project.description && (
-                    <Description>{project.description}</Description>
+                    <InlineMarkdown
+                      as={Description}
+                      text={project.description}
+                    />
                   )}
 
                   {project.highlights && project.highlights.length > 0 && (
                     <Highlights>
                       {project.highlights.map((highlight, i) => (
-                        <Highlight key={i}>{highlight}</Highlight>
+                        <InlineMarkdown
+                          as={Highlight}
+                          key={i}
+                          text={highlight}
+                        />
                       ))}
                     </Highlights>
                   )}
@@ -523,7 +539,9 @@ function Resume({ resume }) {
                   {award.title && <Institution>{award.title}</Institution>}
                   {award.awarder && <Degree>{award.awarder}</Degree>}
                   {award.date && <StyledDateRange startDate={award.date} />}
-                  {award.summary && <Description>{award.summary}</Description>}
+                  {award.summary && (
+                    <InlineMarkdown as={Description} text={award.summary} />
+                  )}
                 </EducationItem>
               ))}
             </StyledSection>
@@ -582,7 +600,9 @@ function Resume({ resume }) {
                   {pub.releaseDate && (
                     <StyledDateRange startDate={pub.releaseDate} />
                   )}
-                  {pub.summary && <Description>{pub.summary}</Description>}
+                  {pub.summary && (
+                    <InlineMarkdown as={Description} text={pub.summary} />
+                  )}
                 </EducationItem>
               ))}
             </StyledSection>
@@ -603,12 +623,18 @@ function Resume({ resume }) {
                     />
                   </ExperienceHeader>
 
-                  {vol.summary && <Description>{vol.summary}</Description>}
+                  {vol.summary && (
+                    <InlineMarkdown as={Description} text={vol.summary} />
+                  )}
 
                   {vol.highlights && vol.highlights.length > 0 && (
                     <Highlights>
                       {vol.highlights.map((highlight, i) => (
-                        <Highlight key={i}>{highlight}</Highlight>
+                        <InlineMarkdown
+                          as={Highlight}
+                          key={i}
+                          text={highlight}
+                        />
                       ))}
                     </Highlights>
                   )}

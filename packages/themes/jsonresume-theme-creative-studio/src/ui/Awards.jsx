@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import Section from './Section.jsx';
 import Date from './Date';
 
+import { InlineMarkdown } from '@jsonresume/core';
 const AwardItem = styled.div`
   margin-bottom: 1.5rem;
 
@@ -49,7 +50,9 @@ const Awards = ({ awards }) => {
               <Date date={award.date} />
             </AwardDate>
           )}
-          {award.summary && <Summary>{award.summary}</Summary>}
+          {award.summary && (
+            <InlineMarkdown as={Summary} text={award.summary} />
+          )}
         </AwardItem>
       ))}
     </Section>

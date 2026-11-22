@@ -5,6 +5,7 @@ import {
   SectionTitle,
   DateRange,
   ContactInfo,
+  InlineMarkdown,
 } from '@jsonresume/core';
 
 const Layout = styled.div`
@@ -299,7 +300,9 @@ function Resume({ resume }) {
         <Name>{basics.name}</Name>
         {basics.label && <Label>{basics.label}</Label>}
         <StyledContactInfo basics={basics} />
-        {basics.summary && <Summary>{basics.summary}</Summary>}
+        {basics.summary && (
+          <InlineMarkdown as={Summary} text={basics.summary} />
+        )}
       </Header>
 
       {work?.length > 0 && (
@@ -316,11 +319,13 @@ function Resume({ resume }) {
                   <DateRange startDate={job.startDate} endDate={job.endDate} />
                 </DateText>
               </WorkHeader>
-              {job.summary && <WorkSummary>{job.summary}</WorkSummary>}
+              {job.summary && (
+                <InlineMarkdown as={WorkSummary} text={job.summary} />
+              )}
               {job.highlights?.length > 0 && (
                 <Highlights>
                   {job.highlights.map((highlight, i) => (
-                    <li key={i}>{highlight}</li>
+                    <InlineMarkdown as="li" key={i} text={highlight} />
                   ))}
                 </Highlights>
               )}
@@ -370,12 +375,12 @@ function Resume({ resume }) {
             <WorkItem key={index}>
               <Position>{project.name}</Position>
               {project.description && (
-                <WorkSummary>{project.description}</WorkSummary>
+                <InlineMarkdown as={WorkSummary} text={project.description} />
               )}
               {project.highlights?.length > 0 && (
                 <Highlights>
                   {project.highlights.map((highlight, i) => (
-                    <li key={i}>{highlight}</li>
+                    <InlineMarkdown as="li" key={i} text={highlight} />
                   ))}
                 </Highlights>
               )}
@@ -403,11 +408,13 @@ function Resume({ resume }) {
                   </DateText>
                 )}
               </WorkHeader>
-              {vol.summary && <WorkSummary>{vol.summary}</WorkSummary>}
+              {vol.summary && (
+                <InlineMarkdown as={WorkSummary} text={vol.summary} />
+              )}
               {vol.highlights?.length > 0 && (
                 <Highlights>
                   {vol.highlights.map((highlight, i) => (
-                    <li key={i}>{highlight}</li>
+                    <InlineMarkdown as="li" key={i} text={highlight} />
                   ))}
                 </Highlights>
               )}
@@ -424,7 +431,9 @@ function Resume({ resume }) {
               <Institution>{award.title}</Institution>
               {award.awarder && <Degree>Awarded by {award.awarder}</Degree>}
               {award.date && <EducationDate>{award.date}</EducationDate>}
-              {award.summary && <WorkSummary>{award.summary}</WorkSummary>}
+              {award.summary && (
+                <InlineMarkdown as={WorkSummary} text={award.summary} />
+              )}
             </EducationItem>
           ))}
         </Section>
@@ -453,7 +462,9 @@ function Resume({ resume }) {
               {pub.releaseDate && (
                 <EducationDate>{pub.releaseDate}</EducationDate>
               )}
-              {pub.summary && <WorkSummary>{pub.summary}</WorkSummary>}
+              {pub.summary && (
+                <InlineMarkdown as={WorkSummary} text={pub.summary} />
+              )}
             </EducationItem>
           ))}
         </Section>

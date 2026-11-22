@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { DateRange, Link, safeUrl } from '@jsonresume/core';
+import { DateRange, Link, safeUrl, InlineMarkdown } from '@jsonresume/core';
 
 /*
  * Art School Modern
@@ -413,7 +413,7 @@ function Highlights({ items }) {
   return (
     <Bullets>
       {items.map((h, i) => (
-        <li key={i}>{h}</li>
+        <InlineMarkdown as="li" key={i} text={h} />
       ))}
     </Bullets>
   );
@@ -510,7 +510,7 @@ function Resume({ resume }) {
         {basics.summary && (
           <Statement>
             <StatementMark>{'— Statement'}</StatementMark>
-            <StatementText>{basics.summary}</StatementText>
+            <InlineMarkdown as={StatementText} text={basics.summary} />
           </Statement>
         )}
 
@@ -529,7 +529,9 @@ function Resume({ resume }) {
                 </EntryTop>
                 {job.name && job.position && <EntrySub>{job.name}</EntrySub>}
                 {job.location && <EntryMeta>{job.location}</EntryMeta>}
-                {job.summary && <EntryText>{job.summary}</EntryText>}
+                {job.summary && (
+                  <InlineMarkdown as={EntryText} text={job.summary} />
+                )}
                 <Highlights items={job.highlights} />
               </Entry>
             ))}
@@ -556,7 +558,9 @@ function Resume({ resume }) {
                   </EntryMeta>
                 </EntryTop>
                 {proj.type && <EntrySub>{proj.type}</EntrySub>}
-                {proj.description && <EntryText>{proj.description}</EntryText>}
+                {proj.description && (
+                  <InlineMarkdown as={EntryText} text={proj.description} />
+                )}
                 <Highlights items={proj.highlights} />
                 {proj.keywords && proj.keywords.length > 0 && (
                   <TagWrap>
@@ -627,7 +631,9 @@ function Resume({ resume }) {
                     {a.date && <EntryMeta>{a.date}</EntryMeta>}
                   </EntryTop>
                   {a.awarder && <EntrySub>{a.awarder}</EntrySub>}
-                  {a.summary && <EntryText>{a.summary}</EntryText>}
+                  {a.summary && (
+                    <InlineMarkdown as={EntryText} text={a.summary} />
+                  )}
                 </Entry>
               ))}
             </Rows>
@@ -672,7 +678,9 @@ function Resume({ resume }) {
                     {p.releaseDate && <EntryMeta>{p.releaseDate}</EntryMeta>}
                   </EntryTop>
                   {p.publisher && <EntrySub>{p.publisher}</EntrySub>}
-                  {p.summary && <EntryText>{p.summary}</EntryText>}
+                  {p.summary && (
+                    <InlineMarkdown as={EntryText} text={p.summary} />
+                  )}
                 </Entry>
               ))}
             </Rows>
@@ -692,7 +700,9 @@ function Resume({ resume }) {
                 {v.organization && v.position && (
                   <EntrySub>{v.organization}</EntrySub>
                 )}
-                {v.summary && <EntryText>{v.summary}</EntryText>}
+                {v.summary && (
+                  <InlineMarkdown as={EntryText} text={v.summary} />
+                )}
                 <Highlights items={v.highlights} />
               </Entry>
             ))}
