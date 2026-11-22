@@ -79,3 +79,10 @@ export function normalizeResume(resume?: Partial<Resume>): Resume;
 export function withStringLocations<T>(resume: T): T;
 /** Gives projects both `summary` and `description` when either is set (#296). */
 export function withProjectSummaries<T>(resume: T): T;
+
+// --- markdown (#600) ---
+
+/** Resume text with inline Markdown (strong, emphasis, code, links) as escaped HTML. */
+export function renderInlineMarkdown(text: unknown): string;
+/** Resume text with its inline Markdown marks removed, links as their label. */
+export function stripInlineMarkdown(text: unknown): string;

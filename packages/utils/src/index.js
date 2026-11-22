@@ -4,7 +4,7 @@
  * Framework-free pure utilities for JSON Resume. No React, no
  * styled-components — safe to use anywhere (server, CLI, browser, themes).
  *
- * Subpath exports: './dates', './metrics', './url'. The root barrel below
+ * Subpath exports: './dates', './metrics', './url', './markdown'. The root barrel below
  * re-exports everything for convenience.
  *
  * @module @jsonresume/utils
@@ -57,3 +57,6 @@ export {
   withStringLocations,
   withProjectSummaries,
 } from './resume.js';
+
+// Inline Markdown in resume text (#600)
+export { renderInlineMarkdown, stripInlineMarkdown } from './markdown.js';

@@ -4,6 +4,8 @@ import {
   text,
   texts,
   entries,
+  prose,
+  proseList,
   workTitle,
   type Entry,
 } from './read';
@@ -39,8 +41,8 @@ const entry = (heading: Lines, item: Entry, summaryKey = 'summary'): Lines => [
   joined(heading, ', '),
   joined([period(item), place(item['location'])]),
   text(item['url']),
-  text(item[summaryKey]),
-  ...bullets([...texts(item['highlights']), ...texts(item['courses'])]),
+  prose(item[summaryKey]),
+  ...bullets([...proseList(item['highlights']), ...texts(item['courses'])]),
 ];
 
 const header = (basics: Entry): Lines => [
@@ -60,7 +62,7 @@ const header = (basics: Entry): Lines => [
 export function toText(resume: Entry): string {
   const basics = entries([resume['basics']])[0] ?? {};
   const list = (key: string) => entries(resume[key]);
-  const summary = text(basics['summary']);
+  const summary = prose(basics['summary']);
   return [
     header(basics)
       .filter((line) => line !== undefined)
@@ -96,7 +98,7 @@ export function toText(resume: Entry): string {
       'Awards',
       list('awards').map((a) => [
         joined([text(a['title']), text(a['awarder']), text(a['date'])]),
-        text(a['summary']),
+        prose(a['summary']),
       ])
     ),
     section(
@@ -111,7 +113,7 @@ export function toText(resume: Entry): string {
       list('publications').map((p) => [
         joined([text(p['name']), text(p['publisher']), text(p['releaseDate'])]),
         text(p['url']),
-        text(p['summary']),
+        prose(p['summary']),
       ])
     ),
     section(

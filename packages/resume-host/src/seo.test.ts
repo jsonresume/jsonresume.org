@@ -80,6 +80,21 @@ describe('withProfileHead', () => {
     expect(bare.endsWith('<p>hi</p>')).toBe(true);
   });
 
+  it('describes the page in words, without the summary’s Markdown', () => {
+    const html = withProfileHead(
+      '<html><head></head><body></body></html>',
+      'ada',
+      {
+        basics: {
+          name: 'Ada',
+          summary: 'Wrote the **first** [program](https://x.org).',
+        },
+      }
+    );
+    expect(html).toContain('content="Ada Wrote the first program."');
+    expect(html).not.toContain('**');
+  });
+
   it('escapes what the resume says, in attributes and in JSON-LD', () => {
     expect(html).not.toContain('<script>alert(1)</script>');
     expect(html).toContain('&lt;/script&gt;');
