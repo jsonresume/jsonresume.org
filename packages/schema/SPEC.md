@@ -74,13 +74,20 @@ MAY additionally sort dated entries by date.
 | `awards`       | `title`, `date`, `awarder`, `summary`.                                                                                                                                                                                                                                                                             |
 | `certificates` | `name`, `date`, `issuer`, `url`, `credentialId`, `expiryDate`, `summary`.                                                                                                                                                                                                                                          |
 | `publications` | `name`, `authors` (in published order, including the owner), `publisher` (for a talk, the event), `releaseDate`, `volume`, `issue`, `pages`, `identifiers` (keyed by scheme: `doi`, `isbn`, `arxiv`, …), `url`, `summary`, `type` (`article`, `book`, `patent`, `thesis`, `talk`, …).                              |
-| `skills`       | `name`, `level`, `keywords`.                                                                                                                                                                                                                                                                                       |
-| `languages`    | `language` (its name) and `fluency` (a label people read, such as "Fluent").                                                                                                                                                                                                                                       |
+| `skills`       | `name`, `level`, `keywords`, `id` (a short stable identifier, such as `typescript`).                                                                                                                                                                                                                               |
+| `languages`    | `language` (its name), `fluency` (a label people read, such as "Fluent") and `scale` (the level on a published scale, for tools: `{ framework, level }`, such as `{ "framework": "CEFR", "level": "C1" }`; `framework` is free text: `CEFR`, `ILR`, `ACTFL`, …).                                                   |
 | `interests`    | `name`, `keywords`.                                                                                                                                                                                                                                                                                                |
 | `references`   | `name`, `reference` (the text), `relationship`, `organization`, `date`, `availableOnRequest` (show "available on request" instead of the text). There are deliberately no contact fields.                                                                                                                          |
 | `projects`     | `name`, `summary`, `description` (deprecated alias of `summary`; `summary` wins when both are set), `highlights`, `keywords`, `startDate`, `endDate`, `url`, `roles`, `entity` (affiliation), `type` (`talk`, `application`, …).                                                                                   |
 | `meta`         | About the document, not the person (§5).                                                                                                                                                                                                                                                                           |
 | `custom`       | Extension data (§6). Allowed at the root, in `basics`, and on every entry of every section.                                                                                                                                                                                                                        |
+
+`work[].skills`, `volunteer[].skills`, `education[].skills` and
+`projects[].skills` list the skills an entry used. Each item is a string,
+the `name` or `id` of a top-level skill, or a skill object (`name`, `level`,
+`keywords`) for a skill grouped there. Consumers SHOULD resolve a string
+against `skills[].id` first, then `skills[].name`, and SHOULD accept a
+string that matches neither as a skill name.
 
 Free-text type fields (`work[].type`, `publications[].type`, `projects[].type`) take any
 value; the values listed are recommendations, so that tools can agree on

@@ -37,11 +37,12 @@ ready for schema PRs under the usual rules.
 **Status (2026-11-22).** Built and released in `@jsonresume/schema` 1.8.0:
 #599 (#693), #589 (#720), #600 (#723), #353 with #319 (#721), #288 (#716),
 and #310's first step, `SPEC.md` (#719), with the Rust implementation
-brought up to 1.x (#725). **On hold:** #315 and #313. Resumes already on
-jsonresume.org use `languages[].proficiency` (6 entries) and
-`work[].skills` (2 people, as skill groups) with other types, so the
-agreed shapes would make them invalid, against this file's own rule. The
-options are on each issue, for the maintainer.
+brought up to 1.x (#725). #315 and #313 follow in 1.9.0 under shapes chosen
+so that no resume on jsonresume.org becomes invalid (all 3,266 that validate
+today still do): live resumes already use `languages[].proficiency` and
+`languages[].level` as text, so the agreed `{ framework, level }` object is
+`languages[].scale`; and two people's `work[].skills` hold skill groups, so
+entry `skills` items are a name, an id, or a skill object.
 
 #### #599 Employment type: accept
 
@@ -68,7 +69,7 @@ Keep `fluency` as free text, the label people read. Add optional
 `framework` free text (`CEFR`, `ILR`, `ACTFL`, …). No closed list: regions use
 different scales, and a mandatory enum would break every existing resume.
 Speaking and writing levels can follow later as an array if a consumer needs
-them.
+them. Built as `languages[].scale` (see the status above).
 
 #### #600 Markdown: change
 
@@ -94,7 +95,8 @@ Accept the additive part: optional `skills[].id` and optional `skills[]` on
 the top-level list, so a skill can point to where it was used. Decline, for
 v1, global skill identifiers and dotted hierarchies: they need a shared
 registry the format can't carry, and `skills[].keywords` already groups.
-Revisit for v2 with a concrete consumer.
+Revisit for v2 with a concrete consumer. Built with entry `skills` items as a
+name, an id, or a skill object (see the status above).
 
 #### #288 Internationalisation: change
 

@@ -10,6 +10,10 @@ export const skills = {
     additionalProperties: true,
     properties: {
       custom: { $ref: '#/definitions/custom' },
+      id: {
+        type: 'string',
+        description: 'A short, stable identifier, e.g. typescript (#313)',
+      },
       name: {
         type: 'string',
         description: 'e.g. Web Development',

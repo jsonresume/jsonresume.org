@@ -9,6 +9,12 @@ export const education = {
     additionalProperties: true,
     properties: {
       custom: { $ref: '#/definitions/custom' },
+      skills: {
+        type: 'array',
+        description:
+          'Skills used here: names or ids from skills[], or skill objects (#313)',
+        items: { $ref: '#/definitions/skillReference' },
+      },
       institution: {
         type: 'string',
         description: 'e.g. Massachusetts Institute of Technology',
