@@ -1,5 +1,11 @@
 # jsonresume-theme-university-first
 
+## 0.2.15
+
+### Patch Changes
+
+- @jsonresume/core@0.4.2
+
 ## 0.2.14
 
 ### Patch Changes

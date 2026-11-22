@@ -1,5 +1,11 @@
 <a id="1.0.0"></a>
 
+## 1.10.0
+
+### Minor Changes
+
+- a2ef2a1: Add the company format (`company-schema.json`, draft, exported as `companySchema`, with `sample.company.json` and `COMPANY-SPEC.md`) and complete job description v1 (`JOB-SPEC.md`) with `url`, `apply` and `companyUrl`. `@jsonresume/types` gains the `Company` type.
+
 ## 1.9.0
 
 ### Minor Changes

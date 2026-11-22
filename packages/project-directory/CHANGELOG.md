@@ -1,5 +1,11 @@
 # @repo/project-directory
 
+## 0.0.5
+
+### Patch Changes
+
+- @repo/content@0.0.5
+
 ## 0.0.4
 
 ### Patch Changes
