@@ -157,7 +157,7 @@ export function PreferencesForm({
       </Section>
       <Section
         title="Where you want to go"
-        hint="In your words: jobs closer to it rank higher."
+        hint="In your words: jobs closer to it rank higher. Left empty, the objective in your resume counts instead."
       >
         <Field label="Direction">
           <Textarea

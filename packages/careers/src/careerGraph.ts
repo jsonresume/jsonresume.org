@@ -68,7 +68,7 @@ const make = Effect.gen(function* () {
 
   const build = (userId: string, resume: unknown, wait: Duration.Input) =>
     Effect.gen(function* () {
-      const want = yield* preferencesFor(preferences, userId);
+      const want = yield* preferencesFor(preferences, userId, resume);
       const [{ ranked, judging }, insight] = yield* models(userId, resume, {
         wait,
         toward: want.direction,

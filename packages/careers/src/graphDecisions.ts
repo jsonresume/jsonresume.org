@@ -1,5 +1,6 @@
 import type { JobPreferences } from '@repo/api';
 import {
+  directionOf,
   noPreferences,
   PreferenceStore,
   resumeMentions,
@@ -10,15 +11,19 @@ import { decideRanked } from './decisions';
 import { gather } from './gather';
 import type { ResumeInsight } from './services';
 
-/** What a person wants, or nothing stated where there is no store (tests). */
+/**
+ * What a person wants, or nothing stated where there is no store (tests).
+ * A goal written in the resume steers until they state a direction.
+ */
 export const preferencesFor = (
   store: Option.Option<PreferenceStore['Service']>,
-  userId: string
+  userId: string,
+  resume: unknown
 ): Effect.Effect<JobPreferences> =>
   Option.match(store, {
     onNone: () => Effect.succeed(noPreferences),
     onSome: (s) => s.get(userId),
-  });
+  }).pipe(Effect.map((p) => ({ ...p, direction: directionOf(p, resume) })));
 
 /**
  * The jobs the Tree draws: those no dealbreaker of theirs rules out, with
