@@ -18,6 +18,11 @@
       "type": "string",
       "description": "Microsoft"
     },
+    "companyUrl": {
+      "type": "string",
+      "format": "uri",
+      "description": "The company's website, e.g. https://microsoft.com. It identifies the company: a company document (company-schema.json) with the same url describes it"
+    },
     "type": {
       "type": "string",
       "description": "Full-time, part-time, contract, etc."
@@ -28,6 +33,32 @@
     "description": {
       "type": "string",
       "description": "Write a short description about the job"
+    },
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Where the posting is published"
+    },
+    "apply": {
+      "type": "object",
+      "description": "How to apply. Give whichever the posting offers",
+      "additionalProperties": true,
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "An application form or page"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "An address to send applications to"
+        },
+        "instructions": {
+          "type": "string",
+          "description": "Anything else the applicant must do, e.g. 'Mention HN in your cover letter'"
+        }
+      }
     },
     "location": {
       "type": "object",

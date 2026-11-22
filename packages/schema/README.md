@@ -94,14 +94,15 @@ Releases are managed from the monorepo with [Changesets](https://github.com/chan
 
 `major` version bumps will be few and far between for this schema.
 
-### Job Description Schema
+### Job description and company schemas
 
-A draft schema for job descriptions is available in this project as well. It is not yet finalized, but we encourage you to check it out and provide feedback. See `job-schema.json` and `sample.job.json`.
+Two related formats ship in this package:
 
-The JSON Job schema is available from:
+- **Job descriptions** (v1): `job-schema.json`, with `sample.job.json`, specified in [JOB-SPEC.md](JOB-SPEC.md).
+- **Companies** (draft): `company-schema.json`, with `sample.company.json`, specified in [COMPANY-SPEC.md](COMPANY-SPEC.md). A job's `companyUrl` matches its company's `url`.
 
 ```js
-require('@jsonresume/schema').jobSchema;
+const { jobSchema, companySchema } = require('@jsonresume/schema');
 ```
 
 ### Other resume standards

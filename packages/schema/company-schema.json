@@ -1,0 +1,187 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/jsonresume/jsonresume.org/master/packages/schema/company-schema.json",
+  "title": "Company Schema",
+  "description": "A company that hires: who it is, where it works and how. Job documents (job-schema.json) point to one through companyUrl",
+  "type": "object",
+  "additionalProperties": true,
+  "definitions": {
+    "iso8601": {
+      "type": "string",
+      "description": "Similar to the standard date type, but each section after the year is optional. e.g. 2014-06-29 or 2023-04",
+      "pattern": "^([1-2][0-9]{3}-[0-1][0-9]-[0-3][0-9]|[1-2][0-9]{3}-[0-1][0-9]|[1-2][0-9]{3})$"
+    },
+    "location": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "address": {
+          "type": "string",
+          "description": "To add multiple address lines, use \\n. For example, 1234 Glücklichkeit Straße\\nHinterhaus 5. Etage li."
+        },
+        "postalCode": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "countryCode": {
+          "type": "string",
+          "description": "code as per ISO-3166-1 ALPHA-2, e.g. US, AU, IN"
+        },
+        "region": {
+          "type": "string",
+          "description": "A state or province, for instance"
+        }
+      }
+    }
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "e.g. Microsoft"
+    },
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "description": "The company's website, e.g. https://microsoft.com. It identifies the company: job documents name it in companyUrl"
+    },
+    "logo": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL of the company's logo, a square image"
+    },
+    "description": {
+      "type": "string",
+      "description": "What the company does, in a few sentences"
+    },
+    "industry": {
+      "type": "string",
+      "description": "e.g. Developer tools, Healthcare, Fintech"
+    },
+    "keywords": {
+      "type": "array",
+      "description": "Words that describe what the company does, e.g. ['payments', 'API']",
+      "items": {
+        "type": "string"
+      }
+    },
+    "founded": {
+      "$ref": "#/definitions/iso8601",
+      "description": "When the company was founded, e.g. 2015"
+    },
+    "employees": {
+      "type": "object",
+      "description": "How many people work there, as a range. Equal min and max for an exact count",
+      "additionalProperties": true,
+      "properties": {
+        "min": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "stage": {
+      "type": "string",
+      "description": "Funding or ownership, e.g. Bootstrapped, Seed, Series B, Public, Non-profit"
+    },
+    "headquarters": {
+      "$ref": "#/definitions/location"
+    },
+    "locations": {
+      "type": "array",
+      "description": "Offices and other places people work, besides the headquarters",
+      "items": {
+        "$ref": "#/definitions/location"
+      }
+    },
+    "remote": {
+      "type": "string",
+      "description": "The company's usual remote policy; each job document says its own",
+      "enum": ["Full", "Hybrid", "None"]
+    },
+    "technologies": {
+      "type": "array",
+      "description": "Languages, frameworks and tools the company uses, e.g. ['TypeScript', 'Postgres']",
+      "items": {
+        "type": "string"
+      }
+    },
+    "benefits": {
+      "type": "array",
+      "description": "e.g. ['Health insurance', '4-day week']",
+      "items": {
+        "type": "string"
+      }
+    },
+    "values": {
+      "type": "array",
+      "description": "What the company says it values, in its words",
+      "items": {
+        "type": "string"
+      }
+    },
+    "careers": {
+      "type": "string",
+      "format": "uri",
+      "description": "The company's page of open roles"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "An address for hiring questions"
+    },
+    "profiles": {
+      "type": "array",
+      "description": "The company on other sites",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "network": {
+            "type": "string",
+            "description": "e.g. GitHub, LinkedIn"
+          },
+          "username": {
+            "type": "string",
+            "description": "e.g. microsoft"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "e.g. https://github.com/microsoft"
+          }
+        }
+      }
+    },
+    "custom": {
+      "type": "object",
+      "description": "Extension data, keyed by tool, as in the resume schema",
+      "additionalProperties": true
+    },
+    "meta": {
+      "type": "object",
+      "description": "About the document, not the company",
+      "additionalProperties": true,
+      "properties": {
+        "canonical": {
+          "type": "string",
+          "description": "URL (as per RFC 3986) to latest version of this document",
+          "format": "uri"
+        },
+        "version": {
+          "type": "string",
+          "description": "A version field which follows semver - e.g. v1.0.0"
+        },
+        "lastModified": {
+          "type": "string",
+          "description": "Using ISO 8601 with YYYY-MM-DDThh:mm:ss"
+        }
+      }
+    }
+  }
+}

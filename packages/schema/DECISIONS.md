@@ -15,6 +15,22 @@ None. New proposals appear in each month's Schema review issue.
 
 ## Decided
 
+### Job and company formats (2026-11-22)
+
+Asked for by the maintainer, outside the monthly review.
+
+- **Job description v1 is complete (#353).** `JOB-SPEC.md` specifies it.
+  Three optional fields fill gaps found serving the board's jobs as
+  documents: `url` (where the posting is published), `apply` (`url`,
+  `email`, `instructions`) and `companyUrl` (the employer's website).
+- **A company format, as a draft.** `company-schema.json`, specified in
+  `COMPANY-SPEC.md`: who the company is, its size, where and how it works,
+  and the technologies and benefits candidates ask about. A company is
+  identified by its website, the same value a job gives in `companyUrl`, so
+  the two formats join without a registry of ids. Open roles stay out of the
+  company document: each is a job document. It stays a draft until a second
+  producer uses it.
+
 ### November 2026
 
 Confirmed by the maintainer on 2026-11-16 and posted on each issue, which

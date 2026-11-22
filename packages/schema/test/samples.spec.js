@@ -1,9 +1,10 @@
 var test = require('tape');
 var Validator = require('jsonschema').Validator;
-var { validate, jobSchema } = require('../validator');
+var { validate, jobSchema, companySchema } = require('../validator');
 
 const sampleResume = require('../sample.resume.json');
 const sampleJob = require('../sample.job.json');
+const sampleCompany = require('../sample.company.json');
 
 // The bundled samples are shipped in package.json "files" and referenced from
 // docs/themes as the canonical examples. They must validate against the schemas
@@ -22,6 +23,16 @@ test('sample.job.json validates against job-schema', (t) => {
   t.true(
     result.valid,
     'sample.job.json is valid: ' +
+      result.errors.map((e) => e.property + ' ' + e.message).join(', ')
+  );
+  t.end();
+});
+
+test('sample.company.json validates against company-schema', (t) => {
+  var result = new Validator().validate(sampleCompany, companySchema);
+  t.true(
+    result.valid,
+    'sample.company.json is valid: ' +
       result.errors.map((e) => e.property + ' ' + e.message).join(', ')
   );
   t.end();
