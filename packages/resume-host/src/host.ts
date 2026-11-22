@@ -11,6 +11,7 @@ import {
 import { withTracking } from '@repo/analytics';
 import { Effect, Random, Schema } from 'effect';
 import { externalizeFonts } from './fonts';
+import { withResumeLanguage } from './lang';
 import { headers, lookup, problem, redirect, respond } from './outcome';
 import { docxResponse, pdfResponse, qrResponse } from './print';
 import { withCanonicalLink, withProfileHead } from './seo';
@@ -128,6 +129,7 @@ export const resumeOutcome = Effect.fn('resumeOutcome')(function* (url: URL) {
   const slug = written ? themeSlug(written) : DEFAULT_THEME;
   const theme = query || isTheme(slug) ? slug : DEFAULT_THEME;
   return yield* renderTheme(theme, doc.value).pipe(
+    Effect.map((html) => withResumeLanguage(html, doc.value)),
     Effect.flatMap((html) =>
       format === 'pdf'
         ? pdfResponse(html, username, doc.value, url.searchParams).pipe(

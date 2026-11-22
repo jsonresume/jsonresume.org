@@ -65,3 +65,36 @@ test('meta.lastModified - invalid', (t) => {
   });
   t.end();
 });
+
+const validates = (resume) => {
+  let result;
+  validate(resume, (errors, ok) => {
+    result = ok;
+  });
+  return result;
+};
+
+test('meta.language (#288) - a BCP 47 tag, as text', (t) => {
+  t.true(validates({ meta: { language: 'en' } }));
+  t.true(validates({ meta: { language: 'pt-BR' } }));
+  t.false(validates({ meta: { language: ['en'] } }));
+  t.false(validates({ meta: { language: 1 } }));
+  t.end();
+});
+
+test('meta.translations (#288) - other documents by language and URL', (t) => {
+  t.true(
+    validates({
+      meta: {
+        language: 'en',
+        translations: [
+          { language: 'fr', url: 'https://jsonresume.org/@ada/fr.json' },
+        ],
+      },
+    })
+  );
+  t.false(validates({ meta: { translations: { fr: 'https://x.org' } } }));
+  t.false(validates({ meta: { translations: [{ url: 'not a url' }] } }));
+  t.false(validates({ meta: { translations: [{ language: 7 }] } }));
+  t.end();
+});
