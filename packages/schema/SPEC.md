@@ -148,9 +148,9 @@ the decisions are recorded in [DECISIONS.md](DECISIONS.md).
 - [`@jsonresume/schema`](https://www.npmjs.com/package/@jsonresume/schema)
   (JavaScript): `schema.json` and a validator.
 - [`json-resume-serde`](../core-rust) (Rust): typed serde bindings with
-  validation. It covers the fields of 1.0 and not yet those added since
-  (such as `objective`, `work[].keywords` and the newer `publications` and
-  `references` fields), which it ignores when reading.
+  validation, written separately from the JavaScript validator. It covers
+  every field of 1.x, keeps unknown properties, and is tested against the
+  schema's sample and examples in CI.
 - [`@jsonresume/types`](../types) (TypeScript): types generated from the
   schema.
 
