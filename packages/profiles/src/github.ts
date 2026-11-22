@@ -53,12 +53,14 @@ export class GithubGists extends Context.Service<
     find(login: string, file: string): Lookup;
     /** Read `file` from a gist already known; not found if it moved or went. */
     read(login: string, gistId: string, file: string): Lookup;
+    /** Whether requests are left beyond a reserve, for refreshes that can wait. */
+    readonly spare: Effect.Effect<boolean>;
   }
 >()('@repo/profiles/GithubGists') {
   static readonly make = (credentials: GithubCredentials) =>
     Effect.gen(function* () {
       const client = yield* HttpClient.HttpClient;
-      const api = makeGithubApi(client, credentials);
+      const { get: api, spare } = makeGithubApi(client, credentials);
       const decodeError = (e: { message: string }) => unavailable(e.message);
 
       const content = Effect.fn('GithubGists.content')(function* (
@@ -151,7 +153,7 @@ export class GithubGists extends Context.Service<
         return yield* content(gist, login, file);
       });
 
-      return GithubGists.of({ find, read });
+      return GithubGists.of({ find, read, spare });
     });
 
   /** Credentials from the environment; GitHub over fetch. */
