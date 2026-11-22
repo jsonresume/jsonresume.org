@@ -26,6 +26,7 @@ export const THEME_CLASSIFICATION = {
   'developer-mono': ['technical', 'single', 'blue'],
   'diagonal-accent-bar': ['bold', 'single', 'red'],
   dublin: ['modern', 'left', 'green'],
+  editorial: ['editorial', 'single', 'warm'],
   elegant: ['modern', 'left', 'blue'],
   'elegant-pink': ['classic', 'single', 'purple'],
   'europass-inspired': ['classic', 'dates', 'blue'],
