@@ -9,6 +9,7 @@ import {
   ContactInfo,
   Link,
   safeUrl,
+  InlineMarkdown,
 } from '@jsonresume/core';
 
 // ---------------------------------------------------------------------------
@@ -397,7 +398,9 @@ function Resume({ resume }) {
       </Masthead>
 
       <Body>
-        {basics.summary && <Summary>{basics.summary}</Summary>}
+        {basics.summary && (
+          <InlineMarkdown as={Summary} text={basics.summary} />
+        )}
 
         {work.length > 0 && (
           <Block>
@@ -428,11 +431,11 @@ function Resume({ resume }) {
                     </EntryMeta>
                   )}
                 </EntryHead>
-                {job.summary && <Para>{job.summary}</Para>}
+                {job.summary && <InlineMarkdown as={Para} text={job.summary} />}
                 {job.highlights && job.highlights.length > 0 && (
                   <Bullets>
                     {job.highlights.map((h, hi) => (
-                      <li key={hi}>{h}</li>
+                      <InlineMarkdown as="li" key={hi} text={h} />
                     ))}
                   </Bullets>
                 )}
@@ -532,11 +535,13 @@ function Resume({ resume }) {
                     </EntryMeta>
                   )}
                 </EntryHead>
-                {project.description && <Para>{project.description}</Para>}
+                {project.description && (
+                  <InlineMarkdown as={Para} text={project.description} />
+                )}
                 {project.highlights && project.highlights.length > 0 && (
                   <Bullets>
                     {project.highlights.map((h, hi) => (
-                      <li key={hi}>{h}</li>
+                      <InlineMarkdown as="li" key={hi} text={h} />
                     ))}
                   </Bullets>
                 )}
@@ -578,11 +583,11 @@ function Resume({ resume }) {
                     </EntryMeta>
                   )}
                 </EntryHead>
-                {vol.summary && <Para>{vol.summary}</Para>}
+                {vol.summary && <InlineMarkdown as={Para} text={vol.summary} />}
                 {vol.highlights && vol.highlights.length > 0 && (
                   <Bullets>
                     {vol.highlights.map((h, hi) => (
-                      <li key={hi}>{h}</li>
+                      <InlineMarkdown as="li" key={hi} text={h} />
                     ))}
                   </Bullets>
                 )}
@@ -604,7 +609,9 @@ function Resume({ resume }) {
                       {[award.awarder, award.date].filter(Boolean).join(' · ')}
                     </CardMeta>
                   )}
-                  {award.summary && <p>{award.summary}</p>}
+                  {award.summary && (
+                    <InlineMarkdown as="p" text={award.summary} />
+                  )}
                 </Card>
               ))}
             </Cards>
@@ -661,7 +668,7 @@ function Resume({ resume }) {
                         .join(' · ')}
                     </CardMeta>
                   )}
-                  {pub.summary && <p>{pub.summary}</p>}
+                  {pub.summary && <InlineMarkdown as="p" text={pub.summary} />}
                 </Card>
               ))}
             </Cards>

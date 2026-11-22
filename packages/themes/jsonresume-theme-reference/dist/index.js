@@ -1732,6 +1732,59 @@ dt.span`
     }
   }
 `;
+const ESCAPES = {
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+  "'": "&#39;"
+};
+const escapeHtml = (text) => text.replace(/[&<>"']/g, (c) => ESCAPES[c]);
+const ESCAPABLE = /\\([\\`*_[\]()!#])/g;
+const CODE = /`([^`]+)`/g;
+const LINK = /\[([^\]]+)\]\(([^)\s]+)\)/g;
+const STRONG = /\*\*(?=\S)([^*]*?\S)\*\*|__(?=\S)([^_]*?\S)__/g;
+const EMPHASIS = /\*(?=\S)([^*]*?\S)\*|(^|[^\p{L}\p{N}_])_(?=\S)([^_]*?\S)_(?![\p{L}\p{N}_])/gu;
+const safeHref = (url) => /^(https?:\/\/|mailto:)/i.test(url) ? url : void 0;
+const emphasis = (text, strong, em) => text.replace(STRONG, (_2, a, b2) => strong(a ?? b2)).replace(
+  EMPHASIS,
+  (_2, a, before, b2) => a !== void 0 ? em(a) : `${before}${em(b2)}`
+);
+const inline = (text, out) => {
+  const kept = [];
+  const keep = (value) => `${kept.push(value) - 1}`;
+  const marks = (t) => emphasis(t, out.strong, out.em);
+  const rest = text.replace(/\uE000/g, "").replace(ESCAPABLE, (_2, c) => keep(out.text(c))).replace(CODE, (_2, body) => keep(out.code(body))).replace(
+    LINK,
+    (_2, label, url) => keep(out.link(marks(out.text(label)), url))
+  );
+  return marks(out.text(rest)).replace(
+    /\uE000(\d+)\uE000/g,
+    (_2, i) => kept[Number(i)]
+  );
+};
+function renderInlineMarkdown(text) {
+  if (typeof text !== "string") return "";
+  return inline(text, {
+    text: escapeHtml,
+    code: (body) => `<code>${escapeHtml(body)}</code>`,
+    link: (label, url) => {
+      const href = safeHref(url);
+      return href ? `<a href="${escapeHtml(href)}">${label}</a>` : label;
+    },
+    strong: (t) => `<strong>${t}</strong>`,
+    em: (t) => `<em>${t}</em>`
+  });
+}
+function InlineMarkdown({ text, as: Tag = "span", ...rest }) {
+  return /* @__PURE__ */ jsx(
+    Tag,
+    {
+      ...rest,
+      dangerouslySetInnerHTML: { __html: renderInlineMarkdown(text) }
+    }
+  );
+}
 dt.hr`
   border: none;
   border-top: 0.5pt solid
@@ -6043,6 +6096,8 @@ dt.span`
     print-color-adjust: exact;
   }
 `;
+const prose = (text) => text && /* @__PURE__ */ jsx(InlineMarkdown, { text });
+const proseList = (items) => items?.map((text, index2) => /* @__PURE__ */ jsx(InlineMarkdown, { text }, index2));
 const Layout = dt.div`
   max-width: var(--resume-max-width, 660px);
   margin: 0 auto;
@@ -6151,7 +6206,7 @@ function Resume({ resume }) {
           );
         })
       ] }),
-      basics.summary && /* @__PURE__ */ jsx(Summary, { children: basics.summary })
+      basics.summary && /* @__PURE__ */ jsx(InlineMarkdown, { as: Summary, text: basics.summary })
     ] }),
     work.length > 0 && /* @__PURE__ */ jsxs(Section, { id: "work", children: [
       /* @__PURE__ */ jsx(SectionTitle, { children: "Work Experience" }),
@@ -6162,8 +6217,8 @@ function Resume({ resume }) {
           subtitle: job.name,
           dateRange: job.startDate ? /* @__PURE__ */ jsx(DateRange, { startDate: job.startDate, endDate: job.endDate }) : null,
           location: job.location,
-          description: job.summary,
-          highlights: job.highlights
+          description: prose(job.summary),
+          highlights: proseList(job.highlights)
         },
         index2
       ))
@@ -6218,7 +6273,7 @@ function Resume({ resume }) {
             }
           ) : null,
           description: /* @__PURE__ */ jsxs(Fragment, { children: [
-            project.description,
+            prose(project.description),
             project.url && safeUrl(project.url) && /* @__PURE__ */ jsxs(Fragment, { children: [
               /* @__PURE__ */ jsx("br", {}),
               /* @__PURE__ */ jsx(
@@ -6236,7 +6291,7 @@ function Resume({ resume }) {
               /* @__PURE__ */ jsx(BadgeList, { items: project.keywords, variant: "accent" })
             ] })
           ] }),
-          highlights: project.highlights
+          highlights: proseList(project.highlights)
         },
         index2
       ))
@@ -6249,8 +6304,8 @@ function Resume({ resume }) {
           title: vol.position,
           subtitle: vol.organization,
           dateRange: vol.startDate ? /* @__PURE__ */ jsx(DateRange, { startDate: vol.startDate, endDate: vol.endDate }) : null,
-          description: vol.summary,
-          highlights: vol.highlights
+          description: prose(vol.summary),
+          highlights: proseList(vol.highlights)
         },
         index2
       ))
@@ -6263,7 +6318,7 @@ function Resume({ resume }) {
           title: award.title,
           subtitle: award.awarder,
           dateRange: award.date,
-          description: award.summary
+          description: prose(award.summary)
         },
         index2
       ))
@@ -6277,7 +6332,7 @@ function Resume({ resume }) {
           subtitle: pub.publisher,
           dateRange: pub.releaseDate,
           description: /* @__PURE__ */ jsxs(Fragment, { children: [
-            pub.summary,
+            prose(pub.summary),
             pub.url && safeUrl(pub.url) && /* @__PURE__ */ jsxs(Fragment, { children: [
               /* @__PURE__ */ jsx("br", {}),
               /* @__PURE__ */ jsx(

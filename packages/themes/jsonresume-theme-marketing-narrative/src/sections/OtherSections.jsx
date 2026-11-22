@@ -1,5 +1,5 @@
 import React from 'react';
-import { Section, DateRange } from '@jsonresume/core';
+import { Section, DateRange, InlineMarkdown } from '@jsonresume/core';
 import {
   StyledSectionTitle,
   StoryItem,
@@ -41,11 +41,11 @@ export function VolunteerSection({ volunteer }) {
               )}
             </CompanyAndDate>
           </StoryHeader>
-          {vol.summary && <Narrative>{vol.summary}</Narrative>}
+          {vol.summary && <InlineMarkdown as={Narrative} text={vol.summary} />}
           {vol.highlights?.length > 0 && (
             <Achievements>
               {vol.highlights.map((highlight, i) => (
-                <AchievementItem key={i}>{highlight}</AchievementItem>
+                <InlineMarkdown as={AchievementItem} key={i} text={highlight} />
               ))}
             </Achievements>
           )}
@@ -66,7 +66,9 @@ export function AwardsSection({ awards }) {
           <Institution>{award.title}</Institution>
           {award.awarder && <Degree>Awarded by {award.awarder}</Degree>}
           {award.date && <EducationDate>{award.date}</EducationDate>}
-          {award.summary && <Narrative>{award.summary}</Narrative>}
+          {award.summary && (
+            <InlineMarkdown as={Narrative} text={award.summary} />
+          )}
         </EducationItem>
       ))}
     </Section>
@@ -84,7 +86,7 @@ export function PublicationsSection({ publications }) {
           <Institution>{pub.name}</Institution>
           {pub.publisher && <Degree>Published by {pub.publisher}</Degree>}
           {pub.releaseDate && <EducationDate>{pub.releaseDate}</EducationDate>}
-          {pub.summary && <Narrative>{pub.summary}</Narrative>}
+          {pub.summary && <InlineMarkdown as={Narrative} text={pub.summary} />}
         </EducationItem>
       ))}
     </Section>

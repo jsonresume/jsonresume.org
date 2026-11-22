@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import Section from './Section.jsx';
 import DateRange from './DateRange.jsx';
 
+import { InlineMarkdown } from '@jsonresume/core';
 const ProjectItem = styled.div`
   margin-bottom: 2rem;
 
@@ -66,7 +67,7 @@ const Projects = ({ projects }) => {
           </ProjectName>
           <DateRange startDate={project.startDate} endDate={project.endDate} />
           {project.description && (
-            <Description>{project.description}</Description>
+            <InlineMarkdown as={Description} text={project.description} />
           )}
           {project.keywords && project.keywords.length > 0 && (
             <Keywords>

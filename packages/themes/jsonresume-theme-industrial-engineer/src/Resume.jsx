@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { DateRange, safeUrl } from '@jsonresume/core';
+import { DateRange, safeUrl, InlineMarkdown } from '@jsonresume/core';
 
 /* ============================================================
    INDUSTRIAL ENGINEER — engineering-datasheet aesthetic.
@@ -635,7 +635,7 @@ function Resume({ resume }) {
           {basics.summary && (
             <SummaryBlock>
               <SummaryLabel>Notes — Profile</SummaryLabel>
-              <SummaryText>{basics.summary}</SummaryText>
+              <InlineMarkdown as={SummaryText} text={basics.summary} />
             </SummaryBlock>
           )}
 
@@ -668,11 +668,13 @@ function Resume({ resume }) {
                       )}
                     </RoleTitle>
                     {job.name && job.position && <RoleOrg>{job.name}</RoleOrg>}
-                    {job.summary && <Para>{job.summary}</Para>}
+                    {job.summary && (
+                      <InlineMarkdown as={Para} text={job.summary} />
+                    )}
                     {job.highlights && job.highlights.length > 0 && (
                       <Highlights>
                         {job.highlights.map((h, j) => (
-                          <li key={j}>{h}</li>
+                          <InlineMarkdown as="li" key={j} text={h} />
                         ))}
                       </Highlights>
                     )}
@@ -711,11 +713,13 @@ function Resume({ resume }) {
                       )}
                     </RoleTitle>
                     {proj.entity && <RoleOrg>{proj.entity}</RoleOrg>}
-                    {proj.description && <Para>{proj.description}</Para>}
+                    {proj.description && (
+                      <InlineMarkdown as={Para} text={proj.description} />
+                    )}
                     {proj.highlights && proj.highlights.length > 0 && (
                       <Highlights>
                         {proj.highlights.map((h, j) => (
-                          <li key={j}>{h}</li>
+                          <InlineMarkdown as="li" key={j} text={h} />
                         ))}
                       </Highlights>
                     )}
@@ -810,11 +814,13 @@ function Resume({ resume }) {
                       )}
                     </RoleTitle>
                     {vol.organization && <RoleOrg>{vol.organization}</RoleOrg>}
-                    {vol.summary && <Para>{vol.summary}</Para>}
+                    {vol.summary && (
+                      <InlineMarkdown as={Para} text={vol.summary} />
+                    )}
                     {vol.highlights && vol.highlights.length > 0 && (
                       <Highlights>
                         {vol.highlights.map((h, j) => (
-                          <li key={j}>{h}</li>
+                          <InlineMarkdown as="li" key={j} text={h} />
                         ))}
                       </Highlights>
                     )}
@@ -834,7 +840,7 @@ function Resume({ resume }) {
                     <div className="src">
                       {[a.awarder, a.date].filter(Boolean).join(' / ')}
                     </div>
-                    {a.summary && <p>{a.summary}</p>}
+                    {a.summary && <InlineMarkdown as="p" text={a.summary} />}
                   </Card>
                 ))}
               </CardGrid>
@@ -891,7 +897,7 @@ function Resume({ resume }) {
                     <div className="src">
                       {[p.publisher, p.releaseDate].filter(Boolean).join(' / ')}
                     </div>
-                    {p.summary && <p>{p.summary}</p>}
+                    {p.summary && <InlineMarkdown as="p" text={p.summary} />}
                   </Card>
                 ))}
               </CardGrid>

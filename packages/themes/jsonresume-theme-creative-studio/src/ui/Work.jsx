@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import Section from './Section.jsx';
 import DateRange from './DateRange.jsx';
 
+import { InlineMarkdown } from '@jsonresume/core';
 const WorkItem = styled.div`
   margin-bottom: 2rem;
 
@@ -50,11 +51,13 @@ const Work = ({ work }) => {
           <Position>{item.position}</Position>
           <Company>{item.name}</Company>
           <DateRange startDate={item.startDate} endDate={item.endDate} />
-          {item.summary && <Description>{item.summary}</Description>}
+          {item.summary && (
+            <InlineMarkdown as={Description} text={item.summary} />
+          )}
           {item.highlights && item.highlights.length > 0 && (
             <Highlights>
               {item.highlights.map((highlight, j) => (
-                <li key={j}>{highlight}</li>
+                <InlineMarkdown as="li" key={j} text={highlight} />
               ))}
             </Highlights>
           )}

@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import Section from './Section.jsx';
 import DateRange from './DateRange.jsx';
 
+import { InlineMarkdown } from '@jsonresume/core';
 const VolunteerItem = styled.div`
   margin-bottom: 2rem;
 
@@ -39,7 +40,9 @@ const Volunteer = ({ volunteer }) => {
           <Position>{item.position}</Position>
           <Organization>{item.organization}</Organization>
           <DateRange startDate={item.startDate} endDate={item.endDate} />
-          {item.summary && <Description>{item.summary}</Description>}
+          {item.summary && (
+            <InlineMarkdown as={Description} text={item.summary} />
+          )}
         </VolunteerItem>
       ))}
     </Section>
