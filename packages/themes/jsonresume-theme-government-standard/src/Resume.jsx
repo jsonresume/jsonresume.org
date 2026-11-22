@@ -1,6 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Section, SectionTitle, ContactInfo } from '@jsonresume/core';
+import {
+  Section,
+  SectionTitle,
+  ContactInfo,
+  InlineMarkdown,
+} from '@jsonresume/core';
 import { WorkSection } from './components/WorkSection.jsx';
 import { EducationSection } from './components/EducationSection.jsx';
 import { SkillsSection } from './components/SkillsSection.jsx';
@@ -275,7 +280,7 @@ function Resume({ resume }) {
       {basics.summary && (
         <Section>
           <StyledSectionTitle>Professional Summary</StyledSectionTitle>
-          <Summary>{basics.summary}</Summary>
+          <InlineMarkdown as={Summary} text={basics.summary} />
         </Section>
       )}
 

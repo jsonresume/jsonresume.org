@@ -9,6 +9,7 @@ import {
   ContactInfo,
   Link,
   safeUrl,
+  InlineMarkdown,
 } from '@jsonresume/core';
 
 const Layout = styled.div`
@@ -253,7 +254,9 @@ function Resume({ resume }) {
           location={basics.location}
           profiles={basics.profiles}
         />
-        {basics.summary && <Summary>{basics.summary}</Summary>}
+        {basics.summary && (
+          <InlineMarkdown as={Summary} text={basics.summary} />
+        )}
       </Header>
 
       {work.length > 0 && (
@@ -269,11 +272,13 @@ function Resume({ resume }) {
               </ItemHeader>
               {job.name && <ItemSubtitle>{job.name}</ItemSubtitle>}
               {job.location && <ItemLocation>{job.location}</ItemLocation>}
-              {job.summary && <ItemDescription>{job.summary}</ItemDescription>}
+              {job.summary && (
+                <InlineMarkdown as={ItemDescription} text={job.summary} />
+              )}
               {job.highlights && job.highlights.length > 0 && (
                 <HighlightsList>
                   {job.highlights.map((highlight, i) => (
-                    <li key={i}>{highlight}</li>
+                    <InlineMarkdown as="li" key={i} text={highlight} />
                   ))}
                 </HighlightsList>
               )}
@@ -351,12 +356,15 @@ function Resume({ resume }) {
               </ItemHeader>
               {project.type && <ItemLocation>{project.type}</ItemLocation>}
               {project.description && (
-                <ItemDescription>{project.description}</ItemDescription>
+                <InlineMarkdown
+                  as={ItemDescription}
+                  text={project.description}
+                />
               )}
               {project.highlights && project.highlights.length > 0 && (
                 <HighlightsList>
                   {project.highlights.map((highlight, i) => (
-                    <li key={i}>{highlight}</li>
+                    <InlineMarkdown as="li" key={i} text={highlight} />
                   ))}
                 </HighlightsList>
               )}
@@ -374,7 +382,7 @@ function Resume({ resume }) {
               <p>
                 {award.awarder} {award.date && `• ${award.date}`}
               </p>
-              {award.summary && <p>{award.summary}</p>}
+              {award.summary && <InlineMarkdown as="p" text={award.summary} />}
             </SimpleCard>
           ))}
         </StyledSection>
@@ -415,7 +423,7 @@ function Resume({ resume }) {
               <p>
                 {pub.publisher} {pub.releaseDate && `• ${pub.releaseDate}`}
               </p>
-              {pub.summary && <p>{pub.summary}</p>}
+              {pub.summary && <InlineMarkdown as="p" text={pub.summary} />}
             </SimpleCard>
           ))}
         </StyledSection>
@@ -435,11 +443,13 @@ function Resume({ resume }) {
               {vol.organization && (
                 <ItemSubtitle>{vol.organization}</ItemSubtitle>
               )}
-              {vol.summary && <ItemDescription>{vol.summary}</ItemDescription>}
+              {vol.summary && (
+                <InlineMarkdown as={ItemDescription} text={vol.summary} />
+              )}
               {vol.highlights && vol.highlights.length > 0 && (
                 <HighlightsList>
                   {vol.highlights.map((highlight, i) => (
-                    <li key={i}>{highlight}</li>
+                    <InlineMarkdown as="li" key={i} text={highlight} />
                   ))}
                 </HighlightsList>
               )}

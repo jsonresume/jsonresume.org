@@ -5,6 +5,7 @@ import {
   SectionTitle,
   ContactInfo,
   DateRange,
+  InlineMarkdown,
 } from '@jsonresume/core';
 
 // Layout
@@ -217,7 +218,7 @@ function Header({ basics = {} }) {
       <Name>{basics.name}</Name>
       {basics.label && <Label>{basics.label}</Label>}
       <StyledContactInfo basics={basics} />
-      {basics.summary && <Summary>{basics.summary}</Summary>}
+      {basics.summary && <InlineMarkdown as={Summary} text={basics.summary} />}
     </HeaderContainer>
   );
 }
@@ -234,11 +235,13 @@ function WorkExperience({ work = [] }) {
           </DateText>
           <Position>{job.position}</Position>
           {job.name && <Company>{job.name}</Company>}
-          {job.summary && <WorkSummary>{job.summary}</WorkSummary>}
+          {job.summary && (
+            <InlineMarkdown as={WorkSummary} text={job.summary} />
+          )}
           {job.highlights?.length > 0 && (
             <Highlights>
               {job.highlights.map((highlight, i) => (
-                <li key={i}>{highlight}</li>
+                <InlineMarkdown as="li" key={i} text={highlight} />
               ))}
             </Highlights>
           )}
@@ -302,12 +305,16 @@ function Projects({ projects = [] }) {
             )}
           </DateText>
           <Position>{project.name}</Position>
-          {project.description && <Company>{project.description}</Company>}
-          {project.summary && <WorkSummary>{project.summary}</WorkSummary>}
+          {project.description && (
+            <InlineMarkdown as={Company} text={project.description} />
+          )}
+          {project.summary && (
+            <InlineMarkdown as={WorkSummary} text={project.summary} />
+          )}
           {project.highlights?.length > 0 && (
             <Highlights>
               {project.highlights.map((highlight, i) => (
-                <li key={i}>{highlight}</li>
+                <InlineMarkdown as="li" key={i} text={highlight} />
               ))}
             </Highlights>
           )}
@@ -331,11 +338,13 @@ function Volunteer({ volunteer = [] }) {
           </DateText>
           <Position>{vol.position}</Position>
           {vol.organization && <Company>{vol.organization}</Company>}
-          {vol.summary && <WorkSummary>{vol.summary}</WorkSummary>}
+          {vol.summary && (
+            <InlineMarkdown as={WorkSummary} text={vol.summary} />
+          )}
           {vol.highlights?.length > 0 && (
             <Highlights>
               {vol.highlights.map((highlight, i) => (
-                <li key={i}>{highlight}</li>
+                <InlineMarkdown as="li" key={i} text={highlight} />
               ))}
             </Highlights>
           )}
@@ -355,7 +364,9 @@ function Awards({ awards = [] }) {
           <DateText>{award.date || ''}</DateText>
           <Institution>{award.title}</Institution>
           {award.awarder && <Degree>Awarded by {award.awarder}</Degree>}
-          {award.summary && <WorkSummary>{award.summary}</WorkSummary>}
+          {award.summary && (
+            <InlineMarkdown as={WorkSummary} text={award.summary} />
+          )}
         </EducationItem>
       ))}
     </>
@@ -388,7 +399,9 @@ function Publications({ publications = [] }) {
           <DateText>{pub.releaseDate || ''}</DateText>
           <Institution>{pub.name}</Institution>
           {pub.publisher && <Degree>Published by {pub.publisher}</Degree>}
-          {pub.summary && <WorkSummary>{pub.summary}</WorkSummary>}
+          {pub.summary && (
+            <InlineMarkdown as={WorkSummary} text={pub.summary} />
+          )}
         </EducationItem>
       ))}
     </>

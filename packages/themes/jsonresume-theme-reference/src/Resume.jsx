@@ -7,7 +7,13 @@ import {
   BadgeList,
   safeUrl,
   getLinkRel,
+  InlineMarkdown,
 } from '@jsonresume/core';
+
+/** Resume prose with its inline Markdown rendered (#600). */
+const prose = (text) => text && <InlineMarkdown text={text} />;
+const proseList = (items) =>
+  items?.map((text, index) => <InlineMarkdown key={index} text={text} />);
 
 /**
  * Resume Component
@@ -152,7 +158,9 @@ function Resume({ resume }) {
             })}
           </Contact>
 
-          {basics.summary && <Summary>{basics.summary}</Summary>}
+          {basics.summary && (
+            <InlineMarkdown as={Summary} text={basics.summary} />
+          )}
         </Header>
       )}
 
@@ -171,8 +179,8 @@ function Resume({ resume }) {
                 ) : null
               }
               location={job.location}
-              description={job.summary}
-              highlights={job.highlights}
+              description={prose(job.summary)}
+              highlights={proseList(job.highlights)}
             />
           ))}
         </Section>
@@ -242,7 +250,7 @@ function Resume({ resume }) {
               }
               description={
                 <>
-                  {project.description}
+                  {prose(project.description)}
                   {project.url && safeUrl(project.url) && (
                     <>
                       <br />
@@ -263,7 +271,7 @@ function Resume({ resume }) {
                   )}
                 </>
               }
-              highlights={project.highlights}
+              highlights={proseList(project.highlights)}
             />
           ))}
         </Section>
@@ -283,8 +291,8 @@ function Resume({ resume }) {
                   <DateRange startDate={vol.startDate} endDate={vol.endDate} />
                 ) : null
               }
-              description={vol.summary}
-              highlights={vol.highlights}
+              description={prose(vol.summary)}
+              highlights={proseList(vol.highlights)}
             />
           ))}
         </Section>
@@ -300,7 +308,7 @@ function Resume({ resume }) {
               title={award.title}
               subtitle={award.awarder}
               dateRange={award.date}
-              description={award.summary}
+              description={prose(award.summary)}
             />
           ))}
         </Section>
@@ -318,7 +326,7 @@ function Resume({ resume }) {
               dateRange={pub.releaseDate}
               description={
                 <>
-                  {pub.summary}
+                  {prose(pub.summary)}
                   {pub.url && safeUrl(pub.url) && (
                     <>
                       <br />

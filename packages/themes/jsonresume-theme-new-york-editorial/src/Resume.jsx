@@ -6,6 +6,7 @@ import {
   DateRange,
   ContactInfo,
   Link,
+  InlineMarkdown,
 } from '@jsonresume/core';
 
 const Layout = styled.div`
@@ -351,7 +352,9 @@ function Resume({ resume }) {
         <Name>{basics.name}</Name>
         {basics.label && <Label>{basics.label}</Label>}
         <StyledContactInfo basics={basics} />
-        {basics.summary && <Summary>{basics.summary}</Summary>}
+        {basics.summary && (
+          <InlineMarkdown as={Summary} text={basics.summary} />
+        )}
       </Header>
 
       {work && work.length > 0 && (
@@ -369,7 +372,9 @@ function Resume({ resume }) {
                   />
                 </CompanyLine>
               </WorkHeader>
-              {job.summary && <WorkSummary>{job.summary}</WorkSummary>}
+              {job.summary && (
+                <InlineMarkdown as={WorkSummary} text={job.summary} />
+              )}
               {job.highlights && job.highlights.length > 0 && (
                 <HighlightsList>
                   {job.highlights.map((highlight, i) => (
@@ -434,12 +439,15 @@ function Resume({ resume }) {
                 )}
               </ProjectName>
               {project.description && (
-                <ProjectDescription>{project.description}</ProjectDescription>
+                <InlineMarkdown
+                  as={ProjectDescription}
+                  text={project.description}
+                />
               )}
               {project.highlights && project.highlights.length > 0 && (
                 <ProjectHighlights>
                   {project.highlights.map((highlight, i) => (
-                    <li key={i}>{highlight}</li>
+                    <InlineMarkdown as="li" key={i} text={highlight} />
                   ))}
                 </ProjectHighlights>
               )}
@@ -461,7 +469,7 @@ function Resume({ resume }) {
                 {pub.releaseDate && <> • {pub.releaseDate}</>}
               </ItemMeta>
               {pub.summary && (
-                <ProjectDescription>{pub.summary}</ProjectDescription>
+                <InlineMarkdown as={ProjectDescription} text={pub.summary} />
               )}
             </ProjectItem>
           ))}
@@ -488,7 +496,7 @@ function Resume({ resume }) {
                   )}
                 </ItemMeta>
                 {vol.summary && (
-                  <ItemDescription>{vol.summary}</ItemDescription>
+                  <InlineMarkdown as={ItemDescription} text={vol.summary} />
                 )}
               </SimpleItem>
             ))}
@@ -508,7 +516,7 @@ function Resume({ resume }) {
                   {award.date && <> • {award.date}</>}
                 </ItemMeta>
                 {award.summary && (
-                  <ItemDescription>{award.summary}</ItemDescription>
+                  <InlineMarkdown as={ItemDescription} text={award.summary} />
                 )}
               </SimpleItem>
             ))}
