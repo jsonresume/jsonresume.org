@@ -1,5 +1,12 @@
 # @jsonresume/jsonresume-theme-consultant-polished
 
+## 1.0.6
+
+### Patch Changes
+
+- Updated dependencies [a6ba9ed]
+  - @jsonresume/core@0.4.0
+
 ## 1.0.5
 
 ### Patch Changes

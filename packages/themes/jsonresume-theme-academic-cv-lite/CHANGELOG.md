@@ -1,5 +1,12 @@
 # jsonresume-theme-academic-cv-lite
 
+## 0.2.12
+
+### Patch Changes
+
+- Updated dependencies [a6ba9ed]
+  - @jsonresume/core@0.4.0
+
 ## 0.2.11
 
 ### Patch Changes

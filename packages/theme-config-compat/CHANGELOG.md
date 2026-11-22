@@ -1,5 +1,12 @@
 # @repo/theme-config
 
+## 0.2.6
+
+### Patch Changes
+
+- Updated dependencies [cd7f535]
+  - @jsonresume/theme-metadata@0.7.0
+
 ## 0.2.5
 
 ### Patch Changes

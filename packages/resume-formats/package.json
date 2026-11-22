@@ -1,6 +1,6 @@
 {
   "name": "@repo/resume-formats",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "A resume as JSON, YAML, plain text, RenderCV, a Word document or a QR code, for /@username.json and friends",
   "type": "module",

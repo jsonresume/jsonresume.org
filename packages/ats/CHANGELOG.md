@@ -1,5 +1,13 @@
 # @repo/ats
 
+## 0.0.3
+
+### Patch Changes
+
+- Updated dependencies [6cc6b92]
+  - @jsonresume/ui@0.4.0
+  - @repo/resume-formats@0.0.1
+
 ## 0.0.2
 
 ### Patch Changes

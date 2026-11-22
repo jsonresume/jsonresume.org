@@ -1,5 +1,13 @@
 # @jsonresume/theme-kit
 
+## 1.2.1
+
+### Patch Changes
+
+- 12439ac: Accept any `@jsonresume/core` from 0.3.0 on as a peer, instead of the one exact version it was published with, so a new core release no longer forces a major theme-kit release (this one would have been 2.0.0 with no change of its own).
+- Updated dependencies [a6ba9ed]
+  - @jsonresume/core@0.4.0
+
 ## 1.2.0
 
 ### Minor Changes

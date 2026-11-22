@@ -1,5 +1,13 @@
 # @jsonresume/jsonresume-theme-professional
 
+## 1.0.30
+
+### Patch Changes
+
+- e327eb3: Load Latin Modern from https://jsonresume.org/fonts/ (served with CORS), so the theme shows in its own typeface wherever it renders, a PDF or a resume built with resume-cli, and fall back to a serif rather than Courier. Drop the Latin Modern Sans faces it declared but never used.
+- Updated dependencies [a6ba9ed]
+  - @jsonresume/core@0.4.0
+
 ## 1.0.29
 
 ### Patch Changes

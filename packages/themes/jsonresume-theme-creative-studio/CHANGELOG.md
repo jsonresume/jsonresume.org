@@ -1,5 +1,12 @@
 # @jsonresume/jsonresume-theme-creative-studio
 
+## 1.1.6
+
+### Patch Changes
+
+- Updated dependencies [a6ba9ed]
+  - @jsonresume/core@0.4.0
+
 ## 1.1.5
 
 ### Patch Changes

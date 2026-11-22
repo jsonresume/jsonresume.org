@@ -1,5 +1,11 @@
 # jsonresume-theme-deedy
 
+## 0.2.1
+
+### Patch Changes
+
+- @jsonresume/theme-primitives@0.2.1
+
 ## 0.2.0
 
 ### Minor Changes

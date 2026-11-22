@@ -1,5 +1,11 @@
 # @jsonresume/theme-metadata
 
+## 0.7.0
+
+### Minor Changes
+
+- cd7f535: Add the community theme Editorial (`editorial`, by Phillip Chaffee): a large serif name, the summary as an opening paragraph and italic section names in an accent colour.
+
 ## 0.6.0
 
 ### Minor Changes

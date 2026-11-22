@@ -1,5 +1,32 @@
 # app
 
+## 0.0.3
+
+### Patch Changes
+
+- Updated dependencies [6cc6b92]
+- Updated dependencies [cd7f535]
+  - @jsonresume/ui@0.4.0
+  - @jsonresume/theme-metadata@0.7.0
+  - @repo/content@0.0.3
+  - @repo/mcp@0.0.3
+  - @repo/resume-editor@0.0.3
+  - @repo/resume-import@0.0.2
+  - @repo/site@0.0.3
+  - @repo/auth-pages@0.0.3
+  - @repo/dashboard@0.0.3
+  - @repo/explore@0.0.3
+  - @repo/job-board@0.0.3
+  - @repo/theme-gallery@0.0.3
+  - @repo/timeline@0.0.3
+  - @repo/resume-themes@0.0.3
+  - @repo/api-server@0.0.3
+  - @repo/resume-pdf@0.0.0
+  - @repo/pathways@0.0.3
+  - @repo/resume-versions@0.0.2
+  - @repo/resume-host@0.0.3
+  - @repo/accounts@0.0.2
+
 ## 0.0.2
 
 ### Patch Changes
