@@ -16,6 +16,7 @@ export const JobsHandlers = HttpApiBuilder.group(
         board: () => board.board,
         status: () => board.status,
         job: ({ params }) => board.job(params.id),
+        document: ({ params }) => board.document(params.id),
       });
     })
 );

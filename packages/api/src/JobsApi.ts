@@ -3,36 +3,10 @@ import { HttpApiEndpoint, HttpApiGroup } from 'effect/http-api';
 import { Authentication } from './Authentication';
 import { JobNotFound, NoResume } from './errors';
 import { MarkSource, PassReason } from './jobMarks';
+import { JobDocument } from './jobDocument';
+import { EmploymentType, RemoteScope, Seniority } from './jobFacets';
 
-export const RemoteScope = Schema.Literals([
-  'onsite',
-  'hybrid',
-  'remote_region',
-  'remote_global',
-  'unspecified',
-]);
-export type RemoteScope = typeof RemoteScope.Type;
-
-export const Seniority = Schema.Literals([
-  'intern',
-  'junior',
-  'mid',
-  'senior',
-  'staff_plus',
-  'lead_management',
-  'unspecified',
-]);
-export type Seniority = typeof Seniority.Type;
-
-export const EmploymentType = Schema.Literals([
-  'full_time',
-  'part_time',
-  'contract',
-  'internship',
-  'cofounder',
-  'unspecified',
-]);
-export type EmploymentType = typeof EmploymentType.Type;
+export { EmploymentType, RemoteScope, Seniority } from './jobFacets';
 
 /** What a signed-in user said about a job. */
 export const JobMark = Schema.Literals([
@@ -162,6 +136,12 @@ export class JobsApi extends HttpApiGroup.make('jobs')
     HttpApiEndpoint.get('job', '/:id', {
       params: { id: Schema.NumberFromString },
       success: Job,
+      error: JobNotFound,
+    }),
+    /** The job as a job-schema v1 document. */
+    HttpApiEndpoint.get('document', '/:id/document', {
+      params: { id: Schema.NumberFromString },
+      success: JobDocument,
       error: JobNotFound,
     })
   )
