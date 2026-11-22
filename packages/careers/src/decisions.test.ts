@@ -170,6 +170,23 @@ describe('job decisions', () => {
     expect(wanting.jobs.at(-1)?.decision.verdict).toBe('ruled_out');
   });
 
+  it("steers by the resume's objective without saving it as theirs", async () => {
+    const decided = await run(
+      Effect.gen(function* () {
+        const userId = yield* seed;
+        return yield* (yield* JobDecisions).decisions(
+          userId,
+          { ...resume, objective: 'Platform engineering in climate tech' },
+          Duration.seconds(5)
+        );
+      })
+    );
+    expect(decided.jobs).toHaveLength(3);
+    // What they stated is still nothing: the objective is the resume's.
+    expect(decided.preferences.direction).toBe('');
+    expect(decided.stated).toBe(false);
+  });
+
   it('keeps decisions, records marks against them, and learns suggestions', async () => {
     const result = await run(
       Effect.gen(function* () {

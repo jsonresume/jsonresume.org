@@ -19,7 +19,7 @@ const preferenceFields = {
   stages: Schema.Array(CompanyStage),
   wantSkills: Schema.Array(Schema.String),
   avoidSkills: Schema.Array(Schema.String),
-  /** Where they want to go, in their words. */
+  /** Where they want to go, in their words. Empty: the resume's objective counts. */
   direction: Schema.String,
   priorities: Schema.Array(Priority),
   /** They need a visa sponsored. */

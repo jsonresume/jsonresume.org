@@ -4,6 +4,7 @@ import {
   decide,
   DECISION_MODEL,
   decisionStore,
+  directionOf,
   isStated,
   JobMatcher,
   PreferenceStore,
@@ -133,11 +134,16 @@ const make = Effect.gen(function* () {
     wait: Duration.Input = Duration.seconds(4)
   ) {
     const preferences = yield* preferenceStore.get(userId);
+    // A goal written in the resume steers until they state one here.
+    const steered = {
+      ...preferences,
+      direction: directionOf(preferences, resume),
+    };
     const [{ ranked, judging }, insight, marked] = yield* Effect.all(
       [
         matcher.rankWithin(resume, userId, {
           wait,
-          toward: preferences.direction,
+          toward: steered.direction,
         }),
         insights.insight(resume, { wait }),
         store.markedFacts(userId),
@@ -149,7 +155,7 @@ const make = Effect.gen(function* () {
       ranked,
       insight,
       resume,
-      preferences,
+      steered,
       year
     ).pipe(Effect.provideService(JobRoles, roles));
     const waitingFor = [

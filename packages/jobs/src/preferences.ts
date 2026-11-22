@@ -1,5 +1,5 @@
 import { JobPreferences } from '@repo/api';
-import { Context, Effect, Layer, Schema } from 'effect';
+import { Context, Effect, Layer, Predicate, Schema } from 'effect';
 import { SqlClient } from 'effect/sql';
 
 /** Where a change to preferences came from. */
@@ -42,6 +42,20 @@ const clean = (p: JobPreferences): JobPreferences => {
     priorities: [...new Set(p.priorities)].slice(0, 3),
     dismissed: words(p.dismissed),
   };
+};
+
+/**
+ * Where someone wants to go, in words: the direction they stated, else their
+ * resume's `objective` (the schema's forward-looking goal, which few themes
+ * show). Jobs are ranked toward it, and it weighs on each job's appeal.
+ */
+export const directionOf = (p: JobPreferences, resume: unknown): string => {
+  if (p.direction) return p.direction;
+  const objective =
+    Predicate.isObject(resume) && 'objective' in resume
+      ? resume.objective
+      : undefined;
+  return Predicate.isString(objective) ? objective.trim().slice(0, 500) : '';
 };
 
 /** Whether someone has said anything about what they want. */
