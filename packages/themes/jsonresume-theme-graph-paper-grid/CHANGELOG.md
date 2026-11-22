@@ -1,5 +1,12 @@
 # jsonresume-theme-graph-paper-grid
 
+## 1.1.14
+
+### Patch Changes
+
+- Updated dependencies [601e883]
+  - @jsonresume/core@0.4.1
+
 ## 1.1.13
 
 ### Patch Changes

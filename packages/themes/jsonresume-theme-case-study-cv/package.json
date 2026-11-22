@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-case-study-cv",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Give project evidence the broad column and supporting capabilities a narrow right rail. Strong project titles, short blue dividers and readable outcomes create a case-study rhythm.",
   "type": "module",
   "main": "./dist/index.js",

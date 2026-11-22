@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-first-role",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Give education, projects and volunteering useful space before employment. Use a small name, clear section labels and enough breathing room for a genuinely short record.",
   "type": "module",
   "main": "./dist/index.js",

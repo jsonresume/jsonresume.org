@@ -1,5 +1,11 @@
 <a id="1.0.0"></a>
 
+## 1.9.0
+
+### Minor Changes
+
+- 3b8cce8: Add `languages[].scale` (`{ framework, level }`, such as CEFR C1) beside the free-text `fluency` (#315), and `skills[].id` with optional `skills` lists on `work`, `volunteer`, `education` and `projects`, holding skill names, ids or skill objects (#313). Every resume that validated before still validates.
+
 ## 1.8.0
 
 ### Minor Changes

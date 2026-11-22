@@ -1,5 +1,15 @@
 # @jsonresume/theme-primitives
 
+## 0.3.0
+
+### Minor Changes
+
+- 6bf761a: Render inline Markdown (bold, emphasis, code and links) in the summary, entry paragraphs and highlights with the shared renderer from `@jsonresume/utils` (#600). Text is escaped first and only http(s) and mailto links are kept.
+
+### Patch Changes
+
+- @jsonresume/utils@0.5.0
+
 ## 0.2.1
 
 ### Patch Changes

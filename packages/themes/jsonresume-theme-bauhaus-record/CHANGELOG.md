@@ -1,5 +1,12 @@
 # jsonresume-theme-bauhaus-record
 
+## 0.2.2
+
+### Patch Changes
+
+- Updated dependencies [6bf761a]
+  - @jsonresume/theme-primitives@0.3.0
+
 ## 0.2.1
 
 ### Patch Changes

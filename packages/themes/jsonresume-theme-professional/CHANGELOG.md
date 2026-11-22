@@ -1,5 +1,12 @@
 # @jsonresume/jsonresume-theme-professional
 
+## 1.0.31
+
+### Patch Changes
+
+- Updated dependencies [601e883]
+  - @jsonresume/core@0.4.1
+
 ## 1.0.30
 
 ### Patch Changes

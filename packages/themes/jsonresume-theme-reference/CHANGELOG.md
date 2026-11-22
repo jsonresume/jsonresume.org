@@ -1,5 +1,13 @@
 # jsonresume-theme-reference
 
+## 0.2.14
+
+### Patch Changes
+
+- 601e883: `ListItem` renders inline Markdown in string `description` and `highlights` with the shared renderer (#600); React nodes pass through unchanged.
+- Updated dependencies [601e883]
+  - @jsonresume/core@0.4.1
+
 ## 0.2.13
 
 ### Patch Changes

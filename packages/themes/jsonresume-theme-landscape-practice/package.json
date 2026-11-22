@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-landscape-practice",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A broad career column and pale green qualifications rail balance technical and creative work. Use a calm serif identity and short rules that leave long project titles room to wrap.",
   "type": "module",
   "main": "./dist/index.js",
