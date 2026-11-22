@@ -1,5 +1,5 @@
 /** Checks on what the person has done: jobs, skills, results, dates. */
-import { text, texts } from '@repo/resume-formats/read';
+import { isCareerBreak, text, texts } from '@repo/resume-formats/read';
 import type { AtsCheck, AtsIssue } from './report';
 import { check, issue, need, type Entry } from './scoring';
 
@@ -13,7 +13,8 @@ const before = (a: string, b: string) => {
 const NUMBER = /\d|%|\$|€|£/;
 
 export const experience = (work: ReadonlyArray<Entry>): AtsCheck => {
-  if (work.length === 0)
+  const jobs = work.filter((job) => !isCareerBreak(job));
+  if (jobs.length === 0)
     return check('experience', 'Work experience', 25, [
       [
         0,
@@ -26,6 +27,8 @@ export const experience = (work: ReadonlyArray<Entry>): AtsCheck => {
       ],
     ]);
   const missing = work.flatMap((job, i) => {
+    // A break has no employer or title to fill in.
+    if (isCareerBreak(job)) return [];
     const gaps = [
       text(job['name']) ? undefined : 'company',
       text(job['position']) ? undefined : 'job title',
@@ -37,7 +40,7 @@ export const experience = (work: ReadonlyArray<Entry>): AtsCheck => {
     return gaps.length > 0 ? [{ i, gaps, name: text(job['name']) }] : [];
   });
   const complete =
-    1 - missing.reduce((n, m) => n + m.gaps.length, 0) / (work.length * 4);
+    1 - missing.reduce((n, m) => n + m.gaps.length, 0) / (jobs.length * 4);
   return check('experience', 'Work experience', 25, [
     [8],
     [17 * complete],

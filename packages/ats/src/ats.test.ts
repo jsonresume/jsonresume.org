@@ -39,6 +39,31 @@ describe('checkAts', () => {
     ).toContain('Job 2 has no company');
   });
 
+  it('reads a career break as a break, not a job missing its company', () => {
+    const job = {
+      name: 'Engines',
+      position: 'Analyst',
+      startDate: '2019-01',
+      endDate: '2021-02',
+      summary: 'Built the difference engine.',
+    };
+    const gap = {
+      type: 'career-break',
+      startDate: '2021-03',
+      endDate: '2022-01',
+      summary: 'Caring for family.',
+    };
+    const score = (work: unknown[]) =>
+      checkAts({ work }).checks.find((c) => c.id === 'experience')?.score;
+    const report = checkAts({ work: [job, gap] });
+    expect(issuesOf(report).map((i) => i.field)).not.toContain('work[1]');
+    expect(score([job, gap])).toBe(score([job]));
+    // Only a break is still no work experience.
+    expect(issuesOf(checkAts({ work: [gap] })).map((i) => i.message)).toContain(
+      'No work experience'
+    );
+  });
+
   it('compares dates at the precision both have', () => {
     const report = checkAts({
       work: [{ name: 'A', startDate: '2015-09', endDate: '2015' }],
