@@ -39,6 +39,18 @@ format.
 lines (for example in `location.address`). Values meant for programs (codes,
 tags, identifiers) are noted as such below.
 
+**Inline Markdown** is allowed in prose fields: every `summary`,
+`work[].highlights[]`, `projects[].description` and
+`projects[].highlights[]`. Only CommonMark inline syntax is part of the
+format: `**strong**`, `*emphasis*` (or `_emphasis_`), `` `code` `` and
+`[links](https://example.com)`. Block syntax (headings, lists, tables) is
+not, and stays literal text. No flag marks it: inline syntax reads as plain
+text where it isn't rendered. Consumers that render it MUST escape the text
+as HTML first and SHOULD keep only `http`, `https` and `mailto` links;
+consumers that can't show it (plain text, ATS) SHOULD strip the marks and
+keep the words. `@jsonresume/utils` provides both (`renderInlineMarkdown`,
+`stripInlineMarkdown`), so themes agree.
+
 **Countries** are ISO 3166-1 alpha-2 codes (`US`, `AU`, `IN`) in
 `location.countryCode`.
 

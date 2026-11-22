@@ -10,7 +10,8 @@
     ".": "./src/index.js",
     "./dates": "./src/dates.js",
     "./metrics": "./src/metrics/index.js",
-    "./url": "./src/url.js"
+    "./url": "./src/url.js",
+    "./markdown": "./src/markdown.js"
   },
   "files": [
     "src"

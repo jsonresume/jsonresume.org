@@ -77,7 +77,7 @@
         },
         "summary": {
           "type": "string",
-          "description": "Write a short 2-3 sentence biography about yourself"
+          "description": "Write a short 2-3 sentence biography about yourself. Inline Markdown allowed: **strong**, *emphasis*, `code` and [links](https://example.com); no headings, lists or tables (#600)"
         },
         "location": {
           "$ref": "#/definitions/location"
@@ -160,11 +160,11 @@
           },
           "summary": {
             "type": "string",
-            "description": "Give an overview of your responsibilities at the company"
+            "description": "Give an overview of your responsibilities at the company. Inline Markdown allowed: **strong**, *emphasis*, `code` and [links](https://example.com); no headings, lists or tables (#600)"
           },
           "highlights": {
             "type": "array",
-            "description": "Specify multiple accomplishments",
+            "description": "Specify multiple accomplishments. Inline Markdown allowed: **strong**, *emphasis*, `code` and [links](https://example.com); no headings, lists or tables (#600)",
             "items": {
               "type": "string",
               "description": "e.g. Increased profits by 20% from 2011-2012 through viral advertising"
@@ -222,7 +222,7 @@
           },
           "summary": {
             "type": "string",
-            "description": "Give an overview of your responsibilities at the company"
+            "description": "Give an overview of your responsibilities at the company. Inline Markdown allowed: **strong**, *emphasis*, `code` and [links](https://example.com); no headings, lists or tables (#600)"
           },
           "highlights": {
             "type": "array",
@@ -292,7 +292,7 @@
           },
           "summary": {
             "type": "string",
-            "description": "Thesis topic, honours, notable projects or other context (#292)"
+            "description": "Thesis topic, honours, notable projects or other context (#292). Inline Markdown allowed: **strong**, *emphasis*, `code` and [links](https://example.com); no headings, lists or tables (#600)"
           },
           "custom": {
             "$ref": "#/definitions/custom"
@@ -320,7 +320,7 @@
           },
           "summary": {
             "type": "string",
-            "description": "e.g. Received for my work with Quantum Physics"
+            "description": "e.g. Received for my work with Quantum Physics. Inline Markdown allowed: **strong**, *emphasis*, `code` and [links](https://example.com); no headings, lists or tables (#600)"
           },
           "custom": {
             "$ref": "#/definitions/custom"
@@ -360,7 +360,7 @@
           },
           "summary": {
             "type": "string",
-            "description": "What the certificate covers (#590)"
+            "description": "What the certificate covers (#590). Inline Markdown allowed: **strong**, *emphasis*, `code` and [links](https://example.com); no headings, lists or tables (#600)"
           },
           "custom": {
             "$ref": "#/definitions/custom"
@@ -433,7 +433,7 @@
           },
           "summary": {
             "type": "string",
-            "description": "Short summary of publication. e.g. Discussion of the World Wide Web, HTTP, HTML."
+            "description": "Short summary of publication. e.g. Discussion of the World Wide Web, HTTP, HTML. Inline Markdown allowed: **strong**, *emphasis*, `code` and [links](https://example.com); no headings, lists or tables (#600)"
           },
           "type": {
             "type": "string",
@@ -567,15 +567,15 @@
           },
           "summary": {
             "type": "string",
-            "description": "Short summary of the project, consistent with summary in other sections (#296). e.g. Collated works of 2017."
+            "description": "Short summary of the project, consistent with summary in other sections (#296). e.g. Collated works of 2017. Inline Markdown allowed: **strong**, *emphasis*, `code` and [links](https://example.com); no headings, lists or tables (#600)"
           },
           "description": {
             "type": "string",
-            "description": "Deprecated alias of summary, kept for compatibility; when both are set, summary wins (#296). e.g. Collated works of 2017."
+            "description": "Deprecated alias of summary, kept for compatibility; when both are set, summary wins (#296). e.g. Collated works of 2017. Inline Markdown allowed: **strong**, *emphasis*, `code` and [links](https://example.com); no headings, lists or tables (#600)"
           },
           "highlights": {
             "type": "array",
-            "description": "Specify multiple features",
+            "description": "Specify multiple features. Inline Markdown allowed: **strong**, *emphasis*, `code` and [links](https://example.com); no headings, lists or tables (#600)",
             "items": {
               "type": "string",
               "description": "e.g. Directs you close but not quite there"

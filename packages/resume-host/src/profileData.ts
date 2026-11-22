@@ -1,4 +1,4 @@
-import { entries, text, texts } from '@repo/resume-formats/read';
+import { entries, prose, text, texts } from '@repo/resume-formats/read';
 import type { Entry } from '@repo/resume-formats/read';
 
 /** Where resumes are served; canonical links always name it. */
@@ -38,7 +38,8 @@ const basicsOf = (resume: unknown): Entry =>
 export const profileOf = (username: string, resume: unknown): Profile => {
   const basics = basicsOf(resume);
   const label = text(basics['label']);
-  const summary = text(basics['summary']);
+  // Search results and link previews show text, not Markdown (#600).
+  const summary = prose(basics['summary']);
   const photo = webUrl(basics['image']);
   const image = photo?.startsWith('https:') ? photo : undefined;
   return {

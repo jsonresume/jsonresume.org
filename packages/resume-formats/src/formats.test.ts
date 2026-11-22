@@ -34,6 +34,23 @@ describe('toText', () => {
     }
   });
 
+  it('writes inline Markdown as its words', () => {
+    const text = toText({
+      basics: { summary: 'Engineer who **ships**.' },
+      work: [
+        {
+          name: 'Acme',
+          summary: 'Led the `api` team.',
+          highlights: ['Cut costs *40%* with [Rust](https://rust-lang.org)'],
+        },
+      ],
+    });
+    expect(text).toContain('Engineer who ships.');
+    expect(text).toContain('Led the api team.');
+    expect(text).toContain('Cut costs 40% with Rust');
+    expect(text).not.toMatch(/\*|`|\]\(/);
+  });
+
   it('heads a career break as one, with its dates', () => {
     const text = toText({
       work: [

@@ -12,6 +12,7 @@ export { Badge, BadgeList } from './Badge.jsx';
 export { ContactInfo } from './ContactInfo.jsx';
 export { Link } from './Link.jsx';
 export { InlineSeparatorPipe } from './InlineSeparatorPipe.jsx';
+export { InlineMarkdown } from './InlineMarkdown.jsx';
 
 // Divider and separator components
 export { KeylineDivider } from './KeylineDivider';

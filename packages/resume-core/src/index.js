@@ -28,7 +28,14 @@ export {
   AccentSidebarStripe,
   AccentTopRule,
   RulesetStack,
+  InlineMarkdown,
 } from './primitives/index.jsx';
+
+// Inline Markdown in resume text (#600): one renderer for every theme
+export {
+  renderInlineMarkdown,
+  stripInlineMarkdown,
+} from '@jsonresume/utils/markdown';
 
 // Export design tokens
 export {

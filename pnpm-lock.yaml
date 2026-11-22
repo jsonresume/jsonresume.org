@@ -2784,6 +2784,9 @@ importers:
 
   packages/resume-formats:
     dependencies:
+      '@jsonresume/utils':
+        specifier: workspace:*
+        version: link:../utils
       docx:
         specifier: 9.13.0
         version: 9.13.0

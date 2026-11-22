@@ -1,5 +1,5 @@
 import { Document, HeadingLevel, Packer, Paragraph } from 'docx';
-import { entries, place, text, type Entry } from './read';
+import { entries, place, prose, text, type Entry } from './read';
 import { body, details, direction, link, section } from './word/blocks';
 import { xmlSafe } from './word/clean';
 import { sections, web } from './word/sections';
@@ -53,7 +53,7 @@ const header = (basics: Entry): Paragraph[] => {
       place(basics['location']),
     ]),
     ...details(profiles),
-    ...section('Summary', body(text(basics['summary']))),
+    ...section('Summary', body(prose(basics['summary']))),
   ];
 };
 

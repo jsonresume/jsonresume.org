@@ -79,7 +79,7 @@ export interface ResumeBasics {
    */
   url?: string;
   /**
-   * Write a short 2-3 sentence biography about yourself
+   * Write a short 2-3 sentence biography about yourself. Inline Markdown allowed: **strong**, *emphasis*, `code` and [links](https://example.com); no headings, lists or tables (#600)
    */
   summary?: string;
   location?: ResumeLocation;
@@ -161,11 +161,11 @@ export interface WorkItem {
   startDate?: Iso8601;
   endDate?: Iso8601;
   /**
-   * Give an overview of your responsibilities at the company
+   * Give an overview of your responsibilities at the company. Inline Markdown allowed: **strong**, *emphasis*, `code` and [links](https://example.com); no headings, lists or tables (#600)
    */
   summary?: string;
   /**
-   * Specify multiple accomplishments
+   * Specify multiple accomplishments. Inline Markdown allowed: **strong**, *emphasis*, `code` and [links](https://example.com); no headings, lists or tables (#600)
    */
   highlights?: string[];
   /**
@@ -217,7 +217,7 @@ export interface VolunteerItem {
   startDate?: Iso8601;
   endDate?: Iso8601;
   /**
-   * Give an overview of your responsibilities at the company
+   * Give an overview of your responsibilities at the company. Inline Markdown allowed: **strong**, *emphasis*, `code` and [links](https://example.com); no headings, lists or tables (#600)
    */
   summary?: string;
   /**
@@ -256,7 +256,7 @@ export interface EducationItem {
    */
   courses?: string[];
   /**
-   * Thesis topic, honours, notable projects or other context (#292)
+   * Thesis topic, honours, notable projects or other context (#292). Inline Markdown allowed: **strong**, *emphasis*, `code` and [links](https://example.com); no headings, lists or tables (#600)
    */
   summary?: string;
   custom?: Custom;
@@ -273,7 +273,7 @@ export interface AwardItem {
    */
   awarder?: string;
   /**
-   * e.g. Received for my work with Quantum Physics
+   * e.g. Received for my work with Quantum Physics. Inline Markdown allowed: **strong**, *emphasis*, `code` and [links](https://example.com); no headings, lists or tables (#600)
    */
   summary?: string;
   custom?: Custom;
@@ -299,7 +299,7 @@ export interface CertificateItem {
   issuer?: string;
   expiryDate?: Iso8601;
   /**
-   * What the certificate covers (#590)
+   * What the certificate covers (#590). Inline Markdown allowed: **strong**, *emphasis*, `code` and [links](https://example.com); no headings, lists or tables (#600)
    */
   summary?: string;
   custom?: Custom;
@@ -354,7 +354,7 @@ export interface PublicationItem {
    */
   url?: string;
   /**
-   * Short summary of publication. e.g. Discussion of the World Wide Web, HTTP, HTML.
+   * Short summary of publication. e.g. Discussion of the World Wide Web, HTTP, HTML. Inline Markdown allowed: **strong**, *emphasis*, `code` and [links](https://example.com); no headings, lists or tables (#600)
    */
   summary?: string;
   /**
@@ -432,15 +432,15 @@ export interface ProjectItem {
    */
   name?: string;
   /**
-   * Short summary of the project, consistent with summary in other sections (#296). e.g. Collated works of 2017.
+   * Short summary of the project, consistent with summary in other sections (#296). e.g. Collated works of 2017. Inline Markdown allowed: **strong**, *emphasis*, `code` and [links](https://example.com); no headings, lists or tables (#600)
    */
   summary?: string;
   /**
-   * Deprecated alias of summary, kept for compatibility; when both are set, summary wins (#296). e.g. Collated works of 2017.
+   * Deprecated alias of summary, kept for compatibility; when both are set, summary wins (#296). e.g. Collated works of 2017. Inline Markdown allowed: **strong**, *emphasis*, `code` and [links](https://example.com); no headings, lists or tables (#600)
    */
   description?: string;
   /**
-   * Specify multiple features
+   * Specify multiple features. Inline Markdown allowed: **strong**, *emphasis*, `code` and [links](https://example.com); no headings, lists or tables (#600)
    */
   highlights?: string[];
   /**

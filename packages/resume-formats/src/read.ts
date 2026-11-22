@@ -1,3 +1,4 @@
+import { stripInlineMarkdown } from '@jsonresume/utils';
 import { Predicate } from 'effect';
 
 export type Entry = Readonly<Record<string, unknown>>;
@@ -9,6 +10,19 @@ export const text = (value: unknown): string | undefined => {
   const trimmed = value.trim();
   return trimmed === '' ? undefined : trimmed;
 };
+
+/**
+ * Prose a person wrote (a summary, a highlight), with its inline Markdown
+ * (#600) removed: formats that can't show emphasis or links get the words.
+ */
+export const prose = (value: unknown): string | undefined => {
+  const t = text(value);
+  return t === undefined ? undefined : stripInlineMarkdown(t);
+};
+
+/** The prose items in a list field, e.g. highlights. */
+export const proseList = (value: unknown): ReadonlyArray<string> =>
+  texts(value).map(stripInlineMarkdown);
 
 /** A career break (#589): a work entry with type "career-break". */
 export const isCareerBreak = (entry: Entry) =>

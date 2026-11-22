@@ -6,6 +6,8 @@ import {
   span,
   text,
   texts,
+  prose,
+  proseList,
   workTitle,
   type Entry,
 } from '../read';
@@ -32,8 +34,8 @@ export const web = (value: unknown) => {
 const role = (title: string | undefined, at: string | undefined, e: Entry) => [
   ...subheading(joined([title, at], ', ')),
   ...details([span(e), place(e['location']), web(e['url'])]),
-  ...body(text(e['summary'])),
-  ...bullets(texts(e['highlights'])),
+  ...body(prose(e['summary'])),
+  ...bullets(proseList(e['highlights'])),
 ];
 
 const keywords = (e: Entry) => joined(texts(e['keywords']), ', ');
@@ -62,8 +64,8 @@ export const sections = (resume: Entry): Paragraph[] => {
           joined(texts(p['roles']), ', '),
           web(p['url']),
         ]),
-        ...body(text(p['description'])),
-        ...bullets(texts(p['highlights'])),
+        ...body(prose(p['description'])),
+        ...bullets(proseList(p['highlights'])),
       ])
     ),
     ...section(
@@ -84,7 +86,7 @@ export const sections = (resume: Entry): Paragraph[] => {
       list('awards').flatMap((a) => [
         ...subheading(text(a['title'])),
         ...details([text(a['awarder']), date(a['date'])]),
-        ...body(text(a['summary'])),
+        ...body(prose(a['summary'])),
       ])
     ),
     ...section(
@@ -106,7 +108,7 @@ export const sections = (resume: Entry): Paragraph[] => {
           date(p['releaseDate']),
           web(p['url']),
         ]),
-        ...body(text(p['summary'])),
+        ...body(prose(p['summary'])),
       ])
     ),
     ...section(
