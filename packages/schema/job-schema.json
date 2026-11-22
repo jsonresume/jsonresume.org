@@ -60,11 +60,99 @@
     },
     "salary": {
       "type": "string",
-      "description": "100000"
+      "description": "The pay as the post words it, for display, e.g. '$120k–150k + equity'. Structured amounts go in compensation (#319)"
+    },
+    "compensation": {
+      "type": "object",
+      "description": "The pay as numbers, for tools (#319). salary stays the text people read. Values normalised to one currency are derived data, not part of the document",
+      "additionalProperties": true,
+      "properties": {
+        "min": {
+          "type": "number",
+          "description": "The lowest amount offered, per period"
+        },
+        "max": {
+          "type": "number",
+          "description": "The highest amount offered, per period; equal to min for a single figure"
+        },
+        "currency": {
+          "type": "string",
+          "description": "ISO 4217 code, e.g. USD, EUR, AUD"
+        },
+        "period": {
+          "type": "string",
+          "enum": ["hour", "day", "week", "month", "year"],
+          "description": "What each amount is paid for"
+        }
+      }
     },
     "experience": {
       "type": "string",
       "description": "Senior or Junior or Mid-level"
+    },
+    "facets": {
+      "type": "object",
+      "description": "The post in fixed terms tools can filter on (#353). Each is optional, and unspecified means the post does not say. The free-text fields above stay for display",
+      "additionalProperties": true,
+      "properties": {
+        "remoteScope": {
+          "type": "string",
+          "enum": [
+            "onsite",
+            "hybrid",
+            "remote_region",
+            "remote_global",
+            "unspecified"
+          ],
+          "description": "Where the work is done: remote_region is remote within named regions, remote_global remote from anywhere"
+        },
+        "remoteRegions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Where remote work is allowed, when limited, e.g. ['US'], ['EU']"
+        },
+        "timezoneRange": {
+          "type": "string",
+          "description": "Hours of overlap or time zones required, e.g. UTC-5 to UTC+1"
+        },
+        "seniority": {
+          "type": "string",
+          "enum": [
+            "intern",
+            "junior",
+            "mid",
+            "senior",
+            "staff_plus",
+            "lead_management",
+            "unspecified"
+          ],
+          "description": "The level of the role"
+        },
+        "employmentType": {
+          "type": "string",
+          "enum": [
+            "full_time",
+            "part_time",
+            "contract",
+            "internship",
+            "cofounder",
+            "unspecified"
+          ],
+          "description": "How the role is held"
+        },
+        "visaSponsorship": {
+          "type": "string",
+          "enum": ["yes", "no", "unspecified"],
+          "description": "Whether the employer sponsors a visa"
+        },
+        "salaryProvenance": {
+          "type": "string",
+          "enum": ["stated", "inferred", "absent"],
+          "description": "Whether compensation comes from numbers the post states, was inferred, or is missing"
+        }
+      }
     },
     "responsibilities": {
       "type": "array",
