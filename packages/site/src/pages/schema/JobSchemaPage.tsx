@@ -19,7 +19,7 @@ export function JobSchemaPage() {
   return (
     <>
       <SchemaHero
-        eyebrow="Reference · draft"
+        eyebrow="Reference · v1"
         title="The job description schema"
         lede={j.intro}
         schemaUrl={j.schemaUrl}
@@ -51,7 +51,7 @@ export function JobSchemaPage() {
         title="Describe the candidate side too"
         items={[
           { label: 'The resume schema', href: paths.schema },
-          { label: 'Get started', href: paths.gettingStarted },
+          { label: 'The company schema', href: paths.companySchema },
         ]}
       />
     </>

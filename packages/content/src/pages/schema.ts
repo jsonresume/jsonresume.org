@@ -34,6 +34,16 @@ export const resumeSchema = {
   ],
 };
 
+export const companySchema = {
+  file: 'company.json',
+  schemaUrl: `${raw}/company-schema.json`,
+  source: `${tree}`,
+  intro:
+    'A standard shape for companies that hire: who they are, how big, where and how they work, and the technologies and benefits candidates ask about. A job description points to its company through companyUrl, the company’s website.',
+  board:
+    'Every company hiring on the jsonresume.org job board is available as a company.json at /api/companies/<name>/document, built only from what its posts state.',
+};
+
 export const jobSchema = {
   file: 'job.json',
   schemaUrl: `${raw}/job-schema.json`,

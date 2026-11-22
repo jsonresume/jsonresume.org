@@ -22,6 +22,7 @@ describe('every page', () => {
       '/ai',
       '/theme-development',
       '/job-description-schema',
+      '/company-schema',
       '/media',
       '/blog',
       '/blog/first-official-release',
