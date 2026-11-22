@@ -30,6 +30,7 @@ export {
   toSummary,
   type JobRow,
 } from './summary';
+export { toJobDocument } from './jobDocument';
 export { careerDirections, familyOf, resumeSkills } from './directions';
 export { SKILL_ALIASES } from './skillAliases';
 export {

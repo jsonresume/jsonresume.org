@@ -7,6 +7,7 @@ import { Context, Effect, Layer, Option, Schema } from 'effect';
 import { SqlClient } from 'effect/sql';
 import { decodePosting } from './posting';
 import { toJob, toSummary, type JobRow } from './summary';
+import { toJobDocument } from './jobDocument';
 
 /** Jobs stay on the board this long: two monthly threads. */
 export const OPEN_DAYS = 62;
@@ -115,6 +116,14 @@ const make = Effect.gen(function* () {
   const job = (id: number) =>
     find(id).pipe(Effect.map(({ row, full }) => toJob(row, full)));
 
+  /** The job as a job-schema v1 document (#353). */
+  const document = (id: number) =>
+    find(id).pipe(
+      Effect.map(({ row }) =>
+        toJobDocument(row, `https://jsonresume.org/jobs/${id}`)
+      )
+    );
+
   const status: Effect.Effect<JobsStatus> = Effect.gen(function* () {
     const [run] = yield* sql`
       SELECT started_at, finished_at, ok, stats, error FROM app.job_runs
@@ -143,5 +152,5 @@ const make = Effect.gen(function* () {
     };
   }).pipe(Effect.orDie);
 
-  return { board, job, find, status };
+  return { board, job, document, find, status };
 });

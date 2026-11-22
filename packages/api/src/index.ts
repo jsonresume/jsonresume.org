@@ -16,6 +16,7 @@ import { ResumeVersionsApi } from './ResumeVersionsApi';
 import { VariantsApi } from './VariantsApi';
 import { JobsApi, MyJobsApi } from './JobsApi';
 export * from './JobDecisionsApi';
+export { JobDocument } from './jobDocument';
 export { MarkSource, PassReason, passReasonLabels } from './jobMarks';
 import { JobDecisionsApi } from './JobDecisionsApi';
 export {

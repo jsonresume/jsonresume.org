@@ -2,6 +2,7 @@ import { Accounts } from '@repo/accounts';
 import {
   Direction,
   Job,
+  JobDocument,
   JobMark,
   JobMatch,
   JobSummary,
@@ -61,6 +62,12 @@ export const JobToolkit = Toolkit.make(
     }),
     ...failing,
   }).annotateMerge(hints('get_job')),
+  Tool.make('get_job_document', {
+    description: describe('get_job_document'),
+    parameters: Schema.Struct({ id: Count }),
+    success: JobDocument,
+    ...failing,
+  }).annotateMerge(hints('get_job_document')),
   Tool.make('mark_job', {
     description: describe('mark_job'),
     parameters: Schema.Struct({
@@ -134,6 +141,10 @@ export const JobHandlers = JobToolkit.toLayer(
               : null;
           return { job, url: jobUrl(id), mark };
         }),
+      get_job_document: ({ id }) =>
+        board
+          .document(id)
+          .pipe(Effect.mapError(() => failWith(`No job ${id}.`))),
       mark_job: ({ id, mark, note, reason }) =>
         Effect.gen(function* () {
           const user = yield* caller;
