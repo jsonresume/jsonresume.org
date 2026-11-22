@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { renderInlineMarkdown } from '@jsonresume/utils/markdown';
 
 /**
  * ListItem Component
@@ -74,6 +75,12 @@ const Highlights = styled.ul`
   }
 `;
 
+// Strings get their inline Markdown rendered (#600); nodes pass through.
+const prose = (value) =>
+  typeof value === 'string'
+    ? { dangerouslySetInnerHTML: { __html: renderInlineMarkdown(value) } }
+    : { children: value };
+
 export function ListItem({
   title,
   subtitle,
@@ -110,13 +117,13 @@ export function ListItem({
       )}
 
       {description && (
-        <Description className="resume-description">{description}</Description>
+        <Description className="resume-description" {...prose(description)} />
       )}
 
       {highlights.length > 0 && (
         <Highlights className="resume-highlights">
           {highlights.map((highlight, index) => (
-            <li key={index}>{highlight}</li>
+            <li key={index} {...prose(highlight)} />
           ))}
         </Highlights>
       )}

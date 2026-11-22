@@ -1455,6 +1455,50 @@ function SectionTitle({
     }
   );
 }
+const ESCAPES = {
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+  "'": "&#39;"
+};
+const escapeHtml = (text) => text.replace(/[&<>"']/g, (c) => ESCAPES[c]);
+const ESCAPABLE = /\\([\\`*_[\]()!#])/g;
+const CODE = /`([^`]+)`/g;
+const LINK = /\[([^\]]+)\]\(([^)\s]+)\)/g;
+const STRONG = /\*\*(?=\S)([^*]*?\S)\*\*|__(?=\S)([^_]*?\S)__/g;
+const EMPHASIS = /\*(?=\S)([^*]*?\S)\*|(^|[^\p{L}\p{N}_])_(?=\S)([^_]*?\S)_(?![\p{L}\p{N}_])/gu;
+const safeHref = (url) => /^(https?:\/\/|mailto:)/i.test(url) ? url : void 0;
+const emphasis = (text, strong, em) => text.replace(STRONG, (_2, a, b2) => strong(a ?? b2)).replace(
+  EMPHASIS,
+  (_2, a, before, b2) => a !== void 0 ? em(a) : `${before}${em(b2)}`
+);
+const inline = (text, out) => {
+  const kept = [];
+  const keep = (value) => `${kept.push(value) - 1}`;
+  const marks = (t) => emphasis(t, out.strong, out.em);
+  const rest = text.replace(/\uE000/g, "").replace(ESCAPABLE, (_2, c) => keep(out.text(c))).replace(CODE, (_2, body) => keep(out.code(body))).replace(
+    LINK,
+    (_2, label, url) => keep(out.link(marks(out.text(label)), url))
+  );
+  return marks(out.text(rest)).replace(
+    /\uE000(\d+)\uE000/g,
+    (_2, i) => kept[Number(i)]
+  );
+};
+function renderInlineMarkdown(text) {
+  if (typeof text !== "string") return "";
+  return inline(text, {
+    text: escapeHtml,
+    code: (body) => `<code>${escapeHtml(body)}</code>`,
+    link: (label, url) => {
+      const href = safeHref(url);
+      return href ? `<a href="${escapeHtml(href)}">${label}</a>` : label;
+    },
+    strong: (t) => `<strong>${t}</strong>`,
+    em: (t) => `<em>${t}</em>`
+  });
+}
 dt.div`
   margin-bottom: ${(props) => props.theme?.spacing?.item || "var(--resume-space-item, 1rem)"};
 
@@ -1729,16 +1773,16 @@ const StyledLink = dt.a`
   }
 `;
 function Link({ href, children, className, ...rest }) {
-  const safeHref = safeUrl(href);
-  if (!safeHref) {
+  const safeHref2 = safeUrl(href);
+  if (!safeHref2) {
     return /* @__PURE__ */ jsx("span", { className, children });
   }
-  const isExternal = isExternalUrl(safeHref);
+  const isExternal = isExternalUrl(safeHref2);
   const externalProps = isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {};
   return /* @__PURE__ */ jsx(
     StyledLink,
     {
-      href: safeHref,
+      href: safeHref2,
       className: `resume-link ${className || ""}`.trim(),
       ...externalProps,
       ...rest,
@@ -1766,6 +1810,15 @@ dt.span`
     }
   }
 `;
+function InlineMarkdown({ text, as: Tag = "span", ...rest }) {
+  return /* @__PURE__ */ jsx(
+    Tag,
+    {
+      ...rest,
+      dangerouslySetInnerHTML: { __html: renderInlineMarkdown(text) }
+    }
+  );
+}
 dt.hr`
   border: none;
   border-top: 0.5pt solid
@@ -6317,7 +6370,7 @@ function Resume({ resume }) {
     /* @__PURE__ */ jsx(Header, { children: basics && /* @__PURE__ */ jsxs(Fragment, { children: [
       basics.name && /* @__PURE__ */ jsx(Name, { children: basics.name }),
       basics.label && /* @__PURE__ */ jsx(Title, { children: basics.label }),
-      basics.summary && /* @__PURE__ */ jsx(Summary, { children: basics.summary })
+      basics.summary && /* @__PURE__ */ jsx(InlineMarkdown, { as: Summary, text: basics.summary })
     ] }) }),
     /* @__PURE__ */ jsxs(TwoColumnLayout, { children: [
       /* @__PURE__ */ jsxs(Sidebar, { children: [
@@ -6403,8 +6456,15 @@ function Resume({ resume }) {
                 }
               )
             ] }),
-            job.summary && /* @__PURE__ */ jsx(Description, { children: job.summary }),
-            job.highlights && job.highlights.length > 0 && /* @__PURE__ */ jsx(Highlights, { children: job.highlights.map((highlight, i) => /* @__PURE__ */ jsx(Highlight, { children: highlight }, i)) })
+            job.summary && /* @__PURE__ */ jsx(InlineMarkdown, { as: Description, text: job.summary }),
+            job.highlights && job.highlights.length > 0 && /* @__PURE__ */ jsx(Highlights, { children: job.highlights.map((highlight, i) => /* @__PURE__ */ jsx(
+              InlineMarkdown,
+              {
+                as: Highlight,
+                text: highlight
+              },
+              i
+            )) })
           ] }, index))
         ] }),
         education && education.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
@@ -6446,8 +6506,21 @@ function Resume({ resume }) {
                 }
               )
             ] }),
-            project.description && /* @__PURE__ */ jsx(Description, { children: project.description }),
-            project.highlights && project.highlights.length > 0 && /* @__PURE__ */ jsx(Highlights, { children: project.highlights.map((highlight, i) => /* @__PURE__ */ jsx(Highlight, { children: highlight }, i)) })
+            project.description && /* @__PURE__ */ jsx(
+              InlineMarkdown,
+              {
+                as: Description,
+                text: project.description
+              }
+            ),
+            project.highlights && project.highlights.length > 0 && /* @__PURE__ */ jsx(Highlights, { children: project.highlights.map((highlight, i) => /* @__PURE__ */ jsx(
+              InlineMarkdown,
+              {
+                as: Highlight,
+                text: highlight
+              },
+              i
+            )) })
           ] }, index))
         ] }),
         awards && awards.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
@@ -6456,7 +6529,7 @@ function Resume({ resume }) {
             award.title && /* @__PURE__ */ jsx(Institution, { children: award.title }),
             award.awarder && /* @__PURE__ */ jsx(Degree, { children: award.awarder }),
             award.date && /* @__PURE__ */ jsx(StyledDateRange, { startDate: award.date }),
-            award.summary && /* @__PURE__ */ jsx(Description, { children: award.summary })
+            award.summary && /* @__PURE__ */ jsx(InlineMarkdown, { as: Description, text: award.summary })
           ] }, index))
         ] }),
         certificates && certificates.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
@@ -6487,7 +6560,7 @@ function Resume({ resume }) {
             ) : pub.name }),
             pub.publisher && /* @__PURE__ */ jsx(Degree, { children: pub.publisher }),
             pub.releaseDate && /* @__PURE__ */ jsx(StyledDateRange, { startDate: pub.releaseDate }),
-            pub.summary && /* @__PURE__ */ jsx(Description, { children: pub.summary })
+            pub.summary && /* @__PURE__ */ jsx(InlineMarkdown, { as: Description, text: pub.summary })
           ] }, index))
         ] }),
         volunteer && volunteer.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [
@@ -6504,8 +6577,15 @@ function Resume({ resume }) {
                 }
               )
             ] }),
-            vol.summary && /* @__PURE__ */ jsx(Description, { children: vol.summary }),
-            vol.highlights && vol.highlights.length > 0 && /* @__PURE__ */ jsx(Highlights, { children: vol.highlights.map((highlight, i) => /* @__PURE__ */ jsx(Highlight, { children: highlight }, i)) })
+            vol.summary && /* @__PURE__ */ jsx(InlineMarkdown, { as: Description, text: vol.summary }),
+            vol.highlights && vol.highlights.length > 0 && /* @__PURE__ */ jsx(Highlights, { children: vol.highlights.map((highlight, i) => /* @__PURE__ */ jsx(
+              InlineMarkdown,
+              {
+                as: Highlight,
+                text: highlight
+              },
+              i
+            )) })
           ] }, index))
         ] }),
         references && references.length > 0 && /* @__PURE__ */ jsxs(StyledSection, { children: [

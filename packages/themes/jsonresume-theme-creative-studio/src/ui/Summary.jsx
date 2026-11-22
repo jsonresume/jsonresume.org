@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Section from './Section.jsx';
 
+import { InlineMarkdown } from '@jsonresume/core';
 const SummaryText = styled.p`
   font-size: 1.1rem;
   line-height: 1.9;
@@ -12,7 +13,7 @@ const Summary = ({ basics }) => {
 
   return (
     <Section title="About">
-      <SummaryText>{basics.summary}</SummaryText>
+      <InlineMarkdown as={SummaryText} text={basics.summary} />
     </Section>
   );
 };

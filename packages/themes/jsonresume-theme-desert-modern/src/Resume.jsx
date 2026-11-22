@@ -1,5 +1,5 @@
 import React from 'react';
-import { DateRange } from '@jsonresume/core';
+import { DateRange, InlineMarkdown } from '@jsonresume/core';
 import {
   Layout,
   Header,
@@ -57,7 +57,9 @@ function Resume({ resume }) {
         {basics.name && <Name>{basics.name}</Name>}
         {basics.label && <Label>{basics.label}</Label>}
         <StyledContactInfo basics={basics} />
-        {basics.summary && <Summary>{basics.summary}</Summary>}
+        {basics.summary && (
+          <InlineMarkdown as={Summary} text={basics.summary} />
+        )}
       </Header>
 
       {work?.length > 0 && (
@@ -83,7 +85,9 @@ function Resume({ resume }) {
                   </EntryMeta>
                 )}
               </EntryHeader>
-              {job.summary && <EntrySummary>{job.summary}</EntrySummary>}
+              {job.summary && (
+                <InlineMarkdown as={EntrySummary} text={job.summary} />
+              )}
               {renderHighlights(job.highlights)}
             </Entry>
           ))}
@@ -120,7 +124,7 @@ function Resume({ resume }) {
                     </EntryMeta>
                   )}
                 </EntryHeader>
-                {summary && <EntrySummary>{summary}</EntrySummary>}
+                {summary && <InlineMarkdown as={EntrySummary} text={summary} />}
                 {renderHighlights(project.highlights)}
                 {project.keywords?.length > 0 && (
                   <KeywordList>{project.keywords.join(' • ')}</KeywordList>
@@ -209,7 +213,9 @@ function Resume({ resume }) {
                   </EntryMeta>
                 )}
               </EntryHeader>
-              {item.summary && <EntrySummary>{item.summary}</EntrySummary>}
+              {item.summary && (
+                <InlineMarkdown as={EntrySummary} text={item.summary} />
+              )}
               {renderHighlights(item.highlights)}
             </Entry>
           ))}
@@ -230,7 +236,9 @@ function Resume({ resume }) {
                 </div>
                 {award.date && <EntryMeta>{award.date}</EntryMeta>}
               </EntryHeader>
-              {award.summary && <EntrySummary>{award.summary}</EntrySummary>}
+              {award.summary && (
+                <InlineMarkdown as={EntrySummary} text={award.summary} />
+              )}
             </Entry>
           ))}
         </SectionBlock>
@@ -250,7 +258,9 @@ function Resume({ resume }) {
                 </div>
                 {cert.date && <EntryMeta>{cert.date}</EntryMeta>}
               </EntryHeader>
-              {cert.summary && <EntrySummary>{cert.summary}</EntrySummary>}
+              {cert.summary && (
+                <InlineMarkdown as={EntrySummary} text={cert.summary} />
+              )}
               {cert.url && (
                 <KeywordList>
                   <Anchor href={cert.url}>{cert.url}</Anchor>
@@ -279,7 +289,9 @@ function Resume({ resume }) {
                 </div>
                 {pub.releaseDate && <EntryMeta>{pub.releaseDate}</EntryMeta>}
               </EntryHeader>
-              {pub.summary && <EntrySummary>{pub.summary}</EntrySummary>}
+              {pub.summary && (
+                <InlineMarkdown as={EntrySummary} text={pub.summary} />
+              )}
             </Entry>
           ))}
         </SectionBlock>

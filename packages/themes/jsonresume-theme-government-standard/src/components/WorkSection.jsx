@@ -1,5 +1,5 @@
 import React from 'react';
-import { Section, DateRange } from '@jsonresume/core';
+import { Section, DateRange, InlineMarkdown } from '@jsonresume/core';
 import {
   StyledSectionTitle,
   WorkItem,
@@ -28,11 +28,13 @@ export function WorkSection({ work }) {
               </DateText>
             )}
           </WorkHeader>
-          {job.summary && <WorkSummary>{job.summary}</WorkSummary>}
+          {job.summary && (
+            <InlineMarkdown as={WorkSummary} text={job.summary} />
+          )}
           {job.highlights?.length > 0 && (
             <Highlights>
               {job.highlights.map((highlight, i) => (
-                <li key={i}>{highlight}</li>
+                <InlineMarkdown as="li" key={i} text={highlight} />
               ))}
             </Highlights>
           )}

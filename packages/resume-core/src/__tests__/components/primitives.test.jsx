@@ -111,6 +111,26 @@ describe('ListItem', () => {
     expect(html).not.toContain('resume-highlights');
   });
 
+  it('renders inline Markdown in string descriptions and highlights (#600)', () => {
+    const { html } = renderHtml(
+      <ListItem
+        title="t"
+        description="Led **five** people"
+        highlights={['See [it](https://e.com)', '<script>x</script>']}
+      />
+    );
+    expect(html).toContain('<strong>five</strong>');
+    expect(html).toContain('<a href="https://e.com"');
+    expect(html).not.toContain('<script>');
+  });
+
+  it('passes React nodes through unchanged', () => {
+    const { html } = renderHtml(
+      <ListItem title="t" description={<em>node</em>} />
+    );
+    expect(html).toContain('<em>node</em>');
+  });
+
   it('renders every highlight as a list item', () => {
     const { html } = renderHtml(
       <ListItem title="t" highlights={['a', 'b', 'c']} />

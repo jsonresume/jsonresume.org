@@ -1455,6 +1455,50 @@ function SectionTitle({
     }
   );
 }
+const ESCAPES = {
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+  "'": "&#39;"
+};
+const escapeHtml = (text) => text.replace(/[&<>"']/g, (c) => ESCAPES[c]);
+const ESCAPABLE = /\\([\\`*_[\]()!#])/g;
+const CODE = /`([^`]+)`/g;
+const LINK = /\[([^\]]+)\]\(([^)\s]+)\)/g;
+const STRONG = /\*\*(?=\S)([^*]*?\S)\*\*|__(?=\S)([^_]*?\S)__/g;
+const EMPHASIS = /\*(?=\S)([^*]*?\S)\*|(^|[^\p{L}\p{N}_])_(?=\S)([^_]*?\S)_(?![\p{L}\p{N}_])/gu;
+const safeHref = (url) => /^(https?:\/\/|mailto:)/i.test(url) ? url : void 0;
+const emphasis = (text, strong, em) => text.replace(STRONG, (_2, a, b2) => strong(a ?? b2)).replace(
+  EMPHASIS,
+  (_2, a, before, b2) => a !== void 0 ? em(a) : `${before}${em(b2)}`
+);
+const inline = (text, out) => {
+  const kept = [];
+  const keep = (value) => `${kept.push(value) - 1}`;
+  const marks = (t) => emphasis(t, out.strong, out.em);
+  const rest = text.replace(/\uE000/g, "").replace(ESCAPABLE, (_2, c) => keep(out.text(c))).replace(CODE, (_2, body) => keep(out.code(body))).replace(
+    LINK,
+    (_2, label, url) => keep(out.link(marks(out.text(label)), url))
+  );
+  return marks(out.text(rest)).replace(
+    /\uE000(\d+)\uE000/g,
+    (_2, i) => kept[Number(i)]
+  );
+};
+function renderInlineMarkdown(text) {
+  if (typeof text !== "string") return "";
+  return inline(text, {
+    text: escapeHtml,
+    code: (body) => `<code>${escapeHtml(body)}</code>`,
+    link: (label, url) => {
+      const href = safeHref(url);
+      return href ? `<a href="${escapeHtml(href)}">${label}</a>` : label;
+    },
+    strong: (t) => `<strong>${t}</strong>`,
+    em: (t) => `<em>${t}</em>`
+  });
+}
 dt.div`
   margin-bottom: ${(props) => props.theme?.spacing?.item || "var(--resume-space-item, 1rem)"};
 
@@ -1783,6 +1827,15 @@ dt.span`
     }
   }
 `;
+function InlineMarkdown({ text, as: Tag = "span", ...rest }) {
+  return /* @__PURE__ */ jsx(
+    Tag,
+    {
+      ...rest,
+      dangerouslySetInnerHTML: { __html: renderInlineMarkdown(text) }
+    }
+  );
+}
 dt.hr`
   border: none;
   border-top: 0.5pt solid
@@ -6336,7 +6389,7 @@ function Resume({ resume }) {
       basics.name && /* @__PURE__ */ jsx(Name, { children: basics.name }),
       basics.label && /* @__PURE__ */ jsx(Label, { children: basics.label }),
       /* @__PURE__ */ jsx(StyledContactInfo, { basics }),
-      basics.summary && /* @__PURE__ */ jsx(Summary, { children: basics.summary })
+      basics.summary && /* @__PURE__ */ jsx(InlineMarkdown, { as: Summary, text: basics.summary })
     ] }),
     work?.length > 0 && /* @__PURE__ */ jsxs(SectionBlock, { children: [
       /* @__PURE__ */ jsx(SectionHeading, { children: "Experience" }),
@@ -6354,7 +6407,7 @@ function Resume({ resume }) {
             }
           ) })
         ] }),
-        job.summary && /* @__PURE__ */ jsx(EntrySummary, { children: job.summary }),
+        job.summary && /* @__PURE__ */ jsx(InlineMarkdown, { as: EntrySummary, text: job.summary }),
         renderHighlights(job.highlights)
       ] }, index))
     ] }),
@@ -6381,7 +6434,7 @@ function Resume({ resume }) {
               }
             ) })
           ] }),
-          summary && /* @__PURE__ */ jsx(EntrySummary, { children: summary }),
+          summary && /* @__PURE__ */ jsx(InlineMarkdown, { as: EntrySummary, text: summary }),
           renderHighlights(project.highlights),
           project.keywords?.length > 0 && /* @__PURE__ */ jsx(KeywordList, { children: project.keywords.join(" • ") })
         ] }, index);
@@ -6438,7 +6491,7 @@ function Resume({ resume }) {
             }
           ) })
         ] }),
-        item.summary && /* @__PURE__ */ jsx(EntrySummary, { children: item.summary }),
+        item.summary && /* @__PURE__ */ jsx(InlineMarkdown, { as: EntrySummary, text: item.summary }),
         renderHighlights(item.highlights)
       ] }, index))
     ] }),
@@ -6455,7 +6508,7 @@ function Resume({ resume }) {
           ] }),
           award.date && /* @__PURE__ */ jsx(EntryMeta, { children: award.date })
         ] }),
-        award.summary && /* @__PURE__ */ jsx(EntrySummary, { children: award.summary })
+        award.summary && /* @__PURE__ */ jsx(InlineMarkdown, { as: EntrySummary, text: award.summary })
       ] }, index))
     ] }),
     certificates?.length > 0 && /* @__PURE__ */ jsxs(SectionBlock, { children: [
@@ -6471,7 +6524,7 @@ function Resume({ resume }) {
           ] }),
           cert.date && /* @__PURE__ */ jsx(EntryMeta, { children: cert.date })
         ] }),
-        cert.summary && /* @__PURE__ */ jsx(EntrySummary, { children: cert.summary }),
+        cert.summary && /* @__PURE__ */ jsx(InlineMarkdown, { as: EntrySummary, text: cert.summary }),
         cert.url && /* @__PURE__ */ jsx(KeywordList, { children: /* @__PURE__ */ jsx(Anchor, { href: cert.url, children: cert.url }) })
       ] }, index))
     ] }),
@@ -6489,7 +6542,7 @@ function Resume({ resume }) {
           ] }),
           pub.releaseDate && /* @__PURE__ */ jsx(EntryMeta, { children: pub.releaseDate })
         ] }),
-        pub.summary && /* @__PURE__ */ jsx(EntrySummary, { children: pub.summary })
+        pub.summary && /* @__PURE__ */ jsx(InlineMarkdown, { as: EntrySummary, text: pub.summary })
       ] }, index))
     ] }),
     languages?.length > 0 && /* @__PURE__ */ jsxs(SectionBlock, { children: [

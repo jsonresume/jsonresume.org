@@ -9,6 +9,23 @@
  * Similar to the standard date type, but each section after the year is optional. e.g. 2014-06-29 or 2023-04. Every date is optional; omit endDate for a current position or ongoing entry (#309).
  */
 export type Iso8601 = string;
+/**
+ * A skill used in this entry (#313): the name or id of a skill in the top-level skills list, or a skill object shaped like one, e.g. { "name": "Backend", "keywords": ["Go"] }
+ */
+export type SkillReference =
+  | string
+  | {
+      /**
+       * e.g. Backend
+       */
+      name?: string;
+      /**
+       * e.g. Master
+       */
+      level?: string;
+      keywords?: string[];
+      [k: string]: any;
+    };
 
 export interface Resume {
   /**
@@ -172,6 +189,10 @@ export interface WorkItem {
    * Skills, tools or technologies used in this role (#293)
    */
   keywords?: string[];
+  /**
+   * Skills used in this role, naming or repeating entries of the top-level skills list, so a skill can point to where it was used (#313)
+   */
+  skills?: SkillReference[];
   custom?: Custom;
   [k: string]: any;
 }
@@ -224,6 +245,10 @@ export interface VolunteerItem {
    * Specify accomplishments and achievements
    */
   highlights?: string[];
+  /**
+   * Skills used in this role, naming or repeating entries of the top-level skills list, so a skill can point to where it was used (#313)
+   */
+  skills?: SkillReference[];
   custom?: Custom;
   [k: string]: any;
 }
@@ -259,6 +284,10 @@ export interface EducationItem {
    * Thesis topic, honours, notable projects or other context (#292). Inline Markdown allowed: **strong**, *emphasis*, `code` and [links](https://example.com); no headings, lists or tables (#600)
    */
   summary?: string;
+  /**
+   * Skills used in this course of study, naming or repeating entries of the top-level skills list, so a skill can point to where it was used (#313)
+   */
+  skills?: SkillReference[];
   custom?: Custom;
   [k: string]: any;
 }
@@ -370,6 +399,10 @@ export interface SkillItem {
    */
   name?: string;
   /**
+   * A short, stable identifier that entries' skills lists can use instead of the name, e.g. 'typescript' (#313)
+   */
+  id?: string;
+  /**
    * e.g. Master
    */
   level?: string;
@@ -389,6 +422,20 @@ export interface LanguageItem {
    * e.g. Fluent, Beginner
    */
   fluency?: string;
+  /**
+   * Where the language sits on a published proficiency scale, for tools; fluency stays the label people read (#315). e.g. { "framework": "CEFR", "level": "C1" }
+   */
+  scale?: {
+    /**
+     * The scale, free text: 'CEFR', 'ILR', 'ACTFL', 'JLPT', 'HSK', …
+     */
+    framework?: string;
+    /**
+     * The level on that scale as it writes it, e.g. 'C1', '3+', 'Advanced Mid', 'N2'
+     */
+    level?: string;
+    [k: string]: any;
+  };
   custom?: Custom;
   [k: string]: any;
 }
@@ -465,6 +512,10 @@ export interface ProjectItem {
    *  e.g. 'volunteering', 'presentation', 'talk', 'application', 'conference'
    */
   type?: string;
+  /**
+   * Skills used in this project, naming or repeating entries of the top-level skills list, so a skill can point to where it was used (#313)
+   */
+  skills?: SkillReference[];
   custom?: Custom;
   [k: string]: any;
 }

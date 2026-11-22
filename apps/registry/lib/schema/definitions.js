@@ -20,6 +20,22 @@ export const definitions = {
       region: { type: 'string' },
     },
   },
+  skillReference: {
+    description:
+      'A skills[].name or id, or a skill object shaped like skills[] (#313)',
+    anyOf: [
+      { type: 'string' },
+      {
+        type: 'object',
+        additionalProperties: true,
+        properties: {
+          name: { type: 'string' },
+          level: { type: 'string' },
+          keywords: { type: 'array', items: { type: 'string' } },
+        },
+      },
+    ],
+  },
   custom: {
     type: 'object',
     description:

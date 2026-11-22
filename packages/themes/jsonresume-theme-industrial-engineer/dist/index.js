@@ -1424,6 +1424,50 @@ dt.span`
   margin-right: 8px;
   font-size: 1.2em;
 `;
+const ESCAPES = {
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+  "'": "&#39;"
+};
+const escapeHtml = (text) => text.replace(/[&<>"']/g, (c) => ESCAPES[c]);
+const ESCAPABLE = /\\([\\`*_[\]()!#])/g;
+const CODE = /`([^`]+)`/g;
+const LINK = /\[([^\]]+)\]\(([^)\s]+)\)/g;
+const STRONG = /\*\*(?=\S)([^*]*?\S)\*\*|__(?=\S)([^_]*?\S)__/g;
+const EMPHASIS = /\*(?=\S)([^*]*?\S)\*|(^|[^\p{L}\p{N}_])_(?=\S)([^_]*?\S)_(?![\p{L}\p{N}_])/gu;
+const safeHref = (url) => /^(https?:\/\/|mailto:)/i.test(url) ? url : void 0;
+const emphasis = (text, strong, em) => text.replace(STRONG, (_2, a, b2) => strong(a ?? b2)).replace(
+  EMPHASIS,
+  (_2, a, before, b2) => a !== void 0 ? em(a) : `${before}${em(b2)}`
+);
+const inline = (text, out) => {
+  const kept = [];
+  const keep = (value) => `${kept.push(value) - 1}`;
+  const marks = (t) => emphasis(t, out.strong, out.em);
+  const rest = text.replace(/\uE000/g, "").replace(ESCAPABLE, (_2, c) => keep(out.text(c))).replace(CODE, (_2, body) => keep(out.code(body))).replace(
+    LINK,
+    (_2, label, url) => keep(out.link(marks(out.text(label)), url))
+  );
+  return marks(out.text(rest)).replace(
+    /\uE000(\d+)\uE000/g,
+    (_2, i) => kept[Number(i)]
+  );
+};
+function renderInlineMarkdown(text) {
+  if (typeof text !== "string") return "";
+  return inline(text, {
+    text: escapeHtml,
+    code: (body) => `<code>${escapeHtml(body)}</code>`,
+    link: (label, url) => {
+      const href = safeHref(url);
+      return href ? `<a href="${escapeHtml(href)}">${label}</a>` : label;
+    },
+    strong: (t) => `<strong>${t}</strong>`,
+    em: (t) => `<em>${t}</em>`
+  });
+}
 dt.div`
   margin-bottom: ${(props) => props.theme?.spacing?.item || "var(--resume-space-item, 1rem)"};
 
@@ -1694,6 +1738,15 @@ dt.span`
     }
   }
 `;
+function InlineMarkdown({ text, as: Tag = "span", ...rest }) {
+  return /* @__PURE__ */ jsx(
+    Tag,
+    {
+      ...rest,
+      dangerouslySetInnerHTML: { __html: renderInlineMarkdown(text) }
+    }
+  );
+}
 dt.hr`
   border: none;
   border-top: 0.5pt solid
@@ -6545,7 +6598,7 @@ function Resume({ resume }) {
     /* @__PURE__ */ jsxs(Body, { children: [
       basics.summary && /* @__PURE__ */ jsxs(SummaryBlock, { children: [
         /* @__PURE__ */ jsx(SummaryLabel, { children: "Notes — Profile" }),
-        /* @__PURE__ */ jsx(SummaryText, { children: basics.summary })
+        /* @__PURE__ */ jsx(InlineMarkdown, { as: SummaryText, text: basics.summary })
       ] }),
       work.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
         /* @__PURE__ */ jsx(SectionHeader, { no: next2(), title: "Experience" }),
@@ -6571,8 +6624,8 @@ function Resume({ resume }) {
               }
             ) : job.position || job.name }),
             job.name && job.position && /* @__PURE__ */ jsx(RoleOrg, { children: job.name }),
-            job.summary && /* @__PURE__ */ jsx(Para, { children: job.summary }),
-            job.highlights && job.highlights.length > 0 && /* @__PURE__ */ jsx(Highlights, { children: job.highlights.map((h, j2) => /* @__PURE__ */ jsx("li", { children: h }, j2)) })
+            job.summary && /* @__PURE__ */ jsx(InlineMarkdown, { as: Para, text: job.summary }),
+            job.highlights && job.highlights.length > 0 && /* @__PURE__ */ jsx(Highlights, { children: job.highlights.map((h, j2) => /* @__PURE__ */ jsx(InlineMarkdown, { as: "li", text: h }, j2)) })
           ] })
         ] }, i))
       ] }),
@@ -6600,8 +6653,8 @@ function Resume({ resume }) {
               }
             ) : proj.name }),
             proj.entity && /* @__PURE__ */ jsx(RoleOrg, { children: proj.entity }),
-            proj.description && /* @__PURE__ */ jsx(Para, { children: proj.description }),
-            proj.highlights && proj.highlights.length > 0 && /* @__PURE__ */ jsx(Highlights, { children: proj.highlights.map((h, j2) => /* @__PURE__ */ jsx("li", { children: h }, j2)) })
+            proj.description && /* @__PURE__ */ jsx(InlineMarkdown, { as: Para, text: proj.description }),
+            proj.highlights && proj.highlights.length > 0 && /* @__PURE__ */ jsx(Highlights, { children: proj.highlights.map((h, j2) => /* @__PURE__ */ jsx(InlineMarkdown, { as: "li", text: h }, j2)) })
           ] })
         ] }, i))
       ] }),
@@ -6659,8 +6712,8 @@ function Resume({ resume }) {
               }
             ) : vol.position }),
             vol.organization && /* @__PURE__ */ jsx(RoleOrg, { children: vol.organization }),
-            vol.summary && /* @__PURE__ */ jsx(Para, { children: vol.summary }),
-            vol.highlights && vol.highlights.length > 0 && /* @__PURE__ */ jsx(Highlights, { children: vol.highlights.map((h, j2) => /* @__PURE__ */ jsx("li", { children: h }, j2)) })
+            vol.summary && /* @__PURE__ */ jsx(InlineMarkdown, { as: Para, text: vol.summary }),
+            vol.highlights && vol.highlights.length > 0 && /* @__PURE__ */ jsx(Highlights, { children: vol.highlights.map((h, j2) => /* @__PURE__ */ jsx(InlineMarkdown, { as: "li", text: h }, j2)) })
           ] })
         ] }, i))
       ] }),
@@ -6669,7 +6722,7 @@ function Resume({ resume }) {
         /* @__PURE__ */ jsx(CardGrid, { children: awards.map((a, i) => /* @__PURE__ */ jsxs(Card, { children: [
           /* @__PURE__ */ jsx("h4", { children: a.title }),
           /* @__PURE__ */ jsx("div", { className: "src", children: [a.awarder, a.date].filter(Boolean).join(" / ") }),
-          a.summary && /* @__PURE__ */ jsx("p", { children: a.summary })
+          a.summary && /* @__PURE__ */ jsx(InlineMarkdown, { as: "p", text: a.summary })
         ] }, i)) })
       ] }),
       certificates.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
@@ -6700,7 +6753,7 @@ function Resume({ resume }) {
             }
           ) : p2.name }),
           /* @__PURE__ */ jsx("div", { className: "src", children: [p2.publisher, p2.releaseDate].filter(Boolean).join(" / ") }),
-          p2.summary && /* @__PURE__ */ jsx("p", { children: p2.summary })
+          p2.summary && /* @__PURE__ */ jsx(InlineMarkdown, { as: "p", text: p2.summary })
         ] }, i)) })
       ] }),
       languages.length > 0 && /* @__PURE__ */ jsxs(Section, { children: [
