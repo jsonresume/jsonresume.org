@@ -15,13 +15,22 @@ export function fakeGithub() {
     status: undefined as number | undefined,
     /** Tokens GitHub rejects with 401. */
     revoked: new Set<string>(),
+    /** Auth schemes (Bearer, Basic, none) out of requests: 403, none left. */
+    limited: new Set<string>(),
+    /** Sent as x-ratelimit-remaining on every other API answer. */
+    remaining: undefined as number | undefined,
     requests: [] as Array<{ path: string; auth: string | undefined }>,
   };
 
-  const json = (body: unknown, status = 200) =>
+  const json = (body: unknown, status = 200, quota = state.remaining) =>
     new Response(JSON.stringify(body), {
       status,
-      headers: { 'content-type': 'application/json' },
+      headers: {
+        'content-type': 'application/json',
+        ...(quota === undefined
+          ? {}
+          : { 'x-ratelimit-remaining': String(quota) }),
+      },
     });
 
   const gistBody = (
@@ -55,6 +64,8 @@ export function fakeGithub() {
     if (state.status !== undefined) return json({}, state.status);
     if (auth && state.revoked.has(auth.replace('Bearer ', '')))
       return json({}, 401);
+    if (state.limited.has(auth?.split(' ')[0] ?? 'none'))
+      return json({ message: 'API rate limit exceeded' }, 403, 0);
     const list = /^\/users\/([^/]+)\/gists$/.exec(url.pathname);
     if (list?.[1]) {
       const user = state.users.get(list[1]);
