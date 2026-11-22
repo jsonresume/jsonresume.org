@@ -122,6 +122,12 @@ jobs:
     # A normal run takes ~8 minutes; without a limit a hung apt/browser
     # download holds the job (and the PR merge queue) for 6 hours.
     timeout-minutes: 30
+    env:
+      # The registry e2e loads a resume from GitHub. Anonymous lookups share
+      # the runner's rate limit and fail often, and fork PRs get no app
+      # credentials (secrets are empty there); the workflow's own read-only
+      # token works on every PR.
+      GITHUB_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v6
