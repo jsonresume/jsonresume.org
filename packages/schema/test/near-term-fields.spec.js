@@ -36,6 +36,23 @@ test('publications.type (#295) - free text', (t) => {
   t.end();
 });
 
+test('a career break (#589) - a work entry with type career-break', (t) => {
+  t.true(
+    valid({
+      work: [
+        {
+          type: 'career-break',
+          startDate: '2021-03',
+          endDate: '2022-01',
+          summary: 'Caring for a family member',
+        },
+      ],
+    })
+  );
+  t.true(valid({ work: [{ type: 'career-break', startDate: '2023' }] }));
+  t.end();
+});
+
 test('work.type (#599) - free text', (t) => {
   t.true(valid({ work: [{ name: 'X', type: 'full-time' }] }));
   t.true(valid({ work: [{ type: 'part-time contract' }] }));

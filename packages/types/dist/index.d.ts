@@ -151,7 +151,7 @@ export interface WorkItem {
    */
   position?: string;
   /**
-   * How the role was held. Free text; recommended values: 'full-time', 'part-time', 'contract', 'freelance', 'internship', 'temporary'. Combine them as needed, e.g. 'part-time contract'. Describes past roles, not what you are looking for (#599)
+   * How the role was held. Free text; recommended values: 'full-time', 'part-time', 'contract', 'freelance', 'internship', 'temporary'. Combine them as needed, e.g. 'part-time contract'. Describes past roles, not what you are looking for (#599). A career break is a work entry with type 'career-break', its dates and an optional summary, and no name (#589)
    */
   type?: string;
   /**

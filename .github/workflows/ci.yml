@@ -101,6 +101,21 @@ jobs:
       - name: Run knip (report mode)
         run: pnpm knip || true
 
+  rust:
+    # json-resume-serde, the Rust implementation of the schema. Its tests
+    # read packages/schema's sample and examples, so it can't drift silently.
+    name: Rust crate
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/core-rust
+    steps:
+      - uses: actions/checkout@v7
+      - run: rustup component add rustfmt clippy
+      - run: cargo fmt --check
+      - run: cargo clippy --all-targets --locked -- -D warnings
+      - run: cargo test --locked
+
   dev-script:
     runs-on: ubuntu-latest
     steps:

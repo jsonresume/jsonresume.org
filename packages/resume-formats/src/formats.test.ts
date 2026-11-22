@@ -34,6 +34,25 @@ describe('toText', () => {
     }
   });
 
+  it('heads a career break as one, with its dates', () => {
+    const text = toText({
+      work: [
+        {
+          type: 'career-break',
+          startDate: '2021-03',
+          endDate: '2022-01',
+          summary: 'Caring for family.',
+        },
+      ],
+    });
+    expect(text).toContain('Career break');
+    expect(text).toContain('Caring for family.');
+    // A titled entry keeps its own title.
+    expect(
+      toText({ work: [{ type: 'career-break', position: 'Sabbatical' }] })
+    ).not.toContain('Career break');
+  });
+
   it('writes structured locations and dates as text', () => {
     expect(output).not.toContain('[object Object]');
     const job = resume.work[0];

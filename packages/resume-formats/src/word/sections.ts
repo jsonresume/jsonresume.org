@@ -1,5 +1,14 @@
 import { Paragraph, TextRun } from 'docx';
-import { date, entries, place, span, text, texts, type Entry } from '../read';
+import {
+  date,
+  entries,
+  place,
+  span,
+  text,
+  texts,
+  workTitle,
+  type Entry,
+} from '../read';
 import {
   body,
   bullets,
@@ -35,7 +44,7 @@ export const sections = (resume: Entry): Paragraph[] => {
   return [
     ...section(
       'Work experience',
-      list('work').flatMap((w) => role(text(w['position']), text(w['name']), w))
+      list('work').flatMap((w) => role(workTitle(w), text(w['name']), w))
     ),
     ...section(
       'Volunteering',
