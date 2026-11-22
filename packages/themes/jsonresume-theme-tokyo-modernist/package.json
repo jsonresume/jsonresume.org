@@ -1,7 +1,7 @@
 {
   "private": false,
   "name": "@jsonresume/jsonresume-theme-tokyo-modernist",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "type": "module",
   "main": "./dist/index.js",
   "license": "MIT",

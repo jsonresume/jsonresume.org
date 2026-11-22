@@ -1,5 +1,11 @@
 # @jsonresume/jsonresume-theme-tokyo-modernist
 
+## 1.0.11
+
+### Patch Changes
+
+- 2b3af11: Render inline Markdown (bold, emphasis, code, links) in summaries, descriptions and highlights with the shared renderer from @jsonresume/core (#600).
+
 ## 1.0.10
 
 ### Patch Changes
