@@ -223,25 +223,29 @@ describe('Importer', () => {
 
   it('fails clearly: too large, scanned, unsupported, nothing found, model down', async () => {
     const { run, importing, events } = setup();
-    const fail = async (input: ImportInput) => {
-      const exit = await Effect.runPromiseExit(
-        Effect.provide(importing(input), setup().layer)
+    const fail = (input: ImportInput) =>
+      Effect.map(Effect.exit(importing(input)), (exit) =>
+        Exit.isFailure(exit) ? JSON.stringify(exit.cause) : 'succeeded'
       );
-      return Exit.isFailure(exit) ? JSON.stringify(exit.cause) : 'succeeded';
-    };
-    expect(await fail(file(new Uint8Array(5 * 1024 * 1024 + 1)))).toContain(
-      'ImportTooLarge'
+    // One database for all five: building one takes seconds (in CI, the
+    // test ran out of time building one per case).
+    const failures = await Effect.runPromise(
+      Effect.provide(
+        Effect.all([
+          fail(file(new Uint8Array(5 * 1024 * 1024 + 1))),
+          fail({ _tag: 'Text', text: 'x'.repeat(6 * 1024 * 1024) }),
+          fail(file(textPdf([]))),
+          fail(file(new Uint8Array([0x89, 0x50, 0x4e, 0x47]))),
+          fail({ _tag: 'Text', text: 'hi' }),
+        ]),
+        setup().layer
+      )
     );
-    expect(
-      await fail({ _tag: 'Text', text: 'x'.repeat(6 * 1024 * 1024) })
-    ).toContain('ImportTooLarge');
-    expect(await fail(file(textPdf([])))).toContain('NothingToImport');
-    expect(
-      await fail(file(new Uint8Array([0x89, 0x50, 0x4e, 0x47])))
-    ).toContain('UnsupportedImport');
-    expect(await fail({ _tag: 'Text', text: 'hi' })).toContain(
-      'NothingToImport'
-    );
+    expect(failures[0]).toContain('ImportTooLarge');
+    expect(failures[1]).toContain('ImportTooLarge');
+    expect(failures[2]).toContain('NothingToImport');
+    expect(failures[3]).toContain('UnsupportedImport');
+    expect(failures[4]).toContain('NothingToImport');
 
     // A model that finds nothing, and one that is down.
     const nothing = setup(fakeReader(() => emptyReply()));
