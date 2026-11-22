@@ -10,6 +10,7 @@ import { withSchemaShapes } from './shapes.ts';
 import { ensureHtmlCharset } from './charset.ts';
 import { themeLoaders } from './loaders.ts';
 import { setThemeLocale } from './locale.ts';
+import { quietly } from './quiet.ts';
 import { withPrintStyles } from './print-styles.ts';
 import { withLegacyBasics, withLegacyWorkNames } from './legacy-fields.ts';
 
@@ -166,7 +167,7 @@ export const renderTheme = Effect.fn('renderTheme')(function* (
   const html = yield* Effect.tryPromise({
     try: async () => {
       setThemeLocale(theme);
-      return renderable.render(prepared);
+      return quietly(() => renderable.render(prepared));
     },
     catch: (error) => failed(theme, error),
   });
