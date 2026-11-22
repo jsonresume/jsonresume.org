@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-northstar-profile",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A precise blue name and small uppercase professional label lead an open single column. Small square section markers add orientation without icons or decorative ratings.",
   "type": "module",
   "main": "./dist/index.js",

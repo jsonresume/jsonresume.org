@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-athletic-profile",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A sturdy condensed identity and bold blue section rules suit practical performance careers. Keep coaching, work and volunteer evidence in text, with certifications in a clear supporting rail.",
   "type": "module",
   "main": "./dist/index.js",

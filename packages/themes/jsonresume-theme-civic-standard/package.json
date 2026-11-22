@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-civic-standard",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Use familiar black-on-white typography with a narrow black rule beside each section heading. Keep every contact detail as selectable text and every entry in natural reading order.",
   "type": "module",
   "main": "./dist/index.js",

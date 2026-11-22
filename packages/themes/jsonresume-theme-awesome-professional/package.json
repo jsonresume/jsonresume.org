@@ -1,6 +1,6 @@
 {
   "name": "jsonresume-theme-awesome-professional",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A polished professional resume with a typographic masthead, restrained red accent and precise entry hierarchy.",
   "type": "module",
   "main": "./dist/index.js",

@@ -1,5 +1,16 @@
 # @repo/site
 
+## 0.0.4
+
+### Patch Changes
+
+- Updated dependencies [3b8cce8]
+  - @jsonresume/schema@1.9.0
+  - @repo/content@0.0.4
+  - @repo/mcp@0.0.4
+  - @repo/schema-explorer@0.0.3
+  - @repo/project-directory@0.0.4
+
 ## 0.0.3
 
 ### Patch Changes

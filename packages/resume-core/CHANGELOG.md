@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.4.1
+
+### Patch Changes
+
+- 601e883: `ListItem` renders inline Markdown in string `description` and `highlights` with the shared renderer (#600); React nodes pass through unchanged.
+- Updated dependencies [3b8cce8]
+  - @jsonresume/types@0.8.0
+  - @jsonresume/utils@0.5.0
+
 ## 0.4.0
 
 ### Minor Changes

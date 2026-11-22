@@ -1,5 +1,12 @@
 # jsonresume-theme-sidebar
 
+## 0.2.14
+
+### Patch Changes
+
+- Updated dependencies [601e883]
+  - @jsonresume/core@0.4.1
+
 ## 0.2.13
 
 ### Patch Changes

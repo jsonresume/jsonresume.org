@@ -1,5 +1,12 @@
 # jsonresume-theme-london-bureau
 
+## 0.2.15
+
+### Patch Changes
+
+- Updated dependencies [601e883]
+  - @jsonresume/core@0.4.1
+
 ## 0.2.14
 
 ### Patch Changes
