@@ -1,4 +1,5 @@
 import { classes as c } from './base.css.js';
+import { Prose } from './Prose.js';
 import type { DocumentModel, Entry } from './types.js';
 
 function Article({ item }: { item: Entry }) {
@@ -18,16 +19,12 @@ function Article({ item }: { item: Entry }) {
         </p>
       )}
       {item.paragraphs.map((paragraph, index) => (
-        <p className={c.paragraph} key={index} dir="auto">
-          {paragraph}
-        </p>
+        <Prose className={c.paragraph} key={index} text={paragraph} />
       ))}
       {item.highlights.length > 0 && (
         <ul className={c.bullets}>
           {item.highlights.map((highlight, index) => (
-            <li key={index} dir="auto">
-              {highlight}
-            </li>
+            <Prose as="li" key={index} text={highlight} />
           ))}
         </ul>
       )}

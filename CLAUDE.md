@@ -116,9 +116,9 @@ Don't remove or deprecate themes without the maintainer's approval. 27 legacy th
 - `schema.json` allows additional properties, so unknown fields are valid. Invalid-case fixtures must use type violations.
 - Schema PRs regenerate `@jsonresume/types` (`pnpm --filter @jsonresume/types build`). `apps/registry/lib/schema.test.js` fails if the registry's copy of the schema lacks a field the published schema declares.
 - `objective` is in the schema (#604). No theme or format renders it, but it steers job matching when the person hasn't stated a direction (`directionOf` in `@repo/jobs`).
-- **Before defining a field, check live resumes for the name** (read-only psql on `app.profiles`; `jsonb_` functions there). A document that already uses the name with another type stops validating. #315 (`languages[].proficiency`) and #313 (`work[].skills`) are on hold for that reason.
+- **Before defining a field, check live resumes for the name** (read-only psql on `app.profiles`; `jsonb_` functions there). A document that already uses the name with another type stops validating. That is why #315's object is `languages[].scale` (`proficiency` and `level` were taken as text) and entry `skills` accept skill objects (#313). Check by validating every live resume against the old and new schema: none may stop validating.
 - The normative description is `packages/schema/SPEC.md`; update it with the schema. Decisions are recorded in `packages/schema/DECISIONS.md`.
-- `packages/core-rust` (Rust) lags the schema: it covers 1.0's fields, and nothing in CI builds it.
+- `packages/core-rust` (Rust, `json-resume-serde`) follows the schema: add new fields there too. CI's `Rust crate` job runs fmt, clippy and tests. serde_valid takes the last string-valued `serde` attribute as a field's name, so each field ends with an explicit `#[serde(rename = "…")]`.
 
 ## Legacy app gotchas (only when touching apps/registry or homepage2)
 

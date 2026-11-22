@@ -38,6 +38,36 @@
           "description": "The general region where you live. Can be a US state, or a province, for instance."
         }
       }
+    },
+    "skillReference": {
+      "description": "A skill used in this entry (#313): the name or id of a skill in the top-level skills list, or a skill object shaped like one, e.g. { \"name\": \"Backend\", \"keywords\": [\"Go\"] }",
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "A skills[].name or skills[].id, e.g. 'TypeScript'"
+        },
+        {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "e.g. Backend"
+            },
+            "level": {
+              "type": "string",
+              "description": "e.g. Master"
+            },
+            "keywords": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "description": "e.g. Go"
+              }
+            }
+          }
+        }
+      ]
     }
   },
   "properties": {
@@ -178,6 +208,13 @@
               "description": "e.g. React"
             }
           },
+          "skills": {
+            "type": "array",
+            "description": "Skills used in this role, naming or repeating entries of the top-level skills list, so a skill can point to where it was used (#313)",
+            "items": {
+              "$ref": "#/definitions/skillReference"
+            }
+          },
           "custom": {
             "$ref": "#/definitions/custom"
           }
@@ -230,6 +267,13 @@
             "items": {
               "type": "string",
               "description": "e.g. Increased profits by 20% from 2011-2012 through viral advertising"
+            }
+          },
+          "skills": {
+            "type": "array",
+            "description": "Skills used in this role, naming or repeating entries of the top-level skills list, so a skill can point to where it was used (#313)",
+            "items": {
+              "$ref": "#/definitions/skillReference"
             }
           },
           "custom": {
@@ -293,6 +337,13 @@
           "summary": {
             "type": "string",
             "description": "Thesis topic, honours, notable projects or other context (#292). Inline Markdown allowed: **strong**, *emphasis*, `code` and [links](https://example.com); no headings, lists or tables (#600)"
+          },
+          "skills": {
+            "type": "array",
+            "description": "Skills used in this course of study, naming or repeating entries of the top-level skills list, so a skill can point to where it was used (#313)",
+            "items": {
+              "$ref": "#/definitions/skillReference"
+            }
           },
           "custom": {
             "$ref": "#/definitions/custom"
@@ -456,6 +507,10 @@
             "type": "string",
             "description": "e.g. Web Development"
           },
+          "id": {
+            "type": "string",
+            "description": "A short, stable identifier that entries' skills lists can use instead of the name, e.g. 'typescript' (#313)"
+          },
           "level": {
             "type": "string",
             "description": "e.g. Master"
@@ -488,6 +543,21 @@
           "fluency": {
             "type": "string",
             "description": "e.g. Fluent, Beginner"
+          },
+          "scale": {
+            "type": "object",
+            "description": "Where the language sits on a published proficiency scale, for tools; fluency stays the label people read (#315). e.g. { \"framework\": \"CEFR\", \"level\": \"C1\" }",
+            "additionalProperties": true,
+            "properties": {
+              "framework": {
+                "type": "string",
+                "description": "The scale, free text: 'CEFR', 'ILR', 'ACTFL', 'JLPT', 'HSK', …"
+              },
+              "level": {
+                "type": "string",
+                "description": "The level on that scale as it writes it, e.g. 'C1', '3+', 'Advanced Mid', 'N2'"
+              }
+            }
           },
           "custom": {
             "$ref": "#/definitions/custom"
@@ -615,6 +685,13 @@
           "type": {
             "type": "string",
             "description": " e.g. 'volunteering', 'presentation', 'talk', 'application', 'conference'"
+          },
+          "skills": {
+            "type": "array",
+            "description": "Skills used in this project, naming or repeating entries of the top-level skills list, so a skill can point to where it was used (#313)",
+            "items": {
+              "$ref": "#/definitions/skillReference"
+            }
           },
           "custom": {
             "$ref": "#/definitions/custom"

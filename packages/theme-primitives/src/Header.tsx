@@ -1,5 +1,6 @@
 import { classes as c } from './base.css.js';
 import { Fragment } from 'react';
+import { Prose } from './Prose.js';
 import type { DocumentModel } from './types.js';
 
 export function Header({ model }: { model: DocumentModel }) {
@@ -33,11 +34,7 @@ export function Header({ model }: { model: DocumentModel }) {
           ))}
         </ul>
       )}
-      {model.summary && (
-        <p className={c.summary} dir="auto">
-          {model.summary}
-        </p>
-      )}
+      {model.summary && <Prose className={c.summary} text={model.summary} />}
     </header>
   );
 }
