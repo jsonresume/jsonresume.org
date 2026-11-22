@@ -3196,6 +3196,9 @@ importers:
       jsonresume-theme-easy-print:
         specifier: workspace:*
         version: link:../themes/jsonresume-theme-easy-print
+      jsonresume-theme-editorial:
+        specifier: 1.0.0
+        version: 1.0.0
       jsonresume-theme-eighties-modern:
         specifier: workspace:*
         version: link:../themes/jsonresume-theme-eighties-modern
@@ -29389,6 +29392,11 @@ packages:
 
   /jsonresume-theme-colophon@0.2.0:
     resolution: {integrity: sha512-NdVTKrhHP2L7I1hvlNIo+o7HYfK3HNb09llSbljnIplsJqL2EajmlfiYVyz2JzPwEDcyeeoGFYTLwRKb1ep/Lg==}
+    engines: {node: '>=18'}
+    dev: false
+
+  /jsonresume-theme-editorial@1.0.0:
+    resolution: {integrity: sha512-jEZArsswvUdmI8l2upDdWgufxI7D/eX73ExdBS6nqR7j1N+F01NLt2n0980Z2FPCmNK2fdp7fAr1E7cnLZhMbg==}
     engines: {node: '>=18'}
     dev: false
 
