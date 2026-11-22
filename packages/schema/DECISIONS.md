@@ -34,6 +34,15 @@ ready for schema PRs under the usual rules.
 | [#310](https://github.com/jsonresume/jsonresume.org/issues/310) | Submit as a formal standard      | **Accept** step one: a normative spec for 1.x                                 |
 | [#329](https://github.com/jsonresume/jsonresume.org/issues/329) | Schema roadmap                   | Not a proposal: labelled `tracking`                                           |
 
+**Status (2026-11-22).** Built and released in `@jsonresume/schema` 1.8.0:
+#599 (#693), #589 (#720), #600 (#723), #353 with #319 (#721), #288 (#716),
+and #310's first step, `SPEC.md` (#719), with the Rust implementation
+brought up to 1.x (#725). **On hold:** #315 and #313. Resumes already on
+jsonresume.org use `languages[].proficiency` (6 entries) and
+`work[].skills` (2 people, as skill groups) with other types, so the
+agreed shapes would make them invalid, against this file's own rule. The
+options are on each issue, for the maintainer.
+
 #### #599 Employment type: accept
 
 Add optional `work[].type`, free text, mirroring `projects[].type`, with
