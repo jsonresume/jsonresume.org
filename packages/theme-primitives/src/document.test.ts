@@ -145,4 +145,29 @@ describe('published document renderer', () => {
     expect(doc.body.textContent).toContain('Mar 2021');
     expect(doc.body.textContent).toContain('May 2022');
   });
+  it('renders inline Markdown in prose and keeps it safe (#600)', () => {
+    const doc = document({
+      basics: { name: 'A', summary: 'I build **fast** sites' },
+      work: [
+        {
+          name: 'Acme',
+          summary: 'See [the launch](https://example.com/launch)',
+          highlights: [
+            'Cut `p99` by *half*',
+            '[bad](javascript:alert(1)) <script>x</script>',
+          ],
+        },
+      ],
+    });
+    expect(doc.querySelector('header strong')?.textContent).toBe('fast');
+    const work = doc.querySelector('[data-section="work"]');
+    expect(work?.querySelector('a')?.getAttribute('href')).toBe(
+      'https://example.com/launch'
+    );
+    expect(work?.querySelector('li code')?.textContent).toBe('p99');
+    expect(work?.querySelector('li em')?.textContent).toBe('half');
+    expect(doc.querySelector('script')).toBeNull();
+    expect(doc.querySelector('a[href^="javascript"]')).toBeNull();
+    expect(work?.textContent).toContain('<script>x</script>');
+  });
 });

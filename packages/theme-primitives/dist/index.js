@@ -1,8 +1,8 @@
 import o, { useState, useMemo, useEffect, useContext, useDebugValue, createElement, useRef, Fragment as Fragment$1 } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { jsxs, jsx, Fragment } from "react/jsx-runtime";
+import { jsx, jsxs, Fragment } from "react/jsx-runtime";
+import { renderInlineMarkdown, formatLocation, safeUrl, formatDateRange, normalizeDates, formatUrlForDisplay } from "@jsonresume/utils";
 import { Schema, Option, Predicate } from "effect";
-import { formatLocation, safeUrl, formatDateRange, normalizeDates, formatUrlForDisplay } from "@jsonresume/utils";
 var __assign = function() {
   __assign = Object.assign || function __assign2(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -1352,6 +1352,20 @@ var classes = { page: "_1t9tjcq0", masthead: "_1t9tjcq1", identity: "_1t9tjcq2",
 var tokens = { color: { ink: "var(--_1ucpvn50)", muted: "var(--_1ucpvn51)", accent: "var(--_1ucpvn52)", rule: "var(--_1ucpvn53)", soft: "var(--_1ucpvn54)", sidebar: "var(--_1ucpvn55)", sidebarInk: "var(--_1ucpvn56)" }, font: { body: "var(--_1ucpvn57)", display: "var(--_1ucpvn58)" }, space: { section: "var(--_1ucpvn59)", entry: "var(--_1ucpvn5a)", gutter: "var(--_1ucpvn5b)" }, type: { size: "var(--_1ucpvn5c)", leading: "var(--_1ucpvn5d)", name: "var(--_1ucpvn5e)", heading: "var(--_1ucpvn5f)" }, width: "var(--_1ucpvn5g)" };
 var defaults = { color: { ink: "#20242a", muted: "#505862", accent: "#234f70", rule: "#ccd2d8", soft: "#f2f5f7", sidebar: "#183e4c", sidebarInk: "#ffffff" }, font: { body: "Arial, sans-serif", display: "Arial, sans-serif" }, space: { section: "30px", entry: "19px", gutter: "48px" }, type: { size: "16px", leading: "1.55", name: "42px", heading: "18px" }, width: "920px" };
 var defaultDesign = "_1ucpvn5h";
+function Prose({
+  as: Tag = "p",
+  text: text2,
+  className
+}) {
+  return /* @__PURE__ */ jsx(
+    Tag,
+    {
+      className,
+      dir: "auto",
+      dangerouslySetInnerHTML: { __html: renderInlineMarkdown(text2) }
+    }
+  );
+}
 function Header({ model }) {
   return /* @__PURE__ */ jsxs("header", { className: classes.masthead, children: [
     model.settings.showPhoto && model.image && /* @__PURE__ */ jsx(
@@ -1369,7 +1383,7 @@ function Header({ model }) {
       model.label && /* @__PURE__ */ jsx("p", { className: classes.label, children: model.label })
     ] }),
     model.contacts.length > 0 && /* @__PURE__ */ jsx("ul", { className: classes.contact, "aria-label": "Contact information", lang: "en", children: model.contacts.map((contact, index) => /* @__PURE__ */ jsx("li", { dir: "auto", children: contact.href ? /* @__PURE__ */ jsx("a", { href: contact.href, children: /* @__PURE__ */ jsx(ContactText, { text: contact.text }) }) : /* @__PURE__ */ jsx(ContactText, { text: contact.text }) }, index)) }),
-    model.summary && /* @__PURE__ */ jsx("p", { className: classes.summary, dir: "auto", children: model.summary })
+    model.summary && /* @__PURE__ */ jsx(Prose, { className: classes.summary, text: model.summary })
   ] });
 }
 function ContactText({ text: text2 }) {
@@ -1385,8 +1399,8 @@ function Article({ item }) {
       item.date && /* @__PURE__ */ jsx("p", { className: classes.date, children: item.date })
     ] }),
     (item.context || item.location) && /* @__PURE__ */ jsx("p", { className: classes.context, dir: "auto", children: [item.context, item.location].filter(Boolean).join(" · ") }),
-    item.paragraphs.map((paragraph, index) => /* @__PURE__ */ jsx("p", { className: classes.paragraph, dir: "auto", children: paragraph }, index)),
-    item.highlights.length > 0 && /* @__PURE__ */ jsx("ul", { className: classes.bullets, children: item.highlights.map((highlight, index) => /* @__PURE__ */ jsx("li", { dir: "auto", children: highlight }, index)) }),
+    item.paragraphs.map((paragraph, index) => /* @__PURE__ */ jsx(Prose, { className: classes.paragraph, text: paragraph }, index)),
+    item.highlights.length > 0 && /* @__PURE__ */ jsx("ul", { className: classes.bullets, children: item.highlights.map((highlight, index) => /* @__PURE__ */ jsx(Prose, { as: "li", text: highlight }, index)) }),
     item.details.length > 0 && /* @__PURE__ */ jsx("p", { className: classes.details, dir: "auto", children: item.details.join(" · ") })
   ] });
 }
