@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/jsonresume/jsonresume.org/master/apps/registry/public/favicon.svg" height="100" alt="JSON Resume logo" />
+  <img src="https://raw.githubusercontent.com/jsonresume/jsonresume.org/master/apps/app/public/favicon.svg" height="100" alt="JSON Resume logo" />
 </p>
 
 <h1 align="center">JSON Resume</h1>
@@ -19,32 +19,35 @@
 
 JSON Resume is an open-source ecosystem of tools for creating, sharing, and
 publishing resumes in a standardized JSON format. This is the monorepo (Turborepo
-+ pnpm) that powers the platform: the marketing site, the hosted registry, the
-documentation site, the schema, the CLI, and the official themes.
++ pnpm) that powers the platform: jsonresume.org, the documentation site, the
+schema, the CLI, and the official themes.
 
 With JSON Resume, you can:
 
 - Create a portable, machine-readable resume
-- Publish your resume online with a unique URL via the registry
+- Publish your resume online at jsonresume.org/@you, as a page, PDF or Word document
 - Render your resume with dozens of community-built themes
 - Validate your resume against the JSON Resume schema
-- Leverage AI-powered tools to help with your job search
+- Match your resume to Hacker News "Who is hiring?" jobs
+- Let your AI agent read and edit your resume through the MCP server at jsonresume.org/mcp
 
 Useful links:
 
+- Site: [jsonresume.org](https://jsonresume.org)
 - Documentation: [jsonresume.org/docs](https://jsonresume.org/docs)
-- Hosted registry: [registry.jsonresume.org](https://registry.jsonresume.org)
-- Marketing site: [jsonresume.org](https://jsonresume.org)
+- Themes: [jsonresume.org/themes](https://jsonresume.org/themes)
 
 ## Monorepo layout
 
 ### Apps (`/apps`)
 
-| App                                | URL                                                          | Description                                                            |
-| ---------------------------------- | ------------------------------------------------------------ | ---------------------------------------------------------------------- |
-| [`apps/registry`](apps/registry)   | [registry.jsonresume.org](https://registry.jsonresume.org)   | Next.js app that hosts resumes, renders themes, and serves AI features |
-| [`apps/homepage2`](apps/homepage2) | [jsonresume.org](https://jsonresume.org)                     | Next.js marketing site for the project                                 |
-| [`apps/docs`](apps/docs)           | [jsonresume.org/docs](https://jsonresume.org/docs)           | Fumadocs documentation site, deployed to GitHub Pages                  |
+| App                                    | URL                                                            | Description                                                                 |
+| -------------------------------------- | -------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| [`apps/app`](apps/app)                 | [jsonresume.org](https://jsonresume.org)                       | The site: resumes, themes, the editor, jobs, MCP (React, Vite, Hono, Effect) |
+| [`apps/docs`](apps/docs)               | [jsonresume.org/docs](https://jsonresume.org/docs)             | Fumadocs documentation site, deployed to GitHub Pages                       |
+| [`apps/styleguide`](apps/styleguide)   | [styleguide.jsonresume.org](https://styleguide.jsonresume.org) | The design system's documentation                                           |
+| [`apps/registry`](apps/registry)       | —                                                              | The former registry (Next.js), kept for reference; its URLs redirect here   |
+| [`apps/homepage2`](apps/homepage2)     | —                                                              | The former marketing site (Next.js), kept for reference                     |
 
 ### Key packages (`/packages`)
 
@@ -57,11 +60,11 @@ Useful links:
 | [`packages/ats-validator`](packages/ats-validator) | `@jsonresume/ats-validator` | ATS (Applicant Tracking System) validation for resume HTML   |
 | [`packages/job-search`](packages/job-search)       | `@jsonresume/jobs`         | Hacker News "Who is Hiring" job search matched to a resume   |
 | [`packages/ui`](packages/ui)                       | `@jsonresume/ui`           | Design system: tokens and React components ([styleguide](https://styleguide.jsonresume.org)) |
-| [`packages/ui-legacy`](packages/ui-legacy)         | `@repo/ui`                 | Previous shadcn/Tailwind components, used by the registry    |
-| [`packages/themes`](packages/themes)               | —                          | ~52 official `jsonresume-theme-*` packages plus `stackoverflow` |
+| [`packages/themes`](packages/themes)               | —                          | The official `jsonresume-theme-*` packages                   |
 
-Other workspace packages include `converters`, `theme-config`, `test-fixtures`,
-and the shared `eslint-config-custom` / `tsconfig` presets.
+The site's features live in focused workspace packages (`@repo/accounts`,
+`@repo/jobs`, `@repo/mcp`, `@repo/resume-themes`, ...); [`AGENTS.md`](AGENTS.md)
+lists them all.
 
 ## Prerequisites
 
@@ -80,38 +83,34 @@ git clone https://github.com/jsonresume/jsonresume.org.git
 cd jsonresume.org
 pnpm install
 
-# Run the registry app (http://localhost:3000)
-cd apps/registry && pnpm dev
+# Run jsonresume.org locally (http://localhost:5173)
+pnpm --filter app dev
 ```
 
-Once the registry is running, open
-[http://localhost:3000/thomasdavis](http://localhost:3000/thomasdavis) to render a
-sample resume, or append `?theme=<slug>` to try a theme.
+The dev server needs no accounts or secrets: it runs on an in-memory database,
+so you can sign up and edit a resume locally. Open
+[http://localhost:5173/@thomasdavis](http://localhost:5173/@thomasdavis) to
+render a resume from a public gist, or append `?theme=<slug>` to try a theme.
 
 ### Working across the monorepo
 
 ```sh
-# Run a task for every workspace
-pnpm turbo dev
 pnpm turbo build
 pnpm turbo lint typecheck
-
-# Scope a task to one app or package
-pnpm turbo dev --filter=registry
-pnpm turbo test --filter=registry
+pnpm turbo typecheck lint test --filter=app...   # the app and every package it uses
 ```
 
 ## Testing
 
 ```sh
-# All workspaces
-pnpm turbo test
+# One package (Vitest)
+pnpm --filter @repo/resume-themes test
 
-# Registry unit tests (Vitest)
-pnpm --filter registry test
+# Everything the site uses
+pnpm turbo test --filter=app...
 
-# Registry end-to-end tests (Playwright)
-pnpm --filter registry test:e2e
+# End-to-end tests (Playwright)
+pnpm turbo test:e2e
 ```
 
 ## Releases
@@ -124,45 +123,24 @@ is versioned in `packages/core-rust/Cargo.toml`.
 
 ## Building themes
 
-Themes live in `packages/themes`. React themes rendered by the registry should:
-
-- Export a default component that accepts a `resume` prop
-- Avoid Node-only modules (e.g. `fs`) so they work on Vercel's runtime
-- Use the `@repo/ui` shared components and render all JSON Resume sections
-
-```jsx
-// packages/themes/jsonresume-theme-your-theme/index.js
-export default function YourTheme({ resume }) {
-  return (
-    <div>
-      <h1>{resume.basics.name}</h1>
-      {/* Your theme JSX */}
-    </div>
-  );
-}
-```
+A theme is an npm package exporting `render(resume)`, which returns a complete
+HTML page. Themes live in `packages/themes`; scaffold one with
 
 ```sh
-pnpm turbo dev --filter=registry
-# Visit http://localhost:3000/thomasdavis?theme=your-theme-name
+pnpm gen:theme harbor-light "Harbor Light"
 ```
 
-See [`docs/AGENT_THEME_DEVELOPMENT.md`](docs/AGENT_THEME_DEVELOPMENT.md) for the
-full theme workflow.
-
-## AI features
-
-The registry includes AI-powered tools (job recommendations, cover letters,
-resume suggestions, interview simulation). These require provider keys; see
-[`apps/registry/.env.example`](apps/registry/.env.example) for the full list.
-AI code uses the Vercel AI SDK v5 (`ai` + `@ai-sdk/openai`).
+and follow [`docs/CREATING_A_THEME.md`](docs/CREATING_A_THEME.md) to preview
+and register it. The [Contributing Guide](CONTRIBUTING.md#contributing-themes)
+says what a theme published on npm needs to be added.
 
 ## Documentation
 
 - [JSON Resume docs](https://jsonresume.org/docs)
 - [Schema](https://jsonresume.org/schema/)
 - [Themes](https://jsonresume.org/themes/)
-- [Registry API](https://registry.jsonresume.org/docs)
+- [MCP server](https://jsonresume.org/mcp)
+- [Developers (OAuth, API)](https://jsonresume.org/developers)
 
 ## History
 
