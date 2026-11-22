@@ -44,6 +44,8 @@ const overrides: Readonly<Record<string, string>> = {
   even: `body{grid-template-columns:[full-start main-start side-start] minmax(0,8em) [side-end content-start] minmax(0,1fr) [main-end content-end full-end];gap:1.5em;--secondaryColor:#5c6864;--accentColor:#7b5f00;--linkColor:#226348}
   .masthead{padding:1.5em 0}.masthead>*{min-width:0}
   h1{font-size:28pt}h2{font-size:16pt}h3{font-size:12pt}`,
+  // Contact links never wrap, so a long URL widened the page and the PDF shrank.
+  editorial: '.contact a{white-space:normal;overflow-wrap:anywhere}',
   'tan-responsive': `.instaFade,.quickFade{opacity:1!important}
   #cv{margin:0;width:100%;max-width:none}#mainArea{padding:0}
   #headshot:has(img[src]:not([src=""])){display:block}
