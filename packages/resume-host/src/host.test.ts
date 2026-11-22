@@ -22,6 +22,7 @@ const resumes: Record<string, unknown> = {
   },
   yank: { basics: { name: 'Yank', location: { countryCode: 'US' } } },
   broken: { basics: { name: 'Broken' } },
+  lingua: { basics: { name: 'Lingua' }, meta: { language: 'pt-BR' } },
   list: [1, 2],
 };
 
@@ -146,6 +147,12 @@ describe('resumeOutcome', () => {
     expect(html).toContain('Gone Theme');
     // The view beacon names the theme the page was drawn with.
     expect(html).toContain('t="elegant"');
+  });
+
+  it("says the resume's language on the page, from meta.language", async () => {
+    const html = await response(await get('/@lingua')).text();
+    expect(html).toMatch(/<html[^>]*\slang="pt-BR"/);
+    expect(await response(await get('/@plain')).text()).not.toContain('pt-BR');
   });
 
   it('reads a theme named by its npm package as that theme', async () => {

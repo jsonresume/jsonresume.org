@@ -484,6 +484,24 @@ export interface ResumeMeta {
    * Using ISO 8601 with YYYY-MM-DDThh:mm:ss
    */
   lastModified?: string;
+  /**
+   * The language this resume is written in, as a BCP 47 tag, e.g. en, pt-BR. One document per language (#288)
+   */
+  language?: string;
+  /**
+   * The same resume in other languages, one document each (#288)
+   */
+  translations?: {
+    /**
+     * BCP 47 tag of that document, e.g. fr
+     */
+    language?: string;
+    /**
+     * URL (as per RFC 3986) of that document
+     */
+    url?: string;
+    [k: string]: any;
+  }[];
   [k: string]: any;
 }
 
