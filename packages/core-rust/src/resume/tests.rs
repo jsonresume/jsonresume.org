@@ -96,3 +96,25 @@ fn names_each_error_by_its_json_path() {
             .is_some()
     );
 }
+
+#[test]
+fn reads_language_scales_and_entry_skills() {
+    let resume: Resume = serde_json::from_value(json!({
+        "skills": [{ "id": "ts", "name": "TypeScript" }],
+        "languages": [{ "language": "German", "fluency": "Fluent",
+                        "scale": { "framework": "CEFR", "level": "C1" } }],
+        "work": [{ "skills": ["ts", { "name": "Backend", "keywords": ["Go"] }] }],
+        "projects": [{ "skills": ["TypeScript"] }]
+    }))
+    .unwrap();
+    assert!(resume.validate().is_ok());
+    assert_eq!(resume.skills[0].id.as_deref(), Some("ts"));
+    let scale = resume.languages[0].scale.as_ref().unwrap();
+    assert_eq!(scale.level.as_deref(), Some("C1"));
+    assert_eq!(resume.work[0].skills[0], SkillReference::Name("ts".into()));
+    match &resume.work[0].skills[1] {
+        SkillReference::Skill(skill) => assert_eq!(skill.keywords, ["Go"]),
+        other => panic!("expected a skill object, got {other:?}"),
+    }
+    assert!(serde_json::from_value::<Resume>(json!({ "work": [{ "skills": [3] }] })).is_err());
+}

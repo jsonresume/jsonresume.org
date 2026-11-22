@@ -8,5 +8,6 @@ mod validation;
 
 pub use resume::{
     Award, Basics, Certificate, Custom, Education, Extra, Interest, Language, Location, Meta,
-    Place, Profile, Project, Publication, Reference, Resume, Skill, Translation, Volunteer, Work,
+    Place, Profile, Project, Publication, Reference, Resume, Scale, Skill, SkillReference,
+    Translation, Volunteer, Work,
 };

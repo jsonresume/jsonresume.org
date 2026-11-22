@@ -1,3 +1,4 @@
+use crate::resume::SkillReference;
 use crate::resume::common::{Custom, Extra, Place};
 use crate::validation::{validate_date, validate_url};
 use serde::{Deserialize, Serialize};
@@ -41,6 +42,10 @@ pub struct Education {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "summary")]
     pub summary: Option<String>,
+    /// Skills this entry used: names or ids from `skills[]`, or skill objects.
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    #[serde(rename = "skills")]
+    pub skills: Vec<SkillReference>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "custom")]
     pub custom: Option<Custom>,

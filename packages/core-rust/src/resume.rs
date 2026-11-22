@@ -22,12 +22,12 @@ pub use certificate::Certificate;
 pub use common::{Custom, Extra, Place};
 pub use education::Education;
 pub use interest::Interest;
-pub use language::Language;
+pub use language::{Language, Scale};
 pub use meta::{Meta, Translation};
 pub use project::Project;
 pub use publication::Publication;
 pub use reference::Reference;
-pub use skill::Skill;
+pub use skill::{Skill, SkillReference};
 pub use volunteer::Volunteer;
 pub use work::Work;
 
