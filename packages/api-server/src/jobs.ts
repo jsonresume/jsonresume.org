@@ -68,3 +68,18 @@ export const MyJobsHandlers = HttpApiBuilder.group(
       });
     })
 );
+
+/** Companies hiring on the board: open to everyone. */
+export const CompaniesHandlers = HttpApiBuilder.group(
+  JsonResumeApi,
+  'companies',
+  (handlers) =>
+    Effect.gen(function* () {
+      const board = yield* JobBoard;
+      return handlers.handleAll({
+        company: ({ params }) => board.company(params.slug),
+        document: ({ params }) =>
+          board.company(params.slug).pipe(Effect.map((p) => p.company)),
+      });
+    })
+);

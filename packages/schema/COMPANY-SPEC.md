@@ -56,3 +56,6 @@ job document of its own.
 - [`@jsonresume/schema`](https://www.npmjs.com/package/@jsonresume/schema):
   `company-schema.json`, exported as `companySchema`.
 - [`@jsonresume/types`](../types): the `Company` type.
+- jsonresume.org serves every company hiring on its job board as a
+  document at `/api/companies/<slug>/document` (with its open jobs at
+  `/api/companies/<slug>`), and to agents through the MCP tool `get_company`.

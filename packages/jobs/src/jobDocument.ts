@@ -1,4 +1,5 @@
 import type { JobDocument } from '@repo/api';
+import { applyOf, homepageOf } from './postLinks';
 import { companyOf, type JobRow, titleOf } from './summary';
 
 const SCHEMA =
@@ -28,6 +29,10 @@ const level = {
   lead_management: 'Lead or management',
 } as const;
 
+/** Where the post is published: its Hacker News comment. */
+export const hnItem = (id: number) =>
+  `https://news.ycombinator.com/item?id=${id}`;
+
 const some = (v: string | null | undefined) =>
   v?.trim() ? v.trim() : undefined;
 
@@ -38,11 +43,13 @@ const present = <T extends object>(o: T): T =>
 /**
  * A board job as a job-schema v1 document (#353). Pay stays the post's
  * words in `salary`: the board's annual USD figures are converted, so they
- * are derived data and left out, as the schema decision says.
+ * are derived data and left out, as the schema decision says. The post's
+ * HTML gives the company's site, when its header links a front page.
  */
 export const toJobDocument = (
   { id, posting: p, postedAt }: JobRow,
-  canonical: string
+  canonical: string,
+  html = ''
 ): JobDocument => {
   const location = present({
     city: some(p.city),
@@ -53,12 +60,15 @@ export const toJobDocument = (
     $schema: SCHEMA,
     title: some(titleOf(p)),
     company: some(companyOf(p)),
+    companyUrl: homepageOf(html),
     type:
       p.employmentType === 'unspecified'
         ? undefined
         : employment[p.employmentType],
     date: postedAt.toISOString().slice(0, 10),
     description: some(p.summary),
+    url: hnItem(id),
+    apply: applyOf(p.apply),
     location: Object.keys(location).length > 0 ? location : undefined,
     remote: p.remote === 'unspecified' ? undefined : remote[p.remote],
     salary: some(p.salary),

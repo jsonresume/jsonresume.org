@@ -1,4 +1,5 @@
 import {
+  CompanyNotFound,
   JobNotFound,
   type JobBoard as Board,
   type JobsStatus,
@@ -8,6 +9,9 @@ import { SqlClient } from 'effect/sql';
 import { decodePosting } from './posting';
 import { toJob, toSummary, type JobRow } from './summary';
 import { toJobDocument } from './jobDocument';
+import { companySlug, toCompanyDocument } from './companyDocument';
+import { companyKey } from './families';
+import { companyOf } from './summary';
 
 /** Jobs stay on the board this long: two monthly threads. */
 export const OPEN_DAYS = 62;
@@ -24,6 +28,7 @@ const Full = Schema.Struct({
   author: Schema.String,
   closed: Schema.Boolean,
 });
+const WithHtml = Schema.Struct({ ...Row.fields, html: Schema.String });
 const Thread = Schema.Struct({ id: Schema.Number, first: Schema.Date });
 const Run = Schema.Struct({
   started_at: Schema.Date,
@@ -119,10 +124,38 @@ const make = Effect.gen(function* () {
   /** The job as a job-schema v1 document (#353). */
   const document = (id: number) =>
     find(id).pipe(
-      Effect.map(({ row }) =>
-        toJobDocument(row, `https://jsonresume.org/jobs/${id}`)
+      Effect.map(({ row, full }) =>
+        toJobDocument(row, `https://jsonresume.org/jobs/${id}`, full.html)
       )
     );
+
+  /** A company and its open jobs, matched by name however it is written. */
+  const company = (slug: string) =>
+    Effect.gen(function* () {
+      const key = companyKey(slug);
+      const found = key
+        ? yield* sql`
+            SELECT j.id::float8 AS id, j.parsed, j.posted_at, j.family_months::float8 AS family_months, j.html
+            FROM app.jobs j WHERE ${open} ORDER BY j.posted_at DESC
+          `.pipe(Effect.flatMap(rows(WithHtml)), Effect.orDie)
+        : [];
+      const posts = found.flatMap((r) =>
+        toRow(r)
+          .filter((row) => companyKey(companyOf(row.posting)) === key)
+          .map((row) => ({ row, html: r.html }))
+      );
+      const [first] = posts;
+      if (!first) return yield* new CompanyNotFound();
+      const canonicalSlug = companySlug(companyOf(first.row.posting));
+      return {
+        slug: canonicalSlug,
+        company: toCompanyDocument(
+          posts,
+          `https://jsonresume.org/api/companies/${canonicalSlug}/document`
+        ),
+        jobs: posts.map(({ row }) => toSummary(row)),
+      };
+    });
 
   const status: Effect.Effect<JobsStatus> = Effect.gen(function* () {
     const [run] = yield* sql`
@@ -152,5 +185,5 @@ const make = Effect.gen(function* () {
     };
   }).pipe(Effect.orDie);
 
-  return { board, job, document, find, status };
+  return { board, job, document, company, find, status };
 });
