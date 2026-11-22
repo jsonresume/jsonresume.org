@@ -1,112 +1,126 @@
 # Claude Repository Instructions
 
+Follow AGENTS.md for all new code (stack, packages, conventions): @AGENTS.md
+
 ## Project
 
-- **Org/Repo:** `jsonresume/jsonresume.org` — ALWAYS use `owner: "jsonresume"`
-- **New stack (live since 2026-10-24):** jsonresume.org is served by `apps/app` from our own server (see `deploy/README.md`), built with React + Vite, TanStack Router, Effect 4 (Schema, HttpApi server, SQL), Effect Atom and `@jsonresume/ui`, as reusable `packages/*`. Follow AGENTS.md for all new code: @AGENTS.md
-- **Legacy stack:** Next.js monorepo (Turborepo + pnpm), Vercel deployment, Supabase DB (`registry`) — `apps/registry` and `apps/homepage2`, now reference only. The registry is deprecated: registry.jsonresume.org redirects to jsonresume.org (resumes to `/@username`, everything else to `/registry`, which lists what hasn't been ported and asks for GitHub issues). Its data is kept (Supabase, CockroachDB, and the copy in our Postgres).
-- **AI SDK:** In the new stack, Effect AI (`effect/ai` + `@effect/ai-openai`, see `@repo/jobs`). The legacy apps use Vercel AI SDK (`ai@^6` + `@ai-sdk/openai@^3`); never vendor SDKs directly
-- **MCP:** every feature ships MCP tools (`@repo/mcp`, served at https://jsonresume.org/mcp, documented at /mcp from its catalog). Auth: API keys (`jr_`) or OAuth 2.1 with dynamic registration (`jro_` tokens; `/.well-known/oauth-*`, `/oauth/authorize` consent page, `/api/oauth/*`). /mcp only takes OAuth tokens granted the `mcp` scope.
-- **OAuth provider ("Sign in with JSON Resume", /developers):** people register apps under Settings → Your OAuth apps (`jrc_` id, `jrs_` secret, hashed). Scopes (`@repo/api` `SCOPES`): `openid`, `profile`, `email`, `resume:read`, `resume:write`, `mcp` (all of them). Apps with a secret may skip PKCE; self-registered clients must use it. Tokens read `/api/oauth/userinfo` and `GET`/`PUT /api/oauth/resume`; revoke at `/api/oauth/revoke`. OpenID Connect: `openid` adds an RS256 `id_token` (claims shared with userinfo, `@repo/api-server` `oidc.ts`), keys at `/api/oauth/jwks`, discovery at `/.well-known/openid-configuration`; the key is `OIDC_SIGNING_KEY` (base64 PKCS#8 PEM) in `/etc/jsonresume/app.env` — without it a key is made at startup and ID tokens stop verifying after a restart.
-- **Jobs:** Hacker News jobs live in `app.jobs`, filled by `@repo/jobs`' pipeline on the box (`jsonresume-jobs.timer`, every 2 hours; status at `/api/jobs/status`). The registry's GitHub Action and its Supabase `jobs` table are retired; its parsed jobs were copied over (`apps/app/scripts/backfill-jobs.ts`). The jobs CLI (`packages/job-search`, `@jsonresume/jobs`) and the hunt skill call `/api/v1` with API keys made under Settings (`@repo/api` V1Api, registry-shaped responses); registry.jsonresume.org/api/v1 308s here. Its `gpt_content_full` text, and the embeddings made from it, were model filler ("please paste the job description") for at least a year: don't reuse them. **Matching** (`JobMatcher.rank`): jobs the resume's country rules out are dropped (`eligibility.ts`, region names as posts write them); embeddings order the rest; for a signed-in user `gpt-5-mini` judges the top 150 posts' own text against the resume (`fitter.ts`: score, the post's best role, why), cached in `app.job_fits` by resume hash + `FIT_VERSION`; pay below the resume's level, a role below it, or an office it can't place caps the score (`level.ts`). The first rank after a resume change waits up to 40s for the model. Measured 2026-10-30 on @thomasdavis against a hand-picked set: picks went from ranks 4–260 (US-only and $30k jobs at 1–2) to 2–49. **Decisions** (docs/jobs-ranking/DECISION-MODEL.md): `/dashboard/jobs` and MCP `decide_jobs` put every job through dealbreakers, a chance (the fit plus the role's required skills the resume shows) and an appeal (the person's preferences, `app.job_preferences`, and their marks): apply, stretch, skip or ruled out; company facts per post in `app.job_facts`; every mark kept with its decision in `app.job_mark_events`. Replay past decisions with `apps/app/scripts/replay-decisions.ts` (read-only; it fetches the live resume, so pin a copy when comparing runs: a resume edited between runs has no stored reading yet and falls back to its listed skills). A required skill the resume's evidence missed but its text names counts as mentioned (`resumeMentions` in `@repo/jobs`), on Jobs and the Tree. **Pathways → Tree** is the career graph (`@repo/careers`, README there): a model reads each resume version into evidence per skill (with quotes), strengths and each entry's role family; another reads each job post into its roles and requirements (after every jobs-pipeline run; `apps/app/scripts/backfill-job-roles.ts` for all open posts); `refreshMoves` learns where people go next from every public resume (the weekly `jsonresume-career-moves` timer). One role-family vocabulary (`families.ts`) ties them together. `buildGraph` gives every square a level in four views (meaning, distance, seniority, time); `TreeMap` (DOM-free layout in `@jsonresume/ui/tree-layout`, fixed levels via `levels`) draws it. API `/api/me/career`, MCP `get_career_tree`, `get_career_moves` and the plan tools. Both model steps (the resume's reading, the jobs' fits) start when a resume is saved by any route (`ResumeSaved` in `@repo/accounts`; saves settle 25s, one run per user, a newer version stops an older one's) or the dashboard opens (`CareerGraphs.prepare`), run at once, and are shared by content hash (`sharedRuns`); `/api/me/career` waits 5s and otherwise answers `pending` with `waitingFor`, the Tree tab asking again (MCP waits 40s). Measured 2026-11-06: first opens took 18–42s (68s worst, sequential) before this. Tests use `@repo/careers/testing` (no models). Skill names are compared only through `skillKey`/`skillName` (`@repo/jobs`; aliases in `skillAliases.ts`, the one list); after changing them, the jobs timer's `mergeSkills` folds stored duplicates together, no model re-read needed. Skills match new names by meaning only if they have a vector; the timer's `embedSkills` gives one to any skill stored without (1,198 predated vectors until 2026-11-18).
-- **Resume formats:** `/@username` serves a theme, `.pdf` (Chromium via `@repo/resume-pdf`; the deploy installs it for the `deploy` user), `.docx` (Word, built by `@repo/resume-formats` with the `docx` package; counted as a download), `.json`, `.yaml`, `.txt`, `.rendercv` and `.qr`, plus `/@username/timeline`. Explore (`/explore`) indexes public resumes, including the registry's copy in `public.resumes`.
-- **Post-consolidation:** This monorepo now absorbs the former standalone repos. The old `resume-schema`, `resume-cli`, `rust-json-resume` repos are **archived** — never link them as live (tracking: #275).
+- **Org/Repo:** `jsonresume/jsonresume.org`. Always use `owner: "jsonresume"`.
+- **The site:** jsonresume.org is `apps/app`, live since 2026-10-24 on our own box (`deploy/README.md`). It is React 19 + Vite, TanStack Router SSR, Effect 4 (Schema, HttpApi, SQL), Effect Atom and `@jsonresume/ui`, with the logic in `packages/*`. Production is Postgres on the box; `/docs` is `apps/docs` (a static Fumadocs export on GitHub Pages, proxied by Caddy).
+- **Legacy, reference only:** `apps/registry` and `apps/homepage2` (Next.js, Vercel, Supabase). registry.jsonresume.org redirects here: resumes to `/@username`, the rest to `/registry`, which lists what hasn't been ported. Read them for behaviour; never copy their code or patterns, and don't register new things there. Supabase, CockroachDB and the copy in `public.resumes` are kept on purpose: never delete them.
+- **Archived repos:** `resume-schema`, `resume-cli` and `rust-json-resume` live here now (`packages/schema`, `packages/cli`, `packages/core-rust`). Never link the old repos as live (#275).
+- **AI:** Effect AI (`effect/ai` + `@effect/ai-openai`, see `@repo/jobs`). The legacy apps use the Vercel AI SDK. Never call vendor SDKs directly.
 
-## Packages (publishable)
+## Features worth knowing before touching them
 
-- `packages/schema` (`@jsonresume/schema`) — THE JSON Resume spec. Consumed internally via `workspace:*`.
-- `packages/cli` (`resume-cli`) — Node 18+, Ajv (draft-07, `strict:false` + `ajv-formats`) validation.
-- `packages/core-rust` (`json-resume-serde`) — Cargo crate, NOT a pnpm package; excluded from JS tooling.
-- `packages/resume-core` (`@jsonresume/core`) — shared theme components. UI: `packages/ui` (`@jsonresume/ui`, the design system: vanilla-extract tokens + React, documented by `apps/styleguide` at styleguide.jsonresume.org; no Tailwind). `packages/ui-legacy` (`@repo/ui`) is the old shadcn/Tailwind set the registry still uses. Style with vanilla-extract `.css.ts` files and `vars` tokens (dynamic values via `createVar` + `assignInlineVars`), not inline `style={{}}` or plain CSS.
+- **MCP:** every feature ships MCP tools (`@repo/mcp`, served at /mcp and documented on that page from its catalog). Auth is API keys (`jr_`) or OAuth 2.1 with dynamic registration (`jro_` tokens; `/.well-known/oauth-*`, the `/oauth/authorize` consent page, `/api/oauth/*`). /mcp only takes OAuth tokens granted the `mcp` scope.
+- **OAuth provider** ("Sign in with JSON Resume", /developers):
+  - Apps are registered under Settings → Your OAuth apps (`jrc_` id, `jrs_` secret, stored hashed).
+  - Scopes (`@repo/api` `SCOPES`): `openid`, `profile`, `email`, `resume:read`, `resume:write`, `mcp`.
+  - Apps with a secret may skip PKCE; self-registered clients must use it.
+  - Endpoints: `/api/oauth/userinfo`, `GET`/`PUT /api/oauth/resume`, `/api/oauth/revoke`.
+  - `openid` adds an RS256 `id_token` (`@repo/api-server` `oidc.ts`; keys at `/api/oauth/jwks`, discovery at `/.well-known/openid-configuration`). The signing key is `OIDC_SIGNING_KEY` in `/etc/jsonresume/app.env`. Without it a key is made at startup, and ID tokens stop verifying after a restart.
+- **Resume pages:** `/@username` renders a theme. The same resume is also served as:
 
-## Code Standards
+  - `.pdf`: Chromium via `@repo/resume-pdf`, printing the HTML on `about:blank` and loading only the public web. Relative URLs don't resolve there, and cross-origin fonts need CORS (the site's `/fonts/` sends it).
+  - `.docx`, via `@repo/resume-formats`.
+  - `.json`, `.yaml`, `.txt`, `.rendercv` and `.qr`.
 
-- **Max 200 lines** per production file (tests/config: 500 max)
-- No `console.log` — use Pino structured logger (`LOG_LEVEL` env var)
-- No `any` types. No skipped tests on main branch
-- Run `pnpm build` locally before pushing — catches 90% of deployment issues
-- Never remove features — create issues for human review if something is broken beyond repair
+  There are also variants at `/@username/<slug>` and `/@username/timeline`. Gist resumes are mirrored, so a stored copy is served while GitHub is down. Explore (`/explore`) indexes every public resume.
 
-## Git Workflow
+- **Jobs:** Hacker News posts live in `app.jobs`. The pipeline is `@repo/jobs` on the box: `jsonresume-jobs.timer` runs every 2 hours, with status at `/api/jobs/status`.
+  - The jobs CLI (`packages/job-search`) and the hunt skill call `/api/v1` with API keys.
+  - The registry's old `gpt_content_full` text, and the embeddings made from it, were model filler for at least a year: don't reuse them.
+- **Job matching** (`JobMatcher.rank`):
+  - Jobs the resume's country rules out are dropped (`eligibility.ts`).
+  - Embeddings order the rest.
+  - For a signed-in user, `gpt-5-mini` judges the top 150 posts against the resume (`fitter.ts`). Results are cached in `app.job_fits` by resume hash + `FIT_VERSION`.
+  - Pay, role level or an office the resume can't place caps the score (`level.ts`).
+- **Job decisions** (`docs/jobs-ranking/DECISION-MODEL.md`, `/dashboard/jobs`, MCP `decide_jobs`): dealbreakers, then a chance and an appeal, give apply, stretch, skip or ruled out. Marks are kept with their decision in `app.job_mark_events`.
+  - Replay decisions with `apps/app/scripts/replay-decisions.ts`. It is read-only and fetches the live resume, so pin a copy when comparing runs.
+- **Pathways → Tree** (`@repo/careers`, README there): models read each resume version into skill evidence and role families, and each job post into roles and requirements. `refreshMoves` (the weekly `jsonresume-career-moves` timer) learns where people go next. One vocabulary ties these together: `families.ts`.
+  - Both model steps start when a resume is saved by any route (`ResumeSaved` in `@repo/accounts`, settling for 25s) or when the dashboard opens. Runs are shared by content hash.
+  - `/api/me/career` waits 5s, then answers `pending`.
+  - Tests use `@repo/careers/testing`, which calls no models.
+- **Skill names** are compared only through `skillKey`/`skillName` (`@repo/jobs`). Aliases are in `skillAliases.ts`, the one list. The jobs timer's `mergeSkills` folds stored duplicates and `embedSkills` gives missing vectors.
 
-- **ALWAYS local git:** `git add → git commit → git push` — NEVER use GitHub API for file changes
-- If push fails: `git pull --rebase origin master` then retry
-- Commit format: `type(scope): description` (feat/fix/refactor/test/docs/chore/perf)
-- Run commands from repo root
+## Themes
 
-## Architecture Patterns
+Themes are npm packages (`packages/themes/*` or community ones from npm), rendered in Node by `@repo/resume-themes` from its own `node_modules`. The full guide is `docs/CREATING_A_THEME.md`; the scaffold is `pnpm gen:theme <slug> "Name"`. To register a theme:
 
-- **Circular imports:** When file and directory share a name, use explicit path: `'./Component/index.js'`
-- **Logger exports:** Triple export pattern (CommonJS default + ES6 default + named)
-- **Themes:** Must use ES6 imports (no `fs.readFileSync`), must render ALL JSON Resume sections, must load Google Fonts via CDN, must use `@jsonresume/core` components, must use `ServerStyleSheet` for styled-components SSR
-- **Theme registration:** Add to `apps/registry/lib/formatters/template/themeConfig.js`
-- **Theme SSR gotcha:** if a theme 400s with `Cannot read properties of undefined (reading 'withConfig')` under the registry's webpack build (but works in plain Node), its styled-components definitions live in a `.js` module — move them into a `.jsx` file (fixed desert-modern; tokyo-modernist was fixed earlier by inlining styles into Resume.jsx). Verify with a production build, not `next dev`.
-- **Bulk live-testing themes:** run `next start` with `GITHUB_TOKEN=$(gh auth token)` or with `AUTH_GITHUB_ID`/`AUTH_GITHUB_SECRET` set — anonymous GitHub lookups rate-limit after ~60 requests and surface as `GITHUB_UNAVAILABLE` 503s.
-- **Gist lookups auth chain** (`lib/getResumeGist.js`): `GITHUB_TOKEN` bearer → on 401, or when unset, the OAuth app credentials as Basic auth (5000/h) → anonymous. Only a GitHub 404 is `INVALID_USERNAME`. A revoked prod token caused the 2026-10-22 outage (#464).
-- **Slow LLM/embedding results:** cache by content with `cachedByContent()` (`lib/contentCache.js`, Vercel Runtime Cache). The CDN alone rarely hits behind Cloudflare.
-- **Never return embedding columns** (`embedding*`, ~40KB/row) to clients; use `JOB_COLUMNS` (`lib/jobColumns.js`). Vercel caps responses at 4.5MB.
-- **`next dev` artifacts:** Next 16 writes `apps/*/AGENTS.md`, `apps/*/CLAUDE.md` and rewrites `next-env.d.ts`. Don't commit them.
-- **Vercel file tracing:** `outputFileTracingIncludes` must use the real `node_modules/.pnpm/...` path; files reached through pnpm's symlinks make Vercel reject the function ("files in symlinked directories"). Verify packaging changes with a `vercel deploy` preview.
-- Search codebase before creating new utils — check `apps/registry/app/utils/`, `apps/registry/lib/`, `packages/`
+1. Add a dependency in `packages/resume-themes/package.json`: `workspace:*` for ours, an exact version for a community theme (read its code first: no disk or network access while rendering, escapes resume text).
+2. Add a loader in `packages/resume-themes/src/loaders.ts`.
+3. Add gallery metadata in `packages/theme-config/src/metadata.js` (`@jsonresume/theme-metadata`; `THEME_NAMES` comes from its keys, and `render.test` checks they match the loaders).
+4. Classify it in `packages/theme-config/src/classification.js`, as `[style, layout, colour]`.
+5. Make the previews with `pnpm theme:preview --themes=<slug>`. It writes `apps/app/public/img/themes/<slug>.webp` and the legacy `apps/homepage2/.../<slug>.png`.
+6. Add a changeset for `@jsonresume/theme-metadata` (and for the theme package, if it is ours).
 
-## CI/CD
+Then check:
 
-- **`ci.yml`** runs on `push(master)` + `pull_request` + `merge_group`; fork PRs supported.
-- **Required checks:** `Lint + Typecheck`, `build`, `test` (e2e), `unit-test`, `dev-script`.
-- Unit tests: `pnpm --filter registry test -- --run` (bypass turbo for selective tests)
-- E2E: `pnpm turbo test:e2e` (Playwright) — covers registry + homepage2 + docs
-- turbo.json must have task entries for any `pnpm turbo <task>` command
-- All env vars used must be declared in turbo.json `globalEnv`
-- **Branch protection requires up-to-date branches:** with several PRs queued, update and auto-merge them one at a time (`gh pr update-branch N` then `gh pr merge N --squash --auto`).
-- **Theme `dist/` is committed** and the `Theme dist sync` check compares it to `src/`: rebuild with `pnpm build` in the theme after editing.
-- **LINT GOTCHA:** `eslint-config-next` is PINNED to `^15` in `@repo/eslint-config-custom` via `require.resolve`. v16 ships an ESLint-9 flat-config ARRAY that crashes ESLint 8 with a circular-structure error — and turbo's remote cache can MASK the failure. Never bump it to 16 without migrating to flat config; verify lint changes with `turbo lint --force`.
+- **Tests:** `pnpm --filter @repo/resume-themes test` renders every theme.
+- **Preview:** `pnpm --filter app dev`, then open http://localhost:5173/@thomasdavis?theme=<slug>.
+- **Built files:** theme `dist/` is committed and CI's `Theme dist sync` compares it with `src/`. Rebuild with `pnpm build` in the theme after editing; our workspace themes load from `dist/`.
+- **Fonts:** use absolute URLs (Google Fonts, or `https://jsonresume.org/fonts/...`) or embed them, so PDFs get them too.
 
-## Releases (Changesets)
+Don't remove or deprecate themes without the maintainer's approval. 27 legacy themes were removed on purpose (2025-10-31): don't restore them.
 
-- See `docs/RELEASING.md`. Add a changeset with your PR: `pnpm changeset`.
-- Merge to `master` → workflow opens/updates a **"Version Packages"** PR → merge it → auto-publish to npm.
-- Manual dispatch: `gh workflow run release-packages.yml`. npm maintenance: `gh workflow run npm-maintenance.yml`.
+## Working locally
 
-## Security & Deps
+- `pnpm install`, then `pnpm --filter app dev`: http://localhost:5173, every page server-rendered, always on an in-memory PGlite database. No secrets are needed. Resumes come from public gists, so `/@thomasdavis` works.
+- **Never sign up test accounts on production.** Use the dev server.
+- **Scripts read `DATABASE_URL`** (`PgLive` in `@repo/database`), and a shell's `DATABASE_URL` may be production. Against production, scripts must be read-only: `pgReadOnly` + `ensureReadOnly`, or psql with `PGOPTIONS='-c default_transaction_read_only=on'`.
+- **Tests:** build and test one package at a time: `pnpm --filter <name> test`, `pnpm --filter <name> typecheck`. For everything the app uses: `pnpm turbo typecheck lint test --filter=app...`.
+- **TypeScript scripts:** there is no `tsx`. Run them with `node --experimental-strip-types --no-warnings <file>.ts`.
+- **Stopping a server:** find its pid by port (`ss -ltnp`) and kill that. `pkill -f` kills the shell running it.
 
-- Security patches: `pnpm.overrides` in root `package.json` (~79 entries live there now).
-- Dependabot runs weekly, grouped.
-- `.prettierignore` excludes `packages/cli`, `packages/core-rust`, package READMEs, and generated/CSS files — keep them out of prettier runs.
+## Production (the box)
 
-## Issue & Community Management
+- Deploy: `sudo deploy/scripts/deploy.sh app <sha>`, after the PR has merged. Check the sha is non-empty first; `--rollback` goes back one release.
+- Logs: `journalctl -u jsonresume@app` (the app) and `journalctl -u caddy -o cat` (JSON access logs, for status codes and latency).
+- Secrets live only in `/etc/jsonresume/*.env` (root, 600). Never commit or print them.
+- Product analytics: PostHog project 134598, cookie-free, queried with HogQL.
 
-- Track all work via GitHub issues. Label: critical/bug/enhancement/refactor/testing
-- `CONTRIBUTING.md`, `docs/RELEASING.md`, and issue forms exist — point contributors there.
-- Schema is now in-repo (`packages/schema`) — handle schema issues HERE, not an external repo.
-- Be skeptical of external user issues — verify before implementing
-- Never deprecate themes/features without maintainer approval
-- **Comments policy:** terse, no emoji; sign agent-authored comments `— AI` on its own line.
-- Discord webhook: only post when explicitly asked
+## Code standards
 
-## Schema Gotcha
+- Files ≤200 lines (tests and config ≤500). No `console.*`, no `any`, no non-null `!`.
+- Effect style, with Schema to parse anything untrusted. Style with vanilla-extract and `vars` tokens. Every feature gets MCP tools.
+- Never remove a feature: open an issue for the maintainer if something is broken beyond repair.
 
-- `schema.json` has `additionalProperties: true` — unknown fields are VALID. Invalid-case test fixtures must use **type violations**, not unknown keys.
-- The registry validates against its **own copy** (`apps/registry/lib/schema/`); `lib/schema.test.js` fails if it lacks a field the published schema declares. Schema PRs also regenerate `@jsonresume/types` (`pnpm --filter @jsonresume/types build`). Proposal rules: CONTRIBUTING.md → Proposing Schema Changes.
+## Git, CI and releases
 
-## Key Paths
+- Use local git (`add` → `commit` → `push`), never the GitHub API for file changes. Stage files by name: never `git add -A`, never a bare `git stash`.
+- Commits: `type(scope): description` (feat/fix/refactor/test/docs/chore/perf).
+- CI (`ci.yml`) required checks:
+  - `Lint + Typecheck` (`turbo lint typecheck prettier`);
+  - `build`;
+  - `unit-test` (`turbo test --filter=app...`);
+  - `test` (Playwright e2e);
+  - `dev-script` (still boots the registry).
+- Branches must be up to date to merge. Queue one PR at a time: `gh pr update-branch N`, then `gh pr merge N --squash --auto`.
+- **LINT GOTCHA:** `eslint-config-next` is pinned to `^15` in `@repo/eslint-config-custom`. v16's flat config crashes ESLint 8, and turbo's cache can hide it. Verify lint changes with `turbo lint --force`.
+- **Releases:** Changesets (`docs/RELEASING.md`). Merging to `master` updates the "Version Packages" PR; merging that publishes to npm. Add a changeset with any change to a published package.
+- `pnpm.overrides` in the root `package.json` holds security patches. Dependabot runs weekly.
 
-- Theme screenshots: `apps/homepage2/public/img/themes/`
-- Screenshot generator: `apps/registry/scripts/generate-theme-screenshots-auto.js`
-- Retry utility: `apps/registry/lib/retry.js`
-- Theme ideas: `packages/themes/ideas.md`
-- Theme dev guide: `docs/AGENT_THEME_DEVELOPMENT.md`
+## Issues and community
 
-## Theme Development Workflow
+- Track work in GitHub issues; point contributors to `CONTRIBUTING.md`.
+- Schema issues are handled here (`packages/schema`), under CONTRIBUTING.md → Proposing Schema Changes.
+- Be skeptical of external issues: verify before implementing.
+- Comments are terse, with no emoji, and agent-authored ones are signed `— AI` on their own line. Write `@name` only to notify a real person.
+- Post to the Discord webhook only when asked.
 
-1. Start dev server: `cd apps/registry && pnpm dev`
-2. Build complete theme with all sections
-3. Screenshot with Playwright, review, iterate until polished
-4. Test at `http://localhost:3000/thomasdavis?theme={slug}`
-5. Each theme MUST have a visually distinct layout from existing themes
+## Schema gotchas
+
+- `schema.json` allows additional properties, so unknown fields are valid. Invalid-case fixtures must use type violations.
+- Schema PRs regenerate `@jsonresume/types` (`pnpm --filter @jsonresume/types build`). `apps/registry/lib/schema.test.js` fails if the registry's copy of the schema lacks a field the published schema declares.
+- `objective` is in the schema (#604), but no theme or format renders it yet.
+
+## Legacy app gotchas (only when touching apps/registry or homepage2)
+
+- A theme that 400s with `reading 'withConfig'` under webpack has styled-components in a `.js` file: move them into `.jsx`.
+- Next 16 `next dev` writes `apps/*/AGENTS.md`, `apps/*/CLAUDE.md` and `next-env.d.ts`. Don't commit them.
 
 ## Principles
 
-- Bias toward action. Ship incrementally. User experience first.
-- Prioritize bugs/features over maintenance/refactoring
-- Never over-engineer. Minimum complexity for current task.
-- Update this file with important learnings for future sessions.
+- Bias toward action, ship incrementally, user experience first. Bugs and features before refactors.
+- Check facts (counts, dates, commands) against the source before writing them on the site or here.
+- Update this file when you learn something a future session needs.

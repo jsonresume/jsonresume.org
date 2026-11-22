@@ -9,13 +9,13 @@ freshly scaffolded theme renders all sections and passes CI on the first try.
 
 A scaffolded theme is wired to the shared suite instead of reinventing it:
 
-| Package                   | Role in a theme                                                                       |
-| ------------------------- | ------------------------------------------------------------------------------------- |
-| `@jsonresume/core`        | `renderResumeDocument` (the SSR document helper) + structural primitives              |
-| `@jsonresume/core/ssr`    | the `renderResumeDocument` / `googleFontsLinks` entry used by `index.jsx`             |
-| `@jsonresume/utils`       | pure, framework-free helpers: `formatDateRange`, `formatLocation`, `safeUrl`, …       |
-| `@jsonresume/theme-kit`   | `runThemeRenderQa` — the exact registry render-QA gate, run from the theme's own test |
-| `@jsonresume/sample-data` | `completeResume` — the canonical every-section fixture the gate renders against       |
+| Package                   | Role in a theme                                                                 |
+| ------------------------- | ------------------------------------------------------------------------------- |
+| `@jsonresume/core`        | `renderResumeDocument` (the SSR document helper) + structural primitives        |
+| `@jsonresume/core/ssr`    | the `renderResumeDocument` / `googleFontsLinks` entry used by `index.jsx`       |
+| `@jsonresume/utils`       | pure, framework-free helpers: `formatDateRange`, `formatLocation`, `safeUrl`, … |
+| `@jsonresume/theme-kit`   | `runThemeRenderQa` — the render-QA gate, run from the theme's own test          |
+| `@jsonresume/sample-data` | `completeResume` — the canonical every-section fixture the gate renders against |
 
 `@jsonresume/core` and `@jsonresume/utils` are runtime deps;
 `@jsonresume/theme-kit` and `@jsonresume/sample-data` are devDeps (test only).
@@ -51,12 +51,16 @@ registration steps (see below) so you wire the theme in deliberately.
 
 ```bash
 pnpm install                                   # picks up the new workspace
-pnpm --filter jsonresume-theme-<slug> build    # confirm it vite-builds
+pnpm --filter jsonresume-theme-<slug> build    # vite-builds dist/ (committed)
 pnpm --filter jsonresume-theme-<slug> test     # run the theme-kit render gate
 
-cd apps/registry && pnpm dev                    # dev server on :3000
-open http://localhost:3000/thomasdavis?theme=<slug>
+pnpm --filter app dev                          # jsonresume.org on :5173, no setup
+open http://localhost:5173/@thomasdavis?theme=<slug>
 ```
+
+The site loads workspace themes from their built `dist/`, so run the theme's
+`build` after each change (and commit `dist/`: CI's `Theme dist sync` check
+compares it with `src/`).
 
 Redesign the styled-components in `src/Resume.jsx` into your own **visually
 distinct** layout. Reach for the `@jsonresume/utils` helpers
@@ -66,32 +70,43 @@ layout-first design process and the hyper-critical screenshot review checklist.
 
 ## 3. Registration checklist
 
-The generator prints these with your slug filled in. You must do them by hand:
+The generator prints these with your slug filled in. You must do them by hand.
+jsonresume.org renders themes with `@repo/resume-themes`, which loads each
+theme package on first use:
 
-1. **`apps/registry/lib/formatters/template/themeConfig.js`** — add the import
-   alongside the other themes and an entry in the `THEMES` object:
-
-   ```js
-   import * as harborLight from 'jsonresume-theme-harbor-light';
-   // ...
-   export const THEMES = {
-     // ...
-     'harbor-light': harborLight,
-   };
-   ```
-
-2. **`packages/theme-config/src/metadata.js`** — add an entry to
-   `THEME_METADATA` (`name`, `description`, `author`, `tags`).
-
-3. **`apps/registry/package.json`** — add the workspace dependency, then
+1. **`packages/resume-themes/package.json`** — add the dependency, then
    re-run `pnpm install`:
 
    ```json
    "jsonresume-theme-harbor-light": "workspace:*",
    ```
 
-4. **Changeset** — run `pnpm changeset`, select the theme package, choose
-   `minor`, describe it, and end the summary with `Refs #275.`
+   A community theme published to npm is pinned to an exact version instead
+   (`"jsonresume-theme-editorial": "1.0.0"`), after reading its code: it must
+   not touch the disk or the network while rendering, and it must escape
+   resume text.
+
+2. **`packages/resume-themes/src/loaders.ts`** — add a loader:
+
+   ```ts
+   'harbor-light': () => import('jsonresume-theme-harbor-light'),
+   ```
+
+3. **`packages/theme-config/src/metadata.js`** — add an entry to the
+   gallery's metadata (`name`, `description`, `author`, `tags`). The slugs
+   here are the theme list: a test fails if they and the loaders differ.
+
+4. **`packages/theme-config/src/classification.js`** — classify it for the
+   gallery's filters as `[style, layout, colour]`, for example
+   `'harbor-light': ['minimal', 'single', 'cool'],`.
+
+5. **Previews** — `pnpm theme:preview --themes=<slug>` renders the theme with
+   the sample resume and writes `apps/app/public/img/themes/<slug>.webp` (the
+   gallery's) and `apps/homepage2/public/img/themes/<slug>.png`. Look at them.
+
+6. **Changeset** — run `pnpm changeset`, select the theme package and
+   `@jsonresume/theme-metadata`, choose `minor`, describe the theme, and end
+   the summary with `Refs #275.`
 
 ## 4. The SSR-inline rule (do not break it)
 
@@ -117,20 +132,20 @@ already correct; keep it that way:
   `font-family` — they load from the Google Fonts CDN.
 - **Render every JSON Resume section** so the theme is complete.
 
-## 5. The render-QA gate (theme-kit + registry)
+## 5. The render-QA gates
 
 A scaffolded theme ships its **own** render-QA test at `tests/theme.test.js`. It
 dogfoods `runThemeRenderQa` from `@jsonresume/theme-kit` against `completeResume`
-from `@jsonresume/sample-data` — the **identical** gate the registry enforces.
+from `@jsonresume/sample-data`.
 It asserts the render does not throw, returns non-empty HTML, emits no raw
 artifacts (`[object Object]`, `undefined`, `NaN`), and covers the baseline
 sections `basics` / `work` / `education` / `skills`.
 
-Run the theme's own test, then the registry's all-theme gate, before a PR:
+Run the theme's own test, then the site's all-theme gate, before a PR:
 
 ```bash
-pnpm --filter jsonresume-theme-<slug> test         # this theme's theme-kit gate
-pnpm --filter registry test -- --run themeRenderQa  # every registered theme
+pnpm --filter jsonresume-theme-<slug> test   # this theme's theme-kit gate
+pnpm --filter @repo/resume-themes test       # every registered theme renders
 ```
 
 A scaffolded theme passes both out of the box. If you ever see a failure, it
@@ -139,7 +154,7 @@ almost always traces back to one of the SSR-inline rules above.
 ## 6. Quality gates before pushing
 
 ```bash
-pnpm build         # turbo build (catches ~90% of deploy issues)
+pnpm build         # turbo build
 pnpm check         # turbo lint + typecheck
 pnpm prettier      # formatting
 ```

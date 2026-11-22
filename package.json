@@ -14,6 +14,7 @@
     "storybook": "pnpm --filter @repo/ui storybook",
     "build-storybook": "pnpm --filter @repo/ui build-storybook",
     "gen:theme": "node scripts/create-theme.mjs",
+    "theme:preview": "node --experimental-strip-types --no-warnings scripts/theme-portfolio/refresh-existing-previews.ts",
     "gen:theme-readmes": "node scripts/gen-theme-readmes.mjs",
     "generate:screenshots": "node apps/registry/scripts/generate-theme-screenshots-auto.js",
     "serve:registry": "start-server-and-test 'pnpm --filter registry dev' http://localhost:3000 generate:screenshots",

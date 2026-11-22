@@ -19,7 +19,7 @@
 2. **Design layout structure FIRST, then style** - Wireframe the grid/columns/structure before adding colors/typography
 3. **Each theme MUST have a visually distinct layout** - NEVER reuse the same layout pattern as the previous theme
 4. **Take screenshots after EACH iteration** to verify visual correctness
-5. **Use the automated screenshot script** at `apps/registry/scripts/generate-theme-screenshots-auto.js`
+5. **Use the automated preview script**: `pnpm theme:preview --themes=<slug>`
 6. **Be hyper-critical when reviewing screenshots** - Fix ALL design issues immediately, iterate until polished
 7. **Test ALL 12 schema sections** render correctly before considering theme complete
 
@@ -170,61 +170,27 @@ Extract:
 ### Step 2: Start Dev Server
 
 ```bash
-cd apps/registry && pnpm dev
+pnpm --filter app dev
 ```
 
-Keep this running in a terminal. All testing happens against `http://localhost:3000`.
+Keep this running in a terminal. All testing happens against
+`http://localhost:5173`. The site loads workspace themes from their built
+`dist/`, so rebuild the theme (`pnpm --filter jsonresume-theme-YOUR-THEME build`)
+after each change and reload.
 
 ### Step 3: Create Theme Package
 
 ```bash
-# Create theme directory
-mkdir -p packages/themes/jsonresume-theme-YOUR-THEME/src
-
-# Create package.json
-cat > packages/themes/jsonresume-theme-YOUR-THEME/package.json <<EOF
-{
-  "name": "jsonresume-theme-YOUR-THEME",
-  "version": "0.1.0",
-  "type": "module",
-  "main": "index.js",
-  "dependencies": {
-    "styled-components": "workspace:*",
-    "react": "workspace:*",
-    "react-dom": "workspace:*",
-    "@resume/core": "workspace:*"
-  },
-  "peerDependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
-  }
-}
-EOF
-
-# Create SSR-compatible index.js
-cat > packages/themes/jsonresume-theme-YOUR-THEME/index.js <<'EOF'
-import { renderToString } from 'react-dom/server';
-import { ServerStyleSheet } from 'styled-components';
-import Resume from './src/Resume.jsx';
-
-export function render(resume) {
-  const sheet = new ServerStyleSheet();
-  const html = renderToString(sheet.collectStyles(<Resume resume={resume} />));
-  const styles = sheet.getStyleTags();
-
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>${resume.basics?.name || 'Resume'}</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  ${styles}
-</head>
-<body>${html}</body>
-</html>`;
-}
-EOF
+pnpm gen:theme your-theme "Your Theme"
+pnpm install
+pnpm --filter jsonresume-theme-your-theme build
+pnpm --filter jsonresume-theme-your-theme test
 ```
+
+The generator writes `package.json`, `index.jsx` (calling
+`renderResumeDocument` from `@jsonresume/core/ssr`), a starter `src/Resume.jsx`
+rendering every section, and the render-QA test. Don't hand-roll
+`renderToString` + `ServerStyleSheet` boilerplate.
 
 ### Step 4: Implement Resume.jsx
 
@@ -304,26 +270,26 @@ export default Resume;
 />
 ```
 
-### Step 5: Register Theme in themeConfig.js
+### Step 5: Register the Theme
 
-**Location:** `apps/registry/lib/formatters/template/themeConfig.js`
+Follow the registration checklist in
+[`CREATING_A_THEME.md`](./CREATING_A_THEME.md#3-registration-checklist) (the
+generator prints it with your slug filled in):
 
-```javascript
-// Add import
-import * as yourtheme from 'jsonresume-theme-YOUR-THEME';
+1. `packages/resume-themes/package.json`: `"jsonresume-theme-your-theme": "workspace:*"`
+2. `packages/resume-themes/src/loaders.ts`: `'your-theme': () => import('jsonresume-theme-your-theme'),`
+3. `packages/theme-config/src/metadata.js`: `name`, `description`, `author`, `tags`
+4. `packages/theme-config/src/classification.js`: `[style, layout, colour]`
+5. A changeset for the theme and `@jsonresume/theme-metadata`
 
-// Add to THEMES object
-export const THEMES = {
-  // ... existing themes
-  'your-theme': yourtheme,
-};
-```
+`pnpm --filter @repo/resume-themes test` fails if the metadata and the
+loaders disagree, and renders every theme.
 
 ### Step 6: Test Theme Locally
 
 ```bash
 # Open in browser
-open http://localhost:3000/thomasdavis?theme=your-theme
+open http://localhost:5173/@thomasdavis?theme=your-theme
 
 # Verify:
 # - All sections render when data present
@@ -331,9 +297,8 @@ open http://localhost:3000/thomasdavis?theme=your-theme
 # - Typography is readable (minimum 15px body text)
 # - Layout matches spec description
 
-# Test print preview
-# Press Cmd/Ctrl + P
-# Verify theme is print-friendly
+# Test the PDF (printed by headless Chromium, as on the site)
+open http://localhost:5173/@thomasdavis.pdf?theme=your-theme
 ```
 
 ### Step 7: Take Screenshot and Be HYPER-CRITICAL
@@ -341,22 +306,22 @@ open http://localhost:3000/thomasdavis?theme=your-theme
 **CRITICAL: Use the automated script**
 
 ```bash
-# Run automated screenshot generation with --force flag
-node apps/registry/scripts/generate-theme-screenshots-auto.js --force
+pnpm theme:preview --themes=your-theme
 ```
 
 **What this script does:**
 
-- Launches Playwright browser (headless Chromium)
-- Navigates to `http://localhost:3000/thomasdavis?theme=YOUR-THEME`
-- Captures full-page screenshot (1280x1024 viewport)
-- Saves to `apps/homepage2/public/img/themes/YOUR-THEME.png`
-- Processes all themes automatically
+- Renders the theme with the complete sample resume (every section filled)
+- Opens it in headless Chromium at 1280x1060 and waits for its fonts
+- Saves the page and screenshot to `output/existing-theme-previews/your-theme/`
+  (`complete.html`, `desktop.png`)
+- Writes the gallery previews: `apps/app/public/img/themes/your-theme.webp`
+  and `apps/homepage2/public/img/themes/your-theme.png`
 
 **Review the screenshot:**
 
 ```bash
-open apps/homepage2/public/img/themes/your-theme.png
+open output/existing-theme-previews/your-theme/desktop.png
 ```
 
 ### HYPER-CRITICAL Review Checklist
@@ -419,7 +384,7 @@ open apps/homepage2/public/img/themes/your-theme.png
 
 1. Note the specific issue (e.g., "date column cuts off MAY 2021")
 2. Edit the Resume.jsx file to fix it
-3. Regenerate screenshot: `node apps/registry/scripts/generate-theme-screenshots-auto.js --theme=your-theme --force`
+3. Rebuild the theme and regenerate the screenshot: `pnpm theme:preview --themes=your-theme`
 4. Review again
 5. Repeat until ZERO issues remain
 
@@ -461,11 +426,12 @@ const DecorativeCircle = styled.div`
 ### Step 9: Re-screenshot After Fixes
 
 ```bash
-# Regenerate screenshot with fixes
-node apps/registry/scripts/generate-theme-screenshots-auto.js --force
+# Rebuild, then regenerate the screenshot with fixes
+pnpm --filter jsonresume-theme-your-theme build
+pnpm theme:preview --themes=your-theme
 
 # Review again
-open apps/homepage2/public/img/themes/your-theme.png
+open output/existing-theme-previews/your-theme/desktop.png
 
 # Iterate until theme matches spec perfectly
 ```
@@ -475,8 +441,10 @@ open apps/homepage2/public/img/themes/your-theme.png
 ```bash
 # Stage all changes
 git add packages/themes/jsonresume-theme-YOUR-THEME/
-git add apps/registry/lib/formatters/template/themeConfig.js
-git add apps/homepage2/public/img/themes/your-theme.png
+git add packages/resume-themes/package.json packages/resume-themes/src/loaders.ts
+git add packages/theme-config/src/metadata.js packages/theme-config/src/classification.js
+git add apps/app/public/img/themes/your-theme.webp apps/homepage2/public/img/themes/your-theme.png
+git add .changeset/ pnpm-lock.yaml
 
 # Commit with descriptive message
 git commit -m "$(cat <<'EOF'
@@ -495,8 +463,8 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 EOF
 )"
 
-# Push to master
-git push origin master
+# Push a branch and open a pull request
+git push origin HEAD
 ```
 
 ## Critical Design Issues and Solutions
@@ -570,130 +538,22 @@ git push origin master
 
 **Test colors:** Use [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/)
 
-## Screenshot Script Details
+## Theme Metadata
 
-### Automated Script: `generate-theme-screenshots-auto.js`
-
-**Location:** `apps/registry/scripts/generate-theme-screenshots-auto.js`
-
-**Usage:**
-
-```bash
-# Generate screenshots for all themes
-node apps/registry/scripts/generate-theme-screenshots-auto.js
-
-# Force regenerate all screenshots (even if they exist)
-node apps/registry/scripts/generate-theme-screenshots-auto.js --force
-
-# Generate screenshot for specific theme only
-node apps/registry/scripts/generate-theme-screenshots-auto.js --theme=your-theme
-
-# Specify custom port (if dev server not on 3000)
-node apps/registry/scripts/generate-theme-screenshots-auto.js --port=3001
-
-# Specify custom username (default: thomasdavis)
-node apps/registry/scripts/generate-theme-screenshots-auto.js --username=testuser
-```
-
-**How it works:**
-
-1. Reads theme list from `packages/theme-config/src/metadata.js`
-2. Checks if dev server running on http://localhost:3000
-3. Launches headless Chromium browser via Playwright
-4. For each theme:
-   - Navigates to `http://localhost:3000/thomasdavis?theme=THEME_NAME`
-   - Waits for network idle
-   - Takes full-page screenshot (1280x1024 viewport)
-   - Saves to temp directory first
-   - Moves to `apps/homepage2/public/img/themes/THEME_NAME.png`
-5. Reports success/failure for each theme
-
-**Prerequisites:**
-
-- Dev server running: `cd apps/registry && pnpm dev`
-- Playwright installed: `npx playwright install chromium`
-
-**Output example:**
-
-```
-🎨 Automated Theme Screenshot Generator
-
-Configuration:
-  Dev Server: http://localhost:3000
-  Test User: thomasdavis
-  Screenshots: /apps/homepage2/public/img/themes
-  Force Regenerate: true
-
-🔍 Checking dev server...
-✅ Dev server is running
-
-📋 Found 29 theme(s) needing screenshots
-
-🌐 Launching browser...
-
-[1/29] modern-classic
-📸 Generating screenshot for 'modern-classic'...
-   URL: http://localhost:3000/thomasdavis?theme=modern-classic
-   ✅ Saved: /apps/homepage2/public/img/themes/modern-classic.png
-
-============================================================
-✅ Successfully generated: 29 screenshot(s)
-============================================================
-```
-
-## Theme Metadata Configuration
-
-### Single Source of Truth: `packages/theme-config/src/metadata.js`
-
-**CRITICAL: All theme metadata lives in this shared package**
+The gallery, the theme pages and MCP `list_themes` read one catalogue:
+`packages/theme-config/src/metadata.js` (published as
+`@jsonresume/theme-metadata`). `THEME_NAMES` is its keys, and
+`classification.js` places each theme in the gallery's style, layout and
+colour filters.
 
 ```javascript
 // packages/theme-config/src/metadata.js
-export const THEME_METADATA = {
-  'your-theme': {
-    name: 'Your Theme Name',
-    description: 'Brief description matching spec vibe',
-    vibe: 'professional', // matches spec
-    colors: {
-      accent: '#0066cc',
-      background: '#ffffff',
-    },
-    typography: {
-      primary: 'Inter, sans-serif',
-      style: 'modern sans-serif',
-    },
-  },
-  // ... other themes
-};
-
-// Auto-generate theme name list
-export const THEME_NAMES = Object.keys(THEME_METADATA);
-
-// Utility: Get random theme for demos
-export function getRandomTheme() {
-  return THEME_NAMES[Math.floor(Math.random() * THEME_NAMES.length)];
-}
-```
-
-**Why this package exists:**
-
-- Both `apps/registry` and `apps/homepage2` need theme metadata
-- Shared workspace package with `workspace:*` protocol
-- Prevents duplication and keeps metadata in sync
-- Single edit updates all consumers
-
-**Usage in registry:**
-
-```javascript
-// apps/registry/lib/formatters/template/themeConfig.js
-export { THEME_METADATA, THEME_NAMES } from '@repo/theme-config';
-```
-
-**Usage in homepage:**
-
-```javascript
-// apps/homepage2/app/themes/page.tsx
-import { THEME_METADATA } from '@repo/theme-config';
+'your-theme': {
+  name: 'Your Theme Name',
+  description: 'Brief description matching spec vibe',
+  author: 'JSON Resume Team',
+  tags: ['professional', 'serif', 'single-column'],
+},
 ```
 
 ## Theme File Structure
@@ -715,16 +575,16 @@ Before marking theme complete:
 - [ ] Background color matches spec
 - [ ] Layout matches spec (spacing, structure)
 - [ ] Theme has distinct visual identity (different from other themes)
-- [ ] Registered in `apps/registry/lib/formatters/template/themeConfig.js`
-- [ ] Added metadata to `packages/theme-config/src/metadata.js`
+- [ ] Registered: dependency and loader in `packages/resume-themes`
+- [ ] Added metadata and classification in `packages/theme-config/src/`
 - [ ] Generated screenshot with automated script
 - [ ] Reviewed screenshot for visual issues
 - [ ] Fixed all issues found in screenshot
 - [ ] Re-generated screenshot to verify fixes
-- [ ] Tested print preview (Cmd/Ctrl + P)
+- [ ] Checked the PDF (`/@thomasdavis.pdf?theme=your-theme`)
 - [ ] Verified contrast ratios (WCAG AA compliance)
 - [ ] Committed all changes (theme, config, metadata, screenshot)
-- [ ] Pushed to master
+- [ ] Opened a pull request with CI green
 - [ ] Verified theme works after deployment
 
 ## Common Mistakes to Avoid
@@ -764,31 +624,30 @@ Before marking theme complete:
 **Start dev server:**
 
 ```bash
-cd apps/registry && pnpm dev
+pnpm --filter app dev
 ```
 
-**Generate all screenshots:**
+**Rebuild the theme and regenerate its previews:**
 
 ```bash
-node apps/registry/scripts/generate-theme-screenshots-auto.js --force
+pnpm --filter jsonresume-theme-your-theme build
+pnpm theme:preview --themes=your-theme
 ```
 
 **View theme:**
 
 ```bash
-open http://localhost:3000/thomasdavis?theme=your-theme
+open http://localhost:5173/@thomasdavis?theme=your-theme
 ```
 
 **Review screenshot:**
 
 ```bash
-open apps/homepage2/public/img/themes/your-theme.png
+open output/existing-theme-previews/your-theme/desktop.png
 ```
 
-**Commit and push:**
+**Test every theme:**
 
 ```bash
-git add packages/themes/ apps/registry/lib/formatters/template/themeConfig.js apps/homepage2/public/img/themes/
-git commit -m "fix(themes): improve design quality"
-git push origin master
+pnpm --filter @repo/resume-themes test
 ```

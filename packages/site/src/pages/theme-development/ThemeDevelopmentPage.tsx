@@ -23,7 +23,7 @@ export function ThemeDevelopmentPage() {
         align="start"
         eyebrow="Theme development"
         title="A theme is one function"
-        lede="It takes a resume and returns HTML. Publish it as jsonresume-theme-{name} and the CLI and the registry can render any resume with it."
+        lede="It takes a resume and returns HTML. Publish it as jsonresume-theme-{name} and the CLI and jsonresume.org can render any resume with it."
         media={<CodeBlock code={t.contract} label="index.js" />}
       />
       <Section spacing="lg" aria-labelledby="build">
@@ -66,7 +66,7 @@ export function ThemeDevelopmentPage() {
             title="What every theme does"
             headingId="rules"
           >
-            So it works in the CLI, on the registry and anywhere else themes
+            So it works in the CLI, on jsonresume.org and anywhere else themes
             run.
           </SectionIntro>
           <ul className={s.rules}>

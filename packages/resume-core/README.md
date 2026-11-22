@@ -581,20 +581,10 @@ export function render(resume) {
 
 ### Step 5: Register Theme
 
-Add to `apps/registry/lib/formatters/template/themeConfig.js`:
-
-```javascript
-import * as myTheme from 'jsonresume-theme-myname';
-
-export const THEMES = {
-  // ...
-  myname: {
-    name: 'My Theme',
-    theme: myTheme,
-    description: 'A beautiful custom theme',
-  },
-};
-```
+jsonresume.org renders themes through `@repo/resume-themes`. Add the package
+as a dependency there, a loader in `packages/resume-themes/src/loaders.ts`,
+and an entry in `packages/theme-config/src/metadata.js`: the full checklist
+is in [`docs/CREATING_A_THEME.md`](../../docs/CREATING_A_THEME.md#3-registration-checklist).
 
 ## Examples
 
