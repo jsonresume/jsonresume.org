@@ -1,5 +1,11 @@
 # jsonresume-theme-monochrome-noir
 
+## 1.1.15
+
+### Patch Changes
+
+- @jsonresume/core@0.4.2
+
 ## 1.1.14
 
 ### Patch Changes

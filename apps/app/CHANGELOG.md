@@ -1,5 +1,23 @@
 # app
 
+## 0.0.6
+
+### Patch Changes
+
+- @repo/content@0.0.5
+- @repo/jobs@0.0.0
+- @repo/mcp@0.0.5
+- @repo/resume-editor@0.0.5
+- @repo/resume-import@0.0.4
+- @repo/site@0.0.5
+- @repo/auth-pages@0.0.5
+- @repo/dashboard@0.0.5
+- @repo/pathways@0.0.5
+- @repo/api-server@0.0.6
+- @repo/resume-themes@0.0.6
+- @repo/resume-host@0.0.6
+- @repo/resume-pdf@0.0.0
+
 ## 0.0.5
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # jsonresume-theme-data-driven
 
+## 0.2.14
+
+### Patch Changes
+
+- @jsonresume/core@0.4.2
+
 ## 0.2.13
 
 ### Patch Changes

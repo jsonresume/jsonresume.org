@@ -1,5 +1,12 @@
 # registry
 
+## 1.0.14
+
+### Patch Changes
+
+- Updated dependencies [a2ef2a1]
+  - @jsonresume/schema@1.10.0
+
 ## 1.0.13
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # @repo/content
 
+## 0.0.5
+
+### Patch Changes
+
+- Updated dependencies [a2ef2a1]
+  - @jsonresume/schema@1.10.0
+
 ## 0.0.4
 
 ### Patch Changes
