@@ -13,13 +13,13 @@
  *     (formatDateRange, formatLocation, safeUrl) instead of reimplementing them.
  *   - a theme.test.js dogfoods runThemeRenderQa from '@jsonresume/theme-kit'
  *     against completeResume from '@jsonresume/sample-data', so a new theme
- *     ships with the exact registry render-QA gate out of the box.
+ *     ships with the render-QA gate out of the box.
  *
  * It bakes in the hard-won lessons (SSR-inline styled-components, ContactInfo
  * single-basics prop, no styled-component named Date, render ALL sections).
  *
- * It does NOT edit shared files (themeConfig.js, theme-config metadata,
- * registry package.json, changesets) — instead it PRINTS the manual
+ * It does NOT edit shared files (the resume-themes loaders and package.json,
+ * theme-config metadata, changesets) — instead it PRINTS the manual
  * registration checklist so the contributor wires it up deliberately.
  *
  * Usage:
@@ -59,11 +59,6 @@ function titleFromSlug(slug) {
     .filter(Boolean)
     .map((w) => w[0].toUpperCase() + w.slice(1))
     .join(' ');
-}
-
-/** kebab-case slug -> lowerCamel identifier usable as a JS import binding. */
-function importIdent(slug) {
-  return slug.replace(/-([a-z0-9])/g, (_, c) => c.toUpperCase());
 }
 
 function packageJson(slug) {
@@ -171,10 +166,10 @@ import { completeResume } from '@jsonresume/sample-data';
 import { render } from '../index.jsx';
 
 /*
- * ${displayName} render-QA — the exact gate the registry enforces across every
- * theme, dogfooded here via @jsonresume/theme-kit. runThemeRenderQa renders the
- * canonical every-section fixture from @jsonresume/sample-data through this
- * theme's render() and asserts:
+ * ${displayName} render-QA — the gate every theme passes, dogfooded here via
+ * @jsonresume/theme-kit. runThemeRenderQa renders the canonical every-section
+ * fixture from @jsonresume/sample-data through this theme's render() and
+ * asserts:
  *   - render() returns non-empty HTML and does not throw,
  *   - no raw artifacts leak ([object Object] / undefined / NaN),
  *   - the baseline sections (basics / work / education / skills) all appear.
@@ -776,10 +771,10 @@ editing the styled-components in \`src/Resume.jsx\`.
 ## Develop
 
 \`\`\`bash
-# From the repo root, with the registry dev server running:
-cd apps/registry && pnpm dev
-# Preview at:
-open http://localhost:3000/thomasdavis?theme=${slug}
+# From the repo root: jsonresume.org on :5173, loading this theme's dist/
+pnpm --filter jsonresume-theme-${slug} build
+pnpm --filter app dev
+open http://localhost:5173/@thomasdavis?theme=${slug}
 \`\`\`
 
 ## Test
@@ -849,8 +844,6 @@ async function main() {
     writeFile(join(dir, 'README.md'), readme(displayName, slug)),
   ]);
 
-  const ident = importIdent(slug);
-
   console.log(`
   Scaffolded jsonresume-theme-${slug}  (ecosystem-native)
   -> packages/themes/${pkgName}/
@@ -872,17 +865,20 @@ async function main() {
   MANUAL REGISTRATION (the generator does NOT touch shared files)
   -----------------------------------------------------------------
 
-  1) apps/registry/lib/formatters/template/themeConfig.js
-     - add import (with the other theme imports):
+  1) packages/resume-themes/package.json
+     - add the workspace dependency (keep alphabetical):
 
-         import * as ${ident} from '${pkgName}';
+         "${pkgName}": "workspace:*",
 
-     - add to the THEMES object:
+     - then re-run: pnpm install
 
-         '${slug}': ${ident},
+  2) packages/resume-themes/src/loaders.ts
+     - add a loader:
 
-  2) packages/theme-config/src/metadata.js
-     - add a metadata entry to THEME_METADATA:
+         '${slug}': () => import('${pkgName}'),
+
+  3) packages/theme-config/src/metadata.js
+     - add a metadata entry:
 
          '${slug}': {
            name: '${displayName}',
@@ -891,33 +887,34 @@ async function main() {
            tags: ['add', 'a', 'few', 'tags'],
          },
 
-  3) apps/registry/package.json
-     - add the workspace dependency (keep alphabetical):
+  4) packages/theme-config/src/classification.js
+     - add [style, layout, colour] for the gallery's filters:
 
-         "${pkgName}": "workspace:*",
+         '${slug}': ['minimal', 'single', 'cool'],
 
-     - then re-run: pnpm install
+  5) previews for the gallery (look at them):
 
-  4) changeset (so the package versions + publishes):
+         pnpm theme:preview --themes=${slug}
+
+  6) changeset (so the package versions + publishes):
 
          pnpm changeset
-     - select ${pkgName}, choose "minor", describe the theme,
-       and end the summary with "Refs #275."
+     - select ${pkgName} and @jsonresume/theme-metadata, choose "minor",
+       describe the theme, and end the summary with "Refs #275."
 
-  5) verify the render gates stay green:
+  7) verify the render gates stay green:
 
-         pnpm --filter ${pkgName} test            # this theme's own theme-kit gate
-         pnpm --filter registry test -- --run themeRenderQa
+         pnpm --filter ${pkgName} test          # this theme's own theme-kit gate
+         pnpm --filter @repo/resume-themes test # every registered theme
 
      The theme ships its OWN render-QA test (tests/theme.test.js, dogfooding
-     runThemeRenderQa from @jsonresume/theme-kit). The registry gate then
-     renders EVERY registered theme against the complete fixture and asserts no
-     crashes, no raw artifacts ([object Object]/undefined/NaN), and that
-     basics/work/education/skills all render.
+     runThemeRenderQa from @jsonresume/theme-kit). The resume-themes test then
+     renders EVERY registered theme and checks the metadata and loaders agree.
 
-  Preview while developing (registry dev server must be running):
+  Preview while developing (rebuild the theme after each change):
 
-     open http://localhost:3000/thomasdavis?theme=${slug}
+     pnpm --filter app dev
+     open http://localhost:5173/@thomasdavis?theme=${slug}
 `);
 }
 
