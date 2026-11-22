@@ -1455,6 +1455,50 @@ function SectionTitle({
     }
   );
 }
+const ESCAPES = {
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+  "'": "&#39;"
+};
+const escapeHtml = (text) => text.replace(/[&<>"']/g, (c) => ESCAPES[c]);
+const ESCAPABLE = /\\([\\`*_[\]()!#])/g;
+const CODE = /`([^`]+)`/g;
+const LINK = /\[([^\]]+)\]\(([^)\s]+)\)/g;
+const STRONG = /\*\*(?=\S)([^*]*?\S)\*\*|__(?=\S)([^_]*?\S)__/g;
+const EMPHASIS = /\*(?=\S)([^*]*?\S)\*|(^|[^\p{L}\p{N}_])_(?=\S)([^_]*?\S)_(?![\p{L}\p{N}_])/gu;
+const safeHref = (url) => /^(https?:\/\/|mailto:)/i.test(url) ? url : void 0;
+const emphasis = (text, strong, em) => text.replace(STRONG, (_2, a, b2) => strong(a ?? b2)).replace(
+  EMPHASIS,
+  (_2, a, before, b2) => a !== void 0 ? em(a) : `${before}${em(b2)}`
+);
+const inline = (text, out) => {
+  const kept = [];
+  const keep = (value) => `${kept.push(value) - 1}`;
+  const marks = (t) => emphasis(t, out.strong, out.em);
+  const rest = text.replace(/\uE000/g, "").replace(ESCAPABLE, (_2, c) => keep(out.text(c))).replace(CODE, (_2, body) => keep(out.code(body))).replace(
+    LINK,
+    (_2, label, url) => keep(out.link(marks(out.text(label)), url))
+  );
+  return marks(out.text(rest)).replace(
+    /\uE000(\d+)\uE000/g,
+    (_2, i) => kept[Number(i)]
+  );
+};
+function renderInlineMarkdown(text) {
+  if (typeof text !== "string") return "";
+  return inline(text, {
+    text: escapeHtml,
+    code: (body) => `<code>${escapeHtml(body)}</code>`,
+    link: (label, url) => {
+      const href = safeHref(url);
+      return href ? `<a href="${escapeHtml(href)}">${label}</a>` : label;
+    },
+    strong: (t) => `<strong>${t}</strong>`,
+    em: (t) => `<em>${t}</em>`
+  });
+}
 dt.div`
   margin-bottom: ${(props) => props.theme?.spacing?.item || "var(--resume-space-item, 1rem)"};
 
@@ -1824,50 +1868,6 @@ dt.span`
     }
   }
 `;
-const ESCAPES = {
-  "&": "&amp;",
-  "<": "&lt;",
-  ">": "&gt;",
-  '"': "&quot;",
-  "'": "&#39;"
-};
-const escapeHtml = (text) => text.replace(/[&<>"']/g, (c) => ESCAPES[c]);
-const ESCAPABLE = /\\([\\`*_[\]()!#])/g;
-const CODE = /`([^`]+)`/g;
-const LINK = /\[([^\]]+)\]\(([^)\s]+)\)/g;
-const STRONG = /\*\*(?=\S)([^*]*?\S)\*\*|__(?=\S)([^_]*?\S)__/g;
-const EMPHASIS = /\*(?=\S)([^*]*?\S)\*|(^|[^\p{L}\p{N}_])_(?=\S)([^_]*?\S)_(?![\p{L}\p{N}_])/gu;
-const safeHref = (url) => /^(https?:\/\/|mailto:)/i.test(url) ? url : void 0;
-const emphasis = (text, strong, em) => text.replace(STRONG, (_2, a, b2) => strong(a ?? b2)).replace(
-  EMPHASIS,
-  (_2, a, before, b2) => a !== void 0 ? em(a) : `${before}${em(b2)}`
-);
-const inline = (text, out) => {
-  const kept = [];
-  const keep = (value) => `${kept.push(value) - 1}`;
-  const marks = (t) => emphasis(t, out.strong, out.em);
-  const rest = text.replace(/\uE000/g, "").replace(ESCAPABLE, (_2, c) => keep(out.text(c))).replace(CODE, (_2, body) => keep(out.code(body))).replace(
-    LINK,
-    (_2, label, url) => keep(out.link(marks(out.text(label)), url))
-  );
-  return marks(out.text(rest)).replace(
-    /\uE000(\d+)\uE000/g,
-    (_2, i) => kept[Number(i)]
-  );
-};
-function renderInlineMarkdown(text) {
-  if (typeof text !== "string") return "";
-  return inline(text, {
-    text: escapeHtml,
-    code: (body) => `<code>${escapeHtml(body)}</code>`,
-    link: (label, url) => {
-      const href = safeHref(url);
-      return href ? `<a href="${escapeHtml(href)}">${label}</a>` : label;
-    },
-    strong: (t) => `<strong>${t}</strong>`,
-    em: (t) => `<em>${t}</em>`
-  });
-}
 function InlineMarkdown({ text, as: Tag = "span", ...rest }) {
   return /* @__PURE__ */ jsx(
     Tag,
