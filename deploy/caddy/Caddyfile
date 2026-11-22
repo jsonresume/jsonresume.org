@@ -20,10 +20,20 @@
 	tls /etc/caddy/certs/jsonresume.org.pem /etc/caddy/certs/jsonresume.org.key
 }
 
+# The app on a local port. A deploy restarts it, and it listens again about
+# 3s later: retry refused connections for up to 10s instead of answering
+# 502. A request that never reached the app is safe to send again.
+(upstream) {
+	reverse_proxy 127.0.0.1:{args[0]} {
+		lb_try_duration 10s
+		lb_try_interval 250ms
+	}
+}
+
 (app) {
 	import origin_tls
 	encode zstd gzip
-	reverse_proxy 127.0.0.1:{args[0]}
+	import upstream {args[0]}
 	log {
 		output stdout
 		format json
@@ -50,7 +60,7 @@ jsonresume.org {
 		}
 	}
 	handle {
-		reverse_proxy 127.0.0.1:3003
+		import upstream 3003
 	}
 	log {
 		output stdout
