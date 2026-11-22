@@ -1,4 +1,4 @@
-import { JobMark } from '@repo/api';
+import { JobMark, type MarkSource, type PassReason } from '@repo/api';
 import { Effect, Option, Schema } from 'effect';
 import type { SqlClient } from 'effect/sql';
 import { decodePosting } from './posting';
@@ -13,6 +13,20 @@ const MarkedRow = Schema.Struct({
   feedback: Schema.NullOr(Schema.String),
   updated_at: Schema.Date,
 });
+/** Why and where a mark was made. */
+export interface MarkMeta {
+  reason?: PassReason | undefined;
+  source?: MarkSource | undefined;
+  position?: number | undefined;
+}
+
+/** The decision a mark was made against, if one was shown. */
+const Snapshot = Schema.Struct({
+  verdict: Schema.NullOr(Schema.String),
+  chance: Schema.NullOr(Schema.Number),
+  appeal: Schema.NullOr(Schema.Number),
+});
+
 const rows = <S extends Schema.Constraint>(schema: S) =>
   Schema.decodeUnknownEffect(Schema.Array(schema));
 
@@ -32,12 +46,16 @@ export const markQueries = (sql: SqlClient.SqlClient) => {
       Effect.orDie
     );
 
-  /** Marks a job (null clears it), with the reason when one is given. */
+  /**
+   * Marks a job (null clears it), with the note when one is given, and
+   * records the mark with the decision it was made against (app.job_mark_events).
+   */
   const mark = (
     userId: string,
     jobId: number,
     state: JobMark | null,
-    feedback: string | null = null
+    feedback: string | null = null,
+    meta: MarkMeta = {}
   ) =>
     (state === null
       ? sql`DELETE FROM app.job_marks WHERE user_id = ${userId} AND job_id = ${jobId}`
@@ -47,7 +65,28 @@ export const markQueries = (sql: SqlClient.SqlClient) => {
           ON CONFLICT (user_id, job_id) DO UPDATE SET state = EXCLUDED.state,
             feedback = coalesce(EXCLUDED.feedback, app.job_marks.feedback), updated_at = now()
         `
-    ).pipe(Effect.asVoid, Effect.orDie);
+    ).pipe(
+      Effect.andThen(
+        sql`
+          INSERT INTO app.job_mark_events
+            (user_id, job_id, state, reason, note, source, position, verdict, chance, appeal)
+          SELECT ${userId}, ${jobId}, ${state}, ${
+          meta.reason ?? null
+        }, ${feedback},
+                 ${meta.source ?? 'jobs'}, ${
+          meta.position ?? null
+        }, d.verdict, d.chance, d.appeal
+          FROM (SELECT 1) one
+          LEFT JOIN app.job_decisions d ON d.user_id = ${userId} AND d.job_id = ${jobId}
+          RETURNING verdict, chance::float8 AS chance, appeal::float8 AS appeal
+        `
+      ),
+      Effect.flatMap(Schema.decodeUnknownEffect(Schema.Array(Snapshot))),
+      Effect.map(
+        ([row]) => row ?? { verdict: null, chance: null, appeal: null }
+      ),
+      Effect.orDie
+    );
 
   /** The jobs a user has marked, newest mark first; optionally one mark. */
   const marked = (userId: string, only: JobMark | null = null) =>

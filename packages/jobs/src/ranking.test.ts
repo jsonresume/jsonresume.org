@@ -1,6 +1,7 @@
+import { noFacts } from './facts';
 import { describe, expect, it } from 'vitest';
 import { fitLimit, resumeLevel } from './level';
-import { finish, retrieve, type OpenJob } from './ranking';
+import { finish, retrieve, whyText, type OpenJob } from './ranking';
 import { posting } from './test/fixtures';
 import type { Posting } from './posting';
 
@@ -57,6 +58,7 @@ const open = (id: number, p: Partial<Posting>, x: number): OpenJob => {
     row: { id, posting: posting(p), postedAt: new Date(now), months: 1 },
     vector,
     text: '',
+    facts: noFacts,
   };
 };
 
@@ -117,5 +119,35 @@ describe('ranking', () => {
     expect(
       finish(retrieved, new Map(), 'senior', new Map([[5, 'applied' as const]]))
     ).toHaveLength(2);
+  });
+
+  it('moves jobs by how much more like their saved ones they are than the rest', () => {
+    const a = open(1, { company: 'A', remote: 'remote_global' }, 0.6);
+    const b = open(2, { company: 'B', remote: 'remote_global' }, 0.6);
+    // Marks raise every job's similarity; B's more than A's.
+    const retrieved = retrieve([a, b], resume, resume, 'AU').map((r) => ({
+      ...r,
+      order: r.cosine + (r.job.row.id === 1 ? 0.2 : 0.24),
+    }));
+    const fits = new Map([
+      [1, { score: 82, role: 'A', why: 'a' }],
+      [2, { score: 80, role: 'B', why: 'b' }],
+    ]);
+    // Uncentred, both moves hit the cap and A stays first; centred, B leads.
+    expect(
+      finish(retrieved, fits, 'senior', new Map()).map((r) => r.row.id)
+    ).toEqual([2, 1]);
+  });
+});
+
+describe("the model's why", () => {
+  it('reads as a sentence, without a "you:" lead-in', () => {
+    expect(whyText('you: cloud and distributed systems align')).toBe(
+      'Cloud and distributed systems align'
+    );
+    expect(whyText("You've shipped agent harnesses")).toBe(
+      "You've shipped agent harnesses"
+    );
+    expect(whyText('your resume shows React')).toBe('Your resume shows React');
   });
 });

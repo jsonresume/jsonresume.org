@@ -53,8 +53,17 @@ const oauthEndpoints = [
   '/api/oauth/jwks',
 ];
 
-/** Paths other sites' clients call: MCP, OAuth, discovery. */
-export const openPaths = ['/mcp', ...oauthEndpoints, '/.well-known/'];
+/**
+ * Paths other sites' clients call: MCP, OAuth, discovery; and the fonts a
+ * theme loads from here (professional), wherever it renders: a printed PDF,
+ * a resume built with resume-cli.
+ */
+export const openPaths = [
+  '/mcp',
+  ...oauthEndpoints,
+  '/.well-known/',
+  '/fonts/',
+];
 
 /** Writes that clients make without a session (so no Origin check). */
 export const sessionless = oauthEndpoints;

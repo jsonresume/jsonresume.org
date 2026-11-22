@@ -2,6 +2,7 @@ import { OpenAiClient } from '@effect/ai-openai';
 import { Config, Effect, Layer, Option } from 'effect';
 import { FetchHttpClient } from 'effect/http';
 import { Embedder, EmbedFailed } from './embedder';
+import { FactsReader } from './facts';
 import { JobFitter } from './fitter';
 import { JobParser, ParseFailed } from './parser';
 
@@ -35,7 +36,8 @@ export const OpenAiJobs = Layer.unwrap(
     return Layer.mergeAll(
       Embedder.layer,
       JobParser.layer,
-      JobFitter.layer
+      JobFitter.layer,
+      FactsReader.layer
     ).pipe(
       Layer.provide(OpenAiClient.layer({ apiKey: key.value })),
       Layer.provide(FetchHttpClient.layer)

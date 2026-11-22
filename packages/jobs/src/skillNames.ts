@@ -57,3 +57,27 @@ export const isKnownSkill = (key: string) => NAMES.has(key);
 /** The name to show for a skill: its known name, else as written ("ML" shows as "Machine Learning"). */
 export const skillName = (name: string): string =>
   NAMES.get(skillKey(name)) ?? name.trim().replace(/\s+/g, ' ');
+
+const CHOICE = /\s*(?:\band\/or\b|\/|,|\s+or\s+|\s+and\s+|&)\s*/i;
+
+/**
+ * The skills a combined requirement names, as written: "React/TypeScript"
+ * and "Go or Rust" are each part, "AWS (ECS, Lambda)" is AWS. Empty when
+ * the name is one skill, or a sentence rather than a list of skills.
+ */
+export const choiceNames = (name: string): string[] => {
+  const head = name.replace(/\s*\([^()]*\)\s*$/, '').trim();
+  const parts = head
+    .split(CHOICE)
+    .map((part) => part.trim())
+    .filter((part) => part.length > 0 && part.split(/\s+/).length <= 3);
+  const names = parts.length >= 2 ? parts : [];
+  if (head !== name.trim() && head.length > 0) names.push(head);
+  return names;
+};
+
+/** choiceNames as keys, other than the requirement's own. */
+export const skillChoices = (name: string): string[] =>
+  [...new Set(choiceNames(name).map(skillKey))].filter(
+    (k) => k !== skillKey(name)
+  );

@@ -10,6 +10,9 @@ import { importTools } from './catalogImport';
 import { webhookTools } from './catalogWebhooks';
 import { proposalTools } from './catalogProposals';
 import { variantTools } from './catalogVariants';
+import { decisionTools } from './catalogDecisions';
+import { jobTools } from './catalogJobs';
+import { accountTools } from './catalogAccount';
 import { privacyTools } from './catalogPrivacy';
 import { treeTools } from './catalogTree';
 import { versionTools } from './catalogVersions';
@@ -138,94 +141,13 @@ export const tools: ReadonlyArray<McpToolInfo> = [
       'Make a theme your page’s default (meta.theme in your resume) and save. Any theme can still be previewed with ?theme= on your page’s URL.',
     writes: true,
   },
-  {
-    name: 'get_resume_analytics',
-    group: 'analytics',
-    description:
-      'Views of your resume over the last 7, 30 or 90 days: visitors, time on page, read depth, day by day, and where readers come from (sites, countries, devices, themes). Also downloads as JSON, YAML, text or Word, and which browsers or tools made them.',
-    writes: false,
-  },
-  {
-    name: 'get_account',
-    group: 'account',
-    description:
-      'Your username, email, linked GitHub, where your resume comes from (gist or saved here), and your page’s links (page, PDF, Word, timeline, JSON, YAML, text, RenderCV, QR code).',
-    writes: false,
-  },
-  {
-    name: 'set_resume_source',
-    group: 'account',
-    description:
-      'Choose where your page reads your resume from: your GitHub gist ("gist") or the copy saved on jsonresume.org ("stored").',
-    writes: true,
-  },
-  {
-    name: 'change_username',
-    group: 'account',
-    description:
-      'Change your username, and so your page’s URL. The old URL redirects for 90 days. Ask the user before calling this.',
-    writes: true,
-  },
-  {
-    name: 'search_resumes',
-    group: 'explore',
-    description:
-      'Search the public resumes on jsonresume.org (Explore) by skills, role, place, name or employer: every word must match. Returns people with their headline, location, top skills and page URL, 24 a page.',
-    writes: false,
-  },
-  {
-    name: 'set_explore_listing',
-    group: 'explore',
-    description:
-      'List your resume in Explore (true, the default) or take it out (false). Your page stays public either way.',
-    writes: true,
-  },
-  {
-    name: 'search_jobs',
-    group: 'jobs',
-    description:
-      'Search the open jobs from Hacker News “Who is hiring?” (the last two monthly threads) by words, where (remote, anywhere, onsite), level and least yearly pay in USD.',
-    writes: false,
-  },
-  {
-    name: 'match_jobs',
-    group: 'jobs',
-    description:
-      'Open jobs ranked by how well they fit your resume: a 0 to 100 fit judged by AI against each post, with the post’s best role for you and why. Jobs you can’t take from where you live (basics.location.countryCode) are left out; low pay or a role below your level caps the fit; your marks nudge the order. Same filters as search_jobs.',
-    writes: false,
-  },
-  {
-    name: 'get_job',
-    group: 'jobs',
-    description:
-      'One job in full: the role, company, pay, where, skills, responsibilities, how to apply, the original post, and your mark.',
-    writes: false,
-  },
-  {
-    name: 'mark_job',
-    group: 'jobs',
-    description:
-      'Record what you think of a job: interested, maybe, applied or not_interested (null clears it), with an optional note. Marks shape match_jobs.',
-    writes: true,
-  },
-  {
-    name: 'get_career_directions',
-    group: 'jobs',
-    description:
-      'The directions your career could take now: the open jobs that fit your resume, grouped by kind of role (founding engineer, engineering leadership, AI…), each with its best and typical fit, median pay, how often it is remote, the skills it asks for, and those your resume doesn’t show yet.',
-    writes: false,
-  },
-  {
-    name: 'list_marked_jobs',
-    group: 'jobs',
-    description:
-      'The jobs you have marked, newest first, optionally only one mark (e.g. applied), with your notes.',
-    writes: false,
-  },
   ...importTools,
   ...directoryTools,
   ...webhookTools,
   ...variantTools,
+  ...accountTools,
+  ...jobTools,
+  ...decisionTools,
   ...proposalTools,
   ...privacyTools,
   ...appTools,

@@ -17,8 +17,13 @@ import { createResumeHandler, variantPath } from './resumes';
 import { createSitemaps, liveSitemapPath, sitemapPath } from './sitemaps';
 import { createTimelinePage, timelinePath } from './timelinePage';
 import { appServices } from './services';
+import { DevSeed } from './devSeed';
 
-const services = appServices(InMemoryDatabase);
+// DEV_SEED_DATABASE_URL fills the empty board from another database (devSeed).
+const services = Layer.merge(
+  appServices(InMemoryDatabase),
+  DevSeed.pipe(Layer.provide(InMemoryDatabase))
+);
 const memoMap = Layer.makeMemoMapUnsafe();
 const api = effectWebHandler(apiRoutes('dev').pipe(Layer.provide(services)), {
   memoMap,

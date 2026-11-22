@@ -54,7 +54,10 @@ export const rootRoute = createRootRouteWithContext<RouterContext>()({
     ],
     // No font preloads: measured, they delay the first paint (they share
     // the connection with the stylesheet) and make nothing load sooner.
-    links: [{ rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' }],
+    links: [
+      { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' },
+      { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+    ],
   }),
   component: RootDocument,
   notFoundComponent: () => (

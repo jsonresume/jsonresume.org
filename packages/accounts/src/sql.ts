@@ -1,5 +1,5 @@
 import { EmailTaken, UsernameUnavailable } from '@repo/api';
-import { PgLive } from '@repo/database';
+import { jsonbText, PgLive } from '@repo/database';
 import { Effect, Layer, Option, Schema } from 'effect';
 import { SqlClient, SqlSchema } from 'effect/sql';
 import { AccountStore, GithubTaken, type UserRecord } from './store';
@@ -163,9 +163,7 @@ export const PgAccountStore = Layer.effect(
           };
         }),
       saveStoredResume: (userId, resume) =>
-        sql`UPDATE app.profiles SET stored_resume = ${JSON.stringify(
-          resume
-        )}::jsonb,
+        sql`UPDATE app.profiles SET stored_resume = ${jsonbText(resume)}::jsonb,
             stored_at = now(), source = 'stored'
           WHERE user_id = ${userId} AND kind = 'account'`.pipe(
           Effect.asVoid,

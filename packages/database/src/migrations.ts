@@ -1,5 +1,6 @@
 import { Effect } from 'effect';
 import { SqlClient } from 'effect/sql';
+import { decisionMigrations } from './decisionMigrations';
 import { laterMigrations } from './laterMigrations';
 
 /**
@@ -428,4 +429,5 @@ export const migrations: Record<
   }),
 
   ...laterMigrations,
+  ...decisionMigrations,
 };

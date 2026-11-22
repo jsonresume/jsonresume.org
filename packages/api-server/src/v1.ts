@@ -8,7 +8,14 @@ import {
   V1NotYet,
   V1TooMany,
 } from '@repo/api';
-import { JobBoard, JobMatcher, toV1Job, v1Options, v1Select } from '@repo/jobs';
+import {
+  JobBoard,
+  JobMatcher,
+  noFacts,
+  toV1Job,
+  v1Options,
+  v1Select,
+} from '@repo/jobs';
 import { Effect, Predicate, Schema } from 'effect';
 import { HttpApiBuilder } from 'effect/http-api';
 import { client } from './http';
@@ -110,6 +117,9 @@ export const V1Handlers = HttpApiBuilder.group(
               eligible: 'unclear',
               role: null,
               why: null,
+              fit: null,
+              facts: noFacts,
+              toward: null,
               limits: [],
             });
           }),

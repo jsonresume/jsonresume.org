@@ -2,7 +2,7 @@ import { RegistryProvider, useAtom } from '@effect/atom-react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { expect, it } from 'vitest';
 import { SaveBar } from './Actions';
-import { isUntouchedExample, Start } from './Start';
+import { IMPORT_PATH, isUntouchedExample, Start } from './Start';
 import { draftAtom, savedAtom, serialize } from './state';
 
 /** The editor's start and save, as ResumeEditor wires them. */
@@ -44,4 +44,11 @@ it('never saves the untouched example as someone’s resume', () => {
   expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled();
   expect(isUntouchedExample(null)).toBe(false);
   expect(isUntouchedExample({ basics: { name: '' } })).toBe(false);
+});
+
+it('offers to import a resume first, read on /start and saved back here', () => {
+  render(<Start onStart={() => undefined} />);
+  const link = screen.getByRole('link', { name: 'Import your resume' });
+  expect(link).toHaveAttribute('href', IMPORT_PATH);
+  expect(screen.getByRole('button', { name: 'Start blank' })).toBeEnabled();
 });

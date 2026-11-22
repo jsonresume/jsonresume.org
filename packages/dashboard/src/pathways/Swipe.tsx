@@ -34,7 +34,10 @@ export function Swipe() {
   const decide = (value: JobMark) => {
     setDone((prev) => new Set(prev).add(job.id));
     setDx(0);
-    void mark({ params: { id: job.id }, payload: { mark: value } });
+    void mark({
+      params: { id: job.id },
+      payload: { mark: value, source: 'swipe', position: done.size },
+    });
   };
   const onDown = (e: PointerEvent) => {
     start.current = e.clientX;

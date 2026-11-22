@@ -1,9 +1,20 @@
 import type { JobMark, Seniority } from '@repo/api';
 import { companyKey } from './families';
+import type { CompanyFacts } from './facts';
 import { eligibility, type Eligibility } from './eligibility';
 import { fitLimit } from './level';
 import type { JobRow } from './summary';
 import { dot } from './vectors';
+
+/**
+ * The model's why as a sentence: told to speak to the candidate as "you",
+ * it sometimes starts "you: ..."; that lead-in goes, the first letter is
+ * capitalised.
+ */
+export const whyText = (why: string): string => {
+  const line = why.trim().replace(/^you\s*:\s*/i, '');
+  return line.charAt(0).toUpperCase() + line.slice(1);
+};
 
 /** An open job against a resume: how well it fits, and why. */
 export interface Ranked {
@@ -14,6 +25,8 @@ export interface Ranked {
   order: number;
   /** The fit, 0 to 100: the model's when judged, else from the cosine; capped. */
   score: number;
+  /** The model's own fit, 0 to 100, uncapped; null until it has judged the post. */
+  fit: number | null;
   mark: JobMark | null;
   eligible: Eligibility;
   /** The post's role that fits best, when the model judged it. */
@@ -22,6 +35,10 @@ export interface Ranked {
   why: string | null;
   /** What capped the score: pay, level, where it is. */
   limits: ReadonlyArray<string>;
+  /** What the post says about the company. */
+  facts: CompanyFacts;
+  /** Cosine between the job and the text it was ranked toward, if any. */
+  toward: number | null;
 }
 
 /** An open job as matching reads it. */
@@ -29,6 +46,7 @@ export interface OpenJob {
   row: JobRow;
   vector: Float32Array;
   text: string;
+  facts: CompanyFacts;
 }
 
 export interface JudgedFit {
@@ -60,11 +78,13 @@ export const retrieve = (
   open: ReadonlyArray<OpenJob>,
   base: Float32Array,
   query: Float32Array,
-  country: string | undefined
+  country: string | undefined,
+  toward: Float32Array | null = null
 ) =>
   open
     .map((job) => ({
       job,
+      toward: toward ? dot(toward, job.vector) : null,
       cosine: dot(base, job.vector),
       order: dot(query, job.vector),
       eligible: eligibility(job.row.posting, country),
@@ -86,31 +106,41 @@ export const finish = (
   level: Seniority,
   markOf: ReadonlyMap<number, JobMark>
 ): Ranked[] => {
-  const ranked = retrieved.map(({ job, cosine, order, eligible, placed }) => {
-    const fit = fits.get(job.row.id);
-    const { cap, notes } = fitLimit(
-      job.row.posting,
-      level,
-      placed ? eligible : 'yes'
-    );
-    const score = Math.min(fit ? fit.score : fitScore(cosine), cap);
-    // Marks move a job a few points: the fit stays the resume's own.
-    const nudge = Math.max(-8, Math.min(8, 100 * (order - cosine)));
-    return {
-      sortBy: score + nudge,
-      ranked: {
-        row: job.row,
-        cosine,
-        order,
-        score,
-        mark: markOf.get(job.row.id) ?? null,
-        eligible,
-        role: fit?.role ?? null,
-        why: fit?.why ?? null,
-        limits: notes,
-      } satisfies Ranked,
-    };
-  });
+  // Marks move every job's similarity by much the same amount; only the
+  // difference from the average move says a job is like the ones they saved.
+  const shift =
+    retrieved.reduce((sum, r) => sum + r.order - r.cosine, 0) /
+    Math.max(1, retrieved.length);
+  const ranked = retrieved.map(
+    ({ job, cosine, order, eligible, placed, toward }) => {
+      const fit = fits.get(job.row.id);
+      const { cap, notes } = fitLimit(
+        job.row.posting,
+        level,
+        placed ? eligible : 'yes'
+      );
+      const score = Math.min(fit ? fit.score : fitScore(cosine), cap);
+      // Marks move a job a few points: the fit stays the resume's own.
+      const nudge = Math.max(-8, Math.min(8, 100 * (order - cosine - shift)));
+      return {
+        sortBy: score + nudge,
+        ranked: {
+          row: job.row,
+          cosine,
+          order,
+          score,
+          fit: fit?.score ?? null,
+          mark: markOf.get(job.row.id) ?? null,
+          eligible,
+          role: fit?.role ?? null,
+          why: fit ? whyText(fit.why) : null,
+          limits: notes,
+          facts: job.facts,
+          toward,
+        } satisfies Ranked,
+      };
+    }
+  );
   ranked.sort((a, b) => b.sortBy - a.sortBy);
   const seen = new Set<string>();
   return ranked.flatMap(({ ranked: r }) => {

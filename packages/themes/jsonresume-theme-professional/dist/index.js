@@ -2861,47 +2861,25 @@ const render = (resume) => {
       font-style: normal;
       font-weight: normal;
       font-display: swap;
-      src: url("/fonts/lmroman10-regular.otf") format("opentype");
+      src: url("https://jsonresume.org/fonts/lmroman10-regular.otf") format("opentype");
     }
 
     @font-face {
       font-family: LatinModern;
       font-weight: bold;
       font-display: swap;
-      src: url("/fonts/lmroman10-bold.otf") format("opentype");
+      src: url("https://jsonresume.org/fonts/lmroman10-bold.otf") format("opentype");
     }
 
     @font-face {
       font-family: LatinModern;
       font-style: italic;
       font-display: swap;
-      src: url("/fonts/lmroman10-italic.otf") format("opentype");
-    }
-
-     @font-face {
-      font-family: LatinModernSans;
-      font-style: normal;
-      font-weight: normal;
-      font-display: swap;
-      src: url("/fonts/lmsans10-regular.otf") format("opentype");
-    }
-
-    @font-face {
-      font-family: LatinModernSans;
-      font-weight: bold;
-      font-display: swap;
-      src: url("/fonts/lmsans10-bold.otf") format("opentype");
-    }
-
-    @font-face {
-      font-family: LatinModernSans;
-      font-style: italic;
-      font-display: swap;
-      src: url("/fonts/lmsans10-italic.otf") format("opentype");
+      src: url("https://jsonresume.org/fonts/lmroman10-italic.otf") format("opentype");
     }
 
     html {
-      font-family:LatinModern, "Courier New", monospace;
+      font-family: LatinModern, "Latin Modern Roman", Georgia, serif;
       background: #fff;
       font-size: 11px;
     }

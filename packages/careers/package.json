@@ -9,7 +9,8 @@
     "./families": "./src/families.ts",
     "./testing": "./src/testing.ts",
     "./roles": "./src/roles.ts",
-    "./moves": "./src/moves.ts"
+    "./moves": "./src/moves.ts",
+    "./replay": "./src/replay.ts"
   },
   "scripts": {
     "test": "vitest run",

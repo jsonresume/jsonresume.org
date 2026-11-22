@@ -1,3 +1,4 @@
+import { noFacts } from '@repo/jobs';
 import type { Ranked } from '@repo/jobs';
 import { expect, it } from 'vitest';
 import type { ResumeInsight, Skill } from '../services';
@@ -111,6 +112,9 @@ const ranked = (id: number, score: number): Ranked => ({
   role: null,
   why: null,
   limits: [],
+  facts: noFacts,
+  toward: null,
+  fit: null,
 });
 const job = (
   id: number,
@@ -118,6 +122,7 @@ const job = (
   reqs: Array<[Skill, 'required' | 'nice']>
 ): GraphJob => ({
   ranked: ranked(id, score),
+  appeal: 0.5,
   role: null,
   family: 'backend',
   requirements: reqs.map(([s, need]) => ({ skill: s, need, years: null })),

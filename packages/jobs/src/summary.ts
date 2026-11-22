@@ -9,10 +9,14 @@ export interface JobRow {
   months: number;
 }
 
-/** Models write "unspecified" or "null" for a company the post doesn't name. */
+/** Models write "unspecified" or "null" for what the post doesn't name. */
 const PLACEHOLDER = /^(unspecified|unknown|null|none|n\/a|not specified|)$/i;
 export const companyOf = (p: Posting) =>
   PLACEHOLDER.test(p.company.trim()) ? '' : p.company.trim();
+
+/** The post's title, or '' when the model wrote a placeholder. */
+export const titleOf = (p: Posting) =>
+  PLACEHOLDER.test(p.title.trim()) ? '' : p.title.trim();
 
 export const placeOf = (p: Posting): string | null =>
   [p.city, p.region && p.region !== p.city ? p.region : null, p.countryCode]
@@ -26,7 +30,7 @@ export const toSummary = ({
   months,
 }: JobRow): JobSummary => ({
   id,
-  title: p.title,
+  title: titleOf(p) || 'Open roles',
   company: companyOf(p),
   location: placeOf(p),
   remote: p.remote,

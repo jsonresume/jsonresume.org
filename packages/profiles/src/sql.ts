@@ -1,4 +1,4 @@
-import { PgLive } from '@repo/database';
+import { jsonbText, PgLive } from '@repo/database';
 import { Effect, Layer, Option, Schema } from 'effect';
 import { SqlClient, SqlSchema } from 'effect/sql';
 import { ProfileStore, type GistMirror, type Profile } from './store';
@@ -102,7 +102,7 @@ export const PgProfileStore = Layer.effect(
           VALUES (${ghost.username}, 'ghost', ${ghost.githubId}, ${
           ghost.gistId
         },
-                  ${JSON.stringify(ghost.resume)}::jsonb, ${ghost.fetchedAt})
+                  ${jsonbText(ghost.resume)}::jsonb, ${ghost.fetchedAt})
           ON CONFLICT (username) DO UPDATE SET
             github_id = EXCLUDED.github_id, gist_id = EXCLUDED.gist_id,
             resume = EXCLUDED.resume, fetched_at = EXCLUDED.fetched_at
@@ -118,7 +118,7 @@ export const PgProfileStore = Layer.effect(
           UPDATE app.profiles SET github_id = ${mirror.githubId}, gist_id = ${
           mirror.gistId
         },
-            resume = ${JSON.stringify(mirror.resume)}::jsonb, fetched_at = ${
+            resume = ${jsonbText(mirror.resume)}::jsonb, fetched_at = ${
           mirror.fetchedAt
         }
           WHERE username = ${username} AND kind = 'account'

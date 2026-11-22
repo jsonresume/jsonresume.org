@@ -10,7 +10,8 @@ export { JobParser, ParseFailed } from './parser';
 export { decodePosting, embeddingText, Posting } from './posting';
 export { postParagraphs, postText } from './postText';
 export { candidateText } from './fits';
-export { resumeText } from './resumeText';
+export { resumeLines, resumeText } from './resumeText';
+export { resumeMentions } from './resumeMentions';
 export { sharedRuns, type RunOptions, type RunState } from './sharedRuns';
 export { JobStore, MAX_PARSE_ATTEMPTS, type NewPost } from './store';
 export {
@@ -21,7 +22,40 @@ export {
 export { OpenAiJobs } from './openai';
 export { fromLegacy } from './legacy';
 export { toV1Job, v1Options, v1Select, type V1Options } from './v1';
-export { companyOf, placeOf, toJob, toSummary, type JobRow } from './summary';
+export {
+  companyOf,
+  placeOf,
+  titleOf,
+  toJob,
+  toSummary,
+  type JobRow,
+} from './summary';
 export { careerDirections, familyOf, resumeSkills } from './directions';
 export { SKILL_ALIASES } from './skillAliases';
-export { foldSkill, isKnownSkill, skillKey, skillName } from './skillNames';
+export {
+  choiceNames,
+  foldSkill,
+  isKnownSkill,
+  skillChoices,
+  skillKey,
+  skillName,
+} from './skillNames';
+export * from './decision';
+export {
+  CompanyFacts,
+  FACTS_VERSION,
+  FactsFailed,
+  FactsReader,
+  noFacts,
+  type FactsPost,
+} from './facts';
+export { factsOf, refreshFacts } from './factsRefresh';
+export type { MarkMeta } from './marks';
+export {
+  isStated,
+  noPreferences,
+  preferenceSummary,
+  PreferenceStore,
+  type PreferenceSource,
+} from './preferences';
+export { decisionStore } from './decisionStore';

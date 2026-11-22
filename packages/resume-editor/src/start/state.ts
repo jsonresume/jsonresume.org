@@ -10,6 +10,12 @@ export type StartStep = 'choose' | 'review' | 'guided' | 'preview';
 
 export const startStepAtom = Atom.make<StartStep>('choose');
 
+/**
+ * The guided section on screen, kept while the visitor looks at a theme, so
+ * "Back to editing" returns to it rather than to the first section.
+ */
+export const startSectionAtom = Atom.make(0).pipe(Atom.keepAlive);
+
 /** The resume being made, before there is an account to save it to. */
 export const startResumeAtom = Atom.make<Json>({});
 

@@ -1,3 +1,4 @@
+import { noFacts, resumeMentions } from '@repo/jobs';
 import { TestDatabase } from '@repo/database/testing';
 import type { Ranked } from '@repo/jobs';
 import { Effect, Layer } from 'effect';
@@ -81,14 +82,25 @@ const ranked: Ranked = {
   role: null,
   why: null,
   limits: [],
+  facts: noFacts,
+  toward: null,
+  fit: null,
 };
 
-it('a resume saying "ML" meets a job requiring "Machine Learning": no gap', async () => {
-  const graph = await Effect.runPromise(
-    ResumeInsights.use((insights) => insights.insight(resume)).pipe(
-      Effect.flatMap((insight) =>
-        gather('00000000-0000-0000-0000-000000000000', insight, [ranked], 2026)
-      ),
+/** The Tree for job 10 against a resume, with what its text names. */
+const treeFor = (cv: unknown, mentions?: (name: string) => boolean) =>
+  Effect.runPromise(
+    Effect.gen(function* () {
+      const insight = yield* (yield* ResumeInsights).insight(cv);
+      return yield* gather(
+        '00000000-0000-0000-0000-000000000000',
+        insight,
+        [ranked],
+        2026,
+        new Map(),
+        mentions
+      );
+    }).pipe(
       Effect.map(buildGraph),
       Effect.provide(
         Layer.mergeAll(
@@ -103,6 +115,9 @@ it('a resume saying "ML" meets a job requiring "Machine Learning": no gap', asyn
       )
     )
   );
+
+it('a resume saying "ML" meets a job requiring "Machine Learning": no gap', async () => {
+  const graph = await treeFor(resume);
   const labels = (kind: string) =>
     graph.nodes.filter((n) => n.kind === kind).map((n) => n.label);
   // Shown under their known names, each once.
@@ -117,6 +132,16 @@ it('a resume saying "ML" meets a job requiring "Machine Learning": no gap', asyn
   expect(graph.nodes.find((n) => n.id === 'job:10')?.detail).toContain(
     '1 required skill to show'
   );
+});
+
+it('a skill the resume names in its text is no gap', async () => {
+  const graph = await treeFor(
+    resume,
+    resumeMentions({
+      work: [{ highlights: ['Rewrote the JavaScript widgets in React.'] }],
+    })
+  );
+  expect(graph.nodes.filter((n) => n.kind === 'gap')).toEqual([]);
 });
 
 it('the in-memory catalog tests use reads names the same way', async () => {

@@ -15,6 +15,11 @@ import { describeProblem } from './problems';
 const resumes: Record<string, unknown> = {
   foo: { basics: { name: 'Foo Bar' }, meta: { theme: 'even' } },
   plain: { basics: { name: 'Plain' } },
+  gone: { basics: { name: 'Gone Theme' }, meta: { theme: 'rocketspacer' } },
+  npm: {
+    basics: { name: 'Npm Named' },
+    meta: { theme: 'jsonresume-theme-even' },
+  },
   yank: { basics: { name: 'Yank', location: { countryCode: 'US' } } },
   broken: { basics: { name: 'Broken' } },
   list: [1, 2],
@@ -132,6 +137,21 @@ describe('resumeOutcome', () => {
     const html = await res.text();
     expect(html).toContain('Foo Bar');
     expect(html).toContain('/api/events/view');
+  });
+
+  it('shows a resume whose meta.theme no longer exists in the default theme', async () => {
+    const res = response(await get('/@gone'));
+    expect(res.status).toBe(200);
+    const html = await res.text();
+    expect(html).toContain('Gone Theme');
+    // The view beacon names the theme the page was drawn with.
+    expect(html).toContain('t="elegant"');
+  });
+
+  it('reads a theme named by its npm package as that theme', async () => {
+    const html = await response(await get('/@npm')).text();
+    expect(html).toContain('Npm Named');
+    expect(html).toBe(await response(await get('/@npm?theme=even')).text());
   });
 
   it('lets ?theme= override, and falls back to elegant', async () => {

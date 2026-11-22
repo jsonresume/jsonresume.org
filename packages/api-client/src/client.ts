@@ -54,6 +54,19 @@ export const usernameCheckAtom = Atom.family((name: string) =>
 export const jobMatchesAtom = ApiClient.query('myJobs', 'matches', {
   reactivityKeys: [...keys.jobs, ...keys.account],
 });
+/**
+ * Decisions on the open jobs (apply, stretch, skip, ruled out) and what the
+ * person wants; saving preferences or a new resume decides again.
+ */
+export const jobDecisionsAtom = ApiClient.query('jobDecisions', 'decisions', {
+  query: {},
+  reactivityKeys: [...keys.jobs, ...keys.account],
+});
+/** Saves what they want; pass reactivityKeys: keys.jobs to decide again. */
+export const saveJobPreferencesAtom = ApiClient.mutation(
+  'jobDecisions',
+  'savePreferences'
+);
 /** Where the resume could go: the fitting jobs grouped by kind of role. */
 export const directionsAtom = ApiClient.query('myJobs', 'directions', {
   reactivityKeys: [...keys.jobs, ...keys.account],
