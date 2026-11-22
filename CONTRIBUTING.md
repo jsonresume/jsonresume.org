@@ -1,8 +1,10 @@
 # Contributing to JSON Resume
 
-Thank you for your interest in contributing to JSON Resume! This document provides guidelines and instructions for contributing to the project.
+Thank you for your interest in contributing to JSON Resume! This document
+explains how to set up the repository, what we expect from a change, and how
+to propose schema changes and themes.
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Code of Conduct](#code-of-conduct)
 - [Getting Started](#getting-started)
@@ -49,180 +51,84 @@ This project focuses exclusively on technical excellence. We expect all contribu
 
 ### Prerequisites
 
-- **Node.js** 18+ (LTS recommended)
-- **pnpm** 8.15.9+
+- **Node.js** 24 (what CI uses; the TypeScript scripts rely on its built-in type stripping)
+- **pnpm**, the version pinned in `package.json`'s `packageManager` field
 - **Git**
-- **Supabase CLI** (for database operations)
 
-### Installation
-
-1. **Install dependencies**:
-
-   ```bash
-   pnpm install
-   ```
-
-2. **Set up environment variables**:
-
-   ```bash
-   # Copy the example file
-   cp apps/registry/.env.example apps/registry/.env
-
-   # Edit .env and add your credentials
-   # See .env.example for required variables
-   ```
-
-3. **Generate Prisma client**:
-
-   ```bash
-   pnpm --filter registry db:generate
-   ```
-
-4. **Start development server**:
-
-   ```bash
-   pnpm dev
-   ```
-
-   This starts:
-
-   - Registry app: http://localhost:3000
-   - Homepage: http://localhost:3001 (if applicable)
-
-### Supabase Setup
-
-The registry app uses Supabase for data storage.
-
-**Database name:** `registry`
+### Run the site
 
 ```bash
-# Link to your Supabase project
-supabase link --project-ref your-project-ref
-
-# Pull latest schema
-supabase db pull
-
-# Run migrations (if any)
-supabase db push
+pnpm install
+pnpm --filter app dev
 ```
+
+This serves jsonresume.org at http://localhost:5173, every page rendered on
+the server as in production, with hot reloading. It needs no accounts,
+secrets or database: it runs on an in-memory Postgres (PGlite) that starts
+empty, so you can sign up, edit a resume and use the dashboard locally.
+Resumes in public GitHub gists render too, for example
+http://localhost:5173/@thomasdavis or `/@thomasdavis?theme=<slug>`.
+
+Optional: `OPENAI_API_KEY` turns on the features that call a model (job
+matching, Pathways). The production configuration is described in
+[`deploy/README.md`](deploy/README.md).
 
 ## Project Structure
 
 ```
 jsonresume.org/
 ├── apps/
-│   ├── homepage/          # Marketing site
-│   ├── homepage2/         # New marketing site
-│   └── registry/          # Main resume registry app
+│   ├── app/            # jsonresume.org: routes and wiring (React, Vite, Hono, Effect)
+│   ├── docs/           # jsonresume.org/docs (Fumadocs, static export)
+│   ├── styleguide/     # styleguide.jsonresume.org, the design system's docs
+│   ├── registry/       # legacy Next.js app, reference only
+│   └── homepage2/      # legacy Next.js site, reference only
 ├── packages/
-│   ├── resume-core/      # Framework-agnostic theme primitives
-│   ├── ats-validator/    # ATS compatibility validation
-│   ├── themes/           # Resume theme implementations
-│   │   ├── jsonresume-theme-reference/
-│   │   ├── jsonresume-theme-modern/
-│   │   ├── jsonresume-theme-standard/
-│   │   └── ... (13+ themes)
-│   ├── ui/               # Shared UI components
-│   └── eslint-config/    # Shared ESLint config
-└── scripts/              # Utility scripts
+│   ├── schema/         # @jsonresume/schema, the JSON Resume spec
+│   ├── cli/            # resume-cli
+│   ├── ui/             # @jsonresume/ui, the design system
+│   ├── resume-themes/  # renders a resume with any gallery theme
+│   ├── theme-config/   # @jsonresume/theme-metadata, the gallery's catalogue
+│   ├── themes/         # the jsonresume-theme-* packages
+│   └── ...             # one package per feature (accounts, jobs, mcp, ...)
+├── deploy/             # how the production server runs
+└── docs/               # design notes and guides
 ```
+
+The site's logic lives in focused packages under `packages/*`; `apps/app` is
+thin. [`AGENTS.md`](AGENTS.md) lists every package and what it holds. The
+legacy apps are kept for reference: don't add features to them.
 
 ## Code Standards
 
-### File Size Limit
+The full rules are in [`AGENTS.md`](AGENTS.md). In short:
 
-**CRITICAL:** All files must be **≤150 lines**. No exceptions.
-
-If a file exceeds 150 lines:
-
-1. Extract business logic into hooks (`useFeatureName.ts`)
-2. Split UI into sub-components
-3. Move utilities to helper files
-4. Follow the structure in `CLAUDE.md`
-
-### Code Organization
-
-```
-feature/
-├── index.ts                 # Public API exports
-├── FeatureComponent.tsx     # Main component (<150 lines)
-├── useFeatureLogic.ts      # Business logic hook
-├── FeatureHelpers.ts       # Pure utility functions
-├── FeatureTypes.ts         # TypeScript types
-└── __tests__/              # Tests
-    ├── FeatureComponent.test.tsx
-    └── useFeatureLogic.test.ts
-```
-
-### TypeScript
-
-- Use TypeScript for all new code
-- Avoid `any` - use proper types or `unknown`
-- Export types for public APIs
-- Use strict mode
-
-### Styling
-
-- Use Tailwind CSS for styling
-- Follow existing component patterns
-- Mobile-first responsive design
-- Dark mode support where applicable
-
-### AI/LLM Integration
-
-**IMPORTANT:** Always use Vercel AI SDK v5 (`ai` package):
-
-```typescript
-import { generateText } from 'ai';
-import { openai } from '@ai-sdk/openai';
-
-const { text } = await generateText({
-  model: openai('gpt-4o-mini', {
-    apiKey: process.env.OPENAI_API_KEY,
-  }),
-  prompt: 'Your prompt here',
-});
-```
-
-❌ **DO NOT** use OpenAI SDK directly for chat completions
-✅ **DO** use Vercel AI SDK for unified API across providers
+- **TypeScript, strict.** No `any`, no non-null `!` to silence errors.
+- **Effect 4** for effects, errors, services and the API; **Effect Schema**
+  to parse anything that crosses a boundary. Effect ships its own guide in
+  `node_modules/effect/AGENTS.md`.
+- **React 19 + `@jsonresume/ui`**, styled with vanilla-extract `.css.ts`
+  files and its `vars` tokens. No Tailwind, no inline `style={{}}`.
+- **Files stay under 200 lines** (tests and config: 500). Split by
+  responsibility when one grows.
+- **No `console.*`.** Use Effect's logger on the server.
+- **Every feature has MCP tools** in `@repo/mcp`, so a person's agent can do
+  anything they can do on the site.
+- **Accessibility:** one `h1` per page, landmarks, alt text, keyboard support.
 
 ## Testing
 
-### Running Tests
+Tests are Vitest, with Testing Library for components. Run them per package
+while you work:
 
 ```bash
-# Run all tests
-pnpm test
-
-# Run tests for specific package
-pnpm --filter registry test
-
-# Run E2E tests
-pnpm test:e2e
+pnpm --filter <package> test        # e.g. pnpm --filter @repo/resume-themes test
+pnpm --filter <package> typecheck
+pnpm turbo typecheck lint test --filter=app...   # the app and every package it uses
 ```
 
-### Test Requirements
-
-- **Unit tests:** >80% coverage for utilities and logic
-- **Component tests:** >70% coverage for UI components
-- **Integration tests:** All API routes must have tests
-- **E2E tests:** Critical user flows (login, create resume, export)
-
-### Writing Tests
-
-```typescript
-// Component test example
-import { render, screen } from '@testing-library/react';
-import { FeatureComponent } from './FeatureComponent';
-
-describe('FeatureComponent', () => {
-  it('renders correctly', () => {
-    render(<FeatureComponent />);
-    expect(screen.getByText('Expected Text')).toBeInTheDocument();
-  });
-});
-```
+Test what matters: parsers, calculations, API handlers and the flows people
+use. Every test must pass before you push; no skipped tests on `master`.
 
 ## Pull Request Process
 
@@ -235,74 +141,31 @@ describe('FeatureComponent', () => {
    git rebase upstream/master
    ```
 
-2. **Run quality checks**:
+2. **Run the checks CI runs**:
 
    ```bash
-   pnpm lint          # ESLint
-   pnpm prettier      # Format check
-   pnpm test          # All tests
-   pnpm build         # Build check
+   pnpm turbo lint typecheck prettier
+   pnpm turbo test --filter=app...
+   pnpm turbo build
    ```
 
-3. **Verify file sizes**:
-   ```bash
-   # Check if any files exceed 150 lines
-   find . -name "*.ts" -o -name "*.tsx" -o -name "*.js" | xargs wc -l | awk '$1 > 150'
-   ```
+3. **Add a changeset** if you changed a published package (`@jsonresume/*`,
+   `resume-cli`, a theme): `pnpm changeset`. See
+   [`docs/RELEASING.md`](docs/RELEASING.md).
 
 ### PR Requirements
 
-✅ **Required:**
-
-- [ ] All tests passing
-- [ ] No ESLint errors
-- [ ] Code formatted with Prettier
-- [ ] All files ≤150 lines
-- [ ] Test coverage maintained/improved
-- [ ] No new security vulnerabilities (`pnpm audit`)
-- [ ] Documentation updated (if needed)
-
-### PR Description Template
-
-```markdown
-## Description
-
-[Clear description of changes]
-
-## Related Issues
-
-Closes #123, Relates to #456
-
-## Changes Made
-
-- [ ] Feature/fix 1
-- [ ] Feature/fix 2
-
-## Testing
-
-- [ ] Unit tests added/updated
-- [ ] Integration tests added/updated
-- [ ] E2E tests added/updated
-- [ ] Manual testing completed
-
-## Performance Impact
-
-[Any performance implications]
-
-## Breaking Changes
-
-[Any breaking changes]
-
-## Screenshots/Demos
-
-[If UI changes]
-```
+- Describe what changed and why, and link the issue (`Closes #123`).
+- List the commands you ran.
+- Add screenshots for visual changes.
+- CI must be green: `Lint + Typecheck`, `build`, `unit-test`, `test` (e2e)
+  and `dev-script`.
 
 ### Review Process
 
-1. **Automated checks** must pass (CI/CD)
+1. **Automated checks** must pass (CI)
 2. **Code review** by maintainer(s)
-3. **Address feedback** and update PR
+3. **Address feedback** and update the PR
 4. **Squash and merge** once approved
 
 ## Commit Message Guidelines
@@ -334,8 +197,7 @@ We use [Conventional Commits](https://www.conventionalcommits.org/):
 ```
 feat(api): add cover letter generation endpoint
 
-Implements AI-powered cover letter generation using Vercel AI SDK v5.
-Uses GPT-4o-mini for content generation.
+Generates a cover letter from the resume and a job post.
 
 Closes #123
 ```
@@ -413,346 +275,68 @@ Index issues such as the roadmap carry the `tracking` label and are skipped.
 
 ## Contributing Themes
 
-Want to add your resume theme to the registry? Here's everything you need to know.
+A theme is an npm package that exports `render(resume)`, returning a complete
+HTML page (a string, or a Promise of one). jsonresume.org renders it on the
+server in Node, for the page at `/@username?theme=<slug>`, and prints the
+same HTML to PDF with headless Chromium.
 
-### Quick Start: Using @jsonresume/core Components (Recommended)
+### Building a theme in this repo
 
-The fastest way to build a new theme is using our composable component library:
+Start with the generator. It scaffolds a theme on `@jsonresume/core` that
+renders every section and passes the render checks:
 
-```javascript
-// index.js
-import {
-  Section,
-  SectionTitle,
-  ListItem,
-  DateRange,
-  BadgeList,
-} from '@jsonresume/core';
-
-export function render(resume) {
-  const html = `
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <title>${resume.basics.name}</title>
-      <link rel="stylesheet" href="https://unpkg.com/@jsonresume/core@0.3.1/src/styles/tokens.css">
-      <style>
-        body {
-          font-family: var(--resume-font-sans);
-          max-width: var(--resume-max-width);
-          margin: 0 auto;
-          padding: 40px 20px;
-        }
-      </style>
-    </head>
-    <body>
-      ${Section({
-        children: `
-          <h1>${resume.basics.name}</h1>
-          <p>${resume.basics.label}</p>
-        `,
-      })}
-
-      ${Section({
-        children: `
-          ${SectionTitle({ text: 'Work Experience' })}
-          ${resume.work
-            .map(
-              (job) => `
-            ${ListItem({
-              title: job.position,
-              subtitle: job.company,
-              date: DateRange({
-                startDate: job.startDate,
-                endDate: job.endDate,
-              }),
-              description: job.summary,
-            })}
-          `
-            )
-            .join('')}
-        `,
-      })}
-
-      ${Section({
-        children: `
-          ${SectionTitle({ text: 'Skills' })}
-          ${resume.skills
-            .map(
-              (skill) => `
-            <div>
-              <strong>${skill.name}</strong>
-              ${BadgeList({ items: skill.keywords })}
-            </div>
-          `
-            )
-            .join('')}
-        `,
-      })}
-    </body>
-    </html>
-  `;
-
-  return html;
-}
+```bash
+pnpm gen:theme harbor-light "Harbor Light"
 ```
 
-**Benefits:**
+[`docs/CREATING_A_THEME.md`](docs/CREATING_A_THEME.md) walks through
+building, previewing and registering it, and
+[`docs/AGENT_THEME_DEVELOPMENT.md`](docs/AGENT_THEME_DEVELOPMENT.md) covers
+the design process and the screenshot review.
 
-- ✅ **ATS-friendly by default** - semantic HTML, standard fonts
-- ✅ **10x faster development** - no need to write HTML from scratch
-- ✅ **Tested components** - all primitives have unit tests
-- ✅ **Design tokens** - consistent styling with CSS variables
-- ✅ **Framework-agnostic** - works with any setup
+### Adding a theme you publish yourself
 
-**Available Components:**
+Publish it to npm and open an issue with the package name and a link to its
+source. Before adding it, we read its code and pin an exact version. A theme
+must:
 
-- `Section()` - Wrapper for resume sections
-- `SectionTitle()` - Styled section headings
-- `ListItem()` - Experience/education entries
-- `DateRange()` - Start/end date display
-- `Badge()` / `BadgeList()` - Skills, keywords, tags
+- **Render every JSON Resume section** it is given, and nothing that isn't
+  there (no `undefined`, `[object Object]` or `NaN`).
+- **Escape resume text.** Resumes are written by anyone.
+- **Not touch the disk or the network while rendering.** Bundle templates
+  and styles into the package's code, so it also works in the CLI and
+  serverless tools.
+- **Load fonts from absolute URLs** (Google Fonts, for example) or embed
+  them. The PDF is printed from a blank page, so relative URLs don't resolve,
+  and fonts from another origin need CORS headers.
+- **Keep the text readable when printed**: real text, not images of text.
 
-**See Working Examples:**
+### Testing a theme locally
 
-- `packages/themes/jsonresume-theme-reference/` - Complete implementation
-- `packages/themes/jsonresume-theme-modern/` - Card-based modern design
-- `packages/resume-core/README.md` - Full API documentation
-
-### Theme Requirements
-
-**CRITICAL:** Themes must be **serverless-compatible**. The registry runs on Vercel's serverless functions, which means:
-
-❌ **Cannot use:**
-
-- `fs.readFileSync()` or any filesystem operations
-- `fs.readFile()`, `fs.readdirSync()`, etc.
-- `__dirname` or `__filename` for file paths
-- Dynamic file loading at runtime
-
-✅ **Must use:**
-
-- ES6 imports for templates and styles
-- Build-time bundling (Vite, webpack, rollup)
-- All assets inlined at compile time
-- **OR** @jsonresume/core components (recommended)
-
-### Quick Start: Converting Your Theme
-
-#### Before (❌ Breaks on Vercel)
-
-```javascript
-// index.js
-const fs = require('fs');
-const Handlebars = require('handlebars');
-
-function render(resume) {
-  const template = fs.readFileSync(__dirname + '/template.hbs', 'utf-8');
-  const css = fs.readFileSync(__dirname + '/style.css', 'utf-8');
-
-  return Handlebars.compile(template)({
-    css: `<style>${css}</style>`,
-    resume,
-  });
-}
-
-module.exports = { render };
+```bash
+pnpm --filter app dev
+open "http://localhost:5173/@thomasdavis?theme=<slug>"
 ```
 
-#### After (✅ Works on Vercel)
+A theme from npm must be registered first (see the checklist in
+`docs/CREATING_A_THEME.md`: a dependency and a loader in
+`packages/resume-themes`, and an entry in `packages/theme-config`).
+`pnpm --filter @repo/resume-themes test` then renders every registered theme.
 
-```javascript
-// index.js
-import Handlebars from 'handlebars';
-import template from './template.hbs?raw'; // Vite raw import
-import css from './style.css?inline'; // Vite inline import
+### Working examples
 
-export function render(resume) {
-  return Handlebars.compile(template)({
-    css: `<style>${css}</style>`,
-    resume,
-  });
-}
-```
-
-### Step-by-Step Migration Guide
-
-#### Option 1: Use Vite (Recommended)
-
-1. **Install Vite and plugins:**
-
-   ```bash
-   npm install --save-dev vite vite-plugin-handlebars
-   ```
-
-2. **Create `vite.config.js`:**
-
-   ```javascript
-   import { defineConfig } from 'vite';
-
-   export default defineConfig({
-     build: {
-       lib: {
-         entry: './index.js',
-         formats: ['cjs'],
-         fileName: 'index',
-       },
-       rollupOptions: {
-         external: ['handlebars'],
-       },
-     },
-   });
-   ```
-
-3. **Update imports to use Vite's special imports:**
-
-   ```javascript
-   import template from './template.hbs?raw';
-   import css from './style.css?inline';
-   ```
-
-4. **Add build script to `package.json`:**
-
-   ```json
-   {
-     "scripts": {
-       "build": "vite build",
-       "prepublishOnly": "npm run build"
-     },
-     "main": "./dist/index.cjs"
-   }
-   ```
-
-5. **Build and test:**
-
-   ```bash
-   npm run build
-   npm publish
-   ```
-
-#### Option 2: Inline Everything Manually
-
-For simple themes, you can inline content directly:
-
-```javascript
-// index.js
-import Handlebars from 'handlebars';
-
-const template = `
-<!DOCTYPE html>
-<html>
-  <head>
-    <style>
-      body { font-family: Arial, sans-serif; }
-      /* your styles here */
-    </style>
-  </head>
-  <body>
-    <h1>{{resume.basics.name}}</h1>
-    <!-- your template here -->
-  </body>
-</html>
-`;
-
-export function render(resume) {
-  return Handlebars.compile(template)({ resume });
-}
-```
-
-### Testing Your Theme Locally
-
-1. **Install your theme in the registry:**
-
-   ```bash
-   cd jsonresume.org
-   pnpm --filter registry add your-theme-name
-   ```
-
-2. **Add it to `themeConfig.js`:**
-
-   ```javascript
-   // apps/registry/lib/formatters/template/themeConfig.js
-   export const THEMES = {
-     // ... existing themes
-     'your-theme': require('your-theme-name'),
-   };
-   ```
-
-3. **Start the dev server:**
-
-   ```bash
-   pnpm dev
-   ```
-
-4. **Test your theme:**
-   ```
-   http://localhost:3000/thomasdavis?theme=your-theme
-   ```
-
-### Working Examples
-
-Check these themes in the repo for reference:
-
-- **@jsonresume/core components:** `packages/themes/jsonresume-theme-reference` (complete example)
-- **@jsonresume/core with custom styles:** `packages/themes/jsonresume-theme-modern` (card-based design)
-- **Simple approach:** `packages/themes/jsonresume-theme-standard`
-- **Vite bundling:** `packages/themes/jsonresume-theme-professional`
-- **Handlebars templates:** `packages/themes/jsonresume-theme-spartacus`
-
-### Common Issues
-
-#### Issue: "Cannot find module"
-
-**Cause:** Vite isn't bundling your files
-**Fix:** Ensure you're using `?raw` or `?inline` suffixes for non-JS imports
-
-#### Issue: "Template is undefined"
-
-**Cause:** Import path is incorrect
-**Fix:** Use relative paths (`./template.hbs`) not absolute paths
-
-#### Issue: Theme works locally but fails on Vercel
-
-**Cause:** Still using `fs` somewhere
-**Fix:** Search your code for `require('fs')` or `fs.readFile`
-
-### Submitting Your Theme
-
-Once your theme is serverless-compatible:
-
-1. **Publish to npm** (if not already published)
-2. **Open an issue** at [#36](https://github.com/jsonresume/jsonresume.org/issues/36)
-3. **Provide:**
-   - Theme name
-   - npm package name
-   - Link to repository
-   - Confirmation that it doesn't use `fs` operations
-
-We'll review and add it to the registry!
-
-### Need Help?
-
-- **Examples:** See `packages/` directory in this repo
-- **Questions:** Comment on [issue #36](https://github.com/jsonresume/jsonresume.org/issues/36)
-- **Stuck:** We're happy to help! Just ask.
-
----
+- **@jsonresume/core components:** `packages/themes/jsonresume-theme-reference`
+- **Typeset serif, embedded fonts:** `packages/themes/jsonresume-theme-professional`
+- **Handlebars templates:** `packages/themes/jsonresume-theme-flat`
 
 ## Getting Help
 
-- **Documentation:** Check [README.md](README.md) and [CLAUDE.md](CLAUDE.md)
-- **Issues:** Search existing issues or create a new one
-- **Discussions:** Ask questions in [GitHub Discussions](https://github.com/jsonresume/jsonresume.org/discussions)
-- **Security:** See [SECURITY.md](SECURITY.md) for reporting vulnerabilities
-
-## Additional Resources
-
-- [Architecture Documentation](CLAUDE.md)
-- [Security Policy](SECURITY.md)
-- [Project Audit](PROJECT_AUDIT.md)
-- [Releasing npm Packages](docs/RELEASING.md)
+- **Documentation:** [README.md](README.md), [AGENTS.md](AGENTS.md) and [docs/](docs)
+- **Issues:** search existing issues or open a new one
+- **Discussions:** ask in [GitHub Discussions](https://github.com/jsonresume/jsonresume.org/discussions)
+- **Security:** see [SECURITY.md](SECURITY.md) for reporting vulnerabilities
+- **Releasing npm packages:** [docs/RELEASING.md](docs/RELEASING.md)
 
 ---
 
-Thank you for contributing to JSON Resume! 🎉
+Thank you for contributing to JSON Resume!

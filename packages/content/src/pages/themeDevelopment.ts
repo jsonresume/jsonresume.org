@@ -30,9 +30,13 @@ export const themeSteps: Step[] = [
     body: 'Publish to npm. People install it next to the CLI and export with `--theme yourname`.',
     code: 'npm publish',
   },
+  {
+    title: 'Add it to jsonresume.org',
+    body: '[Open an issue on GitHub](https://github.com/jsonresume/jsonresume.org/issues/new) with the package name and its source. We read the code, pin a version and add it to the gallery, where anyone can choose it.',
+  },
 ];
 
-/** What a theme must do to work with the CLI and the registry. */
+/** What a theme must do to work with the CLI and jsonresume.org. */
 export const rules: { label: string; detail: string }[] = [
   {
     label: 'Return a string',
