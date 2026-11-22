@@ -59,6 +59,7 @@ Then check:
 - **Tests:** `pnpm --filter @repo/resume-themes test` renders every theme.
 - **Preview:** `pnpm --filter app dev`, then open http://localhost:5173/@thomasdavis?theme=<slug>.
 - **Built files:** theme `dist/` is committed and CI's `Theme dist sync` compares it with `src/`. Rebuild with `pnpm build` in the theme after editing; our workspace themes load from `dist/`.
+  - 48 themes bundle `@jsonresume/core` into their `dist/`, so any change to `packages/resume-core` changes all of them: rebuild every theme that depends on `@jsonresume/core`, not just the one you touched.
 - **Console output:** themes render with the console muted (`quiet.ts`), so a theme can't write resume text into the server's logs.
 - **Fonts:** use absolute URLs (Google Fonts, or `https://jsonresume.org/fonts/...`) or embed them, so PDFs get them too.
 
@@ -70,6 +71,7 @@ Don't remove or deprecate themes without the maintainer's approval. 27 legacy th
 - **Never sign up test accounts on production.** Use the dev server.
 - **Scripts read `DATABASE_URL`** (`PgLive` in `@repo/database`), and a shell's `DATABASE_URL` may be production. Against production, scripts must be read-only: `pgReadOnly` + `ensureReadOnly`, or psql with `PGOPTIONS='-c default_transaction_read_only=on'`.
 - **Tests:** build and test one package at a time: `pnpm --filter <name> test`, `pnpm --filter <name> typecheck`. For everything the app uses: `pnpm turbo typecheck lint test --filter=app...`.
+  - After changing a package's API (a new service method, endpoint or export), typecheck its consumers too (`pnpm turbo typecheck --filter=app...`): test mocks in other packages break silently otherwise.
 - **TypeScript scripts:** there is no `tsx`. Run them with `node --experimental-strip-types --no-warnings <file>.ts`.
 - **Stopping a server:** find its pid by port (`ss -ltnp`) and kill that. `pkill -f` kills the shell running it.
 
@@ -97,6 +99,7 @@ Don't remove or deprecate themes without the maintainer's approval. 27 legacy th
   - `test` (Playwright e2e);
   - `dev-script` (still boots the registry).
 - Branches must be up to date to merge. Queue one PR at a time: `gh pr update-branch N`, then `gh pr merge N --squash --auto`.
+  - Never guess a PR number: read it with `gh pr view <branch> --json number`. The bot's "Version Packages" PR takes numbers too, and merging it publishes to npm.
 - **Fork PRs get every secret as an empty string.** Default env with `||=`, not `??=` (which keeps `''`), and skip tests that need credentials when they're absent (see `apps/registry/tests/render.spec.js`). `github.token` can't read gists.
 - **Turbo's remote cache needs `TURBO_TOKEN`** (a Vercel token for the `jsonresume` team, as a repo secret). Without a working one, every CI run builds all ~220 tasks (about 9 minutes).
 - **LINT GOTCHA:** `eslint-config-next` is pinned to `^15` in `@repo/eslint-config-custom`. v16's flat config crashes ESLint 8, and turbo's cache can hide it. Verify lint changes with `turbo lint --force`.
