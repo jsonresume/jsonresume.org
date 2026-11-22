@@ -14,7 +14,20 @@
   },
   "remote": "Hybrid",
   "salary": "100000",
+  "compensation": {
+    "min": 100000,
+    "max": 100000,
+    "currency": "EUR",
+    "period": "year"
+  },
   "experience": "Mid-level",
+  "facets": {
+    "remoteScope": "hybrid",
+    "seniority": "mid",
+    "employmentType": "full_time",
+    "visaSponsorship": "unspecified",
+    "salaryProvenance": "stated"
+  },
   "responsibilities": [
     "Develop and maintain web applications",
     "Collaborate with cross-functional teams",
