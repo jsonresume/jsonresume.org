@@ -44,9 +44,9 @@ pub fn validate_email(value: &Option<String>) -> Result<(), Error> {
 
 pub fn validate_date(value: &Option<String>) -> Result<(), Error> {
     if let Some(date_str) = value {
-        // Pattern: YYYY or YYYY-MM or YYYY-MM-DD
+        // Pattern: YYYY or YYYY-MM or YYYY-MM-DD, years 1000 to 2999 as in the schema
         let re =
-            regex::Regex::new(r"^[1-9]\d{3}(?:-(?:0[1-9]|1[0-2])(?:-(?:0[1-9]|[12]\d|3[01]))?)?$")
+            regex::Regex::new(r"^[12]\d{3}(?:-(?:0[1-9]|1[0-2])(?:-(?:0[1-9]|[12]\d|3[01]))?)?$")
                 .unwrap();
         if re.is_match(date_str) {
             Ok(())
