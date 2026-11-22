@@ -6,7 +6,7 @@
   "main": "validator.js",
   "scripts": {
     "test": "npm run validate && npm run test-units",
-    "validate": "ajv validate -s node_modules/json-metaschema/draft-07-schema -d schema -d job-schema",
+    "validate": "ajv validate -s node_modules/json-metaschema/draft-07-schema -d schema -d job-schema -d company-schema",
     "test-units": "tape **/*.spec.js | tap-spec"
   },
   "repository": {
@@ -21,10 +21,14 @@
   "files": [
     "sample.resume.json",
     "sample.job.json",
+    "sample.company.json",
     "schema.json",
     "job-schema.json",
+    "company-schema.json",
     "validator.js",
     "SPEC.md",
+    "JOB-SPEC.md",
+    "COMPANY-SPEC.md",
     "examples"
   ],
   "dependencies": {

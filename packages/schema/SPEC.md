@@ -173,5 +173,6 @@ the decisions are recorded in [DECISIONS.md](DECISIONS.md).
 - [`@jsonresume/types`](../types) (TypeScript): types generated from the
   schema.
 
-The job description format (`job-schema.json`) is a separate draft and not
-part of this specification.
+Two related formats have their own specifications: job descriptions
+([JOB-SPEC.md](JOB-SPEC.md), `job-schema.json`, v1) and companies
+([COMPANY-SPEC.md](COMPANY-SPEC.md), `company-schema.json`, a draft).

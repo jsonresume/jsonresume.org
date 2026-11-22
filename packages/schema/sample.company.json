@@ -1,0 +1,47 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jsonresume/jsonresume.org/master/packages/schema/company-schema.json",
+  "name": "Microsoft",
+  "url": "https://microsoft.com",
+  "logo": "https://example.com/logos/microsoft.png",
+  "description": "Microsoft builds software, services and devices, from Windows and Office to the Azure cloud.",
+  "industry": "Software",
+  "keywords": ["operating systems", "cloud", "productivity software"],
+  "founded": "1975-04-04",
+  "employees": {
+    "min": 200000,
+    "max": 250000
+  },
+  "stage": "Public",
+  "headquarters": {
+    "address": "One Microsoft Way",
+    "postalCode": "98052",
+    "city": "Redmond",
+    "countryCode": "US",
+    "region": "Washington"
+  },
+  "locations": [
+    {
+      "city": "Berlin",
+      "countryCode": "DE",
+      "region": "Berlin"
+    }
+  ],
+  "remote": "Hybrid",
+  "technologies": ["C#", "TypeScript", "Azure", "SQL Server"],
+  "benefits": ["Health insurance", "Parental leave", "Stock purchase plan"],
+  "values": ["Respect", "Integrity", "Accountability"],
+  "careers": "https://careers.microsoft.com",
+  "email": "careers@example.com",
+  "profiles": [
+    {
+      "network": "GitHub",
+      "username": "microsoft",
+      "url": "https://github.com/microsoft"
+    }
+  ],
+  "meta": {
+    "canonical": "http://example.com/companies/microsoft",
+    "version": "v1.0.0",
+    "lastModified": "2026-11-22T12:00:00"
+  }
+}

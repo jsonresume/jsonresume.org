@@ -4,8 +4,10 @@ var addFormats = require('ajv-formats');
 
 const schema = require('../schema.json');
 const jobSchema = require('../job-schema.json');
+const companySchema = require('../company-schema.json');
 const sampleResume = require('../sample.resume.json');
 const sampleJob = require('../sample.job.json');
+const sampleCompany = require('../sample.company.json');
 
 // Regression tests for jsonresume/jsonresume.org#321.
 //
@@ -16,6 +18,7 @@ const sampleJob = require('../sample.job.json');
 const schemas = [
   ['schema.json', schema],
   ['job-schema.json', jobSchema],
+  ['company-schema.json', companySchema],
 ];
 
 test('schemas declare the draft-07 meta-schema', (t) => {
@@ -68,6 +71,11 @@ test('samples validate under the resume-cli Ajv baseline', (t) => {
   t.true(
     validateJob(sampleJob),
     'sample.job.json: ' + JSON.stringify(validateJob.errors || null)
+  );
+  const validateCompany = ajv.compile(companySchema);
+  t.true(
+    validateCompany(sampleCompany),
+    'sample.company.json: ' + JSON.stringify(validateCompany.errors || null)
   );
   t.end();
 });

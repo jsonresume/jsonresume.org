@@ -2,9 +2,15 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Web Developer",
   "company": "Microsoft",
+  "companyUrl": "https://microsoft.com",
   "type": "Full-time",
   "date": "2024-07",
   "description": "We are looking for a skilled Web Developer to join our team. The role involves building and maintaining web applications.",
+  "url": "https://careers.microsoft.com/jobs/web-developer",
+  "apply": {
+    "url": "https://careers.microsoft.com/jobs/web-developer/apply",
+    "instructions": "Include a link to a site you built."
+  },
   "location": {
     "address": "1234 Glücklichkeit Straße\nHinterhaus 5. Etage li.",
     "postalCode": "10115",

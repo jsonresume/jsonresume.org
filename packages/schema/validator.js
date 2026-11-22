@@ -1,6 +1,7 @@
 'use strict';
 const schema = require('./schema');
 const jobSchema = require('./job-schema');
+const companySchema = require('./company-schema');
 const Validator = require('jsonschema').Validator;
 
 function validate(resumeJson, callback) {
@@ -32,4 +33,5 @@ module.exports = {
   validate: validate,
   schema,
   jobSchema,
+  companySchema,
 };
