@@ -68,6 +68,16 @@ export const jobSchemaRoute = page(
   () => import('./job-schema.lazy')
 );
 
+export const companySchemaRoute = page(
+  paths.companySchema,
+  {
+    title: 'Company schema',
+    description:
+      'A standard JSON format for companies that hire: every field of company.json with an example.',
+  },
+  () => import('./company-schema.lazy')
+);
+
 export const appsRoute = page(
   paths.apps,
   {
