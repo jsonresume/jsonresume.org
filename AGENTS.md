@@ -148,21 +148,20 @@ commit rules apply to all code.
 
 ## Project Philosophy & Scope
 
-This repository is a Turborepo-driven Next.js monorepo focused purely on technical excellence—no community morale docs or Code of Conduct. Always build features with performance, maintainability, and developer experience in mind. When adding AI capabilities, standardize on Vercel AI SDK v5 (`ai` + `@ai-sdk/openai`) with streaming responses and tool calling.
+This repository is a Turborepo + pnpm monorepo focused purely on technical excellence—no community morale docs or Code of Conduct. Always build features with performance, maintainability, and developer experience in mind. AI capabilities use Effect AI (`effect/ai` + `@effect/ai-openai`, see `@repo/jobs`); only the legacy apps use the Vercel AI SDK.
 
 ## Structure & Shared Modules
 
-Core apps live in `apps/`: the `registry` resume platform and the `homepage2` marketing site. Edge routes reside at `app/api`. Shared UI, linting rules, and utilities come from `packages/` (notably `packages/ui`, the `@jsonresume/ui` design system documented by `apps/styleguide`, and the `jsonresume-theme-*` packages). Supabase migrations and config live in `supabase/`, reference docs in `docs/`, helper scripts in `scripts/`, and sample resume data in `resume.yaml`. Keep feature logic, hooks, components, and `*.test.*` files co-located under the relevant app or package.
+Apps live in `apps/`: `app` (jsonresume.org), `docs`, `styleguide`, and the legacy `registry` and `homepage2`. Shared UI, linting rules, and utilities come from `packages/` (notably `packages/ui`, the `@jsonresume/ui` design system documented by `apps/styleguide`, and the `jsonresume-theme-*` packages). Reference docs live in `docs/`, helper scripts in `scripts/`, and the production setup in `deploy/`. Keep feature logic, hooks, components, and `*.test.*` files co-located under the relevant app or package.
 
 ## Build, Test & Tooling
 
 - `pnpm install` — install workspace deps (run from repo root).
-- `pnpm turbo dev` / `pnpm turbo dev --filter=registry` — start all or targeted apps.
+- `pnpm --filter app dev` — run jsonresume.org locally (in-memory database, no secrets).
 - `pnpm build` — execute all build pipelines before merging.
 - `pnpm lint` and `pnpm format` — enforce shared ESLint + Prettier rules.
-- `pnpm turbo test` or `pnpm --filter registry test -- --run` — run Vitest suites.
-- `pnpm test:e2e` — execute Playwright flows; boot registry locally first.
-- Supabase CLI (`supabase link`, `supabase db push`) manages the `registry` database schema.
+- `pnpm --filter <package> test` or `pnpm turbo test --filter=app...` — run Vitest suites.
+- `pnpm turbo test:e2e` — execute Playwright flows.
 
 ## Coding Style & Architecture
 
@@ -174,4 +173,4 @@ Colocate deterministic Vitest specs (`*.test.(ts|js)`) with the code they cover,
 
 ## Commits & PR Workflow
 
-Use Conventional Commits (`type(scope): summary`), as in `fix(navigation): update docs links`. Perform local git commits—never rely on GitHub API file updates. PRs must outline changes, link issues, list executed commands (`pnpm lint`, `pnpm turbo test`, `pnpm build`, `pnpm test:e2e` when relevant), and attach screenshots for UI updates. Keep environment samples (`apps/registry/.env.example`) in sync, ensure CI is green, and request review only after validating builds and tests.
+Use Conventional Commits (`type(scope): summary`), as in `fix(navigation): update docs links`. Perform local git commits—never rely on GitHub API file updates. PRs must outline changes, link issues, list executed commands (`pnpm lint`, `pnpm turbo test`, `pnpm build`, `pnpm test:e2e` when relevant), and attach screenshots for UI updates. Ensure CI is green, and request review only after validating builds and tests.
