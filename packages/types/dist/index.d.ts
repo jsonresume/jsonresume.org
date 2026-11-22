@@ -545,13 +545,69 @@ export interface JobDescription {
    */
   remote?: 'Full' | 'Hybrid' | 'None';
   /**
-   * 100000
+   * The pay as the post words it, for display, e.g. '$120k–150k + equity'. Structured amounts go in compensation (#319)
    */
   salary?: string;
+  /**
+   * The pay as numbers, for tools (#319). salary stays the text people read. Values normalised to one currency are derived data, not part of the document
+   */
+  compensation?: {
+    /**
+     * The lowest amount offered, per period
+     */
+    min?: number;
+    /**
+     * The highest amount offered, per period; equal to min for a single figure
+     */
+    max?: number;
+    /**
+     * ISO 4217 code, e.g. USD, EUR, AUD
+     */
+    currency?: string;
+    /**
+     * What each amount is paid for
+     */
+    period?: 'hour' | 'day' | 'week' | 'month' | 'year';
+    [k: string]: any;
+  };
   /**
    * Senior or Junior or Mid-level
    */
   experience?: string;
+  /**
+   * The post in fixed terms tools can filter on (#353). Each is optional, and unspecified means the post does not say. The free-text fields above stay for display
+   */
+  facets?: {
+    /**
+     * Where the work is done: remote_region is remote within named regions, remote_global remote from anywhere
+     */
+    remoteScope?: 'onsite' | 'hybrid' | 'remote_region' | 'remote_global' | 'unspecified';
+    /**
+     * Where remote work is allowed, when limited, e.g. ['US'], ['EU']
+     */
+    remoteRegions?: string[];
+    /**
+     * Hours of overlap or time zones required, e.g. UTC-5 to UTC+1
+     */
+    timezoneRange?: string;
+    /**
+     * The level of the role
+     */
+    seniority?: 'intern' | 'junior' | 'mid' | 'senior' | 'staff_plus' | 'lead_management' | 'unspecified';
+    /**
+     * How the role is held
+     */
+    employmentType?: 'full_time' | 'part_time' | 'contract' | 'internship' | 'cofounder' | 'unspecified';
+    /**
+     * Whether the employer sponsors a visa
+     */
+    visaSponsorship?: 'yes' | 'no' | 'unspecified';
+    /**
+     * Whether compensation comes from numbers the post states, was inferred, or is missing
+     */
+    salaryProvenance?: 'stated' | 'inferred' | 'absent';
+    [k: string]: any;
+  };
   /**
    * what the job entails
    */
