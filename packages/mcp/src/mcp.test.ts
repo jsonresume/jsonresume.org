@@ -249,6 +249,7 @@ describe('the MCP server', () => {
     );
     expect((await call('list_marked_jobs')).value).toEqual([]);
     expect((await call('get_job_document', { id: 1 })).isError).toBe(true);
+    expect((await call('get_company', { name: 'Acme' })).isError).toBe(true);
     expect((await call('get_resume_schema')).value.$schema).toContain(
       'json-schema'
     );

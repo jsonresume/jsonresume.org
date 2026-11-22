@@ -27,7 +27,14 @@ export const jobTools: ReadonlyArray<McpToolInfo> = [
     name: 'get_job_document',
     group: 'jobs',
     description:
-      'One job as a JSON Resume job-schema v1 document: title, company, where, pay as the post words it, the facets tools filter on (remote scope, seniority, employment type, visa), skills, responsibilities and qualifications. For handing a job to other tools.',
+      'One job as a JSON Resume job-schema v1 document: title, company and its site, where, pay as the post words it, the facets tools filter on (remote scope, seniority, employment type, visa), skills, responsibilities, qualifications, how to apply and the original post. For handing a job to other tools.',
+    writes: false,
+  },
+  {
+    name: 'get_company',
+    group: 'jobs',
+    description:
+      'A company hiring on the board, as a JSON Resume company-schema document (its name, its site when its posts link it, where its jobs are, its remote policy when every post agrees, the technologies its posts ask for), with its open jobs.',
     writes: false,
   },
   {

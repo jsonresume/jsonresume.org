@@ -13,9 +13,18 @@ export const JobDocument = Schema.Struct({
   $schema: Text,
   title: Schema.optionalKey(Text),
   company: Schema.optionalKey(Text),
+  companyUrl: Schema.optionalKey(Text),
   type: Schema.optionalKey(Text),
   date: Text,
   description: Schema.optionalKey(Text),
+  url: Text,
+  apply: Schema.optionalKey(
+    Schema.Struct({
+      url: Schema.optionalKey(Text),
+      email: Schema.optionalKey(Text),
+      instructions: Schema.optionalKey(Text),
+    })
+  ),
   location: Schema.optionalKey(
     Schema.Struct({
       city: Schema.optionalKey(Text),

@@ -149,4 +149,27 @@ describe('the jobs pipeline', () => {
     expect(job.post).toEqual(['Backend Engineer | Acme | Go Postgres']);
     expect(missing._tag).toBe('JobNotFound');
   });
+
+  it('finds a company by name however it is written, with its open jobs', async () => {
+    const { layer } = setup();
+    const [acme, missing] = await Effect.runPromise(
+      Effect.gen(function* () {
+        yield* run;
+        const board = yield* JobBoard;
+        return [
+          yield* board.company('acme'),
+          yield* Effect.flip(board.company('nobody')),
+        ] as const;
+      }).pipe(Effect.provide(layer))
+    );
+    expect(acme.slug).toBe('acme-inc');
+    expect(acme.company).toMatchObject({
+      name: 'Acme, Inc.',
+      meta: {
+        canonical: 'https://jsonresume.org/api/companies/acme-inc/document',
+      },
+    });
+    expect(acme.jobs.map((j) => j.id)).toEqual([201]);
+    expect(missing._tag).toBe('CompanyNotFound');
+  });
 });
