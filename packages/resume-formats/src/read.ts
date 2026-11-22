@@ -10,6 +10,15 @@ export const text = (value: unknown): string | undefined => {
   return trimmed === '' ? undefined : trimmed;
 };
 
+/** A career break (#589): a work entry with type "career-break". */
+export const isCareerBreak = (entry: Entry) =>
+  text(entry['type'])?.toLowerCase() === 'career-break';
+
+/** A job's title, or "Career break" for a break written without one. */
+export const workTitle = (entry: Entry) =>
+  text(entry['position']) ??
+  (isCareerBreak(entry) ? 'Career break' : undefined);
+
 /** The objects in a list field, skipping anything else. */
 export const entries = (value: unknown): ReadonlyArray<Entry> =>
   Array.isArray(value) ? value.filter(Predicate.isObject) : [];

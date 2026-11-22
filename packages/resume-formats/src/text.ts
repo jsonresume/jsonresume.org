@@ -1,4 +1,12 @@
-import { place, period, text, texts, entries, type Entry } from './read';
+import {
+  place,
+  period,
+  text,
+  texts,
+  entries,
+  workTitle,
+  type Entry,
+} from './read';
 
 type Lines = ReadonlyArray<string | undefined>;
 
@@ -60,7 +68,7 @@ export function toText(resume: Entry): string {
     summary ? section('Summary', [[summary]]) : undefined,
     section(
       'Work',
-      list('work').map((w) => entry([text(w['position']), text(w['name'])], w))
+      list('work').map((w) => entry([workTitle(w), text(w['name'])], w))
     ),
     section(
       'Volunteer',
