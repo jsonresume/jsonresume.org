@@ -52,8 +52,38 @@ describe('browserOptions', () => {
     });
     expect(countryOf('h=jsonresume.org\nloc=CA\ntls=TLSv1.3')).toBe('CA');
     expect(countryOf('')).toBeUndefined();
+    const plain = browserOptions('https://us.posthog.com').before_send;
+    const event = { uuid: 'u', event: '$pageview', properties: { a: 1 } };
+    expect(typeof plain === 'function' ? plain(event) : null).toEqual(event);
+  });
+
+  it('drops exceptions nobody can act on, and keeps the rest', () => {
+    const send = browserOptions('https://us.posthog.com', 'CA').before_send;
+    const exception = (...list: Array<{ type: string; value: string }>) => ({
+      uuid: 'u',
+      event: '$exception',
+      properties: { $exception_list: list },
+    });
+    const sent = (event: ReturnType<typeof exception>) =>
+      typeof send === 'function' ? send(event) : undefined;
+    const aborted = {
+      type: 'DOMException',
+      value: 'AbortError: signal is aborted without reason',
+    };
+    const real = { type: 'TypeError', value: 'x is undefined' };
+    expect(sent(exception(aborted))).toBeNull();
     expect(
-      browserOptions('https://us.posthog.com').before_send
-    ).toBeUndefined();
+      sent(exception({ type: 'Error', value: 'Script error.' }))
+    ).toBeNull();
+    expect(
+      sent(
+        exception({
+          type: 'UnhandledRejection',
+          value: 'Object Not Found Matching Id:1, MethodName:update',
+        })
+      )
+    ).toBeNull();
+    expect(sent(exception(real))?.properties?.country).toBe('CA');
+    expect(sent(exception(aborted, real))).not.toBeNull();
   });
 });
