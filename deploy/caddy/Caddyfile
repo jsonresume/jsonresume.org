@@ -5,7 +5,8 @@
 # Cloudflare reach 80/443. Install with:
 #   sudo cp deploy/caddy/Caddyfile /etc/caddy/Caddyfile && sudo systemctl reload caddy
 #
-# App ports (see deploy/systemd and /etc/jsonresume/<app>.env): app 3003.
+# App ports (see deploy/systemd and /etc/jsonresume/<app>.env): app 3003,
+# build-cache 3011.
 
 {
 	auto_https off
@@ -60,6 +61,11 @@ jsonresume.org {
 		reverse_proxy https://jsonresume.github.io {
 			header_up Host jsonresume.github.io
 		}
+	}
+	# Turborepo's remote cache for CI (apps/build-cache): TURBO_API is
+	# https://jsonresume.org/_turbo. It checks the token itself.
+	handle_path /_turbo/* {
+		import upstream 3011
 	}
 	handle {
 		import upstream 3003

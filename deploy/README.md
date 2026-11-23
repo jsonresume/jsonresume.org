@@ -26,7 +26,15 @@ its phases are in [`SELF_HOSTING_PLAN.md`](../SELF_HOSTING_PLAN.md).
 | `RESEND_API_KEY`, `MAIL_FROM` (optional)  | Email delivery; without them verification links are only logged       |
 | `OPENAI_API_KEY`                          | The jobs pipeline (parsing, embeddings) and matching jobs to resumes |
 
-Ports: app 3003 (`apps/app`).
+Ports: app 3003 (`apps/app`), build-cache 3011 (`apps/build-cache`).
+
+Build cache: `jsonresume@build-cache` is Turborepo's remote cache for CI,
+at `https://jsonresume.org/_turbo` (Caddy strips the prefix). CI's builds
+still run on GitHub's machines; only their results are kept here, in
+`/var/cache/jsonresume/build-cache` (unused for 14 days, or past 10GB,
+they are removed). `/etc/jsonresume/build-cache.env` holds `PORT=3011` and
+`BUILD_CACHE_TOKEN`, which is also the repo's `TURBO_TOKEN` secret: to change
+it, write a new one to both (`openssl rand -hex 32`) and restart the unit.
 
 Retention, as the privacy policy (/privacy) says: journald keeps logs 30
 days (`deploy/journald/retention.conf` in `/etc/systemd/journald.conf.d/`),
@@ -115,6 +123,7 @@ sudo deploy/scripts/deploy.sh app                    # build and release origin/
 sudo deploy/scripts/deploy.sh app <branch|sha>       # any ref
 sudo deploy/scripts/deploy.sh app --rollback         # back to the previous release
 journalctl -u jsonresume@app -f                      # logs
+sudo deploy/scripts/deploy.sh build-cache            # release the CI build cache
 sudo systemctl start jsonresume-backup               # backup now (also nightly, 03:00 UTC)
 sudo systemctl start jsonresume-jobs                 # jobs pipeline now (also every 2 hours)
 journalctl -u jsonresume-jobs                        # its runs; status at /api/jobs/status
