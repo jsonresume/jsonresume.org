@@ -4,6 +4,7 @@ export {
   isSampleResume,
   savedProperties,
   sectionCount,
+  themeOf,
   type SaveOutcome,
   type SaveSource,
 } from './real';
