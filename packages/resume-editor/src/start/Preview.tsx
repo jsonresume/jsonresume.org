@@ -1,4 +1,5 @@
 import { useAtom, useAtomSet, useAtomValue } from '@effect/atom-react';
+import { startEvent } from './events';
 import {
   Button,
   ChipGroup,
@@ -82,7 +83,10 @@ export function Preview() {
           <Button asChild variant="primary" size="lg">
             <a
               href={next}
-              onClick={() => writeStartDraft(withTheme(clean, theme))}
+              onClick={() => {
+                startEvent('start_save_clicked', { signedIn, theme });
+                writeStartDraft(withTheme(clean, theme));
+              }}
             >
               {signedIn ? 'Save it' : 'Save it and get your link'}
             </a>

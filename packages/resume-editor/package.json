@@ -27,6 +27,7 @@
     "@repo/api-client": "workspace:*",
     "@repo/ats": "workspace:*",
     "@repo/content": "workspace:*",
+    "@repo/posthog": "workspace:^",
     "@repo/schema-explorer": "workspace:*",
     "@repo/url-state": "workspace:*",
     "@vanilla-extract/css": "^1.21.3",
