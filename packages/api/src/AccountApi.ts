@@ -13,6 +13,15 @@ import {
 
 export const ResumeSource = Schema.Literals(['gist', 'stored']);
 
+/** Why someone deleted their account, if they said: to learn, never required. */
+export const LeaveReason = Schema.Literals([
+  'mistake',
+  'private',
+  'not-useful',
+  'other',
+]);
+export type LeaveReason = typeof LeaveReason.Type;
+
 /** The signed-in user's account and its public page. */
 export class Account extends Schema.Class<Account>('@repo/api/Account')({
   username: Schema.String,
@@ -82,7 +91,10 @@ export class AccountApi extends HttpApiGroup.make('account')
     }),
     /** Deletes the account, its names and its views; `confirm` is the username. */
     HttpApiEndpoint.post('delete', '/delete', {
-      payload: Schema.Struct({ confirm: Schema.String }),
+      payload: Schema.Struct({
+        confirm: Schema.String,
+        reason: Schema.optionalKey(LeaveReason),
+      }),
       error: ConfirmationMismatch,
     })
   )

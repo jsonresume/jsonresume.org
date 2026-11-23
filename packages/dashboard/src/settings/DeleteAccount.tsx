@@ -15,24 +15,37 @@ import {
   DialogTrigger,
   Field,
   Input,
+  Select,
   Stack,
   Text,
 } from '@jsonresume/ui';
+import type { LeaveReason } from '@repo/api';
 import { deleteAccountAtom, errorTag } from '@repo/api-client';
 import { account as copy } from '@repo/content/pages';
 import { useState } from 'react';
 
-/** Delete everything, after typing the username back. */
+const reasons = Object.entries(copy.settings.leaveReasons) as ReadonlyArray<
+  [LeaveReason, string]
+>;
+const isReason = (value: string): value is LeaveReason =>
+  reasons.some(([key]) => key === value);
+
+/** Delete everything, after typing the username back; asks why, optionally. */
 export function DeleteAccount({ username }: { username: string }) {
   const remove = useAtomSet(deleteAccountAtom, { mode: 'promiseExit' });
   const [confirm, setConfirm] = useState('');
+  const [reason, setReason] = useState<LeaveReason>();
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string>();
   const matches = confirm.trim().toLowerCase() === username;
 
   const submit = async () => {
     setBusy(true);
-    const tag = errorTag(await remove({ payload: { confirm } }));
+    const tag = errorTag(
+      await remove({
+        payload: reason ? { confirm, reason } : { confirm },
+      })
+    );
     if (tag === undefined) return window.location.assign('/');
     setBusy(false);
     setMessage(copy.errors[tag] ?? copy.errors['default']);
@@ -55,6 +68,23 @@ export function DeleteAccount({ username }: { username: string }) {
               <DialogDescription>{copy.settings.deleteText}</DialogDescription>
               <Stack gap={4}>
                 {message ? <Callout tone="danger">{message}</Callout> : null}
+                <Field label={copy.settings.leaveReason}>
+                  <Select
+                    value={reason ?? ''}
+                    onChange={(e) =>
+                      setReason(
+                        isReason(e.target.value) ? e.target.value : undefined
+                      )
+                    }
+                  >
+                    <option value="">—</option>
+                    {reasons.map(([key, label]) => (
+                      <option key={key} value={key}>
+                        {label}
+                      </option>
+                    ))}
+                  </Select>
+                </Field>
                 <Field label={copy.settings.deleteConfirm(username)}>
                   <Input
                     autoCapitalize="none"

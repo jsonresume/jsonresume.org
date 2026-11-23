@@ -43,6 +43,7 @@ export {
   Account,
   AccountApi,
   HiddenField,
+  LeaveReason,
   Privacy,
   ResumeSource,
 } from './AccountApi';
