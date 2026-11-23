@@ -1,5 +1,6 @@
 import { authorizationServer, protectedResource } from '@repo/mcp';
 import { llmsRoutes } from './llmsFiles';
+import { mcpRegistryAuthRoute } from './mcpRegistry';
 import { schemaFileRoutes } from './schemaFiles';
 import { securityTxtRoute } from './securityTxt';
 
@@ -32,6 +33,7 @@ export const discoveryRoutes = (site: string, openAiChallenge?: string) => {
     securityTxtRoute(site),
     ...schemaFileRoutes(),
     ...llmsRoutes(site),
+    mcpRegistryAuthRoute(),
     ...(openAiChallenge
       ? [
           {

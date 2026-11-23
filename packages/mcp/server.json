@@ -1,0 +1,19 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "org.jsonresume/jsonresume",
+  "title": "JSON Resume",
+  "description": "Read, write, validate and theme your resume.json; export PDF and Word; match it to HN jobs.",
+  "version": "1.0.0",
+  "websiteUrl": "https://jsonresume.org/mcp",
+  "repository": {
+    "url": "https://github.com/jsonresume/jsonresume.org",
+    "source": "github",
+    "subfolder": "packages/mcp"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://jsonresume.org/mcp"
+    }
+  ]
+}

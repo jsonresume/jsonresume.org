@@ -28,3 +28,16 @@ the catalog, add the tool to a toolkit here (or a new toolkit in
 
 `openai-plugin/` is the package for the ChatGPT app directory, with the
 steps to submit it in its README.
+
+`server.json` lists the server in the official MCP Registry as
+`org.jsonresume/jsonresume` (a remote, streamable HTTP at
+`https://jsonresume.org/mcp`). The registry trusts the `org.jsonresume`
+namespace because `https://jsonresume.org/.well-known/mcp-registry-auth`
+holds the public half of the key in `/etc/jsonresume/mcp-registry.pem`. To
+publish a new version, bump `version` here and, on the box:
+
+```sh
+MCP_PRIVATE_KEY="$(sudo openssl pkey -in /etc/jsonresume/mcp-registry.pem -noout -text | sed -n '/priv:/,/pub:/p' | sed '1d;$d' | tr -d ' :\n')" \
+  mcp-publisher login http --domain jsonresume.org
+mcp-publisher publish packages/mcp/server.json
+```
