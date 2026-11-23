@@ -33,3 +33,8 @@ export async function cachedByContent(namespace, input, compute, options = {}) {
   if (cache.size > MAX_ENTRIES) cache.delete(cache.keys().next().value);
   return value;
 }
+
+/** Empties every namespace (tests). */
+export function clearContentCache() {
+  caches.clear();
+}
