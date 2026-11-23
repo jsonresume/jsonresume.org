@@ -5,6 +5,8 @@ import { GithubGists } from '../github';
 interface FakeGist {
   id: string;
   files: Record<string, string>;
+  /** When it was last updated, in ms (default 0), for `?since=`. */
+  updated?: number;
 }
 
 /** GitHub in memory: users with gists, and a switch to make it fail. */
@@ -19,7 +21,11 @@ export function fakeGithub() {
     limited: new Set<string>(),
     /** Sent as x-ratelimit-remaining on every other API answer. */
     remaining: undefined as number | undefined,
-    requests: [] as Array<{ path: string; auth: string | undefined }>,
+    requests: [] as Array<{
+      path: string;
+      search: string;
+      auth: string | undefined;
+    }>,
   };
 
   const json = (body: unknown, status = 200, quota = state.remaining) =>
@@ -71,10 +77,14 @@ export function fakeGithub() {
       const user = state.users.get(list[1]);
       if (!user) return json({}, 404);
       const page = Number(url.searchParams.get('page') ?? 1);
+      const size = Number(url.searchParams.get('per_page') ?? 30);
+      const since = url.searchParams.get('since');
+      const after = since ? Date.parse(since) : -Infinity;
       return json(
-        page === 1
-          ? user.gists.map((g) => gistBody(list[1] ?? '', user.id, g, false))
-          : []
+        user.gists
+          .filter((g) => (g.updated ?? 0) > after)
+          .slice((page - 1) * size, page * size)
+          .map((g) => gistBody(list[1] ?? '', user.id, g, false))
       );
     }
     const one = /^\/gists\/([^/]+)$/.exec(url.pathname);
@@ -89,7 +99,7 @@ export function fakeGithub() {
     Effect.sync(() => {
       const auth = request.headers['authorization'];
       if (url.hostname === 'api.github.com')
-        state.requests.push({ path: url.pathname, auth });
+        state.requests.push({ path: url.pathname, search: url.search, auth });
       return HttpClientResponse.fromWeb(request, answer(url, auth));
     })
   );
