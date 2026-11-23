@@ -71,7 +71,19 @@ export interface SaveOutcome {
   first: boolean;
   real: boolean;
   sections: number;
+  /** meta.theme as saved, if it looks like a theme name (else 'other'). */
+  theme: string | null;
 }
+
+/** The theme a resume asks for, as an event can carry it: a name, never free text. */
+export const themeOf = (resume: unknown): string | null => {
+  if (typeof resume !== 'object' || resume === null) return null;
+  const meta: unknown = Reflect.get(resume, 'meta');
+  if (typeof meta !== 'object' || meta === null) return null;
+  const theme: unknown = Reflect.get(meta, 'theme');
+  if (typeof theme !== 'string' || theme.trim() === '') return null;
+  return /^[a-z0-9@/._-]{1,80}$/.test(theme) ? theme : 'other';
+};
 
 /** `resume_saved`'s properties: plain values, never resume text. */
 export const savedProperties = (outcome: SaveOutcome, source: SaveSource) => ({
@@ -79,4 +91,5 @@ export const savedProperties = (outcome: SaveOutcome, source: SaveSource) => ({
   real: outcome.real,
   first: outcome.first,
   sections: outcome.sections,
+  theme: outcome.theme,
 });

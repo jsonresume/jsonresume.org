@@ -5,6 +5,7 @@ import {
   isRealResume,
   isSampleResume,
   savedProperties,
+  themeOf,
   sectionCount,
 } from './real';
 
@@ -77,9 +78,25 @@ describe('real resumes', () => {
     expect(sectionCount({ basics: { name: '' }, work: [] })).toBe(0);
     expect(
       savedProperties(
-        { version: 1, first: true, real: true, sections: 3 },
+        { version: 1, first: true, real: true, sections: 3, theme: 'even' },
         'mcp'
       )
-    ).toEqual({ source: 'mcp', real: true, first: true, sections: 3 });
+    ).toEqual({
+      source: 'mcp',
+      real: true,
+      first: true,
+      sections: 3,
+      theme: 'even',
+    });
+  });
+
+  it('names the theme, never free text', () => {
+    expect(themeOf({ meta: { theme: 'elegant' } })).toBe('elegant');
+    expect(themeOf({ meta: { theme: 'jsonresume-theme-even' } })).toBe(
+      'jsonresume-theme-even'
+    );
+    expect(themeOf({ meta: { theme: 'My Secret Notes!' } })).toBe('other');
+    expect(themeOf({ meta: {} })).toBeNull();
+    expect(themeOf({})).toBeNull();
   });
 });

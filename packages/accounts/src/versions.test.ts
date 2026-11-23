@@ -51,6 +51,7 @@ describe('versions of saved resumes', () => {
       first: false,
       real: true,
       sections: 3,
+      theme: null,
     });
     // The same JSON again: saved, but no new version.
     expect(result.again).toMatchObject({ version: null, first: false });
