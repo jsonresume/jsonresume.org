@@ -13,7 +13,7 @@ overrides:
   marked@<4.0.10: ^4.0.10
   prismjs@<1.30.0: ^1.30.0
   next@>=13.0.0 <15.5.18: ^15.5.18
-  next@>=16.0.0 <16.3.3: ^16.3.3
+  next@>=16.0.0 <16.4.5: ^16.4.5
   cookie@<0.7.0: ^0.7.0
   tmp@<0.2.4: ^0.2.4
   nth-check@<2.0.1: ^2.1.1
@@ -29,7 +29,7 @@ overrides:
   pug-code-gen@<3.0.3: ^3.0.3
   esbuild@<0.25.0: ^0.25.0
   esbuild@>=0.27.3 <0.28.1: ^0.28.1
-  vite@<=6.4.2: ^6.4.3
+  vite@<=6.4.3: ^6.4.4
   dompurify@>=3.0.0 <3.4.13: ^3.4.13
   playwright@<1.55.1: ^1.55.1
   next-auth@<4.24.12: ^4.24.12
@@ -42,7 +42,7 @@ overrides:
   storybook@>=8.7.0-alpha.0 <9.1.19: ^9.1.19
   vitest@<3.2.6: ^3.2.6
   '@vitest/ui@<3.2.6': ^3.2.6
-  undici@>=7.0.0 <7.29.0: ^7.29.0
+  undici@>=7.0.0 <7.30.1: ^7.30.1
   socket.io-parser@>=4.0.0 <4.2.7: ^4.2.7
   ip-address@>=10.0.0 <10.3.1: ^10.3.1
   effect@<3.20.0: ^3.20.0
@@ -108,8 +108,8 @@ importers:
         specifier: ^16.0.3
         version: 16.6.1
       next:
-        specifier: ^16.3.3
-        version: 16.3.3(@babel/core@7.29.7)(@playwright/test@1.56.1)(@types/node@20.19.24)(react-dom@19.2.7)(react@19.2.7)
+        specifier: ^16.4.5
+        version: 16.4.6(@babel/core@7.29.7)(@playwright/test@1.56.1)(@types/node@20.19.24)(react-dom@19.2.7)(react@19.2.7)
       react:
         specifier: 19.2.7
         version: 19.2.7
@@ -134,7 +134,7 @@ importers:
         version: 19.2.2(@types/react@19.2.2)
       '@vanilla-extract/vite-plugin':
         specifier: ^5.2.6
-        version: 5.2.6(@types/node@20.19.24)(vite@6.4.3)
+        version: 5.2.6(@types/node@20.19.24)(vite@6.4.4)
       effect:
         specifier: 4.0.6
         version: 4.0.6
@@ -157,8 +157,8 @@ importers:
         specifier: ^2.8.0
         version: 2.8.8
       sharp:
-        specifier: 0.35.4
-        version: 0.35.4(@types/node@20.19.24)
+        specifier: 0.35.5
+        version: 0.35.5(@types/node@20.19.24)
       start-server-and-test:
         specifier: ^2.0.3
         version: 2.1.2
@@ -166,8 +166,8 @@ importers:
         specifier: ^2.9.14
         version: 2.9.18
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   apps/app:
     dependencies:
@@ -307,8 +307,8 @@ importers:
         specifier: 19.2.7
         version: 19.2.7(react@19.2.7)
       sharp:
-        specifier: 0.35.4
-        version: 0.35.4(@types/node@20.19.24)
+        specifier: 0.35.5
+        version: 0.35.5(@types/node@20.19.24)
       unpdf:
         specifier: 1.9.1
         version: 1.9.1
@@ -345,10 +345,10 @@ importers:
         version: 1.21.3
       '@vanilla-extract/vite-plugin':
         specifier: ^5.2.6
-        version: 5.2.6(@types/node@20.19.24)(vite@6.4.3)
+        version: 5.2.6(@types/node@20.19.24)(vite@6.4.4)
       '@vitejs/plugin-react':
         specifier: ^4.7.0
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       jsdom:
         specifier: ^27.0.0
         version: 27.0.1(postcss@8.5.23)
@@ -359,8 +359,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -369,19 +369,19 @@ importers:
     dependencies:
       fumadocs-core:
         specifier: ^16.0.0
-        version: 16.8.0(@types/react@19.2.2)(next@16.3.3)(react-dom@19.2.7)(react@19.2.7)(zod@4.4.3)
+        version: 16.8.0(@types/react@19.2.2)(next@16.4.6)(react-dom@19.2.7)(react@19.2.7)(zod@4.4.3)
       fumadocs-mdx:
         specifier: ^14.0.0
-        version: 14.3.1(@types/mdx@2.0.13)(@types/react@19.2.2)(fumadocs-core@16.8.0)(next@16.3.3)(react@19.2.7)(vite@6.4.3)
+        version: 14.3.1(@types/mdx@2.0.13)(@types/react@19.2.2)(fumadocs-core@16.8.0)(next@16.4.6)(react@19.2.7)(vite@6.4.4)
       fumadocs-ui:
         specifier: ^16.0.0
-        version: 16.8.0(@types/mdx@2.0.13)(@types/react-dom@19.2.2)(@types/react@19.2.2)(fumadocs-core@16.8.0)(next@16.3.3)(react-dom@19.2.7)(react@19.2.7)(tailwindcss@4.2.2)
+        version: 16.8.0(@types/mdx@2.0.13)(@types/react-dom@19.2.2)(@types/react@19.2.2)(fumadocs-core@16.8.0)(next@16.4.6)(react-dom@19.2.7)(react@19.2.7)(tailwindcss@4.2.2)
       mermaid:
         specifier: ^11.16.1
         version: 11.17.2
       next:
-        specifier: ^16.3.3
-        version: 16.3.3(@babel/core@7.29.7)(@playwright/test@1.56.1)(@types/node@20.19.24)(react-dom@19.2.7)(react@19.2.7)
+        specifier: ^16.4.5
+        version: 16.4.6(@babel/core@7.29.7)(@playwright/test@1.56.1)(@types/node@20.19.24)(react-dom@19.2.7)(react@19.2.7)
       react:
         specifier: 19.2.7
         version: 19.2.7
@@ -427,7 +427,7 @@ importers:
         version: link:../../packages/theme-config-compat
       '@vercel/analytics':
         specifier: ^1.3.1
-        version: 1.5.0(next@16.3.3)(react@19.2.7)
+        version: 1.5.0(next@16.4.6)(react@19.2.7)
       disqus-react:
         specifier: ^1.1.5
         version: 1.1.7(react-dom@19.2.7)(react@19.2.7)
@@ -435,8 +435,8 @@ importers:
         specifier: ^4.0.3
         version: 4.0.3
       next:
-        specifier: ^16.3.3
-        version: 16.3.3(@babel/core@7.29.7)(@playwright/test@1.56.1)(@types/node@20.19.24)(react-dom@19.2.7)(react@19.2.7)
+        specifier: ^16.4.5
+        version: 16.4.6(@babel/core@7.29.7)(@playwright/test@1.56.1)(@types/node@20.19.24)(react-dom@19.2.7)(react@19.2.7)
       prisma:
         specifier: ^4.15.0
         version: 4.16.2
@@ -548,7 +548,7 @@ importers:
         version: 0.5.19(tailwindcss@3.4.18)
       '@vercel/analytics':
         specifier: ^1.3.1
-        version: 1.5.0(next@16.3.3)(react@19.2.7)
+        version: 1.5.0(next@16.4.6)(react@19.2.7)
       '@vercel/functions':
         specifier: ^3.10.3
         version: 3.10.3
@@ -1279,11 +1279,11 @@ importers:
         specifier: ^0.407.0
         version: 0.407.0(react@19.2.7)
       next:
-        specifier: ^16.3.3
-        version: 16.3.3(@babel/core@7.29.7)(@playwright/test@1.56.1)(@types/node@20.19.24)(react-dom@19.2.7)(react@19.2.7)
+        specifier: ^16.4.5
+        version: 16.4.6(@babel/core@7.29.7)(@playwright/test@1.56.1)(@types/node@20.19.24)(react-dom@19.2.7)(react@19.2.7)
       next-auth:
         specifier: 5.0.0-beta.32
-        version: 5.0.0-beta.32(next@16.3.3)(react@19.2.7)
+        version: 5.0.0-beta.32(next@16.4.6)(react@19.2.7)
       octokit:
         specifier: ^4.0.2
         version: 4.1.4
@@ -1368,7 +1368,7 @@ importers:
         version: 20.19.24
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       '@vitest/coverage-v8':
         specifier: ^3.2.4
         version: 3.2.4(vitest@3.2.6)
@@ -1415,8 +1415,8 @@ importers:
         specifier: ^0.548.0
         version: 0.548.0(react@19.2.7)
       next:
-        specifier: ^16.3.3
-        version: 16.3.3(@babel/core@7.29.7)(@playwright/test@1.56.1)(@types/node@20.19.24)(react-dom@19.2.7)(react@19.2.7)
+        specifier: ^16.4.5
+        version: 16.4.6(@babel/core@7.29.7)(@playwright/test@1.56.1)(@types/node@20.19.24)(react-dom@19.2.7)(react@19.2.7)
       react:
         specifier: 19.2.7
         version: 19.2.7
@@ -1438,7 +1438,7 @@ importers:
         version: 19.2.2(@types/react@19.2.18)
       '@vanilla-extract/next-plugin':
         specifier: ^2.5.2
-        version: 2.5.2(@types/node@20.19.24)(next@16.3.3)(webpack@5.107.2)
+        version: 2.5.2(@types/node@20.19.24)(next@16.4.6)(webpack@5.107.2)
       react-docgen-typescript:
         specifier: ^2.4.0
         version: 2.4.0(typescript@5.9.3)
@@ -1646,8 +1646,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -1687,7 +1687,7 @@ importers:
         version: 1.21.3
       '@vanilla-extract/vite-plugin':
         specifier: ^5.2.6
-        version: 5.2.6(@types/node@20.19.24)(vite@6.4.3)
+        version: 5.2.6(@types/node@20.19.24)(vite@6.4.4)
       axe-core:
         specifier: ^4.14.0
         version: 4.14.0
@@ -1707,8 +1707,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -1767,7 +1767,7 @@ importers:
         version: 19.2.18
       '@vanilla-extract/vite-plugin':
         specifier: ^5.2.6
-        version: 5.2.6(@types/node@20.19.24)(vite@6.4.3)
+        version: 5.2.6(@types/node@20.19.24)(vite@6.4.4)
       jsdom:
         specifier: ^27.0.0
         version: 27.0.1(postcss@8.5.23)
@@ -1982,8 +1982,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -2053,7 +2053,7 @@ importers:
         version: 19.2.18
       '@vanilla-extract/vite-plugin':
         specifier: ^5.2.6
-        version: 5.2.6(@types/node@20.19.24)(vite@6.4.3)
+        version: 5.2.6(@types/node@20.19.24)(vite@6.4.4)
       axe-core:
         specifier: ^4.14.0
         version: 4.14.0
@@ -2220,7 +2220,7 @@ importers:
         version: 1.21.3
       '@vanilla-extract/vite-plugin':
         specifier: ^5.2.6
-        version: 5.2.6(@types/node@20.19.24)(vite@6.4.3)
+        version: 5.2.6(@types/node@20.19.24)(vite@6.4.4)
       axe-core:
         specifier: ^4.14.0
         version: 4.14.0
@@ -2240,8 +2240,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -2255,8 +2255,8 @@ importers:
         specifier: 4.0.6
         version: 4.0.6
       sharp:
-        specifier: 0.35.4
-        version: 0.35.4(@types/node@20.19.24)
+        specifier: 0.35.5
+        version: 0.35.5(@types/node@20.19.24)
     devDependencies:
       '@repo/eslint-config-custom':
         specifier: workspace:*
@@ -2315,7 +2315,7 @@ importers:
         version: 1.21.3
       '@vanilla-extract/vite-plugin':
         specifier: ^5.2.6
-        version: 5.2.6(@types/node@20.19.24)(vite@6.4.3)
+        version: 5.2.6(@types/node@20.19.24)(vite@6.4.4)
       axe-core:
         specifier: ^4.14.0
         version: 4.14.0
@@ -2335,8 +2335,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -2485,8 +2485,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -2540,8 +2540,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -2637,7 +2637,7 @@ importers:
         version: 1.21.3
       '@vanilla-extract/vite-plugin':
         specifier: ^5.2.6
-        version: 5.2.6(@types/node@20.19.24)(vite@6.4.3)
+        version: 5.2.6(@types/node@20.19.24)(vite@6.4.4)
       jsdom:
         specifier: ^27.0.0
         version: 27.0.1(postcss@8.5.23)
@@ -2654,8 +2654,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -2686,7 +2686,7 @@ importers:
         version: 8.6.15(react-dom@19.2.7)(react@19.2.7)(storybook@8.6.17)(typescript@5.9.3)
       '@storybook/react-vite':
         specifier: 8.6.15
-        version: 8.6.15(react-dom@19.2.7)(react@19.2.7)(storybook@8.6.17)(typescript@5.9.3)(vite@6.4.3)
+        version: 8.6.15(react-dom@19.2.7)(react@19.2.7)(storybook@8.6.17)(typescript@5.9.3)(vite@6.4.4)
       react:
         specifier: 19.2.7
         version: 19.2.7
@@ -2700,8 +2700,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: 6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: 6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -2765,7 +2765,7 @@ importers:
         version: 19.2.18
       '@vanilla-extract/vite-plugin':
         specifier: ^5.2.6
-        version: 5.2.6(@types/node@20.19.24)(vite@6.4.3)
+        version: 5.2.6(@types/node@20.19.24)(vite@6.4.4)
       jsdom:
         specifier: ^27.0.0
         version: 27.0.1(postcss@8.5.23)
@@ -2782,8 +2782,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -3780,7 +3780,7 @@ importers:
         version: 1.21.3
       '@vanilla-extract/vite-plugin':
         specifier: ^5.2.6
-        version: 5.2.6(@types/node@20.19.24)(vite@6.4.3)
+        version: 5.2.6(@types/node@20.19.24)(vite@6.4.4)
       jsdom:
         specifier: ^27.0.0
         version: 27.0.1(postcss@8.5.23)
@@ -3797,8 +3797,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -3902,7 +3902,7 @@ importers:
         version: 1.21.3
       '@vanilla-extract/vite-plugin':
         specifier: ^5.2.6
-        version: 5.2.6(@types/node@20.19.24)(vite@6.4.3)
+        version: 5.2.6(@types/node@20.19.24)(vite@6.4.4)
       jsdom:
         specifier: ^27.0.0
         version: 27.0.1(postcss@8.5.23)
@@ -3919,8 +3919,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -3958,8 +3958,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -4021,7 +4021,7 @@ importers:
         version: 1.21.3
       '@vanilla-extract/vite-plugin':
         specifier: ^5.2.6
-        version: 5.2.6(@types/node@20.19.24)(vite@6.4.3)
+        version: 5.2.6(@types/node@20.19.24)(vite@6.4.4)
       jsdom:
         specifier: ^27.0.0
         version: 27.0.1(postcss@8.5.23)
@@ -4038,8 +4038,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -4107,7 +4107,7 @@ importers:
         version: 1.21.3
       '@vanilla-extract/vite-plugin':
         specifier: ^5.2.6
-        version: 5.2.6(@types/node@20.19.24)(vite@6.4.3)
+        version: 5.2.6(@types/node@20.19.24)(vite@6.4.4)
       jsdom:
         specifier: ^27.0.0
         version: 27.0.1(postcss@8.5.23)
@@ -4124,8 +4124,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -4161,8 +4161,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -4198,8 +4198,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -4221,10 +4221,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-academy-record:
     dependencies:
@@ -4257,8 +4257,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -4294,8 +4294,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -4331,8 +4331,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -4368,8 +4368,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -4405,8 +4405,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -4442,8 +4442,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -4465,10 +4465,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-architecture-atelier:
     dependencies:
@@ -4501,8 +4501,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -4538,8 +4538,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -4561,10 +4561,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-art-nouveau-profile:
     dependencies:
@@ -4597,8 +4597,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -4620,10 +4620,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-asymmetric-timeline:
     dependencies:
@@ -4642,10 +4642,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-athletic-profile:
     dependencies:
@@ -4678,8 +4678,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -4715,8 +4715,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -4752,8 +4752,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -4789,8 +4789,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -4826,8 +4826,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -4849,10 +4849,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-bilingual-modern:
     dependencies:
@@ -4885,8 +4885,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -4922,8 +4922,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -4959,8 +4959,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -4982,10 +4982,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-bookplate-cv:
     dependencies:
@@ -5018,8 +5018,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -5055,8 +5055,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -5078,10 +5078,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-bubblegum-minimal:
     dependencies:
@@ -5114,8 +5114,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -5151,8 +5151,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -5188,8 +5188,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -5211,10 +5211,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-canadian-profile:
     dependencies:
@@ -5247,8 +5247,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -5284,8 +5284,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -5321,8 +5321,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -5358,8 +5358,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -5395,8 +5395,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -5432,8 +5432,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -5469,8 +5469,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -5506,8 +5506,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -5543,8 +5543,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -5580,8 +5580,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -5626,8 +5626,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -5663,8 +5663,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -5686,10 +5686,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-coastal-creative:
     dependencies:
@@ -5708,10 +5708,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-cobalt-statement:
     dependencies:
@@ -5744,8 +5744,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -5781,8 +5781,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -5818,8 +5818,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -5841,10 +5841,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-compact-developer:
     dependencies:
@@ -5877,8 +5877,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -5914,8 +5914,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -5937,7 +5937,7 @@ importers:
         version: link:../../eslint-config-custom
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       react:
         specifier: 19.2.7
         version: 19.2.7
@@ -5945,8 +5945,8 @@ importers:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.7)(react@19.2.7)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-contact-rail:
     dependencies:
@@ -5979,8 +5979,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -6016,8 +6016,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -6053,8 +6053,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -6090,8 +6090,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -6122,7 +6122,7 @@ importers:
         version: link:../../eslint-config-custom
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       react:
         specifier: 19.2.7
         version: 19.2.7
@@ -6130,8 +6130,8 @@ importers:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.7)(react@19.2.7)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-culinary-portfolio:
     dependencies:
@@ -6164,8 +6164,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -6187,10 +6187,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -6226,8 +6226,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -6263,8 +6263,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -6292,10 +6292,10 @@ importers:
         version: link:../../theme-kit
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -6317,10 +6317,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-diagonal-accent-bar:
     dependencies:
@@ -6339,10 +6339,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-diplomat-cv:
     dependencies:
@@ -6375,8 +6375,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -6412,8 +6412,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -6449,8 +6449,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -6486,8 +6486,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -6515,10 +6515,10 @@ importers:
         version: link:../../theme-kit
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -6554,8 +6554,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -6591,8 +6591,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -6628,8 +6628,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -6651,10 +6651,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-exhibition-notes:
     dependencies:
@@ -6687,8 +6687,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -6724,8 +6724,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -6747,10 +6747,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-first-role:
     dependencies:
@@ -6783,8 +6783,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -6826,8 +6826,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -6863,8 +6863,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -6886,10 +6886,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-french-professionnel:
     dependencies:
@@ -6922,8 +6922,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -6959,8 +6959,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -6996,8 +6996,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -7033,8 +7033,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -7070,8 +7070,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -7107,8 +7107,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -7130,10 +7130,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-graph-paper-grid:
     dependencies:
@@ -7152,10 +7152,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-graphic-ledger:
     dependencies:
@@ -7188,8 +7188,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -7225,8 +7225,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -7262,8 +7262,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -7299,8 +7299,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -7336,8 +7336,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -7373,8 +7373,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -7410,8 +7410,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -7433,10 +7433,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-infrastructure-map:
     dependencies:
@@ -7469,8 +7469,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -7492,10 +7492,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-jake-technical:
     dependencies:
@@ -7528,8 +7528,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -7565,8 +7565,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -7602,8 +7602,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -7639,8 +7639,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -7676,8 +7676,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -7713,8 +7713,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -7750,8 +7750,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -7787,8 +7787,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -7824,8 +7824,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -7861,8 +7861,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -7898,8 +7898,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -7921,10 +7921,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-longform-career:
     dependencies:
@@ -7957,8 +7957,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -7994,8 +7994,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -8031,8 +8031,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -8054,10 +8054,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-masthead-edition:
     dependencies:
@@ -8090,8 +8090,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -8127,8 +8127,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -8164,8 +8164,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -8187,10 +8187,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-minimalist-grid:
     dependencies:
@@ -8209,10 +8209,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-modern-classic:
     dependencies:
@@ -8231,10 +8231,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-monochrome-noir:
     dependencies:
@@ -8253,10 +8253,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-monograph-cv:
     dependencies:
@@ -8289,8 +8289,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -8326,8 +8326,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -8363,8 +8363,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -8400,8 +8400,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -8437,8 +8437,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -8474,8 +8474,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -8511,8 +8511,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -8548,8 +8548,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -8571,10 +8571,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-newsprint-brief:
     dependencies:
@@ -8607,8 +8607,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -8630,10 +8630,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-northstar-profile:
     dependencies:
@@ -8666,8 +8666,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -8703,8 +8703,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -8740,8 +8740,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -8777,8 +8777,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -8814,8 +8814,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -8851,8 +8851,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -8888,8 +8888,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -8914,10 +8914,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-operator-manual:
     dependencies:
@@ -8950,8 +8950,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -8973,10 +8973,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-paper-plain:
     dependencies:
@@ -9009,8 +9009,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -9046,8 +9046,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -9083,8 +9083,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -9120,8 +9120,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -9157,8 +9157,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -9194,8 +9194,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -9231,8 +9231,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -9268,8 +9268,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -9305,8 +9305,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -9343,10 +9343,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-product-story:
     dependencies:
@@ -9379,8 +9379,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -9405,7 +9405,7 @@ importers:
         version: link:../../eslint-config-custom
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       react:
         specifier: 19.2.7
         version: 19.2.7
@@ -9413,8 +9413,8 @@ importers:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.7)(react@19.2.7)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-public-service-ledger:
     dependencies:
@@ -9447,8 +9447,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -9484,8 +9484,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -9521,8 +9521,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -9558,8 +9558,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -9595,8 +9595,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -9632,8 +9632,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -9669,8 +9669,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -9692,10 +9692,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -9731,8 +9731,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -9768,8 +9768,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -9805,8 +9805,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -9842,8 +9842,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -9879,8 +9879,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -9916,8 +9916,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -9939,10 +9939,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-security-brief:
     dependencies:
@@ -9975,8 +9975,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -10012,8 +10012,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -10049,8 +10049,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -10078,10 +10078,10 @@ importers:
         version: link:../../theme-kit
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -10103,10 +10103,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-signal-red:
     dependencies:
@@ -10139,8 +10139,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -10176,8 +10176,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -10213,8 +10213,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -10250,8 +10250,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -10287,8 +10287,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -10324,8 +10324,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -10361,8 +10361,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -10398,8 +10398,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -10435,8 +10435,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -10472,8 +10472,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -10509,8 +10509,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -10546,8 +10546,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -10583,8 +10583,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -10620,8 +10620,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -10657,8 +10657,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -10704,7 +10704,7 @@ importers:
         version: link:../../eslint-config-custom
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       react:
         specifier: 19.2.7
         version: 19.2.7
@@ -10715,8 +10715,8 @@ importers:
         specifier: ^3.4.3
         version: 3.4.18
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -10752,8 +10752,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -10789,8 +10789,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -10826,8 +10826,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -10863,8 +10863,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -10900,8 +10900,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -10937,8 +10937,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -10978,10 +10978,10 @@ importers:
         version: link:../../eslint-config-custom
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -11017,8 +11017,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -11046,10 +11046,10 @@ importers:
         version: link:../../theme-kit
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -11085,8 +11085,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -11122,8 +11122,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -11145,10 +11145,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-university-first:
     dependencies:
@@ -11167,10 +11167,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-urban-techno:
     dependencies:
@@ -11189,10 +11189,10 @@ importers:
     devDependencies:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
 
   packages/themes/jsonresume-theme-vertical-accent:
     dependencies:
@@ -11225,8 +11225,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -11262,8 +11262,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -11291,10 +11291,10 @@ importers:
         version: link:../../theme-kit
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -11397,7 +11397,7 @@ importers:
         version: 5.1.35
       '@vitejs/plugin-react':
         specifier: ^4.2.1
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       babel-plugin-named-exports-order:
         specifier: ^0.0.2
         version: 0.0.2
@@ -11423,8 +11423,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@18.19.130)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@18.19.130)
       webpack:
         specifier: ^5.104.1
         version: 5.107.2(esbuild@0.25.12)(postcss@8.5.23)
@@ -11464,7 +11464,7 @@ importers:
         version: 1.21.3
       '@vanilla-extract/vite-plugin':
         specifier: ^5.2.6
-        version: 5.2.6(@types/node@20.19.24)(vite@6.4.3)
+        version: 5.2.6(@types/node@20.19.24)(vite@6.4.4)
       axe-core:
         specifier: ^4.14.0
         version: 4.14.0
@@ -11484,8 +11484,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -11614,10 +11614,10 @@ importers:
         version: 19.2.2(@types/react@19.2.2)
       '@vanilla-extract/vite-plugin':
         specifier: ^5.2.6
-        version: 5.2.6(@types/node@20.19.24)(vite@6.4.3)
+        version: 5.2.6(@types/node@20.19.24)(vite@6.4.4)
       '@vitejs/plugin-react':
         specifier: ^4.7.0
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       axe-core:
         specifier: ^4.14.0
         version: 4.14.0
@@ -11637,8 +11637,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^6.4.3
-        version: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^6.4.4
+        version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
         specifier: ^3.2.6
         version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
@@ -11714,7 +11714,7 @@ importers:
         version: 9.0.0-alpha.17(react-dom@19.2.7)(react@19.2.7)(storybook@9.1.20)
       '@storybook/react-vite':
         specifier: ^9.1.17
-        version: 9.1.17(react-dom@19.2.7)(react@19.2.7)(storybook@9.1.20)(typescript@5.9.3)(vite@6.4.3)
+        version: 9.1.17(react-dom@19.2.7)(react@19.2.7)(storybook@9.1.20)(typescript@5.9.3)(vite@6.4.4)
       '@testing-library/jest-dom':
         specifier: ^6.9.1
         version: 6.9.1
@@ -11738,7 +11738,7 @@ importers:
         version: 6.21.0(eslint@8.57.1)(typescript@5.9.3)
       '@vitejs/plugin-react':
         specifier: ^4.7.0
-        version: 4.7.0(vite@6.4.3)
+        version: 4.7.0(vite@6.4.4)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.21(postcss@8.5.23)
@@ -11780,7 +11780,7 @@ importers:
         version: 19.2.7(react@19.2.7)
       storybook:
         specifier: ^9.1.19
-        version: 9.1.20(@testing-library/dom@10.4.1)(prettier@2.8.8)(vite@6.4.3)
+        version: 9.1.20(@testing-library/dom@10.4.1)(prettier@2.8.8)(vite@6.4.4)
       tailwindcss:
         specifier: ^3.4.4
         version: 3.4.18
@@ -14620,220 +14620,220 @@ packages:
     engines: {node: '>=18'}
     requiresBuild: true
 
-  /@img/sharp-darwin-arm64@0.35.4:
-    resolution: {integrity: sha512-Uhfl4V4lhP2nbUVF9+hyH1+luj86f1gUFeo8ALYxFoULoU+G87D43BfeMP8XHsk9boxAnCY/bf2EHwhA7MuGsA==}
+  /@img/sharp-darwin-arm64@0.35.5:
+    resolution: {integrity: sha512-QRUlFQ0WxvdWyqqG/WtI3iupfD5rBzmCHXSdPsY91sAtVtTo7Q4cb6zOccZ3gqEqkr0f1As1ehLqmEpDsRf+lg==}
     engines: {node: '>=20.9.0'}
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
     optionalDependencies:
-      '@img/sharp-libvips-darwin-arm64': 1.3.3
+      '@img/sharp-libvips-darwin-arm64': 1.3.4
     optional: true
 
-  /@img/sharp-darwin-x64@0.35.4:
-    resolution: {integrity: sha512-hWniXY3bG5qKpkKrAwPe4y+VTPmf086YQAnkxWh7uA1YrlRouWGa0M0Mxj3ZjnXFkv7/TD1bTy9lGUK26vRvWw==}
+  /@img/sharp-darwin-x64@0.35.5:
+    resolution: {integrity: sha512-+BR255RhDlpygUpOc/Jdt1nT6DQ3XG/ERo5wbcdOf5Q320dKtPCKPLR1LJs9VGXRaMa8l1uUa0tkCNOXiAxZUw==}
     engines: {node: '>=20.9.0'}
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
     optionalDependencies:
-      '@img/sharp-libvips-darwin-x64': 1.3.3
+      '@img/sharp-libvips-darwin-x64': 1.3.4
     optional: true
 
-  /@img/sharp-freebsd-wasm32@0.35.4:
-    resolution: {integrity: sha512-lIsKw/BU+kjB4eZjxrYrZmwOJYi3Ajrv66iAlBmUPyKc3HpnloevB1g3wxGD9P/5BbQ1brBGl65VRRrCvQDEqA==}
+  /@img/sharp-freebsd-wasm32@0.35.5:
+    resolution: {integrity: sha512-Y/z91nEZ4uIBX5X3nfTovjU9lHNKFYbL2lpHCLVNmXQK03VIZvXBBt0KxbPGp2SdGSF+2mQU4e+hQaWOt86iAw==}
     engines: {node: '>=20.9.0'}
     os: [freebsd]
     requiresBuild: true
     dependencies:
-      '@img/sharp-wasm32': 0.35.4
+      '@img/sharp-wasm32': 0.35.5
     optional: true
 
-  /@img/sharp-libvips-darwin-arm64@1.3.3:
-    resolution: {integrity: sha512-suTBPTDGrI9WodccaDdwZItTSaBYASlBk1NSfElSHrUfzu3szG6lvIF58+WiFvnfzuK8ZBFS5zE00PxqxnRiPg==}
+  /@img/sharp-libvips-darwin-arm64@1.3.4:
+    resolution: {integrity: sha512-5R89nBYiRdUlSWJxPhO+GVtaXzXSxKnRu/xqMn3KTA3L9EB9Oy/P+Nn2f2vlhPuUdy/Zusb2DarbyTpGCfEDuw==}
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
     optional: true
 
-  /@img/sharp-libvips-darwin-x64@1.3.3:
-    resolution: {integrity: sha512-FVJZ5mITMobmXIz/hPDTw0EintTW5H3WfrxwLqEqjiIihlu+hVRyGrFQ60xl0Lxn7Bt3zdpevPaQi0HEzqz9fw==}
+  /@img/sharp-libvips-darwin-x64@1.3.4:
+    resolution: {integrity: sha512-iR2OKH80yi0U+dUplyh3/xdpFvps6YkCwsXenIJxqxR1v9o+xtKTGbS9H7cps+2Vxjc8B1j96p75NmTGjIhtpQ==}
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
     optional: true
 
-  /@img/sharp-libvips-linux-arm64@1.3.3:
-    resolution: {integrity: sha512-0DaL0A6Xu6sQSQFwe4iVCrKWU2cCTItnRsYsCdxAMm9NF6twAA9BKnoqy4hqz4+azQ0JHuA26qiUKsf1XJ/v5A==}
+  /@img/sharp-libvips-linux-arm64@1.3.4:
+    resolution: {integrity: sha512-Y3dgX/6lE2QhQb+Gxy0WZxfg9MEm/JBjamZpS2IklP7xIQoKN4hzAm7KcMVGtaVDt3neE9OKBC7vAfonA/Lr1A==}
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
     optional: true
 
-  /@img/sharp-libvips-linux-arm@1.3.3:
-    resolution: {integrity: sha512-3rbU4vqXXc3hY/OiXdl52xZvT0F1yEngWfvqudtPJg/KkyiaQw2DRsFrNzpmLvfavbwOq3qXn36GP8obHRULQA==}
+  /@img/sharp-libvips-linux-arm@1.3.4:
+    resolution: {integrity: sha512-LmRtTsOHuvM2+wlO2Db37dx5MiZhB0FvSunciw48YjdOkZz9KAiRbm8ujeMOA1INqmei5NapFxYEK1D1ZSidmw==}
     cpu: [arm]
     os: [linux]
     requiresBuild: true
     optional: true
 
-  /@img/sharp-libvips-linux-ppc64@1.3.3:
-    resolution: {integrity: sha512-cdn1OvUBwsXhbC0zSzJnNzf5MZ/mTrobawDvNXBTxe8VtqKAm0sRuEY2Evzovb/w9JMk4TvRxqt1mekSuJz64w==}
+  /@img/sharp-libvips-linux-ppc64@1.3.4:
+    resolution: {integrity: sha512-Le6boB8Tai0Nis+gIxIpKx68UDVVIqdR8Tin5Yf1z2LJJQLDJvCDRqRu+jC2qCoD+eIomonmOwB4smBRxfVpYQ==}
     cpu: [ppc64]
     os: [linux]
     requiresBuild: true
     optional: true
 
-  /@img/sharp-libvips-linux-riscv64@1.3.3:
-    resolution: {integrity: sha512-HjPVx7yKz+0lqdhDlTw1tt90wamBoxhiXpvl1XZpJLiHH4RCJ5yDTqH+VlYPv2fwFs89JFw4c1IexYOcQUi4IQ==}
+  /@img/sharp-libvips-linux-riscv64@1.3.4:
+    resolution: {integrity: sha512-aHkkIEHPRdQEegJN20MLmGtxYD9R2wQr3Cwpddnu5+YKMt6Uzax7S9h5gpZTo8wyrGuZSlfQ63OevL5mTyOC7Q==}
     cpu: [riscv64]
     os: [linux]
     requiresBuild: true
     optional: true
 
-  /@img/sharp-libvips-linux-s390x@1.3.3:
-    resolution: {integrity: sha512-neWLh+3yCNThxnfy3c4BbVBeGgt9aftno+XbT56iK28RgeDs3UOFWviLWlUu0bArYVYJaFDK+RRohbicUNCm8Q==}
+  /@img/sharp-libvips-linux-s390x@1.3.4:
+    resolution: {integrity: sha512-ra/mB6MikESDUO7Yg+Mi95bFBb9GsObURuhnOv3OqknjGe9sZrG8tCe9q0xSIGrtLgvgw0gKnFWcK4blSgQOuQ==}
     cpu: [s390x]
     os: [linux]
     requiresBuild: true
     optional: true
 
-  /@img/sharp-libvips-linux-x64@1.3.3:
-    resolution: {integrity: sha512-4vKmvAst9nrowcqquKFAyZJUDolUaIp8uRiN0mWFguJ1IplC9/pitXtlnnlU4aa/eJw3J7i67V+pwUL+wZGdsA==}
+  /@img/sharp-libvips-linux-x64@1.3.4:
+    resolution: {integrity: sha512-GJ//SSXbnwSDes02umB3nDJLFcQzw8a18V8fyhqr6tV515tOEMdImjjxj1AoafMRz56F3PHgftnj1QEKSU1zkw==}
     cpu: [x64]
     os: [linux]
     requiresBuild: true
     optional: true
 
-  /@img/sharp-libvips-linuxmusl-arm64@1.3.3:
-    resolution: {integrity: sha512-Y9kQaLMuNoB0bPYOOdcZMaseNrFpPodIWWMrx+CZyydf2xn68j9WYc6sWWRrDwNkzCQjKYfc68L7jKjGlHMibw==}
+  /@img/sharp-libvips-linuxmusl-arm64@1.3.4:
+    resolution: {integrity: sha512-hvulFwtjUcagsis6BBxHwGFwWoNZjgYmULGVrZcyfNbjA8hKILbRxGg15/7w5HDyXHXUos/j6baAWqnCyQ2DWA==}
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
     optional: true
 
-  /@img/sharp-libvips-linuxmusl-x64@1.3.3:
-    resolution: {integrity: sha512-fj8Mv0HHfD1Rr+4I68+3agJynxDWtBFgicTbSOb9Bke6pIwzGcJ+RX/yHjmiEGFMCavY/dxvem7MyNaJF+wDiw==}
+  /@img/sharp-libvips-linuxmusl-x64@1.3.4:
+    resolution: {integrity: sha512-6zXKeE/p39I1AmA3cJG35eyBGNqNddLnUXjhwBnsGjFPWqf5VKkDBEqaEkPDoTEtkxwi2vv8Tcr2mDyP4So7Fg==}
     cpu: [x64]
     os: [linux]
     requiresBuild: true
     optional: true
 
-  /@img/sharp-linux-arm64@0.35.4:
-    resolution: {integrity: sha512-De4jpEnAU8Hd5oT0j1G3uL4ZvTuipVMn7YC6vPaJhy6/7EwEae0SVAoBrUMYQbkLGDm85taVWwuPc1a44LTzCQ==}
+  /@img/sharp-linux-arm64@0.35.5:
+    resolution: {integrity: sha512-LYVx5JTsOM2CBzmxreh+nl64/3H6Xb09iSLknqH47z2T2DFFxDeFLP5y4dJwe6H7uGQlHPyEEtIqyo3DYsRwdQ==}
     engines: {node: '>=20.9.0'}
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
     optionalDependencies:
-      '@img/sharp-libvips-linux-arm64': 1.3.3
+      '@img/sharp-libvips-linux-arm64': 1.3.4
     optional: true
 
-  /@img/sharp-linux-arm@0.35.4:
-    resolution: {integrity: sha512-7OAS8gI0EReKGVN2HssHlM6umJgxF5VI3xN0p9FA91p/YO+ou5hiNghLdZ5BEHztwaaK5+bLKRf8x/o2L2nk9A==}
+  /@img/sharp-linux-arm@0.35.5:
+    resolution: {integrity: sha512-LEaXK2WdXVK5ykcw0buWyPMsmLLL2vpHLD6yrNSW+JGEL3BZPA4tpKN6iaMc4AxTTAoaX/sU1rOL51lcIz48ZQ==}
     engines: {node: '>=20.9.0'}
     cpu: [arm]
     os: [linux]
     requiresBuild: true
     optionalDependencies:
-      '@img/sharp-libvips-linux-arm': 1.3.3
+      '@img/sharp-libvips-linux-arm': 1.3.4
     optional: true
 
-  /@img/sharp-linux-ppc64@0.35.4:
-    resolution: {integrity: sha512-2oYZJeIl4kCcMGk4ouZVjnkCtFrpQFlNEtJ6GbxzhHQchwH0NH/qEb9ykmOl29dqwMq+JhFdZn+1ak2FKhI9fQ==}
+  /@img/sharp-linux-ppc64@0.35.5:
+    resolution: {integrity: sha512-QVxAAq8evVRI9ia2vqgwrmWucn5Dfv+JdWzj75pD8omHLPSP7f8p20O8jxzjCcuCEQEOtYOZUmX1hkiZ0kdevA==}
     engines: {node: '>=20.9.0'}
     cpu: [ppc64]
     os: [linux]
     requiresBuild: true
     optionalDependencies:
-      '@img/sharp-libvips-linux-ppc64': 1.3.3
+      '@img/sharp-libvips-linux-ppc64': 1.3.4
     optional: true
 
-  /@img/sharp-linux-riscv64@0.35.4:
-    resolution: {integrity: sha512-cPbNChoRURAWdebDIHSenxRpgEdy7JkPydSnUxRm9VvKD7m0/xVaR/8Fzlu81pk5nHEvHH87UZUA7cTtwnbJSA==}
+  /@img/sharp-linux-riscv64@0.35.5:
+    resolution: {integrity: sha512-LtdreXguaavKODPIfzJ4kffx7UNt1omwtK0rch4EBbbSTXPnxWmYSayXdLJw0fJzQ97kHt1gL/yh4tvU+nCyRQ==}
     engines: {node: '>=20.9.0'}
     cpu: [riscv64]
     os: [linux]
     requiresBuild: true
     optionalDependencies:
-      '@img/sharp-libvips-linux-riscv64': 1.3.3
+      '@img/sharp-libvips-linux-riscv64': 1.3.4
     optional: true
 
-  /@img/sharp-linux-s390x@0.35.4:
-    resolution: {integrity: sha512-RY0JFY8Fd6RonCBtHz+DvadaPkXDSI1AUn6yWL9TipqkZ1vY8w8evqdgyDFnkm4/K1ve1TvZiaePP5oSd4+WVQ==}
+  /@img/sharp-linux-s390x@0.35.5:
+    resolution: {integrity: sha512-UZasTOFiYzotTsGOCu42BfUzP6Tu6Do/947iRm1RsLKvlllxwGcn4RN27LibGWceix4Y+Pmw3jsnTcCQIgWjqA==}
     engines: {node: '>=20.9.0'}
     cpu: [s390x]
     os: [linux]
     requiresBuild: true
     optionalDependencies:
-      '@img/sharp-libvips-linux-s390x': 1.3.3
+      '@img/sharp-libvips-linux-s390x': 1.3.4
     optional: true
 
-  /@img/sharp-linux-x64@0.35.4:
-    resolution: {integrity: sha512-9qvvEAuk8k89TfWUoX2htWjbAMX8p+NxCppjpcg5k6xMsjhBQPTsoIh36h9Qde4WRuGpJeYnOjdosDn/cnv+OA==}
+  /@img/sharp-linux-x64@0.35.5:
+    resolution: {integrity: sha512-SxFtLTeJInhAA9Q836kux2vZNeOBQEx658qvbboZScr0wIARym3IcGmW7KpVD5sbVg0Ojy+udFQdayYIZyoNog==}
     engines: {node: '>=20.9.0'}
     cpu: [x64]
     os: [linux]
     requiresBuild: true
     optionalDependencies:
-      '@img/sharp-libvips-linux-x64': 1.3.3
+      '@img/sharp-libvips-linux-x64': 1.3.4
     optional: true
 
-  /@img/sharp-linuxmusl-arm64@0.35.4:
-    resolution: {integrity: sha512-KB5jxpfWQTr0nc3xdHtWChdbifHrBGsd2SM62Eyxrl8afikm+f5qGBU75SJIZBT/S1MC8XyacdlXBMSWq6OURA==}
+  /@img/sharp-linuxmusl-arm64@0.35.5:
+    resolution: {integrity: sha512-9HbMclmI1zlNkFRs3z9/eBtDjfD0sGlrX1z6b1qwmiFY5ElDLh4BC0LPBdVp7z1DXFiKlIcznf+ZlsuZzLxQqg==}
     engines: {node: '>=20.9.0'}
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
     optionalDependencies:
-      '@img/sharp-libvips-linuxmusl-arm64': 1.3.3
+      '@img/sharp-libvips-linuxmusl-arm64': 1.3.4
     optional: true
 
-  /@img/sharp-linuxmusl-x64@0.35.4:
-    resolution: {integrity: sha512-f+eZJZIQNEEd26RPSW+76chwOf1XtA2Y/O+5ocVyLliHkeih3e+jhLVBdNTd2rS3IbNXK8+ug93Vf5ZXtF5Lxg==}
+  /@img/sharp-linuxmusl-x64@0.35.5:
+    resolution: {integrity: sha512-4KOphqB035HrVdqLZfCgMzzERrQkkzOwRhl4OAkRO1YCldbaFjySXMaK534Mo0V+LndnlJk+sbUyLeU0ULyD1A==}
     engines: {node: '>=20.9.0'}
     cpu: [x64]
     os: [linux]
     requiresBuild: true
     optionalDependencies:
-      '@img/sharp-libvips-linuxmusl-x64': 1.3.3
+      '@img/sharp-libvips-linuxmusl-x64': 1.3.4
     optional: true
 
-  /@img/sharp-wasm32@0.35.4:
-    resolution: {integrity: sha512-zQnl4Kwp7Q6NHsENtU2T/00Zi+w3AQNwz3+UaTyVBy2FpXrzXzGjndpK61onhZjRtRpQXxCTeqw19bVyXOh7jA==}
+  /@img/sharp-wasm32@0.35.5:
+    resolution: {integrity: sha512-Ptsga1su4tQx+LLF1ECS9U6nz5kmrXKo6XVbtR48Ke3ZRxxgaWBu7IDtEe1quo8hiupwm6WFqxVlXaSf7IINGQ==}
     engines: {node: '>=20.9.0'}
     requiresBuild: true
     dependencies:
       '@emnapi/runtime': 1.11.3
     optional: true
 
-  /@img/sharp-webcontainers-wasm32@0.35.4:
-    resolution: {integrity: sha512-ESfNkywmCfPNyaZjxooddJQiQ+l/nTpGEOGthxiLnIHXC/CmcBixnfwUleX9mCz9ovrUUvKMap/pm8RYbzfwaA==}
+  /@img/sharp-webcontainers-wasm32@0.35.5:
+    resolution: {integrity: sha512-hfhF/FmoQyTUkA0bIKFOtw536BQSeBMe6BF6QyWlrPxT754+TFLaZ7sKKTfvvM0yJgKgaYTwnFCIZ/GuDw5SUA==}
     engines: {node: '>=20.9.0'}
     cpu: [wasm32]
     requiresBuild: true
     dependencies:
-      '@img/sharp-wasm32': 0.35.4
+      '@img/sharp-wasm32': 0.35.5
     optional: true
 
-  /@img/sharp-win32-arm64@0.35.4:
-    resolution: {integrity: sha512-iNdlBX9gLVvqe2I3uIJSIKTq6wckP/DYxZtcqxm09x5Gi24DnFBmPAWZmr60ZyYMG0xlzo6goG3670ar+RXvRw==}
+  /@img/sharp-win32-arm64@0.35.5:
+    resolution: {integrity: sha512-X4t7g+7ZA5DKblCBEXGjUqqemj4vczING/5viFwAL8h4N3qYeyjwdCvRLHi4EdOUI+2Z7UFlp1VM+p/AuEtm6Q==}
     engines: {node: '>=20.9.0'}
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
     optional: true
 
-  /@img/sharp-win32-ia32@0.35.4:
-    resolution: {integrity: sha512-kqRsbaa5CS6KHlpxnN7WhE6vAAugXyZButpRdvDWetlv6Qv4N9WTcrWzF7tXfB9T7MsoadqdI8hmwLq6UlLvtw==}
+  /@img/sharp-win32-ia32@0.35.5:
+    resolution: {integrity: sha512-5Zm82LoBc43nhwNybZlG7Y1KO//Zhsn306fQl29ZOuStHLGTo3BWL83q3cznX0poxSAMuYL1On/BHBxkBeKr6A==}
     engines: {node: ^20.9.0}
     cpu: [ia32]
     os: [win32]
     requiresBuild: true
     optional: true
 
-  /@img/sharp-win32-x64@0.35.4:
-    resolution: {integrity: sha512-XtmnYhBcrORsJ4XJngyzr/EWP0hRZLAZRFaApdKuviyqF78+ylxh2y06ZmtULAMOnObJ3ucpN0AcwSWnMowTRg==}
+  /@img/sharp-win32-x64@0.35.5:
+    resolution: {integrity: sha512-x76eH0vEiHlcMQu8Y8IenntaACtddpT6W0wmXtWrnKcnKI7ME5DdgqhAD6SEWOEl1v2zDvkZDhFA9KnURwpfqg==}
     engines: {node: '>=20.9.0'}
     cpu: [x64]
     os: [win32]
@@ -15138,11 +15138,11 @@ packages:
       chalk: 4.1.2
     dev: true
 
-  /@joshwooding/vite-plugin-react-docgen-typescript@0.5.0(typescript@5.9.3)(vite@6.4.3):
+  /@joshwooding/vite-plugin-react-docgen-typescript@0.5.0(typescript@5.9.3)(vite@6.4.4):
     resolution: {integrity: sha512-qYDdL7fPwLRI+bJNurVcis+tNgJmvWjH4YTBGXTA8xMuxFrnAz6E5o35iyzyKbq5J5Lr8mJGfrR5GXl+WGwhgQ==}
     peerDependencies:
       typescript: '>= 4.3.x'
-      vite: ^6.4.3
+      vite: ^6.4.4
     peerDependenciesMeta:
       typescript:
         optional: true
@@ -15151,14 +15151,14 @@ packages:
       magic-string: 0.27.0
       react-docgen-typescript: 2.4.0(typescript@5.9.3)
       typescript: 5.9.3
-      vite: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vite: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
     dev: true
 
-  /@joshwooding/vite-plugin-react-docgen-typescript@0.6.1(typescript@5.9.3)(vite@6.4.3):
+  /@joshwooding/vite-plugin-react-docgen-typescript@0.6.1(typescript@5.9.3)(vite@6.4.4):
     resolution: {integrity: sha512-J4BaTocTOYFkMHIra1JDWrMWpNmBl4EkplIwHEsV8aeUOtdWjwSnln9U7twjMFTAEB7mptNtSKyVi1Y2W9sDJw==}
     peerDependencies:
       typescript: '>= 4.3.x'
-      vite: ^6.4.3
+      vite: ^6.4.4
     peerDependenciesMeta:
       typescript:
         optional: true
@@ -15167,7 +15167,7 @@ packages:
       magic-string: 0.30.21
       react-docgen-typescript: 2.4.0(typescript@5.9.3)
       typescript: 5.9.3
-      vite: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vite: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
     dev: true
 
   /@jridgewell/gen-mapping@0.3.13:
@@ -15465,72 +15465,72 @@ packages:
     dev: true
     optional: true
 
-  /@next/env@16.3.3:
-    resolution: {integrity: sha512-U2eYQRwXj+dsqxV79zFqExDdatnNY/ZWc2nsJU1p/OgT7fd3dXwlF6OjYaFQCfMoeTA19PWq+wVmYgimVA+V+g==}
+  /@next/env@16.4.6:
+    resolution: {integrity: sha512-SunBjJ6t+oBtecS3dTjdVuMhUogP5wD/vrGL5EVuQYM1iS4O5ilL51HkiJ3sPjMzRHiCChvr4dbaSJbR7F3lxA==}
 
   /@next/eslint-plugin-next@15.5.7:
     resolution: {integrity: sha512-DtRU2N7BkGr8r+pExfuWHwMEPX5SD57FeA6pxdgCHODo+b/UgIgjE+rgWKtJAbEbGhVZ2jtHn4g3wNhWFoNBQQ==}
     dependencies:
       fast-glob: 3.3.1
 
-  /@next/swc-darwin-arm64@16.3.3:
-    resolution: {integrity: sha512-8Hiv32QJPwdV6KYJ8meR9SBA061tQqnIKTJDocvOXlEQqib0xMFpzArosuffFUUc0sslbh7QQ8a3Yey1QV8EIw==}
+  /@next/swc-darwin-arm64@16.4.6:
+    resolution: {integrity: sha512-kJ4VVZkley17xKaJx72QN2IBqjrj7zenCQZaUF0l9ShS/1Mt2kW4+Z5KGG6vgr3L/J562xTOizVyM1iA/u5nlg==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
     optional: true
 
-  /@next/swc-darwin-x64@16.3.3:
-    resolution: {integrity: sha512-A1lgKgwVchRYmSe467zdwhxT9040dd8lH+o65sL5Jet8fjB4kegw/rDyPIpYVRb6jAqwXFOJpjIXJLxQKLiE3A==}
+  /@next/swc-darwin-x64@16.4.6:
+    resolution: {integrity: sha512-eIPGZIqC+8JKaeZmvnCANJQF4xWkkHqSnAAajtFxgwDMAOnCgxNvP52SeWZ41PyVwoe+Le/NQuZSaQ8j7YshSA==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
     optional: true
 
-  /@next/swc-linux-arm64-gnu@16.3.3:
-    resolution: {integrity: sha512-bf0FIssMFueU2dm7vQEWWxk0c8UjKTdW0yzuh0sQsD8pf1+KCLDdaqhYZNMYGmXwEOiHAUzgBKudovIlcvvBjg==}
+  /@next/swc-linux-arm64-gnu@16.4.6:
+    resolution: {integrity: sha512-9nI6O8vvczH2D9ZNdMGqb/3NuT15T9ksOZnAmx9/gjF2cOi74+xxyf1Hk96uIMfm14c9y6wHeBq6SH8g6udvcA==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
     optional: true
 
-  /@next/swc-linux-arm64-musl@16.3.3:
-    resolution: {integrity: sha512-W7viwCk9JY/cAkdz/A273rd5bb3RgT/IHwR7Upv90tunjBWNtAAhGhoecHh+teRNRSinuAFmE+l7fwZ4YKkrXg==}
+  /@next/swc-linux-arm64-musl@16.4.6:
+    resolution: {integrity: sha512-7/qPhTxDp2ScluOJOhLuhWmlA17o1yZ0SIgpISBCpBxXgtnK4+KGywBpFkfLPiU1rnSM1faFGzYkH6i7JdTrqA==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
     optional: true
 
-  /@next/swc-linux-x64-gnu@16.3.3:
-    resolution: {integrity: sha512-0W46zw1N3ODpI6n0GeivHvvob1pooozgZVqy65k0mh4/7vr+FbY9+WpHzNVXjHipJf/A3FDheBG19H1s5A25rA==}
+  /@next/swc-linux-x64-gnu@16.4.6:
+    resolution: {integrity: sha512-oOpbNa8XOW1qCGd9VvzC4fbkkRxEls7/WI6tz+YHC0xRA7KpV1U7DrAnCPjzVyOk/karzWEepCOcTIDmwK8FwQ==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
     requiresBuild: true
     optional: true
 
-  /@next/swc-linux-x64-musl@16.3.3:
-    resolution: {integrity: sha512-H4mBso8ZTMBPtdT0PN0pBx2ayTvQuTuvS6qT13d77yVFJXAPCxkyIhLTmdMaGTJs0krQYI/qpzdHijCeihXhbg==}
+  /@next/swc-linux-x64-musl@16.4.6:
+    resolution: {integrity: sha512-aM8CZ+OR2EwXaAYw7KGkW2GDmNDsLBIRe1MMRZCJPTdw/xhTD0IMUVO4sf3KqrzuRouGzwwLZn34+gFeVXiUQA==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
     requiresBuild: true
     optional: true
 
-  /@next/swc-win32-arm64-msvc@16.3.3:
-    resolution: {integrity: sha512-cTMUJpcEGmeywofCUfhR+rSsoE33+rVPnPEYNTNdLNlsOeEg/vktOsKUSTb28vUGqD2jkm4Zaskcwn7OCI6FQg==}
+  /@next/swc-win32-arm64-msvc@16.4.6:
+    resolution: {integrity: sha512-U0p7/tEtqvHX2crhd841CDwKtp5CFkKXVjOhmfccR3Pvp64sj8KBwRqsvltqLOwVBbj0NtkxwXSDpEHYGbxeXQ==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
     optional: true
 
-  /@next/swc-win32-x64-msvc@16.3.3:
-    resolution: {integrity: sha512-2VR4cTBzHXaBjnGsuH6GyJjENzQOmHeAh11uY1iUhjm3j5dEUrVJuUj+VL78jaGi/Dik8xS76zEj18BsFhlVZQ==}
+  /@next/swc-win32-x64-msvc@16.4.6:
+    resolution: {integrity: sha512-3ZG15/5WIdlTQsIEvc9sPTTSL5XFrlLklIKmfF4fwsDnoAhu6NcBDXsk3mbGxNyo6aVLEGex+fHCv2MahY7a9g==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [win32]
@@ -19002,7 +19002,7 @@ packages:
     dependencies:
       '@storybook/global': 5.0.0
       axe-core: 4.14.0
-      storybook: 9.1.20(@testing-library/dom@10.4.1)(prettier@2.8.8)(vite@6.4.3)
+      storybook: 9.1.20(@testing-library/dom@10.4.1)(prettier@2.8.8)(vite@6.4.4)
     dev: true
 
   /@storybook/addon-actions@8.6.14(storybook@8.6.17):
@@ -19085,7 +19085,7 @@ packages:
       '@storybook/react-dom-shim': 9.1.17(react-dom@19.2.7)(react@19.2.7)(storybook@9.1.20)
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
-      storybook: 9.1.20(@testing-library/dom@10.4.1)(prettier@2.8.8)(vite@6.4.3)
+      storybook: 9.1.20(@testing-library/dom@10.4.1)(prettier@2.8.8)(vite@6.4.4)
       ts-dedent: 2.2.0
     transitivePeerDependencies:
       - '@types/react'
@@ -19163,7 +19163,7 @@ packages:
     peerDependencies:
       storybook: ^9.1.19
     dependencies:
-      storybook: 9.1.20(@testing-library/dom@10.4.1)(prettier@2.8.8)(vite@6.4.3)
+      storybook: 9.1.20(@testing-library/dom@10.4.1)(prettier@2.8.8)(vite@6.4.4)
     dev: true
 
   /@storybook/addon-outline@8.6.14(storybook@8.6.17):
@@ -19246,33 +19246,33 @@ packages:
       '@storybook/icons': 1.6.0(react-dom@19.2.7)(react@19.2.7)
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
-      storybook: 9.1.20(@testing-library/dom@10.4.1)(prettier@2.8.8)(vite@6.4.3)
+      storybook: 9.1.20(@testing-library/dom@10.4.1)(prettier@2.8.8)(vite@6.4.4)
       ts-dedent: 2.2.0
     dev: true
 
-  /@storybook/builder-vite@8.6.15(storybook@8.6.17)(vite@6.4.3):
+  /@storybook/builder-vite@8.6.15(storybook@8.6.17)(vite@6.4.4):
     resolution: {integrity: sha512-9Y05/ndZE6/eI7ZIUCD/QtH2htRIUs9j1gxE6oW0zRo9TJO1iqxfLNwgzd59KEkId7gdZxPei0l+LGTUGXYKRg==}
     peerDependencies:
       storybook: 8.6.17
-      vite: ^6.4.3
+      vite: ^6.4.4
     dependencies:
       '@storybook/csf-plugin': 8.6.15(storybook@8.6.17)
       browser-assert: 1.2.1
       storybook: 8.6.17(prettier@2.8.8)
       ts-dedent: 2.2.0
-      vite: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vite: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
     dev: true
 
-  /@storybook/builder-vite@9.1.17(storybook@9.1.20)(vite@6.4.3):
+  /@storybook/builder-vite@9.1.17(storybook@9.1.20)(vite@6.4.4):
     resolution: {integrity: sha512-OQCYaFWoTBvovN2IJmkAW+7FgHMJiih1WA/xqgpKIx0ImZjB4z5FrKgzQeXsrYcLEsynyaj+xN3JFUKsz5bzGQ==}
     peerDependencies:
       storybook: ^9.1.19
-      vite: ^6.4.3
+      vite: ^6.4.4
     dependencies:
       '@storybook/csf-plugin': 9.1.17(storybook@9.1.20)
-      storybook: 9.1.20(@testing-library/dom@10.4.1)(prettier@2.8.8)(vite@6.4.3)
+      storybook: 9.1.20(@testing-library/dom@10.4.1)(prettier@2.8.8)(vite@6.4.4)
       ts-dedent: 2.2.0
-      vite: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vite: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
     dev: true
 
   /@storybook/builder-webpack5@8.6.14(esbuild@0.25.12)(postcss@8.5.23)(storybook@8.6.17)(typescript@5.9.3):
@@ -19425,7 +19425,7 @@ packages:
     peerDependencies:
       storybook: ^9.1.19
     dependencies:
-      storybook: 9.1.20(@testing-library/dom@10.4.1)(prettier@2.8.8)(vite@6.4.3)
+      storybook: 9.1.20(@testing-library/dom@10.4.1)(prettier@2.8.8)(vite@6.4.4)
       unplugin: 1.16.1
     dev: true
 
@@ -19620,10 +19620,10 @@ packages:
     dependencies:
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
-      storybook: 9.1.20(@testing-library/dom@10.4.1)(prettier@2.8.8)(vite@6.4.3)
+      storybook: 9.1.20(@testing-library/dom@10.4.1)(prettier@2.8.8)(vite@6.4.4)
     dev: true
 
-  /@storybook/react-vite@8.6.15(react-dom@19.2.7)(react@19.2.7)(storybook@8.6.17)(typescript@5.9.3)(vite@6.4.3):
+  /@storybook/react-vite@8.6.15(react-dom@19.2.7)(react@19.2.7)(storybook@8.6.17)(typescript@5.9.3)(vite@6.4.4):
     resolution: {integrity: sha512-9st+2NCemzzBwmindpDrRLEqYJmwwd2RnXMoj+Wt4Y1r4MGoRe1l837ciT2tmstaqekY2mVUSYd6879NzeeMYw==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
@@ -19631,14 +19631,14 @@ packages:
       react: 19.2.7
       react-dom: 19.2.7
       storybook: 8.6.17
-      vite: ^6.4.3
+      vite: ^6.4.4
     peerDependenciesMeta:
       '@storybook/test':
         optional: true
     dependencies:
-      '@joshwooding/vite-plugin-react-docgen-typescript': 0.5.0(typescript@5.9.3)(vite@6.4.3)
+      '@joshwooding/vite-plugin-react-docgen-typescript': 0.5.0(typescript@5.9.3)(vite@6.4.4)
       '@rollup/pluginutils': 5.3.0
-      '@storybook/builder-vite': 8.6.15(storybook@8.6.17)(vite@6.4.3)
+      '@storybook/builder-vite': 8.6.15(storybook@8.6.17)(vite@6.4.4)
       '@storybook/react': 8.6.15(react-dom@19.2.7)(react@19.2.7)(storybook@8.6.17)(typescript@5.9.3)
       find-up: 5.0.0
       magic-string: 0.30.21
@@ -19648,25 +19648,25 @@ packages:
       resolve: 1.22.11
       storybook: 8.6.17(prettier@2.8.8)
       tsconfig-paths: 4.2.0
-      vite: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vite: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
     transitivePeerDependencies:
       - rollup
       - supports-color
       - typescript
     dev: true
 
-  /@storybook/react-vite@9.1.17(react-dom@19.2.7)(react@19.2.7)(storybook@9.1.20)(typescript@5.9.3)(vite@6.4.3):
+  /@storybook/react-vite@9.1.17(react-dom@19.2.7)(react@19.2.7)(storybook@9.1.20)(typescript@5.9.3)(vite@6.4.4):
     resolution: {integrity: sha512-RZHsqD1mnTMo4MCJw68t3swS5BTMSTpeRhlelMwjoTEe7jJCPa+qx00uMlWliR1QBN1hMO8Y1dkchxSiUS9otA==}
     engines: {node: '>=20.0.0'}
     peerDependencies:
       react: 19.2.7
       react-dom: 19.2.7
       storybook: ^9.1.19
-      vite: ^6.4.3
+      vite: ^6.4.4
     dependencies:
-      '@joshwooding/vite-plugin-react-docgen-typescript': 0.6.1(typescript@5.9.3)(vite@6.4.3)
+      '@joshwooding/vite-plugin-react-docgen-typescript': 0.6.1(typescript@5.9.3)(vite@6.4.4)
       '@rollup/pluginutils': 5.3.0
-      '@storybook/builder-vite': 9.1.17(storybook@9.1.20)(vite@6.4.3)
+      '@storybook/builder-vite': 9.1.17(storybook@9.1.20)(vite@6.4.4)
       '@storybook/react': 9.1.17(react-dom@19.2.7)(react@19.2.7)(storybook@9.1.20)(typescript@5.9.3)
       find-up: 7.0.0
       magic-string: 0.30.21
@@ -19674,9 +19674,9 @@ packages:
       react-docgen: 8.0.2
       react-dom: 19.2.7(react@19.2.7)
       resolve: 1.22.11
-      storybook: 9.1.20(@testing-library/dom@10.4.1)(prettier@2.8.8)(vite@6.4.3)
+      storybook: 9.1.20(@testing-library/dom@10.4.1)(prettier@2.8.8)(vite@6.4.4)
       tsconfig-paths: 4.2.0
-      vite: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vite: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
     transitivePeerDependencies:
       - rollup
       - supports-color
@@ -19791,7 +19791,7 @@ packages:
       '@storybook/react-dom-shim': 9.1.17(react-dom@19.2.7)(react@19.2.7)(storybook@9.1.20)
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
-      storybook: 9.1.20(@testing-library/dom@10.4.1)(prettier@2.8.8)(vite@6.4.3)
+      storybook: 9.1.20(@testing-library/dom@10.4.1)(prettier@2.8.8)(vite@6.4.4)
       typescript: 5.9.3
     dev: true
 
@@ -21602,7 +21602,7 @@ packages:
     dependencies:
       '@vanilla-extract/css': 1.21.3
       '@vanilla-extract/integration': 8.0.11
-      vite: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vite: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vite-node: 3.2.4(@types/node@20.19.24)(yaml@2.9.0)
     transitivePeerDependencies:
       - '@types/node'
@@ -21661,14 +21661,14 @@ packages:
       - supports-color
     dev: true
 
-  /@vanilla-extract/next-plugin@2.5.2(@types/node@20.19.24)(next@16.3.3)(webpack@5.107.2):
+  /@vanilla-extract/next-plugin@2.5.2(@types/node@20.19.24)(next@16.4.6)(webpack@5.107.2):
     resolution: {integrity: sha512-apq4i0atiSL4Qz4kiGdOov8ucGLLlQ1Vw7JgvppMp7FCtUBBlosRteaTGrGP7PjczRkzWsx5BR/cp8Ev81o7RQ==}
     peerDependencies:
       next: ^15.5.18
     dependencies:
-      '@vanilla-extract/turbopack-plugin': 0.1.4(@types/node@20.19.24)(next@16.3.3)
+      '@vanilla-extract/turbopack-plugin': 0.1.4(@types/node@20.19.24)(next@16.4.6)
       '@vanilla-extract/webpack-plugin': 2.3.27(webpack@5.107.2)
-      next: 16.3.3(@babel/core@7.29.7)(@playwright/test@1.56.1)(@types/node@20.19.24)(react-dom@19.2.7)(react@19.2.7)
+      next: 16.4.6(@babel/core@7.29.7)(@playwright/test@1.56.1)(@types/node@20.19.24)(react-dom@19.2.7)(react@19.2.7)
       semver: 7.8.5
     transitivePeerDependencies:
       - '@swc/helpers'
@@ -21699,7 +21699,7 @@ packages:
       '@vanilla-extract/css': 1.21.3
     dev: false
 
-  /@vanilla-extract/turbopack-plugin@0.1.4(@types/node@20.19.24)(next@16.3.3):
+  /@vanilla-extract/turbopack-plugin@0.1.4(@types/node@20.19.24)(next@16.4.6):
     resolution: {integrity: sha512-fhUO88e2npKjV3Kb+fY9AciFlS6L8a31hdhD1R8uWz8QaHc5x9OWM+H/v4Sdr1Yw9p9sALvNIXMIS1oI12EnNg==}
     peerDependencies:
       next: ^15.5.18
@@ -21707,7 +21707,7 @@ packages:
       '@swc/core': 1.16.20
       '@vanilla-extract/compiler': 0.7.2(@types/node@20.19.24)
       '@vanilla-extract/integration': 8.0.11
-      next: 16.3.3(@babel/core@7.29.7)(@playwright/test@1.56.1)(@types/node@20.19.24)(react-dom@19.2.7)(react@19.2.7)
+      next: 16.4.6(@babel/core@7.29.7)(@playwright/test@1.56.1)(@types/node@20.19.24)(react-dom@19.2.7)(react@19.2.7)
     transitivePeerDependencies:
       - '@swc/helpers'
       - '@types/node'
@@ -21725,14 +21725,14 @@ packages:
       - yaml
     dev: true
 
-  /@vanilla-extract/vite-plugin@5.2.6(@types/node@20.19.24)(vite@6.4.3):
+  /@vanilla-extract/vite-plugin@5.2.6(@types/node@20.19.24)(vite@6.4.4):
     resolution: {integrity: sha512-mGk0YEan+NyeoxEO51LfxOdtw2JBI+Yb840FGg+zvG6tVU3YfDgKGPiGuk5oT8jqzfsm7H89DyjOVCpl6Bnn0w==}
     peerDependencies:
-      vite: ^6.4.3
+      vite: ^6.4.4
     dependencies:
       '@vanilla-extract/compiler': 0.7.2(@types/node@20.19.24)
       '@vanilla-extract/integration': 8.0.11
-      vite: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vite: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
     transitivePeerDependencies:
       - '@types/node'
       - babel-plugin-macros
@@ -21764,7 +21764,7 @@ packages:
       - supports-color
     dev: true
 
-  /@vercel/analytics@1.5.0(next@16.3.3)(react@19.2.7):
+  /@vercel/analytics@1.5.0(next@16.4.6)(react@19.2.7):
     resolution: {integrity: sha512-MYsBzfPki4gthY5HnYN7jgInhAZ7Ac1cYDoRWFomwGHWEX7odTEzbtg9kf/QSo7XEsEAqlQugA6gJ2WS2DEa3g==}
     peerDependencies:
       '@remix-run/react': ^2
@@ -21790,7 +21790,7 @@ packages:
       vue-router:
         optional: true
     dependencies:
-      next: 16.3.3(@babel/core@7.29.7)(@playwright/test@1.56.1)(@types/node@20.19.24)(react-dom@19.2.7)(react@19.2.7)
+      next: 16.4.6(@babel/core@7.29.7)(@playwright/test@1.56.1)(@types/node@20.19.24)(react-dom@19.2.7)(react@19.2.7)
       react: 19.2.7
     dev: false
 
@@ -21842,11 +21842,11 @@ packages:
       jose: 5.10.0
     dev: false
 
-  /@vitejs/plugin-react@4.7.0(vite@6.4.3):
+  /@vitejs/plugin-react@4.7.0(vite@6.4.4):
     resolution: {integrity: sha512-gUu9hwfWvvEDBBmgtAowQCojwZmJ5mcLn3aufeCsitijs3+f2NsrPtlAWIR6OPiqljl96GVCUbLe0HyqIpVaoA==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
-      vite: ^6.4.3
+      vite: ^6.4.4
     dependencies:
       '@babel/core': 7.29.7
       '@babel/plugin-transform-react-jsx-self': 7.27.1(@babel/core@7.29.7)
@@ -21854,7 +21854,7 @@ packages:
       '@rolldown/pluginutils': 1.0.0-beta.27
       '@types/babel__core': 7.20.5
       react-refresh: 0.17.0
-      vite: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vite: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -21915,11 +21915,11 @@ packages:
       tinyrainbow: 2.0.0
     dev: true
 
-  /@vitest/mocker@3.2.4(vite@6.4.3):
+  /@vitest/mocker@3.2.4(vite@6.4.4):
     resolution: {integrity: sha512-46ryTE9RZO/rfDd7pEqFl7etuyzekzEhUbTW3BvmeO/BcCMEgq59BKhek3dXDWgAj4oMK6OZi+vRr1wPW6qjEQ==}
     peerDependencies:
       msw: ^2.4.9
-      vite: ^6.4.3
+      vite: ^6.4.4
     peerDependenciesMeta:
       msw:
         optional: true
@@ -21929,14 +21929,14 @@ packages:
       '@vitest/spy': 3.2.4
       estree-walker: 3.0.3
       magic-string: 0.30.21
-      vite: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vite: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
     dev: true
 
-  /@vitest/mocker@3.2.6(vite@6.4.3):
+  /@vitest/mocker@3.2.6(vite@6.4.4):
     resolution: {integrity: sha512-EZOrpDbkKotFAP7wPAQV1UIyoGOk4oX7ynWhBhLB7v+meMHbQhU16oPpIYGTTe4oFlhpryGpgpcZP/sin3hYuw==}
     peerDependencies:
       msw: ^2.4.9
-      vite: ^6.4.3
+      vite: ^6.4.4
     peerDependenciesMeta:
       msw:
         optional: true
@@ -21946,7 +21946,7 @@ packages:
       '@vitest/spy': 3.2.6
       estree-walker: 3.0.3
       magic-string: 0.30.21
-      vite: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vite: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
     dev: true
 
   /@vitest/pretty-format@2.0.5:
@@ -23695,7 +23695,7 @@ packages:
       parse5: 7.3.0
       parse5-htmlparser2-tree-adapter: 7.1.0
       parse5-parser-stream: 7.1.2
-      undici: 7.29.1
+      undici: 7.30.1
       whatwg-mimetype: 4.0.0
     dev: false
 
@@ -25885,7 +25885,7 @@ packages:
     dependencies:
       '@typescript-eslint/utils': 8.49.0(eslint@8.57.1)(typescript@5.9.3)
       eslint: 8.57.1
-      storybook: 9.1.20(@testing-library/dom@10.4.1)(prettier@2.8.8)(vite@6.4.3)
+      storybook: 9.1.20(@testing-library/dom@10.4.1)(prettier@2.8.8)(vite@6.4.4)
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -26814,7 +26814,7 @@ packages:
     requiresBuild: true
     optional: true
 
-  /fumadocs-core@16.8.0(@types/react@19.2.2)(next@16.3.3)(react-dom@19.2.7)(react@19.2.7)(zod@4.4.3):
+  /fumadocs-core@16.8.0(@types/react@19.2.2)(next@16.4.6)(react-dom@19.2.7)(react@19.2.7)(zod@4.4.3):
     resolution: {integrity: sha512-kO9DnhJ/8E2DNtsyDlvMFDBNH0A5V+OFJEFiGNNb/jM/zs7YdSszQ3LOPL66AnyUQ5aou7BmFyPvzJvyiDMyjg==}
     peerDependencies:
       '@mdx-js/mdx': '*'
@@ -26829,7 +26829,7 @@ packages:
       algoliasearch: 5.x.x
       flexsearch: '*'
       lucide-react: '*'
-      next: ^16.3.3
+      next: ^16.4.5
       react: 19.2.7
       react-dom: 19.2.7
       react-router: 7.x.x
@@ -26882,7 +26882,7 @@ packages:
       js-yaml: 4.3.2
       mdast-util-mdx: 3.0.0
       mdast-util-to-markdown: 2.1.2
-      next: 16.3.3(@babel/core@7.29.7)(@playwright/test@1.56.1)(@types/node@20.19.24)(react-dom@19.2.7)(react@19.2.7)
+      next: 16.4.6(@babel/core@7.29.7)(@playwright/test@1.56.1)(@types/node@20.19.24)(react-dom@19.2.7)(react@19.2.7)
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
       remark: 15.0.1
@@ -26899,7 +26899,7 @@ packages:
       - supports-color
     dev: false
 
-  /fumadocs-mdx@14.3.1(@types/mdx@2.0.13)(@types/react@19.2.2)(fumadocs-core@16.8.0)(next@16.3.3)(react@19.2.7)(vite@6.4.3):
+  /fumadocs-mdx@14.3.1(@types/mdx@2.0.13)(@types/react@19.2.2)(fumadocs-core@16.8.0)(next@16.4.6)(react@19.2.7)(vite@6.4.4):
     resolution: {integrity: sha512-0u2eXvYrZtrJB14y6fDhP0hhxLgmH8JOmRv6IVHALt5MqR9JIJxV5LJYlho8g8CJXRE8w12rVNFZN0rtUVAqGw==}
     hasBin: true
     peerDependencies:
@@ -26910,7 +26910,7 @@ packages:
       mdast-util-directive: '*'
       next: ^15.5.18
       react: 19.2.7
-      vite: ^6.4.3
+      vite: ^6.4.4
     peerDependenciesMeta:
       '@types/mdast':
         optional: true
@@ -26934,11 +26934,11 @@ packages:
       chokidar: 5.0.0
       esbuild: 0.28.1
       estree-util-value-to-estree: 3.5.0
-      fumadocs-core: 16.8.0(@types/react@19.2.2)(next@16.3.3)(react-dom@19.2.7)(react@19.2.7)(zod@4.4.3)
+      fumadocs-core: 16.8.0(@types/react@19.2.2)(next@16.4.6)(react-dom@19.2.7)(react@19.2.7)(zod@4.4.3)
       js-yaml: 4.3.2
       mdast-util-mdx: 3.0.0
       mdast-util-to-markdown: 2.1.2
-      next: 16.3.3(@babel/core@7.29.7)(@playwright/test@1.56.1)(@types/node@20.19.24)(react-dom@19.2.7)(react@19.2.7)
+      next: 16.4.6(@babel/core@7.29.7)(@playwright/test@1.56.1)(@types/node@20.19.24)(react-dom@19.2.7)(react@19.2.7)
       picocolors: 1.1.1
       picomatch: 4.0.4
       react: 19.2.7
@@ -26948,20 +26948,20 @@ packages:
       unist-util-remove-position: 5.0.0
       unist-util-visit: 5.1.0
       vfile: 6.0.3
-      vite: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vite: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       zod: 4.4.3
     transitivePeerDependencies:
       - supports-color
     dev: false
 
-  /fumadocs-ui@16.8.0(@types/mdx@2.0.13)(@types/react-dom@19.2.2)(@types/react@19.2.2)(fumadocs-core@16.8.0)(next@16.3.3)(react-dom@19.2.7)(react@19.2.7)(tailwindcss@4.2.2):
+  /fumadocs-ui@16.8.0(@types/mdx@2.0.13)(@types/react-dom@19.2.2)(@types/react@19.2.2)(fumadocs-core@16.8.0)(next@16.4.6)(react-dom@19.2.7)(react@19.2.7)(tailwindcss@4.2.2):
     resolution: {integrity: sha512-om9bQBUcy/1Dt4+VCJIN4SplF8KLpwT+lOaqOmUzQjHl6l/YgYULBm9dukuA7wxDBXaFCawvwBWfx0TjrC+UuA==}
     peerDependencies:
       '@takumi-rs/image-response': '*'
       '@types/mdx': '*'
       '@types/react': '*'
       fumadocs-core: 16.8.0
-      next: ^16.3.3
+      next: ^16.4.5
       react: 19.2.7
       react-dom: 19.2.7
     peerDependenciesMeta:
@@ -26988,10 +26988,10 @@ packages:
       '@types/mdx': 2.0.13
       '@types/react': 19.2.2
       class-variance-authority: 0.7.1
-      fumadocs-core: 16.8.0(@types/react@19.2.2)(next@16.3.3)(react-dom@19.2.7)(react@19.2.7)(zod@4.4.3)
+      fumadocs-core: 16.8.0(@types/react@19.2.2)(next@16.4.6)(react-dom@19.2.7)(react@19.2.7)(zod@4.4.3)
       lucide-react: 1.8.0(react@19.2.7)
       motion: 12.38.0(react-dom@19.2.7)(react@19.2.7)
-      next: 16.3.3(@babel/core@7.29.7)(@playwright/test@1.56.1)(@types/node@20.19.24)(react-dom@19.2.7)(react@19.2.7)
+      next: 16.4.6(@babel/core@7.29.7)(@playwright/test@1.56.1)(@types/node@20.19.24)(react-dom@19.2.7)(react@19.2.7)
       next-themes: 0.4.6(react-dom@19.2.7)(react@19.2.7)
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
@@ -31369,7 +31369,7 @@ packages:
     engines: {node: '>= 0.4.0'}
     dev: false
 
-  /next-auth@5.0.0-beta.32(next@16.3.3)(react@19.2.7):
+  /next-auth@5.0.0-beta.32(next@16.4.6)(react@19.2.7):
     resolution: {integrity: sha512-CGlChIEWZ6LltNVxrE5yiySMID+Idpmry47JYA5lLwgD8Sx02a8M65VL0TWVz9nbnOioS/tCW/rP/0+mE7Qp4Q==}
     peerDependencies:
       '@simplewebauthn/browser': ^9.0.1
@@ -31386,7 +31386,7 @@ packages:
         optional: true
     dependencies:
       '@auth/core': 0.41.3
-      next: 16.3.3(@babel/core@7.29.7)(@playwright/test@1.56.1)(@types/node@20.19.24)(react-dom@19.2.7)(react@19.2.7)
+      next: 16.4.6(@babel/core@7.29.7)(@playwright/test@1.56.1)(@types/node@20.19.24)(react-dom@19.2.7)(react@19.2.7)
       react: 19.2.7
     dev: false
 
@@ -31400,8 +31400,8 @@ packages:
       react-dom: 19.2.7(react@19.2.7)
     dev: false
 
-  /next@16.3.3(@babel/core@7.29.7)(@playwright/test@1.56.1)(@types/node@20.19.24)(react-dom@19.2.7)(react@19.2.7):
-    resolution: {integrity: sha512-tuRTx1nQ/yVw83cwJBo9F+njGUgMn3UHQycreWHB8XsStvvAh1AthbI8/4IpKnFaF58F+iSiHejYOlMQ/eq83g==}
+  /next@16.4.6(@babel/core@7.29.7)(@playwright/test@1.56.1)(@types/node@20.19.24)(react-dom@19.2.7)(react@19.2.7):
+    resolution: {integrity: sha512-QZJiYhaZLJMo2KpkQGQIwvmd79WVsAWeYIU554a8d7zArS3si/IRy3lBNV/rtYhE70oLwdLYhPAXLPx8HwcwtA==}
     engines: {node: '>=20.9.0'}
     hasBin: true
     peerDependencies:
@@ -31421,7 +31421,7 @@ packages:
       sass:
         optional: true
     dependencies:
-      '@next/env': 16.3.3
+      '@next/env': 16.4.6
       '@playwright/test': 1.56.1
       '@swc/helpers': 0.5.23
       baseline-browser-mapping: 2.11.21
@@ -31431,15 +31431,15 @@ packages:
       react-dom: 19.2.7(react@19.2.7)
       styled-jsx: 5.1.6(@babel/core@7.29.7)(react@19.2.7)
     optionalDependencies:
-      '@next/swc-darwin-arm64': 16.3.3
-      '@next/swc-darwin-x64': 16.3.3
-      '@next/swc-linux-arm64-gnu': 16.3.3
-      '@next/swc-linux-arm64-musl': 16.3.3
-      '@next/swc-linux-x64-gnu': 16.3.3
-      '@next/swc-linux-x64-musl': 16.3.3
-      '@next/swc-win32-arm64-msvc': 16.3.3
-      '@next/swc-win32-x64-msvc': 16.3.3
-      sharp: 0.35.4(@types/node@20.19.24)
+      '@next/swc-darwin-arm64': 16.4.6
+      '@next/swc-darwin-x64': 16.4.6
+      '@next/swc-linux-arm64-gnu': 16.4.6
+      '@next/swc-linux-arm64-musl': 16.4.6
+      '@next/swc-linux-x64-gnu': 16.4.6
+      '@next/swc-linux-x64-musl': 16.4.6
+      '@next/swc-win32-arm64-msvc': 16.4.6
+      '@next/swc-win32-x64-msvc': 16.4.6
+      sharp: 0.35.5(@types/node@20.19.24)
     transitivePeerDependencies:
       - '@babel/core'
       - '@types/node'
@@ -34305,10 +34305,9 @@ packages:
   /shallowequal@1.1.0:
     resolution: {integrity: sha512-y0m1JoUZSlPAjXVtPPW70aZWfIL/dSP7AFkRnniLCrK/8MDKog3TySTBmckD+RObVxH0v4Tox67+F14PdED2oQ==}
 
-  /sharp@0.35.4(@types/node@20.19.24):
-    resolution: {integrity: sha512-n++8XWcj+jCOr2IOl7h8LbKnGBDY4aPbmprMONBNFdn0ImXqpGVv5zliDs0V9HbmbCQLpbuo2ej9rAoOQTvMDA==}
+  /sharp@0.35.5(@types/node@20.19.24):
+    resolution: {integrity: sha512-Ywn4OnzGukp7CDMrp08RQ50YKmuwG47brZgIVPTvBaaAfQlRlygrRqSrxdCiL9M+LlzLBiJ68IR1QqvzHyjC7g==}
     engines: {node: '>=20.9.0'}
-    requiresBuild: true
     peerDependencies:
       '@types/node': '*'
     peerDependenciesMeta:
@@ -34320,31 +34319,31 @@ packages:
       detect-libc: 2.1.2
       semver: 7.8.5
     optionalDependencies:
-      '@img/sharp-darwin-arm64': 0.35.4
-      '@img/sharp-darwin-x64': 0.35.4
-      '@img/sharp-freebsd-wasm32': 0.35.4
-      '@img/sharp-libvips-darwin-arm64': 1.3.3
-      '@img/sharp-libvips-darwin-x64': 1.3.3
-      '@img/sharp-libvips-linux-arm': 1.3.3
-      '@img/sharp-libvips-linux-arm64': 1.3.3
-      '@img/sharp-libvips-linux-ppc64': 1.3.3
-      '@img/sharp-libvips-linux-riscv64': 1.3.3
-      '@img/sharp-libvips-linux-s390x': 1.3.3
-      '@img/sharp-libvips-linux-x64': 1.3.3
-      '@img/sharp-libvips-linuxmusl-arm64': 1.3.3
-      '@img/sharp-libvips-linuxmusl-x64': 1.3.3
-      '@img/sharp-linux-arm': 0.35.4
-      '@img/sharp-linux-arm64': 0.35.4
-      '@img/sharp-linux-ppc64': 0.35.4
-      '@img/sharp-linux-riscv64': 0.35.4
-      '@img/sharp-linux-s390x': 0.35.4
-      '@img/sharp-linux-x64': 0.35.4
-      '@img/sharp-linuxmusl-arm64': 0.35.4
-      '@img/sharp-linuxmusl-x64': 0.35.4
-      '@img/sharp-webcontainers-wasm32': 0.35.4
-      '@img/sharp-win32-arm64': 0.35.4
-      '@img/sharp-win32-ia32': 0.35.4
-      '@img/sharp-win32-x64': 0.35.4
+      '@img/sharp-darwin-arm64': 0.35.5
+      '@img/sharp-darwin-x64': 0.35.5
+      '@img/sharp-freebsd-wasm32': 0.35.5
+      '@img/sharp-libvips-darwin-arm64': 1.3.4
+      '@img/sharp-libvips-darwin-x64': 1.3.4
+      '@img/sharp-libvips-linux-arm': 1.3.4
+      '@img/sharp-libvips-linux-arm64': 1.3.4
+      '@img/sharp-libvips-linux-ppc64': 1.3.4
+      '@img/sharp-libvips-linux-riscv64': 1.3.4
+      '@img/sharp-libvips-linux-s390x': 1.3.4
+      '@img/sharp-libvips-linux-x64': 1.3.4
+      '@img/sharp-libvips-linuxmusl-arm64': 1.3.4
+      '@img/sharp-libvips-linuxmusl-x64': 1.3.4
+      '@img/sharp-linux-arm': 0.35.5
+      '@img/sharp-linux-arm64': 0.35.5
+      '@img/sharp-linux-ppc64': 0.35.5
+      '@img/sharp-linux-riscv64': 0.35.5
+      '@img/sharp-linux-s390x': 0.35.5
+      '@img/sharp-linux-x64': 0.35.5
+      '@img/sharp-linuxmusl-arm64': 0.35.5
+      '@img/sharp-linuxmusl-x64': 0.35.5
+      '@img/sharp-webcontainers-wasm32': 0.35.5
+      '@img/sharp-win32-arm64': 0.35.5
+      '@img/sharp-win32-ia32': 0.35.5
+      '@img/sharp-win32-x64': 0.35.5
 
   /shebang-command@2.0.0:
     resolution: {integrity: sha512-kHxr2zZpYtdmrN1qDjrrX/Z1rR1kG8Dx+gkpK1G4eXmvXswmcE1hTWBWYUzlraYw1/yZp6YuDY77YtvbN0dmDA==}
@@ -34784,7 +34783,7 @@ packages:
       - utf-8-validate
     dev: true
 
-  /storybook@9.1.20(@testing-library/dom@10.4.1)(prettier@2.8.8)(vite@6.4.3):
+  /storybook@9.1.20(@testing-library/dom@10.4.1)(prettier@2.8.8)(vite@6.4.4):
     resolution: {integrity: sha512-6rME2tww6PFhm96iG2Xx44yzwLDWBiDWy+kJ2ub6x90werSTOiuo+tZJ94BgCfFutR0tEfLRIq59s+Zg6YyChA==}
     hasBin: true
     peerDependencies:
@@ -34797,7 +34796,7 @@ packages:
       '@testing-library/jest-dom': 6.9.1
       '@testing-library/user-event': 14.6.1(@testing-library/dom@10.4.1)
       '@vitest/expect': 3.2.4
-      '@vitest/mocker': 3.2.4(vite@6.4.3)
+      '@vitest/mocker': 3.2.4(vite@6.4.4)
       '@vitest/spy': 3.2.4
       better-opn: 3.0.2
       esbuild: 0.25.12
@@ -36082,8 +36081,8 @@ packages:
   /undici-types@8.9.0:
     resolution: {integrity: sha512-KTDyRTYX8sWmKXAikPHHSyc63CRPETMctyjKFupcC6OBLXT3xsN0e9aF7m+mIXutFWpUXuedtowG7iLOzp0kQg==}
 
-  /undici@7.29.1:
-    resolution: {integrity: sha512-RYONW2MeafgYlkVOKYKkA/Ag7BmXqgIWCa8t1m0JcxrQg9pI9lEqRhAOruOBCbAohOa/gkCF+iPi9hrgvTzu6Q==}
+  /undici@7.30.1:
+    resolution: {integrity: sha512-03KrMbjIFDWQR5RNPrSw3bd1r12JpyFQl9/yxjUbJtqkjmllqC5lFjZh6ujeuJCKr8EOQvRW872Oy/az+nLYxg==}
     engines: {node: '>=20.18.1'}
     dev: false
 
@@ -36539,7 +36538,7 @@ packages:
       debug: 4.4.3
       es-module-lexer: 1.7.0
       pathe: 2.0.3
-      vite: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vite: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
     transitivePeerDependencies:
       - '@types/node'
       - jiti
@@ -36555,8 +36554,8 @@ packages:
       - yaml
     dev: true
 
-  /vite@6.4.3(@types/node@18.19.130):
-    resolution: {integrity: sha512-NTKlcQjlAK7MlQoyb6LgaqHc8sso/pVyUJYWMws3jg21uTJw/LddqIFPcPqP6PzpgbIcZyKI85sFE4HBrQDA8A==}
+  /vite@6.4.4(@types/node@18.19.130):
+    resolution: {integrity: sha512-xGjU/SyjeNyb0E4KxXBvYz/1C+3JXuujvf2hXNOtnlcE+58o5ajd9N2/n2VhkiJvpCP2qQasnUpx5PXNeI+p1Q==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
     hasBin: true
     peerDependencies:
@@ -36606,8 +36605,8 @@ packages:
       fsevents: 2.3.3
     dev: true
 
-  /vite@6.4.3(@types/node@20.19.24)(yaml@2.9.0):
-    resolution: {integrity: sha512-NTKlcQjlAK7MlQoyb6LgaqHc8sso/pVyUJYWMws3jg21uTJw/LddqIFPcPqP6PzpgbIcZyKI85sFE4HBrQDA8A==}
+  /vite@6.4.4(@types/node@20.19.24)(yaml@2.9.0):
+    resolution: {integrity: sha512-xGjU/SyjeNyb0E4KxXBvYz/1C+3JXuujvf2hXNOtnlcE+58o5ajd9N2/n2VhkiJvpCP2qQasnUpx5PXNeI+p1Q==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
     hasBin: true
     peerDependencies:
@@ -36688,7 +36687,7 @@ packages:
       '@types/chai': 5.2.3
       '@types/node': 20.19.24
       '@vitest/expect': 3.2.6
-      '@vitest/mocker': 3.2.6(vite@6.4.3)
+      '@vitest/mocker': 3.2.6(vite@6.4.4)
       '@vitest/pretty-format': 3.2.6
       '@vitest/runner': 3.2.6
       '@vitest/snapshot': 3.2.6
@@ -36708,7 +36707,7 @@ packages:
       tinyglobby: 0.2.16
       tinypool: 1.1.1
       tinyrainbow: 2.0.0
-      vite: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vite: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vite-node: 3.2.4(@types/node@20.19.24)(yaml@2.9.0)
       why-is-node-running: 2.3.0
     transitivePeerDependencies:
@@ -36757,7 +36756,7 @@ packages:
       '@types/chai': 5.2.3
       '@types/node': 20.19.24
       '@vitest/expect': 3.2.6
-      '@vitest/mocker': 3.2.6(vite@6.4.3)
+      '@vitest/mocker': 3.2.6(vite@6.4.4)
       '@vitest/pretty-format': 3.2.6
       '@vitest/runner': 3.2.6
       '@vitest/snapshot': 3.2.6
@@ -36775,7 +36774,7 @@ packages:
       tinyglobby: 0.2.16
       tinypool: 1.1.1
       tinyrainbow: 2.0.0
-      vite: 6.4.3(@types/node@20.19.24)(yaml@2.9.0)
+      vite: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vite-node: 3.2.4(@types/node@20.19.24)(yaml@2.9.0)
       why-is-node-running: 2.3.0
     transitivePeerDependencies:

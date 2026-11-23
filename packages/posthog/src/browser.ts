@@ -1,4 +1,5 @@
 import type { PostHog, PostHogConfig } from 'posthog-js';
+import { isNoise } from './noise';
 
 /**
  * PostHog in the browser, loaded after the page is idle so it never delays
@@ -23,19 +24,21 @@ export const browserOptions = (
   // Typing in the editor is resume text: never recorded.
   disable_session_recording: true,
   disable_surveys: true,
-  // Cookieless mode drops the address before PostHog could place it. The
-  // country goes in our own property and in PostHog's, for its world map.
-  before_send: country
-    ? (event) =>
-        event && {
-          ...event,
-          properties: {
-            ...event.properties,
-            country,
-            $geoip_country_code: country,
-          },
-        }
-    : undefined,
+  // Exceptions nobody can act on are dropped. Cookieless mode drops the
+  // address before PostHog could place it, so the country goes in our own
+  // property and in PostHog's, for its world map.
+  before_send: (event) => {
+    if (!event || isNoise(event)) return null;
+    if (!country) return event;
+    return {
+      ...event,
+      properties: {
+        ...event.properties,
+        country,
+        $geoip_country_code: country,
+      },
+    };
+  },
 });
 
 /** The visitor's country from Cloudflare's trace, which fronts the site. */
