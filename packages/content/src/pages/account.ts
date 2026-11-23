@@ -95,8 +95,10 @@ export const username = {
 
 /** What a failed request means, by error tag. */
 export const errors: Record<string, string> = {
-  InvalidCredentials: 'That email and password don’t match an account.',
-  EmailTaken: 'An account already uses that email. Sign in instead.',
+  InvalidCredentials:
+    'That email and password don’t match an account. If you signed up with GitHub, use Continue with GitHub.',
+  EmailTaken:
+    'An account already uses that email. Sign in instead, with your password or with GitHub.',
   TooManyAttempts: 'Too many attempts. Wait a few minutes, then try again.',
   GithubUnreachable:
     'GitHub isn’t answering, so we can’t confirm that username yet. Try again in a minute.',
