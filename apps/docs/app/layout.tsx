@@ -25,7 +25,11 @@ export default function Layout({ children }: { children: ReactNode }) {
         />
       </head>
       <body suppressHydrationWarning>
-        <RootProvider>{children}</RootProvider>
+        <RootProvider
+          search={{ options: { type: 'static', api: '/docs/api/search.json' } }}
+        >
+          {children}
+        </RootProvider>
       </body>
     </html>
   );
