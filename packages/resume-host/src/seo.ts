@@ -5,6 +5,10 @@ import {
   profilePage,
   SITE,
 } from './profileData';
+import { CARD_SIZE } from './card';
+
+/** The PNG link previews show for a resume page. */
+export const cardUrl = (username: string) => `${SITE}/_card/${username}.png`;
 
 /** Text safe inside an HTML attribute or element. */
 const escape = (value: string) =>
@@ -54,9 +58,14 @@ const headTags = (html: string, username: string, resume: unknown) => {
     ['property', 'og:title', title],
     ['property', 'og:description', description],
     ['property', 'og:url', url],
-    ['property', 'og:image', profile.image ?? `${SITE}/og.png`],
+    // The resume's own card (apps/app/server/cards.ts, CARD_SIZE).
+    ['property', 'og:image', cardUrl(username)],
+    ['property', 'og:image:width', String(CARD_SIZE.width)],
+    ['property', 'og:image:height', String(CARD_SIZE.height)],
+    ['property', 'og:image:alt', `${title}: resume card`],
     ['property', 'profile:username', username],
-    ['name', 'twitter:card', profile.image ? 'summary' : 'summary_large_image'],
+    ['name', 'twitter:card', 'summary_large_image'],
+    ['name', 'twitter:image', cardUrl(username)],
     ['name', 'twitter:title', title],
     ['name', 'twitter:description', description],
   ];

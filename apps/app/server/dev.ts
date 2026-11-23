@@ -3,6 +3,8 @@
  * and Explore, as in production, on an in-memory Postgres (PGlite) that starts
  * empty (the job board too: run the pipeline against it to fill it).
  */
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { apiRoutes } from '@repo/api-server';
 import { mcpRoutes } from '@repo/mcp';
 import { InMemoryDatabase } from '@repo/database/testing';
@@ -15,6 +17,7 @@ import { createExplorePage, explorePath } from './explorePage';
 import { companyPath, createJobPages, jobPath, jobsPath } from './jobPages';
 import { createResumeHandler, variantPath } from './resumes';
 import { createSitemaps, liveSitemapPath, sitemapPath } from './sitemaps';
+import { cardPath, createCardHandler } from './cards';
 import { createTimelinePage, timelinePath } from './timelinePage';
 import { appServices } from './services';
 import { DevSeed } from './devSeed';
@@ -38,6 +41,10 @@ const mcp = effectWebHandler(
 const jobs = createJobPages(render, services, { memoMap });
 const explore = createExplorePage(render, services, { memoMap });
 const timeline = createTimelinePage(render, services, { memoMap });
+const cards = createCardHandler(services, {
+  cacheDir: join(tmpdir(), 'jsonresume-dev-cards'),
+  memoMap,
+});
 const sitemaps = createSitemaps(process.env.SITE_URL ?? '', services, {
   memoMap,
 });
@@ -70,6 +77,7 @@ app.get(
   variantPath,
   async (c, next) => (await resumes.fetch(c.req.raw)) ?? next()
 );
+app.get(cardPath, (c) => cards.fetch(c.req.raw));
 app.get(
   timelinePath,
   async (c, next) => (await timeline.fetch(c.req.raw)) ?? next()

@@ -84,7 +84,10 @@ describe('the server handler', () => {
       RateLimiter.layer,
       Layer.succeed(
         ResumePdf,
-        ResumePdf.of({ print: () => Effect.succeed(new Uint8Array()) })
+        ResumePdf.of({
+          snapshot: () => Effect.die('no snapshots here'),
+          print: () => Effect.succeed(new Uint8Array()),
+        })
       ),
       Layer.succeed(
         Profiles,
