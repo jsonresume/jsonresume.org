@@ -35,6 +35,7 @@ export const paths = {
   registry: '/registry',
   jobs: '/jobs',
   job: (id: number) => `/jobs/${id}`,
+  jobCompany: (slug: string) => `/jobs/companies/${slug}`,
   dashboard: '/dashboard',
   dashboardJobs: '/dashboard/jobs',
   /** Pathways, putting `ask` to the copilot on arrival. */

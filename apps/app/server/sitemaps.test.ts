@@ -134,11 +134,12 @@ describe('/sitemap.xml', () => {
     expect(new Set(urls).size).toBe(urls.length);
   });
 
-  it('lists open jobs with their dates', async () => {
+  it('lists open jobs and their companies, with dates', async () => {
     const { text } = await get('/sitemap-jobs.xml');
     expect(locs(text)).toEqual([
       'https://jsonresume.org/jobs/41',
       'https://jsonresume.org/jobs/42',
+      'https://jsonresume.org/jobs/companies/acme',
     ]);
     expect(text).toContain('<lastmod>2026-11-02</lastmod>');
   });

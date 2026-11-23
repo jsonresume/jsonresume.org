@@ -12,7 +12,7 @@ import { Layer } from 'effect';
 import { render } from '../src/entry-server';
 import { discoveryRoutes, isMcpRequest, sessionless } from './agents';
 import { createExplorePage, explorePath } from './explorePage';
-import { createJobPages, jobPath, jobsPath } from './jobPages';
+import { companyPath, createJobPages, jobPath, jobsPath } from './jobPages';
 import { createResumeHandler, variantPath } from './resumes';
 import { createSitemaps, liveSitemapPath, sitemapPath } from './sitemaps';
 import { createTimelinePage, timelinePath } from './timelinePage';
@@ -68,6 +68,7 @@ app.get(
 );
 app.get(jobsPath, (c) => jobs.board(c.req.raw));
 app.get(jobPath, (c) => jobs.job(c.req.raw));
+app.get(companyPath, (c) => jobs.company(c.req.raw));
 app.get(explorePath, (c) => explore.fetch(c.req.raw));
 app.get(sitemapPath, () => sitemaps.index());
 app.get(

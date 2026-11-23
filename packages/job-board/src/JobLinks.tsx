@@ -16,7 +16,13 @@ export function JobLinks({ job, boardHref }: { job: Job; boardHref: string }) {
         More
       </Heading>
       {company && (
-        <a href={`${boardHref}?q=${encodeURIComponent(company)}`}>
+        <a
+          href={
+            job.companySlug
+              ? `${boardHref}/companies/${job.companySlug}`
+              : `${boardHref}?q=${encodeURIComponent(company)}`
+          }
+        >
           Other jobs at {company}
         </a>
       )}
