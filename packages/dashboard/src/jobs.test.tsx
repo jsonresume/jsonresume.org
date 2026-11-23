@@ -178,6 +178,27 @@ describe('the decided jobs page', () => {
     expect(weekly.getAttribute('aria-checked')).toBe('true');
   });
 
+  it('offers the weekly email when there are jobs for it, until put off', () => {
+    window.localStorage.clear();
+    const { unmount } = show(
+      decided({ preferences: { ...none, weeklyEmail: true } })
+    );
+    expect(screen.queryByText('New jobs, by email')).toBeNull();
+    unmount();
+    const nothing = show(
+      decided({ counts: { apply: 0, stretch: 0, skip: 0, ruled_out: 1 } })
+    );
+    expect(screen.queryByText('New jobs, by email')).toBeNull();
+    nothing.unmount();
+    const offered = show(decided());
+    expect(screen.getByText('New jobs, by email')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Not now' }));
+    expect(screen.queryByText('New jobs, by email')).toBeNull();
+    offered.unmount();
+    show(decided());
+    expect(screen.queryByText('New jobs, by email')).toBeNull();
+  });
+
   it('offers suggestions from marks, and drops one once answered', () => {
     show(
       decided({
