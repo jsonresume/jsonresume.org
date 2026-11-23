@@ -35,6 +35,10 @@ const bindings = [
 ];
 
 /** Edit the resume as a form or as JSON, with the page beside it, live. */
+const welcomed = () =>
+  typeof window !== 'undefined' &&
+  new URLSearchParams(window.location.search).get('welcome') === '1';
+
 export function ResumeEditor({ username }: { username: string }) {
   useAtomsInUrl(bindings);
   const draft = useAtomValue(draftAtom);
@@ -133,6 +137,9 @@ export function ResumeEditor({ username }: { username: string }) {
     >
       <Stack gap={4}>
         {toGist && !target.gistWrite ? <AllowGist /> : null}
+        {draft === null && welcomed() ? (
+          <Start.Welcome username={username} />
+        ) : null}
         {notice ? <Callout tone={notice.tone}>{notice.text}</Callout> : null}
         {example ? (
           <Callout tone="info">
