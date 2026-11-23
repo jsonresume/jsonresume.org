@@ -19,7 +19,6 @@
     "AUTH_SECRET",
     "AUTH_GITHUB_ID",
     "AUTH_GITHUB_SECRET",
-    "VERCEL_ENV",
     "NEXT_PUBLIC_SUPABASE_URL",
     "NEXT_PUBLIC_SUPABASE_ANON_KEY",
     "NEXT_PUBLIC_APP_URL",
@@ -30,15 +29,20 @@
     "LOGTAIL_URL",
     "NEXT_PUBLIC_LOGTAIL_SOURCE_TOKEN",
     "NEXT_PUBLIC_BETTER_STACK_SOURCE_TOKEN",
-    "NEXT_PUBLIC_BETTER_STACK_INGESTING_URL",
-    "VERCEL_BYPASS_FALLBACK_OVERSIZED_ERROR"
+    "NEXT_PUBLIC_BETTER_STACK_INGESTING_URL"
   ],
   "tasks": {
     "db:generate": {
       "cache": false
     },
     "build": {
-      "outputs": [".next/**", "!.next/cache/**", "_site/**", "dist/**"],
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**",
+        "_site/**",
+        "dist/**",
+        "out/**"
+      ],
       "dependsOn": ["^build"]
     },
     "lint": {

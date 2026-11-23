@@ -168,7 +168,7 @@ Before opening a PR, please read our [Contributing Guide](CONTRIBUTING.md) for t
 
 ## Contributors
 
-[![Contributors](https://4.vercel.app/github/contributors/jsonresume/jsonresume.org?strokeopacity=1)](https://github.com/jsonresume/jsonresume.org/graphs/contributors)
+[![Contributors](https://contrib.rocks/image?repo=jsonresume/jsonresume.org)](https://github.com/jsonresume/jsonresume.org/graphs/contributors)
 
 Join our [Discord community](https://discord.gg/GTZtn8pTXC) for discussions, support, and collaboration.
 

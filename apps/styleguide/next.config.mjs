@@ -5,9 +5,10 @@ const withVanillaExtract = createVanillaExtractPlugin();
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // Example sources (and their .css.ts files) are read from disk at build
-  // time and shown next to the live example.
-  outputFileTracingIncludes: { '/components/[slug]': ['./examples/**/*'] },
+  // Every page is static (example sources are read from disk at build
+  // time), so the build is plain files in out/, served by the box's Caddy
+  // at styleguide.jsonresume.org.
+  output: 'export',
 };
 
 // vanilla-extract compiles .css.ts files through webpack, so dev and build

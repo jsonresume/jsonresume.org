@@ -40,13 +40,8 @@ yarn-error.log*
 # typescript incremental
 *.tsbuildinfo
 
-# vercel
-.vercel
 .parcel-cache
 /.vs
-
-# Vercel error monitoring
-scripts/.vercel-error-hashes.json
 
 *storybook.log
 storybook-static

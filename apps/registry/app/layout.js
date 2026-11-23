@@ -1,4 +1,3 @@
-import { Analytics } from '@vercel/analytics/react';
 import { AuthProvider } from './context/auth';
 import Menu from './components/Menu';
 import '@repo/ui/globals.css';
@@ -30,7 +29,6 @@ export default function RootLayout({ children }) {
         <AuthProvider>
           <Menu />
           <main>{children}</main>
-          <Analytics />
         </AuthProvider>
       </body>
     </html>

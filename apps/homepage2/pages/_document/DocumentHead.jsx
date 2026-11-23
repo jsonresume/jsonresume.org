@@ -6,8 +6,7 @@ export function DocumentHead() {
 
       <link rel="dns-prefetch" href="//fonts.googleapis.com" />
       <link rel="dns-prefetch" href="//cdnjs.cloudflare.com" />
-      {(process.env.NODE_ENV === 'development' ||
-        process.env.VERCEL_ENV === 'preview') && (
+      {process.env.NODE_ENV === 'development' && (
         // eslint-disable-next-line @next/next/no-sync-scripts
         <script
           data-project-id="3T7wRdtjOmyutEJb4CkBwQmBQqnzIsTTBh1ypGGP"
