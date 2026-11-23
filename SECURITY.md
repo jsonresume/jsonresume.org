@@ -21,6 +21,8 @@ Please do not report security vulnerabilities through public GitHub issues, disc
 
 ### 2. Report Privately
 
+**Preferred:** [report it privately on GitHub](https://github.com/jsonresume/jsonresume.org/security/advisories/new) (Security → Report a vulnerability).
+
 **Email:** security@jsonresume.org (or contact [@thomasdavis](https://github.com/thomasdavis) directly)
 
 **Include:**
