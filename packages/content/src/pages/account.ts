@@ -64,6 +64,15 @@ export const settings = {
     'Deletes your account, your saved resume and every view we recorded. Your username is free straight away. A resume in a GitHub gist stays on GitHub. This can’t be undone.',
   deleteConfirm: (name: string) => `Type ${name} to confirm`,
   deleteButton: 'Delete my account',
+  leaveReason: 'Why are you leaving? (optional)',
+  leaveReasons: {
+    mistake: 'I signed up by mistake, or made a second account',
+    private: 'I don’t want my resume public',
+    'not-useful': 'It isn’t what I was looking for',
+    other: 'Something else',
+  },
+  leavePrivateGist:
+    'Your page shows your public gist, so it stays up whether or not you have an account. To take it down, make the gist secret or delete it on GitHub; the page goes soon after.',
 };
 
 export const chooseUsername = {

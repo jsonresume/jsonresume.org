@@ -110,7 +110,11 @@ export const AccountHandlers = HttpApiBuilder.group(
             const user = yield* CurrentUser;
             yield* accounts.deleteAccount(user.id, payload.confirm);
             yield* clearSession;
-            yield* track(user.id, 'account_deleted');
+            yield* track(
+              user.id,
+              'account_deleted',
+              payload.reason ? { reason: payload.reason } : undefined
+            );
           }),
         setSource: ({ payload }) =>
           Effect.gen(function* () {

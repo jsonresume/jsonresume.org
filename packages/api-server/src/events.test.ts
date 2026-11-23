@@ -69,4 +69,29 @@ describe('product events', () => {
     ]);
     expect(new Set(server.events.map((e) => e.id)).size).toBe(1);
   });
+
+  it('records why an account was deleted, when they say', async () => {
+    server = testServer();
+    const user = await (
+      await server.post('/api/auth/signup', {
+        email: 'ada@example.com',
+        password: 'correct horse battery',
+        username: 'ada',
+      })
+    ).json();
+    const odd = await server.post('/api/account/delete', {
+      confirm: 'ada',
+      reason: 'because',
+    });
+    expect(odd.status).toBe(400);
+    await server.post('/api/account/delete', {
+      confirm: 'ada',
+      reason: 'private',
+    });
+    expect(server.events.at(-1)).toEqual({
+      id: user.id,
+      event: 'account_deleted',
+      properties: { reason: 'private' },
+    });
+  });
 });
