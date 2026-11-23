@@ -7,6 +7,8 @@ interface FakeGist {
   files: Record<string, string>;
   /** When it was last updated, in ms (default 0), for `?since=`. */
   updated?: number;
+  /** Secret: left out of listings, but readable by id, as on GitHub. */
+  secret?: boolean;
 }
 
 /** GitHub in memory: users with gists, and a switch to make it fail. */
@@ -46,6 +48,7 @@ export function fakeGithub() {
     inline: boolean
   ) => ({
     id: gist.id,
+    public: gist.secret !== true,
     owner: { id: ownerId, login },
     files: Object.fromEntries(
       Object.entries(gist.files).map(([name, text]) => [
@@ -82,7 +85,7 @@ export function fakeGithub() {
       const after = since ? Date.parse(since) : -Infinity;
       return json(
         user.gists
-          .filter((g) => (g.updated ?? 0) > after)
+          .filter((g) => g.secret !== true && (g.updated ?? 0) > after)
           .slice((page - 1) * size, page * size)
           .map((g) => gistBody(list[1] ?? '', user.id, g, false))
       );

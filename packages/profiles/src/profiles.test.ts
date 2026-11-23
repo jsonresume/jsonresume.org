@@ -145,6 +145,28 @@ describe('Profiles.resume', () => {
     }).pipe(run(layer));
   });
 
+  it('takes the page down when the gist is made secret', () => {
+    const { github, layer } = setup();
+    return Effect.gen(function* () {
+      const profiles = yield* Profiles;
+      yield* profiles.resume(foo);
+      const gists = github.state.users.get('foo')?.gists ?? [];
+      github.state.users.set('foo', {
+        id: 7,
+        gists: gists.map((g) => ({ ...g, secret: true })),
+      });
+      yield* TestClock.adjust(Duration.minutes(5));
+      yield* profiles.resume(foo);
+      yield* settle;
+      const error = yield* Effect.flip(profiles.resume(foo));
+      expect(error).toMatchObject({
+        _tag: 'ProfileNotFound',
+        reason: 'no-gist',
+      });
+      expect(yield* (yield* ProfileStore).find('foo')).toBeUndefined();
+    }).pipe(run(layer));
+  });
+
   it('tells a missing user from a missing gist', () => {
     const { layer } = setup();
     return Effect.gen(function* () {
