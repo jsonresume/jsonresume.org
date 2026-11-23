@@ -291,12 +291,20 @@ describe('resumeOutcome', () => {
     expect(res.headers.get('location')).toMatch(/^\/@foo\?theme=[a-z-]+$/);
   });
 
+  it('opens an old link with a removed theme in the owner’s theme', async () => {
+    const page = response(await get('/@foo?theme=kwan'));
+    expect(page.status).toBe(302);
+    expect(page.headers.get('location')).toBe('/@foo');
+    const pdf = response(await get('/@foo.pdf?theme=nope&paper=a4'));
+    expect(pdf.headers.get('location')).toBe('/@foo.pdf?paper=a4');
+    expect(response(await get('/@foo.json?theme=nope')).status).toBe(200);
+  });
+
   it.each([
     ['/@nobody', { kind: 'no-gist', page: true }],
     ['/@nobody.json', { kind: 'no-gist', page: false }],
     ['/@down', { kind: 'github-down', page: true }],
     ['/@list.json', { kind: 'not-object', page: false }],
-    ['/@foo?theme=nope', { kind: 'theme-missing', page: true }],
     ['/@foo.odt', { kind: 'unknown-format', page: true }],
     ['/@nobody.docx', { kind: 'no-gist', page: true }],
     ['/@nobody.pdf', { kind: 'no-gist', page: true }],

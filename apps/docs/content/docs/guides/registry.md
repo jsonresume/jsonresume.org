@@ -46,7 +46,8 @@ The theme is chosen in this order:
 2. `meta.theme` in your resume: `{ "meta": { "theme": "even" } }`
 3. the default theme
 
-`?theme=random` picks a random theme. The full list is in the
+`?theme=random` picks a random theme. A theme that no longer exists is
+dropped from the address, so old links still open the resume. The full list is in the
 [theme gallery](https://jsonresume.org/themes/). Themes work for `.pdf` too:
 `/@jane.pdf?theme=even`.
 
@@ -62,7 +63,7 @@ https://jsonresume.org/@jane?gistname=resume-de.json
 
 | Status | Meaning |
 | --- | --- |
-| 404 | No such user, no public `resume.json` gist, no resume published yet, or an unknown theme or format |
+| 404 | No such user, no public `resume.json` gist, no resume published yet, or an unknown format |
 | 400 | The resume is not valid JSON, or not a JSON object |
 | 500 | The theme could not render this resume; try another theme |
 | 503 | GitHub could not be reached, or the PDF could not be made; try again shortly |
