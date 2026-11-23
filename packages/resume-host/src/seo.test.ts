@@ -61,8 +61,13 @@ describe('withProfileHead', () => {
     expect(html).toContain(
       '<meta property="og:url" content="https://jsonresume.org/@ada">'
     );
+    // Link previews show the resume's card, large.
     expect(html).toContain(
-      '<meta property="og:image" content="https://example.com/ada.jpg">'
+      '<meta property="og:image" content="https://jsonresume.org/_card/ada.png">'
+    );
+    expect(html).toContain('<meta property="og:image:width" content="1200">');
+    expect(html).toContain(
+      '<meta name="twitter:card" content="summary_large_image">'
     );
     expect(html).toContain('name="twitter:title"');
     // Everything lands inside <head>.
@@ -165,6 +170,7 @@ describe('resume pages, served', () => {
   const printer = Layer.succeed(
     ResumePdf,
     ResumePdf.of({
+      snapshot: () => Effect.die('no snapshots here'),
       print: (html) => Effect.succeed(new TextEncoder().encode(html)),
     })
   );

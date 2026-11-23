@@ -86,6 +86,7 @@ const profiles = Layer.succeed(
 const printer = Layer.succeed(
   ResumePdf,
   ResumePdf.of({
+    snapshot: () => Effect.die('no snapshots here'),
     print: (html, paper, options) =>
       html.includes('Broken')
         ? Effect.fail(new PdfFailed({ message: 'x' }))

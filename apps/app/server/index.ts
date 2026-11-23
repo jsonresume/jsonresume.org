@@ -24,6 +24,7 @@ import {
   openPaths,
   sessionless,
 } from './agents';
+import { cardPath, createCardHandler } from './cards';
 import { createExplorePage, explorePath } from './explorePage';
 import { companyPath, createJobPages, jobPath, jobsPath } from './jobPages';
 import { createResumeHandler, resumePath, variantPath } from './resumes';
@@ -98,6 +99,15 @@ const main = Effect.gen(function* () {
     Config.withDefault(join(tmpdir(), 'jsonresume'))
   );
   const images = createImageProxy({ cacheDir: join(cacheDir, 'images') });
+  const cards = yield* Effect.acquireRelease(
+    Effect.sync(() =>
+      createCardHandler(services, {
+        cacheDir: join(cacheDir, 'cards'),
+        memoMap,
+      })
+    ),
+    (handler) => Effect.promise(() => handler.dispose())
+  );
   const render = yield* loadRenderer;
   const resumes = yield* Effect.acquireRelease(
     Effect.sync(() =>
@@ -154,6 +164,7 @@ const main = Effect.gen(function* () {
       { path: variantPath, fetch: resumes.fetch },
       { path: themeFontPath, fetch: themeFont },
       { path: imageProxyPath, fetch: images },
+      { path: cardPath, fetch: cards.fetch },
       { path: timelinePath, fetch: timeline.fetch },
       { path: jobsPath, fetch: jobs.board },
       { path: jobPath, fetch: jobs.job },

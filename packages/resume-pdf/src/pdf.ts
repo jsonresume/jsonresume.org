@@ -1,13 +1,12 @@
-import { Clock, Context, Effect, Layer, Schema, Semaphore } from 'effect';
+import { Clock, Context, Effect, Layer, Semaphore } from 'effect';
 import { createHash } from 'node:crypto';
 import type { Browser } from 'playwright-core';
+import { PdfFailed } from './errors.ts';
 import { fitOnePage } from './fit.ts';
 import { mayLoad, type Paper } from './policy.ts';
+import { makeSnapshot } from './snapshot.ts';
 
-/** The browser could not print the page. */
-export class PdfFailed extends Schema.TaggedError<PdfFailed>()('PdfFailed', {
-  message: Schema.String,
-}) {}
+export { PdfFailed } from './errors.ts';
 
 /** Prints at a time: each holds a Chromium page, a few hundred MB at worst. */
 const CONCURRENT = 2;
@@ -33,6 +32,11 @@ export class ResumePdf extends Context.Service<
       html: string,
       paper: Paper,
       options?: PrintOptions
+    ): Effect.Effect<Uint8Array<ArrayBuffer>, PdfFailed>;
+    /** A PNG of `html` laid out at `width` × `height` CSS pixels. */
+    snapshot(
+      html: string,
+      size: { width: number; height: number }
     ): Effect.Effect<Uint8Array<ArrayBuffer>, PdfFailed>;
   }
 >()('@repo/resume-pdf/ResumePdf') {
@@ -149,7 +153,9 @@ export class ResumePdf extends Context.Service<
           return pdf;
         });
 
-      return ResumePdf.of({ print });
+      const snapshot = makeSnapshot(open, attempt, turns);
+
+      return ResumePdf.of({ print, snapshot });
     })
   );
 }
