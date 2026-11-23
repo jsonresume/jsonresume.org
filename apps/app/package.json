@@ -62,7 +62,7 @@
     "qrcode": "^1.5.4",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "sharp": "0.35.4",
+    "sharp": "0.35.5",
     "unpdf": "1.9.1"
   },
   "devDependencies": {
@@ -80,7 +80,7 @@
     "jsdom": "^27.0.0",
     "tsconfig": "workspace:*",
     "typescript": "^5.9.3",
-    "vite": "^6.4.3",
+    "vite": "^6.4.4",
     "vitest": "^3.2.6",
     "@playwright/test": "1.56.1"
   }
