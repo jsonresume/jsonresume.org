@@ -81,7 +81,8 @@ publish_static() {
   rm -rf "${WWW:?}/$sha.new" && cp -r "$out" "$WWW/$sha.new"
   chmod -R a+rX "$WWW/$sha.new"
   rm -rf "${WWW:?}/${sha:?}" && mv "$WWW/$sha.new" "$WWW/$sha"
-  old=$(readlink -f "$WWW/current" 2>/dev/null || true)
+  # readlink -f names a missing link too: only read one that exists.
+  old=""; [ -L "$WWW/current" ] && old=$(readlink -f "$WWW/current")
   repoint "$WWW/current" "$WWW/$sha"
   [ -n "$old" ] && [ "$old" != "$WWW/$sha" ] && repoint "$WWW/previous" "$old"
   live=$(readlink -f "$WWW/current"); prev=$(readlink -f "$WWW/previous" 2>/dev/null || true)
