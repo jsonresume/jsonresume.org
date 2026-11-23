@@ -1,5 +1,20 @@
 # app
 
+## 0.0.7
+
+### Patch Changes
+
+- @repo/content@0.0.6
+- @repo/jobs@0.0.0
+- @repo/mcp@0.0.6
+- @repo/resume-editor@0.0.6
+- @repo/resume-import@0.0.5
+- @repo/site@0.0.6
+- @repo/auth-pages@0.0.6
+- @repo/dashboard@0.0.6
+- @repo/pathways@0.0.6
+- @repo/api-server@0.0.7
+
 ## 0.0.6
 
 ### Patch Changes
