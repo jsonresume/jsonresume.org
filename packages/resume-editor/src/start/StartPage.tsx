@@ -3,6 +3,7 @@ import { THEME_METADATA } from '@jsonresume/theme-metadata';
 import { useEffect } from 'react';
 import { Container, Heading, Text } from '@jsonresume/ui';
 import { Choose } from './Choose';
+import { startEvent } from './events';
 import { Guided } from './Guided';
 import { Preview } from './Preview';
 import { Review } from './Review';
@@ -36,6 +37,10 @@ function Step() {
       live = false;
     };
   }, [setTheme, setResume, setStep]);
+  // Each step reached, to see where people leave (start_step).
+  useEffect(() => {
+    startEvent('start_step', { step });
+  }, [step]);
   return step === 'review' ? (
     <Review />
   ) : step === 'guided' ? (

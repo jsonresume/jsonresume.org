@@ -2809,6 +2809,9 @@ importers:
       '@repo/content':
         specifier: workspace:*
         version: link:../content
+      '@repo/posthog':
+        specifier: workspace:^
+        version: link:../posthog
       '@repo/schema-explorer':
         specifier: workspace:*
         version: link:../schema-explorer

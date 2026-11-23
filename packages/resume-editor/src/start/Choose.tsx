@@ -1,4 +1,5 @@
 import { useAtomSet } from '@effect/atom-react';
+import { startEvent } from './events';
 import {
   Button,
   Callout,
@@ -36,11 +37,19 @@ export function Choose() {
   const [error, setError] = useState<string>();
   const signedIn = useSignedInHint();
 
-  const read = async (send: () => ReturnType<typeof run>) => {
+  const read = async (
+    kind: 'file' | 'text',
+    send: () => ReturnType<typeof run>
+  ) => {
     setBusy(true);
     setError(undefined);
     const exit = await send();
     setBusy(false);
+    startEvent('start_import_result', {
+      kind,
+      ok: Exit.isSuccess(exit),
+      reason: Exit.isFailure(exit) ? errorTag(exit) ?? 'unknown' : null,
+    });
     if (Exit.isFailure(exit)) return setError(failed(errorTag(exit)));
     setResult(exit.value);
     setResume(exit.value.resume);
@@ -51,7 +60,7 @@ export function Choose() {
     if (!file) return;
     const form = new FormData();
     form.append('file', file);
-    void read(() => run({ payload: form }));
+    void read('file', () => run({ payload: form }));
   };
 
   return (
@@ -91,7 +100,7 @@ export function Choose() {
           <Button
             variant="secondary"
             disabled={busy || text.trim().length < 40}
-            onClick={() => void read(() => run({ payload: { text } }))}
+            onClick={() => void read('text', () => run({ payload: { text } }))}
           >
             Read it
           </Button>
