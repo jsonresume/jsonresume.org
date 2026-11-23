@@ -20,6 +20,7 @@ const GistFile = Schema.Struct({
 });
 const Gist = Schema.Struct({
   id: Schema.String,
+  public: Schema.optionalKey(Schema.Boolean),
   owner: Schema.Struct({ id: Schema.Number, login: Schema.String }),
   files: Schema.Record(Schema.String, GistFile),
 });
@@ -157,9 +158,11 @@ export class GithubGists extends Context.Service<
           body === undefined
             ? undefined
             : yield* decodeGist(body).pipe(Effect.mapError(decodeError));
-        // Gone, lost the file, or the login now belongs to someone else.
+        // Gone, made secret, lost the file, or the login is someone else's.
+        // A secret gist is still readable by id: its owner hid it, so do we.
         if (
           !gist ||
+          gist.public === false ||
           gist.owner.login.toLowerCase() !== login.toLowerCase() ||
           !(file in gist.files)
         ) {
