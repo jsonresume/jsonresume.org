@@ -201,6 +201,41 @@ describe('GitHub accounts', () => {
     );
   });
 
+  it('joins the verified email account GitHub’s email belongs to', async () => {
+    const { run, lastToken } = accountsStack();
+    await run(
+      Effect.gen(function* () {
+        const accounts = yield* Accounts;
+        const { user } = yield* accounts.signUp(signUp);
+        yield* accounts.verifyEmail(lastToken());
+        const result = yield* accounts.githubSignIn(
+          identity(9, 'ada-gh', 'ada@example.com')
+        );
+        if (result._tag !== 'SignedIn') throw new Error(result._tag);
+        expect(result).toMatchObject({ created: false, linked: true });
+        expect(result.user).toMatchObject({
+          id: user.id,
+          username: 'ada',
+          githubLogin: 'ada-gh',
+        });
+
+        // Unverified, the address proves nothing: a new account, no email.
+        const bea = yield* accounts.signUp({
+          ...signUp,
+          email: 'b@x.io',
+          username: 'bea',
+        });
+        const other = yield* accounts.githubSignIn(
+          identity(10, 'bea-gh', 'b@x.io')
+        );
+        if (other._tag !== 'SignedIn') throw new Error(other._tag);
+        expect(other.created).toBe(true);
+        expect(other.user.id).not.toBe(bea.user.id);
+        expect(other.user.email).toBeNull();
+      })
+    );
+  });
+
   it('merges a linked ghost into the account as a redirect', async () => {
     const { run } = accountsStack();
     await run(
