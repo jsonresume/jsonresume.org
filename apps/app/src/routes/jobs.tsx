@@ -46,3 +46,26 @@ export const jobRoute = createRoute({
     });
   },
 }).lazy(() => import('./jobs.lazy').then((m) => m.JobRoute));
+
+export const companyRoute = createRoute({
+  getParentRoute: () => siteRoute,
+  path: '/jobs/companies/$slug',
+  loader: ({ context, location }) => {
+    if (context.company === null) throw notFound();
+    if (context.company) return context.company;
+    throw reload(location.href);
+  },
+  head: ({ loaderData: profile }) => {
+    if (!profile) return {};
+    const { name } = profile.company;
+    const count = profile.jobs.length;
+    return pageHead({
+      title: `Jobs at ${name}`,
+      description: `${count} open ${
+        count === 1 ? 'job' : 'jobs'
+      } at ${name} from Hacker News "Who is hiring?", with where they work and the technologies they ask for.`,
+      path: paths.jobCompany(profile.slug),
+      parents: [{ name: 'Jobs', path: paths.jobs }],
+    });
+  },
+}).lazy(() => import('./jobs.lazy').then((m) => m.CompanyRoute));

@@ -5,6 +5,7 @@ import axe from 'axe-core';
 import { describe, expect, it } from 'vitest';
 import { filterJobs, noFilters } from './filters';
 import { postedText, remoteText, salaryText } from './format';
+import { CompanyPage } from './CompanyPage';
 import { JobBoardPage } from './JobBoardPage';
 import { JobPage } from './JobPage';
 import { applyHref } from './Linkified';
@@ -166,13 +167,54 @@ describe('JobPage', () => {
     expect(screen.getByText('No longer on the board')).toBeInTheDocument();
     expect(
       screen.getByRole('link', { name: `Other jobs at ${full.company}` })
-    ).toHaveAttribute('href', `/jobs?q=${encodeURIComponent(full.company)}`);
+    ).toHaveAttribute('href', '/jobs/companies/acme');
     expect(
       screen.getByRole('link', { name: 'This job (job.json)' })
     ).toHaveAttribute('href', `/api/jobs/${full.id}/document`);
     expect(
       screen.getByRole('link', { name: 'The company (company.json)' })
     ).toHaveAttribute('href', '/api/companies/acme/document');
+    expect(await violations(container)).toEqual([]);
+  });
+});
+
+describe('CompanyPage', () => {
+  it('shows what the posts state and the open jobs, and passes axe', async () => {
+    const { container } = render(
+      <CompanyPage
+        profile={{
+          slug: 'acme',
+          company: {
+            $schema: 'https://example.com/company-schema.json',
+            name: 'Acme',
+            url: 'https://www.acme.com',
+            remote: 'Full',
+            locations: [{ city: 'Berlin', countryCode: 'DE' }],
+            technologies: ['Go'],
+            meta: {
+              canonical: 'https://jsonresume.org/api/companies/acme/document',
+              lastModified: '2026-11-03T10:00:00.000Z',
+            },
+          },
+          jobs: [job()],
+        }}
+        boardHref="/jobs"
+        jobHref={(id) => `/jobs/${id}`}
+      />
+    );
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Acme');
+    expect(screen.getByText(/1 open job from/)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'acme.com' })).toHaveAttribute(
+      'href',
+      'https://www.acme.com'
+    );
+    expect(screen.getByText('Remote')).toBeInTheDocument();
+    expect(screen.getByText('Where').nextElementSibling).toHaveTextContent(
+      'Berlin, DE'
+    );
+    expect(
+      screen.getByRole('list', { name: 'Jobs at Acme' })
+    ).toBeInTheDocument();
     expect(await violations(container)).toEqual([]);
   });
 });

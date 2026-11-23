@@ -5,10 +5,12 @@ import type { Render } from './resumes';
 /** Hono path patterns for the board and a job. */
 export const jobsPath = '/jobs';
 export const jobPath = '/jobs/:id{[0-9]+}';
+export const companyPath = '/jobs/companies/:slug{[a-z0-9-]+}';
 
 /**
- * Serves /jobs and /jobs/:id: reads the board or the job, then renders the
- * app's route with it as router context (see src/routes/jobs.tsx).
+ * Serves /jobs, /jobs/:id and /jobs/companies/:slug: reads the board, the
+ * job or the company, then renders the app's route with it as router
+ * context (see src/routes/jobs.tsx).
  */
 export function createJobPages<E>(
   render: Render,
@@ -41,5 +43,16 @@ export function createJobPages<E>(
       : new Response(page.body, { status: 404, headers: page.headers });
   };
 
-  return { board, job, dispose: () => runtime.dispose() };
+  const company = async (request: Request) => {
+    const slug = new URL(request.url).pathname.split('/')[3] ?? '';
+    const found = await read((b) =>
+      b.company(slug).pipe(Effect.orElseSucceed(() => null))
+    );
+    const page = await render(request, { company: found });
+    return found
+      ? page
+      : new Response(page.body, { status: 404, headers: page.headers });
+  };
+
+  return { board, job, company, dispose: () => runtime.dispose() };
 }

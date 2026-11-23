@@ -1,5 +1,5 @@
 import { Explore } from '@repo/explore';
-import { JobBoard } from '@repo/jobs';
+import { companySlug, JobBoard } from '@repo/jobs';
 import { chunk, sitemapIndex, urlSet } from '@repo/server/sitemap';
 import { Effect, type Layer, ManagedRuntime } from 'effect';
 
@@ -24,7 +24,7 @@ const xml = (body: string) =>
 
 /**
  * /sitemap.xml, an index of: the prerendered pages, every open job
- * (/jobs/:id), and every resume Explore lists (/@username), in files of at
+ * (/jobs/:id) and hiring company (/jobs/companies/:slug), and every resume Explore lists (/@username), in files of at
  * most 40,000. Resumes that opted out of Explore are left out.
  */
 export function createSitemaps<E>(
@@ -45,10 +45,22 @@ export function createSitemaps<E>(
   });
   const jobs = Effect.gen(function* () {
     const board = yield* (yield* JobBoard).board;
-    return board.jobs.map((job) => ({
-      path: `/jobs/${job.id}`,
-      lastmod: job.postedAt,
-    }));
+    // Newest first, so a company's first job gives its lastmod.
+    const companies = new Map<string, string>();
+    for (const job of board.jobs) {
+      const slug = companySlug(job.company);
+      if (slug && !companies.has(slug)) companies.set(slug, job.postedAt);
+    }
+    return [
+      ...board.jobs.map((job) => ({
+        path: `/jobs/${job.id}`,
+        lastmod: job.postedAt,
+      })),
+      ...[...companies].map(([slug, lastmod]) => ({
+        path: `/jobs/companies/${slug}`,
+        lastmod,
+      })),
+    ];
   });
 
   const index = async () => {
