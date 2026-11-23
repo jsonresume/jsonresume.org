@@ -241,6 +241,9 @@ importers:
       '@repo/job-board':
         specifier: workspace:^
         version: link:../../packages/job-board
+      '@repo/job-digest':
+        specifier: workspace:*
+        version: link:../../packages/job-digest
       '@repo/jobs':
         specifier: workspace:^
         version: link:../../packages/jobs
@@ -1628,6 +1631,9 @@ importers:
       '@repo/explore':
         specifier: workspace:*
         version: link:../explore
+      '@repo/job-digest':
+        specifier: workspace:*
+        version: link:../job-digest
       '@repo/jobs':
         specifier: workspace:^
         version: link:../jobs
@@ -2369,6 +2375,40 @@ importers:
       vite:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
+      vitest:
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
+
+  packages/job-digest:
+    dependencies:
+      '@repo/accounts':
+        specifier: workspace:*
+        version: link:../accounts
+      '@repo/api':
+        specifier: workspace:*
+        version: link:../api
+      '@repo/careers':
+        specifier: workspace:*
+        version: link:../careers
+      '@repo/jobs':
+        specifier: workspace:*
+        version: link:../jobs
+      effect:
+        specifier: 4.0.6
+        version: 4.0.6
+    devDependencies:
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      '@types/node':
+        specifier: ^20.19.24
+        version: 20.19.24
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
       vitest:
         specifier: ^4.1.12
         version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)

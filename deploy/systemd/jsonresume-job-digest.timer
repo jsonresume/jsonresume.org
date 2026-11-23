@@ -1,0 +1,11 @@
+# Mondays, after Sunday's career moves and the weekend's job imports.
+[Unit]
+Description=Send the jsonresume.org weekly jobs email
+
+[Timer]
+OnCalendar=Mon *-*-* 14:00:00 UTC
+RandomizedDelaySec=10min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

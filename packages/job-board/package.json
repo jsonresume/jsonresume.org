@@ -6,7 +6,8 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./filters": "./src/filters.ts"
+    "./filters": "./src/filters.ts",
+    "./stop-email": "./src/StopEmailPage.tsx"
   },
   "sideEffects": [
     "**/*.css.ts"

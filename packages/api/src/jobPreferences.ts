@@ -24,6 +24,8 @@ const preferenceFields = {
   priorities: Schema.Array(Priority),
   /** They need a visa sponsored. */
   needsVisa: Schema.Boolean,
+  /** A weekly email of new jobs to apply for (opt-in; one click stops it). */
+  weeklyEmail: Schema.Boolean,
 };
 
 /**
@@ -70,6 +72,9 @@ export const JobPreferences = Schema.Struct({
   needsVisa: preferenceFields.needsVisa.pipe(
     Schema.withDecodingDefaultKey(Effect.succeed(false))
   ),
+  weeklyEmail: preferenceFields.weeklyEmail.pipe(
+    Schema.withDecodingDefaultKey(Effect.succeed(false))
+  ),
   /** Suggestions they turned down, by id. */
   dismissed: Schema.Array(Schema.String).pipe(
     Schema.withDecodingDefaultKey(Effect.succeed([]))
@@ -90,5 +95,6 @@ export const JobPreferenceChange = Schema.Struct({
   direction: Schema.optionalKey(preferenceFields.direction),
   priorities: Schema.optionalKey(preferenceFields.priorities),
   needsVisa: Schema.optionalKey(preferenceFields.needsVisa),
+  weeklyEmail: Schema.optionalKey(preferenceFields.weeklyEmail),
 });
 export type JobPreferences = typeof JobPreferences.Type;

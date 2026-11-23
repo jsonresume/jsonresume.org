@@ -46,7 +46,15 @@ const sitemaps = createSitemaps(process.env.SITE_URL ?? '', services, {
 const PASS = 'x-dev-pass';
 const app = new Hono();
 app.notFound((c) => c.body(null, 404, { [PASS]: '1' }));
-app.use('*', sameOrigin('/api', ['/api/events/', '/api/v1/', ...sessionless]));
+app.use(
+  '*',
+  sameOrigin('/api', [
+    '/api/events/',
+    '/api/v1/',
+    '/api/job-digest/',
+    ...sessionless,
+  ])
+);
 app.all('/api/*', (c) => api.handler(c.req.raw));
 app.all('/mcp', (c, next) =>
   isMcpRequest(c.req.raw) ? mcp.handler(c.req.raw) : next()

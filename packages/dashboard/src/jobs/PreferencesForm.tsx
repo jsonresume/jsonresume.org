@@ -15,6 +15,7 @@ import {
 import { employmentLabels, seniorityLabels } from '@repo/job-board';
 import type { ReactNode } from 'react';
 import { ChoiceChips } from './ChoiceChips';
+import { WeeklyEmail } from './WeeklyEmail';
 import * as s from './wants.css';
 
 const options = <T extends string>(labels: Record<T, string>) =>
@@ -188,6 +189,7 @@ export function PreferencesForm({
           onCheckedChange={set('needsVisa')}
         />
       </Section>
+      <WeeklyEmail on={value.weeklyEmail} onChange={set('weeklyEmail')} />
     </>
   );
 }

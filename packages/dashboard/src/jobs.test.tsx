@@ -26,6 +26,7 @@ const none: JobPreferences = {
   direction: '',
   priorities: [],
   needsVisa: false,
+  weeklyEmail: false,
   dismissed: [],
 };
 
@@ -164,6 +165,17 @@ describe('the decided jobs page', () => {
       'No gambling',
     ]);
     expect(screen.getByText('No gambling')).toBeInTheDocument();
+  });
+
+  it('has the weekly email, off until turned on', () => {
+    show(decided());
+    fireEvent.click(screen.getByRole('button', { name: 'Set what you want' }));
+    const weekly = screen.getByRole('switch', {
+      name: 'Email me new jobs that fit',
+    });
+    expect(weekly.getAttribute('aria-checked')).toBe('false');
+    fireEvent.click(weekly);
+    expect(weekly.getAttribute('aria-checked')).toBe('true');
   });
 
   it('offers suggestions from marks, and drops one once answered', () => {

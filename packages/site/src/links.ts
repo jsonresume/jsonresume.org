@@ -41,6 +41,7 @@ export const paths = {
   jobCompany: (slug: string) => `/jobs/companies/${slug}`,
   dashboard: '/dashboard',
   dashboardJobs: '/dashboard/jobs',
+  jobEmailStop: '/jobs/email/stop',
   /** Pathways, putting `ask` to the copilot on arrival. */
   pathways: (ask?: string) =>
     ask

@@ -65,5 +65,9 @@ describe('decision tools', () => {
     });
     await call('set_job_preferences', { needsVisa: true });
     expect((await call('decide_jobs')).value.stated).toBe(true);
+    // The weekly email stays off until asked for.
+    expect(
+      (await call('set_job_preferences', { weeklyEmail: true })).value
+    ).toMatchObject({ weeklyEmail: true, needsVisa: true });
   });
 });

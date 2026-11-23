@@ -162,6 +162,9 @@ export const setPrivacyAtom = ApiClient.mutation('account', 'setPrivacy');
 /** Sets the page's theme from the gallery (a new version). */
 export const setThemeAtom = ApiClient.mutation('account', 'setTheme');
 
+/** Turn off the weekly jobs email from its link (no session needed). */
+export const stopJobDigestAtom = ApiClient.mutation('jobDigest', 'stop');
+
 /** List an OAuth app of yours in the public directory (/apps). */
 export const setAppListingAtom = ApiClient.mutation('oauthApps', 'setListing');
 /** The public apps directory. */
