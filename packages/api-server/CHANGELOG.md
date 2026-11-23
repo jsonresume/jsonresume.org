@@ -1,5 +1,13 @@
 # @repo/api-server
 
+## 0.0.7
+
+### Patch Changes
+
+- @repo/jobs@0.0.0
+- @repo/resume-import@0.0.5
+- @repo/pathways@0.0.6
+
 ## 0.0.6
 
 ### Patch Changes

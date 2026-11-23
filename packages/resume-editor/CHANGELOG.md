@@ -1,5 +1,14 @@
 # @repo/resume-editor
 
+## 0.0.6
+
+### Patch Changes
+
+- Updated dependencies [e630011]
+  - @jsonresume/schema@1.11.0
+  - @repo/content@0.0.6
+  - @repo/schema-explorer@0.0.3
+
 ## 0.0.5
 
 ### Patch Changes
