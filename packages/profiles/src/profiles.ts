@@ -2,6 +2,7 @@ import { Context, Effect, Layer } from 'effect';
 import { ProfileNotFound, type ResumeError } from './errors';
 import { GithubGists } from './github';
 import { makeMirrored } from './mirror';
+import { makeMisses } from './misses';
 import { redact } from './redact';
 import { ProfileStore } from './store';
 import type { Username } from './username';
@@ -50,6 +51,7 @@ export class Profiles extends Context.Service<
       const store = yield* ProfileStore;
 
       const mirrored = makeMirrored(github, RESUME_FILE);
+      const misses = makeMisses();
 
       const resume = Effect.fn('Profiles.resume')(function* (
         username: Username,
@@ -121,16 +123,23 @@ export class Profiles extends Context.Service<
         }
         // Other gist files (?gistname=) are read live and not kept.
         if (file !== RESUME_FILE) {
-          const found = yield* github.find(username, file);
+          const found = yield* misses(
+            `${username.toLowerCase()}/${file}`,
+            github.find(username, file)
+          );
           return done({ resume: found.resume, stale: false }, 'gist');
         }
         const ghost = profile?.kind === 'ghost' ? profile : undefined;
-        const result = yield* mirrored(
+        const lookup = mirrored(
           username,
           ghost,
           (m) => store.saveGhost({ username, ...m }),
           store.removeGhost(username)
         );
+        // A known ghost has a copy to serve; only unknown logins are misses.
+        const result = yield* ghost
+          ? lookup
+          : misses(`${username.toLowerCase()}/${file}`, lookup);
         return done(result, 'ghost');
       });
 
