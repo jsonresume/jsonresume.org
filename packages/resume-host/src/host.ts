@@ -82,6 +82,14 @@ export const resumeOutcome = Effect.fn('resumeOutcome')(function* (url: URL) {
     );
     return redirect(next.pathname + next.search, 302);
   }
+  // A theme since removed in the address is nearly always an old link the
+  // owner shared (?theme=kwan on a CV): their visitors want the resume, so
+  // it opens without the theme, in the owner's own.
+  if (page && query && !isTheme(themeSlug(query))) {
+    const next = new URL(url);
+    next.searchParams.delete('theme');
+    return redirect(next.pathname + next.search, 302);
+  }
 
   const file = url.searchParams.get('gistname') ?? undefined;
   const resolved = yield* lookup(username, file, page, variant);
@@ -122,12 +130,11 @@ export const resumeOutcome = Effect.fn('resumeOutcome')(function* (url: URL) {
     );
   }
 
-  // A theme in the address is what the visitor asked for: a missing one is
-  // explained. One in meta.theme is the owner's, often a theme since
-  // removed: their visitors get the resume in the default theme instead.
+  // The address's theme (known to exist, see above), else the owner's
+  // meta.theme: often one since removed, so then the default theme.
   const written = query ?? metaTheme(doc.value);
   const slug = written ? themeSlug(written) : DEFAULT_THEME;
-  const theme = query || isTheme(slug) ? slug : DEFAULT_THEME;
+  const theme = isTheme(slug) ? slug : DEFAULT_THEME;
   return yield* renderTheme(theme, doc.value).pipe(
     Effect.map((html) => withResumeLanguage(html, doc.value)),
     Effect.flatMap((html) =>
