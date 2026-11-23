@@ -45,6 +45,15 @@ export function Start({ onStart }: { onStart: (resume: unknown) => void }) {
   );
 }
 
+/** Straight after signing up (?welcome=1): what this page is for. */
+Start.Welcome = function Welcome({ username }: { username: string }) {
+  return (
+    <Callout tone="brand" title="Welcome to JSON Resume">
+      Make your resume here and it goes live at jsonresume.org/@{username}.
+    </Callout>
+  );
+};
+
 /** Bring back a draft kept in this browser, or let it go. */
 Start.Restore = function Restore({
   at,
