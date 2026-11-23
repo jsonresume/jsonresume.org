@@ -8,6 +8,7 @@ import { DecisionCard } from './DecisionCard';
 import { jobsEvent, verdicts } from './labels';
 import type { MarkChange } from './MarkActions';
 import { Suggestions } from './Suggestions';
+import { WeeklyEmailOffer } from './WeeklyEmailOffer';
 import { inView, isVerdict, VerdictTabs, type View } from './VerdictTabs';
 import { Wants } from './Wants';
 
@@ -77,6 +78,10 @@ export function Decided({ result }: { result: JobDecisions }) {
       <Suggestions
         suggestions={result.suggestions}
         preferences={result.preferences}
+      />
+      <WeeklyEmailOffer
+        preferences={result.preferences}
+        waiting={result.counts.apply + result.counts.stretch}
       />
       <VerdictTabs
         jobs={jobs}

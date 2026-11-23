@@ -25,6 +25,7 @@ import {
   sessionless,
 } from './agents';
 import { cardPath, createCardHandler } from './cards';
+import { pruneCaches } from './prune';
 import { createExplorePage, explorePath } from './explorePage';
 import { companyPath, createJobPages, jobPath, jobsPath } from './jobPages';
 import { createResumeHandler, resumePath, variantPath } from './resumes';
@@ -136,6 +137,9 @@ const main = Effect.gen(function* () {
       )
     ),
     (handler) => Effect.promise(() => handler.dispose())
+  );
+  yield* Effect.forkScoped(
+    pruneCaches([join(cacheDir, 'images'), join(cacheDir, 'cards')])
   );
   const timeline = yield* Effect.acquireRelease(
     Effect.sync(() =>
