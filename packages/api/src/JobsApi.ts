@@ -63,6 +63,8 @@ export const Job = Schema.Struct({
   author: Schema.String,
   /** True when the post is older than the board's window or was removed. */
   closed: Schema.Boolean,
+  /** The company in /api/companies/:slug; '' when the post names none. */
+  companySlug: Schema.String,
 });
 export type Job = typeof Job.Type;
 

@@ -14,6 +14,15 @@ const PLACEHOLDER = /^(unspecified|unknown|null|none|n\/a|not specified|)$/i;
 export const companyOf = (p: Posting) =>
   PLACEHOLDER.test(p.company.trim()) ? '' : p.company.trim();
 
+/** A company's name as a URL segment: `Acme, Inc.` is `acme-inc`. */
+export const companySlug = (name: string) =>
+  name
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
 /** The post's title, or '' when the model wrote a placeholder. */
 export const titleOf = (p: Posting) =>
   PLACEHOLDER.test(p.title.trim()) ? '' : p.title.trim();
@@ -61,4 +70,5 @@ export const toJob = (
   post: postParagraphs(extra.html),
   author: extra.author,
   closed: extra.closed,
+  companySlug: companySlug(companyOf(row.posting)),
 });

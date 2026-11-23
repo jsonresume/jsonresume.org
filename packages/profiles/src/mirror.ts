@@ -95,7 +95,9 @@ export const makeMirrored = (github: GithubGists['Service'], file: string) => {
         if (age < Duration.toMillis(GHOST_TTL))
           return { resume: known.resume, stale: false };
         if (age < Duration.toMillis(GHOST_STALE)) {
-          yield* refreshLater(refresh, login);
+          // Low on GitHub requests (a crawler sweeping resumes), keep the
+          // rest for resumes with no copy yet: this one waits.
+          if (yield* github.spare) yield* refreshLater(refresh, login);
           return { resume: known.resume, stale: false };
         }
       }

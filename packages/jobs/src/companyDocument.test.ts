@@ -1,7 +1,8 @@
 import { createRequire } from 'node:module';
 import { Validator } from 'jsonschema';
 import { describe, expect, it } from 'vitest';
-import { companySlug, toCompanyDocument } from './companyDocument';
+import { toCompanyDocument } from './companyDocument';
+import { companySlug } from './summary';
 import { applyOf, homepageOf } from './postLinks';
 import { posting } from './test/fixtures';
 
