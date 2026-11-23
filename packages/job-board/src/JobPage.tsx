@@ -23,6 +23,8 @@ import {
 } from './format';
 import * as s from './job.css';
 import { applyHref, Linkified } from './Linkified';
+import { JobLinks } from './JobLinks';
+import { Prepare } from './Prepare';
 import { VariantForJob } from './VariantForJob';
 
 function List({ title, items }: { title: string; items: readonly string[] }) {
@@ -67,44 +69,6 @@ function Facts({ job }: { job: Job }) {
           ) : null
         )}
       </dl>
-    </Card>
-  );
-}
-
-/** Questions for Pathways' copilot about this job, as links to ask them. */
-function Prepare({ job, ask }: { job: Job; ask: (q: string) => string }) {
-  const role = `the ${job.title} job at ${companyText(job.company)} (job ${
-    job.id
-  })`;
-  const questions = [
-    [
-      'Tailor my resume to it',
-      `Tailor my resume to ${role}. Show me each change before saving.`,
-    ],
-    [
-      'Write a cover letter',
-      `Write a cover letter for ${role}, from my resume.`,
-    ],
-    [
-      'Practise the interview',
-      `Give me a mock interview for ${role}, one question at a time, with feedback.`,
-    ],
-  ] as const;
-  return (
-    <Card tone="raised" className={s.prepare}>
-      <Heading level={2} size="group">
-        Get ready with Pathways
-      </Heading>
-      <Text size="sm" tone="muted">
-        Our career copilot reads your resume and this post.
-      </Text>
-      {questions.map(([label, question]) => (
-        <Button key={label} asChild variant="secondary" size="sm">
-          <a href={ask(question)} rel="nofollow">
-            {label}
-          </a>
-        </Button>
-      ))}
     </Card>
   );
 }
@@ -193,6 +157,7 @@ export function JobPage({
           <div className={s.aside}>
             <Facts job={job} />
             {ask ? <Prepare job={job} ask={ask} /> : null}
+            <JobLinks job={job} boardHref={boardHref} />
           </div>
         </div>
       </Container>

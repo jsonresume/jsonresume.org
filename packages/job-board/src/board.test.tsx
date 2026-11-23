@@ -141,6 +141,7 @@ describe('JobPage', () => {
       post: ['Acme | Berlin | Hybrid', 'Apply: https://acme.com/jobs'],
       author: 'acme',
       closed: true,
+      companySlug: 'acme',
     };
     const { container } = render(
       <JobPage
@@ -163,6 +164,15 @@ describe('JobPage', () => {
       screen.getByRole('link', { name: 'https://acme.com/jobs' })
     ).toBeInTheDocument();
     expect(screen.getByText('No longer on the board')).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: `Other jobs at ${full.company}` })
+    ).toHaveAttribute('href', `/jobs?q=${encodeURIComponent(full.company)}`);
+    expect(
+      screen.getByRole('link', { name: 'This job (job.json)' })
+    ).toHaveAttribute('href', `/api/jobs/${full.id}/document`);
+    expect(
+      screen.getByRole('link', { name: 'The company (company.json)' })
+    ).toHaveAttribute('href', '/api/companies/acme/document');
     expect(await violations(container)).toEqual([]);
   });
 });

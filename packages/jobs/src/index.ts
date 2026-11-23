@@ -31,7 +31,8 @@ export {
   type JobRow,
 } from './summary';
 export { hnItem, toJobDocument } from './jobDocument';
-export { companySlug, toCompanyDocument } from './companyDocument';
+export { toCompanyDocument } from './companyDocument';
+export { companySlug } from './summary';
 export { applyOf, homepageOf } from './postLinks';
 export { careerDirections, familyOf, resumeSkills } from './directions';
 export { SKILL_ALIASES } from './skillAliases';

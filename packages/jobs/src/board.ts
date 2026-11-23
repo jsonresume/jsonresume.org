@@ -7,11 +7,16 @@ import {
 import { Context, Effect, Layer, Option, Schema } from 'effect';
 import { SqlClient } from 'effect/sql';
 import { decodePosting } from './posting';
-import { toJob, toSummary, type JobRow } from './summary';
+import {
+  companyOf,
+  companySlug,
+  toJob,
+  toSummary,
+  type JobRow,
+} from './summary';
 import { toJobDocument } from './jobDocument';
-import { companySlug, toCompanyDocument } from './companyDocument';
+import { toCompanyDocument } from './companyDocument';
 import { companyKey } from './families';
-import { companyOf } from './summary';
 
 /** Jobs stay on the board this long: two monthly threads. */
 export const OPEN_DAYS = 62;
