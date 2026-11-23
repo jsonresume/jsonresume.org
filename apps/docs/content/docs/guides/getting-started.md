@@ -48,9 +48,10 @@ resume export resume.html
 resume export resume.pdf
 ```
 
-Or host it: put the file in a public GitHub gist named `resume.json` and open
-`https://registry.jsonresume.org/<your-github-username>`. See the
-[registry guide](/guides/registry).
+Or host it at `https://jsonresume.org/@<username>`: write it in the editor
+after [signing up](https://jsonresume.org/signup), or keep it in a public
+GitHub gist named `resume.json`. The hosted page downloads as PDF and Word
+too. See [hosting and downloads](/guides/registry).
 
 ## 4. Pick a theme
 
@@ -60,5 +61,5 @@ Browse the [theme gallery](https://jsonresume.org/themes/), then:
 resume export resume.html --theme even
 ```
 
-or, on the registry, `?theme=even` or `"meta": { "theme": "even" }` in your
+or, on jsonresume.org, `?theme=even` or `"meta": { "theme": "even" }` in your
 resume. See [themes](/guides/themes).
