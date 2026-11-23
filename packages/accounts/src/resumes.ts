@@ -3,6 +3,7 @@ import {
   isRealResume,
   ResumeVersions,
   sectionCount,
+  themeOf,
   type Actor,
   type SaveOutcome,
 } from '@repo/resume-versions';
@@ -81,6 +82,7 @@ export const resumeSaving = (gist: Effect.Success<typeof gistSync>) =>
           !account?.hasStoredResume &&
           !account?.hasMirror,
         real: isRealResume(resume),
+        theme: themeOf(resume),
         sections: sectionCount(resume),
       };
       return outcome;
