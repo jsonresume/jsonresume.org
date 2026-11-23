@@ -50,6 +50,7 @@ export function CompanySchemaPage() {
       <NextSteps
         title="The other formats"
         items={[
+          { label: 'Read the specification', href: paths.specCompany },
           { label: 'Job description schema', href: paths.jobDescriptionSchema },
           { label: 'The resume schema', href: paths.schema },
         ]}

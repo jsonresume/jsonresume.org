@@ -50,6 +50,7 @@ export function JobSchemaPage() {
       <NextSteps
         title="Describe the candidate side too"
         items={[
+          { label: 'Read the specification', href: paths.specJob },
           { label: 'The resume schema', href: paths.schema },
           { label: 'The company schema', href: paths.companySchema },
         ]}

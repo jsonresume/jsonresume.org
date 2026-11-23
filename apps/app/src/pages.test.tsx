@@ -63,6 +63,9 @@ describe('every page', () => {
     { timeout: 60_000 },
     async () => {
       const { existsSync } = await import('node:fs');
+      // Served by the server (server/schemaFiles.ts), not prerendered.
+      const { SCHEMA_PATHS } = await import('@repo/content/spec');
+      const served: ReadonlyArray<string> = SCHEMA_PATHS;
       const publicDir = new URL('../public', import.meta.url).pathname;
       const broken: string[] = [];
       for (const path of paths) {
@@ -76,6 +79,7 @@ describe('every page', () => {
           const ok =
             paths.includes(target) ||
             livePaths.includes(target) ||
+            served.includes(target) ||
             target.startsWith('/api/') ||
             /^\/jobs(\/\d+)?$/.test(target) ||
             /^\/@[a-z0-9-]+(\.[a-z]+|\/timeline)?$/.test(target) ||
