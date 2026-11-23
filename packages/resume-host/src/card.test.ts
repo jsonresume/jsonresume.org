@@ -40,3 +40,18 @@ describe('the resume card', () => {
     expect(bare).not.toContain('<img');
   });
 });
+
+describe('the card URL', () => {
+  it('changes when the card would', async () => {
+    const { cardUrl } = await import('./seo');
+    const a = cardUrl('ada', { basics: { name: 'Ada' } });
+    expect(cardUrl('ada', { basics: { name: 'Ada' } })).toBe(a);
+    expect(
+      cardUrl('ada', { basics: { name: 'Ada', label: 'Analyst' } })
+    ).not.toBe(a);
+    // Contact details aren't on the card, so they don't change it.
+    expect(
+      cardUrl('ada', { basics: { name: 'Ada', email: 'a@example.com' } })
+    ).toBe(a);
+  });
+});

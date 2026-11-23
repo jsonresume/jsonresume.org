@@ -5,10 +5,21 @@ import {
   profilePage,
   SITE,
 } from './profileData';
-import { CARD_SIZE } from './card';
+import { createHash } from 'node:crypto';
+import { CARD_SIZE, resumeCardHtml } from './card';
 
-/** The PNG link previews show for a resume page. */
-export const cardUrl = (username: string) => `${SITE}/_card/${username}.png`;
+/**
+ * The PNG link previews show for a resume page, versioned by the card's
+ * content: Cloudflare and crawlers keep a card for a day, so a changed
+ * resume gets a new URL rather than yesterday's card.
+ */
+export const cardUrl = (username: string, resume: unknown) => {
+  const version = createHash('sha256')
+    .update(resumeCardHtml(username, resume))
+    .digest('hex')
+    .slice(0, 10);
+  return `${SITE}/_card/${username}.png?v=${version}`;
+};
 
 /** Text safe inside an HTML attribute or element. */
 const escape = (value: string) =>
@@ -59,13 +70,13 @@ const headTags = (html: string, username: string, resume: unknown) => {
     ['property', 'og:description', description],
     ['property', 'og:url', url],
     // The resume's own card (apps/app/server/cards.ts, CARD_SIZE).
-    ['property', 'og:image', cardUrl(username)],
+    ['property', 'og:image', cardUrl(username, resume)],
     ['property', 'og:image:width', String(CARD_SIZE.width)],
     ['property', 'og:image:height', String(CARD_SIZE.height)],
     ['property', 'og:image:alt', `${title}: resume card`],
     ['property', 'profile:username', username],
     ['name', 'twitter:card', 'summary_large_image'],
-    ['name', 'twitter:image', cardUrl(username)],
+    ['name', 'twitter:image', cardUrl(username, resume)],
     ['name', 'twitter:title', title],
     ['name', 'twitter:description', description],
   ];
