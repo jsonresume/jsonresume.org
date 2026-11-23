@@ -74,4 +74,18 @@ export const decisionMigrations: Record<
       CREATE INDEX job_mark_events_user ON app.job_mark_events (user_id, created_at)
     `;
   }),
+
+  // The weekly jobs email (@repo/job-digest): every job sent to whom, so a
+  // job is never sent twice and a rerun the same week sends nothing new.
+  '23_job_digests': Effect.gen(function* () {
+    const sql = yield* SqlClient.SqlClient;
+    yield* sql`
+      CREATE TABLE app.job_digests (
+        user_id uuid NOT NULL REFERENCES app.users (id) ON DELETE CASCADE,
+        job_id bigint NOT NULL,
+        sent_at timestamptz NOT NULL DEFAULT now(),
+        PRIMARY KEY (user_id, job_id)
+      )
+    `;
+  }),
 };

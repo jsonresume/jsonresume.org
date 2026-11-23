@@ -20,7 +20,7 @@ export const decisionTools: ReadonlyArray<McpToolInfo> = [
     name: 'set_job_preferences',
     group: 'jobs',
     description:
-      'Change what you want from your next job. Only the fields given change; lists replace the old list. Dealbreakers (workplaces, pay floor, employment, levels, avoided industries and skills, visa) rule jobs out of decide_jobs; the rest weigh how much you’d want each job. An empty direction falls back to the resume’s objective. Ask the person rather than guessing.',
+      'Change what you want from your next job. Only the fields given change; lists replace the old list. Dealbreakers (workplaces, pay floor, employment, levels, avoided industries and skills, visa) rule jobs out of decide_jobs; the rest weigh how much you’d want each job. An empty direction falls back to the resume’s objective. weeklyEmail turns on (or off) a Monday email of new apply and stretch jobs. Ask the person rather than guessing, and never turn the email on without them asking.',
     writes: true,
   },
 ];

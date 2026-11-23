@@ -20,6 +20,7 @@ it('applies every migration to an empty database', async () => {
     'embeddings',
     'imports',
     'job_decisions',
+    'job_digests',
     'job_facts',
     'job_fits',
     'job_mark_events',

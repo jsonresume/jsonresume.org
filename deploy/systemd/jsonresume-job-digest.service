@@ -1,0 +1,30 @@
+# The weekly jobs email (@repo/job-digest): each person who turned it on in
+# their job preferences gets this week's new jobs to apply for, if any. One
+# run, started on Mondays by jsonresume-job-digest.timer. A job is never sent
+# twice (app.job_digests), so running it again sends nothing new.
+#
+# Install: sudo cp deploy/systemd/jsonresume-job-digest.* /etc/systemd/system/
+#          sudo systemctl daemon-reload && sudo systemctl enable --now jsonresume-job-digest.timer
+# Run now: sudo systemctl start jsonresume-job-digest  (logs: journalctl -u jsonresume-job-digest)
+[Unit]
+Description=jsonresume.org weekly jobs email
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=deploy
+Group=deploy
+Environment=NODE_ENV=production HOME=/srv/jsonresume
+# AUTH_SECRET, SITE_URL, RESEND_API_KEY, OPENAI_API_KEY are in app.env;
+# DATABASE_URL in postgres.env.
+EnvironmentFile=/etc/jsonresume/app.env
+EnvironmentFile=-/etc/jsonresume/postgres.env
+WorkingDirectory=/srv/jsonresume/app/current/apps/app
+ExecStart=/usr/bin/node dist/job-digest/job-digest.js
+TimeoutStartSec=60min
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true

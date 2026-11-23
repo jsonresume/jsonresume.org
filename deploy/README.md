@@ -134,6 +134,7 @@ sudo systemctl start jsonresume-backup               # backup now (also nightly,
 sudo systemctl start jsonresume-jobs                 # jobs pipeline now (also every 2 hours)
 journalctl -u jsonresume-jobs                        # its runs; status at /api/jobs/status
 sudo systemctl start jsonresume-career-moves         # recount career moves now (also weekly)
+sudo systemctl start jsonresume-job-digest           # send the weekly jobs email now (also Mondays)
 sudo deploy/scripts/cloudflare-ips.sh                # refresh Cloudflare ranges (ufw + Caddy)
 ```
 

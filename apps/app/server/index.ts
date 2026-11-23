@@ -169,7 +169,7 @@ const main = Effect.gen(function* () {
     // OAuth clients register and get tokens without a session.
     protect: {
       prefix: '/api',
-      exempt: ['/api/events/', '/api/v1/', ...sessionless],
+      exempt: ['/api/events/', '/api/v1/', '/api/job-digest/', ...sessionless],
     },
     openPaths,
     // The registry moved here: its links redirect (see registryRedirect).

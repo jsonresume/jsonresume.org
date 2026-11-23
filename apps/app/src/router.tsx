@@ -39,6 +39,7 @@ import {
 } from './routes/auth';
 import { privacyRoute, termsRoute } from './routes/docs';
 import { companySpecRoute, jobSpecRoute, resumeSpecRoute } from './routes/spec';
+import { jobEmailStopRoute } from './routes/jobEmail';
 import { exploreRoute } from './routes/explore';
 import { companyRoute, jobRoute, jobsRoute } from './routes/jobs';
 import {
@@ -84,6 +85,7 @@ export const routeTree = rootRoute.addChildren([
     resumeSpecRoute,
     jobSpecRoute,
     companySpecRoute,
+    jobEmailStopRoute,
     termsRoute,
     blogRoute,
     postRoute,

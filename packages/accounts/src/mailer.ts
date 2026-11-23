@@ -6,6 +6,8 @@ export interface Mail {
   subject: string;
   text: string;
   html?: string;
+  /** Extra headers, such as List-Unsubscribe. */
+  headers?: Record<string, string>;
 }
 
 /**

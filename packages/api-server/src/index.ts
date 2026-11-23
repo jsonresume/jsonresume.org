@@ -1,3 +1,4 @@
+import { JobDigestHandlers } from './jobDigest';
 import { Accounts } from '@repo/accounts';
 import { Health, JsonResumeApi } from '@repo/api';
 import { Duration, Effect, Layer, Schedule } from 'effect';
@@ -60,6 +61,7 @@ export const apiRoutes = (version: string) =>
         MyJobsHandlers,
         CompaniesHandlers,
         JobDecisionsHandlers,
+        JobDigestHandlers,
         CareerHandlers,
         ExploreHandlers,
         MyListingHandlers,
