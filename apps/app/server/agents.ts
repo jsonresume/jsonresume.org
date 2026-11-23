@@ -1,7 +1,9 @@
 import { authorizationServer, protectedResource } from '@repo/mcp';
+import { securityTxtRoute } from './securityTxt';
 
 /**
- * OAuth discovery, at the paths RFC 9728 and 8414 and OpenID Connect name; and,
+ * OAuth discovery, at the paths RFC 9728 and 8414 and OpenID Connect name;
+ * security.txt (RFC 9116); and,
  * when OPENAI_APPS_CHALLENGE is set, the token proving to OpenAI that we own
  * the MCP server's domain (ChatGPT app submission).
  */
@@ -25,6 +27,7 @@ export const discoveryRoutes = (site: string, openAiChallenge?: string) => {
       path: '/.well-known/openid-configuration',
       fetch: json(authorizationServer(site)),
     },
+    securityTxtRoute(site),
     ...(openAiChallenge
       ? [
           {
