@@ -1,4 +1,4 @@
-import { Context, Effect, Layer, Schema } from 'effect';
+import { Clock, Context, Effect, Layer, Schema } from 'effect';
 import { FetchHttpClient, HttpClient } from 'effect/http';
 import {
   ProfileNotFound,
@@ -11,6 +11,7 @@ import {
   unavailable,
   type GithubCredentials,
 } from './githubApi';
+import { makeScans } from './scans';
 
 const GistFile = Schema.Struct({
   raw_url: Schema.String,
@@ -61,6 +62,7 @@ export class GithubGists extends Context.Service<
     Effect.gen(function* () {
       const client = yield* HttpClient.HttpClient;
       const { get: api, spare } = makeGithubApi(client, credentials);
+      const scans = makeScans();
       const decodeError = (e: { message: string }) => unavailable(e.message);
 
       const content = Effect.fn('GithubGists.content')(function* (
@@ -102,11 +104,15 @@ export class GithubGists extends Context.Service<
         login: string,
         file: string
       ) {
+        const now = yield* Clock.currentTimeMillis;
+        const since = scans.since(login, file, now);
+        const after = since ? `&since=${encodeURIComponent(since)}` : '';
         for (let page = 1; page <= MAX_PAGES; page++) {
           const body = yield* api(
-            `/users/${login}/gists?per_page=${PAGE}&page=${page}`
+            `/users/${login}/gists?per_page=${PAGE}&page=${page}${after}`
           );
           if (body === undefined) {
+            scans.forget(login, file);
             return yield* new ProfileNotFound({
               username: login,
               reason: 'no-user',
@@ -118,9 +124,22 @@ export class GithubGists extends Context.Service<
           );
           const gist = gists.find((g) => file in g.files);
           // Listings leave file contents out; one more request reads it.
-          if (gist) return yield* read(login, gist.id, file);
-          if (gists.length < PAGE) break;
+          if (gist) {
+            scans.forget(login, file);
+            return yield* read(login, gist.id, file);
+          }
+          if (gists.length < PAGE) {
+            // Every gist (updated since the last scan) was read.
+            scans.noGist(login, file, now);
+            return yield* new ProfileNotFound({
+              username: login,
+              reason: 'no-gist',
+              file,
+            });
+          }
         }
+        // More than MAX_PAGES of gists: not all were read.
+        scans.forget(login, file);
         return yield* new ProfileNotFound({
           username: login,
           reason: 'no-gist',
