@@ -31,7 +31,14 @@ const isReason = (value: string): value is LeaveReason =>
   reasons.some(([key]) => key === value);
 
 /** Delete everything, after typing the username back; asks why, optionally. */
-export function DeleteAccount({ username }: { username: string }) {
+export function DeleteAccount({
+  username,
+  fromGist,
+}: {
+  username: string;
+  /** The page shows their gist, which deleting the account leaves up. */
+  fromGist: boolean;
+}) {
   const remove = useAtomSet(deleteAccountAtom, { mode: 'promiseExit' });
   const [confirm, setConfirm] = useState('');
   const [reason, setReason] = useState<LeaveReason>();
@@ -85,6 +92,11 @@ export function DeleteAccount({ username }: { username: string }) {
                     ))}
                   </Select>
                 </Field>
+                {reason === 'private' && fromGist ? (
+                  <Callout tone="info">
+                    {copy.settings.leavePrivateGist}
+                  </Callout>
+                ) : null}
                 <Field label={copy.settings.deleteConfirm(username)}>
                   <Input
                     autoCapitalize="none"

@@ -147,7 +147,10 @@ export function SettingsPage() {
         <ConnectionsCard />
         <ApiKeysCard />
         <OAuthAppsCard />
-        <DeleteAccount username={account.username} />
+        <DeleteAccount
+          username={account.username}
+          fromGist={account.source === 'gist'}
+        />
       </Stack>
     </AppPage>
   );

@@ -17,7 +17,7 @@ describe('deleting the account', () => {
     vi.stubGlobal('fetch', fetch);
     render(
       <RegistryProvider>
-        <DeleteAccount username="ada" />
+        <DeleteAccount username="ada" fromGist />
       </RegistryProvider>
     );
     fireEvent.click(screen.getByRole('button', { name: 'Delete my account' }));
@@ -26,6 +26,8 @@ describe('deleting the account', () => {
     });
     expect(why).toHaveValue('');
     fireEvent.change(why, { target: { value: 'private' } });
+    // Deleting leaves a gist's page up: say how to take it down.
+    expect(screen.getByText(/make the gist secret/)).toBeInTheDocument();
     fireEvent.change(
       screen.getByRole('textbox', { name: 'Type ada to confirm' }),
       {

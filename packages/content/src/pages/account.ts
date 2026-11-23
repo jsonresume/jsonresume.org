@@ -71,6 +71,8 @@ export const settings = {
     'not-useful': 'It isn’t what I was looking for',
     other: 'Something else',
   },
+  leavePrivateGist:
+    'Your page shows your public gist, so it stays up whether or not you have an account. To take it down, make the gist secret or delete it on GitHub; the page goes soon after.',
 };
 
 export const chooseUsername = {
