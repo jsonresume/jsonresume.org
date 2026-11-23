@@ -160,13 +160,21 @@ describe('resume versions', () => {
       .filter((e) => e.event === 'resume_saved')
       .map((e) => e.properties);
     expect(sources).toEqual([
-      { via: 'api', source: 'api', real: true, first: true, sections: 3 },
+      {
+        via: 'api',
+        source: 'api',
+        real: true,
+        first: true,
+        sections: 3,
+        theme: null,
+      },
       {
         via: 'oauth_app',
         source: 'oauth_app',
         real: true,
         first: false,
         sections: 3,
+        theme: null,
       },
     ]);
   });

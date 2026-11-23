@@ -35,6 +35,9 @@
     "db:generate": {
       "cache": false
     },
+    "transit": {
+      "dependsOn": ["^transit"]
+    },
     "build": {
       "outputs": [
         ".next/**",
@@ -61,7 +64,7 @@
       "outputs": []
     },
     "typecheck": {
-      "dependsOn": ["@jsonresume/ui#build"],
+      "dependsOn": ["transit", "@jsonresume/ui#build"],
       "inputs": [
         "**/*.ts",
         "**/*.tsx",
@@ -88,7 +91,7 @@
       "dependsOn": ["lint", "typecheck"]
     },
     "test": {
-      "dependsOn": ["@jsonresume/ui#build"],
+      "dependsOn": ["transit", "@jsonresume/ui#build"],
       "inputs": [
         "**/*.ts",
         "**/*.tsx",
