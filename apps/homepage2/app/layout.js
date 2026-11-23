@@ -1,4 +1,3 @@
-import { Analytics } from '@vercel/analytics/react';
 import { fontVariables } from './components/layout/fonts';
 import { Sidebar } from './components/layout/Sidebar';
 import { TopNav } from './components/layout/TopNav';
@@ -29,8 +28,7 @@ export default async function Layout({ children }) {
     <html lang="en" className={fontVariables}>
       <head>
         <link rel="dns-prefetch" href="//cdnjs.cloudflare.com" />
-        {(process.env.NODE_ENV === 'development' ||
-          process.env.VERCEL_ENV === 'preview') && (
+        {process.env.NODE_ENV === 'development' && (
           // eslint-disable-next-line @next/next/no-sync-scripts
           <script
             data-project-id="3T7wRdtjOmyutEJb4CkBwQmBQqnzIsTTBh1ypGGP"
@@ -84,7 +82,6 @@ export default async function Layout({ children }) {
         </div>
 
         <ExternalScripts />
-        <Analytics />
       </body>
     </html>
   );

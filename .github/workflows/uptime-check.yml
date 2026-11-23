@@ -3,16 +3,11 @@ name: Uptime Check
 # Synthetic uptime monitor for the JSON Resume public surfaces.
 #
 # Why this exists (ref #275): in June 2026 the registry, homepage, docs and
-# database were all effectively down for *months* and nobody noticed, because
-# Vercel deployments were paused behind a stale CDN cache. The existing
-# `vercel_error_monitor.yml` only scrapes the Vercel *logs* API for runtime
-# errors on the registry project -- it cannot detect a hard outage, a paused
-# deployment, or a dead DNS record, because no logs are produced when the app
-# never runs. This workflow complements it with real end-to-end HTTP probes.
+# database were all effectively down for *months* and nobody noticed. These
+# are real end-to-end HTTP probes, so a hard outage or a dead DNS record
+# shows up even when the app never runs and logs nothing.
 #
-# Each probe is fail-tolerant (curl never aborts the job) and we explicitly
-# detect Vercel's `x-vercel-error: DEPLOYMENT_PAUSED` header so a paused
-# project surfaces as DOWN rather than a misleading 200/402.
+# Each probe is fail-tolerant (curl never aborts the job).
 #
 # Alerting is idempotent: a single issue "Uptime: <surface> down" per surface,
 # commented only on state *changes* (up->down, down->up) and auto-closed on
@@ -76,25 +71,8 @@ jobs:
               "$url" 2>"$RUNNER_TEMP/${key}.err") || code="000"
             code="${code:-000}"
 
-            # Explicitly detect a paused Vercel deployment. Vercel returns the
-            # header `x-vercel-error: DEPLOYMENT_PAUSED` (often with HTTP 402)
-            # when a project's deployments are paused -- which is exactly the
-            # silent-outage mode that motivated this monitor.
-            vercel_err=""
-            if [ -f "$hdr_file" ]; then
-              vercel_err=$(grep -i '^x-vercel-error:' "$hdr_file" | head -1 | sed 's/^[Xx]-[Vv]ercel-[Ee]rror:[[:space:]]*//I' | tr -d '\r' || true)
-            fi
-
             status="up"
             detail="HTTP $code"
-
-            if [ -n "$vercel_err" ]; then
-              detail="HTTP $code, x-vercel-error: $vercel_err"
-              if echo "$vercel_err" | grep -qi 'DEPLOYMENT_PAUSED'; then
-                status="down"
-                detail="DEPLOYMENT_PAUSED (HTTP $code) -- Vercel deployments are paused for this project"
-              fi
-            fi
 
             if [ "$code" != "200" ]; then
               status="down"
