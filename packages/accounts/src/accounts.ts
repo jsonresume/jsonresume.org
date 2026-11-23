@@ -35,6 +35,7 @@ import {
   type SignedIn,
 } from './core';
 import { gistSync } from './gistSync';
+import { joinEmailAccount } from './githubMatch';
 import { accountManagement } from './manage';
 import { resumeSaving } from './resumes';
 import type { GithubIdentity, UserRecord } from './store';
@@ -119,10 +120,13 @@ const make = Effect.gen(function* () {
     identity: GithubIdentity
   ) {
     const existing = yield* store.findByGithubId(identity.id);
-    if (existing) {
-      yield* gist.keepGrant(existing.id, identity);
-      const session = yield* startSession(existing);
-      return { _tag: 'SignedIn', created: false, ...session } as const;
+    // Or the email account GitHub's verified email belongs to (githubMatch).
+    const known = existing ?? (yield* joinEmailAccount(store, identity));
+    if (known) {
+      yield* gist.keepGrant(known.id, identity);
+      const session = yield* startSession(known);
+      const linked = existing === undefined;
+      return { _tag: 'SignedIn', created: false, linked, ...session } as const;
     }
     const claimant = { githubId: identity.id, githubLogin: identity.login };
     const login = normalName(identity.login);
