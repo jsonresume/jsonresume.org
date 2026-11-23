@@ -62,8 +62,8 @@ describe('withProfileHead', () => {
       '<meta property="og:url" content="https://jsonresume.org/@ada">'
     );
     // Link previews show the resume's card, large.
-    expect(html).toContain(
-      '<meta property="og:image" content="https://jsonresume.org/_card/ada.png">'
+    expect(html).toMatch(
+      /<meta property="og:image" content="https:\/\/jsonresume\.org\/_card\/ada\.png\?v=[0-9a-f]{10}">/
     );
     expect(html).toContain('<meta property="og:image:width" content="1200">');
     expect(html).toContain(
