@@ -98,9 +98,10 @@ jobs:
           # --- Surfaces ---------------------------------------------------
           check_http registry  "Registry" "https://registry.jsonresume.org/thomasdavis?cb=${CB}-${RANDOM}" "Thomas"
           check_http homepage  "Homepage" "https://jsonresume.org?cb=${CB}-${RANDOM}" "-"
-          # docs moved to jsonresume.org/docs (#491) -- served by homepage2's
-          # rewrite to GitHub Pages, so this also covers that proxy path.
+          # docs moved to jsonresume.org/docs (#491) -- Caddy on the box proxies
+          # it to GitHub Pages, so this also covers that proxy path.
           check_http docs      "Docs"     "https://jsonresume.org/docs?cb=${CB}-${RANDOM}" "-"
+          check_http styleguide "Styleguide" "https://styleguide.jsonresume.org/?cb=${CB}-${RANDOM}" "Styleguide"
           # supabase auth health endpoint (expect 200). Kong 401s every
           # /auth/v1/* route without an apikey, so send the public anon key
           # (the same browser-safe key hardcoded in apps/registry/app/lib/supabase.ts).
@@ -147,6 +148,7 @@ jobs:
               registry: 'Registry (registry.jsonresume.org)',
               homepage: 'Homepage (jsonresume.org)',
               docs: 'Docs (jsonresume.org/docs)',
+              styleguide: 'Styleguide (styleguide.jsonresume.org)',
               jobs: 'Jobs pipeline (jsonresume.org/api/jobs/status)',
               supabase: 'Supabase (database/auth)',
             };
