@@ -238,6 +238,9 @@ globalStyle(p(':where(th, td)'), {
   padding: `${vars.space[2]} ${vars.space[3]}`,
   borderBlockEnd: `1px solid ${vars.color.border.default}`,
 });
+// In a table, `anywhere` lets a column shrink to one character, splitting
+// field names (`$sche ma`); break-word keeps them whole unless they can't fit.
+globalStyle(p(':where(th, td) :where(code)'), { overflowWrap: 'break-word' });
 globalStyle(p(':where(img)'), { maxWidth: '100%', height: 'auto' });
 // GitHub task lists: the checkbox replaces the bullet.
 globalStyle(p(':where(.contains-task-list)'), {

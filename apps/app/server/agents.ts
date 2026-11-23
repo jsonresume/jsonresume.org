@@ -1,9 +1,10 @@
 import { authorizationServer, protectedResource } from '@repo/mcp';
+import { schemaFileRoutes } from './schemaFiles';
 import { securityTxtRoute } from './securityTxt';
 
 /**
  * OAuth discovery, at the paths RFC 9728 and 8414 and OpenID Connect name;
- * security.txt (RFC 9116); and,
+ * security.txt (RFC 9116); the schema files; and,
  * when OPENAI_APPS_CHALLENGE is set, the token proving to OpenAI that we own
  * the MCP server's domain (ChatGPT app submission).
  */
@@ -28,6 +29,7 @@ export const discoveryRoutes = (site: string, openAiChallenge?: string) => {
       fetch: json(authorizationServer(site)),
     },
     securityTxtRoute(site),
+    ...schemaFileRoutes(),
     ...(openAiChallenge
       ? [
           {

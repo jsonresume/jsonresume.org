@@ -19,6 +19,9 @@ export const paths = {
   themeDevelopment: '/theme-development',
   jobDescriptionSchema: '/job-description-schema',
   companySchema: '/company-schema',
+  spec: '/spec',
+  specJob: '/spec/job',
+  specCompany: '/spec/company',
   media: '/media',
   blog: '/blog',
   post: (slug: string) => `/blog/${slug}`,
@@ -119,6 +122,7 @@ export const footerGroups: NavGroup[] = [
     items: [
       { label: 'CLI', href: paths.cli },
       { label: 'Theme development', href: paths.themeDevelopment },
+      { label: 'Specification', href: paths.spec },
       { label: 'Job description schema', href: paths.jobDescriptionSchema },
       { label: 'Company schema', href: paths.companySchema },
       { label: 'MCP for agents', href: paths.mcp },

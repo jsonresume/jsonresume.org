@@ -80,6 +80,7 @@ export function SchemaPage() {
         title="Ready to write yours?"
         items={[
           { label: 'Get started', href: paths.gettingStarted },
+          { label: 'Read the specification', href: paths.spec },
           { label: 'Job description schema', href: paths.jobDescriptionSchema },
           { label: 'Browse themes', href: paths.themes },
         ]}
