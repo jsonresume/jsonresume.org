@@ -12,7 +12,8 @@
     "./documents": "./src/documents.ts",
     "./slugs": "./src/slugs.ts",
     "./pages": "./src/pages/index.ts",
-    "./spec": "./src/spec.ts"
+    "./spec": "./src/spec.ts",
+    "./llms": "./src/llms.ts"
   },
   "sideEffects": [
     "**/*.css.ts"
