@@ -1,8 +1,9 @@
 import { RegistryProvider } from '@effect/atom-react';
-import { Container, Hero, Section } from '@jsonresume/ui';
+import { Container, Hero, Section, Text } from '@jsonresume/ui';
 import { ThemeGallery, themes } from '@repo/theme-gallery';
 import { paths, themeImageUrl, themePreviewUrl } from '../links';
 import { NextSteps } from './shared/NextSteps';
+import { OwnPage } from './themes/OwnPage';
 import { ThemeUse } from './themes/ThemeUse';
 
 export function ThemesPage() {
@@ -20,12 +21,26 @@ export function ThemesPage() {
           {/* Atoms live with the feature that uses them, so Effect's runtime
               loads only on this page; one registry per render keeps SSR safe. */}
           <RegistryProvider>
-            <ThemeGallery
-              image={(theme) => themeImageUrl(theme.slug)}
-              href={(theme) => themePreviewUrl(theme.slug)}
-              page={(theme) => paths.theme(theme.slug)}
-              details={(theme) => <ThemeUse theme={theme} />}
-            />
+            <OwnPage>
+              {(me) => (
+                <>
+                  {me && (
+                    <Text size="sm" tone="muted">
+                      Previews show your own resume, @{me}. Nothing changes
+                      until you choose one.
+                    </Text>
+                  )}
+                  <ThemeGallery
+                    image={(theme) => themeImageUrl(theme.slug)}
+                    href={(theme) =>
+                      themePreviewUrl(theme.slug, me ?? undefined)
+                    }
+                    page={(theme) => paths.theme(theme.slug)}
+                    details={(theme) => <ThemeUse theme={theme} />}
+                  />
+                </>
+              )}
+            </OwnPage>
           </RegistryProvider>
         </Container>
       </Section>
