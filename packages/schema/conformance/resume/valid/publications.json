@@ -1,0 +1,14 @@
+{
+  "publications": [
+    {
+      "name": "On Computable Numbers",
+      "authors": ["A. M. Turing"],
+      "publisher": "Proc. LMS",
+      "releaseDate": "1936",
+      "identifiers": {
+        "doi": "10.1112/plms/s2-42.1.230"
+      },
+      "type": "article"
+    }
+  ]
+}

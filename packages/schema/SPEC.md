@@ -162,14 +162,21 @@ How changes are proposed and decided is in
 [CONTRIBUTING.md → Proposing Schema Changes](../../CONTRIBUTING.md#proposing-schema-changes);
 the decisions are recorded in [DECISIONS.md](DECISIONS.md).
 
-## 9. Implementations
+## 9. Conformance
+
+[`conformance/`](conformance/README.md) holds documents with the result an
+implementation must give for each, valid or not, listed in
+`conformance/manifest.json` with the section each one tests. Every
+implementation below passes it.
+
+## 10. Implementations
 
 - [`@jsonresume/schema`](https://www.npmjs.com/package/@jsonresume/schema)
   (JavaScript): `schema.json` and a validator.
 - [`json-resume-serde`](../core-rust) (Rust): typed serde bindings with
   validation, written separately from the JavaScript validator. It covers
   every field of 1.x, keeps unknown properties, and is tested against the
-  schema's sample and examples in CI.
+  schema's sample, examples and conformance suite in CI.
 - [`@jsonresume/types`](../types) (TypeScript): types generated from the
   schema.
 

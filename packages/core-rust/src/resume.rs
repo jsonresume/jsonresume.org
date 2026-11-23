@@ -105,4 +105,6 @@ pub struct Resume {
 }
 
 #[cfg(test)]
+mod conformance;
+#[cfg(test)]
 mod tests;

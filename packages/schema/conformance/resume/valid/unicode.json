@@ -1,0 +1,10 @@
+{
+  "basics": {
+    "name": "山田 太郎",
+    "label": "Ingénieure logiciel",
+    "location": {
+      "city": "Zürich",
+      "countryCode": "CH"
+    }
+  }
+}

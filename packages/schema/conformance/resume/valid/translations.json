@@ -1,0 +1,11 @@
+{
+  "meta": {
+    "language": "en",
+    "translations": [
+      {
+        "language": "pt-BR",
+        "url": "https://example.com/resume.pt-BR.json"
+      }
+    ]
+  }
+}

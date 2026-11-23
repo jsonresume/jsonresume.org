@@ -1,0 +1,17 @@
+{
+  "work": [
+    {
+      "name": "Acme",
+      "location": "Berlin"
+    }
+  ],
+  "education": [
+    {
+      "institution": "TU",
+      "location": {
+        "city": "Berlin",
+        "countryCode": "DE"
+      }
+    }
+  ]
+}

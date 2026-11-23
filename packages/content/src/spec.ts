@@ -24,6 +24,10 @@ const LINKS: Record<string, string> = {
   'job-schema.json': '/job-schema.json',
   'company-schema.json': '/company-schema.json',
   'DECISIONS.md': `${REPO}/packages/schema/DECISIONS.md`,
+  'conformance/README.md': `${REPO.replace(
+    '/blob/',
+    '/tree/'
+  )}/packages/schema/conformance`,
   '../types': `${REPO}/packages/types`,
   '../core-rust': `${REPO}/packages/core-rust`,
   '../../CONTRIBUTING.md': `${REPO}/CONTRIBUTING.md`,

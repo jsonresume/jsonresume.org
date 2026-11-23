@@ -1,0 +1,15 @@
+{
+  "name": "Acme",
+  "url": "https://acme.example",
+  "founded": "2014",
+  "employees": {
+    "min": 50,
+    "max": 200
+  },
+  "remote": "Full",
+  "headquarters": {
+    "city": "Toronto",
+    "countryCode": "CA"
+  },
+  "technologies": ["Go", "Postgres"]
+}

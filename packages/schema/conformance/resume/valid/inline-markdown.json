@@ -1,0 +1,11 @@
+{
+  "basics": {
+    "summary": "Builds **fast** systems; see [my site](https://example.com)."
+  },
+  "work": [
+    {
+      "name": "Acme",
+      "highlights": ["Cut latency by *40%*"]
+    }
+  ]
+}
