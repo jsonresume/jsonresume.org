@@ -101,7 +101,7 @@ Don't remove or deprecate themes without the maintainer's approval. 27 legacy th
 - Branches must be up to date to merge. Queue one PR at a time: `gh pr update-branch N`, then `gh pr merge N --squash --auto`.
   - Never guess a PR number: read it with `gh pr view <branch> --json number`. The bot's "Version Packages" PR takes numbers too, and merging it publishes to npm.
 - **Fork PRs get every secret as an empty string.** Default env with `||=`, not `??=` (which keeps `''`), and skip tests that need credentials when they're absent (see `apps/registry/tests/render.spec.js`). `github.token` can't read gists.
-- **Turbo's remote cache needs `TURBO_TOKEN`** (a Vercel token for the `jsonresume` team, as a repo secret). Without a working one, every CI run builds all ~220 tasks (about 9 minutes).
+- **Turbo's remote cache is ours:** `apps/build-cache` on the box, at `https://jsonresume.org/_turbo` (`TURBO_API` in `ci.yml`, token in the `TURBO_TOKEN` secret and `/etc/jsonresume/build-cache.env`). Fork PRs get no token and build everything.
 - **LINT GOTCHA:** `eslint-config-next` is pinned to `^15` in `@repo/eslint-config-custom`. v16's flat config crashes ESLint 8, and turbo's cache can hide it. Verify lint changes with `turbo lint --force`.
 - **Releases:** Changesets (`docs/RELEASING.md`). Merging to `master` updates the "Version Packages" PR; merging that publishes to npm. Add a changeset with any change to a published package.
 - `pnpm.overrides` in the root `package.json` holds security patches. Dependabot runs weekly.

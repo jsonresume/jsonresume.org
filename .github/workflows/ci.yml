@@ -7,6 +7,9 @@ on:
   merge_group:
 
 env:
+  # Turbo's remote cache, on our box (apps/build-cache). Fork PRs get no
+  # token and build without it.
+  TURBO_API: https://jsonresume.org/_turbo
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ vars.TURBO_TEAM }}
   AUTH_SECRET: ${{ secrets.AUTH_SECRET }}

@@ -1,0 +1,26 @@
+{
+  "name": "build-cache",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Turborepo's remote cache for CI, served from the jsonresume.org box",
+  "type": "module",
+  "scripts": {
+    "start": "node --experimental-strip-types --no-warnings src/main.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts"
+  },
+  "dependencies": {
+    "@effect/platform-node": "4.0.6",
+    "@hono/node-server": "^2.1.11",
+    "effect": "4.0.6",
+    "hono": "^4.13.20"
+  },
+  "devDependencies": {
+    "@repo/eslint-config-custom": "workspace:*",
+    "@types/node": "^20.19.24",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.12"
+  }
+}
