@@ -43,11 +43,13 @@ export const resumeSaving = (gist: Effect.Success<typeof gistSync>) =>
         });
       }
       const account = yield* store.account(userId);
+      const found = yield* store.resumeOf(userId);
+      const here = found ? yield* gist.startsHere({ ...found, userId }) : false;
       const record = versions.record(userId, resume, actor, note);
       // A gist that feeds the page stays the source of truth: write to it,
       // then keep what we wrote as its copy here and as a version.
       const recorded =
-        account?.source === 'gist' && account.user.githubLogin
+        account?.source === 'gist' && account.user.githubLogin && !here
           ? yield* gist.writeGist(userId, resume).pipe(
               Effect.flatMap((saved) =>
                 versions.inTransaction(
@@ -62,9 +64,13 @@ export const resumeSaving = (gist: Effect.Success<typeof gistSync>) =>
               )
             )
           : yield* versions.inTransaction(
-              store
-                .saveStoredResume(userId, resume)
-                .pipe(Effect.andThen(record))
+              store.saveStoredResume(userId, resume).pipe(
+                // From now on the page reads what is saved here.
+                Effect.andThen(
+                  here ? store.setSource(userId, 'stored') : Effect.void
+                ),
+                Effect.andThen(record)
+              )
             );
       if (Option.isSome(listener)) yield* listener.value.saved(userId, resume);
       const outcome: SaveOutcome = {

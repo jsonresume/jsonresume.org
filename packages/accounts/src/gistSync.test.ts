@@ -88,12 +88,13 @@ describe('saving to the gist', () => {
     );
   });
 
-  it('asks for the gist permission when GitHub didn’t grant it, and says when GitHub is down', async () => {
-    const { run, gists, saved } = accountsStack();
+  it('saves here for someone with no gist who didn’t grant the permission', async () => {
+    const { run, gists } = accountsStack();
     gists.owners.set('tok', 6);
     await run(
       Effect.gen(function* () {
         const accounts = yield* Accounts;
+        const profiles = yield* Profiles;
         const result = yield* accounts.githubSignIn({
           id: 6,
           login: 'plain',
@@ -103,7 +104,40 @@ describe('saving to the gist', () => {
         });
         if (result._tag !== 'SignedIn') throw new Error('expected sign-in');
         const id = result.user.id;
+        // The editor's button says Save, not "Save to gist" behind a wall.
+        expect((yield* accounts.currentResume(id)).source).toBe('stored');
+
+        yield* accounts.saveResume(
+          id,
+          { basics: { name: 'Started here' } },
+          userActor
+        );
+        expect(gists.gists.size).toBe(0);
+        const account = yield* accounts.account(id);
+        expect(account?.source).toBe('stored');
+        expect(yield* profiles.resume('plain' as Username)).toMatchObject({
+          resume: { basics: { name: 'Started here' } },
+        });
+      })
+    );
+  });
+
+  it('asks for the gist permission to save to an existing gist, and says when GitHub is down', async () => {
+    const { run, gists, saved } = accountsStack();
+    gists.owners.set('tok', 5);
+    gists.gists.set('g5', { ownerId: 5, content: '{}' });
+    await run(
+      Effect.gen(function* () {
+        const accounts = yield* Accounts;
+        const profiles = yield* Profiles;
+        yield* profiles.resume('ghosty' as Username); // the ghost, mirroring gist g5
+        const result = yield* accounts.githubSignIn(
+          ghosty('tok', ['read:user'])
+        );
+        if (result._tag !== 'SignedIn') throw new Error('expected sign-in');
+        const id = result.user.id;
         expect(yield* accounts.canWriteGist(id)).toBe(false);
+        expect((yield* accounts.currentResume(id)).source).toBe('gist');
         expect(
           (yield* Effect.flip(
             accounts.saveResume(id, { basics: {} }, userActor)
@@ -111,13 +145,7 @@ describe('saving to the gist', () => {
         ).toBe('GistPermissionNeeded');
 
         // Signing in again with the permission fixes it.
-        yield* accounts.githubSignIn({
-          id: 6,
-          login: 'plain',
-          avatarUrl: null,
-          email: null,
-          grant: grant('tok'),
-        });
+        yield* accounts.githubSignIn(ghosty('tok'));
         gists.down = true;
         expect(
           (yield* Effect.flip(

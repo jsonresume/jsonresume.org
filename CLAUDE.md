@@ -75,6 +75,7 @@ Don't remove or deprecate themes without the maintainer's approval. 27 legacy th
   - After changing a package's API (a new service method, endpoint or export), typecheck its consumers too (`pnpm turbo typecheck --filter=app...`): test mocks in other packages break silently otherwise.
 - **TypeScript scripts:** there is no `tsx`. Run them with `node --experimental-strip-types --no-warnings <file>.ts`.
 - **Stopping a server:** find its pid by port (`ss -ltnp`) and kill that. `pkill -f` kills the shell running it.
+- **Memory on the box:** it has 11GB and serves the site. A wide `turbo test`/`typecheck` (dozens of node processes) has run it out of memory, and the kernel then killed the user session (tmux and the agent). Run anything wider than one package in a capped cgroup with `--concurrency=2`: `systemd-run --user --scope -p MemoryMax=5G -- pnpm turbo ... --concurrency=2`. Test packages one at a time; CI runs the whole repo.
 
 ## Production (the box)
 
