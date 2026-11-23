@@ -65,8 +65,9 @@ export const resumeUrl = (username: string, extension?: string) =>
   extension ? `/@${username}.${extension}` : `/@${username}`;
 
 /** Live preview of a theme, rendered from a real resume hosted here. */
-export const themePreviewUrl = (slug: string) =>
-  `${resumeUrl('thomasdavis')}?theme=${encodeURIComponent(slug)}`;
+/** A theme on a real resume: the sample one, or `username`'s own. */
+export const themePreviewUrl = (slug: string, username = 'thomasdavis') =>
+  `${resumeUrl(username)}?theme=${encodeURIComponent(slug)}`;
 
 /** The theme open in the gallery's preview, where the rest are a click away. */
 export const themeInGalleryUrl = (slug: string) =>

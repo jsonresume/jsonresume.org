@@ -14,6 +14,7 @@ import {
 import type { ThemeSummary } from '@repo/domain';
 import { ThemeGrid } from '@repo/theme-gallery/grid';
 import { paths, themeImageUrl, themePreviewUrl } from '../../links';
+import { LivePreview } from './OwnPage';
 import { ThemeUse } from './ThemeUse';
 import * as s from './themePage.css';
 
@@ -44,9 +45,7 @@ export function ThemePage({ theme, similar }: ThemePageProps) {
             <Button asChild variant="primary" size="lg">
               <a href={start}>Start your resume in {theme.name}</a>
             </Button>
-            <Button asChild size="lg">
-              <a href={themePreviewUrl(theme.slug)}>Live preview</a>
-            </Button>
+            <LivePreview slug={theme.slug} href={themePreviewUrl} />
           </>
         }
       />
