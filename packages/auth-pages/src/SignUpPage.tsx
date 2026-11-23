@@ -17,6 +17,9 @@ export interface SignUpPageProps {
   signInLink: ReactNode;
 }
 
+/** Where a new email account goes after signing up, unless `next` says. */
+export const NEW_ACCOUNT_HOME = '/dashboard/editor?welcome=1';
+
 function SignUpForm({ next, signInLink }: SignUpPageProps) {
   const copy = account.signUp;
   const signUp = useAtomSet(signUpAtom, { mode: 'promiseExit' });
@@ -37,8 +40,11 @@ function SignUpForm({ next, signInLink }: SignUpPageProps) {
       reactivityKeys: keys.session,
     });
     const tag = errorTag(exit);
+    // A new email account has no resume yet: land where one is made (import,
+    // blank or example). From the overview, 21 of 22 such accounts in 30
+    // days to 2026-11-23 never made one.
     if (tag === undefined)
-      return window.location.assign(safeNext(next, '/dashboard?welcome=1'));
+      return window.location.assign(safeNext(next, NEW_ACCOUNT_HOME));
     setBusy(false);
     setMessage(refusalMessage(usernameReason(exit), tag));
   };
