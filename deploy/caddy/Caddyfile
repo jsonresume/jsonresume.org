@@ -22,11 +22,13 @@
 
 # The app on a local port. A deploy restarts it, and it listens again about
 # 3s later: retry refused connections for up to 10s instead of answering
-# 502. A request that never reached the app is safe to send again.
+# 502. A request that never reached the app is safe to send again; one that
+# did is never retried (Caddy would otherwise resend a failed GET).
 (upstream) {
 	reverse_proxy 127.0.0.1:{args[0]} {
 		lb_try_duration 10s
 		lb_try_interval 250ms
+		lb_retry_match expression false
 	}
 }
 
