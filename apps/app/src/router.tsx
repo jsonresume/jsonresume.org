@@ -39,7 +39,7 @@ import {
 } from './routes/auth';
 import { privacyRoute, termsRoute } from './routes/docs';
 import { exploreRoute } from './routes/explore';
-import { jobRoute, jobsRoute } from './routes/jobs';
+import { companyRoute, jobRoute, jobsRoute } from './routes/jobs';
 import {
   exampleRoute,
   examplesRoute,
@@ -77,6 +77,7 @@ export const routeTree = rootRoute.addChildren([
     registryRoute,
     jobsRoute,
     jobRoute,
+    companyRoute,
     exploreRoute,
     privacyRoute,
     termsRoute,

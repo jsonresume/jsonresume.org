@@ -12,4 +12,5 @@ export { JobBoardPage, type JobLinks } from './JobBoardPage';
 export { JobCard, type JobCardProps } from './JobCard';
 export { JobFilterBar, useFilteredJobs } from './JobFilters';
 export { JobList } from './JobList';
+export { CompanyPage } from './CompanyPage';
 export { JobPage } from './JobPage';

@@ -25,7 +25,7 @@ import {
   sessionless,
 } from './agents';
 import { createExplorePage, explorePath } from './explorePage';
-import { createJobPages, jobPath, jobsPath } from './jobPages';
+import { companyPath, createJobPages, jobPath, jobsPath } from './jobPages';
 import { createResumeHandler, resumePath, variantPath } from './resumes';
 import { createSitemaps, liveSitemapPath, sitemapPath } from './sitemaps';
 import { createTimelinePage, timelinePath } from './timelinePage';
@@ -157,6 +157,7 @@ const main = Effect.gen(function* () {
       { path: timelinePath, fetch: timeline.fetch },
       { path: jobsPath, fetch: jobs.board },
       { path: jobPath, fetch: jobs.job },
+      { path: companyPath, fetch: jobs.company },
       { path: explorePath, fetch: explore.fetch },
       { path: sitemapPath, fetch: sitemaps.index },
       { path: liveSitemapPath, fetch: sitemaps.file },

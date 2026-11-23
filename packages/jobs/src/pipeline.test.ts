@@ -43,7 +43,7 @@ const setup = () => {
         post(
           202,
           200,
-          'Frontend Engineer | Webby | React TypeScript CSS',
+          'Frontend Engineer | Webby (YC W21) | React TypeScript CSS',
           daysAgo(19)
         ),
         post(203, 200, 'unparseable rambling', daysAgo(19)),
@@ -171,5 +171,17 @@ describe('the jobs pipeline', () => {
     });
     expect(acme.jobs.map((j) => j.id)).toEqual([201]);
     expect(missing._tag).toBe('CompanyNotFound');
+  });
+
+  it('finds a company from the slug its own name gives', async () => {
+    const { layer } = setup();
+    const webby = await Effect.runPromise(
+      Effect.gen(function* () {
+        yield* run;
+        return yield* (yield* JobBoard).company('webby-yc-w21');
+      }).pipe(Effect.provide(layer))
+    );
+    expect(webby.slug).toBe('webby-yc-w21');
+    expect(webby.jobs.map((j) => j.id)).toEqual([202]);
   });
 });

@@ -1,5 +1,5 @@
 import { base, RouteProgress } from '@jsonresume/ui';
-import type { ExploreResults, Job, JobBoard } from '@repo/api';
+import type { CompanyProfile, ExploreResults, Job, JobBoard } from '@repo/api';
 import type { ResumeProblem } from '@repo/domain';
 import { authHintScript, NotFoundPage, SiteLayout } from '@repo/site';
 import type { Timeline } from '@repo/timeline';
@@ -38,6 +38,8 @@ export interface RouterContext {
   jobBoard?: JobBoard;
   /** /jobs/:id, or null when there is no such job. */
   job?: Job | null;
+  /** /jobs/companies/:slug, or null when no such company is hiring. */
+  company?: CompanyProfile | null;
   /** /explore, searched for this request (see ./explore.tsx). */
   explore?: ExploreResults;
   /** /@username/timeline, with the server's today (see ./timeline.tsx). */

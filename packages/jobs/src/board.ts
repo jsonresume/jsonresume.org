@@ -146,7 +146,9 @@ const make = Effect.gen(function* () {
         : [];
       const posts = found.flatMap((r) =>
         toRow(r)
-          .filter((row) => companyKey(companyOf(row.posting)) === key)
+          .filter(
+            (row) => companyKey(companySlug(companyOf(row.posting))) === key
+          )
           .map((row) => ({ row, html: r.html }))
       );
       const [first] = posts;
