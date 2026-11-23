@@ -12,6 +12,7 @@ import { ResumeForm } from './form/ResumeForm';
 import { JsonPane } from './JsonPane';
 import { formSections } from './model';
 import { PreviewPane } from './PreviewPane';
+import { Live } from './Live';
 import { AllowGist, Start } from './Start';
 import { CheckPane } from './CheckPane';
 import { SidePane } from './SidePane';
@@ -140,7 +141,11 @@ export function ResumeEditor({ username }: { username: string }) {
         {draft === null && welcomed() ? (
           <Start.Welcome username={username} />
         ) : null}
-        {notice ? <Callout tone={notice.tone}>{notice.text}</Callout> : null}
+        {notice?.live ? (
+          <Live username={username} />
+        ) : notice ? (
+          <Callout tone={notice.tone}>{notice.text}</Callout>
+        ) : null}
         {example ? (
           <Callout tone="info">
             This is the example. Change it to make it yours; it can’t be saved
