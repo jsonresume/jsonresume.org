@@ -82,6 +82,27 @@ registry.jsonresume.org {
 	import app 3003
 }
 
+# The design system's docs (apps/styleguide): a static export, released by
+# deploy/scripts/deploy.sh styleguide into /srv/www/styleguide.
+styleguide.jsonresume.org {
+	import origin_tls
+	encode zstd gzip
+	root * /srv/www/styleguide/current
+	# Hashed build files never change; pages are checked on every visit.
+	header /_next/static/* Cache-Control "public, max-age=31536000, immutable"
+	header ?Cache-Control "public, max-age=0, must-revalidate"
+	try_files {path} {path}.html {path}/index.html
+	file_server
+	handle_errors 404 {
+		rewrite * /404.html
+		file_server
+	}
+	log {
+		output stdout
+		format json
+	}
+}
+
 # One name for the site.
 www.jsonresume.org, beta.jsonresume.org {
 	import origin_tls

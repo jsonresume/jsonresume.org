@@ -36,6 +36,10 @@ they are removed). `/etc/jsonresume/build-cache.env` holds `PORT=3011` and
 `BUILD_CACHE_TOKEN`, which is also the repo's `TURBO_TOKEN` secret: to change
 it, write a new one to both (`openssl rand -hex 32`) and restart the unit.
 
+Static sites have no service: `deploy.sh styleguide` builds `apps/styleguide`
+and copies its `out/` to `/srv/www/styleguide/<sha>` (the last three are
+kept; `--rollback` works the same way).
+
 Retention, as the privacy policy (/privacy) says: journald keeps logs 30
 days (`deploy/journald/retention.conf` in `/etc/systemd/journald.conf.d/`),
 the backup script prunes R2 copies older than 30 days. `/etc/jsonresume/
@@ -113,8 +117,9 @@ jobs) and `sitemap-resumes-N.xml` (everyone Explore lists, 40,000 a file).
 Hostnames (Cloudflare proxied, `deploy/caddy/Caddyfile`): jsonresume.org is
 the site, with `/docs` proxied to GitHub Pages; www and beta redirect to it;
 registry.jsonresume.org is answered by the app with redirects (resumes to
-`/@username`, the rest to `/registry`). The DNS records as they were before
-the switch, pointing at Vercel, are the way back.
+`/@username`, the rest to `/registry`); styleguide.jsonresume.org is the
+styleguide (`apps/styleguide`), a static export Caddy serves from
+`/srv/www/styleguide/current`. Nothing runs on Vercel any more.
 
 ## Common tasks
 
@@ -124,6 +129,7 @@ sudo deploy/scripts/deploy.sh app <branch|sha>       # any ref
 sudo deploy/scripts/deploy.sh app --rollback         # back to the previous release
 journalctl -u jsonresume@app -f                      # logs
 sudo deploy/scripts/deploy.sh build-cache            # release the CI build cache
+sudo deploy/scripts/deploy.sh styleguide             # release styleguide.jsonresume.org
 sudo systemctl start jsonresume-backup               # backup now (also nightly, 03:00 UTC)
 sudo systemctl start jsonresume-jobs                 # jobs pipeline now (also every 2 hours)
 journalctl -u jsonresume-jobs                        # its runs; status at /api/jobs/status

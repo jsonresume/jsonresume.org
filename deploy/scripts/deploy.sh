@@ -10,6 +10,10 @@
 #   <app>/current -> releases/..  what jsonresume@<app> serves
 #   <app>/previous -> releases/.. the release before it, for --rollback
 #
+# Static sites (STATIC_APPS: a build of plain files in apps/<app>/out) have no
+# service: each build is copied to /srv/www/<app>/<sha>, which Caddy can read,
+# and /srv/www/<app>/current (and previous) point at one.
+#
 # Builds run as `deploy` with /etc/jsonresume/<app>.env loaded by systemd, so
 # NEXT_PUBLIC_* values are inlined while the env file stays root-only.
 set -euo pipefail
@@ -20,6 +24,10 @@ BASE=/srv/jsonresume
 REPO=$BASE/repo.git
 APPDIR=$BASE/$APP
 KEEP=3
+STATIC_APPS="styleguide"
+WWW=/srv/www/$APP
+
+is_static() { case " $STATIC_APPS " in *" $APP "*) return 0 ;; esac; return 1; }
 
 log() { echo "[deploy $APP] $*"; }
 
@@ -60,9 +68,41 @@ switch_to() {
   systemctl restart "jsonresume@$APP"
 }
 
+repoint() {
+  # Atomically point $1 at $2.
+  ln -sfn "$2" "$1.new" && mv -T "$1.new" "$1"
+}
+
+publish_static() {
+  # Copy a static build where Caddy reads it, then switch to it.
+  local out=$1 sha=$2 old
+  [ -f "$out/index.html" ] || { log "no $out/index.html"; exit 1; }
+  install -d -m 755 "$WWW"
+  rm -rf "${WWW:?}/$sha.new" && cp -r "$out" "$WWW/$sha.new"
+  chmod -R a+rX "$WWW/$sha.new"
+  rm -rf "${WWW:?}/${sha:?}" && mv "$WWW/$sha.new" "$WWW/$sha"
+  old=$(readlink -f "$WWW/current" 2>/dev/null || true)
+  repoint "$WWW/current" "$WWW/$sha"
+  [ -n "$old" ] && [ "$old" != "$WWW/$sha" ] && repoint "$WWW/previous" "$old"
+  live=$(readlink -f "$WWW/current"); prev=$(readlink -f "$WWW/previous" 2>/dev/null || true)
+  ls -1t "$WWW" | grep -vx -e current -e previous | tail -n +$((KEEP + 1)) | while read -r gone; do
+    [ "$WWW/$gone" = "$live" ] || [ "$WWW/$gone" = "$prev" ] && continue
+    rm -rf "${WWW:?}/${gone:?}"
+  done
+  log "live: $sha"
+}
+
 [ "$(id -u)" = 0 ] || { echo "run as root" >&2; exit 1; }
 [ -f /etc/jsonresume/"$APP".env ] || { echo "missing /etc/jsonresume/$APP.env" >&2; exit 1; }
 install -d -o deploy -g deploy "$APPDIR/releases"
+
+if [ "$REF" = --rollback ] && is_static; then
+  prev=$(readlink -f "$WWW/previous") || { log "no previous release"; exit 1; }
+  log "rolling back to $(basename "$prev")"
+  old=$(readlink -f "$WWW/current")
+  repoint "$WWW/current" "$prev" && repoint "$WWW/previous" "$old"
+  exit
+fi
 
 if [ "$REF" = --rollback ]; then
   prev=$(readlink -f "$APPDIR/previous") || { log "no previous release"; exit 1; }
@@ -96,6 +136,15 @@ if [ ! -f "$REL/.built" ]; then
       || log "warning: Chromium was not installed; check /@username.pdf"
   fi
   touch "$REL/.built" && chown deploy:deploy "$REL/.built"
+fi
+
+if is_static; then
+  publish_static "$REL/apps/$APP/out" "$SHA"
+  # Only the copy is served; the checkout is kept for the next build.
+  ls -1t "$APPDIR/releases" | tail -n +$((KEEP + 1)) | while read -r old; do
+    rm -rf "${APPDIR:?}/releases/${old:?}"
+  done
+  exit
 fi
 
 if [ "$(readlink -f "$APPDIR/current" 2>/dev/null)" = "$REL" ]; then

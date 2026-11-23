@@ -6,7 +6,8 @@ Follow AGENTS.md for all new code (stack, packages, conventions): @AGENTS.md
 
 - **Org/Repo:** `jsonresume/jsonresume.org`. Always use `owner: "jsonresume"`.
 - **The site:** jsonresume.org is `apps/app`, live since 2026-10-24 on our own box (`deploy/README.md`). It is React 19 + Vite, TanStack Router SSR, Effect 4 (Schema, HttpApi, SQL), Effect Atom and `@jsonresume/ui`, with the logic in `packages/*`. Production is Postgres on the box; `/docs` is `apps/docs` (a static Fumadocs export on GitHub Pages, proxied by Caddy).
-- **Legacy, reference only:** `apps/registry` and `apps/homepage2` (Next.js, Vercel, Supabase). registry.jsonresume.org redirects here: resumes to `/@username`, the rest to `/registry`, which lists what hasn't been ported. Read them for behaviour; never copy their code or patterns, and don't register new things there. Supabase, CockroachDB and the copy in `public.resumes` are kept on purpose: never delete them.
+- **Styleguide:** styleguide.jsonresume.org is `apps/styleguide`, a static Next export served by the box's Caddy (`sudo deploy/scripts/deploy.sh styleguide`). Nothing is hosted on Vercel.
+- **Legacy, reference only:** `apps/registry` and `apps/homepage2` (Next.js, formerly on Vercel, Supabase). registry.jsonresume.org redirects here: resumes to `/@username`, the rest to `/registry`, which lists what hasn't been ported. Read them for behaviour; never copy their code or patterns, and don't register new things there. Supabase, CockroachDB and the copy in `public.resumes` are kept on purpose: never delete them.
 - **Archived repos:** `resume-schema`, `resume-cli` and `rust-json-resume` live here now (`packages/schema`, `packages/cli`, `packages/core-rust`). Never link the old repos as live (#275).
 - **AI:** Effect AI (`effect/ai` + `@effect/ai-openai`, see `@repo/jobs`). The legacy apps use the Vercel AI SDK. Never call vendor SDKs directly.
 
