@@ -40,8 +40,8 @@ overrides:
   glob@>=10.0.0 <10.5.0: ^10.5.0
   storybook@>=8.0.0 <8.6.17: 8.6.17
   storybook@>=8.7.0-alpha.0 <9.1.19: ^9.1.19
-  vitest@<3.2.6: ^3.2.6
-  '@vitest/ui@<3.2.6': ^3.2.6
+  vitest@<4.1.11: ^4.1.12
+  '@vitest/ui@<4.1.11': ^4.1.12
   undici@>=7.0.0 <7.30.1: ^7.30.1
   socket.io-parser@>=4.0.0 <4.2.7: ^4.2.7
   ip-address@>=10.0.0 <10.3.1: ^10.3.1
@@ -318,7 +318,7 @@ importers:
         version: 4.0.6(effect@4.0.6)
       '@effect/vitest':
         specifier: 4.0.6
-        version: 4.0.6(effect@4.0.6)(vitest@3.2.6)
+        version: 4.0.6(effect@4.0.6)(vitest@4.1.12)
       '@playwright/test':
         specifier: 1.56.1
         version: 1.56.1
@@ -362,8 +362,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   apps/docs:
     dependencies:
@@ -1370,11 +1370,11 @@ importers:
         specifier: ^4.3.4
         version: 4.7.0(vite@6.4.4)
       '@vitest/coverage-v8':
-        specifier: ^3.2.4
-        version: 3.2.4(vitest@3.2.6)
+        specifier: ^4.1.12
+        version: 4.1.12(vitest@4.1.12)
       '@vitest/ui':
-        specifier: ^3.2.6
-        version: 3.2.6(vitest@3.2.6)
+        specifier: ^4.1.12
+        version: 4.1.12(vitest@4.1.12)
       caniuse-lite:
         specifier: ^1.0.30001566
         version: 1.0.30001751
@@ -1397,8 +1397,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   apps/styleguide:
     dependencies:
@@ -1446,8 +1446,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/accounts:
     dependencies:
@@ -1486,8 +1486,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/analytics:
     dependencies:
@@ -1523,8 +1523,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/api:
     dependencies:
@@ -1542,8 +1542,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/api-client:
     dependencies:
@@ -1573,8 +1573,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/api-server:
     dependencies:
@@ -1649,8 +1649,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/ats:
     dependencies:
@@ -1710,8 +1710,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/ats-validator:
     dependencies:
@@ -1720,8 +1720,8 @@ importers:
         version: 1.1.2
     devDependencies:
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/auth-pages:
     dependencies:
@@ -1784,8 +1784,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/careers:
     dependencies:
@@ -1821,8 +1821,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/cli:
     dependencies:
@@ -1985,8 +1985,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/converters/jsonresume-to-rendercv:
     dependencies:
@@ -2073,8 +2073,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/database:
     dependencies:
@@ -2098,8 +2098,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/db:
     dependencies:
@@ -2120,8 +2120,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/domain:
     dependencies:
@@ -2139,8 +2139,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/eslint-config-custom:
     dependencies:
@@ -2243,8 +2243,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/images:
     dependencies:
@@ -2271,8 +2271,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/job-board:
     dependencies:
@@ -2338,8 +2338,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/job-search:
     dependencies:
@@ -2363,8 +2363,8 @@ importers:
         version: 19.2.7
     devDependencies:
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/jobs:
     dependencies:
@@ -2403,8 +2403,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/mcp:
     dependencies:
@@ -2488,8 +2488,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/pathways:
     dependencies:
@@ -2543,8 +2543,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/posthog:
     dependencies:
@@ -2571,8 +2571,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/profiles:
     dependencies:
@@ -2593,8 +2593,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/project-directory:
     dependencies:
@@ -2657,8 +2657,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/resume-core:
     dependencies:
@@ -2703,8 +2703,8 @@ importers:
         specifier: 6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/resume-editor:
     dependencies:
@@ -2785,8 +2785,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/resume-formats:
     dependencies:
@@ -2825,8 +2825,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(yaml@2.9.0)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/resume-host:
     dependencies:
@@ -2865,8 +2865,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/resume-import:
     dependencies:
@@ -2926,8 +2926,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/resume-pdf:
     dependencies:
@@ -2966,8 +2966,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/resume-themes:
     dependencies:
@@ -3684,8 +3684,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/resume-versions:
     dependencies:
@@ -3718,8 +3718,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/sample-data: {}
 
@@ -3800,8 +3800,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/server:
     dependencies:
@@ -3828,8 +3828,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/site:
     dependencies:
@@ -3922,8 +3922,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/ssg:
     devDependencies:
@@ -3961,8 +3961,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/theme-config:
     devDependencies:
@@ -4041,8 +4041,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/theme-kit:
     dependencies:
@@ -4066,8 +4066,8 @@ importers:
         specifier: ^6.1.19
         version: 6.1.19(react-dom@19.2.7)(react@19.2.7)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/theme-primitives:
     dependencies:
@@ -4127,8 +4127,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-abstract-margin:
     dependencies:
@@ -4164,8 +4164,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-academic-classic:
     dependencies:
@@ -4201,8 +4201,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-academic-cv-lite:
     dependencies:
@@ -4260,8 +4260,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-accessible-large-type:
     dependencies:
@@ -4297,8 +4297,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-alta:
     dependencies:
@@ -4334,8 +4334,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-api-reference:
     dependencies:
@@ -4371,8 +4371,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-apprenticeship-entry:
     dependencies:
@@ -4408,8 +4408,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-arabic-modern:
     dependencies:
@@ -4445,8 +4445,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-architects-portfolio:
     dependencies:
@@ -4504,8 +4504,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-architecture-spec:
     dependencies:
@@ -4541,8 +4541,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-art-deco:
     dependencies:
@@ -4600,8 +4600,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-art-school-modern:
     dependencies:
@@ -4681,8 +4681,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-australian-professional:
     dependencies:
@@ -4718,8 +4718,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-awesome-professional:
     dependencies:
@@ -4755,8 +4755,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-bare-serif:
     dependencies:
@@ -4792,8 +4792,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-bauhaus-record:
     dependencies:
@@ -4829,8 +4829,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-berlin-grid:
     dependencies:
@@ -4888,8 +4888,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-blackline:
     dependencies:
@@ -4925,8 +4925,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-boardroom-register:
     dependencies:
@@ -4962,8 +4962,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-bold-header-statement:
     dependencies:
@@ -5021,8 +5021,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-botanical-frame:
     dependencies:
@@ -5058,8 +5058,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-brutalist:
     dependencies:
@@ -5117,8 +5117,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-build-log:
     dependencies:
@@ -5154,8 +5154,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-byline-profile:
     dependencies:
@@ -5191,8 +5191,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-californian-warm:
     dependencies:
@@ -5250,8 +5250,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-capital-brief:
     dependencies:
@@ -5287,8 +5287,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-care-path:
     dependencies:
@@ -5324,8 +5324,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-case-study-cv:
     dependencies:
@@ -5361,8 +5361,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-ceramic-portfolio:
     dependencies:
@@ -5398,8 +5398,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-chambers-counsel:
     dependencies:
@@ -5435,8 +5435,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-charter-serif:
     dependencies:
@@ -5472,8 +5472,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-chronicle-senior:
     dependencies:
@@ -5509,8 +5509,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-civic-standard:
     dependencies:
@@ -5546,8 +5546,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-cjk-modern:
     dependencies:
@@ -5583,8 +5583,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-claude:
     dependencies:
@@ -5629,8 +5629,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-clinic-serif:
     dependencies:
@@ -5666,8 +5666,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-clinical-precision:
     dependencies:
@@ -5747,8 +5747,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-colour-block-cv:
     dependencies:
@@ -5784,8 +5784,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-colour-pencil:
     dependencies:
@@ -5821,8 +5821,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-community-garden:
     dependencies:
@@ -5880,8 +5880,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-confetti-accent:
     dependencies:
@@ -5917,8 +5917,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-consultant-polished:
     dependencies:
@@ -5982,8 +5982,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-contrast-banner:
     dependencies:
@@ -6019,8 +6019,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-correspondence-classic:
     dependencies:
@@ -6056,8 +6056,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-council-profile:
     dependencies:
@@ -6093,8 +6093,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-creative-confidence:
     dependencies:
@@ -6167,8 +6167,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-data-driven:
     dependencies:
@@ -6192,8 +6192,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-data-notebook:
     dependencies:
@@ -6229,8 +6229,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-deedy:
     dependencies:
@@ -6266,8 +6266,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-desert-modern:
     dependencies:
@@ -6297,8 +6297,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-developer-mono:
     dependencies:
@@ -6378,8 +6378,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-dublin:
     dependencies:
@@ -6415,8 +6415,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-easy-print:
     dependencies:
@@ -6452,8 +6452,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-eighties-modern:
     dependencies:
@@ -6489,8 +6489,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-elegant-pink:
     dependencies:
@@ -6520,8 +6520,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-engineering-matrix:
     dependencies:
@@ -6557,8 +6557,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-essay-profile:
     dependencies:
@@ -6594,8 +6594,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-europass-inspired:
     dependencies:
@@ -6631,8 +6631,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-executive-slate:
     dependencies:
@@ -6690,8 +6690,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-fellowship-dossier:
     dependencies:
@@ -6727,8 +6727,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-field-researcher:
     dependencies:
@@ -6786,8 +6786,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-flat:
     dependencies:
@@ -6829,8 +6829,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-footnote-profile:
     dependencies:
@@ -6866,8 +6866,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-french-atelier:
     dependencies:
@@ -6925,8 +6925,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-friendly-notebook:
     dependencies:
@@ -6962,8 +6962,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-friendly-professional:
     dependencies:
@@ -6999,8 +6999,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-gallery-catalogue:
     dependencies:
@@ -7036,8 +7036,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-german-business:
     dependencies:
@@ -7073,8 +7073,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-global-formal:
     dependencies:
@@ -7110,8 +7110,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-government-standard:
     dependencies:
@@ -7191,8 +7191,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-harvard-classic:
     dependencies:
@@ -7228,8 +7228,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-headline-heavy:
     dependencies:
@@ -7265,8 +7265,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-hospitality-profile:
     dependencies:
@@ -7302,8 +7302,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-illustration-folio:
     dependencies:
@@ -7339,8 +7339,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-independent-consultant:
     dependencies:
@@ -7376,8 +7376,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-indic-modern:
     dependencies:
@@ -7413,8 +7413,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-industrial-engineer:
     dependencies:
@@ -7472,8 +7472,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-investor-brief:
     dependencies:
@@ -7531,8 +7531,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-journal-record:
     dependencies:
@@ -7568,8 +7568,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-korean-modern:
     dependencies:
@@ -7605,8 +7605,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-lab-protocol:
     dependencies:
@@ -7642,8 +7642,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-landscape-practice:
     dependencies:
@@ -7679,8 +7679,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-latin-american-cv:
     dependencies:
@@ -7716,8 +7716,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-ledger-professional:
     dependencies:
@@ -7753,8 +7753,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-letterhead-heritage:
     dependencies:
@@ -7790,8 +7790,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-letterpress-resume:
     dependencies:
@@ -7827,8 +7827,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-library-card:
     dependencies:
@@ -7864,8 +7864,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-literary-margin:
     dependencies:
@@ -7901,8 +7901,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-london-bureau:
     dependencies:
@@ -7960,8 +7960,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-magazine-desk:
     dependencies:
@@ -7997,8 +7997,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-makers-mark:
     dependencies:
@@ -8034,8 +8034,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-marketing-narrative:
     dependencies:
@@ -8093,8 +8093,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-meridian-resume:
     dependencies:
@@ -8130,8 +8130,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-merit-scholarship:
     dependencies:
@@ -8167,8 +8167,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-mid-century-resume:
     dependencies:
@@ -8292,8 +8292,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-monospaced-minimal:
     dependencies:
@@ -8329,8 +8329,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-mosaic-profile:
     dependencies:
@@ -8366,8 +8366,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-motion-designer:
     dependencies:
@@ -8403,8 +8403,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-museum-profile:
     dependencies:
@@ -8440,8 +8440,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-musician-repertoire:
     dependencies:
@@ -8477,8 +8477,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-narrow-measure:
     dependencies:
@@ -8514,8 +8514,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-new-york-corporate:
     dependencies:
@@ -8551,8 +8551,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-new-york-editorial:
     dependencies:
@@ -8610,8 +8610,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-nordic-minimal:
     dependencies:
@@ -8669,8 +8669,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-oblique-resume:
     dependencies:
@@ -8706,8 +8706,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-one-page-essential:
     dependencies:
@@ -8743,8 +8743,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-one-page-plus:
     dependencies:
@@ -8780,8 +8780,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-open-column:
     dependencies:
@@ -8817,8 +8817,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-open-margin:
     dependencies:
@@ -8854,8 +8854,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-open-source-maintainer:
     dependencies:
@@ -8891,8 +8891,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-operations-precision:
     dependencies:
@@ -8953,8 +8953,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-pacific-horizon:
     dependencies:
@@ -9012,8 +9012,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-photography-index:
     dependencies:
@@ -9049,8 +9049,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-pixel-professional:
     dependencies:
@@ -9086,8 +9086,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-plain-sans:
     dependencies:
@@ -9123,8 +9123,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-platform-record:
     dependencies:
@@ -9160,8 +9160,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-portfolio-colophon:
     dependencies:
@@ -9197,8 +9197,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-portuguese-modern:
     dependencies:
@@ -9234,8 +9234,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-poster-professional:
     dependencies:
@@ -9271,8 +9271,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-practitioner-record:
     dependencies:
@@ -9308,8 +9308,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-pro:
     devDependencies:
@@ -9323,8 +9323,8 @@ importers:
         specifier: workspace:^
         version: link:../../eslint-config-custom
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-product-manager-canvas:
     dependencies:
@@ -9382,8 +9382,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-professional:
     dependencies:
@@ -9450,8 +9450,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-publishers-page:
     dependencies:
@@ -9487,8 +9487,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-punchline-profile:
     dependencies:
@@ -9524,8 +9524,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-quant-record:
     dependencies:
@@ -9561,8 +9561,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-quiet-authority:
     dependencies:
@@ -9598,8 +9598,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-quiet-column:
     dependencies:
@@ -9635,8 +9635,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-redaction-profile:
     dependencies:
@@ -9672,8 +9672,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-reference:
     dependencies:
@@ -9697,8 +9697,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-release-notes-cv:
     dependencies:
@@ -9734,8 +9734,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-research-engineer:
     dependencies:
@@ -9771,8 +9771,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-research-narrative:
     dependencies:
@@ -9808,8 +9808,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-resume-index:
     dependencies:
@@ -9845,8 +9845,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-returner-profile:
     dependencies:
@@ -9882,8 +9882,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-rounded-profile:
     dependencies:
@@ -9919,8 +9919,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-sales-hunter:
     dependencies:
@@ -9978,8 +9978,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-seventies-studio:
     dependencies:
@@ -10015,8 +10015,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-short-form:
     dependencies:
@@ -10052,8 +10052,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-sidebar:
     dependencies:
@@ -10083,8 +10083,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-sidebar-photo-strip:
     dependencies:
@@ -10142,8 +10142,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-skilled-trades:
     dependencies:
@@ -10179,8 +10179,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-skills-first:
     dependencies:
@@ -10216,8 +10216,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-slate-sidebar:
     dependencies:
@@ -10253,8 +10253,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-soft-panel:
     dependencies:
@@ -10290,8 +10290,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-space-saver:
     dependencies:
@@ -10327,8 +10327,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-spanish-profesional:
     dependencies:
@@ -10364,8 +10364,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-spartan-lines:
     dependencies:
@@ -10401,8 +10401,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-startup-operator:
     dependencies:
@@ -10438,8 +10438,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-stewardship-cv:
     dependencies:
@@ -10475,8 +10475,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-stockholm:
     dependencies:
@@ -10512,8 +10512,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-studio-folio:
     dependencies:
@@ -10549,8 +10549,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-sunbeam-cv:
     dependencies:
@@ -10586,8 +10586,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-swiss-archive:
     dependencies:
@@ -10623,8 +10623,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-systems-ledger:
     dependencies:
@@ -10660,8 +10660,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-tailwind:
     dependencies:
@@ -10718,8 +10718,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-telegram-cv:
     dependencies:
@@ -10755,8 +10755,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-terminal-contrast:
     dependencies:
@@ -10792,8 +10792,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-terminal-light:
     dependencies:
@@ -10829,8 +10829,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-test-report:
     dependencies:
@@ -10866,8 +10866,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-textile-grid:
     dependencies:
@@ -10903,8 +10903,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-theatre-credits:
     dependencies:
@@ -10940,8 +10940,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-tokyo-modernist:
     dependencies:
@@ -10983,8 +10983,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-trustee-profile:
     dependencies:
@@ -11020,8 +11020,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-two-column-modernist:
     dependencies:
@@ -11051,8 +11051,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-type-foundry:
     dependencies:
@@ -11088,8 +11088,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-type-wall:
     dependencies:
@@ -11125,8 +11125,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-typewriter-modern:
     dependencies:
@@ -11228,8 +11228,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-wide-measure:
     dependencies:
@@ -11265,8 +11265,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/jsonresume-theme-writers-portfolio:
     dependencies:
@@ -11296,8 +11296,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/themes/stackoverflow:
     dependencies:
@@ -11487,8 +11487,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/tsconfig: {}
 
@@ -11640,8 +11640,8 @@ importers:
         specifier: ^6.4.4
         version: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/ui-legacy:
     dependencies:
@@ -11788,8 +11788,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/url-state:
     dependencies:
@@ -11831,8 +11831,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/utils:
     devDependencies:
@@ -11849,8 +11849,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
   packages/webhooks:
     dependencies:
@@ -11880,8 +11880,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vitest:
-        specifier: ^3.2.6
-        version: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
 
 packages:
 
@@ -12041,14 +12041,6 @@ packages:
   /@alloc/quick-lru@5.2.0:
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
     engines: {node: '>=10'}
-
-  /@ampproject/remapping@2.3.0:
-    resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
-    engines: {node: '>=6.0.0'}
-    dependencies:
-      '@jridgewell/gen-mapping': 0.3.13
-      '@jridgewell/trace-mapping': 0.3.31
-    dev: true
 
   /@antfu/install-pkg@1.1.0:
     resolution: {integrity: sha512-MGQsmw10ZyI+EJo45CdSER4zEb+p31LpDAFp2Z3gkSd1yqVZGi0Ebx++YTEMonJy4oChEMLsxZ64j8FH6sSqtQ==}
@@ -13934,14 +13926,14 @@ packages:
       '@electric-sql/pglite': 0.5.11
       effect: 4.0.6
 
-  /@effect/vitest@4.0.6(effect@4.0.6)(vitest@3.2.6):
+  /@effect/vitest@4.0.6(effect@4.0.6)(vitest@4.1.12):
     resolution: {integrity: sha512-oKNbtyUHK5+0o730CXwojULEu7f3+c235pYFD4U5T//o+hHrJbYbZU4bRkcv936tPr5IOnmujeyQiC/LuJJjHw==}
     peerDependencies:
       effect: ^4.0.6
       vitest: '>=5.0.0 <6.0.0'
     dependencies:
       effect: 4.0.6
-      vitest: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+      vitest: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
     dev: true
 
   /@electric-sql/pglite@0.5.11:
@@ -21603,7 +21595,7 @@ packages:
       '@vanilla-extract/css': 1.21.3
       '@vanilla-extract/integration': 8.0.11
       vite: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
-      vite-node: 3.2.4(@types/node@20.19.24)(yaml@2.9.0)
+      vite-node: 3.2.4(@types/node@20.19.24)
     transitivePeerDependencies:
       - '@types/node'
       - babel-plugin-macros
@@ -21859,31 +21851,26 @@ packages:
       - supports-color
     dev: true
 
-  /@vitest/coverage-v8@3.2.4(vitest@3.2.6):
-    resolution: {integrity: sha512-EyF9SXU6kS5Ku/U82E259WSnvg6c8KTjppUncuNdm5QHpe17mwREHnjDzozC8x9MZ0xfBUFSaLkRv4TMA75ALQ==}
+  /@vitest/coverage-v8@4.1.12(vitest@4.1.12):
+    resolution: {integrity: sha512-6S7/iVknKglLAxMFxQGNppBI0iqJS2NgM6FBxavitj7KaDq/vywOWGf6dGu7F2L1Qy0G6S3uTp7aGshHrzK8JA==}
     peerDependencies:
-      '@vitest/browser': 3.2.4
-      vitest: ^3.2.6
+      '@vitest/browser': 4.1.12
+      vitest: 4.1.12
     peerDependenciesMeta:
       '@vitest/browser':
         optional: true
     dependencies:
-      '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 1.0.2
-      ast-v8-to-istanbul: 0.3.8
-      debug: 4.4.3
+      '@vitest/utils': 4.1.12
+      ast-v8-to-istanbul: 1.0.8
       istanbul-lib-coverage: 3.2.2
       istanbul-lib-report: 3.0.1
-      istanbul-lib-source-maps: 5.0.6
       istanbul-reports: 3.2.0
-      magic-string: 0.30.21
-      magicast: 0.3.5
-      std-env: 3.10.0
-      test-exclude: 7.0.1
-      tinyrainbow: 2.0.0
-      vitest: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
-    transitivePeerDependencies:
-      - supports-color
+      magicast: 0.5.5
+      obug: 2.2.1
+      std-env: 4.3.0
+      tinyrainbow: 3.2.0
+      vitest: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
     dev: true
 
   /@vitest/expect@2.0.5:
@@ -21905,14 +21892,15 @@ packages:
       tinyrainbow: 2.0.0
     dev: true
 
-  /@vitest/expect@3.2.6:
-    resolution: {integrity: sha512-1+7q9BtaKzEmO+fmNT3kYvoNn5Y71XWAx2Q5HRim4tTVRQVRv4uJFAQ5FbK0OPUeNP/WmVCpxYxoJdvuHVjzBQ==}
+  /@vitest/expect@4.1.12:
+    resolution: {integrity: sha512-vFlTt+YEu9WBpNjdGayNmlMVzrWPi1+sv853/7t2FU7hpO5gAFBKHzQmkCq5Xjpr+evegF2994LQT3hF3mRlqQ==}
     dependencies:
+      '@standard-schema/spec': 1.1.0
       '@types/chai': 5.2.3
-      '@vitest/spy': 3.2.6
-      '@vitest/utils': 3.2.6
-      chai: 5.3.3
-      tinyrainbow: 2.0.0
+      '@vitest/spy': 4.1.12
+      '@vitest/utils': 4.1.12
+      chai: 6.3.0
+      tinyrainbow: 3.2.0
     dev: true
 
   /@vitest/mocker@3.2.4(vite@6.4.4):
@@ -21932,8 +21920,8 @@ packages:
       vite: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
     dev: true
 
-  /@vitest/mocker@3.2.6(vite@6.4.4):
-    resolution: {integrity: sha512-EZOrpDbkKotFAP7wPAQV1UIyoGOk4oX7ynWhBhLB7v+meMHbQhU16oPpIYGTTe4oFlhpryGpgpcZP/sin3hYuw==}
+  /@vitest/mocker@4.1.12(vite@6.4.4):
+    resolution: {integrity: sha512-fKShNpKZzupWZuY0z7egydvL0sqW4INEZBEExMBMAa6izlENEVHwoXgdaTCaBZ5fwlr4xf2o1wXC83n9RpO+NA==}
     peerDependencies:
       msw: ^2.4.9
       vite: ^6.4.4
@@ -21943,7 +21931,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      '@vitest/spy': 3.2.6
+      '@vitest/spy': 4.1.12
       estree-walker: 3.0.3
       magic-string: 0.30.21
       vite: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
@@ -21967,24 +21955,24 @@ packages:
       tinyrainbow: 2.0.0
     dev: true
 
-  /@vitest/pretty-format@3.2.6:
-    resolution: {integrity: sha512-lb7XXXzmm2h2ASzFnRvQpDo6onT1NmMJA3tkGTWiBFtRJ9lxGY3d3mm/Apt36gej2bkkOVLL/yTOtufDaFa/jA==}
+  /@vitest/pretty-format@4.1.12:
+    resolution: {integrity: sha512-XW9O8+Mxx4VpCtkYdMJLZQQwsVryP9wk7cPKDxtXFfwSak6yRh5+2fep/Y0XF/ElBvJHq8bcYdi6aeuai0opZA==}
     dependencies:
-      tinyrainbow: 2.0.0
+      tinyrainbow: 3.2.0
     dev: true
 
-  /@vitest/runner@3.2.6:
-    resolution: {integrity: sha512-HYcoSj1w5tcgUnzoF0HcyaAQjpA1gj9ftUJ7iSJSuipc02jW9gKkigwZbjFldAfYHA1fa8UZVRftdMY5msWM9Q==}
+  /@vitest/runner@4.1.12:
+    resolution: {integrity: sha512-NKlVKCr5QnCe8jijdMnmkpHHU+WTqiLFR6G0pHji9uRjXK9xJl1k1nTw6F3pOOj2PDcsDt2GKQMI7wIsaT491w==}
     dependencies:
-      '@vitest/utils': 3.2.6
+      '@vitest/utils': 4.1.12
       pathe: 2.0.3
-      strip-literal: 3.1.0
     dev: true
 
-  /@vitest/snapshot@3.2.6:
-    resolution: {integrity: sha512-H+ZjNTWGpObenh0YnlBctAPnJSI20P81PL8BPzWpx54YXLLTm8hEsWawtcYLMrwvpK48hGxLLbCS+1KRXhsKhw==}
+  /@vitest/snapshot@4.1.12:
+    resolution: {integrity: sha512-ko1y1Qgb/slzQ9mr+b89Cuqud8WG1TKtsPD8r7ZUBdvVOGt85Af2HwCqHujrhwJq95hs/9RM7fcAPg57o1vlzw==}
     dependencies:
-      '@vitest/pretty-format': 3.2.6
+      '@vitest/pretty-format': 4.1.12
+      '@vitest/utils': 4.1.12
       magic-string: 0.30.21
       pathe: 2.0.3
     dev: true
@@ -22001,25 +21989,23 @@ packages:
       tinyspy: 4.0.4
     dev: true
 
-  /@vitest/spy@3.2.6:
-    resolution: {integrity: sha512-oq6BbH68WzcWmwtBrU9nqLeaXTR4XwJF7FSLkKEZo4i6eoXcrxjcwSuTvWBIRUTC6VC72nXYunzqgZA+IKdtxg==}
-    dependencies:
-      tinyspy: 4.0.4
+  /@vitest/spy@4.1.12:
+    resolution: {integrity: sha512-RGq9x4JNGNTZHEJxvN0oSiJjeSCExm0n2gZKKJZHY9cX5AVA6M7VJILBT3ZJ/tJ/0J9uWT7fETV9/btoi//vSg==}
     dev: true
 
-  /@vitest/ui@3.2.6(vitest@3.2.6):
-    resolution: {integrity: sha512-mATfG3zVdhobE9U1rIpvtYD3DGuSSxqZ3Aj/8ityGqKXy8YDJ9BoAjZmAz6dZ1IZ1xI5V+MerkCczvVa+3QK9Q==}
+  /@vitest/ui@4.1.12(vitest@4.1.12):
+    resolution: {integrity: sha512-eYUTHtsp52Fu6YGUw9T9173bba7YUr9j/Xj9CdhUaOb8AppLKcknHUaiZQeqJ8MiJ8C2VyKiZuUGSKdvPIKQKA==}
     peerDependencies:
-      vitest: 3.2.6
+      vitest: 4.1.12
     dependencies:
-      '@vitest/utils': 3.2.6
+      '@vitest/utils': 4.1.12
       fflate: 0.8.3
       flatted: 3.4.2
       pathe: 2.0.3
       sirv: 3.0.2
       tinyglobby: 0.2.16
-      tinyrainbow: 2.0.0
-      vitest: 3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1)
+      tinyrainbow: 3.2.0
+      vitest: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4)
     dev: true
 
   /@vitest/utils@0.34.7:
@@ -22055,12 +22041,12 @@ packages:
       tinyrainbow: 2.0.0
     dev: true
 
-  /@vitest/utils@3.2.6:
-    resolution: {integrity: sha512-lI23nIs4bnT3T8NIoh+vFaz5s2/DdP0Jgt2jxwgWljvwn82cLJtyi/If+fjFyoLMGIOz0U/fKvWE0d4jsNQEfg==}
+  /@vitest/utils@4.1.12:
+    resolution: {integrity: sha512-Q3awXrwOfEV+qc3WmO5ONyE0yO7Q1gQ9/oyHxGLZ/pl7N3NO/ZztqQwKLuwMkV+CA1JYSIeO3gkHnRDIo4AVaA==}
     dependencies:
-      '@vitest/pretty-format': 3.2.6
-      loupe: 3.2.1
-      tinyrainbow: 2.0.0
+      '@vitest/pretty-format': 4.1.12
+      convert-source-map: 2.0.0
+      tinyrainbow: 3.2.0
     dev: true
 
   /@webassemblyjs/ast@1.14.1:
@@ -22932,12 +22918,12 @@ packages:
       tslib: 2.8.1
     dev: true
 
-  /ast-v8-to-istanbul@0.3.8:
-    resolution: {integrity: sha512-szgSZqUxI5T8mLKvS7WTjF9is+MVbOeLADU73IseOcrqhxr/VAvy6wfoVE39KnKzA7JRhjF5eUagNlHwvZPlKQ==}
+  /ast-v8-to-istanbul@1.0.8:
+    resolution: {integrity: sha512-lPdpagk13ANXV+HClJEpCZM7kUsl5XcvgqKzZhaj6Ve1ZFICcY2sGhAN1n1vT0tML6EclT7bfVgTxqL57Gkpow==}
     dependencies:
       '@jridgewell/trace-mapping': 0.3.31
       estree-walker: 3.0.3
-      js-tokens: 9.0.1
+      js-tokens: 10.0.0
     dev: true
 
   /astral-regex@1.0.0:
@@ -23577,6 +23563,11 @@ packages:
       deep-eql: 5.0.2
       loupe: 3.2.1
       pathval: 2.0.1
+    dev: true
+
+  /chai@6.3.0:
+    resolution: {integrity: sha512-XWAtwJ6OHO+tj0EKCs0Y2UamnyOxseZWltU4x2U2wh8g4AigdjwvtUjvLP2tqkA/avxHEtzxNaqGq/YGNwckKg==}
+    engines: {node: '>=18'}
     dev: true
 
   /chalk@1.1.3:
@@ -26248,8 +26239,8 @@ packages:
     engines: {node: '>= 0.8.0'}
     dev: true
 
-  /expect-type@1.2.2:
-    resolution: {integrity: sha512-JhFGDVJ7tmDJItKhYgJCGLOWjuK9vPxiXoUFLwLDc99NlmklilbiQJwoctZtt13+xMw91MCk/REan6MWHqDjyA==}
+  /expect-type@1.4.0:
+    resolution: {integrity: sha512-KfYbmpRm0VbLjEvVa9yGwCi9GI34xvi7A/HXYWQO65CSD2u3MczUJSuwXKFIxlGsgBQizV9q5J9NHj4VG0n+pA==}
     engines: {node: '>=12.0.0'}
     dev: true
 
@@ -28633,17 +28624,6 @@ packages:
       - supports-color
     dev: true
 
-  /istanbul-lib-source-maps@5.0.6:
-    resolution: {integrity: sha512-yg2d+Em4KizZC5niWhQaIomgf5WlL4vOOjZ5xGCmF8SnPE/mDWWXgvRExdcpCgh9lLRRa1/fSYp2ymmbJ1pI+A==}
-    engines: {node: '>=10'}
-    dependencies:
-      '@jridgewell/trace-mapping': 0.3.31
-      debug: 4.4.3
-      istanbul-lib-coverage: 3.2.2
-    transitivePeerDependencies:
-      - supports-color
-    dev: true
-
   /istanbul-reports@3.2.0:
     resolution: {integrity: sha512-HGYWWS/ehqTV3xN10i23tkPkpH46MLCIMFNCaaKNavAXTF1RkqxawEPtnjnGZ6XKSInBKkiOA5BKS+aZiY3AvA==}
     engines: {node: '>=8'}
@@ -29241,12 +29221,12 @@ packages:
     resolution: {integrity: sha512-rtS5ATOo2Q5k1G+DADISilDA6lv79zIiwFd6CcjuIxGKLFm5C+RLImRscVap9k55i+MOZwgliw+NejvkLuGD5g==}
     dev: false
 
+  /js-tokens@10.0.0:
+    resolution: {integrity: sha512-lM/UBzQmfJRo9ABXbPWemivdCW8V2G8FHaHdypQaIy523snUjog0W71ayWXTjiR+ixeMyVHN2XcpnTd/liPg/Q==}
+    dev: true
+
   /js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
-
-  /js-tokens@9.0.1:
-    resolution: {integrity: sha512-mxa9E9ITFOt0ban3j6L5MpjwegGz6lBQmM1IJkWeBZGcMxto50+eWdjC/52xDbS2vy0k7vIMK0Fe2wfL9OQSpQ==}
-    dev: true
 
   /js-yaml@3.15.2:
     resolution: {integrity: sha512-6EuL879VkRA+1Cz578mKMiKvjPNEuk6+r1JaFzoSWejZmtf7xWbIyw1e3KkxlkzTIt9Taw6JBhEppG7utc1P+w==}
@@ -30142,11 +30122,11 @@ packages:
       '@jridgewell/sourcemap-codec': 1.5.5
     dev: true
 
-  /magicast@0.3.5:
-    resolution: {integrity: sha512-L0WhttDl+2BOsybvEOLK7fW3UA0OQ0IQ2d6Zl2x/a6vVRs3bAY0ECOSHHeL5jD+SbOpOCUEi0y1DgHEn9Qn1AQ==}
+  /magicast@0.5.5:
+    resolution: {integrity: sha512-UicdXN8zQ3JHlxVq+28afMXPr1z7WNY6+7EJnzTdQWkTAlMLF5fNCCKxJHBQwGaNGR11581EiQmQzx73+MvszA==}
     dependencies:
-      '@babel/parser': 7.28.5
-      '@babel/types': 7.28.5
+      '@babel/parser': 7.29.7
+      '@babel/types': 7.29.7
       source-map-js: 1.2.1
     dev: true
 
@@ -31644,6 +31624,11 @@ packages:
 
   /objectorarray@1.0.5:
     resolution: {integrity: sha512-eJJDYkhJFFbBBAxeh8xW+weHlkI28n2ZdQV/J/DNfWfSKlGEf2xcfAbZTv3riEXHAhL9SVOTs2pRmXiSTf78xg==}
+    dev: true
+
+  /obug@2.2.1:
+    resolution: {integrity: sha512-XrsrhT5sybtKI6wakr2SPOlGZWWYbUXZ7a0jT8/QOeAPau+1X/bSegNe5YR75oJmEZQbKningirmGOEJCIk61Q==}
+    engines: {node: '>=12.20.0'}
     dev: true
 
   /octokit@4.1.4:
@@ -34736,8 +34721,8 @@ packages:
     engines: {node: '>= 0.8'}
     dev: false
 
-  /std-env@3.10.0:
-    resolution: {integrity: sha512-5GS12FdOZNliM5mAOxFRg7Ir0pWz8MdpYm6AY6VPkGpbA7ZzmbzNcBJQ0GPvvyWgcY7QAhCgf9Uy89I03faLkg==}
+  /std-env@4.3.0:
+    resolution: {integrity: sha512-OtU/EgQ1kIm5KwqQpBC6ZEMXrZRui11w8zgfTWp8cdO9B8OaPsbA8bTHO2P+HNo1VlUTGMVBwPhydu6poeXiag==}
     dev: true
 
   /stop-iteration-iterator@1.1.0:
@@ -35093,12 +35078,6 @@ packages:
   /strip-json-comments@5.0.3:
     resolution: {integrity: sha512-1tB5mhVo7U+ETBKNf92xT4hrQa3pm0MZ0PQvuDnWgAAGHDsfp4lPSpiS6psrSiet87wyGPh9ft6wmhOMQ0hDiw==}
     engines: {node: '>=14.16'}
-
-  /strip-literal@3.1.0:
-    resolution: {integrity: sha512-8r3mkIM/2+PpjHoOtiAW8Rg3jJLHaV7xPwG+YRGrv6FP0wwk/toTpATxWYOW0BKdWwl82VT2tFYi5DlROa0Mxg==}
-    dependencies:
-      js-tokens: 9.0.1
-    dev: true
 
   /striptags@3.2.0:
     resolution: {integrity: sha512-g45ZOGzHDMe2bdYMdIvdAfCQkCTDMGBazSw1ypMowwGIee7ZQ5dU0rBJ8Jqgl+jAKIv4dbeE1jscZq9wid1Tkw==}
@@ -35615,15 +35594,6 @@ packages:
       minimatch: 3.1.5
     dev: true
 
-  /test-exclude@7.0.1:
-    resolution: {integrity: sha512-pFYqmTw68LXVjeWJMST4+borgQP2AyMNbg1BpZh9LbyhUeNkeaPF9gzfPGUAnSMV3qPYdWUwDIjjCLiSDOl7vg==}
-    engines: {node: '>=18'}
-    dependencies:
-      '@istanbuljs/schema': 0.1.3
-      glob: 10.5.0
-      minimatch: 9.0.9
-    dev: true
-
   /text-decoder@1.2.7:
     resolution: {integrity: sha512-vlLytXkeP4xvEq2otHeJfSQIRyWxo/oZGEbXrtEEF9Hnmrdly59sUbzZ/QgyWuLYHctCHxFF4tRQZNQ9k60ExQ==}
     dependencies:
@@ -35682,14 +35652,9 @@ packages:
     resolution: {integrity: sha512-XPaBkWQJdsf3pLKJV9p4qN/S+fm2Oj8AIPo1BTUhg5oxkvm9+SVEGFdhyOz7tTdUTfvxMiAs4sp6/eZO2Ew+pw==}
     dev: false
 
-  /tinyexec@0.3.2:
-    resolution: {integrity: sha512-KQQR9yN7R5+OSwaK0XQoj22pwHoTlgYqmUscPYoknOoWCWfj/5/ABTMRi69FrKU5ffPVh5QcFikpWJI/P1ocHA==}
-    dev: true
-
   /tinyexec@1.1.1:
     resolution: {integrity: sha512-VKS/ZaQhhkKFMANmAOhhXVoIfBXblQxGX1myCQ2faQrfmobMftXeJPcZGp0gS07ocvGJWDLZGyOZDadDBqYIJg==}
     engines: {node: '>=18'}
-    dev: false
 
   /tinyglobby@0.2.16:
     resolution: {integrity: sha512-pn99VhoACYR8nFHhxqix+uvsbXineAasWm5ojXoN8xEwK5Kd3/TrhNn1wByuD52UxWRLy8pu+kRMniEi6Eq9Zg==}
@@ -35698,11 +35663,6 @@ packages:
       fdir: 6.5.0(picomatch@4.0.4)
       picomatch: 4.0.4
 
-  /tinypool@1.1.1:
-    resolution: {integrity: sha512-Zba82s87IFq9A9XmjiX5uZA/ARWDrB03OHlq+Vw1fSdt0I+4/Kutwy8BP4Y/y/aORMo61FQ0vIb5j44vSo5Pkg==}
-    engines: {node: ^18.0.0 || >=20.0.0}
-    dev: true
-
   /tinyrainbow@1.2.0:
     resolution: {integrity: sha512-weEDEq7Z5eTHPDh4xjX789+fHfF+P8boiFB+0vbWzpbnbsEr/GRaohi/uMKxg8RZMXnl1ItAi/IUHWMsjDV7kQ==}
     engines: {node: '>=14.0.0'}
@@ -35710,6 +35670,11 @@ packages:
 
   /tinyrainbow@2.0.0:
     resolution: {integrity: sha512-op4nsTR47R6p0vMUUoYl/a+ljLFVtlfaXkLQmqfLR1qHma1h/ysYk4hEXZ880bf2CYgTskvTa/e196Vd5dDQXw==}
+    engines: {node: '>=14.0.0'}
+    dev: true
+
+  /tinyrainbow@3.2.0:
+    resolution: {integrity: sha512-LgO3D9yZJjApUiuUfl9iFAwrtaX4+lok3wJIqttGoKCHlWUqHqbQpnxCf82L8FjgKsh4iGo78hqJwgL8F6To2A==}
     engines: {node: '>=14.0.0'}
     dev: true
 
@@ -36529,7 +36494,7 @@ packages:
       d3-timer: 3.0.1
     dev: false
 
-  /vite-node@3.2.4(@types/node@20.19.24)(yaml@2.9.0):
+  /vite-node@3.2.4(@types/node@20.19.24):
     resolution: {integrity: sha512-EbKSKh+bh1E1IFxeO0pg1n4dvoOTt0UDiXMd/qn++r98+jPO1xtJilvXldeuQ8giIB5IkpjCgMleHMNEsGH6pg==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
     hasBin: true
@@ -36656,26 +36621,39 @@ packages:
     optionalDependencies:
       fsevents: 2.3.3
 
-  /vitest@3.2.6(@types/node@20.19.24)(@vitest/ui@3.2.6)(jsdom@27.0.1):
-    resolution: {integrity: sha512-xejya+bT/j/+R/AGa1XOfRxLmNUlLtlwjRsFUILF+xHfzElmGcmFydy2gqqIrd62ptIEfwVMofd19uNWD9L7Nw==}
-    engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
+  /vitest@4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.4):
+    resolution: {integrity: sha512-5eWdz2yb3ajxWF3C8C4TjkXl7FGm3n2E/VlazALrQHzK7nYMSGFnCZto0bbPNl77AwkOZVLk0YnBAejUu0NiWA==}
+    engines: {node: ^20.0.0 || ^22.0.0 || >=24.0.0}
     hasBin: true
     peerDependencies:
       '@edge-runtime/vm': '*'
-      '@types/debug': ^4.1.12
-      '@types/node': ^18.0.0 || ^20.0.0 || >=22.0.0
-      '@vitest/browser': 3.2.6
-      '@vitest/ui': 3.2.6
+      '@opentelemetry/api': ^1.9.0
+      '@types/node': ^20.0.0 || ^22.0.0 || >=24.0.0
+      '@vitest/browser-playwright': 4.1.12
+      '@vitest/browser-preview': 4.1.12
+      '@vitest/browser-webdriverio': ^4.1.11
+      '@vitest/coverage-istanbul': 4.1.12
+      '@vitest/coverage-v8': 4.1.12
+      '@vitest/ui': 4.1.12
       happy-dom: '*'
       jsdom: '*'
+      vite: ^6.4.4
     peerDependenciesMeta:
       '@edge-runtime/vm':
         optional: true
-      '@types/debug':
+      '@opentelemetry/api':
         optional: true
       '@types/node':
         optional: true
-      '@vitest/browser':
+      '@vitest/browser-playwright':
+        optional: true
+      '@vitest/browser-preview':
+        optional: true
+      '@vitest/browser-webdriverio':
+        optional: true
+      '@vitest/coverage-istanbul':
+        optional: true
+      '@vitest/coverage-v8':
         optional: true
       '@vitest/ui':
         optional: true
@@ -36684,112 +36662,32 @@ packages:
       jsdom:
         optional: true
     dependencies:
-      '@types/chai': 5.2.3
       '@types/node': 20.19.24
-      '@vitest/expect': 3.2.6
-      '@vitest/mocker': 3.2.6(vite@6.4.4)
-      '@vitest/pretty-format': 3.2.6
-      '@vitest/runner': 3.2.6
-      '@vitest/snapshot': 3.2.6
-      '@vitest/spy': 3.2.6
-      '@vitest/ui': 3.2.6(vitest@3.2.6)
-      '@vitest/utils': 3.2.6
-      chai: 5.3.3
-      debug: 4.4.3
-      expect-type: 1.2.2
+      '@vitest/coverage-v8': 4.1.12(vitest@4.1.12)
+      '@vitest/expect': 4.1.12
+      '@vitest/mocker': 4.1.12(vite@6.4.4)
+      '@vitest/pretty-format': 4.1.12
+      '@vitest/runner': 4.1.12
+      '@vitest/snapshot': 4.1.12
+      '@vitest/spy': 4.1.12
+      '@vitest/ui': 4.1.12(vitest@4.1.12)
+      '@vitest/utils': 4.1.12
+      es-module-lexer: 2.1.0
+      expect-type: 1.4.0
       jsdom: 27.0.1(postcss@8.5.23)
       magic-string: 0.30.21
+      obug: 2.2.1
       pathe: 2.0.3
       picomatch: 4.0.4
-      std-env: 3.10.0
+      std-env: 4.3.0
       tinybench: 2.9.0
-      tinyexec: 0.3.2
+      tinyexec: 1.1.1
       tinyglobby: 0.2.16
-      tinypool: 1.1.1
-      tinyrainbow: 2.0.0
+      tinyrainbow: 3.2.0
       vite: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
-      vite-node: 3.2.4(@types/node@20.19.24)(yaml@2.9.0)
       why-is-node-running: 2.3.0
     transitivePeerDependencies:
-      - jiti
-      - less
-      - lightningcss
       - msw
-      - sass
-      - sass-embedded
-      - stylus
-      - sugarss
-      - supports-color
-      - terser
-      - tsx
-      - yaml
-    dev: true
-
-  /vitest@3.2.6(@types/node@20.19.24)(yaml@2.9.0):
-    resolution: {integrity: sha512-xejya+bT/j/+R/AGa1XOfRxLmNUlLtlwjRsFUILF+xHfzElmGcmFydy2gqqIrd62ptIEfwVMofd19uNWD9L7Nw==}
-    engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
-    hasBin: true
-    peerDependencies:
-      '@edge-runtime/vm': '*'
-      '@types/debug': ^4.1.12
-      '@types/node': ^18.0.0 || ^20.0.0 || >=22.0.0
-      '@vitest/browser': 3.2.6
-      '@vitest/ui': 3.2.6
-      happy-dom: '*'
-      jsdom: '*'
-    peerDependenciesMeta:
-      '@edge-runtime/vm':
-        optional: true
-      '@types/debug':
-        optional: true
-      '@types/node':
-        optional: true
-      '@vitest/browser':
-        optional: true
-      '@vitest/ui':
-        optional: true
-      happy-dom:
-        optional: true
-      jsdom:
-        optional: true
-    dependencies:
-      '@types/chai': 5.2.3
-      '@types/node': 20.19.24
-      '@vitest/expect': 3.2.6
-      '@vitest/mocker': 3.2.6(vite@6.4.4)
-      '@vitest/pretty-format': 3.2.6
-      '@vitest/runner': 3.2.6
-      '@vitest/snapshot': 3.2.6
-      '@vitest/spy': 3.2.6
-      '@vitest/utils': 3.2.6
-      chai: 5.3.3
-      debug: 4.4.3
-      expect-type: 1.2.2
-      magic-string: 0.30.21
-      pathe: 2.0.3
-      picomatch: 4.0.4
-      std-env: 3.10.0
-      tinybench: 2.9.0
-      tinyexec: 0.3.2
-      tinyglobby: 0.2.16
-      tinypool: 1.1.1
-      tinyrainbow: 2.0.0
-      vite: 6.4.4(@types/node@20.19.24)(yaml@2.9.0)
-      vite-node: 3.2.4(@types/node@20.19.24)(yaml@2.9.0)
-      why-is-node-running: 2.3.0
-    transitivePeerDependencies:
-      - jiti
-      - less
-      - lightningcss
-      - msw
-      - sass
-      - sass-embedded
-      - stylus
-      - sugarss
-      - supports-color
-      - terser
-      - tsx
-      - yaml
     dev: true
 
   /void-elements@3.1.0:

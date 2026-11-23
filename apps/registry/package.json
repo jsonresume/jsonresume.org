@@ -315,8 +315,8 @@
     "@types/jest": "^27.0.1",
     "@types/node": "^20.10.0",
     "@vitejs/plugin-react": "^4.3.4",
-    "@vitest/coverage-v8": "^3.2.4",
-    "@vitest/ui": "^3.2.4",
+    "@vitest/coverage-v8": "^4.1.12",
+    "@vitest/ui": "^4.1.12",
     "caniuse-lite": "^1.0.30001566",
     "eslint": "^8.55.0",
     "eslint-config-next": "^15.5.7",
@@ -324,6 +324,6 @@
     "playwright": "^1.40.0",
     "tsconfig": "workspace:*",
     "typescript": "^5.9.3",
-    "vitest": "^3.2.4"
+    "vitest": "^4.1.12"
   }
 }

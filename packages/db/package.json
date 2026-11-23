@@ -22,6 +22,6 @@
     "@types/pg": "^8.23.1",
     "tsconfig": "workspace:*",
     "typescript": "^5.9.3",
-    "vitest": "^3.2.6"
+    "vitest": "^4.1.12"
   }
 }
