@@ -50,8 +50,12 @@ lowercase).
 
 ## GitHub
 
-- **Sign in with GitHub** is a login option alongside email and password. The
-  first GitHub sign-in creates an account:
+- **Sign in with GitHub** is a login option alongside email and password.
+  A first GitHub sign-in whose verified primary email is the verified email
+  of an account with no GitHub linked signs into that account and links
+  GitHub to it, rather than making a second, empty account. An unverified
+  email account is never joined this way. Otherwise the first GitHub sign-in
+  creates an account:
   - It claims the ghost if there is one; otherwise it takes the GitHub login
     as the username if that is free.
   - If an email account already holds the login (it took the name before the

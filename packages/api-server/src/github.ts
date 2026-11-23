@@ -98,7 +98,10 @@ export const GithubRoutes = HttpRouter.use((router) =>
           yield* track(
             result.user.id,
             result.created ? 'user_signed_up' : 'user_signed_in',
-            { method: 'github' }
+            // linked: an email account found by its email, GitHub now joined.
+            'linked' in result && result.linked
+              ? { method: 'github', linked: true }
+              : { method: 'github' }
           );
           return yield* withSession(go(next), result.token);
         }
