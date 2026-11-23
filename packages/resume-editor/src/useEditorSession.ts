@@ -2,7 +2,7 @@ import { useAtom, useAtomSet, useAtomValue } from '@effect/atom-react';
 import { useShortcut } from '@jsonresume/ui';
 import { accountAtom, errorTag, keys, saveResumeAtom } from '@repo/api-client';
 import { AsyncResult } from 'effect/reactivity';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { clearBackup, useBackup } from './backup';
 import { clearStartDraft, readStartDraft } from './start/draft';
 import { isUntouchedExample } from './Start';
@@ -25,6 +25,8 @@ const saveError = (tag: string) =>
 export interface Notice {
   tone: 'success' | 'danger' | 'info';
   text: string;
+  /** The first save put the page live: show its link, not just the text. */
+  live?: boolean;
 }
 
 /**
@@ -50,6 +52,10 @@ export function useEditorSession(username: string) {
     !account.value.emailVerified &&
     account.value.github === null;
   const source = ready ? loaded.value.source : 'stored';
+  // Whether the page had a resume before this session's saves.
+  const hadResume = useRef<boolean | undefined>(undefined);
+  if (ready && hadResume.current === undefined)
+    hadResume.current = loaded.value.resume !== null;
 
   // A resume made on /start before sign-up arrives as ?start=1: it is
   // saved at once when the account has none, else opened for review.
@@ -98,7 +104,10 @@ export function useEditorSession(username: string) {
       return setNotice({ tone: 'danger', text: saveError(tag) });
     setSaved(serialize(draft));
     clearBackup(username);
+    const first = hadResume.current === false;
+    hadResume.current = true;
     setNotice({
+      live: first && !waitingForEmail,
       tone: 'success',
       text: waitingForEmail
         ? 'Saved. Your page goes live once you confirm your email: we sent you a link.'
