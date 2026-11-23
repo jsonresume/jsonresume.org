@@ -61,8 +61,22 @@ describe('resume history tools', () => {
 
     const saves = events.filter((e) => e.event === 'resume_saved');
     expect(saves.map((e) => e.properties)).toEqual([
-      { via: 'mcp', source: 'mcp', real: true, first: false, sections: 3 },
-      { via: 'mcp', source: 'mcp', real: true, first: false, sections: 3 },
+      {
+        via: 'mcp',
+        source: 'mcp',
+        real: true,
+        first: false,
+        sections: 3,
+        theme: null,
+      },
+      {
+        via: 'mcp',
+        source: 'mcp',
+        real: true,
+        first: false,
+        sections: 3,
+        theme: null,
+      },
     ]);
     expect(events.filter((e) => e.event === 'version_restored')).toEqual([
       { event: 'version_restored', properties: { actor: 'assistant' } },

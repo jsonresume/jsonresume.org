@@ -38,6 +38,7 @@ describe('product events', () => {
           real: false,
           first: true,
           sections: 1,
+          theme: null,
         },
       },
       { id: user.id, event: 'api_key_created', properties: undefined },
