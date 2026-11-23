@@ -14,7 +14,7 @@
     "vite": "^6.4.3",
     "@jsonresume/sample-data": "workspace:*",
     "@jsonresume/theme-kit": "workspace:*",
-    "vitest": "^3.2.6"
+    "vitest": "^4.1.12"
   },
   "peerDependencies": {
     "styled-components": "^6"

@@ -252,6 +252,6 @@
     "@types/node": "^20.19.24",
     "tsconfig": "workspace:*",
     "typescript": "^5.9.3",
-    "vitest": "^3.2.6"
+    "vitest": "^4.1.12"
   }
 }
