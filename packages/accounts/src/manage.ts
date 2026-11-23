@@ -104,9 +104,11 @@ export const accountManagement = Effect.gen(function* () {
         : undefined;
     const primary =
       found.source === 'gist' ? fresh ?? found.mirror : found.stored;
+    const here = yield* gist.startsHere({ ...found, userId });
     return {
       resume: primary ?? found.stored ?? found.mirror ?? null,
-      source: found.source,
+      // Where the next save goes, which the editor names on its button.
+      source: here ? ('stored' as const) : found.source,
     };
   });
 

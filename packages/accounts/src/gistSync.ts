@@ -86,5 +86,19 @@ export const gistSync = Effect.gen(function* () {
       }
     });
 
-  return { keepGrant, canWrite, writeGist, readGist };
+  /**
+   * A GitHub account with no gist on it yet and no permission to make one:
+   * it starts on jsonresume.org (saves are stored there, and the page reads
+   * them) instead of asking for GitHub's gist permission before a first save.
+   */
+  const startsHere = (found: {
+    source: 'gist' | 'stored';
+    gistId: string | null;
+    userId: string;
+  }) =>
+    found.source === 'gist' && found.gistId === null
+      ? Effect.map(canWrite(found.userId), (can) => !can)
+      : Effect.succeed(false);
+
+  return { keepGrant, canWrite, writeGist, readGist, startsHere };
 });
