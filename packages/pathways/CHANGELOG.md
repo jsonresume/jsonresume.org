@@ -1,5 +1,11 @@
 # @repo/pathways
 
+## 0.0.6
+
+### Patch Changes
+
+- @repo/mcp@0.0.6
+
 ## 0.0.5
 
 ### Patch Changes

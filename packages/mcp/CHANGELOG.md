@@ -1,5 +1,16 @@
 # @repo/mcp
 
+## 0.0.6
+
+### Patch Changes
+
+- Updated dependencies [e630011]
+  - @jsonresume/schema@1.11.0
+  - @repo/jobs@0.0.0
+  - @repo/resume-editor@0.0.6
+  - @repo/resume-import@0.0.5
+  - @repo/schema-explorer@0.0.3
+
 ## 0.0.5
 
 ### Patch Changes
