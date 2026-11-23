@@ -33,7 +33,7 @@ at `https://jsonresume.org/_turbo` (Caddy strips the prefix). CI's builds
 still run on GitHub's machines; only their results are kept here, in
 `/var/cache/jsonresume/build-cache` (unused for 14 days, or past 10GB,
 they are removed). `/etc/jsonresume/build-cache.env` holds `PORT=3011` and
-`TURBO_TOKEN`, which is also the repo's `TURBO_TOKEN` secret: to change
+`BUILD_CACHE_TOKEN`, which is also the repo's `TURBO_TOKEN` secret: to change
 it, write a new one to both (`openssl rand -hex 32`) and restart the unit.
 
 Retention, as the privacy policy (/privacy) says: journald keeps logs 30

@@ -13,7 +13,7 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 
 const main = Effect.gen(function* () {
   const port = yield* Config.Port('PORT').pipe(Config.withDefault(3011));
-  const token = yield* Config.Redacted('TURBO_TOKEN');
+  const token = yield* Config.Redacted('BUILD_CACHE_TOKEN');
   // systemd's CacheDirectory (/var/cache/jsonresume/build-cache).
   const dir = yield* Config.String('CACHE_DIRECTORY');
   const maxGb = yield* Config.Number('BUILD_CACHE_MAX_GB').pipe(

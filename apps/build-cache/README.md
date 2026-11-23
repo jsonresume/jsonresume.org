@@ -6,7 +6,7 @@ outputs here and replays them when the same task comes up again, so a PR
 only rebuilds the packages it changed.
 
 - The API is turbo's v8 artifacts API (`/v8/artifacts/:hash`, `status`,
-  `events`), one team, one Bearer token (`TURBO_TOKEN`). Without the token
+  `events`), one team, one Bearer token (`BUILD_CACHE_TOKEN` on the box, `TURBO_TOKEN` in CI). Without the token
   nothing is served, so fork PRs, which get no secrets, build everything.
 - Artifacts are files in `CACHE_DIRECTORY` (systemd's
   `/var/cache/jsonresume/build-cache`). Reading one touches it; every hour
@@ -18,6 +18,6 @@ only rebuilds the packages it changed.
 
 ```sh
 pnpm --filter build-cache test
-PORT=3011 TURBO_TOKEN=dev CACHE_DIRECTORY=/tmp/turbo pnpm --filter build-cache start
+PORT=3011 BUILD_CACHE_TOKEN=dev CACHE_DIRECTORY=/tmp/turbo pnpm --filter build-cache start
 TURBO_API=http://127.0.0.1:3011 TURBO_TEAM=jsonresume TURBO_TOKEN=dev pnpm turbo build
 ```
