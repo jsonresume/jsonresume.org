@@ -106,7 +106,7 @@ Don't remove or deprecate themes without the maintainer's approval. 27 legacy th
 - **Turbo's remote cache is ours:** `apps/build-cache` on the box, at `https://jsonresume.org/_turbo` (`TURBO_API` in `ci.yml`, token in the `TURBO_TOKEN` secret and as `BUILD_CACHE_TOKEN` in `/etc/jsonresume/build-cache.env`). Fork PRs get no token and build everything.
 - **LINT GOTCHA:** `eslint-config-next` is pinned to `^15` in `@repo/eslint-config-custom`. v16's flat config crashes ESLint 8, and turbo's cache can hide it. Verify lint changes with `turbo lint --force`.
 - **Releases:** Changesets (`docs/RELEASING.md`). Merging to `master` updates the "Version Packages" PR; merging that publishes to npm. Add a changeset with any change to a published package.
-- `pnpm.overrides` in the root `package.json` holds security patches. Dependabot runs weekly.
+- `pnpm.overrides` in the root `package.json` holds security patches. Dependabot runs weekly. After changing overrides, check the lockfile with a clean install (`git worktree add`, then `pnpm install --frozen-lockfile --ignore-scripts` there): with `node_modules` already in place, a frozen install passes even when CI's fails with `ERR_PNPM_LOCKFILE_MISSING_DEPENDENCY`.
 
 ## Issues and community
 
