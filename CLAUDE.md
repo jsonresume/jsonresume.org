@@ -78,7 +78,7 @@ Don't remove or deprecate themes without the maintainer's approval. 27 legacy th
 
 ## Production (the box)
 
-- Deploy: `sudo deploy/scripts/deploy.sh app <sha>`, after the PR has merged. Check the sha is non-empty first; `--rollback` goes back one release.
+- Deploy: `sudo deploy/scripts/deploy.sh app <sha>` (or `build-cache`, `styleguide`), after the PR has merged. Run it from an up-to-date master checkout: the script itself comes from the working tree, and an older copy deploys the wrong way. Check the sha is non-empty first; `--rollback` goes back one release.
 - Logs: `journalctl -u jsonresume@app` (the app) and `journalctl -u caddy -o cat` (JSON access logs, for status codes and latency).
 - Secrets live only in `/etc/jsonresume/*.env` (root, 600). Never commit or print them.
 - Product analytics: PostHog project 134598, cookie-free, queried with HogQL.
