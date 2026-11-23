@@ -1,0 +1,278 @@
+{
+  "version": "1.10.0",
+  "cases": [
+    {
+      "file": "resume/valid/empty.json",
+      "schema": "resume",
+      "valid": true,
+      "description": "Every field is optional: {} conforms.",
+      "section": "1"
+    },
+    {
+      "file": "resume/valid/schema-url.json",
+      "schema": "resume",
+      "valid": true,
+      "description": "A $schema URL naming the schema the document follows.",
+      "section": "3"
+    },
+    {
+      "file": "resume/valid/unknown-properties.json",
+      "schema": "resume",
+      "valid": true,
+      "description": "Properties the format does not define stay valid, at the top level and inside entries.",
+      "section": "1, 6"
+    },
+    {
+      "file": "resume/valid/dates-precision.json",
+      "schema": "resume",
+      "valid": true,
+      "description": "Dates as precise as the author knows: YYYY, YYYY-MM or YYYY-MM-DD.",
+      "section": "2"
+    },
+    {
+      "file": "resume/valid/current-position.json",
+      "schema": "resume",
+      "valid": true,
+      "description": "A startDate with no endDate is current or ongoing.",
+      "section": "2"
+    },
+    {
+      "file": "resume/valid/no-dates.json",
+      "schema": "resume",
+      "valid": true,
+      "description": "Entries without dates conform: every date is optional.",
+      "section": "2"
+    },
+    {
+      "file": "resume/valid/career-break.json",
+      "schema": "resume",
+      "valid": true,
+      "description": "A career break is a work entry with type career-break.",
+      "section": "3"
+    },
+    {
+      "file": "resume/valid/inline-markdown.json",
+      "schema": "resume",
+      "valid": true,
+      "description": "Inline Markdown in prose fields is plain text to the format.",
+      "section": "2"
+    },
+    {
+      "file": "resume/valid/custom.json",
+      "schema": "resume",
+      "valid": true,
+      "description": "custom holds tool data, namespaced by tool, at the top level and on skills.",
+      "section": "6"
+    },
+    {
+      "file": "resume/valid/skill-links.json",
+      "schema": "resume",
+      "valid": true,
+      "description": "skills[].id names a skill; entries list skills by id or as skill objects.",
+      "section": "3"
+    },
+    {
+      "file": "resume/valid/language-scale.json",
+      "schema": "resume",
+      "valid": true,
+      "description": "A language with a label for people and a published scale for tools.",
+      "section": "3"
+    },
+    {
+      "file": "resume/valid/translations.json",
+      "schema": "resume",
+      "valid": true,
+      "description": "meta.language and links to the same resume in other languages.",
+      "section": "5"
+    },
+    {
+      "file": "resume/valid/unicode.json",
+      "schema": "resume",
+      "valid": true,
+      "description": "Text in any script.",
+      "section": "1"
+    },
+    {
+      "file": "resume/valid/publications.json",
+      "schema": "resume",
+      "valid": true,
+      "description": "Publication details: authors, identifiers by scheme, type.",
+      "section": "3"
+    },
+    {
+      "file": "resume/valid/structured-location.json",
+      "schema": "resume",
+      "valid": true,
+      "description": "Entries carry a structured location.",
+      "section": "4"
+    },
+    {
+      "file": "resume/invalid/basics-array.json",
+      "schema": "resume",
+      "valid": false,
+      "description": "basics is an object.",
+      "section": "3"
+    },
+    {
+      "file": "resume/invalid/work-object.json",
+      "schema": "resume",
+      "valid": false,
+      "description": "work is an array of entries.",
+      "section": "3"
+    },
+    {
+      "file": "resume/invalid/name-number.json",
+      "schema": "resume",
+      "valid": false,
+      "description": "basics.name is a string.",
+      "section": "3"
+    },
+    {
+      "file": "resume/invalid/date-month-13.json",
+      "schema": "resume",
+      "valid": false,
+      "description": "There is no month 13.",
+      "section": "2"
+    },
+    {
+      "file": "resume/invalid/date-words.json",
+      "schema": "resume",
+      "valid": false,
+      "description": "Dates are ISO 8601, not words.",
+      "section": "2"
+    },
+    {
+      "file": "resume/invalid/date-year-range.json",
+      "schema": "resume",
+      "valid": false,
+      "description": "Years run from 1000 to 2999.",
+      "section": "2"
+    },
+    {
+      "file": "resume/invalid/date-number.json",
+      "schema": "resume",
+      "valid": false,
+      "description": "Dates are strings.",
+      "section": "2"
+    },
+    {
+      "file": "resume/invalid/highlights-numbers.json",
+      "schema": "resume",
+      "valid": false,
+      "description": "highlights are strings.",
+      "section": "3"
+    },
+    {
+      "file": "resume/invalid/keywords-string.json",
+      "schema": "resume",
+      "valid": false,
+      "description": "keywords is an array, not a comma-separated string.",
+      "section": "3"
+    },
+    {
+      "file": "resume/invalid/profiles-object.json",
+      "schema": "resume",
+      "valid": false,
+      "description": "basics.profiles is an array.",
+      "section": "3"
+    },
+    {
+      "file": "resume/invalid/custom-string.json",
+      "schema": "resume",
+      "valid": false,
+      "description": "custom is an object.",
+      "section": "6"
+    },
+    {
+      "file": "resume/invalid/scale-string.json",
+      "schema": "resume",
+      "valid": false,
+      "description": "languages[].scale is an object.",
+      "section": "3"
+    },
+    {
+      "file": "resume/invalid/meta-language-number.json",
+      "schema": "resume",
+      "valid": false,
+      "description": "meta.language is a BCP 47 tag string.",
+      "section": "5"
+    },
+    {
+      "file": "resume/invalid/location-string-in-basics.json",
+      "schema": "resume",
+      "valid": false,
+      "description": "basics.location is an object.",
+      "section": "4"
+    },
+    {
+      "file": "job/valid/empty.json",
+      "schema": "job",
+      "valid": true,
+      "description": "Every field is optional: {} conforms.",
+      "section": "JOB 1"
+    },
+    {
+      "file": "job/valid/posting.json",
+      "schema": "job",
+      "valid": true,
+      "description": "A posting with apply details, compensation and the company website.",
+      "section": "JOB 2"
+    },
+    {
+      "file": "job/invalid/remote-yes.json",
+      "schema": "job",
+      "valid": false,
+      "description": "remote is one of Full, Hybrid, None.",
+      "section": "JOB 2"
+    },
+    {
+      "file": "job/invalid/compensation-text.json",
+      "schema": "job",
+      "valid": false,
+      "description": "compensation amounts are numbers; salary is the text.",
+      "section": "JOB 2"
+    },
+    {
+      "file": "job/invalid/skills-string.json",
+      "schema": "job",
+      "valid": false,
+      "description": "skills is an array.",
+      "section": "JOB 2"
+    },
+    {
+      "file": "company/valid/empty.json",
+      "schema": "company",
+      "valid": true,
+      "description": "Every field is optional: {} conforms.",
+      "section": "COMPANY 1"
+    },
+    {
+      "file": "company/valid/company.json",
+      "schema": "company",
+      "valid": true,
+      "description": "A company with size, locations and technologies.",
+      "section": "COMPANY 2"
+    },
+    {
+      "file": "company/invalid/employees-zero.json",
+      "schema": "company",
+      "valid": false,
+      "description": "employees counts start at 1.",
+      "section": "COMPANY 2"
+    },
+    {
+      "file": "company/invalid/employees-fraction.json",
+      "schema": "company",
+      "valid": false,
+      "description": "employees counts are integers.",
+      "section": "COMPANY 2"
+    },
+    {
+      "file": "company/invalid/remote-sometimes.json",
+      "schema": "company",
+      "valid": false,
+      "description": "remote is one of Full, Hybrid, None.",
+      "section": "COMPANY 2"
+    }
+  ]
+}

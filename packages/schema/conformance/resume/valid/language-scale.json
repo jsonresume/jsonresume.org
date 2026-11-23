@@ -1,0 +1,12 @@
+{
+  "languages": [
+    {
+      "language": "Spanish",
+      "fluency": "Professional",
+      "scale": {
+        "framework": "CEFR",
+        "level": "C1"
+      }
+    }
+  ]
+}

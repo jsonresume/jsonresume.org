@@ -1,0 +1,24 @@
+{
+  "title": "Backend Engineer",
+  "company": "Acme",
+  "companyUrl": "https://acme.example",
+  "type": "Full-time",
+  "date": "2026-11",
+  "remote": "Hybrid",
+  "url": "https://news.ycombinator.com/item?id=1",
+  "apply": {
+    "url": "https://acme.example/jobs/1"
+  },
+  "compensation": {
+    "min": 120000,
+    "max": 150000,
+    "currency": "USD"
+  },
+  "skills": [
+    {
+      "name": "Go",
+      "level": "Senior",
+      "keywords": ["gRPC"]
+    }
+  ]
+}

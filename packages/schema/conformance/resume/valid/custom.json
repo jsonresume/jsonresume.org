@@ -1,0 +1,17 @@
+{
+  "custom": {
+    "myTool": {
+      "score": 9
+    }
+  },
+  "skills": [
+    {
+      "name": "Rust",
+      "custom": {
+        "myTool": {
+          "years": 4
+        }
+      }
+    }
+  ]
+}

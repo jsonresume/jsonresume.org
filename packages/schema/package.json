@@ -29,7 +29,8 @@
     "SPEC.md",
     "JOB-SPEC.md",
     "COMPANY-SPEC.md",
-    "examples"
+    "examples",
+    "conformance"
   ],
   "dependencies": {
     "jsonschema": "^1.4.1"

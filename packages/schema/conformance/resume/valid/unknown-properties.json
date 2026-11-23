@@ -1,0 +1,15 @@
+{
+  "basics": {
+    "name": "Ada Lovelace",
+    "favouriteNumber": 7
+  },
+  "work": [
+    {
+      "name": "Analytical Engines",
+      "teamSize": 3
+    }
+  ],
+  "x-tool": {
+    "id": 1
+  }
+}

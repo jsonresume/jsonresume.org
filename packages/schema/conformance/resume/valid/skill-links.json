@@ -1,0 +1,26 @@
+{
+  "skills": [
+    {
+      "id": "typescript",
+      "name": "TypeScript",
+      "level": "Advanced"
+    }
+  ],
+  "work": [
+    {
+      "name": "Acme",
+      "skills": [
+        "typescript",
+        {
+          "name": "Kubernetes"
+        }
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "CLI",
+      "skills": ["typescript"]
+    }
+  ]
+}
