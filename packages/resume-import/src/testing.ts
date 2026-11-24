@@ -43,8 +43,9 @@ export const emptyReply = (): ModelReply => ({
 
 /**
  * A language model that answers every request with `answer(text)`, the
- * text being what the user message carried: the resume's text. Counts its
- * calls, so tests can see the cache work.
+ * text being what the user message carried: the resume's text, and
+ * `[file <type>]` for a file. Counts its calls, so tests can see the cache
+ * work.
  */
 export const scriptedModel = (answer: (text: string) => ModelReply) => {
   const calls: string[] = [];
@@ -54,7 +55,13 @@ export const scriptedModel = (answer: (text: string) => ModelReply) => {
       generateText: (options) => {
         const text = options.prompt.content
           .flatMap((m) => (m.role === 'user' ? m.content : []))
-          .flatMap((part) => (part.type === 'text' ? [part.text] : []))
+          .flatMap((part) =>
+            part.type === 'text'
+              ? [part.text]
+              : part.type === 'file'
+              ? [`[file ${part.mediaType}]`]
+              : []
+          )
           .join('\n');
         calls.push(text);
         return Effect.succeed([

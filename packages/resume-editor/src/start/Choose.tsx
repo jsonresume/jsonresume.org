@@ -78,10 +78,10 @@ export function Choose() {
           </Heading>
           <FileDropzone
             onFiles={upload}
-            accept=".pdf,.docx,.zip,.txt"
+            accept=".pdf,.docx,.zip,.txt,.png,.jpg,.jpeg,.webp"
             maxSize={IMPORT_MAX_BYTES}
             title="Drop it here"
-            hint="PDF, Word, or a LinkedIn data export (.zip)"
+            hint="PDF (scans too), Word, a photo or screenshot, or a LinkedIn data export (.zip)"
             disabled={busy}
           />
         </section>

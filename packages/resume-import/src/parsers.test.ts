@@ -75,11 +75,25 @@ describe('detect', () => {
     expect(text).toEqual({ kind: 'text', text: 'Ada' });
   });
 
-  it('refuses old Word files, images, other zips and binary', async () => {
+  it('knows photos and screenshots by their bytes', async () => {
+    const kinds = await Promise.all(
+      [
+        [0x89, 0x50, 0x4e, 0x47, 0, 0],
+        [0xff, 0xd8, 0xff, 0xe0, 0, 0],
+        [0x52, 0x49, 0x46, 0x46, 1, 2, 3, 4, 0x57, 0x45, 0x42, 0x50],
+      ].map(async (bytes) => {
+        const source = await run(detect({ bytes: new Uint8Array(bytes) }));
+        return source.kind === 'image' ? source.mediaType : source.kind;
+      })
+    );
+    expect(kinds).toEqual(['image/png', 'image/jpeg', 'image/webp']);
+  });
+
+  it('refuses old Word files, GIFs, other zips and binary', async () => {
     const doc = new Uint8Array([0xd0, 0xcf, 0x11, 0xe0, 1, 2]);
     expect(await failure(detect({ bytes: doc }))).toContain('.docx or PDF');
-    const png = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0, 0]);
-    expect(await failure(detect({ bytes: png }))).toContain('image');
+    const gif = new Uint8Array([0x47, 0x49, 0x46, 0x38, 0x39, 0x61]);
+    expect(await failure(detect({ bytes: gif }))).toContain('PNG or JPEG');
     const other = zip({ 'notes.txt': 'hello' });
     expect(await failure(detect({ bytes: other }))).toContain('LinkedIn');
     const binary = new Uint8Array([0xff, 0xfe, 0x00, 0x81]);

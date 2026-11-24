@@ -10,11 +10,11 @@ import {
 import { tracker } from '@repo/posthog';
 import { Clock, Context, Effect, Layer, Option } from 'effect';
 import { createHash, randomUUID } from 'node:crypto';
-import { score, type Unsure } from './confidence';
+import { score } from './confidence';
 import { detect, type Source, type Upload } from './detect';
-import { modelText, tidy } from './extract';
-import { fromLinkedIn } from './linkedin';
+import { tidy } from './extract';
 import { ResumeReader } from './reader';
+import { readSource } from './readSource';
 import { ImportStore } from './store';
 
 /** Stored with each import: inputs read at another version are read again. */
@@ -54,7 +54,7 @@ const prepare = (input: ImportInput) =>
   });
 
 /**
- * Turns a resume (PDF, Word, LinkedIn export, text) into JSON Resume with
+ * Turns a resume (PDF, scan, photo, Word, LinkedIn export, text) into JSON Resume with
  * how sure it is of each field. Nothing is saved to the account: the person
  * reviews it first. Never keeps the file or its text; app.imports keeps the
  * hash, timings and counts, and the parsed result so the same input is read
@@ -77,22 +77,7 @@ export class Importer extends Context.Service<
       const store = yield* ImportStore;
       const track = yield* tracker;
 
-      const read = (source: Source) =>
-        Effect.gen(function* () {
-          if (source.kind === 'linkedin') {
-            const { resume, unsure } = fromLinkedIn(source.files);
-            return { resume, unsure, warnings: [], model: null };
-          }
-          const { text, warnings } = yield* modelText(source);
-          const reply = yield* reader.read(text);
-          const unsure: ReadonlyArray<Unsure> = reply.unsure;
-          return {
-            resume: reply.resume,
-            unsure,
-            warnings,
-            model: reader.model,
-          };
-        });
+      const read = readSource(reader);
 
       const run = Effect.fn('Importer.run')(function* (
         input: ImportInput,

@@ -3,7 +3,7 @@ title: Privacy policy
 description: What jsonresume.org keeps about you, why, who helps us run it, how long it's kept, and how to see, change or delete it.
 ---
 
-_Last updated 23 November 2026._
+_Last updated 24 November 2026._
 
 JSON Resume is an open-source project, and jsonresume.org is run by its maintainers. This policy covers jsonresume.org, its API and its MCP server (the connection that lets apps such as ChatGPT and Claude use your account). We keep only what the site needs to work, we don't sell data, and we don't show ads.
 
@@ -19,6 +19,8 @@ JSON Resume is an open-source project, and jsonresume.org is run by its maintain
 
 **Jobs.** Job posts come from public Hacker News "Who is hiring?" threads. When you use jobs matched to your resume, the text of your resume is sent to OpenAI to make an embedding (a list of numbers describing it), which we keep, keyed by a hash of that text, so we don't need to send it again. We also keep what you mark about jobs (interested, maybe, applied, not for me), any note or reason you give, where you made the mark and the decision we showed you then; what you tell us you want from a job (pay, where you'll work, industries, skills, your direction), with each change to it; and the decision we made on each job for you, so we can check our decisions against yours. If you turn on the weekly jobs email (it is off unless you do), we email you new jobs on Mondays and keep which jobs we sent you, so none is sent twice; every email has a link that turns it off.
 
+**Importing a resume.** When you import a resume (a PDF, a Word document, a photo or screenshot, or pasted text), what it says is sent to OpenAI to turn it into JSON Resume: its text, or for a scan, photo or screenshot the file itself. A LinkedIn data export is read here and sent nowhere. We don't keep the file or its text: we keep a hash of it, when it was imported, how long reading took, and the resume read from it, so the same file isn't read twice.
+
 **Apps and keys.** For each app you connect (MCP clients such as ChatGPT or Claude) and each API key you make: its name, when it was made and last used, and a one-way hash of the key or token. We never keep keys or tokens in a form we could read back.
 
 **Signing in.** A cookie keeps you signed in, another tells the site you are (so it can show the right buttons), and a short-lived one protects signing in with GitHub. No tracking or advertising cookies.
@@ -30,7 +32,7 @@ JSON Resume is an open-source project, and jsonresume.org is run by its maintain
 - **OVH** hosts our server and database, in Canada.
 - **Cloudflare** carries traffic to the site and stores our database backups.
 - **GitHub** signs you in when you choose it, and holds your gist.
-- **OpenAI** reads job posts to tidy them, and makes embeddings of resumes for matching. OpenAI doesn't use API data to train its models.
+- **OpenAI** reads job posts to tidy them, reads resumes you import, and makes embeddings of resumes for matching. OpenAI doesn't use API data to train its models.
 - **Resend** sends account emails (confirming your address, resetting your password) and, if you turn it on, the weekly jobs email.
 - **PostHog** counts how the site is used, in the United States.
 

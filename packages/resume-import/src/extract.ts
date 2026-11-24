@@ -75,7 +75,9 @@ export const plainText = (text: string) =>
 const MAX_MODEL_CHARS = 40_000;
 
 /** The text of a PDF, Word document or text, as a model reads it. */
-export const modelText = (source: Exclude<Source, { kind: 'linkedin' }>) =>
+export const modelText = (
+  source: Exclude<Source, { kind: 'linkedin' | 'image' }>
+) =>
   Effect.gen(function* () {
     const full =
       source.kind === 'pdf'

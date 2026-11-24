@@ -72,17 +72,28 @@ describe('POST /api/import', () => {
     });
     expect(server.modelCalls[0]).toContain('Computed Bernoulli numbers');
 
+    // A photo, and a scan (a PDF with no text): the model sees the file.
     const png = await upload(
       new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0, 0, 0, 0]),
       'me.png',
       'image/png'
     );
-    expect(png.status).toBe(415);
-    expect(await png.json()).toMatchObject({ _tag: 'UnsupportedImport' });
-
+    expect(png.status).toBe(200);
+    expect(await png.json()).toMatchObject({ kind: 'image' });
     const scan = await upload(textPdf([]), 'scan.pdf', 'application/pdf');
-    expect(scan.status).toBe(422);
-    expect((await scan.json()).message).toContain('scan');
+    expect(scan.status).toBe(200);
+    expect(await scan.json()).toMatchObject({ kind: 'pdf' });
+    expect(
+      server.modelCalls.slice(-2).map((c) => c.split('\n').at(-1))
+    ).toEqual(['[file image/png]', '[file application/pdf]']);
+
+    const gif = await upload(
+      new Uint8Array([0x47, 0x49, 0x46, 0x38, 0x39, 0x61]),
+      'me.gif',
+      'image/gif'
+    );
+    expect(gif.status).toBe(415);
+    expect(await gif.json()).toMatchObject({ _tag: 'UnsupportedImport' });
 
     const huge = await upload(
       new Uint8Array(5 * 1024 * 1024 + 10),
