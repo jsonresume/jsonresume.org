@@ -445,12 +445,23 @@ describe('the API, over HTTP', () => {
              access_expires_at > now() + interval '50 minutes' AS access_alive
       FROM app.oauth_tokens ORDER BY created_at LIMIT 1`;
     expect(used).toEqual({ soon: true, access_alive: true });
+    await server.sql`
+      UPDATE app.oauth_tokens SET refresh_expires_at = now() - interval '1 second'
+      WHERE id = (SELECT id FROM app.oauth_tokens ORDER BY created_at LIMIT 1)`;
+    const stale = await token({
+      grant_type: 'refresh_token',
+      refresh_token: tokens.refresh_token,
+      client_id,
+    });
+    expect(stale.status).toBe(400);
+    expect((await stale.json()).error_description).toMatch(/newest one/);
     const forged = await token({
       grant_type: 'refresh_token',
       refresh_token: 'jrr_not-a-token',
       client_id,
     });
     expect(forged.status).toBe(400);
+    expect((await forged.json()).error_description).toMatch(/is unknown$/);
 
     const connections = await (
       await server.fetch('/api/oauth/connections')

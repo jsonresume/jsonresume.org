@@ -102,7 +102,7 @@ export const OAuthHandlers = HttpApiBuilder.group(
             );
           }).pipe(
             Effect.catchTag('OAuthFailure', (e) => Effect.fail(toError(e))),
-            logRefusal('token', p.grant_type)
+            logRefusal('token', p.grant_type, p.client_id)
           ),
         revoke: ({ payload: p }) =>
           Effect.gen(function* () {
