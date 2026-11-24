@@ -112,9 +112,17 @@ export const tokenQueries = (
       RETURNING client_id, user_id, scope
     `.pipe(Effect.orDie);
     if (!row) {
+      // A token past its window still has its row until the next clean-up:
+      // the client kept an old one, which tells it apart from a bad token.
+      const [spent] = yield* sql`
+        SELECT 1 FROM app.oauth_tokens
+        WHERE refresh_hash = ${hashToken(token)} AND client_id = ${client.id}
+      `.pipe(Effect.orDie);
       return yield* O.fail(
         'invalid_grant',
-        'The refresh token is unknown or expired'
+        spent
+          ? 'The refresh token was replaced or has expired: use the newest one, or sign in again'
+          : 'The refresh token is unknown'
       );
     }
     yield* sql`
