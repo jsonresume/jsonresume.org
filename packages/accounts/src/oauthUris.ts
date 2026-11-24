@@ -13,6 +13,12 @@ export const SCOPE = 'mcp';
 export const CODE_TTL = 10 * 60_000;
 export const ACCESS_TTL = 60 * 60_000;
 export const REFRESH_TTL = 90 * 24 * 60 * 60_000;
+/**
+ * How long a used refresh token still works. Clients that share one login
+ * (several Claude Code sessions) refresh at the same moment: without this,
+ * the first rotates the token and the rest are signed out.
+ */
+export const REFRESH_REUSE = 2 * 60_000;
 
 const LOOPBACK = new Set(['localhost', '127.0.0.1', '[::1]']);
 const FORBIDDEN = new Set([
