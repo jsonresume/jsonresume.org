@@ -17,8 +17,11 @@ export const ProposalsHandlers = HttpApiBuilder.group(
         list: () =>
           Effect.gen(function* () {
             const user = yield* CurrentUser;
-            const { resume } = yield* accounts.currentResume(user.id);
             const list = yield* proposals.pending(user.id);
+            // Nearly always none: then skip reading the resume (a gist read
+            // on GitHub for gist accounts), only needed to show the changes.
+            if (list.length === 0) return [];
+            const { resume } = yield* accounts.currentResume(user.id);
             return list.map((p) => ({
               id: p.id,
               by: proposerOf(p),
