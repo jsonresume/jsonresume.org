@@ -1,9 +1,14 @@
 ---
 title: "Calculations"
-description: "Internal architecture notes for contributors"
+description: "Legacy internals: the retired Next.js apps, kept for reference"
 ---
 
 # Calculations
+
+> **Legacy app.** This page describes `apps/registry` and `apps/homepage2`, the
+> Next.js apps jsonresume.org ran on until October 2026. They are kept for
+> reference only: the live site is `apps/app`, and its code is in
+> [How jsonresume.org is built](/architecture).
 
 This module provides utility functions for analyzing and transforming resume data related to skills, experience, education, and date conversions. It supports counting skills and keywords, extracting skill evolution over time using natural language processing, computing total and average work experience durations, summarizing career progression by job title, determining the highest education level attained, and converting between various date and time representations. These calculations underpin dashboard metrics and job data visualizations elsewhere in the system.
 

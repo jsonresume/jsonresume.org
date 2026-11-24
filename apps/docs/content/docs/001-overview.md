@@ -1,9 +1,14 @@
 ---
 title: "Overview"
-description: "Internal architecture notes for contributors"
+description: "Legacy internals: the retired Next.js apps, kept for reference"
 ---
 
 # Overview
+
+> **Legacy app.** This page describes `apps/registry` and `apps/homepage2`, the
+> Next.js apps jsonresume.org ran on until October 2026. They are kept for
+> reference only: the live site is `apps/app`, and its code is in
+> [How jsonresume.org is built](/architecture).
 
 This project implements a comprehensive platform for managing, analyzing, and visualizing professional resumes and job data. It integrates multiple subsystems including resume parsing and analysis, job matching and decision support, interactive job graph visualization, interview facilitation, and user dashboard components. The architecture is modular, with distinct UI components, hooks for state and data management, and backend API endpoints supporting AI-driven analysis and data persistence.
 

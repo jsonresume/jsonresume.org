@@ -1,9 +1,14 @@
 ---
 title: "API Layer"
-description: "Internal architecture notes for contributors"
+description: "Legacy internals: the retired Next.js apps, kept for reference"
 ---
 
 # API Layer
+
+> **Legacy app.** This page describes `apps/registry` and `apps/homepage2`, the
+> Next.js apps jsonresume.org ran on until October 2026. They are kept for
+> reference only: the live site is `apps/app`, and its code is in
+> [How jsonresume.org is built](/architecture).
 
 The API Layer implements the backend route handlers and utility functions that power core features such as authentication, resume management, job matching, pathways, chat interactions, and report generation. It interfaces primarily with Supabase for data storage and retrieval, and OpenAI for AI-driven text generation and embeddings. This layer orchestrates data flow between client requests, database queries, AI models, and response formatting.
 

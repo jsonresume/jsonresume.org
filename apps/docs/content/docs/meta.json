@@ -1,3 +1,14 @@
 {
-  "pages": ["index", "guides", "---Internals (for contributors)---", "..."]
+  "pages": [
+    "index",
+    "guides",
+    "architecture",
+    "---Packages and tools---",
+    "002-repository-structure",
+    "007-job-search-subsystem",
+    "033-resume-core-library",
+    "034-theme-packages",
+    "---Legacy internals (retired Next.js apps)---",
+    "..."
+  ]
 }

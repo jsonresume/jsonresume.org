@@ -1,9 +1,14 @@
 ---
 title: "Job Reports"
-description: "Internal architecture notes for contributors"
+description: "Legacy internals: the retired Next.js apps, kept for reference"
 ---
 
 # Job Reports
+
+> **Legacy app.** This page describes `apps/registry` and `apps/homepage2`, the
+> Next.js apps jsonresume.org ran on until October 2026. They are kept for
+> reference only: the live site is `apps/app`, and its code is in
+> [How jsonresume.org is built](/architecture).
 
 This module provides components and utilities for generating detailed job-related reports and analytics within the user registry application. It aggregates data about job pipelines, salary distributions, skill gaps, market trends, and user activity to present comprehensive insights into job search progress and market positioning.
 

@@ -1,9 +1,14 @@
 ---
 title: "Dashboard Subsystem"
-description: "Internal architecture notes for contributors"
+description: "Legacy internals: the retired Next.js apps, kept for reference"
 ---
 
 # Dashboard Subsystem
+
+> **Legacy app.** This page describes `apps/registry` and `apps/homepage2`, the
+> Next.js apps jsonresume.org ran on until October 2026. They are kept for
+> reference only: the live site is `apps/app`, and its code is in
+> [How jsonresume.org is built](/architecture).
 
 The Dashboard Subsystem manages the rendering and data orchestration of the user metrics and statistics dashboard within the user registry application. It integrates resume data fetching, metric computation, and UI presentation through a collection of React components, hooks, and utilities. This subsystem is responsible for displaying a comprehensive overview of a user's professional profile, including summaries, skills, education, career progression, and various aggregated statistics.
 

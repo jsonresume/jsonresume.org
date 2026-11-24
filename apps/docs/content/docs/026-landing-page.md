@@ -1,9 +1,14 @@
 ---
 title: "Landing Page"
-description: "Internal architecture notes for contributors"
+description: "Legacy internals: the retired Next.js apps, kept for reference"
 ---
 
 # Landing Page
+
+> **Legacy app.** This page describes `apps/registry` and `apps/homepage2`, the
+> Next.js apps jsonresume.org ran on until October 2026. They are kept for
+> reference only: the live site is `apps/app`, and its code is in
+> [How jsonresume.org is built](/architecture).
 
 The landing page subsystem orchestrates the main entry point of the JSON Resume Registry web application. It assembles the hero banner, feature highlights, call-to-action prompts, and footer into a cohesive user interface that introduces the platform’s value proposition and guides users toward authentication or exploration. This documentation covers the components and data structures that compose the landing page, their interactions, and the rendering logic. It does not cover the authentication backend, editor interface, or other unrelated UI modules.
 
