@@ -56,6 +56,8 @@ export class ProfileStore extends Context.Service<
     removeGhost(username: string): Effect.Effect<void>;
     /** Keep the latest gist copy on an account. */
     saveMirror(username: string, mirror: GistMirror): Effect.Effect<void>;
+    /** Forget an account's gist copy: GitHub says the gist is gone or secret. */
+    dropMirror(username: string): Effect.Effect<void>;
     /** A variant of an account's resume (/@name/slug), or undefined. */
     variant(userId: string, slug: string): Effect.Effect<unknown>;
   }
@@ -87,5 +89,11 @@ export const memoryStore = (
       const current = profiles.get(username);
       if (current?.kind === 'account')
         profiles.set(username, { ...current, mirror });
+    }),
+  dropMirror: (username) =>
+    Effect.sync(() => {
+      const current = profiles.get(username);
+      if (current?.kind === 'account')
+        profiles.set(username, { ...current, mirror: undefined });
     }),
 });

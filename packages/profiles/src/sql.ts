@@ -123,6 +123,11 @@ export const PgProfileStore = Layer.effect(
         }
           WHERE username = ${username} AND kind = 'account'
         `.pipe(Effect.asVoid, Effect.orDie),
+      dropMirror: (username) =>
+        sql`
+          UPDATE app.profiles SET gist_id = NULL, resume = NULL, fetched_at = NULL
+          WHERE username = ${username} AND kind = 'account'
+        `.pipe(Effect.asVoid, Effect.orDie),
     });
   })
 );

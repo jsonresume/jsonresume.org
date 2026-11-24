@@ -74,8 +74,10 @@ lowercase).
 ## Where the resume comes from
 
 - Ghosts and GitHub accounts: the gist, fetched live with a short cache. A
-  deleted gist or GitHub user means 404, and the ghost and its name
-  protection go away.
+  deleted or secret gist, or a deleted GitHub user, means 404 from the next
+  visit after GitHub says so: the ghost and its name protection go away, and
+  an account forgets its copy (the account stays; a new gist brings the page
+  back).
 - The gist stays the source of truth (changed 2026-10-24): saving in the
   editor writes to the person's resume.json gist (creating one if they have
   none) with their GitHub token, which GitHub grants with the `gist` scope at
