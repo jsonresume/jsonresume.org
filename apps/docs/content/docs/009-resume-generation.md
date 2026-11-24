@@ -1,9 +1,14 @@
 ---
 title: "Resume Generation"
-description: "Internal architecture notes for contributors"
+description: "Legacy internals: the retired Next.js apps, kept for reference"
 ---
 
 # Resume Generation
+
+> **Legacy app.** This page describes `apps/registry` and `apps/homepage2`, the
+> Next.js apps jsonresume.org ran on until October 2026. They are kept for
+> reference only: the live site is `apps/app`, and its code is in
+> [How jsonresume.org is built](/architecture).
 
 The resume generation subsystem orchestrates the process of retrieving, validating, optionally transforming, formatting, and caching user resumes. It supports multiple output formats, theme selection including random theme redirection, and integration with a large language model (LLM) for resume transformation based on user prompts.
 

@@ -1,9 +1,14 @@
 ---
 title: "Additional Modules"
-description: "Internal architecture notes for contributors"
+description: "Legacy internals: the retired Next.js apps, kept for reference"
 ---
 
 # Additional Modules
+
+> **Legacy app.** This page describes `apps/registry` and `apps/homepage2`, the
+> Next.js apps jsonresume.org ran on until October 2026. They are kept for
+> reference only: the live site is `apps/app`, and its code is in
+> [How jsonresume.org is built](/architecture).
 
 This page documents a collection of additional source files and utilities that support various features within the JSON Resume Registry application and its UI components. These modules include sample resume data, UI style guides, terms of service and privacy policy pages, job listing components, speech synthesis hooks, pagination utilities, error handling components, editor wrappers, resume merging utilities, resume themes, ATS validation logic, and API key management. The documented symbols cover both frontend React components and backend API data, as well as shared utilities and theme renderers.
 

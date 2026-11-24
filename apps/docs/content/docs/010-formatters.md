@@ -1,9 +1,14 @@
 ---
 title: "Formatters"
-description: "Internal architecture notes for contributors"
+description: "Legacy internals: the retired Next.js apps, kept for reference"
 ---
 
 # Formatters
+
+> **Legacy app.** This page describes `apps/registry` and `apps/homepage2`, the
+> Next.js apps jsonresume.org ran on until October 2026. They are kept for
+> reference only: the live site is `apps/app`, and its code is in
+> [How jsonresume.org is built](/architecture).
 
 This module implements a collection of resume formatters that transform JSON resume data into various output formats including PDF, YAML, JSON, plain text, LaTeX, RenderCV YAML, and QR code images. Each formatter adapts the resume data to the conventions and requirements of its target format, supporting different use cases such as web rendering, printing, or data interchange.
 

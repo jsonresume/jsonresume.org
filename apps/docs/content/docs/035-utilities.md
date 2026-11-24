@@ -1,9 +1,14 @@
 ---
 title: "Utilities"
-description: "Internal architecture notes for contributors"
+description: "Legacy internals: the retired Next.js apps, kept for reference"
 ---
 
 # Utilities
+
+> **Legacy app.** This page describes `apps/registry` and `apps/homepage2`, the
+> Next.js apps jsonresume.org ran on until October 2026. They are kept for
+> reference only: the live site is `apps/app`, and its code is in
+> [How jsonresume.org is built](/architecture).
 
 This page documents the general utility functions and helpers used across the project. These utilities cover diverse concerns such as resume data patching, job filtering, retry logic with backoff, and caching mechanisms for pathways data. The documented components are foundational to multiple subsystems, providing reusable logic for data transformation, filtering, error handling, and persistence.
 

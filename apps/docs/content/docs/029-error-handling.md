@@ -1,9 +1,14 @@
 ---
 title: "Error Handling"
-description: "Internal architecture notes for contributors"
+description: "Legacy internals: the retired Next.js apps, kept for reference"
 ---
 
 # Error Handling
+
+> **Legacy app.** This page describes `apps/registry` and `apps/homepage2`, the
+> Next.js apps jsonresume.org ran on until October 2026. They are kept for
+> reference only: the live site is `apps/app`, and its code is in
+> [How jsonresume.org is built](/architecture).
 
 This module defines a comprehensive error handling framework for the Pathways application, encapsulating distinct failure modes encountered during API interactions, data updates, embedding generation, chat operations, and domain-specific conditions like missing resumes or invalid job data. It provides strongly typed error classes with immutable properties, factory methods for error construction from external inputs, a union type for exhaustive error handling, and utility functions for error identification and user-friendly message extraction.
 

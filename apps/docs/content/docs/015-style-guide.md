@@ -1,9 +1,14 @@
 ---
 title: "Style Guide"
-description: "Internal architecture notes for contributors"
+description: "Legacy internals: the retired Next.js apps, kept for reference"
 ---
 
 # Style Guide
+
+> **Legacy app.** This page describes `apps/registry` and `apps/homepage2`, the
+> Next.js apps jsonresume.org ran on until October 2026. They are kept for
+> reference only: the live site is `apps/app`, and its code is in
+> [How jsonresume.org is built](/architecture).
 
 The Style Guide module provides a comprehensive reference for UI components and design system elements used within the JSON Resume Registry application. It serves as a centralized showcase and documentation for reusable components such as buttons, inputs, cards, badges, and more, demonstrating their usage, variants, and best practices. This module does not cover the underlying implementation details of the components themselves but focuses on their presentation and prop interfaces.
 

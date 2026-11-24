@@ -1,9 +1,14 @@
 ---
 title: "Signup Flow"
-description: "Internal architecture notes for contributors"
+description: "Legacy internals: the retired Next.js apps, kept for reference"
 ---
 
 # Signup Flow
+
+> **Legacy app.** This page describes `apps/registry` and `apps/homepage2`, the
+> Next.js apps jsonresume.org ran on until October 2026. They are kept for
+> reference only: the live site is `apps/app`, and its code is in
+> [How jsonresume.org is built](/architecture).
 
 The Signup Flow module orchestrates user registration within the application, providing UI components, hooks, and utilities to handle email/password signup, OAuth via GitHub, and automatic display name generation. It manages user input, communicates with the authentication backend, and presents feedback on loading and error states.
 

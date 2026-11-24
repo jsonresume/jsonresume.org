@@ -1,9 +1,14 @@
 ---
 title: "Similarity Engine"
-description: "Internal architecture notes for contributors"
+description: "Legacy internals: the retired Next.js apps, kept for reference"
 ---
 
 # Similarity Engine
+
+> **Legacy app.** This page describes `apps/registry` and `apps/homepage2`, the
+> Next.js apps jsonresume.org ran on until October 2026. They are kept for
+> reference only: the live site is `apps/app`, and its code is in
+> [How jsonresume.org is built](/architecture).
 
 The Similarity Engine subsystem provides the components, hooks, utilities, and clustering algorithms necessary to build and interact with a similarity graph. This graph visualizes relationships between entities (such as job positions or resumes) based on content similarity, enabling exploration of clusters and connections through an interactive network visualization.
 
