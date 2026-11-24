@@ -66,6 +66,8 @@ const asText = (item: unknown): string[] => {
 };
 
 const TEXT_LISTS = ['highlights', 'keywords', 'courses'];
+/** Ratings written as numbers (5 of 5): themes call string methods on them. */
+const TEXT_RATINGS = ['level', 'fluency'];
 
 const withTextLists = (entry: unknown): unknown => {
   if (!Predicate.isObject(entry)) return entry;
@@ -73,6 +75,12 @@ const withTextLists = (entry: unknown): unknown => {
   for (const key of TEXT_LISTS) {
     const list = out[key];
     if (Array.isArray(list)) out[key] = list.flatMap(asText);
+  }
+  for (const key of TEXT_RATINGS) {
+    const rating = out[key];
+    if (rating === undefined || Predicate.isString(rating)) continue;
+    if (Predicate.isNumber(rating)) out[key] = String(rating);
+    else delete out[key];
   }
   return out;
 };
@@ -101,7 +109,7 @@ const asList = (section: string, value: unknown): unknown[] => {
   return [];
 };
 
-/** Every section a list of entries, their text lists text, profiles named, and a name. */
+/** Every section a list of entries, their text lists and ratings text, profiles named, and a name. */
 export const withSchemaShapes = (resume: ResumeDocument): ResumeDocument => {
   const out: Entry = { ...resume };
   for (const section of SECTIONS) {
