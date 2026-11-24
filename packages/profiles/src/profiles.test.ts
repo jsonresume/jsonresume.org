@@ -257,7 +257,11 @@ describe('Profiles.resume', () => {
       yield* profiles.resume(mine);
       yield* settle;
       const error = yield* Effect.flip(profiles.resume(mine));
-      expect(error).toMatchObject({ _tag: 'ProfileNotFound' });
+      // An account, so its page says so, rather than how to make a gist.
+      expect(error).toMatchObject({
+        _tag: 'ProfileNotFound',
+        reason: 'unpublished',
+      });
       const kept = yield* (yield* ProfileStore).find('mine');
       expect(kept).toMatchObject({ kind: 'account', mirror: undefined });
     }).pipe(run(layer));

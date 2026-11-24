@@ -115,11 +115,18 @@ export class Profiles extends Context.Service<
           }
           // A gist its owner deleted or hid takes the page down, as for a
           // ghost; the account stays, and a new gist brings the page back.
+          // No gist yet is an account with nothing published: its owner
+          // writes one in the editor, which makes the gist.
           const result = yield* mirrored(
             login,
             profile.mirror,
             (m) => store.saveMirror(username, m),
             store.dropMirror(username)
+          ).pipe(
+            Effect.catchIf(
+              (e) => e._tag === 'ProfileNotFound' && e.reason === 'no-gist',
+              () => Effect.fail(unpublished)
+            )
           );
           return done(result, 'account');
         }
