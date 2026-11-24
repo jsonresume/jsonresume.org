@@ -6,7 +6,13 @@ import { TooManyAttempts } from './errors';
 export const IMPORT_MAX_BYTES = 5 * 1024 * 1024;
 
 /** Where an import came from: a PDF, a Word document, a LinkedIn export or text. */
-export const ImportKind = Schema.Literals(['pdf', 'docx', 'linkedin', 'text']);
+export const ImportKind = Schema.Literals([
+  'pdf',
+  'docx',
+  'linkedin',
+  'text',
+  'image',
+]);
 export type ImportKind = typeof ImportKind.Type;
 
 /** How sure the import is of one field. */

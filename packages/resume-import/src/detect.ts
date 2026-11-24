@@ -14,7 +14,9 @@ export type Source =
   | { kind: 'pdf'; bytes: Uint8Array }
   | { kind: 'docx'; bytes: Uint8Array }
   | { kind: 'linkedin'; files: ReadonlyMap<string, string> }
-  | { kind: 'text'; text: string };
+  | { kind: 'text'; text: string }
+  /** A photo or screenshot of a resume, read by the model as an image. */
+  | { kind: 'image'; bytes: Uint8Array; mediaType: string };
 
 /** The CSVs of a LinkedIn data export that become a resume. */
 export const LINKEDIN_FILES = [
@@ -40,16 +42,25 @@ const startsWith = (bytes: Uint8Array, magic: ReadonlyArray<number>) =>
 const PDF = [0x25, 0x50, 0x44, 0x46, 0x2d]; // %PDF-
 const ZIP = [0x50, 0x4b, 0x03, 0x04];
 const OLE = [0xd0, 0xcf, 0x11, 0xe0]; // .doc, .xls
-const IMAGES = [
-  [0x89, 0x50, 0x4e, 0x47],
-  [0xff, 0xd8, 0xff],
-  [0x47, 0x49, 0x46, 0x38],
+/** Images the model reads, by their first bytes. */
+const IMAGES: ReadonlyArray<[ReadonlyArray<number>, string]> = [
+  [[0x89, 0x50, 0x4e, 0x47], 'image/png'],
+  [[0xff, 0xd8, 0xff], 'image/jpeg'],
 ];
+const RIFF = [0x52, 0x49, 0x46, 0x46];
+const WEBP = [0x57, 0x45, 0x42, 0x50]; // at byte 8, after RIFF and a size
+const GIF = [0x47, 0x49, 0x46, 0x38];
+
+const imageType = (bytes: Uint8Array) =>
+  IMAGES.find(([magic]) => startsWith(bytes, magic))?.[1] ??
+  (startsWith(bytes, RIFF) && startsWith(bytes.subarray(8), WEBP)
+    ? 'image/webp'
+    : undefined);
 
 const unsupported = (message: string) => new UnsupportedImport({ message });
 
 const SUPPORTED =
-  'Import a PDF, a Word document (.docx), a LinkedIn data export (.zip) or plain text.';
+  'Import a PDF, a Word document (.docx), a photo or screenshot (PNG, JPEG, WebP), a LinkedIn data export (.zip) or plain text.';
 
 const basename = (path: string) => path.split('/').pop() ?? path;
 
@@ -116,10 +127,12 @@ export const detect = (
         'Older Word documents (.doc) can’t be read. Save it as .docx or PDF and import that.'
       )
     );
-  if (IMAGES.some((magic) => startsWith(bytes, magic)))
+  const mediaType = imageType(bytes);
+  if (mediaType) return Effect.succeed({ kind: 'image', bytes, mediaType });
+  if (startsWith(bytes, GIF))
     return Effect.fail(
       unsupported(
-        'That is an image. Import the resume as a PDF or Word document, or paste its text.'
+        'GIF images can’t be read. Save it as PNG or JPEG, or import a PDF.'
       )
     );
   return Effect.map(asText(bytes), (text) => ({ kind: 'text', text } as const));
