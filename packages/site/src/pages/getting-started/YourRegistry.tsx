@@ -52,8 +52,11 @@ export function YourRegistry() {
       </ul>
       <p className={l.muted}>
         More versions? Add files such as resume-fr.json to the same Gist and
-        open <RegistryLink href={g.gistFileUrl(user, 'resume-fr.json')} />.
-        Prefer your own repository? A{' '}
+        open {/* A pattern, not a link: the example user has no such file. */}
+        <span className={l.url}>
+          {g.gistFileUrl(user, 'resume-fr.json').replace(HOST, '')}
+        </span>
+        . Prefer your own repository? A{' '}
         <a href={g.ownRepoExample}>GitHub Action can publish the Gist</a> on
         every push.
       </p>
