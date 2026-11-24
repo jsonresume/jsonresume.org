@@ -4,6 +4,7 @@ import { Effect } from 'effect';
 import { HttpServerRequest } from 'effect/http';
 import { HttpApiBuilder } from 'effect/http-api';
 import { oidc } from './oidc';
+import { logRefusal } from './oauthLog';
 import { track } from '@repo/posthog';
 
 const toError = (e: OAuthFailure) =>
@@ -70,7 +71,8 @@ export const OAuthHandlers = HttpApiBuilder.group(
                 grant_types: ['authorization_code', 'refresh_token'],
                 response_types: ['code'],
               })),
-              Effect.mapError(toError)
+              Effect.mapError(toError),
+              logRefusal('register')
             ),
         token: ({ payload: p }) =>
           Effect.gen(function* () {
@@ -99,7 +101,8 @@ export const OAuthHandlers = HttpApiBuilder.group(
               })
             );
           }).pipe(
-            Effect.catchTag('OAuthFailure', (e) => Effect.fail(toError(e)))
+            Effect.catchTag('OAuthFailure', (e) => Effect.fail(toError(e))),
+            logRefusal('token', p.grant_type)
           ),
         revoke: ({ payload: p }) =>
           Effect.gen(function* () {
