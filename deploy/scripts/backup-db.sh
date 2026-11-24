@@ -25,10 +25,13 @@ export RCLONE_CONFIG_R2_TYPE=s3 RCLONE_CONFIG_R2_PROVIDER=Cloudflare \
   RCLONE_CONFIG_R2_ENDPOINT=$R2_ENDPOINT RCLONE_CONFIG_R2_NO_CHECK_BUCKET=true
 
 pg() { sudo -u postgres "$@"; }
+# The live tables (accounts, pages, resume history, jobs), then the legacy
+# resumes; the first must not restore empty.
 counts() {
   pg psql -XAt -d "$1" -c "select
-    (select count(*) from public.resumes), (select count(*) from public.jobs),
-    (select count(*) from auth.users), (select count(*) from public.companies)"
+    (select count(*) from app.users), (select count(*) from app.profiles),
+    (select count(*) from app.resume_versions), (select count(*) from app.jobs),
+    (select count(*) from public.resumes)"
 }
 
 install -d -o postgres -g postgres -m 700 "$DIR"
@@ -45,7 +48,7 @@ restored=$(counts "$CHECK_DB")
 pg dropdb "$CHECK_DB"
 # Writes between the dump and the count (view counter) can only add rows.
 [ "$restored" = "$live" ] || echo "note: live $live, restored $restored"
-[ "$(echo "$restored" | cut -d'|' -f1)" -gt 0 ] || { echo "restored resumes empty"; exit 1; }
+[ "$(echo "$restored" | cut -d'|' -f1)" -gt 0 ] || { echo "restored accounts empty"; exit 1; }
 
 rclone copyto --s3-no-check-bucket "$FILE" "r2:$R2_BUCKET/daily/$(basename "$FILE")"
 find "$DIR" -name "$DB-*.dump" -mtime +$KEEP_LOCAL_DAYS -delete
