@@ -86,7 +86,11 @@ export const tokenQueries = (
     return yield* issueTokens(row.client_id, row.user_id, row.scope, row.nonce);
   });
 
-  /** A refresh token is used once: it is replaced with a new pair. */
+  /**
+   * A refresh token gets a new pair. The used one works for REFRESH_REUSE
+   * more (never longer than it had), and its access token until it expires.
+   * Pairs past both expiries are cleared then.
+   */
   const refresh = Effect.fn('OAuth.refresh')(function* (
     token: string,
     clientId: string,
@@ -98,17 +102,25 @@ export const tokenQueries = (
       user_id: string;
       scope: string;
     }>`
-      DELETE FROM app.oauth_tokens WHERE refresh_hash = ${hashToken(
+      UPDATE app.oauth_tokens
+      SET refresh_expires_at = least(refresh_expires_at, ${yield* at(
+        O.REFRESH_REUSE
+      )})
+      WHERE refresh_hash = ${hashToken(
         token
-      )} AND refresh_expires_at > now()
+      )} AND refresh_expires_at > now() AND client_id = ${client.id}
       RETURNING client_id, user_id, scope
     `.pipe(Effect.orDie);
-    if (!row || row.client_id !== client.id) {
+    if (!row) {
       return yield* O.fail(
         'invalid_grant',
         'The refresh token is unknown or expired'
       );
     }
+    yield* sql`
+      DELETE FROM app.oauth_tokens WHERE client_id = ${row.client_id} AND user_id = ${row.user_id}
+        AND access_expires_at < now() AND refresh_expires_at < now()
+    `.pipe(Effect.orDie);
     return yield* issueTokens(row.client_id, row.user_id, row.scope);
   });
 

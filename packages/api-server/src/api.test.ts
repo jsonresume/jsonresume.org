@@ -432,12 +432,25 @@ describe('the API, over HTTP', () => {
       })
     ).json();
     expect(refreshed.access_token).toMatch(/^jro_/);
+    // Sessions sharing one login refresh at once: the used token still works
+    // for two minutes, never more, and its access token until it expires.
     const reused = await token({
       grant_type: 'refresh_token',
       refresh_token: tokens.refresh_token,
       client_id,
     });
-    expect(reused.status).toBe(400);
+    expect(reused.status).toBe(200);
+    const [used] = await server.sql`
+      SELECT refresh_expires_at < now() + interval '3 minutes' AS soon,
+             access_expires_at > now() + interval '50 minutes' AS access_alive
+      FROM app.oauth_tokens ORDER BY created_at LIMIT 1`;
+    expect(used).toEqual({ soon: true, access_alive: true });
+    const forged = await token({
+      grant_type: 'refresh_token',
+      refresh_token: 'jrr_not-a-token',
+      client_id,
+    });
+    expect(forged.status).toBe(400);
 
     const connections = await (
       await server.fetch('/api/oauth/connections')
