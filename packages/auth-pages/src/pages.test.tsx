@@ -72,6 +72,27 @@ describe('a prerendered page, hydrated with ?next=', () => {
   });
 });
 
+describe('a prerendered sign-in page, hydrated with ?error=', () => {
+  it('shows the error without a hydration mismatch', async () => {
+    const container = document.createElement('div');
+    container.innerHTML = renderToString(<SignInPage signUpLink={null} />);
+    document.body.append(container);
+    const mismatches: unknown[] = [];
+    await act(async () => {
+      hydrateRoot(
+        container,
+        <SignInPage error="github-expired" signUpLink={null} />,
+        { onRecoverableError: (e) => mismatches.push(e) }
+      );
+    });
+    expect(mismatches).toEqual([]);
+    expect(container.querySelector('[role="alert"]')).toHaveTextContent(
+      'took too long'
+    );
+    container.remove();
+  });
+});
+
 describe('SignUpPage', () => {
   it('shows the page address and checks the username format as you type', () => {
     render(<SignUpPage signInLink={<a href="/signin">Sign in</a>} />);
