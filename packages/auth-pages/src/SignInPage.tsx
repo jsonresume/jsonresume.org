@@ -1,6 +1,6 @@
 import { RegistryProvider, useAtomSet } from '@effect/atom-react';
 import { AuthCard, Button, Divider, Field, Input, Text } from '@jsonresume/ui';
-import { errorTag, keys, signInAtom } from '@repo/api-client';
+import { errorTag, keys, signInAtom, useIsClient } from '@repo/api-client';
 import { account } from '@repo/content/pages';
 import { useState, type FormEvent, type ReactNode } from 'react';
 import {
@@ -26,9 +26,11 @@ function SignInForm({ next, error, signUpLink, forgotLink }: SignInPageProps) {
   const copy = account.signIn;
   const signIn = useAtomSet(signInAtom, { mode: 'promiseExit' });
   const [busy, setBusy] = useState(false);
-  const [message, setMessage] = useState(
-    error ? account.githubErrors[error] : undefined
-  );
+  const [message, setMessage] = useState<string>();
+  // The page is prerendered without ?error=: show it once hydrated, so the
+  // first render matches that HTML.
+  const githubError =
+    useIsClient() && error ? account.githubErrors[error] : undefined;
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -58,7 +60,7 @@ function SignInForm({ next, error, signUpLink, forgotLink }: SignInPageProps) {
         </>
       }
     >
-      <ErrorNote message={message} />
+      <ErrorNote message={message ?? githubError} />
       <GithubButton label={copy.github} next={next} />
       <Divider label={copy.or} />
       <Form onSubmit={submit}>
