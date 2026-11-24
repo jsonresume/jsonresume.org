@@ -18,6 +18,9 @@ describe('/api/resume/proposals', () => {
       method: 'PUT',
       body: JSON.stringify({ resume: { basics: { name: 'Ada' } } }),
     });
+    expect(await (await server.fetch('/api/resume/proposals')).json()).toEqual(
+      []
+    );
     for (const label of ['Engineer', 'Poet'])
       await server.sql`
         INSERT INTO app.change_proposals (user_id, actor_kind, actor_id, actor_name, note, resume)
