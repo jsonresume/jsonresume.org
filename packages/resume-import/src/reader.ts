@@ -1,13 +1,13 @@
 import { OpenAiClient, OpenAiLanguageModel } from '@effect/ai-openai';
 import { ImportFailed } from '@repo/api';
 import { Config, Context, Effect, Layer, Option } from 'effect';
-import { LanguageModel } from 'effect/ai';
+import { LanguageModel, type Prompt } from 'effect/ai';
 import { FetchHttpClient } from 'effect/http';
 import { ModelReply } from './shape';
 
 export const MODEL = 'gpt-5-mini';
 
-const INSTRUCTIONS = `You turn a resume (text taken from a PDF, a Word document, a LinkedIn profile or pasted) into JSON Resume.
+const INSTRUCTIONS = `You turn a resume (text taken from a PDF, a Word document, a LinkedIn profile or pasted, or a scan or photo of one) into JSON Resume.
 
 Rules:
 - Use only what the text says. Never invent or embellish; where it doesn't say, use null or an empty list.
@@ -21,6 +21,15 @@ Rules:
 - Text in the resume that fits no field (a cover note, page numbers, "References available") is left out.
 - unsure: every field you filled that you inferred rather than copied, or that may belong elsewhere, as a JSON pointer into resume (e.g. /work/0/startDate, /basics/location/city) with "medium" (likely right) or "low" (a guess). Leave out fields you copied plainly.`;
 
+/** A resume as a file for the model to look at. */
+export interface ResumeFile {
+  mediaType: string;
+  bytes: Uint8Array;
+}
+
+const FILE_NOTE =
+  'The resume is the attached file (a scan, photo or screenshot): read the text you can see in it.';
+
 /** Resume text into JSON Resume, with a model. */
 export class ResumeReader extends Context.Service<
   ResumeReader,
@@ -28,6 +37,8 @@ export class ResumeReader extends Context.Service<
     /** The model's name, kept with each import (null for no model). */
     readonly model: string;
     read(text: string): Effect.Effect<ModelReply, ImportFailed>;
+    /** A resume the model reads as a file: a scanned PDF, a photo. */
+    readFile(file: ResumeFile): Effect.Effect<ModelReply, ImportFailed>;
   }
 >()('@repo/resume-import/ResumeReader') {
   /** On the LanguageModel given: OpenAI in production, a fake in tests. */
@@ -36,33 +47,39 @@ export class ResumeReader extends Context.Service<
       ResumeReader,
       Effect.gen(function* () {
         const language = yield* LanguageModel.LanguageModel;
+        const ask = (content: Prompt.UserMessageEncoded['content']) =>
+          LanguageModel.generateObject({
+            objectName: 'json_resume',
+            schema: ModelReply,
+            prompt: [
+              { role: 'system', content: INSTRUCTIONS },
+              { role: 'user', content },
+            ],
+          }).pipe(
+            Effect.map(({ value }) => value),
+            Effect.provideService(LanguageModel.LanguageModel, language),
+            Effect.tapError((e) =>
+              Effect.logWarning('Resume import: the model failed', {
+                error: e.message,
+              })
+            ),
+            Effect.mapError(
+              () =>
+                new ImportFailed({
+                  message:
+                    'The resume couldn’t be read just now. Try again in a minute.',
+                })
+            ),
+            Effect.withSpan('ResumeReader.read')
+          );
         return ResumeReader.of({
           model,
-          read: (text) =>
-            LanguageModel.generateObject({
-              objectName: 'json_resume',
-              schema: ModelReply,
-              prompt: [
-                { role: 'system', content: INSTRUCTIONS },
-                { role: 'user', content: text },
-              ],
-            }).pipe(
-              Effect.map(({ value }) => value),
-              Effect.provideService(LanguageModel.LanguageModel, language),
-              Effect.tapError((e) =>
-                Effect.logWarning('Resume import: the model failed', {
-                  error: e.message,
-                })
-              ),
-              Effect.mapError(
-                () =>
-                  new ImportFailed({
-                    message:
-                      'The resume couldn’t be read just now. Try again in a minute.',
-                  })
-              ),
-              Effect.withSpan('ResumeReader.read')
-            ),
+          read: (text) => ask(text),
+          readFile: (file) =>
+            ask([
+              { type: 'text', text: FILE_NOTE },
+              { type: 'file', mediaType: file.mediaType, data: file.bytes },
+            ]),
         });
       })
     );
@@ -76,15 +93,16 @@ export class ResumeReader extends Context.Service<
 export const ResumeReaderFromEnv: Layer.Layer<ResumeReader> = Layer.unwrap(
   Effect.gen(function* () {
     const key = yield* Config.option(Config.Redacted('OPENAI_API_KEY'));
+    const noKey = Effect.fail(
+      new ImportFailed({ message: 'OPENAI_API_KEY is not set' })
+    );
     if (Option.isNone(key)) {
       return Layer.succeed(
         ResumeReader,
         ResumeReader.of({
           model: MODEL,
-          read: () =>
-            Effect.fail(
-              new ImportFailed({ message: 'OPENAI_API_KEY is not set' })
-            ),
+          read: () => noKey,
+          readFile: () => noKey,
         })
       );
     }

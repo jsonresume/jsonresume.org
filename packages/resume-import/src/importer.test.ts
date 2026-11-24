@@ -221,21 +221,41 @@ describe('Importer', () => {
     expect(result.confidence['/basics/location/city']).toBe('medium');
   });
 
-  it('fails clearly: too large, scanned, unsupported, nothing found, model down', async () => {
+  it('reads a scanned PDF or a photo by showing the model the file', async () => {
+    const reader = fakeReader(adaReply);
+    const { importing, layer } = setup(reader);
+    const png = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 1, 2]);
+    const [scan, photo] = await Effect.runPromise(
+      Effect.provide(
+        Effect.all([importing(file(textPdf([]))), importing(file(png))]),
+        layer
+      )
+    );
+    expect(scan).toMatchObject({ kind: 'pdf', cached: false });
+    expect(photo).toMatchObject({ kind: 'image', cached: false });
+    expect(scan?.resume).toMatchObject({
+      basics: { email: 'ada@example.com' },
+    });
+    expect(reader.calls.map((c) => c.split('\n').at(-1))).toEqual([
+      '[file application/pdf]',
+      '[file image/png]',
+    ]);
+  });
+
+  it('fails clearly: too large, unsupported, nothing found, model down', async () => {
     const { run, importing, events } = setup();
     const fail = (input: ImportInput) =>
       Effect.map(Effect.exit(importing(input)), (exit) =>
         Exit.isFailure(exit) ? JSON.stringify(exit.cause) : 'succeeded'
       );
-    // One database for all five: building one takes seconds (in CI, the
+    // One database for all four: building one takes seconds (in CI, the
     // test ran out of time building one per case).
     const failures = await Effect.runPromise(
       Effect.provide(
         Effect.all([
           fail(file(new Uint8Array(5 * 1024 * 1024 + 1))),
           fail({ _tag: 'Text', text: 'x'.repeat(6 * 1024 * 1024) }),
-          fail(file(textPdf([]))),
-          fail(file(new Uint8Array([0x89, 0x50, 0x4e, 0x47]))),
+          fail(file(new Uint8Array([0x47, 0x49, 0x46, 0x38, 0x39, 0x61]))),
           fail({ _tag: 'Text', text: 'hi' }),
         ]),
         setup().layer
@@ -243,9 +263,8 @@ describe('Importer', () => {
     );
     expect(failures[0]).toContain('ImportTooLarge');
     expect(failures[1]).toContain('ImportTooLarge');
-    expect(failures[2]).toContain('NothingToImport');
-    expect(failures[3]).toContain('UnsupportedImport');
-    expect(failures[4]).toContain('NothingToImport');
+    expect(failures[2]).toContain('UnsupportedImport');
+    expect(failures[3]).toContain('NothingToImport');
 
     // A model that finds nothing, and one that is down.
     const nothing = setup(fakeReader(() => emptyReply()));
@@ -261,6 +280,7 @@ describe('Importer', () => {
       ResumeReader.of({
         model: 'down',
         read: () => Effect.fail(new ImportFailed({ message: 'down' })),
+        readFile: () => Effect.fail(new ImportFailed({ message: 'down' })),
       })
     );
     const broken = setup({ layer: down, calls: [] });
