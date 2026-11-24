@@ -41,7 +41,7 @@ export const problems: Record<
   }),
   unpublished: ({ username }) => ({
     title: `@${username} hasn’t published yet`,
-    body: `This name belongs to a JSON Resume account. The page goes live once its owner confirms their email and adds a resume.`,
+    body: `This name belongs to a JSON Resume account. The page goes live once its owner adds a resume (and confirms their email, if they signed up with one).`,
   }),
   'no-variant': ({ username, file = '' }) => ({
     title: `@${username} has no version called ${file}`,
