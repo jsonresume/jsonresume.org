@@ -28,10 +28,12 @@ const part = (column: string) =>
 
 /**
  * Explore: every public resume, searchable. Listed are ghosts (gists
- * mirrored here), verified accounts that haven't opted out, and the
- * registry's resumes whose names nobody here holds. Searches run on an
- * index in memory, rebuilt in the background every ten minutes and at once
- * when someone opts in or out.
+ * mirrored here) and verified accounts that haven't opted out: only pages
+ * that open. The registry's copies (public.resumes) are not listed, as most
+ * of their gists are gone (53 of 60 sampled on 2026-11-24 no longer
+ * rendered); a live one becomes a ghost when its page is visited. Searches
+ * run on an index in memory, rebuilt in the background every ten minutes
+ * and at once when someone opts in or out.
  */
 export class Explore extends Context.Service<
   Explore,
@@ -61,27 +63,11 @@ export class Explore extends Context.Service<
         LEFT JOIN app.users u ON u.id = p.user_id
         WHERE p.listed AND (p.kind = 'ghost' OR (p.kind = 'account'
           AND (u.email_verified_at IS NOT NULL OR u.github_id IS NOT NULL)))`);
-      // The registry's copy, where it was carried over (not in tests).
-      const legacy = sql.unsafe(`
-        -- Its updated_at marks the registry's bulk re-syncs, not edits.
-        SELECT r.username, ${part('r.resume::jsonb')} AS resume,
-               NULL::timestamptz AS updated_at
-        FROM public.resumes r
-        WHERE pg_input_is_valid(r.resume, 'jsonb')
-          AND NOT EXISTS (SELECT 1 FROM app.profiles p WHERE p.username = lower(r.username))`);
-      const hasLegacy = sql`SELECT to_regclass('public.resumes') IS NOT NULL AS listed`;
-
       const build: Effect.Effect<Index> = Effect.gen(function* () {
-        const ours = yield* Effect.flatMap(here, decodeRows);
-        const old = (yield* Effect.flatMap(
-          hasLegacy,
-          Schema.decodeUnknownEffect(Listed)
-        ))[0]?.listed
-          ? yield* Effect.flatMap(legacy, decodeRows)
-          : [];
+        const rows = yield* Effect.flatMap(here, decodeRows);
         const seen = new Set<string>();
         const index: Entry[] = [];
-        for (const r of [...ours, ...old]) {
+        for (const r of rows) {
           const handle = parseHandle(`@${r.username}`);
           const name = handle?.username;
           if (!name || seen.has(name) || reservedUsernames.has(name)) continue;
