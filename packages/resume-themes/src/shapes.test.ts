@@ -27,8 +27,27 @@ const messy = {
   interests: { posts: [{ url: '/feed' }], skills: [{ kind: 'x' }] },
 };
 
+/** Ratings as numbers (a 1-5 scale) or lists (2026-11-24, elegant failed). */
+const rated = {
+  basics: { name: 'Ada', label: 'Engineer' },
+  skills: [
+    { name: 'Android', level: 5, keywords: ['Kotlin'] },
+    { name: 'Go', level: ['senior'] },
+  ],
+  languages: [{ language: 'Polish', fluency: 5 }],
+};
+
 describe('schema shapes', () => {
   const fixed = withSchemaShapes(messy);
+
+  it('reads ratings as text, and drops one that isn’t', () => {
+    const shaped = withSchemaShapes(rated);
+    expect(shaped['skills']).toEqual([
+      { name: 'Android', level: '5', keywords: ['Kotlin'] },
+      { name: 'Go' },
+    ]);
+    expect(shaped['languages']).toEqual([{ language: 'Polish', fluency: '5' }]);
+  });
 
   it('names profiles from their address and drops empty ones', () => {
     expect(fixed['basics']).toMatchObject({
@@ -62,8 +81,10 @@ describe('schema shapes', () => {
     'renders %s with them',
     { timeout: 30_000 },
     async (theme) => {
-      const html = await Effect.runPromise(renderTheme(theme, messy));
-      expect(html).toMatch(/<meta[^>]+charset/i);
+      for (const resume of [messy, rated]) {
+        const html = await Effect.runPromise(renderTheme(theme, resume));
+        expect(html).toMatch(/<meta[^>]+charset/i);
+      }
     }
   );
 });
