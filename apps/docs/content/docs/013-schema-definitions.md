@@ -1,9 +1,14 @@
 ---
 title: "Schema Definitions"
-description: "Internal architecture notes for contributors"
+description: "Legacy internals: the retired Next.js apps, kept for reference"
 ---
 
 # Schema Definitions
+
+> **Legacy app.** This page describes `apps/registry` and `apps/homepage2`, the
+> Next.js apps jsonresume.org ran on until October 2026. They are kept for
+> reference only: the live site is `apps/app`, and its code is in
+> [How jsonresume.org is built](/architecture).
 
 This module defines the JSON schema and TypeScript types that model the structure of resumes within the system. It provides a comprehensive, strongly typed contract for all resume sections, including personal information, work history, education, skills, and metadata. These schemas enable validation, tooling, and consistent data interchange across components that consume or produce resume data.
 

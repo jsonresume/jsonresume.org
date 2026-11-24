@@ -1,9 +1,14 @@
 ---
 title: "Explore Module"
-description: "Internal architecture notes for contributors"
+description: "Legacy internals: the retired Next.js apps, kept for reference"
 ---
 
 # Explore Module
+
+> **Legacy app.** This page describes `apps/registry` and `apps/homepage2`, the
+> Next.js apps jsonresume.org ran on until October 2026. They are kept for
+> reference only: the live site is `apps/app`, and its code is in
+> [How jsonresume.org is built](/architecture).
 
 The Explore Module provides the core functionality for browsing, filtering, and paginating professional resumes stored in the JSON Resume Registry. It supports client-side filtering by name, location, and position, as well as server-driven search and pagination. The module integrates UI components for displaying resumes, filter controls, search bars, and loading states, orchestrating data fetching and user interaction.
 

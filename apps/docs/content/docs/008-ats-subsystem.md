@@ -1,9 +1,14 @@
 ---
 title: "ATS Subsystem"
-description: "Internal architecture notes for contributors"
+description: "Legacy internals: the retired Next.js apps, kept for reference"
 ---
 
 # ATS Subsystem
+
+> **Legacy app.** This page describes `apps/registry` and `apps/homepage2`, the
+> Next.js apps jsonresume.org ran on until October 2026. They are kept for
+> reference only: the live site is `apps/app`, and its code is in
+> [How jsonresume.org is built](/architecture).
 
 The ATS Subsystem evaluates resumes for Applicant Tracking System (ATS) compatibility by scoring various structural and content elements. It performs checks on contact information, work experience, education, skills, keywords, date formatting, and theme compatibility, generating a comprehensive score, rating, and actionable recommendations to improve ATS performance.
 

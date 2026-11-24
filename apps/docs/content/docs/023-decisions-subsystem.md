@@ -1,9 +1,14 @@
 ---
 title: "Decisions Subsystem"
-description: "Internal architecture notes for contributors"
+description: "Legacy internals: the retired Next.js apps, kept for reference"
 ---
 
 # Decisions Subsystem
+
+> **Legacy app.** This page describes `apps/registry` and `apps/homepage2`, the
+> Next.js apps jsonresume.org ran on until October 2026. They are kept for
+> reference only: the live site is `apps/app`, and its code is in
+> [How jsonresume.org is built](/architecture).
 
 The Decisions Subsystem implements AI-powered job matching, decision tree visualization, and user interface components to assist candidates in evaluating job opportunities. It integrates candidate resumes, job data, and user preferences to score and rank jobs, visualize decision criteria, and capture user decisions. This subsystem orchestrates data fetching, scoring logic, decision tree state management, and UI rendering to provide an interactive decision support experience.
 

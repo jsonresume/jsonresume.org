@@ -1,9 +1,14 @@
 ---
 title: "Layout and Navigation"
-description: "Internal architecture notes for contributors"
+description: "Legacy internals: the retired Next.js apps, kept for reference"
 ---
 
 # Layout and Navigation
+
+> **Legacy app.** This page describes `apps/registry` and `apps/homepage2`, the
+> Next.js apps jsonresume.org ran on until October 2026. They are kept for
+> reference only: the live site is `apps/app`, and its code is in
+> [How jsonresume.org is built](/architecture).
 
 This module implements the layout components and navigation user interface for the application, including the page structure, header, user search, and embedded scripts. It manages user context via URL routing and provides interactive elements such as autocomplete user selection and navigation links. The components coordinate to render a consistent UI framework around dynamic page content.
 

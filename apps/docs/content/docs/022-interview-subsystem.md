@@ -1,9 +1,14 @@
 ---
 title: "Interview Subsystem"
-description: "Internal architecture notes for contributors"
+description: "Legacy internals: the retired Next.js apps, kept for reference"
 ---
 
 # Interview Subsystem
+
+> **Legacy app.** This page describes `apps/registry` and `apps/homepage2`, the
+> Next.js apps jsonresume.org ran on until October 2026. They are kept for
+> reference only: the live site is `apps/app`, and its code is in
+> [How jsonresume.org is built](/architecture).
 
 The Interview Subsystem implements an interactive interview experience between two roles: an interviewer and a candidate. It manages conversational state, user input, and streaming AI-generated responses to simulate a live interview. The subsystem includes UI components, hooks for state management, API utilities for streaming responses, and styled components for consistent presentation.
 

@@ -1,9 +1,14 @@
 ---
 title: "Logging and Activity Tracking"
-description: "Internal architecture notes for contributors"
+description: "Legacy internals: the retired Next.js apps, kept for reference"
 ---
 
 # Logging and Activity Tracking
+
+> **Legacy app.** This page describes `apps/registry` and `apps/homepage2`, the
+> Next.js apps jsonresume.org ran on until October 2026. They are kept for
+> reference only: the live site is `apps/app`, and its code is in
+> [How jsonresume.org is built](/architecture).
 
 This module provides comprehensive facilities for tracking user and system activities within the Pathways application. It includes utilities for batching and sending activity logs to the server, managing toast notifications for user feedback, and maintaining persistent job state information both locally and remotely. These components work together to capture meaningful user interactions, system events, and state changes, enabling analytics, debugging, and enhanced user experience.
 

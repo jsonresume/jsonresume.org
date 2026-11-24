@@ -1,9 +1,14 @@
 ---
 title: "Resume Editor"
-description: "Internal architecture notes for contributors"
+description: "Legacy internals: the retired Next.js apps, kept for reference"
 ---
 
 # Resume Editor
+
+> **Legacy app.** This page describes `apps/registry` and `apps/homepage2`, the
+> Next.js apps jsonresume.org ran on until October 2026. They are kept for
+> reference only: the live site is `apps/app`, and its code is in
+> [How jsonresume.org is built](/architecture).
 
 The Resume Editor subsystem provides a comprehensive set of React GUI components and hooks designed for editing various sections of a resume and managing the resume state. It offers fine-grained update handlers for different resume sections, enabling seamless state synchronization and user interaction within a resume editing application.
 
