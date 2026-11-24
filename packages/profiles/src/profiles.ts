@@ -113,11 +113,13 @@ export class Profiles extends Context.Service<
             const found = yield* github.find(login, file);
             return done({ resume: found.resume, stale: false }, 'gist');
           }
+          // A gist its owner deleted or hid takes the page down, as for a
+          // ghost; the account stays, and a new gist brings the page back.
           const result = yield* mirrored(
             login,
             profile.mirror,
             (m) => store.saveMirror(username, m),
-            Effect.void
+            store.dropMirror(username)
           );
           return done(result, 'account');
         }

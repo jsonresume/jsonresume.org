@@ -242,6 +242,27 @@ describe('Profiles.resume', () => {
     }).pipe(run(layer));
   });
 
+  it('takes an account’s page down when its gist is made secret', () => {
+    const { github, layer } = setup(undefined, [account()]);
+    const mine = 'mine' as Username;
+    return Effect.gen(function* () {
+      const profiles = yield* Profiles;
+      yield* profiles.resume(mine);
+      const gists = github.state.users.get('foo')?.gists ?? [];
+      github.state.users.set('foo', {
+        id: 7,
+        gists: gists.map((g) => ({ ...g, secret: true })),
+      });
+      yield* TestClock.adjust(Duration.minutes(5));
+      yield* profiles.resume(mine);
+      yield* settle;
+      const error = yield* Effect.flip(profiles.resume(mine));
+      expect(error).toMatchObject({ _tag: 'ProfileNotFound' });
+      const kept = yield* (yield* ProfileStore).find('mine');
+      expect(kept).toMatchObject({ kind: 'account', mirror: undefined });
+    }).pipe(run(layer));
+  });
+
   it('serves an account’s stored copy when it chose one', () => {
     const { github, layer } = setup(undefined, [
       account({ source: 'stored', stored: { basics: { name: 'Saved' } } }),
