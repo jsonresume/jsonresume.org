@@ -35,7 +35,7 @@ describe('every page', () => {
   // Account and dashboard pages stay out of search; the dashboard is an
   // empty shell until the browser loads the session.
   const isPrivate = (path: string) =>
-    /^\/(signin|signup|dashboard|forgot-password|reset-password|oauth|jobs\/email)/.test(
+    /^\/(signin|signup|dashboard|forgot-password|reset-password|oauth|jobs\/email|emails$)/.test(
       path
     );
   const isApp = (path: string) => path.startsWith('/dashboard');

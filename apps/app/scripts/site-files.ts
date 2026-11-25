@@ -12,7 +12,7 @@ import { join } from 'node:path';
 const ORIGIN = 'https://jsonresume.org';
 /** Account pages, the dashboard and OAuth consent stay out of search. */
 const PRIVATE =
-  /^\/(signin|signup|forgot-password|reset-password|dashboard|oauth|jobs\/email)(\/|$)/;
+  /^\/(signin|signup|forgot-password|reset-password|dashboard|oauth|jobs\/email|emails)(\/|$)/;
 /** What crawlers skip: the signed-in app, the API, consent, analytics. */
 export const DISALLOW = ['/api/', '/dashboard', '/oauth/', '/ingest/'];
 
