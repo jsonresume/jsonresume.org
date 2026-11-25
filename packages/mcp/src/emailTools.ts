@@ -35,7 +35,7 @@ export const EmailHandlers = EmailToolkit.toLayer(
       set_email_settings: (change) =>
         Effect.gen(function* () {
           const user = yield* caller;
-          return yield* setEmailSettings(user.id, change, 'agent');
+          return yield* setEmailSettings(user.id, change, 'mcp');
         }).pipe(Effect.provide(services)),
     };
   })

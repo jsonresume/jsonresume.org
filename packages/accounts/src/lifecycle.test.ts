@@ -191,3 +191,41 @@ describe('compose', () => {
     expect(mail.text).toContain('discord.gg');
   });
 });
+
+describe('campaign tags', () => {
+  it('tags links to our pages with the email they came from, not API links', () => {
+    const mail = compose({
+      to: 'a@b.c',
+      site: 'https://jsonresume.org',
+      campaign: 'welcome',
+      subject: 'Hi',
+      preview: 'Hi',
+      heading: 'Hi',
+      intro: [],
+      action: { label: 'Go', url: 'https://jsonresume.org/@ada' },
+      items: [
+        {
+          title: 'Themes',
+          text: 't',
+          url: 'https://jsonresume.org/themes?x=1',
+        },
+        {
+          title: 'Verify',
+          text: 'v',
+          url: 'https://jsonresume.org/api/auth/verify?token=t',
+        },
+        { title: 'Elsewhere', text: 'e', url: 'https://github.com/jsonresume' },
+      ],
+    });
+    expect(mail.text).toContain(
+      'https://jsonresume.org/@ada?utm_source=email&utm_medium=email&utm_campaign=welcome'
+    );
+    expect(mail.text).toContain(
+      'https://jsonresume.org/themes?x=1&utm_source=email&utm_medium=email&utm_campaign=welcome'
+    );
+    expect(mail.text).toContain(
+      'https://jsonresume.org/api/auth/verify?token=t\n'
+    );
+    expect(mail.text).toContain('https://github.com/jsonresume\n');
+  });
+});

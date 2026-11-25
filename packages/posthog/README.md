@@ -33,5 +33,21 @@ Product analytics in PostHog (project 134598, US cloud), cookie-free.
 | `oauth_app_created`     | Settings, Your OAuth apps                   |                         |
 | `oauth_access_granted`  | the consent page                            | `client_id`, `scope`    |
 | `mcp_tool_called`       | `/mcp`                                      | `tool`                  |
+| `email_sent`            | every automatic email (`@repo/accounts` lifecycle, `@repo/resume-report`, `@repo/job-digest`) | `kind` (welcome, verify_reminder, verify_last_call, empty_page, report, weekly_jobs), `jobs` |
+| `email_settings_changed` | `/emails`, Settings → Emails, one-click unsubscribe, MCP | what changed, `via` (link, settings, one-click, mcp) |
+
+Browser events (`track` from `@repo/posthog/browser`):
+
+| Event                   | Where                                       | Properties              |
+| ----------------------- | ------------------------------------------- | ----------------------- |
+| `start_step`, `start_import_result`, `start_save_clicked` | `/start` | `step`, `kind`, `ok`, `theme` |
+| `sign_in_failed`        | `/signin`                                   | `reason` (no-account, github, password, or the error) |
+| `sign_up_failed`        | `/signup`                                   | `reason`                |
+| `explore_searched`      | `/explore`                                  | `terms`, `total`, `page`, `skills` (the words, only when all are popular skills) |
+| `explore_result_opened` | a result on `/explore`                      | `rank`, `page`, `terms`, `skills` |
+| `editor_mode_changed`   | the editor's Form / JSON switch             | `mode`                  |
+| `page_not_found`        | the 404 page                                | `path`, `from` (referring host) |
+
+Emails tag links to our pages with `utm_source=email&utm_medium=email&utm_campaign=<kind>` (`compose`'s `campaign`), so PostHog's page views say which email a visit came from.
 
 Never put an email, a name or resume text in an event.

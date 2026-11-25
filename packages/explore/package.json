@@ -18,6 +18,7 @@
     "lint": "eslint src --ext .ts,.tsx"
   },
   "dependencies": {
+    "@repo/posthog": "workspace:*",
     "@jsonresume/ui": "workspace:*",
     "@repo/api": "workspace:*",
     "@repo/images": "workspace:*",

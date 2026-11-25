@@ -38,6 +38,7 @@ export function digestEmail(
   const { text, html } = compose({
     to: '',
     site,
+    campaign: 'weekly_jobs',
     subject,
     preview: jobs
       .slice(0, 3)

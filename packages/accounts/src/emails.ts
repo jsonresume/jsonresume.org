@@ -52,6 +52,7 @@ export const verifyReminderEmail =
     compose({
       to,
       site: siteUrl,
+      campaign: 'verify_reminder',
       subject: `Your page at /@${username} is waiting`,
       preview: 'Here is a fresh link to confirm your email.',
       heading: 'One step left',
@@ -75,6 +76,7 @@ export const verifyLastCallEmail =
     compose({
       to,
       site: siteUrl,
+      campaign: 'verify_last_call',
       subject: `Last day to keep @${username} on JSON Resume`,
       preview: `Confirm your email by ${day(heldUntil)} to keep the name.`,
       heading: `Keep @${username}?`,
@@ -100,6 +102,7 @@ export const passwordResetEmail = (
   compose({
     to,
     site: siteUrl,
+    campaign: 'password_reset',
     subject: 'Reset your JSON Resume password',
     preview: 'Choose a new password for your account.',
     heading: 'Reset your password',

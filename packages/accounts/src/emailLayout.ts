@@ -39,8 +39,32 @@ export interface EmailContent {
     links?: ReadonlyArray<{ label: string; url: string }>;
   };
   site: string;
+  /** Tags this email's links to our pages (utm_campaign), so clicks count. */
+  campaign?: string;
   headers?: Record<string, string>;
 }
+
+/** A link to one of our pages, tagged with the email it came from. */
+const tagged = (url: string, site: string, campaign: string | undefined) => {
+  if (!campaign || !url.startsWith(site) || url.startsWith(`${site}/api/`))
+    return url;
+  const tags = `utm_source=email&utm_medium=email&utm_campaign=${campaign}`;
+  return `${url}${url.includes('?') ? '&' : '?'}${tags}`;
+};
+
+/** The content with its links tagged (see tagged). */
+const withTags = (c: EmailContent): EmailContent => ({
+  ...c,
+  action: { ...c.action, url: tagged(c.action.url, c.site, c.campaign) },
+  ...(c.items
+    ? {
+        items: c.items.map((it) => ({
+          ...it,
+          url: tagged(it.url, c.site, c.campaign),
+        })),
+      }
+    : {}),
+});
 
 /** The text version: the same words, links written out. */
 const plain = (c: EmailContent) =>
@@ -76,7 +100,8 @@ const plain = (c: EmailContent) =>
  * button, an optional list, and the same footer. Tables and inline styles,
  * so it holds together in Gmail and Outlook; dark mode where supported.
  */
-export function compose(c: EmailContent): Mail {
+export function compose(content: EmailContent): Mail {
+  const c = withTags(content);
   const items = c.items?.length
     ? `<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 12px">${c.items
         .map((it, i) => item(it, c.numbered ? i + 1 : undefined))

@@ -8,7 +8,9 @@ import {
   Section,
   SectionIntro,
 } from '@jsonresume/ui';
+import { track } from '@repo/posthog/browser';
 import { useRouterState } from '@tanstack/react-router';
+import { useEffect } from 'react';
 import { paths, resumeUrl } from '../links';
 import { SiteLink } from '../SiteLink';
 import * as l from './shared/layout.css';
@@ -44,6 +46,16 @@ const usernameIn = (pathname: string) =>
 export function NotFoundPage() {
   const pathname = useRouterState({ select: (r) => r.location.pathname });
   const username = usernameIn(pathname);
+  // Which missing pages people reach, and from where: broken links to fix.
+  useEffect(() => {
+    let from = 'direct';
+    try {
+      if (document.referrer) from = new URL(document.referrer).host;
+    } catch {
+      from = 'unknown';
+    }
+    track('page_not_found', { path: pathname.slice(0, 120), from });
+  }, [pathname]);
   return (
     <>
       {/* React hoists this into <head>; missing pages stay out of search. */}

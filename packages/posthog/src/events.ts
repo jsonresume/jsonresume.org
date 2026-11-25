@@ -21,7 +21,9 @@ export type ProductEventName =
   | 'theme_chosen'
   | 'jobs_decided'
   | 'job_marked'
-  | 'job_preferences_saved';
+  | 'job_preferences_saved'
+  | 'email_sent'
+  | 'email_settings_changed';
 
 /** Plain values only: never an email, a name or resume text. */
 export type ProductEventProperties = Readonly<

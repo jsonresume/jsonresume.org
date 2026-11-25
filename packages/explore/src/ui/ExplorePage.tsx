@@ -14,6 +14,7 @@ import {
 import type { ExploreResults } from '@repo/api';
 import { proxiedImage } from '@repo/images/url';
 import * as s from './explore.css';
+import { useExploreTracking } from './tracking';
 
 export interface ExploreLinks {
   /** A person's resume. */
@@ -45,6 +46,7 @@ export function ExplorePage({
   links: ExploreLinks;
 }) {
   const { query, people, total, page, pageCount, popularSkills } = results;
+  const opened = useExploreTracking(query, total, page, popularSkills);
   return (
     <>
       <Hero
@@ -101,21 +103,23 @@ export function ExplorePage({
                 Every word has to match: try fewer, or another spelling.
               </EmptyState>
             ) : (
-              <Grid gap={4} minColumnWidth="18rem">
-                {people.map((p) => (
-                  <ResumeCard
-                    key={p.username}
-                    name={p.name}
-                    label={p.label ?? undefined}
-                    avatarUrl={proxiedImage(p.image, 96)}
-                    location={p.location ?? undefined}
-                    skills={p.skills.slice(0, 5)}
-                    updated={updated(p.updatedAt)}
-                    href={links.person(p.username)}
-                    headingLevel={2}
-                  />
-                ))}
-              </Grid>
+              <div onClickCapture={opened}>
+                <Grid gap={4} minColumnWidth="18rem">
+                  {people.map((p) => (
+                    <ResumeCard
+                      key={p.username}
+                      name={p.name}
+                      label={p.label ?? undefined}
+                      avatarUrl={proxiedImage(p.image, 96)}
+                      location={p.location ?? undefined}
+                      skills={p.skills.slice(0, 5)}
+                      updated={updated(p.updatedAt)}
+                      href={links.person(p.username)}
+                      headingLevel={2}
+                    />
+                  ))}
+                </Grid>
+              </div>
             )}
             <Pagination
               page={page}

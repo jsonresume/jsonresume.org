@@ -65,6 +65,7 @@ export function reportEmail(
   return compose({
     to: who.to,
     site,
+    campaign: 'report',
     subject: `${people(totals.visitors)} read your resume this month`,
     preview: [
       change ? `That’s ${change}.` : '',

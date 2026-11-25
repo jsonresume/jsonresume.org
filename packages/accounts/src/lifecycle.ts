@@ -2,6 +2,7 @@ import { Clock, Config, Duration, Effect, Redacted, Schema } from 'effect';
 import { SqlClient } from 'effect/sql';
 import { accountsCore, UNVERIFIED_TTL } from './core';
 import { verifyLastCallEmail, verifyReminderEmail } from './emails';
+import { track } from '@repo/posthog';
 import { emailPrefs } from './emailPrefs';
 import { emailLinks } from './emailToken';
 import { emptyPageEmail, welcomeEmail } from './lifecycleMail';
@@ -146,6 +147,7 @@ export const lifecycleEmails = Effect.gen(function* () {
         const kind = dueEmail(c, now);
         if (kind && (yield* claim(c.userId, kind))) {
           yield* send(c, kind);
+          yield* track(c.userId, 'email_sent', { kind });
           sent += 1;
         }
       }
