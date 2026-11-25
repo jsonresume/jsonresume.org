@@ -9,6 +9,9 @@ export const page = style({
   paddingBlock: space[8],
 });
 
+/** The current step: its parts spaced as the page spaces them. */
+export const step = style({ display: 'grid', gap: space[8] });
+
 export const ways = style({
   display: 'grid',
   gap: space[4],
