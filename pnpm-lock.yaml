@@ -337,6 +337,9 @@ importers:
       '@effect/vitest':
         specifier: 4.0.6
         version: 4.0.6(effect@4.0.6)(vitest@4.1.12)
+      '@jsonresume/schema':
+        specifier: workspace:*
+        version: link:../../packages/schema
       '@playwright/test':
         specifier: 1.56.1
         version: 1.56.1
