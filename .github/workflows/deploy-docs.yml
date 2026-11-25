@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
+      url: ${{ steps.deploy.outputs.page_url || steps.deploy-again.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -51,8 +51,8 @@ jobs:
         run: pnpm --filter docs build
 
       # No CNAME: docs are served from the GitHub Pages project URL
-      # (jsonresume.github.io/jsonresume.org) behind a jsonresume.org/docs
-      # rewrite in apps/homepage2.
+      # (jsonresume.github.io/jsonresume.org), proxied at jsonresume.org/docs
+      # by the box's Caddy.
 
       - name: Disable Jekyll
         run: touch apps/docs/out/.nojekyll
@@ -65,6 +65,19 @@ jobs:
         with:
           path: apps/docs/out
 
+      # deploy-pages sometimes finds no artifact seconds after it was
+      # uploaded (3 of 5 runs failed so on 2026-11-23..24, upload fine):
+      # GitHub's artifact list lags. Try once more after a pause.
       - name: Deploy
         id: deploy
+        continue-on-error: true
+        uses: actions/deploy-pages@v5
+
+      - name: Wait for the artifact to be listed
+        if: steps.deploy.outcome == 'failure'
+        run: sleep 45
+
+      - name: Deploy (again)
+        id: deploy-again
+        if: steps.deploy.outcome == 'failure'
         uses: actions/deploy-pages@v5
