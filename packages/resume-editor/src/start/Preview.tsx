@@ -77,8 +77,11 @@ export function Preview() {
         />
         <div className={s.aside}>
           <Text size="sm" tone="muted">
-            These themes read cleanly in applicant-tracking systems and print
-            well. You can switch to any of the others later.
+            {START_THEMES.includes(theme)
+              ? 'These themes read cleanly in applicant-tracking systems and print well. You can switch to any of the others later.'
+              : `${
+                  THEME_METADATA[theme]?.name ?? theme
+                } is the look you picked. The others here read cleanly in applicant-tracking systems; you can switch any time.`}
           </Text>
           <Button asChild variant="primary" size="lg">
             <a

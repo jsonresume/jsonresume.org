@@ -1,15 +1,18 @@
 import { RegistryProvider, useAtom, useAtomValue } from '@effect/atom-react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { clearStartDraft, readStartDraft, writeStartDraft } from './draft';
 import { parseSkills, skillsText, tidy } from './guided';
 import { Guided } from './Guided';
+import { Preview } from './Preview';
 import { pathOf, pointerLabel } from './pointer';
 import { foundSummary, Review } from './Review';
 import {
   startImportAtom,
   startResumeAtom,
+  START_THEMES,
   startStepAtom,
+  startThemeAtom,
   withTheme,
 } from './state';
 
@@ -163,5 +166,39 @@ describe('Guided', () => {
     fireEvent.click(screen.getByRole('button', { name: 'See it in a theme' }));
     fireEvent.click(screen.getByRole('button', { name: 'Back to editing' }));
     expect(screen.getByLabelText('Company')).toBeTruthy();
+  });
+});
+
+describe('the preview', () => {
+  // jsdom has no ResizeObserver; the preview frame watches its width.
+  beforeEach(() =>
+    vi.stubGlobal(
+      'ResizeObserver',
+      class {
+        observe() {}
+        unobserve() {}
+        disconnect() {}
+      }
+    )
+  );
+  afterEach(() => vi.unstubAllGlobals());
+
+  const at = (theme: string) =>
+    render(
+      <RegistryProvider initialValues={[[startThemeAtom, theme]]}>
+        <Preview />
+      </RegistryProvider>
+    );
+
+  it('says the listed themes read cleanly in applicant-tracking systems', () => {
+    at(START_THEMES[0] ?? 'elegant');
+    expect(screen.getByText(/These themes read cleanly/)).toBeInTheDocument();
+  });
+
+  it('names a theme picked from the gallery as the reader’s own choice', () => {
+    at('kendall');
+    expect(
+      screen.getByText(/Kendall is the look you picked/)
+    ).toBeInTheDocument();
   });
 });
