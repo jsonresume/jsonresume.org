@@ -49,6 +49,22 @@ describe('schema shapes', () => {
     expect(shaped['languages']).toEqual([{ language: 'Polish', fluency: '5' }]);
   });
 
+  it('reads a photo written as an object (Reactive Resume) as its URL', () => {
+    const shaped = withSchemaShapes({
+      basics: {
+        name: 'Ada',
+        picture: { url: 'https://x.test/ada.png', size: 64 },
+        image: { url: '', size: 64 },
+        photo: 'https://x.test/kept.png',
+      },
+    });
+    expect(shaped['basics']).toMatchObject({
+      picture: 'https://x.test/ada.png',
+      photo: 'https://x.test/kept.png',
+    });
+    expect(shaped['basics']).not.toHaveProperty('image');
+  });
+
   it('names profiles from their address and drops empty ones', () => {
     expect(fixed['basics']).toMatchObject({
       name: '',

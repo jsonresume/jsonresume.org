@@ -109,6 +109,24 @@ const asList = (section: string, value: unknown): unknown[] => {
   return [];
 };
 
+/**
+ * A photo as themes read it, a URL: Reactive Resume exports picture as
+ * { url, size, effects, ... }, which themes printed into the img src as
+ * text. An object's url is kept; anything else that isn't text goes.
+ */
+const PHOTOS = ['image', 'picture', 'photo'];
+const withPhotoUrls = (basics: Entry): Entry => {
+  const out: Entry = { ...basics };
+  for (const key of PHOTOS) {
+    const value = out[key];
+    if (value === undefined || Predicate.isString(value)) continue;
+    const url = Predicate.isObject(value) ? value['url'] : undefined;
+    if (Predicate.isString(url) && url.trim()) out[key] = url;
+    else delete out[key];
+  }
+  return out;
+};
+
 /** Every section a list of entries, their text lists and ratings text, profiles named, and a name. */
 export const withSchemaShapes = (resume: ResumeDocument): ResumeDocument => {
   const out: Entry = { ...resume };
@@ -118,7 +136,7 @@ export const withSchemaShapes = (resume: ResumeDocument): ResumeDocument => {
   }
   const basics = Predicate.isObject(out['basics']) ? out['basics'] : {};
   out['basics'] = {
-    ...basics,
+    ...withPhotoUrls(basics),
     name: Predicate.isString(basics['name']) ? basics['name'] : '',
     profiles: profiles(basics['profiles']),
   };
