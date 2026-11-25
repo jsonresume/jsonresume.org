@@ -1,4 +1,4 @@
-import { handlePath, parseHandle } from '@repo/profiles';
+import { handlePath, parseHandle, resumeFormats } from '@repo/profiles';
 import { formatResume } from '@repo/resume-formats';
 import {
   DEFAULT_THEME,
@@ -104,6 +104,15 @@ export const resumeOutcome = Effect.fn('resumeOutcome')(function* (
       301
     );
   }
+  // /@name/json, a format written as a page: /@name.json, if no such variant.
+  const asFormat = resumeFormats.find((f) => f === variant);
+  if (
+    asFormat &&
+    format === 'html' &&
+    resolved._tag === 'Problem' &&
+    resolved.problem.kind === 'no-variant'
+  )
+    return redirect(handlePath(username, asFormat) + url.search, 301);
   if (resolved._tag !== 'Resume') return resolved;
 
   const doc = decodeDocument(resolved.resume);
