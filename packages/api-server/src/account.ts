@@ -1,7 +1,9 @@
 import { Accounts, type AccountRecord } from '@repo/accounts';
 import { THEME_METADATA } from '@jsonresume/theme-metadata';
 import { Account, CurrentUser, JsonResumeApi, UnknownTheme } from '@repo/api';
-import { Effect } from 'effect';
+import { Context, Effect } from 'effect';
+import { emailSettings, setEmailSettings } from '@repo/job-digest';
+import { PreferenceStore } from '@repo/jobs';
 import { HttpApiBuilder } from 'effect/http-api';
 import { clearSession } from './http';
 import { track } from '@repo/posthog';
@@ -41,6 +43,9 @@ export const AccountHandlers = HttpApiBuilder.group(
   (handlers) =>
     Effect.gen(function* () {
       const accounts = yield* Accounts;
+      const services = Context.make(Accounts, accounts).pipe(
+        Context.add(PreferenceStore, yield* PreferenceStore)
+      );
       const current = Effect.gen(function* () {
         const user = yield* CurrentUser;
         const record = yield* accounts.account(user.id);
@@ -77,6 +82,18 @@ export const AccountHandlers = HttpApiBuilder.group(
             const user = yield* CurrentUser;
             yield* accounts.setHiddenFields(user.id, payload.hidden);
             return { hidden: yield* accounts.hiddenFields(user.id) };
+          }),
+        emails: () =>
+          Effect.gen(function* () {
+            const user = yield* CurrentUser;
+            return yield* emailSettings(user.id).pipe(Effect.provide(services));
+          }),
+        setEmails: ({ payload }) =>
+          Effect.gen(function* () {
+            const user = yield* CurrentUser;
+            return yield* setEmailSettings(user.id, payload).pipe(
+              Effect.provide(services)
+            );
           }),
         setTheme: ({ payload }) =>
           Effect.gen(function* () {

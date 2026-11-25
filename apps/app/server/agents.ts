@@ -74,8 +74,11 @@ export const openPaths = [
   '/fonts/',
 ];
 
-/** Writes that clients make without a session (so no Origin check). */
-export const sessionless = oauthEndpoints;
+/**
+ * Writes that clients make without a session (so no Origin check): OAuth,
+ * and mail apps' one-click unsubscribe (RFC 8058), which carries a token.
+ */
+export const sessionless = [...oauthEndpoints, '/api/email-settings/stop'];
 
 /**
  * /mcp is both the MCP server and the page about it: a browser asking for

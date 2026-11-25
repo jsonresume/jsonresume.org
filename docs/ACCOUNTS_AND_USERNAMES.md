@@ -44,7 +44,9 @@ lowercase).
   `/@foo` stays a 404 until the email is verified and a resume is saved.
   Meanwhile its owner, signed in, still sees the page and its downloads
   (sent `noindex`; `apps/app/server/owner.ts`), so the dashboard's links work.
-  Unverified holds expire after 7 days.
+  Unverified holds expire after 7 days. A fresh link is emailed a day after
+  signup (the first runs out at 24 hours) and again the day before the hold
+  ends (`@repo/accounts` `lifecycle.ts`).
 - **Renames** are allowed. The old name 301s to the new one and stays retired
   for 90 days, then is free.
 - **Deleting** an account frees the name immediately. If GitHub `foo` has a

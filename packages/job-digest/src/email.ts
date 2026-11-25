@@ -1,3 +1,4 @@
+import { compose } from '@repo/accounts';
 import type { DecidedJob } from '@repo/api';
 
 export interface DigestEmail {
@@ -5,15 +6,6 @@ export interface DigestEmail {
   text: string;
   html: string;
 }
-
-const escape = (text: string) =>
-  text.replace(
-    /[&<>"']/g,
-    (c) =>
-      ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[
-        c
-      ] ?? c)
-  );
 
 const where = (job: DecidedJob) =>
   job.remote === 'remote_global' || job.remote === 'remote_region'
@@ -34,44 +26,43 @@ const verdictLabel = (job: DecidedJob) =>
 export function digestEmail(
   jobs: ReadonlyArray<DecidedJob>,
   site: string,
-  stopUrl: string
+  stopUrl: string,
+  settingsUrl: string
 ): DigestEmail {
   const n = jobs.length;
   const subject =
     n === 1
       ? `A new job that fits: ${jobs[0]?.title ?? ''}`
       : `${n} new jobs that fit your resume`;
-  const link = (job: DecidedJob) => `${site}/jobs/${job.id}`;
-  const text = [
-    'New on the JSON Resume job board this week, decided against your resume and preferences:',
-    '',
-    ...jobs.flatMap((job) => [
-      `${verdictLabel(job)}: ${job.title}`,
-      `  ${place(job)}`,
-      `  ${link(job)}`,
-      '',
-    ]),
-    `All your jobs: ${site}/dashboard/jobs`,
-    '',
-    `You get this because you turned on the weekly email in your job preferences. Stop it: ${stopUrl}`,
-  ].join('\n');
-  const items = jobs
-    .map(
-      (job) =>
-        `<li style="margin:0 0 16px"><strong>${escape(
-          verdictLabel(job)
-        )}</strong>: <a href="${escape(link(job))}">${escape(
-          job.title
-        )}</a><br><span style="color:#555">${escape(place(job))}</span></li>`
-    )
-    .join('');
-  const html = `<div style="font-family:sans-serif;line-height:1.5;max-width:560px">
-<p>New on the JSON Resume job board this week, decided against your resume and preferences:</p>
-<ul style="padding-left:20px">${items}</ul>
-<p><a href="${escape(`${site}/dashboard/jobs`)}">All your jobs</a></p>
-<p style="color:#777;font-size:13px">You get this because you turned on the weekly email in your job preferences. <a href="${escape(
-    stopUrl
-  )}">Stop these emails</a>.</p>
-</div>`;
-  return { subject, text, html };
+  const applies = jobs.filter((job) => job.decision.verdict === 'apply').length;
+  const { text, html } = compose({
+    to: '',
+    site,
+    subject,
+    preview: jobs
+      .slice(0, 3)
+      .map((job) => job.title)
+      .join(' · '),
+    heading: n === 1 ? 'A new job for you' : `${n} new jobs for you`,
+    intro: [
+      `New on the JSON Resume job board this week, decided against your resume and preferences${
+        applies > 0 ? `: ${applies} to apply for` : ''
+      }.`,
+    ],
+    action: { label: 'Open your jobs', url: `${site}/dashboard/jobs` },
+    items: jobs.map((job) => ({
+      tag: verdictLabel(job),
+      title: job.title,
+      text: place(job),
+      url: `${site}/jobs/${job.id}`,
+    })),
+    reason: {
+      text: 'You get this because you turned on the weekly email in your job preferences.',
+      links: [
+        { label: 'Stop these emails', url: stopUrl },
+        { label: 'Change your email settings', url: settingsUrl },
+      ],
+    },
+  });
+  return { subject, text, html: html ?? '' };
 }

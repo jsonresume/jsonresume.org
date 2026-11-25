@@ -2,7 +2,7 @@ import { GithubUnreachable, UsernameUnavailable } from '@repo/api';
 import { Usernames } from '@repo/profiles';
 import { Clock, Config, Duration, Effect } from 'effect';
 import { hashToken, newToken } from './crypto';
-import { verificationEmail } from './emails';
+import { verificationEmail, type VerifyTemplate } from './emails';
 import { Mailer } from './mailer';
 import { AccountStore, type UserRecord } from './store';
 
@@ -50,7 +50,8 @@ export const accountsCore = Effect.gen(function* () {
   });
 
   const sendVerification = Effect.fn('Accounts.sendVerification')(function* (
-    user: UserRecord
+    user: UserRecord,
+    template: VerifyTemplate = verificationEmail
   ) {
     if (!user.email || user.emailVerified) return;
     const token = newToken();
@@ -61,9 +62,7 @@ export const accountsCore = Effect.gen(function* () {
       yield* later(EMAIL_TOKEN_TTL),
       'verify'
     );
-    yield* mailer.send(
-      verificationEmail(user.email, user.username, siteUrl, token)
-    );
+    yield* mailer.send(template(user.email, user.username, siteUrl, token));
   });
 
   const claimable = Effect.fn('Accounts.claimable')(function* (

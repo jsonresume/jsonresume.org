@@ -40,6 +40,7 @@ import {
 } from './routes/auth';
 import { privacyRoute, termsRoute } from './routes/docs';
 import { companySpecRoute, jobSpecRoute, resumeSpecRoute } from './routes/spec';
+import { emailSettingsRoute } from './routes/emails';
 import { jobEmailStopRoute } from './routes/jobEmail';
 import { exploreRoute } from './routes/explore';
 import { companyRoute, jobRoute, jobsRoute } from './routes/jobs';
@@ -88,6 +89,7 @@ export const routeTree = rootRoute.addChildren([
     jobSpecRoute,
     companySpecRoute,
     jobEmailStopRoute,
+    emailSettingsRoute,
     termsRoute,
     blogRoute,
     postRoute,

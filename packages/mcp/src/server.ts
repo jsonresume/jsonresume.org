@@ -18,6 +18,7 @@ import { ProposalHandlers, ProposalToolkit } from './proposalTools';
 import { VariantHandlers, VariantToolkit } from './variantTools';
 import { DecisionHandlers, DecisionToolkit } from './decisionTools';
 import { PrivacyHandlers, PrivacyToolkit } from './privacyTools';
+import { EmailHandlers, EmailToolkit } from './emailTools';
 import { JobHandlers, JobToolkit } from './jobTools';
 import { CompanyHandlers, CompanyToolkit } from './companyTools';
 import { Prompts } from './prompts';
@@ -128,6 +129,7 @@ export const mcpRoutes = (site: string = SITE) =>
     McpServer.toolkit(ImportToolkit).pipe(Layer.provide(ImportHandlers)),
     McpServer.toolkit(AccountToolkit).pipe(Layer.provide(AccountHandlers)),
     McpServer.toolkit(PrivacyToolkit).pipe(Layer.provide(PrivacyHandlers)),
+    McpServer.toolkit(EmailToolkit).pipe(Layer.provide(EmailHandlers)),
     McpServer.toolkit(ExploreToolkit).pipe(Layer.provide(ExploreHandlers)),
     McpServer.toolkit(JobToolkit).pipe(Layer.provide(JobHandlers)),
     McpServer.toolkit(CompanyToolkit).pipe(Layer.provide(CompanyHandlers)),

@@ -18,6 +18,8 @@ so mail scanners can't stop it by fetching the link) and carries
 `List-Unsubscribe` + `List-Unsubscribe-Post` for one-click stops in mail
 apps (RFC 8058). Both call `POST /api/job-digest/stop`, which checks the
 token (`digestToken`, an HMAC of the user id under `AUTH_SECRET`).
+The footer also links to `/emails`, the settings page every email shares
+(`settings.ts` here; see `@repo/accounts` README).
 
 `runDigests` takes plain functions, so a week's run is tested without a
 database (`digest.test.ts`); the endpoint is tested in `@repo/api-server`.

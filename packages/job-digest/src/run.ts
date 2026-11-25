@@ -1,4 +1,5 @@
 import type { DecidedJob } from '@repo/api';
+import { emailLinks } from '@repo/accounts';
 import { Effect } from 'effect';
 import { digestEmail } from './email';
 import { pickJobs } from './pick';
@@ -55,7 +56,8 @@ export const runDigests = (
         const email = digestEmail(
           jobs,
           site,
-          `${site}/jobs/email/stop?${query}`
+          `${site}/jobs/email/stop?${query}`,
+          emailLinks(site, secret, person.id, 'weekly').settings
         );
         yield* deps.send({
           to: person.email,

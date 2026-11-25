@@ -9,6 +9,14 @@ export { decrypt, encrypt, hashToken, newToken, sign, unsign } from './crypto';
 export { GithubOAuth, GithubOAuthFailed } from './githubOAuth';
 export { RateLimiter } from './limiter';
 export { Mailer, type Mail } from './mailer';
+export { compose, type EmailContent, type EmailItem } from './emailLayout';
+export {
+  emailLinks,
+  emailToken,
+  validEmailToken,
+  type EmailKind,
+  type EmailLinks,
+} from './emailToken';
 export {
   AccountStore,
   GithubTaken,

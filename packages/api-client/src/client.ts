@@ -29,6 +29,7 @@ export const keys = {
   explore: ['explore'],
   career: ['career'],
   versions: ['versions'],
+  emails: ['emails'],
 } as const;
 
 export const sessionAtom = ApiClient.query('auth', 'session', {

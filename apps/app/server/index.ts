@@ -6,7 +6,7 @@
  */
 import { serve } from '@hono/node-server';
 import { NodeRuntime } from '@effect/platform-node';
-import { PurgeUnverified, apiRoutes } from '@repo/api-server';
+import { AccountJobs, apiRoutes } from '@repo/api-server';
 import { PgLive } from '@repo/database';
 import { createImageProxy, imageProxyPath } from '@repo/images';
 import { mcpRoutes } from '@repo/mcp';
@@ -77,7 +77,7 @@ const main = Effect.gen(function* () {
   const api = yield* Effect.acquireRelease(
     Effect.sync(() =>
       effectWebHandler(
-        Layer.mergeAll(apiRoutes(version), PurgeUnverified).pipe(
+        Layer.mergeAll(apiRoutes(version), AccountJobs).pipe(
           Layer.provide(services)
         ),
         { memoMap }

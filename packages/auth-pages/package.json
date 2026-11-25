@@ -5,7 +5,8 @@
   "description": "Sign in, sign up and choose-a-username pages for jsonresume.org",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./emails": "./src/emails.ts"
   },
   "sideEffects": [
     "**/*.css.ts"

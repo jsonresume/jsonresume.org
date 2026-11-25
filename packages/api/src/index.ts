@@ -5,6 +5,7 @@ import { AuthApi } from './AuthApi';
 import { CareerApi } from './CareerApi';
 import { EditorApi } from './EditorApi';
 import { EventsApi } from './EventsApi';
+import { EmailSettingsApi } from './EmailSettingsApi';
 import { JobDigestApi } from './JobDigestApi';
 import { ImportApi } from './ImportApi';
 import { ExploreApi, MyListingApi } from './ExploreApi';
@@ -72,6 +73,7 @@ export {
 export * from './errors';
 export { EditorApi, EditorResume } from './EditorApi';
 export { EventsApi, PingEvent, ViewEvent } from './EventsApi';
+export * from './EmailSettingsApi';
 export { JobDigestApi } from './JobDigestApi';
 export {
   FieldConfidence,
@@ -177,6 +179,7 @@ export class JsonResumeApi extends HttpApi.make('jsonresume')
   .add(CompaniesApi)
   .add(JobDecisionsApi)
   .add(JobDigestApi)
+  .add(EmailSettingsApi)
   .add(CareerApi)
   .add(ExploreApi)
   .add(MyListingApi)

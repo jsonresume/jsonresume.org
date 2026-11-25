@@ -14,6 +14,7 @@ import { variantTools } from './catalogVariants';
 import { decisionTools } from './catalogDecisions';
 import { jobTools } from './catalogJobs';
 import { accountTools } from './catalogAccount';
+import { emailTools } from './catalogEmails';
 import { privacyTools } from './catalogPrivacy';
 import { treeTools } from './catalogTree';
 import { versionTools } from './catalogVersions';
@@ -157,6 +158,7 @@ export const tools: ReadonlyArray<McpToolInfo> = [
   ...decisionTools,
   ...proposalTools,
   ...privacyTools,
+  ...emailTools,
   ...appTools,
   ...treeTools,
   ...versionTools,
