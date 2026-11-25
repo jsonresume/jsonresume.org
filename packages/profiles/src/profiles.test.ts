@@ -295,6 +295,31 @@ describe('Profiles.resume', () => {
     }).pipe(run(layer));
   });
 
+  it('shows its owner an unverified account’s page, but not an empty one', () => {
+    const { layer } = setup(undefined, [
+      account({
+        verified: false,
+        source: 'stored',
+        stored: { basics: { name: 'Saved' } },
+      }),
+      account({ username: 'empty', source: 'stored' }),
+    ]);
+    return Effect.gen(function* () {
+      const profiles = yield* Profiles;
+      const mine = 'mine' as Username;
+      expect(yield* profiles.resume(mine, { owner: true })).toMatchObject({
+        resume: { basics: { name: 'Saved' } },
+      });
+      expect(
+        yield* Effect.flip(profiles.resume(mine, { owner: false }))
+      ).toMatchObject({ reason: 'unpublished' });
+      const empty = 'empty' as Username;
+      expect(
+        yield* Effect.flip(profiles.resume(empty, { owner: true }))
+      ).toMatchObject({ reason: 'unpublished' });
+    }).pipe(run(layer));
+  });
+
   it('redirects an alias to its account', () => {
     const { layer } = setup(undefined, [
       { kind: 'alias', username: 'foo', target: 'mine' },

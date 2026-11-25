@@ -46,9 +46,13 @@ const metaTheme = (doc: ResumeDocument) => {
  * Theme: ?theme=, then the resume's meta.theme, then elegant; ?theme=random
  * redirects to a random one. Paper (PDF and Word): ?paper=a4|letter, else
  * the owner's country's. ?fit=1 fits a PDF slightly over a page onto one.
- * Other gist files with ?gistname=.
+ * Other gist files with ?gistname=. `owner`: the signed-in owner is asking,
+ * who sees their page before it is published.
  */
-export const resumeOutcome = Effect.fn('resumeOutcome')(function* (url: URL) {
+export const resumeOutcome = Effect.fn('resumeOutcome')(function* (
+  url: URL,
+  options: { owner?: boolean } = {}
+) {
   const path = variantPath(url.pathname) ?? {
     handle: url.pathname.slice(1).replace(/^%40/i, '@'),
     variant: undefined,
@@ -92,7 +96,7 @@ export const resumeOutcome = Effect.fn('resumeOutcome')(function* (url: URL) {
   }
 
   const file = url.searchParams.get('gistname') ?? undefined;
-  const resolved = yield* lookup(username, file, page, variant);
+  const resolved = yield* lookup(username, file, page, variant, options.owner);
   if (resolved._tag === 'Moved') {
     const to = handlePath(resolved.username, format);
     return redirect(
