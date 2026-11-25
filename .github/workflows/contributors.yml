@@ -2,9 +2,12 @@
 # there) every week, and opens or updates a pull request when someone new
 # has contributed or a count has changed.
 #
-# The pull request is opened with the GitHub App token (APP_ID /
-# APP_PRIVATE_KEY, as in release-packages.yml) so that CI runs on it: pull
-# requests opened with the default GITHUB_TOKEN don't trigger workflows.
+# The list is read with the workflow's own token: the GitHub App's has no
+# issues permission, and without it GitHub's issues endpoint quietly
+# returns only pull requests (the first run lost every issue that way).
+# The pull request is opened with the App token (APP_ID / APP_PRIVATE_KEY,
+# as in release-packages.yml) so that CI runs on it: pull requests opened
+# with the default GITHUB_TOKEN don't trigger workflows.
 name: Contributors
 
 on:
@@ -14,6 +17,8 @@ on:
 
 permissions:
   contents: read
+  issues: read
+  pull-requests: read
 
 concurrency:
   group: contributors
@@ -46,7 +51,7 @@ jobs:
       - name: Collect
         run: pnpm --filter @repo/contributors collect
         env:
-          GITHUB_TOKEN: ${{ steps.app.outputs.token }}
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: Open or update the pull request
         env:
@@ -57,6 +62,14 @@ jobs:
           if git show "HEAD:$file" | jq -S '.people' | cmp -s - <(jq -S '.people' "$file"); then
             echo "No new contributions"
             exit 0
+          fi
+          # Credits are only ever added: a shorter list means a source failed.
+          credits() { jq '[.people[].credits[].count] | add'; }
+          before=$(git show "HEAD:$file" | credits)
+          after=$(credits < "$file")
+          if [ "$after" -lt $((before * 95 / 100)) ]; then
+            echo "::error::Credits fell from $before to $after: a source failed, so nothing was opened."
+            exit 1
           fi
           branch=chore/contributors-refresh
           git config user.name 'jsonresume-bot'
