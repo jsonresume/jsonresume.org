@@ -1,7 +1,7 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { hydrateRoot } from 'react-dom/client';
 import { renderToString } from 'react-dom/server';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { useNextHref } from './shared';
 import { SignInPage } from './SignInPage';
 import { SignUpPage } from './SignUpPage';
@@ -27,6 +27,31 @@ describe('SignInPage', () => {
     expect(screen.getByLabelText(/Password/)).toHaveAttribute(
       'autocomplete',
       'current-password'
+    );
+  });
+
+  afterEach(() => vi.unstubAllGlobals());
+
+  it('says why a sign-in was refused: here, a GitHub account', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () =>
+        Response.json(
+          { _tag: 'InvalidCredentials', hint: 'github' },
+          { status: 401 }
+        )
+      )
+    );
+    render(<SignInPage signUpLink={null} />);
+    fireEvent.change(screen.getByLabelText(/Email/), {
+      target: { value: 'plain@x.io' },
+    });
+    fireEvent.change(screen.getByLabelText(/Password/), {
+      target: { value: 'whatever!!' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Sign in' }));
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'That account signs in with GitHub'
     );
   });
 

@@ -1,7 +1,6 @@
 import {
   EmailTaken,
   GithubUnreachable,
-  InvalidCredentials,
   NoResume,
   Unauthorized,
   UsernameUnavailable,
@@ -30,6 +29,7 @@ import {
   accountsCore,
   normalEmail,
   normalName,
+  refuseSignIn,
   unreachable,
   UNVERIFIED_TTL,
   type SignedIn,
@@ -107,7 +107,7 @@ const make = Effect.gen(function* () {
     const hash = found?.passwordHash ?? (yield* decoyHash);
     const ok = yield* verifyPassword(input.password, hash);
     if (!found || found.passwordHash === null || !ok)
-      return yield* new InvalidCredentials();
+      return yield* refuseSignIn(found);
     return yield* startSession(found.user);
   });
 

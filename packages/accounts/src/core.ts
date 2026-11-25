@@ -1,4 +1,8 @@
-import { GithubUnreachable, UsernameUnavailable } from '@repo/api';
+import {
+  GithubUnreachable,
+  InvalidCredentials,
+  UsernameUnavailable,
+} from '@repo/api';
 import { Usernames } from '@repo/profiles';
 import { Clock, Config, Duration, Effect } from 'effect';
 import { hashToken, newToken } from './crypto';
@@ -21,6 +25,23 @@ export const normalEmail = (email: string) => email.trim().toLowerCase();
 export const normalName = (name: string) => name.trim().toLowerCase();
 
 export const unreachable = () => new GithubUnreachable();
+
+/**
+ * A refused sign-in, saying why (InvalidCredentials' hint), logged without
+ * the email so the reasons can be counted.
+ */
+export const refuseSignIn = (
+  found: { passwordHash: string | null } | undefined
+) => {
+  const hint = !found
+    ? ('no-account' as const)
+    : found.passwordHash === null
+    ? ('github' as const)
+    : ('password' as const);
+  return Effect.logInfo('sign-in refused', { hint }).pipe(
+    Effect.andThen(Effect.fail(new InvalidCredentials({ hint })))
+  );
+};
 
 /** What every account flow shares: sessions, verification, name checks. */
 export const accountsCore = Effect.gen(function* () {
