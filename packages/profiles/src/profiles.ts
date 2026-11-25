@@ -27,6 +27,14 @@ export interface MovedResume {
   username: string;
 }
 
+/** Another gist file, a variant, or `owner`: the reader is the signed-in
+ * owner, who sees their page before their email is confirmed. */
+export interface ResumeOptions {
+  file?: string;
+  variant?: string;
+  owner?: boolean;
+}
+
 /**
  * Resolves /@username to a resume (docs/ACCOUNTS_AND_USERNAMES.md): an
  * alias redirects; an account serves its gist or its stored copy once
@@ -40,7 +48,7 @@ export class Profiles extends Context.Service<
   {
     resume(
       username: Username,
-      options?: { file?: string; variant?: string }
+      options?: ResumeOptions
     ): Effect.Effect<ResolvedResume | MovedResume, ResumeError>;
   }
 >()('@repo/profiles/Profiles') {
@@ -55,7 +63,7 @@ export class Profiles extends Context.Service<
 
       const resume = Effect.fn('Profiles.resume')(function* (
         username: Username,
-        options?: { file?: string; variant?: string }
+        options?: ResumeOptions
       ) {
         const file = options?.file ?? RESUME_FILE;
         const profile = yield* store.find(username);
@@ -90,7 +98,8 @@ export class Profiles extends Context.Service<
             reason: 'unpublished',
             file,
           });
-          if (!profile.verified) return yield* unpublished;
+          if (!profile.verified && options?.owner !== true)
+            return yield* unpublished;
           // A variant (/@name/slug): its own copy, published with the account.
           if (options?.variant !== undefined) {
             const found = yield* store.variant(profile.userId, options.variant);

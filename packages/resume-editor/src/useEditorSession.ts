@@ -110,7 +110,7 @@ export function useEditorSession(username: string) {
       live: first && !waitingForEmail,
       tone: 'success',
       text: waitingForEmail
-        ? 'Saved. Your page goes live once you confirm your email: we sent you a link.'
+        ? 'Saved. Your page goes live once you confirm your email (we sent you a link); until then only you can see it.'
         : source === 'gist'
         ? 'Saved to your gist. Your page shows it now.'
         : 'Saved. Your page shows it now.',

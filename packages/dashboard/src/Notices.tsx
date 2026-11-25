@@ -60,7 +60,8 @@ export function Notices() {
           <Stack direction="row" wrap align="center" gap={3}>
             <span>
               We sent a link to {account.email}. {account.path} stays private
-              until you open it.
+              until you open it; meanwhile only you, signed in, can see it and
+              download it.
               {account.emailDelivery
                 ? ''
                 : ' (Email delivery isn’t set up on this server yet.)'}

@@ -42,18 +42,21 @@ export const redirect = (location: string, status: number) =>
 
 /**
  * The resume at a username (another gist file with `file`): found, moved
- * to another name, or the problem, explained on a page or as JSON.
+ * to another name, or the problem, explained on a page or as JSON. The
+ * `owner` sees it before it is published (see Profiles).
  */
 export const lookup = (
   username: Username,
   file: string | undefined,
   page: boolean,
-  variant?: string
+  variant?: string,
+  owner = false
 ) =>
   Effect.flatMap(Profiles, (profiles) =>
     profiles.resume(username, {
       ...(file === undefined ? {} : { file }),
       ...(variant === undefined ? {} : { variant }),
+      ...(owner ? { owner } : {}),
     })
   ).pipe(
     Effect.catchTags({
