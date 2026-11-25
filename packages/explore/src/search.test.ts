@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { lastModifiedOf, toEntry } from './listing';
-import { popularSkills } from './search';
+import { popularSkills, search } from './search';
 
 const person = (username: string, keywords: string[]) =>
   toEntry({
@@ -30,5 +30,55 @@ describe('lastModifiedOf', () => {
     expect(lastModifiedOf('2030-01-01', now)).toBeNull();
     expect(lastModifiedOf('soon', now)).toBeNull();
     expect(lastModifiedOf(undefined, now)).toBeNull();
+  });
+});
+
+describe('matching words', () => {
+  const all = [
+    person('ada', ['Java', 'Spring', 'AWS']),
+    person('bo', ['JavaScript', 'React']),
+    person('cy', ['C', 'C++', 'Embedded']),
+    person('di', ['Golang', 'Kubernetes']),
+    person('ed', ['Laws of motion', 'Google Docs', 'CSS']),
+    person('gil', ['ReactJS', 'Python3']),
+    person('fay', [
+      'Excel',
+      'Word',
+      'Outlook',
+      'Teams',
+      'Jira',
+      'Slack',
+      'Zoom',
+      'Figma',
+      'Docker',
+      'AWS',
+    ]),
+  ].flatMap((e) => e ?? []);
+  const who = (q: string) =>
+    search(all, [], q, 1).people.map((p) => p.username);
+
+  it('matches whole words, not letters inside them', () => {
+    expect(who('aws').sort()).toEqual(['ada', 'fay']);
+    expect(who('c')).toEqual(['cy']);
+    expect(who('go')).toEqual(['di']); // golang, not Google
+  });
+
+  it('finds other spellings of a skill, not other words', () => {
+    expect(who('java')).toEqual(['ada']);
+    expect(who('golang')).toEqual(['di']);
+    expect(who('kube')).toEqual([]);
+    expect(who('react')).toEqual(['bo', 'gil']);
+  });
+
+  it('keeps the symbols skills are spelled with', () => {
+    expect(who('c++')).toEqual(['cy']);
+  });
+
+  it('shows the skills a search matched first', () => {
+    const fay = search(all, [], 'aws', 1).people.find(
+      (p) => p.username === 'fay'
+    );
+    expect(fay?.skills[0]).toBe('AWS');
+    expect(fay?.skills).toHaveLength(8);
   });
 });
