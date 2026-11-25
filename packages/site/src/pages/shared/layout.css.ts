@@ -151,11 +151,6 @@ export const eyebrow = style({
   textTransform: 'uppercase',
 });
 
-export const pathCards = style([
-  cardGrid,
-  { gridTemplateColumns: 'repeat(auto-fit, minmax(15rem, 1fr))' },
-]);
-
 export const spaced = style({ marginBlockEnd: space[10] });
 
 /* Long-form text: a readable measure, left-aligned with the page. */
