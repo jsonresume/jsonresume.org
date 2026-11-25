@@ -279,6 +279,18 @@ describe('resumeOutcome', () => {
     expect(res.headers.get('location')).toBe('/@foo.json?theme=x');
   });
 
+  it('sends a format written as a page (/@name/json) to /@name.json', async () => {
+    const res = response(await get('/@ada/json?x=1'));
+    expect(res.status).toBe(301);
+    expect(res.headers.get('location')).toBe('/@ada.json?x=1');
+    expect(response(await get('/@ada/pdf')).headers.get('location')).toBe(
+      '/@ada.pdf'
+    );
+    // A real variant keeps its page; other unknown names stay not found.
+    expect(await get('/@ada/acme')).toMatchObject({ _tag: 'Respond' });
+    expect(await get('/@ada/nope')).toMatchObject({ _tag: 'Problem' });
+  });
+
   it('redirects a merged name to its account, keeping format and query', async () => {
     const res = response(await get('/@merged.json?x=1'));
     expect(res.status).toBe(301);
