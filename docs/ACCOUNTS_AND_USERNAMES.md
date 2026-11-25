@@ -42,6 +42,8 @@ lowercase).
   doesn't protect its name.
 - **Held at signup, public once verified.** The name is locked at signup, and
   `/@foo` stays a 404 until the email is verified and a resume is saved.
+  Meanwhile its owner, signed in, still sees the page and its downloads
+  (sent `noindex`; `apps/app/server/owner.ts`), so the dashboard's links work.
   Unverified holds expire after 7 days.
 - **Renames** are allowed. The old name 301s to the new one and stays retired
   for 90 days, then is free.

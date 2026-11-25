@@ -11,6 +11,7 @@ import {
 import { Effect, type Layer, ManagedRuntime } from 'effect';
 import { randomUUID } from 'node:crypto';
 import type { RouterContext } from '../src/routes/root';
+import { isOwner } from './owner';
 import { gateRead } from './readers';
 
 /** The app's live renderer: a request and router context in, a page out. */
@@ -70,14 +71,27 @@ export function createResumeHandler<E>(
     const gate = await runtime.runPromise(gateRead(request));
     if (gate._tag === 'Refused') return gate.response;
     const reader = gate._tag === 'Keyed' ? gate.reader : undefined;
-    const outcome = await runtime.runPromise(
-      resumeOutcome(new URL(request.url))
-    );
+    const url = new URL(request.url);
+    let outcome = await runtime.runPromise(resumeOutcome(url));
+    // Not published yet: its owner still sees it (the dashboard links its
+    // page and downloads before the email is confirmed), kept out of search.
+    let unlisted = false;
+    if (
+      outcome?._tag === 'Problem' &&
+      outcome.problem.kind === 'unpublished' &&
+      (await runtime.runPromise(isOwner(request, outcome.problem.username)))
+    ) {
+      outcome = await runtime.runPromise(resumeOutcome(url, { owner: true }));
+      unlisted = true;
+    }
     if (outcome === undefined) return undefined;
     if (outcome._tag === 'Respond') {
-      if (outcome.read)
+      if (outcome.read && !unlisted)
         runtime.runFork(recordRead(outcome.read, request, reader));
-      return outcome.response;
+      if (!unlisted) return outcome.response;
+      const response = new Response(outcome.response.body, outcome.response);
+      response.headers.set('x-robots-tag', 'noindex');
+      return response;
     }
 
     const { problem } = outcome;
