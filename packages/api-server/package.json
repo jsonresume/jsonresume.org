@@ -20,6 +20,7 @@
     "@repo/careers": "workspace:*",
     "@repo/explore": "workspace:*",
     "@repo/job-digest": "workspace:*",
+    "@repo/resume-report": "workspace:*",
     "@repo/jobs": "workspace:^",
     "@repo/pathways": "workspace:*",
     "@repo/posthog": "workspace:^",

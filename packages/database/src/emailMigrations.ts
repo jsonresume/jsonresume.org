@@ -23,4 +23,13 @@ export const emailMigrations: Record<
       ALTER TABLE app.users ADD COLUMN account_emails boolean NOT NULL DEFAULT true
     `;
   }),
+
+  // The monthly resume report (@repo/resume-report): on until turned off.
+  // Each month's send is a row in account_emails, kind 'report:YYYY-MM'.
+  '26_monthly_report': Effect.gen(function* () {
+    const sql = yield* SqlClient.SqlClient;
+    yield* sql`
+      ALTER TABLE app.users ADD COLUMN monthly_report boolean NOT NULL DEFAULT true
+    `;
+  }),
 };

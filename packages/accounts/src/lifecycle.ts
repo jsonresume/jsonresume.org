@@ -2,6 +2,7 @@ import { Clock, Config, Duration, Effect, Redacted, Schema } from 'effect';
 import { SqlClient } from 'effect/sql';
 import { accountsCore, UNVERIFIED_TTL } from './core';
 import { verifyLastCallEmail, verifyReminderEmail } from './emails';
+import { emailPrefs } from './emailPrefs';
 import { emailLinks } from './emailToken';
 import { emptyPageEmail, welcomeEmail } from './lifecycleMail';
 
@@ -154,18 +155,7 @@ export const lifecycleEmails = Effect.gen(function* () {
   );
 
   return {
-    /** Whether the account wants the emails above (welcome, reminders, nudge). */
-    accountEmails: (userId: string) =>
-      sql<{ on: boolean }>`
-        SELECT account_emails AS on FROM app.users WHERE id = ${userId}`.pipe(
-        Effect.map((rows) => rows[0]?.on === true),
-        Effect.orDie
-      ),
-    setAccountEmails: (userId: string, on: boolean) =>
-      sql`UPDATE app.users SET account_emails = ${on} WHERE id = ${userId}`.pipe(
-        Effect.asVoid,
-        Effect.orDie
-      ),
+    ...emailPrefs(sql),
     sendAccountEmailsAt,
     sendAccountEmails: Effect.flatMap(Clock.currentTimeMillis, (ms) =>
       sendAccountEmailsAt(new Date(ms))

@@ -1,6 +1,7 @@
 import { JobDigestHandlers } from './jobDigest';
 import { EmailSettingsHandlers } from './emailSettings';
 import { Accounts } from '@repo/accounts';
+import { sendReports } from '@repo/resume-report';
 import { Health, JsonResumeApi } from '@repo/api';
 import { Duration, Effect, Layer, Schedule } from 'effect';
 import { HttpApiBuilder } from 'effect/http-api';
@@ -119,5 +120,23 @@ export const PurgeUnverified = Layer.effectDiscard(
   })
 );
 
+/** Every 15 minutes: the monthly resume reports, early each month (@repo/resume-report). */
+const ResumeReports = Layer.effectDiscard(
+  sendReports.pipe(
+    Effect.tap((sent) =>
+      sent > 0 ? Effect.logInfo('Resume reports sent', { sent }) : Effect.void
+    ),
+    Effect.catchCause((cause) =>
+      Effect.logError('Resume reports failed', { cause })
+    ),
+    Effect.repeat(Schedule.spaced(Duration.minutes(15))),
+    Effect.forkScoped
+  )
+);
+
 /** What the server runs in the background for accounts: purges and emails. */
-export const AccountJobs = Layer.mergeAll(PurgeUnverified, AccountEmails);
+export const AccountJobs = Layer.mergeAll(
+  PurgeUnverified,
+  AccountEmails,
+  ResumeReports
+);

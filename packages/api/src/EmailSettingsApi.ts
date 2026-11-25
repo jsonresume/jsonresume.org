@@ -8,6 +8,8 @@ export const EmailSettings = Schema.Struct({
   accountEmails: Schema.Boolean,
   /** The Monday email of new jobs (job preferences' weeklyEmail). */
   weeklyJobs: Schema.Boolean,
+  /** Early each month: who read the resume, when someone did. */
+  monthlyReport: Schema.Boolean,
 });
 export type EmailSettings = typeof EmailSettings.Type;
 
@@ -15,10 +17,16 @@ export type EmailSettings = typeof EmailSettings.Type;
 export const EmailSettingsChange = Schema.Struct({
   accountEmails: Schema.optionalKey(Schema.Boolean),
   weeklyJobs: Schema.optionalKey(Schema.Boolean),
+  monthlyReport: Schema.optionalKey(Schema.Boolean),
 });
 export type EmailSettingsChange = typeof EmailSettingsChange.Type;
 
-export const EmailKind = Schema.Literals(['account', 'weekly', 'all']);
+export const EmailKind = Schema.Literals([
+  'account',
+  'weekly',
+  'report',
+  'all',
+]);
 
 const link = { user: Schema.String, token: Schema.String };
 

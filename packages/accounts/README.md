@@ -24,8 +24,9 @@ Stopping them takes a click or two. Every optional email links to
 under `AUTH_SECRET`, `emailToken.ts`), which shows a switch per kind and
 "Unsubscribe from all", without signing in, and carries `List-Unsubscribe` +
 `List-Unsubscribe-Post` so mail apps offer their own one-click button. The
-account's switch is `app.users.account_emails`; the weekly jobs email's is
-job preferences' `weeklyEmail`. Both are read and changed together by
+account's switches are `app.users.account_emails` and `monthly_report`
+(`emailPrefs.ts`; the report is `@repo/resume-report`); the weekly jobs
+email's is job preferences' `weeklyEmail`. All are read and changed together by
 `emailSettings`/`setEmailSettings` in `@repo/job-digest`, behind
 `/api/email-settings` (by token), `/api/account/emails` (signed in, the
 dashboard's Settings → Emails) and MCP `get_email_settings`/`set_email_settings`.
