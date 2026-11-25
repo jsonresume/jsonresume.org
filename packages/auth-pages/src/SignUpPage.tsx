@@ -3,7 +3,13 @@ import { AuthCard, Button, Divider, Field, Input, Text } from '@jsonresume/ui';
 import { errorTag, keys, signUpAtom, usernameReason } from '@repo/api-client';
 import { track } from '@repo/posthog/browser';
 import { account } from '@repo/content/pages';
-import { useState, type FormEvent, type ReactNode } from 'react';
+import {
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+  type ReactNode,
+} from 'react';
 import {
   ErrorNote,
   GithubButton,
@@ -25,6 +31,13 @@ function SignUpForm({ next, signInLink }: SignUpPageProps) {
   const copy = account.signUp;
   const signUp = useAtomSet(signUpAtom, { mode: 'promiseExit' });
   const [name, setName] = useState('');
+  // Uncontrolled, so a name typed (or filled in) before the page hydrates
+  // survives it; picked up here once it has.
+  const nameInput = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    const typed = nameInput.current?.value.trim().toLowerCase();
+    if (typed) setName(typed);
+  }, []);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string>();
 
@@ -34,7 +47,10 @@ function SignUpForm({ next, signInLink }: SignUpPageProps) {
     setBusy(true);
     const exit = await signUp({
       payload: {
-        username: name,
+        username:
+          String(form.get('username') ?? '')
+            .trim()
+            .toLowerCase() || name,
         email: String(form.get('email')),
         password: String(form.get('password')),
       },
@@ -79,8 +95,12 @@ function SignUpForm({ next, signInLink }: SignUpPageProps) {
             autoComplete="username"
             autoCapitalize="none"
             spellCheck={false}
-            value={name}
-            onChange={(e) => setName(e.target.value.trim().toLowerCase())}
+            ref={nameInput}
+            onChange={(e) => {
+              const next = e.target.value.trim().toLowerCase();
+              if (next !== e.target.value) e.target.value = next;
+              setName(next);
+            }}
             maxLength={39}
             required
           />
