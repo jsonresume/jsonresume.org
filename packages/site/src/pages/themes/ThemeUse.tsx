@@ -9,11 +9,11 @@ export function ThemeUse({ theme }: { theme: ThemeSummary }) {
   const meta = `"meta": { "theme": "${theme.slug}" }`;
   return (
     <section className={s.use} aria-labelledby="theme-use">
-      <h3 id="theme-use" className={s.heading}>
+      <h2 id="theme-use" className={s.heading}>
         Use {theme.name}
-      </h3>
+      </h2>
       <div className={s.way}>
-        <h4 className={s.title}>On jsonresume.org</h4>
+        <h3 className={s.title}>On jsonresume.org</h3>
         <UseTheme theme={theme} />
         <p className={s.text}>
           In the editor, pick <strong>{theme.name}</strong> from the Theme menu
@@ -31,7 +31,7 @@ export function ThemeUse({ theme }: { theme: ThemeSummary }) {
         </p>
       </div>
       <div className={s.way}>
-        <h4 className={s.title}>In your resume.json</h4>
+        <h3 className={s.title}>In your resume.json</h3>
         <p className={s.text}>
           Set the theme in <code>meta</code>, whether your resume lives here or
           in a GitHub gist:
@@ -39,14 +39,14 @@ export function ThemeUse({ theme }: { theme: ThemeSummary }) {
         <CodeBlock code={meta} label="resume.json" />
       </div>
       <div className={s.way}>
-        <h4 className={s.title}>Try it on your resume first</h4>
+        <h3 className={s.title}>Try it on your resume first</h3>
         <p className={s.text}>
           Add <code>?theme={theme.slug}</code> to your link, like
           jsonresume.org/@you?theme={theme.slug}. Nothing is saved.
         </p>
       </div>
       <div className={s.way}>
-        <h4 className={s.title}>Ask your AI assistant</h4>
+        <h3 className={s.title}>Ask your AI assistant</h3>
         <p className={s.text}>
           With jsonresume.org connected, say “Switch my resume theme to{' '}
           {theme.name}.”
