@@ -1,4 +1,3 @@
-import { facts } from '@repo/content/facts';
 import {
   organization,
   pageHead,
@@ -33,7 +32,7 @@ export const homeRoute = page(
   paths.home,
   {
     title: 'JSON Resume: the open standard for resumes',
-    description: `Write your resume once in JSON and publish it anywhere: ${facts.themeCount} open-source themes, a CLI, and free hosting from a GitHub gist.`,
+    description: `Write your resume once in JSON and publish it anywhere: ${__THEME_COUNT__} open-source themes, a CLI, and free hosting from a GitHub gist.`,
     jsonLd: [webSite(), organization()],
   },
   () => import('./home.lazy')
@@ -53,7 +52,7 @@ export const schemaRoute = page(
   paths.schema,
   {
     title: 'The resume schema',
-    description: `Every section and field of resume.json, schema version ${facts.schemaVersion}, with examples and ways to validate.`,
+    description: `Every section and field of resume.json, schema version ${__SCHEMA_VERSION__}, with examples and ways to validate.`,
   },
   () => import('./schema.lazy')
 );
@@ -102,7 +101,7 @@ export const themesRoute = page(
   paths.themes,
   {
     title: 'Themes',
-    description: `Browse ${facts.themeCount} open-source resume themes and preview each with a real resume.`,
+    description: `Browse ${__THEME_COUNT__} open-source resume themes and preview each with a real resume.`,
   },
   () => import('./themes.lazy')
 );

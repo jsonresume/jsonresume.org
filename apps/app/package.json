@@ -71,6 +71,7 @@
   "devDependencies": {
     "@effect/sql-pglite": "4.0.6",
     "@effect/vitest": "4.0.6",
+    "@jsonresume/schema": "workspace:*",
     "@repo/eslint-config-custom": "workspace:*",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",

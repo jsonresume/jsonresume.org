@@ -1,10 +1,23 @@
+import { THEME_METADATA } from '@jsonresume/theme-metadata';
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
 import { lazyRoutes } from '@repo/ssg/vite';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
+import { createRequire } from 'node:module';
+
+const schemaPackage: { version: string } = createRequire(import.meta.url)(
+  '@jsonresume/schema/package.json'
+);
 
 export default defineConfig({
   plugins: [vanillaExtractPlugin(), react(), lazyRoutes()],
+  // Numbers the routes' heads quote (as @repo/content/facts computes them),
+  // worked out here: importing facts there put the whole theme list in the
+  // bundle every page loads, only to count it.
+  define: {
+    __THEME_COUNT__: JSON.stringify(Object.keys(THEME_METADATA).length),
+    __SCHEMA_VERSION__: JSON.stringify(schemaPackage.version),
+  },
   build: {
     // The client build starts from the entry, not an index.html (the root
     // route renders the document), and writes the manifest prerender reads.
