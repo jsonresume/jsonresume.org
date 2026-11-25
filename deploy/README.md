@@ -11,6 +11,7 @@ its phases are in [`SELF_HOSTING_PLAN.md`](../SELF_HOSTING_PLAN.md).
 | `/etc/jsonresume/postgres.env`    | `DATABASE_URL` for the local database                      |
 | `/etc/jsonresume/backup.env`      | R2 credentials, scoped to the `jsonresume-db-backups` bucket |
 | `/srv/jsonresume/<app>/current`   | Live release, served by `jsonresume@<app>`                 |
+| `/srv/jsonresume/<app>/assets`    | Every release's `/assets` for 14 days (`ASSET_ARCHIVE`), so pages opened before a deploy still load their chunks |
 | `/usr/local/lib/jsonresume/deploy`| Installed copy of this directory (backup script)           |
 | `/var/backups/jsonresume`         | Local dumps, kept 7 days                                   |
 | `/etc/caddy/certs`                | Cloudflare origin certificate for `*.jsonresume.org`       |

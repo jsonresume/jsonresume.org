@@ -24,6 +24,12 @@ export interface DynamicHandler {
 export interface SiteAppOptions {
   /** Absolute path of the built client: prerendered pages and /assets. */
   clientDir: string;
+  /**
+   * Earlier builds' fingerprinted /assets (deploy.sh keeps them), served
+   * when this build lacks one: a page loaded before a deploy still loads
+   * its lazy routes.
+   */
+  assetArchive?: string;
   /** Handlers mounted ahead of static files, e.g. the Effect API. */
   mount?: ReadonlyArray<MountedHandler>;
   /** Pages rendered per request, ahead of static files. */
@@ -56,6 +62,7 @@ const hasExtension = (path: string) => /\.[a-z0-9]+$/i.test(path);
  */
 export function createSiteApp({
   clientDir,
+  assetArchive,
   mount = [],
   dynamic = [],
   protect,
@@ -141,6 +148,15 @@ export function createSiteApp({
         hasExtension(path) ? path : `${path === '/' ? '' : path}/index.html`,
     })
   );
+
+  if (assetArchive)
+    app.use(
+      '/assets/*',
+      serveStatic({
+        root: relative(process.cwd(), assetArchive) || '.',
+        rewriteRequestPath: (path) => path.replace(/^\/assets/, ''),
+      })
+    );
 
   app.notFound((c) => c.html(notFoundPage, 404));
   return app;

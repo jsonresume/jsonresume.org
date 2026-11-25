@@ -27,7 +27,13 @@ import {
 import { cardPath, createCardHandler } from './cards';
 import { pruneCaches } from './prune';
 import { createExplorePage, explorePath } from './explorePage';
-import { companyPath, createJobPages, jobPath, jobsPath } from './jobPages';
+import {
+  apiKeysRoute,
+  companyPath,
+  createJobPages,
+  jobPath,
+  jobsPath,
+} from './jobPages';
 import { createResumeHandler, resumePath, variantPath } from './resumes';
 import { createSitemaps, liveSitemapPath, sitemapPath } from './sitemaps';
 import { createTimelinePage, timelinePath } from './timelinePage';
@@ -53,21 +59,19 @@ const loadRenderer = Effect.promise(async () => {
   );
 });
 
-const apiKeysRedirect = () =>
-  new Response(null, {
-    status: 301,
-    headers: { location: '/dashboard/settings#api-keys' },
-  });
-
 const main = Effect.gen(function* () {
-  const port = yield* Config.Port('PORT').pipe(Config.withDefault(3003));
-  const hostname = yield* Config.String('HOST').pipe(
-    Config.withDefault('127.0.0.1')
-  );
-  const version = yield* Config.String('GIT_COMMIT_SHA').pipe(
-    Config.withDefault('dev')
-  );
-
+  const { port, hostname, version, site, openAiChallenge, assetArchive } =
+    yield* Config.all({
+      port: Config.Port('PORT').pipe(Config.withDefault(3003)),
+      hostname: Config.String('HOST').pipe(Config.withDefault('127.0.0.1')),
+      version: Config.String('GIT_COMMIT_SHA').pipe(Config.withDefault('dev')),
+      site: Config.String('SITE_URL').pipe(
+        Config.withDefault('https://jsonresume.org')
+      ),
+      openAiChallenge: Config.option(Config.String('OPENAI_APPS_CHALLENGE')),
+      // Earlier releases' /assets, for pages loaded before a deploy (deploy.sh).
+      assetArchive: Config.option(Config.String('ASSET_ARCHIVE')),
+    });
   const services = appServices(PgLive);
   const memoMap = Layer.makeMemoMapUnsafe();
   const api = yield* Effect.acquireRelease(
@@ -80,12 +84,6 @@ const main = Effect.gen(function* () {
       )
     ),
     (handler) => Effect.promise(() => handler.dispose())
-  );
-  const site = yield* Config.String('SITE_URL').pipe(
-    Config.withDefault('https://jsonresume.org')
-  );
-  const openAiChallenge = yield* Config.option(
-    Config.String('OPENAI_APPS_CHALLENGE')
   );
   const mcp = yield* Effect.acquireRelease(
     Effect.sync(() =>
@@ -157,6 +155,7 @@ const main = Effect.gen(function* () {
   );
   const app = createSiteApp({
     clientDir,
+    assetArchive: Option.getOrUndefined(assetArchive),
     mount: [
       { prefix: '/api', fetch: api.handler },
       { prefix: '/mcp', fetch: mcp.handler, when: isMcpRequest },
@@ -176,8 +175,7 @@ const main = Effect.gen(function* () {
       { path: explorePath, fetch: explore.fetch },
       { path: sitemapPath, fetch: sitemaps.index },
       { path: liveSitemapPath, fetch: sitemaps.file },
-      // Where the jobs CLI and its docs send people for a key.
-      { path: '/api-keys', fetch: async () => apiKeysRedirect() },
+      apiKeysRoute,
       ...discoveryRoutes(site, Option.getOrUndefined(openAiChallenge)),
     ],
     // Beacons carry no authority; /api/v1 takes API keys, never cookies;

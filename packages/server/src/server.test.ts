@@ -80,6 +80,23 @@ describe('createSiteApp', () => {
     );
   });
 
+  it('serves an earlier build’s assets from the archive, and only assets', async () => {
+    const archive = mkdtempSync(join(tmpdir(), 'assets-'));
+    writeFileSync(join(archive, 'old-123.js'), 'old');
+    writeFileSync(join(archive, 'app-abc.js'), 'archived');
+    writeFileSync(join(archive, 'index.html'), 'not a page');
+    const archived = createSiteApp({ clientDir: dir, assetArchive: archive });
+    const old = await archived.request('/assets/old-123.js');
+    expect(old.status).toBe(200);
+    expect(await old.text()).toBe('old');
+    expect(old.headers.get('cache-control')).toContain('immutable');
+    // This build's own copy wins.
+    const own = await archived.request('/assets/app-abc.js');
+    expect(await own.text()).toBe('console.log(1)');
+    expect((await archived.request('/assets/gone-9.js')).status).toBe(404);
+    expect((await archived.request('/old-123.js')).status).toBe(404);
+  });
+
   it('answers unknown paths with the 404 page', async () => {
     const res = await get('/nope');
     expect(res.status).toBe(404);

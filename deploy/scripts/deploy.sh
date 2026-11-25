@@ -9,6 +9,8 @@
 #   <app>/releases/<sha>          one built checkout per commit
 #   <app>/current -> releases/..  what jsonresume@<app> serves
 #   <app>/previous -> releases/.. the release before it, for --rollback
+#   <app>/assets                  every release's /assets for ASSET_DAYS, which
+#                                 the app serves when its own build lacks one
 #
 # Static sites (STATIC_APPS: a build of plain files in apps/<app>/out) have no
 # service: each build is copied to /srv/www/<app>/<sha>, which Caddy can read,
@@ -24,6 +26,7 @@ BASE=/srv/jsonresume
 REPO=$BASE/repo.git
 APPDIR=$BASE/$APP
 KEEP=3
+ASSET_DAYS=14
 STATIC_APPS="styleguide"
 WWW=/srv/www/$APP
 
@@ -60,13 +63,33 @@ switch_to() {
   # readlink -f names a missing link too: only read one that exists.
   old=""; [ -L "$APPDIR/current" ] && old=$(readlink -f "$APPDIR/current")
   ln -sfn "$target" "$APPDIR/current.new" && mv -T "$APPDIR/current.new" "$APPDIR/current"
-  # Tell the app which commit it is serving (e.g. /api/health).
-  printf 'GIT_COMMIT_SHA=%s\n' "$(basename "$target")" > "$APPDIR/release.env"
+  # Tell the app which commit it is serving (e.g. /api/health), and where
+  # earlier releases' assets are (archive_assets).
+  printf 'GIT_COMMIT_SHA=%s\nASSET_ARCHIVE=%s\n' "$(basename "$target")" \
+    "$APPDIR/assets" > "$APPDIR/release.env"
   if [ -n "$old" ] && [ "$old" != "$target" ]; then
     ln -sfn "$old" "$APPDIR/previous.new" && mv -T "$APPDIR/previous.new" "$APPDIR/previous"
   fi
   chown -h deploy:deploy "$APPDIR/current" "$APPDIR/previous" 2>/dev/null || true
   systemctl restart "jsonresume@$APP"
+}
+
+archive_assets() {
+  # A page loaded before a deploy still asks for its own build's chunks
+  # (fingerprinted, so names never clash): keep every kept release's
+  # /assets in one place, and each file ASSET_DAYS after its last release.
+  local archive=$APPDIR/assets src f
+  install -d -o deploy -g deploy "$archive"
+  for src in "$APPDIR"/releases/*/apps/"$APP"/dist/client/assets; do
+    [ -d "$src" ] || continue
+    (cd "$src" && find . -type f -printf '%P\n') | while read -r f; do
+      if [ -e "$archive/$f" ]; then touch "$archive/$f"; else
+        install -D -o deploy -g deploy -m 644 "$src/$f" "$archive/$f.new" &&
+          mv "$archive/$f.new" "$archive/$f"
+      fi
+    done
+  done
+  find "$archive" -type f -mtime +"$ASSET_DAYS" -delete
 }
 
 repoint() {
@@ -149,6 +172,8 @@ if is_static; then
   exit
 fi
 
+# Before the switch, so no page loaded from the old release misses a chunk.
+archive_assets
 if [ "$(readlink -f "$APPDIR/current" 2>/dev/null)" = "$REL" ]; then
   log "already live; restarting"
   systemctl restart "jsonresume@$APP"
