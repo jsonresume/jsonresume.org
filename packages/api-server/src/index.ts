@@ -1,4 +1,5 @@
 import { JobDigestHandlers } from './jobDigest';
+import { EmailSettingsHandlers } from './emailSettings';
 import { Accounts } from '@repo/accounts';
 import { Health, JsonResumeApi } from '@repo/api';
 import { Duration, Effect, Layer, Schedule } from 'effect';
@@ -62,6 +63,7 @@ export const apiRoutes = (version: string) =>
         CompaniesHandlers,
         JobDecisionsHandlers,
         JobDigestHandlers,
+        EmailSettingsHandlers,
         CareerHandlers,
         ExploreHandlers,
         MyListingHandlers,
@@ -84,6 +86,23 @@ export const apiRoutes = (version: string) =>
     PathwaysRoutes
   );
 
+/** Every five minutes: the welcome, verify reminders and empty-page nudge that are due. */
+const AccountEmails = Layer.effectDiscard(
+  Effect.gen(function* () {
+    const accounts = yield* Accounts;
+    yield* accounts.sendAccountEmails.pipe(
+      Effect.tap((sent) =>
+        sent > 0 ? Effect.logInfo('Account emails sent', { sent }) : Effect.void
+      ),
+      Effect.catchCause((cause) =>
+        Effect.logError('Account emails failed', { cause })
+      ),
+      Effect.repeat(Schedule.spaced(Duration.minutes(5))),
+      Effect.forkScoped
+    );
+  })
+);
+
 /** Hourly: frees the names of email accounts never verified, and of renames past their redirect. */
 export const PurgeUnverified = Layer.effectDiscard(
   Effect.gen(function* () {
@@ -99,3 +118,6 @@ export const PurgeUnverified = Layer.effectDiscard(
     );
   })
 );
+
+/** What the server runs in the background for accounts: purges and emails. */
+export const AccountJobs = Layer.mergeAll(PurgeUnverified, AccountEmails);

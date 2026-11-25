@@ -1,6 +1,7 @@
 import { Schema } from 'effect';
 import { HttpApiEndpoint, HttpApiGroup } from 'effect/http-api';
 import { Authentication } from './Authentication';
+import { EmailSettings, EmailSettingsChange } from './EmailSettingsApi';
 import {
   ConfirmationMismatch,
   GistPermissionNeeded,
@@ -65,6 +66,12 @@ export class AccountApi extends HttpApiGroup.make('account')
     HttpApiEndpoint.put('setPrivacy', '/privacy', {
       payload: Privacy,
       success: Privacy,
+    }),
+    /** Which emails the account gets; each email links here too, by token. */
+    HttpApiEndpoint.get('emails', '/emails', { success: EmailSettings }),
+    HttpApiEndpoint.put('setEmails', '/emails', {
+      payload: EmailSettingsChange,
+      success: EmailSettings,
     }),
     /** The page's theme (meta.theme), from the gallery: a new version. */
     HttpApiEndpoint.put('setTheme', '/theme', {

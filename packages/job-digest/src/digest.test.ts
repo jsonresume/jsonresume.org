@@ -91,7 +91,8 @@ describe('the email', () => {
       job(8, 'stretch', 60, { title: 'Lead <script>', remote: 'hybrid' }),
     ],
     'https://jsonresume.org',
-    'https://jsonresume.org/jobs/email/stop?user=u&token=t'
+    'https://jsonresume.org/jobs/email/stop?user=u&token=t',
+    'https://jsonresume.org/emails?user=u&token=e'
   );
 
   it('links each job and the way out', () => {
@@ -102,6 +103,7 @@ describe('the email', () => {
     expect(email.text).toContain('Stretch: Lead <script>');
     expect(email.text).toContain('Acme · Berlin, DE, hybrid');
     expect(email.html).toContain('jobs/email/stop?user=u&amp;token=t');
+    expect(email.html).toContain('/emails?user=u&amp;token=e');
   });
 
   it('escapes post text in the HTML', () => {

@@ -36,6 +36,7 @@ import {
 } from './core';
 import { gistSync } from './gistSync';
 import { joinEmailAccount } from './githubMatch';
+import { lifecycleEmails } from './lifecycle';
 import { accountManagement } from './manage';
 import { resumeSaving } from './resumes';
 import type { GithubIdentity, UserRecord } from './store';
@@ -64,6 +65,7 @@ const make = Effect.gen(function* () {
   } = yield* accountsCore;
   const management = yield* accountManagement;
   const gist = yield* gistSync;
+  const lifecycle = yield* lifecycleEmails;
   const privacy = privacyQueries(yield* SqlClient.SqlClient);
   const { saveResume, restoreVersion, setSource } = yield* resumeSaving(gist);
   /** The page's theme (meta.theme), saved as a version like any change. */
@@ -178,6 +180,7 @@ const make = Effect.gen(function* () {
     account: (userId: string) => store.account(userId),
     saveResume,
     ...privacy,
+    ...lifecycle,
     setTheme,
     restoreVersion,
     setSource,

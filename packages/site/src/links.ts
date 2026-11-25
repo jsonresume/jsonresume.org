@@ -43,6 +43,8 @@ export const paths = {
   dashboard: '/dashboard',
   dashboardJobs: '/dashboard/jobs',
   jobEmailStop: '/jobs/email/stop',
+  /** Every email's on/off switch, from the link in any email. */
+  emailSettings: '/emails',
   /** Pathways, putting `ask` to the copilot on arrival. */
   pathways: (ask?: string) =>
     ask

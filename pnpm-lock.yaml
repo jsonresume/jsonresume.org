@@ -2579,6 +2579,9 @@ importers:
       '@repo/job-board':
         specifier: workspace:*
         version: link:../job-board
+      '@repo/job-digest':
+        specifier: workspace:*
+        version: link:../job-digest
       '@repo/jobs':
         specifier: workspace:*
         version: link:../jobs
