@@ -1,6 +1,6 @@
 import { RegistryProvider, useAtomSet, useAtomValue } from '@effect/atom-react';
 import { THEME_METADATA } from '@jsonresume/theme-metadata';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Container, Heading, Text } from '@jsonresume/ui';
 import { Choose } from './Choose';
 import { startEvent } from './events';
@@ -8,7 +8,12 @@ import { Guided } from './Guided';
 import { Preview } from './Preview';
 import { Review } from './Review';
 import * as s from './start.css';
-import { startResumeAtom, startStepAtom, startThemeAtom } from './state';
+import {
+  startResumeAtom,
+  startSectionAtom,
+  startStepAtom,
+  startThemeAtom,
+} from './state';
 
 const examples = () => import('@repo/content/documents');
 
@@ -41,7 +46,28 @@ function Step() {
   useEffect(() => {
     startEvent('start_step', { step });
   }, [step]);
-  return step === 'review' ? (
+  // A new step or section starts at its top: its buttons are at the bottom
+  // of a long form, so on a phone the next one would open scrolled past.
+  const section = useAtomValue(startSectionAtom);
+  const top = useRef<HTMLDivElement>(null);
+  const first = useRef(true);
+  useEffect(() => {
+    if (first.current) {
+      first.current = false;
+      return;
+    }
+    const at = top.current?.getBoundingClientRect().top;
+    if (at !== undefined && at < 0) window.scrollBy({ top: at - 16 });
+  }, [step, section]);
+  return (
+    <div ref={top} className={s.step}>
+      {current(step)}
+    </div>
+  );
+}
+
+const current = (step: string) =>
+  step === 'review' ? (
     <Review />
   ) : step === 'guided' ? (
     <Guided />
@@ -50,7 +76,6 @@ function Step() {
   ) : (
     <Choose />
   );
-}
 
 /**
  * /start: a resume without an account. Import or write it, check it, see
