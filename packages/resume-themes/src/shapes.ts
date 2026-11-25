@@ -127,6 +127,18 @@ const withPhotoUrls = (basics: Entry): Entry => {
   return out;
 };
 
+/** An award as the schema names it: name → title, issuer → awarder. */
+const asAward = (entry: unknown): unknown => {
+  if (!Predicate.isObject(entry)) return entry;
+  const title = entry['title'] ?? entry['name'] ?? entry['award'];
+  const awarder = entry['awarder'] ?? entry['issuer'];
+  return {
+    ...entry,
+    title: Predicate.isString(title) ? title : '',
+    ...(awarder === undefined ? {} : { awarder }),
+  };
+};
+
 /** Every section a list of entries, their text lists and ratings text, profiles named, and a name. */
 export const withSchemaShapes = (resume: ResumeDocument): ResumeDocument => {
   const out: Entry = { ...resume };
@@ -134,7 +146,16 @@ export const withSchemaShapes = (resume: ResumeDocument): ResumeDocument => {
     if (out[section] === undefined || out[section] === null) continue;
     out[section] = asList(section, out[section]).map(withTextLists);
   }
-  const basics = Predicate.isObject(out['basics']) ? out['basics'] : {};
+  const basics: Entry = Predicate.isObject(out['basics'])
+    ? { ...out['basics'] }
+    : {};
+  // A list of languages inside basics belongs to the languages section.
+  if (Array.isArray(basics['languages'])) {
+    if (out['languages'] === undefined)
+      out['languages'] = basics['languages'].map(withTextLists);
+    delete basics['languages'];
+  }
+  if (Array.isArray(out['awards'])) out['awards'] = out['awards'].map(asAward);
   out['basics'] = {
     ...withPhotoUrls(basics),
     name: Predicate.isString(basics['name']) ? basics['name'] : '',

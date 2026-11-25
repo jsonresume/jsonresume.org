@@ -1,5 +1,6 @@
 import { Effect } from 'effect';
 import { describe, expect, it } from 'vitest';
+import { withoutInvalidDates } from './invalid-dates.ts';
 import { regionCode, withRegionCodes } from './regions.ts';
 import { renderTheme, themeSlugs } from './render.ts';
 import { withSchemaShapes } from './shapes.ts';
@@ -47,6 +48,52 @@ describe('schema shapes', () => {
       { name: 'Go' },
     ]);
     expect(shaped['languages']).toEqual([{ language: 'Polish', fluency: '5' }]);
+  });
+
+  it('moves a list of languages written in basics to the languages section', () => {
+    const shaped = withSchemaShapes({
+      basics: {
+        name: 'Ada',
+        languages: [{ language: 'French', fluency: 'Native' }],
+      },
+    });
+    expect(shaped['languages']).toEqual([
+      { language: 'French', fluency: 'Native' },
+    ]);
+    expect(shaped['basics']).not.toHaveProperty('languages');
+    const text = withSchemaShapes({
+      basics: { name: 'Ada', languages: 'English, French' },
+    });
+    expect(text['basics']).toMatchObject({ languages: 'English, French' });
+  });
+
+  it('reads awards written with name and issuer, and never says undefined', () => {
+    const shaped = withSchemaShapes({
+      basics: { name: 'Ada' },
+      awards: [
+        { name: 'Annual Award', issuer: 'The Institute' },
+        { awarder: 'Company', summary: 'Two years running' },
+      ],
+    });
+    expect(shaped['awards']).toEqual([
+      {
+        name: 'Annual Award',
+        issuer: 'The Institute',
+        title: 'Annual Award',
+        awarder: 'The Institute',
+      },
+      { awarder: 'Company', summary: 'Two years running', title: '' },
+    ]);
+  });
+
+  it('takes dates a theme could not read out of its HTML', () => {
+    const none = '<div><time datetime="">Invalid Date</time> – Present</div>';
+    expect(withoutInvalidDates(none)).toBe('<div></div>');
+    const endOnly =
+      '<div><time datetime="">Invalid Date</time> – <time datetime="2006-01-01">Jan 2006</time></div>';
+    expect(withoutInvalidDates(endOnly)).toBe(
+      '<div><time datetime="2006-01-01">Jan 2006</time></div>'
+    );
   });
 
   it('reads a photo written as an object (Reactive Resume) as its URL', () => {
