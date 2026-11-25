@@ -7,7 +7,11 @@ import {
   Skeleton,
   Stack,
 } from '@jsonresume/ui';
-import { errorTag, jobDecisionsAtom } from '@repo/api-client';
+import {
+  errorTag,
+  jobDecisionsAtom,
+  jobDecisionsNowAtom,
+} from '@repo/api-client';
 import { Exit } from 'effect';
 import { AsyncResult } from 'effect/reactivity';
 import { useEffect, type ReactNode } from 'react';
@@ -15,17 +19,22 @@ import { Decided } from './jobs/Decided';
 
 /** /dashboard/jobs: every open job decided for the user: apply, stretch, skip or ruled out. */
 export function JobsPage() {
-  const result = useAtomValue(jobDecisionsAtom);
+  const full = useAtomValue(jobDecisionsAtom);
+  // Asked for at once alongside: a first visit sees jobs decided so far
+  // (from embeddings) instead of waiting up to 4 seconds for the models.
+  const now = useAtomValue(jobDecisionsNowAtom);
+  const result =
+    AsyncResult.isSuccess(full) || !AsyncResult.isSuccess(now) ? full : now;
   const refresh = useAtomRefresh(jobDecisionsAtom);
   const waiting =
-    AsyncResult.isSuccess(result) && result.value.waitingFor.length > 0;
+    AsyncResult.isSuccess(full) && full.value.waitingFor.length > 0;
   // While the models work, ask again: each request waits up to 4 seconds
   // for them, so decisions sharpen soon after each finishes.
   useEffect(() => {
     if (!waiting) return;
     const t = setTimeout(refresh, 1_500);
     return () => clearTimeout(t);
-  }, [waiting, result, refresh]);
+  }, [waiting, full, refresh]);
 
   const page = (children: ReactNode) => (
     <AppPage

@@ -1,4 +1,6 @@
 import { RegistryProvider } from '@effect/atom-react';
+import { jobDecisionsAtom, jobDecisionsNowAtom } from '@repo/api-client';
+import { AsyncResult } from 'effect/reactivity';
 import type {
   DecidedJob,
   JobDecision,
@@ -10,6 +12,7 @@ import { act, fireEvent, render, screen } from '@testing-library/react';
 import axe from 'axe-core';
 import { describe, expect, it } from 'vitest';
 import { Decided } from './jobs/Decided';
+import { JobsPage } from './JobsPage';
 import { wantText } from './jobs/Wants';
 
 const none: JobPreferences = {
@@ -218,6 +221,24 @@ describe('the decided jobs page', () => {
 
   it('says when the AI is still deciding', () => {
     show(decided({ waitingFor: ['jobs'] }));
+    expect(screen.getByText('Still deciding')).toBeInTheDocument();
+  });
+
+  it('shows what is decided so far while the models still work', () => {
+    render(
+      <RegistryProvider
+        initialValues={[
+          [jobDecisionsAtom, AsyncResult.initial(true)],
+          [
+            jobDecisionsNowAtom,
+            AsyncResult.success(decided({ waitingFor: ['jobs'] })),
+          ],
+        ]}
+      >
+        <JobsPage />
+      </RegistryProvider>
+    );
+    expect(titles()).toEqual(['Frontend Engineer']);
     expect(screen.getByText('Still deciding')).toBeInTheDocument();
   });
 });
