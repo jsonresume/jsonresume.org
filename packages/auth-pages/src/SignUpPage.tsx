@@ -1,6 +1,7 @@
 import { RegistryProvider, useAtomSet } from '@effect/atom-react';
 import { AuthCard, Button, Divider, Field, Input, Text } from '@jsonresume/ui';
 import { errorTag, keys, signUpAtom, usernameReason } from '@repo/api-client';
+import { track } from '@repo/posthog/browser';
 import { account } from '@repo/content/pages';
 import { useState, type FormEvent, type ReactNode } from 'react';
 import {
@@ -46,7 +47,9 @@ function SignUpForm({ next, signInLink }: SignUpPageProps) {
     if (tag === undefined)
       return window.location.assign(safeNext(next, NEW_ACCOUNT_HOME));
     setBusy(false);
-    setMessage(refusalMessage(usernameReason(exit), tag));
+    const reason = usernameReason(exit);
+    track('sign_up_failed', { reason: reason ?? tag ?? 'default' });
+    setMessage(refusalMessage(reason, tag));
   };
 
   return (

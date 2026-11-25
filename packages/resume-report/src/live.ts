@@ -1,5 +1,6 @@
 import { emailLinks, Mailer } from '@repo/accounts';
 import { AnalyticsStore } from '@repo/analytics';
+import { track } from '@repo/posthog';
 import { Clock, Config, Effect, Redacted, Schema } from 'effect';
 import { SqlClient } from 'effect/sql';
 import { runReports } from './run';
@@ -65,6 +66,12 @@ export const sendReports = Effect.gen(function* () {
           INSERT INTO app.account_emails (user_id, kind) VALUES (${userId}, ${kind})
           ON CONFLICT DO NOTHING RETURNING kind`.pipe(
           Effect.map((rows) => rows.length > 0),
+          // Claimed means it goes out next: counted as sent.
+          Effect.tap((claimed) =>
+            claimed
+              ? track(userId, 'email_sent', { kind: 'report' })
+              : Effect.void
+          ),
           Effect.orDie
         ),
       links: (userId) => emailLinks(site, secret, userId, 'report'),

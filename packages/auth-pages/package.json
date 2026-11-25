@@ -21,6 +21,7 @@
     "@jsonresume/ui": "workspace:*",
     "@repo/api-client": "workspace:*",
     "@repo/content": "workspace:*",
+    "@repo/posthog": "workspace:*",
     "@repo/images": "workspace:*",
     "@repo/mcp": "workspace:*",
     "@vanilla-extract/css": "^1.21.3",

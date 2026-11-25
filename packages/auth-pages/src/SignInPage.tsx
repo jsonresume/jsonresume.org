@@ -8,6 +8,7 @@ import {
   useIsClient,
 } from '@repo/api-client';
 import { account } from '@repo/content/pages';
+import { track } from '@repo/posthog/browser';
 import { useState, type FormEvent, type ReactNode } from 'react';
 import {
   ErrorNote,
@@ -54,6 +55,7 @@ function SignInForm({ next, error, signUpLink, forgotLink }: SignInPageProps) {
       return window.location.assign(safeNext(next, '/dashboard'));
     setBusy(false);
     const hint = signInHint(exit);
+    track('sign_in_failed', { reason: hint ?? tag });
     setMessage((hint && account.signInHints[hint]) || errorMessage(tag));
   };
 

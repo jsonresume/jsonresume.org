@@ -1,6 +1,7 @@
 import { Accounts, Mailer } from '@repo/accounts';
 import { JobDecisions } from '@repo/careers';
 import { PreferenceStore } from '@repo/jobs';
+import { track } from '@repo/posthog';
 import { Clock, Config, Duration, Effect, Redacted } from 'effect';
 import { SqlClient } from 'effect/sql';
 import { runDigests } from './run';
@@ -38,7 +39,16 @@ export const sendDigests = Effect.gen(function* () {
         Effect.map(decisions.decisions(userId, resume, WAIT), (d) => d.jobs),
       sent: store.sent,
       send: mailer.send,
-      record: store.record,
+      // Recorded once sent: counted then, with how many jobs it held.
+      record: (userId, jobIds) =>
+        store.record(userId, jobIds).pipe(
+          Effect.tap(() =>
+            track(userId, 'email_sent', {
+              kind: 'weekly_jobs',
+              jobs: jobIds.length,
+            })
+          )
+        ),
     },
     { now, secret, site }
   );

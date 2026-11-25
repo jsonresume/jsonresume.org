@@ -8,4 +8,5 @@ export {
   linkUser,
   setEmailSettings,
   stopChange,
+  type SettingsVia,
 } from './settings';

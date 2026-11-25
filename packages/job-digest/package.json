@@ -14,6 +14,7 @@
     "lint": "eslint src --ext .ts"
   },
   "dependencies": {
+    "@repo/posthog": "workspace:*",
     "@repo/accounts": "workspace:*",
     "@repo/api": "workspace:*",
     "@repo/careers": "workspace:*",

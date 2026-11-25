@@ -36,13 +36,17 @@ export const EmailSettingsHandlers = HttpApiBuilder.group(
           ),
         set: ({ query, payload }) =>
           checked(query.user, query.token).pipe(
-            Effect.flatMap((user) => setEmailSettings(user, payload)),
+            Effect.flatMap((user) => setEmailSettings(user, payload, 'link')),
             Effect.provide(services)
           ),
         stop: ({ query }) =>
           checked(query.user, query.token).pipe(
             Effect.flatMap((user) =>
-              setEmailSettings(user, stopChange(query.kind ?? 'all'))
+              setEmailSettings(
+                user,
+                stopChange(query.kind ?? 'all'),
+                'one-click'
+              )
             ),
             Effect.as({ stopped: true }),
             Effect.provide(services),

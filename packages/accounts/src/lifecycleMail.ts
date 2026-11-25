@@ -43,6 +43,7 @@ export const welcomeEmail = (
   compose({
     to,
     site,
+    campaign: 'welcome',
     subject: hasResume
       ? `Your resume is live at /@${username}`
       : `Welcome to JSON Resume, @${username}`,
@@ -77,6 +78,7 @@ export const emptyPageEmail = (
   compose({
     to,
     site,
+    campaign: 'empty_page',
     subject: `Your page at /@${username} is still empty`,
     preview: 'Start from the resume you already have. It takes about a minute.',
     heading: 'Start from the resume you have',

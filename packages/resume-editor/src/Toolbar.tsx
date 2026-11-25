@@ -2,6 +2,7 @@ import { useAtom } from '@effect/atom-react';
 import { Badge, SegmentedControl, Select } from '@jsonresume/ui';
 import { DEFAULT_THEME, draftAtom, themeOf, themeOptions } from './state';
 import { setAt } from './values';
+import { track } from '@repo/posthog/browser';
 
 export type Mode = 'form' | 'json';
 /** On phones, one thing at a time: the editor, the page, or its ATS check. */
@@ -64,7 +65,12 @@ export function EditorToolbar({
           { value: 'json', label: 'JSON' },
         ]}
         value={mode}
-        onValueChange={(v) => onMode(v === 'json' ? 'json' : 'form')}
+        onValueChange={(v) => {
+          const next = v === 'json' ? 'json' : 'form';
+          // How many edit as JSON (it loads its own editor: #815).
+          track('editor_mode_changed', { mode: next });
+          onMode(next);
+        }}
       />
       <ThemeSelect />
       <Problems count={problems} />
