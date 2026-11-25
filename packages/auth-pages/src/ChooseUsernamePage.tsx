@@ -18,7 +18,13 @@ import {
 import { account } from '@repo/content/pages';
 import { proxiedImage } from '@repo/images/url';
 import { AsyncResult } from 'effect/reactivity';
-import { useState, type FormEvent, type ReactNode } from 'react';
+import {
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+  type ReactNode,
+} from 'react';
 import {
   ErrorNote,
   errorMessage,
@@ -40,14 +46,23 @@ function Choose({
   const copy = account.chooseUsername;
   const complete = useAtomSet(completeGithubAtom, { mode: 'promiseExit' });
   const [name, setName] = useState('');
+  // Uncontrolled, so a name typed before the page hydrates survives it.
+  const nameInput = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    const typed = nameInput.current?.value.trim().toLowerCase();
+    if (typed) setName(typed);
+  }, []);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string>();
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const typed = String(
+      new FormData(event.currentTarget).get('username') ?? ''
+    );
     setBusy(true);
     const exit = await complete({
-      payload: { username: name },
+      payload: { username: typed.trim().toLowerCase() || name },
       reactivityKeys: keys.session,
     });
     const tag = errorTag(exit);
@@ -81,8 +96,12 @@ function Choose({
             name="username"
             autoCapitalize="none"
             spellCheck={false}
-            value={name}
-            onChange={(e) => setName(e.target.value.trim().toLowerCase())}
+            ref={nameInput}
+            onChange={(e) => {
+              const next = e.target.value.trim().toLowerCase();
+              if (next !== e.target.value) e.target.value = next;
+              setName(next);
+            }}
             maxLength={39}
             required
           />

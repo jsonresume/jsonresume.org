@@ -11,7 +11,7 @@ import {
 import { IMPORT_MAX_BYTES } from '@repo/api';
 import { errorTag, importResumeAtom, useSignedInHint } from '@repo/api-client';
 import { Exit } from 'effect';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as s from './start.css';
 import { startImportAtom, startResumeAtom, startStepAtom } from './state';
 
@@ -33,6 +33,12 @@ export function Choose() {
   const setResume = useAtomSet(startResumeAtom);
   const setStep = useAtomSet(startStepAtom);
   const [text, setText] = useState('');
+  // Uncontrolled, so text pasted before the page hydrates survives it.
+  const pasted = useRef<HTMLTextAreaElement>(null);
+  useEffect(() => {
+    const early = pasted.current?.value;
+    if (early) setText(early);
+  }, []);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string>();
   const signedIn = useSignedInHint();
@@ -93,7 +99,7 @@ export function Choose() {
             className={s.paste}
             aria-labelledby="start-paste"
             placeholder="Paste your resume, or your LinkedIn profile’s text"
-            value={text}
+            ref={pasted}
             onChange={(e) => setText(e.target.value)}
             disabled={busy}
           />
