@@ -3,8 +3,15 @@ import type { Card, Step, UserPath } from './types';
 /** Resumes are hosted at jsonresume.org/@username (the registry moved here). */
 const site = 'https://jsonresume.org';
 
-/** The three ways in, shown first so people pick one. */
+/** The ways in, shown first so people pick one; the quickest first. */
 export const paths: Card[] = [
+  {
+    eyebrow: 'Quickest',
+    title: 'Make it here',
+    description:
+      'Upload the resume you have (PDF, Word, a photo) or answer a few questions. No GitHub, nothing to install.',
+    href: '/start',
+  },
   {
     eyebrow: 'No install',
     title: 'Host it from a Gist',

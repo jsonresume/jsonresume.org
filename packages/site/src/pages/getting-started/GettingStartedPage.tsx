@@ -42,11 +42,11 @@ export function GettingStartedPage() {
         align="start"
         eyebrow="Getting started"
         title="Your resume, live in minutes"
-        lede="Pick a way in. All three use the same resume.json, so you can switch at any time."
+        lede="Pick a way in. Every one makes the same resume.json, so you can switch at any time."
       />
       <Section spacing="lg">
         <Container>
-          <ul className={l.pathCards} aria-label="Ways to start">
+          <ul className={l.cardGrid2} aria-label="Ways to start">
             {g.paths.map((path) => (
               <li key={path.title}>
                 <LinkCard
