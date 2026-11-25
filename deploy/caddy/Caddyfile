@@ -33,14 +33,29 @@
 	}
 }
 
+# Request logs, as JSON on stdout (journald keeps 30 days). Secrets that
+# can arrive in an address are dropped first: a password from a form sent
+# before its page hydrated (or by scanners), reset and confirm tokens,
+# OAuth codes.
+(access_log) {
+	log {
+		output stdout
+		format filter {
+			wrap json
+			request>uri query {
+				delete password
+				delete token
+				delete code
+			}
+		}
+	}
+}
+
 (app) {
 	import origin_tls
 	encode zstd gzip
 	import upstream {args[0]}
-	log {
-		output stdout
-		format json
-	}
+	import access_log
 }
 
 # jsonresume.org: the site (apps/app). The docs are a static export on
@@ -70,10 +85,7 @@ jsonresume.org {
 	handle {
 		import upstream 3003
 	}
-	log {
-		output stdout
-		format json
-	}
+	import access_log
 }
 
 # The registry is now part of jsonresume.org: the app answers every
@@ -97,10 +109,7 @@ styleguide.jsonresume.org {
 		rewrite * /404.html
 		file_server
 	}
-	log {
-		output stdout
-		format json
-	}
+	import access_log
 }
 
 # One name for the site.

@@ -9,7 +9,7 @@ import {
 } from '@repo/api-client';
 import { account } from '@repo/content/pages';
 import { useState, type FormEvent, type ReactNode } from 'react';
-import { ErrorNote, errorMessage, Form } from './shared';
+import { ErrorNote, Form, SubmitButton, errorMessage } from './shared';
 
 function Forgot({ signInLink }: { signInLink: ReactNode }) {
   const copy = account.forgotPassword;
@@ -45,9 +45,7 @@ function Forgot({ signInLink }: { signInLink: ReactNode }) {
             <Field label={copy.email} required>
               <Input name="email" type="email" autoComplete="email" required />
             </Field>
-            <Button type="submit" variant="primary" fullWidth disabled={busy}>
-              {copy.submit}
-            </Button>
+            <SubmitButton busy={busy}>{copy.submit}</SubmitButton>
           </Form>
         </>
       )}

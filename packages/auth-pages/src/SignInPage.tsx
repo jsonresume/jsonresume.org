@@ -12,10 +12,11 @@ import { track } from '@repo/posthog/browser';
 import { useState, type FormEvent, type ReactNode } from 'react';
 import {
   ErrorNote,
-  errorMessage,
-  GithubButton,
-  safeNext,
   Form,
+  GithubButton,
+  SubmitButton,
+  errorMessage,
+  safeNext,
 } from './shared';
 
 export interface SignInPageProps {
@@ -84,9 +85,7 @@ function SignInForm({ next, error, signUpLink, forgotLink }: SignInPageProps) {
             required
           />
         </Field>
-        <Button type="submit" variant="primary" fullWidth disabled={busy}>
-          {copy.submit}
-        </Button>
+        <SubmitButton busy={busy}>{copy.submit}</SubmitButton>
         {forgotLink ? (
           <Text as="span" size="xs" tone="muted">
             {forgotLink}
