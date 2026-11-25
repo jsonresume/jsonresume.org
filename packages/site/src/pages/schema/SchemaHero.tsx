@@ -42,7 +42,7 @@ export function SchemaHero({
         </>
       }
       media={
-        <nav aria-label="Sections">
+        <nav aria-label="Top-level sections">
           <ul className={s.map}>
             {sectionKeys.map((key) => (
               <li key={key}>
