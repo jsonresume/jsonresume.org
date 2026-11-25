@@ -131,10 +131,16 @@ describe('email accounts', () => {
         const nobody = yield* Effect.flip(
           accounts.signIn({ email: 'who@x.io', password: 'whatever!!' })
         );
-        expect([wrong._tag, nobody._tag]).toEqual([
-          'InvalidCredentials',
-          'InvalidCredentials',
+        expect([wrong, nobody]).toMatchObject([
+          { _tag: 'InvalidCredentials', hint: 'password' },
+          { _tag: 'InvalidCredentials', hint: 'no-account' },
         ]);
+        // A GitHub sign-up has the email but no password: say so.
+        yield* accounts.githubSignIn(identity(6, 'plain', 'plain@x.io'));
+        const github = yield* Effect.flip(
+          accounts.signIn({ email: 'plain@x.io', password: 'whatever!!' })
+        );
+        expect(github).toMatchObject({ hint: 'github' });
         const { token } = yield* accounts.signIn({
           email: ' ADA@example.com ',
           password: signUp.password,

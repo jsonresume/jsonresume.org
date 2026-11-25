@@ -1,6 +1,12 @@
 import { RegistryProvider, useAtomSet } from '@effect/atom-react';
 import { AuthCard, Button, Divider, Field, Input, Text } from '@jsonresume/ui';
-import { errorTag, keys, signInAtom, useIsClient } from '@repo/api-client';
+import {
+  errorTag,
+  keys,
+  signInAtom,
+  signInHint,
+  useIsClient,
+} from '@repo/api-client';
 import { account } from '@repo/content/pages';
 import { useState, type FormEvent, type ReactNode } from 'react';
 import {
@@ -47,7 +53,8 @@ function SignInForm({ next, error, signUpLink, forgotLink }: SignInPageProps) {
     if (tag === undefined)
       return window.location.assign(safeNext(next, '/dashboard'));
     setBusy(false);
-    setMessage(errorMessage(tag));
+    const hint = signInHint(exit);
+    setMessage((hint && account.signInHints[hint]) || errorMessage(tag));
   };
 
   return (

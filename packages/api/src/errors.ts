@@ -30,7 +30,16 @@ export class EmailTaken extends Schema.TaggedError<EmailTaken>()(
 /** Wrong email or password; deliberately doesn't say which. */
 export class InvalidCredentials extends Schema.TaggedError<InvalidCredentials>()(
   'InvalidCredentials',
-  {},
+  {
+    /**
+     * Why, so the page can say what to do: no account has that email; the
+     * account signs in with GitHub (no password yet); or the password is
+     * wrong. Sign-up already says whether an email has an account.
+     */
+    hint: Schema.optionalKey(
+      Schema.Literals(['no-account', 'github', 'password'])
+    ),
+  },
   { httpApiStatus: 401 }
 ) {}
 

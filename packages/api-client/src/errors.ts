@@ -31,3 +31,15 @@ export function usernameReason(
     ? error.reason
     : undefined;
 }
+
+/** Why a sign-in was refused ('no-account', 'github', 'password'), when it was. */
+export function signInHint(
+  exit: Exit.Exit<unknown, unknown>
+): string | undefined {
+  const error = failure(exit);
+  return Predicate.isTagged(error, 'InvalidCredentials') &&
+    Predicate.hasProperty(error, 'hint') &&
+    Predicate.isString(error.hint)
+    ? error.hint
+    : undefined;
+}

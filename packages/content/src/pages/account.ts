@@ -94,6 +94,16 @@ export const username = {
 };
 
 /** What a failed request means, by error tag. */
+/** A refused sign-in, by why (InvalidCredentials' hint). */
+export const signInHints: Record<string, string> = {
+  'no-account':
+    'No account uses that email. Check the spelling, or sign up below.',
+  github:
+    'That account signs in with GitHub: use Continue with GitHub above. To sign in with a password instead, set one with Forgot your password.',
+  password:
+    'That password isn’t right. Try again, or set a new one with Forgot your password.',
+};
+
 export const errors: Record<string, string> = {
   InvalidCredentials:
     'That email and password don’t match an account. If you signed up with GitHub, use Continue with GitHub.',
