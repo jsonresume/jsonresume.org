@@ -63,15 +63,6 @@ export const jobDecisionsAtom = ApiClient.query('jobDecisions', 'decisions', {
   query: {},
   reactivityKeys: [...keys.jobs, ...keys.account],
 });
-/** Saves what they want; pass reactivityKeys: keys.jobs to decide again. */
-export const saveJobPreferencesAtom = ApiClient.mutation(
-  'jobDecisions',
-  'savePreferences'
-);
-/** Where the resume could go: the fitting jobs grouped by kind of role. */
-export const directionsAtom = ApiClient.query('myJobs', 'directions', {
-  reactivityKeys: [...keys.jobs, ...keys.account],
-});
 /** The career graph Pathways → Tree draws, and where people go next. */
 export const careerGraphAtom = ApiClient.query('career', 'graph', {
   reactivityKeys: [...keys.career, ...keys.jobs, ...keys.account],
