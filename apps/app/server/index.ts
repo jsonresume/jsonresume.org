@@ -178,13 +178,13 @@ const main = Effect.gen(function* () {
       apiKeysRoute,
       ...discoveryRoutes(site, Option.getOrUndefined(openAiChallenge)),
     ],
-    // Beacons carry no authority; /api/v1 takes API keys, never cookies;
-    // OAuth clients register and get tokens without a session.
+    // Beacons, /api/v1 (API keys) and OAuth clients carry no session.
     protect: {
       prefix: '/api',
       exempt: ['/api/events/', '/api/v1/', '/api/job-digest/', ...sessionless],
     },
     openPaths,
+    fallback: resumes.bare,
     // The registry moved here: its links redirect (see registryRedirect).
     redirectHosts: { 'registry.jsonresume.org': registryRedirect },
   });

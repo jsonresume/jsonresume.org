@@ -97,6 +97,25 @@ describe('createSiteApp', () => {
     expect((await archived.request('/old-123.js')).status).toBe(404);
   });
 
+  it('asks the fallback only when nothing else answered', async () => {
+    const asked: Array<string> = [];
+    const withFallback = createSiteApp({
+      clientDir: dir,
+      fallback: async (request) => {
+        asked.push(new URL(request.url).pathname);
+        return new URL(request.url).pathname === '/ada'
+          ? new Response(null, { status: 301, headers: { location: '/@ada' } })
+          : undefined;
+      },
+    });
+    const moved = await withFallback.request('/ada');
+    expect(moved.status).toBe(301);
+    expect(moved.headers.get('location')).toBe('/@ada');
+    expect((await withFallback.request('/nobody')).status).toBe(404);
+    expect((await withFallback.request('/')).status).toBe(200);
+    expect(asked).toEqual(['/ada', '/nobody']);
+  });
+
   it('answers unknown paths with the 404 page', async () => {
     const res = await get('/nope');
     expect(res.status).toBe(404);

@@ -40,6 +40,8 @@ export interface SiteAppOptions {
   redirectHosts?: Readonly<Record<string, (url: URL) => string>>;
   /** Path prefixes any website may call (CORS, no cookies): MCP and OAuth. */
   openPaths?: ReadonlyArray<string>;
+  /** Last try before the 404 page, when no route or file answered. */
+  fallback?: (request: Request) => Promise<Response | undefined>;
 }
 
 /**
@@ -68,6 +70,7 @@ export function createSiteApp({
   protect,
   redirectHosts = {},
   openPaths = [],
+  fallback,
 }: SiteAppOptions): Hono {
   // serveStatic resolves `root` against the working directory.
   const root = relative(process.cwd(), clientDir) || '.';
@@ -158,6 +161,8 @@ export function createSiteApp({
       })
     );
 
-  app.notFound((c) => c.html(notFoundPage, 404));
+  app.notFound(
+    async (c) => (await fallback?.(c.req.raw)) ?? c.html(notFoundPage, 404)
+  );
   return app;
 }
