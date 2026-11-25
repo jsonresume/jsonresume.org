@@ -1,5 +1,5 @@
 import type { ExploreResults } from '@repo/api';
-import type { Entry } from './listing';
+import { wordsOf, type Entry } from './listing';
 
 export const PAGE_SIZE = 24;
 
@@ -12,19 +12,58 @@ export const termsOf = (query: string) =>
     .filter((t) => t.length > 0)
     .slice(0, 8);
 
+/** What may follow a term in another spelling of it: reactjs, react.js, python3. */
+const VARIANT = /^(?:\.?js|lang|\d[\w.]*|[-_.].*)$/;
+
+/**
+ * How a word matches a term: the same word, or another spelling of it
+ * ("react" finds "reactjs", "python" finds "python3"), but never a
+ * different word that happens to start the same ("java" isn't "javascript").
+ */
+const fit = (word: string, term: string) =>
+  word === term
+    ? 1
+    : word.startsWith(term) && VARIANT.test(word.slice(term.length))
+    ? 0.5
+    : 0;
+
+const best = (words: Iterable<string>, term: string) => {
+  let top = 0;
+  for (const word of words) {
+    top = Math.max(top, fit(word, term));
+    if (top === 1) break;
+  }
+  return top;
+};
+
 /** How well an entry matches every term, or 0 when one is missing. */
 const relevance = (entry: Entry, terms: ReadonlyArray<string>) => {
   let score = 0;
   for (const term of terms) {
-    if (!entry.words.includes(term)) return 0;
+    const match = best(entry.words, term);
+    if (match === 0) return 0;
     const { name, label, username } = entry.listing;
-    score += entry.skillSet.has(term)
-      ? 3
-      : `${name} ${label ?? ''} ${username}`.toLowerCase().includes(term)
-      ? 2
-      : 1;
+    score +=
+      match *
+      (entry.skillSet.has(term)
+        ? 3
+        : best(wordsOf(`${name} ${label ?? ''} ${username}`), term) > 0
+        ? 2
+        : 1);
   }
   return score;
+};
+
+/** The listing with the skills a search matched shown first. */
+const matchedFirst = (entry: Entry, terms: ReadonlyArray<string>) => {
+  if (terms.length === 0) return entry.listing;
+  const hit = (skill: string) =>
+    wordsOf(skill).some((w) => terms.some((t) => fit(w, t) > 0)) ||
+    terms.includes(skill.toLowerCase());
+  const matched = entry.skills.filter(hit);
+  if (matched.length === 0) return entry.listing;
+  const rest = entry.listing.skills.filter((s) => !matched.includes(s));
+  return { ...entry.listing, skills: [...matched, ...rest].slice(0, 8) };
 };
 
 const newest = (a: Entry, b: Entry) =>
@@ -94,7 +133,7 @@ export const search = (
     total: ranked.length,
     people: ranked
       .slice((current - 1) * PAGE_SIZE, current * PAGE_SIZE)
-      .map((e) => e.listing),
+      .map((e) => matchedFirst(e, terms)),
     popularSkills: [...popular],
   };
 };

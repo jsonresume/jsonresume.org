@@ -4,8 +4,10 @@ import { entries, text, texts } from '@repo/resume-formats/read';
 /** A resume ready to search: what Explore shows, and the words it matches. */
 export interface Entry {
   listing: ResumeListing;
-  /** Everything searchable, lower-cased: name, headline, place, skills, jobs. */
-  words: string;
+  /** Every word of what's searchable (name, headline, place, skills, jobs), lower-cased. */
+  words: ReadonlySet<string>;
+  /** Every skill, as written, for showing the ones a search matched. */
+  skills: ReadonlyArray<string>;
   /** Skills and keywords, lower-cased, for exact matches. */
   skillSet: ReadonlySet<string>;
   /** How complete it looks (headline, skills, photo, jobs): fuller first. */
@@ -91,7 +93,7 @@ export const toEntry = (row: Row): Entry | undefined => {
         lastModifiedOf(entries([resume['meta']])[0]?.['lastModified'])
       )?.toISOString() ?? null,
   };
-  const words = [
+  const searchable = [
     row.username,
     name,
     label,
@@ -101,11 +103,11 @@ export const toEntry = (row: Row): Entry | undefined => {
     ...work.flatMap((w) => [text(w['position']), text(w['name'])]),
   ]
     .filter(Boolean)
-    .join(' \n ')
-    .toLowerCase();
+    .join(' \n ');
   return {
     listing,
-    words,
+    words: new Set(wordsOf(searchable)),
+    skills,
     skillSet: new Set(skills.map((s) => s.toLowerCase())),
     fullness:
       (label ? 2 : 0) +
@@ -115,6 +117,18 @@ export const toEntry = (row: Row): Entry | undefined => {
       (location ? 0.5 : 0),
   };
 };
+
+/**
+ * The words of some text, lower-cased: split on spaces and punctuation, but
+ * keeping what skills are spelled with ("c#", "c++", "node.js", "ci/cd" is
+ * two words), without a sentence's closing full stop.
+ */
+export const wordsOf = (text: string) =>
+  text
+    .toLowerCase()
+    .split(/[\s,;:/()|"'!?[\]{}<>]+/)
+    .map((w) => w.replace(/\.+$/, ''))
+    .filter((w) => w.length > 0);
 
 const squash = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
 
