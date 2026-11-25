@@ -134,5 +134,6 @@ Don't remove or deprecate themes without the maintainer's approval. 27 legacy th
 ## Principles
 
 - Bias toward action, ship incrementally, user experience first. Bugs and features before refactors.
+- **Never add anything to people's resumes.** A resume page and its downloads (`/@username`, `.pdf`, `.docx`, every format) show the person's resume and nothing of ours: no badges, "Made with JSON Resume" links, banners, CTAs or ads (maintainer, 2026-11-25). Fixes that make a theme render what the person wrote are fine; growth ideas go elsewhere on the site.
 - Check facts (counts, dates, commands) against the source before writing them on the site or here.
 - Update this file when you learn something a future session needs.
