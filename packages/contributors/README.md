@@ -24,15 +24,19 @@ the `/contributors` page (`@repo/contributors/ui`) and the
   pull requests, issues or comments in that repository, or the npm package
   or project.
 - **Data:** `src/data/contributors.json`, written by `scripts/collect.ts` from
-  public data only. Run it with any GitHub token (it needs no scopes; the
-  run takes a few hundred requests and about seven minutes):
+  public data only. Run it with a GitHub token that can read issues: a
+  classic one needs no scopes, but an app or fine-grained token without
+  issues permission gets only pull requests from the issues endpoint, and
+  every issue drops out. The run takes a few hundred requests and about
+  seven minutes:
 
   ```sh
   GITHUB_TOKEN=… pnpm --filter @repo/contributors collect
   ```
 
   The `Contributors` workflow runs it every Monday, and opens a pull request
-  when the list changed.
+  when the list changed (never when its credits fell by over 5%: a source
+  failed).
 - **Page:** everyone is in the server-rendered HTML, most involved first;
   search and the filter only hide people. A person's first six credits
   show, and the rest fold into "and N more".
