@@ -36,6 +36,10 @@ describe('browserOptions', () => {
     expect(options.cookieless_mode).toBe('always');
     expect(options.api_host).toBe('/ingest');
     expect(options.disable_session_recording).toBe(true);
+    expect(options.capture_performance).toEqual({
+      web_vitals: true,
+      network_timing: false,
+    });
   });
 
   it('adds the country to every event when it is known', () => {
