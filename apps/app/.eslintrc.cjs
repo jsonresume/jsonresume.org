@@ -11,6 +11,8 @@ module.exports = {
   },
   settings: { react: { version: 'detect' } },
   ignorePatterns: ['dist', 'node_modules'],
+  // Set by vite.config.ts `define` (declared in src/env.d.ts).
+  globals: { __THEME_COUNT__: 'readonly', __SCHEMA_VERSION__: 'readonly' },
   rules: {
     'react/react-in-jsx-scope': 'off',
     // TypeScript checks unused code; the base rule misreads type parameters.

@@ -1,3 +1,8 @@
+/** How many gallery themes there are, counted at build time (vite.config.ts). */
+declare const __THEME_COUNT__: number;
+/** @jsonresume/schema's version, at build time (vite.config.ts). */
+declare const __SCHEMA_VERSION__: string;
+
 /** Build-time settings (see .env.production). */
 interface ImportMetaEnv {
   /** PostHog's project token: public, it ships to every browser. */
