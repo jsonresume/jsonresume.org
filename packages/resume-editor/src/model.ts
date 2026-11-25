@@ -1,5 +1,6 @@
 import type { JsonSchemaNode } from '@repo/schema-explorer';
 import { Predicate } from 'effect';
+import { helpText } from './help';
 
 /** How a field is edited. */
 export type FieldKind =
@@ -80,7 +81,7 @@ function field(
   const base = {
     key,
     label: humanize(key),
-    ...(raw.description ? { description: raw.description } : {}),
+    ...(raw.description ? { description: helpText(raw.description) } : {}),
   };
   const options = raw.oneOf ?? raw.anyOf;
   const structured = options
