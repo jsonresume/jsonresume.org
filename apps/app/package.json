@@ -35,6 +35,7 @@
     "@repo/dashboard": "workspace:^",
     "@repo/database": "workspace:^",
     "@repo/domain": "workspace:*",
+    "@repo/contributors": "workspace:^",
     "@repo/explore": "workspace:^",
     "@repo/images": "workspace:*",
     "@repo/job-board": "workspace:^",

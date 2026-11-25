@@ -17,6 +17,7 @@ import {
   startRoute,
   appsRoute,
   teamRoute,
+  contributorsRoute,
   themeDevelopmentRoute,
   themesRoute,
 } from './routes/pages';
@@ -74,6 +75,7 @@ export const routeTree = rootRoute.addChildren([
     themeDevelopmentRoute,
     projectsRoute,
     teamRoute,
+    contributorsRoute,
     mediaRoute,
     mcpRoute,
     registryRoute,

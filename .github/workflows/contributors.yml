@@ -1,0 +1,71 @@
+# Refreshes the /contributors page's list (packages/contributors, README
+# there) every week, and opens or updates a pull request when someone new
+# has contributed or a count has changed.
+#
+# The pull request is opened with the GitHub App token (APP_ID /
+# APP_PRIVATE_KEY, as in release-packages.yml) so that CI runs on it: pull
+# requests opened with the default GITHUB_TOKEN don't trigger workflows.
+name: Contributors
+
+on:
+  schedule:
+    - cron: '17 4 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: contributors
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate a token
+        id: app
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - uses: actions/checkout@v7
+        with:
+          token: ${{ steps.app.outputs.token }}
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile --ignore-scripts --filter @repo/contributors...
+
+      - name: Collect
+        run: pnpm --filter @repo/contributors collect
+        env:
+          GITHUB_TOKEN: ${{ steps.app.outputs.token }}
+
+      - name: Open or update the pull request
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+        run: |
+          file=packages/contributors/src/data/contributors.json
+          # A new date alone isn't worth a pull request.
+          if git show "HEAD:$file" | jq -S '.people' | cmp -s - <(jq -S '.people' "$file"); then
+            echo "No new contributions"
+            exit 0
+          fi
+          branch=chore/contributors-refresh
+          git config user.name 'jsonresume-bot'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git checkout -B "$branch"
+          git add "$file"
+          git commit -m 'chore(contributors): refresh the contributors list'
+          git push --force origin "$branch"
+          if [ -z "$(gh pr list --head "$branch" --json number --jq '.[].number')" ]; then
+            gh pr create --head "$branch" --title 'chore(contributors): refresh the contributors list' \
+              --body 'The weekly refresh of jsonresume.org/contributors (`.github/workflows/contributors.yml`): new contributors and updated counts from GitHub and npm.'
+          fi

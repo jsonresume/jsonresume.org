@@ -10,6 +10,7 @@ import { TreeHandlers, TreeToolkit } from './treeTools';
 import { McpActor, McpCaller } from './context';
 import { ExploreHandlers, ExploreToolkit } from './exploreTools';
 import { ExportHandlers, ExportToolkit } from './exportTools';
+import { CommunityHandlers, CommunityToolkit } from './communityTools';
 import { DirectoryHandlers, DirectoryToolkit } from './directoryTools';
 import { ImportHandlers, ImportToolkit } from './importTools';
 import { WebhookHandlers, WebhookToolkit } from './webhookTools';
@@ -138,6 +139,7 @@ export const mcpRoutes = (site: string = SITE) =>
     McpServer.toolkit(VariantToolkit).pipe(Layer.provide(VariantHandlers)),
     McpServer.toolkit(DecisionToolkit).pipe(Layer.provide(DecisionHandlers)),
     McpServer.toolkit(ProposalToolkit).pipe(Layer.provide(ProposalHandlers)),
+    McpServer.toolkit(CommunityToolkit).pipe(Layer.provide(CommunityHandlers)),
     Prompts
   ).pipe(
     Layer.provideMerge(

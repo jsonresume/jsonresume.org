@@ -5,6 +5,7 @@
  * here too.
  */
 import { appTools } from './catalogApps';
+import { communityTools } from './catalogCommunity';
 import { directoryTools } from './catalogDirectory';
 import { importTools } from './catalogImport';
 import { webhookTools } from './catalogWebhooks';
@@ -24,7 +25,8 @@ export type McpGroup =
   | 'account'
   | 'explore'
   | 'jobs'
-  | 'apps';
+  | 'apps'
+  | 'community';
 
 export interface McpToolInfo {
   name: string;
@@ -74,6 +76,11 @@ export const groups: Record<McpGroup, { title: string; description: string }> =
       title: 'Connected apps',
       description:
         'See and disconnect the apps you’ve connected, and register OAuth apps for your own product.',
+    },
+    community: {
+      title: 'Community',
+      description:
+        'Everyone who has built JSON Resume, and what each of them did.',
     },
   };
 
@@ -153,6 +160,7 @@ export const tools: ReadonlyArray<McpToolInfo> = [
   ...appTools,
   ...treeTools,
   ...versionTools,
+  ...communityTools,
 ];
 
 /** Conversations the agent can start: the registry's AI tools, as prompts. */
