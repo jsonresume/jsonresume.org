@@ -1,5 +1,8 @@
+import { useAtomValue } from '@effect/atom-react';
 import resume from '@jsonresume/sample-data/complete-resume.json';
 import { Button, Callout, EmptyState, Stack, Text } from '@jsonresume/ui';
+import { accountAtom } from '@repo/api-client';
+import { AsyncResult } from 'effect/reactivity';
 import { serialize } from './state';
 
 const EXAMPLE = serialize(resume);
@@ -45,11 +48,22 @@ export function Start({ onStart }: { onStart: (resume: unknown) => void }) {
   );
 }
 
-/** Straight after signing up (?welcome=1): what this page is for. */
+/**
+ * Straight after signing up (?welcome=1): what this page is for. An email
+ * account's page waits for the address to be confirmed, so it says so.
+ */
 Start.Welcome = function Welcome({ username }: { username: string }) {
+  const account = useAtomValue(accountAtom);
+  const unconfirmed =
+    AsyncResult.isSuccess(account) &&
+    account.value.email !== null &&
+    !account.value.emailVerified &&
+    account.value.github === null;
   return (
     <Callout tone="brand" title="Welcome to JSON Resume">
-      Make your resume here and it goes live at jsonresume.org/@{username}.
+      {unconfirmed
+        ? `Make your resume here. It goes live at jsonresume.org/@${username} once you confirm your email: we sent you a link.`
+        : `Make your resume here and it goes live at jsonresume.org/@${username}.`}
     </Callout>
   );
 };
