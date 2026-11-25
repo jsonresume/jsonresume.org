@@ -11,7 +11,7 @@ import { AsyncResult } from 'effect/reactivity';
 import { useState } from 'react';
 import { ConsentMaker, ConsentScopes } from './ConsentScopes';
 import { LocalHandoff, useHandoff } from './LocalHandoff';
-import { Form } from './shared';
+import { Form, SubmitButton } from './shared';
 
 /** What /oauth/authorize was asked, from its query string. */
 export interface AuthorizeRequest {
@@ -143,9 +143,7 @@ function Consent({
         </Callout>
       ) : null}
       <Form onSubmit={(e) => (e.preventDefault(), void answer(true))}>
-        <Button type="submit" variant="primary" fullWidth disabled={busy}>
-          Allow
-        </Button>
+        <SubmitButton busy={busy}>Allow</SubmitButton>
         <Button
           type="button"
           variant="secondary"

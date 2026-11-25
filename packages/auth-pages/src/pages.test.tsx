@@ -63,6 +63,21 @@ describe('SignInPage', () => {
   });
 });
 
+describe('prerendered account forms', () => {
+  // Sent by the browser itself (before hydration, or without scripts), a
+  // GET form put the password in the address and the server's logs.
+  it('post, and keep submit off until the page hydrates', () => {
+    for (const html of [
+      renderToString(<SignInPage signUpLink={null} />),
+      renderToString(<SignUpPage signInLink={null} />),
+    ]) {
+      expect(html).toContain('method="post"');
+      const submit = html.match(/<button[^>]*type="submit"[^>]*>/)?.[0];
+      expect(submit).toContain('disabled');
+    }
+  });
+});
+
 describe('a prerendered page, hydrated with ?next=', () => {
   // The prerendered HTML has no ?next=; hydration alone keeps that href.
   it('carries next on GitHub and on the link to the other form', async () => {

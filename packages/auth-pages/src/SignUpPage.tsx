@@ -12,11 +12,12 @@ import {
 } from 'react';
 import {
   ErrorNote,
-  GithubButton,
-  safeNext,
-  refusalMessage,
-  UsernameStatus,
   Form,
+  GithubButton,
+  SubmitButton,
+  UsernameStatus,
+  refusalMessage,
+  safeNext,
 } from './shared';
 
 export interface SignUpPageProps {
@@ -117,9 +118,7 @@ function SignUpForm({ next, signInLink }: SignUpPageProps) {
             required
           />
         </Field>
-        <Button type="submit" variant="primary" fullWidth disabled={busy}>
-          {copy.submit}
-        </Button>
+        <SubmitButton busy={busy}>{copy.submit}</SubmitButton>
       </Form>
     </AuthCard>
   );

@@ -10,7 +10,7 @@ import { usernameCheckAtom, useIsClient } from '@repo/api-client';
 import { useAtomValue } from '@effect/atom-react';
 import { account } from '@repo/content/pages';
 import { AsyncResult } from 'effect/reactivity';
-import type { FormHTMLAttributes } from 'react';
+import type { FormHTMLAttributes, ReactNode } from 'react';
 
 const USERNAME = /^[a-z0-9](?:[a-z0-9]|-(?=[a-z0-9])){0,38}$/;
 export const isUsername = (name: string) => USERNAME.test(name);
@@ -63,11 +63,32 @@ export function GithubButton({
 }
 
 /** A form with its fields stacked. */
+/**
+ * Every account form. POST, so that a form the browser sends itself (before
+ * the page hydrates, or without scripts) never puts its fields, a password
+ * among them, in the address, the history and the server's logs.
+ */
 export const Form = (props: FormHTMLAttributes<HTMLFormElement>) => (
   <Stack asChild gap={4}>
-    <form {...props} />
+    <form method="post" {...props} />
   </Stack>
 );
+
+/** A form's submit button: off until the page has hydrated (see Form). */
+export function SubmitButton({
+  busy,
+  children,
+}: {
+  busy: boolean;
+  children: ReactNode;
+}) {
+  const ready = useIsClient();
+  return (
+    <Button type="submit" variant="primary" fullWidth disabled={busy || !ready}>
+      {children}
+    </Button>
+  );
+}
 
 export function ErrorNote({ message }: { message: string | undefined }) {
   return message ? (

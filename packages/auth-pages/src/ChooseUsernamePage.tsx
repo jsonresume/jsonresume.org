@@ -27,11 +27,12 @@ import {
 } from 'react';
 import {
   ErrorNote,
+  Form,
+  SubmitButton,
+  UsernameStatus,
   errorMessage,
   refusalMessage,
   safeNext,
-  UsernameStatus,
-  Form,
 } from './shared';
 
 function Choose({
@@ -106,9 +107,7 @@ function Choose({
             required
           />
         </Field>
-        <Button type="submit" variant="primary" fullWidth disabled={busy}>
-          {copy.submit}
-        </Button>
+        <SubmitButton busy={busy}>{copy.submit}</SubmitButton>
       </Form>
     </AuthCard>
   );
