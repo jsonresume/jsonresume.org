@@ -56,3 +56,13 @@ export function createJobPages<E>(
 
   return { board, job, company, dispose: () => runtime.dispose() };
 }
+
+/** /api-keys: where the jobs CLI and its docs send people for a key. */
+export const apiKeysRoute = {
+  path: '/api-keys',
+  fetch: async () =>
+    new Response(null, {
+      status: 301,
+      headers: { location: '/dashboard/settings#api-keys' },
+    }),
+};
