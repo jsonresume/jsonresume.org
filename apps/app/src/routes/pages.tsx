@@ -127,6 +127,16 @@ export const teamRoute = page(
   () => import('./team.lazy')
 );
 
+export const contributorsRoute = page(
+  paths.contributors,
+  {
+    title: 'Contributors',
+    description:
+      'Everyone who has built JSON Resume since 2014, with every commit, theme, tool, issue and discussion credited and linked.',
+  },
+  () => import('./contributors.lazy')
+);
+
 export const cliRoute = page(
   paths.cli,
   {

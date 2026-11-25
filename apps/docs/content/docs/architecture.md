@@ -63,6 +63,7 @@ routes and wiring, and every feature is a package in `packages/*`.
 | [`@repo/auth-pages`](https://github.com/jsonresume/jsonresume.org/tree/master/packages/auth-pages)           | Sign in, sign up and choose-a-username pages                 |
 | [`@repo/dashboard`](https://github.com/jsonresume/jsonresume.org/tree/master/packages/dashboard)             | The signed-in app: editor, overview, settings                |
 | [`@repo/explore`](https://github.com/jsonresume/jsonresume.org/tree/master/packages/explore)                 | Explore: every public resume, searchable                     |
+| [`@repo/contributors`](https://github.com/jsonresume/jsonresume.org/tree/master/packages/contributors)       | Everyone who has contributed, with every credit              |
 | [`@repo/theme-gallery`](https://github.com/jsonresume/jsonresume.org/tree/master/packages/theme-gallery)     | The theme gallery and its search                             |
 | [`@repo/schema-explorer`](https://github.com/jsonresume/jsonresume.org/tree/master/packages/schema-explorer) | The readable schema reference                                |
 | [`@repo/jobs`](https://github.com/jsonresume/jsonresume.org/tree/master/packages/jobs)                       | Hacker News jobs: import pipeline and matching               |

@@ -18,6 +18,7 @@ describe('every page', () => {
       '/themes',
       '/projects',
       '/team',
+      '/contributors',
       '/cli',
       '/ai',
       '/theme-development',

@@ -225,6 +225,9 @@ importers:
       '@repo/content':
         specifier: workspace:*
         version: link:../../packages/content
+      '@repo/contributors':
+        specifier: workspace:^
+        version: link:../../packages/contributors
       '@repo/dashboard':
         specifier: workspace:^
         version: link:../../packages/dashboard
@@ -2028,6 +2031,70 @@ importers:
         specifier: ^4.1.12
         version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.5)
 
+  packages/contributors:
+    dependencies:
+      '@jsonresume/ui':
+        specifier: workspace:*
+        version: link:../ui
+      '@repo/images':
+        specifier: workspace:*
+        version: link:../images
+      effect:
+        specifier: 4.0.6
+        version: 4.0.6
+    devDependencies:
+      '@effect/platform-node':
+        specifier: 4.0.6
+        version: 4.0.6(effect@4.0.6)(redis@6.3.0)
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      '@testing-library/jest-dom':
+        specifier: ^6.9.1
+        version: 6.9.1
+      '@testing-library/react':
+        specifier: ^16.3.0
+        version: 16.3.0(@testing-library/dom@10.4.1)(@types/react-dom@19.2.2)(@types/react@19.2.18)(react-dom@19.2.7)(react@19.2.7)
+      '@types/node':
+        specifier: ^20.19.24
+        version: 20.19.24
+      '@types/react':
+        specifier: ^19.2.2
+        version: 19.2.18
+      '@types/react-dom':
+        specifier: ^19.2.2
+        version: 19.2.2(@types/react@19.2.18)
+      '@vanilla-extract/css':
+        specifier: ^1.21.3
+        version: 1.21.3
+      '@vanilla-extract/vite-plugin':
+        specifier: ^5.2.6
+        version: 5.2.6(@types/node@20.19.24)(vite@6.4.5)
+      axe-core:
+        specifier: ^4.14.0
+        version: 4.14.0
+      jsdom:
+        specifier: ^27.0.0
+        version: 27.0.1(postcss@8.5.23)
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      react-dom:
+        specifier: 19.2.7
+        version: 19.2.7(react@19.2.7)
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vite:
+        specifier: ^6.4.5
+        version: 6.4.5(@types/node@20.19.24)(yaml@2.9.0)
+      vitest:
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.5)
+
   packages/converters/jsonresume-to-rendercv:
     dependencies:
       json-to-pretty-yaml:
@@ -2503,6 +2570,9 @@ importers:
       '@repo/careers':
         specifier: workspace:*
         version: link:../careers
+      '@repo/contributors':
+        specifier: workspace:*
+        version: link:../contributors
       '@repo/explore':
         specifier: workspace:*
         version: link:../explore
@@ -13942,7 +14012,6 @@ packages:
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
-    dev: false
 
   /@effect/platform-node@4.0.6(effect@4.0.6)(redis@6.3.0):
     resolution: {integrity: sha512-gXvGHAy0/8PZbWvMMguloDUyeSP+rzYEo3FSEqUuGduxo9ORcGioDxPI+GOLCIFfam7VuNkmSUxBOiRMIrMrBw==}
@@ -13958,7 +14027,6 @@ packages:
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
-    dev: false
 
   /@effect/sql-pg@4.0.6(effect@4.0.6):
     resolution: {integrity: sha512-mh2Z+Hi1/AWtkoGuzub2PPCHN7ZsMAbY8dlv/YbdJ6PoXVdrVAGsr+FeeoeD6f0rdnln4DQm7PvFjv1htAjY9w==}
@@ -18650,7 +18718,6 @@ packages:
       '@redis/client': ^6.3.0
     dependencies:
       '@redis/client': 6.3.0
-    dev: false
 
   /@redis/client@6.3.0:
     resolution: {integrity: sha512-fHrjwGCBvAANGi+TuRuwKi83sIOzgHr8eh+Uf48w3fSX7Hhrz174NrWqfJhAC2vnN0d/tfaZpdr6+o6JC3QHwg==}
@@ -18663,7 +18730,6 @@ packages:
         optional: true
       '@opentelemetry/api':
         optional: true
-    dev: false
 
   /@redis/json@6.3.0(@redis/client@6.3.0):
     resolution: {integrity: sha512-yt6vRfPBXtW/3qm53cF81TSQpLMjWdW4/2E9WQ2GgbvsKkuCKCFQIcMiKlil1ZMnezK+IQuS795xKU5psbaegw==}
@@ -18672,7 +18738,6 @@ packages:
       '@redis/client': ^6.3.0
     dependencies:
       '@redis/client': 6.3.0
-    dev: false
 
   /@redis/search@6.3.0(@redis/client@6.3.0):
     resolution: {integrity: sha512-RPXAZmKjZZG7Tm7m1w9keFdXzbL91PiSHQBfQRe9xwW40jNsTRbG0FwhIz4QlHPU4gKDAsCy8IQHj4yZl4H9rw==}
@@ -18681,7 +18746,6 @@ packages:
       '@redis/client': ^6.3.0
     dependencies:
       '@redis/client': 6.3.0
-    dev: false
 
   /@redis/time-series@6.3.0(@redis/client@6.3.0):
     resolution: {integrity: sha512-+fJOB8mN1z5WRakCJNh5lVdz1KqvHGSOistsKeitD24QsCtPwyRQXWC0iq6T/i/ubLE/YcguZqPm8F598MKk4A==}
@@ -18690,7 +18754,6 @@ packages:
       '@redis/client': ^6.3.0
     dependencies:
       '@redis/client': 6.3.0
-    dev: false
 
   /@rolldown/pluginutils@1.0.0-beta.27:
     resolution: {integrity: sha512-+d0F4MKMCbeVUJwG96uQ4SgAznZNSq93I3V+9NHA4OpvqG8mRCpGdKmK8l/dl02h2CCDHwW2FqilnTyDcAnqjA==}
@@ -21145,7 +21208,6 @@ packages:
     resolution: {integrity: sha512-67MQl+fpWKVTT1NYdnmo3U4sc/xPo/zQBncVnI74qmQa0z/b+1g6iYqNmGCPbxO+zz2aklb08a0oHfegiVd0/w==}
     dependencies:
       '@types/node': 20.19.24
-    dev: false
 
   /@types/yargs-parser@21.0.3:
     resolution: {integrity: sha512-I4q9QU9MQv4oEOz4tAHJtNz1cwuLxn2F3xcc2iV5WdqLPpUnj30aUuxt1mAxYTG+oe8CZMV/+6rU4S4gRDzqtQ==}
@@ -33446,7 +33508,6 @@ packages:
     transitivePeerDependencies:
       - '@node-rs/xxhash'
       - '@opentelemetry/api'
-    dev: false
 
   /reflect.getprototypeof@1.0.10:
     resolution: {integrity: sha512-00o4I+DVrefhv+nX0ulyi3biSHCPDe+yLv5o/p6d/UVlirijB8E16FtfwSAi4g3tcqrQ4lRAqQSoFEZJehYEcw==}
@@ -36013,7 +36074,6 @@ packages:
   /undici@8.12.3:
     resolution: {integrity: sha512-+fdndUTwBP86cVjihTp21hZHo7d6oj1c/47XPA3lL8mM0XHs+C4EkcjmgRsFnFk2f/UONGDy9ItBItmXsLOQHw==}
     engines: {node: '>=22.19.0'}
-    dev: false
 
   /unicode-canonical-property-names-ecmascript@2.0.1:
     resolution: {integrity: sha512-dA8WbNeb2a6oQzAQ55YlT5vQAWGV9WXOsi3SskE3bcCdM0P4SDd+24zS/OCacdRq5BkdsRj9q3Pg6YyQoxIGqg==}

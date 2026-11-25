@@ -110,6 +110,11 @@ export function TeamPage({ team, history }: TeamPageProps) {
                 <Button asChild>
                   <a href={copy.contributing.guide}>Contributing guide</a>
                 </Button>
+                <Button asChild variant="ghost">
+                  <SiteLink href={paths.contributors}>
+                    Everyone who has contributed
+                  </SiteLink>
+                </Button>
               </div>
             </div>
           </div>
