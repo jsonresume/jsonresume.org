@@ -1654,6 +1654,9 @@ importers:
       '@repo/resume-import':
         specifier: workspace:*
         version: link:../resume-import
+      '@repo/resume-report':
+        specifier: workspace:*
+        version: link:../resume-report
       '@repo/resume-themes':
         specifier: workspace:*
         version: link:../resume-themes
@@ -3109,6 +3112,37 @@ importers:
       pdfjs-dist:
         specifier: 5.4.296
         version: 5.4.296
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: ^4.1.12
+        version: 4.1.12(@types/node@20.19.24)(@vitest/coverage-v8@4.1.12)(@vitest/ui@4.1.12)(jsdom@27.0.1)(vite@6.4.5)
+
+  packages/resume-report:
+    dependencies:
+      '@repo/accounts':
+        specifier: workspace:*
+        version: link:../accounts
+      '@repo/analytics':
+        specifier: workspace:*
+        version: link:../analytics
+      '@repo/api':
+        specifier: workspace:*
+        version: link:../api
+      effect:
+        specifier: 4.0.6
+        version: 4.0.6
+    devDependencies:
+      '@repo/eslint-config-custom':
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      '@types/node':
+        specifier: ^20.19.24
+        version: 20.19.24
       tsconfig:
         specifier: workspace:*
         version: link:../tsconfig

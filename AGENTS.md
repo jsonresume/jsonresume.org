@@ -80,6 +80,7 @@ package over growing an app.
 | `@repo/images`            | Other sites' images (avatars, photos) resized and cached by our server at `/_img/<width>/<source>.webp`; `proxiedImage()` builds the path.    |
 | `@repo/posthog`           | Product analytics in PostHog, cookie-free: the browser client, server-side events under the account id, the `/ingest` proxy.                  |
 | `@repo/job-digest`        | The weekly jobs email (opt-in): new apply and stretch jobs from the dashboard's decisions, the one-click stop, the Monday timer's run.        |
+| `@repo/resume-report`     | The monthly resume report email: who read your resume in the last 30 days and from where, sent early each month when someone did.             |
 | `@repo/contributors`      | Everyone who has contributed to JSON Resume, with every credit linked: the /contributors page, `list_contributors`, the weekly collector.     |
 
 Dependency direction: `domain` ← `content`, `api` ← `site`, feature packages ←

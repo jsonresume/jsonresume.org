@@ -12,6 +12,11 @@ const ROWS: ReadonlyArray<{
     hint: 'A welcome, reminders to confirm your email, and one nudge if your page stays empty. Each comes once at most.',
   },
   {
+    key: 'monthlyReport',
+    label: 'Monthly resume report',
+    hint: 'Early each month: how many people read your resume and where they came from. Only when someone did.',
+  },
+  {
     key: 'weeklyJobs',
     label: 'Weekly jobs email',
     hint: 'On Mondays, new Hacker News jobs that fit your resume.',

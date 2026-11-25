@@ -47,7 +47,10 @@ function Settings({ user, token, settingsHref }: Link) {
       </Callout>
     );
   const allOff =
-    current !== undefined && !current.accountEmails && !current.weeklyJobs;
+    current !== undefined &&
+    !current.accountEmails &&
+    !current.weeklyJobs &&
+    !current.monthlyReport;
   return (
     <Stack gap={6}>
       <EmailSwitches
@@ -67,7 +70,11 @@ function Settings({ user, token, settingsHref }: Link) {
             loading={busy}
             disabled={current === undefined}
             onClick={() =>
-              void change({ accountEmails: false, weeklyJobs: false })
+              void change({
+                accountEmails: false,
+                weeklyJobs: false,
+                monthlyReport: false,
+              })
             }
           >
             Unsubscribe from all
