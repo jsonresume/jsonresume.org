@@ -25,16 +25,14 @@
   },
   "dependencies": {
     "handlebars": "^4.7.7",
-    "i18next": "^22.4.15",
-    "i18next-browser-languagedetector": "^7.0.1",
-    "i18next-http-backend": "^3.0.5",
+    "i18next": "^26.7.2",
     "jsonresume-theme-stackoverflow": "^3.3.0",
     "markdown-it": "^14.2.0",
     "moment": "^2.29.4",
     "ramda": "^0.29.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-i18next": "^12.2.2",
+    "react-i18next": "^17.1.13",
     "styled-components": "^6.1.19",
     "web-vitals": "^2.1.0"
   },
