@@ -24,6 +24,9 @@ export const browserOptions = (
   // Typing in the editor is resume text: never recorded.
   disable_session_recording: true,
   disable_surveys: true,
+  // Core Web Vitals (LCP, CLS, FCP, INP) from real visits, so speed work can
+  // be measured. Network timing stays off: it would record request URLs.
+  capture_performance: { web_vitals: true, network_timing: false },
   // Exceptions nobody can act on are dropped. Cookieless mode drops the
   // address before PostHog could place it, so the country goes in our own
   // property and in PostHog's, for its world map.
