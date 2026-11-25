@@ -6,6 +6,7 @@ import {
 import { Effect, Schema } from 'effect';
 import { createRequire } from 'node:module';
 import { withRegionCodes } from './regions.ts';
+import { withoutInvalidDates } from './invalid-dates.ts';
 import { withSchemaShapes } from './shapes.ts';
 import { ensureHtmlCharset } from './charset.ts';
 import { themeLoaders } from './loaders.ts';
@@ -177,5 +178,5 @@ export const renderTheme = Effect.fn('renderTheme')(function* (
       message: 'the theme did not return HTML',
     });
   }
-  return withPrintStyles(ensureHtmlCharset(html), theme);
+  return withPrintStyles(ensureHtmlCharset(withoutInvalidDates(html)), theme);
 });
