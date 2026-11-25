@@ -4,17 +4,21 @@ import { AppPage, Callout, Skeleton, SplitView, Stack } from '@jsonresume/ui';
 import { media } from '@jsonresume/ui/tokens';
 import { decodeJsonSchema } from '@repo/schema-explorer';
 import { optionParam, useAtomsInUrl } from '@repo/url-state';
-import { useMemo, useState } from 'react';
+import { lazy, Suspense, useMemo, useState } from 'react';
 import { clearBackup, readBackup, useWide } from './backup';
 import { pathKey } from './form/context';
 import { FormProvider } from './form/FormProvider';
 import { ResumeForm } from './form/ResumeForm';
-import { JsonPane } from './JsonPane';
 import { formSections } from './model';
 import { PreviewPane } from './PreviewPane';
 import { Live } from './Live';
 import { AllowGist, Start } from './Start';
 import { CheckPane } from './CheckPane';
+
+// CodeMirror (most of the editor's JavaScript) loads only for the JSON view.
+const JsonPane = lazy(() =>
+  import('./JsonPane').then((m) => ({ default: m.JsonPane }))
+);
 import { SidePane } from './SidePane';
 import {
   draftAtom,
@@ -92,7 +96,9 @@ export function ResumeEditor({ username }: { username: string }) {
 
   const editor =
     mode === 'json' ? (
-      <JsonPane schema={schema} />
+      <Suspense fallback={<Skeleton height="24rem" />}>
+        <JsonPane schema={schema} />
+      </Suspense>
     ) : (
       <FormProvider issues={issueMap}>
         <ResumeForm sections={sections} issues={issueMap} />
