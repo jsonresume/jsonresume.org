@@ -22,12 +22,20 @@ const mine = async () =>
 describe('email settings', () => {
   it('starts with account emails on and the weekly email off', async () => {
     await signedUp();
-    expect(await mine()).toEqual({ accountEmails: true, weeklyJobs: false });
+    expect(await mine()).toEqual({
+      accountEmails: true,
+      weeklyJobs: false,
+      monthlyReport: true,
+    });
     const set = await server.fetch('/api/account/emails', {
       method: 'PUT',
       body: JSON.stringify({ weeklyJobs: true }),
     });
-    expect(await set.json()).toEqual({ accountEmails: true, weeklyJobs: true });
+    expect(await set.json()).toEqual({
+      accountEmails: true,
+      weeklyJobs: true,
+      monthlyReport: true,
+    });
     const prefs = await server.fetch('/api/me/job-preferences');
     expect((await prefs.json()).weeklyEmail).toBe(true);
   });
@@ -43,6 +51,7 @@ describe('email settings', () => {
     expect(await read.json()).toEqual({
       accountEmails: true,
       weeklyJobs: false,
+      monthlyReport: true,
     });
     const off = await server.fetch(link(token), {
       method: 'PUT',
@@ -51,6 +60,7 @@ describe('email settings', () => {
     expect(await off.json()).toEqual({
       accountEmails: false,
       weeklyJobs: false,
+      monthlyReport: true,
     });
   });
 
@@ -76,6 +86,10 @@ describe('email settings', () => {
     expect(await wrong.json()).toEqual({ stopped: false });
     const right = await stop(emailToken('test secret', id), 'account');
     expect(await right.json()).toEqual({ stopped: true });
-    expect(await mine()).toEqual({ accountEmails: false, weeklyJobs: true });
+    expect(await mine()).toEqual({
+      accountEmails: false,
+      weeklyJobs: true,
+      monthlyReport: true,
+    });
   });
 });

@@ -1,26 +1,23 @@
 import type { Mail } from './mailer';
+import {
+  button,
+  DISCORD,
+  escape,
+  FONT,
+  footerLink,
+  GITHUB,
+  INK,
+  item,
+  MUTED,
+  p,
+  RED,
+  stats,
+  STYLE,
+  type EmailItem,
+  type EmailStat,
+} from './emailParts';
 
-/** Where people talk to each other and to us; every email points there. */
-export const DISCORD = 'https://discord.gg/GTZtn8pTXC';
-const GITHUB = 'https://github.com/jsonresume/jsonresume.org';
-
-export const escape = (s: string) =>
-  s.replace(
-    /[&<>"']/g,
-    (c) =>
-      ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[
-        c
-      ] ?? c)
-  );
-
-/** A line in a list under the button: a next step, or a job. */
-export interface EmailItem {
-  /** A short tag before the title, such as "Apply". */
-  tag?: string;
-  title: string;
-  text: string;
-  url: string;
-}
+export { DISCORD, escape, type EmailItem, type EmailStat } from './emailParts';
 
 export interface EmailContent {
   to: string;
@@ -30,6 +27,8 @@ export interface EmailContent {
   heading: string;
   intro: ReadonlyArray<string>;
   action: { label: string; url: string };
+  /** Numbers in a row, under the intro. */
+  stats?: ReadonlyArray<EmailStat>;
   items?: ReadonlyArray<EmailItem>;
   /** Number the items, as steps to take in order. */
   numbered?: boolean;
@@ -43,70 +42,14 @@ export interface EmailContent {
   headers?: Record<string, string>;
 }
 
-const INK = '#1f1f1f';
-const MUTED = '#6b6b6b';
-const RED = '#d23a3a';
-const LINK = '#a92525';
-const FONT =
-  "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif";
-
-// Clients that read <style> (Apple Mail, iOS, Outlook.com) follow dark mode;
-// the rest get the light design from the inline styles.
-const STYLE = `<style>
-:root{color-scheme:light dark;supported-color-schemes:light dark}
-@media (prefers-color-scheme:dark){
-.jr-bg{background:#121212!important}
-.jr-card{background:#1d1d1d!important;border-color:#333!important}
-.jr-ink{color:#ececec!important}
-.jr-muted{color:#a8a8a8!important}
-.jr-link{color:#ff8a8a!important}
-.jr-rule{border-color:#333!important}
-.jr-num{background:#3a1d1d!important;color:#ff8a8a!important}
-}
-@media (max-width:600px){.jr-pad{padding:28px 22px!important}}
-</style>`;
-
-const p = (s: string) =>
-  `<p class="jr-ink" style="margin:0 0 16px;font-size:16px;line-height:1.6;color:${INK}">${escape(
-    s
-  )}</p>`;
-
-const button = ({ label, url }: { label: string; url: string }) =>
-  `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:8px 0 28px"><tr><td style="border-radius:6px;background:${RED}"><a href="${escape(
-    url
-  )}" style="display:inline-block;padding:13px 24px;font-family:${FONT};font-size:16px;font-weight:600;line-height:1.2;color:#ffffff;text-decoration:none;border-radius:6px">${escape(
-    label
-  )}</a></td></tr></table>`;
-
-const item = (it: EmailItem, n: number | undefined) => {
-  const marker =
-    n === undefined
-      ? ''
-      : `<td valign="top" width="36" style="padding:2px 12px 0 0"><div class="jr-num" style="width:26px;height:26px;border-radius:13px;background:#fbeaea;color:${LINK};font-size:13px;font-weight:700;line-height:26px;text-align:center">${n}</div></td>`;
-  const tag = it.tag
-    ? `<span style="display:inline-block;margin-right:6px;padding:1px 8px;border-radius:10px;background:#fbeaea;color:${LINK};font-size:12px;font-weight:700">${escape(
-        it.tag
-      )}</span>`
-    : '';
-  return `<tr>${marker}<td valign="top" style="padding:0 0 18px">${tag}<a class="jr-link" href="${escape(
-    it.url
-  )}" style="font-size:16px;font-weight:600;color:${LINK};text-decoration:none">${escape(
-    it.title
-  )}</a><div class="jr-muted" style="margin-top:3px;font-size:14px;line-height:1.5;color:${MUTED}">${escape(
-    it.text
-  )}</div></td></tr>`;
-};
-
-const footerLink = (label: string, url: string) =>
-  `<a class="jr-link" href="${escape(
-    url
-  )}" style="color:${LINK};text-decoration:none">${label}</a>`;
-
 /** The text version: the same words, links written out. */
 const plain = (c: EmailContent) =>
   [
     c.heading,
     ...c.intro,
+    ...(c.stats ?? []).map(
+      (s) => `${s.value} ${s.label}${s.note ? ` (${s.note})` : ''}`
+    ),
     `${c.action.label}: ${c.action.url}`,
     ...(c.items ?? []).map(
       (it, i) =>
@@ -164,6 +107,7 @@ export function compose(c: EmailContent): Mail {
     c.heading
   )}</h1>
 ${c.intro.map(p).join('\n')}
+${stats(c.stats ?? [])}
 ${button(c.action)}
 ${items}
 ${(c.outro ?? []).map(p).join('\n')}

@@ -10,10 +10,19 @@ describe('email tools', () => {
     expect((await call('get_email_settings')).value).toEqual({
       accountEmails: true,
       weeklyJobs: false,
+      monthlyReport: true,
     });
     const set = await call('set_email_settings', { accountEmails: false });
-    expect(set.value).toEqual({ accountEmails: false, weeklyJobs: false });
+    expect(set.value).toEqual({
+      accountEmails: false,
+      weeklyJobs: false,
+      monthlyReport: true,
+    });
     const weekly = await call('set_email_settings', { weeklyJobs: true });
-    expect(weekly.value).toEqual({ accountEmails: false, weeklyJobs: true });
+    expect(weekly.value).toEqual({
+      accountEmails: false,
+      weeklyJobs: true,
+      monthlyReport: true,
+    });
   });
 });

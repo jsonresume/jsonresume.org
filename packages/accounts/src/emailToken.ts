@@ -19,7 +19,7 @@ export const validEmailToken = (
 };
 
 /** Which emails a one-click unsubscribe stops. */
-export type EmailKind = 'account' | 'weekly' | 'all';
+export type EmailKind = 'account' | 'weekly' | 'report' | 'all';
 
 /** What an email needs to be stopped or changed in one or two clicks. */
 export interface EmailLinks {

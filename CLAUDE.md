@@ -42,7 +42,7 @@ Follow AGENTS.md for all new code (stack, packages, conventions): @AGENTS.md
   - Both model steps start when a resume is saved by any route (`ResumeSaved` in `@repo/accounts`, settling for 25s) or when the dashboard opens. Runs are shared by content hash.
   - `/api/me/career` waits 5s, then answers `pending`.
   - Tests use `@repo/careers/testing`, which calls no models.
-- **Emails** (`@repo/accounts` `lifecycle.ts`, README there): a fresh confirm link a day after signup and a last call before the name is freed; a welcome; one nudge if the page is still empty. Each at most once, every five minutes (`AccountJobs`). Every email is built by `compose` (`emailLayout.ts`). Every optional email links to `/emails` (switches by signed token, no sign-in) and sends `List-Unsubscribe` one-click headers. Keep both on any new email.
+- **Emails** (`@repo/accounts` `lifecycle.ts`, README there): a fresh confirm link a day after signup and a last call before the name is freed; a welcome; one nudge if the page is still empty. Each at most once, every five minutes (`AccountJobs`). Early each month, a resume report to people whose page had readers (`@repo/resume-report`). Every email is built by `compose` (`emailLayout.ts`). Every optional email links to `/emails` (switches by signed token, no sign-in) and sends `List-Unsubscribe` one-click headers. Keep both on any new email.
 - **Skill names** are compared only through `skillKey`/`skillName` (`@repo/jobs`). Aliases are in `skillAliases.ts`, the one list. The jobs timer's `mergeSkills` folds stored duplicates and `embedSkills` gives missing vectors.
 
 ## Themes
