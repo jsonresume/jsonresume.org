@@ -7,6 +7,7 @@ import {
   SearchField,
 } from '@jsonresume/ui';
 import { optionParam, textParam, useAtomsInUrl } from '@repo/url-state';
+import { useCallback, useDeferredValue } from 'react';
 import {
   THEME_STYLES,
   THEME_LAYOUTS,
@@ -68,6 +69,14 @@ export function ThemeGallery({ details, ...links }: ThemeGalleryProps) {
   const [sort, setSort] = useAtom(themeSortAtom);
   const setOpen = useAtomSet(themeOpenAtom);
   const visible = useAtomValue(visibleThemesAtom);
+  // A filter's chip answers at once and the grid (up to 228 cards) follows:
+  // re-rendering it inside the click made a tap take 216-424ms on a 4x
+  // slowed CPU (INP), and 6.6s for one visitor.
+  const shown = useDeferredValue(visible);
+  const openTheme = useCallback(
+    (theme: { slug: string }) => setOpen(theme.slug),
+    [setOpen]
+  );
 
   const active = [
     ...(query
@@ -148,11 +157,11 @@ export function ThemeGallery({ details, ...links }: ThemeGalleryProps) {
         Most used includes unchanged defaults; explicitly chosen excludes them.
         Updated {updated}.
       </p>
-      {visible.length ? (
+      {shown.length ? (
         <ThemeGrid
-          themes={visible}
+          themes={shown}
           eagerCount={4}
-          onOpen={(theme) => setOpen(theme.slug)}
+          onOpen={openTheme}
           {...links}
         />
       ) : (
