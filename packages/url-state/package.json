@@ -5,7 +5,8 @@
   "description": "Keep Effect Atom state in the URL's search params, safely for prerendered pages",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./pending": "./src/pending.ts"
   },
   "sideEffects": [
     "**/*.css.ts"

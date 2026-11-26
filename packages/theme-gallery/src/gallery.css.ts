@@ -1,5 +1,7 @@
 import { vars } from '@jsonresume/ui/tokens';
-import { PENDING } from '@repo/url-state';
+// The subpath: a .css.ts is evaluated at build time, and the package's main
+// entry would pull React and Effect into that.
+import { PENDING } from '@repo/url-state/pending';
 import { globalStyle, keyframes, style } from '@vanilla-extract/css';
 
 const { color, font, space } = vars;
