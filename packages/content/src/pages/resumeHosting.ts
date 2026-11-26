@@ -35,10 +35,18 @@ export const problems: Record<
     title: `No resume at @${username}`,
     body: `There is no GitHub user called ${username}. Resumes here are found by GitHub username, so check the spelling.`,
   }),
-  'no-gist': ({ username, file = 'resume.json' }) => ({
-    title: `@${username} hasn’t published a resume`,
-    body: `We looked for a public gist with a file named \`${file}\` on ${username}’s GitHub account and didn’t find one.`,
-  }),
+  'no-gist': ({ username, file = 'resume.json' }) =>
+    // ?gistname= asks for another file (resume-fr.json): people copy the
+    // pattern from Getting started, and the main resume may well exist.
+    file === 'resume.json'
+      ? {
+          title: `@${username} hasn’t published a resume`,
+          body: `We looked for a public gist with a file named \`resume.json\` on ${username}’s GitHub account and didn’t find one.`,
+        }
+      : {
+          title: `@${username} has no ${file}`,
+          body: `We looked for a public gist with a file named \`${file}\` on ${username}’s GitHub account and didn’t find one. Their main resume, if they have one, is at /@${username}.`,
+        },
   unpublished: ({ username }) => ({
     title: `@${username} hasn’t published yet`,
     body: `This name belongs to a JSON Resume account. The page goes live once its owner adds a resume (and confirms their email, if they signed up with one).`,
