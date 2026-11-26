@@ -21,13 +21,16 @@ export const duration = (seconds: number) => {
   return s >= 60 ? `${Math.floor(s / 60)}m ${s % 60}s` : `${s}s`;
 };
 
-const people = (n: number) => (n === 1 ? '1 person' : `${n} people`);
+/** 1,834: big numbers grouped, as people read them. */
+const count = (n: number) => n.toLocaleString('en');
+
+const people = (n: number) => (n === 1 ? '1 person' : `${count(n)} people`);
 
 /** How this month compares: "up from 12", "down from 30", or nothing. */
 export const versus = (now: number, before: number) =>
   before === 0 || now === before
     ? undefined
-    : `${now > before ? 'up' : 'down'} from ${before}`;
+    : `${now > before ? 'up' : 'down'} from ${count(before)}`;
 
 /** "google.com (12), Direct (9) and github.com (3)". */
 const listed = (rows: Overview['referrers'], name = (s: string) => s) => {
@@ -48,16 +51,16 @@ export function reportEmail(
   const change = versus(totals.visitors, previous.visitors);
   const figures: Array<EmailStat> = [
     {
-      value: String(totals.visitors),
+      value: count(totals.visitors),
       label: totals.visitors === 1 ? 'reader' : 'readers',
       ...(change ? { note: change } : {}),
     },
-    { value: String(totals.views), label: 'page views' },
+    { value: count(totals.views), label: 'page views' },
     ...(totals.medianSeconds > 0
       ? [{ value: duration(totals.medianSeconds), label: 'typical read' }]
       : []),
     ...(totals.dataReads > 0
-      ? [{ value: String(totals.dataReads), label: 'downloads' }]
+      ? [{ value: count(totals.dataReads), label: 'downloads' }]
       : []),
   ];
   const from = listed(overview.referrers);
@@ -66,7 +69,8 @@ export function reportEmail(
     to: who.to,
     site,
     campaign: 'report',
-    subject: `${people(totals.visitors)} read your resume this month`,
+    // Sent in the first week of a month, about the 30 days before it.
+    subject: `${people(totals.visitors)} read your resume in the past month`,
     preview: [
       change ? `That’s ${change}.` : '',
       from && `Most came from ${from}.`,
@@ -75,7 +79,10 @@ export function reportEmail(
       .join(' '),
     heading: `${people(totals.visitors)} read your resume`,
     intro: [
-      `In the last 30 days, ${site}/@${username} had ${totals.views} ${
+      `In the last 30 days, ${site.replace(
+        /^https?:\/\//,
+        ''
+      )}/@${username} had ${count(totals.views)} ${
         totals.views === 1 ? 'view' : 'views'
       } from ${people(totals.visitors)}. Your own visits aren’t counted.`,
     ],
