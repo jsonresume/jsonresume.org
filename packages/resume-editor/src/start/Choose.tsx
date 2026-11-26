@@ -13,6 +13,7 @@ import { errorTag, importResumeAtom, useSignedInHint } from '@repo/api-client';
 import { Exit } from 'effect';
 import { useEffect, useRef, useState } from 'react';
 import * as s from './start.css';
+import { extensionOf, fitImage } from './fitImage';
 import { startImportAtom, startResumeAtom, startStepAtom } from './state';
 
 const failed = (tag: string | undefined) =>
@@ -45,7 +46,8 @@ export function Choose() {
 
   const read = async (
     kind: 'file' | 'text',
-    send: () => ReturnType<typeof run>
+    send: () => ReturnType<typeof run>,
+    shrunk = false
   ) => {
     setBusy(true);
     setError(undefined);
@@ -55,18 +57,26 @@ export function Choose() {
       kind,
       ok: Exit.isSuccess(exit),
       reason: Exit.isFailure(exit) ? errorTag(exit) ?? 'unknown' : null,
+      shrunk,
     });
     if (Exit.isFailure(exit)) return setError(failed(errorTag(exit)));
     setResult(exit.value);
     setResume(exit.value.resume);
     setStep('review');
   };
-  const upload = (files: File[]) => {
-    const [file] = files;
-    if (!file) return;
+  const refused = (reason: 'type' | 'size', file: File) =>
+    startEvent('start_file_refused', { reason, ext: extensionOf(file) });
+  const upload = async (files: File[]) => {
+    const [chosen] = files;
+    if (!chosen) return;
+    const file = await fitImage(chosen, IMPORT_MAX_BYTES);
+    if (file.size > IMPORT_MAX_BYTES) {
+      refused('size', chosen);
+      return setError(failed('ImportTooLarge'));
+    }
     const form = new FormData();
     form.append('file', file);
-    void read('file', () => run({ payload: form }));
+    void read('file', () => run({ payload: form }), file !== chosen);
   };
 
   return (
@@ -83,9 +93,10 @@ export function Choose() {
             Upload your resume
           </Heading>
           <FileDropzone
-            onFiles={upload}
+            onFiles={(files) => void upload(files)}
+            onReject={refused}
+            onCancel={() => startEvent('start_file_cancelled', {})}
             accept=".pdf,.docx,.zip,.txt,.png,.jpg,.jpeg,.webp"
-            maxSize={IMPORT_MAX_BYTES}
             title="Drop it here"
             hint="PDF (scans too), Word, a photo or screenshot, or a LinkedIn data export (.zip)"
             disabled={busy}
