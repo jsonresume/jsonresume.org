@@ -46,22 +46,28 @@ const haystack = (job: JobSummary) =>
 
 /**
  * Jobs matching every filter. Each search word must start a word of the
- * job's title, company, place or skills ("us" finds US, not Rust).
+ * job's title, company, place or skills ("us" finds US, not Rust), so a
+ * half-typed word already finds something. Jobs where every word is whole
+ * come first ("java" lists Java jobs before JavaScript ones), each group
+ * in the board's own order.
  */
 export const filterJobs = <J extends JobSummary>(
   jobs: ReadonlyArray<J>,
   filters: JobFilters
 ): J[] => {
   const words = filters.query.toLowerCase().split(/\s+/).filter(Boolean);
-  return jobs.filter((job) => {
-    if (!matchesWhere(job, filters.where)) return false;
-    if (filters.seniority && job.seniority !== filters.seniority) return false;
+  const whole: J[] = [];
+  const started: J[] = [];
+  for (const job of jobs) {
+    if (!matchesWhere(job, filters.where)) continue;
+    if (filters.seniority && job.seniority !== filters.seniority) continue;
     if (filters.minSalary !== null) {
       const top = job.salaryMax ?? job.salaryMin;
-      if (top === null || top < filters.minSalary) return false;
+      if (top === null || top < filters.minSalary) continue;
     }
-    if (words.length === 0) return true;
     const text = haystack(job);
-    return words.every((word) => text.some((w) => w.startsWith(word)));
-  });
+    if (!words.every((word) => text.some((w) => w.startsWith(word)))) continue;
+    (words.every((word) => text.includes(word)) ? whole : started).push(job);
+  }
+  return [...whole, ...started];
 };
