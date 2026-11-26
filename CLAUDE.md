@@ -89,6 +89,7 @@ Don't remove or deprecate themes without the maintainer's approval. 27 legacy th
 
 - Files ≤200 lines (tests and config ≤500). No `console.*`, no `any`, no non-null `!`.
 - Effect style, with Schema to parse anything untrusted. Style with vanilla-extract and `vars` tokens. Every feature gets MCP tools.
+- A `.css.ts` file is evaluated at build time, along with everything it imports. Import only tokens or dependency-free modules there (a subpath such as `@repo/url-state/pending`): pulling a package's main entry, with React and Effect, into one made the first SSR test 10× slower and timed it out in CI (#829).
 - Never remove a feature: open an issue for the maintainer if something is broken beyond repair.
 
 ## Git, CI and releases
