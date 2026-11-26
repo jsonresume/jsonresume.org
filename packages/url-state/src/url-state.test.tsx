@@ -9,7 +9,7 @@ import {
 } from '@testing-library/react';
 import { Atom } from 'effect/reactivity';
 import { afterEach, describe, expect, it } from 'vitest';
-import { optionParam, textParam, useAtomsInUrl } from './index';
+import { optionParam, textParam, urlStateScript, useAtomsInUrl } from './index';
 
 const query = Atom.make('');
 const tag = Atom.make<string | null>(null);
@@ -60,5 +60,22 @@ describe('useAtomsInUrl', () => {
       fireEvent.click(screen.getByRole('button', { name: 'tag' }))
     );
     expect(window.location.search).toBe('?q=go&tag=minimal');
+  });
+
+  it('marks a page opened with state until the state is applied', async () => {
+    const mark = () => {
+      delete document.documentElement.dataset['urlState'];
+      new Function(urlStateScript)();
+      return document.documentElement.dataset['urlState'];
+    };
+    window.history.replaceState(null, '', '/x?utm_source=email');
+    expect(mark()).toBeUndefined();
+    window.history.replaceState(null, '', '/x?q=react');
+    expect(mark()).toBe('pending');
+    await mount();
+    await act(
+      () => new Promise((done) => requestAnimationFrame(() => done(null)))
+    );
+    expect(document.documentElement.dataset['urlState']).toBeUndefined();
   });
 });

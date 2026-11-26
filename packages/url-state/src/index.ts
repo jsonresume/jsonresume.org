@@ -1,6 +1,9 @@
 import { RegistryContext } from '@effect/atom-react';
 import type { Atom } from 'effect/reactivity';
 import { useContext, useEffect } from 'react';
+import { urlStateApplied } from './pending';
+
+export { PENDING, urlStateApplied, urlStateScript } from './pending';
 
 /**
  * One search parameter bound to a writable atom holding a string, where
@@ -60,6 +63,7 @@ export function useAtomsInUrl(bindings: ReadonlyArray<UrlBinding>): void {
           )
       );
     }
+    urlStateApplied();
 
     const sync = () => {
       const url = new URL(window.location.href);

@@ -1,5 +1,6 @@
 import { vars } from '@jsonresume/ui/tokens';
-import { globalStyle, style } from '@vanilla-extract/css';
+import { PENDING } from '@repo/url-state';
+import { globalStyle, keyframes, style } from '@vanilla-extract/css';
 
 const { color, font, space } = vars;
 
@@ -97,4 +98,15 @@ export const sortFacet = style({
   selectors: {
     '&&': { flex: '1 1 14rem', minWidth: 'min(100%, 14rem)' },
   },
+});
+
+// Opened with filters in the address (?style=minimal), the prerendered page
+// holds every theme until React applies them; waiting hidden for that frame
+// keeps the grid from collapsing under the reader. Shown after 3s anyway,
+// should the script never run.
+const reveal = keyframes({ to: { visibility: 'visible' } });
+export const gallery = style({});
+globalStyle(`${PENDING} ${gallery}`, {
+  visibility: 'hidden',
+  animation: `${reveal} 0s 3s forwards`,
 });

@@ -26,5 +26,6 @@ export {
 } from './links';
 export { NotFoundPage } from './pages/NotFoundPage';
 export { authHintScript } from './HeaderAuth';
+export { urlStateScript } from '@repo/url-state';
 export { SiteLayout } from './SiteLayout';
 export { isSitePath, SiteLink } from './SiteLink';
