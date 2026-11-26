@@ -1,7 +1,12 @@
 import { base, RouteProgress } from '@jsonresume/ui';
 import type { CompanyProfile, ExploreResults, Job, JobBoard } from '@repo/api';
 import type { ResumeProblem } from '@repo/domain';
-import { authHintScript, NotFoundPage, SiteLayout } from '@repo/site';
+import {
+  authHintScript,
+  NotFoundPage,
+  SiteLayout,
+  urlStateScript,
+} from '@repo/site';
 import type { Timeline } from '@repo/timeline';
 import {
   createRootRouteWithContext,
@@ -15,10 +20,12 @@ import {
 function RootDocument() {
   const loading = useRouterState({ select: (s) => s.status === 'pending' });
   return (
-    // The pre-paint script marks <html> before React hydrates it.
+    // The pre-paint scripts mark <html> before React hydrates it.
     <html lang="en" data-theme="system" suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: authHintScript }} />
+        <script
+          dangerouslySetInnerHTML={{ __html: authHintScript + urlStateScript }}
+        />
         <HeadContent />
       </head>
       <body className={base}>

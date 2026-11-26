@@ -103,7 +103,7 @@ export function ThemeGallery({ details, ...links }: ThemeGalleryProps) {
   ];
 
   return (
-    <>
+    <div className={s.gallery}>
       <FilterBar
         className={s.filters}
         label="Filter themes"
@@ -161,6 +161,6 @@ export function ThemeGallery({ details, ...links }: ThemeGalleryProps) {
         </EmptyState>
       )}
       <GalleryPreview themes={visible} details={details} {...links} />
-    </>
+    </div>
   );
 }
