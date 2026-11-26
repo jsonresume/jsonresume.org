@@ -10,10 +10,10 @@ import {
   Textarea,
 } from '@jsonresume/ui';
 import { Predicate } from 'effect';
-import type { ReactNode } from 'react';
+import { memo, type ReactNode } from 'react';
 import { itemTitle, type FieldSpec } from '../model';
 import type { Json, Path } from '../values';
-import { pathKey, useForm } from './context';
+import { pathKey, sameField, useForm } from './context';
 
 const text = (v: Json) =>
   Predicate.isString(v) || Predicate.isNumber(v) ? String(v) : '';
@@ -68,8 +68,7 @@ export function Fields({
   );
 }
 
-/** One field of the resume, edited the way its type suggests. */
-export function FieldEditor({ spec, value, path }: Props) {
+function FieldEditorView({ spec, value, path }: Props) {
   const { set, issues } = useForm();
   const error = issues.get(pathKey(path));
   const field = (control: ReactNode, hint?: string) => (
@@ -156,6 +155,9 @@ export function FieldEditor({ spec, value, path }: Props) {
       return <List spec={spec} value={value} path={path} />;
   }
 }
+
+/** One field of the resume, edited the way its type suggests. */
+export const FieldEditor = memo(FieldEditorView, sameField);
 
 function Group({ spec, value, path }: Props) {
   return (

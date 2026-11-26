@@ -14,3 +14,16 @@ export const FormContext = createContext<FormContextValue>({
 });
 export const useForm = () => useContext(FormContext);
 export const pathKey = (path: Path) => path.join('.');
+
+/**
+ * A field whose spec, value and place are unchanged needn't render again:
+ * edits copy only the path they change (setAt), so typing in one field
+ * leaves every other field's value as it was.
+ */
+export const sameField = (
+  a: { spec: unknown; value: Json; path: Path },
+  b: { spec: unknown; value: Json; path: Path }
+) =>
+  a.spec === b.spec &&
+  a.value === b.value &&
+  pathKey(a.path) === pathKey(b.path);

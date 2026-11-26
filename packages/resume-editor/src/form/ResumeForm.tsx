@@ -1,21 +1,11 @@
 import { useAtom, useAtomValue } from '@effect/atom-react';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-  Badge,
-} from '@jsonresume/ui';
+import { Accordion } from '@jsonresume/ui';
 import { useEffect, useMemo } from 'react';
 import type { SectionSpec } from '../model';
 import { draftAtom, goToFieldAtom, openSectionsAtom } from '../state';
 import { reveal } from './goTo';
 import { pathKey } from './context';
-import { Fields, FieldEditor, List } from './FieldEditor';
-
-/** "3" for a list with entries; nothing otherwise. */
-const countOf = (value: unknown) =>
-  Array.isArray(value) && value.length > 0 ? value.length : undefined;
+import { SectionPanel } from './SectionPanel';
 
 /**
  * Every section of the resume as a panel, Basics open first. Panels show
@@ -53,50 +43,18 @@ export function ResumeForm({
       ? (draft as Record<string, unknown>)[key]
       : undefined;
 
+  const value = useMemo(() => [...open], [open]);
+
   return (
-    <Accordion type="multiple" value={[...open]} onValueChange={setOpen}>
-      {sections.map((section) => {
-        const value = valueOf(section.key);
-        const count = countOf(value);
-        const issuesHere = problems.get(section.key);
-        return (
-          <AccordionItem
-            key={section.key}
-            value={section.key}
-            data-path={section.key}
-          >
-            <AccordionTrigger>
-              {section.label}
-              {count ? <Badge tone="neutral">{count}</Badge> : null}
-              {issuesHere ? (
-                <Badge tone="warning">{`${issuesHere} to fix`}</Badge>
-              ) : null}
-            </AccordionTrigger>
-            <AccordionContent>
-              {section.kind === 'list' ? (
-                <List
-                  spec={section}
-                  value={value}
-                  path={[section.key]}
-                  headingLevel={3}
-                />
-              ) : section.kind === 'group' ? (
-                <Fields
-                  specs={section.fields ?? []}
-                  value={value}
-                  path={[section.key]}
-                />
-              ) : (
-                <FieldEditor
-                  spec={section}
-                  value={value}
-                  path={[section.key]}
-                />
-              )}
-            </AccordionContent>
-          </AccordionItem>
-        );
-      })}
+    <Accordion type="multiple" value={value} onValueChange={setOpen}>
+      {sections.map((section) => (
+        <SectionPanel
+          key={section.key}
+          section={section}
+          value={valueOf(section.key)}
+          issues={problems.get(section.key)}
+        />
+      ))}
     </Accordion>
   );
 }

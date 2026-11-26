@@ -4,9 +4,8 @@ import { AppPage, Callout, Skeleton, SplitView, Stack } from '@jsonresume/ui';
 import { media } from '@jsonresume/ui/tokens';
 import { decodeJsonSchema } from '@repo/schema-explorer';
 import { optionParam, useAtomsInUrl } from '@repo/url-state';
-import { lazy, Suspense, useMemo, useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { clearBackup, readBackup, useWide } from './backup';
-import { pathKey } from './form/context';
 import { FormProvider } from './form/FormProvider';
 import { ResumeForm } from './form/ResumeForm';
 import { formSections } from './model';
@@ -30,7 +29,7 @@ import {
 import { EditorActions, SaveBar } from './Actions';
 import { CompactToolbar, EditorToolbar, type Mode, type View } from './Toolbar';
 import { useEditorSession } from './useEditorSession';
-import { validate } from './validate';
+import { useIssues } from './useIssues';
 
 const schema = decodeJsonSchema(schemaJson);
 const sections = formSections(schema);
@@ -71,14 +70,7 @@ export function ResumeEditor({ username }: { username: string }) {
     replace: start,
   } = useEditorSession(username);
 
-  const issues = useMemo(
-    () => (draft === null ? [] : validate(draft, schema)),
-    [draft]
-  );
-  const issueMap = useMemo(
-    () => new Map(issues.map((i) => [pathKey(i.path), i.message])),
-    [issues]
-  );
+  const { issues, issueMap, settled } = useIssues(draft, schema);
   // A gist that feeds the page stays the source of truth: saves go there.
   const toGist = target.source === 'gist' && target.github !== null;
   const onMode = (next: Mode) => {
@@ -106,7 +98,7 @@ export function ResumeEditor({ username }: { username: string }) {
     );
   const restorable =
     backup &&
-    serialize(backup.resume) !== serialize(draft) &&
+    serialize(backup.resume) !== serialize(settled) &&
     serialize(backup.resume) !== serialize(loadedResume);
 
   const save = {

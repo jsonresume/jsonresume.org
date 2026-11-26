@@ -1,43 +1,52 @@
-import { useAtom } from '@effect/atom-react';
+import { useAtomSet, useAtomValue } from '@effect/atom-react';
 import { Badge, SegmentedControl, Select } from '@jsonresume/ui';
-import { DEFAULT_THEME, draftAtom, themeOf, themeOptions } from './state';
-import { setAt } from './values';
+import { memo } from 'react';
+import {
+  DEFAULT_THEME,
+  draftAtom,
+  draftThemeAtom,
+  themeOptions,
+} from './state';
+import { setAt, type Json } from './values';
 import { track } from '@repo/posthog/browser';
 
 export type Mode = 'form' | 'json';
 /** On phones, one thing at a time: the editor, the page, or its ATS check. */
 export type View = 'edit' | 'preview' | 'check';
 
-/** Which theme the page uses (meta.theme), the recommended ones first. */
-export function ThemeSelect() {
-  const [draft, setDraft] = useAtom(draftAtom);
+// Built once: 228 options re-created on every keystroke were half the
+// editor's typing time (profiled, 4x CPU).
+const options = themeOptions.map((group) => (
+  <optgroup key={group.label} label={group.label}>
+    {group.options.map((t) => (
+      <option key={t.value} value={t.value}>
+        {t.label}
+      </option>
+    ))}
+  </optgroup>
+));
+
+/**
+ * Which theme the page uses (meta.theme), the recommended ones first. It
+ * reads the theme alone, so typing elsewhere in the resume leaves it be.
+ */
+export const ThemeSelect = memo(function ThemeSelect() {
+  const theme = useAtomValue(draftThemeAtom);
+  const setDraft = useAtomSet(draftAtom);
   return (
     <Select
       inline
       aria-label="Theme"
-      value={themeOf(draft)}
-      onChange={(e) =>
-        setDraft(
-          setAt(
-            draft,
-            ['meta', 'theme'],
-            e.target.value === DEFAULT_THEME ? '' : e.target.value
-          )
-        )
-      }
+      value={theme}
+      onChange={(e) => {
+        const next = e.target.value === DEFAULT_THEME ? '' : e.target.value;
+        setDraft((draft: Json) => setAt(draft, ['meta', 'theme'], next));
+      }}
     >
-      {themeOptions.map((group) => (
-        <optgroup key={group.label} label={group.label}>
-          {group.options.map((t) => (
-            <option key={t.value} value={t.value}>
-              {t.label}
-            </option>
-          ))}
-        </optgroup>
-      ))}
+      {options}
     </Select>
   );
-}
+});
 
 const Problems = ({ count }: { count: number }) =>
   count > 0 ? (

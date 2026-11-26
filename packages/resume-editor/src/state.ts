@@ -66,6 +66,9 @@ export const themeOf = (resume: Json): string => {
     : DEFAULT_THEME;
 };
 
+/** The draft's theme alone: its readers skip re-rendering as text changes. */
+export const draftThemeAtom = Atom.make((get) => themeOf(get(draftAtom)));
+
 export const editorResumeAtom = ApiClient.query('editor', 'resume', {});
 
 /**
