@@ -1,5 +1,6 @@
 import type { ThemeSummary } from '@repo/domain';
 import * as s from './gallery.css';
+import { memo } from 'react';
 import { ThemeCard } from './ThemeCard';
 
 /**
@@ -25,7 +26,8 @@ export interface ThemeGridProps extends ThemeLinks {
   onOpen?: (theme: ThemeSummary) => void;
 }
 
-export function ThemeGrid({
+/** Memoised: the gallery re-renders on each filter, the grid only when its list changes. */
+export const ThemeGrid = memo(function ThemeGrid({
   themes: list,
   image,
   href,
@@ -49,4 +51,4 @@ export function ThemeGrid({
       ))}
     </ul>
   );
-}
+});
