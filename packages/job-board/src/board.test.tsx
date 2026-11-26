@@ -73,6 +73,17 @@ describe('filterJobs', () => {
     expect(ids({ minSalary: 180_000 })).toEqual([2]);
     expect(ids({ query: 'us' })).toEqual([3]);
   });
+
+  it('lists whole-word matches before half-typed ones, still finding both', () => {
+    const board = [
+      job({ id: 10, title: 'Frontend Engineer', skills: ['JavaScript'] }),
+      job({ id: 11, title: 'Platform Engineer', skills: ['Java', 'Kafka'] }),
+    ];
+    const ids = (query: string) =>
+      filterJobs(board, { ...noFilters, query }).map((j) => j.id);
+    expect(ids('java')).toEqual([11, 10]);
+    expect(ids('jav')).toEqual([10, 11]);
+  });
 });
 
 describe('format', () => {
