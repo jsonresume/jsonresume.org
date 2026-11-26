@@ -2,7 +2,7 @@ import { useAtomSet, useAtomValue } from '@effect/atom-react';
 import { media } from '@jsonresume/ui/tokens';
 import { checkAts } from '@repo/ats';
 import { AtsReportView } from '@repo/ats/ui';
-import { useMemo } from 'react';
+import { useDeferredValue, useMemo } from 'react';
 import * as s from './editor.css';
 import { useWide } from './backup';
 import { fieldTarget } from './form/goTo';
@@ -16,7 +16,8 @@ import {
 
 /** The draft's ATS check, as it changes: what tracking systems will read. */
 export function CheckPane() {
-  const draft = useAtomValue(draftAtom);
+  // Checked after a keystroke paints, not inside it (see useIssues).
+  const draft = useDeferredValue(useAtomValue(draftAtom));
   const report = useMemo(() => checkAts(draft), [draft]);
   const setOpen = useAtomSet(openSectionsAtom);
   const setGoTo = useAtomSet(goToFieldAtom);
@@ -40,6 +41,6 @@ export function CheckPane() {
 
 /** The draft's ATS score, for the switch that shows the check. */
 export function useAtsScore() {
-  const draft = useAtomValue(draftAtom);
+  const draft = useDeferredValue(useAtomValue(draftAtom));
   return useMemo(() => checkAts(draft).score, [draft]);
 }
