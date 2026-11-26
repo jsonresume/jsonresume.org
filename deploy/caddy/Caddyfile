@@ -33,6 +33,24 @@
 	}
 }
 
+# Headers on every response. Pages may be framed only by this site
+# (clickjacking: the OAuth consent page, settings), except resumes, which
+# people embed on their own sites. HSTS stays on this host alone: not every
+# subdomain is known to be HTTPS-only.
+(security_headers) {
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		-Server
+	}
+	@framed_by_self not path /@* /%40*
+	header @framed_by_self {
+		Content-Security-Policy "frame-ancestors 'self'"
+		X-Frame-Options "SAMEORIGIN"
+	}
+}
+
 # Request logs, as JSON on stdout (journald keeps 30 days). Secrets that
 # can arrive in an address are dropped first: a password from a form sent
 # before its page hydrated (or by scanners), reset and confirm tokens,
@@ -53,6 +71,7 @@
 
 (app) {
 	import origin_tls
+	import security_headers
 	encode zstd gzip
 	import upstream {args[0]}
 	import access_log
@@ -62,6 +81,7 @@
 # GitHub Pages (apps/docs, basePath /docs), served under /docs as before.
 jsonresume.org {
 	import origin_tls
+	import security_headers
 	encode zstd gzip
 	handle /docs {
 		rewrite * /jsonresume.org/
@@ -98,6 +118,7 @@ registry.jsonresume.org {
 # deploy/scripts/deploy.sh styleguide into /srv/www/styleguide.
 styleguide.jsonresume.org {
 	import origin_tls
+	import security_headers
 	encode zstd gzip
 	root * /srv/www/styleguide/current
 	# Hashed build files never change; pages are checked on every visit.
