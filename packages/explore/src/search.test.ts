@@ -116,4 +116,14 @@ describe('ranking', () => {
       'radio',
     ]);
   });
+
+  it('puts the phrase searched for, in a headline, before its words apart', () => {
+    const all = [
+      titled('apart', 'Software Engineer', ['Data', 'Engineer', 'Azure']),
+      titled('phrase', 'Senior Data Engineer', ['SQL', 'Python']),
+    ].flatMap((e) => e ?? []);
+    expect(
+      search(all, [], 'data engineer', 1).people.map((p) => p.username)
+    ).toEqual(['phrase', 'apart']);
+  });
 });
