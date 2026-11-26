@@ -1,6 +1,6 @@
 'use client';
 
-import { useId, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { visuallyHidden } from '../../styles/shared.css';
 import { Button } from '../button/button';
 import * as s from './inputs.css';
@@ -16,6 +16,10 @@ export interface FileDropzoneProps {
   hint?: ReactNode;
   browseLabel?: string;
   disabled?: boolean;
+  /** A file refused here (wrong type, too large), after its reason shows. */
+  onReject?: (reason: 'type' | 'size', file: File) => void;
+  /** The file picker closed without a choice. */
+  onCancel?: () => void;
 }
 
 const formatBytes = (n: number) =>
@@ -46,22 +50,35 @@ export function FileDropzone({
   hint,
   browseLabel = 'Choose file',
   disabled = false,
+  onReject,
+  onCancel,
 }: FileDropzoneProps) {
   const [dragging, setDragging] = useState(false);
   const [error, setError] = useState('');
   const input = useRef<HTMLInputElement>(null);
   const errorId = useId();
+  const cancelled = useRef(onCancel);
+  cancelled.current = onCancel;
+  // React has no onCancel for inputs; browsers fire 'cancel' on the element.
+  useEffect(() => {
+    const el = input.current;
+    const listen = () => cancelled.current?.();
+    el?.addEventListener('cancel', listen);
+    return () => el?.removeEventListener('cancel', listen);
+  }, []);
 
   const take = (list: FileList | null) => {
     const files = Array.from(list ?? []).slice(0, multiple ? undefined : 1);
     const wrongType = files.find((f) => !matchesAccept(f, accept));
     const tooBig = maxSize ? files.find((f) => f.size > maxSize) : undefined;
-    if (wrongType)
-      return setError(
-        `${wrongType.name} isn't an accepted file type (${accept}).`
-      );
-    if (tooBig && maxSize)
-      return setError(`${tooBig.name} is larger than ${formatBytes(maxSize)}.`);
+    if (wrongType) {
+      setError(`${wrongType.name} isn't an accepted file type (${accept}).`);
+      return onReject?.('type', wrongType);
+    }
+    if (tooBig && maxSize) {
+      setError(`${tooBig.name} is larger than ${formatBytes(maxSize)}.`);
+      return onReject?.('size', tooBig);
+    }
     setError('');
     if (files.length) onFiles(files);
   };

@@ -192,6 +192,33 @@ describe('FileDropzone', () => {
     expect(onFiles).toHaveBeenCalledOnce();
     expect(screen.getByRole('alert')).toHaveTextContent('');
   });
+
+  it('reports refusals and a picker closed empty', () => {
+    const onReject = vi.fn();
+    const onCancel = vi.fn();
+    const { container } = render(
+      <FileDropzone
+        onFiles={vi.fn()}
+        accept=".pdf"
+        maxSize={1}
+        onReject={onReject}
+        onCancel={onCancel}
+      />
+    );
+    const zone = screen.getByRole('button', { name: 'Choose file' })
+      .parentElement as HTMLElement;
+    const docx = new File(['x'], 'cv.docx');
+    const big = new File(['xx'], 'cv.pdf', { type: 'application/pdf' });
+    fireEvent.drop(zone, { dataTransfer: { files: [docx] } });
+    fireEvent.drop(zone, { dataTransfer: { files: [big] } });
+    expect(onReject.mock.calls).toEqual([
+      ['type', docx],
+      ['size', big],
+    ]);
+    const input = container.querySelector('input[type="file"]');
+    input?.dispatchEvent(new Event('cancel'));
+    expect(onCancel).toHaveBeenCalledOnce();
+  });
 });
 
 describe('Repeater', () => {
