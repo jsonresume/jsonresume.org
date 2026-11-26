@@ -36,20 +36,30 @@ const best = (words: Iterable<string>, term: string) => {
   return top;
 };
 
-/** How well an entry matches every term, or 0 when one is missing. */
+/** How many skills count as someone's main ones: people list those first. */
+const LEAD_SKILLS = 3;
+
+/**
+ * How well an entry matches every term, or 0 when one is missing. A skill
+ * counts 3, one of the first listed 1 more, and the name or headline 2 on
+ * top: with "python", a Python Developer comes before a wireless engineer
+ * who lists it eighth (1,684 people list Python, and each used to tie).
+ */
 const relevance = (entry: Entry, terms: ReadonlyArray<string>) => {
   let score = 0;
   for (const term of terms) {
     const match = best(entry.words, term);
     if (match === 0) return 0;
     const { name, label, username } = entry.listing;
-    score +=
-      match *
-      (entry.skillSet.has(term)
-        ? 3
-        : best(wordsOf(`${name} ${label ?? ''} ${username}`), term) > 0
-        ? 2
-        : 1);
+    const skill = entry.skillSet.has(term) ? 3 : 0;
+    const lead = entry.skills
+      .slice(0, LEAD_SKILLS)
+      .some((s) => s.toLowerCase() === term)
+      ? 1
+      : 0;
+    const headline =
+      best(wordsOf(`${name} ${label ?? ''} ${username}`), term) > 0 ? 2 : 0;
+    score += match * (skill + lead + headline || 1);
   }
   return score;
 };

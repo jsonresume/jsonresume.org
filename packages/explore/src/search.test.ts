@@ -82,3 +82,38 @@ describe('matching words', () => {
     expect(fay?.skills).toHaveLength(8);
   });
 });
+
+describe('ranking', () => {
+  const titled = (username: string, label: string, keywords: string[]) =>
+    toEntry({
+      username,
+      resume: {
+        basics: { name: username, label },
+        skills: [{ name: 'All', keywords }],
+      },
+      updatedAt: null,
+    });
+  it('puts the headline and the first-listed skills before a passing mention', () => {
+    const all = [
+      titled('radio', 'Wireless Engineer', [
+        'RF',
+        'Matlab',
+        'Linux',
+        'C',
+        'Python',
+      ]),
+      titled('lead', 'Data Engineer', ['Python', 'SQL', 'Spark']),
+      titled('dev', 'Python Developer', [
+        'Django',
+        'Postgres',
+        'Docker',
+        'Python',
+      ]),
+    ].flatMap((e) => e ?? []);
+    expect(search(all, [], 'python', 1).people.map((p) => p.username)).toEqual([
+      'dev',
+      'lead',
+      'radio',
+    ]);
+  });
+});
