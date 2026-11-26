@@ -49,6 +49,7 @@ export const STYLE = `<style>
 .jr-num{background:#3a1d1d!important;color:#ff8a8a!important}
 }
 @media (max-width:600px){.jr-pad{padding:28px 22px!important}.jr-statv{font-size:20px!important}.jr-stat{padding:12px 4px!important}}
+@media (max-width:360px){.jr-statv{font-size:16px!important}.jr-stat{padding:10px 2px!important}}
 </style>`;
 
 export const p = (s: string) =>
@@ -96,7 +97,7 @@ export const stats = (list: ReadonlyArray<EmailStat>) =>
           (s) =>
             `<td class="jr-rule jr-stat" valign="top" width="${Math.floor(
               100 / list.length
-            )}%" style="padding:14px 10px;border:1px solid #ecece8;border-radius:8px;text-align:center"><div class="jr-ink jr-statv" style="font-size:28px;font-weight:800;line-height:1.1;color:${INK}">${escape(
+            )}%" style="padding:14px 10px;border:1px solid #ecece8;border-radius:8px;text-align:center"><div class="jr-ink jr-statv" style="font-size:28px;font-weight:800;line-height:1.1;white-space:nowrap;color:${INK}">${escape(
               s.value
             )}</div><div class="jr-muted" style="margin-top:4px;font-size:13px;line-height:1.4;color:${MUTED}">${escape(
               s.label

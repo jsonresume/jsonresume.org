@@ -40,6 +40,29 @@ const links = {
   headers: { 'List-Unsubscribe': '<https://x>' },
 };
 
+describe('big numbers', () => {
+  it('groups them as people read them', () => {
+    const many = new Overview({
+      ...overview(1834, 2210),
+      totals: { ...totals(1834), views: 5120 },
+    });
+    const mail = reportEmail(
+      {
+        to: 'a@example.test',
+        username: 'jane',
+        site: 'https://jsonresume.org',
+      },
+      many,
+      links
+    );
+    expect(mail.subject).toBe(
+      '1,834 people read your resume in the past month'
+    );
+    expect(mail.text).toContain('jsonresume.org/@jane had 5,120 views');
+    expect(mail.text).toContain('1,834 readers (down from 2,210)');
+  });
+});
+
 describe('reportMonth', () => {
   it('is due from 09:00 UTC on the 1st through the 7th', () => {
     expect(reportMonth(new Date('2026-12-01T08:59:00Z'))).toBeUndefined();
@@ -57,7 +80,7 @@ describe('the email', () => {
   );
 
   it('says how many read it, against the month before, and from where', () => {
-    expect(mail.subject).toBe('12 people read your resume this month');
+    expect(mail.subject).toBe('12 people read your resume in the past month');
     expect(mail.text).toContain('12 readers (up from 4)');
     expect(mail.text).toContain('24 page views');
     expect(mail.text).toContain('1m 20s typical read');
@@ -77,7 +100,7 @@ describe('the email', () => {
       overview(1, 0),
       links
     );
-    expect(one.subject).toBe('1 person read your resume this month');
+    expect(one.subject).toBe('1 person read your resume in the past month');
     expect(one.text).toContain('1 reader\n');
   });
 
