@@ -61,6 +61,12 @@ const relevance = (entry: Entry, terms: ReadonlyArray<string>) => {
       best(wordsOf(`${name} ${label ?? ''} ${username}`), term) > 0 ? 2 : 0;
     score += match * (skill + lead + headline || 1);
   }
+  // "data engineer" as written, in the headline: worth more than both words
+  // found apart (a "Data" skill and an "Engineer" one).
+  if (terms.length > 1) {
+    const said = ` ${wordsOf(entry.listing.label ?? '').join(' ')} `;
+    if (said.includes(` ${terms.join(' ')} `)) score += 4 * terms.length;
+  }
   return score;
 };
 
