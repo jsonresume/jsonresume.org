@@ -148,10 +148,6 @@ export {
 
 // Overlays, disclosure and navigation
 export {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
   CodeBlock,
   Dialog,
   DialogClose,
@@ -170,6 +166,12 @@ export {
   type DialogContentProps,
   type TooltipProps,
 } from './components/interactive/interactive';
+export {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from './components/interactive/accordion';
 export {
   BreadcrumbItem,
   Breadcrumbs,

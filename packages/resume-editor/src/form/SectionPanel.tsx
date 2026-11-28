@@ -29,7 +29,8 @@ export const SectionPanel = memo(function SectionPanel({
   const count = countOf(value);
   return (
     <AccordionItem value={section.key} data-path={section.key}>
-      <AccordionTrigger>
+      {/* Under the page's h1: the sections are its h2s. */}
+      <AccordionTrigger level={2}>
         {section.label}
         {count ? <Badge tone="neutral">{count}</Badge> : null}
         {issues ? <Badge tone="warning">{`${issues} to fix`}</Badge> : null}

@@ -175,7 +175,7 @@ export function List({
   spec,
   value,
   path,
-  headingLevel = 4,
+  headingLevel = 3,
 }: Props & { headingLevel?: 2 | 3 | 4 | 5 }) {
   const { set } = useForm();
   return (
