@@ -1,8 +1,9 @@
 import { RegistryProvider, useAtom, useAtomValue } from '@effect/atom-react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { clearStartDraft, readStartDraft, writeStartDraft } from './draft';
 import { parseSkills, skillsText, tidy } from './guided';
+import { Choose } from './Choose';
 import { Guided } from './Guided';
 import { Preview } from './Preview';
 import { pathOf, pointerLabel } from './pointer';
@@ -126,6 +127,32 @@ describe('Review', () => {
     expect(foundSummary(resumeShown())).toBe(
       'Ada · 1 job · 0 schools · 0 skill groups'
     );
+  });
+});
+
+describe('Choose', () => {
+  it('takes a resume.json as it is, with no import', async () => {
+    function Step() {
+      return <output data-testid="step">{useAtomValue(startStepAtom)}</output>;
+    }
+    const { container } = render(
+      <RegistryProvider>
+        <Choose />
+        <Step />
+        <Resume />
+      </RegistryProvider>
+    );
+    const input = container.querySelector('input[type="file"]');
+    expect(input?.getAttribute('accept')).toContain('.json');
+    const resume = { basics: { name: 'Ada' }, work: [{ name: 'Engines' }] };
+    const file = new File([JSON.stringify(resume)], 'resume.json', {
+      type: 'application/json',
+    });
+    if (input) fireEvent.change(input, { target: { files: [file] } });
+    await waitFor(() =>
+      expect(screen.getByTestId('step').textContent).toBe('review')
+    );
+    expect(resumeShown()).toEqual(resume);
   });
 });
 

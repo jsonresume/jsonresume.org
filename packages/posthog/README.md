@@ -40,7 +40,7 @@ Browser events (`track` from `@repo/posthog/browser`):
 
 | Event                   | Where                                       | Properties              |
 | ----------------------- | ------------------------------------------- | ----------------------- |
-| `start_step`, `start_import_result`, `start_save_clicked` | `/start` | `step`, `kind`, `ok`, `reason`, `shrunk` (a large photo scaled down first), `theme` |
+| `start_step`, `start_import_result`, `start_save_clicked` | `/start` | `step`, `kind` (`file`, `text`, or `json`: a resume.json read in the browser, no import), `ok`, `reason`, `shrunk` (a large photo scaled down first), `theme` |
 | `start_file_refused`, `start_file_cancelled` | `/start` | `reason` (`type` or `size`), `ext` (the extension, never the name) |
 | `sign_in_failed`        | `/signin`                                   | `reason` (no-account, github, password, or the error) |
 | `sign_up_failed`        | `/signup`                                   | `reason`                |

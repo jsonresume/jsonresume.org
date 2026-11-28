@@ -14,11 +14,12 @@ import { Exit } from 'effect';
 import { useEffect, useRef, useState } from 'react';
 import * as s from './start.css';
 import { extensionOf, fitImage } from './fitImage';
+import { readResumeJson } from './jsonFile';
 import { startImportAtom, startResumeAtom, startStepAtom } from './state';
 
 const failed = (tag: string | undefined) =>
   tag === 'UnsupportedImport'
-    ? 'That isn’t a file we can read. Try a PDF, a Word .docx, a LinkedIn export .zip, or paste the text.'
+    ? 'That isn’t a file we can read. Try a PDF, a Word .docx, a LinkedIn export .zip, a resume.json, or paste the text.'
     : tag === 'ImportTooLarge'
     ? 'That file is over 5 MB. Try a smaller copy, or paste the text.'
     : tag === 'NothingToImport'
@@ -69,6 +70,19 @@ export function Choose() {
   const upload = async (files: File[]) => {
     const [chosen] = files;
     if (!chosen) return;
+    // A resume.json is already a resume: straight to checking it.
+    const own = await readResumeJson(chosen);
+    if (own) {
+      startEvent('start_import_result', {
+        kind: 'json',
+        ok: true,
+        reason: null,
+        shrunk: false,
+      });
+      setResult(null);
+      setResume(own);
+      return setStep('review');
+    }
     const file = await fitImage(chosen, IMPORT_MAX_BYTES);
     if (file.size > IMPORT_MAX_BYTES) {
       refused('size', chosen);
@@ -96,9 +110,9 @@ export function Choose() {
             onFiles={(files) => void upload(files)}
             onReject={refused}
             onCancel={() => startEvent('start_file_cancelled', {})}
-            accept=".pdf,.docx,.zip,.txt,.png,.jpg,.jpeg,.webp"
+            accept=".pdf,.docx,.zip,.txt,.json,.png,.jpg,.jpeg,.webp"
             title="Drop it here"
-            hint="PDF (scans too), Word, a photo or screenshot, or a LinkedIn data export (.zip)"
+            hint="PDF (scans too), Word, a photo or screenshot, a LinkedIn data export (.zip) or a resume.json"
             disabled={busy}
           />
         </section>
