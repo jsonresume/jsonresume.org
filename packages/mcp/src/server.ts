@@ -158,6 +158,7 @@ export const mcpRoutes = (site: string = SITE) =>
         // for. Claude opened subscriptions/listen every few minutes and
         // dropped it at once (about 600 a day).
         allowSubscriptions: false,
+        // Keep PROTOCOL_VERSIONS (serverCard.ts) in step: a test checks.
         protocols: [
           McpProtocol.v2026_07_28,
           McpProtocol.v2025_11_25,
