@@ -20,7 +20,12 @@ export interface Reader {
   userId: string;
   email: string;
   username: string;
+  /** When the resume last changed, if known. */
+  updated: Date | null;
 }
+
+/** A resume not changed in this long gets a word about it in the report. */
+export const STALE_DAYS = 183;
 
 /** What a run needs, as plain functions, so it is tested without a database. */
 export interface ReportDeps {
@@ -58,7 +63,11 @@ export const runReports = (deps: ReportDeps, now: Date, site: string) =>
         reportEmail(
           { to: reader.email, username: reader.username, site },
           overview,
-          deps.links(reader.userId)
+          deps.links(reader.userId),
+          reader.updated &&
+            now.getTime() - reader.updated.getTime() > STALE_DAYS * 86_400_000
+            ? reader.updated
+            : undefined
         )
       );
       sent += 1;

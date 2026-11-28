@@ -9,6 +9,7 @@ const Reader = Schema.Struct({
   id: Schema.String,
   email: Schema.String,
   username: Schema.String,
+  updated: Schema.NullOr(Schema.Date),
 });
 const decodeReaders = Schema.decodeUnknownEffect(Schema.Array(Reader));
 
@@ -30,7 +31,10 @@ export const sendReports = Effect.gen(function* () {
     {
       due: (kind, since, limit) =>
         sql`
-          SELECT u.id, u.email, p.username
+          SELECT u.id, u.email, p.username,
+                 -- A save here, or the gist's own last change.
+                 CASE WHEN p.source = 'stored' THEN p.stored_at
+                      ELSE p.gist_updated_at END AS updated
           FROM app.users u
           JOIN app.profiles p ON p.user_id = u.id AND p.kind = 'account'
           WHERE u.email IS NOT NULL AND u.monthly_report
@@ -49,6 +53,7 @@ export const sendReports = Effect.gen(function* () {
               userId: r.id,
               email: r.email,
               username: r.username,
+              updated: r.updated,
             }))
           ),
           Effect.orDie

@@ -124,6 +124,13 @@ describe('runReports', () => {
             userId: `u${i}`,
             email: `u${i}@example.com`,
             username: i === 0 ? 'quiet' : `user${i}`,
+            // user1's resume is old, user2's recent, the rest unknown.
+            updated:
+              i === 1
+                ? new Date('2024-03-15T00:00:00Z')
+                : i === 2
+                ? new Date('2026-10-01T00:00:00Z')
+                : null,
           }))
             .filter((r) => !claimed.has(`${r.userId}:${kind}`))
             .slice(0, limit)
@@ -155,6 +162,16 @@ describe('runReports', () => {
       'u3@example.com',
     ]);
     expect(await Effect.runPromise(runReports(deps, due, site))).toBe(0);
+  });
+
+  it('says when a resume being read was last updated, only if long ago', async () => {
+    const { deps, sent } = setup(4);
+    await Effect.runPromise(runReports(deps, due, site));
+    const [old, recent, unknown] = sent.map((m) => m.text);
+    expect(old).toContain('Last updated March 2024');
+    expect(old).toContain('https://jsonresume.org/dashboard/editor');
+    expect(recent).not.toContain('Last updated');
+    expect(unknown).not.toContain('Last updated');
   });
 
   it('keeps to the daily cap, and sends nothing when not due', async () => {
