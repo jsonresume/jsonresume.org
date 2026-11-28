@@ -1,6 +1,5 @@
 'use client';
 
-import * as AccordionPrimitive from '@radix-ui/react-accordion';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
@@ -172,68 +171,6 @@ export const TabsContent = forwardRef<
       className={cx(s.tabsContent, className)}
       {...props}
     />
-  );
-});
-
-/* Accordion */
-
-export const Accordion = AccordionPrimitive.Root;
-
-export const AccordionItem = forwardRef<
-  ElementRef<typeof AccordionPrimitive.Item>,
-  ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>
->(function AccordionItem({ className, ...props }, ref) {
-  return (
-    <AccordionPrimitive.Item
-      ref={ref}
-      className={cx(s.accordionItem, className)}
-      {...props}
-    />
-  );
-});
-
-export const AccordionTrigger = forwardRef<
-  ElementRef<typeof AccordionPrimitive.Trigger>,
-  ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>
->(function AccordionTrigger({ className, children, ...props }, ref) {
-  return (
-    <AccordionPrimitive.Header className={s.accordionHeader}>
-      <AccordionPrimitive.Trigger
-        ref={ref}
-        className={cx(s.accordionTrigger, className)}
-        {...props}
-      >
-        {children}
-        <svg
-          className={s.accordionChevron}
-          viewBox="0 0 16 16"
-          aria-hidden="true"
-        >
-          <path
-            d="m4 6 4 4 4-4"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-          />
-        </svg>
-      </AccordionPrimitive.Trigger>
-    </AccordionPrimitive.Header>
-  );
-});
-
-export const AccordionContent = forwardRef<
-  ElementRef<typeof AccordionPrimitive.Content>,
-  ComponentPropsWithoutRef<typeof AccordionPrimitive.Content>
->(function AccordionContent({ className, children, ...props }, ref) {
-  return (
-    <AccordionPrimitive.Content
-      ref={ref}
-      className={cx(s.accordionContent, className)}
-      {...props}
-    >
-      <div className={s.accordionContentInner}>{children}</div>
-    </AccordionPrimitive.Content>
   );
 });
 

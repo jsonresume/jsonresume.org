@@ -431,6 +431,25 @@ describe('interactive', () => {
     expect(screen.getByText('An open standard.')).toBeVisible();
   });
 
+  it('puts an accordion header at the heading level asked for', () => {
+    render(
+      <Accordion type="multiple">
+        <AccordionItem value="a">
+          <AccordionTrigger>Default</AccordionTrigger>
+        </AccordionItem>
+        <AccordionItem value="b">
+          <AccordionTrigger level={2}>Section</AccordionTrigger>
+        </AccordionItem>
+      </Accordion>
+    );
+    expect(
+      screen.getByRole('heading', { name: 'Default', level: 3 })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'Section', level: 2 })
+    ).toBeInTheDocument();
+  });
+
   it('shows tooltips on keyboard focus', async () => {
     render(
       <TooltipProvider delayDuration={0}>
