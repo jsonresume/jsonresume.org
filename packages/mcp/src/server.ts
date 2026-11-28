@@ -153,6 +153,11 @@ export const mcpRoutes = (site: string = SITE) =>
         websiteUrl: `${site}/mcp`,
         instructions,
         path: '/mcp',
+        // The tools and prompts only change with a deploy, which restarts
+        // the server and every stream with it: there is nothing to listen
+        // for. Claude opened subscriptions/listen every few minutes and
+        // dropped it at once (about 600 a day).
+        allowSubscriptions: false,
         protocols: [
           McpProtocol.v2026_07_28,
           McpProtocol.v2025_11_25,
