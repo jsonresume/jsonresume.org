@@ -1,4 +1,6 @@
+import { readFileSync } from 'node:fs';
 import { afterEach, describe, expect, it } from 'vitest';
+import { aiCatalog, PROTOCOL_VERSIONS, serverCard } from './serverCard';
 import { disposeEndpoint, setup } from './test/endpoint';
 
 afterEach(disposeEndpoint);
@@ -42,6 +44,8 @@ describe('MCP 2026-07-28', () => {
         )
       );
     const discovered = await post('server/discover', {});
+    // The server card promises what the server says it speaks.
+    expect(discovered.result.supportedVersions).toEqual([...PROTOCOL_VERSIONS]);
     expect(discovered.result.capabilities).toMatchObject({
       tools: { listChanged: false },
       prompts: { listChanged: false },
@@ -52,5 +56,23 @@ describe('MCP 2026-07-28', () => {
     expect(listen.error).toMatchObject({ code: -32601 });
     const tools = await post('tools/list', {});
     expect(tools.result.tools.length).toBeGreaterThan(50);
+  });
+
+  it('has a server card matching the registry entry, and a catalog naming it', () => {
+    const registry = JSON.parse(
+      readFileSync(new URL('../server.json', import.meta.url), 'utf8')
+    );
+    const card = serverCard('https://jsonresume.org');
+    for (const key of ['name', 'title', 'description', 'version', 'websiteUrl'])
+      expect(card[key as keyof typeof card]).toEqual(registry[key]);
+    expect(card.description.length).toBeLessThanOrEqual(100);
+    expect(card.remotes[0]?.url).toBe(registry.remotes[0].url);
+    expect(aiCatalog('https://jsonresume.org').entries).toEqual([
+      {
+        identifier: 'urn:air:jsonresume.org:mcp:jsonresume',
+        type: 'application/mcp-server-card+json',
+        url: 'https://jsonresume.org/mcp/server-card',
+      },
+    ]);
   });
 });
