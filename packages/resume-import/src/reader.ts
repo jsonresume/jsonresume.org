@@ -110,7 +110,10 @@ export const ResumeReaderFromEnv: Layer.Layer<ResumeReader> = Layer.unwrap(
       Layer.provide(
         OpenAiLanguageModel.layer({
           model: MODEL,
-          config: { reasoning: { effort: 'low' } },
+          // People wait on the page while it reads. Priority processing
+          // measured 15s against 33-43s for the same resume and the same
+          // output (2026-11-28), at about twice the price per token.
+          config: { reasoning: { effort: 'low' }, service_tier: 'priority' },
         })
       ),
       Layer.provide(OpenAiClient.layer({ apiKey: key.value })),
