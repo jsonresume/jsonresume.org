@@ -92,9 +92,10 @@ export function DeleteAccount({
                     ))}
                   </Select>
                 </Field>
-                {reason === 'private' && fromGist ? (
+                {reason === 'private' ? (
                   <Callout tone="info">
-                    {copy.settings.leavePrivateGist}
+                    {copy.settings.keepPrivate}
+                    {fromGist ? ` ${copy.settings.leavePrivateGist}` : ''}
                   </Callout>
                 ) : null}
                 <Field label={copy.settings.deleteConfirm(username)}>

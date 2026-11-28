@@ -74,12 +74,13 @@ export function createResumeHandler<E>(
     const reader = gate._tag === 'Keyed' ? gate.reader : undefined;
     const url = new URL(request.url);
     let outcome = await runtime.runPromise(resumeOutcome(url));
-    // Not published yet: its owner still sees it (the dashboard links its
-    // page and downloads before the email is confirmed), kept out of search.
+    // Not published yet, or private: its owner still sees it (the dashboard
+    // links its page and downloads), kept out of search and the counts.
     let unlisted = false;
     if (
       outcome?._tag === 'Problem' &&
-      outcome.problem.kind === 'unpublished' &&
+      (outcome.problem.kind === 'unpublished' ||
+        outcome.problem.kind === 'private') &&
       (await runtime.runPromise(isOwner(request, outcome.problem.username)))
     ) {
       outcome = await runtime.runPromise(resumeOutcome(url, { owner: true }));

@@ -33,6 +33,8 @@ export interface AccountProfile {
   stored: unknown;
   /** Contact details kept off the public page (see redact). */
   hidden?: ReadonlyArray<string>;
+  /** The owner keeps the page to themselves: only they see it, signed in. */
+  private?: boolean;
 }
 
 /** A name that redirects to an account (a merged ghost, or a rename). */

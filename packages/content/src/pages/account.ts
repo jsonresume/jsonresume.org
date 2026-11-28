@@ -71,8 +71,10 @@ export const settings = {
     'not-useful': 'It isn’t what I was looking for',
     other: 'Something else',
   },
+  keepPrivate:
+    'To keep your account but not your page, close this and switch on Keep my page private under Privacy: only you will see it.',
   leavePrivateGist:
-    'Your page shows your public gist, so it stays up whether or not you have an account. To take it down, make the gist secret or delete it on GitHub; the page goes soon after.',
+    'Deleting doesn’t take it down: your page shows your public gist, so it stays up whether or not you have an account. To take it down, make the gist secret or delete it on GitHub; the page goes soon after.',
 };
 
 export const chooseUsername = {

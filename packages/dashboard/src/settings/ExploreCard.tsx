@@ -15,12 +15,15 @@ import {
   setExploreListingAtom,
 } from '@repo/api-client';
 import { AsyncResult } from 'effect/reactivity';
+import { usePending } from './usePending';
 
 /** Whether the resume is listed in Explore; the page stays public either way. */
 export function ExploreCard() {
   const result = useAtomValue(exploreListingAtom);
   const set = useAtomSet(setExploreListingAtom, { mode: 'promiseExit' });
-  const listed = AsyncResult.isSuccess(result) ? result.value.listed : true;
+  const [listed, setListed] = usePending(
+    AsyncResult.isSuccess(result) ? result.value.listed : true
+  );
   return (
     <Card id="explore">
       <CardHeader>
@@ -38,10 +41,12 @@ export function ExploreCard() {
             checked={listed}
             disabled={!AsyncResult.isSuccess(result)}
             onCheckedChange={(checked) =>
-              void set({
-                payload: { listed: checked },
-                reactivityKeys: keys.explore,
-              })
+              void setListed(checked, () =>
+                set({
+                  payload: { listed: checked },
+                  reactivityKeys: keys.explore,
+                })
+              )
             }
           />
         </Stack>

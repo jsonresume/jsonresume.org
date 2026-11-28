@@ -88,6 +88,32 @@ describe('email accounts', () => {
     );
   });
 
+  it('keeps a private page from everyone but its owner', async () => {
+    const { run, lastToken } = accountsStack();
+    await run(
+      Effect.gen(function* () {
+        const accounts = yield* Accounts;
+        const profiles = yield* Profiles;
+        const { user } = yield* accounts.signUp(signUp);
+        yield* accounts.verifyEmail(lastToken());
+        yield* accounts.saveResume(
+          user.id,
+          { basics: { name: 'Ada' } },
+          userActor
+        );
+        expect(yield* accounts.pagePrivate(user.id)).toBe(false);
+        yield* accounts.setPagePrivate(user.id, true);
+        expect(yield* accounts.pagePrivate(user.id)).toBe(true);
+        const shut = yield* Effect.flip(profiles.resume('ada' as Username));
+        expect(shut).toMatchObject({ reason: 'private' });
+        const own = yield* profiles.resume('ada' as Username, { owner: true });
+        expect(own._tag).toBe('Resume');
+        yield* accounts.setPagePrivate(user.id, false);
+        expect((yield* profiles.resume('ada' as Username))._tag).toBe('Resume');
+      })
+    );
+  });
+
   it('refuses taken, reserved and GitHub names, and a second account per email', async () => {
     const { run } = accountsStack();
     await run(

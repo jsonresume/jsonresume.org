@@ -46,6 +46,7 @@ export {
   HiddenField,
   LeaveReason,
   Privacy,
+  PrivacyChange,
   ResumeSource,
 } from './AccountApi';
 export {

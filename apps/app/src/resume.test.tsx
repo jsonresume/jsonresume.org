@@ -95,6 +95,14 @@ describe('the server handler', () => {
           resume: (username) =>
             username === 'down'
               ? Effect.fail(new GithubUnavailable({ message: 'down' }))
+              : username === 'secret'
+              ? Effect.fail(
+                  new ProfileNotFound({
+                    username,
+                    reason: 'private',
+                    file: 'resume.json',
+                  })
+                )
               : Effect.fail(
                   new ProfileNotFound({
                     username,
@@ -149,6 +157,14 @@ describe('the server handler', () => {
         code: 'no-gist',
         message: 'octocat has no public gist with a file called resume.json.',
       },
+    });
+  });
+
+  it('answers a private page as not found, to everyone but its owner', async () => {
+    const response = await resumes.fetch(request('/@secret.json'));
+    expect(response?.status).toBe(404);
+    expect(await response?.json()).toEqual({
+      error: { code: 'private', message: 'secret keeps their resume private.' },
     });
   });
 

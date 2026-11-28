@@ -23,7 +23,8 @@ export type ProductEventName =
   | 'job_marked'
   | 'job_preferences_saved'
   | 'email_sent'
-  | 'email_settings_changed';
+  | 'email_settings_changed'
+  | 'page_privacy_changed';
 
 /** Plain values only: never an email, a name or resume text. */
 export type ProductEventProperties = Readonly<

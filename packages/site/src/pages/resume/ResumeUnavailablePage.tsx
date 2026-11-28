@@ -53,6 +53,7 @@ function Actions({ problem }: { problem: ResumeProblem }) {
         </Button>
       );
     case 'unpublished':
+    case 'private':
       return (
         <Button asChild variant="primary">
           <SiteLink href={paths.signIn}>Is this you? Sign in</SiteLink>

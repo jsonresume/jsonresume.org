@@ -6,11 +6,18 @@ import { Schema } from 'effect';
  */
 export const ResumeProblem = Schema.Union([
   /**
-   * No GitHub user, no gist with the file, an account not public yet, or
+   * No GitHub user, no gist with the file, an account not public yet or
+   * kept private, or
    * no variant of that name (/@name/variant, the name in `file`).
    */
   Schema.Struct({
-    kind: Schema.Literals(['no-user', 'no-gist', 'unpublished', 'no-variant']),
+    kind: Schema.Literals([
+      'no-user',
+      'no-gist',
+      'unpublished',
+      'private',
+      'no-variant',
+    ]),
     username: Schema.String,
     file: Schema.String,
   }),
@@ -50,6 +57,7 @@ export const resumeProblemStatus = (problem: ResumeProblem): number => {
     case 'no-user':
     case 'no-gist':
     case 'unpublished':
+    case 'private':
     case 'no-variant':
     case 'theme-missing':
     case 'unknown-format':

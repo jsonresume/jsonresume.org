@@ -35,6 +35,7 @@ Product analytics in PostHog (project 134598, US cloud), cookie-free.
 | `mcp_tool_called`       | `/mcp`                                      | `tool`                  |
 | `email_sent`            | every automatic email (`@repo/accounts` lifecycle, `@repo/resume-report`, `@repo/job-digest`) | `kind` (welcome, verify_reminder, verify_last_call, empty_page, report, weekly_jobs), `jobs` |
 | `email_settings_changed` | `/emails`, Settings → Emails, one-click unsubscribe, MCP | what changed, `via` (link, settings, one-click, mcp) |
+| `page_privacy_changed` | Settings → Privacy, MCP `set_page_private` | `private` (true when the page is now private), `via` (dashboard, mcp) |
 
 Browser events (`track` from `@repo/posthog/browser`):
 

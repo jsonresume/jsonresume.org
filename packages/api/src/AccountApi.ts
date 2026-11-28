@@ -30,6 +30,8 @@ export class Account extends Schema.Class<Account>('@repo/api/Account')({
   path: Schema.String,
   /** Whether /@username is live: verified, and a resume to show. */
   public: Schema.Boolean,
+  /** The owner keeps the page to themselves (Settings → Privacy). */
+  pagePrivate: Schema.Boolean,
   email: Schema.NullOr(Schema.String),
   emailVerified: Schema.Boolean,
   github: Schema.NullOr(
@@ -50,7 +52,17 @@ export class Account extends Schema.Class<Account>('@repo/api/Account')({
 /** Contact details an account can keep off its public page. */
 export const HiddenField = Schema.Literals(['email', 'phone', 'address']);
 export type HiddenField = typeof HiddenField.Type;
-export const Privacy = Schema.Struct({ hidden: Schema.Array(HiddenField) });
+/** What stays off the public page, and whether the page is the owner's alone. */
+export const Privacy = Schema.Struct({
+  hidden: Schema.Array(HiddenField),
+  /** Only the signed-in owner sees /@username; out of Explore and search. */
+  pagePrivate: Schema.Boolean,
+});
+/** A change to either; what is left out stays as it was. */
+export const PrivacyChange = Schema.Struct({
+  hidden: Schema.optionalKey(Schema.Array(HiddenField)),
+  pagePrivate: Schema.optionalKey(Schema.Boolean),
+});
 
 export class AccountApi extends HttpApiGroup.make('account')
   .add(
@@ -64,7 +76,7 @@ export class AccountApi extends HttpApiGroup.make('account')
     /** What stays off the public page (and its formats); the owner sees all. */
     HttpApiEndpoint.get('privacy', '/privacy', { success: Privacy }),
     HttpApiEndpoint.put('setPrivacy', '/privacy', {
-      payload: Privacy,
+      payload: PrivacyChange,
       success: Privacy,
     }),
     /** Which emails the account gets; each email links here too, by token. */

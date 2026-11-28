@@ -21,6 +21,7 @@ export const problems: Record<
   | 'no-user'
   | 'no-gist'
   | 'unpublished'
+  | 'private'
   | 'no-variant'
   | 'not-json'
   | 'not-object'
@@ -50,6 +51,10 @@ export const problems: Record<
   unpublished: ({ username }) => ({
     title: `@${username} hasn’t published yet`,
     body: `This name belongs to a JSON Resume account. The page goes live once its owner adds a resume (and confirms their email, if they signed up with one).`,
+  }),
+  private: ({ username }) => ({
+    title: `@${username} keeps their resume private`,
+    body: `This name belongs to a JSON Resume account whose owner shows their page only to themselves. If it’s yours, sign in to see it.`,
   }),
   'no-variant': ({ username, file = '' }) => ({
     title: `@${username} has no version called ${file}`,

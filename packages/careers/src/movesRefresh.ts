@@ -50,10 +50,15 @@ const histories = Effect.gen(function* () {
     if (!people.has(key)) people.set(key, work);
   };
   const profiles = yield* sql`
-    SELECT username,
-           (CASE WHEN source = 'stored' THEN stored_resume ELSE resume END) -> 'work' AS work
-    FROM app.profiles WHERE kind IN ('account', 'ghost')
-    ORDER BY (kind = 'account') DESC, username
+    SELECT p.username,
+           -- A private page's history counts for nothing, and still keeps
+           -- the registry's old copy of that name out.
+           CASE WHEN coalesce(u.page_private, false) THEN NULL
+                WHEN p.source = 'stored' THEN p.stored_resume -> 'work'
+                ELSE p.resume -> 'work' END AS work
+    FROM app.profiles p LEFT JOIN app.users u ON u.id = p.user_id
+    WHERE p.kind IN ('account', 'ghost')
+    ORDER BY (p.kind = 'account') DESC, p.username
   `.pipe(
     Effect.flatMap(Schema.decodeUnknownEffect(Schema.Array(Profile))),
     Effect.orDie

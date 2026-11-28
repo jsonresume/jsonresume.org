@@ -62,6 +62,7 @@ export class Explore extends Context.Service<
         FROM app.profiles p
         LEFT JOIN app.users u ON u.id = p.user_id
         WHERE p.listed AND (p.kind = 'ghost' OR (p.kind = 'account'
+          AND NOT u.page_private
           AND (u.email_verified_at IS NOT NULL OR u.github_id IS NOT NULL)))`);
       const build: Effect.Effect<Index> = Effect.gen(function* () {
         const rows = yield* Effect.flatMap(here, decodeRows);
