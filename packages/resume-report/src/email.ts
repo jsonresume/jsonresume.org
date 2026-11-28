@@ -24,6 +24,12 @@ export const duration = (seconds: number) => {
 /** 1,834: big numbers grouped, as people read them. */
 const count = (n: number) => n.toLocaleString('en');
 
+const month = new Intl.DateTimeFormat('en', {
+  month: 'long',
+  year: 'numeric',
+  timeZone: 'UTC',
+});
+
 const people = (n: number) => (n === 1 ? '1 person' : `${count(n)} people`);
 
 /** How this month compares: "up from 12", "down from 30", or nothing. */
@@ -40,11 +46,16 @@ const listed = (rows: Overview['referrers'], name = (s: string) => s) => {
     : `${parts.slice(0, -1).join(', ')} and ${parts.at(-1)}`;
 };
 
-/** The report: who read the resume in the last 30 days, and from where. */
+/**
+ * The report: who read the resume in the last 30 days, and from where.
+ * `stale`: when the resume last changed, given only when that was over
+ * half a year ago, so people being read know theirs may be out of date.
+ */
 export function reportEmail(
   who: { to: string; username: string; site: string },
   overview: Overview,
-  links: EmailLinks
+  links: EmailLinks,
+  stale?: Date
 ) {
   const { totals, previous } = overview;
   const { site, username } = who;
@@ -88,6 +99,17 @@ export function reportEmail(
     ],
     stats: figures,
     action: { label: 'See all your numbers', url: `${site}/dashboard` },
+    ...(stale
+      ? {
+          items: [
+            {
+              title: `Last updated ${month.format(stale)}`,
+              text: 'People are reading it, so it’s worth a look: a new job, skill or date since then?',
+              url: `${site}/dashboard/editor`,
+            },
+          ],
+        }
+      : {}),
     outro: [
       ...(from ? [`Where they came from: ${from}.`] : []),
       ...(where ? [`Where they were: ${where}.`] : []),
