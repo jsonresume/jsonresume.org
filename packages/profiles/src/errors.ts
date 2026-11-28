@@ -2,7 +2,8 @@ import { Schema } from 'effect';
 
 /**
  * No resume at this username: no such GitHub user, no gist with the file,
- * or an account that hasn't published (email unverified, or nothing saved).
+ * an account that hasn't published (email unverified, or nothing saved), or
+ * one its owner keeps private.
  */
 export class ProfileNotFound extends Schema.TaggedError<ProfileNotFound>()(
   'ProfileNotFound',
@@ -12,6 +13,7 @@ export class ProfileNotFound extends Schema.TaggedError<ProfileNotFound>()(
       'no-user',
       'no-gist',
       'unpublished',
+      'private',
       'no-variant',
     ]),
     /** The gist file looked for, e.g. resume.json. */

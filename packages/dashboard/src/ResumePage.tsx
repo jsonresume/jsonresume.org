@@ -105,7 +105,9 @@ export function ResumePage() {
         <Stack asChild direction="row" wrap align="center" gap={3}>
           <span>
             <Link href={account.path}>jsonresume.org{account.path}</Link>
-            {account.public ? (
+            {account.public && account.pagePrivate ? (
+              <Badge tone="neutral">Private</Badge>
+            ) : account.public ? (
               <Badge tone="success">Live</Badge>
             ) : (
               <Badge tone="warning">Not live yet</Badge>

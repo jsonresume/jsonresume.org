@@ -18,6 +18,7 @@ const Row = Schema.Struct({
   target: Schema.NullOr(Schema.String),
   retired: Schema.Boolean,
   hidden: Schema.NullOr(Schema.Array(Schema.String)),
+  private: Schema.NullOr(Schema.Boolean),
 });
 type Row = typeof Row.Type;
 
@@ -55,6 +56,7 @@ const toProfile = (row: Row): Profile | undefined => {
             mirror: mirrorOf(row),
             stored: row.stored_resume,
             hidden: row.hidden ?? [],
+            private: row.private ?? false,
           };
   }
 };
@@ -74,6 +76,7 @@ export const PgProfileStore = Layer.effect(
                p.resume, p.fetched_at, p.source, p.stored_resume, p.user_id,
                (u.email_verified_at IS NOT NULL OR u.github_id IS NOT NULL) AS verified,
                u.github_login, a.username AS target, u.hidden_fields AS hidden,
+               u.page_private AS private,
                coalesce(p.retired_until < now(), false) AS retired
         FROM app.profiles p
         LEFT JOIN app.users u ON u.id = p.user_id

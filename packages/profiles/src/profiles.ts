@@ -100,6 +100,14 @@ export class Profiles extends Context.Service<
           });
           if (!profile.verified && options?.owner !== true)
             return yield* unpublished;
+          // Kept private: every public read (page, formats, variants, other
+          // gist files) answers as if there were nothing, except to its owner.
+          if (profile.private === true && options?.owner !== true)
+            return yield* new ProfileNotFound({
+              username,
+              reason: 'private',
+              file,
+            });
           // A variant (/@name/slug): its own copy, published with the account.
           if (options?.variant !== undefined) {
             const found = yield* store.variant(profile.userId, options.variant);

@@ -12,7 +12,8 @@ import { savedProperties, userActor } from '@repo/resume-versions';
 const toAccount = (
   record: AccountRecord,
   emailDelivery: boolean,
-  gistWrite: boolean
+  gistWrite: boolean,
+  pagePrivate: boolean
 ) => {
   const { user } = record;
   const verified = user.emailVerified || user.githubId !== null;
@@ -24,6 +25,7 @@ const toAccount = (
     username: user.username,
     path: `/@${user.username}`,
     public: verified && hasResume,
+    pagePrivate,
     email: user.email,
     emailVerified: user.emailVerified,
     github: user.githubLogin
@@ -53,7 +55,8 @@ export const AccountHandlers = HttpApiBuilder.group(
         return toAccount(
           record,
           accounts.emailDelivery,
-          yield* accounts.canWriteGist(user.id)
+          yield* accounts.canWriteGist(user.id),
+          yield* accounts.pagePrivate(user.id)
         );
       });
       return handlers.handleAll({
@@ -73,15 +76,18 @@ export const AccountHandlers = HttpApiBuilder.group(
             return yield* current;
           }),
         privacy: () =>
-          Effect.gen(function* () {
-            const user = yield* CurrentUser;
-            return { hidden: yield* accounts.hiddenFields(user.id) };
-          }),
+          Effect.flatMap(CurrentUser, (user) => accounts.privacy(user.id)),
         setPrivacy: ({ payload }) =>
           Effect.gen(function* () {
             const user = yield* CurrentUser;
-            yield* accounts.setHiddenFields(user.id, payload.hidden);
-            return { hidden: yield* accounts.hiddenFields(user.id) };
+            const before = yield* accounts.pagePrivate(user.id);
+            const after = yield* accounts.changePrivacy(user.id, payload);
+            if (after.pagePrivate !== before)
+              yield* track(user.id, 'page_privacy_changed', {
+                private: after.pagePrivate,
+                via: 'dashboard',
+              });
+            return after;
           }),
         emails: () =>
           Effect.gen(function* () {

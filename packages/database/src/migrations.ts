@@ -3,6 +3,7 @@ import { SqlClient } from 'effect/sql';
 import { decisionMigrations } from './decisionMigrations';
 import { emailMigrations } from './emailMigrations';
 import { importMigrations } from './importMigrations';
+import { pageMigrations } from './pageMigrations';
 import { laterMigrations } from './laterMigrations';
 
 /**
@@ -434,4 +435,5 @@ export const migrations: Record<
   ...decisionMigrations,
   ...importMigrations,
   ...emailMigrations,
+  ...pageMigrations,
 };

@@ -70,6 +70,12 @@ export function Notices() {
           </Stack>
         </Callout>
       ) : null}
+      {account.public && account.pagePrivate ? (
+        <Callout tone="info" title="Your page is private">
+          Only you see it, signed in. Anyone else finds nothing there. Change it
+          under <a href="/dashboard/settings#privacy">Settings → Privacy</a>.
+        </Callout>
+      ) : null}
       {!unverified && !account.public ? (
         <Callout tone="info" title="Your page isn’t live yet">
           Add a resume on the <a href="/dashboard/resume">Resume</a> page: link
