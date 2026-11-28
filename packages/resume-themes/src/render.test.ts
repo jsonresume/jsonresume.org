@@ -51,6 +51,22 @@ describe('renderTheme', () => {
     expect(decoded).toContain('src="https://example.com/photo.jpg"');
     expect(decoded).toContain('href="https://example.com"');
   });
+  it('leaves the photo out of minyma and Tan when the resume has none', async () => {
+    for (const theme of ['minyma', 'tan-responsive']) {
+      const without = await Effect.runPromise(
+        renderTheme(theme, { basics: { name } })
+      );
+      expect(without, theme).not.toContain('alt="avatar"');
+      const html = await Effect.runPromise(
+        renderTheme(theme, {
+          basics: { name, image: 'https://example.com/photo.jpg' },
+        })
+      );
+      expect(html.replace(/&#x2f;/gi, '/'), theme).toContain(
+        'https://example.com/photo.jpg'
+      );
+    }
+  });
   it('preserves achievement bullets and current employer names in Claude', async () => {
     const html = await Effect.runPromise(
       renderTheme('claude', {

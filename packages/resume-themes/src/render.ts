@@ -6,6 +6,7 @@ import {
 import { Effect, Schema } from 'effect';
 import { createRequire } from 'node:module';
 import { withRegionCodes } from './regions.ts';
+import { withoutEmptyImages } from './empty-images.ts';
 import { withoutInvalidDates } from './invalid-dates.ts';
 import { withSchemaShapes } from './shapes.ts';
 import { ensureHtmlCharset } from './charset.ts';
@@ -178,5 +179,8 @@ export const renderTheme = Effect.fn('renderTheme')(function* (
       message: 'the theme did not return HTML',
     });
   }
-  return withPrintStyles(ensureHtmlCharset(withoutInvalidDates(html)), theme);
+  return withPrintStyles(
+    ensureHtmlCharset(withoutEmptyImages(withoutInvalidDates(html))),
+    theme
+  );
 });
