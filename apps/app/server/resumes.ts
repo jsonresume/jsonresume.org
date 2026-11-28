@@ -12,6 +12,7 @@ import { Effect, type Layer, ManagedRuntime } from 'effect';
 import { randomUUID } from 'node:crypto';
 import type { RouterContext } from '../src/routes/root';
 import { bareName } from './bareNames';
+import { strayPunctuation } from './strayPunctuation';
 import { isOwner } from './owner';
 import { gateRead } from './readers';
 
@@ -114,8 +115,14 @@ export function createResumeHandler<E>(
     return new Response(page.body, { status, headers });
   };
 
-  /** /name without the @, after everything else missed (bareNames). */
-  const bare = (request: Request) => runtime.runPromise(bareName(request));
+  /**
+   * After everything else missed: a link with a sentence's punctuation on
+   * its end (strayPunctuation), or /name without the @ (bareNames).
+   */
+  const bare = (request: Request) =>
+    Promise.resolve(strayPunctuation(request)).then(
+      (moved) => moved ?? runtime.runPromise(bareName(request))
+    );
 
   return { fetch, bare, dispose: () => runtime.dispose() };
 }
