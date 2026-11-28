@@ -36,6 +36,7 @@ export const makeMirrored = (github: GithubGists['Service'], file: string) => {
         gistId: found.gistId,
         resume: found.resume,
         fetchedAt: new Date(now),
+        ...(found.updatedAt ? { updatedAt: found.updatedAt } : {}),
       })
     );
 

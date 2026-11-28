@@ -17,6 +17,7 @@ const setup = (token?: string, seed: Array<Profile> = []) => {
       { id: 'g1', files: { 'notes.md': '# hi' } },
       {
         id: 'g2',
+        updated: Date.UTC(2025, 4, 1),
         files: {
           'resume.json': JSON.stringify(resume),
           'other.json': '{"x":1}',
@@ -62,7 +63,13 @@ describe('Profiles.resume', () => {
         stale: false,
       });
       const ghost = yield* (yield* ProfileStore).find('foo');
-      expect(ghost).toMatchObject({ githubId: 7, gistId: 'g2', resume });
+      // GitHub's updated_at, for Explore to date it by.
+      expect(ghost).toMatchObject({
+        githubId: 7,
+        gistId: 'g2',
+        resume,
+        updatedAt: new Date(Date.UTC(2025, 4, 1)),
+      });
       expect(github.state.requests.map((r) => r.path)).toEqual([
         '/users/foo/gists',
         '/gists/g2',

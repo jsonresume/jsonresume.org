@@ -10,6 +10,7 @@ const Row = Schema.Struct({
   gist_id: Schema.NullOr(Schema.String),
   resume: Schema.Unknown,
   fetched_at: Schema.NullOr(Schema.Date),
+  gist_updated_at: Schema.NullOr(Schema.Date),
   source: Schema.Literals(['gist', 'stored']),
   stored_resume: Schema.Unknown,
   user_id: Schema.NullOr(Schema.String),
@@ -29,6 +30,7 @@ const mirrorOf = (row: Row): GistMirror | undefined =>
         gistId: row.gist_id,
         resume: row.resume,
         fetchedAt: row.fetched_at,
+        ...(row.gist_updated_at ? { updatedAt: row.gist_updated_at } : {}),
       }
     : undefined;
 
@@ -73,7 +75,7 @@ export const PgProfileStore = Layer.effect(
       Result: Row,
       execute: (username) => sql`
         SELECT p.username, p.kind, p.github_id::float8 AS github_id, p.gist_id,
-               p.resume, p.fetched_at, p.source, p.stored_resume, p.user_id,
+               p.resume, p.fetched_at, p.gist_updated_at, p.source, p.stored_resume, p.user_id,
                (u.email_verified_at IS NOT NULL OR u.github_id IS NOT NULL) AS verified,
                u.github_login, a.username AS target, u.hidden_fields AS hidden,
                u.page_private AS private,
@@ -101,14 +103,17 @@ export const PgProfileStore = Layer.effect(
         ),
       saveGhost: (ghost) =>
         sql`
-          INSERT INTO app.profiles (username, kind, github_id, gist_id, resume, fetched_at)
+          INSERT INTO app.profiles (username, kind, github_id, gist_id, resume, fetched_at, gist_updated_at)
           VALUES (${ghost.username}, 'ghost', ${ghost.githubId}, ${
           ghost.gistId
         },
-                  ${jsonbText(ghost.resume)}::jsonb, ${ghost.fetchedAt})
+                  ${jsonbText(ghost.resume)}::jsonb, ${ghost.fetchedAt}, ${
+          ghost.updatedAt ?? null
+        })
           ON CONFLICT (username) DO UPDATE SET
             github_id = EXCLUDED.github_id, gist_id = EXCLUDED.gist_id,
-            resume = EXCLUDED.resume, fetched_at = EXCLUDED.fetched_at
+            resume = EXCLUDED.resume, fetched_at = EXCLUDED.fetched_at,
+            gist_updated_at = EXCLUDED.gist_updated_at
           WHERE app.profiles.kind = 'ghost'
         `.pipe(Effect.asVoid, Effect.orDie),
       removeGhost: (username) =>
@@ -123,12 +128,13 @@ export const PgProfileStore = Layer.effect(
         },
             resume = ${jsonbText(mirror.resume)}::jsonb, fetched_at = ${
           mirror.fetchedAt
-        }
+        }, gist_updated_at = ${mirror.updatedAt ?? null}
           WHERE username = ${username} AND kind = 'account'
         `.pipe(Effect.asVoid, Effect.orDie),
       dropMirror: (username) =>
         sql`
-          UPDATE app.profiles SET gist_id = NULL, resume = NULL, fetched_at = NULL
+          UPDATE app.profiles SET gist_id = NULL, resume = NULL, fetched_at = NULL,
+            gist_updated_at = NULL
           WHERE username = ${username} AND kind = 'account'
         `.pipe(Effect.asVoid, Effect.orDie),
     });

@@ -6,6 +6,8 @@ export const GistMirror = Schema.Struct({
   gistId: Schema.String,
   resume: Schema.Unknown,
   fetchedAt: Schema.Date,
+  /** When the gist last changed on GitHub (its updated_at), if known. */
+  updatedAt: Schema.optionalKey(Schema.Date),
 });
 export type GistMirror = typeof GistMirror.Type;
 
