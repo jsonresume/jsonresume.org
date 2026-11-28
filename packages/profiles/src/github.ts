@@ -23,6 +23,7 @@ const Gist = Schema.Struct({
   public: Schema.optionalKey(Schema.Boolean),
   owner: Schema.Struct({ id: Schema.Number, login: Schema.String }),
   files: Schema.Record(Schema.String, GistFile),
+  updated_at: Schema.optionalKey(Schema.String),
 });
 type Gist = typeof Gist.Type;
 const decodeGists = Schema.decodeUnknownEffect(Schema.Array(Gist));
@@ -37,7 +38,15 @@ export interface GistResume {
   githubId: number;
   githubLogin: string;
   resume: unknown;
+  /** When the gist last changed, as GitHub says. */
+  updatedAt?: Date;
 }
+
+/** GitHub's updated_at, when it is a date. */
+const updatedOf = (value: string | undefined) => {
+  const date = value === undefined ? undefined : new Date(value);
+  return date && !Number.isNaN(date.getTime()) ? { updatedAt: date } : {};
+};
 
 type Lookup = Effect.Effect<
   GistResume,
@@ -98,6 +107,7 @@ export class GithubGists extends Context.Service<
           githubId: gist.owner.id,
           githubLogin: gist.owner.login,
           resume,
+          ...updatedOf(gist.updated_at),
         } satisfies GistResume;
       });
 

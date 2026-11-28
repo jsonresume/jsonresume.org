@@ -56,8 +56,9 @@ export class Explore extends Context.Service<
                ${part(
                  "CASE WHEN p.kind = 'account' AND p.source = 'stored' THEN p.stored_resume ELSE p.resume END"
                )} AS resume,
-               -- Only a save here is an edit we saw; a gist's fetch time is not.
-               CASE WHEN p.kind = 'account' AND p.source = 'stored' THEN p.stored_at END
+               -- A save here, or the gist's own updated_at; never a fetch time.
+               CASE WHEN p.kind = 'account' AND p.source = 'stored' THEN p.stored_at
+                    ELSE p.gist_updated_at END
                  AS updated_at
         FROM app.profiles p
         LEFT JOIN app.users u ON u.id = p.user_id

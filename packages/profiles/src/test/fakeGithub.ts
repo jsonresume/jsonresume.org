@@ -50,6 +50,7 @@ export function fakeGithub() {
     id: gist.id,
     public: gist.secret !== true,
     owner: { id: ownerId, login },
+    updated_at: new Date(gist.updated ?? 0).toISOString(),
     files: Object.fromEntries(
       Object.entries(gist.files).map(([name, text]) => [
         name,
