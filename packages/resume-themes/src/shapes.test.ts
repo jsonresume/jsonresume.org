@@ -1,5 +1,6 @@
 import { Effect } from 'effect';
 import { describe, expect, it } from 'vitest';
+import { withoutEmptyImages } from './empty-images.ts';
 import { withoutInvalidDates } from './invalid-dates.ts';
 import { regionCode, withRegionCodes } from './regions.ts';
 import { renderTheme, themeSlugs } from './render.ts';
@@ -94,6 +95,18 @@ describe('schema shapes', () => {
     expect(withoutInvalidDates(endOnly)).toBe(
       '<div><time datetime="2006-01-01">Jan 2006</time></div>'
     );
+  });
+
+  it('takes images with no source out of the HTML', () => {
+    expect(
+      withoutEmptyImages('<p><img src= alt="avatar" class="a" /></p>')
+    ).toBe('<p></p>');
+    expect(withoutEmptyImages('<p><img src="" alt="avatar" /></p>')).toBe(
+      '<p></p>'
+    );
+    expect(withoutEmptyImages("<p><img alt='x' src=''></p>")).toBe('<p></p>');
+    const kept = '<img src="a.jpg" alt=""><img data-src="" src=b.png>';
+    expect(withoutEmptyImages(kept)).toBe(kept);
   });
 
   it('reads a photo written as an object (Reactive Resume) as its URL', () => {
